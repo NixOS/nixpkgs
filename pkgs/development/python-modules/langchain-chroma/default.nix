@@ -7,6 +7,7 @@
   numpy,
   poetry-core,
   pytestCheckHook,
+  pytest-asyncio,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,8 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/libs/partners/chroma";
 
+  patches = [ ./001-async-test.patch ];
+
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [ "chromadb" ];
@@ -35,7 +38,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_chroma" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   passthru = {
     inherit (langchain-core) updateScript;
@@ -46,6 +52,9 @@ buildPythonPackage rec {
     description = "Integration package connecting Chroma and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/chroma";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }
