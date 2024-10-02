@@ -8490,6 +8490,18 @@ final: prev:
     meta.homepage = "https://github.com/mfussenegger/nvim-dap-python/";
   };
 
+  nvim-dap-rego = buildVimPlugin {
+    pname = "nvim-dap-rego";
+    version = "2024-09-28";
+    src = fetchFromGitHub {
+      owner = "rinx";
+      repo = "nvim-dap-rego";
+      rev = "ab13103327b5e336a0d059ec2d9f1022c26ffadf";
+      sha256 = "05ainkya2z6hm02glz2xcnd39y3fvkdmsgnl6la7kchin227l6w4";
+    };
+    meta.homepage = "https://github.com/rinx/nvim-dap-rego/";
+  };
+
   nvim-dap-rr = buildVimPlugin {
     pname = "nvim-dap-rr";
     version = "2024-07-10";

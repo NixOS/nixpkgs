@@ -1,53 +1,98 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, openjdk17
-, wget
-, which
-, gnused
-, gawk
-, coreutils
-, buildFHSEnv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  openjdk,
+  gradle,
+  wget,
+  which,
+  gnused,
+  gawk,
+  coreutils,
+  bash,
+  testers,
+  nixosTests,
 }:
-
-let
-  nextflow =
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nextflow";
-  version = "22.10.6";
+  # 24.08.0-edge is compatible with Java 21. The current (as of 2024-09-19)
+  # nextflow release (24.04.4) does not yet support java21, but java19. The
+  # latter is not in nixpkgs(-unstable) anymore.
+  version = "24.08.0-edge";
 
-  src = fetchurl {
-    url = "https://github.com/nextflow-io/nextflow/releases/download/v${version}/nextflow-${version}-all";
-    hash = "sha256-zeYsKxWRnzr0W6CD+yjoAXwCN/AbN5P4HhH1oftnrjY=";
+  src = fetchFromGitHub {
+    owner = "nextflow-io";
+    repo = "nextflow";
+    rev = "6e866ae81ff3bf8a9729e9dbaa9dd89afcb81a4b";
+    hash = "sha256-SA27cuP3iO5kD6u0uTeEaydyqbyJzOkVtPrb++m3Tv0=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    openjdk17
-    wget
-    which
-    gnused
-    gawk
-    coreutils
+    gradle
   ];
 
-  dontUnpack = true;
+  postPatch = ''
+    # Nextflow invokes the constant "/bin/bash" (not as a shebang) at
+    # several locations so we fix that globally. However, when running inside
+    # a container, we actually *want* "/bin/bash". Thus the global fix needs
+    # to be reverted for this specific use case.
+    substituteInPlace modules/nextflow/src/main/groovy/nextflow/executor/BashWrapperBuilder.groovy \
+      --replace-fail "['/bin/bash'," "['${bash}/bin/bash'," \
+      --replace-fail "if( containerBuilder ) {" "if( containerBuilder ) {
+                launcher = launcher.replaceFirst(\"/nix/store/.*/bin/bash\", \"/bin/bash\")"
+  '';
+
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+  __darwinAllowLocalNetworking = true;
+
+  # During the build, some additional dependencies are downloaded ("detached
+  # configuration"). We thus need to run a full build on instead of the default
+  # one.
+  # See https://github.com/NixOS/nixpkgs/pull/339197#discussion_r1747749061
+  gradleUpdateTask = "pack";
+  # The installer attempts to copy a final JAR to $HOME/.nextflow/...
+  gradleFlags = ["-Duser.home=\$TMPDIR"];
+  preBuild = ''
+    # See Makefile (`make pack`)
+    export BUILD_PACK=1
+  '';
+  gradleBuildTask = "pack";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
-    install -Dm755 $src $out/bin/nextflow
+    install -Dm755 build/releases/nextflow-${finalAttrs.version}-dist $out/bin/nextflow
 
     runHook postInstall
   '';
 
   postFixup = ''
     wrapProgram $out/bin/nextflow \
-      --prefix PATH : ${lib.makeBinPath nativeBuildInputs} \
-      --set JAVA_HOME ${openjdk17.home}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gawk
+          gnused
+          wget
+          which
+        ]
+      } \
+      --set JAVA_HOME ${openjdk.home}
   '';
+
+  passthru.tests.default = nixosTests.nextflow;
+  # versionCheckHook doesn't work as of 2024-09-23.
+  # See https://github.com/NixOS/nixpkgs/pull/339197#issuecomment-2363495060
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "env HOME=$TMPDIR nextflow -version";
+  };
 
   meta = with lib; {
     description = "DSL for data-driven computational pipelines";
@@ -61,17 +106,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nextflow.io/";
     changelog = "https://github.com/nextflow-io/nextflow/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Etjean edmundmiller ];
+    maintainers = with maintainers; [
+      Etjean
+      edmundmiller
+    ];
     mainProgram = "nextflow";
     platforms = platforms.unix;
   };
-};
-in
-if stdenv.hostPlatform.isLinux then
-  buildFHSEnv
-  {
-    name = "nextflow";
-    targetPkgs = pkgs: [ nextflow ];
-    runScript = "nextflow";
-  }
-else nextflow
+})

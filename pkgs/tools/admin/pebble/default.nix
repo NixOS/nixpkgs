@@ -1,11 +1,12 @@
 { lib
 , stdenv
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 , nixosTests
 }:
 
-buildGoModule rec {
+# build failure with go 1.23
+buildGo122Module rec {
   pname = "pebble";
   version = "2.4.0";
 
