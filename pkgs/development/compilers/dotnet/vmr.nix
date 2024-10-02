@@ -27,6 +27,7 @@
   callPackage,
   unzip,
   yq,
+  installShellFiles,
 
   baseName ? "dotnet",
   bootstrapSdk,
@@ -90,6 +91,7 @@ stdenv.mkDerivation rec {
       xmlstarlet
       unzip
       yq
+      installShellFiles
     ]
     ++ lib.optionals (lib.versionAtLeast version "9") [
       nodejs
@@ -419,6 +421,11 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  outputs = [
+    "out"
+    "man"
+  ];
+
   installPhase =
     let
       assets = if (lib.versionAtLeast version "9") then "assets" else targetArch;
@@ -447,6 +454,8 @@ stdenv.mkDerivation rec {
           mv "$unpacked" "$nupkg"
           # TODO: should we fix executable flags here? see dotnetInstallHook
       done
+
+      installManPage src/sdk/documentation/manpages/sdk/*
 
       runHook postInstall
     '';
