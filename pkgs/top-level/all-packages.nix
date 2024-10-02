@@ -2038,7 +2038,7 @@ with pkgs;
 
   xpaste = callPackage ../tools/text/xpaste { };
 
-  xrootd = callPackage ../tools/networking/xrootd {
+  xrootd = callPackage ../by-name/xr/xrootd/package.nix {
     # Workaround systemd static build breakage
     systemd = if systemd.meta.broken then null else systemd;
   };
