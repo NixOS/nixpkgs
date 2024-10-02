@@ -2037,8 +2037,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.219.1028"; # compatible with vscode ^1.92.0
-          hash = "sha256-5f1P/CV6+Rp2kS9oSz5Ko5jMUt/Q6pWa9a+3nPyin6k=";
+          version = "1.234.1133"; # compatible with vscode ^1.93.1
+          hash = "sha256-kRQIB4ozN8f+JPG2U6tA/u0r3/J05kYfMuksaJrumZM=";
         };
 
         meta = {
@@ -2054,8 +2054,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot-chat";
-          version = "0.19.2024073102"; # compatible with vscode ^1.92.0
-          hash = "sha256-ekRBmJiAav1gITWlqBOuWtZMt1YZeseF+3fw326db/s=";
+          version = "0.21.2024090602"; # latest compatible with vscode ^1.93
+          hash = "sha256-9wl/orFbf1OFwGnF1uLfyOOtO2v5k2H1aUMBtngXDfs=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
