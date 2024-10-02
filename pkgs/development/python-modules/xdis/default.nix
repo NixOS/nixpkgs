@@ -3,6 +3,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   six,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.1.0";
+  version = "6.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,8 +20,16 @@ buildPythonPackage rec {
     owner = "rocky";
     repo = "python-xdis";
     rev = "refs/tags/${version}";
-    hash = "sha256-KgKTO99T2/be1sBs5rY3Oy7/Yl9WGgdG3hqqkZ7D7ZY=";
+    hash = "sha256-Fn1cyUPMrn1SEXl4sdQwJiNHaY+BbxBDz3nKZY965/0=";
   };
+  patches = [
+    (fetchpatch {
+      # 2.13.5 support, already committed to main, expected in 6.1.2
+      url = "https://github.com/rocky/python-xdis/commit/fcba74a7f64c5e2879ca0779ff10f38f9229e7da.patch";
+      hash = "sha256-D7eJ97g4G6pmYL/guq0Ndf8yKTVBD2gAuUCAKwvlYbE=";
+    })
+    ./test_nested_scopes.patch
+  ];
 
   propagatedBuildInputs = [
     click

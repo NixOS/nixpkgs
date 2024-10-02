@@ -1,0 +1,97 @@
+commit 7f3dd6fb7ff92ad23b2e1bcc978eb6c63a28dcdb
+Author: Arnout Engelen <arnout@bzzt.net>
+Date:   Wed Oct 2 21:01:35 2024 +0200
+
+    Make test/decompyle/test_nested_scopes.py compile
+
+diff --git a/test/decompyle/test_nested_scopes.py b/test/decompyle/test_nested_scopes.py
+index 32646e1..5dc207e 100644
+--- a/test/decompyle/test_nested_scopes.py
++++ b/test/decompyle/test_nested_scopes.py
+@@ -22,7 +22,7 @@ def x0():
+ 
+ def x1():
+      def y1():
+-         print 'y-blurb =', blurb
++         print('y-blurb =', blurb)
+      y1()
+ 
+ def x2():
+@@ -33,41 +33,41 @@ def x2():
+ 
+ def x3a():
+     def y3a(x):
+-        print 'y-blurb =', blurb, flurb
++        print('y-blurb =', blurb, flurb)
+     print
+     blurb = 3
+     flurb = 7
+     y3a(1)
+-    print 'x3a-blurb =', blurb
++    print('x3a-blurb =', blurb)
+ 
+ def x3():
+     def y3(x):
+         def z():
+             blurb = 25
+-            print 'z-blurb =', blurb,
++            print('z-blurb =', blurb)
+         z()
+-        print 'y-blurb =', blurb,
++        print('y-blurb =', blurb)
+     print
+     blurb = 3
+     y3(1)
+-    print 'x3-blurb =', blurb
++    print('x3-blurb =', blurb)
+ 
+ def x3b():
+     def y3b(x):
+         def z():
+-            print 'z-blurb =', blurb,
++            print('z-blurb =', blurb)
+         blurb = 25
+         z()
+-        print 'y-blurb =', blurb,
++        print('y-blurb =', blurb)
+     print
+     blurb = 3
+     y3b(1)
+-    print 'x3-blurb =', blurb
++    print('x3-blurb =', blurb)
+ 
+ def x4():
+     def y4(x):
+         def z():
+-            print 'z-blurb =', blurb
++            print('z-blurb =', blurb)
+         z()
+     global blurb
+     blurb = 3
+@@ -75,15 +75,15 @@ def x4():
+ 
+ def x():
+     def y(x):
+-        print 'y-blurb =', blurb
++        print('y-blurb =', blurb)
+     blurb = 2
+     y(1)
+ 
+ 
+-def func_with_tuple_args6((a,b), (c,d)=(2,3), *args, **kwargs):
+-    def y(x):
+-        print 'y-a =', a
+-    print c
++#def func_with_tuple_args6((a,b), (c,d)=(2,3), *args, **kwargs):
++#    def y(x):
++#        print('y-a =', a)
++#    print c
+ 
+ def find(self, name):
+     # This is taken from 'What's new in Python 2.1' by amk
+@@ -92,4 +92,4 @@ def find(self, name):
+ x0(); x1(); x2();
+ x3(); x3a(); x3b();
+ x4(); x()
+-print 'blurb =', blurb
++print('blurb =', blurb)
