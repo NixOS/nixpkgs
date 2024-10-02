@@ -1,0 +1,12 @@
+diff --git a/hscontrol/app.go b/hscontrol/app.go
+index b8dceba..4bcf019 100644
+--- a/hscontrol/app.go
++++ b/hscontrol/app.go
+@@ -821,6 +821,7 @@ func (h *Headscale) Serve() error {
+
+ 				// And we're done:
+ 				cancel()
++ 				return
+ 			}
+ 		}
+ 	}

@@ -1,0 +1,62 @@
+From 3bbc396c4ddc8a5e26f7776155bb366c8d47c440 Mon Sep 17 00:00:00 2001
+From: Bob van der Linden <bobvanderlinden@gmail.com>
+Date: Thu, 9 Feb 2023 16:55:00 +0100
+Subject: [PATCH 2/2] remove dependency on git
+
+---
+ librubyfmt/build.rs | 35 +++--------------------------------
+ 1 file changed, 3 insertions(+), 32 deletions(-)
+
+diff --git a/librubyfmt/build.rs b/librubyfmt/build.rs
+index ef94c09..4668785 100644
+--- a/librubyfmt/build.rs
++++ b/librubyfmt/build.rs
+@@ -26,27 +26,9 @@ fn main() -> Output {
+     let path = std::env::current_dir()?;
+     let ruby_checkout_path = path.join("ruby_checkout");
+ 
+-    let old_checkout_sha = if ruby_checkout_path.join(ripper).exists() {
+-        Some(get_ruby_checkout_sha())
+-    } else {
+-        None
+-    };
+-
+-    let _ = Command::new("git")
+-        .args(&["submodule", "update", "--init"])
+-        .status();
+-
+-    let new_checkout_sha = get_ruby_checkout_sha();
+-
+-    // Only rerun this build if the ruby_checkout has changed
+-    match old_checkout_sha {
+-        Some(old_sha) if old_sha == new_checkout_sha => {}
+-        _ => {
+-            make_configure(&ruby_checkout_path)?;
+-            run_configure(&ruby_checkout_path)?;
+-            build_ruby(&ruby_checkout_path)?;
+-        }
+-    }
++    make_configure(&ruby_checkout_path)?;
++    run_configure(&ruby_checkout_path)?;
++    build_ruby(&ruby_checkout_path)?;
+ 
+     cc::Build::new()
+         .file("src/rubyfmt.c")
+@@ -152,14 +134,3 @@ fn check_process_success(command: &str, code: ExitStatus) -> Output {
+     }
+ }
+ 
+-fn get_ruby_checkout_sha() -> String {
+-    String::from_utf8(
+-        Command::new("git")
+-            .args(&["rev-parse", "HEAD"])
+-            .current_dir("./ruby_checkout")
+-            .output()
+-            .expect("git rev-parse shouldn't fail")
+-            .stdout,
+-    )
+-    .expect("output should be valid utf8")
+-}
+-- 
+2.39.1
+

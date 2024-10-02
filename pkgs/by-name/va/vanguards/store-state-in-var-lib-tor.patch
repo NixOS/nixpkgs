@@ -1,0 +1,16 @@
+Description: Store state in /var/lib/tor
+Author: Iain R. Learmonth <irl@debian.org>
+Forwarded: not-needed
+Last-Update: 2018-07-30
+---
+--- a/vanguards-example.conf
++++ b/vanguards-example.conf
+@@ -34,7 +34,7 @@
+ logfile =
+ 
+ # Name of state file (with absolute path, or relative to current directory):
+-state_file = vanguards.state
++state_file = /var/lib/tor/vanguards.state
+ 
+ 
+ ## Vanguards: layer1, layer2, and layer3 rotation params.

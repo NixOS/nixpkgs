@@ -1,0 +1,28 @@
+diff -ru3 warsow_21_sdk_old/source/source/gameshared/q_arch.h warsow_21_sdk_new/source/source/gameshared/q_arch.h
+--- warsow_21_sdk_old/source/source/gameshared/q_arch.h	2016-03-26 22:22:10.000000000 +0300
++++ warsow_21_sdk_new/source/source/gameshared/q_arch.h	2018-03-13 00:37:29.907019953 +0300
+@@ -206,15 +206,15 @@
+ #endif
+ 
+ // FIXME: move these to CMakeLists.txt
+-#define LIBZ_LIBNAME "libz.so.1|libz.so"
+-#define LIBCURL_LIBNAME "libcurl.so.4|libcurl.so.3|libcurl.so"
+-#define LIBPNG_LIBNAME "libpng16.so.16|libpng15.so.15|libpng14.so.14|libpng12.so.0|libpng.so"
+-#define LIBJPEG_LIBNAME "libjpeg.so.8|libjpeg.so"
+-#define LIBOGG_LIBNAME "libogg.so.0|libogg.so"
+-#define LIBVORBIS_LIBNAME "libvorbis.so.0|libvorbis.so"
+-#define LIBVORBISFILE_LIBNAME "libvorbisfile.so.3|libvorbisfile.so"
+-#define LIBTHEORA_LIBNAME "libtheora.so.0|libtheora.so"
+-#define LIBFREETYPE_LIBNAME "libfreetype.so.6|libfreetype.so"
++#define LIBZ_LIBNAME "@zlib@/lib/libz.so"
++#define LIBCURL_LIBNAME "@curl@/lib/libcurl.so"
++#define LIBPNG_LIBNAME "@libpng@/lib/libpng.so"
++#define LIBJPEG_LIBNAME "@libjpeg@/lib/libjpeg.so"
++#define LIBOGG_LIBNAME "@libogg@/lib/libogg.so"
++#define LIBVORBIS_LIBNAME "@libvorbis@/lib/libvorbis.so"
++#define LIBVORBISFILE_LIBNAME "@libvorbis@/lib/libvorbisfile.so"
++#define LIBTHEORA_LIBNAME "@libtheora@/lib/libtheora.so"
++#define LIBFREETYPE_LIBNAME "@freetype@/lib/libfreetype.so"
+ 
+ #if defined ( __FreeBSD__ )
+ #define BUILDSTRING "FreeBSD"

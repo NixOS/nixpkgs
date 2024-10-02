@@ -1,0 +1,26 @@
+commit bf870157e0a9c3d19e968afb276b4e7d96b4df30
+Author: Doron Behar <doron.behar@gmail.com>
+Date:   Thu Oct 21 13:10:42 2021 +0300
+
+    gr-modtool: Don't copy source permissions
+    
+    This is needed for systems such as NixOS, where the build tree isn't
+    writable and the files copied should be.
+    
+    Signed-off-by: Doron Behar <doron.behar@gmail.com>
+
+diff --git a/gr-utils/python/modtool/core/newmod.py b/gr-utils/python/modtool/core/newmod.py
+index 123059907..0c734e7ae 100644
+--- a/gr-utils/python/modtool/core/newmod.py
++++ b/gr-utils/python/modtool/core/newmod.py
+@@ -78,7 +78,9 @@ class ModToolNewModule(ModTool):
+         self._setup_scm(mode='new')
+         logger.info("Creating out-of-tree module in {}...".format(self.dir))
+         try:
+-            shutil.copytree(self.srcdir, self.dir)
++            # https://stackoverflow.com/a/17022146/4935114
++            shutil.copystat = lambda x, y: x
++            shutil.copytree(self.srcdir, self.dir, copy_function=shutil.copyfile)
+             os.chdir(self.dir)
+         except OSError:
+             raise ModToolException('Could not create directory {}.'.format(self.dir))

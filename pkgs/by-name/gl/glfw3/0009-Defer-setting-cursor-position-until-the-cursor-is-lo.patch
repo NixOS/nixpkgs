@@ -1,0 +1,59 @@
+From 9997ae55a47de469ea26f8437c30b51483abda5f Mon Sep 17 00:00:00 2001
+From: Dan Klishch <danilklishch@gmail.com>
+Date: Sat, 30 Sep 2023 23:38:05 -0400
+Subject: Defer setting cursor position until the cursor is locked
+
+---
+ src/wl_platform.h |  3 +++
+ src/wl_window.c   | 14 ++++++++++++--
+ 2 files changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/src/wl_platform.h b/src/wl_platform.h
+index ca34f66e..cd1f227f 100644
+--- a/src/wl_platform.h
++++ b/src/wl_platform.h
+@@ -403,6 +403,9 @@ typedef struct _GLFWwindowWayland
+     int                         scaleSize;
+     int                         compositorPreferredScale;
+ 
++    double                      askedCursorPosX, askedCursorPosY;
++    GLFWbool                    didAskForSetCursorPos;
++
+     struct zwp_relative_pointer_v1* relativePointer;
+     struct zwp_locked_pointer_v1*   lockedPointer;
+     struct zwp_confined_pointer_v1* confinedPointer;
+diff --git a/src/wl_window.c b/src/wl_window.c
+index 1de26558..0df16747 100644
+--- a/src/wl_window.c
++++ b/src/wl_window.c
+@@ -2586,8 +2586,9 @@ void _glfwGetCursorPosWayland(_GLFWwindow* window, double* xpos, double* ypos)
+ 
+ void _glfwSetCursorPosWayland(_GLFWwindow* window, double x, double y)
+ {
+-    _glfwInputError(GLFW_FEATURE_UNAVAILABLE,
+-                    "Wayland: The platform does not support setting the cursor position");
++    window->wl.didAskForSetCursorPos = true;
++    window->wl.askedCursorPosX = x;
++    window->wl.askedCursorPosY = y;
+ }
+ 
+ void _glfwSetCursorModeWayland(_GLFWwindow* window, int mode)
+@@ -2819,6 +2820,15 @@ static const struct zwp_relative_pointer_v1_listener relativePointerListener =
+ static void lockedPointerHandleLocked(void* userData,
+                                       struct zwp_locked_pointer_v1* lockedPointer)
+ {
++    _GLFWwindow* window = userData;
++
++    if (window->wl.didAskForSetCursorPos)
++    {
++        window->wl.didAskForSetCursorPos = false;
++        zwp_locked_pointer_v1_set_cursor_position_hint(window->wl.lockedPointer,
++                                                       wl_fixed_from_double(window->wl.askedCursorPosX),
++                                                       wl_fixed_from_double(window->wl.askedCursorPosY));
++    }
+ }
+ 
+ static void lockedPointerHandleUnlocked(void* userData,
+-- 
+2.42.0
+
