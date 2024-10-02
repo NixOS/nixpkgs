@@ -39,7 +39,11 @@ stdenv.mkDerivation (finalAttrs: {
   env = lib.optionals (extraBuildEnv != null) extraBuildEnv;
 
   installPhase = ''
+    runHook preInstall
+
     cp -r apps/photos/out $out
+
+    runHook postInstall
   '';
 
   meta = {
