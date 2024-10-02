@@ -11094,9 +11094,10 @@ with pkgs;
   # temporarily, latest LTS and Innovation release are equal
   percona-server_innovation = percona-server_8_4;
   percona-server = percona-server_lts;
-  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_8_0 percona-xtrabackup_8_3;
-  percona-xtrabackup_lts = percona-xtrabackup_8_0;
-  percona-xtrabackup_innovation = percona-xtrabackup_8_3;
+  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_8_0 percona-xtrabackup_8_4;
+  percona-xtrabackup_lts = percona-xtrabackup_8_4;
+  # temporarily, latest LTS and Innovation release are equal
+  percona-xtrabackup_innovation = percona-xtrabackup_8_4;
   percona-xtrabackup = percona-xtrabackup_lts;
 
   pick = callPackage ../tools/misc/pick { };
