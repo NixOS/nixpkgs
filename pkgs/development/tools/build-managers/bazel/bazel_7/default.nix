@@ -202,7 +202,7 @@ let
       dontFixup = true;
       buildPhase = ''
         runHook preBuild
-        export HOME=$TMP
+        export HOME=$(mktemp -d)
         (cd bazel_src; ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} mod deps --curses=no;
         ${bazelForDeps}/bin/bazel --server_javabase=${runJdk} vendor src:bazel_nojdk \
         --curses=no \
