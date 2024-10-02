@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, options, ... }:
 let
   cfg = config.services.oauth2-proxy.nginx;
 in
@@ -46,7 +46,7 @@ in
         };
         oldType = lib.types.listOf lib.types.str;
         convertFunc = x:
-          lib.warn "services.oauth2-proxy.nginx.virtualHosts should be an attrset, found ${lib.generators.toPretty {} x}"
+          lib.warn "${options.services.oauth2-proxy.nginx.virtualHosts} should be an attrset, found ${lib.generators.toPretty {} x}"
           lib.genAttrs x (_: {});
         newType = lib.types.attrsOf vhostSubmodule;
       in lib.types.coercedTo oldType convertFunc newType;

@@ -252,8 +252,8 @@ in
       # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
       system.build = {
         inherit nixos-generate-config nixos-install nixos-rebuild;
-        nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-        nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
+        nixos-option = lib.warn "${config.system.diagnostics.prefix}Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
+        nixos-enter = lib.warn "${config.system.diagnostics.prefix}Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
       };
     }
   ];

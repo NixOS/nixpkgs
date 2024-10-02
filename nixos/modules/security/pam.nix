@@ -1595,7 +1595,7 @@ in
         # TODO(@uninsane): replace this warning + lib.filter with just an assertion
         (map (modulePath: lib.warnIfNot
           (lib.hasPrefix "/" modulePath)
-          ''non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
+          ''${config.system.diagnostics.prefix}non-absolute PAM modulePath "${modulePath}" is unsupported by apparmor and will be treated as an error by future versions of nixpkgs; see <https://github.com/NixOS/nixpkgs/pull/314791>''
           modulePath
         ))
         (lib.filter (lib.hasPrefix "/"))
