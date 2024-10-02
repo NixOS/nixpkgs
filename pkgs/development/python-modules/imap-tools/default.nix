@@ -34,6 +34,10 @@ buildPythonPackage rec {
     "test_folders"
     "test_idle"
     "test_live"
+
+    # broken by Python 3.12.6 email parsing changes: https://github.com/ikvk/imap_tools/issues/242
+    # FIXME: remove when fixed
+    "test_utils"
   ];
 
   pythonImportsCheck = [ "imap_tools" ];
