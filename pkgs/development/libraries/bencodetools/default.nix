@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    python3
+    (python3.withPackages (ps: with ps; [ distutils ]))
   ];
 
   # installCheck instead of check due to -install_name'd library on Darwin
