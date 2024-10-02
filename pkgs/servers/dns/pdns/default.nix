@@ -53,15 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     tinycdb
   ];
 
-  # Configure phase requires 64-bit time_t even on 32-bit platforms.
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.hostPlatform.is32bit [
-      "-D_TIME_BITS=64"
-      "-D_FILE_OFFSET_BITS=64"
-    ]
-  );
-
   configureFlags = [
+    (lib.enableFeature stdenv.hostPlatform.is32bit "experimental-64bit-time_t-support-on-glibc")
     (lib.enableFeature false "silent-rules")
     (lib.enableFeature true "dns-over-tls")
     (lib.enableFeature true "unit-tests")
