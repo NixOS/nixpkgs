@@ -21,20 +21,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-QzyNPThwbjPKANeZ4GAT9b4f8LTcjXnCiK+vzRkhM4c=";
+    hash = "sha256-fVL49g71eyfYyeXI4B1qRNM90fBKjHeq0I4poz1pdME=";
   };
 
   outputs = [ "out" "dev" ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    hash = "sha256-33s62iOWYh1a8ETY/fbPRxvnj8dR4/UfG8mjFyWwz5k=";
+    hash = "sha256-MW4/iB2NsCj0s9Q/h/PoCIIaDfZ/iqw+FGrsJmVR0lw=";
   };
 
   nativeBuildInputs = [
