@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "mhcflurry";
-  version = "2.1.3";
+  version = "2.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "openvax";
     repo = "mhcflurry";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xz3Myd+pifNQMTH1BC2qsQEy7UorYNQNj+7ysMVmCOs=";
+    hash = "sha256-dxCGCPnk1IFKg8ZVqMJsojQL0KlNirKlHJoaaOYIzMU=";
   };
 
   # keras and tensorflow are not in the official setup.py requirements but are required for the CLI utilities to run.
