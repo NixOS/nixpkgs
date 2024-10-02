@@ -48,25 +48,42 @@ buildDotnetModule rec {
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      desktopName = "BeatSaberModManager";
-      name = "BeatSaberModManager";
-      exec = "BeatSaberModManager";
-      # icon = "osu!";
-      comment = meta.description;
-      type = "Application";
-      categories = [
-        "Game"
-        "Utility"
-      ];
-      mimeTypes = [
-        "x-scheme-handler/beatsaver"
-        "x-scheme-handler/modelsaber"
-        "x-scheme-handler/bsplaylist"
-      ];
-    })
-  ];
+  desktopItems =
+    [
+      (makeDesktopItem {
+        name = "BeatSaberModManager";
+        desktopName = "BeatSaberModManager";
+        exec = "BeatSaberModManager";
+        # icon = "osu!";
+        comment = meta.description;
+        type = "Application";
+        categories = [
+          "Game"
+          "Utility"
+        ];
+      })
+    ]
+    ++ (map
+      (
+        protocol:
+        makeDesktopItem {
+          name = "BeatSaberModManager-url-${protocol}";
+          desktopName = "BeatSaberModManager";
+          comment = "URL:${protocol} Protocol";
+          type = "Application";
+          categories = [ "Utility" ];
+          exec = "BeatSaberModManager --install %u";
+          terminal = false;
+          noDisplay = true;
+          mimeTypes = [ "x-scheme-handler/${protocol}" ];
+        }
+      )
+      [
+        "beatsaver"
+        "modelsaber"
+        "bsplaylist"
+      ]
+    );
 
   meta = with lib; {
     description = "Yet another mod installer for Beat Saber, heavily inspired by ModAssistant";
