@@ -19,6 +19,7 @@
 , "alex"
 , "audiosprite"
 , "aws-cdk"
+, "awk-language-server"
 , "awesome-lint"
 , "bower"
 , "browserify"
