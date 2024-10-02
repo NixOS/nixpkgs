@@ -4978,8 +4978,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  auctex = callPackage ../tools/typesetting/tex/auctex { };
-
   blahtexml = callPackage ../tools/typesetting/tex/blahtexml { };
 
   catdvi = callPackage ../tools/typesetting/tex/catdvi { };
