@@ -54,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-include cstdint"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit tinygltf;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Library for compressing and decompressing 3D geometric meshes and point clouds";
