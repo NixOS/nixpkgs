@@ -54,7 +54,7 @@ python3.pkgs.buildPythonApplication rec {
     gsettings-desktop-schemas libosinfo gtksourceview4
   ] ++ lib.optional spiceSupport spice-gtk;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pygobject3 libvirt libxml2 requests cdrtools
   ];
 
@@ -74,7 +74,7 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     glib-compile-schemas $out/share/gsettings-schemas/${pname}-${version}/glib-2.0/schemas
 
-    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    gappsWrapperArgs+=(--set PYTHONPATH "${python3.pkgs.makePythonPath dependencies}")
     # these are called from virt-install in initrdinject.py
     gappsWrapperArgs+=(--prefix PATH : "${lib.makeBinPath [ cpio e2fsprogs file findutils gzip ]}")
 
