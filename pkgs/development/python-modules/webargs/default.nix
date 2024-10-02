@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.4.0";
+  version = "8.6.0";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6pk2ghSkzmE5JL6Z1x21jCaWMele/0+gm3NU5S3ABqU=";
+    hash = "sha256-uNCYq5K9dMZZ7KcFr6MdaBR18hjLFcHlcnH6IQPAVHo=";
   };
 
   pythonImportsCheck = [ "webargs" ];

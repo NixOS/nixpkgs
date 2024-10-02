@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "fontparts";
-  version = "0.12.1";
+  version = "0.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "fontParts";
     inherit version;
-    hash = "sha256-eeU13S1IcC+bsiK3YDlT4rVDeXDGcxx1wY/is8t5pCA=";
+    hash = "sha256-d41ZVJOiCPITRjgGajBZh2JhnV345yPTCiTEGJzPoQ0=";
     extension = "zip";
   };
 

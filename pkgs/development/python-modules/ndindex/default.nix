@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
-  version = "1.8";
+  version = "1.9.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     rev = "refs/tags/${version}";
-    hash = "sha256-F52ly3NkrZ0H9XoomMqmWfLl+8X0z26Yx67DB8DUqyU=";
+    hash = "sha256-5S4HN5MFLgURImwFsyyTOxDhrZJ5Oe+Ln/TA/bsCsek=";
   };
 
   nativeBuildInputs = [ cython ];

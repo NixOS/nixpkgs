@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "diofant";
-  version = "0.14.0";
+  version = "0.15.0";
   format = "pyproject";
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit version;
     pname = "Diofant";
-    hash = "sha256-c886y37xR+4TxZw9+3tb7nkTGxWcS+Ag/ruUUdpf7S4=";
+    hash = "sha256-noh9qJXjx+GJH+XZ8jHS3IGeOuBf54BXVXnS1p8RGoc=";
   };
 
   patches = [

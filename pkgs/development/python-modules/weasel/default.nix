@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.3.4";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "weasel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
+    hash = "sha256-gXPHEoEY0qKcpAtqHlUw5c43/6hKseCx+vBNzEXFF2A=";
   };
 
   pythonRelaxDeps = [

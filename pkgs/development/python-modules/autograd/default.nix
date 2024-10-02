@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "autograd";
-  version = "1.6.2";
+  version = "1.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hzHgigxOOJ2GlaQAcq2kUSZBwRO2ys6PTPvo636a7es=";
+    hash = "sha256-3nQ/02jW31I803MF3NFxhhqXUqFESTZ30sn1pWmD/y8=";
   };
 
   propagatedBuildInputs = [

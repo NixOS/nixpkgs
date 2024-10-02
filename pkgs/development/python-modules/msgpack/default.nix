@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "1.0.8";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lcArDifnBuSNDlQm0XEMp44PBijW6J1bWluRpfEidPM=";
+    hash = "sha256-3UMszCxyuRTky3evzmSqt2HBE3zGmL45hO7iYLyyiW4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

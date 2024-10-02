@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "netcdf4";
-  version = "1.6.5";
+  version = "1.7.1.post2";
   format = "pyproject";
 
   disabled = isPyPy;
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "netCDF4";
     inherit version;
-    hash = "sha256-gkiB0KrP3lvZgtat7dhXQlnIVVN4HnuD4M6CuJC/oO8=";
+    hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
   };
 
   nativeBuildInputs = [

@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "youseedee";
-  version = "0.5.3";
+  version = "0.6.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hQkI8kdropLiO86LXDy6eQma3FEg48gLldU7bFg9dzI=";
+    hash = "sha256-9w6yr28zq0LgOvMp5fCFaHGOwK4wbbDo/g1jH4Uky0E=";
   };
 
   patches = [

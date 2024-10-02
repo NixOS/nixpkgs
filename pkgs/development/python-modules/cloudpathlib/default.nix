@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.18.1";
+  version = "0.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RrdRUqQ3QyMUpTi1FEsSXK6WS37r77SdPBH1oVVvSw0=";
+    hash = "sha256-VjoQc9nzwcMh9kiqWXsJNE5X7e7/sVGId5jgFTLZQy4=";
   };
 
   nativeBuildInputs = [ flit-core ];

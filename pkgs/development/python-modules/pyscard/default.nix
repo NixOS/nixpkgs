@@ -18,14 +18,14 @@ in
 
 buildPythonPackage rec {
   pname = "pyscard";
-  version = "2.0.9";
+  version = "2.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pyscard";
     rev = "refs/tags/${version}";
-    hash = "sha256-DO4Ea+mlrWPpOLI8Eki+03UnsOXEhN2PAl0+gdN5sTo=";
+    hash = "sha256-wlw2QL1vfhXba8ok/URcd9M+F7Sa+ZtekV1w5X24owE=";
   };
 
   build-system = [ setuptools ];

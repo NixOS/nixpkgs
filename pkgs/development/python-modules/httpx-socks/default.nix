@@ -34,13 +34,13 @@ buildPythonPackage rec {
     hash = "sha256-9v5DfxEtM7jq+b8wR0M1klTSnSdFjQ4aDl8ZSZWxbFA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     httpcore
     python-socks
-  ];
+  ] ++ python-socks.optional-dependencies.asyncio;
 
   optional-dependencies = {
     asyncio = [ async-timeout ];

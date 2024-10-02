@@ -26,11 +26,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "urllib3" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jmespath
     python-dateutil
     urllib3

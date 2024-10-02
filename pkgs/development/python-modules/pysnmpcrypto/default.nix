@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pysnmpcrypto";
-  version = "0.0.4";
+  version = "0.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tjX7Ox7GY3uaADP1BQYhThbrhFdLHSWrAnu95MqlUSk=";
+    hash = "sha256-7mgZJHzu4Jqi3lS5mMUcz1lddanMwuMDODs5paxjgWw=";
   };
 
   postPatch = ''

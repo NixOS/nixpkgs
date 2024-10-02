@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.4.7";
+  version = "0.5.0";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-abOGgY1QotUYYH1LlzRC6NUkdgx81si4vgPYyY/EvOc=";
+    hash = "sha256-DelSd2VLPUA9nBXe08bO3zB+myfMnOe9mVookdDJVa8=";
   };
 
   propagatedBuildInputs = [

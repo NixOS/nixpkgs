@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-reversion";
-  version = "5.0.12";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wEfMmanxukqubbicOsJDR41t6Y7Ipgxwc/zIddicXNs=";
+    hash = "sha256-MwmCHltvzu3M5raXXxqcf6tq58fQ4SdqkONFlG+g3Lg=";
   };
 
   nativeBuildInputs = [ setuptools ];

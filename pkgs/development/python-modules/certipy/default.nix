@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "certipy";
-  version = "0.1.3";
+  version = "0.2.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n980gqpzh0fm58h3i4mi2i10wgj606lscm1r5sk60vbf6vh8mv9";
+    sha256 = "sha256-DA6nslJItC+5MPMBc6eMAp5rpn4u+VmMpEcNiXXJy7Y=";
   };
 
   propagatedBuildInputs = [ pyopenssl ];

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "python-osc";
-  version = "1.8.3";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-pc4bpWyNgt9Ryz8pRrXdM6cFInkazEuFZOYtKyCtnKo=";
+    hash = "sha256-q1D2axoZ79W/9yLyarZFDfGc3YS6ho8IyaM+fHhRRFY=";
   };
 
   nativeBuildInputs = [ setuptools ];

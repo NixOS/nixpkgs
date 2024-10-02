@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "fontmath";
-  version = "0.9.3";
+  version = "0.9.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "fontMath";
     inherit version;
-    hash = "sha256-alOHy3/rEFlY2y9c7tyHhRPMNb83FeJiCQ8FV74MGxw=";
+    hash = "sha256-H9kZDJ14ThMFw8SXcbkdkQ8kakt8RO3iGcmaB+167aQ=";
     extension = "zip";
   };
 

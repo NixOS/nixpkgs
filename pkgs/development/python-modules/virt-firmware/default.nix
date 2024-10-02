@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "virt-firmware";
-  version = "24.4";
+  version = "24.7";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rqhaKDOQEOj6bcRz3qZJ+a4yG1qTC9SUjuxMhZlnmwU=";
+    hash = "sha256-Rc87Nk4Sylx5/j3LVVDCNFkv8hYuyJKFptsC1kA3d78=";
   };
 
   build-system = [ setuptools ];

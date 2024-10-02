@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   pyasn1,
   pytestCheckHook,
@@ -10,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyasn1-modules";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,8 +20,17 @@ buildPythonPackage rec {
     owner = "pyasn1";
     repo = "pyasn1-modules";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UJycVfj08+3zjHPji5Qlh3yqeS30dEwu1pyrN1yo1Vc=";
+    hash = "sha256-7tCmhADC8LuswonL4QQ01/DD0RzeRLFJrsU49On4fqY=";
   };
+
+  patches = [
+    # Stop using pyasn1.compat.octets, https://github.com/pyasn1/pyasn1-modules/pull/22
+    (fetchpatch {
+      name = "pyasn1-compat.patch";
+      url = "https://github.com/pyasn1/pyasn1-modules/commit/079c176eb00ed7352c9696efa12a0577beeecd71.patch";
+      hash = "sha256-k/7P0RnhK57BUFZFFBDyFvroFF9lhonNhD/XXNGoiMk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

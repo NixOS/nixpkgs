@@ -12,12 +12,12 @@
 }:
 buildPythonPackage rec {
   pname = "ansible-builder";
-  version = "3.0.1";
+  version = "3.1.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rxyhgj9Cad751tPAptCTLCtXQLUXaRYv39bkoFzzjOk=";
+    hash = "sha256-0txXPianvVCV6YrrN+6bALyfUAWr6nFH10IpwPNCb8s=";
   };
 
   nativeBuildInputs = [

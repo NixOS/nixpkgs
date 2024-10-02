@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
+    hash = "sha256-wNXcmH0IIuAOoomIdmhAPxe4TiEzes3Kq+Vth2r4/IA=";
     postFetch = "rm -rf $out/docs/reST";
   };
 

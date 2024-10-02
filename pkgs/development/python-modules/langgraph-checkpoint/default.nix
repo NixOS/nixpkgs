@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "1.0.9";
+  version = "1.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/checkpoint==${version}";
-    hash = "sha256-3gm+L67pPAKpY1kqnX1lPnca40KoBVZdRZ1Cy6D0dzU=";
+    hash = "sha256-CDQGzhzV6lQYatdk3xYw0FgRk6shq7FR0skUxYpIcc0=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
-  version = "0.25.1";
+  version = "0.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ye2XQL/ZQPlA4dy3tlr03WyGhfl7SaOXMt10cWHnW5o=";
+    hash = "sha256-uLOOAmJ8Y0z+tuIIOSnI8qZoZ+IA2+tNBX1lDCvc8+A=";
     fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
   };
 

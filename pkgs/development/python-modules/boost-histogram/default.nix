@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "boost-histogram";
-  version = "1.4.1";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "boost_histogram";
     inherit version;
-    hash = "sha256-lxRvc19GfVBpdqBH8/I3zlmECpUv0jH19DH4l/sAbN0=";
+    hash = "sha256-BiPwEObFLl0Bh2dyOVloYJDbB/ww8NHYR1tdZjxd2yw=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

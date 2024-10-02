@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "remarshal";
-  version = "0.17.1";
+  version = "0.18.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dbohdan";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2WxMh5P/8NvElymnMU3JzQU0P4DMXFF6j15OxLaS+VA=";
+    hash = "sha256-GFQzeFAHofGohOpsMg7cORyKM1iterwMWD+J7LGQzdk=";
   };
 
   nativeBuildInputs = [

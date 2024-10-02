@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.224.1";
+  version = "2.232.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "sagemaker-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kc66sygHGFqMvSY7rACb62wJEJesnN4KDmtYZLIOsqc=";
+    hash = "sha256-I+iZKx1CnZIGYgYuYhhs8BnY84KPyKOGw8M0He26DGU=";
   };
 
   patches = [

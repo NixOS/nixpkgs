@@ -35,7 +35,7 @@ let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
-    version = "0.22.0";
+    version = "0.24.0";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ let
       owner = "scikit-image";
       repo = "scikit-image";
       rev = "refs/tags/v${version}";
-      hash = "sha256-M18y5JBPf3DR7SlJcCf82nG2MzwILg2w1AhJMzZXslg=";
+      hash = "sha256-zhW7P2ss7n9LXRXiBMsifxCGGKXgZFbGLl3K4u4xzfE=";
     };
 
     postPatch = ''

@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "numpy-stl";
-  version = "3.1.1";
+  version = "3.1.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-947qYsgJOL9T6pFPpbbJL0SPDqtWCeDlpzfd4DlAQzQ=";
+    hash = "sha256-crRpUN+jZC3xx7hzz6eKVIUzckuQdHjFZ9tC/fV+49I=";
   };
 
   propagatedBuildInputs = [

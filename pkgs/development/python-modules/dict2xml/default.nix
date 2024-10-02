@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "dict2xml";
-  version = "1.7.5";
+  version = "1.7.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "delfick";
     repo = "python-dict2xml";
     rev = "refs/tags/release-${version}";
-    hash = "sha256-GNvG1VFz/qkkTrKleMrq8n6kcIYtfhUlQMyCqH9uQzw=";
+    hash = "sha256-5GnIVpG2xHKYv27sSjjmm8JsZ1YR9Mvc3SqE4SnE84o=";
   };
 
   nativeBuildInputs = [ hatchling ];

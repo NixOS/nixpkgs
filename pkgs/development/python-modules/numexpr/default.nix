@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "numexpr";
-  version = "2.10.0";
+  version = "2.10.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-yJ6TB1JjnfBAU5FgMm2PmahBWbvqQZQ6uOlgWR7arvA=";
+    hash = "sha256-m7qZ01SmXxoAiri4fwfYRATGaOZrq2JN9ba1NzQDz4E=";
   };
 
   # patch for compatibility with numpy < 2.0

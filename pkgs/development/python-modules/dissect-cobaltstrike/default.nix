@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-cobaltstrike";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cobaltstrike";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CS50c3r7sdxp3CRS6XJ4QUmUFtmhFg6rSdKfYzJSOV4=";
+    hash = "sha256-xHBjKGcJU6+VQyyrqKi6fNB+8KGhw/EGL12ZCdgWyug=";
   };
 
   build-system = [

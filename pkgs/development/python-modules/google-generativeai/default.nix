@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-generativeai";
-  version = "0.7.2";
+  version = "0.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = "generative-ai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KVKoPCpMaaVMU6VqYXD7vHmhv1AS5slRobRVDDuaDHc=";
+    hash = "sha256-7l7Tg4sCdRtYnDwrQBA4rUIz4gO2YGf+3qn7OQRMCDc=";
   };
 
   pythonRelaxDeps = [ "google-ai-generativelanguage" ];

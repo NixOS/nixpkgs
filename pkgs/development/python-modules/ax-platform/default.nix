@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ax-platform";
-  version = "0.4.1";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "ax";
     rev = "refs/tags/${version}";
-    hash = "sha256-ygMMMKY5XsoQGp9yUMFAQqkSUlXNBJCb8xgGE10db4U=";
+    hash = "sha256-jmBjrtxqg4Iu3Qr0HRqjVfwURXzbJaGm+DBFNHYk/vA=";
   };
 
   build-system = [

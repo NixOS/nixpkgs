@@ -40,7 +40,7 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.4.19.post1";
+  version = "0.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -49,7 +49,7 @@ mkDerivationWith buildPythonPackage rec {
     owner = "napari";
     repo = "napari";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qw5WdFPySNkmm+dNu+hqsmr+csBpHnSl9bMpb4nKEqI=";
+    hash = "sha256-+xgG0mbtVuB6XcpXSDDKaopCxXVTcVl3lKBt1CRmw/s=";
   };
 
   postPatch = ''

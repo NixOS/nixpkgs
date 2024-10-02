@@ -6,12 +6,12 @@
 
 buildPythonPackage rec {
   pname = "django-gravatar2";
-  version = "1.4.4";
+  version = "1.4.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vn921fb6jjx7rf5dzhy66rkb71nwmh9ydd0xs9ys72icw4jh4y8";
+    sha256 = "sha256-LbtWRl45Xdizkg1AF+J6R1aRLMKtmxG6SM8UOHGoA2Q=";
   };
 
   doCheck = false;

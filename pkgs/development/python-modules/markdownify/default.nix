@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "0.12.1";
+  version = "0.13.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H7CMYYsw4O56MaObmY9EoY+yirJU9V9K8GttNaIXnic=";
+    hash = "sha256-qyV/nmvUB1EYgoooydAvikv+t0IfVYg0qnmy3+syoJg=";
   };
 
   build-system = [ setuptools ];

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "1.24.2";
+  version = "1.25.0";
 
   pyproject = true;
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     rev = "refs/tags/${version}";
-    hash = "sha256-2629Xk2KB1WX3JzAupBWmKg+Ztp5FFJ0x9Xa/w+8tns=";
+    hash = "sha256-pardg1lR8cUuGsli3obqeYf3nxqtlWWzNmZKMWCPwT0=";
   };
 
   patches = [

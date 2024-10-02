@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.5.20240503091721";
+  version = "8.7.20240905150001";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     rev = "refs/tags/${version}";
-    hash = "sha256-VbEIkWzg6kPnJWqbvlfsD83oS0VQasGQo+pUIPiGjhU=";
+    hash = "sha256-hPqUD9gYO78NnG/QdD32uRkRPpN5UIhfzNHpUXnNOgE=";
   };
 
   postPatch = ''

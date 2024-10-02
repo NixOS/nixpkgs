@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bibtex";
-  version = "2.6.2";
+  version = "2.6.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9IevaUM28ov7fWoXBwlTp9JkvsQwAKI3lyQnT1+NcK4=";
+    hash = "sha256-fHkDR+8csO3zDeVfwyTZeC0IXonFLCuPqvoILgjiOUY=";
   };
 
   propagatedBuildInputs = [

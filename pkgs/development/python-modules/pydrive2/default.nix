@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.19.0";
+  version = "1.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
-    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
+    hash = "sha256-Foum622DybCC8FvIy5Xuk85iOJ2ztVn/DnabW7iysQo=";
   };
 
   nativeBuildInputs = [

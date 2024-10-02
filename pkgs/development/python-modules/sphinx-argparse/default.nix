@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-argparse";
-  version = "0.4.0";
+  version = "0.5.2";
   format = "setuptools";
 
   src = fetchPypi {
     pname = "sphinx_argparse";
     inherit version;
-    hash = "sha256-4PNBhOtW8S+s53T7yHuICr25AXoJmNHsVZsmfpaX5Ek=";
+    hash = "sha256-5TUvj6iUtvtv2gSYuiip+NQ1lx70u8GmycZBTnZE8DI=";
   };
 
   postPatch = ''

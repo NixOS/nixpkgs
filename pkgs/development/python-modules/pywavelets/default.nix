@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pywavelets";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PyWavelets";
     repo = "pywt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Dr6LWGVlYGDD21l1RQ7elScovcen5uuFdJJXe3deB5o=";
+    hash = "sha256-oWAF8YDvb0SdlRzSjG2BNEekBkvR3U6KQ+e2FoIs+tw=";
   };
 
   postPatch = ''

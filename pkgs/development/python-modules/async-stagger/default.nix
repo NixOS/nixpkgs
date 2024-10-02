@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "async-stagger";
-  version = "0.3.1";
+  version = "0.4.0.post1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "async_stagger";
     inherit version;
-    hash = "sha256-qp81fp79J36aUWqUvegSStXkZ+m8Zcn62qrJjpVqQ9Y=";
+    hash = "sha256-s3jI25FbKFH7sf0KiaXIsheLnNYvMXHEc+R6f0PLrFw=";
   };
 
   nativeCheckInputs = [
