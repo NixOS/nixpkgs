@@ -575,8 +575,6 @@ let
         compilerNames.ghc8107
         # Support ceased as of 2.5.0.0
         compilerNames.ghc902
-        # No support yet (2024-05-12)
-        compilerNames.ghc9101
       ] released;
       hoogle = lib.subtractLists [
       ] released;
