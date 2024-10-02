@@ -94,10 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ]
     ++ lib.optionals (!userOnly) [ dtc ];
 
-  buildInputs = [ zlib glib pixman
-    vde2 lzo snappy libtasn1
-    gnutls nettle curl libslirp
-  ]
+  buildInputs = [ glib zlib ]
+    ++ lib.optionals (!minimal) [ dtc pixman vde2 lzo snappy libtasn1 gnutls nettle libslirp ]
+    ++ lib.optionals (!userOnly) [ curl ]
     ++ lib.optionals ncursesSupport [ ncurses ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Cocoa Hypervisor Kernel rez setfile vmnet ]
     ++ lib.optionals seccompSupport [ libseccomp ]
@@ -112,8 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smartcardSupport [ libcacard ]
     ++ lib.optionals spiceSupport [ spice-protocol spice ]
     ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap_ng libcap attr ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [ libaio ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [ libcap_ng libcap attr libaio ]
     ++ lib.optionals xenSupport [ xen ]
     ++ lib.optionals cephSupport [ ceph ]
     ++ lib.optionals glusterfsSupport [ glusterfs libuuid ]
@@ -124,8 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
     ++ lib.optionals canokeySupport [ canokey-qemu ]
-    ++ lib.optionals capstoneSupport [ capstone ]
-    ++ lib.optionals (!userOnly) [ dtc ];
+    ++ lib.optionals capstoneSupport [ capstone ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
