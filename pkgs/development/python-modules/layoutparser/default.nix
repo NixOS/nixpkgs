@@ -40,7 +40,7 @@ let
       torchvision
       effdet
     ];
-    # paddledetection = [ paddlepaddle ]
+    # paddledetection = [ paddlepaddle ]
   };
 in
 buildPythonPackage {

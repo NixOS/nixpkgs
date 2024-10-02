@@ -8,7 +8,7 @@ let
    * to a menuentry for use in grub.
    *
    *  * defaults: {name, image, params, initrd}
-   *  * options: [ option... ]
+   *  * options: [ option... ]
    *  * option: {name, params, class}
    */
   menuBuilderGrub2 =
