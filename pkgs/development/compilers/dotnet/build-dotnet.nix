@@ -143,14 +143,15 @@ mkWrapper type (stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r ./ $out
-
     mkdir -p $out/share/doc/$pname/$version
-    mv $out/LICENSE.txt $out/share/doc/$pname/$version/
-    mv $out/ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+    mv LICENSE.txt $out/share/doc/$pname/$version/
+    mv ThirdPartyNotices.txt $out/share/doc/$pname/$version/
 
-    ln -s $out/dotnet $out/bin/dotnet
+    mkdir -p $out/share/dotnet
+    cp -r ./ $out/share/dotnet
+
+    mkdir -p $out/bin
+    ln -s $out/share/dotnet/dotnet $out/bin/dotnet
 
     runHook postInstall
   '';
@@ -161,17 +162,17 @@ mkWrapper type (stdenv.mkDerivation rec {
     patchelf \
       --add-needed libicui18n.so \
       --add-needed libicuuc.so \
-      $out/shared/Microsoft.NETCore.App/*/libcoreclr.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+      $out/share/dotnet/shared/Microsoft.NETCore.App/*/libcoreclr.so \
+      $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Globalization.Native.so \
+      $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libgssapi_krb5.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
-      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+      $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Net.Security.Native.so \
+      $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
     patchelf \
       --add-needed libssl.so \
-      $out/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
-      $out/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
+      $out/share/dotnet/shared/Microsoft.NETCore.App/*/*System.Security.Cryptography.Native.OpenSsl.so \
+      $out/share/dotnet/packs/Microsoft.NETCore.App.Host.${hostRid}/*/runtimes/${hostRid}/native/*host
   '';
 
   # fixes: Could not load ICU data. UErrorCode: 2
