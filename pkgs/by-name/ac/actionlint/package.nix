@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.7.2";
+  version = "1.7.3";
 in
 buildGoModule {
   pname = "actionlint";
@@ -22,7 +22,7 @@ buildGoModule {
     owner = "rhysd";
     repo = "actionlint";
     rev = "v${version}";
-    hash = "sha256-/VhSmNwAhgAM/506MjI07KBFbkBTLpQfod49ysju+uU=";
+    hash = "sha256-IwkTiuQ3eTZMn1y0NG1jo9UrX7AmEUBRSGQ/vq/0YL8=";
   };
 
   vendorHash = "sha256-SIY79SjYYXW2slUQr2Bm9dLH8K2wE3l/TL3QP0m8GLs=";
