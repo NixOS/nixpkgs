@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonAtLeast,
   pythonOlder,
 
@@ -41,6 +42,15 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-uOOZX8bKRunTOgYVbmetu2m0B7kijxBgWdNiLCAhiQ4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python3.12.7-compat.patch";
+      url = "https://github.com/python/mypy/commit/1a2c8e2a4df21532e4952191cad74ae50083f4ad.patch";
+      hash = "sha256-GBQPTkdoLeErjbRUjZBFEwvCcN/WzC3OYVvou6M+f80=";
+    })
+  ];
+
 
   build-system = [
     mypy-extensions
