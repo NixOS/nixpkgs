@@ -21,8 +21,9 @@
   systemd,
   voms,
   zlib,
-  # If not null, the builder will
-  # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
+  # If not null, move the default configuration files to "$etc/etc" and look for the configuration
+  # directory at externalEtc.
+  # Otherwise, the program will look for the configuration files under $out/etc."
   externalEtc ? "/etc",
   removeReferencesTo,
 }:
@@ -81,9 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
       # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
       fuse
     ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      systemd
-      voms
+    ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) [
+      systemd # only available on specific non-static Linux platforms
+      voms # only available on Linux due to gsoap failing to build on Darwin
     ];
 
   # https://github.com/xrootd/xrootd/blob/master/packaging/rhel/xrootd.spec.in#L665-L675=
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MACAROONS" false)
     (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
     (lib.cmakeBool "ENABLE_SCITOKENS" true)
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_VOMS" stdenv.hostPlatform.isLinux)
   ];
 
