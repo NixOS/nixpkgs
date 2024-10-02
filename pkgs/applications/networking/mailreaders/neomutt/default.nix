@@ -35,7 +35,9 @@
   withContrib ? true,
 }:
 
-assert lib.warnIf (enableMixmaster) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+assert lib.warnIf (
+  enableMixmaster
+) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
@@ -97,24 +99,21 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
-  configureFlags =
-    [
-      "--enable-autocrypt"
-      "--gpgme"
-      "--gss"
-      "--lmdb"
-      "--notmuch"
-      "--ssl"
-      "--sasl"
-      "--with-homespool=mailbox"
-      "--with-mailpath="
-      # To make it not reference .dev outputs. See:
-      # https://github.com/neomutt/neomutt/pull/2367
-      "--disable-include-path-in-cflags"
-      "--zlib"
-    ]
-    ++ lib.optional enableZstd "--zstd"
-    ++ lib.optional enableLua "--lua";
+  configureFlags = [
+    "--enable-autocrypt"
+    "--gpgme"
+    "--gss"
+    "--lmdb"
+    "--notmuch"
+    "--ssl"
+    "--sasl"
+    "--with-homespool=mailbox"
+    "--with-mailpath="
+    # To make it not reference .dev outputs. See:
+    # https://github.com/neomutt/neomutt/pull/2367
+    "--disable-include-path-in-cflags"
+    "--zlib"
+  ] ++ lib.optional enableZstd "--zstd" ++ lib.optional enableLua "--lua";
 
   postInstall =
     ''
