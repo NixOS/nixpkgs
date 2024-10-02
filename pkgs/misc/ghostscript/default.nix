@@ -21,6 +21,7 @@
 , bash
 , buildPackages
 , openjpeg
+, fixDarwinDylibNames
 , cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
 , cups
 , x11Support ? cupsSupport
@@ -82,7 +83,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config autoconf zlib ]
-    ++ lib.optional cupsSupport cups;
+    ++ lib.optional cupsSupport cups
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [
     zlib expat openssl
@@ -136,17 +138,14 @@ stdenv.mkDerivation rec {
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
     ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in $out/lib/*.dylib* ; do
-      install_name_tool -id "$file" $file
-    done
   '';
 
-  # dynamic library name only contains maj.min, eg. '9.53'
-  dylib_version = lib.versions.majorMinor version;
+  # dynamic library name only contains major version number, eg. '10'
+  dylib_version = lib.versions.major version;
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
-    install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
+    for file in $out/bin/{gs,gsc,gsx}; do
+      install_name_tool -change libgs.$dylib_version.dylib $out/lib/libgs.$dylib_version.dylib $file
+    done
   '';
 
   # validate dynamic linkage
