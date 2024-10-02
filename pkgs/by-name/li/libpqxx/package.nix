@@ -1,28 +1,51 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, python3 }:
+{
+  fetchFromGitHub,
+  lib,
+  postgresql,
+  python3,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpqxx";
-  version = "7.7.5";
+  version = "7.9.2";
 
   src = fetchFromGitHub {
     owner = "jtv";
-    repo = pname;
+    repo = "libpqxx";
     rev = version;
-    sha256 = "sha256-mvGPMbk4b8NmPvzy5hS+Au69NtDGha8ONTEQf6I3VZE=";
+    hash = "sha256-I5e0iqXlZqDOMa1PlnrxpcKt1c2mbnSbVQrpi1Gh25o=";
   };
 
-  nativeBuildInputs = [ python3 ];
-  buildInputs = [ postgresql ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
-  preConfigure = ''
-    patchShebangs ./tools/splitconfig
+  postPatch = ''
+    patchShebangs ./tools/splitconfig.py
   '';
 
-  configureFlags = [ "--enable-shared --disable-documentation" ];
-  CXXFLAGS = [ "-std=c++17" ];
+  configureFlags = [
+    "--disable-documentation"
+    "--enable-shared"
+  ];
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    postgresql.dev
+    python3
+  ];
+
+  buildInputs = [
+    postgresql.lib
+  ];
 
   meta = {
     description = "C++ library to access PostgreSQL databases";
+    downloadPage = "https://github.com/jtv/libpqxx";
+    changelog = "https://github.com/jtv/libpqxx/releases/tag/${version}";
     homepage = "https://pqxx.org/development/libpqxx/";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
