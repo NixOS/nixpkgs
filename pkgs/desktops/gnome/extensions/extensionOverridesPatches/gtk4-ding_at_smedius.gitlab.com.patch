@@ -1,13 +1,3 @@
-diff --git a/app/createThumbnail.js b/app/createThumbnail.js
-index d070248..f0c2def 100755
---- a/app/createThumbnail.js
-+++ b/app/createThumbnail.js
-@@ -1,4 +1,4 @@
--#!/usr/bin/gjs
-+#!@gjs@/bin/gjs
- 
- /* DING: Desktop Icons New Generation for GNOME Shell
-  *
 diff --git a/app/ding.js b/app/ding.js
 index 1062bc7..c312d48 100755
 --- a/app/ding.js
