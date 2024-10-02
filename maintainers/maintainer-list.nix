@@ -21474,6 +21474,12 @@
     githubId = 2164118;
     name = "Tobias Bora";
   };
+  tobifroe = {
+    email = "hi@froelich.dev";
+    github = "tobifroe";
+    githubId = 40638719;
+    name = "Tobias Frölich";
+  };
   tobim = {
     email = "nix@tobim.fastmail.fm";
     github = "tobim";
