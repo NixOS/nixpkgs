@@ -1,16 +1,5 @@
-{ lib
-, stdenv
-, cmake
-, fetchgit
-, libX11
-, meson
-, ninja
-, pkg-config
-, vulkan-headers
-, vulkan-loader
-, wayland-scanner
-, wayland
-}:
+{ lib, stdenv, cmake, fetchgit, libX11, meson, ninja, pkg-config, vulkan-headers
+, vulkan-loader, wayland-scanner, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-hdr-layer-kwin6";
