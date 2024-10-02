@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   inherit meta pname version;
 
   src = fetchurl {
-    url = "https://releases.lmstudio.ai/darwin/arm64/${version}/LM%20Studio-${version}-arm64.dmg";
-    hash = "sha256-KC4nXhMkrRDRtLPnpD5UTyKzQ+xH9jhZZHnjk9gDVfo=";
+    url = "https://releases.lmstudio.ai/darwin/arm64/${version}/LM-Studio-${version}-arm64.dmg";
+    hash = "sha256-PmXekM7rHY8EIp6l2XiLQlxyIB00MJS5C0gzFfe1i70=";
   };
 
   nativeBuildInputs = [ undmg ];

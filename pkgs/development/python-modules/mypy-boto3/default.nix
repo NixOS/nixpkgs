@@ -222,8 +222,8 @@ rec {
       "sha256-T7rLgdtj8PUAZ6WRRkFYH/I6bqq+NA29kddxeI72UVU=";
 
   mypy-boto3-clouddirectory =
-    buildMypyBoto3Package "clouddirectory" "1.35.0"
-      "sha256-pU73zcHpJjazGSsHDUcWQezvdQfrP8mV4CROICuQOq8=";
+    buildMypyBoto3Package "clouddirectory" "1.35.30"
+      "sha256-D64DZgrma3/kvhyH6ZbPtD8nlRrzFVM8WT8Ex2fTZLM=";
 
   mypy-boto3-cloudformation =
     buildMypyBoto3Package "cloudformation" "1.35.0"
@@ -262,8 +262,8 @@ rec {
       "sha256-DXAn45lDLDoA5T7yDRRYwz7HI0l2SYxB6TZAsXZS2oY=";
 
   mypy-boto3-codeartifact =
-    buildMypyBoto3Package "codeartifact" "1.35.0"
-      "sha256-NXttDVG1iAGoYefRXROKaXiQUnRXxiOcOUad7ZuA2xE=";
+    buildMypyBoto3Package "codeartifact" "1.35.31"
+      "sha256-wCjyRnd7RlnLRQrADd2Xmh74IsQxBfUgLIJuaZW7kjw=";
 
   mypy-boto3-codebuild =
     buildMypyBoto3Package "codebuild" "1.35.21"
@@ -338,8 +338,8 @@ rec {
       "sha256-1pS2EkJapoNVi5lUEftaxbdoN4fd7XSFjWyLXH1noL0=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.35.13"
-      "sha256-sL2WWzsUFA6dbKR3XUEoy+CbWT6TWVQCxfdQ8mZTmbo=";
+    buildMypyBoto3Package "connect" "1.35.30"
+      "sha256-QTUZHkDIsCUtFUXnydjwTrHUiYFh5uRyOKwW70isSaE=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.35.0"
@@ -1054,8 +1054,8 @@ rec {
       "sha256-aIKpT15gBmM2gkkSbmzs5pVvAIfessdzlQTspmvK+LQ=";
 
   mypy-boto3-pricing =
-    buildMypyBoto3Package "pricing" "1.35.0"
-      "sha256-imX//FkRBbNmc69jJINlSIPB0WZc0AvIRH+/c3PRSn8=";
+    buildMypyBoto3Package "pricing" "1.35.30"
+      "sha256-THSL/TxygrV/E4XO4YQQBS5p2xU7MyPFdR2ZkVx2o0k=";
 
   mypy-boto3-privatenetworks =
     buildMypyBoto3Package "privatenetworks" "1.35.0"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-85yUjKQ8oiECUYHhmmYrDssyFSQb6itfIRY2iuwCZdo=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.35.25"
-      "sha256-I4lTEWslkWlrayRnTG9wZcSdihSEDd51F37a/zdaMY8=";
+    buildMypyBoto3Package "rds" "1.35.31"
+      "sha256-WX0o2LkYYNXMi6IOR8Cqm6faTwW5/Y2pir4+GOpBytI=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.35.28"
@@ -1118,8 +1118,8 @@ rec {
       "sha256-49Ysavsq6tDUQAcJiP4GQkt5zgBz36qufByA88bltco=";
 
   mypy-boto3-resource-groups =
-    buildMypyBoto3Package "resource-groups" "1.35.0"
-      "sha256-5l6yFERWSvAgeguBrQmx7fzRmSFW95As0NIqo91VTmw=";
+    buildMypyBoto3Package "resource-groups" "1.35.30"
+      "sha256-f+4F+0VuLAmx+3+qBwNj8jit9DYC/Dfrhd5/L0ledW4=";
 
   mypy-boto3-resourcegroupstaggingapi =
     buildMypyBoto3Package "resourcegroupstaggingapi" "1.35.0"
@@ -1378,8 +1378,8 @@ rec {
       "sha256-j9ZU1UHzKNo1+gb+uUYiMTIwjGi9OEg0jAmKGx+mGno=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.35.0"
-      "sha256-98NHM9PlT4c9jCcm8kKaEsOHHvFdhmAca/LRmW8biTo=";
+    buildMypyBoto3Package "verifiedpermissions" "1.35.30"
+      "sha256-wOoPXyHx/yCdGtLFLFyO9WJLSx0XyIiwMWMLff3v25U=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.35.0"
