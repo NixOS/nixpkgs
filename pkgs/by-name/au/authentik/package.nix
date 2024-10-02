@@ -118,25 +118,6 @@ let
         };
       };
 
-      django-pglock = prev.buildPythonPackage rec {
-        pname = "django-pglock";
-        version = "1.6.0";
-        src = fetchFromGitHub {
-          owner = "Opus10";
-          repo = pname;
-          rev = version;
-          hash = "sha256-KCB00W3sUyEERgK/DfDPl051uFkc0IRdbOJusUVs5SA=";
-        };
-        nativeBuildInputs = with prev; [
-          poetry-core
-        ];
-        propagatedBuildInputs = with final; [
-          django
-          django-pgactivity
-        ];
-        pyproject = true;
-      };
-
       # Use 3.14.0 until https://github.com/encode/django-rest-framework/issues/9358 is fixed.
       # Otherwise applying blueprints/default/default-brand.yaml fails with:
       #   authentik.flows.models.RelatedObjectDoesNotExist: FlowStageBinding has no target.
