@@ -4679,6 +4679,19 @@ final: prev:
     meta.homepage = "https://github.com/sjl/gundo.vim/";
   };
 
+  gx-nvim = buildVimPlugin {
+    pname = "gx.nvim";
+    version = "2024-09-11";
+    src = fetchFromGitHub {
+      owner = "chrishrb";
+      repo = "gx.nvim";
+      rev = "cc70d112b14d18dd7b123a5d5288266a60e8189e";
+      sha256 = "0r6ga1nixwjdgqh413pa6nvvn79bq80dg8xgijyg6l6i8k6r5f8v";
+      fetchSubmodules = true;
+    };
+    meta.homepage = "https://github.com/chrishrb/gx.nvim/";
+  };
+
   gv-vim = buildVimPlugin {
     pname = "gv.vim";
     version = "2023-12-10";
