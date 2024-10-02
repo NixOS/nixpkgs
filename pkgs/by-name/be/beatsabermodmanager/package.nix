@@ -4,6 +4,7 @@
   fetchFromGitHub,
   copyDesktopItems,
   makeDesktopItem,
+  iconConvTools,
 
   dotnetCorePackages,
 
@@ -29,7 +30,10 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
-  nativeBuildInputs = [ copyDesktopItems ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    iconConvTools
+  ];
 
   projectFile = [ "BeatSaberModManager/BeatSaberModManager.csproj" ];
 
@@ -48,13 +52,21 @@ buildDotnetModule rec {
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
+  fixupPhase = ''
+    runHook preFixup
+
+    icoFileToHiColorTheme $out/lib/beatsabermodmanager/Resources/Icons/Icon.ico beatsabermodmanager $out
+
+    runHook postFixup
+  '';
+
   desktopItems =
     [
       (makeDesktopItem {
         name = "BeatSaberModManager";
         desktopName = "BeatSaberModManager";
         exec = "BeatSaberModManager";
-        # icon = "osu!";
+        icon = "beatsabermodmanager";
         comment = meta.description;
         type = "Application";
         categories = [
