@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, unstableGitUpdater
+, gitUpdater
 , nixosTests
 , cmake
 , pkg-config
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "0-unstable-2024-08-31";
+  version = "24.09";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "2d754931f038865bd91938578b862262f0ce7c00";
-    hash = "sha256-wmtAbajZ859tvLjKuwqFUq05VGLxHNJX1XyIXM6vvgU=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-/0txc9ynC3rj9tbHwYNlDe2C1DlmjoE2Q2/uoBz2GFg=";
   };
 
   strictDeps = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     providedSessions = [ "miriway" ];
     tests = {
       inherit (nixosTests) miriway;
