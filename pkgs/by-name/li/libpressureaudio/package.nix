@@ -1,82 +1,55 @@
-{ stdenv, apulse, libpulseaudio, pkg-config, intltool }:
+{
+  apulse,
+  libpulseaudio,
+  symlinkJoin,
+}:
 
-stdenv.mkDerivation {
-  pname = "libpressureaudio";
-  version = apulse.version;
+symlinkJoin {
+  name = "libpressureaudio-${apulse.version}-nixpkgs";
 
-  src = libpulseaudio.src;
+  paths = [ apulse ];
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  postBuild = ''
+    pushd $out/lib
+    mv apulse/* .
+    rmdir apulse
+    popd
 
-  dontConfigure = true;
-  dontBuild = true;
+    mkdir -p $out/include/
+    pushd $out/include/
+    tar xvf ${libpulseaudio.src} --wildcards "*/src/pulse/*.h" --strip-components 2
+    popd
 
-  installPhase = ''
-    echo "Copying libraries from apulse."
-    mkdir -p $out/lib
-    ls ${apulse}/lib/apulse $out/lib
-    cp -a ${apulse}/lib/apulse/* $out/lib/
-
-    echo "Copying headers from pulseaudio."
-    mkdir -p $out/include/pulse
-    cp -a src/pulse/*.h $out/include/pulse
-
-    echo "Generating custom pkgconfig definitions."
     mkdir -p $out/lib/pkgconfig
-    for a in libpulse.pc libpulse-simple.pc libpulse-mainloop-glib.pc ; do
-        cat > $out/lib/pkgconfig/$a << EOF
-    prefix=$out
-    libdir=$out/lib
-    includedir=$out/include
-
-    EOF
-    done
-
-    cat >> $out/lib/pkgconfig/libpulse.pc << EOF
-    Name: libpulse
-    Description: PulseAudio Client Interface
-    Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse
-    Cflags: -I$out/include -D_REENTRANT
-    EOF
-
-    cat >> $out/lib/pkgconfig/libpulse-simple.pc << EOF
-    Name: libpulse-simple
-    Description: PulseAudio Simplified Synchronous Client Interface
-    Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse-simple
-    Cflags: -I$out/include -D_REENTRANT
-    Requires: libpulse
-    EOF
-
-    cat >> $out/lib/pkgconfig/libpulse-mainloop-glib.pc << EOF
-    Name: libpulse-mainloop-glib
-    Description: PulseAudio GLib 2.0 Main Loop Wrapper
-    Version: ${libpulseaudio.version}-rebootstrapped
-    Libs: -L$out/lib -lpulse-mainloop-glib
-    Cflags: -I$out/include -D_REENTRANT
-    Requires: libpulse glib-2.0
-    EOF
+    pushd $out/lib/pkgconfig
+    install -Dm644 ${./libpulse-mainloop-glib-template.pc} ./libpulse-mainloop-glib.pc
+    version=${apulse.version} substituteAllInPlace ./libpulse-mainloop-glib.pc
+    install -Dm644 ${./libpulse-simple-template.pc} ./libpulse-simple.pc
+    version=${apulse.version} substituteAllInPlace ./libpulse-simple.pc
+    install -Dm644 ${./libpulse-template.pc} ./libpulse.pc
+    version=${apulse.version} substituteAllInPlace ./libpulse.pc
+    popd
   '';
 
-  meta = apulse.meta // {
+  meta = {
+    homepage = "http://r-36.net/scm/pressureaudio/file/README.md.html";
     description = "libpulse without any sound daemons over pure ALSA";
     longDescription = ''
-      apulse (${apulse.meta.homepage}) implements most of libpulse
-      API over pure ALSA in 5% LOC of the original PulseAudio.
+      apulse implements most of libpulse API over pure ALSA in 5% LOC of the
+      original PulseAudio.
 
-      But apulse is made to be used as a wrapper that substitutes its
-      replacement libs into LD_LIBRARY_PATH. The problem with that is
-      that you still have to link against the original libpulse.
+      However, apulse is meant to be used as a wrapper that updates the
+      LD_LIBRARY_PATH environment environment variable, still requiring to link
+      against the original libpulse.
 
-      pressureaudio (http://git.r-36.net/pressureaudio/) wraps apulse
-      with everything you need to replace libpulse completely.
+      pressureaudio is a wrapper that joins apulse and pulseaudio headers plus
+      custom pkgconfig files so that it replaces libpulse completely.
 
-      This derivation is a reimplementation of pressureaudio in pure
-      nix.
+      In Nixpkgs, libpressureaudio is (re)implemented using Nixpkgs machinery.
 
-      You can simply override libpulse with this and most
-      packages would just work.
+      You can simply override libpulse with this and most packages would just
+      work.
     '';
+    inherit (apulse.meta) license maintainers platforms;
   };
 }
