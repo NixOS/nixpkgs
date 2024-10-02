@@ -68,7 +68,9 @@ in
   # elisp error in old versions
   ampc = ignoreCompilationErrorIfOlder super.ampc "0.2.0.20240220.181558";
 
-  auctex = mkHome super.auctex;
+  auctex = (mkHome super.auctex).overrideAttrs (old: {
+    #
+  });
 
   auctex-cont-latexmk = mkHome super.auctex-cont-latexmk;
 
