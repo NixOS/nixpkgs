@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitLab,
+  nix-update-script,
 }:
 let
   version = "1.2";
@@ -18,6 +19,8 @@ buildGoModule {
   };
 
   vendorHash = "sha256-c03vYidm8SkoesRVQZdg/bCp9LIpdTmpXdfwInlHBKk=";
+
+  passthru.updateScript = nix-update-script { };
 
   doCheck = true;
 
