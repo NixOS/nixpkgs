@@ -118,24 +118,6 @@ let
         };
       };
 
-      django-pgactivity = prev.buildPythonPackage rec {
-        pname = "django-pgactivity";
-        version = "1.4.1";
-        src = fetchFromGitHub {
-          owner = "Opus10";
-          repo = pname;
-          rev = version;
-          hash = "sha256-VwH7fwLcoH2Z9D/OY9iieM0cRhyDKOpAzqQ+4YVE3vU=";
-      };
-        nativeBuildInputs = with prev; [
-          poetry-core
-        ];
-        propagatedBuildInputs = with final; [
-          django
-        ];
-        pyproject = true;
-      };
-
       django-pglock = prev.buildPythonPackage rec {
         pname = "django-pglock";
         version = "1.6.0";
