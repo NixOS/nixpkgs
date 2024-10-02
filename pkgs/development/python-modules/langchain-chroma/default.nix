@@ -43,6 +43,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # Bad integration test, not used or vetted by the langchain team
+    "test_chroma_update_document"
+  ];
+
   passthru = {
     inherit (langchain-core) updateScript;
   };
