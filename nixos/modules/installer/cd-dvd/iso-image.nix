@@ -175,7 +175,6 @@ let
     # Search using a "marker file"
     search --set=root --file /EFI/nixos-installer-image
 
-    insmod gfxterm
     insmod png
     set gfxpayload=keep
     set gfxmode=${lib.concatStringsSep "," [
@@ -197,7 +196,15 @@ let
     ]}
 
     if [ "\$textmode" == "false" ]; then
-      terminal_output gfxterm
+      if [ x\$feature_default_font_path = xy ] ; then
+        font=unicode
+      else
+        font=(\$root)/EFI/boot/unicode.pf2
+      fi
+      if loadfont $font; then
+        insmod gfxterm 
+        terminal_output gfxterm
+      fi
       terminal_input  console
     else
       terminal_output console
