@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 let
-  version = "1.1";
+  version = "1.2";
 in
 buildGoModule {
   pname = "invidious-router";
@@ -13,8 +13,8 @@ buildGoModule {
   src = fetchFromGitLab {
     owner = "gaincoder";
     repo = "invidious-router";
-    rev = version;
-    hash = "sha256-t8KQqMPkBbVis1odDcSu+H0uvyvoFqCmtWoHqVRxmfc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-YcMtZq4VMHr6XqHcsAAEmMF6jF1j1wb7Lq4EK42QAEo=";
   };
 
   vendorHash = "sha256-c03vYidm8SkoesRVQZdg/bCp9LIpdTmpXdfwInlHBKk=";
