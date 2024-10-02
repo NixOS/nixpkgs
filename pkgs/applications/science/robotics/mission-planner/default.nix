@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono }:
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono, gitUpdater
+}:
 
 let
   pname = "mission-planner";
@@ -44,6 +45,8 @@ in stdenv.mkDerivation rec {
       --add-flags $out/opt/mission-planner/MissionPlanner.exe
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "ArduPilot ground station";
