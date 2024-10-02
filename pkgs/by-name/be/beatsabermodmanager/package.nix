@@ -2,6 +2,8 @@
   lib,
   buildDotnetModule,
   fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
 
   dotnetCorePackages,
 
@@ -27,6 +29,8 @@ buildDotnetModule rec {
 
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   projectFile = [ "BeatSaberModManager/BeatSaberModManager.csproj" ];
 
   executables = [ "BeatSaberModManager" ];
@@ -42,6 +46,26 @@ buildDotnetModule rec {
   # Required for OneClick
   makeWrapperArgs = [
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "BeatSaberModManager";
+      name = "BeatSaberModManager";
+      exec = "BeatSaberModManager";
+      # icon = "osu!";
+      comment = meta.description;
+      type = "Application";
+      categories = [
+        "Game"
+        "Utility"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/beatsaver"
+        "x-scheme-handler/modelsaber"
+        "x-scheme-handler/bsplaylist"
+      ];
+    })
   ];
 
   meta = with lib; {
