@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apulse";
-  version = "0.1.13";
+  version = "0.1.13-unstable-2024-05-11";
 
   src = fetchFromGitHub {
     name = "apulse-source-${finalAttrs.version}";
     owner = "i-rinat";
     repo = "apulse";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-tlLdUyyajtnXAJXUuK4n5PWFRu9RM9jb+XjsApWBztw=";
+    rev = "74b7e472fac2f3c93ea26a2ba178cde24a94d6c4";
+    hash = "sha256-G7vTJxskO4HWfVNNFZjPG26Tx6TzdMeYhLOE9ejiVLY=";
   };
 
   outputs = [
