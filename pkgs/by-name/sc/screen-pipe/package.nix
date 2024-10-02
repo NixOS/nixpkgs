@@ -15,13 +15,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "screen-pipe";
-  version = "0.1.48";
+  version = "0.1.93";
 
   src = fetchFromGitHub {
-    owner = "louis030195";
+    owner = "mediar-ai";
     repo = "screen-pipe";
     rev = "v${version}";
-    hash = "sha256-rWKRCqWFuPO84C52mMrrS4euD6XdJU8kqZsAz28+vWE=";
+    hash = "sha256-70cb41a6229a45fb150884baf9768febe41a629f3e40fb75a931150fd7341b1a=";
   };
 
   cargoLock = {
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Personalized AI powered by what you've seen, said, or heard";
-    homepage = "https://github.com/louis030195/screen-pipe";
+    homepage = "https://github.com/mediar-ai/screen-pipe";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
     mainProgram = "screen-pipe";
