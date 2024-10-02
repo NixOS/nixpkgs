@@ -103,6 +103,11 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
+        "--no-rewrite-asserts",
+        help="Do not rewrite assert statements with debugging information",
+        action="store_true",
+    )
+    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -132,6 +137,7 @@ def main() -> None:
         logger,
         args.keep_vm_state,
         args.global_timeout,
+        not args.no_rewrite_asserts,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
