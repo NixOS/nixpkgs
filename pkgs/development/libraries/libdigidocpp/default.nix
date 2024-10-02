@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "bin" ];
 
+  # Cherry-pick of
+  # https://github.com/open-eid/libdigidocpp/commit/2b5db855ba3ceb9bae1f11589ea1aea22bb7595a
+  # Fixes https://github.com/NixOS/nixpkgs/issues/334397
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'TSA_URL "http://dd-at.ria.ee/tsa"' 'TSA_URL "https://eid-dd.ria.ee/ts"'
+  '';
+
   # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
   # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
   # https://github.com/open-eid/cmake/pull/35 might be an alternative.
