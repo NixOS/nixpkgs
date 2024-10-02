@@ -1,13 +1,36 @@
-{ lib, stdenv, cmake, fetchgit, libX11, meson, ninja, pkg-config, vulkan-headers
-, vulkan-loader, wayland-scanner, wayland }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchgit,
+  libX11,
+  meson,
+  ninja,
+  pkg-config,
+  vulkan-headers,
+  vulkan-loader,
+  wayland-scanner,
+  wayland,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-hdr-layer-kwin6";
   version = "0.1.0";
 
-  nativeBuildInputs = [ meson ninja pkg-config cmake ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    cmake
+  ];
 
-  buildInputs = [ vulkan-headers vulkan-loader libX11 wayland-scanner wayland ];
+  buildInputs = [
+    vulkan-headers
+    vulkan-loader
+    libX11
+    wayland-scanner
+    wayland
+  ];
 
   src = fetchgit {
     url = "https://github.com/Zamundaaa/VK_hdr_layer.git";
