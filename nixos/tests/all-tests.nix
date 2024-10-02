@@ -228,6 +228,7 @@ in {
   containers-nested = handleTest ./containers-nested.nix {};
   containers-physical_interfaces = handleTest ./containers-physical_interfaces.nix {};
   containers-portforward = handleTest ./containers-portforward.nix {};
+  containers-portforward-interface = handleTest ./containers-portforward-interface.nix {};
   containers-reloadable = handleTest ./containers-reloadable.nix {};
   containers-require-bind-mounts = handleTest ./containers-require-bind-mounts.nix {};
   containers-restart_networking = handleTest ./containers-restart_networking.nix {};

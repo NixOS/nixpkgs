@@ -118,16 +118,6 @@ let
         extraFlags+=" --network-veth"
       fi
 
-      if [ -n "$HOST_PORT" ]; then
-        OIFS=$IFS
-        IFS=","
-        for i in $HOST_PORT
-        do
-            extraFlags+=" --port=$i"
-        done
-        IFS=$OIFS
-      fi
-
       if [ -n "$HOST_BRIDGE" ]; then
         extraFlags+=" --network-bridge=$HOST_BRIDGE"
       fi
@@ -175,7 +165,6 @@ let
         --setenv LOCAL_ADDRESS="$LOCAL_ADDRESS" \
         --setenv HOST_ADDRESS6="$HOST_ADDRESS6" \
         --setenv LOCAL_ADDRESS6="$LOCAL_ADDRESS6" \
-        --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
         ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
@@ -255,6 +244,7 @@ let
           fi
         fi
         ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
+
       ''
   );
 
@@ -371,7 +361,7 @@ let
           protocol = mkOption {
             type = types.str;
             default = "tcp";
-            description = "The protocol specifier for port forwarding between host and container";
+            description = "The protocol specifier for port forwarding between host and container. Possible values: tcp, tcp6, udp, udp6";
           };
           hostPort = mkOption {
             type = types.int;
@@ -382,13 +372,18 @@ let
             default = null;
             description = "Target port of container";
           };
+          interfaces = mkOption {
+            type = types.listOf types.str;
+            default = [];
+            description = "List of external interface names on the host to bind the port to. Defaults to all interfaces including lo";
+          };
         };
       });
       default = [];
-      example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; } ];
+      example = [ { protocol = "tcp"; hostPort = 8080; containerPort = 80; interfaces = [ "eth0" "lo" ]; } ];
       description = ''
         List of forwarded ports from host to container. Each forwarded port
-        is specified by protocol, hostPort and containerPort. By default,
+        is specified by protocol, hostPort and containerPort and interfaces. By default,
         protocol is tcp and hostPort and containerPort are assumed to be
         the same if containerPort is not explicitly given.
       '';
@@ -814,6 +809,45 @@ in
 
         serviceConfig = serviceDirectives dummyConfig;
       };
+
+      portForwarding = with lib; concatLists (concatLists (forEach (filter (x: x.value.forwardPorts != []) (
+        (mapAttrsToList (name: cfg:  nameValuePair name cfg) config.containers))) (containerConfig:
+          forEach containerConfig.value.forwardPorts (port:
+            if port.interfaces == [] then [{
+              containerName = containerConfig.name;
+              hostPort = port.hostPort;
+              containerPort = port.containerPort;
+              interface = "";
+              protocol = port.protocol;
+            }] else forEach port.interfaces (interface:  {
+              containerName = containerConfig.name;
+              hostPort = port.hostPort;
+              containerPort = port.containerPort;
+              interface = interface;
+              protocol = port.protocol;
+            })
+      ))));
+
+      portForwardIps = portForward:
+        if lib.strings.hasSuffix portForward.protocol "6"
+        then
+          ''
+          HOST_IP=`ip -f inet6 addr show ${portForward.interface} | sed -En -e 's/.*inet6 ([0-9a-f:]+).*/\1/p'`
+          CONTAINER_IP=`machinectl status web | grep Address -A 1 | tail -n 1 | sed -En -e 's/\s+([0-9a-f:]+)\%/\1/p'
+          ''
+        else
+          ''
+          HOST_IP=`ip -f inet addr show ${portForward.interface} | sed -En -e 's/.*inet ([0-9.]+).*/\1/p'`
+          CONTAINER_IP=`machinectl status ${portForward.containerName} | grep Address -A 1 | sed -En -e 's/.*Address:\s+([0-9.]+).*/\1/p'`
+          '';
+
+      portForwardBind = portForward: if (portForward.interface != "") then ",bind=$HOST_IP" else "";
+
+      portForwardScript = portForward:
+        ''
+          ${portForwardIps portForward}
+          ${pkgs.socat}/bin/socat ${portForward.protocol}-listen:${toString portForward.hostPort},fork,reuseaddr${portForwardBind portForward} ${portForward.protocol}:$CONTAINER_IP:${toString portForward.containerPort}
+        '';
     in {
       warnings =
         (optional (config.virtualisation.containers.enable && versionOlder config.system.stateVersion "22.05") ''
@@ -860,15 +894,37 @@ in
                 restartIfChanged = containerConfig.restartIfChanged;
               }
             )
-        )) config.containers)
+          )) config.containers)
+        ++ (forEach portForwarding (portForward: {
+          name = "container@${portForward.containerName}-forward-${portForward.interface}-${toString portForward.hostPort}-${portForward.protocol}";
+          value = {
+            bindsTo = if portForward.interface != "" && portForward.interface != "lo" then ["sys-subsystem-net-devices-${portForward.interface}.device"] else [];
+            partOf = [ "container@${portForward.containerName}.service" ];
+            script = portForwardScript portForward;
+            description = "Port forwarding for container ${portForward.containerName} ${portForward.interface}:${toString portForward.hostPort}";
+            path = [ pkgs.iproute2 ];
+            environment.root = if config.containers.${portForward.containerName}.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
+          } // (
+            optionalAttrs config.containers.${portForward.containerName}.autoStart
+              {
+                wantedBy = [ "machines.target" ];
+                wants = [ "network.target" ];
+                after = [ "network.target" ];
+                restartTriggers = [
+                  config.containers.${portForward.containerName}.path
+                  config.environment.etc."${configurationDirectoryName}/${portForward.containerName}.conf".source
+                ];
+                restartIfChanged = config.containers.${portForward.containerName}.restartIfChanged;
+              }
+            );
+        }))
       ));
 
       # Generate a configuration file in /etc/nixos-containers for each
       # container so that container@.target can get the container
       # configuration.
       environment.etc =
-        let mkPortStr = p: p.protocol + ":" + (toString p.hostPort) + ":" + (if p.containerPort == null then toString p.hostPort else toString p.containerPort);
-        in mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.conf"
+        mapAttrs' (name: cfg: nameValuePair "${configurationDirectoryName}/${name}.conf"
         { text =
             ''
               SYSTEM_PATH=${cfg.path}
@@ -876,9 +932,6 @@ in
                 PRIVATE_NETWORK=1
                 ${optionalString (cfg.hostBridge != null) ''
                   HOST_BRIDGE=${cfg.hostBridge}
-                ''}
-                ${optionalString (length cfg.forwardPorts > 0) ''
-                  HOST_PORT=${concatStringsSep "," (map mkPortStr cfg.forwardPorts)}
                 ''}
                 ${optionalString (cfg.hostAddress != null) ''
                   HOST_ADDRESS=${cfg.hostAddress}
@@ -893,7 +946,6 @@ in
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
               ''}
-              INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"
               ${optionalString cfg.autoStart ''
                 AUTO_START=1
@@ -919,7 +971,7 @@ in
 
       environment.systemPackages = [
         nixos-container
-      ];
+      ] ++ (if portForwarding != [] then [pkgs.socat] else []);
 
       boot.kernelModules = [
         "bridge"
