@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Cv1Ldvk0+VzNsKnDFwDtLZ5ixUOGV+PWYAqN9KV9g/s=";
+    sha256 = "sha256-S6EJGF9jRiCzH0f7WNrbLtAX23fjD/Hzd8YLEzkXesw=";
   };
 
   nativeBuildInputs = [
