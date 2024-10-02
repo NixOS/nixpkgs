@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  python3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bencodetools";
   version = "unstable-2022-05-11";
 
