@@ -25,9 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [
     curl
     ncurses
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-  ]);
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Cocoa ]);
 
   meta = {
     description = "Browse Hacker News interactively in your terminal";
