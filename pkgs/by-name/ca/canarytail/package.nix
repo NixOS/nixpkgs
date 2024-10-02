@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch2
-, installShellFiles
-, go
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch2,
+  installShellFiles,
+  go,
 }:
 
 buildGoModule rec {
@@ -39,7 +40,11 @@ buildGoModule rec {
   proxyVendor = true;
   vendorHash = "sha256-5oxCi0A3yatnVdV1Nx7KBUgPbvB41VmjMgiqLpNl+oI=";
 
-  ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=v${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
