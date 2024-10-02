@@ -99,13 +99,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2";
-  version = "2.30.6";
+  version = "2.30.7";
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-ij9/VhSacUaPbMGX1hx2nz0n8b1tDb1PnC7IO9TlNhE=";
+    hash = "sha256-R0liyiJMCDKzDxB7jmoQfNfaE4X7qU5OrOqR7BzEu7k=";
   };
 
   outputs = [
