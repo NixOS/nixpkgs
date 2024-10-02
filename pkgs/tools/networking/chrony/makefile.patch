@@ -1,0 +1,23 @@
+diff --git a/Makefile.in b/Makefile.in
+index ef100a4..47f54f4 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -23,7 +23,7 @@
+ 
+ SYSCONFDIR = @SYSCONFDIR@
+ BINDIR = @BINDIR@
+-SBINDIR = @SBINDIR@
++SBINDIR = @BINDIR@
+ LOCALSTATEDIR = @LOCALSTATEDIR@
+ CHRONYVARDIR = @CHRONYVARDIR@
+ DESTDIR =
+@@ -86,9 +86,7 @@ getdate :
+ 
+ install: chronyd chronyc
+ 	[ -d $(DESTDIR)$(SYSCONFDIR) ] || mkdir -p $(DESTDIR)$(SYSCONFDIR)
+-	[ -d $(DESTDIR)$(SBINDIR) ] || mkdir -p $(DESTDIR)$(SBINDIR)
+ 	[ -d $(DESTDIR)$(BINDIR) ] || mkdir -p $(DESTDIR)$(BINDIR)
+-	[ -d $(DESTDIR)$(CHRONYVARDIR) ] || mkdir -p $(DESTDIR)$(CHRONYVARDIR)
+ 	if [ -f $(DESTDIR)$(SBINDIR)/chronyd ]; then rm -f $(DESTDIR)$(SBINDIR)/chronyd ; fi
+ 	if [ -f $(DESTDIR)$(BINDIR)/chronyc ]; then rm -f $(DESTDIR)$(BINDIR)/chronyc ; fi
+ 	cp chronyd $(DESTDIR)$(SBINDIR)/chronyd

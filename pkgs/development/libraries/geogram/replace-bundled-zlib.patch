@@ -1,0 +1,46 @@
+--- a/src/lib/geogram/third_party/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/third_party/CMakeLists.txt	2023-03-09 20:46:16.740801862 +0100
+@@ -33,7 +33,6 @@
+ aux_source_directories(SOURCES "Source Files\\LM6"          LM7)
+ aux_source_directories(SOURCES "Source Files\\rply"         rply)
+ aux_source_directories(SOURCES "Source Files\\shewchuk"     shewchuk)
+-aux_source_directories(SOURCES "Source Files\\zlib"         zlib)
+ aux_source_directories(SOURCES "Source Files\\PoissonRecon" PoissonRecon)
+ aux_source_directories(SOURCES "Source Files\\xatlas"       xatlas)
+ 
+--- a/src/lib/geogram/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/CMakeLists.txt	2023-03-09 20:49:21.080059939 +0100
+@@ -70,6 +70,9 @@
+     target_link_libraries(geogram psapi)
+ endif()
+ 
++find_package(ZLIB REQUIRED)
++target_link_libraries(geogram ZLIB::ZLIB)
++
+ # Install the library
+ install_devkit_targets(geogram)
+ 
+--- a/src/lib/geogram/basic/geofile.h	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/basic/geofile.h	2023-03-09 20:52:33.713329571 +0100
+@@ -44,7 +44,7 @@
+ #include <geogram/basic/numeric.h>
+ #include <geogram/basic/memory.h>
+ #include <geogram/basic/string.h>
+-#include <geogram/third_party/zlib/zlib.h>
++#include <zlib.h>
+ 
+ #include <stdexcept>
+ #include <fstream>
+--- a/src/lib/geogram/third_party/CMakeLists.txt	1970-01-01 01:00:01.000000000 +0100
++++ b/src/lib/geogram/third_party/CMakeLists.txt	2023-03-09 20:54:50.276520762 +0100
+@@ -60,8 +59,10 @@
+     ${ANDROID_NDK}/sources/android/native_app_glue
+   )
+   message(STATUS "building for Android")
+ endif()  
+ 
++find_package(ZLIB REQUIRED)
++target_link_libraries(geogram_third_party PUBLIC ZLIB::ZLIB)
+ 
+ set_target_properties(
+     geogram_third_party PROPERTIES

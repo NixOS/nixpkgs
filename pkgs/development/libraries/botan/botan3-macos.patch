@@ -1,0 +1,48 @@
+diff --git a/src/lib/prov/commoncrypto/commoncrypto_block.cpp b/src/lib/prov/commoncrypto/commoncrypto_block.cpp
+index a07fe118d..f059ee497 100644
+--- a/src/lib/prov/commoncrypto/commoncrypto_block.cpp
++++ b/src/lib/prov/commoncrypto/commoncrypto_block.cpp
+@@ -11,6 +11,7 @@
+ #include <botan/hex.h>
+ #include <botan/internal/commoncrypto_utils.h>
+ 
++#include <CommonCrypto/CommonCryptoError.h>
+ #include <CommonCrypto/CommonCrypto.h>
+ 
+ namespace Botan {
+diff --git a/src/lib/prov/commoncrypto/commoncrypto_hash.cpp b/src/lib/prov/commoncrypto/commoncrypto_hash.cpp
+index 1fb79c419..faf9575c2 100644
+--- a/src/lib/prov/commoncrypto/commoncrypto_hash.cpp
++++ b/src/lib/prov/commoncrypto/commoncrypto_hash.cpp
+@@ -11,6 +11,7 @@
+ #include <botan/internal/stl_util.h>
+ #include <unordered_map>
+ 
++#include <CommonCrypto/CommonCryptoError.h>
+ #include <CommonCrypto/CommonCrypto.h>
+ 
+ namespace Botan {
+diff --git a/src/lib/prov/commoncrypto/commoncrypto_utils.h b/src/lib/prov/commoncrypto/commoncrypto_utils.h
+index b1c7411fd..9becab2d1 100644
+--- a/src/lib/prov/commoncrypto/commoncrypto_utils.h
++++ b/src/lib/prov/commoncrypto/commoncrypto_utils.h
+@@ -10,6 +10,7 @@
+ 
+ #include <botan/sym_algo.h>
+ 
++#include <CommonCrypto/CommonCryptoError.h>
+ #include <CommonCrypto/CommonCrypto.h>
+ 
+ namespace Botan {
+diff --git a/src/lib/rng/system_rng/system_rng.cpp b/src/lib/rng/system_rng/system_rng.cpp
+index b2f7b4c45..f4933b1e3 100644
+--- a/src/lib/rng/system_rng/system_rng.cpp
++++ b/src/lib/rng/system_rng/system_rng.cpp
+@@ -20,6 +20,7 @@
+    #include <bcrypt.h>
+    #include <windows.h>
+ #elif defined(BOTAN_TARGET_OS_HAS_CCRANDOM)
++   #include <CommonCrypto/CommonCryptoError.h>
+    #include <CommonCrypto/CommonRandom.h>
+ #elif defined(BOTAN_TARGET_OS_HAS_ARC4RANDOM)
+    #include <stdlib.h>

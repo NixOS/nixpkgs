@@ -1,0 +1,55 @@
+diff --git a/source/netclient.c b/source/netclient.c
+index 6b6f99ec9b...88d4b91077 100644
+--- a/source/netclient.c
++++ b/source/netclient.c
+@@ -496,7 +496,7 @@
+      */
+     device_list = upnpDiscover(2000, NULL, NULL, 0, 0, 2, NULL);
+ #    else
+-#      if (MINIUPNPC_API_VERSION == 17)
++#      if (MINIUPNPC_API_VERSION >= 17)
+     /*
+      * Version 17
+      *
+@@ -516,8 +516,13 @@
+ 
+     if (device_list != NULL) {
+ 
++#if (MINIUPNPC_API_VERSION <= 17) || !defined(MINIUPNPC_API_VERSION)
+         rc = UPNP_GetValidIGD(device_list, &upnp_urls, &upnp_igd_datas,
+                               local_host, sizeof(local_host));
++#else
++        rc = UPNP_GetValidIGD(device_list, &upnp_urls, &upnp_igd_datas,
++                              local_host, sizeof(local_host), NULL, 0);
++#endif
+ 
+         switch (rc) {
+ 
+@@ -525,13 +530,27 @@
+             DLOG(("Found valid IGD : %s\n", upnp_urls.controlURL));
+             break;
+ 
++#if (MINIUPNPC_API_VERSION >= 18)
+         case 2:
++            DLOG(("Found a (reserved?) IGD : %s\n", upnp_urls.controlURL));
++            DLOG(("Trying to continue anyway\n"));
++            break;
++#endif
+ 
++#if (MINIUPNPC_API_VERSION <= 17) || !defined(MINIUPNPC_API_VERSION)
++        case 2:
++#else
++        case 3:
++#endif
+             DLOG(("Found a (not connected?) IGD : %s\n", upnp_urls.controlURL));
+             DLOG(("Trying to continue anyway\n"));
+             break;
+ 
++#if (MINIUPNPC_API_VERSION <= 17) || !defined(MINIUPNPC_API_VERSION)
+         case 3:
++#else
++        case 4:
++#endif
+             DLOG(("UPnP device found. Is it an IGD ? : %s\n",
+                     upnp_urls.controlURL));
+             DLOG(("Trying to continue anyway\n"));

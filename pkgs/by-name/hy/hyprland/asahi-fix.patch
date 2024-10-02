@@ -1,0 +1,15 @@
+diff --git a/src/protocols/LinuxDMABUF.cpp b/src/protocols/LinuxDMABUF.cpp
+index 0fbf832e..c6077114 100644
+--- a/src/protocols/LinuxDMABUF.cpp
++++ b/src/protocols/LinuxDMABUF.cpp
+@@ -492,9 +492,8 @@ CLinuxDMABufV1Protocol::CLinuxDMABufV1Protocol(const wl_interface* iface, const
+                 return;
+             }
+         } else {
+-            protoLog(ERR, "DRM device {} has no render node, disabling linux dmabuf", device->nodes[DRM_NODE_PRIMARY] ? device->nodes[DRM_NODE_PRIMARY] : "null");
++            protoLog(ERR, "DRM device {} has no render node, disabling linux dmabuf checks", device->nodes[DRM_NODE_PRIMARY] ? device->nodes[DRM_NODE_PRIMARY] : "null");
+             drmFreeDevice(&device);
+-            removeGlobal();
+         }
+     });
+ }

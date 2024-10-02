@@ -1,0 +1,14 @@
+The $(RUSTC_SRC_DL) file already exists, but for some reason Make wants to rebuild
+this target when it has $(RUSTC_SRC_TARBALL) as a dependency.
+
+--- a/minicargo.mk	2023-04-06 08:26:18.408817572 +0200
++++ b/minicargo.mk	2023-04-06 08:27:11.553536996 +0200
+@@ -176,7 +176,7 @@
+ 	@echo [CURL] $@
+ 	@rm -f $@
+ 	@curl -sS https://static.rust-lang.org/dist/$@ -o $@
+-$(RUSTC_SRC_DL): $(RUSTC_SRC_TARBALL) rustc-$(RUSTC_VERSION)-src.patch
++$(RUSTC_SRC_DL): rustc-$(RUSTC_VERSION)-src.patch
+ 	tar -xf $(RUSTC_SRC_TARBALL)
+ 	cd $(RUSTCSRC) && patch -p0 < ../rustc-$(RUSTC_VERSION)-src.patch;
+ 	touch $(RUSTC_SRC_DL)
