@@ -1,7 +1,6 @@
 {
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nixosTests,
   rustPlatform,
   lib,
@@ -9,24 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-ld";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
-    hash = "sha256-rmSXQ4MYQe/OFDBRlqqw5kyp9b/aeEg0Fg9c167xofg=";
+    hash = "sha256-N0rXDMTzDCdMUIMGZpGi04iptUXX3MZcVTshMNkJCSM=";
   };
 
-  patches = [
-    # Backport fix for Rust 1.81
-    (fetchpatch {
-      url = "https://github.com/nix-community/nix-ld/commit/9583c80eafc4f904a013713c084e9dc5e47c3675.patch";
-      hash = "sha256-glZNdNh+dAmi1xjgcitLymsaQIrEQx4M5VFDOxpDk1Q=";
-    })
-  ];
-
-  cargoHash = "sha256-BVulfs4zm3Iruq00H49QcxR3V+iZvePtLBTytdXfLP4=";
+  cargoHash = "sha256-deh+gFshOTe+Zxd1epHjVoceBtunjp0QcRW/Y4FBKzI=";
 
   hardeningDisable = [ "stackprotector" ];
 
