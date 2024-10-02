@@ -30,7 +30,7 @@
   xar,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "xar";
+  pname = "xar${lib.optionalString (e2fsprogs == null) "-minimal"}";
   version = "498";
 
   src = fetchFromGitHub {
