@@ -15,7 +15,7 @@
 , xmlrpc_c
 , zlib
 , nixosTests
-, unstableGitUpdater
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    updateScript = gitUpdater { tagPrefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };
