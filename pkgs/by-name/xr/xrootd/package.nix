@@ -21,8 +21,9 @@
   systemd,
   voms,
   zlib,
-  # If not null, the builder will
-  # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
+  # If not null, move the default configuration files to "$etc/etc" and look for the configuration
+  # directory at externalEtc.
+  # Otherwise, the program will look for the configuration files under $out/etc."
   externalEtc ? "/etc",
   removeReferencesTo,
 }:
@@ -119,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_MACAROONS" false)
     (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
     (lib.cmakeBool "ENABLE_SCITOKENS" true)
-    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.doCheck)
+    (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "ENABLE_VOMS" stdenv.hostPlatform.isLinux)
   ];
 
