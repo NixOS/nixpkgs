@@ -63,6 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
     maintainers = with maintainers; [ nickcao RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
   };
 })
