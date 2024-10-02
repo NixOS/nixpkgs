@@ -585,21 +585,6 @@ rec {
     }:
     let
       typeName = if lazy then "lazyAttrsOf" else "attrsOf";
-      lazyMergeFn = loc: defs:
-        zipAttrsWith (name: defs:
-          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
-          # mergedValue will trigger an appropriate error when accessed
-          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
-        )
-        # Push down position info.
-        (pushPositions defs);
-
-      mergeFn = loc: defs:
-        mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
-            (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
-          )
-        # Push down position info.
-        (pushPositions defs)));
       # Push down position info.
       pushPositions = map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value);
     in
@@ -608,7 +593,25 @@ rec {
       description = (if lazy then "lazy attribute set" else "attribute set") + " of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
       descriptionClass = "composite";
       check = isAttrs;
-      merge = if lazy then lazyMergeFn else mergeFn;
+      merge = if lazy then (
+        # Lazy merge Function
+        loc: defs:
+          zipAttrsWith (name: defs:
+            let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+            # mergedValue will trigger an appropriate error when accessed
+            in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+          )
+          # Push down position info.
+          (pushPositions defs)
+      ) else (
+        # Non-lazy merge Function
+        loc: defs:
+          mapAttrs (n: v: v.value) (filterAttrs (n: v: v ? value) (zipAttrsWith (name: defs:
+              (mergeDefinitions (loc ++ [name]) elemType (defs)).optionalValue
+            )
+          # Push down position info.
+          (pushPositions defs)))
+      );
       emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${name}>"]);
       getSubModules = elemType.getSubModules;
