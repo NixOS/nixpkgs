@@ -1,8 +1,8 @@
-{ pkgs, testBase, system, ... }:
+{ name, pkgs, testBase, system, ... }:
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest ({ config, ... }: {
-  name = "nextcloud-with-mysql-and-memcached";
+  inherit name;
   meta = with pkgs.lib.maintainers; {
     maintainers = [ eqyiel ];
   };

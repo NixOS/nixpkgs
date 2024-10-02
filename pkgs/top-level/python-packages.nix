@@ -13999,8 +13999,6 @@ self: super: with self; {
 
   scikit-misc = callPackage ../development/python-modules/scikit-misc { };
 
-  scikit-optimize = callPackage ../development/python-modules/scikit-optimize { };
-
   scikit-posthocs = callPackage ../development/python-modules/scikit-posthocs { };
 
   scikit-rf = callPackage ../development/python-modules/scikit-rf { };
@@ -17583,6 +17581,10 @@ self: super: with self; {
   xdot = callPackage ../development/python-modules/xdot {
     inherit (pkgs) graphviz;
   };
+
+  xen = toPythonModule (pkgs.xen-slim.override {
+    python3Packages = self;
+  });
 
   xformers = callPackage ../development/python-modules/xformers { };
 

@@ -906,9 +906,7 @@ with pkgs;
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
-  fetchbower = callPackage ../build-support/fetchbower {
-    inherit (nodePackages) bower2nix;
-  };
+  fetchbower = callPackage ../build-support/fetchbower { };
 
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
@@ -3136,7 +3134,9 @@ with pkgs;
 
   authenticator = callPackage ../applications/misc/authenticator { };
 
-  authelia = callPackage ../servers/authelia { pnpm = pnpm_9; };
+  authelia = callPackage ../servers/authelia {
+    buildGoModule = buildGo123Module;
+  };
 
   authentik-outposts = recurseIntoAttrs (callPackages ../by-name/au/authentik/outposts.nix { });
 
@@ -4161,7 +4161,7 @@ with pkgs;
 
   bozohttpd-minimal = bozohttpd.override { minimal = true; };
 
-  brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
+  brasero-unwrapped = callPackage ../tools/cd-dvd/brasero { };
 
   brasero = callPackage ../tools/cd-dvd/brasero/wrapper.nix { };
 
@@ -5212,10 +5212,6 @@ with pkgs;
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal { };
-
-  hebbot = callPackage ../servers/matrix-hebbot {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   hexio = callPackage ../development/tools/hexio { };
 
@@ -7802,10 +7798,6 @@ with pkgs;
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
   uniscribe = callPackage ../tools/text/uniscribe { };
-
-  galculator = callPackage ../applications/misc/galculator {
-    gtk = gtk3;
-  };
 
   fornalder = callPackage ../applications/version-management/fornalder { };
 
@@ -10407,13 +10399,16 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackages ../servers/nextcloud {})
-    nextcloud28 nextcloud29;
+    nextcloud28 nextcloud29 nextcloud30;
 
   nextcloud28Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/28.json;
   };
   nextcloud29Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/29.json;
+  };
+  nextcloud30Packages = callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/30.json;
   };
 
 
@@ -13237,8 +13232,6 @@ with pkgs;
   tydra = callPackage ../tools/misc/tydra { };
 
   typesense = callPackage ../servers/search/typesense { };
-
-  typos = callPackage ../development/tools/typos { };
 
   tz = callPackage ../tools/misc/tz { };
 
@@ -16778,8 +16771,6 @@ with pkgs;
 
   gimme-aws-creds = callPackage ../tools/admin/gimme-aws-creds { };
 
-  gimoji = callPackage ../applications/misc/gimoji { };
-
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
   # Needed for autogen
@@ -17941,10 +17932,6 @@ with pkgs;
   jacoco = callPackage ../development/tools/analysis/jacoco { };
 
   jake = callPackage ../development/tools/jake { };
-
-  inherit (callPackage ../development/tools/build-managers/jam { })
-    jam
-    ftjam;
 
   javacc = callPackage ../development/tools/parsing/javacc {
     # Upstream doesn't support anything newer than Java 8.
@@ -19207,12 +19194,6 @@ with pkgs;
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
   };
-
-  ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
-
-  ndn-tools = callPackage ../tools/networking/ndn-tools { };
-
-  nfd = callPackage ../servers/nfd { };
 
   cddlib = callPackage ../development/libraries/cddlib { };
 
@@ -24898,7 +24879,6 @@ with pkgs;
 
   pflogsumm = callPackage ../servers/mail/postfix/pflogsumm.nix { };
 
-  pomerium = callPackage ../servers/http/pomerium { };
   pomerium-cli = callPackage ../tools/security/pomerium-cli { };
 
   postgrey = callPackage ../servers/mail/postgrey { };
@@ -26409,8 +26389,6 @@ with pkgs;
   goresym = callPackage ../development/tools/goresym { };
 
   gotests = callPackage ../development/tools/gotests { };
-
-  gotestsum = callPackage ../development/tools/gotestsum { };
 
   gqlgenc = callPackage ../development/tools/gqlgenc { };
 
@@ -32281,9 +32259,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
-  qbittorrent-qt5 = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 

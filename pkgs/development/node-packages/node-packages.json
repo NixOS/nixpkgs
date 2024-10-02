@@ -21,7 +21,6 @@
 , "aws-cdk"
 , "awesome-lint"
 , "bower"
-, "bower2nix"
 , "browserify"
 , "browser-sync"
 , "cdk8s-cli"

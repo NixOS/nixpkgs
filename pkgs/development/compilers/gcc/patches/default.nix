@@ -157,9 +157,9 @@ in
   }) ];
   "11" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-    # ff4bf32 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.4.0
-    url = "https://github.com/iains/gcc-11-branch/compare/ff4bf326d03e750a8d4905ea49425fe7d15a04b8..gcc-11.4-darwin-r0.diff";
-    hash = "sha256-6prPgR2eGVJs7vKd6iM1eZsEPCD1ShzLns2Z+29vlt4=";
+    # 5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.5.0
+    url = "https://github.com/iains/gcc-11-branch/compare/5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6..gcc-11.5-darwin-r0.diff";
+    hash = "sha256-7lH+GkgkrE6nOp9PMdIoqlQNWK31s6oW+lDt1LIkadE=";
   }) ];
   "10" = [ (fetchpatch {
     # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
@@ -200,9 +200,6 @@ in
 
 
 ## gcc 11.0 and older ##############################################################################
-
-# libgcc’s `configure` script misdetects aarch64-darwin, resulting in an invalid deployment target.
-++ optional (is11 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ./11/libgcc-aarch64-darwin-detection.patch
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
 ++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
