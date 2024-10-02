@@ -8,7 +8,7 @@ pkgs: {
     # newer versions cause linking failures against `libabsl_spinlock_wait`
     protobuf = pkgs.protobuf_21;
   };
-  percona-server_8_3 = pkgs.callPackage ./8_3.nix {
+  percona-server_8_4 = pkgs.callPackage ./8_4.nix {
     inherit (pkgs.darwin) developer_cmds DarwinTools;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
     # newer versions cause linking failures against `libabsl_spinlock_wait`
