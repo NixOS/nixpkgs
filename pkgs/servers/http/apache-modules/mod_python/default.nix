@@ -4,7 +4,7 @@
   lib,
   libintl,
   nix-update-script,
-  python3,
+  python3Packages,
   stdenv,
 }:
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     apacheHttpd
-    python3
+    python3Packages.distutils
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libintl
   ];
