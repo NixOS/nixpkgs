@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, cmake
-, pkg-config
-, mir
-, libxkbcommon
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  pkg-config,
+  mir,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mir based Wayland compositor";
     longDescription = ''
       Miriway is a starting point for creating a Wayland based desktop environment using Mir.
@@ -64,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       enabling these in miriway-shell.config.
     '';
     homepage = "https://github.com/Miriway/Miriway";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    mainProgram = "miriway";
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 })
