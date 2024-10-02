@@ -48,7 +48,7 @@ crystal.buildCrystalPackage rec {
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
 
   nativeBuildInputs = [ wrapGAppsHook4 pkg-config gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     libadwaita

@@ -9,7 +9,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       # Booting off the encrypted disk requires having a Nix store available for the init script
       mountHostNixStore = true;
       useEFIBoot = true;
-      qemu.options = [ "-device canokey,file=/tmp/canokey-file" ];
+      qemu.options = [ "-device pci-ohci,id=usb-bus" "-device canokey,bus=usb-bus.0,file=/tmp/canokey-file" ];
     };
     boot.loader.systemd-boot.enable = true;
 

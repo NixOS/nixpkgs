@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   bluez,
   cmake,
   dbus,
@@ -18,34 +17,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brainflow";
-  version = "5.12.1";
+  version = "5.13.3";
 
   src = fetchFromGitHub {
     owner = "brainflow-dev";
     repo = "brainflow";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-haQO03nkvLoXtFVe+C+yi+MwM0CFh6rLcLvU8fQ4k/w=";
+    hash = "sha256-LFiDyNuWbEAKU0Rl+n7ozxr5CM4NLphR2o9bYHw6xJY=";
   };
 
-  patches = [
-    # All of these are PRs that were merged into the upstream repository and will be included in the next release
-    # These should be removed once the next version is released
-    (fetchpatch {
-      # Fixes a major issue that prevented the build from working at all (why was this not backported???)
-      url = "https://github.com/brainflow-dev/brainflow/commit/883b0cd08acb99d7b6e241e92fba2e9a363d17b1.patch";
-      hash = "sha256-QQd+BI3I65gfaNS/SKLjCoqbCwPCiTh+nh0tJAZM6hQ=";
-    })
-    (fetchpatch {
-      # Bumps the version of a python dependency that had a backwards-incompatible change
-      url = "https://github.com/brainflow-dev/brainflow/commit/ea23a6f0483ce4d6fdd7a82bace865356ee78d7f.patch";
-      hash = "sha256-dvMpxxRrnJQ9ADGagB1JhuoB9SNwn755wbHzW/3ECeo=";
-    })
-    (fetchpatch {
-      # Fixes an incorrect use of an environment variable during the build
-      url = "https://github.com/brainflow-dev/brainflow/commit/053b8c1253b686cbec49ab4adb47c9ee02d3f99a.patch";
-      hash = "sha256-Pfhe1ZvMagfVAGZqeWn1uHXgwlTtkOm+gyWuvC5/Sro=";
-    })
-  ];
+  patches = [ ];
 
   cmakeFlags = [
     (lib.cmakeBool "USE_LIBFTDI" useLibFTDI)

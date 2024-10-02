@@ -68,7 +68,7 @@ runCommand name
         # Add any extra outputs specified by the caller of `buildEnv`.
         ++ lib.filter (p: p!=null)
           (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall);
-      priority = drv.meta.priority or 5;
+      priority = drv.meta.priority or lib.meta.defaultPriority;
     }) paths);
     preferLocalBuild = true;
     allowSubstitutes = false;

@@ -76,8 +76,8 @@ rec {
     # The makefile tries to link to `-llua<luaversion>`
     LUA_LIBS = "-llua";
 
-    buildInputs = lib.optionals stdenv.isLinux [linux-pam]
-      ++ lib.optionals stdenv.isDarwin [openpam];
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [linux-pam]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [openpam];
 
     installPhase = ''
       runHook preInstall
@@ -163,7 +163,7 @@ rec {
     '';
 
     meta = with lib; {
-      broken = stdenv.isDarwin;
+      broken = stdenv.hostPlatform.isDarwin;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
       homepage = "https://www.gitano.org.uk/luxio/";
       license = licenses.mit;

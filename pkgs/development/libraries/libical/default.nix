@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/pull/67204
     # previously with https://github.com/NixOS/nixpkgs/pull/61657#issuecomment-495579489
     # gtk-doc docbook_xsl docbook_xml_dtd_43 # for docs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
   nativeInstallCheckInputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
   # Musl does not support TZDIR.
   doInstallCheck = !stdenv.hostPlatform.isMusl;
   enableParallelChecking = false;
-  preInstallCheck = if stdenv.isDarwin then ''
+  preInstallCheck = if stdenv.hostPlatform.isDarwin then ''
     for testexe in $(find ./src/test -maxdepth 1 -type f -executable); do
       for lib in $(cd lib && ls *.3.dylib); do
         install_name_tool -change $lib $out/lib/$lib $testexe

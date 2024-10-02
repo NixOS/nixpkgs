@@ -45,15 +45,15 @@ stdenv.mkDerivation rec {
     "-DCMAKE_EXE_LINKER_FLAGS=-pthread"
   ];
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change "@rpath/liblas.3.dylib" "$out/lib/liblas.3.dylib" $out/lib/liblas_c.dylib
   '';
 
-  meta = {
+  meta = with lib; {
     description = "LAS 1.0/1.1/1.2 ASPRS LiDAR data translation toolset";
     homepage = "https://liblas.org";
-    license = lib.licenses.bsd3;
-    platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.michelk ];
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; teams.geospatial.members ++ [ lib.maintainers.michelk ];
   };
 }

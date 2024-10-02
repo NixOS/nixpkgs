@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-tbZS7PdRFvO2ifoHA/w3cSPfqqHrLeLHAg6V8oG9gVE=";
   };
 
-  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl xz ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config makeBinaryWrapper ];
   postInstall = ''
     wrapProgram $out/bin/pwninit \

@@ -12,13 +12,14 @@
 
   # tests
   pytestCheckHook,
+  pytest-cov-stub,
   pygments,
 }:
 
 buildPythonPackage rec {
   pname = "flask-gravatar";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "Flask-Gravatar";
@@ -39,18 +40,18 @@ buildPythonPackage rec {
      -e "s|tests_require=tests_require,||g" \
      -e "s|extras_require=extras_require,||g" \
      -e "s|setup_requires=setup_requires,||g"
-    # pep8 is deprecated and cov not needed
+    # pep8 is deprecated
     substituteInPlace pytest.ini \
-     --replace "--pep8" "" \
-     --replace "--cov=flask_gravatar --cov-report=term-missing" ""
+     --replace-fail "--pep8" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ flask ];
+  dependencies = [ flask ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
     pygments
   ];
 

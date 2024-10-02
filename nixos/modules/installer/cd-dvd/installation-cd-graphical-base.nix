@@ -1,10 +1,6 @@
 # This module contains the basic configuration for building a graphical NixOS
 # installation CD.
-
 { lib, pkgs, ... }:
-
-with lib;
-
 {
   imports = [ ./installation-cd-base.nix ];
 
@@ -26,14 +22,11 @@ with lib;
 
   # Provide networkmanager for easy wireless configuration.
   networking.networkmanager.enable = true;
-  networking.wireless.enable = mkImageMediaOverride false;
+  networking.wireless.enable = lib.mkImageMediaOverride false;
 
   # KDE complains if power management is disabled (to be precise, if
   # there is no power management backend such as upower).
   powerManagement.enable = true;
-
-  # Enable sound in graphical iso's.
-  hardware.pulseaudio.enable = true;
 
   # VM guest additions to improve host-guest interaction
   services.spice-vdagentd.enable = true;
@@ -63,7 +56,7 @@ with lib;
     # Firefox for reading the manual.
     firefox
 
-    glxinfo
+    mesa-demos
   ];
 
 }

@@ -368,11 +368,11 @@ stdenv.mkDerivation ({
     # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
     export CLANG="${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
   '' +
-  lib.optionalString (stdenv.isLinux && hostPlatform.libc == "glibc") ''
+  lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
     export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
@@ -476,7 +476,7 @@ stdenv.mkDerivation ({
     autoconf automake m4
     # Python is used in a few scripts invoked by hadrian to generate e.g. rts headers.
     python3
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx

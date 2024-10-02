@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # needs apple frameworks + SDK fix? see #205247
+    broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
     maintainers = [ ];
   };
 }

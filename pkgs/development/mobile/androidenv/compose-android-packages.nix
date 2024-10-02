@@ -27,8 +27,8 @@
 
 let
   # Determine the Android os identifier from Nix's system identifier
-  os = if stdenv.isLinux then "linux"
-    else if stdenv.isDarwin then "macosx"
+  os = if stdenv.hostPlatform.isLinux then "linux"
+    else if stdenv.hostPlatform.isDarwin then "macosx"
     else throw "No Android SDK tarballs are available for system architecture: ${stdenv.system}";
 
   # Uses mkrepo.rb to create a repo spec.

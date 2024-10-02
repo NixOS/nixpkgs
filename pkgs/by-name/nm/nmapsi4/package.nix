@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     owner = "nmapsi4";
     repo = "nmapsi4";
     rev = "v${version}";
-    sha256 = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
+    hash = "sha256-q3XfwJ4TGK4E58haN0Q0xRH4GDpKD8VZzyxHe/VwBqY=";
   };
 
   nativeBuildInputs = [

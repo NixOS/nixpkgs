@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.srcMetadataByPlatform = {
     x86_64-linux.platform = "gtk-linux-x86_64";
-    x86_64-linux.sha256 = "17frac2nsx22hfa72264as31rn35hfh9gfgy0n6wvc3knl5d2716";
+    x86_64-linux.hash = "sha256-JhzRCrVzsM2NBf65l6CDZdgchlbECHGUg0J0bQVT2Z0=";
     i686-linux.platform = "gtk-linux-x86";
-    i686-linux.sha256 = "13ca17rga9yvdshqvh0sfzarmdcl4wv4pid0ls7v35v4844zbc8b";
+    i686-linux.hash = "sha256-C7H1CUFkl7GPpqDFSzYnlLWa1XcawI2hbtsn9fIJio0=";
     x86_64-darwin.platform = "cocoa-macosx-x86_64";
-    x86_64-darwin.sha256 = "0wjyxlw7i9zd2m8syd6k1q85fj8pzhxlfsrl8fpgsj37p698bd0a";
+    x86_64-darwin.hash = "sha256-CrSFkrlnSP2uQzRrRzv8F0lXEA7TNK9RFe2neDjtXnI=";
   };
   passthru.srcMetadata =
     finalAttrs.passthru.srcMetadataByPlatform.${stdenv.hostPlatform.system} or null;
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     assert srcMetadata != null;
     fetchzip {
       url = "https://archive.eclipse.org/eclipse/downloads/drops4/R-${finalAttrs.fullVersion}/swt-${finalAttrs.version}-${srcMetadata.platform}.zip";
-      inherit (srcMetadata) sha256;
+      inherit (srcMetadata) hash;
       stripRoot = false;
       postFetch = ''
         mkdir "$unpackDir"

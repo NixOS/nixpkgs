@@ -12,7 +12,7 @@ If the build broke as a result of a package update, try those solutions in order
 
 - search the [sage GitHub repo](https://github.com/sagemath/sage) for keywords like "Upgrade <package>". Maybe somebody has already proposed a patch that fixes the issue. You can then add a `fetchpatch` to `sage-src.nix`.
 
-- check if [gentoo](https://github.com/cschwan/sage-on-gentoo/tree/master/sci-mathematics/sage), [debian](https://salsa.debian.org/science-team/sagemath/tree/master/debian) or [arch linux](https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/sagemath) already solved the problem. You can then again add a `fetchpatch` to `sage-src.nix`. If applicable you should also [propose the patch upstream](#proposing-a-sage-patch).
+- check if [gentoo](https://github.com/cschwan/sage-on-gentoo/tree/master/sci-mathematics/sage), [debian](https://salsa.debian.org/science-team/sagemath/tree/master/debian) or [arch linux](https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/sagemath) already solved the problem. You can then again add a `fetchpatch` to `sage-src.nix`. If applicable you should also propose the patch upstream.
 
 - fix the problem yourself. First clone the sagemath source and then check out the sage version you want to patch:
 

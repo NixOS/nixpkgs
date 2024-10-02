@@ -35,7 +35,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "snapcraft";
-  version = "8.3.2";
+  version = "8.3.3";
 
   pyproject = true;
 
@@ -43,7 +43,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "snapcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-JlmVnSpbMjMpJBXyRxF/LqJ+0e5fty6BK+sCPJ2Uw9I=";
+    hash = "sha256-xE+5nYvXawl9HjeBI9ogwyYAVCj/sPoMCVfEeZL5vN4=";
   };
 
   patches = [
@@ -88,8 +88,7 @@ python.pkgs.buildPythonApplication rec {
       'return str(Path("${glibc}/lib/ld-linux-x86-64.so.2"))'
 
     substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-cov>=4.0",' "" \
-      --replace-fail "--cov=snapcraft" ""
+      --replace-fail '"pytest-cov>=4.0",' ""
   '';
 
   nativeBuildInputs = [ makeWrapper ];
@@ -155,6 +154,7 @@ python.pkgs.buildPythonApplication rec {
     with python.pkgs;
     [
       pytest-check
+      pytest-cov-stub
       pytest-mock
       pytest-subprocess
       pytestCheckHook
@@ -196,7 +196,7 @@ python.pkgs.buildPythonApplication rec {
     "test_snap_command_fallback"
     "test_validate_architectures_supported"
     "test_validate_architectures_unsupported"
-  ] ++ lib.optionals stdenv.isAarch64 [ "test_load_project" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_load_project" ];
 
   disabledTestPaths = [
     "tests/unit/commands/test_remote.py"

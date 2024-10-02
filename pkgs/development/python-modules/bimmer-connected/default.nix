@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bimmer-connected";
-  version = "0.16.1";
+  version = "0.16.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "bimmerconnected";
     repo = "bimmer_connected";
     rev = "refs/tags/${version}";
-    hash = "sha256-rklWek0XDedJXxVlRLLVMOkU0wMOlv8+Uzn8aVAmc2k=";
+    hash = "sha256-IrGOhUnWTtCI5juFFuNdWSWxeFr7s8bRNT8sUludGo0=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     china = [ pillow ];
   };
 
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytestCheckHook
     respx
     time-machine
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # presumably regressed in pytest-asyncio 0.23.0

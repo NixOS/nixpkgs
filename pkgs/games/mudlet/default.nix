@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     qtmultimedia
     yajl
     discord-rpc
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
     AppKit
   ];
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
     cp -r ../translations $out/share/
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r src/mudlet.app/ $out/Applications/mudlet.app
     mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
       --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ libsForQt5.qtkeychain discord-rpc ]}:$out/lib" \
       --chdir "$out";
 
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -pv $out/bin
     cp src/mudlet $out/bin/mudlet-unwrapped
     makeQtWrapper $out/bin/mudlet-unwrapped $out/bin/mudlet \

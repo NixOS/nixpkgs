@@ -9,7 +9,7 @@
 
 buildDunePackage rec {
   pname = "tezt";
-  version = "4.0.0";
+  version = "4.1.0";
 
   minimalOCamlVersion = "4.12";
 
@@ -17,7 +17,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = pname;
     rev = version;
-    hash = "sha256-waFjE/yR+XAJOew1YsCnbvsJR8oe9gflyVj4yXAvNuM=";
+    hash = "sha256-1Cl/GOB+MDPJIl/6600PLTSL+vCYcAZGjedd6hr7rJw=";
   };
 
   propagatedBuildInputs = [

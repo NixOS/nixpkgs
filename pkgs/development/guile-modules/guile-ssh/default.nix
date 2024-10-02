@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   # FAIL: server-client.scm
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     mv $out/bin/*.scm $out/share/guile-ssh

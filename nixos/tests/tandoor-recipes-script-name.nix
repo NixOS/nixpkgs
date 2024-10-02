@@ -78,7 +78,7 @@ import ./make-test-python.nix (
                         elif value.startswith("/"):
                             self.urls.append(f"{origin_url}{value}")
                         else:
-                            print("Ignoring external URL: {value}")
+                            print(f"Ignoring non-path URL: {value}")
 
                         break
 

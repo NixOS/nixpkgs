@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
-  ] ++ lib.optionals stdenv.isDarwin [ curl ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   buildInputs = [
     libgit2
     libssh2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ curl ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl ];
 
   env = {
     LIBGIT2_SYS_USE_PKG_CONFIG = true;

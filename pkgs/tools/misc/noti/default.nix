@@ -21,7 +21,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   ldflags = [
     "-s"

@@ -68,7 +68,7 @@ let filters = {
       perl = perl.passthru.withPackages (p: [ p.ImageExifTool ]);
     };
     filterPath = lib.makeBinPath (map lib.getBin (builtins.attrValues filters));
-    useInotify = if stdenv.isLinux then "true" else "false";
+    useInotify = if stdenv.hostPlatform.isLinux then "true" else "false";
 in
 
 mkDerivation rec {
@@ -138,7 +138,7 @@ mkDerivation rec {
     file
   ] ++ lib.optionals withGui [
     qtbase
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -167,15 +167,15 @@ mkDerivation rec {
       --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
     wrapProgram $out/share/recoll/filters/rclimg \
       --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ ImageExifTool ]}"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace  $f --replace '"lyx"' '"${lib.getBin lyx}/bin/lyx"'
-  '' + lib.optionalString (stdenv.isDarwin && withGui) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
     mkdir $out/Applications
     mv $out/bin/recoll.app $out/Applications
   '';
 
   # create symlink after fixup to prevent double wrapping of recoll
-  postFixup = lib.optionalString (stdenv.isDarwin && withGui) ''
+  postFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && withGui) ''
     ln -s ../Applications/recoll.app/Contents/MacOS/recoll $out/bin/recoll
   '';
 

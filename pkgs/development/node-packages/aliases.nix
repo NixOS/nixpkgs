@@ -9,16 +9,16 @@ pkgs: lib: self: super:
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = alias: with lib;
+  removeRecurseForDerivations = alias:
     if alias.recurseForDerivations or false
-    then removeAttrs alias ["recurseForDerivations"]
+    then lib.removeAttrs alias ["recurseForDerivations"]
     else alias;
 
   # Disabling distribution prevents top-level aliases for non-recursed package
   # sets from building on Hydra.
-  removeDistribute = alias: with lib;
-    if isDerivation alias then
-      dontDistribute alias
+  removeDistribute = alias:
+    if lib.isDerivation alias then
+      lib.dontDistribute alias
     else alias;
 
   # Make sure that we are not shadowing something from node-packages.nix.
@@ -63,14 +63,17 @@ mapAliases {
   inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
+  inherit (pkgs) bower2nix; # added 2024-08-23
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) clubhouse-cli; # added 2023-08-18
+  inherit (pkgs) coc-clangd; # added 2024-06-29
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) coc-pyright; # added 2024-07-14
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
@@ -84,7 +87,8 @@ mapAliases {
   inherit (pkgs) dotenv-cli; # added 2024-06-26
   eask = pkgs.eask; # added 2023-08-17
   inherit (pkgs.elmPackages) elm-test;
-  eslint_d = pkgs.eslint_d; # Added 2023-05-26
+  inherit (pkgs) eslint; # Added 2024-08-28
+  inherit (pkgs) eslint_d; # Added 2023-05-26
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
@@ -110,6 +114,8 @@ mapAliases {
   inherit (pkgs) hyperpotamus; # added 2023-08-19
   immich = pkgs.immich-cli; # added 2023-08-19
   indium = throw "indium was removed because it was broken"; # added 2023-08-19
+  inliner = throw "inliner was removed because it was abandoned upstream"; # added 2024-08-23
+  inherit (pkgs) intelephense; # added 2024-08-31
   ionic = throw "ionic was replaced by @ionic/cli"; # added 2023-08-19
   inherit (pkgs) jake; # added 2023-08-19
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
@@ -126,6 +132,7 @@ mapAliases {
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19
   inherit (pkgs) near-cli; # added 2023-09-09
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
+  inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) nodemon; # added 2024-06-28
   inherit (pkgs) npm-check-updates; # added 2023-08-22
@@ -135,6 +142,7 @@ mapAliases {
   inherit (pkgs) pm2; # added 2024-01-22
   inherit (pkgs) pnpm; # added 2024-06-26
   prettier_d_slim = pkgs.prettier-d-slim; # added 2023-09-14
+  inherit (pkgs) prisma; # added 2024-08-31
   inherit (pkgs) pxder; # added 2023-09-26
   inherit (pkgs) quicktype; # added 2023-09-09
   react-native-cli = throw "react-native-cli was removed because it was deprecated"; # added 2023-09-25
@@ -154,6 +162,7 @@ mapAliases {
   surge = pkgs.surge-cli; # Added 2023-09-08
   inherit (pkgs) svelte-language-server; # Added 2024-05-12
   swagger = throw "swagger was removed because it was broken and abandoned upstream"; # added 2023-09-09
+  teck-programmer = throw "teck-programmer was removed because it was broken and unmaintained"; # added 2024-08-23
   tedicross = throw "tedicross was removed because it was broken"; # added 2023-09-09
   inherit (pkgs) terser; # Added 2023-08-31
   inherit (pkgs) textlint; # Added 2024-05-13

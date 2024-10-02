@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
   sourceRoot = ".";
 
   nativeBuildInputs = [ makeBinaryWrapper installShellFiles ]
-    ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   installPhase = ''
     runHook preInstall
@@ -57,10 +57,17 @@ stdenvNoCC.mkDerivation {
     chmod +x $out/bin/limactl
     wrapProgram $out/bin/limactl \
       --prefix PATH : ${lib.makeBinPath [ qemu ]}
-    installShellCompletion --cmd limactl \
-      --bash <($out/bin/limactl completion bash) \
-      --fish <($out/bin/limactl completion fish) \
-      --zsh <($out/bin/limactl completion zsh)
+
+    # the shell completion only works with a patched $out/bin/limactl and so
+    # needs to run after the autoPatchelfHook is executed in postFixup.
+    doShellCompletion() {
+      installShellCompletion --cmd limactl \
+        --bash <($out/bin/limactl completion bash) \
+        --fish <($out/bin/limactl completion fish) \
+        --zsh <($out/bin/limactl completion zsh)
+    }
+    postFixupHooks+=(doShellCompletion)
+
     runHook postInstall
   '';
 
@@ -72,7 +79,7 @@ stdenvNoCC.mkDerivation {
 
   # Stripping removes entitlements of the binary on Darwin making it non-operational.
   # Therefore, disable stripping on Darwin.
-  dontStrip = stdenvNoCC.isDarwin;
+  dontStrip = stdenvNoCC.hostPlatform.isDarwin;
 
   passthru.updateScript =
     let

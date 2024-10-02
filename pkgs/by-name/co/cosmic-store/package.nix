@@ -9,7 +9,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
+    repo = "cosmic-store";
     rev = "epoch-${version}";
     hash = "sha256-RuqWO2/sqMMd9xMRClAy7cwv7iCTEC15TZ7JLBZ2zwM=";
     fetchSubmodules = true;
@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
 
   # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
   postInstall = ''
-    wrapProgram "$out/bin/${pname}" \
+    wrapProgram "$out/bin/cosmic-store" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-store";
     description = "App Store for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [ ahoneybun nyabinary ];
     platforms = platforms.linux;
   };
 }

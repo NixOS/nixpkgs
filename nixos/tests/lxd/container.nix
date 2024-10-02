@@ -64,7 +64,7 @@ in {
 
     with subtest("Squashfs image is functional"):
         machine.succeed(
-            "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs-squashfs} --alias nixos-squashfs"
+            "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs-squashfs}/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs --alias nixos-squashfs"
         )
         machine.succeed("lxc launch nixos-squashfs container")
         with machine.nested("Waiting for instance to start and be usable"):

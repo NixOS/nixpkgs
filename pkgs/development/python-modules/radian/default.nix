@@ -6,6 +6,7 @@
   pyte,
   pexpect,
   ptyprocess,
+  pythonOlder,
   jedi,
   git,
   lineedit,
@@ -14,27 +15,33 @@
   rchitect,
   R,
   rPackages,
-  pythonOlder,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "radian";
-  version = "0.6.12";
-  format = "setuptools";
+  version = "0.6.13";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "randy3k";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cojKbDNqcUay5RxvWszQ96eC4jVI4G7iRv/ZYWgidCQ=";
+    hash = "sha256-gz2VczAgVbvISzvY/v0GvZ/Erv6ipZwPU61r6OJ+3Fo=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace '"pytest-runner"' ""
   '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeBuildInputs = [
     R # needed at setup time to detect R_HOME

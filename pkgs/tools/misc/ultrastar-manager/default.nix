@@ -30,21 +30,21 @@ let
 
       dontInstall = true;
 
-      patchPhase = with lib; ''
+      patchPhase = ''
         # we don’t want prebuild binaries checked into version control!
         rm -rf lib include
 
         # fix up main project file
         sed -e 's|-L.*unix.*lbass.*$|-lbass|' \
             -e "/QMAKE_POST_LINK/d" \
-            -e "s|../include/bass|${getLib libbass}/include|g" \
-            -e "s|../include/taglib|${getLib taglib}/include|g" \
-            -e "s|../include/mediainfo|${getLib libmediainfo}/include|g" \
+            -e "s|../include/bass|${lib.getLib libbass}/include|g" \
+            -e "s|../include/taglib|${lib.getLib taglib}/include|g" \
+            -e "s|../include/mediainfo|${lib.getLib libmediainfo}/include|g" \
             -i src/UltraStar-Manager.pro
 
         # if more plugins start depending on ../../../include,
         # it should be abstracted out for all .pro files
-        sed -e "s|../../../include/taglib|${getLib taglib}/include/taglib|g" \
+        sed -e "s|../../../include/taglib|${lib.getLib taglib}/include/taglib|g" \
             -i src/plugins/audiotag/audiotag.pro
 
         mkdir $out

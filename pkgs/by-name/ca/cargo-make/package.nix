@@ -10,23 +10,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.37.15";
+  version = "0.37.18";
 
   src = fetchFromGitHub {
     owner = "sagiegurari";
     repo = "cargo-make";
     rev = version;
-    hash = "sha256-sIiRlqUn59BxrvOs7N1es3vJVQRerV0EhNntuXXgPJA=";
+    hash = "sha256-fiS4Z+Ao3DHyIal1GNXsCEgbLy1fsjbOdLcr7jNvhzA=";
   };
 
-  cargoHash = "sha256-MvCGdlEevHND7buW+JuAyH6gRck5ppSAq9xylXSgm5w=";
+  cargoHash = "sha256-GyHaVcrrq3v/d1WJmpteGwVkB9mLk+OIRDSkwR+aPMI=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     bzip2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

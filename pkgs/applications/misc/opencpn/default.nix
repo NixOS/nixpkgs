@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-axRI3sssj2Q6IBfIeyvOa494b0EgKFP+lFL/QrGIybQ=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
@@ -65,9 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     gtest
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
     makeWrapper
   ];
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     flac
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
   ] ++ [
     gtk3
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     sqlite
     tinyxml
     wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-utils
     libselinux
     libsepol
@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXtst
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lame
   ];
 
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSQUISH_USE_SSE=0"
   ]);
 
-  postInstall = lib.optionals stdenv.isDarwin ''
+  postInstall = lib.optionals stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/OpenCPN.app $out/Applications
     makeWrapper $out/Applications/OpenCPN.app/Contents/MacOS/OpenCPN $out/bin/opencpn

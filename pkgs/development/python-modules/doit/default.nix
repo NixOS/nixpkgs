@@ -30,11 +30,14 @@ let
       hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
     };
 
-    propagatedBuildInputs = [
-      cloudpickle
-      importlib-metadata
-      toml
-    ] ++ lib.optional stdenv.isLinux pyinotify ++ lib.optional stdenv.isDarwin macfsevents;
+    propagatedBuildInputs =
+      [
+        cloudpickle
+        importlib-metadata
+        toml
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux pyinotify
+      ++ lib.optional stdenv.hostPlatform.isDarwin macfsevents;
 
     nativeCheckInputs = [
       configclass
@@ -51,7 +54,7 @@ let
     passthru.tests = {
       # hangs on darwin
       check = doit.overridePythonAttrs (_: {
-        doCheck = !stdenv.isDarwin;
+        doCheck = !stdenv.hostPlatform.isDarwin;
       });
     };
 

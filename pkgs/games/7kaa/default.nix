@@ -7,7 +7,6 @@
 , fetchurl
 , fetchFromGitHub
 , openal
-, libtool
 , enet
 , SDL2
 , curl
@@ -55,7 +54,7 @@ gccStdenv.mkDerivation (finalAttrs: {
     autoupdate
   '';
 
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
 
   postInstall = ''
     mkdir $out/share/7kaa/MUSIC

@@ -8,6 +8,7 @@
   nodejs,
   makeWrapper,
   callPackage,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,6 +63,9 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     client = callPackage ./client.nix {
       inherit (finalAttrs) src version offlineCache meta;
+    };
+    tests = {
+      inherit (nixosTests) your_spotify;
     };
   };
 

@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "changedetection-io";
-  version = "0.45.24";
+  version = "0.46.04";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "dgtlmoon";
     repo = "changedetection.io";
     rev = "refs/tags/${version}";
-    hash = "sha256-VltrcTbX95agV9JGV2KYGeZ6iUlgzrOsjShsUpiGfes=";
+    hash = "sha256-V1nGVURA4nksDX0kXxfPbO/rB0nmECqpfysenpzcfZs=";
   };
 
   postPatch = ''
@@ -30,9 +30,11 @@ python3.pkgs.buildPythonApplication rec {
     apprise
     beautifulsoup4
     brotli
+    babel
     chardet
     cryptography
     dnspython
+    elementpath
     eventlet
     feedgen
     flask

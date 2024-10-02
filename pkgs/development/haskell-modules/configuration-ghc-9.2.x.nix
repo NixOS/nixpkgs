@@ -69,10 +69,12 @@ self: super: {
   haskell-language-server = lib.pipe super.haskell-language-server [
     (disableCabalFlag "fourmolu")
     (disableCabalFlag "ormolu")
+    (disableCabalFlag "cabal")
     (disableCabalFlag "stylishHaskell")
     (d: d.override {
       ormolu = null;
       fourmolu = null;
+      stan = null;
     })
   ];
 

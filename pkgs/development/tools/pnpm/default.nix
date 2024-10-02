@@ -8,8 +8,8 @@ let
       hash = "sha256-2qJ6C1QbxjUyP/lsLe2ZVGf/n+bWn/ZwIVWKqa2dzDY=";
     };
     "9" = {
-      version = "9.7.0";
-      hash = "sha256-s1AY+/qPWDZosmSeQHkipyE1XNgfYb7rSsHUJY5YVVk=";
+      version = "9.10.0";
+      hash = "sha256-NVqKuNu2rUG+++85vE/Wtd+F4Sdh0nJL0B8T6HjeSxM";
     };
   };
 

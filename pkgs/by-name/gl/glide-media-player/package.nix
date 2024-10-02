@@ -17,26 +17,26 @@
 
 stdenv.mkDerivation rec {
   pname = "glide-media-player";
-  version = "0.6.3";
+  version = "0.6.5";
 
   src = fetchFromGitHub {
     owner = "philn";
     repo = "glide";
     rev = version;
-    hash = "sha256-rWWMMuA41uFWazIJBVLxzaCrR5X5tI4x+GXXYkfeqz8=";
+    hash = "sha256-gmBXUj6LxC7VDH/ni8neYivysagqcbI/UCUq9Ly3D24=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Kvdbo5tkhwsah9W7Y5zqpoA3bVHfmjGj7Cjsqxkljls=";
+    hash = "sha256-u41H746/nPX2PmpyweUp4Y9k+XIruazgMdU6B4ig708=";
   };
 
   postPatch = ''
     substituteInPlace scripts/meson_post_install.py \
       --replace-warn "gtk-update-icon-cache" "gtk4-update-icon-cache"
-    substituteInPlace data/net.baseart.Glide.desktop \
-      --replace-warn "Icon=net.baseart.Glide.svg" "Icon=net.baseart.Glide"
+    substituteInPlace data/net.base_art.Glide.desktop \
+      --replace-warn "Icon=net.base_art.Glide.svg" "Icon=net.baseart.Glide"
     patchShebangs --build \
       scripts/meson_post_install.py \
       build-aux/cargo-build.py

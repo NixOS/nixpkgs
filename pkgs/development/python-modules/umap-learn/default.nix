@@ -45,7 +45,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     plot = [
       bokeh
       colorcet

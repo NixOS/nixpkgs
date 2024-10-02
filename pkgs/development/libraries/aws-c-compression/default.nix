@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-compression";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
     rev = "v${version}";
-    sha256 = "sha256-Cf3MvoRWGAy+vlE59JSpTGOBl07dI4mbIaL1HIiLN/I=";
+    sha256 = "sha256-Zr1C47YaTkMlG7r2WtAkxRfjZRuBKeTXzNIGspdLap4=";
   };
 
   nativeBuildInputs = [

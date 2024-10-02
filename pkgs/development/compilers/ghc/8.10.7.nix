@@ -69,7 +69,7 @@ assert !enableIntegerSimple -> gmp != null;
 assert (stdenv.targetPlatform != stdenv.hostPlatform) -> !enableHaddockProgram;
 
 let
-  libffi_name = if stdenv.isDarwin && stdenv.isAarch64 then "libffi" else "libffi_3_3";
+  libffi_name = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "libffi" else "libffi_3_3";
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   inherit (bootPkgs) ghc;
@@ -253,7 +253,7 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
       hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/97d0b0a367e4c6a52a17c3299439ac7de129da24.patch";
@@ -302,9 +302,9 @@ stdenv.mkDerivation (rec {
 
     echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
 
     # GHC tries the host xattr /usr/bin/xattr by default which fails since it expects python to be 2.7
@@ -366,7 +366,7 @@ stdenv.mkDerivation (rec {
   nativeBuildInputs = [
     perl autoreconfHook autoconf automake m4 python3
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ] ++ lib.optionals enableDocs [
     sphinx

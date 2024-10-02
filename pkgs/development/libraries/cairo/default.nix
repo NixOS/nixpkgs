@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, gtk-doc, meson, ninja, pkg-config, python3
 , docbook_xsl, fontconfig, freetype, libpng, pixman, zlib
-, x11Support? !stdenv.isDarwin || true, libXext, libXrender
+, x11Support? !stdenv.hostPlatform.isDarwin || true, libXext, libXrender
 , gobjectSupport ? true, glib
 , xcbSupport ? x11Support, libxcb
 , darwin
@@ -34,7 +34,7 @@ in {
 
   buildInputs = [
     docbook_xsl
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
     CoreText
     ApplicationServices
@@ -87,7 +87,7 @@ in {
     # `-I' flags to be propagated.
     sed -i "$out/lib/pkgconfig/cairo.pc" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
-  '' + lib.optionalString stdenv.isDarwin glib.flattenInclude;
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin glib.flattenInclude;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

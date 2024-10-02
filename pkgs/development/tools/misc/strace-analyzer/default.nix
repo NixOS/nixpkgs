@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [ strace ];
 
-  checkFlags = lib.optionals stdenv.isAarch64 [
+  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
     # thread 'analysis::tests::analyze_dd' panicked at 'assertion failed: ...'
     "--skip=analysis::tests::analyze_dd"
   ];

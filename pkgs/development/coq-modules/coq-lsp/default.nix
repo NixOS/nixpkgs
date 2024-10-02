@@ -9,15 +9,17 @@
 
   release."0.1.8+8.16".sha256 = "sha256-dEEAK5IXGjHB8D/fYJRQG/oCotoXJuWLxXB0GQlY2eo=";
   release."0.1.9+8.17".sha256 = "sha256-BCsVRKSE9txeKgDfTsu7hQ6MebC+dX2AAqDF9iL7bYE=";
-  release."0.1.9+8.18".sha256 = "sha256-elAXvkyqw/R/EziGn+QdPn42t5rqTVVW08BXGP3HimY=";
-  release."0.1.9+8.19".sha256 = "sha256-0bk0o25aYkrRf5zaWZnNJqqoBZ6u8nSV9QDIWCeFEco=";
+  release."0.2.0+8.18".sha256 = "sha256-OByBB1CLmj2N0AEieBXLVvP6OLGqi0HXra2jE9k3hXU=";
+  release."0.2.0+8.19".sha256 = "sha256-G/UurWHxR2VzjClZCDHYcz7wAQAaYZt+DsADSXMybdk=";
+  release."0.2.0+8.20".sha256 = "sha256-+KRiYK+YCHC4R6/yDenRI8SqZiZ29X24xlDzegbPfrw=";
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = isEq "8.16"; out = "0.1.8+8.16"; }
     { case = isEq "8.17"; out = "0.1.9+8.17"; }
-    { case = isEq "8.18"; out = "0.1.9+8.18"; }
-    { case = isEq "8.19"; out = "0.1.9+8.19"; }
+    { case = isEq "8.18"; out = "0.2.0+8.18"; }
+    { case = isEq "8.19"; out = "0.2.0+8.19"; }
+    { case = isEq "8.20"; out = "0.2.0+8.20"; }
   ] null;
 
   nativeBuildInputs = [ makeWrapper ];

@@ -3,7 +3,7 @@ GEM
   specs:
     ansi (1.5.0)
     chronic (0.10.2)
-    papertrail (0.10.1)
+    papertrail (0.11.2)
       ansi (~> 1.5)
       chronic (~> 0.10)
 
@@ -14,4 +14,4 @@ DEPENDENCIES
   papertrail
 
 BUNDLED WITH
-   2.1.4
+   2.5.16

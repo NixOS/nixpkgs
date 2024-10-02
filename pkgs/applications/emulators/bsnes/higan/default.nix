@@ -33,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libicns
   ];
 
   buildInputs = [
     SDL2
     libao
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     gtk3
     gtksourceview3
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     udev
   ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Carbon
     Cocoa
     OpenAL
@@ -72,13 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildPhase = let
     platform =
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then "linux"
-      else if stdenv.isDarwin
+      else if stdenv.hostPlatform.isDarwin
       then "macos"
-      else if stdenv.isBSD
+      else if stdenv.hostPlatform.isBSD
       then "bsd"
-      else if stdenv.isWindows
+      else if stdenv.hostPlatform.isWindows
       then "windows"
       else throw "Unknown platform for higan: ${stdenv.hostPlatform.system}";
   in ''
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     mkdir ${placeholder "out"}
     mv higan/out/higan.app ${placeholder "out"}/
     mv icarus/out/icarus.app ${placeholder "out"}/
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     # we create a first-run script to populate
     # $HOME with all the stuff needed at runtime
     let
-      dest = if stdenv.isDarwin
+      dest = if stdenv.hostPlatform.isDarwin
            then "\\$HOME/Library/Application Support/higan"
            else "\\$HOME/higan";
     in ''
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
 # TODO: select between Qt and GTK3

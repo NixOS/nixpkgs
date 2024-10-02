@@ -1,5 +1,4 @@
 { fetchFromGitHub
-, fetchpatch
 , lib
 , openssl
 , pkg-config
@@ -18,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "stable2407";
+  version = "stable2407-2";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-${version}";
-    hash = "sha256-g+jReHOAkaWjr1yJILFL4mSYGEfRBlSCrUHp8ro22SA=";
+    hash = "sha256-4WOoFjihzErc6lIgiWvLg6fqDOxs1A+A0ERvu/D8btw=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -52,15 +51,6 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  cargoPatches = [
-    # NOTE: bump `time` dependency to be able to build with rust 1.80
-    # should be removed on the next release
-    (fetchpatch {
-      url = "https://github.com/paritytech/polkadot-sdk/pull/5149.patch";
-      hash = "sha256-FNG9XLeMRJOT6k7mcs6GemtQ3oUrH/hOYG0JNQP0akU=";
-    })
-  ];
-
   buildType = "production";
 
   cargoBuildFlags = [ "-p" "polkadot" ];
@@ -79,8 +69,8 @@ rustPlatform.buildRustPackage rec {
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
-    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
   # available for `rustc-wasm32`

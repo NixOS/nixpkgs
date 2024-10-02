@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "0.9.0";
 
   src = fetchurl {
-    url = "https://github.com/askimed/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
     hash = "sha256-PhI866NrbokMsSrU6YeSv03S1+VcNqVJsocI3xPfDcc=";
   };
   sourceRoot = ".";

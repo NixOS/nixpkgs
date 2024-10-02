@@ -24,12 +24,12 @@
   zstd,
   libarchive,
   withBlas ? true,
-  withHyperscan ? stdenv.isx86_64,
-  withLuaJIT ? stdenv.isx86_64,
+  withHyperscan ? stdenv.hostPlatform.isx86_64,
+  withLuaJIT ? stdenv.hostPlatform.isx86_64,
   nixosTests,
 }:
 
-assert withHyperscan -> stdenv.isx86_64;
+assert withHyperscan -> stdenv.hostPlatform.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";

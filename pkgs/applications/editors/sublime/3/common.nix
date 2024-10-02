@@ -65,7 +65,7 @@ let
       for binary in ${ builtins.concatStringsSep " " binaries }; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 
@@ -92,7 +92,7 @@ let
 
     postFixup = ''
       wrapProgram $out/sublime_bash \
-        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1"
+        --set LD_PRELOAD "${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"}/libgcc_s.so.1"
 
       wrapProgram $out/${primaryBinary} \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
@@ -101,7 +101,7 @@ let
         "''${gappsWrapperArgs[@]}"
 
       # Without this, plugin_host crashes, even though it has the rpath
-      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${lib.getLib openssl}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
+      wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"}/libgcc_s.so.1:${lib.getLib openssl}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
 in stdenv.mkDerivation (rec {

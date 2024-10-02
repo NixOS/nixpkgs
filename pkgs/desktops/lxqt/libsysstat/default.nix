@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library used to query system info and statistics";
     homepage = "https://github.com/lxqt/libsysstat";
     license = licenses.lgpl21Plus;

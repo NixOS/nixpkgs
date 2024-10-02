@@ -168,6 +168,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/open62541/open62541/releases/tag/v${finalAttrs.version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })

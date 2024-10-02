@@ -1,37 +1,40 @@
 {
   lib,
   stdenv,
-  anthropic,
-  attr,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  orjson,
+  pydantic,
+  requests,
+
+  # tests
+  anthropic,
   dataclasses-json,
   fastapi,
-  fetchFromGitHub,
   freezegun,
   httpx,
   instructor,
-  orjson,
-  poetry-core,
-  pydantic,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
-  requests,
   uvicorn,
+  attr,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.85";
+  version = "0.1.129";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IPbamCfaurikFAqKnvMp8+x5ULCeQ61d5oZFO9+s4SQ=";
+    hash = "sha256-GIWDGr6zd/YaSgcSrIw0a1Ul9RxdmtJBMTEbGapudtw=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -56,7 +59,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.isLinux [ attr ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -78,6 +81,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
     # Tests require a Langsmith API key
     "tests/evaluation/test_evaluation.py"
@@ -88,12 +92,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "langsmith";
   };
 }

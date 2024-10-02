@@ -28,7 +28,7 @@
 , gi-docgen
 , libgxps
 , withLibsecret ? true
-, supportNautilus ? (!stdenv.isDarwin)
+, supportNautilus ? (!stdenv.hostPlatform.isDarwin)
 , libadwaita
 , exempi
 , cargo
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
   ] ++ lib.optionals supportNautilus [
     nautilus
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -111,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
+      --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
+  '';
+
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
@@ -118,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
       # https://gitlab.gnome.org/GNOME/Incubator/papers/-/issues/176
       --prefix PATH : "$out/bin"
     )
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
   '';
 

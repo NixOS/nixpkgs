@@ -12,7 +12,7 @@ buildGoModule rec {
   version = "2.6.0";
 
   src = fetchurl {
-    url = "http://www.goredo.cypherpunks.ru/download/${pname}-${version}.tar.zst";
+    url = "http://www.goredo.cypherpunks.ru/download/goredo-${version}.tar.zst";
     hash = "sha256-XTL/otfCKC55TsUBBVors2kgFpOFh+6oekOOafOhcUs=";
   };
 

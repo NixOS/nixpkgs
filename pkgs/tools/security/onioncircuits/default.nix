@@ -48,7 +48,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://tails.boum.org";
     description = "GTK application to display Tor circuits and streams";
     mainProgram = "onioncircuits";

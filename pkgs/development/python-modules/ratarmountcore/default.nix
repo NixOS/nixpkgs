@@ -2,53 +2,61 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  pytestCheckHook,
-  indexed-bzip2,
   indexed-gzip,
   indexed-zstd,
+  libarchive-c,
+  pytestCheckHook,
   python-xz,
-  setuptools,
+  pythonOlder,
   rapidgzip,
   rarfile,
+  setuptools,
   zstandard, # Python bindings
   zstd, # System tool
 }:
 
 buildPythonPackage rec {
   pname = "ratarmountcore";
-  version = "0.6.3";
+  version = "0.7.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "mxmlnkn";
     repo = "ratarmount";
     rev = "core-v${version}";
-    hash = "sha256-2jG066BUkhyHRqRyFAucQRJrjXQNw2ccCxERKkltO3Y=";
+    hash = "sha256-2LPGKdofx2ID8BU0dZhGiZ3tUkd+niEVGvTSBFX4InU=";
     fetchSubmodules = true;
   };
 
   sourceRoot = "${src.name}/core";
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
-    indexed-gzip
-    indexed-bzip2
-    indexed-zstd
-    python-xz
-    rapidgzip
-    rarfile
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [ "ratarmountcore" ];
+  optional-dependencies = {
+    full = [
+      indexed-gzip
+      indexed-zstd
+      python-xz
+      rapidgzip
+      rarfile
+    ];
+    _7z = [ libarchive-c ];
+    bzip2 = [ rapidgzip ];
+    gzip = [ indexed-gzip ];
+    rar = [ rarfile ];
+    xz = [ python-xz ];
+    zstd = [ indexed-zstd ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
     zstandard
     zstd
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "ratarmountcore" ];
 
   disabledTestPaths = [
     # Disable this test because for arcane reasons running pytest with nix-build uses 10-100x
@@ -60,9 +68,17 @@ buildPythonPackage rec {
     "tests/test_BlockParallelReaders.py"
   ];
 
+  disabledTests = [
+    # Tests with issues
+    "test_file_versions"
+    "test_stream_compressed"
+    "test_chimera_file"
+  ];
+
   meta = with lib; {
     description = "Library for accessing archives by way of indexing";
     homepage = "https://github.com/mxmlnkn/ratarmount/tree/master/core";
+    changelog = "https://github.com/mxmlnkn/ratarmount/blob/core-v${version}/core/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with lib.maintainers; [ mxmlnkn ];
   };

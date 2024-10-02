@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
-  version = "3.41";
+  version = "3.42";
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
-    hash = "sha256-CAPteS1zjS6a+/6ZFUZD1WA7dcK8yM4qodVF8PGpTfY=";
+    hash = "sha256-gGP+A8CfmXaAf5WEKYCU6ud93pzjeh9tU37SP0/TIzw=";
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.
@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ pedrohlc ];
     changelog = "https://github.com/SaschaWillems/VulkanCapsViewer/releases/tag/${version}";
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

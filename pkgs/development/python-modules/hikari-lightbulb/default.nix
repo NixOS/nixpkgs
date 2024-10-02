@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hikari ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crontrigger = [ croniter ];
   };
 

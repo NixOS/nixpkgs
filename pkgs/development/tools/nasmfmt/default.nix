@@ -1,6 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
-buildGoModule rec {
+buildGoModule {
   pname = "nasmfmt";
   version = "unstable-2022-09-15";
 
@@ -14,10 +18,10 @@ buildGoModule rec {
   vendorHash = null;
 
   preBuild = ''
-    cp ${./go.mod} go.mod
+    go mod init github.com/yamnikov-oleg/nasmfmt
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [ "-s" ];
 
   meta = with lib; {
     description = "Formatter for NASM source files";

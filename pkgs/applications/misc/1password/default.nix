@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xar cpio ];
 
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat op.pkg/Payload | cpio -i
   '';
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       --zsh <($out/bin/${mainProgram} completion zsh)
   '';
 
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 

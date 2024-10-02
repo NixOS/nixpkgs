@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt3d
     qtbase
   ]
-  ++ lib.optionals stdenv.isDarwin [ freetype ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  qmakeFlags = lib.optionals stdenv.isDarwin [ "CONFIG+=non_portable" ];
+  qmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CONFIG+=non_portable" ];
 
   postPatch = ''
     substituteInPlace pdf_viewer_build_config.pro \
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "/etc/sioyek" "$out/etc"
   '';
 
-  postInstall = if stdenv.isDarwin then ''
+  postInstall = if stdenv.hostPlatform.isDarwin then ''
     cp -r pdf_viewer/shaders sioyek.app/Contents/MacOS/shaders
     cp pdf_viewer/prefs.config sioyek.app/Contents/MacOS/
     cp pdf_viewer/prefs_user.config sioyek.app/Contents/MacOS/

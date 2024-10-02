@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     lp_solve
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "\''$ORIGIN" "\''${CMAKE_INSTALL_PREFIX}/lib"
   '';

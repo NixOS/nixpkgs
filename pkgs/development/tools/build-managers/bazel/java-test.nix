@@ -35,7 +35,7 @@ let
     cp -r ${bazel-examples}/java-tutorial $out
     find $out -type d -exec chmod 755 {} \;
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

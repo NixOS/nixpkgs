@@ -8,8 +8,8 @@
 , CoreFoundation
 , SystemConfiguration
 , Security
-, withLLVM ? !stdenv.isDarwin
-, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
+, withLLVM ? !stdenv.hostPlatform.isDarwin
+, withSinglepass ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.llvm
     libffi
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     SystemConfiguration
     Security

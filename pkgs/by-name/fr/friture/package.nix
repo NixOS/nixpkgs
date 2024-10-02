@@ -7,20 +7,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.49-unstable-2024-06-02";
+  version = "0.51";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlecomte";
-    repo = pname;
-    rev = "405bffa585ece0cb535c32d0f4f6ace932b40103";
-    hash = "sha256-4xvIlRuJ7WCFj1dEyvO9UOsye70nFlWjb9XU0owwgiM=";
+    repo = "friture";
+    rev = "v${version}";
+    hash = "sha256-1Swkk7bhQTSo17Gj0i1VNiIt+fSXgDIeWfJ9LpoUEHg=";
   };
 
-  pythonRelaxDeps = true;
-
   postPatch = ''
-    sed -i -e '/packages=\[/a "friture.playback",' pyproject.toml
+    sed -i -e 's/==.*"/"/' -e '/packages=\[/a "friture.playback",' pyproject.toml
   '';
 
   nativeBuildInputs =

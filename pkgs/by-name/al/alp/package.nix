@@ -33,7 +33,7 @@ buildGoModule rec {
   buildPhase = ''
     runHook preBuild
 
-    go build -o $GOPATH/bin/${pname} main.go
+    go build -o $GOPATH/bin/alp main.go
 
     runHook postBuild
   '';

@@ -10,6 +10,7 @@
 }:
 
 { runScript ? "bash"
+, nativeBuildInputs ? []
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -270,7 +271,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name (nameAttrs // {
-  inherit meta;
+  inherit nativeBuildInputs meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {

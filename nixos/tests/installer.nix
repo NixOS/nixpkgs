@@ -626,12 +626,16 @@ let
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
+            perlPackages.ConfigIniFiles
+            perlPackages.FileSlurp
+            perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             # make-options-doc/default.nix
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
+            switch-to-configuration-ng
             texinfo
             unionfs-fuse
             xorg.lndir
@@ -645,6 +649,10 @@ let
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
+            pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            pkgs.perlPackages.FileCopyRecursive
+            pkgs.perlPackages.XMLSAX
+            pkgs.perlPackages.XMLSAXBase
           ])
           ++ optionals (bootLoader == "systemd-boot") [
             pkgs.zstd.bin

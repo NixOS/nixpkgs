@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.58";
+  version = "3.5.59";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    hash = "sha256-mwfLCZfjAtKNfp9Cc8hkLAOKo6VfKD3l+IDiXDP2LV8=";
+    hash = "sha256-O0fn+s3RIIriVw6sMB2nSKAGtVF0Tz6Ns4Jb9OpcbgY=";
   };
 
   strictDeps = true;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
 
-    ant -f build.xml -Dbits=${if stdenv.isi686 then "32" else "64"}
+    ant -f build.xml -Dbits=${if stdenv.hostPlatform.isi686 then "32" else "64"}
 
     runHook postBuild
   '';

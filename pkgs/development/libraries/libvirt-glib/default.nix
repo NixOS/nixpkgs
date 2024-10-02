@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libvirt
     libxml2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng
   ];
 

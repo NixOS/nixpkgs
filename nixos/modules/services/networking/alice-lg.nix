@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.alice-lg;
   settingsFormat = pkgs.formats.ini { };
@@ -9,17 +6,17 @@ in
 {
   options = {
     services.alice-lg = {
-      enable = mkEnableOption "Alice Looking Glass";
+      enable = lib.mkEnableOption "Alice Looking Glass";
 
-      package = mkPackageOption pkgs "alice-lg" { };
+      package = lib.mkPackageOption pkgs "alice-lg" { };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = settingsFormat.type;
         default = { };
         description = ''
           alice-lg configuration, for configuration options see the example on [github](https://github.com/alice-lg/alice-lg/blob/main/etc/alice-lg/alice.example.conf)
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             server = {
               # configures the built-in webserver and provides global application settings

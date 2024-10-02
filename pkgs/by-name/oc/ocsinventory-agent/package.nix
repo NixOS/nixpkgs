@@ -32,7 +32,7 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-aFzBrUsVttUhpYGEYd/yYuXmE90PGCiBmBsVjtHcHLg=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   buildInputs = with perlPackages; [
     perl
@@ -48,9 +48,9 @@ perlPackages.buildPerlPackage rec {
     ProcDaemon
     ProcPIDFile
     XMLSimple
-  ] ++ lib.optionals stdenv.isLinux (with perlPackages; [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux (with perlPackages; [
     NetCUPS # cups-filters is broken on darwin
-  ]) ++ lib.optionals stdenv.isDarwin (with perlPackages; [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin (with perlPackages; [
     MacSysProfile
   ]);
 
@@ -62,14 +62,14 @@ perlPackages.buildPerlPackage rec {
       ipmitool # ipmitool
       nmap # nmap
       pciutils # lspci
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       dmidecode # dmidecode
       iproute2 # ip
       lvm2 # pvs
       usbutils # lsusb
       util-linux # last, lsblk, mount
     ];
-  in lib.optionalString stdenv.isDarwin ''
+  in lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/ocsinventory-agent
   '' + ''
     wrapProgram $out/bin/ocsinventory-agent --prefix PATH : ${lib.makeBinPath runtimeDependencies}

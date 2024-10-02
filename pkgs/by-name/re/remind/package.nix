@@ -38,7 +38,7 @@ tcl.mkTclDerivation rec {
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
     "-DHAVE_SETENV"
     "-DHAVE_UNSETENV"

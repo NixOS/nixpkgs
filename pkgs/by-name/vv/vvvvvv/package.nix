@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";
-    sha256 = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
+    hash = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
     meta.license = lib.licenses.unfree;
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     physfs
     SDL2
     tinyxml-2
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit ];
 
   cmakeDir = "../desktop_version";
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       name = "VVVVVV";
       desktopName = "VVVVVV";
       comment = meta.description;
-      exec = pname;
+      exec = "vvvvvv";
       icon = "VVVVVV";
       terminal = false;
       categories = [ "Game" ];
@@ -69,12 +69,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 VVVVVV $out/bin/${pname}
+    install -Dm755 VVVVVV $out/bin/vvvvvv
     install -Dm644 "$src/desktop_version/icon.ico" "$out/share/pixmaps/VVVVVV.png"
     cp -r "$src/desktop_version/fonts/" "$out/share/"
     cp -r "$src/desktop_version/lang/" "$out/share/"
 
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/vvvvvv \
       --add-flags "-assets ${dataZip}" \
       --add-flags "-langdir $out/share/lang" \
       --add-flags "-fontsdir $out/share/fonts"

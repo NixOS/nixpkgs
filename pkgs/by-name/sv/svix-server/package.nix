@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svix-server";
-  version = "1.28.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "svix";
     repo = "svix-webhooks";
     rev = "v${version}";
-    hash = "sha256-6GKb3tSO4yr2tMH7V5oOPSsWK4OLX0/Zqd2N+ZrIvls=";
+    hash = "sha256-W5oLN0rMG2c8h05sIEOf4h95SQrFrs/7vLpsHH91sIA=";
   };
 
   sourceRoot = "${src.name}/server";
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage rec {
       "https://github.com/svix/svix-webhooks/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ techknowlogick ];
-    broken = stdenv.isx86_64 && stdenv.isDarwin; # aws-lc-sys currently broken on darwin x86_64
+    broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }

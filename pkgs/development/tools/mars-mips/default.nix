@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     unzip
     imagemagick
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 

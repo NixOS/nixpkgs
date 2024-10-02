@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-intents";
-  version = "2024.8.7";
+  version = "2024.9.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     repo = "intents-package";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-s6cw9Ni4NFNNLu7s8YaHk6MeKlss60GgxdwcUVA1djo=";
+    hash = "sha256-8wsszLbrOLvJJoXFHx40zJJbXKT6yNRS5Kgam9P8yGQ=";
   };
 
   build-system = [
@@ -62,6 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/home-assistant/intents/releases/tag/${version}";
     description = "Intents to be used with Home Assistant";
     homepage = "https://github.com/home-assistant/intents";
     license = licenses.cc-by-40;

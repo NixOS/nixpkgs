@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config python ];
   buildInputs = [
     libzip glib libusb1 libftdi1 check libserialport glibmm hidapi
-  ] ++ lib.optionals stdenv.isLinux [ libieee1284 bluez ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libieee1284 bluez ];
 
   strictDeps = true;
 

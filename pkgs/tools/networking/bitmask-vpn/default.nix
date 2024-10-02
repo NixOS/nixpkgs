@@ -84,7 +84,7 @@ buildGoModule rec {
 
     patchShebangs gui/build.sh
     wrapPythonProgramsIn branding/scripts
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace pkg/helper/linux.go \
       --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
     substituteInPlace pkg/vpn/launcher_linux.go \
@@ -103,7 +103,7 @@ buildGoModule rec {
     qttools
     which
     wrapQtAppsHook
-  ] ++ lib.optional (!stdenv.isLinux) qtinstaller;
+  ] ++ lib.optional (!stdenv.hostPlatform.isLinux) qtinstaller;
 
   buildInputs = [
     qtbase
@@ -112,7 +112,7 @@ buildGoModule rec {
     qtgraphicaleffects
     qtquickcontrols
     qtquickcontrols2
-  ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,
   # this should be fixable once darwin.apple_sdk >= 10.13
@@ -142,7 +142,7 @@ buildGoModule rec {
     (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
     install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
     install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
   '';
 

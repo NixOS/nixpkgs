@@ -70,7 +70,7 @@ in {
         anotherOrganisation.users = [ "bob" ];
       };
 
-      specialisation.manual-config.configuration = {
+      specialisation.manual_config.configuration = {
         services.taskserver.pki.manual = {
           ca.cert = snakeOil.cacert;
           server.cert = snakeOil.cert;
@@ -95,7 +95,7 @@ in {
     cfg = nodes.server.config.services.taskserver;
     portStr = toString cfg.listenPort;
     specialisations = "${nodes.server.system.build.toplevel}/specialisation";
-    newServerSystem = "${specialisations}/manual-config";
+    newServerSystem = "${specialisations}/manual_config";
     switchToNewServer = "${newServerSystem}/bin/switch-to-configuration test";
   in ''
     from shlex import quote

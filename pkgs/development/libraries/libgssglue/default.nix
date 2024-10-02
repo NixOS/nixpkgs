@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   autoreconfHook,
-  libkrb5,
+  krb5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/etc
     cat <<EOF > $out/etc/gssapi_mech.conf
-    ${libkrb5}/lib/libgssapi_krb5.so mechglue_internal_krb5_init
+    ${lib.getLib krb5}/lib/libgssapi_krb5.so mechglue_internal_krb5_init
     EOF
   '';
 

@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     fixup-yarn-lock
     nodejs
     makeWrapper
-    python3
+    (python3.withPackages (ps: [ ps.setuptools ]))
     nest-cli
     libsass
     pkg-config
@@ -116,7 +116,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir \
-      -c.electronDist=${electron}/libexec/electron \
+      -c.electronDist=${electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

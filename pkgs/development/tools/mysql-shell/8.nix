@@ -72,8 +72,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [ pkg-config cmake git bison makeWrapper ]
-    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ]
-    ++ lib.optionals stdenv.isDarwin [ cctools DarwinTools ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools DarwinTools ];
 
   buildInputs = [
     curl
@@ -95,8 +95,8 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     antlr.runtime.cpp
   ] ++ pythonDeps
-  ++ lib.optionals stdenv.isLinux [ libtirpc ]
-  ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   preConfigure = ''
     # Build MySQL

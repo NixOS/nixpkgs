@@ -12,12 +12,12 @@ buildGoModule rec {
   };
 
   buildInputs =
-    lib.optional stdenv.isLinux (lib.getDev pcsclite)
-    ++ lib.optional stdenv.isDarwin (darwin.apple_sdk.frameworks.PCSC);
+    lib.optional stdenv.hostPlatform.isLinux (lib.getDev pcsclite)
+    ++ lib.optional stdenv.hostPlatform.isDarwin (darwin.apple_sdk.frameworks.PCSC);
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/lib/systemd/user
     substitute contrib/systemd/user/yubikey-agent.service $out/lib/systemd/user/yubikey-agent.service \
       --replace 'ExecStart=yubikey-agent' "ExecStart=$out/bin/yubikey-agent"

@@ -9,7 +9,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     sha256 = "sha256-CC24z0+2dSeqDddX5dJUs7SX9QJ8Iyh/nAp0pqdDvwg=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ jemalloc ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ jemalloc ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     cp -r lib $out/
     wrapProgram $out/bin/${pname} \
       --set JAVA_HOME "${jre}" \
-      --suffix ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${lib.makeLibraryPath buildInputs}
+      --suffix ${if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} : ${lib.makeLibraryPath buildInputs}
   '';
 
   passthru.tests = {

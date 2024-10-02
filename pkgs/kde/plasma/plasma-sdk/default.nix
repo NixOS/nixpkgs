@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "plasma-sdk";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

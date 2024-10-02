@@ -84,7 +84,7 @@ let
       # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
       "--with-extra-cxxflags=-xc++"
     ]
-    ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+    ++ lib.optional stdenv.hostPlatform.isx86_64 "--with-jvm-features=zgc"
     ++ lib.optional headless "--enable-headless-only"
     ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 

@@ -26,21 +26,21 @@ let
     # Some tests in the test suite isn't working on aarch64. Disable them for
     # now until upstream finds a workaround.
     # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
-    ++ lib.optionals stdenv.isi686 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+    ++ lib.optionals stdenv.hostPlatform.isi686 [
       "future_division"
       "overflow_check_longlong"
     ];
 in
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.0.10";
+  version = "3.0.11";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "Cython";
+    pname = "cython";
     inherit version;
-    hash = "sha256-3MlnOTMfuFTc9QP5RgdXbP6EiAZsYcpQ39VYNvEy3pk=";
+    hash = "sha256-cUbdKvhoK0ymEzGFHmrrzp/lFY51MAND+AwHyoCx+v8=";
   };
 
   build-system = [
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-  # doCheck = !stdenv.isDarwin;
+  # doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     inherit sage;

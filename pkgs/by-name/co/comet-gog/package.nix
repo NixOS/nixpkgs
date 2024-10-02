@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   env.PROTOC = lib.getExe' protobuf "protoc";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     SystemConfiguration
   ];

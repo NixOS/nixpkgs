@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./change-lock-location.patch
+    ./read-bundle-info-from-root.patch
   ];
 
   cmakeFlags = [

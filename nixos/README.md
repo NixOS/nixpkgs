@@ -80,6 +80,7 @@ Reviewing process:
 
 - Ensure that all file paths [fit the guidelines](../CONTRIBUTING.md#file-naming-and-organisation).
 - Ensure that the module tests, if any, are succeeding.
+- Ensure that new module tests are added to the package `passthru.tests`.
 - Ensure that the introduced options are correct.
   - Type should be appropriate (string related types differs in their merging capabilities, `loaOf` and `string` types are deprecated).
   - Description, default and example should be provided.
@@ -95,7 +96,8 @@ Sample template for a new module review is provided below.
 ##### Reviewed points
 
 - [ ] module path fits the guidelines
-- [ ] module tests succeed on ARCHITECTURE
+- [ ] module tests, if any, succeed on ARCHITECTURE
+- [ ] module tests, if any, are added to package `passthru.tests`
 - [ ] options have appropriate types
 - [ ] options have default
 - [ ] options have example

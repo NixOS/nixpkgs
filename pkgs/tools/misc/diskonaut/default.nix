@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-S/ne3iTEnlA3AqcPg3geLzV4bYVuYPjMCITSVJFnWYI=";
 
   # 1 passed; 44 failed https://hydra.nixos.org/build/148943783/nixlog/1
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Terminal disk space navigator";

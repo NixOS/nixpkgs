@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.13";
+  version = "2.2.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ejAgPSHeE2842WvGjH+2HbaA7HoNDuIGNvmqXgCjuLE=";
+    hash = "sha256-3evll1Ll8krvAfelGoJHOrmH7RvkeM/ZU1j13cTuXR4=";
   };
 
   postPatch = ''

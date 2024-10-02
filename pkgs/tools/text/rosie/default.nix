@@ -3,16 +3,16 @@
 , fetchgit
 , libbsd
 , readline
+,
 }:
-
 stdenv.mkDerivation rec {
   pname = "rosie";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchgit {
     url = "https://gitlab.com/rosie-pattern-language/rosie";
-    rev = "9303e04ae2cffabdda6ccc4e2a351a47218615ff";
-    sha256 = "1smh760baf43hr56p6rh4khz3shyzda5lqva4ffxwchl7yy7r82j";
+    rev = "79605830e32dff33544f9ebe7d7be752c29424b5";
+    sha256 = "sha256-n7Tem/4ZjizfCPT21teYK2wZ/gVpgjHUim9s7soEwbM=";
     fetchSubmodules = true;
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sed -iE '/ld.so.conf.d/d' Makefile
   '';
 
-  preInstall = lib.optionalString stdenv.isDarwin ''
+  preInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib build/bin/rosie
     install_name_tool -id $out/lib/librosie.dylib build/lib/librosie.dylib
   '';

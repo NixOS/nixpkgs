@@ -44,9 +44,9 @@ buildPythonPackage rec {
     cryptography
     pyasn1
     six
-  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
+  ] ++ optional-dependencies.ed25519; # remove on 3.0 update
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gssapi = [
       pyasn1
       gssapi
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     icecream
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # disable tests that require pytest-relaxed, which is broken

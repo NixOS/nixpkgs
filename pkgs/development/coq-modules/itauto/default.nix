@@ -5,6 +5,7 @@
   owner = "fbesson";
   domain = "gitlab.inria.fr";
 
+  release."8.20.0".sha256 = "sha256-LYKGbI3O6yw6CiTJNUGL11PT4q4o+gJK1kQgKQL0/Hk=";
   release."8.19.0".sha256 = "sha256-xKWCF4dYvvlJUVGCZcR2RLCG55vlGzu2GN30MeRvVD4=";
   release."8.18.0".sha256 = "sha256-4mDDnKTeYrf27uRMkydQxO7j2tfgTFXOREW474d40eo=";
   release."8.17.0".sha256 = "sha256-fgdnKchNT1Hyrq14gU8KWYnlSfg3qlsSw5A4+RoA26w=";
@@ -14,6 +15,7 @@
   release."8.13+no".sha256 = "sha256-gXoxtLcHPoyjJkt7WqvzfCMCQlh6kL2KtCGe3N6RC/A=";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+    { case = isEq "8.20"; out = "8.20.0"; }
     { case = isEq "8.19"; out = "8.19.0"; }
     { case = isEq "8.18"; out = "8.18.0"; }
     { case = isEq "8.17"; out = "8.17.0"; }

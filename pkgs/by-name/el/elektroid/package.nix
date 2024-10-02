@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     owner = "dagargo";
     repo = "elektroid";
     rev = version;
-    sha256 = "sha256-Qv4jvk6N0IMgYGCPWNYGDZJKGA+UPzhHeYfSrkq5hy4=";
+    hash = "sha256-Qv4jvk6N0IMgYGCPWNYGDZJKGA+UPzhHeYfSrkq5hy4=";
   };
 
   nativeBuildInputs = [

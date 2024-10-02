@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   VERSION = version;
 
-  doCheck = !(stdenv.isDarwin && stdenv.isx86_64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
   nativeBuildInputs = [
     autoreconfHook
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ];
 
   # SMART is only supported on Linux and requires the smartmontools package
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/snapraid \
      --prefix PATH : ${lib.makeBinPath [ smartmontools ]}
   '';

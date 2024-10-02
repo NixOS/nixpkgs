@@ -56,6 +56,7 @@
 # dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.
 # if you include the generated code in the output via postInstall.
 , useFakeRustfmt ? true
+, usePgTestCheckFeature ? true
 , ...
 } @ args:
 let
@@ -86,7 +87,7 @@ let
   preBuildAndTest = ''
     export PGRX_HOME=$(mktemp -d)
     export PGDATA="$PGRX_HOME/data-${pgrxPostgresMajor}/"
-    cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${postgresql}/bin/pg_config
+    cargo-pgrx pgrx init "--pg${pgrxPostgresMajor}" ${lib.getDev postgresql}/bin/pg_config
     echo "unix_socket_directories = '$(mktemp -d)'" > "$PGDATA/postgresql.conf"
 
     # This is primarily for Mac or other Nix systems that don't use the nixbld user.
@@ -96,12 +97,12 @@ let
     pg_ctl stop
   '';
 
-  argsForBuildRustPackage = builtins.removeAttrs args [ "postgresql" "useFakeRustfmt" ];
+  argsForBuildRustPackage = builtins.removeAttrs args [ "postgresql" "useFakeRustfmt" "usePgTestCheckFeature" ];
 
   # so we don't accidentally `(rustPlatform.buildRustPackage argsForBuildRustPackage) // { ... }` because
   # we forgot parentheses
   finalArgs = argsForBuildRustPackage // {
-    buildInputs = (args.buildInputs or [ ]) ++ lib.optionals stdenv.isDarwin [ Security ];
+    buildInputs = (args.buildInputs or [ ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
     nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [
       cargo-pgrx
@@ -117,11 +118,10 @@ let
       ${preBuildAndTest}
       ${maybeEnterBuildAndTestSubdir}
 
-      NIX_PGLIBDIR="${postgresql}/lib" \
       PGRX_BUILD_FLAGS="--frozen -j $NIX_BUILD_CORES ${builtins.concatStringsSep " " cargoBuildFlags}" \
-      ${lib.optionalString stdenv.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin ''RUSTFLAGS="''${RUSTFLAGS:+''${RUSTFLAGS} }-Clink-args=-Wl,-undefined,dynamic_lookup"''} \
       cargo pgrx package \
-        --pg-config ${postgresql}/bin/pg_config \
+        --pg-config ${lib.getDev postgresql}/bin/pg_config \
         ${maybeDebugFlag} \
         --features "${builtins.concatStringsSep " " buildFeatures}" \
         --out-dir "$out"
@@ -155,7 +155,7 @@ let
     RUST_BACKTRACE = "full";
 
     checkNoDefaultFeatures = true;
-    checkFeatures = (args.checkFeatures or [ ]) ++ [ "pg_test pg${pgrxPostgresMajor}" ];
+    checkFeatures = (args.checkFeatures or [ ]) ++ (lib.optionals usePgTestCheckFeature [ "pg_test" ]) ++ [ "pg${pgrxPostgresMajor}" ];
   };
 in
 rustPlatform.buildRustPackage finalArgs

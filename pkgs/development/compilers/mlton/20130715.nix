@@ -3,7 +3,7 @@
 let
   version = "20130715";
 
-  usr_prefix = if stdenv.isDarwin then "usr/local" else "usr";
+  usr_prefix = if stdenv.hostPlatform.isDarwin then "usr/local" else "usr";
 
   dynamic_linker = stdenv.cc.bintools.dynamicLinker;
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   sourceRoot = "${pname}-${version}";
 
   buildInputs = [ gmp ];
-  nativeBuildInputs = lib.optional stdenv.isLinux patchelf;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
 
   makeFlags = [ "all-no-docs" ];
 
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $(pwd)/../${usr_prefix}/bin/mlton --replace '/${usr_prefix}/lib/mlton' $(pwd)/../${usr_prefix}/lib/mlton
   '' + lib.optionalString stdenv.cc.isClang ''
     sed -i "s_	patch -s -p0 <gdtoa.hide-public-fns.patch_	patch -s -p0 <gdtoa.hide-public-fns.patch\n\tsed -i 's|printf(emptyfmt|printf(\"\"|g' ./gdtoa/arithchk.c_" ./runtime/Makefile
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|XCFLAGS += -I/usr/local/include -I/sw/include -I/opt/local/include||' ./runtime/Makefile
   '';
 
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
     # So the builder runs the binary compiler with gmp.
     export LD_LIBRARY_PATH=${gmp.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
 
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch ELF interpreter.
     patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     for e in mllex mlyacc ; do
       patchelf --set-interpreter ${dynamic_linker} $(pwd)/../${usr_prefix}/bin/$e
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Patch libgmp linking
     install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/lib/mlton/mlton-compile
     install_name_tool -change /opt/local/lib/libgmp.10.dylib ${gmp}/lib/libgmp.10.dylib $(pwd)/../${usr_prefix}/bin/mlyacc

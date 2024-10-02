@@ -5,7 +5,7 @@
 , pkg-config
 , gettext
 , glib
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
 , udev
 , pulseaudioSupport ? config.pulseaudio or true

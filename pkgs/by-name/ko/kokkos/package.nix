@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kokkos";
-  version = "4.3.01";
+  version = "4.4.01";
 
   src = fetchFromGitHub {
     owner = "kokkos";
     repo = "kokkos";
     rev = finalAttrs.version;
-    hash = "sha256-x496DKEBMNUUZ2rBNT2MPBV8Obi5aUKQuHwjLiNPMhk=";
+    hash = "sha256-VpUbvSQ6PQhhm9ovj97U9XEdbfro9K+LSmeSiNpqHuI=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ asl20-llvm ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

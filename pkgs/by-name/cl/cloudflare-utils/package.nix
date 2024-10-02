@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "Cyb3r-Jak3";
     repo = "cloudflare-utils";
     rev = "v${version}";
-    sha256 = "sha256-hmMWMV8hJblXn0aW+S/VpFu9xYdh8k1H1Oa2x5DYMY4=";
+    hash = "sha256-hmMWMV8hJblXn0aW+S/VpFu9xYdh8k1H1Oa2x5DYMY4=";
   };
 
   vendorHash = "sha256-c1fUMX7pSiElSWSMBIzoNIEGcnCck9eUGPYXzb2Rv3w=";

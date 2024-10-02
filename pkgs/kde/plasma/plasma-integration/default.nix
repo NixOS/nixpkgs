@@ -9,9 +9,13 @@ mkKdeDerivation {
   pname = "plasma-integration";
 
   # force it to check our custom import path too
-  patches = [./qml-path.patch];
+  patches = [ ./qml-path.patch ];
 
-  outputs = ["out" "dev" "qt5"];
+  outputs = [
+    "out"
+    "dev"
+    "qt5"
+  ];
 
   # We can't add qt5 stuff to dependencies or the hooks blow up,
   # so manually point everything to everything. Oof.
@@ -57,7 +61,10 @@ mkKdeDerivation {
     "-DKF5XmlGui_DIR=${libsForQt5.kxmlgui.dev}/lib/cmake/KF5XmlGui"
   ];
 
-  extraBuildInputs = [qtwayland xorg.libXcursor];
+  extraBuildInputs = [
+    qtwayland
+    xorg.libXcursor
+  ];
 
   # Move Qt5 plugin to Qt5 plugin path
   postInstall = ''

@@ -1,7 +1,7 @@
 { lib, beamPackages, makeWrapper, rebar3, elixir, erlang, fetchFromGitHub, nixosTests }:
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.13.3";
+  version = "0.14.2";
 
   inherit elixir;
 
@@ -13,13 +13,13 @@ beamPackages.mixRelease rec {
     owner = "livebook-dev";
     repo = "livebook";
     rev = "v${version}";
-    hash = "sha256-luvqH6fjovRhVQrsP00XLSQ/rjHZgUbUWmL2B5XCyKI=";
+    hash = "sha256-iD9FzIjm0OAnApgmMqw0bDTQH/pSC8Z2l4+3Y4y+ieQ=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-/U/UmNVtl7H0rdgXpibM/bYvRbio8WzVRTv4tQ7GQcY=";
+    hash = "sha256-knqjnySXwh7/vMkFNfDZzSjojWpWPNZyR/RIDb9hdgA=";
   };
 
   postInstall = ''

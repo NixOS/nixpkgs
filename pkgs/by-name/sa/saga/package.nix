@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    sha256 = "sha256-741O6C7amxSnOOTledF0izmVhiT79tFI4+EOtpNqP2Q=";
+    hash = "sha256-741O6C7amxSnOOTledF0izmVhiT79tFI4+EOtpNqP2Q=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     curl
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   ]
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     unixODBC
     poppler
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.isDarwin))
+    (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
   ];
 
   meta = with lib; {

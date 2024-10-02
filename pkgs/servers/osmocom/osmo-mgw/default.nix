@@ -9,7 +9,7 @@
 }:
 
 let
-  inherit (stdenv) isLinux;
+  inherit (stdenv.hostPlatform) isLinux;
 in
 
 stdenv.mkDerivation rec {

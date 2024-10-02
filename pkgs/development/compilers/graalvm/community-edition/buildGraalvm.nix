@@ -18,12 +18,12 @@
 , zlib
   # extra params
 , extraCLibs ? [ ]
-, gtkSupport ? stdenv.isLinux
+, gtkSupport ? stdenv.hostPlatform.isLinux
 , useMusl ? false
 , ...
 } @ args:
 
-assert useMusl -> stdenv.isLinux;
+assert useMusl -> stdenv.hostPlatform.isLinux;
 let
   extraArgs = builtins.removeAttrs args [
     "lib"
@@ -51,7 +51,7 @@ let
     "meta"
   ];
 
-  cLibs = lib.optionals stdenv.isLinux (
+  cLibs = lib.optionals stdenv.hostPlatform.isLinux (
     [ glibc zlib.static ]
     ++ lib.optionals (!useMusl) [ glibc.static ]
     ++ lib.optionals useMusl [ musl ]
@@ -86,7 +86,7 @@ let
       #
       # We therefor use --strip-components=1 vs 3 depending on the platform.
       tar xf "$src" -C "$out" --strip-components=${
-        if stdenv.isLinux then "1" else "3"
+        if stdenv.hostPlatform.isLinux then "1" else "3"
       }
 
       # Sanity check
@@ -104,12 +104,12 @@ let
     dontStrip = true;
 
     nativeBuildInputs = [ unzip makeWrapper ]
-      ++ lib.optional stdenv.isLinux autoPatchelfHook;
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
     propagatedBuildInputs = [ setJavaClassPath zlib ]
-      ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
+      ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
 
-    buildInputs = lib.optionals stdenv.isLinux [
+    buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib # libasound.so wanted by lib/libjsound.so
       fontconfig
       stdenv.cc.cc.lib # libstdc++.so.6
@@ -136,7 +136,7 @@ let
         ${toString (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs)}
     '';
 
-    preFixup = lib.optionalString (stdenv.isLinux) ''
+    preFixup = lib.optionalString (stdenv.hostPlatform.isLinux) ''
       for bin in $(find "$out/bin" -executable -type f); do
         wrapProgram "$bin" --prefix LD_LIBRARY_PATH : "${runtimeLibraryPath}"
       done
@@ -147,7 +147,7 @@ let
       runHook preInstallCheck
 
       ${# broken in darwin
-      lib.optionalString stdenv.isLinux ''
+      lib.optionalString stdenv.hostPlatform.isLinux ''
         echo "Testing Jshell"
         echo '1 + 1' | $out/bin/jshell
       ''}
@@ -172,14 +172,14 @@ let
       ./helloworld | fgrep 'Hello World'
 
       ${# -H:+StaticExecutableWithDynamicLibC is only available in Linux
-      lib.optionalString (stdenv.isLinux && !useMusl) ''
+      lib.optionalString (stdenv.hostPlatform.isLinux && !useMusl) ''
         echo "Ahead-Of-Time compilation with -H:+StaticExecutableWithDynamicLibC"
         $out/bin/native-image -H:+UnlockExperimentalVMOptions -H:+StaticExecutableWithDynamicLibC -march=compatibility $extraNativeImageArgs HelloWorld
         ./helloworld | fgrep 'Hello World'
       ''}
 
       ${# --static is only available in Linux
-      lib.optionalString (stdenv.isLinux && useMusl) ''
+      lib.optionalString (stdenv.hostPlatform.isLinux && useMusl) ''
         echo "Ahead-Of-Time compilation with --static and --libc=musl"
         $out/bin/native-image $extraNativeImageArgs -march=compatibility --libc=musl --static HelloWorld
         ./helloworld | fgrep 'Hello World'

@@ -18,13 +18,13 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.19";
+  version = "0.11.22";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ejumGfG98l3N3mA7UX86GYa46hIwxjEB2/jvAW9rv0I=";
+    hash = "sha256-CQt6ptVwx86rYmXSgQ962fJupRQidLRFXU6yYkWasR0=";
   };
 
   cargoLock = {
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
       openssl
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreFoundation
       darwin.apple_sdk_11_0.frameworks.CoreServices
       darwin.apple_sdk_11_0.frameworks.Security
@@ -53,9 +53,15 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=e2e"
+
     # Fails because of missing `creation_timestamp` field
     # https://github.com/NixOS/nixpkgs/pull/328756#issuecomment-2241322796
     "--skip=test_config_update"
+
+    # Require internet access
+    "--skip=docs::tests::cetz"
+    "--skip=docs::tests::tidy"
+    "--skip=docs::tests::touying"
   ];
 
   passthru = {

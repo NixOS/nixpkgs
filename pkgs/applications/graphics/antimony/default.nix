@@ -28,7 +28,7 @@ in
        sed -i "s,python3,${python3.executable}," CMakeLists.txt
     '';
 
-    postInstall = lib.optionalString stdenv.isLinux ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 $src/deploy/icon.svg $out/share/icons/hicolor/scalable/apps/antimony.svg
       install -Dm644 ${./mimetype.xml} $out/share/mime/packages/antimony.xml
     '';

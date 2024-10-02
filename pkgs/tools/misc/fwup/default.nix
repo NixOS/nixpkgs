@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libsodium
     xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DiskArbitration
   ];
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     xdelta
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Configurable embedded Linux firmware update creator and runner";

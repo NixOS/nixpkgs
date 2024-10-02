@@ -19,6 +19,12 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "other";
 
+  patches = [
+    # Fix compatibility with pyixapi 0.2.3
+    # https://github.com/peering-manager/peering-manager/commit/ee558ff66e467412942559a8a92252e3fc009920
+    ./fix-pyixapi-0.2.3-compatibility.patch
+  ];
+
   propagatedBuildInputs = with python3.pkgs; [
     django
     djangorestframework

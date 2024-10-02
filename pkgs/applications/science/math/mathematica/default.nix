@@ -44,12 +44,6 @@ let versions = callPackage ./versions.nix { };
                         else "and with local documentation"}")
       else lib.head matching-versions;
 
-    specific-drv = ./. + "/${lib.versions.major found-version.version}.nix";
-
-    real-drv = if lib.pathExists specific-drv
-               then specific-drv
-               else ./generic.nix;
-
     isMatching = v1: v2:
       let as      = lib.splitVersion v1;
           bs      = lib.splitVersion v2;
@@ -59,12 +53,12 @@ let versions = callPackage ./versions.nix { };
 
     matchesDoc = v:
       builtins.match (if webdoc
-                      then ".*[0-9]_LINUX.sh"
-                      else ".*[0-9]_BNDL_LINUX.sh") v.src.name != null;
+                      then ".*[0-9]_LIN(UX)?.sh"
+                      else ".*_B[Nn][Dd][Ll].sh") v.src.name != null;
 
 in
 
-callPackage real-drv {
+callPackage ./generic.nix {
   inherit cudaSupport cudaPackages;
   inherit (found-version) version lang;
   src = if source == null then found-version.src else source;
@@ -77,7 +71,7 @@ callPackage real-drv {
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ herberteuler rafaelrc ];
+    maintainers = with maintainers; [ herberteuler rafaelrc chewblacka ];
     platforms = [ "x86_64-linux" ];
   };
 }

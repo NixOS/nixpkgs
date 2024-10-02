@@ -90,7 +90,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aiosonic" ];
 
   disabledTests =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # need network
       "test_simple_get"
       "test_get_python"
@@ -132,7 +132,7 @@ buildPythonPackage rec {
       "test_get_with_cookies"
       "test_proxy_request"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # "FAILED tests/test_proxy.py::test_proxy_request - Exception: port 8865 never got active"
       "test_proxy_request"
     ];

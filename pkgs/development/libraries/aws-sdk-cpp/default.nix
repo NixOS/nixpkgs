@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
     rm tests/aws-cpp-sdk-core-tests/http/HttpClientTest.cpp
-  '' + lib.optionalString stdenv.isi686 ''
+  '' + lib.optionalString stdenv.hostPlatform.isi686 ''
     # EPSILON is exceeded
     rm tests/aws-cpp-sdk-core-tests/aws/client/AdaptiveRetryStrategyTest.cpp
   '';
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl openssl zlib
-  ] ++ lib.optionals (stdenv.isDarwin &&
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin &&
                         ((builtins.elem "text-to-speech" apis) ||
                          (builtins.elem "*" apis)))
          [ CoreAudio AudioToolbox ];
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/aws/aws-sdk-cpp";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ eelco orivej ];
+    maintainers = with maintainers; [ orivej ];
     # building ec2 runs out of memory: cc1plus: out of memory allocating 33554372 bytes after a total of 74424320 bytes
     broken = stdenv.buildPlatform.is32bit && ((builtins.elem "ec2" apis) || (builtins.elem "*" apis));
   };

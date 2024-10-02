@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   # error: invalid suffix on literal; C++11 requires a space between literal and identifier
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-reserved-user-defined-literal";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-reserved-user-defined-literal";
 
   installPhase = ''
     mkdir -p "$out/share/doc/satallax" "$out/bin" "$out/lib" "$out/lib/satallax"
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     cp -r coq* "$out/lib/satallax/"
   '';
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     runHook preCheck

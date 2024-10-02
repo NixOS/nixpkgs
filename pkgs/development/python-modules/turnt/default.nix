@@ -2,24 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  flit,
+  flit-core,
   click,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "turnt";
-  version = "1.11.0";
-  format = "pyproject";
+  version = "1.12.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XN+qzRgZMSdeBmW0OM36mQ79sRCuP8E++SqH8FOoEq0=";
+    hash = "sha256-4K7cqGwKErGbZ+dxVa06v8aIfrpVLC293d29QT+vsBw=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
     tomli
   ];

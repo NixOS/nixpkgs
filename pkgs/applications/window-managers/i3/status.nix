@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "i3status";
-  version = "2.14";
+  version = "2.15";
 
   src = fetchurl {
     url = "https://i3wm.org/i3status/i3status-${version}.tar.xz";
-    sha256 = "0929chhvyq9hg4scpcz8r9zn3s9jvbg6a86k3wqa77qg85rh4kaw";
+    sha256 = "sha256-bGf1LK5PE533ZK0cxzZWK+D5d1B5G8IStT80wG6vIgU=";
   };
 
   nativeBuildInputs = [ meson ninja perl pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];

@@ -23,6 +23,8 @@ melpaBuild {
     markdown-mode
   ];
 
+  ignoreCompilationError = false;
+
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {

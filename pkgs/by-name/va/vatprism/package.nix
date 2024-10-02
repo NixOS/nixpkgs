@@ -60,7 +60,7 @@ maven.buildMavenPackage rec {
   ];
 
   mvnHash =
-    if (stdenv.isLinux && stdenv.isAarch64) then
+    if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
       "sha256-x0nFt2C7dZqMdllI1+Io9SPBY2J/dVgBTVb9T24vFFI="
     else
       "sha256-9uyNCUqnMgpiwm2kz544pWNB/SkRpASm2Dln0e4yZos=";
@@ -78,7 +78,7 @@ maven.buildMavenPackage rec {
 
     # create a wrapper that will automatically set the classpath
     # this should be the paths from the dependency derivation
-    makeWrapper ${jdk}/bin/java $out/bin/${pname} \
+    makeWrapper ${jdk}/bin/java $out/bin/vatprism \
         --add-flags "-jar $out/vatsim-map-${version}-fat.jar" \
         --set JAVA_HOME ${jdk.home} \
         --suffix LD_LIBRARY_PATH : ${libPath}

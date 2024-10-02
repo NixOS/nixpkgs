@@ -2,20 +2,20 @@
 , stdenv
 , fetchFromGitHub
 , withBanner ? "Grub Bootloader" # use override to specify your own banner text
-, withStyle ? "white" # use override to specify one of "dark" / "orange" / "bigSur"
+, withStyle ? "light" # use override to specify one of "dark" / "orange" / "bigSur"
 }:
 
-assert builtins.any (s: withStyle == s) ["white" "dark" "orange" "bigSur"];
+assert builtins.any (s: withStyle == s) ["light" "dark" "orange" "bigSur"];
 
 stdenv.mkDerivation {
   pname = "sleek-grub-theme";
-  version = "unstable-2022-06-04";
+  version = "unstable-2024-08-11";
 
   src = fetchFromGitHub ({
     owner = "sandesh236";
     repo = "sleek--themes";
-    rev = "981326a8e35985dc23f1b066fdbe66ff09df2371";
-    hash = "sha256-yD4JuoFGTXE/aI76EtP4rEWCc5UdFGi7Ojys6Yp8Z58=";
+    rev = "0c47e645ccc2d72aa165e9d994f9d09f58de9f6d";
+    hash = "sha256-H4s4CSR8DaH8RT9w40hkguNNcC0U8gHKS2FLt+FApeA=";
   });
 
   installPhase = ''

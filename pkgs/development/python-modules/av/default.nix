@@ -63,7 +63,7 @@ buildPythonPackage rec {
   ];
 
   # `__darwinAllowLocalNetworking` doesn’t work for these; not sure why.
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_timeout.py"
   ];
 
@@ -94,7 +94,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Pythonic bindings for FFmpeg/Libav";
+    description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";

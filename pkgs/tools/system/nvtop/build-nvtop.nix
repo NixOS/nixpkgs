@@ -53,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ cmake gtest ] ++ lib.optional nvidia addDriverRunpath;
 
-  buildInputs = with lib; [ ncurses udev ]
-    ++ optional nvidia cudatoolkit
-    ++ optional needDrm libdrm
+  buildInputs = [ ncurses udev ]
+    ++ lib.optional nvidia cudatoolkit
+    ++ lib.optional needDrm libdrm
   ;
 
   # this helps cmake to find <drm.h>

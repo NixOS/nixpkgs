@@ -45,7 +45,7 @@ buildGoModule rec {
   ];
 
   # tests fail to access /etc/bashrc on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \

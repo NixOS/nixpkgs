@@ -15,13 +15,12 @@
 ] }:
 
 let
-  shared_meta = lib:
-    with lib; {
-      homepage = "https://www.picotech.com/downloads/linux";
-      maintainers = with maintainers; [ expipiplus1 wirew0rm ] ++ teams.lumiguide.members;
-      platforms = [ "x86_64-linux" ];
-      license = licenses.unfree;
-    };
+  shared_meta = lib: {
+    homepage = "https://www.picotech.com/downloads/linux";
+    maintainers = with lib.maintainers; [ expipiplus1 wirew0rm ] ++ lib.teams.lumiguide.members;
+    platforms = [ "x86_64-linux" ];
+    license = lib.licenses.unfree;
+  };
 
   libpicoipp = callPackage ({ stdenv, lib, fetchurl, autoPatchelfHook, dpkg }:
     stdenv.mkDerivation rec {
@@ -39,11 +38,10 @@ let
         install -Dt $out/usr/share/doc/libpicoipp usr/share/doc/libpicoipp/copyright
         runHook postInstall
       '';
-      meta = with lib;
-        shared_meta lib // {
-          sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-          description = "library for picotech oscilloscope software";
-        };
+      meta = shared_meta lib // {
+        sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+        description = "library for picotech oscilloscope software";
+      };
     }) { };
 
   # If we don't have a platform available, put a dummy version here, so at

@@ -52,11 +52,15 @@ buildPythonPackage rec {
         'return "${placeholder "out"}/bin/wormhole"'
     ''
     # fix the location of the ifconfig binary
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
     '';
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "spake2"
+  ];
 
   dependencies = [
     attrs
@@ -74,7 +78,7 @@ buildPythonPackage rec {
     zipstream-ng
   ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dilation = [ noiseprotocol ];
   };
 
@@ -87,8 +91,8 @@ buildPythonPackage rec {
       mock
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.dilation
-    ++ lib.optionals stdenv.isDarwin [ unixtools.locale ];
+    ++ optional-dependencies.dilation
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;
 

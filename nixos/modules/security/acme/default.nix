@@ -1,5 +1,4 @@
 { config, lib, pkgs, options, ... }:
-with lib;
 let
 
 
@@ -8,11 +7,11 @@ let
   user = if cfg.useRoot then "root" else "acme";
 
   # Used to calculate timer accuracy for coalescing
-  numCerts = length (builtins.attrNames cfg.certs);
+  numCerts = lib.length (builtins.attrNames cfg.certs);
   _24hSecs = 60 * 60 * 24;
 
   # Used to make unique paths for each cert/account config set
-  mkHash = with builtins; val: substring 0 20 (hashString "sha256" val);
+  mkHash = with builtins; val: lib.substring 0 20 (hashString "sha256" val);
   mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
 
@@ -29,7 +28,7 @@ let
     else
       [{ fst = head workingBaseList; snd = head needAssignmentList;}] ++
       _rrCycler origBaseList (if (tail workingBaseList == []) then origBaseList else tail workingBaseList) (tail needAssignmentList);
-  attrsToList = mapAttrsToList (attrname: attrval: {name = attrname; value = attrval;});
+  attrsToList = lib.mapAttrsToList (attrname: attrval: {name = attrname; value = attrval;});
   # for an AttrSet `funcsAttrs` having functions as values, apply single arguments from
   # `argsList` to them in a round-robin manner.
   # Returns an attribute set with the applied functions as values.
@@ -57,7 +56,7 @@ let
   commonServiceConfig = {
     Type = "oneshot";
     User = user;
-    Group = mkDefault "acme";
+    Group = lib.mkDefault "acme";
     UMask = "0022";
     StateDirectoryMode = "750";
     ProtectSystem = "strict";
@@ -136,8 +135,8 @@ let
   userMigrationService = let
     script = with builtins; ''
       chown -R ${user} .lego/accounts
-    '' + (concatStringsSep "\n" (mapAttrsToList (cert: data: ''
-      for fixpath in ${escapeShellArg cert} .lego/${escapeShellArg cert}; do
+    '' + (lib.concatStringsSep "\n" (lib.mapAttrsToList (cert: data: ''
+      for fixpath in ${lib.escapeShellArg cert} .lego/${lib.escapeShellArg cert}; do
         if [ -d "$fixpath" ]; then
           chmod -R u=rwX,g=rX,o= "$fixpath"
           chown -R ${user}:${data.group} "$fixpath"
@@ -166,8 +165,8 @@ let
 
     # ensure all required lock files exist, but none more
     script = ''
-      GLOBIGNORE="${concatStringsSep ":" concurrencyLockfiles}"
-      rm -f *
+      GLOBIGNORE="${lib.concatStringsSep ":" concurrencyLockfiles}"
+      rm -f -- *
       unset GLOBIGNORE
 
       xargs touch <<< "${toString concurrencyLockfiles}"
@@ -186,7 +185,7 @@ let
     useDns = data.dnsProvider != null;
     useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
-    selfsignedDeps = optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
+    selfsignedDeps = lib.optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
     # Minica and lego have a "feature" which replaces * with _. We need
     # to make this substitution to reference the output files from both programs.
@@ -196,7 +195,7 @@ let
     # FIXME when mkChangedOptionModule supports submodules, change to that.
     # This is a workaround
     extraDomains = data.extraDomainNames ++ (
-      optionals
+      lib.optionals
       (data.extraDomains != "_mkMergedOptionModule")
       (builtins.attrNames data.extraDomains)
     );
@@ -204,22 +203,22 @@ let
     # Create hashes for cert data directories based on configuration
     # Flags are separated to avoid collisions
     hashData = with builtins; ''
-      ${concatStringsSep " " data.extraLegoFlags} -
-      ${concatStringsSep " " data.extraLegoRunFlags} -
-      ${concatStringsSep " " data.extraLegoRenewFlags} -
+      ${lib.concatStringsSep " " data.extraLegoFlags} -
+      ${lib.concatStringsSep " " data.extraLegoRunFlags} -
+      ${lib.concatStringsSep " " data.extraLegoRenewFlags} -
       ${toString acmeServer} ${toString data.dnsProvider}
       ${toString data.ocspMustStaple} ${data.keyType}
     '';
     certDir = mkHash hashData;
     # TODO remove domainHash usage entirely. Waiting on go-acme/lego#1532
-    domainHash = mkHash "${concatStringsSep " " extraDomains} ${data.domain}";
+    domainHash = mkHash "${lib.concatStringsSep " " extraDomains} ${data.domain}";
     accountHash = (mkAccountHash acmeServer data);
     accountDir = accountDirRoot + accountHash;
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
-      ++ optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
-      ++ optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
+      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ lib.optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
     else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
     else [ "--http" "--http.webroot" data.webroot ];
@@ -231,22 +230,22 @@ let
       "--email" data.email
       "--key-type" data.keyType
     ] ++ protocolOpts
-      ++ optionals (acmeServer != null) [ "--server" acmeServer ]
-      ++ concatMap (name: [ "-d" name ]) extraDomains
+      ++ lib.optionals (acmeServer != null) [ "--server" acmeServer ]
+      ++ lib.concatMap (name: [ "-d" name ]) extraDomains
       ++ data.extraLegoFlags;
 
     # Although --must-staple is common to both modes, it is not declared as a
     # mode-agnostic argument in lego and thus must come after the mode.
-    runOpts = escapeShellArgs (
+    runOpts = lib.escapeShellArgs (
       commonOpts
       ++ [ "run" ]
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
+      ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRunFlags
     );
-    renewOpts = escapeShellArgs (
+    renewOpts = lib.escapeShellArgs (
       commonOpts
       ++ [ "renew" "--no-random-sleep" ]
-      ++ optionals data.ocspMustStaple [ "--must-staple" ]
+      ++ lib.optionals data.ocspMustStaple [ "--must-staple" ]
       ++ data.extraLegoRenewFlags
     );
 
@@ -286,8 +285,8 @@ let
 
     selfsignService = lockfileName: {
       description = "Generate self-signed certificate for ${cert}";
-      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
-      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
 
       path = with pkgs; [ minica ];
 
@@ -315,7 +314,7 @@ let
         minica \
           --ca-key ca/key.pem \
           --ca-cert ca/cert.pem \
-          --domains ${escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
+          --domains ${lib.escapeShellArg (builtins.concatStringsSep "," ([ data.domain ] ++ extraDomains))}
 
         # Create files to match directory layout for real certificates
         cd '${keyName}'
@@ -324,21 +323,21 @@ let
         cat key.pem fullchain.pem > full.pem
 
         # Group might change between runs, re-apply it
-        chown '${user}:${data.group}' *
+        chown '${user}:${data.group}' -- *
 
         # Default permissions make the files unreadable by group + anon
         # Need to be readable by group
-        chmod 640 *
+        chmod 640 -- *
       '';
     };
 
     renewService = lockfileName: {
       description = "Renew ACME certificate for ${cert}";
-      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
-      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ lib.optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
-      wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
+      wantedBy = lib.optionals (!config.boot.isContainer) [ "multi-user.target" ];
 
       path = with pkgs; [ lego coreutils diffutils openssl ];
 
@@ -368,33 +367,33 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        EnvironmentFile = mkIf useDnsOrS3 data.environmentFile;
+        EnvironmentFile = lib.mkIf useDnsOrS3 data.environmentFile;
 
-        Environment = mkIf useDnsOrS3
-          (mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+        Environment = lib.mkIf useDnsOrS3
+          (lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
 
-        LoadCredential = mkIf useDnsOrS3
-          (mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
+        LoadCredential = lib.mkIf useDnsOrS3
+          (lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
-          cd /var/lib/acme/${escapeShellArg cert}
+          cd /var/lib/acme/${lib.escapeShellArg cert}
           if [ -e renewed ]; then
             rm renewed
             ${data.postRun}
-            ${optionalString (data.reloadServices != [])
-                "systemctl --no-block try-reload-or-restart ${escapeShellArgs data.reloadServices}"
+            ${lib.optionalString (data.reloadServices != [])
+                "systemctl --no-block try-reload-or-restart ${lib.escapeShellArgs data.reloadServices}"
             }
           fi
         '');
-      } // optionalAttrs (data.listenHTTP != null && toInt (last (splitString ":" data.listenHTTP)) < 1024) {
+      } // lib.optionalAttrs (data.listenHTTP != null && lib.toInt (lib.last (lib.splitString ":" data.listenHTTP)) < 1024) {
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp
       script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
-        ${optionalString data.enableDebugLogs "set -x"}
+        ${lib.optionalString data.enableDebugLogs "set -x"}
         set -euo pipefail
 
         # This reimplements the expiration date check, but without querying
@@ -411,7 +410,7 @@ let
 
           expiration_line="$(
             set -euxo pipefail
-            openssl x509 -noout -enddate <$pem \
+            openssl x509 -noout -enddate <"$pem" \
                   | grep notAfter \
                   | sed -e 's/^notAfter=//'
           )"
@@ -419,13 +418,13 @@ let
 
           expiration_date="$(date -d "$expiration_line" +%s)"
           now="$(date +%s)"
-          expiration_s=$[expiration_date - now]
-          expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
+          expiration_s=$((expiration_date - now))
+          expiration_days=$((expiration_s / (3600 * 24)))   # rounds down
 
           [[ $expiration_days -gt ${toString data.validMinDays} ]]
         }
 
-        ${optionalString (data.webroot != null) ''
+        ${lib.optionalString (data.webroot != null) ''
           # Ensure the webroot exists. Fixing group is required in case configuration was changed between runs.
           # Lego will fail if the webroot does not exist at all.
           (
@@ -442,7 +441,7 @@ let
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
         # We also need an account key. Avoids #190493
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
@@ -461,7 +460,7 @@ let
           # Produce a nice error for those doing their first nixos-rebuild with these certs
           echo Failed to fetch certificates. \
             This may mean your DNS records are set up incorrectly. \
-            ${optionalString (cfg.preliminarySelfsigned) "Selfsigned certs are in place and dependant services will still start."}
+            ${lib.optionalString (cfg.preliminarySelfsigned) "Selfsigned certs are in place and dependant services will still start."}
           # Exit 10 so that users can potentially amend SuccessExitStatus to ignore this error.
           # High number to avoid Systemd reserved codes.
           exit 10
@@ -490,7 +489,7 @@ let
     };
   };
 
-  certConfigs = mapAttrs certToConfig cfg.certs;
+  certConfigs = lib.mapAttrs certToConfig cfg.certs;
 
   # These options can be specified within
   # security.acme.defaults or security.acme.certs.<name>
@@ -504,22 +503,22 @@ let
       # stay constant. Though notably it wouldn't matter much, because to get
       # the option information, a submodule with name `<name>` is evaluated
       # without any definitions.
-      defaultText = if isDefaults then default else literalExpression "config.security.acme.defaults.${name}";
+      defaultText = if isDefaults then default else lib.literalExpression "config.security.acme.defaults.${name}";
     };
   in {
     imports = [
-      (mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
+      (lib.mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
     ];
 
     options = {
-      validMinDays = mkOption {
-        type = types.int;
+      validMinDays = lib.mkOption {
+        type = lib.types.int;
         inherit (defaultAndText "validMinDays" 30) default defaultText;
         description = "Minimum remaining validity before renewal in days.";
       };
 
-      renewInterval = mkOption {
-        type = types.str;
+      renewInterval = lib.mkOption {
+        type = lib.types.str;
         inherit (defaultAndText "renewInterval" "daily") default defaultText;
         description = ''
           Systemd calendar expression when to check for renewal. See
@@ -527,12 +526,12 @@ let
         '';
       };
 
-      enableDebugLogs = mkEnableOption "debug logging for this certificate" // {
+      enableDebugLogs = lib.mkEnableOption "debug logging for this certificate" // {
         inherit (defaultAndText "enableDebugLogs" true) default defaultText;
       };
 
-      webroot = mkOption {
-        type = types.nullOr types.str;
+      webroot = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         inherit (defaultAndText "webroot" null) default defaultText;
         example = "/var/lib/acme/acme-challenge";
         description = ''
@@ -544,8 +543,8 @@ let
         '';
       };
 
-      server = mkOption {
-        type = types.nullOr types.str;
+      server = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         inherit (defaultAndText "server" "https://acme-v02.api.letsencrypt.org/directory") default defaultText;
         example = "https://acme-staging-v02.api.letsencrypt.org/directory";
         description = ''
@@ -556,8 +555,8 @@ let
         '';
       };
 
-      email = mkOption {
-        type = types.nullOr types.str;
+      email = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         inherit (defaultAndText "email" null) default defaultText;
         description = ''
           Email address for account creation and correspondence from the CA.
@@ -566,14 +565,14 @@ let
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         inherit (defaultAndText "group" "acme") default defaultText;
         description = "Group running the ACME client.";
       };
 
-      reloadServices = mkOption {
-        type = types.listOf types.str;
+      reloadServices = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         inherit (defaultAndText "reloadServices" []) default defaultText;
         description = ''
           The list of systemd services to call `systemctl try-reload-or-restart`
@@ -581,8 +580,8 @@ let
         '';
       };
 
-      postRun = mkOption {
-        type = types.lines;
+      postRun = lib.mkOption {
+        type = lib.types.lines;
         inherit (defaultAndText "postRun" "") default defaultText;
         example = "cp full.pem backup.pem";
         description = ''
@@ -593,8 +592,8 @@ let
         '';
       };
 
-      keyType = mkOption {
-        type = types.str;
+      keyType = lib.mkOption {
+        type = lib.types.str;
         inherit (defaultAndText "keyType" "ec256") default defaultText;
         description = ''
           Key type to use for private keys.
@@ -603,8 +602,8 @@ let
         '';
       };
 
-      dnsProvider = mkOption {
-        type = types.nullOr types.str;
+      dnsProvider = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         inherit (defaultAndText "dnsProvider" null) default defaultText;
         example = "route53";
         description = ''
@@ -613,8 +612,8 @@ let
         '';
       };
 
-      dnsResolver = mkOption {
-        type = types.nullOr types.str;
+      dnsResolver = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         inherit (defaultAndText "dnsResolver" null) default defaultText;
         example = "1.1.1.1:53";
         description = ''
@@ -624,8 +623,8 @@ let
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         inherit (defaultAndText "environmentFile" null) default defaultText;
         description = ''
           Path to an EnvironmentFile for the cert's service containing any required and
@@ -636,8 +635,8 @@ let
         example = "/var/src/secrets/example.org-route53-api-token";
       };
 
-      credentialFiles = mkOption {
-        type = types.attrsOf (types.path);
+      credentialFiles = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.path);
         inherit (defaultAndText "credentialFiles" {}) default defaultText;
         description = ''
           Environment variables suffixed by "_FILE" to set for the cert's service
@@ -647,15 +646,15 @@ let
           This allows to securely pass credential files to lego by leveraging systemd
           credentials.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "RFC2136_TSIG_SECRET_FILE" = "/run/secrets/tsig-secret-example.org";
           }
         '';
       };
 
-      dnsPropagationCheck = mkOption {
-        type = types.bool;
+      dnsPropagationCheck = lib.mkOption {
+        type = lib.types.bool;
         inherit (defaultAndText "dnsPropagationCheck" true) default defaultText;
         description = ''
           Toggles lego DNS propagation check, which is used alongside DNS-01
@@ -663,8 +662,8 @@ let
         '';
       };
 
-      ocspMustStaple = mkOption {
-        type = types.bool;
+      ocspMustStaple = lib.mkOption {
+        type = lib.types.bool;
         inherit (defaultAndText "ocspMustStaple" false) default defaultText;
         description = ''
           Turns on the OCSP Must-Staple TLS extension.
@@ -675,24 +674,24 @@ let
         '';
       };
 
-      extraLegoFlags = mkOption {
-        type = types.listOf types.str;
+      extraLegoFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         inherit (defaultAndText "extraLegoFlags" []) default defaultText;
         description = ''
           Additional global flags to pass to all lego commands.
         '';
       };
 
-      extraLegoRenewFlags = mkOption {
-        type = types.listOf types.str;
+      extraLegoRenewFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         inherit (defaultAndText "extraLegoRenewFlags" []) default defaultText;
         description = ''
           Additional flags to pass to lego renew.
         '';
       };
 
-      extraLegoRunFlags = mkOption {
-        type = types.listOf types.str;
+      extraLegoRunFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         inherit (defaultAndText "extraLegoRunFlags" []) default defaultText;
         description = ''
           Additional flags to pass to lego run.
@@ -704,40 +703,40 @@ let
   certOpts = { name, config, ... }: {
     options = {
       # user option has been removed
-      user = mkOption {
+      user = lib.mkOption {
         visible = false;
         default = "_mkRemovedOptionModule";
       };
 
       # allowKeysForGroup option has been removed
-      allowKeysForGroup = mkOption {
+      allowKeysForGroup = lib.mkOption {
         visible = false;
         default = "_mkRemovedOptionModule";
       };
 
       # extraDomains was replaced with extraDomainNames
-      extraDomains = mkOption {
+      extraDomains = lib.mkOption {
         visible = false;
         default = "_mkMergedOptionModule";
       };
 
-      directory = mkOption {
-        type = types.str;
+      directory = lib.mkOption {
+        type = lib.types.str;
         readOnly = true;
         default = "/var/lib/acme/${name}";
         description = "Directory where certificate and other state is stored.";
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = name;
         description = "Domain to fetch certificate for (defaults to the entry name).";
       };
 
-      extraDomainNames = mkOption {
-        type = types.listOf types.str;
+      extraDomainNames = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "example.org"
             "mydomain.org"
@@ -751,8 +750,8 @@ let
       # This setting must be different for each configured certificate, otherwise
       # two or more renewals may fail to bind to the address. Hence, it is not in
       # the inheritableOpts.
-      listenHTTP = mkOption {
-        type = types.nullOr types.str;
+      listenHTTP = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = ":1360";
         description = ''
@@ -762,8 +761,8 @@ let
         '';
       };
 
-      s3Bucket = mkOption {
-        type = types.nullOr types.str;
+      s3Bucket = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "acme";
         description = ''
@@ -771,7 +770,7 @@ let
         '';
       };
 
-      inheritDefaults = mkOption {
+      inheritDefaults = lib.mkOption {
         default = true;
         example = true;
         description = "Whether to inherit values set in `security.acme.defaults` or not.";
@@ -784,8 +783,8 @@ in {
 
   options = {
     security.acme = {
-      preliminarySelfsigned = mkOption {
-        type = types.bool;
+      preliminarySelfsigned = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether a preliminary self-signed certificate should be generated before
@@ -797,8 +796,8 @@ in {
         '';
       };
 
-      acceptTerms = mkOption {
-        type = types.bool;
+      acceptTerms = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Accept the CA's terms of service. The default provider is Let's Encrypt,
@@ -806,8 +805,8 @@ in {
         '';
       };
 
-      useRoot = mkOption {
-        type = types.bool;
+      useRoot = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use the root user when generating certs. This is not recommended
@@ -818,8 +817,8 @@ in {
         '';
       };
 
-      defaults = mkOption {
-        type = types.submodule (inheritableModule true);
+      defaults = lib.mkOption {
+        type = lib.types.submodule (inheritableModule true);
         description = ''
           Default values inheritable by all configured certs. You can
           use this to define options shared by all your certs. These defaults
@@ -828,9 +827,9 @@ in {
         '';
       };
 
-      certs = mkOption {
+      certs = lib.mkOption {
         default = { };
-        type = with types; attrsOf (submodule [ (inheritableModule false) certOpts ]);
+        type = with lib.types; attrsOf (submodule [ (inheritableModule false) certOpts ]);
         description = ''
           Attribute set of certificates to get signed and renewed. Creates
           `acme-''${cert}.{service,timer}` systemd units for
@@ -838,7 +837,7 @@ in {
           to those units if they rely on the certificates being present,
           or trigger restarts of the service if certificates get renewed.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "example.com" = {
               webroot = "/var/lib/acme/acme-challenge/";
@@ -852,9 +851,9 @@ in {
           }
         '';
       };
-      maxConcurrentRenewals = mkOption {
+      maxConcurrentRenewals = lib.mkOption {
         default = 5;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           Maximum number of concurrent certificate generation or renewal jobs. All other
           jobs will queue and wait running jobs to finish. Reduces the system load of
@@ -867,39 +866,39 @@ in {
   };
 
   imports = [
-    (mkRemovedOptionModule [ "security" "acme" "production" ] ''
+    (lib.mkRemovedOptionModule [ "security" "acme" "production" ] ''
       Use security.acme.server to define your staging ACME server URL instead.
 
       To use the let's encrypt staging server, use security.acme.server =
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     '')
-    (mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
-    (mkRemovedOptionModule [ "security" "acme" "preDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
-    (mkRemovedOptionModule [ "security" "acme" "activationDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
-    (mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
-    (mkChangedOptionModule [ "security" "acme" "validMinDays" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMinDays))
-    (mkChangedOptionModule [ "security" "acme" "renewInterval" ] [ "security" "acme" "defaults" "renewInterval" ] (config: config.security.acme.renewInterval))
-    (mkChangedOptionModule [ "security" "acme" "email" ] [ "security" "acme" "defaults" "email" ] (config: config.security.acme.email))
-    (mkChangedOptionModule [ "security" "acme" "server" ] [ "security" "acme" "defaults" "server" ] (config: config.security.acme.server))
-    (mkChangedOptionModule [ "security" "acme" "enableDebugLogs" ] [ "security" "acme" "defaults" "enableDebugLogs" ] (config: config.security.acme.enableDebugLogs))
+    (lib.mkRemovedOptionModule [ "security" "acme" "directory" ] "ACME Directory is now hardcoded to /var/lib/acme and its permissions are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (lib.mkRemovedOptionModule [ "security" "acme" "preDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (lib.mkRemovedOptionModule [ "security" "acme" "activationDelay" ] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (lib.mkChangedOptionModule [ "security" "acme" "validMin" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMin / (24 * 3600)))
+    (lib.mkChangedOptionModule [ "security" "acme" "validMinDays" ] [ "security" "acme" "defaults" "validMinDays" ] (config: config.security.acme.validMinDays))
+    (lib.mkChangedOptionModule [ "security" "acme" "renewInterval" ] [ "security" "acme" "defaults" "renewInterval" ] (config: config.security.acme.renewInterval))
+    (lib.mkChangedOptionModule [ "security" "acme" "email" ] [ "security" "acme" "defaults" "email" ] (config: config.security.acme.email))
+    (lib.mkChangedOptionModule [ "security" "acme" "server" ] [ "security" "acme" "defaults" "server" ] (config: config.security.acme.server))
+    (lib.mkChangedOptionModule [ "security" "acme" "enableDebugLogs" ] [ "security" "acme" "defaults" "enableDebugLogs" ] (config: config.security.acme.enableDebugLogs))
   ];
 
-  config = mkMerge [
-    (mkIf (cfg.certs != { }) {
+  config = lib.mkMerge [
+    (lib.mkIf (cfg.certs != { }) {
 
       # FIXME Most of these custom warnings and filters for security.acme.certs.* are required
       # because using mkRemovedOptionModule/mkChangedOptionModule with attrsets isn't possible.
-      warnings = filter (w: w != "") (mapAttrsToList (cert: data: optionalString (data.extraDomains != "_mkMergedOptionModule") ''
+      warnings = lib.filter (w: w != "") (lib.mapAttrsToList (cert: data: lib.optionalString (data.extraDomains != "_mkMergedOptionModule") ''
         The option definition `security.acme.certs.${cert}.extraDomains` has changed
         to `security.acme.certs.${cert}.extraDomainNames` and is now a list of strings.
         Setting a custom webroot for extra domains is not possible, instead use separate certs.
       '') cfg.certs);
 
       assertions = let
-        certs = attrValues cfg.certs;
+        certs = lib.attrValues cfg.certs;
       in [
         {
-          assertion = cfg.defaults.email != null || all (certOpts: certOpts.email != null) certs;
+          assertion = cfg.defaults.email != null || lib.all (certOpts: certOpts.email != null) certs;
           message = ''
             You must define `security.acme.certs.<name>.email` or
             `security.acme.defaults.email` to register with the CA. Note that using
@@ -914,7 +913,7 @@ in {
             to `true`. For Let's Encrypt's ToS see https://letsencrypt.org/repository/
           '';
         }
-      ] ++ (builtins.concatLists (mapAttrsToList (cert: data: [
+      ] ++ (builtins.concatLists (lib.mapAttrsToList (cert: data: [
         {
           assertion = data.user == "_mkRemovedOptionModule";
           message = ''
@@ -936,7 +935,7 @@ in {
         # referencing them as a user quite weird too. Best practice is to use
         # the domain option.
         {
-          assertion = ! hasInfix "*" cert;
+          assertion = ! lib.hasInfix "*" cert;
           message = ''
             The cert option path `security.acme.certs.${cert}.dnsProvider`
             cannot contain a * character.
@@ -959,7 +958,7 @@ in {
           '';
         })
         {
-          assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
+          assertion = lib.all (lib.hasSuffix "_FILE") (lib.attrNames data.credentialFiles);
           message = ''
             Option `security.acme.certs.${cert}.credentialFiles` can only be
             used for variables suffixed by "_FILE".
@@ -982,27 +981,27 @@ in {
       ];
 
       systemd.services = let
-        renewServiceFunctions = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs;
+        renewServiceFunctions = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-${cert}" conf.renewService) certConfigs;
         renewServices =  if cfg.maxConcurrentRenewals > 0
           then roundRobinApplyAttrs renewServiceFunctions concurrencyLockfiles
-          else mapAttrs (_: f: f null) renewServiceFunctions;
-        selfsignServiceFunctions = mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs;
+          else lib.mapAttrs (_: f: f null) renewServiceFunctions;
+        selfsignServiceFunctions = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs;
         selfsignServices = if cfg.maxConcurrentRenewals > 0
           then roundRobinApplyAttrs selfsignServiceFunctions concurrencyLockfiles
-          else mapAttrs (_: f: f null) selfsignServiceFunctions;
+          else lib.mapAttrs (_: f: f null) selfsignServiceFunctions;
         in
         { "acme-fixperms" = userMigrationService; }
-        // (optionalAttrs (cfg.maxConcurrentRenewals > 0) {"acme-lockfiles" = lockfilePrepareService; })
+        // (lib.optionalAttrs (cfg.maxConcurrentRenewals > 0) {"acme-lockfiles" = lockfilePrepareService; })
         // renewServices
-        // (optionalAttrs (cfg.preliminarySelfsigned) ({
+        // (lib.optionalAttrs (cfg.preliminarySelfsigned) ({
         "acme-selfsigned-ca" = selfsignCAService;
       } // selfsignServices));
 
-      systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
+      systemd.timers = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 
       systemd.targets = let
         # Create some targets which can be depended on to be "active" after cert renewals
-        finishedTargets = mapAttrs' (cert: conf: nameValuePair "acme-finished-${cert}" {
+        finishedTargets = lib.mapAttrs' (cert: conf: lib.nameValuePair "acme-finished-${cert}" {
           wantedBy = [ "default.target" ];
           requires = [ "acme-${cert}.service" ];
           after = [ "acme-${cert}.service" ];
@@ -1017,15 +1016,15 @@ in {
         # Using a target here is fine - account creation is a one time event. Even if
         # systemd clean --what=state is used to delete the account, so long as the user
         # then runs one of the cert services, there won't be any issues.
-        accountTargets = mapAttrs' (hash: confs: let
+        accountTargets = lib.mapAttrs' (hash: confs: let
           leader = "acme-${(builtins.head confs).cert}.service";
           dependantServices = map (conf: "acme-${conf.cert}.service") (builtins.tail confs);
-        in nameValuePair "acme-account-${hash}" {
+        in lib.nameValuePair "acme-account-${hash}" {
           requiredBy = dependantServices;
           before = dependantServices;
           requires = [ leader ];
           after = [ leader ];
-        }) (groupBy (conf: conf.accountHash) (attrValues certConfigs));
+        }) (lib.groupBy (conf: conf.accountHash) (lib.attrValues certConfigs));
       in finishedTargets // accountTargets;
     })
   ];

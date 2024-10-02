@@ -16,7 +16,7 @@ buildDunePackage {
 
   propagatedBuildInputs = [
     eio_posix
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     eio_linux
   ];
 }

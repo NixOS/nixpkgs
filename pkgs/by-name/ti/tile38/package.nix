@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "tidwall";
     repo = pname;
     rev = version;
-    sha256 = "sha256-+HclPZOVBa5cEAuUr5R40+CHI58yZJ6uo8qM06IAgQw=";
+    hash = "sha256-+HclPZOVBa5cEAuUr5R40+CHI58yZJ6uo8qM06IAgQw=";
   };
 
   vendorHash = "sha256-nnamNwowRPWQBKUMg800bFgijv8iHbdh/wUwTfX0NcY=";

@@ -12,17 +12,17 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
     then "osx"
     else "lnp") # Linux with PAM modules;
-  ] ++ lib.optional stdenv.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
+  ] ++ lib.optional stdenv.hostPlatform.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
 
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [
     openssl
-    (if stdenv.isDarwin then libkrb5 else pam)  # Matches the make target.
+    (if stdenv.hostPlatform.isDarwin then libkrb5 else pam)  # Matches the make target.
   ];
 
   patches = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("ARRC=${stdenv.cc.targetPrefix}ar rc")
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin
     "-I${openssl.dev}/include/openssl";
 
   installPhase = ''

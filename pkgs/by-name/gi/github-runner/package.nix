@@ -22,13 +22,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.319.0";
+  version = "2.319.1";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-02vIMuaeU5CsdwmJzUdfa6BFKewsKGFsEWKza3CqRtQ=";
+    hash = "sha256-cXOYW4py2RRJVUKrQBGf6LHNyc1sJ/bMR4hJxtDv3PU=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -113,7 +113,7 @@ buildDotnetModule rec {
   nativeBuildInputs = [
     which
     git
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 
@@ -230,7 +230,7 @@ buildDotnetModule rec {
 
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace './bin/Runner.Listener' "$out/bin/Runner.Listener"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/lib/github-runner/config.sh \
       --replace 'command -v ldd' 'command -v ${glibc.bin}/bin/ldd' \
       --replace 'ldd ./bin' '${glibc.bin}/bin/ldd ${dotnet-runtime}/shared/Microsoft.NETCore.App/${dotnet-runtime.version}/' \
@@ -256,7 +256,7 @@ buildDotnetModule rec {
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts
     install src/Misc/layoutbin/checkScripts/* $out/lib/github-runner/checkScripts/
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Wrap explicitly to, e.g., prevent extra entries for LD_LIBRARY_PATH
     makeWrapperArgs=()
 
@@ -318,7 +318,7 @@ buildDotnetModule rec {
     description = "Self-hosted runner for GitHub Actions";
     homepage = "https://github.com/actions/runner";
     license = licenses.mit;
-    maintainers = with maintainers; [ veehaitch newam kfollesdal aanderse zimbatm ];
+    maintainers = with maintainers; [ veehaitch kfollesdal aanderse zimbatm ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

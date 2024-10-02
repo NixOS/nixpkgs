@@ -12,16 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ flex bison which ]
-    ++ lib.optionals stdenv.isDarwin [ DarwinTools xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools xcbuild ];
 
   buildInputs = [ libsndfile ]
-    ++ lib.optional (!stdenv.isDarwin) alsa-lib
-    ++ lib.optionals stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel MultitouchSupport ];
 
   patches = [ ./darwin-limits.patch ];
 
   makeFlags = [ "-C src" "DESTDIR=$(out)/bin" ];
-  buildFlags = [ (if stdenv.isDarwin then "mac" else "linux-alsa") ];
+  buildFlags = [ (if stdenv.hostPlatform.isDarwin then "mac" else "linux-alsa") ];
 
   meta = with lib; {
     description = "Programming language for real-time sound synthesis and music creation";

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin QuartzCore;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin QuartzCore;
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;

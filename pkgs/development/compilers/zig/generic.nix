@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   # /System/Library/CoreServices/.SystemVersionPlatform.plist to determine the
   # OS version. This causes the build to fail during stage 3 with
   # OSVersionDetectionFail when the sandbox is enabled.
-  __impureHostDeps = lib.optionals stdenv.isDarwin [
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
     "/System/Library/CoreServices/.SystemVersionPlatform.plist"
     "/System/Library/CoreServices/SystemVersion.plist"
   ];

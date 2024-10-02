@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     xorgproto
     libXi
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     Carbon Cocoa Kernel OpenGL
   ];
 

@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake installShellFiles pkg-config ];
 
   buildInputs = [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation libresolv Security ];
 
   nativeCheckInputs = [
     git

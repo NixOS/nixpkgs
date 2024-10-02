@@ -214,9 +214,6 @@ because their behaviour is different:
   paths included in this list. Items listed in `install_requires` go here.
 * `optional-dependencies ? { }`: Optional feature flagged dependencies.  Items listed in `extras_requires` go here.
 
-Aside from propagating dependencies,
-  `buildPythonPackage` also injects code into and wraps executables with the
-  paths included in this list. Items listed in `extras_requires` go here.
 
 ##### Overriding Python packages {#overriding-python-packages}
 
@@ -360,6 +357,66 @@ modifications.
 ```
 
 Do pay attention to passing in the right Python version!
+
+#### `mkPythonMetaPackage` function {#mkpythonmetapackage-function}
+
+This will create a meta package containing [metadata files](https://packaging.python.org/en/latest/specifications/recording-installed-packages/) to satisfy a dependency on a package, without it actually having been installed into the environment.
+In nixpkgs this is used to package Python packages with split binary/source distributions such as [psycopg2](https://pypi.org/project/psycopg2/)/[psycopg2-binary](https://pypi.org/project/psycopg2-binary/).
+
+```nix
+mkPythonMetaPackage {
+  pname = "psycopg2-binary";
+  inherit (psycopg2) optional-dependencies version;
+  dependencies = [ psycopg2 ];
+  meta = {
+    inherit (psycopg2.meta) description homepage;
+  };
+}
+```
+
+#### `mkPythonEditablePackage` function {#mkpythoneditablepackage-function}
+
+When developing Python packages it's common to install packages in [editable mode](https://setuptools.pypa.io/en/latest/userguide/development_mode.html).
+Like `mkPythonMetaPackage` this function exists to create an otherwise empty package, but also containing a pointer to an impure location outside the Nix store that can be changed without rebuilding.
+
+The editable root is passed as a string. Normally `.pth` files contains absolute paths to the mutable location. This isn't always ergonomic with Nix, so environment variables are expanded at runtime.
+This means that a shell hook setting up something like a `$REPO_ROOT` variable can be used as the relative package root.
+
+As an implementation detail, the [PEP-518](https://peps.python.org/pep-0518/) `build-system` specified won't be used, but instead the editable package will be built using [hatchling](https://pypi.org/project/hatchling/).
+The `build-system`'s provided will instead become runtime dependencies of the editable package.
+
+Note that overriding packages deeper in the dependency graph _can_ work, but it's not the primary use case and overriding existing packages can make others break in unexpected ways.
+
+``` nix
+{ pkgs ? import <nixpkgs> { } }:
+
+let
+  pyproject = pkgs.lib.importTOML ./pyproject.toml;
+
+  myPython = pkgs.python.override {
+    self = myPython;
+    packageOverrides = pyfinal: pyprev: {
+      # An editable package with a script that loads our mutable location
+      my-editable = pyfinal.mkPythonEditablePackage {
+        # Inherit project metadata from pyproject.toml
+        pname = pyproject.project.name;
+        inherit (pyproject.project) version;
+
+        # The editable root passed as a string
+        root = "$REPO_ROOT/src"; # Use environment variable expansion at runtime
+
+        # Inject a script (other PEP-621 entrypoints are also accepted)
+        inherit (pyproject.project) scripts;
+      };
+    };
+  };
+
+  pythonEnv =  testPython.withPackages (ps: [ ps.my-editable ]);
+
+in pkgs.mkShell {
+  packages = [ pythonEnv ];
+}
+```
 
 #### `python.buildEnv` function {#python.buildenv-function}
 
@@ -2033,8 +2090,8 @@ no maintainer, so maintenance falls back to the package set maintainers.
 
 ### Updating packages in bulk {#python-package-bulk-updates}
 
-There is a tool to update alot of python libraries in bulk, it exists at
-`maintainers/scripts/update-python-libraries` with this repository.
+A tool to bulk-update numerous Python libraries is available in the
+repository at `maintainers/scripts/update-python-libraries`.
 
 It can quickly update minor or major versions for all packages selected
 and create update commits, and supports the `fetchPypi`, `fetchurl` and

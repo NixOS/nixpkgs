@@ -12,7 +12,6 @@
 , p7zip
 , autoPatchelfHook
 , libXxf86vm
-, unzip
 , libGL
 }:
 

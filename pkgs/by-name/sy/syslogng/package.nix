@@ -33,6 +33,9 @@
 , libesmtp
 , rdkafka
 , gperf
+, withGrpc ? true
+, grpc
+, protobuf
 }:
 let
   python-deps = ps: with ps; [
@@ -94,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     paho-mqtt-c
     hiredis
     rdkafka
-  ];
+  ] ++ (lib.optionals withGrpc [ protobuf grpc ]);
 
   configureFlags = [
     "--enable-manpages"
@@ -111,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-systemd-journal=system"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--without-compile-date"
-  ];
+  ] ++ (lib.optionals withGrpc [ "--enable-grpc" ]);
 
   outputs = [ "out" "man" ];
 

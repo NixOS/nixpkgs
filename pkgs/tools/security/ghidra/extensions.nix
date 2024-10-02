@@ -13,6 +13,10 @@ lib.makeScope newScope (self: {
 
   ghidraninja-ghidra-scripts = self.callPackage ./extensions/ghidraninja-ghidra-scripts { };
 
+  ghidra-delinker-extension = self.callPackage ./extensions/ghidra-delinker-extension {
+    inherit ghidra;
+  };
+
   gnudisassembler = self.callPackage ./extensions/gnudisassembler { inherit ghidra; };
 
   lightkeeper = self.callPackage ./extensions/lightkeeper { };

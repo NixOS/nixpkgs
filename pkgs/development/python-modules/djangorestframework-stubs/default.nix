@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.15.0";
+  version = "3.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-5fZzSRn59ii41QKOqkZUXTDnm70Um9SY445Vfoo8sgg=";
+    hash = "sha256-m9KxC3dGe+uRB3YIykV/SCOHeItRYNKopF9fqCd10Vk=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compatible-mypy = [ mypy ] ++ django-stubs.optional-dependencies.compatible-mypy;
     coreapi = [ coreapi ];
     markdown = [ types-markdown ];
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     py
     pytest-mypy-plugins
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all testsare failing with 3.14.5 and below
   doCheck = false;

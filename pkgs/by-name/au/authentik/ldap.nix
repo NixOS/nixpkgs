@@ -4,7 +4,7 @@ buildGoModule {
   pname = "authentik-ldap-outpost";
   inherit (authentik) version src;
 
-  vendorHash = "sha256-hxtyXyCfVemsjYQeo//gd68x4QO/4Vcww8i2ocsUVW8=";
+  vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
 
   CGO_ENABLED = 0;
 

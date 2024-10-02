@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional (!isCross) help2man;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
     CoreServices

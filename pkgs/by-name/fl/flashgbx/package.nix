@@ -49,7 +49,7 @@ python3Packages.buildPythonApplication rec {
     requests
     setuptools
     qt6.qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 

@@ -15,7 +15,7 @@ rec {
   envVars = let
 
     # As a workaround for https://github.com/rust-lang/rust/issues/89626 use lld on pkgsStatic aarch64
-    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.isDarwin;
+    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.hostPlatform.isDarwin;
 
     ccForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}c++";
@@ -80,8 +80,7 @@ rec {
     '';
   };
 } // lib.mapAttrs (old: new: platform:
-  # TODO: enable warning after 23.05 is EOL.
-  # lib.warn "`rust.${old} platform` is deprecated. Use `platform.rust.${new}` instead."
+  lib.warn "`rust.${old} platform` is deprecated. Use `platform.rust.${lib.showAttrPath new}` instead."
     lib.getAttrFromPath new platform.rust)
 {
   toTargetArch = [ "platform" "arch" ];

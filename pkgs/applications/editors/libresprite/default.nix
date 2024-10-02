@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
     lua
     # no v8 due to missing libplatform and libbase
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWITH_WEBP_SUPPORT=ON"
   ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
 
   # Install mime icons. Note that the mimetype is still "x-aseprite"
   postInstall = ''
@@ -116,6 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # https://github.com/LibreSprite/LibreSprite/issues/308
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

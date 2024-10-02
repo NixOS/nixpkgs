@@ -10,6 +10,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , udev
 , unstableGitUpdater
 , wayland
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

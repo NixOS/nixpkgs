@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Free and open-source Touhou Project clone and fangame";
     mainProgram = "taisei";
     longDescription = ''

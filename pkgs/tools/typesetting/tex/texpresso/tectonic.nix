@@ -6,11 +6,11 @@ tectonic-unwrapped.override (old: {
       src = fetchFromGitHub {
         owner = "let-def";
         repo = "tectonic";
-        rev = "b38cb3b2529bba947d520ac29fbb7873409bd270";
-        hash = "sha256-ap7fEPHsASAphIQkjcvk1CC7egTdxaUh7IpSS5os4W8=";
+        rev = "5b844105c06e0b16e40b1254359f8c28e8956280";
+        hash = "sha256-RPsXmp+5MF9h+H3wdL1O1hXSRZWjWTY8lXq/dWZIM1g=";
         fetchSubmodules = true;
       };
-      cargoHash = "sha256-62sxvPIiY3len1wsl7QelK3u4ekftIjcTqoIGZMYb5A=";
+      cargoHash = "sha256-g4iBo8r+QUOcFJ3CI2+HOi4VHxU7jKnIWlJcKx/6r5E=";
       # binary has a different name, bundled tests won't work
       doCheck = false;
       meta.mainProgram = "texpresso-tonic";

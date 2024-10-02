@@ -7,6 +7,8 @@
 , prefetch-npm-deps
 , diffutils
 , installShellFiles
+, nodejsInstallManuals
+, nodejsInstallExecutables
 }:
 
 {
@@ -39,9 +41,10 @@
       propagatedBuildInputs = [
         installShellFiles
         makeWrapper
+        nodejsInstallManuals
+        nodejsInstallExecutables
       ];
       substitutions = {
-        hostNode = "${nodejs}/bin/node";
         jq = "${jq}/bin/jq";
       };
     } ./npm-install-hook.sh;

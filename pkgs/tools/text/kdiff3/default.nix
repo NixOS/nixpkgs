@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
   '';
 

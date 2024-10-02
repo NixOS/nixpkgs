@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.zeyple;
   ini = pkgs.formats.ini { };
@@ -16,10 +14,10 @@ let
   '';
 in {
   options.services.zeyple = {
-    enable = mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
+    enable = lib.mkEnableOption "Zeyple, an utility program to automatically encrypt outgoing emails with GPG";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "zeyple";
       description = ''
         User to run Zeyple as.
@@ -32,8 +30,8 @@ in {
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "zeyple";
       description = ''
         Group to use to run Zeyple.
@@ -46,7 +44,7 @@ in {
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = ini.type;
       default = { };
       description = ''
@@ -56,21 +54,21 @@ in {
       '';
     };
 
-    keys = mkOption {
-      type = with types; listOf path;
+    keys = lib.mkOption {
+      type = with lib.types; listOf path;
       description = "List of public key files that will be imported by gpg.";
     };
 
-    rotateLogs = mkOption {
-      type = types.bool;
+    rotateLogs = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Whether to enable rotation of log files.";
     };
   };
 
-  config = mkIf cfg.enable {
-    users.groups = optionalAttrs (cfg.group == "zeyple") { "${cfg.group}" = { }; };
-    users.users = optionalAttrs (cfg.user == "zeyple") {
+  config = lib.mkIf cfg.enable {
+    users.groups = lib.optionalAttrs (cfg.group == "zeyple") { "${cfg.group}" = { }; };
+    users.users = lib.optionalAttrs (cfg.user == "zeyple") {
       "${cfg.user}" = {
         isSystemUser = true;
         group = cfg.group;
@@ -78,14 +76,14 @@ in {
     };
 
     services.zeyple.settings = {
-      zeyple = mapAttrs (name: mkDefault) {
+      zeyple = lib.mapAttrs (name: lib.mkDefault) {
         log_file = "/var/log/zeyple/zeyple.log";
         force_encrypt = true;
       };
 
-      gpg = mapAttrs (name: mkDefault) { home = "${gpgHome}"; };
+      gpg = lib.mapAttrs (name: lib.mkDefault) { home = "${gpgHome}"; };
 
-      relay = mapAttrs (name: mkDefault) {
+      relay = lib.mapAttrs (name: lib.mkDefault) {
         host = "localhost";
         port = 10026;
       };
@@ -98,7 +96,7 @@ in {
       mode = "0600";
     };
 
-    services.logrotate = mkIf cfg.rotateLogs {
+    services.logrotate = lib.mkIf cfg.rotateLogs {
       enable = true;
       settings.zeyple = {
         files = cfg.settings.zeyple.log_file;

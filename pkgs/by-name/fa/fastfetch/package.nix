@@ -10,7 +10,7 @@
   ddcutil,
   glib,
   hwdata,
-  imagemagick_light,
+  imagemagick,
   libXrandr,
   libdrm,
   libglvnd,
@@ -43,17 +43,17 @@
   x11Support ? true,
 }:
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.21.2";
+  version = "2.26.1";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     rev = finalAttrs.version;
-    hash = "sha256-wh8k/+2Wj5XhYvBD+s7IHLGi7v7gxn6rxLHlZTvw+Rk=";
+    hash = "sha256-0TRhMK45mfCft56R07lUbnxjfQrIAXONy4f6ykpc5X8=";
   };
 
   outputs = [
@@ -71,13 +71,13 @@ stdenv'.mkDerivation (finalAttrs: {
   buildInputs =
     [
       chafa
-      imagemagick_light
+      imagemagick
       pcre
       pcre2
       sqlite
       yyjson
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       dbus
       dconf
       ddcutil
@@ -103,8 +103,8 @@ stdenv'.mkDerivation (finalAttrs: {
       xorg.libXdmcp
       xorg.libXext
     ]
-    ++ lib.optionals (x11Support && (!stdenv.isDarwin)) [ xfce.xfconf ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals (x11Support && (!stdenv.hostPlatform.isDarwin)) [ xfce.xfconf ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         Apple80211
@@ -138,10 +138,10 @@ stdenv'.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_X11" x11Support)
       (lib.cmakeBool "ENABLE_XCB" x11Support)
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
-      (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.isDarwin)))
+      (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
       (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
     ];
@@ -167,7 +167,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Like neofetch, but much faster because written in C";
+    description = "An actively maintained, feature-rich and performance oriented, neofetch like system information tool";
     homepage = "https://github.com/fastfetch-cli/fastfetch";
     changelog = "https://github.com/fastfetch-cli/fastfetch/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;

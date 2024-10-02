@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   pname = "wimlib";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
-  buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ fuse3 ];
+  buildInputs = [ ntfs3g ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ fuse3 ];
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${pname}-${version}.tar.gz";
@@ -22,20 +22,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preBuild = lib.optionalString (!stdenv.isDarwin) ''
+  preBuild = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace programs/mkwinpeimg.in \
       --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
   postInstall = let
-    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.isDarwin) [ cdrkit syslinux fuse3 ]);
+    path = lib.makeBinPath  ([ cabextract mtools ntfs3g ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ cdrkit syslinux fuse3 ]);
   in ''
     for prog in $out/bin/*; do
       wrapProgram $prog --prefix PATH : $out/bin:${path}
     done
   '';
 
-  doCheck = (!stdenv.isDarwin);
+  doCheck = (!stdenv.hostPlatform.isDarwin);
 
   preCheck = ''
     patchShebangs tests

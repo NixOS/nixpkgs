@@ -50,7 +50,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
       SDL2
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreGraphics
       CoreML
@@ -70,7 +70,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       --replace '${cudaOldStr}' '${cudaNewStr}'
   '';
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
     WHISPER_METAL_EMBED_LIBRARY = "1";

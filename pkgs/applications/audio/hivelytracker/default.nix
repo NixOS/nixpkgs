@@ -66,6 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     mainProgram = "hivelytracker";
     maintainers = with maintainers; [ fgaz ];
-    broken = stdenv.isDarwin; # TODO: try to use xcbuild
+    broken = stdenv.hostPlatform.isDarwin; # TODO: try to use xcbuild
   };
 })

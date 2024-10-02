@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   nativeCheckInputs = [ gtest ];
-  doCheck = !stdenv.isAarch64; # single failure that I can't explain
+  doCheck = !stdenv.hostPlatform.isAarch64; # single failure that I can't explain
 
   preFixup = ''
     gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ dbus ]})

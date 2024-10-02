@@ -8,8 +8,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.1.2";
-  source.sha256 = "t96v3RwBfezB644RVbTmO8i/xh1F23WQC8PBxc/msjg=";
+  version = "3.3.1";
+  source.sha256 = "sha256-xixLYzDIvX3D+vbe9SccST37TnyZx/YjePLPjagHsOU=";
 
   erubis = buildRubyGem rec {
     inherit ruby;
@@ -23,8 +23,8 @@ buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "1.3.0";
-    source.sha256 = "sha256-Gtx/nls2VaaMcTk/7ovQrQiNFO6Og6C3NybyPLs8p8M=";
+    version = "1.3.2";
+    source.sha256 = "sha256-7vApO54kFYzK16s4Oug1NLetTtmcCflvGmsDZVCrvto=";
   };
 
   xdg = buildRubyGem rec {

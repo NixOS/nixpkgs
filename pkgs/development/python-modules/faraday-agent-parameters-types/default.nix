@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
-  version = "1.7.0";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
-    hash = "sha256-xFrTOsoh/qCCnzJq97pHW2TogiWfnw4zL4Lul4jRaA0=";
+    hash = "sha256-ypr5/6mnATFswZPX4aeusH8PoYRa+yVL1gk+pdz7r0w=";
   };
 
   postPatch = ''

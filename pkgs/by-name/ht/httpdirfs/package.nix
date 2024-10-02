@@ -21,10 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fangfufu";
     repo = "httpdirfs";
     rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
+    hash = "sha256-PUYsT0VDEzerPqwrLJrET4kSsWsQhtnfmLepeaqtA+I=";
   };
 
-  postPatch = lib.optional stdenv.isDarwin ''
+  postPatch = lib.optional stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace-fail '-fanalyzer' '-Xanalyzer'
   '';
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Disabled for Darwin because requires macFUSE installed outside NixOS
-    tests.version = lib.optionalAttrs stdenv.isLinux (
+    tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (
       testers.testVersion {
         command = "${lib.getExe finalAttrs.finalPackage} --version";
         package = finalAttrs.finalPackage;

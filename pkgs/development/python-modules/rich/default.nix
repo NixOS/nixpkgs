@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     jupyter = [ ipywidgets ];
   };
 
@@ -88,9 +88,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Textualize/rich";
     changelog = "https://github.com/Textualize/rich/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      ris
-      joelkoen
-    ];
+    maintainers = with maintainers; [ ris ];
   };
 }

@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin (
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk_11_0.frameworks; [ CoreFoundation IOKit SystemConfiguration Security ]
   );
 
@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   # There are some CI failures with Rattler. Tests on Aarch64 has been skipped.
   # See https://github.com/prefix-dev/pixi/pull/241.
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_task_with_env"
     "--skip=test_pixi_only_env_activation"
     "--skip=cli::shell_hook::tests::test_environment_json"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--skip=task::task_environment::tests::test_find_ambiguous_task"
     "--skip=task::task_environment::tests::test_find_task_dual_defined"
     "--skip=task::task_environment::tests::test_find_task_explicit_defined"

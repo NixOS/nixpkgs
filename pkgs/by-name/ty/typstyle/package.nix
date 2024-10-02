@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.31";
+  version = "0.11.34";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RJeeYN5bw161UcORKPUkdNExyoWdL6w4ey/p/UCPSG0=";
+    hash = "sha256-6z2jzs5PxsEsCPSm9+sZnBdzh0edLMylaLBvSSPoPNo=";
   };
 
-  cargoHash = "sha256-hBOoFIQxLqrJG7jR0ONlWSzxEVl9ctsR85REJtODZWw=";
+  cargoHash = "sha256-MaqsAQvh30nDzoxgnFKu7+wvRZ7WvwLgKYM3Fru8qfg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Security

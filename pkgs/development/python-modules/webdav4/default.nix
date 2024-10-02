@@ -10,6 +10,7 @@
   httpx,
   pytest-xdist,
   pytestCheckHook,
+  pytest-cov-stub,
   python-dateutil,
   pythonOlder,
   wsgidav,
@@ -29,17 +30,12 @@ buildPythonPackage rec {
     hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     httpx
     python-dateutil
   ];
@@ -49,10 +45,11 @@ buildPythonPackage rec {
     colorama
     pytest-xdist
     pytestCheckHook
+    pytest-cov-stub
     wsgidav
-  ] ++ passthru.optional-dependencies.fsspec;
+  ] ++ optional-dependencies.fsspec;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [ fsspec ];
     http2 = [ httpx.optional-dependencies.http2 ];
     all = [

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
     # assumes the target is x86_64-unknown-linux-gnu
     "--skip simple_project::it_checks_okay_project_correctly";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Cargo subcommand to check rust documentation for broken links";

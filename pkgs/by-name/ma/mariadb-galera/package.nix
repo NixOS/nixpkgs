@@ -53,6 +53,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ izorkin ] ++ teams.helsinki-systems.members;
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

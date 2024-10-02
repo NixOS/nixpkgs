@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner  = "BIC-MNI";
     repo   = "EBTKS";
     rev    = "67e4e197d8a32d6462c9bdc7af44d64ebde4fb5c";
-    sha256 = "1a1qw6i47fs1izx60l1ysabpmyx9j5sjnbdv8b47wi2xcc9i3hpq";
+    hash = "sha256-+MIRE2NdRH7IQrstK3WRqft6l9I+UGD6j0G7Q6LhOKg=";
   };
 
   # error: use of undeclared identifier 'finite'; did you mean 'isfinite'?

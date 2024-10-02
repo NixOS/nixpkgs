@@ -35,7 +35,7 @@ buildGoModule rec {
   ];
 
   # Trusted by this computer: no: x509: “cert-manager” certificate is not trusted
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     mv $out/bin/ctl $out/bin/cmctl

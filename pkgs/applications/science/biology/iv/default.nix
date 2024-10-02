@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
         break
       fi
     done
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
   '';
 

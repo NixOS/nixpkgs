@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "jgke";
     repo = "connman-gtk";
     rev = "v${version}";
-    sha256 = "09k0hx5hxpbykvslv12l2fq9pxdwpd311mxj038hbqzjghcyidyr";
+    hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
   };
 
   nativeBuildInputs = [

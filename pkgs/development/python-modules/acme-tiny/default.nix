@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   setuptools-scm,
   fusepy,
   fuse,
@@ -11,7 +12,7 @@
 buildPythonPackage rec {
   pname = "acme-tiny";
   version = "5.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,12 +20,15 @@ buildPythonPackage rec {
   };
 
   patchPhase = ''
-    substituteInPlace acme_tiny.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/test_module.py --replace '"openssl"' '"${openssl.bin}/bin/openssl"'
-    substituteInPlace tests/utils.py --replace /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
+    substituteInPlace acme_tiny.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/test_module.py --replace-fail '"openssl"' '"${openssl.bin}/bin/openssl"'
+    substituteInPlace tests/utils.py --replace-fail /etc/ssl/openssl.cnf ${openssl.out}/etc/ssl/openssl.cnf
   '';
 
-  buildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [
     fusepy

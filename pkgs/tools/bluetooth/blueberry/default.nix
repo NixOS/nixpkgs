@@ -2,7 +2,7 @@
 , lib
 , fetchFromGitHub
 , bluez-tools
-, gnome
+, gnome-bluetooth_1_0
 , gobject-introspection
 , libnotify
 , pavucontrol
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bluez-tools
-    gnome.gnome-bluetooth_1_0
+    gnome-bluetooth_1_0
     libnotify
     python3Packages.python
     util-linux

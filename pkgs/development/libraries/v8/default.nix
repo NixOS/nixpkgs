@@ -101,11 +101,11 @@ stdenv.mkDerivation rec {
   '';
 
   postPatch = ''
-    ${lib.optionalString stdenv.isAarch64 ''
+    ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     ''}
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build/config/compiler/compiler.gni \
         --replace 'strip_absolute_paths_from_debug_symbols = true' \
                   'strip_absolute_paths_from_debug_symbols = false'
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
         --replace 'current_toolchain == host_toolchain || !use_xcode_clang' \
                   'false'
     ''}
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace build/config/compiler/BUILD.gn \
         --replace "-Wl,-fatal_warnings" ""
     ''}
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     ''host_toolchain="//build/toolchain/linux/unbundle:default"''
     ''v8_snapshot_toolchain="//build/toolchain/linux/unbundle:default"''
   ] ++ lib.optional stdenv.cc.isClang ''clang_base_path="${llvmCcAndBintools}"''
-  ++ lib.optional stdenv.isDarwin ''use_lld=false'';
+  ++ lib.optional stdenv.hostPlatform.isDarwin ''use_lld=false'';
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-O2"
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     llvmPackages.llvm
     python3.pkgs.setuptools

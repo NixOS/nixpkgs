@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   # OSError: AF_UNIX path too long
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     "test_protocol_pause_resume"

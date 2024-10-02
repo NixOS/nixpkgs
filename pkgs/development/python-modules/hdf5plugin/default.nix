@@ -2,20 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
+  py-cpuinfo,
   h5py,
 }:
 
 buildPythonPackage rec {
   pname = "hdf5plugin";
-  version = "4.4.0";
-  format = "setuptools";
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "silx-kit";
     repo = "hdf5plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MnqY1PyGzo31H696J9CekiA2rJrUYzUMDC3UJMZaFLA=";
+    hash = "sha256-6lEU8ZGJKazDqloel5QcaXAbNGzV1fAbAjYC/hFUOdI=";
   };
+
+  build-system = [
+    setuptools
+    py-cpuinfo
+  ];
 
   dependencies = [ h5py ];
 

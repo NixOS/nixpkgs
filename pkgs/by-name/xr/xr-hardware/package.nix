@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installTargets = "install_package";
-  installFlagsArray = "DESTDIR=${placeholder "out"}";
+  installFlags = "DESTDIR=${placeholder "out"}";
 
   passthru.updateScript = nix-update-script { };
 

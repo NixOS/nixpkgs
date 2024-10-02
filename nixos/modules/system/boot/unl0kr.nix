@@ -13,7 +13,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    meta.maintainers = with lib.maintainers; [ tomfitzhenry ];
+    meta.maintainers = [];
     assertions = [
       {
         assertion = cfg.enable -> config.boot.initrd.systemd.enable;

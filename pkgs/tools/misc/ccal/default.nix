@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   pname = "ccal";
   version = "2.5.3";
   src = fetchurl {
-    url = "https://ccal.chinesebay.com/${pname}-${version}.tar.gz";
+    url = "https://ccal.chinesebay.com/ccal-${version}.tar.gz";
     sha256 = "sha256-PUy9yfkFzgKrSEBB+79/C3oxmuajUMbBbWNuGlpQ35Y=";
   };
 

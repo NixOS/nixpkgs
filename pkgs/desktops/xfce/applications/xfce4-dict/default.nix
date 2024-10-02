@@ -10,9 +10,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-dict";
-  version = "0.8.6";
+  version = "0.8.7";
 
-  sha256 = "sha256-a7St9iH+jzwq/llrMJkuqwgQrDFEjqebs/N6Lxa3dkI=";
+  sha256 = "sha256-1xjprnQG2P+LYAhEGxdu1wpoP/+C+udmNqb/3zEojr0=";
 
   buildInputs = [
     glib

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     ./0001-Fix-include-path-in-exported-CMake-targets.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace bindings/python/CMakeLists.txt --replace " -u -r" ""
   '';
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "-DPY_MOD_INSTALL_DIR=${placeholder "py"}/${python3.sitePackages}/"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-faligned-allocation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-faligned-allocation";
 
   meta = with lib; {
     description = "Zeek's Messaging Library";

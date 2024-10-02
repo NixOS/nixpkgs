@@ -5,6 +5,7 @@
   pythonOlder,
 
   hatchling,
+  hatch-fancy-pypi-readme,
   manim,
   ffmpeg,
 
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   build-system = [
     hatchling
+    hatch-fancy-pypi-readme
   ];
 
   pythonRemoveDeps = [ "opencv-python" ];

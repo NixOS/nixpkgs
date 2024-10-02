@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ expat ncurses ]
     ++ lib.optionals x11Support [ cairo libX11 ]
-    ++ lib.optionals stdenv.isLinux [ numactl ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
     ++ lib.optionals enableCuda [ cudaPackages.cuda_cudart ];
 
   # Since `libpci' appears in `hwloc.pc', it must be propagated.
-  propagatedBuildInputs = lib.optional stdenv.isLinux pciutils;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux pciutils;
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     if [ -d "${numactl}/lib64" ]; then
       numalibdir="${numactl}/lib64"
     else

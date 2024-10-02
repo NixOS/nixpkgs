@@ -16,7 +16,7 @@
 , udisks2
 , waylandSupport ? false, wayland-protocols, xwayland
 , bluetoothSupport ? true, bluez5
-, pulseSupport ? !stdenv.isDarwin, libpulseaudio
+, pulseSupport ? !stdenv.hostPlatform.isDarwin, libpulseaudio
 , directoryListingUpdater
 }:
 

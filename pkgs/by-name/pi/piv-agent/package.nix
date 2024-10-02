@@ -24,10 +24,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.shortCommit=${src.rev}" ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then [ darwin.apple_sdk.frameworks.PCSC ]
     else [ pcsclite ];
 

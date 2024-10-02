@@ -19,6 +19,6 @@ buildGoModule rec {
     homepage = "https://github.com/gennaro-tedesco/element";
     license = licenses.asl20;
     maintainers = [ maintainers.j0hax ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

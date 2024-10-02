@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "typstwriter";
-  version = "0.1";
+  version = "0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Bzero";
     repo = "typstwriter";
     rev = "V${version}";
-    hash = "sha256-xgBBZTViMzYgxaYb24druUwLqVWdf9utCETC+goLqYk=";
+    hash = "sha256-LhK1e6q7nmk13ZW55/1uEKhg7stQLIs+2bdFJDc24bg=";
   };
 
   build-system = [ python3.pkgs.flit-core ];

@@ -3,26 +3,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
-  version = "3.1.1";
+  version = "3.1.1-unstable-2024-08-02";
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
-    rev = "v${version}";
-    hash = "sha256-/g5bO3UQcg0XYm62KdoWcVQqOV3SIedWUYLufEcblmE=";
+    # commit "chore: update to build with rust 1.80 (leanprover/elan#134)"
+    rev = "97ce78e0e6aecdf3e8d35dbf42b0614302efb250";
+    hash = "sha256-7cwpHMyhpTxYXjZM4xbDK+epvA2kBf7jelvMaPGP1kU=";
   };
 
-  cargoHash = "sha256-f8YVUTxHX1FY2p73DlnLDtCJaG/0JImUtJFraV6ErNM=";
+  cargoHash = "sha256-ON5d7ryMKEhkx6dV760msr+y/+4hIwssXUE5Ocaq2W0=";
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   OPENSSL_NO_VENDOR = 1;
   buildInputs = [ curl zlib openssl ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   buildFeatures = [ "no-self-update" ];
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     # Run patchelf on the downloaded binaries.
     # This is necessary because Lean 4 is now dynamically linked.
     (runCommand "0001-dynamically-patchelf-binaries.patch" {

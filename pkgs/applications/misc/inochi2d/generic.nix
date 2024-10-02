@@ -14,6 +14,7 @@
   freetype,
   SDL2,
   zenity,
+  libGL,
 
   builderArgs,
 }:
@@ -126,7 +127,8 @@ buildDubPackage (
     postFixup = ''
       # Add support for `open file` dialog
       makeWrapper $out/share/${pname}/${pname} $out/bin/${pname} \
-          --prefix PATH : ${lib.makeBinPath [ zenity ]}
+          --prefix PATH : ${lib.makeBinPath [ zenity ]} \
+          --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
     '';
 
     meta = {

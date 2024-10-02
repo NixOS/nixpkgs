@@ -30,6 +30,6 @@ buildGoModule rec {
     #
     # but this package is no longer maintained.
     #
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -51,7 +51,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
     SystemConfiguration
@@ -70,7 +70,7 @@ buildPythonPackage rec {
       "test_cache"
       "test_remote_stylesheet"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # pyo3_runtime.PanicException: event loop thread panicked
       "test_invalid_href"
     ];

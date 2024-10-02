@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreServices
     SystemConfiguration
   ]);
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 

@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \

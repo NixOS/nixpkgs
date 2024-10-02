@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  doCheck = !stdenv.isi686; # tests fail on i686
+  doCheck = !stdenv.hostPlatform.isi686; # tests fail on i686
 
   meta = with lib; {
     description = "Mozilla's Universal Charset Detector C/C++ API";

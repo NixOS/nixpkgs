@@ -27,7 +27,6 @@
   pyyaml,
   redis,
   scikit-learn,
-  scikit-optimize,
   scipy,
   setuptools,
   shap,
@@ -44,7 +43,7 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "3.6.1";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -53,7 +52,7 @@ buildPythonPackage rec {
     owner = "optuna";
     repo = "optuna";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+ZqMRIza4K5VWTUm7tC87S08SI+C8GKd2Uh3rGoHwd0=";
+    hash = "sha256-ZCK6otX90s8SB91TLkKwJ4net2dGmAKdIESeHXy87K0=";
   };
 
   nativeBuildInputs = [
@@ -71,7 +70,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     integration = [
       botorch
       catboost
@@ -83,7 +82,6 @@ buildPythonPackage rec {
       # pytorch-ignite
       pytorch-lightning
       scikit-learn
-      scikit-optimize
       shap
       tensorflow
       torch
@@ -115,7 +113,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ passthru.optional-dependencies.optional;
+  ] ++ fakeredis.optional-dependencies.lua ++ optional-dependencies.optional;
 
   pytestFlagsArray = [ "-m 'not integration'" ];
 

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     glib.out
     brotli
     libnghttp2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
     (lib.mesonEnable "docs" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "sysprof" stdenv.isLinux)
+    (lib.mesonEnable "sysprof" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "vapi" withIntrospection)
   ];
 

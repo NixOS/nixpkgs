@@ -12,7 +12,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -D fasm${lib.optionalString stdenvNoCC.isx86_64 ".x64"} $out/bin/fasm
+    install -D fasm${lib.optionalString stdenvNoCC.hostPlatform.isx86_64 ".x64"} $out/bin/fasm
 
     runHook postInstall
   '';

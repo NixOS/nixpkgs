@@ -2,7 +2,7 @@
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
 , Carbon, PCSC, buildPackages
-, withApplePCSC ? stdenv.isDarwin
+, withApplePCSC ? stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     zlib readline openssl libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
   ]
-  ++ lib.optional stdenv.isDarwin Carbon
+  ++ lib.optional stdenv.hostPlatform.isDarwin Carbon
   ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

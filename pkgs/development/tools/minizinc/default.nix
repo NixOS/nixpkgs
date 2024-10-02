@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizinc";
-  version = "2.8.5";
+  version = "2.8.6";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "libminizinc";
     rev = finalAttrs.version;
-    sha256 = "sha256-AD5hbHnu5/gmhvk4Hzeqzvq3E/7w54ijxl9US5eATRY=";
+    sha256 = "sha256-mWbkCm6nfN4rJpiCfVPo2K29oV2fInMGbFv4J8NDbaw=";
   };
 
   nativeBuildInputs = [ bison cmake flex jq ];

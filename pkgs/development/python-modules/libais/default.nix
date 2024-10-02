@@ -4,13 +4,14 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "libais";
   version = "0.17";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,12 +20,9 @@ buildPythonPackage rec {
     hash = "sha256-6yrqIpjF6XaSfXSOTA0B4f3aLcHXkgA/3WBZBBNQ018=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "'pytest-runner'," ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ six ];
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

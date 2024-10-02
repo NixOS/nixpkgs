@@ -13,11 +13,14 @@
     inherit hostPath containerPath;
     options = mountOptions;
   };
-  jqAddMountExpression = ".containerEdits.mounts[.containerEdits.mounts | length] |= . +";
-  allJqMounts = lib.concatMap
-    (mount:
-      ["${lib.getExe jq} '${jqAddMountExpression} ${builtins.toJSON (mkMount mount)}'"])
-    mounts;
+  mountToCommand = mount:
+    "additionalMount \"${mount.hostPath}\" \"${mount.containerPath}\" '${builtins.toJSON mount.mountOptions}'";
+  mountsToCommands = mounts:
+    if (builtins.length mounts) == 0 then
+      "cat"
+    else
+      (lib.strings.concatMapStringsSep " | \\\n"
+        mountToCommand mounts);
 in
 writeScriptBin "nvidia-cdi-generator"
 ''
@@ -32,6 +35,18 @@ function cdiGenerate {
     --nvidia-ctk-path ${lib.getExe' nvidia-container-toolkit "nvidia-ctk"}
 }
 
-cdiGenerate | \
-  ${lib.concatStringsSep " | " allJqMounts} > $RUNTIME_DIRECTORY/nvidia-container-toolkit.json
+function additionalMount {
+  local hostPath="$1"
+  local containerPath="$2"
+  local mountOptions="$3"
+  if [ -e "$hostPath" ]; then
+    ${lib.getExe jq} ".containerEdits.mounts[.containerEdits.mounts | length] = { \"hostPath\": \"$hostPath\", \"containerPath\": \"$containerPath\", \"options\": $mountOptions }"
+  else
+    echo "Mount $hostPath ignored: could not find path in the host machine" >&2
+    cat
+  fi
+}
+
+cdiGenerate |
+  ${mountsToCommands mounts} > $RUNTIME_DIRECTORY/nvidia-container-toolkit.json
 ''

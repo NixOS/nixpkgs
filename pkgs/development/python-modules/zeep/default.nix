@@ -51,7 +51,7 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async_require = [ httpx ];
     xmlsec_require = [ xmlsec ];
   };
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Failed: External connections not allowed during tests.

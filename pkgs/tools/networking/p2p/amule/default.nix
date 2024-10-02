@@ -98,6 +98,6 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
     platforms = platforms.unix;
     # Undefined symbols for architecture arm64: "_FSFindFolder"
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

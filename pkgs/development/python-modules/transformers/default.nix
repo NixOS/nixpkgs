@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -59,16 +58,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.44.0";
+  version = "4.45.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i3KKfkYvKRYrs/kiwBJdyFzMiXKwyBEeUuZcHszip3k=";
+    hash = "sha256-5fGEnw4YllQdZV/0vDGXYsCyTw0rtPRD/V7UWoBBZjQ=";
   };
 
   build-system = [ setuptools ];

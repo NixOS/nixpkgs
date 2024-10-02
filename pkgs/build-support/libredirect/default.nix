@@ -32,7 +32,7 @@ else stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-    ${if stdenv.isDarwin && stdenv.isAarch64 then ''
+    ${if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then ''
     # We need the unwrapped binutils and clang:
     # We also want to build a fat library with x86_64, arm64, arm64e in there.
     # Because we use the unwrapped tools, we need to provide -isystem for headers
@@ -47,7 +47,7 @@ else stdenv.mkDerivation rec {
       -Wl,-install_name,$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"
-    '' else if stdenv.isDarwin then ''
+    '' else if stdenv.hostPlatform.isDarwin then ''
     $CC -Wall -std=c99 -O3 -fPIC libredirect.c \
       -Wl,-install_name,$out/lib/$libName \
       -shared -o "$libName"
@@ -58,7 +58,7 @@ else stdenv.mkDerivation rec {
 
     if [ -n "$doInstallCheck" ]; then
       $CC -Wall -std=c99 \
-        ${lib.optionalString (!stdenv.isDarwin) "-D_GNU_SOURCE"} \
+        ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "-D_GNU_SOURCE"} \
         -O3 test.c -o test
     fi
 
@@ -75,7 +75,7 @@ else stdenv.mkDerivation rec {
 
     install -vD "$libName" "$out/lib/$libName"
 
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # dylib will be rejected unless dylib rpath gets explictly set
     install_name_tool \
       -change $libName $out/lib/$libName \
@@ -84,7 +84,7 @@ else stdenv.mkDerivation rec {
     # Provide a setup hook that injects our library into every process.
     mkdir -p "$hook/nix-support"
     cat <<SETUP_HOOK > "$hook/nix-support/setup-hook"
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
     export DYLD_INSERT_LIBRARIES="$out/lib/$libName"
     '' else ''
     export LD_PRELOAD="$out/lib/$libName"

@@ -42,9 +42,10 @@ let
       SESSION_COOKIE_SECURE = ENABLE_HTTPS
       DATA_DIR = "${dataDir}"
       CACHE_DIR = f"{DATA_DIR}/cache"
-      STATIC_ROOT = "${finalPackage.static}/static"
+      STATIC_ROOT = "${finalPackage.static}"
       MEDIA_ROOT = "/var/lib/weblate/media"
-      COMPRESS_ROOT = "${finalPackage.static}/compressor-cache"
+      COMPRESS_ROOT = "${finalPackage.static}"
+      COMPRESS_OFFLINE = True
       DEBUG = False
 
       DATABASES = {
@@ -86,6 +87,13 @@ let
 
       VCS_BACKENDS = ("weblate.vcs.git.GitRepository",)
 
+      SITE_URL = "https://{}".format(SITE_DOMAIN)
+
+      # WebAuthn
+      OTP_WEBAUTHN_RP_NAME = SITE_TITLE
+      OTP_WEBAUTHN_RP_ID = SITE_DOMAIN.split(":")[0]
+      OTP_WEBAUTHN_ALLOWED_ORIGINS = [SITE_URL]
+
     ''
     + lib.optionalString cfg.smtp.enable ''
       ADMINS = (("Weblate Admin", "${cfg.smtp.user}"),)
@@ -124,6 +132,7 @@ let
 
   weblatePath = with pkgs; [
     gitSVN
+    borgbackup
 
     #optional
     git-review
@@ -205,8 +214,7 @@ in
 
         locations = {
           "= /favicon.ico".alias = "${finalPackage}/${python.sitePackages}/weblate/static/favicon.ico";
-          "/static/".alias = "${finalPackage.static}/static/";
-          "/static/CACHE/".alias = "${finalPackage.static}/compressor-cache/CACHE/";
+          "/static/".alias = "${finalPackage.static}/";
           "/media/".alias = "/var/lib/weblate/media/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };

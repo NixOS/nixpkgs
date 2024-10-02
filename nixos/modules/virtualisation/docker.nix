@@ -244,7 +244,7 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.graphics.enable32Bit or false;
+        { assertion = cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64 -> config.hardware.graphics.enable32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
         }];
 
@@ -256,7 +256,11 @@ in
         live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
-            path = "${pkgs.nvidia-docker}/bin/nvidia-container-runtime";
+            # Use the legacy nvidia-container-runtime wrapper to allow
+            # the `--runtime=nvidia` approach to expose
+            # GPU's. Starting with Docker > 25, CDI can be used
+            # instead, removing the need for runtime wrappers.
+            path = lib.getExe' pkgs.nvidia-docker "nvidia-container-runtime.legacy";
           };
         };
       };

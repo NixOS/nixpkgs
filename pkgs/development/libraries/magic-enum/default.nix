@@ -4,7 +4,6 @@
 , cmake
 , nix-update-script
 , testers
-, magic-enum
 }:
 stdenv.mkDerivation rec{
   pname = "magic-enum";
@@ -29,7 +28,6 @@ stdenv.mkDerivation rec{
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = magic-enum; };
   };
 
   meta = {

@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, python3Packages
+, python311Packages
 , fetchFromGitHub
 , fetchurl
 , cargo
@@ -40,7 +40,7 @@ let
   #
   # See https://github.com/NixOS/nixpkgs/pull/198311#issuecomment-1326894295
   myCargoSetupHook = rustPlatform.cargoSetupHook.overrideAttrs (old: {
-    cargoConfig = lib.optionalString (!stdenv.isDarwin) old.cargoConfig;
+    cargoConfig = lib.optionalString (!stdenv.hostPlatform.isDarwin) old.cargoConfig;
   });
 
   src = fetchFromGitHub {
@@ -83,7 +83,7 @@ let
       substituteInPlace build-tar.py \
         --replace-fail 'run(yarn + ["--cwd", src_join(), "install", "--prefer-offline"])' 'pass'
 
-      ${python3Packages.python}/bin/python3 build-tar.py \
+      ${python311Packages.python}/bin/python3 build-tar.py \
         --output isl-dist.tar.xz \
         --yarn 'yarn --offline --frozen-lockfile --ignore-engines --ignore-scripts --no-progress'
 
@@ -101,7 +101,7 @@ let
   };
 in
 # Builds the main `sl` binary and its Python extensions
-python3Packages.buildPythonApplication {
+python311Packages.buildPythonApplication {
   pname = "sapling";
   inherit src version;
 
@@ -141,7 +141,7 @@ python3Packages.buildPythonApplication {
     install ${isl}/isl-dist.tar.xz $out/lib/isl-dist.tar.xz
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/sl \
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
   '';
@@ -156,7 +156,7 @@ python3Packages.buildPythonApplication {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     libiconv
     Cocoa

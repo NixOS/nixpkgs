@@ -2,21 +2,20 @@
   bats,
   fetchFromGitHub,
   lib,
-  packcc,
   python3,
   stdenv,
   testers,
   uncrustify,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "packcc";
   version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "arithy";
     repo = "packcc";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-k1C/thvr/5fYrgu/j8YN3kwXp4k26sC9AhYhYAKQuX0=";
   };
 
@@ -61,7 +60,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = packcc; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     description = "Parser generator for C";
@@ -72,10 +71,10 @@ stdenv.mkDerivation rec {
       - Supports direct and indirect left-recursive grammar rules.
     '';
     homepage = "https://github.com/arithy/packcc";
-    changelog = "https://github.com/arithy/packcc/releases/tag/${src.rev}";
+    changelog = "https://github.com/arithy/packcc/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ azahi ];
     platforms = platforms.unix;
     mainProgram = "packcc";
   };
-}
+})

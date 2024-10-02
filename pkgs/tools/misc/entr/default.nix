@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "5.6";
 
   src = fetchurl {
-    url = "https://eradman.com/entrproject/code/${pname}-${version}.tar.gz";
+    url = "https://eradman.com/entrproject/code/entr-${version}.tar.gz";
     hash = "sha256-AiK435KNO1o7UZTWPn3gmFM+BBkNnZoVS5JsbB+d0U4=";
   };
 

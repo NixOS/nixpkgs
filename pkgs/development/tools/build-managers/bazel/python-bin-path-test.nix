@@ -65,7 +65,7 @@ let
     cp ${pythonBin} $out/python/bin.py
     cp ${pythonBUILD} $out/python/BUILD.bazel
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

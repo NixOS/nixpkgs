@@ -4,7 +4,7 @@
 , autoreconfHook
 , doxygen
 , pkg-config
-, enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableUdev ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic
 , udev
 , libobjc
 , IOKit
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withDocs [ doxygen ];
   propagatedBuildInputs =
     lib.optional enableUdev udev ++
-    lib.optionals stdenv.isDarwin [ libobjc IOKit Security ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit Security ];
 
   dontDisableStatic = withStatic;
 

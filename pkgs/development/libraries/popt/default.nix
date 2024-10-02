@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
 
-  patches = lib.optionals stdenv.isCygwin [
+  patches = lib.optionals stdenv.hostPlatform.isCygwin [
     ./1.16-cygwin.patch
     ./1.16-vpath.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [

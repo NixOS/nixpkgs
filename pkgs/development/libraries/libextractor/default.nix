@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch2, substituteAll
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, pkg-config
-, rpmSupport ? stdenv.isLinux, rpm
+, rpmSupport ? stdenv.hostPlatform.isLinux, rpm
 , gstreamerSupport ? true, gst_all_1
 # ^ Needed e.g. for proper id3 and FLAC support.
 #   Set to `false` to decrease package closure size by about 87 MB (53%).
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   # Checks need to be run after "make install", otherwise plug-ins are not in
   # the search path, etc.
   doCheck = false;
-  doInstallCheck = !stdenv.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   installCheckPhase = "make check";
 
   meta = with lib; {

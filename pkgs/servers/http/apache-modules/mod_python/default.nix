@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     apacheHttpd
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libintl
   ];
 

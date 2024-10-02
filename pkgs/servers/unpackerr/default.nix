@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-wWIw0gNn5tqRq0udzPy/n2OkiIVESpSotOSn2YlBNS4=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa WebKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa WebKit ];
 
   ldflags = [ "-s" "-w" "-X golift.io/version.Version=${version}" ];
 

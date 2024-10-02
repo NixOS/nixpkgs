@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ord";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
     rev = version;
-    hash = "sha256-psZ0NrCjRuRepatEcEMSVbw8JHD5Nh/vUXSxiGqDyfg=";
+    hash = "sha256-qTTAViVZEw4XgYADoonsVZPulp43lFFkX2xE5OFbL3s=";
   };
 
-  cargoHash = "sha256-gxIQZm5uZqdJ1ou6lghinj4Roi/L5HHb+d+i0t5HdaU=";
+  cargoHash = "sha256-QSeAAaT1LbcWLmML8i2sgRtTnimZfKgLq6qhnpQr8cc=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];

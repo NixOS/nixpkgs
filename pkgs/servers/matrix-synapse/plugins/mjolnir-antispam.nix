@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matrix-org/mjolnir/blob/main/docs/synapse_module.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ jojosch ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

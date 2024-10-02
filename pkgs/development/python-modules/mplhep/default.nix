@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "mplhep";
-  version = "0.3.51";
+  version = "0.3.52";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "mplhep";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5uXqBifJNWznXX4l5G79DLvD6VdD8xRBwZJbzp1+HP8=";
+    hash = "sha256-fcc/DG4irTvAOjCGAW7hW96z0yJNSvcpanfDGN9H9XI=";
   };
 
   build-system = [

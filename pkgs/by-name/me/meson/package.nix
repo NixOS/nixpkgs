@@ -108,7 +108,7 @@ python3.pkgs.buildPythonApplication rec {
   checkInputs = [
     zlib
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     Foundation
@@ -116,7 +116,7 @@ python3.pkgs.buildPythonApplication rec {
     OpenAL
     OpenGL
     openldap
-  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
     # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
     llvmPackages.openmp
     # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
@@ -144,10 +144,10 @@ python3.pkgs.buildPythonApplication rec {
     ''test cases/linuxlike/14 static dynamic linkage''
     # Nixpkgs cctools does not have bitcode support.
     ''test cases/osx/7 bitcode''
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires llvmPackages.openmp, creating cyclic dependency
     ''test cases/common/184 openmp''
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     # pch doesn't work quite right on FreeBSD, I think
     ''test cases/common/13 pch''
   ]))

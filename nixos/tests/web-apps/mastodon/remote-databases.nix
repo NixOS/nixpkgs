@@ -10,6 +10,9 @@ let
     192.168.2.103 mastodon.local
   '';
 
+  postgresqlPassword = "thisisnotasecret";
+  redisPassword = "thisisnotasecrettoo";
+
 in
 {
   name = "mastodon-remote-postgresql";
@@ -19,9 +22,7 @@ in
     databases = { config, ... }: {
       environment = {
         etc = {
-          "redis/password-redis-db".text = ''
-            ogjhJL8ynrP7MazjYOF6
-          '';
+          "redis/password-redis-db".text = redisPassword;
         };
       };
       networking = {
@@ -46,16 +47,19 @@ in
 
       services.postgresql = {
         enable = true;
-        # TODO remove once https://github.com/NixOS/nixpkgs/pull/266270 is resolved.
-        package = pkgs.postgresql_14;
         enableTCPIP = true;
         authentication = ''
-          hostnossl mastodon_local mastodon_test 192.168.2.201/32 md5
+          hostnossl mastodon mastodon 192.168.2.201/32 md5
         '';
+        ensureDatabases = [ "mastodon" ];
+        ensureUsers = [
+          {
+            name = "mastodon";
+            ensureDBOwnership = true;
+          }
+        ];
         initialScript = pkgs.writeText "postgresql_init.sql" ''
-          CREATE ROLE mastodon_test LOGIN PASSWORD 'SoDTZcISc3f1M1LJsRLT';
-          CREATE DATABASE mastodon_local TEMPLATE template0 ENCODING UTF8;
-          GRANT ALL PRIVILEGES ON DATABASE mastodon_local TO mastodon_test;
+          CREATE ROLE mastodon LOGIN PASSWORD '${postgresqlPassword}';
         '';
       };
     };
@@ -100,12 +104,8 @@ in
 
       environment = {
         etc = {
-          "mastodon/password-redis-db".text = ''
-            ogjhJL8ynrP7MazjYOF6
-          '';
-          "mastodon/password-posgressql-db".text = ''
-            SoDTZcISc3f1M1LJsRLT
-          '';
+          "mastodon/password-redis-db".text = redisPassword;
+          "mastodon/password-posgressql-db".text = postgresqlPassword;
         };
       };
 
@@ -138,8 +138,8 @@ in
           createLocally = false;
           host = "192.168.2.102";
           port = 5432;
-          name = "mastodon_local";
-          user = "mastodon_test";
+          name = "mastodon";
+          user = "mastodon";
           passwordFile = "/etc/mastodon/password-posgressql-db";
         };
         smtp = {

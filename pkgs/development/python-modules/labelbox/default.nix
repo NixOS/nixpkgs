@@ -4,20 +4,24 @@
   fetchFromGitHub,
   geojson,
   google-api-core,
+  hatchling,
   imagesize,
+  mypy,
   nbconvert,
   nbformat,
   numpy,
   opencv4,
-  packaging,
   pillow,
   pydantic,
   pyproj,
+  pytest-cov-stub,
+  pytest-order,
+  pytest-rerunfailures,
+  pytest-xdist,
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
   requests,
-  setuptools,
   shapely,
   strenum,
   tqdm,
@@ -27,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "3.72.2";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,22 +40,16 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-gor1LFT/XrWxWPwGn8lOkF46p/yrRILZp6fpeV+xvto=";
+    hash = "sha256-jIbSKT/jRWVyN2LH6Ih0VFc5QKICR7cYONzGpZ9bJvM=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail "--reruns 2 --reruns-delay 10 --durations=20 -n 10" ""
-
-    # disable pytest_plugins which requires `pygeotile`
-    substituteInPlace tests/conftest.py \
-      --replace-fail "pytest_plugins" "_pytest_plugins"
-  '';
-
+  sourceRoot = "${src.name}/libs/labelbox";
 
   pythonRelaxDeps = [ "python-dateutil" ];
 
-  build-system = [ setuptools ];
+  pythonRemoveDeps = [ "opencv-python-headless" ];
+
+  build-system = [ hatchling ];
 
   dependencies = [
     google-api-core
@@ -60,12 +58,13 @@ buildPythonPackage rec {
     requests
     strenum
     tqdm
+    geojson
+    mypy
   ];
 
   optional-dependencies = {
     data = [
       shapely
-      geojson
       numpy
       pillow
       opencv4
@@ -74,13 +73,16 @@ buildPythonPackage rec {
       pyproj
       # pygeotile
       typing-extensions
-      packaging
     ];
   };
 
   nativeCheckInputs = [
     nbconvert
     nbformat
+    pytest-cov-stub
+    pytest-order
+    pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ] ++ optional-dependencies.data;
 
@@ -89,6 +91,7 @@ buildPythonPackage rec {
     "tests/integration"
     # Missing requirements
     "tests/data"
+    "tests/unit/test_label_data_type.py"
   ];
 
   pythonImportsCheck = [ "labelbox" ];
@@ -96,7 +99,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
-    changelog = "https://github.com/Labelbox/labelbox-python/blob/v.${version}/CHANGELOG.md";
+    changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ rakesh4g ];
   };

@@ -45,6 +45,7 @@ lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-pcre,,,,,,vyp
 lrexlib-posix,,,,,,
+lsp-progress.nvim,,,,,,gepbird
 lua-cjson,,,,,,
 lua-cmsgpack,,,,,,
 lua-curl,,,,,,
@@ -104,6 +105,8 @@ luv,,,,1.48.0-2,,
 lush.nvim,,,https://luarocks.org/dev,,,teto
 lyaml,,,,,,lblasc
 lz.n,,,,,,mrcjkb
+lze,,,,,,birdee
+lzn-auto-require,,,,,,mrcjkb
 magick,,,,,5.1,donovanglover
 markdown,,,,,,
 mediator_lua,,,,,,
@@ -111,6 +114,7 @@ middleclass,,,,,,
 mimetypes,,,,,,
 mpack,,,,,,
 moonscript,https://raw.githubusercontent.com/leafo/moonscript/master/moonscript-dev-1.rockspec,,,,,arobyn
+neorg,,,,,,GaetanLepage
 neotest,,,,,,mrcjkb
 nlua,,,,,,teto
 nui.nvim,,,,,,mrcjkb

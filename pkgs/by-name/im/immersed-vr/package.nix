@@ -31,6 +31,6 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 
-in if stdenv.isDarwin
+in if stdenv.hostPlatform.isDarwin
 then callPackage ./darwin.nix { inherit pname version src meta; }
 else callPackage ./linux.nix { inherit pname version src meta; }

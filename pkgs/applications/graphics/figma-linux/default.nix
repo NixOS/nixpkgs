@@ -8,7 +8,6 @@
 , wrapGAppsHook3
 , ...
 }:
-with lib;
 stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
   version = "0.11.4";
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
           --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${finalAttrs.pname}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];

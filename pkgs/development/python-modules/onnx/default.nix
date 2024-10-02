@@ -123,7 +123,7 @@ buildPythonPackage rec {
       "test_vgg19_cpu"
       "test_zfnet512_cpu"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # AssertionError: Output 0 of test 0 in folder
       "test__pytorch_converted_Conv2d_depthwise_padded"
       "test__pytorch_converted_Conv2d_dilated"

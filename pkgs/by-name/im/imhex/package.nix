@@ -25,15 +25,15 @@
 }:
 
 let
-  version = "1.35.3";
-  patterns_version = "1.35.3";
+  version = "1.35.4";
+  patterns_version = "1.35.4";
 
   patterns_src = fetchFromGitHub {
     name = "ImHex-Patterns-source-${patterns_version}";
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-h86qoFMSP9ehsXJXOccUK9Mfqe+DVObfSRT4TCtK0rY=";
+    hash = "sha256-7ch2KXkbkdRAvo3HyErWcth3kG4bzYvp9I5GZSsb/BQ=";
   };
 
 in
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = "ImHex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8vhOOHfg4D9B9yYgnGZBpcjAjuL4M4oHHax9ad5PJtA=";
+    hash = "sha256-6QpmFkSMQpGlEzo7BHZn20c+q8CTDUB4yO87wMU5JT4=";
   };
 
   nativeBuildInputs = [

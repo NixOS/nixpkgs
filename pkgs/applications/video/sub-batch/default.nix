@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kl/sub-batch";
     license = licenses.mit;
     maintainers = with maintainers; [ erictapen ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sub-batch";
   };
 }

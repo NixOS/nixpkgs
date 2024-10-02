@@ -12,11 +12,11 @@ buildGoModule rec {
   };
 
   # clipboard functionality not working on Darwin
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
 
   vendorHash = null;
 

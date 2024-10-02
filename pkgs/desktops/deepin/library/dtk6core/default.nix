@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, lshw
-, libuchardet
-, dtkcommon
-, dtk6log
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  lshw,
+  libuchardet,
+  dtkcommon,
+  dtk6log,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6core";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
     rev = finalAttrs.version;
-    hash = "sha256-zyhqkxxWB5U37eBxINNxcbnF5NpImg+E7H1VhfJDz60=";
+    hash = "sha256-3MwvTnjtVVcMjQa1f4UdagEtWhJj8aDgfUlmnGo/R7s=";
   };
 
   patches = [
@@ -48,7 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
   ];
 
-  propagatedBuildInputs = [ dtkcommon dtk6log ];
+  propagatedBuildInputs = [
+    dtkcommon
+    dtk6log
+  ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -66,7 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DCore/bin/*; do

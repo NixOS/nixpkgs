@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-P+qez0oVsHBiaBYban2o8MRvF8ElLf5zb+p+tYunWWA=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   buildFeatures = [ "cli" ];
 

@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   buildFlags = [ "lib" "predict" "train" ];
 
   installPhase = ''
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
       install -D liblinear.so.${soVersion} $out/lib/liblinear.${soVersion}.dylib
       ln -s $out/lib/liblinear.${soVersion}.dylib $out/lib/liblinear.dylib
     '' else ''

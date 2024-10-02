@@ -55,7 +55,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Gigalixir Command-Line Interface";
     homepage = "https://github.com/gigalixir/gigalixir-cli";
     license = licenses.mit;

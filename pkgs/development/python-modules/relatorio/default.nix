@@ -28,7 +28,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     chart = [
       # pycha
       pyyaml
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     fodt = [ python-magic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.fodt;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.fodt;
 
   pythonImportsCheck = [ "relatorio" ];
 

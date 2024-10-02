@@ -81,7 +81,7 @@ mkDerivation rec {
     homepage = "https://bitcoinabc.org/";
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
     mainProgram = "bitcoin-cli";
   };

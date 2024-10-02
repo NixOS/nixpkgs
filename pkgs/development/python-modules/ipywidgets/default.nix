@@ -2,14 +2,13 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
-  wheel,
   comm,
   ipykernel,
   ipython,
   jsonschema,
   jupyterlab-widgets,
   lib,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytz,
   traitlets,
   widgetsnbextension,
@@ -17,20 +16,17 @@
 
 buildPythonPackage rec {
   pname = "ipywidgets";
-  version = "8.1.3";
+  version = "8.1.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9fnuquCCsYI86erCV1JylS9A10iJOXKVbcCXAKY5LZw=";
+    hash = "sha256-hw5DsaNWVqgMGMlQO78tFoAtsctIfuxvqyfWgzgd3hc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     comm
     ipython
     jupyterlab-widgets
@@ -41,7 +37,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipykernel
     jsonschema
-    pytest7CheckHook
+    pytestCheckHook
     pytz
   ];
 

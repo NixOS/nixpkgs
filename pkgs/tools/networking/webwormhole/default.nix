@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "webwormhole";
-  version = "unstable-2023-02-25";
+  version = "0-unstable-2023-11-15";
 
   src = fetchFromGitHub {
     owner = "saljam";
     repo = pname;
-    rev = "25b68f4f4c1aaa0c6c1949b60bd4ef52ec972ebb";
-    hash = "sha256-JFmfwHBa/lNGTOIIgnMFc4VMlsXtjX9v9Tn2XpdVMfA=";
+    rev = "6ceee76274ee881e828bd48c5cc15c758b9ad77c";
+    hash = "sha256-C9r6wFhP5BkIClgTQol7LyMUHXOzyrX9Pn91VqBaqFQ=";
   };
 
   vendorHash = "sha256-+7ctAm2wnjmfMd6CHXlcAUwiUMS7cH4koDAvlEUAXEg=";

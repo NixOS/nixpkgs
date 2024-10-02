@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   version = "46.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/sushi/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/sushi/${lib.versions.major version}/sushi-${version}.tar.xz";
     hash = "sha256-lghbqqQwqyFCxgaqtcR+L7sv0+two1ITfmXFmlig8sY=";
   };
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://en.wikipedia.org/wiki/Sushi_(software)";
+    homepage = "https://gitlab.gnome.org/GNOME/sushi";
     description = "Quick previewer for Nautilus";
     mainProgram = "sushi";
     maintainers = teams.gnome.members;

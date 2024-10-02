@@ -46,6 +46,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ julienmalka ];
     # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

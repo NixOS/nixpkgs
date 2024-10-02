@@ -1,7 +1,8 @@
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../../.. { inherit system config; }
-, kernelVersionsToTest ? [ "5.4" "latest" ]
+  # Test current default (LTS) and latest kernel
+, kernelVersionsToTest ? [ (pkgs.lib.versions.majorMinor pkgs.linuxPackages.kernel.version) "latest" ]
 }:
 
 with pkgs.lib;

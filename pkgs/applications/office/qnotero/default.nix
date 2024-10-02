@@ -47,7 +47,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://www.cogsci.nl/software/qnotero";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin; # Build fails even after adding cx-freeze to `buildInputs`
+    broken = stdenv.hostPlatform.isDarwin; # Build fails even after adding cx-freeze to `buildInputs`
     maintainers = [ lib.maintainers.nico202 ];
   };
 }

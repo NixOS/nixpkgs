@@ -6,7 +6,7 @@
 , perl
 , openssl
 , zlib
-, ffmpeg_4
+, ffmpeg_7
 , libvpx
 , libopus
 , libuuid
@@ -27,14 +27,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-f0kZTOI2XzhnXwWLJzWqUJmz3d7c9wGN/D5LC0nY/08=";
   };
 
-  sourceRoot = "${src.name}/src";
+  patches = [
+    # ffmpeg 7.0 Update: Use new channel layout
+    # https://github.com/AirenSoft/OvenMediaEngine/pull/1626
+    ./support-ffmpeg-7.patch
+  ];
+
   makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ bc pkg-config perl ];
-  buildInputs = [ openssl srt zlib ffmpeg_4 libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
+  buildInputs = [ openssl srt zlib ffmpeg_7 libvpx libopus srtp jemalloc pcre2 libuuid hiredis ];
 
   preBuild = ''
+    cd src
+
     patchShebangs core/colorg++
     patchShebangs core/colorgcc
     patchShebangs projects/main/update_git_info.sh

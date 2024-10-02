@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ad-miner";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mazars-Tech";
     repo = "AD_Miner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Xb0RFllg3oqW6PhUjRxDkgXd7lv7XD37FfBsnpxrN+s=";
+    hash = "sha256-kWIareupm0r48HGnESk5S/0IEKjDfHtXWi64ehjdAQ4=";
   };
 
   # All requirements are pinned

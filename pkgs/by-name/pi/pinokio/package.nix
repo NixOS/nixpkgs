@@ -31,7 +31,7 @@ let
   };
 in
 
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation
   {
     inherit pname version src meta;

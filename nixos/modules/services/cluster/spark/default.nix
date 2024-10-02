@@ -2,20 +2,19 @@
 let
   cfg = config.services.spark;
 in
-with lib;
 {
   options = {
     services.spark = {
       master = {
-        enable = mkEnableOption "Spark master service";
-        bind = mkOption {
-          type = types.str;
+        enable = lib.mkEnableOption "Spark master service";
+        bind = lib.mkOption {
+          type = lib.types.str;
           description = "Address the spark master binds to.";
           default = "127.0.0.1";
           example = "0.0.0.0";
         };
-        restartIfChanged  = mkOption {
-          type = types.bool;
+        restartIfChanged  = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             Automatically restart master service on config change.
             This can be set to false to defer restarts on clusters running critical applications.
@@ -24,8 +23,8 @@ with lib;
           '';
           default = true;
         };
-        extraEnvironment = mkOption {
-          type = types.attrsOf types.str;
+        extraEnvironment = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           description = "Extra environment variables to pass to spark master. See spark-standalone documentation.";
           default = {};
           example = {
@@ -35,19 +34,19 @@ with lib;
         };
       };
       worker = {
-        enable = mkEnableOption "Spark worker service";
-        workDir = mkOption {
-          type = types.path;
+        enable = lib.mkEnableOption "Spark worker service";
+        workDir = lib.mkOption {
+          type = lib.types.path;
           description = "Spark worker work dir.";
           default = "/var/lib/spark";
         };
-        master = mkOption {
-          type = types.str;
+        master = lib.mkOption {
+          type = lib.types.str;
           description = "Address of the spark master.";
           default = "127.0.0.1:7077";
         };
-        restartIfChanged  = mkOption {
-          type = types.bool;
+        restartIfChanged  = lib.mkOption {
+          type = lib.types.bool;
           description = ''
             Automatically restart worker service on config change.
             This can be set to false to defer restarts on clusters running critical applications.
@@ -56,8 +55,8 @@ with lib;
           '';
           default = true;
         };
-        extraEnvironment = mkOption {
-          type = types.attrsOf types.str;
+        extraEnvironment = lib.mkOption {
+          type = lib.types.attrsOf lib.types.str;
           description = "Extra environment variables to pass to spark worker.";
           default = {};
           example = {
@@ -66,18 +65,18 @@ with lib;
           };
         };
       };
-      confDir = mkOption {
-        type = types.path;
+      confDir = lib.mkOption {
+        type = lib.types.path;
         description = "Spark configuration directory. Spark will use the configuration files (spark-defaults.conf, spark-env.sh, log4j.properties, etc) from this directory.";
         default = "${cfg.package}/conf";
-        defaultText = literalExpression ''"''${package}/conf"'';
+        defaultText = lib.literalExpression ''"''${package}/conf"'';
       };
-      logDir = mkOption {
-        type = types.path;
+      logDir = lib.mkOption {
+        type = lib.types.path;
         description = "Spark log directory.";
         default = "/var/log/spark";
       };
-      package = mkPackageOption pkgs "spark" {
+      package = lib.mkPackageOption pkgs "spark" {
         example = ''
           spark.overrideAttrs (super: rec {
             pname = "spark";

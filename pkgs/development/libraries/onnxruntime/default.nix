@@ -149,7 +149,7 @@ effectiveStdenv.mkDerivation rec {
     numpy
     pybind11
     packaging
-  ]) ++ lib.optionals effectiveStdenv.isDarwin [
+  ]) ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     Foundation
     libiconv
   ] ++ lib.optionals cudaSupport (with cudaPackages; [

@@ -16,11 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Zkw+NfeVtIArrBxR1qR9bAQe5yd7mAtNiT0x5Mqr3Ic=";
   };
 
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov" ""
-  '';
-
   build-system = with python3.pkgs; [ setuptools ];
 
   dependencies =
@@ -35,7 +30,10 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ publicsuffixlist.optional-dependencies.update;
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "trustymail" ];
 

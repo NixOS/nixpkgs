@@ -19,10 +19,10 @@ stdenv.mkDerivation {
     [ autoreconfHook ]
     ++ lib.optional withReadline readline;
   enableParallelBuilding = true;
-  configureFlags = with lib;
-    optional (!withReadline) "--without-readline"
-    ++ optional enableEmu "--enable-emu"
-    ++ optional enableSpy "--enable-spy";
+  configureFlags =
+    lib.optional (!withReadline) "--without-readline"
+    ++ lib.optional enableEmu "--enable-emu"
+    ++ lib.optional enableSpy "--enable-spy";
 
   meta = with lib; {
     description = "Netgear switch (NSDP) administration tool";

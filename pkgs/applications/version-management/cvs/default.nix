@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
 
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.cc.isClang) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 

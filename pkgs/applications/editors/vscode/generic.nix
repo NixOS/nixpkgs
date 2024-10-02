@@ -157,17 +157,18 @@ in
   ];
 
   buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-    ++ lib.optionals (!stdenv.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];
 
-  runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland libsecret ];
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland libsecret ];
 
   nativeBuildInputs = [ unzip ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
     asar
     copyDesktopItems
     # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-    (buildPackages.wrapGAppsHook3.override { inherit (buildPackages) makeWrapper; })
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   dontBuild = true;
@@ -176,7 +177,7 @@ in
 
   installPhase = ''
     runHook preInstall
-  '' + (if stdenv.isDarwin then ''
+  '' + (if stdenv.hostPlatform.isDarwin then ''
     mkdir -p "$out/Applications/${longName}.app" "$out/bin"
     cp -r ./* "$out/Applications/${longName}.app"
     ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
@@ -205,7 +206,7 @@ in
   preFixup = ''
     gappsWrapperArgs+=(
         ${ # we cannot use runtimeDependencies otherwise libdbusmenu do not work on kde
-          lib.optionalString stdenv.isLinux
+          lib.optionalString stdenv.hostPlatform.isLinux
           "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"}
       # Add gio to PATH so that moving files to the trash works when not using a desktop environment
       --prefix PATH : ${glib.bin}/bin
@@ -216,7 +217,7 @@ in
 
   # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
   # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     # this is a fix for "save as root" functionality
     packed="resources/app/node_modules.asar"
     unpacked="resources/app/node_modules"
@@ -234,7 +235,7 @@ in
   '' + (
     let
       vscodeRipgrep =
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
         else
           "resources/app/node_modules/@vscode/ripgrep/bin/rg";
@@ -247,7 +248,7 @@ in
     ''
   );
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --add-needed ${libglvnd}/lib/libGLESv2.so.2 \
       --add-needed ${libglvnd}/lib/libGL.so.1 \

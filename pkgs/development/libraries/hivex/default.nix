@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     libxml2
   ]
   ++ (with perlPackages; [ perl IOStringy ])
-  ++ lib.optionals stdenv.isDarwin [ libintl ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
   enableParallelBuilding = true;
 

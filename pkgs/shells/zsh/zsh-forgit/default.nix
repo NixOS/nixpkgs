@@ -1,32 +1,33 @@
-{ stdenv
+{ stdenvNoCC
 , lib
 , bash
 , coreutils
 , findutils
 , fetchFromGitHub
 , fzf
+, gawk
 , git
 , gnugrep
 , gnused
 , makeWrapper
 }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-forgit";
-  version = "24.02.0";
+  version = "24.09.0";
 
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = version;
-    sha256 = "sha256-DoOtrnEJwSxkCZtsVek+3w9RZH7j7LTvdleBC88xyfI=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-8QgnEu41BHeX6heP2slQT+X+Dti+7Ij+J2zqmU4dm3I=";
   };
 
   strictDeps = true;
 
   postPatch = ''
     substituteInPlace forgit.plugin.zsh \
-      --replace "\$INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
+      --replace-fail "\$FORGIT_INSTALL_DIR/bin/git-forgit" "$out/bin/git-forgit"
   '';
 
   dontBuild = true;
@@ -38,10 +39,9 @@ stdenv.mkDerivation rec {
 
     install -D bin/git-forgit $out/bin/git-forgit
     install -D completions/_git-forgit $out/share/zsh/site-functions/_git-forgit
-    install -D completions/git-forgit.zsh $out/share/zsh/${pname}/git-forgit.zsh
-    install -D forgit.plugin.zsh $out/share/zsh/${pname}/forgit.plugin.zsh
+    install -D forgit.plugin.zsh $out/share/zsh/${finalAttrs.pname}/forgit.plugin.zsh
     wrapProgram $out/bin/git-forgit \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils findutils fzf git gnugrep gnused ]}
+      --prefix PATH : ${lib.makeBinPath [ bash coreutils findutils fzf gawk git gnugrep gnused ]}
 
     runHook postInstall
   '';
@@ -54,4 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ deejayem ];
     platforms = platforms.all;
   };
-}
+})

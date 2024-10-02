@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -95,6 +95,10 @@ rustPlatform.buildRustPackage rec {
       "whichlang-0.1.0" = "sha256-7AvLGjtWHjG0TnZdg9p5D+O0H19uo2sqPxJMn6mOU0k=";
     };
   };
+
+  cargoPatches =[
+    ./update-time-for-rust-1.80.patch
+  ];
 
   CARGO_PROFILE_RELEASE_LTO = "fat";
   CARGO_PROFILE_RELEASE_CODEGEN_UNITS = "1";

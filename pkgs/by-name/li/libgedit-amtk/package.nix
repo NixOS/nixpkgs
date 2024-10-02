@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitLab
 , glib
 , gtk3
 , meson
@@ -17,15 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-amtk";
-  version = "5.8.0";
+  version = "5.9.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchFromGitHub {
-    owner = "gedit-technology";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
     repo = "libgedit-amtk";
     rev = version;
-    hash = "sha256-U77/KMZw9k9ukebCXVXAsCa4uJaTgw9irfZ/l0303kk=";
+    hash = "sha256-D6jZmadUHDtxedw/tCsKHzcWXobs6Vb7dyhbVKqu2Zc=";
   };
 
   strictDeps = true;
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     dbus # For dbus-run-session
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
 
@@ -62,12 +64,10 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = gitUpdater {
-    odd-unstable = true;
-  };
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    homepage = "https://github.com/gedit-technology/libgedit-amtk";
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl21Plus;

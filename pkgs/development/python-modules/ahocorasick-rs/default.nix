@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   rustPlatform,
-  typing-extensions,
   pytestCheckHook,
   pyahocorasick,
   hypothesis,
@@ -19,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "ahocorasick_rs";
-    sha256 = "sha256-lzRwODlJlymMSih3CqNIeR+HrUbgVhroM1JuHFfW848=";
+    hash = "sha256-lzRwODlJlymMSih3CqNIeR+HrUbgVhroM1JuHFfW848=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     maturinBuildHook
     cargoSetupHook
-    typing-extensions
   ];
 
   nativeCheckInputs = [
@@ -46,6 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast Aho-Corasick algorithm for Python";
     homepage = "https://github.com/G-Research/ahocorasick_rs/";
+    changelog = "https://github.com/G-Research/ahocorasick_rs/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ erictapen ];
   };

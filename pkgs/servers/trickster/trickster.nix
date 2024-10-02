@@ -2,6 +2,7 @@
 , buildGoModule
 , fetchFromGitHub
 , go
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -20,9 +21,9 @@ buildGoModule rec {
 
   subPackages = [ "cmd/trickster" ];
 
-  ldflags = with lib;
+  ldflags =
     [ "-extldflags '-static'" "-s" "-w" ] ++
-    (mapAttrsToList (n: v: "-X main.application${n}=${v}") {
+    (lib.mapAttrsToList (n: v: "-X main.application${n}=${v}") {
       BuildTime = "1970-01-01T00:00:00+0000";
       GitCommitID = rev;
       GoVersion = "go${go.version}}";
@@ -31,6 +32,8 @@ buildGoModule rec {
 
   # Tests are broken.
   doCheck = false;
+
+  passthru.tests = { inherit (nixosTests) trickster; };
 
   meta = with lib; {
     description = "Reverse proxy cache and time series dashboard accelerator";

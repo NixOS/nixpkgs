@@ -28,6 +28,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/kvaps/kubectl-node-shell";
     license = licenses.asl20;
     maintainers = with maintainers; [ jocelynthode ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

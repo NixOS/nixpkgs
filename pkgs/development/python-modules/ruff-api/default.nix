@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ruff-api";
-  version = "0.0.7";
+  version = "0.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "amyreese";
     repo = "ruff-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wST5TfIcw5rezaL9ZygoK3RYsGA9wzfnC3aDdc3g4tU=";
+    hash = "sha256-BW/qXq4HemqxhvjIKrrn07eqGJwAbYei7e+I+oHxujU=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
     libiconv
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Experimental Python API for Ruff";
     homepage = "https://github.com/amyreese/ruff-api";
-    changelog = "https://github.com/amyreese/ruff-api/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/amyreese/ruff-api/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

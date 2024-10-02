@@ -205,7 +205,7 @@ stdenv.mkDerivation ({
 
   env = {
     linuxHeaders = lib.optionalString withLinuxHeaders linuxHeaders;
-    inherit (stdenv) is64bit;
+    inherit (stdenv.hostPlatform) is64bit;
     # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to
     # prevent a retained dependency on the bootstrap tools in the stdenv-linux
     # bootstrap.
@@ -294,7 +294,7 @@ stdenv.mkDerivation ({
 
     license = licenses.lgpl2Plus;
 
-    maintainers = with maintainers; [ eelco ma27 connorbaker ];
+    maintainers = with maintainers; [ ma27 connorbaker ];
     platforms = platforms.linux;
   } // (args.meta or {});
 })

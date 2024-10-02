@@ -8,8 +8,9 @@
 , libXi
 , libXext
 , OpenGL
-, enableEGL ? (!stdenv.isDarwin)
+, enableEGL ? (!stdenv.hostPlatform.isDarwin)
 , testers
+, mesa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,8 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libXmu libXi libXext ];
-  propagatedBuildInputs = if stdenv.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libXmu libXi libXext ];
+  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
   cmakeFlags = [
@@ -74,8 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "glew" ];
     platforms = with platforms;
       if enableEGL then
-        subtractLists darwin mesaPlatforms
+        subtractLists darwin mesa.meta.platforms
       else
-        mesaPlatforms;
+        mesa.meta.platforms;
   };
 })

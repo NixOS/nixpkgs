@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ blasfeo ]
     ++ lib.optionals pythonSupport [ python3Packages.pybind11 ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages.openmp ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_DOCS" true)

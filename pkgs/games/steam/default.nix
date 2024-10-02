@@ -1,5 +1,5 @@
 { makeScopeWithSplicing', generateSplicesForMkScope
-, stdenv, buildFHSEnv, pkgsi686Linux, glxinfo
+, stdenv, buildFHSEnv, pkgsi686Linux, mesa-demos
 }:
 
 let
@@ -14,10 +14,10 @@ let
     steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
     steam-fhsenv = callPackage ./fhsenv.nix {
-      glxinfo-i686 =
+      mesa-demos-i686 =
         if self.steamArch == "amd64"
-        then pkgsi686Linux.glxinfo
-        else glxinfo;
+        then pkgsi686Linux.mesa-demos
+        else mesa-demos;
       steam-runtime-wrapped-i686 =
         if self.steamArch == "amd64"
         then pkgsi686Linux.steamPackages.steam-runtime-wrapped

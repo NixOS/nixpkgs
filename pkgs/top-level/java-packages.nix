@@ -13,7 +13,7 @@ in {
 
   compiler = let
     mkOpenjdk = path-linux: path-darwin: args:
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then mkOpenjdkLinuxOnly path-linux args
       else let
         openjdk = callPackage path-darwin {};
@@ -21,7 +21,7 @@ in {
 
     mkOpenjdkLinuxOnly = path-linux: args: let
       openjdk = callPackage path-linux (args);
-    in assert stdenv.isLinux; openjdk // {
+    in assert stdenv.hostPlatform.isLinux; openjdk // {
       headless = openjdk.override { headless = true; };
     };
 
@@ -71,13 +71,13 @@ in {
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then ../development/compilers/temurin-bin/jdk-linux.nix
       else ../development/compilers/temurin-bin/jdk-darwin.nix
     ) {});
 
     semeru-bin = recurseIntoAttrs (callPackage (
-      if stdenv.isLinux
+      if stdenv.hostPlatform.isLinux
       then ../development/compilers/semeru-bin/jdk-linux.nix
       else ../development/compilers/semeru-bin/jdk-darwin.nix
     ) {});

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, makeWrapper
 , haskellPackages, haskell
-, which, swiProlog, rlwrap, tk
+, which, swi-prolog, rlwrap, tk
 , curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
@@ -26,7 +26,7 @@ let
 in stdenv.mkDerivation {
   inherit pname version src;
 
-  buildInputs = [ swiProlog ];
+  buildInputs = [ swi-prolog ];
   nativeBuildInputs = [ which makeWrapper ];
 
   makeFlags = [

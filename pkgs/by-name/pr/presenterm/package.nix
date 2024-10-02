@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   # Crashes at runtime on darwin with:
   # Library not loaded: .../out/lib/libsixel.1.dylib
-  buildFeatures = lib.optionals (!stdenv.isDarwin) [ "sixel" ];
+  buildFeatures = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "sixel" ];
 
   passthru = {
     updateScript = nix-update-script { };

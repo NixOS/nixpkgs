@@ -37,7 +37,7 @@ symlinkJoin rec {
     wrapGAppsHook3
   ];
 
-  runtimeDependencies = lib.optionalString stdenv.isLinux (lib.makeLibraryPath [
+  runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (lib.makeLibraryPath [
     addDriverRunpath.driverLink
     flite # narrator support
 
@@ -57,7 +57,7 @@ symlinkJoin rec {
   postBuild = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}

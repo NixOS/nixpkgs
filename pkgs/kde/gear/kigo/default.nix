@@ -6,7 +6,7 @@
 mkKdeDerivation {
   pname = "kigo";
 
-  extraNativeBuildInputs = [_7zz];
-  extraBuildInputs = [qtsvg];
+  extraNativeBuildInputs = [ _7zz ];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kigo";
 }

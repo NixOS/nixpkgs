@@ -107,7 +107,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   buildInputs = [
     ruby
-  ] ++ lib.optionals stdenv.isDarwin [ libobjc ]
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc ]
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";

@@ -13,16 +13,16 @@
 , makeWrapper
 , netperf
 , nixosTests
-, python3
+, python3Packages
 , stdenv
 , zip
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bcc";
   version = "0.31.0";
 
-  disabled = !stdenv.isLinux;
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
@@ -44,14 +44,14 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.netaddr ];
+  propagatedBuildInputs = [ python3Packages.netaddr ];
   nativeBuildInputs = [
     bison
     cmake
     flex
     llvmPackages.llvm.dev
     makeWrapper
-    python3.pkgs.setuptools
+    python3Packages.setuptools
     zip
   ];
 
@@ -82,7 +82,7 @@ python3.pkgs.buildPythonApplication rec {
 
   preInstall = ''
     # required for setuptool during install
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
   '';
   postInstall = ''
     mkdir -p $out/bin $out/share

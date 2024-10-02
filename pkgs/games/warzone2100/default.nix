@@ -46,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version  = "4.5.1";
+  version  = "4.5.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
-    hash = "sha256-+bOS0wJzTZN0bXp0KKL7OO4QWY6TYhZi1R5vJolBdDQ=";
+    hash = "sha256-7tSfLkVth9nbGSwn1uNWeFrHx5ac+jaO3Gk9Bb+hLIk=";
   };
 
   buildInputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     harfbuzz
     sqlite
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     vulkan-headers
     vulkan-loader
   ];
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     #
     # Alternatively, we could have set CMAKE_INSTALL_BINDIR to "bin".
     "-DCMAKE_INSTALL_DATAROOTDIR=${placeholder "out"}/share"
-  ] ++ lib.optional stdenv.isDarwin "-P../configure_mac.cmake";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "-P../configure_mac.cmake";
 
   postInstall = lib.optionalString withVideos ''
     cp ${sequences_src} $out/share/warzone2100/sequences.wz
@@ -141,6 +141,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

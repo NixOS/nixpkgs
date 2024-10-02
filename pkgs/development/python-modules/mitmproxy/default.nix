@@ -59,6 +59,7 @@ buildPythonPackage rec {
 
 
   pythonRelaxDeps = [
+    "protobuf"
     "urwid"
   ];
 
@@ -90,7 +91,7 @@ buildPythonPackage rec {
     urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis

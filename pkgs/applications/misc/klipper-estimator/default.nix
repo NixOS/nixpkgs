@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libgit2 Security SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libgit2 Security SystemConfiguration ];
 
   nativeBuildInputs = [ pkg-config ];
 

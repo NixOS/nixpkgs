@@ -17,13 +17,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
-  version = "0.5.3";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "bkryza";
     repo = "clang-uml";
     rev = finalAttrs.version;
-    hash = "sha256-ghnbOjVYw0zdFK/SDJ3sOObu6I7ROVNzYl1hovWju/Q=";
+    hash = "sha256-PEzTvwW/wUg8wgKjeNGbpgpP3SH2sVWRYc6o3gFjxx0=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     yaml-cpp
   ];
 
-  cmakeFlags = if debug then [ "-DCMAKE_BUILD_TYPE=Debug" ] else [ ];
+  cmakeBuildType = if debug then "Debug" else "Release";
 
   clang = if enableLibcxx then llvmPackages.libcxxClang else llvmPackages.clang;
 

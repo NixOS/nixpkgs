@@ -23,10 +23,10 @@ let
     maintainers = with maintainers; [ atila conradmearns zaninime qbit kashw2 w-lfchen ];
   };
 
-  filename = if stdenv.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
+  filename = if stdenv.hostPlatform.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash = if stdenv.isDarwin then "sha256-rFXmhlxXlVz5nCrXMmfYGaxe4/wnBRdFxsfiwiIDHgw=" else "sha256-ok1fedN8+OXBisFpVXbKRW2OhE4o9MC9lJmtMMST6V8=";
+    hash = if stdenv.hostPlatform.isDarwin then "sha256-rFXmhlxXlVz5nCrXMmfYGaxe4/wnBRdFxsfiwiIDHgw=" else "sha256-ok1fedN8+OXBisFpVXbKRW2OhE4o9MC9lJmtMMST6V8=";
   };
 
   icon = fetchurl {
@@ -89,4 +89,4 @@ let
     '';
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux
