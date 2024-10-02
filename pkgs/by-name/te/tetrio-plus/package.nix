@@ -18,14 +18,14 @@
 }:
 
 let
-  version = "0.27.2";
+  version = "0.27.4";
   rev = "electron-v${version}-tetrio-v${tetrio-desktop.version}";
 
   src = fetchFromGitLab {
     owner = "UniQMG";
     repo = "tetrio-plus";
     inherit rev;
-    hash = "sha256-pcT8/YsfHeimSkeNziW9ha63hEgCg2vnvJSZAY1c7P0=";
+    hash = "sha256-HwGFg8dxqtqghdP+PXWXr6Fi5vfgopThs+QNa3N1awk=";
     fetchSubmodules = true;
   };
 
@@ -41,7 +41,7 @@ let
 
     sourceRoot = "${src.name}/tpsecore";
 
-    cargoHash = "sha256-K9l8wQOtjf3l8gZMMdVnaNrgzVWGl62iBBcpA+ulJbw=";
+    cargoHash = "sha256-zqeoPeGZvSz7W3c7MXnvvq73hvavg1RGzPc3iTqAjBo=";
 
     nativeBuildInputs = [
       wasm-pack
