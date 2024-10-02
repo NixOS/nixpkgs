@@ -1,0 +1,15 @@
+diff --git a/tuna/tuna_gui.py b/tuna/tuna_gui.py
+index cefee4a..135290e 100755
+--- a/tuna/tuna_gui.py
++++ b/tuna/tuna_gui.py
+@@ -154,9 +154,7 @@ class main_gui:
+     def check_root(self):
+         if os.getuid() == 0:
+             return False
+-        self.binpath = sys.executable.strip(os.path.basename(sys.executable))
+-        os.execv(self.binpath + 'pkexec',
+-                 [sys.executable] + [self.binpath + 'tuna'] + sys.argv[1:])
++        os.execvp('pkexec', ['@tuna@'] + sys.argv[1:])
+         return True
+ 
+     def check_env(self):
