@@ -24924,8 +24924,6 @@ with pkgs;
     mir
     mir_2_15;
 
-  miriway = callPackage ../applications/window-managers/miriway { };
-
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 
   icinga2-agent = callPackage ../servers/monitoring/icinga2 {
