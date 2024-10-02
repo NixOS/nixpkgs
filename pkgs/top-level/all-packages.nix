@@ -19599,6 +19599,8 @@ with pkgs;
 
   ffms = callPackage ../development/libraries/ffms { };
 
+  ffpb = with python3Packages; toPythonApplication ffpb;
+
   fftw = callPackage ../development/libraries/fftw { };
   fftwSinglePrec = fftw.override { precision = "single"; };
   fftwFloat = fftwSinglePrec; # the configure option is just an alias
