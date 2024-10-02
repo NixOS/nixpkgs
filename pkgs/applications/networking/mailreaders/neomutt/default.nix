@@ -35,15 +35,17 @@
   withContrib ? true,
 }:
 
+assert lib.warnIf (enableMixmaster) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20240425";
+  version = "20241002";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     rev = finalAttrs.version;
-    hash = "sha256-QBqPFteoAm3AdQN0XTWpho8DEW2BFCCzBcHUZIiSxyQ=";
+    hash = "sha256-c8G0CGg4jrwq+HVR4O0AtaJNzr7pDYsie1410tisLEY=";
   };
 
   buildInputs = [
@@ -112,8 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--zlib"
     ]
     ++ lib.optional enableZstd "--zstd"
-    ++ lib.optional enableLua "--lua"
-    ++ lib.optional enableMixmaster "--mixmaster";
+    ++ lib.optional enableLua "--lua";
 
   postInstall =
     ''
