@@ -137,17 +137,15 @@ in
     };
 
     nginx = mkOption {
-      type = types.nullOr (types.submodule (
-        lib.recursiveUpdate
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-          {
-            # enable encryption by default,
-            # as sensitive login and Dolibarr (ERP) data should not be transmitted in clear text.
-            options.forceSSL.default = true;
-            options.enableACME.default = true;
-          }
-      ));
+      type = types.nullOr (types.submodule
+        (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
       default = null;
+      defaultText = ''
+        {
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
       example = lib.literalExpression ''
         {
           serverAliases = [
@@ -247,7 +245,11 @@ in
     services.nginx.enable = mkIf (cfg.nginx != null) true;
     services.nginx.virtualHosts."${cfg.domain}" = mkIf (cfg.nginx != null) (lib.mkMerge [
       cfg.nginx
-      ({
+      {
+        # enable encryption by default,
+        # as sensitive login and Dolibarr (ERP) data should not be transmitted in clear text.
+        forceSSL = lib.mkDefault true;
+        enableACME = lib.mkDefault true;
         root = lib.mkForce "${package}/htdocs";
         locations."/".index = "index.php";
         locations."~ [^/]\\.php(/|$)" = {
@@ -256,7 +258,7 @@ in
             fastcgi_pass unix:${config.services.phpfpm.pools.dolibarr.socket};
           '';
         };
-      })
+      }
     ]);
 
     systemd.services."phpfpm-dolibarr".after = mkIf cfg.database.createLocally [ "mysql.service" ];
