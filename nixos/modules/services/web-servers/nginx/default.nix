@@ -1136,7 +1136,7 @@ in
           At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
         '';
       }
-    ] ++ lib.flatten (map (host: host.assertions) (lib.attrValues virtualHosts))
+    ] ++ concatMap (host: host.assertions) (lib.attrValues virtualHosts)
     ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
       cert = config.security.acme.certs.${name};

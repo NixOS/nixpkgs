@@ -209,15 +209,14 @@ in
         };
         nginx = lib.mkOption {
           # Type of a single virtual host, or null.
-          type = lib.types.nullOr (lib.types.submodule (
-            lib.recursiveUpdate (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }) {
-              options.serverName = {
-                default = "radicle-${config.networking.hostName}.${config.networking.domain}";
-                defaultText = "radicle-\${config.networking.hostName}.\${config.networking.domain}";
-              };
-            }
-          ));
+          type = lib.types.nullOr (lib.types.submodule
+            (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
           default = null;
+          defaultText = ''
+            {
+              serverName = "radicle-''${config.networking.hostName}.''${config.networking.domain}";
+            }
+          '';
           example = lib.literalExpression ''
             {
               serverAliases = [
@@ -333,6 +332,7 @@ in
           {
             forceSSL = lib.mkDefault true;
             enableACME = lib.mkDefault true;
+            serverName = lib.mkDefault "radicle-${config.networking.hostName}.${config.networking.domain}";
             locations."/" = {
               proxyPass = "http://${cfg.httpd.listenAddress}:${toString cfg.httpd.listenPort}";
               recommendedProxySettings = true;
