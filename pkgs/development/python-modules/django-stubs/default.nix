@@ -27,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-hhKMIotl5smoXl3FbrHG9BElkX2uDiHmz+zfGyfmMMU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-stubs-ext
     types-pytz
