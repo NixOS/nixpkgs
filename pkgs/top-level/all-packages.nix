@@ -642,8 +642,6 @@ with pkgs;
 
   gobble = callPackage ../tools/X11/gobble { };
 
-  goda = callPackage ../development/tools/goda { };
-
   gokrazy = callPackage ../development/misc/gokrazy { };
 
   gojq = callPackage ../development/tools/gojq { };
