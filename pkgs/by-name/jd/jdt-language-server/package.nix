@@ -6,15 +6,15 @@
 }:
 
 let
-  timestamp = "202408291433";
+  timestamp = "202409261450";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jdt-language-server";
-  version = "1.39.0";
+  version = "1.40.0";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${finalAttrs.version}/jdt-language-server-${finalAttrs.version}-${timestamp}.tar.gz";
-    hash = "sha256-8EbY8Il05udz8u1HQmbqsJiJxkWfJmNXn4t9SXvTRyk=";
+    hash = "sha256-dBb8Yr76RQ4y8G7CtQPy7sXyLwscwS97juURK/ZxzxE=";
   };
 
   sourceRoot = ".";
