@@ -1229,6 +1229,11 @@ let
 
     ### N ###
 
+    nbd = pkgs.libnbd.override {
+      ocamlPackages = self;
+      buildOcamlBindings = true;
+    };
+
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
     ninja_utils = callPackage ../development/ocaml-modules/ninja_utils { };
