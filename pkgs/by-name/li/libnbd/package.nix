@@ -6,12 +6,18 @@
   pkg-config,
   perl,
   buildPythonBindings ? false,
+  buildOcamlBindings ? false,
+  ocamlPackages,
   python3,
   libxml2,
   fuse,
   fuse3,
   gnutls,
+  autoreconfHook,
 }:
+
+lib.throwIf (buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05")
+  "OCaml binding are not available for OCaml < 4.05"
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
@@ -22,11 +28,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-7DgviwGPPLccTPvomyH+0CMknXmR2wENsxpXD97OP84=";
   };
 
-  nativeBuildInputs = [
-    bash-completion
-    pkg-config
-    perl
-  ] ++ lib.optionals buildPythonBindings [ python3 ];
+  nativeBuildInputs =
+    [
+      bash-completion
+      pkg-config
+      perl
+      autoreconfHook
+    ]
+    ++ lib.optionals buildPythonBindings [ python3 ]
+    ++ lib.optionals buildOcamlBindings (
+      with ocamlPackages;
+      [
+        findlib
+        ocaml
+      ]
+    );
 
   buildInputs = [
     fuse
@@ -34,6 +50,11 @@ stdenv.mkDerivation rec {
     gnutls
     libxml2
   ];
+
+  postPatch = lib.optionalString buildOcamlBindings ''
+    substituteInPlace ocaml/Makefile.am \
+        --replace-fail '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
+  '';
 
   configureFlags = lib.optionals buildPythonBindings [
     "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
@@ -75,4 +96,4 @@ stdenv.mkDerivation rec {
 }
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
-# TODO: bindings for go and ocaml
+# TODO: bindings for go
