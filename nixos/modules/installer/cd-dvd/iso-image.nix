@@ -203,7 +203,7 @@ let
       # Load theme fonts
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
     '' else ''
-    if background_image (\$root)/EFI/BOOT/efi-background.png; then
+      if background_image (\$root)/EFI/BOOT/efi-background.png; then
         # Black background means transparent background when there
         # is a background image set... This seems undocumented :(
         set color_normal=black/black
