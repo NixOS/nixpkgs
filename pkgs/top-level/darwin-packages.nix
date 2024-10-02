@@ -71,6 +71,7 @@ makeScopeWithSplicing' {
     "CF"
     "CarbonHeaders"
     "CommonCrypto"
+    "CoreSymbolication"
   ] (mkStub apple_sdk.version);
 in
 
@@ -198,10 +199,6 @@ impure-cmds // appleSourcePackages // stubs // {
     xcode_15 xcode_15_0_1 xcode_15_1 xcode_15_2 xcode_15_3 xcode_15_4
     xcode_16 xcode_16_1
     xcode;
-
-  CoreSymbolication = callPackage ../os-specific/darwin/CoreSymbolication {
-    inherit (apple_sdk) darwin-stubs;
-  };
 
   xcodeProjectCheckHook = pkgs.makeSetupHook {
     name = "xcode-project-check-hook";
