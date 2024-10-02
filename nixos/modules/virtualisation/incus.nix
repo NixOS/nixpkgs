@@ -59,6 +59,9 @@ let
         skopeo
         umoci
       ]
+      ++ lib.optionals (lib.versionAtLeast cfg.package.version "6.4.0") [
+        lxcfs
+      ]
       ++ lib.optionals config.security.apparmor.enable [
         apparmor-bin-utils
 
