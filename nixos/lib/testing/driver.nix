@@ -36,7 +36,7 @@ let
   pythonizedNames = map pythonizeName nodeHostNames;
   machineNames = map (name: "${name}: Machine;") pythonizedNames;
 
-  withChecks = lib.warnIf config.skipLint "Linting is disabled";
+  withChecks = lib.warnIf config.skipLint "Linting is disabled in NixOS test named ${config.name}";
 
   driver =
     hostPkgs.runCommand "nixos-test-driver-${config.name}"
