@@ -2,6 +2,7 @@
 , nextcloud27Packages
 , nextcloud28Packages
 , nextcloud29Packages
+, nextcloud30Packages
 }:
 
 let
@@ -14,7 +15,7 @@ let
     inherit version;
 
     src = fetchurl {
-      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
+      url = "https://download.nextcloud.com/server/releases/nextcloud-${version}.tar.bz2";
       inherit hash;
     };
 
@@ -59,6 +60,12 @@ in {
     version = "29.0.7";
     hash = "sha256-9TL/wxvlqDdLXgcrhv/4dl7Bn9oMhQnO45hzCB2yxUQ=";
     packages = nextcloud29Packages;
+  };
+
+  nextcloud30 = generic {
+    version = "30.0.0";
+    hash = "sha256-GNeoCVe7U+lPsESS9rUhNDTdo+naEtn3iZl2h8hWTmA=";
+    packages = nextcloud30Packages;
   };
 
   # tip: get the sha with:
