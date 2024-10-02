@@ -179,7 +179,7 @@ in
 
         systemd = {
           slices.system-samba = {
-            description = "Samba slice";
+            description = "Samba (SMB Networking Protocol) Slice";
           };
           targets.samba = {
             description = "Samba Server";
