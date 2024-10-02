@@ -49,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Web client for Ente Photos";
     homepage = "https://ente.io/";
+    changelog = "https://github.com/ente-io/ente/releases";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       surfaceflinger
