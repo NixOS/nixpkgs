@@ -74,7 +74,7 @@ buildPythonPackage rec {
     "test_custom_language_detect_fast_text_0"
     "test_custom_language_detect_fast_text_1"
 
-    # breaks with latest tzdata
+    # breaks with latest tzdata: https://github.com/scrapinghub/dateparser/issues/1237
     # FIXME: look into this more
     "test_relative_base"
   ];
