@@ -26072,7 +26072,7 @@ with pkgs;
   linux-rt = linuxPackages-rt.kernel;
   linux-rt_latest = linuxPackages-rt_latest.kernel;
 
-  # hardened kernels
+  # kernels
   linuxPackages_hardened = linuxKernel.packages.linux_hardened;
   linux_hardened = linuxPackages_hardened.kernel;
   linuxPackages_5_4_hardened = linuxKernel.packages.linux_5_4_hardened;
@@ -26085,6 +26085,56 @@ with pkgs;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
   linuxPackages_6_6_hardened = linuxKernel.packages.linux_6_6_hardened;
   linux_6_6_hardened = linuxKernel.kernels.linux_6_6_hardened;
+
+  # Linux kernels
+  linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
+  linux-rt_5_15 = linuxKernel.kernels.linux_rt_5_15;
+  linux-rt_5_4 = linuxKernel.kernels.linux_rt_5_4;
+  linux-rt_6_1 = linuxKernel.kernels.linux_rt_6_1;
+  linuxPackages_4_14 = linuxKernel.packages.linux_4_14;
+  linuxPackages_4_19 = linuxKernel.packages.linux_4_19;
+  linuxPackages_5_4 = linuxKernel.packages.linux_5_4;
+  linuxPackages_5_10 = linuxKernel.packages.linux_5_10;
+  linuxPackages_5_15 = linuxKernel.packages.linux_5_15;
+  linuxPackages_6_1 = linuxKernel.packages.linux_6_1;
+  linuxPackages_6_4 = linuxKernel.packages.linux_6_4;
+  linuxPackages_6_5 = linuxKernel.packages.linux_6_5;
+  linuxPackages_6_6 = linuxKernel.packages.linux_6_6;
+  linuxPackages_6_7 = linuxKernel.packages.linux_6_7;
+  linuxPackages_6_8 = linuxKernel.packages.linux_6_8;
+  linuxPackages_6_9 = linuxKernel.packages.linux_6_9;
+  linuxPackages_6_10 = linuxKernel.packages.linux_6_10;
+  linuxPackages_6_11 = linuxKernel.packages.linux_6_11;
+  linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
+  linuxPackages_rpi02w = linuxKernel.packages.linux_rpi3;
+  linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
+  linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
+  linuxPackages_rpi3 = linuxKernel.packages.linux_rpi3;
+  linuxPackages_rpi4 = linuxKernel.packages.linux_rpi4;
+  linuxPackages_rt_5_10 = linuxKernel.packages.linux_rt_5_10;
+  linuxPackages_rt_5_15 = linuxKernel.packages.linux_rt_5_15;
+  linuxPackages_rt_5_4 = linuxKernel.packages.linux_rt_5_4;
+  linuxPackages_rt_6_1 = linuxKernel.packages.linux_rt_6_1;
+  linux_4_14 = linuxKernel.kernels.linux_4_14;
+  linux_4_19 = linuxKernel.kernels.linux_4_19;
+  linux_5_4 = linuxKernel.kernels.linux_5_4;
+  linux_5_10 = linuxKernel.kernels.linux_5_10;
+  linux_5_15 = linuxKernel.kernels.linux_5_15;
+  linux_6_1 = linuxKernel.kernels.linux_6_1;
+  linux_6_4 = linuxKernel.kernels.linux_6_4;
+  linux_6_5 = linuxKernel.kernels.linux_6_5;
+  linux_6_6 = linuxKernel.kernels.linux_6_6;
+  linux_6_7 = linuxKernel.kernels.linux_6_7;
+  linux_6_8 = linuxKernel.kernels.linux_6_8;
+  linux_6_9 = linuxKernel.kernels.linux_6_9;
+  linux_6_10 = linuxKernel.kernels.linux_6_10;
+  linux_6_11 = linuxKernel.kernels.linux_6_11;
+  linux_rpi0 = linuxKernel.kernels.linux_rpi1;
+  linux_rpi02w = linuxKernel.kernels.linux_rpi3;
+  linux_rpi1 = linuxKernel.kernels.linux_rpi1;
+  linux_rpi2 = linuxKernel.kernels.linux_rpi2;
+  linux_rpi3 = linuxKernel.kernels.linux_rpi3;
+  linux_rpi4 = linuxKernel.kernels.linux_rpi4;
 
   # GNU Linux-libre kernels
   linuxPackages-libre = linuxKernel.packages.linux_libre;
