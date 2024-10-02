@@ -62,7 +62,14 @@
 # NOTE: When editing this expression see if the same change applies to
 # SDL expression too
 let
-  inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
+  inherit (darwin.apple_sdk.frameworks)
+    AudioUnit
+    Cocoa
+    CoreAudio
+    CoreServices
+    ForceFeedback
+    OpenGL
+    ;
   dlopenPropagatedBuildInputs =
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
     lib.optionals (openglSupport && !stdenv.isDarwin) [ libGL ]
@@ -140,8 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-scanner
     ];
 
-  propagatedBuildInputs =
-    lib.optionals x11Support [ xorgproto ] ++ dlopenPropagatedBuildInputs;
+  propagatedBuildInputs = lib.optionals x11Support [ xorgproto ] ++ dlopenPropagatedBuildInputs;
 
   buildInputs =
     [ libiconv ]
@@ -157,13 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
       OpenGL
     ];
 
-  configureFlags =
-    [ (lib.enableFeature false "oss")
-      (lib.withFeature x11Support "x")
-      (lib.withFeatureAs alsaSupport "alsa-prefix" "${lib.getLib alsa-lib}/lib")
-      (lib.enableFeature (!stdenv.hostPlatform.isWindows) "video-opengles")
-      (lib.enableFeature enableSdltest "sdltest")
-    ];
+  configureFlags = [
+    (lib.enableFeature false "oss")
+    (lib.withFeature x11Support "x")
+    (lib.withFeatureAs alsaSupport "alsa-prefix" "${lib.getLib alsa-lib}/lib")
+    (lib.enableFeature (!stdenv.hostPlatform.isWindows) "video-opengles")
+    (lib.enableFeature enableSdltest "sdltest")
+  ];
 
   dontDisableStatic = withStatic;
 
@@ -181,12 +187,9 @@ stdenv.mkDerivation (finalAttrs: {
   # For static linking, it is better to rely on `pkg-config` `.pc`
   # files.
   postInstall =
-    (if withStatic then
-      ''rm $out/lib/*.la''
-     else
-       ''rm $out/lib/*.a'')
-    + "\n" +
-    ''moveToOutput bin/sdl2-config "$dev"'';
+    (if withStatic then ''rm $out/lib/*.la'' else ''rm $out/lib/*.a'')
+    + "\n"
+    + ''moveToOutput bin/sdl2-config "$dev"'';
 
   # SDL is weird in that instead of just dynamically linking with
   # libraries when you `--enable-*` (or when `configure` finds) them
@@ -203,9 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
   # list the symbols used in this way.
   postFixup =
     let
-      rpath = lib.makeLibraryPath (
-        dlopenPropagatedBuildInputs ++ dlopenBuildInputs
-      );
+      rpath = lib.makeLibraryPath (dlopenPropagatedBuildInputs ++ dlopenBuildInputs);
     in
     lib.optionalString (stdenv.hostPlatform.extensions.sharedLibrary == ".so") ''
       for lib in $out/lib/*.so* ; do
