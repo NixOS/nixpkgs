@@ -10,15 +10,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-ci-ls";
-  version = "0.21.2";
+  version = "0.21.3";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-wkL6ko43oWrpyscEpCMuoFamDMJk9+xI3qYOs+DgI8g=";
+    hash = "sha256-3PqGnknP5ilwPCDsD8GwIEamZC24lEnuQhipTo8RDI0=";
   };
 
-  cargoHash = "sha256-H/p29QbCaZRa81g+5eUsG47tUJPVgB1J9zZYY5/n5Vk=";
+  cargoHash = "sha256-c31madEElZpHbzyKHqUDyPW/maVrkNKlldX24Y3iFGQ=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs =

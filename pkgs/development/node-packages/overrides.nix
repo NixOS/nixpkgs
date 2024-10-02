@@ -36,15 +36,6 @@ final: prev: {
     buildInputs = [ final.node-gyp-build ];
   };
 
-  bower2nix = prev.bower2nix.override {
-    nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
-    postInstall = ''
-      for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : ${lib.makeBinPath [ pkgs.git pkgs.nix ]}
-      done
-    '';
-  };
-
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
     dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.hostPlatform.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;

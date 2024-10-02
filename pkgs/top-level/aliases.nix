@@ -1325,6 +1325,7 @@ mapAliases {
 
   ### Q ###
 
+  qbittorrent-qt5 = throw "'qbittorrent-qt5' has been removed as qBittorrent 5 dropped support for Qt 5. Please use 'qbittorrent'"; # Added 2024-09-30
   qcsxcad = libsForQt5.qcsxcad; # Added 2020-11-05
   qtcreator-qt6 = throw "'qtcreator-qt6' has been renamed to/replaced by 'qtcreator', since qt5 version has been removed"; # Added 2023-07-25
   qflipper = qFlipper; # Added 2022-02-11
