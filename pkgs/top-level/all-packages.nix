@@ -18079,8 +18079,6 @@ with pkgs;
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
-  luaformatter = callPackage ../development/tools/luaformatter { };
-
   lurk = callPackage ../development/tools/lurk { };
 
   maizzle = callPackage ../development/tools/maizzle { };
