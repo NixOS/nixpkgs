@@ -367,6 +367,7 @@ in {
   mimir = handleTest ./mimir.nix {};
   gancio = handleTest ./gancio.nix {};
   garage = handleTest ./garage {};
+  gatus = runTest ./gatus.nix;
   gemstash = handleTest ./gemstash.nix {};
   geoserver = runTest ./geoserver.nix;
   gerrit = handleTest ./gerrit.nix {};
