@@ -361,7 +361,7 @@ stdenv.mkDerivation rec {
 
       # The build process tries to overwrite some things in the sdk (e.g.
       # SourceBuild.MSBuildSdkResolver.dll), so it needs to be mutable.
-      cp -Tr ${bootstrapSdk} .dotnet
+      cp -Tr ${bootstrapSdk}/share/dotnet .dotnet
       chmod -R +w .dotnet
 
       export HOME=$(mktemp -d)

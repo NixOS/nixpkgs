@@ -21,20 +21,22 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
 buildEnv {
   name = "dotnet-core-combined";
   paths = map (x: x.unwrapped) dotnetPackages;
-  pathsToLink = [
-    "/host"
-    "/packs"
-    "/sdk"
-    "/sdk-manifests"
-    "/shared"
-    "/templates"
+  pathsToLink = map (x: "/share/dotnet/${x}") [
+    "host"
+    "packs"
+    "sdk"
+    "sdk-manifests"
+    "shared"
+    "templates"
   ];
   ignoreCollisions = true;
+  nativeBuildInputs = [ makeWrapper ];
   postBuild = ''
-    cp -R "${cli.unwrapped}"/dotnet $out/
+    mkdir -p "$out"/share/dotnet
+    cp "${cli.unwrapped}"/share/dotnet/dotnet $out/share/dotnet
     cp -R "${cli}"/nix-support "$out"/
     mkdir "$out"/bin
-    ln -s "$out"/dotnet "$out"/bin/dotnet
+    ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
   '';
   passthru = {
     inherit (cli) icu;

@@ -44,10 +44,10 @@ dotnetFromEnv'
             # if dotnet CLI is available, set DOTNET_ROOT based on it. Otherwise set to default .NET runtime
             dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$wrapperPath")
             dotnetRootFlagsArray+=("--run" "$dotnetFromEnvScript")
-            dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime")
+            dotnetRootFlagsArray+=("--set-default" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
             dotnetRootFlagsArray+=("--suffix" "PATH" ":" "$dotnetRuntime/bin")
         else
-            dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime")
+            dotnetRootFlagsArray+=("--set" "DOTNET_ROOT" "$dotnetRuntime/share/dotnet")
             dotnetRootFlagsArray+=("--prefix" "PATH" ":" "$dotnetRuntime/bin")
         fi
     fi
