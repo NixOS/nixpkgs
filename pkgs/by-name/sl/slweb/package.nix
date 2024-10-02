@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, redo-apenwarr
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  redo-apenwarr,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,12 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Static website generator which aims at being simplistic";
     homepage = "https://strahinja.srht.site/slweb/";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "slweb";
   };
 })
