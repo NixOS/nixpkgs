@@ -652,6 +652,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
         scons = super.scons.override { python3Packages = self.python3.pkgs; };
 
+        xar = super.xarMinimal;
+
         darwin = super.darwin.overrideScope (
           selfDarwin: superDarwin: {
             signingUtils = prevStage.darwin.signingUtils.override { inherit (selfDarwin) sigtool; };
@@ -908,6 +910,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             # Disable tests because they use dejagnu, which fails to run.
             libffi = super.libffi.override { doCheck = false; };
+
+            xar = super.xarMinimal;
 
             darwin = super.darwin.overrideScope (
               selfDarwin: superDarwin:
