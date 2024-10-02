@@ -28,6 +28,12 @@ buildGoModule rec {
       url = "https://github.com/canarytail/client/commit/0871ad14489c0b96d5cd3d980fb0028f8026f2ee.patch?full_index=1";
       hash = "sha256-uO4bSUTD3iBmZHGvhwFuOQDjFUElYSuIGICHvh+62eY=";
     })
+    # Builds on pull request 22, ensuring tests pass
+    # https://github.com/jee-mj/canary-client
+    (fetchpatch2 {
+      url = "https://github.com/canarytail/client/commit/20eb1da6e10e9acbefbb74f3f2170ce72514a239.patch?full_index=1";
+      hash = "sha256-IaMwLiknCpNGO9el5qZvdcg8DQvIuajKDXvtMj8Qt6c=";
+    })
   ];
 
   proxyVendor = true;
@@ -46,32 +52,29 @@ buildGoModule rec {
     go build -o $out/bin/canarytail ./cmd/canarytail.go
   '';
 
-  passthru.tests.canarytail-tests = stdenv.mkDerivation {
-    name = "canarytail-client-tests";
-    buildInputs = [ go ];
+  passthru.tests.canarytail-tests = buildGoModule {
+    pname = "canarytail-client-tests";
+    version = "0.1.2+unstable-latest";
 
     src = fetchFromGitHub {
-      owner = "ScreamingHawk";
-      repo = "canary-client";
-      rev = "0871ad14489c0b96d5cd3d980fb0028f8026f2ee";
-      hash = "sha256-FfU9drEE+xFjZpNddQqt53gvhSpiEs5QTVC7XR1kVP8=";
+      owner = "canarytail";
+      repo = "client";
+      rev = "20eb1da6e10e9acbefbb74f3f2170ce72514a239";
+      hash = "sha256-UZDxtMtKTS2l6WMdBd03mrvfpBHFziyF6lHGYP33XYQ=";
     };
 
-    preCheck = ''
-      export HOME=$(mktemp -d)
-    '';
-
-    installPhase = ''
-      # No need to install anything, we only need to run the tests
-    '';
+    proxyVendor = true;
+    vendorHash = "sha256-5oxCi0A3yatnVdV1Nx7KBUgPbvB41VmjMgiqLpNl+oI=";
 
     checkPhase = ''
-      go mod vendor
-      go test -mod=vendor ./blockchain_test.go ./canary_test.go ./crypto_test.go
+      # Use vendored dependencies for tests as well
+      go test ./canary_test.go ./crypto_test.go # ./blockchain_test.go
+      # blockchain_test fails due to sandboxing, but has been tested locally using command:
+      # `nix-build --option sandbox false -A passthru.tests.canarytail-tests`
     '';
   };
 
-  doCheck = false;
+  doCheck = true;
 
   meta = with lib; {
     description = "Official CanaryTail implementation in Golang for easy, trackable, standardized warrant canaries.";
