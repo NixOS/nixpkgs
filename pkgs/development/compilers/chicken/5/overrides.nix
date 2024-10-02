@@ -43,6 +43,13 @@ in
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
     // (addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 srfi-13 ]) old);
   cmark = addToBuildInputs pkgs.cmark;
+  comparse = old: {
+    # For some reason lazy-seq 2 gets interpreted as lazy-seq 0.0.0??
+    postPatch = ''
+      substituteInPlace comparse.egg \
+        --replace-fail 'lazy-seq "0.1.0"' 'lazy-seq "0.0.0"'
+    '';
+  };
   epoxy = old:
     (addToPropagatedBuildInputsWithPkgConfig pkgs.libepoxy old)
     // lib.optionalAttrs stdenv.cc.isClang {
@@ -210,7 +217,6 @@ in
   begin-syntax = broken;
   canvas-draw = broken;
   chicken-doc-admin = broken;
-  comparse = broken;
   coops-utils = broken;
   crypt = broken;
   hypergiant = broken;
