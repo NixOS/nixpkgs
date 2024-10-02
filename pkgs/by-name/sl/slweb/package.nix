@@ -2,35 +2,33 @@
   lib,
   stdenv,
   fetchFromSourcehut,
-  redo-apenwarr,
-  testers,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slweb";
-  version = "0.9.0";
+  version = "0.10.1";
 
   src = fetchFromSourcehut {
     owner = "~strahinja";
     repo = "slweb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QDHcp5pCmapgOlJpDDyyC12JOfh/biDyF6O+iKGbOGg=";
+    hash = "sha256-AJg8qgbNUKizU0uyTnq9EviIXOUuaGvQowLAyTWhGTY=";
   };
 
-  nativeBuildInputs = [ redo-apenwarr ];
-
-  installPhase = ''
-    runHook preInstall
-    export FALLBACKVER=${finalAttrs.version}
-    PREFIX=$out redo install
-    runHook postInstall
+  postPatch = ''
+    substituteInPlace config.mk \
+      --replace-fail "/usr/local" "$out"
   '';
 
-  enableParallelBuilding = true;
-
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+  env = {
+    FALLBACKVER = finalAttrs.version;
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = {
     description = "Static website generator which aims at being simplistic";
