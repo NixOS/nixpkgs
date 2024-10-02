@@ -6,7 +6,7 @@
 , testers
 , cachix
 , darwin
-, libgit2
+, sqlx-cli
 , nixVersions
 , openssl
 , pkg-config
@@ -19,15 +19,14 @@ let
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "1e61e9f40673f84c3b02573145492d8af581bec5";
-      hash = "sha256-uDwWyizzlQ0HFzrhP6rVp2+2NNA+/TM5zT32dR8GUlg=";
+      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
+      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
     };
-    buildInputs = old.buildInputs ++ [ libgit2 ];
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.2";
+  version = "1.3";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -36,14 +35,24 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-95MYldiApQ7gqoUa79yolPahudKmFv6B2HnF+ZqWiGI=";
+    hash = "sha256-14hqEeVy72nYDOFn7HK6Mff7L49kUI5K6wMLVHG3A90=";
   };
 
-  cargoHash = "sha256-A2s+DXq00T0DCVXUHy2ZN6XvqpHy6PmL0H9l1NIfFVU=";
+  cargoHash = "sha256-E4pU/tZHxMrKSheqWF5qeOfS/NZ/Uw5jY+AbSUHmoaI=";
 
   buildAndTestSubdir = "devenv";
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  # Force sqlx to use the prepared queries
+  SQLX_OFFLINE = true;
+  # A local database to use for preparing queries
+  DATABASE_URL = "sqlite:nix-eval-cache.db";
+
+  preBuild = ''
+    cargo sqlx database setup --source devenv-eval-cache/migrations
+    cargo sqlx prepare --workspace
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkg-config sqlx-cli ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
