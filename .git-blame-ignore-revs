@@ -186,3 +186,6 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 
 # fetchurl: nixfmt-rfc-style
 ce21e97a1f20dee15da85c084f9d1148d84f853b
+
+# percona: apply nixfmt
+8d14fa2886fec877690c6d28cfcdba4503dbbcea
