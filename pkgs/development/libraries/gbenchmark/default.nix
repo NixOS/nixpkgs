@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
+  checkInputs = [ gtest ];
+
   cmakeFlags = [
+    (lib.cmakeBool "BENCHMARK_USE_BUNDLED_GTEST" false)
     (lib.cmakeBool "BENCHMARK_ENABLE_WERROR" false)
   ];
 
@@ -33,11 +36,6 @@ stdenv.mkDerivation rec {
   # This might be a problem with our Clang, as it does not reproduce
   # with Xcode, but we just work around it by silencing the warning.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-c++17-attribute-extensions";
-
-  postPatch = ''
-    cp -r ${gtest.src} googletest
-    chmod -R u+w googletest
-  '';
 
   # Tests fail on 32-bit due to not enough precision
   doCheck = stdenv.hostPlatform.is64bit;
