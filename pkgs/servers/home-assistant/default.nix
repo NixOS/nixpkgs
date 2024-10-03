@@ -408,7 +408,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.9.3";
+  hassVersion = "2024.10.0";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -426,13 +426,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-W/qngUrc/R3lqdIWUFIXtP9IJ6t+VGdeAdJyZuGm94Q=";
+    hash = "sha256-X7atEjhw6QcS5xNiW+17/vrwqjCL4N3VocxUTELLXgo=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qp1AiB89sq1OrAVR7qLEfX1j8kW8L2lb4Z1x4z4AzP0=";
+    hash = "sha256-SHNs/zLyNVi0uGguRTWMnt9UpPYEFJbrfwBYFz+q5Nk=";
   };
 
   build-system = with python.pkgs; [
@@ -457,6 +457,7 @@ in python.pkgs.buildPythonApplication rec {
     "sqlalchemy"
     "typing-extensions"
     "urllib3"
+    "uv"
     "yarl"
   ];
 
@@ -489,6 +490,7 @@ in python.pkgs.buildPythonApplication rec {
   dependencies = with python.pkgs; [
     # Only packages required in pyproject.toml
     aiodns
+    aiohasupervisor
     aiohttp
     aiohttp-cors
     aiohttp-fast-zlib
@@ -512,7 +514,6 @@ in python.pkgs.buildPythonApplication rec {
     orjson
     packaging
     pillow
-    pip
     psutil-home-assistant
     pyjwt
     pyopenssl
@@ -523,6 +524,7 @@ in python.pkgs.buildPythonApplication rec {
     typing-extensions
     ulid-transform
     urllib3
+    uv
     voluptuous
     voluptuous-openapi
     voluptuous-serialize
@@ -530,8 +532,6 @@ in python.pkgs.buildPythonApplication rec {
     # REQUIREMENTS in homeassistant/auth/mfa_modules/totp.py and homeassistant/auth/mfa_modules/notify.py
     pyotp
     pyqrcode
-    # Implicit dependency via homeassistant/requirements.py
-    packaging
   ];
 
   makeWrapperArgs = lib.optional skipPip "--add-flags --skip-pip";
@@ -587,6 +587,8 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect=tests/helpers/test_script.py::test_parallel_error"
     "--deselect=tests/helpers/test_script.py::test_propagate_error_service_not_found"
     "--deselect=tests/helpers/test_script.py::test_continue_on_error_automation_issue"
+    # checks whether pip is installed
+    "--deselect=tests/util/test_package.py::test_check_package_fragment"
     # tests are located in tests/
     "tests"
   ];
