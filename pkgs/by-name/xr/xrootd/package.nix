@@ -121,16 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags =
     [
       "-DXRootD_VERSION_STRING=${finalAttrs.version}"
-    ]
-    ++ lib.optionals enableTestRunner [
       "-DFORCE_ENABLED=TRUE"
       "-DENABLE_DAVIX=TRUE"
       "-DENABLE_FUSE=${if (!stdenv.hostPlatform.isDarwin) then "TRUE" else "FALSE"}" # not supported
       "-DENABLE_MACAROONS=OFF"
       "-DENABLE_PYTHON=FALSE" # built separately
       "-DENABLE_SCITOKENS=TRUE"
-      "-DENABLE_TESTS=TRUE"
       "-DENABLE_VOMS=${if stdenv.hostPlatform.isLinux then "TRUE" else "FALSE"}"
+    ]
+    ++ lib.optionals enableTestRunner [
+      "-DENABLE_TESTS=TRUE"
     ];
 
   postFixup = lib.optionalString (externalEtc != null) ''
