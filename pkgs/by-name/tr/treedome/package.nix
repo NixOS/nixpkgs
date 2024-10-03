@@ -1,5 +1,5 @@
 { lib
-, cargo-tauri
+, cargo-tauri_1
 , cmake
 , dbus
 , fetchgit
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cmake
     pkg-config
-    cargo-tauri
+    cargo-tauri_1
     wrapGAppsHook3
   ];
 

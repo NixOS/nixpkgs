@@ -8,7 +8,7 @@
   wrapGAppsHook3,
   cargo,
   rustc,
-  cargo-tauri,
+  cargo-tauri_1,
   pkg-config,
   esbuild,
   buildGoModule,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     nodejs
     pnpm.configHook
     wrapGAppsHook3

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   cacert,
-  cargo-tauri,
+  cargo-tauri_1,
   darwin,
   desktop-file-utils,
   libsoup,
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     cacert # required for turbo
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
     nodejs
     pkg-config
