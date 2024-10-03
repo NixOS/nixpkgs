@@ -82,18 +82,18 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline run build
 
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # ugly hack; electron-builder fails when some files under Electron.app are read-only
     cp -R ${electron.dist}/Electron.app .
     chmod -R u+w Electron.app
 
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Disable code signing during build on macOS.
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" .electron-builder.config.cjs
   '' + ''
     yarn --offline run electron-builder --dir \
       --config .electron-builder.config.cjs \
-      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
+      -c.electronDist=. \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
