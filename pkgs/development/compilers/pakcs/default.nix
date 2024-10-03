@@ -5,13 +5,13 @@
 
 let
   pname = "pakcs";
-  version = "3.6.0";
+  version = "3.7.2";
 
   # Don't switch to "Current release" without a reason, because its
   # source updates without version bump. Prefer last from "Older releases" instead.
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/pakcs-${version}-src.tar.gz";
-    hash = "sha256-1r6jEY3eEGESKcAepiziVbxpIvQLtCS6l0trBU3SGGo=";
+    hash = "sha256-ZfQUgFqmPPCeDx/T5G/JdvYDq/7XbvsgxPcEX4y9HZ4=";
   };
 
   curry-frontend = (haskellPackages.override {
