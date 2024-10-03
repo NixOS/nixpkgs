@@ -46,6 +46,8 @@
 
   moonraker = callPackage ./moonraker {};
 
+  nest_protect = callPackage ./nest_protect {};
+
   ntfy = callPackage ./ntfy {};
 
   omnik_inverter = callPackage ./omnik_inverter {};
