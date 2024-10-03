@@ -15,18 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   name = "xmoji";
-  version = "0.5.1";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "Zirias";
     repo = "xmoji";
-    rev =
-      let
-        inherit (lib.versions) majorMinor patch;
-        inherit (finalAttrs) version;
-      in
-      "refs/tags/v${majorMinor version}-${patch version}";
-    hash = "sha256-ZZ1jW97JUv003bAMZZfGWbAAPgeZlpBKREaedFi3R8M=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-uYynbzexj1MDHcU8tryJLCGmqTfYOmY0vXrHZ3MlZa0=";
     fetchSubmodules = true;
   };
 
