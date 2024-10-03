@@ -1,11 +1,17 @@
-{ lib, stdenvNoCC, fetchurl, makeBinaryWrapper, jre_headless }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre_headless,
+}:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bundletool";
   version = "1.17.1";
 
   src = fetchurl {
-    url = "https://github.com/google/bundletool/releases/download/${version}/bundletool-all-${version}.jar";
+    url = "https://github.com/google/bundletool/releases/download/${finalAttrs.version}/bundletool-all-${finalAttrs.version}.jar";
     sha256 = "sha256-RYgerRM4iHLYLEJVsZVIi3/DPyysWpqXewr8XpI2dZI=";
   };
 
@@ -19,14 +25,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool to manipulate Android App Bundles";
     mainProgram = "bundletool";
     homepage = "https://developer.android.com/studio/command-line/bundletool";
-    changelog = "https://github.com/google/bundletool/releases/tag/${version}";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = [ ];
+    changelog = "https://github.com/google/bundletool/releases/tag/${finalAttrs.version}";
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    maintainers = with lib.maintainers; [ momeemt ];
     platforms = jre_headless.meta.platforms;
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})
