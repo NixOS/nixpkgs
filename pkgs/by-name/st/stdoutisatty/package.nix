@@ -24,11 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
   ];
 
-  preFixup = ''
-    # necessary for dynamic loading of `lib/libstdoutisatty.so` at runtime
-    wrapProgram $out/bin/${finalAttrs.pname} \
-      --prefix LD_LIBRARY_PATH : "$out/lib"
-  '';
+  cmakeFlags = [
+    # must specify the full path to `libstdoutisatty.so` in the nix store
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-DLIB_FILE='\"${placeholder "out"}/lib/libstdoutisatty.so\"'")
+  ];
 
   passthru = {
     updateScript = nix-update-script { };
