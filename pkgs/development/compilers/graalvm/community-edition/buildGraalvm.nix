@@ -124,6 +124,12 @@ let
       # jni.h expects jni_md.h to be in the header search path.
       ln -sf $out/include/linux/*_md.h $out/include/
 
+      mkdir -p $out/share
+      # move files in $out like LICENSE.txt
+      find $out/ -maxdepth 1 -type f -exec mv {} $out/share \;
+      # symbolic link to $out/lib/svm/LICENSE_NATIVEIMAGE.txt
+      rm -f $out/LICENSE_NATIVEIMAGE.txt
+
       # copy-paste openjdk's preFixup
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
