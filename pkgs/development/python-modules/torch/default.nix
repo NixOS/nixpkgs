@@ -119,7 +119,7 @@ let
         "8.7"
         "8.9"
         "9.0"
-        "9.0a"
+        # "9.0a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
@@ -214,7 +214,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.4.1";
+  version = "2.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -232,16 +232,21 @@ buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-x/zM/57syr46CP1TfGaefSjzvNm4jJbWFZGVGyzPMg8=";
+    hash = "sha256-xUj77yKz3IQ3gd/G32pI4OhL3LoN1zS7eFg0/0nZp5I=";
   };
 
   patches =
     [
+      ./pytorch_2_0_1_c10_fix.patch
+      ./pytorch_2_0_1_aten_fix.patch
+
+      ./pytorch_2_0_1_kineto_fix.patch
+      ./pytorch_2_0_1_fbgemmm_fix.patch
       # Allow setting PYTHON_LIB_REL_PATH with an environment variable.
       # https://github.com/pytorch/pytorch/pull/128419
       ./passthrough-python-lib-rel-path.patch
     ]
-    ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+    #++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # pthreadpool added support for Grand Central Dispatch in April
       # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
@@ -290,9 +295,9 @@ buildPythonPackage rec {
     # NOTE: Parts of pytorch rely on unmaintained FindCUDA.cmake with custom patches to support e.g.
     # newer architectures (sm_90a). We do want to delete vendored patches, but have to keep them
     # until https://github.com/pytorch/pytorch/issues/76082 is addressed
-    + lib.optionalString cudaSupport ''
-      rm cmake/Modules/FindCUDAToolkit.cmake
-    ''
+    # + lib.optionalString cudaSupport ''
+    #   rm cmake/Modules/FindCUDAToolkit.cmake
+    # ''
     # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
     # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
     +

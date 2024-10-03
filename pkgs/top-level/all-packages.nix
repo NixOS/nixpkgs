@@ -16606,7 +16606,8 @@ with pkgs;
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters) python27 python39 python310 python311 python312 python313 python3Minimal pypy27 pypy310 pypy39 rustpython;
-
+  # inherit (pythonInterpreters) python27 python39 python310 python311  python313 python3Minimal pypy27 pypy310 pypy39 rustpython;
+  # python312 = pythonInterpreters.python312.override {stdenv = gcc11Stdenv;};
   # List of extensions with overrides to apply to all Python package sets.
   pythonPackagesExtensions = [ ];
 

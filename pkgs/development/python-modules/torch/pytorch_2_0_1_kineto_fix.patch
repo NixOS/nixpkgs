@@ -1,0 +1,10 @@
+diff --git a/third_party/kineto/libkineto/src/SampleListener.h b/a/third_party/kineto/libkineto/src/SampleListener.h
+--- a/third_party/kineto/libkineto/src/SampleListener.h
++++ b/third_party/kineto/libkineto/src/SampleListener.h
+@@ -11,5 +11,6 @@
+ #include <assert.h>
+ #include <cmath>
+ #include <iostream>
++#include <cstdint>
+ #include <string>
+ #include <vector>

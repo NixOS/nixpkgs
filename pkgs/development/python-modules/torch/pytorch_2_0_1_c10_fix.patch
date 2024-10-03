@@ -1,0 +1,11 @@
+diff --git a/c10/util/Registry.h b/c10/util/Registry.h
+--- a/c10/util/Registry.h
++++ b/c10/util/Registry.h
+@@ -11,2 +11,3 @@
+ #include <c10/macros/Macros.h>
+ #include <c10/util/Type.h>
++#include <stdexcept>
+
+ namespace c10 {
+
+ template <typename KeyType>
