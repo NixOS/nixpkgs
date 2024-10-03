@@ -1,0 +1,11 @@
+diff -Naru i/joe/tty.c w/joe/tty.c
+--- ./joe/tty.c	2018-01-10 17:28:34
++++ ../joe-i-4.6/joe/tty.c	2024-10-02 14:08:22
+@@ -6,6 +6,7 @@
+  *	This file is part of JOE (Joe's Own Editor)
+  */
+ #include "types.h"
++#include <util.h>
+ 
+ /* Needed for TIOCGWINSZ detection below */
+ #ifdef GWINSZ_IN_SYS_IOCTL
