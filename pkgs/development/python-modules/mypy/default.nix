@@ -35,7 +35,9 @@ buildPythonPackage rec {
   version = "1.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # mypy doesn't support python313 yet
+  # https://github.com/python/mypy/issues/17264
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "python";
