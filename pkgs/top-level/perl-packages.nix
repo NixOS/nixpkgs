@@ -18770,7 +18770,7 @@ with self; {
     buildInputs = [ TestNoWarnings ];
     perlPreHook = "export LD=$CC";
     meta = {
-      description = "Internationalizing Domain Names in Applications (UTS #46)";
+      description = "Internationalizing Domain Names in Applications (UTS #46)";
       homepage = "https://metacpan.org/release/Net-IDN-Encode";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
