@@ -15693,6 +15693,8 @@ self: super: with self; {
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
 
+  torch-geometric = callPackage ../development/python-modules/torch-geometric { };
+
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
 
   torch-bin = callPackage ../development/python-modules/torch/bin.nix {
