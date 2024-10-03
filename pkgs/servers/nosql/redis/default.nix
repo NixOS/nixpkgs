@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, lua, jemalloc, pkg-config, nixosTests
+{ lib, stdenv, fetchurl, lua, jemalloc, pkg-config, nixosTests
 , tcl, which, ps, getconf
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 # dependency ordering is broken at the moment when building with openssl
@@ -12,21 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "7.2.5";
+  version = "7.4.0";
 
   src = fetchurl {
     url = "https://download.redis.io/releases/redis-${finalAttrs.version}.tar.gz";
-    hash = "sha256-WYEXlwb4OR8DvpHZUayvrtqRr3+sVr7/snAZYxA+Qj0=";
+    hash = "sha256-V7R8LGaCY21pfb9dZtjUlbTmU6/JzTK3rfnaPkM7iq8=";
   };
 
-  patches = [
-    # fixes: make test [exception]: Executing test client: permission denied
-    # https://github.com/redis/redis/issues/12792
-    (fetchpatch {
-      url = "https://github.com/redis/redis/pull/12887.diff";
-      hash = "sha256-VZEMShW7Ckn5hLJHffQvE94Uly41WZW1bwvxny+Y3W8=";
-    })
-  ] ++ lib.optionals useSystemJemalloc [
+  patches = lib.optionals useSystemJemalloc [
     # use system jemalloc
     (fetchurl {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/redis/-/raw/102cc861713c796756abd541bf341a4512eb06e6/redis-5.0-use-system-jemalloc.patch";
@@ -90,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://redis.io";
     description = "Open source, advanced key-value store";
-    license = licenses.bsd3;
+    license = with licenses; [ sspl rsalv2 ];
     platforms = platforms.all;
     changelog = "https://github.com/redis/redis/raw/${finalAttrs.version}/00-RELEASENOTES";
     maintainers = with maintainers; [ berdario globin ];
