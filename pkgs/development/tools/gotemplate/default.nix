@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo123Module, fetchFromGitHub }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "gotemplate";
-  version = "3.7.5";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-BMZyq7fa57WaE0cSkGjHWxtEnbC7vEy+kLaHDoI/KZU=";
+    hash = "sha256-sRCyOQmj4ti+1Qdap0Q5MLoJZLwjZtw1cYjZMGksvuA=";
   };
 
-  vendorHash = "sha256-uRB3atrJ+A1/xXvgmkyM/AKN+9VKSIDvsnPIdtsc3vc=";
+  vendorHash = "sha256-xtvexOmzTXjP3QsGp0aL3FdJe3mdBSCnTeM6hLq/tIo=";
 
   meta = with lib; {
     description = "CLI for go text/template";
