@@ -27,13 +27,13 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.22.6";
-  hash = "sha256-jBCKgDlvXwA7Z4GDBJ+aZc52zC+om30DtsZJuHado1s=";
+  version = "0.23.2";
+  hash = "sha256-d0dkMDo+YXX9q6V32nQItk+Tl6sHCSytOZo3R90ZL0I=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     inherit hash;
     fetchSubmodules = true;
   };
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-44FIO0kPso6NxjLwmggsheILba3r9GEhDld2ddt601g=";
+  cargoHash = "sha256-NMFzecSTlot+zYr0Zkf2Y2XKnQW8386SOvLnayl11Yg=";
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
@@ -169,7 +169,7 @@ rustPlatform.buildRustPackage {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tree-sitter/tree-sitter";
     description = "Parser generator tool and an incremental parsing library";
     mainProgram = "tree-sitter";
@@ -185,7 +185,7 @@ rustPlatform.buildRustPackage {
       * Robust enough to provide useful results even in the presence of syntax errors
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [ Profpatsch ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ Profpatsch ];
   };
 }
