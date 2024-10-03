@@ -1,0 +1,99 @@
+commit 08c9c9980dd7628d6db4baeed57982ce9bf8212e
+Author: Yurii Matsiuk <24990891+ymatsiuk@users.noreply.github.com>
+Date:   Thu Jul 18 11:49:38 2024 +0200
+
+    Revert "tests: Add tests to ensure that we don't duplicate symbols in libraries"
+    
+    This reverts commit 8e7e5bf7104df691217eda520b727470045cafcd.
+
+diff --git a/libfprint/tod/tests/check-library-symbols.sh b/libfprint/tod/tests/check-library-symbols.sh
+deleted file mode 100755
+index 61f44c3..0000000
+--- a/libfprint/tod/tests/check-library-symbols.sh
++++ /dev/null
+@@ -1,65 +0,0 @@
+-#!/bin/bash
+-
+-library1=$1
+-library2=$2
+-
+-function cleanup_results() {
+-    grep -F -w '.text' | cut -s -f2 | awk '{print $(NF)}'
+-}
+-
+-function dump_exported_symbols() {
+-    objdump -TC "$1" | cleanup_results
+-}
+-
+-function dump_defined_symbols() {
+-    objdump -t "$1" | cleanup_results
+-}
+-
+-function in_array() {
+-  local target=$1
+-  shift
+-
+-  local i;
+-  for i in "$@"; do
+-    if [[ "$i" == "$target" ]]; then
+-        return 0
+-    fi
+-  done
+-
+-  return 1
+-}
+-
+-function is_fatal() {
+-    if [[ "$1" == "fp_"* ]] || [[ "$1" == "fpi_"* ]]; then
+-        return 0
+-    fi
+-    return 1
+-}
+-
+-lib1_exported=($(dump_exported_symbols "$library1"))
+-lib2_exported=($(dump_exported_symbols "$library2"))
+-
+-lib1_defined=("$(dump_defined_symbols "$library1")")
+-lib2_defined=("$(dump_defined_symbols "$library2")")
+-
+-valid=true
+-
+-for f in ${lib1_exported[*]}; do
+-    if in_array "$f" ${lib2_exported[*]}; then
+-        echo "$f function exported in both $library1 and $library2"
+-        if is_fatal "$f"; then
+-            valid=false
+-        fi
+-    fi
+-done
+-
+-for f in ${lib1_defined[*]}; do
+-    if in_array "$f" ${lib2_defined[*]}; then
+-        echo "$f function defined in both $library1 and $library2"
+-        if is_fatal "$f"; then
+-            valid=false
+-        fi
+-    fi
+-done
+-
+-[[ "$valid" == true ]] && exit 0
+diff --git a/tests/meson.build b/tests/meson.build
+index db61c1b..32d993a 100644
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -557,15 +557,4 @@ if get_option('tod')
+             )
+         endif
+     endforeach
+-
+-    if find_program('objdump', required: false).found()
+-        check_libs_symbols = find_program(meson.source_root() /
+-            'libfprint/tod/tests/check-library-symbols.sh')
+-        test('check-tod-lib-sybmbols',
+-            check_libs_symbols,
+-            args: [libfprint.full_path(), libfprint_tod.full_path()],
+-            depends: [libfprint, libfprint_tod],
+-            suite: ['abi-check', tod_suites ],
+-        )
+-    endif
+ endif
