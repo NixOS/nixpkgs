@@ -10,7 +10,7 @@
   ninja,
 
   # buildInputs
-  ffmpeg-full,
+  ffmpeg_6-full,
   pybind11,
   sox,
   torch,
@@ -108,9 +108,9 @@ buildPythonPackage rec {
   FFMPEG_ROOT = symlinkJoin {
     name = "ffmpeg";
     paths = [
-      ffmpeg-full.bin
-      ffmpeg-full.dev
-      ffmpeg-full.lib
+      ffmpeg_6-full.bin
+      ffmpeg_6-full.dev
+      ffmpeg_6-full.lib
     ];
   };
 
@@ -131,7 +131,7 @@ buildPythonPackage rec {
     );
 
   buildInputs = [
-    ffmpeg-full
+    ffmpeg_6-full
     pybind11
     sox
     torch.cxxdev
