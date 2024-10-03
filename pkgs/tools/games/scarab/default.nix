@@ -1,13 +1,15 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, glibc
-, zlib
-, gtk3
-, copyDesktopItems
-, icoutils
-, wrapGAppsHook3
-, makeDesktopItem
+{
+  buildDotnetModule,
+  copyDesktopItems,
+  fetchFromGitHub,
+  glibc,
+  gtk3,
+  icoutils,
+  lib,
+  makeDesktopItem,
+  nixosTests,
+  wrapGAppsHook3,
+  zlib,
 }:
 
 buildDotnetModule rec {
@@ -58,17 +60,22 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Scarab";
-    name = "scarab";
-    exec = "Scarab";
-    icon = "scarab";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Scarab";
+      name = "scarab";
+      exec = "Scarab";
+      icon = "scarab";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = nixosTests.scarab;
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Hollow Knight mod installer and manager";
