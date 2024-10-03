@@ -8,7 +8,6 @@ in {
   options = {
     services.espanso = {
       enable = mkEnableOption "Espanso";
-      wayland = mkEnableOption "use the Wayland compatible espanso package";
       package = mkPackageOption pkgs "espanso" {
         example = "pkgs.espanso-wayland";
       };
