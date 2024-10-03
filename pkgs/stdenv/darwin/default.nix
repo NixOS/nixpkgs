@@ -648,6 +648,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           self = self.python3-bootstrap;
           pythonAttr = "python3-bootstrap";
           enableLTO = false;
+          # Workaround for ld64 crashes on x86_64-darwin. Remove after 11.0 is made the default.
+          inherit (prevStage) apple-sdk_11;
         };
 
         scons = super.scons.override { python3Packages = self.python3.pkgs; };

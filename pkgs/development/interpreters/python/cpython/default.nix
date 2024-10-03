@@ -25,6 +25,7 @@
 
 # platform-specific dependencies
 , bash
+, apple-sdk_11
 , darwin
 , windows
 
@@ -177,6 +178,9 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
+    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
+    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
