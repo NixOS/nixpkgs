@@ -17413,8 +17413,6 @@ with pkgs;
 
   cl-launch = callPackage ../development/tools/misc/cl-launch { };
 
-  clean-css-cli = callPackage ../development/tools/clean-css-cli { };
-
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
