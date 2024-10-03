@@ -23,7 +23,8 @@ buildDotnetModule rec {
   };
 
   nugetDeps = ./deps.nix;
-  projectFile = "Scarab.sln";
+  projectFile = "Scarab/Scarab.csproj";
+  testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
 
   preConfigureNuGet = ''
@@ -47,6 +48,8 @@ buildDotnetModule rec {
     icoutils
     wrapGAppsHook3
   ];
+
+  doCheck = true;
 
   postFixup = ''
     # Icons for the desktop file
