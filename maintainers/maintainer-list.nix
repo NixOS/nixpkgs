@@ -13729,6 +13729,12 @@
     githubId = 1215331;
     name = "Matt Melling";
   };
+  melon = {
+    email = "melontime05@gmail.com";
+    github = "BlaiZephyr";
+    githubId = 101197249;
+    name = "Tim";
+  };
   melsigl = {
     email = "melanie.bianca.sigl@gmail.com";
     github = "melsigl";
