@@ -251,8 +251,13 @@ nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --github-token=mytoken
 Alternatively, set the number of processes to a lower count to avoid rate-limiting.
 
 ```sh
-
 nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --proc 1'
+```
+
+If you want to update only certain plugins, you can specify their names to `update` flag. Note that those name must be the same as in `pkgs/applications/editors/vim/plugins/vim-plugin-names` file.
+
+```sh
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "LazyVim"'
 ```
 
 ## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}
