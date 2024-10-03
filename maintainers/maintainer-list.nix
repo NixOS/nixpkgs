@@ -2041,6 +2041,12 @@
     github = "auchter";
     githubId = 1190483;
   };
+  aucub = {
+    name = "aucub";
+    email = "dr56ekgbb@mozmail.com";
+    github = "aucub";
+    githubId = 78630225;
+  };
   augustebaum = {
     email = "auguste.apple@gmail.com";
     github = "augustebaum";
@@ -14694,6 +14700,12 @@
     githubId = 6709831;
     name = "Jake Hill";
   };
+  nartsiss = {
+    name = "Daniil Nartsissov";
+    email = "nartsiss@proton.me";
+    github = "nartsisss";
+    githubId = 54633007;
+  };
   nasageek = {
     github = "NasaGeek";
     githubId = 474937;
@@ -16653,6 +16665,12 @@
     github = "PixelSergey";
     githubId = 14542417;
     name = "Sergey Ichtchenko";
+  };
+  pizzapim = {
+    email = "pim@kunis.nl";
+    github = "pizzapim";
+    githubId = 23135512;
+    name = "Pim Kunis";
   };
   pjbarnoy = {
     email = "pjbarnoy@gmail.com";

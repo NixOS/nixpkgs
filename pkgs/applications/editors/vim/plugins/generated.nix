@@ -5486,6 +5486,18 @@ final: prev:
     meta.homepage = "https://github.com/udalov/kotlin-vim/";
   };
 
+  kulala-nvim = buildVimPlugin {
+    pname = "kulala.nvim";
+    version = "2024-09-30";
+    src = fetchFromGitHub {
+      owner = "mistweaverco";
+      repo = "kulala.nvim";
+      rev = "3b53dbb5677b144f372ecb25cb7841fba0c85a60";
+      sha256 = "sha256-Sbeby+N8bmkof8B8BsCWzZzWhot1wjQuRwqABI2/V3M=";
+    };
+    meta.homepage = "https://github.com/mistweaverco/kulala.nvim/";
+  };
+
   lalrpop-vim = buildVimPlugin {
     pname = "lalrpop.vim";
     version = "2017-11-22";
@@ -8488,6 +8500,18 @@ final: prev:
       sha256 = "1m2bs71l4wdk6kippwkmsvw4978qcqh8lnkx7h9sa82l87wb76mp";
     };
     meta.homepage = "https://github.com/mfussenegger/nvim-dap-python/";
+  };
+
+  nvim-dap-rego = buildVimPlugin {
+    pname = "nvim-dap-rego";
+    version = "2024-09-28";
+    src = fetchFromGitHub {
+      owner = "rinx";
+      repo = "nvim-dap-rego";
+      rev = "ab13103327b5e336a0d059ec2d9f1022c26ffadf";
+      sha256 = "05ainkya2z6hm02glz2xcnd39y3fvkdmsgnl6la7kchin227l6w4";
+    };
+    meta.homepage = "https://github.com/rinx/nvim-dap-rego/";
   };
 
   nvim-dap-rr = buildVimPlugin {
