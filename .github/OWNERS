@@ -1,0 +1,19 @@
+#
+# Currently unused! Use CODEOWNERS for now, see workflows/codeowners.yml
+#
+####################
+#
+# This file is used to describe who owns what in this repository.
+# Users/teams will get review requests for PRs that change their files.
+#
+# This file does not replace `meta.maintainers`
+# but is instead used for other things than derivations and modules,
+# like documentation, package sets, and other assets.
+#
+# This file uses the same syntax as the natively supported CODEOWNERS file,
+# see https://help.github.com/articles/about-codeowners/ for documentation.
+# However it comes with some notable differences:
+# - There is no need for user/team listed here to have write access.
+# - No reviews will be requested for PRs that target the wrong base branch.
+#
+# Processing of this file is implemented in workflows/codeowners.yml
