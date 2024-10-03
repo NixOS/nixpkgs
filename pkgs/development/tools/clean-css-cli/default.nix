@@ -1,20 +1,23 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
-  pname = "clean-css-cli";
-  version = "5.6.2";
-
+let
+  version = "5.6.3";
   src = fetchFromGitHub {
     owner = "clean-css";
     repo = "clean-css-cli";
     rev = "v${version}";
-    hash = "sha256-ONWJn6mehXeNwRVEEM+Ad/heXwNWC9E9yA5eUQsi98A=";
+    hash = "sha256-tsFNcQg55uY2gL5xLLLS6INLlYzbsU6M3hnsYeOFGEw=";
   };
+in
+buildNpmPackage {
+  pname = "clean-css-cli";
+  inherit version src;
 
-  npmDepsHash = "sha256-eVd6YSTHhp6qzGYn5PlikUgjNS+GJoRwfm6KPrEJKGE=";
+  npmDepsHash = "sha256-uvI9esVVOE18syHUCJpoiDY+Vh3hJO+GsMOTZSYJaxg=";
 
   dontNpmBuild = true;
 
@@ -24,6 +27,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/clean-css/clean-css-cli";
     license = lib.licenses.mit;
     mainProgram = "cleancss";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }
