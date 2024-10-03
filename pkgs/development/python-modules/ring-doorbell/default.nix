@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "ring-doorbell";
-  version = "0.9.5";
+  version = "0.9.6";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ring_doorbell";
     inherit version;
-    hash = "sha256-NnKcUr0SExXRDkNCIGU3LtwU1LIMAZzurn2Aoua1lzA=";
+    hash = "sha256-pSHsQ2bJ0zNk6eJfDERVFqZM/IWorL8HFFjnwnhaHhY=";
   };
 
   pythonRelaxDeps = [ "requests-oauthlib" ];
@@ -42,15 +42,12 @@ buildPythonPackage rec {
     aiofiles
     aiohttp
     asyncclick
+    firebase-messaging
     oauthlib
     pytz
     typing-extensions
     websockets
   ];
-
-  optional-dependencies = {
-    listen = [ firebase-messaging ];
-  };
 
   nativeCheckInputs = [
     aioresponses
