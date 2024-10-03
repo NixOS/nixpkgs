@@ -10639,10 +10639,6 @@ with pkgs;
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nym = darwin.apple_sdk_11_0.callPackage ../applications/networking/nym {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
-  };
-
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oath-toolkit = callPackage ../tools/security/oath-toolkit { };
