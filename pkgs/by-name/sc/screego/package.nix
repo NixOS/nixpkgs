@@ -36,6 +36,10 @@ let
       nodejs
     ];
 
+    preConfigure = ''
+      export HOME=$(mktemp -d)
+    '';
+
     installPhase = ''
       cp -r build $out
     '';
@@ -67,6 +71,8 @@ buildGo123Module rec {
   postInstall = ''
     mv $out/bin/server $out/bin/screego
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Screen sharing for developers";
