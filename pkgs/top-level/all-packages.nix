@@ -19312,6 +19312,8 @@ with pkgs;
 
   cog = callPackage ../development/web/cog { };
 
+  cosmo = callPackage ../development/tools/cosmo { };
+
   inherit (cosmopolitan) cosmocc;
 
   python-cosmopolitan = callPackage ../development/interpreters/python-cosmopolitan { };
