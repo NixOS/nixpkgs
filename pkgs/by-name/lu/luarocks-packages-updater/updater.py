@@ -25,7 +25,9 @@ from pluginupdate import FetchConfig, update_plugins
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
-ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent  # type: ignore
+ROOT = Path(
+    os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+).parent.parent  # type: ignore
 
 PKG_LIST = "maintainers/scripts/luarocks-packages.csv"
 TMP_FILE = "$(mktemp)"
@@ -121,7 +123,18 @@ class LuaEditor(pluginupdate.Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+    def get_update(
+        self,
+        input_file: str,
+        outfile: str,
+        config: FetchConfig,
+        # TODO: implement support for adding/updating individual plugins
+        to_update: Optional[List[str]],
+    ):
+        if to_update is not None:
+            raise NotImplementedError(
+                "For now, lua updater doesn't support updating individual packages."
+            )
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
