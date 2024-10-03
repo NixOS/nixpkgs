@@ -655,12 +655,15 @@ in {
     # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
     linux_testing = packagesFor kernels.linux_testing;
 
+
+    # This follows linux_default
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
-    linux_5_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_4_hardened);
-    linux_5_10_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_10_hardened);
-    linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
-    linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
+    # For _hardened only recurseIntoAttrs for the latest stable, latest lts, and default versions
+    linux_5_4_hardened = packagesFor kernels.linux_5_4_hardened;
+    linux_5_10_hardened = packagesFor kernels.linux_5_10_hardened;
+    linux_5_15_hardened = packagesFor kernels.linux_5_15_hardened;
+    linux_6_1_hardened = packagesFor kernels.linux_6_1_hardened;
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
