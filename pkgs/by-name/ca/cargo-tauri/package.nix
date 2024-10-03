@@ -48,6 +48,13 @@ rustPlatform.buildRustPackage rec {
     tests = {
       setupHooks = callPackage ./test-app.nix { };
     };
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "tauri-v(.*)"
+      ];
+    };
   };
 
   meta = {
