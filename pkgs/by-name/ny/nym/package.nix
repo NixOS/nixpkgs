@@ -1,28 +1,24 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, CoreServices
-, nix-update-script
-, rustc
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  darwin,
+  nix-update-script,
+  rustc,
 }:
 
-let
-  version = "1.1.21";
-  hash = "sha256-VM0Pc5qyrsn9wV3mfvrAlCfm/rIf3cednZzFtJCT+no=";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nym";
-  inherit version;
+  version = "1.1.21";
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
     rev = "nym-binaries-v${version}";
-    inherit hash;
+    hash = "sha256-VM0Pc5qyrsn9wV3mfvrAlCfm/rIf3cednZzFtJCT+no=";
   };
 
   cargoLock = {
@@ -43,9 +39,18 @@ rustPlatform.buildRustPackage {
       --replace 'vergen(config).expect("failed to extract build metadata")' '()'
   '';
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
+      Security
+      CoreServices
+    ]);
 
   checkType = "debug";
 
@@ -71,14 +76,14 @@ rustPlatform.buildRustPackage {
     VERGEN_CARGO_PROFILE = "release";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mixnet providing IP-level privacy";
     longDescription = ''
       Nym routes IP packets through other participating nodes to hide their source and destination.
       In contrast with Tor, it prevents timing attacks at the cost of latency.
     '';
     homepage = "https://nymtech.net";
-    license = licenses.asl20;
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
   };
 }
