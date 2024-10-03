@@ -88,4 +88,8 @@ in {
     scalaVersion = "2.13";
     sha256 = "sha256-2BydXmF6AkWDdG5rbRLD2I/6z3w3UD0dCd5Tp+3lU7c=";
   };
+  ammonite_3_3 = common {
+    scalaVersion = "3.3";
+    sha256 = "sha256-EL8mTUmbcetVIVOHjd/JvO8NsXnb3EtYK2+itZwOsDI=";
+  };
 }
