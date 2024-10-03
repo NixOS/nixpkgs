@@ -13443,6 +13443,8 @@ with pkgs;
 
   viu = callPackage ../tools/graphics/viu { };
 
+  vivado = callPackage ../applications/science/electronics/vivado { };
+
   vix = callPackage ../tools/misc/vix { };
 
   vkbasalt = callPackage ../tools/graphics/vkbasalt {
