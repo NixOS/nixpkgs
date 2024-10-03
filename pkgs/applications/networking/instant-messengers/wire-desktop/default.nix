@@ -6,7 +6,7 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook3
+, buildPackages
 , cpio
 , xar
 , libdbusmenu
@@ -97,7 +97,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook3
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
     buildInputs = [
@@ -137,7 +137,7 @@ let
     ];
 
     preFixup = ''
-      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --ozone-platform=wayland --enable-features=WaylandWindowDecorations}}")
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
     '';
 
     postFixup = ''
