@@ -16,6 +16,7 @@
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
 /.github/workflows/codeowners.yml @infinisil
+/.github/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
 
 # Development support
