@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname   = "pritunl-ssh";
-  version = "1.0.3219.78";
+  version = "1.0.3231.6";
 
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-zero-client";
     rev = version;
-    sha256 = "sha256-ksTfgt1AWs8hgUR9w6aWv5MDXeORgYNWYZgAFUqj++s=";
+    sha256 = "sha256-kccc8ZDh3S/Ko/MaBd5u0UxMNIbg5dhvRuecJuE3D6c=";
   };
 
   buildInputs = [ python3 ];
