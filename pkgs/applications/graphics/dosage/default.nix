@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "dosage";
@@ -12,13 +16,20 @@ python3Packages.buildPythonApplication rec {
   pyproject = true;
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook pytest-xdist responses
+    pytestCheckHook
+    pytest-xdist
+    responses
   ];
 
   build-system = [ python3Packages.setuptools-scm ];
 
   dependencies = with python3Packages; [
-    colorama imagesize lxml requests six platformdirs
+    colorama
+    imagesize
+    lxml
+    requests
+    six
+    platformdirs
   ];
 
   disabledTests = [
