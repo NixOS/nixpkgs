@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/share/lib/podman-desktop"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
-    mv dist/mac-*/Podman\ Desktop.app $out/Applications
+    mv dist/mac*/Podman\ Desktop.app $out/Applications
     ln -s $out/Applications/Podman\ Desktop.app/Contents/Resources "$out/share/lib/podman-desktop/resources"
 
     makeWrapper "$out/Applications/Podman Desktop.app/Contents/MacOS/Podman Desktop" $out/bin/podman-desktop
