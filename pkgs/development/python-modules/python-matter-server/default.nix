@@ -24,6 +24,7 @@
   zeroconf,
 
   # tests
+  aioresponses,
   python,
   pytest,
   pytest-aiohttp,
@@ -55,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "6.3.0";
+  version = "6.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -64,7 +65,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-/e7U0knkWQq9PnTimA2/ncNTyekx7QOcFEdtJHUcb9I=";
+    hash = "sha256-g+97a/X0FSapMLfdW6iNf1akkHGLqCmHYimQU/M6loo=";
   };
 
   patches = [
@@ -105,6 +106,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
     pytest-aiohttp
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
