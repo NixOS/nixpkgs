@@ -36,7 +36,7 @@ let
   throwSystem = throw "Unsupported system: ${system}";
 
   pname = "waveterm";
-  version = "0.8.7";
+  version = "0.8.8";
 
   suffix =
     {
@@ -51,10 +51,10 @@ let
     url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}";
     hash =
       {
-        x86_64-linux = "sha256-pWBKZid8sumi/EP3DA5KcLnZsHsuKYK6E6NHXdWKh8s=";
-        aarch64-linux = "sha256-2paRX+OGPSEktV4S+V43ZE9UgltLYZ+Nyba5/miBQkA=";
-        x86_64-darwin = "sha256-tsqw597gQIMnQ/OPZhrWwaRliF94KyS+ryajttDLqBA=";
-        aarch64-darwin = "sha256-PD38UBSNKuv836P/py/CtrLOlddHa0+w7R20YVY4Ybc=";
+        x86_64-linux = "sha256-hRpJTFVoBQZyJD06FTRbBPj/1DlYlDWPRjJ1IKeK7Cs=";
+        aarch64-linux = "sha256-T3VqsoHhPYYrAe/dEd0SUH+G4jpHjKpJTrFy8/AgoKI=";
+        x86_64-darwin = "sha256-UlyNl2Qu59L4hnK8rTeUV30YVD45L7ub5SP8f97aJrw=";
+        aarch64-darwin = "sha256-cP+z8DQsNBJc3p57xQdGqqq7jvYcRQRIa+P+6kD3eCc=";
       }
       .${system} or throwSystem;
   };
