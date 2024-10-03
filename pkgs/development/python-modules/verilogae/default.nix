@@ -1,22 +1,6 @@
-{
-  buildPythonPackage,
-  fetchFromSourcehut,
-  stdenv,
-  llvmPackages,
-  rustc,
-  patchelf,
-  python,
-  setuptools-rust,
-  cargo,
-  clang,
-  rustPlatform,
-  lib,
-  zlib,
-  ncurses,
-  libxml2,
-  pkg-config,
-  pkgs,
-}:
+{ buildPythonPackage, fetchFromSourcehut, stdenv, llvmPackages, rustc, patchelf
+, python, setuptools-rust, cargo, clang, rustPlatform, lib, zlib, ncurses
+, libxml2, pkg-config, pkgs }:
 
 buildPythonPackage rec {
   pname = "verilogae";
@@ -32,23 +16,20 @@ buildPythonPackage rec {
   format = "other";
 
   cargoDeps = rustPlatform.importCargoLock {
-    lockFile = "${src}/Cargo.lock";
+    lockFile = "${./Cargo.lock}";
     outputHashes = {
-      "salsa-0.17.0-pre.2" = "sha256-6GssvV76lFr5OzAUekz2h6f82Tn7usz5E8MSZ5DmgJw=";
+      "salsa-0.17.0-pre.2" =
+        "sha256-6GssvV76lFr5OzAUekz2h6f82Tn7usz5E8MSZ5DmgJw=";
     };
   };
 
-  buildInputs = [
-    llvmPackages.libllvm
-    pkgs.libxml2
-    ncurses.dev
-    zlib
-  ];
+  buildInputs = [ llvmPackages.libllvm pkgs.libxml2 ncurses.dev zlib ];
 
   nativeBuildInputs = [
     cargo
     clang
     rustPlatform.cargoSetupHook
+    rustPlatform.bindgenHook
     rustc
     llvmPackages.libllvm
     llvmPackages.clang
@@ -63,15 +44,16 @@ buildPythonPackage rec {
   configurePhase = "true";
 
   buildPhase = ''
-    export CC="${llvmPackages.clang}/bin/clang"
-    export CXX="${llvmPackages.clang}/bin/clang++"
+    echo "Running buildPhase"
 
-    export CARGO_BUILD_RUSTFLAGS="-L${llvmPackages.libllvm}/lib -lLLVMCore -lLLVMCodeGen -lLLVMTarget -lLLVMAnalysis -lLLVMSupport -lLLVMInstCombine -lLLVMTransformUtils -lLLVMScalarOpts -lLLVMInstrumentation"
+    # Set necessary LLVM flags
+    export RUSTFLAGS="-C link-arg=-L${llvmPackages.libllvm}/lib"
 
     export LD_LIBRARY_PATH="${llvmPackages.libllvm}/lib:${pkgs.libxml2}/lib:${ncurses.dev}/lib:$LD_LIBRARY_PATH"
     export PKG_CONFIG_PATH="${pkgs.libxml2}/lib/pkgconfig:${ncurses.dev}/lib/pkgconfig:$PKG_CONFIG_PATH"
 
-    cargo build --release
+    echo "Building using cargo..."
+    cargo build --release --verbose
   '';
 
   installPhase = ''
@@ -87,13 +69,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "verilogae" ];
 
   meta = {
-    description = "Verilog-A tool useful for compact model parameter extraction";
+    description =
+      "Verilog-A tool useful for compact model parameter extraction";
     homepage = "https://man.sr.ht/~dspom/openvaf_doc/verilogae/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      jasonodoom
-      jleightcap
-    ];
+    maintainers = with lib.maintainers; [ jasonodoom jleightcap ];
     platforms = lib.platforms.linux;
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
   };
