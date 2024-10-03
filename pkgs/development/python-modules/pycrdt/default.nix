@@ -3,27 +3,34 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # buildInputs
   libiconv,
+
+  # nativeBuildInputs
   rustPlatform,
+
+  # tests
   anyio,
   objsize,
   pydantic,
   pytestCheckHook,
   trio,
   y-py,
+
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.9.11";
+  version = "0.9.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-62r3AO+x9du6UjIdtqDPmwJ30/YmQxbPcCXgOaGNtL0=";
+    hash = "sha256-iaFpBD07l1WlC5FNzFxxF5gJS59yAyPmEn/NZg5U0AQ=";
   };
 
   postPatch = ''
