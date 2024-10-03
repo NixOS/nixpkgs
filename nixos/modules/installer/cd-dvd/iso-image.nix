@@ -201,7 +201,11 @@ let
       # Sets theme.
       set theme=(\$root)/EFI/BOOT/grub-theme/theme.txt
       # Load theme fonts
-      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/BOOT/grub-theme/%P\n")
+      set loadfontdone=false
+      $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "if loadfont (\$root)/EFI/BOOT/grub-theme/%P; then set loadfontdone=true; fi\n")
+      if [ "\$loadfontdone" == "false" ]; then
+        loadfont (\$root)/EFI/BOOT/unicode.pf2
+      fi
     '' else ''
       if background_image (\$root)/EFI/BOOT/efi-background.png; then
         # Black background means transparent background when there
@@ -214,13 +218,6 @@ let
         set menu_color_highlight=white/blue
       fi
     ''}
-
-    set loadfontdone=false
-    $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "if loadfont (\$root)/EFI/BOOT/grub-theme/%P; then set loadfontdone=true; fi\n")
-
-    if [ "\$loadfontdone" == "false" ]; then
-      loadfont (\$root)/EFI/BOOT/unicode.pf2
-    fi
 
     if [ "\$textmode" == "false" ]; then
       insmod gfxterm
