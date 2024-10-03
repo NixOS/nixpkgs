@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/FNA-XNA/FAudio";
     changelog = "https://github.com/FNA-XNA/FAudio/releases/tag/${version}";
     license = licenses.zlib;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.marius851000 ];
   };
 }
