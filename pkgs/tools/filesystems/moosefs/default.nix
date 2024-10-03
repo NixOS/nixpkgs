@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) moosefs; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://moosefs.com";
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
-    platforms = platforms.unix;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ mfossen markuskowa ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ mfossen markuskowa ];
   };
 }
