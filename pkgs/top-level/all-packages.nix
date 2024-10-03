@@ -2017,7 +2017,8 @@ with pkgs;
 
   vrrtest = callPackage ../tools/video/vrrtest { };
 
-  winbox = callPackage ../tools/admin/winbox {
+  winbox = winbox3;
+  winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
   };
 
@@ -25522,8 +25523,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
-
   pg_featureserv = callPackage ../servers/geospatial/pg_featureserv { };
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
@@ -26331,8 +26330,6 @@ with pkgs;
   gotest = callPackage ../development/tools/gotest { };
 
   gotestfmt = callPackage ../development/tools/gotestfmt { };
-
-  gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
