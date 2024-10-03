@@ -97,6 +97,9 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       gnome2.GConf
       libcap
+
+      # Unity Editor 6000 specific dependencies
+      harfbuzz
     ] ++ extraLibs pkgs;
   };
 
