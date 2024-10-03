@@ -10202,6 +10202,8 @@ self: super: with self; {
 
   pyisemail = callPackage ../development/python-modules/pyisemail { };
 
+  pyiskra = callPackage ../development/python-modules/pyiskra { };
+
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };
