@@ -193,8 +193,10 @@ stdenv.mkDerivation rec {
     cp -rp "${bundledContent}"/* "$out/share/ardour${lib.versions.major version}/media"
   '' + lib.optionalString videoSupport ''
     # `harvid` and `xjadeo` must be accessible in `PATH` for video to work.
+    # Add LV2_PATH with the NixOS location to where to find installed LV2 plugins
     wrapProgram "$out/bin/ardour${lib.versions.major version}" \
-      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}"
+      --prefix PATH : "${lib.makeBinPath [ harvid xjadeo ]}" \
+      --prefix LV2_PATH : "/run/current-system/sw/lib/lv2/"
   '';
 
   LINKFLAGS = "-lpthread";
