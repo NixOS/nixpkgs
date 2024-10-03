@@ -56,6 +56,10 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+    augeas = callPackage ../development/ocaml-modules/augeas {
+      inherit (pkgs) augeas;
+    };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
