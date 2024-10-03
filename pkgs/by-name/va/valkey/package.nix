@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "valkey";
-  version = "7.2.6";
+  version = "7.2.7";
 
   src = fetchFromGitHub {
     owner = "valkey-io";
     repo = "valkey";
     rev = finalAttrs.version;
-    hash = "sha256-nWeuWlP000DHEmIBzW1UmGqN+BggCjTS5plbQ/NV6wY=";
+    hash = "sha256-2kbhUg+rNuIUF/Bna6jFLI6Vhg9TlSi+OZEy6jKl2X0=";
   };
 
   patches = lib.optional useSystemJemalloc ./use_system_jemalloc.patch;
