@@ -44,6 +44,7 @@
   nss,
   pango,
   pipewire,
+  vulkan-loader,
   wayland, # ozone/wayland
 
   # Command line programs
@@ -152,6 +153,7 @@ let
       speechd
       systemd
       util-linux
+      vulkan-loader
       wayland
       wget
     ]
@@ -209,9 +211,12 @@ let
       exe=$out/bin/google-chrome-$dist
 
       mkdir -p $out/bin $out/share
+      cp -v -a opt/* $out/share
+      cp -v -a usr/share/* $out/share
 
-      cp -a opt/* $out/share
-      cp -a usr/share/* $out/share
+      # replace bundled vulkan-loader
+      rm -v $out/share/google/$appname/libvulkan.so.1
+      ln -v -s -t "$out/share/google/$appname" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
 
       substituteInPlace $out/share/google/$appname/google-$appname \
         --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
