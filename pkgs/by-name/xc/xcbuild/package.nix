@@ -10,11 +10,40 @@
   stdenv,
   zlib,
 
-  # These arguments are obsolete but required to avoid evaluation errors for now
+  # These arguments are obsolete but required to avoid evaluation errors (for now).
   CoreGraphics ? null,
   CoreServices ? null,
   ImageIO ? null,
+
+  # These are deprecated and do nothing. They’re needed for compatibility and will
+  # warn eventually once in-tree uses are cleaned up.
+  xcodePlatform ? null,
+  xcodeVer ? null,
+  sdkVer ? null,
+  productBuildVer ? null,
 }:
+
+let
+  attrs = {
+    inherit
+      xcodePlatform
+      xcodeVer
+      sdkVer
+      productBuildVer
+      ;
+  };
+in
+assert lib.warnIf (lib.any (attr: attr != null) (lib.attrValues attrs)) ''
+  The following arguments are deprecated and do nothing: ${
+    lib.concatStringsSep ", " (lib.attrNames (lib.filterAttrs (_: value: value != null) attrs))
+  }
+
+  xcbuild will dynamically pick up the SDK and SDK version based
+  on the SDK used in nixpkgs. If you need to use a different SDK,
+  add the appropriate SDK to your package’s `buildInputs`.
+
+  See the stdenv documentation for how to use `apple-sdk`.
+'' true;
 
 let
   googletest = fetchFromGitHub {
