@@ -15,7 +15,6 @@
   exfatprogs,
   f2fs-tools,
   fatresize,
-  hfsprogs,
   jfsutils,
   nilfs-utils,
   ntfs3g,
@@ -41,7 +40,7 @@ let
     exfatprogs
     f2fs-tools
     fatresize
-    hfsprogs
+    # hfsprogs intentionally omitted due to being unmaintained
     jfsutils
     nilfs-utils
     ntfs3g
