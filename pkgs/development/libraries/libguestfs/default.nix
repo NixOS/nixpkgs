@@ -39,6 +39,7 @@
 , javaSupport ? false
 , jdk
 , zstd
+, guestfsdOnly ? false
 }:
 
 assert appliance == null || lib.isDerivation appliance;
@@ -53,46 +54,63 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    cdrkit
-    cpio
-    flex
-    getopt
-    gperf
-    makeWrapper
-    pkg-config
-    qemu
-    zstd
-  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
-  ++ (with ocamlPackages; [ ocaml findlib ]);
-  buildInputs = [
-    libxcrypt
-    ncurses
-    jansson
-    pcre2
-    augeas
-    libxml2
-    acl
-    libcap
-    libcap_ng
-    libconfig
-    systemd
-    fuse
-    yajl
-    libvirt
-    gmp
-    readline
-    file
-    hivex
-    db
-    numactl
-    libapparmor
-    perlPackages.ModuleBuild
-    libtirpc
-  ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
-  ++ lib.optional javaSupport jdk;
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      cdrkit
+      cpio
+      flex
+      getopt
+      gperf
+      makeWrapper
+      pkg-config
+      qemu
+      zstd
+    ]
+    ++ (with perlPackages; [
+      perl
+      libintl-perl
+      GetoptLong
+      ModuleBuild
+    ])
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
+  buildInputs =
+    [
+      libxcrypt
+      ncurses
+      jansson
+      pcre2
+      augeas
+      libxml2
+      acl
+      libcap
+      libcap_ng
+      libconfig
+      systemd
+      fuse
+      yajl
+      libvirt
+      gmp
+      readline
+      file
+      (hivex.override { inherit ocamlPackages; })
+      db
+      numactl
+      libapparmor
+      perlPackages.ModuleBuild
+      libtirpc
+      zstd
+    ]
+    ++ (with ocamlPackages; [
+      ocamlbuild
+      ounit
+    ])
+    ++ lib.optional javaSupport jdk
+    ++ lib.optional guestfsdOnly [ ocamlPackages.augeas ];
 
   prePatch = ''
     # build-time scripts
@@ -106,14 +124,35 @@ stdenv.mkDerivation rec {
     # some scripts hardcore /usr/bin/env which is not available in the build env
     patchShebangs .
   '';
-  configureFlags = [
-    "--disable-appliance"
-    "--disable-daemon"
-    "--with-distro=NixOS"
-    "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
-  ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
+  configureFlags =
+    [
+      "--disable-appliance"
+      "--with-distro=NixOS"
+      "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
+      "CPPFLAGS=-I${libxml2.dev}/include/libxml2"
+    ]
+    ++ lib.optionals (!guestfsdOnly) [ "--disable-daemon" ]
+    ++ lib.optionals guestfsdOnly [
+      "--enable-daemon"
+      "--enable-install-daemon"
+      "--without-qemu"
+      "--without-libvirt"
+      "--disable-fuse"
+      "--disable-erlang"
+      "--disable-gobject"
+      "--disable-golang"
+      "--disable-haskell"
+      "--disable-lua"
+      "--disable-ocaml"
+      "--disable-perl"
+      "--disable-php"
+      "--disable-python"
+      "--disable-ruby"
+    ]
+    ++ lib.optionals (!javaSupport) [ "--without-java" ];
   patches = [
     ./libguestfs-syms.patch
+    ./guestfsd_skip_setenv_systemd.patch
   ];
 
   createFindlibDestdir = true;
@@ -121,7 +160,14 @@ stdenv.mkDerivation rec {
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
-  postInstall = ''
+  installPhase = lib.optionals guestfsdOnly ''
+    mkdir -p $out
+    cd daemon
+    REALLY_INSTALL=yes make install
+    runHook postInstall
+  '';
+
+  postInstall = lib.optionals (!guestfsdOnly) ''
     mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
@@ -136,29 +182,40 @@ stdenv.mkDerivation rec {
     ln -s ${appliance} $out/lib/guestfs
   '';
 
-  doInstallCheck = appliance != null;
-  installCheckPhase = ''
-    runHook preInstallCheck
+  doInstallCheck = (appliance != null) || guestfsdOnly;
+  installCheckPhase =
+    lib.optionalString (appliance != null) ''
+      runHook preInstallCheck
 
-    export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
+      export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
 
-    ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
+      ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
 
-    $out/bin/guestfish <<'EOF'
-    add-drive disk1.img
-    run
-    list-filesystems
-    part-disk /dev/sda mbr
-    mkfs ext2 /dev/sda1
-    list-filesystems
-    EOF
+      $out/bin/guestfish <<'EOF'
+      add-drive disk1.img
+      run
+      list-filesystems
+      part-disk /dev/sda mbr
+      mkfs ext2 /dev/sda1
+      list-filesystems
+      EOF
 
-    runHook postInstallCheck
-  '';
+      runHook postInstallCheck
+    ''
+    + lib.optionalString guestfsdOnly ''
+      executable_count=$(find $out -type f -executable | wc -l)
+      if [ "$executable_count" -ne 1 ]; then
+        echo "Error: Expected exactly one executable (guestfsd), but found $executable_count executables."
+        exit 1
+      fi
+    '';
 
   meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;

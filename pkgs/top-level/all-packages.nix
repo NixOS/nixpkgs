@@ -21166,6 +21166,7 @@ with pkgs;
   libgudev = callPackage ../development/libraries/libgudev { };
 
   libguestfs-appliance = callPackage ../development/libraries/libguestfs/appliance.nix { };
+  libguestfs-guestfsd = libguestfs.override { guestfsdOnly = true; };
   libguestfs = callPackage ../development/libraries/libguestfs {
     autoreconfHook = buildPackages.autoreconfHook264;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
