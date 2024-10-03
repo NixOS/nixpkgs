@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitLab
 , fetchpatch
+, fetchpatch2
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -11,7 +12,8 @@
 , VideoDecodeAcceleration
 , boost
 , bullet
-, ffmpeg
+# Please unpin this on the next OpenMW release.
+, ffmpeg_6
 , libXt
 , luajit
 , lz4
@@ -80,7 +82,7 @@ stdenv.mkDerivation rec {
     SDL2
     boost
     bullet'
-    ffmpeg
+    ffmpeg_6
     libXt
     luajit
     lz4
