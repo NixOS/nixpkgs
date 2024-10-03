@@ -3,20 +3,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.3.1";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "Electron-Cash";
     repo = "Electron-Cash";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-xOyj5XerOwgfvI0qj7+7oshDvd18h5IeZvcJTis8nWo=";
+    sha256 = "sha256-4cKlDJRFHt+FQ1ycO1Jz/stdhj9omiLu2G2vk7WmsIc=";
   };
 
   build-system = with python3Packages; [
     cython
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     # requirements
     pyaes
     ecdsa
@@ -54,9 +54,6 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [ ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   postPatch = ''
-    substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
-
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
   '';
