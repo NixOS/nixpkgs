@@ -252,6 +252,9 @@ let
         --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
 
+      # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
+      patchelf --set-rpath $rpath $out/share/google/$appname/lib*GL*
+
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
