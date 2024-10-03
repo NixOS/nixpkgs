@@ -10995,11 +10995,7 @@ with pkgs;
 
   paho-mqtt-c = callPackage ../development/libraries/paho-mqtt-c { };
 
-  pakcs = callPackage ../development/compilers/pakcs {
-    # Doesn't compile with GHC 9.0 due to whitespace syntax changes
-    # see also https://github.com/NixOS/nixpkgs/issues/166108
-    haskellPackages = haskell.packages.ghc810;
-  };
+  pakcs = callPackage ../development/compilers/pakcs { };
 
   pal = callPackage ../tools/misc/pal { };
 
