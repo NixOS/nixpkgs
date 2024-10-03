@@ -12,7 +12,7 @@ let
 in
 
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { pkgs, lib, ... }:
   rec {
     name = "logrotate";
     meta = with pkgs.lib.maintainers; {
@@ -86,6 +86,42 @@ import ./make-test-python.nix (
             };
           };
         };
+      keepPerm =
+        { ... }:
+        {
+          systemd.services.foo =
+            let
+              exe = pkgs.writeShellScript "exe" ''
+                while true; do
+                  echo 0123456789abcdef >> /var/log/foo/log
+                  sleep 1s
+                done
+              '';
+            in
+            {
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                DynamicUser = true;
+                LogsDirectory = "foo";
+                ExecStart = "${exe}";
+              };
+            };
+
+          systemd.services.logrotate = {
+            serviceConfig = {
+              RestrictAddressFamilies = lib.mkForce "AF_UNIX";
+            };
+          };
+
+          services.logrotate = {
+            enable = true;
+            settings.foo = {
+              files = [ "/var/log/private/foo/log" ];
+              size = "16";
+              postrotate = "systemctl restart foo";
+            };
+          };
+        };
     };
 
     testScript = ''
@@ -138,6 +174,11 @@ import ./make-test-python.nix (
           info = failingMachine.get_unit_info("logrotate-checkconf.service")
           if info["ActiveState"] != "failed":
               raise Exception('logrotate-checkconf.service was not failed')
+      with subtest("Keep permission"):
+          keepPerm.wait_for_unit("foo.service")
+          keepPerm.wait_for_file("/var/log/private/foo/log")
+          keepPerm.succeed("systemctl start logrotate.service")
+          keepPerm.wait_for_file("/var/log/private/foo/log.1")
 
       machine.log(machine.execute("systemd-analyze security logrotate.service | grep -v ✓")[1])
 
