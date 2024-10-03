@@ -15126,6 +15126,12 @@
     github = "niklaskorz";
     githubId = 590517;
   };
+  NiklasVousten = {
+    name = "Niklas Vousten";
+    email = "nixpkgs@vousten.dev";
+    github = "NiklasVousten";
+    githubId = 24965952;
+  };
   NikolaMandic = {
     email = "nikola@mandic.email";
     github = "NikolaMandic";
