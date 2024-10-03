@@ -4,7 +4,7 @@
 , rustc
 , rustPlatform
 , cargo
-, cargo-tauri
+, cargo-tauri_1
 , desktop-file-utils
 , openssl
 , libayatana-appindicator
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
     nodejs
     pnpm.configHook

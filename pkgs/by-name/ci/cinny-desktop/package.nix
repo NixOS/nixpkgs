@@ -4,7 +4,7 @@
   darwin,
   fetchFromGitHub,
   rustPlatform,
-  cargo-tauri,
+  cargo-tauri_1,
   cinny,
   desktop-file-utils,
   wrapGAppsHook3,
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     wrapGAppsHook3
     pkg-config
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
   ];
 

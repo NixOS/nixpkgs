@@ -7,7 +7,7 @@
 
   pnpm_9,
   nodejs,
-  cargo-tauri,
+  cargo-tauri_1,
   pkg-config,
   wrapGAppsHook3,
   makeBinaryWrapper,
@@ -56,7 +56,7 @@ buildRustPackage rec {
     [
       pnpm_9.configHook
       nodejs
-      cargo-tauri.hook
+      cargo-tauri_1.hook
       pkg-config
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
