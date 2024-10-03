@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "gotools";
-  version = "0.22.0";
+  version = "0.25.0";
 
   # using GitHub instead of https://go.googlesource.com/tools because Gitiles UI is to basic to browse
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "v${version}";
-    hash = "sha256-qqzvbHFbm6RlqztBnuj7HvMa9Wff1+YUA0fxiM0cx8o=";
+    hash = "sha256-iM6mGIQF+TOo1iV8hH9/4iOPdNiS9ymPmhslhDVnIIs=";
   };
 
   postPatch = ''
@@ -18,7 +18,7 @@ buildGoModule rec {
     rm -r gopls
   '';
 
-  vendorHash = "sha256-eQ/T/Zxmzn6KF0ewjvt9TDd48RSsSbQ3LgVcKgdeVbU=";
+  vendorHash = "sha256-9NSgtranuyRqtBq1oEnHCPIDFOIUJdVh5W/JufqN2Ko=";
 
   doCheck = false;
 
