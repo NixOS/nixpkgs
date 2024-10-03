@@ -11814,6 +11814,13 @@
     githubId = 307744;
     name = "Adam Fidel";
   };
+  Lee = {
+    name = "Lee";
+    email = "lee@mtftm.com";
+    github = "Leetfs";
+    githubId = 50666532;
+    keys = [ { fingerprint = "16B6 8466 D702 DB58 D893 9F9F F524 9CF8 681F 623F"; } ];
+  };
   leemachin = {
     email = "me@mrl.ee";
     github = "leemeichin";
@@ -23875,13 +23882,6 @@
     github = "zzzsyyy";
     githubId = 59917878;
     name = "Mathias Zhang";
-  };
-  Lee = {
-    name = "Lee";
-    email = "lee@mtftm.com";
-    github = "Leetfs";
-    githubId = 50666532;
-    keys = [ { fingerprint = "16B6 8466 D702 DB58 D893 9F9F F524 9CF8 681F 623F"; } ];
   };
 }
 # Keep the list alphabetically sorted.
