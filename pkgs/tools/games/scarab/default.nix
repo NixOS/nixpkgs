@@ -1,13 +1,14 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, glibc
-, zlib
-, gtk3
-, copyDesktopItems
-, icoutils
-, wrapGAppsHook3
-, makeDesktopItem
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  glibc,
+  zlib,
+  gtk3,
+  copyDesktopItems,
+  icoutils,
+  wrapGAppsHook3,
+  makeDesktopItem,
 }:
 
 buildDotnetModule rec {
@@ -22,7 +23,8 @@ buildDotnetModule rec {
   };
 
   nugetDeps = ./deps.nix;
-  projectFile = "Scarab.sln";
+  projectFile = "Scarab/Scarab.csproj";
+  testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
 
   preConfigureNuGet = ''
@@ -47,6 +49,8 @@ buildDotnetModule rec {
     wrapGAppsHook3
   ];
 
+  doCheck = true;
+
   postFixup = ''
     # Icons for the desktop file
     icotool -x $src/Scarab/Assets/omegamaggotprime.ico
@@ -58,26 +62,28 @@ buildDotnetModule rec {
     done
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "Scarab";
-    name = "scarab";
-    exec = "Scarab";
-    icon = "scarab";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Scarab";
+      name = "scarab";
+      exec = "Scarab";
+      icon = "scarab";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Hollow Knight mod installer and manager";
     homepage = "https://github.com/fifty-six/Scarab";
     downloadPage = "https://github.com/fifty-six/Scarab/releases";
     changelog = "https://github.com/fifty-six/Scarab/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ huantian ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ huantian ];
     mainProgram = "Scarab";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
