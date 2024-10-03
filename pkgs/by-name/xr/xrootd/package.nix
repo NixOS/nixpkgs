@@ -120,17 +120,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DXRootD_VERSION_STRING=${finalAttrs.version}"
-      "-DFORCE_ENABLED=TRUE"
-      "-DENABLE_DAVIX=TRUE"
-      "-DENABLE_FUSE=${if (!stdenv.hostPlatform.isDarwin) then "TRUE" else "FALSE"}" # not supported
-      "-DENABLE_MACAROONS=OFF"
-      "-DENABLE_PYTHON=FALSE" # built separately
-      "-DENABLE_SCITOKENS=TRUE"
-      "-DENABLE_VOMS=${if stdenv.hostPlatform.isLinux then "TRUE" else "FALSE"}"
+      (lib.cmakeFeature "XRootD_VERSION_STRING" finalAttrs.version)
+      (lib.cmakeBool "FORCE_ENABLED" true)
+      (lib.cmakeBool "ENABLE_DAVIX" true)
+      (lib.cmakeBool "ENABLE_FUSE" (!stdenv.hostPlatform.isDarwin)) # XRootD doesn't support MacFUSE
+      (lib.cmakeBool "ENABLE_MACAROONS" false)
+      (lib.cmakeBool "ENABLE_PYTHON" false) # built separately
+      (lib.cmakeBool "ENABLE_SCITOKENS" true)
+      (lib.cmakeBool "ENABLE_VOMS" stdenv.hostPlatform.isLinux)
     ]
     ++ lib.optionals enableTestRunner [
-      "-DENABLE_TESTS=TRUE"
+      (lib.cmakeBool "ENABLE_TESTS" true)
     ];
 
   postFixup = lib.optionalString (externalEtc != null) ''
