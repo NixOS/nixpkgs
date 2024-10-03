@@ -5,6 +5,7 @@
   rustPlatform,
   fetchFromGitHub,
   gtk4,
+  nix-update-script,
   openssl,
   pkg-config,
   webkitgtk_4_1,
@@ -47,6 +48,8 @@ rustPlatform.buildRustPackage rec {
     tests = {
       setupHooks = callPackage ./test-app.nix { };
     };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
