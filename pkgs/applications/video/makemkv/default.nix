@@ -1,5 +1,6 @@
 {
   autoPatchelfHook,
+  common-updater-scripts,
   curl,
   fetchurl,
   ffmpeg,
@@ -8,6 +9,8 @@
   openssl,
   pkg-config,
   qtbase,
+  rubyPackages,
+  writeShellApplication,
   zlib,
 
   withJava ? true,
@@ -82,6 +85,35 @@ mkDerivation {
 
     runHook postInstall
   '';
+
+  passthru = {
+    srcs = {
+      inherit src_bin src_oss;
+    };
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-makemkv";
+      runtimeInputs = [
+        common-updater-scripts
+        curl
+        rubyPackages.nokogiri
+      ];
+      text = ''
+        get_version() {
+          # shellcheck disable=SC2016
+          curl --fail --silent 'https://forum.makemkv.com/forum/viewtopic.php?f=3&t=224' \
+            | nokogiri -e 'puts $_.css("head title").first.text.match(/\bMakeMKV (\d+\.\d+\.\d+) /)[1]'
+        }
+        oldVersion=${lib.escapeShellArg version}
+        newVersion=$(get_version)
+        if [[ $oldVersion == $newVersion ]]; then
+          echo "$0: New version same as old version, nothing to do." >&2
+          exit
+        fi
+        update-source-version makemkv "$newVersion" --source-key=passthru.srcs.src_bin
+        update-source-version makemkv "$newVersion" --source-key=passthru.srcs.src_oss --ignore-same-version
+      '';
+    });
+  };
 
   meta = with lib; {
     description = "Convert blu-ray and dvd to mkv";
