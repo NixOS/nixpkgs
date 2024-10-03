@@ -9839,6 +9839,13 @@
     github = "jdupak";
     githubId = 22683640;
   };
+  jebriggsy = {
+    name = "Jacob Briggs";
+    email = "jebriggsy@protonmail.com";
+    github = "jebriggsy";
+    githubId = 319954;
+    keys = [ { fingerprint = "2F83 B9C6 3175 AFC1 9DD6  5A53 4AB1 0A34 202A 2D04"; } ];
+  };
   jecaro = {
     email = "jeancharles.quillet@gmail.com";
     github = "jecaro";
