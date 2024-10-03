@@ -1,18 +1,19 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libsForQt5,
 }:
 
-mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mathmod";
-  version = "11.1-unstable-2024-01-26";
+  version = "12.0";
 
   src = fetchFromGitHub {
     owner = "parisolab";
     repo = "mathmod";
-    rev = "24d03a04c17363520ae7cf077e72a7b8684eb6fd";
-    hash = "sha256-HiqHssPGqYEVZWchZRj4rFPc+xNVZk1ryl5qvFC2BmQ=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-h1iI7bheJVfE2+0m6Yk7QNCkl9Vye97tqb/WkQExVcQ=";
   };
 
   patches = [ ./fix-paths.patch ];
@@ -21,9 +22,13 @@ mkDerivation {
     substituteInPlace MathMod.pro --subst-var out
   '';
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ];
 
   meta = {
+    changelog = "https://github.com/parisolab/mathmod/releases/tag/${finalAttrs.version}";
     description = "Mathematical modelling software";
     homepage = "https://github.com/parisolab/mathmod";
     license = lib.licenses.gpl2Plus;
@@ -31,4 +36,4 @@ mkDerivation {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.unix;
   };
-}
+})
