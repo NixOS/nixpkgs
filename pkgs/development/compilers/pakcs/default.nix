@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, makeWrapper
+{ lib, stdenv, fetchurl, fetchpatch2, makeWrapper
 , haskellPackages, haskell
 , which, swi-prolog, rlwrap, tk
 , curl, git, unzip, gnutar, coreutils, sqlite }:
@@ -16,10 +16,21 @@ let
 
   curry-frontend = (haskellPackages.override {
     overrides = self: super: {
-      curry-frontend = haskell.lib.compose.overrideCabal (drv: {
-        inherit src;
-        postUnpack = "sourceRoot+=/frontend";
-      }) (super.callPackage ./curry-frontend.nix { });
+      curry-frontend = lib.pipe (super.callPackage ./curry-frontend.nix { })
+        [ haskell.lib.doJailbreak
+          (haskell.lib.compose.overrideCabal (drv: {
+            inherit src;
+            postUnpack = "sourceRoot+=/frontend";
+          }))
+          (haskell.lib.compose.appendPatch
+            # mtl 2.3 compatibility has been fixed upstream but it's not in
+            # the release yet
+            (fetchpatch2 {
+              name = "fix-mtl-2.3.patch";
+              url = "https://git.ps.informatik.uni-kiel.de/curry/curry-frontend/-/commit/3b26d2826141fee676da07939c2929a049279b70.diff";
+              hash = "sha256-R3XjoUzAwTvDoUEAIIjmrSh2r4RHMqe00RMIs+7jFPY=";
+            }))
+        ];
     };
   }).curry-frontend;
 
