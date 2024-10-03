@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
-    repo = finalAttrs.pname;
+    repo = "stdoutisatty";
     rev = finalAttrs.version;
     hash = "sha256-NyVn9cxx0rY1ridNDTqe0pzcVhdLVaPCKT4hoQkQzRs=";
   };
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      ls-color = runCommand "${finalAttrs.pname}-ls-color" { } ''
+      ls-color = runCommand "${finalAttrs.pname}-test-ls-color" { } ''
         set -x
         mkdir somedir
         ln -s somedir somelink
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/lilydjwg/stdoutisatty";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ bryango ];
-    mainProgram = finalAttrs.pname;
+    mainProgram = "stdoutisatty";
     platforms = lib.platforms.linux;
   };
 })
