@@ -5016,6 +5016,12 @@
     github = "definfo";
     githubId = 66514911;
   };
+  deftdawg = {
+    name = "DeftDawg";
+    github = "deftdawg";
+    email = "deftdawg@gmail.com";
+    githubId = 4991612;
+  };
   deifactor = {
     name = "Ash Zahlen";
     email = "ext0l@riseup.net";
