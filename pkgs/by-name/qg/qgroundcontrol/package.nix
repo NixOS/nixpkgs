@@ -91,6 +91,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    ./disable-bad-message.patch
+  ];
+
   meta = {
     description = "Provides full ground station support and configuration for the PX4 and APM Flight Stacks";
     homepage = "https://qgroundcontrol.com/";
