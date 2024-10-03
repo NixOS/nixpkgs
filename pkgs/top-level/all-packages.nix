@@ -18061,8 +18061,6 @@ with pkgs;
 
   lttv = callPackage ../development/tools/misc/lttv { };
 
-  luaformatter = callPackage ../development/tools/luaformatter { };
-
   lurk = callPackage ../development/tools/lurk { };
 
   maizzle = callPackage ../development/tools/maizzle { };
@@ -19160,7 +19158,7 @@ with pkgs;
 
   niv = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.niv);
 
-  ormolu = haskellPackages.ormolu.bin;
+  ormolu = lib.getBin (haskell.lib.compose.justStaticExecutables haskellPackages.ormolu);
 
   capnproto = callPackage ../development/libraries/capnproto { };
 
@@ -24089,17 +24087,17 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl_2_4_7 = wrapLisp {
-    pkg = callPackage ../development/compilers/sbcl { version = "2.4.7"; };
-    faslExt = "fasl";
-    flags = [ "--dynamic-space-size" "3000" ];
-  };
   sbcl_2_4_8 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl { version = "2.4.8"; };
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_8;
+  sbcl_2_4_9 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.4.9"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_4_9;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 

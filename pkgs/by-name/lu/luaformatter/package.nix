@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, antlr4_9, libargs, catch2, cmake, yaml-cpp }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  antlr4_9,
+  libargs,
+  catch2,
+  cmake,
+  yaml-cpp,
+}:
 let
   antlr4 = antlr4_9;
 in
-
 stdenv.mkDerivation rec {
   pname = "luaformatter";
   version = "1.3.6";
@@ -25,7 +33,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ antlr4.runtime.cpp yaml-cpp ];
+  buildInputs = [
+    antlr4.runtime.cpp
+    yaml-cpp
+  ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.isDarwin && stdenv.isx86_64
+  ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   meta = with lib; {
     description = "Code formatter for Lua";
