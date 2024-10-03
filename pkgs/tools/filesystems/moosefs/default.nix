@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     description = "Open Source, Petabyte, Fault-Tolerant, Highly Performing, Scalable Network Distributed File System";
     platforms = platforms.unix;
     license = licenses.gpl2Only;
-    maintainers = [ maintainers.mfossen ];
+    maintainers = with maintainers; [ mfossen markuskowa ];
   };
 }
