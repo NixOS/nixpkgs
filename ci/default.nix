@@ -24,4 +24,5 @@ let
 in
 {
   inherit pkgs;
+  requestReviews = pkgs.callPackage ./request-reviews { };
 }

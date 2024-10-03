@@ -1,0 +1,7 @@
+# Trusted development branches:
+# These generally require PRs to update and are built by Hydra.
+master
+staging
+release-*
+staging-*
+haskell-updates
