@@ -1,12 +1,12 @@
 {
+  autoPatchelfHook,
+  curl,
+  fetchurl,
+  ffmpeg,
   lib,
   mkDerivation,
-  fetchurl,
-  autoPatchelfHook,
-  pkg-config,
-  curl,
-  ffmpeg,
   openssl,
+  pkg-config,
   qtbase,
   zlib,
 
