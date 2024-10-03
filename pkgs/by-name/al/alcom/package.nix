@@ -1,7 +1,7 @@
 {
   buildDotnetModule,
   cargo-about,
-  cargo-tauri,
+  cargo-tauri_1,
   dotnetCorePackages,
   fetchFromGitHub,
   fetchNpmDeps,
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     cargo-about
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     dotnetSdk
     nodejs
     npmHooks.npmConfigHook
