@@ -5270,6 +5270,8 @@ self: super: with self; {
 
   google-nest-sdm = callPackage ../development/python-modules/google-nest-sdm { };
 
+  google-photos-library-api = callPackage ../development/python-modules/google-photos-library-api { };
+
   googlemaps = callPackage ../development/python-modules/googlemaps { };
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
