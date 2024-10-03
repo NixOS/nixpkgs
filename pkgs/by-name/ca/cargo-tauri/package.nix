@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage rec {
     hook = callPackage ./hook.nix { };
 
     tests = {
-      setupHooks = callPackage ./test-app.nix { };
+      hook = callPackage ./test-app.nix { };
       version = testers.testVersion { package = cargo-tauri; };
     };
 
