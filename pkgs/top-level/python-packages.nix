@@ -3354,6 +3354,8 @@ self: super: with self; {
 
   django-csp = callPackage ../development/python-modules/django-csp { };
 
+  django-cte = callPackage ../development/python-modules/django-cte { };
+
   django-currentuser = callPackage ../development/python-modules/django-currentuser { };
 
   django-debug-toolbar = callPackage ../development/python-modules/django-debug-toolbar { };
@@ -3450,6 +3452,10 @@ self: super: with self; {
 
   django-payments = callPackage ../development/python-modules/django-payments { };
 
+  django-pgactivity = callPackage ../development/python-modules/django-pgactivity { };
+
+  django-pglock = callPackage ../development/python-modules/django-pglock { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-phonenumber-field = callPackage ../development/python-modules/django-phonenumber-field { };
@@ -3543,6 +3549,8 @@ self: super: with self; {
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
   django-tastypie = callPackage ../development/python-modules/django-tastypie { };
+
+  django-tenants = callPackage ../development/python-modules/django-tenants { };
 
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
@@ -3725,6 +3733,8 @@ self: super: with self; {
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
+
+  drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
 
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
@@ -15301,6 +15311,8 @@ self: super: with self; {
   tempora = callPackage ../development/python-modules/tempora { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
+
+  tenant-schemas-celery = callPackage ../development/python-modules/tenant-schemas-celery { };
 
   tencentcloud-sdk-python = callPackage ../development/python-modules/tencentcloud-sdk-python { };
 
