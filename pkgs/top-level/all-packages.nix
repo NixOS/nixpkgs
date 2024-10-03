@@ -26358,8 +26358,6 @@ with pkgs;
 
   gotestfmt = callPackage ../development/tools/gotestfmt { };
 
-  gotools = callPackage ../development/tools/gotools { };
-
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
