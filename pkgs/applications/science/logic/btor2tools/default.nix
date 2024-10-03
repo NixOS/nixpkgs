@@ -21,11 +21,24 @@ stdenv.mkDerivation rec {
     cp -v  lib/libbtor2parser.* $lib/lib
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # make sure shared libraries are present and program can be executed
+    $out/bin/btorsim -h > /dev/null
+
+    runHook postInstallCheck
+  '';
+
   outputs = [ "out" "dev" "lib" ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
   meta = with lib; {
