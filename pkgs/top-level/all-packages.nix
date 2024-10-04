@@ -17686,8 +17686,6 @@ with pkgs;
 
   drip = callPackage ../development/tools/drip { };
 
-  drm_info = callPackage ../development/tools/drm_info { };
-
   dura = callPackage ../development/tools/misc/dura {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
