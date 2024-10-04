@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, guile-fibers
-, guile-gcrypt
-, guile-gnutls
-, texinfo
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  guile-fibers,
+  guile-gcrypt,
+  guile-gnutls,
+  texinfo,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "guile-goblins";
@@ -18,8 +19,17 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ guile pkg-config texinfo ];
-  buildInputs = [ guile guile-fibers guile-gcrypt guile-gnutls ];
+  nativeBuildInputs = [
+    guile
+    pkg-config
+    texinfo
+  ];
+  buildInputs = [
+    guile
+    guile-fibers
+    guile-gcrypt
+    guile-gnutls
+  ];
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
