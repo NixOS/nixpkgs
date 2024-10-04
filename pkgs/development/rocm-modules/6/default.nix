@@ -233,6 +233,11 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
+  hipblaslt = callPackage ./hipblaslt {
+    inherit rocmUpdateScript rocm-cmake rocblas rocsolver clr;
+    stdenv = llvm.rocmClangStdenv;
+  };
+
   # hipBlasLt - Very broken with Tensile at the moment, only supports GFX9
   # hipTensor - Only supports GFX9
 
