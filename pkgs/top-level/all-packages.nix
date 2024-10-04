@@ -10185,8 +10185,6 @@ with pkgs;
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
 
-  mtdutils = callPackage ../tools/filesystems/mtdutils { };
-
   mtools = callPackage ../tools/filesystems/mtools { };
 
   mtr = callPackage ../tools/networking/mtr { };
