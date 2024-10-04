@@ -30922,7 +30922,9 @@ with pkgs;
 
   lightburn = libsForQt5.callPackage ../applications/graphics/lightburn { };
 
-  lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr { };
+  lighthouse-steamvr = callPackage ../tools/misc/lighthouse-steamvr {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   liblinphone = callPackage ../development/libraries/liblinphone { };
 
