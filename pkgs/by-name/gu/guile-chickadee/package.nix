@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, makeWrapper
-, testers
-, guile
-, pkg-config
-, texinfo
-, freetype
-, libjpeg_turbo
-, libpng
-, libvorbis
-, mpg123
-, openal
-, readline
-, guile-opengl
-, guile-sdl2
-, guile-chickadee
+{
+  lib,
+  autoreconfHook,
+  fetchurl,
+  freetype,
+  guile,
+  guile-opengl,
+  guile-sdl2,
+  libjpeg_turbo,
+  libpng,
+  libvorbis,
+  makeWrapper,
+  mpg123,
+  openal,
+  pkg-config,
+  readline,
+  stdenv,
+  testers,
+  texinfo,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-chickadee";
   version = "0.10.0";
@@ -27,12 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Ey9TtuWaGlHG2cYYwqJIt2RX7XNUW28OGl/kuPUCD3U=";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [
-    makeWrapper
     autoreconfHook
     guile
+    makeWrapper
     pkg-config
     texinfo
   ];
@@ -55,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
+  strictDeps = true;
+
   postInstall = ''
     wrapProgram $out/bin/chickadee \
       --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
@@ -62,19 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion {
-    package = guile-chickadee;
+    package = finalAttrs.finalPackage;
     command = "chickadee -v";
   };
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    description = "Game development toolkit for Guile Scheme with SDL2 and OpenGL";
+  meta = {
     homepage = "https://dthompson.us/projects/chickadee.html";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ chito ];
+    description = "Game development toolkit for Guile Scheme with SDL2 and OpenGL";
+    license = lib.licenses.asl20;
     mainProgram = "chickadee";
-    platforms = guile.meta.platforms;
+    maintainers = with lib.maintainers; [ chito ] ;
+    inherit (guile.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
