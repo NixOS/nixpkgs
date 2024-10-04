@@ -47,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
         paths = finalAttrs.buildInputs;
       };
     in
-    [
-      "SDLMINUSI=-I${sdl-env}/include/SDL"
-    ];
+    [ "SDLMINUSI=-I${sdl-env}/include/SDL" ];
 
   strictDeps = true;
 
@@ -59,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gnu.org/software/guile-sdl/";
     description = "Guile bindings for SDL";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (guile.meta) platforms;
   };
 })
