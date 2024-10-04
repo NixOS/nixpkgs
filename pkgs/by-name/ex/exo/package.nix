@@ -6,32 +6,19 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
-  version = "0-unstable-2024-10-02";
+  version = "0-unstable-2024-10-03";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "2654f290c3179aa143960e336e8985a8b6f6b72b";
-    hash = "sha256-jaIeK3sn6Swi20DNnvDtSAIt3DXIN0OQDiozNUHqtjs=";
+    rev = "2b9dec20eb25f8708455e13eabc744d653b7a286";
+    hash = "sha256-Iz65bs/ntTrxcifrPemAlK8zVjbwQfXsnUlcE1r4E/A=";
   };
 
   build-system = with python3Packages; [ setuptools ];
 
-  pythonRelaxDeps = [
-    "aiohttp"
-    "aiofiles"
-    "blobfile"
-    "grpcio-tools"
-    "huggingface-hub"
-    "numpy"
-    "protobuf"
-    "pynvml"
-    "safetensors"
-    "tenacity"
-    "tokenizers"
-    "transformers"
-  ];
+  pythonRelaxDeps = true;
 
   pythonRemoveDeps = [ "uuid" ];
 
