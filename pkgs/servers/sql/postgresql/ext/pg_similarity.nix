@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, gcc, postgresql }:
+{ stdenv, lib, fetchFromGitHub, gcc, postgresql, buildPostgresExtension }:
 
-stdenv.mkDerivation {
-
+buildPostgresExtension {
   pname = "pg_similarity";
   version = "1.0";
+
   src = fetchFromGitHub {
     owner = "eulerto";
     repo = "pg_similarity";
@@ -11,14 +11,9 @@ stdenv.mkDerivation {
     sha256 = "1z4v4r2yccdr8kz3935fnk1bc5vj0qj0apscldyap4wxlyi89xim";
   };
 
-  buildInputs = [ postgresql gcc ];
+  buildInputs = [ gcc ];
 
   makeFlags = [ "USE_PGXS=1" ];
-
-  installPhase = ''
-    install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
-    install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
-  '';
 
   meta = {
     description = "Extension to support similarity queries on PostgreSQL";

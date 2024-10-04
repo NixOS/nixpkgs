@@ -2,7 +2,6 @@
 , fetchzip
 , nixosTests
 , stdenv
-
 , mecab
 , postgresql
 }:

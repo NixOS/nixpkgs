@@ -287,6 +287,7 @@ let
               '';
               installPhase = "touch $out";
             } // extraArgs);
+          buildPostgresExtension = newSuper.callPackage ./buildPostgresExtension.nix {};
         };
         newSelf = self // scope;
         newSuper = { callPackage = newScope (scope // this.pkgs); };

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true }:
+{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true, buildPostgresExtension }:
 
-stdenv.mkDerivation rec {
+buildPostgresExtension rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.14.2";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl libkrb5 ];
+  buildInputs = [ openssl libkrb5 ];
 
   src = fetchFromGitHub {
     owner = "timescale";

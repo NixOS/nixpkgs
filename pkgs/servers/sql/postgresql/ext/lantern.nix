@@ -4,9 +4,10 @@
 , fetchFromGitHub
 , postgresql
 , postgresqlTestExtension
+, buildPostgresExtension
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+buildPostgresExtension (finalAttrs: {
   pname = "postgresql-lantern";
   version = "0.2.4";
 
@@ -21,20 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ];
-
-  buildInputs = [
-    postgresql
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    install -D -t $out/lib lantern${postgresql.dlSuffix}
-    install -D -t $out/share/postgresql/extension lantern-*.sql
-    install -D -t $out/share/postgresql/extension lantern.control
-
-    runHook postInstall
-  '';
 
   cmakeFlags = [
     "-DBUILD_FOR_DISTRIBUTING=ON"
