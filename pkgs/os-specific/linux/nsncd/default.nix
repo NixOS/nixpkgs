@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage {
@@ -39,5 +41,10 @@ rustPlatform.buildRustPackage {
     ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
+  };
+
+  passthru = {
+    tests.nscd = nixosTests.nscd;
+    updateScript = nix-update-script { };
   };
 }
