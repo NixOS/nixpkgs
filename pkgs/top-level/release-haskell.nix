@@ -347,7 +347,7 @@ let
         nvfetcher
         oama
         ormolu
-        # pakcs broken by set-extra on 2024-03-15
+        pakcs
         pandoc
         place-cursor-at
         pinboard-notes-backup
