@@ -1,28 +1,50 @@
-{ lib, stdenv, fetchFromGitHub
-, libdrm, json_c, pciutils
-, meson, ninja, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  libdrm,
+  json_c,
+  pciutils,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
 }:
 
-stdenv.mkDerivation rec {
+let
+  version = "2.7.0";
+in
+stdenv.mkDerivation {
   pname = "drm_info";
-  version = "2.3.0";
+  inherit version;
 
-  src = fetchFromGitHub {
-    owner = "ascent12";
+  src = fetchFromGitLab {
+    owner = "emersion";
     repo = "drm_info";
-    rev = "v${version}";
-    sha256 = "sha256-UTDYLe3QezPCyG9CIp+O+KX716JDTL9mn+OEjjyTwlg=";
+    domain = "gitlab.freedesktop.org";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pgYhZtmyhuhxBiiTRdrEp/YsuwrD6KK/ahfO2L3mfM8=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ libdrm json_c pciutils ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
-  meta = with lib; {
+  buildInputs = [
+    libdrm
+    json_c
+    pciutils
+    scdoc
+  ];
+
+  meta = {
     description = "Small utility to dump info about DRM devices";
     mainProgram = "drm_info";
-    homepage = "https://github.com/ascent12/drm_info";
-    license = licenses.mit;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    homepage = "https://gitlab.freedesktop.org/emersion/drm_info";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ momeemt ];
+    platforms = lib.platforms.linux;
   };
 }
