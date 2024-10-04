@@ -4,6 +4,7 @@
 
   grafanaPlugin = callPackage ./grafana-plugin.nix { };
 
+  bsull-console-datasource = callPackage ./bsull-console-datasource { };
   doitintl-bigquery-datasource = callPackage ./doitintl-bigquery-datasource { };
   grafadruid-druid-datasource = callPackage ./grafadruid-druid-datasource { };
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
