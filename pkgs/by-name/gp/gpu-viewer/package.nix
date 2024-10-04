@@ -1,54 +1,60 @@
 {
   lib,
+  python3Packages,
   fetchFromGitHub,
-  pkg-config,
+
+  # nativeBuildInputs
+  gobject-introspection,
   meson,
   ninja,
+  pkg-config,
+  wrapGAppsHook4,
+
+  # buildInputs
+  gdk-pixbuf,
   gtk4,
   libadwaita,
-  python3Packages,
-  gobject-introspection,
   vulkan-tools,
+
+  # wrapper
   python3,
-  wrapGAppsHook4,
-  gdk-pixbuf,
+  clinfo,
   lsb-release,
   mesa-demos,
   vdpauinfo,
-  clinfo,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gpu-viewer";
-  version = "3.04";
+  version = "3.06";
 
   format = "other";
 
   src = fetchFromGitHub {
     owner = "arunsivaramanneo";
-    repo = pname;
+    repo = "gpu-viewer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+FDBHSVBTUHnhu2n7i9W1zIZe2wjY+OuFwQOJZojuzs=";
+    hash = "sha256-vFU2VdafY1HmPGRa20PwT6n+Xf4bKBzKJ5jWpvwyMWg=";
   };
 
   nativeBuildInputs = [
-    pkg-config
+    gobject-introspection
     meson
     ninja
-    gobject-introspection
+    pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
+    gdk-pixbuf
     gtk4
     libadwaita
     vulkan-tools
-    gdk-pixbuf
   ];
 
   pythonPath = with python3Packages; [
-    pygobject3
     click
+    pygobject3
   ];
 
   # Prevent double wrapping
@@ -72,13 +78,13 @@ python3.pkgs.buildPythonApplication rec {
       ''${gappsWrapperArgs[@]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/arunsivaramanneo/GPU-Viewer";
     description = "Front-end to glxinfo, vulkaninfo, clinfo and es2_info";
     changelog = "https://github.com/arunsivaramanneo/GPU-Viewer/releases/tag/v${version}";
-    maintainers = with maintainers; [ GaetanLepage ];
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     mainProgram = "gpu-viewer";
   };
 }
