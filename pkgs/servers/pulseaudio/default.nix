@@ -34,9 +34,12 @@
 , # Whether to build only the library.
   libOnly ? false
 
-, AudioUnit, Cocoa, CoreServices, CoreAudio
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa CoreAudio;
+in
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
@@ -49,7 +52,7 @@ stdenv.mkDerivation rec {
   patches = [
     # Install sysconfdir files inside of the nix store,
     # but use a conventional runtime sysconfdir outside the store
-    ./add-option-for-installation-sysconfdir.patch
+    ./0000-add-option-for-installation-sysconfdir.patch
 
     # Fix crashes with some UCM devices
     # See https://gitlab.archlinux.org/archlinux/packaging/packages/pulseaudio/-/issues/4
