@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildNpmPackage
-, clang
-, go
-, qtwebengine
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildNpmPackage,
+  clang,
+  go,
+  qtwebengine,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
