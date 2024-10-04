@@ -447,7 +447,7 @@ let
           (let
             deps = deviceDependency v.interface;
           in
-          { description = "Vlan Interface ${n}";
+          { description = "MACVLAN Interface ${n}";
             wantedBy = [ "network-setup.service" (subsystemDevice n) ];
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
