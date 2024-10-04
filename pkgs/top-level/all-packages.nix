@@ -10947,8 +10947,6 @@ with pkgs;
 
   payload-dumper-go = callPackage ../tools/archivers/payload-dumper-go { };
 
-  p3x-onenote = callPackage ../applications/office/p3x-onenote { };
-
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
   };
