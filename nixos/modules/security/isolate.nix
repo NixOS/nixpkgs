@@ -125,7 +125,7 @@ in
     };
 
     systemd.slices.isolate = {
-      description = "Isolate sandbox slice";
+      description = "Isolate Sandbox Slice";
     };
 
     meta.maintainers = with maintainers; [ virchau13 ];
