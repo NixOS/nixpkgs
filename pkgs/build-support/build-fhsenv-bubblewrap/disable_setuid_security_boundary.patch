@@ -1,0 +1,24 @@
+diff --git a/bubblewrap.c b/bubblewrap.c
+index 9f87e90..62c9a5c 100644
+--- a/bubblewrap.c
++++ b/bubblewrap.c
+@@ -35,6 +35,7 @@
+ #include <linux/sched.h>
+ #include <linux/seccomp.h>
+ #include <linux/filter.h>
++#include <unistd.h>
+ 
+ #include "utils.h"
+ #include "network.h"
+@@ -2722,6 +2723,11 @@ main (int    argc,
+   int intermediate_pids_sockets[2] = {-1, -1};
+   const char *exec_path = NULL;
+ 
++  // Set real UID to effective UID to trick bubblewrap into thinking it is root
++  if (setreuid(geteuid(), -1) != 0) {
++    die_with_error ("seretuid failed");
++  }
++
+   /* Handle --version early on before we try to acquire/drop
+    * any capabilities so it works in a build environment;
+    * right now flatpak's build runs bubblewrap --version.
