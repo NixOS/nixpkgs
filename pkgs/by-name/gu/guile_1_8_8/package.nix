@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/0000-cpp-4.5.patch
     # Self explanatory
     ./patches/0001-CVE-2016-8605.patch
+    # Add path for library dir on Nixpkgs
+    ./patches/0002-lt-dladdsearchdir.patch
   ];
 
   outputs = [
@@ -69,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.withFeature false "threads")
     ];
 
-  preBuild = ''
-    sed -e '/lt_dlinit/a  lt_dladdsearchdir("'$out/lib'");' -i libguile/dynl.c
+  postPatch = ''
+    libdir=''${!outputLib} substituteAllInPlace libguile/dynl.c
   '';
 
   postInstall =
