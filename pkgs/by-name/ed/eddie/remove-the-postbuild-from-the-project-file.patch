@@ -1,0 +1,27 @@
+From 243cfaf1847aab4510da0df7cf59941b1d358062 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Sun, 4 Aug 2024 17:21:18 +0300
+Subject: [PATCH] Remove the postbuild from the project file.
+
+---
+ src/App.CLI.Linux/App.CLI.Linux.net7.csproj | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/src/App.CLI.Linux/App.CLI.Linux.net7.csproj b/src/App.CLI.Linux/App.CLI.Linux.net7.csproj
+index c72f41f..a08a536 100644
+--- a/src/App.CLI.Linux/App.CLI.Linux.net7.csproj
++++ b/src/App.CLI.Linux/App.CLI.Linux.net7.csproj
+@@ -50,9 +50,4 @@
+ 		<ProjectReference Include="..\Lib.Core\Lib.Core.net7.csproj" />
+ 		<ProjectReference Include="..\Lib.Platform.Linux\Lib.Platform.Linux.net7.csproj" />
+ 	</ItemGroup>
+-
+-	<Target Name="LinuxPostBuild" AfterTargets="PostBuildEvent">		
+-		<Exec Command="$(ProjectDir)/postbuild.sh &quot;$(TargetDir)&quot; $(RuntimeIdentifier) $(ConfigurationName)" />
+-	</Target>
+-
+ </Project>
+\ No newline at end of file
+-- 
+2.45.2
+
