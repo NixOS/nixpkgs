@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru = {
-    updateScript = gitUpdater { tagPrefix = "v"; };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };
