@@ -94,6 +94,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   setOutputFlags = false; # $dev gets into $lib otherwise
 
+  strictDeps = true;
+
   setupHook = ./setup-hook.sh;
 
   passthru = {
