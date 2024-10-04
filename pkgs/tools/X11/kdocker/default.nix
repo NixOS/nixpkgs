@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Dock any application into the system tray";
     homepage = "https://github.com/user-none/KDocker";
+    changelog = "https://github.com/user-none/KDocker/blob/${finalAttrs.version}/ChangeLog";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ hexclover ];
     platforms = platforms.linux;
