@@ -56,8 +56,8 @@ rec {
     assert stdenv.cc.libcxx != null;
     assert pkgs.stdenv.cc.libcxx != null;
     # only unified libcxx / libcxxabi stdenv's are supported
-    assert lib.versionAtLeast pkgs.stdenv.cc.libcxx.version "12";
-    assert lib.versionAtLeast stdenv.cc.libcxx.version "12";
+    assert lib.versionAtLeast (lib.getVersion pkgs.stdenv.cc.libcxx) "12";
+    assert lib.versionAtLeast (lib.getVersion stdenv.cc.libcxx) "12";
     let
       llvmLibcxxVersion = lib.getVersion llvmLibcxx;
       stdenvLibcxxVersion = lib.getVersion stdenvLibcxx;
