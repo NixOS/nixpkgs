@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, Libsystem }:
 let
-  version = "110.99.5";
+  version = "110.99.6";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
 
   arch = if stdenv.hostPlatform.is64bit
@@ -8,9 +8,9 @@ let
     else "32";
 
   boot32 = { url = "${baseurl}/boot.x86-unix.tgz";
-             hash = "sha256-9yU9gBTN/z1kEcv1y8OPq+4Y0pFLzUNB8pTmf3K4M2U="; };
+             hash = "sha256-7fk0x9lj9klYTljyeMuKaSyZocdAwFjXsNK7qP6MEaU="; };
   boot64 = { url = "${baseurl}/boot.amd64-unix.tgz";
-             hash = "sha256-pfGpnx4qzcGLkdHEXj108DSaGajXgZWT/Ms99+rrYbs="; };
+             hash = "sha256-SHUYt/jJLUiuIIgCq3F/X20r30i3+FS2VJNsMpZMvUk="; };
 
   bootBinary = if stdenv.hostPlatform.is64bit
                then boot64
@@ -18,28 +18,28 @@ let
 
   sources = map fetchurl [
     bootBinary
-    { url = "${baseurl}/config.tgz";              hash = "sha256-8yuVv1L1t1Ep4kIuVv0+2xI2YX12A9DHZsPIBDjN0V0="; }
-    { url = "${baseurl}/cm.tgz";                  hash = "sha256-bRrH3yjJnypTGhg0VL+25G2G+/3Ze63ggHDgAByhTrI="; }
-    { url = "${baseurl}/compiler.tgz";            hash = "sha256-l7WeUhOexpjkkQjhJ0nHdAVetuKKt8CFE859NXqONh0="; }
-    { url = "${baseurl}/runtime.tgz";             hash = "sha256-cSV8Uv3EHU96/KsF//RJYPXJizAO7VmKnIlvDkWCbTA="; }
-    { url = "${baseurl}/system.tgz";              hash = "sha256-vB24eqXTmtzjElLzeKwS4bhGg2lpW+Ef3lewx5W6vMM="; }
-    { url = "${baseurl}/MLRISC.tgz";              hash = "sha256-ZjzbbWrvfw1f+0vfhoCcFHiIRoz6F/QbuhfTJEkzGgY="; }
-    { url = "${baseurl}/smlnj-lib.tgz";           hash = "sha256-B7B+gSgh/tb5ZeQoJuonDgS4RSUc5TYs/3yJ5jsCgo0="; }
-    { url = "${baseurl}/old-basis.tgz";           hash = "sha256-584UQ4PsqO12KrR4t27gRXk0YyExu2ksAGq4jIGXhpE="; }
-    { url = "${baseurl}/ckit.tgz";                hash = "sha256-TbeODlBfhRlTTntrF3lIoIH7m3sjkgoh29XSv6UUYaw="; }
-    { url = "${baseurl}/nlffi.tgz";               hash = "sha256-frIqBvzMBdrCfURGRX3Pln8bpBLa/ZQPc6n9wRAExUs="; }
-    { url = "${baseurl}/cml.tgz";                 hash = "sha256-9yU9gBTN/z1kEcv1y8OPq+4Y0pFLzUNB8pTmf3K4M2U="; }
-    { url = "${baseurl}/eXene.tgz";               hash = "sha256-hdoI/6M6FZcIsd5eJf1DDhiTWV3TuPFfA5dR9iU43lU="; }
-    { url = "${baseurl}/ml-lpt.tgz";              hash = "sha256-9U8GoL1n2NzyKh0tiRqWaKLa4RS4h1q9oGGhgaINZ7E="; }
-    { url = "${baseurl}/ml-lex.tgz";              hash = "sha256-NnpcyyyV+eC3Ebw77r1mJEiLbG8nZl4jaV7fP1QJGZo="; }
-    { url = "${baseurl}/ml-yacc.tgz";             hash = "sha256-gjVBk8grQLj0+uC2+zTo/X5TrcaCb0xkbRry9IsT56Q="; }
-    { url = "${baseurl}/ml-burg.tgz";             hash = "sha256-XGC60kS/w5nxJe0IHWxHz/xwgsmKoukTl4pjdFjIzw0="; }
-    { url = "${baseurl}/pgraph.tgz";              hash = "sha256-VSQ0nPFlbuepbVRZCmYa5wOvQUbP0MXRra0V8lrvIKw="; }
-    { url = "${baseurl}/trace-debug-profile.tgz"; hash = "sha256-1lW/zJiiZFOYjFNOQJIzMP4Ms7M0QdYIHHAoDiKN6Kc="; }
-    { url = "${baseurl}/heap2asm.tgz";            hash = "sha256-71eHCwSaVoYWnItIkXl7EuB9ZLk9WpEvdIbmRW+o4a0="; }
-    { url = "${baseurl}/smlnj-c.tgz";             hash = "sha256-anKS6PqxElOz6MYB7dyd/dqJaah7CyIm8FjGu3/C4h8="; }
-    { url = "${baseurl}/doc.tgz";                 hash = "sha256-Yy0dGhT997szNFbTX7aYuDI/dUxDmH1Z035iIUIeDxY="; }
-    { url = "${baseurl}/asdl.tgz";                hash = "sha256-hJa1Rk/GHkCwV2zycTYZJC8Kh24tghrTvsCbAcWrNz8="; }
+    { url = "${baseurl}/config.tgz";              hash = "sha256-aSOmbHFxqTOK/5xy6hNALqn6cqVXd+eJUS4N7KF/WoE="; }
+    { url = "${baseurl}/cm.tgz";                  hash = "sha256-7RJSdgRcsm1TMFXbkUULwWpVYQzTjruG8aZemfDGuzk="; }
+    { url = "${baseurl}/compiler.tgz";            hash = "sha256-HcDTHYkBM13fqkclx8MXTcT9jotfv7kqLLIq6ec0Er4="; }
+    { url = "${baseurl}/runtime.tgz";             hash = "sha256-RgJ24Hxx7w3NzCD6VMxU+8NOKjLtDl6q8+zl0onnuB4="; }
+    { url = "${baseurl}/system.tgz";              hash = "sha256-mP9k+Mivk0DyIfx5zl8yfZtaty6WoNSVd20PhvhZoAo="; }
+    { url = "${baseurl}/MLRISC.tgz";              hash = "sha256-6zGuS5YRPwAZqyt7pk8fgtnjy/NIWsDnC5h8FsQ7qAU="; }
+    { url = "${baseurl}/smlnj-lib.tgz";           hash = "sha256-kHXAFszzIR+glBJA7AjLGpGnRwh67CYO1MxZDZI4WVM="; }
+    { url = "${baseurl}/old-basis.tgz";           hash = "sha256-VWoDwC8DVcmCMj4Ah/MBwJQgfLsfxn3GuhaMwblp3aI="; }
+    { url = "${baseurl}/ckit.tgz";                hash = "sha256-jgFn4GPIWV2XcHYvCtOz/+GL1ja3L1yz4WokrOTaeXo="; }
+    { url = "${baseurl}/nlffi.tgz";               hash = "sha256-9vJlWTqYfpA1FKM9QsxyPTAARIbpFs6AsrCl7CHteTI="; }
+    { url = "${baseurl}/cml.tgz";                 hash = "sha256-B/9L1U/CVygIgCAjeJsbZXlg2wncayoDnZJqDp1/cp4="; }
+    { url = "${baseurl}/eXene.tgz";               hash = "sha256-/z5Z+r3q6dwqXBo4Zncl313jjuWsc+p6+SrWlCJGl4E="; }
+    { url = "${baseurl}/ml-lpt.tgz";              hash = "sha256-0AV1f5YaPSkMjlAv9nRzuKWEZn/uTy9eMGTrhwo9TrY="; }
+    { url = "${baseurl}/ml-lex.tgz";              hash = "sha256-wd0QLoG4eHFQmcLs9g6Zs+XnC95v99YYzK2xq1rcB9c="; }
+    { url = "${baseurl}/ml-yacc.tgz";             hash = "sha256-YRIkIKQ6k3HFLCCkNuh7gSuv6mHWFJAQcENuHqRrDKI="; }
+    { url = "${baseurl}/ml-burg.tgz";             hash = "sha256-aeBxOHdsFNbxyQATKvX1HbeLzOHXA8Cdd+Sz6xgvi/k="; }
+    { url = "${baseurl}/pgraph.tgz";              hash = "sha256-16jW36yw7S40/BZ1bEyHrRWsHo/MJz1Dkzex7JZRdeg="; }
+    { url = "${baseurl}/trace-debug-profile.tgz"; hash = "sha256-oS1zB+1IuQCP3BCzop3UsV1RHLOI6sAUbi+JFhgw8ds="; }
+    { url = "${baseurl}/heap2asm.tgz";            hash = "sha256-7mbuluXzIzqg69fjVndKJ4k+NHPm2q+n/VHRa+VJ6pk="; }
+    { url = "${baseurl}/smlnj-c.tgz";             hash = "sha256-/cZ3vWQUSQKxBNUUQJ3U73R1bqJsVQ56A1n2BlhSAhU="; }
+    { url = "${baseurl}/doc.tgz";                 hash = "sha256-Svv65apyManShajxZgUKrt40PWya++vVJnkAcnlx2eU="; }
+    { url = "${baseurl}/asdl.tgz";                hash = "sha256-JZRyW3u1Z5iMNos2QgqNd1T2I0QAf9VNkpxHEZG0uVs="; }
   ];
 in stdenv.mkDerivation {
   pname = "smlnj";
