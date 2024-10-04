@@ -3,6 +3,8 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, pkg-config
+, openssl
 , Security
 }:
 
@@ -19,9 +21,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-WCbpwvCXm54/Cv+TscaqseWzTUd8V1DxmS30fUZZTwI=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+  # use OpenSSL for the TLS backend instead of the default rustls
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "native-tls" ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+  ];
+
+  env.OPENSSL_NO_VENDOR = true;
 
   postInstall = ''
     installShellCompletion --cmd tldr \
