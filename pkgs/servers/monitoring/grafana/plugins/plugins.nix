@@ -6,6 +6,7 @@
 
   bsull-console-datasource = callPackage ./bsull-console-datasource { };
   doitintl-bigquery-datasource = callPackage ./doitintl-bigquery-datasource { };
+  fetzerch-sunandmoon-datasource = callPackage ./fetzerch-sunandmoon-datasource { };
   grafadruid-druid-datasource = callPackage ./grafadruid-druid-datasource { };
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
