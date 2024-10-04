@@ -9,7 +9,7 @@
   matplotlib,
   packaging,
   pillow,
-  pytest7CheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -36,13 +36,7 @@ buildPythonPackage rec {
     pillow
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook ];
-
-  disabledTests = [
-    # Broken since b6e98f18950c2b5dbdc725c1181df2ad1be19fee
-    "test_hash_fails"
-    "test_hash_missing"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # Following are broken since at least a1548780dbc79d76360580691dc1bb4af4e837f6
