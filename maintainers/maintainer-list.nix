@@ -18287,6 +18287,18 @@
     githubId = 1217934;
     name = "José Romildo Malaquias";
   };
+  romner-set = {
+    email = "admin@cynosure.red";
+    github = "romner-set";
+    githubId = 41077433;
+    name = "romner-set";
+    keys = [
+      {
+        # uploaded to https://keys.openpgp.org
+        fingerprint = "4B75 244B 0279 9598 FF3B  C21F 95FC 58F1 8CFD FAB0";
+      }
+    ];
+  };
   ronanmacf = {
     email = "macfhlar@tcd.ie";
     github = "RonanMacF";
