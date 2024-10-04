@@ -18,21 +18,21 @@
 }:
 
 let
-  version = "1.17.7";
+  version = "1.17.8";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-jFvIMbyVKx+HPMhFDGTjktsLJHm2JtGA8P/JZWaJUdA=";
+    hash = "sha256-jg9UdDDZr+7ZdseJtb7N+y7Prhyq3hLo4+EZpzRxcEE=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-di5VLUb57HWnxi3LfZfA/Z5qFRINDvb1oIDO4pHToO8=";
+    hash = "sha256-knUrzj/J+Xk5N1tg0q9iIXT+hqStkkjL3Yc2Yp5tvIo=";
   };
 in
 mkDerivation {
@@ -105,7 +105,7 @@ mkDerivation {
         }
         oldVersion=${lib.escapeShellArg version}
         newVersion=$(get_version)
-        if [[ $oldVersion == $newVersion ]]; then
+        if [[ $oldVersion == "$newVersion" ]]; then
           echo "$0: New version same as old version, nothing to do." >&2
           exit
         fi
