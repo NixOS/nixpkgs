@@ -23,11 +23,10 @@ buildPythonPackage rec {
     hash = "sha256-jQ/q2yIXJp+X4ajcbEqxXuYtYeyZJ1xTBjSlzqLuRpg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==69.5.1" "setuptools" \
-      --replace-fail "setuptools_scm==8.0.4" "setuptools_scm"
-  '';
+  relaxBuildSystem = [
+    "setuptools"
+    "setuptools_scm"
+  ];
 
   build-system = [
     setuptools
