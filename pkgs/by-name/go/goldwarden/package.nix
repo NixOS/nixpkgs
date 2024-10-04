@@ -92,7 +92,7 @@ buildGoModule rec {
     description = "Feature-packed Bitwarden compatible desktop integration";
     homepage = "https://github.com/quexten/goldwarden";
     license = licenses.mit;
-    maintainers = with maintainers; [ arthsmn ];
+    maintainers = with maintainers; [ arthsmn justanotherariel ];
     mainProgram = "goldwarden";
     platforms = platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
   };
