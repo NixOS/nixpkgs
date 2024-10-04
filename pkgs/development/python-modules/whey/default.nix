@@ -41,8 +41,6 @@ buildPythonPackage rec {
     shippinglabel
   ];
 
-  nativeCheckInputs = [ ];
-
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail '"setuptools!=61.*,<=67.1.0,>=40.6.0"' '"setuptools"'
