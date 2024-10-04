@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgcrypt libgpg-error gettext ];
 
-  nativeBuildInputs = [ ];
-
   meta = with lib; {
     homepage = "http://www.videolan.org/developers/libbdplus.html";
     description = "Library to access BD+ protected Blu-Ray disks";
