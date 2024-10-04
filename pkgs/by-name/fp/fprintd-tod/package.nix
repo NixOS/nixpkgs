@@ -1,11 +1,13 @@
-{ lib
-, fetchFromGitLab
-, fetchpatch
-, fprintd
-, libfprint-tod
+{
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  fprintd,
+  libfprint-tod,
 }:
 
-(fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (oldAttrs: rec {
+(fprintd.override { libfprint = libfprint-tod; }).overrideAttrs (
+  finalAttrs: previousAttrs: {
     pname = "fprintd-tod";
     version = "1.90.9";
 
@@ -13,11 +15,11 @@
       domain = "gitlab.freedesktop.org";
       owner = "libfprint";
       repo = "fprintd";
-      rev = "v${version}";
+      rev = "v${finalAttrs.version}";
       sha256 = "sha256-rOTVThHOY/Q2IIu2RGiv26UE2V/JFfWWnfKZQfKl5Mg=";
     };
 
-    patches = oldAttrs.patches or [] ++ [
+    patches = previousAttrs.patches or [ ] ++ [
       (fetchpatch {
         name = "use-more-idiomatic-correct-embedded-shell-scripting";
         url = "https://gitlab.freedesktop.org/libfprint/fprintd/-/commit/f4256533d1ffdc203c3f8c6ee42e8dcde470a93f.patch";
@@ -40,11 +42,13 @@
       })
     ];
 
-    postPatch = oldAttrs.postPatch or "" + ''
-      # part of "remove-pointless-copying-of-files-into-build-directory" but git-apply doesn't handle renaming
-      mv src/device.xml src/net.reactivated.Fprint.Device.xml
-      mv src/manager.xml src/net.reactivated.Fprint.Manager.xml
-    '';
+    postPatch =
+      previousAttrs.postPatch or ""
+      + ''
+        # part of "remove-pointless-copying-of-files-into-build-directory" but git-apply doesn't handle renaming
+        mv src/device.xml src/net.reactivated.Fprint.Device.xml
+        mv src/manager.xml src/net.reactivated.Fprint.Manager.xml
+      '';
 
     meta = {
       homepage = "https://fprint.freedesktop.org/";
@@ -53,4 +57,5 @@
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ hmenke ];
     };
-  })
+  }
+)
