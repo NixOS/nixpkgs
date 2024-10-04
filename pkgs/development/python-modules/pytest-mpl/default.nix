@@ -43,11 +43,19 @@ buildPythonPackage rec {
     "tests/subtests/test_subtest.py"
   ];
 
+  # The default tolerance is too strict in our build environment
+  # https://github.com/matplotlib/pytest-mpl/pull/9
+  # https://github.com/matplotlib/pytest-mpl/issues/225
   preCheck = ''
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
+
+    substituteInPlace pytest_mpl/plugin.py \
+      --replace-fail "DEFAULT_TOLERANCE = 2" "DEFAULT_TOLERANCE = 10"
+    substituteInPlace tests/test_pytest_mpl.py \
+      --replace-fail "DEFAULT_TOLERANCE = 10 if WIN else 2" "DEFAULT_TOLERANCE = 10"
   '';
 
   meta = with lib; {
