@@ -1,67 +1,54 @@
 {
   lib,
-  stdenv,
+  alsa-lib,
+  avahi,
+  bluez5,
+  check,
+  darwin,
+  dbus,
+  dconf,
+  fetchpatch2,
   fetchurl,
-  pkg-config,
+  fftwFloat,
+  glib,
+  gst_all_1,
+  libasyncns,
+  libcap,
+  libintl,
+  libjack2,
   libsndfile,
   libtool,
-  makeWrapper,
-  perlPackages,
-  xorg,
-  libcap,
-  alsa-lib,
-  glib,
-  dconf,
-  avahi,
-  libjack2,
-  libasyncns,
   lirc,
-  dbus,
-  sbc,
-  bluez5,
-  udev,
-  openssl,
-  fftwFloat,
-  soxr,
-  speexdsp,
-  systemd,
-  webrtc-audio-processing_1,
-  gst_all_1,
-  check,
-  libintl,
+  m4,
+  makeWrapper,
   meson,
   ninja,
-  m4,
-  wrapGAppsHook3,
-  fetchpatch2,
   nixosTests,
-
-  x11Support ? false,
-
-  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-
-  # Whether to support the JACK sound system as a backend.
-  jackaudioSupport ? false,
-
-  # Whether to build the OSS wrapper ("padsp").
-  ossWrapper ? true,
-
-  airtunesSupport ? false,
-
-  bluetoothSupport ? stdenv.hostPlatform.isLinux,
+  openssl,
+  perlPackages,
+  pkg-config,
+  sbc,
+  soxr,
+  speexdsp,
+  stdenv,
+  systemd,
+  udev,
+  webrtc-audio-processing_1,
+  wrapGAppsHook3,
+  xorg,
+  # Boolean flags
   advancedBluetoothCodecs ? false,
-
-  remoteControlSupport ? false,
-
-  zeroconfSupport ? false,
-
+  airtunesSupport ? false,
   alsaSupport ? stdenv.hostPlatform.isLinux,
+  bluetoothSupport ? stdenv.hostPlatform.isLinux,
+  jackaudioSupport ? false, # Whether to support the JACK sound system as a backend
+  libOnly ? false, # Whether to build only the library
+  ossWrapper ? true, # Whether to build the OSS wrapper ("padsp")
+  remoteControlSupport ? false,
   udevSupport ? stdenv.hostPlatform.isLinux,
-
-  # Whether to build only the library.
-  libOnly ? false,
-
-  darwin,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  x11Support ? false,
+  zeroconfSupport ? false,
 }:
 
 let
@@ -72,12 +59,12 @@ let
     CoreAudio
     ;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "${lib.optionalString libOnly "lib"}pulseaudio";
   version = "17.0";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
+    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${finalAttrs.version}.tar.xz";
     hash = "sha256-BTeU1mcaPjl9hJ5HioC4KmPLnYyilr01tzMXu1zrh7U=";
   };
 
@@ -117,7 +104,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ glib ]
     # gstreamer plugin discovery requires wrapping
-    ++ lib.optional (bluetoothSupport && advancedBluetoothCodecs) wrapGAppsHook3;
+    ++ lib.optionals (bluetoothSupport && advancedBluetoothCodecs) [ wrapGAppsHook3 ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libcap ];
 
@@ -146,7 +133,7 @@ stdenv.mkDerivation rec {
         libasyncns
         webrtc-audio-processing_1
       ]
-      ++ lib.optional jackaudioSupport libjack2
+      ++ lib.optionals jackaudioSupport [ libjack2 ]
       ++ lib.optionals x11Support [
         xorg.libICE
         xorg.libSM
@@ -154,12 +141,12 @@ stdenv.mkDerivation rec {
         xorg.libXi
         xorg.libXtst
       ]
-      ++ lib.optional useSystemd systemd
+      ++ lib.optionals useSystemd [ systemd ]
       ++ lib.optionals stdenv.hostPlatform.isLinux [
         alsa-lib
         udev
       ]
-      ++ lib.optional airtunesSupport openssl
+      ++ lib.optionals airtunesSupport [ openssl ]
       ++ lib.optionals bluetoothSupport [
         bluez5
         sbc
@@ -175,8 +162,8 @@ stdenv.mkDerivation rec {
             ;
         }
       )
-      ++ lib.optional remoteControlSupport lirc
-      ++ lib.optional zeroconfSupport avahi
+      ++ lib.optionals remoteControlSupport [ lirc ]
+      ++ lib.optionals zeroconfSupport [ avahi ]
     );
 
   mesonFlags =
@@ -229,6 +216,7 @@ stdenv.mkDerivation rec {
 
   # tests fail on Darwin because of timeouts
   doCheck = !stdenv.hostPlatform.isDarwin;
+
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
@@ -249,7 +237,7 @@ stdenv.mkDerivation rec {
   preFixup =
     lib.optionalString (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform)) ''
       wrapProgram $out/libexec/pulse/gsettings-helper \
-       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${pname}-${version}" \
+       --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}" \
        --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
     ''
     # add .so symlinks for modules to be found under macOS
@@ -279,23 +267,20 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "Sound server for POSIX and Win32 systems";
     homepage = "http://www.pulseaudio.org/";
+    description = "Sound server for POSIX and Win32 systems";
+    longDescription = ''
+      PulseAudio is a sound server for POSIX and Win32 systems.  A sound server
+      is basically a proxy for your sound applications.  It allows you to do
+      advanced operations on your sound data as it passes between your
+      application and your hardware.  Things like transferring the audio to a
+      different machine, changing the sample format or channel count and mixing
+      several sounds into one are easily achieved using a sound server.
+    '';
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ lovek323 ];
     platforms = lib.platforms.unix;
-
     # https://gitlab.freedesktop.org/pulseaudio/pulseaudio/-/issues/1089
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-
-    longDescription = ''
-      PulseAudio is a sound server for POSIX and Win32 systems.  A
-      sound server is basically a proxy for your sound applications.
-      It allows you to do advanced operations on your sound data as it
-      passes between your application and your hardware.  Things like
-      transferring the audio to a different machine, changing the
-      sample format or channel count and mixing several sounds into
-      one are easily achieved using a sound server.
-    '';
   };
-}
+})
