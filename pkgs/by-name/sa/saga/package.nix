@@ -6,6 +6,7 @@
   cmake,
   desktopToDarwinBundle,
   pkg-config,
+  wrapGAppsHook3,
   # not native
   gdal,
   wxGTK32,
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+    wrapGAppsHook3
     pkg-config
   ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
