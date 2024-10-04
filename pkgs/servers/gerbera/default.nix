@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
+, fetchurl
 , cmake
 , pkg-config
 , nixosTests
@@ -13,6 +13,7 @@
 , spdlog
 , sqlite
 , zlib
+, fmt_11
   # options
 , enableMysql ? false
 , libmysqlclient
@@ -37,6 +38,8 @@
 , ffmpegthumbnailer
 , enableInotifyTools ? true
 , inotify-tools
+, wavpack
+, enableWavPack ? false
 }:
 
 let
@@ -59,37 +62,33 @@ let
     { name = "MATROSKA"; enable = enableLibmatroska; packages = [ libmatroska libebml ]; }
     { name = "MYSQL"; enable = enableMysql; packages = [ libmysqlclient ]; }
     { name = "TAGLIB"; enable = enableTaglib; packages = [ taglib ]; }
+    { name = "WAVPACK"; enable = enableWavPack; packages = [ wavpack ]; }
   ];
 
-  inherit (lib) flatten optionals;
+  inherit (lib) flatten;
 
 in
 stdenv.mkDerivation rec {
   pname = "gerbera";
-  version = "1.12.1";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     repo = "gerbera";
     owner = "gerbera";
     rev = "v${version}";
-    sha256 = "sha256-j5J0u0zIjHY2kP5P8IzN2h+QQSCwsel/iTspad6V48s=";
+    sha256 = "sha256-SUMXnVCmrxoEbKKuzh+b7uvIanxilvpDDiH5ihjAm38=";
   };
 
-  patches = [
-    # Can be removed on the next bump, see:
-    # https://github.com/gerbera/gerbera/pull/2840.
-    (fetchpatch {
-      name = "gerbera-fmt10.patch";
-      url = "https://github.com/gerbera/gerbera/commit/37957aac0aea776e6f843af2358916f81056a405.patch";
-      hash = "sha256-U7dyFGEbelVZeHYX/4fLOC0k+9pUKZ8qP/LIVXWCMcU=";
-    })
-  ];
-
-  postPatch = lib.optionalString enableMysql ''
-    substituteInPlace cmake/FindMySQL.cmake \
-      --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
-      --replace /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
-  '';
+  postPatch =
+    let
+      mysqlPatch = lib.optionalString enableMysql ''
+        substituteInPlace cmake/FindMySQL.cmake \
+          --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \
+          --replace /usr/lib/mysql     ${lib.getLib libmysqlclient}/lib/mariadb
+      '';
+    in ''
+      ${mysqlPatch}
+    '';
 
   cmakeFlags = [
     # systemd service will be generated alongside the service
@@ -106,13 +105,14 @@ stdenv.mkDerivation rec {
     spdlog
     sqlite
     zlib
+    fmt_11
   ] ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 
   passthru.tests = { inherit (nixosTests) mediatomb; };
 
   meta = with lib; {
     homepage = "https://docs.gerbera.io/";
-    description = "UPnP Media Server for 2020";
+    description = "UPnP Media Server for 2024";
     longDescription = ''
       Gerbera is a Mediatomb fork.
       It allows to stream your digital media through your home network and consume it on all kinds
