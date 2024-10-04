@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fix doc snarfing with GCC 4.5.
-    ./cpp-4.5.patch
+    ./patches/0000-cpp-4.5.patch
     # Self explanatory
-    ./CVE-2016-8605.patch
+    ./patches/0001-CVE-2016-8605.patch
   ];
 
   preBuild = ''
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  setupHook = ./setup-hook-1.8.sh;
+  setupHook = ./setup-hook.sh;
 
   passthru = {
     effectiveVersion = lib.versions.majorMinor version;
