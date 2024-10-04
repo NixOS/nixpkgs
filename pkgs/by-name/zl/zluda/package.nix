@@ -20,6 +20,7 @@ rustPlatform.buildRustPackage rec {
     rocmPackages.rocsolver
     rocmPackages.rocblas
     rocmPackages.hipblas
+    rocmPackages.hipblaslt
     rocmPackages.rocm-cmake
     rocmPackages.hipfft
     zlib
@@ -52,8 +53,6 @@ rustPlatform.buildRustPackage rec {
   env.VERGEN_GIT_SHA = src.rev;
 
   preConfigure = ''
-    # Comment out zluda_blaslt in Cargo.toml until hipBLASLt package is added: https://github.com/NixOS/nixpkgs/issues/197885#issuecomment-2046178008
-    sed -i '/zluda_blaslt/d' Cargo.toml
     # disable test written for windows only: https://github.com/vosen/ZLUDA/blob/774f4bcb37c39f876caf80ae0d39420fa4bc1c8b/zluda_inject/tests/inject.rs#L55
     rm zluda_inject/tests/inject.rs
   '';
