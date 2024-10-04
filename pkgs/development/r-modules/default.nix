@@ -811,13 +811,17 @@ let
     torch = [
       pkgs.cudaPackages_11_8.cuda_cudart.dev
       pkgs.cudaPackages_11_8.cuda_nvrtc.dev
-      pkgs.cudaPackages_11_8.cuda_nvrtc.lib
+      # pkgs.cudaPackages_11_8.cuda_nvrtc.lib
+      pkgs.cudaPackages_11_8.cuda_cccl.dev
       pkgs.cudaPackages_11_8.cuda_nvtx.dev
       pkgs.cudaPackages_11_8.cuda_nvcc # no lib or dev?
       pkgs.cudaPackages_11_8.libcusparse.dev
       pkgs.cudaPackages_11_8.libcusolver.dev
       pkgs.cudaPackages_11_8.libcublas.dev
+      pkgs.cudaPackages_11_8.libcurand.dev
+      pkgs.cudaPackages_11_8.libcufft.lib
       pkgs.cudaPackages_11_8.cudnn.dev
+
       # pkgs.python3Packages.torchWithCuda.dev # pulled in by setting env var TORCH_PATH in torch override
     ];
   };
@@ -1843,7 +1847,7 @@ let
 
     torch =
       let
-        libtorch_hack_2_0_1 = pkgs.python3Packages.torch.override
+        libtorch_hack_2_0_1 = pkgs.python311Packages.torch.override
           {
             # protobuf = pkgs.python3Packages.protobuf.override {
             #   protobuf = pkgs.protobuf.override {
@@ -1874,7 +1878,13 @@ let
             # };
             cudaSupport = true;
             rocmSupport = false;
-            cudaPackages = pkgs.cudaPackages_11_8;
+            cudaPackages = pkgs.cudaPackages_11_8.overrideScope (cu-fi: _: {
+              # CuDNN 9 is not supported:
+              # https://github.com/cupy/cupy/issues/8215
+              cudnn = cu-fi.cudnn_8_9;
+            });
+
+            # cudaPackages = pkgs.cudaPackages_11_8;
             effectiveMagma = pkgs.magma-cuda-static.override {
               cudaPackages = pkgs.cudaPackages_11_8;
             };

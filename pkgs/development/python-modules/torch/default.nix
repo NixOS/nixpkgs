@@ -239,6 +239,9 @@ buildPythonPackage rec {
     [
       ./pytorch_2_0_1_c10_fix.patch
       ./pytorch_2_0_1_aten_fix.patch
+      ./pytorch_2_0_1_quant_fix.patch
+      ./pytorch_2_0_1_jit_fix.patch
+      ./pytorch_2_0_1_lazy_fix.patch
 
       ./pytorch_2_0_1_kineto_fix.patch
       ./pytorch_2_0_1_fbgemmm_fix.patch
