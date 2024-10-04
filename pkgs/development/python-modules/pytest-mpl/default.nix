@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   setuptools-scm,
   pytest,
   jinja2,
   matplotlib,
+  packaging,
   pillow,
   pytest7CheckHook,
 }:
@@ -13,20 +15,24 @@
 buildPythonPackage rec {
   pname = "pytest-mpl";
   version = "0.17.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-++8F1+ZktLM0UvtpisGI5SJ5HzJ9405+o329/p1SysY=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   buildInputs = [ pytest ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     matplotlib
+    packaging
     pillow
   ];
 
