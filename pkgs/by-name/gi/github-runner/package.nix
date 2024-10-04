@@ -22,13 +22,13 @@ assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
 
 buildDotnetModule rec {
   pname = "github-runner";
-  version = "2.319.1";
+  version = "2.320.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-cXOYW4py2RRJVUKrQBGf6LHNyc1sJ/bMR4hJxtDv3PU=";
+    hash = "sha256-mVi/Z89R2nbxQAyEkpbcaU3Pc3wK6989QojHew9ad4g=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -79,14 +79,6 @@ buildDotnetModule rec {
       url = "https://github.com/actions/runner/commit/5ff0ce1.patch";
       hash = "sha256-2Vg3cKZK3cE/OcPDZkdN2Ro2WgvduYTTwvNGxwCfXas=";
     })
-  ] ++ lib.optionals (nodeRuntimes == [ "node20" ]) [
-    # If the package is built without Node 16, make Node 20 the default internal version
-    # https://github.com/actions/runner/pull/2844
-    (fetchpatch {
-      name = "internal-node-20.patch";
-      url = "https://github.com/actions/runner/commit/acdc6ed.patch";
-      hash = "sha256-3/6yhhJPr9OMWBFc5/NU/DRtn76aTYvjsjQo2u9ZqnU=";
-    })
   ];
 
   postPatch = ''
@@ -94,7 +86,10 @@ buildDotnetModule rec {
     substituteInPlace src/dir.proj \
       --replace 'git update-index --assume-unchanged ./Runner.Sdk/BuildConstants.cs' \
                 'true'
-  '';
+  '' + lib.optionalString (nodeRuntimes == [ "node20" ]) ''
+      substituteInPlace src/Runner.Common/Util/NodeUtil.cs \
+        --replace-fail '_defaultNodeVersion = "node16"' '_defaultNodeVersion = "node20"'
+    '';
 
   DOTNET_SYSTEM_GLOBALIZATION_INVARIANT = isNull glibcLocales;
   LOCALE_ARCHIVE = lib.optionalString (!DOTNET_SYSTEM_GLOBALIZATION_INVARIANT) "${glibcLocales}/lib/locale/locale-archive";
