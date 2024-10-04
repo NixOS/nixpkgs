@@ -24905,8 +24905,6 @@ with pkgs;
     libOnly = true;
   };
 
-  libcardiacarrest = callPackage ../misc/libcardiacarrest { };
-
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
