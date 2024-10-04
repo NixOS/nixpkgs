@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-report-plugins";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-30x4avA3FrqZ4GoTl6Js5h3VG5LW7BNHOcNWxznXoT0=";
+    hash = "sha256-yk2fYlueaobXJgF7ob6jTccEz8r0geq1HFVsa+ZO30Q=";
   };
 
   nativeBuildInputs = [ poetry-core ];
