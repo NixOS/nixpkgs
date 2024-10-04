@@ -66,6 +66,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Free and open source utility for network discovery and security auditing";
     homepage = "http://www.nmap.org";
+    changelog = "https://nmap.org/changelog.html#${version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
