@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-core";
-  version = "6.0.2";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-core";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-sgL1UMt3o01zA8v41dyCG1fAsK/PkTRsHQJOvlNatZ4=";
+    hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,8 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     name = finalAttrs.pname;
     owner = finalAttrs.src.owner;
     repo = finalAttrs.src.repo;
-    page = "tags?per_page=1";
-    filter = ".[0].name | split(\"-\") | .[1]";
   };
 
   meta = with lib; {

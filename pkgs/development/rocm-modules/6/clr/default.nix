@@ -36,18 +36,9 @@ let
     "--set ROCM_PATH $out"
   ];
 
-  # https://github.com/NixOS/nixpkgs/issues/305641
-  # Not needed when 3.29.2 is in unstable
-  cmake' = cmake.overrideAttrs(old: rec {
-    version = "3.29.2";
-    src = fetchurl {
-      url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
-      hash = "sha256-NttLaSaqt0G6bksuotmckZMiITIwi03IJNQSPLcwNS4=";
-    };
-  });
 in stdenv.mkDerivation (finalAttrs: {
   pname = "clr";
-  version = "6.0.2";
+  version = "6.2.2";
 
   outputs = [
     "out"
@@ -58,12 +49,12 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "clr";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-ZMpA7vCW2CcpGdBLZfPimMHcgjhN1PHuewJiYwZMgGY=";
+    hash = "sha256-VFf0kC3mrwiRLY7WWSkCJ/dr9oMNzK2hJocZ55Jwq7o=";
   };
 
   nativeBuildInputs = [
     makeWrapper
-    cmake'
+    cmake
     perl
     python3Packages.python
     python3Packages.cppheaderparser
@@ -192,8 +183,6 @@ in stdenv.mkDerivation (finalAttrs: {
       name = finalAttrs.pname;
       owner = finalAttrs.src.owner;
       repo = finalAttrs.src.repo;
-      page = "tags?per_page=1";
-      filter = ".[0].name | split(\"-\") | .[1]";
     };
 
     impureTests = {

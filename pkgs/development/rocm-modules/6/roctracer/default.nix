@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "6.0.2";
+  version = "6.2.2";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "roctracer";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-a6/N6W3JXVI0VZRGxlS3cVENC3VTP1w9UFnd0+EWAuo=";
+    hash = "sha256-pqpZjKHD11+bWPVKMK2kj/7jiynz+IhlfN1BZNdX8z0=";
   };
 
   nativeBuildInputs = [

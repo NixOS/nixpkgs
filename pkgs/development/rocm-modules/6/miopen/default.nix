@@ -34,13 +34,13 @@
 }:
 
 let
-  version = "6.0.2";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIOpen";
     rev = "rocm-${version}";
-    hash = "sha256-mbOdlSb0ESKi9hMkq3amv70Xkp/YKnZYre24d/y5TD0=";
+    hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
     fetchLFS = true;
     leaveDotGit = true;
 
@@ -226,11 +226,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
-  };
+  #passthru.updateScript = rocmUpdateScript {
+  #  name = finalAttrs.pname;
+  #  owner = finalAttrs.src.owner;
+  #  repo = finalAttrs.src.repo;
+  #};
 
   meta = with lib; {
     description = "Machine intelligence library for ROCm";

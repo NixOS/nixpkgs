@@ -40,7 +40,7 @@ let
   ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rdc";
-  version = "6.0.2";
+  version = "6.2.2";
 
   outputs = [
     "out"
@@ -54,7 +54,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rdc";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-QugcajxILmDeQiWG5uAUO41Wut45irg2Ynufgn1bmps=";
+    hash = "sha256-AzH1rZFqEH8sovZZfJykvsEmCedEZWigQFHWHl6/PdE=";
   };
 
   nativeBuildInputs = [
