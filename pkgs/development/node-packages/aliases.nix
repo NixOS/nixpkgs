@@ -135,6 +135,7 @@ mapAliases {
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
   inherit (pkgs) nodemon; # added 2024-06-28
+  npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = self.parcel; # added 2023-09-04

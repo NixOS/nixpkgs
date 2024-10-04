@@ -148,7 +148,6 @@
 , "node-red"
 , "node2nix"
 , "np"
-, "npm"
 , "npm-merge-driver"
 , "nrm"
 , "orval"
