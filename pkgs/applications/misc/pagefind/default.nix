@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
       wasm-pack
       httplz
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.buildPlatform.isDarwin [
       python3
     ];
 
