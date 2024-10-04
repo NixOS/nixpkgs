@@ -3175,8 +3175,6 @@ with pkgs;
 
   iamy = callPackage ../tools/admin/iamy { };
 
-  iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
-
   azeret-mono = callPackage ../data/fonts/azeret-mono { };
 
   azure-cli-extensions = recurseIntoAttrs azure-cli.extensions;
@@ -4454,8 +4452,6 @@ with pkgs;
     wlroots = wlroots_0_17;
   };
 
-  swaykbdd = callPackage ../tools/wayland/swaykbdd { };
-
   swayr = callPackage ../tools/wayland/swayr { };
 
   swayrbar = callPackage ../tools/wayland/swayrbar { };
@@ -5364,8 +5360,6 @@ with pkgs;
   konsave = callPackage ../applications/misc/konsave { };
 
   krapslog = callPackage ../tools/misc/krapslog { };
-
-  krelay = callPackage ../applications/networking/cluster/krelay { };
 
   krill = callPackage ../servers/krill {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -7055,8 +7049,6 @@ with pkgs;
   driftnet = callPackage ../tools/networking/driftnet { };
 
   driftctl = callPackage ../applications/networking/cluster/driftctl { };
-
-  eks-node-viewer = callPackage ../applications/networking/cluster/eks-node-viewer { };
 
   drill = callPackage ../tools/networking/drill {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -17426,8 +17418,6 @@ with pkgs;
 
   cmake-format = python3Packages.callPackage ../development/tools/cmake-format { };
 
-  cobra-cli = callPackage ../development/tools/cobra-cli { };
-
   cmake-language-server = python3Packages.callPackage ../development/tools/misc/cmake-language-server {
     inherit cmake cmake-format;
   };
@@ -20051,8 +20041,6 @@ with pkgs;
   pgpkeyserver-lite = callPackage ../servers/web-apps/pgpkeyserver-lite { };
 
   pgweb = callPackage ../development/tools/database/pgweb { };
-
-  granted = callPackage ../tools/admin/granted { };
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
@@ -30670,8 +30658,6 @@ with pkgs;
 
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
 
-  kubecolor = callPackage ../applications/networking/cluster/kubecolor { };
-
   kubebuilder = callPackage ../applications/networking/cluster/kubebuilder { };
 
   kuttl = callPackage ../applications/networking/cluster/kuttl { };
@@ -30682,15 +30668,9 @@ with pkgs;
 
   kubectl-explore = callPackage ../applications/networking/cluster/kubectl-explore { };
 
-  kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
-
   kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
 
-  kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
-
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
-
-  kubectl-tree = callPackage ../applications/networking/cluster/kubectl-tree { };
 
   kubectl-view-allocations = callPackage ../applications/networking/cluster/kubectl-view-allocations {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -32915,8 +32895,6 @@ with pkgs;
     syncthing
     syncthing-discovery
     syncthing-relay;
-
-  stc-cli = callPackage ../applications/networking/stc-cli { };
 
   syncthingtray = kdePackages.callPackage ../applications/misc/syncthingtray {
     # renamed in KF5 -> KF6
@@ -38168,8 +38146,6 @@ with pkgs;
 
   jx = callPackage ../applications/networking/cluster/jx { };
 
-  pv-migrate = callPackage ../applications/networking/cluster/pv-migrate { };
-
   tagref = callPackage ../tools/misc/tagref { };
 
   tcat = callPackage ../tools/misc/tcat { };
@@ -38829,8 +38805,6 @@ with pkgs;
   };
 
   webwormhole = callPackage ../tools/networking/webwormhole { };
-
-  yor = callPackage ../applications/networking/cluster/yor { };
 
   wifi-password = callPackage ../os-specific/darwin/wifi-password { };
 
