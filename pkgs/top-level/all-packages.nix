@@ -6570,6 +6570,8 @@ with pkgs;
 
   age = callPackage ../tools/security/age { };
 
+  agebox = callPackage ../tools/security/agebox { };
+
   age-plugin-ledger = callPackage ../tools/security/age-plugin-ledger {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
