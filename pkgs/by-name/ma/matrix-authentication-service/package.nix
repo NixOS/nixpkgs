@@ -12,6 +12,7 @@
   stdenv,
   darwin,
   open-policy-agent,
+  cctools,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ];
+  ] ++ lib.optional stdenv.isDarwin cctools; # libtool used by gyp;
 
   buildInputs =
     [
