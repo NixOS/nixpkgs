@@ -89,7 +89,7 @@
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
-  rocmPackages_5,
+  rocmPackages_6,
   gpuTargets ? [ ],
 }:
 
@@ -104,7 +104,7 @@ let
 
   triton = throw "python3Packages.torch: use _tritonEffective instead of triton to avoid divergence";
 
-  rocmPackages = rocmPackages_5;
+  rocmPackages = rocmPackages_6;
 
   setBool = v: if v then "1" else "0";
 
@@ -171,7 +171,6 @@ let
       clr
       rccl
       miopen
-      miopengemm
       rocrand
       rocblas
       rocsparse
@@ -185,6 +184,7 @@ let
       hipfft
       hipsolver
       hipblas
+      hipblaslt
       rocminfo
       rocm-thunk
       rocm-comgr
@@ -216,8 +216,6 @@ let
     # In particular, this triggered warnings from cuda's `aliases.nix`
     "Magma cudaPackages does not match cudaPackages" =
       cudaSupport && (effectiveMagma.cudaPackages.cudaVersion != cudaPackages.cudaVersion);
-    "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
-      rocmSupport;
   };
 in
 buildPythonPackage rec {
