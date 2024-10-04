@@ -5170,8 +5170,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
-
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
   };
