@@ -5,17 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "routersploit";
-  version = "unstable-2021-02-06";
-  format = "setuptools";
+  version = "3.4.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "threat9";
-    repo = pname;
-    rev = "3fd394637f5566c4cf6369eecae08c4d27f93cda";
-    hash = "sha256-IET0vL0VVP9ZNn75hKdTCiEmOZRHHYICykhzW2g3LEg=";
+    repo = "routersploit";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-fJz2CWWOrRB1lwrjZzQ1/J1KbWXXDrOUfVmAYVA42pk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     future
     paramiko
     pycryptodome
@@ -39,8 +43,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [
-    "-n"
-    "$NIX_BUILD_CORES"
     # Run the same tests as upstream does in the first round
     "tests/core/"
     "tests/test_exploit_scenarios.py"
