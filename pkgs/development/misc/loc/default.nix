@@ -15,6 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     homepage = "https://github.com/cgag/loc";
+    changelog = "https://github.com/cgag/loc/blob/v${version}/CHANGELOG.md";
     description = "Count lines of code quickly";
     mainProgram = "loc";
     license = lib.licenses.mit;

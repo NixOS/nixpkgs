@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/zxing-cpp/zxing-cpp";
+    changelog = "https://github.com/zxing-cpp/zxing-cpp/releases/tag/${finalAttrs.src.rev}";
     description = "C++ port of zxing (a Java barcode image processing library)";
     longDescription = ''
       ZXing-C++ ("zebra crossing") is an open-source, multi-format 1D/2D barcode

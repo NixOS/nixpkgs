@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       to MobileSafari and UIWebViews on real and simulated iOS devices.
     '';
     homepage = "https://github.com/google/ios-webkit-debug-proxy";
+    changelog = "https://github.com/google/ios-webkit-debug-proxy/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd3;
     mainProgram = "ios_webkit_debug_proxy";
     maintainers = with maintainers; [

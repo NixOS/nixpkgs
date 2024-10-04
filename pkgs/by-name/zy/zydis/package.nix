@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://zydis.re/";
+    changelog = "https://github.com/zyantific/zydis/releases/tag/v${version}";
     description = "Fast and lightweight x86/x86-64 disassembler library";
     license = licenses.mit;
     maintainers = with maintainers; [ jbcrail AndersonTorres athre0z ];

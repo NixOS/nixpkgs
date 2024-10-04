@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Medley Interlisp virtual machine";
     homepage = "https://interlisp.org/";
+    changelog = "https://github.com/Interlisp/maiko/releases";
     license = licenses.mit;
     maintainers = with maintainers; [ ehmry ];
     inherit (xorg.libX11.meta) platforms;
