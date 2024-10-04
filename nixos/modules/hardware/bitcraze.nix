@@ -8,8 +8,7 @@ in
     enable = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
-        Bitcraze Crazyflie udev rules and ensure 'plugdev' group exists.
+      description = ''Bitcraze Crazyflie udev rules and ensure 'plugdev' group exists.
         This is a prerequisite to using Bitcraze Crazyflie devices without being root, since Bitcraze Crazyflie USB descriptors will be owned by plugdev through udev.
       '';
     };
