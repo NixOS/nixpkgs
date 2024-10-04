@@ -14,12 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    hash = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
+    hash = "sha256-vGgBOKu+ClmyRZHQkAS8r/YJtZihr/oD/yj8V7DeAQ8=";
   };
 
   nativeBuildInputs = [
