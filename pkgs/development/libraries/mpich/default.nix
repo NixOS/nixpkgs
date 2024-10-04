@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     sed -i 's:FC="gfortran":FC=${gfortran}/bin/gfortran:' $out/bin/mpifort
   '';
 
-  meta = with lib; {
+  meta = {
     # As far as we know, --with-pmix silently disables all of `--with-pm`
     broken = pmixSupport && withPm != [ ];
 
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
       url = "http://git.mpich.org/mpich.git/blob/a385d6d0d55e83c3709ae851967ce613e892cd21:/COPYRIGHT";
       fullName = "MPICH license (permissive)";
     };
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
