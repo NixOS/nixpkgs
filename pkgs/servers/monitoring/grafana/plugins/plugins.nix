@@ -23,6 +23,7 @@
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };
   marcusolsson-dynamictext-panel = callPackage ./marcusolsson-dynamictext-panel { };
+  marcusolsson-json-datasource = callPackage ./marcusolsson-json-datasource { };
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
