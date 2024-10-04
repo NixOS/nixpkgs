@@ -9523,6 +9523,11 @@
     github = "istoph";
     githubId = 114227790;
   };
+  istudyatuni = {
+    name = "Ilia";
+    github = "istudyatuni";
+    githubId = 43654815;
+  };
   itepastra = {
     name = "Noa Aarts";
     github = "itepastra";
