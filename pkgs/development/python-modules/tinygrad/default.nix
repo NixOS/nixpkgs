@@ -67,6 +67,11 @@ buildPythonPackage rec {
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
+    # Patch `clang` directly in the source file
+    + ''
+      substituteInPlace tinygrad/runtime/ops_clang.py \
+        --replace-fail "'clang'" "'${lib.getExe clang}'"
+    ''
     + lib.optionalString rocmSupport ''
       substituteInPlace tinygrad/runtime/autogen/hip.py \
         --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \

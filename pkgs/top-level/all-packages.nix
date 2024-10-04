@@ -30180,8 +30180,6 @@ with pkgs;
 
   sleep-on-lan = callPackage ../tools/networking/sleep-on-lan { };
 
-  slweb = callPackage ../applications/misc/slweb { };
-
   sonixd = callPackage ../applications/audio/sonixd { };
 
   sonobus = callPackage ../applications/audio/sonobus { };
