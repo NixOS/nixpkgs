@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, makeSetupHook, runCommand
-, tzdata
+, tzdata, zip, zlib
 
 # Version specific stuff
 , release, version, src
@@ -24,17 +24,39 @@ let
           --replace "/usr/local/etc/zoneinfo" ""
       '';
 
+      nativeBuildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
+        # Only used to detect the presence of zlib. Could be replaced with a stub.
+        zip
+      ];
+
+      buildInputs = lib.optionals (lib.versionAtLeast version "9.0") [
+        zlib
+      ];
+
       preConfigure = ''
         cd unix
       '';
 
-      configureFlags = [
+      # Note: pre-9.0 flags are temporarily interspersed to avoid a mass rebuild.
+      configureFlags = lib.optionals (lib.versionOlder version "9.0") [
         "--enable-threads"
+      ] ++ [
         # Note: using $out instead of $man to prevent a runtime dependency on $man.
         "--mandir=${placeholder "out"}/share/man"
+      ] ++ lib.optionals (lib.versionOlder version "9.0") [
         "--enable-man-symlinks"
         # Don't install tzdata because NixOS already has a more up-to-date copy.
         "--with-tzdata=no"
+      ] ++ lib.optionals (lib.versionAtLeast version "9.0") [
+        # By default, tcl libraries get zipped and embedded into libtcl*.so,
+        # which gets `zipfs mount`ed at runtime. This is fragile (for example
+        # stripping the .so removes the zip trailer), so we install them as
+        # traditional files.
+        # This might make tcl slower to start from slower storage on cold cache,
+        # however according to my benchmarks on fast storage and warm cache
+        # tcl built with --disable-zipfs actually starts in half the time.
+        "--disable-zipfs"
+      ] ++ [
         "tcl_cv_strtod_unbroken=ok"
       ] ++ lib.optional stdenv.hostPlatform.is64bit "--enable-64bit";
 
