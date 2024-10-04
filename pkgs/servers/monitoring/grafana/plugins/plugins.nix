@@ -32,4 +32,5 @@
   volkovlabs-form-panel = callPackage ./volkovlabs-form-panel { };
   volkovlabs-rss-datasource = callPackage ./volkovlabs-rss-datasource { };
   volkovlabs-variable-panel = callPackage ./volkovlabs-variable-panel { };
+  yesoreyeram-infinity-datasource = callPackage ./yesoreyeram-infinity-datasource { };
 }
