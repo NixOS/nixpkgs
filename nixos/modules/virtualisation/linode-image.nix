@@ -20,6 +20,7 @@ in
   imports = [
     ./linode-config.nix
     ./disk-size-option.nix
+    ../image/builder-attr-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -57,6 +58,7 @@ in
   };
 
   config = {
+    image.builderAttr = "linodeImage";
     system.build.linodeImage = import ../../lib/make-disk-image.nix {
       name = "linode-image";
       # NOTE: Linode specifically requires images to be `gzip`-ed prior to upload

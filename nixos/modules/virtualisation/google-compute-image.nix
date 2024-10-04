@@ -22,6 +22,7 @@ in
   imports = [
     ./google-compute-config.nix
     ./disk-size-option.nix
+    ../image/builder-attr-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -72,6 +73,7 @@ in
       fsType = "vfat";
     };
 
+    image.builderAttr = "googleComputeImage";
     system.build.googleComputeImage = import ../../lib/make-disk-image.nix {
       name = "google-compute-image";
       postVM = ''

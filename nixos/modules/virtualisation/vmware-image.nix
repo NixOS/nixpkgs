@@ -17,6 +17,10 @@ let
   ];
 
 in {
+  imports = [
+    ../image/builder-attr-option.nix
+  ];
+
   options = {
     vmware = {
       baseImageSize = lib.mkOption {
@@ -56,6 +60,7 @@ in {
   };
 
   config = {
+    image.builderAttr = "vmwareImage";
     system.build.vmwareImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''
