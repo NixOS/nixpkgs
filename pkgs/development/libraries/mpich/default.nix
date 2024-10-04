@@ -1,17 +1,29 @@
-{ stdenv, lib, fetchurl, perl, gfortran, automake, autoconf
-, openssh, hwloc, python3
-, darwin
-# either libfabric or ucx work for ch4backend on linux. On darwin, neither of
-# these libraries currently build so this argument is ignored on Darwin.
-, ch4backend
-# Process managers to build (`--with-pm`),
-# cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
-, withPm ? [ "hydra" "gforker" ]
-, pmix
-# PMIX support is likely incompatible with process managers (`--with-pm`)
-# https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
-, pmixSupport ? false
-} :
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perl,
+  gfortran,
+  automake,
+  autoconf,
+  openssh,
+  hwloc,
+  python3,
+  darwin,
+  # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
+  # these libraries currently build so this argument is ignored on Darwin.
+  ch4backend,
+  # Process managers to build (`--with-pm`),
+  # cf. https://github.com/pmodels/mpich/blob/b80a6d7c24defe7cdf6c57c52430f8075a0a41d6/README.vin#L562-L586
+  withPm ? [
+    "hydra"
+    "gforker"
+  ],
+  pmix,
+  # PMIX support is likely incompatible with process managers (`--with-pm`)
+  # https://github.com/NixOS/nixpkgs/pull/274804#discussion_r1432601476
+  pmixSupport ? false,
+}:
 
 let
   withPmStr = if withPm != [ ] then builtins.concatStringsSep ":" withPm else "no";
@@ -19,7 +31,7 @@ in
 
 assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "mpich";
   version = "4.2.3";
 
@@ -36,22 +48,39 @@ stdenv.mkDerivation  rec {
     ./disable-romio-tests.patch
   ];
 
-  outputs = [ "out" "doc" "man" ];
-
-  configureFlags = [
-    "--enable-shared"
-    "--with-pm=${withPmStr}"
-  ] ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
-    "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
-    "FCFLAGS=-fallow-argument-mismatch"
-  ] ++ lib.optionals pmixSupport [
-    "--with-pmix"
+  outputs = [
+    "out"
+    "doc"
+    "man"
   ];
+
+  configureFlags =
+    [
+      "--enable-shared"
+      "--with-pm=${withPmStr}"
+    ]
+    ++ lib.optionals (lib.versionAtLeast gfortran.version "10") [
+      "FFLAGS=-fallow-argument-mismatch" # https://github.com/pmodels/mpich/issues/4300
+      "FCFLAGS=-fallow-argument-mismatch"
+    ]
+    ++ lib.optionals pmixSupport [
+      "--with-pmix"
+    ];
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ gfortran python3 autoconf automake ];
-  buildInputs = [ perl openssh hwloc ]
+  nativeBuildInputs = [
+    gfortran
+    python3
+    autoconf
+    automake
+  ];
+  buildInputs =
+    [
+      perl
+      openssh
+      hwloc
+    ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
     ++ lib.optional pmixSupport pmix
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Foundation;
