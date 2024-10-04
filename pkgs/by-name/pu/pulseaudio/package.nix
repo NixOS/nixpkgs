@@ -229,7 +229,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''
     + ''
       moveToOutput lib/cmake "$dev"
-      rm -f $out/.bin-unwrapped/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+    ''
+    # qpaeq is a separated package, because of specific dependencies
+    + ''
+      rm -f $out/.bin-unwrapped/qpaeq
 
       cp config.h $dev/include/pulse
     '';
