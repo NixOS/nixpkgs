@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     # On a normal distro this is enough for includes from all SDL2* packages to work,
     # but on NixOS they're spread across different paths.
     # This patch + the setup-hook will ensure that `sdl2-config --cflags` works correctly.
-    ./find-headers.patch
+    ./0000-find-headers.patch
   ];
 
   postPatch = ''
