@@ -20,7 +20,7 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "11.1.2";
+  version = "11.2";
 
   releaseName = "NIX";
   distroPrefix = "ghidra_${version}_${releaseName}";
@@ -28,7 +28,7 @@ let
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    hash = "sha256-FL1nLaq8A9PI+RzqZg5+O+4+ZsH16MG3cf7OIKimDqw=";
+    hash = "sha256-iO6g3t8JNdc/wAC+JG+6Y7aZCq7T9zYQC3KKZcr+wzc=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

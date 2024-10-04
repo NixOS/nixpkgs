@@ -196,14 +196,8 @@ in
       # To prevent gratuitous rebuilds on each change to Nixpkgs
       nixos.revision = null;
 
-      stateVersion = lib.mkDefault (throw ''
-        The macOS linux builder should not need a stateVersion to be set, but a module
-        has accessed stateVersion nonetheless.
-        Please inspect the trace of the following command to figure out which module
-        has a dependency on stateVersion.
-
-          nix-instantiate --attr darwin.linux-builder --show-trace
-      '');
+      # to be updated by module maintainers, see nixpkgs#325610
+      stateVersion = "24.05";
     };
 
     users.users."${user}" = {

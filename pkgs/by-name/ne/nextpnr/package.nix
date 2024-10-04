@@ -47,8 +47,12 @@ stdenv.mkDerivation rec {
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
-  cmakeFlags =
-    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
+  cmakeFlags = let
+    # the specified version must always start with "nextpnr-", so add it if
+    # missing (e.g. if the user overrides with a git hash)
+    rev = main_src.rev;
+    version = if (lib.hasPrefix "nextpnr-" rev) then rev else "nextpnr-${rev}";
+  in ["-DCURRENT_GIT_VERSION=${version}"
       "-DARCH=generic;ice40;ecp5;gowin;himbaechel"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
