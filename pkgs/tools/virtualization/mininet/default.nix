@@ -13,7 +13,11 @@
 }:
 
 let
-  pyEnv = python3.withPackages(ps: [ ps.setuptools ]);
+  pyEnv = python3.withPackages(ps: [
+    ps.setuptools
+    ps.packaging
+    ps.distutils
+  ]);
 
   telnet = runCommand "inetutils-telnet"
     { }
@@ -53,7 +57,7 @@ stdenv.mkDerivation rec {
   pythonPath = [ python3.pkgs.setuptools ];
   nativeBuildInputs = [ help2man makeWrapper python3.pkgs.wrapPython ];
 
-  propagatedBuildInputs = [ python3 which ];
+  propagatedBuildInputs = [ pyEnv which ];
 
   installTargets = [ "install-mnexec" "install-manpages" ];
 
