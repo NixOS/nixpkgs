@@ -31,4 +31,5 @@
   volkovlabs-echarts-panel = callPackage ./volkovlabs-echarts-panel { };
   volkovlabs-form-panel = callPackage ./volkovlabs-form-panel { };
   volkovlabs-rss-datasource = callPackage ./volkovlabs-rss-datasource { };
+  volkovlabs-variable-panel = callPackage ./volkovlabs-variable-panel { };
 }
