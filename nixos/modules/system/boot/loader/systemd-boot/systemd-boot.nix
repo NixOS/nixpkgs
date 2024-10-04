@@ -351,7 +351,6 @@ in {
         Windows can unseal the encryption key.
       '';
     };
-  };
 
     defaultEntry = mkOption {
       default = null;
@@ -367,6 +366,7 @@ in {
         See <https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html#Options>.
       '';
     };
+  };
 
   config = mkIf cfg.enable {
     assertions = [
