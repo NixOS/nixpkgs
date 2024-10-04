@@ -111,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Testing framework for infrastructure software";
     homepage = "https://github.com/freebsd/kyua/";
+    changelog = "https://github.com/freebsd/kyua/blob/master/NEWS.md";
     license = lib.licenses.bsd3;
     mainProgram = "kyua";
     maintainers = with lib.maintainers; [ reckenrode ];

@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for polynomial system solving through algebraic methods";
     mainProgram = "msolve";
     homepage = "https://msolve.lip6.fr";
+    changelog = "https://github.com/algebraic-solving/msolve/releases/tag/${finalAttrs.src.rev}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

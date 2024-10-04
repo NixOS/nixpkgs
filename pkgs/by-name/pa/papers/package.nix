@@ -134,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://wiki.gnome.org/Apps/papers";
+    changelog = "https://gitlab.gnome.org/GNOME/Incubator/papers/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME's document viewer";
 
     longDescription = ''

@@ -68,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
+    changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
     maintainers = teams.gnome.members;

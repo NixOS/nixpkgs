@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Derivative of Bitcoin Core with a collection of improvements";
     homepage = "https://bitcoinknots.org/";
+    changelog = "https://github.com/bitcoinknots/bitcoin/blob/v${version}/doc/release-notes.md";
     maintainers = with maintainers; [ prusnak mmahut ];
     license = licenses.mit;
     platforms = platforms.unix;

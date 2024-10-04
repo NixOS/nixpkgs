@@ -97,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Applications and router for I2P, anonymity over the Internet";
     homepage = "https://geti2p.net";
+    changelog = "https://github.com/i2p/i2p.i2p/releases/tag/i2p-${finalAttrs.version}";
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars

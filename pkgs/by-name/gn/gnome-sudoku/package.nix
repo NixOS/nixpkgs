@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-sudoku";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-sudoku/-/blob/${version}/NEWS?ref_type=tags";
     description = "Test your logic skills in this number grid puzzle";
     mainProgram = "gnome-sudoku";
     maintainers = teams.gnome.members;

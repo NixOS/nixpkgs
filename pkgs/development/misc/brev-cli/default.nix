@@ -33,6 +33,7 @@ buildGoModule rec {
     description = "Connect your laptop to cloud computers";
     mainProgram = "brev";
     homepage = "https://github.com/brevdev/brev-cli";
+    changelog = "https://github.com/brevdev/brev-cli/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];
   };

@@ -32,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "LLMs for your CLI";
     homepage = "https://github.com/gorilla-llm/gorilla-cli";
+    changelog = "https://github.com/gorilla-llm/gorilla-cli/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
     mainProgram = "gorilla";

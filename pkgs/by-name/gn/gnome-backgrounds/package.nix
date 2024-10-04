@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Default wallpaper set for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-backgrounds";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-backgrounds/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.cc-by-sa-30;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

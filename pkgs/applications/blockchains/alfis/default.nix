@@ -62,6 +62,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative Free Identity System";
     homepage = "https://alfis.name";
+    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;

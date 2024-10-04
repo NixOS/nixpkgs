@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Qt frontend for nmap";
     mainProgram = "nmapsi4";
+    changelog = "https://github.com/nmapsi4/nmapsi4/releases/tag/${src.rev}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ peterhoeg ];
     inherit (src.meta) homepage;
