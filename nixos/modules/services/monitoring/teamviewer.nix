@@ -3,25 +3,14 @@
 with lib;
 
 let
-
   cfg = config.services.teamviewer;
-
 in
-
 {
-
-  ###### interface
-
   options = {
-
     services.teamviewer.enable = mkEnableOption "TeamViewer daemon";
-
   };
 
-  ###### implementation
-
   config = mkIf (cfg.enable) {
-
     environment.systemPackages = [ pkgs.teamviewer ];
 
     services.dbus.packages = [ pkgs.teamviewer ];
@@ -31,7 +20,11 @@ in
 
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "network.target" "dbus.service" ];
+      after = [
+        "network-online.target"
+        "network.target"
+        "dbus.service"
+      ];
       requires = [ "dbus.service" ];
       preStart = "mkdir -pv /var/lib/teamviewer /var/log/teamviewer";
 
@@ -46,5 +39,4 @@ in
       };
     };
   };
-
 }
