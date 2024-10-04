@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   protobuf,
   bzip2,
@@ -26,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.10.2";
+  version = "0.10.3";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -36,11 +35,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wH26uwaYzfqiamiJ/oosVEiTfCOItwVGbHdRh6Ykpgk=";
+    hash = "sha256-xpNSMZWWiFU6OOooAD7ENzOggqYHdU88baPsXnovpXU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-1AFDyZpkcvFzWBczMAPfajmhBmVl4ou4JdKnrK2KlQI=";
+  cargoHash = "sha256-qiKfHrxQ4TSSomDLlPJ2+GOEri/ZuMCvUNdxRVoplgg=";
 
   nativeBuildInputs = [
     pkg-config
