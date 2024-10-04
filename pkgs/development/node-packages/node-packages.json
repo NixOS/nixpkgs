@@ -147,7 +147,6 @@
 , "node-gyp-build"
 , "node2nix"
 , "np"
-, "npm"
 , "npm-merge-driver"
 , "nrm"
 , "orval"
