@@ -1705,6 +1705,7 @@
   ./virtualisation/docker.nix
   ./virtualisation/ecs-agent.nix
   ./virtualisation/hyperv-guest.nix
+  ./virtualisation/images.nix
   ./virtualisation/incus.nix
   ./virtualisation/incus-agent.nix
   ./virtualisation/kvmgt.nix

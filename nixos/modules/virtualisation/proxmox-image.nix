@@ -9,6 +9,7 @@ with lib;
 {
   imports = [
     ./disk-size-option.nix
+    ../image/builder-attr-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -250,6 +251,7 @@ with lib;
           message = "'legacy+gpt' disk partitioning requires 'seabios' bios";
         }
       ];
+      image.builderAttr = "VMA";
       system.build.VMA = import ../../lib/make-disk-image.nix {
         name = "proxmox-${cfg.filenameSuffix}";
         inherit (cfg) partitionTableType;

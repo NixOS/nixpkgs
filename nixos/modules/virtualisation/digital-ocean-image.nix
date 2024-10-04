@@ -14,6 +14,7 @@ in
   imports = [
     ./digital-ocean-config.nix
     ./disk-size-option.nix
+    ../image/builder-attr-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -58,6 +59,7 @@ in
 
   #### implementation
   config = {
+    image.builderAttr = "digitalOceanImage";
     system.build.digitalOceanImage = import ../../lib/make-disk-image.nix {
       name = "digital-ocean-image";
       format = "qcow2";

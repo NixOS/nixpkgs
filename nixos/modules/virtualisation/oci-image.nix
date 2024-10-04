@@ -9,12 +9,16 @@ let
   cfg = config.oci;
 in
 {
-  imports = [ ./oci-common.nix ];
+  imports = [
+    ./oci-common.nix
+    ../image/builder-attr-option.nix
+  ];
 
   config = {
     virtualisation.diskSize = lib.mkDefault (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;
 
+    image.builderAttr = "OCIImage";
     system.build.OCIImage = import ../../lib/make-disk-image.nix {
       inherit config lib pkgs;
       inherit (config.virtualisation) diskSize;
