@@ -5,13 +5,16 @@ let
 in
 {
   options = {
-    services.teamviewer.enable = lib.mkEnableOption "TeamViewer daemon";
+    services.teamviewer = {
+      enable = lib.mkEnableOption "TeamViewer daemon & system package";
+      package = lib.mkPackageOption pkgs "teamviewer" { };
+    };
   };
 
   config = lib.mkIf (cfg.enable) {
-    environment.systemPackages = [ pkgs.teamviewer ];
+    environment.systemPackages = [ cfg.package ];
 
-    services.dbus.packages = [ pkgs.teamviewer ];
+    services.dbus.packages = [ cfg.package ];
 
     systemd.services.teamviewerd = {
       description = "TeamViewer remote control daemon";
@@ -30,7 +33,7 @@ in
       startLimitBurst = 10;
       serviceConfig = {
         Type = "simple";
-        ExecStart = "${pkgs.teamviewer}/bin/teamviewerd -f";
+        ExecStart = "${cfg.package}/bin/teamviewerd -f";
         PIDFile = "/run/teamviewerd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "on-abort";
