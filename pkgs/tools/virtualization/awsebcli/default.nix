@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, glibcLocales, git }:
+{ lib, python3, fetchFromGitHub, git }:
 
 let
   changeVersion = overrideFunc: version: hash: overrideFunc (oldAttrs: rec {
@@ -33,15 +33,8 @@ localPython.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # https://github.com/aws/aws-elastic-beanstalk-cli/pull/469
-    substituteInPlace setup.py --replace "scripts=['bin/eb']," ""
+    substituteInPlace setup.py --replace-fail "scripts=['bin/eb']," ""
   '';
-
-  nativeBuildInputs = with localPython.pkgs; [
-  ];
-
-  buildInputs = [
-    glibcLocales
-  ];
 
   propagatedBuildInputs = with localPython.pkgs; [
     blessed
