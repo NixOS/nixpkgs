@@ -1,10 +1,9 @@
 { lib
-, stdenv
-, fetchurl
-, fetchpatch
 , boehmgc
 , buildPackages
 , coverageAnalysis ? null
+, fetchpatch
+, fetchurl
 , gawk
 , gmp
 , libffi
@@ -14,55 +13,28 @@
 , pkg-config
 , pkgsBuildBuild
 , readline
+, stdenv
+# Boolean flags
+, runCoverageAnalysis ? false
 }:
 
 let
-  # Do either a coverage analysis build or a standard build.
-  builder = if coverageAnalysis != null
-            then coverageAnalysis
-            else stdenv.mkDerivation;
-in
-builder rec {
   pname = "guile";
   version = "2.0.13";
-
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/guile/guile-${version}.tar.xz";
     sha256 = "12yqkr974y91ylgw6jnmci2v90i90s7h9vxa4zk0sai8vjnz4i1p";
   };
 
+  builder = if runCoverageAnalysis
+            then coverageAnalysis
+            else stdenv.mkDerivation;
+in
+assert runCoverageAnalysis -> (coverageAnalysis != null);
+builder {
+  inherit pname version src;
+
   outputs = [ "out" "dev" "info" ];
-  setOutputFlags = false; # $dev gets into the library otherwise
-
-  depsBuildBuild = [
-    buildPackages.stdenv.cc
-  ]
-  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    pkgsBuildBuild.guile_2_0;
-
-  nativeBuildInputs = [
-    makeWrapper
-    pkg-config
-  ];
-  buildInputs = [
-    readline
-    libtool
-    libunistring
-    libffi
-  ];
-  propagatedBuildInputs = [
-    boehmgc
-    gmp
-
-    # These ones aren't normally needed here, but `libguile*.la' has '-l'
-    # flags for them without corresponding '-L' flags. Adding them here will
-    # add the needed `-L' flags.  As for why the `.la' file lacks the `-L'
-    # flags, see below.
-    libtool
-    libunistring
-  ];
-
-  enableParallelBuilding = true;
 
   patches = [
     # Small fixes to Clang compiler
@@ -78,7 +50,7 @@ builder rec {
       url = "https://git.savannah.gnu.org/cgit/guile.git/patch/?id=2fbde7f02adb8c6585e9baf6e293ee49cd23d4c4";
       sha256 = "0p6c1lmw1iniq03z7x5m65kg3lq543kgvdb4nrxsaxjqf3zhl77v";
     })] ++
-  (lib.optional (coverageAnalysis != null) ./gcov-file-name.patch)
+  (lib.optionals runCoverageAnalysis [ ./gcov-file-name.patch ])
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./filter-mkostemp-darwin.patch
     (fetchpatch {
@@ -87,80 +59,115 @@ builder rec {
     })
   ];
 
-  # Explicitly link against libgcc_s, to work around the infamous
-  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
-
-  # don't have "libgcc_s.so.1" on darwin
-  LDFLAGS = lib.optionalString
-    (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
-
-  configureFlags = [
-    "--with-libreadline-prefix"
-  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
-    # Make sure the right <gmp.h> is found, and not the incompatible
-    # /usr/include/mp.h from OpenSolaris. See
-    # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
-    # for details.
-    "--with-libgmp-prefix=${lib.getDev gmp}"
-
-    # Same for these (?).
-    "--with-libreadline-prefix=${lib.getDev readline}"
-    "--with-libunistring-prefix=${libunistring}"
-
-    # See below.
-    "--without-threads"
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    pkgsBuildBuild.guile_2_0
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
-  ''
-  # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
-  # why `--with-libunistring-prefix' and similar options coming from
-  # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
-  + ''
-    sed -i "$out/lib/pkgconfig/guile"-*.pc    \
-        -e "s|-lunistring|-L${libunistring}/lib -lunistring|g ;
-            s|^Cflags:\(.*\)$|Cflags: -I${libunistring.dev}/include \1|g ;
-            s|-lltdl|-L${libtool.lib}/lib -lltdl|g ;
-            s|includedir=$out|includedir=$dev|g
-            "
-    '';
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+
+  buildInputs = [
+    libffi
+    libtool
+    libunistring
+    readline
+  ];
+
+  propagatedBuildInputs = [
+    boehmgc
+    gmp
+    # These ones aren't normally needed here, but 'libguile*.la' has '-l' flags
+    # for them without corresponding '-L' flags. Adding them here will add the
+    # needed '-L' flags.
+    # As for why the '.la' file lacks the '-L' flags, see below
+    libtool
+    libunistring
+  ];
+
+  configureFlags = [
+    (lib.withFeature true "libreadline-prefix")
+  ] ++ lib.optionals stdenv.hostPlatform.isSunOS [
+    # Make sure the right <gmp.h> is found, and not the incompatible
+    # /usr/include/mp.h from OpenSolaris
+    # More details at
+    # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+    (lib.withFeatureAs true "with-libgmp-prefix" "${lib.getDev gmp}")
+
+    # Same for these (?)
+    (lib.withFeatureAs true "libreadline-prefix" "${lib.getDev readline}")
+    (lib.withFeatureAs true "libunistring-prefix" "${lib.getDev libunistring}")
+
+    # See below
+    (lib.withFeature false "threads")
+  ];
+
+  env = {
+    # Explicitly link against libgcc_s, to work around the infamous
+    # "libgcc_s.so.1 must be installed for pthread_cancel to work". However
+    # there is no "libgcc_s.so.1" on darwin and musl
+    LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "-lgcc_s";
+    # Work around <https://bugs.gnu.org/14201>
+    SHELL = lib.optionalString (!stdenv.hostPlatform.isLinux) stdenv.shell;
+    CONFIG_SHELL = lib.optionalString (!stdenv.hostPlatform.isLinux) stdenv.shell;
+  };
+
+  enableParallelBuilding = true;
+
+  setOutputFlags = false; # otherwise $dev gets into the library
 
   # make check doesn't work on darwin
-  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper.
+  # On Linuxes+Hydra the tests are flaky; feel free to investigate deeper
   doCheck = false;
-  doInstallCheck = doCheck;
+
+  doInstallCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/guile-snarf --prefix PATH : "${lib.getBin gawk}/bin"
+  ''
+  # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+  # why '--with-libunistring-prefix' and similar options coming from
+  # 'AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64
+  + ''
+    sed -i "$out/lib/pkgconfig/guile"-*.pc \
+        -e "s|-lunistring|-L${lib.getLib libunistring}/lib -lunistring|g" \
+        -e "s|^Cflags:\(.*\)$|Cflags: -I${lib.getDev libunistring}/include \1|g" \
+        -e "s|-lltdl|-L${lib.getLib libtool}/lib -lltdl|g" \
+        -e "s|includedir=$out|includedir=$dev|g"
+    '';
 
   setupHook = ./setup-hook-2.0.sh;
 
-  passthru = rec {
+  passthru = let
     effectiveVersion = lib.versions.majorMinor version;
-    siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
-    siteDir = "share/guile/site/${effectiveVersion}";
-  };
+  in
+    {
+      inherit effectiveVersion;
+      siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
+      siteDir = "share/guile/site/${effectiveVersion}";
+    };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";
     longDescription = ''
-        GNU Guile is an implementation of the Scheme programming language, with
-        support for many SRFIs, packaged for use in a wide variety of
-        environments.  In addition to implementing the R5RS Scheme standard and
-        a large subset of R6RS, Guile includes a module system, full access to
-        POSIX system calls, networking support, multiple threads, dynamic
-        linking, a foreign function call interface, and powerful string
-        processing.
-      '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ludo ];
-    platforms = platforms.all;
+      GNU Guile is an implementation of the Scheme programming language, with
+      support for many SRFIs, packaged for use in a wide variety of
+      environments.
+
+      In addition to implementing the R5RS Scheme standard and a large subset of
+      R6RS, Guile includes a module system, full access to POSIX system calls,
+      networking support, multiple threads, dynamic linking, a foreign function
+      call interface, and powerful string processing.
+    '';
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ ludo ];
+    platforms = lib.platforms.all;
   };
 }
-
-//
-
-(lib.optionalAttrs (!stdenv.hostPlatform.isLinux) {
-  # Work around <https://bugs.gnu.org/14201>.
-  SHELL = stdenv.shell;
-  CONFIG_SHELL = stdenv.shell;
-})
+# TODO: point to the proper coverageAnalysis input so we don't need to rely on
+# setting it to null
