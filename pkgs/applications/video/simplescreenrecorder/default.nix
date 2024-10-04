@@ -4,7 +4,7 @@
 
 mkDerivation rec {
   pname = "simplescreenrecorder";
-  version = "0.4.4-unstable-2024-08-13";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
