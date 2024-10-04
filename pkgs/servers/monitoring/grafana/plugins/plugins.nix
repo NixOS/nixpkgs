@@ -13,6 +13,7 @@
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
   grafana-discourse-datasource = callPackage ./grafana-discourse-datasource { };
   grafana-github-datasource = callPackage ./grafana-github-datasource { };
+  grafana-googlesheets-datasource = callPackage ./grafana-googlesheets-datasource { };
   grafana-oncall-app = callPackage ./grafana-oncall-app { };
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
