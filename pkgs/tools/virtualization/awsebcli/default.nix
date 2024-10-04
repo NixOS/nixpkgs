@@ -95,7 +95,7 @@ localPython.pkgs.buildPythonApplication rec {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "Command line interface for Elastic Beanstalk";
     changelog = "https://github.com/aws/aws-elastic-beanstalk-cli/blob/${version}/CHANGES.rst";
-    maintainers = with maintainers; [ eqyiel kirillrdy ];
+    maintainers = with maintainers; [ kirillrdy ];
     license = licenses.asl20;
     mainProgram = "eb";
   };
