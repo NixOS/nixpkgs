@@ -1450,7 +1450,9 @@ with pkgs;
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
 
-  acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
+  acme-dns = callPackage ../servers/dns/acme-dns/default.nix {
+    buildGoModule = buildGo122Module; # https://github.com/joohoi/acme-dns/issues/365
+  };
 
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
@@ -14127,7 +14129,7 @@ with pkgs;
   zip = callPackage ../tools/archivers/zip { };
 
   zincsearch = callPackage ../servers/search/zincsearch {
-    buildGoModule = buildGo121Module;
+    buildGoModule = buildGo122Module;
   };
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
@@ -14489,7 +14491,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  inherit (coqPackages_8_19) compcert;
+  inherit (coqPackages) compcert;
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp { };
   computecpp = wrapCCWith rec {
@@ -23945,17 +23947,6 @@ with pkgs;
   go = go_1_23;
   buildGoModule = buildGo123Module;
   buildGoPackage = buildGo123Package;
-
-  # requires a newer Apple SDK
-  go_1_21 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.21.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
-  };
-  buildGo121Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
-    go = buildPackages.go_1_21;
-  };
-  buildGo121Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
-    go = buildPackages.go_1_21;
-  };
 
   # requires a newer Apple SDK
   go_1_22 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.22.nix {
@@ -34753,16 +34744,7 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
-  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng {
-    libplacebo = libplacebo.overrideAttrs (old: {
-      version = "6.338.2-unstable-2024-01-29";
-      src = old.src.override {
-        # broken with 7.349.0 -- pinning to rev used by upstream https://github.com/streetpea/chiaki-ng/blob/96d535db41bb9c3b37fbffcf2402d51e891ff960/scripts/build-libplacebo.sh#L9
-        rev = "c320f61e601caef2be081ce61138e5d51c1be21d";
-        hash = "sha256-ZlKYgWz/Rkp4IPt6cJ+KNnzBB2s8jGZEamSAOIGyDuE=";
-      };
-    });
-  };
+  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
 
   clonehero = callPackage ../games/clonehero { };
 

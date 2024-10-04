@@ -3903,6 +3903,8 @@ let
         };
       };
 
+      pylyzer.pylyzer = callPackage ./pylyzer.pylyzer { };
+
       pythagoratechnologies.gpt-pilot-vs-code = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gpt-pilot-vs-code";
