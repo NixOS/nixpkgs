@@ -20,6 +20,7 @@
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
+  marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   redis-app = callPackage ./redis-app { };
   redis-datasource = callPackage ./redis-datasource { };
   redis-explorer-app = callPackage ./redis-explorer-app { };
