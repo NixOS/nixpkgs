@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, libusb1
-, pytestCheckHook
-, python
-, pythonOlder
-, setuptools-scm
-, importlib-resources
-, pyusb
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libusb1,
+  pytestCheckHook,
+  python,
+  pythonOlder,
+  setuptools-scm,
+  importlib-resources,
+  pyusb,
 }:
 
 buildPythonPackage rec {
@@ -66,6 +67,9 @@ buildPythonPackage rec {
     description = "Packaged libusb shared libraries for Python";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vbruegge stargate01 ];
+    maintainers = with maintainers; [
+      vbruegge
+      stargate01
+    ];
   };
 }

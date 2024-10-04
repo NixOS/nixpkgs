@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchFromGitHub
-, libusb-package
-, pyusb
-, scipy
-, numpy
-, pytestCheckHook
-, pyyaml
-, pythonOlder
-, bitcraze-udev-rules
-, pythonRelaxDepsHook
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  libusb-package,
+  pyusb,
+  scipy,
+  numpy,
+  pytestCheckHook,
+  pyyaml,
+  pythonOlder,
+  bitcraze-udev-rules,
+  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -26,14 +27,16 @@ buildPythonPackage rec {
     hash = "sha256-OZQAisA9b3YIf3zEC5RlrW70h4tgCBC19/KEvle+kLY=";
   };
 
-  propagatedBuildInputs = [
-    pyusb
-    scipy
-    numpy
-    libusb-package
-  ] ++ lib.optionals stdenv.isLinux [
-    bitcraze-udev-rules
-  ];
+  propagatedBuildInputs =
+    [
+      pyusb
+      scipy
+      numpy
+      libusb-package
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      bitcraze-udev-rules
+    ];
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
@@ -67,6 +70,9 @@ buildPythonPackage rec {
     description = "Python library to communicate with Crazyflie";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vbruegge stargate01 ];
+    maintainers = with maintainers; [
+      vbruegge
+      stargate01
+    ];
   };
 }

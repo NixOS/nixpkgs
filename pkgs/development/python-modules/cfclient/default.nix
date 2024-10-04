@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, cflib
-, appdirs
-, pyzmq
-, pyqtgraph
-, pyyaml
-, numpy
-, vispy
-, pyserial
-, pyqt6
-, pyqt6-sip
-, qasync
-, packaging
-, qtm
-, xorg
-, wrapQtAppsHook
-, pythonRelaxDepsHook
-, qt5
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  cflib,
+  appdirs,
+  pyzmq,
+  pyqtgraph,
+  pyyaml,
+  numpy,
+  vispy,
+  pyserial,
+  pyqt6,
+  pyqt6-sip,
+  qasync,
+  packaging,
+  qtm,
+  xorg,
+  wrapQtAppsHook,
+  pythonRelaxDepsHook,
+  qt5,
 }:
 
 buildPythonPackage rec {
@@ -82,7 +83,10 @@ buildPythonPackage rec {
     description = "Host applications and library for Crazyflie written in Python";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vbruegge stargate01 ];
+    maintainers = with maintainers; [
+      vbruegge
+      stargate01
+    ];
     mainProgram = "cfclient";
   };
 }

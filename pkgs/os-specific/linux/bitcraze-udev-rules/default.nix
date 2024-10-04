@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "bitcraze-udev-rules";
@@ -17,7 +21,10 @@ stdenvNoCC.mkDerivation {
   meta = with lib; {
     description = "Udev rules for Bitcraze Crazyflie";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ vbruegge stargate01 ];
+    maintainers = with maintainers; [
+      vbruegge
+      stargate01
+    ];
     platforms = platforms.linux;
     homepage = "https://github.com/bitcraze/crazyflie-lib-python/blob/master/docs/installation/usb_permissions.md";
   };

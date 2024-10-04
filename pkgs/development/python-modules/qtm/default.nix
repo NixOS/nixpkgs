@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pythonAtLeast
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pythonAtLeast,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-mock,
 }:
 
 buildPythonPackage rec {
@@ -42,6 +43,9 @@ buildPythonPackage rec {
     description = "Python implementation of the real-time protocol for Qualisys Track Manager (legacy version)";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ vbruegge stargate01 ];
+    maintainers = with maintainers; [
+      vbruegge
+      stargate01
+    ];
   };
 }
