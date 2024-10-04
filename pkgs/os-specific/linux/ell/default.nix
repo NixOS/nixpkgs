@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
-  version = "0.68";
+  version = "0.69";
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
-    hash = "sha256-1T2VL/7vSIVVmJQ3n3+swFE/faUTT3mHaskdi/TUJFY=";
+    hash = "sha256-FOEVnpndbIufb8i6egBIoG1PC01WxtAlf3I47YqM+hk=";
   };
 
   nativeBuildInputs = [
