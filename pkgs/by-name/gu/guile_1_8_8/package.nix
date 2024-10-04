@@ -1,7 +1,7 @@
 {
   lib,
   buildPackages,
-  fetchurl,
+  fetchFromSavannah,
   gawk,
   gmp,
   libtool,
@@ -16,9 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "guile";
   version = "1.8.8";
 
-  src = fetchurl {
-    url = "mirror://gnu/guile/guile-${finalAttrs.version}.tar.gz";
-    sha256 = "0l200a0v7h8bh0cwz6v7hc13ds39cgqsmfrks55b1rbj5vniyiy3";
+  src = fetchFromSavannah {
+    repo = "guile";
+    rev = "release_${lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
+    hash = "sha256-6VE9hcufUwfy5urLDJphjBGbVIFQx/ZP93pYvv254fU=";
   };
 
   patches = [
