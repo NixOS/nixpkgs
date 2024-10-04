@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage {
     # on IPv4. That's not the case in the Nix sandbox somehow. Works
     # when running cargo test impurely on a (NixOS|Debian) machine.
     "--skip=ffi::test_gethostbyname2_r"
-  ];
+  ] ++ (lib.optional stdenv.hostPlatform.isS390x "-skip=handlers::test::test_hostent_serialization");
 
   meta = with lib; {
     description = "Name service non-caching daemon";
