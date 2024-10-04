@@ -7526,8 +7526,6 @@ with pkgs;
 
   mcrcon = callPackage ../tools/networking/mcrcon { };
 
-  mozillavpn = qt6Packages.callPackage ../tools/networking/mozillavpn { };
-
   mozwire = callPackage ../tools/networking/mozwire {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
