@@ -42,7 +42,6 @@ tcl.mkTclDerivation {
     ++ lib.optional enableAqua "--enable-aqua";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ];
 
   propagatedBuildInputs = [
     libXft

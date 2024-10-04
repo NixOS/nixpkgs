@@ -31,7 +31,6 @@ in stdenv.mkDerivation {
     env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
     nativeBuildInputs = [ patchelf makeWrapper virtualBoxNixGuestAdditionsBuilder ] ++ kernel.moduleBuildDependencies;
-    buildInputs = [ ];
 
     buildPhase = ''
       runHook preBuild
