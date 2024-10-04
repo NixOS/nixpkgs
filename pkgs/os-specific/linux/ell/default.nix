@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   version = "0.67";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
