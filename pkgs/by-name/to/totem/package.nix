@@ -130,6 +130,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://apps.gnome.org/Totem/";
+    changelog = "https://gitlab.gnome.org/GNOME/totem/-/blob/${version}/NEWS?ref_type=tags";
     description = "Movie player for the GNOME desktop based on GStreamer";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus; # with exception to allow use of non-GPL compatible plug-ins
