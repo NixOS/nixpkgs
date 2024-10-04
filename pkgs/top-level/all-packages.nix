@@ -355,8 +355,6 @@ with pkgs;
 
   cbfmt = callPackage ../development/tools/cbfmt { };
 
-  cfn-nag = callPackage ../development/tools/cfn-nag { };
-
   circumflex = callPackage ../applications/networking/circumflex { };
 
   citron = callPackage ../tools/misc/citron { };
@@ -2021,7 +2019,8 @@ with pkgs;
 
   vrrtest = callPackage ../tools/video/vrrtest { };
 
-  winbox = callPackage ../tools/admin/winbox {
+  winbox = winbox3;
+  winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
   };
 
@@ -7177,10 +7176,6 @@ with pkgs;
 
   evtx = callPackage ../tools/security/evtx { };
 
-  luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
-    ssh = openssh;
-  };
-
   kics = callPackage ../tools/admin/kics { };
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
@@ -11841,8 +11836,6 @@ with pkgs;
   rename = callPackage ../tools/misc/rename { };
 
   renameutils = callPackage ../tools/misc/renameutils { };
-
-  renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
   repgrep = callPackage ../tools/text/repgrep { };
 
@@ -25548,8 +25541,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  mbtileserver = callPackage ../servers/geospatial/mbtileserver { };
-
   pg_featureserv = callPackage ../servers/geospatial/pg_featureserv { };
 
   pg_tileserv = callPackage ../servers/geospatial/pg_tileserv { };
@@ -26358,8 +26349,6 @@ with pkgs;
   gotest = callPackage ../development/tools/gotest { };
 
   gotestfmt = callPackage ../development/tools/gotestfmt { };
-
-  gotools = callPackage ../development/tools/gotools { };
 
   gotop = callPackage ../tools/system/gotop {
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -28499,8 +28488,6 @@ with pkgs;
 
   bfcal = libsForQt5.callPackage ../applications/misc/bfcal { };
 
-  bibletime = libsForQt5.callPackage ../applications/misc/bibletime { };
-
   bino3d = qt6Packages.callPackage ../applications/video/bino3d { };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee { };
@@ -30220,8 +30207,6 @@ with pkgs;
 
   sleep-on-lan = callPackage ../tools/networking/sleep-on-lan { };
 
-  slweb = callPackage ../applications/misc/slweb { };
-
   sonixd = callPackage ../applications/audio/sonixd { };
 
   sonobus = callPackage ../applications/audio/sonobus { };
@@ -30754,8 +30739,6 @@ with pkgs;
   };
 
   kubelogin = callPackage ../applications/networking/cluster/kubelogin { };
-
-  kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
   kubevpn = callPackage ../applications/networking/cluster/kubevpn { };
 
@@ -36424,8 +36407,6 @@ with pkgs;
     webdoc = true;
     cudaSupport = true;
   };
-
-  mathmod = libsForQt5.callPackage ../applications/science/math/mathmod { };
 
   metis = callPackage ../development/libraries/science/math/metis { };
 

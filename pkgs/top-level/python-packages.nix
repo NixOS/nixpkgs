@@ -13907,6 +13907,8 @@ self: super: with self; {
 
   sagemaker = callPackage ../development/python-modules/sagemaker { };
 
+  sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
+
   salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
@@ -15691,6 +15693,8 @@ self: super: with self; {
   };
 
   torch-audiomentations = callPackage ../development/python-modules/torch-audiomentations { };
+
+  torch-geometric = callPackage ../development/python-modules/torch-geometric { };
 
   torch-pitch-shift = callPackage ../development/python-modules/torch-pitch-shift { };
 

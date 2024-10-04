@@ -322,6 +322,7 @@ in {
   fancontrol = handleTest ./fancontrol.nix {};
   fanout = handleTest ./fanout.nix {};
   fcitx5 = handleTest ./fcitx5 {};
+  fedimintd = runTest ./fedimintd.nix;
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
   ferretdb = handleTest ./ferretdb.nix {};
@@ -942,6 +943,7 @@ in {
   sudo = handleTest ./sudo.nix {};
   sudo-rs = handleTest ./sudo-rs.nix {};
   sunshine = handleTest ./sunshine.nix {};
+  suricata = handleTest ./suricata.nix {};
   suwayomi-server = handleTest ./suwayomi-server.nix {};
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
