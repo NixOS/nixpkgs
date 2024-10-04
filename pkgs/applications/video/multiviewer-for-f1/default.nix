@@ -20,6 +20,7 @@
 , nspr
 , nss
 , pango
+, writeScript
 , xorg
 }:
 let
@@ -88,6 +89,27 @@ stdenvNoCC.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/Multiviewer for F1\""
 
     runHook postInstall
+  '';
+
+  passthru.updateScript = writeScript "update-multiviewer-for-f1" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p curl common-updater-scripts
+    set -eu -o pipefail
+
+    # Get latest API for packages, store so we only make one request
+    latest=$(curl -s "https://api.multiviewer.app/api/v1/releases/latest/")
+
+    # From the downloaded JSON extract the url, version and id
+    link=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").url')
+    id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
+    version=$(echo $latest | jq -r '.version')
+
+    # Pre-calculate package hash
+    hash=$(nix-prefetch-url --type sha256 $link)
+
+    # Update ID and version in source
+    update-source-version ${pname} "$id" --version-key=id
+    update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
   '';
 
   meta = with lib; {
