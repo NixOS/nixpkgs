@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, perl, gfortran
+{ stdenv, lib, fetchurl, perl, gfortran, automake, autoconf
 , openssh, hwloc, python3
 , darwin
 # either libfabric or ucx work for ch4backend on linux. On darwin, neither of
@@ -21,12 +21,20 @@ assert (ch4backend.pname == "ucx" || ch4backend.pname == "libfabric");
 
 stdenv.mkDerivation  rec {
   pname = "mpich";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchurl {
     url = "https://www.mpich.org/static/downloads/${version}/mpich-${version}.tar.gz";
-    sha256 = "sha256-iD9bs66r9ifLhJLKAqA7GR0Jg2u+D1mdhQg1EXl4HUE=";
+    hash = "sha256-egGRgMUdFzitnF2NRSMU3mXoKO4kC8stH4DemmW+iKg=";
   };
+
+  patches = [
+    # Disables ROMIO test which was enabled in
+    # https://github.com/pmodels/mpich/commit/09686f45d77b7739f7aef4c2c6ef4c3060946595
+    # The test searches for mpicc in $out/bin, which is not yet present in the checkPhase
+    # Moreover it fails one test.
+    ./disable-romio-tests.patch
+  ];
 
   outputs = [ "out" "doc" "man" ];
 
@@ -42,7 +50,7 @@ stdenv.mkDerivation  rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ gfortran python3 ];
+  nativeBuildInputs = [ gfortran python3 autoconf automake ];
   buildInputs = [ perl openssh hwloc ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) ch4backend
     ++ lib.optional pmixSupport pmix
