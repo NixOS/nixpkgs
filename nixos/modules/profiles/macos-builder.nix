@@ -133,6 +133,7 @@ in
         enable = true;
 
         authorizedKeysFiles = [ "${keysDirectory}/%u_${keyType}.pub" ];
+        authorizedKeysInHomedir = false;  # working around #325610
       };
     };
 
