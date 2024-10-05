@@ -1,14 +1,20 @@
-{ buildGoModule, lib, installShellFiles, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  installShellFiles,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "deck";
-  version = "1.40.2";
+  version = "1.40.3";
 
   src = fetchFromGitHub {
     owner = "Kong";
     repo = "deck";
-    rev = "v${version}";
-    hash = "sha256-qLWDZEYO/0as2+4OM6/FAJcN+vnRBrcx59uHRkougLQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n6WASCtDwBX4FASSWI17JpU7rDXIeSidPWhj/MB2tUs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -21,7 +27,7 @@ buildGoModule rec {
   ];
 
   proxyVendor = true; # darwin/linux hash mismatch
-  vendorHash = "sha256-RkhpR9sKWaO1jceCU4sS4TmxS5giq2uUIkiHNnahQZw=";
+  vendorHash = "sha256-csoSvu7uce1diB4EsQCRRt08mX+rJoxfZqAtaoo0x4M=";
 
   postInstall = ''
     installShellCompletion --cmd deck \
@@ -30,11 +36,13 @@ buildGoModule rec {
       --zsh <($out/bin/deck completion zsh)
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Configuration management and drift detection tool for Kong";
     homepage = "https://github.com/Kong/deck";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "deck";
-    maintainers = with maintainers; [ liyangau ];
+    maintainers = with lib.maintainers; [ liyangau ];
   };
 }
