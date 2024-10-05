@@ -146,6 +146,8 @@ let
     pkgs.pkgsCross.mips64el-linux-gnuabi64.stdenv
     pkgs.pkgsCross.mips64el-linux-gnuabin32.stdenv
     pkgs.pkgsCross.mingwW64.stdenv
+    # Uses the expression that is used by the most cross-compil_ed_ GHCs
+    pkgs.pkgsCross.riscv64.haskell.compiler.native-bignum.ghc948
 
   ] ++ lib.optionals (with pkgs.stdenv.buildPlatform; isx86_64 && isLinux) [
     # Musl-to-glibc cross on the same architecture tends to turn up
