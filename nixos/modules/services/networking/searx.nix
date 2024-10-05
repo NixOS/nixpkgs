@@ -318,7 +318,7 @@ in
   };
 
   meta.maintainers = with maintainers; [
-    rnhmjoj
+    SuperSandro2000
     _999eagle
   ];
 }
