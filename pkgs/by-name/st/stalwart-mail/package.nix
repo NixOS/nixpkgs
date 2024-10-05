@@ -153,12 +153,12 @@ rustPlatform.buildRustPackage {
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       happysalada
       onny
       oddlama
