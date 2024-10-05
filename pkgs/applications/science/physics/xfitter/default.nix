@@ -18,7 +18,7 @@
 , qcdnum
 , root
 , zlib
-, memorymappingHook, memstreamHook
+, memorymappingHook
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ apfel blas ceres-solver lhapdf lapack libyaml root qcdnum gsl yaml-cpp zlib ]
     ++ lib.optionals ("5" == lib.versions.major root.version) [ apfelgrid applgrid ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook memstreamHook ]
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ]
     ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc
     ;
 
