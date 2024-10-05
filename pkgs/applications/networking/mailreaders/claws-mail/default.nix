@@ -31,7 +31,7 @@
 , enablePluginBsfilter ? true
 , enablePluginClamd ? true
 , enablePluginDillo ? true
-, enablePluginFancy ? true, webkitgtk
+, enablePluginFancy ? true, webkitgtk_4_0
 , enablePluginFetchInfo ? true
 , enablePluginKeywordWarner ? true
 , enablePluginLibravatar ? enablePluginRavatar
@@ -67,7 +67,7 @@ let
     { flags = [ "dbus" ]; enabled = enableDbus; deps = [ dbus dbus-glib ]; }
     { flags = [ "dillo-plugin" ]; enabled = enablePluginDillo; }
     { flags = [ "enchant" ]; enabled = enableEnchant; deps = [ enchant ]; }
-    { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ webkitgtk ]; }
+    { flags = [ "fancy-plugin" ]; enabled = enablePluginFancy; deps = [ webkitgtk_4_0 ]; }
     { flags = [ "fetchinfo-plugin" ]; enabled = enablePluginFetchInfo; }
     { flags = [ "keyword_warner-plugin" ]; enabled = enablePluginKeywordWarner; }
     { flags = [ "gnutls" ]; enabled = enableGnuTLS; deps = [ gnutls ]; }

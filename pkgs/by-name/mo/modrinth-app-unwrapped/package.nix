@@ -19,7 +19,7 @@
   nodejs,
   openssl,
   pkg-config,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 rustPlatform.buildRustPackage {
   pname = "modrinth-app-unwrapped";
@@ -87,7 +87,7 @@ rustPlatform.buildRustPackage {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
