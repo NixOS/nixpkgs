@@ -8,13 +8,10 @@
 mkDerivation {
   pname = "ghc-settings-edit";
   version = "0.1.0";
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.unions [
-      ./Setup.hs
-      ./ghc-settings-edit.lhs
-      ./ghc-settings-edit.cabal
-    ];
+  src = builtins.path {
+    path = ./.;
+    name = "source";
+    filter = path: _: (builtins.baseNameOf path) != "default.nix";
   };
   isLibrary = false;
   isExecutable = true;
