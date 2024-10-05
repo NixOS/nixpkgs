@@ -5,6 +5,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage2";
   buildMan = false; # No man pages to build
   targetName = "libunwind";
   targetDir = "runtimes";

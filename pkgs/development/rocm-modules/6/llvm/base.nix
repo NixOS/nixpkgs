@@ -3,6 +3,7 @@
 , gcc13Stdenv
 , fetchFromGitHub
 , rocmUpdateScript
+, nameSuffix
 , pkg-config
 , cmake
 , ninja
@@ -60,7 +61,7 @@ let
   inferNativeTarget = t: if t == "NATIVE" then llvmNativeTarget else t;
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 in stdenv.mkDerivation (finalAttrs: {
-  pname = "rocm-llvm-${targetName}";
+  pname = "rocm-llvm-${targetName}${nameSuffix}";
   version = "6.2.2";
 
   outputs = [

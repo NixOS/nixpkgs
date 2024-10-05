@@ -8,6 +8,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage2";
   buildDocs = false; # No documentation to build
   buildMan = false; # No man pages to build
   targetName = "compiler-rt";

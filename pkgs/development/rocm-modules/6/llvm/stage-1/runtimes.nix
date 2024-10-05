@@ -7,6 +7,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage1";
   buildDocs = false;
   buildMan = false;
   buildTests = false;

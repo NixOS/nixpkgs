@@ -6,6 +6,7 @@
 
 callPackage ../base.nix rec {
   inherit stdenv rocmUpdateScript;
+  nameSuffix = "-stage1";
   targetName = "clang-unwrapped";
   targetDir = "clang";
   extraBuildInputs = [ llvm ];
