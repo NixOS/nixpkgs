@@ -21721,12 +21721,6 @@ with pkgs;
 
   mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
-  memorymapping = callPackage ../development/libraries/memorymapping { };
-  memorymappingHook = makeSetupHook {
-    name = "memorymapping-hook";
-    propagatedBuildInputs = [ memorymapping ];
-  } ../development/libraries/memorymapping/setup-hook.sh;
-
   memray = callPackage ../development/tools/memray { };
 
   menu-cache = callPackage ../development/libraries/menu-cache { };
