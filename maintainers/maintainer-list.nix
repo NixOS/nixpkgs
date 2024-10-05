@@ -18498,6 +18498,11 @@
     githubId = 56157634;
     name = "Ruben Hönle";
   };
+  rubikcubed = {
+    github = "rubikcubed";
+    githubId = 91467402;
+    name = "rubikcubed";
+  };
   ruby0b = {
     github = "ruby0b";
     githubId = 106119328;
