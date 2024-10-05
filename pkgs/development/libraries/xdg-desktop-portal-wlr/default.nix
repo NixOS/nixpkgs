@@ -11,7 +11,7 @@
 , grim
 , inih
 , libdrm
-, mesa
+, libgbm
 , pipewire
 , scdoc
 , slurp
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-scanner makeWrapper ];
-  buildInputs = [ inih libdrm mesa pipewire systemd wayland wayland-protocols ];
+  buildInputs = [ inih libdrm libgbm pipewire systemd wayland wayland-protocols ];
 
   mesonFlags = [
     "-Dsd-bus-provider=libsystemd"

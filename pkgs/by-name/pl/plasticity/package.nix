@@ -17,7 +17,7 @@
 , libnotify
 , libsForQt5
 , libxkbcommon
-, mesa
+, libgbm
 , nspr
 , nss
 , openssl
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec  {
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract libgbm ];
 
   buildInputs = [
     alsa-lib

@@ -7,7 +7,7 @@
   cython_0,
   docutils,
   kivy-garden,
-  mesa,
+  libgbm,
   mtdev,
   SDL2,
   SDL2_image,
@@ -50,7 +50,7 @@ buildPythonPackage rec {
       SDL2_mixer
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
-      mesa
+      libgbm
       mtdev
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

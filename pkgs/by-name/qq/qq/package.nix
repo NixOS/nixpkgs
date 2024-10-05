@@ -12,7 +12,7 @@
 , libgcrypt
 , libkrb5
 , libnotify
-, mesa # for libgbm
+, libgbm
 , libpulseaudio
 , libGL
 , nss
@@ -63,7 +63,7 @@ stdenv.mkDerivation {
     libpulseaudio
     libgcrypt
     libkrb5
-    mesa
+    libgbm
     nss
     vips
     xorg.libXdamage

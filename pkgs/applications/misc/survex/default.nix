@@ -9,7 +9,7 @@
 , libGLU
 , libICE
 , libX11
-, mesa
+, libgbm
 , perl
 , pkg-config
 , proj
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     # TODO: libGLU doesn't build for macOS because of Mesa issues
     # (#233265); is it required for anything?
     libGLU
-    mesa
+    libgbm
     libICE
     libX11
   ];

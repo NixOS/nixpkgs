@@ -26,7 +26,7 @@
   libudev0-shim,
   libdrm,
   makeWrapper,
-  mesa,
+  libgbm,
   noto-fonts-cjk-sans,
   nspr,
   nss,
@@ -99,7 +99,7 @@ let
       libdrm
       nspr
       nss
-      mesa # libgbm
+      libgbm # libgbm
       qt5.qtbase
       qt5.qtdeclarative
       qt5.qtsvg

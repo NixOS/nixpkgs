@@ -13,7 +13,7 @@
 , libsigcxx
 , libvorbis
 , lua5_2
-, mesa
+, libgbm
 , SDL2
 , SDL2_image
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libsigcxx
     libvorbis
     lua5_2
-    mesa
+    libgbm
     SDL2
     SDL2_image
   ];

@@ -58,7 +58,7 @@
 , libxslt
 , lcms2
 , libkrb5
-, mesa
+, libgbm
 , enableProprietaryCodecs ? true
   # darwin
 , autoSignDarwinBinariesHook
@@ -280,7 +280,7 @@ qtModule {
     pipewire
 
     libkrb5
-    mesa
+    libgbm
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AGL
     AVFoundation

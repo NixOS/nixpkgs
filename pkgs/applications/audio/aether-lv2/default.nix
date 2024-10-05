@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, lv2, libX11, libGL, libGLU, mesa, cmake }:
+{ lib, stdenv, fetchFromGitHub, lv2, libX11, libGL, libGLU, libgbm, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "aether-lv2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    lv2 libX11 libGL libGLU mesa
+    lv2 libX11 libGL libGLU libgbm
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

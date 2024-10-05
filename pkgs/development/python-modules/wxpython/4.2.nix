@@ -27,7 +27,7 @@
   libXtst,
   libXxf86vm,
   libglvnd,
-  mesa,
+  libgbm,
   pango,
   SDL,
   webkitgtk,
@@ -92,7 +92,7 @@ buildPythonPackage rec {
       libXtst
       libXxf86vm
       libglvnd
-      mesa
+      libgbm
       webkitgtk
       xorgproto
     ];

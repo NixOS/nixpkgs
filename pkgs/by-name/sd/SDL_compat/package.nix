@@ -5,11 +5,11 @@
 , fetchFromGitHub
 , libGLU
 , libiconv
-, mesa
+, libGL
 , pkg-config
 , stdenv
 # Boolean flags
-, libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms
+, libGLSupported ? lib.elem stdenv.hostPlatform.system libGL.meta.platforms
 , openglSupport ? libGLSupported
 }:
 

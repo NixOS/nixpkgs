@@ -21,7 +21,7 @@
 , gtk3
 , gdk-pixbuf
 , glib
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -87,7 +87,7 @@ let
     gtk3
     gdk-pixbuf
     glib
-    mesa
+    libgbm
     nspr
     nss
     pango

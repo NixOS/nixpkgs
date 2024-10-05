@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, libdrm, libX11, libGL, mesa, pkg-config, gst_all_1 }:
+{ lib, stdenv, fetchFromGitLab, meson, ninja, libdrm, libX11, libGL, libgbm, pkg-config, gst_all_1 }:
 
 stdenv.mkDerivation {
   pname = "kmscube";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     libdrm
     libX11
     libGL
-    mesa
+    libgbm
   ] ++ (with gst_all_1; [
     gstreamer
     gst-plugins-base

@@ -1,7 +1,7 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook3, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
 , libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, zenity
-, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
+, at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, libgbm, libxkbcommon
 , pname, meta, harfbuzz, libayatana-appindicator, libdbusmenu, libGL
   # High-DPI support: Spotify's --force-device-scale-factor argument
   # not added if `null`, otherwise, should be a number.
@@ -49,7 +49,7 @@ let
     libpng
     libpulseaudio
     libxkbcommon
-    mesa
+    libgbm
     nss_latest
     pango
     stdenv.cc.cc

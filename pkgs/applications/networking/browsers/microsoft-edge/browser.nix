@@ -27,7 +27,7 @@
 , pango
 , cairo
 , gdk-pixbuf
-, mesa
+, libgbm
 , alsa-lib
 , at-spi2-core
 , libuuid
@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
         xorg.libxcb cups.lib dbus.lib expat libdrm
         xorg.libXcomposite xorg.libXdamage xorg.libXext
         xorg.libXfixes xorg.libXrandr libxkbcommon
-        pipewire gtk3 pango cairo gdk-pixbuf mesa
+        pipewire gtk3 pango cairo gdk-pixbuf libgbm
         alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
       ];
       naclHelper = lib.makeLibraryPath [
-        glib nspr atk libdrm xorg.libxcb mesa xorg.libX11
+        glib nspr atk libdrm xorg.libxcb libgbm xorg.libX11
         xorg.libXext dbus.lib libxkbcommon
       ];
       libwidevinecdm = lib.makeLibraryPath [

@@ -8,11 +8,12 @@
 , libGL
 , libglvnd
 , makeWrapper
+, mesa
 , pkg-config
 , python3
 , x11Support ? true, libxcb, libX11
 , waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
-, useGbm ? true, mesa, udev
+, useGbm ? true, libgbm, udev
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     wayland-protocols
   ] ++ lib.optionals useGbm [
     udev
-    mesa
+    libgbm
   ];
 
   depsBuildBuild = [ pkg-config ];

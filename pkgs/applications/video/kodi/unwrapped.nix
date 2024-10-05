@@ -18,7 +18,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
 , libplist, p11-kit, zlib, flatbuffers, fstrcmp, rapidjson
-, lirc
+, lirc, mesa
 , x11Support ? true, libX11, xorgproto, libXt, libXmu, libXext, libXinerama, libXrandr, libXtst, libXfixes, xdpyinfo, libXdmcp
 , dbusSupport ? true, dbus
 , joystickSupport ? true, cwiid
@@ -33,7 +33,7 @@
 , vdpauSupport ? true, libvdpau
 , waylandSupport ? false, wayland, wayland-protocols
 , waylandpp ?  null, libxkbcommon
-, gbmSupport ? false, mesa, libinput, libdisplay-info
+, gbmSupport ? false, libgbm, libinput, libdisplay-info
 , buildPackages
 }:
 
@@ -126,7 +126,7 @@ in stdenv.mkDerivation (finalAttrs: {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fstrcmp rapidjson
       lirc
-      mesa # for libEGL
+      mesa  # for eglext_angle.h
     ]
     ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
@@ -151,7 +151,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals gbmSupport [
       libxkbcommon.dev
-      mesa.dev
+      libgbm
       libinput.dev
       libdisplay-info
     ];

@@ -23,7 +23,7 @@
 , nss
 , nspr
 , libdrm
-, mesa
+, libgbm
 , wayland
 , udev
 }:
@@ -111,7 +111,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     # Build the set of output library directories to rpath against
     LIBDIRS="${lib.makeLibraryPath [
       libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
-      nss nspr libdrm mesa wayland udev
+      nss nspr libdrm libgbm wayland udev
     ]}"
     for output in $outputs; do
       if [ "$output" = debug ]; then continue; fi

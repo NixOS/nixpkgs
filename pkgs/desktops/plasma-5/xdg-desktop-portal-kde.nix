@@ -5,7 +5,7 @@
 , wayland-scanner
 , cups
 , libepoxy
-, mesa
+, libgbm
 , pcre
 , pipewire
 , wayland
@@ -30,7 +30,7 @@ mkDerivation {
   buildInputs = [
     cups
     libepoxy
-    mesa
+    libgbm
     pcre
     pipewire
     wayland

@@ -2,7 +2,7 @@
 , substituteAll
 , meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
 , wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
-, systemd, libGL, libX11, mesa
+, systemd, libGL, libX11
 , xwayland ? null
 , nixosTests
 }:
@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon xcbutilwm
-    mesa # for libEGL headers
     systemd libGL libX11
   ];
 

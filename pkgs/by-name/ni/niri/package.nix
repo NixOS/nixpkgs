@@ -12,7 +12,7 @@
 , wayland
 , systemd
 , libinput
-, mesa
+, libgbm
 , fontconfig
 , libglvnd
 , autoPatchelfHook
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     libdisplay-info
     libxkbcommon
     libinput
-    mesa # For libgbm
+    libgbm
     fontconfig
     stdenv.cc.cc.lib
     pipewire
@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
 
   runtimeDependencies = [
     wayland
-    mesa
+    libgbm
     libglvnd # For libEGL
   ];
 

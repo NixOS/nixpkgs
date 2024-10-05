@@ -6,7 +6,7 @@
 , plasma-wayland-protocols
 , libepoxy
 , ffmpeg
-, mesa
+, libgbm
 , pipewire
 , wayland
 }:
@@ -20,7 +20,7 @@ mkDerivation {
     kcoreaddons
     plasma-wayland-protocols
     ffmpeg
-    mesa
+    libgbm
     pipewire
     wayland
   ];

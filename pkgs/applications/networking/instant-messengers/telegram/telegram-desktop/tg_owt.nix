@@ -23,7 +23,7 @@
   glib,
   abseil-cpp,
   pipewire,
-  mesa,
+  libgbm,
   libGL,
   unstableGitUpdater,
   darwin,
@@ -70,7 +70,7 @@ stdenv.mkDerivation {
       libXrandr
       libXtst
       pipewire
-      mesa
+      libgbm
       libGL
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (

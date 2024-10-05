@@ -24,7 +24,7 @@
 , glib
 , abseil-cpp
 , pipewire
-, mesa
+, libgbm
 , libdrm
 , libGL
 , darwin
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
-      --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
+      --replace '"libgbm.so.1"' '"${libgbm}/lib/libgbm.so.1"' \
       --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
   '';
 
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
     libXi
     glib
     pipewire
-    mesa
+    libgbm
     libdrm
     libGL
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [

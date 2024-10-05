@@ -13,7 +13,7 @@
   x264,
   libpulseaudio,
   pipewire,
-  mesa, # for libgbm
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     x264
     libpulseaudio
     pipewire
-    mesa
+    libgbm
   ];
 
   meta = with lib; {

@@ -31,7 +31,7 @@
 , libpulseaudio
 , libuuid
 , libxshmfence
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     libuuid
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango

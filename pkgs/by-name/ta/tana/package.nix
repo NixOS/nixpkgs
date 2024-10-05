@@ -19,7 +19,7 @@
 , libdrm
 , libglvnd
 , libxkbcommon
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -29,7 +29,7 @@
 , dpkg
 }:
 let
-  glLibs = [ libglvnd mesa ];
+  glLibs = [ libglvnd libgbm ];
   libs = [
     alsa-lib
     atkmm

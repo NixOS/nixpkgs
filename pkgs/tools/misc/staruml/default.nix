@@ -5,7 +5,7 @@
 , xorg, nss, nspr
 , atk, at-spi2-atk, dbus
 , gdk-pixbuf, pango, cairo
-, expat, libdrm, mesa
+, expat, libdrm, libgbm
 , alsa-lib, at-spi2-core, cups
 , libxkbcommon }:
 
@@ -19,7 +19,7 @@ let
     nspr atk at-spi2-atk
     dbus gdk-pixbuf pango cairo
     xorg.libXrandr expat libdrm
-    mesa alsa-lib at-spi2-core
+    libgbm alsa-lib at-spi2-core
     cups
   ];
 in

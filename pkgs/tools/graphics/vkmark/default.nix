@@ -6,7 +6,7 @@
 , ninja
 , vulkan-headers
 , vulkan-loader
-, mesa
+, libgbm
 , wayland-protocols
 , wayland
 , glm
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-headers
     vulkan-loader
-    mesa
+    libgbm
     glm
     assimp
     libxcb

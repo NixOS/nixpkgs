@@ -7,7 +7,6 @@
 , libxml2
 , libevdev
 , libinput
-, mesa
 , meson
 , ninja
 , pixman
@@ -44,7 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libevdev
     libinput
-    mesa # for libEGL
     pixman
     udev
     wayland

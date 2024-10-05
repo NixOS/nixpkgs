@@ -8,7 +8,7 @@
 , gcc-unwrapped
 , nss
 , libdrm
-, mesa
+, libgbm
 , alsa-lib
 , xdg-utils
 , systemd
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     glibc
     libdrm
     gcc-unwrapped
-    mesa
+    libgbm
     alsa-lib
     xdg-utils
   ];

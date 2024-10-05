@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg, mesa, libsndfile, libsamplerate }:
+{ lib, stdenv, fetchFromGitHub, libjack2, libGL, pkg-config, xorg, libgbm, libsndfile, libsamplerate }:
 
 stdenv.mkDerivation rec {
   pname = "ninjas2";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libjack2 xorg.libX11 libGL mesa libsndfile libsamplerate
+    libjack2 xorg.libX11 libGL libgbm libsndfile libsamplerate
   ];
 
   installPhase = ''

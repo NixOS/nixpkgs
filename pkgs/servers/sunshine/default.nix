@@ -21,7 +21,7 @@
 , wayland-scanner
 , libffi
 , libcap
-, mesa
+, libgbm
 , curl
 , pcre
 , pcre2
@@ -131,7 +131,7 @@ stdenv'.mkDerivation rec {
     libva
     libvdpau
     numactl
-    mesa
+    libgbm
     amf-headers
     svt-av1
     libappindicator
@@ -145,7 +145,7 @@ stdenv'.mkDerivation rec {
 
   runtimeDependencies = [
     avahi
-    mesa
+    libgbm
     xorg.libXrandr
     libxcb
     libglvnd

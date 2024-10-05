@@ -22136,6 +22136,8 @@ with pkgs;
 
   mesa_glu = callPackage ../development/libraries/mesa-glu {};
 
+  libgbm = callPackage ../development/libraries/mesa/gbm.nix {};
+
   ## End libGL/libGLU/Mesa stuff
 
   meterbridge = callPackage ../applications/audio/meterbridge { };

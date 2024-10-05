@@ -12,7 +12,7 @@
 , libpng
 , libxkbcommon
 , lzo
-, mesa
+, libgbm
 , meson
 , ninja
 , openssl
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     libpng
     libxkbcommon
     lzo
-    mesa
+    libgbm
     openssl
     pixman
     wayland

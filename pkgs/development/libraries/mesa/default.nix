@@ -6,7 +6,6 @@
 , expat
 , fetchCrate
 , fetchFromGitLab
-, fetchpatch
 , file
 , flex
 , glslang
@@ -15,7 +14,6 @@
 , jdupes
 , libdrm
 , libglvnd
-, libomxil-bellagio
 , libunwind
 , libva-minimal
 , libvdpau
@@ -181,17 +179,15 @@ in stdenv.mkDerivation {
     (lib.mesonOption "platforms" (lib.concatStringsSep "," eglPlatforms))
     (lib.mesonOption "gallium-drivers" (lib.concatStringsSep "," galliumDrivers))
     (lib.mesonOption "vulkan-drivers" (lib.concatStringsSep "," vulkanDrivers))
-    (lib.mesonOption "vulkan-layers" (builtins.concatStringsSep "," vulkanLayers))
+    (lib.mesonOption "vulkan-layers" (lib.concatStringsSep "," vulkanLayers))
 
-    # Make sure we know where to find all the drivers
+    # Make sure we know where to put all the drivers
     (lib.mesonOption "dri-drivers-path" "${placeholder "drivers"}/lib/dri")
     (lib.mesonOption "vdpau-libs-path" "${placeholder "drivers"}/lib/vdpau")
-    (lib.mesonOption "omx-libs-path" "${placeholder "drivers"}/lib/bellagio")
     (lib.mesonOption "va-libs-path" "${placeholder "drivers"}/lib/dri")
     (lib.mesonOption "d3d-drivers-path" "${placeholder "drivers"}/lib/d3d")
 
     # Set search paths for non-Mesa drivers (e.g. Nvidia)
-    (lib.mesonOption "dri-search-path" "${libglvnd.driverLink}/lib/dri")
     (lib.mesonOption "gbm-backends-path" "${libglvnd.driverLink}/lib/gbm:${placeholder "out"}/lib/gbm")
 
     # Enable glvnd for dynamic libGL dispatch
@@ -231,7 +227,6 @@ in stdenv.mkDerivation {
     expat
     spirv-tools
     libglvnd
-    libomxil-bellagio
     libunwind
     libva-minimal
     libvdpau
@@ -303,10 +298,13 @@ in stdenv.mkDerivation {
 
   postInstall = ''
     # Move driver-related bits to $drivers
+    moveToOutput "lib/gbm" $drivers
     moveToOutput "lib/lib*_mesa*" $drivers
+    moveToOutput "lib/libgallium*" $drivers
+    moveToOutput "lib/libglapi*" $drivers
     moveToOutput "lib/libpowervr_rogue*" $drivers
-    moveToOutput "lib/libxatracker*" $drivers
     moveToOutput "lib/libvulkan_*" $drivers
+    moveToOutput "lib/libxatracker*" $drivers
 
     # Update search path used by glvnd (it's pointing to $out but drivers are in $drivers)
     for js in $drivers/share/glvnd/egl_vendor.d/*.json; do
@@ -373,7 +371,7 @@ in stdenv.mkDerivation {
     done
 
     # add RPATH here so Zink can find libvulkan.so
-    patchelf --add-rpath ${vulkan-loader}/lib $out/lib/libgallium*.so
+    patchelf --add-rpath ${vulkan-loader}/lib $drivers/lib/libgallium*.so
   '';
 
   env.NIX_CFLAGS_COMPILE = toString ([

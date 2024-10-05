@@ -9,7 +9,7 @@
 , unzip
 , at-spi2-atk
 , libdrm
-, mesa
+, libgbm
 , libxkbcommon
 , libxshmfence
 , libGL
@@ -100,7 +100,7 @@ let
     stdenv.cc.cc.lib
     systemd
   ]
-    ++ lib.optionals (lib.versionAtLeast version "9.0.0") [ libdrm mesa ]
+    ++ lib.optionals (lib.versionAtLeast version "9.0.0") [ libdrm libgbm ]
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]
     ++ lib.optionals (lib.versionAtLeast version "12.0.0") [ libxshmfence ]

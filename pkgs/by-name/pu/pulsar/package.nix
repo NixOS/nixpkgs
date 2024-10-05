@@ -14,7 +14,7 @@
 , gdk-pixbuf
 , glib
 , gtk3
-, mesa
+, libgbm
 , nss
 , nspr
 , xorg
@@ -55,7 +55,7 @@ let
     glib
     gtk3
     libsecret
-    mesa
+    libgbm
     nss
     nspr
     libdrm

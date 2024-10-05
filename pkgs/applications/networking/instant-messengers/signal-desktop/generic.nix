@@ -41,7 +41,7 @@
 , libuuid
 , at-spi2-core
 , libappindicator-gtk3
-, mesa
+, libgbm
   # Runtime dependencies:
 , systemd
 , libnotify
@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     libappindicator-gtk3
     libnotify
     libuuid
-    mesa # for libgbm
+    libgbm
     nspr
     nss
     pango

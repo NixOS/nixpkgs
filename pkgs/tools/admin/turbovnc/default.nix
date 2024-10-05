@@ -7,6 +7,7 @@
 , bzip2
 , cmake
 , freetype
+, libgbm
 , libGL
 , libjpeg_turbo
 , makeWrapper
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXfont2 # for -DTVNC_SYSTEMX11=1
     libxkbfile # for -DTVNC_SYSTEMX11=1
     libXi
-    mesa # for -DTVNC_SYSTEMX11=1
+    libgbm # for -DTVNC_SYSTEMX11=1
     pixman # for -DTVNC_SYSTEMX11=1
     xorgproto
     xtrans # for -DTVNC_SYSTEMX11=1

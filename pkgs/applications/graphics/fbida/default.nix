@@ -20,7 +20,7 @@
 , libepoxy
 , pixman
 , poppler
-, mesa
+, libgbm
 , lirc
 }:
 
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     pixman
     poppler
     lirc
-    mesa
+    libgbm
   ];
 
   makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" "JPEG_VER=62" ];

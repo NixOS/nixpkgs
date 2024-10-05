@@ -42,7 +42,7 @@ let
     xdg-user-dirs
 
     # electron based launchers need newer versions of these libraries than what runtime provides
-    mesa
+    libgbm
     sqlite
   ] ++ extraPkgs pkgs;
 

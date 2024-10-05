@@ -9,7 +9,7 @@
 , aml
 , jansson
 , libxkbcommon
-, mesa
+, libgbm
 , neatvnc
 , pam
 , pixman
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     aml
     jansson
     libxkbcommon
-    mesa
+    libgbm
     neatvnc
     pam
     pixman

@@ -247,7 +247,7 @@ filterAndCreateOverrides {
       libcurand,
       libGLU,
       libglvnd,
-      mesa,
+      libgbm,
     }:
     prevAttrs: {
       buildInputs = prevAttrs.buildInputs ++ [
@@ -256,7 +256,7 @@ filterAndCreateOverrides {
         libcurand
         libGLU
         libglvnd
-        mesa
+        libgbm
       ];
     };
 

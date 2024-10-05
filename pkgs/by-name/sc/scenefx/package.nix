@@ -13,7 +13,7 @@
   pixman,
   wayland-protocols,
   libGL,
-  mesa,
+  libgbm,
   validatePkgConfig,
   testers,
   wayland-scanner,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libGL
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     wayland-protocols

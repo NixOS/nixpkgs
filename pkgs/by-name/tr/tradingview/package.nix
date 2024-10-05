@@ -12,7 +12,7 @@
 , libdrm
 , libsecret
 , libxkbcommon
-, mesa
+, libgbm
 , pango
 , sqlite
 , systemd
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdrm
     libsecret
     libxkbcommon
-    mesa
+    libgbm
     pango
     sqlite
     systemd

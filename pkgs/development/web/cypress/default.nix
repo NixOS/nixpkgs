@@ -6,7 +6,7 @@
 , lib
 , buildPackages
 , makeShellWrapper
-, mesa
+, libgbm
 , nss
 , stdenv
 , udev
@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     gtk2
     alsa-lib
     gtk3
-    mesa # for libgbm
+    libgbm
   ]) ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
     CoreServices

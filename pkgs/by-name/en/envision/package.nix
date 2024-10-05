@@ -29,7 +29,7 @@ buildFHSEnv {
         ++ pkgs.monado.nativeBuildInputs
         ++ (with pkgs; [
           # Additional dependencies required by Monado when built using Envision
-          mesa
+          libgbm
           shaderc
           xorg.libX11
           xorg.libxcb

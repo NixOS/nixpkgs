@@ -30,7 +30,7 @@
   kscreenlocker,
   breeze-qt5,
   libinput,
-  mesa,
+  libgbm,
   lcms2,
   xorg,
 }:
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
     breeze-qt5
     libinput
-    mesa
+    libgbm
     lcms2
 
     xorg.libxcb

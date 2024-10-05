@@ -47,7 +47,7 @@
 , apple_sdk
 , libGL
 , libGLU
-, mesa
+, libgbm
 , libintl
 , lcms2
 , libmanette
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     hyphen
     libGL
     libGLU
-    mesa # for libEGL headers
+    libgbm
     libgcrypt
     libgpg-error
     libidn

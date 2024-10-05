@@ -32,7 +32,7 @@
 , libuuid
 , libxkbcommon
 , libxshmfence
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -82,7 +82,7 @@ let
     fontconfig freetype gdk-pixbuf glib gtk3 gtk4 libdrm libX11 libGL
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
-    libXtst libuuid mesa nspr nss pango pipewire udev wayland
+    libXtst libuuid libgbm nspr nss pango pipewire udev wayland
     xorg.libxcb zlib snappy libkrb5
   ]
     ++ optional pulseSupport libpulseaudio

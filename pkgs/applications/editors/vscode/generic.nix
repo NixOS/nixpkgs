@@ -10,7 +10,7 @@
 , at-spi2-atk
 , autoPatchelfHook
 , alsa-lib
-, mesa
+, libgbm
 , nss
 , nspr
 , xorg
@@ -157,7 +157,7 @@ in
   ];
 
   buildInputs = [ libsecret libXScrnSaver libxshmfence ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ alsa-lib at-spi2-atk libkrb5 mesa nss nspr systemd xorg.libxkbfile ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ alsa-lib at-spi2-atk libkrb5 libgbm nss nspr systemd xorg.libxkbfile ];
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland libsecret ];
 

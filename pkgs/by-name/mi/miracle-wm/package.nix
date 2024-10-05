@@ -16,7 +16,7 @@
   libnotify,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   mir,
   nlohmann_json,
   pcre2,
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnotify
     libuuid
     libxkbcommon
-    mesa # gbm.h
+    libgbm # gbm.h
     mir
     nlohmann_json
     pcre2

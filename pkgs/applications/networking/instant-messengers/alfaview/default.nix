@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, dpkg, autoPatchelfHook, makeWrapper, wrapGAppsHook3
 , alsa-lib, dbus, fontconfig, freetype, glib, gst_all_1, libGL
 , libinput, libpulseaudio, libsecret, libtiff, libxkbcommon
-, mesa, openssl, systemd, xorg }:
+, libgbm, openssl, systemd, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libsecret
     libtiff
     libxkbcommon
-    mesa
+    libgbm
     openssl
     stdenv.cc.cc
     systemd

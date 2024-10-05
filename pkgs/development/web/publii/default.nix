@@ -15,7 +15,7 @@
 , glib
 , gtk3
 , libsecret
-, mesa
+, libgbm
 , nss
 , pango
 , udev
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     libsecret
-    mesa
+    libgbm
     nss
     pango
     xorg.libX11

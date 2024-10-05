@@ -46,7 +46,7 @@
   libvdpau,
   libxkbcommon,
   lua,
-  mesa,
+  libgbm,
   meson,
   mujs,
   ninja,
@@ -240,7 +240,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals cmsSupport [ lcms2 ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals dvdnavSupport [
       libdvdnav

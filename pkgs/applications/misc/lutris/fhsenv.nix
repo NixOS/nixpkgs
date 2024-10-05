@@ -56,7 +56,7 @@ in buildFHSEnv {
     # Higan // TODO: "higan is not available for the x86_64 architecture"
 
     # Libretro
-    fluidsynth hidapi mesa libdrm
+    fluidsynth hidapi libgbm libdrm
 
     # MAME
     fontconfig SDL2_ttf

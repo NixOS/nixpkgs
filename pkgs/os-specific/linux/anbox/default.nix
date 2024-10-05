@@ -14,7 +14,7 @@
 , libGL
 , libglvnd
 , lxc
-, mesa
+, libgbm
 , properties-cpp
 , protobuf
 , protobufc
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     libdwarf
     libGL
     lxc
-    mesa
+    libgbm
     properties-cpp
     protobuf
     python3

@@ -31,7 +31,7 @@
   libGL,
   libadwaita,
   libdrm,
-  mesa,
+  libgbm,
   pango,
   sqlite,
   udev,
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     libGL
     libadwaita
     libdrm
-    mesa
+    libgbm
     pango
     sqlite
     udev

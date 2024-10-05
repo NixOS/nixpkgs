@@ -26,7 +26,7 @@
 , libXxf86vm
 , makeWrapper
 , mbedtls_2
-, mesa
+, libgbm
 , nvidia_cg_toolkit
 , pkg-config
 , python3
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libv4l
     libxkbcommon
-    mesa
+    libgbm
     udev
   ];
 

@@ -3,7 +3,7 @@
 , at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
 , glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
 , libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
-, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
+, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, libgbm, nspr, nss
 , pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
 , libunity
 , speechd-minimal
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nss
     wrapGAppsHook3
     makeShellWrapper
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     systemd
     libpulseaudio
     libdrm
-    mesa
+    libgbm
     stdenv.cc.cc
     alsa-lib
     atk

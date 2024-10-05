@@ -1,7 +1,7 @@
 { lib, stdenv, requireFile, makeWrapper, autoPatchelfHook, wrapGAppsHook3, which, more
 , file, atk, alsa-lib, cairo, fontconfig, gdk-pixbuf, glib, webkitgtk, gtk2-x11, gtk3
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
-, gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
+, gnome2, libgbm, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxx, symlinkJoin
 , libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
 , libfaketime
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     libvorbis
     libxml2
     llvmPackages_12.libunwind
-    mesa
+    libgbm
     nspr
     nss
     opencv4'

@@ -24,7 +24,7 @@
 , libXrender
 , libXt
 , libXtst
-, mesa
+, libgbm
 , pango
 , pciutils
 , zlib
@@ -87,7 +87,7 @@ lib.warnIf (useHardenedMalloc != null)
       libXrender
       libXt
       libXtst
-      mesa # for libgbm
+      libgbm
       pango
       pciutils
       stdenv.cc.cc

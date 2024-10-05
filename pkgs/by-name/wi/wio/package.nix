@@ -6,7 +6,7 @@
 , cairo
 , libxkbcommon
 , makeWrapper
-, mesa
+, libgbm
 , meson
 , ninja
 , pkg-config
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     libxkbcommon
-    mesa
+    libgbm
     udev
     wayland
     wayland-protocols

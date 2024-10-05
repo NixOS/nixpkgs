@@ -11,7 +11,7 @@
   xwayland,
   libdisplay-info,
   libei,
-  mesa,
+  libgbm,
   lcms2,
   libcap,
   pipewire,
@@ -54,7 +54,7 @@ mkKdeDerivation {
 
     krunner
 
-    mesa # libgbm
+    libgbm
     lcms2
     libcap
     libdisplay-info

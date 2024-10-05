@@ -6,7 +6,7 @@
 , libffi
 , libpng
 , libjpeg
-, mesa
+, libgbm
 , libGL
 , eigen
 , openblas
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     eigen
     openblas
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    mesa
+    libgbm
     libGL
   ];
 
