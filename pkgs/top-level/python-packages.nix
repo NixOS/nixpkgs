@@ -17590,7 +17590,7 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
-  xen = toPythonModule (pkgs.xen-slim.override {
+  xen = toPythonModule (pkgs.xen.override {
     python3Packages = self;
   });
 
