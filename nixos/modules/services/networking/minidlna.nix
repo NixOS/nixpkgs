@@ -1,43 +1,20 @@
-# Module for MiniDLNA, a simple DLNA server.
 { config, lib, pkgs, ... }:
 
 let
   cfg = config.services.minidlna;
-  settingsFormat = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
-  settingsFile = settingsFormat.generate "minidlna.conf" cfg.settings;
-in
+  format = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
+  cfgfile = format.generate "minidlna.conf" cfg.settings;
 
-{
-  ###### interface
-  options.services.minidlna.enable = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = ''
-      Whether to enable MiniDLNA, a simple DLNA server.
-      It serves media files such as video and music to DLNA client devices
-      such as televisions and media players. If you use the firewall, consider
-      adding the following: `services.minidlna.openFirewall = true;`
-    '';
-  };
-
-  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" { };
-
-  options.services.minidlna.openFirewall = lib.mkOption {
-    type = lib.types.bool;
-    default = false;
-    description = ''
-      Whether to open both HTTP (TCP) and SSDP (UDP) ports in the firewall.
-    '';
-  };
+in {
+  options.services.minidlna.enable = lib.mkEnableOption "MiniDLNA, a simple DLNA server. Consider adding `openFirewall = true` into your config";
+  options.services.minidlna.openFirewall = lib.mkEnableOption "opening HTTP (TCP) and SSDP (UDP) ports in the firewall";
+  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" {};
 
   options.services.minidlna.settings = lib.mkOption {
     default = {};
-    description = ''
-      The contents of MiniDLNA's configuration file.
-      When the service is activated, a basic template is generated from the current options opened here.
-    '';
+    description = "Configuration for `minidlna.conf(5)`.";
     type = lib.types.submodule {
-      freeformType = settingsFormat.type;
+      freeformType = format.type;
 
       options.media_dir = lib.mkOption {
         type = lib.types.listOf lib.types.str;
@@ -55,9 +32,8 @@ in
         description = ''
           The interval between announces (in seconds).
           Instead of waiting for announces, you should set `openFirewall` option to use SSDP discovery.
-          Lower values (e.g. 30 seconds) should be used if your network blocks the discovery unicast.
-          Some relevant information can be found here:
-          https://sourceforge.net/p/minidlna/discussion/879957/thread/1389d197/
+          Lower values (e.g. 30 seconds) should be used if your network is blocking the SSDP multicast.
+          Some relevant information can be found [here](https://sourceforge.net/p/minidlna/discussion/879957/thread/1389d197/).
         '';
       };
       options.port = lib.mkOption {
@@ -69,14 +45,14 @@ in
         type = lib.types.path;
         default = "/var/cache/minidlna";
         example = "/tmp/minidlna";
-        description = "Specify the directory where you want MiniDLNA to store its database and album art cache.";
+        description = "Specify the directory to store database and album art cache.";
       };
       options.friendly_name = lib.mkOption {
         type = lib.types.str;
         default = config.networking.hostName;
         defaultText = lib.literalExpression "config.networking.hostName";
         example = "rpi3";
-        description = "Name that the DLNA server presents to clients.";
+        description = "Name that the server presents to clients.";
       };
       options.root_container = lib.mkOption {
         type = lib.types.str;
@@ -113,28 +89,16 @@ in
     };
   };
 
-  imports = [
-    (lib.mkRemovedOptionModule [ "services" "minidlna" "config" ] "")
-    (lib.mkRemovedOptionModule [ "services" "minidlna" "extraConfig" ] "")
-    (lib.mkRenamedOptionModule [ "services" "minidlna" "loglevel"] [ "services" "minidlna" "settings" "log_level" ])
-    (lib.mkRenamedOptionModule [ "services" "minidlna" "rootContainer"] [ "services" "minidlna" "settings" "root_container" ])
-    (lib.mkRenamedOptionModule [ "services" "minidlna" "mediaDirs"] [ "services" "minidlna" "settings" "media_dir" ])
-    (lib.mkRenamedOptionModule [ "services" "minidlna" "friendlyName"] [ "services" "minidlna" "settings" "friendly_name" ])
-    (lib.mkRenamedOptionModule [ "services" "minidlna" "announceInterval"] [ "services" "minidlna" "settings" "notify_interval" ])
-  ];
-
-  ###### implementation
   config = lib.mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.settings.port ];
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.openFirewall [ 1900 ];
 
+    users.groups.minidlna.gid = config.ids.gids.minidlna;
     users.users.minidlna = {
       description = "MiniDLNA daemon user";
       group = "minidlna";
       uid = config.ids.uids.minidlna;
     };
-
-    users.groups.minidlna.gid = config.ids.gids.minidlna;
 
     systemd.services.minidlna = {
       description = "MiniDLNA Server";
@@ -147,7 +111,7 @@ in
         CacheDirectory = "minidlna";
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
-        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${settingsFile}";
+        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${cfgfile}";
       };
     };
   };
