@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication {
   pname = "exo";
-  version = "0-unstable-2024-10-03";
+  version = "0-unstable-2024-10-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "exo-explore";
     repo = "exo";
-    rev = "2b9dec20eb25f8708455e13eabc744d653b7a286";
-    hash = "sha256-Iz65bs/ntTrxcifrPemAlK8zVjbwQfXsnUlcE1r4E/A=";
+    rev = "7b2a523fd1e5f1281d89bc1f664a29dc2003b787";
+    hash = "sha256-o4tNbU9oa7WsAQ6eiTHqQVhliXbG/Y8d7PeH2TTWgGk=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -34,11 +34,11 @@ python3Packages.buildPythonApplication {
     jinja2
     netifaces
     numpy
+    nvidia-ml-py
     pillow
     prometheus-client
     protobuf
     psutil
-    pynvml
     requests
     rich
     safetensors
