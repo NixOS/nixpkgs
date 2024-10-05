@@ -59,7 +59,9 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
-, enableProfiledLibs ? true
+  # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
+  # A riscv64 cross-compiler fits into the limit comfortably.
+, enableProfiledLibs ? !stdenv.hostPlatform.isRiscV64
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
