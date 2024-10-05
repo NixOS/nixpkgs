@@ -36294,8 +36294,6 @@ with pkgs;
 
   ginac = callPackage ../applications/science/math/ginac { };
 
-  glom = callPackage ../applications/misc/glom { };
-
   glucose = callPackage ../applications/science/logic/glucose { };
   glucose-syrup = callPackage ../applications/science/logic/glucose {
     enableUnfree = true;
