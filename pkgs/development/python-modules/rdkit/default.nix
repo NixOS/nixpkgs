@@ -17,7 +17,6 @@
   numpy,
   pandas,
   pillow,
-  memorymappingHook,
 }:
 let
   external = {
@@ -96,7 +95,7 @@ buildPythonPackage rec {
     eigen
     inchi
     maeparser
-  ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
+  ];
 
   dependencies = [
     numpy
