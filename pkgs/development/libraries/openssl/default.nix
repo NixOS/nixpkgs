@@ -289,7 +289,7 @@ in {
     };
   };
 
-  openssl_3 = common {
+  openssl_3_0 = common {
     version = "3.0.15";
     hash = "sha256-I8Zm0O3yDxQkmz2PA2isrumrWFsJ4d6CEHxm4fPslTM=";
 

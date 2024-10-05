@@ -71,10 +71,10 @@ edk2 = stdenv.mkDerivation {
       mkdir -p CryptoPkg/Library/OpensslLib/openssl
       (
       cd CryptoPkg/Library/OpensslLib/openssl
-      tar --strip-components=1 -xf ${buildPackages.openssl_3.src}
+      tar --strip-components=1 -xf ${buildPackages.openssl_3_0.src}
 
       # Apply OpenSSL patches.
-      ${lib.pipe buildPackages.openssl_3.patches [
+      ${lib.pipe buildPackages.openssl_3_0.patches [
         (builtins.filter (
           patch:
           !builtins.elem (baseNameOf patch) [

@@ -10,7 +10,7 @@
   librsvg,
   libsoup,
   fetchzip,
-  openssl_3,
+  openssl_3_0,
   webkitgtk,
   gdk-pixbuf,
   pkg-config,
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     libsoup
     glib
     dbus
-    openssl_3
+    openssl_3_0
     librsvg
   ];
 

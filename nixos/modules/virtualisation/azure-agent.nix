@@ -130,7 +130,7 @@ in
         OS.RootDeviceScsiTimeoutPeriod=30
 
         # If "None", the system default version is used.
-        OS.OpensslPath=${pkgs.openssl_3.bin}/bin/openssl
+        OS.OpensslPath=${pkgs.openssl_3_0.bin}/bin/openssl
 
         # Set the SSH ClientAliveInterval
         # OS.SshClientAliveInterval=180

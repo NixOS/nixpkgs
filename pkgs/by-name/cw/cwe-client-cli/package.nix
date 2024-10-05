@@ -5,7 +5,7 @@
   pkg-config,
   glib,
   dbus,
-  openssl_3,
+  openssl_3_0,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cwe-client-cli";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     glib
     dbus
-    openssl_3
+    openssl_3_0
   ];
   cargoHash = "sha256-VgbNwqDVcORWJB5QjH39gZZtW1n2Me9FxVUhb4vIg1A=";
 
