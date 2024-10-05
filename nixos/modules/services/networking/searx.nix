@@ -109,7 +109,7 @@ in
 
           ::: {.note}
           For available settings, see the Searx
-          [docs](https://searx.github.io/searx/admin/settings.html).
+          [docs](https://docs.searxng.org/admin/settings/index.html).
           :::
         '';
       };
@@ -298,9 +298,6 @@ in
         enable-threads = true;
         module = "searx.webapp";
         env = [
-          # TODO: drop this as it is only required for searx
-          "SEARX_SETTINGS_PATH=${cfg.settingsFile}"
-          # searxng compatibility https://github.com/searxng/searxng/issues/1519
           "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
         ];
         buffer-size = 32768;
