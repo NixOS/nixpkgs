@@ -7619,8 +7619,6 @@ self: super: with self; {
 
   manuf = callPackage ../development/python-modules/manuf { };
 
-  mapbox = callPackage ../development/python-modules/mapbox { };
-
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
 
   mapclassify = callPackage ../development/python-modules/mapclassify { };
