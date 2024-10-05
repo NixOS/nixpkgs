@@ -9776,8 +9776,6 @@ self: super: with self; {
 
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
-  pdfx = callPackage ../development/python-modules/pdfx { };
-
   pdm-backend = callPackage ../development/python-modules/pdm-backend { };
 
   pdm-build-locked = callPackage ../development/python-modules/pdm-build-locked { };
