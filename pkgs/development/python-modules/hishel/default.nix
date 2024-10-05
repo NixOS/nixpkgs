@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.32";
+  version = "0.0.33";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-EbvEu8pb64gj5buahpjR2dS/hjR9tRzhToQ41eRqYpw=";
+    hash = "sha256-zi+13X7u2pk9w2EoYjfl3/Y8O5hHpA0wZx3sSv2vU6U=";
   };
 
   build-system = [
