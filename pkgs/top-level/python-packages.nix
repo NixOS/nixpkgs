@@ -5159,6 +5159,8 @@ self: super: with self; {
 
   gipc = callPackage ../development/python-modules/gipc { };
 
+  girder-client = callPackage ../development/python-modules/girder-client { };
+
   gistyc = callPackage ../development/python-modules/gistyc { };
 
   git-annex-adapter =
