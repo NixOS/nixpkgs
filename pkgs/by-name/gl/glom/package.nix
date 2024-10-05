@@ -19,6 +19,7 @@
   libgdamm,
   libarchive,
   libepc,
+  python311,
   python3,
   ncurses,
   glibmm,
@@ -58,9 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     postgresSupport = true;
   };
 
-  python = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+  python = python311.withPackages (
+    pkgs: with pkgs; [
+      pygobject3
+      distutils
+    ]
+  );
 
-  sphinx-build = python3.pkgs.sphinx.overrideAttrs (super: {
+  python_boost = python311.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+
+  sphinx-build = python311.pkgs.sphinx.overrideAttrs (super: {
     postFixup =
       super.postFixup or ""
       + ''
@@ -71,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   boost_python = boost.override {
     enablePython = true;
-    inherit (finalAttrs) python;
+    python = finalAttrs.python_boost;
   };
 
   nativeBuildInputs = [
@@ -81,7 +89,9 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     mm-common
     intltool
-    yelp-tools
+    (yelp-tools.override {
+      python3 = python311;
+     })
     itstool
     doxygen
     graphviz
@@ -97,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     libxmlxx3
     libxslt
+    python311.pkgs.pygobject3
     finalAttrs.gda
     libarchive
     libepc
@@ -106,7 +117,6 @@ stdenv.mkDerivation (finalAttrs: {
     goocanvasmm2
     evince
     isocodes
-    python3.pkgs.pygobject3
     gtksourceview
     gtksourceviewmm
     postgresql_15 # for postgresql utils
@@ -117,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
 
   configureFlags = [
-    "--with-boost-python=boost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}"
+    "--with-boost-python=boost_python${lib.versions.major python311.version}${lib.versions.minor python311.version}"
     "--with-postgres-utils=${lib.getBin postgresql_15}/bin"
   ];
 
@@ -133,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "${placeholder "out"}/${python3.sitePackages}"
+      --prefix PYTHONPATH : "${placeholder "out"}/${python311.sitePackages}"
       --set PYTHONHOME "${finalAttrs.python}"
     )
   '';
