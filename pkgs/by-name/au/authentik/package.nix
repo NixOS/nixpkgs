@@ -70,7 +70,7 @@ let
       openapi-generator-cli generate -i ./schema.yml \
       -g typescript-fetch -o $out \
       -c ./scripts/api-ts-config.yaml \
-        --additional-properties=npmVersion=${nodejs.pkgs.npm.version} \
+        --additional-properties=npmVersion="$(${lib.getExe' nodejs "npm"} --version)" \
         --git-repo-id authentik --git-user-id goauthentik
       runHook postBuild
     '';
