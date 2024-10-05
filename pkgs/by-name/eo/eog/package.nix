@@ -118,6 +118,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNOME image viewer";
     homepage = "https://gitlab.gnome.org/GNOME/eog";
+    changelog = "https://gitlab.gnome.org/GNOME/eog/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

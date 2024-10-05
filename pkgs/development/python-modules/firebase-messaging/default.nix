@@ -6,8 +6,9 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   http-ece,
-  poetry-core,
+  myst-parser,
   protobuf,
   pytest-asyncio,
   pytest-mock,
@@ -23,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.3.0";
+  version = "0.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
     rev = "refs/tags/${version}";
-    hash = "sha256-pZpnekJ11yx3L8l56vZOa4uS+jJMxUkYODgNAqysVeY=";
+    hash = "sha256-duUqDioIBo2QQP/4VGGwklDt4F8pDm/sHrvOx4wcTWQ=";
   };
 
   outputs = [
@@ -40,12 +41,19 @@ buildPythonPackage rec {
     "doc"
   ];
 
+  build-system = [
+    hatchling
+  ];
+
   nativeBuildInputs = [
-    poetry-core
     sphinxHook
   ] ++ optional-dependencies.docs;
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "http-ece"
+  ];
+
+  dependencies = [
     aiohttp
     cryptography
     http-ece
@@ -54,6 +62,7 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     docs = [
+      myst-parser
       sphinx
       sphinx-autodoc-typehints
       sphinx-rtd-theme
