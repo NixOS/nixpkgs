@@ -36,11 +36,11 @@ mkAppleDerivation (finalAttrs: {
   postPatch =
     ''
       # Work around unnecessary private API usage in libcharset.
-      mkdir -p libcharset/os && cat <<-header > libcharset/os/variant_private.h
+      mkdir -p libcharset/os && cat <<EOF > libcharset/os/variant_private.h
         #pragma once
         #include <stdbool.h>
         static inline bool os_variant_has_internal_content(const char*) { return false; }
-      header
+      EOF
 
       # Add additional test cases found while working on packaging libiconv in nixpkgs.
       cp ${./nixpkgs_test.c} tests/libiconv/nixpkgs_test.c
