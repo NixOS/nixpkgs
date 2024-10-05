@@ -47,8 +47,6 @@ self: super: with self; {
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
 
-  acoustics = callPackage ../development/python-modules/acoustics { };
-
   acquire = callPackage ../development/python-modules/acquire { };
 
   actdiag = callPackage ../development/python-modules/actdiag { };
