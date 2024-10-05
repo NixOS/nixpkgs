@@ -1,40 +1,74 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
+  testers,
+  zabbix-cli,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "zabbix-cli";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "3.1.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-B5t/vxCmPdRR9YKOc2htI57Kmk1ZrpwPUln4JoUrK6g=";
+    hash = "sha256-It0SVbGNIxf2i4gleqVRAZCIks/Tf/WYSAgipOC+HwE=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    packaging
-    requests
+  pythonRelaxDeps = [ "click-repl" ];
+
+  build-system = with python3Packages; [
+    hatchling
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
+  dependencies =
+    with python3Packages;
+    [
+      click-repl
+      httpx
+      httpx.optional-dependencies.socks
+      packaging
+      platformdirs
+      pydantic
+      requests
+      rich
+      strenum
+      tomli
+      tomli-w
+      typer
+      typing-extensions
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+    ];
+
+  nativeCheckInputs = with python3Packages; [
+    freezegun
+    inline-snapshot
     pytestCheckHook
   ];
 
-  disabledTests = [
-    # TypeError: option values must be strings
-    "test_descriptor_del"
-    "test_initialize"
-  ];
+  # Otherwise tests will fail to create directory
+  # Permission denied: '/homeless-shelter'
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  pythonImportsCheck = [ "zabbix_cli" ];
+
+  passthru.tests.version = testers.testVersion {
+    package = zabbix-cli;
+    command = "HOME=$(mktemp -d) zabbix-cli --version";
+  };
 
   meta = with lib; {
     description = "Command-line interface for Zabbix";
     homepage = "https://github.com/unioslo/zabbix-cli";
     license = licenses.gpl3Plus;
+    mainProgram = "zabbix-cli";
     maintainers = [ ];
   };
 }
