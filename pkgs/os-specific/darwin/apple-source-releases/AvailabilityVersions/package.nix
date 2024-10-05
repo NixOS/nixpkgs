@@ -84,14 +84,6 @@ mkAppleDerivation (finalAttrs: {
 
     "$out/libexec/make_symbol_aliasing.sh" \$threshold "\$dest/include/sys/_symbol_aliasing.h"
 
-    # __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ is only defined by clang 17+, so define it for older versions.
-    ${lib.getExe gnused} -E '/#ifndef __MAC_OS_X_VERSION_MIN_REQUIRED/{
-        i#ifndef __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__
-        i#define __ENVIRONMENT_OS_VERSION_MIN_REQUIRED__ __ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__
-        i#endif
-      }' \\
-      -i "\$dest/include/AvailabilityInternal.h"
-
     # Remove macros from newer SDKs because they can confuse some programs about the SDK version.
     declare -a versionParts=(\''${threshold//./ })
     if [ "\''${versionParts[0]}" == "10" ]; then
