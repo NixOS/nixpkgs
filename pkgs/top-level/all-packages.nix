@@ -38250,13 +38250,9 @@ with pkgs;
 
   valent = callPackage ../applications/misc/valent { };
 
-  vault = callPackage ../tools/security/vault { };
-
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-ssh-plus = callPackage ../tools/security/vault-ssh-plus { };
-
-  vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
