@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  passthru.updateScript = gitUpdater { tagPrefix = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   enableParallelBuilding = true;
 
