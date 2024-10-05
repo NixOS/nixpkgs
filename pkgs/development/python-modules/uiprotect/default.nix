@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "6.0.2";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Dmim+wSAhco3KvtbAT/f/feNriaI22m0ml4L9SJFPs=";
+    hash = "sha256-SWEWh1c5GcMrjJlcLtXScRNoem2ACGt3nFC4+ARMIIw=";
   };
 
   build-system = [ poetry-core ];
@@ -88,6 +88,12 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
+
+  disabledTests = [
+    # https://127.0.0.1 vs https://127.0.0.1:0
+    "test_base_url"
+    "test_bootstrap"
+  ];
 
   pythonImportsCheck = [ "uiprotect" ];
 
