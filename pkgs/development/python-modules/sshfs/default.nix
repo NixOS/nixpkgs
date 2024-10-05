@@ -41,7 +41,7 @@ buildPythonPackage rec {
     fido2 = [ asyncssh ] ++ asyncssh.optional-dependencies.fido2;
     gssapi = [ asyncssh ] ++ asyncssh.optional-dependencies.gssapi;
     libnacl = [ asyncssh ] ++ asyncssh.optional-dependencies.libnacl;
-    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.python-pkcs11;
+    pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.pkcs11;
     pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyopenssl;
   };
 
