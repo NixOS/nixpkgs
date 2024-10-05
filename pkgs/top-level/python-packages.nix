@@ -566,8 +566,6 @@ self: super: with self; {
 
   amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
 
-  ambee = callPackage ../development/python-modules/ambee { };
-
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
