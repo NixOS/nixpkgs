@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
-  version = "1.17.5";
+  version = "1.17.6";
 
   src =
     let
@@ -16,16 +20,16 @@ stdenv.mkDerivation rec {
         aarch64-darwin = "darwin_arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-rh0ZVmAbiOmZFCpiiX9ClAYmQKx084VKCjxvD9bbYAk=";
-        aarch64-linux = "sha256-DtriOEQCuSMMjzfJJpJAf7z+wGJSbzU3V/X+glTLkv8=";
-        i686-linux = "sha256-EPS3Sx2l0Gv4PWeqrnIEoNYUF4Or075vdhn71vKXQEw=";
-        x86_64-darwin = "sha256-pi/sD88haBxUx6dSUEUv6ugQO2K/lhg4ne7xbcVzg3M=";
-        aarch64-darwin = "sha256-6ZESO3m5FCRwTNh3xlWjWw6c9sjiAwV09YA/hQ5Py/o=";
+        x86_64-linux = "sha256-K9yNZ4M8u8FfisWi6Y6TsBJy6FQytr3htNCsKh2MlyA=";
+        aarch64-linux = "sha256-KLHkxUGvekHT/bPtoIlmylCubTWH+I7Q0wJM0UG0Hp8=";
+        i686-linux = "sha256-jBS/nGKP27weFw4u6Q10athYwCqWLzpb7ph39v+QAN8=";
+        x86_64-darwin = "sha256-5KfWqtJldk66dO5ImYKivDau4JzacUIXBfAzWkkPfoE=";
+        aarch64-darwin = "sha256-wjmNY1lunJDjpkWDXl0upAeNBqBx8momlY4a3j+hMd0=";
       };
     in
     fetchzip {
       url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
-      stripRoot=false;
+      stripRoot = false;
       inherit hash;
     };
 
@@ -57,8 +61,23 @@ stdenv.mkDerivation rec {
     homepage = "https://www.vaultproject.io";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
-    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick mkaito ];
+    maintainers =
+      with maintainers;
+      teams.serokell.members
+      ++ [
+        offline
+        psyanticy
+        Chili-Man
+        techknowlogick
+        mkaito
+      ];
     mainProgram = "vault";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
   };
 }

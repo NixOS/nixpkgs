@@ -534,6 +534,10 @@ with pkgs;
 
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
+  deck = callPackage ../by-name/de/deck/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -5165,8 +5169,6 @@ with pkgs;
   gping = callPackage ../tools/networking/gping {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  gpu-viewer = callPackage ../applications/misc/gpu-viewer { };
 
   greg = callPackage ../applications/audio/greg {
     pythonPackages = python3Packages;
@@ -20658,8 +20660,6 @@ with pkgs;
   libbass = (callPackage ../development/libraries/audio/libbass { }).bass;
   libbass_fx = (callPackage ../development/libraries/audio/libbass { }).bass_fx;
   libbassmix = (callPackage ../development/libraries/audio/libbass { }).bassmix;
-
-  libbde = callPackage ../development/libraries/libbde { };
 
   libbdplus = callPackage ../development/libraries/libbdplus { };
 
@@ -38228,13 +38228,9 @@ with pkgs;
 
   valent = callPackage ../applications/misc/valent { };
 
-  vault = callPackage ../tools/security/vault { };
-
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
   vault-ssh-plus = callPackage ../tools/security/vault-ssh-plus { };
-
-  vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
 
