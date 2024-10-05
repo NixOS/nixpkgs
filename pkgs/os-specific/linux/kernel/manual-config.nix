@@ -396,6 +396,9 @@ let
       requiredSystemFeatures = [ "big-parallel" ];
 
       meta = {
+        # https://github.com/NixOS/nixpkgs/pull/345534#issuecomment-2391238381
+        broken = withRust && lib.versionOlder version "6.12";
+
         description =
           "The Linux kernel" +
           (if kernelPatches == [] then "" else

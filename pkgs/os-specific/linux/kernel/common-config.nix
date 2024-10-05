@@ -34,7 +34,11 @@ let
 
   # Currently not enabling Rust by default, as upstream requires rustc 1.81
   defaultRust = false;
-  withRust = (forceRust || defaultRust) && kernelSupportsRust;
+  withRust =
+    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
+      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
+    '';
+    (forceRust || defaultRust) && kernelSupportsRust;
 
   options = {
 
