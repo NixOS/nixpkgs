@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-foBVhvNH5Wh07eF1w3/dWmzXg1Dpm9IDm5PfBl1BGWQ=";
 
-  nativeBuildInputs = [installShellFiles];
+  nativeBuildInputs = [ installShellFiles ];
 
   overrideModAttrs = _: {
     preBuild = ''
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   doCheck = false;
 
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   ldflags = [
     "-s"
@@ -47,7 +47,7 @@ buildGoModule rec {
     homepage = "https://github.com/ekristen/aws-nuke";
     changelog = "https://github.com/ekristen/aws-nuke/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [grahamc];
+    maintainers = with maintainers; [ grahamc ];
     mainProgram = "aws-nuke";
   };
 }
