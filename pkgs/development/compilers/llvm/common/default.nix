@@ -264,12 +264,6 @@ let
                   path = ../12;
                 }
               ];
-              "lldb/cpu_subtype_arm64e_replacement.patch" = [
-                {
-                  after = "13";
-                  path = ../13;
-                }
-              ];
               "lldb/resource-dir.patch" = [
                 {
                   before = "16";
@@ -703,19 +697,7 @@ let
             ++ lib.optional (lib.versionOlder metadata.release_version "14") (
               metadata.getVersionFile "lldb/gnu-install-dirs.patch"
             )
-            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch
-            # This is a stopgap solution if/until the macOS SDK used for x86_64 is
-            # updated.
-            #
-            # The older 10.12 SDK used on x86_64 as of this writing has a `mach/machine.h`
-            # header that does not define `CPU_SUBTYPE_ARM64E` so we replace the one use
-            # of this preprocessor symbol in `lldb` with its expansion.
-            #
-            # See here for some context:
-            # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
-            ++ lib.optional (
-              stdenv.targetPlatform.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-            ) (metadata.getVersionFile "lldb/cpu_subtype_arm64e_replacement.patch");
+            ++ lib.optional (lib.versionAtLeast metadata.release_version "14") ./lldb/gnu-install-dirs.patch;
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
           src = callPackage (
