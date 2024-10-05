@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
           appindicator-sharp
           gtk-sharp-3_0.gtk3
           webkit2-sharp
-          webkit2-sharp.webkitgtk
+          webkit2-sharp.webkitgtk_4_0
         ]}
   '';
 

@@ -10,7 +10,7 @@
 , luafilesystem
 , luajit
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     luafilesystem
     luajit
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ] ++ ( with gst_all_1; [
     gstreamer
     gst-plugins-base

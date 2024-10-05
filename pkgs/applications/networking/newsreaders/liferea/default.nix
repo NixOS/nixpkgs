@@ -9,7 +9,7 @@
 , libxslt
 , sqlite
 , libsoup
-, webkitgtk
+, webkitgtk_4_1
 , json-glib
 , gst_all_1
 , libnotify
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    webkitgtk
+    webkitgtk_4_1
     libxml2
     libxslt
     sqlite
