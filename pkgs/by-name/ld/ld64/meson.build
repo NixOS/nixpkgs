@@ -25,48 +25,6 @@ openssl = dependency('openssl', version : '>=3.0')
 xar = cc.find_library('xar')
 
 
-# Feature tests
-
-# macOS 10.12 does not support `DISPATCH_APPLY_AUTO`. Fortunately, `DISPATCH_APPLY_CURRENT_ROOT_QUEUE` has the
-# same value and was repurposed in subsequent releases as `DISPATCH_APPLY_AUTO`.
-dispatch_apply_auto_test = '''
-#include <dispatch/dispatch.h>
-int main(int argc, char* argv[]) {
-    dispatch_queue_t queue = DISPATCH_APPLY_AUTO;
-    return 0;
-}
-'''
-if not cc.compiles(
-    dispatch_apply_auto_test,
-    args : '-Wno-unused-command-line-argument',
-    name : 'supports DISPATCH_APPLY_AUTO',
-)
-    add_project_arguments(
-        '-include', 'dispatch/private.h',
-        '-DDISPATCH_APPLY_AUTO=DISPATCH_APPLY_CURRENT_ROOT_QUEUE',
-        '-DPRIVATE', # The required API is private on the 10.12 SDK.
-        language: ['c', 'cpp'],
-    )
-endif
-
-# The return type of `dispatch_get_global_queue` was changed in 10.14.
-# Use the older type if the SDK does not support it.
-dispatch_queue_global_test = '''
-#include <dispatch/dispatch.h>
-int main(int argc, char* argv[]) {
-    dispatch_queue_global_t queue = dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0);
-    return 0;
-}
-'''
-if not cc.compiles(
-    dispatch_queue_global_test,
-    args : '-Wno-unused-command-line-argument',
-    name : 'supports dispatch_queue_global_t',
-)
-    add_project_arguments('-Ddispatch_queue_global_t=dispatch_queue_t', language : ['c', 'cpp'])
-endif
-
-
 # Generated files
 
 compile_stubs_h = custom_target(
@@ -143,6 +101,11 @@ ld64 = executable(
     dependencies : [libtapi, openssl, xar],
     include_directories : incdirs,
     install : true,
+    cpp_args : [
+        # Required for `_COMM_PAGE_CPU_CAPABILITIES64` in
+        # <System/machine/cpu_capabilities.h> on `x86_64-darwin`
+        '-DPRIVATE',
+    ],
     # These linker flags mirror those used in a release build of the Xcode project.
     # See: https://github.com/apple-oss-distributions/ld64/blob/47f477cb721755419018f7530038b272e9d0cdea/ld64.xcodeproj/project.pbxproj#L1292-L1299.
     link_args : [
