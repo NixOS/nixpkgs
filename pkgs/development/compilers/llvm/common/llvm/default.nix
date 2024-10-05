@@ -4,7 +4,6 @@
 , pkgsBuildBuild
 , pollyPatches ? []
 , patches ? []
-, polly_src ? null
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -107,8 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = src';
   patches = patches';
 
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${finalAttrs.src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -493,18 +491,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = null;
   postInstall = null;
-})) // lib.optionalAttrs (lib.versionOlder release_version "13") {
-  inherit polly_src;
-
-  unpackPhase = ''
-    unpackFile $src
-    mv llvm-${release_version}* llvm
-    sourceRoot=$PWD/llvm
-  '' + optionalString enablePolly ''
-    unpackFile $polly_src
-    mv polly-* $sourceRoot/tools/polly
-  '';
-} // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
+})) // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
   nativeCheckInputs = [ which ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
 } // lib.optionalAttrs (lib.versionOlder release_version "15") {
   # hacky fix: created binaries need to be run before installation

@@ -35,11 +35,6 @@ let
 
   hasPatches = builtins.length patches > 0;
 
-  postUnpack = lib.optionalString (lib.versions.major release_version == "12") ''
-    ln -s ${libcxx.src}/libcxx .
-    ln -s ${libcxx.src}/llvm .
-  '';
-
   prePatch = lib.optionalString (lib.versionAtLeast release_version "15" && (hasPatches || lib.versionOlder release_version "18")) ''
     cd ../${pname}
     chmod -R u+w .
@@ -60,8 +55,8 @@ stdenv.mkDerivation (rec {
   src = src';
 
   sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else if lib.versionAtLeast release_version "15" then "${src.name}/runtimes"
+    if lib.versionAtLeast release_version "15"
+    then "${src.name}/runtimes"
     else "${src.name}/${pname}";
 
   outputs = [ "out" "dev" ];
@@ -72,6 +67,9 @@ stdenv.mkDerivation (rec {
 
   cmakeFlags = lib.optional (lib.versionAtLeast release_version "15") "-DLLVM_ENABLE_RUNTIMES=libunwind"
     ++ lib.optional (!enableShared) "-DLIBUNWIND_ENABLE_SHARED=OFF"
+    ++ lib.optionals (lib.versions.major release_version == "12" && stdenv.hostPlatform.isDarwin) [
+      "-DCMAKE_CXX_COMPILER_WORKS=ON"
+    ]
     ++ devExtraCmakeFlags;
 
   meta = llvm_meta // {
@@ -85,7 +83,6 @@ stdenv.mkDerivation (rec {
       dependency of other runtimes.
     '';
   };
-} // (if postUnpack != "" then { inherit postUnpack; } else {})
-  // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
+} // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
   // (if prePatch != "" then { inherit prePatch; } else {})
   // (if postPatch != "" then { inherit postPatch; } else {}))
