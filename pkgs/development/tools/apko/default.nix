@@ -41,10 +41,15 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  checkFlags = [
-    # fails to run on read-only filesystem
-    "-skip=(TestPublish|TestBuild|TestTarFS)"
-  ];
+  preCheck = ''
+    # some tests require a writable HOME
+    export HOME=$(mktemp -d)
+
+    # some test data include SOURCE_DATE_EPOCH (which is different from our default)
+    # and the default version info which we get by unsetting our ldflags
+    export SOURCE_DATE_EPOCH=0
+    ldflags=
+  '';
 
   postInstall = ''
     installShellCompletion --cmd apko \
