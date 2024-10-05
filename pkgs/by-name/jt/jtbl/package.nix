@@ -11,17 +11,17 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "kellyjonbrazil";
-    repo = pname;
+    repo = "jtbl";
     rev = "v${version}";
     hash = "sha256-ILQwUpjNueaYR5hxOWd5kZSPhVoFnnS2FcttyKSTPr8=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     tabulate
   ];
 
