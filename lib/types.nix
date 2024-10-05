@@ -616,7 +616,35 @@ rec {
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${name}>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit name lazy; };
-      functor = (defaultFunctor typeName) // { wrapped = elemType; type = t: attrsWith { elemType = t; inherit name lazy; }; };
+      functor = defaultFunctor "attrsWith" // {
+        payload = {
+          inherit elemType name lazy;
+        };
+        binOp = lhs: rhs:
+          let
+            elemType = lhs.elemType.typeMerge rhs.elemType.functor;
+            name = 
+              if lhs.name == rhs.name then
+                lhs.name
+              else if lhs.name == "name" then
+                rhs.name
+              else if rhs.name == "name" then
+                lhs.name
+              else
+                null;
+            lazy = 
+              if lhs.lazy == rhs.lazy then
+                lhs.lazy
+              else
+                null;
+          in
+          if elemType == null || name == null || lazy == null then
+            null
+          else
+            {
+              inherit elemType name lazy;
+            };
+      };
       nestedTypes.elemType = elemType;
     };
 
