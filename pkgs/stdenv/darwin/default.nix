@@ -679,12 +679,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
 
             postLinkSignHook = prevStage.darwin.postLinkSignHook.override { inherit (selfDarwin) sigtool; };
 
-            adv_cmds = superDarwin.adv_cmds.override {
-              # Break an infinite recursion between CMake and libtapi. CMake requires adv_cmds.ps, and adv_cmds
-              # requires a newer SDK that requires libtapi to build, which requires CMake.
-              inherit (prevStage) apple-sdk_11;
-            };
-
             # Rewrap binutils with the real libSystem
             binutils = superDarwin.binutils.override {
               inherit (self) coreutils;
