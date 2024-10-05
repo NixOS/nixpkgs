@@ -58,7 +58,7 @@
       let
         cfg = config.boot.initrd.systemd;
       in
-      lib.mkIf cfg.tpm2.enable {
+      lib.mkIf (cfg.enable && cfg.tpm2.enable) {
         boot.initrd.systemd.additionalUpstreamUnits = [
           "tpm2.target"
           "systemd-tpm2-setup-early.service"

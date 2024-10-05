@@ -1,16 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchNpmDeps
-, npmHooks
-, nodejs
-, python3
-, pkg-config
-, sqlite
-, zstd
-, stdenv
-, darwin
-, open-policy-agent
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
+  python3,
+  pkg-config,
+  sqlite,
+  zstd,
+  stdenv,
+  darwin,
+  open-policy-agent,
+  cctools,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,8 +29,8 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-       "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
-     };
+      "sea-query-0.32.0-rc.1" = "sha256-Q/NFiIBu8L5rQj4jwcIo8ACmAhLBy4HSTcJv06UdK8E=";
+    };
   };
 
   npmDeps = fetchNpmDeps {
@@ -45,16 +47,18 @@ rustPlatform.buildRustPackage rec {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ];
+  ] ++ lib.optional stdenv.isDarwin cctools; # libtool used by gyp;
 
-  buildInputs = [
-    sqlite
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.CoreFoundation
+      darwin.apple_sdk_11_0.frameworks.Security
+      darwin.apple_sdk_11_0.frameworks.SystemConfiguration
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -95,5 +99,8 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
+    # Note: broken on x86_64-darwin because of aligned_alloc, can be revisited after
+    # https://github.com/NixOS/nixpkgs/pull/346043 is merged
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }
