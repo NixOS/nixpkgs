@@ -80,6 +80,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     mainProgram = "bitbox";
     maintainers = [ maintainers.tensor5 ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
