@@ -7285,8 +7285,6 @@ with pkgs;
 
   z-lua = callPackage ../tools/misc/z-lua { };
 
-  zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
-
   zabbixctl = callPackage ../tools/misc/zabbixctl { };
 
   zee = callPackage ../applications/editors/zee {
