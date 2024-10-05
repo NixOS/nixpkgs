@@ -6467,6 +6467,17 @@ with pkgs;
 
   libskk = callPackage ../development/libraries/libskk { };
 
+  mozc-ut = mozc.override { dictionaries = [
+    mozcdic-ut-alt-cannadic
+    mozcdic-ut-edict2
+    mozcdic-ut-jawiki
+    mozcdic-ut-neologd
+    mozcdic-ut-personal-names
+    mozcdic-ut-place-names
+    mozcdic-ut-skk-jisyo
+    mozcdic-ut-sudachidict
+  ]; };
+
   m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
@@ -6516,16 +6527,7 @@ with pkgs;
 
     inherit mozc;
 
-    mozc-ut = mozc.override { dictionaries = [
-      mozcdic-ut-alt-cannadic
-      mozcdic-ut-edict2
-      mozcdic-ut-jawiki
-      mozcdic-ut-neologd
-      mozcdic-ut-personal-names
-      mozcdic-ut-place-names
-      mozcdic-ut-skk-jisyo
-      mozcdic-ut-sudachidict
-    ]; };
+    inherit mozc-ut;
 
     openbangla-keyboard = libsForQt5.callPackage ../applications/misc/openbangla-keyboard { withIbusSupport = true; };
 
@@ -7474,10 +7476,10 @@ with pkgs;
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
 
-  fcitx5-mozc = libsForQt5.callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
-    abseil-cpp = abseil-cpp.override {
-      cxxStandard = "17";
-    };
+  fcitx5-mozc = callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix { };
+
+  fcitx5-mozc-ut = callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
+    mozc = mozc-ut;
   };
 
   fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
