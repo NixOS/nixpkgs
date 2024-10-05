@@ -14588,7 +14588,6 @@ with pkgs;
   flutter323 = flutterPackages.v3_23;
   flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
-  flutter316 = flutterPackages.v3_16;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
