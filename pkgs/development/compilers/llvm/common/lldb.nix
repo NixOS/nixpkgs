@@ -24,8 +24,6 @@
 , patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
-, apple-sdk_11
-, darwinMinVersionHook
 , ...
 }:
 
@@ -93,14 +91,6 @@ stdenv.mkDerivation (rec {
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-  ]
-  ++ lib.optionals
-    (
-      stdenv.targetPlatform.isDarwin
-        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-    ) [
-    apple-sdk_11
-    (darwinMinVersionHook "10.15")
   ];
 
   hardeningDisable = [ "format" ];
