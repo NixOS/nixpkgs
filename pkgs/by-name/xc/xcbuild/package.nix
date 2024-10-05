@@ -23,27 +23,28 @@
   productBuildVer ? null,
 }:
 
-let
-  attrs = {
-    inherit
-      xcodePlatform
-      xcodeVer
-      sdkVer
-      productBuildVer
-      ;
-  };
-in
-assert lib.warnIf (lib.any (attr: attr != null) (lib.attrValues attrs)) ''
-  The following arguments are deprecated and do nothing: ${
-    lib.concatStringsSep ", " (lib.attrNames (lib.filterAttrs (_: value: value != null) attrs))
-  }
-
-  xcbuild will dynamically pick up the SDK and SDK version based
-  on the SDK used in nixpkgs. If you need to use a different SDK,
-  add the appropriate SDK to your package’s `buildInputs`.
-
-  See the stdenv documentation for how to use `apple-sdk`.
-'' true;
+# TODO(@reckenrode) enable this warning after uses in nixpkgs have been fixed
+#let
+#  attrs = {
+#    inherit
+#      xcodePlatform
+#      xcodeVer
+#      sdkVer
+#      productBuildVer
+#      ;
+#  };
+#in
+#assert lib.warnIf (lib.any (attr: attr != null) (lib.attrValues attrs)) ''
+#  The following arguments are deprecated and do nothing: ${
+#    lib.concatStringsSep ", " (lib.attrNames (lib.filterAttrs (_: value: value != null) attrs))
+#  }
+#
+#  xcbuild will dynamically pick up the SDK and SDK version based
+#  on the SDK used in nixpkgs. If you need to use a different SDK,
+#  add the appropriate SDK to your package’s `buildInputs`.
+#
+#  See the stdenv documentation for how to use `apple-sdk`.
+#'' true;
 
 let
   googletest = fetchFromGitHub {
