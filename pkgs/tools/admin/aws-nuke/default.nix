@@ -29,7 +29,11 @@ buildGoModule rec {
 
   subPackages = ["."];
 
-  ldflags = ["-s" "-w" "-extldflags=\"-static\""];
+  ldflags = [
+    "-s"
+    "-w"
+    "-extldflags=\"-static\""
+  ];
 
   postInstall = ''
     installShellCompletion --cmd aws-nuke \
