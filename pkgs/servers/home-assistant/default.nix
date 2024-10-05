@@ -408,7 +408,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.10.0";
+  hassVersion = "2024.10.1";
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -426,13 +426,13 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-X7atEjhw6QcS5xNiW+17/vrwqjCL4N3VocxUTELLXgo=";
+    hash = "sha256-yEClfdMyN0E+eelSFESVbVDzvZu/rn4qBCjD5L/L6Is=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-SHNs/zLyNVi0uGguRTWMnt9UpPYEFJbrfwBYFz+q5Nk=";
+    hash = "sha256-M2vuqHoLNVizoCXnQ4RRQ+//TgtoJxJaQFCz9H7UnVs=";
   };
 
   build-system = with python.pkgs; [
