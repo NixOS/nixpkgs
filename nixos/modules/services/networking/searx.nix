@@ -38,9 +38,8 @@ in
 {
 
   imports = [
-    (mkRenamedOptionModule
-      [ "services" "searx" "configFile" ]
-      [ "services" "searx" "settingsFile" ])
+    (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
+    (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
   ];
 
   options = {
@@ -145,7 +144,7 @@ in
 
       package = mkPackageOption pkgs "searxng" { };
 
-      runInUwsgi = mkOption {
+      configureUwsgi = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -205,7 +204,7 @@ in
       script = generateConfig;
     };
 
-    systemd.services.searx = mkIf (!cfg.runInUwsgi) {
+    systemd.services.searx = mkIf (!cfg.configureUwsgi) {
       description = "Searx server, the meta search engine.";
       wantedBy = [ "network.target" "multi-user.target" ];
       requires = [ "searx-init.service" ];
@@ -222,7 +221,7 @@ in
       };
     };
 
-    systemd.services.uwsgi = mkIf cfg.runInUwsgi {
+    systemd.services.uwsgi = mkIf cfg.configureUwsgi {
       requires = [ "searx-init.service" ];
       after = [ "searx-init.service" ];
     };
@@ -233,7 +232,7 @@ in
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
     };
 
-    services.uwsgi = mkIf cfg.runInUwsgi {
+    services.uwsgi = mkIf cfg.configureUwsgi {
       enable = true;
       plugins = [ "python3" ];
 
