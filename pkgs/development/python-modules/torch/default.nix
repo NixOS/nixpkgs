@@ -275,14 +275,6 @@ buildPythonPackage rec {
 
   patches =
     lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # pthreadpool added support for Grand Central Dispatch in April
-      # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
-      # that is available starting with macOS 10.13. However, our current
-      # base is 10.12. Until we upgrade, we can fall back on the older
-      # pthread support.
-      ./pthreadpool-disable-gcd.diff
-    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
