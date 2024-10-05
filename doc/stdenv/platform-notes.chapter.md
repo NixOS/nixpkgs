@@ -74,7 +74,7 @@ Some common issues when packaging software for Darwin:
   }
   ```
 
-- Multiple SDKs are available for use in nixpkgs. Each platform has a default SDK (10.12.2 for x86_64-darwin and 11.3 for aarch64-darwin), which is available as the `apple-sdk` package.
+- Multiple SDKs are available for use in nixpkgs. The default `apple-sdk` package matches the minimum supported macOS version, and is included implicitly in the standard environment.
 
   The SDK provides the necessary headers and text-based stubs to link common frameworks and libraries (such as libSystem, which is effectively Darwin’s libc). Projects will sometimes indicate which SDK to use by the Xcode version. As a rule of thumb, subtract one from the Xcode version to get the available SDK in nixpkgs.
 
@@ -84,29 +84,24 @@ Some common issues when packaging software for Darwin:
   stdenv.mkDerivation {
     name = "libfoo-1.2.3";
     # ...
-    env.PACKAGE_SPECIFIC_SDK_VAR = apple-sdk_10_15.sdkroot;
+    env.PACKAGE_SPECIFIC_SDK_VAR = apple-sdk_12.sdkroot;
     # or
-    buildInputs = [ apple-sdk_10_15 ];
+    buildInputs = [ apple-sdk_12 ];
     postPatch = ''
       export PACKAGE_SPECIFIC_SDK_VAR=$SDKROOT
     '';
   }
   ```
 
-  The following is a list of Xcode versions, the SDK version in nixpkgs, and the attribute to use to add it. Generally, only the last SDK release for a major version is packaged (each _x_ in 10._x_ until 10.15 is considered a major version).
+  The following is a list of Xcode versions, the SDK version in nixpkgs, and the attribute to use to add it. Generally, only the last SDK release for a major version is packaged.
 
-  | Xcode version      | SDK version                                       | nixpkgs attribute |
-  |--------------------|---------------------------------------------------|-------------------|
-  | Varies by platform | 10.12.2 (x86_64-darwin)<br/>11.3 (aarch64-darwin) | `apple-sdk`       |
-  | 8.0–8.3.3          | 10.12.2                                           | `apple-sdk_10_12` |
-  | 9.0–9.4.1          | 10.13.2                                           | `apple-sdk_10_13` |
-  | 10.0–10.3          | 10.14.6                                           | `apple-sdk_10_14` |
-  | 11.0–11.7          | 10.15.6                                           | `apple-sdk_10_15` |
-  | 12.0–12.5.1        | 11.3                                              | `apple-sdk_11`    |
-  | 13.0–13.4.1        | 12.3                                              | `apple-sdk_12`    |
-  | 14.0–14.3.1        | 13.3                                              | `apple-sdk_13`    |
-  | 15.0–15.4          | 14.4                                              | `apple-sdk_14`    |
-  | 16.0               | 15.0                                              | `apple-sdk_15`    |
+  | Xcode version      | SDK version | nixpkgs attribute            |
+  |--------------------|-------------|------------------------------|
+  | 12.0–12.5.1        | 11.3        | `apple-sdk_11` / `apple-sdk` |
+  | 13.0–13.4.1        | 12.3        | `apple-sdk_12`               |
+  | 14.0–14.3.1        | 13.3        | `apple-sdk_13`               |
+  | 15.0–15.4          | 14.4        | `apple-sdk_14`               |
+  | 16.0               | 15.0        | `apple-sdk_15`               |
 
   To use a non-default SDK, add it to your build inputs.
 
@@ -122,14 +117,14 @@ Some common issues when packaging software for Darwin:
 
   ```nix
   stdenv.mkDerivation {
-    name = "libfoo-1.2.3"; # Upstream specifies that it needs Xcode 12 to build, so use the 11.3 SDK.
+    name = "libfoo-1.2.3"; # Upstream specifies that it needs Xcode 14 to build, so use the 12.3 SDK.
     # ...
-    buildInputs = [ apple-sdk_11 ];
-    nativeBuildInputs = [ swift ]; # Propagates the 13.3 SDK, so the 13.3 SDK package will be used instead of the 11.3 SDK.
+    buildInputs = [ apple-sdk_12 ];
+    nativeBuildInputs = [ swift ]; # Propagates the 13.3 SDK, so the 13.3 SDK package will be used instead of the 12.3 SDK.
   }
   ```
 
-- When a package indicates a minimum supported version, also called the deployment target, you can set it in your derivation using `darwinMinVersionHook`. If you need to set a minimum version higher than the default SDK, you should also add the corresponding SDK to your `buildInputs`.
+- When a package indicates a minimum supported version, also called the deployment target, you can set it in your derivation using `darwinMinVersionHook`, which sets the relevant `MACOSX_DEPLOYMENT_TARGET` variable. If you need to set a minimum version higher than the default SDK, you should also add the corresponding SDK to your `buildInputs`.
 
   The deployment target controls how Darwin handles availability and access to some APIs. In most cases, if a deployment target is newer than the first availability of an API, that API will be linked directly. Otherwise, the API will be weakly linked and checked at runtime.
 
@@ -144,16 +139,16 @@ Some common issues when packaging software for Darwin:
 
   ```nix
   stdenv.mkDerivation {
-    name = "libfoo-1.2.3"; # Upstream specifies the minimum supported version as 10.15.
-    buildInputs = [ qt6.qtbase (darwinMinVersionHook "10.15") ];
+    name = "libfoo-1.2.3"; # Upstream specifies the minimum supported version as 11.7.
+    buildInputs = [ qt6.qtbase (darwinMinVersionHook "11.7") ];
   }
   # Qt 6 specifies a minimum version of 12.0, so the minimum version resolves to 12.0.
   ```
 
 
-- You should rely on the default SDK when possible. If a package specifies a required SDK version, use that version (e.g., libuv requires 11.0, so it should use `apple-sdk_11`). When a package supports multiple SDKs, determine which SDK package to use based on the following rules of thumb:
+- You should rely on the default SDK when possible. If a package specifies a required SDK version, use that version (e.g., Qt requires the macOS 14 or 15 SDK, so it should use `apple-sdk_15`). When a package supports multiple SDKs, determine which SDK package to use based on the following rules of thumb:
 
-  - If a package supports multiple SDK versions, use the lowest supported SDK version by the package (but no lower than the default SDK). That ensures maximal platform compatibility for the package.
+  - If a package supports multiple SDK versions, consider using the lowest supported SDK version by the package (but no lower than the default SDK). That ensures maximal platform compatibility for the package.
 
   - If a package specifies a range of supported SDK versions _and_ a minimum supported version, assume the package is using availability checks to support the indicated minimum version. Add the highest supported SDK and a `darwinMinVersionHook` set to the minimum version supported by the upstream package.
 
@@ -163,7 +158,7 @@ Some common issues when packaging software for Darwin:
   stdenv.mkDerivation {
     name = "foo-1.2.3";
     # ...
-    buildInputs = [ apple-sdk_15 (darwinMinVersionHook "10.15") ]; # Upstream builds with the 15.0 SDK but supports 10.15.
+    buildInputs = [ apple-sdk_15 (darwinMinVersionHook "12.0") ]; # Upstream builds with the 15.0 SDK but supports 12.0.
   }
   ```
 
@@ -173,20 +168,20 @@ Some common issues when packaging software for Darwin:
   stdenv.mkDerivation {
     name = "libfoo-1.2.3";
     # ...
-    buildInputs = [ apple-sdk_15 ]; # Upstream builds with the 15.0 SDK but supports 10.15.
-    propagatedBuildInputs = [ apple-sdk_10_15 (darwinMinVersionHook "10.15") ];
+    buildInputs = [ apple-sdk_15 ]; # Upstream builds with the 15.0 SDK but supports 12.0.
+    propagatedBuildInputs = [ apple-sdk_12 (darwinMinVersionHook "12.0") ];
   }
   # ...
   stdenv.mkDerivation {
     name = "bar-1.2.3";
     # ...
-    buildInputs = [ libfoo ]; # Builds with the 10.15 SDK
+    buildInputs = [ libfoo ]; # Builds with the 12.3 SDK
   }
   # ...
   stdenv.mkDerivation {
     name = "baz-1.2.3";
     # ...
-    buildInputs = [ apple-sdk_12 libfoo ]; # Builds with the 12.3 SDK
+    buildInputs = [ apple-sdk_13 libfoo ]; # Builds with the 13.3 SDK
   }
   ```
 
@@ -211,8 +206,8 @@ Some common issues when packaging software for Darwin:
 
 - There are two legacy patterns that are being phased out. These patterns were used in the past to change the SDK version. They have been reimplemented to use the `apple-sdk` packages.
 
-  - `pkgs.darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the 11.0 SDK. It now adds the `apple-sdk_11` package to your derivation’s build inputs.
-  - `overrideSDK` - this stdenv adapter would try to replace the frameworks used by your derivation and its transitive dependencies.  It now adds the `apple-sdk_11` package for `11.0` or the `apple-sdk_12` package for `12.3`. If `darwinMinVersion` is specified, it will add `darwinMinVersionHook` with the specified minimum version. No other SDK versions are supported.
+  - `darwin.apple_sdk_11_0.callPackage` - this pattern was used to provide frameworks from the 11.0 SDK. It is now the same as `callPackage`.
+  - `overrideSDK` - this stdenv adapter would try to replace the frameworks used by your derivation and its transitive dependencies. It now adds the `apple-sdk_12` package for `12.3` and does nothing for `11.0`. If `darwinMinVersion` is specified, it will add `darwinMinVersionHook` with the specified minimum version. No other SDK versions are supported.
 
 - Darwin supports cross-compilation between Darwin platforms. Cross-compilation from Linux is not currently supported but may be supported in the future. To cross-compile to Darwin, you can set `crossSystem` or use one of the Darwin systems in `pkgsCross`. The `darwinMinVersionHook` and the SDKs support cross-compilation. If you need to specify a different SDK version for a `depsBuildBuild` compiler, add it to your `nativeBuildInputs`.
 
@@ -237,7 +232,6 @@ Some common issues when packaging software for Darwin:
 
   In static compilation situations, it is possible for the build and host platform to be the same platform but have different SDKs with the same version (one dynamic and one static). cc-wrapper takes care of handling this distinction.
 
-- The current default versions of the deployment target (minimum version) and SDK are indicated by Darwin-specific attributes on the platform. Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds. If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
+- The current default version of the SDK and deployment target (minimum version) are indicated by the Darwin-specific platform attributes `darwinSdkVersion` and `darwinMinVersion`. Because of the ways that minimum version and SDK can be changed that are not visible to Nix, they should be treated as lower bounds. If you need to parameterize over a specific version, create a function that takes the version as a parameter instead of relying on these attributes.
 
-  - `darwinMinVersion` defaults to 10.12 on x86_64-darwin and 11.0 on aarch64-darwin. It sets the default `MACOSX_DEPLOYMENT_TARGET`.
-  - `darwinSdkVersion` defaults to 10.12 on x86-64-darwin and 11.0 on aarch64-darwin. Only the major version determines the SDK version, resulting in the 10.12.2 and 11.3 SDKs being used on these platforms respectively.
+  On macOS, the `darwinMinVersion` and `darwinSdkVersion` are always the same, and are currently set to 11.3.
