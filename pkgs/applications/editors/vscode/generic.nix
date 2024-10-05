@@ -236,7 +236,10 @@ in
     let
       vscodeRipgrep =
         if stdenv.hostPlatform.isDarwin then
-          "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
+          if lib.versionAtLeast version "1.94.0" then
+            "Contents/Resources/app/node_modules/@vscode/ripgrep/bin/rg"
+          else
+            "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
         else
           "resources/app/node_modules/@vscode/ripgrep/bin/rg";
     in
