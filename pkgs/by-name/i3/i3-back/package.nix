@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = i3-back; };
 
   meta = {
-    description = "An i3/Sway utility to switch focus to your last focused window.";
+    description = "i3/Sway utility to switch focus to your last focused window";
     homepage = "https://github.com/Cretezy/i3-back";
     changelog = "https://github.com/Cretezy/i3-back/blob/main/CHANGELOG.md";
     license = lib.licenses.mit;
