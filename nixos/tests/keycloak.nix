@@ -20,6 +20,8 @@ let
 
       nodes = {
         keycloak = { config, ... }: {
+          virtualisation.memorySize = 2047;
+
           security.pki.certificateFiles = [
             certs.ca.cert
           ];
