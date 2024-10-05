@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage rec {
   #Skip trycmd integration tests
   checkFlags = [ "--skip=cli_tests" ];
 
-  meta = with lib; {
-    mainProgram = "loco";
+  meta = {
     description = "Loco CLI is a powerful command-line tool designed to streamline the process of generating Loco websites";
     homepage = "https://loco.rs";
     changelog = "https://github.com/loco-rs/loco/blob/master/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ sebrut ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sebrut ];
+    mainProgram = "loco";
   };
 }
