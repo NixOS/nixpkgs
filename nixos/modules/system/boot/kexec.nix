@@ -6,7 +6,10 @@
 
     systemd.services.prepare-kexec =
       { description = "Preparation for kexec";
-        wantedBy = [ "kexec.target" ];
+        # It has to be enabled in some boot scenarios (see https://github.com/nix-community/lanzaboote/issues/143).
+        # This restores the ability to load the proper kernel and initrd
+        # for systemctl kexec.
+        wantedBy = [ "kexec.target" "multi-user.target" ];
         before = [ "systemd-kexec.service" ];
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
