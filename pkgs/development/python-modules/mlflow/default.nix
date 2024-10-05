@@ -51,6 +51,8 @@ buildPythonPackage rec {
     hash = "sha256-KSyuS4NXSgyyIxF+IkyqZ5iTMHivAjNxnCthK+pkVhc=";
   };
 
+  build-system = [ setuptools ];
+
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.
@@ -62,7 +64,7 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     alembic
     cachetools
     click
@@ -93,7 +95,7 @@ buildPythonPackage rec {
     requests
     scikit-learn
     scipy
-    setuptools
+    setuptools # https://github.com/mlflow/mlflow/issues/11330
     #shap
     simplejson
     sqlalchemy
