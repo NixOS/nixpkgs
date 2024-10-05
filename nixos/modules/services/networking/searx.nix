@@ -157,7 +157,7 @@ in
       };
 
       uwsgiConfig = mkOption {
-        type = options.services.uwsgi.instance.type;
+        inherit (options.services.uwsgi.instance) type;
         default = {
           http = ":8080";
         };
@@ -215,7 +215,7 @@ in
             "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
           ];
           buffer-size = 32768;
-          pythonPackages = self: [ cfg.package ];
+          pythonPackages = _: [ cfg.package ];
         } // cfg.uwsgiConfig;
       };
     };
@@ -230,7 +230,7 @@ in
           RuntimeDirectory = "searx";
           RuntimeDirectoryMode = "750";
         } // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = builtins.toPath cfg.environmentFile;
+          EnvironmentFile = cfg.environmentFile;
         };
         script = generateConfig;
       };
@@ -248,7 +248,7 @@ in
           Group = "searx";
           ExecStart = lib.getExe cfg.package;
         } // optionalAttrs (cfg.environmentFile != null) {
-          EnvironmentFile = builtins.toPath cfg.environmentFile;
+          EnvironmentFile = cfg.environmentFile;
         };
         environment = {
           SEARXNG_SETTINGS_PATH = cfg.settingsFile;
