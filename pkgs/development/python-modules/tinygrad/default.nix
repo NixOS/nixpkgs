@@ -36,6 +36,8 @@
   torch,
   tqdm,
   transformers,
+
+  tinygrad,
 }:
 
 buildPythonPackage rec {
@@ -92,7 +94,13 @@ buildPythonPackage rec {
       # pyobjc-framework-metal
     ];
 
-  pythonImportsCheck = [ "tinygrad" ];
+  pythonImportsCheck =
+    [
+      "tinygrad"
+    ]
+    ++ lib.optionals cudaSupport [
+      "tinygrad.runtime.ops_nv"
+    ];
 
   nativeCheckInputs = [
     blobfile
@@ -174,6 +182,10 @@ buildPythonPackage rec {
     # Files under this directory are not considered as tests by upstream and should be skipped
     "extra/"
   ];
+
+  passthru.tests = {
+    withCuda = tinygrad.override { cudaSupport = true; };
+  };
 
   meta = {
     description = "Simple and powerful neural network framework";
