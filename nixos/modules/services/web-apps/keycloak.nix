@@ -673,8 +673,8 @@ in
               mkdir -p /run/keycloak/ssl
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             '' + ''
-              export KEYCLOAK_ADMIN=admin
-              export KEYCLOAK_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
+              export KC_BOOTSTRAP_ADMIN_USERNAME=admin
+              export KC_BOOTSTRAP_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
               kc.sh --verbose start --optimized
             '';
           };
