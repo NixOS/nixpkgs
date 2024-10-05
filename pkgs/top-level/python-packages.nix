@@ -15900,6 +15900,8 @@ self: super: with self; {
 
   timelib = callPackage ../development/python-modules/timelib { };
 
+  timeloop = callPackage ../development/python-modules/timeloop { };
+
   time-machine = callPackage ../development/python-modules/time-machine { };
 
   timeout-decorator = callPackage ../development/python-modules/timeout-decorator { };
