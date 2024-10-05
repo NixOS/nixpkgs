@@ -1,61 +1,77 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, autoconf
-, automake
-, libtool
-, mm-common
-, intltool
-, itstool
-, doxygen
-, graphviz
-, makeFontsConf
-, freefont_ttf
-, boost
-, libxmlxx3
-, libxslt
-, libgdamm
-, libarchive
-, libepc
-, python3
-, ncurses
-, glibmm
-, gtk3
-, openssl
-, gtkmm3
-, goocanvasmm2
-, evince
-, isocodes
-, gtksourceview
-, gtksourceviewmm
-, postgresql_15
-, gobject-introspection
-, yelp-tools
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoconf,
+  automake,
+  libtool,
+  mm-common,
+  intltool,
+  itstool,
+  doxygen,
+  graphviz,
+  makeFontsConf,
+  freefont_ttf,
+  boost,
+  libxmlxx3,
+  libxslt,
+  libgdamm,
+  libarchive,
+  libepc,
+  python3,
+  ncurses,
+  glibmm,
+  gtk3,
+  openssl,
+  gtkmm3,
+  goocanvasmm2,
+  evince,
+  isocodes,
+  gtksourceview,
+  gtksourceviewmm,
+  postgresql_15,
+  gobject-introspection,
+  yelp-tools,
+  wrapGAppsHook3,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
+  pname = "glom";
+  version = "1.32.0";
+
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "doc"
+    "devdoc"
+  ];
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/glom/${lib.versions.majorMinor finalAttrs.version}/glom-${finalAttrs.version}.tar.xz";
+    hash = "sha256-U78gfryoLFY7nme86XdFmhfn/ZTjXCfBlphnNtokjfE=";
+  };
+
   gda = libgdamm.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
+
   python = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
+
   sphinx-build = python3.pkgs.sphinx.overrideAttrs (super: {
-    postFixup = super.postFixup or "" + ''
-      # Do not propagate Python
-      rm $out/nix-support/propagated-build-inputs
-    '';
+    postFixup =
+      super.postFixup or ""
+      + ''
+        # Do not propagate Python
+        rm $out/nix-support/propagated-build-inputs
+      '';
   });
-  boost_python = boost.override { enablePython = true; inherit python; };
-in stdenv.mkDerivation rec {
-  pname = "glom";
-  version = "1.32.0";
 
-  outputs = [ "out" "lib" "dev" "doc" "devdoc" ];
-
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1wcd4kd3crwqjv0jfp73jkyyf5ws8mvykg37kqxmcb58piz21gsk";
+  boost_python = boost.override {
+    enablePython = true;
+    inherit (finalAttrs) python;
   };
 
   nativeBuildInputs = [
@@ -69,22 +85,22 @@ in stdenv.mkDerivation rec {
     itstool
     doxygen
     graphviz
-    sphinx-build
+    finalAttrs.sphinx-build
     wrapGAppsHook3
     gobject-introspection # for setup hook
   ];
 
   buildInputs = [
-    boost_python
+    finalAttrs.boost_python
     glibmm
     gtk3
     openssl
     libxmlxx3
     libxslt
-    gda
+    finalAttrs.gda
     libarchive
     libepc
-    python
+    finalAttrs.python
     ncurses # for python
     gtkmm3
     goocanvasmm2
@@ -118,15 +134,18 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix PYTHONPATH : "${placeholder "out"}/${python3.sitePackages}"
-      --set PYTHONHOME "${python}"
+      --set PYTHONHOME "${finalAttrs.python}"
     )
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Easy-to-use database designer and user interface";
     homepage = "http://www.glom.org/";
-    license = [ licenses.lgpl2 licenses.gpl2 ];
-    maintainers = teams.gnome.members;
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      lgpl2
+      gpl2
+    ];
+    maintainers = lib.teams.gnome.members;
+    platforms = lib.platforms.linux;
   };
-}
+})
