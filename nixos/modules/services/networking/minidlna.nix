@@ -90,6 +90,11 @@ in
         example = "general,artwork,database,inotify,scanner,metadata,http,ssdp,tivo=warn";
         description = "Defines the type of messages that should be logged and down to which level of importance.";
       };
+      options.enable_subtitles = lib.mkOption {
+        type = lib.types.enum [ "yes" "no" ];
+        default = "yes";
+        description = "Enable subtitle support on unknown clients.";
+      };
       options.inotify = lib.mkOption {
         type = lib.types.enum [ "yes" "no" ];
         default = "no";
