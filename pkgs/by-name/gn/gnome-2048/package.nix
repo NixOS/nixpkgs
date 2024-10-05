@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-2048";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-2048/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Obtain the 2048 tile";
     mainProgram = "gnome-2048";
     maintainers = teams.gnome.members;

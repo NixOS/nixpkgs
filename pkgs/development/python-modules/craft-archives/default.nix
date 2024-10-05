@@ -6,7 +6,7 @@
   launchpadlib,
   lazr-restfulclient,
   overrides,
-  pydantic_1,
+  pydantic,
   setuptools,
   setuptools-scm,
   tabulate,
@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "1.2.0";
+  version = "2.0.0";
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     rev = "refs/tags/${version}";
-    hash = "sha256-4BYRwuBDKFbVvK805e+L4ZR8wtS8GHHYteexH4YZmSE=";
+    hash = "sha256-BrKyOdfbwt9qU5Bt/kX/+GgxH7LCFmmFg4mevBWVp2I=";
   };
 
   postPatch = ''
@@ -36,16 +36,13 @@ buildPythonPackage rec {
       --replace-fail "setuptools==67.7.2" "setuptools"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     launchpadlib
     lazr-restfulclient
     overrides
-    pydantic_1
+    pydantic
     tabulate
   ];
 

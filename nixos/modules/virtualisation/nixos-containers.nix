@@ -109,13 +109,15 @@ let
 
       cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+      declare -a extraFlags
+
       if [ "$PRIVATE_NETWORK" = 1 ]; then
-        extraFlags+=" --private-network"
+        extraFlags+=("--private-network")
       fi
 
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
          [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
-        extraFlags+=" --network-veth"
+        extraFlags+=("--network-veth")
       fi
 
       if [ -n "$HOST_PORT" ]; then
@@ -123,30 +125,30 @@ let
         IFS=","
         for i in $HOST_PORT
         do
-            extraFlags+=" --port=$i"
+            extraFlags+=("--port=$i")
         done
         IFS=$OIFS
       fi
 
       if [ -n "$HOST_BRIDGE" ]; then
-        extraFlags+=" --network-bridge=$HOST_BRIDGE"
+        extraFlags+=("--network-bridge=$HOST_BRIDGE")
       fi
 
-      extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
+      extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
-        extraFlags+=" --network-interface=$iface"
+        extraFlags+=("--network-interface=$iface")
       done
 
       for iface in $MACVLANS; do
-        extraFlags+=" --network-macvlan=$iface"
+        extraFlags+=("--network-macvlan=$iface")
       done
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
       ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
         if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
-          extraFlags+=" --personality=x86"
+          extraFlags+=("--personality=x86")
         fi
       ''}
 
@@ -157,9 +159,11 @@ let
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
       # to the container systemd when it receives SIGTERM for container shutdown;
       # containerInit and stage2 have to handle this as well.
+      # TODO: fix shellcheck issue properly
+      # shellcheck disable=SC2086
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
-        -M "$INSTANCE" -D "$root" $extraFlags \
+        -M "$INSTANCE" -D "$root" "''${extraFlags[@]}" \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
