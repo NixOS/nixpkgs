@@ -107,6 +107,8 @@
            containerPath = "/usr/bin/nvidia-debugdump"; }
          { hostPath = lib.getExe' nvidia-driver "nvidia-powerd";
            containerPath = "/usr/bin/nvidia-powerd"; }
+         { hostPath = lib.getExe' nvidia-driver "nvidia-ctk";
+           containerPath = "/usr/bin/nvidia-ctk"; }
          { hostPath = lib.getExe' nvidia-driver "nvidia-smi";
            containerPath = "/usr/bin/nvidia-smi"; }])
       # nvidia-docker 1.0 uses /usr/local/nvidia/lib{,64}
