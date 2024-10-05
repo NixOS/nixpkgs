@@ -18,7 +18,7 @@
   libxml2,
   openssl,
   sqlite,
-  webkitgtk,
+  webkitgtk_6_0,
   glib-networking,
   librsvg,
   gst_all_1,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxml2
       openssl
       sqlite
-      webkitgtk
+      webkitgtk_6_0
 
       # TLS support for loading external content in webkitgtk WebView
       glib-networking

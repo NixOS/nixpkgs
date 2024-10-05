@@ -19,7 +19,7 @@
   libuuid,
   curl,
   libhandy,
-  webkitgtk,
+  webkitgtk_4_0,
   gnome,
   adwaita-icon-theme,
   libxml2,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libuuid
     curl
     libhandy
-    webkitgtk
+    webkitgtk_4_0
     tracker
     gnome-online-accounts
     gsettings-desktop-schemas

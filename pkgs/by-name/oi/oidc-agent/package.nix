@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   curl,
-  webkitgtk,
+  webkitgtk_4_0,
   libmicrohttpd,
   libsecret,
   qrencode,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    webkitgtk
+    webkitgtk_4_0
     libmicrohttpd
     libsecret
     qrencode

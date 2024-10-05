@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , gobject-introspection, makeWrapper, wrapGAppsHook3
 , gtk3, gst_all_1, python3
-, gettext, adwaita-icon-theme, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk
+, gettext, adwaita-icon-theme, help2man, keybinder3, libnotify, librsvg, streamripper, udisks, webkitgtk_4_0
 , iconTheme ? adwaita-icon-theme
 , deviceDetectionSupport ? true
 , documentationSupport ? true
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional multimediaKeySupport keybinder3
   ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
   ++ lib.optional podcastSupport python3.pkgs.feedparser
-  ++ lib.optional wikipediaSupport webkitgtk;
+  ++ lib.optional wikipediaSupport webkitgtk_4_0;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

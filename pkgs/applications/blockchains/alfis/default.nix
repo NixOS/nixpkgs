@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  webkitgtk,
+  webkitgtk_4_0,
   zenity,
   Cocoa,
   Security,
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs =
     lib.optional stdenv.hostPlatform.isDarwin Security
-    ++ lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk
+    ++ lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0
     ++ lib.optionals (withGui && stdenv.hostPlatform.isDarwin) [
       Cocoa
       WebKit

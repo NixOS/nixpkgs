@@ -31,7 +31,7 @@
 , python3
 , desktop-file-utils
 , itstool
-, withWebservices ? true, webkitgtk
+, withWebservices ? true, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libX11
-  ] ++ lib.optional withWebservices webkitgtk;
+  ] ++ lib.optional withWebservices webkitgtk_4_0;
 
   mesonFlags = [
     "-Dlibchamplain=true"

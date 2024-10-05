@@ -65,7 +65,7 @@ let
       nativeLibs = [ pkgs.sqlite ];
     });
     cl-webkit2 = super.cl-webkit2.overrideLispAttrs (o: {
-      nativeLibs = [ pkgs.webkitgtk ];
+      nativeLibs = [ pkgs.webkitgtk_4_0 ];
     });
     dbd-mysql = super.dbd-mysql.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.mariadb.client ];

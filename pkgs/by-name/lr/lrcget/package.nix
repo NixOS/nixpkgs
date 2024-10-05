@@ -2,7 +2,7 @@
   dbus,
   openssl,
   gtk3,
-  webkitgtk,
+  webkitgtk_4_0,
   pkg-config,
   wrapGAppsHook3,
   fetchFromGitHub,
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
       gtk3
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      webkitgtk
+      webkitgtk_4_0
       alsa-lib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

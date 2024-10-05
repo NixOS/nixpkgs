@@ -8,7 +8,7 @@
 , gobject-introspection
 , gtk3
 , wrapGAppsHook3
-, webkitgtk
+, webkitgtk_4_0
 , libnotify
 , keybinder3
 , libappindicator
@@ -44,7 +44,7 @@ python3Packages.buildPythonApplication rec {
     libappindicator
     libnotify
     librsvg
-    webkitgtk
+    webkitgtk_4_0
     wmctrl
   ];
 

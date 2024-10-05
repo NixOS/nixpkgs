@@ -29154,11 +29154,6 @@ with pkgs;
 
   foliate = callPackage ../applications/office/foliate { };
 
-  font-manager = callPackage ../by-name/fo/font-manager/package.nix {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_6_0;
-  };
-
   fontfinder = callPackage ../applications/misc/fontfinder { };
 
   fontpreview = callPackage ../applications/misc/fontpreview { };
@@ -30748,10 +30743,7 @@ with pkgs;
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_4_1;
-  };
+  liferea = callPackage ../applications/networking/newsreaders/liferea { };
 
   lightworks = callPackage ../applications/video/lightworks { };
 
@@ -31306,9 +31298,7 @@ with pkgs;
   netmaker = callPackage ../applications/networking/netmaker {subPackages = ["."];};
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
-  newsflash = callPackage ../applications/networking/feedreaders/newsflash {
-    webkitgtk = webkitgtk_6_0;
-  };
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
 
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
@@ -32175,7 +32165,7 @@ with pkgs;
   };
 
   quodlibet-full = quodlibet.override {
-    inherit gtksourceview webkitgtk;
+    inherit gtksourceview webkitgtk_4_0;
     kakasi = kakasi;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
@@ -38180,7 +38170,9 @@ with pkgs;
 
   wcalc = callPackage ../applications/misc/wcalc { };
 
-  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
+  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {
+    webkitgtk = webkitgtk_4_0;
+  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
 

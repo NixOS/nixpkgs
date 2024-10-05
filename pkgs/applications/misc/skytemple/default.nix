@@ -3,7 +3,7 @@
 , gobject-introspection
 , gtk3
 , gtksourceview4
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , python3Packages
 }:
@@ -28,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   nativeBuildInputs = [

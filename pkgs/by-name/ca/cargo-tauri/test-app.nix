@@ -8,7 +8,7 @@
   libsoup,
   openssl,
   pkg-config,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.isLinux [
       glib-networking
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.isDarwin (
       with darwin.apple_sdk.frameworks;

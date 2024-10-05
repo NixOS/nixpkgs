@@ -14,7 +14,7 @@
   glib,
   glib-networking,
   libayatana-appindicator,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libayatana-appindicator
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.DarwinTools

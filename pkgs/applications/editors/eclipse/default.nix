@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXrender, zlib
 , glib, gtk3, gtk2, libXtst, jdk, jdk8, gsettings-desktop-schemas
-, webkitgtk ? null  # for internal web browser
+, webkitgtk_4_0 ? null  # for internal web browser
 , buildEnv, runCommand
 , callPackage
 }:
@@ -29,7 +29,7 @@ in rec {
   # work around https://bugs.eclipse.org/bugs/show_bug.cgi?id=476075#c3
   buildEclipseUnversioned = callPackage ./build-eclipse.nix {
     inherit stdenv makeDesktopItem freetype fontconfig libX11 libXrender zlib
-            jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk
+            jdk glib gtk libXtst gsettings-desktop-schemas webkitgtk_4_0
             makeWrapper;
   };
   buildEclipse = eclipseData: buildEclipseUnversioned (eclipseData // { productVersion = "${platform_major}.${platform_minor}"; });

@@ -7,7 +7,7 @@
 , glib
 , gtk3
 , libgee
-, webkitgtk
+, webkitgtk_4_0
 , clutter-gtk
 , clutter-gst
 , ninja
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk3
     libgee
-    webkitgtk
+    webkitgtk_4_0
     clutter-gtk
     clutter-gst
   ];

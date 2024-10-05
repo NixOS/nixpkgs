@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, python3, perl, bison
 , texinfo, desktop-file-utils, wrapGAppsHook3, docbook2x, docbook-xsl-nons
 , inform7, gettext, libossp_uuid, gtk3, gobject-introspection, vala, gtk-doc
-, webkitgtk, gtksourceview3, gspell, libxml2, goocanvas2, libplist, glib
+, webkitgtk_4_0, gtksourceview3, gspell, libxml2, goocanvas2, libplist, glib
 , gst_all_1 }:
 
 # Neither gnome-inform7 nor its dependencies ratify and chimara have tagged releases in the GTK3 branch yet.
@@ -92,7 +92,7 @@ in stdenv.mkDerivation {
     gtk3
     gtksourceview3
     gspell
-    webkitgtk
+    webkitgtk_4_0
     libxml2
     goocanvas2
     libplist

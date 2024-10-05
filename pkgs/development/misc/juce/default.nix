@@ -13,7 +13,7 @@
 , freetype
 , curl
 , libglvnd
-, webkitgtk
+, webkitgtk_4_0
 , pcre
 , darwin
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # libasound.so
     libglvnd # libGL.so
-    webkitgtk # webkit2gtk-4.0
+    webkitgtk_4_0 # webkit2gtk-4.0
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.MetalKit

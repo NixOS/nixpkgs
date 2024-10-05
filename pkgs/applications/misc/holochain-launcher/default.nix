@@ -4,7 +4,7 @@
 , autoPatchelfHook
 , dpkg
 , openssl
-, webkitgtk
+, webkitgtk_4_0
 , libappindicator
 , wrapGAppsHook3
 , shared-mime-info
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
-    webkitgtk
+    webkitgtk_4_0
     libappindicator
 
     glib-networking
