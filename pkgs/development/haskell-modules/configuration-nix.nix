@@ -1431,4 +1431,9 @@ self: super: builtins.intersectAttrs super {
       "--skip=/Cabal.Paths/paths"
     ];
   }) super.doctest;
+
+  # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
+  # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
+  # security level 2
+  openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
 }
