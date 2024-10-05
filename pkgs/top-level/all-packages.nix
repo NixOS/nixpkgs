@@ -10366,12 +10366,6 @@ with pkgs;
     propagatedBuildInputs = [ memorymapping ];
   } ../development/libraries/memorymapping/setup-hook.sh;
 
-  memstream = callPackage ../development/libraries/memstream { };
-  memstreamHook = makeSetupHook {
-    name = "memstream-hook";
-    propagatedBuildInputs = [ memstream ];
-  } ../development/libraries/memstream/setup-hook.sh;
-
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
   mergerfs-tools = callPackage ../tools/filesystems/mergerfs/tools.nix { };
