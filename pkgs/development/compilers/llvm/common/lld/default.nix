@@ -6,7 +6,6 @@
 , buildLlvmTools
 , monorepoSrc ? null
 , src ? null
-, libunwind ? null
 , runCommand
 , cmake
 , ninja
@@ -30,12 +29,7 @@ let
         mkdir -p "$out/llvm"
       '') else src;
 
-  postPatch = lib.optionalString (lib.versions.major release_version == "12") ''
-    substituteInPlace MachO/CMakeLists.txt --replace \
-      '(''${LLVM_MAIN_SRC_DIR}/' '('
-    mkdir -p libunwind/include
-    tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
-  '' + lib.optionalString (lib.versions.major release_version == "13") ''
+  postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
     substituteInPlace MachO/CMakeLists.txt --replace \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
@@ -45,9 +39,7 @@ stdenv.mkDerivation (rec {
 
   src = src';
 
-  sourceRoot =
-    if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = "${src.name}/${pname}";
 
   nativeBuildInputs = [ cmake ] ++ lib.optional (lib.versionAtLeast release_version "15") ninja;
   buildInputs = [ libllvm libxml2 ];
