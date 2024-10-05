@@ -21729,12 +21729,6 @@ with pkgs;
 
   memray = callPackage ../development/tools/memray { };
 
-  memstream = callPackage ../development/libraries/memstream { };
-  memstreamHook = makeSetupHook {
-    name = "memstream-hook";
-    propagatedBuildInputs = [ memstream ];
-  } ../development/libraries/memstream/setup-hook.sh;
-
   menu-cache = callPackage ../development/libraries/menu-cache { };
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
