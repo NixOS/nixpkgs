@@ -12966,6 +12966,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/vim-after-object/";
   };
 
+  vim-afterglow = buildVimPlugin {
+    pname = "vim-afterglow";
+    version = "2024-03-31";
+    src = fetchFromGitHub {
+      owner = "danilo-augusto";
+      repo = "vim-afterglow";
+      rev = "fe3a0c4d2acf13ed6f7f0f1fede0a2570f13b06e";
+      sha256 = "0z61jfdhhajw5k7y8msk8nj5nljwygmw3s6vsqq9qgczaixqh968";
+    };
+    meta.homepage = "https://github.com/danilo-augusto/vim-afterglow/";
+  };
+
   vim-agda = buildVimPlugin {
     pname = "vim-agda";
     version = "2024-05-17";
