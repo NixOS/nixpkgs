@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbclient-ng";
-  version = "2.1.5";
+  version = "2.1.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
     repo = "smbclient-ng";
     rev = "refs/tags/${version}";
-    hash = "sha256-5ObqmCvMoBuQOPbQATrIVzxnxrJtvB+iUJSS7sqs6hI=";
+    hash = "sha256-T1OAiRL7AGMz12dFIPOESS77lVd62iaBt9vXCdzqJBQ=";
   };
 
   pythonRelaxDeps = [
