@@ -3877,6 +3877,8 @@ with pkgs;
 
   supergfxctl = callPackage ../applications/system/supergfxctl { };
 
+  supercell-wx = qt6.callPackage ../applications/science/meteorology/supercell-wx { };
+
   titanium = callPackage ../development/mobile/titanium { };
 
   titanium-alloy = callPackage ../development/mobile/titanium-alloy { };
