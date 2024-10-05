@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "oath-toolkit";
-  version = "2.6.11";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-/FEqSltG9MQ6sFhsMYn+zk1U9+ZJOX1voeI0KEMeLLQ=";
+    hash = "sha256-yv33ObHsSydkQcau2uZBFDS72HAHH2YVS5CcxuLZ6Lo=";
   };
 
   buildInputs = [ securityDependency ];
