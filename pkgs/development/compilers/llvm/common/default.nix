@@ -380,6 +380,17 @@ let
       libllvm = callPackage ./llvm {
         patches =
           lib.optional (lib.versionOlder metadata.release_version "14") ./llvm/llvm-config-link-static.patch
+          ++ lib.optionals (lib.versions.major metadata.release_version == "12") [
+            (metadata.getVersionFile "llvm/fix-llvm-issue-49955.patch")
+
+            # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
+            (fetchpatch {
+              name = "uops-CMOV16rm-noreg.diff";
+              url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
+              sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
+              stripLen = 1;
+            })
+          ]
           ++ [ (metadata.getVersionFile "llvm/gnu-install-dirs.patch") ]
           ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
             # Running the tests involves invoking binaries (like `opt`) that depend on
@@ -443,7 +454,7 @@ let
                   hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
                 }
               )
-          ++ lib.optionals (lib.versions.major metadata.release_version == "13") [
+          ++ lib.optionals (lib.versionOlder metadata.release_version "14") [
             # Backport gcc-13 fixes with missing includes.
             (fetchpatch {
               name = "signals-gcc-13.patch";
@@ -544,7 +555,9 @@ let
           # compilers breaking libclang when we can do Linux‐to‐Darwin
           # cross‐compilation again.
           ++ lib.optional (
-            !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
+            # TODO: This also applies for clang == 12, do we need it?
+            lib.versionAtLeast metadata.release_version "13" &&
+            (!args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin)
           ) ./clang/add-nostdlibinc-flag.patch
           ++ [
             (substituteAll {
@@ -989,14 +1002,21 @@ let
       );
 
       compiler-rtPatches =
-        lib.optional (lib.versionOlder metadata.release_version "15") (
-          metadata.getVersionFile "compiler-rt/codesign.patch"
-        ) # Revert compiler-rt commit that makes codesign mandatory
+        lib.optionals (lib.versions.major metadata.release_version == "12") [
+          # Revert compiler-rt commit that makes codesign mandatory
+          ./compiler-rt/7-12-codesign.patch
+        ]
+        ++ lib.optional (
+          lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "15"
+        ) (metadata.getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
         ++ [
           (metadata.getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
         ]
         ++ lib.optional (
-          lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
+          lib.versions.major metadata.release_version == "12"
+          || (
+            lib.versionAtLeast metadata.release_version "14" && lib.versionOlder metadata.release_version "18"
+          )
         ) (metadata.getVersionFile "compiler-rt/gnu-install-dirs.patch")
         ++ [
           # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
@@ -1004,9 +1024,11 @@ let
           (metadata.getVersionFile "compiler-rt/normalize-var.patch")
         ]
         ++
-          lib.optional (lib.versionOlder metadata.release_version "18")
+          lib.optional
+            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
             # Prevent a compilation error on darwin
             (metadata.getVersionFile "compiler-rt/darwin-targetconditionals.patch")
+        # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
         ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
           # See: https://github.com/NixOS/nixpkgs/pull/186575
           ./compiler-rt/darwin-plistbuddy-workaround.patch
@@ -1022,13 +1044,18 @@ let
           ./compiler-rt/armv6-mcr-dmb.patch
           ./compiler-rt/armv6-sync-ops-no-thumb.patch
         ]
-        ++ lib.optionals (lib.versionOlder metadata.release_version "18") [
-          # Fix build on armv6l
-          ./compiler-rt/armv6-scudo-no-yield.patch
-        ]
+        ++
+          lib.optionals
+            (lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "18")
+            [
+              # Fix build on armv6l
+              ./compiler-rt/armv6-scudo-no-yield.patch
+            ]
         ++ [
           # Fix build on armv6l
           ./compiler-rt/armv6-no-ldrexd-strexd.patch
+        ]
+        ++ lib.optionals (lib.versionAtLeast metadata.release_version "13") [
           (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
         ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
