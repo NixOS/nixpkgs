@@ -1,4 +1,9 @@
-{ buildFHSEnv, envision-unwrapped }:
+{
+  lib,
+  buildFHSEnv,
+  envision-unwrapped,
+  makeWrapper,
+}:
 
 buildFHSEnv {
   name = "envision";
@@ -7,6 +12,9 @@ buildFHSEnv {
 
   strictDeps = true;
 
+  nativeBuildInputs = [ makeWrapper ];
+
+  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]
@@ -36,6 +44,17 @@ buildFHSEnv {
           xorg.libXrandr
           xorg.libXrender
           xorg.xorgproto
+          # Additional dependencies required for Monado WMR support
+          bc
+          fmt
+          fmt.dev
+          git-lfs
+          gtest
+          jq
+          libepoxy
+          lz4.dev
+          tbb
+          libxkbcommon
         ])
       )
     )
@@ -83,6 +102,9 @@ buildFHSEnv {
     ln -s ${envision-unwrapped}/share/icons $out/share
     ln -s ${envision-unwrapped}/share/applications/org.gabmus.envision.desktop $out/share/applications
     ln -s ${envision-unwrapped}/share/metainfo/org.gabmus.envision.appdata.xml $out/share/metainfo
+
+    wrapProgram $out/bin/envision \
+      --add-flags "-d"
   '';
 
   runScript = "envision";
