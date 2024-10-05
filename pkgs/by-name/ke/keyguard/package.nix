@@ -24,7 +24,6 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-
   version = "1.6.0";
 
   src = fetchFromGitHub {
