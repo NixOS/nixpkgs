@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-klotski";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-klotski/-/blob/${version}/NEWS?ref_type=tags";
     description = "Slide blocks to solve the puzzle";
     mainProgram = "gnome-klotski";
     maintainers = teams.gnome.members;

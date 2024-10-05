@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "juceaide";
     longDescription = "JUCE is an open-source cross-platform C++ application framework for desktop and mobile applications, including VST, VST3, AU, AUv3, RTAS and AAX audio plug-ins";
     homepage = "https://github.com/juce-framework/JUCE";
+    changelog = "https://github.com/juce-framework/JUCE/blob/${finalAttrs.version}/CHANGE_LIST.md";
     license = with licenses; [ isc gpl3Plus ];
     maintainers = with maintainers; [ kashw2 ];
     platforms = platforms.all;

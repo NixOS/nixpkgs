@@ -46,6 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Shell scripts made simple";
     homepage = "https://github.com/tusharsadhwani/zxpy";
+    changelog = "https://github.com/tusharsadhwani/zxpy/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "zxpy";

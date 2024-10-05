@@ -74,6 +74,12 @@ in
         description = "Group under which Redmine is ran.";
       };
 
+      address = mkOption {
+        type = types.str;
+        default = "0.0.0.0";
+        description = "IP address Redmine should bind to.";
+      };
+
       port = mkOption {
         type = types.port;
         default = 3000;
@@ -429,7 +435,7 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
-        ExecStart="${bundle} exec rails server -u webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+        ExecStart="${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
       };
 
     };
