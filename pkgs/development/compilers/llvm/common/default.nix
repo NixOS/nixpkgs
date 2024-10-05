@@ -167,12 +167,6 @@ let
                   path = ../15;
                 }
               ];
-              "libcxx/0001-darwin-10.12-mbstate_t-fix.patch" = [
-                {
-                  after = "18";
-                  path = ../18;
-                }
-              ];
               "libunwind/gnu-install-dirs.patch" = [
                 {
                   before = "17";
@@ -1072,62 +1066,37 @@ let
 
       libcxx = callPackage ./libcxx (
         {
-          patches =
-            lib.optionals (lib.versionOlder metadata.release_version "16") (
-              lib.optional (lib.versions.major metadata.release_version == "15")
-                # See:
-                #   - https://reviews.llvm.org/D133566
-                #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
-                # !!! Drop in LLVM 16+
-                (
-                  fetchpatch {
-                    url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
-                    hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
-                  }
-                )
-              ++ [
-                (substitute {
-                  src = ./libcxxabi/wasm.patch;
-                  substitutions = [
-                    "--replace-fail"
-                    "/cmake/"
-                    "/llvm/cmake/"
-                  ];
-                })
-              ]
-              ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
-                src = ./libcxx/libcxx-0001-musl-hacks.patch;
+          patches = lib.optionals (lib.versionOlder metadata.release_version "16") (
+            lib.optional (lib.versions.major metadata.release_version == "15")
+              # See:
+              #   - https://reviews.llvm.org/D133566
+              #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
+              # !!! Drop in LLVM 16+
+              (
+                fetchpatch {
+                  url = "https://github.com/llvm/llvm-project/commit/57c7bb3ec89565c68f858d316504668f9d214d59.patch";
+                  hash = "sha256-B07vHmSjy5BhhkGSj3e1E0XmMv5/9+mvC/k70Z29VwY=";
+                }
+              )
+            ++ [
+              (substitute {
+                src = ./libcxxabi/wasm.patch;
                 substitutions = [
                   "--replace-fail"
-                  "/include/"
-                  "/libcxx/include/"
+                  "/cmake/"
+                  "/llvm/cmake/"
                 ];
               })
-            )
-            ++
-              lib.optional
-                (
-                  lib.versions.major metadata.release_version == "17"
-                  && stdenv.hostPlatform.isDarwin
-                  && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-                )
-                # https://github.com/llvm/llvm-project/issues/64226
-                (
-                  fetchpatch {
-                    name = "0042-mbstate_t-not-defined.patch";
-                    url = "https://github.com/macports/macports-ports/raw/acd8acb171f1658596ed1cf25da48d5b932e2d19/lang/llvm-17/files/0042-mbstate_t-not-defined.patch";
-                    hash = "sha256-jo+DYA6zuSv9OH3A0bYwY5TlkWprup4OKQ7rfK1WHBI=";
-                  }
-                )
-            ++
-              lib.optional
-                (
-                  lib.versionAtLeast metadata.release_version "18"
-                  && stdenv.hostPlatform.isDarwin
-                  && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-                )
-                # https://github.com/llvm/llvm-project/issues/64226
-                (metadata.getVersionFile "libcxx/0001-darwin-10.12-mbstate_t-fix.patch");
+            ]
+            ++ lib.optional stdenv.hostPlatform.isMusl (substitute {
+              src = ./libcxx/libcxx-0001-musl-hacks.patch;
+              substitutions = [
+                "--replace-fail"
+                "/include/"
+                "/libcxx/include/"
+              ];
+            })
+          );
           stdenv =
             if stdenv.hostPlatform.isDarwin then
               overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
