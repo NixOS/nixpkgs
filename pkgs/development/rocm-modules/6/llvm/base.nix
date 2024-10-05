@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, gcc12Stdenv
+, gcc13Stdenv
 , fetchFromGitHub
 , rocmUpdateScript
 , pkg-config
@@ -47,8 +47,8 @@
 
 let stdenv' = stdenv; in
 let stdenv =
-      if stdenv'.cc.cc.isGNU or false && lib.versionAtLeast stdenv'.cc.cc.version "13.0"
-      then gcc12Stdenv
+      if stdenv'.cc.isGNU && lib.versionOlder stdenv'.cc.cc.version "13.0"
+      then gcc13Stdenv
       else stdenv';
 in
 
@@ -86,7 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     git
-    (python3Packages.python.withPackages (p: [ p.setuptools ]))
+    (python3Packages.python.withPackages (p: [ p.setuptools p.myst-parser ]))
   ] ++ lib.optionals (buildDocs || buildMan) [
     doxygen
     sphinx
@@ -116,6 +116,9 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DLLVM_ENABLE_PROJECTS=${lib.concatStringsSep ";" targetProjects}"
   ] ++ lib.optionals ((finalAttrs.passthru.isLLVM || targetDir == "runtimes") && targetRuntimes != [ ]) [
     "-DLLVM_ENABLE_RUNTIMES=${lib.concatStringsSep ";" targetRuntimes}"
+  ] ++ lib.optionals (targetDir == "runtimes") [
+    # https://github.com/llvm/llvm-project/issues/98440
+    "-DCXX_SUPPORTS_NOSTDLIBXX_FLAG=OFF"
   ] ++ lib.optionals finalAttrs.passthru.isLLVM [
     "-DLLVM_INSTALL_UTILS=ON"
     "-DLLVM_INSTALL_GTEST=ON"

@@ -34,9 +34,6 @@ callPackage ../base.nix rec {
 
     # ???? `ld: cannot find crti.o: No such file or directory` linker issue?
     rm test/Interpreter/dynamic-library.cpp
-
-    # `fatal error: 'stdio.h' file not found`
-    rm test/OpenMP/amdgcn_emit_llvm.c
   '';
 
   extraPostInstall = ''
