@@ -11,7 +11,7 @@
 , makeWrapper
 , nftables
 , nss
-, openssl_3_2
+, openssl_3_3
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     dbus
     gtk3
     libpcap
-    openssl_3_2
+    openssl_3_3
     nss
     stdenv.cc.cc.lib
   ];
