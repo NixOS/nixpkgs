@@ -66,12 +66,7 @@ makeScopeWithSplicing' {
   # macOS 12.3 SDK
   apple_sdk_12_3 = pkgs.callPackage ../os-specific/darwin/apple-sdk-12.3 { };
 
-  # Pick an SDK
-  apple_sdk = {
-    "10.12" = apple_sdk_10_12;
-    "11.0" = apple_sdk_11_0;
-  }.${stdenv.hostPlatform.darwinSdkVersion}
-  or (throw "Unsupported sdk: ${stdenv.hostPlatform.darwinSdkVersion}");
+  apple_sdk = apple_sdk_11_0;
 
   stubs = {
     inherit apple_sdk apple_sdk_10_12 apple_sdk_11_0 apple_sdk_12_3;
