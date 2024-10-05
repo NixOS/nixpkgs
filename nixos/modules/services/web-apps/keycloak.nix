@@ -351,35 +351,12 @@ in
                 for more information about hostname configuration.
               '';
             };
-
-            proxy = mkOption {
-              type = enum [ "edge" "reencrypt" "passthrough" "none" ];
-              default = "none";
-              example = "edge";
-              description = ''
-                The proxy address forwarding mode if the server is
-                behind a reverse proxy.
-
-                - `edge`:
-                  Enables communication through HTTP between the
-                  proxy and Keycloak.
-                - `reencrypt`:
-                  Requires communication through HTTPS between the
-                  proxy and Keycloak.
-                - `passthrough`:
-                  Enables communication through HTTP or HTTPS between
-                  the proxy and Keycloak.
-
-                See <https://www.keycloak.org/server/reverseproxy> for more information.
-              '';
-            };
           };
         };
 
         example = literalExpression ''
           {
             hostname = "keycloak.example.com";
-            proxy = "reencrypt";
             https-key-store-file = "/path/to/file";
             https-key-store-password = { _secret = "/run/keys/store_password"; };
           }
@@ -495,6 +472,16 @@ in
               The option `services.keycloak.settings.hostname-strict-backchannel' has been removed.
               Set `services.keycloak.settings.hostname-backchannel-dynamic' instead.
               See [New Hostname options](https://www.keycloak.org/docs/25.0.0/upgrading/#new-hostname-options) for details.
+            '';
+          }
+          {
+            assertion = cfg.settings.proxy or null == null;
+            message = ''
+              The option `services.keycloak.settings.proxy' has been removed.
+              Set `services.keycloak.settings.proxy-headers` in combination
+              with other hostname options as needed instead.
+              See [Proxy option removed](https://www.keycloak.org/docs/latest/upgrading/index.html#proxy-option-removed)
+              for more information.
             '';
           }
         ];
