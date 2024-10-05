@@ -1,5 +1,5 @@
 { lib
-, flutter322
+, flutter324
 , python3
 , fetchFromGitHub
 , pcre2
@@ -11,15 +11,15 @@
 , removeReferencesTo
 }:
 
-flutter322.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "7.0.1";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    hash = "sha256-7FgZZCaafjNUaniPWVtba57zFABIJnLOw4GpyMsegKQ=";
+    hash = "sha256-sAs/tglLt1igovtfs07+7G5/xeMcQgfR9G4b7VzyDVY=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
@@ -34,9 +34,6 @@ flutter322.buildFlutterApplication rec {
 
     substituteInPlace linux/CMakeLists.txt \
       --replace-fail "../build/linux/helper" "${passthru.helper}/libexec/helper"
-
-    substituteInPlace linux/my_application.cc \
-      --replace-fail "gtk_widget_realize(GTK_WIDGET(window));" "gtk_widget_show(GTK_WIDGET(window));"
   '';
 
   preInstall = ''
