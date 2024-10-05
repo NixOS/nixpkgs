@@ -10,7 +10,7 @@
 , perl
 , clang
 , hip-common
-, hipcc
+, llvm
 , rocm-device-libs
 , rocm-comgr
 , rocm-runtime
@@ -79,7 +79,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCLR_BUILD_HIP=ON"
     "-DCLR_BUILD_OCL=ON"
     "-DHIP_COMMON_DIR=${hip-common}"
-    "-DHIPCC_BIN_DIR=${hipcc}/bin"
+    "-DHIPCC_BIN_DIR=${llvm}/bin"
     "-DHIP_PLATFORM=amd"
     "-DPROF_API_HEADER_PATH=${roctracer.src}/inc/ext"
     "-DROCM_PATH=${rocminfo}"
@@ -137,9 +137,6 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     patchShebangs $out/bin
-
-    # hipcc.bin and hipconfig.bin is mysteriously never installed
-    cp -a ${hipcc}/bin/{hipcc.bin,hipconfig.bin} $out/bin
 
     wrapProgram $out/bin/hipcc.bin ${lib.concatStringsSep " " wrapperArgs}
     wrapProgram $out/bin/hipconfig.bin ${lib.concatStringsSep " " wrapperArgs}
