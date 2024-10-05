@@ -7428,9 +7428,7 @@ with pkgs;
 
   fcitx5-mozc = callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix { };
 
-  fcitx5-mozc-ut = callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix {
-    mozc = mozc-ut;
-  };
+  fcitx5-mozc-ut = fcitx5-mozc.override { mozc = mozc-ut; };
 
   fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 

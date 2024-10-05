@@ -1,129 +1,145 @@
-{ lib, clangStdenv, fetchFromGitHub, fetchurl, fetchpatch
-, python3Packages, ninja, pkg-config, protobuf, zinnia, qt5, fcitx5
-, jsoncpp, gtest, which, gtk2, unzip, abseil-cpp, breakpad, nixosTests }:
-let
-  inherit (python3Packages) python gyp six;
-  utdic = fetchurl {
-    url = "https://osdn.net/downloads/users/39/39056/mozcdic-ut-20220904.tar.bz2";
-    sha256 = "sha256-pmLBCcw2Zsirzl1PjYkviRIZoyfUz5rpESeABDxuhtU=";
-  };
-  japanese_usage_dictionary = fetchFromGitHub {
-    owner = "hiroyuki-komatsu";
-    repo = "japanese-usage-dictionary";
-    rev = "e5b3425575734c323e1d947009dd74709437b684";
-    sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
-  };
-  zipcode_rel = "202011";
-  jigyosyo = fetchurl {
-    url = "https://osdn.net/projects/ponsfoot-aur/storage/mozc/jigyosyo-${zipcode_rel}.zip";
-    sha256 = "j7MkNtd4+QTi91EreVig4/OV0o5y1+KIjEJBEmLK/mY=";
-  };
-  x-ken-all = fetchurl {
-    url =
-      "https://osdn.net/projects/ponsfoot-aur/storage/mozc/x-ken-all-${zipcode_rel}.zip";
-    sha256 = "ExS0Cg3rs0I9IOVbZHLt8UEfk8/LmY9oAHPVVlYuTPw=";
-  };
+{
+  bazel_7,
+  buildBazelPackage,
+  fcitx5,
+  fetchFromGitHub,
+  gettext,
+  lib,
+  mozc,
+  nixosTests,
+  pkg-config,
+  python3,
+  unzip,
+}:
 
-in clangStdenv.mkDerivation {
+buildBazelPackage {
   pname = "fcitx5-mozc";
-  version = "2.26.4220.102";
+  version = "2.30.5544.102";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "mozc";
-    rev = "1882e33b61673b66d63277f82b4c80ae4e506c10";
-    sha256 = "R+w0slVFpqtt7PIr1pyupJjRoQsABVZiMdZ9fKGKAqw=";
+    fetchSubmodules = true;
+    rev = "57e67f2a25e4c0861e0e422da0c7d4c232d89fcc";
+    hash = "sha256-1EZjEbMl+LRipH5gEgFpaKP8uEKPfupHmiiTNJc/T1k=";
   };
 
-  nativeBuildInputs = [ gyp ninja python pkg-config qt5.wrapQtAppsHook six which unzip ];
+  sourceRoot = "source/src";
 
-  buildInputs = [ protobuf zinnia qt5.qtbase fcitx5 abseil-cpp jsoncpp gtest gtk2 ];
-
-  patches = [
-    # Support linking system abseil-cpp
-    (fetchpatch {
-      url = "https://salsa.debian.org/debian/mozc/-/raw/debian/sid/debian/patches/0007-Update-src-base-absl.gyp.patch";
-      sha256 = "UiS0UScDKyAusXOhc7Bg8dF8ARQQiVTylEhAOxqaZt8=";
-    })
-
+  nativeBuildInputs = [
+    gettext
+    pkg-config
+    python3
+    unzip
   ];
 
-  postUnpack = ''
-    unzip ${x-ken-all} -d $sourceRoot/src/
-    unzip ${jigyosyo} -d $sourceRoot/src/
-    mkdir $TMPDIR/unpack
-    tar xf ${utdic} -C $TMPDIR/unpack
-    cat $TMPDIR/unpack/mozcdic-ut-20220904/mozcdic-ut-20220904.txt >> $sourceRoot/src/data/dictionary_oss/dictionary00.txt
+  buildInputs = [
+    mozc
+    fcitx5
+  ];
 
-    rmdir $sourceRoot/src/third_party/breakpad/
-    ln -s ${breakpad} $sourceRoot/src/third_party/breakpad
-    rmdir $sourceRoot/src/third_party/gtest/
-    ln -s ${gtest} $sourceRoot/src/third_party/gtest
-    rmdir $sourceRoot/src/third_party/gyp/
-    ln -s ${gyp} $sourceRoot/src/third_party/gyp
-    rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/
-    ln -s ${japanese_usage_dictionary} $sourceRoot/src/third_party/japanese_usage_dictionary
+  postPatch = ''
+    sed -i -e 's|^\(LINUX_MOZC_SERVER_DIR = \).\+|\1"${mozc}/lib/mozc"|' config.bzl
   '';
 
-  # Copied from https://github.com/archlinux/svntogit-community/blob/packages/fcitx5-mozc/trunk/PKGBUILD
-  configurePhase = ''
-    cd src
-    export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1 use_libabseil=1"
+  bazel = bazel_7;
+  removeRulesCC = false;
+  dontAddBazelOpts = true;
 
-    # disable fcitx4
-    rm unix/fcitx/fcitx.gyp
+  bazelFlags = [
+    "--config"
+    "oss_linux"
+    "--compilation_mode"
+    "opt"
+  ];
 
-    # gen zip code seed
-    PYTHONPATH="$PWD:$PYTHONPATH" python dictionary/gen_zip_code_seed.py --zip_code="x-ken-all.csv" --jigyosyo="JIGYOSYO.CSV" >> data/dictionary_oss/dictionary09.txt
+  bazelTargets = [
+    "unix/fcitx5:fcitx5-mozc.so"
+    "unix/icons"
+  ];
 
-    # use libstdc++ instead of libc++
-    sed "/stdlib=libc++/d;/-lc++/d" -i gyp/common.gypi
+  fetchAttrs = {
+    preInstall = ''
+      rm -rf $bazelOut/external/fcitx5
+    '';
 
-    # run gyp
-    python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc
-  '';
+    sha256 = "sha256-wz2lJckr7Pu4jtoejjFv8LdjVO2+ferrS473M4jc86I=";
+  };
 
-  buildPhase = ''
-    runHook preBuild
+  buildAttrs = {
+    installPhase = ''
+      runHook preInstall
 
-    python build_mozc.py build -c Release \
-      server/server.gyp:mozc_server \
-      gui/gui.gyp:mozc_tool \
-      unix/fcitx5/fcitx5.gyp:fcitx5-mozc
+      install -Dm444 ../LICENSE $out/share/licenses/fcitx5-mozc/LICENSE
+      install -Dm444 data/installer/credits_en.html $out/share/licenses/fcitx5-mozc/Submodules
 
-    runHook postBuild
-  '';
+      install -Dm555 bazel-bin/unix/fcitx5/fcitx5-mozc.so $out/lib/fcitx5/fcitx5-mozc.so
+      install -Dm444 unix/fcitx5/mozc-addon.conf $out/share/fcitx5/addon/mozc.conf
+      install -Dm444 unix/fcitx5/mozc.conf $out/share/fcitx5/inputmethod/mozc.conf
 
-  installPhase = ''
-    runHook preInstall
+      for pofile in unix/fcitx5/po/*.po; do
+        filename=$(basename $pofile)
+        lang=''${filename/.po/}
+        mofile=''${pofile/.po/.mo}
+        msgfmt $pofile -o $mofile
+        install -Dm444 $mofile $out/share/locale/$lang/LC_MESSAGES/fcitx5-mozc.mo
+      done
 
-    export PREFIX=$out
-    export _bldtype=Release
-    ../scripts/install_server
-    install -d $out/share/licenses/fcitx5-mozc
-    head -n 29 server/mozc_server.cc > $out/share/licenses/fcitx5-mozc/LICENSE
-    install -m644 data/installer/*.html $out/share/licenses/fcitx5-mozc/
-    install -d $out/share/fcitx5/addon
-    install -d $out/share/fcitx5/inputmethod
-    install -d $out/lib/fcitx5
-    ../scripts/install_fcitx5
+      msgfmt --xml -d unix/fcitx5/po/ --template unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml.in -o unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
+      install -Dm444 unix/fcitx5/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml $out/share/metainfo/org.fcitx.Fcitx5.Addon.Mozc.metainfo.xml
 
-    runHook postInstall
-  '';
+      cd bazel-bin/unix
 
-  preFixup = ''
-    wrapQtApp $out/lib/mozc/mozc_tool
-  '';
+      unzip -o icons.zip
+
+      # These are relative symlinks, they will always resolve to files within $out
+
+      install -Dm444 mozc.png $out/share/icons/hicolor/128x128/apps/org.fcitx.Fcitx5.fcitx_mozc.png
+      ln -s org.fcitx.Fcitx5.fcitx_mozc.png $out/share/icons/hicolor/128x128/apps/fcitx_mozc.png
+
+      for svg in \
+        alpha_full.svg \
+        alpha_half.svg \
+        direct.svg \
+        hiragana.svg \
+        katakana_full.svg \
+        katakana_half.svg \
+        outlined/dictionary.svg \
+        outlined/properties.svg \
+        outlined/tool.svg
+      do
+        name=$(basename -- $svg)
+        path=$out/share/icons/hicolor/scalable/apps
+        prefix=org.fcitx.Fcitx5.fcitx_mozc
+
+        install -Dm444 $svg $path/$prefix_$name
+        ln -s $prefix_$name $path/fcitx_mozc_$name
+      done
+
+      runHook postInstall
+    '';
+  };
 
   passthru.tests = {
     inherit (nixosTests) fcitx5;
   };
 
   meta = with lib; {
-    description = "Fcitx5 Module of A Japanese Input Method for Chromium OS, Windows, Mac and Linux (the Open Source Edition of Google Japanese Input)";
+    description = "Mozc - a Japanese Input Method Editor designed for multi-platform";
     homepage = "https://github.com/fcitx/mozc";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ berberman govanify ];
+    license = with licenses; [
+      asl20 # abseil-cpp
+      bsd3 # mozc, breakpad, gtest, gyp, japanese-usage-dictionary, protobuf
+      mit # wil
+      naist-2003 # IPAdic
+      publicDomain # src/data/test/stress_test, Okinawa dictionary
+      unicode-30 # src/data/unicode, breakpad
+    ];
+    maintainers = with maintainers; [
+      berberman
+      govanify
+      musjj
+    ];
     platforms = platforms.linux;
   };
 }
