@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, lib, zlib, pcre
-, memorymappingHook, memstreamHook
+, memorymappingHook
 , gnutls
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib pcre gnutls ]
-    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook memstreamHook ];
+    ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memorymappingHook ];
 
   preConfigure = ''
     cd src
