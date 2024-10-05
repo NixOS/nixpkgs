@@ -34,7 +34,7 @@ let
 
   pypkgs = with python3.pkgs; makePythonPath [ pyparsing ];
 
-in runCommand "systemtap-${kernel.version}-${version}" {
+in runCommand "systemtap-${version}" {
   inherit stapBuild;
   nativeBuildInputs = [ makeWrapper ];
   passthru.tests = { inherit (nixosTests.systemtap) linux_default linux_latest; };
