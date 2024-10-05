@@ -145,7 +145,9 @@ stdenv.mkDerivation (finalAttrs: {
   __structuredAttrs = true;
 
   passthru = {
-    xcbuild = lib.warn "xcbuild.xcbuild is deprecated and will be removed; use xcbuild instead." finalAttrs.finalPackage;
+    xcbuild =
+      # lib.warn "xcbuild.xcbuild is deprecated and will be removed; use xcbuild instead."
+      finalAttrs.finalPackage;
   };
 
   meta = {
