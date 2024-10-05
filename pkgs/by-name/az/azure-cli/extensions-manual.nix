@@ -31,6 +31,33 @@
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
 
+  azure-iot = mkAzExtension rec {
+    pname = "azure-iot";
+    description = "The Azure IoT extension for Azure CLI.";
+    version = "0.25.0";
+    url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
+    sha256 = "7db4bc07667efa8472513d9e121fb2551fcaeae68255c7bc0768ad4177c1b1c6";
+    propagatedBuildInputs = (
+      with python3Packages;
+      [
+        azure-core
+        azure-identity
+        azure-iot-device
+        azure-mgmt-core
+        azure-storage-blob
+        jsonschema
+        msrest
+        msrestazure
+        packaging
+        tomli
+        tomli-w
+        tqdm
+        treelib
+      ]
+    );
+    meta.maintainers = with lib.maintainers; [ mikut ];
+  };
+
   containerapp = mkAzExtension rec {
     pname = "containerapp";
     version = "1.0.0b1";
@@ -83,7 +110,6 @@
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
-
 }
 // lib.optionalAttrs config.allowAliases {
   # Removed extensions
