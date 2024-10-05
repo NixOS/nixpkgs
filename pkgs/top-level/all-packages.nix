@@ -14586,7 +14586,6 @@ with pkgs;
   flutter = flutterPackages.stable;
   flutter324 = flutterPackages.v3_24;
   flutter323 = flutterPackages.v3_23;
-  flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
 
   fnm = callPackage ../development/tools/fnm {
