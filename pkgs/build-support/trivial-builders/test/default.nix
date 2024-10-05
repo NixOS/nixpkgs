@@ -33,4 +33,7 @@ recurseIntoAttrs {
     inherit (references) samples;
   };
   writeTextFile = callPackage ./write-text-file.nix {};
+  manualTesting = lib.dontRecurseIntoAttrs {
+    addTmateBreakpoint = callPackage ./addTmateBreakpoint.nix {};
+  };
 }
