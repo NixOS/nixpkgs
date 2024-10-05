@@ -5272,8 +5272,6 @@ self: super: with self; {
 
   google-re2 = callPackage ../development/python-modules/google-re2 { };
 
-  google-reauth = callPackage ../development/python-modules/google-reauth { };
-
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
   google-search-results = callPackage ../development/python-modules/google-search-results { };
