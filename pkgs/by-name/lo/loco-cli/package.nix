@@ -1,23 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "loco-cli";
-  version = "0.2.6";
+  version = "0.2.9";
 
-  src = fetchFromGitHub {
-    owner = "loco-rs";
-    repo = "loco";
-    rev = "51e0362";
-    hash = "sha256-ZiAl+Ru2ggLy7RRqQySwKRbWtGesR7ZgREIpHKrJ00Q=";
-    sparseCheckout = [ "loco-cli" ];
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-AhL+k5XEf8m1pyOECTlPwALUG/ELJeACfV2kulxlzaA=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoHash = "sha256-BtunTti1cPbG1Qiv39tLdbXHM413UzsCckyqL5CJEUA=";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
-
-  sourceRoot = "${src.name}/loco-cli";
+  #Skip trycmd integration tests
+  checkFlags = [ "--skip=cli_tests" ];
 
   meta = with lib; {
     mainProgram = "loco";
