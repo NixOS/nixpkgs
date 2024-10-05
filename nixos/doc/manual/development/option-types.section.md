@@ -687,6 +687,9 @@ The only required parameter is `name`.
     Note: There is a generic `defaultTypeMerge` that work with most of
     value and composed types.
 
+    Note: This is to define the type merge behavior. To merge types, use
+    `lib.types.mergeTypes`.
+
 `functor`
 
 :   An attribute set representing the type. It is used for type
