@@ -53,7 +53,7 @@ mkAppleDerivation (finalAttrs: {
   # `gperf` is used to generate a lookup table from module to ops functions.
   nativeBuildInputs = lib.optionals hostPlatform.isStatic [ gperf ];
 
-  mesonFlags = [ (lib.mesonBool "tests" finalAttrs.doInstallCheck) ];
+  mesonFlags = [ (lib.mesonBool "tests" finalAttrs.finalPackage.doInstallCheck) ];
 
   postBuild =
     # Add `libcharset.a` contents to `libiconv.a` to duplicate the reexport from `libiconv.dylib`.
@@ -90,7 +90,7 @@ mkAppleDerivation (finalAttrs: {
     license = [
       lib.licenses.bsd2
       lib.licenses.bsd3
-    ] ++ lib.optional finalAttrs.doInstallCheck lib.licenses.apple-psl10;
+    ] ++ lib.optional finalAttrs.finalPackage.doInstallCheck lib.licenses.apple-psl10;
     mainProgram = "iconv";
   };
 })
