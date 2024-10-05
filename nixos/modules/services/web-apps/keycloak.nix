@@ -249,12 +249,14 @@ in
       package = mkPackageOption pkgs "keycloak" { };
 
       initialAdminPassword = mkOption {
-        type = str;
-        default = "changeme";
+        type = nullOr str;
+        default = null;
         description = ''
-          Initial password set for the `admin`
-          user. The password is not stored safely and should be changed
+          Initial password set for the temporary `admin` user.
+          The password is not stored safely and should be changed
           immediately in the admin panel.
+
+          See [Admin bootstrap and recovery](https://www.keycloak.org/server/bootstrap-admin-recovery) for details.
         '';
       };
 
@@ -620,6 +622,9 @@ in
             environment = {
               KC_HOME_DIR = "/run/keycloak";
               KC_CONF_DIR = "/run/keycloak/conf";
+            } // lib.optionalAttrs (cfg.initialAdminPassword != null) {
+              KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
+              KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
             };
             serviceConfig = {
               LoadCredential =
@@ -660,8 +665,6 @@ in
               mkdir -p /run/keycloak/ssl
               cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
             '' + ''
-              export KC_BOOTSTRAP_ADMIN_USERNAME=admin
-              export KC_BOOTSTRAP_ADMIN_PASSWORD=${escapeShellArg cfg.initialAdminPassword}
               kc.sh --verbose start --optimized
             '';
           };
