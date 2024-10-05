@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, gcc13Stdenv
 , fetchFromGitHub
 , rocmUpdateScript
 , nameSuffix
@@ -46,12 +45,12 @@
 , isBroken ? false
 }:
 
-let stdenv' = stdenv; in
-let stdenv =
-      if stdenv'.cc.isGNU && lib.versionOlder stdenv'.cc.cc.version "13.0"
-      then gcc13Stdenv
-      else stdenv';
-in
+#let stdenv' = stdenv; in
+#let stdenv =
+#      if stdenv'.cc.isGNU && lib.versionOlder stdenv'.cc.cc.version "13.0"
+#      then gcc13Stdenv
+#      else stdenv';
+#in
 
 let
   llvmNativeTarget =
