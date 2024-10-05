@@ -1,6 +1,5 @@
 { lib, stdenv
 , fetchurl
-, fetchpatch
 , pkg-config
 , removeReferencesTo
 , zlib
@@ -24,42 +23,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
-  version = "2.4.10";
+  version = "2.4.11";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "sha256-11dXwrwPeiiwLuTVLKnksaoboq/+FrmFhU9TNpQOWtc=";
+    hash = "sha256-moj+HaOimpF8P8Z85usxeDmdaOGlSMbYbHDZsTZR/XE=";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2024-47175_0.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/9939a70b750edd9d05270060cc5cf62ca98cfbe5.patch";
-      hash = "sha256-Nt6/JwoaHkzFxCl1BuXOQRfki8Oquk2rIwvw7qekTQI=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-47175_1.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/04bb2af4521b56c1699a2c2431c56c05a7102e69.patch";
-      hash = "sha256-ZyvVAv96pK6ldSQf5IOiIXk8xYeNJOWNHX0S5pyn6pw=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-47175_2.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/e0630cd18f76340d302000f2bf6516e99602b844.patch";
-      hash = "sha256-uDUOIwkRGZo+XXheDt+HGsXujtEJ3b4o5yNWdnz5uIY=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-47175_3.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/1e6ca5913eceee906038bc04cc7ccfbe2923bdfd.patch";
-      hash = "sha256-SiYUsa+DUNPua0/r/rvzzRAYra2AP49ImbyWG5RnCI0=";
-    })
-    (fetchpatch {
-      name = "CVE-2024-47175_4.patch";
-      url = "https://github.com/OpenPrinting/cups/commit/2abe1ba8a66864aa82cd9836b37e57103b8e1a3b.patch";
-      hash = "sha256-oeZ3nNmPMkusxZhmmKOCcD/AD+QzkVE8acNXapGK/Ew=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace cups/testfile.c \
