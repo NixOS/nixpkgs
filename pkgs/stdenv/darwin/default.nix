@@ -28,14 +28,7 @@ assert crossSystem == localSystem;
 let
   inherit (localSystem) system;
 
-  sdkMajorVersion =
-    let
-      inherit (localSystem) darwinSdkVersion;
-    in
-    if lib.versionOlder darwinSdkVersion "11" then
-      lib.versions.majorMinor darwinSdkVersion
-    else
-      lib.versions.major darwinSdkVersion;
+  sdkMajorVersion = lib.versions.major localSystem.darwinSdkVersion;
 
   commonImpureHostDeps = [
     "/bin/sh"
