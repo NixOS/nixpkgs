@@ -159,6 +159,7 @@ in
     dependencies = with self; [
       dressing-nvim
       nui-nvim
+      nvim-treesitter
       plenary-nvim
     ];
   };
