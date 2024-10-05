@@ -1,6 +1,5 @@
 {
   lib,
-  apple-sdk_11,
   apple-sdk_15,
   bison,
   bluez,
@@ -109,8 +108,6 @@ mkAppleDerivation {
     bison
     flex
   ] ++ lib.optionals withBluez [ bluez.dev ];
-
-  buildInputs = [ apple-sdk_11 ];
 
   meta = {
     description = "Packet Capture Library (with Apple modifications)";
