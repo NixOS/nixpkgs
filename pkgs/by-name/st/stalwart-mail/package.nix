@@ -26,7 +26,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.10.0";
+  version = "0.10.2";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -36,21 +36,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9qk7+LJntEmCIuxp0707OOHBVkywlAJA1QmWllR9ZHg=";
+    hash = "sha256-wH26uwaYzfqiamiJ/oosVEiTfCOItwVGbHdRh6Ykpgk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-O1LuEHH5VD/6875Psfp5N/oWYlo1cuTlHzwcgG9RrpI=";
-
-  patches = [
-    # Remove "PermissionsStartOnly" from systemd service files,
-    # which is deprecated and conflicts with our module's ExecPreStart.
-    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
-    (fetchpatch {
-      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
-      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
-    })
-  ];
+  cargoHash = "sha256-1AFDyZpkcvFzWBczMAPfajmhBmVl4ou4JdKnrK2KlQI=";
 
   nativeBuildInputs = [
     pkg-config
