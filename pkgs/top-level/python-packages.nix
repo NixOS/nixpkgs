@@ -13587,6 +13587,8 @@ self: super: with self; {
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
 
+  requests-unixsocket2 = callPackage ../development/python-modules/requests-unixsocket2 { };
+
   requests-wsgi-adapter = callPackage ../development/python-modules/requests-wsgi-adapter { };
 
   requirements-detector = callPackage ../development/python-modules/requirements-detector { };
