@@ -21,6 +21,7 @@
 , udev
 , SDL2
 , SDL2_mixer
+, fontconfig
 }:
 
 buildDotnetModule rec {
@@ -50,6 +51,7 @@ buildDotnetModule rec {
     vulkan-loader
     ffmpeg
     udev
+    fontconfig
 
     # Avalonia UI
     glew
