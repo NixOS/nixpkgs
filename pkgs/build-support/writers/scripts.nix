@@ -652,6 +652,53 @@ rec {
   writeHaskellBin = name: writeHaskell "/bin/${name}";
 
   /**
+    writeNim takes a name, an attrset with an optional Nim compiler, and some
+    Nim source code, returning an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNim` usage example
+
+    ```nix
+      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+        echo "hello nim"
+      '';
+    ```
+    :::
+  */
+  writeNim =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      nim ? pkgs.nim2,
+      nimCompileOptions ? { },
+      strip ? true,
+    }:
+    let
+      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+        {
+          d = "release";
+          nimcache = ".";
+        }
+        // nimCompileOptions
+      );
+    in
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.nim
+        ${lib.getExe nim} compile ${nimCompileCmdArgs} tmp.nim
+        mv tmp $out
+      '';
+      inherit makeWrapperArgs strip;
+    } name;
+
+  /**
+    writeNimBin takes the same arguments as writeNim but outputs a directory
+    (like writeScriptBin)
+  */
+  writeNimBin = name: writeNim "/bin/${name}";
+
+  /**
     Like writeScript but the first line is a shebang to nu
 
     Can be called with or without extra arguments.
