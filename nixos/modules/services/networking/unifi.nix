@@ -1,4 +1,4 @@
-{ config, options, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.services.unifi;
   stateDir = "/var/lib/unifi";
@@ -128,16 +128,15 @@ in
         Type = "simple";
         ExecStart = "${cmd} start";
         ExecStop = "${cmd} stop";
+        # Send the signal to the main process so it can clean up its child processes.
+        KillMode = "mixed";
+        # 0 and SIGTERM (143 from bash) indicate successful exit.
+        SuccessExitStatus = 143;
         Restart = "on-failure";
-        TimeoutSec = "5min";
+        TimeoutSec = lib.mkDefault 30;
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";
-        # the stop command exits while the main process is still running, and unifi
-        # wants to manage its own child processes. this means we have to set KillSignal
-        # to something the main process ignores, otherwise every stop will have unifi.service
-        # fail with SIGTERM status.
-        KillSignal = "SIGCONT";
 
         # Hardening
         AmbientCapabilities = "";
