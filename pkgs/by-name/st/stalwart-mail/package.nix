@@ -162,6 +162,7 @@ rustPlatform.buildRustPackage {
       happysalada
       onny
       oddlama
+      pandapip1
     ];
   };
 }
