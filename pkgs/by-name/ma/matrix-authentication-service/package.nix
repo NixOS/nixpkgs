@@ -99,8 +99,5 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ teutat3s ];
     mainProgram = "mas-cli";
-    # Note: broken on x86_64-darwin because of aligned_alloc, can be revisited after
-    # https://github.com/NixOS/nixpkgs/pull/346043 is merged
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

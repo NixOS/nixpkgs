@@ -56,12 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
     "tools"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.cc.isClang [
-      "-faligned-allocation"
-    ]
-  );
-
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
