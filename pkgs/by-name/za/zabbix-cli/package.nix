@@ -69,6 +69,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/unioslo/zabbix-cli";
     license = licenses.gpl3Plus;
     mainProgram = "zabbix-cli";
-    maintainers = [ ];
+    maintainers = [ maintainers.anthonyroussel ];
   };
 }
