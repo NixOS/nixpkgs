@@ -283,7 +283,9 @@ with pkgs;
 
   fission = callPackage ../development/tools/fission { };
 
-  apko = callPackage ../development/tools/apko { };
+  apko = callPackage ../development/tools/apko {
+    buildGoModule = buildGo123Module;
+  };
 
   melange = callPackage ../development/tools/melange { };
 
