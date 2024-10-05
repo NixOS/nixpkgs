@@ -3153,8 +3153,6 @@ with pkgs;
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
-  awsebcli = callPackage ../tools/virtualization/awsebcli { };
-
   awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
 
   awslogs = callPackage ../tools/admin/awslogs { };

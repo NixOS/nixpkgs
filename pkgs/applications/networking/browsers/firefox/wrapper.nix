@@ -50,7 +50,7 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
     }:
 

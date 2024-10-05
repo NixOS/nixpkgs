@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "stc";
-  version = "1.5";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "tenox7";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Hv8md27LUB/d1MNqNEw7UX7r3tMYdguuGP3xOI2LWBk=";
+    sha256 = "sha256-QdU480at8VvuHpYmEKagnBotjM7ikOsVLJeedJ2qtjw=";
   };
 
   vendorHash = "sha256-TnWCviLstm6kS34cNkrVGS9RZ21cVX/jmx8d+KytB0c=";
