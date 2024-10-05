@@ -7609,6 +7609,8 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
+  manifold3d = callPackage ../development/python-modules/manifold3d { };
+
   manifestoo = callPackage ../development/python-modules/manifestoo { };
 
   manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
