@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "maddy";
-  version = "0.7.1";
+  version = "unstable-2024-02-14";
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
-    rev = "v${version}";
-    sha256 = "sha256-jVlIjeBvxc82GQn8vW2RqcAErxZqftGj32d+IbBxQxY=";
+    rev = "1d6cd8c35f4c4a1279084ae974ecfcf73a426743";
+    hash = "sha256-wfeWbdMfxlYtLMj+xrgBORfs/MdcaM3tncpNSXi1K9E=";
   };
 
-  vendorHash = "sha256-bSBk68w6T/Wy5klj5oC/ZW5TqDESG3mW9cIQ3auNmCk=";
+  vendorHash = "sha256-Jmo8y4qZYvrk7gpsWpesBw0T2IW5Bb+Irs3ExW/DjUs=";
 
   tags = [ "libpam" ];
 
@@ -44,15 +44,13 @@ buildGoModule rec {
     mkdir -p $out/lib/systemd/system
 
     substitute dist/systemd/maddy.service $out/lib/systemd/system/maddy.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
 
     substitute dist/systemd/maddy@.service $out/lib/systemd/system/maddy@.service \
-      --replace "/usr/local/bin/maddy" "$out/bin/maddy" \
-      --replace "/bin/kill" "${coreutils}/bin/kill"
+      --replace-fail "/usr/local/bin/maddy" "$out/bin/maddy" \
+      --replace-fail "/bin/kill" "${coreutils}/bin/kill"
   '';
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=strict-prototypes";
 
   passthru.tests.nixos = nixosTests.maddy;
 
@@ -60,6 +58,6 @@ buildGoModule rec {
     description = "Composable all-in-one mail server";
     homepage = "https://maddy.email";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [ nickcao onny ];
   };
 }
