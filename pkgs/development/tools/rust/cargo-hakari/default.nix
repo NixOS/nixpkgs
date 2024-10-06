@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     "cargo-hakari"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Manage workspace-hack packages to speed up builds in large workspaces";
     mainProgram = "cargo-hakari";
     longDescription = ''
@@ -36,11 +36,11 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://crates.io/crates/cargo-hakari";
     changelog = "https://github.com/guppy-rs/guppy/blob/cargo-hakari-${version}/tools/cargo-hakari/CHANGELOG.md";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       macalinao
     ];
