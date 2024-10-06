@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.9";
+  version = "1.2.10";
 
   strictDeps = true;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9k7NMw2M6IqCUQNBekzDaS6VYAOKwPmuCfJkENQ7oiI=";
+    hash = "sha256-5hc+bnsyc8Am9My2kzsU7fv+1CePCHgxL82Mxz/zJRo=";
   };
 
   postPatch = ''
@@ -91,6 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Link glslang source because MoltenVK needs non-public headers to build.
     mkdir -p build/include
     ln -s "${glslang.src}" "build/include/glslang"
+
+    # MoltenVK should be using SPIRV_CROSS_NAMESPACE instead of hardcoding the namespace.
+    substituteInPlace MoltenVK/MoltenVK/GPUObjects/MVKDescriptorSet.mm \
+      --replace-fail MVK_spirv_cross SPIRV_CROSS_NAMESPACE
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
