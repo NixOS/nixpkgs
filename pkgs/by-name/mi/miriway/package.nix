@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, nixosTests
-, cmake
-, pkg-config
-, mir
-, libxkbcommon
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  pkg-config,
+  mir,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
-  version = "0-unstable-2024-08-31";
+  version = "24.09";
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
-    rev = "2d754931f038865bd91938578b862262f0ce7c00";
-    hash = "sha256-wmtAbajZ859tvLjKuwqFUq05VGLxHNJX1XyIXM6vvgU=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-/0txc9ynC3rj9tbHwYNlDe2C1DlmjoE2Q2/uoBz2GFg=";
   };
 
   strictDeps = true;
@@ -33,14 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     providedSessions = [ "miriway" ];
     tests = {
       inherit (nixosTests) miriway;
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Mir based Wayland compositor";
     longDescription = ''
       Miriway is a starting point for creating a Wayland based desktop environment using Mir.
@@ -64,8 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
       enabling these in miriway-shell.config.
     '';
     homepage = "https://github.com/Miriway/Miriway";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ OPNA2608 ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    mainProgram = "miriway";
+    maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 })
