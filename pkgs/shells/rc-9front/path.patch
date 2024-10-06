@@ -7,7 +7,7 @@ index 7ccbe1b..691f493 100644
  if not {
  	finit
 -	if(~ $#path 0) path=(. /bin /usr/bin /usr/local/bin)
-+	if(~ $#path 0) path=`:{/usr/bin/env echo -n $PATH}
++	if(~ $#path 0) path=`:{COREUTILS/bin/env echo -n $PATH}
  }
  fn sigexit
  if(! ~ $#cflag 0){
