@@ -22,6 +22,13 @@
     };
     # Grows on first boot
     systemd.repart.partitions = { "10-root".repartConfig.Type = "root"; };
+    systemd.services.nix-store-load-db = {
+      wantedBy = [ "multi-user.target" ];
+      before = [ "nix-daemon.socket" ];
+      unitConfig.ConditionFirstBoot = true;
+      serviceConfig.ExecStart =
+        "nix-store --load-db < /nix/store/.registration";
+    };
     image.repart = {
       name = config.system.name;
       partitions = {
@@ -42,7 +49,15 @@
         };
         "10-root" = {
           storePaths = [ config.system.build.toplevel ];
-          contents = { "/etc/NIXOS".source = pkgs.writeText "NIXOS" ""; };
+          contents = {
+            # This is needed for nixos-enter to work
+            "/etc/NIXOS".source = pkgs.writeText "NIXOS" "";
+            "/nix/var/nix/profiles".source = pkgs.runCommand "profiles" { } ''
+              mkdir -p $out
+              ln -s ${config.system.build.toplevel} $out/system-1-link
+              ln -s /nix/var/nix/profiles/system-1-link $out/system
+            '';
+          };
           repartConfig = {
             Type = "root";
             Label = "root";
@@ -56,7 +71,8 @@
     system.build.finalImage = if config.image.amazon.type == "uefi" then
       config.system.build.image
     else
-      pkgs.vmTools.runInLinuxVM (pkgs.runCommand config.system.build.image.name {
+      pkgs.vmTools.runInLinuxVM
+      (pkgs.runCommand config.system.build.image.name {
         preVM = ''
           cp ${config.system.build.image}/${config.image.repart.imageFile} ${config.image.repart.imageFile}
           chmod u+w ${config.image.repart.imageFile}
@@ -78,12 +94,7 @@
         mount /dev/vda1 $mountPoint/boot
 
         export HOME=$TMPDIR
-
-        # make profile. Wish this was done outside of the VM
-        mkdir -p $mountPoint/nix/var/nix/profiles
-        ln -s ${config.system.build.toplevel} $mountPoint/nix/var/nix/profiles/system-1-link 
-        ln -s /nix/var/nix/profiles/system-1-link $mountPoint/nix/var/nix/profiles/system 
-        ls -l $mountPoint/nix/var/nix/profiles
+        ls -la $mountPoint/nix/var/nix/profiles
 
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- ${config.system.build.toplevel}/bin/switch-to-configuration boot
       '');
