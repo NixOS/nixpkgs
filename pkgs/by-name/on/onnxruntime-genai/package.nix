@@ -21,13 +21,14 @@
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
 , onnxruntime
+, onnxruntime-extensions
 , buildEnv
 , simdjson
 }@inputs:
 
 
 let
-  version = "0.2.0-rc4";
+  version = "0.4.0";
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
@@ -37,7 +38,12 @@ let
   cudaArchitectures = (builtins.map cudaPackages.cudaFlags.dropDot cudaCapabilities);
   cudaArchitecturesString = lib.strings.concatStringsSep ";" cudaArchitectures;
 
-  ort = buildEnv { name = "ort"; paths = [  onnxruntime  onnxruntime.dev ]; };
+  ort = buildEnv { name = "ort"; paths = [
+    onnxruntime
+    onnxruntime.dev
+    onnxruntime-extensions
+    onnxruntime-extensions.dev
+    ]; };
 in
 effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime-genai";
@@ -47,7 +53,7 @@ effectiveStdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "onnxruntime-genai";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BTVJSa4ltcy9sURQ/Q2ou9h3bLphh01va9bogoobxAs=";
+    hash = "sha256-Qegmt1RHaS8N342Dp0VFqUna12YfcWe47rxK//EVBOA=";
   };
 
   patches = [
@@ -57,6 +63,7 @@ effectiveStdenv.mkDerivation rec {
     # Context: we want the upstream to
     # - during nix build target directory doesn't have write permissions, so we do these actions in postBuild phase
     ./0001-dont-copy-files-into-wheel.patch
+    ./0002-update-link.patch
   ] ++ lib.optionals cudaSupport [
     # This patch is copied from onnxruntime main package
     # We apply the referenced 1064.patch ourselves to our nix dependency.
@@ -70,6 +77,7 @@ effectiveStdenv.mkDerivation rec {
     python3Packages.python
     protobuf_21
     ort
+    onnxruntime-extensions
     simdjson
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     pip
@@ -89,6 +97,7 @@ effectiveStdenv.mkDerivation rec {
     nlohmann_json
     microsoft-gsl
     ort
+    onnxruntime-extensions
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     numpy
     pybind11
@@ -126,12 +135,13 @@ effectiveStdenv.mkDerivation rec {
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
     "-DCMAKE_POSITION_INDEPENDENT_CODE=ON"
-    "-DBUILD_WHEEL=${if pythonSupport then "ON" else "OFF"}"
+    "-DENABLE_MODEL_BENCHMARK=OFF"
+    "-DENABLE_TESTS=OFF"
+    "-DENABLE_PYTHON=${if pythonSupport then "ON" else "OFF"}"
     "-DUSE_DML=OFF"
+    "-DUSE_ROCM=OFF"
     "-DORT_HOME=${ort}"
     (lib.cmakeBool "USE_CUDA" cudaSupport)
-    "-DFETCHCONTENT_SOURCE_DIR_SIMDJSON=${simdjson.src}"
-    "-DFETCHCONTENT_SOURCE_DIR_GSL=${microsoft-gsl.src}"
     "-DFETCHCONTENT_SOURCE_DIR_GOOGLETEST=${gtest.src}"
   ]
   ++ lib.optionals cudaSupport [
@@ -165,8 +175,9 @@ effectiveStdenv.mkDerivation rec {
   postBuild = lib.optionalString pythonSupport ''
     cd wheel
     chmod +w onnxruntime_genai
-    cp ../src/python/onnxruntime_genai.cpython-311-x86_64-linux-gnu.so onnxruntime_genai/
+    cp ../src/python/onnxruntime_genai.cpython-312-x86_64-linux-gnu.so onnxruntime_genai/
     cp $src/ThirdPartyNotices.txt onnxruntime_genai/
+    cp $src/src/python/package_description.md package_description.md
     ${python3Packages.python.interpreter} setup.py bdist_wheel
     cd ..
   '';
