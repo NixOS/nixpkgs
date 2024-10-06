@@ -95,10 +95,10 @@
         "src": {
             "owner": "libretro",
             "repo": "beetle-saturn-libretro",
-            "rev": "7a8f808a1d447fcb8fa9547d9f163eb3600d3086",
-            "hash": "sha256-Yp1HuhbsQGicrFeIbnJP6Rd6hVK4BRclUnPKZlYC7pM="
+            "rev": "3c12611c8cc13adaf2b82ca0a2e4862ebfd06753",
+            "hash": "sha256-9GyFloo+7mBA6C2p791P1+g0GfuFEKB2+3QSCz9gXmc="
         },
-        "version": "unstable-2024-05-19"
+        "version": "unstable-2024-10-01"
     },
     "beetle-supafaust": {
         "fetcher": "fetchFromGitHub",
