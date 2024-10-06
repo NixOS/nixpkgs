@@ -22,8 +22,6 @@ let
       extraName ? ""
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
-    # a limited RC script used only to generate the manifest for remote plugins
-    # , manifestRc ? null
     , withPython2 ? false
     , withPython3 ? true
     /* the function you would have passed to python3.withPackages */
@@ -77,6 +75,7 @@ let
 
     pluginRC = lib.foldl (acc: p: if p.config != null then acc ++ [p.config] else acc) []  pluginsNormalized;
 
+    # a limited RC script used only to generate the manifest for remote plugins
     manifestRc = vimUtils.vimrcContent { customRC = ""; };
     # we call vimrcContent without 'packages' to avoid the init.vim generation
     neovimRcContent' = vimUtils.vimrcContent {
