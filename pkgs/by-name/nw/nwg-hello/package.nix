@@ -55,6 +55,12 @@ python3Packages.buildPythonApplication rec {
     install -D -m 644 -t "$out/share/nwg-hello/" img/*
   '';
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   # Upstream has no tests
   doCheck = false;
   pythonImportsCheck = [ "nwg_hello" ];
