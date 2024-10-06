@@ -17,14 +17,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.0.5";
+  version = "2.0.6";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
     rev = "refs/tags/${version}";
-    hash = "sha256-BLLcU2GESyHGFJJicE42V3nMFf/YfnYsXcAOPIHuCAg=";
+    hash = "sha256-4c6pisd3o7mycivHd1QZ2N7s8pYzrQXiZMbVvl5ciPA=";
   };
 
   nativeBuildInputs = [
