@@ -1078,15 +1078,20 @@ let
 
         fold-dwim-org = ignoreCompilationError super.fold-dwim-org; # elisp error
 
-        # https://github.com/melpa/melpa/pull/9182
-        frontside-javascript = super.frontside-javascript.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --verbose packages/javascript/test-suppport.el
-            '';
-        });
+        frontside-javascript = super.frontside-javascript.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9182
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20240929.1858" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --verbose packages/javascript/test-suppport.el
+                ''
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         fxrd-mode = ignoreCompilationError super.fxrd-mode; # elisp error
 
