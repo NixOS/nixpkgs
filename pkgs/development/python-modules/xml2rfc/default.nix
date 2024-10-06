@@ -22,13 +22,14 @@
   pythonOlder,
   pyyaml,
   requests,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
   version = "3.23.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -45,7 +46,11 @@ buildPythonPackage rec {
       --replace-fail "test flaketest" "test"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "lxml" ];
+
+  dependencies = [
     appdirs
     configargparse
     dict2xml
