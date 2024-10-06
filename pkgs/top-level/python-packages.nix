@@ -10114,6 +10114,8 @@ self: super: with self; {
 
   propka = callPackage ../development/python-modules/propka { };
 
+  prosemirror = callPackage ../development/python-modules/prosemirror { };
+
   proxsuite = toPythonModule (pkgs.proxsuite.override { pythonSupport = true; python3Packages = self; });
 
   proxsuite-nlp = toPythonModule (pkgs.proxsuite-nlp.override { pythonSupport = true; python3Packages = self; });
