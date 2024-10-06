@@ -1,12 +1,14 @@
-{ lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
+{ lib, stdenv, fetchFromGitHub, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdfview";
-  version = "3.3.1";
+  version = "3.3.2";
 
-  src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/hdfview-${finalAttrs.version}/src/hdfview-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-WcGYceMOB8gCycJSW4KdApy2gIBgTnE/d0PxGZClUqg=";
+  src = fetchFromGitHub {
+    owner = "HDFGroup";
+    repo = "hdfview";
+    rev = "refs/tags/v${finalAttrs.version}";
+    sha256 = "sha256-aJHeknkF38qDH9l+vuzdKFZZTcs/XMjtlHuu/LTF124=";
   };
 
   patches = [
@@ -77,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
+    downloadPage = "https://github.com/HDFGroup/hdfview";
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "HDFView";
