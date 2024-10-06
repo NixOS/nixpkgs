@@ -25113,8 +25113,6 @@ with pkgs;
 
   rakkess = callPackage ../development/tools/rakkess { };
 
-  redis = callPackage ../servers/nosql/redis { };
-
   redli = callPackage ../tools/networking/redli { };
 
   redstore = callPackage ../servers/http/redstore { };
