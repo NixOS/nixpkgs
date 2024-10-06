@@ -141,6 +141,8 @@ rustPlatform.buildRustPackage {
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::auth::auth"
     # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::antispam::antispam"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
     "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
