@@ -1,13 +1,14 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nodejs
-, python3
-, runtimeShell
-, stdenv
-, testers
-, runme
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nodejs,
+  python3,
+  runtimeShell,
+  stdenv,
+  testers,
+  runme,
 }:
 
 buildGoModule rec {
