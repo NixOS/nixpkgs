@@ -24,6 +24,7 @@
 , python311Packages
 , runCommand  # for passthru.tests
 , spaceNavSupport ? stdenv.hostPlatform.isLinux
+, ifcSupport ? false
 , stdenv
 , swig
 , vtk
@@ -48,6 +49,7 @@ let
   inherit (python311Packages)
     boost
     gitpython
+    ifcopenshell
     matplotlib
     pivy
     ply
@@ -126,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals spaceNavSupport [
       libspnav
       qtx11extras
+    ]
+    ++ lib.optionals ifcSupport [
+      ifcopenshell
     ];
 
   patches = [
