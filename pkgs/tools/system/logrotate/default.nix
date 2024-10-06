@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, gzip, popt, autoreconfHook
-, aclSupport ? true, acl
+, aclSupport ? stdenv.isLinux, acl
 , nixosTests
 }:
 
