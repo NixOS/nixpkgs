@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "apachetomcatscanner";
   version = "3.7.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
@@ -20,6 +20,8 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     sed -i '/apachetomcatscanner=apachetomcatscanner\.__main__:main/d' setup.py
   '';
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     requests
@@ -39,7 +41,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "ApacheTomcatScanner";
     homepage = "https://github.com/p0dalirius/ApacheTomcatScanner";
     changelog = "https://github.com/p0dalirius/ApacheTomcatScanner/releases/tag/${version}";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }
