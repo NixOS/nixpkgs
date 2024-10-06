@@ -148,7 +148,7 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     webadmin = callPackage ./webadmin.nix { };
-    update-script = nix-update-script { };
+    updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
