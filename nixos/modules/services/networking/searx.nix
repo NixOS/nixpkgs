@@ -53,6 +53,14 @@ in
         description = "Whether to enable Searx, the meta search engine.";
       };
 
+      domain = mkOption {
+        type = types.str;
+        description = ''
+          The domain under which searxng will be served.
+          Right now this is only used with the configureNginx option.
+        '';
+      };
+
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -156,6 +164,14 @@ in
         '';
       };
 
+      configureNginx = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to configure nginx as an frontend to uwsgi.
+        '';
+      };
+
       uwsgiConfig = mkOption {
         inherit (options.services.uwsgi.instance) type;
         default = {
@@ -187,16 +203,31 @@ in
     };
 
     services = {
+      nginx = lib.mkIf cfg.configureNginx {
+        enable = true;
+        recommendedProxySettings = true;
+        recommendedUwsgiSettings = true;
+        virtualHosts."${cfg.domain}".locations = {
+          "/".uwsgiPass = "unix:${config.services.uwsgi.instance.vassals.searx.socket}";
+          "/static/".alias = lib.mkDefault "${cfg.package}/share/static/";
+        };
+      };
+
       redis.servers.searx = lib.mkIf cfg.redisCreateLocally {
         enable = true;
         user = "searx";
         port = 0;
       };
 
-      searx.settings = {
-        # merge NixOS settings with defaults settings.yml
-        use_default_settings = mkDefault true;
-        redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+      searx = {
+        configureUwsgi = lib.mkIf cfg.configureNginx true;
+        settings = {
+          # merge NixOS settings with defaults settings.yml
+          use_default_settings = mkDefault true;
+          redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+          server.base_url = "http${lib.optionalString (lib.any lib.id (with config.services.nginx.virtualHosts."${cfg.domain}"; [ onlySSL addSSL forceSSL ])) "s"}://${cfg.domain}/";
+          ui.static_use_hash = true;
+        };
       };
 
       uwsgi = mkIf cfg.configureUwsgi {
@@ -216,11 +247,18 @@ in
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
+        } // lib.optionalAttrs cfg.configureNginx {
+          socket = "/run/searx/uwsgi.sock";
+          chmod-socket = "660";
         } // cfg.uwsgiConfig;
       };
     };
 
     systemd.services = {
+      nginx = lib.mkIf cfg.configureNginx {
+        serviceConfig.SupplementaryGroups = [ "searx" ];
+      };
+
       searx-init = {
         description = "Initialise Searx settings";
         serviceConfig = {
