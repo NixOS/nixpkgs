@@ -47,9 +47,18 @@ let
    Indeed, note that wrapping with `-u init.vim` has sideeffects like .nvimrc wont be loaded
    anymore, $MYVIMRC wont be set etc
    */
-   makeNeovimConfig = { customRC ? "", ...}@attrs: attrs // {
+   makeNeovimConfig = {
+      customRC ? ""
+      /* the function you would have passed to lua.withPackages */
+      , extraLuaPackages ? (_: [ ])
+      , ...}@attrs: let
+        luaEnv = neovim-unwrapped.lua.withPackages extraLuaPackages;
+     in attrs // {
      neovimRcContent = customRC;
-     wrapperArgs = []; # for backwards compat
+     wrapperArgs = lib.optionals (luaEnv != null) [
+          "--prefix" "LUA_PATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaPathAbsStr luaEnv)
+          "--prefix" "LUA_CPATH" ";" (neovim-unwrapped.lua.pkgs.luaLib.genLuaCPathAbsStr luaEnv)
+      ];
    };
 
 
