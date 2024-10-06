@@ -89,6 +89,10 @@ in
 , runCommand
 , pkgs
 }: let
+editline_sigstop = editline.overrideAttrs (old: {
+  # enable SIGSTOP (needed to allow the use of Ctrl+Z in REPL)
+  configureFlags = old.configureFlags or [] ++ [ "--enable-sigstop" ];
+});
 self = stdenv.mkDerivation {
   pname = "nix";
 
@@ -135,7 +139,7 @@ self = stdenv.mkDerivation {
     brotli
     bzip2
     curl
-    editline
+    editline_sigstop
     libsodium
     openssl
     sqlite
