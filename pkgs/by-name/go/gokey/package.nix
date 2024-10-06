@@ -1,16 +1,18 @@
 { lib, buildGoModule, fetchFromGitHub }:
-buildGoModule {
+buildGoModule rec {
   pname = "gokey";
-  version = "0.1.2-unstable-2023-11-16";
+  version = "0.1.3";
+
+  patches = [ ./version.patch ];
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "gokey";
-    rev = "26fcef24d123e0eaf7b92224e6880f529f94aa9f";
-    hash = "sha256-nt4fO8NKYfRkpoC1z8zDrEZC7+fo6sU/ZOHCMHIAT58=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pvtRSWq/vXlyUShb61aiDlis9AiQnrA2PWycr1Zw0og=";
   };
 
-  vendorHash = "sha256-ZDCoRE2oP8ANsu7jfLm3BMLzXdsq1dhsEigvwWgKk54=";
+  vendorHash = "sha256-qlP2tI6QQMjxP59zaXgx4mX9IWSrOKWmme717wDaUEc=";
 
   meta = with lib; {
     homepage = "https://github.com/cloudflare/gokey";
