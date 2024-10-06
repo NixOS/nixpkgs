@@ -53,6 +53,14 @@ in
         description = "Whether to enable Searx, the meta search engine.";
       };
 
+      domain = mkOption {
+        type = types.str;
+        description = ''
+          The domain under which searxng will be served.
+          Right now this is only used with the configureNginx option.
+        '';
+      };
+
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -156,6 +164,14 @@ in
         '';
       };
 
+      configureNginx = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to configure nginx as an frontend to uwsgi.
+        '';
+      };
+
       uwsgiConfig = mkOption {
         inherit (options.services.uwsgi.instance) type;
         default = {
@@ -187,16 +203,34 @@ in
     };
 
     services = {
+      nginx = lib.mkIf cfg.configureNginx {
+        enable = true;
+        recommendedProxySettings = true;
+        upstreams.searx.servers."unix:${config.services.uwsgi.instance.vassals.searx.socket}" = { };
+        virtualHosts."${cfg.domain}".locations = {
+          "/" = {
+            uwsgiPass = "searx";
+            extraConfig = ''
+              include ${config.services.nginx.package}/conf/uwsgi_params;
+            '';
+          };
+          "/static/".alias = lib.mkDefault "${config.services.searx.package}/share/static/";
+        };
+      };
+
       redis.servers.searx = lib.mkIf cfg.redisCreateLocally {
         enable = true;
         user = "searx";
         port = 0;
       };
 
-      searx.settings = {
-        # merge NixOS settings with defaults settings.yml
-        use_default_settings = mkDefault true;
-        redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+      searx = {
+        configureUwsgi = lib.mkIf cfg.configureNginx true;
+        settings = {
+          # merge NixOS settings with defaults settings.yml
+          use_default_settings = mkDefault true;
+          redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+        };
       };
 
       uwsgi = mkIf cfg.configureUwsgi {
@@ -216,6 +250,9 @@ in
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
+        } // lib.optionalAttrs cfg.configureNginx {
+          socket = "/run/searx/uwsgi.sock";
+          chmod-socket = "660";
         } // cfg.uwsgiConfig;
       };
     };
@@ -263,10 +300,15 @@ in
 
     users = {
       groups.searx = { };
-      users.searx = {
-        description = "Searx daemon user";
-        group = "searx";
-        isSystemUser = true;
+      users = {
+        nginx = lib.mkIf cfg.configureNginx {
+          extraGroups = [ "searx" ];
+        };
+        searx = {
+          description = "Searx daemon user";
+          group = "searx";
+          isSystemUser = true;
+        };
       };
     };
   };
