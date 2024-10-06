@@ -853,13 +853,19 @@ let
         # one optional dependency spark is removed in https://github.com/melpa/melpa/pull/9151
         chronometrist = ignoreCompilationError super.chronometrist;
 
-        # https://github.com/melpa/melpa/pull/9184
-        chronometrist-key-values = super.chronometrist-key-values.overrideAttrs (old: {
-          recipe = ''
-            (chronometrist-key-values :fetcher git :url ""
-             :files (:defaults "elisp/chronometrist-key-values.*"))
-          '';
-        });
+        chronometrist-key-values = super.chronometrist-key-values.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9184
+            recipe =
+              if lib.versionOlder finalAttrs.version "20241006.1831" then
+                ''
+                  (chronometrist-key-values :fetcher git :url ""
+                   :files (:defaults "elisp/chronometrist-key-values.*"))
+                ''
+              else
+                previousAttrs.recipe;
+          }
+        );
 
         clingo-mode = super.clingo-mode.overrideAttrs (
           finalAttrs: previousAttrs: {
