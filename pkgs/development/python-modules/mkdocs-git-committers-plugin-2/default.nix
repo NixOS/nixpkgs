@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-git-committers-plugin-2";
-  version = "2.3.0";
+  version = "2.4.1";
   format = "setuptools";
 
   disabled = !pythonAtLeast "3.8";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "ojacques";
     repo = "mkdocs-git-committers-plugin-2";
     rev = "refs/tags/${version}";
-    hash = "sha256-+Ua2oX8PrfTROAhXNjcKdjIajVfvP3D3ToddFfj5N6A=";
+    hash = "sha256-hKt0K5gOkdUDwTlyMTwodl4gD1RD+s+CM+zEpngSnlc=";
   };
 
   propagatedBuildInputs = [
