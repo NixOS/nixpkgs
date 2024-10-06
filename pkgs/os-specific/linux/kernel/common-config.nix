@@ -11,6 +11,7 @@
 
 # Configuration
 { lib, stdenv, version
+, rustAvailable
 
 , features ? {}
 }:
@@ -34,7 +35,7 @@ let
 
   # Currently only enabling Rust by default on kernel 6.12+,
   # which actually has features that use Rust that we want.
-  defaultRust = lib.versionAtLeast version "6.12" && (stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch64);
+  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust = (forceRust || defaultRust) && kernelSupportsRust;
 
   options = {

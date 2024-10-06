@@ -108,6 +108,7 @@ let
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
+    rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
