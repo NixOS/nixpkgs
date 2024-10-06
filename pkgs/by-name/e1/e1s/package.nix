@@ -18,7 +18,7 @@ buildGoModule {
   meta = with lib; {
     description = "Easily Manage AWS ECS Resources in Terminal 🐱";
     homepage = "https://github.com/keidarcy/e1s";
-    changelog = "https://github.com/derailed/e1s/releases/tag/v${version}";
+    changelog = "https://github.com/keidarcy/e1s/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "e1s";
     maintainers = with maintainers; [ zelkourban ];
