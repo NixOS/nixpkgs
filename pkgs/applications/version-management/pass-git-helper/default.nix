@@ -1,8 +1,9 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pyxdg, pytest, pytest-mock }:
+{ lib, buildPythonApplication, fetchFromGitHub, pyxdg, pytestCheckHook, pytest-cov-stub, pytest-mock, setuptools }:
 
 buildPythonApplication rec {
   pname   = "pass-git-helper";
   version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner  = "languitar";
@@ -11,11 +12,19 @@ buildPythonApplication rec {
     sha256 = "sha256-DLH3l4wYfBlrc49swLgyHeZXebJ5JSzU7cHjD7Hmw0g=";
   };
 
-  propagatedBuildInputs = [ pyxdg ];
-  nativeCheckInputs = [ pytest pytest-mock ];
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  build-system = [ setuptools ];
+
+  dependencies = [ pyxdg ];
+
+  env.HOME = "$TMPDIR";
+
+  pythonImportsCheck = [ "passgithelper" ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    pytest-mock
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/languitar/pass-git-helper";
