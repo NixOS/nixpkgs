@@ -5,16 +5,22 @@
 
 buildNpmPackage rec {
   pname = "npm-check-updates";
-  version = "16.14.12";
+  version = "17.1.3";
 
   src = fetchFromGitHub {
     owner = "raineorshine";
     repo = "npm-check-updates";
     rev = "v${version}";
-    hash = "sha256-3/DaEgPF9+wofYqA1XrJul4/cNGuGeXAeRg0HW0O+Ok=";
+    hash = "sha256-nF7VtlLFHCexqL4+rLLWKwaOP65MNJRxA6sRdnlc0vM=";
   };
 
-  npmDepsHash = "sha256-zUJKuiMycVCuXMh6caMzmi6qpgknVsvmqV3XykhlSBI=";
+  npmDepsHash = "sha256-3usTIfAWMViAzHP+mV4RsIaMz46GBErh8Y0e9nu+sxE=";
+
+  postPatch = ''
+    sed -i '/"prepare"/d' package.json
+  '';
+
+  makeCacheWritable = true;
 
   meta = {
     changelog = "https://github.com/raineorshine/npm-check-updates/blob/${src.rev}/CHANGELOG.md";
