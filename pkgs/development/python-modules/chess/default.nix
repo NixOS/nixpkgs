@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   python,
+  setuptools,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "chess";
   version = "1.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,6 +20,8 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-+YNEm1QppXeeIjOKfCSQoQmuSzBsW4ws0ej/whjTAPg=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "chess" ];
 
