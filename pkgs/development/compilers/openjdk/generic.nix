@@ -4,7 +4,6 @@
   lib,
   stdenv,
 
-  fetchFromGitHub,
   fetchurl,
   fetchpatch,
 
@@ -48,6 +47,8 @@
   liberation_ttf,
   cacert,
 
+  nixpkgs-openjdk-updater,
+
   # TODO(@sternenseemann): gtk3 fails to evaluate in pkgsCross.ghcjs.buildPackages
   # which should be fixable, this is a no-rebuild workaround for GHC.
   headless ? lib.versionAtLeast featureVersion "21" && stdenv.targetPlatform.isGhcjs,
@@ -87,7 +88,10 @@
 
 let
   sourceFile = ./. + "/${featureVersion}/source.json";
-  sourceInfo = lib.importJSON sourceFile;
+  source = nixpkgs-openjdk-updater.openjdkSource {
+    inherit sourceFile;
+    featureVersionPrefix = tagPrefix + featureVersion;
+  };
 
   atLeast11 = lib.versionAtLeast featureVersion "11";
   atLeast17 = lib.versionAtLeast featureVersion "17";
@@ -97,7 +101,7 @@ let
   tagPrefix = if atLeast11 then "jdk-" else "jdk";
   # TODO: Merge these `lib.removePrefix` calls once update scripts have
   # been run.
-  version = lib.removePrefix tagPrefix (lib.removePrefix "refs/tags/" sourceInfo.rev);
+  version = lib.removePrefix tagPrefix (lib.removePrefix "refs/tags/" source.src.rev);
   versionSplit =
     # TODO: Remove `-ga` logic once update scripts have been run.
     builtins.match (if atLeast11 then "(.+)[-+](.+)" else "(.+)-b?(.+)") version;
@@ -137,9 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
       "jre"
     ];
 
-  src = fetchFromGitHub {
-    inherit (sourceInfo) owner repo rev hash;
-  };
+  inherit (source) src;
 
   patches =
     [
@@ -622,8 +624,8 @@ stdenv.mkDerivation (finalAttrs: {
   passthru =
     {
       home = "${finalAttrs.finalPackage}/lib/openjdk";
-
       inherit jdk-bootstrap;
+      inherit (source) updateScript;
     }
     // (if atLeast11 then { inherit gtk3; } else { inherit gtk2; })
     // lib.optionalAttrs (!atLeast23) {
