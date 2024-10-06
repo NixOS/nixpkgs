@@ -42,6 +42,7 @@ mapAliases ({
   aiohttp-isal = throw "aiohttp-isal has been removed, as it has been archived and replace by aiohttp-fast-zlib"; # Added 2024-08-11
   aiomysensors = throw "aiomysensors has been removed, as it was packaged for Home Assistant, which migrated to pymysensors."; # Added 2024-07-07
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
+  aiolip = throw "aiolip has been removed because the upstream repository was archived in 2021"; # Added 2024-10-04
   aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
   aioquic-mitmproxy = throw "aioquic-mitmproxy has been removed because mitmproxy no longer uses it"; # Added 2024-01-16
