@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.6.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    rev = "16e02dee823184058d43a706ed6a34d03e29680b";
-    hash = "sha256-jiQnLMGUdM2UcW4c/zz2XqEVix5B68wEvpPtVAnVfEI=";
+    rev = "25b505f7679e40bd42f5ff59218deb0f2aac2083";
+    hash = "sha256-+WXeHcILukCheUzD59ffP+eMLXF8T5qm3NWNUugWIqg=";
   };
 
   inherit gradleBuildTask gradleUpdateTask;
