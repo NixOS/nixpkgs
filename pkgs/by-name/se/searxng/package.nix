@@ -8,13 +8,13 @@
 python3.pkgs.toPythonModule (
   python3.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2024-06-19";
+    version = "0-unstable-2024-10-05";
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "acf3f109b2a99a5e6f25f5f2975016a36673c6ef";
-      hash = "sha256-NdFnB5JEaWo7gt+RwxKxkVtEL8uGLlc4z0ROHN+zoL4=";
+      rev = "e7a4d7d7c3d688b69737f2b1ecd23571f5e3a0b9";
+      hash = "sha256-JfcB19Tfk5e7DyArzz9TNjidOZjkSxTLEU3ZhE105qs=";
     };
 
     postPatch = ''
