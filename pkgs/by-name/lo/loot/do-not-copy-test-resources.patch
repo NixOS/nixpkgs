@@ -1,0 +1,44 @@
+diff --git a/cmake/tests.cmake b/cmake/tests.cmake
+index 4ab27eb9..a4c4650c 100644
+--- a/cmake/tests.cmake
++++ b/cmake/tests.cmake
+@@ -220,39 +220,6 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+             COMMAND ${QT_DIR}/bin/windeployqt $<TARGET_FILE:loot_gui_tests>
+             COMMENT "Running windeployqt...")
+     endif()
+-else()
+-    set(LOOT_QT_TEST_RESOURCES
+-        libicudata.so.73
+-        libicudata.so.73.2
+-        libicui18n.so.73
+-        libicui18n.so.73.2
+-        libicuuc.so.73
+-        libicuuc.so.73.2
+-        libQt6Concurrent.so.6
+-        libQt6Concurrent.so.6.7.2
+-        libQt6Core.so.6
+-        libQt6Core.so.6.7.2
+-        libQt6DBus.so.6
+-        libQt6DBus.so.6.7.2
+-        libQt6Gui.so.6
+-        libQt6Gui.so.6.7.2
+-        libQt6Network.so.6
+-        libQt6Network.so.6.7.2
+-        libQt6Test.so.6
+-        libQt6Test.so.6.7.2
+-        libQt6Widgets.so.6
+-        libQt6Widgets.so.6.7.2
+-        libQt6XcbQpa.so.6
+-        libQt6XcbQpa.so.6.7.2
+-        libQt6OpenGL.so.6
+-        libQt6OpenGL.so.6.7.2)
+-
+-    foreach(TEST_RESOURCE ${LOOT_QT_TEST_RESOURCES})
+-        add_custom_command(TARGET loot_gui_tests POST_BUILD
+-            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+-                "${QT_DIR}/lib/${TEST_RESOURCE}"
+-                $<TARGET_FILE_DIR:loot_gui_tests>/${TEST_RESOURCE})
+-    endforeach()
+ endif()
+ 
+ # Copy the API binary to the build directory.
