@@ -2,9 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
   setuptools,
   pythonOlder,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -25,9 +25,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "chess" ];
 
-  checkPhase = ''
-    ${python.interpreter} ./test.py -v
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [ "test.py" ];
 
   meta = with lib; {
     description = "Chess library with move generation, move validation, and support for common formats";
