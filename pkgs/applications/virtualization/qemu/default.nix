@@ -38,6 +38,8 @@
 , hostCpuOnly ? false
 , hostCpuTargets ? (if toolsOnly
                     then [ ]
+                    else if xenSupport
+                    then [ "i386-softmmu" ]
                     else if hostCpuOnly
                     then (lib.optional stdenv.hostPlatform.isx86_64 "i386-softmmu"
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
@@ -49,6 +51,8 @@
 , gitUpdater
 , qemu-utils # for tests attribute
 }:
+
+assert lib.assertMsg (xenSupport -> hostCpuTargets == [ "i386-softmmu" ]) "Xen should not use any other QEMU architecture other than i386.";
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
