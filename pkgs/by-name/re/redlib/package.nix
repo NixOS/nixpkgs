@@ -26,8 +26,8 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -Dm644 contrib/redlib.service $out/lib/systemd/system/redlib.service
-    sed -i "s#/usr/bin/redlib#$out/bin/redlib#" $out/lib/systemd/system/redlib.service
-    sed -i "/EnvironmentFile/d" $out/lib/systemd/system/redlib.service
+    substituteInPlace $out/lib/systemd/system/redlib.service \
+      --replace-fail "/usr/bin/redlib" "$out/bin/redlib"
   '';
 
   checkFlags = [
