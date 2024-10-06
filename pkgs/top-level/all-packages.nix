@@ -2122,8 +2122,6 @@ with pkgs;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
 
-  darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
-
   degit = callPackage ../applications/version-management/degit { };
 
   delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
@@ -24901,8 +24899,6 @@ with pkgs;
   inherit (callPackage ../servers/mir { })
     mir
     mir_2_15;
-
-  miriway = callPackage ../applications/window-managers/miriway { };
 
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 

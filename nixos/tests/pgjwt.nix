@@ -26,7 +26,10 @@ with pkgs; {
     start_all()
     master.wait_for_unit("postgresql")
     master.succeed(
-        "${pkgs.sudo}/bin/sudo -u ${sqlSU} PGOPTIONS=--search_path=tap,public ${pgProve}/bin/pg_prove -d postgres -v -f ${pgjwt.src}/test.sql"
+        "${pkgs.gnused}/bin/sed -e '12 i CREATE EXTENSION pgcrypto;\\nCREATE EXTENSION pgtap;\\nSET search_path TO tap,public;' ${pgjwt.src}/test.sql > /tmp/test.sql"
+    )
+    master.succeed(
+        "${pkgs.sudo}/bin/sudo -u ${sqlSU} PGOPTIONS=--search_path=tap,public ${pgProve}/bin/pg_prove -d postgres -v -f /tmp/test.sql"
     )
   '';
 })

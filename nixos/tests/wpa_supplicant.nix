@@ -8,6 +8,8 @@ let
     maintainers = [ oddlama rnhmjoj ];
   };
 
+  naughtyPassphrase = ''!,./;'[]\-=<>?:"{}|_+@$%^&*()`~ # ceci n'est pas un commentaire'';
+
   runConnectionTest = name: extraConfig: runTest {
     name = "wpa_supplicant-${name}";
     inherit meta;
@@ -28,7 +30,7 @@ let
               ssid = "nixos-test-sae";
               authentication = {
                 mode = "wpa3-sae";
-                saePasswords = [ { password = "reproducibility"; } ];
+                saePasswords = [ { password = naughtyPassphrase; } ];
               };
               bssid = "02:00:00:00:00:00";
             };
@@ -37,8 +39,8 @@ let
               authentication = {
                 mode = "wpa3-sae-transition";
                 saeAddToMacAllow = true;
-                saePasswordsFile = pkgs.writeText "password" "reproducibility";
-                wpaPasswordFile = pkgs.writeText "password" "reproducibility";
+                saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
+                wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
               };
               bssid = "02:00:00:00:00:01";
             };
@@ -46,7 +48,7 @@ let
               ssid = "nixos-test-wpa2";
               authentication = {
                 mode = "wpa2-sha256";
-                wpaPassword = "reproducibility";
+                wpaPassword = naughtyPassphrase;
               };
               bssid = "02:00:00:00:00:02";
             };
@@ -66,7 +68,7 @@ let
 
           # secrets
           secretsFile = pkgs.writeText "wpa-secrets" ''
-            psk_nixos_test=reproducibility
+            psk_nixos_test=${naughtyPassphrase}
           '';
         }
         extraConfig

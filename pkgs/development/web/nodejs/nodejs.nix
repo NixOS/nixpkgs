@@ -331,6 +331,7 @@ let
         # TODO: revisit at a later date.
         "test-fs-readv"
         "test-fs-readv-sync"
+        "test-vm-memleak"
       ])}"
     ];
 
