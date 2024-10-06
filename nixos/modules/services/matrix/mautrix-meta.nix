@@ -69,11 +69,6 @@ in {
                 appservice = {
                   id = "";
 
-                  database = {
-                    type = "sqlite3-fk-wal";
-                    uri = "file:${fullDataDir config}/mautrix-meta.db?_txlock=immediate";
-                  };
-
                   bot = {
                     username = "";
                   };
@@ -83,37 +78,43 @@ in {
                   address = "http://${config.settings.appservice.hostname}:${toString config.settings.appservice.port}";
                 };
 
-                meta = {
-                  mode = "";
+                bridge = {
+                  permissions = {};
                 };
 
-                bridge = {
-                  # Enable encryption by default to make the bridge more secure
-                  encryption = {
-                    allow = true;
-                    default = true;
-                    require = true;
+                database = {
+                  type = "sqlite3-fk-wal";
+                  uri = "file:${fullDataDir config}/mautrix-meta.db?_txlock=immediate";
+                };
 
-                    # Recommended options from mautrix documentation
-                    # for additional security.
-                    delete_keys = {
-                      dont_store_outbound = true;
-                      ratchet_on_decrypt = true;
-                      delete_fully_used_on_decrypt = true;
-                      delete_prev_on_new_session = true;
-                      delete_on_device_delete = true;
-                      periodically_delete_expired = true;
-                      delete_outdated_inbound = true;
-                    };
+                # Enable encryption by default to make the bridge more secure
+                encryption = {
+                  allow = true;
+                  default = true;
+                  require = true;
 
-                    verification_levels = {
-                      receive = "cross-signed-tofu";
-                      send = "cross-signed-tofu";
-                      share = "cross-signed-tofu";
-                    };
+                  # Recommended options from mautrix documentation
+                  # for additional security.
+                  delete_keys = {
+                    dont_store_outbound = true;
+                    ratchet_on_decrypt = true;
+                    delete_fully_used_on_decrypt = true;
+                    delete_prev_on_new_session = true;
+                    delete_on_device_delete = true;
+                    periodically_delete_expired = true;
+                    delete_outdated_inbound = true;
                   };
 
-                  permissions = {};
+                  # TODO: This effectively disables encryption. But this is the value provided when a <0.4 config is migrated. Changing it will corrupt the database.
+                  # https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L24
+                  # If you wish to encrypt the local database you should set this to an environment variable substitution and reset the bridge or somehow migrate the DB.
+                  pickle_key = "mautrix.bridge.e2ee";
+
+                  verification_levels = {
+                    receive = "cross-signed-tofu";
+                    send = "cross-signed-tofu";
+                    share = "cross-signed-tofu";
+                  };
                 };
 
                 logging = {
@@ -123,6 +124,10 @@ in {
                     format = "pretty-colored";
                     time_format = " ";
                   };
+                };
+
+                network = {
+                  mode = "";
                 };
               };
               defaultText = ''
@@ -261,7 +266,7 @@ in {
         description = ''
           Configuration of multiple `mautrix-meta` instances.
           `services.mautrix-meta.instances.facebook` and `services.mautrix-meta.instances.instagram`
-          come preconfigured with meta.mode, appservice.id, bot username, display name and avatar.
+          come preconfigured with network.mode, appservice.id, bot username, display name and avatar.
         '';
 
         example = ''
@@ -283,7 +288,7 @@ in {
             messenger = {
               enable = true;
               settings = {
-                meta.mode = "messenger";
+                network.mode = "messenger";
                 homeserver.domain = "example.com";
                 appservice = {
                   id = "messenger";
@@ -313,9 +318,9 @@ in {
           '';
         }
         {
-          assertion = builtins.elem cfg.settings.meta.mode [ "facebook" "facebook-tor" "messenger" "instagram" ];
+          assertion = builtins.elem cfg.settings.network.mode [ "facebook" "facebook-tor" "messenger" "instagram" ];
           message = ''
-            The option `services.mautrix-meta.instances.${name}.settings.meta.mode` has to be set
+            The option `services.mautrix-meta.instances.${name}.settings.network.mode` has to be set
             to one of: facebook, facebook-tor, messenger, instagram.
             This configures the mode of the bridge.
           '';
@@ -336,6 +341,24 @@ in {
           assertion = cfg.settings.appservice.bot.username != "";
           message = ''
             The option `services.mautrix-meta.instances.${name}.settings.appservice.bot.username` has to be set.
+          '';
+        }
+        {
+          assertion = !(cfg.settings ? bridge.disable_xma);
+          message = ''
+            The option `bridge.disable_xma` has been moved to `network.disable_xma_always`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
+          '';
+        }
+        {
+          assertion = !(cfg.settings ? bridge.displayname_template);
+          message = ''
+            The option `bridge.displayname_template` has been moved to `network.displayname_template`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
+          '';
+        }
+        {
+          assertion = !(cfg.settings ? meta);
+          message = ''
+            The options in `meta` have been moved to `network`. Please [migrate your configuration](https://github.com/mautrix/meta/releases/tag/v0.4.0). You may wish to use [the auto-migration code](https://github.com/mautrix/meta/blob/f5440b05aac125b4c95b1af85635a717cbc6dd0e/cmd/mautrix-meta/legacymigrate.go#L23) for reference.
           '';
         }
       ]) enabledInstances));
@@ -518,11 +541,7 @@ in {
       in {
         instagram = {
           settings = {
-            meta.mode = mkDefault "instagram";
-
-            bridge = {
-              username_template = mkDefault "instagram_{{.}}";
-            };
+            network.mode = mkDefault "instagram";
 
             appservice = {
               id = mkDefault "instagram";
@@ -532,16 +551,13 @@ in {
                 displayname = mkDefault "Instagram bridge bot";
                 avatar = mkDefault "mxc://maunium.net/JxjlbZUlCPULEeHZSwleUXQv";
               };
+              username_template = mkDefault "instagram_{{.}}";
             };
           };
         };
         facebook = {
           settings = {
-            meta.mode = mkDefault "facebook";
-
-            bridge = {
-              username_template = mkDefault "facebook_{{.}}";
-            };
+            network.mode = mkDefault "facebook";
 
             appservice = {
               id = mkDefault "facebook";
@@ -551,6 +567,7 @@ in {
                 displayname = mkDefault "Facebook bridge bot";
                 avatar = mkDefault "mxc://maunium.net/ygtkteZsXnGJLJHRchUwYWak";
               };
+              username_template = mkDefault "facebook_{{.}}";
             };
           };
         };
