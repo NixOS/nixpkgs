@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, desktop-file-utils
-, makeWrapper
-, meson
-, ninja
-, gtk3
-, libayatana-appindicator
-, libpulseaudio
-, libdrm
-, gpu-screen-recorder
-, libglvnd
-, libX11
-, libXrandr
-, wayland
-, wrapGAppsHook3
-, wrapperDir ? "/run/wrappers/bin"
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  desktop-file-utils,
+  makeWrapper,
+  meson,
+  ninja,
+  gtk3,
+  libayatana-appindicator,
+  libpulseaudio,
+  libdrm,
+  gpu-screen-recorder,
+  libglvnd,
+  libX11,
+  libXrandr,
+  wayland,
+  wrapGAppsHook3,
+  wrapperDir ? "/run/wrappers/bin",
 }:
 
 stdenv.mkDerivation {
@@ -50,16 +51,20 @@ stdenv.mkDerivation {
     wayland
   ];
 
-  preFixup = let
-    gpu-screen-recorder-wrapped = gpu-screen-recorder.override {
-      inherit wrapperDir;
-    };
-  in ''
-    gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
-    gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
-    # we also append /run/opengl-driver/lib as it otherwise fails to find libcuda.
-    gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libglvnd ]}:/run/opengl-driver/lib)
-  '';
+  preFixup =
+    let
+      gpu-screen-recorder-wrapped = gpu-screen-recorder.override {
+        inherit wrapperDir;
+      };
+    in
+    ''
+      gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
+      gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
+      # we also append /run/opengl-driver/lib as it otherwise fails to find libcuda.
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [ libglvnd ]
+      }:/run/opengl-driver/lib)
+    '';
 
   meta = {
     description = "GTK frontend for gpu-screen-recorder.";
