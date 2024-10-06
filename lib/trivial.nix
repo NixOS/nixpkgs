@@ -226,6 +226,26 @@ in {
   bitNot = builtins.sub (-1);
 
   /**
+    Convert a boolean to an integer.
+
+    This function uses the integers 0 and 1 to represent Boolean values.
+
+    # Inputs
+
+    `flag`
+
+    : 1\. Function argument
+
+    # Type
+
+    ```
+    boolToInt :: bool -> int
+    ```
+  */
+  # We explicitly invert the argument here purely as a type assertion.
+  boolToInt = flag: if (!flag) then 0 else 1;
+
+  /**
     Convert a boolean to a string.
 
     This function uses the strings "true" and "false" to represent
