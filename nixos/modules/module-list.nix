@@ -1507,6 +1507,7 @@
   ./services/web-apps/stirling-pdf.nix
   ./services/web-apps/trilium.nix
   ./services/web-apps/tt-rss.nix
+  ./services/web-apps/timetagger.nix
   ./services/web-apps/vikunja.nix
   ./services/web-apps/wakapi.nix
   ./services/web-apps/weblate.nix
