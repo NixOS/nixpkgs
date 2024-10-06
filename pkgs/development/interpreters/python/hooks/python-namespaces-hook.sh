@@ -4,7 +4,9 @@ echo "Sourcing python-namespaces-hook"
 pythonNamespacesHook() {
     echo "Executing pythonNamespacesHook"
 
-    for namespace in ${pythonNamespaces[@]}; do
+    # Assume the elemnts of pythonNamespaces do not contain spaces
+    # shellcheck disable=SC2048
+    for namespace in ${pythonNamespaces[*]-}; do
         echo "Enforcing PEP420 namespace: ${namespace}"
 
         # split namespace into segments. "azure.mgmt" -> "azure mgmt"
