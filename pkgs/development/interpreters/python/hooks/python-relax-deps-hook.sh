@@ -42,13 +42,13 @@
 _pythonRelaxDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRelaxDeps:-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
+    if [[ -z "${pythonRelaxDeps[*]-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
         return
     elif [[ "$pythonRelaxDeps" == 1 ]]; then
         sed -i "$metadata_file" -r \
             -e 's/(Requires-Dist: [a-zA-Z0-9_.-]+\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/'
     else
-        for dep in $pythonRelaxDeps; do
+        for dep in ${pythonRelaxDeps[*]}; do
             sed -i "$metadata_file" -r \
                 -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
         done
@@ -58,13 +58,13 @@ _pythonRelaxDeps() {
 _pythonRemoveDeps() {
     local -r metadata_file="$1"
 
-    if [[ -z "${pythonRemoveDeps:-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
+    if [[ -z "${pythonRemoveDeps[*]-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
         return
     elif [[ "$pythonRemoveDeps" == 1 ]]; then
         sed -i "$metadata_file" \
             -e '/Requires-Dist:.*/d'
     else
-        for dep in $pythonRemoveDeps; do
+        for dep in ${pythonRemoveDeps[*]-}; do
             sed -i "$metadata_file" \
                 -e "/Requires-Dist: $dep/d"
         done
