@@ -81,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
-    mainProgram = "gpu-screen-recorder";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
     license = lib.licenses.gpl3Only;
+    mainProgram = "gpu-screen-recorder";
     maintainers = [ lib.maintainers.babbaj ];
     platforms = [ "x86_64-linux" ];
   };
