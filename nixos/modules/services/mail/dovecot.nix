@@ -489,17 +489,17 @@ in
       };
 
       extensions = mkOption {
-        default = [];
+        default = null;
         description = "Sieve extensions for use in user scripts";
         example = [ "notify" "imapflags" "vnd.dovecot.filter" ];
-        type = types.listOf types.str;
+        type = types.nullOr (types.listOf types.str);
       };
 
       globalExtensions = mkOption {
-        default = [];
+        default = null;
         example = [ "vnd.dovecot.environment" ];
         description = "Sieve extensions for use in global scripts";
-        type = types.listOf types.str;
+        type = types.nullOr (types.listOf types.str);
       };
 
       scripts = mkOption {
@@ -541,18 +541,23 @@ in
         perProtocol.imap.enable = [ "imap_quota" ];
       };
 
-      sieve.plugins =
-        optional (cfg.imapsieve.mailbox != []) "sieve_imapsieve"
-        ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms";
-
-      sieve.globalExtensions = optional (cfg.sieve.pipeBins != []) "vnd.dovecot.pipe";
+      sieve = {
+        plugins =
+          optional (cfg.imapsieve.mailbox != []) "sieve_imapsieve"
+          ++ optional (cfg.sieve.pipeBins != []) "sieve_extprograms";
+      } // optionalAttrs (cfg.sieve.pipeBins != []) { globalExtensions = "vnd.dovecot.pipe"; };
 
       pluginSettings = lib.mapAttrs (n: lib.mkDefault) ({
         sieve_plugins = concatStringsSep " " cfg.sieve.plugins;
-        sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions);
-        sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions);
         sieve_pipe_bin_dir = sievePipeBinScriptDirectory;
-      } // sieveScriptSettings // imapSieveMailboxSettings);
+      } // optionalAttrs
+             (cfg.sieve.extensions != null)
+             { sieve_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.extensions); }
+        // optionalAttrs
+             (cfg.sieve.globalExtensions != null)
+             { sieve_global_extensions = concatStringsSep " " (map (el: "+${el}") cfg.sieve.globalExtensions); }
+        // sieveScriptSettings
+        // imapSieveMailboxSettings);
     };
 
     users.users = {
