@@ -5,11 +5,14 @@
   makeWrapper,
   meson,
   ninja,
+  addDriverRunpath,
   pkg-config,
   libXcomposite,
   libpulseaudio,
+  dbus,
   ffmpeg,
   wayland,
+  pipewire,
   libdrm,
   libva,
   libglvnd,
@@ -22,14 +25,13 @@
 
 stdenv.mkDerivation {
   pname = "gpu-screen-recorder";
-  version = "unstable-2024-07-05";
+  version = "4.1.11";
 
-  # Snapshot tarballs use the following versioning format:
-  # printf "r%s.%s\n" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
   src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder.git.r641.48cd80f.tar.gz";
-    hash = "sha256-hIEK8EYIxQTTiFePPZf4V0nsxqxkfcDeOG9GK9whn+0=";
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder.git.4.1.11.tar.gz";
+    hash = "sha256-XCs40MzObfNtErxnN3rYQ722TAiREcbaJZet+VJfimg=";
   };
+
   sourceRoot = ".";
 
   nativeBuildInputs = [
@@ -42,7 +44,9 @@ stdenv.mkDerivation {
   buildInputs = [
     libXcomposite
     libpulseaudio
+    dbus
     ffmpeg
+    pipewire
     wayland
     libdrm
     libva
@@ -52,22 +56,27 @@ stdenv.mkDerivation {
     libXfixes
   ];
 
-  patches = [ ./0001-Don-t-install-systemd-unit-files-using-absolute-path.patch ];
-
   mesonFlags = [
-    "-Dsystemd=true"
-
-    # Capabilities are handled by security.wrappers if possible.
-    "-Dcapabilities=false"
+    # Enable Wayland support
+    (lib.mesonBool "portal" true)
+    # Handle by the module
+    (lib.mesonBool "capabilities" false)
+    (lib.mesonBool "systemd" false)
+    (lib.mesonBool "nvidia_suspend_fix" false)
   ];
 
   postInstall = ''
     mkdir $out/bin/.wrapped
     mv $out/bin/gpu-screen-recorder $out/bin/.wrapped/
     makeWrapper "$out/bin/.wrapped/gpu-screen-recorder" "$out/bin/gpu-screen-recorder" \
-    --prefix LD_LIBRARY_PATH : ${libglvnd}/lib \
-    --prefix PATH : ${wrapperDir} \
-    --suffix PATH : $out/bin
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libglvnd
+          addDriverRunpath.driverLink
+        ]
+      }" \
+      --prefix PATH : "${wrapperDir}" \
+      --suffix PATH : "$out/bin"
   '';
 
   meta = {
