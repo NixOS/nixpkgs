@@ -1,32 +1,46 @@
 {
+  lib,
   buildPythonPackage,
   fetchPypi,
-  nose,
-  lib,
+  pynose,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "xlwt";
   version = "1.3.0";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88";
+    hash = "sha256-xZkScXqbKPGjwqmP1gdBAUsGsEOTbc7LwRPqqtoVbIg=";
   };
 
-  nativeCheckInputs = [ nose ];
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ pynose ];
+
   checkPhase = ''
+    runHook preCheck
+
     nosetests -v
+
+    runHook postCheck
   '';
 
-  meta = {
+  pythonImportsCheck = [ "xlwt" ];
+
+  meta = with lib; {
     description = "Library to create spreadsheet files compatible with MS";
     homepage = "https://github.com/python-excel/xlwt";
-    license = with lib.licenses; [
+    license = with licenses; [
       bsdOriginal
       bsd3
-      lgpl21
+      lgpl21Plus
     ];
+    maintainers = with maintainers; [ ];
   };
 }
