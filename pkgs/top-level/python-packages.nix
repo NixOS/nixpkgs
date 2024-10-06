@@ -2642,6 +2642,8 @@ self: super: with self; {
 
   crccheck = callPackage ../development/python-modules/crccheck { };
 
+  crcelk = callPackage ../development/python-modules/crcelk { };
+
   crcmod = callPackage ../development/python-modules/crcmod { };
 
   credstash = callPackage ../development/python-modules/credstash { };
@@ -14473,6 +14475,8 @@ self: super: with self; {
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
   smmap = callPackage ../development/python-modules/smmap { };
+
+  smoke-zephyr = callPackage ../development/python-modules/smoke-zephyr { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
