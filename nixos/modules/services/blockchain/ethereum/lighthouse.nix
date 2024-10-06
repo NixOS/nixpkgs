@@ -205,12 +205,19 @@ in {
         default = "";
         example = "";
       };
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lighthouse;
+        defaultText = literalExpression "pkgs.lighthouse";
+        description = lib.mdDoc "The lighthouse package that should be used.";
+      };
     };
   };
 
   config = lib.mkIf (cfg.beacon.enable || cfg.validator.enable) {
 
-    environment.systemPackages = [ pkgs.lighthouse ] ;
+    environment.systemPackages = [ cfg.package ] ;
 
     networking.firewall = lib.mkIf cfg.beacon.enable {
       allowedTCPPorts = lib.mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
@@ -227,7 +234,7 @@ in {
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.beacon.dataDir}/${cfg.network}
 
-        ${pkgs.lighthouse}/bin/lighthouse beacon_node \
+        ${cfg.package}/bin/lighthouse beacon_node \
           --disable-upnp \
           ${lib.optionalString cfg.beacon.disableDepositContractSync "--disable-deposit-contract-sync"} \
           --port ${toString cfg.beacon.port} \
@@ -275,7 +282,7 @@ in {
         # make sure the chain data directory is created on first run
         mkdir -p ${cfg.validator.dataDir}/${cfg.network}
 
-        ${pkgs.lighthouse}/bin/lighthouse validator_client \
+        ${cfg.package}/bin/lighthouse validator_client \
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
           --datadir ${cfg.validator.dataDir}/${cfg.network} \
