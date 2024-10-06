@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/bin"
       ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
