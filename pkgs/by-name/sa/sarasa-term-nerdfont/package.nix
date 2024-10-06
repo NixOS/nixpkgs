@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, unzip, }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  unzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "sarasa-term-sc-nerd";
@@ -35,4 +40,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-
