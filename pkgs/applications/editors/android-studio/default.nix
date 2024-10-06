@@ -9,8 +9,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2024.1.2.13"; # "Android Studio Koala Feature Drop | 2024.1.2 Patch 1"
-    sha256Hash = "sha256-aIxlXCMPKYZ6Eq44LMJuxnBr9/ML1Nl/LxXI+WDLG5s=";
+    version = "2024.2.1.9"; # "Android Studio Ladybug | 2024.2.1"
+    sha256Hash = "sha256-18ppVeAvxx6kNBOjSKcZjbEMNt8khKmohMq3JErX7pY=";
   };
   betaVersion = {
     version = "2024.2.1.8"; # "Android Studio Ladybug | 2024.2.1 RC 1"
