@@ -10,8 +10,7 @@
 , lzip
 , perl
 , gmp
-, autoconf
-, automake
+, autoreconfHook
 , libidn2
 , libiconv
 , texinfo
@@ -129,7 +128,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.hostPlatform.isLinux) trousers;
 
-  nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoconf automake ]
+  nativeBuildInputs = [ perl pkg-config texinfo ] ++ [ autoreconfHook ]
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
