@@ -44,8 +44,7 @@ stdenv.mkDerivation rec {
       + "~/.nix-profile/lib/lv2")
     ++ lib.optional stdenv.isLinux  (lib.mesonOption "default_lv2_path"
       "~/.lv2:/usr/local/lib/lv2:/usr/lib/lv2:"
-      + "~/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2:"
-      + "/etc/profiles/per-user/$USER/lib/lv2");
+      + "~/.nix-profile/lib/lv2:/run/current-system/sw/lib/lv2");
 
   passthru = {
     tests = {
