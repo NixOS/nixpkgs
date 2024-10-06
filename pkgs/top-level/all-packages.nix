@@ -351,8 +351,6 @@ with pkgs;
 
   brev-cli = callPackage ../development/misc/brev-cli { };
 
-  buf = callPackage ../development/tools/buf { };
-
   cbfmt = callPackage ../development/tools/cbfmt { };
 
   circumflex = callPackage ../applications/networking/circumflex { };

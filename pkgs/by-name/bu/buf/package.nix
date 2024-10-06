@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.42.0";
+  version = "1.44.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     rev = "v${version}";
-    hash = "sha256-T4cEl2aT6F/IamCd1FxomYxqGpbcbXzPtEu0AJUyJJU=";
+    hash = "sha256-I0Y9gsNqCFLR2Bkt55HyER6wznTNoZW5345zUmuOFXQ=";
   };
 
-  vendorHash = "sha256-apF3FpVlwonm76d0Ue7TMPDIRW0BNkZXWMLgh1+mmvo=";
+  vendorHash = "sha256-4ykve9X//ckYPDkq76i0ojOiyzjrPJ/J2z7mA5giWKE=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -40,6 +40,10 @@ buildGoModule rec {
   ];
 
   preCheck = ''
+    # For WebAssembly runtime tests
+    GOOS=wasip1 GOARCH=wasm go build -o $GOPATH/bin/buf-plugin-suffix.wasm \
+      ./private/bufpkg/bufcheck/internal/cmd/buf-plugin-suffix
+
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
   '';
