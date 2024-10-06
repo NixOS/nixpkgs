@@ -125,6 +125,8 @@ let
 
     osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+    screensaver-asteroids = callPackage ../applications/video/kodi/addons/screensaver-asteroids { };
+
     upnext = callPackage ../applications/video/kodi/addons/upnext { };
 
     vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
