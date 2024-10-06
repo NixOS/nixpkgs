@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libsixel
-, stdenv
-, nix-update-script
-, testers
-, presenterm
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libsixel,
+  stdenv,
+  nix-update-script,
+  testers,
+  presenterm,
 }:
 
 rustPlatform.buildRustPackage rec {
