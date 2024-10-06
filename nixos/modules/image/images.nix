@@ -9,7 +9,7 @@ let
   inherit (lib) types;
 
   imageModules = {
-    amazon = ../../maintainers/scripts/ec2/amazon-image.nix;
+    amazon = ./amazon.nix;
     azure = ../virtualisation/azure-image.nix;
     digital-ocean = ../virtualisation/digital-ocean-image.nix;
     google-compute = ../virtualisation/google-compute-image.nix;
