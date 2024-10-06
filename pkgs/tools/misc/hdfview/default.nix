@@ -102,5 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "HDFView";
+    # Startup issue is described here:
+    # https://github.com/NixOS/nixpkgs/issues/340048 A possible solution is
+    # suggested here:
+    # https://forum.hdfgroup.org/t/building-hdfview-3-1-0-on-centos-6-swt-library-not-found/5698
+    # But it requires us to update swt, which is a bit hard, the swt update is tracked here:
+    # https://github.com/NixOS/nixpkgs/issues/219771
+    broken = true;
   };
 })
