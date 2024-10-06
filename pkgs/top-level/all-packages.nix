@@ -11978,8 +11978,6 @@ with pkgs;
 
   rund = callPackage ../development/tools/rund { };
 
-  runme = callPackage ../development/tools/misc/runme { };
-
   runzip = callPackage ../tools/archivers/runzip { };
 
   ruplacer = callPackage ../tools/text/ruplacer {
