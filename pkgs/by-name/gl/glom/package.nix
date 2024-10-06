@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     (yelp-tools.override {
       python3 = python311;
-     })
+    })
     itstool
     doxygen
     graphviz
@@ -155,7 +155,11 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl2
       gpl2
     ];
-    maintainers = lib.teams.gnome.members;
+    maintainers =
+      lib.teams.gnome.members
+      ++ (with lib.maintainers; [
+        bot-wxt1221
+      ]);
     platforms = lib.platforms.linux;
   };
 })
