@@ -1071,7 +1071,7 @@ in
             '';
           };
           "memcached" = {
-            servers."unix:/run//memcached/memcached.sock" = {};
+            servers."unix:/run/memcached/memcached.sock" = {};
           };
         };
       };
