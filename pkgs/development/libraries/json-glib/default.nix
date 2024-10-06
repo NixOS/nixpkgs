@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , docutils
 , glib
 , meson
@@ -33,6 +34,13 @@ stdenv.mkDerivation rec {
   patches = [
     # Add option for changing installation path of installed tests.
     ./meson-add-installed-tests-prefix-option.patch
+
+    # Restore single quote string extension
+    # https://gitlab.gnome.org/GNOME/json-glib/-/issues/76
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/json-glib/-/commit/2a26bd3dedc3b27471e6df210d76333d3d41159c.patch";
+      hash = "sha256-U/jWB4wneN4MwZO3vAfI9Z7UT/SLMNEx/X8NMsCO8I4=";
+    })
   ];
 
   strictDeps = true;
