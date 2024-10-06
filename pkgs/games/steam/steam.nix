@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
     rm $out/share/applications/steam.desktop
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
+    # required by SteamVR app
+    chmod +x $out/share/applications/steam.desktop
   '';
 
   passthru.updateScript = ./update-bootstrap.py;
