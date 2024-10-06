@@ -70,9 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "GTK frontend for gpu-screen-recorder.";
-    mainProgram = "gpu-screen-recorder-gtk";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
     license = lib.licenses.gpl3Only;
+    mainProgram = "gpu-screen-recorder-gtk";
     maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
