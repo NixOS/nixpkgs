@@ -620,8 +620,6 @@ with pkgs;
 
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
-  figma-linux = callPackage ../applications/graphics/figma-linux { };
-
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
   frece = callPackage ../development/tools/frece { };
@@ -12711,8 +12709,6 @@ with pkgs;
 
   stricat = callPackage ../tools/security/stricat { };
 
-  staruml = callPackage ../tools/misc/staruml { };
-
   stone-phaser = callPackage ../applications/audio/stone-phaser { };
 
   systrayhelper = callPackage ../tools/misc/systrayhelper { };
@@ -16766,8 +16762,6 @@ with pkgs;
   };
 
   inav-blackbox-tools = callPackage ../tools/misc/inav-blackbox-tools { };
-
-  infracost = callPackage ../tools/misc/infracost { };
 
   msp430GccSupport = callPackage ../development/misc/msp430/gcc-support.nix { };
 
@@ -31681,10 +31675,6 @@ with pkgs;
 
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
-  netbeans = callPackage ../applications/editors/netbeans {
-    jdk = jdk17;
-  };
-
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
   ncdu = callPackage ../tools/misc/ncdu {
@@ -31752,8 +31742,6 @@ with pkgs;
 
   obs-studio-plugins = recurseIntoAttrs (callPackage ../applications/video/obs-studio/plugins {});
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix { };
-
-  obsidian = callPackage ../applications/misc/obsidian { };
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
@@ -34372,8 +34360,6 @@ with pkgs;
   samplv1 = libsForQt5.callPackage ../applications/audio/samplv1 { };
 
   scaleft = callPackage ../applications/networking/scaleft { };
-
-  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
   beancount = with python3.pkgs; toPythonApplication beancount;
 
