@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitLab
 , fetchpatch
-, fetchpatch2
 , cmake
 , pkg-config
 , wrapQtAppsHook
