@@ -32,6 +32,7 @@ let
   inherit (lib.strings)
     concatMapStrings
     concatStringsSep
+    removeSuffix
     ;
   inherit (lib.types)
     mkOptionType
@@ -100,7 +101,7 @@ rec {
     name: mkOption {
     default = false;
     example = true;
-    description = "Whether to enable ${name}.";
+    description = "Whether to enable ${removeSuffix "." (removeSuffix "\n" name)}.";
     type = lib.types.bool;
   };
 
