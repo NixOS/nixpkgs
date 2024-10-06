@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, ant, jdk, hdf4, hdf5, makeDesktopItem, copyDesktopItems, strip-nondeterminism, stripJavaArchivesHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdfview";
   version = "3.3.1";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/hdfview-${version}/src/hdfview-${version}.tar.gz";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/hdfview-${finalAttrs.version}/src/hdfview-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-WcGYceMOB8gCycJSW4KdApy2gIBgTnE/d0PxGZClUqg=";
   };
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     desktopName = name;
     exec = name;
     icon = name;
-    comment = meta.description;
+    comment = finalAttrs.finalPackage.meta.description;
     categories = [ "Science" "DataVisualization" ];
   };
 
@@ -77,8 +77,8 @@ stdenv.mkDerivation rec {
     description = "A visual tool for browsing and editing HDF4 and HDF5 files";
     license = lib.licenses.free; # BSD-like
     homepage = "https://www.hdfgroup.org/downloads/hdfview";
-    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ jiegec ];
     mainProgram = "HDFView";
   };
-}
+})
