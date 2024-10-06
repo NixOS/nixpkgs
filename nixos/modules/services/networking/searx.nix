@@ -365,6 +365,10 @@ in
       uwsgi = mkIf cfg.configureUwsgi {
         requires = [ "searx-init.service" ];
         after = [ "searx-init.service" ];
+        restartTriggers = [
+          cfg.package
+          cfg.settingsFile
+        ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
       };
     };
 
