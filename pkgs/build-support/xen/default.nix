@@ -3,14 +3,11 @@
   stdenv,
   autoPatchelfHook,
   cmake,
-  ninja,
   pkg-config,
   testers,
   which,
-
   fetchgit,
   fetchpatch,
-  fetchFromGitHub,
 
   # Xen
   acpica-tools,
@@ -32,31 +29,11 @@
   zlib,
   zstd,
 
-  slim ? false,
-
-  # Xen Optional
-  withInternalQEMU ? !slim,
-  pixman,
-  glib,
-
-  withInternalSeaBIOS ? !slim,
-  withSeaBIOS ? !withInternalSeaBIOS,
+  # Optional Components
   seabios,
-
-  withInternalOVMF ? !slim,
-  withOVMF ? !withInternalOVMF,
   OVMF,
-  nasm,
-
-  withInternalIPXE ? !slim,
-  withIPXE ? !withInternalIPXE,
   ipxe,
-
-  withFlask ? false,
   checkpolicy,
-
-  efiVendor ? "nixos", # Allow downstreams with custom branding to quickly override the EFI Vendor string.
-  withEFI ? true,
   binutils-unwrapped,
 
   # Documentation
@@ -76,198 +53,90 @@
   nbd,
   openvswitch,
   util-linux,
-  ...
 }:
 
-versionDefinition:
+{
+  pname,
+  branch ? lib.versions.majorMinor version,
+  version,
+  vendor ? "nixos",
+  withEFI ? true,
+  withFlask ? false,
+  withSeaBIOS ? true,
+  withOVMF ? true,
+  withIPXE ? true,
+  useDefaultPatchList ? true,
+  rev,
+  hash,
+  patches ? [ ],
+  meta ? { },
+}:
 
 let
-  #TODO: fix paths instead.
-  scriptEnvPath = lib.strings.makeSearchPathOutput "out" "bin" [
-    bridge-utils
-    coreutils
-    diffutils
-    gawk
-    gnugrep
-    gnused
-    inetutils
-    iproute2
-    iptables
-    multipath-tools
-    nbd
-    openvswitch
-    perl
-    util-linux.bin
-    which
-  ];
-
-  # Inherit attributes from a versionDefinition.
-  inherit (versionDefinition)
-    pname
-    branch
-    version
-    latest
-    genericPatchList
-    pkg
+  # Inherit helper functions from lib and builtins.
+  inherit (builtins) elemAt isAttrs;
+  inherit (lib.strings)
+    concatLines
+    enableFeature
+    makeSearchPathOutput
+    optionalString
+    removeSuffix
+    versionOlder
     ;
+  inherit (lib.platforms) linux aarch64;
+  inherit (lib) teams;
+  inherit (lib.licenses)
+    cc-by-40
+    gpl2Only
+    lgpl21Only
+    mit
+    ;
+  inherit (lib.meta) getExe;
+  inherit (lib.lists)
+    count
+    flatten
+    optional
+    optionals
+    range
+    remove
+    zipListsWith
+    ;
+  inherit (lib.attrsets) attrByPath;
 
   # Mark versions older than minSupportedVersion as EOL.
   minSupportedVersion = "4.16";
 
   ## Generic Patch Handling ##
 
-  mappedGenericPatches = builtins.map (patch: upstreamPatches.${patch}) genericPatchList;
-
   upstreamPatches = import ./patches.nix {
     inherit lib fetchpatch;
   };
 
-  upstreamPatchList = lib.lists.flatten mappedGenericPatches;
-
-  ## Pre-fetched Source Handling ##
-
-  # Main attribute set for sources needed to build tools and firmwares.
-  # Each source takes in:
-  # * A `src` attribute, which contains the actual fetcher,
-  # * A 'patches` attribute, which is a list of patches that need to be applied in the source.
-  # * A `path` attribute, which is the destination of the source inside the Xen tree.
-  prefetchedSources =
-    lib.attrsets.optionalAttrs withInternalQEMU {
-      qemu = {
-        src = fetchgit {
-          url = "https://xenbits.xenproject.org/git-http/qemu-xen.git";
-          fetchSubmodules = true;
-          inherit (pkg.qemu) rev hash;
-        };
-        patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.qemu) pkg.qemu.patches;
-        path = "tools/qemu-xen";
-      };
-    }
-    // lib.attrsets.optionalAttrs withInternalSeaBIOS {
-      seaBIOS = {
-        src = fetchgit {
-          url = "https://xenbits.xenproject.org/git-http/seabios.git";
-          inherit (pkg.seaBIOS) rev hash;
-        };
-        patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [
-          "patches"
-        ] pkg.seaBIOS) pkg.seaBIOS.patches;
-        path = "tools/firmware/seabios-dir-remote";
-      };
-    }
-    // lib.attrsets.optionalAttrs withInternalOVMF {
-      ovmf = {
-        src = fetchgit {
-          url = "https://xenbits.xenproject.org/git-http/ovmf.git";
-          fetchSubmodules = true;
-          inherit (pkg.ovmf) rev hash;
-        };
-        patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ovmf) pkg.ovmf.patches;
-        path = "tools/firmware/ovmf-dir-remote";
-      };
-    }
-    // lib.attrsets.optionalAttrs withInternalIPXE {
-      ipxe = {
-        src = fetchFromGitHub {
-          owner = "ipxe";
-          repo = "ipxe";
-          inherit (pkg.ipxe) rev hash;
-        };
-        patches = lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.ipxe) pkg.ipxe.patches;
-        path = "tools/firmware/etherboot/ipxe.git";
-      };
-    };
-
-  # Gets a list containing the names of the top-level attribute for each pre-fetched
-  # source, to be used in the map functions below.
-  prefetchedSourcesList = lib.attrsets.mapAttrsToList (name: value: name) prefetchedSources;
-
-  # Produces bash commands that will copy each pre-fetched source.
-  copyPrefetchedSources =
-    # Finish the deployment by concatnating the list of commands together.
-    lib.strings.concatLines (
-      # Iterate on each pre-fetched source.
-      builtins.map (
-        source:
-        # Only produce a copy command if patches exist.
-        lib.strings.optionalString (lib.attrsets.hasAttrByPath [ "${source}" ] prefetchedSources)
-          # The actual copy command. `src` is always an absolute path to a fetcher output
-          # inside the /nix/store, and `path` is always a path relative to the Xen root.
-          # We need to `mkdir -p` the target directory first, and `chmod +w` the contents last,
-          # as the copied files will still be edited by the postPatchPhase.
-          ''
-            echo "Copying ${prefetchedSources.${source}.src} -> ${prefetchedSources.${source}.path}"
-            mkdir --parents ${prefetchedSources.${source}.path}
-            cp --recursive --no-target-directory ${prefetchedSources.${source}.src} ${
-              prefetchedSources.${source}.path
-            }
-            chmod --recursive +w ${prefetchedSources.${source}.path}
-          ''
-      ) prefetchedSourcesList
-    );
-
-  # Produces strings with `patch` commands to be ran on postPatch.
-  # These deploy the .patch files for each pre-fetched source.
-  deployPrefetchedSourcesPatches =
-    # Finish the deployment by concatnating the list of commands together.
-    lib.strings.concatLines (
-      # The double map functions create a list of lists. Flatten it so we can concatnate it.
-      lib.lists.flatten (
-        # Iterate on each pre-fetched source.
-        builtins.map (
-          source:
-          # Iterate on each available patch.
-          (builtins.map (
-            patch:
-            # Only produce a patch command if patches exist.
-            lib.strings.optionalString
-              (lib.attrsets.hasAttrByPath [
-                "${source}"
-                "patches"
-              ] prefetchedSources)
-              # The actual patch command. It changes directories to the correct source each time.
-              ''
-                echo "Applying patch ${patch} to ${source}."
-                patch --directory ${prefetchedSources.${source}.path} --strip 1 < ${patch}
-              ''
-          ) prefetchedSources.${source}.patches)
-        ) prefetchedSourcesList
-      )
-    );
+  upstreamPatchList = flatten (
+    with upstreamPatches;
+    [
+      QUBES_REPRODUCIBLE_BUILDS
+      XSA_460
+      XSA_461
+      XSA_462
+    ]
+  );
 
   ## XSA Patches Description Builder ##
 
-  # Sometimes patches are sourced through a path, like ./0000-xen.patch.
-  # This would break the patch attribute parser functions, so we normalise
-  # all patches sourced through paths by setting them to a { type = "path"; }
-  # attribute set.
-  # Patches from fetchpatch are already attribute sets.
-  normalisedPatchList = builtins.map (
-    patch:
-    if !builtins.isAttrs patch then
-      if builtins.isPath patch then
-        { type = "path"; }
-      else
-        throw "xen/generic/default.nix: normalisedPatchList attempted to normalise something that is not a Path or an Attribute Set."
-    else
-      patch
-  ) pkg.xen.patches;
-
   # Simple counter for the number of attrsets (patches) in the patches list after normalisation.
-  numberOfPatches = lib.lists.count (patch: builtins.isAttrs patch) normalisedPatchList;
+  numberOfPatches = count (patch: isAttrs patch) upstreamPatchList;
 
   # builtins.elemAt's index begins at 0, so we subtract 1 from the number of patches in order to
   # produce the range that will be used in the following builtin.map calls.
-  availablePatchesToTry = lib.lists.range 0 (numberOfPatches - 1);
+  availablePatchesToTry = range 0 (numberOfPatches - 1);
 
   # Takes in an attrByPath input, and outputs the attribute value for each patch in a list.
   # If a patch does not have a given attribute, returns `null`. Use lib.lists.remove null
   # to remove these junk values, if necessary.
   retrievePatchAttributes =
     attributeName:
-    builtins.map (
-      x: lib.attrsets.attrByPath attributeName null (builtins.elemAt normalisedPatchList x)
-    ) availablePatchesToTry;
+    map (x: attrByPath attributeName null (elemAt upstreamPatchList x)) availablePatchesToTry;
 
   # Produces a list of newline-separated strings that lists the vulnerabilities this
   # Xen is NOT affected by, due to the applied Xen Security Advisory patches. This is
@@ -286,27 +155,27 @@ let
   #  * [CVE-1999-00002](https://www.cve.org/CVERecord?id=CVE-1999-00002)
   #  * [CVE-1999-00003](https://www.cve.org/CVERecord?id=CVE-1999-00003)
   writeAdvisoryDescription =
-    if (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]) != [ ]) then
-      lib.lists.zipListsWith (a: b: a + b)
-        (lib.lists.zipListsWith (a: b: a + "**" + b + ".**\n  >")
-          (lib.lists.zipListsWith (a: b: "* [Xen Security Advisory #" + a + "](" + b + "): ")
-            (lib.lists.remove null (retrievePatchAttributes [ "xsa" ]))
+    if (remove null (retrievePatchAttributes [ "xsa" ]) != [ ]) then
+      zipListsWith (a: b: a + b)
+        (zipListsWith (a: b: a + "**" + b + ".**\n  >")
+          (zipListsWith (a: b: "* [Xen Security Advisory #" + a + "](" + b + "): ")
+            (remove null (retrievePatchAttributes [ "xsa" ]))
             (
-              lib.lists.remove null (retrievePatchAttributes [
+              remove null (retrievePatchAttributes [
                 "meta"
                 "homepage"
               ])
             )
           )
           (
-            lib.lists.remove null (retrievePatchAttributes [
+            remove null (retrievePatchAttributes [
               "meta"
               "description"
             ])
           )
         )
         (
-          lib.lists.remove null (retrievePatchAttributes [
+          remove null (retrievePatchAttributes [
             "meta"
             "longDescription"
           ])
@@ -327,198 +196,142 @@ let
     doInstallCheck = false; # We get a spurious failure otherwise, due to a host/target mismatch.
     meta.mainProgram = "ld"; # We only really care for `ld`.
   });
+
+  #TODO: fix paths instead.
+  scriptEnvPath = makeSearchPathOutput "out" "bin" [
+    bridge-utils
+    coreutils
+    diffutils
+    gawk
+    gnugrep
+    gnused
+    inetutils
+    iproute2
+    iptables
+    multipath-tools
+    nbd
+    openvswitch
+    perl
+    util-linux.bin
+    which
+  ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
+  # TODO: Split $out in $bin for binaries and $lib for libraries.
+  # TODO: Python package to be in separate output/package.
   outputs = [
-    "out" # TODO: Split $out in $bin for binaries and $lib for libraries.
-    "man" # Manual pages for Xen userspace utilities.
-    "doc" # The full Xen documentation in HTML format.
-    "dev" # Development headers.
-    "boot" # xen.gz kernel, policy file if Flask is enabled, xen.efi if EFI is enabled.
-    # TODO: Python package to be in separate output/package.
+    "out"
+    "man"
+    "doc"
+    "dev"
+    "boot"
   ];
 
   # Main Xen source.
   src = fetchgit {
     url = "https://xenbits.xenproject.org/git-http/xen.git";
-    inherit (pkg.xen) rev hash;
+    inherit rev hash;
   };
 
-  patches =
-    # Generic Xen patches that apply to all Xen versions.
-    [ ./0000-xen-ipxe-src-generic.patch ]
-    # Gets the patches from the pkg.xen.patches attribute from the versioned files.
-    ++ lib.lists.optionals (lib.attrsets.hasAttrByPath [ "patches" ] pkg.xen) pkg.xen.patches
-    ++ upstreamPatchList;
+  patches = optionals useDefaultPatchList upstreamPatchList ++ patches;
 
-  nativeBuildInputs =
-    [
-      autoPatchelfHook
-      bison
-      cmake
-      flex
-      pandoc
-      pkg-config
-      python3Packages.setuptools
-    ]
-    ++ lib.lists.optionals withInternalQEMU [
-      ninja
-      python3Packages.sphinx
-    ];
-  buildInputs =
-    [
-      # Xen
-      acpica-tools
-      bzip2
-      dev86
-      e2fsprogs.dev
-      libnl
-      libuuid
-      lzo
-      ncurses
-      perl
-      python3Packages.python
-      xz
-      yajl
-      zlib
-      zstd
+  nativeBuildInputs = [
+    autoPatchelfHook
+    bison
+    cmake
+    flex
+    pandoc
+    pkg-config
+    python3Packages.setuptools
+  ];
+  buildInputs = [
+    # Xen
+    acpica-tools
+    bzip2
+    dev86
+    e2fsprogs.dev
+    libnl
+    libuuid
+    lzo
+    ncurses
+    perl
+    python3Packages.python
+    xz
+    yajl
+    zlib
+    zstd
 
-      # oxenstored
-      ocamlPackages.findlib
-      ocamlPackages.ocaml
+    # oxenstored
+    ocamlPackages.findlib
+    ocamlPackages.ocaml
 
-      # Python Fixes
-      python3Packages.wrapPython
-    ]
-    ++ lib.lists.optionals withInternalQEMU [
-      glib
-      pixman
-    ]
-    ++ lib.lists.optional withInternalOVMF nasm
-    ++ lib.lists.optional withFlask checkpolicy
-    ++ lib.lists.optional (lib.strings.versionOlder version "4.19") systemdMinimal;
+    # Python Fixes
+    python3Packages.wrapPython
+  ] ++ optional withFlask checkpolicy ++ optional (versionOlder version "4.19") systemdMinimal;
 
-  configureFlags =
-    [
-      "--enable-systemd"
-      "--disable-qemu-traditional"
-    ]
-    ++ lib.lists.optional (!withInternalQEMU) "--with-system-qemu"
-
-    ++ lib.lists.optional withSeaBIOS "--with-system-seabios=${seabios}/share/seabios"
-    ++ lib.lists.optional (!withInternalSeaBIOS && !withSeaBIOS) "--disable-seabios"
-
-    ++ lib.lists.optional withOVMF "--with-system-ovmf=${OVMF.firmware}"
-    ++ lib.lists.optional withInternalOVMF "--enable-ovmf"
-
-    ++ lib.lists.optional withIPXE "--with-system-ipxe=${ipxe}"
-    ++ lib.lists.optional withInternalIPXE "--enable-ipxe"
-
-    ++ lib.lists.optional withFlask "--enable-xsmpolicy";
+  configureFlags = [
+    "--enable-systemd"
+    "--disable-qemu-traditional"
+    "--with-system-qemu"
+    (if withSeaBIOS then "--with-system-seabios=${seabios}/share/seabios" else "--disable-seabios")
+    (if withOVMF then "--with-system-ovmf=${OVMF.firmware}" else "--disable-ovmf")
+    (if withIPXE then "--with-system-ipxe=${ipxe}" else "--disable-ipxe")
+    (enableFeature withFlask "xsmpolicy")
+  ];
 
   makeFlags =
     [
+      "SUBSYSTEMS=${toString finalAttrs.buildFlags}"
+
       "PREFIX=$(out)"
-      "CONFIG_DIR=/etc"
-      "XEN_SCRIPT_DIR=$(CONFIG_DIR)/xen/scripts"
       "BASH_COMPLETION_DIR=$(PREFIX)/share/bash-completion/completions"
+
+      "XEN_WHOAMI=${pname}"
+      "XEN_DOMAIN=${vendor}"
+
+      "GIT=${coreutils}/bin/false"
+      "WGET=${coreutils}/bin/false"
     ]
-    ++ lib.lists.optionals withEFI [
-      "EFI_VENDOR=${efiVendor}"
+    ++ optionals withEFI [
+      "EFI_VENDOR=${vendor}"
       "INSTALL_EFI_STRIP=1"
-      "LD=${lib.meta.getExe efiBinutils}" # See the comment in the efiBinutils definition above.
+      "LD=${getExe efiBinutils}" # See the comment in the efiBinutils definition above.
     ]
     # These flags set the CONFIG_* options in /boot/xen.config
     # and define if the default policy file is built. However,
     # the Flask binaries always get compiled by default.
-    ++ lib.lists.optionals withFlask [
+    ++ optionals withFlask [
       "XSM_ENABLE=y"
       "FLASK_ENABLE=y"
-    ]
-    ++ (pkg.xen.makeFlags or [ ]);
+    ];
 
   buildFlags = [
-    "xen" # Build the Xen Hypervisor.
-    "tools" # Build the userspace tools, such as `xl`.
-    "docs" # Build the Xen Documentation
+    "xen"
+    "tools"
+    "docs"
   ];
 
   enableParallelBuilding = true;
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString (
-    [
-      "-Wno-error=maybe-uninitialized"
-      "-Wno-error=array-bounds"
-    ]
-    ++ lib.lists.optionals withInternalOVMF [
-      "-Wno-error=format-security"
-      "-Wno-error=use-after-free"
-      "-Wno-error=vla-parameter"
-      "-Wno-error=dangling-pointer"
-      "-Wno-error=stringop-overflow"
-    ]
-  );
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=maybe-uninitialized"
+    "-Wno-error=array-bounds"
+  ];
 
   dontUseCmakeConfigure = true;
-  dontUseNinjaBuild = withInternalQEMU;
 
-  prePatch =
-    # Xen's stubdoms, tools and firmwares need various sources that
-    # are usually fetched at build time using wget and git. We can't
-    # have that, so we pre-fetch them in the versioned Nix expressions,
-    # and produce fake wget and git executables for debugging purposes.
-    #
-    # We also produce a fake hostname executable to prevent spurious
-    # command-not-found errors during compilation.
-    #
-    # The snippet below produces executables that simply print in stdout
-    # what they were supposed to fetch, and exit gracefully.
-    ''
-      mkdir fake-bin
-
-      cat > fake-bin/wget << EOF
-      #!${stdenv.shell} -e
-      echo ===== FAKE WGET: Not fetching \$*
-      [ -e \$3 ]
-      EOF
-
-      cat > fake-bin/git << EOF
-      #!${stdenv.shell}
-      echo ===== FAKE GIT: Not cloning \$*
-      [ -e \$3 ]
-      EOF
-
-      cat > fake-bin/hostname << EOF
-      #!${stdenv.shell}
-      echo ${efiVendor}
-      [ -e \$3 ]
-      EOF
-
-      chmod +x fake-bin/*
-      export PATH=$PATH:$PWD/fake-bin
-    ''
-
-    # Remove in-tree QEMU sources, as we either pre-fetch them through
-    # the versioned Nix expressions if withInternalQEMU is true, or we
-    # don't build QEMU at all if withInternalQEMU is false.
-    + ''
-      rm --recursive --force tools/qemu-xen tools/qemu-xen-traditional
-    ''
-
-    # Call copyPrefetchedSources, which copies all aviable sources to their correct positions.
-    + ''
-      ${copyPrefetchedSources}
-    '';
+  # Remove in-tree QEMU sources, we don't need them in any circumstance.
+  prePatch = "rm --recursive --force tools/qemu-xen tools/qemu-xen-traditional";
 
   postPatch =
     # The following patch forces Xen to install xen.efi on $out/boot
     # instead of $out/boot/efi/efi/nixos, as the latter directory
     # would otherwise need to be created manually. This also creates
     # a more consistent output for downstreams who override the
-    # efiVendor attribute above.
+    # vendor attribute above.
     ''
       substituteInPlace xen/Makefile \
         --replace-fail "\$(D)\$(EFI_MOUNTPOINT)/efi/\$(EFI_VENDOR)/\$(T)-\$(XEN_FULLVERSION).efi" \
@@ -541,46 +354,18 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace \
        tools/hotplug/Linux/systemd/{xen-qemu-dom0-disk-backend,xenconsoled}.service.in \
         --replace-fail "/bin/mkdir" "${coreutils}/bin/mkdir"
-    ''
-
-    # # Call deployPrefetchedSourcesPatches, which patches all pre-fetched sources with their specified patchlists.
-    + ''
-      ${deployPrefetchedSourcesPatches}
-    ''
-    # Patch shebangs for QEMU and OVMF build scripts.
-    + lib.strings.optionalString withInternalQEMU ''
-      patchShebangs --build tools/qemu-xen/scripts/tracetool.py
-    ''
-    + lib.strings.optionalString withInternalOVMF ''
-      patchShebangs --build tools/firmware/ovmf-dir-remote/OvmfPkg/build.sh tools/firmware/ovmf-dir-remote/BaseTools/BinWrappers/PosixLike/{AmlToC,BrotliCompress,build,GenFfs,GenFv,GenFw,GenSec,LzmaCompress,TianoCompress,Trim,VfrCompile}
     '';
 
-  installPhase =
-    let
-      cpFlags = builtins.toString [
-        "--preserve=mode,ownership,timestamps,link"
-        "--recursive"
-        "--verbose"
-        "--no-dereference"
-      ];
-    in
-    # Run the preInstall tasks.
-    ''
-      runHook preInstall
-    ''
+  installPhase = ''
+    runHook preInstall
 
-    # Create $out directories and copy build output.
-    + ''
-      mkdir --parents $out $out/share $boot
-      cp ${cpFlags} dist/install/nix/store/*/* $out/
-      cp ${cpFlags} dist/install/etc $out
-      cp ${cpFlags} dist/install/boot $boot
-    ''
+    mkdir --parents $out $out/share $boot
+    cp -prvd dist/install/nix/store/*/* $out/
+    cp -prvd dist/install/etc $out
+    cp -prvd dist/install/boot $boot
 
-    # Run the postInstall tasks.
-    + ''
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   postInstall =
     # Wrap xencov_split, xenmon and xentrace_format.
@@ -603,7 +388,6 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   postFixup =
-    # Fix binaries in $out/libexec/xen/bin.
     ''
       addAutoPatchelfSearchPath $out/lib
       autoPatchelf $out/libexec/xen/bin
@@ -611,7 +395,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Flask is particularly hard to disable. Even after
     # setting the make flags to `n`, it still gets compiled.
     # If withFlask is disabled, delete the extra binaries.
-    + lib.strings.optionalString (!withFlask) ''
+    + optionalString (!withFlask) ''
       rm -f $out/bin/flask-*
     '';
 
@@ -623,11 +407,6 @@ stdenv.mkDerivation (finalAttrs: {
         "boot/xenpolicy-${version}"
       else
         throw "This Xen was compiled without FLASK support.";
-    qemu-system-i386 =
-      if withInternalQEMU then
-        "libexec/xen/bin/qemu-system-i386"
-      else
-        throw "This Xen was compiled without a built-in QEMU.";
     # This test suite is very simple, as Xen's userspace
     # utilities require the hypervisor to be booted.
     tests = {
@@ -654,103 +433,63 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta =
-    if
-      !(lib.attrsets.hasAttrByPath [
-        "meta"
-      ] versionDefinition)
-    then
-      {
-        inherit branch;
+  meta = {
+    inherit branch;
 
-        # Short description for Xen.
-        description =
-          "Xen Project Hypervisor"
-          # The "and related components" addition is automatically hidden if said components aren't being built.
-          + lib.strings.optionalString (prefetchedSources != { }) " and related components"
-          + " (${if slim then "Without Internal Components" else "Standard"})";
+    description = "Type-1 hypervisor intended for embedded and hyperscale use cases";
+    longDescription =
+      ''
+        The Xen Project Hypervisor is a virtualisation technology defined as a *type-1
+        hypervisor*, which allows multiple virtual machines, known as domains, to run
+        concurrently with the host on the physical machine. On a typical *type-2
+        hypervisor*, the virtual machines run as applications on top of the
+        host. NixOS runs as the privileged **Domain 0**, and can paravirtualise or fully
+        virtualise **Unprivileged Domains**.
 
-        # Long description for Xen.
-        longDescription =
-          (
-            if slim then
-              ''
-                Slimmed-down version of the Xen Project Hypervisor that reuses nixpkgs packages
-                as much as possible. Instead of using the Xen Project forks for various internal
-                components, this version uses `seabios`, `ovmf` and `ipxe` from Nixpkgs. These
-                components may ocasionally get out of sync with the hypervisor itself, but this
-                builds faster and uses less space than the default derivation.
-              ''
-            else
-              ''
-                Standard version of the Xen Project Hypervisor. Uses forks of QEMU, SeaBIOS,
-                OVMF and iPXE provided by the Xen Project. This provides the vanilla Xen
-                experience, but wastes space and build time. A typical NixOS setup that runs
-                lots of VMs will usually need to build two different versions of QEMU when using
-                this Xen derivation (one fork and upstream).
-              ''
-          )
-          + lib.strings.optionalString (!withInternalQEMU) (
-            "\nUse with `qemu_xen_${lib.strings.stringAsChars (x: if x == "." then "_" else x) branch}`"
-            + lib.strings.optionalString latest " or `qemu_xen`"
-            + ".\n"
-          )
-          # Then, if any of the optional with* components are being built, add the "Includes:" string.
-          +
-            lib.strings.optionalString
-              (
-                withInternalQEMU
-                || withInternalSeaBIOS
-                || withInternalOVMF
-                || withInternalIPXE
-                || withEFI
-                || withFlask
-              )
-              (
-                "\nIncludes:"
-                # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
-                # that many optional components, we just use lib.strings.optionalString, because it's simpler.
-                # Optional components that aren't being built are automatically hidden.
-                + lib.strings.optionalString withEFI "\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
-                + lib.strings.optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
-                + lib.strings.optionalString withInternalQEMU "\n* `qemu-xen`: The Xen Project's mirror of [QEMU](https://www.qemu.org/)."
-                + lib.strings.optionalString withInternalSeaBIOS "\n* `seabios-xen`: The Xen Project's mirror of [SeaBIOS](https://www.seabios.org/SeaBIOS)."
-                + lib.strings.optionalString withInternalOVMF "\n* `ovmf-xen`: The Xen Project's mirror of [OVMF](https://github.com/tianocore/tianocore.github.io/wiki/OVMF)."
-                + lib.strings.optionalString withInternalIPXE "\n* `ipxe-xen`: The Xen Project's pinned version of [iPXE](https://ipxe.org/)."
-              )
-          # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
-          # This will hopefully give users the peace of mind that their Xen is secure, without needing
-          # to search the source code for the XSA patches.
-          + lib.strings.optionalString (writeAdvisoryDescription != [ ]) (
-            "\n\nThis Xen Project Hypervisor (${version}) has been patched against the following known security vulnerabilities:\n"
-            + lib.strings.removeSuffix "\n" (lib.strings.concatLines writeAdvisoryDescription)
-          );
+        Use with the `qemu_xen` package.
+      ''
+      # Then, if any of the optional with* components are being built, add the "Includes:" string.
+      + optionalString (withEFI || withFlask) (
+        "\nIncludes:"
+        # Originally, this was a call for the complicated withPrefetchedSources. Since there aren't
+        # that many optional components, we just use lib.strings.optionalString, because it's simpler.
+        # Optional components that aren't being built are automatically hidden.
+        + optionalString withEFI "\n* `xen.efi`: The Xen Project's [EFI binary](https://xenbits.xenproject.org/docs/${branch}-testing/misc/efi.html), available on the `boot` output of this package."
+        + optionalString withFlask "\n* `xsm-flask`: The [FLASK Xen Security Module](https://wiki.xenproject.org/wiki/Xen_Security_Modules_:_XSM-FLASK). The `xenpolicy-${version}` file is available on the `boot` output of this package."
+        + optionalString withSeaBIOS "\n* `seabios`: Support for the SeaBIOS boot firmware on HVM domains."
+        + optionalString withOVMF "\n* `ovmf`: Support for the OVMF UEFI boot firmware on HVM domains."
+        + optionalString withIPXE "\n* `ipxe`: Support for the iPXE boot firmware on HVM domains."
+      )
+      # Finally, we write a notice explaining which vulnerabilities this Xen is NOT vulnerable to.
+      # This will hopefully give users the peace of mind that their Xen is secure, without needing
+      # to search the source code for the XSA patches.
+      + optionalString (writeAdvisoryDescription != [ ]) (
+        "\n\nThis Xen Project Hypervisor (${version}) has been patched against the following known security vulnerabilities:\n"
+        + removeSuffix "\n" (concatLines writeAdvisoryDescription)
+      );
 
-        homepage = "https://xenproject.org/";
-        downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
-        changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${branch}_Release_Notes";
+    homepage = "https://xenproject.org/";
+    downloadPage = "https://downloads.xenproject.org/release/xen/${version}/";
+    changelog = "https://wiki.xenproject.org/wiki/Xen_Project_${branch}_Release_Notes";
 
-        license = with lib.licenses; [
-          # Documentation.
-          cc-by-40
-          # Most of Xen is licensed under the GPL v2.0.
-          gpl2Only
-          # Xen Libraries and the `xl` command-line utility.
-          lgpl21Only
-          # Development headers in $dev/include.
-          mit
-        ];
+    license = [
+      # Documentation.
+      cc-by-40
+      # Most of Xen is licensed under the GPL v2.0.
+      gpl2Only
+      # Xen Libraries and the `xl` command-line utility.
+      lgpl21Only
+      # Development headers in $dev/include.
+      mit
+    ];
 
-        # This automatically removes maintainers from EOL versions of Xen, so we aren't bothered about versions we don't explictly support.
-        maintainers = lib.lists.optionals (lib.strings.versionAtLeast version minSupportedVersion) lib.teams.xen.members;
-        knownVulnerabilities = lib.lists.optional (lib.strings.versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
+    maintainers = teams.xen.members;
+    knownVulnerabilities = optional (versionOlder version minSupportedVersion) "The Xen Project Hypervisor version ${version} is no longer supported by the Xen Project Security Team. See https://xenbits.xenproject.org/docs/unstable/support-matrix.html";
 
-        mainProgram = "xl";
+    mainProgram = "xl";
 
-        # Evaluates to x86_64-linux.
-        platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
-
-      }
-    else
-      versionDefinition.meta;
+    #TODO: Migrate meta.platforms to the new lib.systems.inspect.patterns.* format.
+    platforms = linux;
+    badPlatforms = aarch64;
+  } // meta;
 })

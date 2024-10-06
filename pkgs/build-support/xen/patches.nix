@@ -6,6 +6,9 @@
 { lib, fetchpatch }:
 
 let
+  inherit (builtins) concatStringsSep;
+  inherit (lib.strings) optionalString concatMapStrings;
+
   xsaPatch =
     {
       id,
@@ -16,8 +19,7 @@ let
       cve ? null,
     }:
     (fetchpatch {
-      name =
-        "XSA-" + id + lib.strings.optionalString (cve != null) ("-" + builtins.concatStringsSep "+" cve);
+      name = "XSA-" + id + optionalString (cve != null) ("-" + concatStringsSep "+" cve);
       url = "https://xenbits.xen.org/xsa/xsa${id}.patch";
       inherit hash;
       passthru = {
@@ -37,9 +39,7 @@ let
               "  _No CVE was assigned to this XSA._"
             else
               "  Fixes:${
-                  lib.strings.concatMapStrings (
-                    x: "\n  * [" + x + "](https://www.cve.org/CVERecord?id=" + x + ")"
-                  ) cve
+                  concatMapStrings (x: "\n  * [" + x + "](https://www.cve.org/CVERecord?id=" + x + ")") cve
                 }"
           );
         homepage = "https://xenbits.xenproject.org/xsa/advisory-${id}.html";
