@@ -757,15 +757,20 @@ let
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 
-        # https://github.com/melpa/melpa/pull/9185
-        alectryon = super.alectryon.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --recursive --verbose etc/elisp/screenshot
-            '';
-        });
+        alectryon = super.alectryon.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9185
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20241006.1902" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --recursive --verbose etc/elisp/screenshot
+                ''
+              else
+                previousAttrs.preBuild or null;
+          }
+        );
 
         # https://github.com/gergelypolonkai/alert-termux/issues/2
         alert-termux = addPackageRequires super.alert-termux [ self.alert ];
