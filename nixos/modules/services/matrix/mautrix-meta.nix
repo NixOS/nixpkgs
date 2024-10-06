@@ -575,5 +575,5 @@ in {
     }
   ];
 
-  meta.maintainers = with lib.maintainers; [ rutherther ];
+  meta.maintainers = with lib.maintainers; [ ];
 }
