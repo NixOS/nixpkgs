@@ -28,6 +28,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Adds code generation, stacks, orchestration, change detection, data sharing and more to Terraform";
     homepage = "https://github.com/terramate-io/terramate";
+    changelog = "https://github.com/terramate-io/terramate/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dit7ya ];
   };
