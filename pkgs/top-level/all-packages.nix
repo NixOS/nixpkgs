@@ -19780,8 +19780,6 @@ with pkgs;
 
   hnswlib = callPackage ../development/libraries/hnswlib { };
 
-  httplib = callPackage ../development/libraries/httplib { };
-
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/libgit2 {
@@ -21247,14 +21245,6 @@ with pkgs;
   libredwg = callPackage ../development/libraries/libredwg { };
 
   librem = callPackage ../development/libraries/librem { };
-
-  libremidi = callPackage ../development/libraries/libremidi {
-      inherit (darwin.apple_sdk.frameworks)
-        CoreAudio
-        CoreFoundation
-        CoreMIDI
-        CoreServices;
-  };
 
   libremines = qt6.callPackage ../games/libremines { };
 
