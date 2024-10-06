@@ -15039,8 +15039,9 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx17 openjfx21 openjfx23;
-  openjfx = openjfx17;
+  openjfx17 = openjfx;
+  openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
+  openjfx23 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "23"; };
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
   openjdk8 = javaPackages.compiler.openjdk8;

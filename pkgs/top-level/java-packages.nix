@@ -2,13 +2,8 @@
 
 with pkgs;
 
-let
-  openjfx17 = callPackage ../development/compilers/openjdk/openjfx/generic.nix { featureVersion = "17"; };
-  openjfx21 = callPackage ../development/compilers/openjdk/openjfx/generic.nix { featureVerison = "21"; };
-  openjfx23 = callPackage ../development/compilers/openjdk/openjfx/generic.nix { featureVersion = "23"; };
-
-in {
-  inherit openjfx17 openjfx21 openjfx23;
+{
+  inherit (pkgs) openjfx17 openjfx21 openjfx23;
 
   compiler = let
     mkOpenjdk = featureVersion: path-darwin:
