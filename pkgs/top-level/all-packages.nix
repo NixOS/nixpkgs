@@ -311,6 +311,12 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
+  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
+    tbb = tbb_2021_11;
+    cereal = cereal_1_3_2;
+    opencv = opencv.override { enableGtk3 = true; };
+  };
+
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
   beeper = callPackage ../applications/networking/instant-messengers/beeper { };
