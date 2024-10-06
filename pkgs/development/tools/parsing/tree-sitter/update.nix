@@ -455,6 +455,10 @@ let
       orga = "grafana";
       repo = "tree-sitter-river";
     };
+    "tree-sitter-moonbit" = {
+      orga = "moonbitlang";
+      repo = "tree-sitter-moonbit";
+    };
   };
 
   allGrammars =
