@@ -83,6 +83,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "circus" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Process and socket manager";
     homepage = "https://github.com/circus-tent/circus";
