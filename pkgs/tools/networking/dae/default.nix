@@ -4,7 +4,7 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
-  gitUpdater,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "dae";
@@ -52,9 +52,7 @@ buildGoModule rec {
     inherit (nixosTests) dae;
   };
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Linux high-performance transparent proxy solution based on eBPF";
