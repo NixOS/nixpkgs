@@ -1,4 +1,6 @@
 # Clean up __init__.py's found in namespace directories
+# shellcheck shell=bash
+
 echo "Sourcing python-namespaces-hook"
 
 pythonNamespacesHook() {
@@ -10,13 +12,15 @@ pythonNamespacesHook() {
         echo "Enforcing PEP420 namespace: ${namespace}"
 
         # split namespace into segments. "azure.mgmt" -> "azure mgmt"
-        IFS='.' read -ra pathSegments <<<$namespace
-        constructedPath=$out/@pythonSitePackages@
+        # shellcheck disable=SC2206
+        local -a pathSegments=(${namespace//./ })
+        # shellcheck disable=SC2154
+        constructedPath="$out"/@pythonSitePackages@
 
         # Need to remove the __init__.py at each namespace level
         # E.g `azure/__init__.py` and `azure/mgmt/__init__.py`
         # The __pycache__ entry also needs to be removed
-        for pathSegment in ${pathSegments[@]}; do
+        for pathSegment in "${pathSegments[@]}"; do
             constructedPath=${constructedPath}/${pathSegment}
             pathToRemove=${constructedPath}/__init__.py
             pycachePath=${constructedPath}/__pycache__/
@@ -32,9 +36,9 @@ pythonNamespacesHook() {
             # event of a "meta-package" package, which will just install
             # other packages, but not produce anything in site-packages
             # besides meta information
-            if [ -d "${constructedPath}/../" -a -z ${dontRemovePth-} ]; then
+            if [[ -d "${constructedPath}/../" ]] && [[ -z "${dontRemovePth-}" ]]; then
                 # .pth files are located in the parent directory of a module
-                @findutils@/bin/find ${constructedPath}/../ -name '*-nspkg.pth' -exec rm -v "{}" +
+                @findutils@/bin/find "${constructedPath}/../" -name '*-nspkg.pth' -exec rm -v "{}" +
             fi
 
             # remove __pycache__/ entry, can be interpreter specific. E.g. __init__.cpython-38.pyc
@@ -48,6 +52,6 @@ pythonNamespacesHook() {
     echo "Finished executing pythonNamespacesHook"
 }
 
-if [ -z "${dontUsePythonNamespacesHook-}" -a -n "${pythonNamespaces-}" ]; then
+if [[ -z "${dontUsePythonNamespacesHook-}" ]] && [[ -n "${pythonNamespaces-}" ]]; then
     postFixupHooks+=(pythonNamespacesHook)
 fi
