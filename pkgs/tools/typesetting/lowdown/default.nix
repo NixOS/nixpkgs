@@ -2,12 +2,13 @@
 , fetchpatch
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? stdenv.hostPlatform.isStatic
+, enableDarwinSandbox ? true
 # for passthru.tests
 , nix
 }:
 
 stdenv.mkDerivation rec {
-  pname = "lowdown";
+  pname = "lowdown${lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) "-unsandboxed"}";
   version = "1.1.0";
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -54,7 +55,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which dieHook ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+  # The Darwin sandbox calls fail inside Nix builds, presumably due to
+  # being nested inside another sandbox.
+  preConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin && !enableDarwinSandbox) ''
     echo 'HAVE_SANDBOX_INIT=0' > configure.local
   '';
 
@@ -103,7 +106,8 @@ stdenv.mkDerivation rec {
     '';
 
   doInstallCheck = true;
-  installCheckPhase = ''
+
+  installCheckPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin || !enableDarwinSandbox) ''
     runHook preInstallCheck
     echo '# TEST' > test.md
     $out/bin/lowdown test.md
