@@ -35,13 +35,13 @@
 , perlPackages
 , ocamlPackages
 , libtirpc
-, appliance ? null
 , javaSupport ? false
 , jdk
 , zstd
+, libguestfs
+, testers
 }:
 
-assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
@@ -114,6 +114,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
   patches = [
     ./libguestfs-syms.patch
+    ./libguestfs_guestfs_path_section.patch
   ];
 
   createFindlibDestdir = true;
@@ -130,31 +131,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = lib.optionalString (appliance != null) ''
-    mkdir -p $out/{lib,lib64}
-    ln -s ${appliance} $out/lib64/guestfs
-    ln -s ${appliance} $out/lib/guestfs
-  '';
-
-  doInstallCheck = appliance != null;
-  installCheckPhase = ''
-    runHook preInstallCheck
-
-    export HOME=$(mktemp -d) # avoid access to /homeless-shelter/.guestfish
-
-    ${qemu}/bin/qemu-img create -f qcow2 disk1.img 10G
-
-    $out/bin/guestfish <<'EOF'
-    add-drive disk1.img
-    run
-    list-filesystems
-    part-disk /dev/sda mbr
-    mkfs ext2 /dev/sda1
-    list-filesystems
-    EOF
-
-    runHook postInstallCheck
-  '';
+  passthru.tests = {
+    version = testers.testVersion {
+      package = libguestfs;
+      command = "libguestfs-test-tool -V";
+    };
+  };
 
   meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
@@ -162,7 +144,5 @@ stdenv.mkDerivation rec {
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
-    # this is to avoid "output size exceeded"
-    hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }
