@@ -1097,7 +1097,8 @@ let
   */
   mkRemovedOptionModule = optionName: replacementInstructions:
     { options, ... }:
-    { options = setAttrByPath optionName (mkOption {
+    { key = "lib/modules.nix#mkRemovedOptionModule-${showOption optionName}";
+      options = setAttrByPath optionName (mkOption {
         visible = false;
         apply = x: throw "The option `${showOption optionName}' can no longer be used since it's been removed. ${replacementInstructions}";
       });
@@ -1182,6 +1183,7 @@ let
   mkMergedOptionModule = from: to: mergeFn:
     { config, options, ... }:
     {
+      key = "lib/modules.nix#mkMergedOptionModule-${lib.concatMapStringsSep "-" showOption from}-to-${showOption to}";
       options = foldl' recursiveUpdate {} (map (path: setAttrByPath path (mkOption {
         visible = false;
         # To use the value in mergeFn without triggering errors
@@ -1343,6 +1345,7 @@ let
       toType = let opt = attrByPath to {} options; in opt.type or (types.submodule {});
     in
     {
+      key = "lib/modules.nix#doRename-${showOption from}-to-${showOption to}";
       options = setAttrByPath from (mkOption {
         inherit visible;
         description = "Alias of {option}`${showOption to}`.";
