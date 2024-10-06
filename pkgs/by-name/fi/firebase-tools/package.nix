@@ -1,33 +1,38 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  xcbuild,
 }:
 
-buildNpmPackage rec {
-  pname = "firebase-tools";
-  version = "13.18.0";
-
+let
+  version = "13.20.2";
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
-    rev = "v${version}";
-    hash = "sha256-Tis5bF1rVuvjSuMeoa5ayyuZXdwolkNL3Ct+IWeYOKc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FIflfCSTXm7J2WectS175vc0ccztWa4tE2E2kcbhwJg=";
   };
+in
+buildNpmPackage {
+  pname = "firebase-tools";
+  inherit version src;
 
-  npmDepsHash = "sha256-mQYetHLbxr3Jegz01BfFVdzcLuz46zcNVqXjjxdKM/E=";
+  npmDepsHash = "sha256-qEerq6rFBN6HmzDS4xQJorzmzapBV/WhzCwG3rHU458=";
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json
   '';
 
-  nativeBuildInputs = [
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ];
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;
@@ -39,6 +44,6 @@ buildNpmPackage rec {
     homepage = "https://github.com/firebase/firebase-tools";
     license = lib.licenses.mit;
     mainProgram = "firebase";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ momeemt ];
   };
 }

@@ -1617,6 +1617,8 @@ self: super: with self; {
 
   biopython = callPackage ../development/python-modules/biopython { };
 
+  biothings-client = callPackage ../development/python-modules/biothings-client { };
+
   biplist = callPackage ../development/python-modules/biplist { };
 
   bip-utils = callPackage ../development/python-modules/bip-utils { };
@@ -3296,6 +3298,8 @@ self: super: with self; {
 
   django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
+  django-axes = callPackage ../development/python-modules/django-axes { };
+
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
@@ -3467,6 +3471,8 @@ self: super: with self; {
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
 
   django-scopes = callPackage ../development/python-modules/django-scopes { };
+
+  django-split-settings = callPackage ../development/python-modules/django-split-settings { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
 
@@ -8941,6 +8947,8 @@ self: super: with self; {
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
 
+  nitrokey = callPackage ../development/python-modules/nitrokey { };
+
   niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
@@ -13513,6 +13521,8 @@ self: super: with self; {
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
+
+  replicate = callPackage ../development/python-modules/replicate { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 
