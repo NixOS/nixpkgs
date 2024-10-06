@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "shiori";
-  version = "1.7.0";
+  version = "1.7.1";
 
   vendorHash = "sha256-fakRqgoEcdzw9WZuubaxfGfvVrMvb8gV/IwPikMnfRQ=";
 
@@ -12,7 +12,7 @@ buildGoModule rec {
     owner = "go-shiori";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5+hTtvBnj3Nh5HitReVkLift9LTiMYVuuYx5EirN0SA=";
+    sha256 = "sha256-gMIpDiA5ncZ50WZ2Y57mScTEXzeObgZxP+nkWe+a8Eo=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
