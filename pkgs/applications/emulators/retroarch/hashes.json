@@ -105,10 +105,10 @@
         "src": {
             "owner": "libretro",
             "repo": "supafaust",
-            "rev": "6b639c98372d1c9bac885c55d772c812d2a9d525",
-            "hash": "sha256-EVXwjrxooZm1JqG4HswUe8zwN81Rm7SPB5Fr4WfpTnc="
+            "rev": "e25f66765938d33f9ad5850e8d6cd597e55b7299",
+            "hash": "sha256-ZgOXHhEHt54J2B1q6uA8v6uOK53g7idJlgoC4guTGow="
         },
-        "version": "unstable-2023-06-19"
+        "version": "unstable-2024-10-01"
     },
     "beetle-supergrafx": {
         "fetcher": "fetchFromGitHub",
