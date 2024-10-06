@@ -21,12 +21,12 @@
   wrapperDir ? "/run/wrappers/bin",
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
   version = "4.1.11";
 
   src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.4.1.11.tar.gz";
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.${finalAttrs.version}.tar.gz";
     hash = "sha256-aLdzMOtKGR0llt+CyTVVX5xc18L9ddlYApe+dcqGRWY=";
   };
 
@@ -76,4 +76,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ babbaj ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
