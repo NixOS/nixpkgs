@@ -94,13 +94,21 @@ let
     REDIRECT_STATUS   = "200";
   };
 
-  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy_set_header-headers.conf" ''
     proxy_set_header        Host $host;
     proxy_set_header        X-Real-IP $remote_addr;
     proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header        X-Forwarded-Proto $scheme;
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
+  '';
+  recommendedUwsgiConfig = pkgs.writeText "nginx-recommended-uwsgi_param-headers.conf" ''
+    uwsgi_param             HTTP_HOST $host;
+    uwsgi_param             HTTP_X_REAL_IP $remote_addr;
+    uwsgi_param             HTTP_X_FORWARDED_FOR $proxy_add_x_forwarded_for;
+    uwsgi_param             HTTP_X_FORWARDED_PROTO $scheme;
+    uwsgi_param             HTTP_X_FORWARDED_HOST $host;
+    uwsgi_param             HTTP_X_FORWARDED_SERVER $host;
   '';
 
   proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
@@ -236,6 +244,15 @@ let
         # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
         proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
+      ''}
+
+      ${optionalString cfg.recommendedUwsgiSettings ''
+        uwsgi_connect_timeout   ${cfg.uwsgiTimeout};
+        uwsgi_send_timeout      ${cfg.uwsgiTimeout};
+        uwsgi_read_timeout      ${cfg.uwsgiTimeout};
+        uwsgi_param             HTTP_CONNECTION "";
+        include ${cfg.package}/conf/uwsgi_params;
+        include ${recommendedUwsgiConfig};
       ''}
 
       ${optionalString (cfg.mapHashBucketSize != null) ''
@@ -442,6 +459,13 @@ let
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
       ''}
+      ${optionalString (config.uwsgiPass != null && !cfg.uwsgiResolveWhileRunning)
+        "uwsgi_pass ${config.uwsgiPass};"
+      }
+      ${optionalString (config.uwsgiPass != null && cfg.uwsgiResolveWhileRunning) ''
+        set $nix_proxy_target "${config.uwsgiPass}";
+        uwsgi_pass $nix_proxy_target;
+      ''}
       ${concatStringsSep "\n"
         (mapAttrsToList (n: v: ''fastcgi_param ${n} "${v}";'')
           (optionalAttrs (config.fastcgiParams != {})
@@ -453,6 +477,7 @@ let
       ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${optionalString (config.uwsgiPass != null && config.recommendedUwsgiSettings) "include ${cfg.package}/conf/uwsgi_params; include ${recommendedUwsgiConfig};"}
       ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
@@ -550,6 +575,23 @@ in
         example = "20s";
         description = ''
           Change the proxy related timeouts in recommendedProxySettings.
+        '';
+      };
+
+      recommendedUwsgiSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to enable recommended uwsgi settings if a vhost does not specify the option manually.
+        '';
+      };
+
+      uwsgiTimeout = mkOption {
+        type = types.str;
+        default = "60s";
+        example = "20s";
+        description = ''
+          Change the uwsgi related timeouts in recommendedUwsgiSettings.
         '';
       };
 
@@ -859,6 +901,16 @@ in
         '';
       };
 
+      uwsgiResolveWhileRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Resolves domains of uwsgi targets at runtime
+          and not only at start, you have to set
+          services.nginx.resolver, too.
+        '';
+      };
+
       mapHashBucketSize = mkOption {
         type = types.nullOr (types.enum [ 32 64 128 ]);
         default = null;
@@ -1160,6 +1212,16 @@ in
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
+        '';
+      }
+
+      {
+        assertion = all (host:
+          all (location: !(location.proxyPass != null && location.uwsgiPass != null)) (attrValues host.locations))
+        (attrValues virtualHosts);
+        message = ''
+          Options services.nginx.service.virtualHosts.<name>.proxyPass and
+          services.nginx.virtualHosts.<name>.uwsgiPass are mutually exclusive.
         '';
       }
 
