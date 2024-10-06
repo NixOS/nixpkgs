@@ -15,6 +15,7 @@
   libcanberra,
   ninja,
   xvfb-run,
+  libadwaita,
   libxcvt,
   libICE,
   libX11,
@@ -166,6 +167,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs src/backends/native/gen-default-modes.py
+
+    # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/3981
+    substituteInPlace src/frames/main.c \
+      --replace-fail "libadwaita-1.so.0" "${libadwaita}/lib/libadwaita-1.so.0"
   '';
 
   postInstall = ''
