@@ -14566,8 +14566,7 @@ with pkgs;
 
   flutterPackages-bin = recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });
-  flutterPackages = flutterPackages-bin;
-  flutter = flutterPackages.stable;
+  flutterPackages = flutterPackages-bin;flutter = flutterPackages.stable;
   flutter324 = flutterPackages.v3_24;
   flutter323 = flutterPackages.v3_23;
   flutter319 = flutterPackages.v3_19;
