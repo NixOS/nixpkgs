@@ -834,10 +834,10 @@
         "src": {
             "owner": "libretro",
             "repo": "ThePowderToy",
-            "rev": "f644498193c4c8be689d8a1d2a70e37e4eff4243",
-            "hash": "sha256-aPUqrrrH2Ia56A3Kx6ClMcZO9nbHGJIcEQ6nFyIMamo="
+            "rev": "5d9c749780063b87bd62ddb025dee4241f196f26",
+            "hash": "sha256-BYeQ2WZgyvjDH5+akrVP5TlLq6Go3NKXB7zeR9oaaJ8="
         },
-        "version": "unstable-2023-01-17"
+        "version": "unstable-2024-10-01"
     },
     "tic80": {
         "fetcher": "fetchFromGitHub",
