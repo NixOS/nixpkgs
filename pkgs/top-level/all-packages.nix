@@ -26912,7 +26912,7 @@ with pkgs;
 
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
-  bitcraze-udev-rules = callPackage ../os-specific/linux/bitcraze-udev-rules { };
+  bitcraze-udev-rules = callPackage ../pkgs/by-name/bi/bitcraze-udev-rules/package.nix
 
   apple-cursor = callPackage ../data/icons/apple-cursor { };
 
