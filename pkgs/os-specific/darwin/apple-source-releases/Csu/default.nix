@@ -2,7 +2,7 @@
 
 appleDerivation' stdenv {
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace Makefile \
       --replace /usr/lib /lib \
       --replace /usr/local/lib /lib \
