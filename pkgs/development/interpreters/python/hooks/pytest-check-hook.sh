@@ -4,6 +4,8 @@
 # this setup hook Bash-evaluates the flags attributes
 # before concatenating them to the command
 # when __structuredAttrs is false.
+#
+# shellcheck shell=bash
 
 echo "Sourcing pytest-check-hook"
 
@@ -17,6 +19,7 @@ function _concatSep {
     local sep="$1"
     local -n arr=$2
     for index in ${!arr[*]}; do
+        # shellcheck disable=SC2086
         if [ $index -eq 0 ]; then
             result="${arr[index]}"
         else
@@ -30,6 +33,7 @@ function _pytestComputeDisabledTestsString() {
     local -a tests=()
     expandStringAndConcatTo tests "$@"
     local prefix="not "
+    # shellcheck disable=SC2034
     prefixed=("${tests[@]/#/$prefix}")
     result=$(_concatSep "and" prefixed)
     echo "$result"
