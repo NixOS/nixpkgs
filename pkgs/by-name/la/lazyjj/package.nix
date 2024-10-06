@@ -6,6 +6,7 @@
   rustPlatform,
   testers,
   lazyjj,
+  fetchpatch,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lazyjj";
@@ -24,6 +25,15 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/lazyjj \
       --prefix PATH : ${lib.makeBinPath [ jujutsu ]}
   '';
+
+  patches = [
+    # https://github.com/Cretezy/lazyjj/pull/61
+    (fetchpatch {
+      name = "adapt_test_traces_to_jj_0.22.0.patch";
+      url = "https://github.com/Cretezy/lazyjj/commit/d5e949fb0e62bc93969c27011963582e12bbe3f6.patch";
+      hash = "sha256-u+IMLW4iZxMmpa+dwggMfQ4E7ygc0T4I6lvzBcPJT3s=";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
