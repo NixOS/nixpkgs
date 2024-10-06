@@ -388,6 +388,7 @@ mapAliases ({
   pathlib = throw "pathlib was removed as it has been integrated in python standard library in version 3.4"; # added 2024-05-13
   pathpy = path; # added 2022-04-12
   pcbnew-transition = pcbnewtransition; # added 2024-03-21
+  pc-ble-driver-py = throw "pc-ble-driver-py has been removed because the upstream repository was archived in 2024"; # Added 2024-10-04
   pdfposter = throw "pdfposter was promoted to a top-level attribute"; # Added 2023-06-29
   pdfminer = pdfminer-six; # added 2022-05-25
   pdfx = throw "pdfx has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
