@@ -68,6 +68,10 @@ mapAliases ({
   libauto = throw "'darwin.libauto' has been removed, as it was broken and unmaintained"; # added 2024-05-10
   libtapi = pkgs.libtapi; # 2024-08-16
 
+  ### M ###
+
+  moltenvk = pkgs.moltenvk; # 2024-10-06
+
   ### O ###
 
   opencflite = pkgs.opencflite; # added 2024-05-02

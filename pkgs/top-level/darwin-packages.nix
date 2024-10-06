@@ -178,8 +178,6 @@ impure-cmds // appleSourcePackages // stubs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-  moltenvk = callPackage ../os-specific/darwin/moltenvk { };
-
   openwith = callPackage ../os-specific/darwin/openwith { };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
