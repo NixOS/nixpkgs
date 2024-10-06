@@ -26914,8 +26914,6 @@ with pkgs;
 
   bitcraze-udev-rules = callPackage ../pkgs/by-name/bi/bitcraze-udev-rules/package.nix
 
-  apple-cursor = callPackage ../data/icons/apple-cursor { };
-
   blackbird = callPackage ../data/themes/blackbird { };
 
   blackout = callPackage ../data/fonts/blackout { };
