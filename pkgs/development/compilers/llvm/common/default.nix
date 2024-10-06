@@ -729,7 +729,9 @@ let
             lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD)
               (
                 [ "-L${targetLlvmLibraries.libunwind}/lib" ]
-                ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version"
+                ++ lib.optional (
+                  lib.versionAtLeast metadata.release_version "17" && !stdenv.targetPlatform.isDarwin
+                ) "--undefined-version"
               );
         }
       );
