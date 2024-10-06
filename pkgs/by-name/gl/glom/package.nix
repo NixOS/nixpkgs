@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     (yelp-tools.override {
       python3 = python311;
-     })
+    })
     itstool
     doxygen
     graphviz
@@ -150,12 +150,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "Easy-to-use database designer and user interface";
-    homepage = "http://www.glom.org/";
     license = with lib.licenses; [
       lgpl2
       gpl2
     ];
-    maintainers = lib.teams.gnome.members;
+    homepage = "https://gitlab.gnome.org/Archive/glom";
+    maintainers =
+      lib.teams.gnome.members
+      ++ (with lib.maintainers; [
+        bot-wxt1221
+      ]);
     platforms = lib.platforms.linux;
   };
 })
