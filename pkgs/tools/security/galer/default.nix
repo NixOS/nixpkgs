@@ -9,8 +9,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "dwisiswant0";
-    repo = pname;
-    rev = "v${version}";
+    repo = "galer";
+    rev = "refs/tags/v${version}";
     hash = "sha256-/VvN6LjK+V8E9XYarRUI/TPGitMM0a3g1lfdYhV1yP8=";
   };
 
@@ -18,9 +18,9 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "Tool to fetch URLs from HTML attributes";
-    mainProgram = "galer";
     homepage = "https://github.com/dwisiswant0/galer";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "galer";
   };
 }
