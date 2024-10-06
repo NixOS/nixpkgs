@@ -6,26 +6,28 @@
 # linted:
 # $ nix run nixpkgs#python3Packages.flake8 -- --ignore E501,E265,E402 update.py
 
-import inspect
-import os
-import tempfile
-import shutil
-from dataclasses import dataclass
-import subprocess
 import csv
+import inspect
 import logging
+import os
+import shutil
+import subprocess
+import tempfile
 import textwrap
+from dataclasses import dataclass
 from multiprocessing.dummy import Pool
-import pluginupdate
-from pluginupdate import update_plugins, FetchConfig
-
-from typing import List, Tuple, Optional
 from pathlib import Path
+from typing import List, Optional, Tuple
+
+import pluginupdate
+from pluginupdate import FetchConfig, update_plugins
 
 log = logging.getLogger()
 log.addHandler(logging.StreamHandler())
 
-ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent  # type: ignore
+ROOT = Path(
+    os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+).parent.parent  # type: ignore
 
 PKG_LIST = "maintainers/scripts/luarocks-packages.csv"
 TMP_FILE = "$(mktemp)"
@@ -35,9 +37,7 @@ HEADER = """/* {GENERATED_NIXFILE} is an auto-generated file -- DO NOT EDIT!
 Regenerate it with: nix run nixpkgs#luarocks-packages-updater
 You can customize the generated packages in pkgs/development/lua-modules/overrides.nix
 */
-""".format(
-    GENERATED_NIXFILE=GENERATED_NIXFILE
-)
+""".format(GENERATED_NIXFILE=GENERATED_NIXFILE)
 
 FOOTER = """
 }
@@ -71,7 +71,6 @@ class LuaPlugin:
 
 # rename Editor to LangUpdate/ EcosystemUpdater
 class LuaEditor(pluginupdate.Editor):
-
     def create_parser(self):
         parser = super().create_parser()
         parser.set_defaults(proc=1)
@@ -124,7 +123,18 @@ class LuaEditor(pluginupdate.Editor):
     def attr_path(self):
         return "luaPackages"
 
-    def get_update(self, input_file: str, outfile: str, config: FetchConfig):
+    def get_update(
+        self,
+        input_file: str,
+        outfile: str,
+        config: FetchConfig,
+        # TODO: implement support for adding/updating individual plugins
+        to_update: Optional[List[str]],
+    ):
+        if to_update is not None:
+            raise NotImplementedError(
+                "For now, lua updater doesn't support updating individual packages."
+            )
         _prefetch = generate_pkg_nix
 
         def update() -> dict:
@@ -193,7 +203,7 @@ def generate_pkg_nix(plug: LuaPlugin):
 
     if plug.luaversion:
         cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace('.', '')
+        luaver = plug.luaversion.replace(".", "")
         if luaver := os.getenv(f"LUA_{luaver}"):
             cmd.append(f"--lua-dir={luaver}")
 
