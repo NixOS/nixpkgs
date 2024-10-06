@@ -57,6 +57,9 @@ versionDefinition:
   withEFI ? true,
   binutils-unwrapped,
 
+  # ARM
+  dtc,
+
   # Documentation
   pandoc,
 
@@ -383,7 +386,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.lists.optional withInternalOVMF nasm
     ++ lib.lists.optional withFlask checkpolicy
-    ++ lib.lists.optional (lib.strings.versionOlder version "4.19") systemdMinimal;
+    ++ lib.lists.optional (lib.strings.versionOlder version "4.19") systemdMinimal
+    ++ lib.lists.optional stdenv.targetPlatform.isAarch64 dtc;
 
   configureFlags =
     [
@@ -719,8 +723,9 @@ stdenv.mkDerivation (finalAttrs: {
 
         mainProgram = "xl";
 
-        # Evaluates to x86_64-linux.
-        platforms = lib.lists.intersectLists lib.platforms.linux lib.platforms.x86_64;
+        # Evaluates to [x86_64-linux aarch64-linux].
+        platforms = lib.lists.intersectLists lib.platforms.linux
+          (lib.platforms.x86_64 ++ lib.platforms.aarch64);
 
       }
     else
