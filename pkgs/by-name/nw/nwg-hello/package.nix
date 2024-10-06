@@ -10,6 +10,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "nwg-hello";
   version = "0.2.4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
@@ -28,7 +29,9 @@ python3Packages.buildPythonApplication rec {
     gtk-layer-shell
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [
     python3Packages.pygobject3
   ];
 
