@@ -39,6 +39,7 @@ assert (hash == null) -> (src != null);
   libcpuid,
   libsodium,
   lowdown,
+  lowdown-unsandboxed,
   lsof,
   mercurial,
   mdbook,
@@ -119,7 +120,7 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals isLegacyParser [ bison ]
     ++ lib.optionals enableDocumentation [
-      (lib.getBin lowdown)
+      (lib.getBin lowdown-unsandboxed)
       mdbook
       mdbook-linkcheck
       doxygen
