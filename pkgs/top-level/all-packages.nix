@@ -5741,6 +5741,8 @@ with pkgs;
 
   phd2 = callPackage ../applications/science/astronomy/phd2 { };
 
+  phog = callPackage ../applications/display-managers/phog { };
+
   phoronix-test-suite = callPackage ../tools/misc/phoronix-test-suite { };
 
   photon = callPackage ../tools/networking/photon { };
