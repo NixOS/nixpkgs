@@ -1,0 +1,18 @@
+diff --git a/bark-protocol/src/types.rs b/bark-protocol/src/types.rs
+index 31dfd48..bea8040 100644
+--- a/bark-protocol/src/types.rs
++++ b/bark-protocol/src/types.rs
+@@ -27,10 +27,9 @@ pub struct PacketHeader {
+ /// our network Packet struct
+ /// we don't need to worry about endianness, because according to the rust docs:
+ ///
+-///     Floats and Ints have the same endianness on all supported platforms.
+-///     IEEE 754 very precisely specifies the bit layout of floats.
+-///
+-///     - https://doc.rust-lang.org/std/primitive.f32.html
++/// > Floats and Ints have the same endianness on all supported platforms.
++/// > IEEE 754 very precisely specifies the bit layout of floats.
++/// - https://doc.rust-lang.org/std/primitive.f32.html
+ #[derive(Debug, Clone, Copy, Zeroable, Pod)]
+ #[repr(C)]
+ pub struct AudioPacketHeader {
