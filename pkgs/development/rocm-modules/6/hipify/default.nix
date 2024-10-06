@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "6.0.2";
+  version = "6.2.2";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-nNyWrPPhUwT7FyASzc3kf5NCTzeqvHybVOc+6hBzkA4=";
+    hash = "sha256-pZ4pzYNDlcZb6b6r5q9QsE0OUUa52arEqjzKBbxEtF0=";
   };
 
   nativeBuildInputs = [ cmake ];
