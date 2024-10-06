@@ -56,7 +56,7 @@ in writeShellScript "update-${pname}" ''
 
   for platform in ${lib.escapeShellArgs meta.platforms}; do
     arch="''${platforms[$platform]}"
-    sha256=$(grep "${name}-$arch-$version.tar.xz" "$HOME/shasums" | cut -d" " -f1)
+    sha256=$(grep "${name}-$arch-$version.tar.xz" "$HOME/shasums" | head -1 | cut -d" " -f1)
     hash=$(nix hash to-sri --type sha256 "$sha256")
 
     update-source-version "${pname}" "0" "sha256-${lib.fakeSha256}" --source-key="sources.$platform"

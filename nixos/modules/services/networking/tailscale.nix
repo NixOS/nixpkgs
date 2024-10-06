@@ -88,6 +88,7 @@ in {
     environment.systemPackages = [ cfg.package ]; # for the CLI
     systemd.packages = [ cfg.package ];
     systemd.services.tailscaled = {
+      after = lib.mkIf (config.networking.networkmanager.enable) [ "NetworkManager-wait-online.service" ];
       wantedBy = [ "multi-user.target" ];
       path = [
         pkgs.procps     # for collecting running services (opt-in feature)

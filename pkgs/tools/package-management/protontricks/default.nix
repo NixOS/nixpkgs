@@ -8,6 +8,7 @@
 , substituteAll
 , writeShellScript
 , steam-run
+, fetchpatch2
 , winetricks
 , yad
 , pytestCheckHook
@@ -16,13 +17,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.11.1";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "Matoking";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-a40IAFrzQ0mogMoXKb+Lp0fPc1glYophqtftigk3nAc=";
+    repo = "protontricks";
+    rev = "refs/tags/${version}";
+    hash = "sha256-dCb8mcwXoxD4abJjLEwk5tGp65XkvepmOX+Kc9Dl7fQ=";
   };
 
   patches = [
@@ -33,6 +34,19 @@ buildPythonApplication rec {
       bash = writeShellScript "steam-run-bash" ''
         exec ${lib.getExe steam-run} bash "$@"
       '';
+    })
+
+    # Revert vendored vdf since our vdf includes `appinfo.vdf` v29 support
+    (fetchpatch2 {
+      url = "https://github.com/Matoking/protontricks/commit/4198b7ea82369a91e3084d6e185f9b370f78eaec.patch";
+      revert = true;
+      hash = "sha256-1U/LiAliKtk3ygbIBsmoavXN0RSykiiegtml+bO8CnI=";
+    })
+
+    # Fix test_run_no_args test
+    (fetchpatch2 {
+      url = "https://github.com/Matoking/protontricks/commit/ff2381ad379a612e73f0d4604f1c9c3a012b3355.patch";
+      hash = "sha256-aiafLbiqS6TBBiQpfTYPVqhQs2OXYg/4yCtbuTv6Ug8=";
     })
   ];
 
