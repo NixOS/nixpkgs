@@ -5,6 +5,7 @@
   trunk-ng,
   tailwindcss,
   fetchNpmDeps,
+  nix-update-script,
   nodejs,
   npmHooks,
   llvmPackages,
@@ -59,6 +60,10 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out
     zip -r $out/webadmin.zip *
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";
