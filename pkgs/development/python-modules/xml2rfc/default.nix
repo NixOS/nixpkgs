@@ -1,22 +1,18 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
   configargparse,
   decorator,
   dict2xml,
   fetchFromGitHub,
   google-i18n-address,
-  html5lib,
   intervaltree,
   jinja2,
   lxml,
-  markupsafe,
   platformdirs,
   pycairo,
   pycountry,
-  pyflakes,
-  pypdf2,
+  pypdf,
   pytestCheckHook,
   python-fontconfig,
   pythonOlder,
@@ -51,19 +47,15 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "lxml" ];
 
   dependencies = [
-    appdirs
     configargparse
     dict2xml
     google-i18n-address
-    html5lib
     intervaltree
     jinja2
     lxml
-    markupsafe
     platformdirs
     pycountry
-    pyflakes
-    pypdf2
+    pypdf
     pyyaml
     requests
     wcwidth
