@@ -28,6 +28,7 @@ lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
 , # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
   # needed for netrcPhase
   netrcImpureEnvVars ? []
+, passthru ? {}
 , meta ? {}
 , allowedRequisites ? null
 }:
@@ -96,6 +97,6 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     gitRepoUrl = url;
-  };
+  } // passthru;
 }
 ))
