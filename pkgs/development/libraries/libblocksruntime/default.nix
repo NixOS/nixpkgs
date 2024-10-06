@@ -1,30 +1,41 @@
-{ lib, stdenv, fetchFromGitHub, clang }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "blocksruntime";
-  version = "unstable-2014-06-24";
+  version = "unstable-2017-10-28";
 
   src = fetchFromGitHub {
     owner = "mackyle";
     repo = "blocksruntime";
-    rev = "b5c5274daf1e0e46ecc9ad8f6f69889bce0a0a5d";
-    sha256 = "0ic4lagagkylcvwgf10mg0s1i57h4i25ds2fzvms22xj4zwzk1sd";
+    rev = "9cc93ae2b58676c23fd02cf0c686fa15b7a3ff81";
+    sha256 = "sha256-pQMNZBgkF4uADOVCWXB5J3qQt8JMe8vo6ZmbtSVA5Xo=";
   };
 
-  buildInputs = [ clang ];
-
-  configurePhase = ''
-    export CC=clang
-    export CXX=clang++
+  buildPhase = ''
+    runHook preBuild
+    ./buildlib ${lib.optionalString (!stdenv.hostPlatform.isStatic) "-shared"}
+    runHook postBuild
   '';
 
-  buildPhase = "./buildlib";
+  installPhase = ''
+    runHook preInstall
+    prefix="/" DESTDIR=$out ./installlib ${
+      if stdenv.hostPlatform.isStatic then "-static" else "-shared"
+    }
+    runHook postInstall
+  '';
 
-  checkPhase = "./checktests";
+  checkPhase = ''
+    runHook preCheck
+    ./checktests
+    runHook postChck
+  '';
 
   doCheck = false; # hasdescriptor.c test fails, hrm.
-
-  installPhase = ''prefix="/" DESTDIR=$out ./installlib'';
 
   meta = with lib; {
     description = "Installs the BlocksRuntime library from the compiler-rt";
