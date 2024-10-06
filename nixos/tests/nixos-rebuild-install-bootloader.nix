@@ -14,7 +14,41 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         connect-timeout = 1;
       };
 
-      system.includeBuildDependencies = true;
+      # From nixos/tests/installer.nix
+      # The test cannot access the network, so any packages we
+      # need must be included in the VM.
+      system.extraDependencies = with pkgs; [
+        bintools
+        brotli
+        brotli.dev
+        brotli.lib
+        desktop-file-utils
+        docbook5
+        docbook_xsl_ns
+        kbd.dev
+        kmod.dev
+        libarchive.dev
+        libxml2.bin
+        libxslt.bin
+        nixos-artwork.wallpapers.simple-dark-gray-bottom
+        ntp
+        perlPackages.ListCompare
+        perlPackages.XMLLibXML
+        # make-options-doc/default.nix
+        (python3.withPackages (p: [ p.mistune ]))
+        shared-mime-info
+        sudo
+        texinfo
+        unionfs-fuse
+        xorg.lndir
+
+        # add curl so that rather than seeing the test attempt to download
+        # curl's tarball, we see what it's trying to download
+        curl
+
+        # for --install-bootloader
+        grub2
+      ];
 
       virtualisation = {
         cores = 2;
@@ -62,6 +96,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       with subtest("Switch system again and install bootloader"):
           result = machine.succeed("nixos-rebuild switch --install-bootloader 2>&1")
           # install-grub2.pl messages
+          machine.log(result)
           assert "updating GRUB 2 menu..." in result
           assert "installing the GRUB 2 boot loader on /dev/vda..." in result
           # GRUB message
