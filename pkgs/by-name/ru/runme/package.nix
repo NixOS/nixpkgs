@@ -13,13 +13,13 @@
 
 buildGoModule rec {
   pname = "runme";
-  version = "3.7.1";
+  version = "3.8.3";
 
   src = fetchFromGitHub {
     owner = "stateful";
     repo = "runme";
     rev = "v${version}";
-    hash = "sha256-b1HP5JCtQFA0+GIkMswb8o3k9zbD5sLrLR7yz8UivLk=";
+    hash = "sha256-AnGh1Kg3CV4UkEwZ81QMeIf9whdeCglmCbfp8DC6N30=";
   };
 
   vendorHash = "sha256-qOM66jiSjAU5e6eGrM8kgJxWJzxwgHpLadx5pTjNFOs=";
@@ -53,7 +53,7 @@ buildGoModule rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
-    substituteInPlace testdata/{categories/basic,runall/basic,script/basic}.txtar \
+    substituteInPlace testdata/{flags/fmt,prompts/basic,runall/basic,script/basic,tags/categories}.txtar \
       --replace-fail /bin/bash "${runtimeShell}"
   '';
 
