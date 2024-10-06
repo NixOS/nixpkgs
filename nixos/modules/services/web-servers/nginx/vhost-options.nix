@@ -176,20 +176,17 @@ with lib;
       description = ''
         Whether to listen for and reject all HTTPS connections to this vhost. Useful in
         [default](#opt-services.nginx.virtualHosts._name_.default)
-        server blocks to avoid serving the certificate for another vhost. Uses the
-        `ssl_reject_handshake` directive available in nginx versions
-        1.19.4 and above.
+        server blocks to avoid serving the certificate for another vhost.
       '';
     };
 
     kTLS = mkOption {
       type = types.bool;
-      default = false;
+      default = true;
       description = ''
         Whether to enable kTLS support.
         Implementing TLS in the kernel (kTLS) improves performance by significantly
         reducing the need for copying operations between user space and the kernel.
-        Required Nginx version 1.21.4 or later.
       '';
     };
 
