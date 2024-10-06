@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   pkg-config,
+  addDriverRunpath,
   desktop-file-utils,
   makeWrapper,
   meson,
@@ -22,14 +23,13 @@
 
 stdenv.mkDerivation {
   pname = "gpu-screen-recorder-gtk";
-  version = "unstable-2024-07-05";
+  version = "4.1.11";
 
-  # Snapshot tarballs use the following versioning format:
-  # printf "r%s.%s\n" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
   src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.r311.c611c51.tar.gz";
-    hash = "sha256-86EdmeZ2dlffSfJOrTVGPtYyL3j6DmCQIALX2rpeS1Y=";
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.4.1.11.tar.gz";
+    hash = "sha256-aLdzMOtKGR0llt+CyTVVX5xc18L9ddlYApe+dcqGRWY=";
   };
+
   sourceRoot = ".";
 
   nativeBuildInputs = [
@@ -60,10 +60,12 @@ stdenv.mkDerivation {
     ''
       gappsWrapperArgs+=(--prefix PATH : ${wrapperDir})
       gappsWrapperArgs+=(--suffix PATH : ${lib.makeBinPath [ gpu-screen-recorder-wrapped ]})
-      # we also append /run/opengl-driver/lib as it otherwise fails to find libcuda.
       gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [ libglvnd ]
-      }:/run/opengl-driver/lib)
+        lib.makeLibraryPath [
+          libglvnd
+          addDriverRunpath.driverLink
+        ]
+      })
     '';
 
   meta = {
