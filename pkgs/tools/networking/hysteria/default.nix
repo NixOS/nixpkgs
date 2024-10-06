@@ -1,6 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "hysteria";
@@ -17,8 +19,10 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags =
-    let cmd = "github.com/apernet/hysteria/app/cmd";
-    in [
+    let
+      cmd = "github.com/apernet/hysteria/app/cmd";
+    in
+    [
       "-s"
       "-w"
       "-X ${cmd}.appVersion=${version}"
@@ -31,6 +35,8 @@ buildGoModule rec {
 
   # Network required
   doCheck = false;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Feature-packed proxy & relay utility optimized for lossy, unstable connections";
