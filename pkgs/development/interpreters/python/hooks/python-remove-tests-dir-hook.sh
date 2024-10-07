@@ -11,5 +11,5 @@ pythonRemoveTestsDir() {
 }
 
 if [ -z "${dontUsePythonRemoveTestsDir-}" ]; then
-    postFixupHooks+=(pythonRemoveTestsDir)
+    appendToVar postFixupHooks pythonRemoveTestsDir
 fi
