@@ -1,6 +1,31 @@
-{ config, hostPkgs, lib, ... }:
+{
+  config,
+  hostPkgs,
+  lib,
+  options,
+  ...
+}:
 let
   inherit (lib) types mkOption;
+
+  /**
+    Create a module system definition that overrides an existing option from a different module evaluation.
+
+    Type: Option a -> (a -> a) -> Definition a
+  */
+  mkOneUp =
+    /**
+      Option from an existing module evaluation, e.g.
+      - `(lib.evalModules ...).options.x` when invoking `evalModules` again,
+      - or `{ options, ... }:` when invoking `extendModules`.
+    */
+    opt:
+    /**
+      Function from the old value to the new definition, which will be wrapped with `mkOverride`.
+    */
+    f:
+    lib.mkOverride (opt.highestPrio - 1) (f opt.value);
+
 in
 {
   options = {
@@ -25,6 +50,13 @@ in
       internal = true;
     };
 
+    rawTestDerivationArg = mkOption {
+      type = types.functionTo types.raw;
+      description = ''
+        Argument passed to `mkDerivation` to create the `rawTestDerivation`.
+      '';
+    };
+
     test = mkOption {
       type = types.package;
       # TODO: can the interactive driver be configured to access the network?
@@ -38,10 +70,12 @@ in
   };
 
   config = {
-    rawTestDerivation = hostPkgs.stdenv.mkDerivation {
+    rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
+    rawTestDerivationArg = finalAttrs: {
       name = "vm-test-run-${config.name}";
 
-      requiredSystemFeatures = [ "nixos-test" ]
+      requiredSystemFeatures =
+        [ "nixos-test" ]
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isLinux [ "kvm" ]
         ++ lib.optionals hostPkgs.stdenv.hostPlatform.isDarwin [ "apple-virt" ];
 
@@ -58,12 +92,25 @@ in
 
       meta = config.meta;
     };
-    test = lib.lazyDerivation { # lazyDerivation improves performance when only passthru items and/or meta are used.
+    test = lib.lazyDerivation {
+      # lazyDerivation improves performance when only passthru items and/or meta are used.
       derivation = config.rawTestDerivation;
       inherit (config) passthru meta;
     };
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;
+
+    # See https://nixos.org/manual/nixos/unstable#sec-override-nixos-test
+    # written in nixos/doc/manual/development/writing-nixos-tests.section.md
+    passthru.overrideTestDerivation =
+      f:
+      config.passthru.extend {
+        modules = [
+          {
+            rawTestDerivationArg = mkOneUp options.rawTestDerivationArg (lib.extends (lib.toExtension f));
+          }
+        ];
+      };
   };
 }
