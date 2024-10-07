@@ -6565,6 +6565,10 @@ self: super: with self; {
 
   hpccm = callPackage ../development/python-modules/hpccm { };
 
+  hpp-affordance-corba = toPythonModule (
+    pkgs.hpp-affordance-corba.override { python3Packages = self; }
+  );
+
   hpp-baxter = toPythonModule (
     pkgs.hpp-baxter.override {
       pythonSupport = true;
