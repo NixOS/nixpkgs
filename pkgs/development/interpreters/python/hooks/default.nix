@@ -163,6 +163,7 @@ in {
       name = "python-relax-deps-hook";
       substitutions = {
         inherit pythonInterpreter pythonSitePackages wheel;
+        hook = ./python-relax-deps-hook.py;
       };
     } ./python-relax-deps-hook.sh) {};
 
