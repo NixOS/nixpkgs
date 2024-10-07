@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "sphinx-mdinclude";
-  version = "0.6.1";
+  version = "0.6.2";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "sphinx_mdinclude";
     inherit version;
-    hash = "sha256-7OPYEuLVWbTn5H9ntqh7Dipom2svURR5XI7Uf/s5wWk=";
+    hash = "sha256-RHRi6Cy4vmFASiIEIn+SB2nrkj0vV2COMyXzu4goa0w=";
   };
 
   nativeBuildInputs = [ flit-core ];
