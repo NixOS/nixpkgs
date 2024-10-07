@@ -469,13 +469,19 @@ rec {
     as a easy way to build multiple derivations at once.
    */
   symlinkJoin =
-    args_@{ name
+    args_@{
+      name ?
+        assert lib.assertMsg (args_ ? pname && args_ ? version)
+          "symlinkJoin requires either a `name` OR `pname` and `version`";
+        "${args_.pname}-${args_.version}"
     , paths
     , preferLocalBuild ? true
     , allowSubstitutes ? false
     , postBuild ? ""
     , ...
     }:
+    assert lib.assertMsg (args_ ? pname == args_ ? version) "symlinkJoin requires `pname` and `version` to be specified together";
+    assert lib.assertMsg (args_ ? name -> !(args_ ? pname || args_ ? version)) "symlinkJoin requires either `name` or `pname` and `version`; to fix this, remove `name` or both of `pname` and `version`";
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
         // {
