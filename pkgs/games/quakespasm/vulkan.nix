@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vkquake";
-  version = "1.31.1.1";
+  version = "1.31.2";
 
   src = fetchFromGitHub {
     owner = "Novum";
     repo = "vkQuake";
     rev = version;
-    sha256 = "sha256-GSCH8U5N95I/gj5KIzAnpsU4i2xJuzXcccuKKAskk8Q=";
+    sha256 = "sha256-7JE1KBavZt8u55KpWMmQOJJuxlW99ICnaQI4MbTgGdw=";
   };
 
   nativeBuildInputs = [

@@ -351,8 +351,6 @@ with pkgs;
 
   brev-cli = callPackage ../development/misc/brev-cli { };
 
-  buf = callPackage ../development/tools/buf { };
-
   cbfmt = callPackage ../development/tools/cbfmt { };
 
   circumflex = callPackage ../applications/networking/circumflex { };
@@ -2123,8 +2121,6 @@ with pkgs;
   datalad = with python3Packages; toPythonApplication datalad;
 
   datalad-gooey = with python3Packages; toPythonApplication datalad-gooey;
-
-  darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
   degit = callPackage ../applications/version-management/degit { };
 
@@ -11264,8 +11260,6 @@ with pkgs;
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
 
-  playwright = with python3Packages; toPythonApplication playwright;
-
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
 
@@ -11977,8 +11971,6 @@ with pkgs;
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
-
-  runme = callPackage ../development/tools/misc/runme { };
 
   runzip = callPackage ../tools/archivers/runzip { };
 
@@ -17638,8 +17630,6 @@ with pkgs;
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
 
-  firebase-tools = callPackage ../development/tools/firebase-tools { };
-
   flootty = callPackage ../development/tools/flootty { };
 
   fffuu = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
@@ -19784,8 +19774,6 @@ with pkgs;
 
   hnswlib = callPackage ../development/libraries/hnswlib { };
 
-  httplib = callPackage ../development/libraries/httplib { };
-
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
   libgit2 = callPackage ../development/libraries/libgit2 {
@@ -21251,14 +21239,6 @@ with pkgs;
   libredwg = callPackage ../development/libraries/libredwg { };
 
   librem = callPackage ../development/libraries/librem { };
-
-  libremidi = callPackage ../development/libraries/libremidi {
-      inherit (darwin.apple_sdk.frameworks)
-        CoreAudio
-        CoreFoundation
-        CoreMIDI
-        CoreServices;
-  };
 
   libremines = qt6.callPackage ../games/libremines { };
 
@@ -24939,8 +24919,6 @@ with pkgs;
   inherit (callPackage ../servers/mir { })
     mir
     mir_2_15;
-
-  miriway = callPackage ../applications/window-managers/miriway { };
 
   icinga2 = callPackage ../servers/monitoring/icinga2 { };
 
@@ -29066,10 +29044,6 @@ with pkgs;
 
   enhanced-ctorrent = callPackage ../applications/networking/p2p/enhanced-ctorrent { };
 
-  entangle = callPackage ../applications/video/entangle {
-    inherit (gst_all_1) gstreamer gst-plugins-base;
-  };
-
   eolie = callPackage ../applications/networking/browsers/eolie { };
 
   eos-installer = callPackage ../applications/misc/eos-installer { };
@@ -31355,7 +31329,9 @@ with pkgs;
 
   mpvScripts = mpv-unwrapped.scripts;
 
-  shaka-packager = callPackage ../applications/video/shaka-packager { };
+  shaka-packager = callPackage ../by-name/sh/shaka-packager/package.nix {
+    abseil-cpp = abseil-cpp_202401;
+  };
 
   mpvpaper = callPackage ../tools/wayland/mpvpaper { };
 
@@ -32549,8 +32525,6 @@ with pkgs;
   shutter = callPackage ../applications/graphics/shutter { };
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
-
-  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 

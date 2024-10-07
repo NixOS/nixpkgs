@@ -50,6 +50,6 @@ rustPlatform.buildRustPackage rec {
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ kevincox ];
+    maintainers = with maintainers; [ clevor ];
   };
 }

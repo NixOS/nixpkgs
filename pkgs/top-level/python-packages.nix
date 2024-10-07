@@ -47,8 +47,6 @@ self: super: with self; {
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
 
-  acoustics = callPackage ../development/python-modules/acoustics { };
-
   acquire = callPackage ../development/python-modules/acquire { };
 
   actdiag = callPackage ../development/python-modules/actdiag { };
@@ -317,8 +315,6 @@ self: super: with self; {
 
   aiolimiter = callPackage ../development/python-modules/aiolimiter { };
 
-  aiolip = callPackage ../development/python-modules/aiolip { };
-
   aiolivisi = callPackage ../development/python-modules/aiolivisi { };
 
   aiolyric = callPackage ../development/python-modules/aiolyric { };
@@ -566,8 +562,6 @@ self: super: with self; {
 
   amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
 
-  ambee = callPackage ../development/python-modules/ambee { };
-
   amberelectric = callPackage ../development/python-modules/amberelectric { };
 
   amcrest = callPackage ../development/python-modules/amcrest { };
@@ -791,8 +785,6 @@ self: super: with self; {
   ariadne = callPackage ../development/python-modules/ariadne { };
 
   arpy = callPackage ../development/python-modules/arpy { };
-
-  arnparse = callPackage ../development/python-modules/arnparse { };
 
   array-api-compat = callPackage ../development/python-modules/array-api-compat { };
 
@@ -1150,8 +1142,6 @@ self: super: with self; {
   azure-eventgrid = callPackage ../development/python-modules/azure-eventgrid { };
 
   azure-eventhub = callPackage ../development/python-modules/azure-eventhub { };
-
-  azure-functions-devops-build = callPackage ../development/python-modules/azure-functions-devops-build { };
 
   azure-graphrbac = callPackage ../development/python-modules/azure-graphrbac { };
 
@@ -1626,6 +1616,8 @@ self: super: with self; {
   biopandas = callPackage ../development/python-modules/biopandas { };
 
   biopython = callPackage ../development/python-modules/biopython { };
+
+  biothings-client = callPackage ../development/python-modules/biothings-client { };
 
   biplist = callPackage ../development/python-modules/biplist { };
 
@@ -3306,6 +3298,8 @@ self: super: with self; {
 
   django-autocomplete-light = callPackage ../development/python-modules/django-autocomplete-light { };
 
+  django-axes = callPackage ../development/python-modules/django-axes { };
+
   django-bootstrap3 = callPackage ../development/python-modules/django-bootstrap3 { };
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
@@ -3477,6 +3471,8 @@ self: super: with self; {
   django-shortuuidfield = callPackage ../development/python-modules/django-shortuuidfield { };
 
   django-scopes = callPackage ../development/python-modules/django-scopes { };
+
+  django-split-settings = callPackage ../development/python-modules/django-split-settings { };
 
   djangoql = callPackage ../development/python-modules/djangoql { };
 
@@ -5277,8 +5273,6 @@ self: super: with self; {
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
   google-re2 = callPackage ../development/python-modules/google-re2 { };
-
-  google-reauth = callPackage ../development/python-modules/google-reauth { };
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
@@ -8953,6 +8947,8 @@ self: super: with self; {
 
   nitransforms = callPackage ../development/python-modules/nitransforms { };
 
+  nitrokey = callPackage ../development/python-modules/nitrokey { };
+
   niworkflows = callPackage ../development/python-modules/niworkflows { };
 
   nix-kernel = callPackage ../development/python-modules/nix-kernel {
@@ -9746,8 +9742,6 @@ self: super: with self; {
 
   pbxproj = callPackage ../development/python-modules/pbxproj { };
 
-  pc-ble-driver-py = callPackage ../development/python-modules/pc-ble-driver-py { };
-
   pcapy-ng = callPackage ../development/python-modules/pcapy-ng {
     inherit (pkgs) libpcap; # Avoid confusion with python package of the same name
   };
@@ -9777,8 +9771,6 @@ self: super: with self; {
   pdfrw2 = callPackage ../development/python-modules/pdfrw2 { };
 
   pdftotext = callPackage ../development/python-modules/pdftotext { };
-
-  pdfx = callPackage ../development/python-modules/pdfx { };
 
   pdm-backend = callPackage ../development/python-modules/pdm-backend { };
 
@@ -13528,6 +13520,8 @@ self: super: with self; {
   repeated-test = callPackage ../development/python-modules/repeated-test { };
 
   repl-python-wakatime = callPackage ../development/python-modules/repl-python-wakatime { };
+
+  replicate = callPackage ../development/python-modules/replicate { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
 

@@ -896,7 +896,7 @@ in
       typesHashMaxSize = mkOption {
         type = types.ints.positive;
         default = if cfg.defaultMimeTypes == "${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024;
-        defaultText = literalExpression ''if cfg.defaultMimeTypes == "''${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024'';
+        defaultText = literalExpression ''if config.services.nginx.defaultMimeTypes == "''${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024'';
         description = ''
           Sets the maximum size of the types hash tables (`types_hash_max_size`).
           It is recommended that the minimum size possible size is used.
@@ -1071,7 +1071,7 @@ in
             '';
           };
           "memcached" = {
-            servers."unix:/run//memcached/memcached.sock" = {};
+            servers."unix:/run/memcached/memcached.sock" = {};
           };
         };
       };

@@ -95,7 +95,6 @@ mapAliases {
   aeon = throw "aeon has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-07-15
   afl = throw "afl has been removed as the upstream project was archived. Consider using 'aflplusplus'"; # Added 2024-04-21
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10"
-  agebox = throw "agebox has been removed due to lack of upstream maintenance"; # Added 2024-07-13
   airfield = throw "airfield has been removed due to being unmaintained"; # Added 2023-05-19
   alertmanager-bot = throw "alertmanager-bot is broken and has been archived by upstream"; # Added 2023-07-28
   alsa-project = throw "alsa-project was removed and its sub-attributes were promoted to top-level."; # Added 2023-11-12
@@ -1238,6 +1237,7 @@ mapAliases {
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead.";
   pkgconfig = throw "'pkgconfig' has been renamed to/replaced by 'pkg-config'"; # Converted to throw 2023-09-10
+  playwright = lib.warn "'playwright' will reference playwright-driver in 25.05. Reference 'python3Packages.playwright' for the python test launcher" python3Packages.toPythonApplication python3Packages.playwright; # Added 2024-10-04
   pleroma-otp = pleroma; # Added 2021-07-10
   pltScheme = racket; # just to be sure
   pmdk = throw "'pmdk' is discontinued, no further support or maintenance is planned by upstream"; # Added 2023-02-06

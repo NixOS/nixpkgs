@@ -10,6 +10,7 @@
   numpy,
   nvidia-ml-py,
   psutil,
+  pydantic,
   pynvml,
   pytestCheckHook,
   pythonOlder,
@@ -38,7 +39,7 @@ in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.44.1";
+  version = "1.5.45";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
@@ -46,12 +47,11 @@ buildPythonPackage rec {
     owner = "plasma-umass";
     repo = "scalene";
     rev = "v${version}";
-    hash = "sha256-XMz+gwiNaKiKplD4kOE1yhcg+dkzjEdDYjW0JsDEMQE=";
+    hash = "sha256-0DhoLsXv2tUEkynMkoA14pNxF6GGLe30bfUOii7+PYE=";
   };
 
   patches = [
     ./01-manifest-no-git.patch
-    ./02-pyproject-unpin-setuptools.patch
   ];
 
   prePatch = ''
@@ -74,6 +74,7 @@ buildPythonPackage rec {
     jinja2
     numpy
     psutil
+    pydantic
     pynvml
     rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
