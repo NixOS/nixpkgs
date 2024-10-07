@@ -28,6 +28,9 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
+let
+  hasElfutils = lib.meta.availableOn stdenv.hostPlatform elfutils;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
   version = "1.24.7";
@@ -76,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     bash-completion
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+  ] ++ lib.optionals hasElfutils [
     elfutils
   ] ++ lib.optionals withLibunwind [
     libunwind
@@ -95,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "introspection" withIntrospection)
     (lib.mesonEnable "doc" enableDocumentation)
     (lib.mesonEnable "libunwind" withLibunwind)
-    (lib.mesonEnable "libdw" withLibunwind)
+    (lib.mesonEnable "libdw" (withLibunwind && hasElfutils))
   ];
 
   postPatch = ''
