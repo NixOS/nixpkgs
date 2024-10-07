@@ -26,30 +26,29 @@ buildPythonPackage rec {
     hash = "sha256-UzLnctft/D38bqClqyyJ4b5GvVXM4CFSd6TypuLo0Y4=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aio-geojson-client
     aiohttp
     pytz
   ];
 
-  __darwinAllowLocalNetworking = true;
-
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aio_geojson_usgs_earthquakes" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
-    description = "Python module for accessing the U.S. Geological Survey Earthquake Hazards Program feeds";
+    description = "Module for accessing the U.S. Geological Survey Earthquake Hazards Program feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes";
     changelog = "https://github.com/exxamalte/python-aio-geojson-usgs-earthquakes/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
