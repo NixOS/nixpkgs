@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-nsw-rfs-incidents";
-  version = "0.7";
+  version = "0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-nsw-rfs-incidents";
     rev = "refs/tags/v${version}";
-    hash = "sha256-HksiKfXhLASAgU81x7YiOXFmBLIkqJ9ldWLLY1ZbZlk=";
+    hash = "sha256-JOvmUWrmYQt2hJ9u08Aliv9ImI3AOTk4uBx3Pv8/7/c=";
   };
 
   nativeBuildInputs = [ setuptools ];
