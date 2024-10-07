@@ -27,6 +27,8 @@ buildPythonPackage rec {
     hash = "sha256-zHgqsl278XBr2X8oQOsnIQxfyYuB5G8NLcTNy4oerUI=";
   };
 
+  pythonRelaxDeps = [ "geojson" ];
+
   __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
