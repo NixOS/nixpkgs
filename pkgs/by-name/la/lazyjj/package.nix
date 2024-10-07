@@ -6,34 +6,24 @@
   rustPlatform,
   testers,
   lazyjj,
-  fetchpatch,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lazyjj";
-  version = "0.3.1";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "Cretezy";
     repo = "lazyjj";
     rev = "v${version}";
-    hash = "sha256-VlGmOdF/XsrZ/9vQ14UuK96LIK8NIkPZk4G4mbS8brg=";
+    hash = "sha256-aglLPEps88D15iv3toNnhRC06gTuM6ITnvZDJg17u6M=";
   };
 
-  cargoHash = "sha256-TAq9FufGsNVsmqCE41REltYRSSLihWJwTMoj0bTxdFc=";
+  cargoHash = "sha256-P5k7C18PP9/y5P5kKWpQcMnT4BeYpFT6IH+M1AgGaPw=";
 
   postInstall = ''
     wrapProgram $out/bin/lazyjj \
       --prefix PATH : ${lib.makeBinPath [ jujutsu ]}
   '';
-
-  patches = [
-    # https://github.com/Cretezy/lazyjj/pull/61
-    (fetchpatch {
-      name = "adapt_test_traces_to_jj_0.22.0.patch";
-      url = "https://github.com/Cretezy/lazyjj/commit/d5e949fb0e62bc93969c27011963582e12bbe3f6.patch";
-      hash = "sha256-u+IMLW4iZxMmpa+dwggMfQ4E7ygc0T4I6lvzBcPJT3s=";
-    })
-  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
