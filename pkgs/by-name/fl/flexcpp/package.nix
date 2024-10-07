@@ -1,5 +1,6 @@
 {
   lib,
+  bisoncpp,
   bobcat,
   fetchFromGitLab,
   icmake,
@@ -54,6 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests = {
+      inherit bisoncpp; # reverse dependency
+    };
+  };
 
   meta = {
     homepage = "https://fbb-git.gitlab.io/flexcpp/";
