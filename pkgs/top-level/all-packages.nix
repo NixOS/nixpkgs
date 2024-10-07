@@ -26912,8 +26912,6 @@ with pkgs;
 
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
 
-  bitcraze-udev-rules = callPackage  ./../by-name/bi/bitcraze-udev-rules/package.nix { /* ... */ };
-
   blackbird = callPackage ../data/themes/blackbird { };
 
   blackout = callPackage ../data/fonts/blackout { };
