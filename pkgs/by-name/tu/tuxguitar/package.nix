@@ -9,30 +9,17 @@
   jack2,
   fluidsynth,
   libpulseaudio,
+  lilv,
   nixosTests,
 }:
 
-let
-  metadata =
-    assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
-    if stdenv.hostPlatform.system == "i686-linux" then
-      {
-        arch = "x86";
-        sha256 = "sha256-k4FQrt72VNb5FdYMzxskcVhKlvx8MZelUlLCItxDB7c=";
-      }
-    else
-      {
-        arch = "x86_64";
-        sha256 = "sha256-mj5wVQlY2xFzdulvMdb5Qb5HGwr7RElzIkpOLjaAfGA=";
-      };
-in
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.5.5";
+  version = "1.6.4";
   pname = "tuxguitar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxguitar/tuxguitar-${finalAttrs.version}-linux-${metadata.arch}.tar.gz";
-    sha256 = metadata.sha256;
+    url = "https://github.com/helge17/tuxguitar/releases/download/${finalAttrs.version}/tuxguitar-${finalAttrs.version}-linux-swt-amd64.tar.gz";
+    hash = "sha256-FD1+7jV69E9AfTczjD6DOGD+pPlscg4o8A9ADBUM9B4=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
           jack2
           fluidsynth
           libpulseaudio
+          lilv
         ]
       }" \
       --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
@@ -76,6 +64,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.lgpl2;
     maintainers = with lib.maintainers; [ ardumont ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 })
