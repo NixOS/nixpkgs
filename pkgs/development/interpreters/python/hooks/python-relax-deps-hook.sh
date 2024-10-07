@@ -48,6 +48,7 @@ _pythonRelaxDeps() {
         sed -i "$metadata_file" -r \
             -e 's/(Requires-Dist: [a-zA-Z0-9_.-]+\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/'
     else
+        # shellcheck disable=SC2048
         for dep in ${pythonRelaxDeps[*]}; do
             sed -i "$metadata_file" -r \
                 -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
@@ -64,6 +65,7 @@ _pythonRemoveDeps() {
         sed -i "$metadata_file" \
             -e '/Requires-Dist:.*/d'
     else
+        # shellcheck disable=SC2048
         for dep in ${pythonRemoveDeps[*]-}; do
             sed -i "$metadata_file" \
                 -e "/Requires-Dist: $dep/d"
@@ -86,11 +88,14 @@ pythonRelaxDepsHook() {
         rm -rf "$wheel"
 
         # Using no quotes on purpose since we need to expand the glob from `$metadata_file`
+        # shellcheck disable=SC2086
         _pythonRelaxDeps $metadata_file
+        # shellcheck disable=SC2086
         _pythonRemoveDeps $metadata_file
 
         if (("${NIX_DEBUG:-0}" >= 1)); then
             echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
+            # shellcheck disable=SC2086
             cat $metadata_file
         fi
 
