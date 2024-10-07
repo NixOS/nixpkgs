@@ -20711,6 +20711,12 @@
     githubId = 18656090;
     name = "Yuki Takagi";
   };
+  takeda = {
+    name = "Derek Kuliński";
+    email = "d@kulinski.us";
+    github = "takeda";
+    githubId = 411978;
+  };
   taketwo = {
     email = "alexandrov88@gmail.com";
     github = "taketwo";
