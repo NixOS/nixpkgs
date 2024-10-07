@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webfont-kit-generator";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "rafaelmardojai";
     repo = "webfont-kit-generator";
     rev = finalAttrs.version;
-    hash = "sha256-RrmzHgRnpgQUNECgYA/AJfoxKpX1HQ5I1Pqjb3MK+P4=";
+    hash = "sha256-ZfyF1Didce88/HaLeMNTw0nGzj3EZnC7V9OzsN21L40=";
   };
 
   nativeBuildInputs = [
