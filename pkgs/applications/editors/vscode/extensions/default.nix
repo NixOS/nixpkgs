@@ -905,6 +905,8 @@ let
         };
       };
 
+      chrischinchilla.vscode-pandoc = callPackage ./chrischinchilla.vscode-pandoc { };
+
       christian-kohler.npm-intellisense = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "npm-intellisense";
