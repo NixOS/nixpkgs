@@ -1,56 +1,79 @@
-{lib, stdenv, fetchurl, fetchFromGitLab
-, yodl, icmake, flexcpp, bobcat
+{
+  lib,
+  bobcat,
+  fetchFromGitLab,
+  fetchurl,
+  flexcpp,
+  icmake,
+  stdenv,
+  yodl,
 }:
-stdenv.mkDerivation rec {
-  pname = "bisonc++";
+
+let
+  gpl = fetchurl {
+    url = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt";
+    hash = "sha256-7a72Msu2Q+TnoiFxemxEGkwafJGObk1W3rw9hzmyM/Y=";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "bisoncpp";
   version = "6.04.00";
 
   src = fetchFromGitLab {
+    name = "bisoncpp-sources-${finalAttrs.version}";
     domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bisoncpp";
-    rev = "6.04.00";
-    hash = "sha256:0aa9bij4g08ilsk6cgrbgi03vyhqr9fn6j2164sjin93m63212wl";
+    rev = finalAttrs.version;
+    hash = "sha256-lIsghqkj2Sg1MUFIY13KGPo9QHwrP2amphGBR2RcSSk=";
   };
 
   buildInputs = [ bobcat ];
 
-  nativeBuildInputs = [ yodl icmake flexcpp ];
+  nativeBuildInputs = [
+    flexcpp
+    icmake
+    yodl
+  ];
 
-  setSourceRoot = ''
-    sourceRoot="$(echo */bisonc++)"
-  '';
+  sourceRoot = "${finalAttrs.src.name}/bisonc++";
 
-  gpl = fetchurl {
-    url = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt";
-    sha256 = "sha256:0hq6i0dm4420825fdm0lnnppbil6z67ls67n5kgjcd912dszjxw1";
-  };
+  strictDeps = true;
 
   postPatch = ''
-    substituteInPlace INSTALL.im --replace /usr $out
+    substituteInPlace INSTALL.im --replace-fail /usr $out
     patchShebangs .
+    substituteInPlace documentation/manual/conditions/gpl.yo \
+      --replace /usr/share/common-licenses/GPL ${gpl}    
     for file in $(find documentation -type f); do
-      substituteInPlace "$file" --replace /usr/share/common-licenses/GPL ${gpl}
-      substituteInPlace "$file" --replace /usr $out
+      substituteInPlace "$file" --replace-warn /usr $out
     done
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     ./build program
     ./build man
     ./build manual
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     ./build install x
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "Parser generator like bison, but it generates C++ code";
-    mainProgram = "bisonc++";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+  meta = {
     homepage = "https://fbb-git.gitlab.io/bisoncpp/";
+    description = "Parser generator like bison, but it generates C++ code";
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "bisonc++";
+    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})
