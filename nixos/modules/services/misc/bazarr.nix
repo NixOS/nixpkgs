@@ -52,6 +52,7 @@ in
             --no-update True
         '';
         Restart = "on-failure";
+        KillSignal = "SIGINT";
       };
     };
 
