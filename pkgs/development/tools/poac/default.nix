@@ -13,7 +13,7 @@
 , lz4
 , mitama-cpp-result
 , ninja
-, openssl_3
+, openssl_3_0
 , package-project-cmake
 , spdlog
 }:
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     libarchive
     libgit2
     lz4
-    openssl_3
+    openssl_3_0
     spdlog
   ];
 
