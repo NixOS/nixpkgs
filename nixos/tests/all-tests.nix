@@ -764,6 +764,7 @@ in {
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
   parsedmarc = handleTest ./parsedmarc {};
+  pcscd = handleTestOn ["x86_64-linux" "aarch64-linux"] ./pcscd.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
