@@ -14,9 +14,6 @@
 , emojipick-font-size ? "18"
 }:
 
-let
-  boolToInt = b: if b then "1" else "0"; # Convert boolean to integer string
-in
 stdenvNoCC.mkDerivation {
   pname = "emojipick";
   version = "2021-01-27";
@@ -35,10 +32,10 @@ stdenvNoCC.mkDerivation {
   # notify-send has to be patched in a bash file
   postPatch = ''
     substituteInPlace emojipick \
-      --replace "use_rofi=0" "use_rofi=${boolToInt emojipick-use-rofi}" \
-      --replace "copy_to_clipboard=1" "copy_to_clipboard=${boolToInt emojipick-copy-to-clipboard}" \
-      --replace "show_notification=1" "show_notification=${boolToInt emojipick-show-notifications}" \
-      --replace "print_emoji=1" "print_emoji=${boolToInt emojipick-print-emoji}" \
+      --replace "use_rofi=0" "use_rofi=${builtins.toString (lib.boolToInt emojipick-use-rofi)}" \
+      --replace "copy_to_clipboard=1" "copy_to_clipboard=${builtins.toString (lib.boolToInt emojipick-copy-to-clipboard)}" \
+      --replace "show_notification=1" "show_notification=${builtins.toString (lib.boolToInt emojipick-show-notifications)}" \
+      --replace "print_emoji=1" "print_emoji=${builtins.toString (lib.boolToInt emojipick-print-emoji)}" \
       --replace "font_family='\"Noto Color Emoji\"'" "font_family='\"${emojipick-font-family}\"'" \
       --replace 'font_size="18"' 'font_size="${emojipick-font-size}"' \
       ${lib.optionalString emojipick-use-rofi "--replace 'rofi ' '${rofi}/bin/rofi '"} \
