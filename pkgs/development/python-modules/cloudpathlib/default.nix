@@ -11,9 +11,9 @@
   boto3,
   psutil,
   pydantic,
-  pytest7CheckHook,
+  pytestCheckHook,
   pytest-cases,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   python-dotenv,
   shortuuid,
@@ -53,9 +53,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     psutil
     pydantic
-    pytest7CheckHook
+    pytestCheckHook
     pytest-cases
-    pytest-cov
+    pytest-cov-stub
     pytest-xdist
     python-dotenv
     shortuuid
