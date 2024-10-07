@@ -13629,6 +13629,8 @@ self: super: with self; {
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
 
+  retinaface = callPackage ../development/python-modules/retinaface { };
+
   retry = callPackage ../development/python-modules/retry { };
 
   retry-decorator = callPackage ../development/python-modules/retry-decorator { };
