@@ -5,7 +5,14 @@ unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
     runHook preCheck
 
-    eval "@pythonCheckInterpreter@ -m unittest discover $unittestFlagsArray"
+    local -a flagsArray=()
+
+    # Compatibility layer to the obsolete unittestFlagsArray
+    eval "flagsArray+=(${unittestFlagsArray[*]-})"
+
+    concatTo flagsArray unittestFlags
+    echoCmd 'unittest flags' "${flagsArray[@]}"
+    @pythonCheckInterpreter@ -m unittest discover "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing unittestCheckPhase"
