@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "seilfahrt";
-  version = "1.0.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Nerdbergev";
     repo = "seilfahrt";
     rev = "v${version}";
-    hash = "sha256-2nbBG/LIx1JDUzxyASvM/5hAI2JbBRDuv8Jub+yTwdA=";
+    hash = "sha256-eQcRS3xyqdtjRki+EPnHIaqUJufniFJCh5qU2Za9kyg=";
   };
 
   vendorHash = "sha256-JU77EFk8SWgZkN4DEtkKS2MsBH16my4j9X/NJC/r6mI=";
