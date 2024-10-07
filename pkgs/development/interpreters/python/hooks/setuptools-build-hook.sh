@@ -1,4 +1,6 @@
 # Setup hook for setuptools.
+# shellcheck shell=bash
+
 echo "Sourcing setuptools-build-hook"
 
 # shellcheck source=pkgs/development/interpreters/python/compat-helpers.sh
