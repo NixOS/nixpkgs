@@ -7,22 +7,21 @@
 , stdenv
 , darwin
 , nix-update-script
-, testers
-, typstyle
+, versionCheckHook
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.11.34";
+  version = "0.11.35";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6z2jzs5PxsEsCPSm9+sZnBdzh0edLMylaLBvSSPoPNo=";
+    hash = "sha256-mPppnbgTXJ4ALIHrI0q9UpwGPDoTGitw5KRY8eA/vJg=";
   };
 
-  cargoHash = "sha256-MaqsAQvh30nDzoxgnFKu7+wvRZ7WvwLgKYM3Fru8qfg=";
+  cargoHash = "sha256-30xinYXS+OGYE1H0Eutwpjgn3OfFtjTUJInDHvn6/E0=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,9 +42,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=e2e"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = typstyle; };
   };
 
   meta = {
