@@ -15,4 +15,4 @@ setuptoolsRustSetup() {
     export CARGO_TARGET_@cargoLinkerVar@_LINKER=@targetLinker@
 }
 
-preConfigureHooks+=(setuptoolsRustSetup)
+appendToVar preConfigureHooks setuptoolsRustSetup
