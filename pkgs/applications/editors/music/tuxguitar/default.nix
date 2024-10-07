@@ -26,12 +26,12 @@ let
         sha256 = "sha256-mj5wVQlY2xFzdulvMdb5Qb5HGwr7RElzIkpOLjaAfGA=";
       };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.5";
   pname = "tuxguitar";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}-linux-${metadata.arch}.tar.gz";
+    url = "mirror://sourceforge/tuxguitar/tuxguitar-${finalAttrs.version}-linux-${metadata.arch}.tar.gz";
     sha256 = metadata.sha256;
   };
 
@@ -78,4 +78,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ ardumont ];
     platforms = lib.platforms.linux;
   };
-}
+})
