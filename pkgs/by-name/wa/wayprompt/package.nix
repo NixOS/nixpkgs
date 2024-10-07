@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     "${finalAttrs.deps}"
   ];
 
+  postFixup = ''
+    substituteInPlace $out/bin/wayprompt-ssh-askpass \
+      --replace-fail wayprompt $out/bin/wayprompt
+  '';
+
   meta = {
     homepage = "https://git.sr.ht/~leon_plickat/wayprompt";
     description = "Multi-purpose (password-)prompt tool for Wayland";
