@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-usgs-earthquakes";
-  version = "0.3";
+  version = "0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-usgs-earthquakes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q9vBy5R5N5ihJdSMALo88qVYcFVs2/33lYRPdLej4S8=";
+    hash = "sha256-UzLnctft/D38bqClqyyJ4b5GvVXM4CFSd6TypuLo0Y4=";
   };
 
   nativeBuildInputs = [ setuptools ];
