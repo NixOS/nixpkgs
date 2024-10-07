@@ -4,13 +4,13 @@
 
 callPackage ./generic.nix {
   pname = "sm64ex";
-  version = "unstable-2022-12-19";
+  version = "unstable-2023-07-01";
 
   src = fetchFromGitHub {
     owner = "sm64pc";
     repo = "sm64ex";
-    rev = "afc7e8da695bdf1aea5400a0d5c8b188d16a2088";
-    sha256 = "sha256-TbA9yGPtP2uGsxN3eFaQwFeNjAjZ5hSk8Qmx1pRQxf8=";
+    rev = "54cd27ccee45a2403b45f07a00d6043c51149969";
+    sha256 = "sha256-inKwdZR4v+tLmfY+rU+fIUdmGX3jCSBMMBqNcdfXHko=";
   };
 
   extraMeta = {
