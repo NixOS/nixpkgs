@@ -12372,9 +12372,7 @@ with pkgs;
   snort = callPackage ../applications/networking/ids/snort { };
 
   soapui = callPackage ../applications/networking/soapui {
-    jdk = if stdenv.hostPlatform.isDarwin
-      then (jdk11.override { enableJavaFX = true; })
-      else jdk11;
+    jdk = jdk11;
   };
 
   sockdump = callPackage ../tools/networking/sockdump { };
