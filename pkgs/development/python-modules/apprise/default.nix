@@ -64,6 +64,9 @@ buildPythonPackage rec {
     "test_plugin_mqtt_general"
     # Nondeterministic. Fails with `assert 3 == 2`
     "test_plugin_matrix_transaction_ids_api_v3"
+    # Nondeterministic. Fails with `IndexError`
+    # https://github.com/NixOS/nixpkgs/issues/346894
+    "test_plugin_wxpusher_result_set"
     # Nondeterministic. Fails with `AssertionError`
     "test_plugin_xbmc_kodi_urls"
     # Nondeterministic. Fails with `AssertionError`
