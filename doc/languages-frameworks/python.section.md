@@ -411,7 +411,7 @@ let
     };
   };
 
-  pythonEnv =  testPython.withPackages (ps: [ ps.my-editable ]);
+  pythonEnv =  myPython.withPackages (ps: [ ps.my-editable ]);
 
 in pkgs.mkShell {
   packages = [ pythonEnv ];
