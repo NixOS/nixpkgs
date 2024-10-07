@@ -54,6 +54,7 @@ buildPythonPackage {
     re2
     onnxruntime-genai.protobuf
     onnxruntime-genai.onnxruntime
+    onnxruntime-genai.onnxruntime-extensions
   ] ++ lib.optionals onnxruntime-genai.passthru.cudaSupport (with onnxruntime-genai.passthru.cudaPackages; [
     libcublas # libcublasLt.so.XX libcublas.so.XX
     libcurand # libcurand.so.XX

@@ -191,7 +191,7 @@ effectiveStdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit cudaSupport cudaPackages onnxruntime; # for the python module
+    inherit cudaSupport cudaPackages onnxruntime onnxruntime-extensions; # for the python module
     protobuf = protobuf_21;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime-genai;
