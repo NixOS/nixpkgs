@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.34.0";
+  version = "0.34.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UjwBxuhXuwJfWewg9si/oIuXgiqbNAYm4lK2f+C6VJU=";
+    hash = "sha256-JSc1Atl6nN0eOJf4dx7tkb05creU43zRM08HKorznW4=";
   };
 
   build-system = [
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     vertex = [ google-auth ];
   };
 

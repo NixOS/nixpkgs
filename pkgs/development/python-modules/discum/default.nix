@@ -37,7 +37,7 @@ buildPythonPackage rec {
     websocket-client
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ra = [
       pycryptodome
       pypng

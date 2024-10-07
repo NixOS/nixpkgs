@@ -79,6 +79,7 @@ mkDerivation rec {
       Bitcoin ABC is a fork of the Bitcoin Core software project.
     '';
     homepage = "https://bitcoinabc.org/";
+    changelog = "https://www.bitcoinabc.org/doc/release-notes/release-notes-${version}.html";
     maintainers = with maintainers; [ lassulus ];
     license = licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;

@@ -46,7 +46,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     serial = [ pyserial ];
     seeedstudio = [ pyserial ];
     pcan = [ uptime ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     parameterized
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.serial;
+  ] ++ optional-dependencies.serial;
 
   disabledTestPaths = [
     # We don't support all interfaces

@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
     maintainers = teams.gnome.members;

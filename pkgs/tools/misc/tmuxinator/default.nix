@@ -8,23 +8,23 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "tmuxinator";
-  version = "3.1.2";
-  source.sha256 = "t96v3RwBfezB644RVbTmO8i/xh1F23WQC8PBxc/msjg=";
+  version = "3.3.1";
+  source.sha256 = "sha256-xixLYzDIvX3D+vbe9SccST37TnyZx/YjePLPjagHsOU=";
 
-  erubis = buildRubyGem rec {
+  erubi = buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
-    gemName = "erubis";
-    version = "2.7.0";
-    source.sha256 = "1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3";
+    gemName = "erubi";
+    version = "1.13.0";
+    source.sha256 = "fca61b47daefd865d0fb50d168634f27ad40181867445badf6427c459c33cd62";
   };
 
   thor = buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
     gemName = "thor";
-    version = "1.3.0";
-    source.sha256 = "sha256-Gtx/nls2VaaMcTk/7ovQrQiNFO6Og6C3NybyPLs8p8M=";
+    version = "1.3.2";
+    source.sha256 = "sha256-7vApO54kFYzK16s4Oug1NLetTtmcCflvGmsDZVCrvto=";
   };
 
   xdg = buildRubyGem rec {
@@ -35,7 +35,7 @@ buildRubyGem rec {
     source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
-  propagatedBuildInputs = [ erubis thor xdg ];
+  propagatedBuildInputs = [ erubi thor xdg ];
 
   nativeBuildInputs = [ installShellFiles ];
 

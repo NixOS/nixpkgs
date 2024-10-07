@@ -56,7 +56,7 @@ buildPythonPackage rec {
     sniffio
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     http2 = [ h2 ];
     socks = [ socksio ];
     brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     pytest-trio
     trustme
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # testsuite wants to find installed packages for testing entrypoint
   preCheck = ''

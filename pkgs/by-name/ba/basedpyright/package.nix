@@ -13,13 +13,13 @@
 }:
 
 let
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-o2MHZMUuVnVjdv2b+GLIMjK1FT8KfLUzo7+zH7OU7HI=";
+    hash = "sha256-nYbxgrNFhQ576rN8W+Hf/Keohy1N8tihOeTQHItKPRc=";
   };
 
   # To regenerate the patched package-lock.json, copy the patched package.json
@@ -51,7 +51,7 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-pavURV/smWxYUWpRjVM08pJqfdNl/fULds66miC2iwg=";
+    npmDepsHash = "sha256-Md17EF3a1GBfnHD2fnLGS76r0xiWYJmBBTzZWRc0j5c=";
     dontNpmBuild = true;
     # Uncomment this flag when using unreleased peer dependencies
     # npmFlags = [ "--legacy-peer-deps" ];

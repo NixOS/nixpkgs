@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/epoupon/lms";
+    changelog = "https://github.com/epoupon/lms/releases/tag/${src.rev}";
     description = "Lightweight Music Server - Access your self-hosted music using a web interface";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

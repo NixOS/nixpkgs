@@ -17,8 +17,8 @@
     hash = "sha256-tzAAwL70VAyUEOZZ86ql+RgXsw4DZhkvW5l0d1eVVHU=";
   };
 
-  "nghttp2-1.61.0.tar.bz2" = fetchurl {
-    url = "https://github.com/nghttp2/nghttp2/releases/download/v1.61.0/nghttp2-1.61.0.tar.bz2";
-    hash = "sha256-Toz37DLUxaQwlmJC1yA10lXNlHCodm1h7tegGQ3VRP0=";
+  "nghttp2-1.63.0.tar.bz2" = fetchurl {
+    url = "https://github.com/nghttp2/nghttp2/releases/download/v1.63.0/nghttp2-1.63.0.tar.bz2";
+    hash = "sha256-YHsXRVTSKoKLxTLR1zT+D3KbXV7SB/LxLpamLoPynFU=";
   };
 }

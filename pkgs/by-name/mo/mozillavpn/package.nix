@@ -1,4 +1,5 @@
 {
+  _experimental-update-script-combinators,
   buildGoModule,
   cargo,
   cmake,
@@ -9,6 +10,7 @@
   libgcrypt,
   libgpg-error,
   libsecret,
+  nix-update-script,
   pkg-config,
   python3,
   qt6,
@@ -20,27 +22,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.0";
+  version = "2.24.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-iTnwx+KPZ5b8qT0fEMUCGQx1UyGVM4VCzooZqslGWtw=";
+    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
   };
   patches = [ ];
 
-  netfilterGoModules =
-    (buildGoModule {
-      inherit (finalAttrs)
-        pname
-        version
-        src
-        patches
-        ;
-      modRoot = "linux/netfilter";
-      vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
-    }).goModules;
+  netfilter = buildGoModule {
+    pname = "${finalAttrs.pname}-netfilter";
+    inherit (finalAttrs)
+      version
+      src
+      patches
+      ;
+    modRoot = "linux/netfilter";
+    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+  };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src patches;
@@ -83,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
-    ln -s '${finalAttrs.netfilterGoModules}' linux/netfilter/vendor
+    ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
   '';
 
   cmakeFlags = [
@@ -98,6 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
     "PATH"
     ":"
     (lib.makeBinPath [ wireguard-tools ])
+  ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script { })
+    (nix-update-script {
+      attrPath = "mozillavpn.netfilter";
+      extraArgs = [ "--version=skip" ];
+    })
   ];
 
   meta = {

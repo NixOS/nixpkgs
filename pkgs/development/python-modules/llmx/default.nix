@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     web = [
       fastapi
       uvicorn

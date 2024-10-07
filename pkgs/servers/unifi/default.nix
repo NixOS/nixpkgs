@@ -46,13 +46,6 @@ let
 in rec {
   # see https://community.ui.com/releases / https://www.ui.com/download/unifi
 
-  unifi7 = generic {
-    version = "7.5.187";
-    suffix = "-f57f5bf7ab";
-    sha256 = "sha256-a5kl8gZbRnhS/p1imPl7soM0/QSFHdM0+2bNmDfc1mY=";
-    knownVulnerabilities = [ "CVE-2024-42025" ];
-  };
-
   unifi8 = generic {
     version = "8.4.62";
     suffix = "-i3q2j125cz";

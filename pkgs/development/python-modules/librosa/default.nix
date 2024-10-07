@@ -78,7 +78,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies.matplotlib = [ matplotlib ];
+  optional-dependencies.matplotlib = [ matplotlib ];
 
   # check that import works, this allows to capture errors like https://github.com/librosa/librosa/issues/1160
   pythonImportsCheck = [ "librosa" ];
@@ -90,7 +90,7 @@ buildPythonPackage rec {
     pytestCheckHook
     resampy
     samplerate
-  ] ++ passthru.optional-dependencies.matplotlib;
+  ] ++ optional-dependencies.matplotlib;
 
   preCheck = ''
     export HOME=$TMPDIR

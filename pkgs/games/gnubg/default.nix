@@ -18,15 +18,17 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 
-  desktopItems = makeDesktopItem {
-    desktopName = "GNU Backgammon";
-    name = pname;
-    genericName = "Backgammon";
-    comment = meta.description;
-    exec = pname;
-    icon = pname;
-    categories = [ "Game" "GTK" "StrategyGame" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "GNU Backgammon";
+      name = pname;
+      genericName = "Backgammon";
+      comment = meta.description;
+      exec = pname;
+      icon = pname;
+      categories = [ "Game" "GTK" "StrategyGame" ];
+    })
+  ];
 
   meta = with lib;
     { description = "World class backgammon application";

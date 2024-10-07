@@ -22,14 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-m77MY0IZ1AJkd4/Y7ltApvdF9y17Lgn92WZPYTCU9tA=";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     yaml = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "configargparse" ];
 

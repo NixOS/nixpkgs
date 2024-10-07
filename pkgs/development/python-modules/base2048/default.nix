@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fuzz = [ frelatage ];
   };
 

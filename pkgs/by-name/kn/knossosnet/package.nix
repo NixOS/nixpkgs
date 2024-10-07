@@ -7,13 +7,13 @@
 
 buildDotnetModule rec {
   pname = "knossosnet";
-  version = "1.2.0";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "KnossosNET";
     repo = "Knossos.NET";
     rev = "v${version}";
-    hash = "sha256-4GVbwBykagSMGF3TxyZeoRb7Km+yLEMFOO8fCkH3U5A=";
+    hash = "sha256-5FNb+L+ABkR/ubSZXuV4hlzy6pIWEXaTXl4piNsmkmw=";
   };
 
   patches = [ ./targetframework.patch ];

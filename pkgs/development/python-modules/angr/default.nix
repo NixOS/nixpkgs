@@ -91,7 +91,7 @@ buildPythonPackage rec {
     unique-log-filter
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     AngrDB = [ sqlalchemy ];
   };
 

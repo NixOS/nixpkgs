@@ -19,27 +19,25 @@
 , libgudev
 , libraw
 , sqlite
-, python3
 , libwebp
 , wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "photos";
     rev = version;
-    sha256 = "sha256-EULNLtoZ8M68cp1DT11G6O2TONH/0DXWNX0k4AUqa/w=";
+    sha256 = "sha256-+aqBeGRisngbH/EALROTr0IZvyrWIlQvFFEgJNfv95Y=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook3
   ];
@@ -65,11 +63,6 @@ stdenv.mkDerivation rec {
     gst-plugins-ugly
     gstreamer
   ]);
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

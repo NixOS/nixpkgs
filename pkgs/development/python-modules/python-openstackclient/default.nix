@@ -72,25 +72,26 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openstackclient" ];
 
+  optional-dependencies = {
+    # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
+    cli-plugins = [
+      osc-placement
+      python-aodhclient
+      python-barbicanclient
+      python-designateclient
+      python-heatclient
+      python-ironicclient
+      python-magnumclient
+      python-manilaclient
+      python-mistralclient
+      python-neutronclient
+      python-watcherclient
+      python-zaqarclient
+      python-zunclient
+    ];
+  };
+
   passthru = {
-    optional-dependencies = {
-      # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
-      cli-plugins = [
-        osc-placement
-        python-aodhclient
-        python-barbicanclient
-        python-designateclient
-        python-heatclient
-        python-ironicclient
-        python-magnumclient
-        python-manilaclient
-        python-mistralclient
-        python-neutronclient
-        python-watcherclient
-        python-zaqarclient
-        python-zunclient
-      ];
-    };
     tests.version = testers.testVersion {
       package = python-openstackclient;
       command = "openstack --version";

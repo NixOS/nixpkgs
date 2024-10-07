@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ prometheus-client ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       gevent
       pika

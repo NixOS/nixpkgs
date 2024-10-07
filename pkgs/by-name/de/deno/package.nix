@@ -113,6 +113,6 @@ rustPlatform.buildRustPackage rec {
     ];
     # NOTE: `aligned_alloc` error on darwin SDK < 10.15. Can't do usual overrideSDK with rust toolchain in current implementation.
     # Should be fixed with darwin SDK refactor and can be revisited.
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 }

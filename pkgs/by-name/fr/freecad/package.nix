@@ -9,12 +9,12 @@
 , gfortran
 , gts
 , hdf5
-, libGLU
-, libXmu
 , libf2c
+, libGLU
 , libredwg
 , libsForQt5
 , libspnav
+, libXmu
 , medfile
 , mpi
 , ninja
@@ -29,6 +29,7 @@
 , vtk
 , wrapGAppsHook3
 , xercesc
+, yaml-cpp
 , zlib
 , withWayland ? false
 }:
@@ -50,6 +51,7 @@ let
     matplotlib
     pivy
     ply
+    pybind11
     pycollada
     pyside2
     pyside2-tools
@@ -61,13 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.2";
+  version = "1.0rc2";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
+    hash = "sha256-kPmfx/C1fCYwBqh6ZOKZAVNVR9m3VryPmBKu3ksDD5E=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -100,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       opencascade-occt
       pivy
       ply # for openSCAD file support
+      pybind11
       pycollada
       pyside2
       pyside2-tools
@@ -116,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       swig
       vtk
       xercesc
+      yaml-cpp
       zlib
     ]
     ++ lib.optionals spaceNavSupport [
@@ -125,12 +130,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+    ./0002-FreeCad-OndselSolver-pkgconfig.patch
   ];
 
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
     "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
+    "-DBUILD_DRAWING=ON"
+    "-DBUILD_FLAT_MESH:BOOL=ON"
+    "-DINSTALL_TO_SITEPACKAGES=OFF"
+    "-DFREECAD_USE_PYBIND11=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
     (
@@ -201,7 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner AndersonTorres ];
+    maintainers = with lib.maintainers; [ gebner AndersonTorres srounce ];
     platforms = lib.platforms.linux;
   };
 })

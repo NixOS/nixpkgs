@@ -1,8 +1,8 @@
 { config, lib, pkgs, ... }:
 
 let
-  inherit (lib) mkIf mkOption mkEnableOption types optional optionals;
-  inherit (lib.types) nullOr bool listOf str;
+  inherit (lib) mkIf mkOption mkDefault mkEnableOption types optional optionals;
+  inherit (lib.types) nullOr bool listOf str attrsOf submodule;
 
   cfg = config.services.i2pd;
 
@@ -618,7 +618,7 @@ in
 
       outTunnels = mkOption {
         default = {};
-        type = with types; attrsOf (submodule (
+        type = attrsOf (submodule (
           { name, ... }: {
             options = {
               destinationPort = mkOption {
@@ -639,7 +639,7 @@ in
 
       inTunnels = mkOption {
         default = {};
-        type = with types; attrsOf (submodule (
+        type = attrsOf (submodule (
           { name, ... }: {
             options = {
               inPort = mkOption {

@@ -139,9 +139,6 @@ let
 in
 {
   alpha-nvim = super.alpha-nvim.overrideAttrs {
-    dependencies = [
-      self.nvim-web-devicons # required by the startify theme
-    ];
     nvimRequireCheck = "alpha";
   };
 
@@ -162,12 +159,13 @@ in
     dependencies = with self; [
       dressing-nvim
       nui-nvim
+      nvim-treesitter
       plenary-nvim
     ];
   };
 
   barbecue-nvim = super.barbecue-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
+    dependencies = with self; [ nvim-lspconfig nvim-navic ];
     meta = {
       description = "VS Code like winbar for Neovim";
       homepage = "https://github.com/utilyre/barbecue.nvim";
@@ -564,6 +562,12 @@ in
     dependencies = with self; [ copilot-lua plenary-nvim ];
   };
 
+  copilot-lualine = super.copilot-lualine.overrideAttrs {
+    dependencies = with self; [ copilot-lua lualine-nvim ];
+    doInstallCheck = true;
+    nvimRequireCheck = "copilot-lualine";
+  };
+
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
@@ -590,19 +594,19 @@ in
 
   cord-nvim =
     let
-      version = "2024-07-19";
+      version = "0-unstable-2024-09-26";
       src = fetchFromGitHub {
         owner = "vyfor";
         repo = "cord.nvim";
-        rev = "cd97c25320fb0a672b11bcd95d8332bb3088ecce";
-        hash = "sha256-66NtKteM1mvHP5wAU4e9JbsF+bq91lmCDcTh/6RPhoo=";
+        rev = "a26b00d58c42174aadf975917b49cec67650545f";
+        hash = "sha256-jUxBvWnj0+axuw2SZ2zLzlhZS0tu+Bk8+wHtXENofkw=";
       };
       extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
       rustPackage = rustPlatform.buildRustPackage {
         pname = "cord.nvim-rust";
         inherit version src;
 
-        cargoHash = "sha256-6FYf4pHEPxvhKHHPmkjQ40zPxaiypnpDxF8kNH+h+tg=";
+        cargoHash = "sha256-M5mTdBACTaUVZhPpMOf1KQ3BcQpEoD2isAKRn+iAWjc=";
 
         installPhase = let
           cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
@@ -988,6 +992,18 @@ in
     passthru.python3Dependencies = ps: [ ps.jupytext ];
   };
 
+  kulala-nvim = super.kulala-nvim.overrideAttrs {
+    dependencies = with self; [
+      nvim-treesitter
+      nvim-treesitter-parsers.http
+    ];
+    buildInputs = [ curl ];
+    postPatch = ''
+      substituteInPlace lua/kulala/config/init.lua \
+        --replace 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+    '';
+  };
+
   LanguageClient-neovim =
     let
       version = "0.1.161";
@@ -1131,10 +1147,6 @@ in
       '';
     };
 
-  markview-nvim = super.markview-nvim.overrideAttrs {
-    dependencies = with self; [ nvim-web-devicons ];
-  };
-
   mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs {
     dependencies = with self; [ mason-nvim nvim-lspconfig ];
   };
@@ -1239,7 +1251,12 @@ in
     dependencies = with self; [ plenary-nvim ];
   };
 
-  neorg = neovimUtils.buildNeovimPlugin { luaAttr = luaPackages.neorg; };
+  neorg = neovimUtils.buildNeovimPlugin {
+    luaAttr = luaPackages.neorg;
+
+    doInstallCheck = true;
+    nvimRequireCheck = "neorg";
+  };
 
   neotest = super.neotest.overrideAttrs {
     dependencies = with self; [ nvim-nio plenary-nvim ];
@@ -1282,6 +1299,10 @@ in
   };
 
   nvim-dap-python = super.nvim-dap-python.overrideAttrs {
+    dependencies = with self; [ nvim-dap ];
+  };
+
+  nvim-dap-rego = super.nvim-dap-rego.overrideAttrs {
     dependencies = with self; [ nvim-dap ];
   };
 

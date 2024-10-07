@@ -78,7 +78,7 @@ buildPythonPackage rec {
     zipstream-ng
   ] ++ autobahn.optional-dependencies.twisted ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dilation = [ noiseprotocol ];
   };
 
@@ -91,7 +91,7 @@ buildPythonPackage rec {
       mock
       pytestCheckHook
     ]
-    ++ passthru.optional-dependencies.dilation
+    ++ optional-dependencies.dilation
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ unixtools.locale ];
 
   __darwinAllowLocalNetworking = true;

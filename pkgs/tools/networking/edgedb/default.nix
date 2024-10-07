@@ -7,11 +7,11 @@
   makeBinaryWrapper,
   pkg-config,
   curl,
+  openssl,
   Security,
   CoreServices,
   libiconv,
   xz,
-  perl,
   substituteAll,
   # for passthru.tests:
   edgedb,
@@ -47,11 +47,15 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     makeBinaryWrapper
     pkg-config
-    perl
   ];
 
   buildInputs =
-    [ curl ]
+    [
+      curl
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      openssl
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices
       Security
@@ -68,6 +72,10 @@ rustPlatform.buildRustPackage rec {
       dynamicLinker = stdenv.cc.bintools.dynamicLinker;
     })
   ];
+
+  env = {
+    OPENSSL_NO_VENDOR = true;
+  };
 
   doCheck = false;
 
