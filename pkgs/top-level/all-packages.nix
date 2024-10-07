@@ -17786,8 +17786,6 @@ with pkgs;
 
   icestorm = callPackage ../development/embedded/fpga/icestorm { };
 
-  icmake = callPackage ../development/tools/build-managers/icmake { };
-
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   ikos = callPackage ../development/tools/analysis/ikos {
