@@ -7,7 +7,7 @@
   CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
 }:
 let
-  version = "0.6.6";
+  version = "0.6.7";
 in
 rustPlatform.buildRustPackage {
   pname = "mdbook-alerts";
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "lambdalisue";
     repo = "rs-mdbook-alerts";
     rev = "v${version}";
-    hash = "sha256-npPQU53l/VtTH23YYT6SOa11eUPNcA96al06S5HNNFE=";
+    hash = "sha256-H3xpaluEUYWuP+JR4Zx8zs/EqeEZPiBa2wcaAtPdvGY=";
   };
 
-  cargoHash = "sha256-1wumxZoNr1QIit+KjgioG5WlSLSsWfcisChUEISoGQE=";
+  cargoHash = "sha256-epnhKGvKN/iHcI77wEJlq7A5S2CkVRoPFTD+fGp1BH8=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
