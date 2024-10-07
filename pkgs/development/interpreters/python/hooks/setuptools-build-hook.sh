@@ -1,4 +1,6 @@
 # Setup hook for setuptools.
+# shellcheck shell=bash
+
 echo "Sourcing setuptools-build-hook"
 
 setuptoolsBuildPhase() {
