@@ -14,19 +14,13 @@ rec {
   # passed on a build=x86_64/host=aarch64 compilation.
   envVars = let
 
-    # As a workaround for https://github.com/rust-lang/rust/issues/89626 use lld on pkgsStatic aarch64
-    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.hostPlatform.isDarwin;
-
     ccForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}c++";
     linkerForBuild = ccForBuild;
 
     ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
     cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-    linkerForHost = if shouldUseLLD stdenv.targetPlatform
-      && !stdenv.cc.bintools.isLLVM
-      then "${pkgsBuildHost.llvmPackages.bintools}/bin/${stdenv.cc.targetPrefix}ld.lld"
-      else ccForHost;
+    linkerForHost = ccForHost;
 
     # Unfortunately we must use the dangerous `pkgsTargetTarget` here
     # because hooks are artificially phase-shifted one slot earlier
@@ -34,10 +28,7 @@ rec {
     # a targetPlatform to them).
     ccForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc";
     cxxForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++";
-    linkerForTarget = if shouldUseLLD pkgsTargetTarget.stdenv.targetPlatform
-      && !pkgsTargetTarget.stdenv.cc.bintools.isLLVM # whether stdenv's linker is lld already
-      then "${pkgsBuildTarget.llvmPackages.bintools}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}ld.lld"
-      else ccForTarget;
+    linkerForTarget = ccForTarget;
 
     rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;
     rustBuildPlatformSpec = stdenv.buildPlatform.rust.rustcTargetSpec;
