@@ -6745,10 +6745,6 @@ self: super: with self; {
 
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 { };
 
-  keyutils = callPackage ../development/python-modules/keyutils {
-    inherit (pkgs) keyutils;
-  };
-
   khanaa = callPackage ../development/python-modules/khanaa {};
 
   kicad = toPythonModule (pkgs.kicad.override {
