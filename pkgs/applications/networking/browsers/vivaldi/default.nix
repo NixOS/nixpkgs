@@ -4,7 +4,7 @@
 , freetype, fontconfig, libXft, libXrender, libxcb, expat
 , libuuid
 , libxml2
-, glib, gtk3, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
+, glib, gtk3, gtk4, pango, gdk-pixbuf, cairo, atk, at-spi2-atk, at-spi2-core
 , qt5
 , libdrm, mesa
 , vulkan-loader
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb libxkbcommon libxshmfence
     libXi libXft libXcursor libXfixes libXScrnSaver libXcomposite libXdamage libXtst libXrandr
-    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gdk-pixbuf libexif ffmpeg systemd libva
+    atk at-spi2-atk at-spi2-core alsa-lib dbus cups gtk3 gtk4 gdk-pixbuf libexif ffmpeg systemd libva
     qt5.qtbase
     freetype fontconfig libXrender libuuid expat glib nss nspr libGL
     libxml2 pango cairo
