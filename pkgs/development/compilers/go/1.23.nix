@@ -13,13 +13,13 @@
 , threadsCross
 , testers
 , skopeo
-, buildGo121Module
+, buildGo123Module
 }:
 
 let
   goBootstrap = buildPackages.callPackage ./bootstrap121.nix { };
 
-  skopeoTest = skopeo.override { buildGoModule = buildGo121Module; };
+  skopeoTest = skopeo.override { buildGoModule = buildGo123Module; };
 
   goarch = platform: {
     "aarch64" = "arm64";
@@ -36,6 +36,7 @@ let
     "riscv64" = "riscv64";
     "s390x" = "s390x";
     "x86_64" = "amd64";
+    "wasm32" = "wasm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
@@ -46,11 +47,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.21.13";
+  version = "1.23.0";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-cfsxYGod5I0SnVkehxemPgxVZf+6CaJOqfiZoTIUw00=";
+    hash = "sha256-Qreo6A2AXaoDAi7T/eQyHUw78smQoUQWXQHu7Nb2mcY=";
   };
 
   strictDeps = true;
@@ -86,10 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./go_no_vendor_checks-1.21.patch
+    ./go_no_vendor_checks-1.22.patch
   ];
 
-  GOOS = stdenv.targetPlatform.parsed.kernel.name;
+  GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
   GOARCH = goarch stdenv.targetPlatform;
   # GOHOSTOS/GOHOSTARCH must match the building system, not the host system.
   # Go will nevertheless build a for host system that we will copy over in
@@ -112,15 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
-  CGO_ENABLED = 1;
+  # Wasi does not support CGO
+  CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
 
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
-    # this is compiled into the binary
-    export GOROOT_FINAL=$out/share/go
 
     export PATH=$(pwd)/bin:$PATH
 
@@ -156,10 +156,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $GOROOT_FINAL
-    cp -a bin pkg src lib misc api doc go.env $GOROOT_FINAL
+    mkdir -p $out/share/go
+    cp -a bin pkg src lib misc api doc go.env $out/share/go
     mkdir -p $out/bin
-    ln -s $GOROOT_FINAL/bin/* $out/bin
+    ln -s $out/share/go/bin/* $out/bin
     runHook postInstall
   '';
 
@@ -179,11 +179,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://go.dev/doc/devel/release#go${lib.versions.majorMinor finalAttrs.version}";
-    description = "The Go Programming language";
+    description = "Go Programming language";
     homepage = "https://go.dev/";
     license = licenses.bsd3;
     maintainers = teams.golang.members;
-    platforms = platforms.darwin ++ platforms.linux ++ platforms.freebsd;
+    platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
     mainProgram = "go";
   };
 })
