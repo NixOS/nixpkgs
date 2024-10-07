@@ -5,12 +5,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sway-assign-cgroups";
-  version = "0.4.0";
+  version = "0.4.1";
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    rev = "v${version}";
-    hash = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   format = "other";
 
