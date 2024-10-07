@@ -301,6 +301,27 @@ in
       '';
     };
 
+    shutdownTimeout = mkOption {
+      type = types.ints.unsigned;
+      default = 300;
+      description = ''
+        Number of seconds we're willing to wait for a guest to shut down.
+        If parallel shutdown is enabled, this timeout applies as a timeout
+        for shutting down all guests on a single URI defined in the variable URIS.
+        If this is 0, then there is no time out (use with caution, as guests might not
+        respond to a shutdown request).
+      '';
+    };
+
+    startDelay = mkOption {
+      type = types.ints.unsigned;
+      default = 0;
+      description = ''
+        Number of seconds to wait between each guest start.
+        If set to 0, all guests will start up in parallel.
+      '';
+    };
+
     allowedBridges = mkOption {
       type = types.listOf types.str;
       default = [ "virbr0" ];
@@ -495,6 +516,8 @@ in
       environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
       environment.PARALLEL_SHUTDOWN = "${toString cfg.parallelShutdown}";
+      environment.SHUTDOWN_TIMEOUT = "${toString cfg.shutdownTimeout}";
+      environment.START_DELAY = "${toString cfg.startDelay}";
     };
 
     systemd.sockets.virtlogd = {
