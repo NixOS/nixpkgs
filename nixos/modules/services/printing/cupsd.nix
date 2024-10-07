@@ -184,8 +184,8 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Whether to open the firewall for TCP/UDP ports specified in
-          listenAdrresses option.
+          Whether to open the firewall for TCP ports specified in
+          listenAddresses option.
         '';
       };
 
@@ -493,7 +493,6 @@ in
       listenPorts = parsePorts cfg.listenAddresses;
     in mkIf cfg.openFirewall {
       allowedTCPPorts = listenPorts;
-      allowedUDPPorts = listenPorts;
     };
 
   };
