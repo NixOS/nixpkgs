@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.6.4";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xd75/AKBFUdA6a8sQnCB2rVbHl/Foy4LTb07jnwrTjA=";
+    hash = "sha256-k2bt1hV3vrQW0CQUTTGI1cJJC7raHzSZwBJyM8iKk/c=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
