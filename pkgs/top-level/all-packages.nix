@@ -17155,8 +17155,6 @@ with pkgs;
 
   bison = callPackage ../development/tools/parsing/bison { };
 
-  bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };
-
   black = with python3Packages; toPythonApplication black;
 
   blackfire = callPackage ../development/tools/misc/blackfire { };
