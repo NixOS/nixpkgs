@@ -26,15 +26,13 @@ buildPythonPackage rec {
     hash = "sha256-JOvmUWrmYQt2hJ9u08Aliv9ImI3AOTk4uBx3Pv8/7/c=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aio-geojson-client
     aiohttp
     pytz
   ];
-
-  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     aioresponses
@@ -44,11 +42,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aio_geojson_nsw_rfs_incidents" ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "Python module for accessing the NSW Rural Fire Service incidents feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-nsw-rfs-incidents";
     changelog = "https://github.com/exxamalte/python-aio-geojson-geonetnz-quakes/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
