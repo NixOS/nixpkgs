@@ -306,7 +306,7 @@ in {
     }) enabledServers);
 
     boot.kernel.sysctl = mkIf cfg.vmOverCommit {
-      "vm.overcommit_memory" = "1";
+      "vm.overcommit_memory" = mkDefault "1";
     };
 
     networking.firewall.allowedTCPPorts = concatMap (conf:
