@@ -1,27 +1,31 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, pkg-config
 , ffmpeg
 , fftwFloat
 , chafa
 , freeimage
 , glib
-, pkg-config
+, opusfile
+, libopus
+, libvorbis
 }:
 
 stdenv.mkDerivation rec {
   pname = "kew";
-  version = "1.5.2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     rev = "v${version}";
-    hash = "sha256-Om7v8eTlYxXQYf1MG+L0I5ICQ2LS7onouhPGosuK8NM=";
+    hash = "sha256-WdWeC9Bx7gI55pDtpORVAeld8QWo6BMzxQ/bliSAFII=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ ffmpeg freeimage fftwFloat chafa glib ];
+  buildInputs = [ ffmpeg freeimage libvorbis opusfile libopus fftwFloat chafa glib ];
+  buildFlags = "-I${opusfile.dev}/include/opus";
 
   installFlags = [
     "MAN_DIR=${placeholder "out"}/share/man"
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ravachol/kew";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ demine ];
     mainProgram = "kew";
+    maintainers = with maintainers; [ demine ];
   };
 }
