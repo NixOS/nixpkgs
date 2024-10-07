@@ -1,36 +1,52 @@
-{ stdenvNoCC
-, fetchFromGitHub
-, lib
-, python3
-, xclip
-, libnotify
-, dmenu
-, rofi
-, installShellFiles
-# Boolean flags
-, emojipick-use-rofi ? false
-, emojipick-copy-to-clipboard ? true
-, emojipick-show-notifications ? true
-, emojipick-print-emoji ? true
-, emojipick-font-family ? "Noto Color Emoji"
-, emojipick-font-size ? "18"
+{
+  lib,
+  dmenu,
+  fetchFromGitHub,
+  installShellFiles,
+  libnotify,
+  python3,
+  rofi,
+  stdenvNoCC,
+  xclip,
+  # Boolean flags
+  emojipick-copy-to-clipboard ? true,
+  emojipick-print-emoji ? true,
+  emojipick-show-notifications ? true,
+  emojipick-use-rofi ? false,
+  # Configurable options
+  emojipick-font-family ? "Noto Color Emoji",
+  emojipick-font-size ? "18",
+
 }:
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emojipick";
-  version = "2021-01-27";
+  version = "20210127";
 
   src = fetchFromGitHub {
     owner = "thingsiplay";
     repo = "emojipick";
-    rev = "20210127";
-    sha256 = "1kib3cyx6z9v9qw6yrfx5sklanpk5jbxjc317wi7i7ljrg0vdazp";
+    rev = finalAttrs.version;
+    hash = "sha256-96u2wcuSnngiP2Ew2Zcs81pFpy7dZW84Tjt90z0bK84=";
   };
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  buildInputs = [
+    libnotify
+    python3
+    xclip
+    (if emojipick-use-rofi then rofi else dmenu)
+  ];
+
   dontConfigure = true;
+
   dontBuild = true;
 
-  # Patch configuration
+  strictDeps = true;
+
   # notify-send has to be patched in a bash file
   postPatch = ''
     substituteInPlace emojipick \
@@ -43,19 +59,6 @@ stdenvNoCC.mkDerivation {
       ${lib.optionalString emojipick-use-rofi "--replace 'rofi ' '${rofi}/bin/rofi '"} \
       --replace notify-send ${libnotify}/bin/notify-send
   '';
-
-  nativeBuildInputs = [
-    installShellFiles
-  ];
-
-  buildInputs = [
-    python3
-    xclip
-    libnotify
-    (if emojipick-use-rofi then rofi else dmenu)
-  ];
-
-  strictDeps = true;
 
   installPhase = ''
     runHook preInstall
@@ -73,4 +76,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ alexnortung ];
     platforms = lib.platforms.linux;
   };
-}
+})
