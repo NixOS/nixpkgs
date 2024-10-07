@@ -9,6 +9,7 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
+, withTermlib ? false
 , unicodeSupport ? true
 , testers
 , binlore
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+    ++ lib.optional withTermlib "--with-termlib"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
