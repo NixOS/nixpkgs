@@ -1,7 +1,7 @@
 { lib, stdenv, autoPatchelfHook, makeDesktopItem, makeWrapper, copyDesktopItems
 
   # Dynamic Libraries
-, curl, libGL, libX11, libXext, libXmu, libXrandr, libXrender
+, curl, glib, gst_all_1, libGL, libX11, libXext, libXmu, libXrandr, libXrender
 
   # For fixing up execution of /bin/ls, which is necessary for
   # product unlocking.
@@ -33,6 +33,9 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     curl
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     libGL
     libX11
     libXext
