@@ -4,6 +4,8 @@
   fetchFromGitHub,
   installShellFiles,
   stdenv,
+  shadow,
+  util-linux,
 }:
 
 buildGoModule rec {
@@ -18,8 +20,6 @@ buildGoModule rec {
   };
 
   vendorHash = null;
-
-  nativeBuildInputs = [ installShellFiles ];
 
   buildPhase = ''
     runHook preBuild
@@ -43,13 +43,6 @@ buildGoModule rec {
     install -Dm755 lilipod $out/bin/lilipod
 
     runHook postInstall
-  '';
-
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd lilipod \
-      --bash <($out/bin/lilipod completion bash) \
-      --fish <($out/bin/lilipod completion fish) \
-      --zsh <($out/bin/lilipod completion zsh)
   '';
 
   meta = {
