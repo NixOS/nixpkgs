@@ -182,6 +182,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/development/libraries/tk      @fgaz
 /pkgs/top-level/tcl-packages.nix    @fgaz
 /pkgs/development/tcl-modules       @fgaz
+/doc/languages-frameworks/tcl.section.md @fgaz
 
 # C compilers
 /pkgs/development/compilers/gcc
