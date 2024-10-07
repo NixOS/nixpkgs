@@ -8,6 +8,7 @@
   acl,
   libuuid,
   lzo,
+  util-linux,
   zlib,
   zstd,
 }:
@@ -30,9 +31,15 @@ stdenv.mkDerivation rec {
     acl
     libuuid
     lzo
+    util-linux
     zlib
     zstd
   ];
+
+  postPatch = ''
+    substituteInPlace ubifs-utils/mount.ubifs \
+      --replace-fail "/bin/mount" "${util-linux}/bin/mount"
+  '';
 
   enableParallelBuilding = true;
 
