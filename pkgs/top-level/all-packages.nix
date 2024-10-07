@@ -26400,13 +26400,6 @@ with pkgs;
     glusterfsSupport = lib.meta.availableOn stdenv.hostPlatform glusterfs && lib.meta.availableOn stdenv.hostPlatform libuuid;
   });
 
-  # See `xenPackages` source for explanations.
-  # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
-  qemu_xen_4_19 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
-  qemu_xen_4_18 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
-  qemu_xen_4_17 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
-  qemu_xen = qemu_xen_4_19;
-
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
   quick-lint-js = callPackage ../development/tools/quick-lint-js { };
@@ -33834,10 +33827,7 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
-
-  xen = xenPackages.xen_4_19;
-  xen-slim = xenPackages.xen_4_19-slim;
+  buildXenPackage = callPackage ../build-support/xen { };
 
   xkbset = callPackage ../tools/X11/xkbset { };
 
