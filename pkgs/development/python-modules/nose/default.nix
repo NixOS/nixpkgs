@@ -22,7 +22,13 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  patches = lib.optional isPy3k [ ./0001-nose-python-3.12-fixes.patch ];
+  patches = lib.optionals isPy3k [
+    ./0001-nose-python-3.12-fixes.patch
+
+    # Fix compatibility with Python ≥ 3.6
+    # Trimmed down https://github.com/nose-devs/nose/pull/952
+    ./inspect-args.patch
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -38,6 +44,18 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ coverage ];
+
+  postInstall = ''
+    # For some reason this does not get installed, breaking `setup.py nosetests` command.
+    # https://github.com/nose-devs/nose/issues/873
+    # Based on https://github.com/nose-devs/nose/blob/release_1.3.7/setup.py#L31
+    echo > $out/${python.sitePackages}/nose-${version}.dist-info/entry_points.txt '[console_scripts]
+    nosetests = nose:run_exit
+    nosetests-${python.pythonVersion} = nose:run_exit
+
+    [distutils.commands]
+    nosetests = nose.commands:nosetests'
+  '';
 
   doCheck = false; # lot's of transient errors, too much hassle
   checkPhase =

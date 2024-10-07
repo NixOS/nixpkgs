@@ -1,0 +1,56 @@
+diff --git a/nose/plugins/manager.py b/nose/plugins/manager.py
+index 04593f56..c7d882c7 100644
+--- a/nose/plugins/manager.py
++++ b/nose/plugins/manager.py
+@@ -104,8 +104,16 @@ def addPlugin(self, plugin, call):
+         """
+         meth = getattr(plugin, call, None)
+         if meth is not None:
+-            if call == 'loadTestsFromModule' and \
+-                    len(inspect.getargspec(meth)[0]) == 2:
++            sig = inspect.signature(meth)
++            bl = set([inspect.Parameter.VAR_KEYWORD,
++                      inspect.Parameter.VAR_POSITIONAL,
++                      inspect.Parameter.KEYWORD_ONLY])
++            args = [k for k, v in sig.parameters.items()
++                    if v.kind not in bl]
++            arg_len = len(args)
++            if hasattr(meth, '__self__'):
++                arg_len += 1
++            if call == 'loadTestsFromModule' and arg_len == 2:
+                 orig_meth = meth
+                 meth = lambda module, path, **kwargs: orig_meth(module)
+             self.plugins.append((plugin, meth))
+diff --git a/nose/util.py b/nose/util.py
+index bfe16589..9ec9c3ed 100644
+--- a/nose/util.py
++++ b/nose/util.py
+@@ -449,16 +449,23 @@ def try_run(obj, names):
+             if type(obj) == types.ModuleType:
+                 # py.test compatibility
+                 if isinstance(func, types.FunctionType):
+-                    args, varargs, varkw, defaults = \
+-                        inspect.getargspec(func)
++                    sig = inspect.signature(func)
++                    bl = set([inspect.Parameter.VAR_KEYWORD,
++                              inspect.Parameter.VAR_POSITIONAL,
++                              inspect.Parameter.KEYWORD_ONLY])
++                    args = [k for k, v in sig.parameters.items()
++                            if v.kind not in bl]
+                 else:
+                     # Not a function. If it's callable, call it anyway
+                     if hasattr(func, '__call__') and not inspect.ismethod(func):
+                         func = func.__call__
+                     try:
+-                        args, varargs, varkw, defaults = \
+-                            inspect.getargspec(func)
+-                        args.pop(0) # pop the self off
++                        sig = inspect.signature(func)
++                        bl = set([inspect.Parameter.VAR_KEYWORD,
++                                  inspect.Parameter.VAR_POSITIONAL,
++                                  inspect.Parameter.KEYWORD_ONLY])
++                        args = [k for k, v in sig.parameters.items()
++                                if v.kind not in bl]
+                     except TypeError:
+                         raise TypeError("Attribute %s of %r is not a python "
+                                         "function. Only functions or callables"
