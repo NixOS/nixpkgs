@@ -34,7 +34,7 @@
   OVMF,
   ipxe,
   checkpolicy,
-  binutils-unwrapped,
+  binutils-unwrapped-all-targets,
 
   # Documentation
   pandoc,
@@ -91,7 +91,7 @@ let
     lgpl21Only
     mit
     ;
-  inherit (lib.meta) getExe;
+  inherit (lib.meta) getExe';
   inherit (lib.lists)
     count
     flatten
@@ -182,20 +182,6 @@ let
         )
     else
       [ ];
-
-  ## Binutils Override ##
-
-  # Originally, there were two versions of binutils being used: the standard one and
-  # this patched one. Unfortunately, that required patches to the Xen Makefiles, and
-  # quickly became too complex to maintain. The new solution is to simply build this
-  # efi-binutils derivation and use it for the whole build process, except if
-  # enableEFI is disabled; it'll then use `binutils`.
-  efiBinutils = binutils-unwrapped.overrideAttrs (oldAttrs: {
-    name = "efi-binutils";
-    configureFlags = oldAttrs.configureFlags ++ [ "--enable-targets=x86_64-pep" ];
-    doInstallCheck = false; # We get a spurious failure otherwise, due to a host/target mismatch.
-    meta.mainProgram = "ld"; # We only really care for `ld`.
-  });
 
   #TODO: fix paths instead.
   scriptEnvPath = makeSearchPathOutput "out" "bin" [
@@ -298,7 +284,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals withEFI [
       "EFI_VENDOR=${vendor}"
       "INSTALL_EFI_STRIP=1"
-      "LD=${getExe efiBinutils}" # See the comment in the efiBinutils definition above.
+      "LD=${getExe' binutils-unwrapped-all-targets "ld"}"
     ]
     # These flags set the CONFIG_* options in /boot/xen.config
     # and define if the default policy file is built. However,
