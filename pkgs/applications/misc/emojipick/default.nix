@@ -52,7 +52,8 @@ stdenvNoCC.mkDerivation {
     python3
     xclip
     libnotify
-  ] ++ (if emojipick-use-rofi then [rofi] else [dmenu]);
+    (if emojipick-use-rofi then rofi else dmenu)
+  ];
 
   strictDeps = true;
 
