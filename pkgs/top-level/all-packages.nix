@@ -24829,13 +24829,7 @@ with pkgs;
   mariadb = mariadb_1011;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
 
-  mongodb = hiPrio mongodb-6_0;
-
-  mongodb-5_0 = callPackage ../servers/nosql/mongodb/5.0.nix {
-    sasl = cyrus_sasl;
-    boost = boost179.override { enableShared = false; };
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
-  };
+  mongodb = hiPrio mongodb-7_0;
 
   mongodb-6_0 = darwin.apple_sdk_11_0.callPackage ../servers/nosql/mongodb/6.0.nix {
     sasl = cyrus_sasl;
@@ -25314,14 +25308,11 @@ with pkgs;
     matomo-beta;
 
   inherit (callPackages ../servers/unifi { })
-    unifi7
     unifi8;
 
-  unifi = unifi7;
+  unifi = unifi8;
 
   unifi-protect-backup = callPackage ../applications/backup/unifi-protect-backup { };
-
-  unifi-video = callPackage ../servers/unifi-video { };
 
   unpackerr = callPackage ../servers/unpackerr {
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
@@ -26386,13 +26377,6 @@ with pkgs;
     cephSupport = lib.meta.availableOn stdenv.hostPlatform ceph;
     glusterfsSupport = lib.meta.availableOn stdenv.hostPlatform glusterfs && lib.meta.availableOn stdenv.hostPlatform libuuid;
   });
-
-  # See `xenPackages` source for explanations.
-  # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
-  qemu_xen_4_19 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_19-slim; });
-  qemu_xen_4_18 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_18-slim; });
-  qemu_xen_4_17 = lowPrio (qemu.override { hostCpuTargets = [ "i386-softmmu" ]; xenSupport = true; xen = xenPackages.xen_4_17-slim; });
-  qemu_xen = qemu_xen_4_19;
 
   qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
@@ -33821,10 +33805,7 @@ with pkgs;
 
   xdotool = callPackage ../tools/X11/xdotool { };
 
-  xenPackages = recurseIntoAttrs (callPackage ../applications/virtualization/xen/packages.nix {});
-
-  xen = xenPackages.xen_4_19;
-  xen-slim = xenPackages.xen_4_19-slim;
+  buildXenPackage = callPackage ../build-support/xen { };
 
   xkbset = callPackage ../tools/X11/xkbset { };
 
