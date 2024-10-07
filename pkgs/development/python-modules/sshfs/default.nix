@@ -42,7 +42,7 @@ buildPythonPackage rec {
     gssapi = [ asyncssh ] ++ asyncssh.optional-dependencies.gssapi;
     libnacl = [ asyncssh ] ++ asyncssh.optional-dependencies.libnacl;
     pkcs11 = [ asyncssh ] ++ asyncssh.optional-dependencies.pkcs11;
-    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyopenssl;
+    pyopenssl = [ asyncssh ] ++ asyncssh.optional-dependencies.pyOpenSSL;
   };
 
   __darwinAllowLocalNetworking = true;
