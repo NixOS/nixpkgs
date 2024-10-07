@@ -6,6 +6,7 @@
   fetchpatch2,
   gitUpdater,
   linkFarm,
+  substituteAll,
   nixosTests,
   ayatana-indicator-datetime,
   bash,
@@ -116,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
-    ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
+    (substituteAll {
+      src = ./9902-Layout-fallback-file.patch;
+      nixosLayoutFile = "/etc/" + finalAttrs.finalPackage.passthru.etcLayoutsFile;
+    })
   ];
 
   postPatch =
@@ -269,12 +273,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    etcLayoutsFile = "lomiri/keymaps";
     tests = {
       inherit (nixosTests.lomiri)
         greeter
         desktop-basics
         desktop-appinteractions
         desktop-ayatana-indicators
+        keymap
         ;
     };
     updateScript = gitUpdater { };
