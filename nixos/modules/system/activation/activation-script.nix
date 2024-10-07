@@ -234,11 +234,12 @@ in
     system.activationScripts.var = ""; # obsolete
 
     systemd.tmpfiles.rules = [
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ] ++ lib.optionals config.nix.enable [
       # Prevent the current configuration from being garbage-collected.
       "d /nix/var/nix/gcroots -"
       "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
-      "D /var/empty 0555 root root -"
-      "h /var/empty - - - - +i"
     ];
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
