@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   kernel,
-  linuxHeaders,
+  kmod,
   pahole,
 }:
 
@@ -19,23 +19,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wZUQHIkbxt9ckTFs8VTrA5I+ebBeaOm+Fb0+GqX5y0c=";
   };
 
-  buildInputs = [
-    pahole
-    linuxHeaders
-  ];
+  buildInputs = [ pahole ];
+  nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
-  makeFlags = [ "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p "$out/lib/modules/${kernel.modDirVersion}"
-
-    find src/ -type f -name '*.ko' \
-      -exec mv {} $out/lib/modules/${kernel.modDirVersion} \;
-
-    runHook postInstall
-  '';
+  # kernel makeFlags contain O=$$(buildRoot), that upstream passes through to make and causes build failure, so we filter it out here
+  makeFlags =
+    (lib.filter (flag: lib.head (lib.strings.splitString "=" flag) != "O") kernel.makeFlags)
+    ++ [
+      "KERNELRELEASE=${kernel.modDirVersion}"
+      "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+      "INSTALL_MOD_PATH=${placeholder "out"}"
+    ];
 
   meta = {
     broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
