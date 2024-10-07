@@ -1,4 +1,4 @@
-let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
+let generateNodeConf = { lib, pkgs, config, privk, pubk, systemdCreds, peerId, nodeId, ...}: {
       imports = [ common/user-account.nix ];
       systemd.services.systemd-networkd.environment.SYSTEMD_LOG_LEVEL = "debug";
       networking.useNetworkd = true;
@@ -6,6 +6,7 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
       networking.firewall.enable = false;
       virtualisation.vlans = [ 1 ];
       environment.systemPackages = with pkgs; [ wireguard-tools ];
+      environment.etc."credstore/network.wireguard.private" = lib.mkIf systemdCreds { text = privk; };
       systemd.network = {
         enable = true;
         config = {
@@ -15,11 +16,14 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
           "90-wg0" = {
             netdevConfig = { Kind = "wireguard"; Name = "wg0"; };
             wireguardConfig = {
+              # Test storing wireguard private key using systemd credentials.
+              PrivateKey = lib.mkIf systemdCreds "@network.wireguard.private";
+
               # NOTE: we're storing the wireguard private key in the
               #       store for this test. Do not do this in the real
               #       world. Keep in mind the nix store is
               #       world-readable.
-              PrivateKeyFile = pkgs.writeText "wg0-priv" privk;
+              PrivateKeyFile = lib.mkIf (!systemdCreds) (pkgs.writeText "wg0-priv" privk);
               ListenPort = 51820;
               FirewallMark = 42;
             };
@@ -74,6 +78,7 @@ in import ./make-test-python.nix ({pkgs, ... }: {
     let localConf = {
         privk = "GDiXWlMQKb379XthwX0haAbK6hTdjblllpjGX0heP00=";
         pubk = "iRxpqj42nnY0Qz8MAQbSm7bXxXP5hkPqWYIULmvW+EE=";
+        systemdCreds = false;
         nodeId = "1";
         peerId = "2";
     };
@@ -83,6 +88,7 @@ in import ./make-test-python.nix ({pkgs, ... }: {
     let localConf = {
         privk = "eHxSI2jwX/P4AOI0r8YppPw0+4NZnjOxfbS5mt06K2k=";
         pubk = "27s0OvaBBdHoJYkH9osZpjpgSOVNw+RaKfboT/Sfq0g=";
+        systemdCreds = true;
         nodeId = "2";
         peerId = "1";
     };
