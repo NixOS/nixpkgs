@@ -10,14 +10,14 @@
 }:
 
 let
-  gpl = fetchurl {
-    url = "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt";
-    hash = "sha256-7a72Msu2Q+TnoiFxemxEGkwafJGObk1W3rw9hzmyM/Y=";
+  gpl3PlusText = fetchurl {
+    url = "https://www.gnu.org/licenses/gpl-3.0.txt";
+    hash = "sha256-OXLcl0T2SZ8Pmy2/dmlvKuetivmyPd5m1q+Gyd+zaYY=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bisoncpp";
-  version = "6.04.00";
+  version = "6.09.00";
 
   src = fetchFromGitLab {
     name = "bisoncpp-sources-${finalAttrs.version}";
@@ -25,8 +25,19 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fbb-git";
     repo = "bisoncpp";
     rev = finalAttrs.version;
-    hash = "sha256-lIsghqkj2Sg1MUFIY13KGPo9QHwrP2amphGBR2RcSSk=";
+    hash = "sha256-N3MiS4li1wQFDFr01fpXs3yH/Njjtd/OUHQsekiNjks=";
   };
+
+  patches = [
+    # Self-explaining, I think
+    ./0000-parameterize-license-file.patch
+  ];
+
+  patchFlags = [
+    # Because I changed the sourceRoot and the patch was written for the
+    # original root
+    "-p2"
+  ];
 
   buildInputs = [ bobcat ];
 
@@ -43,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace INSTALL.im --replace-fail /usr $out
     patchShebangs .
-    substituteInPlace documentation/manual/conditions/gpl.yo \
-      --replace /usr/share/common-licenses/GPL ${gpl}    
+    license_file=${gpl3PlusText} substituteAllInPlace documentation/manual/conditions/gpl.yo
     for file in $(find documentation -type f); do
       substituteInPlace "$file" --replace-warn /usr $out
     done
@@ -71,9 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://fbb-git.gitlab.io/bisoncpp/";
     description = "Parser generator like bison, but it generates C++ code";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "bisonc++";
-    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      raskin
+      AndersonTorres
+    ];
     platforms = lib.platforms.all;
   };
 })
