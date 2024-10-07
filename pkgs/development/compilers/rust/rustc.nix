@@ -84,8 +84,8 @@ in stdenv.mkDerivation (finalAttrs: {
   # Reference: https://github.com/rust-lang/rust/blob/master/src/bootstrap/configure.py
   configureFlags = let
     prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
-    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "cc"}";
-    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "c++"}";
+    ccPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "gcc"}";
+    cxxPrefixForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "g++"}";
     setBuild  = "--set=target.${stdenv.buildPlatform.rust.rustcTarget}";
     setHost   = "--set=target.${stdenv.hostPlatform.rust.rustcTarget}";
     setTarget = "--set=target.${stdenv.targetPlatform.rust.rustcTarget}";
