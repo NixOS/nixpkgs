@@ -1,21 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, procps }:
+{ stdenv, lib, fetchFromGitHub, bc, curl, figlet, fortune, gawk, iproute2, lm_sensors, procps }:
 
 stdenv.mkDerivation rec {
   pname = "fancy-motd";
-  version = "unstable-2022-06-06";
+  version = "unstable-2022-11-08";
 
   src = fetchFromGitHub {
     owner = "bcyran";
     repo = pname;
-    rev = "812c58f04f65053271f866f3797baa2eba7324f5";
-    sha256 = "sha256-O/euB63Dyj+NyfZK42egSEYwZhL8B0jCxSSDYoT4cpo=";
+    rev = "1573a60d780ff12f03dbff602ceaf97755910079";
+    sha256 = "sha256-mPd2aum/wsdlvEhjikeJNwZN/BArwX4h0VQROF925hg=";
   };
 
-  buildInputs = [ bc curl figlet fortune gawk iproute2 ];
+  buildInputs = [ bc curl figlet fortune gawk iproute2 lm_sensors ];
 
   postPatch = ''
     substituteInPlace motd.sh \
-      --replace 'BASE_DIR="$(dirname "$(readlink -f "$0")")"' "BASE_DIR=\"$out/lib\""
+      --replace 'BASE_DIR=$(dirname "$(readlink -f "$0")")' "BASE_DIR=\"$out/lib\""
 
     substituteInPlace modules/20-uptime \
       --replace "uptime -p" "${procps}/bin/uptime -p"
