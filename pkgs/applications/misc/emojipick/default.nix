@@ -6,6 +6,8 @@
 , libnotify
 , dmenu
 , rofi
+, installShellFiles
+# Boolean flags
 , emojipick-use-rofi ? false
 , emojipick-copy-to-clipboard ? true
 , emojipick-show-notifications ? true
@@ -42,18 +44,22 @@ stdenvNoCC.mkDerivation {
       --replace notify-send ${libnotify}/bin/notify-send
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   buildInputs = [
     python3
     xclip
     libnotify
   ] ++ (if emojipick-use-rofi then [rofi] else [dmenu]);
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp ./emojipick $out/bin
-    cp ./emojiget.py $out/bin
+    installBin emojipick emojiget.py
 
     runHook postInstall
   '';
