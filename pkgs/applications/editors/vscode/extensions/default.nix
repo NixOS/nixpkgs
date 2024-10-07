@@ -5393,6 +5393,8 @@ let
         };
       };
 
+      yzane.markdown-pdf = callPackage ./yzane.markdown-pdf { };
+
       yzhang.dictionary-completion = buildVscodeMarketplaceExtension {
         mktplcRef = {
           publisher = "yzhang";
