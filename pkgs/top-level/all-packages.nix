@@ -17656,8 +17656,6 @@ with pkgs;
 
   flexibee = callPackage ../applications/office/flexibee { };
 
-  flexcpp = callPackage ../development/tools/parsing/flexc++ { };
-
   geis = callPackage ../development/libraries/geis { };
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
