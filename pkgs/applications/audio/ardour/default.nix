@@ -64,14 +64,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
-  version = "8.6";
+  version = "8.8";
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
-    hash = "sha256-sMp24tjtX8fZJWc7dvb+9e6pEflT4ugoOZjDis6/3nM=";
+    hash = "sha256-S96hlk4M+38OjjF3T6lhDm3cBjN5t4y6EeYRmvAmVfE=";
   };
 
   bundledContent = fetchzip {
