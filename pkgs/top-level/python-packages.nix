@@ -10106,6 +10106,8 @@ self: super: with self; {
 
   prometheus-pandas = callPackage ../development/python-modules/prometheus-pandas { };
 
+  propcache = callPackage ../development/python-modules/propcache { };
+
   prophet = callPackage ../development/python-modules/prophet { };
 
   propka = callPackage ../development/python-modules/propka { };
