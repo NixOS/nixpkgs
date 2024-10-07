@@ -18,7 +18,7 @@ buildPythonPackage rec {
   version = "0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "exxamalte";
@@ -29,16 +29,14 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonRelaxDeps = [
     # geojson>=2.4.0,<3, but we have 3.x
     "geojson"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aio-geojson-client
     geojson
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     description = "Python library for accessing GeoJSON feeds";
     homepage = "https://github.com/exxamalte/python-aio-geojson-generic-client";
     changelog = "https://github.com/exxamalte/python-aio-geojson-generic-client/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 ];
+    license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
 }
