@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     owner = "mediar-ai";
     repo = "screen-pipe";
     rev = "v${version}";
-    hash = "sha256-70cb41a6229a45fb150884baf9768febe41a629f3e40fb75a931150fd7341b1a=";
+    hash = "sha256-EiMbJRxsgln5ElY9/6EO2k29MK0QUyk2ThPDS7PQ64JN++E84hpOPSdugbFPVkYs";
   };
 
   cargoLock = {
