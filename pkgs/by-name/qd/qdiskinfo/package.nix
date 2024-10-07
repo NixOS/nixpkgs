@@ -6,36 +6,33 @@
   fetchzip,
   cmake,
   qt6,
-  theme ? "",
-  customBgDark ? "",
-  customBgLight ? "",
-  customStatusPath ? "",
-  customSrc ? "",
-  customRightCharacter ? false,
+  qdiskinfo,
+  themeBundle ? null,
 }:
 
 let
-  isTheme = theme != null && theme != "";
-
-  rightCharacter =
-    (builtins.elem theme [
-      "aoi"
-      "shizukuTeaBreak"
-    ])
-    || customRightCharacter;
-  themeSources = import ./sources.nix { inherit fetchzip; };
-  themes = import ./themes.nix {
-    inherit
-      customBgDark
-      customBgLight
-      customSrc
-      customStatusPath
-      lib
-      themeSources
-      ;
-  };
+  isThemed = themeBundle != null && themeBundle != { };
+  themeBundle' =
+    if isThemed then
+      {
+        rightCharacter = false;
+      }
+      // themeBundle
+    else
+      { rightCharacter = false; };
 in
-assert !isTheme || lib.attrsets.hasAttrByPath [ theme ] themes;
+
+# check theme bundle
+assert
+  isThemed
+  -> (
+    themeBundle' ? src
+    && themeBundle' ? paths.bgDark
+    && themeBundle' ? paths.bgLight
+    && themeBundle' ? paths.status
+    && themeBundle' ? rightCharacter
+  );
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "qdiskinfo";
   version = "0.3";
@@ -64,32 +61,49 @@ stdenv.mkDerivation (finalAttrs: {
     [
       "-DQT_VERSION_MAJOR=6"
     ]
-    ++ lib.optionals isTheme [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
-    ++ (if rightCharacter then [ "-DCHARACTER_IS_RIGHT=ON" ] else [ "-DCHARACTER_IS_RIGHT=OFF" ]);
+    ++ lib.optionals isThemed [ "-DINCLUDE_OPTIONAL_RESOURCES=ON" ]
+    ++ (
+      if themeBundle'.rightCharacter then
+        [ "-DCHARACTER_IS_RIGHT=ON" ]
+      else
+        [ "-DCHARACTER_IS_RIGHT=OFF" ]
+    );
 
   postUnpack = ''
     cp -r $sourceRoot $TMPDIR/src
     sourceRoot=$TMPDIR/src
   '';
-  patchPhase = lib.optionalString isTheme ''
-    export SRCPATH=${themes."${theme}".src}/CdiResource/themes/
+  patchPhase = lib.optionalString isThemed ''
+    export SRCPATH=${themeBundle'.src}/CdiResource/themes/
     export DESTPATH=$sourceRoot/dist/theme/
     mkdir -p $DESTPATH
-    if [ -n "${themes."${theme}".paths.bgDark}" ]; then
-      cp $SRCPATH/${themes."${theme}".paths.bgDark} $DESTPATH/bg_dark.png
+    if [ -n "${themeBundle'.paths.bgDark}" ]; then
+      cp $SRCPATH/${themeBundle'.paths.bgDark} $DESTPATH/bg_dark.png
     fi
-    if  [ -n "${themes."${theme}".paths.bgLight}" ]; then
-      cp $SRCPATH/${themes."${theme}".paths.bgLight} $DESTPATH/bg_light.png
+    if  [ -n "${themeBundle'.paths.bgLight}" ]; then
+      cp $SRCPATH/${themeBundle'.paths.bgLight} $DESTPATH/bg_light.png
     fi
-    cp $SRCPATH/${themes."${theme}".paths.status}/SDdiskStatusBad-300.png $DESTPATH/bad.png
-    cp $SRCPATH/${themes."${theme}".paths.status}/SDdiskStatusCaution-300.png $DESTPATH/caution.png
-    cp $SRCPATH/${themes."${theme}".paths.status}/SDdiskStatusGood-300.png $DESTPATH/good.png
-    cp $SRCPATH/${themes."${theme}".paths.status}/SDdiskStatusUnknown-300.png $DESTPATH/unknown.png
+    cp $SRCPATH/${themeBundle'.paths.status}/SDdiskStatusBad-300.png $DESTPATH/bad.png
+    cp $SRCPATH/${themeBundle'.paths.status}/SDdiskStatusCaution-300.png $DESTPATH/caution.png
+    cp $SRCPATH/${themeBundle'.paths.status}/SDdiskStatusGood-300.png $DESTPATH/good.png
+    cp $SRCPATH/${themeBundle'.paths.status}/SDdiskStatusUnknown-300.png $DESTPATH/unknown.png
   '';
   postInstall = ''
     wrapProgram $out/bin/QDiskInfo \
       --suffix PATH : ${smartmontools}/bin
   '';
+
+  passthru =
+    let
+      themeSources = import ./sources.nix { inherit fetchzip; };
+    in
+    rec {
+      themeBundles = import ./themes.nix { inherit themeSources; };
+      tests = lib.flip lib.mapAttrs themeBundles (
+        themeName: themeBundle:
+        (qdiskinfo.override { inherit themeBundle; }).overrideAttrs { pname = "qdiskinfo-${themeName}"; }
+      );
+    };
 
   meta = {
     description = "CrystalDiskInfo alternative for Linux";

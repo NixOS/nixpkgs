@@ -1,11 +1,4 @@
-{
-  customBgDark,
-  customBgLight,
-  customSrc,
-  customStatusPath,
-  lib,
-  themeSources,
-}:
+{ themeSources }:
 
 {
   aoi = {
@@ -15,14 +8,7 @@
       bgLight = "Aoi/AoiBackground-300.png";
       status = "Aoi";
     };
-  };
-  custom = {
-    src = themeSources."${customSrc}";
-    paths = {
-      bgDark = customBgDark;
-      bgLight = customBgLight;
-      status = customStatusPath;
-    };
+    rightCharacter = true;
   };
   kureikei = {
     src = themeSources.kureikei;
@@ -383,6 +369,7 @@
       bgLight = "ShizukuTeaBreak/ShizukuBackground-300.png";
       status = "Shizuku";
     };
+    rightCharacter = true;
   };
   shizukuWebRadio = {
     src = themeSources.shizuku;
