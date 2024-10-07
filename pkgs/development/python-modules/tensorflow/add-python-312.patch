@@ -1,0 +1,12 @@
+diff -Naurd x/tensorflow/tools/toolchains/python/python_repo.bzl y/tensorflow/tools/toolchains/python/python_repo.bzl
+--- x/tensorflow/tools/toolchains/python/python_repo.bzl	2024-10-08 07:49:21.408314991 +0000
++++ y/tensorflow/tools/toolchains/python/python_repo.bzl	2024-10-08 07:52:22.552639011 +0000
+@@ -4,7 +4,7 @@
+ Defaults to 3.10.
+ """
+ 
+-VERSIONS = ["3.9", "3.10", "3.11"]
++VERSIONS = ["3.9", "3.10", "3.11", "3.12"]
+ DEFAULT_VERSION = "3.10"
+ WARNING = """
+ TF_PYTHON_VERSION variable was not set correctly, using default version. {} Python
