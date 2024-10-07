@@ -14,18 +14,23 @@ rec {
   # passed on a build=x86_64/host=aarch64 compilation.
   envVars = let
 
-    ccForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc";
-    cxxForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}c++";
+    # should match pkgs/development/compilers/rust/rustc.nix
+    prefixForStdenv = stdenv: "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}";
+    ccForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang" else "gcc"}";
+    cxxForStdenv = stdenv: "${prefixForStdenv stdenv}${if (stdenv.cc.isClang or false) then "clang++" else "g++"}";
 
-    ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
-    cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+    ccForBuild = ccForStdenv pkgsBuildHost.stdenv;
+    cxxForBuild = cxxForStdenv pkgsBuildHost.stdenv;
+
+    ccForHost = ccForStdenv stdenv;
+    cxxForHost = cxxForStdenv stdenv;
 
     # Unfortunately we must use the dangerous `pkgsTargetTarget` here
     # because hooks are artificially phase-shifted one slot earlier
     # (they go in nativeBuildInputs, so the hostPlatform looks like
     # a targetPlatform to them).
-    ccForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc";
-    cxxForTarget = "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++";
+    ccForTarget = ccForStdenv pkgsTargetTarget.stdenv;
+    cxxForTarget = cxxForStdenv pkgsTargetTarget.stdenv;
 
     rustBuildPlatform = stdenv.buildPlatform.rust.rustcTarget;
     rustBuildPlatformSpec = stdenv.buildPlatform.rust.rustcTargetSpec;
