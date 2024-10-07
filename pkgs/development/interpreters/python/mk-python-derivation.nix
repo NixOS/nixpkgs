@@ -215,23 +215,6 @@ let
 
   isSetuptoolsDependency = isSetuptoolsDependency' (attrs.pname or null);
 
-  passthru =
-    attrs.passthru or { }
-    // {
-      updateScript = let
-        filename = head (splitString ":" self.meta.position);
-      in attrs.passthru.updateScript or [ update-python-libraries filename ];
-    }
-    // optionalAttrs (dependencies != []) {
-      inherit dependencies;
-    }
-    // optionalAttrs (optional-dependencies != {}) {
-      inherit optional-dependencies;
-    }
-    // optionalAttrs (build-system != []) {
-      inherit build-system;
-    };
-
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((cleanAttrs attrs) // {
 
@@ -324,7 +307,21 @@ let
 
     outputs = outputs ++ optional withDistOutput "dist";
 
-    inherit passthru;
+    passthru = attrs.passthru or { }
+    // {
+      updateScript = let
+        filename = head (splitString ":" self.meta.position);
+      in attrs.passthru.updateScript or [ update-python-libraries filename ];
+    }
+    // optionalAttrs (dependencies != []) {
+      inherit dependencies;
+    }
+    // optionalAttrs (optional-dependencies != {}) {
+      inherit optional-dependencies;
+    }
+    // optionalAttrs (build-system != []) {
+      inherit build-system;
+    };
 
     meta = {
       # default to python's platforms
@@ -351,5 +348,5 @@ let
 
 in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
-  passthru
+  { }
   self
