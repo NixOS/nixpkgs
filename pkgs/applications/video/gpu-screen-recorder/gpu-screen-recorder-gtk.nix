@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation {
   pname = "gpu-screen-recorder-gtk";
-  version = "unstable-2024-07-05";
+  version = "4.1.2";
 
   # Snapshot tarballs use the following versioning format:
   # printf "r%s.%s\n" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
   src = fetchurl {
-    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.r311.c611c51.tar.gz";
-    hash = "sha256-86EdmeZ2dlffSfJOrTVGPtYyL3j6DmCQIALX2rpeS1Y=";
+    url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.r363.ada871c.tar.gz";
+    hash = "sha256-axUPS0clJrv9qznitKnHYTrFHA0RlkzXTQnHR+fsfjQ=";
   };
   sourceRoot = ".";
 
