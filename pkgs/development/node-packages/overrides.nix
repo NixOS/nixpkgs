@@ -155,10 +155,6 @@ final: prev: {
     '';
   };
 
-  node-red = prev.node-red.override {
-    buildInputs = [ pkgs.node-pre-gyp ];
-  };
-
   node2nix = prev.node2nix.override {
     # Get latest commit for misc fixes
     src = fetchFromGitHub {
