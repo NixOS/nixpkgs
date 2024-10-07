@@ -2,7 +2,7 @@
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
 , cmocka, uthash, swtpm, iproute2, procps, which
-, libuuid
+, libuuid, libtpms
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl json_c curl libgcrypt uthash libuuid
+    openssl json_c curl libgcrypt uthash libuuid libtpms
   ]
   # cmocka is checked in the configure script
   # when unit and/or integration testing is enabled
@@ -73,6 +73,11 @@ stdenv.mkDerivation rec {
       --replace '@PREFIX@' $out/lib/
     substituteInPlace ./bootstrap \
       --replace 'git describe --tags --always --dirty' 'echo "${version}"'
+    for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
+      substituteInPlace "$src" \
+        --replace '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
+        --replace '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
+    done
   '';
 
   configureFlags = lib.optionals doInstallCheck [
