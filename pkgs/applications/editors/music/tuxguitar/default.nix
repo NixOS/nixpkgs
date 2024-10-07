@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    inherit (nixosTests) tuxguitar;
+    nixos = nixosTests.tuxguitar;
   };
 
   meta = {
