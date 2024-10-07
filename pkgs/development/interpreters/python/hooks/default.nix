@@ -219,7 +219,7 @@ in {
     makePythonHook {
       name = "unittest-check-hook";
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit compatHelpers pythonCheckInterpreter;
       };
     } ./unittest-check-hook.sh) {};
 

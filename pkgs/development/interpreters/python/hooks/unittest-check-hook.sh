@@ -1,11 +1,16 @@
 # Setup hook for unittest.
 echo "Sourcing unittest-check-hook"
 
+# shellcheck source=pkgs/development/interpreters/python/compat-helpers.sh
+source @compatHelpers@
+
+canonicalizeFlagsArrayExpandString unittestFlagsArray
+
 unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
     runHook preCheck
 
-    eval "@pythonCheckInterpreter@ -m unittest discover $unittestFlagsArray"
+    @pythonCheckInterpreter@ -m unittest discover "${unittestFlagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing unittestCheckPhase"
