@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aio-geojson-geonetnz-volcano";
-  version = "0.9";
+  version = "0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "exxamalte";
     repo = "python-aio-geojson-geonetnz-volcano";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZmGDO9EROFMlxdj5txNh719M+3l/0jRFbB2h2AyZAdI=";
+    hash = "sha256-B+jULYeel7efk7fB26zXQyS1ZCsmFVKlOkfnKWFQFJ4=";
   };
 
   nativeBuildInputs = [ setuptools ];
