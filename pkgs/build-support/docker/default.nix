@@ -974,6 +974,7 @@ rec {
                 eval "$fakeRootCommands"
                 tar \
                   --sort name \
+                  --exclude=./dev \
                   --exclude=./proc \
                   --exclude=./sys \
                   --exclude=.${builtins.storeDir} \
