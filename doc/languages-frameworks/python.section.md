@@ -1433,7 +1433,7 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
     unittestCheckHook
   ];
 
-  unittestFlagsArray = [
+  unittestFlags = [
     "-s" "tests" "-v"
   ];
 }

@@ -108,6 +108,7 @@ let
     "disabledTests"
     "pytestFlags"
     "pytestFlagsArray"
+    "unittestFlags"
     "unittestFlagsArray"
     "outputs"
     "stdenv"
@@ -445,6 +446,9 @@ let
         }
         // optionalAttrs (attrs ? pytestFlagsArray) {
           pytestFlagsArray = attrs.pytestFlagsArray;
+        }
+        // optionalAttrs (attrs ? unittestFlags) {
+          unittestFlags = attrs.unittestFlags;
         }
         // optionalAttrs (attrs ? unittestFlagsArray) {
           unittestFlagsArray = attrs.unittestFlagsArray;
