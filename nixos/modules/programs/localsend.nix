@@ -15,11 +15,16 @@ in
     openFirewall = lib.mkEnableOption "opening the firewall port ${toString firewallPort} for receiving files" // {
       default = true;
     };
+
+    package = lib.mkPackageOption pkgs "localsend" { };
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.localsend ];
-    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ firewallPort ];
+    environment.systemPackages = [ cfg.package ];
+    networking.firewall = {
+      allowedTCPPorts = lib.optional cfg.openFirewall firewallPort;
+      allowedUDPPorts = lib.optional cfg.openFirewall firewallPort;
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ pandapip1 ];
