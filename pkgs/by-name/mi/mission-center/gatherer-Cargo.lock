@@ -25,9 +25,9 @@ checksum = "4e1496f8fb1fbf272686b8d37f523dab3e4a7443300055e74cdaa449f3114356"
 
 [[package]]
 name = "app-rummage"
-version = "0.2.6"
+version = "0.2.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c015066de1a3af6e3582d1c4bf19f481fe7536e495c30fae84ec63cb08f90622"
+checksum = "1321031f83546d8c1c81840700838c47e1fbf8eba93c393f2821573624b296f0"
 dependencies = [
  "log",
  "nix",
@@ -399,7 +399,7 @@ dependencies = [
 
 [[package]]
 name = "gatherer"
-version = "0.6.0"
+version = "0.6.1"
 dependencies = [
  "anyhow",
  "app-rummage",

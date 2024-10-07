@@ -351,8 +351,6 @@ with pkgs;
 
   brev-cli = callPackage ../development/misc/brev-cli { };
 
-  buf = callPackage ../development/tools/buf { };
-
   cbfmt = callPackage ../development/tools/cbfmt { };
 
   circumflex = callPackage ../applications/networking/circumflex { };
@@ -11247,8 +11245,6 @@ with pkgs;
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
   playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
-
-  playwright = with python3Packages; toPythonApplication playwright;
 
   playwright-driver = (callPackage ../development/web/playwright/driver.nix { }).playwright-core;
   playwright-test = (callPackage ../development/web/playwright/driver.nix { }).playwright-test;
@@ -32507,8 +32503,6 @@ with pkgs;
   shutter = callPackage ../applications/graphics/shutter { };
 
   sic-image-cli = callPackage ../tools/graphics/sic-image-cli { };
-
-  sioyek = libsForQt5.callPackage ../applications/misc/sioyek { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
