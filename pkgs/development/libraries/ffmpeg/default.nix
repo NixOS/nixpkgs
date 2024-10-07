@@ -6,6 +6,7 @@ let
     callPackage ./generic.nix (
       {
         inherit (darwin.apple_sdk.frameworks)
+          Accelerate
           AppKit
           AudioToolbox
           AVFoundation
@@ -18,22 +19,25 @@ let
     );
 
   v4 = {
-    version = "4.4.4";
-    hash = "sha256-Q8bkuF/1uJfqttJJoObnnLX3BEduv+qxsvOrVhMvRjA=";
+    version = "4.4.5";
+    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
   };
 
   v6 = {
-    version = "6.1.1";
-    hash = "sha256-Q0c95hbCVUHQWPoh5uC8uzMylmB4BnWg+VhXEgSouzo=";
+    version = "6.1.2";
+    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
   };
 
   v7 = {
-    version = "7.0.1";
-    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
+    version = "7.0.2";
+    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
   };
 in
 
 rec {
+  # We keep FFmpeg 4 around for now mainly for a couple of binary
+  # packages (Spotify and REAPER). Please don’t add new source packages
+  # that depend on this version.
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";

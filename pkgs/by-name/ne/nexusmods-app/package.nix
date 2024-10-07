@@ -1,35 +1,40 @@
-{ _7zz
-, buildDotnetModule
-, copyDesktopItems
-, desktop-file-utils
-, dotnetCorePackages
-, fetchFromGitHub
-, fontconfig
-, lib
-, libICE
-, libSM
-, libX11
-, nexusmods-app
-, runCommand
-, enableUnfree ? false # Set to true to support RAR format mods
+{
+  _7zz,
+  avalonia,
+  buildDotnetModule,
+  copyDesktopItems,
+  desktop-file-utils,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  imagemagick,
+  lib,
+  runCommand,
+  xdg-utils,
+  pname ? "nexusmods-app",
 }:
 let
-  _7zzWithOptionalUnfreeRarSupport = _7zz.override {
-    inherit enableUnfree;
-  };
-in
-buildDotnetModule rec {
-  pname = "nexusmods-app";
+  # From https://nexus-mods.github.io/NexusMods.App/developers/Contributing/#for-package-maintainers
+  constants = [
+    # Tell the app it is a distro package; affects wording in update prompts
+    "INSTALLATION_METHOD_PACKAGE_MANAGER"
 
-  version = "0.4.1";
+    # Don't include upstream's 7zz binary; we use the nixpkgs version
+    "NEXUSMODS_APP_USE_SYSTEM_EXTRACTOR"
+  ];
+in
+buildDotnetModule (finalAttrs: {
+  inherit pname;
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-FzQphMhiC1g+6qmk/R1v4rq2ldy35NcaWm0RR1UlwLA=";
+    hash = "sha256-OmWDJVsXtUOYBeUXLx6EkQ1/RuH/3wIe40R5KgpmEC4=";
   };
+
+  enableParallelBuilding = false;
 
   # If the whole solution is published, there seems to be a race condition where
   # it will sometimes publish the wrong version of a dependent assembly, for
@@ -39,93 +44,157 @@ buildDotnetModule rec {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
+  buildInputs = [
+    # TODO: bump avalonia to 11.1.3
+    # avalonia
+  ];
+
+  nativeCheckInputs = [ _7zz ];
+
   nativeBuildInputs = [
     copyDesktopItems
+    imagemagick # For resizing SVG icon in postInstall
   ];
 
   nugetDeps = ./deps.nix;
+  mapNuGetDependencies = true;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  preConfigure = ''
-    substituteInPlace Directory.Build.props \
-      --replace '</PropertyGroup>' '<ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles></PropertyGroup>'
-  '';
-
   postPatch = ''
-    ln --force --symbolic "${lib.getExe _7zzWithOptionalUnfreeRarSupport}" src/ArchiveManagement/NexusMods.FileExtractor/runtimes/linux-x64/native/7zz
-
     # for some reason these tests fail (intermittently?) with a zero timestamp
     touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [desktop-file-utils]}"
-    "--set APPIMAGE $out/bin/${meta.mainProgram}" # Make associating with nxm links work on Linux
+    "--prefix PATH : ${lib.makeBinPath finalAttrs.runtimeInputs}"
   ];
 
-  runtimeDeps = [
-    fontconfig
-    libICE
-    libSM
-    libX11
+  postInstall = ''
+    # Desktop entry
+    # As per #308324, use mainProgram from PATH, instead of $out/bin/NexusMods.App
+    install -D -m 444 -t $out/share/applications src/NexusMods.App/com.nexusmods.app.desktop
+    substituteInPlace $out/share/applications/com.nexusmods.app.desktop \
+      --replace-fail '${"$"}{INSTALL_EXEC}' "${finalAttrs.meta.mainProgram}"
+
+    # AppStream metadata
+    install -D -m 444 -t $out/share/metainfo src/NexusMods.App/com.nexusmods.app.metainfo.xml
+
+    # Icon
+    icon=src/NexusMods.App/icon.svg
+    install -D -m 444 -T $icon $out/share/icons/hicolor/scalable/apps/com.nexusmods.app.svg
+
+    # Bitmap icons
+    for i in 16 24 48 64 96 128 256 512; do
+      size=''${i}x''${i}
+      dir=$out/share/icons/hicolor/$size/apps
+      mkdir -p $dir
+      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+    done
+  '';
+
+  runtimeInputs = [
+    _7zz
+    desktop-file-utils
+    xdg-utils
   ];
 
-  executables = [
-    nexusmods-app.meta.mainProgram
+  executables = [ "NexusMods.App" ];
+
+  dotnetBuildFlags = [
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.1/src/NexusMods.App/app.pupnet.conf#L38
+    "--property:Version=${finalAttrs.version}"
+    "--property:TieredCompilation=true"
+    "--property:PublishReadyToRun=true"
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
   doCheck = true;
 
   dotnetTestFlags = [
     "--environment=USER=nobody"
-    (lib.strings.concatStrings [
-      "--filter="
-      (lib.strings.concatStrings (lib.strings.intersperse "&" ([
-        "Category!=Disabled"
-        "FlakeyTest!=True"
-        "RequiresNetworking!=True"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
-        "FullyQualifiedName!=NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
-      ] ++ lib.optionals (! enableUnfree) [
-        "FullyQualifiedName!=NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
-       ])))
-    ])
+    "--property:DefineConstants=${lib.strings.concatStringsSep "%3B" constants}"
   ];
 
+  testFilters = [
+    "Category!=Disabled"
+    "FlakeyTest!=True"
+    "RequiresNetworking!=True"
+  ];
+
+  disabledTests =
+    [
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
+      "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+    ]
+    ++ lib.optionals (!_7zz.meta.unfree) [
+      "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
+    ];
+
   passthru = {
-    tests = {
-      serve = runCommand "${pname}-test-serve" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram}
-        touch $out
-      '';
-      help = runCommand "${pname}-test-help" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} --help
-        touch $out
-      '';
-      associate-nxm = runCommand "${pname}-test-associate-nxm" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} associate-nxm
-        touch $out
-      '';
-      list-tools = runCommand "${pname}-test-list-tools" { } ''
-        ${nexusmods-app}/bin/${nexusmods-app.meta.mainProgram} list-tools
-        touch $out
-      '';
-    };
+    tests =
+      let
+        runTest =
+          name: script:
+          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
+            ${script}
+            touch $out
+          '';
+      in
+      {
+        serve = runTest "serve" ''
+          NexusMods.App
+        '';
+        help = runTest "help" ''
+          NexusMods.App --help
+        '';
+        associate-nxm = runTest "associate-nxm" ''
+          NexusMods.App associate-nxm
+        '';
+        list-tools = runTest "list-tools" ''
+          NexusMods.App list-tools
+        '';
+      };
     updateScript = ./update.bash;
   };
 
   meta = {
-    description = "Game mod installer, creator and manager";
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${src.rev}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.rev}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0
       MattSturgeon
     ];
     platforms = lib.platforms.linux;
+    description = "Game mod installer, creator and manager";
+    longDescription = ''
+      A mod installer, creator and manager for all your popular games.
+
+      Currently experimental and undergoing active development,
+      new releases may include breaking changes!
+
+      ${
+        if _7zz.meta.unfree then
+          ''
+            This "unfree" variant includes support for mods packaged as RAR archives.
+          ''
+        else
+          ''
+            It is strongly recommended that you use the "unfree" variant of this package,
+            which provides support for mods packaged as RAR archives.
+
+            You can also enable unrar support manually, by overriding the `_7zz` used:
+
+            ```nix
+            pkgs.nexusmods-app.override {
+              _7zz = pkgs._7zz-rar;
+            }
+            ```
+          ''
+      }
+    '';
   };
-}
+})

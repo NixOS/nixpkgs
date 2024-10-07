@@ -5,6 +5,7 @@
 , installShellFiles
 , nixosTests
 , enableDbusUi ? true
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -39,11 +40,10 @@ python3Packages.buildPythonApplication rec {
     janus
     keyring
     logbook
-    matrix-nio
+    (matrix-nio.override { withOlm = true; })
     peewee
     prompt-toolkit
   ]
-  ++ matrix-nio.optional-dependencies.e2e
   ++ lib.optionals enableDbusUi optional-dependencies.ui;
 
   optional-dependencies.ui = with python3Packages; [
@@ -61,8 +61,17 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
+  nativeBuildInputs = lib.optionals enableDbusUi [
+    wrapGAppsHook3
+  ];
+
+  dontWrapGApps = enableDbusUi;
+  makeWrapperArgs = lib.optionals enableDbusUi [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
   # darwin has difficulty communicating with server, fails some integration tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installManPage docs/man/*.[1-9]

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   # everything is done in `make install`
-  buildPhase = "true";
+  dontBuild = true;
 
   installFlags = [
     "PREFIX=$(out)"

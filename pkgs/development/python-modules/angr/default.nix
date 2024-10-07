@@ -36,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "angr";
-  version = "9.2.114";
+  version = "9.2.119";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -45,14 +45,21 @@ buildPythonPackage rec {
     owner = "angr";
     repo = "angr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Juv1/N/QdV99P1QupXU+OTl2ycT0SNrQF3PfDvQjb3Y=";
+    hash = "sha256-GwfQj8KU6M5ylgJPN1Blz8Chz2zEDTZayFdvjXXWoHY=";
   };
 
-  pythonRelaxDeps = [ "capstone" ];
+  postPatch = ''
+    # unicorn is also part of build-system
+    substituteInPlace pyproject.toml \
+      --replace-fail "unicorn==2.0.1.post1" "unicorn"
+  '';
 
-  build-system = [
-    setuptools
+  pythonRelaxDeps = [
+    "capstone"
+    "unicorn"
   ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     ailment
@@ -84,11 +91,11 @@ buildPythonPackage rec {
     unique-log-filter
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     AngrDB = [ sqlalchemy ];
   };
 
-  setupPyBuildFlags = lib.optionals stdenv.isLinux [
+  setupPyBuildFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "--plat-name"
     "linux"
   ];
@@ -110,5 +117,7 @@ buildPythonPackage rec {
     homepage = "https://angr.io/";
     license = with licenses; [ bsd2 ];
     maintainers = with maintainers; [ fab ];
+    # angr is pining unicorn
+    broken = versionAtLeast unicorn.version "2.0.1.post1";
   };
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/snapshot/f2fs-tools-v${version}.tar.gz";
-    sha256 = "sha256-zNG1F//+BTBzlEc6qNVixyuCB6PMZD5Kf8pVK0ePYiA=";
+    hash = "sha256-zNG1F//+BTBzlEc6qNVixyuCB6PMZD5Kf8pVK0ePYiA=";
   };
 
   nativeBuildInputs = [
@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-9XrNf9MMMDGOsuP3DvUhm30Sa2xICDtXbUIvM/TP35o=";
     })
   ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs-tools.git/";

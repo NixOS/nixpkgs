@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "stackprotector" ] ++
-    lib.optionals stdenv.isi686 [ "pic" "fortify" ];
+    lib.optionals stdenv.hostPlatform.isi686 [ "pic" "fortify" ];
 
   # Fix for glibc-2.34, see
   # https://gitweb.gentoo.org/repo/gentoo.git/commit/dev-lang/maude/maude-3.1-r1.ebuild?id=f021cc6cfa1e35eb9c59955830f1fd89bfcb26b4

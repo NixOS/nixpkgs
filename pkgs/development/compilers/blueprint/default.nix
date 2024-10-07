@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # requires xvfb-run
-  doCheck = !stdenv.isDarwin
+  doCheck = !stdenv.hostPlatform.isDarwin
   && false;  # tests time out
 
   checkPhase = ''

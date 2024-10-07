@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, gettext, pkg-config, perlPackages
+{ lib, stdenv, fetchurl, fetchpatch, gettext, pkg-config, perlPackages
 , libidn2, zlib, pcre, libuuid, libiconv, libintl
 , python3, lzip, darwin
 , withLibpsl ? false, libpsl
@@ -16,6 +16,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./remove-runtime-dep-on-openssl-headers.patch
+    (fetchpatch {
+      name = "CVE-2024-38428.patch";
+      url = "https://git.savannah.gnu.org/cgit/wget.git/patch/?id=ed0c7c7e0e8f7298352646b2fd6e06a11e242ace";
+      hash = "sha256-4ZVPufgG/h0UkxF9hQBAtF6QAG4GEz9hHeqEsD47q4U=";
+    })
   ];
 
   preConfigure = ''
@@ -26,15 +31,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ libidn2 zlib pcre libuuid ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optional withLibpsl libpsl
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices perlPackages.perl ];
 
   configureFlags = [
     (lib.withFeatureAs withOpenssl "ssl" "openssl")
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://lists.gnu.org/archive/html/bug-wget/2021-01/msg00076.html
     "--without-included-regex"
   ];
 
+  __darwinAllowLocalNetworking = true;
   doCheck = true;
   preCheck = ''
     patchShebangs tests fuzz
@@ -44,7 +50,7 @@ stdenv.mkDerivation rec {
     do
       sed -i "$i" -e's/localhost/127.0.0.1/g'
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # depending on the underlying filesystem, some tests
     # creating exotic file names fail
     for f in tests/Test-ftp-iri.px \
@@ -61,7 +67,7 @@ stdenv.mkDerivation rec {
   checkInputs = [
     perlPackages.HTTPDaemon
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     perlPackages.IOSocketSSL
   ];
 

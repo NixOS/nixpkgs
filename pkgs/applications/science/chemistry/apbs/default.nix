@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     suitesparse
     blas
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libintl
     libiconv
   ];

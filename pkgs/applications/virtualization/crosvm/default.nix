@@ -6,18 +6,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crosvm";
-  version = "126.0";
+  version = "127.0";
 
   src = fetchgit {
     url = "https://chromium.googlesource.com/chromiumos/platform/crosvm";
-    rev = "5533201f3ff3230d121e06100557d369c055e6dc";
-    hash = "sha256-Ufi8dIhNgXvD53PWLG2uj7CD37UZIegrqAQz3wTKTvE=";
+    rev = "8fdfed12c960850e9d5e809cfd2a40ce3bdd98d6";
+    hash = "sha256-W0zLYM91xoq9vURgYs2noc9F9RtvoXztIIHMx0HVK5g=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
-  cargoHash = "sha256-E2lyBgptQs+/5JS2WJc4ietguXdK16DFEVzqylmX+Pk=";
+  cargoHash = "sha256-nEJBRlwMqTahaIC9WdtoxGLVfc+U9sJ0ilzLhavcbD0=";
 
   nativeBuildInputs = [
     pkg-config protobuf python3 rustPlatform.bindgenHook wayland-scanner

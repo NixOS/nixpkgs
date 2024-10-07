@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/JuanBindez/pytubefix";
     description = "Pytube fork with additional features and fixes";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ roshaen ];
+    maintainers = with lib.maintainers; [ youhaveme9 ];
   };
 }

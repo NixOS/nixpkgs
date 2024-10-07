@@ -16,18 +16,19 @@
   appimage-run,
   gtk4,
   bintools,
+  libnotify,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "2.0.6";
+  version = "2.0.7";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    rev = version;
-    hash = "sha256-+JuF0SL+2yVgkKPItt9Vq6SLcnxaMSWxIeVhY9XLX28=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Zp0w6ZJFRV5IANF0sY/n8jqgG+3h9J2eV/dUP+we8PY=";
   };
 
   postPatch =
@@ -79,6 +80,7 @@ python3Packages.buildPythonApplication rec {
         desktop-file-utils # update-desktop-database
         gtk4.dev # gtk4-launch
         bintools # readelf
+        libnotify # notify-send
       ]
     }"
   ];

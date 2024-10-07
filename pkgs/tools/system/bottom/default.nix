@@ -34,6 +34,8 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion \
       target/tmp/bottom/completion/btm.{bash,fish} \
       --zsh target/tmp/bottom/completion/_btm
+
+    install -Dm444 desktop/bottom.desktop -t $out/share/applications
   '';
 
   BTM_GENERATE = true;

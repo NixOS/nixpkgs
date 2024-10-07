@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/profanity-im/libmesode/";
     license = with licenses; [ gpl3Only mit];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ devhell ];
   };
 }

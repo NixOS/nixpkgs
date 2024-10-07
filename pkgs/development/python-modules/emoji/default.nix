@@ -10,16 +10,16 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.12.1";
+  version = "2.13.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
-    repo = pname;
+    repo = "emoji";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m9V9ryIE2U+KsyzFhAoMCGYMkPCBUl/ex1Ue5OUwslc=";
+    hash = "sha256-FTQTbp5Ud3CyqkAiGvY8hBOKnvFR29CgZPbz4eZp/ik=";
   };
 
   build-system = [ setuptools ];

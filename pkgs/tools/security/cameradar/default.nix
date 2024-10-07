@@ -35,6 +35,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "RTSP stream access tool";
     homepage = "https://github.com/Ullaakut/cameradar";
+    changelog = "https://github.com/Ullaakut/cameradar/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Upstream issue, doesn't build with latest curl, see

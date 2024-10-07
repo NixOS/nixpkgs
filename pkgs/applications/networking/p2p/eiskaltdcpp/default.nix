@@ -26,7 +26,7 @@ mkDerivation rec {
       GetoptLong
       TermShellUI
     ])) ]
-    ++ lib.optional stdenv.isDarwin libiconv;
+    ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   cmakeFlags = [
     "-DDBUS_NOTIFY=ON"

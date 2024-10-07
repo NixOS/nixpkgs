@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "keras";
-  version = "3.4.1";
+  version = "3.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "keras-team";
     repo = "keras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pp84wTvcrWnxuksYUrzs9amapwBC8yU1PA0PE5dRl6k=";
+    hash = "sha256-zbeGa4g2psAofYAVuM7BNWI2gI21e739N5ZtxVfnVUg=";
   };
 
   build-system = [

@@ -60,23 +60,23 @@ rec {
   armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     rust.rustcTarget = "armv7-linux-androideabi";
-    sdkVer = "33";
-    ndkVer = "26";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   } // platforms.armv7a-android;
 
   aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     rust.rustcTarget = "aarch64-linux-android";
-    sdkVer = "33";
-    ndkVer = "26";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     useAndroidPrebuilt = true;
   };
 
   aarch64-android = {
     config = "aarch64-unknown-linux-android";
-    sdkVer = "33";
-    ndkVer = "26";
+    androidSdkVersion = "33";
+    androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
     useLLVM = true;
@@ -256,7 +256,7 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -265,7 +265,7 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
@@ -274,7 +274,7 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";
@@ -284,7 +284,7 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "14.3";
+    darwinSdkVersion = "14.3";
     xcodeVer = "12.3";
     xcodePlatform = "iPhoneSimulator";
     darwinPlatform = "ios-simulator";

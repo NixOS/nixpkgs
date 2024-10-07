@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   # tests are network based :(
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreServices
     AppKit
   ]);

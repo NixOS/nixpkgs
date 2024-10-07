@@ -5,6 +5,7 @@
 , nodejs
 , makeBinaryWrapper
 , shellcheck
+, versionCheckHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,11 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     nodejs
     pnpm_8.configHook
     makeBinaryWrapper
+    versionCheckHook
   ];
   buildPhase = ''
     runHook preBuild
 
-    pnpm --filter=bash-language-server build
+    pnpm compile server
 
     runHook postBuild
   '';
@@ -53,12 +55,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Create the executable, based upon what happens in npmHooks.npmInstallHook
     makeWrapper ${lib.getExe nodejs} $out/bin/bash-language-server \
-      --prefix PATH : ${lib.makeBinPath [ shellcheck ]} \
+      --suffix PATH : ${lib.makeBinPath [ shellcheck ]} \
       --inherit-argv0 \
       --add-flags $out/lib/bash-language-server/out/cli.js
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "A language server for Bash";

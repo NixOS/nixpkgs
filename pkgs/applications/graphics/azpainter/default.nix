@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     freetype fontconfig
     libjpeg libpng libtiff libwebp
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preBuild = ''
     cd build

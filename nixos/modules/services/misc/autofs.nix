@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.autofs;
@@ -18,8 +15,8 @@ in
 
     services.autofs = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Mount filesystems on demand. Unmount them automatically.
@@ -27,9 +24,9 @@ in
         '';
       };
 
-      autoMaster = mkOption {
-        type = types.str;
-        example = literalExpression ''
+      autoMaster = lib.mkOption {
+        type = lib.types.str;
+        example = lib.literalExpression ''
           let
             mapConf = pkgs.writeText "auto" '''
              kernel    -ro,soft,intr       ftp.kernel.org:/pub/linux
@@ -51,14 +48,14 @@ in
         '';
       };
 
-      timeout = mkOption {
-        type = types.int;
+      timeout = lib.mkOption {
+        type = lib.types.int;
         default = 600;
         description = "Set the global minimum timeout, in seconds, until directories are unmounted";
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Pass -d and -7 to automount and write log to the system journal.
@@ -72,7 +69,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.kernelModules = [ "autofs" ];
 
@@ -90,7 +87,7 @@ in
         serviceConfig = {
           Type = "forking";
           PIDFile = "/run/autofs.pid";
-          ExecStart = "${pkgs.autofs5}/bin/automount ${optionalString cfg.debug "-d"} -p /run/autofs.pid -t ${builtins.toString cfg.timeout} ${autoMaster}";
+          ExecStart = "${pkgs.autofs5}/bin/automount ${lib.optionalString cfg.debug "-d"} -p /run/autofs.pid -t ${builtins.toString cfg.timeout} ${autoMaster}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         };
       };

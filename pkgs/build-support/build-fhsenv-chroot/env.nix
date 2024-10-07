@@ -4,6 +4,7 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
+, nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -245,6 +246,7 @@ let
 
 in stdenv.mkDerivation {
   name         = "${name}-fhs";
+  inherit nativeBuildInputs;
   buildCommand = ''
     mkdir -p $out
     cd $out

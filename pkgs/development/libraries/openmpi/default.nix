@@ -29,7 +29,7 @@
   # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
   enablePrefix ? false,
   # Enable libfabric support (necessary for Omnipath networks) on x86_64 linux
-  fabricSupport ? stdenv.isLinux && stdenv.isx86_64,
+  fabricSupport ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64,
   # Enable Fortran support
   fortranSupport ? true,
   # AVX/SSE options. See passthru.defaultAvxOptions for the available options.
@@ -40,11 +40,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-mQWC8gazqzLpOKoxu/B8Y5No5EBdyhlvq+fw927tqQs=";
+    sha256 = "sha256-ZYjVfApL0pmiQQP04ZYFGynotV+9pJ4R1bPTIDCjJ3Y=";
   };
 
   postPatch = ''
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs =
     [ "out" ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       "man"
       "dev"
     ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
       libevent
       hwloc
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       libnl
       numactl
       pmix
@@ -95,9 +95,9 @@ stdenv.mkDerivation (finalAttrs: {
       prrte
     ]
     ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals (stdenv.isLinux || stdenv.isFreeBSD) [ rdma-core ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
     # needed for internal pmix
-    ++ lib.optionals (!stdenv.isLinux) [ python3 ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
     ++ lib.optionals fabricSupport [
       libpsm2
       libfabric
@@ -115,11 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     (lib.enableFeature cudaSupport "mca-dso")
     (lib.enableFeature fortranSupport "mpi-fortran")
-    (lib.withFeatureAs stdenv.isLinux "libnl" (lib.getDev libnl))
-    "--with-pmix=${if stdenv.isLinux then (lib.getDev pmix) else "internal"}"
-    (lib.withFeatureAs stdenv.isLinux "pmix-libdir" "${lib.getLib pmix}/lib")
+    (lib.withFeatureAs stdenv.hostPlatform.isLinux "libnl" (lib.getDev libnl))
+    "--with-pmix=${lib.getDev pmix}"
+    "--with-pmix-libdir=${lib.getLib pmix}/lib"
     # Puts a "default OMPI_PRTERUN" value to mpirun / mpiexec executables
-    (lib.withFeatureAs stdenv.isLinux "prrte" (lib.getBin prrte))
+    (lib.withFeatureAs stdenv.hostPlatform.isLinux "prrte" (lib.getBin prrte))
     (lib.withFeature enableSGE "sge")
     (lib.enableFeature enablePrefix "mpirun-prefix-by-default")
     # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
@@ -175,7 +175,9 @@ stdenv.mkDerivation (finalAttrs: {
         // lib.optionalAttrs fortranSupport {
           "fort" = [
             "gfortran"
-            "${targetPackages.gfortran}/bin/${targetPackages.gfortran.targetPrefix}gfortran"
+            "${targetPackages.gfortran or gfortran}/bin/${
+              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+            }gfortran"
           ];
         };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
@@ -212,7 +214,12 @@ stdenv.mkDerivation (finalAttrs: {
       ${lib.pipe wrapperDataFileNames [
         (lib.mapCartesianProduct (
           { part1, part2 }:
-          ''
+          # From some reason the Darwin build doesn't include some of these
+          # wrapperDataSubstitutions strings and even some of the files. Hence
+          # we currently don't perform these substitutions on other platforms,
+          # until a Darwin user will care enough about this cross platform
+          # related substitution.
+          lib.optionalString stdenv.hostPlatform.isLinux ''
             substituteInPlace "''${!outputDev}/share/openmpi/${part1}${part2}-wrapper-data.txt" \
               --replace-fail \
                 compiler=${lib.elemAt wrapperDataSubstitutions.${part2} 0} \
@@ -221,7 +228,7 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to ${lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
+      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
       # from some reason.
       moveToOutput "bin/pcc" "''${!outputDev}"
 
@@ -233,11 +240,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup =
     lib.optionalString (lib.elem "man" finalAttrs.outputs) ''
-      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputMan}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
     ''
     + lib.optionalString (lib.elem "dev" finalAttrs.outputs) ''
       remove-references-to -t "''${!outputDev}" $out/bin/mpirun
-      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.sharedLibrary})
+      remove-references-to -t "''${!outputDev}" $(readlink -f $out/lib/libopen-pal${stdenv.hostPlatform.extensions.library})
 
       # The path to the wrapper is hard coded in libopen-pal.so, which we just cleared.
       wrapProgram "''${!outputDev}/bin/opal_wrapper" \
@@ -263,7 +270,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.open-mpi.org/";
     description = "Open source MPI-3 implementation";
     longDescription = "The Open MPI Project is an open source MPI-3 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";
-    maintainers = with lib.maintainers; [ markuskowa ];
+    maintainers = with lib.maintainers; [
+      markuskowa
+      doronbehar
+    ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
   };

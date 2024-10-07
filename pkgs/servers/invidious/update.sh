@@ -36,7 +36,7 @@ if [ ! -d "$git_dir" ]; then
 fi
 git -C "$git_dir" fetch origin --tags "$git_branch"
 
-new_tag="$(git -C "$git_dir" ls-remote --tags --sort=committerdate origin | head -n1 | grep -Po '(?<=refs/tags/).*')"
+new_tag="$(git -C "$git_dir" ls-remote --tags --sort=-committerdate origin | tail -n1 | grep -Po '(?<=refs/tags/).*')"
 new_version="${new_tag#v}"
 
 if [ "$new_version" = "$old_version" ]; then
@@ -44,8 +44,9 @@ if [ "$new_version" = "$old_version" ]; then
     exit
 fi
 
+info "updating to $new_tag"
 commit="$(git -C "$git_dir" rev-list "$new_tag" --max-count=1 --abbrev-commit)"
-date="$(git -C "$git_dir" log -1 --format=%cd --date=format:%Y.%m.%d)"
+date="$(git -C "$git_dir" log -1 --format=%cd --date=format:%Y.%m.%d "$commit")"
 json_set '.invidious.date' "$date"
 json_set '.invidious.commit' "$commit"
 json_set '.invidious.version' "$new_version"

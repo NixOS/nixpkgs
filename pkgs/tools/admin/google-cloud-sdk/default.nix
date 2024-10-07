@@ -49,8 +49,8 @@ in stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/google-cloud-sdk
-    if [ -d .install/platform/bundledpythonunix ]; then
-      rm -r .install/platform/bundledpythonunix
+    if [ -d platform/bundledpythonunix ]; then
+      rm -r platform/bundledpythonunix
     fi
     cp -R * .install $out/google-cloud-sdk/
 
@@ -64,6 +64,7 @@ in stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --set CLOUDSDK_PYTHON_ARGS "-S -W ignore" \
             --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 

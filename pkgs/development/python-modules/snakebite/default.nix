@@ -2,24 +2,27 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "snakebite";
   version = "2.11.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "085238b4944cb9c658ee62d5794de936ac3d0c337c504b2cc86424a205ae978a";
+    hash = "sha256-CFI4tJRMucZY7mLVeU3pNqw9DDN8UEssyGQkogWul4o=";
   };
 
-  propagatedBuildInputs = [ protobuf ];
+  build-system = [ setuptools ];
+
+  dependencies = [ protobuf ];
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "'argparse'" ""
+      --replace-fail "'argparse'" ""
   '';
 
   # Tests require hadoop hdfs

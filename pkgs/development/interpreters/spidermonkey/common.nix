@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   ] ++ lib.optionals (lib.versionOlder version "91") [
     autoconf213
     yasm # to buid icu? seems weird
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
   ];
 
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     nspr
     readline
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
     libiconv
   ];
@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
-    broken = stdenv.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+    broken = stdenv.hostPlatform.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
     platforms = platforms.unix;
   };
 })

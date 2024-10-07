@@ -49,6 +49,7 @@
 , libmbim
 , libcbor
 , xz
+, nix-update-script
 , enableFlashrom ? false
 , enablePassim ? false
 }:
@@ -66,7 +67,7 @@ let
   haveDell = isx86;
 
   # only redfish for x86_64
-  haveRedfish = stdenv.isx86_64;
+  haveRedfish = stdenv.hostPlatform.isx86_64;
 
   # only use msr if x86 (requires cpuid)
   haveMSR = isx86;
@@ -120,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.23";
+  version = "1.9.25";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-SLwRATYUSnHN6r5KyVGXbdAFjHCfykItbBTsl5/s8fA=";
+    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
   };
 
   patches = [
@@ -325,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"

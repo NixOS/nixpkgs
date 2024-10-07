@@ -133,9 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     xorg.libX11
     xorg.libxkbfile
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libsecret
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     CoreServices
@@ -246,7 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
     patchShebangs .
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Use prebuilt binary for @parcel/watcher, which requires macOS SDK 10.13+
     # (see issue #101229).
     pushd ./lib/vscode/remote/node_modules/@parcel/watcher

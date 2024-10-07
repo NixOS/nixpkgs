@@ -1,10 +1,12 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   autoconf,
   automake,
   makeWrapper,
+  python311,
   runCommand,
   textlint,
   textlint-plugin-latex2e,
@@ -26,13 +28,13 @@
 
 buildNpmPackage rec {
   pname = "textlint";
-  version = "14.0.5";
+  version = "14.2.1";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W2ySdd1ADqEpEBFgwRvzAzAivL//pj2PSlg7Kfcbspg=";
+    hash = "sha256-M3ahoQxEBTGfQy2k3QqIefh0emgGF9q+AwWTReKWbhM=";
   };
 
   patches = [
@@ -42,12 +44,18 @@ buildNpmPackage rec {
     ./remove-workspaces.patch
   ];
 
-  npmDepsHash = "sha256-IMXcdR9WqSvBwk3/0qihVr3OraJAwrsCMUVnTbx9z+Q=";
+  npmDepsHash = "sha256-6qP3caFg4Cpm7yckjopRdX/D8jH9ObLCba1k2TiQWCA=";
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-  ];
+  nativeBuildInputs =
+    [
+      autoconf
+      automake
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+      # File "/build/source/node_modules/node-gyp/gyp/gyp_main.py", line 42, in <module>
+      # npm error ModuleNotFoundError: No module named 'distutils'
+      python311
+    ];
 
   installPhase = ''
     runHook preInstall

@@ -13,7 +13,7 @@ let
     };
 
     nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ] ++ lib.optional stdenv.isDarwin Foundation;
+    buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
     makeFlags = [ makeTarget ];
 

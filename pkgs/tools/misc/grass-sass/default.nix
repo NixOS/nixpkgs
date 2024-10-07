@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "grass";
-  version = "0.13.3";
+  version = "0.13.4";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-catGfGiKjB6KZCt6yjwdR5VV0RAaBfiUnjlyCCBguBs=";
+    hash = "sha256-uk4XLF0QsH9Nhz73PmdSpwhxPdCh+DlNNqtbJtLWgNI=";
   };
 
-  cargoHash = "sha256-xonfDCJWVIuZQOBSLcrEFnziHwz6ZNQQxvVh+ulueUo=";
+  cargoHash = "sha256-Vnbda4dkCIRheqKq4umLhn2LCO7lkJQUuPrkExj9708=";
 
   # tests require rust nightly
   doCheck = false;

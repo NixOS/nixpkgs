@@ -61,6 +61,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "https://gitlab.gnome.org/GNOME/alacarte";
+    changelog = "https://gitlab.gnome.org/GNOME/alacarte/-/blob/${version}/NEWS?ref_type=tags";
     description = "Menu editor for GNOME using the freedesktop.org menu specification";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;

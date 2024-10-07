@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     pexpect
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     dev = [
       mypy
       pytest

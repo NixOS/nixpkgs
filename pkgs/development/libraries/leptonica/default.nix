@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ which gnuplot ];
 
   # Fails on pngio_reg for unknown reason
-  doCheck = false; # !stdenv.isDarwin;
+  doCheck = false; # !stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Image processing and analysis library";

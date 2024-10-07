@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withColorer [ spdlog xercesc ]
     ++ lib.optionals withMultiArc [ libarchive pcre ]
     ++ lib.optionals withNetRocks [ openssl libssh libnfs neon ]
-    ++ lib.optional (withNetRocks && !stdenv.isDarwin) samba # broken on darwin
+    ++ lib.optional (withNetRocks && !stdenv.hostPlatform.isDarwin) samba # broken on darwin
     ++ lib.optionals withPython (with python3Packages; [ python cffi debugpy pcpp ])
-    ++ lib.optionals stdenv.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL System ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL System ];
 
   postPatch = ''
     patchShebangs python/src/prebuild.sh

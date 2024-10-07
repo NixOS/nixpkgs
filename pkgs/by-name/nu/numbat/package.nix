@@ -20,15 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-t6vxJ0UIQJILCGv4PO5V4/QF5de/wtMQDkb8gPtE70E=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
-  env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/${pname}/modules";
+  env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
   postInstall = ''
-    mkdir -p $out/share/${pname}
-    cp -r $src/${pname}/modules $out/share/${pname}/
+    mkdir -p $out/share/numbat
+    cp -r $src/numbat/modules $out/share/numbat/
   '';
 
   passthru.tests.version = testers.testVersion {

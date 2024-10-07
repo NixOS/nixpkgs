@@ -47,7 +47,7 @@ buildPythonPackage rec {
       "test_diagram"
       "test_ordered_with_graph"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
       "test_binary_stream"
     ];

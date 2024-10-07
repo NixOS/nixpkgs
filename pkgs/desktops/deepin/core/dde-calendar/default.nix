@@ -1,35 +1,34 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, qtbase
-, qtsvg
-, libical
-, sqlite
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  qtbase,
+  qtsvg,
+  libical,
+  sqlite,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-calendar";
-  version = "5.13.1";
+  version = "5.14.4";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-Hn759Cxtzv+HBllA2vdZcH6P8EWZkjawpgkmLiE2+uA=";
+    hash = "sha256-bZxNOBtLjop0eYxpMeoomaWYvPcMyDfQfgGPK9m+ARo=";
   };
 
-  patches = [
-    ./fix-wrapped-name-not-in-whitelist.diff
-  ];
+  patches = [ ./fix-wrapped-name-not-in-whitelist.diff ];
 
   postPatch = ''
     for file in $(grep -rl "/bin/bash"); do
@@ -68,4 +67,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
-

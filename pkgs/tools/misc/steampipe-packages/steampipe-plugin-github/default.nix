@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "steampipe-plugin-github";
-  version = "0.42.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe-plugin-github";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GtlUSIjRLlO/ICdWV9QNjLyBwM+/Jpt4INIaHst4Tao=";
+    hash = "sha256-XscJqrtnvA4poCcUspPIsYIrfI22o/PLeNPBl8WSl/E=";
   };
 
-  vendorHash = "sha256-UivLueePtstJtAWbl7li8FzZ41Q2kF9FYzVYdQ4172g=";
+  vendorHash = "sha256-EVcPpFzRd9EmyuPqZBQjSNEB4BEbU8Km6Y/f+ulfK5s=";
 
   ldflags = [
     "-s"

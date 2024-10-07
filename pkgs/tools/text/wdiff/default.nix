@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Comparing files on a word by word basis";
     mainProgram = "wdiff";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ eelco SuperSandro2000 ];
+    maintainers = with maintainers; [ SuperSandro2000 ];
     platforms = platforms.unix;
   };
 }

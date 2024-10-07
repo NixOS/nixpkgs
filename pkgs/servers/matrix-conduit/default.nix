@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     sqlite
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -55,7 +55,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   passthru.tests = {
     inherit (nixosTests) matrix-conduit;

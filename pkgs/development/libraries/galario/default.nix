@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fftw fftwFloat ]
   ++ lib.optional enablePython pythonPackages.python
-  ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = lib.optionals enablePython [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   preCheck = ''
-    ${if stdenv.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
+    ${if stdenv.hostPlatform.isDarwin then "export DYLD_LIBRARY_PATH=$(pwd)/src/" else "export LD_LIBRARY_PATH=$(pwd)/src/"}
     ${lib.optionalString enablePython "sed -i -e 's|^#!.*|#!${stdenv.shell}|' python/py.test.sh"}
   '';
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  postInstall = lib.optionalString (stdenv.isDarwin && enablePython) ''
+  postInstall = lib.optionalString (stdenv.hostPlatform.isDarwin && enablePython) ''
     install_name_tool -change libgalario.dylib $out/lib/libgalario.dylib $out/lib/python*/site-packages/galario/double/libcommon.so
     install_name_tool -change libgalario_single.dylib $out/lib/libgalario_single.dylib $out/lib/python*/site-packages/galario/single/libcommon.so
   '';

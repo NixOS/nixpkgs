@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cilium";
     repo = "tetragon";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
+    hash = "sha256-KOR5MMRnhrlcMPqRjzjSJXvitiZQ8/tlxEnBiQG2x/Q=";
   };
 
   buildInputs = [

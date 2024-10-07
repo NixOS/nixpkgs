@@ -65,7 +65,7 @@ buildPythonPackage rec {
     "test_tls_ext_noca"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";

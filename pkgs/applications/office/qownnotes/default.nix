@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, qmake
+, cmake
 , qttools
 , qtbase
 , qtdeclarative
@@ -20,24 +20,24 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.8.3";
+  version = "24.9.8";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-lbNJT6IbIgTYLpsMWK6Nk0XXhw1De+wZgrH4DE1vDKg=";
+    hash = "sha256-G5PLz1GzjfPM5tj3rtwJt4hR3v+oSq2bVr/llTSFbNk=";
   };
 
   nativeBuildInputs = [
-    qmake
+    cmake
     qttools
     wrapQtAppsHook
     pkg-config
     installShellFiles
     xvfb-run
-  ] ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     qtbase
@@ -45,10 +45,11 @@ stdenv.mkDerivation {
     qtsvg
     qtwebsockets
     botan2
-  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
-  qmakeFlags = [
-    "USE_SYSTEM_BOTAN=1"
+  cmakeFlags = [
+    "-DQON_QT6_BUILD=ON"
+    "-DBUILD_WITH_SYSTEM_BOTAN=ON"
   ];
 
   postInstall = ''
@@ -60,11 +61,11 @@ stdenv.mkDerivation {
       --fish <(xvfb-run $out/bin/${appname} --completion fish)
   ''
   # Create a lowercase symlink for Linux
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -s $out/bin/${appname} $out/bin/${pname}
   ''
   # Wrap application for macOS as lowercase binary
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/${appname}.app $out/Applications
     makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}

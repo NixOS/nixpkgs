@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pyserial,
   pyserial-asyncio,
   pytest-asyncio,
@@ -24,6 +25,13 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-z/QulOkvkV/1Z+M7EfzdfGvrrtkapYcvfz+3AijR46k=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/zigpy/zigpy-deconz/commit/86fdcd6be824f12ce3bf88b40217a6224cbf5a89.patch";
+      hash = "sha256-iqpTSJPBMSBZXg5EVXXupxIFRsGCNuxU/oNHZ2VT0Jc=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

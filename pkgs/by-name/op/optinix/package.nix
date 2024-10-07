@@ -6,16 +6,16 @@
 }:
 buildGoModule rec {
   pname = "optinix";
-  version = "0.1.1";
+  version = "0.1.3";
 
   src = fetchFromGitLab {
     owner = "hmajid2301";
     repo = "optinix";
     rev = "v${version}";
-    hash = "sha256-bRHesc03jExIL29BCP93cMbx+BOT4sHCu58JjpmRaeA=";
+    hash = "sha256-Y+TCMKLLBcpGgbQbwt/F9PhcDoG9B156hHM9teD+vFA=";
   };
 
-  vendorHash = "sha256-uSFEhRWvJ83RGpekPJL9MOYJy2NfgVdZxuaNUMq3VaE=";
+  vendorHash = "sha256-kwAmp3pP2oEETztJ28fW1H6cMp0mCBiunVy41I8aeEk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

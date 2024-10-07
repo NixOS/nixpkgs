@@ -438,7 +438,7 @@ let
 
   hostidFile = pkgs.runCommand "gen-hostid" { preferLocalBuild = true; } ''
       hi="${cfg.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
+      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
         echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > $out
       '' else ''
         echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > $out

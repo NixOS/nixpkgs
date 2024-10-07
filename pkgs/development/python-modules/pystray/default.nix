@@ -12,6 +12,7 @@
   pygobject3,
   gtk3,
   libayatana-appindicator,
+  pytest,
 }:
 
 buildPythonPackage rec {
@@ -54,12 +55,17 @@ buildPythonPackage rec {
     libayatana-appindicator
   ];
 
-  nativeCheckInputs = [ xvfb-run ];
+  nativeCheckInputs = [
+    pytest
+    xvfb-run
+  ];
 
   checkPhase = ''
-    rm tests/icon_tests.py # test needs user input
+    runHook preCheck
 
-    xvfb-run -s '-screen 0 800x600x24' python setup.py test
+    xvfb-run -s '-screen 0 800x600x24' pytest tests/menu_descriptor_tests.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

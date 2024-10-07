@@ -26,13 +26,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "betterlockscreen";
-  version = "4.2.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
-    owner = "pavanjadhaw";
+    owner = "betterlockscreen";
     repo = "betterlockscreen";
     rev = "v${version}";
-    sha256 = "sha256-e/NyUxrN18+x2zt+JzqVA00P8VdHo8oj9Bx09XKI+Eg=";
+    sha256 = "sha256-59Ct7XIfZqU3yaW9FO7UV8SSMLdcZMPRc7WJangxFPo=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Fast and sweet looking lockscreen for linux systems with effects!";
-    homepage = "https://github.com/pavanjadhaw/betterlockscreen";
+    homepage = "https://github.com/betterlockscreen/betterlockscreen";
     mainProgram = "betterlockscreen";
     license = licenses.mit;
     platforms = platforms.linux;

@@ -40,7 +40,6 @@ makeScopeWithSplicing' {
     attrs = {
       inherit libsForQt5;
       inherit (pkgs) config lib fetchurl;
-      gconf = pkgs.gnome2.GConf;
       inherit (pkgs) gsettings-desktop-schemas;
     };
   in (lib.makeOverridable mkPlasma5 attrs);
@@ -155,7 +154,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     python3 = pkgs.python311;
   };
 
@@ -206,7 +205,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   pulseaudio-qt = callPackage ../development/libraries/pulseaudio-qt { };
 
   qca = callPackage ../development/libraries/qca {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (libsForQt5) qtbase;
   };
   qca-qt5 = self.qca;
@@ -238,7 +237,7 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   qtinstaller = callPackage ../development/libraries/qtinstaller { };
 
   qtkeychain = callPackage ../development/libraries/qtkeychain {
-    stdenv = if pkgs.stdenv.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
@@ -287,6 +286,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
   xp-pen-deco-01-v2-driver = callPackage ../os-specific/linux/xp-pen-drivers/deco-01-v2 { };
 
   xp-pen-g430-driver = callPackage ../os-specific/linux/xp-pen-drivers/g430 { };
+
+  xwaylandvideobridge = callPackage ../tools/wayland/xwaylandvideobridge { };
 
   yuview = callPackage ../applications/video/yuview { };
 }) // lib.optionalAttrs pkgs.config.allowAliases {

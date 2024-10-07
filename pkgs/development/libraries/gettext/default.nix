@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = lib.optionalString stdenv.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
+  LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
   configureFlags = [
      "--disable-csharp"
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
     bash
   ]
-  ++ lib.optionals (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
     # HACK, see #10874 (and 14664)
     libiconv
   ];
@@ -102,6 +102,6 @@ stdenv.mkDerivation rec {
   };
 }
 
-// lib.optionalAttrs stdenv.isDarwin {
+// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

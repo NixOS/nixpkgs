@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xwallpaper";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "stoeckmann";
     repo = "xwallpaper";
     rev = "v${version}";
-    sha256 = "sha256-onxneLmXs1rYwpTzcnn+rbDboWVoEQgtGMHx/bMPRa8=";
+    sha256 = "sha256-smhqovPgDdSLhAwW1y/hnPjNwFcpIUocs3MKizdvZj0=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook installShellFiles ];

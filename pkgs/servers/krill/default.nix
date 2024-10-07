@@ -20,14 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Z12fUK4TUgk38/vNAt8RWLFGLc8WnZAgHWz0xl1QKLI=";
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];
 
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
   # disable failing tests on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "RPKI Certificate Authority and Publication Server written in Rust";

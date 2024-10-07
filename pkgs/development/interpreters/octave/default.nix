@@ -136,9 +136,9 @@ in stdenv.mkDerivation (finalAttrs: {
       libsForQt5.qscintilla
     ] ++ lib.optionals (enableJava) [
       jdk
-    ] ++ lib.optionals (!stdenv.isDarwin) [
+    ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libGL libGLU libX11
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.Accelerate
       darwin.apple_sdk.frameworks.Cocoa
@@ -153,12 +153,12 @@ in stdenv.mkDerivation (finalAttrs: {
       libsForQt5.qttools
     ];
 
-    doCheck = !stdenv.isDarwin;
+    doCheck = !stdenv.hostPlatform.isDarwin;
 
     enableParallelBuilding = true;
 
     # Fix linker error on Darwin (see https://trac.macports.org/ticket/61865)
-    NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lobjc";
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lobjc";
 
     # See https://savannah.gnu.org/bugs/?50339
     F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
@@ -168,9 +168,9 @@ in stdenv.mkDerivation (finalAttrs: {
       "--with-lapack=lapack"
       (if use64BitIdx then "--enable-64" else "--disable-64")
     ]
-    ++ lib.optionals stdenv.isDarwin [ "--enable-link-all-dependencies" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-link-all-dependencies" ]
     ++ lib.optionals enableReadline [ "--enable-readline" ]
-    ++ lib.optionals stdenv.isDarwin [ "--with-x=no" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
     ++ lib.optionals enableQt [ "--with-qt=5" ]
     ;
 

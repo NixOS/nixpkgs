@@ -3,6 +3,7 @@
   buildPythonPackage,
   certifi,
   click,
+  dotmap,
   ecs-logging,
   elastic-transport,
   elasticsearch8,
@@ -36,10 +37,10 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-
   dependencies = [
     certifi
     click
+    dotmap
     ecs-logging
     elastic-transport
     elasticsearch8
@@ -68,6 +69,8 @@ buildPythonPackage rec {
     "test_multiple_hosts_raises"
     "test_non_dict_passed"
     "test_skip_version_check"
+    # es_client.exceptions.ConfigurationError: Must populate both username and password, or leave both empty
+    "test_exit_if_not_master "
   ];
 
   meta = with lib; {

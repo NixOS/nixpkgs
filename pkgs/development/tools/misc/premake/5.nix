@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-2R5gq4jaQsp8Ny1oGuIYkef0kn2UG9jMf20vq0714oY=";
   };
 
-  buildInputs = [ libuuid ] ++ lib.optionals stdenv.isDarwin [ Foundation readline ];
+  buildInputs = [ libuuid ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation readline ];
 
   patches = [ ./no-curl-ca.patch ];
   postPatch = ''
     substituteInPlace contrib/curl/premake5.lua \
       --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace premake5.lua \
       --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5 \
       --replace-fail '"-arch arm64"' '""' \
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
        make -f Bootstrap.mak osx
     '' else ''
        make -f Bootstrap.mak linux

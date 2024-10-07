@@ -9,17 +9,17 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.14.6";
+  version = "1.14.9";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-X9XwVZpRnkp7oVKwyvQbs8ZaWwLkuLEEHNfV5BvfVvI=";
+    hash = "sha256-W0wHQMvbQJC3PdCZLVpE3cTasii/CkF+gdVOV2MX2Mo=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-UP+bQM8ydfbILlVhuNPVIKLyXZFTzGmHizn2hYgNE4Y=";
+  vendorHash = "sha256-Fxl8fisdCH0nlUFOS5NLMnvfpqIhlTd6/BbR+qIzlKQ=";
 
   doCheck = false;
 
@@ -41,7 +41,6 @@ in buildGoModule rec {
     "cmd/ethkey"
     "cmd/evm"
     "cmd/geth"
-    "cmd/p2psim"
     "cmd/rlpdump"
     "cmd/utils"
   ];
@@ -51,7 +50,7 @@ in buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 

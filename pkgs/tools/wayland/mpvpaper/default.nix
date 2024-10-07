@@ -6,7 +6,7 @@
 , wayland-protocols
 , wayland-scanner
 , egl-wayland
-, glew-egl
+, glew
 , mpv
 , pkg-config
 , fetchFromGitHub
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     egl-wayland
-    glew-egl
+    glew
     mpv
   ];
 

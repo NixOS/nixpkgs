@@ -11,6 +11,9 @@ in
     _: k3s: import ./airgap-images.nix { inherit system pkgs k3s; }
   ) allK3s;
   auto-deploy = lib.mapAttrs (_: k3s: import ./auto-deploy.nix { inherit system pkgs k3s; }) allK3s;
+  containerd-config = lib.mapAttrs (
+    _: k3s: import ./containerd-config.nix { inherit system pkgs k3s; }
+  ) allK3s;
   etcd = lib.mapAttrs (
     _: k3s:
     import ./etcd.nix {

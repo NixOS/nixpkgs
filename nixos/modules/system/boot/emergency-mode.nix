@@ -1,16 +1,13 @@
 { config, lib, ... }:
-
-with lib;
-
 {
 
   ###### interface
 
   options = {
 
-    systemd.enableEmergencyMode = mkOption {
+    systemd.enableEmergencyMode = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether to enable emergency mode, which is an
         {command}`sulogin` shell started on the console if
@@ -27,7 +24,7 @@ with lib;
 
   config = {
 
-    systemd.additionalUpstreamSystemUnits = optionals
+    systemd.additionalUpstreamSystemUnits = lib.optionals
       config.systemd.enableEmergencyMode [
         "emergency.target" "emergency.service"
       ];

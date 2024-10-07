@@ -28,7 +28,7 @@ let
         inherit (self) qtModule;
         inherit srcs python3;
         stdenv =
-          if stdenv.isDarwin
+          if stdenv.hostPlatform.isDarwin
           then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
           else stdenv;
       });
@@ -106,7 +106,7 @@ let
             qtwebengine
             qtwebsockets
             qtwebview
-          ] ++ lib.optionals (!stdenv.isDarwin) [ qtwayland libglvnd ]))
+          ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwayland libglvnd ]))
         { };
 
       qt3d = callPackage ./modules/qt3d.nix { };
@@ -163,7 +163,7 @@ let
         qtModule = callPackage
           ({ qtModule }: qtModule.override {
             stdenv =
-              if stdenv.isDarwin
+              if stdenv.hostPlatform.isDarwin
               then overrideSDK stdenv { darwinMinVersion = "11.0"; darwinSdkVersion = "11.0"; }
               else stdenv;
           })

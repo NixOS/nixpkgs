@@ -1,37 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, wayland
-, dwayland
-, qt5integration
-, qt5platform-plugins
-, image-editor
-, qtbase
-, qtmultimedia
-, ffmpeg
-, ffmpegthumbnailer
-, libusb1
-, libpciaccess
-, portaudio
-, libv4l
-, gst_all_1
-, systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  wayland,
+  dwayland,
+  qt5integration,
+  qt5platform-plugins,
+  image-editor,
+  qtbase,
+  qtmultimedia,
+  ffmpeg,
+  ffmpegthumbnailer,
+  libusb1,
+  libpciaccess,
+  portaudio,
+  libv4l,
+  gst_all_1,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
-  version = "unstable-2023-09-26";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
-    rev = "8ad3b6ad2a4f5f0b22a216496a0187a69a1e1bcc";
-    hash = "sha256-/8ddplHJzeu7lrRzN66KhJGkFou4FcXc+BzYFK5YVeE=";
+    rev = version;
+    hash = "sha256-3q8yV8GpCPKW780YpCn+xLeFBGJFoAMmKSFCAH9OXoE=";
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH
@@ -53,26 +54,27 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    dtkwidget
-    wayland
-    dwayland
-    qt5integration
-    qt5platform-plugins
-    image-editor
-    qtbase
-    qtmultimedia
-    ffmpeg
-    ffmpegthumbnailer
-    libusb1
-    libpciaccess
-    portaudio
-    libv4l
-  ] ++ (with gst_all_1 ; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      dtkwidget
+      wayland
+      dwayland
+      qt5integration
+      qt5platform-plugins
+      image-editor
+      qtbase
+      qtmultimedia
+      ffmpeg
+      ffmpegthumbnailer
+      libusb1
+      libpciaccess
+      portaudio
+      libv4l
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+    ]);
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 
@@ -84,18 +86,29 @@ stdenv.mkDerivation rec {
   ];
 
   qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ ffmpeg ffmpegthumbnailer gst_all_1.gstreamer gst_all_1.gst-plugins-base libusb1 libv4l portaudio systemd ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        ffmpeg
+        ffmpegthumbnailer
+        gst_all_1.gstreamer
+        gst_all_1.gst-plugins-base
+        libusb1
+        libv4l
+        portaudio
+        systemd
+      ]
+    }"
   ];
 
   preFixup = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to view camera, take photo and video";
     homepage = "https://github.com/linuxdeepin/deepin-camera";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

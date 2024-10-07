@@ -8,18 +8,18 @@
   libxml2,
   libffi,
   xar,
-  testers,
+  versionCheckHook,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "c3c";
-  version = "0.6.1";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "c3lang";
     repo = "c3c";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-iOljE1BRVc92NJZj+nr1G6KkBTCwJEUOadXHUDNoPGk=";
+    hash = "sha256-hFLiE1S9l2NhSIaqpYoBfn27IkhavcM0Ma31+XJtYj4=";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [ xar ];
+  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -48,9 +48,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = finalAttrs.finalPackage; };
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Compiler for the C3 language";

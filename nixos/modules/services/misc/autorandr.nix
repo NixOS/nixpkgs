@@ -1,32 +1,29 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.autorandr;
-  hookType = types.lines;
+  hookType = lib.types.lines;
 
   matrixOf = n: m: elemType:
-  mkOptionType rec {
+  lib.mkOptionType rec {
     name = "matrixOf";
     description =
       "${toString n}×${toString m} matrix of ${elemType.description}s";
     check = xss:
-      let listOfSize = l: xs: isList xs && length xs == l;
+      let listOfSize = l: xs: lib.isList xs && lib.length xs == l;
       in listOfSize n xss
-      && all (xs: listOfSize m xs && all elemType.check xs) xss;
-    merge = mergeOneOption;
+      && lib.all (xs: listOfSize m xs && lib.all elemType.check xs) xss;
+    merge = lib.mergeOneOption;
     getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "*" "*" ]);
     getSubModules = elemType.getSubModules;
     substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-    functor = (defaultFunctor name) // { wrapped = elemType; };
+    functor = (lib.defaultFunctor name) // { wrapped = elemType; };
   };
 
-  profileModule = types.submodule {
+  profileModule = lib.types.submodule {
     options = {
-      fingerprint = mkOption {
-        type = types.attrsOf types.str;
+      fingerprint = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
         description = ''
           Output name to EDID mapping.
           Use `autorandr --fingerprint` to get current setup values.
@@ -34,13 +31,13 @@ let
         default = { };
       };
 
-      config = mkOption {
-        type = types.attrsOf configModule;
+      config = lib.mkOption {
+        type = lib.types.attrsOf configModule;
         description = "Per output profile configuration.";
         default = { };
       };
 
-      hooks = mkOption {
+      hooks = lib.mkOption {
         type = hooksModule;
         description = "Profile hook scripts.";
         default = { };
@@ -48,66 +45,66 @@ let
     };
   };
 
-  configModule = types.submodule {
+  configModule = lib.types.submodule {
     options = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         description = "Whether to enable the output.";
         default = true;
       };
 
-      crtc = mkOption {
-        type = types.nullOr types.ints.unsigned;
+      crtc = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.unsigned;
         description = "Output video display controller.";
         default = null;
         example = 0;
       };
 
-      primary = mkOption {
-        type = types.bool;
+      primary = lib.mkOption {
+        type = lib.types.bool;
         description = "Whether output should be marked as primary";
         default = false;
       };
 
-      position = mkOption {
-        type = types.str;
+      position = lib.mkOption {
+        type = lib.types.str;
         description = "Output position";
         default = "";
         example = "5760x0";
       };
 
-      mode = mkOption {
-        type = types.str;
+      mode = lib.mkOption {
+        type = lib.types.str;
         description = "Output resolution.";
         default = "";
         example = "3840x2160";
       };
 
-      rate = mkOption {
-        type = types.str;
+      rate = lib.mkOption {
+        type = lib.types.str;
         description = "Output framerate.";
         default = "";
         example = "60.00";
       };
 
-      gamma = mkOption {
-        type = types.str;
+      gamma = lib.mkOption {
+        type = lib.types.str;
         description = "Output gamma configuration.";
         default = "";
         example = "1.0:0.909:0.833";
       };
 
-      rotate = mkOption {
-        type = types.nullOr (types.enum [ "normal" "left" "right" "inverted" ]);
+      rotate = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "normal" "left" "right" "inverted" ]);
         description = "Output rotate configuration.";
         default = null;
         example = "left";
       };
 
-      transform = mkOption {
-        type = types.nullOr (matrixOf 3 3 types.float);
+      transform = lib.mkOption {
+        type = lib.types.nullOr (matrixOf 3 3 lib.types.float);
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             [ 0.6 0.0 0.0 ]
             [ 0.0 0.6 0.0 ]
@@ -121,30 +118,30 @@ let
         '';
       };
 
-      dpi = mkOption {
-        type = types.nullOr types.ints.positive;
+      dpi = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.positive;
         description = "Output DPI configuration.";
         default = null;
         example = 96;
       };
 
-      scale = mkOption {
-        type = types.nullOr (types.submodule {
+      scale = lib.mkOption {
+        type = lib.types.nullOr (lib.types.submodule {
           options = {
-            method = mkOption {
-              type = types.enum [ "factor" "pixel" ];
+            method = lib.mkOption {
+              type = lib.types.enum [ "factor" "pixel" ];
               description = "Output scaling method.";
               default = "factor";
               example = "pixel";
             };
 
-            x = mkOption {
-              type = types.either types.float types.ints.positive;
+            x = lib.mkOption {
+              type = lib.types.either lib.types.float lib.types.ints.positive;
               description = "Horizontal scaling factor/pixels.";
             };
 
-            y = mkOption {
-              type = types.either types.float types.ints.positive;
+            y = lib.mkOption {
+              type = lib.types.either lib.types.float lib.types.ints.positive;
               description = "Vertical scaling factor/pixels.";
             };
           };
@@ -164,7 +161,7 @@ let
           exclusive.
         '';
         default = null;
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             x = 1.25;
             y = 1.25;
@@ -174,22 +171,22 @@ let
     };
   };
 
-  hooksModule = types.submodule {
+  hooksModule = lib.types.submodule {
     options = {
-      postswitch = mkOption {
-        type = types.attrsOf hookType;
+      postswitch = lib.mkOption {
+        type = lib.types.attrsOf hookType;
         description = "Postswitch hook executed after mode switch.";
         default = { };
       };
 
-      preswitch = mkOption {
-        type = types.attrsOf hookType;
+      preswitch = lib.mkOption {
+        type = lib.types.attrsOf hookType;
         description = "Preswitch hook executed before mode switch.";
         default = { };
       };
 
-      predetect = mkOption {
-        type = types.attrsOf hookType;
+      predetect = lib.mkOption {
+        type = lib.types.attrsOf hookType;
         description = ''
           Predetect hook executed before autorandr attempts to run xrandr.
         '';
@@ -199,37 +196,37 @@ let
   };
 
   hookToFile = folder: name: hook:
-    nameValuePair "xdg/autorandr/${folder}/${name}" {
+    lib.nameValuePair "xdg/autorandr/${folder}/${name}" {
       source = "${pkgs.writeShellScriptBin "hook" hook}/bin/hook";
     };
   profileToFiles = name: profile:
     with profile;
-    mkMerge ([
+    lib.mkMerge ([
       {
-        "xdg/autorandr/${name}/setup".text = concatStringsSep "\n"
-          (mapAttrsToList fingerprintToString fingerprint);
+        "xdg/autorandr/${name}/setup".text = lib.concatStringsSep "\n"
+          (lib.mapAttrsToList fingerprintToString fingerprint);
         "xdg/autorandr/${name}/config".text =
-          concatStringsSep "\n" (mapAttrsToList configToString profile.config);
+          lib.concatStringsSep "\n" (lib.mapAttrsToList configToString profile.config);
       }
-      (mapAttrs' (hookToFile "${name}/postswitch.d") hooks.postswitch)
-      (mapAttrs' (hookToFile "${name}/preswitch.d") hooks.preswitch)
-      (mapAttrs' (hookToFile "${name}/predetect.d") hooks.predetect)
+      (lib.mapAttrs' (hookToFile "${name}/postswitch.d") hooks.postswitch)
+      (lib.mapAttrs' (hookToFile "${name}/preswitch.d") hooks.preswitch)
+      (lib.mapAttrs' (hookToFile "${name}/predetect.d") hooks.predetect)
     ]);
   fingerprintToString = name: edid: "${name} ${edid}";
   configToString = name: config:
     if config.enable then
-      concatStringsSep "\n" ([ "output ${name}" ]
-        ++ optional (config.position != "") "pos ${config.position}"
-        ++ optional (config.crtc != null) "crtc ${toString config.crtc}"
-        ++ optional config.primary "primary"
-        ++ optional (config.dpi != null) "dpi ${toString config.dpi}"
-        ++ optional (config.gamma != "") "gamma ${config.gamma}"
-        ++ optional (config.mode != "") "mode ${config.mode}"
-        ++ optional (config.rate != "") "rate ${config.rate}"
-        ++ optional (config.rotate != null) "rotate ${config.rotate}"
-        ++ optional (config.transform != null) ("transform "
-          + concatMapStringsSep "," toString (flatten config.transform))
-        ++ optional (config.scale != null)
+      lib.concatStringsSep "\n" ([ "output ${name}" ]
+        ++ lib.optional (config.position != "") "pos ${config.position}"
+        ++ lib.optional (config.crtc != null) "crtc ${toString config.crtc}"
+        ++ lib.optional config.primary "primary"
+        ++ lib.optional (config.dpi != null) "dpi ${toString config.dpi}"
+        ++ lib.optional (config.gamma != "") "gamma ${config.gamma}"
+        ++ lib.optional (config.mode != "") "mode ${config.mode}"
+        ++ lib.optional (config.rate != "") "rate ${config.rate}"
+        ++ lib.optional (config.rotate != null) "rotate ${config.rotate}"
+        ++ lib.optional (config.transform != null) ("transform "
+          + lib.concatMapStringsSep "," toString (lib.flatten config.transform))
+        ++ lib.optional (config.scale != null)
         ((if config.scale.method == "factor" then "scale" else "scale-from")
           + " ${toString config.scale.x}x${toString config.scale.y}"))
     else ''
@@ -242,11 +239,11 @@ in {
   options = {
 
     services.autorandr = {
-      enable = mkEnableOption "handling of hotplug and sleep events by autorandr";
+      enable = lib.mkEnableOption "handling of hotplug and sleep events by autorandr";
 
-      defaultTarget = mkOption {
+      defaultTarget = lib.mkOption {
         default = "default";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Fallback if no monitor layout can be detected. See the docs
           (https://github.com/phillipberndt/autorandr/blob/v1.0/README.md#how-to-use)
@@ -254,23 +251,23 @@ in {
         '';
       };
 
-      ignoreLid = mkOption {
+      ignoreLid = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Treat outputs as connected even if their lids are closed";
       };
 
-      matchEdid = mkOption {
+      matchEdid = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Match displays based on edid instead of name";
       };
 
-      hooks = mkOption {
+      hooks = lib.mkOption {
         type = hooksModule;
         description = "Global hook scripts";
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             postswitch = {
               "notify-i3" = "''${pkgs.i3}/bin/i3-msg restart";
@@ -296,11 +293,11 @@ in {
           }
         '';
       };
-      profiles = mkOption {
-        type = types.attrsOf profileModule;
+      profiles = lib.mkOption {
+        type = lib.types.attrsOf profileModule;
         description = "Autorandr profiles specification.";
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             "work" = {
               fingerprint = {
@@ -330,17 +327,17 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.udev.packages = [ pkgs.autorandr ];
 
     environment = {
       systemPackages = [ pkgs.autorandr ];
-      etc = mkMerge ([
-        (mapAttrs' (hookToFile "postswitch.d") cfg.hooks.postswitch)
-        (mapAttrs' (hookToFile "preswitch.d") cfg.hooks.preswitch)
-        (mapAttrs' (hookToFile "predetect.d") cfg.hooks.predetect)
-        (mkMerge (mapAttrsToList profileToFiles cfg.profiles))
+      etc = lib.mkMerge ([
+        (lib.mapAttrs' (hookToFile "postswitch.d") cfg.hooks.postswitch)
+        (lib.mapAttrs' (hookToFile "preswitch.d") cfg.hooks.preswitch)
+        (lib.mapAttrs' (hookToFile "predetect.d") cfg.hooks.predetect)
+        (lib.mkMerge (lib.mapAttrsToList profileToFiles cfg.profiles))
       ]);
     };
 
@@ -357,8 +354,8 @@ in {
             --batch \
             --change \
             --default ${cfg.defaultTarget} \
-            ${optionalString cfg.ignoreLid "--ignore-lid"} \
-            ${optionalString cfg.matchEdid "--match-edid"}
+            ${lib.optionalString cfg.ignoreLid "--ignore-lid"} \
+            ${lib.optionalString cfg.matchEdid "--match-edid"}
         '';
         Type = "oneshot";
         RemainAfterExit = false;
@@ -368,5 +365,5 @@ in {
 
   };
 
-  meta.maintainers = with maintainers; [ alexnortung ];
+  meta.maintainers = with lib.maintainers; [ alexnortung ];
 }

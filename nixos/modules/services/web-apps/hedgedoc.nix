@@ -26,7 +26,7 @@ in
     (lib.mkRemovedOptionModule [ "services" "hedgedoc" "workDir" ] ''
       This option has been removed in favor of systemd managing the state directory.
 
-      If you have set this option without specifying `services.settings.uploadsDir`,
+      If you have set this option without specifying `services.hedgedoc.settings.uploadsPath`,
       please move these files to `/var/lib/hedgedoc/uploads`, or set the option to point
       at the correct location.
     '')

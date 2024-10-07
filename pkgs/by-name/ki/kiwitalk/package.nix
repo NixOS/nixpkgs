@@ -1,16 +1,15 @@
 { lib
 , fetchFromGitHub
-, copyDesktopItems
 , stdenv
 , rustc
 , rustPlatform
 , cargo
 , cargo-tauri
+, desktop-file-utils
 , openssl
 , libayatana-appindicator
 , webkitgtk
 , pkg-config
-, makeDesktopItem
 , pnpm
 , nodejs
 }:
@@ -28,7 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+      --replace-warn "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
   pnpmDeps = pnpm.fetchDeps {
@@ -48,10 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri.hook
+    desktop-file-utils
     nodejs
     pnpm.configHook
-    copyDesktopItems
     pkg-config
   ];
 
@@ -61,27 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     webkitgtk
   ];
 
-  preBuild = ''
-    cargo tauri build -b deb
+  postInstall = lib.optionalString stdenv.isLinux ''
+    desktop-file-edit \
+      --set-comment "An UNOFFICIAL cross-platform KakaoTalk client" \
+      --set-key="Categories" --set-value="Network;InstantMessaging;" \
+      $out/share/applications/kiwi-talk.desktop
   '';
-
-  preInstall = ''
-    mv target/release/bundle/deb/*/data/usr/ $out
-    # delete the generated desktop entry
-    rm -r $out/share/applications
-  '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "KiwiTalk";
-      exec = "kiwi-talk";
-      icon = "kiwi-talk";
-      desktopName = "KiwiTalk";
-      comment = "An UNOFFICIAL cross-platform KakaoTalk client";
-      categories = [ "Network" "InstantMessaging" ];
-      terminal = false;
-    })
-  ];
 
   meta = with lib; {
     description = "UNOFFICIAL cross-platform KakaoTalk client written in TypeScript & Rust (SolidJS, tauri)";

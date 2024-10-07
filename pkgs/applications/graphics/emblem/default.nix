@@ -49,11 +49,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libadwaita
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Wno-error=incompatible-function-pointer-types"
   ]);
 

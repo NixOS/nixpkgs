@@ -17,6 +17,10 @@ let
     extraConfig = mkPhpIni cfg.phpOptions;
   };
 
+  # "you're escaped" -> "'you\'re escaped'"
+  # https://www.php.net/manual/en/language.types.string.php#language.types.string.syntax.single
+  toPhpString = s: "'${escape [ "'" "\\" ] s}'";
+
   dokuwikiAclAuthConfig = hostName: cfg: let
     inherit (cfg) acl;
     acl_gen = concatMapStringsSep "\n" (l: "${l.page} \t ${l.actor} \t ${toString l.level}");
@@ -43,12 +47,12 @@ let
   mkPhpValue = v: let
     isHasAttr = s: isAttrs v && hasAttr s v;
   in
-    if isString v then escapeShellArg v
+    if isString v then toPhpString v
     # NOTE: If any value contains a , (comma) this will not get escaped
-    else if isList v && any lib.strings.isCoercibleToString v then escapeShellArg (concatMapStringsSep "," toString v)
+    else if isList v && any lib.strings.isCoercibleToString v then toPhpString (concatMapStringsSep "," toString v)
     else if isInt v then toString v
     else if isBool v then toString (if v then 1 else 0)
-    else if isHasAttr "_file" then "trim(file_get_contents(${lib.escapeShellArg v._file}))"
+    else if isHasAttr "_file" then "trim(file_get_contents(${toPhpString v._file}))"
     else if isHasAttr "_raw" then v._raw
     else abort "The dokuwiki localConf value ${lib.generators.toPretty {} v} can not be encoded."
   ;
@@ -59,7 +63,7 @@ let
       [" = ${mkPhpValue v};"]
     else
       mkPhpAttrVals v;
-  in map (e: "[${escapeShellArg k}]${e}") (flatten values);
+  in map (e: "[${toPhpString k}]${e}") (flatten values);
 
   dokuwikiLocalConfig = hostName: cfg: let
     conf_gen = c: map (v: "$conf${v}") (mkPhpAttrVals c);

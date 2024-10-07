@@ -2,15 +2,16 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
-  pkg-config,
-  wayland-scanner,
   makeWrapper,
+  pkg-config,
   wrapQtAppsHook,
   nix-update-script,
+  hyprland,
   hyprland-protocols,
   hyprlang,
+  hyprutils,
+  hyprwayland-scanner,
   libdrm,
   mesa,
   pipewire,
@@ -18,35 +19,39 @@
   qttools,
   qtwayland,
   sdbus-cpp,
+  slurp,
   systemd,
   wayland,
   wayland-protocols,
-  hyprland,
-  hyprpicker,
-  slurp,
+  wayland-scanner,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.3";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-cyyxu/oj4QEFp3CVx2WeXa9T4OAUyynuBJHGkBZSxJI=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-1DGktDtSWIJpnDbVoj/qpvJSH5zg6JbOfuh6xqZMap0=";
   };
+
+  depsBuildBuild = [
+    pkg-config
+  ];
 
   nativeBuildInputs = [
     cmake
-    pkg-config
-    wayland-scanner
     makeWrapper
+    pkg-config
     wrapQtAppsHook
+    hyprwayland-scanner
   ];
 
   buildInputs = [
     hyprland-protocols
     hyprlang
+    hyprutils
     libdrm
     mesa
     pipewire
@@ -57,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     wayland
     wayland-protocols
+    wayland-scanner
   ];
 
   dontWrapQtApps = true;
@@ -72,12 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       }
 
     wrapProgramShell $out/libexec/xdg-desktop-portal-hyprland \
-      --prefix PATH ":" ${
-        lib.makeBinPath [
-          (placeholder "out")
-          hyprpicker
-        ]
-      }
+      --prefix PATH ":" ${lib.makeBinPath [ (placeholder "out") ]}
   '';
 
   passthru = {

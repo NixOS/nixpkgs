@@ -55,7 +55,7 @@ let
     cp ${./cpp-test-MODULE.bazel} $out/MODULE.bazel
     cp ${./cpp-test-MODULE.bazel.lock} $out/MODULE.bazel.lock
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));

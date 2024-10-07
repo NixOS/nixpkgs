@@ -64,16 +64,16 @@ def update_file(relpath, variant, version, suffix, sha256):
         for line in f:
             result = line
             result = re.sub(
-                fr'^    version = ".+"; #{variant}',
-                f'    version = "{version}"; #{variant}',
+                fr'^      version = ".+"; #{variant}',
+                f'      version = "{version}"; #{variant}',
                 result)
             result = re.sub(
-                fr'^    suffix = ".+"; #{variant}',
-                f'    suffix = "{suffix}"; #{variant}',
+                fr'^      suffix = ".+"; #{variant}',
+                f'      suffix = "{suffix}"; #{variant}',
                 result)
             result = re.sub(
-                fr'^    sha256 = ".+"; #{variant}',
-                f'    sha256 = "{sha256}"; #{variant}',
+                fr'^      sha256 = ".+"; #{variant}',
+                f'      sha256 = "{sha256}"; #{variant}',
                 result)
             print(result, end='')
 

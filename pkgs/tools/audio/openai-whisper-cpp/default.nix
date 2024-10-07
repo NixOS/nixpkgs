@@ -25,13 +25,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.6.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${finalAttrs.version}" ;
-    hash = "sha256-hIEIu7feOZWqxRskf6Ej7l653/9KW8B3cnpPLoCRBAc=";
+    hash = "sha256-obAXqqQEs7lkv6v1vl3aN+Vh6wPSYSXXbI6mlee6/QM=";
   };
 
   # The upstream download script tries to download the models to the
@@ -50,7 +50,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
       SDL2
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreGraphics
       CoreML
@@ -70,7 +70,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
       --replace '${cudaOldStr}' '${cudaNewStr}'
   '';
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
     WHISPER_METAL_EMBED_LIBRARY = "1";

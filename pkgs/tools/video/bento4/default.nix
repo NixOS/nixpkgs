@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_ARCHITECTURES="
   ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Patch binaries to use our dylib
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     find $out/bin -maxdepth 1 -executable -type f -exec install_name_tool -change @rpath/libap4.dylib $out/lib/libap4.dylib {} \;
   '';
 

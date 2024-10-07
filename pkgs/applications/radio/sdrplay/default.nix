@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, autoPatchelfHook, udev, libusb1 }:
 let
   arch =
-    if stdenv.isx86_64 then "x86_64"
-    else if stdenv.isi686 then "i686"
-    else if stdenv.isAarch64 then "aarch64"
+    if stdenv.hostPlatform.isx86_64 then "x86_64"
+    else if stdenv.hostPlatform.isi686 then "i686"
+    else if stdenv.hostPlatform.isAarch64 then "aarch64"
     else throw "unsupported architecture";
 
   version = "3.07.1";

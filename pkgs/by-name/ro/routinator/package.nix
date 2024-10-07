@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-1JxAbQPCQqDVry3wGIdY4q18rzCXlJ7Dnc8LIvhkW1g=";
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security SystemConfiguration ]);
 
   meta = with lib; {
     description = "RPKI Validator written in Rust";

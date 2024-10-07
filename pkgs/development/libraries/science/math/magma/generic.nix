@@ -31,7 +31,7 @@
 
 
 let
-  inherit (lib) lists strings trivial;
+  inherit (lib) getLib lists strings trivial;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
   # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
@@ -133,6 +133,7 @@ stdenv.mkDerivation {
     lapack
     blas
     python3
+    (getLib gfortran.cc) # libgfortran.so
   ] ++ lists.optionals cudaSupport (with effectiveCudaPackages; [
     cuda_cudart # cuda_runtime.h
     libcublas # cublas_v2.h

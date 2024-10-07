@@ -21,23 +21,23 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvpn";
-  version = "2.6.11";
+  version = "2.6.12";
 
   src = fetchurl {
     url = "https://swupdate.openvpn.net/community/releases/openvpn-${finalAttrs.version}.tar.gz";
-    hash = "sha256-1grfQT034R5uY1McrPJlWQZ1YEa07f/oihO54v7EDV4=";
+    hash = "sha256-HGEP3etobjTxNnw0fgJ+QY4HUjoQ9NjOSiwq8vYaGSk=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ lz4 lzo openssl ]
-    ++ optionals stdenv.isLinux [ libcap_ng libnl pam ]
+    ++ optionals stdenv.hostPlatform.isLinux [ libcap_ng libnl pam ]
     ++ optional useSystemd systemd
     ++ optional pkcs11Support pkcs11helper;
 
   configureFlags = optional useSystemd "--enable-systemd"
     ++ optional pkcs11Support "--enable-pkcs11"
-    ++ optional stdenv.isDarwin "--disable-plugin-auth-pam";
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-plugin-auth-pam";
 
   # We used to vendor the update-systemd-resolved script inside libexec,
   # but a separate package was made, that uses libexec/openvpn. Copy it

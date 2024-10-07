@@ -25,7 +25,7 @@ buildPythonApplication rec {
     pyserial
     setuptools
     wxpython
-  ] ++ lib.optionals stdenv.isDarwin [ billiard gnureadline ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ billiard gnureadline ];
 
   # No tests
   doCheck = false;

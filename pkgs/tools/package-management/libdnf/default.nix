@@ -1,38 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gettext
-, pkg-config
-, libsolv
-, openssl
-, check
-, json_c
-, libmodulemd
-, libsmartcols
-, sqlite
-, librepo
-, libyaml
-, rpm
-, zchunk
-, cppunit
-, python
-, swig
-, glib
-, sphinx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  pkg-config,
+  libsolv,
+  openssl,
+  check,
+  json_c,
+  libmodulemd,
+  libsmartcols,
+  sqlite,
+  librepo,
+  libyaml,
+  rpm,
+  zchunk,
+  cppunit,
+  python,
+  swig,
+  pcre2,
+  sphinx,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
-  version = "0.73.2";
+  version = "0.73.3";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-tdAbkIb3BAhNKFbjIGHEdVNwh3E1sKFLP+L4MhifsQM=";
+    hash = "sha256-XzPpjnmL2wwLZnLAJLuOQGWXAoCJnij14P6qSXglMhY=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +58,7 @@ stdenv.mkDerivation rec {
     python
     swig
     sphinx
+    pcre2.dev
   ];
 
   propagatedBuildInputs = [
@@ -67,9 +73,7 @@ stdenv.mkDerivation rec {
     cp ${libsolv}/share/cmake/Modules/FindLibSolv.cmake cmake/modules/
   '';
 
-  patches = [
-    ./fix-python-install-dir.patch
-  ];
+  patches = [ ./fix-python-install-dir.patch ];
 
   postPatch = ''
     # https://github.com/rpm-software-management/libdnf/issues/1518
@@ -82,7 +86,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DPYTHON_DESIRED=${lib.head (lib.splitString ["."] python.version)}"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString [ "." ] python.version)}"
   ];
 
   postInstall = ''
@@ -93,12 +97,15 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Package management library";
     homepage = "https://github.com/rpm-software-management/libdnf";
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k katexochen ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
+      rb2k
+      katexochen
+    ];
   };
 }

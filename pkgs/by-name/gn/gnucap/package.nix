@@ -20,7 +20,7 @@ It performs nonlinear dc and transient analyses, fourier analysis, and ac analys
     changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Relies on LD_LIBRARY_PATH
+    broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH
     maintainers = [ maintainers.raboof ];
     mainProgram = "gnucap";
   };
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/gnucap-${version}.tar.gz";
     hash = "sha256-MUCtGw3BxGWgXgUwzklq5T1y9kjBTnFBa0/GK0hhl0E=";
   };
 

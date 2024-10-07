@@ -6,12 +6,22 @@
   pyparsing,
   typing-extensions,
   pytestCheckHook,
+  setuptools,
+  cython,
+  numpy,
+  fonttools,
+  pillow,
+  pyside6,
+  matplotlib,
+  pymupdf,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
-  version = "0.18.1";
+  version = "1.3.2";
   pname = "ezdxf";
-  format = "setuptools";
+
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -19,27 +29,39 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x1p9dWrbDtDreXdBuzOA4Za+ZC40y4xdEU7MGb9uUec=";
+    hash = "sha256-BzdLl2GjLh2ABJzJ6bhdbic9jlSABIVR3XGrYiLJHa0=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyparsing
     typing-extensions
+    numpy
+    fonttools
   ];
+
+  optional-dependencies = {
+    draw = [
+      pyside6
+      matplotlib
+      pymupdf
+      pillow
+    ];
+    draw5 = [
+      pyqt5
+      matplotlib
+      pymupdf
+      pillow
+    ];
+  };
+
+  build-system = [
+    setuptools
+    cython
+  ];
+
+  checkInputs = [ pillow ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  disabledTests = [
-    # requires geomdl dependency
-    "TestNurbsPythonCorrectness"
-    "test_rational_spline_curve_points_by_nurbs_python"
-    "test_rational_spline_derivatives_by_nurbs_python"
-    "test_from_nurbs_python_curve_to_ezdxf_bspline"
-    "test_from_ezdxf_bspline_to_nurbs_python_curve_non_rational"
-    "test_from_ezdxf_bspline_to_nurbs_python_curve_rational"
-    # AssertionError: assert 44.99999999999999 == 45
-    "test_dimension_transform_interface"
-  ];
 
   pythonImportsCheck = [
     "ezdxf"

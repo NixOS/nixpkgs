@@ -1,7 +1,8 @@
 { lib
 , fetchFromGitHub
 , fetchpatch
-, python3
+, python311
+, python311Packages
 , glibcLocales
 , gobject-introspection
 , wrapGAppsHook3
@@ -15,7 +16,7 @@
 , nixosTests
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python311Packages.buildPythonApplication rec {
   pname = "guake";
   version = "3.10";
 
@@ -55,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook3
-    python3.pkgs.pip
+    python311Packages.pip
   ];
 
   buildInputs = [
@@ -64,13 +65,13 @@ python3.pkgs.buildPythonApplication rec {
     keybinder3
     libnotify
     libwnck
-    python3
+    python311
     vte
   ];
 
   makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311Packages; [
     dbus-python
     pycairo
     pygobject3
@@ -96,7 +97,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Drop-down terminal for GNOME";
     homepage = "http://guake-project.org";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.msteen ];
+    maintainers = [ maintainers.msteen maintainers.heywoodlh ];
     platforms = platforms.linux;
   };
 }

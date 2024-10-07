@@ -5,10 +5,10 @@
 stdenv.mkDerivation ({
   buildInputs = buildInputs ++ [R gettext] ++
                 lib.optionals requireX [util-linux xvfb-run] ++
-                lib.optionals stdenv.isDarwin [Cocoa Foundation gfortran libiconv];
+                lib.optionals stdenv.hostPlatform.isDarwin [Cocoa Foundation gfortran libiconv];
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+    lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   enableParallelBuilding = true;
 

@@ -78,11 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
     scitokens-cpp
     zlib
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     # https://github.com/xrootd/xrootd/blob/5b5a1f6957def2816b77ec773c7e1bfb3f1cfc5b/cmake/XRootDFindLibs.cmake#L58
     fuse
   ]
-  ++ lib.optionals stdenv.isLinux [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     systemd
     voms
   ]
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs genversion.sh
     substituteInPlace cmake/XRootDConfig.cmake.in \
       --replace-fail "@PACKAGE_CMAKE_INSTALL_" "@CMAKE_INSTALL_FULL_"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i cmake/XRootDOSDefs.cmake -e '/set( MacOSX TRUE )/ainclude( GNUInstallDirs )'
   '';
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
   + ''
     moveToOutput "bin/xrootd-config" "$dev"
     moveToOutput "bin/.xrootd-config-wrapped" "$dev"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p "$out/lib/systemd/system"
     install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
   '';
@@ -127,12 +127,12 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableTestRunner [
     "-DFORCE_ENABLED=TRUE"
     "-DENABLE_DAVIX=TRUE"
-    "-DENABLE_FUSE=${if (!stdenv.isDarwin) then "TRUE" else "FALSE"}" # not supported
+    "-DENABLE_FUSE=${if (!stdenv.hostPlatform.isDarwin) then "TRUE" else "FALSE"}" # not supported
     "-DENABLE_MACAROONS=OFF"
     "-DENABLE_PYTHON=FALSE" # built separately
     "-DENABLE_SCITOKENS=TRUE"
     "-DENABLE_TESTS=TRUE"
-    "-DENABLE_VOMS=${if stdenv.isLinux then "TRUE" else "FALSE"}"
+    "-DENABLE_VOMS=${if stdenv.hostPlatform.isLinux then "TRUE" else "FALSE"}"
   ];
 
   postFixup = lib.optionalString (externalEtc != null) ''

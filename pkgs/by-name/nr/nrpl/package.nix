@@ -8,7 +8,7 @@ buildNimPackage {
     owner  = "wheineman";
     repo   = "nrpl";
     rev    = "6d6c189ab7d1c905cc29dc678d66e9e132026f69";
-    sha256 = "1cly9lhrawnc42r31b7r0p0i6hcx8r00aa17gv7w9pcpj8ngb4v2";
+    hash = "sha256-YpP1LJKX3cTPficoBUBGnUETwQX5rDCyIMxylSFNnrI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -18,7 +18,7 @@ buildNimPackage {
     (fetchpatch {
       url    = "https://patch-diff.githubusercontent.com/raw/wheineman/nrpl/pull/12.patch";
       name   = "update_for_new_nim.patch";
-      sha256 = "1zff7inhn3l1jnxcnidy705lzi3wqib1chf4rayh1g9i23an7wg1";
+      hash = "sha256-4fFj1RAxvQC9ysRBFlbEfMRPCzi+Rcu6lYEOC208zv0=";
     })
   ];
 

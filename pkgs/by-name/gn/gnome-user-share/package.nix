@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
-    sha256 = "DfMGqgVYMT81Pvf1G/onwDYoGtxFZ34c+/p8n4YVOM4=";
+    hash = "sha256-DfMGqgVYMT81Pvf1G/onwDYoGtxFZ34c+/p8n4YVOM4=";
   };
 
   preConfigure = ''
@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-user-share";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-user-share/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Service that exports the contents of the Public folder in your home directory on the local network";
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;

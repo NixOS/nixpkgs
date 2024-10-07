@@ -50,7 +50,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     entrypoints = [ ];
     abfs = [ adlfs ];
     adl = [ adlfs ];
@@ -110,10 +110,10 @@ buildPythonPackage rec {
       "test_urlpath_inference_errors"
       "test_mismatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # works locally on APFS, fails on hydra with AssertionError comparing timestamps
       # darwin hydra builder uses HFS+ and has only one second timestamp resolution
-      # this two tests however, assume nanosecond resolution
+      # this two tests however, assume nanosecond resolution
       "test_modified"
       "test_touch"
       # tries to access /home, ignores $HOME

@@ -49,7 +49,7 @@ in {
 
   config = mkIf cfg.enable {
     environment.ldso = mkDefault stub-ld;
-    environment.ldso32 = mkIf pkgs.stdenv.isx86_64 (mkDefault stub-ld32);
+    environment.ldso32 = mkIf pkgs.stdenv.hostPlatform.isx86_64 (mkDefault stub-ld32);
   };
 
   meta.maintainers = with lib.maintainers; [ tejing ];

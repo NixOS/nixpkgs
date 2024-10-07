@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ablog";
-  version = "0.11.10";
+  version = "0.11.11";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "sunpy";
     repo = "ablog";
     rev = "v${version}";
-    hash = "sha256-8NyFLGtMJLUkojEhWpWNZz3zlfgGVgSvgk4dDEz1jzs=";
+    hash = "sha256-Hx4iLO+Of2o4tmIDS17SxyswbW2+KMoD4BjB4q1KU9M=";
   };
 
   nativeBuildInputs = with python3.pkgs; [

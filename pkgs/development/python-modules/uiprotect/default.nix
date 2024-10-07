@@ -30,6 +30,7 @@
   ffmpeg,
   pytest-asyncio,
   pytest-benchmark,
+  pytest-cov-stub,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
@@ -37,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "5.4.0";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -46,16 +47,15 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LwG8X1UHsGL7jw4au2Jeo6pcsnRK23rqB5aFBQRTGmI=";
+    hash = "sha256-SWEWh1c5GcMrjJlcLtXScRNoem2ACGt3nFC4+ARMIIw=";
   };
-
-  postPatch = ''
-    sed -i "/addopts =/d" pyproject.toml
-  '';
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "pydantic" ];
+  pythonRelaxDeps = [
+    "aiofiles"
+    "pydantic"
+  ];
 
   dependencies = [
     aiofiles
@@ -81,6 +81,7 @@ buildPythonPackage rec {
     ffmpeg # Required for command ffprobe
     pytest-asyncio
     pytest-benchmark
+    pytest-cov-stub
     pytest-timeout
     pytest-xdist
     pytestCheckHook
@@ -88,10 +89,16 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
+  disabledTests = [
+    # https://127.0.0.1 vs https://127.0.0.1:0
+    "test_base_url"
+    "test_bootstrap"
+  ];
+
   pythonImportsCheck = [ "uiprotect" ];
 
   meta = with lib; {
-    description = "Python API for UniFi Protect (Unofficial";
+    description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
     changelog = "https://github.com/uilibs/uiprotect/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

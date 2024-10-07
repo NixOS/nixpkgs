@@ -48,10 +48,7 @@ in {
 
   nodes = {
     machine = { pkgs, lib, ... }: {
-      system.switch = {
-        enable = !ng;
-        enableNg = ng;
-      };
+      system.switch.enableNg = ng;
 
       environment.systemPackages = [ pkgs.socat ]; # for the socket activation stuff
       users.mutableUsers = false;
@@ -261,6 +258,15 @@ in {
         unitWithBackslashModified.configuration = {
           imports = [ unitWithBackslash.configuration ];
           systemd.services."escaped\\x2ddash".serviceConfig.X-Test = "test";
+        };
+
+        unitWithMultilineValue.configuration = {
+          systemd.services.test.serviceConfig.ExecStart = ''
+            ${pkgs.coreutils}/bin/true \
+            # ignored
+            ; ignored
+              blah blah
+          '';
         };
 
         unitStartingWithDash.configuration = {
@@ -594,6 +600,7 @@ in {
     };
 
     other = {
+      system.switch.enable = true;
       users.mutableUsers = true;
     };
   };
@@ -876,9 +883,16 @@ in {
         machine.succeed("! test -e /run/current-system/dry-activate")
         machine.succeed("! test -e /run/current-system/bin/switch-to-configuration")
 
+        # Ensure units with multiline values work
+        out = switch_to_specialisation("${machine}", "unitWithMultilineValue")
+        assert_lacks(out, "NOT restarting the following changed units:")
+        assert_lacks(out, "reloading the following units:")
+        assert_lacks(out, "restarting the following units:")
+        assert_lacks(out, "the following new units were started:")
+        assert_contains(out, "starting the following units: test.service")
+
         # Ensure \ works in unit names
         out = switch_to_specialisation("${machine}", "unitWithBackslash")
-        assert_contains(out, "stopping the following units: test.service\n")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "\nrestarting the following units:")

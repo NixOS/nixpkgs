@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     knownVulnerabilities = [
       "CVE-2023-29552: UDP Reflection Attack with ampliciation factor of up to 2200"
     ];

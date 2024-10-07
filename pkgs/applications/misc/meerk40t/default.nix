@@ -36,9 +36,9 @@ python3Packages.buildPythonApplication rec {
     setuptools
     wxpython
   ]
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  passthru.optional-dependencies = with python3Packages; {
+  optional-dependencies = with python3Packages; {
     cam = [
       opencv4
     ];

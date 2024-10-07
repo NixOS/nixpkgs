@@ -12,6 +12,7 @@
 , speex
 , jansson
 , libopus
+, nixosTests
 , withJanus ? true
 }:
 stdenv.mkDerivation rec {
@@ -52,6 +53,8 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  passthru.tests = { inherit (nixosTests) ustreamer; };
 
   meta = with lib; {
     homepage = "https://github.com/pikvm/ustreamer";

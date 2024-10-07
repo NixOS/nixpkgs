@@ -4,6 +4,7 @@
 , cmake
 , extra-cmake-modules
 , pkg-config
+, httplib
 , qtbase
 , qtimageformats
 , qtwebengine
@@ -21,13 +22,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeal";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "zealdocs";
     repo = "zeal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-918hWy5be5mHINLbFJPiE29wlL1kRUD4MS3AjML/6fs=";
+    hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
   };
 
   nativeBuildInputs = [
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    httplib
     libXdmcp
     libarchive
     libpthreadstubs

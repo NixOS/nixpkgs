@@ -1,4 +1,4 @@
-{ symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
+{ lib, symlinkJoin, makeWrapper, kakoune, plugins ? [], configure ? {} }:
 
 let
   # "plugins" is the preferred way, but some configurations may be
@@ -24,7 +24,7 @@ in
       rm "$out/bin/kak"
       makeWrapper "${kakoune}/bin/kak" "$out/bin/kak" \
         --set KAKOUNE_RUNTIME "$out/share/kak" \
-        --set PATH "$PATH:$out/share/kak/bin"
+        --suffix PATH : "$out/share/kak/bin"
 
       # currently kakoune ignores doc files if they are symlinks, so workaround by
       # copying doc files over, so they become regular files...
@@ -34,5 +34,5 @@ in
       rm -Rf "$out/DELETE_ME"
     '';
 
-    meta = kakoune.meta // { priority = (kakoune.meta.priority or 0) - 1; };
+    meta = kakoune.meta // { priority = (kakoune.meta.priority or lib.meta.defaultPriority) - 1; };
   }

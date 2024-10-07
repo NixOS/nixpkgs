@@ -13,17 +13,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unison-code-manager";
-  version = "0.5.24";
+  version = "0.5.27";
 
-  src = if stdenv.isDarwin then
+  src = if stdenv.hostPlatform.isDarwin then
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-macos.tar.gz";
-      hash = "sha256-5LVcN7ly0n68DFqIjA8EJabZa3WwJf1ueqgJ+gPHNbA=";
+      hash = "sha256-bmEmox+CfkGZP9GCfwDyspTult0WV+6jfQzehT33p8U=";
     }
   else
     fetchurl {
       url = "https://github.com/unisonweb/unison/releases/download/release/${finalAttrs.version}/ucm-linux.tar.gz";
-      hash = "sha256-nCNmUYkBWhXL2eN+uQblf7oPkiVwfAKi6v+Cb9Co19g=";
+      hash = "sha256-js7MgzJQShy6z1QNsIRwjtZfrNOGwUA001SWlKWgMoA=";
     };
 
   # The tarball is just the prebuilt binary, in the archive root.
@@ -32,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ gmp ncurses6 zlib ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ gmp ncurses6 zlib ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib}

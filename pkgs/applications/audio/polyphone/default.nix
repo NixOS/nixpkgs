@@ -1,55 +1,74 @@
-{ stdenv, lib, mkDerivation, fetchFromGitHub, qmake, pkg-config, alsa-lib, libjack2, portaudio, libogg, flac, libvorbis, rtmidi, qtsvg, qttools }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
+  alsa-lib,
+  flac,
+  libjack2,
+  libogg,
+  libvorbis,
+  qtsvg,
+  qtwayland,
+  rtmidi,
+}:
 
-mkDerivation rec {
-  version = "2.3.0";
+stdenv.mkDerivation rec {
+  version = "2.4.0";
   pname = "polyphone";
 
   src = fetchFromGitHub {
     owner = "davy7125";
     repo = "polyphone";
     rev = version;
-    sha256 = "09habv51pw71wrb39shqi80i2w39dx5a39klzswsald5j9sia0ir";
+    hash = "sha256-cPHLmqsS4ReqOCcsgOf77V/ShIkk7chGoJ6bU4W5ejs=";
   };
+
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
-    libjack2
-    portaudio
-    libogg
     flac
+    libjack2
+    libogg
     libvorbis
-    rtmidi
     qtsvg
+    qtwayland
+    rtmidi
   ];
-
-  nativeBuildInputs = [ qmake qttools pkg-config ];
 
   preConfigure = ''
     cd ./sources/
   '';
 
-  installPhase = ''
-    runHook preInstall
-    install -d $out/bin
-    install -m755 bin/polyphone $out/bin/
-
-    install -Dm444 ./contrib/com.polyphone_soundfonts.polyphone.desktop -t $out/share/applications/
-    install -Dm444 ./contrib/polyphone.svg -t $out/share/icons/hicolor/scalable/apps/
-    runHook postInstall
+  postConfigure = ''
+    # Work around https://github.com/NixOS/nixpkgs/issues/214765
+    substituteInPlace Makefile \
+      --replace-fail "$(dirname $QMAKE)/lrelease" "${lib.getBin qttools}/bin/lrelease"
   '';
 
   qmakeFlags = [
     "DEFINES+=USE_LOCAL_STK"
-    "DEFINES+=USE_LOCAL_QCUSTOMPLOT"
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Soundfont editor for creating musical instruments";
     mainProgram = "polyphone";
     homepage = "https://www.polyphone-soundfonts.com/";
     license = licenses.gpl3;
-    maintainers = [ maintainers.maxdamantus ];
+    maintainers = with maintainers; [
+      maxdamantus
+      orivej
+    ];
     platforms = platforms.linux;
   };
 }

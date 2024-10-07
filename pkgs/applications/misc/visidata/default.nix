@@ -40,7 +40,7 @@
 # other
 , git
 , withPcap ? true, dpkt, dnslib
-, withXclip ? stdenv.isLinux, xclip
+, withXclip ? stdenv.hostPlatform.isLinux, xclip
 , testers
 , visidata
 }:

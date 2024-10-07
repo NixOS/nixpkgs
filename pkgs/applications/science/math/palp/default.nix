@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace GNUmakefile --replace gcc cc
   '';
 

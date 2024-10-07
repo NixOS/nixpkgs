@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "osxphotos";
-  version = "0.68.3";
+  version = "0.68.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhetTbull";
     repo = "osxphotos";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KgdKqmrWPr0kBtIB80BMmLUAmf7CpA7JJeE4DjLal78=";
+    hash = "sha256-5cKxlfm4i743bJlS2HVPBO1Fbvz1c6wgkkG8Vle8Ajo=";
   };
 
   build-system = [ setuptools ];
@@ -107,6 +107,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/RhetTbull/osxphotos/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ sigmanificient ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

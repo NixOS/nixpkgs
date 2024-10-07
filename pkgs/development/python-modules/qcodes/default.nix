@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -38,13 +37,13 @@
   xarray,
 
   # optional-dependencies
+  furo,
   jinja2,
   nbsphinx,
   pyvisa-sim,
   scipy,
   sphinx,
   sphinx-issues,
-  sphinx-rtd-theme,
   towncrier,
   opencensus,
   opencensus-ext-azure,
@@ -63,16 +62,14 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.47.0";
+  version = "0.48.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gp+HeYJGWyW49jisadnavjIpzu7C2uS2qWn7eC6okqg=";
+    hash = "sha256-Q1WyuK1mCbs75kGY1Aaw7S5EfFRjwqzZnhNyeSx7qc8=";
   };
 
   build-system = [
@@ -112,6 +109,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     docs = [
       # autodocsumm
+      furo
       jinja2
       nbsphinx
       pyvisa-sim
@@ -121,7 +119,6 @@ buildPythonPackage rec {
       # sphinx-favicon
       sphinx-issues
       # sphinx-jsonschema
-      sphinx-rtd-theme
       # sphinxcontrib-towncrier
       towncrier
     ];
@@ -195,9 +192,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qcodes" ];
 
+  # Remove the `asyncio_default_fixture_loop_scope` option as it has been introduced in newer `pytest-asyncio` v0.24
+  # which is not in nixpkgs yet:
+  # pytest.PytestConfigWarning: Unknown config option: asyncio_default_fixture_loop_scope
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"'
+      --replace-fail 'default-version = "0.0"' 'default-version = "${version}"' \
+      --replace-fail 'asyncio_default_fixture_loop_scope = "function"' ""
   '';
 
   postInstall = ''

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   version = "4.10.0";
 
   src = fetchurl {
-    url = "mirror://gnu/findutils/${pname}-${version}.tar.xz";
+    url = "mirror://gnu/findutils/findutils-${version}.tar.xz";
     sha256 = "sha256-E4fgtn/yR9Kr3pmPkN+/cMFJE5Glnd/suK5ph4nwpPU=";
   };
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/cache"
   ];
 
-  CFLAGS = lib.optionals stdenv.isDarwin [
+  CFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     # TODO: Revisit upstream issue https://savannah.gnu.org/bugs/?59972
     # https://github.com/Homebrew/homebrew-core/pull/69761#issuecomment-770268478
     "-D__nonnull\\(params\\)="

@@ -42,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/bpython/curtsies/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ flokli ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

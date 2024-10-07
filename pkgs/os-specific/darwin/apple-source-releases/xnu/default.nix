@@ -5,7 +5,7 @@
 }:
 
 appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
-  let arch = if stdenv.isx86_64 then "x86_64" else "arm64";
+  let arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "arm64";
   in
   {
   depsBuildBuild = [ buildPackages.stdenv.cc ];

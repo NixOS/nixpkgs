@@ -1,4 +1,4 @@
-{ lib, stdenv, writeShellScript, buildFHSEnv, steam, glxinfo-i686
+{ lib, stdenv, writeShellScript, buildFHSEnv, steam, mesa-demos-i686
 , steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , extraLibraries ? pkgs: [ ] # extra packages to add to multiPkgs
@@ -23,7 +23,7 @@ let
     # Errors in output without those
     pciutils
     # run.sh wants ldconfig
-    glibc.bin
+    glibc_multi.bin
     # Games' dependencies
     xorg.xrandr
     which
@@ -46,7 +46,7 @@ let
     sqlite
   ] ++ extraPkgs pkgs;
 
-  ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
+  ldPath = lib.optionals stdenv.hostPlatform.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
   ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
   ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
@@ -60,8 +60,8 @@ let
   # bootstrap.tar.xz has 444 permissions, which means that simple deletes fail
   # and steam will not be able to start
   fixBootstrap = ''
-    if [ -r $HOME/.local/share/Steam/bootstrap.tar.xz ]; then
-      chmod +w $HOME/.local/share/Steam/bootstrap.tar.xz
+    if [ -r $HOME/.steam/steam/bootstrap.tar.xz ]; then
+      chmod +w $HOME/.steam/steam/bootstrap.tar.xz
     fi
   '';
 
@@ -125,8 +125,7 @@ in buildFHSEnv rec {
     xorg.libXi
     xorg.libSM
     xorg.libICE
-    gnome2.GConf
-    curlWithGnuTls
+    curl
     nspr
     nss
     cups
@@ -206,7 +205,6 @@ in buildFHSEnv rec {
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-plugins-base
     json-glib # paradox launcher (Stellaris)
-    libdrm
     libxkbcommon # paradox launcher
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
@@ -223,9 +221,7 @@ in buildFHSEnv rec {
     zlib
     atk
     cairo
-    freetype
     gdk-pixbuf
-    fontconfig
 
     # Prison Architect
     libGLU
@@ -271,10 +267,10 @@ in buildFHSEnv rec {
   '' + extraProfile;
 
   runScript = writeShellScript "steam-wrapper.sh" ''
-    if [ -f /host/etc/NIXOS ]; then   # Check only useful on NixOS
-      ${glxinfo-i686}/bin/glxinfo >/dev/null 2>&1
+    if [ -f /etc/NIXOS ]; then   # Check only useful on NixOS
+      ${mesa-demos-i686}/bin/glxinfo 2>&1 | grep -q Error
       # If there was an error running glxinfo, we know something is wrong with the configuration
-      if [ $? -ne 0 ]; then
+      if [ $? -eq 0 ]; then
         cat <<EOF > /dev/stderr
     **
     WARNING: Steam is not set up. Add the following options to /etc/nixos/configuration.nix
@@ -303,6 +299,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
+    "--bind-try /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
@@ -344,6 +341,10 @@ in buildFHSEnv rec {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
+      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
+      # steam is a dependency and already unfree, so normal steam-run will not install without
+      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
+      license = lib.licenses.mit;
     };
   };
 }

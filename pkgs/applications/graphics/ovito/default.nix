@@ -48,7 +48,7 @@ mkDerivation rec {
     qtbase
     qtsvg
     qttools
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     VideoDecodeAcceleration
   ];
 
@@ -58,6 +58,6 @@ mkDerivation rec {
     homepage = "https://ovito.org";
     license = with licenses;  [ gpl3Only mit ];
     maintainers = with maintainers; [ twhitehead ];
-    broken = stdenv.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
+    broken = stdenv.hostPlatform.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
 }

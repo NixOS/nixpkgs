@@ -33,7 +33,7 @@ python311Packages.buildPythonApplication rec {
       pytest-mock
     ]);
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "test_settings_defaults"
     "test_from_file"
     "test_from_env"

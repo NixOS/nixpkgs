@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
   buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   postInstall = ''

@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
 
   cfg = config.services.lighthouse;
@@ -8,47 +6,47 @@ in {
 
   options = {
     services.lighthouse = {
-      beacon = mkOption {
+      beacon = lib.mkOption {
         description = "Beacon node";
         default = {};
-        type = types.submodule {
+        type = lib.types.submodule {
           options = {
             enable = lib.mkEnableOption "Lightouse Beacon node";
 
-            dataDir = mkOption {
-              type = types.str;
+            dataDir = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/lighthouse-beacon";
               description = ''
                 Directory where data will be stored. Each chain will be stored under it's own specific subdirectory.
               '';
             };
 
-            address = mkOption {
-              type = types.str;
+            address = lib.mkOption {
+              type = lib.types.str;
               default = "0.0.0.0";
               description = ''
                 Listen address of Beacon node.
               '';
             };
 
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 9000;
               description = ''
                 Port number the Beacon node will be listening on.
               '';
             };
 
-            openFirewall = mkOption {
-              type = types.bool;
+            openFirewall = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Open the port in the firewall
               '';
             };
 
-            disableDepositContractSync = mkOption {
-              type = types.bool;
+            disableDepositContractSync = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Explicitly disables syncing of deposit logs from the execution node.
@@ -58,24 +56,24 @@ in {
             };
 
             execution = {
-              address = mkOption {
-                type = types.str;
+              address = lib.mkOption {
+                type = lib.types.str;
                 default = "127.0.0.1";
                 description = ''
                   Listen address for the execution layer.
                 '';
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 8551;
                 description = ''
                   Port number the Beacon node will be listening on for the execution layer.
                 '';
               };
 
-              jwtPath = mkOption {
-                type = types.str;
+              jwtPath = lib.mkOption {
+                type = lib.types.str;
                 default = "";
                 description = ''
                   Path for the jwt secret required to connect to the execution layer.
@@ -85,16 +83,16 @@ in {
 
             http = {
               enable = lib.mkEnableOption "Beacon node http api";
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 5052;
                 description = ''
                   Port number of Beacon node RPC service.
                 '';
               };
 
-              address = mkOption {
-                type = types.str;
+              address = lib.mkOption {
+                type = lib.types.str;
                 default = "127.0.0.1";
                 description = ''
                   Listen address of Beacon node RPC service.
@@ -104,16 +102,16 @@ in {
 
             metrics = {
               enable = lib.mkEnableOption "Beacon node prometheus metrics";
-              address = mkOption {
-                type = types.str;
+              address = lib.mkOption {
+                type = lib.types.str;
                 default = "127.0.0.1";
                 description = ''
                   Listen address of Beacon node metrics service.
                 '';
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 5054;
                 description = ''
                   Port number of Beacon node metrics service.
@@ -121,8 +119,8 @@ in {
               };
             };
 
-            extraArgs = mkOption {
-              type = types.str;
+            extraArgs = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 Additional arguments passed to the lighthouse beacon command.
               '';
@@ -133,27 +131,27 @@ in {
         };
       };
 
-      validator = mkOption {
+      validator = lib.mkOption {
         description = "Validator node";
         default = {};
-        type = types.submodule {
+        type = lib.types.submodule {
           options = {
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = "Enable Lightouse Validator node.";
             };
 
-            dataDir = mkOption {
-              type = types.str;
+            dataDir = lib.mkOption {
+              type = lib.types.str;
               default = "/var/lib/lighthouse-validator";
               description = ''
                 Directory where data will be stored. Each chain will be stored under it's own specific subdirectory.
               '';
             };
 
-            beaconNodes = mkOption {
-              type = types.listOf types.str;
+            beaconNodes = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
               default = ["http://localhost:5052"];
               description = ''
                 Beacon nodes to connect to.
@@ -162,16 +160,16 @@ in {
 
             metrics = {
               enable = lib.mkEnableOption "Validator node prometheus metrics";
-              address = mkOption {
-                type = types.str;
+              address = lib.mkOption {
+                type = lib.types.str;
                 default = "127.0.0.1";
                 description = ''
                   Listen address of Validator node metrics service.
                 '';
               };
 
-              port = mkOption {
-                type = types.port;
+              port = lib.mkOption {
+                type = lib.types.port;
                 default = 5056;
                 description = ''
                   Port number of Validator node metrics service.
@@ -179,8 +177,8 @@ in {
               };
             };
 
-            extraArgs = mkOption {
-              type = types.str;
+            extraArgs = lib.mkOption {
+              type = lib.types.str;
               description = ''
                 Additional arguments passed to the lighthouse validator command.
               '';
@@ -191,16 +189,16 @@ in {
         };
       };
 
-      network = mkOption {
-        type = types.enum [ "mainnet" "gnosis" "chiado" "sepolia" "holesky" ];
+      network = lib.mkOption {
+        type = lib.types.enum [ "mainnet" "gnosis" "chiado" "sepolia" "holesky" ];
         default = "mainnet";
         description = ''
           The network to connect to. Mainnet is the default ethereum network.
         '';
       };
 
-      extraArgs = mkOption {
-        type = types.str;
+      extraArgs = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Additional arguments passed to every lighthouse command.
         '';
@@ -210,17 +208,17 @@ in {
     };
   };
 
-  config = mkIf (cfg.beacon.enable || cfg.validator.enable) {
+  config = lib.mkIf (cfg.beacon.enable || cfg.validator.enable) {
 
     environment.systemPackages = [ pkgs.lighthouse ] ;
 
-    networking.firewall = mkIf cfg.beacon.enable {
-      allowedTCPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
-      allowedUDPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
+    networking.firewall = lib.mkIf cfg.beacon.enable {
+      allowedTCPPorts = lib.mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
+      allowedUDPPorts = lib.mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
     };
 
 
-    systemd.services.lighthouse-beacon = mkIf cfg.beacon.enable {
+    systemd.services.lighthouse-beacon = lib.mkIf cfg.beacon.enable {
       description = "Lighthouse beacon node (connect to P2P nodes and verify blocks)";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -268,7 +266,7 @@ in {
       };
     };
 
-    systemd.services.lighthouse-validator = mkIf cfg.validator.enable {
+    systemd.services.lighthouse-validator = lib.mkIf cfg.validator.enable {
       description = "Lighthouse validtor node (manages validators, using data obtained from the beacon node via a HTTP API)";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
@@ -281,7 +279,7 @@ in {
           --network ${cfg.network} \
           --beacon-nodes ${lib.concatStringsSep "," cfg.validator.beaconNodes} \
           --datadir ${cfg.validator.dataDir}/${cfg.network} \
-          ${optionalString cfg.validator.metrics.enable ''--metrics --metrics-address ${cfg.validator.metrics.address} --metrics-port ${toString cfg.validator.metrics.port}''} \
+          ${lib.optionalString cfg.validator.metrics.enable ''--metrics --metrics-address ${cfg.validator.metrics.address} --metrics-port ${toString cfg.validator.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.validator.extraArgs}
       '';
 

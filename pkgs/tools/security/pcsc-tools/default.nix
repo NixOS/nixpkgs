@@ -8,7 +8,7 @@
 , pkg-config
 , wrapGAppsHook3
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, dbusSupport ? stdenv.isLinux, dbus
+, dbusSupport ? stdenv.hostPlatform.isLinux, dbus
 , pcsclite
 , PCSC
 , wget
@@ -25,13 +25,13 @@ assert systemdSupport -> dbusSupport;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcsc-tools";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "LudovicRousseau";
     repo = "pcsc-tools";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-+cvgSNlSYSJ2Zr2iWk96AacyQ38ru9/RK8yeK3ceqCo=";
+    hash = "sha256-5a3sVcFEFzBkbRKUqlCPV7sL3O17G7hDVpxLpAWofdE=";
   };
 
   configureFlags = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     dbus
   ] ++ [
     perlPackages.perl pcsclite
-  ] ++ lib.optional stdenv.isDarwin PCSC
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
     ++ lib.optional systemdSupport systemd;
 
   nativeBuildInputs = [

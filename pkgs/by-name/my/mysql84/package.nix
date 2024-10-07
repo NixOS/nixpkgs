@@ -5,15 +5,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql";
-  version = "8.4.1";
+  version = "8.4.2";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor finalAttrs.version}/mysql-${finalAttrs.version}.tar.gz";
-    hash = "sha256-20Hxl9cXDFTX7cDQyaJzDCJfSvBeztD2S+z5u2wRAT4=";
+    hash = "sha256-Vlenjchr8L8iJ+CwX43losRHqBahEv+ib6cAg7y+mBQ=";
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]
-    ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -28,9 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf_21 re2 readline zlib
     zstd libfido2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     numactl libtirpc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools darwin.apple_sdk.frameworks.CoreServices darwin.developer_cmds darwin.DarwinTools
   ];
 

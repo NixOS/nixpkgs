@@ -11,7 +11,7 @@ mkDerivation rec {
     sha256 = "0hf1c2m8n88frmxmyn0ndr8129p7iky49nq565sw1asaydm5z6pb";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace glogg.pro \
       --replace "boost_program_options-mt" "boost_program_options"
   '';
@@ -21,7 +21,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "VERSION=${version}" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/glogg.app $out/Applications/glogg.app
     rm -fr $out/{bin,share}

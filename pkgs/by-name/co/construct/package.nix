@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ENso0y7yEaXzGXzZOnlZ1L7+j/qayJL+f55/NYLz2ew=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
         --replace g++ c++
   '';

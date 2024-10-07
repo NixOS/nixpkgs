@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ expect ];
 
   # character_device fails with "File name too long" on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs tests/*.exp

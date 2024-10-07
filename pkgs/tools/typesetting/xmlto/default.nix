@@ -1,11 +1,11 @@
 {
+  autoreconfHook,
   bash,
   coreutils,
   docbook_xml_dtd_45,
   docbook_xsl,
   docbook-xsl-ns,
-  fetchpatch,
-  fetchurl,
+  fetchgit,
   findutils,
   flex,
   getopt,
@@ -22,32 +22,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmlto";
-  version = "0.0.28";
+  version = "0.0.29";
 
-  src = fetchurl {
-    url = "https://releases.pagure.org/xmlto/xmlto-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-ETDfOnlX659vDSnkqhx1cyp9+21jm+AThZtcfsVCEnY=";
+  src = fetchgit {
+    url = "https://pagure.io/xmlto.git";
+    rev = finalAttrs.version;
+    hash = "sha256-wttag8J1t9cBPBHNY7me2H0IPOzS8IjfCLIHNWq67Do=";
   };
-
-  # Note: These patches modify `xmlif/xmlif.l`, which requires `flex` to be rerun.
-  patches = [
-    # Fixes implicit `int` on `main`, which is an error with clang 16.
-    (fetchpatch {
-      url = "https://pagure.io/xmlto/c/8e34f087bf410bcc5fe445933d6ad9bae54f24b5.patch";
-      hash = "sha256-z5riDBZBVuFeBcjI++dAl3nTIgOPau4Gag0MJbYt+cc=";
-    })
-    # Fixes implicit `int` on `ifsense`, which is also an error with clang 16.
-    (fetchpatch {
-      url = "https://pagure.io/xmlto/c/1375e2df75530cd198bd16ac3de38e2b0d126276.patch";
-      hash = "sha256-fM6ZdTigrcC9cbXiKu6oa5Hs71mrREockB1wRlw6nDk=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs xmlif/test/run-test
 
     substituteInPlace "xmlto.in" \
-      --replace-fail "@BASH@" "${bash}/bin/bash" \
+      --replace-fail "@XMLTO_BASH_PATH@" "${bash}/bin/bash" \
       --replace-fail "@FIND@" "${findutils}/bin/find" \
       --replace-fail "@GETOPT@" "${getopt}/bin/getopt" \
       --replace-fail "@GREP@" "${gnugrep}/bin/grep" \
@@ -64,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
   nativeBuildInputs = [
+    autoreconfHook
     makeWrapper
     flex
     getopt

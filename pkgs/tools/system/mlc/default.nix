@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloadmirror.intel.com/736634/mlc_v${version}.tgz";
-    sha256 = "3vNI/CQwyY4KMFest1wkVYecsxigjXyGIUIKai979W4=";
+    sha256 = "EDa5V56qCPQxgCu4eddYiWDrk7vkYS0jisnG004L+jQ=";
   };
 
   sourceRoot = "Linux";

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
+  separateDebugInfo = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;
   hardeningDisable = lib.optional (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isx86_32) "stackprotector";

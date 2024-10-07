@@ -5,12 +5,13 @@
   pythonOlder,
   setuptools,
   pytest,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "pglast";
   version = "6.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,14 +20,14 @@ buildPythonPackage rec {
     hash = "sha256-mGP7o52Wun6AdE2jMAJBmLR10EmN50qzbMzB06BFXMg=";
   };
 
-  propagatedBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=pglast --cov-report term-missing" ""
-  '';
+  dependencies = [ setuptools ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    pytest-cov-stub
+  ];
 
   # pytestCheckHook doesn't work
   # ImportError: cannot import name 'parse_sql' from 'pglast'

@@ -37,7 +37,7 @@
   makeDesktopItem,
   openssl,
   wrapGAppsHook3,
-  makeShellWrapper,
+  buildPackages,
   at-spi2-atk,
   at-spi2-core,
   libuuid,
@@ -55,34 +55,32 @@
   cacert,
 }:
 
-with lib;
-
 let
   pname = "gitkraken";
-  version = "10.2.0";
+  version = "10.4.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      hash = "sha256-NY7IgUt6Q27Pz1K46xL4LYFBwTJdT+fvsFDM2OhoPWg=";
+      hash = "sha256-JGWDOAkJEnhvUyQOFsmoeW9Izj0IuHNpYGlYAMiWPj0=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      hash = "sha256-e7zIMJNMdFy7/8zsV3nH1OT76xNznoSPRUVhoLfR6QI=";
+      hash = "sha256-yCDE6QJMgU2Mgr/kUDnbKwQ3MpgVcdjAK7fnTAjSL54=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      hash = "sha256-YjGH9tKbJaYc5qENBCCpJGWWFJIQTD8O2H3onhMwGrw=";
+      hash = "sha256-nh+tO++QvPx9jyZuxNrH7rHFXZqVnu5jyiki3oWdw7E=";
     };
   };
 
   src = srcs.${stdenv.hostPlatform.system} or throwSystem;
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.gitkraken.com/git-client";
     description = "Simplifying Git for any OS";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
@@ -108,7 +106,7 @@ let
     dontBuild = true;
     dontConfigure = true;
 
-    libPath = makeLibraryPath [
+    libPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
       curlWithGnuTls
       udev
@@ -168,7 +166,9 @@ let
 
     nativeBuildInputs = [
       copyDesktopItems
-      (wrapGAppsHook3.override { makeWrapper = makeShellWrapper; })
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
     buildInputs = [
       gtk3
@@ -251,4 +251,4 @@ let
     dontFixup = true;
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

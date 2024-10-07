@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
   buildInputs = [ glib libsndfile libjack2 ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libpulseaudio ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit AudioUnit CoreAudio CoreMIDI CoreServices ];
 
   cmakeFlags = [
     "-Denable-framework=off"

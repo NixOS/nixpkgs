@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
     abseil-cpp
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Foundation ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Foundation ]);
 
-  env = lib.optionalAttrs stdenv.isx86_32 {
+  env = lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
     # https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/issues/5
     NIX_CFLAGS_COMPILE = "-msse2";
   };

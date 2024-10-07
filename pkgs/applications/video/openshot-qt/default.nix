@@ -10,18 +10,18 @@
 , qtsvg
 , qtwayland
 , wayland
-, waylandSupport ? stdenv.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , wrapGAppsHook3
 }:
 
 let
   pname = "openshot-qt";
-  version = "3.1.1";
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "v${version}";
-    hash = "sha256-kEz1APBitWLlnIbyloYMsqNrwC9RqU04kyyWzm5klYc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
   };
 in
 mkDerivationWith python3.pkgs.buildPythonApplication {
@@ -66,7 +66,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     wrapProgram $out/bin/openshot-qt \
   ''
   # Fix toolbar icons on Darwin
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     --suffix QT_PLUGIN_PATH : "${lib.getBin qtsvg}/${qtbase.qtPluginPrefix}" \
   '' + ''
     "''${gappsWrapperArgs[@]}" \

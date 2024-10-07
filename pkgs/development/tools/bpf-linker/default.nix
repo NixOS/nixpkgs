@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, llvmPackages_18
+, llvmPackages_19
 , zlib
 , ncurses
 , libxml2
@@ -10,25 +10,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bpf-linker";
-  version = "0.9.12";
+  version = "0.9.13";
 
   src = fetchFromGitHub {
     owner = "aya-rs";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-HMLbNAB6Ze2x8OeAwVXMMn5P9GYK9hCa61Ic5yqblUA=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CRYp1ktmmY4OS23+LNKOBQJUMkd+GXptBp5LPfbyZAc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "compiletest_rs-0.10.2" = "sha256-n1OxKal1B+WNshfMgtiA5Th+FQyDalOdB4PAo6mUzwQ=";
+      "compiletest_rs-0.10.2" = "sha256-JTfVfMW0bCbFjQxeAFu3Aex9QmGnx0wp6weGrNlQieA=";
     };
   };
 
   buildNoDefaultFeatures = true;
 
-  nativeBuildInputs = [ llvmPackages_18.llvm ];
+  nativeBuildInputs = [ llvmPackages_19.llvm ];
   buildInputs = [ zlib ncurses libxml2 ];
 
   # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none

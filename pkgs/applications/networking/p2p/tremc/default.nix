@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, python3Packages
-, x11Support ? !stdenv.isDarwin
+, x11Support ? !stdenv.hostPlatform.isDarwin
 , xclip ? null
 , pbcopy ? null
 , useGeoIP ? false # Require /var/lib/geoip-databases/GeoIP.dat
 }:
 let
-  wrapperPath = with lib; makeBinPath (
-    optional x11Support xclip ++
-    optional stdenv.isDarwin pbcopy
+  wrapperPath = lib.makeBinPath (
+    lib.optional x11Support xclip ++
+    lib.optional stdenv.hostPlatform.isDarwin pbcopy
   );
 in
 python3Packages.buildPythonApplication rec {

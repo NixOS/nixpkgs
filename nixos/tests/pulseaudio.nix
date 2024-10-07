@@ -40,7 +40,7 @@ let
             };
 
             environment.systemPackages = [ testers.testPlay pkgs.pavucontrol ]
-              ++ lib.optional pkgs.stdenv.isx86_64 testers.testPlay32;
+              ++ lib.optional pkgs.stdenv.hostPlatform.isx86_64 testers.testPlay32;
           } // lib.optionalAttrs systemWide {
             users.users.alice.extraGroups = [ "pulse-access" ];
             systemd.services.pulseaudio.wantedBy = [ "multi-user.target" ];
@@ -54,7 +54,7 @@ let
 
           machine.send_chars("testPlay \n")
           machine.wait_for_file("/tmp/testPlay_success")
-          ${lib.optionalString pkgs.stdenv.isx86_64 ''
+          ${lib.optionalString pkgs.stdenv.hostPlatform.isx86_64 ''
             machine.send_chars("testPlay32 \n")
             machine.wait_for_file("/tmp/testPlay32_success")
           ''}

@@ -107,7 +107,13 @@ CONTAINERD_VERSION=$(grep github.com/containerd/containerd ${FILE_GO_MOD} \
 CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/containerd/archive/refs/tags/v${CONTAINERD_VERSION}.tar.gz")
 
-CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
+# The repository of "cri-tools" changes for 1.31.x, this can likely be removed in future releases
+if [ "$MINOR_VERSION" -gt 30 ]; then
+    CRI_CTL_REPO=sigs.k8s.io
+else
+    CRI_CTL_REPO=github.com/kubernetes-sigs
+fi
+CRI_CTL_VERSION=$(grep "$CRI_CTL_REPO/cri-tools" ${FILE_GO_MOD} \
     | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
 
 setKV () {

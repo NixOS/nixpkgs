@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, buildHaskellPackages, ghc
-, jailbreak-cabal, hscolour, cpphs, runCommand
+, jailbreak-cabal, hscolour, cpphs, runCommandCC
 , ghcWithHoogle, ghcWithPackages
 , nodejs
 }:
@@ -53,7 +53,7 @@ in
 # TODO enable shared libs for cross-compiling
 , enableSharedExecutables ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic && (ghc.enableShared or false)
-, enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip for darwin
+, enableDeadCodeElimination ? (!stdenv.hostPlatform.isDarwin)  # TODO: use -dead_strip for darwin
 # Disabling this for ghcjs prevents this crash: https://gitlab.haskell.org/ghc/ghc/-/issues/23235
 , enableStaticLibraries ? !(stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isWasm || stdenv.hostPlatform.isGhcjs)
 , enableHsc2hsViaAsm ? stdenv.hostPlatform.isWindows
@@ -150,35 +150,6 @@ assert stdenv.hostPlatform.isWasm -> enableStaticLibraries == false;
 
 let
 
-  # This is a workaround for the 2024-07-20 staging-next cycle to avoid causing mass rebuilds.
-  # todo(@reckenrode) Remove this workaround and remove `NIX_COREFOUNDATION_RPATH`, the related hooks, and ld-wrapper support.
-  nixCoreFoundationRpathWorkaround = stdenv.mkDerivation {
-    name = "nix-corefoundation-rpath-workaround";
-    buildCommand = ''
-      mkdir -p "$out/nix-support"
-      cat <<-EOF > "$out/nix-support/setup-hook"
-      removeUseSystemCoreFoundationFrameworkHook() {
-        unset NIX_COREFOUNDATION_RPATH
-        local _hook
-        for _hook in envBuildBuildHooks envBuildHostHooks envBuildTargetHooks envHostHostHooks envHostTargetHooks envTargetTargetHooks; do
-          local _index=0
-          local _var="\$_hook[@]"
-          for _var in "\''${!_var}"; do
-            if [ "\$_var" = "useSystemCoreFoundationFramework" ]; then
-              unset "\$_hook[\$_index]"
-            fi
-            ((++_index))
-          done
-          unset _index
-          unset _var
-        done
-        unset _hook
-      }
-      addEnvHooks "\$hostOffset" removeUseSystemCoreFoundationFrameworkHook
-      EOF
-    '';
-  };
-
   inherit (lib) optional optionals optionalString versionAtLeast
                        concatStringsSep enableFeature optionalAttrs;
 
@@ -271,8 +242,8 @@ let
     "--with-gcc=$CC" # Clang won't work without that extra information.
   ] ++ [
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
-    (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
+    (optionalString (enableSharedExecutables && stdenv.hostPlatform.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/${ghcLibdir}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.hostPlatform.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding (makeGhcOptions [ "-j$NIX_BUILD_CORES" "+RTS" "-A64M" "-RTS" ]))
     (optionalString useCpphs ("--with-cpphs=${cpphs}/bin/cpphs " + (makeGhcOptions [ "-cpp"  "-pgmP${cpphs}/bin/cpphs" "-optP--cpp" ])))
     (enableFeature enableLibraryProfiling "library-profiling")
@@ -459,8 +430,7 @@ stdenv.mkDerivation ({
   inherit depsBuildBuild nativeBuildInputs;
   buildInputs = otherBuildInputs ++ optionals (!isLibrary) propagatedBuildInputs
     # For patchShebangsAuto in fixupPhase
-    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ]
-    ++ optionals (stdenv.isDarwin && stdenv.isx86_64) [ nixCoreFoundationRpathWorkaround ];
+    ++ optionals stdenv.hostPlatform.isGhcjs [ nodejs ];
   propagatedBuildInputs = optionals isLibrary propagatedBuildInputs;
 
   LANG = "en_US.UTF-8";         # GHC needs the locale configured during the Haddock phase.
@@ -531,7 +501,7 @@ stdenv.mkDerivation ({
   # the `$out/lib/links` directory to read-only when the build is done after the
   # dist directory has already been exported, which triggers an unnecessary
   # rebuild of modules included in the exported dist directory.
-  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
+  + (optionalString (stdenv.hostPlatform.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -820,7 +790,7 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
-      in runCommand name {
+      in runCommandCC name {
         inherit shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;

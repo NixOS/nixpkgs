@@ -9,25 +9,25 @@
 
 buildPythonPackage rec {
   pname = "html2image";
-  version = "2.0.4.3";
+  version = "2.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "vgalin";
     repo = "html2image";
-    rev = version;
-    hash = "sha256-BDl2Kibp1WOAOYNlXa2aaEgQTitk+OZu72OgytciZYI=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-k5y89nUF+fhUj9uzTAPkkAdOb2TsTL2jm/ZXwHlxu/A=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-    --replace poetry.masonry.api poetry.core.masonry.api \
-    --replace "poetry>=" "poetry-core>="
+    --replace-fail poetry.masonry.api poetry.core.masonry.api \
+    --replace-fail "poetry>=" "poetry-core>="
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
     websocket-client
   ];

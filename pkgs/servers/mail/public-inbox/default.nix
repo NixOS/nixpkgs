@@ -78,8 +78,7 @@ let
     "v2mirror"
   ];
 
-  testConditions = with lib;
-    concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
+  testConditions = lib.concatMapStringsSep " " (n: "! -name ${lib.escapeShellArg n}.t") skippedTests;
 
 in
 
@@ -127,7 +126,7 @@ buildPerlPackage rec {
     man
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [
     curl
     git
@@ -139,7 +138,7 @@ buildPerlPackage rec {
     PlackTestExternalServer
     TestSimple13
     XMLTreePP
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     LinuxInotify2
   ];
   preCheck = ''

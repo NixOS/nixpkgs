@@ -205,10 +205,11 @@ in
 
       boot.initrd.systemd = {
         contents = {
-          "/etc/tmpfiles.d/resolv.conf".text =
-            "L /etc/resolv.conf - - - - /run/systemd/resolve/stub-resolv.conf";
           "/etc/systemd/resolved.conf".text = resolvedConf;
         };
+
+        tmpfiles.settings.systemd-resolved-stub."/etc/resolv.conf".L.argument =
+          "/run/systemd/resolve/stub-resolv.conf";
 
         additionalUpstreamUnits = ["systemd-resolved.service"];
         users.systemd-resolve = {};

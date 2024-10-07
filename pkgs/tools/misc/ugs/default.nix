@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ugs";
-  version = "2.1.8";
+  version = "2.1.9";
 
   src = fetchzip {
     url = "https://github.com/winder/Universal-G-Code-Sender/releases/download/v${version}/UniversalGcodeSender.zip";
-    hash = "sha256-2rGxo8Yu0i93CXmnkKJwjez3vXzaO69/ztwjXxgWtyo=";
+    hash = "sha256-cZlBIafz+SZHP5xY6PupoCrbCng9lx9mbixBWiV6ufQ=";
   };
 
   dontUnpack = true;

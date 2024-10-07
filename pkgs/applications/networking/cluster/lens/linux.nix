@@ -9,9 +9,10 @@ in
 appimageTools.wrapType2 {
   inherit pname version src meta;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     ''
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     export OMP_NUM_THREADS=2
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 

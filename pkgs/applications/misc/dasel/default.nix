@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -23,14 +24,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dasel \
       --bash <($out/bin/dasel completion bash) \
       --fish <($out/bin/dasel completion fish) \
       --zsh <($out/bin/dasel completion zsh)
   '';
 
-  doInstallCheck = true;
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   installCheckPhase = ''
     runHook preInstallCheck
     if [[ $($out/bin/dasel --version) == "dasel version ${version}" ]]; then

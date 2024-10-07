@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags = lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   outputMan = "dev"; # tiny page for a dev tool
 

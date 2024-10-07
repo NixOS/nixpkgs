@@ -1,4 +1,4 @@
-{ lib, stdenv, bundlerEnv, ruby, bundlerUpdateScript }:
+{ lib, stdenv, bundlerEnv, ruby, bundlerUpdateScript, testers, papertrail }:
 
 let
   papertrail-env = bundlerEnv {
@@ -20,6 +20,8 @@ in stdenv.mkDerivation {
   '';
 
   passthru.updateScript = bundlerUpdateScript "papertrail";
+
+  passthru.tests.version = testers.testVersion { package = papertrail; };
 
   meta = with lib; {
     description = "Command-line client for Papertrail log management service";

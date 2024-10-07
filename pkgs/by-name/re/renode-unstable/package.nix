@@ -5,11 +5,11 @@
 
 renode.overrideAttrs (finalAttrs: _: {
   pname = "renode-unstable";
-  version = "1.15.1+20240801git19eb5fb22";
+  version = "1.15.3+20241004git4b8a8f170";
 
   src = fetchurl {
     url = "https://builds.renode.io/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-dIyMQtFXvHivlzC+Y3TrWsN81/cETKTaucZY5r/x5rU=";
+    hash = "sha256-/+fH5DHL/kg4IlJyOlCuOMsUocaBsA8GYvq5iP7Ip+4=";
   };
 
   passthru.updateScript =

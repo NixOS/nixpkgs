@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gcC6REfZentIPEDhGznUSYu8mvVfpPeMz/Bks+N43Fk=";
   };
 
-  buildFlags = lib.optional stdenv.isLinux "unix";
+  buildFlags = lib.optional stdenv.hostPlatform.isLinux "unix";
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--enable-c3270"
     "--enable-pr3270"
     "--enable-s3270"
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     expat
     openssl
     readline
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "IBM 3270 terminal emulator for the X Window System";

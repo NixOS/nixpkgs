@@ -85,8 +85,13 @@ let
 
   startScript = cfg:
     ''
-      mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
+      # Declare root explicitly to avoid shellcheck warnings, it comes from the env
+      declare root
+
+      mkdir -p "$root/etc" "$root/var/lib"
+      chmod 0755 "$root/etc" "$root/var/lib"
+      mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
+      chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -95,19 +100,24 @@ let
         touch "$root/etc/machine-id"
       fi
 
-      mkdir -p -m 0755 \
+      mkdir -p \
+        "/nix/var/nix/profiles/per-container/$INSTANCE" \
+        "/nix/var/nix/gcroots/per-container/$INSTANCE"
+      chmod 0755 \
         "/nix/var/nix/profiles/per-container/$INSTANCE" \
         "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
       cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+      declare -a extraFlags
+
       if [ "$PRIVATE_NETWORK" = 1 ]; then
-        extraFlags+=" --private-network"
+        extraFlags+=("--private-network")
       fi
 
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
          [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
-        extraFlags+=" --network-veth"
+        extraFlags+=("--network-veth")
       fi
 
       if [ -n "$HOST_PORT" ]; then
@@ -115,30 +125,30 @@ let
         IFS=","
         for i in $HOST_PORT
         do
-            extraFlags+=" --port=$i"
+            extraFlags+=("--port=$i")
         done
         IFS=$OIFS
       fi
 
       if [ -n "$HOST_BRIDGE" ]; then
-        extraFlags+=" --network-bridge=$HOST_BRIDGE"
+        extraFlags+=("--network-bridge=$HOST_BRIDGE")
       fi
 
-      extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
+      extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
-        extraFlags+=" --network-interface=$iface"
+        extraFlags+=("--network-interface=$iface")
       done
 
       for iface in $MACVLANS; do
-        extraFlags+=" --network-macvlan=$iface"
+        extraFlags+=("--network-macvlan=$iface")
       done
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
       ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
-        if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
-          extraFlags+=" --personality=x86"
+        if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
+          extraFlags+=("--personality=x86")
         fi
       ''}
 
@@ -149,9 +159,11 @@ let
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
       # to the container systemd when it receives SIGTERM for container shutdown;
       # containerInit and stage2 have to handle this as well.
+      # TODO: fix shellcheck issue properly
+      # shellcheck disable=SC2086
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
-        -M "$INSTANCE" -D "$root" $extraFlags \
+        -M "$INSTANCE" -D "$root" "''${extraFlags[@]}" \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
@@ -203,33 +215,33 @@ let
         if cfg.${attribute} == null then
           ''
             if [ -n "${variable}" ]; then
-              ${ipcmd} add ${variable} dev $ifaceHost
+              ${ipcmd} add "${variable}" dev "$ifaceHost"
             fi
           ''
         else
-          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
+          ''${ipcmd} add ${cfg.${attribute}} dev "$ifaceHost"'';
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
             # Add ${name} to bridge ${cfg.hostBridge}
-            ip link set dev ${name} master ${cfg.hostBridge} up
+            ip link set dev "${name}" master "${cfg.hostBridge}" up
           ''
         else
           ''
             echo "Bring ${name} up"
-            ip link set dev ${name} up
+            ip link set dev "${name}" up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
-              ip addr add ${cfg.hostAddress} dev ${name}
+              ip addr add ${cfg.hostAddress} dev "${name}"
             ''}
             ${optionalString (cfg.hostAddress6 != null) ''
-              ip -6 addr add ${cfg.hostAddress6} dev ${name}
+              ip -6 addr add ${cfg.hostAddress6} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress != null) ''
-              ip route add ${cfg.localAddress} dev ${name}
+              ip route add ${cfg.localAddress} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress6 != null) ''
-              ip -6 route add ${cfg.localAddress6} dev ${name}
+              ip -6 route add ${cfg.localAddress6} dev "${name}"
             ''}
           '';
     in
@@ -238,7 +250,7 @@ let
            [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
           if [ -z "$HOST_BRIDGE" ]; then
             ifaceHost=ve-$INSTANCE
-            ip link set dev $ifaceHost up
+            ip link set dev "$ifaceHost" up
 
             ${ipcall cfg "ip addr" "$HOST_ADDRESS" "hostAddress"}
             ${ipcall cfg "ip -6 addr" "$HOST_ADDRESS6" "hostAddress6"}
@@ -488,9 +500,10 @@ in
                       extraConfig = { options, ... }: {
                         _file = "module at ${__curPos.file}:${toString __curPos.line}";
                         config = {
-                          nixpkgs = if options.nixpkgs?hostPlatform && host.options.nixpkgs.hostPlatform.isDefined
-                                    then { inherit (host.config.nixpkgs) hostPlatform; }
-                                    else { inherit (host.config.nixpkgs) localSystem; }
+                          nixpkgs =
+                            if options.nixpkgs?hostPlatform
+                            then { inherit (host.pkgs.stdenv) hostPlatform; }
+                            else { localSystem = host.pkgs.stdenv.hostPlatform; }
                           ;
                           boot.isContainer = true;
                           networking.hostName = mkDefault name;

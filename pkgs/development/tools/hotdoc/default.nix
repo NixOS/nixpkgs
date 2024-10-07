@@ -91,7 +91,7 @@ buildPythonApplication rec {
   disabledTests = [
     # Test does not correctly handle path normalization for test comparison
     "test_cli_overrides"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
     "test_index"
   ];

@@ -18,7 +18,7 @@ mkDerivation {
       libmd
       libnetbsd
     ]
-    ++ lib.optional (stdenv.isFreeBSD) libutil;
+    ++ lib.optional (stdenv.hostPlatform.isFreeBSD) libutil;
 
   postPatch = ''
     ln -s $BSDSRCDIR/contrib/mknod/*.c $BSDSRCDIR/contrib/mknod/*.h $BSDSRCDIR/contrib/mtree
@@ -32,7 +32,7 @@ mkDerivation {
           "-lnetbsd"
         ]
         ++ lib.optional compatIsNeeded "-legacy"
-        ++ lib.optional stdenv.isFreeBSD "-lutil"
+        ++ lib.optional stdenv.hostPlatform.isFreeBSD "-lutil"
       )
     }"
   '';

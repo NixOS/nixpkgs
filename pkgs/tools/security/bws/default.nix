@@ -13,36 +13,36 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bws";
-  version = "0.4.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "sdk";
     rev = "bws-v${version}";
-    hash = "sha256-oCAyUTVAUfXBEb2K7vkYBOzcwqCsm2wxEKsYLZcfm6w=";
+    hash = "sha256-acS4yKppvIBiwBMoa5Ero4G9mUf8OLG/TbrZOolAwuc=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "uniffi-0.25.2" = "sha256-YckrtociJV3VKGs5DJ0a1r1Cvq06S/mtr9iL1kLmAi8=";
+      "passkey-0.2.0" = "sha256-dCQUu4lWqdQ6EiNLPRVHL1dLVty4r8//ZQzV8XCBhmY=";
     };
   };
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     perl
   ];
 
   buildInputs =
     [
       oniguruma
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 

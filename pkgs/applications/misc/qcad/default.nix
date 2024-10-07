@@ -57,7 +57,7 @@ mkDerivation rec {
     qtscript
     qtsvg
     qtxmlpatterns
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 
@@ -68,17 +68,17 @@ mkDerivation rec {
     "QMAKE_CXXFLAGS=-std=c++14"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--prefix DYLD_LIBRARY_PATH : ${placeholder "out"}/lib"
   ];
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm555 release/qcad-bin $out/bin/qcad
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm555 release/QCAD.app/Contents/MacOS/QCAD $out/bin/qcad
     mkdir -p $out/lib
   '' + ''

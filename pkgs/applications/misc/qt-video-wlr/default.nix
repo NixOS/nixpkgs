@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, meson, cmake, ninja, gst_all_1, wrapQtAppsHook, qtbase, qtmultimedia, layer-shell-qt }:
+{ stdenv, lib, fetchFromGitHub, pkg-config, meson, cmake, ninja, gst_all_1, wrapQtAppsHook, qtbase, qtmultimedia, layer-shell-qt, wayland-scanner }:
 let
  gstreamerPath = with gst_all_1; lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" [
      gstreamer
@@ -24,6 +24,7 @@ in stdenv.mkDerivation rec {
     cmake # only used for find layer-shell-qt
     ninja
     wrapQtAppsHook
+    wayland-scanner
   ];
 
   buildInputs = [

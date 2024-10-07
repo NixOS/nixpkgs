@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.tuxedo-rs;
 
@@ -9,13 +6,13 @@ in
 {
   options = {
     hardware.tuxedo-rs = {
-      enable = mkEnableOption "Rust utilities for interacting with hardware from TUXEDO Computers";
+      enable = lib.mkEnableOption "Rust utilities for interacting with hardware from TUXEDO Computers";
 
-      tailor-gui.enable = mkEnableOption "tailor-gui, an alternative to TUXEDO Control Center, written in Rust";
+      tailor-gui.enable = lib.mkEnableOption "tailor-gui, an alternative to TUXEDO Control Center, written in Rust";
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       hardware.tuxedo-keyboard.enable = true;
 
@@ -40,10 +37,10 @@ in
 
       environment.systemPackages = [ pkgs.tuxedo-rs ];
     }
-    (mkIf cfg.tailor-gui.enable {
+    (lib.mkIf cfg.tailor-gui.enable {
       environment.systemPackages = [ pkgs.tailor-gui ];
     })
   ]);
 
-  meta.maintainers = with maintainers; [ mrcjkb ];
+  meta.maintainers = with lib.maintainers; [ mrcjkb ];
 }

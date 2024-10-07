@@ -68,10 +68,10 @@ in
       servers = [
         "/${cfg.domain}/127.0.0.1#5300"
       ];
-      extraConfig = ''
-        bind-interfaces
-        listen-address=127.0.0.1
-      '';
+      settings = {
+        bind-interfaces = true;
+        listen-address = "127.0.0.1";
+      };
     };
 
   };

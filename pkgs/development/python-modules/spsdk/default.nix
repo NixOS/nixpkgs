@@ -49,6 +49,7 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "requests"
     "packaging"
     "typing-extensions"

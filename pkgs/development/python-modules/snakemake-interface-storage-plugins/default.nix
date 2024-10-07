@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "snakemake-interface-storage-plugins";
-  version = "3.2.3";
+  version = "3.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-xfqxUla3qFnGZSFpWVCmtSJLqCK6XJF1OtDF1EDXbZU=";
+    hash = "sha256-qjQZc7DIXIPmqXq+Fjslgrq2LbjbdRS/twGsp/jrxRY=";
   };
 
   nativeBuildInputs = [ poetry-core ];

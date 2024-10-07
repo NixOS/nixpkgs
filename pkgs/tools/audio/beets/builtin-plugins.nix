@@ -128,6 +128,11 @@
     testPaths = [ ];
   };
   autobpm = {
+    propagatedBuildInputs = with python3Packages; [
+      librosa
+      # An optional dependency of librosa, needed for beets' autobpm
+      resampy
+    ];
     testPaths = [ ];
   };
   listenbrainz = {

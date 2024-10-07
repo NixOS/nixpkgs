@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-cAw5YMplCx6vAhfWmskZuBHyB1o4dGd7hMceOG3V51Y=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Fixes build failure on Darwin due to missing byte order functions.
     # https://github.com/cracklib/cracklib/pull/96
     (fetchpatch2 {

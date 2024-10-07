@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "cf-xarray";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "xarray-contrib";
     repo = "cf-xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zio00ki86DZqWtGnVseDR28He4DW1jjKdwfsxRwFDfg=";
+    hash = "sha256-Rz0E7GBaN/7zb0dqAxo0SJ4Bd+eQuOOv6x1WubIUh6A=";
   };
 
   build-system = [
@@ -45,7 +42,7 @@ buildPythonPackage rec {
 
   dependencies = [ xarray ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       matplotlib
       pint
@@ -60,7 +57,7 @@ buildPythonPackage rec {
     dask
     pytestCheckHook
     scipy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cf_xarray" ];
 

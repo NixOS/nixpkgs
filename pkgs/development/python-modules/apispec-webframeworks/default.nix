@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "apispec-webframeworks";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     owner = "marshmallow-code";
     repo = "apispec-webframeworks";
     rev = "refs/tags/${version}";
-    hash = "sha256-qepiaRW36quIgxBtEHMF3HN0wO6jp2uGAHgg5fJoMUY=";
+    hash = "sha256-V4tdqcHfYRh9VoXUTPXM3SIOogJDJB14SLj5dSd7LzU=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ apispec ] ++ apispec.optional-dependencies.yaml;
+  dependencies = [ apispec ] ++ apispec.optional-dependencies.yaml;
 
   nativeCheckInputs = [
     aiohttp

@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # workaround wrong library IDs
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -sv "$out/lib/xfitter/"* "$out/lib/"
   '';
 

@@ -2,16 +2,16 @@
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
-  version = "1.23.13";
+  version = "1.23.15";
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = version;
-    hash = "sha256-7JWn78gRLzuXuZjhTvjdJ7JVtLOtQ08zyokqkPdzYh0=";
+    hash = "sha256-/UAou+l7ppXU3t54YYdDZcXUNvEw7VGcn/OVPXdFdj0=";
   };
 
-  npmDepsHash = "sha256-MKONzKCGYeMQK8JR9W9KiPLaqP/F0uAOzql4wZK4Sp4=";
+  npmDepsHash = "sha256-KaOnlqvfGatrdEqtw2Y0SudLuyzU6yC78DWn3+EZcec=";
 
   patches = [
     # Fixes the permissions of the database being not set correctly
@@ -46,6 +46,6 @@ buildNpmPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ julienmalka ];
     # FileNotFoundError: [Errno 2] No such file or directory: 'xcrun'
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

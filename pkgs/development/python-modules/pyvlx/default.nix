@@ -47,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
     license = with licenses; [ lgpl2Only ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

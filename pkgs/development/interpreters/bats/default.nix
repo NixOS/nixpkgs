@@ -69,7 +69,7 @@ resholve.mkDerivation rec {
         external = [
           "greadlink"
           "shlock"
-        ] ++ lib.optionals stdenv.isDarwin [
+        ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "pkill" # procps doesn't supply this on darwin
         ];
       };
@@ -119,7 +119,7 @@ resholve.mkDerivation rec {
         "cannot:libexec/bats-core/bats-exec-file"
         "cannot:libexec/bats-core/bats-exec-suite"
         "cannot:libexec/bats-core/bats-gather-tests"
-      ] ++ lib.optionals (!stdenv.isDarwin) [
+      ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
         # checked invocations for exec
         "cannot:${procps}/bin/pkill"
       ];
@@ -196,7 +196,7 @@ resholve.mkDerivation rec {
         parallel # skips some tests if it can't detect
         flock # skips some tests if it can't detect
         procps
-      ] ++ lib.optionals stdenv.isDarwin [ lsof ];
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lsof ];
       inherit doInstallCheck;
       installCheckPhase = ''
         # TODO: cut if https://github.com/bats-core/bats-core/issues/418 allows
@@ -225,7 +225,7 @@ resholve.mkDerivation rec {
     # aren't massive builds)
     inherit bash-preexec locate-dominating-file packcc;
     resholve = resholve.tests.cli;
-  } // lib.optionalAttrs (!stdenv.isDarwin) {
+  } // lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
     # TODO: kikit's kicad dependency is marked broken on darwin atm
     # may be able to fold this up if that resolves.
     inherit kikit;

@@ -4,7 +4,6 @@
 , gnat-bootstrap ? null
 , langAda ? false
 , langFortran
-, langJava ? false
 , langJit ? false
 , langGo
 , withoutTargetLibc
@@ -13,18 +12,13 @@
 , pkgsBuildTarget
 }:
 
-assert langJava -> lib.versionOlder version "7";
-assert langAda -> gnat-bootstrap != null; let
-  needsLib
-    =  (lib.versionOlder version "7" && (langJava || langGo))
-    || (lib.versions.major version == "4" && lib.versions.minor version == "9" && targetPlatform.isDarwin);
-in lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
+assert langAda -> gnat-bootstrap != null;
+
+lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
   export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
   export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
   export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-'' + lib.optionalString needsLib ''
-  export lib=$out;
 '' + lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
 ''

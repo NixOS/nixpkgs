@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbmap";
-  version = "1.10.4";
+  version = "1.10.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ShawnDEvans";
     repo = "smbmap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CU0pio+R8JI/vQi13mOmiEeWC+r4EuLwWOQYLnm4Oao=";
+    hash = "sha256-xeQ3o0Pt4eDeMnSJKdEJfHhA0oPiD7tmX9TQAb3b9I8=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

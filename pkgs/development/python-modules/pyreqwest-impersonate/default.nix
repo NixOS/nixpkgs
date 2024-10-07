@@ -44,14 +44,14 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     SystemConfiguration
   ];
 
   env.BORING_BSSL_PATH = boringssl-wrapper;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dev = [ pytest ];
   };
 

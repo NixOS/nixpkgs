@@ -1,19 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, ffmpeg_4, libui, unstableGitUpdater, wrapGAppsHook3 }:
+{ lib, stdenv, fetchFromGitHub, ffmpeg_7, libui, unstableGitUpdater, wrapGAppsHook3 }:
 
 stdenv.mkDerivation {
   pname = "untrunc-anthwlock";
-  version = "0-unstable-2021-11-21";
+  version = "0-unstable-2024-08-14";
 
   src = fetchFromGitHub {
     owner = "anthwlock";
     repo = "untrunc";
-    rev = "d72ec324fbc29eb00b53c7dafeef09f92308962b";
-    hash = "sha256-h+aFPhlbEM6EfCKbsJPelBY5ys7kv5K4rbK/HTHeEcw=";
+    rev = "13cafedf59369db478af537fb909f0d7fd0eb85f";
+    hash = "sha256-4GIPj8so7POEwxKZzFBoJTu76XKbGHYmXC/ILeo0dVE=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = [ ffmpeg_4 libui ];
+  buildInputs = [ ffmpeg_7 libui ];
 
   buildPhase = ''
     runHook preBuild

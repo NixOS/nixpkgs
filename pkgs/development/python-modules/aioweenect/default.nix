@@ -5,7 +5,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
-  httpx,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -13,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioweenect";
-  version = "1.1.2";
+  version = "1.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "eifinger";
     repo = "aioweenect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qVhF+gy5qcH/okuncDuzbAUPonkmQo1/QwOjC70IV4w=";
+    hash = "sha256-2qTjRXQdTExqY5/ckB6UrkmavzjZK/agfL9+o6fXS0M=";
   };
 
   postPatch = ''
@@ -34,10 +33,7 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    aiohttp
-    httpx
-  ];
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses

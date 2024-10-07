@@ -162,7 +162,18 @@ def _fetch_github(url):
 def _hash_to_sri(algorithm, value):
     """Convert a hash to its SRI representation"""
     return (
-        subprocess.check_output(["nix", "hash", "to-sri", "--type", algorithm, value])
+        subprocess.check_output(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command",
+                "hash",
+                "to-sri",
+                "--type",
+                algorithm,
+                value,
+            ]
+        )
         .decode()
         .strip()
     )
@@ -250,6 +261,8 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
         homepage = subprocess.check_output(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command",
                 "eval",
                 "-f",
                 f"{NIXPKGS_ROOT}/default.nix",

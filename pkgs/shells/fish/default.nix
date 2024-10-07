@@ -177,7 +177,7 @@ let
 
       # tests/checks/complete.fish
       sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Tests use pkill/pgrep which are currently not built on Darwin
       # See https://github.com/NixOS/nixpkgs/pull/103180
       rm tests/pexpects/exit.py
@@ -187,7 +187,7 @@ let
       # pexpect tests are flaky in general
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/bind.py
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/exit_handlers.py
@@ -208,12 +208,12 @@ let
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
     # Fish’s test suite needs to be able to look up process information and send signals.
-    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+    sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
       (allow mach-lookup mach-task-name)
       (allow signal (target children))
     '';
@@ -235,7 +235,7 @@ let
       gnused
       groff
       gettext
-    ] ++ lib.optional (!stdenv.isDarwin) man-db;
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
     doCheck = true;
 
@@ -249,7 +249,7 @@ let
       make test
     '';
 
-    postInstall = with lib; ''
+    postInstall = ''
       sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
           -i "$out/share/fish/functions/grep.fish"
       sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
@@ -262,7 +262,7 @@ let
              "$out/share/fish/functions/prompt_pwd.fish"
       sed -i "s|nroff|${groff}/bin/nroff|"                 \
              "$out/share/fish/functions/__fish_print_help.fish"
-      sed -e "s|clear;|${getBin ncurses}/bin/clear;|"      \
+      sed -e "s|clear;|${lib.getBin ncurses}/bin/clear;|"      \
           -i "$out/share/fish/functions/fish_default_key_bindings.fish"
       sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
              $out/share/fish/completions/{sudo.fish,doas.fish}
@@ -270,7 +270,7 @@ let
           -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
              $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
 
-    '' + optionalString usePython ''
+    '' + lib.optionalString usePython ''
       cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
       function __fish_anypython
           echo ${python3.interpreter}
@@ -278,18 +278,18 @@ let
       end
       EOF
 
-    '' + optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 
-    '' + optionalString (!stdenv.isDarwin) ''
+    '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
               "$out/share/fish/tools/create_manpage_completions.py"
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
               "$out/share/fish/functions/man.fish"
-    '' + optionalString useOperatingSystemEtc ''
+    '' + lib.optionalString useOperatingSystemEtc ''
       tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
     '' + ''
       tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
@@ -308,7 +308,7 @@ let
     passthru = {
       shellPath = "/bin/fish";
       tests = {
-        nixos = lib.optionalAttrs stdenv.isLinux nixosTests.fish;
+        nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.fish;
 
         # Test the fish_config tool by checking the generated splash page.
         # Since the webserver requires a port to run, it is not started.

@@ -41,7 +41,7 @@ buildGoModule {
   '';
 
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     mkdir -p $bin/bin $dev $out/lib

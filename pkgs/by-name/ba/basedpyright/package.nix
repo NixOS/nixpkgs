@@ -2,27 +2,31 @@
   lib,
   fetchFromGitHub,
   runCommand,
-  jq,
   buildNpmPackage,
-  python3,
   stdenvNoCC,
+  docify,
   testers,
+  writeText,
+  jq,
+  python3,
   basedpyright,
 }:
 
 let
-  version = "1.15.2";
+  version = "1.18.2";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N51wZjhdoNbhHpMrgcEEzd9FIVwKwYs9sU7jyFV2b8g=";
+    hash = "sha256-nYbxgrNFhQ576rN8W+Hf/Keohy1N8tihOeTQHItKPRc=";
   };
 
+  # To regenerate the patched package-lock.json, copy the patched package.json
+  # and run `nix-shell -p nodejs --command 'npm update --package-lock'`
   patchedPackageJSON = runCommand "package.json" { } ''
     ${jq}/bin/jq '
-      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser"))
+      .devDependencies |= with_entries(select(.key == "glob" or .key == "jsonc-parser" or .key == "@detachhead/ts-helpers"))
       | .scripts =  {  }
       ' ${src}/package.json > $out
   '';
@@ -30,7 +34,7 @@ let
   pyright-root = buildNpmPackage {
     pname = "pyright-root";
     inherit version src;
-    npmDepsHash = "sha256-63kUhKrxtJhwGCRBnxBfOFXs2ARCNn+OOGu6+fSJey4=";
+    npmDepsHash = "sha256-vxfoaShk3ihmhr/5/2GSOuMqeo6rxebO6aiD3DybjW4=";
     dontNpmBuild = true;
     postPatch = ''
       cp ${patchedPackageJSON} ./package.json
@@ -47,10 +51,10 @@ let
     pname = "pyright-internal";
     inherit version src;
     sourceRoot = "${src.name}/packages/pyright-internal";
-    npmDepsHash = "sha256-RkMgCa7oAPFbTHC5WAcz6b8cUOEORR0sZr2VxhQki1k=";
+    npmDepsHash = "sha256-Md17EF3a1GBfnHD2fnLGS76r0xiWYJmBBTzZWRc0j5c=";
     dontNpmBuild = true;
-    # FIXME: Remove this flag when TypeScript 5.5 is released
-    npmFlags = [ "--legacy-peer-deps" ];
+    # Uncomment this flag when using unreleased peer dependencies
+    # npmFlags = [ "--legacy-peer-deps" ];
     installPhase = ''
       runHook preInstall
       cp -r . "$out"
@@ -58,32 +62,15 @@ let
     '';
   };
 
-  docify = python3.pkgs.buildPythonApplication {
-    pname = "docify";
-    version = "unstable";
-    format = "pyproject";
-    src = fetchFromGitHub {
-      owner = "AThePeanut4";
-      repo = "docify";
-      rev = "7380a6faa6d1e8a3dc790a00254e6d77f84cbd91";
-      hash = "sha256-BPR1rc/JzdBweiWmdHxgardDDrJZVWkUIF3ZEmEYf/A=";
-    };
-    buildInputs = [ python3.pkgs.setuptools ];
-    propagatedBuildInputs = [
-      python3.pkgs.libcst
-      python3.pkgs.tqdm
-    ];
-  };
-
   docstubs = stdenvNoCC.mkDerivation {
     name = "docstubs";
     inherit src;
-    buildInputs = [ docify ];
+    nativeBuildInputs = [ docify ];
 
     installPhase = ''
       runHook preInstall
       cp -r packages/pyright-internal/typeshed-fallback docstubs
-      ${docify}/bin/docify docstubs/stdlib --builtins-only --in-place
+      docify docstubs/stdlib --builtins-only --in-place
       cp -rv docstubs "$out"
       runHook postInstall
     '';
@@ -94,7 +81,7 @@ buildNpmPackage rec {
   inherit version src;
 
   sourceRoot = "${src.name}/packages/pyright";
-  npmDepsHash = "sha256-6Zhd5IothE7RoetaITL5MmLIF6YDNk6IiHcfTzbbjLY=";
+  npmDepsHash = "sha256-6/OhBbIuFjXTN8N/PitaQ57aYZmpwcUOJ/vlLbhiXAU=";
 
   postPatch = ''
     chmod +w ../../
@@ -113,7 +100,39 @@ buildNpmPackage rec {
 
   passthru = {
     updateScript = ./update.sh;
-    tests.version = testers.testVersion { package = basedpyright; };
+    tests = {
+      version = testers.testVersion { package = basedpyright; };
+
+      # We are expecting 3 errors. Any other amount would indicate, not working
+      # stub files, for instance.
+      simple = testers.testEqualContents {
+        assertion = "simple type checking";
+        expected = writeText "expected" ''
+          3
+        '';
+        actual =
+          runCommand "actual"
+            {
+              nativeBuildInputs = [
+                jq
+                basedpyright
+              ];
+              base = writeText "base" ''
+                import sys
+
+                if sys.platform == "win32":
+                    a = "a" + 1
+
+                print(3)
+                nonexistentfunction(3)
+              '';
+
+            }
+            ''
+              (basedpyright --outputjson $base || true) | jq -r .summary.errorCount > $out
+            '';
+      };
+    };
   };
 
   meta = {

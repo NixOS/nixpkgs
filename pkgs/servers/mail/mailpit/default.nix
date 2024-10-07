@@ -10,6 +10,7 @@
   fetchNpmDeps,
   testers,
   mailpit,
+  nixosTests,
 }:
 
 let
@@ -38,7 +39,7 @@ let
       hash = source.npmDepsHash;
     };
 
-    env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+    env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
       # Make sure libc++ uses `posix_memalign` instead of `aligned_alloc` on x86_64-darwin.
       # Otherwise, nodejs would require the 11.0 SDK and macOS 10.15+.
       NIX_CFLAGS_COMPILE = "-D__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__=101300";
@@ -78,9 +79,12 @@ buildGoModule {
     cp -r ${ui} server/ui/dist
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = mailpit;
-    command = "mailpit version";
+  passthru.tests = {
+    inherit (nixosTests) mailpit;
+    version = testers.testVersion {
+      package = mailpit;
+      command = "mailpit version";
+    };
   };
 
   passthru.updateScript = {

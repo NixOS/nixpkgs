@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--with-blas-libs=-lcblas"
     "--with-lapack-libs=-llapacke"
     "--without-archnative"
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # disable SIMD instructions (which are enabled *when available* by default)
     # for now we need to be careful to disable *all* relevant versions of an instruction set explicitly (https://github.com/linbox-team/fflas-ffpack/issues/284)
     "--${if stdenv.hostPlatform.sse3Support   then "enable" else "disable"}-sse3"

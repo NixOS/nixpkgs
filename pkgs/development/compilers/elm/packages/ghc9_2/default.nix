@@ -1,8 +1,9 @@
 { pkgs, lib }:
 
 self: pkgs.haskell.packages.ghc92.override {
-  overrides = self: super: with pkgs.haskell.lib.compose; with lib;
+  overrides = self: super:
     let
+      inherit (pkgs.haskell.lib.compose) justStaticExecutables overrideCabal doJailbreak;
       elmPkgs = rec {
         /*
           The elm-format expression is updated via a script in the https://github.com/avh4/elm-format repo:
@@ -23,8 +24,8 @@ self: pkgs.haskell.packages.ghc92.override {
 
             description = "Formats Elm source code according to a standard set of rules based on the official Elm Style Guide";
             homepage = "https://github.com/avh4/elm-format";
-            license = licenses.bsd3;
-            maintainers = with maintainers; [ avh4 turbomack ];
+            license = lib.licenses.bsd3;
+            maintainers = with lib.maintainers; [ avh4 turbomack ];
           })
           (self.callPackage ./elm-format/elm-format.nix { }));
       };

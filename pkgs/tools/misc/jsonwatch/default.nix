@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Gjb7v3kz11iOml3Ykxhy43KNxzaprgMbb5DpPNChLTc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     mainProgram = "jsonwatch";
   };
 }

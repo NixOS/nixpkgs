@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libICE libXext libXi libXrandr libXxf86vm libGLU ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
                  "-DOPENGL_INCLUDE_DIR=${libGLX.dev}/include"
                  "-DOPENGL_gl_LIBRARY:FILEPATH=${libGLX}/lib/libGL.dylib"
                  "-DOPENGL_glu_LIBRARY:FILEPATH=${libGLU}/lib/libGLU.dylib"

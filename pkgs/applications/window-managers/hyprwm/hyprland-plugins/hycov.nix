@@ -28,5 +28,6 @@ mkHyprlandPlugin hyprland rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ donovanglover ];
     platforms = lib.platforms.linux;
+    broken = true; # Doesn't work after Hyprland v0.41.2 https://gitee.com/DreamMaoMao/hycov/issues/IANYC8#note_31512295_link
   };
 }

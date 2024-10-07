@@ -6,6 +6,7 @@
   fetchpatch2,
   gitUpdater,
   linkFarm,
+  substituteAll,
   nixosTests,
   ayatana-indicator-datetime,
   bash,
@@ -79,6 +80,13 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-J9ySZgWd7KR7aU1cCRu5iirq7bi3NdLR9SZs9Pd1I8w=";
     })
 
+    # Remove when https://gitlab.com/ubports/development/core/lomiri/-/merge_requests/181 merged & in release
+    (fetchpatch {
+      name = "0101-lomiri-Fix-accountsservice-property-defaults.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri/-/commit/369c7aac242f1798ce46b1415ab6112ac5e9d095.patch";
+      hash = "sha256-ieJCA1F/ljmgwEfGXWCTQNG1A/bmiJhNH9uzzULpUEc=";
+    })
+
     # Fix greeter & related settings
     # These patches are seemingly not submitted upstream yet
     (fetchpatch {
@@ -109,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
 
     ./9901-lomiri-Disable-Wizard.patch
-    ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
+    (substituteAll {
+      src = ./9902-Layout-fallback-file.patch;
+      nixosLayoutFile = "/etc/" + finalAttrs.finalPackage.passthru.etcLayoutsFile;
+    })
   ];
 
   postPatch =
@@ -262,8 +273,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    etcLayoutsFile = "lomiri/keymaps";
     tests = {
-      inherit (nixosTests.lomiri) greeter desktop desktop-ayatana-indicators;
+      inherit (nixosTests.lomiri)
+        greeter
+        desktop-basics
+        desktop-appinteractions
+        desktop-ayatana-indicators
+        keymap
+        ;
     };
     updateScript = gitUpdater { };
     greeter = linkFarm "lomiri-greeter" [

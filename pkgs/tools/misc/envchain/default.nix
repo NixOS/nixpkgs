@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libsecret readline ]
-    ++ lib.optionals stdenv.isDarwin [ libedit ncurses Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libedit ncurses Security ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl readline zlib libidn2 gmp libiconv libunistring gettext ];
 
-  hardeningDisable = lib.optional stdenv.isDarwin "format";
+  hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Required to build with clang 16 or `configure` will fail to detect several standard functions.
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };

@@ -3,7 +3,7 @@ nvidia_x11: sha256:
 { stdenv, lib, fetchurl, patchelf }:
 
 let
-  sys = with lib; concatStringsSep "-" (reverseList (splitString "-" stdenv.system));
+  sys = lib.concatStringsSep "-" (lib.reverseList (lib.splitString "-" stdenv.system));
   bsys = builtins.replaceStrings ["_"] ["-"] sys;
   fmver = nvidia_x11.version;
 in
@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     description = "Fabricmanager daemon for NVLink intialization and control";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     mainProgram = "nv-fabricmanager";
-    maintainers = with maintainers; [ edwtjo ];
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }

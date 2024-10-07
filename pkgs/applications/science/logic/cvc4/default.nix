@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ gmp git python3.pkgs.toml readline swig libantlr3c antlr3_4 boost jdk python3 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ cln ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ cln ];
   configureFlags = [
     "--enable-language-bindings=c,c++,java"
     "--enable-gpl"
     "--with-readline"
     "--with-boost=${boost.dev}"
-  ] ++ lib.optionals (!stdenv.isDarwin) [ "--with-cln" ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "--with-cln" ];
 
   prePatch = ''
     patch -p1 -i ${./minisat-fenv.patch} -d src/prop/minisat

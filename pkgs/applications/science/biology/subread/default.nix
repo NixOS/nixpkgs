@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     cd src
-    cp Makefile.${if stdenv.isLinux then "Linux" else "MacOS"} Makefile
+    cp Makefile.${if stdenv.hostPlatform.isLinux then "Linux" else "MacOS"} Makefile
   '';
 
   makeFlags = [ "CC_EXEC=cc" ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "High-performance read alignment, quantification and mutation discovery";
     license = licenses.gpl3;
     maintainers = with maintainers; [ jbedo ];

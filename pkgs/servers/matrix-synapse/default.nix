@@ -17,20 +17,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.112.0";
+  version = "1.116.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-8iXw9C91kPWDlzo/3AA/iVCQqq47eGSORMTzEQTTS+8=";
+    hash = "sha256-TDVqRdp723zq57rb5ZFIX8lqA5D2p9akqNXvoJXSIKg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-hx/IMOxk4vUHXMMIcnxnC3RJcIvJL+IooZnf+m+VKSs=";
+    hash = "sha256-GSl4B2EVENspJsQ9jVh+gPJaRlCZwaPStjz5ALSzj/U=";
   };
 
   postPatch = ''
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -96,7 +96,7 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ twisted.optional-dependencies.tls;
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     postgres = if isPyPy then [
       psycopg2cffi
     ] else [
@@ -138,9 +138,9 @@ python3.pkgs.buildPythonApplication rec {
     mock
     parameterized
   ])
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

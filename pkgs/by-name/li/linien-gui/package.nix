@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     pyqt5
     superqt
     linien-client
+    requests
   ];
 
   dontWrapQtApps = true;

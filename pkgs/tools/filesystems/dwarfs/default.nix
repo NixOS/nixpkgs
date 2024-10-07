@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  substituteAll,
   bison,
   boost,
   cmake,

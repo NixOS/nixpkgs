@@ -11,13 +11,13 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0.1.0";
+  version = "0-unstable-2024-10-04";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "6eabc3f02fae3683bffab483e614bebfcd476b21";
-    hash = "sha256-wSZjK+rOXn+UQiP1NbdNn5/UW6UcBxjvlqr2wh++MbM=";
+    rev = "61ebdef2e263c091f24807b07701be5cb8068dea";
+    hash = "sha256-whgxjoDF7aey3xWy2b9Dp+NHsszK6By+raEbygcSU6w=";
   };
 
   nativeBuildInputs = [
@@ -28,19 +28,17 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     nix
     boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     SystemConfiguration
   ]);
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nix-base32-0.1.2-alpha.0" = "sha256-wtPWGOamy3+ViEzCxMSwBcoR4HMMD0t8eyLwXfCDFdo=";
-    };
   };
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
 
-  ATTIC_DISTRIBUTOR = "attic";
+  ATTIC_DISTRIBUTOR = "nixpkgs";
+  NIX_INCLUDE_PATH = "${lib.getDev nix}/include";
 
   # Attic interacts with Nix directly and its tests require trusted-user access
   # to nix-daemon to import NARs, which is not possible in the build sandbox.
@@ -54,6 +52,8 @@ rustPlatform.buildRustPackage {
         --fish <($out/bin/attic gen-completions fish)
     fi
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";

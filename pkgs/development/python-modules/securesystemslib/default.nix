@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     PySPX = [ pyspx ];
     awskms = [
       boto3
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ed25519
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "securesystemslib" ];
 

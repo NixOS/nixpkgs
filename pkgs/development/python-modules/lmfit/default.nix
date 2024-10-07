@@ -1,24 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
   asteval,
   dill,
-  numpy,
-  scipy,
-  uncertainties,
-  pytestCheckHook,
-  pandas,
+  fetchPypi,
   matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  setuptools,
+  uncertainties,
 }:
 
 buildPythonPackage rec {
   pname = "lmfit";
   version = "1.3.2";
-
   pyproject = true;
+
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -26,15 +28,16 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "--cov=lmfit --cov-report html" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=lmfit --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asteval
     dill
     numpy
@@ -43,14 +46,19 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pandas
     matplotlib
+    pandas
+    pytestCheckHook
   ];
+
+  pythonImportsCheck = [ "lmfit" ];
+
+  disabledTests = [ "test_check_ast_errors" ];
 
   meta = with lib; {
     description = "Least-Squares Minimization with Bounds and Constraints";
-    homepage = "https://lmfit-py.readthedocs.io/";
+    homepage = "https://lmfit.github.io/lmfit-py/";
+    changelog = "https://github.com/lmfit/lmfit-py/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nomeata ];
   };

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "timm";
-  version = "1.0.8";
+  version = "1.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "pytorch-image-models";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z7v1CTwIqdF8xhfGa2mtFi0sFjhOhM7X/q1OQ5qHA7c=";
+    hash = "sha256-iWZXile3hCUMx2q3VHJasX7rlJmT0OKBm9rkCXuWISw=";
   };
 
   build-system = [ pdm-backend ];

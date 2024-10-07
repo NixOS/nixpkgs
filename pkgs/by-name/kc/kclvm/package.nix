@@ -28,14 +28,14 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = [ rustc ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ rustc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libkclvm_cli_cdylib.dylib $out/lib/libkclvm_cli_cdylib.dylib
   '';
 

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p18nxijh323f4i1s2pg7pcr0557xljl5avv8ll5s9nfr34r5j0w";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin utmp
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin utmp
     ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";

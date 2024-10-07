@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # package does not contain tests as of v0.3.3
   docCheck = false;

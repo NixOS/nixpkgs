@@ -1,11 +1,9 @@
 # generic builder for Emacs packages
 
-{ lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
+{ lib, stdenv, emacs, texinfo, writeText, ... }:
 
 let
-  inherit (lib) optionalAttrs getLib;
-  handledArgs = [ "buildInputs" "packageRequires" "propagatedUserEnvPkgs" "meta" ]
-    ++ lib.optionals (emacs.withNativeCompilation or false) [ "nativeBuildInputs" "postInstall" ];
+  inherit (lib) optionalAttrs;
 
   setupHook = writeText "setup-hook.sh" ''
     source ${./emacs-funcs.sh}
@@ -21,13 +19,16 @@ let
     fi
   '';
 
+  libBuildHelper = import ./lib-build-helper.nix;
+
 in
 
-{ pname
-, version
-, buildInputs ? []
+libBuildHelper.extendMkDerivation' stdenv.mkDerivation (finalAttrs:
+
+{ buildInputs ? []
 , nativeBuildInputs ? []
 , packageRequires ? []
+, propagatedBuildInputs ? []
 , propagatedUserEnvPkgs ? []
 , postInstall ? ""
 , meta ? {}
@@ -36,10 +37,10 @@ in
 , ...
 }@args:
 
-stdenv.mkDerivation (finalAttrs: ({
-  name = "emacs-${pname}-${finalAttrs.version}";
+{
+  name = args.name or "emacs-${finalAttrs.pname}-${finalAttrs.version}";
 
-  unpackCmd = ''
+  unpackCmd = args.unpackCmd or ''
     case "$curSrc" in
       *.el)
         # keep original source filename without the hash
@@ -55,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: ({
     esac
   '';
 
-  buildInputs = [emacs texinfo] ++ packageRequires ++ buildInputs;
-  propagatedBuildInputs = packageRequires;
-  propagatedUserEnvPkgs = packageRequires ++ propagatedUserEnvPkgs;
+  inherit packageRequires;
+  buildInputs = finalAttrs.packageRequires ++ buildInputs;
+  nativeBuildInputs = [ emacs texinfo ] ++ nativeBuildInputs;
+  propagatedBuildInputs = finalAttrs.packageRequires ++ propagatedBuildInputs;
+  propagatedUserEnvPkgs = finalAttrs.packageRequires ++ propagatedUserEnvPkgs;
 
-  inherit setupHook;
-
-  doCheck = false;
+  setupHook = args.setupHook or setupHook;
 
   meta = {
     broken = false;
@@ -73,11 +74,7 @@ stdenv.mkDerivation (finalAttrs: ({
 
 // optionalAttrs (emacs.withNativeCompilation or false) {
 
-  LIBRARY_PATH = "${getLib stdenv.cc.libc}/lib";
-
-  nativeBuildInputs = [ gcc ] ++ nativeBuildInputs;
-
-  addEmacsNativeLoadPath = true;
+  addEmacsNativeLoadPath = args.addEmacsNativeLoadPath or true;
 
   inherit turnCompilationWarningToError ignoreCompilationError;
 
@@ -100,4 +97,4 @@ stdenv.mkDerivation (finalAttrs: ({
   '' + postInstall;
 }
 
-// removeAttrs args handledArgs))
+)

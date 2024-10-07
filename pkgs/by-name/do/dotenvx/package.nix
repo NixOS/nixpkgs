@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "dotenvx";
-  version = "1.7.0";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "dotenvx";
     repo = "dotenvx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AEgf46LCqQCKdq7yEvvumtVVZltPUn8ktLuFiLJar3g=";
+    hash = "sha256-SlZ18ToGbC+c5ffuYFGeOy30w90ukBO0qKxD+HNVt3E=";
   };
 
-  npmDepsHash = "sha256-TdMGkw5/aP9Ki65Ik7286fH5FD5VAfFgATul9ZOHWxA=";
+  npmDepsHash = "sha256-KaqSCtraMmQHe7Tcs/2CVaQcmazgHkV5K4T64lHEVP4=";
 
   dontNpmBuild = true;
 

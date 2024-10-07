@@ -5,20 +5,20 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "snipaste";
-  version = "2.9-Beta2";
+  version = "2.9.2-Beta";
 
   src = fetchurl {
     url = "https://download.snipaste.com/archives/Snipaste-${version}-x86_64.AppImage";
-    hash = "sha256-VJvw3M1Ohfji/PoIxn4gc9KcFl6H1wRYW5Pbf1p5rlg=";
+    hash = "sha256-oV69uABjzkbQdwb+1wRRxszhrwI4uyzhQZ4aXBnyeo8=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Screenshot tools";
     homepage = "https://www.snipaste.com/";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ luftmensch-luftmensch ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     mainProgram = "snipaste";
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

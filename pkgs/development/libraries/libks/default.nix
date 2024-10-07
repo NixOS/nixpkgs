@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isLinux libuuid
-    ++ lib.optional stdenv.isDarwin libossp_uuid;
+    ++ lib.optional stdenv.hostPlatform.isLinux libuuid
+    ++ lib.optional stdenv.hostPlatform.isDarwin libossp_uuid;
 
   passthru = {
     tests.freeswitch = freeswitch;
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Foundational support for signalwire C products";
     homepage = "https://github.com/signalwire/libks";
     maintainers = with lib.maintainers; [ misuzu ];

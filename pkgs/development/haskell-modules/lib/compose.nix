@@ -184,6 +184,13 @@ rec {
   markBrokenVersion = version: drv: assert drv.version == version; markBroken drv;
   markUnbroken = overrideCabal (drv: { broken = false; });
 
+  /* disableParallelBuilding drops the -j<n> option from the GHC
+     command line for the given package. This can be useful in rare
+     situations where parallel building of a package causes GHC to
+     fail for some reason.
+   */
+  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
+
   enableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = true; });
   disableLibraryProfiling = overrideCabal (drv: { enableLibraryProfiling = false; });
 
@@ -345,14 +352,14 @@ rec {
     , ignorePackages     ? []
     } : drv :
       overrideCabal (_drv: {
-        postBuild = with lib;
-          let args = concatStringsSep " " (
-                       optional ignoreEmptyImports "--ignore-empty-imports" ++
-                       optional ignoreMainModule   "--ignore-main-module" ++
+        postBuild =
+          let args = lib.concatStringsSep " " (
+                       lib.optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       lib.optional ignoreMainModule   "--ignore-main-module" ++
                        map (pkg: "--ignore-package ${pkg}") ignorePackages
                      );
           in "${pkgs.haskellPackages.packunused}/bin/packunused" +
-             optionalString (args != "") " ${args}";
+             lib.optionalString (args != "") " ${args}";
       }) (appendConfigureFlag "--ghc-option=-ddump-minimal-imports" drv);
 
   buildStackProject = pkgs.callPackage ../generic-stack-builder.nix { };

@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+{ lib, stdenv, fetchFromGitHub, buildLinux, variant, ... } @ args:
 
 let
   # comments with variant added for update script
-  # ./update-zen.py zen
-  zenVariant = {
-    version = "6.10.1"; #zen
-    suffix = "zen1"; #zen
-    sha256 = "0lr9qjz4hlvx3yc0lj65fnmbciyh6symycbi9ass761l1niswbk5"; #zen
-    isLqx = false;
-  };
-  # ./update-zen.py lqx
-  lqxVariant = {
-    version = "6.9.11"; #lqx
-    suffix = "lqx1"; #lqx
-    sha256 = "0i6i0ak10gswlk60pnkn5dlz74g4nd7n1xbnvf24nnwwp69kkd44"; #lqx
-    isLqx = true;
+  variants = {
+    # ./update-zen.py zen
+    zen = {
+      version = "6.10.9"; #zen
+      suffix = "zen1"; #zen
+      sha256 = "199362jd1waqri6arb8sdfqrzjkdki5vis2z03cpp2blnbqva10b"; #zen
+      isLqx = false;
+    };
+    # ./update-zen.py lqx
+    lqx = {
+      version = "6.10.9"; #lqx
+      suffix = "lqx1"; #lqx
+      sha256 = "0y7r55iy7ylddv7yrlwkz7ps82j447a6m3khq2w4sfh8f0xy86p7"; #lqx
+      isLqx = true;
+    };
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
     inherit version;
@@ -118,12 +120,9 @@ let
       maintainers = with lib.maintainers; [ thiagokokada jerrysm64 ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
 
   } // (args.argsOverride or { }));
 in
-{
-  zen = zenKernelsFor zenVariant;
-  lqx = zenKernelsFor lqxVariant;
-}
+zenKernelsFor variants.${variant}

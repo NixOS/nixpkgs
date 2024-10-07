@@ -6,17 +6,6 @@
 import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... }:
   let
     unit = if nftables then "nftables" else (if withFirewall then "firewall" else "nat");
-
-    routerBase =
-      lib.mkMerge [
-        { virtualisation.vlans = [ 2 1 ];
-          networking.firewall.enable = withFirewall;
-          networking.firewall.filterForward = nftables;
-          networking.nftables.enable = nftables;
-          networking.nat.internalIPs = [ "192.168.1.0/24" ];
-          networking.nat.externalInterface = "eth1";
-        }
-      ];
   in
   {
     name = "nat" + (lib.optionalString nftables "Nftables")
@@ -26,27 +15,27 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
     };
 
     nodes =
-      { client =
-          { pkgs, nodes, ... }:
-          lib.mkMerge [
-            { virtualisation.vlans = [ 1 ];
-              networking.defaultGateway =
-                (pkgs.lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
-              networking.nftables.enable = nftables;
-            }
-          ];
+      {
+        client = { lib, nodes, ... }: {
+          virtualisation.vlans = [ 1 ];
+          networking.defaultGateway =
+            (lib.head nodes.router.networking.interfaces.eth2.ipv4.addresses).address;
+          networking.nftables.enable = nftables;
+        };
 
-        router =
-        { ... }: lib.mkMerge [
-          routerBase
-          { networking.nat.enable = true; }
-        ];
+        router = { lib, ... }: {
+          virtualisation.vlans = [ 2 1 ];
+          networking.firewall.enable = withFirewall;
+          networking.firewall.filterForward = nftables;
+          networking.nftables.enable = nftables;
+          networking.nat.enable = true;
+          networking.nat.internalIPs = [ "192.168.1.0/24" ];
+          networking.nat.externalInterface = "eth1";
 
-        routerDummyNoNat =
-        { ... }: lib.mkMerge [
-          routerBase
-          { networking.nat.enable = false; }
-        ];
+          specialisation.no-nat.configuration = {
+            networking.nat.enable = lib.mkForce false;
+          };
+        };
 
         server =
           { ... }:
@@ -59,11 +48,7 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
           };
       };
 
-    testScript =
-      { nodes, ... }: let
-        routerDummyNoNatClosure = nodes.routerDummyNoNat.system.build.toplevel;
-        routerClosure = nodes.router.system.build.toplevel;
-      in ''
+    testScript = ''
         client.start()
         router.start()
         server.start()
@@ -94,14 +79,14 @@ import ./make-test-python.nix ({ pkgs, lib, withFirewall, nftables ? false, ... 
 
         # If we turn off NAT, the client shouldn't be able to reach the server.
         router.succeed(
-            "${routerDummyNoNatClosure}/bin/switch-to-configuration test 2>&1"
+            "/run/booted-system/specialisation/no-nat/bin/switch-to-configuration test 2>&1"
         )
         client.fail("curl -4 --fail --connect-timeout 5 http://server/ >&2")
         client.fail("ping -4 -c 1 server >&2")
 
         # And make sure that reloading the NAT job works.
         router.succeed(
-            "${routerClosure}/bin/switch-to-configuration test 2>&1"
+            "/run/booted-system/bin/switch-to-configuration test 2>&1"
         )
         # FIXME: this should not be necessary, but nat.service is not started because
         #        network.target is not triggered

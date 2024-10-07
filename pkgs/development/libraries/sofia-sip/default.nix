@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7QmK2UxEO5lC0KBDWB3bwKTy0Nc7WrdTLjoQYzezoaY=";
   };
 
-  buildInputs = [ glib openssl ] ++ lib.optional stdenv.isDarwin SystemConfiguration;
+  buildInputs = [ glib openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin SystemConfiguration;
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   meta = with lib; {

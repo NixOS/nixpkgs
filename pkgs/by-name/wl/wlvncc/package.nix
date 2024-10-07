@@ -19,6 +19,7 @@
 , pkg-config
 , pixman
 , wayland
+, wayland-scanner
 , zlib
 }:
 stdenv.mkDerivation {
@@ -36,6 +37,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

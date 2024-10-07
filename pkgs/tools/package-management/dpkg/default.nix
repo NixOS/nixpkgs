@@ -13,7 +13,7 @@
 , autoreconfHook
 , pkg-config
 , diffutils
-, glibc ? !stdenv.isDarwin
+, glibc ? !stdenv.hostPlatform.isDarwin
 , darwin
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
-  ] ++ lib.optional stdenv.isDarwin "--disable-linker-optimisations";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-linker-optimisations";
 
   enableParallelBuilding = true;
 
@@ -67,13 +67,13 @@ stdenv.mkDerivation rec {
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
        --replace '"diff"' \"${diffutils}/bin/diff\"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace src/main/help.c \
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
   '';
 
   buildInputs = [ perl zlib bzip2 xz zstd libmd ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
   nativeBuildInputs = [ makeWrapper perl autoreconfHook pkg-config ];
 
   postInstall =

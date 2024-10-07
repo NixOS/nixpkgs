@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ glib zlib libpng ];
 
-  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" "-DCMAKE_BUILD_TYPE=RELEASE" ];
+  cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;

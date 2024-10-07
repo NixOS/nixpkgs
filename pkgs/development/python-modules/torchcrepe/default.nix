@@ -29,7 +29,7 @@ buildPythonPackage {
     hash = "sha256-fhBU5KFDNDG4g4KNivE/dRpMPyu1QNa9xKN6HIz3tK4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     librosa
     resampy
     scipy

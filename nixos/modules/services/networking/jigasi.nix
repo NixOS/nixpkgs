@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.jigasi;
   homeDirName = "jigasi-home";
@@ -10,10 +7,10 @@ let
   sipCommunicatorPropertiesFileUnsubstituted = "${pkgs.jigasi}/etc/jitsi/jigasi/sip-communicator.properties";
 in
 {
-  options.services.jigasi = with types; {
-    enable = mkEnableOption "Jitsi Gateway to SIP - component of Jitsi Meet";
+  options.services.jigasi = with lib.types; {
+    enable = lib.mkEnableOption "Jitsi Gateway to SIP - component of Jitsi Meet";
 
-    xmppHost = mkOption {
+    xmppHost = lib.mkOption {
       type = str;
       example = "localhost";
       description = ''
@@ -21,7 +18,7 @@ in
       '';
     };
 
-    xmppDomain = mkOption {
+    xmppDomain = lib.mkOption {
       type = nullOr str;
       example = "meet.example.org";
       description = ''
@@ -31,7 +28,7 @@ in
       '';
     };
 
-    componentPasswordFile = mkOption {
+    componentPasswordFile = lib.mkOption {
       type = str;
       example = "/run/keys/jigasi-component";
       description = ''
@@ -39,7 +36,7 @@ in
       '';
     };
 
-    userName = mkOption {
+    userName = lib.mkOption {
       type = str;
       default = "callcontrol";
       description = ''
@@ -47,7 +44,7 @@ in
       '';
     };
 
-    userDomain = mkOption {
+    userDomain = lib.mkOption {
       type = str;
       example = "internal.meet.example.org";
       description = ''
@@ -55,7 +52,7 @@ in
       '';
     };
 
-    userPasswordFile = mkOption {
+    userPasswordFile = lib.mkOption {
       type = str;
       example = "/run/keys/jigasi-user";
       description = ''
@@ -63,7 +60,7 @@ in
       '';
     };
 
-    bridgeMuc = mkOption {
+    bridgeMuc = lib.mkOption {
       type = str;
       example = "jigasibrewery@internal.meet.example.org";
       description = ''
@@ -71,7 +68,7 @@ in
       '';
     };
 
-    defaultJvbRoomName = mkOption {
+    defaultJvbRoomName = lib.mkOption {
       type = str;
       default = "";
       example = "siptest";
@@ -80,8 +77,8 @@ in
       '';
     };
 
-    environmentFile = mkOption {
-      type = types.nullOr types.path;
+    environmentFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         File containing environment variables to be passed to the jigasi service,
@@ -93,10 +90,10 @@ in
       '';
     };
 
-    config = mkOption {
+    config = lib.mkOption {
       type = attrsOf str;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           "org.jitsi.jigasi.auth.URL" = "XMPP:jitsi-meet.example.com";
         }
@@ -107,12 +104,12 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.jicofo.config = {
       "org.jitsi.jicofo.jigasi.BREWERY" = "${cfg.bridgeMuc}";
     };
 
-    services.jigasi.config = mapAttrs (_: v: mkDefault v) {
+    services.jigasi.config = lib.mapAttrs (_: v: lib.mkDefault v) {
       "org.jitsi.jigasi.BRIDGE_MUC" = cfg.bridgeMuc;
     };
 
@@ -186,7 +183,7 @@ in
       restartTriggers = [
         config.environment.etc."jitsi/jigasi/sip-communicator.properties".source
       ];
-      environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jigasiProps);
+      environment.JAVA_SYS_PROPS = lib.concatStringsSep " " (lib.mapAttrsToList (k: v: "${k}=${toString v}") jigasiProps);
 
       script = ''
         ${pkgs.jigasi}/bin/jigasi \
@@ -228,9 +225,9 @@ in
     };
 
     environment.etc."jitsi/jigasi/sip-communicator.properties".source =
-      mkDefault "${sipCommunicatorPropertiesFile}";
+      lib.mkDefault "${sipCommunicatorPropertiesFile}";
     environment.etc."jitsi/jigasi/logging.properties".source =
-      mkDefault "${stateDir}/logging.properties-journal";
+      lib.mkDefault "${stateDir}/logging.properties-journal";
   };
 
   meta.maintainers = lib.teams.jitsi.members;

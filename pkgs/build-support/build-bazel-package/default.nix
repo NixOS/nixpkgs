@@ -64,7 +64,7 @@ let
       ;
   };
   fBuildAttrs = fArgs // buildAttrs;
-  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
+  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "hash" "sha256" ];
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
@@ -181,7 +181,7 @@ stdenv.mkDerivation (fBuildAttrs // {
         new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
         rm "$symlink"
         ln -sf "$new_target" "$symlink"
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # on linux symlink permissions cannot be modified, so we modify those on darwin to match the linux ones
         ${chmodder}/bin/chmodder "$symlink"
     '' + ''
@@ -197,8 +197,10 @@ stdenv.mkDerivation (fBuildAttrs // {
     dontFixup = true;
     allowedRequisites = [];
 
-    outputHashAlgo = "sha256";
-    outputHash = fetchAttrs.sha256;
+    inherit (lib.fetchers.normalizeHash { hashTypes = [ "sha256" ]; } fetchAttrs)
+      outputHash
+      outputHashAlgo
+    ;
   });
 
   nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];

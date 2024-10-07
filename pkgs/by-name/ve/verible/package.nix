@@ -18,8 +18,8 @@ buildBazelPackage rec {
   # These environment variables are read in bazel/build-version.py to create
   # a build string shown in the tools --version output.
   # If env variables not set, it would attempt to extract it from .git/.
-  GIT_DATE = "2024-08-05";
-  GIT_VERSION = "v0.0-3747-g79f6290d";
+  GIT_DATE = "2024-09-17";
+  GIT_VERSION = "v0.0-3791-g88bf4fb8";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
   version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
@@ -28,7 +28,7 @@ buildBazelPackage rec {
     owner = "chipsalliance";
     repo  = "verible";
     rev   = "${GIT_VERSION}";
-    hash  = "sha256-cixhB7QZStfG4DKjqEVipIeM9uUt6vibtbtZypzIcMo=";
+    hash  = "sha256-Na91NpHhPRZ1k82pLQBvEcL8EWi/1imNN3dPNSl65DQ=";
   };
 
   bazel = bazel_6;
@@ -37,7 +37,7 @@ buildBazelPackage rec {
   ];
 
   fetchAttrs = {
-    sha256 = "sha256-bKASgc5KftCWtMvJkGA4nweBAtgdnyC9uXIJxPjKYS0=";
+    hash = "sha256-bKASgc5KftCWtMvJkGA4nweBAtgdnyC9uXIJxPjKYS0=";
   };
 
   nativeBuildInputs = [

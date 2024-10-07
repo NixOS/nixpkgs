@@ -75,6 +75,11 @@ in {
       after = [ "multi-user.target" ];
       requires = [ "network-online.target" ];
 
+      path = [
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
+
       restartIfChanged = false;
       unitConfig.X-StopOnRemoval = false;
 

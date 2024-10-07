@@ -4,6 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
+
 in
 
 self: super: {

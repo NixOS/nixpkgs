@@ -175,9 +175,24 @@ in
     prosody.enable = mkOption {
       type = bool;
       default = true;
+      example = false;
       description = ''
         Whether to configure Prosody to relay XMPP messages between Jitsi Meet components. Turn this
         off if you want to configure it manually.
+      '';
+    };
+    prosody.lockdown = mkOption {
+      type = bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to disable Prosody features not needed by Jitsi Meet.
+
+        The default Prosody configuration assumes that it will be used as a
+        general-purpose XMPP server rather than as a companion service for
+        Jitsi Meet. This option reconfigures Prosody to only listen on
+        localhost without support for TLS termination, XMPP federation or
+        the file transfer proxy.
       '';
     };
 
@@ -211,7 +226,10 @@ in
         smacks = mkDefault true;
         tls = mkDefault true;
         websocket = mkDefault true;
+        proxy65 = mkIf cfg.prosody.lockdown (mkDefault false);
       };
+      httpInterfaces = mkIf cfg.prosody.lockdown (mkDefault [ "127.0.0.1" ]);
+      httpsPorts = mkIf cfg.prosody.lockdown (mkDefault []);
       muc = [
         {
           domain = "conference.${cfg.hostName}";
@@ -232,7 +250,7 @@ in
           extraConfig = ''
             restrict_room_creation = true
             storage = "memory"
-            admins = { "focus@auth.${cfg.hostName}" }
+            admins = { "focus@auth.${cfg.hostName}", "jvb@auth.${cfg.hostName}" }
           '';
         }
         {
@@ -300,7 +318,7 @@ in
             muc_component = "conference.${cfg.hostName}"
             breakout_rooms_component = "breakout.${cfg.hostName}"
         '')
-        (mkBefore ''
+        (mkBefore (''
           muc_mapper_domain_base = "${cfg.hostName}"
 
           cross_domain_websocket = true;
@@ -310,7 +328,10 @@ in
             "focus@auth.${cfg.hostName}",
             "jvb@auth.${cfg.hostName}"
           }
-        '')
+        '' + optionalString cfg.prosody.lockdown ''
+          c2s_interfaces = { "127.0.0.1" };
+          modules_disabled = { "s2s" };
+        ''))
       ];
       virtualHosts.${cfg.hostName} = {
         enabled = true;
@@ -444,7 +465,29 @@ in
         Type = "simple";
         ExecStart = "${pkgs.jitsi-excalidraw}/bin/jitsi-excalidraw-backend";
         Restart = "on-failure";
+
+        DynamicUser = true;
         Group = "jitsi-meet";
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectClock = true;
+        ProtectHome = true;
+        ProtectProc = true;
+        ProtectKernelLogs = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallFilter = [ "@system-service @pkey" "~@privileged" ];
       };
     };
 
@@ -513,7 +556,11 @@ in
             cp ${overrideJs "${pkgs.jitsi-meet}/interface_config.js" "interfaceConfig" cfg.interfaceConfig ""} $out/interface_config.js
             cp ./libs/external_api.min.js $out/external_api.js
           '';
-        in ''
+        in (optionalString cfg.excalidraw.enable ''
+          handle /socket.io/ {
+            reverse_proxy 127.0.0.1:${toString cfg.excalidraw.port}
+          }
+        '') + ''
           handle /http-bind {
             header Host ${cfg.hostName}
             reverse_proxy 127.0.0.1:5280

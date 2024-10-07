@@ -5,6 +5,7 @@
 , libffi
 , pkg-config
 , wayland-protocols
+, wayland-scanner
 , wayland
 , xorg
 , darwin
@@ -30,15 +31,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    wayland-scanner
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libffi
     wayland-protocols
     wayland
     xorg.libX11
     alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/cb --add-rpath $out/lib
   '';
 

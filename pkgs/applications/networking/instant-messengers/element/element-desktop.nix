@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-desktop";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
     hash = desktopSrcHash;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   };
 
   nativeBuildInputs = [ yarn fixup-yarn-lock nodejs makeWrapper jq ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   inherit seshat;
 
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   '';
 
   # The desktop item properties should be kept in sync with data from upstream:
-  # https://github.com/vector-im/element-desktop/blob/develop/package.json
+  # https://github.com/element-hq/element-desktop/blob/develop/package.json
   desktopItem = makeDesktopItem {
     name = "element-desktop";
     exec = "${executableName} %u";
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
   '';
 
@@ -147,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   meta = with lib; {
     description = "A feature-rich client for Matrix.org";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/element-hq/element-desktop/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;

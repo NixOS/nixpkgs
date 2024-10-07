@@ -28,6 +28,7 @@
   packaging,
   pandas,
   passlib,
+  setuptools,
   peft,
   pgmpy,
   plotly,
@@ -47,11 +48,10 @@
   scikit-learn,
   sentence-transformers,
   seqeval,
-  setuptools,
   smart-open,
   snorkel,
-  spacy,
   spacy-transformers,
+  spacy,
   sqlalchemy,
   tqdm,
   transformers,
@@ -67,7 +67,7 @@
 
 buildPythonPackage rec {
   pname = "argilla";
-  version = "1.29.0";
+  version = "1.29.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -76,8 +76,10 @@ buildPythonPackage rec {
     owner = "argilla-io";
     repo = "argilla";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+eQNvLDV063JY6CyngpGyo4NdSd6HvAHFgGWtPfZNVQ=";
+    hash = "sha256-ndendXlgACFdwnZ/P2W22Tr/Ji8AYw/6jtb8F3/zqSA=";
   };
+
+  sourceRoot = "${src.name}/${pname}";
 
   pythonRelaxDeps = [
     "httpx"
@@ -88,7 +90,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     httpx
@@ -105,7 +106,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server =
       [
         aiofiles
@@ -177,7 +178,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 

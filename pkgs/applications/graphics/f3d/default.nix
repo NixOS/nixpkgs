@@ -15,7 +15,7 @@
 , opencascade-occt
 , assimp
 , fontconfig
-, withManual ? !stdenv.isDarwin
+, withManual ? !stdenv.hostPlatform.isDarwin
 , withPythonBinding ? false
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     opencascade-occt
     assimp
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     OpenGL
   ] ++ lib.optionals withPythonBinding [

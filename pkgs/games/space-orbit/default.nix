@@ -38,7 +38,7 @@ EOF
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Space combat simulator";
     mainProgram = "space-orbit";
     license = licenses.gpl2Plus;

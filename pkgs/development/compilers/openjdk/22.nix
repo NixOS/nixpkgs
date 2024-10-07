@@ -42,6 +42,7 @@
 , gtk3
 , glib
 , writeShellScript
+, versionCheckHook
 }:
 
 let
@@ -253,6 +254,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   pos = __curPos;
   meta = import ./meta.nix lib featureVersion;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/java";
+
+  doInstallCheck = true;
 
   passthru = {
     updateScript =

@@ -78,7 +78,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison removeReferencesTo ]
           ++ (op docSupport groff)
-          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
+          ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
@@ -92,8 +92,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ op (!cursesSupport && stdenv.isDarwin) readline
-          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+          ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
+          ++ ops stdenv.hostPlatform.isDarwin [ libiconv libobjc libunwind Foundation ];
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
@@ -156,7 +156,7 @@ let
           # overrides that by enabling `-O2` which is the minimum optimization
           # needed for `_FORTIFY_SOURCE`.
         ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
-        ] ++ ops stdenv.isDarwin [
+        ] ++ ops stdenv.hostPlatform.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed
           "--with-out-ext=tk"
@@ -172,14 +172,6 @@ let
           # it's not going to be used.
           export HOME=$TMPDIR
         '';
-
-        # Work around useSystemCoreFoundationFramework hook causing issues with the ld64 upgrade.
-        # This will be fixed on staging in https://github.com/NixOS/nixpkgs/pull/329529
-        preBuild =
-          if lib.versionAtLeast ver.majMin "3.3" && stdenv.isDarwin && stdenv.isx86_64 then
-            "unset NIX_COREFOUNDATION_RPATH"
-          else
-            null;
 
         # fails with "16993 tests, 2229489 assertions, 105 failures, 14 errors, 89 skips"
         # mostly TZ- and patch-related tests

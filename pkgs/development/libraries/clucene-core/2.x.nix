@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     # required for darwin and linux-musl
     ./pthread-include.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./fix-darwin.patch
 
     # see https://bugs.gentoo.org/869170
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   # see https://github.com/macports/macports-ports/commit/236d43f2450c6be52dc42fd3a2bbabbaa5136201
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/shared/CMakeLists.txt --replace 'fstati64;_fstati64;fstat64;fstat;_fstat' 'fstat;_fstat'
     substituteInPlace src/shared/CMakeLists.txt --replace 'stati64;_stati64;stat64;stat;_stat' 'stat;_stat'
   '';

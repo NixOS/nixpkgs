@@ -54,7 +54,7 @@ index fcbd491..8f6e6f0 100644
 -pub const GIT_VERSION: &str = git_version!();
 -pub const BUILD_TIME: &str = include!(concat!(env!("OUT_DIR"), "/build-time.txt"));
 -pub const REMOTE_URL: &str = include!(concat!(env!("OUT_DIR"), "/remote-url.txt"));
-+pub const GIT_VERSION: &str = "d895cb94623d320f79b364a8f63ab518fddf697b";
++pub const GIT_VERSION: &str = "11bef15e66a3c9b0b991207d09a67c071b3dda02";
 +pub const BUILD_TIME: &str = "1970-01-01 00:00:00";
 +pub const REMOTE_URL: &str = "https://github.com/jpochyla/psst";
  

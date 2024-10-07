@@ -13,18 +13,18 @@
 buildPythonPackage rec {
   pname = "platformdirs";
   version = "4.2.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "platformdirs";
+    repo = "platformdirs";
     rev = "refs/tags/${version}";
     hash = "sha256-WsHB+Si8RnJ9b8dYA9m7YRin3UYdJlL1v6/v8SExXtY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];

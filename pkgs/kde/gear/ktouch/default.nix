@@ -1,4 +1,4 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "ktouch";
   # FIXME(qt5)

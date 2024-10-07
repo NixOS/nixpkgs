@@ -6,14 +6,12 @@
 
 assert enablePython -> swig != null && python3 != null;
 
-with lib;
-
 stdenv.mkDerivation (rec {
   pname = "libselinux";
   version = "3.6";
   inherit (libsepol) se_url;
 
-  outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
+  outputs = [ "bin" "out" "dev" "man" ] ++ lib.optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${version}/libselinux-${version}.tar.gz";
@@ -46,13 +44,13 @@ stdenv.mkDerivation (rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [
+  nativeBuildInputs = [ pkg-config python3 ] ++ lib.optionals enablePython [
     python3Packages.pip
     python3Packages.setuptools
     python3Packages.wheel
     swig
   ];
-  buildInputs = [ libsepol pcre2 fts ] ++ optionals enablePython [ python3 ];
+  buildInputs = [ libsepol pcre2 fts ] ++ lib.optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
@@ -72,11 +70,11 @@ stdenv.mkDerivation (rec {
 
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ optionals (fts != null) [
+  ] ++ lib.optionals (fts != null) [
     "FTS_LDLIBS=-lfts"
-  ] ++ optionals stdenv.hostPlatform.isStatic [
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "DISABLE_SHARED=y"
-  ] ++ optionals enablePython [
+  ] ++ lib.optionals enablePython [
     "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "PYTHON_SETUP_ARGS=--no-build-isolation"
@@ -87,11 +85,11 @@ stdenv.mkDerivation (rec {
       --replace "#include <unistd.h>" ""
   '';
 
-  preInstall = optionalString enablePython ''
+  preInstall = lib.optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux
   '';
 
-  installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
+  installTargets = [ "install" ] ++ lib.optional enablePython "install-pywrap";
 
   meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
     description = "SELinux core library";

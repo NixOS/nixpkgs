@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xca";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "chris2511";
     repo = "xca";
     rev = "RELEASE.${finalAttrs.version}";
-    hash = "sha256-E0Ap+JDK/oYTG+uaRHsdOxyLIywlYJ01T4ANQhNH220=";
+    hash = "sha256-Ty6j0Fl2smMGxp+1nnD3Fu83bn19gqtRKSA1wDgNZes=";
   };
 
   buildInputs = [ openssl qtbase ];

@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     abseil-cpp
-  ] ++ lib.optionals (stdenv.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ darwin.apple_sdk.frameworks.CoreServices ];
 
   pythonImportsCheck = [ "webrtc_noise_gain" ];
 

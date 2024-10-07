@@ -3,7 +3,7 @@
 let
   # TODO: Switch to OpenPAM once https://gitlab.com/oath-toolkit/oath-toolkit/-/issues/26 is addressed upstream
   securityDependency =
-    if stdenv.isDarwin then xmlsec
+    if stdenv.hostPlatform.isDarwin then xmlsec
     else pam;
 
 in stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ securityDependency ];
 
-  configureFlags = lib.optionals stdenv.isDarwin [ "--disable-pam" ];
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-pam" ];
 
   passthru.updateScript = nix-update-script { };
 

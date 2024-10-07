@@ -1,16 +1,16 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg_4, libjack2, libX11, libXext, libXinerama, qtx11extras
+{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg_7, libjack2, libX11, libXext, libXinerama, qtx11extras
 , libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja, nix-update-script
 }:
 
 mkDerivation rec {
   pname = "simplescreenrecorder";
-  version = "0.4.4";
+  version = "0.4.4-unstable-2024-08-13";
 
   src = fetchFromGitHub {
     owner = "MaartenBaert";
     repo = "ssr";
-    rev = version;
-    sha256 = "sha256-cVjQmyk+rCqmDJzdnDk7bQ8kpyD3HtTw3wLVx2thHok=";
+    rev = "4e3ba13dd212fc4213fe0911f371bc7d34033b8d";
+    hash = "sha256-jBZkyrZOrUljWgO8U4SZOTCu3sOm83unQ7vyv+KkAuE=";
   };
 
   cmakeFlags = [
@@ -29,7 +29,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ninja ];
   buildInputs = [
-    alsa-lib ffmpeg_4 libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
+    alsa-lib ffmpeg_7 libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
     libpulseaudio libv4l qtbase qttools qtx11extras
   ];
 

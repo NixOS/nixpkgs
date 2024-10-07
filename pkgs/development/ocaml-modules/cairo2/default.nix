@@ -14,9 +14,9 @@ buildDunePackage rec {
   useDune2 = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo dune-configurator ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  buildInputs = [ cairo dune-configurator ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
-  doCheck = !(stdenv.isDarwin
+  doCheck = !(stdenv.hostPlatform.isDarwin
   # https://github.com/Chris00/ocaml-cairo/issues/19
   || lib.versionAtLeast ocaml.version "4.10");
 

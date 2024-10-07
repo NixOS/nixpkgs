@@ -10,6 +10,12 @@
 mkKdeDerivation {
   pname = "kpipewire";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtquick3d pipewire ffmpeg mesa libva];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtquick3d
+    pipewire
+    ffmpeg
+    mesa
+    libva
+  ];
 }

@@ -13,6 +13,7 @@
 , libxml2
 , libllvm
 , version
+, devExtraCmakeFlags ? []
 }:
 let
   pname = "lld";
@@ -32,7 +33,7 @@ let
       '(''${LLVM_MAIN_SRC_DIR}/' '('
     mkdir -p libunwind/include
     tar -xf "${libunwind.src}" --wildcards -C libunwind/include --strip-components=2 "libunwind-*/include/"
-  '' + lib.optionalString (lib.versions.major release_version == "13" && stdenv.isDarwin) ''
+  '' + lib.optionalString (lib.versions.major release_version == "13" && stdenv.hostPlatform.isDarwin) ''
     substituteInPlace MachO/CMakeLists.txt --replace \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
@@ -55,7 +56,7 @@ stdenv.mkDerivation (rec {
     "-DLLD_INSTALL_PACKAGE_DIR=${placeholder "dev"}/lib/cmake/lld"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   # Musl's default stack size is too small for lld to be able to link Firefox.
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-Wl,-z,stack-size=2097152";

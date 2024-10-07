@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake git ];
-  buildInputs = lib.optionals stdenv.isLinux [ glibc.static ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
   meta = with lib; {
     homepage = "https://github.com/dropbox/lepton";

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs =
-    if stdenv.isDarwin then [ AppKit ApplicationServices Carbon ]
+    if stdenv.hostPlatform.isDarwin then [ AppKit ApplicationServices Carbon ]
     else [
       libX11
       libxkbcommon

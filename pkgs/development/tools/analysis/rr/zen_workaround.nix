@@ -1,17 +1,14 @@
-{ stdenv, lib, fetchzip, kernel }:
+{ stdenv, lib, kernel, rr }:
 
 /* The python script shouldn't be needed for users of this kernel module.
   https://github.com/rr-debugger/rr/blob/master/scripts/zen_workaround.py
   The module itself is called "zen_workaround" (a bit generic unfortunately).
 */
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rr-zen_workaround";
-  version = "2023-11-23";
 
-  src = fetchzip {
-    url = "https://gist.github.com/glandium/01d54cefdb70561b5f6675e08f2990f2/archive/f9d2070a7d87388da39acd157e0e53666a7d6ee0.zip";
-    sha256 = "sha256-VqqKYjd8J7Uh5ea+PjLT93cNdQFvGIwGu4bzx+weSvo=";
-  };
+  inherit (rr) src version;
+  sourceRoot = "source/third-party/zen-pmu-workaround";
 
   hardeningDisable = [ "pic" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;

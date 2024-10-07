@@ -91,9 +91,9 @@ stdenv.mkDerivation rec {
       ${lib.optionalString (nautilusSize != null) ("--size " + nautilusSize)} \
       ${lib.optionalString (panelOpacity != null) ("--panel-opacity " + panelOpacity)} \
       ${lib.optionalString (panelSize != null) ("--panel-size " + panelSize)} \
-      ${lib.optionalString (roundedMaxWindow == true) "--roundedmaxwindow"} \
-      ${lib.optionalString (nordColor == true) "--nordcolor"} \
-      ${lib.optionalString (darkerColor == true) "--darkercolor"} \
+      ${lib.optionalString roundedMaxWindow "--roundedmaxwindow"} \
+      ${lib.optionalString nordColor "--nordcolor"} \
+      ${lib.optionalString darkerColor "--darkercolor"} \
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share

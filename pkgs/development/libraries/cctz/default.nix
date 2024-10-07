@@ -13,13 +13,13 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  buildInputs = lib.optional stdenv.isDarwin Foundation;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   installTargets = [ "install_hdrs" ]
     ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
     ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libcctz.so $out/lib/libcctz.so
   '';
 

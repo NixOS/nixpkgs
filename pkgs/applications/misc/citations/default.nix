@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     poppler
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

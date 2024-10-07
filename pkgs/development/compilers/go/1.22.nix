@@ -47,16 +47,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.22.5";
+  version = "1.22.7";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-rJxyPyJJaa7mJLw0/TTJ4T8qIS11xxyAfeZEu0bhEvY=";
+    hash = "sha256-ZkMth9heDPrD7f/mN9WTD8Td9XkzE/4R5KDzMwI8h58=";
   };
 
   strictDeps = true;
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];

@@ -2,11 +2,11 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  python,
   isPy27,
   enum34,
   attrs,
   pytz,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,10 +24,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     attrs
     pytz
+    pytestCheckHook
   ];
-  checkPhase = ''
-    ${python.interpreter} setup.py test
-  '';
 
   meta = with lib; {
     description = "Simple serialization library based on ast.literal_eval";

@@ -8,9 +8,8 @@
   zlib,
   stdenv,
   darwin,
+  versionCheckHook,
   nix-update-script,
-  testers,
-  tinymist,
   vscode-extensions,
 }:
 
@@ -18,13 +17,13 @@ rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.18";
+  version = "0.11.28";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2tf2Dg6HfJrHQgjNKtJNT7kLoUKMoLe6U2O7VsMg7Vs=";
+    hash = "sha256-Wiuf53HlTMJeYJG815e9PgOtJBRxYRPllus7mmxdvM4=";
   };
 
   cargoLock = {
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
       openssl
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreFoundation
       darwin.apple_sdk_11_0.frameworks.CoreServices
       darwin.apple_sdk_11_0.frameworks.Security
@@ -53,19 +52,27 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     "--skip=e2e"
+
     # Fails because of missing `creation_timestamp` field
     # https://github.com/NixOS/nixpkgs/pull/328756#issuecomment-2241322796
     "--skip=test_config_update"
+
+    # Require internet access
+    "--skip=docs::tests::cetz"
+    "--skip=docs::tests::tidy"
+    "--skip=docs::tests::touying"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "-V" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
     tests = {
       vscode-extension = vscode-extensions.myriad-dreamin.tinymist;
-      version = testers.testVersion {
-        command = "${meta.mainProgram} -V";
-        package = tinymist;
-      };
     };
   };
 
@@ -75,6 +82,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
-    maintainers = with lib.maintainers; [ lampros ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      lampros
+    ];
   };
 }

@@ -71,24 +71,26 @@ stdenv.mkDerivation (finalAttrs: {
           'string(FIND "''${_module_dir}" "''${_core_abs_dir}" found_basepath)' \
           'set (found_basepath 0)'
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cmake/PySideHelpers.cmake \
         --replace-fail \
           "Designer" ""
     '';
 
   # "Couldn't find libclang.dylib You will likely need to add it manually to PATH to ensure the build succeeds."
-  env = lib.optionalAttrs stdenv.isDarwin { LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    LLVM_INSTALL_DIR = "${llvmPackages.libclang.lib}/lib";
+  };
 
   nativeBuildInputs = [
     cmake
     ninja
     python
     pythonImportsCheckHook
-  ] ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
 
   buildInputs =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       # qtwebengine fails under darwin
       # see https://github.com/NixOS/nixpkgs/pull/312987
       packages ++ [ python.pkgs.qt6.qtwebengine ]

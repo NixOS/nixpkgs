@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.28.10";
+  version = "2.28.12";
 
   src = passthru.sources.${stdenv.hostPlatform.system} or (throw "Unsupported platform for blackfire: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     dpkg
   ];
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    if ${ lib.boolToString stdenv.isLinux }
+    if ${ lib.boolToString stdenv.hostPlatform.isLinux }
     then
       dpkg-deb -x $src $out
       mv $out/usr/* $out
@@ -57,23 +57,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "HWSIffGVZYu9xTBM2uajkhBX7kzH17fepyZxMVQTOp8=";
+        sha256 = "Z8E8Nn+q9Onku6K7OM3qh2Co0QYnxn9s+g2/xgntFCw=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "wbqhEOw7tM3ekHCQUZpy6DiiEtYssoNFNdlzW8SkXgQ=";
+        sha256 = "RbT65OuvjUD73h5qp9n5EIXTPR94T7z6/4EcsE/XMsM=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "LiN2qnhWhLWSMG/9G6Zf4rwCjksvvYWsDhHSPx+Bsjk=";
+        sha256 = "d1VadZt5yZg7AF0UITh3XcEGxBLR6uONgkaLt5vXTE0=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "lNIGtc7gU1jtkfCqJRnGWu6RXMcVDM/ayKTsUMq9j+M=";
+        sha256 = "h8IAxVUj85mh8Lz/zpxAHv0r4ozodiFWw+we0b4ZhJo=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "2gmAVjjTzFx36MxB8yyUTjXyH8oeyUXVhJby3rvV1Ek=";
+        sha256 = "wp5I8urCtH1zr5Pg10yBN5RqVMPmWS/KNd6zSvIslKo=";
       };
     };
 

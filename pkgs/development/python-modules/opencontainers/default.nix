@@ -20,11 +20,11 @@ buildPythonPackage rec {
     sed -i "/pytest-runner/d" setup.py
   '';
 
-  passthru.optional-dependencies.reggie = [ requests ];
+  optional-dependencies.reggie = [ requests ];
 
   pythonImportsCheck = [ "opencontainers" ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.reggie;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.reggie;
 
   __darwinAllowLocalNetworking = true;
 

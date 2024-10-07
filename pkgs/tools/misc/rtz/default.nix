@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, fetchurl
 , pkg-config
 , bzip2
 , openssl
@@ -11,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rtz";
-  version = "0.5.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "twitchax";
     repo = "rtz";
     rev = "v${version}";
-    hash = "sha256-cc5yGZ4zHB9V//ywvKv9qgKGDpKotzkJKbfwv1rK2tM=";
+    hash = "sha256-V7N9NFIc/WWxLaahkjdS47Qj8sc3HRdKSkrBqi1ngA8=";
   };
 
   cargoLock = {
@@ -35,16 +36,12 @@ rustPlatform.buildRustPackage rec {
     bzip2
     openssl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   buildFeatures = [ "web" ];
-
-  env = {
-    # requires nightly features
-    RUSTC_BOOTSTRAP = true;
-  };
 
   meta = with lib; {
     description = "Tool to easily work with timezone lookups via a binary, a library, or a server";

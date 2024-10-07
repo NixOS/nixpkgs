@@ -55,7 +55,7 @@ buildPythonPackage rec {
       pyqtgraph
       pyqt5
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       cramfsprogs
       cramfsswap
       sasquatch

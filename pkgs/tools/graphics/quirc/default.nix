@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dlbeer/quirc/commit/257c6c94d99960819ecabf72199e5822f60a3bc5.patch?full_index=1";
       hash = "sha256-WLQK7vy34VmgJzppTnRjAcZoSGWVaXQSaGq9An8W0rw=";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Disable building of linux-only demos on darwin systems
     ./0001-Don-t-build-demos.patch
   ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # don't install static library
     rm $out/lib/libquirc.a
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Set absolute install name to avoid the need for DYLD_LIBRARY_PATH
     dylib=$out/lib/libquirc.${finalAttrs.version}.dylib
     ${stdenv.cc.targetPrefix}install_name_tool -id "$dylib" "$dylib"

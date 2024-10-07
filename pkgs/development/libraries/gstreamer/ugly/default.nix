@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libmad
     libmpeg2
     x264
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     IOKit
     CoreFoundation
     DiskArbitration

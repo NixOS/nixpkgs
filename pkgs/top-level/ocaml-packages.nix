@@ -56,6 +56,10 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+    augeas = callPackage ../development/ocaml-modules/augeas {
+      inherit (pkgs) augeas;
+    };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
@@ -63,6 +67,8 @@ let
     ### B ###
 
     b0 = callPackage ../development/ocaml-modules/b0 { };
+
+    backoff = callPackage ../development/ocaml-modules/backoff { };
 
     bap = janeStreet_0_15.bap;
 
@@ -224,8 +230,6 @@ let
     cohttp-lwt-jsoo = callPackage ../development/ocaml-modules/cohttp/lwt-jsoo.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
-
-    cohttp-mirage = callPackage ../development/ocaml-modules/cohttp/mirage.nix { };
 
     cohttp-top = callPackage ../development/ocaml-modules/cohttp/top.nix { };
 
@@ -444,6 +448,8 @@ let
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+    eio-ssl = callPackage ../development/ocaml-modules/eio-ssl { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -658,6 +664,8 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
+
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
@@ -688,6 +696,14 @@ let
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
+    httpun = callPackage ../development/ocaml-modules/httpun { };
+
+    httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
+    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
+    httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
@@ -1117,8 +1133,6 @@ let
 
     mirage-bootvar-xen = callPackage ../development/ocaml-modules/mirage-bootvar-xen { };
 
-    mirage-channel = callPackage ../development/ocaml-modules/mirage-channel { };
-
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
     mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
@@ -1126,8 +1140,6 @@ let
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
     mirage-console = callPackage ../development/ocaml-modules/mirage-console { };
-
-    mirage-console-unix = callPackage ../development/ocaml-modules/mirage-console/unix.nix { };
 
     mirage-crypto = callPackage ../development/ocaml-modules/mirage-crypto { };
 
@@ -1181,6 +1193,8 @@ let
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
+    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
+
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1204,6 +1218,10 @@ let
     msat = callPackage ../development/ocaml-modules/msat { };
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
+
+    multicore-bench =  callPackage ../development/ocaml-modules/multicore-bench { };
+
+    multicore-magic =  callPackage ../development/ocaml-modules/multicore-magic { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
 
@@ -1783,6 +1801,8 @@ let
     terminal = callPackage ../development/ocaml-modules/terminal { };
 
     terminal_size = callPackage ../development/ocaml-modules/terminal_size { };
+
+    terml = callPackage ../development/ocaml-modules/terml { };
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 

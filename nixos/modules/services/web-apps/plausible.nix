@@ -329,6 +329,6 @@ in {
     ];
   };
 
-  meta.maintainers = with maintainers; [ xanderio ];
+  meta.maintainers = teams.cyberus.members;
   meta.doc = ./plausible.md;
 }

@@ -39,6 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "lbreakouthd";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableHttp3 "http3")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-faligned-allocation"
   ]);
 

@@ -34,12 +34,12 @@ let
   };
 
   mkNongnuDevelPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/nongnu-devel-packages.nix {
-    inherit (pkgs) buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
   mkNongnuPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/nongnu-packages.nix {
-    inherit (pkgs) buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 

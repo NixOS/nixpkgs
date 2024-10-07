@@ -17,16 +17,16 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.13.1";
+    version = "1.0.0";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-bh0UsXA5yHtvP9femOwEzVzmu1VLz2uZwoIHL/kI7kM=";
+      hash = "sha256-y0C2z2iMMQSG5+xGngZ98+ixIgbvaQxPdAWuPbEbBAY=";
     };
 
-    vendorHash = "sha256-ziCJG722c32QAh9QmoC2E7TcLiC2InKwfdC9mkanTsU=";
+    vendorHash = "sha256-zhGqDHdVGg7eGnw5L3eSyXKBTjp85ir5zrtf7HbXmC0=";
 
     inherit overrideModAttrs;
 
@@ -37,11 +37,11 @@ let
     ldflags = [
       "-s"
       "-w"
-      "-X github.com/temporalio/cli/headers.Version=${version}"
+      "-X github.com/temporalio/cli/temporalcli.Version=${version}"
     ];
 
     # Tests fail with x86 on macOS Rosetta 2
-    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
+    doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
     preCheck = ''
       export HOME="$(mktemp -d)"

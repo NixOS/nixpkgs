@@ -61,6 +61,10 @@ let
 
   removePythonPrefix = lib.removePrefix namePrefix;
 
+  mkPythonEditablePackage = callPackage ./editable.nix { };
+
+  mkPythonMetaPackage = callPackage ./meta-package.nix { };
+
   # Convert derivation to a Python module.
   toPythonModule = drv:
     drv.overrideAttrs( oldAttrs: {
@@ -93,10 +97,11 @@ let
 
 in {
   inherit lib pkgs stdenv;
-  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
+  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy312 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
+  inherit mkPythonMetaPackage mkPythonEditablePackage;
 
   python = toPythonModule python;
 

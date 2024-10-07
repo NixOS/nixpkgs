@@ -41,30 +41,49 @@ in lib.init bootStages ++ [
       if crossSystem.isStatic
       then buildPackages.stdenvAdapters.makeStatic
       else lib.id;
+    stdenvNoCC = adaptStdenv (buildPackages.stdenv.override (old: rec {
+      buildPlatform = localSystem;
+      hostPlatform = crossSystem;
+      targetPlatform = crossSystem;
+
+      # Prior overrides are surely not valid as packages built with this run on
+      # a different platform, and so are disabled.
+      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
+      allowedRequisites = null;
+
+      cc = null;
+      hasCC = false;
+
+      extraNativeBuildInputs = old.extraNativeBuildInputs
+        ++ lib.optionals
+             (hostPlatform.isLinux && !buildPlatform.isLinux)
+             [ buildPackages.patchelf ]
+        ++ lib.optional
+             (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
+               in f hostPlatform && !(f buildPlatform) )
+             buildPackages.updateAutotoolsGnuConfigScriptsHook
+        ;
+    }));
   in {
     inherit config;
     overlays = overlays ++ crossOverlays;
     selfBuild = false;
+    inherit stdenvNoCC;
     stdenv = let
-      baseStdenv = adaptStdenv (buildPackages.stdenv.override (old: rec {
-        buildPlatform = localSystem;
-        hostPlatform = crossSystem;
-        targetPlatform = crossSystem;
+      inherit (stdenvNoCC) hostPlatform targetPlatform;
+      baseStdenv = stdenvNoCC.override {
+        # Old ones run on wrong platform
+        extraBuildInputs = lib.optionals hostPlatform.isDarwin [
+          buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation
+        ];
 
-        # Prior overrides are surely not valid as packages built with this run on
-        # a different platform, and so are disabled.
-        overrides = _: _: {};
-        extraBuildInputs = [ ] # Old ones run on wrong platform
-           ++ lib.optionals hostPlatform.isDarwin [ buildPackages.targetPackages.darwin.apple_sdk.frameworks.CoreFoundation ]
-           ;
-        allowedRequisites = null;
-
-        hasCC = !targetPlatform.isGhcjs;
+        hasCC = !stdenvNoCC.targetPlatform.isGhcjs;
 
         cc = if crossSystem.useiOSPrebuilt or false
                then buildPackages.darwin.iosSdkPkgs.clang
              else if crossSystem.useAndroidPrebuilt or false
-               then buildPackages."androidndkPkgs_${crossSystem.ndkVer}".clang
+               then buildPackages."androidndkPkgs_${crossSystem.androidNdkVersion}".clang
              else if targetPlatform.isGhcjs
                # Need to use `throw` so tryEval for splicing works, ugh.  Using
                # `null` or skipping the attribute would cause an eval failure
@@ -75,18 +94,13 @@ in lib.init bootStages ++ [
                then buildPackages.llvmPackages.libcxxClang
              else if crossSystem.useLLVM or false
                then buildPackages.llvmPackages.clang
+             else if crossSystem.useZig or false
+               then buildPackages.zig.cc
+             else if crossSystem.useArocc or false
+               then buildPackages.arocc
              else buildPackages.gcc;
 
-        extraNativeBuildInputs = old.extraNativeBuildInputs
-          ++ lib.optionals
-               (hostPlatform.isLinux && !buildPlatform.isLinux)
-               [ buildPackages.patchelf ]
-          ++ lib.optional
-               (let f = p: !p.isx86 || builtins.elem p.libc [ "musl" "wasilibc" "relibc" ] || p.isiOS || p.isGenode;
-                 in f hostPlatform && !(f buildPlatform) )
-               buildPackages.updateAutotoolsGnuConfigScriptsHook
-          ;
-      }));
+      };
     in if config ? replaceCrossStdenv then config.replaceCrossStdenv { inherit buildPackages baseStdenv; } else baseStdenv;
   })
 

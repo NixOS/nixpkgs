@@ -1,15 +1,13 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
-
-, autoreconfHook
+, meson
+, ninja
 , go-md2man
 , pkg-config
 , openssl
 , fuse3
 , libcap
-, libseccomp
 , python3
 , which
 , valgrind
@@ -25,43 +23,29 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "composefs";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "composefs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ekUFLZGWTsiJZFv3nHoxuV057zoOtWBIkt+VdtzlaU4=";
+    hash = "sha256-9YEY7oTjWwVT2KbzTOOc6sJIGEAkdLSKDf1noF1cYuA=";
   };
 
   strictDeps = true;
   outputs = [ "out" "lib" "dev" ];
 
-  patches = [
-    # fixes composefs-info tests, remove in next release
-    # https://github.com/containers/composefs/pull/291
-    (fetchpatch {
-      url = "https://github.com/containers/composefs/commit/f7465b3a57935d96451b392b07aa3a1dafb56e7b.patch";
-      hash = "sha256-OO3IfqLf3dQGjEgKx3Bo630KALmLAWwgdACuyZm2Ujc=";
-    })
-  ];
-
   postPatch = lib.optionalString installExperimentalTools ''
-    sed -i "s/noinst_PROGRAMS +\?=/bin_PROGRAMS +=/g" tools/Makefile.am
+    substituteInPlace tools/meson.build \
+      --replace-fail "install : false" "install : true"
   '';
 
-  configureFlags = [
-    (lib.enableFeature true "man")
-    (lib.enableFeature enableValgrindCheck "valgrind-test")
-  ];
-
-  nativeBuildInputs = [ autoreconfHook go-md2man pkg-config ];
+  nativeBuildInputs = [ meson ninja go-md2man pkg-config ];
   buildInputs = [ openssl ]
     ++ lib.optional fuseSupport fuse3
     ++ lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
       libcap
-      libseccomp
     ]
   );
 
@@ -71,11 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional fuseSupport fuse3
     ++ lib.filter (lib.meta.availableOn stdenv.buildPlatform) [ erofs-utils fsverity-utils ];
 
+  mesonCheckFlags = lib.optionals enableValgrindCheck "--setup=valgrind";
+
   preCheck = ''
-    patchShebangs --build tests/*dir tests/*.sh
-    substituteInPlace tests/*.sh \
-      --replace-quiet " /tmp" " $TMPDIR" \
-      --replace-quiet " /var/tmp" " $TMPDIR"
+    patchShebangs --build ../tests/*dir ../tests/*.sh
   '';
 
   passthru = {

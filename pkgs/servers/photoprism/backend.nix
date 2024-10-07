@@ -1,12 +1,20 @@
-{ lib, buildGoModule, coreutils, libtensorflow, src, version, ... }:
+{ lib, buildGoModule, coreutils, libtensorflow, src, version
+, pkg-config
+, vips
+}:
 
 buildGoModule rec {
   inherit src version;
   pname = "photoprism-backend";
 
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
   buildInputs = [
     coreutils
     libtensorflow
+    vips
   ];
 
   ldflags = [
@@ -19,7 +27,7 @@ buildGoModule rec {
     substituteInPlace internal/commands/passwd.go --replace '/bin/stty' "${coreutils}/bin/stty"
   '';
 
-  vendorHash = "sha256-ogJ/FwWJt1L0NGKX29tqWmHo4WslzC7ck5r7vn5PEuY=";
+  vendorHash = "sha256-6xE1j/Vh9ltE6TpBkvjK4rzLyXv8OJzy84vf9Iqw3yU=";
 
   subPackages = [ "cmd/photoprism" ];
 

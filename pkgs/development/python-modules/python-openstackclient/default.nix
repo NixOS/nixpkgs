@@ -5,17 +5,25 @@
   ddt,
   openstackdocstheme,
   osc-lib,
+  osc-placement,
   pbr,
+  python-aodhclient,
   python-barbicanclient,
   python-cinderclient,
   python-designateclient,
   python-heatclient,
   python-ironicclient,
   python-keystoneclient,
+  python-magnumclient,
   python-manilaclient,
-  python-novaclient,
+  python-mistralclient,
+  python-neutronclient,
   python-openstackclient,
+  python-watcherclient,
+  python-zaqarclient,
+  python-zunclient,
   requests-mock,
+  requests,
   setuptools,
   sphinxHook,
   sphinxcontrib-apidoc,
@@ -25,12 +33,12 @@
 
 buildPythonPackage rec {
   pname = "python-openstackclient";
-  version = "6.6.0";
+  version = "7.1.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-u+8e00gpxBBSsuyiZIDinKH3K+BY0UMNpTQexExPKVw=";
+    hash = "sha256-hLbxcm/LkqMU2dyTMYhIB12iR7eYMUhC0bFS8zZEGl0=";
   };
 
   build-system = [
@@ -47,7 +55,7 @@ buildPythonPackage rec {
     pbr
     python-cinderclient
     python-keystoneclient
-    python-novaclient
+    requests
   ];
 
   nativeCheckInputs = [
@@ -64,17 +72,26 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "openstackclient" ];
 
+  optional-dependencies = {
+    # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
+    cli-plugins = [
+      osc-placement
+      python-aodhclient
+      python-barbicanclient
+      python-designateclient
+      python-heatclient
+      python-ironicclient
+      python-magnumclient
+      python-manilaclient
+      python-mistralclient
+      python-neutronclient
+      python-watcherclient
+      python-zaqarclient
+      python-zunclient
+    ];
+  };
+
   passthru = {
-    optional-dependencies = {
-      # See https://github.com/openstack/python-openstackclient/blob/master/doc/source/contributor/plugins.rst
-      cli-plugins = [
-        python-barbicanclient
-        python-designateclient
-        python-heatclient
-        python-ironicclient
-        python-manilaclient
-      ];
-    };
     tests.version = testers.testVersion {
       package = python-openstackclient;
       command = "openstack --version";

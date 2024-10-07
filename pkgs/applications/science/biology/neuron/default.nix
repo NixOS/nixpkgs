@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     git
   ] ++ optionals useCore [ perl gsl ]
-  ++ optionals stdenv.isDarwin [ xcbuild ];
+  ++ optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = optionals useIv [
     xorg.libX11.dev

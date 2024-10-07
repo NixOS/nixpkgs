@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ] ++ lib.optional stdenv.isLinux jemalloc;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
   # jemalloc headers are required in include/folly/portability/Malloc.h
-  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [
@@ -66,13 +66,13 @@ stdenv.mkDerivation rec {
 
     # temporary hack until folly builds work on aarch64,
     # see https://github.com/facebook/folly/issues/1880
-    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
 
     # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
     # see https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optional (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
   ];
 

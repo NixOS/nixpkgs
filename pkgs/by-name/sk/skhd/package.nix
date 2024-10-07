@@ -10,7 +10,7 @@
 let
   inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
 
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "skhd";

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cmark";
-  version = "0.31.0";
+  version = "0.31.1";
 
   src = fetchFromGitHub {
     owner = "commonmark";
     repo = pname;
     rev = version;
-    sha256 = "sha256-GBesKTp9DqoFAmCc0RB+XePvzV9g+w+oyrD1nCgyklI=";
+    sha256 = "sha256-+JLw7zCjjozjq1RhRQGFqHj/MTUTq3t7A0V3T2U2PQk=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preCheck = let
-    lib_path = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+    lib_path = if stdenv.hostPlatform.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in ''
     export ${lib_path}=$(readlink -f ./src)
   '';

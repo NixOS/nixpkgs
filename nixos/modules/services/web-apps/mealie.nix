@@ -57,7 +57,6 @@ in
 
       environment = {
         PRODUCTION = "true";
-        ALEMBIC_CONFIG_FILE="${pkg}/config/alembic.ini";
         API_PORT = toString cfg.port;
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";

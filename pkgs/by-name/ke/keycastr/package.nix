@@ -24,6 +24,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = "https://github.com/keycastr/keycastr";
     description = "Open-source keystroke visualizer";

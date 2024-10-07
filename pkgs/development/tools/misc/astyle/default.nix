@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake }:
+{ stdenv, lib, fetchurl, cmake, asLibrary ? false }:
 
 stdenv.mkDerivation rec {
   pname = "astyle";
@@ -10,6 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  # upstream repo includes a build/ directory
+  cmakeBuildDir = "_build";
+
+  cmakeFlags = lib.optional asLibrary [
+    "-DBUILD_SHARED_LIBS=ON"
+  ];
+
+  postInstall = lib.optionalString asLibrary ''
+    install -Dm444 ../src/astyle.h $out/include/astyle.h
+  '';
 
   meta = with lib; {
     description = "Source code indenter, formatter, and beautifier for C, C++, C# and Java";

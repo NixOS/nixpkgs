@@ -5,14 +5,14 @@ set -eu -o pipefail
 
 source_file=pkgs/development/python-modules/types-aiobotocore-packages/default.nix
 
-#nix-update python312Packages.types-aiobotocore --commit --build
+nix-update python312Packages.types-aiobotocore --commit --build
 
 packages=(
   types-aiobotocore-accessanalyzer
   types-aiobotocore-account
   types-aiobotocore-acm
   types-aiobotocore-acm-pca
-  types-aiobotocore-alexaforbusiness
+  # types-aiobotocore-alexaforbusiness  Obsolete, will be removed soon
   types-aiobotocore-amp
   types-aiobotocore-amplify
   types-aiobotocore-amplifybackend
@@ -39,7 +39,7 @@ packages=(
   types-aiobotocore-autoscaling-plans
   types-aiobotocore-backup
   types-aiobotocore-backup-gateway
-  types-aiobotocore-backupstorage
+  # types-aiobotocore-backupstorage  Obsolete, will be removed soon
   types-aiobotocore-batch
   types-aiobotocore-billingconductor
   types-aiobotocore-braket
@@ -73,7 +73,7 @@ packages=(
   types-aiobotocore-codeguru-security
   types-aiobotocore-codeguruprofiler
   types-aiobotocore-codepipeline
-  types-aiobotocore-codestar
+  # types-aiobotocore-codestar  Obsolete, will be removed soon
   types-aiobotocore-codestar-connections
   types-aiobotocore-codestar-notifications
   types-aiobotocore-cognito-identity
@@ -151,7 +151,7 @@ packages=(
   types-aiobotocore-guardduty
   types-aiobotocore-health
   types-aiobotocore-healthlake
-  types-aiobotocore-honeycode
+  # types-aiobotocore-honeycode  Obsolete, will be removed soon
   types-aiobotocore-iam
   types-aiobotocore-identitystore
   types-aiobotocore-imagebuilder
@@ -235,7 +235,7 @@ packages=(
   types-aiobotocore-migrationhub-config
   types-aiobotocore-migrationhuborchestrator
   types-aiobotocore-migrationhubstrategy
-  types-aiobotocore-mobile
+  # types-aiobotocore-mobile  Obsolete, will be removed soon
   types-aiobotocore-mq
   types-aiobotocore-mturk
   types-aiobotocore-mwaa
