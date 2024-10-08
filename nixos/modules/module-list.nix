@@ -177,6 +177,7 @@
   ./programs/digitalbitbox/default.nix
   ./programs/direnv.nix
   ./programs/dmrconfig.nix
+  ./programs/dolphin.nix
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
