@@ -1,0 +1,19 @@
+diff --git a/src/index.ts b/src/index.ts
+index 3d41389..f6bfb95 100644
+--- a/src/index.ts
++++ b/src/index.ts
+@@ -19,7 +19,6 @@ import { resolve } from 'node:path'
+ import { errorHandler, config as configInited, versionFormatter } from './utils'
+ import { commands } from './cmds'
+ import { BIN_NAME, ENGINE_DIR } from './constants'
+-import { updateCheck } from './middleware/update-check'
+ import { registerCommand } from './middleware/register-command'
+ import { log } from './log'
+
+@@ -83,7 +82,6 @@ async function middleware(command: commander.Command) {
+   // If the program is verbose, store that fact within the logger
+   log.isDebug = program.opts().verbose
+
+-  await updateCheck()
+   registerCommand(command.name())
+ }
