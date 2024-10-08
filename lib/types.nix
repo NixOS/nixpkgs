@@ -617,6 +617,8 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit name lazy; };
       functor = defaultFunctor "attrsWith" // {
+        wrapped = elemType;
+        type = t: attrsWith { elemType = t; inherit name lazy; };
         payload = {
           inherit elemType name lazy;
         };
