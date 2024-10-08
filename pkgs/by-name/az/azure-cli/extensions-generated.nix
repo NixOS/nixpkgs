@@ -1016,6 +1016,13 @@
     sha256 = "5dde97f8fb12eaa258530f68ec2cae00a957f30479835e9f5ed057940312741a";
     description = "Microsoft Azure Command-Line Tools Support Extension";
   };
+  terraform = mkAzExtension rec {
+    pname = "terraform";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/terraform-${version}-py3-none-any.whl";
+    sha256 = "80fde2b896b707fd83f83821809682079bd3bb032aa9cb04ba0d2595b3673f27";
+    description = "Microsoft Azure Command-Line Tools Terraform Extension";
+  };
   timeseriesinsights = mkAzExtension rec {
     pname = "timeseriesinsights";
     version = "1.0.0b1";
