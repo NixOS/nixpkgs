@@ -12,6 +12,7 @@
 , cryptsetup
 , util-linux
 , lvm2
+, python3
 , systemd
 , xfsprogs
 , thin-provisioning-tools
@@ -27,18 +28,18 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
-  version = "3.6.8";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "refs/tags/stratisd-v${version}";
-    hash = "sha256-cYd2oy9reY8eWSdO98cVcz6/Z+MS26NY4U3UNVfMdbg=";
+    hash = "sha256-JevVIyNNkRuG1aH9yuBKwVlOgS67jJSoJDZQvpLsy/4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-1KzOKo5Q1uBqO3aCBYUJJxla4873AzrwoFPaNpKKFJU=";
+    hash = "sha256-n8gF8WuHwwPxZAggkJckBxfvb0r+jJDuTcj7KXjg4/Y=";
   };
 
   postPatch = ''
@@ -52,6 +53,8 @@ stdenv.mkDerivation rec {
       --replace-fail sleep                 "${coreutils}/bin/sleep" \
       --replace-fail udevadm               "${systemd}/bin/udevadm"
   '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -71,6 +74,7 @@ stdenv.mkDerivation rec {
     util-linux
     systemd
     lvm2
+    (python3.withPackages (ps: [ ps.dbus-python ]))
   ];
 
   outputs = [ "out" "initrd" ];
