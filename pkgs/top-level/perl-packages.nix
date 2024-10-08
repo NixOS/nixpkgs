@@ -10403,6 +10403,22 @@ with self; {
     };
   };
 
+  FileXDG = buildPerlPackage {
+    pname = "File-XDG";
+    version = "1.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PL/PLICEASE/File-XDG-1.03.tar.gz";
+      hash = "sha256-iL18FFjLdjvs7W570MEZcqFWseOSMphPinqL5CBr984=";
+    };
+    preCheck = "rm t/file_xdg.t"; # Tries to write to $HOME
+    propagatedBuildInputs = [ PathClass PathTiny RefUtil ];
+    meta = {
+      homepage = "https://metacpan.org/pod/File::XDG";
+      description = "Basic implementation of the XDG base directory specification";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   FileZglob = buildPerlPackage {
     pname = "File-Zglob";
     version = "0.11";
