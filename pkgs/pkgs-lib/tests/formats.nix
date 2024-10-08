@@ -222,6 +222,67 @@ in runBuildTests {
     '';
   };
 
+  iniCoercedDuplicateKeys = shouldPass rec {
+    format = formats.ini {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedDuplicateKeys";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1
+      bar=2
+    '';
+  };
+
+  iniCoercedListToValue = shouldPass rec {
+    format = formats.ini {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 1; }; };
+      }
+      {
+        file = "format-test-inner-iniCoercedListToValue";
+        value = { foo = { bar = 2; }; };
+      }
+    ];
+    expected = ''
+      [foo]
+      bar=1, 2
+    '';
+  };
+
+  iniCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = true; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
+  };
+
+  iniNoCoercedNoLists = shouldFail {
+    format = formats.ini { atomsCoercedToLists = false; };
+    input = {
+      foo = {
+        bar = 1;
+      };
+    };
+  };
+
   iniWithGlobalNoSections = shouldPass {
     format = formats.iniWithGlobalSection {};
     input = {};
@@ -315,6 +376,82 @@ in runBuildTests {
       baz=false
       qux=qux
     '';
+  };
+
+  iniWithGlobalCoercedDuplicateKeys = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listsAsDuplicateKeys = true;
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedDuplicateKeys";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3
+      baz=4
+
+      [foo]
+      bar=2
+      bar=1
+    '';
+  };
+
+  iniWithGlobalCoercedListToValue = shouldPass rec {
+    format = formats.iniWithGlobalSection {
+      listToValue = lib.concatMapStringsSep ", " (lib.generators.mkValueStringDefault { });
+      atomsCoercedToLists = true;
+    };
+    input = format.type.merge [ ] [
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 4; };
+          sections = { foo = { bar = 1; }; };
+        };
+      }
+      {
+        file = "format-test-inner-iniWithGlobalCoercedListToValue";
+        value = {
+          globalSection = { baz = 3; };
+          sections = { foo = { bar = 2; }; };
+        };
+      }
+    ];
+    expected = ''
+      baz=3, 4
+
+      [foo]
+      bar=2, 1
+    '';
+  };
+
+  iniWithGlobalCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = true; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
+  };
+
+  iniWithGlobalNoCoercedNoLists = shouldFail {
+    format = formats.iniWithGlobalSection { atomsCoercedToLists = false; };
+    input = {
+      globalSection = { baz = 4; };
+      foo = { bar = 1; };
+    };
   };
 
   keyValueAtoms = shouldPass {
