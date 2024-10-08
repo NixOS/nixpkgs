@@ -45,6 +45,24 @@ in
         '';
       };
 
+      prompt = mkOption {
+        default = null;
+        type = types.nullOr types.bool;
+        description = ''
+          Whether to show or hide the prompt for user selection in boot menu.
+
+          When set to `true`, the bootloader will show a menu allowing to select
+          a generation to boot.
+
+          When set to `false`, the bootloader will prevent the menu from being
+          show. Disabling the prompt will not show the menu and always boot into
+          the default boot entry regardless of timeout or configuration limit.
+
+          When set to `null`, the default. The prompt config will be omitted and
+          the bootloader default will be used.
+        '';
+      };
+
       configurationLimit = mkOption {
         default = 20;
         example = 10;
@@ -94,6 +112,7 @@ in
 
   config = let
     builderArgs = "-g ${toString cfg.configurationLimit} -t ${timeoutStr}"
+      + lib.optionalString (cfg.prompt != null) " -p ${if cfg.prompt then "1" else "0"}"
       + lib.optionalString (dtCfg.name != null) " -n ${dtCfg.name}"
       + lib.optionalString (!cfg.useGenerationDeviceTree) " -r";
     installBootLoader = pkgs.writeScript "install-extlinux-conf.sh" (''

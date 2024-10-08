@@ -6,16 +6,17 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 usage() {
-    echo "usage: $0 -t <timeout> -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>] [-r]" >&2
+    echo "usage: $0 -t <timeout> [-p] -c <path-to-default-configuration> [-d <boot-dir>] [-g <num-generations>] [-n <dtbName>] [-r]" >&2
     exit 1
 }
 
 timeout=                # Timeout in centiseconds
+prompt=                 # Prompt value
 default=                # Default configuration
 target=/boot            # Target directory
 numGenerations=0        # Number of other generations to include in the menu
 
-while getopts "t:c:d:g:n:r" opt; do
+while getopts "t:p:c:d:g:n:r" opt; do
     case "$opt" in
         t) # U-Boot interprets '0' as infinite and negative as instant boot
             if [ "$OPTARG" -lt 0 ]; then
@@ -26,6 +27,7 @@ while getopts "t:c:d:g:n:r" opt; do
                 timeout=$((OPTARG * 10))
             fi
             ;;
+        p) prompt=$OPTARG ;;
         c) default="$OPTARG" ;;
         d) target="$OPTARG" ;;
         g) numGenerations="$OPTARG" ;;
@@ -129,6 +131,10 @@ DEFAULT nixos-default
 MENU TITLE ------------------------------------------------------------
 TIMEOUT $timeout
 EOF
+
+if [ ! -z "$prompt" ]; then
+  echo "PROMPT $prompt" >> $tmpFile
+fi
 
 addEntry $default default >> $tmpFile
 
