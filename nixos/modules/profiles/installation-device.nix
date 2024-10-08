@@ -52,21 +52,30 @@ with lib;
     services.getty.autologinUser = "nixos";
 
     # Some more help text.
-    services.getty.helpLine = ''
-      The "nixos" and "root" accounts have empty passwords.
-
-      To log in over ssh you must set a password for either "nixos" or "root"
-      with `passwd` (prefix with `sudo` for "root"), or add your public key to
-      /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
-
-      If you need a wireless connection, type
-      `sudo systemctl start wpa_supplicant` and configure a
-      network using `wpa_cli`. See the NixOS manual for details.
-    '' + optionalString config.services.xserver.enable ''
-
-      Type `sudo systemctl start display-manager' to
-      start the graphical user interface.
-    '';
+    services.getty.helpLine =
+      let
+        concatBlocks = blocks: concatStringsSep "\n" (filter (x: x != "") blocks);
+      in
+      concatBlocks [
+        # each block must have a trailing newline
+        ''
+          The "nixos" and "root" accounts have empty passwords.
+        ''
+        (optionalString config.services.openssh.enable ''
+          To log in over ssh you must set a password for either "nixos" or "root"
+          with `passwd` (prefix with `sudo` for "root"), or add your public key to
+          /home/nixos/.ssh/authorized_keys or /root/.ssh/authorized_keys.
+        '')
+        (optionalString config.networking.wireless.enable ''
+          If you need a wireless connection, type
+          `sudo systemctl start wpa_supplicant` and configure a
+          network using `wpa_cli`. See the NixOS manual for details.
+        '')
+        (optionalString config.services.xserver.enable ''
+          Type `sudo systemctl start display-manager' to
+          start the graphical user interface.
+        '')
+      ];
 
     # We run sshd by default. Login is only possible after adding a
     # password via "passwd" or by adding a ssh key to ~/.ssh/authorized_keys.
