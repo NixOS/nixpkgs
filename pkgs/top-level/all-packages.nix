@@ -3503,8 +3503,6 @@ with pkgs;
 
   sedutil = callPackage ../tools/security/sedutil { };
 
-  emplace = callPackage ../tools/package-management/emplace { };
-
   enchive = callPackage ../tools/security/enchive { };
 
   enjarify = callPackage ../tools/misc/enjarify { };
