@@ -4,25 +4,13 @@
   runCommand,
   makeWrapper,
 
-  extraPackages ? [ ],
-  optionalDeps ? [
-    jq
-    poppler_utils
-    _7zz
-    ffmpegthumbnailer
-    fd
-    ripgrep
-    fzf
-    zoxide
-    imagemagick
-    chafa
-  ],
+  runtimeDeps ? (ps: ps),
 
   # deps
   file,
   yazi-unwrapped,
 
-  # optional deps
+  # default optional deps
   jq,
   poppler_utils,
   _7zz,
@@ -41,7 +29,19 @@
 }:
 
 let
-  runtimePaths = [ file ] ++ optionalDeps ++ extraPackages;
+  defaultDeps = [
+    jq
+    poppler_utils
+    _7zz
+    ffmpegthumbnailer
+    fd
+    ripgrep
+    fzf
+    zoxide
+    imagemagick
+    chafa
+  ];
+  runtimePaths = [ file ] ++ (runtimeDeps defaultDeps);
 
   settingsFormat = formats.toml { };
 
