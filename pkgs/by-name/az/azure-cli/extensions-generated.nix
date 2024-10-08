@@ -626,9 +626,9 @@
   };
   log-analytics-solution = mkAzExtension rec {
     pname = "log-analytics-solution";
-    version = "1.0.0";
+    version = "1.0.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/log_analytics_solution-${version}-py2.py3-none-any.whl";
-    sha256 = "c0a4252da4c29032c4e956b768860529509e88a1ecef7f3a3189cb701a305c6b";
+    sha256 = "7e10443de862cd0c19090b0a0dae5e9942e8b48c20e3a9c3305778daa756ea96";
     description = "Support for Azure Log Analytics Solution";
   };
   logic = mkAzExtension rec {
