@@ -3,6 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
+  versionCheckHook,
 
   withFish ? false,
   fish,
@@ -82,6 +83,9 @@ buildGoModule rec {
       substituteInPlace $out/share/assume.fish \
         --replace /bin/fish ${fish}/bin/fish
     '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
