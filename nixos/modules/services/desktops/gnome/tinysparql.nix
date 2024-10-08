@@ -1,5 +1,3 @@
-# TinySPARQL daemon.
-
 {
   config,
   pkgs,
@@ -11,7 +9,6 @@ let
   cfg = config.services.gnome.tinysparql;
 in
 {
-
   meta = {
     maintainers = lib.teams.gnome.members;
   };
@@ -46,12 +43,8 @@ in
     )
   ];
 
-  ###### interface
-
   options = {
-
     services.gnome.tinysparql = {
-
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -60,21 +53,14 @@ in
           search tool and metadata storage system.
         '';
       };
-
     };
-
   };
 
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     environment.systemPackages = [ pkgs.tinysparql ];
 
     services.dbus.packages = [ pkgs.tinysparql ];
 
     systemd.packages = [ pkgs.tinysparql ];
-
   };
-
 }
