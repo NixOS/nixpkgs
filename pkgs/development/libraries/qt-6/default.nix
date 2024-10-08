@@ -62,6 +62,13 @@ let
             revert = true;
             hash = "sha256-cjB2sC4cvZn0UEc+sm6ZpjyC78ssqB1Kb5nlZQ15M4A=";
           })
+
+          # Backport patch for https://bugs.kde.org/show_bug.cgi?id=493116
+          # FIXME: remove for 6.8.1
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/2ea3abed0125d81ca4f3bacb9650db7314657332.patch";
+            hash = "sha256-mdTdwhJtebuLUQRo+y1XUrrzgqG9G7GvPQwvrXLycJI=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
