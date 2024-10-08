@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glog";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "sha256-xqRp9vaauBkKz2CXbh/Z4TWqhaUtqfbsSlbYZR/kW9s=";
+    sha256 = "sha256-+nwWP6VBmhgU7GCPSEGUzvUSCc48wXME181WpJ5ABP4=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     # consumers of the CMake config file to fail at the configuration step.
     # Explicitly disabling unwind support sidesteps the issue.
     "-DWITH_UNWIND=OFF"
+    # Upstream disabled generation of pkg-config `.pc` files since
+    #     https://github.com/google/glog/releases/tag/v0.7.0
+    # because they are "undocumented and untested".
+    # Non-C++ dependents (that thus can't use CMake) may need them though
+    # to find `glog`, so we enable them.
+    "-DWITH_PKGCONFIG=ON"
   ];
 
   doCheck = true;
