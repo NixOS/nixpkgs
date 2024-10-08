@@ -5,7 +5,6 @@
 , wayland-scanner
 , pkg-config
 , libdrm
-, fetchpatch
 }:
 
 qtModule {
@@ -18,11 +17,9 @@ qtModule {
   buildInputs = [ wayland libdrm ];
   nativeBuildInputs = [ pkg-config ];
 
-  patches = [
-    # Update wayland.xml to version 1.23.0
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwayland/-/commit/c2f61bc47baacf2e6a44c6c3c4e4cbf0abfa4095.diff";
-      sha256 = "sha256-ZcK/LT65oFvTzCukZB8aDYWH5L6RK5MOPs8VtpYQpq0=";
-    })
-  ];
+  # Replace vendored wayland.xml with our matching version
+  # FIXME: remove when upstream updates past 1.23
+  postPatch = ''
+    cp ${wayland-scanner}/share/wayland/wayland.xml src/3rdparty/protocol/wayland/wayland.xml
+  '';
 }
