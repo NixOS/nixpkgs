@@ -92,6 +92,19 @@ in
         description = "The state directory, logs and plugins are stored here.";
       };
 
+      importRepositories = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Import repositories into Redmine database at startup. Depending on the
+          size of the repository, the import process might take some time or might
+          even timeout if it's done over the webserver. By enabling this option,
+          the timeout of the systemd unit is disabled in order to not interrupt
+          the import process and thus it's recommended to enable this option only
+          for the initial import and to disable it afterwards.
+        '';
+      };
+
       settings = mkOption {
         type = format.type;
         default = {};
@@ -427,13 +440,17 @@ in
         ${bundle} exec rake db:migrate
         ${bundle} exec rake redmine:plugins:migrate
         ${bundle} exec rake redmine:load_default_data
+
+        ${optionalString cfg.importRepositories ''
+          ${bundle} exec rails runner "Repository.fetch_changesets"
+        ''}
       '';
 
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
-        TimeoutSec = "300";
+        TimeoutSec = if cfg.importRepositories then "infinity" else "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
         ExecStart="${bundle} exec rails server -u webrick -e production -b ${toString cfg.address} -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
       };
