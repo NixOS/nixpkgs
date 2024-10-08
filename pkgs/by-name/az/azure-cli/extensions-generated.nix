@@ -605,9 +605,9 @@
   };
   k8s-runtime = mkAzExtension rec {
     pname = "k8s-runtime";
-    version = "1.0.3";
+    version = "1.0.4";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_runtime-${version}-py3-none-any.whl";
-    sha256 = "133dd153979c74d37aa25956ed8a9aa741c334929848cd67c26f268332759d40";
+    sha256 = "aee2d3008d818d78342149e6f1d2c7922abbbe43f323d51e6cd58c73b1c67b3a";
     description = "Microsoft Azure Command-Line Tools K8sRuntime Extension";
   };
   kusto = mkAzExtension rec {
