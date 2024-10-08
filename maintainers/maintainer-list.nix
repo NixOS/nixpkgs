@@ -13747,6 +13747,13 @@
     github = "mi-ael";
     githubId = 12199265;
   };
+  miampf = {
+    email = "miampf@proton.me";
+    github = "miampf";
+    githubId = 111570799;
+    name = "Mia Motte Mallon";
+    keys = [ { fingerprint = "7008 92AA 6F32 8CAC 8740  0070 EF03 9364 B5B6 886C"; } ];
+  };
   miangraham = {
     github = "miangraham";
     githubId = 704580;
