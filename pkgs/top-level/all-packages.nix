@@ -26563,6 +26563,7 @@ with pkgs;
     ubootBananaPim64
     ubootAmx335xEVM
     ubootClearfog
+    ubootCM3588NAS
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
