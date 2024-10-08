@@ -61,7 +61,12 @@ in
     inherit imageModules;
     images = lib.mapAttrs (
       name: conf:
-      lib.recursiveUpdate conf.config.image.builder {
+      let
+        builder =
+          conf.config.image.builder
+            or (throw "Module for `system.build.images.${name}` misses required `image.builder` option.");
+      in
+      lib.recursiveUpdate builder {
         passthru.config = conf.config;
       }
     ) imageConfigs;
