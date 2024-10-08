@@ -25,7 +25,9 @@ appimageTools.wrapType2 {
       $out/share/applications/hhd-ui.desktop \
       --replace-fail "Exec=AppRun" "Exec=hhd-ui" \
       --replace-fail "Categories=game;" "Categories=Game;"
-    cp ${extractedFiles}/usr/share/icons $out/share -r
+    iconDir=$out/share/icons/hicolor/512x512/apps
+    mkdir -p $iconDir
+    cp ${extractedFiles}/hhd-ui.png $iconDir
   '';
 
   meta = with lib; {
