@@ -1757,6 +1757,18 @@ final: prev:
     meta.homepage = "https://github.com/hrsh7th/cmp-copilot/";
   };
 
+  cmp-ctags = buildVimPlugin {
+    pname = "cmp-ctags";
+    version = "2023-05-16";
+    src = fetchFromGitHub {
+      owner = "delphinus";
+      repo = "cmp-ctags";
+      rev = "8d9ddae9ea20c303bdc0888b663c0459b0dc72c2";
+      sha256 = "1bm2fgl1k2b2sk3dv317ay7ddzbzy2dyiwb8xf1ihpx53853cw8b";
+    };
+    meta.homepage = "https://github.com/delphinus/cmp-ctags/";
+  };
+
   cmp-dap = buildVimPlugin {
     pname = "cmp-dap";
     version = "2023-12-10";
