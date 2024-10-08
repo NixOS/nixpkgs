@@ -1988,6 +1988,8 @@ self: super: with self; {
 
   camel-converter = callPackage ../development/python-modules/camel-converter { };
 
+  can-isotp = callPackage ../development/python-modules/can-isotp { };
+
   canals = callPackage ../development/python-modules/canals { };
 
   canmatrix = callPackage ../development/python-modules/canmatrix { };
@@ -4492,8 +4494,6 @@ self: super: with self; {
   flask-assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
-
-  flask-babelex = callPackage ../development/python-modules/flask-babelex { };
 
   flask-bcrypt = callPackage ../development/python-modules/flask-bcrypt { };
 
@@ -9659,6 +9659,8 @@ self: super: with self; {
 
   parsel = callPackage ../development/python-modules/parsel { };
 
+  parselmouth = callPackage ../development/python-modules/parselmouth { };
+
   parse-type = callPackage ../development/python-modules/parse-type { };
 
   parsimonious = callPackage ../development/python-modules/parsimonious { };
@@ -10105,6 +10107,8 @@ self: super: with self; {
   prometheus-async = callPackage ../development/python-modules/prometheus-async { };
 
   prometheus-pandas = callPackage ../development/python-modules/prometheus-pandas { };
+
+  propcache = callPackage ../development/python-modules/propcache { };
 
   prophet = callPackage ../development/python-modules/prophet { };
 
@@ -17590,7 +17594,7 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
-  xen = toPythonModule (pkgs.xen-slim.override {
+  xen = toPythonModule (pkgs.xen.override {
     python3Packages = self;
   });
 
