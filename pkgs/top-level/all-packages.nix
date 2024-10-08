@@ -3301,9 +3301,7 @@ with pkgs;
 
   bazarr = callPackage ../servers/bazarr { };
 
-  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop {
-    openjdk11 = openjdk11.override { enableJavaFX = true; };
-  };
+  bisq-desktop = callPackage ../applications/blockchains/bisq-desktop { };
 
   bic = callPackage ../development/interpreters/bic { };
 
@@ -6071,7 +6069,7 @@ with pkgs;
   };
 
   bacula = callPackage ../tools/backup/bacula {
-    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit Kerberos;
   };
 
   bacon = callPackage ../development/tools/bacon {
@@ -10602,8 +10600,6 @@ with pkgs;
 
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
-  oath-toolkit = callPackage ../tools/security/oath-toolkit { };
-
   oatpp = callPackage ../development/libraries/oatpp { };
 
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
@@ -12362,9 +12358,7 @@ with pkgs;
   snort = callPackage ../applications/networking/ids/snort { };
 
   soapui = callPackage ../applications/networking/soapui {
-    jdk = if stdenv.hostPlatform.isDarwin
-      then (jdk11.override { enableJavaFX = true; })
-      else jdk11;
+    jdk = jdk11;
   };
 
   sockdump = callPackage ../tools/networking/sockdump { };
@@ -15088,7 +15082,7 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
-  inherit (javaPackages) openjfx11 openjfx17 openjfx21 openjfx22;
+  inherit (javaPackages) openjfx17 openjfx21 openjfx22;
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
