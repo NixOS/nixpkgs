@@ -2,6 +2,7 @@
   bash,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 
   withFish ? false,
   fish,
@@ -57,6 +58,8 @@ buildGoModule rec {
       substituteInPlace $out/share/assume.fish \
         --replace /bin/fish ${fish}/bin/fish
     '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Easiest way to access your cloud";
