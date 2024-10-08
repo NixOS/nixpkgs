@@ -45,7 +45,7 @@ buildPythonPackage {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
-    description = "MTCNN face detection implementation for TensorFlow, as a PIP package";
+    description = "MTCNN face detection implementation for TensorFlow";
     homepage = "https://github.com/ipazc/mtcnn";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ derdennisop ];
