@@ -14373,8 +14373,6 @@ with pkgs;
     inherit (python3Packages) filecheck;
   };
 
-  blueprint-compiler = callPackage ../development/compilers/blueprint { };
-
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
   };
