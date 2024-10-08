@@ -1,9 +1,9 @@
-{ python3Packages, writers}:
+{ python3Packages, writers }:
 
 let
   py = python3Packages;
 
-  gunicornScript = writers.writePython3 "gunicornMlflow" {} ''
+  gunicornScript = writers.writePython3 "gunicornMlflow" { } ''
     import re
     import sys
     from gunicorn.app.wsgiapp import run
@@ -12,25 +12,28 @@ let
         sys.exit(run())
   '';
 in
-py.toPythonApplication
-  (py.mlflow.overridePythonAttrs(old: {
+py.toPythonApplication (
+  py.mlflow.overridePythonAttrs (old: {
 
     propagatedBuildInputs = old.dependencies ++ [
       py.boto3
       py.mysqlclient
     ];
 
-    postPatch = (old.postPatch or "") + ''
-      cat mlflow/utils/process.py
+    postPatch =
+      (old.postPatch or "")
+      + ''
+        cat mlflow/utils/process.py
 
-      substituteInPlace mlflow/utils/process.py --replace-fail \
-        "process = subprocess.Popen(" \
-        "cmd[0]='${gunicornScript}'; process = subprocess.Popen("
-    '';
+        substituteInPlace mlflow/utils/process.py --replace-fail \
+          "process = subprocess.Popen(" \
+          "cmd[0]='${gunicornScript}'; process = subprocess.Popen("
+      '';
 
     postInstall = ''
       gpath=$out/bin/gunicornMlflow
       cp ${gunicornScript} $gpath
       chmod 555 $gpath
     '';
-}))
+  })
+)
