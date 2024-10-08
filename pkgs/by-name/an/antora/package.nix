@@ -34,5 +34,6 @@ buildNpmPackage rec {
     license = licenses.mpl20;
     mainProgram = "antora";
     maintainers = [ maintainers.ehllie ];
+    platforms = lib.platforms.all;
   };
 }
