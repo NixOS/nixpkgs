@@ -416,9 +416,9 @@
   };
   elastic = mkAzExtension rec {
     pname = "elastic";
-    version = "1.0.0b2";
+    version = "1.0.0b3";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/elastic-${version}-py3-none-any.whl";
-    sha256 = "1d99dbcc10b99185b4cd9b64a8835d80b424226e5cf5d40b3e3ae1d435532657";
+    sha256 = "2f3ae430d3c34dd4007c8c5a8374963568cc23558872464242811cc5a26e2de7";
     description = "Microsoft Azure Command-Line Tools MicrosoftElastic Extension";
   };
   elastic-san = mkAzExtension rec {
