@@ -9892,6 +9892,10 @@ self: super: with self; {
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
 
+  plover = callPackage ../development/python-modules/plover {
+    inherit (pkgs.libsForQt5) wrapQtAppsHook;
+  };
+
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
   micloud = callPackage ../development/python-modules/micloud { };

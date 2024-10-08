@@ -31986,9 +31986,7 @@ with pkgs;
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
 
-  plover = python3Packages.callPackage ../applications/misc/plover {
-    inherit (libsForQt5) wrapQtAppsHook;
-  };
+  plover = python3Packages.plover;
 
   plugdata = callPackage ../applications/audio/plugdata { };
 
