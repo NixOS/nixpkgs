@@ -1490,8 +1490,6 @@ dont-distribute-packages:
  - gelatin-gl
  - gelatin-sdl2
  - gelatin-shaders
- - gemini-router
- - gemini-textboard
  - gencheck
  - generic-accessors
  - generic-override-aeson
