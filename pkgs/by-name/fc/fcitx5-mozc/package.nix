@@ -24,8 +24,6 @@ buildBazelPackage {
     hash = "sha256-1EZjEbMl+LRipH5gEgFpaKP8uEKPfupHmiiTNJc/T1k=";
   };
 
-  sourceRoot = "source/src";
-
   nativeBuildInputs = [
     gettext
     pkg-config
@@ -39,7 +37,7 @@ buildBazelPackage {
   ];
 
   postPatch = ''
-    sed -i -e 's|^\(LINUX_MOZC_SERVER_DIR = \).\+|\1"${mozc}/lib/mozc"|' config.bzl
+    sed -i -e 's|^\(LINUX_MOZC_SERVER_DIR = \).\+|\1"${mozc}/lib/mozc"|' src/config.bzl
   '';
 
   bazel = bazel_7;
@@ -65,6 +63,10 @@ buildBazelPackage {
 
     sha256 = "sha256-wz2lJckr7Pu4jtoejjFv8LdjVO2+ferrS473M4jc86I=";
   };
+
+  preConfigure = ''
+    cd src
+  '';
 
   buildAttrs = {
     installPhase = ''
