@@ -5,6 +5,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   makeBinaryWrapper,
+  nixosTests,
   yarnConfigHook,
   fetchpatch,
   # dependencies
@@ -178,6 +179,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) linkwarden;
+  };
 
   meta = {
     description = "Self-hosted collaborative bookmark manager to collect, organize, and preserve webpages, articles, and more...";
