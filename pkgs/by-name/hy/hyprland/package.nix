@@ -15,7 +15,6 @@
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
-  jq,
   libGL,
   libdrm,
   libexecinfo,
@@ -45,15 +44,30 @@
   enableNvidiaPatches ? false,
 }:
 let
-  info = builtins.fromJSON (builtins.readFile ./info.json);
+  inherit (lib.asserts) assertMsg;
+  inherit (lib.attrsets) mapAttrsToList;
+  inherit (lib.lists)
+    concatLists
+    optionals
+    ;
+  inherit (lib.strings)
+    makeBinPath
+    optionalString
+    cmakeBool
+    ;
+  inherit (lib.trivial)
+    importJSON
+    ;
+
+  info = importJSON ./info.json;
 in
-assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
-assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
-assert lib.assertMsg (!hidpiXWayland)
+assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
+assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
+assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hyprland" + lib.optionalString debug "-debug";
+  pname = "hyprland" + optionalString debug "-debug";
   version = "0.43.0";
 
   src = fetchFromGitHub {
@@ -93,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
-    jq
     makeWrapper
     cmake
     ninja
@@ -108,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  buildInputs =
+  buildInputs = concatLists [
     [
       aquamarine
       cairo
@@ -129,32 +142,33 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       xorg.libXcursor
     ]
-    ++ lib.optionals stdenv.hostPlatform.isBSD [ epoll-shim ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
-    ++ lib.optionals enableXWayland [
+    (optionals stdenv.hostPlatform.isBSD [ epoll-shim ])
+    (optionals stdenv.hostPlatform.isMusl [ libexecinfo ])
+    (optionals enableXWayland [
       xorg.libxcb
       xorg.libXdmcp
       xorg.xcbutilerrors
       xorg.xcbutilwm
       xwayland
-    ]
-    ++ lib.optionals withSystemd [ systemd ];
+    ])
+    (optionals withSystemd [ systemd ])
+  ];
 
   cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
 
   dontStrip = debug;
 
-  cmakeFlags = [
-    (lib.cmakeBool "NO_XWAYLAND" (!enableXWayland))
-    (lib.cmakeBool "LEGACY_RENDERER" legacyRenderer)
-    (lib.cmakeBool "NO_SYSTEMD" (!withSystemd))
-  ];
+  cmakeFlags = mapAttrsToList cmakeBool {
+    "NO_XWAYLAND" = !enableXWayland;
+    "LEGACY_RENDERER" = legacyRenderer;
+    "NO_SYSTEMD" = !withSystemd;
+  };
 
   postInstall = ''
-    ${lib.optionalString wrapRuntimeDeps ''
+    ${optionalString wrapRuntimeDeps ''
       wrapProgram $out/bin/Hyprland \
         --suffix PATH : ${
-          lib.makeBinPath [
+          makeBinPath [
             binutils
             pciutils
             pkgconf
@@ -163,9 +177,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  passthru.providedSessions = [ "hyprland" ];
-
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    providedSessions = [ "hyprland" ];
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "https://github.com/hyprwm/Hyprland";
