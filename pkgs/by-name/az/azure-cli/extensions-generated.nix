@@ -584,9 +584,9 @@
   };
   internet-analyzer = mkAzExtension rec {
     pname = "internet-analyzer";
-    version = "0.1.0rc6";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/internet_analyzer-${version}-py2.py3-none-any.whl";
-    sha256 = "0708d9f598d1618d138eebcf18354d97c7b3a2c90570959df077e04d419d32c3";
+    sha256 = "4564881a7c90bacfd881c629a4182398007c886d099ea88db97e1ff10053a5c4";
     description = "Microsoft Azure Command-Line Tools Internet Analyzer Extension";
   };
   ip-group = mkAzExtension rec {
