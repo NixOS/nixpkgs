@@ -107,7 +107,7 @@ let
   stdenv =
     if cudaSupport then
       cudaPackages.backendStdenv
-    else if originalStdenv.isDarwin then
+    else if originalStdenv.hostPlatform.isDarwin then
       llvmPackages.stdenv
     else
       originalStdenv;
@@ -274,7 +274,7 @@ let
     '';
   };
   bazel-build =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       _bazel-build.overrideAttrs (prev: {
         bazelFlags = prev.bazelFlags ++ [
           "--override_repository=rules_cc=${rules_cc_darwin_patched}"
@@ -341,16 +341,16 @@ let
         cudnnMerged
       ]
       ++ lib.optionals mklSupport [ mkl ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         Foundation
         Security
       ]
-      ++ lib.optionals (!stdenv.isDarwin) [ nsync ];
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ nsync ];
 
     # arbitrarily set to the current latest bazel version, overly careful
     TF_IGNORE_MAX_BAZEL_VERSION = true;
 
-    LIBTOOL = lib.optionalString stdenv.isDarwin "${cctools}/bin/libtool";
+    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     # Take as many libraries from the system as possible. Keep in sync with
     # list of valid syslibs in
@@ -395,7 +395,7 @@ let
         "wrapt"
         "zlib"
       ]
-      ++ lib.optionals (!stdenv.isDarwin) [
+      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
         "nsync" # fails to build on darwin
       ]
     );
@@ -598,12 +598,12 @@ let
         maintainers = with lib.maintainers; [ abbradar ];
         platforms = with lib.platforms; linux ++ darwin;
         broken =
-          stdenv.isDarwin
+          stdenv.hostPlatform.isDarwin
           || !(xlaSupport -> cudaSupport)
           || !(cudaSupport -> builtins.hasAttr cudnnAttribute cudaPackages)
           || !(cudaSupport -> cudaPackages ? cudatoolkit);
       }
-      // lib.optionalAttrs stdenv.isDarwin {
+      // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
         timeout = 86400; # 24 hours
         maxSilent = 14400; # 4h, double the default of 7200s
       };

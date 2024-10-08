@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     crc32c
     libvpx
     abseil-cpp
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXtst
     libXcomposite
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
     mesa
     libdrm
     libGL
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
     AppKit
     IOKit

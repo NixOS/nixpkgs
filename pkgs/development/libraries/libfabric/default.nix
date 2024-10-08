@@ -3,9 +3,9 @@
 , fetchFromGitHub
 , pkg-config
 , autoreconfHook
-, enablePsm2 ? (stdenv.isx86_64 && stdenv.isLinux)
+, enablePsm2 ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux)
 , libpsm2
-, enableOpx ? (stdenv.isx86_64 && stdenv.isLinux)
+, enableOpx ? (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isLinux)
 , libuuid
 , numactl
 }:

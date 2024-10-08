@@ -219,7 +219,7 @@ buildDotnetGlobalTool {
 ## Generating and updating NuGet dependencies {#generating-and-updating-nuget-dependencies}
 
 When writing a new expression, you can use the generated `fetch-deps` script to initialise the lockfile.
-After creating a blank `deps.nix` and pointing `nugetDeps` to it,
+After setting `nugetDeps` to the desired location of the lockfile (e.g. `./deps.nix`),
 build the script with `nix-build -A package.fetch-deps` and then run the result.
 (When the root attr is your package, it's simply `nix-build -A fetch-deps`.)
 

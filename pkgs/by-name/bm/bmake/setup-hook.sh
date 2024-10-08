@@ -17,7 +17,7 @@ bmakeBuildPhase() {
     )
     concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
 
-    echoCmd 'build flags' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: flagsArray: ${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
 
     runHook postBuild
@@ -36,7 +36,7 @@ bmakeCheckPhase() {
     fi
 
     if [ -z "${checkTarget:-}" ]; then
-        echo "no test target found in bmake, doing nothing"
+        nixInfoLog "${FUNCNAME[0]}: no test target found in bmake, doing nothing"
     else
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
@@ -44,7 +44,7 @@ bmakeCheckPhase() {
         )
         concatTo flagsArray makeFlags makeFlagsArray checkFlags=VERBOSE=y checkFlagsArray checkTarget
 
-        echoCmd 'check flags' "${flagsArray[@]}"
+        nixInfoLog "${FUNCNAME[0]}: flagsArray: ${flagsArray[@]}"
         bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
     fi
 
@@ -64,7 +64,7 @@ bmakeInstallPhase() {
     )
     concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets=install
 
-    echoCmd 'install flags' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: flagsArray: ${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
 
     runHook postInstall
@@ -80,7 +80,7 @@ bmakeDistPhase() {
     local flagsArray=()
     concatTo flagsArray distFlags distFlagsArray distTarget=dist
 
-    echo 'dist flags: %q' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: flagsArray: ${flagsArray[@]}"
     bmake ${makefile:+-f $makefile} "${flagsArray[@]}"
 
     if [ "${dontCopyDist:-0}" != 1 ]; then
@@ -98,16 +98,20 @@ preConfigureHooks+=(addMakeFlags)
 
 if [ -z "${dontUseBmakeBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=bmakeBuildPhase
+    nixInfoLog "${FUNCNAME[0]}: set buildPhase to bmakeBuildPhase"
 fi
 
 if [ -z "${dontUseBmakeCheck-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=bmakeCheckPhase
+    nixInfoLog "${FUNCNAME[0]}: set checkPhase to bmakeCheckPhase"
 fi
 
 if [ -z "${dontUseBmakeInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=bmakeInstallPhase
+    nixInfoLog "${FUNCNAME[0]}: set installPhase to bmakeInstallPhase"
 fi
 
 if [ -z "${dontUseBmakeDist-}" ] && [ -z "${distPhase-}" ]; then
     distPhase=bmakeDistPhase
+    nixInfoLog "${FUNCNAME[0]}: set distPhase to bmakeDistPhase"
 fi

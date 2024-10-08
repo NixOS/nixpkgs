@@ -10,7 +10,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ sndio ]
-    ++ lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD)
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD)
     libbsd;
 
   outputs = [ "out" "man" ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     makeFlagsArray+=("PREFIX=$out")
   '' + lib.optionalString
-    (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) ''
+    (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isBSD) ''
       makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
       # Fix warning about implicit declaration of function 'strlcpy'

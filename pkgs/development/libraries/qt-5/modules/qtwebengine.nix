@@ -29,7 +29,7 @@
 , lib, stdenv
 , version ? null
 , qtCompatVersion
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , pipewire
 , postPatch ? ""
 , nspr
@@ -65,7 +65,7 @@ qtModule ({
     pkgsBuildBuild.pkg-config
     (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
     pkg-config-wrapped-without-prefix
-  ] ++ lib.optional stdenv.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -135,7 +135,7 @@ qtModule ({
   # Prevent Chromium build script from making the path to `clang` relative to
   # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
   # from `src/core/config/mac_osx.pri`.
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
       --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
   ''
@@ -148,13 +148,13 @@ qtModule ({
       src/core/web_engine_library_info.cpp
   ''
   # Patch library paths in Chromium sources
-  + lib.optionalString (!stdenv.isDarwin) ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
       src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
     sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
       src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-  '' + lib.optionalString stdenv.isDarwin (''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin (''
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
@@ -233,7 +233,7 @@ qtModule ({
 
     libevent
     ffmpeg_7
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     dbus zlib minizip snappy nss protobuf jsoncpp
 
     # Audio formats
@@ -257,7 +257,7 @@ qtModule ({
 
   # FIXME These dependencies shouldn't be needed but can't find a way
   # around it. Chromium pulls this in while bootstrapping GN.
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
     cctools
 
@@ -287,7 +287,7 @@ qtModule ({
     libunwind
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cups
     libpm
     sandbox
@@ -313,7 +313,7 @@ qtModule ({
 
   postInstall = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     mkdir -p $out/libexec
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
     Prefix = ..

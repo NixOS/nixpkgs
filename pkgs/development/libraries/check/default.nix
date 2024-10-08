@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;
 
-  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   meta = with lib; {
     description = "Unit testing framework for C";

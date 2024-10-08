@@ -28,7 +28,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     sso = [
       lxml
       pyopenssl

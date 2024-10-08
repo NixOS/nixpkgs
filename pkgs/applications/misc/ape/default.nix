@@ -1,4 +1,4 @@
-{ lib, stdenv, swiProlog, makeWrapper,
+{ lib, stdenv, swi-prolog, makeWrapper,
   fetchFromGitHub,
   lexiconPath ? "prolog/lexicon/clex_lexicon.pl",
   pname ? "ape",
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   version = "2019-08-10";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ swiProlog ];
+  buildInputs = [ swi-prolog ];
 
   src = fetchFromGitHub {
      owner = "Attempto";

@@ -12,8 +12,8 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin) [ nettools ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ iproute2 ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ nettools ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ iproute2 ];
 
   vendorHash = "sha256-JIqQXS2iw3opeotpfqC16w7hdu+7XjxhIyVj2M+98ec=";
 

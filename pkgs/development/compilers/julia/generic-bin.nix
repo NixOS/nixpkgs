@@ -24,14 +24,14 @@ let
     "REPL"
     # Test flaky
     "ccall"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test flaky on ofborg
     "FileWatching"
     # Test requires pbcopy
     "InteractiveUtils"
     # Test requires network access
     "Sockets"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Test Failed at $out/share/julia/stdlib/v1.8/LinearAlgebra/test/blas.jl:702
     "LinearAlgebra/blas"
     # Test Failed at $out/share/julia/test/misc.jl:724
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
         '@test_skip ca_roots_path() != bundled_ca_roots()'
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
     # https://github.com/JuliaLang/julia/blob/v1.9.0/NEWS.md#external-dependencies
     stdenv.cc.cc

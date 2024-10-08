@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       --ignore=test/t/test_screen.py
   '';
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i -e 's/readlink -f/readlink/g' bash_completion completions/*
   '';
 

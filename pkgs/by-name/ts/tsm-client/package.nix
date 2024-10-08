@@ -45,7 +45,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.23?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.1.24?topic=solaris-set-api-environment-variables
 
 
 # The newest version of TSM client should be discoverable by
@@ -104,10 +104,10 @@ let
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     name = "tsm-client-${finalAttrs.version}-unwrapped";
-    version = "8.1.23.0";
+    version = "8.1.24.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-LydzEvzcv7sizSQkVmkbJ/WhunP6oJm32M6nstIfSginCLwYoSb5WbnjeQq2PM2xncFN8W/SteUtCPYbOVKaKA==";
+      hash = "sha512-TqTDE2oJK/Wu/MNYUCqxmOE6asAqDLz4GtdcFZuKqvfT8pJUCYKz9yjRPIrM3u2XfLH0wDq+Q8ER4ui680mswA==";
     };
     inherit meta passthru;
 

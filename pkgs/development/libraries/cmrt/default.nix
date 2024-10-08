@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm libva ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://01.org/linuxmedia";
     description = "Intel C for Media Runtime";
     longDescription = "Media GPU kernel manager for Intel G45 & HD Graphics family";

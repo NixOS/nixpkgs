@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = lib.optional stdenv.is64bit ./bpf_stubs_workaround.patch;
+  patches = lib.optional stdenv.hostPlatform.is64bit ./bpf_stubs_workaround.patch;
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -127,6 +127,8 @@ stdenv.mkDerivation rec {
 
   # zerocallusedregs interferes during BPF compilation; TODO: perhaps improve
   hardeningDisable = [ "stackprotector" "zerocallusedregs" ];
+
+  doCheck = true;
 
   installFlags = [
     "e_datadir=\${TMPDIR}"

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     avro = [
       avro
       fastavro
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pyflakes
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "confluent_kafka" ];
 

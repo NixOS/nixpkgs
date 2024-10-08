@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       # The application ships with different config directories for each platform.
       # Note the application come with ARM variants as well, although the
       # current included wrapper doesn't use them.
-      configDir = if stdenv.isDarwin then "config_mac" else "config_linux";
+      configDir = if stdenv.hostPlatform.isDarwin then "config_mac" else "config_linux";
     in
     ''
       runHook preInstall

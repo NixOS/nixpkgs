@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       attrs
       cattrs
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     hypothesis
     pytestCheckHook
     typing-extensions
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests" ];
 

@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     installManPage docs/_build/man/*
 
     wrapProgram $out/bin/sshuttle \
-      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.isLinux [ iptables nettools ])}" \
+      --prefix PATH : "${lib.makeBinPath ([ coreutils openssh procps ] ++ lib.optionals stdenv.hostPlatform.isLinux [ iptables nettools ])}" \
   '';
 
   meta = with lib; {

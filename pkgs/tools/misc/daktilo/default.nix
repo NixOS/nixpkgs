@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
     xorg.libXi
     xorg.libXtst
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

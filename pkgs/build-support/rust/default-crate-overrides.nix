@@ -72,7 +72,7 @@ in
 
   cargo = attrs: {
     buildInputs = [ openssl zlib curl ]
-      ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ];
   };
 
   libz-sys = attrs: {
@@ -281,7 +281,7 @@ in
   };
 
   security-framework-sys = attr: {
-    propagatedBuildInputs = lib.optional stdenv.isDarwin Security;
+    propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   sequoia-openpgp = attrs: {
@@ -320,7 +320,7 @@ in
   };
 
   serde_derive = attrs: {
-    buildInputs = lib.optional stdenv.isDarwin Security;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
   };
 
   servo-fontconfig-sys = attrs: {

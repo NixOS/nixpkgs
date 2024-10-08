@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.7.1";
+  version = "3.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-/Zg4MYOvbsbJ0zyKuq+gX0PNbm8TyyBMziIaGCq6Lt8=";
+    hash = "sha256-TiFeyXgu7JKrCEzGCnamguWEP+HN4DRzYOErmdlWZFY=";
   };
 
   build-system = [ setuptools ];

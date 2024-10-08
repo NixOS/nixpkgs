@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # will probably be fixed in https://github.com/NixOS/nixpkgs/pull/302481
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
         --replace-fail "-flto" ""
   '';

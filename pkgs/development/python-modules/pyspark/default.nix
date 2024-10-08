@@ -42,7 +42,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ py4j ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ml = [ numpy ];
     mllib = [ numpy ];
     sql = [

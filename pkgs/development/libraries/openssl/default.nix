@@ -5,7 +5,7 @@
 , enableSSL2 ? false
 , enableSSL3 ? false
 , enableMD2 ? false
-, enableKTLS ? stdenv.isLinux
+, enableKTLS ? stdenv.hostPlatform.isLinux
 , static ? stdenv.hostPlatform.isStatic
 # path to openssl.cnf file. will be placed in $etc/etc/ssl/openssl.cnf to replace the default
 , conf ? null

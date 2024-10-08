@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://hydra.nixos.org/build/222679737/nixlog/3/tail
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-error=maybe-uninitialized";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=maybe-uninitialized";
 
   doInstallCheck = true;
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
         "$PWD/google/cloud/storage/benchmarks"
         "$PWD/google/cloud/testing_util"
       ];
-      ldLibraryPathName = "${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH";
+      ldLibraryPathName = "${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH";
     in
     lib.optionalString doInstallCheck (
       lib.optionalString (!staticOnly) ''
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     # Disable any integration tests, which need to contact the internet.
     # Also disable the `storage_benchmark_*` tests.
     # With Protobuf < 23.x they require -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=ON.
-    # With Protobuf >= 23.x they require They require setting -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
+    # With Protobuf >= 23.x they require They require setting -DGOOGLE_CLOUD_CPP_ENABLE_CTYPE_WORKAROUND=OFF
     ctest --label-exclude integration-test --exclude-regex storage_benchmarks_
 
     runHook postInstallCheck

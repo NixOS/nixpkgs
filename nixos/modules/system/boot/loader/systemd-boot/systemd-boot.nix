@@ -24,6 +24,8 @@ let
   systemdBootBuilder = pkgs.substituteAll rec {
     name = "systemd-boot";
 
+    dir = "bin";
+
     src = checkedSource;
 
     isExecutable = true;
@@ -86,7 +88,7 @@ let
 
   finalSystemdBootBuilder = pkgs.writeScript "install-systemd-boot.sh" ''
     #!${pkgs.runtimeShell}
-    ${systemdBootBuilder} "$@"
+    ${systemdBootBuilder}/bin/systemd-boot "$@"
     ${cfg.extraInstallCommands}
   '';
 in {

@@ -68,7 +68,7 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
-} (if stdenv.isDarwin then ''
+} (if stdenv.hostPlatform.isDarwin then ''
   mkdir -p $out/bin/
   mkdir -p "$out/Applications/${longName}.app/Contents/MacOS"
 

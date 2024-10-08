@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "0hvckhi5gfny3mlva6d7y9pmx7cbwvq0r7mk11k3sdiik9hlkmdd";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # There is not enough space in the load command to accomodate a full path to the store,
     # so use `@executable_path` to specify a relative path to chicken’s lib folder.
     sed -e '/POSTINSTALL_PROGRAM_FLAGS = /{s|$(LIBDIR)|@executable_path/../lib|}' \
@@ -30,12 +30,12 @@ stdenv.mkDerivation {
   setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
 
   # -fno-strict-overflow is not a supported argument in clang on darwin
-  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin ["strictoverflow"];
 
   makeFlags = [
     "PLATFORM=${platform}" "PREFIX=$(out)"
     "VARDIR=$(out)/var/lib"
-  ] ++ (lib.optionals stdenv.isDarwin [
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
     "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
     "C_COMPILER=$(CC)"
     "POSTINSTALL_PROGRAM=${stdenv.cc.targetPrefix}install_name_tool"
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
 

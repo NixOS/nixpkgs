@@ -51,7 +51,7 @@ buildPythonPackage rec {
     "pytest_regressions.plugin"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dataframe = [
       pandas
       numpy

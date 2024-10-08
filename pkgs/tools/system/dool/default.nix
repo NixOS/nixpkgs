@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dool";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "scottchiefbaker";
     repo = "dool";
     rev = "v${version}";
-    hash = "sha256-G9mcvUPGQw+0AtvlHdnnfAmcZtcUH/Sc77UVeA/FYZc=";
+    hash = "sha256-VII8Om43YILP3w0CsiKKdJDuK2Lc1rit2EY+eAArvng=";
   };
 
   buildInputs = [

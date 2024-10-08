@@ -154,6 +154,7 @@ stdenv.mkDerivation rec {
       Guix is based on the Nix package manager.
     '';
     homepage = "http://www.gnu.org/software/guix";
+    changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     mainProgram = "guix";
     maintainers = with maintainers; [ cafkafk foo-dogsquared ];

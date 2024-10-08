@@ -23,7 +23,7 @@ buildGoModule rec {
   vendorHash = "sha256-DGYYH5sKhpcWHYoUim4NyflzqsXFc4MCOqIw5jIfIiM=";
 
   # By default, libs and bins are stripped. KCL will crash on darwin if they are.
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   ldflags = [
     "-w -s"
@@ -33,7 +33,7 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
   buildInputs = [ kclvm kclvm_cli ] ++ (
-    lib.optional stdenv.isDarwin [
+    lib.optional stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

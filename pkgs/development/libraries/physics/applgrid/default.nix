@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
 
   # For some reason zlib was only needed after bump to gfortran8
-  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   patches = [
     ./bad_code.patch
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/Makefile.in \
       --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
-  '' + (lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile.in \
       --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
   '');

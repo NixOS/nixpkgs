@@ -1,10 +1,7 @@
 {config, lib, pkgs, ...}:
-
-with lib;
-
 let
   cfg = config.services.boinc;
-  allowRemoteGuiRpcFlag = optionalString cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc";
+  allowRemoteGuiRpcFlag = lib.optionalString cfg.allowRemoteGuiRpc "--allow_remote_gui_rpc";
 
   fhsEnv = pkgs.buildFHSEnv {
     name = "boinc-fhs-env";
@@ -16,8 +13,8 @@ let
 in
   {
     options.services.boinc = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the BOINC distributed computing client. If this
@@ -27,20 +24,20 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "boinc" {
+      package = lib.mkPackageOption pkgs "boinc" {
         example = "boinc-headless";
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/boinc";
         description = ''
           The directory in which to store BOINC's configuration and data files.
         '';
       };
 
-      allowRemoteGuiRpc = mkOption {
-        type = types.bool;
+      allowRemoteGuiRpc = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           If set to true, any remote host can connect to and control this BOINC
@@ -52,10 +49,10 @@ in
         '';
       };
 
-      extraEnvPackages = mkOption {
-        type = types.listOf types.package;
+      extraEnvPackages = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [];
-        example = literalExpression "[ pkgs.virtualbox ]";
+        example = lib.literalExpression "[ pkgs.virtualbox ]";
         description = ''
           Additional packages to make available in the environment in which
           BOINC will run. Common choices are:
@@ -77,7 +74,7 @@ in
       };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       environment.systemPackages = [cfg.package];
 
       users.users.boinc = {

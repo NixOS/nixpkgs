@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [gtest];
   cmakeFlags = [ "-Dtest=ON" ];
   env.NIX_CFLAGS_COMPILE = "-std=c++14" +
-    lib.optionalString stdenv.isLinux " -pthread";
+    lib.optionalString stdenv.hostPlatform.isLinux " -pthread";
   postInstall = ''
     mkdir -p $out/include
     cp ../src/easylogging++.cc $out/include

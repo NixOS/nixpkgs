@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
       "--disable-embedded-perl"
       "--without-perl-modules"
-    ] ++ lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
+    ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ nettools file autoreconfHook ];
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.IOKit

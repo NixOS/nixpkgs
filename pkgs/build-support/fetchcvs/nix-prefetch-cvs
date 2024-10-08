@@ -59,7 +59,7 @@ if test -z "$finalPath"; then
     (cd "$tmpPath" && cvs -f -z0 -d $cvsRoot export "${args[*]}" -d cvs-export $module >&2)
 
     # Compute the hash.
-    hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
+    hash=$(nix-hash --type $hashType ${hashFormat:-"--sri"} $tmpFile)
     if ! test -n "$QUIET"; then echo "hash is $hash" >&2; fi
 
     # Add the downloaded file to the Nix store.

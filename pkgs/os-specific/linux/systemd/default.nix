@@ -266,6 +266,7 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0018-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0019-Adjust-for-musl-headers.patch")
       (musl-patches + "/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0021-errno-util-Make-STRERROR-portable-for-musl.patch")
       (musl-patches + "/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
       (musl-patches + "/0023-shared-Do-not-use-malloc_info-on-musl.patch")
       (musl-patches + "/0024-avoid-missing-LOCK_EX-declaration.patch")

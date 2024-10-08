@@ -1,130 +1,141 @@
-{ stdenv
-, callPackage
-, lib
-, writeShellScript
-, mkNugetDeps
-, nix
-, cacert
-, nuget-to-nix
-, dotnetCorePackages
-, xmlstarlet
-, patchNupkgs
+{
+  stdenv,
+  callPackage,
+  lib,
+  writeShellScript,
+  mkNugetDeps,
+  nix,
+  cacert,
+  nuget-to-nix,
+  dotnetCorePackages,
+  xmlstarlet,
+  patchNupkgs,
+  symlinkJoin,
 
-, releaseManifestFile
-, tarballHash
-, depsFile
-, bootstrapSdk
+  releaseManifestFile,
+  tarballHash,
+  depsFile,
+  bootstrapSdk,
 }:
 
 let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  dotnetSdk = callPackage bootstrapSdk {};
-
-  deps = mkNugetDeps {
-    name = "dotnet-vmr-deps";
-    sourceFile = depsFile;
+  sdkPackages = symlinkJoin {
+    name = "${bootstrapSdk.name}-packages";
+    paths = map (
+      p:
+      p.override {
+        installable = true;
+      }
+    ) bootstrapSdk.packages;
   };
 
-  sdkPackages = dotnetSdk.packages.override {
-    installable = true;
-  };
+  vmr =
+    (mkVMR {
+      inherit releaseManifestFile tarballHash bootstrapSdk;
+    }).overrideAttrs
+      (old: rec {
+        prebuiltPackages = mkNugetDeps {
+          name = "dotnet-vmr-deps";
+          sourceFile = depsFile;
+          installable = true;
+        };
 
-  vmr = (mkVMR {
-    inherit releaseManifestFile tarballHash dotnetSdk;
-  }).overrideAttrs (old: rec {
-    prebuiltPackages = mkNugetDeps {
-      name = "dotnet-vmr-deps";
-      sourceFile = depsFile;
-      installable = true;
-    };
+        nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [
+          xmlstarlet
+          patchNupkgs
+        ];
 
-    nativeBuildInputs =
-      old.nativeBuildInputs or []
-      ++ [ xmlstarlet patchNupkgs ];
-
-    postPatch = old.postPatch or "" + ''
-      xmlstarlet ed \
-        --inplace \
-        -s //Project -t elem -n Import \
-        -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
-        src/*/Directory.Build.targets
-    '';
-
-    postConfigure = old.postConfigure or "" + ''
-      [[ ! -v prebuiltPackages ]] || \
-        ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
-      ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
-    '';
-
-    buildFlags =
-      old.buildFlags
-      ++ lib.optionals (lib.versionAtLeast old.version "9") [
-        # We need to set this as long as we have something in deps.nix. Currently
-        # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
-        # artifacts.
-        "-p:SkipErrorOnPrebuilts=true"
-      ];
-
-    passthru = old.passthru or {} // { fetch-deps =
-      let
-        inherit (vmr) targetRid updateScript;
-        otherRids =
-          lib.remove targetRid (
-            map (system: dotnetCorePackages.systemToDotnetRid system)
-              vmr.meta.platforms);
-
-        pkg = vmr.overrideAttrs (old: {
-          nativeBuildInputs = old.nativeBuildInputs ++ [
-            nix
-            cacert
-            (nuget-to-nix.override { dotnet-sdk = dotnetSdk; })
-          ];
-          postPatch = old.postPatch or "" + ''
+        postPatch =
+          old.postPatch or ""
+          + ''
             xmlstarlet ed \
               --inplace \
               -s //Project -t elem -n Import \
-              -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
-              repo-projects/Directory.Build.targets
-            # make nuget-client use the standard arcade package-cache dir, which
-            # is where we scan for dependencies
-            xmlstarlet ed \
-              --inplace \
-              -s //Project -t elem -n ItemGroup \
-              -s \$prev -t elem -n EnvironmentVariables \
-              -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
-              repo-projects/nuget-client.proj
+              -i \$prev -t attr -n Project -v "${./patch-restored-packages.proj}" \
+              src/*/Directory.Build.targets
           '';
-          buildFlags = [ "--online" ] ++ old.buildFlags;
-          prebuiltPackages = null;
-        });
 
-        drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
-      in
-        writeShellScript "fetch-dotnet-sdk-deps" ''
-          ${nix}/bin/nix-shell --pure --run 'source /dev/stdin' "${drv}" << 'EOF'
-          set -e
+        postConfigure =
+          old.postConfigure or ""
+          + ''
+            [[ ! -v prebuiltPackages ]] || \
+              ln -sf "$prebuiltPackages"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+            ln -sf "${sdkPackages}"/share/nuget/source/*/*/*.nupkg prereqs/packages/prebuilt/
+          '';
 
-          tmp=$(mktemp -d)
-          trap 'rm -fr "$tmp"' EXIT
+        buildFlags =
+          old.buildFlags
+          ++ lib.optionals (lib.versionAtLeast old.version "9") [
+            # We need to set this as long as we have something in deps.nix. Currently
+            # that's the portable ilasm/ildasm which aren't in the centos sourcebuilt
+            # artifacts.
+            "-p:SkipErrorOnPrebuilts=true"
+          ];
 
-          HOME=$tmp/.home
-          cd "$tmp"
+        passthru = old.passthru or { } // {
+          fetch-deps =
+            let
+              inherit (vmr) targetRid updateScript;
+              otherRids = lib.remove targetRid (
+                map (system: dotnetCorePackages.systemToDotnetRid system) vmr.meta.platforms
+              );
 
-          phases="''${prePhases[*]:-} unpackPhase patchPhase ''${preConfigurePhases[*]:-} \
-            configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
-            genericBuild
+              pkg = vmr.overrideAttrs (old: {
+                nativeBuildInputs = old.nativeBuildInputs ++ [
+                  nix
+                  cacert
+                  nuget-to-nix
+                ];
+                postPatch =
+                  old.postPatch or ""
+                  + ''
+                    xmlstarlet ed \
+                      --inplace \
+                      -s //Project -t elem -n Import \
+                      -i \$prev -t attr -n Project -v "${./record-downloaded-packages.proj}" \
+                      repo-projects/Directory.Build.targets
+                    # make nuget-client use the standard arcade package-cache dir, which
+                    # is where we scan for dependencies
+                    xmlstarlet ed \
+                      --inplace \
+                      -s //Project -t elem -n ItemGroup \
+                      -s \$prev -t elem -n EnvironmentVariables \
+                      -i \$prev -t attr -n Include -v 'NUGET_PACKAGES=$(ProjectDirectory)artifacts/sb/package-cache/' \
+                      repo-projects/nuget-client.proj
+                  '';
+                buildFlags = [ "--online" ] ++ old.buildFlags;
+                prebuiltPackages = null;
+              });
 
-          depsFiles=(./src/*/deps.nix)
+              drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
+            in
+            writeShellScript "fetch-dotnet-sdk-deps" ''
+              ${nix}/bin/nix-shell --pure --run 'source /dev/stdin' "${drv}" << 'EOF'
+              set -e
 
-          cat $(nix-build ${toString ./combine-deps.nix} \
-            --arg list "[ ''${depsFiles[*]} ]" \
-            --argstr baseRid ${targetRid} \
-            --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
-            ) > "${toString prebuiltPackages.sourceFile}"
-          EOF
-        '';
-    };
-  });
-in mkPackages { inherit vmr; }
+              tmp=$(mktemp -d)
+              trap 'rm -fr "$tmp"' EXIT
+
+              HOME=$tmp/.home
+              cd "$tmp"
+
+              phases="''${prePhases[*]:-} unpackPhase patchPhase ''${preConfigurePhases[*]:-} \
+                configurePhase ''${preBuildPhases[*]:-} buildPhase checkPhase" \
+                genericBuild
+
+              depsFiles=(./src/*/deps.nix)
+
+              cat $(nix-build ${toString ./combine-deps.nix} \
+                --arg list "[ ''${depsFiles[*]} ]" \
+                --argstr baseRid ${targetRid} \
+                --arg otherRids '${lib.generators.toPretty { multiline = false; } otherRids}' \
+                ) > "${toString prebuiltPackages.sourceFile}"
+              EOF
+            '';
+        };
+      });
+in
+mkPackages { inherit vmr; }

@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ optionals withGUI [ cmark ]
-  ++ optionals stdenv.isLinux [ qtwayland ]
-  ++ optionals stdenv.isDarwin [ libiconv ];
+  ++ optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+  ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

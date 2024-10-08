@@ -61,7 +61,7 @@ buildPythonPackage rec {
         ];
         plot = [ matplotlib ];
         symfont = [ sympy ];
-        type1 = lib.optional stdenv.isDarwin xattr;
+        type1 = lib.optional stdenv.hostPlatform.isDarwin xattr;
         pathops = [ skia-pathops ];
         repacker = [ uharfbuzz ];
       };

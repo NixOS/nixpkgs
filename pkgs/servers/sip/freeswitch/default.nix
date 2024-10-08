@@ -90,7 +90,7 @@ defaultModules = mods: with mods; [
   xml_int.cdr
   xml_int.rpc
   xml_int.scgi
-] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
+] ++ lib.optionals stdenv.hostPlatform.isLinux [ endpoints.gsmopen ];
 
 enabledModules = (if modules != null then modules else defaultModules) availableModules;
 
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     libuuid libxcrypt
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
-  ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration ];
 
   enableParallelBuilding = true;
 
@@ -168,6 +168,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mpl11;
     maintainers = with lib.maintainers; [ mikaelfangel ];
     platforms = with lib.platforms; unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "fiona";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Toblerity";
     repo = "Fiona";
     rev = "refs/tags/${version}";
-    hash = "sha256-0Jiyq9x9YLDN1a1LBlCK2ac6kLZ5X2rOPusUQH5OPrQ=";
+    hash = "sha256-5NN6PBh+6HS9OCc9eC2TcBvkcwtI4DV8qXnz4tlaMXc=";
   };
 
   build-system = [

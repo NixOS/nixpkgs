@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   # tests are broken on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
     runHook preInstall

@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
   buildInputs = [ flac lame libmpg123 libogg libopus libvorbis ]
-    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # need headers from the Carbon.framework in /System/Library/Frameworks to
   # compile this on darwin -- not sure how to handle
-  preConfigure = lib.optionalString stdenv.isDarwin
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin
     ''
       NIX_CFLAGS_COMPILE+=" -I$SDKROOT/System/Library/Frameworks/Carbon.framework/Versions/A/Headers"
     '';

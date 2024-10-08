@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "deltalake";
-  version = "0.19.1";
+  version = "0.20.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Xgn6uyIfuB6YnCg8FieOr/tuhXBtmDZKvNpcDGynNZg=";
+    hash = "sha256-serMb6Rirmw+QLpET3NT2djBoFBW/TGu1/5qYjiYpKE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    hash = "sha256-ebX51/ztIdhY81sd0fdPsKvaGtCEk8oofrj/Nrt8nfA=";
+    hash = "sha256-NkXovFsX+qbca+gYeBMQnacNzubloWNW/GrXNeWquE8=";
   };
 
   env.OPENSSL_NO_VENDOR = 1;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
     libiconv

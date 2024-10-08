@@ -39,7 +39,7 @@ buildPythonPackage rec {
     "testVFSWithWAL"
     # no lines in errout.txt
     "testWriteUnraisable"
-  ] ++ lib.optionals stdenv.isDarwin [ "testzzForkChecker" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "testzzForkChecker" ];
 
   pythonImportsCheck = [ "apsw" ];
 

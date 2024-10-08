@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "eris-go";
-  version = "20240826";
+  version = "20240920";
   outputs = [ "out" "man" ];
 
   src = fetchFromGitea {
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner = "eris";
     repo = "eris-go";
     rev = version;
-    hash = "sha256-qw3HdHtyMuWqwkuGzVzQ8bXnXlJJPDpiYrQZb0lIYj8=";
+    hash = "sha256-ZC4MBt1ucbZOn3sgs2xEiLLSDq7mz5Nj/in/TzydAbk=";
   };
 
   vendorHash = "sha256-TnB4BSO2Yb9AtcHgdEgNrFHAQJ7u4IzmhLdcSjbZ7SA=";

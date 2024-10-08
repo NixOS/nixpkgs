@@ -46,11 +46,11 @@ buildPythonPackage rec {
     sphinx-autodoc-typehints
     sphinx-rtd-theme
     sphinxHook
-  ] ++ passthru.optional-dependencies.doc;
+  ] ++ optional-dependencies.doc;
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     validation = [ pydantic ];
     global = [ platformdirs ];
     doc = [
@@ -63,7 +63,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python tool configuration";

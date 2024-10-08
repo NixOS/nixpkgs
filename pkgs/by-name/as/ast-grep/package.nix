@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.27.0";
+  version = "0.27.3";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-aoROD6c+VghvoBixSYLXC1DrYDkOhJA5rjDycc9NyR8=";
+    hash = "sha256-nE4cHQvFseSgB6LluTp9dCDEqR9vAymZCN3V7HgieYA=";
   };
 
-  cargoHash = "sha256-skOE/J+Msvm8tUizijONy+vx4MrsMbd4uUs5bO8FId4=";
+  cargoHash = "sha256-A0qvug8wbqN22B0j6BFZyeHMfmlBsuZJRJ1SmctTz1s=";
 
   nativeBuildInputs = [ installShellFiles ];
 

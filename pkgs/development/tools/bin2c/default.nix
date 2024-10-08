@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   makeFlags = [ "prefix=$(out)" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkTarget = "test";
   checkInputs = [ util-linux ]; # uuidgen
 

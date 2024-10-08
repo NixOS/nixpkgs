@@ -61,7 +61,7 @@ buildPythonPackage rec {
     tzlocal
   ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     complete = [
       requests-gssapi
       # requests-negotiate-sspi

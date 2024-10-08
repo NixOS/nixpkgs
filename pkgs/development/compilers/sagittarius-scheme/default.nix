@@ -6,12 +6,12 @@
 , boehmgc
 , openssl
 , zlib
-, odbcSupport ? !stdenv.isDarwin
+, odbcSupport ? !stdenv.hostPlatform.isDarwin
 , libiodbc
 }:
 
-let platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
-                            else if (stdenv.isLinux or stdenv.isBSD) then "LD_LIBRARY_PATH"
+let platformLdLibraryPath = if stdenv.hostPlatform.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
+                            else if (stdenv.hostPlatform.isLinux or stdenv.hostPlatform.isBSD) then "LD_LIBRARY_PATH"
                             else throw "unsupported platform";
 in
 stdenv.mkDerivation rec {
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libffi boehmgc openssl zlib ] ++ lib.optional odbcSupport libiodbc;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Wno-error=int-conversion"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # error: '__builtin_ia32_aeskeygenassist128' needs target feature aes
     "-maes"
   ]);

@@ -37,7 +37,7 @@ buildGoModule rec {
 
   buildInputs = [
     flac
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
 

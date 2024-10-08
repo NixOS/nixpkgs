@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk_doc" withIntrospection)
   ];
 
-  doCheck = stdenv.isLinux && withIntrospection;
+  doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
   separateDebugInfo = true;
 
   postPatch = ''

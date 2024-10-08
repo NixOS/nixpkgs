@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "vips";
   version = "8.15.3";
 
-  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
+  outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "devdoc" ];
 
   src = fetchFromGitHub {
     owner = "libvips";
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     docbook-xsl-nons
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gtk-doc
   ];
 
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     cgif
     libarchive
     libhwy
-  ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
   propagatedBuildInputs = [
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
   ]
-  ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-Dgtk_doc=true"
   ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
   ;
 

@@ -11,7 +11,9 @@
 , pyinstaller
 , glibc
 , binutils
+, macholib
 , installShellFiles
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -34,10 +36,11 @@ buildPythonPackage rec {
   dependencies = [
     altgraph
     packaging
+    macholib
     pyinstaller-hooks-contrib
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix" "PATH" ":"  (lib.makeBinPath [ glibc binutils ])
   ];
 

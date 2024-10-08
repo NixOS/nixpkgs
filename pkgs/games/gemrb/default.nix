@@ -20,7 +20,7 @@ let
   backend =
     if stdenv.hostPlatform.isx86 then "OpenGL" else "GLES";
 
-  withVLC = stdenv.isDarwin;
+  withVLC = stdenv.hostPlatform.isDarwin;
 
   inherit (lib) optional optionalString;
 

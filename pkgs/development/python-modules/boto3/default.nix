@@ -49,7 +49,7 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crt = [ botocore.optional-dependencies.crt ];
   };
 

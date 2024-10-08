@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "akregator";
 
-  extraBuildInputs = [qtwebengine];
+  extraBuildInputs = [ qtwebengine ];
 }

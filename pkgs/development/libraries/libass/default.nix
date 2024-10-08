@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ freetype fribidi harfbuzz ]
     ++ lib.optional fontconfigSupport fontconfig
-    ++ lib.optional stdenv.isDarwin [
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.ApplicationServices
       darwin.apple_sdk.frameworks.CoreFoundation

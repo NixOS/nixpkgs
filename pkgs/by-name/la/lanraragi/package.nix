@@ -61,7 +61,7 @@ buildNpmPackage rec {
     TimeLocal
     YAMLPP
     StringSimilarity
-  ] ++ lib.optionals stdenv.isLinux [ LinuxInotify2 ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ LinuxInotify2 ];
 
   buildPhase = ''
     runHook preBuild

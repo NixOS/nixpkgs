@@ -4,35 +4,28 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  qttools,
   doxygen,
-  wrapQtAppsHook,
-  wrapGAppsHook3,
   wayland-scanner,
+  wayland,
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
+  libsForQt5,
   deepin-pw-check,
-  qtbase,
-  qtx11extras,
-  qtmultimedia,
-  polkit-qt,
   libxcrypt,
-  librsvg,
   gtest,
   runtimeShell,
-  dbus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-control-center";
-  version = "6.0.59";
+  version = "6.0.65";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-OniY/B/9319AYYFFPnsUMNrnc0yVGG3rfCLPjgNFyag=";
+    hash = "sha256-9v2UtLjQQ3OX69UxMknLlrQhorahDI4Z4EEHItBs7G0=";
   };
 
   postPatch = ''
@@ -43,24 +36,22 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qttools
+    libsForQt5.qttools
     doxygen
-    wrapQtAppsHook
-    wrapGAppsHook3
+    libsForQt5.wrapQtAppsHook
     wayland-scanner
   ];
-  dontWrapGApps = true;
 
   buildInputs = [
+    wayland
     dtkwidget
     qt5platform-plugins
+    qt5integration
     deepin-pw-check
-    qtbase
-    qtx11extras
-    qtmultimedia
-    polkit-qt
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.polkit-qt
     libxcrypt
-    librsvg
     gtest
   ];
 
@@ -79,17 +70,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # qt.qpa.plugin: Could not find the Qt platform plugin "minimal"
     # A workaround is to set QT_PLUGIN_PATH explicitly
-    export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
-  '';
-
-  # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
-  qtWrapperArgs = [
-    "--prefix QT_PLUGIN_PATH : ${qt5integration}/${qtbase.qtPluginPrefix}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ librsvg ]}"
-  ];
-
-  preFixup = ''
-    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
   outputs = [
@@ -97,12 +78,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Control panel of Deepin Desktop Environment";
     mainProgram = "dde-control-center";
     homepage = "https://github.com/linuxdeepin/dde-control-center";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = teams.deepin.members;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = lib.teams.deepin.members;
   };
 }

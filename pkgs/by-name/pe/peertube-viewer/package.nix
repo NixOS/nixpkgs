@@ -2,7 +2,6 @@
   lib,
   fetchFromGitLab,
   rustPlatform,
-  youtube-dl,
 }:
 
 rustPlatform.buildRustPackage rec {

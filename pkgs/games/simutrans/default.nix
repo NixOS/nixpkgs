@@ -121,8 +121,8 @@ let
     configurePhase = let
       # Configuration as per the readme.txt and config.template
       platform =
-        if stdenv.isLinux then "linux" else
-        if stdenv.isDarwin then "mac" else throw "add your platform";
+        if stdenv.hostPlatform.isLinux then "linux" else
+        if stdenv.hostPlatform.isDarwin then "mac" else throw "add your platform";
       config = ''
         BACKEND = mixer_sdl
         COLOUR_DEPTH = 16

@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "config.build2.libpkgconf=true"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath "''${!outputLib}/lib" "''${!outputBin}/bin/b"
   '';
 

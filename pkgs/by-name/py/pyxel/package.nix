@@ -46,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs =
     [ SDL2 ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.IOKit
     ];

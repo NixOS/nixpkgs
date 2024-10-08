@@ -4,13 +4,12 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
-  pytest-runner,
   aiohttp,
   attrs,
   multidict,
   colorlog,
   pynacl,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-randomly,
   pytest-asyncio,
   mock,
@@ -46,15 +45,14 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [ pynacl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-runner
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytest-randomly
     mock
   ];

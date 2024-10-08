@@ -24,7 +24,7 @@
 let
   inherit (llvmPackages) stdenv;
   mkDerivation = (
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then darwin.apple_sdk_11_0.llvmPackages_16.stdenv
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
@@ -83,10 +83,10 @@ in mkDerivation rec {
     python3
     perl
     llvmPackages.lld
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
     yasm
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.bintools
     findutils
     darwin.bootstrap_cmds
@@ -96,7 +96,7 @@ in mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
   corrosionSrc = if rustSupport then fetchFromGitHub {
@@ -154,7 +154,7 @@ in mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|gfind|find|' cmake/tools.cmake
     sed -i 's|ggrep|grep|' cmake/tools.cmake
   '' + lib.optionalString rustSupport ''
@@ -168,7 +168,7 @@ in mkDerivation rec {
     popd
 
     cargoSetupPostPatchHook() { true; }
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Make sure Darwin invokes lld.ld64 not lld.
     substituteInPlace cmake/tools.cmake \
       --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
@@ -183,10 +183,10 @@ in mkDerivation rec {
   env = {
     NIX_CFLAGS_COMPILE =
       # undefined reference to '__sync_val_compare_and_swap_16'
-      lib.optionalString stdenv.isx86_64 " -mcx16" +
+      lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16" +
       # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
       # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
-      lib.optionalString stdenv.isDarwin " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+      lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988

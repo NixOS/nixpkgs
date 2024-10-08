@@ -855,6 +855,7 @@ let
           "UseGateway"
           "UseRoutes"
           "UseTimezone"
+          "IPv6OnlyMode"
           "ClientIdentifier"
           "VendorClassIdentifier"
           "UserClass"
@@ -888,6 +889,7 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)

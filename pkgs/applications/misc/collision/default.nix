@@ -20,13 +20,13 @@
 
 crystal.buildCrystalPackage rec {
   pname = "Collision";
-  version = "3.8.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Collision";
     rev = "v${version}";
-    hash = "sha256-55qCHc+snMAUFAT31Z8EPtJ/HLrnv1BveCEzjkn7N5g=";
+    hash = "sha256-c/74LzDM63w5zW8z2T8o4Efvuzj791/zTSKEDN32uak=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ crystal.buildCrystalPackage rec {
   # Shortly, adding pkg-config to buildInputs along with openssl fixes the issue.
 
   nativeBuildInputs = [ wrapGAppsHook4 pkg-config gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     libadwaita

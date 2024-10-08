@@ -12,6 +12,7 @@
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
 , multiArch ? false # Whether to include 32bit packages
+, nativeBuildInputs ? []
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -34,7 +35,7 @@
 # /lib will link to /lib32
 
 let
-  inherit (stdenv) is64bit;
+  inherit (stdenv.hostPlatform) is64bit;
 
   name = if (args ? pname && args ? version)
     then "${args.pname}-${args.version}"
@@ -257,6 +258,7 @@ let
   '';
 
 in runCommandLocal "${name}-fhs" {
+  inherit nativeBuildInputs;
   passthru = {
     inherit args baseTargetPaths targetPaths baseMultiPaths ldconfig isMultiBuild;
   };

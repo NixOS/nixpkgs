@@ -40,6 +40,9 @@ mkDerivation rec {
     ghostscript
   ];
 
+  # needed for qmakeFlags+=( below
+  __structuredAttrs = true;
+
   preConfigure = ''
     lrelease qpdfview.pro
     qmakeFlags+=(*.pro)

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     ./line-numbers.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
-  doCheck = stdenv.isx86_64;
+  doCheck = stdenv.hostPlatform.isx86_64;
   # Tends to fail otherwise.
   enableParallelChecking = false;
 

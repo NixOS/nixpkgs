@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     # test/run requires the compgen function which is available in
     # bashInteractive, but not bash.
     bashInteractive
-  ] ++ lib.optional stdenv.isDarwin xcodebuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcodebuild;
 
   checkInputs = [
     doctest
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
         [
           "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
         ]
-        ++ lib.optionals stdenv.isDarwin [
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "test.basedir"
           "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
           "test.multi_arch"

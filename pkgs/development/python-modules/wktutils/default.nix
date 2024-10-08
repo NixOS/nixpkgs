@@ -48,7 +48,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extras = [
       requests
       scikit-learn

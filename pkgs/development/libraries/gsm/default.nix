@@ -4,7 +4,7 @@
 }:
 
 let
-  inherit (stdenv) isDarwin;
+  inherit (stdenv.hostPlatform) isDarwin;
   inherit (lib) optional optionalString;
 in
 

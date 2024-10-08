@@ -76,7 +76,7 @@ stdenv.mkDerivation (args // {
       (if npmInstallHook != null then npmInstallHook else npmHooks.npmInstallHook)
       nodejs.python
     ]
-    ++ lib.optionals stdenv.isDarwin [ cctools ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
   buildInputs = buildInputs ++ [ nodejs ];
 
   strictDeps = true;

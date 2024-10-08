@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
-  version = "24.4.0";
+  version = "24.8.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aX7VDn1FLnhniuOOKrk1hDAIvsRIlVKDzQ+zYoZ+MWU=";
+    hash = "sha256-sFFQbQ1z08xDV879PeF7uFnX7PAE6ZSw98+oeFG8cVY=";
   };
 
   patches = [

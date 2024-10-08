@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-mahjongg";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/blob/${version}/NEWS?ref_type=tags";
     description = "Disassemble a pile of tiles by removing matching pairs";
     mainProgram = "gnome-mahjongg";
     maintainers = teams.gnome.members;

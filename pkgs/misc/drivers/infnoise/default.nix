@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, libftdi
-, infnoise, testers }:
+, testers }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "infnoise";
   version = "0.3.2";
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  GIT_COMMIT = src.rev;
-  GIT_VERSION = version;
+  GIT_COMMIT = finalAttrs.src.rev;
+  GIT_VERSION = finalAttrs.version;
   GIT_DATE = "2019-08-12";
 
   buildInputs = [ libftdi ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    tests.version = testers.testVersion { package = infnoise; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
@@ -57,4 +57,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ StijnDW zhaofengli ];
     platforms = platforms.linux;
   };
-}
+})

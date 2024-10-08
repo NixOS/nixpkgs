@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     mainProgram = "littlefs-fuse";
     inherit (fuse.meta) platforms;
     # fatal error: 'linux/fs.h' file not found
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

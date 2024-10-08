@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     boost
     eigen
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
 

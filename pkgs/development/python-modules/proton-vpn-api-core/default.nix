@@ -11,23 +11,24 @@
   sentry-sdk,
   distro,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.22.3";
+  version = "0.32.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-BGei6tw6VTKkHmaIWa2VJfKOL5cRUbauOQ7zp1RY9Bo=";
+    rev = "v${version}";
+    hash = "sha256-n4TZkp2ZMSJ1w1wQUMsAhX8kmWu59udlsXXEhIM83mI=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     distro
     proton-core
     proton-vpn-connection
@@ -37,24 +38,33 @@ buildPythonPackage rec {
     sentry-sdk
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton/vpn/core/ --cov-report html --cov-report term" ""
-  '';
-
   pythonImportsCheck = [ "proton.vpn.core" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  disabledTests = [
+    # Permission denied: '/run'
+    "test_ensure_configuration_file_is_created"
+    "test_ovpnconfig_with_settings"
+    "test_wireguard_config_content_generation"
+    "test_wireguard_with_non_certificate"
+    "test_ensure_generate_is_returning_expected_content"
+    "test_ensure_same_configuration_file_in_case_of_duplicate"
+    "test_ensure_configuration_file_is_deleted"
+  ];
+
+  meta = {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

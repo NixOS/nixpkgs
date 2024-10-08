@@ -48,6 +48,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mihaimaruseac ];
     mainProgram = "magika";
     # Currently, disabling on AArch64 as it onnx runtime crashes on ofborg
-    broken = stdenv.isAarch64 && stdenv.isLinux;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 }

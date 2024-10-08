@@ -4,15 +4,16 @@
 , fetchFromGitHub
 , nix-update-script
 , installShellFiles
+, versionCheckHook
 }:
 
 let
-  version = "0.20.1";
+  version = "0.23.0";
   gitSrc = fetchFromGitHub {
     owner = "glasskube";
     repo = "glasskube";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0ndYFpfijuBSODdl5XJah6/avLE1Bf6OZ0p0KGRB3dw=";
+    hash = "sha256-X9XXQ/Ke3toXLIkSCzGrypd1lKDfslpJ96zmDHBDbl8=";
   };
   web-bundle = buildNpmPackage rec {
     inherit version;
@@ -20,7 +21,7 @@ let
 
     src = gitSrc;
 
-    npmDepsHash = "sha256-BcYrZ95BLxKXQ4c1bHqNZKT9Tv4rAK72WSwrjhIsASY=";
+    npmDepsHash = "sha256-9BicZfnrJEFrtaJ0uGmLnnY99KplnL8qdmG5FMo70uI=";
 
     dontNpmInstall = true;
 
@@ -40,7 +41,7 @@ in buildGo123Module rec {
 
   src = gitSrc;
 
-  vendorHash = "sha256-BTJzhKf8aGHKbG0fdWVRWy0rFob9ZSTH45ME+4rdohU=";
+  vendorHash = "sha256-xpN/5VmRPFQegP+ORpb875N/+AKgxiqyZWk4Px+SCZ4=";
 
   CGO_ENABLED = 0;
 
@@ -54,6 +55,8 @@ in buildGo123Module rec {
   subPackages = [ "cmd/glasskube" "cmd/package-operator" ];
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   preBuild = ''
     cp -r ${web-bundle}/bundle internal/web/root/static/bundle

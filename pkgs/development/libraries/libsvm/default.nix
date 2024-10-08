@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   installPhase =
     let
       libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
       soVersion = "3";
-      libName = if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
+      libName = if stdenv.hostPlatform.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
     in
     ''
       runHook preInstall

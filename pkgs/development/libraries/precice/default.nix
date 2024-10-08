@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
-    lib.optionals stdenv.isDarwin [ "-D_GNU_SOURCE" ]
+    lib.optionals stdenv.hostPlatform.isDarwin [ "-D_GNU_SOURCE" ]
     # libxml2-2.12 changed const qualifiers
     ++ [ "-fpermissive" ]
   );

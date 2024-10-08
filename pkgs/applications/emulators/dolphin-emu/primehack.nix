@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-  ] ++ lib.optional stdenv.isLinux wrapQtAppsHook;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux wrapQtAppsHook;
 
   buildInputs = [
     curl
@@ -93,13 +93,13 @@ stdenv.mkDerivation rec {
     fmt
     xz
     qtbase
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     bluez
     udev
     libevdev
     alsa-lib
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreBluetooth
     OpenGL
     ForceFeedback
@@ -109,11 +109,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUSE_SHARED_ENET=ON"
     "-DENABLE_LTO=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways
@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   # - Allow Dolphin to use nix-provided libraries instead of building them
   postPatch = ''
     substituteInPlace CMakeLists.txt --replace 'DISTRIBUTOR "None"' 'DISTRIBUTOR "NixOS"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt --replace 'if(NOT APPLE)' 'if(true)'
     substituteInPlace CMakeLists.txt --replace 'if(LIBUSB_FOUND AND NOT APPLE)' 'if(LIBUSB_FOUND)'
   '';
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ Madouura ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.unix;
   };
 }

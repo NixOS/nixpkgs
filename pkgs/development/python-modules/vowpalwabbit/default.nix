@@ -55,7 +55,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
   '';
 
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
     # Test again when new version is released
-    broken = stdenv.isLinux;
+    broken = stdenv.hostPlatform.isLinux;
   };
 }

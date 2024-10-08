@@ -39,13 +39,13 @@ rustPlatform.buildRustPackage rec {
               --subst-var libPath
           '';
     in
-    lib.optionals stdenv.isLinux [ patchelfPatch ];
+    lib.optionals stdenv.hostPlatform.isLinux [ patchelfPatch ];
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];

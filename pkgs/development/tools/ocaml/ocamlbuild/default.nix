@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib
-, version ? if lib.versionAtLeast ocaml.version "4.07" then "0.15.0" else "0.14.3"
+, version ? if lib.versionAtLeast ocaml.version "4.08" then "0.15.0" else "0.14.3"
 }:
 
 stdenv.mkDerivation (finalAttrs: {

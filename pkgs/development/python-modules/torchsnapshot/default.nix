@@ -66,6 +66,6 @@ buildPythonPackage rec {
       # https://github.com/pytorch/torchsnapshot/issues/175
       pythonAtLeast "3.12"
       # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      || stdenv.isDarwin;
+      || stdenv.hostPlatform.isDarwin;
   };
 }

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     removeReferencesTo
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     # Fix tests on arm
     # https://github.com/Exiv2/exiv2/issues/933
     rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
     export LC_ALL=C
 

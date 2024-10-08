@@ -215,7 +215,7 @@ stdenv.mkDerivation rec {
     # This seems to be a bug in the openblas Makefile:
     # on x86_64 it expects NO_BINARY_MODE=
     # but on aarch64 it expects NO_BINARY_MODE=0
-    NO_BINARY_MODE = if stdenv.isx86_64
+    NO_BINARY_MODE = if stdenv.hostPlatform.isx86_64
         then toString (stdenv.hostPlatform != stdenv.buildPlatform)
         else stdenv.hostPlatform != stdenv.buildPlatform;
     # This disables automatic build job count detection (which honours neither enableParallelBuilding nor NIX_BUILD_CORES)

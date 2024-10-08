@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "bibtex-tidy";
-  version = "1.13.0";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "FlamingTempura";
     repo = "bibtex-tidy";
-    rev = "9658d907d990fd80d25ab37d9aee120451bf5d19";
-    hash = "sha256-4TrEabxIVB0Vu/E1ClKwk7lXcnPgoVh3RjLYsPwH2yQ=";
+    rev = "v${version}";
+    hash = "sha256-sMgy29deEfc3DFSC0Z4JZCeNAFpBKNYj+mJnFI1pSY4=";
   };
 
-  npmDepsHash = "sha256-VzzHGmW7Rb6dEdBxd84GXKSPasqfTkn+5rNw9C2lt8k=";
+  npmDepsHash = "sha256-FKde5/ZZcS5g0fUaDjhRlKGLiS8kk1PvkZw9PUmvAAE=";
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;

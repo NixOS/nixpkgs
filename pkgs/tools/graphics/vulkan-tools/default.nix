@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     vulkan-headers
     vulkan-loader
     vulkan-volk
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libffi
     libX11
     libXau
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
     wayland-scanner
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     moltenvk
     moltenvk.dev
     AppKit
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     "-DGLSLANG_INSTALL_DIR=${glslang}"
     # Hide dev warnings that are useless for packaging
     "-Wno-dev"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DMOLTENVK_REPO_ROOT=${moltenvk}/share/vulkan/icd.d"
     # Don’t build the cube demo because it requires `ibtool`, which is not available in nixpkgs.
     "-DBUILD_CUBE=OFF"

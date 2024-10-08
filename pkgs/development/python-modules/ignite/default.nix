@@ -97,6 +97,6 @@ buildPythonPackage rec {
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.bcdarwin ];
     # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

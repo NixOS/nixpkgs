@@ -70,7 +70,7 @@ in
     }
 
     (import ./wayland-session.nix {
-      inherit lib;
+      inherit lib pkgs;
       enableXWayland = cfg.xwayland.enable;
       enableWlrPortal = lib.mkDefault false; # Hyprland has its own portal, wlr is not needed
     })

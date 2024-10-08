@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
   nativeBuildInputs = [ cmake pkg-config meson ninja ];
   buildInputs = [ libmpdclient yaml-cpp ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation ];
 
   mesonFlags = [ "-Dunsupported_use_system_yamlcpp=true" ];
 

@@ -53,7 +53,7 @@
     package:
     package.overrideAttrs (
       old:
-      lib.optionalAttrs (!stdenv.isDarwin) {
+      lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
         setupHook = writeText "setupHook.sh" ''
           prependToVar dotnetRuntimeDeps \
             "${lib.getLib libICE}" \
@@ -67,7 +67,7 @@
     package:
     package.overrideAttrs (
       old:
-      lib.optionalAttrs stdenv.isLinux {
+      lib.optionalAttrs stdenv.hostPlatform.isLinux {
         nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ autoPatchelfHook ];
 
         buildInputs = old.buildInputs or [ ] ++ [ fontconfig ];

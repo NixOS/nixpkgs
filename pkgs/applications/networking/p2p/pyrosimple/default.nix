@@ -5,7 +5,7 @@
 , pyrosimple
 , python3
 , testers
-, withInotify ? stdenv.isLinux
+, withInotify ? stdenv.hostPlatform.isLinux
 }:
 
 python3.pkgs.buildPythonApplication rec {

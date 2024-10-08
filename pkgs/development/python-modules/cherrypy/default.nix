@@ -101,15 +101,17 @@ buildPythonPackage rec {
       "test_1_Ram_Concurrency"
       "test_2_File_Concurrency"
     ]
-    ++ lib.optionals stdenv.isDarwin [ "test_block" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_block" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [ "cherrypy/test/test_config_server.py" ];
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    "cherrypy/test/test_config_server.py"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "cherrypy" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     json = [ simplejson ];
     memcached_session = [ python-memcached ];
     routes_dispatcher = [ routes ];

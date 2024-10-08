@@ -30,7 +30,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [ pkg-config python3 ];
 
   buildInputs = [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];

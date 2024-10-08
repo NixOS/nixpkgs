@@ -16,7 +16,7 @@ import utils
 
 
 LEAF_TEMPLATE = jinja2.Template('''
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "{{ pname }}";
 }
@@ -25,7 +25,7 @@ mkKdeDerivation {
 ROOT_TEMPLATE = jinja2.Template('''
 {callPackage}: {
   {%- for p in packages %}
-  {{ p }} = callPackage ./{{ p }} {};
+  {{ p }} = callPackage ./{{ p }} { };
   {%- endfor %}
 }
 '''.strip());

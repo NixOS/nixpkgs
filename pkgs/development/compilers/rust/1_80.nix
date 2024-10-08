@@ -88,7 +88,7 @@ import ./default.nix
                 allowedRequisites = null;
                 cc = llvmPackages.clangNoLibcxx;
                 hostPlatform = stdenv.hostPlatform // {
-                  useLLVM = !stdenv.isDarwin;
+                  useLLVM = !stdenv.hostPlatform.isDarwin;
                 };
               };
               inherit libunwind;

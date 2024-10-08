@@ -6,7 +6,7 @@
 
 buildGoModule rec {
   pname = "rclone";
-  version = "1.68.0";
+  version = "1.68.1";
 
   outputs = [ "out" "man" ];
 
@@ -14,7 +14,7 @@ buildGoModule rec {
     owner = "rclone";
     repo = "rclone";
     rev = "v${version}";
-    hash = "sha256-xLTzfS3/9XBqh0B7/VeRKYEHAgc4rY3QcIUS3f1/e0M=";
+    hash = "sha256-qVk1l6PLB2S9KlUiccBN60wbaApZnPXTjq1LYsf7pyE=";
   };
 
   vendorHash = "sha256-vZxdayoKTo/fs5PgEdT4gepNq0kNNmLQhlybWY5kpx0=";
@@ -23,13 +23,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
-  buildInputs = lib.optional enableCmount (if stdenv.isDarwin then macfuse-stubs else fuse);
+  buildInputs = lib.optional enableCmount (if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse);
 
   tags = lib.optionals enableCmount [ "cmount" ];
 
   ldflags = [ "-s" "-w" "-X github.com/rclone/rclone/fs.Version=${version}" ];
 
-  postConfigure = lib.optionalString (!stdenv.isDarwin) ''
+  postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace vendor/github.com/winfsp/cgofuse/fuse/host_cgo.go \
         --replace-fail '"libfuse.so.2"' '"${lib.getLib fuse}/lib/libfuse.so.2"'
   '';
@@ -51,7 +51,7 @@ buildGoModule rec {
       # filesystem helpers
       ln -s $out/bin/rclone $out/bin/rclonefs
       ln -s $out/bin/rclone $out/bin/mount.rclone
-    '' + lib.optionalString (enableCmount && !stdenv.isDarwin)
+    '' + lib.optionalString (enableCmount && !stdenv.hostPlatform.isDarwin)
       # use --suffix here to ensure we don't shadow /run/wrappers/bin/fusermount3,
       # as the setuid wrapper is required as non-root on NixOS.
       ''

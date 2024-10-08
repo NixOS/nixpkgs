@@ -113,7 +113,7 @@ ocamlPackages.buildDunePackage rec {
     seqes
     stdint
     tezt
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

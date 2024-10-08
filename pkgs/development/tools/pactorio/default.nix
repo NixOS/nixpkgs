@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
-  buildInputs = [ bzip2 ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ bzip2 ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage artifacts/pactorio.1

@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
 
-  mesonFlags = lib.optionals stdenv.isLinux [
+  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [
     # Add FHS and Debian paths for non-NixOS applications
     "-Ddriverdir=${mesa.driverLink}/lib/dri:/usr/lib/dri:/usr/lib32/dri:/usr/lib/x86_64-linux-gnu/dri:/usr/lib/i386-linux-gnu/dri"
   ];

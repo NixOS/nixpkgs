@@ -8,7 +8,7 @@
 }:
 
 let
-  fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
+  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
 in stdenv.mkDerivation rec {
   pname = "sshfs-fuse";
   inherit version;
@@ -33,12 +33,12 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     wrapProgram $out/bin/sshfs --prefix PATH : "${openssh}/bin"
   '';
 
   # doCheck = true;
-  checkPhase = lib.optionalString (!stdenv.isDarwin) ''
+  checkPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The tests need fusermount:
     mkdir bin
     cp ${fuse}/bin/fusermount3 bin/fusermount

@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "0.5.0";
+  version = "0.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "cached-ipaddress";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ec2tW1X0iYdQFd5XFRABwUTPjqxV5lhwT6UEimmF+/o=";
+    hash = "sha256-wF5GBQCmKHo3sX4lYA9/wS69x4fFNNh08VG3qMp9UKs=";
   };
 
   build-system = [

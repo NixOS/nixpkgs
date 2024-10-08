@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # FATAL: could not create shared memory segment: Operation not permitted
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     postgresqlTestHook

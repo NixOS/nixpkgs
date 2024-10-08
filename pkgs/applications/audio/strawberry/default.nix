@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-REoki+8rneQ+4rL9rC7Md5Hrj6ftd7RePEF1fK4FnKY=";
+    hash = "sha256-86AMmp8R9/NibTsMFTTFcMeIqZ5x8din9RcBvhGO9xg=";
     fetchSubmodules = true;
   };
 
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     taglib
     qtbase
     qtx11extras
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     libgpod
     libpulseaudio
     libselinux
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-  ] ++ optionals stdenv.isLinux [
+  ] ++ optionals stdenv.hostPlatform.isLinux [
     util-linux
   ];
 

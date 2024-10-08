@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "ytarchive";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "Kethsar";
     repo = "ytarchive";
     rev = "v${version}";
-    hash = "sha256-mQgpwuTIEHeDv/PzBHpK1sraxFj8Ef3y8vN5bLw5E94=";
+    hash = "sha256-Y1frd7iJJuNFvLL/C1Y+RrqYC/1LF7P3J9rkPAThp9c=";
   };
 
-  vendorHash = "sha256-sjwQ/zEYJRkeWUDB7TzV8z+kET8lVRnQkXYbZbcUeHY=";
+  vendorHash = "sha256-hVAiWJKdDQB+6UlARFdjVATCMiGrEK2US62KAxCquvU=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 

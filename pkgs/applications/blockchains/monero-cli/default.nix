@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  ninja,
   pkg-config,
   boost,
   libsodium,
@@ -83,7 +82,7 @@ stdenv.mkDerivation rec {
       unbound
       zeromq
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       IOKit
       CoreData
     ]
@@ -93,7 +92,7 @@ stdenv.mkDerivation rec {
       libusb1
       protobuf_21
     ]
-    ++ lib.optionals (trezorSupport && stdenv.isLinux) [
+    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
       udev
     ];
 
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
       "-DBUILD_GUI_DEPS=ON"
       "-DReadline_ROOT_DIR=${readline.dev}"
     ]
-    ++ lib.optional stdenv.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
     ++ lib.optional trezorSupport [
       "-DUSE_DEVICE_TREZOR=ON"
       # fix build on recent gcc versions

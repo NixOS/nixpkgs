@@ -21,8 +21,8 @@ in
     };
     leasesPath = mkOption {
       type = types.path;
-      default = "/var/lib/misc/dnsmasq.leases";
-      example = "/var/lib/dnsmasq/dnsmasq.leases";
+      default = "/var/lib/dnsmasq/dnsmasq.leases";
+      example = "/var/lib/misc/dnsmasq.leases";
       description = ''
         Path to the `dnsmasq.leases` file.
       '';

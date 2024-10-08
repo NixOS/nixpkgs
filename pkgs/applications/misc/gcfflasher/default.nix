@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libgpiod
   ];
 

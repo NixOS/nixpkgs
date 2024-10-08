@@ -42,6 +42,7 @@
 , mypaint-brushes1
 , libwebp
 , libheif
+, libxslt
 , libgudev
 , openexr
 , desktopToDarwinBundle
@@ -76,6 +77,14 @@ in stdenv.mkDerivation (finalAttrs: {
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
     ./hardcode-plugin-interpreters.patch
+
+    # GIMP queries libheif.pc for builtin encoder/decoder support to determine if AVIF/HEIC files are supported
+    # (see https://gitlab.gnome.org/GNOME/gimp/-/blob/a8b1173ca441283971ee48f4778e2ffd1cca7284/configure.ac?page=2#L1846-1852)
+    # These variables have been removed since libheif 1.18.0
+    # (see https://github.com/strukturag/libheif/commit/cf0d89c6e0809427427583290547a7757428cf5a)
+    # This has already been fixed for the upcoming GIMP 3, but the fix has not been backported to 2.x yet
+    # (see https://gitlab.gnome.org/GNOME/gimp/-/issues/9080)
+    ./force-enable-libheif.patch
   ];
 
   nativeBuildInputs = [
@@ -85,7 +94,8 @@ in stdenv.mkDerivation (finalAttrs: {
     gettext
     makeWrapper
     gtk-doc
-  ] ++ lib.optionals stdenv.isDarwin [
+    libxslt
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -125,11 +135,11 @@ in stdenv.mkDerivation (finalAttrs: {
     glib-networking
     libmypaint
     mypaint-brushes1
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Cocoa
     gtk-mac-integration-gtk2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libgudev
   ] ++ lib.optionals withPython [
     python
@@ -158,7 +168,7 @@ in stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
 
   env = {
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DGDK_OSX_BIG_SUR=16";
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";

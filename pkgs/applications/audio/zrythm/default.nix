@@ -206,7 +206,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Automated and intuitive digital audio workstation";
     maintainers = with maintainers; [ tshaynik magnetophon yuu astavie PowerUser64 ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.agpl3Plus;
   };
 })

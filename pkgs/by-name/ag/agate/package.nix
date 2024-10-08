@@ -13,22 +13,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
-  version = "3.3.8";
+  version = "3.3.9";
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
-    hash = "sha256-HK4ZTpRe6dEvBnjZLisSGXJmD5gTPEnf6f/gN0AHUsI=";
+    hash = "sha256-u+v9RydB6OIsq2zOSmTDuejneb2uNFhRXsVNlGcPABs=";
   };
 
-  cargoHash = "sha256-yRCH4TRZ3m7ZG/NAEi1YDisSoad6FxCyojtXVvwbU9w=";
+  cargoHash = "sha256-oNI+UsxDdHSQGtl6vhxNWSiYVc8TV/vG8UoQX2w4ZoM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.Security
     ];

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
   ]
-  ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
 
   buildInputs = lib.optionals withMkl [
     mkl
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
     oneDNN
   ] ++ lib.optionals withOpenblas [
     openblas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
     darwin.apple_sdk.frameworks.Accelerate
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.CoreVideo
   ];

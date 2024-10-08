@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  doCheck = (!stdenv.isDarwin); # times out
+  doCheck = (!stdenv.hostPlatform.isDarwin); # times out
   enableParallelChecking = false;
 
   meta = with lib; {

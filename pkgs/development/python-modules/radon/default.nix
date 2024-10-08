@@ -45,7 +45,7 @@ buildPythonPackage rec {
     colorama
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     toml = [ tomli ];
   };
 

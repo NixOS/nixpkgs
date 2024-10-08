@@ -45,8 +45,8 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmMerged ncurses libffi libxml2 ]
     ++ lib.optionals enableCUDA [ cuda ]
-    ++ lib.optional (!stdenv.isDarwin) libpfm
-    ++ lib.optionals stdenv.isDarwin [ libobjc Cocoa Foundation ];
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Cocoa Foundation ];
 
   cmakeFlags = let
     resourceDir = "${llvmMerged}/lib/clang/" + (
@@ -100,6 +100,6 @@ in stdenv.mkDerivation rec {
     # never built on aarch64-darwin since first introduction in nixpkgs
     # Linux Aarch64 broken above LLVM11
     # https://github.com/terralang/terra/issues/597
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

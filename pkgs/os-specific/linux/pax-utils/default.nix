@@ -4,7 +4,7 @@
 , buildPackages
 , docbook_xml_dtd_44
 , docbook_xsl
-, withLibcap ? stdenv.isLinux, libcap
+, withLibcap ? stdenv.hostPlatform.isLinux, libcap
 , pkg-config
 , meson
 , ninja

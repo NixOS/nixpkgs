@@ -1,0 +1,35 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 404b5cd..bba31c1 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2613,13 +2613,3 @@ dependencies = [
+  "quote",
+  "syn",
+ ]
+-
+-[[patch.unused]]
+-name = "alpm"
+-version = "3.0.4"
+-source = "git+https://github.com/archlinux/alpm.rs?rev=306342#306342efc6f24739c92de64c432f962a22891e63"
+-
+-[[patch.unused]]
+-name = "aur-depends"
+-version = "3.0.0"
+-source = "git+https://github.com/Morganamilo/aur-depends?rev=30c2c1#30c2c15019f8dd80e803c9deefce3279079806af"
+diff --git a/Cargo.toml b/Cargo.toml
+index 020c5c2..f74e9d1 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -70,12 +70,3 @@ static = ["alpm/static"]
+ mock = ["async-trait"]
+ mock_chroot = ["mock"]
+ #default = ["git", "generate"]
+-
+-[patch.crates-io]
+-#alpm = { path = "../alpm.rs/alpm" }
+-#alpm-utils = { path = "../alpm.rs/alpm-utils" }
+-alpm = { git = "https://github.com/archlinux/alpm.rs", rev = "306342" }
+-#alpm-utils = { git = "https://github.com/archlinux/alpm.rs", rev = "8da396" }
+-#aur-depends = { path = "../aur-depends" }
+-aur-depends = { git = "https://github.com/Morganamilo/aur-depends", rev = "30c2c1"}
+-#aur-fetch = { path = "../aur-fetch" }

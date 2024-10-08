@@ -7,7 +7,6 @@
   hatchling,
   importlib-metadata,
   opentelemetry-test-utils,
-  setuptools,
   pytestCheckHook,
   writeScript,
 }:

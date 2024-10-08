@@ -33,6 +33,10 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
+  tags = [
+    "kvformat"
+  ];
+
   postInstall = ''
     tar xf ${web-assets}
     mkdir -p $out/share/gotosocial
@@ -40,7 +44,7 @@ buildGoModule rec {
   '';
 
   # tests are working only on x86_64-linux
-  # doCheck = stdenv.isLinux && stdenv.isx86_64;
+  # doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64;
   # checks are currently very unstable in our setup, so we should test manually for now
   doCheck = false;
 

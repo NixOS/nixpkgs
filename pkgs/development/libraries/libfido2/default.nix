@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ libcbor zlib ]
-    ++ lib.optionals stdenv.isDarwin [ hidapi ]
-    ++ lib.optionals stdenv.isLinux [ udev ]
-    ++ lib.optionals (stdenv.isLinux && withPcsclite) [ pcsclite ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hidapi ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [ pcsclite ];
 
   propagatedBuildInputs = [ openssl ];
 
@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d"
     "-DCMAKE_INSTALL_LIBDIR=lib"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DUSE_HIDAPI=1"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DNFC_LINUX=1"
-  ] ++ lib.optionals (stdenv.isLinux && withPcsclite) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withPcsclite) [
     "-DUSE_PCSC=1"
   ];
 

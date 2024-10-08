@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.coturn;
   pidfile = "/run/turnserver/turnserver.pid";
@@ -8,8 +7,8 @@ listening-port=${toString cfg.listening-port}
 tls-listening-port=${toString cfg.tls-listening-port}
 alt-listening-port=${toString cfg.alt-listening-port}
 alt-tls-listening-port=${toString cfg.alt-tls-listening-port}
-${concatStringsSep "\n" (map (x: "listening-ip=${x}") cfg.listening-ips)}
-${concatStringsSep "\n" (map (x: "relay-ip=${x}") cfg.relay-ips)}
+${lib.concatStringsSep "\n" (map (x: "listening-ip=${x}") cfg.listening-ips)}
+${lib.concatStringsSep "\n" (map (x: "relay-ip=${x}") cfg.relay-ips)}
 min-port=${toString cfg.min-port}
 max-port=${toString cfg.max-port}
 ${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
@@ -40,9 +39,9 @@ ${cfg.extraConfig}
 in {
   options = {
     services.coturn = {
-      enable = mkEnableOption "coturn TURN server";
-      listening-port = mkOption {
-        type = types.int;
+      enable = lib.mkEnableOption "coturn TURN server";
+      listening-port = lib.mkOption {
+        type = lib.types.int;
         default = 3478;
         description = ''
           TURN listener port for UDP and TCP.
@@ -50,8 +49,8 @@ in {
           "plain" TCP and UDP port(s), too - if allowed by configuration.
         '';
       };
-      tls-listening-port = mkOption {
-        type = types.int;
+      tls-listening-port = lib.mkOption {
+        type = lib.types.int;
         default = 5349;
         description = ''
           TURN listener port for TLS.
@@ -65,10 +64,10 @@ in {
           For secure UDP connections, we support DTLS version 1.
         '';
       };
-      alt-listening-port = mkOption {
-        type = types.int;
+      alt-listening-port = lib.mkOption {
+        type = lib.types.int;
         default = cfg.listening-port + 1;
-        defaultText = literalExpression "listening-port + 1";
+        defaultText = lib.literalExpression "listening-port + 1";
         description = ''
           Alternative listening port for UDP and TCP listeners;
           default (or zero) value means "listening port plus one".
@@ -80,16 +79,16 @@ in {
           are listening to that endpoint only for "symmetry".
         '';
       };
-      alt-tls-listening-port = mkOption {
-        type = types.int;
+      alt-tls-listening-port = lib.mkOption {
+        type = lib.types.int;
         default = cfg.tls-listening-port + 1;
-        defaultText = literalExpression "tls-listening-port + 1";
+        defaultText = lib.literalExpression "tls-listening-port + 1";
         description = ''
           Alternative listening port for TLS and DTLS protocols.
         '';
       };
-      listening-ips = mkOption {
-        type = types.listOf types.str;
+      listening-ips = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "203.0.113.42" "2001:DB8::42" ];
         description = ''
@@ -98,8 +97,8 @@ in {
           then all IPv4 and IPv6 system IPs will be used for listening.
         '';
       };
-      relay-ips = mkOption {
-        type = types.listOf types.str;
+      relay-ips = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "203.0.113.42" "2001:DB8::42" ];
         description = ''
@@ -115,29 +114,29 @@ in {
           as the family of the client socket).
         '';
       };
-      min-port = mkOption {
-        type = types.int;
+      min-port = lib.mkOption {
+        type = lib.types.int;
         default = 49152;
         description = ''
           Lower bound of UDP relay endpoints
         '';
       };
-      max-port = mkOption {
-        type = types.int;
+      max-port = lib.mkOption {
+        type = lib.types.int;
         default = 65535;
         description = ''
           Upper bound of UDP relay endpoints
         '';
       };
-      lt-cred-mech = mkOption {
-        type = types.bool;
+      lt-cred-mech = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Use long-term credential mechanism.
         '';
       };
-      no-auth = mkOption {
-        type = types.bool;
+      no-auth = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           This option is opposite to lt-cred-mech.
@@ -148,8 +147,8 @@ in {
           lt-cred-mech is default.
         '';
       };
-      use-auth-secret = mkOption {
-        type = types.bool;
+      use-auth-secret = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           TURN REST API flag.
@@ -172,8 +171,8 @@ in {
           or can be found in the turn_secret table in the database.
         '';
       };
-      static-auth-secret = mkOption {
-        type = types.nullOr types.str;
+      static-auth-secret = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           'Static' authentication secret value (a string) for TURN REST API only.
@@ -183,17 +182,17 @@ in {
           by a separate program, so this is why that other mode is 'dynamic'.
         '';
       };
-      static-auth-secret-file = mkOption {
-        type = types.nullOr types.str;
+      static-auth-secret-file = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Path to the file containing the static authentication secret.
         '';
       };
-      realm = mkOption {
-        type = types.str;
+      realm = lib.mkOption {
+        type = lib.types.str;
         default = config.networking.hostName;
-        defaultText = literalExpression "config.networking.hostName";
+        defaultText = lib.literalExpression "config.networking.hostName";
         example = "example.com";
         description = ''
           The default realm to be used for the users when no explicit
@@ -203,60 +202,60 @@ in {
           mechanism or with TURN REST API.
         '';
       };
-      cert = mkOption {
-        type = types.nullOr types.str;
+      cert = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/lib/acme/example.com/fullchain.pem";
         description = ''
           Certificate file in PEM format.
         '';
       };
-      pkey = mkOption {
-        type = types.nullOr types.str;
+      pkey = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/var/lib/acme/example.com/key.pem";
         description = ''
           Private key file in PEM format.
         '';
       };
-      dh-file = mkOption {
-        type = types.nullOr types.str;
+      dh-file = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Use custom DH TLS key, stored in PEM format in the file.
         '';
       };
-      secure-stun = mkOption {
-        type = types.bool;
+      secure-stun = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Require authentication of the STUN Binding request.
           By default, the clients are allowed anonymous access to the STUN Binding functionality.
         '';
       };
-      no-cli = mkOption {
-        type = types.bool;
+      no-cli = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Turn OFF the CLI support.
         '';
       };
-      cli-ip = mkOption {
-        type = types.str;
+      cli-ip = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           Local system IP address to be used for CLI server endpoint.
         '';
       };
-      cli-port = mkOption {
-        type = types.int;
+      cli-port = lib.mkOption {
+        type = lib.types.int;
         default = 5766;
         description = ''
           CLI server port.
         '';
       };
-      cli-password = mkOption {
-        type = types.nullOr types.str;
+      cli-password = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           CLI access password.
@@ -264,45 +263,45 @@ in {
           for of the password (see the -P command in the turnadmin utility).
         '';
       };
-      no-udp = mkOption {
-        type = types.bool;
+      no-udp = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable UDP client listener";
       };
-      no-tcp = mkOption {
-        type = types.bool;
+      no-tcp = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable TCP client listener";
       };
-      no-tls = mkOption {
-        type = types.bool;
+      no-tls = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable TLS client listener";
       };
-      no-dtls = mkOption {
-        type = types.bool;
+      no-dtls = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable DTLS client listener";
       };
-      no-udp-relay = mkOption {
-        type = types.bool;
+      no-udp-relay = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable UDP relay endpoints";
       };
-      no-tcp-relay = mkOption {
-        type = types.bool;
+      no-tcp-relay = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Disable TCP relay endpoints";
       };
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Additional configuration options";
       };
     };
   };
 
-  config = mkIf cfg.enable (mkMerge ([
+  config = lib.mkIf cfg.enable (lib.mkMerge ([
     { assertions = [
       { assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null ;
         message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
@@ -334,7 +333,7 @@ in {
 
         preStart = ''
           cat ${configFile} > ${runConfig}
-          ${optionalString (cfg.static-auth-secret-file != null) ''
+          ${lib.optionalString (cfg.static-auth-secret-file != null) ''
             ${pkgs.replace-secret}/bin/replace-secret \
               "#static-auth-secret#" \
               ${cfg.static-auth-secret-file} \
@@ -349,7 +348,7 @@ in {
           User = "turnserver";
           Group = "turnserver";
           AmbientCapabilities =
-            mkIf (
+            lib.mkIf (
               cfg.listening-port < 1024 ||
               cfg.alt-listening-port < 1024 ||
               cfg.tls-listening-port < 1024 ||

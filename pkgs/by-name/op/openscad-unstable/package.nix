@@ -28,6 +28,7 @@
 , libsForQt5
 , libspnav
 , libzip
+, manifold
 , mesa
 , mpfr
 , python3
@@ -36,61 +37,23 @@
 , wayland-protocols
 , wrapGAppsHook3
 , xorg
+, mimalloc
+, opencsg
 }:
-let
-  # get cccl from source to avoid license issues
-  nvidia-cccl = clangStdenv.mkDerivation {
-    pname = "nvidia-cccl";
-    # note, after v2.2.0, manifold dependency fails with some swap() ambiguities
-    version = "2.2.0";
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "cccl";
-      fetchSubmodules = true;
-      rev = "v2.2.0";
-      hash = "sha256-azHDAuK0rAHrH+XkN3gHDrbwZOclP3zbEMe8VRpMjDQ=";
-    };
-    patches = [ ./thrust-cmake.patch ];
-    nativeBuildInputs = [ cmake pkg-config ];
-    buildInputs = [ tbb_2021_11 ];
-    cmakeFlags = [
-      # only enable what we need
-      "-DCCCL_ENABLE_CUB=OFF"
-      "-DCCCL_ENABLE_LIBCUDACXX=ON"
-      "-DCCCL_ENABLE_THRUST=ON"
-      "-DCCCL_ENABLE_TESTING=OFF"
-      "-DCCCL_ENABLE_EXAMPLES=OFF"
-
-      "-DTHRUST_DEVICE_SYSTEM=TBB"
-      "-DTHRUST_HOST_SYSTEM=CPP"
-      "-DTHRUST_ENABLE_HEADER_TESTING=OFF"
-      "-DTHRUST_ENABLE_TESTING=OFF"
-      "-DTHRUST_ENABLE_EXAMPLES=OFF"
-
-      "-DLIBCUDACXX_ENABLE_CUDA=OFF"
-      "-DLIBCUDACXX_ENABLE_STATIC_LIBRARY=OFF"
-      "-DLIBCUDACXX_ENABLE_LIBCUDACXX_TESTS=OFF"
-    ];
-    meta = with lib; {
-      description = "CUDA C++ Core Libraries";
-      homepage = "https://github.com/NVIDIA/cccl";
-      license = licenses.asl20;
-      platforms = platforms.unix;
-    };
-  };
-in
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-08-17";
+  version = "2024-09-22";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "a16ca2a670840cfecb76254967380385d4d573cb";
-    hash = "sha256-YadbrYaxxdVNejasFW0MbcYwjwTHHQbVjqen9PKEsYQ=";
-    fetchSubmodules = true;
+    rev = "1cf4e97ed488d606c823f107dcc361f218aa84ca";
+    hash = "sha256-5WzLAQnjH+4JjJhh9pCgY3j8+lyNPrtY9a104tzkglo=";
+    fetchSubmodules = true;  # Only really need sanitizers-cmake and MCAD
   };
+
   patches = [ ./test.diff ];
+
   nativeBuildInputs = [
     (python3.withPackages (ps: with ps; [ numpy pillow ]))
     bison
@@ -103,12 +66,10 @@ clangStdenv.mkDerivation rec {
     pkg-config
   ];
   buildInputs = with libsForQt5; with qt5; [
-    # manifold dependencies
     clipper2
     glm
     tbb_2021_11
-    nvidia-cccl
-
+    mimalloc
     boost
     cairo
     cgal_5
@@ -119,17 +80,19 @@ clangStdenv.mkDerivation rec {
     ghostscript
     glib
     gmp
+    opencsg
     harfbuzz
     hidapi
     lib3mf
     libspnav
     libzip
+    manifold
     mpfr
     qscintilla
     qtbase
     qtmultimedia
   ]
-  ++ lib.optionals clangStdenv.isLinux [
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     xorg.libXdmcp
     libICE
     libSM
@@ -138,12 +101,13 @@ clangStdenv.mkDerivation rec {
     qtwayland
     libGLU
   ]
-  ++ lib.optional clangStdenv.isDarwin qtmacextras
+  ++ lib.optional clangStdenv.hostPlatform.isDarwin qtmacextras
   ;
   cmakeFlags = [
     "-DEXPERIMENTAL=ON" # enable experimental options
     "-DSNAPSHOT=ON" # nightly icons
-    "-DUSE_BUILTIN_OPENCSG=ON" # bundled latest opencsg
+    "-DUSE_BUILTIN_OPENCSG=OFF"
+    "-DUSE_BUILTIN_MANIFOLD=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings ["-"] ["."] version}\""
     "-DCMAKE_UNITY_BUILD=ON" # faster build
     # IPO
@@ -180,6 +144,5 @@ clangStdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ pca006132 raskin ];
     mainProgram = "openscad";
-    broken = true;  # https://github.com/NixOS/nixpkgs/issues/341043
   };
 }

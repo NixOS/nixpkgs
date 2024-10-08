@@ -28,7 +28,11 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.nix;
 
-  dotnetFlags = [ "-p:PublishReadyToRun=false" ];
+  dotnetFlags = [
+    "-p:PublishReadyToRun=false"
+    # for some reason this is set to win-x64 in the project files
+    "-p:RuntimeIdentifier="
+  ];
 
   projectFile = [
     "LibationAvalonia/LibationAvalonia.csproj"

@@ -1169,7 +1169,7 @@ in
           value.fsType = "9p";
           value.neededForBoot = true;
           value.options =
-            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
+            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" "x-systemd.requires=modprobe@9pnet_virtio.service" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
     in lib.mkMerge [

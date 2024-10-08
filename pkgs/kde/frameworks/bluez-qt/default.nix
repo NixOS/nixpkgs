@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "bluez-qt";
 
-  extraBuildInputs = [qtdeclarative];
+  extraBuildInputs = [ qtdeclarative ];
 }

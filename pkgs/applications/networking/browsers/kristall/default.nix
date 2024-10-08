@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   qmakeFlags = [ "src/kristall.pro" ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     mv kristall.app $out/Applications
   '' else ''

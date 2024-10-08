@@ -29,15 +29,15 @@
 , wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
-, swig4
+, swig
 , python3
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libcef
 , pciutils
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , withFdk ? true
 , pipewire
 , libdrm
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig4;
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -183,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addDriverRunpath $out/lib/lib*.so
     addDriverRunpath $out/lib/obs-plugins/*.so
 

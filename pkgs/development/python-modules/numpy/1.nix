@@ -105,7 +105,7 @@ buildPythonPackage rec {
       meson-python
       pkg-config
     ]
-    ++ lib.optionals (stdenv.isDarwin) [ xcbuild.xcrun ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ xcbuild.xcrun ]
     ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   buildInputs = [
@@ -155,13 +155,13 @@ buildPythonPackage rec {
 
   # https://github.com/numpy/numpy/issues/24548
   disabledTests =
-    lib.optionals stdenv.isi686 [
+    lib.optionals stdenv.hostPlatform.isi686 [
       "test_new_policy" # AssertionError: assert False
       "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
       "test_float_remainder_overflow" # AssertionError: FloatingPointError not raised by divmod
       "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
     ]
-    ++ lib.optionals stdenv.isAarch32 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
       "test_impossible_feature_enable" # AssertionError: Failed to generate error
       "test_features" # AssertionError: Failure Detection
       "test_new_policy" # AssertionError: assert False
@@ -173,10 +173,10 @@ buildPythonPackage rec {
       "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
       "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       "test_big_arrays" # OOM on a 16G machine
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # can fail on virtualized machines confused over their cpu identity
       "test_dispatcher"
     ];

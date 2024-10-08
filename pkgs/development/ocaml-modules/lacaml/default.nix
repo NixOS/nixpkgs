@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ lapack blas ] ++
-    lib.optionals stdenv.isDarwin
+    lib.optionals stdenv.hostPlatform.isDarwin
       [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {

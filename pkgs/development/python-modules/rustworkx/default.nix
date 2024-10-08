@@ -38,7 +38,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = [ numpy ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ numpy ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   checkInputs = [
     fixtures

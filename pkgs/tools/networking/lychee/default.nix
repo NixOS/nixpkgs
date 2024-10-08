@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   checkFlags = [
     #  Network errors for all of these tests

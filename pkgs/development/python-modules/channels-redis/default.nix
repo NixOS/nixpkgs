@@ -38,7 +38,7 @@ buildPythonPackage rec {
     msgpack
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cryptography = [ cryptography ];
   };
 

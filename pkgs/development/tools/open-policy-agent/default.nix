@@ -8,7 +8,7 @@
 , enableWasmEval ? false
 }:
 
-assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+assert enableWasmEval && stdenv.hostPlatform.isDarwin -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "open-policy-agent";
@@ -55,9 +55,9 @@ buildGoModule rec {
     # want but also limits the tests
     # Also avoid wasm tests on darwin due to wasmtime-go build issues
     getGoDirs() {
-      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.isDarwin "-e wasm"}
+      go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
     }
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     rm server/server_test.go
   '';

@@ -7,6 +7,7 @@ let
     concatStringsSep
     const
     elem
+    escapeShellArgs
     filterAttrs
     isString
     literalExpression
@@ -545,7 +546,7 @@ in
               rm -f ${cfg.dataDir}/*.conf
 
               # Initialise the database.
-              initdb -U ${cfg.superUser} ${concatStringsSep " " cfg.initdbArgs}
+              initdb -U ${cfg.superUser} ${escapeShellArgs cfg.initdbArgs}
 
               # See postStart!
               touch "${cfg.dataDir}/.first_startup"

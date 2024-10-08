@@ -4,13 +4,15 @@
 , gtk2
 , gtk3
 , lib
+, buildPackages
+, makeShellWrapper
 , mesa
 , nss
 , stdenv
 , udev
 , unzip
-, wrapGAppsHook3
 , xorg
+, darwin
 }:
 
 let
@@ -23,6 +25,10 @@ let
       platform = "linux-arm64";
       checksum = "sha256-rB0ak6jYnJMb0aHDLAyhaGoOFK4FXDLEOeofNdW/Wk8=";
     };
+    aarch64-darwin = {
+      platform = "darwin-arm64";
+      checksum = "sha256-L2rhtB/DIK7Qum2YNoWVBn4mf+DA3rbcBUfZEEa/C8c=";
+    };
   };
   inherit (stdenv.hostPlatform) system;
   binary = availableBinaries.${system} or (throw "cypress: No binaries available for system ${system}");
@@ -34,27 +40,47 @@ in stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";
     sha256 = checksum;
+    stripRoot = !stdenv.isDarwin;
   };
 
   # don't remove runtime deps
   dontPatchELF = true;
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 unzip ];
+  nativeBuildInputs =
+    [
+      unzip
+      makeShellWrapper
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      autoPatchelfHook
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    ];
 
-  buildInputs = with xorg; [
+
+  buildInputs = lib.optionals stdenv.isLinux (with xorg; [
     libXScrnSaver
     libXdamage
     libXtst
     libxshmfence
-  ] ++ [
     nss
     gtk2
     alsa-lib
     gtk3
     mesa # for libgbm
-  ];
+  ]) ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    Cocoa
+    CoreServices
+    CoreMedia
+    CoreAudio
+    AudioToolbox
+    AVFoundation
+    Foundation
+    ApplicationServices
+  ]);
 
-  runtimeDependencies = [ (lib.getLib udev) ];
+  runtimeDependencies = lib.optional stdenv.isLinux (lib.getLib udev);
 
   installPhase = ''
     runHook preInstall
@@ -67,9 +93,18 @@ in stdenv.mkDerivation rec {
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
     echo '{"verified": true}' > $out/binary_state.json
-    ln -s $out/opt/cypress/Cypress $out/bin/Cypress
-
+    ${if stdenv.isDarwin then ''
+      ln -s $out/opt/cypress/Cypress.app/Contents/MacOS/Cypress $out/bin/cypress
+    '' else ''
+      ln -s $out/opt/cypress/Cypress $out/bin/cypress
+    ''}
     runHook postInstall
+  '';
+
+  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+    # exit with 1 after 25.05
+    makeWrapper $out/opt/cypress/Cypress $out/bin/Cypress \
+      --run 'echo "Warning: Use the lowercase cypress executable instead of the capitalized one."'
   '';
 
   passthru = {

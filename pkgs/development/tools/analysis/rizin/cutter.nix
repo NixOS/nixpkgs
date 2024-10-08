@@ -52,7 +52,7 @@ let cutter = stdenv.mkDerivation rec {
     qttools
     qtwebengine
     rizin
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 

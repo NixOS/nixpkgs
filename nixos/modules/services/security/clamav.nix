@@ -165,7 +165,7 @@ in
     environment.etc."clamav/clamd.conf".source = clamdConfigFile;
 
     systemd.slices.system-clamav = {
-      description = "ClamAV slice";
+      description = "ClamAV Antivirus Slice";
     };
 
     systemd.services.clamav-daemon = mkIf cfg.daemon.enable {

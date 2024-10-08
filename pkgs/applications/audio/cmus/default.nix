@@ -1,15 +1,15 @@
 { config, lib, stdenv, fetchFromGitHub, ncurses, pkg-config
 , libiconv, CoreAudio, AudioUnit, VideoToolbox
 
-, alsaSupport ? stdenv.isLinux, alsa-lib ? null
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib ? null
 # simple fallback for everyone else
-, aoSupport ? !stdenv.isLinux, libao ? null
+, aoSupport ? !stdenv.hostPlatform.isLinux, libao ? null
 , jackSupport ? false, libjack ? null
 , samplerateSupport ? jackSupport, libsamplerate ? null
 , ossSupport ? false, alsa-oss ? null
 , pulseaudioSupport ? config.pulseaudio or false, libpulseaudio ? null
 , sndioSupport ? false, sndio ? null
-, mprisSupport ? stdenv.isLinux, systemd ? null
+, mprisSupport ? stdenv.hostPlatform.isLinux, systemd ? null
 
 # TODO: add these
 #, artsSupport
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv CoreAudio AudioUnit VideoToolbox ]
     ++ lib.flatten (lib.concatMap (a: a.deps) opts);
 
   prefixKey = "prefix=";

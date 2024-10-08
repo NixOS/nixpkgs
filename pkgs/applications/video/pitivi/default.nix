@@ -102,7 +102,7 @@ python3.pkgs.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
     mainProgram = "pitivi";
   };

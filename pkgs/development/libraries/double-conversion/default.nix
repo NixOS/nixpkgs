@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional (! enableStatic) "-DBUILD_SHARED_LIBS=ON";
 
   # Case sensitivity issue
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     rm BUILD
   '';
 

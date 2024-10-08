@@ -40,7 +40,7 @@ in rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper poppler_utils ];
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = path;
 

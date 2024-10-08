@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.8.1";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CKIP5yZyt+kPeWnVuHnWV8Li2zhaiowQ9Uy6VlvyN/I=";
+    hash = "sha256-tck6/WMxr+S2OlXRzqkHbke+y0uom1YrGBwT4luwx9Y=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -64,6 +64,9 @@ buildPythonPackage rec {
     "test_plugin_mqtt_general"
     # Nondeterministic. Fails with `assert 3 == 2`
     "test_plugin_matrix_transaction_ids_api_v3"
+    # Nondeterministic. Fails with `IndexError`
+    # https://github.com/NixOS/nixpkgs/issues/346894
+    "test_plugin_wxpusher_result_set"
     # Nondeterministic. Fails with `AssertionError`
     "test_plugin_xbmc_kodi_urls"
     # Nondeterministic. Fails with `AssertionError`

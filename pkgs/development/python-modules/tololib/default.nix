@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tololib" ];
 
   # Network discovery doesn't work in the sandbox for darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Python Library for Controlling TOLO Sauna/Steam Bath Devices";

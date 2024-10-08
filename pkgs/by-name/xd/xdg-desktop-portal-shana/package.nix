@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "Decodetalkers";
     repo = "xdg-desktop-portal-shana";
     rev = "v${version}";
-    sha256 = "sha256-bBKoAegT3wk2UD2fqSLaix2MuKtVAcHA6vcB9VAzLJw=";
+    hash = "sha256-bBKoAegT3wk2UD2fqSLaix2MuKtVAcHA6vcB9VAzLJw=";
   };
 
   nativeBuildInputs = [

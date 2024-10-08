@@ -344,7 +344,7 @@ let
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
-        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
         # This avoids eating them all up if something is misconfigured upon the first try.
         RestartSec = 15 * 60;
 

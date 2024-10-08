@@ -21,6 +21,7 @@ bundlerApp {
   meta = with lib; {
     description = "Black box WordPress vulnerability scanner";
     homepage = "https://wpscan.org/";
+    changelog = "https://github.com/wpscanteam/wpscan/releases";
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ nyanloutre manveru ];
     platforms = platforms.unix;

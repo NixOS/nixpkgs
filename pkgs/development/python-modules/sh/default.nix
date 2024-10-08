@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/amoffat/sh/issues/684
       "test_general_signal"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable tests that fail on Darwin sandbox
       "test_background_exception"
       "test_cwd"

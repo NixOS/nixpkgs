@@ -79,14 +79,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.2";
+  version = "3.38.3";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-lArwRtHR/KAsgjpjid6YnPA9BkcG1Mg/KeIIOWN75Kg=";
+    hash = "sha256-yJFYq4t0LzBr+O2bmtBSeehQ2vfUaZIQfOY68WZcHG4=";
   };
 
   passthru = {
@@ -152,7 +152,6 @@ in mkDerivation rec {
   env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"

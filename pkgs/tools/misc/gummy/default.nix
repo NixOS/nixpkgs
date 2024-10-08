@@ -1,9 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitea
-, substituteAll
 , testers
-, gummy
 , cmake
 , libX11
 , libXext
@@ -18,7 +16,7 @@
 , spdlog
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gummy";
   version = "0.6.0";
 
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
     domain = "codeberg.org";
     owner = "fusco";
     repo = "gummy";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-kATieFf+dEpcYgSEPoETacP7R+u2dOrg7rOhIkNQ1uE=";
   };
 
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/gummyd $out/bin/gummyd
   '';
 
-  passthru.tests.version = testers.testVersion { package = gummy; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     homepage = "https://codeberg.org/fusco/gummy";
@@ -78,4 +76,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = [ ];
   };
-}
+})

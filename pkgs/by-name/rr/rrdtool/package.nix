@@ -28,7 +28,7 @@ perl.pkgs.toPerlModule (
     };
 
     # Fix darwin build
-    patches = lib.optional stdenv.isDarwin (fetchpatch {
+    patches = lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
       url = "https://github.com/oetiker/rrdtool-1.x/pull/1262.patch";
       hash = "sha256-aP0rmDlILn6VC8Tg7HpRXbxL9+KD/PRTbXnbQ7HgPEg=";
     });
@@ -47,7 +47,7 @@ perl.pkgs.toPerlModule (
         cairo
         groff
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         tcl
         darwin.apple_sdk.frameworks.ApplicationServices
       ];

@@ -24,7 +24,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs gpgme lvm2 ];
 
   patches = [
     # fix scrolling

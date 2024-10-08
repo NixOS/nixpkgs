@@ -17,13 +17,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "stable2407-2";
+  version = "stable2409";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
     rev = "polkadot-${version}";
-    hash = "sha256-4WOoFjihzErc6lIgiWvLg6fqDOxs1A+A0ERvu/D8btw=";
+    hash = "sha256-QNjk2lb04VLYpwbE7hmUVaujijX9nkZxVdseTS1G85E=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -69,8 +69,8 @@ rustPlatform.buildRustPackage rec {
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
   buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
-    lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    lib.optionals stdenv.hostPlatform.isLinux [ rust-jemalloc-sys-unprefixed ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
   # available for `rustc-wasm32`

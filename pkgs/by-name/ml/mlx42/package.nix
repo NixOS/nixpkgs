@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, glfw
-, darwin
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableDebug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  glfw,
+  darwin,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableDebug ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,24 +16,35 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "codam-coding-college";
     repo = "MLX42";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-c4LoTePHhQeZTx33V1K3ZyXmT7vjB6NdkGVAiSuJKfI=";
   };
 
-  postPatch = ''
-    patchShebangs ./tools
-  ''
-  + lib.optionalString enableShared ''
-    substituteInPlace CMakeLists.txt \
-        --replace "mlx42 STATIC" "mlx42 SHARED"
-  '';
+  postPatch =
+    ''
+      patchShebangs --build ./tools
+    ''
+    + lib.optionalString enableShared ''
+      substituteInPlace CMakeLists.txt \
+          --replace-fail "mlx42 STATIC" "mlx42 SHARED"
+    '';
+
+  strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ glfw ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ OpenGL Cocoa IOKit ]);
+  buildInputs =
+    [ glfw ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        OpenGL
+        Cocoa
+        IOKit
+      ]
+    );
 
-  cmakeFlags = [ "-DDEBUG=${toString enableDebug}" ];
+  cmakeFlags = [ (lib.cmakeBool "DEBUG" enableDebug) ];
 
   postInstall = ''
     mkdir -p $out/lib/pkgconfig
@@ -40,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/codam-coding-college/MLX42/releases/tag/v${finalAttrs.version}";
     description = "Simple cross-platform graphics library that uses GLFW and OpenGL";
     homepage = "https://github.com/codam-coding-college/MLX42";
     license = lib.licenses.gpl2Only;

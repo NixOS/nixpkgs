@@ -24,16 +24,16 @@
 , libgeotiff
 , libjpeg
   # eccodes is broken on darwin
-, enableGRIB ? stdenv.isLinux
+, enableGRIB ? stdenv.hostPlatform.isLinux
 , eccodes
-, enableGLPK ? stdenv.isLinux
+, enableGLPK ? stdenv.hostPlatform.isLinux
 , glpk
   # We enable it in hdf4 and use libtirpc as a dependency here from the passthru
   # of hdf4
-, enableLibtirpc ? stdenv.isLinux
+, enableLibtirpc ? stdenv.hostPlatform.isLinux
 , libtirpc
 , python3
-, enableMPI ? (stdenv.isLinux || stdenv.isDarwin)
+, enableMPI ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
   # Choose MPICH over OpenMPI because it currently builds on AArch and Darwin
 , mpi
   # Unfree optional dependency for hdf4 and hdf5
@@ -57,11 +57,11 @@
 , plplot-forced ? null
   # wxWidgets is preferred over X11 for this project but we only have it on Linux
   # and Darwin.
-, enableWX ? (stdenv.isLinux || stdenv.isDarwin)
+, enableWX ? (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin)
 , wxGTK32
 , Cocoa
   # X11: OFF by default for platform consistency. Use X where WX is not available
-, enableXWin ? (!stdenv.isLinux && !stdenv.isDarwin)
+, enableXWin ? (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isDarwin)
 }:
 
 let
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional enableGRIB eccodes
   ++ lib.optional enableGLPK glpk
   ++ lib.optional enableWX wxGTK32
-  ++ lib.optional (enableWX && stdenv.isDarwin) Cocoa
+  ++ lib.optional (enableWX && stdenv.hostPlatform.isDarwin) Cocoa
   ++ lib.optional enableMPI mpi
   ++ lib.optional enableLibtirpc hdf4-custom.libtirpc
   ++ lib.optional enableSzip szip;
@@ -172,7 +172,7 @@ stdenv.mkDerivation rec {
 
   # Tests are failing on Hydra:
   # ./src/common/dpycmn.cpp(137): assert ""IsOk()"" failed in GetClientArea(): invalid wxDisplay object
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   # Opt-out unstable tests
   # https://github.com/gnudatalanguage/gdl/issues/482

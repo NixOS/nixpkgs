@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     blas lapack gmm fltk libjpeg zlib opencascade-occt
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL libGLU xorg.libXrender xorg.libXcursor xorg.libXfixes
     xorg.libXext xorg.libXft xorg.libXinerama xorg.libX11 xorg.libSM
     xorg.libICE

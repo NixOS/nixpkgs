@@ -41,7 +41,7 @@ buildPythonPackage rec {
     "test_hashandlers"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin) [
     # Exception: unable to connect to Redis server
     "tests/test_redis.py"
   ];

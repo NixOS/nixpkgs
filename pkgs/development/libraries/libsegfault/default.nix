@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "vKtY6ZEkyK2K+BzJCSo30f9MpERpPlUnarFIlvJ1Giw=";
   };
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin) "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED=1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin) "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED=1";
 
   nativeBuildInputs = [
     meson

@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     guile glib loudmouth gmp libidn readline libtool
     libunwind ncurses curl jansson
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
   ];
 
-  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-largp";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-largp";
 
   meta = with lib; {
     description =  "Console XMPP client";

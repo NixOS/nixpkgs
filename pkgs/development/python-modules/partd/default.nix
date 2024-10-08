@@ -51,7 +51,7 @@ buildPythonPackage rec {
     toolz
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     complete = [
       blosc2
       numpy

@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     git perl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.system_cmds libiconv
   ];
 

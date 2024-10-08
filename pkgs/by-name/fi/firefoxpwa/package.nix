@@ -28,13 +28,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "firefoxpwa";
-  version = "2.12.1";
+  version = "2.12.5";
 
   src = fetchFromGitHub {
     owner = "filips123";
     repo = "PWAsForFirefox";
     rev = "v${version}";
-    hash = "sha256-0Yyd0mJK/eDallg9ERimvZIRCOTeDkzeAVUfDeNP928=";
+    hash = "sha256-WAAZ35AkKzufhDm8RNTpSsGJjqCIm84THEOmXemvv2o=";
   };
 
   sourceRoot = "${src.name}/native";
@@ -69,7 +69,7 @@ rustPlatform.buildRustPackage rec {
   libs =
     let
       libs =
-        lib.optionals stdenv.isLinux [
+        lib.optionals stdenv.hostPlatform.isLinux [
           cups
           ffmpeg
           libglvnd

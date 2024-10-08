@@ -4,7 +4,7 @@ let
 in {
   options = {
     services.xe-guest-utilities = {
-      enable = lib.mkEnableOption "the Xen guest utilities daemon";
+      enable = lib.mkEnableOption "the XenServer guest utilities daemon";
     };
   };
   config = lib.mkIf cfg.enable {

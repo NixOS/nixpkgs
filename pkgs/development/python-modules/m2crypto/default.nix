@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   env =
     {
-      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+      NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
         "-Wno-error=implicit-function-declaration"
         "-Wno-error=incompatible-pointer-types"
       ]);

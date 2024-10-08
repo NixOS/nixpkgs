@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.efi = "${finalAttrs.finalPackage}/memtest.efi";
 
   preBuild = ''
-    cd ${if stdenv.isi686 then "build32" else "build64"}
+    cd ${if stdenv.hostPlatform.isi686 then "build32" else "build64"}
   '';
 
   installPhase = ''

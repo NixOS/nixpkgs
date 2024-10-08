@@ -28,8 +28,6 @@ let
          ''
     else interpreter;
 
-  getEmulator = system: (lib.systems.elaborate { inherit system; }).emulator pkgs;
-  getQemuArch = system: (lib.systems.elaborate { inherit system; }).qemuArch;
 
   # Mapping of systems to “magicOrExtension” and “mask”. Mostly taken from:
   # - https://github.com/cleverca22/nixos-configs/blob/master/qemu.nix
@@ -280,28 +278,50 @@ in {
         '';
         type = types.listOf (types.enum (builtins.attrNames magics));
       };
+
+      preferStaticEmulators = mkOption {
+        default = false;
+        description = ''
+          Whether to use static emulators when available.
+
+          This enables the kernel to preload the emulator binaries when
+          the binfmt registrations are added, obviating the need to make
+          the emulator binaries available inside chroots and chroot-like
+          sandboxes.
+        '';
+        type = types.bool;
+      };
     };
   };
 
   config = {
+    assertions = lib.mapAttrsToList (name: reg: {
+      assertion = reg.fixBinary -> !reg.wrapInterpreterInShell;
+      message = "boot.binfmt.registrations.\"${name}\" cannot have fixBinary when the interpreter is invoked through a shell.";
+    }) cfg.registrations;
+
     boot.binfmt.registrations = builtins.listToAttrs (map (system: assert system != pkgs.stdenv.hostPlatform.system; {
       name = system;
       value = { config, ... }: let
-        interpreter = getEmulator system;
-        qemuArch = getQemuArch system;
+        elaborated = lib.systems.elaborate { inherit system; };
+        useStaticEmulator = cfg.preferStaticEmulators && elaborated.staticEmulatorAvailable pkgs;
+        interpreter = elaborated.emulator (if useStaticEmulator then pkgs.pkgsStatic else pkgs);
 
-        preserveArgvZero = "qemu-${qemuArch}" == baseNameOf interpreter;
+        inherit (elaborated) qemuArch;
+        isQemu = "qemu-${qemuArch}" == baseNameOf interpreter;
+
         interpreterReg = let
           wrapperName = "qemu-${qemuArch}-binfmt-P";
           wrapper = pkgs.wrapQemuBinfmtP wrapperName interpreter;
         in
-          if preserveArgvZero then "${wrapper}/bin/${wrapperName}"
+          if isQemu && !useStaticEmulator then "${wrapper}/bin/${wrapperName}"
           else interpreter;
       in ({
-        preserveArgvZero = mkDefault preserveArgvZero;
+        preserveArgvZero = mkDefault isQemu;
 
         interpreter = mkDefault interpreterReg;
-        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero);
+        fixBinary = mkDefault useStaticEmulator;
+        wrapInterpreterInShell = mkDefault (!config.preserveArgvZero && !config.fixBinary);
         interpreterSandboxPath = mkDefault (dirOf (dirOf config.interpreter));
       } // (magics.${system} or (throw "Cannot create binfmt registration for system ${system}")));
     }) cfg.emulatedSystems);

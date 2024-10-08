@@ -75,6 +75,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     # needs additional work to support aarch64-darwin
     # due to usage of _DARWIN_NO_64_BIT_INODE
-    broken = stdenv.isAarch64 && stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin;
   };
 }

@@ -30,8 +30,8 @@ buildGoModule rec {
   postInstall = ''
     installShellCompletion --cmd rr \
       --bash <($out/bin/rr completion bash) \
-      --zsh <($out/bin/rr zsh) \
-      --fish <($out/bin/rr fish)
+      --zsh <($out/bin/rr completion zsh) \
+      --fish <($out/bin/rr completion fish)
   '';
 
   postPatch = ''

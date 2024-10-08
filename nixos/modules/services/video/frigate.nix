@@ -518,7 +518,7 @@ in
         libva-utils
         procps
         radeontop
-      ] ++ lib.optionals (!stdenv.isAarch64) [
+      ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [
         # not available on aarch64-linux
         intel-gpu-tools
       ];

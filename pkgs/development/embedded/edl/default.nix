@@ -57,6 +57,6 @@ python3Packages.buildPythonPackage {
       xddxdd
     ];
     # Case-sensitive files in 'Loader' submodule
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

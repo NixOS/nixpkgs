@@ -3,6 +3,7 @@
 # Checkout ./README.md for more information.
 
 {
+  config,
   lib,
   mkAzExtension,
   mycli,
@@ -83,6 +84,8 @@
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
 
+}
+// lib.optionalAttrs config.allowAliases {
   # Removed extensions
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
   vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06

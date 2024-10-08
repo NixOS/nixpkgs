@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-irKpVerxzjJIiLofoTdySk/PzojuVLgMq2DYF0qPaAM=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [ libpulseaudio libX11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libpulseaudio libX11 ];
 
   nativeBuildInputs = [ cmake makeWrapper ];
 

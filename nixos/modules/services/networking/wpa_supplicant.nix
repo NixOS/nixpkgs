@@ -50,6 +50,15 @@ let
     ++ optional cfg.scanOnLowSignal ''bgscan="simple:30:-70:3600"''
     ++ optional (cfg.extraConfig != "") cfg.extraConfig);
 
+  configIsGenerated = with cfg;
+    networks != {} || extraConfig != "" || userControlled.enable;
+
+  # the original configuration file
+  configFile =
+    if configIsGenerated
+      then pkgs.writeText "wpa_supplicant.conf" generatedConfig
+      else "/etc/wpa_supplicant.conf";
+
   # Creates a network block for wpa_supplicant.conf
   mkNetwork = opts:
   let
@@ -81,8 +90,8 @@ let
     let
       deviceUnit = optional (iface != null) "sys-subsystem-net-devices-${utils.escapeSystemdPath iface}.device";
       configStr = if cfg.allowAuxiliaryImperativeNetworks
-        then "-c /etc/wpa_supplicant.conf -I ${pkgs.writeText "wpa_supplicant.conf" generatedConfig}"
-        else "-c /etc/wpa_supplicant.conf";
+        then "-c /etc/wpa_supplicant.conf -I ${configFile}"
+        else "-c ${configFile}";
     in {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
 
@@ -103,6 +112,12 @@ let
 
       script =
       ''
+        ${optionalString (configIsGenerated && !cfg.allowAuxiliaryImperativeNetworks) ''
+          if [ -f /etc/wpa_supplicant.conf ]; then
+            echo >&2 "<3>/etc/wpa_supplicant.conf present but ignored. Generated ${configFile} is used instead."
+          fi
+        ''}
+
         # ensure wpa_supplicant.conf exists, or the daemon will fail to start
         ${optionalString cfg.allowAuxiliaryImperativeNetworks ''
           touch /etc/wpa_supplicant.conf
@@ -515,9 +530,6 @@ in {
     ];
 
     hardware.wirelessRegulatoryDatabase = true;
-
-    environment.etc."wpa_supplicant.conf" =
-      lib.mkIf (!cfg.allowAuxiliaryImperativeNetworks) { text = generatedConfig; };
 
     environment.systemPackages = [ pkgs.wpa_supplicant ];
     services.dbus.packages = optional cfg.dbusControlled pkgs.wpa_supplicant;

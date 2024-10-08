@@ -58,7 +58,7 @@
       owner = "bats-core";
       repo = "bats-detik";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-Lz5BPKHtgdakKRALPZFFgz91d07Ubk5rUgA+Ep2aoG8=";
+      hash = "sha256-f8PN+VsUdUXrR9JiQgVuYDy2QgOtaxE8tkkxOUF0uC4=";
     };
     dontBuild = true;
     installPhase = ''

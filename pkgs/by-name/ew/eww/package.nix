@@ -72,6 +72,6 @@ rustPlatform.buildRustPackage rec {
       w-lfchen
     ];
     mainProgram = "eww";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

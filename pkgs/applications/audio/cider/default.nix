@@ -9,10 +9,11 @@ appimageTools.wrapType2 rec {
     sha256 = "sha256-NwoV1eeAN0u9VXWpu5mANXhmgqe8u3h7BlsREP1f/pI=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

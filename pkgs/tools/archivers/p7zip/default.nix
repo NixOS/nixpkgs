@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preConfigure = ''
     buildFlags=all3
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp makefile.macosx_llvm_64bits makefile.machine
   '';
 

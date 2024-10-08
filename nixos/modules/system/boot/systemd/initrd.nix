@@ -38,6 +38,7 @@ let
     "kmod-static-nodes.service"
     "local-fs-pre.target"
     "local-fs.target"
+    "modprobe@.service"
     "multi-user.target"
     "paths.target"
     "poweroff.target"
@@ -68,7 +69,6 @@ let
     "systemd-reboot.service"
     "systemd-sysctl.service"
     "timers.target"
-    "tpm2.target"
     "umount.target"
     "systemd-bsod.service"
   ] ++ cfg.additionalUpstreamUnits;
@@ -349,15 +349,6 @@ in {
       visible = "shallow";
       description = "Definition of slice configurations.";
     };
-
-    enableTpm2 = mkOption {
-      default = cfg.package.withTpm2Tss;
-      defaultText = "boot.initrd.systemd.package.withTpm2Tss";
-      type = types.bool;
-      description = ''
-        Whether to enable TPM2 support in the initrd.
-      '';
-    };
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
@@ -394,9 +385,7 @@ in {
       # systemd needs this for some features
       "autofs"
       # systemd-cryptenroll
-    ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
-    ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb"
-    ++ lib.optional cfg.package.withEfi "efivarfs";
+    ] ++ lib.optional cfg.package.withEfi "efivarfs";
 
     boot.kernelParams = [
       "root=${config.boot.initrd.systemd.root}"
@@ -495,10 +484,6 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
-      ] ++ optionals (cfg.package.withCryptsetup && cfg.enableTpm2) [
-        # tpm2 support
-        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
-        pkgs.tpm2-tss
       ] ++ optionals cfg.package.withCryptsetup [
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
@@ -538,7 +523,7 @@ in {
           for o in $(< /proc/cmdline); do
               case $o in
                   init=*)
-                      IFS== read -r -a initParam <<< "$o"
+                      IFS="=" read -r -a initParam <<< "$o"
                       closure="''${initParam[1]}"
                       ;;
               esac
@@ -574,7 +559,7 @@ in {
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true
-          exec chroot /sysroot $closure/prepare-root
+          exec chroot /sysroot "$closure/prepare-root"
         '';
       };
 

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     rocmPackages.clr
     rocmPackages.rocfft
     rocmPackages.hipfft
-  ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp
   ;
 
   cmakeFlags = [

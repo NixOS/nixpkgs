@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # Special flags needed on Darwin:
   # https://github.com/axkibe/lsyncd/blob/42413cabbedca429d55a5378f6e830f191f3cc86/INSTALL#L51
-  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" "-DXNU_DIR=${xnu}/include" ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-DWITH_INOTIFY=OFF" "-DWITH_FSEVENTS=ON" "-DXNU_DIR=${xnu}/include" ];
 
   dontUseCmakeBuildDir = true;
 

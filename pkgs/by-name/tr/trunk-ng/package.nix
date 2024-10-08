@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs = if stdenv.hostPlatform.isDarwin
     then [ libiconv CoreServices Security SystemConfiguration ]
     else [ openssl ];
 

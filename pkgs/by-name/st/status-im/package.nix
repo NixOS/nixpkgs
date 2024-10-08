@@ -12,7 +12,7 @@ let
   src = fetchzip {
     name = "StatusIm-Desktop-v${version}-${commit}-x86_64.AppImage";
     url = "https://github.com/status-im/status-desktop/releases/download/${version}/StatusIm-Desktop-v${version}-${commit}-x86_64.tar.gz";
-    sha256 = "sha256-i91E1eaN6paM+uZ8EvO1+Wj0Po9KnzQorG0tWKF4hn8=";
+    hash = "sha256-i91E1eaN6paM+uZ8EvO1+Wj0Po9KnzQorG0tWKF4hn8=";
     stripRoot = false;
     postFetch = ''
       mv $out/StatusIm-Desktop-v${version}-${commit}-x86_64.AppImage $TMPDIR/tmp
@@ -31,7 +31,7 @@ let
   };
   icon = fetchurl {
     url = "https://github.com/status-im/status-desktop/raw/afde83651724a555626b5d9a3d582918de6c3d59/status.png";
-    sha256 = "sha256-ViGuOr9LskGs/P7pjPO9zYgosWaZlZZYVuPpliOA5dY=";
+    hash = "sha256-ViGuOr9LskGs/P7pjPO9zYgosWaZlZZYVuPpliOA5dY=";
   };
   pname = "status-desktop";
 in appimageTools.wrapType2 {

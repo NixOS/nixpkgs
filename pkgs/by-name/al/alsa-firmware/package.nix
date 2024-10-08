@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://alsa/firmware/alsa-firmware-${version}.tar.bz2";
-    sha256 = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
+    hash = "sha256-tnttfQi8/CR+9v8KuIqZwYgwWjz1euLf0LzZpbNs1bs=";
   };
 
   patches = [
     # fixes some includes / missing types on musl libc; should not make a difference for other platforms
     (fetchpatch {
       url = "https://raw.githubusercontent.com/void-linux/void-packages/ae690000017d5fd355ab397c49202426e3a01c11/srcpkgs/alsa-firmware/patches/musl.patch";
-      sha256 = "sha256-4A+TBBvpz14NwMNewLc2LQL51hnz4EZlZ44rhnx5dnc=";
+      hash = "sha256-4A+TBBvpz14NwMNewLc2LQL51hnz4EZlZ44rhnx5dnc=";
     })
   ];
 

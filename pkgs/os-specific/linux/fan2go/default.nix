@@ -1,21 +1,26 @@
-{ buildGoModule, fetchFromGitHub, lib, lm_sensors }:
+{ buildGo123Module, fetchFromGitHub, lib, lm_sensors }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "fan2go";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "markusressel";
     repo = pname;
     rev = version;
-    hash = "sha256-w2Qwu3ZmBkoA86xa7V6pnIBAbfG9mtkAHePkQjefRW8=";
+    hash = "sha256-eSHeHBzDvzsDAck0zexwR8drasisvlQNTeowv92E2uc=";
   };
 
-  vendorHash = "sha256-6OEdl7ie0dTjXrG//Fvcg4ZyTW/mhrUievDljY2zi/4=";
+  vendorHash = "sha256-ad0e/cxbcU/KfPDOdD46KdCcvns83dgGDAyLLQiGyiA=";
 
   postConfigure = ''
     substituteInPlace vendor/github.com/md14454/gosensors/gosensors.go \
-      --replace '"/etc/sensors3.conf"' '"${lm_sensors}/etc/sensors3.conf"'
+      --replace-fail '"/etc/sensors3.conf"' '"${lm_sensors}/etc/sensors3.conf"'
+
+    # Uses /usr/bin/echo, and even if we patch that, it refuses to execute any
+    # binary without being able to confirm that it's owned by root, which isn't
+    # possible under the sandbox.
+    rm internal/fans/cmd_test.go
   '';
 
   CGO_CFLAGS = "-I ${lm_sensors}/include";

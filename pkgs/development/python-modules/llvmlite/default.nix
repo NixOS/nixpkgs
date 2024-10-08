@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [ "/usr/lib/libm.dylib" ];
 
   passthru = lib.optionalAttrs (!withStaticLLVM) { inherit llvm; };
 

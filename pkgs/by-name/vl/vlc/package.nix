@@ -304,5 +304,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ AndersonTorres alois31 ];
     platforms = lib.platforms.linux;
+    mainProgram = "vlc";
   };
 })

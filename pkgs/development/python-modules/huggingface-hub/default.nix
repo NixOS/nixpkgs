@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -19,16 +18,14 @@
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.24.6";
+  version = "0.25.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1W+hfe2m5mXidbepVPMObnOZH6LCQG9dvFRbo9iUjKg=";
+    hash = "sha256-MloCUtvJ3A7t6NbCCPp4kcR+7apTrIjbvm6Ppe0SgdA=";
   };
 
   build-system = [ setuptools ];

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/nix-top \
         --prefix PATH : "$out/libexec/nix-top:${additionalPath}"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       ln -s /bin/stty $out/libexec/nix-top
     ''
     + ''

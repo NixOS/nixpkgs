@@ -33,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     execnet = [ execnet ];
     sqlalchemy = [ sqlalchemy ];
     redis = [ redis ];
@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

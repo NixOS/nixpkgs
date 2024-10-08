@@ -9,20 +9,22 @@
   installShellFiles,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "dotter";
-  version = "0.13.2-unstable-2024-08-02";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "SuperCuber";
     repo = "dotter";
-    rev = "d5199df24e6db039c460fa37fe3279f89c3bfc63";
-    hash = "sha256-8/drsrJq8mfrWvTCcNX0eoPHzywxQNuyRdxQE/zb8lA=";
+    rev = "v${version}";
+    hash = "sha256-7YExvmuliTL9oagXNUtZ7ZOPyELcS+igK1tXdhG0kQk=";
   };
 
-  cargoHash = "sha256-+LBmswq2mvM0hb6wwCQMxL+C/TdpRGZQGufgsqC1KSQ=";
+  cargoHash = "sha256-LEOORHD0j+HVl/fB9Q2xVZ2AxZKsPE5SeOS1ZsKwTSo=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   nativeCheckInputs = [
     which

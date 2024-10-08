@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "v${version}";
-    hash = "sha256-/JO2SFAG42cyY1JICT/BJQ8VrkNLsEfAoeWwu9Ofl68=";
+    hash = "sha256-OjWRdYAxjYMGZswwKqGKUwCIc5qHkNBTQgIcbiRquH0=";
   };
 
   buildInputs = (lib.optional (!withGoolm) olm) ++ [
@@ -30,7 +30,7 @@ buildGoModule rec {
   ];
   tags = lib.optional withGoolm "goolm";
 
-  vendorHash = "sha256-MmbpY4VP6vrwGCI74GZ/QslThHDLQmIwI7G63Gru3UI=";
+  vendorHash = "sha256-oV8ILDEyMpOZy5m2mnPAZj5XAhleO8yNz49wxvZboVs=";
 
   doCheck = false;
 

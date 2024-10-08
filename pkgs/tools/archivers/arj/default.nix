@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace environ.c \
         --replace "  #include <sys/statfs.h>" "  #include <sys/mount.h>"
   '';

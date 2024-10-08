@@ -78,7 +78,7 @@ let
 
         nativeBuildInputs = [ autoreconfHook bison removeReferencesTo ]
           ++ (op docSupport groff)
-          ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
+          ++ (ops (dtraceSupport && stdenv.hostPlatform.isLinux) [ systemtap libsystemtap ])
           ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
@@ -92,8 +92,8 @@ let
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
           # running on darwin
-          ++ op (!cursesSupport && stdenv.isDarwin) readline
-          ++ ops stdenv.isDarwin [ libiconv libobjc libunwind Foundation ];
+          ++ op (!cursesSupport && stdenv.hostPlatform.isDarwin) readline
+          ++ ops stdenv.hostPlatform.isDarwin [ libiconv libobjc libunwind Foundation ];
         propagatedBuildInputs = op jemallocSupport jemalloc;
 
         enableParallelBuilding = true;
@@ -156,7 +156,7 @@ let
           # overrides that by enabling `-O2` which is the minimum optimization
           # needed for `_FORTIFY_SOURCE`.
         ] ++ lib.optional stdenv.cc.isGNU "CFLAGS=-O3" ++ [
-        ] ++ ops stdenv.isDarwin [
+        ] ++ ops stdenv.hostPlatform.isDarwin [
           # on darwin, we have /usr/include/tk.h -- so the configure script detects
           # that tk is installed
           "--with-out-ext=tk"

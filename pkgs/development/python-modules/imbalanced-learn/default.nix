@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.12.3";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WwB5agFBnpECvUJeJ8MZ1Y0fbPLfp1HgLtf07fZ8PBs=";
+    hash = "sha256-gVO6OF0pawfZfgkBomJKhsBrSMlML5LaOlNUgnaXt6M=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optional = [
       keras
       pandas

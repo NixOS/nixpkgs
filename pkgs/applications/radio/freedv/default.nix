@@ -16,7 +16,7 @@
 , hamlib_4
 , wxGTK32
 , sioclient
-, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , AppKit
 , AVFoundation
 , Cocoa
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-oFuAH81mduiSQGIDgDDy1IPskqqCBmfWbpqQstUIw9g=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace-fail "-Wl,-ld_classic" ""
     substituteInPlace src/CMakeLists.txt \
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     macdylibbundler
     makeWrapper
     darwin.autoSignDarwinBinariesHook
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     wxGTK32
     sioclient
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     AVFoundation
     Cocoa
@@ -74,13 +74,13 @@ stdenv.mkDerivation rec {
     "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-DAPPLE_OLD_XCODE"
   ]);
 
   doCheck = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/FreeDV.app $out/Applications
     makeWrapper $out/Applications/FreeDV.app/Contents/MacOS/FreeDV $out/bin/freedv

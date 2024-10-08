@@ -1,20 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.babeld;
 
-  conditionalBoolToString = value: if (isBool value) then (boolToString value) else (toString value);
+  conditionalBoolToString = value: if (lib.isBool value) then (lib.boolToString value) else (toString value);
 
   paramsString = params:
-    concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (getAttr name params)}")
-                   (attrNames params);
+    lib.concatMapStringsSep " " (name: "${name} ${conditionalBoolToString (lib.getAttr name params)}")
+                   (lib.attrNames params);
 
   interfaceConfig = name:
     let
-      interface = getAttr name cfg.interfaces;
+      interface = lib.getAttr name cfg.interfaces;
     in
     "interface ${name} ${paramsString interface}\n";
 
@@ -22,17 +19,17 @@ let
     ''
       skip-kernel-setup true
     ''
-    + (optionalString (cfg.interfaceDefaults != null) ''
+    + (lib.optionalString (cfg.interfaceDefaults != null) ''
       default ${paramsString cfg.interfaceDefaults}
     '')
-    + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
+    + (lib.concatMapStrings interfaceConfig (lib.attrNames cfg.interfaces))
     + extraConfig);
 
 in
 
 {
 
-  meta.maintainers = with maintainers; [ hexa ];
+  meta.maintainers = with lib.maintainers; [ hexa ];
 
   ###### interface
 
@@ -40,15 +37,15 @@ in
 
     services.babeld = {
 
-      enable = mkEnableOption "the babeld network routing daemon";
+      enable = lib.mkEnableOption "the babeld network routing daemon";
 
-      interfaceDefaults = mkOption {
+      interfaceDefaults = lib.mkOption {
         default = null;
         description = ''
           A set describing default parameters for babeld interfaces.
           See {manpage}`babeld(8)` for options.
         '';
-        type = types.nullOr (types.attrsOf types.unspecified);
+        type = lib.types.nullOr (lib.types.attrsOf lib.types.unspecified);
         example =
           {
             type = "tunnel";
@@ -56,13 +53,13 @@ in
           };
       };
 
-      interfaces = mkOption {
+      interfaces = lib.mkOption {
         default = {};
         description = ''
           A set describing babeld interfaces.
           See {manpage}`babeld(8)` for options.
         '';
-        type = types.attrsOf (types.attrsOf types.unspecified);
+        type = lib.types.attrsOf (lib.types.attrsOf lib.types.unspecified);
         example =
           { enp0s2 =
             { type = "wired";
@@ -72,9 +69,9 @@ in
           };
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Options that will be copied to babeld.conf.
           See {manpage}`babeld(8)` for details.
@@ -87,7 +84,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.babeld.enable {
+  config = lib.mkIf config.services.babeld.enable {
 
     boot.kernel.sysctl = {
       "net.ipv6.conf.all.forwarding" = 1;

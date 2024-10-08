@@ -44,10 +44,9 @@ in {
         telephony-service
         teleports
       ]);
-      variables = {
-        # To override the keyboard layouts in Lomiri
-        NIXOS_XKB_LAYOUTS = config.services.xserver.xkb.layout;
-      };
+
+      # To override the default keyboard layout in Lomiri
+      etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text = lib.strings.replaceStrings [","] ["\n"] config.services.xserver.xkb.layout;
     };
 
     hardware = {

@@ -269,6 +269,7 @@ dependencies = [
  "assert_matches",
  "base64 0.21.7",
  "bitflags",
+ "blake2",
  "boring",
  "chacha20poly1305",
  "chrono",
@@ -278,6 +279,7 @@ dependencies = [
  "hex-literal",
  "lazy_static",
  "libc",
+ "libcrux-ml-kem",
  "log",
  "prost",
  "prost-build",
@@ -1496,6 +1498,43 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5274423e17b7c9fc20b6e7e208532f9b19825d82dfd615708b70edd83df41f1"
 
 [[package]]
+name = "hax-lib"
+version = "0.1.0-pre.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1b4c24729b7608f3a2f2b798b503e18ca3d46b5287e85e42c3e2a81a6431c20e"
+dependencies = [
+ "hax-lib-macros",
+ "num-bigint",
+ "num-traits 0.2.19",
+]
+
+[[package]]
+name = "hax-lib-macros"
+version = "0.1.0-pre.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e537b6582ecf0d2bc9761b6c129840c9a039263e71b933850af8e24d5e3a840"
+dependencies = [
+ "hax-lib-macros-types",
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.72",
+]
+
+[[package]]
+name = "hax-lib-macros-types"
+version = "0.1.0-pre.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1025439d93a495700d7099f7bd2285845837def514b2f97b2f8a4cd93fab5bd9"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "serde",
+ "serde_json",
+ "uuid",
+]
+
+[[package]]
 name = "headers"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1944,6 +1983,45 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 
 [[package]]
+name = "libcrux-intrinsics"
+version = "0.0.2-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9995f4888b0bbcb4bab293c271ac6f5a4fa6a06f76576cb2c31063ba618d9914"
+
+[[package]]
+name = "libcrux-ml-kem"
+version = "0.0.2-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6cac73db2e2fa0382c2f37632e0d1e188201175deda0158b49a2632bc8deefe1"
+dependencies = [
+ "hax-lib",
+ "libcrux-intrinsics",
+ "libcrux-platform",
+ "libcrux-sha3",
+ "rand_core",
+]
+
+[[package]]
+name = "libcrux-platform"
+version = "0.0.2-pre.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "647e39666194b11df17c19451d1154b9be79df98b9821532560c2ecad0cf3410"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "libcrux-sha3"
+version = "0.0.2-alpha.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee374451378a5b7ec908373d03a78cbf050c387cd1996a50724d88a392f4d1a5"
+dependencies = [
+ "hax-lib",
+ "libcrux-intrinsics",
+ "libcrux-platform",
+]
+
+[[package]]
 name = "libloading"
 version = "0.8.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2018,16 +2096,24 @@ dependencies = [
 name = "libsignal-bridge-testing"
 version = "0.1.0"
 dependencies = [
+ "attest",
  "futures-util",
+ "http 1.1.0",
  "jni 0.21.1",
  "libsignal-bridge-macros",
  "libsignal-bridge-types",
  "libsignal-message-backup",
+ "libsignal-net",
+ "libsignal-protocol",
  "linkme",
  "neon",
+ "nonzero_ext",
  "paste",
+ "prost",
  "scopeguard",
+ "strum",
  "tokio",
+ "uuid",
 ]
 
 [[package]]
@@ -2091,7 +2177,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-ffi"
-version = "0.55.1"
+version = "0.57.1"
 dependencies = [
  "cpufeatures",
  "futures-util",
@@ -2106,7 +2192,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni"
-version = "0.55.1"
+version = "0.57.1"
 dependencies = [
  "cfg-if",
  "cpufeatures",
@@ -2122,12 +2208,12 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni-testing"
-version = "0.55.1"
+version = "0.57.1"
 dependencies = [
  "jni 0.21.1",
  "libsignal-bridge-testing",
+ "libsignal-bridge-types",
  "log",
- "log-panics",
 ]
 
 [[package]]
@@ -2135,7 +2221,6 @@ name = "libsignal-keytrans"
 version = "0.0.1"
 dependencies = [
  "assert_matches",
- "async-trait",
  "curve25519-dalek",
  "displaydoc",
  "ed25519-dalek",
@@ -2173,9 +2258,9 @@ dependencies = [
  "hmac",
  "itertools 0.13.0",
  "json5",
+ "libsignal-core",
  "libsignal-message-backup",
  "libsignal-message-backup-macros",
- "libsignal-protocol",
  "log",
  "macro_rules_attribute",
  "mediasan-common",
@@ -2264,13 +2349,16 @@ dependencies = [
  "serde_json",
  "sha2",
  "snow",
+ "socks5-server",
  "static_assertions",
  "strum",
  "test-case",
+ "test-log",
  "thiserror",
  "tls-parser",
  "tokio",
  "tokio-boring",
+ "tokio-socks",
  "tokio-stream",
  "tokio-tungstenite 0.23.1",
  "tokio-util",
@@ -2278,11 +2366,12 @@ dependencies = [
  "url",
  "uuid",
  "warp",
+ "zerocopy",
 ]
 
 [[package]]
 name = "libsignal-node"
-version = "0.55.1"
+version = "0.57.1"
 dependencies = [
  "cmake",
  "futures",
@@ -2343,6 +2432,7 @@ dependencies = [
 name = "libsignal-svr3"
 version = "0.1.0"
 dependencies = [
+ "aes-gcm-siv",
  "assert_matches",
  "criterion",
  "curve25519-dalek",
@@ -2351,11 +2441,13 @@ dependencies = [
  "hex-literal",
  "hkdf",
  "nonzero_ext",
+ "proptest",
  "prost",
  "prost-build",
  "rand_core",
  "sha2",
- "strum_macros",
+ "signal-crypto",
+ "strum",
  "subtle",
  "test-case",
  "zerocopy",
@@ -3181,6 +3273,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "proc-macro-error"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
+dependencies = [
+ "proc-macro-error-attr",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+ "version_check",
+]
+
+[[package]]
+name = "proc-macro-error-attr"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "version_check",
+]
+
+[[package]]
 name = "proc-macro2"
 version = "1.0.86"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3895,6 +4011,7 @@ dependencies = [
  "hex-literal",
  "hkdf",
  "hmac",
+ "rand_core",
  "sha2",
  "static_assertions",
  "thiserror",
@@ -3965,6 +4082,29 @@ checksum = "ce305eb0b4296696835b71df73eb912e0f1ffd2556a501fcede6e0c50349191c"
 dependencies = [
  "libc",
  "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "socks5-proto"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d91431c4672e25e372ef46bc554be8f315068c03608f99267a71ad32a12e8c4"
+dependencies = [
+ "bytes",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
+name = "socks5-server"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5223c26981806584cc38c74fddf58808dbdcf4724890471ced69e7a2e8d86345"
+dependencies = [
+ "async-trait",
+ "bytes",
+ "socks5-proto",
+ "tokio",
 ]
 
 [[package]]
@@ -4288,6 +4428,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "tokio-socks"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d4770b8024672c1101b3f6733eab95b18007dbe0847a8afe341fcf79e06043f"
+dependencies = [
+ "either",
+ "futures-util",
+ "thiserror",
+ "tokio",
+]
+
+[[package]]
 name = "tokio-stream"
 version = "0.1.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4579,6 +4731,7 @@ version = "1.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "81dfa00651efa65069b0b6b651f4aaa31ba9e3c3ce0137aaad053604ee7e0314"
 dependencies = [
+ "getrandom",
  "serde",
  "sha1_smol",
 ]

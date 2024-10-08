@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     tenacity
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     api = with python3.pkgs; [
       fastapi
       uvicorn

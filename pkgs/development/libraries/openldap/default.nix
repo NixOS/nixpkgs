@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libsodium
     libtool
     openssl
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     libxcrypt # causes linking issues on *-darwin
     systemdMinimal
   ];
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
-  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 

@@ -81,6 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ dasisdormax ];
-    broken = !stdenv.is64bit;
+    broken = !stdenv.hostPlatform.is64bit;
   };
 }

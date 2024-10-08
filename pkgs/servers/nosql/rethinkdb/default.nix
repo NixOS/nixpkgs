@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  configureFlags = lib.optionals (!stdenv.isDarwin) [
+  configureFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "--with-jemalloc"
     "--lib-path=${jemalloc}/lib"
   ];
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "rethinkdb" ];
 
   buildInputs = [ protobuf boost zlib curl openssl icu ]
-    ++ lib.optional (!stdenv.isDarwin) jemalloc
-    ++ lib.optional stdenv.isDarwin libtool;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) jemalloc
+    ++ lib.optional stdenv.hostPlatform.isDarwin libtool;
 
   nativeBuildInputs = [ which m4 python3Packages.python makeWrapper ];
 

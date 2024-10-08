@@ -36,15 +36,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ bash ] # for git-credential-rbw
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
-  preConfigure = lib.optionalString stdenv.isLinux ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
     export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';

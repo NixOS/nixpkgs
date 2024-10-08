@@ -38,6 +38,6 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
     description = "UEFI Shell from Tianocore EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/ShellPkg";
     maintainers = with lib.maintainers; [ LunNova mjoerg ];
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

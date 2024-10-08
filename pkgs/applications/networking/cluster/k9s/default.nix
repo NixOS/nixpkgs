@@ -26,7 +26,7 @@ buildGoModule rec {
   vendorHash = "sha256-U/tIsYpoog3S8V2yQGGqaQ+Av7TfvCYt3zn74qWuQKs=";
 
   # TODO investigate why some config tests are failing
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
   # Required to workaround test check error:
   preCheck = "export HOME=$(mktemp -d)";
   # For arch != x86

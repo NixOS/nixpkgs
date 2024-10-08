@@ -38,9 +38,9 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
   buildInputs =
-    lib.optional stdenv.isDarwin Security
-    ++ lib.optional (withGui && stdenv.isLinux) webkitgtk
-    ++ lib.optionals (withGui && stdenv.isDarwin) [
+    lib.optional stdenv.hostPlatform.isDarwin Security
+    ++ lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk
+    ++ lib.optionals (withGui && stdenv.hostPlatform.isDarwin) [
       Cocoa
       WebKit
     ];
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=dns::client::tests::test_udp_client"
   ];
 
-  postInstall = lib.optionalString (withGui && stdenv.isLinux) ''
+  postInstall = lib.optionalString (withGui && stdenv.hostPlatform.isLinux) ''
     wrapProgram $out/bin/alfis \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
@@ -62,10 +62,11 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Alternative Free Identity System";
     homepage = "https://alfis.name";
+    changelog = "https://github.com/Revertron/Alfis/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    broken = withGui && stdenv.isDarwin;
+    broken = withGui && stdenv.hostPlatform.isDarwin;
   };
 }

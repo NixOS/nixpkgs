@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "zlib-ng";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-zlib-ng";
     rev = "v${version}";
-    hash = "sha256-H8Niz6BbmNCccNKHBfRma4SUt0RY846fCiHidEvcd5E=";
+    hash = "sha256-UsdZgpRI7h6GemT1+1g/cP/8uhLykZ//saH4JMwwlY4=";
   };
 
   patches = [

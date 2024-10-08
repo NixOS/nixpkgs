@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "soteria";
     maintainers = with lib.maintainers; [
       NotAShelf
-      lychee
     ];
     inherit (polkit.meta) platforms;
   };

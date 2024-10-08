@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
       --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 

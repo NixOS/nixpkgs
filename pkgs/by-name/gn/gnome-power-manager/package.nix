@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-power-manager/${lib.versions.major version}/gnome-power-manager-${version}.tar.xz";
-    sha256 = "faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
+    hash = "sha256-faq0i73bMOnfKrplDLYNBeZnyfiFrOagoeeVDgy90y8=";
   };
 
   nativeBuildInputs = [

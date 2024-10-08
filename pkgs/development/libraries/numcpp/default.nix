@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_MULTIPLE_TEST=ON"
   ];
 
-  doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isStatic;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic;
 
   postInstall = ''
     substituteInPlace $out/share/NumCpp/cmake/NumCppConfig.cmake \

@@ -9,39 +9,36 @@
 , ppxlib_0_15, ppx_deriving_0_15
 , coqPackages
 , version ? if lib.versionAtLeast ocaml.version "4.08" then "1.18.1"
-    else if lib.versionAtLeast ocaml.version "4.07" then "1.15.2" else "1.14.1"
+    else "1.15.2"
 }:
 
 let p5 = camlp5; in
 let camlp5 = p5.override { legacy = true; }; in
 
 let fetched = coqPackages.metaFetch ({
-    release."1.19.2".sha256 = "sha256-7VTUbsFVoNT6srLwcAn5WNSsWC7cVUdphKRWBHHiH5M=";
-    release."1.18.1".sha256 = "sha256-zgBJefQDe3JyCGbC0wvMcx/9iMVbftBJ43NPogkNeHY=";
-    release."1.17.0".sha256 = "sha256-DTxE8CvYl0et20pxueydI+WzraI6UPHMNvxyp2gU/+w=";
-    release."1.16.5".sha256 = "sha256-tKX5/cVPoBeHiUe+qn7c5FIRYCwY0AAukN7vSd/Nz9A=";
-    release."1.15.2".sha256 = "sha256-XgopNP83POFbMNyl2D+gY1rmqGg03o++Ngv3zJfCn2s=";
-    release."1.15.0".sha256 = "sha256:1ngdc41sgyzyz3i3lkzjhnj66gza5h912virkh077dyv17ysb6ar";
-    release."1.14.1".sha256 = "sha256-BZPVL8ymjrE9kVGyf6bpc+GA2spS5JBpkUtZi04nPis=";
-    release."1.13.7".sha256 = "10fnwz30bsvj7ii1vg4l1li5pd7n0qqmwj18snkdr5j9gk0apc1r";
-    release."1.13.5".sha256 = "02a6r23mximrdvs6kgv6rp0r2dgk7zynbs99nn7lphw2c4189kka";
-    release."1.13.1".sha256 = "12a9nbdvg9gybpw63lx3nw5wnxfznpraprb0wj3l68v1w43xq044";
-    release."1.13.0".sha256 = "0dmzy058m1mkndv90byjaik6lzzfk3aaac7v84mpmkv6my23bygr";
-    release."1.12.0".sha256 = "1agisdnaq9wrw3r73xz14yrq3wx742i6j8i5icjagqk0ypmly2is";
-    release."1.11.4".sha256 = "1m0jk9swcs3jcrw5yyw5343v8mgax238cjb03s8gc4wipw1fn9f5";
+    release."1.19.2".sha256 = "sha256-dBj5Ek7PWq/8Btq/dggJUqa8cUtfvbi6EWo/lJEDOU4=";
+    release."1.18.1".sha256 = "sha256-rrIv/mVC0Ez3nU7fpnzwduIC3tI6l73DjgAbv1gd2v0=";
+    release."1.17.0".sha256 = "sha256-J8FJBeaB+2HtHjrkgNzOZJngZ2AcYU+npL9Y1HNPnzo=";
+    release."1.15.2".sha256 = "sha256-+sQYQiN3n+dlzXzi5opOjhkJZqpkNwlHZcUjaUM6+xQ=";
+    release."1.15.0".sha256 = "sha256-vpQzbkDqJPCmaBmXcBnzlWGS7djW9wWv8xslkIlXgP0=";
+    release."1.13.7".sha256 = "sha256-0QbOEnrRCYA2mXDGRKe+QYCXSESLJvLzRW0Iq+/3P9Y=";
+    release."1.12.0".sha256 = "sha256-w4JzLZB8jcxw7nA7AfgU9jTZTr6IYUxPU5E2vNIFC4Q=";
+    release."1.11.4".sha256 = "sha256-dyzEpzokgffsF9lt+FZgUlcZEuAb70vGuHfGUtjZYIM=";
     releaseRev = v: "v${v}";
+    releaseArtifact = v: if lib.versionAtLeast v "1.13.8"
+      then "elpi-${v}.tbz"
+      else "elpi-v${v}.tbz";
     location = { domain = "github.com"; owner = "LPCIC"; repo = "elpi"; };
   }) version;
 in
-buildDunePackage rec {
+buildDunePackage {
   pname = "elpi";
   inherit (fetched) version src;
 
   patches = lib.optional (version == "1.16.5")
     ./atd_2_10.patch;
 
-  minimalOCamlVersion = "4.04";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.07";
 
   # atdgen is both a library and executable
   nativeBuildInputs = [ perl ]
@@ -68,6 +65,6 @@ buildDunePackage rec {
   };
 
   postPatch = ''
-    substituteInPlace elpi_REPL.ml --replace "tput cols" "${ncurses}/bin/tput cols"
+    substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
   '';
 }

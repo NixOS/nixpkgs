@@ -17,7 +17,7 @@
 let
   otherArgs = lib.attrsets.removeAttrs args [ "pname" "data" "repo" "releasePrefix" "isMultiArch" ];
   inherit (stdenvNoCC.hostPlatform) system;
-  inherit (if isCrossArch then data else data.${system}) url hash;
+  inherit (if isCrossArch then data else data.${system} or (throw "gaugePlugins.${pname}: No source for system: ${system}")) url hash;
   # Upstream uses a different naming scheme for platforms
   systemMap = {
     "x86_64-darwin" = "darwin.x86_64";

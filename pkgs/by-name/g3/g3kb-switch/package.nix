@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     owner = "lyokha";
     repo = "g3kb-switch";
     rev = version;
-    sha256 = "sha256-kTJfV0xQmWuxibUlfC1qJX2J2nrZ4wimdf/nGciQq0Y=";
+    hash = "sha256-kTJfV0xQmWuxibUlfC1qJX2J2nrZ4wimdf/nGciQq0Y=";
   };
 
   nativeBuildInputs = [

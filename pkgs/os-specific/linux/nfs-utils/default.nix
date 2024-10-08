@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkg-config, util-linux, libcap, libtirpc, libevent
 , sqlite, libkrb5, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, python3, buildPackages, nixosTests, rpcsvc-proto, openldap, libxml2
+, python3, buildPackages, nixosTests, rpcsvc-proto, openldap, cyrus_sasl, libxml2
 , enablePython ? true, enableLdap ? true
 }:
 
@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
     libtirpc libcap libevent sqlite lvm2
     libuuid keyutils libkrb5 tcp_wrappers libxml2
   ] ++ lib.optional enablePython python3
-    ++ lib.optional enableLdap  openldap;
+  ++ lib.optionals enableLdap [
+    openldap
+    cyrus_sasl
+  ];
 
   enableParallelBuilding = true;
 
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
       "--with-pluginpath=${placeholder "lib"}/lib/libnfsidmap" # this installs libnfsidmap
       "--with-rpcgen=${buildPackages.rpcsvc-proto}/bin/rpcgen"
       "--with-modprobedir=${placeholder "out"}/etc/modprobe.d"
-    ] ++ lib.optional enableLdap "--with-ldap";
+    ] ++ lib.optional enableLdap "--enable-ldap";
 
   patches = lib.optionals stdenv.hostPlatform.isMusl [
     # http://openwall.com/lists/musl/2015/08/18/10
@@ -103,7 +106,7 @@ stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  # doCheck = !stdenv.isMips;
+  # doCheck = !stdenv.hostPlatform.isMips;
   # https://bugzilla.kernel.org/show_bug.cgi?id=203793
   doCheck = false;
 

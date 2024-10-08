@@ -138,7 +138,7 @@ buildPythonPackage rec {
 
   env.HOME = "$(mktemp -d)";
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # all = [
     #   farm-haystack
     # ];

@@ -21,25 +21,25 @@
 let
   # fix for: https://github.com/NixOS/nixpkgs/issues/272156
   buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
 in
 buildNpmPackage' rec {
   pname = "bruno";
-  version = "1.28.0";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-SLND+eEEMFVHE5XPt2EKkJ+BjENqvUSrWkqnC6ghUBI=";
+    hash = "sha256-n/3zNS3aME7ZSoJ7TQ7gqVod469g7PGTsLcdNIwB09Y=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-RFn7Bbx1xMm4gt++lhPflXjEfTIgmls2TkrJ8Ta2qpI=";
+  npmDepsHash = "sha256-p3kdYuDiPZ9SmtrFajXd76Ohd+VUqn/Y8SpAPFrTBZA=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -47,7 +47,7 @@ buildNpmPackage' rec {
       (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
       copyDesktopItems
     ];
@@ -58,7 +58,7 @@ buildNpmPackage' rec {
       cairo
       pango
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreText
     ];
 
@@ -100,7 +100,7 @@ buildNpmPackage' rec {
     pushd packages/bruno-electron
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
@@ -136,7 +136,7 @@ buildNpmPackage' rec {
 
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
 

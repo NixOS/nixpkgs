@@ -15,7 +15,7 @@ rec {
   envVars = let
 
     # As a workaround for https://github.com/rust-lang/rust/issues/89626 use lld on pkgsStatic aarch64
-    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.isDarwin;
+    shouldUseLLD = platform: platform.isAarch64 && platform.isStatic && !stdenv.hostPlatform.isDarwin;
 
     ccForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}cc";
     cxxForBuild = "${pkgsBuildHost.stdenv.cc}/bin/${pkgsBuildHost.stdenv.cc.targetPrefix}c++";

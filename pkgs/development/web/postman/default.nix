@@ -14,6 +14,6 @@ let
 
 in
 
-if stdenvNoCC.isDarwin
+if stdenvNoCC.hostPlatform.isDarwin
 then callPackage ./darwin.nix { inherit pname version meta; }
 else callPackage ./linux.nix { inherit pname version meta; }

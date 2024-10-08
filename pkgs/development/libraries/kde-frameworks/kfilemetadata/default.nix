@@ -18,7 +18,7 @@
 mkDerivation {
   pname = "kfilemetadata";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     attr
   ] ++ [
     ebook_tools

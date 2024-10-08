@@ -41,7 +41,7 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./default-icc-profile.patch;
       srgbProfile =
-        if stdenv.isDarwin then
+        if stdenv.hostPlatform.isDarwin then
           "/System/Library/ColorSync/Profiles/sRGB Profile.icc"
         else
           # break runtime dependency chain all of colord dependencies
@@ -65,7 +65,9 @@ buildPythonPackage rec {
 
   # FIXME: Only add "sRGB Profile.icc" to __impureHostDeps once
   # https://github.com/NixOS/nix/issues/9301 is fixed.
-  __impureHostDeps = lib.optionals stdenv.isDarwin [ "/System/Library/ColorSync/Profiles" ];
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/ColorSync/Profiles"
+  ];
 
   nativeCheckInputs = [
     exiftool

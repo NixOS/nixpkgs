@@ -152,12 +152,12 @@ python3.pkgs.buildPythonApplication {
     qt6.wrapQtAppsHook
     rsync
     rustPlatform.cargoSetupHook
-  ] ++ lib.optional stdenv.isDarwin swift;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -213,7 +213,7 @@ python3.pkgs.buildPythonApplication {
       wrapt
       zipp
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       AVKit
       CoreAudio
     ];
@@ -226,7 +226,7 @@ python3.pkgs.buildPythonApplication {
 
   # tests fail with to many open files
   # TODO: verify if this is still true (I can't, no mac)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # these two tests are flaky, see https://github.com/ankitects/anki/issues/3353
@@ -344,6 +344,6 @@ python3.pkgs.buildPythonApplication {
       oxij
     ];
     # Reported to crash at launch on darwin (as of 2.1.65)
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

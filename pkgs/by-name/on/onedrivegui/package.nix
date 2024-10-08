@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "1.1.0rc3";
+  version = "1.1.0";
 
   setupPy = writeText "setup.py" ''
     from setuptools import setup

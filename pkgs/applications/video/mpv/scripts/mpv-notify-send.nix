@@ -2,7 +2,6 @@
   lib,
   buildLua,
   fetchFromGitHub,
-  fetchpatch,
   unstableGitUpdater,
   libnotify,
 }:

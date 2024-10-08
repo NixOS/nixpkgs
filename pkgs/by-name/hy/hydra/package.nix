@@ -44,6 +44,7 @@
 , glibcLocales
 , fetchFromGitHub
 , nixosTests
+, unstableGitUpdater
 }:
 
 let
@@ -123,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-08-27";
+  version = "0-unstable-2024-09-24";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "2d79b0a4da9e2a8ff97c1173aa56fe92e1f4629b";
-    hash = "sha256-ZU8/LzdZ0nbUxVxTsRZyMpTGEtps9oG0Yx2cpS9J8I4=";
+    rev = "95003f2eb503f71979856470c7caea946f1ae7f0";
+    hash = "sha256-6FI0QIkMAL35J8mzAiAntCsFbMMZBuOBpKuDIctflaA=";
   };
 
   buildInputs = [
@@ -172,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
       darcs
       gnused
       breezy
-    ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ]
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ rpm dpkg cdrkit ]
   );
 
   nativeBuildInputs = [
@@ -232,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit nix perlDeps;
     tests.basic = nixosTests.hydra.hydra;
+    updateScript = unstableGitUpdater {};
   };
 
   meta = with lib; {

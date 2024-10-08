@@ -10,17 +10,24 @@
 
   # dependencies
   async-timeout,
+  asgi-logger,
   cloudevents,
   fastapi,
   grpcio,
   httpx,
+  azure-identity,
   kubernetes,
   numpy,
   orjson,
   pandas,
   prometheus-client,
   protobuf,
+  requests,
   psutil,
+  azure-storage-blob,
+  azure-storage-file-share,
+  boto3,
+  google-cloud-storage,
   pydantic,
   python-dateutil,
   pyyaml,
@@ -32,11 +39,6 @@
 
   # checks
   avro,
-  azure-storage-blob,
-  azure-storage-file-share,
-  boto3,
-  botocore,
-  google-cloud-storage,
   grpcio-testing,
   pytest-asyncio,
   pytestCheckHook,
@@ -58,6 +60,16 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/python/kserve";
+
+  pythonRelaxDeps = [
+    "fastapi"
+    "httpx"
+    "prometheus-client"
+    "protobuf"
+    "ray"
+    "uvicorn"
+    "psutil"
+  ];
 
   build-system = [
     deprecation
@@ -87,30 +99,28 @@ buildPythonPackage rec {
     uvicorn
   ] ++ ray.optional-dependencies.serve-deps;
 
-  pythonRelaxDeps = [
-    "fastapi"
-    "httpx"
-    "prometheus-client"
-    "protobuf"
-    "ray"
-    "uvicorn"
-    "psutil"
-  ];
-
-  pythonImportsCheck = [ "kserve" ];
+  optional-dependencies = {
+    storage = [
+      azure-identity
+      azure-storage-blob
+      azure-storage-file-share
+      boto3
+      google-cloud-storage
+      requests
+    ];
+    logging = [ asgi-logger ];
+    ray = [ ray ];
+  };
 
   nativeCheckInputs = [
     avro
-    azure-storage-blob
-    azure-storage-file-share
-    boto3
-    botocore
-    google-cloud-storage
     grpcio-testing
     pytest-asyncio
     pytestCheckHook
     tomlkit
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "kserve" ];
 
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
@@ -122,6 +132,8 @@ buildPythonPackage rec {
     "test_health_handler"
     "test_infer"
     "test_infer_v2"
+    # Assertion error due to HTTP response code
+    "test_unload"
   ];
 
   meta = {

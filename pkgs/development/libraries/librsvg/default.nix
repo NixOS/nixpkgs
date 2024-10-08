@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     pango
     libintl
     vala # for share/vala/Makefile.vapigen
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Foundation
     libobjc
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature withIntrospection "vala")
 
     "--enable-always-build-tests"
-  ] ++ lib.optional stdenv.isDarwin "--disable-Bsymbolic"
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-Bsymbolic"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTarget}";
 
   doCheck = false; # all tests fail on libtool-generated rsvg-convert not being able to find coreutils
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
   # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     NIX_LDFLAGS = "-lobjc";
   };
 

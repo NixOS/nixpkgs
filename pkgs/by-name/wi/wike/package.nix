@@ -4,6 +4,7 @@
 , meson
 , ninja
 , pkg-config
+, pkgsCross
 , appstream-glib
 , desktop-file-utils
 , gobject-introspection
@@ -62,7 +63,13 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    patchShebangs --update $out/share/wike/wike-sp
   '';
+
+  passthru = {
+    tests.cross = pkgsCross.aarch64-multiplatform.wike;
+  };
 
   meta = with lib; {
     description = "Wikipedia Reader for the GNOME Desktop";

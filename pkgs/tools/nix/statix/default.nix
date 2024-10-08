@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = lib.optional withJson "json";
 
   # tests are failing on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Lints and suggestions for the nix programming language";

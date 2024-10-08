@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --replace-fail "-lcurses" "-lncurses"
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-undef-prefix";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-undef-prefix";
 
   nativeBuildInputs = lib.optionals withGUI [ pkg-config makeWrapper ];
 

@@ -86,6 +86,13 @@ rec {
     , preferLocalBuild ? true
     , derivationArgs ? { }
     }:
+    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+      destination must be an absolute path, relative to the derivation's out path,
+      got '${destination}' instead.
+
+      Ensure that the path starts with a / and specifies at least the filename.
+    '';
+
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in

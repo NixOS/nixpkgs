@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libuv
     libmicrohttpd
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     IOKit
   ];

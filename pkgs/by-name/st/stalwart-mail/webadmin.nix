@@ -5,6 +5,7 @@
   trunk-ng,
   tailwindcss,
   fetchNpmDeps,
+  nix-update-script,
   nodejs,
   npmHooks,
   llvmPackages,
@@ -15,13 +16,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "webadmin";
-  version = "0.1.13";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "webadmin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QtQAcbyTSAj56QZky7eyNS15pnetLVN1Z4cN5pxlJFc=";
+    hash = "sha256-kMfdCb2dwoVd9G1uZw2wcfaAAPt6obFfWQbbXG/MDB4=";
   };
 
   npmDeps = fetchNpmDeps {
@@ -30,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-na1HEueX8w7kuDp8LEtJ0nD1Yv39cyk6sEMpS1zix2s=";
   };
 
-  cargoHash = "sha256-CWDwVVea+cdsoIbQdQ3HDiVwYuMSplWZSUXTweibu9s=";
+  cargoHash = "sha256-0Urr0MsmenFqg25lZAzg7LgJ/NkZHINoOWtPad7G6GE=";
 
   postPatch = ''
     # Using local tailwindcss for compilation
@@ -59,6 +60,10 @@ rustPlatform.buildRustPackage rec {
     mkdir -p $out
     zip -r $out/webadmin.zip *
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Secure & modern all-in-one mail server Stalwart (webadmin module)";

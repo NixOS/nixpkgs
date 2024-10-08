@@ -21,7 +21,7 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-alygZSOSotfJ2yrltAIQhDwLvAgcvUEIJasAzFnxSmw=";
   };
   postPatch = whenPatched "gunzip < ${patch_src} | patch -Np1"
-  + lib.optionalString stdenv.isFreeBSD ''
+  + lib.optionalString stdenv.hostPlatform.isFreeBSD ''
 
     sed -i 1i'int feenableexcept(int __mask);' contrib/libtests/pngvalid.c
   '';

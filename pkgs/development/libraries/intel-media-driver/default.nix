@@ -8,7 +8,7 @@
 , libpciaccess
 , intel-gmmlib
 , libdrm
-, enableX11 ? stdenv.isLinux
+, enableX11 ? stdenv.hostPlatform.isLinux
 , libX11
   # for passhtru.tests
 , pkgsi686Linux

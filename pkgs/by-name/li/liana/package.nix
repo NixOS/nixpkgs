@@ -38,7 +38,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "6.0";
+  version = "6.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
@@ -94,6 +94,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ dunxen ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

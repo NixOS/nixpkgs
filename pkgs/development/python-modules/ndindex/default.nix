@@ -34,7 +34,7 @@ buildPythonPackage rec {
       --replace "--flakes" ""
   '';
 
-  passthru.optional-dependencies.arrays = [ numpy ];
+  optional-dependencies.arrays = [ numpy ];
 
   pythonImportsCheck = [ "ndindex" ];
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     hypothesis
     pytest-cov-stub
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.arrays;
+  ] ++ optional-dependencies.arrays;
 
   meta = with lib; {
     description = "";

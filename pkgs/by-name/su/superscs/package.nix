@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Qu7RM6Ew4hEmoIXO0utDDVmjmNX3yt3FxWZXCQ/Xjp4=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile --replace-fail \
       ".so" \
       ".dylib"

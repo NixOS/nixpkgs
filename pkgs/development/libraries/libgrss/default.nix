@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     glib
     libxml2
     libsoup
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
     AppKit
   ];

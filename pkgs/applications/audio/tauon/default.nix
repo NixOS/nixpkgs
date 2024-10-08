@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       setproctitle
     ]
     ++ lib.optional withDiscordRPC pypresence
-    ++ lib.optional stdenv.isLinux pulsectl;
+    ++ lib.optional stdenv.hostPlatform.isLinux pulsectl;
 
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       throw "Architecture not supported";
 
   buildInputs = [ gmp ];
-  nativeBuildInputs = lib.optional stdenv.isLinux patchelf;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
 
   buildPhase = ''
     make update \
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --set-interpreter ${dynamic-linker} $out/lib/mlton/mlton-compile
     patchelf --set-rpath ${gmp}/lib $out/lib/mlton/mlton-compile
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter ${dynamic-linker} $out/bin/$e
       patchelf --set-rpath ${gmp}/lib $out/bin/$e
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change \
       /opt/local/lib/libgmp.10.dylib \
       ${gmp}/lib/libgmp.10.dylib \

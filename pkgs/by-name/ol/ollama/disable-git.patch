@@ -1,15 +1,17 @@
+diff --git a/llm/generate/gen_common.sh b/llm/generate/gen_common.sh
+index 3825c155..d22eccd2 100644
 --- a/llm/generate/gen_common.sh
 +++ b/llm/generate/gen_common.sh
-@@ -65,6 +65,8 @@
-         echo 'add_subdirectory(../ext_server ext_server) # ollama' >>${LLAMACPP_DIR}/CMakeLists.txt
-     fi
+@@ -69,6 +69,8 @@ git_module_setup() {
+ }
  
+ apply_patches() {
 +    return
 +
-     if [ -n "$(ls -A ../patches/*.diff)" ]; then
-         # apply temporary patches until fix is upstream
-         for patch in ../patches/*.diff; do
-@@ -110,6 +112,8 @@
+     # apply temporary patches until fix is upstream
+     for patch in ../patches/*.patch; do
+         git -c 'user.name=nobody' -c 'user.email=<>' -C ${LLAMACPP_DIR} am ${patch}
+@@ -133,6 +135,8 @@ install() {
  
  # Keep the local tree clean after we're done with the build
  cleanup() {

@@ -6,6 +6,8 @@
   # TODO: replace indirect self-reference by proper self-reference
   #       https://github.com/NixOS/nixpkgs/pull/119942
   nixos-install-tools,
+  nixos-install,
+  nixos-enter,
   runCommand,
   nixosTests,
   binlore,
@@ -18,9 +20,8 @@ in
   name = "nixos-install-tools-${version}";
   paths = lib.attrValues {
     # See nixos/modules/installer/tools/tools.nix
-    inherit (config.system.build)
-      nixos-install nixos-generate-config nixos-enter;
-
+    inherit (config.system.build) nixos-generate-config;
+    inherit nixos-install nixos-enter;
     inherit (config.system.build.manual) nixos-configuration-reference-manpage;
   };
 

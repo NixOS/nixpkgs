@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     msgpack = [ msgpack ];
     # zfpy = [ zfpy ];
   };

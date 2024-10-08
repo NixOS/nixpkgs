@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ httpx ];
   };
 

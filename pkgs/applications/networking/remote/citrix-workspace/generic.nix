@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
     message = ''
       In order to use Citrix Workspace, you need to comply with the Citrix EULA and download
-      the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
+      the ${if stdenv.hostPlatform.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
 
       ${homepage}
 

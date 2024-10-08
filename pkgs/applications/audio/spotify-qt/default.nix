@@ -27,7 +27,7 @@ mkDerivation rec {
 
    installFlags = [ "DESTDIR=$(out)" ];
 
-   postInstall = lib.optionalString stdenvNoCC.isDarwin ''
+   postInstall = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
      mkdir -p $out/Applications
      mv $out/bin/spotify-qt.app $out/Applications
      ln $out/Applications/spotify-qt.app/Contents/MacOS/spotify-qt $out/bin/spotify-qt

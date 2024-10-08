@@ -99,6 +99,6 @@ import ./make-test-python.nix ({ pkgs, ... }:
                   gw.wait_until_succeeds("vtysh -c 'show ip route' | grep '^O>'")
 
           with subtest("Test ICMP"):
-              client.wait_until_succeeds("ping -c 3 server >&2")
+              client.wait_until_succeeds("ping -4 -c 3 server >&2")
         '';
     })

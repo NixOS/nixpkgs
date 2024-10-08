@@ -10,7 +10,7 @@
 , fmt_9
 , libev
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUsb ? stdenv.isLinux, libusb1
+, withUsb ? stdenv.hostPlatform.isLinux, libusb1
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ fmt_9 libev ]
     ++ lib.optional withSystemd systemd
     ++ lib.optional withUsb libusb1
-    ++ lib.optional stdenv.isDarwin argp-standalone;
+    ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 
   configureFlags = [
     (lib.enableFeature withSystemd "systemd")

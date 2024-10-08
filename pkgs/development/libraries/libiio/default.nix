@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
     libxml2
     libusb1
   ] ++ lib.optional avahiSupport avahi
-    ++ lib.optional stdenv.isLinux libaio
-    ++ lib.optionals stdenv.isDarwin [ CFNetwork CoreServices ];
+    ++ lib.optional stdenv.hostPlatform.isLinux libaio
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CFNetwork CoreServices ];
 
   cmakeFlags = [
     "-DUDEV_RULES_INSTALL_DIR=${placeholder "out"}/lib/udev/rules.d"

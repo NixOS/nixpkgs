@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.autossh;
@@ -16,21 +13,21 @@ in
 
     services.autossh = {
 
-      sessions = mkOption {
-        type = types.listOf (types.submodule {
+      sessions = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule {
           options = {
-            name = mkOption {
-              type = types.str;
+            name = lib.mkOption {
+              type = lib.types.str;
               example = "socks-peer";
               description = "Name of the local AutoSSH session";
             };
-            user = mkOption {
-              type = types.str;
+            user = lib.mkOption {
+              type = lib.types.str;
               example = "bill";
               description = "Name of the user the AutoSSH session should run as";
             };
-            monitoringPort = mkOption {
-              type = types.int;
+            monitoringPort = lib.mkOption {
+              type = lib.types.int;
               default = 0;
               example = 20000;
               description = ''
@@ -39,8 +36,8 @@ in
                 style monitoring
               '';
             };
-            extraArguments = mkOption {
-              type = types.separatedString " ";
+            extraArguments = lib.mkOption {
+              type = lib.types.separatedString " ";
               example = "-N -D4343 bill@socks.example.net";
               description = ''
                 Arguments to be passed to AutoSSH and retransmitted to SSH
@@ -75,7 +72,7 @@ in
 
   ###### implementation
 
-  config = mkIf (cfg.sessions != []) {
+  config = lib.mkIf (cfg.sessions != []) {
 
     systemd.services =
 

@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, python3, bluez
 , tcl, acl, kmod, coreutils, shadow, util-linux
-, alsaSupport ? stdenv.isLinux, alsa-lib
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 }:
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-3v1Q9ytlxUAqssVzgwppeOXyAq0NmEeTyN3ixBUuvgQ";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     argon2 = [ argon2-cffi ];
     bcrypt = [ bcrypt ];
     totp = [ cryptography ];
@@ -35,14 +35,10 @@ buildPythonPackage rec {
       "version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')"
   '';
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-xdist
-    ]
-    ++ passthru.optional-dependencies.argon2
-    ++ passthru.optional-dependencies.bcrypt
-    ++ passthru.optional-dependencies.totp;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-xdist
+  ] ++ optional-dependencies.argon2 ++ optional-dependencies.bcrypt ++ optional-dependencies.totp;
 
   pythonImportsCheck = [ "passlib" ];
 

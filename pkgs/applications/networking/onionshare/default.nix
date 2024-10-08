@@ -102,9 +102,9 @@ rec {
       export HOME="$(mktemp -d)"
     '';
 
-    disabledTests = lib.optionals stdenv.isLinux [
+    disabledTests = lib.optionals stdenv.hostPlatform.isLinux [
       "test_get_tor_paths_linux"  # expects /usr instead of /nix/store
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # requires meek-client which is not packaged
       "test_get_tor_paths_darwin"
       # on darwin (and only on darwin) onionshare attempts to discover

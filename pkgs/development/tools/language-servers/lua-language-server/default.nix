@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     Foundation
     ditto
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       pushd 3rd/luamake
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # This package uses the program clang for C and C++ files. The language
       # is selected via the command line argument -std, but this do not work
       # in combination with the nixpkgs clang wrapper. Therefor we have to
@@ -55,7 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
         -e '/cxx_/s,$cc,clang++,'
     '';
 
-  ninjaFlags = [ "-fcompile/ninja/${if stdenv.isDarwin then "macos" else "linux"}.ninja" ];
+  ninjaFlags = [
+    "-fcompile/ninja/${if stdenv.hostPlatform.isDarwin then "macos" else "linux"}.ninja"
+  ];
 
   postBuild = ''
     popd

@@ -5,19 +5,18 @@
   rustPlatform,
   just,
   dbus,
-  rust,
   stdenv,
   xdg-desktop-portal-cosmic,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-session";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-session";
     rev = "epoch-${version}";
-    sha256 = "sha256-5zfEBNsMxtKPJZcGYZth/SoXrsg0gpug15VR5fPbvt0=";
+    hash = "sha256-rkzcu5lXKVQ5RfilcKQjTzeKZv+FpqrtARZgGGlYKK4=";
   };
 
   cargoLock = {
@@ -60,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-session";
     maintainers = with maintainers; [
       a-kenji
-      nyanbinary
+      nyabinary
     ];
     platforms = platforms.linux;
   };

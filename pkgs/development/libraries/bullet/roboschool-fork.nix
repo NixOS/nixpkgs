@@ -18,12 +18,12 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals stdenv.isLinux [ libGLU libGL libglut ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa OpenGL ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL libglut ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa OpenGL ];
 
   patches = [ ./gwen-narrowing.patch ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's/FIND_PACKAGE(OpenGL)//' CMakeLists.txt
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
     "-DBUILD_SHARED_LIBS=ON"
     "-DBUILD_CPU_DEMOS=OFF"
     "-DINSTALL_EXTRA_LIBS=ON"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENGL_FOUND=true"
     "-DOPENGL_LIBRARIES=${OpenGL}/Library/Frameworks/OpenGL.framework"
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks/OpenGL.framework"
@@ -53,6 +53,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     # /tmp/nix-build-bullet-2019-03-27.drv-0/source/src/Bullet3Common/b3Vector3.h:297:7: error: argument value 10880 is outside the valid range [0, 255] [-Wargument-outside-range]
     #                 y = b3_splat_ps(y, 0x80);
-    broken = (stdenv.isDarwin && stdenv.isx86_64);
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 }

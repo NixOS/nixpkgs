@@ -34,7 +34,7 @@ buildPythonPackage rec {
     openldap
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gevent = [ gevent ];
     tornado = [ tornado ];
     trio = [ trio ];

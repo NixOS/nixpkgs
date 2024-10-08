@@ -8,13 +8,10 @@ rustPlatform.buildRustPackage rec {
     owner = "kornelski";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ceeKG45OQLxiYcwq2Kumbpd+lkyY+W/og1/6Zdpd3zo=";
-    postFetch = ''
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+    hash = "sha256-ze9OQHNtujzn2rY24bmFUkz5AYsjoMrwqm4jyQoF53Y=";
   };
 
-  cargoHash = "sha256-jEMvvFOcFij4lT/5Y5xARaVURT/evV9u1Vkqtm4al+g=";
+  cargoHash = "sha256-9/TSmw0XEnEURgrT6Oy3nqnNkmXUHLr0InlKyg4m9sQ=";
 
   meta = with lib; {
     description = "Fast file deduplicator";

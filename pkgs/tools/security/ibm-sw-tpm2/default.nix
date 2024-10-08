@@ -6,7 +6,7 @@
 }:
 let
   makefile =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then "makefile.mac"
     else "makefile";
 in

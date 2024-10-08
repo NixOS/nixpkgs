@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "/usr/local/lib/libosxfuse.dylib" "fuse"
   '';
@@ -20,14 +20,14 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    (if stdenv.isDarwin then fuse else fuse3)
+    (if stdenv.hostPlatform.isDarwin then fuse else fuse3)
     bzip2
     zlib
-  ] ++ lib.optional stdenv.isLinux attr;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux attr;
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DUSE_FUSE3=OFF";
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DUSE_FUSE3=OFF";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DUSE_FUSE2";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DUSE_FUSE2";
 
   postFixup = ''
     ln -s $out/bin/apfs-fuse $out/bin/mount.fuse.apfs-fuse

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   postFixup = ''
     chmod +x $out/lib/*

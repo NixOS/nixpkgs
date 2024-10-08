@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # utmp.h is deprecated on aarch64-darwin
-  postPatch = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) ''
+  postPatch = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     for file in login.*; do
       substituteInPlace $file --replace "#ifdef HAVE_UTMP_H" "#if 0"
     done

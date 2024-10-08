@@ -11,18 +11,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
-  desktopItems = makeDesktopItem {
-    type = "Application";
-    name = pname;
-    desktopName = "Conduktor";
-    genericName = meta.description;
-    exec = pname;
-    icon = fetchurl {
-      url = "https://github.com/conduktor/builds/raw/v${version}/.github/resources/Conduktor.png";
-      sha256 = "0s7p74qclvac8xj2m22gfxx5m2c7cf0nqpk5sb049p2wvryhn2j4";
-    };
-    comment = "A beautiful and fully-featured desktop client for Apache Kafka";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = pname;
+      desktopName = "Conduktor";
+      genericName = meta.description;
+      exec = pname;
+      icon = fetchurl {
+        url = "https://github.com/conduktor/builds/raw/v${version}/.github/resources/Conduktor.png";
+        sha256 = "0s7p74qclvac8xj2m22gfxx5m2c7cf0nqpk5sb049p2wvryhn2j4";
+      };
+      comment = "A beautiful and fully-featured desktop client for Apache Kafka";
+    })
+  ];
 
   dontConfigure = true;
   dontBuild = true;

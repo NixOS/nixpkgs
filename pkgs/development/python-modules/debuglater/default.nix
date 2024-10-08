@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ colorama ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [ dill ];
   };
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     numpy
     pandas
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "debuglater" ];
 

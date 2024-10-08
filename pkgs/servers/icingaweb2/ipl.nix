@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2-ipl";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "Icinga";
     repo = "icinga-php-library";
     rev = "v${version}";
-    hash = "sha256-b0y3EKcYWt3cH79HvHnpiHt18ZbRf9lEsfKTZO0dHME=";
+    hash = "sha256-TR2hd8TdWA2zSyalxBaqqdcK6FO2CovqddF8mvvyb1U=";
   };
 
   installPhase = ''

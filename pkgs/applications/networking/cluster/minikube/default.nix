@@ -29,14 +29,14 @@ buildGoModule rec {
   };
   postPatch =
     (
-      lib.optionalString (withQemu && stdenv.isDarwin) ''
+      lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
           --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
           --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
       ''
     ) + (
-      lib.optionalString (withQemu && stdenv.isLinux) ''
+      lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
           --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 
-  buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ vmnet ] else if stdenv.hostPlatform.isLinux then [ libvirt ] else null;
 
   buildPhase = ''
     make COMMIT=${src.rev}

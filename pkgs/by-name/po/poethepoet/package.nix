@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
     tomli
   ];
 
-  passthru.optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3.pkgs; {
     poetry_plugin = [
       poetry
     ];

@@ -7,8 +7,8 @@
 , libjpeg
 , zlib
 , libewf
-, enableNtfs ? !stdenv.isDarwin, ntfs3g ? null
-, enableExtFs ? !stdenv.isDarwin, e2fsprogs ? null
+, enableNtfs ? !stdenv.hostPlatform.isDarwin, ntfs3g ? null
+, enableExtFs ? !stdenv.hostPlatform.isDarwin, e2fsprogs ? null
 , enableQt ? false, qtbase ? null, qttools ? null, qwt ? null
 }:
 

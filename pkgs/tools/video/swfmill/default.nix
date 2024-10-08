@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxslt freetype libpng libxml2 ];
 
   # fatal error: 'libxml/xpath.h' file not found
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${libxml2.dev}/include/libxml2";
 
   meta = {
     description = "Xml2swf and swf2xml processor with import functionalities";

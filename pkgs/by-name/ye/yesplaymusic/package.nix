@@ -74,7 +74,7 @@ let
     platforms = builtins.attrNames srcs;
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then stdenv.mkDerivation {
   inherit pname version src meta;
 

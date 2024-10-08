@@ -27,7 +27,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security ++ [ zstd ];
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security ++ [
+    zstd
+  ];
 
   # Most tests rely on external resources and build artifacts.
   # Disabling check here to work with build sandboxing.

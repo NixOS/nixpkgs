@@ -101,6 +101,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of components in GNOME that store secrets, passwords, keys, certificates and make them available to applications";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-keyring";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-keyring/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl2;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     "--with-milter=${libmilter}"
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
-  ] ++ lib.optional stdenv.isDarwin "--with-unbound=${unbound}";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "--with-unbound=${unbound}";
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
-  buildInputs = [ libbsd openssl libmilter perl ] ++ lib.optional stdenv.isDarwin unbound;
+  buildInputs = [ libbsd openssl libmilter perl ] ++ lib.optional stdenv.hostPlatform.isDarwin unbound;
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \

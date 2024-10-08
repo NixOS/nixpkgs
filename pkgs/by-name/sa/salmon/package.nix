@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     tbb_2021_11
     xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

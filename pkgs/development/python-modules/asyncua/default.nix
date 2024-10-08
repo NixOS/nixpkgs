@@ -64,7 +64,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
     "test_publish"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # OSError: [Errno 48] error while attempting to bind on address ('127.0.0.1',...
     "test_anonymous_rejection"
     "test_certificate_handling_success"

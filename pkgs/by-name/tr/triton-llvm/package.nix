@@ -149,7 +149,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
-  '' + lib.optionalString stdenv.isAarch64 ''
+  '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # Not sure why this fails
     rm test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
   '';
@@ -161,7 +161,7 @@ in stdenv.mkDerivation (finalAttrs: {
   doCheck = buildTests;
 
   nativeCheckInputs = [ which ]
-    ++ lib.optionals stdenv.isDarwin [ sysctl ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
 
   checkTarget = "check-all";
   requiredSystemFeatures = [ "big-parallel" ];

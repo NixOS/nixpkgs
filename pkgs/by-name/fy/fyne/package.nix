@@ -40,7 +40,7 @@ buildGoModule rec {
       libXrandr
       libXxf86vm
     ]
-    ++ (lib.optionals stdenv.isDarwin (
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         Carbon

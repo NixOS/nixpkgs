@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ncurses perl fortune ]
-   ++ lib.optional stdenv.isDarwin libiconv;
+   ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   preFixup = ''
      wrapProgram "$out/bin/typefortune" \

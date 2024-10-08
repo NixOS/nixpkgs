@@ -30,18 +30,18 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     makeWrapper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
   # robotjs node-gyp dependencies
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libpng
     libX11
     libXi
     libXtst
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     CoreFoundation
     ApplicationServices
@@ -84,7 +84,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/jitsi-meet-electron
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/jitsi-meet-electron
 
@@ -97,7 +97,7 @@ buildNpmPackage rec {
       install -Dm644 resources/icons/512x512.png $out/share/icons/hicolor/512x512/apps/jitsi-meet-electron.png
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Jitsi Meet.app" $out/Applications
       makeWrapper "$out/Applications/Jitsi Meet.app/Contents/MacOS/Jitsi Meet" $out/bin/jitsi-meet-electron

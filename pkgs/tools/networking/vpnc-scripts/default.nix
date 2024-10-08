@@ -31,13 +31,13 @@ stdenv.mkDerivation {
   preFixup = ''
     substituteInPlace $out/bin/vpnc-script \
       --replace "which" "type -P"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/bin/vpnc-script \
       --replace "/sbin/resolvconf" "${openresolv}/bin/resolvconf" \
       --replace "/usr/bin/resolvectl" "${systemd}/bin/resolvectl"
   '' + ''
     wrapProgram $out/bin/vpnc-script \
-      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.isLinux [ openresolv iproute2 ])}"
+      --prefix PATH : "${lib.makeBinPath ([ nettools gawk coreutils gnugrep ] ++ lib.optionals stdenv.hostPlatform.isLinux [ openresolv iproute2 ])}"
   '';
 
   meta = with lib; {

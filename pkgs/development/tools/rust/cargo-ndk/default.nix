@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-sIKan8LnGv4sGVrGOUOKSD3R4fNRu5yBFATm5MWDTSU=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreGraphics
     Foundation
   ];

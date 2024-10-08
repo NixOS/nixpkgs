@@ -7,7 +7,7 @@
   nix-update-script,
 }:
 let
-  version = "2.5.1";
+  version = "2.5.2";
 in
 python3.pkgs.buildPythonApplication {
   pname = "novelwriter";
@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication {
     owner = "vkbo";
     repo = "novelWriter";
     rev = "v${version}";
-    hash = "sha256-DgeDAPE5IkZtzi+Xq2BpGfpgTRonzNjaa1NTcwnqdNo=";
+    hash = "sha256-xRSq6lBZ6jHtNve027uF2uNs3/40s0YdFN9F9O7m5VU=";
   };
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication {
     export QT_QPA_PLATFORM_PLUGIN_PATH=${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins/platforms
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/{icons,applications,pixmaps,mime/packages}
 
     cp -r setup/data/hicolor $out/share/icons
@@ -68,6 +68,6 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "novelwriter";
 
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.isDarwin; # TODO awaiting build instructions for Darwin
+    broken = stdenv.hostPlatform.isDarwin; # TODO awaiting build instructions for Darwin
   };
 }

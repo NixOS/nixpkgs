@@ -73,7 +73,7 @@ let
       # fix not be able to find clang from PATH
       substituteInPlace cl_headers/CMakeLists.txt \
         --replace " NO_DEFAULT_PATH" ""
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Uses linker flags that are not supported on Darwin.
       sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
       substituteInPlace CMakeLists.txt \
@@ -107,6 +107,6 @@ stdenv.mkDerivation {
     maintainers = [ ];
     platforms = platforms.all;
     # error: invalid value 'CL3.0' in '-cl-std=CL3.0'
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

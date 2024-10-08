@@ -11,6 +11,12 @@
     "sha256": "0y9r1jhlbr4bxhv0a73kgkg6klgg05l6iy3shhkp130s3hlkhfg1",
     "version": "2.7"
   },
+  "twentytwentyfour": {
+    "path": "twentytwentyfour/1.2",
+    "rev": "235025",
+    "sha256": "16d7sgpcw9hkih5ji9h5wc9pv5nw0rv0q5glv6iq8k9mbms3295w",
+    "version": "1.2"
+  },
   "twentytwentyone": {
     "path": "twentytwentyone/2.3",
     "rev": "235022",

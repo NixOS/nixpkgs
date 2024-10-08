@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
       protobuf
     ]
     # https://github.com/vercel/turbo/blob/ea740706e0592b3906ab34c7cfa1768daafc2a84/CONTRIBUTING.md#linux-dependencies
-    ++ lib.optional stdenv.isLinux llvmPackages.bintools;
+    ++ lib.optional stdenv.hostPlatform.isLinux llvmPackages.bintools;
 
   buildInputs =
     [
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
       rust-jemalloc-sys
       zlib
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_11_0.frameworks;
       [
         CoreFoundation

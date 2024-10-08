@@ -36,13 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glfw
     ffmpeg-full
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXrandr
     libXinerama
     libXcursor
     gtk3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Carbon
     Cocoa
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     Kernel
   ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications $out/bin
     cp -r MIDIVisualizer.app $out/Applications/
     ln -s ../Applications/MIDIVisualizer.app/Contents/MacOS/MIDIVisualizer $out/bin/

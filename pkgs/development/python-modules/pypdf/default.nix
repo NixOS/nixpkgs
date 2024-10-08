@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
 
   # build-system
@@ -27,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.3.1";
+  version = "5.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -36,7 +37,7 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-wSF20I5WaxRoN0n0jxB5O3mAAIOxP/TclYBTRAUwYHo=";
+    hash = "sha256-omnNC1mzph59aqrXqLCuCk0LgzfJv/JhbQRrAgRhAIg=";
   };
 
   outputs = [
@@ -51,6 +52,14 @@ buildPythonPackage rec {
     sphinxHook
     sphinx-rtd-theme
     myst-parser
+  ];
+
+  patches = [
+    (fetchpatch2 {
+      # Mark test_increment_writer as enable_socket (https://github.com/py-pdf/pypdf/pull/2867)
+      url = "https://github.com/py-pdf/pypdf/commit/d974d5c755a7b65f3b9c68c5742afdbc0c1693f6.patch";
+      hash = "sha256-4xiCAStP615IktTUgk31JbIxkxx8d6PQdu8Nfmhc1jo=";
+    })
   ];
 
   postPatch = ''

@@ -7,9 +7,9 @@
 , gobject-introspection
 , libcanberra-gtk3
 , poppler_gi
-, withGstreamer ? stdenv.isLinux
+, withGstreamer ? stdenv.hostPlatform.isLinux
 , gst_all_1
-, withVLC ? stdenv.isLinux
+, withVLC ? stdenv.hostPlatform.isLinux
 }:
 
 python3Packages.buildPythonApplication rec {

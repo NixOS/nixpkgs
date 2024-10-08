@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       SHELL="sh"
       "all"
     )
-    '' + (if stdenv.isx86_64 then ''
+    '' + (if stdenv.hostPlatform.isx86_64 then ''
     makeFlagsArray+=(
       CFLAGS="-fcommon -O -DFOUR -m64"
     );

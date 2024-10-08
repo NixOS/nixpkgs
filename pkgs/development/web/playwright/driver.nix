@@ -7,6 +7,8 @@
   jq,
   nodejs,
   fetchFromGitHub,
+  linkFarm,
+  callPackage,
   makeFontsConf,
   makeWrapper,
   runCommand,
@@ -16,14 +18,22 @@ let
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
+  suffix =
+    {
+      x86_64-linux = "linux";
+      aarch64-linux = "linux-arm64";
+      x86_64-darwin = "mac";
+      aarch64-darwin = "mac-arm64";
+    }
+    .${system} or throwSystem;
 
-  version = "1.46.0";
+  version = "1.47.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "playwright";
     rev = "v${version}";
-    hash = "sha256-pNvjWyedKsac7WffOXZjsxGVlUSkmXqSGHvivF9ek4g=";
+    hash = "sha256-cKjVDy1wFo8NlF8v+8YBuQUF2OUYjCmv27uhEoVUrno=";
   };
 
   babel-bundle = buildNpmPackage {
@@ -40,7 +50,7 @@ let
     pname = "expect-bundle";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright/bundles/expect";
-    npmDepsHash = "sha256-jNrFQ6BcMsVdEyB2ATFH4wRNb12v4w1kXo6rVv6rzAw=";
+    npmDepsHash = "sha256-qnFx/AQZtmxNFrrabfOpsWy6I64DFJf3sWrJzL1wfU4=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -60,7 +70,7 @@ let
     pname = "utils-bundle-core";
     inherit version src;
     sourceRoot = "${src.name}/packages/playwright-core/bundles/utils";
-    npmDepsHash = "sha256-lh57Xvrqt0YDenBvahoUuQNW6GdRUiBBkA3TLmnz9WE=";
+    npmDepsHash = "sha256-aktxEDQKxsDcInyjDKDuIu4zwtrAH0lRda/mP1IayPA=";
     dontNpmBuild = true;
     installPhase = ''
       cp -r . "$out"
@@ -82,7 +92,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}"; # update.sh depends on sourceRoot presence
-    npmDepsHash = "sha256-8wc/QfABTIVrzQxM9aCyXGkLaothOBVLteH8SiPanZU=";
+    npmDepsHash = "sha256-FaDTJmIiaaOCvq6tARfiWX5IBTTNOJ/iVkRsO4D8aqc=";
 
     nativeBuildInputs = [ cacert ];
 
@@ -148,6 +158,7 @@ let
     '';
 
     passthru = {
+      browsersJSON = (lib.importJSON ./browsers.json).browsers;
       browsers =
         {
           x86_64-linux = browsers-linux { };
@@ -206,40 +217,48 @@ let
     meta.platforms = lib.platforms.darwin;
   };
 
-  browsers-linux =
+  browsers-linux = lib.makeOverridable (
     {
       withChromium ? true,
+      withFirefox ? true,
+      withWebkit ? true,
+      withFfmpeg ? true,
+      fontconfig_file ? makeFontsConf {
+        fontDirectories = [ ];
+      },
     }:
     let
-      fontconfig = makeFontsConf { fontDirectories = [ ]; };
+      browsers =
+        lib.optionals withChromium [ "chromium" ]
+        ++ lib.optionals withFirefox [ "firefox" ]
+        ++ lib.optionals withWebkit [ "webkit" ]
+        ++ lib.optionals withFfmpeg [ "ffmpeg" ];
     in
-    runCommand ("playwright-browsers" + lib.optionalString withChromium "-chromium")
-      {
-        nativeBuildInputs = [
-          makeWrapper
-          jq
-        ];
-      }
-      (
-        ''
-          BROWSERS_JSON=${playwright-core}/browsers.json
-        ''
-        + lib.optionalString withChromium ''
-          CHROMIUM_REVISION=$(jq -r '.browsers[] | select(.name == "chromium").revision' $BROWSERS_JSON)
-          mkdir -p $out/chromium-$CHROMIUM_REVISION/chrome-linux
-
-          # See here for the Chrome options:
-          # https://github.com/NixOS/nixpkgs/issues/136207#issuecomment-908637738
-          makeWrapper ${chromium}/bin/chromium $out/chromium-$CHROMIUM_REVISION/chrome-linux/chrome \
-            --set SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
-            --set FONTCONFIG_FILE ${fontconfig}
-        ''
-        + ''
-          FFMPEG_REVISION=$(jq -r '.browsers[] | select(.name == "ffmpeg").revision' $BROWSERS_JSON)
-          mkdir -p $out/ffmpeg-$FFMPEG_REVISION
-          ln -s ${ffmpeg}/bin/ffmpeg $out/ffmpeg-$FFMPEG_REVISION/ffmpeg-linux
-        ''
-      );
+    linkFarm "playwright-browsers" (
+      lib.listToAttrs (
+        map (
+          name:
+          let
+            value = playwright-core.passthru.browsersJSON.${name};
+          in
+          lib.nameValuePair
+            # TODO check platform for revisionOverrides
+            "${name}-${value.revision}"
+            (
+              callPackage (./. + "/${name}.nix") (
+                {
+                  inherit suffix system throwSystem;
+                  inherit (value) revision;
+                }
+                // lib.optionalAttrs (name == "chromium") {
+                  inherit fontconfig_file;
+                }
+              )
+            )
+        ) browsers
+      )
+    )
+  );
 in
 {
   playwright-core = playwright-core;

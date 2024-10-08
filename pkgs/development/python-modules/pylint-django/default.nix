@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pylint-plugin-utils ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     with_django = [ django ];
   };
 

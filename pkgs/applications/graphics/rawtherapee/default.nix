@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
   ];
 
@@ -88,9 +88,9 @@ stdenv.mkDerivation rec {
     exiv2
     libraw
     libjxl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcanberra-gtk3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration
   ];
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     "-DCACHE_NAME_SUFFIX=\"\""
     "-DWITH_SYSTEM_LIBRAW=\"ON\""
     "-DWITH_JXL=\"ON\""
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   ];
   env.CXXFLAGS = "-include cstdint"; # needed at least with gcc13 on aarch64-linux
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/RawTherapee.app $out/bin
     cp -R Release $out/Applications/RawTherapee.app/Contents
     for f in $out/Applications/RawTherapee.app/Contents/MacOS/*; do

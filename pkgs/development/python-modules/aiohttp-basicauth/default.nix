@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-basicauth";
-  version = "1.0.0";
+  version = "1.1.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "romis2012";
     repo = "aiohttp-basicauth";
-    rev = "v${version}";
-    hash = "sha256-UaRzauHmBHYwXFqRwDn1py79BScqq5j5SWALM4dQBP4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-DjwrMlkVVceA5kDzm0c/on0VMOxyMMA3Hu4Y2Tiu0lI=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

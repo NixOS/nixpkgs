@@ -9,7 +9,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/wixplosives/codux-versions/releases/download/${version}/Codux-${version}.x86_64.AppImage";
-    sha256 = "sha256-/e5tz3/XD/aaxLc/SUrTmWWfqI2Gw/xBTTTSmv5uZEQ=";
+    hash = "sha256-/e5tz3/XD/aaxLc/SUrTmWWfqI2Gw/xBTTTSmv5uZEQ=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };

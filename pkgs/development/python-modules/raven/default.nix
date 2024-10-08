@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "raven" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flask = [
       blinker
       flask

@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-x3JnqztoLol5dNMact/qMveQuvcMTg/jqHxW0lksB7Y=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   checkFlags = [
     # requires embedded toolchains

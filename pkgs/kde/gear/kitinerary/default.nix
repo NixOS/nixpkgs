@@ -10,7 +10,7 @@
 mkKdeDerivation {
   pname = "kitinerary";
 
-  extraNativeBuildInputs = [shared-mime-info];
+  extraNativeBuildInputs = [ shared-mime-info ];
   extraBuildInputs = [
     qtsvg
     qtdeclarative

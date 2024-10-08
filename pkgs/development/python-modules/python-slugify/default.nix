@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ text-unidecode ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     unidecode = [ unidecode ];
   };
 

@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   };
 
   # use pregenerated nib files because generating them requires Xcode
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i "/ibtool/d" configure
     mkdir -p build/Owl.app/Contents/Resources/English.lproj
     cp ${./mac/MainMenu.nib} build/Owl.app/Contents/Resources/English.lproj/MainMenu.nib
@@ -37,10 +37,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     makeWrapper
     wayland-scanner
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.DarwinTools
     darwin.bootstrap_cmds
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gnustep.make
     gnustep.wrapGNUstepAppsHook
   ];
@@ -48,9 +48,9 @@ stdenv.mkDerivation {
   buildInputs = [
     libxkbcommon
     wayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     gnustep.back
     gnustep.base
     gnustep.gui
@@ -64,14 +64,14 @@ stdenv.mkDerivation {
   configureScript = "../configure";
 
   # error: "Your gnustep-base was configured for the objc-nonfragile-abi but you are not using it now."
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-fobjc-runtime=gnustep-2.0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-fobjc-runtime=gnustep-2.0";
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{Applications,bin}
     mv Owl.app $out/Applications
-    makeWrapper $out/{Applications/Owl.app${lib.optionalString stdenv.isDarwin "/Contents/MacOS"},bin}/Owl
+    makeWrapper $out/{Applications/Owl.app${lib.optionalString stdenv.hostPlatform.isDarwin "/Contents/MacOS"},bin}/Owl
 
     runHook postInstall
   '';

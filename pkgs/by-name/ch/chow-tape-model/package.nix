@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     # error: 'vvtanh' was not declared in this scope; did you mean 'tanh'?
     # error: no matching function for call to 'juce::dsp::SIMDRegister<double>::SIMDRegister(xsimd::simd_batch_traits<xsimd::batch<double, 2> >::batch_bool_type)'
-    broken = stdenv.isAarch64; # since 2021-12-27 on hydra (update to 2.10): https://hydra.nixos.org/build/162558991
+    broken = stdenv.hostPlatform.isAarch64; # since 2021-12-27 on hydra (update to 2.10): https://hydra.nixos.org/build/162558991
     mainProgram = "CHOWTapeModel";
   };
 })

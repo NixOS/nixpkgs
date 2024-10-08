@@ -26,14 +26,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pbr ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     streams = [ testtools ];
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.streams;
+  ] ++ optional-dependencies.streams;
 
   meta = {
     description = "Reusable state for writing clean tests and more";

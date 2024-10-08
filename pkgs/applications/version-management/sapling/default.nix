@@ -40,7 +40,7 @@ let
   #
   # See https://github.com/NixOS/nixpkgs/pull/198311#issuecomment-1326894295
   myCargoSetupHook = rustPlatform.cargoSetupHook.overrideAttrs (old: {
-    cargoConfig = lib.optionalString (!stdenv.isDarwin) old.cargoConfig;
+    cargoConfig = lib.optionalString (!stdenv.hostPlatform.isDarwin) old.cargoConfig;
   });
 
   src = fetchFromGitHub {
@@ -141,7 +141,7 @@ python311Packages.buildPythonApplication {
     install ${isl}/isl-dist.tar.xz $out/lib/isl-dist.tar.xz
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/sl \
       --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
   '';
@@ -156,7 +156,7 @@ python311Packages.buildPythonApplication {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     libiconv
     Cocoa

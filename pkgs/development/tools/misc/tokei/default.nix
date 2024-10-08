@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-U7Bode8qwDsNf4FVppfEHA9uiOFz74CtKgXG6xyYlT8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv Security
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [ zlib ];
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zlib ];
 
   # enable all output formats
   buildFeatures = [ "all" ];

@@ -37,7 +37,7 @@ buildPythonPackage rec {
       "test_basic"
       "test_custom_metadata"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable darwin tests which require executables: `iconutil` and `screencapture`
       "test_grab"
       "test_grabclipboard"

@@ -3,7 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+
+  # build-system
   flit-core,
+
+  # dependencies
   click,
   jinja2,
   jsonschema,
@@ -22,17 +26,19 @@
   sphinx-togglebutton,
   sphinxcontrib-bibtex,
   sphinx-multitoc-numbering,
-  pytestCheckHook,
-  texsoup,
+
+  # tests
   jupytext,
   pytest-regressions,
   pytest-xdist,
+  pytestCheckHook,
   sphinx-inline-tabs,
+  texsoup,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-book";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -41,7 +47,7 @@ buildPythonPackage rec {
     owner = "jupyter-book";
     repo = "jupyter-book";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NlCMfkfvquonqf7FdaJ7AC9ebM7VSifn+zM7gWh32LQ=";
+    hash = "sha256-MBSf2/+4+efWHJ530jdezeh5OLTtUZlAEOl5SqoWOuE=";
   };
 
   build-system = [ flit-core ];
@@ -108,12 +114,14 @@ buildPythonPackage rec {
     "tests/test_pdf.py"
   ];
 
-  meta = with lib; {
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     description = "Build a book with Jupyter Notebooks and Sphinx";
     homepage = "https://jupyterbook.org/";
     changelog = "https://github.com/jupyter-book/jupyter-book/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.jupyter.members;
     mainProgram = "jupyter-book";
   };
 }

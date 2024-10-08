@@ -38,10 +38,10 @@
   wxGTK,
   zlib,
   # Boolean guard flags
-  alsaSupport ? stdenv.isLinux,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   openalSupport ? true,
   portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:
@@ -102,12 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals openalSupport [
-    (if stdenv.isDarwin then OpenAL else openal)
+    (if stdenv.hostPlatform.isDarwin then OpenAL else openal)
   ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
   ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Carbon
     Cocoa

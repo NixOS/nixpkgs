@@ -109,6 +109,6 @@ meta = with lib; {
 };
 
 in
-if stdenvNoCC.isDarwin
+if stdenvNoCC.hostPlatform.isDarwin
 then darwin
 else linux

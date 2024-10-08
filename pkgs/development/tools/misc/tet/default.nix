@@ -9,8 +9,6 @@ stdenv.mkDerivation ({
     sha256 = "1j57hv56df38w249l595b8rsgmsyvjkbysai03a9724gax5jl9av" ;
   };
 
-  buildInputs = [ ];
-
   patchPhase = "chmod +x configure";
 
   configurePhase = "./configure -t lite";

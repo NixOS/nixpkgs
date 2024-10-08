@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   dependencies = [ msgpack ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compression = [
       lz4
       zstandard
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest7CheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "flow.record" ];
 

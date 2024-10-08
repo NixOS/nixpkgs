@@ -7,7 +7,7 @@ index 451fc48..ed45f4d 100644
  
    snprintf(file_path, sizeof(file_path), "%s%s%s%s", gimx_params.homedir, GIMX_DIR, CONFIG_DIR, file);
 -
-+  if(getenv("GIMXCONF")) { snprintf(file_path, sizeof(file_path), "%s", file); }
++  snprintf(file_path, sizeof(file_path), "%s", file);
    if(read_file(file_path) == -1)
    {
      gerror("read_file failed\n");
@@ -20,7 +20,7 @@ index 700cae9..9143d8b 100755
  
    snprintf(file_path, sizeof(file_path), "%s%s%s%s", gimx_params.homedir, GIMX_DIR, CONFIG_DIR, gimx_params.config_file);
 -
-+  if(getenv("GIMXCONF")) { snprintf(file_path, sizeof(file_path), "%s", gimx_params.config_file); }
++  snprintf(file_path, sizeof(file_path), "%s", gimx_params.config_file);
    FILE * fp = gfile_fopen(file_path, "r");
    if (fp == NULL)
    {

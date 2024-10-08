@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!withNgshared) [
     libXaw
     libXext
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
   ];
 

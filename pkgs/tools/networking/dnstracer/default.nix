@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.isDarwin [ libresolv ];
+  buildInputs = [] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libresolv ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lresolv";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lresolv";
 
   meta = with lib; {
     description = "Determines where a given Domain Name Server (DNS) gets its information from, and follows the chain of DNS servers back to the servers which know the data";

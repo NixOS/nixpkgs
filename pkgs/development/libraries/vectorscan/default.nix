@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     pkg-config
     ragel
     python3
-  ] ++ lib.optional stdenv.isLinux util-linux;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
     boost184
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     (if lib.elem stdenv.hostPlatform.system [ "x86_64-linux" "i686-linux" ] then
       [ "-DBUILD_AVX2=ON" "-DBUILD_AVX512=ON" "-DBUILD_AVX512VBMI=ON" "-DFAT_RUNTIME=ON" ]
     else
-      (if (stdenv.isLinux && stdenv.isAarch64) then
+      (if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
         [ "-DBUILD_SVE=ON" "-DBUILD_SVE2=ON" "-DBUILD_SVE2_BITPERM=ON" "-DFAT_RUNTIME=ON" ]
       else
         [ "-DFAT_RUNTIME=OFF" ]

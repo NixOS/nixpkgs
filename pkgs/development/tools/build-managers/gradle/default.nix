@@ -61,7 +61,7 @@ rec {
       nativeBuildInputs = [
         makeWrapper
         unzip
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         autoPatchelfHook
       ];
 
@@ -98,9 +98,9 @@ rec {
             --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain${toolchain.property}"
         '';
 
-      dontFixup = !stdenv.isLinux;
+      dontFixup = !stdenv.hostPlatform.isLinux;
 
-      fixupPhase = let arch = if stdenv.is64bit then "amd64" else "i386";
+      fixupPhase = let arch = if stdenv.hostPlatform.is64bit then "amd64" else "i386";
       in ''
         . ${./patching.sh}
 

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     slang
     zip
   ] ++ lib.optionals x11Support [ libX11 ]
-    ++ lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       --replace /bin/rm ${coreutils}/bin/rm
   '';
 
-  postFixup = lib.optionalString ((!stdenv.isDarwin) && x11Support) ''
+  postFixup = lib.optionalString ((!stdenv.hostPlatform.isDarwin) && x11Support) ''
     # libX11.so is loaded dynamically so autopatch doesn't detect it
     patchelf \
       --add-needed ${libX11}/lib/libX11.so \

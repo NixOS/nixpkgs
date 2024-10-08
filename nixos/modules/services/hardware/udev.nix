@@ -434,7 +434,7 @@ in
     '';
 
     systemd.services.systemd-udevd =
-      { restartTriggers = cfg.packages;
+      { restartTriggers = [ config.environment.etc."udev/rules.d".source ];
       };
 
   };

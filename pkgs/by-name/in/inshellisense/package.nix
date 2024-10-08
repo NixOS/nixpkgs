@@ -20,8 +20,8 @@ buildNpmPackage rec {
   # npm ERR!   int ret = openpty(&master, &slave, nullptr, NULL, static_cast<winsi ze*>(&winp));
   #
   # when `node-gyp` tries to build the dep. The below allows `npm` to download the prebuilt binary.
-  makeCacheWritable = stdenv.isDarwin;
-  nativeBuildInputs = lib.optional stdenv.isDarwin cacert;
+  makeCacheWritable = stdenv.hostPlatform.isDarwin;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin cacert;
 
   meta = with lib; {
     description = "IDE style command line auto complete";

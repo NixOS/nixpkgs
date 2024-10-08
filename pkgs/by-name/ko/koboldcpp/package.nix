@@ -16,7 +16,7 @@
   config,
   cudaPackages ? { },
 
-  openblasSupport ? !stdenv.isDarwin,
+  openblasSupport ? !stdenv.hostPlatform.isDarwin,
   openblas,
 
   cublasSupport ? config.cudaSupport,
@@ -24,14 +24,14 @@
   # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
   cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
-  clblastSupport ? stdenv.isLinux,
+  clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
   ocl-icd,
 
   vulkanSupport ? true,
   vulkan-loader,
 
-  metalSupport ? stdenv.isDarwin && stdenv.isAarch64,
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
   march ? "",
   mtune ? "",
 }:
@@ -44,7 +44,7 @@ let
   '';
 
   darwinFrameworks =
-    if (stdenv.isDarwin && stdenv.isx86_64) then
+    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
       darwin.apple_sdk.frameworks
     else
       darwin.apple_sdk_11_0.frameworks;
@@ -53,13 +53,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.74";
+  version = "1.75.2";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-tGG1+EGlCUmFpx/axijonOXydurwFxqjuoeDwHxC+pc=";
+    hash = "sha256-olMlYzde97RSx0OmDULSOFlM3imUq3AVxQdXyYBPd3Q=";
   };
 
   enableParallelBuilding = true;
@@ -74,7 +74,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals effectiveStdenv.isDarwin [
+    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
       darwinFrameworks.Accelerate
       darwinFrameworks.CoreVideo
       darwinFrameworks.CoreGraphics
@@ -100,7 +100,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   pythonPath = finalAttrs.pythonInputs;
 
-  darwinLdFlags = lib.optionals stdenv.isDarwin [
+  darwinLdFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
     "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
     "-framework CoreServices"

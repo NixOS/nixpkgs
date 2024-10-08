@@ -1,6 +1,7 @@
 { lib, stdenv, fetchurl, pkg-config, gnutls, liburcu, lmdb, libcap_ng, libidn2, libunistring
 , systemd, nettle, libedit, zlib, libiconv, libintl, libmaxminddb, libbpf, nghttp2, libmnl
 , ngtcp2-gnutls, xdp-tools
+, fstrm, protobufc
 , sphinx
 , autoreconfHook
 , nixosTests, knot-resolver, knot-dns, runCommandLocal
@@ -21,6 +22,7 @@ stdenv.mkDerivation rec {
     "--with-configdir=/etc/knot"
     "--with-rundir=/run/knot"
     "--with-storage=/var/lib/knot"
+    "--with-module-dnstap" "--enable-dnstap"
   ];
 
   patches = [
@@ -40,11 +42,11 @@ stdenv.mkDerivation rec {
     ngtcp2-gnutls  # DoQ support in kdig (and elsewhere but not much use there yet)
     libmaxminddb # optional for geoip module (it's tiny)
     # without sphinx &al. for developer documentation
-    # TODO: add dnstap support?
-  ] ++ lib.optionals stdenv.isLinux [
+    fstrm protobufc # dnstap support
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap_ng systemd
     xdp-tools libbpf libmnl # XDP support (it's Linux kernel API)
-  ] ++ lib.optional stdenv.isDarwin zlib; # perhaps due to gnutls
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin zlib; # perhaps due to gnutls
 
   enableParallelBuilding = true;
 
@@ -60,7 +62,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit knot-resolver;
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) knot kea;
     prometheus-exporter = nixosTests.prometheus-exporters.knot;
     # Some dependencies are very version-sensitive, so the might get dropped

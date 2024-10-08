@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -23,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.9.1";
+  version = "5.10.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-c6AWGKX5ML3Zs02hwIYt8dvZVMvWEmUAkOlU0SvpUaA=";
+    hash = "sha256-9d72JWEz2L8yyZQKkdwQMgwQM3nz4yVHnmVCERaa5C8=";
   };
 
   build-system = [ poetry-core ];

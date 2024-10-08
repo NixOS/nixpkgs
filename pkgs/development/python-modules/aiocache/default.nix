@@ -7,32 +7,28 @@
   marshmallow,
   msgpack,
   pkgs,
-  pythonOlder,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
+  pythonOlder,
   redis,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiocache";
-  version = "0.12.2";
+  version = "0.12.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiocache";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yvXDNJL8uxReaU81klVWudJwh1hmvg5GeeILcNpm/YA=";
+    hash = "sha256-4QYCRXMWlt9fsiWgUTc2pKzXG7AG/zGmd4HT5ggIZNM=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=aiocache --cov=tests/ --cov-report term" ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -46,6 +42,7 @@ buildPythonPackage rec {
     aiohttp
     marshmallow
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);

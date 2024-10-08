@@ -31,6 +31,7 @@ in
 
   testScript = ''
     import json
+    import xml.etree.ElementTree as xml
 
     machine.start()
 
@@ -45,5 +46,18 @@ in
 
     # Check that the name was overridden via the environmentFile option.
     assert webui_config["name"] == "${webuiName} (Open WebUI)"
+
+    webui_opensearch_xml = machine.succeed("curl http://127.0.0.1:${mainPort}/opensearch.xml")
+    webui_opensearch = xml.fromstring(webui_opensearch_xml)
+
+    webui_opensearch_url = webui_opensearch.find(
+        ".//{http://a9.com/-/spec/opensearch/1.1/}Url"
+    )
+    assert (
+        webui_opensearch_url is not None
+    ), f"no url tag found in {webui_opensearch_xml}"
+    assert (
+        webui_opensearch_url.get("template") == "http://localhost:8080/?q={searchTerms}"
+    ), "opensearch url doesn't match the configured port"
   '';
 }

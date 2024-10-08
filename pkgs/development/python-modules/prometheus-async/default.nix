@@ -36,7 +36,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
     ];

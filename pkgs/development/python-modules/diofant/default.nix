@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mpmath ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     exports = [
       cython
       numpy

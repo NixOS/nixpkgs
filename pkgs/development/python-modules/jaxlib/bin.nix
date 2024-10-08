@@ -186,7 +186,7 @@ buildPythonPackage {
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
   nativeBuildInputs =
-    lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc.lib ];
@@ -238,12 +238,12 @@ buildPythonPackage {
     broken =
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
       || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "8.2")
-      || !(cudaSupport -> stdenv.isLinux)
+      || !(cudaSupport -> stdenv.hostPlatform.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
       # Fails at pythonImportsCheckPhase:
       # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
       # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
       # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
-      || (stdenv.isDarwin && stdenv.isx86_64);
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 }

@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.0";
+  version = "3.7.2";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kstars/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yvN1k0LqUi5Odb34Nk8UP5qoIbFUcvUiyESpoMKmuqg=";
+    url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
+    hash = "sha256-fEu3BGBW5cgrY38zBB3iL0/SRrobEtJVsGNWRNtT40s=";
   };
 
   nativeBuildInputs = [

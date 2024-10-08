@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "syndicate-lang";
     repo = "syndicate-rs";
     rev = "${pname}-v${version}";
-    sha256 = "sha256-bTteZIlBSoQ1o5shgd9NeKVvEhZTyG3i2zbeVojWiO8=";
+    hash = "sha256-bTteZIlBSoQ1o5shgd9NeKVvEhZTyG3i2zbeVojWiO8=";
   };
   cargoHash = "sha256-SIpdFXTk6MC/drjCLaaa49BbGsvCMNbPGCfTxAlCo9c=";
   nativeBuildInputs = [

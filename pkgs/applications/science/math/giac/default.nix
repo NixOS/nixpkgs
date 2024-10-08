@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     # when fltk is disabled. disable these tests for now.
     echo > check/chk_fhan2
     echo > check/chk_fhan9
-  '' + lib.optionalString (stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     # these cover a known regression in giac, likely due to how pari state
     # is shared between multiple giac instances (see pari.cc.old).
     # see https://github.com/NixOS/nixpkgs/pull/264126 for more information
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     "--enable-ao" "--enable-ecm" "--enable-glpk"
   ] ++ lib.optionals enableGUI [
     "--enable-gui" "--with-x"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "--disable-nls"
   ] ++ lib.optionals (!enableGUI) [
     "--disable-fltk"

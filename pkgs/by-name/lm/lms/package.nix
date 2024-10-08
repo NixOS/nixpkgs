@@ -17,16 +17,18 @@
   libSM,
   libICE,
   stb,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.56.0";
+  version = "3.58.0";
+
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-o/wgh/PtFcTOmfl5H1cc1cTsWFvEnVQYhh4hPTnLNMU=";
+    hash = "sha256-sWlD/n9Qjwiu/UfZrxRxwv2rc4XwRZN35fyjIriGZPY=";
   };
 
   strictDeps = true;
@@ -48,6 +50,7 @@ stdenv.mkDerivation rec {
     libSM
     libICE
     stb
+    openssl
   ];
 
   postPatch = ''
@@ -56,8 +59,6 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tools/db-generator/LmsDbGenerator.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
     substituteInPlace src/tools/cover/LmsCover.cpp --replace-fail "/etc/lms.conf" "$out/share/lms/lms.conf"
   '';
-
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   postInstall = ''
     substituteInPlace $out/share/lms/lms.conf --replace-fail "/usr/bin/ffmpeg" "${ffmpeg}/bin/ffmpeg"
@@ -77,12 +78,13 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.strings.makeLibraryPath [libSM libICE]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/epoupon/lms";
+    changelog = "https://github.com/epoupon/lms/releases/tag/${src.rev}";
     description = "Lightweight Music Server - Access your self-hosted music using a web interface";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
     mainProgram = "lms";
-    maintainers = with maintainers; [ mksafavi ];
+    maintainers = with lib.maintainers; [ mksafavi ];
   };
 }

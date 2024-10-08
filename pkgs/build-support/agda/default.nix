@@ -109,7 +109,7 @@ let
         # darwin, it seems that there is no standard such locale; luckily,
         # the referenced issue doesn't seem to surface on darwin. Hence let's
         # set this only on non-darwin.
-        LC_ALL = optionalString (!stdenv.isDarwin) "C.UTF-8";
+        LC_ALL = optionalString (!stdenv.hostPlatform.isDarwin) "C.UTF-8";
 
         meta = if meta.broken or false then meta // { hydraPlatforms = platforms.none; } else meta;
 

@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ] ++
     # for flock
-    lib.optional stdenv.isLinux util-linux;
+    lib.optional stdenv.hostPlatform.isLinux util-linux;
 
   buildInputs = [
     libuv
@@ -70,6 +70,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

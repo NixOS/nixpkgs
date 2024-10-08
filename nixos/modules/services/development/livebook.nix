@@ -46,7 +46,7 @@ in
       type = with lib.types; nullOr lib.types.path;
       default = null;
       description = ''
-        Additional dnvironment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`LIVEBOOK_PASSWORD` (which is used to specify the
         password needed to access the livebook site) or {env}`LIVEBOOK_COOKIE`

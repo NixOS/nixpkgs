@@ -9,6 +9,7 @@
 , vala
 , libadwaita
 , libgee
+, gettext
 , granite7
 , gtk4
 , networkmanager
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
     pkg-config
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     libnma-gtk4
     switchboard
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = nix-update-script { };

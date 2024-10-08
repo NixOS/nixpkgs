@@ -46,7 +46,7 @@ buildPythonPackage rec {
     h11
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ anyio ];
     http2 = [ h2 ];
     socks = [ socksio ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "httpcore" ];
 

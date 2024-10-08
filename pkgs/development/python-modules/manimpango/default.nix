@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ pango ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = [ pango ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   propagatedBuildInputs = [ cython ];
 

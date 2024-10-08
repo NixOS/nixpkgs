@@ -16,25 +16,25 @@
 
 buildNpmPackage rec {
   pname = "vscode-js-debug";
-  version = "1.93.0";
+  version = "1.94.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-js-debug";
     rev = "v${version}";
-    hash = "sha256-8+ZoTddzgwLwPUduT+G5zVgt/ZxLWKojz1PKvOxLX6o=";
+    hash = "sha256-Mh4g0YBgZ3u0zLwfzbcc1/24dsgq/7l9fu/KdurhLks=";
   };
 
-  npmDepsHash = "sha256-4GTZevbQg1LhxVw6WQYGvWHVuaWTwpCf50gMZWAHE7c=";
+  npmDepsHash = "sha256-s+kulnn4yE2rNPtm2MYJ36kFZStYgjePc7zdX7FwrNk=";
 
   nativeBuildInputs = [
     pkg-config
     node-gyp
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs =
-    lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin [
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Security
       AppKit
     ];

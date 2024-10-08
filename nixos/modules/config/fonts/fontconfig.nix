@@ -52,7 +52,7 @@ let
         ${lib.optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>
-        ${lib.optionalString (pkgs.stdenv.isx86_64 && cfg.cache32Bit) ''
+        ${lib.optionalString (pkgs.stdenv.hostPlatform.isx86_64 && cfg.cache32Bit) ''
           <cachedir>${cache32}</cachedir>
         ''}
         ''}

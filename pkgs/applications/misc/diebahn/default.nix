@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     pango
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Foundation
     Security
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
 
   # Darwin needs to link against gettext from nixpkgs instead of the one vendored by gettext-sys
   # because the vendored copy does not build with newer versions of clang.
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
     GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";

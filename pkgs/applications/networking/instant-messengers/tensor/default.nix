@@ -37,7 +37,7 @@ mkDerivation rec {
     mimeTypes = [ "application/x-chat" ];
   };
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     runHook preInstall
 
     mkdir -p $out/Applications

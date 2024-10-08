@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mg";
-  version = "7.3";
+  version = "7.3-unstable-2024-06-04";
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
-    rev = "mg-${version}";
-    sha256 = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
+    rev = "4d4abcfc793554dbd4effdba8a3cc28ce2654c33";
+    hash = "sha256-+sp8Edu5UWv73TCNVZTeH5rl2Q5XarYrlTYHuQsroVs=";
   };
 
   postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

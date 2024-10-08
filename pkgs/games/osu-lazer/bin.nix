@@ -43,7 +43,7 @@ let
 
   passthru.updateScript = ./update-bin.sh;
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then stdenv.mkDerivation {
   inherit pname version src meta passthru;
 

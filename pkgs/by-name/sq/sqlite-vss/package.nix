@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ nlohmann_json faiss sqlite ]
-    ++ lib.optional stdenv.isLinux gomp
-    ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+    ++ lib.optional stdenv.hostPlatform.isLinux gomp
+    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   SQLITE_VSS_CMAKE_VERSION = finalAttrs.version;
 

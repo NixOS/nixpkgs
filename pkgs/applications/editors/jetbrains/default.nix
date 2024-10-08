@@ -39,7 +39,7 @@ let
 
   products = versions.${system} or (throw "Unsupported system: ${system}");
 
-  package = if stdenv.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
+  package = if stdenv.hostPlatform.isDarwin then ./bin/darwin.nix else ./bin/linux.nix;
   mkJetBrainsProductCore = callPackage package { inherit vmopts; };
   mkMeta = meta: fromSource: {
     inherit (meta) homepage longDescription;
@@ -47,7 +47,7 @@ let
     maintainers = map (x: lib.maintainers."${x}") meta.maintainers;
     license = if meta.isOpenSource then lib.licenses.asl20 else lib.licenses.unfree;
     sourceProvenance = if fromSource then [ lib.sourceTypes.fromSource ] else
-      (if stdenv.isDarwin then [ lib.sourceTypes.binaryNativeCode ] else [ lib.sourceTypes.binaryBytecode ]);
+      (if stdenv.hostPlatform.isDarwin then [ lib.sourceTypes.binaryNativeCode ] else [ lib.sourceTypes.binaryBytecode ]);
   };
 
   mkJetBrainsProduct =
@@ -85,7 +85,7 @@ let
     });
 
   buildPycharm = args:
-    (mkJetBrainsProduct args).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs stdenv.isLinux {
+    (mkJetBrainsProduct args).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs stdenv.hostPlatform.isLinux {
       buildInputs = with python3.pkgs; (previousAttrs.buildInputs or []) ++ [ python3 setuptools ];
       preInstall = ''
         echo "compiling cython debug speedups"
@@ -106,7 +106,7 @@ rec {
 
   clion = (mkJetBrainsProduct {
     pname = "clion";
-    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+    extraBuildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
       fontconfig
       python3
       stdenv.cc.cc
@@ -114,13 +114,13 @@ rec {
       libxcrypt-legacy
       lttng-ust_2_12
       musl
-    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       expat
       libxml2
       xz
     ];
   }).overrideAttrs (attrs: {
-    postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+    postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/clion
 
@@ -131,7 +131,7 @@ rec {
       )
     '';
 
-    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/clion
 
@@ -175,7 +175,7 @@ rec {
     extraBuildInputs = [ libgcc stdenv.cc.cc ];
   }).overrideAttrs
     (attrs: {
-      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
+      postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.hostPlatform.isLinux ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
         chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
@@ -186,7 +186,7 @@ rec {
 
   idea-community-src = buildIdea { pname = "idea-community"; extraBuildInputs = [ stdenv.cc.cc ]; fromSource = true; };
 
-  idea-community = if stdenv.isDarwin || stdenv.isAarch64 then idea-community-bin else idea-community-src;
+  idea-community = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64 then idea-community-bin else idea-community-src;
 
   idea-ultimate = buildIdea { pname = "idea-ultimate"; extraBuildInputs = [ stdenv.cc.cc lldb musl ]; };
 
@@ -198,7 +198,7 @@ rec {
 
   pycharm-community-src = buildPycharm { pname = "pycharm-community"; fromSource = true; };
 
-  pycharm-community = if stdenv.isDarwin then pycharm-community-bin else pycharm-community-src;
+  pycharm-community = if stdenv.hostPlatform.isDarwin then pycharm-community-bin else pycharm-community-src;
 
   pycharm-professional = buildPycharm { pname = "pycharm-professional"; extraBuildInputs = [ musl ]; };
 
@@ -211,14 +211,14 @@ rec {
         libxcrypt
         lttng-ust_2_12
         musl
-      ]++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      ]++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
         expat
         libxml2
         xz
       ];
 
     }).overrideAttrs (attrs: {
-      postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.isLinux) ''
+      postInstall = (attrs.postInstall or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
         (
           cd $out/rider
 
@@ -240,20 +240,20 @@ rec {
 
   rust-rover = (mkJetBrainsProduct {
     pname = "rust-rover";
-    extraBuildInputs = lib.optionals (stdenv.isLinux) [
+    extraBuildInputs = lib.optionals (stdenv.hostPlatform.isLinux) [
       python3
       openssl
       libxcrypt-legacy
       fontconfig
       xorg.libX11
       libGL
-    ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       expat
       libxml2
       xz
     ];
   }).overrideAttrs (attrs: {
-    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
+    postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       (
         cd $out/rust-rover
 

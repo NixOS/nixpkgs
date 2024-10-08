@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
   buildInputs = [ ncurses ];
 
   meta = {

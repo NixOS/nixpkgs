@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  buildGoModule,
+  buildGo123Module,
   substituteAll,
   pandoc,
   nodejs,
@@ -11,6 +11,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 let
@@ -34,20 +35,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "siyuan";
-  version = "3.1.0";
+  version = "3.1.8";
 
   src = fetchFromGitHub {
     owner = "siyuan-note";
     repo = "siyuan";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-UIPASTSW7YGpxJJHfCq28M/U6CzyqaJiISZGtE0aDPw=";
+    hash = "sha256-0sV3r3ETW/FeLJZQrkE95oqKeUKKiNA3vpOBPtHzeE8=";
   };
 
-  kernel = buildGoModule {
+  kernel = buildGo123Module {
     name = "${finalAttrs.pname}-${finalAttrs.version}-kernel";
     inherit (finalAttrs) src;
     sourceRoot = "${finalAttrs.src.name}/kernel";
-    vendorHash = "sha256-s4dW43Qy3Lrc5WPpugQpN6BDEFVxqnorXpp40SGFk7I=";
+    vendorHash = "sha256-hxXCq03wxVLONaztZVqLjlqQ/fZNlV2iDF5JIayb5YY=";
 
     patches = [
       (substituteAll {
@@ -89,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       src
       sourceRoot
       ;
-    hash = "sha256-QSaBNs0m13Pfrvl8uUVqRpP3m8PoOBIY5VU5Cg/G2jY=";
+    hash = "sha256-g6O6YE1irE3Hy+Xu7MeH97Oc4bq32IDnfP1VLSiF/U4=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/app";
@@ -138,6 +139,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = [ desktopEntry ];
+
+  passthru = {
+    inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Privacy-first personal knowledge management system that supports complete offline usage, as well as end-to-end encrypted data sync";

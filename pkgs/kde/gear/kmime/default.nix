@@ -6,6 +6,6 @@
 mkKdeDerivation {
   pname = "kmime";
 
-  extraNativeBuildInputs = [qttools];
-  extraBuildInputs = [ki18n];
+  extraNativeBuildInputs = [ qttools ];
+  extraBuildInputs = [ ki18n ];
 }

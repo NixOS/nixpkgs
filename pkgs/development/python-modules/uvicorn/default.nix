@@ -42,7 +42,7 @@ buildPythonPackage rec {
     h11
   ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies.standard = [
+  optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml

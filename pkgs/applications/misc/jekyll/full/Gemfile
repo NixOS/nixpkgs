@@ -10,6 +10,7 @@ gem "jemoji"
 
 # Optional dependencies:
 gem "jekyll-coffeescript"
+gem "jekyll-compose"
 #gem "jekyll-docs"
 gem "jekyll-favicon"
 gem "jekyll-feed", "~> 0.9"

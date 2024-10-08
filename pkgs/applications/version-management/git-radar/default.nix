@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp git-radar fetch.sh prompt.bash prompt.zsh radar-base.sh $out
     ln -s $out/git-radar $out/bin
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       wrapProgram $out/git-radar --prefix PATH : ${lib.makeBinPath [ coreutils-prefixed ]}
     ''}
   '';

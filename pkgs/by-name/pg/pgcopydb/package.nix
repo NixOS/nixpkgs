@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     sqlite
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pam
   ];
 

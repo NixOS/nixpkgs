@@ -58,7 +58,7 @@ let
   # TODO support also other build architectures. The ideal way would be to use
   # stdenv_32bit but that doesn't work due to host platform mismatch:
   # https://github.com/NixOS/nixpkgs/issues/212494
-  buildStdenv = if buildPackages.stdenv.isx86_64 && stdenv.is32bit
+  buildStdenv = if buildPackages.stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.is32bit
     then buildPackages.pkgsi686Linux.buildPackages.stdenv
     else buildPackages.stdenv;
 

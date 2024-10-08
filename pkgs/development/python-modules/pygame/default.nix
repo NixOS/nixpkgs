@@ -99,7 +99,7 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   preConfigure = ''
     ${python.pythonOnBuildForHost.interpreter} buildconfig/config.py

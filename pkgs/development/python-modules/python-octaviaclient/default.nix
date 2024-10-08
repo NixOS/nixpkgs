@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "python-octaviaclient";
-  version = "3.7.0";
+  version = "3.8.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wAGxByeRBOwdWZg2DwVpt1yGi5er3KQ/qhyRVAwaKe4=";
+    hash = "sha256-wrYhCY3gqcklSK8lapsgFq25Yi3awEGgarW2a7W1kO4=";
   };
 
   build-system = [

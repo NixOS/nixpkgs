@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "kas";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "siemens";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ws2V16HSGn2zyMmcG601ScHfONSE/DBVO3Gaj8dktf4=";
+    hash = "sha256-J64yy2G8+5uT31Vpwhge5R7ZqId+NzE5ykXBHjc0qgQ=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [ setuptools kconfiglib jsonschema distro pyyaml gitpython ];

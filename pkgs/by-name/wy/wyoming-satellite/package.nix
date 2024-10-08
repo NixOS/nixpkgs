@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     silerovad = with python3Packages; [
       pysilero-vad
     ];

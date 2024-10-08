@@ -1,5 +1,4 @@
 { lib
-, cmake
 , dbus
 , fetchFromGitHub
 , fetchYarnDeps
@@ -13,12 +12,14 @@
 , cyrus_sasl
 , stdenv
 , fixup_yarn_lock
-, yarn
+, yarnConfigHook
 , nodejs-slim
 , cargo-tauri
 , cargo
 , rustPlatform
 , rustc
+, jq
+, moreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -31,6 +32,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-Bi9GCQr7yox5Plc7o0svRKYi1XoK/HDGj1VbW1z4jac=";
   };
+
+  # Yarn *really* wants us to use corepack if this is set
+  postPatch = ''
+    jq 'del(.packageManager)' package.json | sponge package.json
+  '';
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
@@ -47,37 +53,22 @@ stdenv.mkDerivation rec {
     };
   };
 
-  configurePhase = ''
-    export HOME=$(mktemp -d)
-    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
-    fixup_yarn_lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-    yarn run postinstall --offline
-  '';
-
-  preBuild = ''
-    yarn tauri build -b deb
-  '';
-
   cargoRoot = "backend/";
-
-  preInstall = ''
-    mv backend/target/release/bundle/deb/*/data/usr/ "$out"
-  '';
+  buildAndTestDir = cargoRoot;
 
   nativeBuildInputs = [
-    cmake
     pkg-config
     perl
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri.hook
     fixup_yarn_lock
-    yarn
+    yarnConfigHook
     nodejs-slim
     cyrus_sasl
+    jq
+    moreutils # for sponge
   ];
 
   buildInputs = [

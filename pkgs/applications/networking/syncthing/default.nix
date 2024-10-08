@@ -24,7 +24,7 @@ let
 
       vendorHash = "sha256-R5GlsCkfoMc5km+NaV+TNUlM3Ot1ARcXfEFimcZOLI4=";
 
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
         # run from Launch Agents/Daemons, even on x86 devices where it has a
         # more lax code signing policy compared to Apple Silicon. So just sign
@@ -87,7 +87,7 @@ in
         install -Dm644 "$mf" "$mandir/$(basename "$mf")"
       done
 
-    '' + lib.optionalString (stdenv.isLinux) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/{system,user}
 
       substitute etc/linux-systemd/system/syncthing@.service \
@@ -109,7 +109,7 @@ in
     stname = "syncthing-relay";
     target = "strelaysrv";
 
-    postInstall = lib.optionalString (stdenv.isLinux) ''
+    postInstall = lib.optionalString (stdenv.hostPlatform.isLinux) ''
       mkdir -p $out/lib/systemd/system
 
       substitute cmd/strelaysrv/etc/linux-systemd/strelaysrv.service \

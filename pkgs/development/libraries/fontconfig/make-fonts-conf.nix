@@ -9,13 +9,13 @@ let fontconfig_ = fontconfig; in
     # nix user profile
     "~/.nix-profile/lib/X11/fonts" "~/.nix-profile/share/fonts"
   ]
-  ++ lib.optional stdenv.isDarwin "~/Library/Fonts"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "~/Library/Fonts"
   ++ [
     # FHS paths for non-NixOS platforms
     "/usr/share/fonts" "/usr/local/share/fonts"
   ]
   # darwin paths
-  ++ lib.optionals stdenv.isDarwin [ "/Library/Fonts" "/System/Library/Fonts" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "/Library/Fonts" "/System/Library/Fonts" ]
   # nix default profile
   ++ [ "/nix/var/nix/profiles/default/lib/X11/fonts" "/nix/var/nix/profiles/default/share/fonts" ]
 

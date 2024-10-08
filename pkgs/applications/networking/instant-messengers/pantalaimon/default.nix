@@ -71,7 +71,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   # darwin has difficulty communicating with server, fails some integration tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postInstall = ''
     installManPage docs/man/*.[1-9]

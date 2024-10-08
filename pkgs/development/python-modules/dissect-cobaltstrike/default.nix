@@ -42,7 +42,7 @@ buildPythonPackage rec {
     lark
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c2 = [
       flow-record
       httpx
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-httpserver
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dissect.cobaltstrike" ];
 
@@ -78,5 +78,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/fox-it/dissect.cobaltstrike/releases/tag/${version}";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ fab ];
+    # Compatibility with dissect.struct 4.x
+    # https://github.com/fox-it/dissect.cobaltstrike/issues/53
+    broken = versionAtLeast dissect-cstruct.version "4";
   };
 }

@@ -46,7 +46,7 @@ buildPythonPackage rec {
       "test_unix_echo" # socket bind error on hydra when built with other packages
       "test_unix_ssl_server" # socket bind error on hydra when built with other packages
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # connects to python.org:1, expects an OsError, hangs in the darwin sandbox
       "test_create_bad_connection"
     ];

@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-text-editor";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-text-editor/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "Text Editor for GNOME";
     mainProgram = "gnome-text-editor";
     maintainers = teams.gnome.members;

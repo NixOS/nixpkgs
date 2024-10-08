@@ -42,7 +42,7 @@ buildPythonPackage rec {
     python-socks
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ async-timeout ];
     trio = [ trio ];
   };

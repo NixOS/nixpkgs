@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Unofficial CLI for speed.cloudflare.com";
     homepage = "https://github.com/code-inflation/cfspeedtest";
     license = with licenses; [ mit ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ colemickens ];
     mainProgram = "cfspeedtest";
   };

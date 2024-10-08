@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.isDarwin [ appnope ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 

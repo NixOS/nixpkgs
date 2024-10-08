@@ -39,7 +39,8 @@ buildPythonPackage rec {
 
   preBuild =
     let
-      ldLibraryPathEnvName = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      ldLibraryPathEnvName =
+        if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       # required for the custom _find_library function in setup.py

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
       --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
       --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
@@ -69,14 +69,14 @@ stdenv.mkDerivation rec {
     qttools # Used for translations even when not building the GUI
     openssl
     pcre
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ApplicationServices
     Carbon
     Cocoa
     CoreServices
     ScreenSaver
     UserNotifications
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux
     libselinux
     libsepol
@@ -95,17 +95,17 @@ stdenv.mkDerivation rec {
   ];
 
   # Silences many warnings
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-inconsistent-missing-override";
 
   cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+
-    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion}";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.hostPlatform.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion}";
 
   doCheck = true;
 
   checkPhase = ''
     runHook preCheck
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # filter out tests failing with sandboxing on darwin
     export GTEST_FILTER=-ServerConfigTests.serverconfig_will_deem_equal_configs_with_same_cell_names:NetworkAddress.hostname_valid_parsing
   '' + ''
@@ -120,12 +120,12 @@ stdenv.mkDerivation rec {
     cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
   '' + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
     substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
       --replace "/usr/bin" "$out/bin"
-  '' + lib.optionalString (stdenv.isDarwin && withGUI) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && withGUI) ''
     mkdir -p $out/Applications
     cp -r bundle/Synergy.app $out/Applications
     ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "plasma-umass";
     repo = "coz";
     rev = version;
-    sha256 = "0val36yw987b1558iiyk3nqg0yy5k9y5wh49v91zj3cs58mmfyhc";
+    hash = "sha256-DHpXKyqaDflD2olAXnyaxXvwsB3Tx4hKCeugxL0ZVG0=";
   };
 
   postPatch = ''

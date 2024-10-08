@@ -24,13 +24,13 @@ let self = stdenv.mkDerivation rec {
   # addition, `configfsf.guess' would return `i386-apple-darwin10.2.0' on
   # `x86_64-darwin', leading to a 32-bit ABI build, which is undesirable.
   preConfigure =
-    if !stdenv.isDarwin
+    if !stdenv.hostPlatform.isDarwin
     then "ln -sf configfsf.guess config.guess"
     else ''echo "Darwin host is `./config.guess`."'';
 
   configureFlags = [
     (lib.enableFeature cxx "cxx")
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "ac_cv_build=x86_64-apple-darwin13.4.0"
     "ac_cv_host=x86_64-apple-darwin13.4.0"
   ];
@@ -72,7 +72,7 @@ let self = stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     badPlatforms = [ "x86_64-darwin" ];
     # never built on aarch64-darwin, aarch64-linux since first introduction in nixpkgs
-    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 };
   in self

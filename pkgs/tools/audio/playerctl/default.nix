@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ];
 
   mesonFlags = [
-    "-Dbash-completions=true"
+    (lib.mesonBool "bash-completions" true)
+    (lib.mesonBool "zsh-completions" true)
     (lib.mesonBool "gtk-doc" withDocs)
   ];
 

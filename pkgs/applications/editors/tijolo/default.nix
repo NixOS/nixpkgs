@@ -38,7 +38,7 @@ crystal.buildCrystalPackage rec {
   '';
 
   nativeBuildInputs = [ wrapGAppsHook4 gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
   buildInputs = [ gtk4 libadwaita vte-gtk4 libgit2 gtksourceview5 editorconfig-core-c ];
 
   buildTargets = [ "all" ];

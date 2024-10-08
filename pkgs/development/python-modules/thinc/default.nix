@@ -19,7 +19,6 @@
   preshed,
   pydantic,
   pytestCheckHook,
-  python,
   pythonOlder,
   setuptools,
   srsly,
@@ -59,7 +58,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
     CoreFoundation
     CoreGraphics

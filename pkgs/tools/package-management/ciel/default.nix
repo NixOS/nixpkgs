@@ -2,7 +2,6 @@
 , bash
 , dbus
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , libgit2
 , libssh2

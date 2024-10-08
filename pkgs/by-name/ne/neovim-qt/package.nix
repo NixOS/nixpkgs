@@ -6,7 +6,7 @@ in
 libsForQt5.mkDerivation {
   pname = "neovim-qt";
   version = unwrapped.version;
-  buildCommand = if stdenv.isDarwin then ''
+  buildCommand = if stdenv.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     cp -r ${unwrapped}/bin/nvim-qt.app $out/Applications
 

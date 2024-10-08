@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "http://www.nncpgo.org/download/nncp-${finalAttrs.version}.tar.xz";
-    sha256 = "7EEUvNkYSqh4HzjbqjqgQlXfu6nDU2v3WWnma8M0r/I=";
+    hash = "sha256-7EEUvNkYSqh4HzjbqjqgQlXfu6nDU2v3WWnma8M0r/I=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "http://www.nncpgo.org/News.html";
     description = "Secure UUCP-like store-and-forward exchanging";
     downloadPage = "http://www.nncpgo.org/Tarballs.html";

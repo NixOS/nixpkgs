@@ -26,7 +26,7 @@ buildGoModule {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ xcodeWrapper ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodeWrapper ];
 
   # Prevent a non-deterministic temporary directory from polluting the resulting object files
   postPatch = ''

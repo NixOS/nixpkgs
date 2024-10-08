@@ -1,52 +1,57 @@
-{ alcotest-lwt
+{ alcotest
 , buildDunePackage
-, ocaml
-, bigarray-compat
-, dune-site
 , fetchurl
-, gluten-lwt-unix
+, eio-ssl
+, faraday
+, h2-eio
+, httpun-eio
+, httpun-ws
+, ipaddr
+, ke
 , lib
 , logs
 , magic-mime
-, mrmime
-, psq
-, rresult
+, pecu
+, prettym
+, unstrctrd
 , uri
+, uutf
+, dune-site
+, eio_main
 }:
-
-lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
-  "piaf is not available for OCaml ${ocaml.version}"
 
 buildDunePackage rec {
   pname = "piaf";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/piaf/releases/download/${version}/piaf-${version}.tbz";
-    hash = "sha256-AMO+ptGox33Bi7u/H0SaeCU88XORrRU3UbLof3EwcmU=";
+    hash = "sha256-B/qQCaUvrqrm2GEW51AH9SebGFx7x8laq5RV8hBzcPs=";
   };
 
-  postPatch = ''
-    substituteInPlace ./vendor/dune --replace "mrmime.prettym" "prettym"
-  '';
-
   propagatedBuildInputs = [
-    bigarray-compat
+    eio-ssl
+    faraday
+    h2-eio
+    httpun-eio
+    httpun-ws
+    ipaddr
     logs
     magic-mime
-    mrmime
-    psq
-    rresult
+    pecu
+    prettym
+    unstrctrd
     uri
-    gluten-lwt-unix
+    uutf
   ];
 
-  nativeCheckInputs = [
-    alcotest-lwt
-    dune-site
-  ];
-  # Check fails with OpenSSL 3
+  # Some test cases fail
   doCheck = false;
+  checkInputs = [
+    alcotest
+    dune-site
+    eio_main
+  ];
 
   meta = {
     description = "HTTP library with HTTP/2 support written entirely in OCaml";

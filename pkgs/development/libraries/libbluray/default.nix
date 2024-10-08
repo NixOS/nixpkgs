@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontconfig ]
     ++ lib.optional withMetadata libxml2
     ++ lib.optional withFonts freetype
-    ++ lib.optional stdenv.isDarwin DiskArbitration;
+    ++ lib.optional stdenv.hostPlatform.isDarwin DiskArbitration;
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 

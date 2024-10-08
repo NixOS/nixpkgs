@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${lib.makeLibraryPath (finalAttrs.runtimeDependencies)}";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
-  postPatch = lib.optionalString (stdenv.isLinux) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     # needs special setup on Linux, dunno if it can work on Darwin
     # Also, I get issues with linking without that, not sure why
     sed -i -e '/juce::juce_recommended_lto_flags/d' CMakeLists.txt
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # The program does not provide any CMake install instructions
-  installPhase = lib.optionalString (stdenv.isLinux) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isLinux) ''
     runHook preInstall
     cd ../linux
     ./install.sh "$out"
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ PowerUser64 ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sonobus";
   };
 })

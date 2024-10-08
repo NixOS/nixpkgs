@@ -30,12 +30,12 @@ let
         lib.optionalString (val != null) "${val}";
       os' = prefix: val:
         lib.optionalString (val != null) (prefix + "${val}");
-      flatten = key: value:
+      toQueryString = key: value:
         "&${key}=${value}";
     in
       "--stream.stream=\"${opt.type}://" + os opt.location + "?" + os' "name=" name
         + os' "&sampleformat=" opt.sampleFormat + os' "&codec=" opt.codec
-        + lib.concatStrings (lib.mapAttrsToList lib.flatten opt.query) + "\"";
+        + lib.concatStrings (lib.mapAttrsToList toQueryString opt.query) + "\"";
 
   optionalNull = val: ret:
     lib.optional (val != null) ret;

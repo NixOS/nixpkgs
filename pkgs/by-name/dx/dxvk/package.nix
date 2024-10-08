@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation (
     mingwW64Stdenv = useWin32ThreadModel pkgsCross.mingwW64.stdenv;
 
     dxvk32 =
-      if stdenvNoCC.isDarwin then
+      if stdenvNoCC.hostPlatform.isDarwin then
         pkgsCross.mingw32.dxvk_1.override {
           stdenv = mingw32Stdenv;
           enableMoltenVKCompat = true;
@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation (
         pkgsCross.mingw32.dxvk_2.override { stdenv = mingw32Stdenv; };
 
     dxvk64 =
-      if stdenvNoCC.isDarwin then
+      if stdenvNoCC.hostPlatform.isDarwin then
         pkgsCross.mingwW64.dxvk_1.override {
           stdenv = mingwW64Stdenv;
           enableMoltenVKCompat = true;

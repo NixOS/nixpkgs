@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   nativeBuildInputs = [ texliveFull ]; # scheme-full needed for ucs package
-  buildInputs = [ xercesc ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = [ xercesc ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildFlags =
     [ "doc" ] ++
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
      then [ "blahtex-mac" "blahtexml-mac" ]
      else [ "blahtex-linux" "blahtexml-linux" ]);
 

@@ -11,7 +11,7 @@ buildGoModule rec {
     owner = "tobychui";
     repo = "zoraxy";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-ZjsBGtY6M5jIXylzg4k8U4krwqx5d5VuMiVHAeUIbXY=";
+    hash = "sha256-ZjsBGtY6M5jIXylzg4k8U4krwqx5d5VuMiVHAeUIbXY=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -38,5 +38,6 @@ buildGoModule rec {
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.luftmensch-luftmensch ];
     mainProgram = "zoraxy";
+    platforms = lib.platforms.linux;
   };
 }

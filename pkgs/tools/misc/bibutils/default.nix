@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bgKK7x6Kaz5azvCYWEp7tocI81z+dAEbNBwR/qXktcM=";
   };
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace lib/Makefile.dynamic \
       --replace '-Wl,-soname,$(SONAME)' ""
   '';
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "test";
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH=`pwd`/lib
   '';
 

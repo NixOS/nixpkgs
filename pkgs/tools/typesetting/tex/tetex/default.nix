@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # fixes "error: conflicting types for 'calloc'", etc.
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 57d texk/kpathsea/c-std.h
   '';
 
-  preConfigure = if stdenv.isCygwin then ''
+  preConfigure = if stdenv.hostPlatform.isCygwin then ''
     find ./ -name "config.guess" -exec rm {} \; -exec ln -s ${automake}/share/automake-*/config.guess {} \;
   '' else null;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       "--without-oxdvik" "--without-texinfo" "--without-texi2html"
       "--with-system-zlib" "--with-system-pnglib" "--with-system-ncurses" ]
     # couldn't get gsftopk working on darwin
-    ++ lib.optional stdenv.isDarwin "--without-gsftopk";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--without-gsftopk";
 
   postUnpack = ''
     mkdir -p $out/share/texmf

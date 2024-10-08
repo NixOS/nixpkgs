@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libiconv openssl ]
     # Use a newer SDK for CoreFoundation, because the sysinfo crate requires
     # it, https://github.com/GuillaumeGomez/sysinfo/issues/915
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks;
       [ IOKit
         CoreFoundation
       ]);

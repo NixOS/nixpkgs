@@ -79,14 +79,14 @@ let
     ]
     ++ lib.optional withOpenssl openssl
     ++ lib.optionals withGnutls [ gnutls libgcrypt ]
-    ++ lib.optionals stdenv.isLinux [ gtk2 gtkspell2 farstream ]
-    ++ lib.optional stdenv.isDarwin gtk2-x11;
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk2 gtkspell2 farstream ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
 
 
     propagatedBuildInputs = [ pkg-config gettext ]
       ++ (with perlPackages; [ perl XMLParser ])
-      ++ lib.optional stdenv.isLinux gtk2
-      ++ lib.optional stdenv.isDarwin gtk2-x11;
+      ++ lib.optional stdenv.hostPlatform.isLinux gtk2
+      ++ lib.optional stdenv.hostPlatform.isDarwin gtk2-x11;
 
     patches = [
       ./add-search-path.patch
@@ -107,7 +107,7 @@ let
     ]
     ++ lib.optionals withCyrus_sasl [ "--enable-cyrus-sasl=yes" ]
     ++ lib.optionals withGnutls [ "--enable-gnutls=yes" "--enable-nss=no" ]
-    ++ lib.optionals stdenv.isDarwin [ "--disable-gtkspell" "--disable-vv" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--disable-gtkspell" "--disable-vv" ]
     ++ lib.optionals stdenv.cc.isClang [ "CFLAGS=-Wno-error=int-conversion" ];
 
     enableParallelBuilding = true;
@@ -121,7 +121,7 @@ let
     # In particular, this detects missing python imports in some of the tools.
     postFixup = let
       # TODO: python is a script, so it doesn't work as interpreter on darwin
-      binsToTest = lib.optionalString stdenv.isLinux "purple-remote," + "pidgin,finch";
+      binsToTest = lib.optionalString stdenv.hostPlatform.isLinux "purple-remote," + "pidgin,finch";
     in lib.optionalString doInstallCheck ''
       for f in "''${!outputBin}"/bin/{${binsToTest}}; do
         echo "Testing: $f --help"

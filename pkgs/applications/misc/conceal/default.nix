@@ -35,6 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/TD-Sky/conceal";
     license = licenses.mit;
     maintainers = with maintainers; [ jedsek kashw2 ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

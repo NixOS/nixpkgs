@@ -13,7 +13,7 @@
 , javaBindings ? true, jdk # Almost doesn't affect closure size
 , pythonBindings ? false, python3
 , extensionPack ? null, fakeroot
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true

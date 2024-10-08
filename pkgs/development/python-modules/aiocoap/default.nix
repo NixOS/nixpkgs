@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     oscore = [
       cbor2
       cryptography

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     libXrandr
   ]);
 
-  postFixup = lib.optional stdenv.isLinux ''
+  postFixup = lib.optional stdenv.hostPlatform.isLinux ''
     rpath=$(patchelf --print-rpath $out/bin/centerpiece)
     patchelf --set-rpath "$rpath:${
       lib.makeLibraryPath [

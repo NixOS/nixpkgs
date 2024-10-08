@@ -6,9 +6,9 @@
 , gnome-themes-extra
 , qt6
 , makeWrapper
-, x11Support ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
 # pypinput is marked as broken for darwin
-, pynputSupport ? stdenv.isLinux
+, pynputSupport ? stdenv.hostPlatform.isLinux
 # Experimental Drag & Drop support requires x11 & pyinput suport
 , hasDndSupport ? x11Support && pynputSupport
 , enableDragAndDrop ? false

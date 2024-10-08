@@ -10,7 +10,7 @@
 , zchunk
 , zstd
 , expat
-, withRpm ? !stdenv.isDarwin
+, withRpm ? !stdenv.hostPlatform.isDarwin
 , rpm
 , db
 , withConda ? true

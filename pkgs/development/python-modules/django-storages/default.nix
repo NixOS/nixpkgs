@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [ azure-storage-blob ];
     boto3 = [ boto3 ];
     dropbox = [ dropbox ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     rsa
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "storages" ];
 

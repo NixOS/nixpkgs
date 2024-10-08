@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "power-profiles-daemon";
-  version = "0.22";
+  version = "0.23";
 
   outputs = [
     "out"
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "upower";
     repo = "power-profiles-daemon";
     rev = finalAttrs.version;
-    sha256 = "sha256-NzaneS/Za73HSK2abBZNmP+ZPbhIG+JXfBTPHm2vBeU=";
+    hash = "sha256-kX8adu+GXxkaHtARUKp51K3Jf9xO+l12vctsJzIavyM=";
   };
 
   nativeBuildInputs =
@@ -132,7 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    homepage = "https://gitlab.freedesktop.org/hadess/power-profiles-daemon";
+    changelog = "https://gitlab.freedesktop.org/upower/power-profiles-daemon/-/releases/${finalAttrs.version}";
+    homepage = "https://gitlab.freedesktop.org/upower/power-profiles-daemon";
     description = "Makes user-selected power profiles handling available over D-Bus";
     mainProgram = "powerprofilesctl";
     platforms = platforms.linux;

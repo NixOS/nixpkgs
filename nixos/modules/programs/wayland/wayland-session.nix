@@ -1,7 +1,9 @@
 {
   lib,
+  pkgs,
   enableXWayland ? true,
   enableWlrPortal ? true,
+  enableGtkPortal ? true,
 }:
 
 {
@@ -18,6 +20,9 @@
   services.graphical-desktop.enable = true;
 
   xdg.portal.wlr.enable = enableWlrPortal;
+  xdg.portal.extraPortals = lib.mkIf enableGtkPortal [
+    pkgs.xdg-desktop-portal-gtk
+  ];
 
   # Window manager only sessions (unlike DEs) don't handle XDG
   # autostart files, so force them to run the service

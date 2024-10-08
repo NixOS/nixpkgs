@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   # (see https://github.com/steveicarus/iverilog/issues/917)
   # so disable the full suite for now.
   doCheck = true;
-  doInstallCheck = !stdenv.isAarch64;
+  doInstallCheck = !stdenv.hostPlatform.isAarch64;
 
   nativeInstallCheckInputs = [
     perl

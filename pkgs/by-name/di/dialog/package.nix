@@ -3,7 +3,7 @@
 , fetchurl
 , libtool
 , ncurses
-, enableShared ? !stdenv.isDarwin && !stdenv.hostPlatform.isStatic
+, enableShared ? !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic
 , unicodeSupport ? true
 , withLibrary ? true
 }:

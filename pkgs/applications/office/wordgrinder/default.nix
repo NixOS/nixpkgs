@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "OBJDIR=$TMP/wg-build"
   ];
 
-  preBuild = lib.optionalString stdenv.isLinux ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeFlagsArray+=('XFT_PACKAGE=--cflags={} --libs={-lX11 -lXft}')
   '';
 
@@ -38,17 +38,17 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXft
   ];
 
   # To be able to find <Xft.h>
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-I${libXft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
   postInstall = ''
     wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
   '';
 

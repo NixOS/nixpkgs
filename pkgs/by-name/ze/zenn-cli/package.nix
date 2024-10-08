@@ -35,13 +35,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenn-cli";
-  version = "0.1.155";
+  version = "0.1.157";
 
   src = fetchFromGitHub {
     owner = "zenn-dev";
     repo = "zenn-editor";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-3SM57DRCz8VuizyUrW6sI9FuBq4NrjoCqriEYUQg27M=";
+    hash = "sha256-1+5UaSYtY00F+1oJfovLIBPnmfRnKpIkQHpxb93rO2k=";
     # turborepo requires .git directory
     leaveDotGit = true;
   };

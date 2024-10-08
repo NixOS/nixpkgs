@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform port of Hexen II game";
     longDescription = ''
       Hammer of Thyrion (uHexen2) is a cross-platform port of Raven Software's Hexen II source.

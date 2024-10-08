@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
 
   nativeBuildInputs = [ cmake pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildInputs = [ libogg ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fmang/opustags";
     description = "Ogg Opus tags editor";
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ kmein ];
     license = licenses.bsd3;
     mainProgram = "opustags";

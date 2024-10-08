@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     zstd
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libxkbcommon
     udev
@@ -51,7 +51,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libXcursor
     xorg.libXi
     xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     rustPlatform.bindgenHook
   ];
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/jumpy --chdir $out/share
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/.jumpy-wrapped \
       --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
   '';

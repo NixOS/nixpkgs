@@ -18,7 +18,6 @@
   pcre,
   lucenepp,
   boost,
-  dbus,
 }:
 
 stdenv.mkDerivation rec {

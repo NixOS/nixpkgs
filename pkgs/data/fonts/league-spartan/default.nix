@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       Taking a strong influence from ATF's classic Spartan family, we're
       starting our own family out with a single strong weight. We've put a few
       unique touches into a beautiful, historical typeface, and made sure to
-      include an extensive characterset – currently totaling over 300 glyphs.
+      include an extensive characterset – currently totaling over 300 glyphs.
 
       Over time, the open-source license will allow us expand League Spartan
       into a full family, with multiple weights and styles, and we're starting

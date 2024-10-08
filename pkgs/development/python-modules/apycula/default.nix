@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "apycula";
-  version = "0.13";
+  version = "0.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Apycula";
-    hash = "sha256-MXzF/nqJj+lsNjl3YLFHTqRLBVxBaKOY+GVboT6Pc4g=";
+    hash = "sha256-sunqCWfXz91nqbJXGeivo3DoQOVgcA8grO5j3atrLbo=";
   };
 
   build-system = [ setuptools-scm ];

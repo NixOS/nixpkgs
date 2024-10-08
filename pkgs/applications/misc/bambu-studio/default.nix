@@ -42,7 +42,7 @@
   webkitgtk,
   wxGTK31,
   xorg,
-  withSystemd ? stdenv.isLinux,
+  withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
   opencascade-occt = opencascade-occt_7_6;

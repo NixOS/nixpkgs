@@ -9,17 +9,18 @@
 , kdsingleapplication
 , pipewire
 , taglib
+, libvgm
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fooyin";
-  version = "0.5.3";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "ludouzi";
     repo = "fooyin";
     rev = "v" + finalAttrs.version;
-    hash = "sha256-h8unOzDSQ9ME6nbfLxau1EctJeNH8P2VG0IBQoqhwGs=";
+    hash = "sha256-9tNd0TDTxlm6jV2kkZGZbi8tZMj13jbp3+aKXOkNtIw=";
   };
 
   buildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.qtbase
     kdePackages.qtsvg
     taglib
+    libvgm
   ];
 
   nativeBuildInputs = [

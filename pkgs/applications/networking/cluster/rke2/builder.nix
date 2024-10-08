@@ -91,7 +91,7 @@ buildGoModule rec {
       package = rke2;
       version = "v${version}";
     };
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) rke2;
   };
 

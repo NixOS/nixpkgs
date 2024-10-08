@@ -46,7 +46,7 @@ buildPythonPackage rec {
     wcwidth
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     glib = [ pygobject3 ];
     tornado = [ tornado ];
     trio = [
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     glibcLocales
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   env.LC_ALL = "en_US.UTF8";
 

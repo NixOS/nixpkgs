@@ -14,7 +14,7 @@
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
 , xorg
-, withWaylandTools ? stdenv.isLinux
+, withWaylandTools ? stdenv.hostPlatform.isLinux
 , wayland
 , wayland-protocols
 , wayland-scanner

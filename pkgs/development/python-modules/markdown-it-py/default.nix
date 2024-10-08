@@ -50,17 +50,17 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-regressions
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.linkify;
+  ] ++ optional-dependencies.linkify;
 
   # disable and remove benchmark tests
   preCheck = ''
     rm -r benchmarking
   '';
-  doCheck = !stdenv.isi686;
+  doCheck = !stdenv.hostPlatform.isi686;
 
   pythonImportsCheck = [ "markdown_it" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compare = [
       commonmark
       markdown

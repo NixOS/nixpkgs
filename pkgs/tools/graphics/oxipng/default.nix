@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-LZ3YIosDpjDYVACWQsr/0XhgX4fyo8CyZG58WfLSzCs=";
 
-  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin;
 
   meta = {
     homepage = "https://github.com/shssoichiro/oxipng";

@@ -4,20 +4,21 @@
   fetchFromGitHub,
   buildGoModule,
   nixosTests,
+  gitUpdater,
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.7.1";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-A82JwjZTzYvRc0PY2FekRUwLszdCEHv6wcLYHvqwiWU=";
+    hash = "sha256-bJ/a/SCNCutQDbmxPp36SYY7qhji2XRv6awp7buZVc0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-PCGv1DcOOP2LE5wGmnuB2t3aJP8nqJ/ChafVxeJnRIg=";
+  vendorHash = "sha256-CVQTBJDwu7AYz6q0MnFPMINRShcnS1JOGqH+Ro4lIRo=";
 
   proxyVendor = true;
 
@@ -51,6 +52,10 @@ buildGoModule rec {
     inherit (nixosTests) dae;
   };
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
     description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
@@ -58,6 +63,7 @@ buildGoModule rec {
     maintainers = with maintainers; [
       oluceps
       pokon548
+      luochen1990
     ];
     platforms = platforms.linux;
     mainProgram = "dae";

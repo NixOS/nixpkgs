@@ -17,7 +17,7 @@ in rustPlatform.buildRustPackage rec {
   sourceRoot = "${src.name}/seshat-node/native";
 
   nativeBuildInputs = [ nodejs python3 yarn fixup-yarn-lock ];
-  buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = [ sqlcipher ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   npm_config_nodedir = nodejs;
 

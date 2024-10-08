@@ -125,7 +125,7 @@ stdenv.mkDerivation {
     "-DLLVM_USE_LINKER=lld"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/codon/*.dylib $out/lib/
   '';
 

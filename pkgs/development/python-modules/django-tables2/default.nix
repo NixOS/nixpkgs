@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     tablib = [ tablib ] ++ tablib.optional-dependencies.xls ++ tablib.optional-dependencies.yaml;
   };
 
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     pyyaml
     pytest-django
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # requires django-filters

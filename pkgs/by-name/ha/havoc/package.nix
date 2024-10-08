@@ -51,6 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "havoc";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.isDarwin; # fatal error: 'sys/epoll.h' file not found
+    broken = stdenv.hostPlatform.isDarwin; # fatal error: 'sys/epoll.h' file not found
   };
 })

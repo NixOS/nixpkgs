@@ -25,7 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'debuggerCommand:' 'debuggerCommand: ${gdb}/bin/gdb'
   '';
 
-  nativeBuildInputs = [ imagemagick ] ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];
+  nativeBuildInputs = [
+    imagemagick
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     motif
@@ -36,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # ioctl is not found without this flag. fixed in next release
   # Upstream issue ref: https://savannah.gnu.org/bugs/index.php?64188
-  env = lib.optionalAttrs stdenv.isDarwin { NIX_CFLAGS_COMPILE = "-DHAVE_SYS_IOCTL_H"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_COMPILE = "-DHAVE_SYS_IOCTL_H"; };
 
   configureFlags = [
     "--enable-builtin-manual"
