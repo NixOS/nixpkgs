@@ -715,6 +715,13 @@
     sha256 = "cf31f9e3fa9458716f0c3d1c15698ef79b707c5bd7d146773d2b2afe42e64c29";
     description = "Microsoft Azure Command-Line Tools MonitorPipelineGroup Extension";
   };
+  multicloud-connector = mkAzExtension rec {
+    pname = "multicloud-connector";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/multicloud_connector-${version}-py3-none-any.whl";
+    sha256 = "ad84350162ae877287f8a151920b3c4bdc6375dd419dd6101c2702db606a5d19";
+    description = "Microsoft Azure Command-Line Tools MulticloudConnector Extension";
+  };
   network-analytics = mkAzExtension rec {
     pname = "network-analytics";
     version = "1.0.0b1";
