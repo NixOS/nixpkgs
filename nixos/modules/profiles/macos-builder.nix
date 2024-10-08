@@ -105,13 +105,7 @@ in
 
     # The linux builder is a lightweight VM for remote building; not evaluation.
     nix.channel.enable = false;
-    # remote builder uses `nix-daemon` (ssh-ng:) or `nix-store --serve` (ssh:)
-    # --force: do not complain when missing
-    # TODO: install a store-only nix
-    #       https://github.com/NixOS/rfcs/blob/master/rfcs/0134-nix-store-layer.md#detailed-design
-    environment.extraSetup = ''
-      rm --force $out/bin/{nix-instantiate,nix-build,nix-shell,nix-prefetch*,nix}
-    '';
+
     # Deployment is by image.
     # TODO system.switch.enable = false;?
     system.disableInstallerTools = true;
