@@ -5,11 +5,11 @@
 }:
 let
   pname = "handheld-daemon-ui";
-  version = "3.1.1";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "https://github.com/hhd-dev/hhd-ui/releases/download/v${version}/hhd-ui.Appimage";
-    hash = "sha256-KH01MvcCbvCqjp1UZHnwfh9G3Yh50CO9Ecjl1Y8VY9E=";
+    hash = "sha256-RRXVoeWOO/pR+CAEY0J6Buf/RhA+G0PdxGQVMdAHfwA=";
   };
   extractedFiles = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -18,7 +18,7 @@ appimageTools.wrapType2 {
 
   extraInstallCommands = ''
     # Handheld-daemon expects the UI binary to be called hhd-ui
-    mv $out/bin/${pname} $out/bin/hhd-ui
+    mv $out/bin/${pname}* $out/bin/hhd-ui
 
     mkdir -p $out/share/applications
     substitute ${extractedFiles}/hhd-ui.desktop \
