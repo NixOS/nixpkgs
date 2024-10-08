@@ -255,9 +255,9 @@
   };
   costmanagement = mkAzExtension rec {
     pname = "costmanagement";
-    version = "0.3.0";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/costmanagement-${version}-py3-none-any.whl";
-    sha256 = "5661a2082ecca000b0c764dc92585e2aa601ccd5eeeb296397533cf4da814cf6";
+    sha256 = "6e5e053d05bad6ad6305bd024f51e355e60fde8bb6a03350dfd81c25437d2e45";
     description = "Microsoft Azure Command-Line Tools CostManagementClient Extension";
   };
   csvmware = mkAzExtension rec {
