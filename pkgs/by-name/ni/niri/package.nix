@@ -2,6 +2,7 @@
   lib,
   clang,
   dbus,
+  eudev,
   fetchFromGitHub,
   libdisplay-info,
   libglvnd,
@@ -16,6 +17,10 @@
   seatd,
   systemd,
   wayland,
+  withDbus ? true,
+  withDinit ? false,
+  withScreencastSupport ? true,
+  withSystemd ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,26 +56,40 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    dbus
-    libdisplay-info
-    libglvnd # For libEGL
-    libinput
-    libxkbcommon
-    mesa # For libgbm
-    pango
-    pipewire
-    seatd
-    systemd # Also includes libudev
-    wayland # For libwayland-client
-  ];
+  buildInputs =
+    [
+      libdisplay-info
+      libglvnd # For libEGL
+      libinput
+      libxkbcommon
+      mesa # For libgbm
+      pango
+      seatd
+      wayland # For libwayland-client
+    ]
+    ++ lib.optional (withDbus || withScreencastSupport || withSystemd) dbus
+    ++ lib.optional withScreencastSupport pipewire
+    ++ lib.optional withSystemd systemd # Includes libudev
+    ++ lib.optional (!withSystemd) eudev; # Use an alternative libudev implementation when building w/o systemd
 
-  postInstall = ''
-    install -Dm0755 ./resources/niri-session -t $out/bin
-    install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
-    install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
-    install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
-  '';
+  buildFeatures =
+    lib.optional withDbus "dbus"
+    ++ lib.optional withDinit "dinit"
+    ++ lib.optional withScreencastSupport "xdp-gnome-screencast"
+    ++ lib.optional withSystemd "systemd";
+  buildNoDefaultFeatures = true;
+
+  postInstall =
+    ''
+      install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
+    ''
+    + lib.optionalString withDbus ''
+      install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
+    ''
+    + lib.optionalString withSystemd ''
+      install -Dm0755 resources/niri-session -t $out/bin
+      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
+    '';
 
   env = {
     # Force linking with libEGL and libwayland-client
