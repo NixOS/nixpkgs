@@ -1,24 +1,34 @@
-{ lib, stdenv, appimageTools, desktop-file-utils, fetchurl }:
+{
+  lib,
+  stdenv,
+  appimageTools,
+  desktop-file-utils,
+  fetchurl,
+}:
 
 let
   pname = "p3x-onenote";
-  version = "2023.4.117";
+  version = "2024.10.110";
 
-  plat = {
-    aarch64-linux = "-arm64";
-    armv7l-linux = "-armv7l";
-    x86_64-linux = "";
-  }.${stdenv.hostPlatform.system};
+  plat =
+    {
+      aarch64-linux = "-arm64";
+      armv7l-linux = "-armv7l";
+      x86_64-linux = "";
+    }
+    .${stdenv.hostPlatform.system};
 
-  sha256 = {
-    aarch64-linux = "sha256-HFuxmMo0m4UOxEQVd32LGvbFsOS8jwCCCS6K/YJIIBE=";
-    armv7l-linux = "sha256-JMgYvqkaRw5sfjbKybAkk28KT12+c19dMir2DUN7Ub0=";
-    x86_64-linux = "sha256-hr/mPOrliP8Dej3DVE2+wYkb1J789WCkkY3xe9EcM44=";
-  }.${stdenv.hostPlatform.system};
+  hash =
+    {
+      aarch64-linux = "sha256-rBoSdbZhOnpX7mr7Uz5XuO5PB4PKcNMPQP9NqCwiIBc=";
+      armv7l-linux = "sha256-8XZ3dpYgHCpo5HjDF4R+U5bO6Fidsf0PlEhOoRB1JA0=";
+      x86_64-linux = "sha256-vn9XCKC68AzxvmjxoH4MynwUG+U/g0JmLjANDFS5kNI=";
+    }
+    .${stdenv.hostPlatform.system};
 
   src = fetchurl {
     url = "https://github.com/patrikx3/onenote/releases/download/v${version}/P3X-OneNote-${version}${plat}.AppImage";
-    inherit sha256;
+    inherit hash;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -45,7 +55,11 @@ appimageTools.wrapType2 rec {
     description = "Linux Electron Onenote - A Linux compatible version of OneNote";
     license = licenses.mit;
     maintainers = with maintainers; [ tiagolobocastro ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "armv7l-linux"
+    ];
     mainProgram = "p3x-onenote";
   };
 }
