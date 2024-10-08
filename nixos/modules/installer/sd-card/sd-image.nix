@@ -30,6 +30,7 @@ in
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
     ../../profiles/all-hardware.nix
+    ../../image/builder-option.nix
   ];
 
   options.sdImage = {
@@ -179,6 +180,7 @@ in
 
     sdImage.storePaths = [ config.system.build.toplevel ];
 
+    image.builder = config.system.build.sdImage;
     system.build.sdImage = pkgs.callPackage ({ stdenv, dosfstools, e2fsprogs,
     mtools, libfaketime, util-linux, zstd }: stdenv.mkDerivation {
       name = config.sdImage.imageName;
