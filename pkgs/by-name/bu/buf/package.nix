@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildGoModule
 , fetchFromGitHub
 , protobuf_26
@@ -34,6 +35,10 @@ buildGoModule rec {
     git # Required for TestGitCloner
     protobuf_26 # Required for buftesting.GetProtocFilePaths
   ];
+
+  # Unbreak failed build on Aarch64.
+  # See https://github.com/NixOS/nixpkgs/pull/346804#issuecomment-2397937973.
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   checkFlags = [
     "-skip=TestWorkspaceGit"
