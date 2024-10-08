@@ -8,15 +8,15 @@
 
 buildPythonPackage rec {
   pname = "auroranoaa";
-  version = "0.0.3";
+  version = "0.0.5";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "djtimca";
     repo = "aurora-api";
-    rev = version;
-    hash = "sha256-ho0O5aEHCKaTuWh2eW2kY5a7dVGIGBLm4nKxAMq0bZ4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-bQDFSbYFsGtvPuJNMykynOpBTIeloUoCVRtIuHXR4n0=";
   };
 
   propagatedBuildInputs = [ aiohttp ];
