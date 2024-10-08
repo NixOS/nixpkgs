@@ -1,6 +1,5 @@
 {
   lib,
-  autoPatchelfHook,
   clang,
   dbus,
   fetchFromGitHub,
@@ -41,7 +40,6 @@ rustPlatform.buildRustPackage rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoPatchelfHook
     clang
     pkg-config
     rustPlatform.bindgenHook
@@ -50,6 +48,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     dbus
     libdisplay-info
+    libglvnd # For libEGL
     libinput
     libxkbcommon
     mesa # For libgbm
@@ -57,11 +56,7 @@ rustPlatform.buildRustPackage rec {
     pipewire
     seatd
     systemd # Also includes libudev
-  ];
-
-  runtimeDependencies = [
-    wayland
-    libglvnd # For libEGL
+    wayland # For libwayland-client
   ];
 
   passthru.providedSessions = [ "niri" ];
@@ -78,6 +73,19 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 resources/niri-portals.conf -t $out/share/xdg-desktop-portal
     install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
   '';
+
+  env = {
+    # Force linking with libEGL and libwayland-client
+    # so they can be discovered by `dlopen()`
+    RUSTFLAGS = toString (
+      map (arg: "-C link-arg=" + arg) [
+        "-Wl,--push-state,--no-as-needed"
+        "-lEGL"
+        "-lwayland-client"
+        "-Wl,--pop-state"
+      ]
+    );
+  };
 
   passthru.updateScript = nix-update-script { };
 
