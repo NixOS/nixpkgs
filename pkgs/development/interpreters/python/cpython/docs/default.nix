@@ -1,47 +1,29 @@
-{ stdenv, fetchurl, lib }:
+{ callPackage }:
 
 let
 pythonDocs = {
   html = {
     recurseForDerivations = true;
-    python27 = import ./2.7-html.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python310 = import ./3.10-html.nix {
-      inherit stdenv fetchurl lib;
-    };
+    python27 = callPackage ./2.7-html.nix { };
+    python312 = callPackage ./3.12-html.nix { };
   };
   pdf_a4 = {
     recurseForDerivations = true;
-    python27 = import ./2.7-pdf-a4.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python310 = import ./3.10-pdf-a4.nix {
-      inherit stdenv fetchurl lib;
-    };
+    python27 = callPackage ./2.7-pdf-a4.nix { };
+    python312 = callPackage ./3.12-pdf-a4.nix { };
   };
   pdf_letter = {
     recurseForDerivations = true;
-    python27 = import ./2.7-pdf-letter.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python310 = import ./3.10-pdf-letter.nix {
-      inherit stdenv fetchurl lib;
-    };
+    python27 = callPackage ./2.7-pdf-letter.nix { };
+    python312 = callPackage ./3.12-pdf-letter.nix { };
   };
   text = {
     recurseForDerivations = true;
-    python27 = import ./2.7-text.nix {
-      inherit stdenv fetchurl lib;
-    };
-    python310 = import ./3.10-text.nix {
-      inherit stdenv fetchurl lib;
-    };
+    python27 = callPackage ./2.7-text.nix { };
+    python312 = callPackage ./3.12-text.nix { };
   };
   texinfo = {
     recurseForDerivations = true;
-    python310 = import ./3.10-texinfo.nix {
-      inherit stdenv fetchurl lib;
-    };
+    python312 = callPackage ./3.12-texinfo.nix { };
   };
 }; in pythonDocs

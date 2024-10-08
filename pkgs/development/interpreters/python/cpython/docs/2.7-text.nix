@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, lib, fetchurl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   pname = "python27-docs-text";
