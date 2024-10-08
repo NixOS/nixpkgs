@@ -1,5 +1,5 @@
 # DO NOT EDIT! This file is generated automatically.
-# Command: /home/k900/nixpkgs/./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-6
+# Command: ./maintainers/scripts/fetch-kde-qt.sh pkgs/development/libraries/qt-6
 { fetchurl, mirror }:
 
 {
