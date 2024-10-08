@@ -53,6 +53,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  passthru = lib.optionalAttrs withUnixODBC {
+    fancyName = "MDBTools";
+    driver = "lib/odbc/libmdbodbc.so";
+  };
+
   meta = with lib; {
     description = ".mdb (MS Access) format tools";
     license = with licenses; [
