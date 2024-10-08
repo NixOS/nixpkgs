@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "xarray";
-  version = "2024.07.0";
+  version = "2024.09.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pydata";
     repo = "xarray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pt0qnkgf3E/QQHQAaZLommakhqEJ4NuTyjx5tdk2N1U=";
+    hash = "sha256-ZrqdpzcNjZMxET355PRWQaUPjvFm+m2y71F7qt8DCjg=";
   };
 
   build-system = [
