@@ -61,11 +61,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  # fixes "cycle detected in build"
+  postInstall = lib.optionalString stdenv.hostPlatform.isWindows ''
+    mkdir $dev/lib
+    mv $out/CMake $dev/lib/cmake
+  '';
+
   meta = with lib; {
     license = licenses.mit;
     description = "Date and time library based on the C++11/14/17 <chrono> header";
     homepage = "https://github.com/HowardHinnant/date";
-    platforms = platforms.unix;
+    platforms = with platforms; unix ++ windows;
     maintainers = with maintainers; [ r-burns ];
   };
 }
