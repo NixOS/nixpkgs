@@ -263,6 +263,10 @@ in
     dependencies = with self; [ nvim-cmp copilot-vim ];
   };
 
+  cmp-ctags = super.cmp-ctags.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+  };
+
   cmp-dap = super.cmp-dap.overrideAttrs {
     dependencies = with self; [ nvim-cmp nvim-dap ];
   };
@@ -380,12 +384,12 @@ in
 
   codeium-nvim = let
     # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
-    codeiumVersion = "1.16.18";
+    codeiumVersion = "1.20.9";
     codeiumHashes = {
-      x86_64-linux = "sha256-/m+t4abPgVWeGpfDkPm5DGCIXm1LoM5znHfES9lotAo=";
-      aarch64-linux = "sha256-0kR799yuxSFmyedJ14f5/EqOiFHs9cWjeJKvDIpIRl0=";
-      x86_64-darwin = "sha256-7Go5qZVAe2UHn547HZG4fmh84iF2r15+0IIlJK72Fqg=";
-      aarch64-darwin = "sha256-fe4GrgLRr66Qmme3p0X5BEwvKZhqG1aiE8xs5A1Dt6E=";
+      x86_64-linux = "sha256-IeNK7UQtOhqC/eQv7MAya4jB1WIGykSR7IgutZatmHM=";
+      aarch64-linux = "sha256-ujTFki/3V79El2WCkG0PJhbaMT0knC9mrS9E7Uv9HD4=";
+      x86_64-darwin = "sha256-r2KloEQsUku9sk8h76kwyQuMTHcq/vwfTSK2dkiXDzE=";
+      aarch64-darwin = "sha256-1jNH0Up8mAahDgvPF6g42LV+RVDVsPqDM54lE2KYY48=";
     };
 
     codeium' = codeium.overrideAttrs rec {
