@@ -976,9 +976,9 @@
   };
   storage-blob-preview = mkAzExtension rec {
     pname = "storage-blob-preview";
-    version = "0.7.2";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storage_blob_preview-${version}-py2.py3-none-any.whl";
-    sha256 = "002b7779f4c6531fdb714f77bcea5d3d96007a7ff5b86869f8e56aad98298b23";
+    sha256 = "1ffe451e41657c8f28a22abee387371d11cedd80d2e52cfcbed0adac0a917b41";
     description = "Microsoft Azure Command-Line Tools Storage-blob-preview Extension";
   };
   storage-mover = mkAzExtension rec {
