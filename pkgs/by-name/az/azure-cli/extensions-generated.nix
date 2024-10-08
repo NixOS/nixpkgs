@@ -990,9 +990,9 @@
   };
   storagesync = mkAzExtension rec {
     pname = "storagesync";
-    version = "1.0.0";
+    version = "1.0.1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/storagesync-${version}-py2.py3-none-any.whl";
-    sha256 = "1f6997e186199058e60d8fdc020c407d4f92d8e78286189c1887e57a371b43c1";
+    sha256 = "7f2ba91a7a44741f4384b44ba7cea73a8a03b5d385b43404cb4951dd2ea5dc5a";
     description = "Microsoft Azure Command-Line Tools MicrosoftStorageSync Extension";
   };
   stream-analytics = mkAzExtension rec {
