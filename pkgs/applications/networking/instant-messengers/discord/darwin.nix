@@ -93,9 +93,8 @@ stdenv.mkDerivation {
             "stable"
           ]
           pname
-      }?platform=osx&format=dmg" | grep -oP 'location: \K\S+')
-      version=''${url##https://dl*.discordapp.net/apps/osx/}
-      version=''${version%%/*.dmg}
+      }?platform=osx&format=dmg" | grep -oP '(?<=location: )\S+')
+      version=$(echo "$url" | grep -oP '(?<=/osx/)[^/]+')
       update-source-version ${
         lib.optionalString (!stdenv.buildPlatform.isDarwin) "pkgsCross.aarch64-darwin."
       }${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
