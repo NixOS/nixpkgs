@@ -442,6 +442,14 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootOrangePi3B = buildUBoot {
+    defconfig = "orangepi-3b-rk3566_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    BL31 = rkbin.BL31_RK3568;
+    filesToInstall = [ "u-boot.itb" "idbloader.img" "u-boot-rockchip.bin" "u-boot-rockchip-spi.bin" ];
+  };
+
   ubootPcduino3Nano = buildUBoot {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
