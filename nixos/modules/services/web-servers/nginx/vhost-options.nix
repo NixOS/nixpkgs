@@ -345,7 +345,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
-        Can be created via: {command}`htpasswd -c <filename> <username>`.
+        Can be created via: {command}`htpasswd -c FILENAME USERNAME`.
 
         WARNING: The generate file contains the users' passwords in a
         non-cryptographically-securely hashed way.
