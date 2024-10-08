@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       gpl2Plus
       lgpl2
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ geoffreyfrogeye ];
     platforms = platforms.unix;
     inherit (src.meta) homepage;
   };
