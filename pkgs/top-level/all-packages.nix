@@ -3653,7 +3653,9 @@ with pkgs;
 
   deterministic-uname = callPackage ../build-support/deterministic-uname { };
 
-  deterministic-host-uname = deterministic-uname.override { forPlatform = stdenv.hostPlatform; };
+  deterministic-host-uname = deterministic-uname.override {
+    forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
+  };
 
   dfmt = callPackage ../tools/text/dfmt { };
 
@@ -17971,12 +17973,15 @@ with pkgs;
     electron_28-bin
     electron_29-bin
     electron_30-bin
-    electron_31-bin;
+    electron_31-bin
+    electron_32-bin
+    ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_29
     electron-chromedriver_30
-    electron-chromedriver_31;
+    electron-chromedriver_31
+    electron-chromedriver_32;
 
   electron_24 = electron_24-bin;
   electron_27 = electron_27-bin;
@@ -17984,6 +17989,7 @@ with pkgs;
   electron_29 = electron_29-bin;
   electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
+  electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
   electron = electron_31;
   electron-bin = electron_31-bin;
 
@@ -25171,6 +25177,17 @@ with pkgs;
     go = buildPackages.go_1_22;
   };
 
+  # requires a newer Apple SDK
+  go_1_23 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.23.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
+  };
+  buildGo123Module = darwin.apple_sdk_11_0.callPackage ../build-support/go/module.nix {
+    go = buildPackages.go_1_23;
+  };
+  buildGo123Package = darwin.apple_sdk_11_0.callPackage ../build-support/go/package.nix {
+    go = buildPackages.go_1_23;
+  };
+
   leaps = callPackage ../development/tools/leaps { };
 
   ### DEVELOPMENT / JAVA MODULES
@@ -26575,7 +26592,7 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo122Module;
+    buildGoModule = buildGo123Module;
   };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };

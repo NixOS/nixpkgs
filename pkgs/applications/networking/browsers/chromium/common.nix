@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch
+{ stdenv, lib, fetchpatch
 , recompressTarball
 , buildPackages
 , buildPlatform
@@ -67,10 +67,6 @@ let
   python3WithPackages = python3.pythonOnBuildForHost.withPackages(ps: with ps; [
     ply jinja2 setuptools
   ]);
-  clangFormatPython3 = fetchurl {
-    url = "https://chromium.googlesource.com/chromium/tools/build/+/e77882e0dde52c2ccf33c5570929b75b4a2a2522/recipes/recipe_modules/chromium/resources/clang-format?format=TEXT";
-    hash = "sha256-1BRxXP+0QgejAWdFHJzGrLMhk/MsRDoVdK/GVoyFg0U=";
-  };
 
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -347,9 +343,6 @@ let
     '' + ''
       # Allow to put extensions into the system-path.
       sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
-
-      # We need the fix for https://bugs.chromium.org/p/chromium/issues/detail?id=1254408:
-      base64 --decode ${clangFormatPython3} > buildtools/linux64/clang-format
 
       # Add final newlines to scripts that do not end with one.
       # This is a temporary workaround until https://github.com/NixOS/nixpkgs/pull/255463 (or similar) has been merged,
