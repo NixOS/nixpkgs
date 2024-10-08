@@ -2,22 +2,22 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  pnpm_8,
+  pnpm,
   nodejs_22,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "astro-language-server";
-  version = "2.14.2";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "withastro";
     repo = "language-tools";
     rev = "@astrojs/language-server@${finalAttrs.version}";
-    hash = "sha256-4GaLyaRUN9qS2U7eSzASB6fSQY2+fWtgfb54uuHjuh4=";
+    hash = "sha256-2MaoW04mX016VIrtfnBX/jzMNCOXE10lSInSyhqot5E=";
   };
 
-  pnpmDeps = pnpm_8.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
       version
@@ -25,12 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
       pnpmWorkspace
       prePnpmInstall
       ;
-    hash = "sha256-q9a4nFPRhR6W/PT1l/Q1799iDmI+WTsudUP8rb8e97g=";
+    hash = "sha256-zCCDlwsKPZQVEYrv85WcMY2JlWgz0tD6iHLSJg1RkRU=";
   };
 
   nativeBuildInputs = [
     nodejs_22
-    pnpm_8.configHook
+    pnpm.configHook
   ];
 
   buildInputs = [ nodejs_22 ];
