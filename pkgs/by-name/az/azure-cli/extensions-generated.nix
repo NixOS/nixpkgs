@@ -801,9 +801,9 @@
   };
   peering = mkAzExtension rec {
     pname = "peering";
-    version = "0.2.1";
+    version = "1.0.0";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/peering-${version}-py3-none-any.whl";
-    sha256 = "b068c12b47f17304af51431a2ae975339b7d4601a180e83916efae73d7c42600";
+    sha256 = "fe4e3ba85c1f65966a059291e46ebeb7c956f28da2b15b541b0492765b623992";
     description = "Microsoft Azure Command-Line Tools PeeringManagementClient Extension";
   };
   portal = mkAzExtension rec {
