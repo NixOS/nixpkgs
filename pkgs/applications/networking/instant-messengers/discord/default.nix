@@ -1,17 +1,26 @@
-{ branch ? "stable", callPackage, fetchurl, lib, stdenv }:
+{
+  branch ? "stable",
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 let
   versions =
-    if stdenv.hostPlatform.isLinux then {
-      stable = "0.0.70";
-      ptb = "0.0.105";
-      canary = "0.0.492";
-      development = "0.0.28";
-    } else {
-      stable = "0.0.318";
-      ptb = "0.0.133";
-      canary = "0.0.591";
-      development = "0.0.49";
-    };
+    if stdenv.hostPlatform.isLinux then
+      {
+        stable = "0.0.70";
+        ptb = "0.0.105";
+        canary = "0.0.492";
+        development = "0.0.28";
+      }
+    else
+      {
+        stable = "0.0.318";
+        ptb = "0.0.133";
+        canary = "0.0.591";
+        development = "0.0.49";
+      };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
@@ -52,7 +61,9 @@ let
     };
     aarch64-darwin = x86_64-darwin;
   };
-  src = srcs.${stdenv.hostPlatform.system}.${branch} or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
+  src =
+    srcs.${stdenv.hostPlatform.system}.${branch}
+      or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
@@ -60,23 +71,35 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ Scrumplex artturin infinidoge jopejoe1 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      Scrumplex
+      artturin
+      infinidoge
+      jopejoe1
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "discord";
   };
-  package =
-    if stdenv.hostPlatform.isLinux
-    then ./linux.nix
-    else ./darwin.nix;
+  package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
   packages = (
     builtins.mapAttrs
-      (_: value:
-        callPackage package (value
+      (
+        _: value:
+        callPackage package (
+          value
           // {
-          inherit src version branch;
-          meta = meta // { mainProgram = value.binaryName; };
-        }))
+            inherit src version branch;
+            meta = meta // {
+              mainProgram = value.binaryName;
+            };
+          }
+        )
+      )
       {
         stable = rec {
           pname = "discord";
