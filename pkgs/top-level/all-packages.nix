@@ -15160,11 +15160,11 @@ with pkgs;
     julia_111;
 
   julia-lts = julia_110-bin;
-  julia-stable = julia_110;
+  julia-stable = julia_111;
   julia = julia-stable;
 
   julia-lts-bin = julia_110-bin;
-  julia-stable-bin = julia_110-bin;
+  julia-stable-bin = julia_111-bin;
   julia-bin = julia-stable-bin;
 
   kind2 = darwin.apple_sdk_11_0.callPackage ../development/compilers/kind2 { };
