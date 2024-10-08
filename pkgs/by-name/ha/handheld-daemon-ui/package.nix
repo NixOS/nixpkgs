@@ -23,7 +23,8 @@ appimageTools.wrapType2 {
     mkdir -p $out/share/applications
     substitute ${extractedFiles}/hhd-ui.desktop \
       $out/share/applications/hhd-ui.desktop \
-      --replace-fail "Exec=AppRun" "Exec=hhd-ui"
+      --replace-fail "Exec=AppRun" "Exec=hhd-ui" \
+      --replace-fail "Categories=game;" "Categories=Game;"
     cp ${extractedFiles}/usr/share/icons $out/share -r
   '';
 
