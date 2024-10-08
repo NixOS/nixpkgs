@@ -8,4 +8,5 @@ lib.makeScope newScope (self: with self; {
   regex = throw "`nu_plugin_regex` is no longer compatible with the current Nushell release.";
   net = callPackage ./net.nix { inherit IOKit CoreFoundation; };
   units = callPackage ./units.nix { };
+  highlight = callPackage ./highlight.nix { };
 })
