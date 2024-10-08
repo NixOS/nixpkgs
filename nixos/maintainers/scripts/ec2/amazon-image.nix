@@ -20,7 +20,7 @@ in
   imports = [
     ../../../modules/virtualisation/amazon-image.nix
     ../../../modules/virtualisation/disk-size-option.nix
-    ../../../modules/image/builder-attr-option.nix
+    ../../../modules/image/builder-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -80,7 +80,7 @@ in
   config.virtualisation.diskSize = lib.mkDefault (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
-  config.image.builderAttr = "amazonImage";
+  config.image.builder = config.system.build.amazonImage;
   config.system.build.amazonImage =
     let
       configFile = pkgs.writeText "configuration.nix" ''

@@ -6,7 +6,7 @@
   imports = [
     ./vagrant-guest.nix
     ./virtualbox-image.nix
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
   ];
 
   virtualbox.params = {
@@ -23,7 +23,7 @@
 
   # generate the box v1 format which is much easier to generate
   # https://www.vagrantup.com/docs/boxes/format.html
-  image.builderAttr = "vagrantVirtualbox";
+  image.builder = config.system.build.vagrantVirtualbox;
   system.build.vagrantVirtualbox = pkgs.runCommand
     "virtualbox-vagrant.box"
     {}

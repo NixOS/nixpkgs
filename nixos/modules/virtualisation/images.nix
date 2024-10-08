@@ -48,11 +48,11 @@ in
 
   config.system.build = {
     inherit imageModules;
-    images = lib.flip lib.mapAttrs imageConfigs (
+    images = lib.mapAttrs (
       name: conf:
-      lib.recursiveUpdate conf.config.system.build.${conf.config.image.builderAttr} {
+      lib.recursiveUpdate conf.config.image.builder {
         passthru.config = conf.config;
       }
-    );
+    ) imageConfigs;
   };
 }

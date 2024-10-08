@@ -8,7 +8,7 @@
 {
   imports = [
     ../profiles/qemu-guest.nix
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
   ];
 
   config = {
@@ -28,7 +28,7 @@
     services.cloud-init.enable = true;
     systemd.services."serial-getty@ttyS0".enable = true;
 
-    image.builderAttr = "kubevirtImage";
+    image.builder = config.system.build.kubevirtImage;
     system.build.kubevirtImage = import ../../lib/make-disk-image.nix {
       inherit lib config pkgs;
       format = "qcow2";

@@ -18,7 +18,7 @@ let
 
 in {
   imports = [
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
   ];
 
   options = {
@@ -60,7 +60,7 @@ in {
   };
 
   config = {
-    image.builderAttr = "vmwareImage";
+    image.builder = config.system.build.vmwareImage;
     system.build.vmwareImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''
