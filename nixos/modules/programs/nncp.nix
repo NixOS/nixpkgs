@@ -74,19 +74,13 @@ in {
       wantedBy = [ "basic.target" ];
       serviceConfig.Type = "oneshot";
       script = ''
-        umask u=rw
-        nncpCfgDir=$(mktemp --directory nncp.XXX)
-        for f in ${jsonCfgFile} ${builtins.toString config.programs.nncp.secrets}; do
-          tmpdir=$(mktemp --directory nncp.XXX)
-          nncp-cfgdir -cfg $f -dump $tmpdir
-          find $tmpdir -size 1c -delete
-          cp -a $tmpdir/* $nncpCfgDir/
-          rm -rf $tmpdir
-        done
-        nncp-cfgdir -load $nncpCfgDir > ${nncpCfgFile}
-        rm -rf $nncpCfgDir
+        umask 127
+        rm -f ${nncpCfgFile}
+        for f in ${jsonCfgFile} ${builtins.toString config.programs.nncp.secrets}
+        do
+          ${lib.getExe pkgs.hjson-go} -c <"$f"
+        done |${lib.getExe pkgs.jq} --slurp add >${nncpCfgFile}
         chgrp ${programCfg.group} ${nncpCfgFile}
-        chmod g+r ${nncpCfgFile}
       '';
     };
   };
