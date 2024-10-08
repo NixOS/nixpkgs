@@ -13,7 +13,7 @@ in
   imports = [
     ./azure-common.nix
     ./disk-size-option.nix
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -62,7 +62,7 @@ in
   };
 
   config = {
-    image.builderAttr = "azureImage";
+    image.builder = config.system.build.azureImage;
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
       postVM = ''

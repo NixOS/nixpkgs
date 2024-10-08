@@ -11,7 +11,7 @@ in
 {
   imports = [
     ./disk-size-option.nix
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -208,7 +208,7 @@ in
       (lib.mkIf (pkgs.stdenv.hostPlatform.system == "i686-linux") { pae = "on"; })
     ];
 
-    image.builderAttr = "virtualBoxOVA";
+    image.builder = config.system.build.virtualBoxOVA;
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
 

@@ -14,7 +14,7 @@ in
 
   imports = [
     ./disk-size-option.nix
-    ../image/builder-attr-option.nix
+    ../image/builder-option.nix
     (lib.mkRenamedOptionModuleWith {
       sinceRelease = 2411;
       from = [
@@ -51,7 +51,7 @@ in
   config = {
     virtualisation.diskSize = lib.mkDefault (4 * 1024);
 
-    image.builderAttr = "hypervImage";
+    image.builder = config.system.build.hypervImage;
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''
