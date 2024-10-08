@@ -80,9 +80,9 @@
   };
   alertsmanagement = mkAzExtension rec {
     pname = "alertsmanagement";
-    version = "0.2.3";
+    version = "1.0.0b1";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/alertsmanagement-${version}-py3-none-any.whl";
-    sha256 = "b45a5752924ab1205ff5862f03a4a465eccb4dd8e79900023498d674aa68665b";
+    sha256 = "e1e15aeff1ab9b25fb820b914e602ce84a7d00e5382eb07d413f1492d90b09d1";
     description = "Microsoft Azure Command-Line Tools AlertsManagementClient Extension";
   };
   amg = mkAzExtension rec {
