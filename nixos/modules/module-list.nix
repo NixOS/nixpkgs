@@ -221,6 +221,7 @@
   ./programs/joycond-cemuhook.nix
   ./programs/k3b.nix
   ./programs/kde-pim.nix
+  ./programs/openfoam.nix
   ./programs/k40-whisperer.nix
   ./programs/kbdlight.nix
   ./programs/kclock.nix
