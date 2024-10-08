@@ -6423,17 +6423,6 @@ with pkgs;
 
   libskk = callPackage ../development/libraries/libskk { };
 
-  mozc-ut = mozc.override { dictionaries = [
-    mozcdic-ut-alt-cannadic
-    mozcdic-ut-edict2
-    mozcdic-ut-jawiki
-    mozcdic-ut-neologd
-    mozcdic-ut-personal-names
-    mozcdic-ut-place-names
-    mozcdic-ut-skk-jisyo
-    mozcdic-ut-sudachidict
-  ]; };
-
   m17-cxx-demod = callPackage ../applications/radio/m17-cxx-demod { };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
