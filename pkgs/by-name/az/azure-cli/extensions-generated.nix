@@ -386,6 +386,13 @@
     sha256 = "1c4bb8216e509c2f08fa75c45930ec377768326f30cb9ab125842aa9352c6e2e";
     description = "Microsoft Azure Command-Line Tools DnsResolverManagementClient Extension";
   };
+  durabletask = mkAzExtension rec {
+    pname = "durabletask";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/durabletask-${version}-py3-none-any.whl";
+    sha256 = "d7a929b294928df79d8312fbf6af72c5d928e304c4a7b37daf3ff772667dfb25";
+    description = "Microsoft Azure Command-Line Tools Durabletask Extension";
+  };
   dynatrace = mkAzExtension rec {
     pname = "dynatrace";
     version = "0.1.0";
