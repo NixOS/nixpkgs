@@ -65,13 +65,13 @@ let
     srcs.${stdenv.hostPlatform.system}.${branch}
       or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one cross-platform voice and text chat for gamers";
     downloadPage = "https://discordapp.com/download";
     homepage = "https://discordapp.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "discord";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       artturin
       donteatoreo
       infinidoge
@@ -83,7 +83,7 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
   package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
