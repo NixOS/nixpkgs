@@ -311,9 +311,9 @@
   };
   datamigration = mkAzExtension rec {
     pname = "datamigration";
-    version = "1.0.0b1";
+    version = "1.0.0b2";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/datamigration-${version}-py3-none-any.whl";
-    sha256 = "9d1ac8c7046e23387696561747be2e8f62e879a4a305f8b20ccd19460a29db0d";
+    sha256 = "8901b5664a95e665781698bc02ee94b4297c82ac9fdfab99dd4f13bac1c0923e";
     description = "Microsoft Azure Command-Line Tools DataMigrationManagementClient Extension";
   };
   dataprotection = mkAzExtension rec {
