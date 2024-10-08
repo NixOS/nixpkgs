@@ -1182,6 +1182,7 @@ mapAliases {
   openjdk22_headless = openjdk22; # Added 2024-09-24
   jdk22 = openjdk22; # Added 2024-09-24
   jdk22_headless = openjdk22; # Added 2024-09-24
+  openjfx11 = throw "OpenJFX 11 was removed as it has reached its end of life"; # Added 2024-10-07
   openjfx19 = throw "OpenJFX 19 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx20 = throw "OpenJFX 20 was removed as it has reached its end of life"; # Added 2024-08-01
   openjfx22 = throw "OpenJFX 22 was removed as it has reached its end of life"; # Added 2024-09-24
