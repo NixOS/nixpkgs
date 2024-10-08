@@ -6,6 +6,7 @@
   pkg-config,
   makeWrapper,
   cmake,
+  meson,
   ninja,
   aquamarine,
   binutils,
@@ -57,7 +58,8 @@ let
   inherit (lib.strings)
     makeBinPath
     optionalString
-    cmakeBool
+    mesonBool
+    mesonEnable
     ;
   inherit (lib.trivial)
     importJSON
@@ -90,11 +92,6 @@ customStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+wE97utoDfhQP6AMdZHUmBeL8grbce/Jv2i5M+6AbaE=";
   };
 
-  patches = [
-    # forces GCC to use -std=c++26 on CMake < 3.30
-    "${finalAttrs.src}/nix/stdcxx.patch"
-  ];
-
   postPatch = ''
     # Fix hardcoded paths to /usr installation
     sed -i "s#/usr#$out#" src/render/OpenGL.cpp
@@ -120,11 +117,13 @@ customStdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     hyprwayland-scanner
     makeWrapper
-    cmake
+    meson
     ninja
     pkg-config
-    python3 # for udis86
     wayland-scanner
+    # for udis86
+    cmake
+    python3
   ];
 
   outputs = [
@@ -166,15 +165,22 @@ customStdenv.mkDerivation (finalAttrs: {
     (optionals withSystemd [ systemd ])
   ];
 
-  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+  mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
 
-  cmakeFlags = mapAttrsToList cmakeBool {
-    "NO_XWAYLAND" = !enableXWayland;
-    "LEGACY_RENDERER" = legacyRenderer;
-    "NO_SYSTEMD" = !withSystemd;
-  };
+  mesonFlags = concatLists [
+    (mapAttrsToList mesonEnable {
+      "xwayland" = enableXWayland;
+      "legacy_renderer" = legacyRenderer;
+      "systemd" = withSystemd;
+    })
+    (mapAttrsToList mesonBool {
+      # PCH provides no benefits when building with Nix
+      "b_pch" = false;
+      "tracy_enable" = false;
+    })
+  ];
 
   postInstall = ''
     ${optionalString wrapRuntimeDeps ''
