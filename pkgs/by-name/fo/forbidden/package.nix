@@ -22,7 +22,6 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     alive-progress
     colorama
-    datetime
     pycurl
     pyjwt
     regex
