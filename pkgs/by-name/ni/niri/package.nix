@@ -93,6 +93,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
+    changelog = "https://github.com/YaLTeR/niri/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       iogamaster
