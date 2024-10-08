@@ -263,6 +263,10 @@ in
     dependencies = with self; [ nvim-cmp copilot-vim ];
   };
 
+  cmp-ctags = super.cmp-ctags.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+  };
+
   cmp-dap = super.cmp-dap.overrideAttrs {
     dependencies = with self; [ nvim-cmp nvim-dap ];
   };
