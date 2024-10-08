@@ -1053,9 +1053,9 @@
   };
   virtual-network-tap = mkAzExtension rec {
     pname = "virtual-network-tap";
-    version = "0.1.0";
-    url = "https://azurecliprod.blob.core.windows.net/cli-extensions/virtual_network_tap-${version}-py2.py3-none-any.whl";
-    sha256 = "7e3f634f8eb701cf6fef504159785bc90e6f5bd2482e459469dd9ab30601aa35";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/virtual_network_tap-${version}-py2.py3-none-any.whl";
+    sha256 = "ee5f6dcfc09fc09e0c3bbd386b4d3bc6cc1f8a3dde8ed550804f43ed4c3cb7ba";
     description = "Manage virtual network taps (VTAP)";
   };
   virtual-wan = mkAzExtension rec {
