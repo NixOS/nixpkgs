@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -13,13 +18,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-HmEh8WmKbdAimvzsAiaXcqSXoU1DJx06+s1EH1JZmwo=";
 
-  ldflags = [ "-s" "-w" "-X github.com/writefreely/writefreely.softwareVer=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/writefreely/writefreely.softwareVer=${version}"
+  ];
 
   tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
 
-  passthru.tests = { inherit (nixosTests) writefreely; };
+  passthru.tests = {
+    inherit (nixosTests) writefreely;
+  };
 
   meta = with lib; {
     description = "Build a digital writing community";
