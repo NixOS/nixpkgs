@@ -1,40 +1,62 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, sphinx
-, glib , pcre
-, libmysqlclient, libressl
+, cmake, pkg-config, sphinx, python3Packages
+, glib, pcre, pcre2, util-linux
+, libsysprof-capture, libmysqlclient, libressl
 , zlib, zstd
+, libselinux, libsepol
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.14.3-1";
+  version = "0.16.9-1";
 
   src = fetchFromGitHub {
-    owner  = "mydumper";
-    repo = "mydumper";
+    owner = pname;
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
+    hash = "sha256-f/NuDyicLG0RUl/ePGYa/4B2wAZ+roVLMc+kWkNxd+Q=";
+    # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "doc" "man" ];
 
-  nativeBuildInputs = [ cmake pkg-config sphinx ];
+  nativeBuildInputs = [ cmake pkg-config sphinx python3Packages.furo ];
 
   buildInputs = [
-    glib pcre
-    libmysqlclient libressl
+    glib pcre pcre2 util-linux
+    libmysqlclient libressl libsysprof-capture
     zlib zstd
-  ];
+  ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol ];
 
   cmakeFlags = [
+    "-DBUILD_DOCS=ON"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DWITH_ZSTD=ON"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=maybe-uninitialized";
+
+  postPatch = ''
+    # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
+    substituteInPlace CMakeLists.txt\
+      --replace-fail "/etc" "$out/etc"
+
+    # as of mydumper v0.16.5-1, mydumper disables building docs by default
+    substituteInPlace CMakeLists.txt\
+        --replace-fail "#  add_subdirectory(docs)" "add_subdirectory(docs)"
+  '';
+
+  preBuild = ''
+    cp -r $src/docs/images ./docs
+  '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "High-performance MySQL backup tool";
-    homepage = "https://github.com/maxbube/mydumper";
+    homepage = "https://github.com/mydumper/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
