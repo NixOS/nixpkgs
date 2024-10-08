@@ -5426,6 +5426,11 @@ with pkgs;
 
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
+  # Less secure variant of lowdown for use inside Nix builds.
+  lowdown-unsandboxed = lowdown.override {
+    enableDarwinSandbox = false;
+  };
+
   numatop = callPackage ../os-specific/linux/numatop { };
 
   numworks-udev-rules = callPackage ../os-specific/linux/numworks-udev-rules { };
