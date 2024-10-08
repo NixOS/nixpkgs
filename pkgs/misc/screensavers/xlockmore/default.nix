@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;
+    mainProgram = "xlock";
   };
 }
