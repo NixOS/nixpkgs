@@ -18,10 +18,17 @@ let
     done
     rm -r packages/grafana-e2e
   '';
+
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  patchGoVersion = ''
+    substituteInPlace go.{mod,work} pkg/build/go.mod \
+      --replace-fail "go 1.22.7" "go 1.22.6"
+  '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.9";
+  version = "10.4.10";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,7 +36,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-Rapbfh2sHHi6wDXpihY1gGx2fA6IM/04THsE1dw1rOo=";
+    hash = "sha256-qbKrSMhV2Zdqt3N8bUOn7sUuz9lHl2BbMy/Y6ymK/NY=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -49,6 +56,7 @@ buildGoModule rec {
     ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
     postPatch = ''
       ${patchAwayGrafanaE2E}
+      ${patchGoVersion}
     '';
     buildPhase = ''
       runHook preBuild
@@ -82,6 +90,7 @@ buildGoModule rec {
 
   postPatch = ''
     ${patchAwayGrafanaE2E}
+    ${patchGoVersion}
   '';
 
   postConfigure = ''
