@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libvpl";
-  version = "2.10.1";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "libvpl";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2yfJo4iwI/h0CJ+mJJ3cAyG5S7KksUibwJHebF3MR+E=";
+    hash = "sha256-H+pRdpk1B/QgsXaTxhQfm3JW5Plgz4esrUV1kKfjY1s=";
   };
 
   nativeBuildInputs = [
@@ -24,13 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-      "-DENABLE_DRI3=ON"
-      "-DENABLE_DRM=ON"
-      "-DENABLE_VA=ON"
-      "-DENABLE_WAYLAND=ON"
-      "-DENABLE_X11=ON"
-      "-DINSTALL_EXAMPLE_CODE=OFF"
-      "-DBUILD_TOOLS=OFF"
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   patches = [
@@ -39,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (addDriverRunpath) driverLink;
     })
   ];
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Intel Video Processing Library";
