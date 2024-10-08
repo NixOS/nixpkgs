@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, gitUpdater }:
 
 buildGoModule rec {
   pname = "corerad";
@@ -21,8 +21,11 @@ buildGoModule rec {
     ldflags+=" -X github.com/mdlayher/corerad/internal/build.linkTimestamp=$(<.gittagtime)"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) corerad;
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      inherit (nixosTests) corerad;
+    };
   };
 
   meta = with lib; {
