@@ -731,10 +731,10 @@
   };
   networkcloud = mkAzExtension rec {
     pname = "networkcloud";
-    version = "2.0.0b2";
+    version = "2.0.0b4";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/networkcloud-${version}-py3-none-any.whl";
-    sha256 = "28c43560516e254ab60708c0ac8cf868795ce76e4aa9da1548584b22331af467";
-    description = "Support for Azure Operator Nexus network cloud commands based on 2023-10-01-preview API version";
+    sha256 = "06707a008405739a5639230f3fd094031084a69f867648503aed4039d118ad9f";
+    description = "Support for Azure Operator Nexus network cloud commands based on 2024-07-01 API version";
   };
   new-relic = mkAzExtension rec {
     pname = "new-relic";
