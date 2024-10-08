@@ -5,6 +5,8 @@
   lib,
   python3,
   toybox,
+  withAdjustor ? false,
+  adjustor
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "handheld-daemon";
@@ -27,6 +29,8 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
     toybox
     xlib
+  ] ++ lib.optionals withAdjustor [
+    adjustor
   ];
 
   # This package doesn't have upstream tests.
