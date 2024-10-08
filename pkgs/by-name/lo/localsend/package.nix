@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchFromGitHub,
-  flutter313,
+  flutter324,
   makeDesktopItem,
   nixosTests,
   pkg-config,
@@ -16,14 +16,15 @@ let
   pname = "localsend";
   version = "1.15.4";
 
-  linux = flutter313.buildFlutterApplication rec {
-    inherit pname version;
+  linux = flutter324.buildFlutterApplication rec {
+    inherit pname;
+    version = "1.15.4-unstable-2024-09-25";
 
     src = fetchFromGitHub {
       owner = pname;
       repo = pname;
-      rev = "v${version}";
-      hash = "sha256-kfqLYe15NIRH12+AastWkLBk4L0MKEV5XZ/klE+pK7g=";
+      rev = "61f3ffdb8dd8b1116ced2e7b585f2f6662ce7d5f";
+      hash = "sha256-s7cR5ty8bygOCzHbLwNTBNlhlQ+2y25/ijlNqWYrqVw=";
     };
 
     sourceRoot = "${src.name}/app";
@@ -31,8 +32,7 @@ let
     pubspecLock = lib.importJSON ./pubspec.lock.json;
 
     gitHashes = {
-      "permission_handler_windows" = "sha256-a7bN7/A65xsvnQGXUvZCfKGtslbNWEwTWR8fAIjMwS0=";
-      "tray_manager" = "sha256-eF14JGf5jclsKdXfCE7Rcvp72iuWd9wuSZ8Bej17tjg=";
+      "permission_handler_windows" = "sha256-+TP3neqlQRZnW6BxHaXr2EbmdITIx1Yo7AEn5iwAhwM=";
     };
 
     nativeBuildInputs = [ pkg-config ];

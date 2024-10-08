@@ -9477,6 +9477,13 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+  jacobkoziej = {
+    name = "Jacob Koziej";
+    email = "jacobkoziej@gmail.com";
+    github = "jacobkoziej";
+    githubId = 45084216;
+    keys = [ { fingerprint = "1BF9 8D10 E0D0 0B41 5723  5836 4C13 3A84 E646 9228"; } ];
+  };
   jaduff = {
     email = "jdduffpublic@proton.me";
     github = "jaduff";

@@ -3463,7 +3463,9 @@ with pkgs;
 
   deterministic-uname = callPackage ../build-support/deterministic-uname { };
 
-  deterministic-host-uname = deterministic-uname.override { forPlatform = stdenv.hostPlatform; };
+  deterministic-host-uname = deterministic-uname.override {
+    forPlatform = stdenv.targetPlatform; # offset by 1 so it works in nativeBuildInputs
+  };
 
   dfmt = callPackage ../tools/text/dfmt { };
 
@@ -14552,11 +14554,7 @@ with pkgs;
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
   flutter324 = flutterPackages.v3_24;
-  flutter323 = flutterPackages.v3_23;
-  flutter322 = flutterPackages.v3_22;
   flutter319 = flutterPackages.v3_19;
-  flutter316 = flutterPackages.v3_16;
-  flutter313 = flutterPackages.v3_13;
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -25615,9 +25613,7 @@ with pkgs;
 
   firmware-manager = callPackage ../os-specific/linux/firmware/firmware-manager { };
 
-  firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater {
-    flutter = flutterPackages.v3_22;
-  };
+  firmware-updater = callPackage ../os-specific/linux/firmware/firmware-updater { };
 
   fwts = callPackage ../os-specific/linux/fwts { };
 
