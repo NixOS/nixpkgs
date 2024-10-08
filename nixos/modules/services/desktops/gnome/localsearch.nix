@@ -1,5 +1,3 @@
-# LocalSearch daemons.
-
 {
   config,
   pkgs,
@@ -8,7 +6,6 @@
 }:
 
 {
-
   meta = {
     maintainers = lib.teams.gnome.members;
   };
@@ -30,12 +27,8 @@
     )
   ];
 
-  ###### interface
-
   options = {
-
     services.gnome.localsearch = {
-
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -44,21 +37,14 @@
           search engine and metadata storage system.
         '';
       };
-
     };
-
   };
 
-  ###### implementation
-
   config = lib.mkIf config.services.gnome.localsearch.enable {
-
     environment.systemPackages = [ pkgs.localsearch ];
 
     services.dbus.packages = [ pkgs.localsearch ];
 
     systemd.packages = [ pkgs.localsearch ];
-
   };
-
 }
