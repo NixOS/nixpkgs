@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   extendModules,
   ...
 }:
@@ -22,6 +23,16 @@ let
     vagrant-virtualbox = [ ./vagrant-virtualbox-image.nix ];
     virtualbox = [ ./virtualbox-image.nix ];
     vmware = [ ./vmware-image.nix ];
+    iso = [ ../installer/cd-dvd/iso-image.nix ];
+    iso-installer = [ ../installer/cd-dvd/installation-cd-base.nix ];
+    sd-card = [
+      (
+        let
+          module = ../. + "/installer/sd-card/sd-image-${pkgs.targetPlatform.linuxArch}.nix";
+        in
+        if builtins.pathExists module then module else throw "The module ${module} does not exist."
+      )
+    ];
   };
   imageConfigs = lib.mapAttrs (
     name: modules:
