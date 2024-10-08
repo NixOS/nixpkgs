@@ -51,6 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  mesonCheckFlags = [
+    # The service-proxy test takes 28s on ofborg, which is too close to the time limit.
+    "--timeout-multiplier" "2"
+  ];
+
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
