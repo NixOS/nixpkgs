@@ -3,7 +3,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  pythonOlder,
+
+  # Build
+  setuptools,
 
   # Dependencies
   gitpython,
@@ -14,9 +17,9 @@
 buildPythonPackage rec {
   pname = "mkdocs-git-committers-plugin-2";
   version = "2.4.1";
-  format = "setuptools";
+  pyproject = true;
 
-  disabled = !pythonAtLeast "3.8";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ojacques";
@@ -25,12 +28,18 @@ buildPythonPackage rec {
     hash = "sha256-hKt0K5gOkdUDwTlyMTwodl4gD1RD+s+CM+zEpngSnlc=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     gitpython
     mkdocs
     requests
   ];
 
+  # Upstream has no tests
+  doCheck = false;
   pythonImportsCheck = [ "mkdocs_git_committers_plugin_2" ];
 
   meta = {
