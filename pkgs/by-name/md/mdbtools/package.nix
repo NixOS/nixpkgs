@@ -10,6 +10,10 @@
   autoreconfHook,
   txt2man,
   which,
+  withLibiodbc ? false,
+  libiodbc,
+  withUnixODBC ? true,
+  unixODBC,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,18 +27,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XWkFgQZKx9/pjVNEqfp9BwgR7w3fVxQ/bkJEYUvCXPs=";
   };
 
-  configureFlags = [ "--disable-scrollkeeper" ];
+  configureFlags =
+    [ "--disable-scrollkeeper" ]
+    ++ lib.optional withUnixODBC "--with-unixodbc=${unixODBC}"
+    ++ lib.optional withLibiodbc "--with-iodbc=${libiodbc}";
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=unused-but-set-variable";
 
-  nativeBuildInputs = [
-    pkg-config
-    bison
-    flex
-    autoreconfHook
-    txt2man
-    which
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      bison
+      flex
+      autoreconfHook
+      txt2man
+      which
+    ]
+    ++ lib.optional withLibiodbc libiodbc
+    ++ lib.optional withUnixODBC unixODBC;
 
   buildInputs = [
     glib
