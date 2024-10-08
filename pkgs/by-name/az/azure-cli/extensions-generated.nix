@@ -680,6 +680,13 @@
     sha256 = "062ad026d9eaf791b5928c4fb793148d40c6c297cee32f175cd3a155eb24d93f";
     description = "Microsoft Azure Command-Line Tools Mdp Extension";
   };
+  microsoft-fabric = mkAzExtension rec {
+    pname = "microsoft-fabric";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/microsoft_fabric-${version}-py3-none-any.whl";
+    sha256 = "8ba450a5a3daafa8b9b6b6e9ee8224f468fd972332e905000f2acc7ff00cd9bb";
+    description = "Microsoft Azure Command-Line Tools Microsoft Fabric Extension";
+  };
   mixed-reality = mkAzExtension rec {
     pname = "mixed-reality";
     version = "0.0.5";
