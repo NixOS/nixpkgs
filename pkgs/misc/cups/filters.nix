@@ -18,6 +18,7 @@
 , liblouis
 , libpng
 , makeWrapper
+, autoreconfHook
 , mupdf
 , perl
 , pkg-config
@@ -53,9 +54,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenPrinting/libcupsfilters/commit/95576ec3d20c109332d14672a807353cdc551018.patch";
       hash = "sha256-MXWllrdWt8n7zqvumQNg34dBgWMwMTwf9lrD+ZZP8Wk=";
     })
+    (fetchpatch {
+      name = "remove-cups-ldap-browse-protocols_CVE-2024-47176_CVE-2024-47850.patch";
+      url = "https://github.com/OpenPrinting/cups-filters/commit/6fd2bdfbdce76149af531ce9fca9062304238451.patch";
+      hash = "sha256-XS1ODy7i7ilgEjsKuEvOUiRN9pqsj+bOktKoshKcg8Q=";
+    })
   ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ pkg-config makeWrapper autoreconfHook ];
 
   buildInputs = [
     cups
