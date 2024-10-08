@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # and the scheme handler is already registered in the packaged .desktop file, rendering this unnecessary
     # see https://github.com/NixOS/nixpkgs/issues/218370
     ./scheme.patch
+    ./qt68.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
