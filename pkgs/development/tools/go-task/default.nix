@@ -12,7 +12,7 @@ buildGoModule rec {
   version = "3.39.2";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "go-task";
     repo = "task";
     rev = "refs/tags/v${version}";
     hash = "sha256-B5o3oAey7zJg5JBf4GO69cLmVbnkKedkjWP108XRGR8=";
