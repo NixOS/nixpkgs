@@ -2498,10 +2498,6 @@ with pkgs;
 
   cen64 = callPackage ../applications/emulators/cen64 { };
 
-  citations = callPackage ../applications/misc/citations { };
-
-  webfontkitgenerator = callPackage ../applications/misc/webfontkitgenerator { };
-
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
   coltrane = callPackage ../applications/misc/coltrane { };
@@ -11643,8 +11639,6 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  raider = callPackage ../applications/misc/raider { };
-
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -14362,8 +14356,6 @@ with pkgs;
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
   };
-
-  blueprint-compiler = callPackage ../development/compilers/blueprint { };
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
@@ -38108,8 +38100,6 @@ with pkgs;
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
-
-  twitch-cli = callPackage ../development/tools/twitch-cli { };
 
   uacme = callPackage ../tools/admin/uacme { };
 
