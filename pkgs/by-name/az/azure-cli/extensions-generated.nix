@@ -563,9 +563,9 @@
   };
   import-export = mkAzExtension rec {
     pname = "import-export";
-    version = "0.1.1";
-    url = "https://azurecliprod.blob.core.windows.net/cli-extensions/import_export-${version}-py3-none-any.whl";
-    sha256 = "0680948362e12138c9582e68e471533482749bd660bfe3c8c2a4d856e90927b0";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/import_export-${version}-py3-none-any.whl";
+    sha256 = "c4e36f1003031a67615a45cd12592bf5c11c54b7bd957f6c2af90efcb5c517b2";
     description = "Microsoft Azure Command-Line Tools StorageImportExport Extension";
   };
   informatica = mkAzExtension rec {
