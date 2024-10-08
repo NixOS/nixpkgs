@@ -15152,7 +15152,6 @@ with pkgs;
   juniper = callPackage ../development/compilers/juniper { };
 
   inherit (callPackage ../development/compilers/julia { })
-    julia_16-bin
     julia_19-bin
     julia_110-bin
     julia_111-bin
@@ -15160,11 +15159,11 @@ with pkgs;
     julia_110
     julia_111;
 
-  julia-lts = julia_16-bin;
+  julia-lts = julia_110-bin;
   julia-stable = julia_110;
   julia = julia-stable;
 
-  julia-lts-bin = julia_16-bin;
+  julia-lts-bin = julia_110-bin;
   julia-stable-bin = julia_110-bin;
   julia-bin = julia-stable-bin;
 

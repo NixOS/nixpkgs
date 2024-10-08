@@ -12,7 +12,6 @@ let
 in
 
 {
-  julia_16-bin = wrapJulia (callPackage ./1.6-bin.nix { });
   julia_19-bin = wrapJulia (callPackage
     (import ./generic-bin.nix {
       version = "1.9.4";
