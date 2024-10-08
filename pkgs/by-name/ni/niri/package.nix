@@ -1,23 +1,22 @@
 {
   lib,
-  rustPlatform,
-  fetchFromGitHub,
-  nix-update-script,
-  pkg-config,
-  libdisplay-info,
-  libxkbcommon,
-  pango,
-  pipewire,
-  seatd,
-  stdenv,
-  wayland,
-  systemd,
-  libinput,
-  mesa,
-  fontconfig,
-  libglvnd,
   autoPatchelfHook,
   clang,
+  dbus,
+  fetchFromGitHub,
+  libdisplay-info,
+  libglvnd,
+  libinput,
+  libxkbcommon,
+  mesa,
+  nix-update-script,
+  pango,
+  pipewire,
+  pkg-config,
+  rustPlatform,
+  seatd,
+  systemd,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -39,30 +38,29 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    pkg-config
-    rustPlatform.bindgenHook
     autoPatchelfHook
     clang
+    pkg-config
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [
-    wayland
-    systemd # For libudev
-    seatd # For libseat
+    dbus
     libdisplay-info
-    libxkbcommon
     libinput
+    libxkbcommon
     mesa # For libgbm
-    fontconfig
-    stdenv.cc.cc.lib
-    pipewire
     pango
+    pipewire
+    seatd
+    systemd # Also includes libudev
   ];
 
   runtimeDependencies = [
     wayland
-    mesa
     libglvnd # For libEGL
   ];
 
