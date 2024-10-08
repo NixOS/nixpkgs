@@ -9,6 +9,7 @@
 , which
 , python3
 , gfortran
+, cacert
 , cmake
 , perl
 , gnum4
@@ -43,6 +44,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     zlib
+  ] ++ lib.optionals (lib.versionAtLeast version "1.11") [
+    cacert
   ];
 
   dontUseCmakeConfigure = true;
