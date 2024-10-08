@@ -42,10 +42,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "xarray" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/pydata/xarray/blob/${src.rev}/doc/whats-new.rst";
     description = "N-D labeled arrays and datasets in Python";
     homepage = "https://github.com/pydata/xarray";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }
