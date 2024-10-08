@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, options, lib, pkgs, ... }:
 
 with lib;
 
@@ -283,6 +283,23 @@ in
       '';
     };
 
+    httpPort = mkOption {
+      default = 80;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTP traffic.
+      '';
+    };
+
+    httpsPort = mkOption {
+      default = 443;
+      type = with types; nullOr port;
+      description = ''
+        The default port to listen on for HTTPS traffic.
+        Will also be used for HTTP/3.
+      '';
+    };
+
     enableReload = mkOption {
       default = true;
       type = types.bool;
@@ -319,6 +336,20 @@ in
         :::
       '';
     };
+
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to enable opening the specified http(s) ports in the firewall.
+        Any port set to `null` will not be opened.
+
+        ::: {.note}
+        If you use other ports for your virtual hosts, you need to open them manually.
+        :::
+      '';
+    };
   };
 
   # implementation
@@ -337,6 +368,8 @@ in
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
       ${optionalString (cfg.acmeCA != null) "acme_ca ${cfg.acmeCA}"}
+      ${optionalString (!elem cfg.httpPort [null options.services.caddy.httpPort.default]) "http_port ${cfg.httpPort}"}
+      ${optionalString (!elem cfg.httpsPort [null options.services.caddy.httpsPort.default]) "https_port ${cfg.httpsPort}"}
       log {
         ${cfg.logFormat}
       }
@@ -405,5 +438,10 @@ in
         listToAttrs certCfg;
 
     environment.etc.${etcConfigFile}.source = cfg.configFile;
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = filter (port: port != null) [ cfg.httpPort cfg.httpsPort ];
+      allowedUDPPorts = optional (cfg.httpsPort != null) cfg.httpsPort;
+    };
   };
 }
