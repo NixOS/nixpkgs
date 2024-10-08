@@ -73,6 +73,7 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [
       artturin
+      donteatoreo
       infinidoge
       jopejoe1
       Scrumplex
