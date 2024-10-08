@@ -7424,10 +7424,6 @@ with pkgs;
 
   fcitx5-bamboo = callPackage ../tools/inputmethods/fcitx5/fcitx5-bamboo.nix { };
 
-  fcitx5-mozc = callPackage ../tools/inputmethods/fcitx5/fcitx5-mozc.nix { };
-
-  fcitx5-mozc-ut = fcitx5-mozc.override { mozc = mozc-ut; };
-
   fcitx5-skk = qt6Packages.callPackage ../tools/inputmethods/fcitx5/fcitx5-skk.nix { };
 
   fcitx5-anthy = callPackage ../tools/inputmethods/fcitx5/fcitx5-anthy.nix { };
