@@ -15,10 +15,10 @@ buildGoModule rec {
     owner = pname;
     repo = "task";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mz/07DONaO3kCxOXEnvWglY0b9JXxCXjTrVIEbsbl98=";
+    hash = "sha256-B5o3oAey7zJg5JBf4GO69cLmVbnkKedkjWP108XRGR8=";
   };
 
-  vendorHash = "sha256-2M/FrXip0Tz0wguCd81qbBDW3XIJlAWwVzD+hIFm6sw=";
+  vendorHash = "sha256-P9J69WJ2C2xgdU9xydiaY8iSKB7ZfexLNYi7dyHDTIk=";
 
   patches = [
     # fix version resolution when passed in though ldflags
