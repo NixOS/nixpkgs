@@ -1,3 +1,11 @@
+/*
+  This profile uses NixOS to create a remote builder VM to build Linux packages,
+  which can be used to build packages for Linux on other operating systems;
+  primarily macOS.
+
+  It contains both the relevant guest settings as well as an installer script
+  that manages it as a QEMU virtual machine on the host.
+ */
 { config, lib, options, ... }:
 
 let
