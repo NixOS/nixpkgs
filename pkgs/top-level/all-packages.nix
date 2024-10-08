@@ -38109,8 +38109,6 @@ with pkgs;
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
-  twitch-cli = callPackage ../development/tools/twitch-cli { };
-
   uacme = callPackage ../tools/admin/uacme { };
 
   ufiformat = callPackage ../tools/system/ufiformat { };
