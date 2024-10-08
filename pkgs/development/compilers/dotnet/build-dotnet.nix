@@ -207,6 +207,7 @@ mkCommon type rec {
     maintainers = with maintainers; [
       kuznero
       mdarocha
+      corngood
     ];
     mainProgram = "dotnet";
     platforms = lib.filter (
