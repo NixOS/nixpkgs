@@ -25,9 +25,15 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "niri";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-4YDrKMwXGVOBkeaISbxqf24rLuHvO98TnqxWYfgiSeg=";
   };
+
+  postPatch = ''
+    patchShebangs resources/niri-session
+    substituteInPlace resources/niri.service \
+      --replace-fail '/usr/bin' "$out/bin"
+  '';
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -59,14 +65,6 @@ rustPlatform.buildRustPackage rec {
     wayland # For libwayland-client
   ];
 
-  passthru.providedSessions = [ "niri" ];
-
-  postPatch = ''
-    patchShebangs ./resources/niri-session
-    substituteInPlace ./resources/niri.service \
-      --replace-fail '/usr/bin' "$out/bin"
-  '';
-
   postInstall = ''
     install -Dm0755 ./resources/niri-session -t $out/bin
     install -Dm0644 resources/niri.desktop -t $out/share/wayland-sessions
@@ -87,18 +85,21 @@ rustPlatform.buildRustPackage rec {
     );
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    providedSessions = [ "niri" ];
+    updateScript = nix-update-script { };
+  };
 
-  meta = with lib; {
+  meta = {
     description = "Scrollable-tiling Wayland compositor";
     homepage = "https://github.com/YaLTeR/niri";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       iogamaster
       foo-dogsquared
       sodiboo
     ];
     mainProgram = "niri";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
