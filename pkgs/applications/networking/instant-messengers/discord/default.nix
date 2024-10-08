@@ -72,10 +72,10 @@ let
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [
-      Scrumplex
       artturin
       infinidoge
       jopejoe1
+      Scrumplex
     ];
     platforms = [
       "x86_64-linux"
