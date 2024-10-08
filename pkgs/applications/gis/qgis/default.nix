@@ -4,24 +4,27 @@
 
 , extraPythonPackages ? (ps: [ ])
 
+# Example of unwrapped package override:
+# qgis.override { unwrapped = qgis.passthru.unwrapped.override { withServer = true; }; }
+, unwrapped ? libsForQt5.callPackage ./unwrapped.nix { }
+
 , libsForQt5
 }:
-let
-  qgis-unwrapped = libsForQt5.callPackage ./unwrapped.nix {  };
-in symlinkJoin rec {
 
-  inherit (qgis-unwrapped) version;
+symlinkJoin rec {
+
+  inherit (unwrapped) version;
   name = "qgis-${version}";
 
-  paths = [ qgis-unwrapped ];
+  paths = [ unwrapped ];
 
   nativeBuildInputs = [
     makeWrapper
-    qgis-unwrapped.py.pkgs.wrapPython
+    unwrapped.py.pkgs.wrapPython
   ];
 
   # extend to add to the python environment of QGIS without rebuilding QGIS application.
-  pythonInputs = qgis-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-unwrapped.py.pkgs);
+  pythonInputs = unwrapped.pythonBuildInputs ++ (extraPythonPackages unwrapped.py.pkgs);
 
   postBuild = ''
     buildPythonPath "$pythonInputs"
@@ -34,9 +37,9 @@ in symlinkJoin rec {
   '';
 
   passthru = {
-    unwrapped = qgis-unwrapped;
+    unwrapped = unwrapped;
     tests.qgis = nixosTests.qgis;
   };
 
-  meta = qgis-unwrapped.meta;
+  meta = unwrapped.meta;
 }
