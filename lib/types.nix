@@ -623,7 +623,7 @@ rec {
         binOp = lhs: rhs:
           let
             elemType = lhs.elemType.typeMerge rhs.elemType.functor;
-            name = 
+            name =
               if lhs.name == rhs.name then
                 lhs.name
               else if lhs.name == "name" then
@@ -632,7 +632,7 @@ rec {
                 lhs.name
               else
                 null;
-            lazy = 
+            lazy =
               if lhs.lazy == rhs.lazy then
                 lhs.lazy
               else
