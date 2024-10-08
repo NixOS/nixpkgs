@@ -78,6 +78,22 @@
           );
       });
 
+      systems.x86_64-linux.test =
+        (self.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ({
+              boot.loader.grub.enable = false;
+              fileSystems."/".device = "nodev";
+              # See https://search.nixos.org/options?show=system.stateVersion&query=stateversion
+              system.stateVersion = lib.versions.majorMinor lib.version; # DON'T do this in real configs!
+
+              programs.nix-ld.systems.x86_64-linux = { };
+            })
+          ];
+        });
+      packages.x86_64-linux.test = self.systems.x86_64-linux.test.config.system.build.toplevel;
+
       checks = forAllSystems (system: {
         tarball = jobs.${system}.tarball;
         # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
