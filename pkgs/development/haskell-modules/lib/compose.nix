@@ -466,7 +466,7 @@ rec {
     which is cross aware instead.
   */
   generateOptparseApplicativeCompletions = commands: pkg:
-    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211) "haskellLib.generateOptparseApplicativeCompletions is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
       (pkgs.lib.foldr __generateOptparseApplicativeCompletion pkg commands);
 
   /*
@@ -475,7 +475,7 @@ rec {
     which is cross aware instead.
   */
   generateOptparseApplicativeCompletion = command: pkg:
-    lib.warnIf (lib.isInOldestRelease 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2211) "haskellLib.generateOptparseApplicativeCompletion is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions (plural!). Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!"
       (__generateOptparseApplicativeCompletion command pkg);
 
   # Don't fail at configure time if there are multiple versions of the

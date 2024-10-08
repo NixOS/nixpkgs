@@ -39,7 +39,7 @@ let
   optionalDeprecationWarning =
     # substitutions is only available starting 24.05.
     # TODO: Remove support for replacements sometime after the next release
-    lib.warnIf (args ? replacements && lib.isInOldestRelease 2405) ''
+    lib.warnIf (args ? replacements && lib.oldestSupportedReleaseIsAtLeast 2405) ''
       pkgs.substitute: For "${name}", `replacements` is used, which is deprecated since it doesn't support arguments with spaces. Use `substitutions` instead:
         substitutions = [ ${deprecationReplacement} ];'';
 in
