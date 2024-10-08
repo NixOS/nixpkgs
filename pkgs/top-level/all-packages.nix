@@ -11651,8 +11651,6 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  raider = callPackage ../applications/misc/raider { };
-
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
