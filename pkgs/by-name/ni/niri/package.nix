@@ -118,6 +118,7 @@ rustPlatform.buildRustPackage rec {
       iogamaster
       foo-dogsquared
       sodiboo
+      getchoo
     ];
     mainProgram = "niri";
     platforms = lib.platforms.linux;
