@@ -708,6 +708,13 @@
     sha256 = "3151a341845d053a4be45d9b7c04e1e15b88503ab6b110163a12b9aee6fd3cd9";
     description = "Microsoft Azure Command-Line Tools MonitorClient Extension";
   };
+  monitor-pipeline-group = mkAzExtension rec {
+    pname = "monitor-pipeline-group";
+    version = "1.0.0b1";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/monitor_pipeline_group-${version}-py3-none-any.whl";
+    sha256 = "cf31f9e3fa9458716f0c3d1c15698ef79b707c5bd7d146773d2b2afe42e64c29";
+    description = "Microsoft Azure Command-Line Tools MonitorPipelineGroup Extension";
+  };
   network-analytics = mkAzExtension rec {
     pname = "network-analytics";
     version = "1.0.0b1";
