@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
@@ -44,6 +45,9 @@
   enableNvidiaPatches ? false,
 }:
 let
+  inherit (builtins)
+    foldl'
+    ;
   inherit (lib.asserts) assertMsg;
   inherit (lib.attrsets) mapAttrsToList;
   inherit (lib.lists)
@@ -60,13 +64,21 @@ let
     ;
 
   info = importJSON ./info.json;
+
+  # possibility to add more adapters in the future, such as keepDebugInfo,
+  # which would be controlled by the `debug` flag
+  adapters = [
+    stdenvAdapters.useMoldLinker
+  ];
+
+  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
 in
 assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
 assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
 assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 
-stdenv.mkDerivation (finalAttrs: {
+customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
   version = "0.43.0";
 
@@ -142,8 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       xorg.libXcursor
     ]
-    (optionals stdenv.hostPlatform.isBSD [ epoll-shim ])
-    (optionals stdenv.hostPlatform.isMusl [ libexecinfo ])
+    (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
+    (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
     (optionals enableXWayland [
       xorg.libxcb
       xorg.libXdmcp
