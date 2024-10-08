@@ -6,6 +6,7 @@
   fetchYarnDeps,
   fetchpatch2,
   makeWrapper,
+  nixosTests,
   yarnBuildHook,
   yarnConfigHook,
   # dependencies
@@ -156,6 +157,10 @@ stdenvNoCC.mkDerivation rec {
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
     hash = "sha256-JX1Kjg60/eYaVj+OaEbNSKVY7p/GknTfWqNUsnSNYao=";
+  };
+
+  passthru.tests = {
+    inherit (nixosTests) linkwarden;
   };
 
   meta = {
