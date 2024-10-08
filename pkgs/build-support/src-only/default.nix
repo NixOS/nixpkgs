@@ -45,6 +45,8 @@ let
     // {
       name = "${name}-source";
 
+      outputs = [ "out" ];
+
       phases = [
         "unpackPhase"
         "patchPhase"
