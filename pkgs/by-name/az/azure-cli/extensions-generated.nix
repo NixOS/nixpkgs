@@ -752,9 +752,9 @@
   };
   nginx = mkAzExtension rec {
     pname = "nginx";
-    version = "2.0.0b5";
+    version = "2.0.0b6";
     url = "https://azcliprod.blob.core.windows.net/cli-extensions/nginx-${version}-py2.py3-none-any.whl";
-    sha256 = "92e0b817bb863173da129abd3c326e058df3afce0fbb9851e6ff8ccea3c04773";
+    sha256 = "d94f77c12ce6945c823f7efa84238e398b5aec878156bbdf3112f0def1eb8960";
     description = "Microsoft Azure Command-Line Tools Nginx Extension";
   };
   notification-hub = mkAzExtension rec {
