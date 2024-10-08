@@ -827,7 +827,7 @@ if [ -z "$rollback" ]; then
             )"
         fi
         if ! echo "$variants" | jq -e --arg variant "$imageVariant" "any(. == \$variant)" > /dev/null; then
-            log "Please specify one of the following supported image variants via --image-variant:\n"
+            echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
             echo "$variants" | jq -r '. | join ("\n")'
             exit 1
         fi
