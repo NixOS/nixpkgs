@@ -30,5 +30,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ boltzmannrain ];
     platforms = platforms.darwin;
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }
