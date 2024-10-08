@@ -15,6 +15,7 @@
 , openssl
 , libxml2
 , zlib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,10 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+  '' + lib.optionalString (lib.versionAtLeast version "1.11") ''
+    substituteInPlace deps/curl.mk \
+      --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
+                     'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
   '';
 
   makeFlags = [
