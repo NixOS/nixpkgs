@@ -372,6 +372,10 @@ with pkgs;
     propagatedBuildInputs = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
 
+  buf = callPackage ../by-name/bu/buf/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
@@ -2498,10 +2502,6 @@ with pkgs;
 
   cen64 = callPackage ../applications/emulators/cen64 { };
 
-  citations = callPackage ../applications/misc/citations { };
-
-  webfontkitgenerator = callPackage ../applications/misc/webfontkitgenerator { };
-
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
   coltrane = callPackage ../applications/misc/coltrane { };
@@ -3502,8 +3502,6 @@ with pkgs;
   echidna = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/security/echidna { });
 
   sedutil = callPackage ../tools/security/sedutil { };
-
-  emplace = callPackage ../tools/package-management/emplace { };
 
   enchive = callPackage ../tools/security/enchive { };
 
@@ -5425,6 +5423,11 @@ with pkgs;
   lssecret = callPackage ../misc/lssecret {};
 
   lowdown = callPackage ../tools/typesetting/lowdown { };
+
+  # Less secure variant of lowdown for use inside Nix builds.
+  lowdown-unsandboxed = lowdown.override {
+    enableDarwinSandbox = false;
+  };
 
   numatop = callPackage ../os-specific/linux/numatop { };
 
@@ -8612,8 +8615,6 @@ with pkgs;
 
   idle3tools = callPackage ../tools/system/idle3tools { };
 
-  ifcopenshell = with python3Packages; toPythonApplication ifcopenshell;
-
   iftop = callPackage ../tools/networking/iftop { };
 
   ifwifi = callPackage ../tools/networking/ifwifi {
@@ -10608,10 +10609,6 @@ with pkgs;
 
   nylon = callPackage ../tools/networking/nylon { };
 
-  nym = darwin.apple_sdk_11_0.callPackage ../applications/networking/nym {
-    inherit (darwin.apple_sdk.frameworks) Security CoreServices;
-  };
-
   oapi-codegen = callPackage ../tools/networking/oapi-codegen { };
 
   oatpp = callPackage ../development/libraries/oatpp { };
@@ -10941,8 +10938,6 @@ with pkgs;
   payload_dumper = callPackage ../tools/archivers/payload_dumper { };
 
   payload-dumper-go = callPackage ../tools/archivers/payload-dumper-go { };
-
-  p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf_21;
@@ -11647,8 +11642,6 @@ with pkgs;
   };
 
   quilt = callPackage ../development/tools/quilt { };
-
-  raider = callPackage ../applications/misc/raider { };
 
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
@@ -14367,8 +14360,6 @@ with pkgs;
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
   };
-
-  blueprint-compiler = callPackage ../development/compilers/blueprint { };
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
@@ -24905,28 +24896,13 @@ with pkgs;
 
   nagios = callPackage ../servers/monitoring/nagios { };
 
+  nagiosPlugins = callPackages ../servers/monitoring/nagios-plugins { };
+
   monitoring-plugins = callPackage ../servers/monitoring/plugins { };
-
-  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { })
-    check-mssql-health
-    check-nwc-health
-    check-ups-health;
-
-  check-openvpn = callPackage ../servers/monitoring/plugins/openvpn.nix { };
-
-  check_smartmon = callPackage ../servers/monitoring/nagios/plugins/smartmon.nix { };
-
-  checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
-
-  check_systemd = callPackage ../servers/monitoring/nagios/plugins/check_systemd.nix { };
-
-  check_zfs = callPackage ../servers/monitoring/nagios/plugins/zfs.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
   neo4j-desktop = callPackage ../applications/misc/neo4j-desktop { };
-
-  check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix { };
 
   net-snmp = callPackage ../servers/monitoring/net-snmp { };
 
@@ -25217,8 +25193,6 @@ with pkgs;
     sensu-go-agent
     sensu-go-backend
     sensu-go-cli;
-
-  check-wmiplus = callPackage ../servers/monitoring/plugins/wmiplus { };
 
   shishi = callPackage ../servers/shishi {
       pam = if stdenv.hostPlatform.isLinux then pam else null;
@@ -38131,8 +38105,6 @@ with pkgs;
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
-  twitch-cli = callPackage ../development/tools/twitch-cli { };
-
   uacme = callPackage ../tools/admin/uacme { };
 
   ufiformat = callPackage ../tools/system/ufiformat { };
@@ -38534,9 +38506,7 @@ with pkgs;
 
   hy = with python3Packages; toPythonApplication hy;
 
-  wmic-bin = callPackage ../servers/monitoring/plugins/wmic-bin.nix { };
-
-  check-uptime = callPackage ../servers/monitoring/plugins/uptime.nix { };
+  wmic-bin = callPackage ../servers/monitoring/wmic-bin { };
 
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { };
 
