@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ointu7N4piOHogBRx8f0Qwtfu+lM3GgtDVrQEX20HhY=";
+    hash = "sha256-VQjK4wNOuUk3KhlvSlDbyclC+RUjeEIVvPN+bKq0fFc=";
   };
 
   postPatch = ''
