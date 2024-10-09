@@ -213,6 +213,9 @@ in
   };
 
   chadtree = super.chadtree.overrideAttrs {
+    buildInputs = [
+      python3
+    ];
     passthru.python3Dependencies =
       ps: with ps; [
         pynvim-pp
@@ -222,6 +225,7 @@ in
 
     # We need some patches so it stops complaining about not being in a venv
     patches = [ ./patches/chadtree/emulate-venv.patch ];
+    nvimRequireCheck = "chadtree";
   };
 
   ChatGPT-nvim = super.ChatGPT-nvim.overrideAttrs {
