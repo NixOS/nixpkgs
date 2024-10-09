@@ -8193,11 +8193,6 @@ with pkgs;
 
   groff = callPackage ../tools/text/groff { };
 
-  gromit-mpx = callPackage ../tools/graphics/gromit-mpx {
-    gtk = gtk3;
-    libappindicator = libappindicator-gtk3;
-  };
-
   gron = callPackage ../development/tools/gron { };
 
   groonga = callPackage ../servers/search/groonga { };
