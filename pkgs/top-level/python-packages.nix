@@ -9896,6 +9896,8 @@ self: super: with self; {
     inherit (pkgs.libsForQt5) wrapQtAppsHook;
   };
 
+  plover-modal-dictionary = callPackage ../development/python-modules/plover-modal-dictionary { };
+
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
 
   micloud = callPackage ../development/python-modules/micloud { };
