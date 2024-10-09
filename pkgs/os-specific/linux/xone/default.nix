@@ -19,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/medusalix/xone/commit/28df566c38e0ee500fd5f74643fc35f21a4ff696.patch";
       hash = "sha256-X14oZmxqqZJoBZxPXGZ9R8BAugx/hkSOgXlGwR5QCm8=";
     })
+    # Fix build on kernel 6.12
+    # https://github.com/medusalix/xone/pull/53
+    (fetchpatch {
+      name = "kernel-6.12.patch";
+      url = "https://github.com/medusalix/xone/commit/d88ea1e8b430d4b96134e43ca1892ac48334578e.patch";
+      hash = "sha256-zQK1tuxu2ZmKxPO0amkfcT/RFBSkU2pWD0qhGyCCHXI=";
+    })
   ];
 
   setSourceRoot = ''
