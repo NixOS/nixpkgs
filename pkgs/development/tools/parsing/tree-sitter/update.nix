@@ -439,6 +439,10 @@ let
       orga = "glehmann";
       repo = "tree-sitter-earthfile";
     };
+    "tree-sitter-sml" = {
+      orga = "stonebuddha";
+      repo = "tree-sitter-sml";
+    };
   };
 
   allGrammars =
