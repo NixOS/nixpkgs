@@ -1,5 +1,9 @@
 # Wrapper around wrapPythonProgramsIn, below. The $pythonPath
 # variable is passed in from the buildPythonPackage function.
+
+# shellcheck source=pkgs/development/interpreters/python/compat-helpers.sh
+source @compatHelpers@
+
 wrapPythonPrograms() {
     wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
 }
@@ -71,26 +75,20 @@ wrapPythonProgramsIn() {
                     # wrapProgram creates the executable shell script described
                     # above. The script will set PYTHONPATH and PATH variables.!
                     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
-                    local -a wrap_args=("$f"
+                    local -a defaultMakeWrapperArgs=("$f"
                                     --prefix PATH ':' "$program_PATH"
                                     )
 
                     if [ -z "$permitUserSite" ]; then
-                        wrap_args+=(--set PYTHONNOUSERSITE "true")
+                        defaultMakeWrapperArgs+=(--set PYTHONNOUSERSITE "true")
                     fi
 
                     # Add any additional arguments provided by makeWrapperArgs
                     # argument to buildPythonPackage.
-                    # We need to support both the case when makeWrapperArgs
-                    # is an array and a IFS-separated string.
-                    # TODO: remove the string branch when __structuredAttrs are used.
-                    if [[ "${makeWrapperArgs+defined}" == "defined" && "$(declare -p makeWrapperArgs)" =~ ^'declare -a makeWrapperArgs=' ]]; then
-                        local -a user_args=("${makeWrapperArgs[@]}")
-                    else
-                        local -a user_args="(${makeWrapperArgs:-})"
-                    fi
-
-                    local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
+                    # If makeWrapperArgs is IFS-separated string,
+                    # Bash-expand it for compatibility purposes.
+                    local -a wrapProgramArgs=()
+                    expandStringAndConcatTo wrapProgramArgs defaultMakeWrapperArgs makeWrapperArgs
                     wrapProgram "${wrapProgramArgs[@]}"
                 fi
             fi

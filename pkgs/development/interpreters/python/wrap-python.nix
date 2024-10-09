@@ -6,6 +6,7 @@
 makePythonHook {
       name = "wrap-python-hook";
       propagatedBuildInputs = [ makeWrapper ];
+      substitutions.compatHelpers = ./compat-helpers.sh;
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
       substitutions.python = python.pythonOnBuildForHost;
