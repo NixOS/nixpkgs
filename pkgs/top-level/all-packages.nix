@@ -17861,6 +17861,8 @@ with pkgs;
 
   kcat = callPackage ../development/tools/kcat { };
 
+  kcctl = callPackage ../development/tools/kcctl { };
+
   kcc = libsForQt5.callPackage ../applications/graphics/kcc { };
 
   kcgi = callPackage ../development/web/kcgi { };
