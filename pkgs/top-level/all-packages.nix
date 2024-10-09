@@ -28450,7 +28450,7 @@ with pkgs;
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_18;
   };
 
   calf = callPackage ../applications/audio/calf {
