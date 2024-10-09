@@ -29,12 +29,11 @@
   wrapGAppsHook3,
   udev,
   libGL,
-  gitUpdater,
 }:
 
 let
   pname = "waveterm";
-  version = "0.8.8";
+  version = "0.8.9";
 
   src =
     let
@@ -47,10 +46,10 @@ let
         aarch64-darwin = "Wave-darwin-arm64-${version}.zip";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-hRpJTFVoBQZyJD06FTRbBPj/1DlYlDWPRjJ1IKeK7Cs=";
-        aarch64-linux = "sha256-T3VqsoHhPYYrAe/dEd0SUH+G4jpHjKpJTrFy8/AgoKI=";
-        x86_64-darwin = "sha256-UlyNl2Qu59L4hnK8rTeUV30YVD45L7ub5SP8f97aJrw=";
-        aarch64-darwin = "sha256-cP+z8DQsNBJc3p57xQdGqqq7jvYcRQRIa+P+6kD3eCc=";
+        x86_64-linux = "sha256-C3i/NGMctc8DwR7b7ec4gq9VClvehQ0wuovH++EPPqE=";
+        aarch64-linux = "sha256-iNCvDGLa5pe19d1GWZ2SZ29DZ1h7T80OK7zAs9hHhAQ=";
+        x86_64-darwin = "sha256-SaUoW4pnSFJsUioNfXukZGc5j0+2yyZrydNOO6oqKyo=";
+        aarch64-darwin = "sha256-wNiLtriTL5Ohcma8Sop3stsqKLJyUpHihoMlylGxTRI=";
       };
     in
     fetchurl {
