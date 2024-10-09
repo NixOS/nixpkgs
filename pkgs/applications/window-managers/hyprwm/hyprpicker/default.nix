@@ -4,19 +4,11 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  ninja,
   cairo,
-  fribidi,
   libGL,
-  libdatrie,
   libjpeg,
-  libselinux,
-  libsepol,
-  libthai,
   libxkbcommon,
   pango,
-  pcre,
-  util-linux,
   wayland,
   wayland-protocols,
   wayland-scanner,
@@ -38,27 +30,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    ninja
     pkg-config
   ];
 
   buildInputs = [
     cairo
-    fribidi
     libGL
-    libdatrie
     libjpeg
-    libselinux
-    libsepol
-    libthai
     libxkbcommon
     pango
-    pcre
     wayland
     wayland-protocols
     wayland-scanner
     libXdmcp
-    util-linux
   ];
 
   postInstall = ''
