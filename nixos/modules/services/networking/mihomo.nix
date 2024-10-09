@@ -18,7 +18,7 @@ in
     package = lib.mkPackageOption pkgs "mihomo" { };
 
     configFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.path;
       description = "Configuration file to use.";
     };
 
