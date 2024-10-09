@@ -4,7 +4,7 @@ wafConfigurePhase() {
     runHook preConfigure
 
     if ! [ -f "${wafPath:=./waf}" ]; then
-        echo "copying waf to $wafPath..."
+        nixInfoLog "${FUNCNAME[0]}: copying waf to $wafPath..."
         cp @waf@/bin/waf "$wafPath"
     fi
 
@@ -19,17 +19,17 @@ wafConfigurePhase() {
     local flagsArray=( $prefixFlag )
     concatTo flagsArray wafConfigureFlags wafConfigureFlagsArray wafConfigureTargets=configure
 
-    echoCmd 'waf configure flags' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: configure flags: ${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     if ! [[ -v enableParallelBuilding ]]; then
         enableParallelBuilding=1
-        echo "waf: enabled parallel building"
+        nixInfoLog "${FUNCNAME[0]}: enabled parallel building"
     fi
 
     if ! [[ -v enableParallelInstalling ]]; then
         enableParallelInstalling=1
-        echo "waf: enabled parallel installing"
+        nixInfoLog "${FUNCNAME[0]}: enabled parallel installing"
     fi
 
     runHook postConfigure
@@ -41,7 +41,7 @@ wafBuildPhase () {
     local flagsArray=( ${enableParallelBuilding:+-j ${NIX_BUILD_CORES}} )
     concatTo flagsArray wafFlags wafFlagsArray wafBuildFlags wafBuildFlagsArray wafBuildTargets=build
 
-    echoCmd 'waf build flags' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: build flags: ${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     runHook postBuild
@@ -57,7 +57,7 @@ wafInstallPhase() {
     local flagsArray=( ${enableParallelInstalling:+-j ${NIX_BUILD_CORES}} )
     concatTo flagsArray wafFlags wafFlagsArray wafInstallFlags wafInstallFlagsArray wafInstallTargets=install
 
-    echoCmd 'waf install flags' "${flagsArray[@]}"
+    nixInfoLog "${FUNCNAME[0]}: install flags: ${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
     runHook postInstall
@@ -65,12 +65,15 @@ wafInstallPhase() {
 
 if [ -z "${dontUseWafConfigure-}" ] && [ -z "${configurePhase-}" ]; then
     configurePhase=wafConfigurePhase
+    nixInfoLog "${FUNCNAME[0]}: set configurePhase to wafConfigurePhase"
 fi
 
 if [ -z "${dontUseWafBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=wafBuildPhase
+    nixInfoLog "${FUNCNAME[0]}: set buildPhase to wafBuildPhase"
 fi
 
 if [ -z "${dontUseWafInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=wafInstallPhase
+    nixInfoLog "${FUNCNAME[0]}: set installPhase to wafInstallPhase"
 fi
