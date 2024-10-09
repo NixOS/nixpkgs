@@ -912,9 +912,11 @@ in
   });
 
   elixir-tools-nvim = super.elixir-tools-nvim.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
     fixupPhase = ''
       patchShebangs $(find $out/bin/ -type f -not -name credo-language-server)
     '';
+    nvimRequireCheck = "elixir";
   };
 
   executor-nvim = super.executor-nvim.overrideAttrs {
