@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -69,6 +70,9 @@ buildPythonPackage rec {
     nbformat
     scikit-image
   ];
+
+  # the check inputs are broken on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # FAILED plotly/matplotlylib/mplexporter/tests/test_basic.py::test_legend_dots - AssertionError: assert '3' == '2'
