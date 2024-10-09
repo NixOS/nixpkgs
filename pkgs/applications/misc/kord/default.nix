@@ -40,14 +40,14 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ alsa-lib ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
   meta = with lib; {
-    description = "A music theory binary and library for Rust";
+    description = "Music theory binary and library for Rust";
     homepage = "https://github.com/twitchax/kord";
     maintainers = with maintainers; [ kidsan ];
     license = with licenses; [ mit ];

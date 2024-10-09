@@ -50,7 +50,7 @@ buildPythonPackage rec {
     werkzeug
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [ asgiref ];
     dotenv = [ python-dotenv ];
   };
@@ -58,7 +58,7 @@ buildPythonPackage rec {
   nativeCheckInputs =
     [ pytestCheckHook ]
     ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   passthru.tests = {
     inherit
@@ -74,7 +74,7 @@ buildPythonPackage rec {
       replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://flask.palletsprojects.com/";
-    description = "The Python micro framework for building web applications";
+    description = "Python micro framework for building web applications";
     mainProgram = "flask";
     longDescription = ''
       Flask is a lightweight WSGI web application framework. It is

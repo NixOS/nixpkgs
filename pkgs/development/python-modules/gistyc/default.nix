@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/ThomasAlbin/gistyc";
-    description = "A Python based GitHub GIST management tool";
+    description = "Python based GitHub GIST management tool";
     longDescription = ''
       gistyc is a Python-based library that enables developers to create, update
       and delete their GitHub GISTs. CLI capabilities allow you to execute the

@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   patches = [ ./byteswap.patch ./dontwake.patch ./execinfo.patch ./satacmds.patch ];
 
   configureFlags = [
-    "--with-db-path=${placeholder "out"}/share/${pname}/hddtemp.db"
+    "--with-db-path=${placeholder "out"}/share/hddtemp/hddtemp.db"
   ];
 
   postInstall = ''
-    install -Dm444 ${db} $out/share/${pname}/hddtemp.db
+    install -Dm444 ${db} $out/share/hddtemp/hddtemp.db
   '';
 
   enableParallelBuilding = true;

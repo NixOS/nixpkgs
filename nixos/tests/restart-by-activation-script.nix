@@ -7,6 +7,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes.machine = { pkgs, ... }: {
     imports = [ ../modules/profiles/minimal.nix ];
 
+    system.switch.enable = true;
+
     systemd.services.restart-me = {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

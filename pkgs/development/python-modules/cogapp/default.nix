@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-qAbV254xihotP86YgAgXkWjn2xPl5VsZt5dj+budKYI=";
+    hash = "sha256-qAbV254xihotP86YgAgXkWjn2xPl5VsZt5dj+budKYI=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A code generator for executing Python snippets in source files";
+    description = "Code generator for executing Python snippets in source files";
     homepage = "https://nedbatchelder.com/code/cog";
     license = licenses.mit;
     maintainers = with maintainers; [ lovek323 ];

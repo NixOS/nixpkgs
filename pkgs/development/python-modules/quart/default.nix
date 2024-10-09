@@ -79,7 +79,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "An async Python micro framework for building web applications";
+    description = "Async Python micro framework for building web applications";
     mainProgram = "quart";
     homepage = "https://github.com/pallets/quart/";
     changelog = "https://github.com/pallets/quart/blob/${src.rev}/CHANGES.rst";

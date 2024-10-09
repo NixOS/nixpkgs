@@ -1,7 +1,6 @@
 { python3Packages
 , lib
 , fetchFromGitHub
-, perlPackages
 , gettext
 , gtk3
 , gobject-introspection
@@ -15,13 +14,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "indicator-sound-switcher";
-  version = "2.3.9";
+  version = "2.3.10.1";
 
   src = fetchFromGitHub {
     owner = "yktoo";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-qJ1lg9A1aCM+/v/JbQAVpYGX25qA5ULqsM8k7uH1uvQ=";
+    sha256 = "sha256-Benhlhz81EgL6+pmjzyruKBOS6O7ce5PPmIIzk2Zong=";
   };
 
   postPatch = ''
@@ -35,6 +34,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
     glib
     gdk-pixbuf
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -45,7 +45,6 @@ python3Packages.buildPythonApplication rec {
     python3Packages.setuptools
     python3Packages.pygobject3
     gtk3
-    gobject-introspection
     librsvg
     libayatana-appindicator
     libpulseaudio

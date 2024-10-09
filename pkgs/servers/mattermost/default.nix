@@ -12,13 +12,13 @@ buildGoModule rec {
   # See https://docs.mattermost.com/upgrade/extended-support-release.html
   # When a new ESR version is available (e.g. 8.1.x -> 9.5.x), update
   # the version regex in passthru.updateScript as well.
-  version = "9.5.5";
+  version = "9.5.9";
 
   src = fetchFromGitHub {
     owner = "mattermost";
     repo = "mattermost";
     rev = "v${version}";
-    hash = "sha256-ZaFXuYm9SEE9ARN5PG8vjt9WnNfGiALilGzjfnDP7aA=";
+    hash = "sha256-mGTLn1aV6pB/ubqtYYF1zNRAaLj5IsdQTLhf1LzcNho=";
   };
 
   # Needed because buildGoModule does not support go workspaces yet.
@@ -34,8 +34,12 @@ buildGoModule rec {
 
   webapp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-${version}-linux-amd64.tar.gz";
-    hash = "sha256-tgds8eTBeisuJcLgtx6zOiFUcVL1oU0LLbPqmh4SQUU=";
+    hash = "sha256-TgaRDIxGBoow1//99bGpp91HNYgdWRnoS09EDAFcHDs=";
   };
+
+  # Makes nix-update-script pick up the fetchurl for the webapp.
+  # https://github.com/Mic92/nix-update/blob/1.3.1/nix_update/eval.py#L179
+  offlineCache = webapp;
 
   vendorHash = "sha256-TJCtgNf56A1U0EbV5gXjTro+YudVBRWiSZoBC3nJxnE=";
 
@@ -69,7 +73,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "v(9\.5\.[0-9]+)" ];
+      extraArgs = [ "--version-regex" "^v(9\.5\.[0-9]+)$" ];
     };
     tests.mattermost = nixosTests.mattermost;
   };

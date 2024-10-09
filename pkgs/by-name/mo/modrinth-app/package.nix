@@ -4,7 +4,7 @@
   symlinkJoin,
   modrinth-app-unwrapped,
   wrapGAppsHook3,
-  addOpenGLRunpath,
+  addDriverRunpath,
   flite,
   glib,
   glib-networking,
@@ -37,8 +37,8 @@ symlinkJoin rec {
     wrapGAppsHook3
   ];
 
-  runtimeDependencies = lib.optionalString stdenv.isLinux (lib.makeLibraryPath [
-    addOpenGLRunpath.driverLink
+  runtimeDependencies = lib.optionalString stdenv.hostPlatform.isLinux (lib.makeLibraryPath [
+    addDriverRunpath.driverLink
     flite # narrator support
 
     udev # oshi
@@ -57,7 +57,7 @@ symlinkJoin rec {
   postBuild = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}

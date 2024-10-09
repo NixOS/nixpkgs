@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "sql_exporter";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "justwatchcom";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ADfJxo9/CcWi9LgX31a7GYAdigFYRbkFy4PYzecG50Y=";
+    sha256 = "sha256-kNIf8HwqNPGJAR8+/IkGn/5ryMEd6rGCixjnKG63xcY=";
   };
 
   vendorHash = null;

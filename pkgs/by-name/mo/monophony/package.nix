@@ -11,15 +11,15 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "monophony";
-  version = "2.9.0";
-  format = "other";
+  version = "2.15.0";
+  pyproject = false;
 
   sourceRoot = "${src.name}/source";
   src = fetchFromGitLab {
     owner = "zehkira";
     repo = "monophony";
     rev = "v${version}";
-    hash = "sha256-fZ+EQqcHJGOLBwyHZJvML6+SkfFpnt6hb8xHedJ7VSU=";
+    hash = "sha256-fC+XXOGBpG5pIQW1tCNtQaptBCyLM+YGgsZLjWrMoDA=";
   };
 
   pythonPath = with python3Packages; [
@@ -28,8 +28,13 @@ python3Packages.buildPythonApplication rec {
     ytmusicapi
   ];
 
+  build-system = with python3Packages; [
+    pip
+    setuptools
+    wheel
+  ];
+
   nativeBuildInputs = [
-    python3Packages.nuitka
     gobject-introspection
     wrapGAppsHook4
   ];
@@ -44,13 +49,17 @@ python3Packages.buildPythonApplication rec {
     gstreamer
   ]);
 
+  # Makefile only contains `install`
+  dontBuild = true;
+
   installFlags = [ "prefix=$(out)" ];
 
+  dontWrapGApps = true;
+
   preFixup = ''
-    buildPythonPath "$pythonPath"
-    gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$program_PYTHONPATH"
+    makeWrapperArgs+=(
       --prefix PATH : "${lib.makeBinPath [yt-dlp]}"
+      "''${gappsWrapperArgs[@]}"
     )
   '';
 

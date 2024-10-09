@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, resto, json-data-encoding, json-data-encoding-bson }:
+{ buildDunePackage, resto, json-data-encoding, json-data-encoding-bson }:
 
 buildDunePackage {
   pname = "resto-json";

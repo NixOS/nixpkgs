@@ -53,7 +53,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dinghy.cli" ];
 
   meta = with lib; {
-    description = "A GitHub activity digest tool";
+    description = "GitHub activity digest tool";
     mainProgram = "dinghy";
     homepage = "https://github.com/nedbat/dinghy";
     changelog = "https://github.com/nedbat/dinghy/blob/${version}/CHANGELOG.rst";

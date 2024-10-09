@@ -5,25 +5,27 @@
 , flex
 , bison
 , bc
+, cpio
+, perl
 , elfutils
 , python3
 , sevVariant ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkrunfw";
-  version = "4.0.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9oVl4mlJE7QHeehG86pbh7KdShZNUGwlnO75k/F/PQ0=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-rxMklV/pu/muz/7m1clEs+BItXid/jMt6j/R/yHBKHI=";
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.4.7.tar.xz";
-    hash = "sha256-3hQ8th3Kp1bAX1b/NRRDFtgQYVgZUYoz40dU8GTEp9g=";
+    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.52.tar.xz";
+    hash = "sha256-FZGrNIOZ1KpTEhFYUlBWppyM8P4OkJNbAJXppY43tLg=";
   };
 
   postPatch = ''
@@ -35,6 +37,8 @@ stdenv.mkDerivation rec {
     flex
     bison
     bc
+    cpio
+    perl
     python3
     python3.pkgs.pyelftools
   ];
@@ -49,13 +53,16 @@ stdenv.mkDerivation rec {
     "SEV=1"
   ];
 
+  # Fixes https://github.com/containers/libkrunfw/issues/55
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.targetPlatform.isAarch64 "-march=armv8-a+crypto";
+
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A dynamic library bundling the guest payload consumed by libkrun";
+    description = "Dynamic library bundling the guest payload consumed by libkrun";
     homepage = "https://github.com/containers/libkrunfw";
     license = with licenses; [ lgpl2Only lgpl21Only ];
-    maintainers = with maintainers; [ nickcao ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ nickcao RossComputerGuy ];
+    platforms = [ "x86_64-linux" ] ++ lib.optionals (!sevVariant) [ "aarch64-linux" ];
   };
-}
+})

@@ -10,19 +10,20 @@ systemd itself uses extensively.
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/src/basic/path-util.h b/src/basic/path-util.h
-index 6d943e967f..d4380aa7e3 100644
+index fcb3aa9399..b9e69cbf91 100644
 --- a/src/basic/path-util.h
 +++ b/src/basic/path-util.h
-@@ -25,9 +25,9 @@
- #  define PATH_SBIN_BIN_NULSTR(x) PATH_NORMAL_SBIN_BIN_NULSTR(x)
- #endif
+@@ -17,10 +17,10 @@
+ #define PATH_MERGED_BIN(x) x "bin"
+ #define PATH_MERGED_BIN_NULSTR(x) x "bin\0"
  
--#define DEFAULT_PATH PATH_SBIN_BIN("/usr/local/") ":" PATH_SBIN_BIN("/usr/")
--#define DEFAULT_PATH_NULSTR PATH_SBIN_BIN_NULSTR("/usr/local/") PATH_SBIN_BIN_NULSTR("/usr/")
--#define DEFAULT_PATH_COMPAT PATH_SPLIT_SBIN_BIN("/usr/local/") ":" PATH_SPLIT_SBIN_BIN("/usr/") ":" PATH_SPLIT_SBIN_BIN("/")
-+#define DEFAULT_PATH "@defaultPathNormal@"
-+#define DEFAULT_PATH_NULSTR "@defaultPathNormal@\0"
-+#define DEFAULT_PATH_COMPAT DEFAULT_PATH
+-#define DEFAULT_PATH_WITH_SBIN PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/")
+-#define DEFAULT_PATH_WITHOUT_SBIN PATH_MERGED_BIN("/usr/local/") ":" PATH_MERGED_BIN("/usr/")
++#define DEFAULT_PATH_WITH_SBIN "@defaultPathNormal@"
++#define DEFAULT_PATH_WITHOUT_SBIN DEFAULT_PATH_WITH_SBIN
  
- #ifndef DEFAULT_USER_PATH
- #  define DEFAULT_USER_PATH DEFAULT_PATH
+-#define DEFAULT_PATH_COMPAT PATH_SPLIT_BIN("/usr/local/") ":" PATH_SPLIT_BIN("/usr/") ":" PATH_SPLIT_BIN("/")
++#define DEFAULT_PATH_COMPAT DEFAULT_PATH_WITH_SBIN
+ 
+ const char* default_PATH(void);
+ 

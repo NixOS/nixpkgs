@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "plux";
-  version = "1.5.0";
+  version = "1.11.0";
   pyproject = true;
 
   # Tests are not available from PyPi
@@ -18,17 +18,21 @@ buildPythonPackage rec {
     owner = "localstack";
     repo = "plux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XHRQTgvxXJCjCD/9Invf/5OCtp12A5poRUv8tR9DJsk=";
+    hash = "sha256-M4N3Ccuw95OcLsWQVtITv4QShBJKliTh5QIoqji8x9o=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [ stevedore ];
+  dependencies = [ stevedore ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  preCheck = ''
+    export HOME=$TMPDIR
+  '';
 
   pythonImportsCheck = [ "plugin.core" ];
 
@@ -36,6 +40,6 @@ buildPythonPackage rec {
     description = "Dynamic code loading framework for building pluggable Python distributions";
     homepage = "https://github.com/localstack/plux";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

@@ -11,6 +11,7 @@
   pytest-asyncio,
   pytest-lazy-fixture,
   pytestCheckHook,
+  python-dateutil,
   qtile,
   requests,
   setuptools-scm,
@@ -19,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "qtile-extras";
-  version = "0.25.0";
+  version = "0.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elParaguayo";
     repo = "qtile-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OYzSKOVg4D5gKxaEreclYq3D16dl8ddLipSdifokDNY=";
+    hash = "sha256-rF9tRzOdMiISN8vupBt9+1d3pWJqbNS83odtm5SzXZI=";
   };
 
   build-system = [ setuptools-scm ];
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-lazy-fixture
     pytestCheckHook
+    python-dateutil
     qtile
     requests
     xorgserver
@@ -62,6 +64,8 @@ buildPythonPackage rec {
     # AttributeError: 'NoneType' object has no attribute 'theta'
     "test_image_size_horizontal"
     "test_image_size_vertical"
+    # flaky, timing sensitive
+    "test_visualiser"
   ];
 
   disabledTestPaths = [

@@ -38,7 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for dealing with VAT MOSS and Norway VAT on digital services. Includes VAT ID validation, rate calculation based on place of supply, exchange rate and currency tools for invoices";
+    description = "Python library for dealing with VAT MOSS and Norway VAT on digital services. Includes VAT ID validation, rate calculation based on place of supply, exchange rate and currency tools for invoices";
     homepage = "https://github.com/raphaelm/vat_moss-python";
     changelog = "https://github.com/raphaelm/vat_moss-python/blob/${src.rev}/changelog.md";
     license = licenses.mit;

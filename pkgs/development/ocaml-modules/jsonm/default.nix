@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   inherit (topkg) buildPhase installPhase;
 
   meta = {
-    description = "An OCaml non-blocking streaming codec to decode and encode the JSON data format";
+    description = "OCaml non-blocking streaming codec to decode and encode the JSON data format";
     homepage = "https://erratique.ch/software/jsonm";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ vbgl ];

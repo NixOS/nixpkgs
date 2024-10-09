@@ -37,12 +37,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "28.1";
-  slang   = "Nickel";
+  version = "29.0";
+  slang   = "Copper";
 
   src = fetchurl {
     url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    hash = "sha256-AiC8dDt9okaM65JvMx7cfd+qfGA7pHli3j4zyOHj9ZM=";
+    hash = "sha256-0vuzuND/g5RYcunm+iWOk0pwY2DmmNrjtNX5ca3fdJM=";
   };
 
   preConfigure = ''
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    description = "An extensible and collaborative platform dedicated to source-code analysis of C software";
+    description = "Extensible and collaborative platform dedicated to source-code analysis of C software";
     homepage    = "http://frama-c.com/";
     license     = lib.licenses.lgpl21;
     maintainers = with lib.maintainers; [ thoughtpolice amiddelk ];

@@ -1,19 +1,19 @@
 { lib
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , clang
 , libpcap
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "pwru";
-  version = "1.0.6";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = "pwru";
     rev = "v${version}";
-    hash = "sha256-8pXyzmzMCxOzwstzvzeZB2HBMeMzGMLZesTURZD3Rt8=";
+    hash = "sha256-HK8t+IaeFLuyqUTuVSShbO426uaFyZcr+jZyz0wo4jw=";
   };
 
   vendorHash = null;
@@ -26,6 +26,9 @@ buildGoModule rec {
     substituteInPlace internal/libpcap/compile.go \
       --replace "-static" ""
   '';
+
+  # this breaks go generate as bpf does not support -fzero-call-used-regs=used-gpr
+  hardeningDisable = [ "zerocallusedregs" ];
 
   preBuild = ''
     TARGET_GOARCH="$GOARCH" GOOS= GOARCH= go generate

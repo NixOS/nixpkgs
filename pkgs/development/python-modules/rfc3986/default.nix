@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Validating URI References per RFC 3986";
     homepage = "https://rfc3986.readthedocs.org";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

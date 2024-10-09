@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jsonrpc-glib";
-  version = "3.44.0";
+  version = "3.44.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "aUBqAlDQzFF1QIyufsqAwMa/rvxK4YMLNUwEM7zVzgY=";
+    sha256 = "E2HRfpyAVkav5RAuWbr4ykUCOGAPyr0BWGxlS3i7MN8=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to communicate using the JSON-RPC 2.0 specification";
+    description = "Library to communicate using the JSON-RPC 2.0 specification";
     homepage = "https://gitlab.gnome.org/GNOME/jsonrpc-glib";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

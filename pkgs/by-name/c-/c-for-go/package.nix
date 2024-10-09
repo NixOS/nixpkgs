@@ -16,6 +16,7 @@ buildGoModule {
 
   meta = with lib; {
     homepage = "https://github.com/xlab/c-for-go";
+    changelog = "https://github.com/xlab/c-for-go/releases/";
     description = "Automatic C-Go Bindings Generator for the Go Programming Language";
     license = licenses.mit;
     maintainers = with maintainers; [ msanft ];

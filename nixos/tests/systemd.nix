@@ -75,11 +75,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       rebootTime = "10min";
       kexecTime = "5min";
     };
+
+    environment.etc."systemd/system-preset/10-testservice.preset".text = ''
+      disable ${config.systemd.services.testservice1.name}
+    '';
   };
 
-  testScript = ''
+  testScript = { nodes, ... }: ''
     import re
     import subprocess
+
+    # Will not succeed unless ConditionFirstBoot=yes
+    machine.wait_for_unit("first-boot-complete.target")
 
     machine.wait_for_x()
     # wait for user services
@@ -204,11 +211,14 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "0B read, 0B written" not in output
 
     with subtest("systemd per-unit accounting works"):
-        assert "IP traffic received: 84B" in output_ping
-        assert "IP traffic sent: 84B" in output_ping
+        assert "IP traffic received: 84B sent: 84B" in output_ping
 
     with subtest("systemd environment is properly set"):
         machine.systemctl("daemon-reexec")  # Rewrites /proc/1/environ
         machine.succeed("grep -q TZDIR=/etc/zoneinfo /proc/1/environ")
+
+    with subtest("systemd presets are ignored"):
+        machine.succeed("systemctl preset ${nodes.machine.systemd.services.testservice1.name}")
+        machine.succeed("test -e /etc/systemd/system/${nodes.machine.systemd.services.testservice1.name}")
   '';
 })

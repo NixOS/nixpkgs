@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "hepunits";
-  version = "2.3.3";
+  version = "2.3.5";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z9fMd81U1ytpwmpo5e+teEK29o+ovGJ7uQ5BF3q+aUU=";
+    hash = "sha256-lDTNLWpyLJSenp4ivQtZWH9pAlvTc1blxwY18bNwNtg=";
   };
 
   nativeBuildInputs = [

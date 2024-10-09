@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
   pythonOlder,
   setuptools,
   six,
@@ -41,10 +40,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "attrdict" ];
 
   meta = with lib; {
-    description = "A dict with attribute-style access";
+    description = "Dict with attribute-style access";
     homepage = "https://github.com/bcj/AttrDict";
     changelog = "https://github.com/bcj/AttrDict/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

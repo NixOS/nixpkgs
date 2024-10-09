@@ -28,7 +28,7 @@ buildLua {
   '';
 
   meta = with lib; {
-    description = "A minimal script to skip sponsored segments of YouTube videos";
+    description = "Minimal script to skip sponsored segments of YouTube videos";
     homepage = "https://codeberg.org/jouni/mpv_sponsorblock_minimal";
     license = licenses.gpl3Only;
     platforms = platforms.all;

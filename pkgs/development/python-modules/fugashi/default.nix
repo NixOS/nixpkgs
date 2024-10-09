@@ -34,9 +34,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipadic
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.unidic-lite;
+  ] ++ optional-dependencies.unidic-lite;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     unidic-lite = [ unidic-lite ];
     unidic = [ unidic ];
   };
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "fugashi" ];
 
   meta = with lib; {
-    description = "A Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
+    description = "Cython MeCab wrapper for fast, pythonic Japanese tokenization and morphological analysis";
     homepage = "https://github.com/polm/fugashi";
     changelog = "https://github.com/polm/fugashi/releases/tag/${version}";
     license = licenses.mit;

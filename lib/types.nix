@@ -73,7 +73,6 @@ let
 
   outer_types =
 rec {
-  __attrsFailEvaluation = true;
   isType = type: x: (x._type or "") == type;
 
   setType = typeName: value: value // {
@@ -220,7 +219,7 @@ rec {
     else "(${t.description})";
 
   # When adding new types don't forget to document them in
-  # nixos/doc/manual/development/option-types.xml!
+  # nixos/doc/manual/development/option-types.section.md!
   types = rec {
 
     raw = mkOptionType {
@@ -254,12 +253,6 @@ rec {
           mergeFunction = {
             # Recursively merge attribute sets
             set = (attrsOf anything).merge;
-            # Safe and deterministic behavior for lists is to only accept one definition
-            # listOf only used to apply mkIf and co.
-            list =
-              if length defs > 1
-              then throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
-              else (listOf anything).merge;
             # This is the type of packages, only accept a single definition
             stringCoercibleSet = mergeOneOption;
             lambda = loc: defs: arg: anything.merge
@@ -1036,7 +1029,7 @@ rec {
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
-        typeMerge = t1: t2: null;
+        typeMerge = t: null;
         functor = (defaultFunctor name) // { wrapped = finalType; };
         nestedTypes.coercedType = coercedType;
         nestedTypes.finalType = finalType;

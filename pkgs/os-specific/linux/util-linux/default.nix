@@ -1,9 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, gtk-doc, pkg-config
-, zlib, shadow
-, capabilitiesSupport ? stdenv.isLinux
+{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
+, capabilitiesSupport ? stdenv.hostPlatform.isLinux
 , libcap_ng
 , libxcrypt
-, sqlite
 , ncursesSupport ? true
 , ncurses
 , pamSupport ? true
@@ -14,25 +12,19 @@
 , translateManpages ? true
 , po4a
 , installShellFiles
-, writeSupport ? stdenv.isLinux
-, shadowSupport ? stdenv.isLinux
+, writeSupport ? stdenv.hostPlatform.isLinux
+, shadowSupport ? stdenv.hostPlatform.isLinux
 , memstreamHook
 , gitUpdater
 }:
-let
-  # Temporarily avoid applying the patches on systems where already we have binaries
-  # (in particular x86_64-linux and aarch64-linux) as the package is a huge rebuild there.
-  avoidRebuild = with stdenv.hostPlatform; isLinux && is64bit && !isStatic;
-in
+
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = if avoidRebuild then "2.40.1" else "2.39.4";
+  version = "2.39.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = if avoidRebuild
-      then "sha256-WeZ2qlPMtEtsOfD/4BqPonSJHJG+8UdHUvrZJGHe8k8="
-      else "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
+    hash = "sha256-bE+HI9r9QcOdk+y/FlCfyIwzzVvTJ3iArlodl6AU/Q4=";
   };
 
   patches = [
@@ -44,11 +36,11 @@ stdenv.mkDerivation rec {
   # the greater util-linux toolset.
   # Compatibility is maintained by symlinking the binaries from the
   # smaller outputs in the bin output.
-  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
-    patchShebangs tests/run.sh tools/all_syscalls
+    patchShebangs tests/run.sh
 
     substituteInPlace sys-utils/eject.c \
       --replace "/bin/umount" "$bin/bin/umount"
@@ -67,7 +59,6 @@ stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
     "--disable-su" # provided by shadow
-    "--with-tmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
     (lib.enableFeature writeSupport "write")
     (lib.enableFeature nlsSupport "nls")
     (lib.withFeature ncursesSupport "ncursesw")
@@ -89,7 +80,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config installShellFiles ]
     ++ lib.optionals translateManpages [ po4a ];
 
-  buildInputs = [ zlib libxcrypt sqlite ]
+  buildInputs = [ zlib libxcrypt ]
     ++ lib.optionals pamSupport [ pam ]
     ++ lib.optionals capabilitiesSupport [ libcap_ng ]
     ++ lib.optionals ncursesSupport [ ncurses ]
@@ -100,7 +91,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     moveToOutput bin/mount "$mount"
     moveToOutput bin/umount "$mount"
     ln -svf "$mount/bin/"* $bin/bin/
@@ -110,13 +101,16 @@ stdenv.mkDerivation rec {
     moveToOutput sbin/sulogin "$login"
     prefix=$login _moveSbin
     ln -svf "$login/bin/"* $bin/bin/
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     moveToOutput sbin/swapon "$swap"
     moveToOutput sbin/swapoff "$swap"
     prefix=$swap _moveSbin
     ln -svf "$swap/bin/"* $bin/bin/
     '' + ''
+
+    ln -svf "$bin/bin/hexdump" "$bin/bin/hd"
+    ln -svf "$man/share/man/man1/hexdump.1" "$man/share/man/man1/hd.1"
 
     installShellCompletion --bash bash-completion/*
   '';
@@ -132,7 +126,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.kernel.org/pub/linux/utils/util-linux/";
-    description = "A set of system utilities for Linux";
+    description = "Set of system utilities for Linux";
     changelog = "https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v${lib.versions.majorMinor version}/v${version}-ReleaseNotes";
     # https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/tree/README.licensing
     license = with licenses; [ gpl2Only gpl2Plus gpl3Plus lgpl21Plus bsd3 bsdOriginalUC publicDomain ];

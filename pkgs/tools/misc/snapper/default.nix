@@ -2,17 +2,17 @@
 , autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
 , lvm2, pam, util-linux, json_c, nixosTests
-, ncurses }:
+, ncurses, zlib }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "sha256-7FwjVk3kkC/suJ13BIEEfIswsPBYhdQI1IuPvNcXi4A=";
+    sha256 = "sha256-U948AmyQ6c5+FCrDijOVLc/p2wwbq5IWwS66x+O960Y=";
   };
 
   strictDeps = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam util-linux json_c ncurses
+    lvm2 pam util-linux json_c ncurses zlib
   ];
 
   passthru.tests.snapper = nixosTests.snapper;

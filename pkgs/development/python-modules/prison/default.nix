@@ -2,14 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   six,
-  nose,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "prison";
   version = "0.1.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "betodealmeida";
@@ -18,9 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-qor40vUQeTdlO3vwug3GGNX5vkNaF0H7EWlRdsY4bvc=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ nose ];
+  dependencies = [ six ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Rison encoder/decoder";

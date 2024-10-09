@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, runtimeShell
 }:
 
 stdenv.mkDerivation rec {

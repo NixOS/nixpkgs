@@ -77,7 +77,7 @@ lib.fix (
     __structuredAttrs = true;
 
     meta = {
-      description = "Libraries to write tests in C, C++, and shell";
+      description = "Lightweight C++ API for Lua";
       homepage = "https://github.com/freebsd/lutok/";
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ reckenrode ];

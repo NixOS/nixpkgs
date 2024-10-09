@@ -42,7 +42,7 @@ buildPythonPackage rec {
     h11
   ] ++ lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies.standard = [
+  optional-dependencies.standard = [
     httptools
     python-dotenv
     pyyaml
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://www.uvicorn.org/";
     changelog = "https://github.com/encode/uvicorn/blob/${src.rev}/CHANGELOG.md";
-    description = "The lightning-fast ASGI server";
+    description = "Lightning-fast ASGI server";
     mainProgram = "uvicorn";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];

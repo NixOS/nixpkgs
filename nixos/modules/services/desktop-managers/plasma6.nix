@@ -8,7 +8,7 @@
   cfg = config.services.desktopManager.plasma6;
 
   inherit (pkgs) kdePackages;
-  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOptionMD types;
+  inherit (lib) literalExpression mkDefault mkIf mkOption mkPackageOption types;
 
   activationScript = ''
     # will be rebuilt automatically
@@ -29,7 +29,7 @@ in {
         description = "Enable Qt 5 integration (theming, etc). Disable for a pure Qt 6 system.";
       };
 
-      notoPackage = mkPackageOptionMD pkgs "Noto fonts - used for UI by default" {
+      notoPackage = mkPackageOption pkgs "Noto fonts - used for UI by default" {
         default = ["noto-fonts"];
         example = "noto-fonts-lgc-plus";
       };
@@ -58,6 +58,7 @@ in {
     ];
 
     qt.enable = true;
+    programs.xwayland.enable = true;
     environment.systemPackages = with kdePackages; let
       requiredPackages = [
         qtwayland # Hack? To make everything run on Wayland
@@ -87,7 +88,6 @@ in {
 
         # Core Plasma parts
         kwin
-        pkgs.xwayland
         kscreen
         libkscreen
         kscreenlocker
@@ -142,11 +142,17 @@ in {
         okular
         kate
         khelpcenter
-        print-manager
         dolphin
+        baloo-widgets  # baloo information in Dolphin
         dolphin-plugins
         spectacle
         ffmpegthumbs
+        krdp
+        xwaylandvideobridge  # exposes Wayland windows to X11 screen capture
+      ] ++ lib.optionals config.services.flatpak.enable [
+        # Since PackageKit Nix support is not there yet,
+        # only install discover if flatpak is enabled.
+        discover
       ];
     in
       requiredPackages
@@ -168,12 +174,13 @@ in {
         )
         kio-extras-kf5
       ]
-      # Optional hardware support features
+      # Optional and hardware support features
       ++ lib.optionals config.hardware.bluetooth.enable [bluedevil bluez-qt pkgs.openobex pkgs.obexftp]
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
       ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
+      ++ lib.optional config.services.printing.enable print-manager
       ++ lib.optional config.services.colord.enable colord-kde
       ++ lib.optional config.services.hardware.bolt.enable plasma-thunderbolt
       ++ lib.optional config.services.samba.enable kdenetwork-filesharing
@@ -202,7 +209,7 @@ in {
     environment.sessionVariables.KPACKAGE_DEP_RESOLVERS_PATH = "${kdePackages.frameworkintegration.out}/libexec/kf6/kpackagehandlers";
 
     # Enable GTK applications to load SVG icons
-    services.xserver.gdk-pixbuf.modulePackages = [pkgs.librsvg];
+    programs.gdk-pixbuf.modulePackages = [pkgs.librsvg];
 
     fonts.packages = [cfg.notoPackage pkgs.hack-font];
     fonts.fontconfig.defaultFonts = {
@@ -212,6 +219,7 @@ in {
     };
 
     programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+    programs.kde-pim.enable = mkDefault true;
     programs.ssh.askPassword = mkDefault "${kdePackages.ksshaskpass.out}/bin/ksshaskpass";
 
     # Enable helpful DBus services.
@@ -236,10 +244,19 @@ in {
     systemd.packages = [kdePackages.drkonqi];
     systemd.services."drkonqi-coredump-processor@".wantedBy = ["systemd-coredump@.service"];
 
+    xdg.icons.enable = true;
+    xdg.icons.fallbackCursorThemes = mkDefault ["breeze_cursors"];
+
     xdg.portal.enable = true;
-    xdg.portal.extraPortals = [kdePackages.xdg-desktop-portal-kde];
+    xdg.portal.extraPortals = [
+      kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-gtk
+    ];
     xdg.portal.configPackages = mkDefault [kdePackages.xdg-desktop-portal-kde];
     services.pipewire.enable = mkDefault true;
+
+    # Enable screen reader by default
+    services.orca.enable = mkDefault true;
 
     services.displayManager = {
       sessionPackages = [kdePackages.plasma-workspace];
@@ -252,6 +269,7 @@ in {
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
+        libplasma
         plasma5support
         qtsvg
         qtvirtualkeyboard
@@ -263,9 +281,12 @@ in {
         enable = true;
         package = kdePackages.kwallet-pam;
       };
-      kde.kwallet = {
-        enable = true;
-        package = kdePackages.kwallet-pam;
+      kde = {
+        allowNullPassword = true;
+        kwallet = {
+          enable = true;
+          package = kdePackages.kwallet-pam;
+        };
       };
       kde-fingerprint = lib.mkIf config.services.fprintd.enable { fprintAuth = true; };
       kde-smartcard = lib.mkIf config.security.pam.p11.enable { p11Auth = true; };

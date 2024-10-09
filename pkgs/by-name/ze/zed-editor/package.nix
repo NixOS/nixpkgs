@@ -2,8 +2,11 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  clang,
+  cmake,
   copyDesktopItems,
   curl,
+  perl,
   pkg-config,
   protobuf,
   xcbuild,
@@ -17,61 +20,122 @@
   alsa-lib,
   libxkbcommon,
   wayland,
+  libglvnd,
   xorg,
   stdenv,
   darwin,
   makeFontsConf,
   vulkan-loader,
+  envsubst,
+  gitUpdater,
+  cargo-about,
+  testers,
+  zed-editor,
+  buildFHSEnv,
+
+  withGLES ? false,
 }:
 
+assert withGLES -> stdenv.hostPlatform.isLinux;
+
+let
+  executableName = "zeditor";
+  # Based on vscode.fhs
+  # Zed allows for users to download and use extensions
+  # which often include the usage of pre-built binaries.
+  # See #309662
+  #
+  # buildFHSEnv allows for users to use the existing Zed
+  # extension tooling without significant pain.
+  fhs =
+    {
+      additionalPkgs ? pkgs: [ ],
+    }:
+    buildFHSEnv {
+      # also determines the name of the wrapped command
+      name = executableName;
+
+      # additional libraries which are commonly needed for extensions
+      targetPkgs =
+        pkgs:
+        (with pkgs; [
+          # ld-linux-x86-64-linux.so.2 and others
+          glibc
+        ])
+        ++ additionalPkgs pkgs;
+
+      # symlink shared assets, including icons and desktop entries
+      extraInstallCommands = ''
+        ln -s "${zed-editor}/share" "$out/"
+      '';
+
+      runScript = "${zed-editor}/bin/${executableName}";
+
+      passthru = {
+        inherit executableName;
+        inherit (zed-editor) pname version;
+      };
+
+      meta = zed-editor.meta // {
+        description = ''
+          Wrapped variant of ${zed-editor.pname} which launches in a FHS compatible environment.
+          Should allow for easy usage of extensions without nix-specific modifications.
+        '';
+      };
+    };
+in
 rustPlatform.buildRustPackage rec {
-  pname = "zed";
-  version = "0.135.2";
+  pname = "zed-editor";
+  version = "0.155.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XnfTrcLKjJH42l9L9KxogMhNQ2u/8G4fyd6i/0dO5S0=";
+    hash = "sha256-QiZZsy96WoWBFFKzVt6k4ZhxhvdBsy2iaF5TnYyb4v8=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Zed uses cargo-install to install cargo-about during the script execution.
+    # We provide cargo-about ourselves and can skip this step.
+    ./0001-generate-licenses.patch
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "alacritty_terminal-0.24.1-dev" = "sha256-b4oSDhsAAYjpYGfFgA1Q1642JoJQ9k5RTsPgFUpAFmc=";
       "async-pipe-0.1.3" = "sha256-g120X88HGT8P6GNCrzpS5SutALx5H+45Sf4iSSxzctE=";
-      "blade-graphics-0.4.0" = "sha256-U8278YkskWE1E60JVTx4hRv4322EV9jz8fzJkBTG3R8=";
-      "font-kit-0.11.0" = "sha256-+4zMzjFyMS60HfLMEXGfXqKn6P+pOngLA45udV09DM8=";
-      "heed-0.20.0-alpha.9" = "sha256-8bzoMmfKS+6AmeTzh0/F7WM9OBdIex+NYFER28bpA/s=";
-      "lsp-types-0.94.1" = "sha256-kplgPsafrgZFMI1D9pQCwmg+FKMn5HNWLbcgdXHUFVU=";
-      "nvim-rs-0.6.0-pre" = "sha256-bdWWuCsBv01mnPA5e5zRpq48BgOqaqIcAu+b7y1NnM8=";
-      "pathfinder_simd-0.5.3" = "sha256-bakBcAQZJdHQPXybe0zoMzE49aOHENQY7/ZWZUMt+pM=";
-      "taffy-0.3.11" = "sha256-0hXOEj6IjSW8e1t+rvxBFX6V9XRum3QO2Des1XlHJEw=";
-      "tree-sitter-0.20.100" = "sha256-xZDWAjNIhWC2n39H7jJdKDgyE/J6+MAVSa8dHtZ6CLE=";
-      "tree-sitter-bash-0.20.4" = "sha256-VP7rJfE/k8KV1XN1w5f0YKjCnDMYU1go/up0zj1mabM=";
-      "tree-sitter-cpp-0.20.0" = "sha256-2QYEFkpwcRmh2kf4qEAL2a5lGSa316CetOhF73e7rEM=";
-      "tree-sitter-css-0.19.0" = "sha256-5Qti/bFac2A1PJxqZEOuSLK3GGKYwPDKAp3OOassBxU=";
-      "tree-sitter-elixir-0.1.0" = "sha256-hBHqQ3eBjknRPJjP+lQJU6NPFhUMtiv4FbKsTw28Bog=";
-      "tree-sitter-go-0.19.1" = "sha256-5+L5QqVjZyeh+sKfxKZWrjIBFE5xM9KZlHcLiHzJCIA=";
-      "tree-sitter-gomod-1.0.2" = "sha256-OPtqXe6OMC9c5dgFH8Msj+6DU01LvLKVbCzGLj0PnLI=";
-      "tree-sitter-gowork-0.0.1" = "sha256-lM4L4Ap/c8uCr4xUw9+l/vaGb3FxxnuZI0+xKYFDPVg=";
-      "tree-sitter-heex-0.0.1" = "sha256-6LREyZhdTDt3YHVRPDyqCaDXqcsPlHOoMFDb2B3+3xM=";
-      "tree-sitter-jsdoc-0.20.0" = "sha256-fKscFhgZ/BQnYnE5EwurFZgiE//O0WagRIHVtDyes/Y=";
-      "tree-sitter-json-0.20.0" = "sha256-fZNftzNavJQPQE4S1VLhRyGQRoJgbWA5xTPa8ZI5UX4=";
-      "tree-sitter-markdown-0.0.1" = "sha256-F8VVd7yYa4nCrj/HEC13BTC7lkV3XSb2Z3BNi/VfSbs=";
-      "tree-sitter-proto-0.0.2" = "sha256-W0diP2ByAXYrc7Mu/sbqST6lgVIyHeSBmH7/y/X3NhU=";
-      "tree-sitter-typescript-0.20.2" = "sha256-cpOAtfvlffS57BrXaoa2xa9NUYw0AsHxVI8PrcpgZCQ=";
-      "tree-sitter-yaml-0.0.1" = "sha256-S59jLlipBI2kwFuZDMmpv0TOZpGyXpbAizN3yC6wJ5I=";
+      "blade-graphics-0.5.0" = "sha256-j/JI34ZPD7RAHNHu3krgDLnIq4QmmZaZaU1FwD7f2FM=";
+      "cosmic-text-0.11.2" = "sha256-TLPDnqixuW+aPAhiBhSvuZIa69vgV3xLcw32OlkdCcM=";
+      "font-kit-0.14.1" = "sha256-qUKvmi+RDoyhMrZ7T6SoVAyMc/aasQ9Y/okzre4SzXo=";
+      "lsp-types-0.95.1" = "sha256-N4MKoU9j1p/Xeowki/+XiNQPwIcTm9DgmfM/Eieq4js=";
+      "nvim-rs-0.8.0-pre" = "sha256-VA8zIynflul1YKBlSxGCXCwa2Hz0pT3mH6OPsfS7Izo=";
+      "protols-tree-sitter-proto-0.2.0" = "sha256-0pvHuwqtkHYLevQnaEFmfyDtILD7Wy0in2KSKFR2mKw=";
+      "tree-sitter-gomod-1.0.2" = "sha256-FCb8ndKSFiLY7/nTX7tWF8c4KcSvoBU1QB5R4rdOgT0=";
+      "tree-sitter-gowork-0.0.1" = "sha256-WRMgGjOlJ+bT/YnSBeSLRTLlltA5WwTvV0Ow/949+BE=";
+      "tree-sitter-heex-0.0.1" = "sha256-SnjhL0WVsHOKuUp3dkTETnCgC/Z7WN0XmpQdJPBeBhw=";
+      "tree-sitter-md-0.3.2" = "sha256-sFcQDabSay9qxzVNAQkHEZB1b9j171dDoYQqaL1iVhE=";
+      "tree-sitter-yaml-0.6.1" = "sha256-95u/bq74SiUHW8lVp3RpanmYS/lyVPW0Inn8gR7N3IQ=";
+      "xim-0.4.0" = "sha256-BXyaIBoqMNbzaSJqMadmofdjtlEVSoU6iogF66YP6a4=";
+      "xkbcommon-0.7.0" = "sha256-2RjZWiAaz8apYTrZ82qqH4Gv20WyCtPT+ldOzm0GWMo=";
     };
   };
 
   nativeBuildInputs = [
+    clang
+    cmake
     copyDesktopItems
     curl
+    perl
     pkg-config
     protobuf
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun ];
+    cargo-about
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
+
+  dontUseCmakeConfigure = true;
 
   buildInputs =
     [
@@ -84,13 +148,13 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       libxkbcommon
       wayland
       xorg.libxcb
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -109,50 +173,101 @@ rustPlatform.buildRustPackage rec {
       ]
     );
 
+  cargoBuildFlags = [
+    "--package=zed"
+    "--package=cli"
+  ];
   buildFeatures = [ "gpui/runtime_shaders" ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
     FONTCONFIG_FILE = makeFontsConf {
       fontDirectories = [
-        "${src}/assets/fonts/zed-mono"
-        "${src}/assets/fonts/zed-sans"
+        "${src}/assets/fonts/plex-mono"
+        "${src}/assets/fonts/plex-sans"
       ];
     };
+    # Setting this environment variable allows to disable auto-updates
+    # https://zed.dev/docs/development/linux#notes-for-packaging-zed
+    ZED_UPDATE_EXPLANATION = "zed has been installed using nix. Auto-updates have thus been disabled.";
+    # Used by `zed --version`
+    RELEASE_VERSION = version;
   };
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-rpath ${vulkan-loader}/lib $out/bin/*
-    patchelf --add-rpath ${wayland}/lib $out/bin/*
+  RUSTFLAGS = if withGLES then "--cfg gles" else "";
+  gpu-lib = if withGLES then libglvnd else vulkan-loader;
+
+  preBuild = ''
+    bash script/generate-licenses
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
+    patchelf --add-rpath ${wayland}/lib $out/libexec/*
+  '';
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
   '';
 
   checkFlags = lib.optionals stdenv.hostPlatform.isLinux [
-    # Fails with "On 2823 Failed to find test1:A"
-    "--skip=test_base_keymap"
-    # Fails with "called `Result::unwrap()` on an `Err` value: Invalid keystroke `cmd-k`"
-    # https://github.com/zed-industries/zed/issues/10427
-    "--skip=test_disabled_keymap_binding"
+    # Fails on certain hosts (including Hydra) for unclear reason
+    "--skip=test_open_paths_action"
+
+    # Flaky: unreliably fails on certain hosts (including Hydra)
+    "--skip=zed::tests::test_window_edit_state_restoring_enabled"
   ];
 
-  postInstall = ''
-    mv $out/bin/Zed $out/bin/zed
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/bin $out/libexec
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
+    cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zeditor
+
     install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
     install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
-    install -D ${src}/crates/zed/resources/zed.desktop $out/share/applications/dev.zed.Zed.desktop
+
+    # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+    # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
+    (
+      export DO_STARTUP_NOTIFY="true"
+      export APP_CLI="zeditor"
+      export APP_ICON="zed"
+      export APP_NAME="Zed"
+      export APP_ARGS="%U"
+      mkdir -p "$out/share/applications"
+      ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+    )
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  passthru = {
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      ignoredVersions = "pre";
+    };
+    tests.version = testers.testVersion {
+      inherit version;
+      package = zed-editor;
+    };
+    fhs = fhs { };
+    fhsWithPackages = f: fhs { additionalPkgs = f; };
+  };
+
+  meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
     changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       GaetanLepage
       niklaskorz
     ];
-    mainProgram = "zed";
-    platforms = platforms.all;
+    mainProgram = "zeditor";
+    platforms = lib.platforms.all;
     # Currently broken on darwin: https://github.com/NixOS/nixpkgs/pull/303233#issuecomment-2048650618
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

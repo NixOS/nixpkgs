@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  unittestCheckHook,
   mock,
   isPy3k,
 }:
@@ -22,15 +22,13 @@ buildPythonPackage {
   };
 
   nativeCheckInputs = [
-    nose
     mock
+    unittestCheckHook
   ];
 
   postPatch = lib.optionalString isPy3k ''
     sed -i -e 's/open *(\([^)]*\))/open(\1, encoding="utf-8")/' setup.py
   '';
-
-  checkPhase = "nosetests tests/test.py";
 
   meta = with lib; {
     description = "Memory-based naive bayesian text classifier";

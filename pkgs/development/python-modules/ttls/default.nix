@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "ttls";
-  version = "1.8.2";
+  version = "1.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "jschlyter";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-i9vJr7uTpkUZ9WiL0BGidIgCdG87k8JnmZuPqt6qLQE=";
+    hash = "sha256-1RctamOSnpZ+bcfwnCsj4OAR7KYzf0XQtSe7MTFMGy4=";
   };
 
   nativeBuildInputs = [ poetry-core ];

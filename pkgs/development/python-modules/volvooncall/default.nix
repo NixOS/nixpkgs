@@ -12,8 +12,6 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  websockets,
 }:
 
 buildPythonPackage rec {
@@ -41,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     console = [
       certifi
       docopt
@@ -57,7 +55,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.mqtt;
+  ] ++ optional-dependencies.mqtt;
 
   pythonImportsCheck = [ "volvooncall" ];
 

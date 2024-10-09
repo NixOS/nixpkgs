@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     expat
-  ] ++ lib.optional stdenv.isDarwin CoreFoundation;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreFoundation;
 
   propagatedBuildInputs = [
     freetype
@@ -69,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     cd "$out/etc/fonts"
     xsltproc --stringparam fontDirectories "${dejavu_fonts.minimal}" \
+      --stringparam includes /etc/fonts/conf.d \
       --path $out/share/xml/fontconfig \
       ${./make-fonts-conf.xsl} $out/etc/fonts/fonts.conf \
       > fonts.conf.tmp
@@ -85,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library for font customization and configuration";
+    description = "Library for font customization and configuration";
     homepage = "http://fontconfig.org/";
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;

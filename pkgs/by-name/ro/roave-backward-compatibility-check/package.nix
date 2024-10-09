@@ -8,16 +8,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "roave-backward-compatibility-check";
-  version = "8.8.0";
+  version = "8.9.0";
 
   src = fetchFromGitHub {
     owner = "Roave";
     repo = "BackwardCompatibilityCheck";
     rev = finalAttrs.version;
-    hash = "sha256-/9nJqZcuBLzgzDyoX4NHW9And7L/F+Bsm/gLzQS7QzE=";
+    hash = "sha256-Bvqo2SmtRWvatXxtHbctBrY0xe0KA+knNmEg+KC8hgY=";
   };
 
-  vendorHash = "sha256-I8JZ4CBrrQmZ38QF9SPZtkPirCAxqSCeTUpMg59Mz7U=";
+  vendorHash = "sha256-cMVOcLRvfwFbxd2mXJhDx1iaUTHPEsI4vh9/JCoOj3M=";
 
   passthru = {
     tests.version = testers.testVersion {
@@ -28,7 +28,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/Roave/BackwardCompatibilityCheck/releases/tag/${finalAttrs.version}";
-    description = "A tool that can be used to verify BC breaks between two versions of a PHP library";
+    description = "Tool that can be used to verify BC breaks between two versions of a PHP library";
     homepage = "https://github.com/Roave/BackwardCompatibilityCheck";
     license = lib.licenses.mit;
     mainProgram = "roave-backward-compatibility-check";

@@ -1,5 +1,5 @@
 /**
-  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/module-system.html).
+  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
   It uses the declared `options` to generate documentation in various formats.
 

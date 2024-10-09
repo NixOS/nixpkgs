@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "whatsapp-for-linux";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = "whatsapp-for-linux";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DU9tvIvDfOtBydR68yeRMFYdMjiBrOobCDXIZMmm7pQ=";
+    hash = "sha256-hUIyn6BhAPoszBTHKa4qSj6IRa+8cUS0Gis/qjDDnyk=";
   };
 
   nativeBuildInputs = [
@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "whatsapp-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 })

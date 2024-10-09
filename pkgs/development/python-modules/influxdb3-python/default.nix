@@ -4,7 +4,6 @@
   certifi,
   fetchFromGitHub,
   pyarrow,
-  pytestCheckHook,
   python-dateutil,
   pythonOlder,
   reactivex,
@@ -14,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "influxdb3-python";
-  version = "0.5.0";
+  version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "InfluxCommunity";
     repo = "influxdb3-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vumKOvCLpcu0z1W/zmf3qsSo3a8FEbI+20/IMt6nCX4=";
+    hash = "sha256-4P+bQEldyBNh4qsIkoZLXnUOrQ5wVGbr55xbS0oQMMM=";
   };
 
   build-system = [ setuptools ];

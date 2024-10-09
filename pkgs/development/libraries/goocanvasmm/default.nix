@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "C++ bindings for GooCanvas";
     homepage = "https://gitlab.gnome.org/Archive/goocanvasmm";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

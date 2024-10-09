@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Store and restore metadata from a filesystem";
     mainProgram = "metastore";
     homepage = "https://software.przemoc.net/#metastore";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ sstef ];
     platforms = platforms.linux;
   };

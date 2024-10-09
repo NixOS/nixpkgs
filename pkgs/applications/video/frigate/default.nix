@@ -1,36 +1,31 @@
 { lib
 , callPackage
-, python3
+, python312
 , fetchFromGitHub
 , fetchurl
-, fetchpatch2
 , frigate
 , nixosTests
 }:
 
 let
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
-    #name = "frigate-${version}-source";
+    name = "frigate-${version}-source";
     owner = "blakeblackshear";
     repo = "frigate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NVT7yaJkVA7b7GL0S0fHjNneBzhjCru56qY1Q4sTVcE=";
+    hash = "sha256-PfUlo9ua4SVcQJTfmSVoEXHH1MUJ8A/w3kJHFpEzll8=";
   };
 
   frigate-web = callPackage ./web.nix {
     inherit version src;
   };
 
-  python = python3.override {
+  python = python312.override {
+    self = python;
     packageOverrides = self: super: {
-      pydantic = super.pydantic_1;
-
-      versioningit = super.versioningit.overridePythonAttrs {
-        # checkPhase requires pydantic>=2
-        doCheck = false;
-      };
+      paho-mqtt = super.paho-mqtt_2;
     };
   };
 
@@ -59,48 +54,35 @@ python.pkgs.buildPythonApplication rec {
 
   inherit src;
 
-  patches = [
-    (fetchpatch2 {
-      name = "frigate-flask3.0-compat.patch";
-      url = "https://github.com/blakeblackshear/frigate/commit/56bdacc1c661eff8a323e033520e75e2ba0a3842.patch";
-      hash = "sha256-s/goUJxIbjq/woCEOEZECdcZoJDoWc1eM63sd60cxeY=";
-    })
-    (fetchpatch2 {
-      # https://github.com/blakeblackshear/frigate/pull/10967
-      name = "frigate-wsdl-path.patch";
-      url = "https://github.com/blakeblackshear/frigate/commit/b65656fa8733c1c2f3d944f716d2e9493ae7c99f.patch";
-      hash = "sha256-taPWFV4PldBGUKAwFMKag4W/3TLMSGdKLYG8bj1Y5mU=";
-    })
-  ];
-
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
 
     substituteInPlace frigate/app.py \
-      --replace "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
+      --replace-fail "Router(migrate_db)" 'Router(migrate_db, "${placeholder "out"}/share/frigate/migrations")'
 
     substituteInPlace frigate/const.py \
-      --replace "/media/frigate" "/var/lib/frigate" \
-      --replace "/tmp/cache" "/var/cache/frigate" \
-      --replace "/config" "/var/lib/frigate" \
-      --replace "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
+      --replace-fail "/media/frigate" "/var/lib/frigate" \
+      --replace-fail "/tmp/cache" "/var/cache/frigate" \
+      --replace-fail "/config" "/var/lib/frigate" \
+      --replace-fail "{CONFIG_DIR}/model_cache" "/var/cache/frigate/model_cache"
 
-    substituteInPlace frigate/http.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
-
-    substituteInPlace frigate/output.py \
-      --replace "/opt/frigate" "${placeholder "out"}/${python.sitePackages}"
+    substituteInPlace frigate/comms/{config,detections,events}_updater.py frigate/comms/inter_process.py \
+      --replace-fail "ipc:///tmp/cache" "ipc:///run/frigate"
 
     substituteInPlace frigate/detectors/detector_config.py \
-      --replace "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+      --replace-fail "/labelmap.txt" "${placeholder "out"}/share/frigate/labelmap.txt"
+
+    # work around onvif-zeep idiosyncrasy
+    substituteInPlace frigate/ptz/onvif.py \
+      --replace-fail dist-packages site-packages
 
     substituteInPlace frigate/config.py \
-      --replace "/cpu_model.tflite" "${tflite_cpu_model}" \
-      --replace "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
+      --replace-fail "/cpu_model.tflite" "${tflite_cpu_model}" \
+      --replace-fail "/edgetpu_model.tflite" "${tflite_edgetpu_model}"
 
     substituteInPlace frigate/test/test_config.py \
-      --replace "(MODEL_CACHE_DIR" "('/build/model_cache'" \
-      --replace "/config/model_cache" "/build/model_cache"
+      --replace-fail "(MODEL_CACHE_DIR" "('/build/model_cache'" \
+      --replace-fail "/config/model_cache" "/build/model_cache"
   '';
 
   dontBuild = true;
@@ -110,8 +92,11 @@ python.pkgs.buildPythonApplication rec {
     scikit-build
     # docker/main/requirements-wheel.txt
     click
+    distutils
     flask
+    flask-limiter
     imutils
+    joserfc
     markupsafe
     matplotlib
     norfair
@@ -119,6 +104,7 @@ python.pkgs.buildPythonApplication rec {
     onvif-zeep
     opencv4
     openvino
+    pandas
     paho-mqtt
     peewee
     peewee-migrate
@@ -127,11 +113,12 @@ python.pkgs.buildPythonApplication rec {
     pydantic
     pytz
     pyyaml
+    pyzmq
     requests
     ruamel-yaml
     scipy
     setproctitle
-    tensorflow
+    tensorflow-bin
     tzlocal
     unidecode
     ws4py

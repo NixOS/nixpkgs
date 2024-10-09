@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
   deprecated,
@@ -38,7 +37,7 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  disabledTestPaths = [ "tests/performance/benchmarks/" ];
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [ "opentelemetry.exporter.otlp.proto.grpc" ];
 

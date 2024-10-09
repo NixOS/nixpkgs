@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    name = "${pname}-${version}";
+    name = "swayosd-${version}";
     hash = "sha256-exbVanUvGp0ub4WE3VcsN8hkcK0Ipf0tNfd92UecICg=";
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A GTK based on screen display for keyboard shortcuts";
+    description = "GTK based on screen display for keyboard shortcuts";
     homepage = "https://github.com/ErikReider/SwayOSD";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aleksana barab-i sergioribera ];

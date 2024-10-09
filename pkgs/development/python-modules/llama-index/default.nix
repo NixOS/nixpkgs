@@ -1,6 +1,6 @@
 {
-  lib,
   buildPythonPackage,
+  poetry-core,
   llama-index-agent-openai,
   llama-index-cli,
   llama-index-core,
@@ -13,19 +13,22 @@
   llama-index-question-gen-openai,
   llama-index-readers-file,
   llama-index-readers-llama-parse,
-  poetry-core,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "llama-index";
 
   inherit (llama-index-core) version src meta;
 
   pyproject = true;
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "llama-index-core"
+  ];
+
+  dependencies = [
     llama-index-agent-openai
     llama-index-cli
     llama-index-core

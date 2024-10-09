@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ perl pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
 
   nativeCheckInputs = [ git ];
 
   meta = with lib; {
-    description = "A cryptographically verifiable code review system for the cargo (Rust) package manager";
+    description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
     mainProgram = "cargo-crev";
     homepage = "https://github.com/crev-dev/cargo-crev";
     license = with licenses; [ asl20 mit mpl20 ];

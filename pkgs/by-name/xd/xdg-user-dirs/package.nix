@@ -18,13 +18,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7G8G10lc26N6cyA5+bXhV4vLKWV2/eDaQO2y9SIg3zw=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     makeWrapper
     libxslt
     docbook_xsl
-  ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   preFixup = ''
     # fallback values need to be last
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
-    description = "A tool to help manage well known user directories like the desktop folder and the music folder";
+    description = "Tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
     maintainers = with maintainers; [ donovanglover ];
     platforms = platforms.unix;

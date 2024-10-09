@@ -1,13 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  pythonOlder,
   fetchFromGitHub,
-  pythonAtLeast,
 
   # build
   setuptools,
 
   # runtime
+  looseversion,
   packaging,
   typing-extensions,
 
@@ -18,19 +19,25 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.11.2";
+  version = "0.11.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IT9aRAUNc2cP2erLr0MglZSVLfDjOxg8PVIIe9AvO0o=";
+    hash = "sha256-0XxBDe9OGQLfl4viuUm5Hx8WvZhSj+J0FoDqD/JOiZM=";
   };
+
+  postPatch = ''
+    substituteInPlace src/lightning_utilities/install/requirements.py \
+      --replace-fail "from distutils.version import LooseVersion" "from looseversion import LooseVersion"
+  '';
 
   build-system = [ setuptools ];
 
   dependencies = [
+    looseversion
     packaging
     typing-extensions
   ];
@@ -61,18 +68,11 @@ buildPythonPackage rec {
     "src/lightning_utilities/install/requirements.py"
   ];
 
-  pytestFlagsArray = [
-    # warns about distutils removal in python 3.12
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
-
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Lightning-AI/utilities/releases/tag/v${version}";
     description = "Common Python utilities and GitHub Actions in Lightning Ecosystem";
     homepage = "https://github.com/Lightning-AI/utilities";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
-    broken = pythonAtLeast "3.12";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

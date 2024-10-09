@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pyfaidx";
-  version = "0.8.1.1";
+  version = "0.8.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bwSCNSYZ8sxWADyiIyG9sNB2S2VnlbweQGKx+psIaGs=";
+    hash = "sha256-2EUkcEVbHnePk5aUR9uOok3rRiTHxAdpUWRZy2+HvDM=";
   };
 
   build-system = [

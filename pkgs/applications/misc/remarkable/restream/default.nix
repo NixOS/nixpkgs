@@ -5,7 +5,6 @@
 , fetchFromGitHub
 , openssh
 , netcat
-, makeWrapper
 }:
 
 stdenv.mkDerivation rec {

@@ -267,7 +267,7 @@ in
       let
         # linux = bsd
         # https://github.com/DerKoun/bsnes-hd/blob/f0b6cf34e9780d53516977ed2de64137a8bcc3c5/bsnes/GNUmakefile#L37
-        platform = if stdenv.isDarwin then "macos" else "linux";
+        platform = if stdenv.hostPlatform.isDarwin then "macos" else "linux";
       in
       [
         "-C"
@@ -405,7 +405,7 @@ in
     hardeningDisable = [ "format" ];
     makefile = "Makefile";
     meta = {
-      description = "Port of DOSBox to libretro aiming for simplicity and ease of use.";
+      description = "Port of DOSBox to libretro aiming for simplicity and ease of use";
       license = lib.licenses.gpl2Only;
     };
   };
@@ -510,7 +510,7 @@ in
   fuse = mkLibretroCore {
     core = "fuse";
     meta = {
-      description = "A port of the Fuse Unix Spectrum Emulator to libretro";
+      description = "Port of the Fuse Unix Spectrum Emulator to libretro";
       license = lib.licenses.gpl3Only;
     };
   };
@@ -809,7 +809,7 @@ in
       && sed -i -e 's,CPUFLAGS  :=,,g' Makefile
     '';
     meta = {
-      description = "Parallel Mupen64plus rewrite for libretro.";
+      description = "Parallel Mupen64plus rewrite for libretro";
       license = lib.licenses.gpl3Only;
     };
   };

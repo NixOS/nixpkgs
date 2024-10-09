@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchPypi,
   pyqt5,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyqt3d";
-  version = "5.15.6";
+  version = "5.15.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt3D";
     inherit version;
-    hash = "sha256-fWxtVc2PwiGzE8mVwPhymjdxFJJvA3f46QEdRevziBw=";
+    hash = "sha256-6ng+tUbH2tLV6q+C6lBQ3eRSVamELgoddYSIHp4lqVE=";
   };
 
   postPatch = ''

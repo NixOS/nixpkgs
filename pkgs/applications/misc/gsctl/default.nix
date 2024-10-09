@@ -31,10 +31,10 @@ buildGoModule rec {
     kubectl
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "The Giant Swarm command line interface";
+    description = "Giant Swarm command line interface";
     homepage = "https://github.com/giantswarm/gsctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ joesalisbury ];

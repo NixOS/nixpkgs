@@ -9,19 +9,19 @@
 , fcitx5-qt
 , libskk
 , qtbase
-, skk-dicts
+, skkDictionaries
 , enableQt ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-skk";
-  version = "5.1.3";
+  version = "5.1.4";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-dbgnhPkpwytPV3EiT4vvpkSucJVDPIED96snF0Eu6qQ=";
+    hash = "sha256-K+AblsG/LwE1httvRCukMEa1KEDaAUWNLUl7MWyy2ow=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_QT" enableQt)
     (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
-    "-DSKK_DEFAULT_PATH=${skk-dicts}/share/SKK-JISYO.L"
+    "-DSKK_DEFAULT_PATH=${skkDictionaries.l}/share/skk/SKK-JISYO.L"
   ];
 
   dontWrapQtApps = true;

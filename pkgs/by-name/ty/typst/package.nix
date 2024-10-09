@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     xz
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Security
@@ -47,10 +47,13 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
+    # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
     substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
     substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+
+    # Fix build with Rust 1.80; remove on next release
+    ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
   postInstall = ''
@@ -66,7 +69,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/${src.rev}";
-    description = "A new markup-based typesetting system that is powerful and easy to learn";
+    description = "New markup-based typesetting system that is powerful and easy to learn";
     homepage = "https://github.com/typst/typst";
     license = lib.licenses.asl20;
     mainProgram = "typst";

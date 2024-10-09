@@ -11,26 +11,31 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
+, enableLiburing ? stdenv.hostPlatform.isLinux
+, liburing
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocksdb";
-  version = "9.1.1";
+  version = "9.6.1";
 
   src = fetchFromGitHub {
     owner = "facebook";
-    repo = finalAttrs.pname;
+    repo = "rocksdb";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/Xf0bzNJPclH9IP80QNaABfhj4IAR5LycYET18VFCXc=";
+    hash = "sha256-Df5X3sL4dRP9TwwfoB3645nlru6eQhFD1LKPCXHrofU=";
   };
+
+  patches = lib.optional (lib.versionAtLeast finalAttrs.version "6.29.3" && enableLiburing) ./fix-findliburing.patch;
 
   nativeBuildInputs = [ cmake ninja ];
 
   propagatedBuildInputs = [ bzip2 lz4 snappy zlib zstd ];
 
   buildInputs = lib.optional enableJemalloc jemalloc
+    ++ lib.optional enableLiburing liburing
     ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
 
   outputs = [
@@ -45,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=${if enableJemalloc then "1" else "0"}"
+    "-DWITH_LIBURING=${if enableLiburing then "1" else "0"}"
     "-DWITH_JNI=0"
     "-DWITH_BENCHMARK_TOOLS=0"
     "-DWITH_TESTS=1"
@@ -81,9 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
   preInstall = ''
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major finalAttrs.version}.dylib" $out/lib/librocksdb.dylib {}
-  '' + lib.optionalString (stdenv.isLinux && enableShared) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && enableShared) ''
     ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
   '';
 
@@ -97,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://rocksdb.org";
-    description = "A library that provides an embeddable, persistent key-value store for fast storage";
+    description = "Library that provides an embeddable, persistent key-value store for fast storage";
     changelog = "https://github.com/facebook/rocksdb/raw/v${finalAttrs.version}/HISTORY.md";
     license = licenses.asl20;
     platforms = platforms.all;

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ast-grep";
-  version = "0.22.3";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "ast-grep";
     repo = "ast-grep";
     rev = version;
-    hash = "sha256-Q2xVB9GZBtXx67rKpeTpy1llXCBpgn9vdZmYkQVHtp8=";
+    hash = "sha256-L0SWDnMMu9OZbgXRuEpVDDamb/hMHVIwLNqog5z26JY=";
   };
 
-  cargoHash = "sha256-0N98WvNLlflNCu7I2nHDSgFHDmbMVqwu4YkqA9GNSwM=";
+  cargoHash = "sha256-gl3GMnWyW3l9tzKaI6xUd6FgCj8u2gtHL9LKgkJLJT4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd sg \
       --bash <($out/bin/sg completions bash) \
       --fish <($out/bin/sg completions fish) \
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     mainProgram = "sg";
-    description = "A fast and polyglot tool for code searching, linting, rewriting at large scale";
+    description = "Fast and polyglot tool for code searching, linting, rewriting at large scale";
     homepage = "https://ast-grep.github.io/";
     changelog = "https://github.com/ast-grep/ast-grep/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

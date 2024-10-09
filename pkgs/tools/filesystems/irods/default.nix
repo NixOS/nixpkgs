@@ -5,8 +5,7 @@
 let
   avro-cpp = avro-cpp_llvm;
   nanodbc = nanodbc_llvm;
-in
-let
+
   common = import ./common.nix {
     inherit lib stdenv bzip2 zlib autoconf automake cmake
       help2man texinfo libtool cppzmq libarchive
@@ -33,6 +32,12 @@ rec {
     # fix build with recent llvm versions
     env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-register -Wno-deprecated-declarations";
 
+    cmakeFlags = common.cmakeFlags or [ ] ++ [
+      "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+      "-DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+      "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+    ];
+
     postPatch = common.postPatch + ''
       patchShebangs ./test
       substituteInPlace plugins/database/CMakeLists.txt --replace-fail "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
@@ -40,11 +45,6 @@ rec {
       do
         substituteInPlace $file --replace-quiet "CATCH2}/include" "CATCH2}/include/catch2"
       done
-      export cmakeFlags="$cmakeFlags
-        -DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        "
 
       substituteInPlace server/auth/CMakeLists.txt --replace-fail SETUID ""
     '';

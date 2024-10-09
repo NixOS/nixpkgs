@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")
-  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
+  ] ++ lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   passthru = { inherit setupHooks; };
 
   meta = {
-    description = "An iconv(3) implementation";
+    description = "Iconv(3) implementation";
 
     longDescription = ''
       Some programs, like mailers and web browsers, must be able to convert

@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "paper-age";
-  version = "1.3.0";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "matiaskorhonen";
     repo = "paper-age";
     rev = "v${version}";
-    hash = "sha256-hrqjnZmcGUgFWn8Z85oJEbeUBaF2SccytMr1AG0GGos=";
+    hash = "sha256-XnJSsxWe4/NLOqBjU7++bwLtVfIR9n8hpBxL3K8Bmho=";
   };
 
-  cargoHash = "sha256-sFofS+POvJwGo/+tiF6dawKgQci/54tUKkQQalqT+K0=";
+  cargoHash = "sha256-808+lQxjE9dxgNZm/FuZwFuBFJgx/7kCpNn+FrMvuoY=";
 
   meta = with lib; {
     description = "Easy and secure paper backups of secrets";

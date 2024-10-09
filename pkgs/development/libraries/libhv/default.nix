@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ curl openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ curl openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   cmakeFlags = [
     "-DENABLE_UDS=ON"
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "A c/c++ network library for developing TCP/UDP/SSL/HTTP/WebSocket/MQTT client/server";
+    description = "C/c++ network library for developing TCP/UDP/SSL/HTTP/WebSocket/MQTT client/server";
     homepage = "https://github.com/ithewei/libhv";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sikmir ];

@@ -42,6 +42,8 @@ toPythonModule (
     ];
     propagatedBuildInputs = [ python ];
 
+    cmakeFlags = [ "-DPYTHON_EXECUTABLE=${lib.getExe python.pythonOnBuildForHost}" ];
+
     meta = with lib; {
       description = "Kinematics and Dynamics Library (Python bindings)";
       homepage = "https://www.orocos.org/kdl.html";

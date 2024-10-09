@@ -26,7 +26,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stashy" ];
 
   meta = with lib; {
-    description = "Python client for the Atlassian Bitbucket Server (formerly known as Stash) REST API.";
+    description = "Python client for the Atlassian Bitbucket Server (formerly known as Stash) REST API";
     homepage = "https://github.com/cosmin/stashy";
     license = licenses.asl20;
     maintainers = with maintainers; [ mupdt ];

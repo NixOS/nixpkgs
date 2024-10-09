@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "zope-exceptions";
-  version = "5.0.1";
+  version = "5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "zope.exceptions";
     inherit version;
-    hash = "sha256-MPxT5TOfX72dEzXg97afd/FePwbisXt/t++SXMJP3ZY=";
+    hash = "sha256-YRtMSUbDAWDbS3u9TzhhOzJoSvFn0xllCvm3O8ew6Xg=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/zope.exceptions";
     changelog = "https://github.com/zopefoundation/zope.exceptions/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

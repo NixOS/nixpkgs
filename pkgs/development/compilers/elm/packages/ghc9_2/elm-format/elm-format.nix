@@ -25,7 +25,7 @@ mkDerivation {
     text
   ];
   homepage = "https://elm-lang.org";
-  description = "A source code formatter for Elm";
+  description = "Source code formatter for Elm";
   license = lib.licenses.bsd3;
   mainProgram = "elm-format";
 }

@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_MULTIPLE_TEST=ON"
   ];
 
-  doCheck = !stdenv.isDarwin && !stdenv.hostPlatform.isStatic;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic;
 
   postInstall = ''
     substituteInPlace $out/share/NumCpp/cmake/NumCppConfig.cmake \
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_CFLAGS_COMPILE="-Wno-error";
 
   meta = with lib; {
-    description = "A Templatized Header Only C++ Implementation of the Python NumPy Library";
+    description = "Templatized Header Only C++ Implementation of the Python NumPy Library";
     homepage = "https://github.com/dpilger26/NumCpp";
     license = licenses.mit;
     maintainers = with maintainers; [spalf];

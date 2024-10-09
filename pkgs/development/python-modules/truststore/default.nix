@@ -14,20 +14,20 @@
 buildPythonPackage rec {
   pname = "truststore";
   version = "0.9.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
-    repo = pname;
+    repo = "truststore";
     rev = "refs/tags/v${version}";
     hash = "sha256-BP88oQ363XFuRMKZqW8wSm1wl5upU+yEgmwktv65JOU=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     httpx
     pyopenssl
@@ -35,14 +35,14 @@ buildPythonPackage rec {
     trustme
   ];
 
-  # tests requires networking
+  # Tests requires networking
   doCheck = false;
 
   pythonImportsCheck = [ "truststore" ];
 
   meta = with lib; {
-    homepage = "https://github.com/sethmlarson/truststore";
     description = "Verify certificates using native system trust stores";
+    homepage = "https://github.com/sethmlarson/truststore";
     changelog = "https://github.com/sethmlarson/truststore/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ anthonyroussel ];

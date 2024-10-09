@@ -20,11 +20,6 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-3IiFU6qGI2MDTBOLQ2qyT5keUMNTNG3sxhtGR3bkIBc=";
   };
 
-  postPatch = ''
-    # We don't want to run the coverage.
-    substituteInPlace tox.ini --replace "--cov=git_pw --cov-report" ""
-  '';
-
   nativeBuildInputs = with python3.pkgs; [
     pbr
     setuptools
@@ -39,6 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytest
     git
   ];
@@ -51,7 +47,7 @@ python3.pkgs.buildPythonApplication rec {
   });
 
   meta = with lib; {
-    description = "A tool for integrating Git with Patchwork, the web-based patch tracking system";
+    description = "Tool for integrating Git with Patchwork, the web-based patch tracking system";
     homepage = "https://github.com/getpatchwork/git-pw";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];

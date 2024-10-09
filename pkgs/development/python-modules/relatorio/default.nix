@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-zgCOmcR9FWj0lpi78U0G1CKR5kyNyr541HusIrBpF/Q=";
+    hash = "sha256-zgCOmcR9FWj0lpi78U0G1CKR5kyNyr541HusIrBpF/Q=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     lxml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     chart = [
       # pycha
       pyyaml
@@ -36,14 +36,14 @@ buildPythonPackage rec {
     fodt = [ python-magic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.fodt;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.fodt;
 
   pythonImportsCheck = [ "relatorio" ];
 
   meta = {
     homepage = "https://relatorio.tryton.org/";
     changelog = "https://hg.tryton.org/relatorio/file/${version}/CHANGELOG";
-    description = "A templating library able to output odt and pdf files";
+    description = "Templating library able to output odt and pdf files";
     mainProgram = "relatorio-render";
     maintainers = with lib.maintainers; [ johbo ];
     license = lib.licenses.gpl2Plus;

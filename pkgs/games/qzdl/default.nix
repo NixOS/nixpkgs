@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A ZDoom WAD Launcher";
+    description = "ZDoom WAD Launcher";
     homepage = "https://zdl.vectec.net";
     license = licenses.gpl3Only;
     inherit (qtbase.meta) platforms;

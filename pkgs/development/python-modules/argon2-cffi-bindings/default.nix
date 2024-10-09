@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Low-level CFFI bindings for Argon2";
     homepage = "https://github.com/hynek/argon2-cffi-bindings";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

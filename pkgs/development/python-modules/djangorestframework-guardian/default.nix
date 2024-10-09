@@ -39,7 +39,7 @@ buildPythonPackage rec {
     description = "Django-guardian support for Django REST Framework";
     homepage = "https://github.com/rpkilby/django-rest-framework-guardian";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # unmaintained, last compatible version is 3.x, use djangorestframework-guardian2 instead
     broken = lib.versionAtLeast django.version "4";
   };

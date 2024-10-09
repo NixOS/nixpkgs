@@ -23,13 +23,13 @@ with lib.strings;
 
 let
 
-  version = "2.72.14";
+  version = "2.74.6";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "sha256-RdSXiOYwKsfyrfHEughCeSwa9VFM6/3pMg54yCMpzLU=";
+    hash = "sha256-0r7DjTrsNKZ5ZmWoA+Y9OXyJFUiUFZiPQb1skXXWYTw=";
     fetchSubmodules = true;
   };
 

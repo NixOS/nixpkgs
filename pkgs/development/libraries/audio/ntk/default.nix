@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     cairo libjpeg libXft python3
   ];
 
+  # NOTE: ntk provides its own waf script that is incompatible with new
+  # python versions. If the script is not present, wafHook will install
+  # a compatible version from nixpkgs.
+  prePatch = ''
+    rm waf
+  '';
+
   meta = {
     description = "Fork of FLTK 1.3.0 with additional functionality";
     version = version;

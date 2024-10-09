@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
   buildInputs = [ gdal openssl ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   meta = with lib; {
     description = "Vector tile server specialized on publishing MVT tiles";

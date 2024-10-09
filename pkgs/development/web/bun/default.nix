@@ -12,13 +12,13 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
-  version = "1.1.8";
+  version = "1.1.29";
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   strictDeps = true;
-  nativeBuildInputs = [ unzip installShellFiles ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ unzip installShellFiles ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
   buildInputs = [ openssl ];
 
   dontConfigure = true;
@@ -51,19 +51,19 @@ stdenvNoCC.mkDerivation rec {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
-        hash = "sha256-n5ElTDuD0fap+llzrXN7de937jYaAG8dpJlKUB0npT4=";
+        hash = "sha256-RSMuealmdHe7qGFwhK9e51TED3PaCwSqzd4aj2RKMxE=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
-        hash = "sha256-4/kEyaF2kmu8MAjlrPgBqKFDId8bBibu3Zll3b0w8Ro=";
+        hash = "sha256-gY+MDJqDjQamxQsk/CJJVuHsBAfwgrebs/h6nI0HV78=";
       };
       "x86_64-darwin" = fetchurl {
-        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
-        hash = "sha256-btyslaKqdk86whAnQV0on7NWTBTRTegFvMsOl0YyloY=";
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64-baseline.zip";
+        hash = "sha256-j5jpgofGcfjto/3CtBsC4QV411lUGdk2wHwLGmLduo4=";
       };
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
-        hash = "sha256-JuDT+8FHbamdMVCDeSTGPYOvhPY2EZ9XeD2zjHEj36Y=";
+        hash = "sha256-RnKczYB/IkUYVBnRktCFhHsmvObQovVMfCilqJq3q1g=";
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -75,8 +75,7 @@ stdenvNoCC.mkDerivation rec {
           exit 0
       fi
       for platform in ${lib.escapeShellArgs meta.platforms}; do
-        update-source-version "bun" "0" "${lib.fakeHash}" --source-key="sources.$platform"
-        update-source-version "bun" "$NEW_VERSION" --source-key="sources.$platform"
+        update-source-version "bun" "$NEW_VERSION" --ignore-same-version --source-key="sources.$platform"
       done
     '';
   };
@@ -93,7 +92,7 @@ stdenvNoCC.mkDerivation rec {
       lgpl21Only # javascriptcore and webkit
     ];
     mainProgram = "bun";
-    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower ];
+    maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower diogomdp ];
     platforms = builtins.attrNames passthru.sources;
     # Broken for Musl at 2024-01-13, tracking issue:
     # https://github.com/NixOS/nixpkgs/issues/280716

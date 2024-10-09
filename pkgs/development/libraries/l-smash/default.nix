@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = "http://l-smash.github.io/l-smash/";
     description = "MP4 container utilities";
     license = licenses.isc;
-    maintainers = with maintainers; [ tadeokondrak ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

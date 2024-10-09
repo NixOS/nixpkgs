@@ -83,7 +83,7 @@ let rizin = stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace binrz/rizin/macos_sign.sh \
       --replace 'codesign' '# codesign'
   '';
@@ -135,7 +135,7 @@ let rizin = stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "UNIX-like reverse engineering framework and command-line toolset.";
+    description = "UNIX-like reverse engineering framework and command-line toolset";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "rizin";

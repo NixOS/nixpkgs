@@ -5,17 +5,21 @@ import os
 import sys
 
 import importlib_metadata
-from packaging.requirements import Requirement
+from packaging.requirements import InvalidRequirement, Requirement
 
 
-def error(msg: str) -> None:
+def error(msg: str, ret: bool = False) -> None:
     print(f"  - {msg}", file=sys.stderr)
-    return False
+    return ret
 
 
 def check_requirement(req: str):
     # https://packaging.pypa.io/en/stable/requirements.html
-    requirement = Requirement(req)
+    try:
+        requirement = Requirement(req)
+    except InvalidRequirement:
+        return error(f"{req} could not be parsed", ret=True)
+
     try:
         version = importlib_metadata.distribution(requirement.name).version
     except importlib_metadata.PackageNotFoundError:

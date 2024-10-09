@@ -34,7 +34,7 @@ buildGoModule rec {
     changelog = "https://github.com/mosajjal/dnsmonster/releases/tag/v${version}";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "dnsmonster";
   };
 }

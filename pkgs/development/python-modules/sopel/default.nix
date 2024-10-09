@@ -6,65 +6,70 @@
   geoip2,
   ipython,
   isPyPy,
+  setuptools,
   praw,
   pyenchant,
-  pygeoip,
   pytestCheckHook,
   pythonOlder,
   pytz,
   sqlalchemy,
   xmltodict,
+  importlib-metadata,
 }:
 
 buildPythonPackage rec {
   pname = "sopel";
-  version = "7.1.9";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
   disabled = isPyPy || pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IJ+ovLQv6/UU1oepmUQjzaWBG3Rdd3xvui7FjK85Urs=";
+    hash = "sha256-juLJp0Et5qMZwBZzw0e4tKg1cBYqAsH8KUzqNoIP70U=";
   };
 
-  patches = [
-    # https://github.com/sopel-irc/sopel/issues/2401
-    # https://github.com/sopel-irc/sopel/commit/596adc44330939519784389cbb927435305ef758.patch
-    # rewrite the patch because there are too many patches needed to apply the above patch.
-    ./python311-support.patch
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools~=66.1" "setuptools"
+  '';
+
+  dependencies = [
     dnspython
     geoip2
     ipython
     praw
     pyenchant
-    pygeoip
     pytz
     sqlalchemy
     xmltodict
+    importlib-metadata
   ];
+
+  pythonRemoveDeps = [ "sopel-help" ];
+
+  pythonRelaxDeps = [ "sqlalchemy" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "praw>=4.0.0,<6.0.0" "praw" \
-      --replace "sqlalchemy<1.4" "sqlalchemy" \
-      --replace "xmltodict==0.12" "xmltodict>=0.12"
-  '';
-
-  preCheck = ''
-    export TESTDIR=$(mktemp -d)
-    cp -R ./test $TESTDIR
-    pushd $TESTDIR
-  '';
-
-  postCheck = ''
-    popd
-  '';
+  disabledTests = [
+    # requires network access
+    "test_example_exchange_cmd_0"
+    "test_example_exchange_cmd_1"
+    "test_example_duck_0"
+    "test_example_duck_1"
+    "test_example_suggest_0"
+    "test_example_suggest_1"
+    "test_example_suggest_2"
+    "test_example_tr2_0"
+    "test_example_tr2_1"
+    "test_example_tr2_2"
+    "test_example_title_command_0"
+    "test_example_wiktionary_0"
+    "test_example_wiktionary_ety_0"
+  ];
 
   pythonImportsCheck = [ "sopel" ];
 

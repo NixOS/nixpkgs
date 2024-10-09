@@ -48,7 +48,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "oscrypto" ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Tests require network access
@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Encryption library for Python";
     homepage = "https://github.com/wbond/oscrypto";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

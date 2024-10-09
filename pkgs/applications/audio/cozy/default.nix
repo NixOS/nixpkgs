@@ -24,6 +24,14 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-oMgdz2dny0u1XV13aHu5s8/pcAz8z/SAOf4hbCDsdjw";
   };
 
+  # FIX: The "Support Debian non-standard python paths" resolves to store path of python
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail \
+        'from distutils.sysconfig import get_python_lib; print(get_python_lib(prefix=""))' \
+        "print(\"$out/${python3Packages.python.sitePackages}\")"
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
@@ -64,7 +72,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A modern audio book player for Linux";
+    description = "Modern audio book player for Linux";
     homepage = "https://cozy.geigi.de/";
     maintainers = with maintainers; [ makefu aleksana ];
     license = licenses.gpl3Plus;

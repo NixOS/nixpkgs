@@ -1,12 +1,12 @@
 { lib, fetchFromGitHub, stdenvNoCC }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "sniglet";
   version = "2011-05-25";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "sniglet";
     rev = "5c6b0860bdd0d8c4f16222e4de3918c384db17c4";
     hash = "sha256-fLT2hZT9o1Ka30EB/6oWwmalhVJ+swXLRFG99yRWd2c=";
   };
@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A fun rounded display face that’s great for headlines";
+    description = "Fun rounded display face that’s great for headlines";
     longDescription = ''
       A rounded display face that’s great for headlines. It comes with a full
       character set, so you can type in Icelandic or even French!
@@ -30,4 +30,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.ofl;
     maintainers = with lib.maintainers; [ minijackson ];
   };
-})
+}

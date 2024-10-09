@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [ gettext gnutls nettle libxcrypt ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ApplicationServices ];
 
-  preBuild = lib.optionalString (stdenv.isDarwin) ''
+  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     export MACOSX_DEPLOYMENT_TARGET=11.0
   '';
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://lib.filezilla-project.org/";
-    description = "A modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
+    description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub ];
     platforms = lib.platforms.unix;

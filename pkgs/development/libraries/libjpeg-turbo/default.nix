@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://libjpeg-turbo.org/";
-    description = "A faster (using SIMD) libjpeg implementation";
+    description = "Faster (using SIMD) libjpeg implementation";
     license = licenses.ijg; # and some parts under other BSD-style licenses
     pkgConfigModules = [ "libjpeg" "libturbojpeg" ];
     maintainers = with maintainers; [ vcunat colemickens kamadorueda ];

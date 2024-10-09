@@ -125,6 +125,22 @@
         filename = "TensorRT-8.6.1.6.Linux.x86_64-gnu.cuda-12.0.tar.gz";
         hash = "sha256-D4FXpfxTKZQ7M4uJNZE3M1CvqQyoEjnNrddYDNHrolQ=";
       }
+      {
+        version = "10.3.0.26";
+        minCudaVersion = "11.0";
+        maxCudaVersion = "11.8";
+        cudnnVersion = "8.9";
+        filename = "TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-11.8.tar.gz";
+        hash = "sha256-1O9TwlUP0eLqTozMs53EefmjriiaHjxb4A4GIuN9jvc=";
+      }
+      {
+        version = "10.3.0.26";
+        minCudaVersion = "12.0";
+        maxCudaVersion = "12.5";
+        cudnnVersion = "8.9";
+        filename = "TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-12.5.tar.gz";
+        hash = "sha256-rf8c1avl2HATgGFyNR5Y/QJOW/D8YdSe9LhM047ZkIE=";
+      }
     ];
   };
 }

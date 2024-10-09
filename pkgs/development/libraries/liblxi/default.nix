@@ -3,20 +3,27 @@
 , libtirpc, rpcsvc-proto, avahi, libxml2
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "liblxi";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "liblxi";
-    rev = "v${version}";
-    hash = "sha256-jS0huNkbyKrsJ3NkenrYtjkzLakOsTJpwlgSo98ribE=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-ZRUYwMy+vvNClHxctoTMDlbnCSp2A0L9roo5KXWCMpI=";
   };
+
+  postPatch = ''
+    # needed by darwin
+    sed -e 1i'#include <string.h>' \
+        -e 1i'#include <stdlib.h>' \
+        -i src/bonjour.c
+  '';
 
   nativeBuildInputs = [ meson ninja cmake pkg-config rpcsvc-proto ];
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libtirpc
     avahi
   ] ++ [
@@ -36,4 +43,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ maintainers.vq ];
   };
-}
+})

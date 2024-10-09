@@ -1,39 +1,54 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "eliot-tree";
   version = "21.0.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
+    hash = "sha256-hTl+r+QJPPQ7ss73lty3Wm7DLy2SKGmmgIuJx38ilO8=";
   };
 
-  nativeCheckInputs = with python3Packages; [
-    testtools
-    pytest
-   ];
+  # Patch Python 3.12 incompatibilities in versioneer.py.
+  postPatch = ''
+    substituteInPlace versioneer.py \
+      --replace-fail SafeConfigParser ConfigParser \
+      --replace-fail readfp read_file
+  '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     colored
     eliot
     iso8601
     jmespath
-    setuptools
     toolz
   ];
 
+  nativeCheckInputs = with python3Packages; [
+    pytestCheckHook
+    testtools
+  ];
+
   # Tests run eliot-tree in out/bin.
-  checkPhase = ''
+  preCheck = ''
     export PATH=$out/bin:$PATH
-    pytest
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "eliottree" ];
+
+  meta = {
     homepage = "https://github.com/jonathanj/eliottree";
+    changelog = "https://github.com/jonathanj/eliottree/blob/${version}/NEWS.rst";
     description = "Render Eliot logs as an ASCII tree";
     mainProgram = "eliot-tree";
-    license = licenses.mit;
-    maintainers = [ maintainers.dpausp ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.dpausp ];
   };
 }

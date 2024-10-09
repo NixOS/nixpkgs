@@ -5,13 +5,13 @@
 
 buildDotnetModule rec {
   pname = "cyclonedx-cli";
-  version = "0.25.0";
+  version = "0.25.1";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kAMSdUMr/NhsbMBViFJQlzgUNnxWgi/CLb3CW9OpWFo=";
+    hash = "sha256-9G9g4bfH6EGSTZQlaiLsRjnryl+mQ3uNXdBUBVcKwlg=";
   };
 
   nugetDeps = ./deps.nix;

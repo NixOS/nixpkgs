@@ -3,10 +3,11 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
+  python,
   duckdb,
   hypothesis,
-  ipython-sql,
   pandas,
   poetry-core,
   pytest-remotedata,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.12.0";
+  version = "0.13.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cm0vbz0VZ2Ws6FDWJO16q4KZW2obs0CBNrfY9jmR+6A=";
+    hash = "sha256-zao8kzzQbnjwJqjHyqDkgmXa3E9nlBH2W0wh7Kjk/qw=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -40,25 +41,36 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
   '';
 
-  disabledTests = [
-    # test should be skipped based on sqlalchemy version but isn't and fails
-    "test_commit"
-  ];
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis
-    ipython-sql
     pandas
     pytest-remotedata
-    snapshottest
     typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.12") [
+    # requires wasmer which is broken for python 3.12
+    # https://github.com/wasmerio/wasmer-python/issues/778
+    snapshottest
   ];
 
   pytestFlagsArray = [
     "-m"
     "'not remote_data'"
+  ];
+
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    # requires snapshottest
+    "duckdb_engine/tests/test_datatypes.py"
+  ];
+
+  disabledTests = [
+    # incompatible with duckdb 1.1.1
+    "test_with_cache"
+  ] ++ lib.optionals (python.pythonVersion == "3.11") [
+    # incompatible with duckdb 1.1.1
+    "test_all_types_reflection"
+    "test_nested_types"
   ];
 
   pythonImportsCheck = [ "duckdb_engine" ];

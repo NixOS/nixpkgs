@@ -5,7 +5,6 @@
   fetchpatch,
   pythonOlder,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   poetry-core,
   jsonschema,
   numpy,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

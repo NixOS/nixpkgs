@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchPypi,
   buildPythonPackage,
   isPy27,
@@ -11,6 +12,7 @@
   flask,
   pillow,
   psycopg2,
+  tkinter,
   pytestCheckHook,
   pytest-mock,
   pytest-xdist,
@@ -18,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.22.1";
+  version = "3.23.0";
   pyproject = true;
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AE32sOoEsRFMeQ+t/kXUEl6w5TElxmqTQlr4U9gqtDI=";
+    hash = "sha256-kaKqMdib2QsO/f5KfoQmTzKCiyq/yfOOZeBBrXb+yK4=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +39,8 @@ buildPythonPackage rec {
     flask
     pillow
     psycopg2
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tkinter
   ];
 
   nativeCheckInputs = [
@@ -53,6 +57,8 @@ buildPythonPackage rec {
     "test_favicon"
     "test_vibrations_methods" # missing attribute
     "test_jmol_roundtrip" # missing attribute
+    "test_pw_input_write_nested_flat" # Did not raise DeprecationWarning
+    "test_fix_scaled" # Did not raise UserWarning
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
   preCheck = ''
@@ -65,6 +71,6 @@ buildPythonPackage rec {
     description = "Atomic Simulation Environment";
     homepage = "https://wiki.fysik.dtu.dk/ase/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

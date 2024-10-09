@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   bash,
   buildPythonPackage,
   fetchFromGitHub,
@@ -12,6 +11,7 @@
   openssl,
   paramiko,
   pytest-asyncio,
+  pytest-cov-stub,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "proxy-py";
-  version = "2.4.4";
+  version = "2.4.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,16 +32,12 @@ buildPythonPackage rec {
     owner = "abhinavsingh";
     repo = "proxy.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QWwIbNt2MtRfQaX7uZJzYmS++2MH+gTjWO0aEKYSETI=";
+    hash = "sha256-pn4YYGntG9C8mhECb7PYgN5wwicdlPcZu6Xn2M3iIKA=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
-    substituteInPlace pytest.ini \
-      --replace-fail "-p pytest_cov" "" \
-      --replace-fail "--no-cov-on-fail" ""
-    sed -i "/--cov/d" pytest.ini
   '';
 
   build-system = [ setuptools-scm ];
@@ -59,6 +55,7 @@ buildPythonPackage rec {
     hyperframe
     openssl
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytest-xdist
     pytestCheckHook
@@ -77,6 +74,7 @@ buildPythonPackage rec {
     "web_server"
     # Location is not writable
     "test_gen_csr"
+    "test_gen_public_key"
     # Tests run into a timeout
     "integration"
   ];
@@ -89,6 +87,5 @@ buildPythonPackage rec {
     changelog = "https://github.com/abhinavsingh/proxy.py/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
   };
 }

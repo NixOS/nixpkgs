@@ -1,55 +1,65 @@
-{ lib
-, stdenv
-, pname
-, version
-, src
-, meta
-, makeShellWrapper
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, gdk-pixbuf
-, glib
-, gtk3
-, libX11
-, libXcomposite
-, libXdamage
-, libXext
-, libXfixes
-, libXrandr
-, libdrm
-, libxcb
-, libxkbcommon
-, libxshmfence
-, libGL
-, libappindicator-gtk3
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, udev
-, xdg-utils
+{
+  lib,
+  stdenv,
+  pname,
+  version,
+  src,
+  meta,
+  makeShellWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libX11,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXrandr,
+  libdrm,
+  libxcb,
+  libxkbcommon,
+  libxshmfence,
+  libGL,
+  libappindicator-gtk3,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  udev,
+  xdg-utils,
 
   # The 1Password polkit file requires a list of users for whom polkit
   # integrations should be enabled. This should be a list of strings that
   # correspond to usernames.
-, polkitPolicyOwners ? []
+  polkitPolicyOwners ? [ ],
 }:
 let
   # Convert the polkitPolicyOwners variable to a polkit-compatible string for the polkit file.
   policyOwners = lib.concatStringsSep " " (map (user: "unix-user:${user}") polkitPolicyOwners);
 
-in stdenv.mkDerivation {
-  inherit pname version src meta;
+in
+stdenv.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
-  nativeBuildInputs = [ makeShellWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    makeShellWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [ glib ];
 
   dontConfigure = true;
@@ -58,37 +68,41 @@ in stdenv.mkDerivation {
   dontWrapGApps = true;
 
   installPhase =
-    let rpath = lib.makeLibraryPath [
-      alsa-lib
-      at-spi2-atk
-      at-spi2-core
-      atk
-      cairo
-      cups
-      dbus
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
-      libdrm
-      libxcb
-      libxkbcommon
-      libxshmfence
-      libGL
-      libappindicator-gtk3
-      mesa
-      nspr
-      nss
-      pango
-      systemd
-    ] + ":${stdenv.cc.cc.lib}/lib64";
-    in ''
+    let
+      rpath =
+        lib.makeLibraryPath [
+          alsa-lib
+          at-spi2-atk
+          at-spi2-core
+          atk
+          cairo
+          cups
+          dbus
+          expat
+          gdk-pixbuf
+          glib
+          gtk3
+          libX11
+          libXcomposite
+          libXdamage
+          libXext
+          libXfixes
+          libXrandr
+          libdrm
+          libxcb
+          libxkbcommon
+          libxshmfence
+          libGL
+          libappindicator-gtk3
+          mesa
+          nspr
+          nss
+          pango
+          systemd
+        ]
+        + ":${stdenv.cc.cc.lib}/lib64";
+    in
+    ''
       runHook preInstall
 
       mkdir -p $out/bin $out/share/1password
@@ -99,12 +113,13 @@ in stdenv.mkDerivation {
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
 
-      '' + (lib.optionalString (polkitPolicyOwners != [ ])
-      ''
+    ''
+    + (lib.optionalString (polkitPolicyOwners != [ ]) ''
       # Polkit file
         mkdir -p $out/share/polkit-1/actions
         substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
-        '') + ''
+    '')
+    + ''
 
       # Icons
       cp -a resources/icons $out/share

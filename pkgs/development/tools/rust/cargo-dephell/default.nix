@@ -26,13 +26,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
   ];
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     darwin.apple_sdk.frameworks.Security
     libgit2
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
+    description = "Tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     mainProgram = "cargo-dephell";
     homepage = "https://github.com/mimoo/cargo-dephell";
     license = with licenses; [ mit /* or */ asl20 ];

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A compiler-wrapper that runs and caches D programs";
+    description = "Compiler-wrapper that runs and caches D programs";
     mainProgram = "rund";
     homepage = "https://github.com/dragon-lang/rund";
     license = lib.licenses.boost;

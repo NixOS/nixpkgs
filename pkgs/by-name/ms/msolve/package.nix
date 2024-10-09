@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "msolve";
-  version = "0.6.5";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "algebraic-solving";
     repo = "msolve";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qCquagxj31ih0r5kE4x/jsIBI+KBgrMa3HcBGuhlufk=";
+    hash = "sha256-p7fD954aMApyBP58cvGrPwHEqhkxWlaiDHUlQT7kX4c=";
   };
 
   postPatch = ''
@@ -38,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for polynomial system solving through algebraic methods";
     mainProgram = "msolve";
     homepage = "https://msolve.lip6.fr";
+    changelog = "https://github.com/algebraic-solving/msolve/releases/tag/${finalAttrs.src.rev}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

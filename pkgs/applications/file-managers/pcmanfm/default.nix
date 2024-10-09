@@ -8,7 +8,7 @@
 , pango
 , pkg-config
 , wrapGAppsHook3
-, gnome
+, adwaita-icon-theme
 , withGtk3 ? true
 , gtk2
 , gtk3
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FMt7JHSTxMzmX7tZAmEeOtAKeocPvB5QrcUEKMUUDPc=";
   };
 
-  buildInputs = [ glib gtk libfm' libX11 pango gnome.adwaita-icon-theme ];
+  buildInputs = [ glib gtk libfm' libX11 pango adwaita-icon-theme ];
   nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";

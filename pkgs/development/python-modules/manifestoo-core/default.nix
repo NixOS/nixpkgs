@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "manifestoo-core";
-  version = "1.6";
+  version = "1.8.1";
   format = "pyproject";
 
   src = fetchPypi {
     inherit version;
     pname = "manifestoo_core";
-    hash = "sha256-gOWu01Z1lxhMJELyxvU5A5AskVEqCoLV/auydM5/QCE=";
+    hash = "sha256-aULT5xxkWEndzEBVcpwvWlIXQYxwfF0VxoI6EHC3JAs=";
   };
 
   nativeBuildInputs = [ hatch-vcs ];
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A library to reason about Odoo addons manifests";
+    description = "Library to reason about Odoo addons manifests";
     homepage = "https://github.com/acsone/manifestoo-core";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ yajo ];

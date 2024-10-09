@@ -29,7 +29,7 @@
 , postgresql
 , proj
 , protobuf
-, python3
+, python311
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,7 +48,8 @@
 }:
 
 let
-  py = python3.override {
+  py = python311.override {
+    self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
         withLocation = true;
@@ -77,14 +78,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.34.7";
+  version = "3.34.11";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-6fIBmIoCVo0AtkjC4Vn3jMjz93gZmvkFAgo+KnasyXo=";
+    hash = "sha256-VNgUMEA7VKZXsLG1ZYUIlYvjwRrH8LsliGiVRMnXOM0=";
   };
 
   passthru = {
@@ -139,7 +140,7 @@ in mkDerivation rec {
 
   patches = [
     (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+      src = ./set-pyqt-package-dirs-ltr.patch;
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -147,12 +148,9 @@ in mkDerivation rec {
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
-  preBuild = ''
-    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
-  '';
+  env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
@@ -164,7 +162,7 @@ in mkDerivation rec {
     );
 
   qtWrapperArgs = [
-    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms"
+    "--set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase}/${qtbase.qtPluginPrefix}/platforms"
   ];
 
   dontWrapGApps = true; # wrapper params passed below
@@ -174,13 +172,15 @@ in mkDerivation rec {
     # the path at build time using GRASS_PREFIX.
     # Using wrapGAppsHook also prevents file dialogs from crashing the program
     # on non-NixOS.
-    wrapProgram $out/bin/qgis \
-      "''${gappsWrapperArgs[@]}" \
-      --prefix PATH : ${lib.makeBinPath [ grass ]}
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        "''${gappsWrapperArgs[@]}" \
+        --prefix PATH : ${lib.makeBinPath [ grass ]}
+    done
   '';
 
   meta = with lib; {
-    description = "A Free and Open Source Geographic Information System";
+    description = "Free and Open Source Geographic Information System";
     homepage = "https://www.qgis.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; teams.geospatial.members ++ [ lsix ];

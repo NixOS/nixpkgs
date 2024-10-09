@@ -2,7 +2,6 @@
 , stdenv
 , fetchzip
 , fetchFromGitHub
-, fetchpatch
 , SDL2
 , buildFHSEnv
 , cmake
@@ -41,7 +40,7 @@ let
     repo = "Unvanquished";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-F8U9UBFCe0PcFYZ2DThQwhouO22jKyWb0/ABhprHXCU=";
+    hash = "sha256-F8U9UBFCe0PcFYZ2DThQwhouO22jKyWb0/ABhprHXCU=";
   };
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
@@ -220,7 +219,7 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "https://unvanquished.net/";
     downloadPage = "https://unvanquished.net/download/";
-    description = "A fast paced, first person strategy game";
+    description = "Fast paced, first person strategy game";
     # don't replace the following lib.licenses.zlib with just "zlib",
     # or you would end up with the package instead
     license = with lib.licenses; [

@@ -7,7 +7,6 @@
   jinja2,
   mako,
   passlib,
-  pytest,
   pyyaml,
   requests,
   rtoml,
@@ -19,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "bundlewrap";
-  version = "4.18.0";
-  format = "setuptools";
+  version = "4.20.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -28,11 +27,11 @@ buildPythonPackage rec {
     owner = "bundlewrap";
     repo = "bundlewrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-7jBFeJem+0vZot+BknKmCxozmoHCBCAZqDbfQQG3/Vw=";
+    hash = "sha256-GoMOEPZb7efFoZn7D2y1XO4XtP9z+1EmakLvSxcCT8I=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+  dependencies = [
     setuptools
     cryptography
     jinja2

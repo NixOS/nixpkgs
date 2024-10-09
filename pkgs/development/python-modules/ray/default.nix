@@ -1,65 +1,68 @@
 {
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  pythonAtLeast,
+  python,
+  fetchPypi,
+  autoPatchelfHook,
+
+  # dependencies
   aiohttp,
   aiohttp-cors,
-  aiorwlock,
   aiosignal,
   attrs,
-  autoPatchelfHook,
-  buildPythonPackage,
-  fetchPypi,
   click,
   cloudpickle,
   colorama,
   colorful,
   cython,
-  dm-tree,
-  fastapi,
   filelock,
   frozenlist,
-  fsspec,
   gpustat,
   grpcio,
-  gym,
   jsonschema,
-  lib,
-  lz4,
-  matplotlib,
   msgpack,
   numpy,
   opencensus,
   packaging,
-  pandas,
-  py-spy,
   prometheus-client,
   psutil,
-  pyarrow,
   pydantic,
-  python,
-  pythonAtLeast,
-  pythonOlder,
-  pythonRelaxDepsHook,
+  py-spy,
   pyyaml,
   requests,
-  scikit-image,
-  scipy,
   setproctitle,
   smart-open,
+  virtualenv,
+
+  # optional-dependencies
+  fsspec,
+  pandas,
+  pyarrow,
+  dm-tree,
+  gym,
+  lz4,
+  matplotlib,
+  scikit-image,
+  scipy,
+  aiorwlock,
+  fastapi,
   starlette,
+  uvicorn,
   tabulate,
   tensorboardx,
-  uvicorn,
-  virtualenv,
 }:
 
 let
   pname = "ray";
-  version = "2.10.0";
+  version = "2.37.0";
 in
 buildPythonPackage rec {
   inherit pname version;
   format = "wheel";
 
-  disabled = pythonOlder "3.10" || pythonAtLeast "3.12";
+  disabled = pythonOlder "3.10" || pythonAtLeast "3.13";
 
   src =
     let
@@ -77,42 +80,8 @@ buildPythonPackage rec {
       // binary-hash
     );
 
-  passthru.optional-dependencies = rec {
-    data-deps = [
-      pandas
-      pyarrow
-      fsspec
-    ];
-
-    serve-deps = [
-      aiorwlock
-      fastapi
-      pandas
-      starlette
-      uvicorn
-    ];
-
-    tune-deps = [
-      tabulate
-      tensorboardx
-    ];
-
-    rllib-deps = tune-deps ++ [
-      dm-tree
-      gym
-      lz4
-      matplotlib
-      scikit-image
-      pyyaml
-      scipy
-    ];
-
-    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
-  };
-
   nativeBuildInputs = [
     autoPatchelfHook
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -122,11 +91,11 @@ buildPythonPackage rec {
     "virtualenv"
   ];
 
-  propagatedBuildInputs = [
-    attrs
+  dependencies = [
     aiohttp
     aiohttp-cors
     aiosignal
+    attrs
     click
     cloudpickle
     colorama
@@ -141,10 +110,10 @@ buildPythonPackage rec {
     numpy
     opencensus
     packaging
-    py-spy
     prometheus-client
     psutil
     pydantic
+    py-spy
     pyyaml
     requests
     setproctitle
@@ -152,18 +121,48 @@ buildPythonPackage rec {
     virtualenv
   ];
 
+  optional-dependencies = rec {
+    air-deps = data-deps ++ serve-deps ++ tune-deps ++ rllib-deps;
+    data-deps = [
+      fsspec
+      pandas
+      pyarrow
+    ];
+    rllib-deps = tune-deps ++ [
+      dm-tree
+      gym
+      lz4
+      matplotlib
+      pyyaml
+      scikit-image
+      scipy
+    ];
+    serve-deps = [
+      aiorwlock
+      fastapi
+      pandas
+      starlette
+      uvicorn
+    ];
+    tune-deps = [
+      tabulate
+      tensorboardx
+    ];
+  };
+
   postInstall = ''
     chmod +x $out/${python.sitePackages}/ray/core/src/ray/{gcs/gcs_server,raylet/raylet}
   '';
 
   pythonImportsCheck = [ "ray" ];
 
-  meta = with lib; {
-    description = "A unified framework for scaling AI and Python applications";
+  meta = {
+    description = "Unified framework for scaling AI and Python applications";
     homepage = "https://github.com/ray-project/ray";
     changelog = "https://github.com/ray-project/ray/releases/tag/ray-${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ billhuang ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ billhuang ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
   };
 }

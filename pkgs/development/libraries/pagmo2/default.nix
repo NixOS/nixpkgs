@@ -12,27 +12,27 @@
 
 stdenv.mkDerivation rec {
   pname = "pagmo2";
-  version = "2.19.0";
+  version = "2.19.1";
 
   src = fetchFromGitHub {
      owner = "esa";
      repo = "pagmo2";
      rev = "v${version}";
-     sha256 = "sha256-z5kg2xKZ666EPK844yp+hi4iGisaIPme9xNdzsAEEjw=";
+     sha256 = "sha256-ido3e0hQLDEPT0AmsfAVTPlGbWe5QBkxgRO6Fg1wp/c=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ eigen nlopt boost tbb ] ++ lib.optional (!stdenv.isDarwin) ipopt;
+  buildInputs = [ eigen nlopt boost tbb ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) ipopt;
 
   cmakeFlags = [
     "-DPAGMO_BUILD_TESTS=${if runTests then "ON" else "OFF"}"
     "-DPAGMO_WITH_EIGEN3=yes"
     "-DPAGMO_WITH_NLOPT=yes"
     "-DNLOPT_LIBRARY=${nlopt}/lib/libnlopt${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DPAGMO_WITH_IPOPT=yes"
     "-DCMAKE_CXX_FLAGS='-fuse-ld=gold'"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # FIXME: fails ipopt test with Invalid_Option on darwin, so disable.
     "-DPAGMO_WITH_IPOPT=no"
     "-DLLVM_USE_LINKER=gold"

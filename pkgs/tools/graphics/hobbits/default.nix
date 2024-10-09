@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing";
 
   meta = with lib; {
-    description = "A multi-platform GUI for bit-based analysis, processing, and visualization";
+    description = "Multi-platform GUI for bit-based analysis, processing, and visualization";
     homepage = "https://github.com/Mahlet-Inc/hobbits";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

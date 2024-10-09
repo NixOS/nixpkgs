@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DINTERFACE_TYPE=${variant}" ];
 
   meta = with lib; {
-    description = "A simple Gtk/Qt front-end to tesseract-ocr";
+    description = "Simple Gtk/Qt front-end to tesseract-ocr";
     mainProgram = "gimagereader-gtk";
     homepage = "https://github.com/manisandro/gImageReader";
     license = licenses.gpl3Plus;

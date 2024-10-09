@@ -57,12 +57,12 @@ in
   options.testing = {
 
     initrdBackdoor = lib.mkEnableOption ''
-      enable backdoor.service in initrd. Requires
+      backdoor.service in initrd. Requires
       boot.initrd.systemd.enable to be enabled. Boot will pause in
       stage 1 at initrd.target, and will listen for commands from the
       Machine python interface, just like stage 2 normally does. This
       enables commands to be sent to test and debug stage 1. Use
-      machine.switch_root() to leave stage 1 and proceed to stage 2.
+      machine.switch_root() to leave stage 1 and proceed to stage 2
     '';
 
   };
@@ -162,6 +162,7 @@ in
 
     boot.kernelParams = [
       "console=${qemu-common.qemuSerialDevice}"
+      "console=tty0"
       # Panic if an error occurs in stage 1 (rather than waiting for
       # user intervention).
       "panic=1" "boot.panic_on_fail"
@@ -180,6 +181,7 @@ in
     services.journald.extraConfig =
       ''
         ForwardToConsole=yes
+        TTYPath=/dev/${qemu-common.qemuSerialDevice}
         MaxLevelConsole=debug
       '';
 

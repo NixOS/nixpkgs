@@ -29,5 +29,6 @@ buildDunePackage rec {
     description = "Nested-parallel programming";
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
+    broken = true; # Not compatible with saturn > 0.4.0
   };
 }

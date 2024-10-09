@@ -4,7 +4,6 @@
   fetchPypi,
   attrs,
   requests,
-  python,
 }:
 
 buildPythonPackage rec {

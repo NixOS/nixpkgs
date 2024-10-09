@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.14.1";
+  version = "0.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-f48Dohyd4sMwFZM6/O9yv45KLV3+w7QAkih95uQbCTo=";
+    hash = "sha256-NncPUZ31vs08v+C+5Ku/v5ufa0604DNh0oK378/E8N8=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     coverage = [ coverage ];
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     mainProgram = "nose2";
     homepage = "https://github.com/nose-devs/nose2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

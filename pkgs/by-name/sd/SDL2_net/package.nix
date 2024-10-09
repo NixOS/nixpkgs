@@ -6,7 +6,7 @@
   pkg-config,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 
@@ -44,7 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libsdl-org/SDL_net";
     description = "SDL multiplatform networking library";
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = lib.teams.sdl.members
+                  ++ (with lib.maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

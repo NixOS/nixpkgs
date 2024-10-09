@@ -7,8 +7,9 @@
 , gobject-introspection
 , libcanberra-gtk3
 , poppler_gi
-, withGstreamer ? stdenv.isLinux
-, withVLC ? stdenv.isLinux
+, withGstreamer ? stdenv.hostPlatform.isLinux
+, gst_all_1
+, withVLC ? stdenv.hostPlatform.isLinux
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,7 +30,16 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     poppler_gi
-  ] ++ lib.optional withGstreamer libcanberra-gtk3;
+  ] ++ lib.optionals withGstreamer [
+    libcanberra-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    (gst_all_1.gst-plugins-good.override {gtkSupport = true;})
+    gst_all_1.gst-libav
+    gst_all_1.gst-vaapi
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     pycairo

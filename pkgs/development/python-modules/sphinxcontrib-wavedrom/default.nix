@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools-scm,
   sphinx,
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "A sphinx extension that allows including wavedrom diagrams by using its text-based representation";
+    description = "Sphinx extension that allows including wavedrom diagrams by using its text-based representation";
     homepage = "https://github.com/bavovanachte/sphinx-wavedrom";
     license = licenses.mit;
     maintainers = with maintainers; [ fsagbuya ];

@@ -3,11 +3,10 @@
   argcomplete,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   httpx,
   mock,
   pytestCheckHook,
-  pythonAtLeast,
-  pythonOlder,
   requests,
   responses,
   setuptools,
@@ -20,15 +19,21 @@ buildPythonPackage rec {
   version = "1.9.8";
   pyproject = true;
 
-  # Still uses distutils, https://github.com/tchellomello/python-amcrest/issues/234
-  disabled = pythonOlder "3.7" || pythonAtLeast "3.12";
-
   src = fetchFromGitHub {
     owner = "tchellomello";
     repo = "python-amcrest";
     rev = "refs/tags/${version}";
     hash = "sha256-v0jWEZo06vltEq//suGrvJ/AeeDxUG5CCFhbf03q34w=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/tchellomello/python-amcrest/pull/235
+      name = "replace-distutils.patch";
+      url = "https://github.com/tchellomello/python-amcrest/commit/ec56049c0f5b49bc4c5bcf0acb7fea89ec1c1df4.patch";
+      hash = "sha256-ym+Bn795y+JqhNMk4NPnOVr3DwO9DkUV0d9LEaz3CMo=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

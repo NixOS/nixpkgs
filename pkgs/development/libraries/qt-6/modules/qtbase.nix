@@ -3,11 +3,8 @@
 , src
 , patches ? [ ]
 , version
-, coreutils
-, buildPackages
 , bison
 , flex
-, gdb
 , gperf
 , lndir
 , perl
@@ -36,7 +33,6 @@
 , libdatrie
 , lttng-ust
 , libepoxy
-, libiconv
 , dbus
 , fontconfig
 , freetype
@@ -254,7 +250,7 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     # FIXME: not sure why this isn't added automatically?
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
@@ -266,7 +262,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
     platforms = platforms.unix ++ platforms.windows;

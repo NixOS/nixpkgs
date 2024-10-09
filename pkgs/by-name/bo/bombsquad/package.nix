@@ -16,24 +16,25 @@
   copyDesktopItems,
   writeShellApplication,
   commandLineArgs ? "",
+  genericUpdater,
 }:
 let
   archive =
     {
       x86_64-linux = {
         name = "BombSquad_Linux_x86_64";
-        hash = "sha256-VLNO0TxI/KBj8RkpGjo9Rx40f7fuV3pK2kIoKff9sRU=";
+        hash = "sha256-jrExsqaM6uhnKMGPkJJTsKt2Imek+YDI2soSP/kfPj0=";
       };
       aarch-64-linux = {
         name = "BombSquad_Linux_Arm64";
-        hash = "sha256-w42qhioZ9JRm004WEKzsJ3G1u09tLuPvTy8qV3DuglI=";
+        hash = "sha256-o1Yg0C5k07NZzc9jQrHXR+kkQl8HZ55U9/fqcpe3Iyw=";
       };
     }
     .${targetPlatform.system} or (throw "${targetPlatform.system} is unsupported.");
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "bombsquad";
-  version = "1.7.34";
+  pname = "bombsquad";
+  version = "1.7.37";
   sourceRoot = ".";
   src = fetchurl {
     url = "https://files.ballistica.net/bombsquad/builds/${archive.name}_${finalAttrs.version}.tar.gz";
@@ -86,28 +87,33 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = lib.getExe (writeShellApplication {
-    name = "bombsquad-versionLister";
-    runtimeInputs = [
-      curl
-      gnugrep
-    ];
-    text = ''
-      curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
-          | grep -oP '^### \K\d+\.\d+\.\d+' \
-          | head -n 1
-    '';
-  });
+  passthru.updateScript = genericUpdater {
+    versionLister = lib.getExe (writeShellApplication {
+      name = "bombsquad-versionLister";
+      runtimeInputs = [
+        curl
+        gnugrep
+      ];
+      text = ''
+        curl -sL "https://files.ballistica.net/bombsquad/builds/CHANGELOG.md" \
+            | grep -oP '^### \K\d+\.\d+\.\d+' \
+            | head -n 1
+      '';
+    });
+  };
 
   meta = {
-    description = "A free, multiplayer, arcade-style game for up to eight players that combines elements of fighting games and first-person shooters (FPS)";
+    description = "Free, multiplayer, arcade-style game for up to eight players that combines elements of fighting games and first-person shooters (FPS)";
     homepage = "https://ballistica.net";
     changelog = "https://ballistica.net/downloads?display=changelog";
     license = with lib.licenses; [
       mit
       unfree
     ];
-    maintainers = with lib.maintainers; [ syedahkam coffeeispower ];
+    maintainers = with lib.maintainers; [
+      syedahkam
+      coffeeispower
+    ];
     mainProgram = "bombsquad";
     platforms = lib.platforms.linux;
   };

@@ -7,7 +7,7 @@
 
 let
   pname = "openfga-cli";
-  version = "0.4.0";
+  version = "0.6.1";
 in
 
 buildGoModule {
@@ -17,10 +17,10 @@ buildGoModule {
     owner = "openfga";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-nwzUBzu8c8kuSTbjwOB1mCFMLF1zoUReXofXeBOAO1U=";
+    hash = "sha256-cAfBEhgHnzmSD8/pVi8VVjnC3O+WgokzdPSzvE5hDec=";
   };
 
-  vendorHash = "sha256-3fElvsy248lRwmIKWv8ac6BLJ1y5Qyr+kKh/1vprmvo=";
+  vendorHash = "sha256-jIcuyt4tzfz+WkyQnMZs6viLnmwtGbVawgnz9M/xAS8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -46,7 +46,7 @@ buildGoModule {
   '';
 
   meta = {
-    description = "A cross-platform CLI to interact with an OpenFGA server";
+    description = "Cross-platform CLI to interact with an OpenFGA server";
     homepage = "https://github.com/openfga/cli";
     license = lib.licenses.asl20;
     mainProgram = "fga";

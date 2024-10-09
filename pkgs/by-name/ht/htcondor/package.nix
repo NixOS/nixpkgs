@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation rec {
   pname = "htcondor";
-  version = "23.7.2";
+  version = "23.9.6";
 
   src = fetchFromGitHub {
     owner = "htcondor";
     repo = "htcondor";
 
     rev = "v${version}";
-    hash = "sha256-U0IeZlDd21RYR9XNoIGPpuwhEL1MfQ9+DDyeX8sLgWM=";
+    hash = "sha256-Xm1K3KESOVStOi6iyCGA8qbQ2IcyS//sF5pvnnMZAlA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];
     # cannot find -lpthread: No such file or directory
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

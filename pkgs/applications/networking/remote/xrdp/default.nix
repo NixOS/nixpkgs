@@ -21,6 +21,7 @@
 , libjpeg_turbo
 , _experimental-update-script-combinators
 , gitUpdater
+, nixosTests
 }:
 
 let
@@ -159,10 +160,13 @@ let
         { command = ["rm" "update-git-commits.txt"]; }
         (gitUpdater { rev-prefix = "v"; attrPath = "xrdp.xorgxrdp"; })
       ]);
+      tests = {
+        inherit (nixosTests) xrdp;
+      };
     };
 
     meta = with lib; {
-      description = "An open source RDP server";
+      description = "Open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
       maintainers = with maintainers; [ chvp lucasew ];

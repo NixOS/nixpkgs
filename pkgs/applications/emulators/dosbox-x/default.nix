@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dosbox-x";
-  version = "2024.03.01";
+  version = "2024.10.01";
 
   src = fetchFromGitHub {
     owner = "joncampbell123";
     repo = "dosbox-x";
     rev = "dosbox-x-v${finalAttrs.version}";
-    hash = "sha256-EcAp7KyqXdBACEbPgkM1INoKeGVo7hMDUx97y2RcX+k=";
+    hash = "sha256-qfrEy7OndhJ/UnfFDCp7qlIhYWANkUBy2ejYVvRrG3k=";
   };
 
   # sips is unavailable in sandbox, replacing with imagemagick breaks build due to wrong Foundation propagation(?) so don't generate resolution variants
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dosbox-x.com";
-    description = "A cross-platform DOS emulator based on the DOSBox project";
+    description = "Cross-platform DOS emulator based on the DOSBox project";
     longDescription = ''
       DOSBox-X is an expanded fork of DOSBox with specific focus on running
       Windows 3.x/9x/Me, PC-98 and 3D support via 3dfx.

@@ -1,7 +1,7 @@
 { lib
 , callPackage
 , crystal
-, fetchFromGitea
+, fetchFromGitHub
 , librsvg
 , pkg-config
 , libxml2
@@ -29,8 +29,7 @@ crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
 
-  src = fetchFromGitea {
-    domain = "gitea.invidious.io";
+  src = fetchFromGitHub {
     owner = "iv-org";
     repo = "invidious";
     fetchSubmodules = true;
@@ -120,7 +119,7 @@ crystal.buildCrystalPackage rec {
   };
 
   meta = with lib; {
-    description = "An open source alternative front-end to YouTube";
+    description = "Open source alternative front-end to YouTube";
     mainProgram = "invidious";
     homepage = "https://invidious.io/";
     license = licenses.agpl3Plus;

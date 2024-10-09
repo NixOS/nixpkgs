@@ -8,11 +8,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, libXt, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "appres";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/appres-1.0.6.tar.xz";
-      sha256 = "02sr4f1bm3y1w24gsvjfzvbpac1kgkq27v1s68q87bd1l3i5f8lb";
+      url = "mirror://xorg/individual/app/appres-1.0.7.tar.xz";
+      sha256 = "17w17gqnfmpfmqgbjci1j4lnsd468k5yscxl3n6pmn4z4f4v250i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1038,11 +1038,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libFS = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libFS";
-    version = "1.0.9";
+    version = "1.0.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libFS-1.0.9.tar.xz";
-      sha256 = "12i0zh1v5zlba617nam8sjhfqi68qqnl7z5hsz3wqhijid1pjwsr";
+      url = "mirror://xorg/individual/lib/libFS-1.0.10.tar.xz";
+      sha256 = "0xrv9x5v6km7ib3d5k9xr704xkhfvigh8i507mb9i706hqybvawv";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1118,11 +1118,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libX11 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libpthreadstubs, libxcb, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libX11";
-    version = "1.8.9";
+    version = "1.8.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libX11-1.8.9.tar.xz";
-      sha256 = "0qijpp9l6hhwwx22hncrzjpmb5ffcakj6pxa5lzgjkhl3l8qz7bp";
+      url = "mirror://xorg/individual/lib/libX11-1.8.10.tar.xz";
+      sha256 = "0lywvwsz92j7isglvw2227g3na4ghyspvsvblpf43ns7jfnksfrb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2458,11 +2458,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xconsole = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, wrapWithXFileSearchPathHook, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xconsole";
-    version = "1.0.8";
+    version = "1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xconsole-1.0.8.tar.xz";
-      sha256 = "195vhqjrzjf4kkzmy0kx50n1bv2kj9fg7mi18mm2w3p4d3q6ljkv";
+      url = "mirror://xorg/individual/app/xconsole-1.1.0.tar.xz";
+      sha256 = "128i77kn5pfrcrw31p90cb97g8a5y5173admr3gpdnndr9w5jxqc";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3678,11 +3678,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xfs = callPackage ({ stdenv, pkg-config, fetchurl, libXfont2, xorgproto, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xfs";
-    version = "1.2.1";
+    version = "1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xfs-1.2.1.tar.xz";
-      sha256 = "1rn1l76z4l133491wb1klixbwb8az5cnrzwx37fb3vnpmplc72ix";
+      url = "mirror://xorg/individual/app/xfs-1.2.2.tar.xz";
+      sha256 = "1k4f15nrgmqkvsn48hnl1j4giwxpmcpdrnq0bq7b6hg265ix82xp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -3898,11 +3898,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkeyboardconfig = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkeyboard-config";
-    version = "2.41";
+    version = "2.42";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.41.tar.xz";
-      sha256 = "13vjvyg1fjvsqzqkpxzigvv94v154mcb2gba4d80spi9aywxcb7h";
+      url = "mirror://xorg/individual/data/xkeyboard-config/xkeyboard-config-2.42.tar.xz";
+      sha256 = "01q8gs7lnx9d7iz29pal7a3whz7njmgjcpzhy82wa7zhq6znxc56";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

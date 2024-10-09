@@ -11,26 +11,24 @@
   pyyaml,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "sarif-tools";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "sarif-tools";
-    rev = "v${version}";
-    hash = "sha256-80amYGnf7xZdpxzTjBGwgg39YN/jJsEkTm0uAlVbH0w=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-MYwhewUTZ3Wl93p6bN3+bHqtXz+BAlAhte+JaetPQYU=";
   };
 
   disabled = pythonOlder "3.8";
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sarif" ];
 
   meta = {
-    description = "A set of command line tools and Python library for working with SARIF files";
+    description = "Set of command line tools and Python library for working with SARIF files";
     homepage = "https://github.com/microsoft/sarif-tools";
     changelog = "https://github.com/microsoft/sarif-tools/releases/tag/v${version}";
     license = lib.licenses.mit;

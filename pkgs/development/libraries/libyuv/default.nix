@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "https://chromium.googlesource.com/libyuv/libyuv.git";
     rev = "eb6e7bb63738e29efd82ea3cf2a115238a89fa51"; # refs/heads/stable
-    sha256 = "sha256-DtRYoaAXb9ZD2OLiKbzKzH5vzuu+Lzu4eHaDgPB9hjU=";
+    hash = "sha256-DtRYoaAXb9ZD2OLiKbzKzH5vzuu+Lzu4eHaDgPB9hjU=";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   # NEON does not work on aarch64, we disable it
-  cmakeFlags = lib.optionals stdenv.isAarch64 ["-DCMAKE_CXX_FLAGS=-DLIBYUV_DISABLE_NEON"];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 ["-DCMAKE_CXX_FLAGS=-DLIBYUV_DISABLE_NEON"];
 
   buildInputs = [ libjpeg ];
 

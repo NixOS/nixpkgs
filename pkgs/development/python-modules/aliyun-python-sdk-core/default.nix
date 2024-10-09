@@ -5,27 +5,25 @@
   fetchPypi,
   jmespath,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-core";
-  version = "2.15.1";
+  version = "2.15.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UYVQ0H9TfNOvrDtsk7XJl840QOTQwFTjrL2qgmHpCt8=";
+    hash = "sha256-VPZqU+GTxhxeFupFBaDKtDVD+K0u8igz9pxNXlFRwX0=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cryptography

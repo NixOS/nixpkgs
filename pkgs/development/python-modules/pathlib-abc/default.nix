@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/barneygale/pathlib-abc";
     changelog = "https://github.com/barneygale/pathlib-abc/blob/${version}/CHANGES.rst";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

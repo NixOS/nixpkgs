@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # tests fail on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A GNU Guile library providing bindings to lzlib";
+    description = "GNU Guile library providing bindings to lzlib";
     homepage = "https://notabug.org/guile-lzlib/guile-lzlib";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ foo-dogsquared ];

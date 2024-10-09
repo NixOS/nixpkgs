@@ -5,14 +5,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "paging-calculator";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-uoijIA9xmifxHlMRo5Rh/Qy1wxiiCNLJnDysI01uPvk=";
+    hash = "sha256-mTHBARrcq8cJxzh80v/fGr5vACAMyy/DhN8zpQTV0jM=";
   };
 
-  cargoHash = "sha256-RbBlZCRVXZLXvz+/olkh2MqJiWq63AwLvo+/5UGRuyM=";
+  cargoHash = "sha256-oQQA+AGsuMKaFhoZRuv3BASCLJwfgbrdK+2noxBLm7k=";
 
   meta = {
     description = "CLI utility that helps calculating page table indices from a virtual address";

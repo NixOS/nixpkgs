@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     "--use-opam"
     "--apron-prefix" apron
   ]
-  ++ lib.optional stdenv.isDarwin "--absolute-dylibs"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "--absolute-dylibs"
   ;
 
   createFindlibDestdir = true;

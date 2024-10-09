@@ -31,6 +31,6 @@ buildPythonPackage rec {
     description = "Mortgage calculator";
     homepage = "https://github.com/jlumbroso/mortgage";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

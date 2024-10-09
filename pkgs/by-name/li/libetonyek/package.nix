@@ -12,6 +12,7 @@
 , librevenge
 , libxml2
 , mdds
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -39,12 +40,13 @@ stdenv.mkDerivation rec {
     librevenge
     libxml2
     mdds
+    zlib
   ];
 
   configureFlags = ["--with-mdds=2.1"];
 
   meta = with lib; {
-    description = "A library and a set of tools for reading and converting Apple iWork documents (Keynote, Pages and Numbers).";
+    description = "Library and a set of tools for reading and converting Apple iWork documents (Keynote, Pages and Numbers)";
     homepage = "https://github.com/LibreOffice/libetonyek";
     changelog = "https://github.com/LibreOffice/libetonyek/blob/${src.rev}/NEWS";
     license = licenses.mpl20;

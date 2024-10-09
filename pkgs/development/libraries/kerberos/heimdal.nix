@@ -17,7 +17,6 @@
 , db
 , libedit
 , pam
-, krb5
 , libmicrohttpd
 , cjson
 
@@ -26,17 +25,17 @@
 , SystemConfiguration
 
 , curl
-, jdk
+, jdk_headless
 , unzip
 , which
 
 , nixosTests
 
 , withCJSON ? true
-, withCapNG ? stdenv.isLinux
+, withCapNG ? stdenv.hostPlatform.isLinux
 # libmicrohttpd should theoretically work for darwin as well, but something is broken.
 # It affects tests check-bx509d and check-httpkadmind.
-, withMicroHTTPD ? stdenv.isLinux
+, withMicroHTTPD ? stdenv.hostPlatform.isLinux
 , withOpenLDAP ? true
 , withOpenLDAPAsHDBModule ? false
 , withOpenSSL ? true
@@ -49,13 +48,13 @@ assert lib.assertMsg (withOpenLDAPAsHDBModule -> withOpenLDAP) ''
 
 stdenv.mkDerivation {
   pname = "heimdal";
-  version = "7.8.0-unstable-2023-11-29";
+  version = "7.8.0-unstable-2024-09-10";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "3253c49544eacb33d5ad2f6f919b0696e5aab794";
-    hash = "sha256-uljzQBzXrZCZjcIWfioqHN8YsbUUNy14Vo+A3vZIXzM=";
+    rev = "fd2d434dd375c402d803e6f948cfc6e257d3facc";
+    hash = "sha256-WA3lo3eD05l7zKuKEVxudMmiG7OvjK/calaUzPQ2pWs=";
   };
 
   outputs = [ "out" "dev" "man" "info" ];
@@ -72,7 +71,7 @@ stdenv.mkDerivation {
   ++ (with perlPackages; [ JSON ]);
 
   buildInputs = [ db libedit pam ]
-    ++ lib.optionals (stdenv.isDarwin) [ CoreFoundation Security SystemConfiguration ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ CoreFoundation Security SystemConfiguration ]
     ++ lib.optionals (withCJSON) [ cjson ]
     ++ lib.optionals (withCapNG) [ libcap_ng ]
     ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
@@ -83,12 +82,14 @@ stdenv.mkDerivation {
   doCheck = true;
   nativeCheckInputs = [
     curl
-    jdk
+    jdk_headless
     unzip
     which
   ];
 
   configureFlags = [
+    "--with-hdbdir=/var/lib/heimdal"
+
     "--with-libedit-include=${libedit.dev}/include"
     "--with-libedit-lib=${libedit}/lib"
     "--with-berkeley-db-include=${db.dev}/include"
@@ -131,7 +132,7 @@ stdenv.mkDerivation {
 
   # (test_cc) heimdal uses librokens implementation of `secure_getenv` on darwin,
   #           which expects either USER or LOGNAME to be set.
-  preCheck = lib.optionalString (stdenv.isDarwin) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     export USER=nix-builder
   '';
 
@@ -170,7 +171,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.heimdal.software";
     changelog = "https://github.com/heimdal/heimdal/releases";
-    description = "An implementation of Kerberos 5 (and some more stuff)";
+    description = "Implementation of Kerberos 5 (and some more stuff)";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ h7x4 ];

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   requests,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     requests
     requests-mock

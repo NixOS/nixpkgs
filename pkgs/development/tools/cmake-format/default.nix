@@ -31,6 +31,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/cheshirekow/cmake_format";
     license = licenses.gpl3;
     maintainers = [ maintainers.tobim ];
+    mainProgram = "cmake-format";
     platforms = platforms.all;
   };
 }

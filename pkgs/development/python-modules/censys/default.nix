@@ -10,7 +10,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
   responses,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "censys";
-  version = "2.2.12";
+  version = "2.2.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Gw3JbAdg/ObWdD6vl8Wuct6VCcP4GAZbiesXSSnW1Mg=";
+    hash = "sha256-3evll1Ll8krvAfelGoJHOrmH7RvkeM/ZU1j13cTuXR4=";
   };
 
   postPatch = ''
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   build-system = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   dependencies = [

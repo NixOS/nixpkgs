@@ -50,9 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/koalalorenzo/python-digitalocean";
     changelog = "https://github.com/koalalorenzo/python-digitalocean/releases/tag/v${version}";
     license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [
-      kiwi
-      teh
-    ];
+    maintainers = with maintainers; [ teh ];
   };
 }

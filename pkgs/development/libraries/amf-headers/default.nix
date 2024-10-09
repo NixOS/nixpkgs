@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "amf-headers";
-  version = "1.4.33";
+  version = "1.4.34";
 
   src = fetchFromGitHub {
     owner = "GPUOpen-LibrariesAndSDKs";
     repo = "AMF";
     rev = "v${version}";
-    sha256 = "sha256-oho1EonWxgBmsQiX3wPhs0jQjLFwLe49C7/SOEptYiw=";
+    sha256 = "sha256-AASoThCzyFharXrprUalOMufz/DDtzlc97q/dQk7B6Y=";
   };
 
   installPhase = ''

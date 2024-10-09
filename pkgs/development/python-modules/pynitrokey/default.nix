@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   installShellFiles,
   libnitrokey,
   flit-core,
@@ -31,7 +30,7 @@
 
 let
   pname = "pynitrokey";
-  version = "0.4.47";
+  version = "0.4.50";
   mainProgram = "nitropy";
 in
 
@@ -41,7 +40,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WOHDskGAZGhiU48JGV0yDhWIpFELFLHhn9g5sbchKKg=";
+    hash = "sha256-BIBwIYxoUcK7E69REcu/qmrpNlyYwnA7Im3iRSsWlnA=";
   };
 
   propagatedBuildInputs = [
@@ -71,7 +70,6 @@ buildPythonPackage {
   nativeBuildInputs = [
     flit-core
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

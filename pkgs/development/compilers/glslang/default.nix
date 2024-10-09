@@ -9,14 +9,16 @@
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
-  version = "14.2.0";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
     rev = version;
-    hash = "sha256-B6jVCeoFjd2H6+7tIses+Kj8DgHS6E2dkVzQAIzDHEc=";
+    hash = "sha256-slKBFq6NyWHQmJq/YR3LmbGnHyZgRg0hej90tZDOGzA=";
   };
+
+  outputs = [ "bin" "out" "dev" ];
 
   # These get set at all-packages, keep onto them for child drvs
   passthru = {
@@ -33,16 +35,19 @@ stdenv.mkDerivation rec {
 
   # This is a dirty fix for lib/cmake/SPIRVTargets.cmake:51 which includes this directory
   postInstall = ''
-    mkdir $out/include/External
+    mkdir -p $dev/include/External
+    moveToOutput lib/pkgconfig "''${!outputDev}"
+    moveToOutput lib/cmake "''${!outputDev}"
   '';
 
   # Fix the paths in .pc, even though it's unclear if these .pc are really useful.
   postFixup = ''
-    substituteInPlace $out/lib/pkgconfig/*.pc \
-      --replace '=''${prefix}//' '=/'
+    substituteInPlace $dev/lib/pkgconfig/*.pc \
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail "includedir=$dev/$dev" "includedir=$dev"
 
     # add a symlink for backwards compatibility
-    ln -s $out/bin/glslang $out/bin/glslangValidator
+    ln -s $bin/bin/glslang $bin/bin/glslangValidator
   '';
 
   meta = with lib; {

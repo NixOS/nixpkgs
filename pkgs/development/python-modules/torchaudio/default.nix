@@ -1,12 +1,16 @@
 {
   lib,
+  symlinkJoin,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
-  symlinkJoin,
-  ffmpeg-full,
   pkg-config,
   ninja,
+
+  # buildInputs
+  ffmpeg-full,
   pybind11,
   sox,
   torch,
@@ -72,14 +76,14 @@ let
 in
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.3.0";
+  version = "2.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8EPoZ/dfxrQjdtE0rZ+2pOaXxlyhRuweYnVuA9i0Fgc=";
+    hash = "sha256-zQqIIzOW9vboP5XQSOUWB0edz6XJvz06RqbcYPO9K24=";
   };
 
   patches = [ ./0001-setup.py-propagate-cmakeFlags.patch ];
@@ -133,7 +137,7 @@ buildPythonPackage rec {
     torch.cxxdev
   ];
 
-  propagatedBuildInputs = [ torch ];
+  dependencies = [ torch ];
 
   BUILD_SOX = 0;
   BUILD_KALDI = 0;
@@ -149,16 +153,16 @@ buildPythonPackage rec {
 
   doCheck = false; # requires sox backend
 
-  meta = with lib; {
+  meta = {
     description = "PyTorch audio library";
     homepage = "https://pytorch.org/";
     changelog = "https://github.com/pytorch/audio/releases/tag/v${version}";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with maintainers; [ junjihashimoto ];
+    maintainers = with lib.maintainers; [ junjihashimoto ];
   };
 }

@@ -8,10 +8,12 @@
 , git
 , inetutils
 , stdenv
+, nixosTests
 }:
 
 let
   python = python3Packages.python.override {
+    self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
     };
@@ -19,28 +21,32 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.5.2";
+  version = "2024.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-LcRqqwMVDgXeUqBS7gmfZqGJxKmXgRfnjNbejlQgijI=";
+    hash = "sha256-i1lrolOrKwa9muXhoknLYATEfLSrVA63VrM3247hVMw=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
     argcomplete
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
+  pythonRemoveDeps = [
+    "esptool"
+    "platformio"
+  ];
+
   postPatch = ''
-    # drop coverage testing
-    sed -i '/--cov/d' pytest.ini
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
@@ -103,6 +109,7 @@ python.pkgs.buildPythonApplication rec {
     hypothesis
     mock
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -125,6 +132,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
+    tests = { inherit (nixosTests) esphome; };
   };
 
   meta = with lib; {

@@ -29,6 +29,7 @@ buildGoModule {
   meta = {
     description = "Command line license text generator";
     homepage = "https://github.com/nishanths/license";
+    changelog = "https://github.com/nishanths/license/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ uncenter ];
     mainProgram = "license";

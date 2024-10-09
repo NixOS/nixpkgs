@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-jKY+Ta6lqMBUlqSViKk3W0CiO8oU+ucmleKDYRA54HQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "A minimal viewer for Termimad";
+    description = "Minimal viewer for Termimad";
     homepage = "https://github.com/Canop/clima";
     changelog = "https://github.com/Canop/clima/releases/tag/${src.rev}";
     license = licenses.mit;

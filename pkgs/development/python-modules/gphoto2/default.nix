@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Python interface to libgphoto2";
     homepage = "https://github.com/jim-easterbrook/python-gphoto2";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

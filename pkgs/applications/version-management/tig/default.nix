@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   autoreconfFlags = [ "-I" "tools" "-v" ];
 
   buildInputs = [ ncurses readline git ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''

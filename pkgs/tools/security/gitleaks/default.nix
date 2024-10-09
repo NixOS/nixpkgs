@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   gitleaks,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.18.2";
+  version = "8.20.1";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+UPlknAwmIeXlosHBXl3qPREV186lfDZGZG/Zx1rxYs=";
+    hash = "sha256-oIhA1+gicNXDHzpdVzFeDvJHGCrqBhwyV+KOyYwMaK8=";
   };
 
-  vendorHash = "sha256-30IJNP4XuV2YNy1TumPUju+GrHFBYi76coy0bJBqDI4=";
+  vendorHash = "sha256-4bGpTMmQmsJQ2RNIehYe0xAwwGOh2l6FGsKdciEVLAc=";
 
   ldflags = [
     "-s"
@@ -28,10 +29,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # With v8 the config tests are are blocking
+  # With v8 the config tests are blocking
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
       --bash <($out/bin/${pname} completion bash) \
       --fish <($out/bin/${pname} completion fish) \

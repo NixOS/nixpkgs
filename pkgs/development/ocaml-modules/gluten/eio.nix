@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, gluten, eio }:
+{ buildDunePackage, gluten, eio }:
 
 buildDunePackage {
   pname = "gluten-eio";

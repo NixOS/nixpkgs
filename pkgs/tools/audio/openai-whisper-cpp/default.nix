@@ -25,13 +25,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.5.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "whisper.cpp";
     rev = "refs/tags/v${finalAttrs.version}" ;
-    hash = "sha256-9H2Mlua5zx2WNXbz2C5foxIteuBgeCNALdq5bWyhQCk=";
+    hash = "sha256-obAXqqQEs7lkv6v1vl3aN+Vh6wPSYSXXbI6mlee6/QM=";
   };
 
   # The upstream download script tries to download the models to the
@@ -50,36 +50,30 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
       SDL2
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreGraphics
       CoreML
       CoreVideo
       MetalKit
     ] ++ lib.optionals cudaSupport ( with cudaPackages; [
-
-      # A temporary hack for reducing the closure size, remove once cudaPackages
-      # have stopped using lndir: https://github.com/NixOS/nixpkgs/issues/271792
-      cuda_cccl.dev # provides nv/target
-      cuda_cudart.dev
-      cuda_cudart.lib
-      cuda_cudart.static
-      libcublas.dev
-      libcublas.lib
-      libcublas.static
+      cuda_cccl # provides nv/target
+      cuda_cudart
+      libcublas
     ]);
 
   postPatch = let
     cudaOldStr = "-lcuda ";
-    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart.lib}/lib/stubs ";
+    cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
       --replace '${cudaOldStr}' '${cudaNewStr}'
   '';
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
+    WHISPER_METAL_EMBED_LIBRARY = "1";
   } // lib.optionalAttrs cudaSupport {
     WHISPER_CUBLAS = "1";
   };
@@ -98,15 +92,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     wrapProgram $out/bin/whisper-cpp-download-ggml-model \
       --prefix PATH : ${lib.makeBinPath [wget]}
-
-    ${lib.optionalString stdenv.isDarwin ''
-      install -Dt $out/share/whisper-cpp ggml-metal.metal
-
-      for bin in whisper-cpp whisper-cpp-stream whisper-cpp-command; do
-        wrapProgram $out/bin/$bin \
-          --set-default GGML_METAL_PATH_RESOURCES $out/share/whisper-cpp
-      done
-    ''}
 
     runHook postInstall
   '';

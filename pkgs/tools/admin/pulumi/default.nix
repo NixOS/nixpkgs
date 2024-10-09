@@ -15,7 +15,7 @@
 
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.99.0";
+  version = "3.122.0";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -74,7 +74,7 @@ buildGoModule rec {
     rm codegen/{docs,dotnet,go,nodejs,python,schema}/*_test.go
     rm -R codegen/{dotnet,go,nodejs,python}/gen_program_test
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export PULUMI_HOME=$(mktemp -d)
   '';
 
@@ -131,7 +131,8 @@ buildGoModule rec {
       ''
         mkdir -p $out/bin
         makeWrapper ${pulumi}/bin/pulumi $out/bin/pulumi \
-          --suffix PATH : ${lib.makeSearchPath "bin" (f pulumiPackages)}
+          --suffix PATH : ${lib.makeBinPath (f pulumiPackages)} \
+          --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
       '';
   };
 

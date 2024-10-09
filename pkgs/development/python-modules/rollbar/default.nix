@@ -51,6 +51,6 @@ buildPythonPackage rec {
     mainProgram = "rollbar";
     homepage = "https://github.com/rollbar/pyrollbar";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

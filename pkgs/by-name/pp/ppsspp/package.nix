@@ -4,7 +4,7 @@
   cmake,
   copyDesktopItems,
   fetchFromGitHub,
-  ffmpeg,
+  ffmpeg_6,
   glew,
   libffi,
   libsForQt5,
@@ -48,6 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-I84zJqEE1X/eo/ukeGA2iZe3lWKvilk+RNGUzl2wZXY=";
   };
 
+  patches = lib.optionals useSystemFfmpeg [
+    ./fix-ffmpeg-6.patch
+  ];
+
   postPatch = ''
     substituteInPlace git-version.cmake --replace unknown ${finalAttrs.src.rev}
     substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
@@ -69,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ]
   ++ lib.optionals useSystemFfmpeg [
-    ffmpeg
+    ffmpeg_6
   ]
   ++ lib.optionals useSystemSnappy [
     snappy
@@ -139,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ppsspp.org/";
-    description = "A HLE Playstation Portable emulator, written in C++ ("
+    description = "HLE Playstation Portable emulator, written in C++ ("
                   + (if enableQt then "Qt" else "SDL + headless") + ")";
     longDescription = ''
       PPSSPP is a PSP emulator, which means that it can run games and other

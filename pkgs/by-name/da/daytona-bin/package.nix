@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     changelog = "https://github.com/daytonaio/daytona/releases/tag/v${finalAttrs.version}";
-    description = "The Open Source Dev Environment Manager";
+    description = "Open Source Dev Environment Manager";
     homepage = "https://github.com/daytonaio/daytona";
     license = lib.licenses.asl20;
     mainProgram = "daytona";

@@ -1,5 +1,5 @@
 { stdenv, lib
-, addOpenGLRunpath
+, addDriverRunpath
 , alsa-lib
 , autoPatchelfHook
 , cairo
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     ${rpmextract}/bin/rpmextract $src
   '';
 
-  nativeBuildInputs = [ addOpenGLRunpath autoPatchelfHook rpmextract ];
+  nativeBuildInputs = [ addDriverRunpath autoPatchelfHook rpmextract ];
 
   buildInputs = [
     alsa-lib
@@ -94,11 +94,11 @@ stdenv.mkDerivation rec {
       --replace "NetworkManager-wait-online.service" ""
   '';
 
-  # NB: addOpenGLRunpath needs to run _after_ autoPatchelfHook, which runs in
+  # NB: addDriverRunpath needs to run _after_ autoPatchelfHook, which runs in
   # postFixup, so we tack it on here.
   doInstallCheck = true;
   installCheckPhase = ''
-    addOpenGLRunpath $out/bin/hqplayerd
+    addDriverRunpath $out/bin/hqplayerd
     $out/bin/hqplayerd --version
   '';
 

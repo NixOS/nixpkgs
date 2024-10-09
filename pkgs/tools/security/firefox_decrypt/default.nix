@@ -29,7 +29,7 @@ buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--prefix"
-    (if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
+    (if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH")
     ":"
     (lib.makeLibraryPath [ nss ])
   ];
@@ -38,7 +38,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/unode/firefox_decrypt";
-    description = "A tool to extract passwords from profiles of Mozilla Firefox and derivates";
+    description = "Tool to extract passwords from profiles of Mozilla Firefox and derivates";
     mainProgram = "firefox_decrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ schnusch ];

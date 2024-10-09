@@ -15,7 +15,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
-, pulseSupport ? stdenv.isLinux, libpulseaudio
+, pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , kerberosSupport ? true, libkrb5
 }:
 
@@ -24,7 +24,7 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "6.7.3329.31";
+  version = "6.9.3447.51";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-TxfsI4XMZM3QvyxV48CrOltnRt0LUwZc2auppTvI+0w=";
-      x86_64-linux = "sha256-NRGELYgcJVL+mLdaWmDZCImCX8w9L+9ecGYQgIB1dq4=";
+      aarch64-linux = "sha256-p+MihnvnVBVcsYE/7vp9b6T2bxp7cAiCq9ME+NHqi38=";
+      x86_64-linux = "sha256-/izigAT9eqhgxgYosMoDoPIA0rOCeYOotEjaigBTazk=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional kerberosSupport libkrb5;
 
   libPath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.is64bit)
+    + lib.optionalString (stdenv.hostPlatform.is64bit)
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
     + ":$out/opt/${vivaldiName}/lib";
 
@@ -124,10 +124,11 @@ in stdenv.mkDerivation rec {
   passthru.updateScript = ./update-vivaldi.sh;
 
   meta = with lib; {
-    description = "A Browser for our Friends, powerful and personal";
+    description = "Browser for our Friends, powerful and personal";
     homepage    = "https://vivaldi.com";
     license     = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    mainProgram = "vivaldi";
     maintainers = with maintainers; [ otwieracz badmutex ];
     platforms   = [ "x86_64-linux" "aarch64-linux" ];
   };

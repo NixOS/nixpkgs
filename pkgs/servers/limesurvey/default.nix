@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Open source survey application";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;

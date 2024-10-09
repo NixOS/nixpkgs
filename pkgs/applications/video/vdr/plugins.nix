@@ -124,7 +124,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "VDR plugin to handle KODI clients.";
+      description = "VDR plugin to handle KODI clients";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;
@@ -176,7 +176,7 @@ in {
       owner = "jowi24";
       repo = "vdr-fritz";
       rev = version;
-      sha256 = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
+      hash = "sha256-DGD73i+ZHFgtCo+pMj5JaMovvb5vS1x20hmc5t29//o=";
       fetchSubmodules = true;
     };
 
@@ -186,7 +186,7 @@ in {
 
     meta = with lib; {
       inherit (src.meta) homepage;
-      description = "A plugin for VDR to access AVMs Fritz Box routers";
+      description = "Plugin for VDR to access AVMs Fritz Box routers";
       maintainers = [ maintainers.ck3d ];
       license = licenses.gpl2;
       inherit (vdr.meta) platforms;

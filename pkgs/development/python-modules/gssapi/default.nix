@@ -7,7 +7,6 @@
 
   # build-system
   cython,
-  krb5,
   setuptools,
 
   # dependencies
@@ -15,6 +14,7 @@
 
   # native dependencies
   GSS,
+  krb5-c, # C krb5 library, not PyPI krb5
 
   # tests
   parameterized,
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
+      --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5-c}"'
   '';
 
   env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
@@ -47,16 +47,16 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    krb5
+    krb5-c
     setuptools
   ];
 
   dependencies = [ decorator ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ GSS ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ GSS ];
 
   # k5test is marked as broken on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     k5test

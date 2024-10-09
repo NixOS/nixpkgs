@@ -22,9 +22,9 @@
 , pam
 , libredirect
 , etcDir ? null
-, withKerberos ? true
+, withKerberos ? false
 , withLdns ? true
-, libkrb5
+, krb5
 , libfido2
 , libxcrypt
 , hostname
@@ -36,7 +36,7 @@
 , isNixos ? stdenv.hostPlatform.isLinux
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   patches = [
@@ -60,15 +60,15 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook pkg-config ]
-    # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
+    # This is not the same as the krb5 from the inputs! pkgs.krb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
-    ++ lib.optional withKerberos pkgs.libkrb5
+    ++ lib.optional withKerberos pkgs.krb5
     ++ extraNativeBuildInputs;
   buildInputs = [ zlib libedit ]
     ++ [ (if linkOpenssl then openssl else libxcrypt) ]
     ++ lib.optional withFIDO libfido2
-    ++ lib.optional withKerberos libkrb5
+    ++ lib.optional withKerberos krb5
     ++ lib.optional withLdns ldns
     ++ lib.optional withPAM pam;
 
@@ -97,8 +97,8 @@ stdenv.mkDerivation {
     (lib.enableFeature dsaKeysSupport "dsa-keys")
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
-    ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")
-    ++ lib.optional stdenv.isDarwin "--disable-libutil"
+    ++ lib.optional withKerberos (assert krb5 != null; "--with-kerberos5=${lib.getDev krb5}")
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-libutil"
     ++ lib.optional (!linkOpenssl) "--without-openssl"
     ++ lib.optional withLdns "--with-ldns"
     ++ extraConfigureFlags;
@@ -111,9 +111,9 @@ stdenv.mkDerivation {
 
   hardeningEnable = [ "pie" ];
 
-  doCheck = true;
+  doCheck = false;
   enableParallelChecking = false;
-  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.isDarwin) hostname;
+  nativeCheckInputs = [ openssl ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname;
   preCheck = lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # construct a dummy HOME
     export HOME=$(realpath ../dummy-home)
@@ -161,7 +161,7 @@ stdenv.mkDerivation {
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl
-  checkTarget = lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
+  checkTarget = lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) "t-exec"
     # other tests are less demanding of the environment
     ++ [ "unit" "file-tests" "interop-tests" ];
 
@@ -177,18 +177,25 @@ stdenv.mkDerivation {
     "sysconfdir=\${out}/etc/ssh"
   ];
 
-  passthru.tests = {
-    borgbackup-integration = nixosTests.borgbackup;
-    openssh = nixosTests.openssh;
+  passthru = {
+    inherit withKerberos;
+    tests = {
+      borgbackup-integration = nixosTests.borgbackup;
+      nixosTest = nixosTests.openssh;
+      openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+        pname = previousAttrs.pname + "-test";
+        doCheck = true;
+      });
+    };
   };
 
   meta = with lib; {
-    description = "An implementation of the SSH protocol${extraDesc}";
+    description = "Implementation of the SSH protocol${extraDesc}";
     homepage = "https://www.openssh.com/";
     changelog = "https://www.openssh.com/releasenotes.html";
     license = licenses.bsd2;
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ eelco aneeshusa ]);
+    maintainers = (extraMeta.maintainers or []) ++ (with maintainers; [ aneeshusa ]);
     mainProgram = "ssh";
   } // extraMeta;
-}
+})

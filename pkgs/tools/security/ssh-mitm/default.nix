@@ -9,6 +9,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
       paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.1";
@@ -62,7 +63,7 @@ buildPythonApplication rec {
     setuptools
     sshpubkeys
     wrapt
-  ] ++ lib.optionals stdenv.isDarwin [ setuptools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
   # fix for darwin users
 
   nativeBuildInputs = [ installShellFiles ];

@@ -17,7 +17,7 @@ mkCoqDerivation {
     mathcomp-bigenough mathcomp-zify mathcomp-algebra-tactics ];
 
   meta = {
-    description = "A formally verified proof in Coq, by computer algebra, that ζ(3) is irrational";
+    description = "Formally verified proof in Coq, by computer algebra, that ζ(3) is irrational";
     license = lib.licenses.cecill-c;
   };
 }

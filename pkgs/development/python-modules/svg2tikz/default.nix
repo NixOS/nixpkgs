@@ -11,25 +11,32 @@
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "3.0.1";
+  version = "3.2.0";
 
   disabled = pythonOlder "3.7";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xyz2tex";
     repo = "svg2tikz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hvGvJFxhu7llj+tFfZvz12dZ8QYjY7zcLzB5S44l+IM=";
+    hash = "sha256-5SOUvrK83ff1x4MTVoJy68OaDmZUfrEwraEWmPMJKTA=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [
+    poetry-core
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     inkex
     lxml
   ];
+
+  pythonRelaxDeps = [
+    "lxml"
+  ];
+
 
   nativeCheckInputs = [ pytestCheckHook ];
 

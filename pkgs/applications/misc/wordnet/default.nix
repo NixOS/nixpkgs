@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ tcl tk ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   hardeningDisable = [ "format" ];
 

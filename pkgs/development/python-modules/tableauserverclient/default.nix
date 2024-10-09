@@ -6,7 +6,6 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   requests-mock,
   setuptools,
@@ -15,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.30";
+  version = "0.31";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MIE6V84xLEbgmTwvP6jQC0H//gBnMTO1sowL1HIMbpQ=";
+    hash = "sha256-e00/+yVKg7dGGq3Os+oWu/F93j5e9dnwWZxKwm+soqM=";
   };
 
   postPatch = ''
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
-    pythonRelaxDepsHook
     versioneer
   ];
 
@@ -59,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tableau/server-client-python";
     changelog = "https://github.com/tableau/server-client-python/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

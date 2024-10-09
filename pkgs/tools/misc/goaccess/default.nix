@@ -12,21 +12,24 @@
 
 stdenv.mkDerivation rec {
   pname = "goaccess";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "allinurl";
     repo = "goaccess";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FAooBAP2RbqAp7NTJNBdbRVldGCbx3SvOoTaiQ9Fl/I=";
+    hash = "sha256-ZOngDAHA88YQvkx2pk5ZSpBzxqelvCIR4z5hiFmfGyc=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [
-    ncurses
-    openssl
-  ] ++ lib.optionals withGeolocation [ libmaxminddb ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+  buildInputs =
+    [
+      ncurses
+      openssl
+    ]
+    ++ lib.optionals withGeolocation [ libmaxminddb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   configureFlags = [
     "--enable-utf8"

@@ -10,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "7.1.1";
+  version = "7.3.1";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-HkiCc/5Xx+1IKMz/vXPXwUp3c8qSjobhQaIJCzq8dqQ=";
+    hash = "sha256-4lk6AHquWKgDk0pBaswbVShZbUDA3wO6cPakhrvrwac=";
   };
 
-  cargoHash = "sha256-r4cmnLkW8ocTcTECAbCk3S94T09lOUzHLQIGHv97W54=";
+  cargoHash = "sha256-GS/RRPzULUla4XY4tO+eM2NAy2nG0qDxqcSq292ivgU=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl dbus ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Tool for working with a stack of patches";

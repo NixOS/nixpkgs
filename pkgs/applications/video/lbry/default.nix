@@ -30,7 +30,7 @@ appimageTools.wrapAppImage rec {
   '';
 
   meta = with lib; {
-    description = "A browser and wallet for LBRY, the decentralized, user-controlled content marketplace";
+    description = "Browser and wallet for LBRY, the decentralized, user-controlled content marketplace";
     longDescription = ''
       The LBRY app is a graphical browser for the decentralized content marketplace provided by the LBRY protocol.
       It is essentially the lbry daemon bundled with a UI using Electron.

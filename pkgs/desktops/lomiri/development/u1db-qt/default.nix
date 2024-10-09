@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     # For our automatic pkg-config output patcher to work, prefix must be used here
     substituteInPlace libu1db-qt.pc.in \
       --replace-fail 'libdir=''${exec_prefix}/lib' 'libdir=''${prefix}/lib'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
+  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     # Other locations add dependencies to custom check target from tests
     substituteInPlace CMakeLists.txt \
       --replace-fail 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'

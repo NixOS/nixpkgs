@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A pure Python implementation of systemd's service notification protocol";
+    description = "Pure Python implementation of systemd's service notification protocol";
     homepage = "https://github.com/bb4242/sdnotify";
     license = licenses.mit;
     maintainers = with maintainers; [ pmiddend ];

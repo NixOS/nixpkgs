@@ -38,6 +38,7 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      "test_cpu" # timing sensitive
       "test_aside_basic" # times out
       "test_write_timeout" # flaky, does not always time out
       "test_aside_cancel" # fails because modifies PYTHONPATH and cant find pytest
@@ -45,7 +46,7 @@ buildPythonPackage rec {
       "test_unix_echo" # socket bind error on hydra when built with other packages
       "test_unix_ssl_server" # socket bind error on hydra when built with other packages
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # connects to python.org:1, expects an OsError, hangs in the darwin sandbox
       "test_create_bad_connection"
     ];

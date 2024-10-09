@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://www.pixelbeat.org/programs/dvd-vr/";
     downloadPage = "https://www.pixelbeat.org/programs/dvd-vr/";
-    description = "A utility to identify and optionally copy recordings from a DVD-VR format disc";
+    description = "Utility to identify and optionally copy recordings from a DVD-VR format disc";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fgaz ];
     mainProgram = "dvd-vr";

@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   pythonAtLeast,
   pythonOlder,
 
@@ -26,20 +27,26 @@
   filelock,
   pytest-xdist,
   pytestCheckHook,
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.9.0";
+  version = "1.10.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  # mypy doesn't support python313 yet
+  # https://github.com/python/mypy/issues/17264
+  disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "python";
     repo = "mypy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-uOOZX8bKRunTOgYVbmetu2m0B7kijxBgWdNiLCAhiQ4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-joV+elRaAICNQHkYuYtTDjvOUkHPsRkG1OLRvdxeIHc=";
+  };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
   };
 
   build-system = [
@@ -117,6 +124,11 @@ buildPythonPackage rec {
       # https://github.com/python/mypy/issues/15221
       "mypyc/test/test_run.py"
     ];
+
+  passthru.tests = {
+    # Failing typing checks on the test-driver result in channel blockers.
+    inherit (nixosTests) nixos-test-driver;
+  };
 
   meta = with lib; {
     description = "Optional static typing for Python";

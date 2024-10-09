@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf automake ];
   buildInputs = [libtool gmpxx];
   meta = {
-    description = "A C++ library for arithmetic and algebraic computations";
+    description = "C++ library for arithmetic and algebraic computations";
     license = lib.licenses.cecill-b;
     maintainers = [lib.maintainers.raskin];
     platforms = lib.platforms.linux;

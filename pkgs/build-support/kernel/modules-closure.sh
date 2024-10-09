@@ -89,6 +89,14 @@ for module in $(< ~-/closure); do
     done || :
 done
 
+if test -e lib/firmware/edid ; then
+    echo "lib/firmware/edid found, copying."
+    mkdir -p "$out/lib/firmware"
+    cp -v --no-preserve=mode --recursive --dereference --no-target-directory lib/firmware/edid "$out/lib/firmware/edid"
+else
+    echo "lib/firmware/edid not found, skipping."
+fi
+
 # copy module ordering hints for depmod
 cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.
 cp $kernel/lib/modules/"$version"/modules.builtin $out/lib/modules/"$version"/.

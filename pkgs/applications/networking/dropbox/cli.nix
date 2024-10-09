@@ -6,7 +6,7 @@
 , python3
 , dropbox
 , gtk4
-, gnome
+, nautilus
 , gdk-pixbuf
 , gobject-introspection
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
   buildInputs = [
     python3
     gtk4
-    gnome.nautilus
+    nautilus
   ];
 
   configureFlags = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     description = "Command line client for the dropbox daemon";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dropbox";
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     # NOTE: Dropbox itself only works on linux, so this is ok.
     platforms = lib.platforms.linux;
   };

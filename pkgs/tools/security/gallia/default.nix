@@ -7,34 +7,33 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.7.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hLGaImYkv6/1Wv1a+0tKmW4qmV4akNoyd0RXopJjetI=";
+    hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
   };
 
-  pythonRelaxDeps = [ "httpx" ];
+  pythonRelaxDeps = [ "aiofiles" ];
 
   build-system = with python3.pkgs; [ poetry-core ];
-
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     aiofiles
     aiohttp
     aiosqlite
     argcomplete
-    can
+    python-can
     exitcode
+    construct
     httpx
+    more-itertools
+    msgspec
     platformdirs
     psutil
-    construct
-    msgspec
     pydantic
     pygit2
     tabulate

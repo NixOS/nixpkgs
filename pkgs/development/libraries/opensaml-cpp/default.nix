@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     boost openssl log4shib xercesc xml-security-c xml-tooling-c zlib
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreServices
     SystemConfiguration
   ]);
@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-xmltooling=${xml-tooling-c}" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.isDarwin) "-std=c++14";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-std=c++14";
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage    = "https://shibboleth.net/products/opensaml-cpp.html";
-    description = "A low-level library written in C++ that provides support for producing and consuming SAML messages";
+    description = "Low-level library written in C++ that provides support for producing and consuming SAML messages";
     mainProgram = "samlsign";
     platforms   = platforms.unix;
     license     = licenses.asl20;

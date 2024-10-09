@@ -15,13 +15,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "espflash";
-  version = "3.0.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
-    rev = "v${version}";
-    hash = "sha256-0CnYdz1KG/y4B+dOp9rYE097ctf4GNmyqv3/xywdA6A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NplHzdUHlBgujH8rLYT5VbYBV7NljMJEbMAxZ5ZK8JY=";
   };
 
   nativeBuildInputs = [
@@ -32,15 +32,15 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     Security
     SystemConfiguration
   ];
 
-  cargoHash = "sha256-CmhBl+d5odc0QL45aWCJcBZIVeJsdpxJweh7FT8cpyY=";
+  cargoHash = "sha256-iA8VJj0btFHUoyY7w8kR+9AU5Yrts4ctr90jxlWQu4c=";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd espflash \

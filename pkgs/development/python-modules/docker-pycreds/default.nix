@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six ];
 
   meta = with lib; {
-    description = "Python bindings for the docker credentials store API.";
+    description = "Python bindings for the docker credentials store API";
     homepage = "https://github.com/shin-/dockerpy-creds";
     license = licenses.asl20;
   };

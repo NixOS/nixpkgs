@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://omxil.sourceforge.net/";
-    description = "An opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
+    description = "Opensource implementation of the Khronos OpenMAX Integration Layer API to access multimedia components";
     mainProgram = "omxregister-bellagio";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

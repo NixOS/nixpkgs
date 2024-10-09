@@ -9,13 +9,12 @@
   pytestCheckHook,
   python,
   pythonOlder,
-  pythonRelaxDepsHook,
   xmlschema,
 }:
 
 buildPythonPackage rec {
   pname = "reqif";
-  version = "0.0.40";
+  version = "0.0.42";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "strictdoc-project";
     repo = "reqif";
     rev = "refs/tags/${version}";
-    hash = "sha256-VQvwynFv/DN5RHT00rxtDcJ9wsEpKdsh3rdyUakBr2Q=";
+    hash = "sha256-cQhis7jrcly3cw2LRv7hpPBFAB0Uag69czf+wJvbh/Q=";
   };
 
   postPatch = ''
@@ -35,7 +34,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

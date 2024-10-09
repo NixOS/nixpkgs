@@ -1,24 +1,33 @@
 {
-  absl-py,
-  buildPythonPackage,
-  cmake,
-  etils,
-  fetchPypi,
-  glfw,
   lib,
-  mujoco,
-  numpy,
-  perl,
-  pybind11,
-  pyopengl,
-  python,
-  setuptools,
   stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # nativeBuildInputs
+  cmake,
+
+  # build-system
+  setuptools,
+
+  # buildInputs
+  mujoco,
+  pybind11,
+
+  # dependencies
+  absl-py,
+  etils,
+  glfw,
+  numpy,
+  pyopengl,
+
+  perl,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "mujoco";
-  version = "3.1.5";
+  inherit (mujoco) version;
 
   pyproject = true;
 
@@ -28,19 +37,21 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kJm6YAE0HMnji3uUuO96ZzRsdjj6PpT1IHQ6NXiR8pY=";
+    hash = "sha256-3WF/QMHARPXff7yTM9MJTTyIYp1OPYYiTly0LeQKaos=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    setuptools
-  ];
+  nativeBuildInputs = [ cmake ];
+
   dontUseCmakeConfigure = true;
+
+  build-system = [ setuptools ];
+
   buildInputs = [
     mujoco
     pybind11
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     absl-py
     etils
     glfw
@@ -82,11 +93,14 @@ buildPythonPackage rec {
       ''
     );
 
-  meta = with lib; {
-    description = "Python bindings for MuJoCo: a general purpose physics simulator.";
+  meta = {
+    description = "Python bindings for MuJoCo: a general purpose physics simulator";
     homepage = "https://mujoco.org/";
     changelog = "https://github.com/google-deepmind/mujoco/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ tmplt ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      tmplt
+    ];
   };
 }

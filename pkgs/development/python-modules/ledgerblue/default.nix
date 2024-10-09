@@ -16,7 +16,6 @@
   python-gnupg,
   python-u2flib-host,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
   setuptools-scm,
   websocket-client,
@@ -24,20 +23,19 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.53";
+  version = "0.1.54";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j5FCQnp+MNrJ8zgYeLRuWF+Gdq0FwJeBYyJALb+H8So=";
+    hash = "sha256-Hn99ST6RnER6XI6+rqA3O9/aC+whYoTOzeoHGF/fFz4=";
   };
 
   build-system = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "protobuf" ];
@@ -55,7 +53,7 @@ buildPythonPackage rec {
     python-gnupg
     python-u2flib-host
     websocket-client
-  ] ++ lib.optionals stdenv.isLinux [ bleak ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
 
   # No tests
   doCheck = false;

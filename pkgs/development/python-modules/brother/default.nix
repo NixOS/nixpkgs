@@ -2,40 +2,44 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  freezegun,
   dacite,
-  pysnmp-lextudio,
+  pysnmp,
   pytest-asyncio,
   pytest-error-for-skips,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  syrupy
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.1.0";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "brother";
     rev = "refs/tags/${version}";
-    hash = "sha256-W7bakj/94l0pL5fOb+CK+Z6k1cbv/CY9XjXGYZfLFY4=";
+    hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
-    pysnmp-lextudio
+    pysnmp
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
   pythonImportsCheck = [ "brother" ];

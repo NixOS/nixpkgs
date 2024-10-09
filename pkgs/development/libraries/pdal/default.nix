@@ -10,7 +10,7 @@
 , curl
 , gdal
 , hdf5-cpp
-, LASzip
+, laszip
 , libe57format
 , libgeotiff
 , libtiff
@@ -19,6 +19,7 @@
 , pkg-config
 , postgresql
 , proj
+, sqlite
 , tiledb
 , xercesc
 , zlib
@@ -27,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pdal";
-  version = "2.7.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = finalAttrs.version;
-    sha256 = "sha256-JoHBxJ0hCWH7ZhmeJk4huT2k0AK5CzIV58NWCjWj5T0=";
+    hash = "sha256-VHcUyYADmNzxZ+Ix56TNuaP9wG+vRlEl71cNM0uMaHg=";
   };
 
   nativeBuildInputs = [
@@ -45,13 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     gdal
     hdf5-cpp
-    LASzip
+    laszip
     libgeotiff
     libtiff
-    libxml2
+    (libxml2.override { enableHttp = true; })
     openscenegraph
     postgresql
     proj
+    sqlite
     tiledb
     xercesc
     zlib
@@ -122,7 +124,9 @@ stdenv.mkDerivation (finalAttrs: {
       version = "pdal ${finalAttrs.finalPackage.version}";
     };
     pdal = callPackage ./tests.nix { pdal = finalAttrs.finalPackage; };
-    pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+    };
   };
 
   meta = with lib; {

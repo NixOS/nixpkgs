@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = nixosTests.cntr;
 
   meta = with lib; {
-    description = "A container debugging tool based on FUSE";
+    description = "Container debugging tool based on FUSE";
     homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
     platforms = platforms.linux;

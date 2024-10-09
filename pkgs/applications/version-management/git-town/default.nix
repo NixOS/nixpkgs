@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "14.2.0";
+  version = "16.3.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-+OJ8aUA/VFOAzdCRcOCQKm6/RjRe13TITP1DAWqoAQI=";
+    hash = "sha256-q4bRUz6ZI6y0AYEDMUBMN1YJxmHkIDDkUiMd4rQbDHk=";
   };
 
   vendorHash = null;
@@ -32,6 +32,9 @@ buildGoModule rec {
 
   preCheck = ''
     HOME=$(mktemp -d)
+
+    # this runs tests requiring local operations
+    rm main_test.go
   '';
 
   checkFlags =
@@ -48,9 +51,9 @@ buildGoModule rec {
 
   postInstall = ''
     installShellCompletion --cmd git-town \
-      --bash <($out/bin/git-town completion bash) \
-      --fish <($out/bin/git-town completion fish) \
-      --zsh <($out/bin/git-town completion zsh)
+      --bash <($out/bin/git-town completions bash) \
+      --fish <($out/bin/git-town completions fish) \
+      --zsh <($out/bin/git-town completions zsh)
 
     wrapProgram $out/bin/git-town --prefix PATH : ${lib.makeBinPath [ git ]}
   '';

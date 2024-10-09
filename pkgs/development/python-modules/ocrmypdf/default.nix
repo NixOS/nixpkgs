@@ -4,9 +4,10 @@
   deprecation,
   fetchFromGitHub,
   ghostscript,
+  hatch-vcs,
+  hatchling,
   hypothesis,
   img2pdf,
-  importlib-resources,
   jbig2enc,
   packaging,
   pdfminer-six,
@@ -20,17 +21,15 @@
   pythonOlder,
   rich,
   reportlab,
-  setuptools-scm,
   substituteAll,
   tesseract,
-  tqdm,
   unpaper,
   installShellFiles,
 }:
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
-  version = "16.2.0";
+  version = "16.5.0";
 
   disabled = pythonOlder "3.10";
 
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-sqhuQ+no6UymxbVtDtWiYQK8kKpO1y37NxLDmRT1LEQ=";
+    hash = "sha256-jqe4BRW0U7gqcf+FtDWjDDvRStAqaEPTuU+B+BrFR5Y=";
   };
 
   patches = [
@@ -61,7 +60,10 @@ buildPythonPackage rec {
     })
   ];
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -100,7 +102,6 @@ buildPythonPackage rec {
       mit
     ];
     maintainers = with maintainers; [
-      kiwi
       dotlambda
     ];
     changelog = "https://github.com/ocrmypdf/OCRmyPDF/blob/${src.rev}/docs/release_notes.rst";

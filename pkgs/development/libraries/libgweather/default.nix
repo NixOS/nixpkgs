@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dzoneinfo_dir=${tzdata}/share/zoneinfo"
     (lib.mesonBool "introspection" withIntrospection)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dc_args=-D_DARWIN_C_SOURCE"
   ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to access weather information from online services for numerous locations";
+    description = "Library to access weather information from online services for numerous locations";
     homepage = "https://gitlab.gnome.org/GNOME/libgweather";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;

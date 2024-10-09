@@ -6,13 +6,13 @@
 
 buildDotnetModule rec {
   pname = "lubelogger";
-  version = "1.3.1";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "hargata";
     repo = "lubelog";
     rev = "v${version}";
-    hash = "sha256-5gpwB4x2/JAaNtPQrlgFwh7om3rTJE0/mGr/Kn4qIIw=";
+    hash = "sha256-f9lj2Er0gQpptzmLpZsxR8hSU6kJlJkwHwpZ7wAq6bk=";
   };
 
   projectFile = "CarCareTracker.sln";
@@ -28,7 +28,7 @@ buildDotnetModule rec {
   executables = [ "CarCareTracker" ]; # This wraps "$out/lib/$pname/foo" to `$out/bin/foo`.
 
   meta = with lib; {
-    description = "A vehicle service records and maintainence tracker";
+    description = "Vehicle service records and maintainence tracker";
     longDescription = ''
       A self-hosted, open-source, unconventionally-named vehicle maintenance records and fuel mileage tracker.
 
@@ -36,8 +36,8 @@ buildDotnetModule rec {
     '';
     homepage = "https://lubelogger.com";
     changelog = "https://github.com/hargata/lubelog/releases/tag/v${version}";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ samasaur ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ lyndeno ];
     mainProgram = "CarCareTracker";
     platforms = platforms.all;
   };

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
-    rev = "${pname}-${version}";
+    rev = "libmamba-${version}";
     hash = "sha256-sxZDlMFoMLq2EAzwBVO++xvU1C30JoIoZXEX/sqkXS0=";
   };
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "The library for the fast Cross-Platform Package Manager";
+    description = "Library for the fast Cross-Platform Package Manager";
     homepage = "https://github.com/mamba-org/mamba";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;

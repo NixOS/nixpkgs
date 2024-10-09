@@ -59,7 +59,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool for testing Helm charts";
+    description = "Tool for testing Helm charts";
     homepage = "https://github.com/helm/chart-testing";
     license = licenses.asl20;
     maintainers = with maintainers; [ atkinschang ];

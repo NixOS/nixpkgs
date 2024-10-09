@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "doc" "man" ];
 
   src = fetchurl {
-    url = "https://download.geany.org/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    url = "https://download.geany.org/geany-${finalAttrs.version}.tar.bz2";
     hash = "sha256-VltM0vAxHB46Fn7HHEoy26ZC4P5VSuW7a4F3t6dMzJI=";
   };
 

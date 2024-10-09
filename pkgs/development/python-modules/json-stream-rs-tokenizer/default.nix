@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.25";
+  version = "0.4.26";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-zo/jRAWSwcOnO8eU4KhDNz44P6xDGcrZf9CflwsSvF0=";
+    hash = "sha256-ogX0KsfHRQW7+exRMKGwJiNINrOKPiTKxAqiTZyEWrg=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # Tests depend on json-stream, which depends on this package.
   # To avoid infinite recursion, we only enable tests when building passthru.tests.
@@ -62,7 +62,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A faster tokenizer for the json-stream Python library";
+    description = "Faster tokenizer for the json-stream Python library";
     homepage = "https://github.com/smheidrich/py-json-stream-rs-tokenizer";
     license = licenses.mit;
     maintainers = with maintainers; [ winter ];

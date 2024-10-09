@@ -1,8 +1,6 @@
 { lib, stdenv
 , fetchurl
 , dpkg
-, util-linux
-, bash
 , makeWrapper
 , electron
 , asar
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Terra station is the official wallet of the Terra blockchain.";
+    description = "Terra station is the official wallet of the Terra blockchain";
     homepage = "https://docs.terra.money/docs/learn/terra-station/README.html";
     license = licenses.isc;
     maintainers = [ maintainers.peterwilli ];

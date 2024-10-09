@@ -1,13 +1,10 @@
 { config, lib, ... }:
-
-with lib;
-
 {
 
   options = {
 
-    environment.enableDebugInfo = mkOption {
-      type = types.bool;
+    environment.enableDebugInfo = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Some NixOS packages provide debug symbols. However, these are
@@ -29,7 +26,7 @@ with lib;
   };
 
 
-  config = mkIf config.environment.enableDebugInfo {
+  config = lib.mkIf config.environment.enableDebugInfo {
 
     # FIXME: currently disabled because /lib is already in
     # environment.pathsToLink, and we can't have both.

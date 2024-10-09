@@ -20,7 +20,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/dinosaure/overlap";
-    description = "A minimal library to know that 2 bigarray share physically the same memory or not";
+    description = "Minimal library to know that 2 bigarray share physically the same memory or not";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann ];
   };

@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitLab
-, mkDerivation
-, qtbase
-, cmake
-, kconfig
-, kio
-, kiconthemes
-, kxmlgui
-, ki18n
-, kguiaddons
-, extra-cmake-modules
-, boost
-, shared-mime-info
-, rrdtool
-, breeze-icons
+{
+  lib,
+  fetchFromGitLab,
+  mkDerivation,
+  qtbase,
+  cmake,
+  kconfig,
+  kio,
+  kiconthemes,
+  kxmlgui,
+  ki18n,
+  kguiaddons,
+  extra-cmake-modules,
+  boost,
+  shared-mime-info,
+  rrdtool,
+  breeze-icons,
 }:
 
 mkDerivation rec {
@@ -23,8 +24,12 @@ mkDerivation rec {
     owner = "aerusso";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
+    hash = "sha256-bUVL5eRQ5UkSZo562pnyEcj0fVoSC5WHRq4BfN67jEM=";
   };
+
+  postPatch = lib.optional (!lib.versionOlder rrdtool.version "1.9.0") ''
+    substituteInPlace kcollectd/rrd_interface.cc --replace-fail 'char *arg[] =' 'const char *arg[] ='
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -47,7 +52,7 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A graphical frontend to collectd";
+    description = "Graphical frontend to collectd";
     homepage = "https://www.antonioerusso.com/projects/kcollectd/";
     maintainers = [ maintainers.symphorien ];
     license = [ lib.licenses.gpl3Plus ];

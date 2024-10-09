@@ -18,6 +18,8 @@
 , which
 , wrapGAppsHook3
 , darwin
+, vulkan-loader
+, autoPatchelfHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,17 +40,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoPatchelfHook
     pkg-config
     which
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libicns
   ];
 
   buildInputs = [
     SDL2
     libao
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     gtk3
     gtksourceview3
@@ -59,16 +62,18 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     openal
     udev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.OpenAL
   ];
 
+  appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
+
   enableParallelBuilding = true;
 
-  makeFlags = lib.optionals stdenv.isLinux [
+  makeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "hiro=gtk3"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "hiro=cocoa"
     "lto=false"
     "vulkan=false"
@@ -78,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     "prefix=$(out)"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.14";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.14";
 
   meta = {
     homepage = "https://ares-emu.net";
@@ -87,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ Madouura AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
 # TODO: select between Qt and GTK3

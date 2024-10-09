@@ -31,7 +31,7 @@
 
 
 let
-  inherit (lib) lists strings trivial;
+  inherit (lib) getLib lists strings trivial;
   inherit (magmaRelease) version hash supportedGpuTargets;
 
   # Per https://icl.utk.edu/magma/downloads, support for CUDA 12 wasn't added until 2.7.1.
@@ -41,8 +41,7 @@ let
     then cudaPackages_11
     else cudaPackages;
 
-  inherit (effectiveCudaPackages) cudaAtLeast cudaFlags cudaOlder;
-  inherit (cudaFlags) cudaCapabilities;
+  inherit (effectiveCudaPackages) cudaAtLeast flags cudaOlder;
 
   # move to newer ROCm version once supported
   rocmPackages = rocmPackages_5;
@@ -52,7 +51,7 @@ let
   #   lists.subtractLists a b = b - a
 
   # For ROCm
-  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like cudaFlags.realArches.
+  # NOTE: The hip.gpuTargets are prefixed with "gfx" instead of "sm" like flags.realArches.
   #   For some reason, Magma's CMakeLists.txt file does not handle the "gfx" prefix, so we must
   #   remove it.
   rocmArches = lists.map (x: strings.removePrefix "gfx" x) rocmPackages.clr.gpuTargets;
@@ -83,12 +82,11 @@ let
       throw "No GPU targets specified"
   );
 
-  # E.g. [ "80" "86" "90" ]
-  cudaArchitectures = (builtins.map cudaFlags.dropDot cudaCapabilities);
-
-  cudaArchitecturesString = strings.concatStringsSep ";" cudaArchitectures;
+  cudaArchitecturesString = flags.cmakeCudaArchitecturesString;
   minArch =
     let
+      # E.g. [ "80" "86" "90" ]
+      cudaArchitectures = (builtins.map flags.dropDot flags.cudaCapabilities);
       minArch' = builtins.head (builtins.sort strings.versionOlder cudaArchitectures);
     in
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
@@ -135,20 +133,17 @@ stdenv.mkDerivation {
     lapack
     blas
     python3
+    (getLib gfortran.cc) # libgfortran.so
   ] ++ lists.optionals cudaSupport (with effectiveCudaPackages; [
-    cuda_cudart.dev # cuda_runtime.h
-    cuda_cudart.lib # cudart
-    cuda_cudart.static # cudart_static
-    libcublas.dev # cublas_v2.h
-    libcublas.lib # cublas
-    libcusparse.dev # cusparse.h
-    libcusparse.lib # cusparse
+    cuda_cudart # cuda_runtime.h
+    libcublas # cublas_v2.h
+    libcusparse # cusparse.h
   ] ++ lists.optionals (cudaOlder "11.8") [
-    cuda_nvprof.dev # <cuda_profiler_api.h>
+    cuda_nvprof # <cuda_profiler_api.h>
   ] ++ lists.optionals (cudaAtLeast "11.8") [
-    cuda_profiler_api.dev # <cuda_profiler_api.h>
+    cuda_profiler_api # <cuda_profiler_api.h>
   ] ++ lists.optionals (cudaAtLeast "12.0") [
-    cuda_cccl.dev # <nv/target>
+    cuda_cccl # <nv/target>
   ]) ++ lists.optionals rocmSupport [
     rocmPackages.clr
     rocmPackages.hipblas

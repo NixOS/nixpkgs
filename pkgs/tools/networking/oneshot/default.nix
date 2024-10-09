@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "oneshot";
-  version = "2.0.2";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "forestnode-io";
     repo = "oneshot";
     rev = "v${version}";
-    hash = "sha256-aIbKXBJNcBbYJRzETT0mkaqTRo+/8o6z882G21V74rg=";
+    hash = "sha256-eEVjdFHZyk2bSVqrMJIsgZvvLoDOira8zTzX9oDNtHM=";
   };
 
   vendorHash = "sha256-TktSQMIHYXF9eyY6jyfE31WLXEq7VZU3qnVIMGjMMcA=";
@@ -41,7 +41,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A first-come first-served single-fire HTTP server";
+    description = "First-come first-served single-fire HTTP server";
     homepage = "https://www.oneshot.uno/";
     license = licenses.mit;
     maintainers = with maintainers; [ milibopp ];

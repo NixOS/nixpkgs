@@ -8,7 +8,9 @@
   qtwayland,
   libinput,
   xorg,
+  xwayland,
   libdisplay-info,
+  libei,
   mesa,
   lcms2,
   libcap,
@@ -39,7 +41,10 @@ mkKdeDerivation {
     "--set-default TZDIR /etc/zoneinfo"
   ];
 
-  extraNativeBuildInputs = [pkg-config python3];
+  extraNativeBuildInputs = [
+    pkg-config
+    python3
+  ];
   extraBuildInputs = [
     qtquick3d
     qtsensors
@@ -53,9 +58,12 @@ mkKdeDerivation {
     lcms2
     libcap
     libdisplay-info
+    libei
     libinput
     pipewire
 
     xorg.libxcvt
+    # we need to provide this so it knows our xwayland supports new features
+    xwayland
   ];
 }

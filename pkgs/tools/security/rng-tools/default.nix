@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
-  version = "6.16";
+  version = "6.17";
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9pXQhG2nbu6bq4BnBgEOyyUBNkQTI5RhWmJIoLtFU+c=";
+    hash = "sha256-wqJvLvxmNG2nb5P525w25Y8byUUJi24QIHNJomCKeG8=";
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A random number generator daemon";
+    description = "Random number generator daemon";
     homepage = "https://github.com/nhorman/rng-tools";
     changelog = "https://github.com/nhorman/rng-tools/releases/tag/v${version}";
     license = licenses.gpl2Plus;

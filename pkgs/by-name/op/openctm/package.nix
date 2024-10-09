@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   pkg-config,
-  freeglut,
+  libglut,
   gtk2,
   libGLU,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
-    freeglut
+    libglut
     gtk2
     libGLU
   ];
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     "MAN1DIR=$(man)/share/man//man1"
   ];
 
-  makefile = if stdenv.isDarwin then "Makefile.macosx" else "Makefile.linux";
+  makefile = if stdenv.hostPlatform.isDarwin then "Makefile.macosx" else "Makefile.linux";
 
   preInstall = "mkdir -p $bin/bin $dev/include $out/lib $man/share/man/man1";
 

@@ -48,7 +48,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   # Tests fail on Darwin with `OSError: AF_UNIX path too long`
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "websockets" ];
 

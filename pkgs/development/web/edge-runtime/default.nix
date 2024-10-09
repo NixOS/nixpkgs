@@ -11,7 +11,7 @@
 
 let
   pname = "edge-runtime";
-  version = "1.53.1";
+  version = "1.53.4";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -20,13 +20,12 @@ rustPlatform.buildRustPackage {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qEEFEeAyUOnNvxIBfAmhMDWde3OPOpyaEI2pBYrdCr0=";
+    hash = "sha256-sDgGfQiAUuI+JaF0BRB5lwvjbWWIoTV/k/tbQsBBc4E=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
-
     outputHashes = {
       "ort-2.0.0-rc.0" = "sha256-j3g9ES2ZLmAAcPYgszBGDG16HiFJTnohwxSvXypFGTw=";
     };
@@ -34,8 +33,8 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security CoreFoundation SystemConfiguration ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ Security CoreFoundation SystemConfiguration ]);
 
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
@@ -56,7 +55,7 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   meta = with lib; {
-    description = "A server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services";
+    description = "Server based on Deno runtime, capable of running JavaScript, TypeScript, and WASM services";
     mainProgram = "edge-runtime";
     homepage = "https://github.com/supabase/edge-runtime";
     license = licenses.mit;

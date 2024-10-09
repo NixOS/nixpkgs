@@ -18,7 +18,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/tamland/kodi-plugin-routing";
-    description = "A routing module for kodi plugins";
+    description = "Routing module for kodi plugins";
     license = licenses.gpl3Plus;
     maintainers = teams.kodi.members;
   };

@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "wagtail";
-  version = "6.0.2";
+  version = "6.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-58/DwPU/swLxeY8OAqesYHirAusOhwPA9xzL0/GOOG8=";
+    hash = "sha256-WQhujKGBsQ8nSxE5JFAFBN7W/BaCTBl283w8vd0QDSQ=";
   };
 
   postPatch = ''
@@ -71,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wagtail" ];
 
   meta = with lib; {
-    description = "A Django content management system focused on flexibility and user experience";
+    description = "Django content management system focused on flexibility and user experience";
     mainProgram = "wagtail";
     homepage = "https://github.com/wagtail/wagtail";
     changelog = "https://github.com/wagtail/wagtail/blob/v${version}/CHANGELOG.txt";

@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "c2patool";
-  version = "0.9.1";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "contentauth";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-+Nnvg1VzVhyrOG1/yIbeKhELzTL5j3cYFb8+P4P0qxA=";
+    hash = "sha256-1q0s8fwhlD891AhS1Sr2JBHi69SUMdP2cYslM/yFh8o=";
   };
 
-  cargoHash = "sha256-guV1n3Gx00ODOyNuosAeRw1NPumjdkC2dFJFuwFBheg=";
+  cargoHash = "sha256-4LfrafJd2W2HL/Q36lJ1zXw2CDLL79SLEuyKeFR9cUY=";
 
   # use the non-vendored openssl
   OPENSSL_NO_VENDOR = 1;
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optional stdenv.isDarwin [
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.CoreServices
     darwin.apple_sdk.frameworks.Carbon

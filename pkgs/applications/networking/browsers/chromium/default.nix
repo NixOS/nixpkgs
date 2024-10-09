@@ -1,9 +1,9 @@
-{ newScope, config, stdenv, fetchurl, makeWrapper
+{ newScope, config, stdenv, makeWrapper
 , buildPackages
 , ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
+, glib, gtk3, gtk4, adwaita-icon-theme, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
-, gcc, nspr, nss, runCommand
+, runCommand
 , lib, libkrb5
 , widevine-cdm
 , electron-source # for warnObsoleteVersionConditional
@@ -16,19 +16,14 @@
 , enableWideVine ? false
 , ungoogled ? false # Whether to build chromium or ungoogled-chromium
 , cupsSupport ? true
-, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , commandLineArgs ? ""
-, pkgsBuildTarget
 , pkgsBuildBuild
 , pkgs
 }:
 
 let
-  # Sometimes we access `llvmPackages` via `pkgs`, and other times
-  # via `pkgsFooBar`, so a string (attrname) is the only way to have
-  # a single point of control over the LLVM version used.
-  llvmPackages_attrName = "llvmPackages_17";
-  stdenv = pkgs.${llvmPackages_attrName}.stdenv;
+  stdenv = pkgs.rustc.llvmPackages.stdenv;
 
   # Helper functions for changes that depend on specific versions:
   warnObsoleteVersionConditional = min-version: result:
@@ -48,7 +43,7 @@ let
   callPackage = newScope chromium;
 
   chromium = rec {
-    inherit stdenv llvmPackages_attrName upstream-info;
+    inherit stdenv upstream-info;
 
     mkChromiumDerivation = callPackage ./common.nix ({
       inherit channel chromiumVersionAtLeast versionRange;
@@ -59,8 +54,12 @@ let
         src = fetchgit {
           inherit (upstream-info.deps.gn) url rev hash;
         };
+      } // lib.optionalAttrs (chromiumVersionAtLeast "127") {
+        # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
+        # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+        hardeningDisable = [ "format" ];
       });
-      recompressTarball = callPackage ./recompress-tarball.nix { };
+      recompressTarball = callPackage ./recompress-tarball.nix { inherit chromiumVersionAtLeast; };
     });
 
     browser = callPackage ./browser.nix {
@@ -106,7 +105,7 @@ in stdenv.mkDerivation {
     gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
 
     # Needed for kerberos at runtime
     libkrb5
@@ -118,12 +117,12 @@ in stdenv.mkDerivation {
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
     libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
 
-  in with lib; ''
+  in ''
     mkdir -p "$out/bin"
 
     makeWrapper "${browserBinary}" "$out/bin/chromium" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-      --add-flags ${escapeShellArg commandLineArgs}
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
     ed -v -s "$out/bin/chromium" << EOF
     2i

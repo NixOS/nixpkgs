@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ six ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     pydantic = [ pydantic ];
     flask = [ flask ];
@@ -50,10 +50,10 @@ buildPythonPackage rec {
       pytestCheckHook
       scipy
     ]
-    ++ passthru.optional-dependencies.aiohttp
-    ++ passthru.optional-dependencies.pydantic
-    ++ passthru.optional-dependencies.yaml
-    ++ passthru.optional-dependencies.flask;
+    ++ optional-dependencies.aiohttp
+    ++ optional-dependencies.pydantic
+    ++ optional-dependencies.yaml
+    ++ optional-dependencies.flask;
 
   pythonImportsCheck = [ "dependency_injector" ];
 

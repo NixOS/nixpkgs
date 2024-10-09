@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A mail parser for python 2 and 3";
+    description = "Mail parser for python 2 and 3";
     mainProgram = "mailparser";
     homepage = "https://github.com/SpamScope/mail-parser";
     license = licenses.asl20;

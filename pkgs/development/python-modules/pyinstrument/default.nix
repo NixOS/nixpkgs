@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -10,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyinstrument";
-  version = "4.6.0";
+  version = "4.7.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +18,7 @@ buildPythonPackage rec {
     owner = "joerick";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NSE2mZPbKmvlQbBPx0MoqYfAOjmsf9CllX7dxygZfc4=";
+    hash = "sha256-Dvpx6Bf4obHL3inzIHhOrM3u/7X+0NRfEAyynDjtEwE=";
   };
 
   nativeBuildInputs = [

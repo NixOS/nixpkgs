@@ -38,7 +38,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/geomet/geomet/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [
-      turion
       ris
     ];
   };

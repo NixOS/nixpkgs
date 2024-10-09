@@ -41,6 +41,6 @@ stdenv.mkDerivation {
       the Otter Prover. This is the LADR command-line version.
     '';
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,13 +4,13 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  name = "pacup";
+  pname = "pacup";
   version = "2.0.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pacstall";
-    repo = name;
+    repo = "pacup";
     rev = "refs/tags/${version}";
     hash = "sha256-ItO38QyxNHftKPQZAPO7596ddBfX0a1nfVVqgx7BfwI=";
   };

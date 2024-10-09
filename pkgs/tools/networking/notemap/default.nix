@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libressl
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     memstreamHook
   ];
 

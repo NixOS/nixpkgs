@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libmpdclient
   ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.musicpd.org/clients/mpc/";
-    description = "A minimalist command line interface to MPD";
+    description = "Minimalist command line interface to MPD";
     changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/v${version}/NEWS";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];

@@ -6,6 +6,7 @@
   isPy38,
   isPy39,
   pythonAtLeast,
+  setuptools,
   flake8,
   six,
   python,
@@ -14,7 +15,7 @@
 buildPythonPackage rec {
   pname = "flake8-future-import";
   version = "0.4.7";
-  format = "setuptools";
+  pyproject = true;
 
   # PyPI tarball doesn't include the test suite
   src = fetchFromGitHub {
@@ -36,10 +37,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace "test_flake8_future_import.py" \
-      --replace "'flake8'" "'${lib.getExe flake8}'"
+      --replace-fail "'flake8'" "'${lib.getExe flake8}'"
   '';
 
-  propagatedBuildInputs = [ flake8 ];
+  build-system = [ setuptools ];
+
+  dependencies = [ flake8 ];
 
   nativeCheckInputs = [ six ];
 
@@ -52,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
+    description = "Flake8 extension to check for the imported __future__ modules to make it easier to have a consistent code base";
     homepage = "https://github.com/xZise/flake8-future-import";
     license = licenses.mit;
   };

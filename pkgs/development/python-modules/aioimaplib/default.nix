@@ -8,7 +8,6 @@
   mock,
   pyopenssl,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   pytz,
   setuptools,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aioimaplib";
-  version = "1.0.1";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "bamthomas";
     repo = "aioimaplib";
     rev = "refs/tags/${version}";
-    hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
+    hash = "sha256-TjCPGZGsSb+04kQNzHU3kWBo2vY34ujEqh1GIMIehJc=";
   };
 
   build-system = [ setuptools ];
@@ -44,13 +43,6 @@ buildPythonPackage rec {
 
   # https://github.com/bamthomas/aioimaplib/issues/54
   doCheck = pythonOlder "3.11";
-
-  disabledTests = [
-    # https://github.com/bamthomas/aioimaplib/issues/77
-    "test_get_quotaroot"
-    # asyncio.exceptions.TimeoutError
-    "test_idle"
-  ];
 
   pythonImportsCheck = [ "aioimaplib" ];
 

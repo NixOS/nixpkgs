@@ -8,7 +8,7 @@
 , gettext
 , dbus
 , glib
-, udevSupport ? stdenv.isLinux
+, udevSupport ? stdenv.hostPlatform.isLinux
 , libgudev
 , udisks2
 , libgcrypt
@@ -41,17 +41,16 @@
 , libgdata
 , libmsgraph
 , python3
-, python3Packages
 , gsettings-desktop-schemas
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
-  version = "1.54.0";
+  version = "1.54.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
-    hash = "sha256-9T2B34bC6GzdJRgsLYpmmiI3HoNiPe0bnVQW3Pxt42Y=";
+    url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor finalAttrs.version}/gvfs-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VJCPThC18cIx6QMwyMFbfyHyu2EPGUwDSzOON5xQjjw=";
   };
 
   patches = [
@@ -137,13 +136,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false; # fails with "ModuleNotFoundError: No module named 'gi'"
-  doInstallCheck = doCheck;
+  doInstallCheck = finalAttrs.finalPackage.doCheck;
 
   separateDebugInfo = true;
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gvfs";
       versionPolicy = "odd-unstable";
     };
   };
@@ -154,4 +153,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };
-}
+})

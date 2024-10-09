@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Japanese font based on Rounded M+ and Noto Sans Japanese";
+    description = "Japanese font based on Rounded M+ and Noto Sans Japanese";
     homepage = "http://jikasei.me/font/rounded-mgenplus/";
     license = licenses.ofl;
     platforms = platforms.all;

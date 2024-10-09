@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "meeko";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "forlilab";
     repo = "Meeko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pngFu6M63W26P7wd6FUNLuf0NikxtRtVR/pnR5PR6Wo=";
+    hash = "sha256-I/kAO0a6DbDqmzjS36ETuoH/Z1gR2eNpyE3herHDKMs=";
   };
 
   patches = [
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python package for preparing small molecule for docking";
     homepage = "https://github.com/forlilab/Meeko";
-    changelog = "https://github.com/forlilab/Meeko/releases/tag/${src.rev}";
+    changelog = "https://github.com/forlilab/Meeko/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ natsukium ];
   };

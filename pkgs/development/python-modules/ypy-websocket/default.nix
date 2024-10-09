@@ -9,7 +9,6 @@
   y-py,
   pytest-asyncio,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   uvicorn,
   websockets,
 }:
@@ -32,7 +31,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
+    description = "Qt/C++ GUI front end to sshfs, ecryptfs-simple, cryfs, gocryptfs, securefs, fscrypt and encfs";
     homepage = "https://github.com/mhogomchungu/sirikali";
     changelog = "https://github.com/mhogomchungu/sirikali/blob/${src.rev}/changelog";
     license = licenses.gpl3Only;

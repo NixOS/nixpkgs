@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
-with lib;
+
 let
+  inherit (lib) mkIf mkOption types;
   cfg = config.services.jenkinsSlave;
   masterCfg = config.services.jenkins;
 in {
@@ -47,16 +48,16 @@ in {
         '';
       };
 
-      javaPackage = mkPackageOption pkgs "jdk" { };
+      javaPackage = lib.mkPackageOption pkgs "jdk" { };
     };
   };
 
   config = mkIf (cfg.enable && !masterCfg.enable) {
-    users.groups = optionalAttrs (cfg.group == "jenkins") {
+    users.groups = lib.optionalAttrs (cfg.group == "jenkins") {
       jenkins.gid = config.ids.gids.jenkins;
     };
 
-    users.users = optionalAttrs (cfg.user == "jenkins") {
+    users.users = lib.optionalAttrs (cfg.user == "jenkins") {
       jenkins = {
         description = "jenkins user";
         createHome = true;

@@ -14,29 +14,32 @@
   python-dateutil,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.5.1";
-  format = "setuptools";
+  version = "6.1.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-SEFIUSxdsqizXIPNmX6ZU3Vf2L+oqvbuDMjHrrdCkhA=";
+    hash = "sha256-92gEffnXBsSE3WZl3LvqKJAh1Iy3zlq/eh9poJSR9f4=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     oslo-config
     oslo-context
     oslo-serialization
     oslo-utils
     pbr
     python-dateutil
-  ] ++ lib.optionals stdenv.isLinux [ pyinotify ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pyinotify ];
 
   nativeCheckInputs = [
     eventlet
@@ -59,6 +62,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/openstack/oslo.log";
     license = licenses.asl20;
     maintainers = teams.openstack.members;
-    broken = stdenv.isDarwin;
   };
 }

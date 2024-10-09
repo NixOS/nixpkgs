@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "gtk_doc" withIntrospection)
   ];
 
-  doCheck = stdenv.isLinux && withIntrospection;
+  doCheck = stdenv.hostPlatform.isLinux && withIntrospection;
   separateDebugInfo = true;
 
   postPatch = ''
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    description = "A library for storing and retrieving passwords and other secrets";
+    description = "Library for storing and retrieving passwords and other secrets";
     homepage = "https://gitlab.gnome.org/GNOME/libsecret";
     license = lib.licenses.lgpl21Plus;
     mainProgram = "secret-tool";

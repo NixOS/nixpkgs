@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://www.nongnu.org/libchop/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.gnu ++ platforms.linux;
   };
 }

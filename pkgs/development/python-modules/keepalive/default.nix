@@ -29,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "An HTTP handler for `urllib` that supports HTTP 1.1 and keepalive";
+    description = "HTTP handler for `urllib` that supports HTTP 1.1 and keepalive";
     homepage = "https://github.com/wikier/keepalive";
     license = licenses.lgpl21Plus;
   };

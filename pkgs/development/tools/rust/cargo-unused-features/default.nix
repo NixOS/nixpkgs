@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     curl
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to find potential unused enabled feature flags and prune them";
+    description = "Tool to find potential unused enabled feature flags and prune them";
     homepage = "https://github.com/timonpost/cargo-unused-features";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda matthiasbeyer ];

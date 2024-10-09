@@ -52,7 +52,7 @@ buildGoModule rec{
 
   meta = with lib; {
     homepage = "https://github.com/bepass-org/bepass";
-    description = "A simple DPI bypass tool written in go";
+    description = "Simple DPI bypass tool written in go";
     license = licenses.mit;
     mainProgram = "bepass";
     maintainers = with maintainers; [ oluceps ];

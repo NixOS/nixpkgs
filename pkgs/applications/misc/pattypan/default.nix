@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "An uploader for Wikimedia Commons";
+    description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
     license = licenses.mit;
     mainProgram = "pattypan";

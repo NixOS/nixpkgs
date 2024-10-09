@@ -10,7 +10,6 @@
 , mypy
 , systemd
 , fakeroot
-, util-linux
 
   # filesystem tools
 , dosfstools
@@ -31,7 +30,7 @@
 , imageFileBasename
 , compression
 , fileSystems
-, partitionsJSON
+, finalPartitions
 , split
 , seed
 , definitionsDirectory
@@ -70,7 +69,7 @@ let
     patchShebangs --build $out
 
     black --check --diff $out
-    ruff --line-length 88 $out
+    ruff check --line-length 88 $out
     mypy --strict $out
   '';
 
@@ -91,8 +90,8 @@ let
   }."${compression.algorithm}";
 
   compressionCommand = {
-    "zstd" = "zstd --no-progress --threads=0 -${toString compression.level}";
-    "xz" = "xz --keep --verbose --threads=0 -${toString compression.level}";
+    "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:
@@ -105,14 +104,15 @@ in
   nativeBuildInputs = [
     systemd
     fakeroot
-    util-linux
   ] ++ lib.optionals (compression.enable) [
     compressionPkg
   ] ++ fileSystemTools;
 
   env = mkfsEnv;
 
-  inherit partitionsJSON definitionsDirectory;
+  inherit finalPartitions definitionsDirectory;
+
+  partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
   # relative path to the repart definitions that are read by systemd-repart
   finalRepartDefinitions = "repart.d";
@@ -138,7 +138,7 @@ in
   patchPhase = ''
     runHook prePatch
 
-    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} $partitionsJSON $definitionsDirectory)
+    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} <(echo "$partitionsJSON") $definitionsDirectory)
     ln -vs $amendedRepartDefinitionsDir $finalRepartDefinitions
 
     runHook postPatch
@@ -148,7 +148,7 @@ in
     runHook preBuild
 
     echo "Building image with systemd-repart..."
-    unshare --map-root-user fakeroot systemd-repart \
+    fakeroot systemd-repart \
       ''${systemdRepartFlags[@]} \
       ${imageFileBasename}.raw \
       | tee repart-output.json

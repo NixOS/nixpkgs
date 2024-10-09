@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
   defusedxml,
   lxml,
   relatorio,
@@ -11,7 +13,6 @@
   polib,
   python-sql,
   werkzeug,
-  wrapt,
   passlib,
   pydot,
   levenshtein,
@@ -26,17 +27,19 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.2.1";
-  format = "setuptools";
+  version = "7.2.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gIWWzm7emSwgKoO5geNIXUqKNsDiq6fle5OHb+KvhLE=";
+    hash = "sha256-Vz1bYIwhvH8SHZnmv9ZuaoOnNe378gtIWK2UQDBQxas=";
   };
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       defusedxml
       lxml
@@ -46,7 +49,6 @@ buildPythonPackage rec {
       polib
       python-sql
       werkzeug
-      wrapt
       passlib
 
       # extra dependencies
@@ -76,7 +78,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The server of the Tryton application platform";
+    description = "Server of the Tryton application platform";
     longDescription = ''
       The server for Tryton, a three-tier high-level general purpose
       application platform under the license GPL-3 written in Python and using
@@ -88,6 +90,7 @@ buildPythonPackage rec {
     homepage = "http://www.tryton.org/";
     changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [
       udono
       johbo

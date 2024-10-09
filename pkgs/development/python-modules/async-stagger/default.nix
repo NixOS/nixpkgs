@@ -1,8 +1,9 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
+  setuptools,
   pytestCheckHook,
   pytest-asyncio,
   pytest-mock,
@@ -10,16 +11,19 @@
 
 buildPythonPackage rec {
   pname = "async-stagger";
-  version = "0.3.1";
-  format = "setuptools";
+  version = "0.4.0.post1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    pname = "async_stagger";
-    inherit version;
-    hash = "sha256-qp81fp79J36aUWqUvegSStXkZ+m8Zcn62qrJjpVqQ9Y=";
+  src = fetchFromGitHub {
+    owner = "twisteroidambassador";
+    repo = "async_stagger";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uJohc3EsAKevqT0J+N0Cqop3xy0PCM5jsP6YYtx+HuQ=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -28,8 +32,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # RuntimeError: Logic bug in...
-    "test_stagger_coro_gen"
+    # "OSError: [Errno 0] fileno not supported" during teardown
+    "test_create_connected_sock_normal"
   ];
 
   pythonImportsCheck = [ "async_stagger" ];

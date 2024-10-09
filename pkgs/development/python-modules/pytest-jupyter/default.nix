@@ -40,7 +40,7 @@ let
 
     propagatedBuildInputs = [ jupyter-core ];
 
-    passthru.optional-dependencies = {
+    optional-dependencies = {
       client = [
         jupyter-client
         nbformat
@@ -59,7 +59,7 @@ let
     nativeCheckInputs = [
       pytest-timeout
       pytestCheckHook
-    ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     passthru.tests = {
       check = self.overridePythonAttrs (_: {
@@ -72,7 +72,7 @@ let
       description = "pytest plugin for testing Jupyter core libraries and extensions";
       homepage = "https://github.com/jupyter-server/pytest-jupyter";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "xkbcommon";
-  version = "1.0";
+  version = "1.5.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NTEafcAU/PU1/2n3pb3m8dbZptI9j9nnmVG4iFqHHe8=";
+    hash = "sha256-rBdICNv2HTXZ2oBL8zuqx0vG8r4MEIWUrpPHnNFd3DY=";
   };
 
   nativeBuildInputs = [ pkg-config ];

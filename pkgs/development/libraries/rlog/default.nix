@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://www.arg0.net/rlog";
-    description = "A C++ logging library used in encfs";
+    description = "C++ logging library used in encfs";
     platforms = lib.platforms.linux;
     license = lib.licenses.lgpl3;
   };

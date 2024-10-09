@@ -19,15 +19,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ boost lapack ]
-    ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate CoreGraphics CoreVideo ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkTarget = "test";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A vector and matrix math library implemented using C++ templates";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Vector and matrix math library implemented using C++ templates";
 
     longDescription = ''vmmlib is a vector and matrix math library implemented
             using C++ templates. Its basic functionality includes a vector

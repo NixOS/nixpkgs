@@ -40,7 +40,7 @@ in {
     pixelfed = {
       enable = mkEnableOption "a Pixelfed instance";
       package = mkPackageOption pkgs "pixelfed" { };
-      phpPackage = mkPackageOption pkgs "php81" { };
+      phpPackage = mkPackageOption pkgs "php82" { };
 
       user = mkOption {
         type = types.str;
@@ -406,7 +406,7 @@ in {
         # is unnecessary as it's part of the installPhase of pixelfed.
 
         # Install Horizon
-        # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
+        # FIXME: require write access to public/ — should be done as part of install — pixelfed-manage horizon:publish
 
         # Perform the first migration.
         [[ ! -f ${cfg.dataDir}/.initial-migration ]] && pixelfed-manage migrate --force && touch ${cfg.dataDir}/.initial-migration

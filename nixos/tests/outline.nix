@@ -13,7 +13,7 @@ in
 {
   name = "outline";
 
-  meta.maintainers = with lib.maintainers; [ xanderio ];
+  meta.maintainers = lib.teams.cyberus.members;
 
   nodes = {
     outline = { pkgs, config, ... }: {

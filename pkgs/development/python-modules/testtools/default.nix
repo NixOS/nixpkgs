@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonAtLeast,
-  pythonRelaxDepsHook,
 
   # build-system
   hatchling,
@@ -15,18 +14,17 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "2.7.1";
+  version = "2.7.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-323pYBDinuIfY3oUfqvzDVCyXjhB3R1o+T7onOd+Nmw=";
+    hash = "sha256-W+W7wfD6D4tgrKbO7AeEXUHQxHXPRFv6200sRew5fqM=";
   };
 
   nativeBuildInputs = [
     hatchling
     hatch-vcs
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "fixtures" ];
@@ -37,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "A set of extensions to the Python standard library's unit testing framework";
+    description = "Set of extensions to the Python standard library's unit testing framework";
     homepage = "https://pypi.python.org/pypi/testtools";
     license = lib.licenses.mit;
   };

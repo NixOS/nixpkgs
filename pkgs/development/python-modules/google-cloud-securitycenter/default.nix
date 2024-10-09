@@ -14,14 +14,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
-  version = "1.31.0";
+  version = "1.34.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1BbYIjVlAEz3cnPx3tzQ5z8z415X3TZJjUsr5aXcs4w=";
+    pname = "google_cloud_securitycenter";
+    inherit version;
+    hash = "sha256-GDvl7W6gFe3c8MHtAOyjzDw/ByNnkxHe2NjgviP10LI=";
   };
 
   build-system = [ setuptools ];
@@ -50,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-securitycenter";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-securitycenter-v${version}/packages/google-cloud-securitycenter/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
-  version = "5.19.0";
+  version = "5.22.0";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    hash = "sha256-MPTrMVbr3XkFzid1FGyAK5sRBMCMMxsdbKEmqv9aANk=";
+    hash = "sha256-gK5iNkGjs1Pjsryl5Jy28Nu3nYnVEoUMdRw1ahN4xEQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -35,10 +35,10 @@ stdenv.mkDerivation rec {
   passthru.tests.nixos = nixosTests.neo4j;
 
   meta = with lib; {
-    description = "A highly scalable, robust (fully ACID) native graph database";
+    description = "Highly scalable, robust (fully ACID) native graph database";
     homepage = "https://neo4j.com/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jonringer offline ];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };
 }

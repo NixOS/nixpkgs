@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "The SLIB Portable Scheme Library";
+    description = "SLIB Portable Scheme Library";
     mainProgram = "slib";
 
     longDescription = ''

@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , rustPlatform
 , cmake
@@ -9,20 +10,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yara-x";
-  version = "0.3.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara-x";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AFRKsBNDgjIsLnr61ME4WvDj+DsvIhFUnDmOGn3So8o=";
+    hash = "sha256-W5qZHPNfRe9RmsmRzA8xGPvLl6JCoVJ59N87p2ZnXGo=";
   };
 
-  cargoHash = "sha256-cZ/bWaTNnX9+o8D5lMu72snc4CLpjqcwjintbw59OXA=";
+  cargoHash = "sha256-ofmTDO11hqr95vSKRtJgMZL2BeA4AkCRNLknzr4n88I=";
 
   nativeBuildInputs = [ cmake installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd yr \
       --bash <($out/bin/yr completion bash) \
       --fish <($out/bin/yr completion fish) \

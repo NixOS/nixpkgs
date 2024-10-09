@@ -57,10 +57,6 @@ let
     let fod = methods.${method} attrs;
     in ''--path:"${fod.outPath}/${attrs.srcDir}"'';
 
-  callAnnotations = { packages, ... }@lockAttrs:
-    map (packageName: nimOverrides.${packageName} or (_: [ ]) lockAttrs)
-      packages;
-
   asFunc = x: if builtins.isFunction x then x else (_: x);
 
 in
@@ -79,12 +75,17 @@ let
 
       lockFileNimFlags = map fodFromLockEntry lockDepends;
 
-      annotationOverlays = lib.lists.flatten (map callAnnotations lockDepends);
-
-      postLock = builtins.foldl'
-        (prevAttrs: overlay: prevAttrs // (overlay finalAttrs prevAttrs))
-        postPkg
-        annotationOverlays;
+      postNimOverrides = builtins.foldl' (
+        prevAttrs:
+        { packages, ... }@lockAttrs:
+        builtins.foldl' (
+          prevAttrs: name:
+          if (builtins.hasAttr name nimOverrides) then
+            (prevAttrs // (nimOverrides.${name} lockAttrs prevAttrs))
+          else
+            prevAttrs
+        ) prevAttrs packages
+      ) postPkg lockDepends;
 
       finalOverride =
         { depsBuildBuild ? [ ]
@@ -125,7 +126,7 @@ let
           };
         };
 
-      attrs = postLock // finalOverride postLock;
+      attrs = postNimOverrides // finalOverride postNimOverrides;
     in
     lib.trivial.warnIf (builtins.hasAttr "nimBinOnly" attrs)
       "the nimBinOnly attribute is deprecated for buildNimPackage"

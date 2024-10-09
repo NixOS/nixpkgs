@@ -1,8 +1,12 @@
 {
   lib,
-  stdenvNoCC,
   stdenv,
-  fetchNetBSD,
+  stdenvNoCC,
+  stdenvNoLibc,
+  stdenvLibcMinimal,
+  runCommand,
+  rsync,
+  source,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
@@ -12,21 +16,39 @@
   mandoc,
   groff,
   statHook,
-  rsync,
   compatIfNeeded,
   defaultMakeFlags,
+  version,
 }:
 
 lib.makeOverridable (
   attrs:
   let
-    stdenv' = if attrs.noCC or false then stdenvNoCC else stdenv;
+    stdenv' =
+      if attrs.noCC or false then
+        stdenvNoCC
+      else if attrs.noLibc or false then
+        stdenvNoLibc
+      else if attrs.libcMinimal or false then
+        stdenvLibcMinimal
+      else
+        stdenv;
   in
   stdenv'.mkDerivation (
-    {
+    rec {
       pname = "${attrs.pname or (baseNameOf attrs.path)}-netbsd";
-      inherit (attrs) version;
-      src = fetchNetBSD attrs.path attrs.version attrs.sha256;
+      inherit version;
+      src = runCommand "${pname}-filtered-src" { nativeBuildInputs = [ rsync ]; } ''
+        for p in ${lib.concatStringsSep " " ([ attrs.path ] ++ attrs.extraPaths or [ ])}; do
+          set -x
+          path="$out/$p"
+          mkdir -p "$(dirname "$path")"
+          src_path="${source}/$p"
+          if [[ -d "$src_path" ]]; then src_path+=/; fi
+          rsync --chmod="+w" -r "$src_path" "$path"
+          set +x
+        done
+      '';
 
       extraPaths = [ ];
 
@@ -40,7 +62,6 @@ lib.makeOverridable (
         mandoc
         groff
         statHook
-        rsync
       ];
       buildInputs = compatIfNeeded;
 
@@ -83,14 +104,14 @@ lib.makeOverridable (
       # TODO should CC wrapper set this?
       CPP = "${stdenv'.cc.targetPrefix}cpp";
     }
-    // lib.optionalAttrs stdenv'.isDarwin { MKRELRO = "no"; }
+    // lib.optionalAttrs stdenv'.hostPlatform.isDarwin { MKRELRO = "no"; }
     // lib.optionalAttrs (stdenv'.cc.isClang or false) {
       HAVE_LLVM = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
     // lib.optionalAttrs (stdenv'.cc.isGNU or false) {
       HAVE_GCC = lib.versions.major (lib.getVersion stdenv'.cc.cc);
     }
-    // lib.optionalAttrs (stdenv'.isx86_32) { USE_SSP = "no"; }
+    // lib.optionalAttrs (stdenv'.hostPlatform.isx86_32) { USE_SSP = "no"; }
     // lib.optionalAttrs (attrs.headersOnly or false) {
       installPhase = "includesPhase";
       dontBuild = true;

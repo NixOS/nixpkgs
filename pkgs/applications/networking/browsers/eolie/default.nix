@@ -1,7 +1,7 @@
 { lib, fetchgit, meson, ninja, pkg-config, nix-update-script
 , python3, gtk3, libsecret, gst_all_1, webkitgtk, glib
 , glib-networking, gtkspell3, hunspell, desktop-file-utils
-, gobject-introspection, wrapGAppsHook3, gnome }:
+, gobject-introspection, wrapGAppsHook3, gnome-settings-daemon }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "eolie";
@@ -32,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-ugly
     gstreamer
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     gtk3
     gtkspell3
     hunspell
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   meta = with lib; {
-    description = "A new GNOME web browser";
+    description = "New GNOME web browser";
     mainProgram = "eolie";
     homepage = "https://gitlab.gnome.org/World/eolie";
     license  = licenses.gpl3Plus;

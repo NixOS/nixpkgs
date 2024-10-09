@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/wireghoul/doona";
-    description = "A fork of the Bruteforce Exploit Detector Tool (BED)";
+    description = "Fork of the Bruteforce Exploit Detector Tool (BED)";
     mainProgram = "doona";
     longDescription = ''
       A fork of the Bruteforce Exploit Detector Tool (BED).

@@ -266,6 +266,13 @@ let
     else if builtins.isList x then "{ ${lib.concatMapStringsSep ", " toLua x} }"
     else throw "Invalid Lua value";
 
+  settingsToLua = prefix: settings: generators.toKeyValue {
+    listsAsDuplicateKeys = false;
+    mkKeyValue = k: generators.mkKeyValueDefault {
+      mkValueString = toLua;
+    } " = " (prefix + k);
+  } (filterAttrs (k: v: v != null) settings);
+
   createSSLOptsStr = o: ''
     ssl = {
       cafile = "/etc/ssl/certs/ca-bundle.crt";
@@ -418,12 +425,23 @@ let
       httpUploadPath = mkOption {
         type = types.str;
         description = ''
-          Directory where the uploaded files will be stored. By
-          default, uploaded files are put in a sub-directory of the
-          default Prosody storage path (usually /var/lib/prosody).
+          Directory where the uploaded files will be stored when the http_upload module is used.
+          By default, uploaded files are put in a sub-directory of the default Prosody storage path (usually /var/lib/prosody).
         '';
         default = "/var/lib/prosody";
       };
+    };
+  };
+
+  httpFileShareOpts = { ... }: {
+    freeformType = with types;
+      let atom = oneOf [ int bool str (listOf atom) ]; in
+      attrsOf (nullOr atom) // {
+        description = "int, bool, string or list of them";
+      };
+    options.domain = mkOption {
+      type = with types; nullOr str;
+      description = "Domain name for a http_file_share service.";
     };
   };
 
@@ -650,9 +668,20 @@ in
 
       uploadHttp = mkOption {
         description = ''
-          Configures the Prosody builtin HTTP server to handle user uploads.
+          Configures the old Prosody builtin HTTP server to handle user uploads.
         '';
         type = types.nullOr (types.submodule uploadHttpOpts);
+        default = null;
+        example = {
+          domain = "uploads.my-xmpp-example-host.org";
+        };
+      };
+
+      httpFileShare = mkOption {
+        description = ''
+          Configures the http_file_share module to handle user uploads.
+        '';
+        type = types.nullOr (types.submodule httpFileShareOpts);
         default = null;
         example = {
           domain = "uploads.my-xmpp-example-host.org";
@@ -716,6 +745,17 @@ in
         description = "Additional prosody configuration";
       };
 
+      log = mkOption {
+        type = types.lines;
+        default = ''"*syslog"'';
+        description = "Logging configuration. See [](https://prosody.im/doc/logging) for more details";
+        example = ''
+          {
+            { min = "warn"; to = "*syslog"; };
+          }
+        '';
+      };
+
     };
   };
 
@@ -740,11 +780,10 @@ in
             You need to setup at least a MUC domain to comply with
             XEP-0423.
           '' + genericErrMsg;}
-        { assertion = cfg.uploadHttp != null || !cfg.xmppComplianceSuite;
+        { assertion = cfg.uploadHttp != null || cfg.httpFileShare != null || !cfg.xmppComplianceSuite;
           message = ''
-            You need to setup the uploadHttp module through
-            config.services.prosody.uploadHttp to comply with
-            XEP-0423.
+            You need to setup the http_upload or http_file_share modules through config.services.prosody.uploadHttp
+            or config.services.prosody.httpFileShare to comply with XEP-0423.
           '' + genericErrMsg;}
       ];
     in errors;
@@ -753,8 +792,11 @@ in
 
     environment.etc."prosody/prosody.cfg.lua".text =
       let
-        httpDiscoItems = optionals (cfg.uploadHttp != null)
-            [{ url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";}];
+        httpDiscoItems = optional (cfg.uploadHttp != null) {
+          url = cfg.uploadHttp.domain; description = "HTTP upload endpoint";
+        } ++ optional (cfg.httpFileShare != null) {
+          url = cfg.httpFileShare.domain; description = "HTTP file share endpoint";
+        };
         mucDiscoItems = builtins.foldl'
             (acc: muc: [{ url = muc.domain; description = "${muc.domain} MUC endpoint";}] ++ acc)
             []
@@ -764,7 +806,7 @@ in
 
       pidfile = "/run/prosody/prosody.pid"
 
-      log = "*syslog"
+      log = ${cfg.log}
 
       data_path = "${cfg.dataDir}"
       plugin_paths = {
@@ -833,12 +875,16 @@ in
         '') cfg.muc}
 
       ${ lib.optionalString (cfg.uploadHttp != null) ''
-        -- TODO: think about migrating this to mod-http_file_share instead.
         Component ${toLua cfg.uploadHttp.domain} "http_upload"
             http_upload_file_size_limit = ${cfg.uploadHttp.uploadFileSizeLimit}
             http_upload_expire_after = ${cfg.uploadHttp.uploadExpireAfter}
             ${lib.optionalString (cfg.uploadHttp.userQuota != null) "http_upload_quota = ${toLua cfg.uploadHttp.userQuota}"}
             http_upload_path = ${toLua cfg.uploadHttp.httpUploadPath}
+      ''}
+
+      ${lib.optionalString (cfg.httpFileShare != null) ''
+        Component ${toLua cfg.httpFileShare.domain} "http_file_share"
+        ${settingsToLua "  http_file_share_" (cfg.httpFileShare // { domain = null; })}
       ''}
 
       ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (n: v: ''

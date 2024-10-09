@@ -34,6 +34,6 @@ buildDunePackage rec {
     description = "OCaml SDL2_image bindings to go with Tsdl";
     homepage = "https://github.com/sanette/tsdl-image";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -18,7 +18,15 @@ let
 
   limesurveyConfig = pkgs.writeText "config.php" ''
     <?php
-      return json_decode('${builtins.toJSON cfg.config}', true);
+      return \array_merge(
+        \json_decode('${builtins.toJSON cfg.config}', true),
+        [
+          'config' => [
+            'encryptionnonce' => \trim(\file_get_contents(\getenv('CREDENTIALS_DIRECTORY') . DIRECTORY_SEPARATOR . 'encryption_nonce')),
+            'encryptionsecretboxkey' => \trim(\file_get_contents(\getenv('CREDENTIALS_DIRECTORY') . DIRECTORY_SEPARATOR . 'encryption_key')),
+          ]
+        ]
+      );
     ?>
   '';
 
@@ -35,8 +43,9 @@ in
     package = mkPackageOption pkgs "limesurvey" { };
 
     encryptionKey = mkOption {
-      type = types.str;
-      default = "E17687FC77CEE247F0E22BB3ECF27FDE8BEC310A892347EC13013ABA11AA7EB5";
+      type = types.nullOr types.str;
+      default = null;
+      visible = false;
       description = ''
         This is a 32-byte key used to encrypt variables in the database.
         You _must_ change this from the default value.
@@ -44,11 +53,32 @@ in
     };
 
     encryptionNonce = mkOption {
-      type = types.str;
-      default = "1ACC8555619929DB91310BE848025A427B0F364A884FFA77";
+      type = types.nullOr types.str;
+      default = null;
+      visible = false;
       description = ''
         This is a 24-byte nonce used to encrypt variables in the database.
         You _must_ change this from the default value.
+      '';
+    };
+
+    encryptionKeyFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        32-byte key used to encrypt variables in the database.
+
+        Note: It should be string not a store path in order to prevent the password from being world readable
+      '';
+    };
+
+    encryptionNonceFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        24-byte used to encrypt variables in the database.
+
+        Note: It should be string not a store path in order to prevent the password from being world readable
       '';
     };
 
@@ -183,6 +213,22 @@ in
       { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.limesurvey.database.createLocally is set to true";
       }
+      { assertion = cfg.encryptionKey != null || cfg.encryptionKeyFile != null;
+        message = ''
+          You must set `services.limesurvey.encryptionKeyFile` to a file containing a 32-character uppercase hex string.
+
+          If this message appears when updating your system, please turn off encryption
+          in the LimeSurvey interface and create backups before filling the key.
+        '';
+      }
+      { assertion = cfg.encryptionNonce != null || cfg.encryptionNonceFile != null;
+        message = ''
+          You must set `services.limesurvey.encryptionNonceFile` to a file containing a 24-character uppercase hex string.
+
+          If this message appears when updating your system, please turn off encryption
+          in the LimeSurvey interface and create backups before filling the nonce.
+        '';
+      }
     ];
 
     services.limesurvey.config = mapAttrs (name: mkDefault) {
@@ -204,8 +250,6 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
-        encryptionnonce = cfg.encryptionNonce;
-        encryptionsecretboxkey = cfg.encryptionKey;
         force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
         config.defaultlang = "en";
       };
@@ -229,10 +273,25 @@ in
       phpPackage = pkgs.php81;
       phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
+      # App code cannot access credentials directly since the service starts
+      # with the root user so we copy the credentials to a place accessible to Limesurvey
+      phpEnv.CREDENTIALS_DIRECTORY = "${stateDir}/credentials";
       settings = {
         "listen.owner" = config.services.httpd.user;
         "listen.group" = config.services.httpd.group;
       } // cfg.poolConfig;
+    };
+    systemd.services.phpfpm-limesurvey.serviceConfig = {
+      ExecStartPre = pkgs.writeShellScript "limesurvey-phpfpm-exec-pre" ''
+        cp -f "''${CREDENTIALS_DIRECTORY}"/encryption_key "${stateDir}/credentials/encryption_key"
+        chown ${user}:${group} "${stateDir}/credentials/encryption_key"
+        cp -f "''${CREDENTIALS_DIRECTORY}"/encryption_nonce "${stateDir}/credentials/encryption_nonce"
+        chown ${user}:${group} "${stateDir}/credentials/encryption_nonce"
+      '';
+      LoadCredential = [
+        "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
+        "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
+      ];
     };
 
     services.httpd = {
@@ -277,6 +336,7 @@ in
       "d ${stateDir}/tmp/assets 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/runtime 0750 ${user} ${group} - -"
       "d ${stateDir}/tmp/upload 0750 ${user} ${group} - -"
+      "d ${stateDir}/credentials 0700 ${user} ${group} - -"
       "C ${stateDir}/upload 0750 ${user} ${group} - ${cfg.package}/share/limesurvey/upload"
     ];
 
@@ -295,6 +355,10 @@ in
         User = user;
         Group = group;
         Type = "oneshot";
+        LoadCredential = [
+          "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
+          "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
+        ];
       };
     };
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.43";
+  version = "3.0.47";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    hash = "sha256-NSe3ryYQbLxloEC8yEg5o1ZuwbBRuwv+lTYx5wSw/30=";
+    hash = "sha256-Hhspy1gICx5p8gfIk6GnvxbRJ6XDDJ0Xolpdd3kuU2A=";
   };
 
   propagatedBuildInputs = [
@@ -47,6 +47,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jonathanslenders/python-prompt-toolkit";
     changelog = "https://github.com/prompt-toolkit/python-prompt-toolkit/blob/${version}/CHANGELOG";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

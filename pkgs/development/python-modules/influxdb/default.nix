@@ -5,7 +5,6 @@
   mock,
   msgpack,
   pandas,
-  pynose,
   pytestCheckHook,
   python-dateutil,
   pytz,
@@ -24,6 +23,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-WMZH9gQ3Et2G6a7hLrTM+7tUFUZ7yZEKSKqMdMEQiXA=";
   };
+
+  patches = [
+    # https://github.com/influxdata/influxdb-python/pull/835
+    ./remove-nose.patch
+  ];
 
   postPatch = ''
     for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
@@ -52,7 +56,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pandas
-    pynose
     pytestCheckHook
     requests-mock
   ];

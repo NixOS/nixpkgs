@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "This library implements support for mixed precision training in JAX.";
+    description = "This library implements support for mixed precision training in JAX";
     homepage = "https://github.com/deepmind/jmp";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];

@@ -9,17 +9,13 @@
   tsort,
   lorder,
   statHook,
-  rsync,
   uudecode,
   config,
   genassym,
   defaultMakeFlags,
-  common,
 }:
 {
   path = "sys";
-  version = "9.2";
-  sha256 = "03s18q8d9giipf05bx199fajc2qwikji0djz7hw63d2lya6bfnpj";
 
   # Make the build ignore linker warnings
   prePatch = ''
@@ -56,7 +52,6 @@
     tsort
     lorder
     statHook
-    rsync
     uudecode
     config
     genassym
@@ -89,5 +84,5 @@
   '';
 
   meta.platforms = lib.platforms.netbsd;
-  extraPaths = [ common ];
+  extraPaths = [ "common" ];
 }

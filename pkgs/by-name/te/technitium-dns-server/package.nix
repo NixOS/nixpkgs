@@ -8,13 +8,13 @@
 let
   technitium-library = buildDotnetModule rec {
     pname = "TechnitiumLibrary";
-    version = "40a7bc7a52cf5d2c371215ea7f5f6fdf71dc1d9c";
+    version = "5af89bb453dd67ae3119771597451e438a938591";
 
     src = fetchFromGitHub {
       owner = "TechnitiumSoftware";
       repo = "TechnitiumLibrary";
       rev = version;
-      hash = "sha256-FNCZH8LZXYyrz5SRIV8P7MruN+t6Qvl96Aa73q3InMI=";
+      hash = "sha256-ezYC2Nh5lgaN95OEP4TYcH6+3AbHbyTfv1RU19DXI3c=";
       name = "${pname}-${version}";
     };
 
@@ -30,13 +30,13 @@ let
 in
 buildDotnetModule rec {
   pname = "technitium-dns-server";
-  version = "12.1";
+  version = "13.0.1";
 
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TfVWGomvKV7QeJUyFMNDAnHKY3YTEwWPxTlW6RhmsR4=";
+    hash = "sha256-O5QJAo6GjoKes5W4ajMcsYpR3j7EcR1vVMiKtTLcwDE=";
     name = "${pname}-${version}";
   };
 

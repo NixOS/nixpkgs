@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0lrYDW51/KSr809whGwg9FYhzcLRfmoxipIgrK1zFCc=";
   };
 
+  patches = [
+    # https://github.com/stewartsmith/libeatmydata/pull/36
+    ./LFS64.patch
+  ];
+
   postPatch = ''
     patchShebangs .
   '';

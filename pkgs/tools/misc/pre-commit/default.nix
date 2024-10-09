@@ -81,7 +81,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''
@@ -183,7 +183,7 @@ buildPythonApplication rec {
   };
 
   meta = with lib; {
-    description = "A framework for managing and maintaining multi-language pre-commit hooks";
+    description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ borisbabic ];

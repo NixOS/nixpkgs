@@ -17,12 +17,9 @@
   python,
   sympy,
   meshio,
-  mpi4py,
-  psutil,
   openssh,
   pyvista,
   pytest,
-  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -89,6 +86,5 @@ buildPythonPackage rec {
     description = "Simple Finite Elements in Python";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ wd15 ];
-    broken = stdenv.isDarwin;
   };
 }

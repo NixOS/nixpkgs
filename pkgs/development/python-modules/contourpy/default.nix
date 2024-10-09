@@ -27,7 +27,7 @@
 let
   contourpy = buildPythonPackage rec {
     pname = "contourpy";
-    version = "1.2.0";
+    version = "1.2.1";
     format = "pyproject";
 
     disabled = pythonOlder "3.8";
@@ -36,7 +36,7 @@ let
       owner = "contourpy";
       repo = "contourpy";
       rev = "refs/tags/v${version}";
-      hash = "sha256-5yZrIwwe9dL5vtdSJnOhY9X4BdK/cdEY4DkVVjCq1uw=";
+      hash = "sha256-Qd6FC7SgFyC/BvOPWVkr2ZfKVMVAknLlidNRq3zcWU0=";
     };
 
     nativeBuildInputs = [
@@ -77,7 +77,7 @@ let
       description = "Python library for calculating contours in 2D quadrilateral grids";
       homepage = "https://github.com/contourpy/contourpy";
       license = licenses.bsd3;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 in

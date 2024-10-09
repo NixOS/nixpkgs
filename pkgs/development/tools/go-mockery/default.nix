@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-mockery";
-  version = "2.43.1";
+  version = "2.46.0";
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
-    sha256 = "sha256-q4N8tAWlJ+P30KvOnt3AdO9Lee2Mg8mCBUXfT+i4m10=";
+    sha256 = "sha256-qPE4hzdu5soGVfw6mLJLWvjiXxdkUAT+kpOCWMO1sL8=";
   };
 
   preCheck = ''
@@ -61,7 +61,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/vektra/mockery";
-    description = "A mock code autogenerator for Golang";
+    description = "Mock code autogenerator for Golang";
     maintainers = with maintainers; [ fbrs ];
     mainProgram = "mockery";
     license = licenses.bsd3;

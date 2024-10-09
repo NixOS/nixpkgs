@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
-  version = "0.17.1";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
-    sha256 = "sha256-Eo0nwATKrx6SmTsaXe3oFIkp0BUTmjcjIc3Vjt+Cr20=";
+    hash = "sha256-Kk3L4hfHon0B6Y6vU7en1UFpg221+EiVCxMX9mvu7pU=";
     fetchSubmodules = true;
   };
 

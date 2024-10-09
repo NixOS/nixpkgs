@@ -104,7 +104,7 @@ class KDERepoMetadata:
         return project
 
     @classmethod
-    def from_repo_metadata_checkout(cls, repo_metadata: pathlib.Path):
+    def from_repo_metadata_checkout(cls, repo_metadata: pathlib.Path, unstable=False):
         projects = [
             Project.from_yaml(metadata_file)
             for metadata_file in repo_metadata.glob("projects-invent/**/metadata.yaml")
@@ -122,29 +122,32 @@ class KDERepoMetadata:
             dep_graph={},
         )
 
-        dep_specs = ["dependency-data-stable-kf6-qt6"]
         dep_graph = collections.defaultdict(set)
 
-        for spec in dep_specs:
-            spec_path = repo_metadata / "dependencies" / spec
-            for line in spec_path.open():
-                line = line.strip()
-                if line.startswith("#"):
-                    continue
-                if not line:
-                    continue
+        if unstable:
+            spec_name = "dependency-data-kf6-qt6"
+        else:
+            spec_name = "dependency-data-stable-kf6-qt6"
 
-                dependent, dependency = line.split(": ")
+        spec_path = repo_metadata / "dependencies" / spec_name
+        for line in spec_path.open():
+            line = line.strip()
+            if line.startswith("#"):
+                continue
+            if not line:
+                continue
 
-                dependent = self.try_lookup_package(dependent)
-                if dependent is None:
-                    continue
+            dependent, dependency = line.split(": ")
 
-                dependency = self.try_lookup_package(dependency)
-                if dependency is None:
-                    continue
+            dependent = self.try_lookup_package(dependent)
+            if dependent is None:
+                continue
 
-                dep_graph[dependent].add(dependency)
+            dependency = self.try_lookup_package(dependency)
+            if dependency is None:
+                continue
+
+            dep_graph[dependent].add(dependency)
 
         self.dep_graph = dep_graph
 

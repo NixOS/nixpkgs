@@ -81,10 +81,10 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://ioquake3.org/";
-    description = "A fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
+    description = "Fast-paced 3D first-person shooter, a community effort to continue supporting/developing id's Quake III Arena";
     license = lib.licenses.gpl2Plus;
     mainProgram = "ioquake3";
-    maintainers = with lib.maintainers; [ abbradar drupol eelco rvolosatovs ];
+    maintainers = with lib.maintainers; [ abbradar drupol rvolosatovs ];
     platforms = lib.platforms.linux;
   };
 }

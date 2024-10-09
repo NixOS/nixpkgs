@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://rectangleapp.com/pro";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.darwin;
   };
 })

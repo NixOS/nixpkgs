@@ -10,16 +10,12 @@
 
 { stdenv, lib, version }:
 
-with lib;
 with lib.kernel;
 with (lib.kernel.whenHelpers version);
 
-assert (versionAtLeast version "4.9");
+assert (lib.versionAtLeast version "4.9");
 
 {
-  # Report BUG() conditions and kill the offending process.
-  BUG = yes;
-
   # Mark LSM hooks read-only after init.  SECURITY_WRITABLE_HOOKS n
   # conflicts with SECURITY_SELINUX_DISABLE y; disabling the latter
   # implicitly marks LSM hooks read-only after init.
@@ -30,8 +26,6 @@ assert (versionAtLeast version "4.9");
   # config builder fails to detect that it has indeed been unset.
   SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
   SECURITY_WRITABLE_HOOKS  = option no;
-
-  STRICT_KERNEL_RWX = yes;
 
   # Perform additional validation of commonly targeted structures.
   DEBUG_CREDENTIALS     = whenOlder "6.6" yes;
@@ -51,16 +45,11 @@ assert (versionAtLeast version "4.9");
   # restricts loading of line disciplines via TIOCSETD ioctl to CAP_SYS_MODULE
   CONFIG_LDISC_AUTOLOAD = option no;
 
-  # Randomize page allocator when page_alloc.shuffle=1
-  SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
-
   # Wipe higher-level memory allocations on free() with page_poison=1
-  PAGE_POISONING           = yes;
   PAGE_POISONING_NO_SANITY = whenOlder "5.11" yes;
   PAGE_POISONING_ZERO      = whenOlder "5.11" yes;
 
-  # Enable init_on_alloc and init_on_free by default
-  INIT_ON_ALLOC_DEFAULT_ON = whenAtLeast "5.3" yes;
+  # Enable init_on_free by default
   INIT_ON_FREE_DEFAULT_ON  = whenAtLeast "5.3" yes;
 
   # Wipe all caller-used registers on exit from a function
@@ -113,9 +102,6 @@ assert (versionAtLeast version "4.9");
   CC_STACKPROTECTOR_REGULAR = lib.mkForce (whenOlder "4.18" no);
   CC_STACKPROTECTOR_STRONG  = whenOlder "4.18" yes;
 
-  # Detect out-of-bound reads/writes and use-after-free
-  KFENCE = whenAtLeast "5.12" yes;
-
   # CONFIG_DEVMEM=n causes these to not exist anymore.
   STRICT_DEVMEM    = option no;
   IO_STRICT_DEVMEM = option no;
@@ -126,8 +112,4 @@ assert (versionAtLeast version "4.9");
 
   # not needed for less than a decade old glibc versions
   LEGACY_VSYSCALL_NONE = yes;
-
-  # Straight-Line-Speculation
-  # https://lwn.net/Articles/877845/
-  SLS = option yes;
 }

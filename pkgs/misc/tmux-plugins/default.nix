@@ -140,26 +140,26 @@ in rec {
     };
   };
 
-  copy-toolkit = mkTmuxPlugin rec {
+  copy-toolkit = mkTmuxPlugin {
     pluginName = "copy-toolkit";
     rtpFilePath = "copytk.tmux";
-    version = "1.1";
+    version = "2021-12-20";
     src = fetchFromGitHub {
       owner = "CrispyConductor";
       repo = "tmux-copy-toolkit";
-      rev = "v${version}";
-      sha256 = "MEMC9klm+PH66UHwrB2SqdCaZX0LAujL+Woo/hV84m4=";
+      rev = "c80c2c068059fe04f840ea9f125c21b83cb6f81f";
+      hash = "sha256-cLeOoJ+4MF8lSpwy5lkcPakvB3cpgey0RfLbVTwERNk=";
     };
     postInstall = ''
       sed -i -e 's|python3 |${pkgs.python3}/bin/python3 |g' $target/copytk.tmux
-      sed -i -e 's|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
+      sed -i -e 's|python3|${pkgs.python3}/bin/python3|g;s|/bin/bash|${pkgs.bash}/bin/bash|g;s|/bin/cat|${pkgs.coreutils}/bin/cat|g' $target/copytk.py
     '';
     meta = {
       homepage = "https://github.com/CrispyConductor/tmux-copy-toolkit";
       description = "Various copy-mode tools";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ deejayem ];
+      maintainers = with lib.maintainers; [ deejayem sedlund ];
     };
   };
 
@@ -207,7 +207,7 @@ in rec {
     };
     meta = with lib; {
       homepage = "https://draculatheme.com/tmux";
-      description = "A feature packed Dracula theme for tmux!";
+      description = "Feature packed Dracula theme for tmux!";
       license = licenses.mit;
       platforms = platforms.unix;
       maintainers = with maintainers; [ ethancedwards8 ];
@@ -242,29 +242,8 @@ in rec {
     };
   };
 
-  fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
-    src = fetchFromGitHub {
-      owner = "Morantron";
-      repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
-    postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
-        )}
-    '';
+  fingers = pkgs.callPackage ./tmux-fingers {
+    inherit mkTmuxPlugin;
   };
 
   fpp = mkTmuxPlugin {
@@ -479,6 +458,35 @@ in rec {
     };
   };
 
+  pass = mkTmuxPlugin {
+    pluginName = "pass";
+    version = "0-unstable-2020-02-28";
+    rtpFilePath = "plugin.tmux";
+    src = pkgs.fetchFromGitHub {
+      owner = "rafi";
+      repo = "tmux-pass";
+      rev = "76b1c98911d56928063a41bc93a2d9e81818ef4c";
+      sha256 = "sha256-bamz4IZrozo5R7jt+z7YKyrogawPqsZ9cTJi9osjVoA=";
+    };
+
+    nativeBuildInputs = [ pkgs.makeWrapper ];
+    postInstall = ''
+      rm $target/README.md
+      rm -r $target/test
+
+      wrapProgram $target/scripts/main.sh \
+        --prefix PATH : ${with pkgs; lib.makeBinPath ( [
+          findutils fzf gnugrep gnused ncurses pkgs.pass tmux
+        ] )}
+    '';
+
+    meta = with lib; {
+      description = "Password-store browser using fzf in tmux";
+      homepage = "https://github.com/rafi/tmux-pass";
+      license = licenses.unlicense;
+    };
+  };
+
   plumb = mkTmuxPlugin rec {
     pluginName = "plumb";
     version = "0.1.1";
@@ -496,12 +504,18 @@ in rec {
   power-theme = mkTmuxPlugin {
     pluginName = "power";
     rtpFilePath = "tmux-power.tmux";
-    version = "unstable-2020-11-18";
+    version = "unstable-2024-05-12";
     src = pkgs.fetchFromGitHub {
       owner = "wfxr";
       repo = "tmux-power";
-      rev = "aec44aa5e00cc39eb71c668b1d73823270058e7d";
-      sha256 = "11nm8cylx10d565g17acy0bj12n6dcbxp71zca2bmg0j1dq859cm";
+      rev = "16bbde801378a70512059541d104c5ae35be32b9";
+      hash = "sha256-IyYQyIONMnVBwhhcI3anOPxKpv2TfI2KZgJ5o5JtZ8I=";
+    };
+    meta = with lib; {
+      description = "Tmux powerline theme";
+      homepage = "https://github.com/wfxr/tmux-power";
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -579,7 +593,7 @@ in rec {
       rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
       sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
@@ -587,12 +601,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.2.0";
+    version = "1.3.1";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-IfSgX02vXdpzyu1GRF1EvzVCqqOEiTjeXtl1EvNr7EI=";
+      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -610,9 +624,11 @@ in rec {
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
-      substituteInPlace $target/session-wizard.tmux \
-        --replace  \$CURRENT_DIR/session-wizard.sh $target/session-wizard.sh
-      wrapProgram $target/session-wizard.sh \
+      for f in .gitignore Dockerfile flake.* scripts tests; do
+        rm -rf $target/$f
+      done
+      substituteInPlace $target/session-wizard.tmux --replace  \$CURRENT_DIR $target
+      wrapProgram $target/bin/t \
         --prefix PATH : ${with pkgs; lib.makeBinPath ([ fzf zoxide coreutils gnugrep gnused ])}
     '';
   };
@@ -669,6 +685,25 @@ in rec {
     };
   };
 
+  tokyo-night-tmux = mkTmuxPlugin {
+    pluginName = "tokyo-night-tmux";
+    rtpFilePath = "tokyo-night.tmux";
+    version = "1.5.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "janoamaral";
+      repo = "tokyo-night-tmux";
+      rev = "d34f1487b4a644b13d8b2e9a2ee854ae62cc8d0e";
+      hash = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/janoamaral/tokyo-night-tmux";
+      description = "A clean, dark Tmux theme that celebrates the lights of Downtown Tokyo at night.";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ redyf ];
+    };
+  };
+
   tmux-colors-solarized = mkTmuxPlugin {
     pluginName = "tmuxcolors";
     version = "unstable-2019-07-14";
@@ -677,6 +712,26 @@ in rec {
       repo = "tmux-colors-solarized";
       rev = "e5e7b4f1af37f8f3fc81ca17eadee5ae5d82cd09";
       sha256 = "1l3i82abzi4b395cgdsjg7lcfaq15kyyhijwvrgchzxi95z3hl4x";
+    };
+  };
+
+  tmux-floax = mkTmuxPlugin {
+    pluginName = "tmux-floax";
+    rtpFilePath = "floax.tmux";
+    version = "0-unstable-2024-07-24";
+    src = fetchFromGitHub {
+      owner = "omerxx";
+      repo = "tmux-floax";
+      rev = "46c0a6a8c3cf79b83d1b338f547acbbd1d306301";
+      hash = "sha256-bALZfVWcoAzcTeWwkBHhi7TzUQJicOBTNdeJh3O/Bj8=";
+    };
+    meta = {
+      description = "Floating pane for Tmux";
+      homepage = "https://github.com/omerxx/tmux-floax";
+      license = lib.licenses.gpl3Only;
+      maintainers = with lib.maintainers; [ redyf ];
+      mainProgram = "tmux-floax";
+      platforms = lib.platforms.all;
     };
   };
 
@@ -814,6 +869,25 @@ in rec {
       repo = "tmux-yank";
       rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
       sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+    };
+  };
+
+  tmux-nova = mkTmuxPlugin rec {
+    pluginName = "tmux-nova";
+    rtpFilePath = "nova.tmux";
+    version = "1.2.0";
+    src = fetchFromGitHub {
+      owner = "o0th";
+      repo = "tmux-nova";
+      rev = "v${version}";
+      sha256 = "16llz3nlyw88lyd8mmj27i0ncyhpfjj5c1yikngf7nxcqsbjmcnh";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/o0th/tmux-nova";
+      description = "tmux-nova theme";
+      license = licenses.mit;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ o0th ];
     };
   };
 }

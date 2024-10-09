@@ -8,14 +8,13 @@
   pytestCheckHook,
   python-gnupg,
   pythonOlder,
-  pythonRelaxDepsHook,
   sentry-sdk,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "notus-scanner";
-  version = "22.6.3";
+  version = "22.6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,17 +23,17 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "notus-scanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LYYof/s0OvXMbEH7jyFIymUVrWYUd/6lychIzfPlylc=";
+    hash = "sha256-DcFIypfdrz8pM7qAMVpof6xKWYp/bSRUswngxa5EQFk=";
   };
 
   pythonRelaxDeps = [
     "packaging"
+    "psutil"
     "python-gnupg"
   ];
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     paho-mqtt

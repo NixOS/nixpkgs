@@ -1,9 +1,8 @@
 { lib
 , python310
-, fetchPypi
 , fetchFromGitHub
 , gdk-pixbuf
-, gnome
+, adwaita-icon-theme
 , gpsbabel
 , glib-networking
 , glibcLocales
@@ -19,6 +18,7 @@
 
 let
   python = python310.override {
+    self = python;
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
         enableGtk3 = true;
@@ -56,7 +56,7 @@ in python.pkgs.buildPythonApplication rec {
     gtk3
     webkitgtk
     glib-networking
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gdk-pixbuf
   ];
 
@@ -85,7 +85,7 @@ in python.pkgs.buildPythonApplication rec {
       TZ=Europe/Kaliningrad \
       LC_TIME=C \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python.interpreter} setup.py test
+      ${python.interpreter} -m unittest
   '';
 
   meta = with lib; {

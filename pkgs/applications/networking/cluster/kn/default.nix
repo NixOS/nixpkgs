@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kn";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     rev = "knative-v${version}";
-    sha256 = "sha256-sUMQrBAOhpMxMawOdvLFSUrcU9od6pmT7NabSywoQn8=";
+    sha256 = "sha256-bXICU1UBNPVIumzRPSOWa1I5hUYWEvo6orBpUvbPEvg=";
   };
 
   vendorHash = null;
@@ -35,7 +35,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";
+    description = "Knative client kn is your door to the Knative world. It allows you to create Knative resources interactively from the command line or from within scripts";
     mainProgram = "kn";
     homepage = "https://github.com/knative/client";
     changelog = "https://github.com/knative/client/releases/tag/v${version}";

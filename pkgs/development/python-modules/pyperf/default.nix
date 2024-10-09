@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://pyperf.readthedocs.io/";
     changelog = "https://github.com/psf/pyperf/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

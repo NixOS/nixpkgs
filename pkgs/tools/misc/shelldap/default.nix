@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
     YAMLSyck
   ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   prePatch = ''
     touch Makefile.PL
@@ -40,7 +40,7 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/shelldap
   '';
 
@@ -51,7 +51,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/mahlonsmith/shelldap/";
-    description = "A handy shell-like interface for browsing LDAP servers and editing their content";
+    description = "Handy shell-like interface for browsing LDAP servers and editing their content";
     changelog = "https://github.com/mahlonsmith/shelldap/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ clerie tobiasBora ];

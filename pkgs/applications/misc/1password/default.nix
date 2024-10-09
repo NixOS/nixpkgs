@@ -12,12 +12,12 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.28.0";
+  version = "2.29.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-rF0HWKLdLDmT5nXqZyn+nwd3DZxkP76Jm+xofvA1dpU=" "zip";
-    i686-linux = fetch "linux_386" "sha256-b9OPsZJTGoAeedj/dv88lkX2Q4p9HG585mWyl7ZfDz4=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-5ZiMQaQLYUR9BZroyG0o+M79cR4GQb6rDyVmIcTZh3o=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-5VmogWqCYMdrg9dyRt4lurPmSRdUUHt4LT3lkOEKdEI=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-sBbdkoacGI/gawM4YH+BBCLDhC2B+cE4iKVGHBhwkic=" "zip";
+    i686-linux = fetch "linux_386" "sha256-TTd5juT0Aqp1+OfunXcuk0KbL6HIHQV31+1Q1e0GYMY=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-Bb6fNoeNxlbDfwt7Jr8BaKCmFUwSdsLQdVoCmQCNmLA=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xar cpio ];
 
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat op.pkg/Payload | cpio -i
   '';
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
       --zsh <($out/bin/${mainProgram} completion zsh)
   '';
 
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 

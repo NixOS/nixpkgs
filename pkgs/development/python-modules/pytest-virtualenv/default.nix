@@ -12,12 +12,14 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-virtualenv";
-  inherit (pytest-fixture-config) version src;
+  inherit (pytest-fixture-config) version src patches;
   pyproject = true;
 
-  sourceRoot = "${src.name}/pytest-virtualenv";
+  postPatch = ''
+    cd pytest-virtualenv
+  '';
 
   build-system = [ setuptools ];
 
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   disabledTestPaths = [ "tests/integration/*" ];
 
   meta = with lib; {
-    description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed.";
+    description = "Create a Python virtual environment in your test that cleans up on teardown. The fixture has utility methods to install packages and list what’s installed";
     homepage = "https://github.com/manahl/pytest-plugins";
     license = licenses.mit;
     maintainers = with maintainers; [ ryansydnor ];

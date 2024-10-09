@@ -1,36 +1,41 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, srcOnly
-, cmake
-, ninja
-, pkg-config
-, libnice
-, openssl
-, plog
-, srtp
-, usrsctp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  libnice,
+  openssl,
+  plog,
+  srtp,
+  usrsctp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdatachannel";
-  version = "0.21.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "paullouisageneau";
     repo = "libdatachannel";
     rev = "v${version}";
-    hash = "sha256-sTdA4kCIdY3l/YUNKbXzRDS1O0AFx90k94W3cJpfLIY=";
+    hash = "sha256-3fax57oaJvOgbTDPCiiUdtsfAGhICfPkuMihawq06SA=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     ninja
     pkg-config
   ];
+
   buildInputs = [
     libnice
     openssl
@@ -48,7 +53,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Fix include path that will be incorrect due to the "dev" output
     substituteInPlace "$dev/lib/cmake/LibDataChannel/LibDataChannelTargets.cmake" \
-      --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
+      --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
   meta = with lib; {
@@ -56,6 +61,6 @@ stdenv.mkDerivation rec {
     homepage = "https://libdatachannel.org/";
     license = with licenses; [ mpl20 ];
     maintainers = with maintainers; [ erdnaxe ];
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

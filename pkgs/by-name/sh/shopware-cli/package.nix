@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.4.43";
+  version = "0.4.51";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     rev = version;
-    hash = "sha256-c8CaPxV54bF4Unlz15SIh64jiGZMZywcKOzdZ74AtaM=";
+    hash = "sha256-mimFOZjWiDodCopJ23RZxWijOT7bDPUOH+A8GL/UyXs=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
   nativeCheckInputs = [ git dart-sass ];
 
-  vendorHash = "sha256-7K56fBX4y2UPofksAl6+u7jBg5tySvtrutUJXDJ/qz4=";
+  vendorHash = "sha256-NXk3wH/XHohI7aYK+dvUmh+0hUrBNiH6xouT9EM8eiE=";
 
   postInstall = ''
     export HOME="$(mktemp -d)"

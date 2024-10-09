@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
   pythonOlder,
+  python-dateutil,
   requests,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "2.1.1";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,12 +19,15 @@ buildPythonPackage rec {
     owner = "rokam";
     repo = "sunweg";
     rev = "refs/tags/${version}";
-    hash = "sha256-fgNtxCBIuNulCfuDaEsM7kL1WpwNE9O+JQ1DMZrz5jA=";
+    hash = "sha256-T67eH5WjS7J2pcNjq9psNmD4MwMfH+HRvk9llqI3FoQ=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [ requests ];
+  propagatedBuildInputs = [
+    python-dateutil
+    requests
+  ];
 
   # Module has no tests
   doCheck = false;

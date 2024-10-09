@@ -1,7 +1,5 @@
 { lib, stdenv, linux }:
 
-with lib;
-
 stdenv.mkDerivation {
   pname = "gpio-utils";
   version = linux.version;
@@ -15,10 +13,10 @@ stdenv.mkDerivation {
   separateDebugInfo = true;
   installFlags = [ "install" "DESTDIR=$(out)" "bindir=/bin" ];
 
-  meta = {
+  meta = with lib; {
     description = "Linux tools to inspect the gpiochip interface";
     maintainers = with maintainers; [ kwohlfahrt ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

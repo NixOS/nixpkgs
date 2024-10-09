@@ -33,6 +33,8 @@ let
     ''
       #!${pkgs.runtimeShell}
 
+      source ${./lib/lib.sh}
+
       systemConfig='@out@'
 
       export PATH=/empty
@@ -168,7 +170,7 @@ in
 
       apply = set: {
         script = ''
-          unset PATH
+          export PATH=
           for i in ${toString path}; do
             PATH=$PATH:$i/bin:$i/sbin
           done
@@ -232,11 +234,12 @@ in
     system.activationScripts.var = ""; # obsolete
 
     systemd.tmpfiles.rules = [
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ] ++ lib.optionals config.nix.enable [
       # Prevent the current configuration from being garbage-collected.
       "d /nix/var/nix/gcroots -"
       "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
-      "D /var/empty 0555 root root -"
-      "h /var/empty - - - - +i"
     ];
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
@@ -19,6 +24,8 @@ stdenv.mkDerivation rec {
     "format"
   ];
 
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isAarch64 "-Wno-narrowing";
+
   nativeBuildInputs = [
     cmake
   ];
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Software for rapid LiDAR processing";
     homepage = "http://lastools.org/";
     license = licenses.unfree;
-    maintainers = with maintainers; [ stephenwithph ];
+    maintainers = with maintainers; teams.geospatial.members ++ [ stephenwithph ];
     platforms = platforms.unix;
   };
 }

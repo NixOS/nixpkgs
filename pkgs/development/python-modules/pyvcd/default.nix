@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Mb4/UBRBqbjF3HJmD/e5z++bQ7ISGiPZb1htKGMnApA=";
+    hash = "sha256-Mb4/UBRBqbjF3HJmD/e5z++bQ7ISGiPZb1htKGMnApA=";
   };
 
   buildInputs = [ setuptools-scm ];
@@ -32,7 +32,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       sb0
-      emily
     ];
   };
 }

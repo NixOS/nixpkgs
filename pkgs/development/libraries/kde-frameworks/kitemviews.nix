@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules,
   qtbase, qttools
 }:

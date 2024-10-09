@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pallets-sphinx-themes";
-  version = "2.1.1";
+  version = "2.1.3";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pallets";
     repo = "pallets-sphinx-themes";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-Z03rsqkwF2rYaqRZflf5qc5EdHPIEcEcB1ftYIm5DQs=";
+    sha256 = "sha256-uXSejJLVmYpzRCP92JQKHosnlx7dgZlFf5XzbxOfvII=";
   };
 
   propagatedBuildInputs = [

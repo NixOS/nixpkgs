@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   fastapi,
   hatchling,

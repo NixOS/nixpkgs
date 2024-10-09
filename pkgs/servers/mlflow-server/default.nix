@@ -1,4 +1,4 @@
-{lib, python3, writeText}:
+{ python3, writeText}:
 
 let
   py = python3.pkgs;

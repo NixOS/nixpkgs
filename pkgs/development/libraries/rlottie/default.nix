@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     (lib.cmakeFeature "LIB_INSTALL_DIR" "${placeholder "out"}/lib")
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-U__ARM_NEON__";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-U__ARM_NEON__";
 
   meta = with lib; {
     homepage = "https://github.com/Samsung/rlottie";
-    description = "A platform independent standalone c++ library for rendering vector based animations and art in realtime";
+    description = "Platform independent standalone c++ library for rendering vector based animations and art in realtime";
     license = with licenses; [ mit bsd3 mpl11 ftl ];
     platforms = platforms.all;
     maintainers = with maintainers; [ CRTified ];

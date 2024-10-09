@@ -1,19 +1,23 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.48.0.1";
+  version = "4.53";
 
   src = fetchurl {
-    url = "https://gentoo.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-YFCFRDGeq2h/UXKme/NnnCuFdtw2Vim6Y3SbytaItGc=";
+    url = "mirror://sourceforge/diskinfo-di/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AN1b78EdrI1lposkj9NBWKLmqFDC5OKrd1lMeaoB6D4=";
   };
 
-  makeFlags = [ "INSTALL_DIR=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
     description = "Disk information utility; displays everything 'df' does and more";
-    homepage = "https://gentoo.com/di/";
+    homepage = "https://diskinfo-di.sourceforge.io/";
     license = licenses.zlib;
     maintainers = with maintainers; [ manveru ];
     platforms = platforms.all;

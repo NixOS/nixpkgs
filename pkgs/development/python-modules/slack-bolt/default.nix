@@ -15,7 +15,6 @@
   flask-sockets,
   gunicorn,
   moto,
-  numpy,
   pyramid,
   pytest-asyncio,
   pytestCheckHook,
@@ -64,7 +63,7 @@ buildPythonPackage rec {
 
   dependencies = [ slack-sdk ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiohttp
       websockets
@@ -95,7 +94,7 @@ buildPythonPackage rec {
     docker
     pytest-asyncio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -121,7 +120,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "slack_bolt" ];
 
   meta = with lib; {
-    description = "A framework to build Slack apps using Python";
+    description = "Framework to build Slack apps using Python";
     homepage = "https://github.com/slackapi/bolt-python";
     changelog = "https://github.com/slackapi/bolt-python/releases/tag/v${version}";
     license = licenses.mit;

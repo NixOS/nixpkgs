@@ -5,7 +5,7 @@ mkCoqDerivation {
   owner = "fblanqui";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.version [
-    {case = range "8.14" "8.19"; out = "1.8.5"; }
+    {case = range "8.14" "8.20"; out = "1.8.5"; }
     {case = range "8.12" "8.16"; out = "1.8.2"; }
     {case = range "8.10" "8.11"; out = "1.7.0"; }
     {case = range "8.8"  "8.9";  out = "1.6.0"; }
@@ -29,7 +29,7 @@ mkCoqDerivation {
 
   meta = {
     homepage = "https://github.com/fblanqui/color";
-    description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant.";
+    description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant";
     maintainers = with lib.maintainers; [ jpas jwiegley ];
   };
 }

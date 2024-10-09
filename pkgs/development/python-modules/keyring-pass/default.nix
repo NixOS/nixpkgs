@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace keyring_pass/__init__.py \
-      --replace 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
+      --replace-fail 'pass_binary = "pass"' 'pass_binary = "${lib.getExe pass}"'
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     keyring

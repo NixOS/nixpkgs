@@ -1,9 +1,6 @@
-{ lib
-, appimageTools
+{ appimageTools
 , fetchurl
 , makeWrapper
-, gtk3
-, gsettings-desktop-schemas
 , pname
 , version
 , hash
@@ -25,6 +22,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   profile = ''
     export LC_ALL=C.UTF-8
   '';
@@ -41,7 +40,6 @@ appimageTools.wrapType2 {
     cp ${extracted}/losslesscut.desktop $out/share/applications
     substituteInPlace $out/share/applications/losslesscut.desktop \
       --replace AppRun losslesscut
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/losslesscut" \
       --add-flags "--disable-seccomp-filter-sandbox"
   '';

@@ -40,8 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
-    rev = with lib;
-      "v" + concatStringsSep "_" (splitVersion version);
+    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
     sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 
@@ -86,8 +85,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
-    description = "A program to help prevent Repetitive Strain Injury";
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''
       Workrave is a program that assists in the recovery and prevention of

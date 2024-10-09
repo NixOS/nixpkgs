@@ -7,12 +7,12 @@ let
   cfg = config.programs.fish;
 
   fishAbbrs = lib.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
       cfg.shellAbbrs
   );
 
   fishAliases = lib.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "alias ${k} ${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "alias ${k} ${lib.escapeShellArg v}")
       (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 

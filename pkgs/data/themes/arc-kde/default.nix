@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
-    description = "A port of the arc theme for Plasma";
+    description = "Port of the arc theme for Plasma";
     homepage = "https://github.com/PapirusDevelopmentTeam/arc-kde";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.nixy ];

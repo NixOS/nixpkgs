@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "argparse";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "p-ranav";
     repo = "argparse";
     rev = "v${version}";
-    sha256 = "sha256-0fgMy7Q9BiQ/C1tmhuNpQgad8yzaLYxh5f6Ps38f2mk=";
+    sha256 = "sha256-JH9t/e/6RaSz+3LjmuNBYOy5gJT3zA+Vz4CxuwEXlvA=";
   };
 
   postPatch = ''

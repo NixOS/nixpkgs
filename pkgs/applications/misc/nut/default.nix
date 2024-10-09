@@ -7,6 +7,7 @@
 , freeipmi
 , gd
 , i2c-tools
+, libgpiod_1
 , libmodbus
 , libtool
 , libusb1
@@ -23,11 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "nut";
-  version = "2.8.0";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://networkupstools.org/source/${lib.versions.majorMinor version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-w+WnCNp5e3xwtlPTexIGoAD8tQO4VRn+TN9jU/eSv+U=";
+    sha256 = "sha256-5LSwy+fdObqQl75/fXh7sv/74132Tf9Ttf45PWWcWX0=";
   };
 
   patches = [
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
+      libgpiod = "${libgpiod_1}/lib";
       libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${libmodbus}/lib";
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus libtool i2c-tools net-snmp gd ];
+  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libgpiod_1 libmodbus libtool i2c-tools net-snmp gd ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper ];
 
@@ -82,9 +84,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/lib/systemd/system/nut-driver-enumerator.path \
       --replace "$out/etc/ups.conf" "/etc/nut/ups.conf"
-
-    # we don't need init.d scripts
-    rm -r $out/share/solaris-init
 
     # Suspicious/overly broad rule, remove it until we know better
     rm $out/etc/udev/rules.d/52-nut-ipmipsu.rules

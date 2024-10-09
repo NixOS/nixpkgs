@@ -24,7 +24,7 @@
 }:
 buildPythonPackage rec {
   pname = "clickhouse-connect";
-  version = "0.7.8";
+  version = "0.7.12";
 
   format = "setuptools";
 
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     repo = "clickhouse-connect";
     owner = "ClickHouse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tdf9aYKAFpRyaqGGNxXs4bzmY6mdhKZ5toFBJRmD2VY=";
+    hash = "sha256-UJSg/ADxVsO4xuym8NGjbgQafWmu7J3Is2hKvObYhU8=";
   };
 
   nativeBuildInputs = [ cython ];
@@ -53,7 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-dotenv
-  ] ++ passthru.optional-dependencies.sqlalchemy ++ passthru.optional-dependencies.numpy;
+  ] ++ optional-dependencies.sqlalchemy ++ optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [
@@ -68,14 +68,12 @@ buildPythonPackage rec {
     "clickhouse_connect.driverc.npconv"
   ];
 
-  passthru = {
-    optional-dependencies = {
-      sqlalchemy = [ sqlalchemy ];
-      numpy = [ numpy ];
-      pandas = [ pandas ];
-      arrow = [ pyarrow ];
-      orjson = [ orjson ];
-    };
+  optional-dependencies = {
+    sqlalchemy = [ sqlalchemy ];
+    numpy = [ numpy ];
+    pandas = [ pandas ];
+    arrow = [ pyarrow ];
+    orjson = [ orjson ];
   };
 
   meta = with lib; {

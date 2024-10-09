@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, prometheus-pushgateway }:
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, testers, prometheus-pushgateway }:
 
 buildGoModule rec {
   pname = "pushgateway";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${version}";
-    sha256 = "sha256-WZ7Gi7jiHoH6ZL0TdB7Z3C9sAzxL/iJtOAm/MsZVRI8=";
+    sha256 = "sha256-SpHxBxBl0APP/y7MnR/p/+VjNAvFOZVlgGMlMGTbodI=";
   };
 
-  vendorHash = "sha256-W2gGp36f1OZonXVkoBvWOaeGnnF5Xi5Kv8JE+iDm+fg=";
+  vendorHash = "sha256-GydAY73Ui6z833x0DoWa6BpK35CYdYfyHw2+RwT3miw=";
 
   ldflags = [
     "-s"
@@ -23,8 +23,11 @@ buildGoModule rec {
     "-X github.com/prometheus/common/version.BuildDate=19700101-00:00:00"
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = prometheus-pushgateway;
+  passthru.tests = {
+    inherit (nixosTests.prometheus) pushgateway;
+    version = testers.testVersion {
+      package = prometheus-pushgateway;
+    };
   };
 
   meta = with lib; {

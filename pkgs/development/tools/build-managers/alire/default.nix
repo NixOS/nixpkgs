@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A source-based package manager for the Ada and SPARK programming languages";
+    description = "Source-based package manager for the Ada and SPARK programming languages";
     homepage = "https://alire.ada.dev";
     changelog = "https://github.com/alire-project/alire/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;

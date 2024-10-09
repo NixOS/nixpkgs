@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-redis";
-  version = "14.3.0";
+  version = "14.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eoMbY4oNzYXkn3uFUhxecJQD+BxYkGTbWhAWSgAoLyA=";
+    hash = "sha256-CIRzJa/wexeuheb+Az0KBaz4z0HMmpzGBiOuLaxGZ+8=";
   };
 
   propagatedBuildInputs = [

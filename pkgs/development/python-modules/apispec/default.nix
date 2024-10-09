@@ -11,7 +11,6 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
-  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -30,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     marshmallow = [ marshmallow ];
     yaml = [ pyyaml ];
     validation = [
@@ -42,15 +41,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apispec" ];
 
   meta = with lib; {
     changelog = "https://github.com/marshmallow-code/apispec/blob/${version}/CHANGELOG.rst";
-    description = "A pluggable API specification generator with support for the OpenAPI Specification";
+    description = "Pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

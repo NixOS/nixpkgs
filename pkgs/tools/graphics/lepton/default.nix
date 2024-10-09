@@ -12,11 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake git ];
-  buildInputs = lib.optionals stdenv.isLinux [ glibc.static ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
   meta = with lib; {
     homepage = "https://github.com/dropbox/lepton";
-    description = "A tool to losslessly compress JPEGs";
+    description = "Tool to losslessly compress JPEGs";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ artemist ];

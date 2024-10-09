@@ -43,8 +43,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
-    watchdog = lib.optionals (!stdenv.isDarwin) [
+  optional-dependencies = {
+    watchdog = lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # watchdog requires macos-sdk 10.13
       watchdog
     ];
@@ -59,11 +59,11 @@ buildPythonPackage rec {
       pytestCheckHook
     ]
     ++ lib.optionals (pythonOlder "3.11") [ greenlet ]
-    ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+    ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "werkzeug" ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [ "test_get_machine_id" ];
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_get_machine_id" ];
 
   disabledTestPaths = [
     # ConnectionRefusedError: [Errno 111] Connection refused
@@ -85,7 +85,7 @@ buildPythonPackage rec {
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     homepage = "https://palletsprojects.com/p/werkzeug/";
-    description = "The comprehensive WSGI web application library";
+    description = "Comprehensive WSGI web application library";
     longDescription = ''
       Werkzeug is a comprehensive WSGI web application library. It
       began as a simple collection of various utilities for WSGI

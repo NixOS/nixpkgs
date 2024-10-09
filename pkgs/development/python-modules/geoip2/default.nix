@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "geoip2" ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.11") [
+    lib.optionals (pythonAtLeast "3.10") [
       # https://github.com/maxmind/GeoIP2-python/pull/136
       "TestAsyncClient"
     ]
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/maxmind/GeoIP2-python";
     changelog = "https://github.com/maxmind/GeoIP2-python/blob/v${version}/HISTORY.rst";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

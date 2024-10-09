@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    description = "A Vim-like browser";
+    description = "Vim-like browser";
     mainProgram = "vimb";
     longDescription = ''
       A fast and lightweight vim like web browser based on the webkit web
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://fanglingsu.github.io/vimb/";
     license = lib.licenses.gpl3;
-    maintainers = [];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

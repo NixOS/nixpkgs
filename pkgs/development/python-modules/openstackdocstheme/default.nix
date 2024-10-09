@@ -6,19 +6,20 @@
   pbr,
   sphinx,
   pythonAtLeast,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "openstackdocstheme";
-  version = "3.2.0";
-  format = "setuptools";
+  version = "3.3.0";
+  pyproject = true;
 
   # breaks on import due to distutils import through pbr.packaging
   disabled = pythonAtLeast "3.12";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-PwSWLJr5Hjwz8cRXXutnE4Jc+vLcL3TJTZl6biK/4E4=";
+    hash = "sha256-wmZJmX5bQKM1uwqWxynkY5jPJaBn+Y2eqSRkE2Ub0qM=";
   };
 
   postPatch = ''
@@ -27,7 +28,9 @@ buildPythonPackage rec {
     rm test-requirements.txt
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     dulwich
     pbr
     sphinx

@@ -15,7 +15,6 @@
   python-fsutil,
   python-slugify,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   setuptools,
@@ -41,7 +40,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "boto3" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -51,7 +49,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       beautifulsoup4
       boto3
@@ -97,7 +95,7 @@ buildPythonPackage rec {
     orjson
     pytestCheckHook
     python-decouple
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests require network access

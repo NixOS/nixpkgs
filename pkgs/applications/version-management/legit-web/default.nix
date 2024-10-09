@@ -1,20 +1,21 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nixosTests
 }:
 
 buildGoModule rec {
   pname = "legit";
-  version = "0.2.2";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     repo = "legit";
     owner = "icyphox";
     rev = "v${version}";
-    hash = "sha256-TBq1ILBhojMIxnLj108L0zLmFsZD/ET9w5cSbqk8+XM=";
+    hash = "sha256-2XeIAeneSKf8TSWOunvRJ7N+3IrmOUjS79ZubsGne9E=";
   };
 
-  vendorHash = "sha256-IeWgmUNkBU3W6ayfRkzMO/0XHNqm5zy5lLUNePzv+ug=";
+  vendorHash = "sha256-4XplNx+Pyv6dn+ophBFxQ3lv3xAf1jP2DpLYX1RenvQ=";
 
   postInstall = ''
     mkdir -p $out/lib/legit/templates
@@ -23,6 +24,8 @@ buildGoModule rec {
     cp -r $src/templates/* $out/lib/legit/templates
     cp -r $src/static/* $out/lib/legit/static
   '';
+
+  passthru.tests = { inherit (nixosTests) legit; };
 
   meta = {
     description = "Web frontend for git";

@@ -29,7 +29,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Easy-to-use offline browser / website mirroring utility - QT frontend";
     mainProgram = "httraqt";
     homepage    = "http://www.httrack.com";

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlagsArray = [ "PREFIX=$(out)/bin/" ];
+  makeFlags = [ "PREFIX=$(out)/bin/" ];
 
   preInstall = ''
     mkdir -p "$out/bin"

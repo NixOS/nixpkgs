@@ -21,9 +21,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A library for testing interactive command-line applications";
+    description = "Library for testing interactive command-line applications";
     homepage = "https://pypi.org/project/scripttest/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

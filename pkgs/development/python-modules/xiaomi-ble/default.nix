@@ -12,13 +12,12 @@
   pycryptodomex,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "xiaomi-ble";
-  version = "0.29.0";
+  version = "0.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "xiaomi-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+zMjnLUzI8ctucvxXts7V4lN4Gp0ZQtArhpXUCBvhF0=";
+    hash = "sha256-dZJsB40BMPo0tOFq0vLILrwfezf5dnspFK/aZWOV4uc=";
   };
 
   postPatch = ''
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pycryptodomex" ];
 

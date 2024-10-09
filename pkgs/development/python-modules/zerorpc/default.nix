@@ -28,7 +28,7 @@ buildPythonPackage rec {
   doCheck = false; # pypi version doesn't include tests
 
   meta = with lib; {
-    description = "An easy to use, intuitive, and cross-language RPC";
+    description = "Easy to use, intuitive, and cross-language RPC";
     mainProgram = "zerorpc";
     homepage = "https://www.zerorpc.io";
     license = licenses.mit;

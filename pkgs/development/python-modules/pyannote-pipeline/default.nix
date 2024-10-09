@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Tunable pipelines";
     homepage = "https://github.com/pyannote/pyannote-pipeline";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "pyannote-pipeline";
   };
 }

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Library of glib utilities.";
+    description = "Library of glib utilities";
     homepage = "https://git.sailfishos.org/mer-core/libglibutil";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+{ lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texliveSmall, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
@@ -15,13 +15,13 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
-  version = "4.3.3";
+  version = "4.4.1";
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-gIUSMTk7hb84d+6eObKC51Dthkxexgy9aObhOfBSAzA=";
+    sha256 = "sha256-tMtnXequtymdOyZdIYzeQ/GSlRzluJt7saUUijay2U0=";
   };
 
   outputs = [ "out" "tex" ];
@@ -33,21 +33,15 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline (texliveSmall.withPackages (ps: with ps; [ inconsolata helvetic ps.texinfo fancyvrb cm-super rsfs ])) xz zlib less texinfo graphviz icu
     bison imake which blas lapack curl tcl tk jdk tzdata
-  ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
     ./no-usr-local-search-paths.patch
-    (fetchpatch {
-      # https://hiddenlayer.com/research/r-bitrary-code-execution/
-      name = "CVE-2024-27322.patch";
-      url = "https://github.com/r-devel/r-svn/commit/f7c46500f455eb4edfc3656c3fa20af61b16abb7.patch";
-      hash = "sha256-CH2mMmie9E96JeGSC7UGm7/roUNhK5xv6HO53N2ixEI=";
-    })
   ];
 
   # Test of the examples for package 'tcltk' fails in Darwin sandbox. See:
   # https://github.com/NixOS/nixpkgs/issues/146131
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure \
       --replace "-install_name libRblas.dylib" "-install_name $out/lib/R/lib/libRblas.dylib" \
       --replace "-install_name libRlapack.dylib" "-install_name $out/lib/R/lib/libRlapack.dylib" \
@@ -83,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       RANLIB=$(type -p ranlib)
       r_cv_have_curl728=yes
       R_SHELL="${stdenv.shell}"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       --disable-R-framework
       --without-x
       OBJC="clang"

@@ -12,13 +12,11 @@
   pythonOlder,
   setuptools,
   voluptuous,
-  websocket-client,
-  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.4.12";
+  version = "2024.8.13";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,7 +25,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-iWl9kDLRh9CAk0tOibDOHcBV7lwVY/TWKYMBZW9G2k0=";
+    hash = "sha256-dojgIKF3AGkJm2USspV0rm8UZnTLxYf4dgt86WwonQk=";
   };
 
   __darwinAllowLocalNetworking = true;

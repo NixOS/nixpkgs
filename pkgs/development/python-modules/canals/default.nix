@@ -35,7 +35,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
       mkdocs-material
       mkdocs-mermaid2-plugin
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # Test requires internet connection to mermaid.ink
@@ -60,7 +60,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "canals" ];
 
   meta = with lib; {
-    description = "A component orchestration engine";
+    description = "Component orchestration engine";
     homepage = "https://github.com/deepset-ai/canals";
     changelog = "https://github.com/deepset-ai/canals/releases/tag/v${version}";
     license = licenses.asl20;

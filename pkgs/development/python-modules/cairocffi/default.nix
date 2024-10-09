@@ -6,8 +6,6 @@
   fetchPypi,
   lib,
   substituteAll,
-  makeFontsConf,
-  freefont_ttf,
   pikepdf,
   pytestCheckHook,
   cairo,
@@ -22,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "cairocffi";
-  version = "1.6.1";
+  version = "1.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eOa75HNXZAxFPQvpKfpJzQXM4uEobz0qHKnL2n79uLc=";
+    hash = "sha256-LkjuhkiE7Eo6NL+oyauZmfaIKG63FKFaQ+ydBow2VXs=";
   };
 
   patches = [
@@ -63,7 +61,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";
     homepage = "https://github.com/SimonSapin/cairocffi";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     description = "cffi-based cairo bindings for Python";
   };
 }

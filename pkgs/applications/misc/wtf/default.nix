@@ -3,7 +3,6 @@
 , lib
 , makeWrapper
 , ncurses
-, stdenv
 }:
 
 buildGoModule rec {
@@ -34,7 +33,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "The personal information dashboard for your terminal";
+    description = "Personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
     changelog = "https://github.com/wtfutil/wtf/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;

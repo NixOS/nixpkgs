@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
-  version = "19.29.0";
+  version = "23.15.0";
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-vn3P9upO6d0jpZzrG77/xkhfn4NINnBZ3YymlRdoONw=";
+    hash = "sha256-gZCR7cDSI0gRaTnYADOLpyHe26URo27JXJjnNxr4Jwc=";
   };
 
-  vendorHash = "sha256-mZNhsvEI1AbsAhoK7AuNgrQvYlkGrrpPVuv3R5nssC4=";
+  vendorHash = "sha256-EBLfbdTV15wSTOThzBY0d2KrSJzRaB8vNH53Uwc+XfM=";
 
   sourceRoot = "${src.name}/src";
 
@@ -38,7 +38,7 @@ buildGoModule rec {
 
   postPatch = ''
     # these tests requires internet access
-    rm engine/image_test.go engine/migrate_glyphs_test.go
+    rm image/image_test.go config/migrate_glyphs_test.go upgrade/notice_test.go
   '';
 
   postInstall = ''
@@ -52,7 +52,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A prompt theme engine for any shell";
+    description = "Prompt theme engine for any shell";
     mainProgram = "oh-my-posh";
     homepage = "https://ohmyposh.dev";
     changelog = "https://github.com/JanDeDobbeleer/oh-my-posh/releases/tag/v${version}";

@@ -1,29 +1,36 @@
 {
   lib,
-  fetchFromGitHub,
-  buildPythonPackage,
-  six,
   archspec,
-  pytestCheckHook,
+  buildPythonPackage,
+  fetchFromGitHub,
   pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "hpccm";
-  version = "22.10.0";
-  format = "setuptools";
+  version = "23.11.0";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
-    rev = "v${version}";
-    hash = "sha256-dLMbwtvn7HTVVlWHAzXU19ERdJxytf9NlnqMXW6ShKI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-uB2+1Nc+SgPzB5hJI1L6yD8gn0hGOkIZF6rejq4rYg8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     six
     archspec
   ];
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
@@ -39,10 +46,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "HPC Container Maker";
-    mainProgram = "hpccm";
     homepage = "https://github.com/NVIDIA/hpc-container-maker";
+    changelog = "https://github.com/NVIDIA/hpc-container-maker/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    platforms = platforms.x86;
     maintainers = with maintainers; [ atila ];
+    mainProgram = "hpccm";
+    platforms = platforms.x86;
   };
 }

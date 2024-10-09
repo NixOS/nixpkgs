@@ -4,7 +4,6 @@
   fetchFromGitHub,
   python,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   imagemagick,
   pip,
   pytestCheckHook,
@@ -33,7 +32,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     pip
-    pythonRelaxDepsHook
     imagemagick
   ];
 
@@ -51,7 +49,7 @@ buildPythonPackage {
     python-docx
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # on linux the icon file can only be xbm format
     convert $out/${python.sitePackages}/pdf2docx/gui/icon.ico \
       $out/${python.sitePackages}/pdf2docx/gui/icon.xbm

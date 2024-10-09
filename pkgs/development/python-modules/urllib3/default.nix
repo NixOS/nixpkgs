@@ -24,17 +24,17 @@
 let
   self = buildPythonPackage rec {
     pname = "urllib3";
-    version = "2.2.1";
+    version = "2.2.2";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-0FcIdsYaueUg13bDisu7WwWndtP5/5ilyP1RYqREzxk=";
+      hash = "sha256-3VBUhVSaelUoM9peYGNjnQ0XfATyO8OGTkHl3F9hIWg=";
     };
 
     nativeBuildInputs = [ hatchling ];
 
-    passthru.optional-dependencies = {
+    optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
     };
@@ -47,7 +47,7 @@ let
         trustme
       ]
       ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
-      ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+      ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

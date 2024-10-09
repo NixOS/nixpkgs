@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
 , python3, ruby, jre8, nettools, bc
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -133,6 +134,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests = { inherit (nixosTests) munin; };
+
   meta = with lib; {
     description = "Networked resource monitoring tool";
     longDescription = ''
@@ -142,7 +145,7 @@ stdenv.mkDerivation rec {
       to kill our performance?' problems.
     '';
     homepage = "https://munin-monitoring.org/";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = [ maintainers.bjornfor ];
     platforms = platforms.linux;
   };

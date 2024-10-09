@@ -21,12 +21,12 @@
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.4.0";
+  version = "2.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-bmP57mG3DxU6ItO1ULGD2lMfiQR1kX/OIDutRZeqwkM=";
+    hash = "sha256-+LtjiJe+kbnb1MCF2f3h9pBI9ZSeIPODLLlDjldBjUs=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,12 @@ buildPythonPackage rec {
   ];
 
   dontUseCmakeConfigure = true;
+
+  postPatch = ''
+    # relax v2 constrain in [build-system] intended for binary backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy~=2.0" "numpy"
+  '';
 
   propagatedBuildInputs = [ numpy ];
 

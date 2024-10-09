@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A library for deferring decorator actions";
+    description = "Library for deferring decorator actions";
     homepage = "https://pylonsproject.org/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

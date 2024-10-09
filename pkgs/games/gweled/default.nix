@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchbzr {
     url = "lp:gweled";
     rev = "108";
-    sha256 = "sha256-rM4dgbYfSrVqZwi+xzKuEtmtjK3HVvqeutmni1vleLo=";
+    hash = "sha256-rM4dgbYfSrVqZwi+xzKuEtmtjK3HVvqeutmni1vleLo=";
   };
 
   doCheck = false;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     description = "Bejeweled clone game";
     mainProgram = "gweled";
     homepage = "https://gweled.org";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ ];
   };

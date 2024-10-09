@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/click-contrib/click-spinner";
     changelog = "https://github.com/click-contrib/click-spinner/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

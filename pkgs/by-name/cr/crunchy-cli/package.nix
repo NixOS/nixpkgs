@@ -10,30 +10,29 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crunchy-cli";
-  version = "3.6.4";
+  version = "3.6.7";
 
   src = fetchFromGitHub {
     owner = "crunchy-labs";
     repo = "crunchy-cli";
     rev = "v${version}";
-    hash = "sha256-ujR/ZTQoNdxVuGd8fie7JwVINqcjwAwyou+iCihYOY0=";
+    hash = "sha256-qBIfDkd4a0m1GNgK4tSq2/dLP8K5Pp4m/M468eHgIAg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "native-tls-0.2.11" = "sha256-r+uvpwf1qgOVYuh+3xYOOsDWyCJnyG4Qc8i7RV2nzy4=";
-      "rsubs-lib-0.3.0" = "sha256-hn0/KxUHgmC3hs8sAMkJKxR7WIjc8YGq9DJU2SriO1A=";
+      "native-tls-0.2.12" = "sha256-YqiX3xj2ionDlDRzkClqkt0E4HY4zt0B6+rGf850ZCk=";
     };
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonImportsCheckHook,
   pythonOlder,
   setuptools,
   sphinx,
@@ -47,7 +46,6 @@ buildPythonPackage {
   ];
 
   nativeBuildInputs = [
-    pythonImportsCheckHook
     sphinx-autoapi
     sphinx-prompt
     sphinx-rtd-theme
@@ -62,7 +60,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "versionwarning" ];
 
   meta = with lib; {
-    description = "A sphinx extension to show a warning banner at the top of your documentation";
+    description = "Sphinx extension to show a warning banner at the top of your documentation";
     homepage = "https://github.com/humitos/sphinx-version-warning";
     changelog = "https://github.com/humitos/sphinx-version-warning/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

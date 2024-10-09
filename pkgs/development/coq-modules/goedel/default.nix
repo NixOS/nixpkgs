@@ -17,7 +17,7 @@ mkCoqDerivation {
   propagatedBuildInputs = [ hydra-battles pocklington ];
 
   meta = with lib; {
-    description = "The Gödel-Rosser 1st incompleteness theorem in Coq";
+    description = "Gödel-Rosser 1st incompleteness theorem in Coq";
     maintainers = with maintainers; [ siraben ];
     license = licenses.mit;
     platforms = platforms.unix;

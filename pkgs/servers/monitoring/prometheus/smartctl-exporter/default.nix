@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildGoModule
 , nixosTests
+, smartmontools
 }:
 
 buildGoModule rec {
@@ -16,6 +17,11 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-WUB2FgBl4Tybz7T0yvcSYIlG75NEhXpn1F0yuB9F21g=";
+
+  postPatch = ''
+    substituteInPlace main.go README.md \
+      --replace-fail /usr/sbin/smartctl ${lib.getExe smartmontools}
+  '';
 
   ldflags = [
     "-X github.com/prometheus/common/version.Version=${version}"

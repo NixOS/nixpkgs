@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Wayland-native logout script written in GTK3";
+    description = "Wayland-native logout script written in GTK3";
     homepage = "https://github.com/AMNatty/wleave";
     license = licenses.mit;
     mainProgram = "wleave";

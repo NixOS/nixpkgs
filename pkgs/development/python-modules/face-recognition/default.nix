@@ -43,7 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://github.com/ageitgey/face_recognition";
-    maintainers = with maintainers; [ ];
-    description = "The world's simplest facial recognition api for Python and the command line";
+    maintainers = [ ];
+    description = "World's simplest facial recognition api for Python and the command line";
   };
 }

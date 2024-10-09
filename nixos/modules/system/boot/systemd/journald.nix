@@ -1,24 +1,21 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.journald;
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "journald" "enableHttpGateway" ] [ "services" "journald" "gateway" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "journald" "enableHttpGateway" ] [ "services" "journald" "gateway" "enable" ])
   ];
 
   options = {
-    services.journald.console = mkOption {
+    services.journald.console = lib.mkOption {
       default = "";
-      type = types.str;
+      type = lib.types.str;
       description = "If non-empty, write log messages to the specified TTY device.";
     };
 
-    services.journald.rateLimitInterval = mkOption {
+    services.journald.rateLimitInterval = lib.mkOption {
       default = "30s";
-      type = types.str;
+      type = lib.types.str;
       description = ''
         Configures the rate limiting interval that is applied to all
         messages generated on the system. This rate limiting is applied
@@ -32,18 +29,18 @@ in {
       '';
     };
 
-    services.journald.storage = mkOption {
+    services.journald.storage = lib.mkOption {
       default = "persistent";
-      type = types.enum [ "persistent" "volatile" "auto" "none" ];
+      type = lib.types.enum [ "persistent" "volatile" "auto" "none" ];
       description = ''
         Controls where to store journal data. See
         {manpage}`journald.conf(5)` for further information.
       '';
     };
 
-    services.journald.rateLimitBurst = mkOption {
+    services.journald.rateLimitBurst = lib.mkOption {
       default = 10000;
-      type = types.int;
+      type = lib.types.int;
       description = ''
         Configures the rate limiting burst limit (number of messages per
         interval) that is applied to all messages generated on the system.
@@ -67,20 +64,20 @@ in {
       '';
     };
 
-    services.journald.extraConfig = mkOption {
+    services.journald.extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       example = "Storage=volatile";
       description = ''
-        Extra config options for systemd-journald. See man journald.conf
+        Extra config options for systemd-journald. See {manpage}`journald.conf(5)`
         for available options.
       '';
     };
 
-    services.journald.forwardToSyslog = mkOption {
+    services.journald.forwardToSyslog = lib.mkOption {
       default = config.services.rsyslogd.enable || config.services.syslog-ng.enable;
-      defaultText = literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
-      type = types.bool;
+      defaultText = lib.literalExpression "services.rsyslogd.enable || services.syslog-ng.enable";
+      type = lib.types.bool;
       description = ''
         Whether to forward log messages to syslog.
       '';
@@ -96,7 +93,8 @@ in {
       "systemd-journald@.service"
       "systemd-journal-flush.service"
       "systemd-journal-catalog-update.service"
-      ] ++ (optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
+      "systemd-journald-sync@.service"
+      ] ++ (lib.optional (!config.boot.isContainer) "systemd-journald-audit.socket") ++ [
       "systemd-journald-dev-log.socket"
       "syslog.socket"
       ];
@@ -107,11 +105,11 @@ in {
         Storage=${cfg.storage}
         RateLimitInterval=${cfg.rateLimitInterval}
         RateLimitBurst=${toString cfg.rateLimitBurst}
-        ${optionalString (cfg.console != "") ''
+        ${lib.optionalString (cfg.console != "") ''
           ForwardToConsole=yes
           TTYPath=${cfg.console}
         ''}
-        ${optionalString (cfg.forwardToSyslog) ''
+        ${lib.optionalString (cfg.forwardToSyslog) ''
           ForwardToSyslog=yes
         ''}
         ${cfg.extraConfig}

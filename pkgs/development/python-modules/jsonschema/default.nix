@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "4.21.1";
+  version = "4.22.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hXJ8ACefX6a+2+YjjSqmQDvt2LSGSrESB9B988wbLuU=";
+    hash = "sha256-WyLUNKRZNRGa+ZBVLIYuXW1WTo9mASBrMFph/fZhorc=";
   };
 
   postPatch = ''
@@ -61,7 +61,7 @@ buildPythonPackage rec {
       pkgutil-resolve-name
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     format = [
       fqdn
       idna
@@ -92,7 +92,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jsonschema" ];
 
   meta = with lib; {
-    description = "An implementation of JSON Schema validation";
+    description = "Implementation of JSON Schema validation";
     mainProgram = "jsonschema";
     homepage = "https://github.com/python-jsonschema/jsonschema";
     license = licenses.mit;

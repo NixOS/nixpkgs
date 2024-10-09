@@ -18,14 +18,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.21.1";
+  version = "2.23.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MfzwdES3+BOmFsS2UOH78dyZigiP4AWadhZIVawX8Fw=";
+    pname = "google_cloud_pubsub";
+    inherit version;
+    hash = "sha256-4f3nm1tktyEpCvTAIpB6/LuDUS2S9OXDNMORz7sCKss=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +41,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 
@@ -64,10 +65,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Google Cloud Pub/Sub API client library";
-    mainProgram = "fixup_pubsub_v1_keywords.py";
     homepage = "https://github.com/googleapis/python-pubsub";
     changelog = "https://github.com/googleapis/python-pubsub/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
+    mainProgram = "fixup_pubsub_v1_keywords.py";
   };
 }

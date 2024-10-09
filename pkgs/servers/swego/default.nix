@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "swego";
-  version = "1.1";
+  version = "1.12";
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O/wczHyaMev0CpAXoDxiN7TtHDsthG+jaH31SPMEB34=";
+    hash = "sha256-roaAzh6Mncu4qtaxEoXk41Mrmz/l7X1+n+Yh5skA65A=";
   };
 
   vendorHash = "sha256-mJWJdwbZq042//hM3WWp2rnLC1GebckUnsIopbF858Q=";
@@ -38,7 +38,7 @@ buildGoModule rec {
     maintainers = with maintainers; [ fab ];
     # darwin crashes with:
     # src/controllers/parsingArgs.go:130:4: undefined: PrintEmbeddedFiles
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "swego";
   };
 }

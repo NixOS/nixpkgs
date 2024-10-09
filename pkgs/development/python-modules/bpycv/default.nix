@@ -4,16 +4,13 @@
   beautifulsoup4,
   blender,
   boxx,
-  bpycv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchPypi,
   minexr,
   opencv4,
-  python3Packages,
   requests,
   runCommand,
-  writeText,
   zcs,
 }:
 
@@ -64,7 +61,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/DIYer22/bpycv";
     license = licenses.mit;
     maintainers = [ maintainers.lucasew ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     inherit (blender.meta) platforms;
   };
 }

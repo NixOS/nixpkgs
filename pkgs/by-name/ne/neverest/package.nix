@@ -5,8 +5,8 @@
 , pkg-config
 , darwin
 , installShellFiles
-, installShellCompletions ? stdenv.hostPlatform == stdenv.buildPlatform
-, installManPages ? stdenv.hostPlatform == stdenv.buildPlatform
+, installShellCompletions ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, installManPages ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , notmuch
 , buildNoDefaultFeatures ? false
 , buildFeatures ? []
@@ -23,18 +23,18 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~soywod";
-    repo = "${pname}-cli";
+    repo = "neverest-cli";
     rev = "v${version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
 
-  cargoSha256 = "i5or8oBtjGqOfTfwB7dYXn/OPgr5WEWNEvC0WdCCG+c=";
+  cargoHash = "sha256-i5or8oBtjGqOfTfwB7dYXn/OPgr5WEWNEvC0WdCCG+c=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
     ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
 
   # TODO: unit tests temporarily broken, remove this line for the next

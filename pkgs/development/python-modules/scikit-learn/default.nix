@@ -7,16 +7,14 @@
   # build-system
   cython,
   gfortran,
+  meson-python,
   numpy,
   scipy,
-  setuptools,
-  wheel,
 
   # native dependencies
   glibcLocales,
   llvmPackages,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pytest-xdist,
   pillow,
   joblib,
@@ -26,41 +24,42 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "1.4.2";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2qHEcdlbrQgMbkS0lGyTkKSEKtwwglcsIOT4iE456Vk=";
+    pname = "scikit_learn";
+    inherit version;
+    hash = "sha256-eJ49sBx1DtbUlvott9UGN4V7RR5XvK6GO/9wfBJHvvc=";
   };
 
-  # Avoid build-system requirements causing failure
-  prePatch = ''
+  postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy==2.0.0rc1" "numpy"
+      --replace-fail "numpy>=2.0.0rc2" "numpy"
+
+    substituteInPlace meson.build --replace-fail \
+      "run_command('sklearn/_build_utils/version.py', check: true).stdout().strip()," \
+      "'${version}',"
   '';
 
   buildInputs = [
+    numpy.blas
     pillow
     glibcLocales
   ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   build-system = [
     cython
+    meson-python
     numpy
     scipy
-    setuptools
-    wheel
   ];
-
-  propagatedBuildInputs = [ numpy.blas ];
 
   dependencies = [
     joblib
@@ -81,11 +80,15 @@ buildPythonPackage rec {
   '';
 
   # PermissionError: [Errno 1] Operation not permitted: '/nix/nix-installer'
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # Skip test_feature_importance_regression - does web fetch
     "test_feature_importance_regression"
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # doesn't seem to produce correct results?
+    # possibly relevant: https://github.com/scikit-learn/scikit-learn/issues/25838#issuecomment-2308650816
+    "test_sparse_input"
   ];
 
   pytestFlagsArray = [
@@ -112,7 +115,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "sklearn" ];
 
   meta = with lib; {
-    description = "A set of python modules for machine learning and data mining";
+    description = "Set of python modules for machine learning and data mining";
     changelog =
       let
         major = versions.major version;

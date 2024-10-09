@@ -4,7 +4,6 @@
   cython,
   fetchFromGitHub,
   msgpack,
-  poetry-core,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -17,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.1.1";
+  version = "7.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +25,7 @@ buildPythonPackage rec {
     owner = "cdgriffith";
     repo = "Box";
     rev = "refs/tags/${version}";
-    hash = "sha256-oxT2y3um6BZ3bwYa+LWBoTgU+9b+V7XtQdCdECU3Gu0=";
+    hash = "sha256-5aORpuh0ezA3mUEpAPANDkdeN8ujNRfCUCV5qamMk68=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       msgpack
       ruamel-yaml
@@ -48,7 +47,7 @@ buildPythonPackage rec {
     msgpack = [ msgpack ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.all;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "box" ];
 

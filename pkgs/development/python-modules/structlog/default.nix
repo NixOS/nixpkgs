@@ -11,12 +11,11 @@
   pytestCheckHook,
   pythonOlder,
   simplejson,
-  twisted,
 }:
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "24.1.0";
+  version = "24.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,10 +24,10 @@ buildPythonPackage rec {
     owner = "hynek";
     repo = "structlog";
     rev = "refs/tags/${version}";
-    hash = "sha256-0Yc28UEeozK2+IqILFTqHoTiM5L2SA4t6jld4qTBSzQ=";
+    hash = "sha256-z3ecgsep/BQJ+Fv78rV4XiFU4+1aaUEfNEtIqy44KV4=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
@@ -40,7 +39,6 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     simplejson
-    twisted
   ];
 
   pythonImportsCheck = [ "structlog" ];

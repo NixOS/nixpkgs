@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Python read/write support for ESRI Shapefile format";
     homepage = "https://github.com/GeospatialPython/pyshp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -49,7 +49,7 @@ stdenv.mkDerivation {
   lib.optionals withDocs [
     libxslt
   ] ++
-  lib.optionals stdenv.isDarwin [
+  lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration-gtk3
   ];
 

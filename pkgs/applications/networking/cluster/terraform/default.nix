@@ -56,7 +56,6 @@ let
         license = licenses.bsl11;
         maintainers = with maintainers; [
           Chili-Man
-          babariviere
           kalbasit
           timstott
           zimbatm
@@ -166,9 +165,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.8.4";
-    hash = "sha256-YCFmjQ/xlyB0spumw8hBUmr9UVC7ZPNGrxYecFKi3aw=";
-    vendorHash = "sha256-PXA2AWq1IFmnqhhU92S9UaIYTUAAn5lsg3S7h5hBOQE=";
+    version = "1.9.7";
+    hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
+    vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

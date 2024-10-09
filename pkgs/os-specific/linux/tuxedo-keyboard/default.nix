@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    broken = stdenv.isAarch64 || (lib.versionOlder kernel.version "5.5");
+    broken = stdenv.hostPlatform.isAarch64 || (lib.versionOlder kernel.version "5.5");
     description = "Keyboard and hardware I/O driver for TUXEDO Computers laptops";
     homepage = "https://github.com/tuxedocomputers/tuxedo-keyboard/";
     license = lib.licenses.gpl3Plus;

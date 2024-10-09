@@ -5,53 +5,57 @@
   gobject-introspection,
   setuptools,
   networkmanager,
+  proton-vpn-api-core,
   proton-vpn-killswitch,
   proton-vpn-logger,
   pycairo,
   pygobject3,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "proton-vpn-killswitch-network-manager";
-  version = "0.4.3";
+  version = "0.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-killswitch-network-manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kN41b6OZ2YXoBsmNZD3NrX4uJChSmm6DVP+5LYwiZMw=";
+    hash = "sha256-iUm+hpqgI4jG+1Cd9F6pBjodxHpq9/2ovXRT877biXQ=";
   };
 
   nativeBuildInputs = [
     # Solves ImportError: cannot import name NM, introspection typelib not found
     gobject-introspection
+  ];
+
+  build-system = [
     setuptools
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     # Needed here for the NM namespace
     networkmanager
+    proton-vpn-api-core
     proton-vpn-killswitch
     proton-vpn-logger
     pycairo
     pygobject3
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=proton.vpn.killswitch.backend.linux.networkmanager --cov-report=html --cov-report=term" ""
-  '';
-
   pythonImportsCheck = [ "proton.vpn.killswitch.backend.linux.networkmanager" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the proton-vpn-killswitch interface using Network Manager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-killswitch-network-manager";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

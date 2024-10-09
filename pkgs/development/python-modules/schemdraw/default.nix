@@ -51,7 +51,7 @@ buildPythonPackage rec {
 
   # Strip out references to unfree fonts from the test suite
   postPatch = ''
-    substituteInPlace test/test_styles.ipynb --replace "font='Times', " ""
+    substituteInPlace test/test_backend.ipynb --replace-fail "(font='Times')" "()"
   '';
 
   preCheck = "rm test/test_pictorial.ipynb"; # Tries to download files
@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "schemdraw" ];
 
   meta = with lib; {
-    description = "A package for producing high-quality electrical circuit schematic diagrams";
+    description = "Package for producing high-quality electrical circuit schematic diagrams";
     homepage = "https://schemdraw.readthedocs.io/en/latest/";
     changelog = "https://schemdraw.readthedocs.io/en/latest/changes.html";
     license = licenses.mit;

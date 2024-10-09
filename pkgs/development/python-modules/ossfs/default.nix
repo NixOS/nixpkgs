@@ -6,7 +6,6 @@
   fsspec,
   oss2,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools-scm,
 }:
 
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

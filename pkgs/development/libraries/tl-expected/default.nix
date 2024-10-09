@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     homepage = "https://tl.tartanllama.xyz/en/latest/api/expected.html";
     license = licenses.cc0;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

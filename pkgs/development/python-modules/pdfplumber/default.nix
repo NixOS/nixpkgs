@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  ghostscript,
   jupyterlab,
   nbexec,
   pandas,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pdfplumber";
-  version = "0.11.0";
+  version = "0.11.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "jsvine";
     repo = "pdfplumber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sjiCxE2WcvBASANCeookNn1n9M+mY0/8QGOCen+pzqM=";
+    hash = "sha256-62S5DMQwSgehl0BcjeRaTocko8xg72pQQ5YLoL3+QbU=";
   };
 
   postPatch = ''
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+    ghostscript
     jupyterlab
     nbexec
     pandas
@@ -64,8 +66,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests requires pypdfium2
     "tests/test_display.py"
-    # Tests require Ghostscript
-    "tests/test_repair.py"
+    # Tests requires pypdfium2
+    "tests/test_issues.py"
   ];
 
   meta = with lib; {

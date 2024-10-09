@@ -24,6 +24,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/diff-match-patch-python/diff-match-patch";
     description = "Diff, Match and Patch libraries for Plain Text";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

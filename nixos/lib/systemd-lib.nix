@@ -12,6 +12,7 @@ let
     concatStringsSep
     const
     elem
+    elemAt
     filter
     filterAttrs
     flatten
@@ -21,11 +22,14 @@ let
     isFloat
     isList
     isPath
+    isString
     length
     makeBinPath
     makeSearchPathOutput
     mapAttrs
     mapAttrsToList
+    mapNullable
+    match
     mkAfter
     mkIf
     optional
@@ -101,6 +105,8 @@ in rec {
     optional (attr ? ${name} && ! isByteFormat attr.${name})
       "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
+  toIntBaseDetected = value: assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null; (builtins.fromTOML "v=${value}").v;
+
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 
   isMacAddress = s: stringLength s == 17
@@ -156,6 +162,23 @@ in rec {
     optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
       "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
 
+  assertRangeWithOptionalMask = name: min: max: group: attr:
+    if (attr ? ${name}) then
+      if isInt attr.${name} then
+        assertRange name min max group attr
+      else if isString attr.${name} then
+        let
+          fields = match "([0-9]+|0x[0-9a-fA-F]+)(/([0-9]+|0x[0-9a-fA-F]+))?" attr.${name};
+        in if fields == null then ["Systemd ${group} field `${name}' must either be an integer or two integers separated by a slash (/)."]
+        else let
+          value = toIntBaseDetected (elemAt fields 0);
+          mask = mapNullable toIntBaseDetected (elemAt fields 2);
+        in
+          optional (!(min <= value && max >= value)) "Systemd ${group} field `${name}' has main value outside the range [${toString min},${toString max}]."
+          ++ optional (mask != null && !(min <= mask && max >= mask)) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
+      else ["Systemd ${group} field `${name}' must either be an integer or a string."]
+    else [];
+
   assertMinimum = name: min: group: attr:
     optional (attr ? ${name} && attr.${name} < min)
       "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
@@ -169,6 +192,10 @@ in rec {
     optional (attr ? ${name} && !isInt attr.${name})
       "Systemd ${group} field `${name}' is not an integer";
 
+  assertRemoved = name: see: group: attr:
+    optional (attr ? ${name})
+      "Systemd ${group} field `${name}' has been removed. See ${see}";
+
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
     # unit options might contain attributes from mkOverride and mkIf that we need to
@@ -181,6 +208,30 @@ in rec {
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
      else trace (concatStringsSep "\n" errors) false;
+
+  checkUnitConfigWithLegacyKey = legacyKey: group: checks: attrs:
+    let
+      dump = lib.generators.toPretty { }
+        (lib.generators.withRecursion { depthLimit = 2; throwOnDepthLimit = false; } attrs);
+      attrs' =
+        if legacyKey == null
+          then attrs
+        else if ! attrs?${legacyKey}
+          then attrs
+        else if removeAttrs attrs [ legacyKey ] == {}
+          then attrs.${legacyKey}
+        else throw ''
+          The declaration
+
+          ${dump}
+
+          must not mix unit options with the legacy key '${legacyKey}'.
+
+          This can be fixed by moving all settings from within ${legacyKey}
+          one level up.
+        '';
+    in
+    checkUnitConfig group checks attrs';
 
   toOption = x:
     if x == true then "true"
@@ -335,18 +386,27 @@ in rec {
       ''}
     ''; # */
 
-  makeJobScript = name: text:
+  makeJobScript = { name, text, enableStrictShellChecks }:
     let
       scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = (pkgs.writeShellScriptBin scriptName ''
-        set -e
-        ${text}
-      '').overrideAttrs (_: {
+      out = (
+        if ! enableStrictShellChecks then
+          pkgs.writeShellScriptBin scriptName ''
+            set -e
+
+            ${text}
+          ''
+        else
+          pkgs.writeShellApplication {
+            name = scriptName;
+            inherit text;
+          }
+      ).overrideAttrs (_: {
         # The derivation name is different from the script file name
         # to keep the script file name short to avoid cluttering logs.
         name = "unit-script-${scriptName}";
       });
-    in "${out}/bin/${scriptName}";
+    in lib.getExe out;
 
   unitConfig = { config, name, options, ... }: {
     config = {
@@ -397,10 +457,16 @@ in rec {
     };
   };
 
-  serviceConfig = { name, config, ... }: {
+  serviceConfig =
+  let
+    nixosConfig = config;
+  in
+  { name, lib, config, ... }: {
     config = {
       name = "${name}.service";
       environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+
+      enableStrictShellChecks = lib.mkOptionDefault nixosConfig.systemd.enableStrictShellChecks;
     };
   };
 

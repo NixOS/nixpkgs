@@ -31,7 +31,6 @@
   nbformat,
   pandas,
   parameterized,
-  pathtools,
   protobuf,
   psutil,
   pydantic,
@@ -40,7 +39,6 @@
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
   responses,
@@ -77,7 +75,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -87,7 +84,6 @@ buildPythonPackage rec {
     click
     docker-pycreds
     gitpython
-    pathtools
     protobuf
     psutil
     pyyaml
@@ -284,11 +280,11 @@ buildPythonPackage rec {
       # See https://github.com/wandb/wandb/issues/6836
       "tests/pytest_tests/unit_tests_old/test_logging.py"
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Same as above
       "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Same as above
       "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
     ];
@@ -297,8 +293,15 @@ buildPythonPackage rec {
     [
       # Timing sensitive
       "test_login_timeout"
+
+      # Tensorflow 2.13 is too old for the current version of keras
+      # ModuleNotFoundError: No module named 'keras.api._v2'
+      "test_saved_model_keras"
+      "test_sklearn_saved_model"
+      "test_pytorch_saved_model"
+      "test_tensorflow_keras_saved_model"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable test that fails on darwin due to issue with python3Packages.psutil:
       # https://github.com/giampaolo/psutil/issues/1219
       "test_tpu_system_stats"
@@ -310,7 +313,7 @@ buildPythonPackage rec {
   passthru.skipBulkUpdate = true;
 
   meta = with lib; {
-    description = "A CLI and library for interacting with the Weights and Biases API";
+    description = "CLI and library for interacting with the Weights and Biases API";
     homepage = "https://github.com/wandb/wandb";
     changelog = "https://github.com/wandb/wandb/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;

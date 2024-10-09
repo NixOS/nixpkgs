@@ -8,7 +8,6 @@
   pyasn1-modules,
   pycparser,
   pyqt5,
-  pythonRelaxDepsHook,
   pyqtwebengine,
   pythonOlder,
   withGui ? false,
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     wrapQtAppsHook
   ];
 
@@ -44,9 +42,9 @@ buildPythonPackage rec {
     cxxfilt
     msgpack
     pycparser
-  ] ++ lib.optionals (withGui) passthru.optional-dependencies.gui;
+  ] ++ lib.optionals (withGui) optional-dependencies.gui;
 
-  passthru.optional-dependencies.gui = [
+  optional-dependencies.gui = [
     pyqt5
     pyqtwebengine
   ];

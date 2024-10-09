@@ -9,7 +9,6 @@
   libusb1,
   mock,
   pyasn1,
-  pythonAtLeast,
   pycryptodome,
   pytestCheckHook,
   rsa,
@@ -35,7 +34,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiofiles
       async-timeout
@@ -47,7 +46,7 @@ buildPythonPackage rec {
     mock
     pycryptodome
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "adb_shell" ];
 

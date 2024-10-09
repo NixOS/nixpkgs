@@ -2,11 +2,13 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python3Packages,
   pythonOlder,
+  pyqt5,
+  poppler-qt5,
+  pycups,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "qpageview";
   version = "0.6.2";
   format = "setuptools";
@@ -20,7 +22,7 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-XFMTOD7ums8sbFHUViEI9q6/rCjUmEtXAdd3/OmLsHU=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pyqt5
     poppler-qt5
     pycups
@@ -29,7 +31,7 @@ python3Packages.buildPythonPackage rec {
   pythonImportsCheck = [ "qpageview" ];
 
   meta = with lib; {
-    description = "A page-based viewer widget for Qt5/PyQt5";
+    description = "Page-based viewer widget for Qt5/PyQt5";
     homepage = "https://github.com/frescobaldi/qpageview";
     changelog = "https://github.com/frescobaldi/qpageview/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Only;

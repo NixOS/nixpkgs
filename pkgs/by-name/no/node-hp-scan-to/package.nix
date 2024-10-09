@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "node-hp-scan-to";
-  version = "1.4.2";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "manuc66";
     repo = "node-hp-scan-to";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/aoR2ccDYTkdmcj4k2zf8VJydQufZ2ucqyZ1OH9jRt0=";
+    hash = "sha256-/XUqCL2F1iMYUoCbGgL9YKs+8wIFHvmh2O0LMbDU8yE=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-Mhlw/3js35TOVDADsPScE9kfv9rmF+u1LzDmKkzunM0=";
+    hash = "sha256-pxeYumHuomOFyCi8XhYTYQNcsGOUvjOg36bFD0yhdLk=";
   };
 
   nativeBuildInputs = [

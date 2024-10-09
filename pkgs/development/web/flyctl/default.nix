@@ -1,17 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles, gitUpdater }:
+{ lib, buildGoModule, fetchFromGitHub, testers, flyctl, installShellFiles }:
 
 buildGoModule rec {
   pname = "flyctl";
-  version = "0.2.55";
+  version = "0.3.15";
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
-    hash = "sha256-yCRaF600UrDmazsgTRp/grWtkULeSQedE5m69K6h/4Q=";
+    hash = "sha256-RM9R3o1NJYrw21SYx5whdR9kbopdOXUj3Uw5dVmo6Kk=";
   };
 
-  vendorHash = "sha256-1hlWyr41t8J4naN5QbEtfCv3npe/kvMH5NKKaxYvLYk=";
+  vendorHash = "sha256-0KVjg4gt0WOJgVaeugSGzJJE/MvKSPZP6MXCYIw0cxQ=";
 
   subPackages = [ "." ];
 
@@ -27,17 +27,12 @@ buildGoModule rec {
   patches = [ ./disable-auto-update.patch ];
 
   preBuild = ''
-    go generate ./...
+    GOOS= GOARCH= CGO_ENABLED=0 go generate ./...
   '';
 
   preCheck = ''
     HOME=$(mktemp -d)
   '';
-
-  checkFlags = [
-    # these tests require network
-    "-skip=TestToTestMachineConfig"
-  ];
 
   # We override checkPhase to be able to test ./... while using subPackages
   checkPhase = ''
@@ -58,14 +53,6 @@ buildGoModule rec {
     ln -s $out/bin/flyctl $out/bin/fly
   '';
 
-  # Upstream tags every PR merged with release tags like
-  # v2024.5.20-pr3545.4. We ignore all revisions containing a '-'
-  # to skip these releases.
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-    ignoredVersions = "-";
-  };
-
   passthru.tests.version = testers.testVersion {
     package = flyctl;
     command = "HOME=$(mktemp -d) flyctl version";
@@ -77,7 +64,7 @@ buildGoModule rec {
     downloadPage = "https://github.com/superfly/flyctl";
     homepage = "https://fly.io/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood ];
+    maintainers = with lib.maintainers; [ adtya jsierles techknowlogick RaghavSood teutat3s ];
     mainProgram = "flyctl";
   };
 }

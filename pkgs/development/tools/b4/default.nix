@@ -2,15 +2,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "b4";
-  version = "0.13.0";
+  version = "0.14.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gsok5aDi5oYJPMXVv3MFAehyKZ5hHBtvwf7z6Ut4dBQ=";
+    hash = "sha256-T4NbblrjDv9gBLslwV/Y9Pbs0RBVluhtsYcf730YET0=";
   };
 
   # tests make dns requests and fails
   doCheck = false;
+
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   propagatedBuildInputs = with python3Packages; [
     requests
@@ -23,7 +28,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://git.kernel.org/pub/scm/utils/b4/b4.git/about";
     license = licenses.gpl2Only;
-    description = "A helper utility to work with patches made available via a public-inbox archive";
+    description = "Helper utility to work with patches made available via a public-inbox archive";
     mainProgram = "b4";
     maintainers = with maintainers; [ jb55 qyliss mfrw ];
   };

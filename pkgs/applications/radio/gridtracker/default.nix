@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "gridtracker.org";
     repo = "gridtracker";
     rev = "v${version}";
-    sha256 = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
+    hash = "sha256-p3PdYOk0yvG3QkM17grzZmf9upK1n0zo4aOrlhGTvTU=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An amateur radio companion to WSJT-X or JTDX";
+    description = "Amateur radio companion to WSJT-X or JTDX";
     mainProgram = "gridtracker";
     longDescription = ''
       GridTracker listens to traffic from WSJT-X/JTDX, displays it on a map,

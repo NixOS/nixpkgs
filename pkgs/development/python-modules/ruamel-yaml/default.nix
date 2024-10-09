@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://sourceforge.net/projects/ruamel-yaml/";
     changelog = "https://sourceforge.net/p/ruamel-yaml/code/ci/default/tree/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

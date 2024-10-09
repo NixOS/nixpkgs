@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ./prevent-kill-on-shutdown.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
   '';
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   #
   # This must be done in preConfigure because the build process removes
   # helper from the source directory during the build.
-  preConfigure = lib.optionalString (!stdenv.isDarwin) ''
+  preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;

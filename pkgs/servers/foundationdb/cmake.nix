@@ -81,7 +81,7 @@ let
           # Needed with GCC 12
           "-Wno-error=missing-template-keyword"
           # Needed to compile on aarch64
-          (lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc")
+          (lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc")
         ];
 
         inherit patches;

@@ -18,17 +18,17 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "everforest" "all" "black" "rimless" "normal" "float" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "dracula" "gruvbox" "everforest" "catppuccin" "all" "black" "rimless" "normal" "float" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2024-05-13";
+  version = "2024-06-18";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-24U1iMByy+cFQuLUWYPBSuvJwYzwS0rCr7L6OWyMUz0=";
+    hash = "sha256-2saj/QfiYCxthGHauaSvRv9VVptlKbXoRTMYs3FWZsc=";
   };
 
   nativeBuildInputs = [
@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A modern and clean Gtk theme";
+    description = "Modern and clean Gtk theme";
     homepage = "https://github.com/vinceliuice/Colloid-gtk-theme";
     license = licenses.gpl3Only;
     platforms = platforms.unix;

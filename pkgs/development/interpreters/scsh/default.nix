@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A Scheme shell";
+    description = "Scheme shell";
     homepage = "http://www.scsh.net/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ joachifm ];

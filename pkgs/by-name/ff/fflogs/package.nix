@@ -5,10 +5,10 @@
 
 let
   pname = "fflogs";
-  version = "8.5.6";
+  version = "8.14.0";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-mLqQ1T5mBNUkTkgbGO/nVkoSy6U7hVBk9EcYAjo3i3k=";
+    hash = "sha256-hHgPtr25X2vZY+MKQn9FgkMLrF5vgklMQHzx4ksGrDk=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -25,7 +25,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "An application for uploading Final Fantasy XIV combat logs to fflogs.com";
+    description = "Application for uploading Final Fantasy XIV combat logs to fflogs.com";
     homepage = "https://www.fflogs.com/client/download";
     downloadPage = "https://github.com/RPGLogs/Uploaders-fflogs/releases/latest";
     license = licenses.unfree; # no license listed

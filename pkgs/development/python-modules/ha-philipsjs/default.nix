@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "ha-philipsjs";
-  version = "3.2.1";
+  version = "3.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = "ha-philipsjs";
     rev = "refs/tags/${version}";
-    hash = "sha256-gN7TPbNGw1vT0oAE6+Kg4V3J5dhYH+Gvv3JwptQ2aMk=";
+    hash = "sha256-zP8cuXdhvCDvnbc20GbFwgickdqeJ17b0vk0zK8ze9Q=";
   };
 
   build-system = [ setuptools ];

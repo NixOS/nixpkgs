@@ -1,28 +1,28 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, zig_0_12
+, zig_0_13
 , callPackage
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zls";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "zigtools";
     repo = "zls";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-2iVDPUj9ExgTooDQmCCtZs3wxBe2be9xjzAk9HedPNY=";
+    hash = "sha256-vkFGoKCYUk6B40XW2T/pdhir2wzN1kpFmlLcoLwJx1U=";
   };
 
   zigBuildFlags = [
-    "-Dversion_data_path=${zig_0_12.src}/doc/langref.html.in"
+    "-Dversion_data_path=${zig_0_13.src}/doc/langref.html.in"
   ];
 
   nativeBuildInputs = [
-    zig_0_12.hook
+    zig_0_13.hook
   ];
 
   postPatch = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/zigtools/zls/releases/tag/${finalAttrs.version}";
     homepage = "https://github.com/zigtools/zls";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda moni ];
+    maintainers = with lib.maintainers; [ figsoda moni _0x5a4 ];
     platforms = lib.platforms.unix;
   };
 })

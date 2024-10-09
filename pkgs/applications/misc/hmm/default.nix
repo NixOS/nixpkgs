@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A small command-line note-taking app";
+    description = "Small command-line note-taking app";
     homepage = "https://github.com/samwho/hmm";
     changelog = "https://github.com/samwho/hmm/releases/tag/v${version}";
     license = licenses.mit;

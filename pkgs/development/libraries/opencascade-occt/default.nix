@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     libXext
     libXmu
     libXi
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";

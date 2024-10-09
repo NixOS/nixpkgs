@@ -1,5 +1,6 @@
 {
   bundlerApp,
+  defaultGemConfig,
   bundlerUpdateScript,
   lib,
   makeWrapper,
@@ -14,10 +15,12 @@
   exes = [ "bolt" ];
   nativeBuildInputs = [ makeWrapper ];
 
-  gemConfig.bolt = attrs: {
-    # scripts in libexec will be executed by remote host,
-    # so shebangs should remain unchanged
-    dontPatchShebangs = true;
+  gemConfig = defaultGemConfig // {
+    bolt = attrs: {
+      # scripts in libexec will be executed by remote host,
+      # so shebangs should remain unchanged
+      dontPatchShebangs = true;
+    };
   };
 
   postBuild = ''

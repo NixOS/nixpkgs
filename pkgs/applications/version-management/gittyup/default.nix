@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     openssl
     qtbase
     qttools
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreFoundation
     Security
   ]);
@@ -68,11 +68,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A graphical Git client designed to help you understand and manage your source code history";
+    description = "Graphical Git client designed to help you understand and manage your source code history";
     homepage = "https://murmele.github.io/Gittyup";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

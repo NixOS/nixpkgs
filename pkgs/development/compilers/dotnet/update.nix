@@ -1,18 +1,19 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, writeScript
-, nix
-, runtimeShell
-, curl
-, cacert
-, jq
-, yq
-, gnupg
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  writeScript,
+  nix,
+  runtimeShell,
+  curl,
+  cacert,
+  jq,
+  yq,
+  gnupg,
 
-, releaseManifestFile
-, releaseInfoFile
-, allowPrerelease
+  releaseManifestFile,
+  releaseInfoFile,
+  allowPrerelease,
 }:
 
 let
@@ -38,7 +39,8 @@ let
 
   drv = builtins.unsafeDiscardOutputDependency pkg.drvPath;
 
-in writeScript "update-dotnet-vmr.sh" ''
+in
+writeScript "update-dotnet-vmr.sh" ''
   #! ${nix}/bin/nix-shell
   #! nix-shell -i ${runtimeShell} --pure ${drv}
   set -euo pipefail
@@ -101,7 +103,7 @@ in writeScript "update-dotnet-vmr.sh" ''
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
 
       if [[ "$artifactsVersion" != "" ]]; then
-          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.8-x64.tar.gz
+          artifactsUrl=https://dotnetcli.azureedge.net/source-built-artifacts/assets/Private.SourceBuilt.Artifacts.$artifactsVersion.centos.9-x64.tar.gz
       else
           artifactsUrl=$(xq -r '.Project.PropertyGroup |
               map(select(.PrivateSourceBuiltArtifactsUrl))

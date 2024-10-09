@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A C library for reading and writing Matlab MAT files";
+    description = "C library for reading and writing Matlab MAT files";
     homepage = "http://matio.sourceforge.net/";
     license = licenses.bsd2;
     maintainers = [ ];

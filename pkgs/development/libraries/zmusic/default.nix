@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zmusic";
-  version = "1.1.12";
+  version = "1.1.13";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
     rev = version;
-    hash = "sha256-waxgn4Dg8One2Hv7J2efMoYo5mmaMSMiPQSNq57kbvE=";
+    hash = "sha256-rvvMS5KciHEvoY4hSfgAEyWJiDMqBto4o09oIpQIGTQ=";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "system-fluidsynth.patch";
-      url = "https://git.alpinelinux.org/aports/plain/testing/zmusic/system-fluidsynth.patch?id=59bac94da374cb01bc2a0e49d9e9287812fa1ac0";
+      url = "https://git.alpinelinux.org/aports/plain/community/zmusic/system-fluidsynth.patch?id=ca353107ef4f2e5c55c3cc824b0840e2838fb894";
       hash = "sha256-xKaqiNk1Kt9yNLB22IVmSEtGeOtxrCi7YtFCmhNr0MI=";
     })
   ];
 
   postPatch = ''
     substituteInPlace source/mididevices/music_fluidsynth_mididevice.cpp \
-      --replace "/usr/share/sounds/sf2" "${soundfont-fluid}/share/soundfonts" \
-      --replace "FluidR3_GM.sf2" "FluidR3_GM2-2.sf2"
+      --replace-fail "/usr/share/sounds/sf2" "${soundfont-fluid}/share/soundfonts" \
+      --replace-fail "FluidR3_GM.sf2" "FluidR3_GM2-2.sf2"
   '';
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       lgpl21Plus
       lgpl3Plus
     ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ azahi lassulus ];
   };
 }

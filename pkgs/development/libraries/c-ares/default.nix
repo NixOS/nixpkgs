@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, writeTextDir
+{ lib, stdenv, fetchurl, updateAutotoolsGnuConfigScriptsHook
 , withCMake ? true, cmake
 
 # sensitive downstream packages
@@ -16,13 +16,14 @@ stdenv.mkDerivation rec {
   version = "1.27.0";
 
   src = fetchurl {
-    url = "https://c-ares.org/download/${pname}-${version}.tar.gz";
+    # Note: tag name varies in some versions, e.g. v1.30.0, c-ares-1_17_0.
+    url = "https://github.com/c-ares/${pname}/releases/download/cares-${builtins.replaceStrings ["."] ["_"] version}/${pname}-${version}.tar.gz";
     hash = "sha256-CnK+ZpWZVcQ+KvL70DQY6Cor1UZGBOyaYhR+N6zrQgs=";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  nativeBuildInputs = lib.optionals withCMake [ cmake ];
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ] ++ lib.optionals withCMake [ cmake ];
 
   cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
     "-DCARES_SHARED=OFF"
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A C library for asynchronous DNS requests";
+    description = "C library for asynchronous DNS requests";
     homepage = "https://c-ares.haxx.se";
     changelog = "https://c-ares.org/changelog.html#${lib.replaceStrings [ "." ] [ "_" ] version}";
     license = licenses.mit;

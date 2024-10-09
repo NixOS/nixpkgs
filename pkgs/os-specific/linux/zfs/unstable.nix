@@ -1,8 +1,8 @@
 { callPackage
 , kernel ? null
 , stdenv
-, linuxKernel
 , nixosTests
+, fetchpatch
 , ...
 } @ args:
 
@@ -14,21 +14,18 @@ callPackage ./generic.nix args {
   # this attribute is the correct one for this package.
   kernelModuleAttribute = "zfs_unstable";
   # check the release notes for compatible kernels
-  kernelCompatible = kernel.kernelOlder "6.9";
-
-  latestCompatibleLinuxPackages = linuxKernel.packages.linux_6_8;
+  kernelCompatible = kernel: kernel.kernelOlder "6.11";
 
   # this package should point to a version / git revision compatible with the latest kernel release
   # IMPORTANT: Always use a tagged release candidate or commits from the
   # zfs-<version>-staging branch, because this is tested by the OpenZFS
   # maintainers.
-  version = "2.2.4";
+  version = "2.2.6";
   # rev = "";
 
-  isUnstable = true;
   tests = [
     nixosTests.zfs.unstable
   ];
 
-  hash = "sha256-SSp/1Tu1iGx5UDcG4j0k2fnYxK05cdE8gzfSn8DU5Z4=";
+  hash = "sha256-wkgoYg6uQOHVq8a9sJXzO/QXJ6q28l7JXWkC+BFvOb0=";
 }

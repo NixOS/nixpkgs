@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.12.1";
   format = "setuptools";
   # https://github.com/bastibe/python-soundfile/issues/157
-  disabled = isPyPy || stdenv.isi686;
+  disabled = isPyPy || stdenv.hostPlatform.isi686;
 
   src = fetchPypi {
     inherit pname version;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   propagatedNativeBuildInputs = [ cffi ];
 
   meta = {
-    description = "An audio library based on libsndfile, CFFI and NumPy";
+    description = "Audio library based on libsndfile, CFFI and NumPy";
     license = lib.licenses.bsd3;
     homepage = "https://github.com/bastibe/python-soundfile";
   };

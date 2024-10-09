@@ -25,7 +25,7 @@
 let
   pname = "qFlipper";
   version = "1.3.3";
-  sha256 = "sha256-/Xzy+OA0Nl/UlSkOOZW2YsOHdJvS/7X3Z3ITkPByAOc=";
+  hash = "sha256-/Xzy+OA0Nl/UlSkOOZW2YsOHdJvS/7X3Z3ITkPByAOc=";
   timestamp = "99999999999";
   commit = "nix-${version}";
 
@@ -38,7 +38,7 @@ mkDerivation {
     repo = "qFlipper";
     rev = version;
     fetchSubmodules = true;
-    inherit sha256;
+    inherit hash;
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ mkDerivation {
     qtquickcontrols
     qtquickcontrols2
     qtgraphicaleffects
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     qtwayland
   ];
 
@@ -83,7 +83,7 @@ mkDerivation {
 
   postInstall = ''
     mkdir -p $out/bin
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
     cp qFlipper.app/Contents/MacOS/qFlipper $out/bin
     ''}
     cp qFlipper-cli $out/bin
@@ -95,7 +95,7 @@ mkDerivation {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform desktop tool to manage your flipper device";
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;

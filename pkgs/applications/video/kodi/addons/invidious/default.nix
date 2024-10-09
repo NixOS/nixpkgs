@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, requests, inputstream-adaptive, inputstreamhelper }:
+{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, infotagger, requests, inputstream-adaptive, inputstreamhelper }:
 
 buildKodiAddon rec {
   pname = "invidious";
@@ -11,6 +11,7 @@ buildKodiAddon rec {
   };
 
   propagatedBuildInputs = [
+    infotagger
     requests
     inputstream-adaptive
     inputstreamhelper
@@ -25,7 +26,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/petterreinholdtsen/kodi-invidious-plugin";
-    description = "A privacy-friendly way of watching YouTube content";
+    description = "Privacy-friendly way of watching YouTube content";
     license = licenses.mit;
     maintainers = teams.kodi.members;
   };

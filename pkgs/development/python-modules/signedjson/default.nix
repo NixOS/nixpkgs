@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "Sign JSON with Ed25519 signatures";
     homepage = "https://github.com/matrix-org/python-signedjson";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

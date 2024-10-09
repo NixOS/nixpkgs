@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "http://incise.org/tinywm.html";
-    description = "A tiny window manager for X11";
+    description = "Tiny window manager for X11";
     longDescription = ''
       TinyWM is a tiny window manager that I created as an exercise in
       minimalism. It is also maybe helpful in learning some of the very basics

@@ -1,6 +1,5 @@
 { lib
 , fetchurl
-, fetchpatch
 , python3Packages
 , gnupg
 , pass

@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.uninformativ.de/git/katriawm/file/README.html";
-    description = "A non-reparenting, dynamic window manager with decorations";
+    description = "Non-reparenting, dynamic window manager with decorations";
     license = lib.licenses.mit;
     mainProgram = "katriawm";
     maintainers = [ lib.maintainers.AndersonTorres ];

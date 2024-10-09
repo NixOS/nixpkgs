@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Mutable mapping tools.";
+    description = "Mutable mapping tools";
     homepage = "https://github.com/dask/zict";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];

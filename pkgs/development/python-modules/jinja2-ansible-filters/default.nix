@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Jinja2 Ansible Filters";
     homepage = "https://pypi.org/project/jinja2-ansible-filters/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

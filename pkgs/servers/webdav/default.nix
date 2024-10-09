@@ -1,17 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, buildGoModule }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "webdav";
-  version = "4.2.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "hacdias";
     repo = "webdav";
     rev = "v${version}";
-    sha256 = "sha256-4rgDO1vItmmCRXRiO24MPa9IPzrsfzCWLH6hl6oKkxk=";
+    sha256 = "sha256-6hDMu3IgyQeRSxo1z3TAjrEH/XwdfHvoLVjyVwa0LdU=";
   };
 
-  vendorHash = "sha256-az+EasmKitFPWD5JfKaSKZGok/n/dPmIv90RiL750KY=";
+  vendorHash = "sha256-LQePicQUm55c0lzVCF6au2v3BfXvGIJHNn2SpTQEjpU=";
 
   meta = with lib; {
     description = "Simple WebDAV server";

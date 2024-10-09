@@ -2,49 +2,53 @@
   lib,
   stdenv,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   braceexpand,
+  numpy,
+  pyyaml,
+
+  # tests
   imageio,
   lmdb,
   msgpack,
-  numpy,
   pytestCheckHook,
-  pyyaml,
-  setuptools,
   torch,
   torchvision,
-  wheel,
-  fetchFromGitHub,
 }:
 buildPythonPackage rec {
   pname = "webdataset";
-  version = "0.2.90";
+  version = "0.2.107";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "webdataset";
     repo = "webdataset";
-    rev = "refs/tags/${version}";
-    hash = "sha256-selj7XD7NS831lbPnx/4o46bNpsxuFdSEIIb4S2b7S0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-L9RUQItmW/7O/eTst2Sl/415EP4Jo662bKWbYA6p5bk=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     braceexpand
     numpy
     pyyaml
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     imageio
+    lmdb
+    msgpack
+    pytestCheckHook
     torch
     torchvision
-    msgpack
-    lmdb
   ];
 
   pythonImportsCheck = [ "webdataset" ];
@@ -67,16 +71,16 @@ buildPythonPackage rec {
       "test_unbatched"
       "test_yaml3"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # pickling error
       "test_background_download"
     ]
-    ++ lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
       "test_concurrent_access"
       # fails to patch 'init_process_group' from torch.distributed
       "TestDistributedChunkedSampler"
     ]
-    ++ lib.optionals (stdenv.isAarch64 && stdenv.isLinux) [
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
       # segfaults on aarch64-linux
       "test_webloader"
       "test_webloader2"
@@ -84,12 +88,20 @@ buildPythonPackage rec {
       "test_webloader_unbatched"
     ];
 
-  meta = with lib; {
-    description = "A high-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AttributeError: <module 'torch.distributed' from /nix/store/...
+    "tests/wids/test_wids.py"
+
+    # Issue with creating a temp file in the sandbox
+    "tests/wids/test_wids_mmtar.py"
+  ];
+
+  meta = {
+    description = "High-performance Python-based I/O system for large (and small) deep learning problems, with strong support for PyTorch";
     mainProgram = "widsindex";
     homepage = "https://github.com/webdataset/webdataset";
     changelog = "https://github.com/webdataset/webdataset/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ iynaix ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ iynaix ];
   };
 }

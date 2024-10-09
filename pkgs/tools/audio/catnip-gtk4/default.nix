@@ -22,17 +22,19 @@ buildGoModule {
   vendorHash = "sha256-gcr3e5Fm2xCTOoTgl71Dv3rxI6gQbqRz0M1NO7fAZk0=";
 
   nativeBuildInputs = [
+    gobject-introspection
     pkg-config
     wrapGAppsHook4
   ];
 
   buildInputs = [
-    gobject-introspection
     gtk4
     libadwaita
   ];
 
   ldflags = [ "-s" "-w" ];
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "GTK4 frontend for catnip";

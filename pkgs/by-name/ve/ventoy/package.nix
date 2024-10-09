@@ -50,11 +50,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
-  version = "1.0.98";
+  version = "1.0.99";
 
   src = fetchurl {
     url = "https://github.com/ventoy/Ventoy/releases/download/v${finalAttrs.version}/ventoy-${finalAttrs.version}-linux.tar.gz";
-    hash = "sha256-JjBB9vG7CNs4Fbp6IIBkIpZg7l9g0e58tjhznc7OsLw=";
+    hash = "sha256-RnzdGIp/c5vHBq28HWlfYf/e/JWRatsBWUfYCCnwCj0=";
   };
 
   patches = [
@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.ventoy.net";
-    description = "A New Bootable USB Solution";
+    description = "New Bootable USB Solution";
     longDescription = ''
       Ventoy is an open source tool to create bootable USB drive for
       ISO/WIM/IMG/VHD(x)/EFI files.  With ventoy, you don't need to format the

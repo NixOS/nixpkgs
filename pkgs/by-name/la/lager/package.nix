@@ -2,7 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, pkg-config
 , boost
 , immer
 , zug

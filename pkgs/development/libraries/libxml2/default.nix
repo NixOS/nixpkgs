@@ -1,10 +1,8 @@
 { stdenv
 , lib
 , fetchurl
-, zlib
 , pkg-config
 , autoreconfHook
-, xz
 , libintl
 , python
 , gettext
@@ -21,20 +19,21 @@
 , enableStatic ? !enableShared
 , gnome
 , testers
+, enableHttp ? false
 }:
 
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.12.7";
+  version = "2.13.3";
 
-  outputs = [ "bin" "dev" "out" "doc" ]
+  outputs = [ "bin" "dev" "out" "devdoc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
+    url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
+    hash = "sha256-CAXXwYDPCcqtcWZsekWKdPBBVhpTKQJFTaUEfYOUgTg=";
   };
 
   strictDeps = true;
@@ -50,19 +49,13 @@ stdenv.mkDerivation (finalAttrs: rec {
     gettext
   ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
     ncurses
-  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
-  ] ++ lib.optionals stdenv.isFreeBSD [
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    xz
   ];
 
   propagatedBuildInputs = [
-    zlib
     findXMLCatalogs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals icuSupport [
     icu
@@ -75,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     (lib.withFeature icuSupport "icu")
     (lib.withFeature pythonSupport "python")
     (lib.optionalString pythonSupport "PYTHON=${python.pythonOnBuildForHost.interpreter}")
-  ];
+  ] ++ lib.optional enableHttp "--with-http";
 
   installFlags = lib.optionals pythonSupport [
     "pythondir=\"${placeholder "py"}/${python.sitePackages}\""
@@ -87,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
     stdenv.hostPlatform.libc != "musl";
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
   '';
 
@@ -96,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   preInstall = lib.optionalString pythonSupport ''
-    substituteInPlace python/libxml2mod.la --replace "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
+    substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
   postFixup = ''
@@ -107,11 +100,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   '';
 
   passthru = {
-    inherit version;
-    pythonSupport = pythonSupport;
+    inherit pythonSupport;
 
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libxml2";
       versionPolicy = "none";
     };
     tests = {
@@ -126,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: rec {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     pkgConfigModules = [ "libxml-2.0" ];
   };
 })

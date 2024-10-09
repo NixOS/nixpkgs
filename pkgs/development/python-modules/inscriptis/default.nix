@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/weblyzard/inscriptis";
     changelog = "https://github.com/weblyzard/inscriptis/releases/tag/${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

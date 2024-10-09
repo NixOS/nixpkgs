@@ -33,7 +33,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/chmouel/clipman";
-    description = "A simple clipboard manager for Wayland";
+    description = "Simple clipboard manager for Wayland";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ma27 ];
     platforms = platforms.linux;

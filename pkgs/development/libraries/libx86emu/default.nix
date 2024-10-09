@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr" "/"
   '';
 
-  buildFlags = [ "shared" ];
+  buildFlags = [ "shared" "CC=${stdenv.cc.targetPrefix}cc" ];
   enableParallelBuilding = true;
 
   installFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];

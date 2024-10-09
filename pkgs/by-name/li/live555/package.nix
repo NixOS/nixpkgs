@@ -1,6 +1,6 @@
 {
   lib,
-  darwin,
+  cctools,
   fetchpatch,
   fetchurl,
   openssl,
@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live555";
-  version = "2024.05.05";
+  version = "2024.08.01";
 
   src = fetchurl {
     urls = [
@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
       "https://download.videolan.org/contrib/live555/live.${finalAttrs.version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-jGT1jg5pa4bwIcxUy7/svIhU2HCxx2TNMkWvBfN33nM=";
+    hash = "sha256-g5q3Q30B5in4CU6h7Ix6e7UEx97tnt/J4XrDT5oaGT8=";
   };
 
   patches = [
@@ -30,19 +30,32 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
-    darwin.cctools
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
   ];
 
   buildInputs = [
     openssl
   ];
 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "C_COMPILER=$(CC)"
+    "CPLUSPLUS_COMPILER=$(CXX)"
+    "LIBRARY_LINK=$(AR) cr "
+    "LINK=$(CXX) -o "
+  ];
+
+  # Since NIX_CFLAGS_COMPILE affects both C and C++ toolchains, we set CXXFLAGS
+  # directly
+  env.CXXFLAGS = "-std=c++20";
+
   strictDeps = true;
 
-  # Since NIX_CFLAGS_COMPILE does not differentiate C and C++ toolchains, we
-  # set CXXFLAGS directly
-  env.CXXFLAGS = "-std=c++20";
+  enableParallelBuilding = true;
+
+  # required for whitespaces in makeFlags
+  __structuredAttrs = true;
 
   postPatch = ''
     substituteInPlace config.macosx-catalina \
@@ -61,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = let
     platform =
-      if stdenv.isLinux then
+      if stdenv.hostPlatform.isLinux then
         "linux"
-      else if stdenv.isDarwin then
+      else if stdenv.hostPlatform.isDarwin then
         "macosx-catalina"
       else
         throw "Unsupported platform: ${stdenv.hostPlatform.system}";
@@ -74,19 +87,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postConfigure
   '';
-
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "C_COMPILER=$(CC)"
-    "CPLUSPLUS_COMPILER=$(CXX)"
-    "LIBRARY_LINK=$(AR) cr "
-    "LINK=$(CXX) -o "
-  ];
-
-  # required for whitespaces in makeFlags
-  __structuredAttrs = true;
-
-  enableParallelBuilding = true;
 
   passthru.tests = {
     # Downstream dependency

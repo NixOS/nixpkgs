@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation rec {
   pname = "peergos";
-  version = "0.17.0";
+  version = "0.20.0";
   src = fetchurl {
     url = "https://github.com/Peergos/web-ui/releases/download/v${version}/Peergos.jar";
-    hash = "sha256-sQPEKvtQDRQ4dF22tZjPhK7DLtDVAcudxoA4+GOeeZA=";
+    hash = "sha256-Kk0ahAsvfTYkmVZTDE+QhyDFHQFY6lpWhmIOYBeJ1xk=";
   };
 
   dontUnpack = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://github.com/Peergos/web-ui/releases/tag/v${version}";
-    description = "A p2p, secure file storage, social network and application protocol";
+    description = "P2p, secure file storage, social network and application protocol";
     downloadPage = "https://github.com/Peergos/web-ui";
     homepage = "https://peergos.org/";
     # peergos have agpt3 license, peergos-web-ui have gpl3, both are used

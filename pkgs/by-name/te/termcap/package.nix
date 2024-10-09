@@ -46,8 +46,8 @@ stdenv.mkDerivation rec {
   postInstall = lib.optionalString (!enableStatic) ''
     rm $out/lib/libtermcap.a
   '' + lib.optionalString enableShared (let
-    libName = "lib${pname}${stdenv.hostPlatform.extensions.sharedLibrary}";
-    impLibName = "lib${pname}.dll.a";
+    libName = "libtermcap${stdenv.hostPlatform.extensions.sharedLibrary}";
+    impLibName = "libtermcap.dll.a";
     winImpLib = lib.optionalString stdenv.hostPlatform.isWindows
       "-Wl,--out-implib,${impLibName}";
   in ''

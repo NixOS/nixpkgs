@@ -15,10 +15,10 @@ rustPlatform.buildRustPackage rec {
     owner = "benbrittain";
     repo = "buckle";
     rev = "v${version}";
-    sha256 = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
+    hash = "sha256-eWhcDzw+6I5N0dse5avwhcQ/y6YZ6b3QKyBwWBrA/xo=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
-    description = "A buck2 launcher";
+    description = "Buck2 launcher";
     longDescription = ''
       Buckle is a launcher for [Buck2](https://buck2.build). It manages
       Buck2 on a per-project basis. This enables a project or team to do

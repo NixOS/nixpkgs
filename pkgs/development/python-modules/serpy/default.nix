@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Ridiculously fast object serialization";
     homepage = "https://github.com/clarkduvall/serpy";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

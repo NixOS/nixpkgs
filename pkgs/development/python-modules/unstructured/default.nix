@@ -57,7 +57,7 @@
   grpcio,
 }:
 let
-  version = "0.13.7";
+  version = "0.15.13";
   optional-dependencies = {
     huggingflace = [
       langdetect
@@ -100,7 +100,7 @@ buildPythonPackage {
     owner = "Unstructured-IO";
     repo = "unstructured";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ekfa454mL7isMX79bd/YXPPHnetSzo1Mlg/XJakYyDM=";
+    hash = "sha256-DbOuNh+p+4vsEO6AQUeMq25RTLm5Zn9FyzcTKJedbTM=";
   };
 
   propagatedBuildInputs = [
@@ -143,7 +143,7 @@ buildPythonPackage {
     grpcio
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";

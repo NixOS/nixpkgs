@@ -13,7 +13,7 @@ skawarePackages.buildPackage {
     maintainers = [ lib.maintainers.somasis ];
   };
 
-  description = "A set of tiny general Unix utilities optimized for simplicity and small size";
+  description = "Set of tiny general Unix utilities optimized for simplicity and small size";
 
   outputs = [ "bin" "dev" "doc" "out" ];
 

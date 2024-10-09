@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "An extensible Vulkan benchmarking suite";
+    description = "Extensible Vulkan benchmarking suite";
     homepage = "https://github.com/vkmark/vkmark";
     license = with licenses; [ lgpl21Plus ];
     platforms = platforms.linux;

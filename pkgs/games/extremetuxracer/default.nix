@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, freeglut, freetype
+{ lib, stdenv, fetchurl, libGLU, libGL, libX11, xorgproto, tcl, libglut, freetype
 , sfml, libXi
 , libXmu, libXext, libXt, libSM, libICE
 , libpng, pkg-config, gettext, intltool
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config intltool ];
   buildInputs = [
-    libGLU libGL libX11 xorgproto tcl freeglut freetype
+    libGLU libGL libX11 xorgproto tcl libglut freetype
     sfml libXi
     libXmu libXext libXt libSM libICE
     libpng gettext
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/extremetuxracer/";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "etr";
     platforms = with lib.platforms; linux;
   };

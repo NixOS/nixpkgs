@@ -16,6 +16,8 @@
   (fetchNuGet { pname = "Spectre.Console"; version = "0.49.1"; sha256 = "0fhl96p3xjd5k1wwvhs80cp35rrlgnza6mw9vy0knhmf7ji9b95n"; })
   (fetchNuGet { pname = "Superpower"; version = "3.0.0"; sha256 = "0p6riay4732j1fahc081dzgs9q4z3n2fpxrin4zfpj6q2226dhz4"; })
   (fetchNuGet { pname = "System.Text.Encoding.CodePages"; version = "8.0.0"; sha256 = "1lgdd78cik4qyvp2fggaa0kzxasw6kc9a6cjqw46siagrm0qnc3y"; })
+  (fetchNuGet { pname = "System.Text.Encodings.Web"; version = "8.0.0"; sha256 = "1wbypkx0m8dgpsaqgyywz4z760xblnwalb241d5qv9kx8m128i11"; })
+  (fetchNuGet { pname = "System.Text.Json"; version = "8.0.3"; sha256 = "0jkl986gnh2a39v5wbab47qyh1g9a64dgh5s67vppcay8hd42c4n"; })
   (fetchNuGet { pname = "WebMarkupMin.Core"; version = "2.16.0"; sha256 = "0cbkgrrkam76bhygrjzd4nj4mpzpgbnsddfzwry1933rcvjlqh6m"; })
-  (fetchNuGet { pname = "YoutubeExplode"; version = "6.3.14"; sha256 = "12w9zz6y7cdw6p2gvr34r4qcl35hh19zn9fm0risrrcs8577msxs"; })
+  (fetchNuGet { pname = "YoutubeExplode"; version = "6.3.16"; sha256 = "1f6d47g1qmmahx6pn2sp0fff7hsmdqwm7z09j47hs6r1yn9a7kyj"; })
 ]

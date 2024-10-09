@@ -38,12 +38,24 @@ rustPlatform.buildRustPackage rec {
     atk
     gdk-pixbuf
     gtk4
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
   ]);
 
+  postInstall = ''
+    install -m 444 \
+        -D data/com.github.qarmin.szyszka.desktop \
+        -t $out/share/applications
+    install -m 444 \
+        -D data/com.github.qarmin.szyszka.metainfo.xml \
+        -t $out/share/metainfo
+    install -m 444 \
+        -D data/icons/com.github.qarmin.szyszka.svg \
+        -t $out/share/icons/hicolor/scalable/apps
+  '';
+
   meta = with lib; {
-    description = "A simple but powerful and fast bulk file renamer";
+    description = "Simple but powerful and fast bulk file renamer";
     homepage = "https://github.com/qarmin/szyszka";
     license = licenses.mit;
     maintainers = with maintainers; [ kranzes ];

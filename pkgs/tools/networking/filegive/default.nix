@@ -18,7 +18,7 @@ buildGoModule rec {
     homepage = "https://viric.name/cgi-bin/filegive";
     description = "Easy p2p file sending program";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     mainProgram = "filegive";
   };
 }

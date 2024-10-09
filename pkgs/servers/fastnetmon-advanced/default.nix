@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
   meta = with lib; {
-    description = "A high performance DDoS detector / sensor - commercial edition";
+    description = "High performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
     changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-texttospeech";
-  version = "2.16.3";
+  version = "2.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-+rwxUDLRN9oHELtMJoc00zYhLY+oMWsjsnfdOoTOchw=";
+    pname = "google_cloud_texttospeech";
+    inherit version;
+    hash = "sha256-hRzD46MqUA/edzeEBh6c6l6ZYKxXaIOid19w1hNZhQo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -39,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Disable tests that require credentials
+    # Tests that require credentials
     "test_list_voices"
     "test_synthesize_speech"
   ];
@@ -55,6 +56,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-texttospeech";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-texttospeech-v${version}/packages/google-cloud-texttospeech/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

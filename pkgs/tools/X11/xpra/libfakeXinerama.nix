@@ -12,22 +12,29 @@ stdenv.mkDerivation  rec {
   buildInputs = [ libX11 libXinerama ];
 
   buildPhase = ''
-    gcc -O2 -Wall fakeXinerama.c -fPIC -o libfakeXinerama.so.1.0 -shared
+    runHook preBuild
+
+    $CC -O2 -Wall fakeXinerama.c -fPIC -o libfakeXinerama.so.1.0 -shared
+
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out/lib
-    cp libfakeXinerama.so.1.0 $out/lib
-    ln -s libfakeXinerama.so.1.0 $out/lib/libXinerama.so.1.0
-    ln -s libXinerama.so.1.0 $out/lib/libXinerama.so.1
-    ln -s libXinerama.so.1 $out/lib/libXinerama.so
+    runHook preInstall
+
+    install -Dm555 libfakeXinerama.so.1.0 -t "$out/lib"
+    ln -s libfakeXinerama.so.1.0 "$out/lib/libXinerama.so.1.0"
+    ln -s libXinerama.so.1.0 "$out/lib/libXinerama.so.1"
+    ln -s libXinerama.so.1 "$out/lib/libXinerama.so"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://xpra.org/";
     description = "fakeXinerama for Xpra";
-    platforms = platforms.linux;
-    maintainers = [ ];
-    license = licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.nickcao ];
+    license = lib.licenses.mit;
   };
 }

@@ -1,51 +1,50 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+  versioneer,
+
+  # dependencies
   click,
   cloudpickle,
   dask,
-  fetchFromGitHub,
   jinja2,
   locket,
   msgpack,
   packaging,
   psutil,
-  pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
-  setuptools,
-  setuptools-scm,
   sortedcontainers,
   tblib,
   toolz,
   tornado,
   urllib3,
-  versioneer,
   zict,
 }:
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "2024.5.0";
+  version = "2024.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "distributed";
     rev = "refs/tags/${version}";
-    hash = "sha256-9W5BpBQHw1ZXCOWiFPeIlMns/Yys1gtdwQ4Lhd7qjK8=";
+    hash = "sha256-UDfa59o+3RVN3QppoUamScdcH8XGOB+KAxArI5w7x6M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "versioneer[toml]==" "versioneer[toml]>=" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail "versioneer[toml]==" "versioneer[toml]>=" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [
-    pythonRelaxDepsHook
     setuptools
     setuptools-scm
     versioneer
@@ -76,11 +75,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "distributed" ];
 
-  meta = with lib; {
+  meta = {
     description = "Distributed computation in Python";
     homepage = "https://distributed.readthedocs.io/";
-    changelog = "https://github.com/dask/distributed/blob/${version}/docs/source/changelog.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ teh ];
+    changelog = "https://github.com/dask/distributed/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ teh ];
   };
 }

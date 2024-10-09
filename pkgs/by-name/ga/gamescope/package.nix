@@ -1,8 +1,11 @@
 { stdenv
+, buildPackages
+, edid-decode
 , fetchFromGitHub
 , meson
 , pkg-config
 , ninja
+, cmake
 , xorg
 , libdrm
 , libei
@@ -10,6 +13,7 @@
 , vulkan-headers
 , wayland
 , wayland-protocols
+, wayland-scanner
 , libxkbcommon
 , glm
 , gbenchmark
@@ -18,19 +22,18 @@
 , SDL2
 , pipewire
 , pixman
+, python3
 , libinput
 , glslang
 , hwdata
-, openvr
 , stb
 , wlroots
-, libliftoff
 , libdecor
-, libdisplay-info
+, lcms
 , lib
 , makeBinaryWrapper
-, patchelfUnstable
 , nix-update-script
+, writeShellScriptBin
 , enableExecutable ? true
 , enableWsi ? true
 }:
@@ -44,28 +47,31 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.14.16";
+  version = "3.15.11";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
     rev = "refs/tags/${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-tijFVOIMW+nkot/uRP0PNZBYZkZMMt1PcAN5+3SWzW4=";
+    hash = "sha256-O2pxaPDwEr9ko7Zplv65qRUDzIk1Q54Q7Rgs94VkTII=";
   };
 
   patches = [
-    # Unvendor dependencies
-    ./use-pkgconfig.patch
-
     # Make it look for shaders in the right place
     ./shaders-path.patch
+    # patch relative gamescopereaper path with absolute
+    ./gamescopereaper.patch
   ];
 
   # We can't substitute the patch itself because substituteAll is itself a derivation,
   # so `placeholder "out"` ends up pointing to the wrong place
   postPatch = ''
     substituteInPlace src/reshade_effect_manager.cpp --replace "@out@" "$out"
+    # Patching shebangs in the main `libdisplay-info` build
+    patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
+    # Replace gamescopereeaper with absolute path
+    substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
   '';
 
   mesonFlags = [
@@ -86,6 +92,16 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
+    wayland-scanner
+    # For `libdisplay-info`
+    python3
+    hwdata
+    edid-decode
+    # For OpenVR
+    cmake
+
+    # calls git describe to encode its own version into the build
+    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
   ] ++ lib.optionals enableExecutable [
     makeBinaryWrapper
     glslang
@@ -98,7 +114,6 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     vulkan-loader
-    openvr
     glm
   ] ++ lib.optionals enableWsi [
     vulkan-headers
@@ -116,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     libavif
     libdrm
     libei
-    libliftoff
     SDL2
     libdecor
     libinput
@@ -125,12 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
     libcap
     stb
-    libdisplay-info
+    lcms
   ]);
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
-    ${lib.getExe patchelfUnstable} $out/bin/gamescope \
+    ${lib.getExe buildPackages.patchelfUnstable} $out/bin/gamescope \
       --add-rpath ${vulkan-loader}/lib --add-needed libvulkan.so.1
 
     # --debug-layers flag expects these in the path

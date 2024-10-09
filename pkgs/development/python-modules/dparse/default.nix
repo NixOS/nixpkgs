@@ -35,14 +35,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # FIXME pipenv = [ pipenv ];
     conda = [ pyyaml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dparse" ];
 
@@ -52,7 +52,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A parser for Python dependency files";
+    description = "Parser for Python dependency files";
     homepage = "https://github.com/pyupio/dparse";
     changelog = "https://github.com/pyupio/dparse/blob/${version}/HISTORY.rst";
     license = licenses.mit;

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    description = "Generic API for dispatch to Pyro backends.";
+    description = "Generic API for dispatch to Pyro backends";
     homepage = "http://pyro.ai";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ georgewhewell ];

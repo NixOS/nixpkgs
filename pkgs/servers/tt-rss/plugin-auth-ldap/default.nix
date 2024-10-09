@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "tt-rss-plugin-auth-ldap";

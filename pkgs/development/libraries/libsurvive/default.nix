@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, freeglut
+, libglut
 , lapack
 , libusb1
 , blas
@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
-    sha256 = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
+    hash = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
-    freeglut
+    libglut
     lapack
     libusb1
     blas

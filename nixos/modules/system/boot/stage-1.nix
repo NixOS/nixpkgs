@@ -131,6 +131,7 @@ let
 
       # Copy udev.
       copy_bin_and_libs ${udev}/bin/udevadm
+      cp ${lib.getLib udev.kmod}/lib/libkmod.so* $out/lib
       copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
@@ -326,7 +327,7 @@ let
 
     setHostId = optionalString (config.networking.hostId != null) ''
       hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
+      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
         echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
       '' else ''
         echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid

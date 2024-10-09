@@ -24,7 +24,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  propagatedBuildInputs = [ packaging ] ++ lib.optional (stdenv.isLinux) pyxdg;
+  propagatedBuildInputs = [ packaging ] ++ lib.optional (stdenv.hostPlatform.isLinux) pyxdg;
 
   meta = with lib; {
     homepage = "https://github.com/damonlynch/showinfilemanager";
@@ -38,6 +38,6 @@ buildPythonPackage rec {
       something with them.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

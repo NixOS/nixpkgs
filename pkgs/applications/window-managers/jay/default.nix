@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "jay";
-  version = "1.2.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "mahkoh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cfX9KcXbBRIaYrR7c+aIQrg+mvLJIM1sEzJ0J7wshMU=";
+    sha256 = "sha256-cuXFkG2YwS0w4xzr7jpjr0QmVA5UJfk5SpjIQKxN/LY=";
   };
 
-  cargoHash = "sha256-htAXhjCBOb8qTAAKdFqTaTSefJJTFlvEBYveOokyWjs=";
+  cargoHash = "sha256-w3ARwQlehJq9uNSQmbUjiWik4a2W3Ax/6/BIsdDUfKM=";
 
   SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Wayland compositor written in Rust";
+    description = "Wayland compositor written in Rust";
     homepage = "https://github.com/mahkoh/jay";
     license = licenses.gpl3;
     platforms   = platforms.linux;

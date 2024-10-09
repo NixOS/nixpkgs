@@ -36,7 +36,7 @@ buildPythonPackage rec {
     six
   ];
 
-  doCheck = !stdenv.isDarwin; # could not create shared memory segment: Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin; # could not create shared memory segment: Operation not permitted
 
   nativeCheckInputs = [
     djangorestframework
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jimfunk/django-postgresql-netfields";
     changelog = "https://github.com/jimfunk/django-postgresql-netfields/blob/v${version}/CHANGELOG";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

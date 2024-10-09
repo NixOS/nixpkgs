@@ -21,24 +21,21 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
-, jellyfin-web
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
   pname = "jellyfin-media-player";
-  version = "1.10.1";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-media-player";
     rev = "v${version}";
-    sha256 = "sha256-l1jNrEUrDCc4R1CZ0b0Omjka6wTryjWqnEJbfCSJ0ZE=";
+    sha256 = "sha256-Jsn4kWQzUaQI9MpbsLJr6JSJk9ZSnMEcrebQ2DYegSU=";
   };
 
   patches = [
-    # fix the location of the jellyfin-web path
-    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -54,9 +51,9 @@ mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreAudio
     CoreFoundation
@@ -77,12 +74,7 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
-  preConfigure = ''
-    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
-    ln -s ${jellyfin-web}/share/jellyfin-web .
-  '';
-
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
 

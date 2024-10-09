@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     description = "SNMP enumerator";
     homepage = "http://www.nothink.org/codes/snmpcheck/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ elohmeier ];
     mainProgram = "snmp-check";
   };
 }

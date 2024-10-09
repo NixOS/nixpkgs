@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  unittestCheckHook,
   google-api-core,
   opencensus-context,
 }:
@@ -29,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "opencensus.common" ];
 
   meta = with lib; {
-    description = "A stats collection and distributed tracing framework";
+    description = "Stats collection and distributed tracing framework";
     homepage = "https://github.com/census-instrumentation/opencensus-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ billhuang ];

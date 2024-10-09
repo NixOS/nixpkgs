@@ -40,7 +40,7 @@ let
       torchvision
       effdet
     ];
-    # paddledetection = [ paddlepaddle ]
+    # paddledetection = [ paddlepaddle ]
   };
 in
 buildPythonPackage {
@@ -96,10 +96,10 @@ buildPythonPackage {
     "tests_deps/test_only_paddledetection.py" # requires paddlepaddle not yet packaged
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   meta = with lib; {
-    description = "A unified toolkit for Deep Learning Based Document Image Analysis";
+    description = "Unified toolkit for Deep Learning Based Document Image Analysis";
     homepage = "https://github.com/Layout-Parser/layout-parser";
     changelog = "https://github.com/Layout-Parser/layout-parser/releases/tag/v${version}";
     license = licenses.asl20;

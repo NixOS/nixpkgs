@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  makeFlags = lib.optionals stdenv.isAarch64 [ "arm_neon=1" "aarch64=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "arm_neon=1" "aarch64=1" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A versatile pairwise aligner for genomic and spliced nucleotide sequences";
+    description = "Versatile pairwise aligner for genomic and spliced nucleotide sequences";
     mainProgram = "minimap2";
     homepage = "https://lh3.github.io/minimap2";
     license = licenses.mit;

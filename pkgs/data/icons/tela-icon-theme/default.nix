@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "tela-icon-theme";
-  version = "2024-04-19";
+  version = "2024-09-04";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = "tela-icon-theme";
     rev = version;
-    hash = "sha256-Z1U0KJMnNNXL5fn3kPoZ2RZNi95T27/tnWVgR8kTj1o=";
+    hash = "sha256-ZzF4U/cTy/7oSDQs4+dezewgNzS5zroba8wpcfPciW4=";
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];
@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flat colorful Design icon theme";
+    description = "Flat colorful Design icon theme";
     homepage = "https://github.com/vinceliuice/tela-icon-theme";
     changelog = "https://github.com/vinceliuice/Tela-icon-theme/releases/tag/${src.rev}";
     license = licenses.gpl3Only;

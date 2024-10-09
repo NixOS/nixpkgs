@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-VoIAwPrkhrRl48czXtKWmLTktsZ/U4TVV924wx0DL+A=";
 
   meta = {
-    description = "A CLI tool to drive test-driven Rust workshops";
+    description = "CLI tool to drive test-driven Rust workshops";
     homepage = "https://github.com/mainmatter/rust-workshop-runner";
     license = with lib.licenses; [
       mit

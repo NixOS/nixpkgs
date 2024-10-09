@@ -17,7 +17,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A configurable HTML Minifier with safety features";
+    description = "Configurable HTML Minifier with safety features";
     mainProgram = "htmlmin";
     homepage = "https://pypi.python.org/pypi/htmlmin";
     license = licenses.bsd3;

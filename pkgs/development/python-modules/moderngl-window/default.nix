@@ -3,9 +3,9 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   setuptools,
   glfw,
+  mesa,
   moderngl,
   numpy,
   pillow,
@@ -37,7 +37,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pillow" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -49,7 +48,7 @@ buildPythonPackage rec {
     pyrr
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trimesh = [
       trimesh
       scipy
@@ -72,7 +71,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl-window/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    platforms = platforms.mesaPlatforms;
-    broken = stdenv.isDarwin;
+    inherit (mesa.meta) platforms;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

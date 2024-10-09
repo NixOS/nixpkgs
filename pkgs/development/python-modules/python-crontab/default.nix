@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-eft0ZQOd39T7k9By1u4NRcGsi/FZfwaG6hT9Q2Hbo3k=";
+    hash = "sha256-9OoWBdJFM7Z/p6Y07ybLWaXy55VPbmd9LXoiKZWaL8g=";
   };
 
   nativeBuildInputs = [ setuptools ];

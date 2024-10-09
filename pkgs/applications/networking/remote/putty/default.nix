@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake perl pkg-config copyDesktopItems ];
   buildInputs = lib.optionals stdenv.hostPlatform.isUnix [
     gtk3 ncurses
-  ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.libs.utmp;
   enableParallelBuilding = true;
 
   desktopItems = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A Free Telnet/SSH Client";
+    description = "Free Telnet/SSH Client";
     longDescription = ''
       PuTTY is a free implementation of Telnet and SSH for Windows and Unix
       platforms, along with an xterm terminal emulator.

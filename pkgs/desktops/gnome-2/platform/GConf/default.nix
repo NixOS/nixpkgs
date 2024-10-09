@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ORBit2 libxml2 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
-    ++ lib.optional (!stdenv.isDarwin) polkit;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) polkit;
 
   propagatedBuildInputs = [ glib dbus-glib ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
-    lib.optionals stdenv.isDarwin [ "--enable-static" ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ "--enable-static" ];
 
   postPatch = ''
     2to3 --write --nobackup gsettings/gsettings-schema-convert

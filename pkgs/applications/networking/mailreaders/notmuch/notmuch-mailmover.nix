@@ -1,29 +1,28 @@
 { notmuch
 , lib
-, stdenv
 , fetchFromGitHub
 , rustPlatform
 , installShellFiles
 }:
 rustPlatform.buildRustPackage rec {
   pname = "notmuch-mailmover";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "michaeladler";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-12eDCqer13GJS0YjJDleJbkP4o7kZfof6HlLG06qZW0=";
+    hash = "sha256-b+6vQ7m49+9RQ+GA75VgOAJej/2zeu5JAje/OazsEsk=";
   };
 
-  cargoHash = "sha256-B5VSkhY4nNXSG2SeCl22pSkl6SXEEoYj99wEsNhs/bQ=";
+  cargoHash = "sha256-qHSmfR5iUBXq8OQJkGCVA4JnExXisN2OIAVKiVMUaZo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [ notmuch ];
 
   postInstall = ''
-    installManPage share/notmuch-mailmover.1
+    installManPage share/notmuch-mailmover.1.gz
     installShellCompletion --cmd notmuch-mailmover \
       --bash share/notmuch-mailmover.bash \
       --fish share/notmuch-mailmover.fish \

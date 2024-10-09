@@ -30,8 +30,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A tool to compress some state in a Synapse instance's database";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Tool to compress some state in a Synapse instance's database";
     homepage = "https://github.com/matrix-org/rust-synapse-compress-state";
     license = licenses.asl20;
     maintainers = with maintainers; [ hexa maralorn ];

@@ -7,7 +7,6 @@
   cython_0,
   setuptools,
   alure2,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {

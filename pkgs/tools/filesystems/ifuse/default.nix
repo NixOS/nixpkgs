@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/ifuse";
-    description = "A fuse filesystem implementation to access the contents of iOS devices";
+    description = "Fuse filesystem implementation to access the contents of iOS devices";
     longDescription = ''
       Mount directories of an iOS device locally using fuse. By default the media
       directory is mounted, options allow to also mount the sandbox container of an

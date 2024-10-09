@@ -2,7 +2,7 @@
 , config
 , fetchFromGitHub
 , cmake
-, darwin
+, cctools
 , libiconv
 , llvmPackages
 , ninja
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     ragel
     yasm
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.cctools
+    cctools
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cudart
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
     CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackages_12.stdenv.cc}/bin/cc";
-    NIX_CFLAGS_LINK = lib.optionalString stdenv.isLinux "-fuse-ld=lld";
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
     NIX_LDFLAGS = "-lc -lm";
   };
 

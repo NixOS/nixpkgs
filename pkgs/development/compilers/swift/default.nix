@@ -25,7 +25,7 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.isDarwin
+    clang = if pkgs.stdenv.hostPlatform.isDarwin
       then
         swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
@@ -58,7 +58,7 @@ let
     xcbuild = xcodebuild;
 
     swift-unwrapped = callPackage ./compiler {
-      inherit (darwin) DarwinTools cctools sigtool;
+      inherit (darwin) DarwinTools sigtool;
       inherit (apple_sdk) MacOSX-SDK CLTools_Executables;
       inherit (apple_sdk.frameworks) CoreServices Foundation Combine;
     };
@@ -68,11 +68,11 @@ let
       useSwiftDriver = false;
     };
 
-    Dispatch = if stdenv.isDarwin
+    Dispatch = if stdenv.hostPlatform.isDarwin
       then null # part of libsystem
       else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
-    Foundation = if stdenv.isDarwin
+    Foundation = if stdenv.hostPlatform.isDarwin
       then apple_sdk.frameworks.Foundation
       else callPackage ./foundation { swift = swiftNoSwiftDriver; };
 
@@ -85,7 +85,7 @@ let
     };
 
     swiftpm = callPackage ./swiftpm {
-      inherit (darwin) DarwinTools cctools;
+      inherit (darwin) DarwinTools;
       inherit (apple_sdk.frameworks) CryptoKit LocalAuthentication;
       swift = swiftNoSwiftDriver;
     };
@@ -107,6 +107,8 @@ let
     };
 
     swift-format = callPackage ./swift-format { };
+
+    swiftpm2nix = callPackage ./swiftpm2nix { };
 
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hsoft/send2trash";
     changelog = "https://github.com/arsenetar/send2trash/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

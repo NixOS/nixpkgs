@@ -40,6 +40,6 @@ buildPythonPackage {
     description = "EncryptedLinksTo from Nixops 1 module port";
     homepage = "https://github.com/nix-community/nixops-encrypted-links";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

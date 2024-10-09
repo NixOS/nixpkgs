@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     mainProgram = "tetgen";
     homepage = "http://tetgen.org/";
     license = lib.licenses.agpl3Plus;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

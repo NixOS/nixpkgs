@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sebageek/clintermission";
     changelog = "https://github.com/sebageek/clintermission/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

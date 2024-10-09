@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, fetchDebianPatch, fetchpatch, cmake, pkg-config
+{ lib, stdenv, fetchurl, fetchFromGitHub, fetchDebianPatch, cmake, pkg-config
 , SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal, libepoxy
 , curl
 , freealut, readline, libb2, gcc-unwrapped
@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.openclonk.org";
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     mainProgram = "openclonk";
-    maintainers = with maintainers; [ lheckemann ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

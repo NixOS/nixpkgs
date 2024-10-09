@@ -9,7 +9,7 @@
 , gtk3
 , glib
 , gjs
-, enableWebkit2gtk ? stdenv.isLinux
+, enableWebkit2gtk ? stdenv.hostPlatform.isLinux
 , webkitgtk_4_1
 , gobject-introspection
 , wrapGAppsHook3
@@ -18,6 +18,7 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , gnome
+, adwaita-icon-theme
 , gdk-pixbuf
 , libxslt
 , gsettings-desktop-schemas
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.pygobject3
     gsettings-desktop-schemas
     gdk-pixbuf
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ] ++ lib.optionals enableWebkit2gtk [
     webkitgtk_4_1
   ];

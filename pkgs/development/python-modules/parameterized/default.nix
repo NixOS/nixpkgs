@@ -45,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/wolever/parameterized";
     changelog = "https://github.com/wolever/parameterized/blob/v${version}/CHANGELOG.txt";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

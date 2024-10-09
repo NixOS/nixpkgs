@@ -2,14 +2,13 @@
 
 buildDunePackage rec {
   pname = "mirage-flow";
-  version = "3.0.0";
+  version = "4.0.2";
 
-  duneVersion = "3";
   minimalOCamlVersion = "4.05";
 
   src = fetchurl {
-    url = "https://github.com/mirage/mirage-flow/releases/download/v${version}/mirage-flow-v${version}.tbz";
-    hash = "sha256-1wvabIXsJ0e+2IvE2V8mnSgQUDuSkT8IB75SkWlhOPw=";
+    url = "https://github.com/mirage/mirage-flow/releases/download/v${version}/mirage-flow-${version}.tbz";
+    hash = "sha256-SGXj3S4b53O9JENUFuMl3I+QoiZ0QSrYu7zTet7q+1o=";
   };
 
   propagatedBuildInputs = [ cstruct fmt lwt ];

@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Fast, pure-Python full text indexing, search, and spell checking library";
     homepage = "https://github.com/mchaput/whoosh";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

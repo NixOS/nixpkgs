@@ -60,8 +60,7 @@ let
     "/usr/bin/pkexec=${pkexecPath}"
     "/bin/true=${coreutils}/bin/true"
   ];
-in
-let
+
   binaryPackage = stdenv.mkDerivation rec {
     pname = "${pnameBase}-bin";
     version = buildVersion;
@@ -86,7 +85,7 @@ let
       for binary in ${builtins.concatStringsSep " " binaries}; do
         patchelf \
           --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.is64bit "64"} \
+          --set-rpath ${lib.makeLibraryPath neededLibraries}:${libGL}/lib:${stdenv.cc.cc.lib}/lib${lib.optionalString stdenv.hostPlatform.is64bit "64"} \
           $binary
       done
 
@@ -116,7 +115,7 @@ let
 
       # We need to replace the ssh-askpass-sublime executable because the default one
       # will not function properly, in order to work it needs to pass an argv[0] to
-      # the sublime_merge binary, and the built-in version will will try to call the
+      # the sublime_merge binary, and the built-in version will try to call the
       # sublime_merge wrapper script which cannot pass through the original argv[0] to
       # the sublime_merge binary. Thankfully the ssh-askpass-sublime functionality is
       # very simple and can be replaced with a simple wrapper script.
@@ -196,10 +195,7 @@ stdenv.mkDerivation (rec {
           fi
 
           for platform in ${lib.escapeShellArgs meta.platforms}; do
-              # The script will not perform an update when the version attribute is up to date from previous platform run
-              # We need to clear it before each run
-              update-source-version "${packageAttribute}.${primaryBinary}" 0 "${lib.fakeSha256}" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
-              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
+              update-source-version "${packageAttribute}.${primaryBinary}" "$latestVersion" --ignore-same-version --file="$versionFile" --version-key=buildVersion --source-key="sources.$platform"
           done
         '';
       in

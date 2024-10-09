@@ -31,18 +31,12 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  CXXFLAGS = with lib; concatStringsSep " " (optionals stdenv.isDarwin [
-    # see upstream bug: http://sphinxsearch.com/bugs/view.php?id=2578
-    # workaround for "error: invalid suffix on literal
-    "-Wno-reserved-user-defined-literal"
-    # workaround for "error: non-constant-expression cannot be narrowed from type 'long' to 'int'"
-    "-Wno-c++11-narrowing"
-  ]);
+  CXXFLAGS = "-std=c++98";
 
   meta = {
-    description = "An open source full text search server";
+    description = "Open source full text search server";
     homepage    = "http://sphinxsearch.com";
-    license     = lib.licenses.gpl2;
+    license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.all;
     maintainers = with lib.maintainers; [ ederoyd46 valodim ];
   };

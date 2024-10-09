@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/hmeine/qimage2ndarray";
-    description = "A small python extension for quickly converting between QImages and numpy.ndarrays (in both directions)";
+    description = "Small python extension for quickly converting between QImages and numpy.ndarrays (in both directions)";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ tbenst ];
   };

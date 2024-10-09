@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   setuptools,
-  pynose,
-  coverage,
+  pytestCheckHook,
   wrapt,
 }:
 
@@ -25,14 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ wrapt ];
 
-  nativeCheckInputs = [
-    pynose
-    coverage
-  ];
-
-  checkPhase = ''
-    nosetests -e test_specific_test
-  '';
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "aiounittest" ];
 

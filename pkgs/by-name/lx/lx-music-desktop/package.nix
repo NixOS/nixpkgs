@@ -6,31 +6,31 @@
 , dpkg
 , libGL
 , systemd
-, electron_28
+, electron_30
 
 , commandLineArgs ? ""
 }:
 
 let
   pname = "lx-music-desktop";
-  version = "2.7.0";
+  version = "2.9.0";
 
   buildUrl = version: arch: "https://github.com/lyswhut/lx-music-desktop/releases/download/v${version}/lx-music-desktop_${version}_${arch}.deb";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = buildUrl version "amd64";
-      hash = "sha256-+mCAFfiJwa+RQ/9vnSPDrC1LoLIoZyFUEJAF6sXdqRM=";
+      hash = "sha256-krjC3vAwTMzlWJJIuJmYzFtN/Z/IINnzooUtlONeUM0=";
     };
 
     aarch64-linux = fetchurl {
       url = buildUrl version "arm64";
-      hash = "sha256-fDlgHJqoZLGnUuZeZGdocYLbsE02QBrWPKS31fbGThk=";
+      hash = "sha256-734hTi/vgSrLAks+CV1vxrrZfSShnpExlO0JWUc4oUE=";
     };
 
     armv7l-linux = fetchurl {
       url = buildUrl version "armv7l";
-      hash = "sha256-X6EXsBvTbPGXCJ+ektMCMGDG2zqGKBvWT/TwjGFL3ug=";
+      hash = "sha256-e4Elipw7MzO+3XmmGlZfLDFgSph0by5Xy6FtYCie/38=";
     };
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   '';
 
   postFixup = ''
-    makeWrapper ${electron_28}/bin/electron $out/bin/lx-music-desktop \
+    makeWrapper ${electron_30}/bin/electron $out/bin/lx-music-desktop \
         --add-flags $out/opt/lx-music-desktop/resources/app.asar \
         --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
@@ -76,13 +76,13 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A music software based on Electron and Vue";
+    description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with maintainers; [ oo-infty ];
+    maintainers = with maintainers; [ oosquare ];
   };
 }

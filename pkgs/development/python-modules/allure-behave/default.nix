@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Allure behave integration.";
+    description = "Allure behave integration";
     homepage = "https://github.com/allure-framework/allure-python";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];

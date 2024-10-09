@@ -23,7 +23,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "about_time" ];
 
   meta = with lib; {
-    description = "A cool helper for tracking time and throughput of code blocks, with beautiful human friendly renditions";
+    description = "Cool helper for tracking time and throughput of code blocks, with beautiful human friendly renditions";
     homepage = "https://github.com/rsalmei/about-time";
     license = licenses.mit;
     maintainers = with maintainers; [ thiagokokada ];

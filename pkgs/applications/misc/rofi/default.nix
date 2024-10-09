@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
+    hash = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''

@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.8";
+  version = "3.10";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.shellitem";
     rev = "refs/tags/${version}";
-    hash = "sha256-zoq42Au2dNJTryj3GNXJrEGvE0az8psPuMXoJNc74QM=";
+    hash = "sha256-BS+c9QbMMsaoZHyuv6jMxbQFQNJeLt3da8Fq/wwXesQ=";
   };
 
   build-system = [

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiconv spdlog sqlite ]
     ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
-    ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cmakeFlags = [
     "-DICONV_INCLUDE_DIR=${libiconv}/include"
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
+    lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.9";
 
   # put examples in an output so people/tools can test against them
   outputs = [ "out" "examples" ];

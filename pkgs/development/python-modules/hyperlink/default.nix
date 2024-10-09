@@ -20,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ idna ] ++ lib.optionals isPy27 [ typing ];
 
   meta = with lib; {
-    description = "A featureful, correct URL for Python";
+    description = "Featureful, correct URL for Python";
     homepage = "https://github.com/python-hyper/hyperlink";
     license = licenses.mit;
     platforms = platforms.all;

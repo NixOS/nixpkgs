@@ -7,18 +7,15 @@
   install,
   mandoc,
   groff,
-  rsync,
   nbperf,
   rpcgen,
-  common,
   defaultMakeFlags,
   stdenv,
 }:
 
 mkDerivation {
+  noLibc = true;
   path = "include";
-  version = "9.2";
-  sha256 = "0nxnmj4c8s3hb9n3fpcmd0zl3l1nmhivqgi9a35sis943qvpgl9h";
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
@@ -26,7 +23,6 @@ mkDerivation {
     install
     mandoc
     groff
-    rsync
     nbperf
     rpcgen
   ];
@@ -46,7 +42,7 @@ mkDerivation {
     makeFlags=''${makeFlags/INCSDIR/INCSDIR0}
   '';
 
-  extraPaths = [ common ];
+  extraPaths = [ "common" ];
   headersOnly = true;
   noCC = true;
   meta.platforms = lib.platforms.netbsd;

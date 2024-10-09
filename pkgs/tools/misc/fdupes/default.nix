@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fdupes";
-  version = "2.3.0";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "adrianlopezroche";
     repo = "fdupes";
     rev = "v${version}";
-    hash = "sha256-BW6a5vKRAuXs/zWPHhtZs6Y4scyCEfqHEAkGUSUiwkI=";
+    hash = "sha256-VPaNDKUgaJRF75cxksK0nZNFarqhat7n8ztIdBoxHI8=";
   };
 
   nativeBuildInputs = [

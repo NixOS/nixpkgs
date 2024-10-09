@@ -6,54 +6,72 @@
 , pkg-config
 , glibc
 , openssl
+, libepoxy
+, libdrm
+, pipewire
+, virglrenderer
 , libkrunfw
+, llvmPackages
 , rustc
+, withGpu ? false
+, withSound ? false
+, withNet ? false
 , sevVariant ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libkrun";
-  version = "1.8.1";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrun";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-rrNiqwx4aEOB3fTyv8xcZEDsNJX4NNPhp13W0qnl1O0=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-fVL49g71eyfYyeXI4B1qRNM90fBKjHeq0I4poz1pdME=";
   };
 
+  outputs = [ "out" "dev" ];
+
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
-    hash = "sha256-6Zfy0LtxUDZzwlhul2fZpsI1c7GWntAMfsT6j+QefVs=";
+    inherit (finalAttrs) src;
+    hash = "sha256-MW4/iB2NsCj0s9Q/h/PoCIIaDfZ/iqw+FGrsJmVR0lw=";
   };
 
   nativeBuildInputs = [
+    llvmPackages.clang
     rustPlatform.cargoSetupHook
     cargo
     rustc
-  ] ++ lib.optionals sevVariant [
-    pkg-config
-  ];
+  ] ++ lib.optional (sevVariant || withGpu) pkg-config;
 
   buildInputs = [
     (libkrunfw.override { inherit sevVariant; })
     glibc
     glibc.static
-  ] ++ lib.optionals sevVariant [
-    openssl
-  ];
+  ] ++ lib.optionals withGpu [ libepoxy libdrm virglrenderer ]
+    ++ lib.optional withSound pipewire
+    ++ lib.optional sevVariant openssl;
+
+  env.LIBCLANG_PATH = "${llvmPackages.clang-unwrapped.lib}/lib/libclang.so";
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-  ] ++ lib.optionals sevVariant [
-    "SEV=1"
-  ];
+  ] ++ lib.optional withGpu "GPU=1"
+    ++ lib.optional withSound "SND=1"
+    ++ lib.optional withNet "NET=1"
+    ++ lib.optional sevVariant "SEV=1";
+
+  postInstall = ''
+    mkdir -p $dev/lib/pkgconfig
+    mv $out/lib64/pkgconfig $dev/lib/pkgconfig
+    mv $out/include $dev/include
+  '';
 
   meta = with lib; {
-    description = "A dynamic library providing Virtualization-based process isolation capabilities";
+    description = "Dynamic library providing Virtualization-based process isolation capabilities";
     homepage = "https://github.com/containers/libkrun";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    maintainers = with maintainers; [ nickcao RossComputerGuy ];
     platforms = libkrunfw.meta.platforms;
   };
-}
+})

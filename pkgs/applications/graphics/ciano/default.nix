@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/robertsanseries/ciano";
-    description = "A multimedia file converter focused on simplicity";
+    description = "Multimedia file converter focused on simplicity";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;

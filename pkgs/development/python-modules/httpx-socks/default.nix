@@ -2,7 +2,6 @@
   lib,
   async-timeout,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   flask,
   httpcore,
@@ -14,7 +13,6 @@
   python-socks,
   pythonOlder,
   setuptools,
-  sniffio,
   starlette,
   tiny-proxy,
   trio,
@@ -44,7 +42,7 @@ buildPythonPackage rec {
     python-socks
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ async-timeout ];
     trio = [ trio ];
   };

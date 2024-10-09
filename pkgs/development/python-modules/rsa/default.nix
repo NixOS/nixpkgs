@@ -41,6 +41,6 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://stuvel.eu/rsa";
     license = licenses.asl20;
-    description = "A pure-Python RSA implementation";
+    description = "Pure-Python RSA implementation";
   };
 }

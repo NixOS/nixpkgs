@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Gnome CD/DVD Burner";
+    description = "Gnome CD/DVD Burner";
     homepage = "https://gitlab.gnome.org/GNOME/brasero";
     maintainers = [ maintainers.bdimcheff ];
     license = licenses.gpl2Plus;

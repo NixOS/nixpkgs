@@ -13,6 +13,7 @@ let
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
     environment.systemPackages = [ pkgs.efibootmgr ];
+    system.switch.enable = true;
   };
 
   commonXbootldr = { config, lib, pkgs, ... }:
@@ -169,10 +170,23 @@ in
       imports = [ common ];
       specialisation.something.configuration = {
         boot.loader.systemd-boot.sortKey = "something";
+
+        # Since qemu will dynamically create a devicetree blob when starting
+        # up, it is not straight forward to create an export of that devicetree
+        # blob without knowing before-hand all the flags we would pass to qemu
+        # (we would then be able to use `dumpdtb`). Thus, the following config
+        # will not boot, but it does allow us to assert that the boot entry has
+        # the correct contents.
+        boot.loader.systemd-boot.installDeviceTree = pkgs.stdenv.hostPlatform.isAarch64;
+        hardware.deviceTree.name = "dummy.dtb";
+        hardware.deviceTree.package = lib.mkForce (pkgs.runCommand "dummy-devicetree-package" { } ''
+          mkdir -p $out
+          cp ${pkgs.emptyFile} $out/dummy.dtb
+        '');
       };
     };
 
-    testScript = ''
+    testScript = { nodes, ... }: ''
       machine.start()
       machine.wait_for_unit("multi-user.target")
 
@@ -184,6 +198,10 @@ in
       )
       machine.succeed(
           "grep 'sort-key something' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
+      )
+    '' + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isAarch64 ''
+      machine.succeed(
+          r"grep 'devicetree /EFI/nixos/[a-z0-9]\{32\}.*dummy' /boot/loader/entries/nixos-generation-1-specialisation-something.conf"
       )
     '';
   };
@@ -224,22 +242,37 @@ in
     testScript = ''
       machine.succeed("mount -o remount,rw /boot")
 
-      # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
-      machine.succeed(
-          """
-        find /boot -iname '*boot*.efi' -print0 | \
-        xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
-      """
-      )
+      def switch():
+          # Replace version inside sd-boot with something older. See magic[] string in systemd src/boot/efi/boot.c
+          machine.succeed(
+            """
+            find /boot -iname '*boot*.efi' -print0 | \
+            xargs -0 -I '{}' sed -i 's/#### LoaderInfo: systemd-boot .* ####/#### LoaderInfo: systemd-boot 000.0-1-notnixos ####/' '{}'
+            """
+          )
+          return machine.succeed("/run/current-system/bin/switch-to-configuration boot 2>&1")
 
-      output = machine.succeed("/run/current-system/bin/switch-to-configuration boot")
+      output = switch()
       assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+      assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+      assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
+
+      with subtest("Test that updating works with lowercase bootx64.efi"):
+          machine.succeed(
+              # Move to tmp file name first, otherwise mv complains the new location is the same
+              "mv /boot/EFI/BOOT/BOOTX64.EFI /boot/EFI/BOOT/bootx64.efi.new",
+              "mv /boot/EFI/BOOT/bootx64.efi.new /boot/EFI/BOOT/bootx64.efi",
+          )
+          output = switch()
+          assert "updating systemd-boot from 000.0-1-notnixos to " in output, "Couldn't find systemd-boot update message"
+          assert 'to "/boot/EFI/systemd/systemd-bootx64.efi"' in output, "systemd-boot not copied to to /boot/EFI/systemd/systemd-bootx64.efi"
+          assert 'to "/boot/EFI/BOOT/BOOTX64.EFI"' in output, "systemd-boot not copied to to /boot/EFI/BOOT/BOOTX64.EFI"
     '';
   };
 
-  memtest86 = makeTest {
+  memtest86 = with pkgs.lib; optionalAttrs (meta.availableOn { inherit system; } pkgs.memtest86plus) (makeTest {
     name = "systemd-boot-memtest86";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -250,11 +283,11 @@ in
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
     '';
-  };
+  });
 
   netbootxyz = makeTest {
     name = "systemd-boot-netbootxyz";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -269,7 +302,7 @@ in
 
   memtestSortKey = makeTest {
     name = "systemd-boot-memtest-sortkey";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -307,7 +340,7 @@ in
 
   extraEntries = makeTest {
     name = "systemd-boot-extra-entries";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -326,7 +359,7 @@ in
 
   extraFiles = makeTest {
     name = "systemd-boot-extra-files";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
@@ -343,7 +376,7 @@ in
 
   switch-test = makeTest {
     name = "systemd-boot-switch-test";
-    meta.maintainers = with pkgs.lib.maintainers; [ Enzime julienmalka ];
+    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
 
     nodes = {
       inherit common;
@@ -426,32 +459,6 @@ in
         machine.fail("test -e /boot/loader/entries/nixos-generation-1.conf")
         machine.succeed("test -e /boot/loader/entries/nixos-generation-2.conf")
       '';
-  };
-
-  # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
-  # itself, systems with such firmware won't boot without this fix
-  uefiLargeFileWorkaround = makeTest {
-    name = "uefi-large-file-workaround";
-    meta.maintainers = with pkgs.lib.maintainers; [ julienmalka ];
-    nodes.machine = { pkgs, ... }: {
-      imports = [common];
-      virtualisation.efi.OVMF = pkgs.OVMF.overrideAttrs (old: {
-        # This patch deliberately breaks the FAT driver in EDK2 to
-        # exhibit (part of) the firmware bug that we are testing
-        # for. Files greater than 10MiB will fail to be read in a
-        # single Read() call, so systemd-boot will fail to load the
-        # initrd without a workaround. The number 10MiB was chosen
-        # because if it were smaller than the kernel size, even the
-        # LoadImage call would fail, which is not the failure mode
-        # we're testing for. It needs to be between the kernel size
-        # and the initrd size.
-        patches = old.patches or [] ++ [ ./systemd-boot-ovmf-broken-fat-driver.patch ];
-      });
-    };
-
-    testScript = ''
-      machine.wait_for_unit("multi-user.target")
-    '';
   };
 
   no-bootspec = makeTest

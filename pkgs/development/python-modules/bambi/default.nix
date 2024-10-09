@@ -87,5 +87,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
+    # https://github.com/NixOS/nixpkgs/issues/310940
+    broken = true;
   };
 }

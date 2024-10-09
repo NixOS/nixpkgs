@@ -79,8 +79,9 @@ self: super: ({
 
   proteaaudio = addExtraLibrary darwin.apple_sdk.frameworks.AudioToolbox super.proteaaudio;
 
-  # the system-fileio tests use canonicalizePath, which fails in the sandbox
-  system-fileio = dontCheck super.system-fileio;
+  # issues finding libcharset.h without libiconv in buildInputs on darwin.
+  with-utf8 = addExtraLibrary pkgs.libiconv super.with-utf8;
+  with-utf8_1_1_0_0 = addExtraLibrary pkgs.libiconv super.with-utf8_1_1_0_0;
 
   git-annex = overrideCabal (drv: {
     # We can't use testFlags since git-annex side steps the Cabal test mechanism
@@ -110,6 +111,12 @@ self: super: ({
         substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
       '' + (drv.postPatch or "");
     }) super.x509-system;
+  crypton-x509-system = overrideCabal (drv:
+    lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+      postPatch = ''
+        substituteInPlace System/X509/MacOS.hs --replace security /usr/bin/security
+      '' + (drv.postPatch or "");
+    }) super.crypton-x509-system;
 
   # https://github.com/haskell-foundation/foundation/pull/412
   foundation = dontCheck super.foundation;
@@ -317,15 +324,60 @@ self: super: ({
   # Tests fail on macOS https://github.com/mrkkrp/zip/issues/112
   zip = dontCheck super.zip;
 
+  warp = super.warp.overrideAttrs (drv: {
+    __darwinAllowLocalNetworking = true;
+  });
+
+  ghcjs-dom-hello = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ jsaddle jsaddle-warp ];
+    executableHaskellDepends = with self; [ ghcjs-dom jsaddle-wkwebview ];
+  }) super.ghcjs-dom-hello;
+
+  jsaddle-hello = overrideCabal (drv: {
+    libraryHaskellDepends = with self; [ jsaddle lens ];
+    executableHaskellDepends = with self; [ jsaddle-warp jsaddle-wkwebview ];
+  }) super.jsaddle-hello;
+
   jsaddle-wkwebview = overrideCabal (drv: {
     libraryFrameworkDepends = with pkgs.buildPackages.darwin.apple_sdk.frameworks; [ Cocoa WebKit ];
     libraryHaskellDepends = with self; [ aeson data-default jsaddle ]; # cabal2nix doesn't add darwin-only deps
   }) super.jsaddle-wkwebview;
-  reflex-dom = overrideCabal (drv: {
-    libraryHaskellDepends = with self; [ base bytestring jsaddle-wkwebview reflex reflex-dom-core text ]; # cabal2nix doesn't add darwin-only deps
-  }) super.reflex-dom;
 
-} // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
+  # cabal2nix doesn't add darwin-only deps
+  reflex-dom = addBuildDepend self.jsaddle-wkwebview (super.reflex-dom.override (drv: {
+    jsaddle-webkit2gtk = null;
+  }));
+
+  # Remove a problematic assert, the length is sometimes 1 instead of 2 on darwin
+  di-core = overrideCabal (drv: {
+    preConfigure = ''
+      substituteInPlace test/Main.hs --replace \
+        "2 @=? List.length (List.nub (List.sort (map Di.log_time logs)))" ""
+    '';
+  }) super.di-core;
+
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isAarch64 {  # aarch64-darwin
+
+  # Workarounds for justStaticExecutables on aarch64-darwin. Since dead code
+  # elimination barely works on aarch64-darwin, any package that has a
+  # dependency that uses a Paths_ module will incur a reference on GHC, making
+  # it fail with disallowGhcReference (which is set by justStaticExecutables).
+  #
+  # To address this, you can either manually remove the references causing this
+  # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
+  # the check, sticking with the status quo. Ideally there'll be zero cases of
+  # the latter in the future!
+  inherit (
+    lib.mapAttrs (_: overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    })) super
+  ) cabal2nix cabal2nix-unstable;
 
   # https://github.com/fpco/unliftio/issues/87
   unliftio = dontCheck super.unliftio;
@@ -355,7 +407,26 @@ self: super: ({
   # https://github.com/NixOS/nixpkgs/issues/149692
   Agda = disableCabalFlag "optimise-heavily" super.Agda;
 
-} // lib.optionalAttrs pkgs.stdenv.isx86_64 {  # x86_64-darwin
+  # https://github.com/NixOS/nixpkgs/issues/198495
+  eventsourcing-postgresql = dontCheck super.eventsourcing-postgresql;
+  gargoyle-postgresql-connect = dontCheck super.gargoyle-postgresql-connect;
+  hs-opentelemetry-instrumentation-postgresql-simple = dontCheck super.hs-opentelemetry-instrumentation-postgresql-simple;
+  moto-postgresql = dontCheck super.moto-postgresql;
+  persistent-postgresql = dontCheck super.persistent-postgresql;
+  pipes-postgresql-simple = dontCheck super.pipes-postgresql-simple;
+  postgresql-connector = dontCheck super.postgresql-connector;
+  postgresql-migration = dontCheck super.postgresql-migration;
+  postgresql-schema = dontCheck super.postgresql-schema;
+  postgresql-simple = dontCheck super.postgresql-simple;
+  postgresql-simple-interpolate = dontCheck super.postgresql-simple-interpolate;
+  postgresql-simple-migration = dontCheck super.postgresql-simple-migration;
+  postgresql-simple-url = dontCheck super.postgresql-simple-url;
+  postgresql-transactional = dontCheck super.postgresql-transactional;
+  postgrest = dontCheck super.postgrest;
+  rivet-adaptor-postgresql = dontCheck super.rivet-adaptor-postgresql;
+  tmp-proc-postgres = dontCheck super.tmp-proc-postgres;
+
+} // lib.optionalAttrs pkgs.stdenv.hostPlatform.isx86_64 {  # x86_64-darwin
 
   # tests appear to be failing to link or something:
   # https://hydra.nixos.org/build/174540882/nixlog/9
@@ -363,4 +434,12 @@ self: super: ({
   # same
   # https://hydra.nixos.org/build/174540882/nixlog/9
   jacinda = dontCheck super.jacinda;
+
+  # Greater floating point error on x86_64-darwin (!) for some reason
+  # https://github.com/ekmett/ad/issues/113
+  ad = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      "-p" "!/issue-108/"
+    ];
+  }) super.ad;
 })

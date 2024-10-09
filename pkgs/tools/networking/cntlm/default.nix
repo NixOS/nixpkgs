@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure --replace "xlc_r gcc" "xlc_r gcc $CC"
     substitute Makefile Makefile.$CC --replace "CC=gcc" "CC=$CC"
   '';

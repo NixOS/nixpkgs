@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     pkg-config
     qttools
     wrapQtAppsHook
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     glib
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     pcre
     python3
     qtsvg
-  ] ++ lib.optionals stdenv.isLinux [ bluez ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
   meta = with lib; {
     description = "Qt-based LA/scope/MSO GUI for sigrok (a signal analysis software suite)";

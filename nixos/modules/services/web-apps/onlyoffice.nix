@@ -1,24 +1,22 @@
 { lib, config, pkgs, ... }:
 
-with lib;
-
 let
   cfg = config.services.onlyoffice;
 in
 {
   options.services.onlyoffice = {
-    enable = mkEnableOption "OnlyOffice DocumentServer";
+    enable = lib.mkEnableOption "OnlyOffice DocumentServer";
 
-    enableExampleServer = mkEnableOption "OnlyOffice example server";
+    enableExampleServer = lib.mkEnableOption "OnlyOffice example server";
 
-    hostname = mkOption {
-      type = types.str;
+    hostname = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
-      description = "FQDN for the onlyoffice instance.";
+      description = "FQDN for the OnlyOffice instance.";
     };
 
-    jwtSecretFile = mkOption {
-      type = types.nullOr types.str;
+    jwtSecretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Path to a file that contains the secret to sign web requests using JSON Web Tokens.
@@ -26,34 +24,34 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "onlyoffice-documentserver" { };
+    package = lib.mkPackageOption pkgs "onlyoffice-documentserver" { };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8000;
-      description = "Port the OnlyOffice DocumentServer should listens on.";
+      description = "Port the OnlyOffice document server should listen on.";
     };
 
-    examplePort = mkOption {
-      type = types.port;
+    examplePort = lib.mkOption {
+      type = lib.types.port;
       default = null;
-      description = "Port the OnlyOffice Example server should listens on.";
+      description = "Port the OnlyOffice example server should listen on.";
     };
 
-    postgresHost = mkOption {
-      type = types.str;
+    postgresHost = lib.mkOption {
+      type = lib.types.str;
       default = "/run/postgresql";
       description = "The Postgresql hostname or socket path OnlyOffice should connect to.";
     };
 
-    postgresName = mkOption {
-      type = types.str;
+    postgresName = lib.mkOption {
+      type = lib.types.str;
       default = "onlyoffice";
-      description = "The name of database OnlyOffice should user.";
+      description = "The name of database OnlyOffice should use.";
     };
 
-    postgresPasswordFile = mkOption {
-      type = types.nullOr types.str;
+    postgresPasswordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       description = ''
         Path to a file that contains the password OnlyOffice should use to connect to Postgresql.
@@ -61,8 +59,8 @@ in
       '';
     };
 
-    postgresUser = mkOption {
-      type = types.str;
+    postgresUser = lib.mkOption {
+      type = lib.types.str;
       default = "onlyoffice";
       description = ''
         The username OnlyOffice should use to connect to Postgresql.
@@ -70,8 +68,8 @@ in
       '';
     };
 
-    rabbitmqUrl = mkOption {
-      type = types.str;
+    rabbitmqUrl = lib.mkOption {
+      type = lib.types.str;
       default = "amqp://guest:guest@localhost:5672";
       description = "The Rabbitmq in amqp URI style OnlyOffice should connect to.";
     };
@@ -80,10 +78,10 @@ in
   config = lib.mkIf cfg.enable {
     services = {
       nginx = {
-        enable = mkDefault true;
+        enable = lib.mkDefault true;
         # misses text/csv, font/ttf, application/x-font-ttf, application/rtf, application/wasm
-        recommendedGzipSettings = mkDefault true;
-        recommendedProxySettings = mkDefault true;
+        recommendedGzipSettings = lib.mkDefault true;
+        recommendedProxySettings = lib.mkDefault true;
 
         upstreams = {
           # /etc/nginx/includes/http-common.conf

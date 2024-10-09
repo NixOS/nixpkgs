@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/orcus/orcus";
     changelog = "https://gitlab.com/orcus/orcus/-/blob/${src.rev}/CHANGELOG";
     license = licenses.mpl20;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -30,7 +30,7 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionals stdenv.isDarwin ''
+  postPatch = lib.optionals stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/platforms/macos.cmake \
       --replace \''${QV2RAY_QtX_DIR}/../../../bin/macdeployqt macdeployqt
   '';
@@ -70,13 +70,13 @@ mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An GUI frontend to v2ray";
+    description = "GUI frontend to v2ray";
     homepage = "https://github.com/Qv2ray/Qv2ray";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ poscat rewine ];
     platforms = platforms.all;
     # never built on aarch64-darwin, x86_64-darwin since update to unstable-2022-09-25
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "qv2ray";
   };
 }

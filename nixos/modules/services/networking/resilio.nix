@@ -291,5 +291,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ jwoudenberg ];
+  meta.maintainers = [ ];
 }

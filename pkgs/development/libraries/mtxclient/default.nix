@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mtxclient";
-  version = "0.9.2";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "mtxclient";
     rev = "v${version}";
-    hash = "sha256-r+bD2L5+3AwkdYa3FwsM+yf7V5w+6ZJC92CMdVeYLJQ=";
+    hash = "sha256-luWcbYCv5OM3aidxiO7glqD+VYnCZMElZYaPKbtvMYI=";
   };
 
   postPatch = ''
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Client API library for the Matrix protocol.";
+    description = "Client API library for the Matrix protocol";
     homepage = "https://github.com/Nheko-Reborn/mtxclient";
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz pstn ];

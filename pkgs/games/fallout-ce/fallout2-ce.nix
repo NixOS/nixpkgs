@@ -1,5 +1,6 @@
 { callPackage
 , fetchFromGitHub
+, fetchpatch2
 , zlib
 }:
 
@@ -14,10 +15,18 @@ callPackage ./build.nix rec {
     hash = "sha256-r1pnmyuo3uw2R0x9vGScSHIVNA6t+txxABzgHkUEY5U=";
   };
 
+  patches = [
+    # Fix case-sensitive filesystems issue when save/load games
+    (fetchpatch2 {
+      url = "https://github.com/alexbatalov/fallout2-ce/commit/d843a662b3ceaf01ac363e9abb4bfceb8b805c36.patch";
+      sha256 = "sha256-u4E9+DE6sGYikIGwKDmSBj3ErCfIo6YzIw2eMiqXw/E=";
+    })
+  ];
+
   extraBuildInputs = [ zlib ];
 
   extraMeta = {
-    description = "A fully working re-implementation of Fallout 2, with the same original gameplay, engine bugfixes, and some quality of life improvements";
+    description = "Fully working re-implementation of Fallout 2, with the same original gameplay, engine bugfixes, and some quality of life improvements";
     homepage = "https://github.com/alexbatalov/fallout2-ce";
   };
 }

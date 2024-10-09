@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, stdenv
 , nix-update-script
 }:
 
@@ -38,6 +37,5 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "kraft";
-    broken = stdenv.isDarwin; # > machine/platform/iterator_v1alpha1.go:32:34: undefined: hostSupportedStrategies
   };
 }

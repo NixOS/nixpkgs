@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-book-theme";
-  version = "1.1.2";
+  version = "1.1.3";
 
   format = "wheel";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     dist = "py3";
     python = "py3";
     pname = "sphinx_book_theme";
-    hash = "sha256-zudERm/eSPUDArhRKRsgiqZ+cmyjG3o7+5tuahRWY+A=";
+    hash = "sha256-pVSpp6w4gZeah6KxD2M6oqVwbnIhihD3G+OLPJ6DGuk=";
   };
 
   propagatedBuildInputs = [
@@ -36,10 +36,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A clean book theme for scientific explanations and documentation with Sphinx";
+    description = "Clean book theme for scientific explanations and documentation with Sphinx";
     homepage = "https://github.com/executablebooks/sphinx-book-theme";
     changelog = "https://github.com/executablebooks/sphinx-book-theme/raw/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

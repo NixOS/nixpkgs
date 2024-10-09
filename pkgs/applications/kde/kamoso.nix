@@ -39,7 +39,7 @@ mkDerivation {
 
   meta = {
     homepage = "https://apps.kde.org/kamoso/";
-    description = "A simple and friendly program to use your camera";
+    description = "Simple and friendly program to use your camera";
     mainProgram = "kamoso";
     license = with lib.licenses; [ lgpl21Only gpl3Only ];
   };

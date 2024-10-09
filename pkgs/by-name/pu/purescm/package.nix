@@ -15,11 +15,24 @@ let
   package = buildNpmPackage {
     inherit pname version;
 
-    src = ./.;
+    src = fileset.toSource {
+      root = ./.;
+      fileset = fileset.unions [
+        ./package.json
+        ./package-lock.json
+        ./.gitignore
+      ];
+    };
     dontNpmBuild = true;
 
     npmDeps = fetchNpmDeps {
-      src = ./.;
+      src = fileset.toSource {
+        root = ./.;
+        fileset = fileset.unions [
+          ./package-lock.json
+          ./package.json
+        ];
+      };
       hash = "sha256-ljeFcLvIET77Q0OR6O5Ok1fGnaxaKaoywpcy2aHq/6o=";
     };
 

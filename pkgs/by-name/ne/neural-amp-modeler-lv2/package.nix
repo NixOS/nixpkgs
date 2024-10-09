@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neural-amp-modeler-lv2";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "mikeoliphant";
-    repo = finalAttrs.pname;
+    repo = "neural-amp-modeler-lv2";
     rev = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-sRZngmivNvSWcjkIqcqjjaIgXFH8aMq+/caNroXmzIk=";
+    hash = "sha256-5BOZOocZWWSWawXJFMAgM0NR0s0CbkzDVr6fnvZMvd0=";
   };
 
   nativeBuildInputs = [

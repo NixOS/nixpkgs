@@ -1,35 +1,39 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, libsForQt5
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  enet,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libslirp,
+  pkg-config,
+  qt6,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
-  inherit (libsForQt5)
+  inherit (qt6)
     qtbase
     qtmultimedia
-    wrapQtAppsHook;
+    qtwayland
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "0.9.5-unstable-2024-05-15";
+  version = "0.9.5-unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "a72b79a55ad2d61811af11b1b911f6af863f66c2";
-    hash = "sha256-cdKfJ316iuRajdrRESt68oR8vkHISFRdHXxVuvGSUqE=";
+    rev = "e9446fa9dc3ba64c22f8e5bb611ad394b5729eda";
+    hash = "sha256-0YNF9NPKaaKzC3d8cXG4Od3AUc1zxVtuB5u2Q8ruwr0=";
   };
 
   nativeBuildInputs = [
@@ -38,23 +42,39 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    SDL2
-    extra-cmake-modules
-    libarchive
-    libslirp
-    libGL
-    qtbase
-    qtmultimedia
-    wayland
-    zstd
-  ];
+  buildInputs =
+    [
+      SDL2
+      enet
+      extra-cmake-modules
+      libarchive
+      libslirp
+      libGL
+      qtbase
+      qtmultimedia
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      wayland
+      qtwayland
+    ];
+
+  cmakeFlags = [ (lib.cmakeBool "USE_QT6" true) ];
 
   strictDeps = true;
 
-  qtWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
-  ];
+  qtWrapperArgs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      "--prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libpcap
+          wayland
+        ]
+      }"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--prefix DYLD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpcap ]}"
+    ];
 
   passthru = {
     updateScript = unstableGitUpdater { };
@@ -88,6 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       benley
       shamilton
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
     tracker
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.Foundation
   ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "A health tracking app for the GNOME desktop";
+    description = "Health tracking app for the GNOME desktop";
     homepage = "https://apps.gnome.org/app/dev.Cogitri.Health";
     license = licenses.gpl3Plus;
     mainProgram = "dev.Cogitri.Health";

@@ -7,23 +7,12 @@
 , perl
 , python3
 , which
-, fetchpatch
 }:
 
 stdenv.mkDerivation {
   pname = "linux-kernel-latest-htmldocs";
 
   inherit (linux_latest) version src;
-
-  patches = [
-    # docutils 0.21 has removed nodes.reprunicode
-    # fixes the `AttributeError` thrown when building docs.
-    (fetchpatch {
-      name = "docutils_fix.patch";
-      url = "https://lore.kernel.org/linux-doc/faf5fa45-2a9d-4573-9d2e-3930bdc1ed65@gmail.com/raw";
-      hash = "sha256-JuV1B/8iDysbH0tl+wr/rdXvoC34uUq25ejMFmD0hio=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs \

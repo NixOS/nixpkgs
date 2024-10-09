@@ -37,7 +37,9 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
   propagatedNativeBuildInputs = [ cffi ];
-  buildInputs = [ libiconv ] ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+  buildInputs = [
+    libiconv
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
     appdirs
     pyyaml
@@ -64,7 +66,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Rust and Python module for handling CMSIS Pack files";
+    description = "Rust and Python module for handling CMSIS Pack files";
     homepage = "https://github.com/pyocd/cmsis-pack-manager";
     license = licenses.asl20;
     maintainers = with maintainers; [

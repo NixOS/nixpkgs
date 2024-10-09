@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.kernel.org/doc/html/latest/filesystems/fsverity.html#userspace-utility";
     changelog = "https://git.kernel.org/pub/scm/fs/fsverity/fsverity-utils.git/tree/NEWS.md";
-    description = "A set of userspace utilities for fs-verity";
+    description = "Set of userspace utilities for fs-verity";
     mainProgram = "fsverity";
     license = licenses.mit;
     maintainers = with maintainers; [ jk ];

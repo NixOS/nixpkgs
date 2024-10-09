@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   sphinx,
-  sphinxcontrib-serializinghtml,
 }:
 
 buildPythonPackage rec {
@@ -29,6 +28,6 @@ buildPythonPackage rec {
     description = "Sphinx extension to include program output";
     homepage = "https://github.com/NextThought/sphinxcontrib-programoutput";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

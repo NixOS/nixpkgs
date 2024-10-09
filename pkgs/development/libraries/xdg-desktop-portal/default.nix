@@ -60,7 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
     # any configs from being loaded from anywhere else.
     ./nix-pkgdatadir-env.patch
+
+    # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
+    ./trash-test.patch
   ];
+
+  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+  '';
 
   nativeBuildInputs = [
     docbook_xml_dtd_412
@@ -114,7 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
     "-Dgeoclue=disabled"
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dpytest=disabled"
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

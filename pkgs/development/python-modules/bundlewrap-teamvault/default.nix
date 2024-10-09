@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/trehn/bundlewrap-teamvault";
     description = "Pull secrets from TeamVault into your BundleWrap repo";
     license = [ licenses.gpl3 ];
-    maintainers = with maintainers; [ hexchen ];
+    maintainers = [ ];
   };
 }

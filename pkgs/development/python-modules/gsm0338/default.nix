@@ -28,9 +28,6 @@ buildPythonPackage {
     description = "Python codec for GSM 03.38";
     homepage = "https://github.com/dsch/gsm0338";
     license = licenses.mit;
-    maintainers = with maintainers; [
-      flokli
-      janik
-    ];
+    maintainers = with maintainers; [ flokli ];
   };
 }

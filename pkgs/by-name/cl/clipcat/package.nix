@@ -9,18 +9,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "clipcat";
-  version = "0.17.0";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "xrelkd";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-e95h8YBVLcy9vubdJpfmeystT2Qw0Y8kap9IbTJW+s8=";
+    hash = "sha256-95y/HiLmhqt1DFmAxLg/W7lr/9dfVtce4+tx+vG2Nuw=";
   };
 
-  cargoHash = "sha256-+73vnGcdCDRMrav/Pi4Z37IlbArJ/SlYishz9KhF4x0=";
+  cargoHash = "sha256-z2t7kq2ogMHJGF7xQnzc11B42gUZFTVokVkbw35CeY0=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_x11_primary"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for cmd in clipcatd clipcatctl clipcat-menu clipcat-notify; do
       installShellCompletion --cmd $cmd \
         --bash <($out/bin/$cmd completions bash) \

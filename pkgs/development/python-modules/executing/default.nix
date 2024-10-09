@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-PBvfkv9GQ5Vj5I5SygtmHXtqqHMJ4XgNV1/I+lSU0/U=";
   };
 
+  patches = [
+    # TODO: replace after the PR is merged or tagged
+    ./get_iter.patch
+  ];
+
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -44,6 +49,11 @@ buildPythonPackage rec {
   disabledTests = [
     # requires ipython, which causes a circular dependency
     "test_two_statement_lookups"
+
+    # Asserts against time passed using time.time() to estimate
+    # if the test runs fast enough. That makes the test flaky when
+    # running on slow systems or cross- / emulated building
+    "test_many_source_for_filename_calls"
   ];
 
   pythonImportsCheck = [ "executing" ];

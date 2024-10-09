@@ -12,6 +12,7 @@
   mock,
   packaging,
   testfixtures,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +40,7 @@ buildPythonPackage rec {
       substituteInPlace okonomiyaki/runtimes/tests/test_runtime.py \
         --replace 'runtime_info = PythonRuntime.from_running_python()' 'raise unittest.SkipTest() #'
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace okonomiyaki/platforms/tests/test_pep425.py \
         --replace 'self.assertEqual(platform_tag, self.tag.platform)' 'raise unittest.SkipTest()'
     '';
@@ -55,8 +56,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/enthought/okonomiyaki";
-    description = "An experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
+    description = "Experimental library aimed at consolidating a lot of low-level code used for Enthought's eggs";
     maintainers = with maintainers; [ genericnerdyusername ];
     license = licenses.bsd3;
+    broken = pythonAtLeast "3.12"; # multiple tests are failing
   };
 }

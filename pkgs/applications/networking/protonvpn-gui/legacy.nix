@@ -1,22 +1,24 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, setuptools
-, wrapGAppsHook3
-, gdk-pixbuf
-, glib-networking
-, gobject-introspection
-, imagemagick
-, librsvg
-, pango
-, python3
-, webkitgtk
-# Python libs
-, protonvpn-nm-lib
-, psutil
-# Optionals
-, withIndicator ? true
-, libappindicator-gtk3 }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  setuptools,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  glib-networking,
+  gobject-introspection,
+  imagemagick,
+  librsvg,
+  pango,
+  python3,
+  webkitgtk,
+  # Python libs
+  protonvpn-nm-lib,
+  psutil,
+  # Optionals
+  withIndicator ? true,
+  libappindicator-gtk3,
+}:
 
 buildPythonApplication rec {
   pname = "protonvpn-gui";
@@ -71,7 +73,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Official ProtonVPN Linux app";
     homepage = "https://github.com/ProtonVPN/linux-app";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     mainProgram = "protonvpn";
     platforms = platforms.linux;

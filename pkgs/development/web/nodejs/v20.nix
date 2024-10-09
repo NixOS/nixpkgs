@@ -5,15 +5,21 @@ let
     inherit openssl;
     python = python3;
   };
+
+  gypPatches = callPackage ./gyp-patches.nix { } ++ [
+    ./gyp-patches-pre-v22-import-sys.patch
+  ];
 in
 buildNodejs {
   inherit enableNpm;
-  version = "20.12.2";
-  sha256 = "sha256-18vMX7+zHpAB8/AVC77aWavl3XE3qqYnOVjNWc41ztc=";
+  version = "20.17.0";
+  sha256 = "9abf03ac23362c60387ebb633a516303637145cb3c177be3348b16880fd8b28c";
   patches = [
-    ./revert-arm64-pointer-auth.patch
+    ./configure-emulator.patch
+    ./configure-armv6-vfpv2.patch
     ./disable-darwin-v8-system-instrumentation-node19.patch
     ./bypass-darwin-xcrun-node16.patch
     ./node-npm-build-npm-package-logic.patch
-  ];
+    ./use-correct-env-in-tests.patch
+  ] ++ gypPatches;
 }

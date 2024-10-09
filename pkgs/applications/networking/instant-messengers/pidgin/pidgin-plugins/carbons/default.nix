@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "XEP-0280: Message Carbons plugin for libpurple";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

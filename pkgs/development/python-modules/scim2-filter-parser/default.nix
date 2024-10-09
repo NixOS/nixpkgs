@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sly ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     django-query = [ django ];
   };
 
@@ -49,10 +49,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.django-query;
+  ] ++ optional-dependencies.django-query;
 
   meta = with lib; {
-    description = "A customizable parser/transpiler for SCIM2.0 filters";
+    description = "Customizable parser/transpiler for SCIM2.0 filters";
     homepage = "https://github.com/15five/scim2-filter-parser";
     changelog = "https://github.com/15five/scim2-filter-parser/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

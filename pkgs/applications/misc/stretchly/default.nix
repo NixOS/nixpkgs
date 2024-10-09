@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stretchly";
-  version = "1.15.1";
+  version = "1.16.0";
 
   src = fetchurl {
     url = "https://github.com/hovancik/stretchly/releases/download/v${finalAttrs.version}/stretchly-${finalAttrs.version}.tar.xz";
-    hash = "sha256-suTH6o7vtUr2DidPXAwqrya5/WukQOFmS/34LaiWDBs=";
+    hash = "sha256-gOMUXGldtZUfqLABJHfbToYe0pcAn8dRWEFxCi/gY9Y=";
   };
 
   icon = fetchurl {
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A break time reminder app";
+    description = "Break time reminder app";
     longDescription = ''
       stretchly is a cross-platform electron app that reminds you to take
       breaks when working on your computer. By default, it runs in your tray

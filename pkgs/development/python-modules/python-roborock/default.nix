@@ -15,12 +15,11 @@
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.2.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +28,7 @@ buildPythonPackage rec {
     owner = "humbertogontijo";
     repo = "python-roborock";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W/42NUs3fQKCxM6hlJTmNQ7E8FevxO3XJCOYyZHQsqs=";
+    hash = "sha256-Mszy1p7TOEynCePCEiLhwdWiKXfFnlo3/a3vc9TxGeY=";
   };
 
   postPatch = ''
@@ -41,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -51,7 +49,7 @@ buildPythonPackage rec {
     dacite
     paho-mqtt
     pycryptodome
-  ] ++ lib.optionals stdenv.isDarwin [ pycryptodomex ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ pycryptodomex ];
 
   nativeCheckInputs = [
     pytest-asyncio

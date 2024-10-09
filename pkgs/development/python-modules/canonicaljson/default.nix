@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  frozendict,
   pytestCheckHook,
   pythonOlder,
   setuptools,

@@ -16,7 +16,7 @@ let
       inherit pname preBuild;
       version = "1.8.1";
       duneVersion = "3";
-      minimalOcamlVersion = "4.08.1";
+      minimalOCamlVersion = "4.08.1";
       doCheck = true;
 
       src = fetchFromGitHub {
@@ -92,7 +92,7 @@ mkCombyPackage {
     ocamlPackages.dune-configurator
     combyKernel
     combySemantic
-  ] ++ (if !stdenv.isAarch32 && !stdenv.isAarch64 then
+  ] ++ (if !stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64 then
     [ ocamlPackages.hack_parallel ]
   else
     [ ]);

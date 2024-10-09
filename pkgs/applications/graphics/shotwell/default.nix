@@ -3,6 +3,7 @@
 , fetchurl
 , meson
 , ninja
+, adwaita-icon-theme
 , gtk3
 , libexif
 , libgphoto2
@@ -37,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shotwell";
-  version = "0.32.6";
+  version = "0.32.9";
 
   src = fetchurl {
     url = "mirror://gnome/sources/shotwell/${lib.versions.majorMinor finalAttrs.version}/shotwell-${finalAttrs.version}.tar.xz";
-    sha256 = "sha256-dZek/6yR4YzYFEsS8tCDE6P0Bbs2gkOnMmgm99kqcLY=";
+    sha256 = "sha256-EjKjPcnBftI6oA2P8lUA5xC73JiZ1VtEFbaLdCnlYOs=";
   };
 
   nativeBuildInputs = [
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     librest
     gcr
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     libsecret
     libportal-gtk3
   ];

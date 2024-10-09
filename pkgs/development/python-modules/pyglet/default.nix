@@ -17,6 +17,7 @@
   ffmpeg-full,
   openal,
   libpulseaudio,
+  mesa,
 }:
 
 buildPythonPackage rec {
@@ -107,8 +108,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "http://www.pyglet.org/";
-    description = "A cross-platform windowing and multimedia library";
+    description = "Cross-platform windowing and multimedia library";
     license = licenses.bsd3;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
   };
 }

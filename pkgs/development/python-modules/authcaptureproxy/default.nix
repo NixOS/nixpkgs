@@ -57,7 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/alandtse/auth_capture_proxy/releases/tag/v${version}";
-    description = "A proxy to capture authentication information from a webpage";
+    description = "Proxy to capture authentication information from a webpage";
     mainProgram = "auth_capture_proxy";
     homepage = "https://github.com/alandtse/auth_capture_proxy";
     license = licenses.asl20;

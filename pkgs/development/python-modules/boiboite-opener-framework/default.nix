@@ -5,7 +5,6 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   scapy,
   setuptools,
 }:
@@ -24,10 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-atKqHRX24UjF/9Dy0aYXAN+80nBJKCd07FmaR5Vl1q4=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "scapy==2.5.0rc1" "scapy"
-  '';
+  pythonRelaxDeps = [ "scapy" ];
 
   build-system = [ setuptools ];
 

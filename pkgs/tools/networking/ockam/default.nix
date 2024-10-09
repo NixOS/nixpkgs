@@ -13,7 +13,7 @@
 
 let
   pname = "ockam";
-  version = "0.124.0";
+  version = "0.134.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -22,13 +22,13 @@ rustPlatform.buildRustPackage {
     owner = "build-trust";
     repo = pname;
     rev = "ockam_v${version}";
-    hash = "sha256-ovcZD9D/iVF3iIti+vQ29YIJE+UI64BeuA2huJsAx5s=";
+    hash = "sha256-6HZI0Gsxn3GmklHl9zJ6yY73FlqcLiyMAqJg8BBmzqg=";
   };
 
-  cargoHash = "sha256-z+GIFN5Q3LWnT5PrZ291G2lHgd5mzDFkKwdcxUXvUnU=";
+  cargoHash = "sha256-VZt7tDewvz7eGpAKzD8pYOnH/3BtH6cULp6uX7CPxX8=";
   nativeBuildInputs = [ git pkg-config ];
   buildInputs = [ openssl dbus ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Security ];
 
   passthru.updateScript = nix-update-script { };
 

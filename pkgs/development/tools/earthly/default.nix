@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "earthly";
-  version = "0.8.11";
+  version = "0.8.15";
 
   src = fetchFromGitHub {
     owner = "earthly";
     repo = "earthly";
     rev = "v${version}";
-    hash = "sha256-73Ftm5/eGqgjtYcvKcRuHGzKnKYdCJ5WqDBsMSSiMuA=";
+    hash = "sha256-7yw2SmwWsPBCH0LOaZSruYeZ5qL+njGuExy8+11Ni78=";
   };
 
-  vendorHash = "sha256-Uj7GGRknXtcu64rzS7SSnwQyE84hnGAyiT62vyppDE4=";
+  vendorHash = "sha256-bwNuQPGjAQ9Afa2GuPWrW8ytfIvhsOYFKPt0zyfdZhU=";
   subPackages = [ "cmd/earthly" "cmd/debugger" ];
 
   CGO_ENABLED = 0;
@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
     "-X main.GitSha=v${version}"
     "-X main.DefaultInstallationName=earthly"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
   ];
 

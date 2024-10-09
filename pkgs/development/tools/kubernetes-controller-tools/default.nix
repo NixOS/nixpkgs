@@ -2,25 +2,16 @@
 
 buildGoModule rec {
   pname = "controller-tools";
-  version = "0.14.0";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-G0jBQ12cpjfWGhXYppV9dB2n68bExi6ME9QbxXsUWvw=";
+    sha256 = "sha256-Txvzp8OcRTDCAB8nFrqj93X+Kk/sNPSSLOI07J3DwcM=";
   };
 
-  patches = [ ./version.patch ];
-
-  postPatch = ''
-    # fix wrong go line which go mod tidy complains about
-    # https://github.com/kubernetes-sigs/controller-tools/pull/881
-    substituteInPlace go.mod \
-      --replace-fail "go 1.20" "go 1.21"
-  '';
-
-  vendorHash = "sha256-8XSMg/MII+HlsFuaOC6CK/jYiBXfeRZmLT7sW/ZN3Ts=";
+  vendorHash = "sha256-nwzXlsSG7JF145bf/AJZB1GbGJRHJC7Q73Jty6mHc/w=";
 
   ldflags = [
     "-s"

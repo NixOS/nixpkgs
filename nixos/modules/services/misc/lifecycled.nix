@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.lifecycled;
 
@@ -21,17 +19,17 @@ let
   '';
 in
 {
-  meta.maintainers = with maintainers; [ cole-h grahamc ];
+  meta.maintainers = with lib.maintainers; [ cole-h grahamc ];
 
   options = {
     services.lifecycled = {
-      enable = mkEnableOption "lifecycled, a daemon for responding to AWS AutoScaling Lifecycle Hooks";
+      enable = lib.mkEnableOption "lifecycled, a daemon for responding to AWS AutoScaling Lifecycle Hooks";
 
       queueCleaner = {
-        enable = mkEnableOption "lifecycled-queue-cleaner";
+        enable = lib.mkEnableOption "lifecycled-queue-cleaner";
 
-        frequency = mkOption {
-          type = types.str;
+        frequency = lib.mkOption {
+          type = lib.types.str;
           default = "hourly";
           description = ''
             How often to trigger the queue cleaner.
@@ -43,8 +41,8 @@ in
           '';
         };
 
-        parallel = mkOption {
-          type = types.ints.unsigned;
+        parallel = lib.mkOption {
+          type = lib.types.ints.unsigned;
           default = 20;
           description = ''
             The number of parallel deletes to run.
@@ -52,63 +50,63 @@ in
         };
       };
 
-      instanceId = mkOption {
-        type = types.nullOr types.str;
+      instanceId = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The instance ID to listen for events for.
         '';
       };
 
-      snsTopic = mkOption {
-        type = types.nullOr types.str;
+      snsTopic = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The SNS topic that receives events.
         '';
       };
 
-      noSpot = mkOption {
-        type = types.bool;
+      noSpot = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Disable the spot termination listener.
         '';
       };
 
-      handler = mkOption {
-        type = types.path;
+      handler = lib.mkOption {
+        type = lib.types.path;
         description = ''
           The script to invoke to handle events.
         '';
       };
 
-      json = mkOption {
-        type = types.bool;
+      json = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable JSON logging.
         '';
       };
 
-      cloudwatchGroup = mkOption {
-        type = types.nullOr types.str;
+      cloudwatchGroup = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Write logs to a specific Cloudwatch Logs group.
         '';
       };
 
-      cloudwatchStream = mkOption {
-        type = types.nullOr types.str;
+      cloudwatchStream = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           Write logs to a specific Cloudwatch Logs stream. Defaults to the instance ID.
         '';
       };
 
-      debug = mkOption {
-        type = types.bool;
+      debug = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable debugging information.
@@ -117,8 +115,8 @@ in
 
       # XXX: Can be removed if / when
       # https://github.com/buildkite/lifecycled/pull/91 is merged.
-      awsRegion = mkOption {
-        type = types.nullOr types.str;
+      awsRegion = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         description = ''
           The region used for accessing AWS services.
@@ -129,8 +127,8 @@ in
 
   ### Implementation ###
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       environment.etc."lifecycled".source = configFile;
 
       systemd.packages = [ pkgs.lifecycled ];
@@ -140,10 +138,10 @@ in
       };
     })
 
-    (mkIf cfg.queueCleaner.enable {
+    (lib.mkIf cfg.queueCleaner.enable {
       systemd.services.lifecycled-queue-cleaner = {
         description = "Lifecycle Daemon Queue Cleaner";
-        environment = optionalAttrs (cfg.awsRegion != null) { AWS_REGION = cfg.awsRegion; };
+        environment = lib.optionalAttrs (cfg.awsRegion != null) { AWS_REGION = cfg.awsRegion; };
         serviceConfig = {
           Type = "oneshot";
           ExecStart = "${pkgs.lifecycled}/bin/lifecycled-queue-cleaner -parallel ${toString cfg.queueCleaner.parallel}";

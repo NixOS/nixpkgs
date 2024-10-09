@@ -42,6 +42,8 @@ self: super: {
 
     pgaudit = super.callPackage ./pgaudit.nix { };
 
+    pgmq = super.callPackage ./pgmq.nix { };
+
     pgroonga = super.callPackage ./pgroonga.nix { };
 
     pgsodium = super.callPackage ./pgsodium.nix { };
@@ -73,6 +75,8 @@ self: super: {
     pgtap = super.callPackage ./pgtap.nix { };
 
     smlar = super.callPackage ./smlar.nix { };
+
+    system_stats = super.callPackage ./system_stats.nix { };
 
     temporal_tables = super.callPackage ./temporal_tables.nix { };
 

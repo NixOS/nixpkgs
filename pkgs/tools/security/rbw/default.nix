@@ -25,32 +25,33 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
-  version = "1.10.2";
+  version = "1.12.1";
 
   src = fetchzip {
     url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
-    hash = "sha256-ScVXtNk2QtfAQn6PtQkbDJNLWAu49l55s6Zpf1fiVjM=";
+    hash = "sha256-+1kalFyhk2UL+iVzuFLDsSSTudrd4QpXw+3O4J+KsLc=";
   };
 
-  cargoHash = "sha256-ii0401TTDm1ySRGOcSmPts/10wTguxsx8h7wA4FsgQk=";
+  cargoHash = "sha256-cKbbsDb449WANGT+x8APhzs+hf5SR3RBsCBWDNceRMA=";
 
   nativeBuildInputs = [
     installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
   buildInputs = [ bash ] # for git-credential-rbw
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
     darwin.apple_sdk_11_0.frameworks.AppKit
   ];
 
-  preConfigure = lib.optionalString stdenv.isLinux ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"
     export OPENSSL_LIB_DIR="${lib.getLib openssl}/lib"
   '';
 
   postInstall = ''
     install -Dm755 -t $out/bin bin/git-credential-rbw
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rbw \
       --bash <($out/bin/rbw gen-completions bash) \
       --fish <($out/bin/rbw gen-completions fish) \

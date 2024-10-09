@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS stream";
+    description = "Library for ARIB STD-B24, decoding JIS 8 bit characters and parsing MPEG-TS stream";
     homepage = "https://code.videolan.org/jeeb/aribb24/";
     license = licenses.lgpl3Plus;
     pkgConfigModules = [ "aribb24" ];

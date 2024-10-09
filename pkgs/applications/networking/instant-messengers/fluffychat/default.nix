@@ -4,10 +4,11 @@
 , imagemagick
 , mesa
 , libdrm
-, flutter
+, flutter324
 , pulseaudio
 , makeDesktopItem
-, gnome
+, zenity
+, olm
 
 , targetFlutterPlatform ? "linux"
 }:
@@ -16,15 +17,15 @@ let
   libwebrtcRpath = lib.makeLibraryPath [ mesa libdrm ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 in
-flutter.buildFlutterApplication (rec {
+flutter324.buildFlutterApplication (rec {
   pname = "fluffychat-${targetFlutterPlatform}";
-  version = "1.20.0";
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "krille-chan";
     repo = "fluffychat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eHwzvWKWJ9Q2OgCvgZTt+Bcph2w2pTqyOtwXFbZ4LEg=";
+    hash = "sha256-biFoRcMss3JVrMoilc8BzJ+R6f+e4RYpZ5dbxDpnfTk=";
   };
 
   inherit pubspecLock;
@@ -44,13 +45,14 @@ flutter.buildFlutterApplication (rec {
     maintainers = with maintainers; [ mkg20001 gilice ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     sourceProvenance = [ sourceTypes.fromSource ];
+    inherit (olm.meta) knownVulnerabilities;
   };
 } // lib.optionalAttrs (targetFlutterPlatform == "linux") {
   nativeBuildInputs = [ imagemagick ];
 
   runtimeDependencies = [ pulseaudio ];
 
-  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+  extraWrapProgramArgs = "--prefix PATH : ${zenity}/bin";
 
   env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 

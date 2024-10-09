@@ -48,6 +48,6 @@ buildPythonPackage rec {
     mainProgram = "segments";
     homepage = "https://github.com/cldf/segments";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

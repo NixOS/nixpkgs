@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.fonts.fontDir;
@@ -12,7 +9,7 @@ let
     find ${toString config.fonts.packages} -regex "$font_regexp" \
       -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
     cd "$out/share/X11/fonts"
-    ${optionalString cfg.decompressFonts ''
+    ${lib.optionalString cfg.decompressFonts ''
       ${pkgs.gzip}/bin/gunzip -f *.gz
     ''}
     ${pkgs.xorg.mkfontscale}/bin/mkfontscale
@@ -27,8 +24,8 @@ in
   options = {
     fonts.fontDir = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to create a directory with links to all fonts in
@@ -36,10 +33,10 @@ in
         '';
       };
 
-      decompressFonts = mkOption {
-        type = types.bool;
+      decompressFonts = lib.mkOption {
+        type = lib.types.bool;
         default = config.programs.xwayland.enable;
-        defaultText = literalExpression "config.programs.xwayland.enable";
+        defaultText = lib.literalExpression "config.programs.xwayland.enable";
         description = ''
           Whether to decompress fonts in
           {file}`/run/current-system/sw/share/X11/fonts`.
@@ -49,7 +46,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ x11Fonts ];
     environment.pathsToLink = [ "/share/X11/fonts" ];
@@ -61,7 +58,7 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "fonts" "enableFontDir" ] [ "fonts" "fontDir" "enable" ])
+    (lib.mkRenamedOptionModule [ "fonts" "enableFontDir" ] [ "fonts" "fontDir" "enable" ])
   ];
 
 }

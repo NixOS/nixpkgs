@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , alsa-lib
 , fftw
-, freeglut
+, libglut
 , freetype
 , glew
 , libjack2
@@ -33,17 +33,17 @@ stdenv.mkDerivation {
   buildInputs = [
     alsa-lib
     fftw
-    freeglut.dev
+    libglut
     freetype
     glew
     libjack2
-    libjpeg.dev
+    libjpeg
     liblo
-    libsndfile.dev
-    libtiff.dev
+    libsndfile
+    libtiff
     ode
     openal
-    openssl.dev
+    openssl
     racket_7_9
   ];
   nativeBuildInputs = [ scons ];

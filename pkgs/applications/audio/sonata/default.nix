@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, wrapGAppsHook3, gettext
-, python3Packages, gnome, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
+, python3Packages, adwaita-icon-theme, gtk3, glib, gdk-pixbuf, gsettings-desktop-schemas, gobject-introspection }:
 
 let
   inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
@@ -24,7 +24,7 @@ in buildPythonApplication rec {
 
   buildInputs = [
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gtk3
     gdk-pixbuf
@@ -45,7 +45,7 @@ in buildPythonApplication rec {
   '';
 
   meta = {
-    description = "An elegant client for the Music Player Daemon";
+    description = "Elegant client for the Music Player Daemon";
     mainProgram = "sonata";
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.

@@ -24,6 +24,13 @@ in
           Enable SSL/TLS encryption.
         '';
       };
+      gpu = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Enable GPU monitoring.
+        '';
+      };
       disableCommandExecute = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -46,7 +53,12 @@ in
         '';
       };
       reportDelay = lib.mkOption {
-        type = lib.types.enum [ 1 2 3 4 ];
+        type = lib.types.enum [
+          1
+          2
+          3
+          4
+        ];
         default = 1;
         description = ''
           The interval between system status reportings.
@@ -96,6 +108,7 @@ in
         ++ lib.optional cfg.skipConnection "--skip-conn"
         ++ lib.optional cfg.skipProcess "--skip-procs"
         ++ lib.optional cfg.tls "--tls"
+        ++ lib.optional cfg.gpu "--gpu"
       );
       wantedBy = [ "multi-user.target" ];
     };

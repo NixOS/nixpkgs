@@ -5,7 +5,6 @@
   fetchFromGitHub,
   setuptools,
   requests,
-  matrix-client,
   distro,
   click,
   typing-extensions,

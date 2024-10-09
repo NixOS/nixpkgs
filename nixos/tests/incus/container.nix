@@ -11,8 +11,8 @@ let
     extra;
   };
 
-  container-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-  container-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+  container-image-metadata = "${releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}}/tarball/nixos-system-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+  container-image-rootfs = "${releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system}}/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
 in
 {
   inherit name;
@@ -61,7 +61,7 @@ in
     machine.succeed("incus admin init --minimal")
 
     with subtest("Container image can be imported"):
-        machine.succeed("incus image import ${container-image-metadata}/*/*.tar.xz ${container-image-rootfs}/*/*.tar.xz --alias nixos")
+        machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
 
     with subtest("Container can be launched and managed"):
         machine.succeed("incus launch nixos container")

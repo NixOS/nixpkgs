@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     description = "Laptop power measuring tool";
     mainProgram = "powerstat";
     homepage = "https://github.com/ColinIanKing/powerstat";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];
   };

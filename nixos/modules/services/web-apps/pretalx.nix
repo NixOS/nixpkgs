@@ -35,7 +35,7 @@ in
   options.services.pretalx = {
     enable = lib.mkEnableOption "pretalx";
 
-    package = lib.mkPackageOptionMD pkgs "pretalx" {};
+    package = lib.mkPackageOption pkgs "pretalx" {};
 
     group = lib.mkOption {
       type = lib.types.str;
@@ -293,6 +293,15 @@ in
         $sudo ${lib.getExe' pythonEnv "pretalx-manage"} "$@"
       '')
     ];
+
+    services.logrotate.settings.pretalx = {
+      files = "${cfg.settings.filesystem.logs}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
 
     services = {
       nginx = lib.mkIf cfg.nginx.enable {

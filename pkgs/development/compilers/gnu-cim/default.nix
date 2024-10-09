@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A GNU compiler for the programming language Simula";
+    description = "GNU compiler for the programming language Simula";
     longDescription = ''
       GNU Cim is a compiler for the programming language Simula.
       It offers a class concept, separate compilation with full type checking,

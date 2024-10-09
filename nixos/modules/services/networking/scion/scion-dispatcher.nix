@@ -3,6 +3,7 @@
 with lib;
 
 let
+  globalCfg = config.services.scion;
   cfg = config.services.scion.scion-dispatcher;
   toml = pkgs.formats.toml { };
   defaultConfig = {
@@ -15,7 +16,7 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-dispatcher.toml" (defaultConfig // cfg.settings);
+  configFile = toml.generate "scion-dispatcher.toml" (recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-dispatcher = {
@@ -64,9 +65,9 @@ in
         DynamicUser = true;
         BindPaths = [ "/dev/shm:/run/shm" ];
         ExecStartPre = "${pkgs.coreutils}/bin/rm -rf /run/shm/dispatcher";
-        ExecStart = "${pkgs.scion}/bin/scion-dispatcher --config ${configFile}";
+        ExecStart = "${globalCfg.package}/bin/scion-dispatcher --config ${configFile}";
         Restart = "on-failure";
-        StateDirectory = "scion-dispatcher";
+        ${if globalCfg.stateless then "RuntimeDirectory" else "StateDirectory"} = "scion-dispatcher";
       };
     };
   };

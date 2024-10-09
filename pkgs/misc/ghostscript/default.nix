@@ -21,7 +21,7 @@
 , bash
 , buildPackages
 , openjpeg
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin)
+, cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
 , cups
 , x11Support ? cupsSupport
 , xorg # with CUPS, X11 only adds very little
@@ -43,11 +43,11 @@ let
     srcs = [
       (fetchurl {
         url = "mirror://sourceforge/gs-fonts/ghostscript-fonts-std-8.11.tar.gz";
-        sha256 = "00f4l10xd826kak51wsmaz69szzm2wp8a41jasr4jblz25bg7dhf";
+        hash = "sha256-DrbzVhGfLkmyVjIQhS4X9X+dzFdV81Cmmkag1kGgxAE=";
       })
       (fetchurl {
         url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
-        sha256 = "1cxaah3r52qq152bbkiyj2f7dx1rf38vsihlhjmrvzlr8v6cqil1";
+        hash = "sha256-gUbMzEaZ/p2rhBRGvdFwOfR2nJA+zrVECRiLkgdUqrM=";
       })
       # ... add other fonts here
     ];
@@ -61,11 +61,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ghostscript${lib.optionalString x11Support "-with-X"}";
-  version = "10.02.1";
+  version = "10.03.1";
 
   src = fetchurl {
     url = "https://github.com/ArtifexSoftware/ghostpdl-downloads/releases/download/gs${lib.replaceStrings ["."] [""] version}/ghostscript-${version}.tar.xz";
-    hash = "sha512-7g91TBvYoYQorRTqo+rYD/i5YnWvUBLnqDhPHxBJDaBW7smuPMeRp6E6JOFuVN9bzN0QnH1ToUU0u9c2CjALEQ=";
+    hash = "sha256-FXIS7clrjMxAlHXc4uSYM/tEJ/FQxFUlje2WMsEGq+4=";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     ./doc-no-ref.diff
   ];
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [ "out" "man" "doc" "fonts" ];
 
   enableParallelBuilding = true;
 
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "so" ]
     # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
     # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
-    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
+    ++ lib.optional (x11Support && stdenv.hostPlatform.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
@@ -133,8 +133,10 @@ stdenv.mkDerivation rec {
 
     cp -r Resource "$out/share/ghostscript/${version}"
 
-    ln -s "${fonts}" "$out/share/ghostscript/fonts"
-  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $fonts/share/fonts
+    cp -rv ${fonts}/* "$fonts/share/fonts/"
+    ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
@@ -142,7 +144,7 @@ stdenv.mkDerivation rec {
 
   # dynamic library name only contains maj.min, eg. '9.53'
   dylib_version = lib.versions.majorMinor version;
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';
@@ -190,7 +192,7 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.agpl3Plus;
     platforms = lib.platforms.all;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ lib.maintainers.tobim ];
     mainProgram = "gs";
   };
 }

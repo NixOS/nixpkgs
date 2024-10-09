@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, buildFHSEnvChroot
+, buildFHSEnv
 , copyDesktopItems
 , fetchurl
 , gsettings-desktop-schemas
@@ -67,7 +67,7 @@ let
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSEnvChroot {
+  vmwareFHSUserEnv = name: buildFHSEnv {
     inherit name;
 
     runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
@@ -151,6 +151,6 @@ stdenv.mkDerivation {
     homepage = "https://www.vmware.com/go/viewclients";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

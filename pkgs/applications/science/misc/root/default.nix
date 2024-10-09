@@ -3,7 +3,6 @@
 , callPackage
 , fetchgit
 , fetchurl
-, fetchpatch
 , makeWrapper
 , cmake
 , coreutils
@@ -25,7 +24,7 @@
 , libGL
 , libxcrypt
 , libxml2
-, llvm_13
+, llvm_16
 , lsof
 , lz4
 , xz
@@ -41,7 +40,6 @@
 , xxHash
 , zlib
 , zstd
-, libAfterImage
 , giflib
 , libjpeg
 , libtiff
@@ -58,7 +56,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.30.06";
+  version = "6.32.06";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -66,13 +64,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-MA237RtnjtL7ljXKZ1khoZRcfCED2oQAM7STCR9VcAw=";
+    hash = "sha256-P8Ay2T/oSN6lrbG0fY8KhieVIyk/7gqis81Sof+rckc=";
   };
 
   clad_src = fetchgit {
     url = "https://github.com/vgvassilev/clad";
-    rev = "refs/tags/v1.4"; # Make sure that this is the same tag as in the ROOT build files!
-    hash = "sha256-OI9PaS7kQ/ewD5Soe3gG5FZdlR6qG6Y3mfHwi5dj1sI=";
+    # Make sure that this is the same tag as in the ROOT build files!
+    # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
+    rev = "refs/tags/v1.7";
+    hash = "sha256-iKrZsuUerrlrjXBrxcTsFu/t0Pb0sa4UlfSwd1yhg3g=";
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    llvm_13
+    llvm_16
     lz4
     xz
     gsl
@@ -98,7 +98,6 @@ stdenv.mkDerivation rec {
     openblas
     openssl
     xxHash
-    libAfterImage
     giflib
     libjpeg
     libtiff
@@ -110,23 +109,12 @@ stdenv.mkDerivation rec {
     tbb
     xrootd
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-  ++ lib.optionals (stdenv.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
   ;
 
   patches = [
     ./sw_vers.patch
-
-    # compatibility with recent XRootD
-    # https://github.com/root-project/root/pull/13752
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/3d3cda6c520791282298782189cdb8ca07ace4b9.diff";
-      hash = "sha256-O3aXzrOEQiPjZgbAj9TL6Wt/adN1kKFwjooeaFRyT4I=";
-    })
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/6e7798e62dbed1ffa8b91a180fa5a080b7c04ba3.diff";
-      hash = "sha256-47/J631DBnVlvM1Pm9iicKXDKAqN8v9hjAstQuHmH8Q=";
-    })
   ];
 
   preConfigure = ''
@@ -136,27 +124,22 @@ stdenv.mkDerivation rec {
       fi
     done
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
-      --replace 'set(lcgpackages ' '#set(lcgpackages '
+      --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
     # We have to bypass the connection check, because it would disable clad.
     # This should probably be fixed upstream with a flag to disable the
     # connectivity check!
     substituteInPlace CMakeLists.txt \
-      --replace 'if(NO_CONNECTION)' 'if(FALSE)'
-    substituteInPlace interpreter/cling/tools/plugins/CMakeLists.txt \
-      --replace 'if(NOT DEFINED NO_CONNECTION OR NOT NO_CONNECTION)' 'if(TRUE)'
+      --replace-fail 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
     # Make sure that clad is not downloaded when building
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
+      --replace-fail 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
     # Make sure that clad is finding the right llvm version
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_13.dev}/lib/cmake/llvm'
-    # Fix that will also be upstream in ROOT 6.32. TODO: remove it when updating to 6.32
-    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace 'set(_CLAD_LIBRARY_PATH ''${clad_install_dir}/plugins/lib)' 'set(_CLAD_LIBRARY_PATH ''${CMAKE_CURRENT_BINARY_DIR}/clad-prefix/src/clad-build/lib''${LLVM_LIBDIR_SUFFIX})'
+      --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
 
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
-      --replace 'add_clang_symlink(''${link} clang)' ""
+      --replace-fail 'add_clang_symlink(''${link} clang)' ""
 
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
@@ -166,11 +149,11 @@ stdenv.mkDerivation rec {
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
-      --replace "-F/System/Library/PrivateFrameworks " ""
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
+      --replace-fail "-F/System/Library/PrivateFrameworks " ""
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
@@ -182,23 +165,20 @@ stdenv.mkDerivation rec {
     "-Dfail-on-missing=ON"
     "-Dfitsio=OFF"
     "-Dgnuinstall=ON"
+    "-Dmathmore=ON"
     "-Dmysql=OFF"
     "-Dpgsql=OFF"
     "-Dsqlite=OFF"
-    "-Dtmva-pymva=OFF"
     "-Dvdt=OFF"
   ]
   ++ lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${lib.getDev stdenv.cc.libc}/include"
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
 
     # fatal error: module map file '/nix/store/<hash>-Libsystem-osx-10.12.6/include/module.modulemap' not found
     # fatal error: could not build module '_Builtin_intrinsics'
     "-Druntime_cxxmodules=OFF"
   ];
-
-  # suppress warnings from compilation of the vendored clang to avoid running into log limits on the Hydra
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.cc.isGNU [ "-Wno-shadow" "-Wno-maybe-uninitialized" ];
 
   postInstall = ''
     for prog in rootbrowse rootcp rooteventselector rootls rootmkdir rootmv rootprint rootrm rootslimtree; do
@@ -244,6 +224,9 @@ stdenv.mkDerivation rec {
     ]}"
   '';
 
+  # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+  CXXFLAGS = lib.optional (stdenv.hostPlatform.system == "x86_64-darwin") "-faligned-allocation";
+
   # To use the debug information on the fly (without installation)
   # add the outPath of root.debug into NIX_DEBUG_INFO_DIRS (in PATH-like format)
   # and make sure that gdb from Nixpkgs can be found in PATH.
@@ -257,7 +240,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://root.cern/";
-    description = "A data analysis framework";
+    description = "Data analysis framework";
     platforms = platforms.unix;
     maintainers = [ maintainers.guitargeek maintainers.veprbl ];
     license = licenses.lgpl21;

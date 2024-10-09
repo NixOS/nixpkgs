@@ -7,7 +7,7 @@
 , intltool
 , wrapGAppsHook3
 , libsoup
-, gnome
+, adwaita-icon-theme
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     libgsf
     libofx
     libsoup
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   meta = with lib; {
-    description = "A personnal accounting application";
+    description = "Personnal accounting application";
     mainProgram = "grisbi";
     longDescription = ''
       Grisbi is an application written by French developers, so it perfectly

@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "iminuit";
-  version = "2.25.2";
+  version = "2.30.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-O/ihuWhlpgzt8pE19P6uCfp8ZiN9KfaN7WTpeoI6mz4=";
+    hash = "sha256-KBW/3rjn94GF8xa3Xi1LGdD2mTvcX/AzUu03twp5Y2A=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pathspec
     ninja
     pyproject-metadata
-  ] ++ scikit-build-core.optional-dependencies.pyproject;
+  ];
 
   propagatedBuildInputs = [ numpy ];
 

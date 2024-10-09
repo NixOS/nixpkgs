@@ -1,6 +1,5 @@
 { lib
 , callPackage
-, callPackages
 , config
 }:
 let
@@ -72,7 +71,7 @@ in rec {
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix {})
     # Add all manually packaged extensions
-    (extensions: extensions // (callPackages ./manuallyPackaged.nix {}))
+    (extensions: extensions // (import ./manuallyPackaged.nix { inherit callPackage; }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
     (mapReadableNames)

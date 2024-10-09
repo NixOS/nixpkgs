@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.gnunet;
@@ -44,8 +41,8 @@ in
 
     services.gnunet = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to run the GNUnet daemon.  GNUnet is GNU's anonymous
@@ -54,8 +51,8 @@ in
       };
 
       fileSharing = {
-        quota = mkOption {
-          type = types.int;
+        quota = lib.mkOption {
+          type = lib.types.int;
           default = 1024;
           description = ''
             Maximum file system usage (in MiB) for file sharing.
@@ -64,8 +61,8 @@ in
       };
 
       udp = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 2086;  # assigned by IANA
           description = ''
             The UDP port for use by GNUnet.
@@ -74,8 +71,8 @@ in
       };
 
       tcp = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 2086;  # assigned by IANA
           description = ''
             The TCP port for use by GNUnet.
@@ -84,8 +81,8 @@ in
       };
 
       load = {
-        maxNetDownBandwidth = mkOption {
-          type = types.int;
+        maxNetDownBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 50000;
           description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
@@ -93,8 +90,8 @@ in
           '';
         };
 
-        maxNetUpBandwidth = mkOption {
-          type = types.int;
+        maxNetUpBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 50000;
           description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
@@ -102,8 +99,8 @@ in
           '';
         };
 
-        hardNetUpBandwidth = mkOption {
-          type = types.int;
+        hardNetUpBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 0;
           description = ''
             Hard bandwidth limit (in bits per second) when uploading
@@ -112,12 +109,12 @@ in
         };
       };
 
-      package = mkPackageOption pkgs "gnunet" {
+      package = lib.mkPackageOption pkgs "gnunet" {
         example = "gnunet_git";
       };
 
-      extraOptions = mkOption {
-        type = types.lines;
+      extraOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Additional options that will be copied verbatim in `gnunet.conf`.
@@ -131,7 +128,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.gnunet.enable {
+  config = lib.mkIf config.services.gnunet.enable {
 
     users.users.gnunet = {
       group = "gnunet";

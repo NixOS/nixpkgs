@@ -14,7 +14,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A stealth coffee-break roguelike game";
+    description = "Stealth coffee-break roguelike game";
     mainProgram = "harmonist";
     longDescription = ''
       Harmonist is a stealth coffee-break roguelike game. The game has a heavy
@@ -26,6 +26,6 @@ buildGoModule rec {
     '';
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

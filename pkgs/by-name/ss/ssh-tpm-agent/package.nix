@@ -1,23 +1,23 @@
 { lib
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , openssl
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "ssh-tpm-agent";
-  version = "0.3.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Foxboron";
     repo = "ssh-tpm-agent";
     rev = "v${version}";
-    hash = "sha256-8CGSiCOcns4cWkYWqibs6hAFRipYabKPCpkhxF4OE8w=";
+    hash = "sha256-gO9qVAVCvaiLrC/GiTJ0NghiXVRXXRBlvOIVSAOftR8=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-zUAIesBeuh1zlxXcjKSNmMawZGgUr9z3NzT0XKn/YCQ=";
+  vendorHash = "sha256-Upq8u5Ip0HQW5FGyqhVUT6rINXz2BpCE7lbtk9fPaWs=";
 
   buildInputs = [
     openssl

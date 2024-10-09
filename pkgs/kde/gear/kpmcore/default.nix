@@ -24,7 +24,8 @@
   udftools,
   xfsprogs,
   zfs,
-}: let
+}:
+let
   # https://github.com/KDE/kpmcore/blob/06f15334ecfbe871730a90dbe2b694ba060ee998/src/util/externalcommand_whitelist.h
   runtimeDeps = [
     cryptsetup
@@ -54,21 +55,23 @@
     # FIXME: audit to see if these are all still required
   ];
 
-  trustedprefixes = writeText "kpmcore-trustedprefixes" (lib.concatStringsSep "\n" (map lib.getBin runtimeDeps));
+  trustedprefixes = writeText "kpmcore-trustedprefixes" (
+    lib.concatStringsSep "\n" (map lib.getBin runtimeDeps)
+  );
 in
-  mkKdeDerivation {
-    pname = "kpmcore";
+mkKdeDerivation {
+  pname = "kpmcore";
 
-    postPatch = ''
-      cp ${trustedprefixes} src/util/trustedprefixes
-    '';
+  postPatch = ''
+    cp ${trustedprefixes} src/util/trustedprefixes
+  '';
 
-    preConfigure = ''
-      substituteInPlace src/util/CMakeLists.txt \
-        --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
-      substituteInPlace src/backend/corebackend.cpp \
-        --replace /usr/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy $out/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy
-    '';
+  preConfigure = ''
+    substituteInPlace src/util/CMakeLists.txt \
+      --replace \$\{POLKITQT-1_POLICY_FILES_INSTALL_DIR\} $out/share/polkit-1/actions
+    substituteInPlace src/backend/corebackend.cpp \
+      --replace /usr/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy $out/share/polkit-1/actions/org.kde.kpmcore.externalcommand.policy
+  '';
 
-    extraNativeBuildInputs = [pkg-config];
-  }
+  extraNativeBuildInputs = [ pkg-config ];
+}

@@ -10,15 +10,15 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-QnZZVQZMkh9GH6io19mlE3gHaiX73TgH7ibFT1H5DB4=";
+    sha256 = "sha256-ao9mxN5cMGopCRXUkJRTNJemizzibdw0Q+oAhKjUyHA=";
   };
-  vendorHash = "sha256-5q405OP8VPChhxiH2tjh2H+ailQRjGmLZvul7CubjJo=";
+  vendorHash = "sha256-pDMvtSavifWfxJqfiOef0CyT8KtU8BUjEFwReElkEeM=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,7 +52,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
+    description = "Pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
     longDescription = ''
       Witness prevents tampering of build materials and verifies the integrity
       of the build process from source to target. It works by wrapping commands

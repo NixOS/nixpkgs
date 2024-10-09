@@ -19,6 +19,6 @@ buildPythonPackage rec {
     mainProgram = "glad";
     homepage = "https://github.com/Dav1dde/glad";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

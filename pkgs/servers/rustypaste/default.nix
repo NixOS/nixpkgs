@@ -2,18 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-mDNWIqA3t8AGNTqryiH2q8Tvg4k5d0II3EBkf7tdoNo=";
+    sha256 = "sha256-C/ndU09+yQTXEUWDO3u9Bl5M3x3aaRHVuWpomUAa/B8=";
   };
 
-  cargoHash = "sha256-ZmlA6O/9ZVLHvBHMkY+hpb6Eb0o0RxfXpwop6BLCdWc=";
+  cargoHash = "sha256-b9KZzevaTl52pduN4gkF8k6yqgDcE8x5sOwmPxzYfWA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A minimal file upload/pastebin service";
+    description = "Minimal file upload/pastebin service";
     homepage = "https://github.com/orhun/rustypaste";
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

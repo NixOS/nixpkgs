@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "dfandrich";
     repo = "gpscorrelate";
     rev = version;
-    sha256 = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
+    hash = "sha256-1t9XUY12hVaUNOg785dMJCiaMMCI2XCcif1DkKYXOoo=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     libxslt
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     exiv2
@@ -48,10 +48,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  preCheck = ''
+    # https://github.com/dfandrich/gpscorrelate/issues/29
+    rm tests/data/test005.*
+  '';
+
   installTargets = [ "install" "install-po" "install-desktop-file" ];
 
   meta = with lib; {
-    description = "A GPS photo correlation tool, to add EXIF geotags";
+    description = "GPS photo correlation tool, to add EXIF geotags";
 
     longDescription = ''
       Digital cameras are cool.  So is GPS.  And, EXIF tags are really
@@ -71,6 +76,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
     homepage = "https://dfandrich.github.io/gpscorrelate/";
+    changelog = "https://github.com/dfandrich/gpscorrelate/releases/tag/${src.rev}";
     platforms = platforms.unix;
     maintainers = with maintainers; [ sikmir ];
   };

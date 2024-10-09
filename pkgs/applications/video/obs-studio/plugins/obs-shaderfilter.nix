@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "OBS Studio filter for applying an arbitrary shader to a source.";
+    description = "OBS Studio filter for applying an arbitrary shader to a source";
     homepage = "https://github.com/exeldro/obs-shaderfilter";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;

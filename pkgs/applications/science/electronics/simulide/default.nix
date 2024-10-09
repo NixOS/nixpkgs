@@ -71,7 +71,7 @@ let
       '';
 
       meta = {
-        description = "A simple real time electronic circuit simulator";
+        description = "Simple real time electronic circuit simulator";
         longDescription = ''
           SimulIDE is a simple real time electronic circuit simulator, intended for hobbyist or students
           to learn and experiment with analog and digital electronic circuits and microcontrollers.

@@ -2,7 +2,6 @@
   attrs,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchPypi,
   lib,
   pytestCheckHook,
   pythonOlder,

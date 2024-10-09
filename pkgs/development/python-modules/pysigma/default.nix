@@ -8,14 +8,13 @@
   pyparsing,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   pyyaml,
   requests,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.11.5";
+  version = "0.11.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Mr4etI6VNPWDVZj4A9j3Ka9v+BpFC75MLXppYELIWrg=";
+    hash = "sha256-jxVTXw3WZcOL5IDUHs+DRGoXDRFn99UWOz5j5mCEf8A=";
   };
 
   pythonRelaxDeps = [
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     jinja2

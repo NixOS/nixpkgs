@@ -1,21 +1,20 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 }:
 
 buildGoModule rec {
   pname = "jsonnet-language-server";
-  version = "0.13.1";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "jsonnet-language-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4tJrEipVbiYQY0L9sDH0f/qT8WY7c3md/Bar/dST+VI=";
+    hash = "sha256-GR5EjVd1Tje9FLyP0pfNT6hMUGYkfPnsT8M72H713D4=";
   };
 
-  vendorHash = "sha256-/mfwBHaouYN8JIxPz720/7MlMVh+5EEB+ocnYe4B020=";
+  vendorHash = "sha256-rh+b089fr+z0YzgvzivzELnSbNDiNczGCRwFrIYR250=";
 
   ldflags = [
     "-s"

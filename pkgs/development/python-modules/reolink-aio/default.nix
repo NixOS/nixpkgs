@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "reolink-aio";
-  version = "0.8.10";
+  version = "0.9.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "reolink_aio";
     rev = "refs/tags/${version}";
-    hash = "sha256-qawrTTLp+qFUVn5TUQ73TcPu37c0EywzJl+8oFW8L04=";
+    hash = "sha256-xIN6ioX02YgzY3sh3l7rFT6UQCMnzlrX/CJj483G6ig=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     description = "Module to interact with the Reolink IP camera API";
     homepage = "https://github.com/starkillerOG/reolink_aio";
     changelog = "https://github.com/starkillerOG/reolink_aio/releases/tag/${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

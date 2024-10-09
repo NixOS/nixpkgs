@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "extism-cli";
-  version = "1.4.0";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "extism";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-F+Kb9ZAgHkw5kcOSt2Q8Lm+B8B4VPkr4FVYbe6HD+is=";
+    hash = "sha256-zC03cvvotRIiW4IiVTwffgMYLDrCp72pgMJHoJk5L0Q=";
   };
 
-  vendorHash = "sha256-/faWWYwY7oxbIOoqpyXC+EU4gECl/o34M+SFyfMOWj8=";
+  vendorHash = "sha256-n4Ue2TSG0zbC2uqXiNakqWQjxhbOgXnC2Y7EKP2BM8Q=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,13 +27,13 @@ buildGoModule rec {
   postInstall = ''
     local INSTALL="$out/bin/extism"
     installShellCompletion --cmd extism \
-      --bash <($out/bin/containerlab completion bash) \
-      --fish <($out/bin/containerlab completion fish) \
-      --zsh <($out/bin/containerlab completion zsh)
+      --bash <($out/bin/extism completion bash) \
+      --fish <($out/bin/extism completion fish) \
+      --zsh <($out/bin/extism completion zsh)
   '';
 
   meta = with lib; {
-    description = "The extism CLI is used to manage Extism installations";
+    description = "Extism CLI is used to manage Extism installations";
     homepage = "https://github.com/extism/cli";
     license = licenses.bsd3;
     maintainers = with maintainers; [ zshipko ];

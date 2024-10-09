@@ -57,11 +57,11 @@ let
   # need to be used instead. Ideally, for the release branches of NixOS we
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
-  mirrors = with version; lib.optionals final  [
+  mirrors = lib.optionals version.final  [
     # tlnet-final snapshot; used when texlive.tlpdb is frozen
     # the TeX Live yearly freeze typically happens in mid-March
-    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString texliveYear}/tlnet-final"
-    "ftp://tug.org/texlive/historic/${toString texliveYear}/tlnet-final"
+    "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
+    "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
   ] ++ [
     # CTAN mirrors
     "https://mirror.ctan.org/systems/texlive/tlnet"
@@ -71,7 +71,7 @@ let
     # please note that this server is not meant for large scale deployment
     # https://tug.org/pipermail/tex-live/2019-November/044456.html
     # https://texlive.info/ MUST appear last (see tlpdbxz)
-    "https://texlive.info/tlnet-archive/${year}/${month}/${day}/tlnet"
+    "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
   ];
 
   tlpdbxz = fetchurl {
@@ -148,9 +148,9 @@ let
   # now a legacy wrapper around buildTeXEnv
   combine = import ./combine-wrapper.nix { inherit buildTeXEnv lib toTLPkgList toTLPkgSets; };
 
-  assertions = with lib;
-    assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
-    assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
+  assertions =
+    lib.assertMsg (tlpdbVersion.year == version.texliveYear) "TeX Live year in texlive does not match tlpdb.nix, refusing to evaluate" &&
+    lib.assertMsg (tlpdbVersion.frozen == version.final) "TeX Live final status in texlive does not match tlpdb.nix, refusing to evaluate";
 
   # Pre-defined evironment packages for TeX Live schemes,
   # to make nix-env usage more comfortable and build selected on Hydra.
@@ -191,7 +191,7 @@ let
       (pname:
         (buildTeXEnv {
           __extraName = "combined" + lib.removePrefix "scheme" pname;
-          __extraVersion = with version; if final then "-final" else ".${year}${month}${day}";
+          __extraVersion = if version.final then "-final" else ".${version.year}${version.month}${version.day}";
           requiredTeXPackages = ps: [ ps.${pname} ];
           # to maintain full backward compatibility, enable texlive.combine behavior
           __combine = true;

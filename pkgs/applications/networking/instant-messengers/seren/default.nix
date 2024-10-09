@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A simple ncurses VoIP program based on the Opus codec";
+    description = "Simple ncurses VoIP program based on the Opus codec";
     mainProgram = "seren";
     longDescription = ''
       Seren is a simple VoIP program based on the Opus codec

@@ -10,15 +10,23 @@
 , libXxf86vm
 }:
 let
+  version = "4.13.2-redo";
+
   desktopItem = makeDesktopItem {
     name = "unciv";
     exec = "unciv";
     comment = "An open-source Android/Desktop remake of Civ V";
     desktopName = "Unciv";
+    icon = "unciv";
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
+  desktopIcon = fetchurl {
+    url = "https://github.com/yairm210/Unciv/blob/${version}/extraImages/Icons/Unciv%20icon%20v6.png?raw=true";
+    hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
+  };
+
+  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libpulseaudio
     libXxf86vm
@@ -27,11 +35,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
-  version = "4.11.13";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-8XuwG64YUcUOblOdrKI4FxSFzn9xjZPAEz05+7rR1Pk=";
+    hash = "sha256-bZXBgSjmW+fBdDfG7cqKkF4VLYw7Iq2mw5j6iDh2ZhY=";
   };
 
   dontUnpack = true;
@@ -46,13 +54,15 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${lib.makeBinPath [ jre ]} \
       --add-flags "-jar ${src}"
 
+    install -Dm444 ${desktopIcon} $out/share/icons/hicolor/512x512/apps/unciv.png
+
     runHook postInstall
   '';
 
   desktopItems = [ desktopItem ];
 
   meta = with lib; {
-    description = "An open-source Android/Desktop remake of Civ V";
+    description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
     maintainers = with maintainers; [ tex ];

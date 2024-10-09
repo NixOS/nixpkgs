@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "The Proxmox VM migrator: migrates VMs between different Proxmox VE clusters";
+    description = "Proxmox VM migrator: migrates VMs between different Proxmox VE clusters";
     mainProgram = "proxmove";
     homepage = "https://github.com/ossobv/proxmove";
     license = licenses.gpl3Plus;

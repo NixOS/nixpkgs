@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # disable downloading and building the tree-sitter grammars at build time
   # grammars can be configured in a config file and installed with `zee --build`
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-fBBjtjM7AnyAL6EOFstL4h6yS+UoLgxck6Mc0tJcXaI=";
 
   meta = with lib; {
-    description = "A modern text editor for the terminal written in Rust";
+    description = "Modern text editor for the terminal written in Rust";
     homepage = "https://github.com/zee-editor/zee";
     license = licenses.mit;
     maintainers = with maintainers; [ booklearner ];

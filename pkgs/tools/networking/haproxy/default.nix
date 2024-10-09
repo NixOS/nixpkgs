@@ -14,7 +14,6 @@
 , openssl
 , lua5_4
 , pcre2
-, systemd
 }:
 
 assert lib.assertOneOf "sslLibrary" sslLibrary [ "quictls" "openssl" "libressl" "wolfssl" ];
@@ -29,24 +28,23 @@ let
   sslPkg = sslPkgs.${sslLibrary};
 in stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "2.9.7";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-0aClbwCKjS8Ae8DDffaylSUg0fTd4zuNOAJxDlFYwTE=";
+    hash = "sha256-rjgiHoWuugOKcl7771v+XnZnG6eVnl63TDn9B55dAC4";
   };
 
   buildInputs = [ sslPkg zlib libxcrypt ]
     ++ lib.optional useLua lua5_4
-    ++ lib.optional usePcre pcre2
-    ++ lib.optional stdenv.isLinux systemd;
+    ++ lib.optional usePcre pcre2;
 
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    ("TARGET=" + (if stdenv.isSunOS then "solaris"
-    else if stdenv.isLinux then "linux-glibc"
-    else if stdenv.isDarwin then "osx"
+    ("TARGET=" + (if stdenv.hostPlatform.isSunOS then "solaris"
+    else if stdenv.hostPlatform.isLinux then "linux-glibc"
+    else if stdenv.hostPlatform.isDarwin then "osx"
     else "generic"))
   ];
 
@@ -68,7 +66,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "LUA_LIB_NAME=lua"
     "LUA_LIB=${lua5_4}/lib"
     "LUA_INC=${lua5_4}/include"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "USE_SYSTEMD=yes"
     "USE_GETADDRINFO=1"
   ] ++ lib.optionals withPrometheusExporter [

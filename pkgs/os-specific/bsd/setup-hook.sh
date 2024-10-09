@@ -28,7 +28,6 @@ addMakeFlags() {
 
   # Definitions passed to share/mk/*.mk. Should be pretty simple -
   # eventually maybe move it to a configure script.
-  export DESTDIR=
   export USETOOLS=never
   export NOCLANGERROR=yes
   export NOGCCERROR=yes

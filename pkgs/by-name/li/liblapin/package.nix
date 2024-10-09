@@ -9,7 +9,7 @@
 }:
 
 stdenv.mkDerivation {
-  name = "liblapin";
+  pname = "liblapin";
   version = "0-unstable-2024-05-20";
 
   src = fetchFromGitHub {

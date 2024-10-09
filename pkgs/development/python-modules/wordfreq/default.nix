@@ -47,7 +47,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library for looking up the frequencies of words in many languages, based on many sources of data";
+    description = "Library for looking up the frequencies of words in many languages, based on many sources of data";
     homepage = "https://github.com/rspeer/wordfreq/";
     license = licenses.mit;
   };

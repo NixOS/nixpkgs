@@ -68,7 +68,7 @@ let
 
     meta = with lib; {
       homepage = "https://github.com/jupyter/nbclient";
-      description = "A client library for executing notebooks";
+      description = "Client library for executing notebooks";
       mainProgram = "jupyter-execute";
       license = licenses.bsd3;
       maintainers = [ ];

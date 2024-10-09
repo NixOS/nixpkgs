@@ -1,7 +1,7 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
-, fetchFromGitHub
+, fetchzip
 , libX11
 , libgdiplus
 , ffmpeg
@@ -10,15 +10,14 @@
 , sndio
 , pulseaudio
 , vulkan-loader
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , libGL
+, libICE
+, libSM
+, libXcursor
+, libXext
+, libXi
+, libXrandr
 , udev
 , SDL2
 , SDL2_mixer
@@ -26,14 +25,14 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.1298"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.1401"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
-  src = fetchFromGitHub {
-    owner = "Ryujinx";
-    repo = "Ryujinx";
-    rev = "a23d8cb92f3f1bb8dc144f4d9fb3fddee749feae";
-    sha256 = "1vf4xwn1z7bfm7c49r2yydx3dqqzqwp0qgzq12m9yskqsj898d63";
+  src = fetchzip {
+    url = "https://archive.org/download/ryujinx-5dbba-07e-33e-83c-9047dcbb-701c-9655edbbe-89086.tar/Ryujinx-5dbba07e33e83c9047dcbb701c9655edbbe89086.tar.gz";
+    hash = "sha256-UeJ3KE5e5H9crqroAxjmxYTf/Z4cbj41a6/1HW2nLcA=";
   };
+
+  enableParallelBuilding = false;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
@@ -53,14 +52,13 @@ buildDotnetModule rec {
     udev
 
     # Avalonia UI
+    glew
     libICE
     libSM
-    libXi
     libXcursor
     libXext
+    libXi
     libXrandr
-    fontconfig
-    glew
 
     # Headless executable
     libGL
@@ -122,7 +120,7 @@ buildDotnetModule rec {
       2017.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ivar jk artemist ];
+    maintainers = with maintainers; [ jk artemist ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "Ryujinx";
   };

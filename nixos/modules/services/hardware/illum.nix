@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.illum;
 in {
@@ -10,9 +7,9 @@ in {
 
     services.illum = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Enable illum, a daemon for controlling screen brightness with brightness buttons.
         '';
@@ -22,7 +19,7 @@ in {
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.illum = {
       description = "Backlight Adjustment Service";

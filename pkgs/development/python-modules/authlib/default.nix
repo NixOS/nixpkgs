@@ -12,27 +12,29 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  setuptools,
   starlette,
   werkzeug,
 }:
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.3.0";
-  format = "setuptools";
+  version = "1.3.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XHzABjGpZN6ilYuBYyGF3Xy/+AT2DXick8/A4JkyWBA=";
+    hash = "sha256-gaFnai5QzHhnyn73JB+QzybaolLWC9barBFdnlEMyMU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cryptography
-    requests
   ];
 
   nativeCheckInputs = [
@@ -43,6 +45,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
+    requests
     starlette
     werkzeug
   ];

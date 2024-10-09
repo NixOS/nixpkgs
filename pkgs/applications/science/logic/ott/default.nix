@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A tool for the working semanticist";
+    description = "Tool for the working semanticist";
     mainProgram = "ott";
     longDescription = ''
       Ott is a tool for writing definitions of programming languages and

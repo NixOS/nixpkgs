@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ dejagnu ];
 
   meta = with lib; {
-    description = "A foreign function call interface library";
+    description = "Foreign function call interface library";
     longDescription = ''
       The libffi library provides a portable, high level programming
       interface to various calling conventions.  This allows a
@@ -63,6 +63,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ armeenm ];
     platforms = platforms.all;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

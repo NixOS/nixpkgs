@@ -4,17 +4,20 @@
   buildPythonPackage,
   pythonOlder,
 
-  # propagates
+  # build-system
+  setuptools,
+
+  # dependencies
   typing-extensions,
 
   # tests
-  unittestCheckHook,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyreaderwriterlock";
   version = "1.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -25,9 +28,11 @@ buildPythonPackage rec {
     hash = "sha256-8FC+4aDgGpF1BmOdlkFtMy7OfWdSmvn9fjKXSmmeJlg=";
   };
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ setuptools ];
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  dependencies = [ typing-extensions ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "readerwriterlock" ];
 

@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
       hash = "sha256-ileSNYddOt1F5rooRB0fXT20WkVlnG+gP5w7qJdBuww=";
     });
 
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isAarch64 [
+    # aarch64-specific code gets:
+    # __builtin_clear_padding not supported for variable length aggregates
+    "trivialautovarinit"
+  ];
+
   nativeBuildInputs = [ cmake ninja ];
 
   # Required for case-insensitive filesystems ("BUILD" exists)

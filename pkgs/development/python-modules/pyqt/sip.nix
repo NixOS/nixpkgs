@@ -2,16 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  mesa,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt5-sip";
-  version = "12.13.0";
+  version = "12.15.0";
 
   src = fetchPypi {
     pname = "PyQt5_sip";
     inherit version;
-    hash = "sha256-fzIdr4S5ydvKYbgOHvN72v/A6TMS7a4s19oluVOXHZE=";
+    hash = "sha256-0j/fzzY7XO3Z05+KnFcQ59UoBPWwiljpHGOLNur8twI=";
   };
 
   # There is no test code and the check phase fails with:
@@ -21,9 +22,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python bindings for Qt5";
-    homepage = "https://www.riverbankcomputing.com/software/sip/";
+    homepage = "https://github.com/Python-SIP/sip";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ sander ];
   };
 }

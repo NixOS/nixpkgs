@@ -8,12 +8,11 @@
   mkdocs,
   pytz,
   pytestCheckHook,
-  git,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-git-revision-date-localized-plugin";
-  version = "1.2.5";
+  version = "1.2.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +21,7 @@ buildPythonPackage rec {
     owner = "timvink";
     repo = "mkdocs-git-revision-date-localized-plugin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cezL65Wsdaa9W4dGLgTz1x3UFrDRDJaGuttr58CBcuw=";
+    hash = "sha256-dzFxNAVBQ5a4opdxSz42VCns49DlZyrglUaQTzfLnW8=";
   };
 
   propagatedBuildInputs = [

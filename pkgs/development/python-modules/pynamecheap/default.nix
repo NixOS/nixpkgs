@@ -22,7 +22,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "Namecheap API client in Python.";
+    description = "Namecheap API client in Python";
     homepage = "https://github.com/Bemmu/PyNamecheap";
     license = licenses.mit;
   };

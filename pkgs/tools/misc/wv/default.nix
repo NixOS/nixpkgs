@@ -22,13 +22,19 @@ stdenv.mkDerivation (finalAttrs: {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
+  env.NIX_CFLAGS_COMPILE =
+    # Suppress incompatible function pointer and int conversion errors when building with newer versions of clang 16.
+    lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion";
+
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 
-  # autoreconfHook fails hard if these two files do not exist
+  # autoreconfHook fails hard if these two files do not exist.
+  # The extra move is to work around case-insensitive filesystems.
   postPatch = ''
-    touch AUTHORS ChangeLog
+    touch AUTHORS
+    mv CHANGELOG ChangeLog~ && mv ChangeLog~ ChangeLog
   '';
 
   meta = {

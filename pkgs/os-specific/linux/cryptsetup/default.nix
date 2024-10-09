@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cryptsetup";
-  version = "2.7.1";
+  version = "2.7.3";
 
   outputs = [ "bin" "out" "dev" "man" ];
   separateDebugInfo = true;
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-2l0UGeKobgGqMv15WCzVTSCIV8tUG8ov1Cal/xqqu8M=";
+    hash = "sha256-t3KuT23wzucgCyjOqWDk2q/yogPS/VAr6rPBMXsHpFY=";
   };
 
   patches = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     # support, because the path still gets included in the binary even
     # though it isn't used.
     "--with-luks2-external-tokens-path=/"
-  ] ++ (with lib; mapAttrsToList (flip enableFeature)) programs;
+  ] ++ (lib.mapAttrsToList (lib.flip lib.enableFeature)) programs;
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals rebuildMan [ asciidoctor ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ] ++ lib.optional (!withInternalArgon2) libargon2;
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/cryptsetup/cryptsetup/";
     description = "LUKS for dm-crypt";
     changelog = "https://gitlab.com/cryptsetup/cryptsetup/-/raw/v${version}/docs/v${version}-ReleaseNotes";
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "cryptsetup";
     maintainers = with lib.maintainers; [ raitobezarius ];
     platforms = with lib.platforms; linux;

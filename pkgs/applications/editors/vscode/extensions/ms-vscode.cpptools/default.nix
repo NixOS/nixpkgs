@@ -1,8 +1,6 @@
 {
   lib,
   vscode-utils,
-  writeScript,
-  runtimeShell,
   jq,
   clang-tools,
   gdbUseFixed ? true,
@@ -40,24 +38,27 @@
 
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
+  isx86Linux = stdenv.hostPlatform.system == "x86_64-linux";
   supported = {
     x86_64-linux = {
-      hash = "sha256-arTBt3UWA5zoo0dL044Sx/NT1LUS76XfGIS96NOMvJk=";
+      hash = "sha256-ek4WBr9ZJ87TXlKQowA68YNt3WNOXymLcVfz1g+Be2o=";
       arch = "linux-x64";
     };
     aarch64-linux = {
-      hash = "sha256-oVuDxx117bVd/jDqn9KivTwR5T2X5UZMHk/nZ/e/IOg=";
+      hash = "sha256-2+JqosgyoMRFnl8fnCrKljkdF3eU72mXy30ZUnaIerA=";
       arch = "linux-arm64";
     };
   };
 
-  base = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
+  base =
+    supported.${stdenv.hostPlatform.system}
+      or (throw "unsupported platform ${stdenv.hostPlatform.system}");
 in
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "cpptools";
     publisher = "ms-vscode";
-    version = "1.20.5";
+    version = "1.22.2";
   };
 
   nativeBuildInputs = [
@@ -73,35 +74,51 @@ vscode-utils.buildVscodeMarketplaceExtension {
     stdenv.cc.cc.lib
   ];
 
-  postPatch = ''
-    mv ./package.json ./package_orig.json
+  dontAutoPatchelf = isx86Linux;
 
-    # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
-    # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
-    cat ./package_orig.json | \
-      jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
-      jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
-      ./package.json
+  postPatch =
+    ''
+      mv ./package.json ./package_orig.json
 
-    # Prevent download/install of extensions
-    touch "./install.lock"
+      # 1. Add activation events so that the extension is functional. This listing is empty when unpacking the extension but is filled at runtime.
+      # 2. Patch `package.json` so that nix's *gdb* is used as default value for `miDebuggerPath`.
+      cat ./package_orig.json | \
+        jq --slurpfile actEvts ${./package-activation-events.json} '(.activationEvents) = $actEvts[0]' | \
+        jq '(.contributes.debuggers[].configurationAttributes | .attach , .launch | .properties.miDebuggerPath | select(. != null) | select(.default == "/usr/bin/gdb") | .default) = "${gdbDefaultsTo}"' > \
+        ./package.json
 
-    # Clang-format from nix package.
-    mv ./LLVM/ ./LLVM_orig
-    mkdir "./LLVM/"
-    find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
+      # Prevent download/install of extensions
+      touch "./install.lock"
 
-    # Patching binaries
-    chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
-    patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
-  '';
+      # Clang-format from nix package.
+      rm -rf ./LLVM
+      mkdir "./LLVM/"
+      find "${clang-tools}" -mindepth 1 -maxdepth 1 | xargs ln -s -t "./LLVM"
 
-  postFixup = lib.optionalString gdbUseFixed ''
-    wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
-  '';
+      # Patching binaries
+      chmod +x bin/cpptools bin/cpptools-srv bin/cpptools-wordexp debugAdapters/bin/OpenDebugAD7
+      patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so.1 ./debugAdapters/bin/libcoreclrtraceptprovider.so
+    ''
+    + lib.optionalString isx86Linux ''
+      chmod +x bin/libc.so
+    '';
+
+  # On aarch64 the binaries are statically linked
+  # but on x86 they are not.
+  postFixup =
+    lib.optionalString isx86Linux ''
+      autoPatchelf $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters
+      # cpptools* are distributed by the extension and need to be run through the distributed musl interpretter
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-srv
+      patchelf --set-interpreter $out/share/vscode/extensions/ms-vscode.cpptools/bin/libc.so $out/share/vscode/extensions/ms-vscode.cpptools/bin/cpptools-wordexp
+    ''
+    + lib.optionalString gdbUseFixed ''
+      wrapProgram $out/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7 --prefix PATH : ${lib.makeBinPath [ gdb ]}
+    '';
 
   meta = {
-    description = "The C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging.";
+    description = "C/C++ extension adds language support for C/C++ to Visual Studio Code, including features such as IntelliSense and debugging";
     homepage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [

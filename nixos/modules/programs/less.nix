@@ -35,6 +35,8 @@ in
       # therefore also enables this module
       enable = lib.mkEnableOption "less, a file pager";
 
+      package = lib.mkPackageOption pkgs "less" { };
+
       configFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -110,7 +112,7 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.less ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.variables = {
       LESSKEYIN_SYSTEM = builtins.toString lessKey;

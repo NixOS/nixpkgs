@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fast = [ ujson ];
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ripe.atlas.sagan" ];
 
   meta = with lib; {
-    description = "A parsing library for RIPE Atlas measurements results";
+    description = "Parsing library for RIPE Atlas measurements results";
     homepage = "https://github.com/RIPE-NCC/ripe-atlas-sagan";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ raitobezarius ];

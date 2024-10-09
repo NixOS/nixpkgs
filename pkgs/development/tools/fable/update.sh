@@ -36,4 +36,4 @@ NUGET_URL="$(curl -f "https://api.nuget.org/v3/index.json" | jq --raw-output '.r
 HASH=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$NUGET_URL")")
 
 sed -i "s/version = \".*\"/version = \"$VER\"/" "$NIX_DRV"
-sed -i "s#nugetSha256 = \"sha256-.\{44\}\"#nugetSha256 = \"$HASH\"#" "$NIX_DRV"
+sed -i "s#nugetHash = \"sha256-.\{44\}\"#nugetHash = \"$HASH\"#" "$NIX_DRV"

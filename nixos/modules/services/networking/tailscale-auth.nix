@@ -14,7 +14,7 @@ let
 in
 {
   options.services.tailscaleAuth = {
-    enable = mkEnableOption "Enable tailscale.nginx-auth, to authenticate users via tailscale.";
+    enable = mkEnableOption "tailscale.nginx-auth, to authenticate users via tailscale";
 
     package = mkPackageOption pkgs "tailscale-nginx-auth" {};
 

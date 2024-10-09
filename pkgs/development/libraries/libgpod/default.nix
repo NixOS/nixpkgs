@@ -9,7 +9,6 @@
 , glib
 , libxml2
 , sqlite
-, zlib
 , sg3_utils
 , gdk-pixbuf
 , taglib

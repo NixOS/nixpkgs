@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
-    description = "A small chess engine supporting fairy pieces";
+    description = "Small chess engine supporting fairy pieces";
     mainProgram = "fairymax";
     longDescription = ''
        A version of micro-Max that reads the piece description from a file

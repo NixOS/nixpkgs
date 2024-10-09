@@ -41,17 +41,17 @@ stdenv.mkDerivation rec {
 
   # Without 'sse' enforcement tests fail on i686 as due to excessive precision as:
   #   error reading back channel B pixel 21,-76 got -nan expected -nan
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
-  doCheck = !stdenv.isAarch32;
+  doCheck = !stdenv.hostPlatform.isAarch32;
 
   passthru.tests = {
     musl = pkgsCross.musl64.openexr_3;
   };
 
   meta = with lib; {
-    description = "A high dynamic-range (HDR) image file format";
+    description = "High dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com";
     license = licenses.bsd3;
     maintainers = with maintainers; [ paperdigits ];

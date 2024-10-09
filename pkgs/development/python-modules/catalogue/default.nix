@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonAtLeast,
   pythonOlder,
   setuptools,
   typing-extensions,

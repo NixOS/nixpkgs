@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "furnace";
-  version = "0.6.3";
+  version = "0.6.7";
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-z0WvJvkry/9T4Fgp2fX83CxPpDBoOPNVtyX2OUk26FI=";
+    hash = "sha256-G5yjqsep+hDGXCqGNBKoMvV7JOD7ZZTxTPBl9VmG8RM=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_GLES" (withGL && preferGLES))
     (lib.cmakeBool "WITH_RENDER_METAL" false) # fails to build
     (lib.cmakeBool "WITH_RENDER_OPENGL1" (withGL && !preferGLES))
-    (lib.cmakeBool "WARNINGS_ARE_ERRORS" true)
     (lib.cmakeBool "FORCE_APPLE_BIN" true)
   ];
 

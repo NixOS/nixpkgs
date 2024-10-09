@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     wxGTK32
     libX11
     readline
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
+    description = "Flash programming utility for Atmel's SAM family of flash-based ARM microcontrollers";
     longDescription = ''
       BOSSA is a flash programming utility for Atmel's SAM family of
       flash-based ARM microcontrollers. The motivation behind BOSSA is

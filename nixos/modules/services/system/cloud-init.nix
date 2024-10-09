@@ -16,6 +16,7 @@ let
   ++ optional cfg.btrfs.enable btrfs-progs
   ++ optional cfg.ext4.enable e2fsprogs
   ++ optional cfg.xfs.enable xfsprogs
+  ++ cfg.extraPackages
   ;
   hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
@@ -76,6 +77,14 @@ in
         description = ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
+        '';
+      };
+
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = ''
+          List of additional packages to be available within cloud-init jobs.
         '';
       };
 
@@ -163,7 +172,7 @@ in
         { text = cfg.config; }
     ;
 
-    systemd.network.enable = cfg.network.enable;
+    systemd.network.enable = mkIf cfg.network.enable true;
 
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";

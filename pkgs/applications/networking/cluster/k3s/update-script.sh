@@ -69,6 +69,24 @@ cat > chart-versions.nix.update <<EOF
 EOF
 mv chart-versions.nix.update chart-versions.nix
 
+# Get all airgap images files associated with this release
+IMAGES_ARCHIVES=$(curl "https://api.github.com/repos/k3s-io/k3s/releases/tags/v${K3S_VERSION}" | \
+    # Filter the assets so that only zstd archives and text files that have "images" in their name remain
+    # Modify the name and write the modified name and download URL to a string
+    jq -r '.assets[] | select(.name | contains("images")) |
+        select(.content_type == "application/zstd" or .content_type == "text/plain; charset=utf-8") |
+        .name = (.name | sub("k3s-"; "") | sub(".tar.zst"; "") | sub(".txt"; "-list")) |
+        "\(.name) \(.browser_download_url)"')
+
+# Create a JSON object for each airgap images file and prefetch all download URLs in the process
+# Combine all JSON objects and write the result to images-versions.json
+while read -r name url; do
+    jq --null-input --arg name "$name" \
+            --arg url "$url" \
+            --arg sha256 "$(nix-prefetch-url --quiet "${url}")" \
+        '{$name: {"url": $url, "sha256": $sha256}}'
+done <<<"${IMAGES_ARCHIVES}" | jq --slurp 'reduce .[] as $item ({}; . * $item)' > images-versions.json
+
 FILE_GO_MOD=${WORKDIR}/go.mod
 curl --silent https://raw.githubusercontent.com/k3s-io/k3s/${K3S_COMMIT}/go.mod > $FILE_GO_MOD
 
@@ -89,7 +107,13 @@ CONTAINERD_VERSION=$(grep github.com/containerd/containerd ${FILE_GO_MOD} \
 CONTAINERD_SHA256=$(nix-prefetch-url --quiet --unpack \
     "https://github.com/k3s-io/containerd/archive/refs/tags/v${CONTAINERD_VERSION}.tar.gz")
 
-CRI_CTL_VERSION=$(grep github.com/kubernetes-sigs/cri-tools ${FILE_GO_MOD} \
+# The repository of "cri-tools" changes for 1.31.x, this can likely be removed in future releases
+if [ "$MINOR_VERSION" -gt 30 ]; then
+    CRI_CTL_REPO=sigs.k8s.io
+else
+    CRI_CTL_REPO=github.com/kubernetes-sigs
+fi
+CRI_CTL_VERSION=$(grep "$CRI_CTL_REPO/cri-tools" ${FILE_GO_MOD} \
     | head -n1 | awk '{print $4}' | sed -e 's/"//g' -e 's/^v//')
 
 setKV () {
@@ -105,6 +129,7 @@ cat >versions.nix <<EOF
   k3sRepoSha256 = "${K3S_REPO_SHA256}";
   k3sVendorHash = "${FAKE_HASH}";
   chartVersions = import ./chart-versions.nix;
+  imagesVersions = builtins.fromJSON (builtins.readFile ./images-versions.json);
   k3sRootVersion = "${K3S_ROOT_VERSION}";
   k3sRootSha256 = "${K3S_ROOT_SHA256}";
   k3sCNIVersion = "${CNIPLUGINS_VERSION}";

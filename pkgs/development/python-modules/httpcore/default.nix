@@ -46,7 +46,7 @@ buildPythonPackage rec {
     h11
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asyncio = [ anyio ];
     http2 = [ h2 ];
     socks = [ socksio ];
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-httpbin
     pytest-trio
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "httpcore" ];
 
@@ -71,7 +71,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/blob/${version}/CHANGELOG.md";
-    description = "A minimal low-level HTTP client";
+    description = "Minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ris ];

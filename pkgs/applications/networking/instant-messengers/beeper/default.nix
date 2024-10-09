@@ -10,11 +10,10 @@
 }:
 let
   pname = "beeper";
-  version = "3.104.7";
-  name = "${pname}-${version}";
+  version = "3.109.1";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.104.7-build-2405024h1b4qoap-x86_64.AppImage";
-    hash = "sha256-VjN9bKxFokExEjMGz42d/VVwVWJzowI42ONsNyXEbnc=";
+    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.109.1-build-240923466rji1i4-x86_64.AppImage";
+    hash = "sha256-RXpoOgnoPmNID5Jx/lNxqsHsifFSS9dZzhjSu8kGtXc=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -25,7 +24,7 @@ let
   };
 in
 stdenvNoCC.mkDerivation rec {
-  inherit name pname version;
+  inherit pname version;
 
   src = appimage;
 
@@ -66,7 +65,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Universal chat app.";
+    description = "Universal chat app";
     longDescription = ''
       Beeper is a universal chat app. With Beeper, you can send
       and receive messages to friends, family and colleagues on

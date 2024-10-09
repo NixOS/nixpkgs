@@ -12,12 +12,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "fst-bin";
-    sha256 = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
+    hash = "sha256-x2rvLMOhatMWU2u5GAdpYy2uuwZLi3apoE6aaTF+M1g=";
   };
 
   cargoHash = "sha256-yTbEaw+BbjVks3j7/b75kGoUjVftLaVYvYIdI/bbfdk=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   doInstallCheck = true;
   installCheckPhase = ''

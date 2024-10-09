@@ -10,6 +10,7 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
@@ -37,7 +38,6 @@ python.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = with python.pkgs; [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [
@@ -94,7 +94,7 @@ python.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/Nike-Inc/gimme-aws-creds";
     changelog = "https://github.com/Nike-Inc/gimme-aws-creds/releases";
-    description = "A CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
+    description = "CLI that utilizes Okta IdP via SAML to acquire temporary AWS credentials";
     mainProgram = "gimme-aws-creds";
     license = licenses.asl20;
     maintainers = with maintainers; [ jbgosselin ];

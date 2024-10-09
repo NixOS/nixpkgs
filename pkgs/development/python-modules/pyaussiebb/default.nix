@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
-  version = "0.1.1";
+  version = "0.1.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,22 +21,22 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XNf9vYMlTLqhYIVNw9GjPcXpOm5EYCcC4aGukR8g3zc=";
+    hash = "sha256-IW2HraJbgvf0G1eRXNpnsPMWlLXi2P9DTyk+tG5Hc2U=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'requests = "^2.27.1"' 'requests = "*"'
+  '';
 
-  propagatedBuildInputs = [
+  build-system = [ poetry-core ];
+
+  dependencies = [
     aiohttp
     requests
     loguru
     pydantic
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace 'requests = "^2.27.1"' 'requests = "*"'
-  '';
 
   # Tests require credentials and requests-testing
   doCheck = false;

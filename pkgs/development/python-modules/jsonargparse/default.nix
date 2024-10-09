@@ -1,7 +1,6 @@
 {
   lib,
   argcomplete,
-  attrs,
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
@@ -9,14 +8,12 @@
   jsonnet,
   jsonschema,
   omegaconf,
-  pydantic,
   pytest-subtests,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
   reconplogger,
   requests,
-  responses,
   ruyaml,
   setuptools,
   types-pyyaml,
@@ -26,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.28.0";
+  version = "4.33.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -35,14 +32,14 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "jsonargparse";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iw6ntzFkvMg5baOgeUzf3qV1eGGqywINd7e6N781llQ=";
+    hash = "sha256-yY/j4UwAoe/qQjBQXgFSrv2BX7DB5EyGCdVYoioyKr8=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       argcomplete
       fsspec

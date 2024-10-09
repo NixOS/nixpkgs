@@ -1,23 +1,25 @@
-{ llvmPackages
-, lib
-, fetchFromGitHub
-, cmake
-, python3
-, curl
-, libxml2
-, libffi
-, xar
+{
+  llvmPackages,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  python3,
+  curl,
+  libxml2,
+  libffi,
+  xar,
+  versionCheckHook,
 }:
 
-llvmPackages.stdenv.mkDerivation rec {
+llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "c3c";
-  version = "0.5.5";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "c3lang";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    hash = "sha256-iOljE1BRVc92NJZj+nr1G6KkBTCwJEUOadXHUDNoPGk=";
+    repo = "c3c";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-hFLiE1S9l2NhSIaqpYoBfn27IkhavcM0Ma31+XJtYj4=";
   };
 
   postPatch = ''
@@ -25,9 +27,7 @@ llvmPackages.stdenv.mkDerivation rec {
       --replace-fail "\''${LLVM_LIBRARY_DIRS}" "${llvmPackages.lld.lib}/lib ${llvmPackages.llvm.lib}/lib"
   '';
 
-  nativeBuildInputs = [
-    cmake
-  ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
     llvmPackages.llvm
@@ -35,9 +35,7 @@ llvmPackages.stdenv.mkDerivation rec {
     curl
     libxml2
     libffi
-  ] ++ lib.optionals llvmPackages.stdenv.isDarwin [
-    xar
-  ];
+  ] ++ lib.optionals llvmPackages.stdenv.hostPlatform.isDarwin [ xar ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -50,11 +48,18 @@ llvmPackages.stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Compiler for the C3 language";
     homepage = "https://github.com/c3lang/c3c";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ luc65r ];
+    maintainers = with maintainers; [
+      luc65r
+      anas
+    ];
     platforms = platforms.all;
+    mainProgram = "c3c";
   };
-}
+})

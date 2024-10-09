@@ -4,7 +4,7 @@
   fetchFromGitHub,
   hatch-vcs,
   hatchling,
-  pytest-lazy-fixture,
+  pytest-lazy-fixtures,
   pytestCheckHook,
   pythonOlder,
   wcwidth,
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.9.0";
+  version = "3.10.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jazzband";
     repo = "prettytable";
     rev = "refs/tags/${version}";
-    hash = "sha256-yIO4eO2VdOnUt9qoNQOeq/c0os2LQ3mqAkCOIuoGpyg=";
+    hash = "sha256-S23nUCA2WTxnCKKKFrtN9HYjP0SHUBPPsVNAc4SYlVg=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ wcwidth ];
 
   nativeCheckInputs = [
-    pytest-lazy-fixture
+    pytest-lazy-fixtures
     pytestCheckHook
   ];
 
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/prettytable";
     changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "Command Line App for Controlling Philips Air Purifiers.";
+    description = "Command Line App for Controlling Philips Air Purifiers";
     license = licenses.mit;
     maintainers = with maintainers; [ urbas ];
   };

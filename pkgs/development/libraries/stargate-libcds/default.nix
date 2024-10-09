@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   # Fix 'error: unrecognized command line option' in platforms other than x86
-  PLAT_FLAGS = lib.optionalString stdenv.isx86_64 "-mfpmath=sse -mssse3";
+  PLAT_FLAGS = lib.optionalString stdenv.hostPlatform.isx86_64 "-mfpmath=sse -mssse3";
 
   patches = [
     # Remove unnecessary tests (valgrind, coverage)

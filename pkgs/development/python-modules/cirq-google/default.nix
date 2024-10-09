@@ -5,7 +5,6 @@
   google-api-core,
   protobuf,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -16,12 +15,9 @@ buildPythonPackage rec {
 
   sourceRoot = "${src.name}/${pname}";
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cirq-core
     google-api-core
     protobuf

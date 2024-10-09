@@ -7,21 +7,20 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.27.0";
+  version = "1.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-esrDJar9J7V0ZIupfyURFWeGigV04Kxo06o/jMz17Fk=";
+    hash = "sha256-9x/Shh7nYPM5BpeVW2xXCD0JIxNwRl1sXi/cE1EhD4o=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     appdirs
@@ -71,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
     # Encoding issues
+    "test_create_files_from_paths"
     "test_file_decode_content"
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"

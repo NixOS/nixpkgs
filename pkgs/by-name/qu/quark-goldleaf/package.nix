@@ -12,9 +12,8 @@
 
 let
   jdk' = jdk.override { enableJavaFX = true; };
-  maven' = maven.override { jdk = jdk'; };
 in
-maven'.buildMavenPackage rec {
+maven.buildMavenPackage rec {
   pname = "quark-goldleaf";
   version = "1.0.0";
 
@@ -38,6 +37,7 @@ maven'.buildMavenPackage rec {
     })
   ];
 
+  mvnJdk = jdk';
   mvnHash = "sha256-gA3HsQZFa2POP9cyJLb1l8t3hrJYzDowhJU+5Xl79p4=";
 
   # set fixed build timestamp for deterministic jar

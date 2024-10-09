@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A small, convenient command-line ACPI client with a lot of features";
+    description = "Small, convenient command-line ACPI client with a lot of features";
     mainProgram = "acpitool";
     homepage = "https://sourceforge.net/projects/acpitool/";
     license = lib.licenses.gpl2Plus;

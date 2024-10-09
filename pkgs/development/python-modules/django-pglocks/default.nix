@@ -12,7 +12,7 @@ buildPythonPackage rec {
   format = "setuptools";
 
   meta = {
-    description = "PostgreSQL locking context managers and functions for Django.";
+    description = "PostgreSQL locking context managers and functions for Django";
     homepage = "https://github.com/Xof/django-pglocks";
     license = lib.licenses.mit;
   };

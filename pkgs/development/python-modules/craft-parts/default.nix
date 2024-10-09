@@ -4,13 +4,11 @@
   fetchFromGitHub,
   nix-update-script,
   overrides,
-  pydantic_1,
-  pydantic-yaml-0,
+  pydantic,
   pyxdg,
   pyyaml,
   requests,
   requests-unixsocket,
-  types-pyyaml,
   urllib3,
   pytestCheckHook,
   pytest-check,
@@ -18,16 +16,16 @@
   pytest-subprocess,
   requests-mock,
   hypothesis,
+  jsonschema,
   git,
   squashfsTools,
-  setuptools,
   setuptools-scm,
   stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "craft-parts";
-  version = "1.30.0";
+  version = "2.1.2";
 
   pyproject = true;
 
@@ -35,31 +33,26 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-parts";
     rev = "refs/tags/${version}";
-    hash = "sha256-JEf5JYDBH4Pm5ke++7GkpimM8Ec0dFe1GGxruntjmVE=";
+    hash = "sha256-QSD43rTy0GsGoUymhoBv1gdS6TMoln5PNsmeycKnXnw=";
   };
 
   patches = [ ./bash-path.patch ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pydantic-yaml[pyyaml]>=0.11.0,<1.0.0" "pydantic-yaml[pyyaml]" \
-      --replace-fail "urllib3<2" "urllib3"
-  '';
+  build-system = [ setuptools-scm ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
+  pythonRelaxDeps = [
+    "requests"
+    "urllib3"
+    "pydantic"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     overrides
-    pydantic_1
-    pydantic-yaml-0
+    pydantic
     pyxdg
     pyyaml
     requests
     requests-unixsocket
-    types-pyyaml
     urllib3
   ];
 
@@ -68,6 +61,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     hypothesis
+    jsonschema
     pytest-check
     pytest-mock
     pytest-subprocess
@@ -103,7 +97,7 @@ buildPythonPackage rec {
       "tests/unit/packages/test_deb.py"
       "tests/unit/packages/test_chisel.py"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "tests/unit/executor/test_environment.py"
       "tests/unit/features/overlay/test_executor_environment.py"

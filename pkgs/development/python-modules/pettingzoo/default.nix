@@ -48,7 +48,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       chess
       # multi-agent-ale-py
@@ -117,13 +117,13 @@ buildPythonPackage rec {
       # ImportError: cannot import name 'pytest_plugins' from 'pettingzoo.classic'
       "test_chess"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Crashes on darwin: `Fatal Python error: Aborted`
       "test_multi_episode_parallel_env_wrapper"
     ];
 
   meta = with lib; {
-    description = "An API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
+    description = "API standard for multi-agent reinforcement learning environments, with popular reference environments and related utilities";
     homepage = "https://github.com/Farama-Foundation/PettingZoo";
     changelog = "https://github.com/Farama-Foundation/PettingZoo/releases/tag/${version}";
     license = licenses.mit;

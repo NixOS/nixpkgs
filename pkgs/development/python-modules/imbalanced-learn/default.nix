@@ -12,20 +12,19 @@
   scipy,
   tensorflow,
   threadpoolctl,
-  pytest-xdist,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.12.2";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qAxWztywcSTyZr5i06XSq1tXeZCac0P98bmTR5Zi9sE=";
+    hash = "sha256-gVO6OF0pawfZfgkBomJKhsBrSMlML5LaOlNUgnaXt6M=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     threadpoolctl
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     optional = [
       keras
       pandas

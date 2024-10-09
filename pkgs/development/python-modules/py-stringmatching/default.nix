@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "py-stringmatching";
-  version = "0.4.5";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-2XuhtWKtmO/8lGaHxdqwdMF6UVEUqw3PUCIC1c7J8rU=";
+    hash = "sha256-XdHLHwT/sgHM+uQ4lxw9c+AcAdJjL6OVgfwtJkYLoBs=";
   };
 
   nativeBuildInputs = [ setuptools ];

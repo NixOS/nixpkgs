@@ -6,7 +6,7 @@ let
     owner = "go-spatial";
     repo = "tegola";
     rev = "v${version}";
-    sha256 = "sha256-Jlpw3JaU5+DO7Z5qruEMoLRf95cPGd9Z+MeDGSgbMjc=";
+    hash = "sha256-Jlpw3JaU5+DO7Z5qruEMoLRf95cPGd9Z+MeDGSgbMjc=";
   };
 
   frontend = buildNpmPackage {

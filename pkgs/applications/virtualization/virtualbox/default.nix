@@ -4,16 +4,16 @@
 , qttools, qtsvg, qtwayland, pkg-config, which, docbook_xsl, docbook_xml_dtd_43
 , alsa-lib, curl, libvpx, nettools, dbus, substituteAll, gsoap, zlib, xz
 , yasm, glslang
-, linuxPackages
 , nixosTests
 # If open-watcom-bin is not passed, VirtualBox will fall back to use
 # the shipped alternative sources (assembly).
 , open-watcom-bin
 , makeself, perl
+, vulkan-loader
 , javaBindings ? true, jdk # Almost doesn't affect closure size
 , pythonBindings ? false, python3
 , extensionPack ? null, fakeroot
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux, libpulseaudio
 , enableHardening ? false
 , headless ? false
 , enable32bitGuests ? true
@@ -22,32 +22,35 @@
 , extraConfigureFlags ? ""
 }:
 
-# See https://github.com/cyberus-technology/virtualbox-kvm/issues/12
-assert enableKvm -> !enableHardening;
-
 # The web services use Java infrastructure.
 assert enableWebService -> javaBindings;
-
-with lib;
 
 let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  version = "7.0.14";
+  virtualboxVersion = "7.0.20";
+  virtualboxSha256 = "5cf5979bef66ebab3fcd495796b215a940e8a07c469d4bc56d064de44222dd02";
+
+  kvmPatchVersion = "20240828";
+  kvmPatchHash = "sha256-g0esJbB1IGyLGZMLFJIY8ZYdHWuiM5IZtLMHZvCY6bs=";
 
   # The KVM build is not compatible to VirtualBox's kernel modules. So don't export
   # modsrc at all.
   withModsrc = !enableKvm;
 
   virtualboxGuestAdditionsIso = callPackage guest-additions-iso/default.nix { };
-in stdenv.mkDerivation {
+
+  inherit (lib) optional optionals optionalString getDev getLib;
+in stdenv.mkDerivation (finalAttrs: {
   pname = "virtualbox";
-  inherit version;
+  version = finalAttrs.virtualboxVersion;
+
+  inherit buildType virtualboxVersion virtualboxSha256 kvmPatchVersion kvmPatchHash virtualboxGuestAdditionsIso;
 
   src = fetchurl {
-    url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "45860d834804a24a163c1bb264a6b1cb802a5bc7ce7e01128072f8d6a4617ca9";
+    url = "https://download.virtualbox.org/virtualbox/${finalAttrs.virtualboxVersion}/VirtualBox-${finalAttrs.virtualboxVersion}.tar.bz2";
+    sha256 = finalAttrs.virtualboxSha256;
   };
 
   outputs = [ "out" ] ++ optional withModsrc "modsrc";
@@ -74,7 +77,7 @@ in stdenv.mkDerivation {
   prePatch = ''
     set -x
     sed -e 's@MKISOFS --version@MKISOFS -version@' \
-        -e 's@PYTHONDIR=.*@PYTHONDIR=${lib.optionalString pythonBindings python3}@' \
+        -e 's@PYTHONDIR=.*@PYTHONDIR=${optionalString pythonBindings python3}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
         -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
@@ -103,7 +106,7 @@ in stdenv.mkDerivation {
      # No update patch disables check for update function
      # https://bugs.launchpad.net/ubuntu/+source/virtualbox-ose/+bug/272212
      (fetchpatch {
-       url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/debian/${version}-dfsg-1/debian/patches/16-no-update.patch";
+       url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/debian/7.0.14-dfsg-1/debian/patches/16-no-update.patch";
        hash = "sha256-UJHpuB6QB/BbxJorlqZXUF12lgq8gbLMRHRMsbyqRpY=";
      })]
   ++ [ ./extra_symbols.patch ]
@@ -120,29 +123,20 @@ in stdenv.mkDerivation {
   })
      # While the KVM patch should not break any other behavior if --with-kvm is not specified,
      # we don't take any chances and only apply it if people actually want to use KVM support.
-  ++ optional enableKvm (fetchpatch
-    (let
-      patchVersion = "20240502";
-    in {
-      name = "virtualbox-${version}-kvm-dev-${patchVersion}.patch";
-      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${patchVersion}/kvm-backend-${version}-dev-${patchVersion}.patch";
-      hash = "sha256-KokIrrAoJutHzPg6e5YAJgDGs+nQoVjapmyn9kG5tV0=";
-    }))
+  ++ optional enableKvm (fetchpatch {
+      name = "virtualbox-${finalAttrs.virtualboxVersion}-kvm-dev-${finalAttrs.kvmPatchVersion}.patch";
+      url = "https://github.com/cyberus-technology/virtualbox-kvm/releases/download/dev-${finalAttrs.kvmPatchVersion}/kvm-backend-${finalAttrs.virtualboxVersion}-dev-${finalAttrs.kvmPatchVersion}.patch";
+      hash = finalAttrs.kvmPatchHash;
+    })
   ++ [
     ./qt-dependency-paths.patch
     # https://github.com/NixOS/nixpkgs/issues/123851
     ./fix-audio-driver-loading.patch
-    ./libxml-2.12.patch
-    ./gcc-13.patch
   ];
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
-  '' + optionalString headless ''
-    # Fix compile error in version 6.1.6
-    substituteInPlace src/VBox/HostServices/SharedClipboard/VBoxSharedClipboardSvc-x11-stubs.cpp \
-      --replace PSHCLFORMATDATA PSHCLFORMATS
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem
@@ -163,6 +157,9 @@ in stdenv.mkDerivation {
     VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
     VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
     VBOX_PATH_APP_DOCS             := $out/doc
+
+    VBOX_WITH_UPDATE_AGENT :=
+
     ${optionalString javaBindings ''
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
@@ -196,14 +193,14 @@ in stdenv.mkDerivation {
         -i AutoConfig.kmk
     sed -e 's@arch/x86/@@' \
         -i Config.kmk
-    substituteInPlace Config.kmk --replace "VBOX_WITH_TESTCASES = 1" "#"
+    substituteInPlace Config.kmk --replace-fail "VBOX_WITH_TESTCASES = 1" "#"
   '';
 
   enableParallelBuilding = true;
 
   buildPhase = ''
     source env.sh
-    kmk -j $NIX_BUILD_CORES BUILD_TYPE="${buildType}"
+    kmk -j $NIX_BUILD_CORES BUILD_TYPE="${finalAttrs.buildType}"
   '';
 
   installPhase = ''
@@ -212,7 +209,7 @@ in stdenv.mkDerivation {
 
     # Install VirtualBox files
     mkdir -p "$libexec"
-    find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
+    find out/linux.*/${finalAttrs.buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
     mkdir -p $out/bin
@@ -250,12 +247,12 @@ in stdenv.mkDerivation {
     ''}
 
     ${optionalString withModsrc ''
-      cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
+      cp -rv out/linux.*/${finalAttrs.buildType}/bin/src "$modsrc"
     ''}
 
     mkdir -p "$out/share/virtualbox"
     cp -rv src/VBox/Main/UnattendedTemplates "$out/share/virtualbox"
-    ln -s "${virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
+    ln -s "${finalAttrs.virtualboxGuestAdditionsIso}" "$out/share/virtualbox/VBoxGuestAdditions.iso"
   '';
 
   preFixup = optionalString (!headless) ''
@@ -264,7 +261,8 @@ in stdenv.mkDerivation {
   # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
   # the source code (see postPatch).
   + optionalString (!headless && !enableHardening) ''
-    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM \
+       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   passthru = {
@@ -285,10 +283,10 @@ in stdenv.mkDerivation {
       fromSource
       binaryNativeCode
     ];
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     homepage = "https://www.virtualbox.org/";
-    maintainers = with maintainers; [ sander friedrichaltheide blitz ];
+    maintainers = with lib.maintainers; [ sander friedrichaltheide blitz ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "VirtualBox";
   };
-}
+})

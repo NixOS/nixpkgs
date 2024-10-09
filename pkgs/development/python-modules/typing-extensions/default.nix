@@ -4,11 +4,15 @@
   fetchPypi,
   flit-core,
   pythonOlder,
+
+  # reverse dependencies
+  mashumaro,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "typing-extensions";
-  version = "4.11.0";
+  version = "4.12.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typing_extensions";
     inherit version;
-    hash = "sha256-g/CFvVylnIApX8KoKrXaxnnL4CufM/fYOvaOJBvqUbA=";
+    hash = "sha256-Gn6tVcflWd1N7ohW46iLQSJav+HOjfV7fBORX+Eh/7g=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -26,6 +30,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "typing_extensions" ];
+
+  passthru.tests = {
+    inherit mashumaro pydantic;
+  };
 
   meta = with lib; {
     description = "Backported and Experimental Type Hints for Python";

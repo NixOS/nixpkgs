@@ -5,6 +5,7 @@
 , pkg-config
 , meson
 , ninja
+, adwaita-icon-theme
 , exiv2
 , libheif
 , libjpeg
@@ -21,7 +22,6 @@
 , libwebp
 , libX11
 , json-glib
-, webkitgtk
 , lcms2
 , bison
 , flex
@@ -31,6 +31,7 @@
 , python3
 , desktop-file-utils
 , itstool
+, withWebservices ? true, webkitgtk
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,7 @@ stdenv.mkDerivation rec {
     clutter-gtk
     exiv2
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     gsettings-desktop-schemas
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
@@ -78,11 +79,11 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libX11
-    webkitgtk
-  ];
+  ] ++ lib.optional withWebservices webkitgtk;
 
   mesonFlags = [
     "-Dlibchamplain=true"
+    (lib.mesonBool "webservices" withWebservices)
   ];
 
   postPatch = ''

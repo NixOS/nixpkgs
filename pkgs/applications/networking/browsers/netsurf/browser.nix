@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  env.CFLAGS = lib.optionalString stdenv.isDarwin "-D_DARWIN_C_SOURCE";
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-D_DARWIN_C_SOURCE";
 
   patchPhase = lib.optionalString stdenv.cc.isClang ''
     runHook prePatch
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.netsurf-browser.org/";
-    description = "A free, open source, small web browser";
+    description = "Free, open source, small web browser";
     mainProgram = "netsurf-gtk3";
     longDescription = ''
       NetSurf is a free, open source web browser. It is written in C and

@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KonradIT/gopro-linux";
     platforms = platforms.unix;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
     mainProgram = "gopro";
   };
 }

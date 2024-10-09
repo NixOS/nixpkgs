@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "cwl-utils";
-  version = "0.33";
+  version = "0.34";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "cwl-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+GvG5Uu2nQWYCcuAkBkegsmMCWhf269jH6Zcex99I4M=";
+    hash = "sha256-HzLDUhiFegYPWAKt3YoiWiunNHcDEx9FvRXwxKd7wp0=";
   };
 
   build-system = [ setuptools ];

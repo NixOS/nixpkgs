@@ -3,7 +3,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   ninja,
   which,
   # build inputs
@@ -72,7 +71,6 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     ninja
     which
   ];
@@ -101,7 +99,7 @@ buildPythonPackage {
     pydot # no idea why this is not in their setup.py
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   nativeCheckInputs = [
     av
@@ -165,7 +163,7 @@ buildPythonPackage {
       "test_overlay_instances_no_boxes"
       "test_get_bounding_box"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       "test_build_batch_dataloader_inference"
       "test_build_dataloader_inference"
       "test_build_iterable_dataloader_inference"

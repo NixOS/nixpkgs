@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document.";
+    description = "sphinxcontrib-qthelp is a sphinx extension which outputs QtHelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-qthelp";
     license = licenses.bsd2;
     maintainers = teams.sphinx.members;

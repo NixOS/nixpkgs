@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  sourceRoot = if stdenv.isDarwin then "." else null;
+  sourceRoot = if stdenv.hostPlatform.isDarwin then "." else null;
 
   installPhase =
     if stdenv.hostPlatform.system == "x86_64-linux" then

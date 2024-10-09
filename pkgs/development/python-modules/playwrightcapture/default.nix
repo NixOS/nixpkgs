@@ -12,7 +12,6 @@
   puremagic,
   pydub,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   requests,
   setuptools,
@@ -23,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.24.10";
+  version = "1.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,10 +31,12 @@ buildPythonPackage rec {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kjh0ZrFS0jb4CYJfDosLiRffsVzF3/EWPYidBrhStIU=";
+    hash = "sha256-v6n+zsiLEQHeAeSALDxu4FWwwQaD/zu3rwxIjR57Ly4=";
   };
 
   pythonRelaxDeps = [
+    "aiohttp"
+    "aiohttp-socks"
     "beautifulsoup4"
     "playwright"
     "setuptools"
@@ -44,7 +45,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     w3lib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     recaptcha = [
       speechrecognition
       pydub

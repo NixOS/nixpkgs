@@ -34,8 +34,8 @@ in {
       theme = {
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome.gnome-themes-extra";
+          default = pkgs.gnome-themes-extra;
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';

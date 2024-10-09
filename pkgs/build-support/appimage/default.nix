@@ -74,7 +74,7 @@ rec {
     targetPkgs = pkgs: with pkgs; [
       gtk3
       bashInteractive
-      gnome.zenity
+      zenity
       xorg.xrandr
       which
       perl
@@ -162,7 +162,7 @@ rec {
       vulkan-loader
 
       flac
-      freeglut
+      libglut
       libjpeg
       libpng12
       libpulseaudio
@@ -205,6 +205,8 @@ rec {
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
+
+      libsecret # For bitwarden
     ];
   };
 }

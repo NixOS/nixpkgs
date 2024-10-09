@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optional stdenv.isDarwin CoreServices;
+    ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   checkFlags = [
     # test failed
@@ -35,9 +35,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/awslabs/flowgger";
-    description = "A fast, simple and lightweight data collector written in Rust";
+    description = "Fast, simple and lightweight data collector written in Rust";
     license = licenses.bsd2;
-    maintainers = with maintainers; [];
+    maintainers = [ ];
     mainProgram = "flowgger";
   };
 }

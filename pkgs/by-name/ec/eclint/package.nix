@@ -12,7 +12,7 @@ rec {
     owner = "greut";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-x0dBiRHaDxKrTCR2RfP2/bpBo6xewu8FX7Bv4ugaUAY=";
+    hash = "sha256-x0dBiRHaDxKrTCR2RfP2/bpBo6xewu8FX7Bv4ugaUAY=";
   };
 
   vendorHash = "sha256-aNQuALDe37lsmTGpClIBOQJlL0NFSAZCgcmTjx0kP+U=";

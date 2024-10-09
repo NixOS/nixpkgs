@@ -8,7 +8,7 @@ let
   nixos-background-light = pkgs.nixos-artwork.wallpapers.nineish;
   nixos-background-dark = pkgs.nixos-artwork.wallpapers.nineish-dark-gray;
 
-  nixos-gsettings-overrides = pkgs.budgie.budgie-gsettings-overrides.override {
+  nixos-gsettings-overrides = pkgs.budgie-gsettings-overrides.override {
     inherit (cfg) extraGSettingsOverrides extraGSettingsOverridePackages;
     inherit nixos-background-dark nixos-background-light;
   };
@@ -40,7 +40,7 @@ let
     destination = "/share/gnome-background-properties/nixos.xml";
   };
 
-  budgie-control-center = pkgs.budgie.budgie-control-center.override {
+  budgie-control-center' = pkgs.budgie-control-center.override {
     enableSshSocket = config.services.openssh.startWhenNeeded;
   };
 
@@ -61,7 +61,7 @@ in {
         '';
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.gnome.gpaste ]";
+        example = literalExpression "[ pkgs.gpaste ]";
       };
 
       extraGSettingsOverrides = mkOption {
@@ -80,7 +80,7 @@ in {
         description = "Extra plugins for the Budgie desktop";
         type = types.listOf types.package;
         default = [];
-        example = literalExpression "[ pkgs.budgiePlugins.budgie-analogue-clock-applet ]";
+        example = literalExpression "[ pkgs.budgie-analogue-clock-applet ]";
       };
     };
 
@@ -94,7 +94,7 @@ in {
 
   config = mkIf cfg.enable {
     services.displayManager.sessionPackages = with pkgs; [
-      budgie.budgie-desktop
+      budgie-desktop
     ];
 
     services.xserver.displayManager.lightdm.greeters.slick = {
@@ -104,7 +104,7 @@ in {
       cursorTheme = mkDefault { name = "Qogir"; package = pkgs.qogir-icon-theme; };
     };
 
-    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie.budgie-desktop-view ];
+    services.xserver.desktopManager.budgie.sessionPath = [ pkgs.budgie-desktop-view ];
 
     environment.extraInit = ''
       ${concatMapStrings (p: ''
@@ -121,18 +121,18 @@ in {
     environment.systemPackages = with pkgs;
       [
         # Budgie Desktop.
-        budgie.budgie-backgrounds
-        budgie-control-center
-        (budgie.budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
-        budgie.budgie-desktop-view
-        budgie.budgie-screensaver
-        budgie.budgie-session
+        budgie-backgrounds
+        budgie-control-center'
+        (budgie-desktop-with-plugins.override { plugins = cfg.extraPlugins; })
+        budgie-desktop-view
+        budgie-screensaver
+        budgie-session
 
         # Required by Budgie Menu.
         gnome-menus
 
         # Required by Budgie Control Center.
-        gnome.zenity
+        zenity
 
         # Provides `gsettings`.
         glib
@@ -142,7 +142,7 @@ in {
       ]
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
       ++ (utils.removePackagesByName [
-          cinnamon.nemo
+          nemo
           mate.eom
           mate.pluma
           mate.atril
@@ -162,7 +162,7 @@ in {
       ++ cfg.sessionPath;
 
     # Both budgie-desktop-view and nemo defaults to this emulator.
-    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome.gnome-terminal);
+    programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
 
     # Fonts.
     fonts.packages = [
@@ -204,13 +204,12 @@ in {
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
 
     hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
-    hardware.pulseaudio.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Sound panel.
 
     xdg.portal.enable = mkDefault true; # for BCC's Applications panel.
     xdg.portal.extraPortals = with pkgs; [
       xdg-desktop-portal-gtk # provides a XDG Portals implementation.
     ];
-    xdg.portal.configPackages = mkDefault [ pkgs.budgie.budgie-desktop ];
+    xdg.portal.configPackages = mkDefault [ pkgs.budgie-desktop ];
 
     services.geoclue2.enable = mkDefault true; # for BCC's Privacy > Location Services panel.
     services.upower.enable = config.powerManagement.enable; # for Budgie's Status Indicator and BCC's Power panel.
@@ -222,7 +221,6 @@ in {
 
     # For BCC's Online Accounts panel.
     services.gnome.gnome-online-accounts.enable = mkDefault true;
-    services.gnome.gnome-online-miners.enable = true;
 
     # For BCC's Printers panel.
     services.printing.enable = mkDefault true;
@@ -243,12 +241,12 @@ in {
 
     # Register packages for DBus.
     services.dbus.packages = [
-      budgie-control-center
+      budgie-control-center'
     ];
 
     # Register packages for udev.
     services.udev.packages = with pkgs; [
-      budgie.magpie
+      magpie
     ];
 
     # Shell integration for MATE Terminal.

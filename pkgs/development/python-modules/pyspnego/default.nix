@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cryptography ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     kerberos = [
       gssapi
       krb5

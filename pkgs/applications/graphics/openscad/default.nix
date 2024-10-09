@@ -26,12 +26,14 @@
 , mkDerivation
 , qtmacextras
 , qmake
-, spacenavSupport ? stdenv.isLinux, libspnav
+, spacenavSupport ? stdenv.hostPlatform.isLinux, libspnav
 , wayland
 , wayland-protocols
 , wrapGAppsHook3
 , qtwayland
 , cairo
+, openscad
+, runCommand
 }:
 
 mkDerivation rec {
@@ -64,12 +66,16 @@ mkDerivation rec {
     eigen boost glew opencsg cgal_4 mpfr gmp glib
     harfbuzz lib3mf libzip double-conversion freetype fontconfig
     qtbase qtmultimedia qscintilla cairo
-  ] ++ lib.optionals stdenv.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
-    ++ lib.optional stdenv.isDarwin qtmacextras
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL wayland wayland-protocols qtwayland ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
     ++ lib.optional spacenavSupport libspnav
   ;
 
-  qmakeFlags = [ "VERSION=${version}" ] ++
+  qmakeFlags = [
+    "VERSION=${version}"
+    "LIB3MF_INCLUDEPATH=${lib3mf.dev}/include/lib3mf/Bindings/Cpp"
+    "LIB3MF_LIBPATH=${lib3mf}/lib"
+  ] ++
     lib.optionals spacenavSupport [
       "ENABLE_SPNAV=1"
       "SPNAV_INCLUDEPATH=${libspnav}/include"
@@ -82,7 +88,7 @@ mkDerivation rec {
     make objects/parser.cxx
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
@@ -111,5 +117,15 @@ mkDerivation rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
     mainProgram = "openscad";
+  };
+
+  passthru.tests = {
+    lib3mf_support = runCommand "${pname}-lib3mf-support-test" {
+      nativeBuildInputs = [ openscad ];
+    } ''
+      echo "cube([1, 1, 1]);" | openscad -o cube.3mf -
+      echo "import(\"cube.3mf\");" | openscad -o cube-import.3mf -
+      mv cube-import.3mf $out
+    '';
   };
 }

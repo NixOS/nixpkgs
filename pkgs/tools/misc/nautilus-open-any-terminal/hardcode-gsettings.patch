@@ -1,8 +1,8 @@
 diff --git a/nautilus_open_any_terminal/nautilus_open_any_terminal.py b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
-index b02a995..a616399 100644
+index 05b6514..b5541dc 100644
 --- a/nautilus_open_any_terminal/nautilus_open_any_terminal.py
 +++ b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
-@@ -228,9 +228,10 @@ def set_terminal_args(*args):
+@@ -413,9 +413,10 @@ if API_VERSION in ("3.0", "2.0"):
          """Provide keyboard shortcuts for opening terminals in Nautilus."""
 
          def __init__(self):
@@ -16,10 +16,24 @@ index b02a995..a616399 100644
                  self._gsettings.connect("changed", self._bind_shortcut)
                  self._create_accel_group()
              self._window = None
-@@ -326,9 +327,10 @@ class OpenAnyTerminalExtension(GObject.GObject, Nautilus.MenuProvider):
-         return items
- 
- 
+@@ -452,9 +453,10 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
+     """Provide context menu items for opening terminals in Nautilus."""
+
+     def __init__(self):
+-        gsettings_source = Gio.SettingsSchemaSource.get_default()
+-        if gsettings_source.lookup(GSETTINGS_PATH, True):
+-            self._gsettings = Gio.Settings.new(GSETTINGS_PATH)
++        gsettings_source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
++        if True:
++            _schema = gsettings_source.lookup(GSETTINGS_PATH, False)
++            self._gsettings = Gio.Settings.new_full(_schema, None, None);
+
+     def _get_terminal_name(self):
+         if self._gsettings.get_boolean(GSETTINGS_USE_GENERIC_TERMINAL_NAME):
+@@ -512,8 +514,9 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
+         )
+
+
 -source = Gio.SettingsSchemaSource.get_default()
 -if source is not None and source.lookup(GSETTINGS_PATH, True):
 -    _gsettings = Gio.Settings.new(GSETTINGS_PATH)

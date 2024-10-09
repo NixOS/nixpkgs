@@ -8,7 +8,7 @@
 }:
 buildPythonPackage rec {
   pname = "tika-client";
-  version = "0.5.0";
+  version = "0.6.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "stumpylog";
     repo = "tika-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-fFibRF3SoDOje6M9YmZI0dwYVn/cvgXqmClvqvNy5f8=";
+    hash = "sha256-1Gc/WF8eEGT17z2CiuSLUIngDZVoHdBhfsUddNUBwWo=";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   doChecks = false;
 
   meta = with lib; {
-    description = "A modern Python REST client for Apache Tika server";
+    description = "Modern Python REST client for Apache Tika server";
     homepage = "https://github.com/stumpylog/tika-client";
     changelog = "https://github.com/stumpylog/tika-client/blob/${version}/CHANGELOG.md";
     license = licenses.mpl20;

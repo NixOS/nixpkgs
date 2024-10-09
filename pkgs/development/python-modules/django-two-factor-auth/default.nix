@@ -9,7 +9,6 @@
   phonenumbers,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   qrcode,
   setuptools-scm,
   twilio,
@@ -31,7 +30,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -45,7 +43,7 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     call = [ twilio ];
     sms = [ twilio ];
     webauthn = [

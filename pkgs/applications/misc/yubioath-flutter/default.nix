@@ -1,25 +1,25 @@
 { lib
-, flutter
+, flutter324
 , python3
 , fetchFromGitHub
 , pcre2
 , libnotify
 , libappindicator
 , pkg-config
-, gnome
+, gnome-screenshot
 , makeWrapper
 , removeReferencesTo
 }:
 
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "yubioath-flutter";
-  version = "6.4.0";
+  version = "7.1.0";
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubioath-flutter";
     rev = version;
-    hash = "sha256-aXUnmKEUCi0rsVr3HVhEk6xa1z9HMsH+0AIY531hqiU=";
+    hash = "sha256-sAs/tglLt1igovtfs07+7G5/xeMcQgfR9G4b7VzyDVY=";
   };
 
   passthru.helper = python3.pkgs.callPackage ./helper.nix { inherit src version meta; };
@@ -67,7 +67,7 @@ flutter.buildFlutterApplication rec {
 
   # Needed for QR scanning to work
   extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ gnome.gnome-screenshot ]}
+    --prefix PATH : ${lib.makeBinPath [ gnome-screenshot ]}
   '';
 
   nativeBuildInputs = [

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "libcxxrt";
-  version = "4.0.10-unstable-2024-04-15";
+  version = "4.0.10-unstable-2024-09-24";
 
   src = fetchFromGitHub {
     owner = "libcxxrt";
     repo = "libcxxrt";
-    rev = "25541e312f7094e9c90895000d435af520d42418";
-    sha256 = "d5uhtlO+28uc2Xnf5trXsy43jgmzBHs2jZhCK57qRM4=";
+    rev = "40e4fa2049930412a2c43cdf0c39b6b5aa735341";
+    sha256 = "2rEbRTr8RLl8EKrDq210baCPDt9OppdL7zloNjGOZME=";
   };
 
   nativeBuildInputs = [ cmake ];

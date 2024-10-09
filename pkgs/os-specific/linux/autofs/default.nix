@@ -1,28 +1,33 @@
 { lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto
+, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto, pkgconf
 , fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.6";
+  version = "5.1.9";
   pname = "autofs";
 
   src = fetchurl {
     url = "mirror://kernel/linux/daemons/autofs/v5/autofs-${version}.tar.xz";
-    sha256 = "1vya21mb4izj3khcr3flibv7xc15vvx2v0rjfk5yd31qnzcy7pnx";
+    sha256 = "sha256-h+avagN5S5Ri6lGXgeUOfSO198ks1Z4RQshdJJOzwks=";
   };
-
   patches = [
-    # glibc 2.34 compat
     (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/autofs/raw/cc745af5e42396d540d5b3b92fae486e232bf6bd/f/autofs-5.1.7-use-default-stack-size-for-threads.patch";
-      sha256 = "sha256-6ETDFbW7EhHR03xFWF+6OJBgn9NX3WW3bGhTNGodaOc=";
-      excludes = [ "CHANGELOG" ];
+      url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-update-configure.patch";
+      hash = "sha256-BomhNw+lMHcgs5gQlzapZ6p/Ji3gJUVkrLpZssBmwbg=";
+    })
+    (fetchpatch {
+      url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-fix-ldap_parse_page_control-check.patch";
+      hash = "sha256-W757LU9r9kuzLeThif2a1olRtxNrJy5suemLS7yfbIU=";
+    })
+   (fetchpatch {
+      url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-fix-crash-in-make_options_string.patch";
+      hash = "sha256-YjTdJ50iNhJ2UjFdrKYEFNt04z0PfmElbFa4GuSskLA=";
     })
   ];
 
   preConfigure = ''
-    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH"
+    configureFlags="--enable-force-shutdown --enable-ignore-busy --with-path=$PATH --with-libtirpc"
     export sssldir="${sssd}/lib/sssd/modules"
     export HAVE_SSS_AUTOFS=1
 
@@ -37,9 +42,6 @@ stdenv.mkDerivation rec {
     unset STRIP # Makefile.rules defines a usable STRIP only without the env var.
   '';
 
-  # configure script is not finding the right path
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-
   installPhase = ''
     make install SUBDIRS="lib daemon modules man" # all but samples
     #make install SUBDIRS="samples" # impure!
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
                   openssl cyrus_sasl rpcsvc-proto ];
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison pkgconf ];
 
   meta = {
     description = "Kernel-based automounter";

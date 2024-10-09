@@ -50,10 +50,13 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
-    description = "A lightweight alternative to elasticsearch that requires minimal resources, written in Go";
+    description = "Lightweight alternative to elasticsearch that requires minimal resources, written in Go";
     mainProgram = "zincsearch";
     homepage = "https://zincsearch-docs.zinc.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    # Doesn't build with Go version later v1.21 (which is EOL).
+    # Upstream issue: https://github.com/zincsearch/zincsearch/issues/975
+    broken = true;
   };
 }

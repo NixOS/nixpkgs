@@ -192,7 +192,12 @@ in {
     };
 
     customComponents = mkOption {
-      type = types.listOf types.package;
+      type = types.listOf (
+        types.addCheck types.package (p: p.isHomeAssistantComponent or false) // {
+          name = "home-assistant-component";
+          description = "package that is a Home Assistant component";
+        }
+      );
       default = [];
       example = literalExpression ''
         with pkgs.home-assistant-custom-components; [
@@ -518,8 +523,9 @@ in {
           # recreate symlinks for desired components
           declare -a components=(${escapeShellArgs cfg.customComponents})
           for component in "''${components[@]}"; do
-            path="$(dirname $(find "$component" -name "manifest.json"))"
-            ln -fns "$path" "${cfg.configDir}/custom_components/"
+            readarray -t manifests < <(find "$component" -name manifest.json)
+            readarray -t paths < <(dirname "''${manifests[@]}")
+            ln -fns "''${paths[@]}" "${cfg.configDir}/custom_components/"
           done
         '';
       in
@@ -649,6 +655,7 @@ in {
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         User = "hass";
         Group = "hass";
+        WorkingDirectory = cfg.configDir;
         Restart = "on-failure";
         RestartForceExitStatus = "100";
         SuccessExitStatus = "100";

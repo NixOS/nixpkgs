@@ -1,30 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, IOKit
-, CoreFoundation
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  IOKit,
+  CoreFoundation,
+  unstableGitUpdater,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nu-plugin-net";
-  version = "0-unstable-2024-04-05";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
-    rev = "a84d72290f513397a359581b9447a4e638ce60c9";
-    hash = "sha256-uKLYTRR2tThSvwWbvEePOLZ9ehNPfCYruZxTKSIxpEA=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-GOF2CSlsjI8PAmIxj/+mR01X5XMviEM8gj7ZYTbeX7I=";
   };
 
-  cargoHash = "sha256-BsCOej31vfTf+Wca4+AjxkhXz6wpMRFJmGBsUqOj2U0=";
+  cargoHash = "sha256-2FjKGirjTb6ZjDmhK9ciQzVtWCF8CcYeA+YXcr1oMP4=";
 
-  nativeBuildInputs = [
-    rustPlatform.bindgenHook
-  ];
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     IOKit
   ];
@@ -32,10 +31,10 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
-    description = "A nushell plugin to list system network interfaces";
+    description = "Nushell plugin to list system network interfaces";
     homepage = "https://github.com/fennewald/nu_plugin_net";
     license = licenses.mit;
     maintainers = with maintainers; [ happysalada ];
-    mainProgram = "nu-plugin-net";
+    mainProgram = "nu_plugin_net";
   };
 }

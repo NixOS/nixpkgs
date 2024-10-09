@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
-  version = "3.23.0";
+  version = "3.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fs2yB3J9UTsbzh8hPbuSbtLh1PASJ3jeAPDlbRnUegE=";
+    hash = "sha256-Wyr/MgWoVEgRF0NoNq4UA/EfJZTmgQqYiGr9V+2ihQk=";
   };
 
   build-system = [ setuptools ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     bqstorage = [
       google-cloud-bigquery-storage
       grpcio
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     google-cloud-storage
     pytestCheckHook
     pytest-xdist
-  ] ++ passthru.optional-dependencies.pandas ++ passthru.optional-dependencies.ipython;
+  ] ++ optional-dependencies.pandas ++ optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
@@ -132,6 +132,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

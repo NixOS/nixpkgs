@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xlsxgrep";
-  version = "0.0.23";
+  version = "0.0.29";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "014i1nifx67mxi0k9sch00j6bjykb6krzl2q3ara9s1g75inl4rm";
+    sha256 = "sha256-vgHNu7MVDjULoBiTkk74W8ZLJ02eds60XshTX3iLJGI=";
   };
 
   pythonPath = with python3Packages; [ xlrd ];

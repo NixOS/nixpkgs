@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A cross-platform automation tool";
+    description = "Cross-platform automation tool";
     homepage = "https://github.com/Jmgr/actiona";
     license = lib.licenses.gpl3Only;
     mainProgram = "actiona";

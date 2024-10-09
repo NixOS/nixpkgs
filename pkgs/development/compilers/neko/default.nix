@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
       libmysqlclient mbedtls_2 openssl libpthreadstubs ]
-      ++ lib.optional stdenv.isLinux gtk2
-      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
+      ++ lib.optional stdenv.hostPlatform.isLinux gtk2
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -39,12 +39,12 @@ stdenv.mkDerivation rec {
 
   # Called from tools/test.neko line 2
   # Uncaught exception - Segmentation fault
-  doInstallCheck = !stdenv.isDarwin;
+  doInstallCheck = !stdenv.hostPlatform.isDarwin;
   dontPatchELF = true;
   dontStrip = true;
 
   meta = with lib; {
-    description = "A high-level dynamically typed programming language";
+    description = "High-level dynamically typed programming language";
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE

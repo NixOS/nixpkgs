@@ -3,21 +3,21 @@
 
 buildGoModule rec {
   pname = "imgproxy";
-  version = "3.24.1";
+  version = "3.26.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    hash = "sha256-1AacDY4qNe+1SESsEEazxoBnJZRphnext1mu3BOKwKY=";
+    hash = "sha256-sjgSbKKTUq6HL7QZ3LNU1Eo+2n/KnlY7Yt80lXAR26k=";
     rev = "v${version}";
   };
 
-  vendorHash = "sha256-GIMba/XlINwJilRo5Oi2j7HJJTQQpMOa2kPH17T/vLU=";
+  vendorHash = "sha256-YxZuAo8l3fhCGCEQVPzKeVdL7i4jWe8rZ5pILI4NVP4=";
 
   nativeBuildInputs = [ pkg-config gobject-introspection ];
 
   buildInputs = [ vips ]
-    ++ lib.optionals stdenv.isDarwin [ libunwind ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libunwind ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'

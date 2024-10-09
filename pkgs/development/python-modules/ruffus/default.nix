@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   # tests very flaky & hang often on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   # test files do indeed need to be executed separately
   checkPhase = ''
     pushd ruffus/test
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Light-weight Python Computational Pipeline Management";
     homepage = "http://www.ruffus.org.uk";
     license = licenses.mit;
-    maintainers = [ maintainers.kiwi ];
+    maintainers = [ ];
   };
 }
