@@ -410,7 +410,6 @@ in
             pkgs.gnome-system-monitor
             pkgs.gnome-weather
             pkgs.loupe
-            pkgs.nautilus
             pkgs.gnome-connections
             pkgs.simple-scan
             pkgs.snapshot
@@ -431,6 +430,7 @@ in
       programs.file-roller.enable = notExcluded pkgs.file-roller;
       programs.geary.enable = notExcluded pkgs.geary;
       programs.gnome-disks.enable = notExcluded pkgs.gnome-disk-utility;
+      programs.nautilus.enable = notExcluded pkgs.nautilus;
       programs.seahorse.enable = notExcluded pkgs.seahorse;
       services.gnome.sushi.enable = notExcluded pkgs.sushi;
 
@@ -438,16 +438,8 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Let nautilus find extensions
-      # TODO: Create nautilus-with-extensions package
-      environment.sessionVariables.NAUTILUS_4_EXTENSION_DIR = "${config.system.path}/lib/nautilus/extensions-4";
-
       # Override default mimeapps for nautilus
       environment.sessionVariables.XDG_DATA_DIRS = [ "${mimeAppsList}/share" ];
-
-      environment.pathsToLink = [
-        "/share/nautilus-python/extensions"
-      ];
     })
 
     (lib.mkIf serviceCfg.games.enable {

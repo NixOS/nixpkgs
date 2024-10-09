@@ -242,6 +242,7 @@
   ./programs/msmtp.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/nautilus.nix
   ./programs/nautilus-open-any-terminal.nix
   ./programs/nbd.nix
   ./programs/neovim.nix
