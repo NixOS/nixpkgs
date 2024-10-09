@@ -1,24 +1,36 @@
 {
   lib,
   stdenv,
+  overrideSDK,
   cmakeMinimal,
   fetchFromGitHub,
+  fetchpatch,
   ninja,
   testers,
   aws-lc,
   ...
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+let
+  awsStdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+in
+awsStdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.33.0";
+  version = "1.36.1";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-YTvKpTaZnmYlEiKS/W5FlmiEMY7MDxgplXIENxRjI3Q=";
+    hash = "sha256-v3fTOhAwdNZVx3Q2DCnUoMmdy11uvrI+yUM2sE0uGGw=";
   };
+
+  patches = [
+    # See https://github.com/NixOS/nixpkgs/issues/144170
+    (fetchpatch {
+      url = "https://github.com/aws/aws-lc/compare/main...tinted-software:aws-lc:main.patch";
+      sha256 = "sha256-rXUG1bVYDnjwQC5+Q5E0W02eVlP1PJkt2IWcvgWnXng=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -35,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.targetPlatform.isStatic))
     "-GNinja"
     "-DDISABLE_GO=ON"
+    "-DDISABLE_PERL=ON"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
