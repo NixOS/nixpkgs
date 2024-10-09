@@ -6269,8 +6269,6 @@ with pkgs;
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
-  chrony = callPackage ../tools/networking/chrony { };
-
   chunkfs = callPackage ../tools/filesystems/chunkfs { };
 
   chunksync = callPackage ../tools/backup/chunksync { };
