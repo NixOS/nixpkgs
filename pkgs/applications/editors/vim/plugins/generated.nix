@@ -5534,6 +5534,18 @@ final: prev:
     meta.homepage = "https://github.com/qnighy/lalrpop.vim/";
   };
 
+  langmapper-nvim = buildVimPlugin {
+    pname = "langmapper.nvim";
+    version = "2024-09-19";
+    src = fetchFromGitHub {
+      owner = "Wansmer";
+      repo = "langmapper.nvim";
+      rev = "ac74a80cb86e8b51e4a13ccb2ee540d544fe1c62";
+      sha256 = "1b2sjsi81r7m1pxxkisl4b2w2cag3v2i4andhn89gv6afzakvzka";
+    };
+    meta.homepage = "https://github.com/Wansmer/langmapper.nvim/";
+  };
+
   last256 = buildVimPlugin {
     pname = "last256";
     version = "2020-12-09";
