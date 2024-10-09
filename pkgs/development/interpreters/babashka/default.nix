@@ -1,6 +1,6 @@
 { lib
 , buildGraalvmNativeImage
-, graalvmCEPackages
+, graalvmPackages
 , fetchurl
 , writeScript
 , installShellFiles
@@ -16,7 +16,7 @@ let
       sha256 = "sha256-uVRk1/lfOXMSp3qOdeMoAFpwJaEBxF1MYtFOv364H7Y=";
     };
 
-    graalvmDrv = graalvmCEPackages.graalvm-ce;
+    graalvmDrv = graalvmPackages.graalvm-ce;
 
     executable = "bb";
 

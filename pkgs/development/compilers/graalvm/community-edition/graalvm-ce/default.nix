@@ -1,10 +1,10 @@
 { stdenv
 , fetchurl
-, graalvmCEPackages
+, graalvmPackages
 , useMusl ? false
 }:
 
-graalvmCEPackages.buildGraalvm {
+graalvmPackages.buildGraalvm {
   inherit useMusl;
   src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
   version = (import ./hashes.nix).version;
