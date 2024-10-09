@@ -27,8 +27,8 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.23.0";
-  hash = "sha256-QNi2u6/jtiMo1dLYoA8Ev1OvZfa8mXCMibSD70J4vVI=";
+  version = "0.24.3";
+  hash = "sha256-2Pg4D1Pf1Ex6ykXouAJvD1NVfg5CH4rCQcSTAJmYwd4=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
@@ -72,8 +72,7 @@ let
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-php = grammars'.tree-sitter-php // { location = "php"; }; } //
-        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; } //
-        { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+        { tree-sitter-sql = grammars'.tree-sitter-sql // { generate = true; }; };
     in
     lib.mapAttrs build (grammars);
 
@@ -112,7 +111,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-H4baEmGsQx+W9EXblt8R1CTYfkgR+dQDAsIwPVsqR68=";
+  cargoHash = "sha256-0ZoXf0eV3kmHaRoHcWrVEgoWnYNBsY9GiFfy84H+0mc=";
 
   buildInputs =
     lib.optionals stdenv.isDarwin [ Security CoreServices ];
@@ -132,7 +131,7 @@ rustPlatform.buildRustPackage {
     sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
     sed -e 's/playground,//' \
-        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+        -e 's/playground::serve(.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
         -i cli/src/main.rs
   '';
 
