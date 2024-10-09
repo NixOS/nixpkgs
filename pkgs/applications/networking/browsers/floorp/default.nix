@@ -57,6 +57,9 @@
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
       mainProgram = "floorp";
+      knownVulnerabilities = [
+        "CVE-2024-9680"
+      ];
     };
     tests = [ nixosTests.floorp ];
   }).override
