@@ -63,7 +63,7 @@ let
           };
           url = mkOption {
             type = types.str;
-            example = "fedimint://p2p.myfedimint.com";
+            example = "fedimint://p2p.myfedimint.com:8173";
             description = ''
               Public address for p2p connections from peers
             '';
@@ -158,6 +158,12 @@ let
             type = types.str;
             example = "api.myfedimint.com";
             description = "Public domain of the API address of the reverse proxy/tls terminator.";
+          };
+          path = mkOption {
+            type = types.str;
+            example = "/";
+            default = "/ws/";
+            description = "Path to host the API on and forward to the daemon's api port";
           };
           config = mkOption {
             type = types.submodule (
@@ -286,8 +292,7 @@ in
               # overriden by default value from vhost-options.nix
               enableACME = mkOverride 99 true;
               forceSSL = mkOverride 99 true;
-              # Currently Fedimint API only support JsonRPC on `/ws/` endpoint, so no need to handle `/`
-              locations."/ws/" = {
+              locations.${cfg.nginx.path} = {
                 proxyPass = "http://127.0.0.1:${toString cfg.api.port}/";
                 proxyWebsockets = true;
                 extraConfig = ''
