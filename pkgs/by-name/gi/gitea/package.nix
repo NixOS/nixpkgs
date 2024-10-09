@@ -33,18 +33,18 @@ let
   };
 in buildGoModule rec {
   pname = "gitea";
-  version = "1.22.2";
+  version = "1.22.3";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${gitea.version}";
-    hash = "sha256-PwA23cbRgw5crzZmngDjAAIODMtguwBCqc9NqWMjF3o=";
+    hash = "sha256-F1vvyf/FE/OIfDjM0CCOef/cXy+GPA+8n1AypE0r6p8=";
   };
 
   proxyVendor = true;
 
-  vendorHash = "sha256-rMTKmztQNse/9CK1qFGWmSwqunwh918EvcuIHk6BSTY=";
+  vendorHash = "sha256-iKf4ozCBcTJQ6bm6dX4dd4buVMGNDVF+rLuYkb7Zxw8=";
 
   outputs = [ "out" "data" ];
 
