@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  openssl,
-  libplist,
   pkg-config,
   wrapGAppsHook3,
   avahi,
   avahi-compat,
   gst_all_1,
+  libplist,
+  openssl,
   nix-update-script,
 }:
 
@@ -32,8 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    openssl
-    libplist
     pkg-config
     wrapGAppsHook3
   ];
@@ -47,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    libplist
+    openssl
   ];
 
   passthru.updateScript = nix-update-script { };
