@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "klog is a tool that allows you to tail logs of multiple Kubernetes pods simultaneously.";
+    description = "Tool to tail logs of multiple Kubernetes pods simultaneously";
     homepage = "https://github.com/tobifroe/klog";
     license = lib.licenses.mit;
     mainProgram = "klog";
