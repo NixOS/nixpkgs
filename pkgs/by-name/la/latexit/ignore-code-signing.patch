@@ -1,0 +1,347 @@
+diff --git a/LaTeXiT-10_9+.xcodeproj/project.pbxproj b/LaTeXiT-10_9+.xcodeproj/project.pbxproj
+index 14d1654..4750d5f 100644
+--- a/LaTeXiT-10_9+.xcodeproj/project.pbxproj
++++ b/LaTeXiT-10_9+.xcodeproj/project.pbxproj
+@@ -3,7 +3,7 @@
+ 	archiveVersion = 1;
+ 	classes = {
+ 	};
+-	objectVersion = 45;
++	objectVersion = 54;
+ 	objects = {
+ 
+ /* Begin PBXAggregateTarget section */
+@@ -3538,12 +3538,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT App extension XPC Service/LaTeXiT App extension XPC Service.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+ 				ENABLE_TESTABILITY = YES;
+@@ -3567,7 +3568,7 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = "XPC Services/LaTeXiT App extension XPC Service/Info.plist";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+ 				MTL_FAST_MATH = YES;
+@@ -3579,6 +3580,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex.xpc;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				SDKROOT = macosx;
+ 				SKIP_INSTALL = YES;
+ 			};
+@@ -3619,12 +3621,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT App extension XPC Service/LaTeXiT App extension XPC Service.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_NS_ASSERTIONS = NO;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+@@ -3642,7 +3645,7 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = "XPC Services/LaTeXiT App extension XPC Service/Info.plist";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = NO;
+ 				MTL_FAST_MATH = YES;
+@@ -3654,6 +3657,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex.xpc;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				SDKROOT = macosx;
+ 				SKIP_INSTALL = YES;
+ 			};
+@@ -3665,9 +3669,10 @@
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -3715,6 +3720,7 @@
+ 					"\"$(SRCROOT)/Frameworks\"",
+ 					"\"$(SRCROOT)\"",
+ 				);
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				OTHER_CFLAGS = "";
+ 				OTHER_LDFLAGS = (
+@@ -3737,10 +3743,11 @@
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_ENTITLEMENTS = LaTeXiT.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEAD_CODE_STRIPPING = YES;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -3786,6 +3793,7 @@
+ 					"\"$(SRCROOT)/Frameworks\"",
+ 					"\"$(SRCROOT)\"",
+ 				);
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				OTHER_CFLAGS = "";
+ 				OTHER_LDFLAGS = (
+@@ -3833,7 +3841,7 @@
+ 				GCC_WARN_UNDECLARED_SELECTOR = YES;
+ 				IBC_STRIP_NIBS = NO;
+ 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				ONLY_ACTIVE_ARCH = YES;
+ 			};
+ 			name = Development;
+@@ -3886,7 +3894,7 @@
+ 				GCC_WARN_UNUSED_VALUE = YES;
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+ 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 			};
+ 			name = Deployment;
+ 		};
+@@ -3895,9 +3903,10 @@
+ 			buildSettings = {
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					Frameworks,
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -3950,9 +3959,10 @@
+ 			buildSettings = {
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					Frameworks,
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -4035,12 +4045,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = LaTeXiT_AppExtension/LaTeXiT_AppExtension.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+ 				ENABLE_TESTABILITY = YES;
+@@ -4064,8 +4075,12 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
+-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+-				MACOSX_DEPLOYMENT_TARGET = 10.10;
++				LD_RUNPATH_SEARCH_PATHS = (
++					"$(inherited)",
++					"@executable_path/../Frameworks",
++					"@executable_path/../../../../Frameworks",
++				);
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+ 				MTL_FAST_MATH = YES;
+@@ -4119,12 +4134,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = LaTeXiT_AppExtension/LaTeXiT_AppExtension.entitlements;
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_NS_ASSERTIONS = NO;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+@@ -4142,8 +4158,12 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = LaTeXiT_AppExtension/Info.plist;
+-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @executable_path/../../../../Frameworks";
+-				MACOSX_DEPLOYMENT_TARGET = 10.10;
++				LD_RUNPATH_SEARCH_PATHS = (
++					"$(inherited)",
++					"@executable_path/../Frameworks",
++					"@executable_path/../../../../Frameworks",
++				);
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = NO;
+ 				MTL_FAST_MATH = YES;
+@@ -4156,6 +4176,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.appex;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				SDKROOT = macosx;
+ 				SKIP_INSTALL = YES;
+ 			};
+@@ -4196,12 +4217,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT XPC Service/LaTeXiT XPC Service.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+ 				ENABLE_TESTABILITY = YES;
+@@ -4225,7 +4247,7 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = "XPC Services/LaTeXiT XPC Service/Info.plist";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+ 				MTL_FAST_MATH = YES;
+@@ -4237,6 +4259,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.xpc;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				SDKROOT = macosx;
+ 				SKIP_INSTALL = YES;
+ 			};
+@@ -4277,12 +4300,13 @@
+ 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "XPC Services/LaTeXiT XPC Service/LaTeXiT XPC Service.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				ENABLE_NS_ASSERTIONS = NO;
+ 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+@@ -4300,7 +4324,7 @@
+ 					Services/Common,
+ 				);
+ 				INFOPLIST_FILE = "XPC Services/LaTeXiT XPC Service/Info.plist";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				MTL_ENABLE_DEBUG_INFO = NO;
+ 				MTL_FAST_MATH = YES;
+@@ -4312,6 +4336,7 @@
+ 				);
+ 				PRODUCT_BUNDLE_IDENTIFIER = fr.chachatelier.pierre.LaTeXiT.xpc;
+ 				PRODUCT_NAME = "$(TARGET_NAME)";
++				PROVISIONING_PROFILE_SPECIFIER = "";
+ 				SDKROOT = macosx;
+ 				SKIP_INSTALL = YES;
+ 			};
+@@ -4323,9 +4348,10 @@
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -4360,7 +4386,7 @@
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+ 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+ 				INSTALL_PATH = "$(HOME)/Applications";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				OTHER_CFLAGS = "";
+ 				OTHER_LDFLAGS = "";
+@@ -4379,10 +4405,11 @@
+ 				CLANG_ENABLE_OBJC_WEAK = YES;
+ 				CODE_SIGN_ENTITLEMENTS = "LaTeXiT Helper.entitlements";
+ 				CODE_SIGN_IDENTITY = "Apple Development";
+-				CODE_SIGN_STYLE = Automatic;
++				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
++				CODE_SIGN_STYLE = Manual;
+ 				CURRENT_PROJECT_VERSION = 2.16.5;
+ 				DEAD_CODE_STRIPPING = YES;
+-				DEVELOPMENT_TEAM = 7SFX84GNR7;
++				DEVELOPMENT_TEAM = "";
+ 				ENABLE_HARDENED_RUNTIME = YES;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"\"$(SRCROOT)/Frameworks\"",
+@@ -4415,7 +4442,7 @@
+ 				GCC_WARN_UNUSED_VARIABLE = YES;
+ 				INFOPLIST_FILE = "Legacy/LaTeXiT Helper/Info.plist";
+ 				INSTALL_PATH = "$(HOME)/Applications";
+-				MACOSX_DEPLOYMENT_TARGET = 10.9;
++				MACOSX_DEPLOYMENT_TARGET = 10.13;
+ 				MARKETING_VERSION = 2.16.5;
+ 				OTHER_CFLAGS = "";
+ 				OTHER_LDFLAGS = "";
