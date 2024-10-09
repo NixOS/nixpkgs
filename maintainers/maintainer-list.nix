@@ -16342,6 +16342,12 @@
     githubId = 434254;
     name = "Pavel Borzenkov";
   };
+  pbsbot = {
+    name = "pbsds bot";
+    email = "pbsbot@pbsds.net";
+    github = "pbsbot";
+    githubId = 11412567;
+  };
   pbsds = {
     name = "Peder Bergebakken Sundt";
     email = "pbsds@hotmail.com";
