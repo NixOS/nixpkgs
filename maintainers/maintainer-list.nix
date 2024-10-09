@@ -2944,6 +2944,12 @@
     githubId = 50839;
     name = "Brian Jones";
   };
+  boldikoller = {
+    email = "boldi.koller@wtss.eu";
+    github = "boldikoller";
+    githubID = 182646310;
+    name = "Boldi Koller";
+  };
   boltzmannrain = {
     email = "boltzmannrain@gmail.com";
     github = "boltzmannrain";
