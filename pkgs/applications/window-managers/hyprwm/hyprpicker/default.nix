@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, ninja
-, cairo
-, fribidi
-, libGL
-, libdatrie
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libxkbcommon
-, pango
-, pcre
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libXdmcp
-, debug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  ninja,
+  cairo,
+  fribidi,
+  libGL,
+  libdatrie,
+  libjpeg,
+  libselinux,
+  libsepol,
+  libthai,
+  libxkbcommon,
+  pango,
+  pcre,
+  util-linux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libXdmcp,
+  debug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
@@ -65,11 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/LICENSE -t $out/share/licenses/hyprpicker
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fufexan ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
     mainProgram = "hyprpicker";
   };
