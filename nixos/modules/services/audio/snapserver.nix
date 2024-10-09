@@ -186,7 +186,8 @@ in {
 
       http.docRoot = lib.mkOption {
         type = with lib.types; nullOr path;
-        default = null;
+        default = pkgs.snapweb;
+        defaultText = lib.literalExpression "pkgs.snapweb";
         description = ''
           Path to serve from the HTTP servers root.
         '';
