@@ -15,11 +15,12 @@ on:
 env:
   # TODO: Once confirmed that this works by seeing that the action would request
   # reviews from the same people (or refuse for wrong base branches),
-  # move all entries from CODEOWNERS to OWNERS and change this value here
-  # OWNERS_FILE: .github/OWNERS
+  # move all entries from CODEOWNERS to OWNERS, remove these two lines and uncomment the ones below
   OWNERS_FILE: .github/CODEOWNERS
-  # Also remove this
   DRY_MODE: 1
+  # OWNERS_FILE: .github/OWNERS
+  # # Don't do anything on draft PRs
+  # DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
 
 jobs:
   # Check that code owners is valid
@@ -84,5 +85,3 @@ jobs:
       run: result/bin/request-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        # Don't do anything on draft PRs
-        DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
