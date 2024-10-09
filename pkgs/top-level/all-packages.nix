@@ -1629,6 +1629,8 @@ with pkgs;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
+  android-unpinner = pkgs.python3Packages.callPackage ../by-name/an/android-unpinner/package.nix { };
+
   asar = callPackage ../tools/compression/asar { };
 
   askalono = callPackage ../tools/misc/askalono { };
