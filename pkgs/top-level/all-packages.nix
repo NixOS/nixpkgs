@@ -6081,10 +6081,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit Kerberos;
   };
 
-  bacon = callPackage ../development/tools/bacon {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
-  };
-
   bats = callPackage ../development/interpreters/bats { };
 
   bbe = callPackage ../tools/misc/bbe { };
