@@ -1164,7 +1164,7 @@ with self; {
     pname = "ArrayUtils";
     version = "0.5";
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/Z/ZM/ZMIJ/Array/Array-Utils-0.5.tar.gz";
+      url = "mirror://cpan/authors/id/Z/ZM/ZMIJ/Array/Array-Utils-0.5.tar.gz";
       hash = "sha256-id0bf82bQ3lJKjp3SW45/mzTebdz/QOmsWDdJu3mN3A=";
     };
     meta = {
@@ -18956,7 +18956,7 @@ with self; {
     version = "0.07";
     buildInputs = [ ModuleBuildTiny ];
     src = fetchurl {
-      url = "https://cpan.metacpan.org/authors/id/A/AB/ABERNDT/Net-MPD-0.07.tar.gz";
+      url = "mirror://cpan/authors/id/A/AB/ABERNDT/Net-MPD-0.07.tar.gz";
       hash = "sha256-M4L7nG9cJd4mKPVhRCn6igB5FSFnjELaBoyZ57KU6VM=";
     };
     meta = {
