@@ -60,6 +60,7 @@
 , usbutils
 , which
 , runCommand
+, wayland
 , xkeyboard_config
 , xorg
 , zlib
@@ -176,6 +177,9 @@ let
           # For GTKLookAndFeel
           gtk2
           glib
+
+          # For wayland support
+          wayland
         ]}"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
