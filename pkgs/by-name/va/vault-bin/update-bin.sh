@@ -4,7 +4,7 @@
 set -euo pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-NIX_DRV="$ROOT/vault-bin.nix"
+NIX_DRV="$ROOT/package.nix"
 if [ ! -f "$NIX_DRV" ]; then
   echo "ERROR: cannot find vault-bin in $ROOT"
   exit 1
