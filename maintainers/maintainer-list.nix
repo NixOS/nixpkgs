@@ -18928,7 +18928,7 @@
     name = "sanana the skenana";
   };
   sander = {
-    email = "s.vanderburg@tudelft.nl";
+    email = "svanderburg@gmail.com";
     github = "svanderburg";
     githubId = 1153271;
     name = "Sander van der Burg";
