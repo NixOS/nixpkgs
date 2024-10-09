@@ -25,11 +25,11 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "chrony";
-  version = "4.5";
+  version = "4.6.1";
 
   src = fetchurl {
-    url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
-    hash = "sha256-Gf4dn0Zk1EWmmpbHHo/bYLzY3yTHPROG4CKH9zZq1CI=";
+    url = "https://chrony-project.org/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-Vx/3P78K4wl/BgTsouALHYuy6Rr/4aNJR4X/IdYZnFw=";
   };
 
   outputs = [
@@ -66,6 +66,7 @@ stdenv'.mkDerivation rec {
     patchShebangs test
 
     # nts_ke_session unit test fails, so drop it.
+    # TODO: try again when updating?
     rm test/unit/nts_ke_session.c
   '';
 
@@ -80,7 +81,7 @@ stdenv'.mkDerivation rec {
 
   meta = {
     description = "Sets your computer's clock from time servers on the Net";
-    homepage = "https://chrony.tuxfamily.org/";
+    homepage = "https://chrony-project.org/";
     license = lib.licenses.gpl2Only;
     platforms =
       with lib.platforms;
