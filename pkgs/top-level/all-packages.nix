@@ -31164,9 +31164,7 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc {
-    inherit (python3Packages) sphinx;
-  };
+  mpc-cli = callPackage ../applications/audio/mpc { };
 
   clerk = callPackage ../applications/audio/clerk { };
 
