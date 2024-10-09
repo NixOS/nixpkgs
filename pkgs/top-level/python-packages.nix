@@ -9898,6 +9898,8 @@ self: super: with self; {
 
   plover-dict-commands = callPackage ../development/python-modules/plover-dict-commands { };
 
+  plover-last-translation = callPackage ../development/python-modules/plover-last-translation { };
+
   plover-stitching = callPackage ../development/python-modules/plover-stitching { };
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
