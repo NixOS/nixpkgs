@@ -1147,6 +1147,8 @@ self: super: with self; {
 
   azure-identity = callPackage ../development/python-modules/azure-identity { };
 
+  azure-iot-device = callPackage ../development/python-modules/azure-iot-device { };
+
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
 
   azure-keyvault-administration = callPackage ../development/python-modules/azure-keyvault-administration { };
@@ -13600,6 +13602,8 @@ self: super: with self; {
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
+
+  requests-unixsocket2 = callPackage ../development/python-modules/requests-unixsocket2 { };
 
   requests-wsgi-adapter = callPackage ../development/python-modules/requests-wsgi-adapter { };
 
