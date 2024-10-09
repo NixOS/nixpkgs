@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
-  version = "9.2.119";
+  version = "9.2.122";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c9CaftT7VInEMRsWN7FhDHwXJccma5wkUfiN9EpjUTQ=";
+    hash = "sha256-YfOjjDlu2bkwUGGm0Sk0QfG+uJcezYKjQvditRLYPT8=";
   };
 
   build-system = [ setuptools ];
