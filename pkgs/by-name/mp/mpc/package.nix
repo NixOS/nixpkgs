@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, libiconv
-, libmpdclient
-, meson
-, ninja
-, pkg-config
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libiconv,
+  libmpdclient,
+  meson,
+  ninja,
+  pkg-config,
+  python3Packages,
+  stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpc";
   version = "0.34";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
-    repo = pname;
-    rev = "v${version}";
+    repo = "mpc";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-2FjYBfak0IjibuU+CNQ0y9Ei8hTZhynS/BK2DNerhVw=";
   };
 
@@ -32,8 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libmpdclient
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     rm $out/share/doc/mpc/contrib/mpc-completion.bash
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.musicpd.org/clients/mpc/";
     description = "Minimalist command line interface to MPD";
-    changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/v${version}/NEWS";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    changelog = "https://raw.githubusercontent.com/MusicPlayerDaemon/mpc/refs/heads/master/NEWS";
+    license = lib.licenses.gpl2Plus;
     mainProgram = "mpc";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.unix;
   };
-}
+})
