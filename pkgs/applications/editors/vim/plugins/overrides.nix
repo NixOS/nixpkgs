@@ -1414,6 +1414,10 @@ in
         homepage = "https://github.com/willothy/moveline.nvim";
         license = lib.licenses.mit;
         maintainers = with lib.maintainers; [ redxtech ];
+        badPlatforms = [
+          "aarch64-darwin"
+          "x86_64-darwin"
+        ];
       };
       nvimRequireCheck = "moveline";
     };
