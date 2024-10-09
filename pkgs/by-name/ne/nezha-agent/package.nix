@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "nezha-agent";
-  version = "0.18.5";
+  version = "0.19.10";
 
   src = fetchFromGitHub {
     owner = "nezhahq";
     repo = "agent";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LmWfs3aL+1lsX4ix2FjDP5g+A0wgcfziXdw5SaKlAdk=";
+    hash = "sha256-tOfk341Eo2bOcGGaQJmQUcfan4HIcgs7+EwHrurG/Fg=";
   };
 
-  vendorHash = "sha256-frPAhiexFSt+KobMbf32h8xv7HMcPl5koEgSs8Nz3cs=";
+  vendorHash = "sha256-q6/265vVg6jCnDvs825nni8QFHkJpQz4xxC9MlJH2do=";
 
   ldflags = [
     "-s"
@@ -25,9 +25,13 @@ buildGoModule rec {
   ];
 
   # The test failed due to a geoip request in the sandbox. Remove it to avoid network requirement
-  preCheck = ''
-    rm ./pkg/monitor/myip_test.go
-  '';
+  # preCheck = ''
+  #   rm ./pkg/monitor/myip_test.go
+  # '';
+
+  patches = [
+    ./fixnet.patch
+  ];
 
   passthru.tests = {
     version = testers.testVersion {
