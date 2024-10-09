@@ -7,7 +7,7 @@ let
 in {
   name = "croc";
   meta = with pkgs.lib.maintainers; {
-    maintainers = [ hax404 julm ];
+    maintainers = [ equirosa SuperSandro2000 ];
   };
 
   nodes = {
