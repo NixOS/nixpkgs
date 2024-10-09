@@ -38,17 +38,41 @@ buildGoModule rec {
     "cmd/granted"
   ];
 
-  postInstall = ''
-    ln -s $out/bin/granted $out/bin/assumego
+  postInstall =
+    let
+      # assume depends on assumego, so we add (placeholder "out") to its path
+      addToAssumePath = lib.makeBinPath [
+        xdg-utils
+        (placeholder "out")
+      ];
+    in
+    ''
+      ln -s $out/bin/granted $out/bin/assumego
 
-    # Install shell script
-    install -Dm755 $src/scripts/assume $out/bin/assume
-    substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      # Create script with correct permissions
+      install -Dm755 /dev/null $out/bin/assume
 
-    wrapProgram $out/bin/assume \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      # assume is a script that must be sourced
+      # We can't wrap it because it inspects $0 and calls return, which can only
+      # be done in sourced scripts.
+      # So instead we insert the following snippet into the beginning of the
+      # script to add to PATH.
+      # This is borrowed from wrapProgram --suffix PATH :
+      addToPath="$(cat << 'EOF'
 
+      PATH=''${PATH:+':'$PATH':'}
+      if [[ $PATH != *':'''${addToAssumePath}''':'* ]]; then
+          PATH=$PATH'${addToAssumePath}'
+      fi
+      PATH=''${PATH#':'}
+      PATH=''${PATH%':'}
+      export PATH
+
+      EOF
+      )"
+
+      # Insert below the #!/bin/sh shebang
+      echo "$addToPath" | sed "/#!\/bin\/sh/r /dev/stdin" $src/scripts/assume >> $out/bin/assume
   '' + lib.optionalString withFish ''
     # Install fish script
     install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
