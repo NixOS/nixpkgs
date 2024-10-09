@@ -372,6 +372,10 @@ with pkgs;
     propagatedBuildInputs = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
 
+  buf = callPackage ../by-name/bu/buf/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
   buildFHSEnv = buildFHSEnvBubblewrap;
@@ -2497,10 +2501,6 @@ with pkgs;
   cdemu-daemon = callPackage ../applications/emulators/cdemu/daemon.nix { };
 
   cen64 = callPackage ../applications/emulators/cen64 { };
-
-  citations = callPackage ../applications/misc/citations { };
-
-  webfontkitgenerator = callPackage ../applications/misc/webfontkitgenerator { };
 
   collapseos-cvm = callPackage ../applications/emulators/collapseos-cvm { };
 
@@ -11643,8 +11643,6 @@ with pkgs;
 
   quilt = callPackage ../development/tools/quilt { };
 
-  raider = callPackage ../applications/misc/raider { };
-
   quota = if stdenv.hostPlatform.isLinux then linuxquota else unixtools.quota;
 
   qvge = libsForQt5.callPackage ../applications/graphics/qvge { };
@@ -14362,8 +14360,6 @@ with pkgs;
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
   };
-
-  blueprint-compiler = callPackage ../development/compilers/blueprint { };
 
   bluespec = callPackage ../development/compilers/bluespec {
     gmp-static = gmp.override { withStatic = true; };
@@ -38108,8 +38104,6 @@ with pkgs;
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
-
-  twitch-cli = callPackage ../development/tools/twitch-cli { };
 
   uacme = callPackage ../tools/admin/uacme { };
 

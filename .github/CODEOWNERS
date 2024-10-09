@@ -15,6 +15,8 @@
 /.github/workflows @NixOS/Security @Mic92 @zowoq
 /.github/workflows/check-nix-format.yml @infinisil
 /.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
+/.github/workflows/codeowners.yml @infinisil
+/.github/OWNERS @infinisil
 /ci @infinisil @philiptaron @NixOS/Security
 
 # Development support
@@ -28,7 +30,7 @@
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
 /lib/asserts.nix            @infinisil @Profpatsch
-/lib/path.*                 @infinisil
+/lib/path/*                 @infinisil
 /lib/fileset                @infinisil
 ## Libraries / Module system
 /lib/modules.nix            @infinisil @roberth
@@ -105,7 +107,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/lib/test-driver  @tfc
 
 # NixOS QEMU virtualisation
-/nixos/virtualisation/qemu-vm.nix           @raitobezarius
+/nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
 
 # ACME
 /nixos/modules/security/acme                @arianvp @flokli @aanderse @emilazy # no merge permission: @m1cr0man
@@ -170,7 +172,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 # Audio
 /nixos/modules/services/audio/botamusique.nix @mweinelt
 /nixos/modules/services/audio/snapserver.nix @mweinelt
-/nixos/tests/modules/services/audio/botamusique.nix @mweinelt
+/nixos/tests/botamusique.nix @mweinelt
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
@@ -204,21 +206,20 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # PostgreSQL and related stuff
 /pkgs/servers/sql/postgresql @thoughtpolice
-/nixos/modules/services/databases/postgresql.xml @thoughtpolice
+/nixos/modules/services/databases/postgresql.md @thoughtpolice
 /nixos/modules/services/databases/postgresql.nix @thoughtpolice
 /nixos/tests/postgresql.nix @thoughtpolice
 
 # Hardened profile & related modules
 /nixos/modules/profiles/hardened.nix @joachifm
-/nixos/modules/security/hidepid.nix @joachifm
 /nixos/modules/security/lock-kernel-modules.nix @joachifm
 /nixos/modules/security/misc.nix @joachifm
 /nixos/tests/hardened.nix @joachifm
-/pkgs/os-specific/linux/kernel/hardened-config.nix @joachifm
+/pkgs/os-specific/linux/kernel/hardened/config.nix @joachifm
 
 # Home Automation
-/nixos/modules/services/misc/home-assistant.nix @mweinelt
-/nixos/modules/services/misc/zigbee2mqtt.nix @mweinelt
+/nixos/modules/services/home-automation/home-assistant.nix @mweinelt
+/nixos/modules/services/home-automation/zigbee2mqtt.nix @mweinelt
 /nixos/tests/home-assistant.nix @mweinelt
 /nixos/tests/zigbee2mqtt.nix @mweinelt
 /pkgs/servers/home-assistant @mweinelt
@@ -316,8 +317,6 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 
 # nim
 /pkgs/development/compilers/nim   @ehmry
-/pkgs/development/nim-packages    @ehmry
-/pkgs/top-level/nim-packages.nix  @ehmry
 
 # terraform providers
 /pkgs/applications/networking/cluster/terraform-providers @zowoq
