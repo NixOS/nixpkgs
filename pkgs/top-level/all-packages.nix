@@ -31164,7 +31164,7 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc { };
+  mpc-cli = mpc;
 
   clerk = callPackage ../applications/audio/clerk { };
 
