@@ -23,6 +23,13 @@ in
     systemd = {
       packages = [ cfg.package ];
       user.services.waybar.wantedBy = [ "graphical-session.target" ];
+
+      # If Waybar modules/configurations are using executables/commands without their explicit PATHs
+      # they might not work as we are using a systemd service to start Waybar
+      # Here we are manually importing PATH variable to the service environment fixing the issue
+      user.services.waybar.environment.PATH =
+        lib.mkOverride 90
+          "/run/wrappers/bin:/etc/profiles/per-user/%u/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin";
     };
   };
 
