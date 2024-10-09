@@ -145,7 +145,6 @@
 , "neovim"
 , "nijs"
 , "node-gyp-build"
-, "node-red"
 , "node2nix"
 , "np"
 , "npm"
