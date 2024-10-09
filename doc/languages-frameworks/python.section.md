@@ -183,7 +183,15 @@ following are specific to `buildPythonPackage`:
   [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
   the binary. Additional arguments here can allow a developer to set environment
   variables which will be available when the binary is run. For example,
-  `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
+  `makeWrapperArgs = ["--set" "FOO" "BAR" "--set" "BAZ" "QUX"]`.
+
+  ::: {.note}
+  When `__structuredAttrs = false`, the attribute `makeWrapperArgs` is passed as a space-separated string to the build script. Developers should use `prependToVar` or `appendToVar` to add arguments to it in build phases, or use `__structuredAttrs = true` to ensure that `makeWrapperArgs` is passed as a Bash array. To manually convert `makeWrapperArgs` to a Bash array when `__structuredAttrs = false`, use `canonicallizeFlagsArray makeWrapperArgs`, or `canonicallizeFlagsArrayExpandString makeWrapperArgs` when Bash-expansion is needed.
+
+  For compatibility purposes,
+  when makeWrapperArgs is passed as an IFS-separated string to the build script, the string content is Bash-expanded before concatenated into the `wrapProgram` command. Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preFixup = ''makeWrapperArgs+=(--prefix PATH : "$SOME_PATH")`'').
+  :::
+
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
 * `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
@@ -541,6 +549,12 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+::: {.note}
+For compatibility purposes, `pytestCheckHook`, `setuptoolsBuildHook` and `unittestCheckHook` Bash-expand the command string they construct before executing when `__structuredAttrs` is `false`. Patterns like `pytestFlagsArray = [ "-m" "'not online'" ]` and ``
+
+Still, developers should not rely on such behaviours, but use `__structuredAttrs = true` to specify flags containing spaces (e.g. `pytestFlagsArray = [ "-m" "not online" ]`), or use -pre and -post phases to specify flags with Bash-expansions (e.g. `preCheck = ''pytestFlagsArray+=(-n "$NIX_BUILD_CORES")''`).
+:::
 
 ## User Guide {#user-guide}
 
