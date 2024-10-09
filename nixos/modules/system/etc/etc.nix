@@ -231,13 +231,13 @@ in
       if [[ ! $IN_NIXOS_SYSTEMD_STAGE1 ]] && [[ "${config.system.build.etc}/etc" != "$(readlink -f /run/current-system/etc)" ]]; then
         echo "remounting /etc..."
 
-        tmpMetadataMount=$(mktemp --directory)
+        tmpMetadataMount=$(mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
         mount --type erofs ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
         # Mount the new /etc overlay to a temporary private mount.
         # This needs the indirection via a private bind mount because you
         # cannot move shared mounts.
-        tmpEtcMount=$(mktemp --directory)
+        tmpEtcMount=$(mktemp --directory -t nixos-etc.XXXXXXXXXX)
         mount --bind --make-private $tmpEtcMount $tmpEtcMount
         mount --type overlay overlay \
           --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
@@ -276,6 +276,22 @@ in
 
         # Unmount the top /etc mount to atomically reveal the new mount.
         umount --lazy --recursive /etc
+
+        # Unmount the temporary mount
+        umount --lazy "$tmpEtcMount"
+        rmdir "$tmpEtcMount"
+
+        # Unmount old metadata mounts
+        # For some reason, `findmnt /tmp --submounts` does not show the nested
+        # mounts. So we'll just find all mounts of type erofs and filter on the
+        # name of the mountpoint.
+        findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
+          if [[ "$mountPoint" =~ ^/tmp/nixos-etc-metadata\..{10}$ &&
+                "$mountPoint" != "$tmpMetadataMount" ]]; then
+            umount --lazy $mountPoint
+            rmdir "$mountPoint"
+          fi
+        done
       fi
     '' else ''
       # Set up the statically computed bits of /etc.
