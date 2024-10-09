@@ -1,0 +1,138 @@
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  libcbor,
+  openssl,
+  zlib,
+  gnugrep,
+  gawk,
+  # Linux only
+  pcsclite,
+  udev,
+  # GUI
+  python3,
+  xterm,
+  makeDesktopItem,
+  copyDesktopItems,
+  # Darwin only
+  libuv,
+  libsolv,
+  libcouchbase,
+  darwin,
+}:
+let
+  pythonEnv = python3.withPackages (ps: [ ps.tkinter ]);
+in
+stdenv.mkDerivation rec {
+  pname = "fido2-manage";
+  version = "0-unstable-2024-09-24";
+
+  src = fetchFromGitHub {
+    owner = "token2";
+    repo = "fido2-manage";
+    rev = "6aef9ceccdf7bcc60a9298e51a4db633256925df";
+    hash = "sha256-rXTL6wpdvCifakmxH14wBLbhTptNYNFGEPskpUy3IjA=";
+  };
+
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      copyDesktopItems
+    ];
+
+  buildInputs =
+    [
+      libcbor
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      xterm
+      udev
+      pcsclite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libuv
+      libsolv
+      libcouchbase
+      gnugrep
+      darwin.apple_sdk.frameworks.IOKit
+      darwin.apple_sdk.frameworks.PCSC
+    ];
+
+  cmakeFlags = [ "-USE_PCSC=ON" ];
+
+  postPatch =
+    ''
+      substituteInPlace ./src/libfido2.pc.in \
+        --replace-fail "\''${prefix}/@CMAKE_INSTALL_LIBDIR@" "@CMAKE_INSTALL_FULL_LIBDIR@"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace ./CMakeLists.txt \
+        --replace-fail "/\''${CMAKE_INSTALL_LIBDIR}" "/lib"
+    '';
+
+  postInstall =
+    lib.optionalString stdenv.isLinux ''
+      install $src/fido2-manage.sh $out/bin/${pname}
+      install -D ${./token2.png} $out/share/icons/hicolor/512x512/apps/token2/token2.png
+      install $src/gui.py $out/bin/${pname}-gui
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      install $src/fido2-manage-mac.sh $out/bin/${pname}
+    '';
+
+  desktopItems = lib.optionals stdenv.isLinux [
+    (makeDesktopItem rec {
+      desktopName = "Fido2 Manager";
+      name = pname;
+      exec = "${pname}-gui";
+      icon = "token2";
+      comment = meta.description;
+      categories = [
+        "Utility"
+        "Settings"
+        "HardwareSettings"
+      ];
+    })
+  ];
+
+  postFixup =
+    ''
+      substituteInPlace $out/bin/${pname} \
+        --replace-fail "/usr/local/bin/" "$out/bin/" \
+        --replace-fail "./fido2-manage.sh" "${pname}" \
+        --replace-fail "awk" "${gawk}/bin/awk"
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace $out/bin/${pname}-gui \
+        --replace-fail "./fido2-manage.sh" "$out/bin/${pname}" \
+        --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
+        --replace-fail "tk.Tk()" "tk.Tk(className='${pname}')" \
+        --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
+
+      substituteInPlace $out/bin/${pname} \
+        --replace-fail "grep" "${gnugrep}/bin/grep"
+
+      sed -i '1i #!${pythonEnv.interpreter}' $out/bin/${pname}-gui
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      substituteInPlace $out/bin/${pname} \
+        --replace-fail "ggrep" "${gnugrep}/bin/grep"
+    '';
+
+  meta = {
+    description = "Manage FIDO2.1 devices over USB or NFC, including Passkeys";
+    homepage = "https://github.com/token2/fido2-manage";
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd2;
+    mainProgram = "fido2-manage";
+    maintainers = with lib.maintainers; [ Srylax ];
+  };
+}
