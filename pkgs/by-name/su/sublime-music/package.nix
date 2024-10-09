@@ -12,26 +12,32 @@
 , libnotify
 , networkSupport ? true
 , networkmanager
+, fetchpatch
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
-  version = "0.12.0";
+  version = "0.12.0-unstable-2024-01-06";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sublime-music";
     repo = "sublime-music";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
+    rev = "0b4ba69a7ff7ad2dfcb0a264587921f323030766";
+    hash = "sha256-NoJ50n/AjM738ebQ/Wccwp2l0sC3VBvKovJvDhDa5SU=";
   };
+
+  patches = [
+    # Fix loadfile command https://github.com/sublime-music/sublime-music/pull/461
+    (fetchpatch {
+      url = "https://github.com/sublime-music/sublime-music/commit/1d107fec2ac7f83e0c49bab663273b31c9072411.patch";
+      hash = "sha256-fUss4kqlFiXRr37AIaeWEv/4Bpzx5xkW28OEnsjQqzY=";
+    })
+  ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
-
-    # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
-    sed -i "s/python-mpv/mpv/g" pyproject.toml
   '';
 
   build-system = with python3.pkgs; [
@@ -94,7 +100,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "GTK3 Subsonic/Airsonic client";
-    homepage = "https://sublimemusic.app/";
+    homepage = "https://sublimemusic.app";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ albakham sumnerevans ];
