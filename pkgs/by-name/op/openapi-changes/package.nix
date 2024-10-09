@@ -1,19 +1,19 @@
 { lib
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , git
 , makeWrapper
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "openapi-changes";
-  version = "0.0.67";
+  version = "0.0.68";
 
   src = fetchFromGitHub {
     owner = "pb33f";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-SNH11z/0DeaYfGwBKW3iIeCVdlpcoZ1elIlgl+quWIY=";
+    hash = "sha256-v+THD4ZWnpeuxLfxaA4LUGdYV3X5rUKeCWq9HIub59Y=";
   };
 
   # this test requires the `.git` of the project to be present
@@ -27,7 +27,7 @@ buildGoModule rec {
     wrapProgram $out/bin/openapi-changes --prefix PATH : ${lib.makeBinPath [ git ]}
   '';
 
-  vendorHash = "sha256-VtwIAP2+FZ6Vpexcb9O68WfJdsTMrJn5bDjkxDe69e4=";
+  vendorHash = "sha256-IiI+mSbJNEpM6rryGtAnGSOcY2RXnvqXTZmZ82L1HPc=";
 
   meta = with lib; {
     description = "World's sexiest OpenAPI breaking changes detector";
