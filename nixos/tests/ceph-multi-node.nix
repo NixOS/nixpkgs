@@ -75,6 +75,10 @@ let
       enable = true;
       daemons = [ cfg.monA.name ];
     };
+    exporter = {
+      enable = true;
+      daemons = [ "exporter" ];
+    };
   }; };
 
   networkOsd = osd: {
@@ -91,6 +95,10 @@ let
     osd = {
       enable = true;
       daemons = [ osd.name ];
+    };
+    exporter = {
+      enable = true;
+      daemons = [ "exporter" ];
     };
   }; };
 
@@ -133,11 +141,23 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
 
+    # Start the ceph-exporter daemon
+    monA.succeed(
+        "ceph auth get-or-create client.exporter mon 'allow profile ceph-exporter' mgr 'allow r' osd 'allow r' mds 'allow r' > /etc/ceph/ceph.client.exporter.keyring",
+        "systemctl start ceph-exporter.target"
+    )
+
     # Send the admin keyring to the OSD machines
     monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
     osd0.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
     osd1.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
     osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
+
+    # Send the exporter keyring to the OSD machines
+    monA.succeed("cp /etc/ceph/ceph.client.exporter.keyring /tmp/shared")
+    osd0.succeed("cp /tmp/shared/ceph.client.exporter.keyring /etc/ceph")
+    osd1.succeed("cp /tmp/shared/ceph.client.exporter.keyring /etc/ceph")
+    osd2.succeed("cp /tmp/shared/ceph.client.exporter.keyring /etc/ceph")
 
     # Bootstrap OSDs
     osd0.succeed(
@@ -204,6 +224,11 @@ let
         "ceph osd pool ls | grep 'multi-node-test'",
         "ceph osd pool delete multi-node-other-test multi-node-other-test --yes-i-really-really-mean-it",
     )
+
+    # Check that the exporter has osd usage data
+
+    osd1.succeed("systemctl start ceph-exporter.target")
+    osd1.wait_until_succeeds("curl localhost:9926/metrics | grep 'ceph_osd_stat_bytes_used'")
 
     # Shut down ceph on all machines in a very unpolite way
     monA.crash()
