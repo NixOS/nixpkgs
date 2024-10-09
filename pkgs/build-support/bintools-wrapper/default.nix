@@ -31,7 +31,6 @@
 , isCCTools ? bintools.isCCTools or false
 , expand-response-params
 , targetPackages ? {}
-, useMacosReexportHack ? false
 , wrapGas ? false
 
 # Note: the hardening flags are part of the bintools-wrapper, rather than
@@ -228,16 +227,9 @@ stdenvNoCC.mkDerivation {
         fi
       done
 
-    '' + (if !useMacosReexportHack then ''
       if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
         wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
       fi
-    '' else ''
-      ldInner="${targetPrefix}ld-reexport-delegate"
-      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
-      wrap "${targetPrefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
-      unset ldInner
-    '') + ''
 
       for variant in $ldPath/${targetPrefix}ld.*; do
         basename=$(basename "$variant")
@@ -421,7 +413,5 @@ stdenvNoCC.mkDerivation {
         attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";
       priority = 10;
-  } // optionalAttrs useMacosReexportHack {
-    platforms = platforms.darwin;
   };
 }
