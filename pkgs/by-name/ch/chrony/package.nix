@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  overrideSDK,
   fetchurl,
   pkg-config,
   gnutls,
@@ -12,7 +13,17 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+let
+  stdenv' =
+    if stdenv.hostPlatform.isDarwin then
+      overrideSDK stdenv {
+        darwinSdkVersion = "11.0";
+        darwinMinVersion = "10.13";
+      }
+    else
+      stdenv;
+in
+stdenv'.mkDerivation rec {
   pname = "chrony";
   version = "4.5";
 
@@ -55,7 +66,7 @@ stdenv.mkDerivation rec {
     patchShebangs test
   '';
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   passthru.tests = {
     inherit (nixosTests) chrony chrony-ptp;
@@ -65,7 +76,15 @@ stdenv.mkDerivation rec {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "https://chrony.tuxfamily.org/";
     license = lib.licenses.gpl2Only;
-    platforms = with lib.platforms; linux ++ freebsd ++ openbsd;
+    platforms =
+      with lib.platforms;
+      builtins.concatLists [
+        linux
+        freebsd
+        netbsd
+        darwin
+        illumos
+      ];
     maintainers = with lib.maintainers; [
       fpletz
       thoughtpolice
