@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, alsa-lib, alsa-utils, fltk, libjack2, libXft,
-libXpm, libjpeg, libpng, libsamplerate, libsndfile, zlib }:
+{ lib, stdenv, fetchurl, alsa-lib, alsa-plugins, alsa-utils, fltk, libjack2,
+libXft, libXpm, libjpeg, libpng, libsamplerate, libsndfile, makeWrapper, zlib }:
 
 stdenv.mkDerivation  rec {
   pname = "rakarrack";
@@ -20,6 +20,13 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ alsa-lib alsa-utils fltk libjack2 libXft libXpm libjpeg
     libpng libsamplerate libsndfile zlib ];
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postFixup = ''
+    wrapProgram $out/bin/rakarrack \
+      --set-default ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib
+  '';
 
   meta = with lib; {
     description = "Multi-effects processor emulating a guitar effects pedalboard";
