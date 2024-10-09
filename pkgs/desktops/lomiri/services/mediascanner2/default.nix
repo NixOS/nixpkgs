@@ -43,11 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/qml/MediaScanner.*/CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
-
-    # Lomiri desktop doesn't identify itself under Canonical's name anymore
-    substituteInPlace src/daemon/scannerdaemon.cc \
-      --replace 'Unity8' 'Lomiri'
+      --replace-fail "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
   '';
 
   strictDeps = true;
