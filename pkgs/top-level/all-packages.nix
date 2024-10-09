@@ -8513,6 +8513,8 @@ with pkgs;
 
   hotpatch = callPackage ../development/libraries/hotpatch { };
 
+  hosts-bl = callPackage ../tools/networking/hosts-bl { };
+
   hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
   hpccm = with python3Packages; toPythonApplication hpccm;
