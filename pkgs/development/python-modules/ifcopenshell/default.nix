@@ -41,6 +41,7 @@
   shapely,
   typing-extensions,
   ## additional deps for tests
+  ifcopenshell,
   lxml,
   mathutils,
   networkx,
@@ -182,7 +183,10 @@ buildPythonPackage rec {
   passthru = {
     updateScript = gitUpdater { rev-prefix = "ifcopenshell-python-"; };
     tests = {
-      version = testers.testVersion { command = "IfcConvert --version"; };
+      version = testers.testVersion {
+        command = "IfcConvert --version";
+        package = ifcopenshell;
+      };
     };
   };
 
