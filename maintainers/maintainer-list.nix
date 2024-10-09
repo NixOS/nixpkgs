@@ -7796,8 +7796,8 @@
     name = "Geoffrey Huntley";
   };
   gigahawk = {
-    email = "Jasper Chan";
-    name = "jasperchan515@gmail.com";
+    name = "Jasper Chan";
+    email = "jasperchan515@gmail.com";
     github = "Gigahawk";
     githubId = 10356230;
   };
@@ -9356,10 +9356,10 @@
     keys = [ { fingerprint = "6BD3 7248 30BD 941E 9180  C1A3 3A33 FA4C 82ED 674F"; } ];
   };
   ivanmoreau = {
-    email = "Iván Molina Rebolledo";
+    name = "Iván Molina Rebolledo";
     github = "ivanmoreau";
     githubId = 10843250;
-    name = "ivan@ivmoreau.com";
+    email = "ivan@ivmoreau.com";
   };
   ivan-timokhin = {
     email = "nixpkgs@ivan.timokhin.name";
