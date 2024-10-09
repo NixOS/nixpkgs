@@ -12,6 +12,7 @@
   pytest-cov-stub,
   pytest-rerunfailures,
   pytestCheckHook,
+  python,
   redis,
   setuptools,
   xxhash,
@@ -19,15 +20,18 @@
 
 buildPythonPackage rec {
   pname = "cashews";
-  version = "7.2.0";
+  version = "7.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Krukov";
     repo = "cashews";
     rev = "refs/tags/${version}";
-    hash = "sha256-7T9M8ioeTjW7OmcHyxZ6awNfp9kVU8Hi+Lgy17jXxK4=";
+    hash = "sha256-mUF+y3rht4e+3qGwjRadjEU331hOkEZpknDjIlxDSzU=";
   };
+
+  # tests failed on 3.11
+  disabled = python.pythonOlder "3.12";
 
   build-system = [ setuptools ];
 
