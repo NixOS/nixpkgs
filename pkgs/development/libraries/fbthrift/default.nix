@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "fbthrift";
     rev = "v${version}";
-    sha256 = "sha256-iCiiKNDlfKm1Y4SGzcSP6o/OdiRRrj9UEawW6qpBpSY=";
+    hash = "sha256-iCiiKNDlfKm1Y4SGzcSP6o/OdiRRrj9UEawW6qpBpSY=";
   };
 
   nativeBuildInputs = [
