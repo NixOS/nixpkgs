@@ -22,6 +22,7 @@ in
 
   nodes.machine = {
     services.userborn.enable = true;
+    boot.initrd.systemd.enable = true;
 
     # Read this password file at runtime from outside the Nix store.
     environment.etc."rootpw.secret".text = rootHashedPasswordFile;

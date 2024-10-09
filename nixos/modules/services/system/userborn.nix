@@ -75,6 +75,10 @@ in
 
     assertions = [
       {
+        assertion = config.boot.initrd.systemd.enable;
+        message = "`services.userborn.enable = true` requires `config.boot.initrd.systemd.enable = true`";
+      }
+      {
         assertion = !(config.systemd.sysusers.enable && cfg.enable);
         message = "You cannot use systemd-sysusers and Userborn at the same time";
       }

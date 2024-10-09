@@ -5,6 +5,7 @@ let
 
   common = {
     services.userborn.enable = true;
+    boot.initrd.systemd.enable = true;
     users.mutableUsers = true;
   };
 in
