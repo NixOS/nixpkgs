@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "nox";
-  version = "2024.04.15";
+  version = "2024.10.09";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "wntrblm";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-PagZR2IdS1gS/ukl4b0Al9sdEsFnFwP8oy0eOGKJHMs=";
+    hash = "sha256-GdNz34A8IKwPG/270sY5t3SoggGCZMWfDq/Wyhk0ez8=";
   };
 
   nativeBuildInputs = [ hatchling ];
