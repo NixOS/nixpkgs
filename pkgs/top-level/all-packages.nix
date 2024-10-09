@@ -35366,7 +35366,7 @@ with pkgs;
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
 
-  snis = callPackage ../games/snis { };
+  snis = callPackage ../games/snis { snis-assets = callPackage ../games/snis/assets.nix { }; };
 
   system-syzygy = callPackage ../games/system-syzygy { };
 
