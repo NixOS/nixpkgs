@@ -9,7 +9,6 @@
   cython,
   meson-python,
   meson,
-  oldest-supported-numpy,
   pkg-config,
   versioneer,
   wheel,
@@ -74,7 +73,7 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       rev = "refs/tags/v${version}";
-      hash = "sha256-yw6lBaX/8ohdRtMFGxvZXih+vDHo8JOnF8CP9JNILAA=";
+      hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
 
     postPatch = ''
