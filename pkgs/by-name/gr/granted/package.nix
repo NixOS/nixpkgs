@@ -94,6 +94,8 @@ buildGoModule rec {
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; [
+      jlbribeiro
+    ];
   };
 }
