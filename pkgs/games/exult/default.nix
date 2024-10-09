@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , SDL2
 , autoconf
+, autoconf-archive
 , automake
 , libogg
 , libtool
@@ -14,17 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "exult";
-  version = "1.8";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "exult";
     repo = "exult";
     rev = "v${version}";
-    hash = "sha256-Y7FpgiGuqR4ZG/PNSfLcNcRWeeC7GebUTighXsCfy+E=";
+    hash = "sha256-NlvtYtmJNYhOC1BtIxIij3NEQHWAGOeD4XgRq7evjzE=";
   };
 
   nativeBuildInputs = [
     autoconf
+    autoconf-archive
     automake
     libtool
     pkg-config
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    ./autogen.sh
+    autoreconf -v -i
   '';
 
   configureFlags = lib.optional (!enableTools) "--disable-tools";
