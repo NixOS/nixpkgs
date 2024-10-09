@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
+    hash = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
 
   nativeBuildInputs = [
