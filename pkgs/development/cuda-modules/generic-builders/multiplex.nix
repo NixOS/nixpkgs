@@ -127,6 +127,8 @@ let
             inherit pname;
             redistName = pname;
             inherit (shims) redistribRelease featureRelease;
+            # get `autoAddDriverRunpath` from pkgs instead of cudaPackages' alias to avoid warning
+            inherit (final.callPackage ({ pkgs }: pkgs) { }) autoAddDriverRunpath;
           };
           fixedDrv = drv.overrideAttrs (overrideAttrsFixupFn final package);
         in
