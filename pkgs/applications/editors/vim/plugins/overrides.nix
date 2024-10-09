@@ -412,11 +412,13 @@ in
 
   cmp-tabnine = super.cmp-tabnine.overrideAttrs {
     buildInputs = [ tabnine ];
+    dependencies = with self; [ nvim-cmp ];
 
     postFixup = ''
       mkdir -p $target/binaries/${tabnine.version}
       ln -s ${tabnine}/bin/ $target/binaries/${tabnine.version}/${tabnine.passthru.platform}
     '';
+    nvimRequireCheck = "cmp_tabnine";
   };
 
   cmp-tmux = super.cmp-tmux.overrideAttrs {
