@@ -1,0 +1,19 @@
+--- a/daemon/guestfsd.c
++++ b/daemon/guestfsd.c
+@@ -98,6 +98,7 @@ main (int argc, char *argv[])
+   int c;
+   const char *channel = NULL;
+   int listen_mode = 0;
++  const bool running_in_systemd = getenv ("INVOCATION_ID") != NULL;
+ 
+   ignore_value (chdir ("/"));
+ 
+@@ -181,7 +182,7 @@ main (int argc, char *argv[])
+    * environment is essentially empty.
+    * https://bugzilla.redhat.com/show_bug.cgi?id=502074#c5
+    */
+-  if (!test_mode)
++  if (!test_mode && !running_in_systemd)
+     setenv ("PATH", "/sbin:/usr/sbin:/bin:/usr/bin", 1);
+   setenv ("SHELL", "/bin/sh", 1);
+   setenv ("LC_ALL", "C", 1);
