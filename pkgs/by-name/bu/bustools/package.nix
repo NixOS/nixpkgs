@@ -5,6 +5,7 @@
   cmake,
   zlib,
   testers,
+  bustools
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ];
 
   passthru.tests.version = testers.testVersion {
+    package = bustools;
     command = "bustools version";
   };
 
