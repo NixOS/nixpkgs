@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       linker should look for the libraries needed for a program.
     '';
     homepage = "https://codeberg.org/pere/chrpath";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
