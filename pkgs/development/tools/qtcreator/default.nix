@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   version = "14.0.1";
 
   src = fetchurl {
-    url = "https://download.qt.io/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    url = "mirror://qt/official_releases/${pname}/${lib.versions.majorMinor version}/${version}/qt-creator-opensource-src-${version}.tar.xz";
     hash = "sha256-lZXS5sZbuRjng3YxQ0HcK+9JHDIApcbVzm8wVQmwsos=";
   };
 
