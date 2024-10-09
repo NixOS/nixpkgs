@@ -2382,8 +2382,6 @@ with pkgs;
 
   gitweb = callPackage ../applications/version-management/gitweb { };
 
-  glab = callPackage ../applications/version-management/glab { };
-
   glitter = callPackage ../applications/version-management/glitter { };
 
   globalping-cli = callPackage ../tools/networking/globalping-cli { };
