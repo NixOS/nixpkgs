@@ -1,7 +1,7 @@
 # Setup hook for checking whether Python imports succeed
 echo "Sourcing python-imports-check-hook.sh"
 
-pythonImportsCheckPhase () {
+pythonImportsCheckPhase() {
     echo "Executing pythonImportsCheckPhase"
 
     if [ -n "$pythonImportsCheck" ]; then
@@ -12,7 +12,7 @@ pythonImportsCheckPhase () {
             pythonImportsCheckOutput=$python
         fi
         export PYTHONPATH="$pythonImportsCheckOutput/@pythonSitePackages@:$PYTHONPATH"
-        ( cd $pythonImportsCheckOutput && eval "@pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ[\"pythonImportsCheck\"].split()))'" )
+        (cd $pythonImportsCheckOutput && @pythonCheckInterpreter@ -c 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))')
     fi
 }
 
