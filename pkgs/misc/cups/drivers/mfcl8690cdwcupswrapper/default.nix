@@ -3,11 +3,11 @@ mfcl8690cdwlpr, perl, lib, stdenv}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl8690cdwcupswrapper";
-  version = "1.4.0-0";
+  version = "1.5.0-0";
 
   src = fetchurl {
     url = "http://download.brother.com/welcome/dlf103250/${pname}-${version}.i386.deb";
-    sha256 = "1bl9r8mmj4vnanwpfjqgq3c9lf2v46wp5k6r2n9iqprf7ldd1kb2";
+    sha256 = "100valq6knz0g75lccn84cl2y3hb0xnpx21nrz62c13rxrdbpwl2";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.thomasbach-dev ];
   };
 }
