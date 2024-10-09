@@ -1273,7 +1273,7 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
   ];
 
   # requires additional data
-  pytestFlagsArray = [
+  pytestFlags = [
     "tests/"
     "--ignore=tests/integration"
   ];
@@ -2002,7 +2002,7 @@ Occasionally packages don't make use of a common test framework, which may then 
 
 * Non-working tests can often be deselected. Most Python modules
   do follow the standard test protocol where the pytest runner can be used.
-  `pytest` supports the `-k` and `--ignore` parameters to ignore test
+  `pytest` supports the `-k` and `--ignore-glob` parameters to ignore test
   methods or classes as well as whole files. For `pytestCheckHook` these are
   conveniently exposed as `disabledTests` and `disabledTestPaths` respectively.
 
@@ -2019,10 +2019,16 @@ Occasionally packages don't make use of a common test framework, which may then 
     ];
 
     disabledTestPaths = [
-      "this/file.py"
+      "path/to/performance.py"
+      "path/to/connect-*.py"
     ];
   }
   ```
+
+  ::: {.note}
+  If the test path to disable contains characters like `*`, `?`, `[`, and `]`,
+  quote them with square brackets (`[*]`, `[?]`, `[[]`, and `[]]`) to match literally.
+  :::
 
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
