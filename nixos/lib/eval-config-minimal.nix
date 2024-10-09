@@ -37,7 +37,10 @@ let
   #       In other words, only the public interface of nixos.evalModules
   #       is experimental.
   lib.evalModules {
-    inherit prefix modules;
+    inherit prefix;
+    modules = [
+      ../modules/misc/meta.nix
+    ] ++ modules;
     class = "nixos";
     specialArgs = {
       modulesPath = builtins.toString ../modules;
