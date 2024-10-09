@@ -6,6 +6,8 @@ let
 
   cfg = config.programs.fish;
 
+  unwrapped = if cfg.package ? unwrapped then cfg.package.unwrapped else cfg.package;
+
   fishAbbrs = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
       cfg.shellAbbrs
@@ -53,7 +55,25 @@ in
         type = lib.types.bool;
       };
 
-      package = lib.mkPackageOption pkgs "fish" { };
+      package = lib.mkOption {
+        type = lib.types.package;
+        default = pkgs.fish;
+        defaultText = lib.literalExpression "pkgs.fish";
+        apply =
+          fish:
+          if fish ? unwrapped then
+            fish.override (prev: {
+              pluginPkgs = cfg.plugins ++ lib.optionals (prev ? pluginPkgs) prev.pluginPkgs;
+            })
+          else
+            pkgs.fish.override (prev: {
+              inherit fish;
+              pluginPkgs = cfg.plugins ++ lib.optionals (prev ? pluginPkgs) prev.pluginPkgs;
+            });
+        description = ''
+          The fish package to use. Plugins are automaticallly added via wrapper.
+        '';
+      };
 
       useBabelfish = lib.mkOption {
         type = lib.types.bool;
@@ -61,6 +81,21 @@ in
         description = ''
           If enabled, the configured environment will be translated to native fish using [babelfish](https://github.com/bouk/babelfish).
           Otherwise, [foreign-env](https://github.com/oh-my-fish/plugin-foreign-env) will be used.
+        '';
+      };
+
+      plugins = lib.mkOption {
+        type = with lib.types; listOf package;
+        default = [ ];
+        example = lib.literalExpression ''
+          with pkgs.fishPlugins; [
+            autopair
+            done
+            fifc
+          ];
+        '';
+        description = ''
+          List of fish plugins to install.
         '';
       };
 
@@ -244,8 +279,8 @@ in
           patchedGenerator = pkgs.stdenv.mkDerivation {
             name = "fish_patched-completion-generator";
             srcs = [
-              "${cfg.package}/share/fish/tools/create_manpage_completions.py"
-              "${cfg.package}/share/fish/tools/deroff.py"
+              "${unwrapped}/share/fish/tools/create_manpage_completions.py"
+              "${unwrapped}/share/fish/tools/deroff.py"
             ];
             unpackCmd = "cp $curSrc $(basename $curSrc)";
             sourceRoot = ".";
