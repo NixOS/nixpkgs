@@ -1553,7 +1553,9 @@ in
   };
 
   nvim-metals = super.nvim-metals.overrideAttrs {
+    dependencies = with self; [ plenary-nvim ];
     dontBuild = true;
+    nvimRequireCheck = "metals";
   };
 
   nvim-navbuddy = super.nvim-navbuddy.overrideAttrs {
