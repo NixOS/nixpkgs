@@ -202,6 +202,9 @@ in {
 
     hardware.steam-hardware.enable = true;
 
+    # Some games require hashed certificates
+    security.pki.useHashedCertificates = true;
+
     environment.systemPackages = [
       cfg.package
       cfg.package.run
