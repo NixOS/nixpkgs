@@ -9900,6 +9900,8 @@ self: super: with self; {
 
   plover-last-translation = callPackage ../development/python-modules/plover-last-translation { };
 
+  plover-modal-dictionary = callPackage ../development/python-modules/plover-modal-dictionary { };
+
   plover-stitching = callPackage ../development/python-modules/plover-stitching { };
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
