@@ -14,6 +14,44 @@ in
         default = true;
       };
 
+      start = lib.mkOption {
+        type = with lib.types; attrsOf str;
+        description = ''
+          Bash scripts to run when gamemode starts.
+
+          Ordering depends on alphabetical order of the script names.
+        '';
+        example = {
+          myScript = ''
+            echo "Gamemode has started!"
+            echo "You can run arbitrary commands here"
+          '';
+          myZZZScript = ''
+            echo "This runs after myScript"
+          '';
+        };
+        default = { };
+      };
+
+      end = lib.mkOption {
+        type = with lib.types; attrsOf str;
+        description = ''
+          Bash scripts to run when gamemode ends.
+
+          Ordering depends on alphabetical order of the script names.
+        '';
+        example = {
+          myScript = ''
+            echo "Gamemode has ended!"
+            echo "You can run arbitrary commands here"
+          '';
+          myZZZScript = ''
+            echo "This runs after myScript"
+          '';
+        };
+        default = { };
+      };
+
       settings = lib.mkOption {
         type = settingsFormat.type;
         default = { };
@@ -90,6 +128,25 @@ in
     };
 
     users.groups.gamemode = { };
+
+    programs.gamemode.settings =
+      let
+        mkStartStopCommand =
+          scripts: type:
+          lib.pipe scripts [
+            (lib.mapAttrsToList pkgs.writeShellScript)
+            lib.concatLines
+            (pkgs.writeShellScript "gamemode-${type}.sh")
+            toString
+            (lib.mkIf (scripts != { }))
+          ];
+      in
+      {
+        custom = {
+          start = mkStartStopCommand cfg.start "start";
+          end = mkStartStopCommand cfg.end "end";
+        };
+      };
   };
 
   meta = {
