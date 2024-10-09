@@ -1,19 +1,20 @@
-{ lib
-, stdenvNoCC
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, ffmpeg
-, alsa-lib
-, SDL2
-, lttng-ust
-, numactl
-, libglvnd
-, xorg
-, udev
+{
+  lib,
+  stdenvNoCC,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  ffmpeg,
+  alsa-lib,
+  SDL2,
+  lttng-ust,
+  numactl,
+  libglvnd,
+  xorg,
+  udev,
 }:
 
 buildDotnetModule rec {
@@ -76,15 +77,17 @@ buildDotnetModule rec {
     runHook postFixup
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "osu!";
-    name = "osu";
-    exec = "osu!";
-    icon = "osu!";
-    comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "osu!";
+      name = "osu";
+      exec = "osu!";
+      icon = "osu!";
+      comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
@@ -96,7 +99,10 @@ buildDotnetModule rec {
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ gepbird thiagokokada ];
+    maintainers = with maintainers; [
+      gepbird
+      thiagokokada
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };
