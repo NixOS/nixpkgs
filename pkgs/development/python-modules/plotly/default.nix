@@ -120,6 +120,9 @@ buildPythonPackage rec {
     "test_dependencies_not_imported"
     # FAILED test_init/test_lazy_imports.py::test_lazy_imports - AssertionError: assert 'plotly' not in {'IPython': <module 'IPython' from '...
     "test_lazy_imports"
+    # requires vaex and polars, vaex is not packaged
+    "test_build_df_from_vaex_and_polars"
+    "test_build_df_with_hover_data_from_vaex_and_polars"
   ];
 
   pythonImportsCheck = [ "plotly" ];
