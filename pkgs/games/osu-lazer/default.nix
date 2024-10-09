@@ -91,15 +91,15 @@ buildDotnetModule rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
     ];
