@@ -9902,6 +9902,8 @@ self: super: with self; {
 
   plover-modal-dictionary = callPackage ../development/python-modules/plover-modal-dictionary { };
 
+  plover-python-dictionary = callPackage ../development/python-modules/plover-python-dictionary { };
+
   plover-stitching = callPackage ../development/python-modules/plover-stitching { };
 
   plover-stroke = callPackage ../development/python-modules/plover-stroke { };
