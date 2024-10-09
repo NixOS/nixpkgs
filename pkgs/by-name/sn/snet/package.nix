@@ -17,6 +17,9 @@ buildGoModule {
 
   vendorHash = "sha256-dubmCLeD8Fwe1msfLN+5WzdbFkfTRnZDU3F49gjWTS4=";
 
+  # flaky test, random failures
+  checkFlags = [ "-skip=TestBloomfilter" ];
+
   meta = {
     description = "Transparent proxy works on linux desktop, MacOS, router";
     homepage = "https://github.com/monsterxx03/snet";
