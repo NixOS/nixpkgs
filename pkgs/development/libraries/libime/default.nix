@@ -13,29 +13,29 @@
 let
   tableVer = "20240108";
   table = fetchurl {
-    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.gz";
-    hash = "sha256-cpxZbYaQfecnx00Pw/0kHEBsXevStMt07v4CI4funa4=";
+    url = "https://download.fcitx-im.org/data/table-${tableVer}.tar.zst";
+    hash = "sha256-Pp2HsEo5PxMXI0csjqqGDdI8N4o9T2qQBVE7KpWzYUs=";
   };
-  arpaVer = "20230712";
+  arpaVer = "20241001";
   arpa = fetchurl {
-    url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.xz";
-    hash = "sha256-ut1iwWxjc3h6D9qPCc1FLRL2DVhohW9lHO7PGge6ujI=";
+    url = "https://download.fcitx-im.org/data/lm_sc.arpa-${arpaVer}.tar.zst";
+    hash = "sha256-VJNOc5Zus46k/o6unGHf5IavN9octTFqBrGcfSieMGM=";
   };
-  dictVer = "20240416";
+  dictVer = "20241001";
   dict = fetchurl {
     url = "https://download.fcitx-im.org/data/dict-${dictVer}.tar.zst";
-    hash = "sha256-nCYsv6MGy0w7BVmRt+IrRT4PJn8gzrXZ2eX4++Ty02c=";
+    hash = "sha256-0zE7iKaGIKI7yNX5VkzxtniEjcevVBxPXwIZjlo2hr8=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "libime";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = "libime";
     rev = version;
-    hash = "sha256-uT0V1CXPaF2FctsndxVszS7Qske6vObbOA4aOnmbdQY=";
+    hash = "sha256-Ky4ERYQRUiPn+EYrgfmfHxdVp31a1oD4nevDniPOT20=";
     fetchSubmodules = true;
   };
 
