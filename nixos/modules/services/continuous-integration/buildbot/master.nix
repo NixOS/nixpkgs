@@ -4,7 +4,7 @@ let
   cfg = config.services.buildbot-master;
   opt = options.services.buildbot-master;
 
-  package = pkgs.python3.pkgs.toPythonModule cfg.package;
+  package = cfg.package.python.pkgs.toPythonModule cfg.package;
   python = package.pythonModule;
 
   escapeStr = lib.escape [ "'" ];
