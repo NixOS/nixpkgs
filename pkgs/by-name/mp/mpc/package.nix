@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   libiconv,
   libmpdclient,
@@ -14,22 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mpc";
-  version = "0.34";
+  version = "0.35";
 
   src = fetchFromGitHub {
     owner = "MusicPlayerDaemon";
     repo = "mpc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-2FjYBfak0IjibuU+CNQ0y9Ei8hTZhynS/BK2DNerhVw=";
+    hash = "sha256-oVdnj3nsYvOHcIOgoamLamriuWu9lucWUQtxVmXZabs=";
   };
-
-  patches = [
-    # fix the build with meson 0.60 (https://github.com/MusicPlayerDaemon/mpc/pull/76)
-    (fetchpatch {
-      url = "https://github.com/MusicPlayerDaemon/mpc/commit/b656ca4b6c2a0d5b6cebd7f7daa679352f664e0e.patch";
-      sha256 = "sha256-fjjSlCKxgkz7Em08CaK7+JAzl8YTzLcpGGMz2HJlsVw=";
-    })
-  ];
 
   buildInputs = [
     libmpdclient
