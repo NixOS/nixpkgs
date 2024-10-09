@@ -58,6 +58,8 @@ stdenv.mkDerivation {
     description = "Utility for sharing a Nix store as a binary cache";
     maintainers = [ maintainers.eelco ];
     license = licenses.lgpl21;
+    # See https://github.com/edolstra/nix-serve/issues/57
+    broken = stdenv.isDarwin;
     platforms = nix.meta.platforms;
     mainProgram = "nix-serve";
   };
