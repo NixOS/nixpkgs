@@ -8,7 +8,7 @@
 , meson
 , ninja
 , pkg-config
-, sphinx
+, python3Packages
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    sphinx
+    python3Packages.sphinx
   ];
 
   postInstall = ''
