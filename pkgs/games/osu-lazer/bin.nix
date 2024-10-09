@@ -28,7 +28,7 @@ let
         hash = "sha256-zQnR3KwlE1gTWH8f+GDRBsc7Whfn9XpT1D/NLg5TtrU=";
       };
     }
-    .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+    .${stdenv.system} or (throw "osu-lazer-bin: ${stdenv.system} is unsupported.");
 
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
