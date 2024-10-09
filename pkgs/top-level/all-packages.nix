@@ -2026,6 +2026,13 @@ with pkgs;
 
   writedisk = callPackage ../tools/misc/writedisk { };
 
+  x2t = callPackage ../by-name/x2/x2t/package.nix {
+    openssl = openssl.override {
+      enableMD2 = true;
+      static = true;
+    };
+  };
+
   xcd = callPackage ../tools/misc/xcd { };
 
   xpaste = callPackage ../tools/text/xpaste { };
