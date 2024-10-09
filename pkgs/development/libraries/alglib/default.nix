@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alglib3";
-  version = "4.02.0";
+  version = "4.03.0";
 
   src = fetchurl {
     url = "https://www.alglib.net/translator/re/alglib-${version}.cpp.gpl.tgz";
-    sha256 = "sha256-U7/ukBXdwC8GkpevFfSfbgbiyOf7CkDv0PUAL8BnAag=";
+    sha256 = "sha256-k7/U9Tq2ND8+qd8tHZP9Gq1okJF3tMNej3WE/6NkBYI=";
   };
 
   nativeBuildInputs = [

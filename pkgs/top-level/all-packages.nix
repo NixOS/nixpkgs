@@ -29054,7 +29054,7 @@ with pkgs;
 
   haruna = kdePackages.callPackage ../applications/video/haruna { };
 
-  hdrmerge = libsForQt5.callPackage ../applications/graphics/hdrmerge { };
+  hdrmerge = libsForQt5.callPackage ../by-name/hd/hdrmerge/package.nix { };
 
   helix = callPackage ../applications/editors/helix { };
 
