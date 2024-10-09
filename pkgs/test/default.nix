@@ -170,6 +170,8 @@ with pkgs;
 
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
+  srcOnly = callPackage ../build-support/src-only/tests.nix { };
+
   systemd = callPackage ./systemd { };
 
   replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
