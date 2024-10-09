@@ -26,8 +26,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lib/CMakeLists.txt \
+      --replace "APPLE" "FALSE" \
       --replace ".a" "${stdenv.hostPlatform.extensions.sharedLibrary}"
-    sed -i '/PKG_CONFIG_EXECUTABLE/d' renderers/CMakeLists.txt
+    sed -i -e '/PKG_CONFIG_EXECUTABLE/d' -e '/PKG_CONFIG_PATH/d' renderers/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
