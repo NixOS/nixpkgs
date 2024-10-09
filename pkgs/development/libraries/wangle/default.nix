@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-fDtJ+9bZj+siKlMglYMkLO/+jldUmsS5V3Umk1gNdlo=";
+    hash = "sha256-fDtJ+9bZj+siKlMglYMkLO/+jldUmsS5V3Umk1gNdlo=";
   };
 
   nativeBuildInputs = [ cmake ];
