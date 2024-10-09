@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, options, pkgs, ... }:
 
 with lib;
 
@@ -61,11 +61,11 @@ let
 
   # Handle assertions and warnings
 
-  failedAssertions = map (x: x.message) (filter (x: !x.assertion) config.assertions);
+  failedAssertions = map (x: "${config.system.diagnostics.prefix}${x.message}") (filter (x: !x.assertion) config.assertions);
 
   baseSystemAssertWarn = if failedAssertions != []
     then throw "\nFailed assertions:\n${concatStringsSep "\n" (map (x: "- ${x}") failedAssertions)}"
-    else showWarnings config.warnings baseSystem;
+    else showWarnings (map (msg: "${config.system.diagnostics.prefix}${msg}") config.warnings) baseSystem;
 
   # Replace runtime dependencies
   system = let inherit (config.system.replaceDependencies) replacements cutoffPackages; in
@@ -299,6 +299,32 @@ in
       '';
     };
 
+    system.diagnostics.prefix = mkOption {
+      type = types.str;
+      default = "";
+      example = "in containers.foo: ";
+      description = ''
+        A prefix that is automatically added in the effect of the `warnings` and `assertions` options.
+
+        Knowning that a warning comes from a specific container can make all the difference, for instance.
+
+        How to provide good diagnostic context:
+        1.  If possible, either
+            - Use the `warnings` and `assertions` options if it's ok and easy to evaluate them out of band.
+            - Use `lib.warn` and refer to the option by `"''${options.myOption}"`, which includes a fully qualified path, like ${options.system.diagnostics.prefix}'s default value.
+        2.  Otherwise, use `lib.warn` or `throw` directly, and include the context in the message.
+            Example:
+            ```nix
+            lib.warn
+              "''${options.system.diagnostics.prefix} The options myOption and myOtherOption may conflict with each other. Check this  and perhaps do that."
+              foo
+            ```
+
+        Instead of setting ${options.system.diagnostics.prefix} directly, it is generally preferable to set the `prefix` parameter in the NixOS entrypoint, or (for this purpose) equivalently, to load NixOS into a submodule.
+        Nonetheless, some interesting use case of invoking NixOS may benefit from a more customized diagnostics prefix string.
+      '';
+    };
+
   };
 
 
@@ -309,6 +335,12 @@ in
         message = "system.copySystemConfiguration is not supported with flakes";
       }
     ];
+
+    system.diagnostics.prefix =
+      let
+        loc = lib.init options.assertions.loc;
+      in
+        if loc == [] then "" else "in ${lib.showOption loc}: ";
 
     system.extraSystemBuilderCmds =
       optionalString
