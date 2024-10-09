@@ -5,9 +5,6 @@
   pkg-config,
   gnutls,
   libedit,
-  nspr,
-  nss,
-  readline,
   texinfo,
   libcap,
   libseccomp,
@@ -35,9 +32,6 @@ stdenv.mkDerivation rec {
     [
       gnutls
       libedit
-      nspr
-      nss
-      readline
       texinfo
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
