@@ -1,145 +1,79 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, alsa-lib
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, pango
-, nspr
-, nss
-, gtk3
-, mesa
-, libGL
-, wayland
-, xorg
-, autoPatchelfHook
-, systemd
-, libnotify
-, libappindicator
-, makeWrapper
-, coreutils
-, gnugrep
+{
+  lib,
+  buildNpmPackage,
+  substituteAll,
+  protobuf,
+  protoc-gen-js,
+  grpc-tools,
+  makeWrapper,
+  electron,
+  mullvad,
 }:
 
-let
-  deps = [
-    alsa-lib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    pango
-    gtk3
-    libappindicator
-    libnotify
-    mesa
-    xorg.libX11
-    xorg.libXScrnSaver
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libxcb
-    xorg.libxshmfence
-    nspr
-    nss
-    systemd
+buildNpmPackage rec {
+  pname = "mullvad-vpn";
+  inherit (mullvad) src version;
+
+  patches = [
+    (substituteAll {
+      src = ./electron-builder.patch;
+      version = version;
+      electron_dist = electron.dist;
+      electron_version = electron.version;
+    })
   ];
 
-  version = "2024.4";
+  postPatch = ''
+    cd gui
+  '';
 
-  selectSystem = attrs: attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  npmDepsHash = "sha256-Cs4rTfLDtVJL5sK3poBVt7RRedsxkQguQ3wfIvwUeUA=";
 
-  platform = selectSystem {
-    x86_64-linux = "amd64";
-    aarch64-linux = "arm64";
-  };
-
-  hash = selectSystem {
-    x86_64-linux = "sha256-bsXlOzqGr37AZhEij68Fy2/3Lk50J7A3jHV0re5U6j0=";
-    aarch64-linux = "sha256-6OBCqOnSkXBntFGxXicPU7GSb9+a5WN4rYExgDa08/I=";
-  };
-in
-
-stdenv.mkDerivation {
-  pname = "mullvad-vpn";
-  inherit version;
-
-  src = fetchurl {
-    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${platform}.deb";
-    inherit hash;
-  };
+  npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
     makeWrapper
+    protoc-gen-js
   ];
 
-  buildInputs = deps;
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ELECTRON_OVERRIDE_DIST_PATH = electron.dist; # TODO: figure out why this is needed
+  };
 
-  dontBuild = true;
-  dontConfigure = true;
+  postConfigure = ''
+    ln -s ${lib.getBin mullvad}/bin/* ../dist-assets/
+    ln -s ${lib.getExe' protobuf "protoc"} node_modules/grpc-tools/bin/protoc
+    ln -s ${lib.getExe' grpc-tools "grpc_node_plugin"} node_modules/grpc-tools/bin/grpc_node_plugin
+  '';
 
-  unpackPhase = "dpkg-deb -x $src .";
-
-  runtimeDependencies = [ (lib.getLib systemd) libGL libnotify libappindicator wayland ];
+  npmBuildScript = "pack:linux";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/mullvad $out/bin
+    mkdir -p $out/share/mullvadvpn-gui/
+    cp -r ../dist/*-unpacked/{locales,resources{,.pak}} $out/share/mullvadvpn-gui/
 
-    mv usr/share/* $out/share
-    mv usr/bin/* $out/bin
-    mv opt/Mullvad\ VPN/* $out/share/mullvad
-
-    ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
-    ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
-
-    wrapProgram $out/bin/mullvad-vpn \
-      --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1 \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
-
-    wrapProgram $out/bin/mullvad-daemon \
-        --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
-
-    wrapProgram $out/bin/mullvad-gui \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland}}"
-
-    sed -i "s|Exec.*$|Exec=$out/bin/mullvad-vpn $U|" $out/share/applications/mullvad-vpn.desktop
+    makeWrapper ${lib.getExe electron} $out/bin/mullvadvpn-gui \
+        --add-flags $out/share/mullvadvpn-gui/resources/app.asar \
+        --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1 \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --inherit-argv0
 
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
-
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
-    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
+    changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl3Only;
+    platforms = electron.meta.platforms;
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      ymarkus
+      ataraxiasjel
+    ];
   };
-
 }
