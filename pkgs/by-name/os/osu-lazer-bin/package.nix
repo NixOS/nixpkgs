@@ -51,7 +51,7 @@ let
     ];
   };
 
-  passthru.updateScript = ./update-bin.sh;
+  passthru.updateScript = ./update.sh;
 in
 if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
