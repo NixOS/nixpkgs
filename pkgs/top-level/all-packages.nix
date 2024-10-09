@@ -33495,8 +33495,6 @@ with pkgs;
 
   wings = callPackage ../applications/graphics/wings { };
 
-  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
-
   wlc = callPackage  ../tools/misc/wlc { };
 
   wlclock = callPackage ../applications/misc/wlclock { };
