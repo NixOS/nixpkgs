@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "sem";
-  version = "0.30.0";
+  version = "0.30.1";
 
   src = fetchFromGitHub {
     owner = "semaphoreci";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-bShQ+paDM9AdrdPrtwyQ5Mytf/SNZ4fVMDT2ZNswt3o=";
+    sha256 = "sha256-C4n6pmqNdZr4kEz/MZgQjwATpjhelkCA0nDyCR/k0mc=";
   };
 
   vendorHash = "sha256-p8+M+pRp12P7tYlFpXjU94JcJOugQpD8rFdowhonh74=";
