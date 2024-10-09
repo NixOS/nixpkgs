@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "3.3.0";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-aez/APsei30Tp1em/RDCuq+v8hOavHq4O9qZahrsF/g=";
+    hash = "sha256-yXp9MyezXQJWUyEvyXc6++/Ow/NNqs1cjLIpEuKDrn0=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
@@ -70,6 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
     "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
     "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
+    "-DGGML_VULKAN=ON"
+    "-DGGML_KOMPUTE=ON"
   ] ++ lib.optionals (!cudaSupport) [
     "-DLLMODEL_CUDA=OFF"
   ];
