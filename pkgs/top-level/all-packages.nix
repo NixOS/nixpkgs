@@ -10762,10 +10762,6 @@ with pkgs;
 
   opensbi = callPackage ../misc/opensbi { };
 
-  opensc = callPackage ../tools/security/opensc {
-    inherit (darwin.apple_sdk.frameworks) Carbon PCSC;
-  };
-
   openseachest = callPackage ../tools/system/openseachest { };
 
   opensm = callPackage ../tools/networking/opensm { };
