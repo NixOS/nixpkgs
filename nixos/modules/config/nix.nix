@@ -221,6 +221,32 @@ in
               '';
             };
 
+            nix-path = mkOption {
+              type = types.listOf types.str;
+              default =
+                if cfg.channel.enable
+                then [
+                  "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+                  "nixos-config=/etc/nixos/configuration.nix"
+                  "/nix/var/nix/profiles/per-user/root/channels"
+                ]
+                else [ ];
+              defaultText = ''
+                if nix.channel.enable
+                then [
+                  "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+                  "nixos-config=/etc/nixos/configuration.nix"
+                  "/nix/var/nix/profiles/per-user/root/channels"
+                ]
+                else [];
+              '';
+              description = ''
+                The default Nix expression search path, used by the Nix
+                evaluator to look up paths enclosed in angle brackets
+                (e.g. `<nixpkgs>`).
+              '';
+            };
+
             sandbox = mkOption {
               type = types.either types.bool (types.enum [ "relaxed" ]);
               default = true;
