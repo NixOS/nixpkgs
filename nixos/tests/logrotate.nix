@@ -1,82 +1,130 @@
 # Test logrotate service works and is enabled by default
 
 let
-  importTest = { ... }: {
-    services.logrotate.settings.import = {
-      olddir = false;
+  importTest =
+    { ... }:
+    {
+      services.logrotate.settings.import = {
+        olddir = false;
+      };
     };
-  };
 
 in
 
-import ./make-test-python.nix ({ pkgs, ... }: rec {
-  name = "logrotate";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ martinetd ];
-  };
-
-  nodes = {
-    defaultMachine = { ... }: {
-      services.logrotate.enable = true;
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  rec {
+    name = "logrotate";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ martinetd ];
     };
-    failingMachine = { ... }: {
-      services.logrotate = {
-        enable = true;
-        configFile = pkgs.writeText "logrotate.conf" ''
-          # self-written config file
-          su notarealuser notagroupeither
-        '';
-      };
-    };
-    machine = { config, ... }: {
-      imports = [ importTest ];
 
-      services.logrotate = {
-        enable = true;
-        settings = {
-          # remove default frequency header and add another
-          header = {
-            frequency = null;
-            delaycompress = true;
-          };
-          # extra global setting... affecting nothing
-          last_line = {
-            global = true;
-            priority = 2000;
-            shred = true;
-          };
-          # using mail somewhere should add --mail to logrotate invocation
-          sendmail = {
-            mail = "user@domain.tld";
-          };
-          # postrotate should be suffixed by 'endscript'
-          postrotate = {
-            postrotate = "touch /dev/null";
-          };
-          # check checkConfig works as expected: there is nothing to check here
-          # except that the file build passes
-          checkConf = {
-            su = "root utmp";
-            createolddir = "0750 root utmp";
-            create = "root utmp";
-            "create " = "0750 root utmp";
-          };
-          # multiple paths should be aggregated
-          multipath = {
-            files = [ "file1" "file2" ];
-          };
-          # overriding imported path should keep existing attributes
-          # (e.g. olddir is still set)
-          import = {
-            notifempty = true;
+    nodes = {
+      defaultMachine =
+        { ... }:
+        {
+          services.logrotate.enable = true;
+        };
+      failingMachine =
+        { ... }:
+        {
+          services.logrotate = {
+            enable = true;
+            configFile = pkgs.writeText "logrotate.conf" ''
+              # self-written config file
+              su notarealuser notagroupeither
+            '';
           };
         };
-      };
-    };
-  };
+      machine =
+        { config, ... }:
+        {
+          imports = [ importTest ];
 
-  testScript =
-    ''
+          services.logrotate = {
+            enable = true;
+            settings = {
+              # remove default frequency header and add another
+              header = {
+                frequency = null;
+                delaycompress = true;
+              };
+              # extra global setting... affecting nothing
+              last_line = {
+                global = true;
+                priority = 2000;
+                shred = true;
+              };
+              # using mail somewhere should add --mail to logrotate invocation
+              sendmail = {
+                mail = "user@domain.tld";
+              };
+              # postrotate should be suffixed by 'endscript'
+              postrotate = {
+                postrotate = "touch /dev/null";
+              };
+              # check checkConfig works as expected: there is nothing to check here
+              # except that the file build passes
+              checkConf = {
+                su = "root utmp";
+                createolddir = "0750 root utmp";
+                create = "root utmp";
+                "create " = "0750 root utmp";
+              };
+              # multiple paths should be aggregated
+              multipath = {
+                files = [
+                  "file1"
+                  "file2"
+                ];
+              };
+              # overriding imported path should keep existing attributes
+              # (e.g. olddir is still set)
+              import = {
+                notifempty = true;
+              };
+            };
+          };
+        };
+      keepPerm =
+        { ... }:
+        {
+          systemd.services.foo =
+            let
+              exe = pkgs.writeShellScript "exe" ''
+                while true; do
+                  echo 0123456789abcdef >> /var/log/foo/log
+                  sleep 1s
+                done
+              '';
+            in
+            {
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                DynamicUser = true;
+                LogsDirectory = "foo";
+                ExecStart = "${exe}";
+              };
+            };
+
+          systemd.services.logrotate = {
+            serviceConfig = {
+              RestrictAddressFamilies = lib.mkForce "AF_UNIX";
+            };
+          };
+
+          services.logrotate = {
+            enable = true;
+            settings.foo = {
+              files = [ "/var/log/private/foo/log" ];
+              size = "16";
+              postrotate = "systemctl restart foo";
+            };
+          };
+        };
+    };
+
+    testScript = ''
       with subtest("whether logrotate works"):
           # we must rotate once first to create logrotate stamp
           defaultMachine.succeed("systemctl start logrotate.service")
@@ -126,8 +174,14 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           info = failingMachine.get_unit_info("logrotate-checkconf.service")
           if info["ActiveState"] != "failed":
               raise Exception('logrotate-checkconf.service was not failed')
+      with subtest("Keep permission"):
+          keepPerm.wait_for_unit("foo.service")
+          keepPerm.wait_for_file("/var/log/private/foo/log")
+          keepPerm.succeed("systemctl start logrotate.service")
+          keepPerm.wait_for_file("/var/log/private/foo/log.1")
 
       machine.log(machine.execute("systemd-analyze security logrotate.service | grep -v ✓")[1])
 
     '';
-})
+  }
+)
