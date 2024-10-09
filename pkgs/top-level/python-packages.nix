@@ -9898,6 +9898,8 @@ self: super: with self; {
 
   plover-dict-commands = callPackage ../development/python-modules/plover-dict-commands { };
 
+  plover-lapwing-aio = callPackage ../development/python-modules/plover-lapwing-aio { };
+
   plover-last-translation = callPackage ../development/python-modules/plover-last-translation { };
 
   plover-modal-dictionary = callPackage ../development/python-modules/plover-modal-dictionary { };
