@@ -403,6 +403,9 @@ Composed types are types that take a type as parameter. `listOf
 
 :   An attribute set of where all the values are of *`attrs.elemType`* type.
 
+    `attrs.elemType` (`type`, required )
+    : The expected type of all attribute values.
+
     `attrs.lazy` (`Bool`, default: `false` )
     : If set to `true` attributes will be evaluated lazily. See also: `types.lazyAttrsOf`
 
