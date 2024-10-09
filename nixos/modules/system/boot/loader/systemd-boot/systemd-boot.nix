@@ -437,10 +437,6 @@ in {
       build.installBootLoader = finalSystemdBootBuilder;
 
       boot.loader.id = "systemd-boot";
-
-      requiredKernelConfig = with config.lib.kernelConfig; [
-        (isYes "EFI_STUB")
-      ];
     };
   };
 }

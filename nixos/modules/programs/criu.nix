@@ -15,9 +15,6 @@ in {
     };
   };
   config = lib.mkIf cfg.enable {
-    system.requiredKernelConfig = with config.lib.kernelConfig; [
-      (isYes "CHECKPOINT_RESTORE")
-    ];
     boot.kernel.features.criu = true;
     environment.systemPackages = [ pkgs.criu ];
   };
