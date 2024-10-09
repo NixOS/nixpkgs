@@ -637,7 +637,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = lib.optional stdenv.isDarwin iconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin iconv;
   }
   ```
 
@@ -645,7 +645,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+    buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null;
   }
   ```
 

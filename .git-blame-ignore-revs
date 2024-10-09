@@ -160,6 +160,9 @@ ad815aebfbfe1415ff6436521d545029c803c3fb
 # nixos/nvidia: apply nixfmt-rfc-style (#313440)
 fbdcdde04a7caa007e825a8b822c75fab9adb2d6
 
+# treewide: reformat files which need reformatting after (#341407)
+e0464e47880a69896f0fb1810f00e0de469f770a
+
 # step-cli: format package.nix with nixfmt (#331629)
 fc7a83f8b62e90de5679e993d4d49ca014ea013d
 

@@ -134,6 +134,7 @@ mapAliases {
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
+  inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
