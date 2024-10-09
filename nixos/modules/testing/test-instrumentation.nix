@@ -89,8 +89,7 @@ in
       {
         contents."/etc/systemd/journald.conf".text = ''
           [Journal]
-          ForwardToConsole=yes
-          MaxLevelConsole=debug
+          ${config.services.journald.extraConfig}
         '';
 
         extraConfig = config.systemd.extraConfig;
