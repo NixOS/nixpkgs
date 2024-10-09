@@ -32823,6 +32823,8 @@ with pkgs;
 
   tanka = callPackage ../applications/networking/cluster/tanka { };
 
+  tantivy-cli = callPackage ../applications/search/tantivy-cli { };
+
   teams = callPackage ../applications/networking/instant-messengers/teams { };
 
   teamspeak_client = libsForQt5.callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
