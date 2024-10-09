@@ -31986,7 +31986,7 @@ with pkgs;
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
 
-  plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
+  plover = libsForQt5.callPackage ../applications/misc/plover { };
 
   plugdata = callPackage ../applications/audio/plugdata { };
 
