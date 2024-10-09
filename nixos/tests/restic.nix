@@ -58,19 +58,20 @@ import ./make-test-python.nix (
           services.restic.backups = {
             remotebackup = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 backupPrepareCommand
                 backupCleanupCommand
                 ;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               repository = remoteRepository;
               initialize = true;
               timerConfig = null; # has no effect here, just checking that it doesn't break the service
             };
             remote-from-file-backup = {
-              inherit passwordFile exclude pruneOpts;
+              inherit exclude pruneOpts;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               initialize = true;
               repositoryFile = pkgs.writeText "repositoryFile" remoteFromFileRepository;
               paths = [
@@ -83,32 +84,32 @@ import ./make-test-python.nix (
             };
             inhibit-test = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 ;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               repository = remoteInhibitTestRepository;
               initialize = true;
               inhibitsSleep = true;
             };
             remote-noinit-backup = {
               inherit
-                passwordFile
                 exclude
                 pruneOpts
                 paths
                 ;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               initialize = false;
               repository = remoteNoInitRepository;
             };
             rclonebackup = {
               inherit
-                passwordFile
                 paths
                 exclude
                 pruneOpts
                 ;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               initialize = true;
               repository = rcloneRepository;
               rcloneConfig = {
@@ -123,12 +124,13 @@ import ./make-test-python.nix (
               '';
             };
             remoteprune = {
-              inherit passwordFile;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               repository = remoteRepository;
               pruneOpts = [ "--keep-last 1" ];
             };
             custompackage = {
-              inherit passwordFile paths;
+              inherit paths;
+              settings.RESTIC_PASSWORD_FILE = passwordFile;
               repository = "some-fake-repository";
               package = pkgs.writeShellScriptBin "restic" ''
                 echo "$@" >> /root/fake-restic.log;

@@ -21,10 +21,8 @@ in
           options = {
             passwordFile = lib.mkOption {
               type = lib.types.str;
-              description = ''
-                Read the repository password from a file.
-              '';
-              example = "/etc/nixos/restic-password";
+              default = "";
+              internal = true;
             };
 
             environmentFile = lib.mkOption {
@@ -302,6 +300,28 @@ in
               '';
               example = 0.1;
             };
+
+            settings = lib.mkOption {
+              description = ''
+                Restic settings. They are provided as environment variables. They should be provided in upper snake
+                case (e.g. {env}`RESTIC_PASSWORD_FILE`). See
+                <https://restic.readthedocs.io/en/stable/040_backup.html#environment-variables> for supported options.
+              '';
+              type = lib.types.submodule {
+                freeformType = with lib.types; attrsOf str;
+
+                options.RESTIC_PASSWORD_FILE = lib.mkOption {
+                  type = lib.types.str;
+                  default = "";
+                  description = ''
+                    Read the repository password from a file.
+                  '';
+                  example = "/etc/nixos/restic-password";
+                };
+              };
+              example = lib.literalExpression ''
+              '';
+            };
           };
         }
       )
@@ -312,13 +332,17 @@ in
         paths = [ "/home" ];
         exclude = [ "/home/*/.cache" ];
         repository = "/mnt/backup-hdd";
-        passwordFile = "/etc/nixos/secrets/restic-password";
         initialize = true;
+        settings = {
+          RESTIC_PASSWORD_FILE = "/etc/nixos/secrets/restic-password";
+        };
       };
       remotebackup = {
         paths = [ "/home" ];
         repository = "sftp:backup@host:/backups/home";
-        passwordFile = "/etc/nixos/secrets/restic-password";
+        settings = {
+          RESTIC_PASSWORD_FILE = "/etc/nixos/secrets/restic-password";
+        };
         extraOptions = [
           "sftp.command='ssh backup@host -i /etc/nixos/secrets/backup-private-key -s sftp'"
         ];
@@ -331,10 +355,15 @@ in
   };
 
   config = {
-    assertions = lib.mapAttrsToList (n: v: {
+    assertions =
+    (lib.mapAttrsToList (n: v: {
       assertion = (v.repository == null) != (v.repositoryFile == null);
       message = "services.restic.backups.${n}: exactly one of repository or repositoryFile should be set";
-    }) config.services.restic.backups;
+    }) config.services.restic.backups) ++
+    (lib.mapAttrsToList (n: v: {
+      assertion = (v.passwordFile == "");
+      message = "services.restic.backups.${n}.passwordFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_PASSWORD_FILE";
+    }) config.services.restic.backups);
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
@@ -371,7 +400,7 @@ in
             {
               # not %C, because that wouldn't work in the wrapper script
               RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
-              RESTIC_PASSWORD_FILE = backup.passwordFile;
+              RESTIC_PASSWORD_FILE = backup.settings.RESTIC_PASSWORD_FILE;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
             }
