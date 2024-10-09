@@ -9892,6 +9892,8 @@ self: super: with self; {
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
 
+  plover-stroke = callPackage ../development/python-modules/plover-stroke { };
+
   micloud = callPackage ../development/python-modules/micloud { };
 
   mqtt2influxdb = callPackage ../development/python-modules/mqtt2influxdb { };
