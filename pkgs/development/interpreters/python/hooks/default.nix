@@ -6,6 +6,7 @@ let
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
+  compatHelpers = ../compat-helpers.sh;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = let
@@ -102,7 +103,7 @@ in {
       name = "pytest-check-hook";
       propagatedBuildInputs = [ pytest ];
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit compatHelpers pythonCheckInterpreter;
       };
     } ./pytest-check-hook.sh) {};
 
