@@ -3034,6 +3034,8 @@ self: super: with self; {
 
   deepdish = callPackage ../development/python-modules/deepdish { };
 
+  deepface = callPackage ../development/python-modules/deepface { };
+
   deepl = callPackage ../development/python-modules/deepl { };
 
   deepmerge = callPackage ../development/python-modules/deepmerge { };
@@ -8247,6 +8249,8 @@ self: super: with self; {
   msrestazure = callPackage ../development/python-modules/msrestazure { };
 
   msrest = callPackage ../development/python-modules/msrest { };
+
+  mtcnn = callPackage ../development/python-modules/mtcnn { };
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
@@ -13626,6 +13630,8 @@ self: super: with self; {
   result = callPackage ../development/python-modules/result { };
 
   rethinkdb = callPackage ../development/python-modules/rethinkdb { };
+
+  retinaface = callPackage ../development/python-modules/retinaface { };
 
   retry = callPackage ../development/python-modules/retry { };
 
