@@ -12,8 +12,11 @@ keywords = [
 bar = "1.0.0"
 
 [dependencies.foo]
+version = "1.0.0"
 features = [
     "cat",
     "meow",
 ]
-version = "1.0.0"
+
+[lints.clippy]
+semicolon_if_nothing_returned = "warn"

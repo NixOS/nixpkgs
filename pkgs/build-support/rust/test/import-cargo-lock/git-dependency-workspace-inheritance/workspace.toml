@@ -3,3 +3,6 @@ version = "1.0.0"
 
 [workspace.dependencies]
 foo = { version = "1.0.0", features = ["meow"] }
+
+[workspace.lints.clippy]
+semicolon_if_nothing_returned = "warn"
