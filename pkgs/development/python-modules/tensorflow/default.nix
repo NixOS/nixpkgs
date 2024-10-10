@@ -192,7 +192,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "2.15.0";
+  version = "2.16.2";
   format = "setuptools";
   variant = lib.optionalString cudaSupport "-gpu";
   pname = "tensorflow${variant}";
@@ -533,7 +533,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "refs/tags/v${version}";
-      hash = "sha256-tCFLEvJ1lHy7NcHDW9Dkd+2D60x+AvOB8EAwmUSQCtM=";
+      hash = "sha256-yBDS9DFkVLIT+bu/vqh/0U60UwoIzqlTKQsflM7GWCA=";
     };
 
     # On update, it can be useful to steal the changes from gentoo
@@ -683,13 +683,6 @@ let
           url = "https://raw.githubusercontent.com/conda-forge/tensorflow-feedstock/0a63c5a962451b4da99a9948323d8b3ed462f461/recipe/patches/0001-Omit-linking-to-layout_proto_cc-if-protobuf-linkage-.patch";
           hash = "sha256-/7buV6DinKnrgfqbe7KKSh9rCebeQdXv2Uj+Xg/083w=";
         })
-        (fetchpatch {
-          url = "https://github.com/openxla/xla/commit/30c1666bf76616b6d6569a262a6cc705b3ce5f47.diff";
-          name = "denormal-cstdint.patch";
-          stripLen = 1;
-          extraPrefix = "third_party/xla/";
-          hash = "sha256-kOXFVFM3Z1945gLoJhTiCvriiWTzlGcm92URWasO5hM=";
-        })
         ./fix-syslib-references.patch
         ./protobuf_lite.patch
         ./protobuf_cc_toolchain.patch
@@ -699,7 +692,6 @@ let
         ./protobuf_python.patch
         ./pybind11_protobuf_python_runtime_dep.patch
         ./pybind11_protobuf_newer_version.patch
-        ./add-python-312.patch
       ]
       ++ lib.optionals (!stdenv.isDarwin) [
         # we override Python in the bazel build anyway, but we also need
@@ -846,12 +838,12 @@ let
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-ZJcKpHUWymY86Zhndg/X76xLN8qNRMJpMG9Vbmzpqx4=";
+              "sha256-yH/RU1MUdLjaQQCkXkc90nzdwycSdSphNhnmn05aWaQ=";
           aarch64-linux =
             if cudaSupport then
               "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
             else
-              "sha256-RCdtej+7d8mJHVLgBzBs3XGQslgG3fbBTQI++qDBDBQ=";
+              "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
           x86_64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
           aarch64-darwin = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
         }
