@@ -16,6 +16,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-T6VcyklwfRS012ZRzqxkahn9YYrQGky/znTqLIkAoK0=";
 
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
   meta = with lib; {
     description = "NATS Command Line Interface";
     homepage = "https://github.com/nats-io/natscli";
