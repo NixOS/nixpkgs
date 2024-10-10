@@ -4,6 +4,52 @@ let
   user = "alice";
   description = "Alice Foobar";
   password = "foobar";
+
+  # tmpfiles setup to make OCRing on terminal output more reliable
+  terminalOcrTmpfilesSetup =
+    {
+      pkgs,
+      lib,
+      config,
+    }:
+    let
+      white = "255, 255, 255";
+      black = "0, 0, 0";
+      colorSection = color: {
+        Color = color;
+        Bold = true;
+        Transparency = false;
+      };
+      terminalColors = pkgs.writeText "customized.colorscheme" (
+        lib.generators.toINI { } {
+          Background = colorSection white;
+          Foreground = colorSection black;
+          Color2 = colorSection black;
+          Color2Intense = colorSection black;
+        }
+      );
+      terminalConfig = pkgs.writeText "terminal.ubports.conf" (
+        lib.generators.toINI { } {
+          General = {
+            colorScheme = "customized";
+            fontSize = "16";
+            fontStyle = "Inconsolata";
+          };
+        }
+      );
+      confBase = "${config.users.users.${user}.home}/.config";
+      userDirArgs = {
+        mode = "0700";
+        user = user;
+        group = "users";
+      };
+    in
+    {
+      "${confBase}".d = userDirArgs;
+      "${confBase}/terminal.ubports".d = userDirArgs;
+      "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
+      "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
+    };
 in
 {
   greeter = makeTest (
@@ -154,47 +200,9 @@ in
           };
 
           # Help with OCR
-          systemd.tmpfiles.settings =
-            let
-              white = "255, 255, 255";
-              black = "0, 0, 0";
-              colorSection = color: {
-                Color = color;
-                Bold = true;
-                Transparency = false;
-              };
-              terminalColors = pkgs.writeText "customized.colorscheme" (
-                lib.generators.toINI { } {
-                  Background = colorSection white;
-                  Foreground = colorSection black;
-                  Color2 = colorSection black;
-                  Color2Intense = colorSection black;
-                }
-              );
-              terminalConfig = pkgs.writeText "terminal.ubports.conf" (
-                lib.generators.toINI { } {
-                  General = {
-                    colorScheme = "customized";
-                    fontSize = "16";
-                    fontStyle = "Inconsolata";
-                  };
-                }
-              );
-              confBase = "${config.users.users.${user}.home}/.config";
-              userDirArgs = {
-                mode = "0700";
-                user = user;
-                group = "users";
-              };
-            in
-            {
-              "10-lomiri-test-setup" = {
-                "${confBase}".d = userDirArgs;
-                "${confBase}/terminal.ubports".d = userDirArgs;
-                "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
-                "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
-              };
-            };
+          systemd.tmpfiles.settings = {
+            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+          };
         };
 
       enableOCR = true;
@@ -371,47 +379,9 @@ in
           };
 
           # Help with OCR
-          systemd.tmpfiles.settings =
-            let
-              white = "255, 255, 255";
-              black = "0, 0, 0";
-              colorSection = color: {
-                Color = color;
-                Bold = true;
-                Transparency = false;
-              };
-              terminalColors = pkgs.writeText "customized.colorscheme" (
-                lib.generators.toINI { } {
-                  Background = colorSection white;
-                  Foreground = colorSection black;
-                  Color2 = colorSection black;
-                  Color2Intense = colorSection black;
-                }
-              );
-              terminalConfig = pkgs.writeText "terminal.ubports.conf" (
-                lib.generators.toINI { } {
-                  General = {
-                    colorScheme = "customized";
-                    fontSize = "16";
-                    fontStyle = "Inconsolata";
-                  };
-                }
-              );
-              confBase = "${config.users.users.${user}.home}/.config";
-              userDirArgs = {
-                mode = "0700";
-                user = user;
-                group = "users";
-              };
-            in
-            {
-              "10-lomiri-test-setup" = {
-                "${confBase}".d = userDirArgs;
-                "${confBase}/terminal.ubports".d = userDirArgs;
-                "${confBase}/terminal.ubports/customized.colorscheme".L.argument = "${terminalColors}";
-                "${confBase}/terminal.ubports/terminal.ubports.conf".L.argument = "${terminalConfig}";
-              };
-            };
+          systemd.tmpfiles.settings = {
+            "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+          };
         };
 
       enableOCR = true;
@@ -732,8 +702,17 @@ in
             # Help with OCR
             fonts.packages = [ pkgs.inconsolata ];
 
-            # Non-QWERTY keymap to test keymap patch
-            services.xserver.xkb.layout = "de";
+            services.xserver.xkb.layout = lib.strings.concatStringsSep "," [
+              # Start with a non-QWERTY keymap to test keymap patch
+              "de"
+              # Then a QWERTY one to test switching
+              "us"
+            ];
+
+            # Help with OCR
+            systemd.tmpfiles.settings = {
+              "10-lomiri-test-setup" = terminalOcrTmpfilesSetup { inherit pkgs lib config; };
+            };
           };
 
         enableOCR = true;
@@ -783,6 +762,30 @@ in
 
                 machine.send_chars("touch ${pwInput}\n")
                 machine.wait_for_file("/home/alice/${pwOutput}", 10)
+
+                # Issues with this keybind: input leaks to focused surface, may open launcher
+                # Don't have the keyboard indicator to handle this better
+                machine.send_key("meta_l-spc")
+                machine.wait_for_console_text('SET KEYMAP "us"')
+
+                # Handle keybind fallout
+                machine.sleep(10) # wait for everything to settle
+                machine.send_key("esc") # close launcher in case it was opened
+                machine.sleep(2) # wait for animation to finish
+                # Make sure input leaks are gone
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+                machine.send_key("backspace")
+
+                machine.send_chars("touch ${pwInput}\n")
+                machine.wait_for_file("/home/alice/${pwInput}", 10)
 
                 machine.send_key("alt-f4")
           '';
