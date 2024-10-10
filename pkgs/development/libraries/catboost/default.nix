@@ -1,20 +1,21 @@
-{ lib
-, config
-, fetchFromGitHub
-, cmake
-, cctools
-, libiconv
-, llvmPackages
-, ninja
-, openssl
-, python3Packages
-, ragel
-, yasm
-, zlib
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
-, llvmPackages_12
-, pythonSupport ? false
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  cmake,
+  cctools,
+  libiconv,
+  llvmPackages,
+  ninja,
+  openssl,
+  python3Packages,
+  ragel,
+  yasm,
+  zlib,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  llvmPackagesCuda ? llvmPackages,
+  pythonSupport ? false,
 }:
 let
   inherit (llvmPackages) stdenv;
@@ -31,9 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2dfCCCa0LheytkLRbYuBd25M320f1kbhBWKIVjslor0=";
   };
 
-  patches = [
-    ./remove-conan.patch
-  ];
+  patches = [ ./remove-conan.patch ];
 
   postPatch = ''
     substituteInPlace cmake/common.cmake \
@@ -50,40 +49,48 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.bintools
-    ninja
-    (python3Packages.python.withPackages (ps: with ps; [ six ]))
-    ragel
-    yasm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      llvmPackages.bintools
+      ninja
+      (python3Packages.python.withPackages (ps: with ps; [ six ]))
+      ragel
+      yasm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+    ++ lib.optionals cudaSupport (with cudaPackages; [ cuda_nvcc ]);
 
-  buildInputs = [
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-    cuda_cccl
-    libcublas
-  ]);
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        cuda_cccl
+        libcublas
+      ]
+    );
 
-  env = {
-    # catboost requires clang 14+ for build, but does clang 12 for cuda build.
-    # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
-    # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
-    CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackages_12.stdenv.cc}/bin/cc";
-    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
-    NIX_LDFLAGS = "-lc -lm";
-  };
+  env =
+    # Supports 3.2 > and < LLVM 15 for Cuda.
+    # https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
+    assert cudaSupport -> lib.versionOlder llvmPackagesCuda.release_version "15";
+    {
+      # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
+      CUDAHOSTCXX = lib.optionalString cudaSupport "${llvmPackagesCuda.stdenv.cc}/bin/cc";
+      NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-fuse-ld=lld";
+      NIX_LDFLAGS = "-lc -lm";
+    };
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BINARY_DIR" "$out")
@@ -115,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     homepage = "https://catboost.ai";
-    maintainers = with maintainers; [ PlushBeaver natsukium ];
+    maintainers = with maintainers; [
+      PlushBeaver
+      natsukium
+    ];
     mainProgram = "catboost";
   };
 })
