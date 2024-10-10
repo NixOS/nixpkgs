@@ -216,7 +216,7 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "0-unstable-2024-08-26";
+    version = "0-unstable-2024-08-25";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
