@@ -46,6 +46,7 @@ buildPythonPackage rec {
 
     # tests require a configured git identity
     export HOME=$TMPDIR
+    git config --global user.name nixbld
     git config --global user.email nixbld@localhost
   '';
 

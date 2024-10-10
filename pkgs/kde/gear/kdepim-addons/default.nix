@@ -8,7 +8,7 @@
   corrosion,
   alpaka,
   # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-hIiJEuUk950g29Qkka4oS7EsZDbPvm8Q3CrqxQG40bU=",
+  cargoHash ? "sha256-t7izRAYjuCYA0YMZaCnvwbVo2UvfTTvdlYUd69T6w/Q=",
 }:
 mkKdeDerivation rec {
   pname = "kdepim-addons";

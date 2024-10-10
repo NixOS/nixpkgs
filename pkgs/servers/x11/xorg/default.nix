@@ -1358,11 +1358,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXfont2 = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXfont2";
-    version = "2.0.6";
+    version = "2.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXfont2-2.0.6.tar.xz";
-      sha256 = "1x5f4w6f94dq9hfcd11xzzjqbz30yn2hdrnmv1b3zyxhgq0j1jkl";
+      url = "mirror://xorg/individual/lib/libXfont2-2.0.7.tar.xz";
+      sha256 = "1ywfwpirvi7fmd3my3cb6szzd9c4p7xy7s1kjjv6k1x4xgyq4ywb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1598,11 +1598,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXtst = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXi, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXtst";
-    version = "1.2.4";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXtst-1.2.4.tar.xz";
-      sha256 = "1j1kr90b7vmpqniqd0pd786kn5924q799c5m2kpgzd2lj85z7xc4";
+      url = "mirror://xorg/individual/lib/libXtst-1.2.5.tar.xz";
+      sha256 = "0hljblisw72fk60y7zf9214ydn7lk32kj43cf12af2bhp4jlq3dm";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;

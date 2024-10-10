@@ -1,4 +1,8 @@
-{ callPackage, darwin }:
+{
+  callPackage,
+  darwin,
+  cudaPackages,
+}:
 
 let
   mkFFmpeg =
@@ -14,6 +18,7 @@ let
           VideoToolbox
           ;
         inherit (darwin) xcode;
+        inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
@@ -50,11 +55,17 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  # Please make sure this is updated to new major versions once they
+  # build and work on all the major platforms. If absolutely necessary
+  # due to severe breaking changes, the bump can wait a little bit to
+  # give the most proactive users time to migrate, but don’t hold off
+  # for too long.
+  #
+  # Packages which depend on FFmpeg should generally use these
+  # unversioned aliases to allow for quicker migration to new releases,
+  # but can pin one of the versioned variants if they do not work with
+  # the current default version.
+  ffmpeg = ffmpeg_7;
+  ffmpeg-headless = ffmpeg_7-headless;
+  ffmpeg-full = ffmpeg_7-full;
 }

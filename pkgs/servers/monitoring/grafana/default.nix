@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
+{ lib, stdenv, buildGo122Module, fetchFromGitHub, removeReferencesTo
 , tzdata, wire
 , yarn, nodejs, python3, cacert
 , jq, moreutils
@@ -6,7 +6,8 @@
 , faketty
 }:
 
-buildGoModule rec {
+# TODO: Go back to using buildGoModule when upgrading to grafana 11.3.
+buildGo122Module rec {
   pname = "grafana";
   version = "11.2.1";
 

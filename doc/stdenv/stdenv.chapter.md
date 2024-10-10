@@ -518,8 +518,10 @@ There are a number of variables that control what phases are executed and in wha
 
 Specifies the phases. You can change the order in which phases are executed, or add new phases, by setting this variable. If it’s not set, the default value is used, which is `$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase checkPhase $preInstallPhases installPhase fixupPhase installCheckPhase $preDistPhases distPhase $postPhases`.
 
+The elements of `phases` must not contain spaces. If `phases` is specified as a Nix Language attribute, it should be specified as lists instead of strings. The same rules apply to the `*Phases` variables.
+
 It is discouraged to set this variable, as it is easy to miss some important functionality hidden in some of the less obviously needed phases (like `fixupPhase` which patches the shebang of scripts).
-Usually, if you just want to add a few phases, it’s more convenient to set one of the variables below (such as `preInstallPhases`).
+Usually, if you just want to add a few phases, it’s more convenient to set one of the `*Phases` variables below.
 
 ##### `prePhases` {#var-stdenv-prePhases}
 

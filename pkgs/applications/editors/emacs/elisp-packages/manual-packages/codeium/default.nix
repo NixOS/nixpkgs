@@ -25,8 +25,6 @@ melpaBuild {
     })
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = gitUpdater { };
 
   meta = {

@@ -1,9 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake }:
+{ lib, stdenv, fetchFromGitHub, cmake, ninja }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
   version = "1.3.290.0";
 
-  nativeBuildInputs = [ cmake ];
+  # Adding `ninja` here to enable Ninja backend. Otherwise on gcc-14 or
+  # later the build fails as:
+  #   modules are not supported by this generator: Unix Makefiles
+  nativeBuildInputs = [ cmake ninja ];
 
   # TODO: investigate why <algorithm> isn't found
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "-DVULKAN_HEADERS_ENABLE_MODULE=OFF" ];

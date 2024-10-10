@@ -9,11 +9,11 @@
   libinput,
   xorg,
   xwayland,
+  libcanberra,
   libdisplay-info,
   libei,
   mesa,
   lcms2,
-  libcap,
   pipewire,
   krunner,
   python3,
@@ -56,7 +56,7 @@ mkKdeDerivation {
 
     mesa # libgbm
     lcms2
-    libcap
+    libcanberra
     libdisplay-info
     libei
     libinput

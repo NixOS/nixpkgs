@@ -13,6 +13,7 @@
 # package without splicing See: https://github.com/NixOS/nixpkgs/pull/107606
 , pkgs
 , fetchurl
+, fetchpatch
 , autoreconfHook
 , zlib
 , openssl
@@ -45,6 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/main/openssh/gss-serv.c.patch?id=a7509603971ce2f3282486a43bb773b1b522af83";
       sha256 = "sha256-eFFOd4B2nccRZAQWwdBPBoKWjfEdKEVGJvKZAzLu3HU=";
+    })
+
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://anongit.mindrot.org/openssh.git/patch/?id=8b664df75966e5aed8dabea00b8838303d3488b8";
+      hash = "sha256-siVg1mnGiZ2aP3IIY4y1WAp3nkOk0XKSBDqYfw6lrQg=";
     })
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966

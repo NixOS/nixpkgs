@@ -3,7 +3,7 @@
 , fetchurl
 , runCommand
 , cmake
-, ffmpeg_7
+, ffmpeg
 , glslang
 , libdrm
 , libglvnd
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildInputs = [
-    ffmpeg_7
+    ffmpeg
     libdrm
     libffi
     libglvnd

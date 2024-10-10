@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch2, copyDesktopItems, makeDesktopItem, qmake
 , qtbase, qtxmlpatterns, qttools, qtwebengine, libGL, fontconfig, openssl, poppler, wrapQtAppsHook
-, ffmpeg_7, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
+, ffmpeg, libva, alsa-lib, SDL, x264, libvpx, libvorbis, libtheora, libogg
 , libopus, lame, fdk_aac, libass, quazip, libXext, libXfixes }:
 
 let
@@ -73,7 +73,7 @@ in stdenv.mkDerivation (finalAttrs: {
     fontconfig
     openssl
     poppler
-    ffmpeg_7
+    ffmpeg
     libva
     alsa-lib
     SDL

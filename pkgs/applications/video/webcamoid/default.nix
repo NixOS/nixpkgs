@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, fetchpatch2, pkg-config, libxcb, mkDerivation, cmake
 , qtbase, qtdeclarative, qtquickcontrols, qtquickcontrols2
-, ffmpeg_7, gst_all_1, libpulseaudio, alsa-lib, jack2
+, ffmpeg, gst_all_1, libpulseaudio, alsa-lib, jack2
 , v4l-utils }:
 mkDerivation rec {
   pname = "webcamoid";
@@ -24,7 +24,7 @@ mkDerivation rec {
   buildInputs = [
     libxcb
     qtbase qtdeclarative qtquickcontrols qtquickcontrols2
-    ffmpeg_7
+    ffmpeg
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
     alsa-lib libpulseaudio jack2
     v4l-utils

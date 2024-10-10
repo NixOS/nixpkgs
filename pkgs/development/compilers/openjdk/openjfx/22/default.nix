@@ -16,7 +16,7 @@
 , libXxf86vm
 , glib
 , alsa-lib
-, ffmpeg_7
+, ffmpeg
 , python3
 , ruby
 , withMedia ? true
@@ -51,7 +51,7 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7 ];
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg ];
   nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
   dontUseCmakeConfigure = true;

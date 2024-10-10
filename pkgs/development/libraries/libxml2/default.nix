@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.13.3";
+  version = "2.13.4";
 
   outputs = [ "bin" "dev" "out" "devdoc" ]
     ++ lib.optional pythonSupport "py"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CAXXwYDPCcqtcWZsekWKdPBBVhpTKQJFTaUEfYOUgTg=";
+    hash = "sha256-ZdBC4cgBAkPmF++wKv2iC4XCFgrNv7y1smuAzsZRVlA=";
   };
 
   strictDeps = true;

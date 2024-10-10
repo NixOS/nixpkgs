@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   doCheck = false; # fails 3 of 5 tests with locale errors
 
   meta = with lib; {

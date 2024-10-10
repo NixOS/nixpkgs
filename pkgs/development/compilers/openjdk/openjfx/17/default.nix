@@ -1,6 +1,6 @@
 { stdenv, lib, pkgs, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_7-headless, python3, ruby
+, ffmpeg-headless, python3, ruby
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -30,7 +30,7 @@ in stdenv.mkDerivation {
     ../backport-ffmpeg-7-support-jfx11.patch
   ];
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7-headless ];
+  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg-headless ];
   nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
 
   dontUseCmakeConfigure = true;

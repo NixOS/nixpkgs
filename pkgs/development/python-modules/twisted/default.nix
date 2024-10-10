@@ -73,6 +73,13 @@ buildPythonPackage rec {
       url = "https://github.com/mweinelt/twisted/commit/e69e652de671aac0abf5c7e6c662fc5172758c5a.patch";
       hash = "sha256-LmvKUTViZoY/TPBmSlx4S9FbJNZfB5cxzn/YcciDmoI=";
     })
+
+    (fetchpatch {
+      name = "python-3.12.6.patch";
+      url = "https://github.com/twisted/twisted/commit/3422f7988e3d42e6e5184acd65f103fd28750648.patch";
+      excludes = [ ".github/workflows/test.yaml" ];
+      hash = "sha256-/UmrHdWaApytkEDZiISjPGzpWv/Yxe/xjvr9GOjMPmQ=";
+    })
   ];
 
   __darwinAllowLocalNetworking = true;

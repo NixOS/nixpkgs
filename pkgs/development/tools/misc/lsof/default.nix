@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences, freebsd, ed }:
 
 let
   dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
@@ -26,12 +26,15 @@ stdenv.mkDerivation rec {
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences perl which ];
+  nativeBuildInputs = [ nukeReferences perl which ed ];
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
-  configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+  configurePhase = let genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
+    linuxFlags = lib.optionalString stdenv.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
+    freebsdFlags = lib.optionalString stdenv.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
+    in "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
 
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do

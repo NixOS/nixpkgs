@@ -26,6 +26,10 @@ let
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
+
     installPhase = ''
       runHook preInstall
       install -D Bin/mbrola $out/bin/mbrola
@@ -49,4 +53,3 @@ in
       ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
       ln -s '${bin}/bin' "$out/"
     ''
-

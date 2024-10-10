@@ -25,7 +25,7 @@ let
           })
 
         ];
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.icecream ];
+        dependencies = oldAttrs.dependencies ++ [ python3.pkgs.icecream ];
       });
     };
   };

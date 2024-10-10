@@ -7,6 +7,7 @@
   lsof,
   pkg-config,
   spirv-tools,
+  qtpositioning,
   qtsvg,
   qtwayland,
   libcanberra,
@@ -41,6 +42,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtpositioning
     qtsvg
     qtwayland
 
@@ -61,7 +63,7 @@ mkKdeDerivation {
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''
     mkdir -p $out/nix-support
-    echo "${lsof} ${xorg.xmessage} ${xorg.xsetroot}" > $out/nix-support/depends
+    echo "${lsof} ${xorg.xmessage} ${xorg.xrdb} ${xorg.xsetroot}" > $out/nix-support/depends
   '';
 
   passthru.providedSessions = [

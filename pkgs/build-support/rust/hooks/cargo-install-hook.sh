@@ -36,6 +36,11 @@ cargoInstallHook() {
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
       -print0 | xargs -r -0 cp -t $out/lib
+
+    # If present, copy any .dSYM directories for debugging on darwin
+    # https://github.com/NixOS/nixpkgs/issues/330036
+    find "${releaseDir}" -maxdepth 1 -name '*.dSYM' -exec cp -RLt $out/bin/ {} +
+
     rmdir --ignore-fail-on-non-empty $out/lib $out/bin
     runHook postInstall
 

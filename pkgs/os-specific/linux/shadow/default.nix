@@ -2,10 +2,11 @@
 , runtimeShell, nixosTests
 , autoreconfHook, bison, flex
 , docbook_xml_dtd_45, docbook_xsl
-, itstool, libbsd, libxml2, libxslt
+, itstool, libxml2, libxslt
 , libxcrypt, pkg-config
 , glibcCross ? null
 , pam ? null
+, withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd, libbsd
 , withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
 }:
 let
@@ -37,8 +38,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libbsd libxcrypt ]
+  buildInputs = [ libxcrypt ]
     ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
+    ++ lib.optional withLibbsd libbsd
     ++ lib.optional withTcb tcb;
 
   patches = [
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     "--with-group-name-max-length=32"
     "--with-bcrypt"
     "--with-yescrypt"
+    (lib.withFeature withLibbsd "libbsd")
   ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
     ++ lib.optional withTcb "--with-tcb";
 

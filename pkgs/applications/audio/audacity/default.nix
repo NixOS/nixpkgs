@@ -30,7 +30,7 @@
 , libid3tag
 , libopus
 , libuuid
-, ffmpeg_7
+, ffmpeg
 , soundtouch
 , pcre
 , portaudio # given up fighting their portaudio.patch?
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
-    ffmpeg_7
+    ffmpeg
     file
     flac
     gtk3
@@ -179,7 +179,7 @@ stdenv.mkDerivation rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/audacity" \
       "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_7 ]} \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''

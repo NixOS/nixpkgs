@@ -1452,7 +1452,9 @@ with pkgs;
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
 
-  acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
+  acme-dns = callPackage ../servers/dns/acme-dns/default.nix {
+    buildGoModule = buildGo122Module; # https://github.com/joohoi/acme-dns/issues/365
+  };
 
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
@@ -5158,12 +5160,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  gscan2pdf = callPackage ../applications/graphics/gscan2pdf {
-    # needs this fork of libtiff, because original libtiff
-    # stopped packaging required tools with version 4.6
-    libtiff = libtiff_t;
-  };
-
   gsctl = callPackage ../applications/misc/gsctl { };
 
   gsocket = callPackage ../tools/networking/gsocket { };
@@ -5476,9 +5472,7 @@ with pkgs;
 
   medusa = callPackage ../tools/security/medusa { };
 
-  megasync = libsForQt5.callPackage ../applications/misc/megasync {
-    ffmpeg = ffmpeg_7;
-  };
+  megasync = libsForQt5.callPackage ../applications/misc/megasync { };
 
   megacmd = callPackage ../applications/misc/megacmd { };
 
@@ -8290,9 +8284,7 @@ with pkgs;
 
   gvproxy = callPackage ../tools/networking/gvproxy { };
 
-  gyroflow = qt6Packages.callPackage ../applications/video/gyroflow {
-    ffmpeg = ffmpeg_7;
-  };
+  gyroflow = qt6Packages.callPackage ../applications/video/gyroflow { };
 
   gzip = callPackage ../tools/compression/gzip { };
 
@@ -8554,12 +8546,6 @@ with pkgs;
   hw-probe = perlPackages.callPackage ../tools/system/hw-probe { };
 
   hybridreverb2 = callPackage ../applications/audio/hybridreverb2 { };
-
-  hylafaxplus = callPackage ../servers/hylafaxplus {
-    # needs this fork of libtiff, because original libtiff
-    # stopped packaging required tools with version 4.6
-    libtiff = libtiff_t;
-  };
 
   hyphen = callPackage ../development/libraries/hyphen { };
 
@@ -9175,7 +9161,7 @@ with pkgs;
   lesspipe = callPackage ../tools/misc/lesspipe { };
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
-    ffmpeg = ffmpeg-full;
+    ffmpeg = ffmpeg_6-full;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
@@ -14569,9 +14555,7 @@ with pkgs;
 
   gbforth = callPackage ../development/compilers/gbforth { };
 
-  default-gcc-version =
-    if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
-    else 13;
+  default-gcc-version = 13;
   gcc = pkgs.${"gcc${toString default-gcc-version}"};
   gccFun = callPackage ../development/compilers/gcc;
   gcc-unwrapped = gcc.cc;
@@ -15520,11 +15504,11 @@ with pkgs;
   wrapRustcWith = { rustc-unwrapped, ... } @ args: callPackage ../build-support/rust/rustc-wrapper args;
   wrapRustc = rustc-unwrapped: wrapRustcWith { inherit rustc-unwrapped; };
 
-  rust_1_80 = callPackage ../development/compilers/rust/1_80.nix {
+  rust_1_81 = callPackage ../development/compilers/rust/1_81.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_18 = llvmPackages_18.libllvm;
   };
-  rust = rust_1_80;
+  rust = rust_1_81;
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -15532,8 +15516,8 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
-  rustPackages_1_80 = rust_1_80.packages.stable;
-  rustPackages = rustPackages_1_80;
+  rustPackages_1_81 = rust_1_81.packages.stable;
+  rustPackages = rustPackages_1_81;
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -19945,9 +19929,11 @@ with pkgs;
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
-  gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
+  gst_all_1 = recurseIntoAttrs (callPackage ../development/libraries/gstreamer {
     callPackage = newScope gst_all_1;
-    inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL Security SystemConfiguration VideoToolbox;
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "12.3" else stdenv;
+    inherit (darwin.apple_sdk_12_3.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL Security SystemConfiguration VideoToolbox;
+    inherit (darwin.apple_sdk_12_3.libs) xpc;
   });
 
   gusb = callPackage ../development/libraries/gusb { };
@@ -20559,10 +20545,7 @@ with pkgs;
 
   libantlr3c = callPackage ../development/libraries/libantlr3c { };
 
-  libaom = callPackage ../development/libraries/libaom {
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=116737
-    stdenv = if stdenv.hostPlatform.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14" then gcc13Stdenv else stdenv;
-  };
+  libaom = callPackage ../development/libraries/libaom { };
 
   libappindicator-gtk2 = libappindicator.override { gtkVersion = "2"; };
   libappindicator-gtk3 = libappindicator.override { gtkVersion = "3"; };
@@ -21610,15 +21593,6 @@ with pkgs;
 
   libtifiles2 = callPackage ../development/libraries/libtifiles2 { };
 
-  inherit
-    ({
-      libtiff = callPackage ../development/libraries/libtiff { };
-      libtiff_t = callPackage ../development/libraries/libtiff/libtiff_t.nix { };
-    })
-    libtiff
-    libtiff_t
-    ;
-
   libtiger = callPackage ../development/libraries/libtiger { };
 
   libtommath = callPackage ../development/libraries/libtommath { };
@@ -21754,10 +21728,7 @@ with pkgs;
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
-  libvmaf = callPackage ../development/libraries/libvmaf {
-    # See libaom
-    stdenv = if stdenv.hostPlatform.isAarch64 && stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "14" then gcc13Stdenv else stdenv;
-  };
+  libvmaf = callPackage ../development/libraries/libvmaf { };
 
   libvncserver = callPackage ../development/libraries/libvncserver {
     inherit (darwin.apple_sdk.frameworks) Carbon;
@@ -22352,6 +22323,13 @@ with pkgs;
       url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
       hash = "sha256-n3KFrN/mN1SVXfuhEUAQ1fJzrCvhiclxfEIouyj9Z18=";
     };
+    patches = [
+      # Backport GCC 14 build fix
+      (fetchpatch {
+        url = "https://github.com/Open-Cascade-SAS/OCCT/commit/7236e83dcc1e7284e66dc61e612154617ef715d6.patch";
+        hash = "sha256-NoC2mE3DG78Y0c9UWonx1vmXoU4g5XxFUT3eVXqLU60=";
+      })
+    ];
   };
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
@@ -22457,7 +22435,7 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
   };
 
-  openssl = openssl_3;
+  openssl = openssl_3_3;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -22466,7 +22444,6 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_2
     openssl_3_3;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv { };
@@ -22611,7 +22588,7 @@ with pkgs;
 
   prospector = callPackage ../development/tools/prospector { };
 
-  protobuf = protobuf_25;
+  protobuf = protobuf_28;
 
   inherit
     ({
@@ -23851,9 +23828,9 @@ with pkgs;
   ### DEVELOPMENT / GO
 
   # the unversioned attributes should always point to the same go version
-  go = go_1_22;
-  buildGoModule = buildGo122Module;
-  buildGoPackage = buildGo122Package;
+  go = go_1_23;
+  buildGoModule = buildGo123Module;
+  buildGoPackage = buildGo123Package;
 
   # requires a newer Apple SDK
   go_1_22 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.22.nix {
@@ -23993,13 +23970,13 @@ with pkgs;
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
-  inherit (perlInterpreters) perl536 perl538;
+  inherit (perlInterpreters) perl538 perl540;
 
-  perl536Packages = recurseIntoAttrs perl536.pkgs;
   perl538Packages = recurseIntoAttrs perl538.pkgs;
+  perl540Packages = recurseIntoAttrs perl540.pkgs;
 
-  perl = perl538;
-  perlPackages = perl538Packages;
+  perl = perl540;
+  perlPackages = perl540Packages;
 
   ack = perlPackages.ack;
 
@@ -34626,8 +34603,8 @@ with pkgs;
 
   deliantra-server = callPackage ../games/deliantra/server.nix {
     # perl538 defines 'struct object' in sv.h. many conflicts result
-    perl = perl536;
-    perlPackages = perl536Packages;
+    perl = perl540;
+    perlPackages = perl540Packages;
   };
   deliantra-arch = callPackage ../games/deliantra/arch.nix { };
   deliantra-maps = callPackage ../games/deliantra/maps.nix { };
@@ -35307,7 +35284,6 @@ with pkgs;
   steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
 
   steam = steamPackages.steam-fhsenv;
-  steam-small = steamPackages.steam-fhsenv-small;
 
   steam-run = steam.run;
 
@@ -36878,7 +36854,7 @@ with pkgs;
         curl
       ];
     });
-    perl = perl536;
+    perl = perl540;
   };
 
   megam = callPackage ../applications/science/misc/megam {

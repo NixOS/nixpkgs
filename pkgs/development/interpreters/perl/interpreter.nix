@@ -28,7 +28,7 @@
 assert (enableCrypt -> (libxcrypt != null));
 
 let
-  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -62,17 +62,15 @@ stdenv.mkDerivation (rec {
 
   disallowedReferences = [ stdenv.cc ];
 
-  patches =
-    # Enable TLS/SSL verification in HTTP::Tiny by default
-    lib.optional (lib.versionOlder version "5.38.0") ./http-tiny-verify-ssl-by-default.patch
-
+  patches = []
     # Do not look in /usr etc. for dependencies.
-    ++ lib.optional (lib.versionOlder version "5.38.0") ./no-sys-dirs-5.31.patch
-    ++ lib.optional (lib.versionAtLeast version "5.38.0") ./no-sys-dirs-5.38.0.patch
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
+    ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
     ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-    ++ lib.optional crossCompiling ./cross.patch;
+    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
+    ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
 
   # This is not done for native builds because pwd may need to come from
   # bootstrap tools when building bootstrap perl.
@@ -97,12 +95,31 @@ stdenv.mkDerivation (rec {
   # Miniperl needs -lm. perl needs -lrt.
   configureFlags =
     (if crossCompiling
-    then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" "-Ddefault_inc_excludes_dot" ]
-    else [ "-de" "-Dcc=cc" ])
+    then [
+      "-Dlibpth=\"\""
+      "-Dglibpth=\"\""
+      "-Ddefault_inc_excludes_dot"
+    ]
+    else ([
+      "-de"
+      "-Dprefix=${placeholder "out"}"
+      "-Dman1dir=${placeholder "out"}/share/man/man1"
+      "-Dman3dir=${placeholder "out"}/share/man/man3"
+    ] ++
+    (if stdenv.hostPlatform.isStatic
+    then [
+      "-Dcc=${stdenv.cc.targetPrefix}cc"
+      "-Dnm=${stdenv.cc.targetPrefix}nm"
+      "-Dar=${stdenv.cc.targetPrefix}ar"
+      "-Uusedl"
+    ]
+    else [
+      "-Dcc=cc"
+      "-Duseshrplib"
+    ])))
     ++ [
       "-Uinstallusrbinperl"
       "-Dinstallstyle=lib/perl5"
-    ] ++ lib.optional (!crossCompiling) "-Duseshrplib" ++ [
       "-Dlocincpth=${libcInc}/include"
       "-Dloclibpth=${libcLib}/lib"
     ]
@@ -110,12 +127,6 @@ stdenv.mkDerivation (rec {
     ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
     ++ lib.optional (!enableCrypt) "-A clear:d_crypt_r"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--all-static"
-    ++ lib.optionals (!crossCompiling) [
-      "-Dprefix=${placeholder "out"}"
-      "-Dman1dir=${placeholder "out"}/share/man/man1"
-      "-Dman3dir=${placeholder "out"}/share/man/man3"
-    ]
     ++ lib.optionals (stdenv.hostPlatform.isFreeBSD && crossCompiling && enableCrypt) [
       # https://github.com/Perl/perl5/issues/22295
       # configure cannot figure out that we have crypt automatically, but we really do
@@ -124,11 +135,16 @@ stdenv.mkDerivation (rec {
 
   configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
+  postConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
+    substituteInPlace Makefile \
+      --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
+  '';
+
   dontAddStaticConfigureFlags = true;
 
   dontAddPrefix = !crossCompiling;
 
-  enableParallelBuilding = !crossCompiling;
+  enableParallelBuilding = false;
 
   # perl includes the build date, the uname of the build system and the
   # username of the build user in some files.
@@ -156,6 +172,10 @@ stdenv.mkDerivation (rec {
     OLD_ZLIB     = False
     GZIP_OS_CODE = AUTO_DETECT
     USE_ZLIB_NG  = False
+  '' + lib.optionalString (lib.versionAtLeast version "5.40.0") ''
+    ZLIB_INCLUDE = ${zlib.dev}/include
+    ZLIB_LIB     = ${zlib.out}/lib
+  '' + ''
     EOF
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
@@ -240,15 +260,15 @@ stdenv.mkDerivation (rec {
     priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     mainProgram = "perl";
   };
-} // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-  crossVersion = "84db4c71ae3d3b01fb2966cd15a060a7be334710"; # Nov 29, 2023
+} // lib.optionalAttrs crossCompiling rec {
+  crossVersion = "1.6";
 
   perl-cross-src = fetchFromGitHub {
     name = "perl-cross-${crossVersion}";
     owner = "arsv";
     repo = "perl-cross";
     rev = crossVersion;
-    sha256 = "sha256-1Zqw4sy/lD2nah0Z8rAE11tSpq1Ym9nBbatDczR+mxs=";
+    sha256 = "sha256-TVDLxw8ctl64LSfLfB4/WLYlSTO31GssSzmdVfqkBmg=";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
