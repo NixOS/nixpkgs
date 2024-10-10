@@ -6907,7 +6907,9 @@ self: super: with self; {
     inherit (pkgs) lammps;
   };
 
-  lancedb = callPackage ../development/python-modules/lancedb { };
+  lancedb = callPackage ../development/python-modules/lancedb {
+    inherit (pkgs) protobuf;
+  };
 
   langchain = callPackage ../development/python-modules/langchain { };
 
