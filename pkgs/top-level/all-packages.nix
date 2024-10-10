@@ -17152,8 +17152,6 @@ with pkgs;
 
   bison = callPackage ../development/tools/parsing/bison { };
 
-  bisoncpp = callPackage ../development/tools/parsing/bisonc++ { };
-
   black = with python3Packages; toPythonApplication black;
 
   blackfire = callPackage ../development/tools/misc/blackfire { };
@@ -17653,8 +17651,6 @@ with pkgs;
 
   flexibee = callPackage ../applications/office/flexibee { };
 
-  flexcpp = callPackage ../development/tools/parsing/flexc++ { };
-
   geis = callPackage ../development/libraries/geis { };
 
   gi-docgen = callPackage ../development/tools/documentation/gi-docgen { };
@@ -17786,8 +17782,6 @@ with pkgs;
   iaca = iaca_3_0;
 
   icestorm = callPackage ../development/embedded/fpga/icestorm { };
-
-  icmake = callPackage ../development/tools/build-managers/icmake { };
 
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
@@ -18753,8 +18747,6 @@ with pkgs;
   };
 
   yo = callPackage ../development/tools/yo { };
-
-  yodl = callPackage ../development/tools/misc/yodl { };
 
   yourkit-java = callPackage ../by-name/yo/yourkit-java/package.nix {
     jre = jdk17;
