@@ -1,0 +1,48 @@
+Fixes sed replacements when variables contain special replacement string
+characters ('\', '&' and separator '/').
+
+diff -u a/configure.sh b/configure.sh
+--- a/configure.sh
++++ b/configure.sh
+@@ -131,21 +131,27 @@
+   wrn "no proper '../lingeling' nor '../picosat' (will not build 'aigbmc' nor 'aigdep')"
+ fi
+ 
++# Use Bash to quote replacement string for sed.
++# https://gist.github.com/tie/7e81aaa4b357c486abc197bdbe00f27c
++function quoteSedReplacement() {
++  echo "${!1//[\/\\&$'\n']/\\&}"
++}
++
+ msg "compiling with: $CC $CFLAGS"
+ rm -f makefile
+ sed \
+-  -e "s/@CC@/$CC/" \
+-  -e "s/@CFLAGS@/$CFLAGS/" \
+-  -e "s/@AIGBMCTARGET@/$AIGBMCTARGET/" \
+-  -e "s/@AIGBMCTARGET@/$AIGBMCTARGET/" \
+-  -e "s,@AIGBMCHDEPS@,$AIGBMCHDEPS," \
+-  -e "s,@AIGBMCODEPS@,$AIGBMCODEPS," \
+-  -e "s,@AIGBMCLIBS@,$AIGBMCLIBS," \
+-  -e "s,@AIGBMCFLAGS@,$AIGBMCFLAGS," \
+-  -e "s/@AIGDEPTARGET@/$AIGDEPTARGET/" \
+-  -e "s/@AIGDEPTARGET@/$AIGDEPTARGET/" \
+-  -e "s,@AIGDEPHDEPS@,$AIGDEPHDEPS," \
+-  -e "s,@AIGDEPCODEPS@,$AIGDEPCODEPS," \
+-  -e "s,@AIGDEPLIBS@,$AIGDEPLIBS," \
+-  -e "s,@AIGDEPFLAGS@,$AIGDEPFLAGS," \
++  -e "s/@CC@/$(quoteSedReplacement CC)/" \
++  -e "s/@CFLAGS@/$(quoteSedReplacement CFLAGS)/" \
++  -e "s/@AIGBMCTARGET@/$(quoteSedReplacement AIGBMCTARGET)/" \
++  -e "s/@AIGBMCTARGET@/$(quoteSedReplacement AIGBMCTARGET)/" \
++  -e "s/@AIGBMCHDEPS@/$(quoteSedReplacement AIGBMCHDEPS)/" \
++  -e "s/@AIGBMCODEPS@/$(quoteSedReplacement AIGBMCODEPS)/" \
++  -e "s/@AIGBMCLIBS@/$(quoteSedReplacement AIGBMCLIBS)/" \
++  -e "s/@AIGBMCFLAGS@/$(quoteSedReplacement AIGBMCFLAGS)/" \
++  -e "s/@AIGDEPTARGET@/$(quoteSedReplacement AIGDEPTARGET)/" \
++  -e "s/@AIGDEPTARGET@/$(quoteSedReplacement AIGDEPTARGET)/" \
++  -e "s/@AIGDEPHDEPS@/$(quoteSedReplacement AIGDEPHDEPS)/" \
++  -e "s/@AIGDEPCODEPS@/$(quoteSedReplacement AIGDEPCODEPS)/" \
++  -e "s/@AIGDEPLIBS@/$(quoteSedReplacement AIGDEPLIBS)/" \
++  -e "s/@AIGDEPFLAGS@/$(quoteSedReplacement AIGDEPFLAGS)/" \
+   makefile.in > makefile
