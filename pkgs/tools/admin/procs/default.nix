@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
+{ lib, stdenv, buildPackages, fetchFromGitHub, rustPlatform, installShellFiles, Security, libiconv, Libsystem }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     for shell in bash fish zsh; do
-      $out/bin/procs --gen-completion $shell
+      ${stdenv.hostPlatform.emulator buildPackages} $out/bin/procs --gen-completion $shell
     done
     installShellCompletion procs.{bash,fish} --zsh _procs
   '';
