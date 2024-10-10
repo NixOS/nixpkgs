@@ -9,20 +9,26 @@
   installShellFiles,
   libiconv,
   darwin,
-  librusty_v8 ? callPackage ./librusty_v8.nix { },
+  librusty_v8 ? callPackage ./librusty_v8.nix {
+    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+  },
 }:
+
+let
+  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "1.46.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AM6SjcIHo6Koxcnznhkv3cXoKaMy2TEVpiWe/bczDuA=";
+    hash = "sha256-3PfAjn2zWgxJOYgKwR7lvXu+rIENIHBMPwMM6dWNgR4=";
   };
 
-  cargoHash = "sha256-D+CZpb6OTzM5Il0k8GQB7qSONy4myE5yKlaSkLLqHT8=";
+  cargoHash = "sha256-3r5B9yWXKO/8ah+Etflws8RnlRTAdaaC5HZMlZduyHE=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -54,14 +60,13 @@ rustPlatform.buildRustPackage rec {
     ])
   );
 
-  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
-
   buildAndTestSubdir = "cli";
 
+  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
   # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
   # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  RUSTY_V8_ARCHIVE = librusty_v8;
+  env.RUSTY_V8_ARCHIVE = librusty_v8;
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -71,15 +76,15 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (canExecute) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
   '';
 
-  doInstallCheck = true;
-  installCheckPhase = ''
+  doInstallCheck = canExecute;
+  installCheckPhase = lib.optionalString (canExecute) ''
     runHook preInstallCheck
     $out/bin/deno --help
     $out/bin/deno --version | grep "deno ${version}"

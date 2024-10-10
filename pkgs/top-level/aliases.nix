@@ -308,6 +308,7 @@ mapAliases {
   clang16Stdenv = lowPrio llvmPackages_16.stdenv;
   clang17Stdenv = lowPrio llvmPackages_17.stdenv;
   clang18Stdenv = lowPrio llvmPackages_18.stdenv;
+  clang19Stdenv = lowPrio llvmPackages_19.stdenv;
 
   clang-tools_6 = throw "clang-tools_6 has been removed from nixpkgs"; # Added 2024-01-08
   clang-tools_7 = throw "clang-tools_7 has been removed from nixpkgs"; # Added 2023-11-19
@@ -329,6 +330,7 @@ mapAliases {
   clang-tools_16 = llvmPackages_16.clang-tools; # Added 2024-04-22
   clang-tools_17 = llvmPackages_17.clang-tools; # Added 2024-04-22
   clang-tools_18 = llvmPackages_18.clang-tools; # Added 2024-04-22
+  clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
 
   cq-editor = throw "cq-editor has been removed, as it use a dependency that was disabled since python 3.8 and was last updated in 2021"; # Added 2024-05-13
 
@@ -829,7 +831,6 @@ mapAliases {
   libbpf_1 = libbpf; # Added 2022-12-06
   libbson = mongoc; # Added 2024-03-11
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
-  libclc = llvmPackages_18.libclc; # Added 2023-10-28
   libcxxabi = throw "'libcxxabi' was merged into 'libcxx'"; # Converted to throw 2024-03-08
   libdwarf_20210528 = throw "'libdwarf_20210528' has been removed because it is not used in nixpkgs, move to libdwarf"; # Added 2024-03-23
   libgme = game-music-emu; # Added 2022-07-20

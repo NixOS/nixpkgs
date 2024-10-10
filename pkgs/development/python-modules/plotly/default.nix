@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -70,6 +71,9 @@ buildPythonPackage rec {
     scikit-image
   ];
 
+  # the check inputs are broken on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
+
   disabledTests = [
     # FAILED plotly/matplotlylib/mplexporter/tests/test_basic.py::test_legend_dots - AssertionError: assert '3' == '2'
     "test_legend_dots"
@@ -116,6 +120,9 @@ buildPythonPackage rec {
     "test_dependencies_not_imported"
     # FAILED test_init/test_lazy_imports.py::test_lazy_imports - AssertionError: assert 'plotly' not in {'IPython': <module 'IPython' from '...
     "test_lazy_imports"
+    # requires vaex and polars, vaex is not packaged
+    "test_build_df_from_vaex_and_polars"
+    "test_build_df_with_hover_data_from_vaex_and_polars"
   ];
 
   pythonImportsCheck = [ "plotly" ];
