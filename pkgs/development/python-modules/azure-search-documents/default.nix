@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "azure-search-documents";
-  version = "11.4.0";
+  version = "32.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-python";
-    rev = "azure-search-documents_${version}";
-    hash = "sha256-0J9AXDH7TOkcKDwFbICiMatLAwiFq3Jtoji8fJSOg8k=";
+    rev = "refs/tags/azure-mgmt-compute_${version}";
+    hash = "sha256-789EKp3lm0RCSSW/ToZLwzxuYP4vH1WO/sxEx8pUlMk=";
   };
 
   sourceRoot = "${src.name}/sdk/search/azure-search-documents";
