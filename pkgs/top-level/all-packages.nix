@@ -3039,8 +3039,6 @@ with pkgs;
 
   archivebox = callPackage ../applications/misc/archivebox { };
 
-  archivemount = callPackage ../tools/filesystems/archivemount { };
-
   archivy = callPackage ../applications/misc/archivy { };
 
   arandr = callPackage ../tools/X11/arandr { };
