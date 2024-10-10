@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (final: {
   pname = "contour";
-  version = "0.4.3.6442";
+  version = "0.5.1.7247";
 
   src = fetchFromGitHub {
     owner = "contour-terminal";
     repo = "contour";
     rev = "v${final.version}";
-    hash = "sha256-m3BEhGbyQm07+1/h2IRhooLPDewmSuhRHOMpWPDluiY=";
+    hash = "sha256-/vpbyaULemyM3elwaoofvbeeID7jNrmu8X8HlZxWGCk=";
   };
 
   patches = [ ./dont-fix-app-bundle.diff ];
