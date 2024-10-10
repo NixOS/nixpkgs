@@ -1,5 +1,6 @@
 { lts ? false
 , version
+, rev ? "refs/tags/v${version}"
 , hash
 , npmDepsHash
 , vendorHash
@@ -8,7 +9,7 @@
 
 { bash
 , brotli
-, buildGoModule
+, buildGo123Module
 , forgejo
 , git
 , gzip
@@ -30,8 +31,7 @@ let
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
-    rev = "v${version}";
-    inherit hash;
+    inherit rev hash;
   };
 
   frontend = buildNpmPackage {
@@ -49,7 +49,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGo123Module rec {
   pname = "forgejo" + lib.optionalString lts "-lts";
 
   inherit
@@ -156,8 +156,8 @@ buildGoModule rec {
     description = "Self-hosted lightweight software forge";
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
+    license = if lib.versionAtLeast version "9.0.0" then lib.licenses.gpl3Plus else lib.licenses.mit;
+    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens marie ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gitea";
   };
