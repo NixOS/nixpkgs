@@ -9,6 +9,7 @@
   parameterized,
   msgpack,
   pyserial,
+  pytest-cov-stub,
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
@@ -32,15 +33,11 @@ buildPythonPackage rec {
     hash = "sha256-p3B1LWSygDX0UhIx4XhXv15H7Hwn9UB20jFIPDZnuNs=";
   };
 
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
-  '';
   pythonRelaxDeps = [ "msgpack" ];
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     msgpack
     packaging
     typing-extensions
@@ -57,6 +54,7 @@ buildPythonPackage rec {
     future
     hypothesis
     parameterized
+    pytest-cov-stub
     pytest-timeout
     pytestCheckHook
   ] ++ optional-dependencies.serial;
