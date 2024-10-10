@@ -142,6 +142,8 @@ with pkgs;
 
   overriding = callPackage ./overriding.nix { };
 
+  problems = recurseIntoAttrs (callPackage ./problems { });
+
   texlive = callPackage ./texlive {};
 
   cuda = callPackage ./cuda { };

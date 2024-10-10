@@ -1,0 +1,32 @@
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:15 has some problem that must be acknowledged, refusing to evaluate.
+
+
+
+Package problems:
+
+- maintainerless: This package has no declared maintainer, i.e. an empty `meta.maintainers` attribute
+
+You can use it anyway by ignoring its problems, using one of the
+following methods:
+
+a) For `nixos-rebuild` you can add "warn" or "ignore" entries to
+  `nixpkgs.config.problems.handlers` inside configuration.nix,
+  like this:
+
+    {
+      nixpkgs.config.problems.handlers = {
+        "a"."maintainerless" = "warn";
+      };
+    }
+
+b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
+  "warn" or "ignore" to `problems.handlers` in
+  ~/.config/nixpkgs/config.nix, like this:
+
+    {
+      problems.handlers = {
+        "a"."maintainerless" = "warn";
+      };
+    }
+
+(use '--show-trace' to show detailed location information)
