@@ -2,31 +2,41 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  nose,
+  pytestCheckHook,
+  setuptools,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "inotify";
   version = "unstable-2020-08-27";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dsoprea";
     repo = "PyInotify";
     rev = "f77596ae965e47124f38d7bd6587365924dcd8f7";
-    sha256 = "X0gu4s1R/Kg+tmf6s8SdZBab2HisJl4FxfdwKktubVc=";
-    fetchSubmodules = false;
+    hash = "sha256-X0gu4s1R/Kg+tmf6s8SdZBab2HisJl4FxfdwKktubVc=";
   };
 
-  nativeCheckInputs = [ nose ];
+  postPatch = ''
+    # First is needed because assertEquals was removed in python 3.12
+    # Second and third are needed because these are the opposite pair now for some reason
+    substituteInPlace tests/test_inotify.py \
+      --replace-fail "assertEquals" "assertEqual" \
+      --replace-fail "['IN_ISDIR', 'IN_CREATE']" "['IN_CREATE', 'IN_ISDIR']" \
+      --replace-fail "['IN_ISDIR', 'IN_DELETE']" "['IN_DELETE', 'IN_ISDIR']"
+  '';
 
-  # dunno what's wrong but the module works regardless
-  doCheck = false;
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test__renames" ];
+
+  meta = {
     homepage = "https://github.com/dsoprea/PyInotify";
     description = "Monitor filesystems events on Linux platforms with inotify";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }
