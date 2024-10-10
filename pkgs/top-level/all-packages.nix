@@ -19182,8 +19182,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  coeurl = callPackage ../development/libraries/coeurl { };
-
   coercer = callPackage ../tools/security/coercer { };
 
   cogl = callPackage ../development/libraries/cogl {
@@ -22163,8 +22161,6 @@ with pkgs;
   mtdev = callPackage ../development/libraries/mtdev { };
 
   mtpfs = callPackage ../tools/filesystems/mtpfs { };
-
-  mtxclient = callPackage ../development/libraries/mtxclient { };
 
   mu = callPackage ../tools/networking/mu { };
 
@@ -31594,8 +31590,6 @@ with pkgs;
   nedit = callPackage ../applications/editors/nedit { };
 
   ngt = callPackage ../development/libraries/ngt { };
-
-  nheko = qt6Packages.callPackage ../applications/networking/instant-messengers/nheko { };
 
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 

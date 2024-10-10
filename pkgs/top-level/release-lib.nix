@@ -3,7 +3,7 @@
 , packageSet ? (import ../..)
 , scrubJobs ? true
 , # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  nixpkgsArgs ? { }
 }:
 
 let
@@ -34,7 +34,20 @@ let
     systems
     ;
 
-  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } nixpkgsArgs);
+  allNixpkgsArgs = lib.recursiveUpdate
+    {
+      config = {
+        allowUnfree = false;
+        inHydra = true;
+        # Exceptional unsafe packages that we still build and distribute,
+        # so users choosing to allow don't have to rebuild them every time.
+        permittedInsecurePackages = [
+          "olm-3.2.16"
+        ];
+      };
+    } nixpkgsArgs;
+
+  pkgs = packageSet (recursiveUpdate { inherit system; config.allowUnsupportedSystem = true; } allNixpkgsArgs);
 
   hydraJob' = if scrubJobs then hydraJob else id;
 
@@ -43,7 +56,7 @@ let
      Nixpkgs from being evaluated again and again for every
      job/platform pair. */
   mkPkgsFor = crossSystem: let
-    packageSet' = args: packageSet (args // { inherit crossSystem; } // nixpkgsArgs);
+    packageSet' = args: packageSet (args // { inherit crossSystem; } // allNixpkgsArgs);
 
     pkgs_x86_64_linux = packageSet' { system = "x86_64-linux"; };
     pkgs_i686_linux = packageSet' { system = "i686-linux"; };
