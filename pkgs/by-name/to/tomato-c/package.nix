@@ -1,39 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libnotify
-, makeWrapper
-, mpv
-, ncurses
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libnotify,
+  makeWrapper,
+  mpv,
+  ncurses,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tomato-c";
-  version = "unstable-2023-08-21";
+  version = "0-unstable-2024-04-19";
 
   src = fetchFromGitHub {
     owner = "gabrielzschmitz";
     repo = "Tomato.C";
-    rev = "6e43e85aa15f3d96811311a3950eba8ce9715634";
-    hash = "sha256-RpKkQ7xhM2XqfZdXra0ju0cTBL3Al9NMVQ/oleFydDs=";
+    rev = "b3b85764362a7c120f3312f5b618102a4eac9f01";
+    hash = "sha256-7i+vn1dAK+bAGpBlKTnSBUpyJyRiPc7AiUF/tz+RyTI=";
   };
-
-  patches = [
-    # Adds missing function declarations required by newer versions of clang.
-    (fetchpatch {
-      url = "https://github.com/gabrielzschmitz/Tomato.C/commit/ad6d4c385ae39d655a716850653cd92431c1f31e.patch";
-      hash = "sha256-3ormv59Ce4rOmeyL30QET3CCUIOrRYMquub+eIQsMW8=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "sudo " ""
-    # Need to define _ISOC99_SOURCE to use `snprintf` on Darwin
-    substituteInPlace config.mk \
-      --replace-fail -D_POSIX_C_SOURCE -D_ISOC99_SOURCE
     substituteInPlace notify.c \
       --replace-fail "/usr/local" "${placeholder "out"}"
     substituteInPlace util.c \
@@ -65,7 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     for file in $out/bin/*; do
       wrapProgram $file \
-        --prefix PATH : ${lib.makeBinPath [ libnotify mpv ]}
+        --prefix PATH : ${
+          lib.makeBinPath [
+            libnotify
+            mpv
+          ]
+        }
     done
   '';
 
