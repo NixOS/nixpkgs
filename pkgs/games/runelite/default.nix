@@ -21,12 +21,13 @@ maven.buildMavenPackage rec {
     hash = "sha256-ckeZ/7rACyZ5j+zzC5hv1NaXTi9q/KvOzMPTDd1crHQ=";
   };
 
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
   mvnJdk = jdk17;
-  mvnHash = "sha256-FpfHtGIfo84z6v9/nzc47+JeIM43MR9mWhVOPSi0xhM=";
+  mvnHash = "sha256-eUP4L2Hz8nJdPfmTRkRGKm+suhwfaCSiea5n2W0qV6U=";
 
   desktop = makeDesktopItem {
     name = "RuneLite";
-    type = "Application";
     exec = "runelite";
     icon = "runelite";
     comment = "Open source Old School RuneScape client";
