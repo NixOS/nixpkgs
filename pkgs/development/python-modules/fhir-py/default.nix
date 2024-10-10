@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "fhir-py";
-  version = "2.0.4";
+  version = "2.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "beda-software";
     repo = "fhir-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WDYDQqeNwt4cKEgF+HqMOuEwUezS10YUOZp+eAui6nM=";
+    hash = "sha256-xRfxAAWlxmnJRKTMRehiZoVwt8B+RLBZFzbu4u2jfNw=";
   };
 
   build-system = [ flit-core ];
