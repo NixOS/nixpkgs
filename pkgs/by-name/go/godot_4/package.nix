@@ -28,7 +28,6 @@
   wayland,
   wayland-scanner,
   withDbus ? true,
-  withDebug ? false,
   withFontconfig ? true,
   withPlatform ? "linuxbsd",
   withPrecision ? "single",
@@ -67,6 +66,7 @@ stdenv.mkDerivation rec {
     "out"
     "man"
   ];
+  separateDebugInfo = true;
 
   # Set the build name which is part of the version. In official downloads, this
   # is set to 'official'. When not specified explicitly, it is set to
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     production = true; # Set defaults to build Godot for use in production
     platform = withPlatform;
     target = withTarget;
-    debug_symbols = withDebug;
+    debug_symbols = true;
 
     # Options from 'platform/linuxbsd/detect.py'
     dbus = withDbus; # Use D-Bus to handle screensaver and portal desktop settings
@@ -158,8 +158,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withPulseaudio [ libpulseaudio ]
     ++ lib.optionals withSpeechd [ speechd-minimal ]
     ++ lib.optionals withUdev [ udev ];
-
-  dontStrip = withDebug;
 
   installPhase = ''
     runHook preInstall
