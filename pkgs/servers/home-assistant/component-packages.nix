@@ -2414,7 +2414,8 @@
     "lirc" = ps: with ps; [
     ]; # missing inputs: python-lirc
     "litejet" = ps: with ps; [
-    ]; # missing inputs: pylitejet
+      pylitejet
+    ];
     "litterrobot" = ps: with ps; [
       pylitterbot
     ];
@@ -5404,6 +5405,7 @@
     "light"
     "linear_garage_door"
     "linkplay"
+    "litejet"
     "litterrobot"
     "livisi"
     "local_calendar"
