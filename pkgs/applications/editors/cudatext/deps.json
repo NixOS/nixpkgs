@@ -6,33 +6,33 @@
   },
   "ATBinHex-Lazarus": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-dEwz052aYcJtKpRcP8t7gE2RHuHPQ4T0zHFMv6zVZ6g="
+    "rev": "2024.09.01",
+    "hash": "sha256-svgw3B5brHPHf/ObkeHz+4ZPjDlwZMPvvVWClrpVQk8="
   },
   "ATFlatControls": {
     "owner": "Alexey-T",
-    "rev": "2023.10.30",
-    "hash": "sha256-fuTQnnuWjIsABx457y+n6luLxQf+b9TiZGLXYjNsUrw="
+    "rev": "2024.09.05",
+    "hash": "sha256-9Fa2W0zJgc/OcVhAc36AHb1Tz5+4EyujvVsI2ZP1SQE="
   },
   "ATSynEdit": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-LGYGCxEPdZL4BU3TGiFxydu7AN8g5kqOdW+dcbiCf7E="
+    "rev": "2024.09.22",
+    "hash": "sha256-WWQ6jIhldsAZsHgm4CP/O/CTXbp1exJ1EcGxw44nu9A="
   },
   "ATSynEdit_Cmp": {
     "owner": "Alexey-T",
-    "rev": "2023.05.31",
-    "hash": "sha256-QXu/p3o0RSwMyntFYrjIQBtOBGvL9rAsINaglG3fZvo="
+    "rev": "2024.07.28",
+    "hash": "sha256-vM0eg+2OGL2N64zdWd0if5xkX8acbj8q/bXUSynUipQ="
   },
   "EControl": {
     "owner": "Alexey-T",
-    "rev": "2023.11.16",
-    "hash": "sha256-FxUV+K9JRsdr0xqQzvg1UI4bBHyhqxiVoPN58h2+WVg="
+    "rev": "2024.04.01",
+    "hash": "sha256-9D8GvEJ1dAqtelyDpiRmDMDkKP50FrM1Ybf3eGUThT4="
   },
   "ATSynEdit_Ex": {
     "owner": "Alexey-T",
-    "rev": "2023.11.23",
-    "hash": "sha256-RNXP8O3UF+hwA3TNzLorZqlt04Idnc4Z9LA87JJSsZE="
+    "rev": "2024.04.02",
+    "hash": "sha256-1a9sfy3MyuRgqY8i89MoHTmcZdowvoH9GHtJGykNe+k="
   },
   "Python-for-Lazarus": {
     "owner": "Alexey-T",
@@ -41,8 +41,8 @@
   },
   "Emmet-Pascal": {
     "owner": "Alexey-T",
-    "rev": "2023.08.12",
-    "hash": "sha256-s9ZKrL+XIWIwejnLz+uuyDbbDuOZLJhiuiMChKB4Reg="
+    "rev": "2023.12.02",
+    "hash": "sha256-NDYhjmVGiw9UKfOQhXLdJiTaGZeTs8kr2hBujI2s+3E="
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
@@ -51,7 +51,7 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
-    "rev": "v11.5.6",
-    "hash": "sha256-7TuHCCaH8/RxiVQmDILPW4T6op/XW6djwA5iSh/Yb5w="
+    "rev": "v11.6.3",
+    "hash": "sha256-2qTcWydp5njDBcptTaQXYPFnpqL/NtR7BAMX5nzVGI0="
   }
 }
