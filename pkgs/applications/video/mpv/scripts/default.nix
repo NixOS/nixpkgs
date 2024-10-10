@@ -123,6 +123,7 @@ let
       quality-menu = callPackage ./quality-menu.nix { };
       reload = callPackage ./reload.nix { };
       simple-mpv-webui = callPackage ./simple-mpv-webui.nix { };
+      smartskip = callPackage ./smartskip.nix { };
       sponsorblock = callPackage ./sponsorblock.nix { };
       sponsorblock-minimal = callPackage ./sponsorblock-minimal.nix { };
       thumbfast = callPackage ./thumbfast.nix { };
