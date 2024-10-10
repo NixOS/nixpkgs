@@ -22,8 +22,8 @@ let
       replicationUser = "wal_receiver_user";
       replicationSlot = "wal_receiver_slot";
       replicationConn = "postgresql://${replicationUser}@localhost";
-      baseBackupDir = "/tmp/pg_basebackup";
-      walBackupDir = "/tmp/pg_wal";
+      baseBackupDir = "/var/cache/wals/pg_basebackup";
+      walBackupDir = "/var/cache/wals/pg_wal";
 
       recoveryFile = pkgs.writeTextDir "recovery.signal" "";
 
@@ -32,6 +32,10 @@ let
       meta.maintainers = with lib.maintainers; [ pacien ];
 
       nodes.machine = { ... }: {
+        systemd.tmpfiles.rules = [
+          "d /var/cache/wals 0750 postgres postgres - -"
+        ];
+
         services.postgresql = {
           package = pkg;
           enable = true;
@@ -60,6 +64,7 @@ let
         # This is only to speedup test, it isn't time racing. Service is set to autorestart always,
         # default 60sec is fine for real system, but is too much for a test
         systemd.services.postgresql-wal-receiver-main.serviceConfig.RestartSec = lib.mkForce 5;
+        systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/var/cache/wals" ];
       };
 
       testScript = ''
