@@ -27,8 +27,14 @@ in
     package = lib.mkPackageOption pkgs "zapret" { };
     params = lib.mkOption {
       default = null;
-      type = lib.types.str;
-      example = "--dpi-desync=fake,disorder2 --dpi-desync-ttl=1 --dpi-desync-autottl=2";
+      type = lib.types.listOf lib.types.str;
+      example = ''
+        [
+          "--dpi-desync=fake,disorder2"
+          "--dpi-desync-ttl=1"
+          "--dpi-desync-autottl=2"
+        ];
+      '';
       description = ''
         Specify the bypass parameters for Zapret binary.
         There are no universal parameters as they vary between different networks, so you'll have to find them yourself.
@@ -108,7 +114,7 @@ in
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
           serviceConfig = {
-            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${cfg.params} ${whitelist} ${blacklist} --qnum=${toString cfg.qnum}";
+            ExecStart = "${cfg.package}/bin/nfqws --pidfile=/run/nfqws.pid ${lib.concatStringsSep " " cfg.params} ${whitelist} ${blacklist} --qnum=${toString cfg.qnum}";
             Type = "simple";
             PIDFile = "/run/nfqws.pid";
             ExecReload = "/bin/kill -HUP $MAINPID";
