@@ -3,7 +3,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
+  pythonOlder,
 
   # Build
   hatchling,
@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.5.39-insiders-4.53.14";
+  version = "9.5.40-insiders-4.53.14";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -45,10 +45,10 @@ buildPythonPackage rec {
     repo = "mkdocs-material-insiders";
     private = true;
     rev = "refs/tags/${version}";
-    hash = "sha256-MJGv9r7T/kkaD76At3nLEaTO1daBJiNPypnRIIN4MSU=";
+    hash = "sha256-+zmAkQYKK4ieFSt/AJlRdj4ovcySvdAikDchPtgJMqo=";
   };
 
-  disabled = !pythonAtLeast "3.8";
+  disabled = pythonOlder "3.8";
 
   build-system = [
     hatchling
