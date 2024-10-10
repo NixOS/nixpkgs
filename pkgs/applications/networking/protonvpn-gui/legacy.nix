@@ -11,7 +11,7 @@
   librsvg,
   pango,
   python3,
-  webkitgtk,
+  webkitgtk_4_0,
   # Python libs
   protonvpn-nm-lib,
   psutil,
@@ -49,7 +49,7 @@ buildPythonApplication rec {
   buildInputs = [
     librsvg
     pango
-    webkitgtk
+    webkitgtk_4_0
   ] ++ lib.optionals withIndicator [ libappindicator-gtk3 ];
 
   postInstall = ''

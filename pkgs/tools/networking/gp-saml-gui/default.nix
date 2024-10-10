@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , buildPythonPackage
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , glib-networking
 , gobject-introspection
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     requests
     pygobject3
     openconnect
-  ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux webkitgtk_4_0;
 
   preFixup = ''
     gappsWrapperArgs+=(

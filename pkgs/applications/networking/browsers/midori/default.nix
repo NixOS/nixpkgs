@@ -9,7 +9,7 @@
 , gcr
 , libpeas
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , sqlite
 , gsettings-desktop-schemas
 , libsoup
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk3
     libpeas
     sqlite
-    webkitgtk
+    webkitgtk_4_0
     json-glib
     libarchive
   ];
