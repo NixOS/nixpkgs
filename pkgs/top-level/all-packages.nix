@@ -28672,8 +28672,6 @@ with pkgs;
 
   cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
 
-  cvs = callPackage ../applications/version-management/cvs { };
-
   cvsps = callPackage ../applications/version-management/cvsps { };
 
   cvsq = callPackage ../applications/version-management/cvsq { };
