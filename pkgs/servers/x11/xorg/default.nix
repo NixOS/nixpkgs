@@ -1398,11 +1398,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXi = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXext, libXfixes, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXi";
-    version = "1.8.1";
+    version = "1.8.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXi-1.8.1.tar.xz";
-      sha256 = "19snjrsdib2y2iq8c1zbrp78qy1b6sdmyvif422gg27j2klc1gw9";
+      url = "mirror://xorg/individual/lib/libXi-1.8.2.tar.xz";
+      sha256 = "0161qsac0dgvkkcihpm2062p1lk2l5mj4i7smd713qnnadg5bq6h";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
