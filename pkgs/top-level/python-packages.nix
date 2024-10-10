@@ -9115,6 +9115,8 @@ self: super: with self; {
 
   nutils-poly = callPackage ../development/python-modules/nutils-poly { };
 
+  nutpie = callPackage ../development/python-modules/nutpie { };
+
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
   nvdlib = callPackage ../development/python-modules/nvdlib { };
