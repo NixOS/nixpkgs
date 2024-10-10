@@ -2312,6 +2312,8 @@ with pkgs;
 
   git-series = callPackage ../applications/version-management/git-series { };
 
+  git-sim = python3Packages.toPythonApplication python3Packages.git-sim;
+
   git-sizer = callPackage ../applications/version-management/git-sizer { };
 
   git-stack = callPackage ../applications/version-management/git-stack {
