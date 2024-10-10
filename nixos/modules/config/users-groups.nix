@@ -13,12 +13,14 @@ let
     flatten
     flip
     foldr
+    genAttrs
     getAttr
     hasAttr
     id
     length
     listToAttrs
     literalExpression
+    mapAttrs
     mapAttrs'
     mapAttrsToList
     match
@@ -509,8 +511,6 @@ let
   gidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) cfg.groups) "gid";
   sdInitrdUidsAreUnique = idsAreUnique (filterAttrs (n: u: u.uid != null) config.boot.initrd.systemd.users) "uid";
   sdInitrdGidsAreUnique = idsAreUnique (filterAttrs (n: g: g.gid != null) config.boot.initrd.systemd.groups) "gid";
-  groupNames = lib.mapAttrsToList (n: g: g.name) cfg.groups;
-  usersWithoutExistingGroup = lib.filterAttrs (n: u: u.group != "" && !lib.elem u.group groupNames) cfg.users;
 
   spec = pkgs.writeText "users-groups.json" (builtins.toJSON {
     inherit (cfg) mutableUsers;
@@ -845,26 +845,18 @@ in {
       };
     };
 
-    assertions = [
-      { assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
+    assertions.users = {
+      uidsGidsUnique = {
+        assertion = !cfg.enforceIdUniqueness || (uidsAreUnique && gidsAreUnique);
         message = "UIDs and GIDs must be unique!";
-      }
-      { assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
+      };
+      systemdInitrdUidsGidsUnique = {
+        assertion = !cfg.enforceIdUniqueness || (sdInitrdUidsAreUnique && sdInitrdGidsAreUnique);
         message = "systemd initrd UIDs and GIDs must be unique!";
-      }
-      { assertion = usersWithoutExistingGroup == {};
-        message =
-          let
-            errUsers = lib.attrNames usersWithoutExistingGroup;
-            missingGroups = lib.unique (lib.mapAttrsToList (n: u: u.group) usersWithoutExistingGroup);
-            mkConfigHint = group: "users.groups.${group} = {};";
-          in ''
-            The following users have a primary group that is undefined: ${lib.concatStringsSep " " errUsers}
-            Hint: Add this to your NixOS configuration:
-              ${lib.concatStringsSep "\n  " (map mkConfigHint missingGroups)}
-          '';
-      }
-      { # If mutableUsers is false, to prevent users creating a
+      };
+
+      noLockout = {
+        # If mutableUsers is false, to prevent users creating a
         # configuration that locks them out of the system, ensure that
         # there is at least one "privileged" account that has a
         # password or an SSH authorized key. Privileged accounts are
@@ -892,58 +884,72 @@ in {
           However you are most probably better off by setting users.mutableUsers = true; and
           manually running passwd root to set the root password.
           '';
-      }
-    ] ++ flatten (flip mapAttrsToList cfg.users (name: user:
-      [
-        {
-        assertion = (user.hashedPassword != null)
-        -> (match ".*:.*" user.hashedPassword == null);
-        message = ''
+      };
+
+      users = flip mapAttrs cfg.users (name: user: {
+        noColonInHashedPassword = {
+          assertion = (user.hashedPassword != null) -> (match ".*:.*" user.hashedPassword == null);
+          message = ''
             The password hash of user "${user.name}" contains a ":" character.
             This is invalid and would break the login system because the fields
             of /etc/shadow (file where hashes are stored) are colon-separated.
-            Please check the value of option `users.users."${user.name}".hashedPassword`.'';
-          }
-          {
-            assertion = let
-              isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
-            in xor isEffectivelySystemUser user.isNormalUser;
-            message = ''
-              Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
-            '';
-          }
-          {
-            assertion = user.group != "";
-            message = ''
-              users.users.${user.name}.group is unset. This used to default to
-              nogroup, but this is unsafe. For example you can create a group
-              for this user with:
-              users.users.${user.name}.group = "${user.name}";
-              users.groups.${user.name} = {};
-            '';
-          }
-        ] ++ (map (shell: {
-            assertion = !user.ignoreShellProgramCheck -> (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
-            message = ''
-              users.users.${user.name}.shell is set to ${shell}, but
-              programs.${shell}.enable is not true. This will cause the ${shell}
-              shell to lack the basic nix directories in its PATH and might make
-              logging in as that user impossible. You can fix it with:
-              programs.${shell}.enable = true;
+            Please check the value of option `users.users."${user.name}".hashedPassword`.
+          '';
+        };
 
-              If you know what you're doing and you are fine with the behavior,
-              set users.users.${user.name}.ignoreShellProgramCheck = true;
-              instead.
-            '';
-          }) [
+        userKindDefined = {
+          assertion = let
+            isEffectivelySystemUser = user.isSystemUser || (user.uid != null && user.uid < 1000);
+          in xor isEffectivelySystemUser user.isNormalUser;
+          message = ''
+            Exactly one of users.users.${user.name}.isSystemUser and users.users.${user.name}.isNormalUser must be set.
+          '';
+        };
+
+        userHasPrimaryGroup = {
+          assertion = user.group != "";
+          message = ''
+            users.users.${user.name}.group is unset. This used to default to
+            nogroup, but this is unsafe. For example you can create a group
+            for this user with:
+            users.users.${user.name}.group = "${user.name}";
+            users.groups.${user.name} = {};
+          '';
+        };
+
+        userPrimaryGroupExists = {
+          assertion = cfg.groups ? ${user.group};
+          message = ''
+            users.users.${user.name}.group is set to "${user.group}", but this group is not defined.
+
+            Hint: Add this to your NixOS configuration:
+              "users.groups.${user.group} = {};";
+          '';
+        };
+
+        shells = genAttrs [
           "fish"
           "xonsh"
           "zsh"
-        ])
-    ));
+        ] (shell: {
+          assertion = !user.ignoreShellProgramCheck -> (user.shell == pkgs.${shell}) -> (config.programs.${shell}.enable == true);
+          message = ''
+            users.users.${user.name}.shell is set to ${shell}, but
+            programs.${shell}.enable is not true. This will cause the ${shell}
+            shell to lack the basic nix directories in its PATH and might make
+            logging in as that user impossible. You can fix it with:
+            programs.${shell}.enable = true;
 
-    warnings =
-      flip concatMap (attrValues cfg.users) (user: let
+            If you know what you're doing and you are fine with the behavior,
+            set users.users.${user.name}.ignoreShellProgramCheck = true;
+            instead.
+          '';
+        });
+      });
+    };
+
+    warnings.users.users = flip mapAttrs cfg.users (name: user: {
+      ambiguousPasswordConfiguration = let
         unambiguousPasswordConfiguration = 1 >= length (filter (x: x != null) ([
           user.hashedPassword
           user.hashedPasswordFile
@@ -954,16 +960,19 @@ in {
           user.initialHashedPassword
           user.initialPassword
         ]));
-      in optional (!unambiguousPasswordConfiguration) ''
-        The user '${user.name}' has multiple of the options
-        `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
-        & `initialHashedPassword` set to a non-null value.
-        The options silently discard others by the order of precedence
-        given above which can lead to surprising results. To resolve this warning,
-        set at most one of the options above to a non-`null` value.
-      '')
-      ++ filter (x: x != null) (
-        flip mapAttrsToList cfg.users (_: user:
+      in {
+        condition = !unambiguousPasswordConfiguration;
+        message = ''
+          The user '${user.name}' has multiple of the options
+          `hashedPassword`, `password`, `hashedPasswordFile`, `initialPassword`
+          & `initialHashedPassword` set to a non-null value.
+          The options silently discard others by the order of precedence
+          given above which can lead to surprising results. To resolve this warning,
+          set at most one of the options above to a non-`null` value.
+        '';
+      };
+
+      invalidPasswordHash = let
         # This regex matches a subset of the Modular Crypto Format (MCF)[1]
         # informal standard. Since this depends largely on the OS or the
         # specific implementation of crypt(3) we only support the (sane)
@@ -972,31 +981,33 @@ in {
         # common mistakes like typing the plaintext password.
         #
         # [1]: https://en.wikipedia.org/wiki/Crypt_(C)
-        let
-          sep = "\\$";
-          base64 = "[a-zA-Z0-9./]+";
-          id = cryptSchemeIdPatternGroup;
-          name = "[a-z0-9-]+";
-          value = "[a-zA-Z0-9/+.-]+";
-          options = "${name}(=${value})?(,${name}=${value})*";
-          scheme  = "${id}(${sep}${options})?";
-          content = "${base64}${sep}${base64}(${sep}${base64})?";
-          mcf = "^${sep}${scheme}${sep}${content}$";
-        in
-        if (allowsLogin user.hashedPassword
+        sep = "\\$";
+        base64 = "[a-zA-Z0-9./]+";
+        id = cryptSchemeIdPatternGroup;
+        name = "[a-z0-9-]+";
+        value = "[a-zA-Z0-9/+.-]+";
+        options = "${name}(=${value})?(,${name}=${value})*";
+        scheme  = "${id}(${sep}${options})?";
+        content = "${base64}${sep}${base64}(${sep}${base64})?";
+        mcf = "^${sep}${scheme}${sep}${content}$";
+      in {
+        condition = allowsLogin user.hashedPassword
             && user.hashedPassword != ""  # login without password
-            && match mcf user.hashedPassword == null)
-        then ''
+            && match mcf user.hashedPassword == null;
+        message = ''
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
-          check the value of option `users.users."${user.name}".hashedPassword`.''
-        else null)
-        ++ flip mapAttrsToList cfg.users (name: user:
-          if user.passwordFile != null then
-            ''The option `users.users."${name}".passwordFile' has been renamed '' +
-            ''to `users.users."${name}".hashedPasswordFile'.''
-          else null)
-      );
-  };
+          check the value of option `users.users."${user.name}".hashedPassword`.
+        '';
+      };
 
+      passwordFileDeprecation = {
+        condition = user.passwordFile != null;
+        message = ''
+          The option `users.users."${user.name}".passwordFile' has been renamed
+          to `users.users."${user.name}".hashedPasswordFile'.
+        '';
+      };
+    });
+  };
 }

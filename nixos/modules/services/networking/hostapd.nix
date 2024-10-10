@@ -1127,77 +1127,69 @@ in {
   ];
 
   config = mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = cfg.radios != {};
-          message = "At least one radio must be configured with hostapd!";
-        }
-      ]
-      # Radio warnings
-      ++ (concatLists (mapAttrsToList (
-          radio: radioCfg:
-            [
-              {
-                assertion = radioCfg.networks != {};
-                message = "hostapd radio ${radio}: At least one network must be configured!";
-              }
-              # XXX: There could be many more useful assertions about (band == xy) -> ensure other required settings.
-              # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
-              {
-                assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
-                message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
-              }
-              {
-                assertion = (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities) -> radioCfg.channel != 0;
-                message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
-              }
-            ]
-            # BSS warnings
-            ++ (concatLists (mapAttrsToList (bss: bssCfg: let
-                auth = bssCfg.authentication;
-                countWpaPasswordDefinitions = count (x: x != null) [
-                  auth.wpaPassword
-                  auth.wpaPasswordFile
-                  auth.wpaPskFile
-                ];
-              in [
-                {
-                  assertion = hasPrefix radio bss;
-                  message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
-                }
-                {
-                  assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
-                  message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
-                }
-                {
-                  assertion = countWpaPasswordDefinitions <= 1;
-                  message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
-                }
-                {
-                  assertion = auth.wpaPassword != null -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
-                  message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
-                }
-                {
-                  assertion = auth.saePasswords == [] || auth.saePasswordsFile == null;
-                  message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
-                }
-                {
-                  assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [] || auth.saePasswordsFile != null);
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
-                }
-                {
-                  assertion = auth.mode == "wpa3-sae-transition" -> (auth.saePasswords != [] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
-                }
-                {
-                  assertion = (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
-                  message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
-                }
-              ])
-              radioCfg.networks))
-        )
-        cfg.radios));
+    assertions.services.hostapd.atLeastOneRadio = {
+      assertion = cfg.radios != {};
+      message = "At least one radio must be configured with hostapd!";
+    };
+
+    assertions.services.hostapd.radios = lib.flip lib.mapAttrs cfg.radios (radio: radioCfg: {
+      atLeastOneNetwork = {
+        assertion = radioCfg.networks != {};
+        message = "hostapd radio ${radio}: At least one network must be configured!";
+      };
+      # XXX: There could be many more useful assertions about (band == xy) -> ensure other required settings.
+      # see https://github.com/openwrt/openwrt/blob/539cb5389d9514c99ec1f87bd4465f77c7ed9b93/package/kernel/mac80211/files/lib/netifd/wireless/mac80211.sh#L158
+      exactlyOneRadioNamedNetwork = {
+        assertion = length (filter (bss: bss == radio) (attrNames radioCfg.networks)) == 1;
+        message = ''hostapd radio ${radio}: Exactly one network must be named like the radio, for reasons internal to hostapd.'';
+      };
+      noACSWithHT40 = {
+        assertion = (radioCfg.wifi4.enable && builtins.elem "HT40-" radioCfg.wifi4.capabilities) -> radioCfg.channel != 0;
+        message = ''hostapd radio ${radio}: using ACS (channel = 0) together with HT40- (wifi4.capabilities) is unsupported by hostapd'';
+      };
+
+      bssWarnings = lib.flip lib.mapAttrs radioCfg.networks (bss: bssCfg: let
+        auth = bssCfg.authentication;
+        countWpaPasswordDefinitions = count (x: x != null) [
+          auth.wpaPassword
+          auth.wpaPasswordFile
+          auth.wpaPskFile
+        ];
+      in {
+        radioHasBssPrefix = {
+          assertion = hasPrefix radio bss;
+          message = "hostapd radio ${radio} bss ${bss}: The bss (network) name ${bss} is invalid. It must be prefixed by the radio name for reasons internal to hostapd. A valid name would be e.g. ${radio}, ${radio}-1, ...";
+        };
+        multipleBssManualBssid = {
+          assertion = (length (attrNames radioCfg.networks) > 1) -> (bssCfg.bssid != null);
+          message = ''hostapd radio ${radio} bss ${bss}: bssid must be specified manually (for now) since this radio uses multiple BSS.'';
+        };
+        singleWpaCredentialSource = {
+          assertion = countWpaPasswordDefinitions <= 1;
+          message = ''hostapd radio ${radio} bss ${bss}: must use at most one WPA password option (wpaPassword, wpaPasswordFile, wpaPskFile)'';
+        };
+        validWpaPasswordLength = {
+          assertion = auth.wpaPassword != null -> (stringLength auth.wpaPassword >= 8 && stringLength auth.wpaPassword <= 63);
+          message = ''hostapd radio ${radio} bss ${bss}: uses a wpaPassword of invalid length (must be in [8,63]).'';
+        };
+        singleSaePasswordSource = {
+          assertion = auth.saePasswords == [] || auth.saePasswordsFile == null;
+          message = ''hostapd radio ${radio} bss ${bss}: must use only one SAE password option (saePasswords or saePasswordsFile)'';
+        };
+        wpa3SaeRequiresPassword = {
+          assertion = auth.mode == "wpa3-sae" -> (auth.saePasswords != [] || auth.saePasswordsFile != null);
+          message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE which requires defining a sae password option'';
+        };
+        wpa3SaeTransitionRequiresWpaSaePasswords = {
+          assertion = auth.mode == "wpa3-sae-transition" -> (auth.saePasswords != [] || auth.saePasswordsFile != null) && countWpaPasswordDefinitions == 1;
+          message = ''hostapd radio ${radio} bss ${bss}: uses WPA3-SAE in transition mode requires defining both a wpa password option and a sae password option'';
+        };
+        wpa2PskRequiresWpaPassword = {
+          assertion = (auth.mode == "wpa2-sha1" || auth.mode == "wpa2-sha256") -> countWpaPasswordDefinitions == 1;
+          message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
+        };
+      });
+    });
 
     environment.systemPackages = [cfg.package];
 
