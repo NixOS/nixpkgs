@@ -1,4 +1,4 @@
-{ mkDerivation, stdenv, lib, qtbase, qtsvg, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
+{ stdenv, lib, libsForQt5, libglvnd, libX11, libXi, fetchurl, makeDesktopItem }:
 let
   desktopItem = makeDesktopItem {
     name = "Write";
@@ -10,8 +10,8 @@ let
     categories = [ "Office" "Graphics" ];
   };
 in
-mkDerivation rec {
-  pname = "write_stylus";
+stdenv.mkDerivation rec {
+  pname = "styluslabs-write-bin";
   version = "300";
 
   src = fetchurl {
@@ -37,8 +37,8 @@ mkDerivation rec {
   '';
   preFixup = let
     libPath = lib.makeLibraryPath [
-      qtbase            # libQt5PrintSupport.so.5
-      qtsvg             # libQt5Svg.so.5
+      libsForQt5.qtbase # libQt5PrintSupport.so.5
+      libsForQt5.qtsvg  # libQt5Svg.so.5
       stdenv.cc.cc.lib  # libstdc++.so.6
       libglvnd          # libGL.so.1
       libX11            # libX11.so.6
@@ -57,6 +57,6 @@ mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
     license = lib.licenses.unfree;
-    maintainers = with maintainers; [ oyren ];
+    maintainers = with maintainers; [ oyren lukts30 atemu ];
   };
 }
