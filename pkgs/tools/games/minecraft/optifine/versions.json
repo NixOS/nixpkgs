@@ -1,4 +1,8 @@
 {
+    "optifine_1_21_1": {
+        "version": "1.21.1_HD_U_J1",
+        "sha256": "10lhnxang1zpvc30brg8ansm5b2snmf8x14g5pmbs280vca2svfv"
+    },
     "optifine_1_20_4": {
         "version": "1.20.4_HD_U_I7",
         "sha256": "1zgz5cd2v299hayk5qx639nknd3mcz58y59rpik8srx48da8jw14"
@@ -152,7 +156,7 @@
         "sha256": "18lzyh639mi7r2hzwnmxv0a6v1ay7dk9bzasvwff82dxq0y9zi7m"
     },
     "optifine-latest": {
-        "version": "1.20.4_HD_U_I7",
-        "sha256": "1zgz5cd2v299hayk5qx639nknd3mcz58y59rpik8srx48da8jw14"
+        "version": "1.21.1_HD_U_J1",
+        "sha256": "10lhnxang1zpvc30brg8ansm5b2snmf8x14g5pmbs280vca2svfv"
     }
 }
