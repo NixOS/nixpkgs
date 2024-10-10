@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     ./python-binding-prefix.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ python ];
+  nativeBuildInputs = [ autoreconfHook perl ] ++ lib.optionals enablePython [ (python.withPackages (ps: with ps; [ distutils ])) ];
   buildInputs = [ cracklib ] ++ lib.optionals enablePAM [ pam ];
 
   configureFlags = lib.optionals (!enablePython) [ "--disable-python-bindings" ];
