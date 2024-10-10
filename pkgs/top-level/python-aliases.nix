@@ -37,7 +37,7 @@ mapAliases ({
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
   acoustics = throw "acoustics has been removed because the upstream repository was archived in 2024"; # Added 2024-10-04
-  adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
+  adafruit-nrfutil = pkgs.adafruit-nrfutil; # Added 2023-11-19
   aioaladdinconnect = throw "aioaladdinconnect has been removed, as the API is supported was obsoleted on 2024-01-24."; # Added 2024-06-07
   aiohttp-isal = throw "aiohttp-isal has been removed, as it has been archived and replace by aiohttp-fast-zlib"; # Added 2024-08-11
   aiomysensors = throw "aiomysensors has been removed, as it was packaged for Home Assistant, which migrated to pymysensors."; # Added 2024-07-07
@@ -50,10 +50,10 @@ mapAliases ({
   ambiclimate = throw "ambiclimate has been removed, because the service has been terminated after 2024-03-31."; # Added 2024-06-07
   ambee = throw "ambee has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
-  ansible-doctor = throw "ansible-doctor has been promoted to a top-level attribute name: `pkgs.ansible-doctor`"; # Added 2023-05-16
-  ansible-later = throw "ansible-later has been promoted to a top-level attribute name: `pkgs.ansible-later`"; # Added 2023-05-16
-  ansible-lint = throw "ansible-lint has been promoted to a top-level attribute name: `pkgs.ansible-lint`"; # Added 2023-05-16
-  ansible-navigator = throw "ansible-navigator has been promoted to a top-level attribute name: pkgs.ansible-navigator"; # Added 2024-08-07
+  inherit (super.pkgs)ansible-doctor; # Added 2023-05-16
+  inherit (super.pkgs) ansible-later; # Added 2023-05-16
+  inherit (super.pkgs) ansible-lint; # Added 2023-05-16
+  inherit (super.pkgs) ansible-navigator; # Added 2024-08-07
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   apache-airflow = throw "apache-airflow has been moved out of pythonPackages and is available as a standalone package"; # added 2023-06-05
   argon2_cffi = argon2-cffi; # added 2022-05-09
@@ -85,11 +85,11 @@ mapAliases ({
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
-  buildbot = throw "use pkgs.buildbot instead"; # added 2022-04-07
-  buildbot-ui = throw "use pkgs.buildbot-ui instead"; # added 2022-04-07
-  buildbot-full = throw "use pkgs.buildbot-full instead"; # added 2022-04-07
-  buildbot-plugins = throw "use pkgs.buildbot-plugins instead"; # added 2022-04-07
-  buildbot-worker = throw "use pkgs.buildbot-worker instead"; # added 2022-04-07
+  inherit (super.pkgs) buildbot; # added 2022-04-07
+  inherit (super.pkgs) buildbot-ui; # added 2022-04-07
+  inherit (super.pkgs) buildbot-full; # added 2022-04-07
+  inherit (super.pkgs) buildbot-plugins; # added 2022-04-07
+  inherit (super.pkgs) buildbot-worker; # added 2022-04-07
   buildbot-pkg = throw "buildbot-pkg has been removed, it's only internally used in buildbot"; # added 2022-04-07
   btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
@@ -113,7 +113,7 @@ mapAliases ({
   clvm-tools = throw "clvm-tools has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   clvm-tools-rs = throw "clvm-tools-rs has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   cntk = throw "cntk has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2023-10-09
-  codespell = throw "codespell has been promoted to a top-level attribute name: `pkgs.codespell`"; # Added 2022-10-02
+  inherit (super.pkgs) codespell; # Added 2022-10-02
   ColanderAlchemy = colanderalchemy; # added 2023-02-19
   command_runner = command-runner; # added 2024-03-06
   CommonMark = commonmark; # added 2023-02-1
@@ -179,7 +179,7 @@ mapAliases ({
   email_validator = email-validator; # added 2022-06-22
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   et_xmlfile = et-xmlfile; # added 2023-10-16
-  etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
+  inherit (super.pkgs) etebase-server; # added 2024-07-16
   ev3dev2 = python-ev3dev2; # added 2023-06-19
   eyeD3 = eyed3; # added 2024-01-03
   Fabric = fabric; # addedd 2023-02-19
@@ -225,18 +225,18 @@ mapAliases ({
   foundationdb61 = throw "foundationdb61 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
   functools32 = throw "functool32 was removed from nixpkgs, because python 2.7 has reach end of life in early 2020"; # added 2024-05-16
-  fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
+  fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was packaged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
-  gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
+  inherit (super.pkgs) gdtoolkit; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
-  gigalixir = throw "gigalixir has been promoted to a top-level attribute name: `pkgs.gigalixir`"; # Added 2022-10-02
+  inherit (super.pkgs) gigalixir; # Added 2022-10-02
   gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
   github3_py = github3-py; # added 2024-01-04
   GitPython = gitpython; # added 2022-10-28
-  glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
-  glasgow = throw "glasgow has been promoted to a top-level attribute name: `pkgs.glasgow`"; # added 2023-02-05
+  inherit (super.pkgs) glances; # added 2020-20-28
+  inherit (super.pkgs) glasgow; # added 2023-02-05
   globre = throw "globre was removed, because it was disabled on all python version since 3.7 and last updated in 2020."; # added 2024-05-13
   google-reauth = throw "google-reauth has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   google_api_python_client = google-api-python-client; # added 2021-03-19
@@ -262,7 +262,7 @@ mapAliases ({
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
   htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
   HTSeq = htseq; # added 2023-02-19
-  hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
+  inherit (super.pkgs.mailmanPackages) hyperkitty; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
   IMAPClient = imapclient; # added 2021-10-28
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
@@ -308,7 +308,7 @@ mapAliases ({
   lazy-import = throw "lazy-import has been removed because it was unused."; # added 2024-05-20
   lazy_imports = lazy-imports; # added 2023-10-13
   ledger_agent = ledger-agent; # Added 2024-01-07
-  lektor = throw "lektor has been promoted to a top-level attribute name: `pkgs.lektor`"; # added 2023-08-01
+  inherit (super.pkgs) lektor; # added 2023-08-01
   libgpuarray = throw "libgpuarray has been removed, as it was unmaintained."; # added 2024-08-03
   line_profiler = line-profiler; # added 2023-11-04
   linear_operator = linear-operator; # added 2024-01-07
@@ -327,9 +327,9 @@ mapAliases ({
   MDP = mdp; # added 2023-02-19
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
   memcached = python-memcached; # added 2022-05-06
-  mailman = throw "Please use pkgs.mailman"; # added 2022-04-29
-  mailman-hyperkitty = throw "Please use pkgs.mailmanPackages.mailman-hyperkitty"; # added 2022-04-29
-  mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
+  inherit (super.pkgs) mailman; # added 2022-04-29
+  inherit (super.pkgs.mailmanPackages) mailman-hyperkitty; # added 2022-04-29
+  inherit (super.pkgs) mailman-web; # added 2022-04-29
   manticore = throw "manticore has been removed because its dependency wasm no longer builds and is unmaintained"; # added 2023-05-20
   mapbox = throw "mapbox has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   marshmallow-enum = throw "marshmallow-enum has been removed because it was archived in 2022 and had no maintainer"; # added 2024-05-10
@@ -342,11 +342,11 @@ mapAliases ({
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mox = throw "mox was removed because it is unmaintained"; # added 2023-02-21
   mox3 = throw "mox3 was removed because it is unmaintained"; # added 2024-08-30
-  mrkd = throw "mrkd has been promoted to a top-level attribute name: `pkgs.mrkd`"; # added 2023-08-01
+  inherit (super.pkgs) mrkd; # added 2023-08-01
   multi_key_dict = multi-key-dict; # added 2023-11-05
-  mutmut = throw "mutmut has been promoted to a top-level attribute name: `pkgs.mutmut`"; # added 2022-10-02
+  inherit (super.pkgs) mutmut; # added 2022-10-02
   n3fit = throw "n3fit has been removed since it relies on a dependency that was removed"; # added 2024-08-24
-  nbmerge = throw "nbmerge has moved to pkgs.nbmerge"; # added 2024-07-05
+  inherit (super.pkgs) nbmerge; # added 2024-07-05
   mypy-boto3-alexaforbusiness = throw "mypy-boto3-alexaforbusiness was removed because it is unmaintained"; # added 2024-09-04
   mypy-boto3-backupstorage = throw "mypy-boto3-backupstorage was removed because it is unmaintained"; # added 2024-09-04
   mypy-boto3-gamesparks = throw "mypy-boto3-gamesparks was removed because it is unmaintained"; # added 2024-09-04
@@ -371,7 +371,7 @@ mapAliases ({
   nose-warnings-filters = throw "nose-warnings-filters has been removed as it has been unmaintained since 2016"; # added 2024-07-27
   nose_warnings_filters = nose-warnings-filters; # added 2024-01-07
   nose-xunitmp = throw "nose-xunitmp has been removed as it depends on the abandoned nose test framework"; # added 2024-07-29
-  notifymuch = throw "notifymuch has been promoted to a top-level attribute name: `pkgs.notifymuch`"; # added 2022-10-02
+  inherit (super.pkgs) notifymuch; # added 2022-10-02
   Nuitka = nuitka; # added 2023-02-19
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
   openai-triton = triton; # added 2024-07-18
@@ -380,7 +380,7 @@ mapAliases ({
   openai-triton-no-cuda = triton-no-cuda; # added 2024-07-18
   openapi-schema-pydantic = throw "openapi-schema-pydantic has been removed, since it is no longer maintained"; # added 2023-10-30
   opencv3 = throw "opencv3 has been removed as it is obsolete"; # added 2023-10-12
-  openllm = throw "openllm has moved to pkgs.openllm"; # added 2021-12-31
+  inherit (super.pkgs) openllm; # added 2021-12-31
   openllm-client = throw "openllm-client has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   openllm-core = throw "openllm-core has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
@@ -403,7 +403,7 @@ mapAliases ({
   Polygon3 = polygon3; # Added 2023-08-08
   posix_ipc = posix-ipc; # added 2024-01-07
   poster3 = throw "poster3 is unmaintained and source is no longer available"; # added 2023-05-29
-  postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
+  inherit (super.pkgs.mailmanPackages) postorius; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11
   privacyidea-ldap-proxy = throw "privacyidea-ldap-proxy has been removed from nixpkgs"; # added 2023-10-31
@@ -412,7 +412,7 @@ mapAliases ({
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
   proxy_tools = proxy-tools; # added 2023-11-05
-  pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
+  inherit (super.pkgs) pur; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
   Pweave = pweave; # added 2023-02-19
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
@@ -643,7 +643,7 @@ mapAliases ({
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
-  tvnamer = throw "tvnamer was moved to pkgs.tvnamer"; # added 2021-07-05
+  inherit (super.pkgs) tvnamer; # added 2021-07-05
   twitter-common-collections = throw "twitter-common-collections has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-confluence = throw "twitter-common-confluence has been removed because it is abandoned and unmaintained"; # added 2024-07-14
   twitter-common-dirutil = throw "twitter-common-dirutil has been removed because it is abandoned and unmaintained"; # added 2024-07-14
@@ -680,7 +680,7 @@ mapAliases ({
   WSME = wsme; # added 2023-02-19
   x11_hash = x11-hash; # added 2023-11-05
   xapp = python-xapp; # added 2024-07-19
-  xenomapper = throw "xenomapper was moved to pkgs.xenomapper"; # added 2021-12-31
+  inherit (super.pkgs) xenomapper; # added 2021-12-31
   XlsxWriter = xlsxwriter; # added 2023-02-19
   xsser = "xsser has been removed because it was unmaintained and relies on a archived project"; # added 2024-07-27
   Yapsy = yapsy; # added 2023-02-19
