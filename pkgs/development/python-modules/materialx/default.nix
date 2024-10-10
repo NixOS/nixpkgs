@@ -5,13 +5,14 @@
   fetchFromGitHub,
   cmake,
   setuptools,
-  darwin,
   libX11,
   libXt,
   libGL,
   openimageio,
   imath,
   python,
+  darwinMinVersionHook,
+  apple-sdk_14,
 }:
 
 buildPythonPackage rec {
@@ -37,13 +38,10 @@ buildPythonPackage rec {
       openimageio
       imath
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        OpenGL
-        Cocoa
-      ]
-    )
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_14
+      (darwinMinVersionHook "10.15")
+    ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libX11
       libXt
@@ -53,9 +51,8 @@ buildPythonPackage rec {
   cmakeFlags = [
     (lib.cmakeBool "MATERIALX_BUILD_OIIO" true)
     (lib.cmakeBool "MATERIALX_BUILD_PYTHON" true)
-    # don't build MSL shader back-end on x86_x64-darwin, as it requires a newer SDK with metal support
     (lib.cmakeBool "MATERIALX_BUILD_GEN_MSL" (
-      stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin)
+      stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin
     ))
   ];
 
