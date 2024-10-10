@@ -1,6 +1,6 @@
 {
   lib,
-  fetchpatch,
+  fetchpatch2,
   fetchurl,
   nano,
   stdenv,
@@ -16,11 +16,25 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./patches/0000-readdir-errno.patch
-    ./patches/0001-getcwd-chroot.patch
+    (fetchpatch2 {
+      name = "0000-readdir-errno.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff_plain;h=0b78641d85af3b72e3b9d94cb7b94e45f3c08ee5";
+      includes = [
+        "lib/getcwd.c"
+      ];
+      hash = "sha256-pfvFp335MNeRd8r1ZGHTN7MQfOKLB390WE4MW1cH3Y0=";
+    })
+    (fetchpatch2 {
+      name = "0001-getcwd-chroot.patch";
+      url = "https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff_plain;h=79c0a43808d9ca85acd04600149fc1a9b75bd1b9";
+      includes = [
+        "lib/getcwd.c"
+      ];
+      hash = "sha256-u9sziWbZvjUH6flxOexLcn1ZEWTfn/ce6Es9/PxTKSM=";
+    })
     ./patches/0002-CVE-2012-0804.patch
     ./patches/0003-CVE-2017-12836.patch
-    (fetchpatch {
+    (fetchpatch2 {
       url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24118ec737c7/cvs/vasnprintf-high-sierra-fix.diff";
       hash = "sha256-r/pIUzL2a7GCljaA+QVSk3vxRVuFU4j3wG72o6JShuI=";
     })
