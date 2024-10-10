@@ -58,12 +58,13 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
                 extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
                 libc_libdir="/usr/lib"
             fi
-            extraLDFlags=("-L$libc_libdir")
+            declare -a prefixExtraLDFlags=()
+            prefixExtraLDFlags=("-L$libc_libdir")
             nixDontSetRpathVar=NIX_DONT_SET_RPATH''${post}
             if test "''${!nixDontSetRpathVar-}" != "1"; then
-                extraLDFlags+=("-rpath" "$libc_libdir")
+                prefixExtraLDFlags+=("-rpath" "$libc_libdir")
             fi
-            extraLDFlags+=("''${extraLDFlags[@]}")
+            extraLDFlags=("''${prefixExtraLDFlags[@]}" "''${extraLDFlags[@]}")
             for i in "''${extraLDFlags[@]}"; do
                 declare -g EXTRA_LDFLAGS''${post}+=" -Wl,$i"
             done
