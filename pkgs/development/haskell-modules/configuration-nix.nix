@@ -1117,6 +1117,22 @@ self: super: builtins.intersectAttrs super {
     (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
+  cloudy =
+    pkgs.lib.pipe
+      super.cloudy
+      [
+        # The code-path that generates the optparse-applicative completions uses
+        # the HOME directory, so that must be set in order to generate completions.
+        # https://github.com/cdepillabout/cloudy/issues/10
+        ( overrideCabal (oldAttrs: {
+            postInstall = ''
+                export HOME=$TMPDIR
+              '' + (oldAttrs.postInstall or "");
+          })
+        )
+        (self.generateOptparseApplicativeCompletions ["cloudy"])
+      ];
+
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;

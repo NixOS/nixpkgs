@@ -207,6 +207,7 @@ package-maintainers:
   bdesham:
     - pinboard-notes-backup
   cdepillabout:
+    - cloudy
     - password
     - password-instances
     - pretty-simple
