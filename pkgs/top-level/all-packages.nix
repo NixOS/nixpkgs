@@ -5856,6 +5856,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  sim-daltonism = callPackage ../applications/accessibility/sim-daltonism { };
+
   simdjson = callPackage ../development/libraries/simdjson { };
 
   shisho = callPackage ../tools/security/shisho { };
