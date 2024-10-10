@@ -34634,7 +34634,8 @@ with pkgs;
   deliantra-data = callPackage ../games/deliantra/data.nix { };
 
   ddnet = callPackage ../games/ddnet {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL Security;
+    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices CoreGraphics ImageIO Carbon Cocoa OpenGL Security;
+    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
   ddnet-server = ddnet.override { buildClient = false; };
 
