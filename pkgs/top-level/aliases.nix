@@ -831,7 +831,6 @@ mapAliases {
   libbpf_1 = libbpf; # Added 2022-12-06
   libbson = mongoc; # Added 2024-03-11
   libcap_pam = throw "'libcap_pam' has been replaced with 'libcap'"; # Converted to throw 2023-09-10
-  libclc = llvmPackages_18.libclc; # Added 2023-10-28
   libcxxabi = throw "'libcxxabi' was merged into 'libcxx'"; # Converted to throw 2024-03-08
   libdwarf_20210528 = throw "'libdwarf_20210528' has been removed because it is not used in nixpkgs, move to libdwarf"; # Added 2024-03-23
   libgme = game-music-emu; # Added 2022-07-20

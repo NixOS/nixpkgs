@@ -15272,6 +15272,7 @@ with pkgs;
   mlir_16 = llvmPackages_16.mlir;
   mlir_17 = llvmPackages_17.mlir;
 
+  libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
