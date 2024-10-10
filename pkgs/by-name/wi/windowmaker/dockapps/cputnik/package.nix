@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, dockapps-sources
-, libX11
-, libXext
-, libXpm
+{
+  lib,
+  libX11,
+  libXext,
+  libXpm,
+  stdenv,
+  windowmaker,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cputnik";
+  inherit (finalAttrs.src) version;
 
-  inherit (dockapps-sources) version src;
+  src = windowmaker.dockapps.dockapps-sources;
 
   sourceRoot = "${finalAttrs.src.name}/cputnik/src";
 
   buildInputs = [
     libX11
-    libXpm
     libXext
+    libXpm
   ];
 
+  hardeningDisable = [ "format" ];
+
+  strictDeps = true;
+
+  # TODO: convert to __structuredAttrs
   preBuild = ''
     makeFlagsArray+=(
       INCS="-I${libX11.dev}/include -I${libXext.dev}/include -I${libXpm.dev}/include"
       LIBS="-L${libX11}/lib -L${libXext}/lib -L${libXpm}/lib -lX11 -lXpm -lXext"
     )
   '';
-
-  hardeningDisable = [ "format" ];
 
   installPhase = ''
     runHook preInstall
@@ -37,10 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Calendar clock with antialiased text";
-    homepage = "https://www.dockapps.net/wmcalclock";
+    homepage = "https://www.dockapps.net/cputnik";
+    description = "CPU and memory monitor";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    mainProgram = "cputnik";
+    inherit (windowmaker.meta) maintainers platforms;
   };
 })

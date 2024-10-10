@@ -1,25 +1,54 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    literalExpression
+    mkIf
+    singleton
+    ;
+  inherit (lib.types) functionTo listOf package;
   cfg = config.services.xserver.windowManager.windowmaker;
 in
 {
-  ###### interface
   options = {
-    services.xserver.windowManager.windowmaker.enable = mkEnableOption "windowmaker";
+    services.xserver.windowManager.windowmaker = {
+      enable = mkEnableOption "windowmaker";
+      package = mkPackageOption pkgs "windowmaker" { };
+      dockapps = mkOption {
+        type = functionTo (listOf package);
+        default = _: [ ];
+        defaultText = literalExpression ''
+          windowmaker: with windowmaker.dockapps; [ ];
+        '';
+        description = ''
+          Extra dockapps available to WindowMaker.
+        '';
+        example = literalExpression ''
+          windowmaker: with windowmaker.dockapps; [
+            cputnik
+            wmcube
+          ];
+        '';
+      };
+    };
   };
 
-  ###### implementation
   config = mkIf cfg.enable {
+    environment.systemPackages = [ cfg.package ] ++ cfg.dockapps cfg.package;
     services.xserver.windowManager.session = singleton {
       name = "windowmaker";
       start = ''
-        ${pkgs.windowmaker}/bin/wmaker &
+        ${lib.getExe cfg.package} &
         waitPID=$!
       '';
     };
-    environment.systemPackages = [ pkgs.windowmaker ];
   };
 }
