@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, hatchling
-, cachetools
-, pandas
-, requests
-, pytest
-, pytest-cov
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  hatchling,
+  cachetools,
+  pandas,
+  requests,
+  pytest,
+  pytest-cov,
 }:
 
 buildPythonPackage rec {
