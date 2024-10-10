@@ -20,7 +20,7 @@ let
     inherit (config.sdImage) storePaths;
     compressImage = config.sdImage.compressImage;
     populateImageCommands = config.sdImage.populateRootCommands;
-    volumeLabel = "NIXOS_SD";
+    volumeLabel = config.sdImage.rootVolumeLabel;
   } // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
     uuid = config.sdImage.rootPartitionUUID;
   });
@@ -94,6 +94,17 @@ in
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
         UUID for the filesystem on the main NixOS partition on the SD card.
+      '';
+    };
+
+    rootVolumeLabel = mkOption {
+      type = types.str;
+      default = "NIXOS_SD";
+      example = "NIXOS_PENDRIVE";
+      description = ''
+        Label for the NixOS root volume.
+        Usually used when creating a recovery NixOS media installation
+        that avoids conflicting with previous instalation label.
       '';
     };
 
@@ -172,7 +183,7 @@ in
         options = [ "nofail" "noauto" ];
       };
       "/" = {
-        device = "/dev/disk/by-label/NIXOS_SD";
+        device = "/dev/disk/by-label/${config.sdImage.rootVolumeLabel}";
         fsType = "ext4";
       };
     };
