@@ -117,17 +117,15 @@ stdenv.mkDerivation {
   # (check-ldap) the bdb backend got deprecated in favour of mdb in openldap 2.5.0,
   #              but the heimdal tests still seem to expect bdb as the openldap backend.
   #              This might be fixed upstream in a future update.
-  patchPhase = ''
-    runHook prePatch
-
+  postPatch = ''
     substituteInPlace tests/ldap/slapd-init.in \
-      --replace 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
+      --replace-fail 'SCHEMA_PATHS="' 'SCHEMA_PATHS="${openldap}/etc/schema '
     substituteInPlace tests/ldap/check-ldap.in \
-      --replace 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
+      --replace-fail 'PATH=' 'PATH=${openldap}/libexec:${openldap}/bin:'
     substituteInPlace tests/ldap/slapd.conf \
-      --replace 'database	bdb' 'database mdb'
-
-    runHook postPatch
+      --replace-fail 'database	bdb' 'database mdb'
+    substituteInPlace tests/kdc/check-iprop.in \
+      --replace-fail '/bin/pwd' 'pwd'
   '';
 
   # (test_cc) heimdal uses librokens implementation of `secure_getenv` on darwin,
