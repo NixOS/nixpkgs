@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cryptography,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
@@ -27,7 +26,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    cryptography
     pyzipper
     striprtf
   ];
