@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     # We remove phony 'FRC' target that forces rebuilds:
     #   'version.h: FRC ...' is translated to 'version.h: ...'.
     sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 

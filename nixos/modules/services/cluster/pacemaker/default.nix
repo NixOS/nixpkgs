@@ -1,19 +1,17 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.pacemaker;
 in
 {
   # interface
   options.services.pacemaker = {
-    enable = mkEnableOption "pacemaker";
+    enable = lib.mkEnableOption "pacemaker";
 
-    package = mkPackageOption pkgs "pacemaker" { };
+    package = lib.mkPackageOption pkgs "pacemaker" { };
   };
 
   # implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [ {
       assertion = config.services.corosync.enable;
       message = ''

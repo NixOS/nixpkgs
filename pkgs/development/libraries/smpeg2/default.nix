@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake makeWrapper pkg-config ];
 
   buildInputs = [ SDL2 ]
-    ++ lib.optional stdenv.isDarwin darwin.libobjc;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
 
   outputs = [ "out" "dev" "man" ];
 

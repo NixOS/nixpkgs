@@ -2,16 +2,14 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   buildMozillaMach,
   nixosTests,
-  python311,
 }:
 
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.17.8";
+    packageVersion = "11.19.1";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -19,14 +17,14 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.2.0";
+    version = "128.4.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-1hHp8LZxGJmLSoe8NNzmx2QxPosrIcLqggeGhf+iMPI=";
+      hash = "sha256-RFJ3aRbLwCf0qaluqImcF9+6frvJbw8QE3jBpxNxFjE=";
     };
 
     extraConfigureFlags = [

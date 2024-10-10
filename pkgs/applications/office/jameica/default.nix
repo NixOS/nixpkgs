@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ ant jdk wrapGAppsHook3 makeWrapper stripJavaArchivesHook ];
-  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ gtk2 glib libXtst ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   dontWrapGApps = true;
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
-        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
+        lib.optionalString stdenv.hostPlatform.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
       --chdir "$out/share/java/" \

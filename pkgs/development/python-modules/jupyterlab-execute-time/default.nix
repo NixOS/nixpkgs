@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-execute-time";
-  version = "3.1.2";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyterlab_execute_time";
     inherit version;
-    hash = "sha256-DiyGsoNXXh+ieMfpSrA6A/5c0ftNV9Ygs9Tl2/VEdbk=";
+    hash = "sha256-mxO2XCwTm/q7P2/xcGxNM+1aViA6idApdggzThW8nAs=";
   };
 
   # jupyterlab is required to build from source but we use the pre-build package

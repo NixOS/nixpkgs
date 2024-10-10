@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
   };
 
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-aiohttp
     pytest-cov-stub
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiojobs" ];
 

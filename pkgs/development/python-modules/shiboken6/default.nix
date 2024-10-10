@@ -28,7 +28,7 @@ stdenv'.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     (python.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ]))
-  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     llvmPackages.llvm

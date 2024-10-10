@@ -59,9 +59,9 @@ stdenv.mkDerivation ( finalAttrs: {
 
   # ensure we have the right install id set.  Otherwise the library
   # wouldn't be found during install.  The alternative would be to work
-  # lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libblst.dylib";
+  # lib.optional stdenv.hostPlatform.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libblst.dylib";
   # into the setup.sh
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libblst.dylib $out/lib/libblst.dylib
   '';
 

@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     owner = "darkomarko42";
     repo = "marwaita-x";
     rev = finalAttrs.version;
-    sha256 = "sha256-x5b3aaasYbxFGvdNNF6vIrF/ZZWBGbdS2kEuB1rwOlA=";
+    hash = "sha256-x5b3aaasYbxFGvdNNF6vIrF/ZZWBGbdS2kEuB1rwOlA=";
   };
 
   buildInputs = [

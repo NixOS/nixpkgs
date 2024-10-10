@@ -106,7 +106,7 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildFeatures = lib.optionals stdenv.isLinux [ "linux-pkg-config" ];
+  buildFeatures = lib.optionals stdenv.hostPlatform.isLinux [ "linux-pkg-config" ];
 
   # Checks require an active X server
   doCheck = false;
@@ -136,7 +136,7 @@ rustPlatform.buildRustPackage rec {
       zlib
       zstd
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit
@@ -149,7 +149,7 @@ rustPlatform.buildRustPackage rec {
         SystemConfiguration
       ]
     )
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       xdotool
     ];
@@ -161,7 +161,7 @@ rustPlatform.buildRustPackage rec {
 
     # .so needs to be next to the executable
     mv $out/bin/rustdesk $out/lib/rustdesk
-    ${lib.optionalString stdenv.isLinux "ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk"}
+    ${lib.optionalString stdenv.hostPlatform.isLinux "ln -s ${libsciter}/lib/libsciter-gtk.so $out/lib/rustdesk"}
 
     makeWrapper $out/lib/rustdesk/rustdesk $out/bin/rustdesk \
       --chdir "$out/share"
@@ -171,7 +171,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm0644 $src/res/logo.svg $out/share/icons/hicolor/scalable/apps/rustdesk.svg
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath "${libayatana-appindicator}/lib" "$out/lib/rustdesk/rustdesk"
   '';
 

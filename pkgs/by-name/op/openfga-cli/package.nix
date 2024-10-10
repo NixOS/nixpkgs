@@ -7,7 +7,7 @@
 
 let
   pname = "openfga-cli";
-  version = "0.6.0";
+  version = "0.6.1";
 in
 
 buildGoModule {
@@ -17,7 +17,7 @@ buildGoModule {
     owner = "openfga";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-6bzVT+SnYAFDYdy5nyXPpmUuLsmjvUuaIlPkICjw30U=";
+    hash = "sha256-cAfBEhgHnzmSD8/pVi8VVjnC3O+WgokzdPSzvE5hDec=";
   };
 
   vendorHash = "sha256-jIcuyt4tzfz+WkyQnMZs6viLnmwtGbVawgnz9M/xAS8=";

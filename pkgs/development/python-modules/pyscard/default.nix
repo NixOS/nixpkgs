@@ -13,7 +13,7 @@
 
 let
   # Package does not support configuring the pcsc library.
-  withApplePCSC = stdenv.isDarwin;
+  withApplePCSC = stdenv.hostPlatform.isDarwin;
 in
 
 buildPythonPackage rec {

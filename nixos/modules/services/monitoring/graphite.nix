@@ -273,6 +273,7 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          Slice = "system-graphite.slice";
           RuntimeDirectory = name;
           ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -295,6 +296,7 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          Slice = "system-graphite.slice";
           RuntimeDirectory = name;
           ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -311,6 +313,7 @@ in {
         after = [ "network.target" ];
         environment = carbonEnv;
         serviceConfig = {
+          Slice = "system-graphite.slice";
           RuntimeDirectory = name;
           ExecStart = "${pkgs.python3Packages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -360,6 +363,7 @@ in {
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
+          Slice = "system-graphite.slice";
         };
         preStart = ''
           if ! test -e ${dataDir}/db-created; then
@@ -397,6 +401,7 @@ in {
           WorkingDirectory = dataDir;
           User = "graphite";
           Group = "graphite";
+          Slice = "system-graphite.slice";
         };
         preStart = ''
           if ! test -e ${dataDir}/db-created; then
@@ -413,6 +418,11 @@ in {
       cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay ||
       cfg.web.enable || cfg.seyren.enable
      ) {
+      systemd.slices.system-graphite = {
+        description = "Graphite Graphing System Slice";
+        documentation = [ "https://graphite.readthedocs.io/en/latest/overview.html" ];
+      };
+
       users.users.graphite = {
         uid = config.ids.uids.graphite;
         group = "graphite";

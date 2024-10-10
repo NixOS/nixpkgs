@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   build-system = [ rustPlatform.maturinBuildHook ];
 

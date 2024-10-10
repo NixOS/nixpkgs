@@ -15,14 +15,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ruff-lsp";
-  version = "0.0.56";
+  version = "0.0.57";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff-lsp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L5bfGW5R9kDCK8zcFh+a/zquJefwKxOB0JdYDTyPFuQ=";
+    hash = "sha256-w9NNdsDD+YLrCw8DHDhVx62MdwLhcN8QSmb/2rqlb5g=";
   };
 
   postPatch = ''
@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # fails in linux sandbox
-  doCheck = stdenv.isDarwin;
+  doCheck = stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

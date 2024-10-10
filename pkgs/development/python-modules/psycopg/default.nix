@@ -35,13 +35,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-jQMIgfMyQpd9bD3F1IhPff39BrFaBD6U7Exryna+Acw=";
+    hash = "sha256-Udysl00lB6rxmQByME6PI3KL4tlzIZ0/CZNWLVKssS8=";
   };
 
   patches = [
@@ -161,7 +161,7 @@ buildPythonPackage rec {
     "psycopg_pool"
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     c = [ psycopg-c ];
     pool = [ psycopg-pool ];
   };
@@ -174,9 +174,9 @@ buildPythonPackage rec {
       pytestCheckHook
       postgresql
     ]
-    ++ lib.optional (stdenv.isLinux) postgresqlTestHook
-    ++ passthru.optional-dependencies.c
-    ++ passthru.optional-dependencies.pool;
+    ++ lib.optional (stdenv.hostPlatform.isLinux) postgresqlTestHook
+    ++ optional-dependencies.c
+    ++ optional-dependencies.pool;
 
   env = {
     postgresqlEnableTCP = 1;
@@ -188,7 +188,7 @@ buildPythonPackage rec {
     ''
       cd ..
     ''
-    + lib.optionalString (stdenv.isLinux) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux) ''
       export PSYCOPG_TEST_DSN="host=/build/run/postgresql user=$PGUSER"
     '';
 
@@ -205,13 +205,16 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
+    # https://github.com/psycopg/psycopg/pull/915
+    "tests/test_notify.py"
+    "tests/test_notify_async.py"
   ];
 
   pytestFlagsArray = [
     "-o"
     "cache_dir=$TMPDIR"
     "-m"
-    "'not refcount and not timing'"
+    "'not refcount and not timing and not flakey'"
     # pytest.PytestRemovedIn9Warning: Marks applied to fixtures have no effect
     "-W"
     "ignore::pytest.PytestRemovedIn9Warning"

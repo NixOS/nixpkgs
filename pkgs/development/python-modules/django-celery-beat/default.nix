@@ -5,7 +5,7 @@
   cron-descriptor,
   django-timezone-field,
   ephem,
-  fetchPypi,
+  fetchFromGitHub,
   pytest-django,
   pytest-timeout,
   pytestCheckHook,
@@ -17,21 +17,23 @@
 
 buildPythonPackage rec {
   pname = "django-celery-beat";
-  version = "2.6.0";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-91stEpcx8SFL6Dg+GPrmv+rNtV3/shFs6EkiLAEG+a0=";
+  src = fetchFromGitHub {
+    owner = "celery";
+    repo = "django-celery-beat";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XWcmKQXNw8eoGkld77E3rHpR9ofa1i2qO/JI8Hnpi9M=";
   };
-
-  nativeBuildInputs = [ setuptools ];
 
   pythonRelaxDeps = [ "django" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     cron-descriptor
     python-crontab
     celery

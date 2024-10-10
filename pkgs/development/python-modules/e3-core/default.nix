@@ -1,18 +1,19 @@
 {
+  lib,
+  stdenv,
   autoPatchelfHook,
   buildPythonPackage,
   colorama,
   distro,
   fetchFromGitHub,
-  lib,
   packaging,
   psutil,
   python-dateutil,
+  pythonOlder,
   pyyaml,
-  requests,
   requests-cache,
   requests-toolbelt,
-  stdenv,
+  requests,
   setuptools,
   stevedore,
   tqdm,
@@ -20,38 +21,37 @@
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.5.0";
+  version = "22.6.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "AdaCore";
     repo = "e3-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7csZYohU89uavSMPOKGJ8HClmtiweGSghyR7QgFfSY8=";
+    hash = "sha256-6rClGDo8KhBbOg/Rw0nVISVtOAACf5cwSafNInlBGCw=";
   };
 
-  patches = [ ./0001-use-distro-over-ld.patch ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    setuptools
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       colorama
       packaging
-      pyyaml
       python-dateutil
+      pyyaml
       requests
       requests-cache
       requests-toolbelt
-      tqdm
       stevedore
+      tqdm
     ]
-    ++ lib.optional stdenv.isLinux [
-      # See setup.py:24. These are required only on Linux. Darwin has its own set
-      # of requirements.
+    ++ lib.optional stdenv.hostPlatform.isLinux [
+      # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
+      # These are required only on Linux. Darwin has its own set of requirements
       psutil
       distro
     ];

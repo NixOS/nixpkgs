@@ -48,7 +48,7 @@
   # Boolean flags
   buildManPages ? true,
   useBuiltinLua ? true,
-  useEspeak ? !stdenv.isDarwin,
+  useEspeak ? !stdenv.hostPlatform.isDarwin,
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,

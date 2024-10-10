@@ -25,7 +25,8 @@ let
       };
       aarch64-darwin = x86_64-darwin;
     }
-    ."${stdenvNoCC.hostPlatform.system}";
+    ."${stdenvNoCC.hostPlatform.system}"
+      or (throw "appflowy: No source for system: ${stdenvNoCC.hostPlatform.system}");
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "appflowy";
@@ -40,7 +41,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
-  ] ++ lib.optionals stdenvNoCC.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs = [
     gtk3
@@ -52,7 +53,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontConfigure = true;
 
   installPhase =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       runHook preInstall
 
       cd AppFlowy/
@@ -67,7 +68,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
       runHook postInstall
     ''
-    + lib.optionalString stdenvNoCC.isDarwin ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       runHook preInstall
 
       mkdir -p $out/{Applications,bin}
@@ -77,17 +78,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
 
   preFixup =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       # Add missing libraries to appflowy using the ones it comes with
       makeWrapper $out/opt/AppFlowy $out/bin/appflowy \
         --set LD_LIBRARY_PATH "$out/opt/lib/" \
         --prefix PATH : "${lib.makeBinPath [ xdg-user-dirs ]}"
     ''
-    + lib.optionalString stdenvNoCC.isDarwin ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/AppFlowy.app/Contents/MacOS/AppFlowy $out/bin/appflowy
     '';
 
-  desktopItems = lib.optionals stdenvNoCC.isLinux [
+  desktopItems = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     (makeDesktopItem {
       name = "appflowy";
       desktopName = "AppFlowy";

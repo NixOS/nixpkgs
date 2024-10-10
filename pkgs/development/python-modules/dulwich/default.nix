@@ -81,7 +81,7 @@ buildPythonPackage rec {
     rm tests/compat/test_pack.py
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "dulwich" ];
 

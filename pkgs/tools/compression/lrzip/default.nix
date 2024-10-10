@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Mb324ojtLV0S10KhL7Vjf3DhSOtCy1pFMTzvLkTnpXM=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Building the ASM/x86 directory creates an empty archive,
     # which fails on darwin, so remove it
     # https://github.com/ckolivas/lrzip/issues/193

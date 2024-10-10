@@ -16,7 +16,7 @@ let
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
       rev = version;
-      sha256 = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
+      hash = "sha256-L7P6FtqKLB4e+ezPzXePM33qj5esNoRlTFXi0/GhdsA=";
     };
   };
 
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
     '' else ''

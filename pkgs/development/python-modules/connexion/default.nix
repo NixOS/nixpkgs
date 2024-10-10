@@ -62,7 +62,7 @@ buildPythonPackage rec {
     werkzeug
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flask = [
       a2wsgi
       flask
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytestCheckHook
     testfixtures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "connexion" ];
 

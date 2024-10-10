@@ -65,6 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./trash-test.patch
   ];
 
+  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+  '';
+
   nativeBuildInputs = [
     docbook_xml_dtd_412
     docbook_xml_dtd_43
@@ -117,7 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
     "-Dgeoclue=disabled"
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dpytest=disabled"
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

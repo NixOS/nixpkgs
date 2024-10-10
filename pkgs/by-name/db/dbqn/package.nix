@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "dzaima";
     repo = "BQN";
     rev = "v${version}";
-    sha256 = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
+    hash = "sha256-AUfT7l7zr/pyG63wX8FMej8RUg7tXC1aroCrunjyw/8=";
   };
 
   nativeBuildInputs = [
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres sternenseemann ];
     inherit (jdk.meta) platforms;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dbqn-native.x86_64-darwin
   };
 }
 # TODO: Processing app

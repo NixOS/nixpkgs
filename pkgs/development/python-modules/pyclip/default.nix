@@ -30,19 +30,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs =
     [ pytest ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       xclip
       xvfb-run
     ];
 
   checkPhase = ''
     runHook preCheck
-    ${lib.optionalString stdenv.isLinux "xvfb-run -s '-screen 0 800x600x24'"} pytest tests
+    ${lib.optionalString stdenv.hostPlatform.isLinux "xvfb-run -s '-screen 0 800x600x24'"} pytest tests
     runHook postCheck
   '';
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Cross-platform clipboard utilities supporting both binary and text data";
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";

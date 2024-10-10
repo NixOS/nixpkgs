@@ -26,7 +26,7 @@ let
     hash = "sha256-Zuz+HGfxjGviGBKTiHdIFXF8UMRLEIfM8f+LIB/xonk=";
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
+  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libpulseaudio
     libXxf86vm

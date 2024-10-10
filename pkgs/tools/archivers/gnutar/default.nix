@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   # avoid retaining reference to CF during stdenv bootstrap
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "gt_cv_func_CFPreferencesCopyAppValue=no"
     "gt_cv_func_CFLocaleCopyCurrent=no"
     "gt_cv_func_CFLocaleCopyPreferredLanguages=no"
@@ -27,26 +27,26 @@ stdenv.mkDerivation rec {
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.
   # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/system.c --replace '_(' 'N_('
   '';
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook
-    ++ lib.optional (!stdenv.isDarwin) updateAutotoolsGnuConfigScriptsHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) updateAutotoolsGnuConfigScriptsHook;
   # Add libintl on Darwin specifically as it fails to link (or skip)
   # NLS on it's own:
   #  "_libintl_textdomain", referenced from:
   #    _main in tar.o
   #  ld: symbol(s) not found for architecture x86_64
-  buildInputs = lib.optional aclSupport acl ++ lib.optional stdenv.isDarwin libintl;
+  buildInputs = lib.optional aclSupport acl ++ lib.optional stdenv.hostPlatform.isDarwin libintl;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-  FORCE_UNSAFE_CONFIGURE = lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.isSunOS) "1";
+  FORCE_UNSAFE_CONFIGURE = lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.hostPlatform.isSunOS) "1";
 
-  preConfigure = if stdenv.isCygwin then ''
+  preConfigure = if stdenv.hostPlatform.isCygwin then ''
     sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
   '' else null;
 

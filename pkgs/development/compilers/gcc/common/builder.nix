@@ -13,7 +13,6 @@ let
     version:
     stdenv.buildPlatform.isDarwin
     && stdenv.buildPlatform.isx86_64
-    && lib.versionAtLeast version "6"
     && lib.versionOlder version "10";
 in
 

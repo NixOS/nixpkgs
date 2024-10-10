@@ -15,7 +15,7 @@
 , proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 , enableWidevine ? false, widevine-cdm ? null
 , commandLineArgs ? ""
-, pulseSupport ? stdenv.isLinux, libpulseaudio
+, pulseSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , kerberosSupport ? true, libkrb5
 }:
 
@@ -24,7 +24,7 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "6.9.3447.41";
+  version = "6.9.3447.51";
 
   suffix = {
     aarch64-linux = "arm64";
@@ -34,8 +34,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}-1_${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-Up2n7G3vatsQC9JKF1A1jAIBbdWm9UhL/75AXuxDCsg=";
-      x86_64-linux = "sha256-Hcd8W8bDlRUT/zPYP+aiJnUmepS38KuK0wRFYB3uW1Y=";
+      aarch64-linux = "sha256-p+MihnvnVBVcsYE/7vp9b6T2bxp7cAiCq9ME+NHqi38=";
+      x86_64-linux = "sha256-/izigAT9eqhgxgYosMoDoPIA0rOCeYOotEjaigBTazk=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -62,7 +62,7 @@ in stdenv.mkDerivation rec {
     ++ lib.optional kerberosSupport libkrb5;
 
   libPath = lib.makeLibraryPath buildInputs
-    + lib.optionalString (stdenv.is64bit)
+    + lib.optionalString (stdenv.hostPlatform.is64bit)
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs)
     + ":$out/opt/${vivaldiName}/lib";
 

@@ -5,20 +5,19 @@
   pythonOlder,
   pytestCheckHook,
   atpublic,
-  bidict,
   black,
   clickhouse-connect,
   dask,
   datafusion,
   db-dtypes,
   duckdb,
+  fetchpatch,
   filelock,
   geopandas,
   google-cloud-bigquery,
   google-cloud-bigquery-storage,
   graphviz,
   hypothesis,
-  multipledispatch,
   numpy,
   oracledb,
   packaging,
@@ -57,25 +56,24 @@
 }:
 let
   testBackends = [
-    "datafusion"
     "duckdb"
-    "pandas"
     "sqlite"
+    "datafusion"
   ];
 
   ibisTestingData = fetchFromGitHub {
     name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    # https://github.com/ibis-project/ibis/blob/9.1.0/nix/overlay.nix#L20-L26
-    rev = "6737d1cb5951cabaccd095a3ae62a93dbd11ecb9";
-    hash = "sha256-MoVTZPWh4KVlrICYACrgfeLdl/fqoa1iweNg3zUtdrs=";
+    # https://github.com/ibis-project/ibis/blob/9.5.0/nix/overlay.nix#L20-L26
+    rev = "b26bd40cf29004372319df620c4bbe41420bb6f8";
+    sha256 = "sha256-1fenQNQB+Q0pbb0cbK2S/UIwZDE4PXXG15MH3aVbyLU=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "9.1.0";
+  version = "9.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -85,8 +83,17 @@ buildPythonPackage rec {
     repo = "ibis";
     owner = "ibis-project";
     rev = "refs/tags/${version}";
-    hash = "sha256-GmzmXzYMs7K7B//is3ZoD4muPAkb0tM56zFBbsA+NEo=";
+    hash = "sha256-6ebw/E3jZFMHKqC5ZY//2Ke0NrklyoGp5JGKBfDxy40=";
   };
+
+  patches = [
+    # remove after the 10.0 release
+    (fetchpatch {
+      name = "ibis-framework-duckdb-1.1.1.patch";
+      url = "https://github.com/ibis-project/ibis/commit/a54eceabac1d6592e9f6ab0ca7749e37a748c2ad.patch";
+      hash = "sha256-j5BPYVqnEF9GQV5N3/VhFUCdsEwAIOQC0KfZ5LNBSRg=";
+    })
+  ];
 
   nativeBuildInputs = [
     poetry-core
@@ -98,16 +105,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     atpublic
-    bidict
-    multipledispatch
-    numpy
-    pandas
     parsy
-    pyarrow
-    pyarrow-hotfix
     python-dateutil
     pytz
-    rich
     sqlglot
     toolz
     typing-extensions
@@ -124,13 +124,17 @@ buildPythonPackage rec {
     pytest-randomly
     pytest-snapshot
     pytest-timeout
+    # this dependency is still needed due to use of strict markers and
+    # `pytest.mark.xdist_group` in the ibis codebase
     pytest-xdist
-  ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
+  ] ++ lib.concatMap (name: optional-dependencies.${name}) testBackends;
+
+  dontUsePytestXdist = true;
 
   pytestFlagsArray = [
-    "--dist=loadgroup"
     "-m"
-    "'${lib.concatStringsSep " or " testBackends} or core'"
+    # tpcds and tpch are slow, so disable them
+    "'not tpcds and not tpch and (${lib.concatStringsSep " or " testBackends} or core)'"
   ];
 
   disabledTests = [
@@ -142,6 +146,7 @@ buildPythonPackage rec {
     "test_register_sqlite"
     # requires network connection
     "test_s3_403_fallback"
+    "test_hugging_face"
     # requires pytest 8.2+
     "test_roundtrip_delta"
   ];
@@ -167,54 +172,139 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ibis" ] ++ map (backend: "ibis.backends.${backend}") testBackends;
 
-  passthru = {
-    optional-dependencies = {
-      bigquery = [
-        db-dtypes
-        google-cloud-bigquery
-        google-cloud-bigquery-storage
-        pydata-google-auth
-      ];
-      clickhouse = [ clickhouse-connect ];
-      dask = [
-        dask
-        regex
-        packaging
-      ];
-      datafusion = [ datafusion ];
-      druid = [ pydruid ];
-      duckdb = [ duckdb ];
-      flink = [ ];
-      geospatial = [
-        geopandas
-        shapely
-      ];
-      mssql = [ pyodbc ];
-      mysql = [ pymysql ];
-      oracle = [
-        oracledb
-        packaging
-      ];
-      pandas = [
-        regex
-        packaging
-      ];
-      polars = [
-        polars
-        packaging
-      ];
-      postgres = [ psycopg2 ];
-      pyspark = [
-        pyspark
-        packaging
-      ];
-      snowflake = [ snowflake-connector-python ];
-      sqlite = [ regex ];
-      trino = [ trino-python-client ];
-      visualization = [ graphviz ];
-      decompiler = [ black ];
-      examples = [ pins ] ++ pins.optional-dependencies.gcs;
-    };
+  optional-dependencies = {
+    bigquery = [
+      db-dtypes
+      google-cloud-bigquery
+      google-cloud-bigquery-storage
+      pyarrow
+      pyarrow-hotfix
+      pydata-google-auth
+      numpy
+      pandas
+      rich
+    ];
+    clickhouse = [
+      clickhouse-connect
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    datafusion = [
+      datafusion
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    druid = [
+      pydruid
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    duckdb = [
+      duckdb
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    flink = [
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    geospatial = [
+      geopandas
+      shapely
+    ];
+    mssql = [
+      pyodbc
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    mysql = [
+      pymysql
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    oracle = [
+      oracledb
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    polars = [
+      polars
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    postgres = [
+      psycopg2
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    pyspark = [
+      pyspark
+      packaging
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    snowflake = [
+      snowflake-connector-python
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    sqlite = [
+      regex
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    trino = [
+      trino-python-client
+      pyarrow
+      pyarrow-hotfix
+      numpy
+      pandas
+      rich
+    ];
+    visualization = [ graphviz ];
+    decompiler = [ black ];
+    examples = [ pins ] ++ pins.optional-dependencies.gcs;
   };
 
   meta = with lib; {

@@ -27,7 +27,7 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ urandom ];
     # many undefined functions
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "emptty";
   };
 }

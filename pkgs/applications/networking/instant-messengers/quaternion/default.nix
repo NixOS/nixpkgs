@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall =
-    if stdenv.isDarwin then ''
+    if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/Applications
       mv $out/bin/quaternion.app $out/Applications
       rmdir $out/bin || :

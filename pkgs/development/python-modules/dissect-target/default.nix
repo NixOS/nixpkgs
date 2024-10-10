@@ -80,7 +80,7 @@ buildPythonPackage rec {
     structlog
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       asn1crypto
       dissect-btrfs
@@ -102,12 +102,12 @@ buildPythonPackage rec {
       yara-python
       zstandard
     ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
-    yara = [ yara-python ] ++ passthru.optional-dependencies.full;
-    smb = [ impacket ] ++ passthru.optional-dependencies.full;
-    mqtt = [ paho-mqtt ] ++ passthru.optional-dependencies.full;
+    yara = [ yara-python ] ++ optional-dependencies.full;
+    smb = [ impacket ] ++ optional-dependencies.full;
+    mqtt = [ paho-mqtt ] ++ optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "dissect.target" ];
 

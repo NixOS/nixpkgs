@@ -15,7 +15,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-notifications";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.2";
 
   src = fetchFromGitHub {
     owner = "pop-os";
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
+    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
   nativeBuildInputs = [ just which pkg-config makeBinaryWrapper ];
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     description = "Notifications for the COSMIC Desktop Environment";
     mainProgram = "cosmic-notifications";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyanbinary ];
+    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
 }

@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     (fetchpatch {
       name = "0001-setup.py-remove-unused-libclang-dependency.patch";
       url = "https://github.com/microsoft/igvm-tooling/commit/7182e925de9b5e9f5c8c3a3ce6e3942a92506064.patch";
-      sha256 = "sha256-tcVxcuLxknyEdo2YjeHOqSG9xQna8US+YyvlcfX+Htw=";
+      hash = "sha256-tcVxcuLxknyEdo2YjeHOqSG9xQna8US+YyvlcfX+Htw=";
       stripLen = 1;
     })
   ];

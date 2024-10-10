@@ -17,7 +17,6 @@
   pytestCheckHook,
   pyyaml,
   setuptools,
-  setuptools-git-versioning,
   xyzservices,
   beautifulsoup4,
   channels,
@@ -47,21 +46,21 @@
 buildPythonPackage rec {
   pname = "bokeh";
   # update together with panel which is not straightforward
-  version = "3.5.0";
-  format = "pyproject";
+  version = "3.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zeia3b6QDDevJaIFKuF0ttO6HvCMkf1att/XEuGEw5k=";
+    hash = "sha256-A6VKZ9tne4iBg0JxxiCngbODrlk69cPqIUkWR1REDQc=";
   };
 
   src_test = fetchFromGitHub {
     owner = "bokeh";
-    repo = pname;
+    repo = "bokeh";
     rev = "refs/tags/${version}";
-    hash = "sha256-PK9iLOCcivr4oF9Riq73dzxGfxzWRk3bdrCCpRrTv5g=";
+    hash = "sha256-MAv+6bwc5f+jZasRDsYTJ/ir0i1pYCuwqPMumsYWvws=";
   };
 
   patches = [
@@ -72,11 +71,16 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail ', "setuptools-git-versioning"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
+  '';
+
+  build-system = [
     colorama
     nodejs
     setuptools
-    setuptools-git-versioning
   ];
 
   nativeCheckInputs = [
@@ -106,7 +110,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jinja2
     contourpy
     numpy

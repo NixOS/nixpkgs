@@ -47,12 +47,12 @@ buildPythonPackage rec {
       # Assertion error
       "test_capture_pane_start"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/test_pane.py:113: AssertionError
       "test_capture_pane_start"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_test.py"
   ];
 

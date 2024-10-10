@@ -17,7 +17,7 @@ buildDunePackage {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreImage OpenGL VideoToolbox ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit CoreImage OpenGL VideoToolbox ];
   propagatedBuildInputs = [ ffmpeg-avutil ffmpeg.dev ];
 
   doCheck = true;

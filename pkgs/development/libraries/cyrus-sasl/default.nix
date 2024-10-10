@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ openssl db gettext libkrb5 libxcrypt ]
     ++ lib.optional enableLdap openldap
-    ++ lib.optional stdenv.isLinux pam;
+    ++ lib.optional stdenv.hostPlatform.isLinux pam;
 
   configureFlags = [
     "--with-openssl=${openssl.dev}"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       "CFLAGS=-DTIME_WITH_SYS_TIME"
     ];
 
-  installFlags = lib.optionals stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+  installFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
 
   passthru.tests = {
     inherit (nixosTests) parsedmarc postfix;

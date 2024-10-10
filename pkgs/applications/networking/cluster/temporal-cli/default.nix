@@ -41,7 +41,7 @@ let
     ];
 
     # Tests fail with x86 on macOS Rosetta 2
-    doCheck = !(stdenv.isDarwin && stdenv.hostPlatform.isx86_64);
+    doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
 
     preCheck = ''
       export HOME="$(mktemp -d)"

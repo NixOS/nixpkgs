@@ -112,7 +112,7 @@ buildPythonPackage {
       pkg-config
       setuptools
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Minimal version required according to:
       # https://github.com/scipy/scipy/blob/v1.14.0/scipy/meson.build#L185-L188
       (xcbuild.override {
@@ -141,7 +141,7 @@ buildPythonPackage {
 
   # The following tests are broken on aarch64-darwin with newer compilers and library versions.
   # See https://github.com/scipy/scipy/issues/18308
-  disabledTests = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     "test_a_b_neg_int_after_euler_hypergeometric_transformation"
     "test_dst4_definition_ortho"
     "test_load_mat4_le"
@@ -150,7 +150,7 @@ buildPythonPackage {
     "test_uint64_max"
   ];
 
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   preConfigure =
     ''
@@ -187,7 +187,9 @@ buildPythonPackage {
   #
   #         ldr     x0, [x0, ___stack_chk_guard];momd
   #
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
+    "stackprotector"
+  ];
 
   # remove references to dev dependencies
   postInstall = ''

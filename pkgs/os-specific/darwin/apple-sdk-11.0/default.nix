@@ -127,7 +127,7 @@ let
       }) bindgenHook;
     };
 
-    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {
+    callPackage = newScope (lib.optionalAttrs stdenv.hostPlatform.isDarwin (stdenvs // rec {
       inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0)

@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-gDQ9AFrJuV7SrzKCAHQBkKj6clXuPLO0DHhnvcBqRLs=";
   };
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
 
   nativeBuildInputs = [ cargo rustPlatform.cargoSetupHook cargo-c validatePkgConfig ];
 

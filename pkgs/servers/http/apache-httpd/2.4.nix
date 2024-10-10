@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     lib.optional brotliSupport brotli ++
     lib.optional sslSupport openssl ++
     lib.optional modTlsSupport rustls-ffi ++
-    lib.optional (modTlsSupport && stdenv.isDarwin) Foundation ++
+    lib.optional (modTlsSupport && stdenv.hostPlatform.isDarwin) Foundation ++
     lib.optional ldapSupport openldap ++    # there is no --with-ldap flag
     lib.optional libxml2Support libxml2 ++
     lib.optional http2Support nghttp2 ++
-    lib.optional stdenv.isDarwin libiconv;
+    lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Required for ‘pthread_cancel’.
-  NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
+  NIX_LDFLAGS = lib.optionalString (!stdenv.hostPlatform.isDarwin) "-lgcc_s";
 
   configureFlags = [
     "--with-apr=${apr.dev}"

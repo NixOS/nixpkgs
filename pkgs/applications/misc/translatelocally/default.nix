@@ -28,7 +28,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   # https://github.com/XapaJIaMnu/translateLocally/blob/81ed8b9/.github/workflows/build.yml#L330
-  postConfigure = lib.optionalString stdenv.isAarch64 ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isAarch64 ''
     bash ../cmake/fix_ruy_build.sh .. .
   '';
 

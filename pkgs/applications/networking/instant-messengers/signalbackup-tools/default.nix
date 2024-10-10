@@ -14,27 +14,27 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20240910";
+  version = "20240929";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
     rev = version;
-    hash = "sha256-VOC13xXWRGHq7K5ju1U/+SNj+qgkJCSYN11l01hwYhI=";
+    hash = "sha256-OXn/RMc2v099S8/atQTYz1YwSH0sD7o7ZImlrBmUlSE=";
   };
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
   buildInputs = [
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Security
   ];
 

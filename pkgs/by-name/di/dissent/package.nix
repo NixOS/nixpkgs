@@ -44,6 +44,8 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    substituteInPlace nix/so.libdb.dissent.service \
+      --replace-warn "/usr/bin/dissent" "$out/bin/dissent"
     install -D -m 444 -t $out/share/applications nix/so.libdb.dissent.desktop
     install -D -m 444 -t $out/share/icons/hicolor/scalable/apps internal/icons/hicolor/scalable/apps/so.libdb.dissent.svg
     install -D -m 444 -t $out/share/icons/hicolor/symbolic/apps internal/icons/symbolic/apps/so.libdb.dissent-symbolic.svg

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny alternative Discord client";
     license = lib.licenses.gpl3Only;
     mainProgram = "dorion";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.intersectLists (lib.platforms.linux) (lib.platforms.x86_64);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "6.2.5";
+  version = "6.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EGMUTUN95wykU756GJSiXwr8Hi3kyaLPfqhuDgvhbBE=";
+    hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
   };
 
   pythonRemoveDeps = [ "pytest-cov" ];
@@ -67,7 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SNMP library";
     homepage = "https://github.com/lextudio/pysnmp";
-    changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.txt";
+    changelog = "https://github.com/lextudio/pysnmp/blob/${src.rev}/CHANGES.rst";
     license = licenses.bsd2;
     maintainers = with maintainers; [ hexa ];
   };

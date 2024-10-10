@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     cmake
     qt6.qttools
     qt6.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
 

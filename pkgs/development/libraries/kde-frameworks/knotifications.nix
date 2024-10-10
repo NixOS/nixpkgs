@@ -11,7 +11,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [
     kcodecs kconfig kcoreaddons kwindowsystem libdbusmenu phonon qtx11extras
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     qtmacextras
   ];
 }

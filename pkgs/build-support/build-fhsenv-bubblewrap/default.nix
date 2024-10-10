@@ -10,6 +10,7 @@
 }:
 
 { runScript ? "bash"
+, nativeBuildInputs ? []
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -125,11 +126,12 @@ let
 
   indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ${extraPreBwrapCmds}
     ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    ${extraPreBwrapCmds}
 
     # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
@@ -270,7 +272,7 @@ let
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
 in runCommandLocal name (nameAttrs // {
-  inherit meta;
+  inherit nativeBuildInputs meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {

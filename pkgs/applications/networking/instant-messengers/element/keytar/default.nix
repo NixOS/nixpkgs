@@ -19,10 +19,10 @@ in stdenv.mkDerivation rec {
     nodejs python3 pkg-config
     npmHooks.npmConfigHook
   ]
-    ++ lib.optional  stdenv.isDarwin xcbuild;
+    ++ lib.optional  stdenv.hostPlatform.isDarwin xcbuild;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security AppKit ];
 
   npmDeps = fetchNpmDeps {
     inherit src;

@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ libuv ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreServices
       ApplicationServices
     ];
@@ -61,7 +61,7 @@ buildPythonPackage rec {
       "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # Segmentation fault
       "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
       # Broken: https://github.com/NixOS/nixpkgs/issues/160904
@@ -78,7 +78,7 @@ buildPythonPackage rec {
       # force using installed/compiled uvloop
       rm -rf uvloop
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Work around "OSError: AF_UNIX path too long"
       # https://github.com/MagicStack/uvloop/issues/463
       export TMPDIR="/tmp"

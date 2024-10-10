@@ -29,16 +29,16 @@ let
 in
 buildNpmPackage rec {
   pname = "homepage-dashboard";
-  version = "0.9.8";
+  version = "0.9.10";
 
   src = fetchFromGitHub {
     owner = "gethomepage";
     repo = "homepage";
     rev = "v${version}";
-    hash = "sha256-WfNUBjg/D3g6GE9ljZZ2lcHBx4XA2ObKjGgQ1VNanv8=";
+    hash = "sha256-qDbYgitMbjOMIZUyQuFSNAyb/ZRAcStm/jDrsIutKno=";
   };
 
-  npmDepsHash = "sha256-PKqOeTspwlnKhQz65Z2C+GmQu6YTMRyaROgF8dZOdV8=";
+  npmDepsHash = "sha256-gAti4y4Ios7XjJ3nVOhzjwPzcAC2upODZ64qQjx17JE=";
 
   preBuild = ''
     mkdir -p config
@@ -50,9 +50,11 @@ buildNpmPackage rec {
     patchShebangs .next/standalone/server.js
   '';
 
-  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.isDarwin [ cctools ];
+  nativeBuildInputs = [ git ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ];
 
-  buildInputs = [ nodePackages.node-gyp-build ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = [
+    nodePackages.node-gyp-build
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -107,6 +109,6 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

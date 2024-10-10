@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pynvml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       jsonargparse
       lightgbm

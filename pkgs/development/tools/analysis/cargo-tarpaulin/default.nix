@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ curl Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl Security ];
 
   doCheck = false;
 

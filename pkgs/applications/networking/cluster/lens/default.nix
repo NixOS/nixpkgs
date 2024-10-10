@@ -35,7 +35,7 @@ let
     platforms = builtins.attrNames sources;
   };
 
-in if stdenv.isDarwin then
+in if stdenv.hostPlatform.isDarwin then
   callPackage ./darwin.nix { inherit pname version src meta; }
 else
   callPackage ./linux.nix { inherit pname version src meta; }

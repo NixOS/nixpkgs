@@ -1,5 +1,5 @@
 { lib, buildFHSEnv, callPackage, makeDesktopItem, runtimeShell
-, runCommand, unstick, quartus-prime-lite
+, runCommand, unstick, quartus-prime-lite, libfaketime, pkgsi686Linux
 , withQuesta ? true
 , supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ]
 , unwrapped ? callPackage ./quartus.nix { inherit unstick supportedDevices withQuesta; }
@@ -85,15 +85,28 @@ in buildFHSEnv rec {
     progs_wrapped=()
     for prog in ''${progs_to_wrap[@]}; do
         relname="''${prog#"${unwrapped}/"}"
+        bname="$(basename "$relname")"
         wrapped="$out/$relname"
         progs_wrapped+=("$wrapped")
         mkdir -p "$(dirname "$wrapped")"
         echo "#!${runtimeShell}" >> "$wrapped"
+        NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=1
         case "$relname" in
             questa_fse/*)
                 echo "export NIXPKGS_IS_QUESTA_WRAPPER=1" >> "$wrapped"
+                # Any use of LD_PRELOAD breaks Questa, so disable the
+                # SOURCE_DATE_EPOCH code path.
+                NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=0
                 ;;
         esac
+        # SOURCE_DATE_EPOCH blocklist for programs that are known to hang/break
+        # with fixed/static clock.
+        case "$bname" in
+            jtagd|quartus_pgm|quartus)
+                NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=0
+                ;;
+        esac
+        echo "export NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK=$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" >> "$wrapped"
         echo "exec $wrapper $prog \"\$@\"" >> "$wrapped"
     done
 
@@ -116,6 +129,17 @@ in buildFHSEnv rec {
     if [ "$NIXPKGS_IS_QUESTA_WRAPPER" != 1 ]; then
         export LD_PRELOAD=''${LD_PRELOAD:+$LD_PRELOAD:}/usr/lib/libudev.so.0
     fi
+
+    # Implement the SOURCE_DATE_EPOCH specification for reproducible builds
+    # (https://reproducible-builds.org/specs/source-date-epoch).
+    # Require opt-in with NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD=1 for now, in case
+    # the blocklist is incomplete.
+    if [ -n "$SOURCE_DATE_EPOCH" ] && [ "$NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD" = 1 ] && [ "$NIXPKGS_QUARTUS_THIS_PROG_SUPPORTS_FIXED_CLOCK" = 1 ]; then
+        export LD_LIBRARY_PATH="${lib.makeLibraryPath [ libfaketime pkgsi686Linux.libfaketime ]}''${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+        export LD_PRELOAD=libfaketime.so.1''${LD_PRELOAD:+:$LD_PRELOAD}
+        export FAKETIME_FMT="%s"
+        export FAKETIME="$SOURCE_DATE_EPOCH"
+    fi
   '' + extraProfile;
 
   # Run the wrappers directly, instead of going via bash.
@@ -126,6 +150,7 @@ in buildFHSEnv rec {
     tests = {
       buildSof = runCommand "quartus-prime-lite-test-build-sof"
         { nativeBuildInputs = [ quartus-prime-lite ];
+          env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
         }
         ''
           cat >mydesign.vhd <<EOF
@@ -153,12 +178,15 @@ in buildFHSEnv rec {
               exit 1
           fi
 
-          touch "$out"
+          sha1sum mydesign.sof > "$out"
         '';
-      questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model" {} ''
-        "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
-        touch "$out"
-      '';
+        questaEncryptedModel = runCommand "quartus-prime-lite-test-questa-encrypted-model"
+          { env.NIXPKGS_QUARTUS_REPRODUCIBLE_BUILD = "1";
+          }
+          ''
+            "${quartus-prime-lite}/bin/vlog" "${quartus-prime-lite.unwrapped}/questa_fse/intel/verilog/src/arriav_atoms_ncrypt.v"
+            touch "$out"
+          '';
     };
   };
 

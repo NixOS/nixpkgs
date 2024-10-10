@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
   ];
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   cargoRoot = "src-tauri";
+  buildAndTestSubdir = finalAttrs.cargoRoot;
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
@@ -69,19 +70,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
   };
 
-  buildPhase = ''
-    runHook preBuild
-    cargo-tauri build -b deb
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules
-    cp -r src-tauri/target/release/bundle/deb/*/data/usr/* $out
-
-    runHook postInstall
   '';
 
   meta = {

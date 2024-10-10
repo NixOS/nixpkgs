@@ -53,7 +53,7 @@
   click,
   typing-extensions,
   # ROCm build and `torch.compile` requires `triton`
-  tritonSupport ? (!stdenv.isDarwin),
+  tritonSupport ? (!stdenv.hostPlatform.isDarwin),
   triton,
 
   # Unit tests
@@ -62,7 +62,7 @@
 
   # Disable MKLDNN on aarch64-darwin, it negatively impacts performance,
   # this is also what official pytorch build does
-  mklDnnSupport ? !(stdenv.isDarwin && stdenv.isAarch64),
+  mklDnnSupport ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64),
 
   # virtual pkg that consistently instantiates blas across nixpkgs
   # See https://github.com/NixOS/nixpkgs/pull/83888
@@ -193,7 +193,7 @@ let
 
   brokenConditions = attrsets.filterAttrs (_: cond: cond) {
     "CUDA and ROCm are mutually exclusive" = cudaSupport && rocmSupport;
-    "CUDA is not targeting Linux" = cudaSupport && !stdenv.isLinux;
+    "CUDA is not targeting Linux" = cudaSupport && !stdenv.hostPlatform.isLinux;
     "Unsupported CUDA version" =
       cudaSupport
       && !(builtins.elem cudaPackages.cudaMajorVersion [
@@ -214,7 +214,7 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.4.0";
+  version = "2.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8.0";
@@ -232,7 +232,7 @@ buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-s49rtarGNNFpnNG+kfJtZLE8ND53Ma201I0cOjeFSts=";
+    hash = "sha256-x/zM/57syr46CP1TfGaefSjzvNm4jJbWFZGVGyzPMg8=";
   };
 
   patches =
@@ -242,7 +242,7 @@ buildPythonPackage rec {
       ./passthrough-python-lib-rel-path.patch
     ]
     ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # pthreadpool added support for Grand Central Dispatch in April
       # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
       # that is available starting with macOS 10.13. However, our current
@@ -250,7 +250,7 @@ buildPythonPackage rec {
       # pthread support.
       ./pthreadpool-disable-gcd.diff
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Propagate CUPTI to Kineto by overriding the search path with environment variables.
       # https://github.com/pytorch/pytorch/pull/108847
       ./pytorch-pr-108847.patch
@@ -296,7 +296,8 @@ buildPythonPackage rec {
     # error: no member named 'aligned_alloc' in the global namespace; did you mean simply 'aligned_alloc'
     # This lib overrided aligned_alloc hence the error message. Tltr: his function is linkable but not in header.
     +
-      lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0")
+      lib.optionalString
+        (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0")
         ''
           substituteInPlace third_party/pocketfft/pocketfft_hdronly.h --replace-fail '#if (__cplusplus >= 201703L) && (!defined(__MINGW32__)) && (!defined(_MSC_VER))
           inline void *aligned_alloc(size_t align, size_t size)' '#if 0
@@ -492,8 +493,8 @@ buildPythonPackage rec {
     )
     ++ lib.optionals rocmSupport [ rocmPackages.llvm.openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ effectiveMagma ]
-    ++ lib.optionals stdenv.isLinux [ numactl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ numactl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       CoreServices
       libobjc
@@ -600,7 +601,7 @@ buildPythonPackage rec {
       mkdir -p "$cxxdev/nix-support"
       printWords "''${propagatedCxxBuildInputs[@]}" >> "$cxxdev/nix-support/propagated-build-inputs"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       for f in $(ls $lib/lib/*.dylib); do
           install_name_tool -id $lib/lib/$(basename $f) $f || true
       done
@@ -620,7 +621,7 @@ buildPythonPackage rec {
   # This is a quick hack to add `libnvrtc` to the runpath so that torch can find
   # it when it is needed at runtime.
   extraRunpaths = lib.optionals cudaSupport [ "${lib.getLib cudaPackages.cuda_nvrtc}/lib" ];
-  postPhases = lib.optionals stdenv.isLinux [ "postPatchelfPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "postPatchelfPhase" ];
   postPatchelfPhase = ''
     while IFS= read -r -d $'\0' elf ; do
       for extra in $extraRunpaths ; do

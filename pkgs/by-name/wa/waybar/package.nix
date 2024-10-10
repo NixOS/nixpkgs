@@ -6,6 +6,7 @@
   SDL2,
   alsa-lib,
   catch2_3,
+  fetchpatch,
   fftw,
   glib,
   gobject-introspection,
@@ -36,6 +37,7 @@
   scdoc,
   sndio,
   spdlog,
+  systemdMinimal,
   sway,
   udev,
   upower,
@@ -52,13 +54,14 @@
   inputSupport ? true,
   jackSupport ? true,
   mpdSupport ? true,
-  mprisSupport ? stdenv.isLinux,
+  mprisSupport ? stdenv.hostPlatform.isLinux,
   nlSupport ? true,
   pipewireSupport ? true,
   pulseSupport ? true,
   rfkillSupport ? true,
   runTests ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
   sndioSupport ? true,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   swaySupport ? true,
   traySupport ? true,
   udevSupport ? true,
@@ -75,20 +78,32 @@ let
   libcava.src = fetchFromGitHub {
     owner = "LukashonakV";
     repo = "cava";
-    rev = "0.10.2";
-    hash = "sha256-jU7RQV2txruu/nUUl0TzjK4nai7G38J1rcTjO7UXumY=";
+    rev = "0.10.3";
+    hash = "sha256-ZDFbI69ECsUTjbhlw2kHRufZbQMu+FQSMmncCJ5pagg=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "waybar";
-  version = "0.10.4";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "Alexays";
     repo = "Waybar";
-    rev = finalAttrs.version;
-    hash = "sha256-/JW3WnRLpfz8j+9Zc9YkK63i8DjHrKwv9PWKIMz3MVI=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-3lc0voMU5RS+mEtxKuRayq/uJO09X7byq6Rm5NZohq8=";
   };
+
+  patches = [
+    # Fix a regression introduced in release 0.11.0
+    # TODO: remove this patch when updating to the next release
+    # Issue: https://github.com/Alexays/Waybar/issues/3597
+    # PR: https://github.com/Alexays/Waybar/pull/3604
+    (fetchpatch {
+      name = "fix-tray";
+      url = "https://github.com/Alexays/Waybar/commit/0d02f6877d88551ea2be0cd151c1e6354e208b1c.patch";
+      hash = "sha256-wpdK6AY+14jt85dOQy6xkh8tNGDN2F9GA9zOfAuOaIc=";
+    })
+  ];
 
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
@@ -140,12 +155,13 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional pulseSupport libpulseaudio
     ++ lib.optional sndioSupport sndio
     ++ lib.optional swaySupport sway
+    ++ lib.optional systemdSupport systemdMinimal
     ++ lib.optional traySupport libdbusmenu-gtk3
     ++ lib.optional udevSupport udev
     ++ lib.optional upowerSupport upower
     ++ lib.optional wireplumberSupport wireplumber
     ++ lib.optional (cavaSupport || pipewireSupport) pipewire
-    ++ lib.optional (!stdenv.isLinux) libinotify-kqueue;
+    ++ lib.optional (!stdenv.hostPlatform.isLinux) libinotify-kqueue;
 
   nativeCheckInputs = [ catch2_3 ];
   doCheck = runTests;
@@ -166,12 +182,16 @@ stdenv.mkDerivation (finalAttrs: {
       "pulseaudio" = pulseSupport;
       "rfkill" = rfkillSupport;
       "sndio" = sndioSupport;
-      "systemd" = false;
+      "systemd" = systemdSupport;
       "tests" = runTests;
       "upower_glib" = upowerSupport;
       "wireplumber" = wireplumberSupport;
     })
     ++ lib.optional experimentalPatches (lib.mesonBool "experimental" true);
+
+  env = lib.optionalAttrs systemdSupport {
+    PKG_CONFIG_SYSTEMD_SYSTEMDUSERUNITDIR = "${placeholder "out"}/lib/systemd/user";
+  };
 
   postPatch = ''
     substituteInPlace include/util/command.hpp \

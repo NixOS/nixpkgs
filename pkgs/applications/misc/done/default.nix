@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     libsecret
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     GETTEXT_DIR = gettext;
   };
 

@@ -2,10 +2,9 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  fetchpatch,
 }:
 let
-  version = "0.1.3";
+  version = "0.1.5";
 in
 buildGoModule {
   pname = "gh-eco";
@@ -15,19 +14,10 @@ buildGoModule {
     owner = "jrnxf";
     repo = "gh-eco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TE1AymNlxjUtkBnBO/VBjYaqLuRyxL75s6sMidKUXTE=";
+    hash = "sha256-Xtlz+u31hO81M53V0ZUtxmOgJ60zlspgVyCr181QrRE=";
   };
 
-  patches = [
-    # Fix package breaking on runtime by updating deps
-    (fetchpatch {
-      name = "update-deps.patch";
-      url = "https://github.com/jrnxf/gh-eco/commit/d45b1e7de8cbcb692def0e94111262cdeff2835d.patch";
-      hash = "sha256-vW5YX6C552dVYjBkYVoDbzT2PP8CaZzxh5g1TKHjrbU=";
-    })
-  ];
-
-  vendorHash = "sha256-O3FQ+Z3KVYgTafwVXUhrGRuOAWlWlOhtVegKVoZBnDE=";
+  vendorHash = "sha256-mPZQPjZ+nnsRMYnSWDM9rYeAPvPwAp3vLZXwTNNHSx0=";
 
   ldflags = [
     "-s"

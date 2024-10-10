@@ -47,14 +47,14 @@ buildPythonPackage rec {
     soupsieve
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     html5lib = [ html5lib ];
     lxml = [ lxml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "bs4" ];
 

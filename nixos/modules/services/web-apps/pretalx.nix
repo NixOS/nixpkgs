@@ -294,6 +294,15 @@ in
       '')
     ];
 
+    services.logrotate.settings.pretalx = {
+      files = "${cfg.settings.filesystem.logs}/*.log";
+      su = "${cfg.user} ${cfg.group}";
+      frequency = "weekly";
+      rotate = "12";
+      copytruncate = true;
+      compress = true;
+    };
+
     services = {
       nginx = lib.mkIf cfg.nginx.enable {
         enable = true;

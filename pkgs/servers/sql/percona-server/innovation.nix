@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     bison cmake pkg-config makeWrapper
     # required for scripts/CMakeLists.txt
     coreutils gnugrep procps
-  ] ++ lib.optionals (!stdenv.isDarwin) [ rpcsvc-proto ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
     ./no-force-outline-atomics.patch # Do not force compilers to turn on -moutline-atomics switch
@@ -45,13 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
     zstd libfido2 openldap perl cyrus_sasl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     numactl libtirpc systemd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools CoreServices developer_cmds DarwinTools
   ]
-  ++ lib.optional (stdenv.isLinux && withJemalloc) jemalloc
-  ++ lib.optional (stdenv.isLinux && withTcmalloc) gperftools;
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) jemalloc
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) gperftools;
 
   outputs = [ "out" "static" ];
 
@@ -81,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-DINSTALL_SHAREDIR=share/mysql"
 
 
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DWITH_SYSTEMD=1"
     "-DWITH_SYSTEMD_DEBUG=1"
   ]
-  ++ lib.optional (stdenv.isLinux && withJemalloc) "-DWITH_JEMALLOC=1"
-  ++ lib.optional (stdenv.isLinux && withTcmalloc) "-DWITH_TCMALLOC=1";
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withJemalloc) "-DWITH_JEMALLOC=1"
+  ++ lib.optional (stdenv.hostPlatform.isLinux && withTcmalloc) "-DWITH_TCMALLOC=1";
 
   postInstall = ''
     moveToOutput "lib/*.a" $static
@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/mysql_config --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}
     wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
     wrapProgram $out/bin/ps-admin --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapProgram $out/bin/mysqld_multi --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
   '';
 

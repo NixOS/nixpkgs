@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "speechbrain";
     repo = "speechbrain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JoVu53HuTPkUIyJGqLE80yu7jzPje8/r5Hk6lJsz2XA=";
+    hash = "sha256-5ZMS1g74G4w83kNrXyt9IUsXe5uYS1qC+MwleQrjhTY=";
   };
 
   dependencies = [

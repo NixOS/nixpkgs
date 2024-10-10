@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Tests freeze on darwin with: pass-audit-1.1 (checkPhase): EOFError
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [
     python3.pkgs.green
     pass

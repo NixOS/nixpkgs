@@ -174,7 +174,7 @@ buildPythonPackage {
     regex
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   pythonImportsCheck = [ "txtai" ];
 

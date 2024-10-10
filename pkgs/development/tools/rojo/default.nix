@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     SystemConfiguration
   ];
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = "1";
 
   # tests flaky on darwin on hydra
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Project management tool for Roblox";

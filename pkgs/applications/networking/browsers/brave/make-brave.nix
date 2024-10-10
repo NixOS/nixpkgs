@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook3, makeWrapper
+{ lib, stdenv, fetchurl, buildPackages
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -49,14 +49,14 @@
 , commandLineArgs ? ""
 
 # Necessary for USB audio devices.
-, pulseSupport ? stdenv.isLinux
+, pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 
 # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
 , libGL
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
-, libvaSupport ? stdenv.isLinux
+, libvaSupport ? stdenv.hostPlatform.isLinux
 , libva
 , enableVideoAcceleration ? libvaSupport
 
@@ -112,7 +112,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "pixlone";
     repo = "logiops";
     rev = "v${version}";
-    sha256 = "sha256-1v728hbIM2ODtB+r6SYzItczRJCsbuTvhYD2OUM1+/E=";
+    hash = "sha256-1v728hbIM2ODtB+r6SYzItczRJCsbuTvhYD2OUM1+/E=";
   };
 
   PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";

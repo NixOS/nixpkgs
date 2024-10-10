@@ -7,6 +7,7 @@
 , gtk-doc
 , docbook-xsl-nons
 , docbook_xml_dtd_43
+, wayland-protocols
 , wayland-scanner
 , wayland
 , gtk4
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     vala
     wayland-scanner
+    wayland-protocols
   ];
 
   buildInputs = [

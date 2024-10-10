@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config help2man ];
   buildInputs = [ libcddb libiconv ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon IOKit ];
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Library for OS-independent CD-ROM and CD image access";

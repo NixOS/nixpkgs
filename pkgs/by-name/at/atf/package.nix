@@ -42,12 +42,12 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'atf_test_program{name="srcdir_test"}' ""
     ''
     # These tests fail on Darwin.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.isDarwin) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isDarwin) ''
       substituteInPlace atf-c/detail/process_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, status_coredump);' ""
     ''
     # This test fails on Linux.
-    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.isLinux) ''
+    + lib.optionalString (finalAttrs.doInstallCheck && stdenv.hostPlatform.isLinux) ''
       substituteInPlace atf-c/detail/fs_test.c \
         --replace-fail 'ATF_TP_ADD_TC(tp, eaccess);' ""
     '';

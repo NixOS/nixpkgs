@@ -38,7 +38,7 @@ buildPythonPackage rec {
     packaging
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     graphviz = [ graphviz ];
   };
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
     virtualenv
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pipdeptree" ];
 

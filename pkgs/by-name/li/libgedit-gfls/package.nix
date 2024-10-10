@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitLab
 , docbook-xsl-nons
 , gobject-introspection
 , gtk-doc
@@ -14,15 +14,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
-  version = "0.1.0";
+  version = "0.2.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchFromGitHub {
-    owner = "gedit-technology";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
     repo = "libgedit-gfls";
     rev = finalAttrs.version;
-    hash = "sha256-tES8UGWcCT8lRd/fnOt9EN3wHkNSLRM4j8ONrCDPBK0=";
+    hash = "sha256-oxsqggn4O4SwGEas840qE103hKU4f+GP+ItOtD3M+ac=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    homepage = "https://github.com/gedit-technology/libgedit-gfls";
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-gfls";
     description = "Module dedicated to file loading and saving";
     maintainers = with lib.maintainers; [ bobby285271 ];
     license = lib.licenses.lgpl3Plus;

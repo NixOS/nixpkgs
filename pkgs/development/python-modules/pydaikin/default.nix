@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.13.6";
+  version = "2.13.7";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "fredrike";
     repo = "pydaikin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-b1dvPrtvYJuTZNUase4GgXFGq69QKJZoxUr2iuYShxk=";
+    hash = "sha256-pLr878LbflRlHzDjarwDLQFHbRZjRvlAZEqP1tfVBNA=";
   };
 
   build-system = [ setuptools ];

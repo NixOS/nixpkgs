@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
 
-  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
     ./increase-test-discovery-timeout.patch
   ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 

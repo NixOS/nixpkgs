@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     physfs
     texinfo
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     libpthreadstubs
     libpulseaudio

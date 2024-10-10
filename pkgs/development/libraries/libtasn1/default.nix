@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo perl ];
 
   doCheck = true;
-  preCheck = if stdenv.isDarwin then
+  preCheck = if stdenv.hostPlatform.isDarwin then
     "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
   else
     null;

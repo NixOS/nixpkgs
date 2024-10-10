@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.6.3";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yqccXQGEvxYnWP8rWmRLjjB0pkSEeXBrRvJIwVowUx0=";
+    hash = "sha256-xd75/AKBFUdA6a8sQnCB2rVbHl/Foy4LTb07jnwrTjA=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -75,7 +75,7 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false
@@ -91,7 +91,7 @@ buildPythonPackage rec {
   meta = {
     description = "Orbax provides common utility libraries for JAX users";
     homepage = "https://github.com/google/orbax/tree/main/checkpoint";
-    changelog = "https://github.com/google/orbax/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/google/orbax/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
   };

@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin
   # error[E0463]: can't find crate for profiler_builtins
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # these tests use nix so...no go

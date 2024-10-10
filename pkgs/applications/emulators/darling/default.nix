@@ -243,6 +243,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Open-source Darwin/macOS emulation layer for Linux";
     homepage = "https://www.darlinghq.org";
+    changelog = "https://github.com/darlinghq/darling/releases";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = [ "x86_64-linux" ];

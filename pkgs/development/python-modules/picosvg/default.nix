@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   # a few tests are failing on aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Tool to simplify SVGs";

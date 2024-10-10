@@ -1,21 +1,22 @@
-self: {
+self:
+{
   lib,
   stdenv,
   makeSetupHook,
   fetchurl,
   cmake,
   qt6,
-}: let
+}:
+let
   dependencies = (lib.importJSON ../generated/dependencies.json).dependencies;
   projectInfo = lib.importJSON ../generated/projects.json;
 
   licenseInfo = lib.importJSON ../generated/licenses.json;
   licensesBySpdxId =
     (lib.mapAttrs' (_: v: {
-        name = v.spdxId or "unknown";
-        value = v;
-      })
-      lib.licenses)
+      name = v.spdxId or "unknown";
+      value = v;
+    }) lib.licenses)
     // {
       # https://community.kde.org/Policies/Licensing_Policy
       "LicenseRef-KDE-Accepted-GPL" = lib.licenses.gpl3Plus;
@@ -71,78 +72,89 @@ self: {
       None = null;
     };
 
-  moveDevHook = makeSetupHook {name = "kf6-move-dev-hook";} ./move-dev-hook.sh;
+  moveDevHook = makeSetupHook { name = "kf6-move-dev-hook"; } ./move-dev-hook.sh;
 in
-  {
-    pname,
-    version ? self.sources.${pname}.version,
-    src ? self.sources.${pname},
-    extraBuildInputs ? [],
-    extraNativeBuildInputs ? [],
-    extraPropagatedBuildInputs ? [],
-    extraCmakeFlags ? [],
-    excludeDependencies ? [],
-    ...
-  } @ args: let
-    depNames = dependencies.${pname} or [];
-    filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
+{
+  pname,
+  version ? self.sources.${pname}.version,
+  src ? self.sources.${pname},
+  extraBuildInputs ? [ ],
+  extraNativeBuildInputs ? [ ],
+  extraPropagatedBuildInputs ? [ ],
+  extraCmakeFlags ? [ ],
+  excludeDependencies ? [ ],
+  ...
+}@args:
+let
+  depNames = dependencies.${pname} or [ ];
+  filteredDepNames = builtins.filter (dep: !(builtins.elem dep excludeDependencies)) depNames;
 
-    # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
-    # but cross is currently very broken anyway, so we can figure this out later.
-    deps = map (dep: self.${dep}) filteredDepNames;
+  # FIXME(later): this is wrong for cross, some of these things really need to go into nativeBuildInputs,
+  # but cross is currently very broken anyway, so we can figure this out later.
+  deps = map (dep: self.${dep}) filteredDepNames;
 
-    traceDuplicateDeps = attrName: attrValue:
-      let
-        pretty = lib.generators.toPretty {};
-        duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
-      in
-        if duplicates != []
-        then lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"
-        else lib.id;
+  traceDuplicateDeps =
+    attrName: attrValue:
+    let
+      pretty = lib.generators.toPretty { };
+      duplicates = builtins.filter (dep: (builtins.elem (lib.getName dep) filteredDepNames)) attrValue;
+    in
+    if duplicates != [ ] then
+      lib.warn "Duplicate dependencies in ${attrName} of package ${pname}: ${pretty duplicates}"
+    else
+      lib.id;
 
-    traceAllDuplicateDeps = lib.flip lib.pipe [
-      (traceDuplicateDeps "extraBuildInputs" extraBuildInputs)
-      (traceDuplicateDeps "extraPropagatedBuildInputs" extraPropagatedBuildInputs)
+  traceAllDuplicateDeps = lib.flip lib.pipe [
+    (traceDuplicateDeps "extraBuildInputs" extraBuildInputs)
+    (traceDuplicateDeps "extraPropagatedBuildInputs" extraPropagatedBuildInputs)
+  ];
+
+  defaultArgs = {
+    inherit version src;
+
+    outputs = [
+      "out"
+      "dev"
+      "devtools"
     ];
 
-    defaultArgs = {
-      inherit version src;
+    nativeBuildInputs = [
+      cmake
+      qt6.wrapQtAppsHook
+      moveDevHook
+    ] ++ extraNativeBuildInputs;
+    buildInputs = [ qt6.qtbase ] ++ extraBuildInputs;
 
-      outputs = ["out" "dev" "devtools"];
+    # FIXME: figure out what to propagate here
+    propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
+    strictDeps = true;
 
-      nativeBuildInputs = [cmake qt6.wrapQtAppsHook moveDevHook] ++ extraNativeBuildInputs;
-      buildInputs = [qt6.qtbase] ++ extraBuildInputs;
+    dontFixCmake = true;
+    cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
 
-      # FIXME: figure out what to propagate here
-      propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
-      strictDeps = true;
+    separateDebugInfo = true;
 
-      dontFixCmake = true;
-      cmakeFlags = ["-DQT_MAJOR_VERSION=6"] ++ extraCmakeFlags;
+    env.LANG = "C.UTF-8";
+  };
 
-      separateDebugInfo = true;
+  cleanArgs = builtins.removeAttrs args [
+    "extraBuildInputs"
+    "extraNativeBuildInputs"
+    "extraPropagatedBuildInputs"
+    "extraCmakeFlags"
+    "excludeDependencies"
+    "meta"
+  ];
 
-      env.LANG = "C.UTF-8";
-    };
+  meta = {
+    description = projectInfo.${pname}.description;
+    homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
+    license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
+    maintainers = lib.teams.qt-kde.members;
+    # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
+    platforms = lib.platforms.linux ++ lib.platforms.freebsd;
+  } // (args.meta or { });
 
-    cleanArgs = builtins.removeAttrs args [
-      "extraBuildInputs"
-      "extraNativeBuildInputs"
-      "extraPropagatedBuildInputs"
-      "extraCmakeFlags"
-      "excludeDependencies"
-      "meta"
-    ];
-
-    meta = {
-      description = projectInfo.${pname}.description;
-      homepage = "https://invent.kde.org/${projectInfo.${pname}.repo_path}";
-      license = lib.filter (l: l != null) (map (l: licensesBySpdxId.${l}) licenseInfo.${pname});
-      maintainers = lib.teams.qt-kde.members;
-      # Platforms are currently limited to what upstream tests in CI, but can be extended if there's interest.
-      platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    } // (args.meta or { });
-
-    pos = builtins.unsafeGetAttrPos "pname" args;
-  in
-    traceAllDuplicateDeps (stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta pos; }))
+  pos = builtins.unsafeGetAttrPos "pname" args;
+in
+traceAllDuplicateDeps (stdenv.mkDerivation (defaultArgs // cleanArgs // { inherit meta pos; }))

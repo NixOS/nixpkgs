@@ -104,7 +104,7 @@ let
       dartFixupHook
       makeWrapper
       jq
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.sigtool
     ] ++
       # Ensure that we inherit the propagated build inputs from the dependencies.

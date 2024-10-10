@@ -10,19 +10,18 @@
   darwin,
   which,
   nix-update-script,
-  testers,
-  pylyzer,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.61";
+  version = "0.0.65";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-t0BzNNofjeBlNqf6iqaWrTzVpzEACyyrZ3YKDYz713U=";
+    hash = "sha256-pHFsrC5SefXEnxgIk/OkRdOOAuYZLhZYVYu41MYtxJs=";
   };
 
   cargoLock = {
@@ -36,9 +35,11 @@ rustPlatform.buildRustPackage rec {
     git
     python3
     makeWrapper
-  ] ++ lib.optionals stdenv.isDarwin [ (writeScriptBin "diskutil" "") ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (writeScriptBin "diskutil" "") ];
 
-  buildInputs = [ python3 ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [
+    python3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -61,9 +62,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = pylyzer; };
   };
 
   meta = {

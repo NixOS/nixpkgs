@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-robots/${lib.versions.major version}/gnome-robots-${version}.tar.xz";
-    sha256 = "04fbykj576dq1h6cycgfhh8wd6yxmlsqykvj188sbwahay42zgvg";
+    hash = "sha256-b78viFdQ8aURCnJPjzWt3ZvGEYTuMc8MDLiZU+T0yxE=";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-robots";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-robots/-/blob/${version}/NEWS?ref_type=tags";
     description = "Avoid the robots and make them crash into each other";
     mainProgram = "gnome-robots";
     maintainers = teams.gnome.members;

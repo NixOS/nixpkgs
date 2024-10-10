@@ -30,6 +30,10 @@ let
       ENGINE = "haystack.backends.whoosh_backend.WhooshEngine";
       PATH = "/var/lib/mailman-web/fulltext-index";
     };
+  } // lib.optionalAttrs cfg.enablePostfix {
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend";
+    EMAIL_HOST = "127.0.0.1";
+    EMAIL_PORT = 25;
   } // cfg.webSettings;
 
   webSettingsJSON = pkgs.writeText "settings.json" (builtins.toJSON webSettings);

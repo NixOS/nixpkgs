@@ -187,6 +187,6 @@ let
   };
 
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

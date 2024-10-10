@@ -21,7 +21,7 @@
 , bash
 , buildPackages
 , openjpeg
-, cupsSupport ? config.ghostscript.cups or (!stdenv.isDarwin)
+, cupsSupport ? config.ghostscript.cups or (!stdenv.hostPlatform.isDarwin)
 , cups
 , x11Support ? cupsSupport
 , xorg # with CUPS, X11 only adds very little
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
   buildFlags = [ "so" ]
     # without -headerpad, the following error occurs on Darwin when compiling with X11 support (as of 10.02.0)
     # error: install_name_tool: changing install names or rpaths can't be redone for: [...]libgs.dylib.10 (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
-    ++ lib.optional (x11Support && stdenv.isDarwin) "LDFLAGS=-headerpad_max_install_names";
+    ++ lib.optional (x11Support && stdenv.hostPlatform.isDarwin) "LDFLAGS=-headerpad_max_install_names";
   installTargets = [ "soinstall" ];
 
   postInstall = ''
@@ -136,7 +136,7 @@ stdenv.mkDerivation rec {
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
     ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     for file in $out/lib/*.dylib* ; do
       install_name_tool -id "$file" $file
     done
@@ -144,7 +144,7 @@ stdenv.mkDerivation rec {
 
   # dynamic library name only contains maj.min, eg. '9.53'
   dylib_version = lib.versions.majorMinor version;
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gs
     install_name_tool -change libgs.dylib.$dylib_version $out/lib/libgs.dylib.$dylib_version $out/bin/gsx
   '';

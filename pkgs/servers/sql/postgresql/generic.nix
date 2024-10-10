@@ -47,7 +47,7 @@ let
     pname = "postgresql";
 
     stdenv' =
-      if jitSupport then
+      if jitSupport && !stdenv.cc.isClang then
         overrideCC llvmPackages.stdenv (llvmPackages.stdenv.cc.override {
           # LLVM bintools are not used by default, but are needed to make -flto work below.
           bintools = llvmPackages.bintools;
@@ -103,8 +103,8 @@ let
       ++ lib.optionals systemdSupport' [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.isLinux [ linux-pam ]
-      ++ lib.optionals (!stdenv'.isDarwin) [ libossp_uuid ];
+      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ]
+      ++ lib.optionals (!stdenv'.hostPlatform.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -126,7 +126,6 @@ let
     # and allows splitting them cleanly.
     env.CFLAGS = "-fdata-sections -ffunction-sections"
       + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections")
-      + lib.optionalString (stdenv'.isDarwin && jitSupport) " -fuse-ld=lld"
       # Makes cross-compiling work when xml2-config can't be executed on the host.
       # Fixed upstream in https://github.com/postgres/postgres/commit/0bc8cebdb889368abdf224aeac8bc197fe4c9ae6
       + lib.optionalString (olderThan "13") " -I${libxml2.dev}/include/libxml2";
@@ -139,16 +138,16 @@ let
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
       (lib.optionalString systemdSupport' "--with-systemd")
-      (if stdenv'.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
+      (if stdenv'.hostPlatform.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals lz4Enabled [ "--with-lz4" ]
       ++ lib.optionals zstdEnabled [ "--with-zstd" ]
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.isLinux [ "--with-pam" ]
+      ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
-      ++ lib.optionals (stdenv'.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ];
+      ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ];
 
     patches = [
       (if atLeast "16" then ./patches/relative-to-symlinks-16+.patch else ./patches/relative-to-symlinks.patch)
@@ -159,14 +158,14 @@ let
 
       (substituteAll {
         src = ./patches/locale-binary-path.patch;
-        locale = "${if stdenv.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
+        locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
-    ) ++ lib.optionals stdenv'.isLinux  [
+    ) ++ lib.optionals stdenv'.hostPlatform.isLinux  [
       (if atLeast "13" then ./patches/socketdir-in-run-13+.patch else ./patches/socketdir-in-run.patch)
-    ] ++ lib.optionals (stdenv'.isDarwin && olderThan "16") [
+    ] ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
       ./patches/export-dynamic-darwin-15-.patch
     ];
 
@@ -230,7 +229,7 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
-    doCheck = !stdenv'.isDarwin;
+    doCheck = !stdenv'.hostPlatform.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
 

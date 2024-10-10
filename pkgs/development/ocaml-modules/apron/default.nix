@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     runHook preConfigure
-    ./configure -prefix $out ${lib.optionalString stdenv.isDarwin "--no-strip"}
+    ./configure -prefix $out ${lib.optionalString stdenv.hostPlatform.isDarwin "--no-strip"}
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
     runHook postConfigure
   '';

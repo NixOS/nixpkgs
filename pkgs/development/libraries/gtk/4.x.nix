@@ -32,13 +32,13 @@
 , gsettings-desktop-schemas
 , gst_all_1
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.hostPlatform.isLinux
 , tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
 # experimental and can cause crashes in inspector
-, vulkanSupport ? stdenv.isLinux
+, vulkanSupport ? stdenv.hostPlatform.isLinux
 , shaderc
 , vulkan-loader
 , vulkan-headers
@@ -46,8 +46,8 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXrandr
     libXrender
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
     tracker
@@ -142,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
   ] ++ lib.optionals cupsSupport [
     cups
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     libexecinfo
@@ -175,13 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
     (lib.mesonBool "x11-backend" x11Support)
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ];
 
   doCheck = false; # needs X11
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
@@ -218,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     PATH="$OLD_PATH"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk4-update-icon-cache "$out"
     # Launcher
@@ -234,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup =  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
     for program in ''${demos[@]}; do

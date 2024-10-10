@@ -21,7 +21,7 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
@@ -51,9 +51,9 @@ mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreAudio
     CoreFoundation
@@ -74,7 +74,7 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
 

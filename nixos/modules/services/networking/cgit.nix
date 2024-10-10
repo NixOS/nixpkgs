@@ -1,14 +1,11 @@
 { config, lib, pkgs, ...}:
-
-with lib;
-
 let
   cfgs = config.services.cgit;
 
-  settingType = with types; oneOf [ bool int str ];
-  repeatedSettingType = with types; oneOf [ settingType (listOf settingType) ];
+  settingType = with lib.types; oneOf [ bool int str ];
+  repeatedSettingType = with lib.types; oneOf [ settingType (listOf settingType) ];
 
-  genAttrs' = names: f: listToAttrs (map f names);
+  genAttrs' = names: f: lib.listToAttrs (map f names);
 
   regexEscape =
     let
@@ -20,9 +17,9 @@ let
         "" # \f / 0x0C
       ];
     in
-      replaceStrings special (map (c: "\\${c}") special);
+      lib.replaceStrings special (map (c: "\\${c}") special);
 
-  stripLocation = cfg: removeSuffix "/" cfg.nginx.location;
+  stripLocation = cfg: lib.removeSuffix "/" cfg.nginx.location;
 
   regexLocation = cfg: regexEscape (stripLocation cfg);
 
@@ -47,29 +44,29 @@ let
 
   # list value as multiple lines (for "readme" for example)
   cgitrcEntry = name: value:
-    if isList value then
+    if lib.isList value then
       map (cgitrcLine name) value
     else
       [ (cgitrcLine name value) ];
 
   mkCgitrc = cfg: pkgs.writeText "cgitrc" ''
     # global settings
-    ${concatStringsSep "\n" (
-        flatten (mapAttrsToList
+    ${lib.concatStringsSep "\n" (
+        lib.flatten (lib.mapAttrsToList
           cgitrcEntry
           ({ virtual-root = cfg.nginx.location; } // cfg.settings)
         )
       )
     }
-    ${optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
+    ${lib.optionalString (cfg.scanPath != null) (cgitrcLine "scan-path" cfg.scanPath)}
 
     # repository settings
-    ${concatStrings (
-        mapAttrsToList
+    ${lib.concatStrings (
+        lib.mapAttrsToList
           (url: settings: ''
             ${cgitrcLine "repo.url" url}
-            ${concatStringsSep "\n" (
-                mapAttrsToList (name: cgitrcLine "repo.${name}") settings
+            ${lib.concatStringsSep "\n" (
+                lib.mapAttrsToList (name: cgitrcLine "repo.${name}") settings
               )
             }
           '')
@@ -90,32 +87,32 @@ let
 in
 {
   options = {
-    services.cgit = mkOption {
+    services.cgit = lib.mkOption {
       description = "Configure cgit instances.";
       default = {};
-      type = types.attrsOf (types.submodule ({ config, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule ({ config, ... }: {
         options = {
-          enable = mkEnableOption "cgit";
+          enable = lib.mkEnableOption "cgit";
 
-          package = mkPackageOption pkgs "cgit" {};
+          package = lib.mkPackageOption pkgs "cgit" {};
 
-          nginx.virtualHost = mkOption {
+          nginx.virtualHost = lib.mkOption {
             description = "VirtualHost to serve cgit on, defaults to the attribute name.";
-            type = types.str;
+            type = lib.types.str;
             default = config._module.args.name;
             example = "git.example.com";
           };
 
-          nginx.location = mkOption {
+          nginx.location = lib.mkOption {
             description = "Location to serve cgit under.";
-            type = types.str;
+            type = lib.types.str;
             default = "/";
             example = "/git/";
           };
 
-          repos = mkOption {
+          repos = lib.mkOption {
             description = "cgit repository settings, see cgitrc(5)";
-            type = with types; attrsOf (attrsOf settingType);
+            type = with lib.types; attrsOf (attrsOf settingType);
             default = {};
             example = {
               blah = {
@@ -125,18 +122,18 @@ in
             };
           };
 
-          scanPath = mkOption {
+          scanPath = lib.mkOption {
             description = "A path which will be scanned for repositories.";
-            type = types.nullOr types.path;
+            type = lib.types.nullOr lib.types.path;
             default = null;
             example = "/var/lib/git";
           };
 
-          settings = mkOption {
+          settings = lib.mkOption {
             description = "cgit configuration, see cgitrc(5)";
-            type = types.attrsOf repeatedSettingType;
+            type = lib.types.attrsOf repeatedSettingType;
             default = {};
-            example = literalExpression ''
+            example = lib.literalExpression ''
               {
                 enable-follow-links = true;
                 source-filter = "''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py";
@@ -144,21 +141,21 @@ in
             '';
           };
 
-          extraConfig = mkOption {
+          extraConfig = lib.mkOption {
             description = "These lines go to the end of cgitrc verbatim.";
-            type = types.lines;
+            type = lib.types.lines;
             default = "";
           };
 
-          user = mkOption {
+          user = lib.mkOption {
             description = "User to run the cgit service as.";
-            type = types.str;
+            type = lib.types.str;
             default = "cgit";
           };
 
-          group = mkOption {
+          group = lib.mkOption {
             description = "Group to run the cgit service as.";
-            type = types.str;
+            type = lib.types.str;
             default = "cgit";
           };
         };
@@ -166,13 +163,13 @@ in
     };
   };
 
-  config = mkIf (any (cfg: cfg.enable) (attrValues cfgs)) {
-    assertions = mapAttrsToList (vhost: cfg: {
+  config = lib.mkIf (lib.any (cfg: cfg.enable) (lib.attrValues cfgs)) {
+    assertions = lib.mapAttrsToList (vhost: cfg: {
       assertion = !cfg.enable || (cfg.scanPath == null) != (cfg.repos == {});
       message = "Exactly one of services.cgit.${vhost}.scanPath or services.cgit.${vhost}.repos must be set.";
     }) cfgs;
 
-    users = mkMerge (flip mapAttrsToList cfgs (_: cfg: {
+    users = lib.mkMerge (lib.flip lib.mapAttrsToList cfgs (_: cfg: {
       users.${cfg.user} = {
         isSystemUser = true;
         inherit (cfg) group;
@@ -180,23 +177,23 @@ in
       groups.${cfg.group} = { };
     }));
 
-    services.fcgiwrap.instances = flip mapAttrs' cfgs (name: cfg:
-      nameValuePair "cgit-${name}" {
+    services.fcgiwrap.instances = lib.flip lib.mapAttrs' cfgs (name: cfg:
+      lib.nameValuePair "cgit-${name}" {
         process = { inherit (cfg) user group; };
         socket = { inherit (config.services.nginx) user group; };
       }
     );
 
-    systemd.services = flip mapAttrs' cfgs (name: cfg:
-      nameValuePair (fcgiwrapUnitName name)
-      (mkIf (cfg.repos != { }) {
+    systemd.services = lib.flip lib.mapAttrs' cfgs (name: cfg:
+      lib.nameValuePair (fcgiwrapUnitName name)
+      (lib.mkIf (cfg.repos != { }) {
         serviceConfig.RuntimeDirectory = fcgiwrapUnitName name;
         preStart = ''
-          GIT_PROJECT_ROOT=${escapeShellArg (gitProjectRoot name cfg)}
+          GIT_PROJECT_ROOT=${lib.escapeShellArg (gitProjectRoot name cfg)}
           mkdir -p "$GIT_PROJECT_ROOT"
           cd "$GIT_PROJECT_ROOT"
-          ${concatLines (flip mapAttrsToList cfg.repos (name: repo: ''
-            ln -s ${escapeShellArg repo.path} ${escapeShellArg name}
+          ${lib.concatLines (lib.flip lib.mapAttrsToList cfg.repos (name: repo: ''
+            ln -s ${lib.escapeShellArg repo.path} ${lib.escapeShellArg name}
           ''))}
         '';
       }
@@ -204,12 +201,12 @@ in
 
     services.nginx.enable = true;
 
-    services.nginx.virtualHosts = mkMerge (mapAttrsToList (name: cfg: {
+    services.nginx.virtualHosts = lib.mkMerge (lib.mapAttrsToList (name: cfg: {
       ${cfg.nginx.virtualHost} = {
         locations = (
           genAttrs'
             [ "cgit.css" "cgit.png" "favicon.ico" "robots.txt" ]
-            (fileName: nameValuePair "= ${stripLocation cfg}/${fileName}" {
+            (fileName: lib.nameValuePair "= ${stripLocation cfg}/${fileName}" {
               extraConfig = ''
                 alias ${cfg.package}/cgit/${fileName};
               '';

@@ -1,8 +1,6 @@
 { lib
 , callPackage
 , fetchFromGitHub
-, fetchPypi
-, fetchpatch
 , python3Packages
 }:
 /*

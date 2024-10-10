@@ -47,11 +47,11 @@ buildPythonPackage rec {
       cp ../javascript/cdp-support/mutation-listener.js $DST_REMOTE
       cp ../third_party/js/selenium/webdriver.json $DST_FF/webdriver_prefs.json
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $DST_PREFIX/common/macos
       ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/macos/
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $DST_PREFIX/common/linux/
       ln -s ${lib.getExe selenium-manager} $DST_PREFIX/common/linux/
     '';

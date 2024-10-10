@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices Foundation ];
+  ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.isDarwin)
+  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs

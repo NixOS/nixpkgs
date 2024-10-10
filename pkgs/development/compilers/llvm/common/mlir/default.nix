@@ -9,7 +9,8 @@
 , libxml2
 , libllvm
 , version
-, doCheck ? (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, doCheck ? (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, devExtraCmakeFlags ? []
 }:
 
 stdenv.mkDerivation rec {
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
     "-DLLVM_TABLEGEN_EXE=${buildLlvmTools.llvm}/bin/llvm-tblgen"
     "-DMLIR_TABLEGEN_EXE=${buildLlvmTools.mlir}/bin/mlir-tblgen"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   outputs = [ "out" "dev" ];
 

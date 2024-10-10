@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "iucode-tool";
     repo = "iucode-tool";
     rev = "v${version}";
-    sha256 = "04dlisw87dd3q3hhmkqc5dd58cp22fzx3rzah7pvcyij135yjc3a";
+    hash = "sha256-ajDpywgyerbvgern0b8T4jJUWisMzwrhwKO1g7iOtBE=";
   };
 
   patches = [

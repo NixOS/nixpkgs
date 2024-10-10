@@ -23,13 +23,13 @@
 
 let
   pname = "devpod";
-  version = "0.5.19";
+  version = "0.5.20";
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-SQac42C6tVFSP5Gx2s6uP4OKW+b+FoT7/+Lo3W178p0=";
+    sha256 = "sha256-8LbqrOKC1als3Xm6ZuU2AySwT0UWjLN2xh+/CvioYew=";
   };
 
   meta = with lib; {
@@ -80,7 +80,7 @@ rec {
 
         offlineCache = fetchYarnDeps {
           yarnLock = "${src}/desktop/yarn.lock";
-          sha256 = "sha256-I+c0zrybNv3iS+Wy+n+NlBalA6gLYuxBw00mAJbqgfU=";
+          hash = "sha256-vUV4yX+UvEKrP0vHxjGwtW2WyONGqHVmFor+WqWbkCc=";
         };
 
         packageJSON = ./package.json;
@@ -107,7 +107,7 @@ rec {
       cargoLock = {
         lockFile = ./Cargo.lock;
         outputHashes = {
-          "tauri-plugin-log-0.0.0" = "sha256-M6uGcf4UWAU+494wAK/r2ta1c3IZ07iaURLwJJR9F3U=";
+          "tauri-plugin-log-0.0.0" = "sha256-tM6oLJe/wwqDDNMKBeMa5nNVvsmi5b104xMOvtm974Y=";
         };
       };
 
@@ -122,7 +122,7 @@ rec {
         cp -r ${frontend-build} frontend-build
 
         substituteInPlace tauri.conf.json --replace '"distDir": "../dist",' '"distDir": "frontend-build",'
-      '' + lib.optionalString stdenv.isLinux ''
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
         substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
           --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
@@ -134,20 +134,20 @@ rec {
       nativeBuildInputs = [
         copyDesktopItems
         pkg-config
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         jq
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         desktopToDarwinBundle
       ];
 
       buildInputs = [
         libsoup
         openssl
-      ] ++ lib.optionals stdenv.isLinux [
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk3
         libayatana-appindicator
         webkitgtk
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         darwin.apple_sdk.frameworks.Carbon
         darwin.apple_sdk.frameworks.Cocoa
         darwin.apple_sdk.frameworks.WebKit

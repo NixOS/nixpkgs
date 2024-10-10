@@ -25,7 +25,7 @@
 
 let
   stdenv' =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       overrideSDK stdenv {
         darwinSdkVersion = "11.0";
         darwinMinVersion = "10.15";

@@ -30,7 +30,6 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
     makeBinaryWrapper
     wrapGAppsHook3
-    python3.pkgs.pytest-runner
   ];
 
   buildInputs = [

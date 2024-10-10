@@ -203,10 +203,13 @@ in {
         ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
       '' + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
         if [ ! -f config.php ]; then
-            php flarum install --file=${flarumInstallConfig}
+          php flarum install --file=${flarumInstallConfig}
         fi
-        php flarum migrate
-        php flarum cache:clear
+      '' + ''
+        if [ -f config.php ]; then
+          php flarum migrate
+          php flarum cache:clear
+        fi
       '';
     };
   };

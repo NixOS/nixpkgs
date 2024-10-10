@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+Cw/aAXkSbYLqc7TGWsMUJNo88v0s1Cq1m4V84j3gXE=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Command-line tool to generate, analyze, convert and manipulate colors";

@@ -36,7 +36,7 @@
 , withRedis ? false
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
-, withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+, withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 # enable support for python plugins in unbound: note this is distinct from pyunbound
 # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false

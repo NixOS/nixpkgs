@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   extra-cmake-modules,
   pkg-config,
@@ -23,22 +22,17 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dde-shell";
-  version = "0.0.43";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dde-shell";
     rev = finalAttrs.version;
-    hash = "sha256-wSk1gEJbTxKUPZ6DiTeVw2qyX+CwANA37ZP0tXnz0J0=";
+    hash = "sha256-I3z6HL1h3qmLfOrwhyLhtSz3og4kHcAdlHJx4+SgPRo=";
   };
 
   patches = [
     ./fix-path-for-nixos.diff
-    (fetchpatch {
-      name = "fix-libdock-plugin_so-contains-a-forbidden-reference.diff";
-      url = "https://github.com/linuxdeepin/dde-shell/commit/bf9a0472bc44748a3c389d796d144dad6b13617b.patch";
-      hash = "sha256-cP5zMsfPyi4FIR1OIbVSnn+Z+KqRuIK7a214VjVb/7w=";
-    })
   ];
 
   postPatch = ''

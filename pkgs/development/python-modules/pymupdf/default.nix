@@ -88,7 +88,7 @@ buildPythonPackage rec {
   };
 
   # TODO: manually add mupdf rpath until upstream fixes it
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for lib in */*.so $out/${python.sitePackages}/*/*.so; do
       install_name_tool -add_rpath ${lib.getLib mupdf-cxx}/lib "$lib"
     done
@@ -175,7 +175,7 @@ buildPythonPackage rec {
       # Exclude lint tests
       "test_flake8"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # darwin does not support OCR right now
       "test_tesseract"
     ];
@@ -187,12 +187,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fitz" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";
     changelog = "https://github.com/pymupdf/PyMuPDF/releases/tag/${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ teto ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ teto ];
+    platforms = lib.platforms.unix;
   };
 }

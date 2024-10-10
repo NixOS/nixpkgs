@@ -1,22 +1,21 @@
 { lib, stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
 
-let
-  traceLog = "/tmp/steam-trace-dependencies.log";
-  version = "1.0.0.74";
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "steam-original";
-  inherit version;
+  version = "1.0.0.81";
 
   src = fetchurl {
     # use archive url so the tarball doesn't 404 on a new release
-    url = "https://repo.steampowered.com/steam/archive/stable/steam_${version}.tar.gz";
-    sha256 = "sha256-sO07g3j1Qejato2LWJ2FrW3AzfMCcBz46HEw7aKxojQ=";
+    url = "https://repo.steampowered.com/steam/archive/stable/steam_${finalAttrs.version}.tar.gz";
+    hash = "sha256-Gia5182s4J4E3Ia1EeC5kjJX9mSltsr+b+1eRtEXtPk=";
   };
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  postInstall = ''
+  postInstall =
+  let
+   traceLog = "/tmp/steam-trace-dependencies.log";
+  in ''
     rm $out/bin/steamdeps
     ${lib.optionalString traceDeps ''
       cat > $out/bin/steamdeps <<EOF
@@ -39,6 +38,8 @@ in stdenv.mkDerivation {
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
+  passthru.updateScript = ./update-bootstrap.py;
+
   meta = with lib; {
     description = "Digital distribution platform";
     longDescription = ''
@@ -51,4 +52,4 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ jagajaga ];
     mainProgram = "steam";
   };
-}
+})

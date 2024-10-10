@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # "binaryenjs" "binaryenjs_wasm" # not building this
     "lit" "gtest"
   ];
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   meta = with lib; {
     homepage = "https://github.com/WebAssembly/binaryen";

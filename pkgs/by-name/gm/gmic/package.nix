@@ -13,9 +13,12 @@
 , gnused
 , graphicsmagick
 , jq
+, libX11
+, libXext
 , libjpeg
 , libpng
 , libtiff
+, llvmPackages
 , ninja
 , opencv
 , openexr
@@ -55,25 +58,31 @@ stdenv.mkDerivation (finalAttrs: {
     cimg
     fftw
     graphicsmagick
+    libX11
+    libXext
     libjpeg
     libpng
     libtiff
     opencv
     openexr
     zlib
+  ] ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
     (lib.cmakeBool "ENABLE_CURL" false)
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
+    (lib.cmakeBool "ENABLE_OPENCV" true)
+    (lib.cmakeBool "ENABLE_XSHM" true)
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
   postPatch = ''
     cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
   '';

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ unzip ];
 
-  patchPhase = lib.optionalString stdenv.isLinux ''
+  patchPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "$out/lib:${lib.makeLibraryPath [zlib]}" \

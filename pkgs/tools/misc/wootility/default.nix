@@ -16,10 +16,11 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands =
     let contents = appimageTools.extract { inherit pname version src; };
     in ''
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/wootility \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
 

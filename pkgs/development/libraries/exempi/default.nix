@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ expat zlib boost ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
-  doCheck = stdenv.isLinux && stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit;
   dontDisableStatic = doCheck;
 
   enableParallelBuilding = true;

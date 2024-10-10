@@ -5,7 +5,6 @@
   ncurses,
   pkg-config,
   fetchFromGitHub,
-  bluez,
   autoreconfHook,
 }:
 

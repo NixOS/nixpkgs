@@ -54,14 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Enable AVX/AVX2/AES-NI instructions, gated by runtime detection via CPUID.
     "--enable-intelasm"
     "--enable-aesni"
-  ] ++ lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [
     # No runtime detection under ARM and no platform function checks like for X86.
     # However, all ARM macOS systems have the supported extensions autodetected in the configure script.
     "--enable-armasm=inline"
   ] ++ extraConfigureFlags;
 
   # Breaks tls13 tests on aarch64-darwin.
-  hardeningDisable = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ "zerocallusedregs" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ "zerocallusedregs" ];
 
   # LTO should help with the C implementations.
   env.NIX_CFLAGS_COMPILE = lib.optionalString enableLto "-flto";
@@ -74,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
   ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

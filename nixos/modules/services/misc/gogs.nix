@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.gogs;
   opt = options.services.gogs;
@@ -29,7 +26,7 @@ let
 
     [session]
     COOKIE_NAME = session
-    COOKIE_SECURE = ${boolToString cfg.cookieSecure}
+    COOKIE_SECURE = ${lib.boolToString cfg.cookieSecure}
 
     [security]
     SECRET_KEY = #secretkey#
@@ -45,70 +42,70 @@ in
 {
   options = {
     services.gogs = {
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Enable Go Git Service.";
       };
 
-      useWizard = mkOption {
+      useWizard = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Do not generate a configuration and use Gogs' installation wizard instead. The first registered user will be administrator.";
       };
 
-      stateDir = mkOption {
+      stateDir = lib.mkOption {
         default = "/var/lib/gogs";
-        type = types.str;
+        type = lib.types.str;
         description = "Gogs data directory.";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "gogs";
         description = "User account under which Gogs runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "gogs";
         description = "Group account under which Gogs runs.";
       };
 
       database = {
-        type = mkOption {
-          type = types.enum [ "sqlite3" "mysql" "postgres" ];
+        type = lib.mkOption {
+          type = lib.types.enum [ "sqlite3" "mysql" "postgres" ];
           example = "mysql";
           default = "sqlite3";
           description = "Database engine to use.";
         };
 
-        host = mkOption {
-          type = types.str;
+        host = lib.mkOption {
+          type = lib.types.str;
           default = "127.0.0.1";
           description = "Database host address.";
         };
 
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 3306;
           description = "Database host port.";
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "gogs";
           description = "Database name.";
         };
 
-        user = mkOption {
-          type = types.str;
+        user = lib.mkOption {
+          type = lib.types.str;
           default = "gogs";
           description = "Database user.";
         };
 
-        password = mkOption {
-          type = types.str;
+        password = lib.mkOption {
+          type = lib.types.str;
           default = "";
           description = ''
             The password corresponding to {option}`database.user`.
@@ -117,8 +114,8 @@ in
           '';
         };
 
-        passwordFile = mkOption {
-          type = types.nullOr types.path;
+        passwordFile = lib.mkOption {
+          type = lib.types.nullOr lib.types.path;
           default = null;
           example = "/run/keys/gogs-dbpassword";
           description = ''
@@ -127,53 +124,53 @@ in
           '';
         };
 
-        path = mkOption {
-          type = types.str;
+        path = lib.mkOption {
+          type = lib.types.str;
           default = "${cfg.stateDir}/data/gogs.db";
-          defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gogs.db"'';
+          defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/data/gogs.db"'';
           description = "Path to the sqlite3 database file.";
         };
       };
 
-      appName = mkOption {
-        type = types.str;
+      appName = lib.mkOption {
+        type = lib.types.str;
         default = "Gogs: Go Git Service";
         description = "Application name.";
       };
 
-      repositoryRoot = mkOption {
-        type = types.str;
+      repositoryRoot = lib.mkOption {
+        type = lib.types.str;
         default = "${cfg.stateDir}/repositories";
-        defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
+        defaultText = lib.literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
-      domain = mkOption {
-        type = types.str;
+      domain = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         description = "Domain name of your server.";
       };
 
-      rootUrl = mkOption {
-        type = types.str;
+      rootUrl = lib.mkOption {
+        type = lib.types.str;
         default = "http://localhost:3000/";
         description = "Full public URL of Gogs server.";
       };
 
-      httpAddress = mkOption {
-        type = types.str;
+      httpAddress = lib.mkOption {
+        type = lib.types.str;
         default = "0.0.0.0";
         description = "HTTP listen address.";
       };
 
-      httpPort = mkOption {
-        type = types.port;
+      httpPort = lib.mkOption {
+        type = lib.types.port;
         default = 3000;
         description = "HTTP listen port.";
       };
 
-      cookieSecure = mkOption {
-        type = types.bool;
+      cookieSecure = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Marks session cookies as "secure" as a hint for browsers to only send
@@ -181,15 +178,15 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = "Configuration lines appended to the generated Gogs configuration file.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.gogs = {
       description = "Gogs (Go Git Service)";
@@ -204,7 +201,7 @@ in
         mkdir -p ${cfg.stateDir}
 
         # copy custom configuration and generate a random secret key if needed
-        ${optionalString (cfg.useWizard == false) ''
+        ${lib.optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
           cp -f ${configFile} ${runConfig}
 
@@ -248,7 +245,7 @@ in
       };
     };
 
-    users = mkIf (cfg.user == "gogs") {
+    users = lib.mkIf (cfg.user == "gogs") {
       users.gogs = {
         description = "Go Git Service";
         uid = config.ids.uids.gogs;
@@ -260,13 +257,13 @@ in
       groups.gogs.gid = config.ids.gids.gogs;
     };
 
-    warnings = optional (cfg.database.password != "")
+    warnings = lib.optional (cfg.database.password != "")
       ''config.services.gogs.database.password will be stored as plaintext
         in the Nix store. Use database.passwordFile instead.'';
 
     # Create database passwordFile default when password is configured.
     services.gogs.database.passwordFile =
-      (mkDefault (toString (pkgs.writeTextFile {
+      (lib.mkDefault (toString (pkgs.writeTextFile {
         name = "gogs-database-password";
         text = cfg.database.password;
       })));

@@ -40,11 +40,11 @@ stdenv.mkDerivation {
       sfml
       zlib
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       openal
       fontconfig
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Cocoa
       darwin.apple_sdk.frameworks.Carbon
       darwin.apple_sdk.frameworks.IOKit
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "AR=${stdenv.cc.targetPrefix}ar"
     "BUILD_EXPAT=0"
-  ] ++ lib.optionals stdenv.isDarwin [ "USE_FONTCONFIG=0" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "USE_FONTCONFIG=0" ];
 
   enableParallelBuilding = true;
 

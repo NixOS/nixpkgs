@@ -58,14 +58,14 @@ python.pkgs.buildPythonApplication rec {
     xxHash
     zstd
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     acl
   ];
 
   dependencies = with python.pkgs; [
     msgpack
     packaging
-    (if stdenv.isLinux then pyfuse3 else llfuse)
+    (if stdenv.hostPlatform.isLinux then pyfuse3 else llfuse)
   ];
 
   makeWrapperArgs = [

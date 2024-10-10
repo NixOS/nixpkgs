@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pQ95sS2dGVzZUOyuUpJPamW7RLiUTGu9KgpWLg4wn/w=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ iputils ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ iputils ];
 
   postInstall = ''
     installManPage gping.1

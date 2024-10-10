@@ -25,7 +25,7 @@
 , xorg
 }:
 let
-  rpathLibs = lib.optionals stdenv.isLinux [
+  rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libxkbcommon
     xorg.libX11
@@ -89,9 +89,9 @@ rustPlatform.buildRustPackage rec {
     glib
     gtk3
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     fontconfig
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libobjc
     Security
     CoreServices
@@ -100,7 +100,7 @@ rustPlatform.buildRustPackage rec {
     AppKit
   ];
 
-  postInstall = if stdenv.isLinux then ''
+  postInstall = if stdenv.hostPlatform.isLinux then ''
     install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
     install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
 
@@ -125,6 +125,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ elliot ];
     mainProgram = "lapce";
     # Undefined symbols for architecture x86_64: "_NSPasteboardTypeFileURL"
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

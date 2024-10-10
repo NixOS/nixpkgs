@@ -45,7 +45,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       requests
@@ -75,16 +75,16 @@ buildPythonPackage rec {
       pytestCheckHook
       responses
     ]
-    ++ passthru.optional-dependencies.aiohttp
-    ++ passthru.optional-dependencies.enterprise_cert
-    ++ passthru.optional-dependencies.reauth;
+    ++ optional-dependencies.aiohttp
+    ++ optional-dependencies.enterprise_cert
+    ++ optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Disable tests using pyOpenSSL as it does not build on M1 Macs
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"

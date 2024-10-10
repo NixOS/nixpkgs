@@ -15,13 +15,17 @@
 , alsa-lib
 , stdenv
 , libxcb
+, bzip2
+, cmake
+, fontconfig
+, freetype
 , pkg-config
 , makeWrapper
 , writeShellScript
 , patchelf
 }:
 let
-  version = "0.10.0";
+  version = "0.14.0";
   # Patch for airshipper to install veloren
   patch = let
     runtimeLibs = [
@@ -59,17 +63,13 @@ rustPlatform.buildRustPackage {
     owner = "Veloren";
     repo = "airshipper";
     rev = "v${version}";
-    hash = "sha256-5zP1Ye1fJNQp8eWKwdxLqBr4qzBfWEEBsJ9s7+8idL4=";
+    hash = "sha256-+ZU3WAjmPDAFAevebePcIlYcgSYSJJ3LyvwbTBKGUH4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "octocrab-0.15.4" = "sha256-uKHLlb0EyWF0Ho8FP38DFZsEWXiAG8FEYzJgwO9W90U=";
-    };
-  };
+  cargoHash = "sha256-mwfYCVcOH2zFr76W9ZC4t/LmEwO5P2eGYXRVkwn6Fm4=";
 
   buildInputs = [
+    fontconfig
     openssl
     wayland
     wayland-protocols
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage {
     libXi
     libXcursor
   ];
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
   RUSTC_BOOTSTRAP = 1; # We need rust unstable features
 
@@ -95,6 +95,9 @@ rustPlatform.buildRustPackage {
         vulkan-loader
         wayland
         wayland-protocols
+        bzip2
+        fontconfig
+        freetype
         libxkbcommon
         libX11
         libXrandr

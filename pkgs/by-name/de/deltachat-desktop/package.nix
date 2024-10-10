@@ -53,13 +53,13 @@ buildNpmPackage rec {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
   ];
 
   buildInputs = [
     deltachat-rpc-server
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 

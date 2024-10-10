@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-WJ58OawPSICCWMWQ042T4OmK5UBRZRU5tnLYxGPbDPc=";
+    hash = "sha256-WJ58OawPSICCWMWQ042T4OmK5UBRZRU5tnLYxGPbDPc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

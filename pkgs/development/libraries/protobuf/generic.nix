@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit hash;
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/google/protobuf/testing/googletest.cc \
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
@@ -85,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://hydra.nixos.org/build/235677717/nixlog/4/tail
   # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
   # https://github.com/protocolbuffers/protobuf/issues/8460
-  doCheck = !(stdenv.isDarwin && lib.versionAtLeast version "23") && !stdenv.hostPlatform.is32bit;
+  doCheck = !(stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "23") && !stdenv.hostPlatform.is32bit;
 
   passthru = {
     tests = {

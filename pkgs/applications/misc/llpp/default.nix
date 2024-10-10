@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ocaml pkg-config ];
   buildInputs = [ mupdf libX11 freetype zlib gumbo jbig2dec openjpeg libjpeg lcms2 harfbuzz ]
-    ++ lib.optionals stdenv.isLinux [ libGLU libGL ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.OpenGL darwin.apple_sdk.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.OpenGL darwin.apple_sdk.frameworks.Cocoa ];
 
   dontStrip = true;
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     install build/llpp $out/bin
     install misc/llpp.inotify $out/bin/llpp.inotify
     install -Dm444 misc/llpp.desktop -t $out/share/applications
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/llpp \
         --prefix PATH ":" "${xclip}/bin"
 

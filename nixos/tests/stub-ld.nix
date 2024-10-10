@@ -18,7 +18,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     libDir = pkgs.stdenv.hostPlatform.libDir;
     ldsoBasename = lib.last (lib.splitString "/" pkgs.stdenv.cc.bintools.dynamicLinker);
 
-    check32 = pkgs.stdenv.isx86_64;
+    check32 = pkgs.stdenv.hostPlatform.isx86_64;
     pkgs32 = pkgs.pkgsi686Linux;
 
     libDir32 = pkgs32.stdenv.hostPlatform.libDir;

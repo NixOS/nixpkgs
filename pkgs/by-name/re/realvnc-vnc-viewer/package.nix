@@ -4,7 +4,7 @@
 }:
 let
   pname = "realvnc-vnc-viewer";
-  version = "7.12.0";
+  version = "7.12.1";
 
   meta = {
     description = "VNC remote desktop client software by RealVNC";
@@ -20,5 +20,5 @@ let
     mainProgram = "vncviewer";
   };
 in
-if stdenv.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
+if stdenv.hostPlatform.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
 else callPackage ./linux.nix { inherit pname version meta; }

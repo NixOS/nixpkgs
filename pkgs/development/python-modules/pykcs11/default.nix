@@ -4,7 +4,7 @@
   callPackage,
   fetchPypi,
   setuptools,
-  swig4,
+  swig,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  nativeBuildInputs = [ swig4 ];
+  nativeBuildInputs = [ swig ];
 
   pypaBuildFlags = [ "--skip-dependency-check" ];
 

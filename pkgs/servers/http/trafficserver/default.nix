@@ -10,8 +10,6 @@
 , pcre
 , perlPackages
 , python3
-, xz
-, zlib
 , catch2
 # recommended dependencies
 , withHwloc ? true
@@ -20,9 +18,9 @@
 , curl
 , withCurses ? true
 , ncurses
-, withCap ? stdenv.isLinux
+, withCap ? stdenv.hostPlatform.isLinux
 , libcap
-, withUnwind ? stdenv.isLinux
+, withUnwind ? stdenv.hostPlatform.isLinux
 , libunwind
 # optional dependencies
 , withBrotli ? false
@@ -66,7 +64,7 @@ stdenv.mkDerivation rec {
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
   nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
     ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
-    ++ lib.optionals stdenv.isLinux [ linuxHeaders ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
   buildInputs = [
     openssl
@@ -97,10 +95,10 @@ stdenv.mkDerivation rec {
       tools/check-unused-dependencies
 
     substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace configure \
       --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
     substituteInPlace iocore/net/test_certlookup.cc \
       --replace 'xcrun leaks' 'true'

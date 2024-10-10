@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "amdvlk-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${finalAttrs.version}";
-    sha256 = "1Svdr93ShjhaWJUTLn5y1kBM4hHey1dUVDiHqFIKgrU=";
+    hash = "sha256-1Svdr93ShjhaWJUTLn5y1kBM4hHey1dUVDiHqFIKgrU=";
   };
 
   buildInputs =

@@ -378,7 +378,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     accessanalyzer = [ mypy-boto3-accessanalyzer ];
     account = [ mypy-boto3-account ];
     acm = [ mypy-boto3-acm ];

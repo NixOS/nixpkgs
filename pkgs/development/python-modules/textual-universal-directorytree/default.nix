@@ -35,7 +35,7 @@ buildPythonPackage rec {
     universal-pathlib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     remote = [
       adlfs
       aiohttp

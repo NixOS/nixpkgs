@@ -27,21 +27,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
-  version = "3.3.2";
+  version = "3.3.5";
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = "refs/tags/v.${finalAttrs.version}";
-    hash = "sha256-caINK4tmDsP7AkLUBqbM96Po7sQxFOn/CAq62K+3aoE=";
+    hash = "sha256-H2/qKnsByidziUldX5MZBrMyMHfuQ4SN9wXizJUGQ8I=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "article_scraper-2.1.0" = "sha256-0jDXH5kkX34tAWK+3hpmW1LWBsFksVgTnSuQX+XXVEM=";
-      "clapper-0.1.0" = "sha256-xQ7l6luO5E4PMjtN9elg0bkJa7IhWzA7KuYDJ+m/VY0=";
-      "news-flash-2.3.0-alpha.0" = "sha256-+CYU2CpF2WfSVjhLtLpHjdAGoycdhdbN9UucKO9XKiA=";
+      "clapper-0.1.0" = "sha256-IFFqfSq2OpzfopQXSYfnJ68HGLY+rvcLqk7NTdDd+28=";
+      "news-flash-2.3.0-alpha.0" = "sha256-L7siGYdb8v57nBGYs86smlw971fvurYQJKK/AdTpi6s=";
       "newsblur_api-0.3.0" = "sha256-m2178zdJzeskl3BQpZr6tlxTAADehxz8uYcZzi15nhQ=";
     };
   };

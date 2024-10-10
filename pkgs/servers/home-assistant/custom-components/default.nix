@@ -10,7 +10,11 @@
 
   awtrix = callPackage ./awtrix {};
 
+  average = callPackage ./average {};
+
   better_thermostat = callPackage ./better_thermostat {};
+
+  bodymiscale = callPackage ./bodymiscale { };
 
   dwd = callPackage ./dwd { };
 
@@ -38,6 +42,8 @@
 
   mass = callPackage ./mass { };
 
+  midea_ac = callPackage ./midea_ac { };
+
   midea_ac_lan = callPackage ./midea_ac_lan {};
 
   midea-air-appliances-lan = callPackage ./midea-air-appliances-lan {};
@@ -45,6 +51,8 @@
   miele = callPackage ./miele {};
 
   moonraker = callPackage ./moonraker {};
+
+  nest_protect = callPackage ./nest_protect {};
 
   ntfy = callPackage ./ntfy {};
 
@@ -59,6 +67,8 @@
   smartir = callPackage ./smartir {};
 
   smartthinq-sensors = callPackage ./smartthinq-sensors {};
+
+  solax_modbus = callPackage ./solax_modbus {};
 
   solis-sensor = callPackage ./solis-sensor {};
 

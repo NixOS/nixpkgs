@@ -13,13 +13,13 @@
 let
   pythonEnv = buildPackages.python3.withPackages (ps: [ps.tkinter]);
 
-targetArch = if stdenv.isi686 then
+targetArch = if stdenv.hostPlatform.isi686 then
   "IA32"
-else if stdenv.isx86_64 then
+else if stdenv.hostPlatform.isx86_64 then
   "X64"
-else if stdenv.isAarch32 then
+else if stdenv.hostPlatform.isAarch32 then
   "ARM"
-else if stdenv.isAarch64 then
+else if stdenv.hostPlatform.isAarch64 then
   "AARCH64"
 else if stdenv.hostPlatform.isRiscV64 then
   "RISCV64"
@@ -28,7 +28,7 @@ else if stdenv.hostPlatform.isLoongArch64 then
 else
   throw "Unsupported architecture";
 
-buildType = if stdenv.isDarwin then
+buildType = if stdenv.hostPlatform.isDarwin then
     "CLANGPDB"
   else
     "GCC5";
@@ -108,7 +108,7 @@ edk2 = stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-return-type"
     + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation"
-    + lib.optionalString (stdenv.isDarwin) " -Wno-error=macro-redefined";
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) " -Wno-error=macro-redefined";
 
   hardeningDisable = [ "format" "fortify" ];
 

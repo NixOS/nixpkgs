@@ -74,7 +74,7 @@ rustPlatform.buildRustPackage rec {
     mpv-unwrapped
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreAudio
     CoreGraphics
@@ -82,7 +82,7 @@ rustPlatform.buildRustPackage rec {
     IOKit
     MediaPlayer
     Security
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
   ];
 

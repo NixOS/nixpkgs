@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-8OErZ6uKTWE245BoBu9lQyTLA43DfWaYDv3wbPWaufg=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     qt5.qtwayland
   ];
 
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "cola/inotify.py"
   ];
 

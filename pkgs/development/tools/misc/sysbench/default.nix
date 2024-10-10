@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   version = "1.0.20";
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmysqlclient luajit ] ++ lib.optionals stdenv.isLinux [ libaio ];
+  buildInputs = [ libmysqlclient luajit ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libaio ];
   depsBuildBuild = [ pkg-config ];
 
   src = fetchFromGitHub {

@@ -72,7 +72,7 @@ buildPythonPackage rec {
       # https://github.com/fabioz/PyDev.Debugger/issues/269
       "test_evaluate_expression"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_multiprocessing_simple"
       "test_evaluate_exception_trace"
     ];

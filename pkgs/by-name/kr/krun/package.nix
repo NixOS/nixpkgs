@@ -3,7 +3,6 @@
 , fetchFromGitHub
 , fetchpatch
 , rustPlatform
-, libiconv
 , libkrun
 , makeWrapper
 , passt

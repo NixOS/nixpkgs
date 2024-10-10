@@ -68,6 +68,6 @@ buildPythonPackage rec {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
     # Build failures
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

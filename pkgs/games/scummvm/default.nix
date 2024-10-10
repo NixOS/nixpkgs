@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ nasm ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib libGLU libGL
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa AudioToolbox Carbon CoreMIDI AudioUnit
   ] ++ [
     curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libtheora libvorbis SDL2 zlib
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # They use 'install -s', that calls the native strip instead of the cross
   postConfigure = ''
     sed -i "s/-c -s/-c -s --strip-program=''${STRIP@Q}/" ports.mk
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.mk \
       --replace x86_64-apple-darwin-ranlib ${cctools}/bin/ranlib \
       --replace aarch64-apple-darwin-ranlib ${cctools}/bin/ranlib

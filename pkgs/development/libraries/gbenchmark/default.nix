@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Tests fail on 32-bit due to not enough precision
-  doCheck = stdenv.is64bit;
+  doCheck = stdenv.hostPlatform.is64bit;
 
   passthru.tests = {
     inherit prometheus-cpp;
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Microbenchmark support library";
     homepage = "https://github.com/google/benchmark";
     license = licenses.asl20;
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin ++ platforms.freebsd;
     maintainers = with maintainers; [ abbradar ];
   };
 }

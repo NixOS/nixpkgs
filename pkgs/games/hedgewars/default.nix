@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
        hedgehog or hedgehogs after a player's or CPU turn is shown only when
        all movement on the battlefield has ceased).'';
     maintainers = with maintainers; [ kragniz fpletz ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     platforms = platforms.linux;
   };
 }

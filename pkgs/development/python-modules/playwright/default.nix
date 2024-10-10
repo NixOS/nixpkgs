@@ -12,6 +12,7 @@
   setuptools,
   setuptools-scm,
   playwright-driver,
+  nixosTests,
   nodejs,
 }:
 
@@ -21,7 +22,7 @@ in
 buildPythonPackage rec {
   pname = "playwright";
   # run ./pkgs/development/python-modules/playwright/update.sh to update
-  version = "1.46.0";
+  version = "1.47.0";
   pyproject = true;
   disabled = pythonOlder "3.7";
 
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-88ZFhP8Bd10czoW71ltelWStypX4z4g18LT3Zo5ACMg=";
+    hash = "sha256-C/spH54hhLI0Egs2jjTjQ5BH1pIw1syrfSyUvVQRoKM=";
   };
 
   patches = [
@@ -73,7 +74,7 @@ buildPythonPackage rec {
     git
     setuptools-scm
     setuptools
-  ] ++ lib.optionals stdenv.isLinux [ auditwheel ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [ "pyee" ];
 
@@ -93,10 +94,14 @@ buildPythonPackage rec {
 
   passthru = {
     inherit driver;
-    tests = {
-      driver = playwright-driver;
-      browsers = playwright-driver.browsers;
-    };
+    tests =
+      {
+        driver = playwright-driver;
+        browsers = playwright-driver.browsers;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) playwright-python;
+      };
     updateScript = ./update.sh;
   };
 

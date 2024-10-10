@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       "https://www.hex-rays.com/products/ida/news/8_1/images/icon_free.png"
       "https://web.archive.org/web/20221105181231if_/https://hex-rays.com/products/ida/news/8_1/images/icon_free.png"
     ];
-    sha256 = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
+    hash = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
   };
 
   desktopItem = makeDesktopItem {

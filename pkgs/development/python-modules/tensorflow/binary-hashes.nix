@@ -1,5 +1,6 @@
 {
   version = "2.17.0";
+  version_jetson = "2.16.1+nv24.07";
   x86_64-linux_39 = {
     url = "https://storage.googleapis.com/tensorflow/versions/2.17.0/tensorflow_cpu-2.17.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl";
     sha256 = "1aacn68b88bnnmpl1q0irih0avzm2lfyhwr3wldg144n5zljlrbx";
@@ -47,6 +48,10 @@
   aarch64-linux_312 = {
     url = "https://storage.googleapis.com/tensorflow/versions/2.17.0/tensorflow-2.17.0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl";
     sha256 = "1zrscms9qkfpiscnl8c7ibfipwpw8jrdfvwh4wb69p9rxvqgxbbj";
+  };
+  aarch64-linux_310_jetson = {
+    url = "https://developer.download.nvidia.com/compute/redist/jp/v60/tensorflow/tensorflow-2.16.1+nv24.07-cp310-cp310-linux_aarch64.whl";
+    sha256 = "1ymdknl5v41z6z0wg068diici30am8vysg6b6sqxr8w6yk4aib42";
   };
   aarch64-darwin_39 = {
     url = "https://storage.googleapis.com/tensorflow/versions/2.17.0/tensorflow-2.17.0-cp39-cp39-macosx_12_0_arm64.whl";

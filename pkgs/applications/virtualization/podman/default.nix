@@ -22,7 +22,7 @@
 , crun
 , runc
 , conmon
-, extraRuntimes ? lib.optionals stdenv.isLinux [ runc ]  # e.g.: runc, gvisor, youki
+, extraRuntimes ? lib.optionals stdenv.hostPlatform.isLinux [ runc ]  # e.g.: runc, gvisor, youki
 , fuse-overlayfs
 , util-linux
 , iptables
@@ -39,12 +39,12 @@
 let
   # do not add qemu to this wrapper, store paths get written to the podman vm config and break when GCed
 
-  binPath = lib.makeBinPath (lib.optionals stdenv.isLinux [
+  binPath = lib.makeBinPath (lib.optionals stdenv.hostPlatform.isLinux [
     fuse-overlayfs
     util-linux
     iptables
     iproute2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     vfkit
   ] ++ extraPackages);
 
@@ -54,7 +54,7 @@ let
     # this only works for some binaries, others may need to be added to `binPath` or in the modules
     paths = [
       gvproxy
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
@@ -66,13 +66,13 @@ let
 in
 buildGoModule rec {
   pname = "podman";
-  version = "5.2.2";
+  version = "5.2.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
-    hash = "sha256-48ltjGrzh74CYV6T6YDFSFC+Msui8YCG1N+c9k5Y09I=";
+    hash = "sha256-2FnUijeQhre7B4utsGGEGbMuuMVZlPDoM2di3z1d4vs=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper python3 ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     btrfs-progs
     gpgme
     libapparmor
@@ -110,7 +110,7 @@ buildGoModule rec {
     runHook preBuild
     patchShebangs .
     substituteInPlace Makefile --replace "/bin/bash" "${runtimeShell}"
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
       make podman-remote # podman-mac-helper uses FHS paths
     '' else ''
       make bin/podman bin/rootlessport bin/quadlet
@@ -121,7 +121,7 @@ buildGoModule rec {
 
   installPhase = ''
     runHook preInstall
-    ${if stdenv.isDarwin then ''
+    ${if stdenv.hostPlatform.isDarwin then ''
       install bin/darwin/podman -Dt $out/bin
     '' else ''
       make install.bin install.systemd
@@ -134,7 +134,7 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     RPATH=$(patchelf --print-rpath $out/bin/.podman-wrapped)
     patchelf --set-rpath "${lib.makeLibraryPath [ systemd ]}":$RPATH $out/bin/.podman-wrapped
   '';
@@ -144,7 +144,7 @@ buildGoModule rec {
       package = podman;
       command = "HOME=$TMPDIR podman --version";
     };
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     inherit (nixosTests) podman;
     # related modules
     inherit (nixosTests)

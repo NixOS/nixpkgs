@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   makeFlags = [ "prefix=$(out)" ];
 

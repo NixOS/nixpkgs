@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  configureFlags = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-asl-lib=-lipoptamplinterface -lamplsolver"
   ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   # ignore one failing test
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace test/Makefile.in --replace-fail \
       "./unitTest\''$(EXEEXT)" \
       ""

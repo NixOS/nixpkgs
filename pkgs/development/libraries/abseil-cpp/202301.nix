@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7C/QIXYRyUyNVVE0tqmv8b5g/uWc58iBI5jzdtddQ+U=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Don’t propagate the path to CoreFoundation. Otherwise, it’s impossible to build packages
     # that require a different SDK other than the default one.
     ./cmake-core-foundation.patch

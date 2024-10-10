@@ -83,11 +83,11 @@ in stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-  ] ++ lib.optionals (!stdenv.isLinux || stdenv.hostPlatform.isMusl) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
     "-Dprofiler=disabled"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postPatch = ''
     patchShebangs build/choose-tests-locale.sh
@@ -130,7 +130,7 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = {
     tests = {

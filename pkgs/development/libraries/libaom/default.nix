@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DCONFIG_TUNE_VMAF=1"
   ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
     "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
-  ] ++ lib.optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # armv7l-hf-multiplatform does not support NEON
     # see lib/systems/platform.nix
     "-DENABLE_NEON=0"

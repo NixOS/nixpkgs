@@ -17,8 +17,6 @@ let
           hash = "sha256-WnRbsy/PJcotZqY9mJPLadrYqkXykOVifLIbDyNf4s4=";
         };
 
-        nativeBuildInputs = [ ];
-
         nativeCheckInputs = with self; [ pytestCheckHook pillow ];
       });
       flask = super.flask.overridePythonAttrs (old: rec {

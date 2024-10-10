@@ -58,7 +58,7 @@ buildPythonPackage rec {
       tomli
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       argcomplete
       attrs

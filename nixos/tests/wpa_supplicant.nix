@@ -8,6 +8,8 @@ let
     maintainers = [ oddlama rnhmjoj ];
   };
 
+  naughtyPassphrase = ''!,./;'[]\-=<>?:"{}|_+@$%^&*()`~ # ceci n'est pas un commentaire'';
+
   runConnectionTest = name: extraConfig: runTest {
     name = "wpa_supplicant-${name}";
     inherit meta;
@@ -21,13 +23,14 @@ let
         enable = true;
         radios.wlan0 = {
           band = "2g";
+          channel = 6;
           countryCode = "US";
           networks = {
             wlan0 = {
               ssid = "nixos-test-sae";
               authentication = {
                 mode = "wpa3-sae";
-                saePasswords = [ { password = "reproducibility"; } ];
+                saePasswords = [ { password = naughtyPassphrase; } ];
               };
               bssid = "02:00:00:00:00:00";
             };
@@ -36,8 +39,8 @@ let
               authentication = {
                 mode = "wpa3-sae-transition";
                 saeAddToMacAllow = true;
-                saePasswordsFile = pkgs.writeText "password" "reproducibility";
-                wpaPasswordFile = pkgs.writeText "password" "reproducibility";
+                saePasswordsFile = pkgs.writeText "password" naughtyPassphrase;
+                wpaPasswordFile = pkgs.writeText "password" naughtyPassphrase;
               };
               bssid = "02:00:00:00:00:01";
             };
@@ -45,7 +48,7 @@ let
               ssid = "nixos-test-wpa2";
               authentication = {
                 mode = "wpa2-sha256";
-                wpaPassword = "reproducibility";
+                wpaPassword = naughtyPassphrase;
               };
               bssid = "02:00:00:00:00:02";
             };
@@ -65,7 +68,7 @@ let
 
           # secrets
           secretsFile = pkgs.writeText "wpa-secrets" ''
-            psk_nixos_test=reproducibility
+            psk_nixos_test=${naughtyPassphrase}
           '';
         }
         extraConfig
@@ -123,13 +126,15 @@ in
     };
 
     testScript = ''
-      config_file = "/etc/static/wpa_supplicant.conf"
-
       with subtest("Daemon is running and accepting connections"):
           machine.wait_for_unit("wpa_supplicant.service")
           status = machine.wait_until_succeeds("wpa_cli status")
           assert "Failed to connect" not in status, \
                  "Failed to connect to the daemon"
+
+      # get the configuration file
+      cmdline = machine.succeed("cat /proc/$(pgrep wpa)/cmdline").split('\x00')
+      config_file = cmdline[cmdline.index("-c") + 1]
 
       with subtest("WPA2 fallbacks have been generated"):
           assert int(machine.succeed(f"grep -c sae-only {config_file}")) == 1

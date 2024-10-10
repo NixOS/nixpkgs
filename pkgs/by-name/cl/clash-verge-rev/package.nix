@@ -8,6 +8,8 @@
   wrapGAppsHook3,
   v2ray-geoip,
   v2ray-domain-list-community,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 let
   pname = "clash-verge-rev";
@@ -101,7 +103,22 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     wrapGAppsHook3
+    copyDesktopItems
   ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "clash-verge";
+      exec = "clash-verge";
+      comment = "Clash Verge Rev";
+      type = "Application";
+      icon = "clash-verge";
+      desktopName = "Clash Verge Rev";
+      terminal = false;
+      categories = [ "Network" ];
+    })
+  ];
+
   installPhase = ''
     runHook preInstall
 

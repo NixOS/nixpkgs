@@ -35,7 +35,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [
     pytest
-    pytest-runner
   ];
 
   checkPhase = ''

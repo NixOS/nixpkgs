@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonImportsCheckHook,
   # documentation build dependencies
   sphinxHook,
   sphinx-notfound-page,
@@ -37,7 +36,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonImportsCheckHook
 
     sphinxHook
     sphinx-notfound-page

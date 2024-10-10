@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono }:
+{ lib, stdenv, fetchurl, makeDesktopItem, makeWrapper, unzip, mono, gitUpdater
+}:
 
 let
   pname = "mission-planner";
@@ -12,11 +13,12 @@ let
   };
 in stdenv.mkDerivation rec {
   inherit pname;
-  version = "1.3.80";
+  version = "1.3.82";
 
   src = fetchurl {
-    url = "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
-    sha256 = "sha256-iivlaQWtOMJHchmR92FoqTaosGJ9F1AgFtuFgDE/9qQ=";
+    url =
+      "https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-${version}.zip";
+    sha256 = "sha256-554fFDxHMo4jV3yrPdGgDYQ6XeW+TWdVIIkGQIBdrCQ=";
   };
 
   nativeBuildInputs = [ makeWrapper mono unzip ];
@@ -43,6 +45,8 @@ in stdenv.mkDerivation rec {
       --add-flags $out/opt/mission-planner/MissionPlanner.exe
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "ArduPilot ground station";

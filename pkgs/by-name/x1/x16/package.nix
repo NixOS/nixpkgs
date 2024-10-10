@@ -57,6 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "x16emu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isAarch64; # ofborg fails to compile it
+    broken = stdenv.hostPlatform.isAarch64; # ofborg fails to compile it
   };
 })

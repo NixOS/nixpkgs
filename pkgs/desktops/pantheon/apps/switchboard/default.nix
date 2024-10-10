@@ -4,7 +4,6 @@
 , nix-update-script
 , pkg-config
 , meson
-, python3
 , ninja
 , sassc
 , vala
@@ -18,20 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-qSqZQcE/g9oOHI8OAxMACSIFXrJMgSFLraAbTHjggLY=";
+    sha256 = "sha256-PRoaC+h9rlwu7Q5Fh/2lBxdod93h02S5dhUVMTEuKR4=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    python3
     sassc
     vala
     wrapGAppsHook4
@@ -49,11 +47,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./plugs-path-env.patch
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

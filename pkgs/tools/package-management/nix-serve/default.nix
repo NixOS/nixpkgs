@@ -2,15 +2,17 @@
 , stdenv
 , fetchFromGitHub
 , bzip2
-, nix
-, perl
+, nixVersions
 , makeWrapper
 , nixosTests
+, fetchpatch
 }:
 
 let
-  rev = "e4675e38ab54942e351c7686e40fabec822120b9";
-  sha256 = "1wm24p6pkxl1d7hrvf4ph6mwzawvqi22c60z9xzndn5xfyr4v0yr";
+  rev = "77ffa33d83d2c7c6551c5e420e938e92d72fec24";
+  sha256 = "sha256-MJRdVO2pt7wjOu5Hk0eVeNbk5bK5+Uo/Gh9XfO4OlMY=";
+  nix = nixVersions.nix_2_24;
+  inherit (nix.perl-bindings) perl;
 in
 
 stdenv.mkDerivation {
@@ -23,6 +25,14 @@ stdenv.mkDerivation {
     inherit rev sha256;
   };
 
+  patches = [
+    # Part of https://github.com/edolstra/nix-serve/pull/61
+    (fetchpatch {
+      url = "https://github.com/edolstra/nix-serve/commit/9e434fff4486afeb3cc3f631f6dc56492b204704.patch";
+      sha256 = "sha256-TxQ6q6UApTKsYIMdr/RyrkKSA3k47stV63bTbxchNTU=";
+    })
+  ];
+
   nativeBuildInputs = [ makeWrapper ];
 
   dontBuild = true;
@@ -34,6 +44,9 @@ stdenv.mkDerivation {
                 --prefix PATH : "${lib.makeBinPath [ bzip2 nix ]}" \
                 --add-flags $out/libexec/nix-serve/nix-serve.psgi
   '';
+
+  /** The nix package that nix-serve got its nix perl bindings from. */
+  passthru.nix = nix;
 
   passthru.tests = {
     nix-serve = nixosTests.nix-serve;

@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     url = "https://github.com/exg/rxvt-unicode/commit/16634bc8dd5fc4af62faf899687dfa8f27768d15.patch";
     excludes = [ "Changes" ];
     sha256 = "sha256-JVqzYi3tcWIN2j5JByZSztImKqbbbB3lnfAwUXrumHM=";
-  }) ++ lib.optional stdenv.isDarwin ./patches/makefile-phony.patch;
+  }) ++ lib.optional stdenv.hostPlatform.isDarwin ./patches/makefile-phony.patch;
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "bin" "dev" "out" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];

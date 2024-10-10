@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pyscaffoldext-markdown
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     testing = [
       configupdater
       pre-commit

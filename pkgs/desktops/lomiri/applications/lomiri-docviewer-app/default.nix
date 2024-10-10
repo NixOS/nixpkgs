@@ -9,7 +9,6 @@
   cmake,
   content-hub,
   gettext,
-  libreoffice,
   libreoffice-unwrapped,
   lomiri-ui-toolkit,
   pkg-config,

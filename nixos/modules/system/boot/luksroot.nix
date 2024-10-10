@@ -1088,6 +1088,8 @@ in
       storePaths = [
         "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
         "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
+      ] ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
+        "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
       ];
 
     };

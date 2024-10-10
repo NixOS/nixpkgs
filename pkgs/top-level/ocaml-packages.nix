@@ -56,6 +56,10 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+    augeas = callPackage ../development/ocaml-modules/augeas {
+      inherit (pkgs) augeas;
+    };
+
     awa = callPackage ../development/ocaml-modules/awa { };
 
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
@@ -444,6 +448,8 @@ let
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+    eio-ssl = callPackage ../development/ocaml-modules/eio-ssl { };
+
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -658,6 +664,8 @@ let
 
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
+    h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
+
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
@@ -688,6 +696,14 @@ let
     httpaf = callPackage ../development/ocaml-modules/httpaf { };
 
     httpaf-lwt-unix = callPackage ../development/ocaml-modules/httpaf/lwt-unix.nix { };
+
+    httpun = callPackage ../development/ocaml-modules/httpun { };
+
+    httpun-eio = callPackage ../development/ocaml-modules/httpun/eio.nix { };
+
+    httpun-types = callPackage ../development/ocaml-modules/httpun/types.nix { };
+
+    httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
@@ -1177,6 +1193,8 @@ let
 
     mirage-vnetif = callPackage ../development/ocaml-modules/mirage-vnetif { };
 
+    mlbdd = callPackage ../development/ocaml-modules/mlbdd { };
+
     mldoc =  callPackage ../development/ocaml-modules/mldoc { };
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
@@ -1210,6 +1228,11 @@ let
     mustache =  callPackage ../development/ocaml-modules/mustache { };
 
     ### N ###
+
+    nbd = pkgs.libnbd.override {
+      ocamlPackages = self;
+      buildOcamlBindings = true;
+    };
 
     netchannel = callPackage ../development/ocaml-modules/netchannel { };
 
@@ -2036,7 +2059,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_latest = ocamlPackages_5_2;
 
-  ocamlPackages = ocamlPackages_5_1;
+  ocamlPackages = ocamlPackages_5_2;
 
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.

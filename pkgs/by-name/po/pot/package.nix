@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri
+    cargo-tauri.hook
     nodejs
     pnpm.configHook
     wrapGAppsHook3
@@ -99,15 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     # pnpm.configHook has to write to .., as our sourceRoot is set to src-tauri
     # TODO: move frontend into its own drv
     chmod +w ..
-  '';
-
-  preBuild = ''
-    # Use cargo-tauri from nixpkgs instead of pnpm tauri from npm
-    cargo tauri build -b deb
-  '';
-
-  preInstall = ''
-    mv target/release/bundle/deb/*/data/usr/ $out
   '';
 
   meta = with lib; {

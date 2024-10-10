@@ -1,25 +1,30 @@
 /*
-How to combine packages for use in development:
-dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
+  How to combine packages for use in development:
+  dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7_0 ];
 
-Hashes and urls are retrieved from:
-https://dotnet.microsoft.com/download/dotnet
+  Hashes and urls are retrieved from:
+  https://dotnet.microsoft.com/download/dotnet
 */
-{ lib
-, config
-, recurseIntoAttrs
-, generateSplicesForMkScope
-, makeScopeWithSplicing'
+{
+  lib,
+  config,
+  recurseIntoAttrs,
+  generateSplicesForMkScope,
+  makeScopeWithSplicing',
 }:
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "dotnetCorePackages";
-  f = (self:
+  f = (
+    self:
     let
       callPackage = self.callPackage;
 
-      buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
+      fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
+
+      buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) { };
       buildAttrs = {
+        inherit fetchNupkg;
         buildAspNetCore = attrs: buildDotnet (attrs // { type = "aspnetcore"; });
         buildNetRuntime = attrs: buildDotnet (attrs // { type = "runtime"; });
         buildNetSdk = attrs: buildDotnet (attrs // { type = "sdk"; });
@@ -40,32 +45,40 @@ makeScopeWithSplicing' {
         "i686-windows" = "win-x86";
       };
 
-    in {
-      inherit callPackage;
+    in
+    {
+      inherit callPackage fetchNupkg;
 
       # Convert a "stdenv.hostPlatform.system" to a dotnet RID
-      systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
+      systemToDotnetRid =
+        system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 
-      combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};
+      combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) { };
 
-      patchNupkgs = callPackage ./patch-nupkgs.nix {};
-      nugetPackageHook = callPackage ./nuget-package-hook.nix {};
+      patchNupkgs = callPackage ./patch-nupkgs.nix { };
+      nugetPackageHook = callPackage ./nuget-package-hook.nix { };
 
       buildDotnetModule = callPackage ../../../build-support/dotnet/build-dotnet-module { };
       buildDotnetGlobalTool = callPackage ../../../build-support/dotnet/build-dotnet-global-tool { };
 
       mkNugetSource = callPackage ../../../build-support/dotnet/make-nuget-source { };
       mkNugetDeps = callPackage ../../../build-support/dotnet/make-nuget-deps { };
-      fetchNupkg = callPackage ../../../build-support/dotnet/fetch-nupkg { };
+      addNuGetDeps = callPackage ../../../build-support/dotnet/add-nuget-deps { };
 
       dotnet_8 = recurseIntoAttrs (callPackage ./8 { bootstrapSdk = dotnet_8_0.sdk_8_0_1xx; });
-      dotnet_9 = recurseIntoAttrs (callPackage ./9 {});
-    } // lib.optionalAttrs config.allowAliases {
+      dotnet_9 = recurseIntoAttrs (callPackage ./9 { });
+    }
+    // lib.optionalAttrs config.allowAliases {
       # EOL
       sdk_2_1 = throw "Dotnet SDK 2.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
       sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
       sdk_3_0 = throw "Dotnet SDK 3.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
       sdk_3_1 = throw "Dotnet SDK 3.1 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
       sdk_5_0 = throw "Dotnet SDK 5.0 is EOL, please use 6.0 (LTS) or 7.0 (Current)";
-    } // dotnet_6_0 // dotnet_7_0 // dotnet_8_0 // dotnet_9_0);
+    }
+    // dotnet_6_0
+    // dotnet_7_0
+    // dotnet_8_0
+    // dotnet_9_0
+  );
 }

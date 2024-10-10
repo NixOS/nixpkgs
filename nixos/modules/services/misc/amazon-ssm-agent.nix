@@ -37,7 +37,12 @@ in {
       after    = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release pkgs.coreutils ];
+      path = [
+        fake-lsb-release
+        pkgs.coreutils
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";

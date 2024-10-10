@@ -193,19 +193,12 @@ The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
 From time to time, changes between branches must be rebased, for example, if the
-number of new rebuilds they would cause is too large for the target branch. When
-rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review. To achieve this,
-rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch. As an additional precautionary measure,
-you should temporarily mark the PR as draft for the duration of the operation.
-This reduces the probability of mass-pinging people. (OfBorg might still
-request a couple of persons for reviews though.)
+number of new rebuilds they would cause is too large for the target branch.
 
 In the following example, we assume that the current branch, called `feature`,
 is based on `master`, and we rebase it onto the merge base between
-`master` and `staging` so that the PR can eventually be retargeted to
-`staging` without causing a mess. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
+`master` and `staging` so that the PR can be retargeted to
+`staging`. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
 while `origin` is the remote you are pushing to.
 
 
@@ -232,36 +225,6 @@ git rebase upstream/staging
 git status
 # Force push your changes
 git push origin feature --force-with-lease
-```
-
-#### Something went wrong and a lot of people were pinged
-
-It happens. Remember to be kind, especially to new contributors.
-There is no way back, so the pull request should be closed and locked
-(if possible). The changes should be re-submitted in a new PR, in which the people
-originally involved in the conversation need to manually be pinged again.
-No further discussion should happen on the original PR, as a lot of people
-are now subscribed to it.
-
-The following message (or a version thereof) might be left when closing to
-describe the situation, since closing and locking without any explanation
-is kind of rude:
-
-```markdown
-It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
-and getting notifications for everything in this pull request. Unfortunately, they
-cannot be automatically unsubscribed from the issue (removing review request does not
-unsubscribe), therefore development cannot continue in this pull request anymore.
-
-Please open a new pull request with your changes, link back to this one and ping the
-people actually involved in here over there.
-
-In order to avoid this in the future, there are instructions for how to properly
-rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
-Setting your pull request to draft prior to rebasing is strongly recommended.
-In draft status, you can preview the list of people that are about to be requested
-for review, which allows you to sidestep this issue.
-This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
 ```
 
 ## How to backport pull requests
@@ -314,6 +277,22 @@ The high change rate of Nixpkgs makes any pull request that remains open for too
 When reviewing a pull request, please always be nice and polite. Controversial changes can lead to controversial opinions, but it is important to respect every community member and their work.
 
 GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
+
+When doing a review:
+- Aim to drive the proposal to a timely conclusion.
+- Focus on the proposed changes to keep the scope of the discussion narrow.
+- Help the contributor prioritise their efforts towards getting their change merged.
+
+If you find anything related that could be improved but is not immediately required for acceptance, consider
+- Implementing the changes yourself in a follow-up pull request (and request review from the person who inspired you)
+- Tracking your idea in an issue
+- Offering the original contributor to review a follow-up pull request
+- Making concrete [suggestions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) in the same pull request.
+
+For example, follow-up changes could involve refactoring code in the affected files.
+
+But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org/) pattern.
+If the related change is essential for the contribution at hand, make clear why you think it is important to address that first.
 
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
@@ -621,7 +600,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = lib.optional stdenv.isDarwin iconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin iconv;
   }
   ```
 
@@ -629,7 +608,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+    buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null;
   }
   ```
 

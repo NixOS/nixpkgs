@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "slumber";
-  version = "1.8.1";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "LucasPickering";
     repo = "slumber";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u+IONDK3X+4kPmW9YXa0qQbAezBD+UADnlNEH1coKNE=";
+    hash = "sha256-W7KvIc6FqM4RUqUsMOzfwBD9kVIFdqPba8dz+Ysg4sY=";
   };
 
-  cargoHash = "sha256-V/wPzEoUppLu8E5/SbBT4sPftz/SIg4s00/AHQL9R+o=";
+  cargoHash = "sha256-1PNf7EVr4UibxR1OM04tDr5jreEeFxvKfx6Qe3p6dJQ=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   meta = with lib; {
     description = "Terminal-based HTTP/REST client";

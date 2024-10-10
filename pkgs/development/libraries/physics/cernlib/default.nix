@@ -6,7 +6,6 @@
   cmake,
   freetype,
   gfortran,
-  gnused,
   openssl,
   libnsl,
   motif,
@@ -56,7 +55,7 @@ stdenv.mkDerivation rec {
     libXt
     libxcrypt
     motif
-  ] ++ lib.optional stdenv.isLinux libnsl;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libnsl;
 
   setupHook = ./setup-hook.sh;
 

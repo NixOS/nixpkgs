@@ -54,7 +54,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "gucharmap";
     rev = finalAttrs.version;
-    sha256 = "sha256-PG86D8QvqHdmo3aJseCerngmuWUqtSMdWzbixWE2HOQ=";
+    hash = "sha256-PG86D8QvqHdmo3aJseCerngmuWUqtSMdWzbixWE2HOQ=";
   };
 
   strictDeps = true;

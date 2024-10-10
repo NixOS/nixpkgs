@@ -79,6 +79,9 @@ buildPythonPackage rec {
     "test_recursion_error"
     "test_openai_class_detection"
     "test_openai_chat_without_roles"
+
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   disabledTestPaths = [

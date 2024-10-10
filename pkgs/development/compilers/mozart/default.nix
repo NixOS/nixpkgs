@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
     homepage = "https://mozart.github.io";
     platforms = platforms.all;
     # Trace/BPT trap: 5
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 
 }

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pkg-config,
   installShellFiles,
+  getconf,
   dbus,
   libseccomp,
   systemd,
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    getconf
   ];
 
   buildInputs = [

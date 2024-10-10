@@ -1,22 +1,23 @@
 { lib, fetchurl, buildDunePackage
 , menhir, menhirLib
 , fmt
+, hmap
 , qcheck
 }:
 
 buildDunePackage rec {
   pname = "dolmen";
-  version = "0.9";
+  version = "0.10";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/Gbury/dolmen/releases/download/v${version}/dolmen-${version}.tbz";
-    hash = "sha256-AD21OFS6zDoz+lXtac95gXwQNppPfGvpRK8dzDZXigo=";
+    hash = "sha256-xchfd+OSTzeOjYLxZu7+QTG04EG/nN7KRnQQ8zxx+mE=";
   };
 
   nativeBuildInputs = [ menhir ];
-  propagatedBuildInputs = [ menhirLib fmt ];
+  propagatedBuildInputs = [ menhirLib fmt hmap ];
 
   doCheck = true;
 

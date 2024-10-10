@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests = lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+  disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly:
     "test_progressive_resize_integration"
   ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var/lib"
     "--with-rundir=/run"
     "--with-logdir=/var/log"
-  ] ++ lib.optionals (stdenv.isLinux) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     "--enable-sctp=${lksctp-tools.out}/lib"
   ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     sqlite
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   enableParallelBuilding = true;
   # Missing install depends:

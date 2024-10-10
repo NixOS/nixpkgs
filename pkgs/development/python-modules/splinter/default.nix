@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ urllib3 ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     "zope.testbrowser" = [
       zope-testbrowser
       lxml
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # driver is present and fails with a different error during loading

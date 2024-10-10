@@ -8,7 +8,7 @@
 , ninja
 , libxslt
 , gtk4
-, enableBackend ? stdenv.isLinux
+, enableBackend ? stdenv.hostPlatform.isLinux
 , json-glib
 , libadwaita
 , librest_1_0

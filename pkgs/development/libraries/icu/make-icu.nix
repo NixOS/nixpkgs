@@ -31,7 +31,7 @@ let
 
       # $(includedir) is different from $(prefix)/include due to multiple outputs
       sed -i -e 's|^\(CPPFLAGS = .*\) -I\$(prefix)/include|\1 -I$(includedir)|' config/Makefile.inc.in
-    '' + lib.optionalString stdenv.isAarch32 ''
+    '' + lib.optionalString stdenv.hostPlatform.isAarch32 ''
       # From https://archlinuxarm.org/packages/armv7h/icu/files/icudata-stdlibs.patch
       sed -e 's/LDFLAGSICUDT=-nodefaultlibs -nostdlib/LDFLAGSICUDT=/' -i config/mh-linux
     '';
@@ -39,7 +39,7 @@ let
     dontDisableStatic = withStatic;
 
     configureFlags = [ "--disable-debug" ]
-      ++ lib.optional (stdenv.isFreeBSD || stdenv.isDarwin) "--enable-rpath"
+      ++ lib.optional (stdenv.hostPlatform.isFreeBSD || stdenv.hostPlatform.isDarwin) "--enable-rpath"
       ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--with-cross-build=${nativeBuildRoot}"
       ++ lib.optional withStatic "--enable-static";
 
@@ -74,7 +74,7 @@ let
     postInstall = lib.optionalString withStatic ''
       mkdir -p $static/lib
       mv -v lib/*.a $static/lib
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -i 's/INSTALL_CMD=.*install/INSTALL_CMD=install/' $out/lib/icu/${version}/pkgdata.inc
     '' + (let
       replacements = [

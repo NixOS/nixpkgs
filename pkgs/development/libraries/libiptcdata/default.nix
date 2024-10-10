@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     libintl
   ];

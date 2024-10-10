@@ -67,8 +67,8 @@ rec {
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
         ./.libs/''
-      + pkgs.lib.optionalString pkgs.stdenv.isDarwin "libxml2.dylib "
-      + pkgs.lib.optionalString (!pkgs.stdenv.isDarwin) "libxml2.a "
+      + pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin "libxml2.dylib "
+      + pkgs.lib.optionalString (!pkgs.stdenv.hostPlatform.isDarwin) "libxml2.a "
       + '' `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
         --embed-file ./test/xmlid/id_err1.xml
 
@@ -175,7 +175,7 @@ rec {
         echo "================= /testing zlib using node ================="
       '';
 
-      postPatch = pkgs.lib.optionalString pkgs.stdenv.isDarwin ''
+      postPatch = pkgs.lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
         substituteInPlace configure \
           --replace '/usr/bin/libtool' 'ar' \
           --replace 'AR="libtool"' 'AR="ar"' \

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
-    lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
+    lib.optionals stdenv.hostPlatform.isLinux [ libseccomp systemd libcap ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
     ++
     # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
-    lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "--disable-seccomp" ]
+    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [ "--disable-seccomp" ]
   ;
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   # disable tests on linux aarch32
   # https://gitlab.torproject.org/tpo/core/tor/-/issues/40912
-  doCheck = !(stdenv.isLinux && stdenv.isAarch32);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch32);
 
   postInstall = ''
     mkdir -p $geoip/share/tor

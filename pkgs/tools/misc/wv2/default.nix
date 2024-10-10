@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optionals stdenv.cc.isClang [ (lib.cmakeFeature "CMAKE_CXX_STANDARD" "14") ];
 
   # Linking gobject explicitly fixes missing symbols (such as missing `_g_object_unref`) on Darwin.
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS+=" $(pkg-config gobject-2.0 --libs)"
   '';
 

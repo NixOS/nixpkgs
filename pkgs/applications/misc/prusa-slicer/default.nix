@@ -128,7 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     catch2
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
 
@@ -210,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ moredread tweber tmarkus ];
     platforms = platforms.unix;
-  } // lib.optionalAttrs (stdenv.isDarwin) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     mainProgram = "PrusaSlicer";
   };
 })

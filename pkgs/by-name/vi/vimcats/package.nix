@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     owner = "mrcjkb";
     repo = "vimcats";
     rev = "v${version}";
-    sha256 = "sha256-QV/eIy6yd6Lnmo8XV+E37/oCZCC3jlPu31emH0MgiO4=";
+    hash = "sha256-QV/eIy6yd6Lnmo8XV+E37/oCZCC3jlPu31emH0MgiO4=";
   };
 
   buildFeatures = [ "cli" ];

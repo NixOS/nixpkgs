@@ -92,7 +92,7 @@ buildPythonPackage rec {
     #"-x" "-W" "ignore" # uncomment for debugging help
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky: OSError: Cannot find empty port in range: 7860-7959
     "test_layout_components_in_output"
     "test_layout_and_state_components_in_output"

@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ bsd3 ];
     platforms = platforms.all;
     maintainers = with maintainers; [ _0x4A6F ];
-    broken = stdenv.isDarwin; # 2018-10-21
+    broken = stdenv.hostPlatform.isDarwin; # 2018-10-21
   };
 }

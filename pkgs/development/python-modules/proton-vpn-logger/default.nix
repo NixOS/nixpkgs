@@ -5,6 +5,7 @@
   setuptools,
   proton-core,
   pytestCheckHook,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -19,28 +20,28 @@ buildPythonPackage rec {
     hash = "sha256-/LfMjyTs/EusgnKEQugsdJzqDZBvaAhbsTUVLDCRw0I=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ proton-core ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace-fail "--cov=proton/vpn/logging/ --cov-report html --cov-report term" ""
-  '';
+  dependencies = [ proton-core ];
 
   pythonImportsCheck = [ "proton.vpn.logging" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   preCheck = ''
     # Needed for Permission denied: '/homeless-shelter'
     export HOME=$(mktemp -d)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "General purpose logging package for the entire ProtonVPN Linux client";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-logger";
-    license = licenses.gpl3Only;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sebtm ];
   };
 }

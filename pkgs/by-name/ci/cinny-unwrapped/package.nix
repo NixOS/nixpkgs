@@ -14,20 +14,20 @@
 
 buildNpmPackage rec {
   pname = "cinny-unwrapped";
-  version = "4.1.0";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny";
     rev = "v${version}";
-    hash = "sha256-GC+TvTPfirov4GxkTp0N3tkDQEAEdmPB71NzOBZQiqs=";
+    hash = "sha256-+sJQosQMji2iLGgOMRykSJm0zIhghsOsROJZvTQk2zQ=";
   };
 
-  npmDepsHash = "sha256-dP+m/ocGn8szZuakrz8slSReNeepOF4Jf7L0/gnXWGU=";
+  npmDepsHash = "sha256-VSTpe1CA6lv5MoqXyk1iZSwzRc6Axy5cM8PmqPOyheA=";
 
   # Fix error: no member named 'aligned_alloc' in the global namespace
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
+    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
   ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
 
   installPhase = ''
     runHook preInstall

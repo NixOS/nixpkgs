@@ -90,10 +90,28 @@ if package maintainers would like to use this feature, they are welcome to migra
 To lessen PR traffic, they're encouraged to also perform some more general maintenance on the package in the same PR,
 though this is not required and must not be expected.
 
-Note that definitions in `all-packages.nix` with custom arguments should not be removed.
+Note that `callPackage` definitions in `all-packages.nix` with custom arguments should not be removed.
 That is a backwards-incompatible change because it changes the `.override` interface.
-Such packages may still be moved to `pkgs/by-name` however, while keeping the definition in `all-packages.nix`.
+Such packages may still be moved to `pkgs/by-name` however, in order to avoid the slightly superficial choice of directory / category in which the `default.nix` file was placed, but please keep the definition in `all-packages.nix` using `callPackage`.
 See also [changing implicit attribute defaults](#changing-implicit-attribute-defaults).
+
+Definitions like the following however, _can_ be transitioned:
+
+```nix
+# all-packages.nix
+fooWithBaz = foo.override {
+  bar = baz;
+};
+# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
+{
+  foo,
+  baz,
+}:
+
+foo.override {
+  bar = baz;
+}
+```
 
 ## Limitations
 

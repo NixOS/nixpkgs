@@ -28,7 +28,7 @@ buildPythonPackage rec {
     ecdsa
   ];
 
-  passthru.optional-dependencies.smartcard = [ pyscard ];
+  optional-dependencies.smartcard = [ pyscard ];
 
   # tests requires hardware
   doCheck = false;

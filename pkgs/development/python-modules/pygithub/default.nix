@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "pygithub";
-  version = "2.3.0";
+  version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ccAbn9x1r+wBIAK66ur8+2Op9ij09rQvHumq5Wh7TUU=";
+    hash = "sha256-VM3xxLa4MlR3vTpeOunsq4/bxZhuKXNKFZbFVul1cMw=";
   };
 
   build-system = [

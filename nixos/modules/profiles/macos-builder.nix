@@ -105,13 +105,7 @@ in
 
     # The linux builder is a lightweight VM for remote building; not evaluation.
     nix.channel.enable = false;
-    # remote builder uses `nix-daemon` (ssh-ng:) or `nix-store --serve` (ssh:)
-    # --force: do not complain when missing
-    # TODO: install a store-only nix
-    #       https://github.com/NixOS/rfcs/blob/master/rfcs/0134-nix-store-layer.md#detailed-design
-    environment.extraSetup = ''
-      rm --force $out/bin/{nix-instantiate,nix-build,nix-shell,nix-prefetch*,nix}
-    '';
+
     # Deployment is by image.
     # TODO system.switch.enable = false;?
     system.disableInstallerTools = true;
@@ -196,14 +190,8 @@ in
       # To prevent gratuitous rebuilds on each change to Nixpkgs
       nixos.revision = null;
 
-      stateVersion = lib.mkDefault (throw ''
-        The macOS linux builder should not need a stateVersion to be set, but a module
-        has accessed stateVersion nonetheless.
-        Please inspect the trace of the following command to figure out which module
-        has a dependency on stateVersion.
-
-          nix-instantiate --attr darwin.linux-builder --show-trace
-      '');
+      # to be updated by module maintainers, see nixpkgs#325610
+      stateVersion = "24.05";
     };
 
     users.users."${user}" = {

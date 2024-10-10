@@ -1,12 +1,18 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, jre } :
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
-  version = "5.5.1";
+  version = "5.5.2";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
-    sha256 = "sha256-FBlr4t2Dch5HXfoLIwhZueECv9zGIRlTbs7L+Ny7u5Y=";
+    hash = "sha256-ff7O3pW8/2CDXrd6CU+ygFeyNoGNCeTHIH7cdm+k8TE=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -32,7 +38,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://www.giss.nasa.gov/tools/panoply";
     platforms = platforms.linux;
     maintainers = [ maintainers.markuskowa ];
-    license = licenses.unfree;  # Package does not state a license
+    license = licenses.unfree; # Package does not state a license
     mainProgram = "panoply";
   };
 }

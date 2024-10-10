@@ -155,7 +155,7 @@ in
     };
   };
 
-  farbfeld = pluginDerivation rec {
+  farbfeld = pluginDerivation {
     pname = "farbfeld";
     version = "unstable-2019-08-12";
 
@@ -309,7 +309,7 @@ in
     variant = "gimp";
   };
 
-  gimplensfun = pluginDerivation rec {
+  gimplensfun = pluginDerivation {
     version = "unstable-2018-10-21";
     pname = "gimplensfun";
 

@@ -81,7 +81,7 @@ let
 
   # Tools invoked by swiftpm at run-time.
   runtimeDeps = [ git ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild.xcrun
       # These tools are part of cctools, but adding that as a build input puts
       # an unwrapped linker in PATH, and breaks builds. This small derivation
@@ -99,13 +99,13 @@ let
   mkBootstrapDerivation = attrs: stdenv.mkDerivation (attrs // {
     nativeBuildInputs = (attrs.nativeBuildInputs or [ ])
       ++ [ cmake ninja swift ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
 
     buildInputs = (attrs.buildInputs or [ ])
       ++ [ Foundation ];
 
     postPatch = (attrs.postPatch or "")
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # On Darwin only, Swift uses arm64 as cpu arch.
         if [ -e cmake/modules/SwiftSupport.cmake ]; then
           substituteInPlace cmake/modules/SwiftSupport.cmake \
@@ -121,7 +121,7 @@ let
       '';
 
     postInstall = (attrs.postInstall or "")
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # The install name of libraries is incorrectly set to lib/ (via our
         # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
         # fixDarwinDylibNames, but some builds create libraries that reference
@@ -149,7 +149,7 @@ let
   # are part of libsystem. Adding its headers to the search path causes strange
   # mixing and errors.
   # TODO: Find a better way to prevent this conflict.
-  ncursesInput = if stdenv.isDarwin then ncurses.out else ncurses;
+  ncursesInput = if stdenv.hostPlatform.isDarwin then ncurses.out else ncurses;
 
   # Derivations for bootstrapping dependencies using CMake.
   # This is based on the `swiftpm/Utilities/bootstrap` script.
@@ -168,7 +168,7 @@ let
     src = generated.sources.swift-system;
 
     postInstall = cmakeGlue.SwiftSystem
-      + lib.optionalString (!stdenv.isDarwin) ''
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
@@ -188,7 +188,7 @@ let
     '';
 
     postInstall = cmakeGlue.SwiftCollections
-      + lib.optionalString (!stdenv.isDarwin) ''
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
@@ -245,7 +245,7 @@ let
     ];
 
     postInstall = cmakeGlue.ArgumentParser
-      + lib.optionalString stdenv.isLinux ''
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
         # Fix rpath so ArgumentParserToolInfo can be found.
         patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
           $out/lib/swift/${swiftOs}/libArgumentParser.so
@@ -266,7 +266,7 @@ let
     name = "llbuild";
     src = generated.sources.swift-llbuild;
 
-    nativeBuildInputs = lib.optional stdenv.isDarwin xcbuild;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin xcbuild;
     buildInputs = [ ncursesInput sqlite ];
 
     patches = [
@@ -389,7 +389,7 @@ in stdenv.mkDerivation (commonAttrs // {
     sqlite
     XCTest
   ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CryptoKit
       LocalAuthentication
     ];

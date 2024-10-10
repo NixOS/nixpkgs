@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";
-    sha256 = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
+    hash = "sha256-x2eAlZT2Ry2p9WE252ZX44ZA1YQWSkYRIlCsYpPswOo=";
     meta.license = lib.licenses.unfree;
   };
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     physfs
     SDL2
     tinyxml-2
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit ];
 
   cmakeDir = "../desktop_version";
 

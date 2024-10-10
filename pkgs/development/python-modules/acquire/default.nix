@@ -41,7 +41,7 @@ buildPythonPackage rec {
     dissect-target
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       dissect-target
       minio
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     ] ++ dissect-target.optional-dependencies.full;
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.full;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "acquire" ];
 

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ispc pkg-config cmake ];
   buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
-                ++ lib.optionals stdenv.isDarwin [ glib ];
+                ++ lib.optionals stdenv.hostPlatform.isDarwin [ glib ];
 
   meta = with lib; {
     description = "High performance ray tracing kernels from Intel";

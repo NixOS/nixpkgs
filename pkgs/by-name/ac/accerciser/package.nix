@@ -24,7 +24,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "d2m9T09j3ImhQ+hs3ET+rr1/jJab6lwfWoaskxGQL0g=";
+    hash = "sha256-d2m9T09j3ImhQ+hs3ET+rr1/jJab6lwfWoaskxGQL0g=";
   };
 
   nativeBuildInputs = [
@@ -68,6 +68,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/accerciser";
+    changelog = "https://gitlab.gnome.org/GNOME/accerciser/-/blob/${version}/NEWS?ref_type=tags";
     description = "Interactive Python accessibility explorer";
     mainProgram = "accerciser";
     maintainers = teams.gnome.members;

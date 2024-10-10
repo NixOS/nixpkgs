@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config makeWrapper ];
 
-  buildInputs = lib.optionals stdenv.isLinux
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux
   (with xorg; [
     # glfw-sys dependencies:
     libX11 libXrandr libXinerama libXcursor libXi libXext
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/applications
     cp $src/rx.desktop $out/share/applications
     wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib

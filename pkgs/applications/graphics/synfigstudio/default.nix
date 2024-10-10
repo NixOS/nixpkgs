@@ -99,7 +99,7 @@ let
       fribidi
       openexr
       fftw
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Foundation
     ];
   };

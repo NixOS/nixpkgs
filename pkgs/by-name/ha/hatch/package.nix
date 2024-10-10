@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
       setuptools
     ]
     ++ [ cargo ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
 
@@ -100,7 +100,7 @@ python3Packages.buildPythonApplication rec {
       # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
       "test_new_selected_python"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/NixOS/nixpkgs/issues/209358
       "test_scripts_no_environment"
 
@@ -114,9 +114,9 @@ python3Packages.buildPythonApplication rec {
       "test_macos_archflags"
       "test_macos_max_compat"
     ]
-    ++ lib.optionals stdenv.isAarch64 [ "test_resolve" ];
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
     # At index 0 diff:
     #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')

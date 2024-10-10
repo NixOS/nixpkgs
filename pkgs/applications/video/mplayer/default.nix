@@ -5,11 +5,11 @@
 , x11Support ? true, libX11, libXext, libGLU, libGL
 , xineramaSupport ? true, libXinerama
 , xvSupport ? true, libXv
-, alsaSupport ? stdenv.isLinux, alsa-lib
+, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
 , screenSaverSupport ? true, libXScrnSaver
 , vdpauSupport ? false, libvdpau
-, cddaSupport ? !stdenv.isDarwin, cdparanoia
-, dvdnavSupport ? !stdenv.isDarwin, libdvdnav
+, cddaSupport ? !stdenv.hostPlatform.isDarwin, cdparanoia
+, dvdnavSupport ? !stdenv.hostPlatform.isDarwin, libdvdnav
 , dvdreadSupport ? true, libdvdread
 , bluraySupport ? true, libbluray
 , amrSupport ? false, amrnb, amrwb
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional libjpegSupport libjpeg
     ++ lib.optional bs2bSupport libbs2b
     ++ lib.optional v4lSupport libv4l
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.apple_sdk.frameworks.OpenGL ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa darwin.apple_sdk.frameworks.OpenGL ]
     ;
 
   configurePlatforms = [ ];
@@ -147,8 +147,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (useUnfreeCodecs && codecs != null && !crossBuild) "--codecsdir=${codecs}"
     ++ lib.optional (stdenv.hostPlatform.isx86 && !crossBuild) "--enable-runtime-cpudetection"
     ++ lib.optional fribidiSupport "--enable-fribidi"
-    ++ lib.optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
-    ++ lib.optional stdenv.isLinux "--enable-fbdev"
+    ++ lib.optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch64) "--enable-vidix"
+    ++ lib.optional stdenv.hostPlatform.isLinux "--enable-fbdev"
     ++ lib.optionals (crossBuild) [
     "--enable-cross-compile"
     "--disable-vidix-pcidb"

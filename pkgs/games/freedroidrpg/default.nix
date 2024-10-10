@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     glew SDL SDL_image SDL_gfx SDL_mixer libogg libvorbis lua5_3 libjpeg libpng zlib
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   enableParallelBuilding = true;
 

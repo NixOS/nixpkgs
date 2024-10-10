@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "tdl";
-  version = "0.17.4";
+  version = "0.17.5";
 
   src = fetchFromGitHub {
     owner = "iyear";
     repo = "tdl";
     rev = "v${version}";
-    hash = "sha256-+2K+8IGl7c2Nq1wr3pDl4H9MEbPsXZotsyaor5TzD5s=";
+    hash = "sha256-K8eq3cuPRgVSqd9VVjlE9DQJQKlyUGZKAhPRwpUTrTc=";
   };
 
-  vendorHash = "sha256-1PgE7Qxxe+GMaMpH5xql/NX8+QSkGRn++/+T6MQkUmM=";
+  vendorHash = "sha256-X9gQ0mtuIgeo7s/IOAC5k6q3C8rBOKjTdQgeV7d3L60=";
 
   ldflags = [
     "-s"

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-autoar/${lib.versions.majorMinor version}/gnome-autoar-${version}.tar.xz";
-    sha256 = "wK++MzvPPLFEGh9XTMjsexuBl3eRRdTt7uKJb9rPw8I=";
+    hash = "sha256-wK++MzvPPLFEGh9XTMjsexuBl3eRRdTt7uKJb9rPw8I=";
   };
 
   nativeBuildInputs = [

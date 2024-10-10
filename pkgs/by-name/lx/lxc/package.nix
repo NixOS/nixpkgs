@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.1";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-fJMNdMXlV1z9q1pMDh046tNmLDuK6zh6uPahTWzWMvc=";
+    hash = "sha256-qc60oSs2KahQJpSmhrctXpV2Zumv7EvlnGFaOCSCX/E=";
   };
 
   nativeBuildInputs = [

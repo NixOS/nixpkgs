@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   ];
 
   src = fetchgit {
-    url = "git://linuxtv.org/edid-decode.git";
+    url = "https://git.linuxtv.org/edid-decode.git";
     rev = "3d635499e4aca3319f0796ba787213c981c5a770";
     hash = "sha256-bqzO39YM/3h9p37xaGJAw9xERgWOD+4yqO/XQiq/QqM=";
   };
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     export bindir=/bin
     export mandir=/share/man
   '';
+
+  enableParallelBuilding = true;
 
   passthru.updateScript = unstableGitUpdater { };
 

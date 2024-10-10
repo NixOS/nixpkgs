@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "obs-cmd";
-  version = "0.17.7";
+  version = "0.17.8";
 
   src = fetchFromGitHub {
     owner = "grigio";
     repo = "obs-cmd";
     rev = "v${version}";
-    hash = "sha256-+rsX86PrTlswi7uItyfOqYWziJ0kLl9X86TMtcmMCKo=";
+    hash = "sha256-IOGdy3X0/r/kuEXAvLeJk2HXtcGI+vbh4Dn1/yOpkmM=";
   };
 
-  cargoHash = "sha256-u+IHQiKEX0KUkwz4KsqwIgdo3KAxarPZgrmJWA1qQ50=";
+  cargoHash = "sha256-oCu/ygjZxEqxE+5Vca3l1mZP3hd+r+5gi2iogQMnEcU=";
 
   meta = with lib; {
     description = "Minimal CLI to control OBS Studio via obs-websocket";

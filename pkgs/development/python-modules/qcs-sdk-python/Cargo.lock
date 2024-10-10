@@ -1592,18 +1592,18 @@ checksum = "830d08ce1d1d941e6b30645f1a0eb5643013d835ce3779a5fc208261dbe10f55"
 
 [[package]]
 name = "lexical"
-version = "6.1.1"
+version = "7.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c7aefb36fd43fef7003334742cbf77b243fcd36418a1d1bdd480d613a67968f6"
+checksum = "8ecd3381ac77c22d4e2607284ac71e44b21c21bd3785ee807d21976d54ee16f9"
 dependencies = [
  "lexical-core",
 ]
 
 [[package]]
 name = "lexical-core"
-version = "0.8.5"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2cde5de06e8d4c2faabc400238f9ae1c74d5412d03a7bd067645ccbc47070e46"
+checksum = "0885f6cdfe75c96e45bbf1c4e49511f128201391ce3b56e60e29f5a1fadbc1c1"
 dependencies = [
  "lexical-parse-float",
  "lexical-parse-integer",
@@ -1614,9 +1614,9 @@ dependencies = [
 
 [[package]]
 name = "lexical-parse-float"
-version = "0.8.5"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "683b3a5ebd0130b8fb52ba0bdc718cc56815b6a097e28ae5a6997d0ad17dc05f"
+checksum = "924f7ec090cd4f60bd873f160b0fb69a0c80bb3a98f2e778a1893ae0e5c4b0b9"
 dependencies = [
  "lexical-parse-integer",
  "lexical-util",
@@ -1625,9 +1625,9 @@ dependencies = [
 
 [[package]]
 name = "lexical-parse-integer"
-version = "0.8.6"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6d0994485ed0c312f6d965766754ea177d07f9c00c9b82a5ee62ed5b47945ee9"
+checksum = "8feab1da84a2ab0ddbbad2fb1830b755f71a9a8d996c7a1f2a553faf72aa3686"
 dependencies = [
  "lexical-util",
  "static_assertions",
@@ -1635,18 +1635,18 @@ dependencies = [
 
 [[package]]
 name = "lexical-util"
-version = "0.8.5"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5255b9ff16ff898710eb9eb63cb39248ea8a5bb036bea8085b1a767ff6c4e3fc"
+checksum = "591ce1a12ecd3b26d4121ab360a6a4483a67f05a5372add6acbfd0b65c9285d9"
 dependencies = [
  "static_assertions",
 ]
 
 [[package]]
 name = "lexical-write-float"
-version = "0.8.5"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "accabaa1c4581f05a3923d1b4cfd124c329352288b7b9da09e766b0668116862"
+checksum = "05b0f3f9ddada5942b54e97654d535df37c9340ad66c24b50360a90619779f41"
 dependencies = [
  "lexical-util",
  "lexical-write-integer",
@@ -1655,9 +1655,9 @@ dependencies = [
 
 [[package]]
 name = "lexical-write-integer"
-version = "0.8.5"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e1b6f3d1f4422866b68192d62f77bc5c700bee84f3069f2469d7bc8c77852446"
+checksum = "48c6d47254ddb292771dce7697ae2be9619f8e369d01a9ccda15ef2ff50443fc"
 dependencies = [
  "lexical-util",
  "static_assertions",
@@ -2551,7 +2551,7 @@ dependencies = [
  "num-complex",
  "parking_lot",
  "portable-atomic",
- "pyo3-build-config",
+ "pyo3-build-config 0.20.3",
  "pyo3-ffi",
  "pyo3-macros",
  "unindent",
@@ -2581,13 +2581,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "pyo3-build-config"
+version = "0.22.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7879eb018ac754bba32cb0eec7526391c02c14a093121857ed09fbf1d1057d41"
+dependencies = [
+ "once_cell",
+ "target-lexicon",
+]
+
+[[package]]
 name = "pyo3-ffi"
 version = "0.20.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62b42531d03e08d4ef1f6e85a2ed422eb678b8cd62b762e53891c05faf0d4afa"
 dependencies = [
  "libc",
- "pyo3-build-config",
+ "pyo3-build-config 0.20.3",
 ]
 
 [[package]]
@@ -2621,7 +2631,7 @@ checksum = "7c7e9b68bb9c3149c5b0cade5d07f953d6d125eb4337723c4ccdb665f1f96185"
 dependencies = [
  "heck 0.4.1",
  "proc-macro2",
- "pyo3-build-config",
+ "pyo3-build-config 0.20.3",
  "quote",
  "syn 2.0.66",
 ]
@@ -2674,7 +2684,7 @@ dependencies = [
 
 [[package]]
 name = "qcs"
-version = "0.23.2"
+version = "0.24.1"
 dependencies = [
  "assert2",
  "async-trait",
@@ -2736,19 +2746,25 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-common"
-version = "0.8.4"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "040552f233992abe94376304cf17dab2d79ff62d4a9ee986d75efe3d19337f57"
+checksum = "1cf1692d12ab36478f43f1ef493a8b2445f7f5d17164f739d8b0fd57ad59e6e6"
 dependencies = [
  "async-trait",
  "backoff",
+ "base64 0.22.1",
  "derive_builder 0.20.0",
  "figment",
  "futures",
  "home",
  "http",
  "jsonwebtoken",
+ "paste",
+ "pyo3",
+ "pyo3-asyncio",
+ "pyo3-build-config 0.22.1",
  "reqwest",
+ "rigetti-pyo3 0.3.6",
  "serde",
  "shellexpand",
  "thiserror",
@@ -2762,9 +2778,9 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-grpc"
-version = "0.8.4"
+version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "eb755cd59b1b3ce99abe52ff6898ad74ca26463e94300c103cafaac4f345c4f3"
+checksum = "b6224aeaaafb92d44439a398a03b042889edacbe23a115cfb1ff1e17c80c8bf2"
 dependencies = [
  "backoff",
  "http",
@@ -2795,9 +2811,9 @@ dependencies = [
 
 [[package]]
 name = "qcs-api-client-openapi"
-version = "0.9.4"
+version = "0.11.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "008d06c4051dd4b3e7d5b6c1f31457c68384f8f36b05b304de6059bbd81c6128"
+checksum = "c5107bbd313d31d1eede8dec2bc9c69e0aa50ffc6207457bb4d8c3ab3cb32434"
 dependencies = [
  "anyhow",
  "qcs-api-client-common",
@@ -2815,7 +2831,7 @@ dependencies = [
 
 [[package]]
 name = "qcs-sdk-python"
-version = "0.19.3"
+version = "0.20.1"
 dependencies = [
  "async-trait",
  "numpy",
@@ -2823,9 +2839,10 @@ dependencies = [
  "opentelemetry 0.23.0",
  "opentelemetry_sdk 0.23.0",
  "paste",
+ "prost",
  "pyo3",
  "pyo3-asyncio",
- "pyo3-build-config",
+ "pyo3-build-config 0.20.3",
  "pyo3-log",
  "pyo3-opentelemetry",
  "pyo3-tracing-subscriber",
@@ -2835,7 +2852,7 @@ dependencies = [
  "qcs-api-client-grpc",
  "qcs-api-client-openapi",
  "quil-rs",
- "rigetti-pyo3",
+ "rigetti-pyo3 0.4.1",
  "serde_json",
  "thiserror",
  "tokio",
@@ -2850,8 +2867,8 @@ checksum = "a1d01941d82fa2ab50be1e79e6714289dd7cde78eba4c074bc5a4374f650dfe0"
 
 [[package]]
 name = "quil-rs"
-version = "0.27.1"
-source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.11.1#ab5b976573b38f3ba2605f57482ccadb1f13bf30"
+version = "0.28.1"
+source = "git+https://github.com/rigetti/quil-rs?tag=quil-py/v0.12.1#a0f2776893d3ce33eb9f29449f3b4b0e9ed24174"
 dependencies = [
  "approx",
  "indexmap 2.2.6",
@@ -3091,6 +3108,19 @@ name = "rigetti-pyo3"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c59068763670399bb3e895a17cc631d9214c3172b64fc74d3ab63dac7371c340"
+dependencies = [
+ "num-complex",
+ "num-traits",
+ "paste",
+ "pyo3",
+ "time",
+]
+
+[[package]]
+name = "rigetti-pyo3"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f924032d36104a859f936762576a9e6fc0811b37a1f4a8144c0b9b25ee89607b"
 dependencies = [
  "num-complex",
  "num-traits",

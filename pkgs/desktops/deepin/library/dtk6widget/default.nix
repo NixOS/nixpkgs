@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6widget";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6widget";
     rev = finalAttrs.version;
-    hash = "sha256-6H3Dtdyq/adb3jz9lGaKmOguXqvhvZn1/G7+YajyF2k=";
+    hash = "sha256-VlFzecX76RMNSBpnMc9HwMPZ5z3zzzkcVcNlGKSShyA=";
   };
 
   patches = [

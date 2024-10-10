@@ -11,15 +11,16 @@
 , wayland
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
+, autoAddDriverRunpath
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "3.2.1";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-h6hcqafTjQsqVlpnqVeohh38A67VSGrW3WrCErjaKIQ=";
+    hash = "sha256-aez/APsei30Tp1em/RDCuq+v8hOavHq4O9qZahrsF/g=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   embed_model = fetchurl {
     url = "https://gpt4all.io/models/gguf/nomic-embed-text-v1.5.f16.gguf";
-    sha256 = "f7af6f66802f4df86eda10fe9bbcfc75c39562bed48ef6ace719a251cf1c2fdb";
+    hash = "sha256-969vZoAvTfhu2hD+m7z8dcOVYr7Ujvas5xmiUc8cL9s=";
   };
 
   patches = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.wrapQtAppsHook
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -56,12 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-headers
     wayland
   ] ++ lib.optionals cudaSupport (
-      with cudaPackages;
-      [
-        cuda_cccl
-        cuda_cudart
-        libcublas
-      ]);
+    with cudaPackages;
+    [
+      cuda_cccl
+      cuda_cudart
+      libcublas
+    ]
+  );
 
   cmakeFlags = [
     "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"

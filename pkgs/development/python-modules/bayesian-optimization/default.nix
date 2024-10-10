@@ -50,7 +50,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "bayes_opt" ];
 
   meta = with lib; {
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = ''
       A Python implementation of global optimization with gaussian processes
     '';

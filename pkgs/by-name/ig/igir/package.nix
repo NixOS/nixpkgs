@@ -38,6 +38,7 @@ buildNpmPackage rec {
     description = "Video game ROM collection manager to help filter, sort, patch, archive, and report on collections on any OS";
     mainProgram = "igir";
     homepage = "https://igir.io";
+    changelog = "https://github.com/emmercm/igir/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

@@ -23,11 +23,11 @@ let
     SkyLight
     ;
 
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "yabai";
-  version = "7.1.2";
+  version = "7.1.3";
 
   src =
     finalAttrs.passthru.sources.${stdenv.hostPlatform.system}
@@ -40,12 +40,12 @@ stdenv'.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [ installShellFiles ]
-    ++ lib.optionals stdenv.isx86_64 [
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
       xcodebuild
       xxd
     ];
 
-  buildInputs = lib.optionals stdenv.isx86_64 [
+  buildInputs = lib.optionals stdenv.hostPlatform.isx86_64 [
     Carbon
     Cocoa
     ScriptingBridge
@@ -53,7 +53,7 @@ stdenv'.mkDerivation (finalAttrs: {
   ];
 
   dontConfigure = true;
-  dontBuild = stdenv.isAarch64;
+  dontBuild = stdenv.hostPlatform.isAarch64;
   enableParallelBuilding = true;
 
   installPhase = ''
@@ -62,14 +62,14 @@ stdenv'.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,share/icons/hicolor/scalable/apps}
 
     cp ./bin/yabai $out/bin/yabai
-    ${lib.optionalString stdenv.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
+    ${lib.optionalString stdenv.hostPlatform.isx86_64 "cp ./assets/icon/icon.svg $out/share/icons/hicolor/scalable/apps/yabai.svg"}
     installManPage ./doc/yabai.1
 
     runHook postInstall
   '';
 
   postPatch =
-    lib.optionalString stdenv.isx86_64 # bash
+    lib.optionalString stdenv.hostPlatform.isx86_64 # bash
       ''
         # aarch64 code is compiled on all targets, which causes our Apple SDK headers to error out.
         # Since multilib doesn't work on darwin i dont know of a better way of handling this.
@@ -96,13 +96,13 @@ stdenv'.mkDerivation (finalAttrs: {
       # See the comments on https://github.com/NixOS/nixpkgs/pull/188322 for more information.
       "aarch64-darwin" = fetchzip {
         url = "https://github.com/koekeishiya/yabai/releases/download/v${finalAttrs.version}/yabai-v${finalAttrs.version}.tar.gz";
-        hash = "sha256-4ZJs7Xpou0Ek0CCCjbK47Nu/XPpuTpBDU8GJz5AsaUg=";
+        hash = "sha256-wp5B24DYX1RYHS/3+4WRRCzVE6FyCzatJDpzJWrEIpQ=";
       };
       "x86_64-darwin" = fetchFromGitHub {
         owner = "koekeishiya";
         repo = "yabai";
         rev = "v${finalAttrs.version}";
-        hash = "sha256-H+7vH6AjP6HQ1ifXe8qlLSh0FQu8KJkwr+38C5akk/c=";
+        hash = "sha256-hCwI6ziUR4yuJOv4MQXh3ufbausaDrG8XfjR+jIOeC4=";
       };
     };
 
@@ -146,6 +146,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ];
     sourceProvenance =
       with lib.sourceTypes;
-      lib.optionals stdenv.isx86_64 [ fromSource ] ++ lib.optionals stdenv.isAarch64 [ binaryNativeCode ];
+      lib.optionals stdenv.hostPlatform.isx86_64 [ fromSource ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ binaryNativeCode ];
   };
 })

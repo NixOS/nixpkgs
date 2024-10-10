@@ -50,7 +50,7 @@ buildPythonPackage rec {
     tomli-w
   ];
 
-  preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '';

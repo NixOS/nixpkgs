@@ -2,7 +2,6 @@
   stdenv,
   lib,
   buildEnv,
-  gnome,
   gnome-panel,
   gnome-flashback,
   xorg,

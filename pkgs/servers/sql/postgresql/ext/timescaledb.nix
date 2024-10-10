@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
     ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
-    ++ lib.optionals stdenv.isDarwin [ "-DLINTER=OFF" ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.

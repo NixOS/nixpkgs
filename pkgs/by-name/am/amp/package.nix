@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       xorg.libxcb
       libgit2
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         curl

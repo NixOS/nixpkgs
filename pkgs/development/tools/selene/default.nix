@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals robloxSupport [
     openssl
-  ] ++ lib.optionals (robloxSupport && stdenv.isDarwin) [
+  ] ++ lib.optionals (robloxSupport && stdenv.hostPlatform.isDarwin) [
     darwin.apple_sdk.frameworks.Security
   ];
 

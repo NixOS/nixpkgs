@@ -32,7 +32,7 @@
 }:
 let
   version = "1.17.31";
-  sha256 = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
+  hash = "sha256-5qPW199o+CVJlqGwiAegsquBRWEb5uDKITxjN5dQYAQ=";
   rocksdb = rocksdb_8_3;
 
   inherit (darwin.apple_sdk_11_0) Libsystem;
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     owner = "solana-labs";
     repo = "solana";
     rev = "v${version}";
-    inherit sha256;
+    inherit hash;
   };
 
   cargoLock = {
@@ -70,8 +70,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles protobuf pkg-config ];
   buildInputs = [ openssl rustPlatform.bindgenHook ]
-    ++ lib.optionals stdenv.isLinux [ udev ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libcxx
     IOKit
     Security
@@ -96,8 +96,8 @@ rustPlatform.buildRustPackage rec {
 
   # Require this on darwin otherwise the compiler starts rambling about missing
   # cmath functions
-  CPPFLAGS = lib.optionals stdenv.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
-  LDFLAGS = lib.optionals stdenv.isDarwin "-L${lib.getLib libcxx}/lib";
+  CPPFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-isystem ${lib.getDev libcxx}/include/c++/v1";
+  LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin "-L${lib.getLib libcxx}/lib";
 
   # If set, always finds OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;

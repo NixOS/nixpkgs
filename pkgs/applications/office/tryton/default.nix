@@ -19,14 +19,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.2.4";
-
-  disabled = !python3Packages.isPy3k;
+  version = "7.2.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LYebXgAvIG3pUF7GpRjeQvP6S83yPjPO/lZg9r0X+Kc=";
+    hash = "sha256-U6hA6TuIMDTFAZUic60A5IKr/LKxKZEgiTIhkLlTJSw=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     pkg-config
@@ -34,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     python-dateutil
     pygobject3
     goocalendar
@@ -55,7 +56,15 @@ python3Packages.buildPythonApplication rec {
     pango
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   strictDeps = false;
+
+  pythonImportsCheck = [ "tryton" ];
 
   doCheck = false;
 

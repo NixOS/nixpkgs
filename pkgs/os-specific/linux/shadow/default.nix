@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ libbsd libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.isLinux) pam
+    ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
     ++ lib.optional withTcb tcb;
 
   patches = [

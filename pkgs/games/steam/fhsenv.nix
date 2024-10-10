@@ -46,7 +46,7 @@ let
     sqlite
   ] ++ extraPkgs pkgs;
 
-  ldPath = lib.optionals stdenv.is64bit [ "/lib64" ]
+  ldPath = lib.optionals stdenv.hostPlatform.is64bit [ "/lib64" ]
   ++ [ "/lib32" ]
   ++ map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
   ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
@@ -299,7 +299,7 @@ in buildFHSEnv rec {
   '' + args.extraPreBwrapCmds or "";
 
   extraBwrapArgs = [
-    "--bind /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
+    "--bind-try /etc/NIXOS /etc/NIXOS" # required 32bit driver check in runScript
     "--bind-try /tmp/dumps /tmp/dumps"
   ] ++ args.extraBwrapArgs or [];
 
@@ -341,6 +341,10 @@ in buildFHSEnv rec {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
+      # steam-run itself is just a script that lives in nixpkgs (which is licensed under MIT).
+      # steam is a dependency and already unfree, so normal steam-run will not install without
+      # allowing unfree packages or appropriate `allowUnfreePredicate` rules.
+      license = lib.licenses.mit;
     };
   };
 }

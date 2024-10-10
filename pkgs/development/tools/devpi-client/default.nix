@@ -9,13 +9,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "devpi-client";
-  version = "7.0.3";
+  version = "7.1.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "devpi_client";
     inherit version;
-    hash = "sha256-5aF6EIFnhfywDeAfWSN+eZUpaO6diPCP5QHT11Y/IQI=";
+    hash = "sha256-NwbhrojxOJSpDvMk0MbAGCbjmS8z2g1ynW6zzgVvy/M=";
   };
 
   build-system = with python3.pkgs; [

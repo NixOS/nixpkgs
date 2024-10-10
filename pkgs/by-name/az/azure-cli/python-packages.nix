@@ -69,7 +69,7 @@ let
 
         nativeCheckInputs = with self; [ pytest ];
 
-        doCheck = stdenv.isLinux;
+        doCheck = stdenv.hostPlatform.isLinux;
 
         # ignore tests that does network call, or assume powershell
         checkPhase = ''

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , cmake
-, buildGo121Module
+, buildGoModule
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -37,7 +37,7 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
-in buildGo121Module rec {
+in buildGoModule rec {
   pname = "datadog-agent";
   inherit src version;
 
@@ -120,6 +120,6 @@ in buildGo121Module rec {
     license     = licenses.bsd3;
     maintainers = with maintainers; [ thoughtpolice domenkozar ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

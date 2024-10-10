@@ -10,9 +10,6 @@
   "27/d6/003e593296a85fd6ed616ed962795b2f87709c3eee2bca4f6d0fe55c6d00/wheel-0.37.1-py2.py3-none-any": {
    "whl": "sha256-S9zX2EATgIYSbNCSVNxhlftPxvAcBQodcjbyYw2x0io="
   },
-  "2d/e0/f877c91e036fcaed2a827f80d6cbdf1d26cffc3333c9ebda31c55c45f050/Pybag-2.2.10-py3-none-any": {
-   "whl": "sha256-gc8eM91mfdIX3FahIzJnluZ5m4Vp8sbvt4wWN1yvmys="
-  },
   "50/8f/518a37381e55a8857a638afa86143efa5508434613541402d20611a1b322/comtypes-1.4.1-py3-none-any": {
    "whl": "sha256-ogig48ocClNic12g/2YYIoAdzocxK4lNfXUq3QEKIbA="
   },
@@ -28,6 +25,9 @@
   "c7/42/be1c7bbdd83e1bfb160c94b9cafd8e25efc7400346cf7ccdbdb452c467fa/setuptools-68.0.0-py3-none-any": {
    "whl": "sha256-EeUsZ0FaOB0Q1rRiztnPuXBmF58OhxOZ4AbEqxAfyF8="
   },
+  "ce/78/91db67e7fe1546dc8b02c38591b7732980373d2d252372f7358054031dd4/Pybag-2.2.12-py3-none-any": {
+   "whl": "sha256-7aXubE6HOQKYG39SW0KgJCi4fHNo3yxb3+He0OaIQSY="
+  },
   "d0/dd/b28df50316ca193dd1275a4c47115a720796d9e1501c1888c4bfa5dc2260/capstone-5.0.1-py3-none-win_amd64": {
    "whl": "sha256-G/pcgeaIDK9BoxlGzW0tBpwEi8wi7fEhJUtQGgSN5nU="
   }
@@ -38,37 +38,37 @@
   }
  },
  "https://github.com": {
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2012_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2012_x64": {
    "fidb": "sha256-1OmKs/eQuDF5MhhDC7oNiySl+/TaZbDB/6jLDPvrDNw="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2012_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2012_x86": {
    "fidb": "sha256-pJDtfi7SHlh0Wf6urOcDa37eTOhOcuEN/YxXQ0ppGLY="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2015_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2015_x64": {
    "fidb": "sha256-4E6eQPnstgHIX02E7Zv2a0U2O+HR6CwWLkyZArjLUI8="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2015_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2015_x86": {
    "fidb": "sha256-tm7mlmU+LtNlkZ3qrviFEDEgx5LiLnmvcNEgnX4dhkQ="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2017_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2017_x64": {
    "fidb": "sha256-1fpfaXKYF0+lPSR9NZnmoSiEYFrRgce5VOI4DsHwvYk="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2017_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2017_x86": {
    "fidb": "sha256-04nLjXb/SlnKNfiRuFIccq1fDfluJTlzotIahhSkzIE="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2019_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2019_x64": {
    "fidb": "sha256-FQAHeW/DakBpZgrWJEmq2q890Rs4ZKXvIeeYMcnOkRg="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vs2019_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vs2019_x86": {
    "fidb": "sha256-62MKNvqlhqNx63NNwLvY0TzK72l/PbWHJZY1jz3SQyo="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vsOlder_x64": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vsOlder_x64": {
    "fidb": "sha256-jDtR9GYM0n4aDWEKnz8tX7yDOmasnuQ5PuLySB6FWGY="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/FunctionID/vsOlder_x86": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/FunctionID/vsOlder_x86": {
    "fidb": "sha256-mGBca2uSFKlF2ETkHIWGDVRkmkW8p4c+9pkcDpNyB4c="
   },
-  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.1.2/lib/java-sarif-2.1-modified": {
+  "NationalSecurityAgency/ghidra-data/raw/Ghidra_11.2/lib/java-sarif-2.1-modified": {
    "jar": "sha256-f3NlZklHVtJxql5LGvbIncUNB0qxxjdKR9+CImQiawE="
   },
   "pxb1988/dex2jar/releases/download/v2.1/dex2jar-2.1": {
@@ -742,8 +742,8 @@
   "pydev/files/pydev/PyDev%206.3.1/PyDev%206.3.1": {
    "zip": "sha256-TYH+nYr+dmW46iCETT9RB/RGdCknxZlz6t5PKYCbBpk="
   },
-  "yajsw/files/yajsw/yajsw-stable-13.09/yajsw-stable-13.09": {
-   "zip": "sha256-Ta5zKlNYRq5d+rdT6CpNX5OtmgWgZeIXK7l3ShsVRTo="
+  "yajsw/files/yajsw/yajsw-stable-13.12/yajsw-stable-13.12": {
+   "zip": "sha256-xvxZgV04ANFOyXeSaor9P2BqDr100s/WBgFndGbt6qI="
   }
  },
  "https://storage.googleapis.com": {
