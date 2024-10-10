@@ -29504,6 +29504,10 @@ with pkgs;
     libName = "librewolf";
   };
 
+  firedragon-unwrapped = callPackage ../applications/networking/browsers/firedragon {};
+
+  firedragon = wrapFirefox firedragon-unwrapped { libName = "firedragon"; };
+
   firefox_decrypt = python3Packages.callPackage ../tools/security/firefox_decrypt { };
 
   flac = callPackage ../applications/audio/flac { };
