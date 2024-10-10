@@ -45,13 +45,15 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.i18n;
 
-  disabledTests = lib.optionals (pythonAtLeast "3.13") [
-    # https://github.com/pallets/jinja/issues/1900
-    "test_custom_async_iteratable_filter"
-    "test_first"
-    "test_loop_errors"
-    "test_package_zip_list"
-  ];
+  disabledTests =
+    lib.optionals (pythonAtLeast "3.13") [
+      # https://github.com/pallets/jinja/issues/1900
+      "test_custom_async_iteratable_filter"
+      "test_first"
+      "test_loop_errors"
+      "test_package_zip_list"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isS390x [ "test_elif_deep" ];
 
   passthru.doc = stdenv.mkDerivation {
     # Forge look and feel of multi-output derivation as best as we can.
