@@ -1,20 +1,21 @@
-{ coreutils
-, fetchFromGitHub
-, gnused
-, lib
-, maven
-, makeWrapper
-, openjdk
+{
+  coreutils,
+  fetchFromGitHub,
+  gnused,
+  lib,
+  maven,
+  makeWrapper,
+  openjdk,
 }:
 
 let
-  version = "1.6.57";
+  version = "1.6.64";
 
   src = fetchFromGitHub {
     owner = "Card-Forge";
     repo = "forge";
     rev = "forge-${version}";
-    hash = "sha256-pxnnqLfyblbIgIRZZrx8Y8K43zUv9mu7PzZ7zltpEUQ=";
+    hash = "sha256-mvmNKj8xgYL32sKmwCOhl//mflczdi0uVQBWiXa6AG4=";
   };
 
   # launch4j downloads and runs a native binary during the package phase.
@@ -25,7 +26,8 @@ maven.buildMavenPackage {
   pname = "forge-mtg";
   inherit version src patches;
 
-  mvnHash = "sha256-QK9g0tG75lIhEtf4jW03N32YbD9Fe5iI0JTuqmCTtnE=";
+  buildOffline = true;
+  mvnHash = "sha256-ouF0Ja3oGrlUCcT0PzI5i9FQ+oLdEhE/LvhJ0QGErvI=";
 
   doCheck = false; # Needs a running Xorg
 
@@ -50,7 +52,13 @@ maven.buildMavenPackage {
     for commandToInstall in forge forge-adventure forge-adventure-editor; do
       chmod 555 $out/share/forge/$commandToInstall.sh
       makeWrapper $out/share/forge/$commandToInstall.sh $out/bin/$commandToInstall \
-        --prefix PATH : ${lib.makeBinPath [ coreutils openjdk gnused ]} \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            coreutils
+            openjdk
+            gnused
+          ]
+        } \
         --set JAVA_HOME ${openjdk}/lib/openjdk \
         --set SENTRY_DSN ""
     done
