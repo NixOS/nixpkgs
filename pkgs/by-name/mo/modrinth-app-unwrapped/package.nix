@@ -8,7 +8,7 @@
   nix-update-script,
   modrinth-app-unwrapped,
   cacert,
-  cargo-tauri,
+  cargo-tauri_1,
   desktop-file-utils,
   esbuild,
   darwin,
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage {
   });
 
   nativeBuildInputs = [
-    cargo-tauri.hook
+    cargo-tauri_1.hook
     desktop-file-utils
     pnpm_8
     nodejs
