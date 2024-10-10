@@ -60,6 +60,7 @@ let rizin = stdenv.mkDerivation rec {
     ./librz-wrapper-support.patch
 
     ./0001-fix-compilation-with-clang.patch
+    ./0002-disable-pcre2-jit.patch
   ];
 
 
