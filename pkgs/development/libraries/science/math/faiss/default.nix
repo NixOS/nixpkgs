@@ -63,7 +63,6 @@ stdenv.mkDerivation {
       pythonPackages.python
       pythonPackages.setuptools
       pythonPackages.pip
-      pythonPackages.wheel
     ];
 
   buildInputs =
