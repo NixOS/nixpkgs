@@ -1,7 +1,6 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , testers
 , go-task
@@ -19,16 +18,6 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-P9J69WJ2C2xgdU9xydiaY8iSKB7ZfexLNYi7dyHDTIk=";
-
-  patches = [
-    # fix version resolution when passed in though ldflags
-    # remove on next release
-    (fetchpatch {
-      name = "fix-ldflags-version.patch";
-      url = "https://github.com/go-task/task/commit/9ee4f21d62382714ac829df6f9bbf1637406eb5b.patch?full_index=1";
-      hash = "sha256-wu5//aZ/vzuObb03AjUUlVFjPr175mn1vVAZgqSGIZ0=";
-    })
-  ];
 
   doCheck = false;
 
