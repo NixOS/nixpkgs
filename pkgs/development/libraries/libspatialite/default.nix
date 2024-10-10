@@ -31,11 +31,15 @@ stdenv.mkDerivation rec {
     geos # for geos-config
   ];
 
+  # From: https://www.gaia-gis.it/fossil/libspatialite/info/7c452740fe
+  # see also: https://github.com/NixOS/nixpkgs/issues/347085
+  patches = [ ./xmlNanoHTTPCleanup.patch ];
+
   buildInputs = [
     freexl
     geos
     librttopo
-    (libxml2.override { enableHttp = true; })
+    libxml2
     minizip
     proj
     sqlite

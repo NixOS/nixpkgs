@@ -1,0 +1,15 @@
+diff --git a/src/wfs/wfs_in.c b/src/wfs/wfs_in.c
+index fe07a0d..7977b17 100644
+--- a/src/wfs/wfs_in.c
++++ b/src/wfs/wfs_in.c
+@@ -4637,7 +4637,9 @@ SPATIALITE_DECLARE void
+ reset_wfs_http_connection (void)
+ {
+ /* Resets the libxml2 "nano HTTP": useful when changing the HTTP_PROXY settings */
+-    xmlNanoHTTPCleanup ();
++#ifdef LIBXML_HTTP_ENABLED
++    xmlNanoHTTPCleanup();
++#endif
+ }
+ 
+ #else /* LIBXML2 isn't enabled */
