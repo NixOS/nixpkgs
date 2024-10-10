@@ -1,160 +1,303 @@
-{ stdenvNoCC, fetchurl, newScope, lib, pkgs
-, stdenv, overrideCC
-, xar, cpio, python3, pbzx }:
+# Compatibility stubs for packages that used the old SDK frameworks.
+# TODO(@reckenrode) Make these stubs warn after framework usage has been cleaned up in nixpkgs.
+{
+  lib,
+  callPackage,
+  newScope,
+  overrideSDK,
+  pkgs,
+  stdenv,
+  stdenvNoCC,
+}:
 
 let
-  mkSusDerivation = args: stdenvNoCC.mkDerivation (args // {
-    dontBuild = true;
-    darwinDontCodeSign = true;
+  mkStub = callPackage ../apple-sdk/mk-stub.nix { } "11.0";
 
-    nativeBuildInputs = [ cpio pbzx ];
+  stdenvs =
+    {
+      stdenv = overrideSDK stdenv "11.0";
+    }
+    // builtins.listToAttrs (
+      map
+        (v: {
+          name = "llvmPackages_${v}";
+          value = pkgs."llvmPackages_${v}" // {
+            stdenv = overrideSDK pkgs."llvmPackages_${v}".stdenv "11.0";
+          };
+        })
+        [
+          "12"
+          "13"
+          "14"
+          "15"
+          "16"
+        ]
+    );
+in
+stdenvs
+// lib.genAttrs [
+  "CLTools_Executables"
+  "IOKit"
+  "Libsystem"
+  "LibsystemCross"
+  "MacOSX-SDK"
+  "configd"
+  "darwin-stubs"
+  "libcharset"
+  "libcompression"
+  "libnetwork"
+  "libpm"
+  "libunwind"
+  "objc4"
+  "sdkRoot"
+] mkStub
+// {
+  frameworks = lib.genAttrs [
+    "AGL"
+    "AVFCapture"
+    "AVFCore"
+    "AVFoundation"
+    "AVKit"
+    "Accelerate"
+    "Accessibility"
+    "Accounts"
+    "AdServices"
+    "AdSupport"
+    "AddressBook"
+    "AddressBookCore"
+    "AppKit"
+    "AppTrackingTransparency"
+    "Apple80211"
+    "AppleScriptKit"
+    "AppleScriptObjC"
+    "ApplicationServices"
+    "AudioToolbox"
+    "AudioToolboxCore"
+    "AudioUnit"
+    "AudioVideoBridging"
+    "AuthenticationServices"
+    "AutomaticAssessmentConfiguration"
+    "Automator"
+    "BackgroundTasks"
+    "BusinessChat"
+    "CFNetwork"
+    "CalendarStore"
+    "CallKit"
+    "Carbon"
+    "ClassKit"
+    "CloudKit"
+    "Cocoa"
+    "Collaboration"
+    "ColorSync"
+    "Combine"
+    "Contacts"
+    "ContactsPersistence"
+    "ContactsUI"
+    "CoreAudio"
+    "CoreAudioKit"
+    "CoreAudioTypes"
+    "CoreBluetooth"
+    "CoreData"
+    "CoreDisplay"
+    "CoreFoundation"
+    "CoreGraphics"
+    "CoreHaptics"
+    "CoreImage"
+    "CoreLocation"
+    "CoreMIDI"
+    "CoreMIDIServer"
+    "CoreML"
+    "CoreMedia"
+    "CoreMediaIO"
+    "CoreMotion"
+    "CoreServices"
+    "CoreSpotlight"
+    "CoreSymbolication"
+    "CoreTelephony"
+    "CoreText"
+    "CoreVideo"
+    "CoreWLAN"
+    "CryptoKit"
+    "CryptoTokenKit"
+    "DVDPlayback"
+    "DebugSymbols"
+    "DeveloperToolsSupport"
+    "DeviceCheck"
+    "DirectoryService"
+    "DiscRecording"
+    "DiscRecordingUI"
+    "DiskArbitration"
+    "DisplayServices"
+    "DriverKit"
+    "EventKit"
+    "ExceptionHandling"
+    "ExecutionPolicy"
+    "ExternalAccessory"
+    "FWAUserLib"
+    "FileProvider"
+    "FileProviderUI"
+    "FinderSync"
+    "ForceFeedback"
+    "Foundation"
+    "GLKit"
+    "GLUT"
+    "GSS"
+    "GameCenterFoundation"
+    "GameCenterUI"
+    "GameCenterUICore"
+    "GameController"
+    "GameKit"
+    "GameplayKit"
+    "HIDDriverKit"
+    "Hypervisor"
+    "ICADevices"
+    "IMServicePlugIn"
+    "IOBluetooth"
+    "IOBluetoothUI"
+    "IOKit"
+    "IOSurface"
+    "IOUSBHost"
+    "IdentityLookup"
+    "ImageCaptureCore"
+    "ImageIO"
+    "InputMethodKit"
+    "InstallerPlugins"
+    "InstantMessage"
+    "Intents"
+    "JavaNativeFoundation"
+    "JavaRuntimeSupport"
+    "JavaScriptCore"
+    "JavaVM"
+    "Kerberos"
+    "Kernel"
+    "KernelManagement"
+    "LDAP"
+    "LatentSemanticMapping"
+    "LinkPresentation"
+    "LocalAuthentication"
+    "MLCompute"
+    "MapKit"
+    "MediaAccessibility"
+    "MediaLibrary"
+    "MediaPlayer"
+    "MediaRemote"
+    "MediaToolbox"
+    "Message"
+    "Metal"
+    "MetalKit"
+    "MetalPerformanceShaders"
+    "MetalPerformanceShadersGraph"
+    "MetricKit"
+    "ModelIO"
+    "MultipeerConnectivity"
+    "MultitouchSupport"
+    "NaturalLanguage"
+    "NearbyInteraction"
+    "NetFS"
+    "Network"
+    "NetworkExtension"
+    "NetworkingDriverKit"
+    "NotificationCenter"
+    "OSAKit"
+    "OSLog"
+    "OpenAL"
+    "OpenCL"
+    "OpenDirectory"
+    "OpenGL"
+    "PCIDriverKit"
+    "PCSC"
+    "PDFKit"
+    "ParavirtualizedGraphics"
+    "PassKit"
+    "PassKitCore"
+    "PencilKit"
+    "Photos"
+    "PhotosUI"
+    "PreferencePanes"
+    "PushKit"
+    "Python"
+    "QTKit"
+    "Quartz"
+    "QuartzCore"
+    "QuickLook"
+    "QuickLookThumbnailing"
+    "QuickTime"
+    "RealityKit"
+    "ReplayKit"
+    "Ruby"
+    "SafariServices"
+    "SceneKit"
+    "ScreenSaver"
+    "ScreenTime"
+    "ScriptingBridge"
+    "Security"
+    "SecurityFoundation"
+    "SecurityInterface"
+    "SensorKit"
+    "ServiceManagement"
+    "SignpostMetrics"
+    "SkyLight"
+    "Social"
+    "SoundAnalysis"
+    "Speech"
+    "SpriteKit"
+    "StoreKit"
+    "SwiftUI"
+    "SyncServices"
+    "System"
+    "SystemConfiguration"
+    "SystemExtensions"
+    "TWAIN"
+    "Tcl"
+    "Tk"
+    "UIFoundation"
+    "URLFormatting"
+    "USBDriverKit"
+    "UniformTypeIdentifiers"
+    "UserNotifications"
+    "UserNotificationsUI"
+    "VideoDecodeAcceleration"
+    "VideoSubscriberAccount"
+    "VideoToolbox"
+    "Virtualization"
+    "Vision"
+    "WebKit"
+    "WidgetKit"
+    "iTunesLibrary"
+    "vmnet"
+  ] mkStub;
 
-    outputs = [ "out" ];
+  libs = lib.genAttrs [
+    "Xplugin"
+    "utmp"
+    "libDER"
+    "xpc"
+    "sandbox"
+    "simd"
+  ] mkStub;
 
-    unpackPhase = ''
-      pbzx $src | cpio -idm
-    '';
-
-    passthru = {
-      inherit (args) version;
-    };
-  });
-
-  MacOSX-SDK = mkSusDerivation {
-    pname = "MacOSX-SDK";
-    version = "11.0.0";
-
-    # https://swscan.apple.com/content/catalogs/others/index-11-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog
-    src = fetchurl {
-      url = "http://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_macOSNMOS_SDK.pkg";
-      sha256 = "0n425smj4q1vxbza8fzwnk323fyzbbq866q32w288c44hl5yhwsf";
-    };
-
-    installPhase = ''
-      mv Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk $out
-    '';
-  };
-
-  CLTools_Executables = mkSusDerivation {
-    pname = "CLTools_Executables";
-    version = "11.0.0";
-
-    # https://swscan.apple.com/content/catalogs/others/index-11-10.15-10.14-10.13-10.12-10.11-10.10-10.9-mountainlion-lion-snowleopard-leopard.merged-1.sucatalog
-    src = fetchurl {
-      url = "http://swcdn.apple.com/content/downloads/46/21/001-89745-A_56FM390IW5/v1um2qppgfdnam2e9cdqcqu2r6k8aa3lis/CLTools_Executables.pkg";
-      sha256 = "0nvb1qx7l81l2wcl8wvgbpsg5rcn51ylhivqmlfr2hrrv3zrrpl0";
-    };
-
-    installPhase = ''
-      mv Library/Developer/CommandLineTools $out
-    '';
-  };
-
-  mkCc = cc:
-    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then cc
-    else
-      cc.override {
-        bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
-        libc = packages.Libsystem;
-      };
-
-  mkStdenv = stdenv:
-    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then stdenv
-    else
-      let
-        darwinMinVersion = "10.12";
-        darwinSdkVersion = "11.0";
-      in
-      (overrideCC stdenv (mkCc stdenv.cc)).override {
-        extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
-        buildPlatform = stdenv.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-        hostPlatform = stdenv.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-        targetPlatform = stdenv.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-      };
-
-  stdenvs = {
-    stdenv = mkStdenv stdenv;
-  } // builtins.listToAttrs (map
-    (v: {
-      name = "llvmPackages_${v}";
-      value = pkgs."llvmPackages_${v}" // {
-        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
-        clang = mkCc pkgs."llvmPackages_${v}".clang;
-      };
-    })
-    [ "12" "13" "14" "15" "16" ]
+  callPackage = newScope (
+    lib.optionalAttrs stdenv.isDarwin stdenvs // { inherit (pkgs.darwin.apple_sdk_11_0) rustPlatform; }
   );
 
-  callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
-
-  packages = stdenvs // {
-    inherit (callPackage ./apple_sdk.nix { }) frameworks libs;
-
-    # TODO: this is nice to be private. is it worth the callPackage above?
-    # Probably, I don't think that callPackage costs much at all.
-    inherit MacOSX-SDK CLTools_Executables;
-
-    Libsystem = callPackage ./libSystem.nix { };
-    LibsystemCross = pkgs.darwin.Libsystem;
-    libcharset = callPackage ./libcharset.nix { };
-    libcompression = callPackage ./libcompression.nix { };
-    libunwind = callPackage ./libunwind.nix { };
-    libnetwork = callPackage ./libnetwork.nix { };
-    libpm = callPackage ./libpm.nix { };
-    # Avoid introducing a new objc4 if stdenv already has one, to prevent
-    # conflicting LLVM modules.
-    objc4 = stdenv.objc4 or (callPackage ./libobjc.nix { });
-
-    sdkRoot = pkgs.callPackage ../apple-sdk/sdkRoot.nix { sdkVersion = "11.0"; };
-
-    # questionable aliases
-    configd = pkgs.darwin.apple_sdk.frameworks.SystemConfiguration;
-    inherit (pkgs.darwin.apple_sdk.frameworks) IOKit;
-
-    xcodebuild = pkgs.xcbuild.override {
-      inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
-      inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreServices CoreGraphics ImageIO;
-    };
-
-    rustPlatform = pkgs.makeRustPlatform {
+  rustPlatform =
+    pkgs.makeRustPlatform {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
       inherit (pkgs) rustc cargo;
-    } // {
-      inherit (pkgs.callPackage ../../../build-support/rust/hooks {
-        inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
-        inherit (pkgs) cargo rustc;
-        clang = mkCc pkgs.clang;
-      }) bindgenHook;
+    }
+    // {
+      inherit
+        (pkgs.callPackage ../../../build-support/rust/hooks {
+          inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+          inherit (pkgs) cargo rustc;
+        })
+        bindgenHook
+        ;
     };
 
-    callPackage = newScope (lib.optionalAttrs stdenv.hostPlatform.isDarwin (stdenvs // rec {
-      inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
-      darwin = pkgs.darwin.overrideScope (_: prev: {
-        inherit (prev.darwin.apple_sdk_11_0)
-          IOKit
-          Libsystem
-          LibsystemCross
-          Security
-          configd
-          libcharset
-          libunwind
-          objc4
-          ;
-        apple_sdk = prev.darwin.apple_sdk_11_0;
-        CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
-      });
-      xcbuild = xcodebuild;
-    }));
+  stdenv = overrideSDK stdenv "11.0";
 
-    darwin-stubs = stdenvNoCC.mkDerivation {
-      pname = "darwin-stubs";
-      inherit (MacOSX-SDK) version;
+  xcodebuild = pkgs.xcodebuild;
 
-      buildCommand = ''
-        mkdir -p "$out"
-        ln -s ${MacOSX-SDK}/System "$out/System"
-        ln -s ${MacOSX-SDK}/usr "$out/usr"
-      '';
-    };
-  };
-in packages
+  version = "11.0";
+}

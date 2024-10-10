@@ -181,6 +181,14 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's|bin/cmake|${buildPackages.cmakeMinimal}/bin/cmake|g' Makefile
   '';
 
+  # Undo some of `fixCmakeFiles` for Darwin to make sure that checks for libraries in the SDK find them
+  # (e.g., `find_library(MATH_LIBRARY m)` should find `$SDKROOT/usr/lib/libm.tbd`).
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace "$out/share/cmake-${lib.versions.majorMinor finalAttrs.version}/Modules/Platform/Darwin.cmake" \
+       --replace-fail '/var/empty/include' '/usr/include' \
+       --replace-fail '/var/empty/lib' '/usr/lib'
+  '';
+
   dontUseCmakeConfigure = true;
   enableParallelBuilding = true;
 

@@ -194,7 +194,10 @@ with lib.maintainers;
   };
 
   darwin = {
-    members = [ toonn ];
+    members = [
+      reckenrode
+      toonn
+    ];
     githubTeams = [ "darwin-maintainers" ];
     scope = "Maintain Darwin compatibility of packages and Darwin-only packages.";
     shortName = "Darwin";

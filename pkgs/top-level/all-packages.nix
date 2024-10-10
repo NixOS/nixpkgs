@@ -13872,6 +13872,10 @@ with pkgs;
     zig = buildPackages.zig_0_12;
   };
 
+  # A minimal xar is needed to break an infinite recursion between macfuse-stubs and xar.
+  # It is also needed to reduce the amount of unnecessary stuff in the Darwin bootstrap.
+  xarMinimal = callPackage ../by-name/xa/xar/package.nix { e2fsprogs = null; };
+
   xclip = callPackage ../tools/misc/xclip { };
 
   xcur2png = callPackage ../tools/graphics/xcur2png { };
@@ -18696,14 +18700,21 @@ with pkgs;
 
   xcode-install = callPackage ../development/tools/xcode-install { };
 
-  xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices CoreGraphics ImageIO;
+  xcbuild = callPackage ../by-name/xc/xcbuild/package.nix {
+    stdenv =
+      # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
   };
-  xcbuild = xcodebuild;
+
   xcbuildHook = makeSetupHook {
     name = "xcbuild-hook";
     propagatedBuildInputs = [ xcbuild ];
-  } ../development/tools/xcbuild/setup-hook.sh  ;
+  } ../by-name/xc/xcbuild/setup-hook.sh;
+
+  xcodebuild = xcbuild;
 
   xcpretty = callPackage ../development/tools/xcpretty { };
 
@@ -19777,7 +19788,6 @@ with pkgs;
     inherit (stdenv.targetPlatform) libc;
   in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
     else if libc == "nblibc" then targetPackages.netbsd.headers or netbsd.headers
-    else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
 
   # We can choose:
@@ -19800,7 +19810,7 @@ with pkgs;
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
-      else targetPackages.darwin.LibsystemCross or (throw "don't yet have a `targetPackages.darwin.LibsystemCross for ${stdenv.targetPlatform.config}`")
+      else targetPackages.darwin.libSystem or darwin.libSystem
     else if name == "fblibc" then targetPackages.freebsd.libc or freebsd.libc
     else if name == "oblibc" then targetPackages.openbsd.libc or openbsd.libc
     else if name == "nblibc" then targetPackages.netbsd.libc or netbsd.libc
@@ -21229,7 +21239,7 @@ with pkgs;
         then libcCross
         else stdenv.cc.libc)
     else if stdenv.hostPlatform.isDarwin
-      then libiconv-darwin
+      then darwin.libiconv
     else libiconvReal;
 
   libcIconv = libc: let
@@ -21469,7 +21479,16 @@ with pkgs;
 
   libplacebo = callPackage ../development/libraries/libplacebo { };
 
-  libpng = callPackage ../development/libraries/libpng { };
+  libpng = callPackage ../development/libraries/libpng {
+    stdenv =
+      # libpng is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+      # that does not propagate xcrun.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
+  };
+
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libpostal = callPackage ../development/libraries/libpostal { };
@@ -21677,6 +21696,9 @@ with pkgs;
   };
 
   libunwind =
+    # Use the system unwinder in the SDK but provide a compatibility package to:
+    # 1. avoid evaluation errors with setting `unwind` to `null`; and
+    # 2. provide a `.pc` for compatibility with packages that expect to find libunwind that way.
     if stdenv.hostPlatform.isDarwin then darwin.libunwind
     else if stdenv.hostPlatform.system == "riscv32-linux" then llvmPackages.libunwind
     else callPackage ../development/libraries/libunwind { };
@@ -21790,6 +21812,13 @@ with pkgs;
 
   libxml2 = callPackage ../development/libraries/libxml2 {
     python = python3;
+    stdenv =
+      # libxml2 is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+      # that does not propagate xcrun.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
   };
 
   libxml2Python = let
@@ -22184,7 +22213,14 @@ with pkgs;
   ncurses =
     if stdenv.hostPlatform.useiOSPrebuilt
     then null
-    else callPackage ../development/libraries/ncurses { };
+    else callPackage ../development/libraries/ncurses {
+      # ncurses is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+      stdenv =
+        if stdenv.isDarwin then
+          darwin.bootstrapStdenv
+        else
+          stdenv;
+    };
 
   ndi = callPackage ../development/libraries/ndi { };
 
@@ -23666,7 +23702,15 @@ with pkgs;
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
 
-  zlib = callPackage ../development/libraries/zlib { };
+  zlib = callPackage ../development/libraries/zlib {
+    stdenv =
+      # zlib is a dependency of xcbuild. Avoid an infinite recursion by using a bootstrap stdenv
+      # that does not propagate xcrun.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
+  };
 
   zlib-ng = callPackage ../development/libraries/zlib-ng { };
 
@@ -23738,6 +23782,38 @@ with pkgs;
   };
 
   plumed = callPackage ../development/libraries/science/chemistry/plumed { };
+
+  ### DEVELOPMENT / LIBRARIES / DARWIN SDKS
+
+  apple-sdk_10_12 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "10.12"; };
+  apple-sdk_10_13 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "10.13"; };
+  apple-sdk_10_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "10.14"; };
+  apple-sdk_10_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "10.15"; };
+  apple-sdk_11 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "11"; };
+  apple-sdk_12 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "12"; };
+  apple-sdk_13 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "13"; };
+  apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
+
+  darwinMinVersionHook =
+    deploymentTarget:
+    makeSetupHook {
+      name = "darwin-deployment-target-hook-${deploymentTarget}";
+      substitutions = {
+        darwinMinVersionVariable = lib.escapeShellArg stdenv.hostPlatform.darwinMinVersionVariable;
+        deploymentTarget = lib.escapeShellArg deploymentTarget;
+      };
+    } ../os-specific/darwin/darwin-min-version-hook/setup-hook.sh;
+
+  ### DEVELOPMENT / TESTING TOOLS
+
+  atf = callPackage ../by-name/at/atf/package.nix {
+    stdenv =
+      # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
+      if stdenv.hostPlatform.isDarwin then
+        darwin.bootstrapStdenv
+      else
+        stdenv;
+  };
 
   ### DEVELOPMENT / LIBRARIES / AGDA
 
@@ -25805,7 +25881,6 @@ with pkgs;
   };
 
   macfuse-stubs = callPackage ../os-specific/darwin/macfuse {
-    inherit (darwin) libtapi;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
