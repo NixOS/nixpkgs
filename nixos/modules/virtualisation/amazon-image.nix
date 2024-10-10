@@ -9,9 +9,12 @@
 let
   inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
-in
 
-{
+  # Old instances do not have an ESP as they were booted with a "legacy-bios" AMI.
+  # We do not want these instances to fail upgrading to 24.11 so we need this condition.
+  hasESP = lib.versionAtLeast config.system.stateVersion "24.11" || pkgs.stdenv.hostPlatform.isAarch64;
+
+in {
   imports = [
     ../profiles/headless.nix
     # Note: While we do use the headless profile, we also explicitly
@@ -24,8 +27,6 @@ in
 
   config = {
 
-    assertions = [ ];
-
     boot.growPartition = true;
 
     fileSystems."/" = mkIf (!cfg.zfs.enable) {
@@ -34,7 +35,7 @@ in
       autoResize = true;
     };
 
-    fileSystems."/boot" = mkIf (cfg.efi || cfg.zfs.enable) {
+    fileSystems."/boot" = mkIf hasESP {
       # The ZFS image uses a partition labeled ESP whether or not we're
       # booting with EFI.
       device = "/dev/disk/by-label/ESP";
@@ -45,9 +46,7 @@ in
 
     boot.zfs.devNodes = mkIf cfg.zfs.enable "/dev/";
 
-    boot.extraModulePackages = [
-      config.boot.kernelPackages.ena
-    ];
+    boot.extraModulePackages = [ config.boot.kernelPackages.ena ];
     boot.initrd.kernelModules = [ "xen-blkfront" ];
     boot.initrd.availableKernelModules = [ "nvme" ];
     boot.kernelParams = [ "console=ttyS0,115200n8" "random.trust_cpu=on" ];
@@ -58,9 +57,11 @@ in
     # boot.
     boot.blacklistedKernelModules = [ "nouveau" "xen_fbfront" ];
 
-    boot.loader.grub.device = if cfg.efi then "nodev" else "/dev/xvda";
-    boot.loader.grub.efiSupport = cfg.efi;
-    boot.loader.grub.efiInstallAsRemovable = cfg.efi;
+    boot.loader.grub.device =
+      # install MBR for x86_64 as we want to support instance types without EFI support
+      if pkgs.stdenv.hostPlatform.isAarch64 then "nodev" else "/dev/xvda";
+    boot.loader.grub.efiSupport = hasESP;
+    boot.loader.grub.efiInstallAsRemovable = hasESP;
     boot.loader.timeout = 1;
     boot.loader.grub.extraConfig = ''
       serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
@@ -71,7 +72,7 @@ in
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = ["network-online.target"];
+      after = [ "network-online.target" ];
       path = [ pkgs.curl ];
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
       serviceConfig.Type = "oneshot";
