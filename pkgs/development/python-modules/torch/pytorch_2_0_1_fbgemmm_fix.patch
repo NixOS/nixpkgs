@@ -1,0 +1,12 @@
+diff --git a/third_party/fbgemm/include/fbgemm/UtilsAvx2.h b/third_party/fbgemm/include/fbgemm/UtilsAvx2.h
+index a1af6078a..4fb1220eb 100644
+--- a/third_party/fbgemm/include/fbgemm/UtilsAvx2.h
++++ b/third_party/fbgemm/include/fbgemm/UtilsAvx2.h
+@@ -8,4 +8,5 @@
+ // This file defines common utilities used in code compiled with avx2/avx512
+ // flags.
+
++#include <cstdint>
+ #include <string>
+
+ namespace fbgemm {
