@@ -181,6 +181,8 @@ stdenv.mkDerivation {
     cat << EOF >> user-config.jam
     using clang-darwin : : ${stdenv.cc.targetPrefix}c++
       : <linkflags>"-rpath $out/lib/"
+        <archiver>$AR
+        <ranlib>$RANLIB
       ;
     EOF
   ''
