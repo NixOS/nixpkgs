@@ -1,27 +1,30 @@
-{ bash
-, buildGoModule
-, fetchFromGitHub
+{
+  bash,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 
-, withFish ? false
-, fish
+  withFish ? false,
+  fish,
 
-, lib
-, makeWrapper
-, xdg-utils
+  lib,
+  makeWrapper,
+  xdg-utils,
 }:
 
 buildGoModule rec {
   pname = "granted";
-  version = "0.34.1";
+  version = "0.35.1";
 
   src = fetchFromGitHub {
     owner = "common-fate";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-iNGagF4+Lz73Ctvh8Qs90E+xvuGi7LWHV/VbjjqMqRY=";
+    sha256 = "sha256-3DYPZbaMZsdbKXqrG4iLVasgfJQ0l1N+28qbYJieO6c=";
   };
 
-  vendorHash = "sha256-uKzs+plk1W2S7iPv2J1Mi1Ff88+82zrIXLy2eTzD/Hc=";
+  vendorHash = "sha256-9aHzPZBgrQv/T9cT/0Xv3bgceMWCuD8YwsG4cN00heE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -38,29 +41,37 @@ buildGoModule rec {
     "cmd/granted"
   ];
 
-  postInstall = ''
-    ln -s $out/bin/granted $out/bin/assumego
+  postInstall =
+    ''
+      ln -s $out/bin/granted $out/bin/assumego
 
-    # Install shell script
-    install -Dm755 $src/scripts/assume $out/bin/assume
-    substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      # Install shell script
+      install -Dm755 $src/scripts/assume $out/bin/assume
+      substituteInPlace $out/bin/assume \
+        --replace /bin/bash ${bash}/bin/bash
 
-    wrapProgram $out/bin/assume \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      wrapProgram $out/bin/assume \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+    ''
+    + lib.optionalString withFish ''
+      # Install fish script
+      install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
+      substituteInPlace $out/share/assume.fish \
+        --replace /bin/fish ${fish}/bin/fish
+    '';
 
-  '' + lib.optionalString withFish ''
-    # Install fish script
-    install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
-    substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Easiest way to access your cloud";
     homepage = "https://github.com/common-fate/granted";
     changelog = "https://github.com/common-fate/granted/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.ivankovnatsky ];
+    maintainers = with maintainers; [
+      jlbribeiro
+    ];
   };
 }
