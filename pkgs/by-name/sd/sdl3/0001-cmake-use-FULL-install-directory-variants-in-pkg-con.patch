@@ -1,0 +1,30 @@
+From 1999109df34e67ed7c34d2b6b42f59feafc22bf1 Mon Sep 17 00:00:00 2001
+From: seth <getchoo@tuta.io>
+Date: Fri, 12 Jul 2024 21:59:14 -0400
+Subject: [PATCH] cmake: use `FULL` install directory variants in pkg-config
+ file
+
+Instead of manually prepending the install prefix to
+`CMAKE_INSTALL_<dir>` (which may already be an absolute path), we can
+let cmake do it for us
+---
+ cmake/sdl3.pc.in | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/cmake/sdl3.pc.in b/cmake/sdl3.pc.in
+index bfc2afffe..3724d6cf8 100644
+--- a/cmake/sdl3.pc.in
++++ b/cmake/sdl3.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@SDL_PKGCONFIG_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: sdl3
+ Description: Simple DirectMedia Layer is a cross-platform multimedia library designed to provide low level access to audio, keyboard, mouse, joystick, 3D hardware via OpenGL, and 2D video framebuffer.
+-- 
+2.45.2
+
