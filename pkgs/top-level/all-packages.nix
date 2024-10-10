@@ -38078,7 +38078,9 @@ with pkgs;
 
   tusk = callPackage ../applications/office/tusk { };
 
-  trufflehog = callPackage ../tools/security/trufflehog { };
+  trufflehog = callPackage ../tools/security/trufflehog {
+    buildGoModule = buildGo123Module;
+  };
 
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
