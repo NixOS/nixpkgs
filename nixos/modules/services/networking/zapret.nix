@@ -9,13 +9,13 @@ let
 
   whitelist =
     if cfg.whitelist != null then
-      "--hostlist ${pkgs.writeText "ZapretWhitelist" cfg.whitelist}"
+      "--hostlist ${pkgs.writeText "ZapretWhitelist" (lib.concatStringsSep "\n" cfg.whitelist)}"
     else
       "";
 
   blacklist =
     if cfg.blacklist != null then
-      "--hostlist-exclude ${pkgs.writeText "ZapretBlacklist" cfg.blacklist}"
+      "--hostlist-exclude ${pkgs.writeText "ZapretBlacklist" (lib.concatStringsSep "\n" cfg.blacklist)}"
     else
       "";
 
@@ -27,7 +27,7 @@ in
     package = lib.mkPackageOption pkgs "zapret" { };
     params = lib.mkOption {
       default = null;
-      type = lib.types.listOf lib.types.str;
+      type = with lib.types; listOf str;
       example = ''
         [
           "--dpi-desync=fake,disorder2"
@@ -46,12 +46,14 @@ in
     };
     whitelist = lib.mkOption {
       default = null;
-      type = lib.types.nullOr lib.types.str;
+      type = with lib.types; nullOr listOf str;
       example = ''
-        youtube.com
-        googlevideo.com
-        ytimg.com
-        youtu.be
+        [
+          "youtube.com"
+          "googlevideo.com"
+          "ytimg.com"
+          "youtu.be"
+        ]
       '';
       description = ''
         Specify a list of domains to bypass. All other domains will be ignored.
@@ -63,9 +65,11 @@ in
     };
     blacklist = lib.mkOption {
       default = null;
-      type = lib.types.nullOr lib.types.str;
+      type = with lib.types; nullOr listOf str;
       example = ''
-        example.com
+        [
+          "example.com"
+        ]
       '';
       description = ''
         Specify a list of domains NOT to bypass. All other domains will be bypassed.
