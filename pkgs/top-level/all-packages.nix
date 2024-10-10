@@ -11320,6 +11320,8 @@ with pkgs;
 
   podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
 
+  podlet = callPackage ../applications/virtualization/podlet { };
+
   pods = callPackage ../applications/virtualization/pods { };
 
   pod2mdoc = callPackage ../tools/misc/pod2mdoc { };
