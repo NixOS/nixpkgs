@@ -4356,8 +4356,6 @@ with pkgs;
 
   clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
 
-  clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
-
   clusterctl = callPackage ../applications/networking/cluster/clusterctl { };
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
