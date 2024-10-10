@@ -8104,6 +8104,13 @@
     githubId = 201997;
     name = "Eric Seidel";
   };
+  griffi-gh = {
+    name = "Alex Prasol";
+    email = "prasol258@gmail.com";
+    matrix = "@voxel:nyanbinary.rs";
+    github = "griffi-gh";
+    githubId = 45996170;
+  };
   grimmauld = {
     name = "Sören Bender";
     email = "soeren@benjos.de";
