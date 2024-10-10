@@ -238,7 +238,7 @@ in rec {
       description = "Fuzzy find your text with fzf instead of selecting it by hand ";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kidd ];
+      maintainers = with lib.maintainers; [ kidd fnune ];
     };
   };
 
