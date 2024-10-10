@@ -47,7 +47,7 @@
         selfTargetTarget = pythonOnTargetForTarget.pkgs or {}; # There is no Python TargetTarget.
       };
       hooks = import ./hooks/default.nix;
-      keep = self: hooks self {};
+      keep = _: { };
       optionalExtensions = cond: as: lib.optionals cond as;
       pythonExtension = import ../../../top-level/python-packages.nix;
       python2Extension = import ../../../top-level/python2-packages.nix;

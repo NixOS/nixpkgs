@@ -26,7 +26,7 @@
 , eggUnpackHook
 , eggBuildHook
 , eggInstallHook
-}:
+}@things:
 
 let
   inherit (builtins) unsafeGetAttrPos;
@@ -262,7 +262,7 @@ let
       setuptoolsBuildHook
     ] ++ optionals (format' == "pyproject") [(
       if isBootstrapPackage then
-        pypaBuildHook.override {
+        python.pythonOnBuildForHost.pkgs.pypaBuildHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) build;
           wheel = null;
         }
@@ -270,7 +270,7 @@ let
         pypaBuildHook
     ) (
       if isBootstrapPackage then
-        pythonRuntimeDepsCheckHook.override {
+        python.pythonOnBuildForHost.pkgs.pythonRuntimeDepsCheckHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) packaging;
         }
       else
@@ -281,7 +281,7 @@ let
       eggUnpackHook eggBuildHook eggInstallHook
     ] ++ optionals (format' != "other") [(
       if isBootstrapInstallPackage then
-        pypaInstallHook.override {
+        python.pythonOnBuildForHost.pkgs.pypaInstallHook.override {
           inherit (python.pythonOnBuildForHost.pkgs.bootstrap) installer;
         }
       else
@@ -324,7 +324,7 @@ let
 
     outputs = outputs ++ optional withDistOutput "dist";
 
-    inherit passthru;
+    passthru = { inherit things; } // passthru;
 
     meta = {
       # default to python's platforms
