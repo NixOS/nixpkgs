@@ -1,0 +1,36 @@
+diff -Naurd x/riegeli/records/BUILD y/riegeli/records/BUILD
+--- x/riegeli/records/BUILD	2023-12-06 16:24:03.939575600 +0000
++++ y/riegeli/records/BUILD	2023-12-06 16:23:00.079531687 +0000
+@@ -1,4 +1,4 @@
+-load("@rules_proto//proto:defs.bzl", "proto_library")
++load("@local_tsl//tsl/platform:build_config.bzl", "tf_proto_library")
+ 
+ package(
+     default_visibility = ["//visibility:public"],
+@@ -14,7 +14,7 @@
+     deps = [
+         ":chunk_reader",
+         ":record_position",
+-        ":records_metadata_cc_proto",
++        ":records_metadata_proto_cc_impl",
+         ":skipped_region",
+         "//riegeli/base:arithmetic",
+         "//riegeli/base:assert",
+@@ -184,13 +184,10 @@
+     ],
+ )
+ 
+-proto_library(
++tf_proto_library(
+     name = "records_metadata_proto",
+     srcs = ["records_metadata.proto"],
+-    deps = ["@com_google_protobuf//:descriptor_proto"],
+-)
+-
+-cc_proto_library(
+-    name = "records_metadata_cc_proto",
+-    deps = [":records_metadata_proto"],
++    cc_api_version = 2,
++    make_default_target_header_only = True,
++    visibility = ["//visibility:public"],
+ )
