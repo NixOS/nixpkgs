@@ -1,8 +1,7 @@
 { lib
 , buildPlatform
 , callPackage
-, kaem
-, mescc-tools-extra
+, stage0-posix
 , checkMeta
 }:
 rec {
@@ -34,7 +33,7 @@ rec {
       inherit name text;
       passAsFile = [ "text" ];
 
-      builder = "${kaem}/bin/kaem";
+      builder = "${stage0-posix.kaem}/bin/kaem";
       args = [
         "--verbose"
         "--strict"
@@ -50,7 +49,7 @@ rec {
         ''))
       ];
 
-      PATH = lib.makeBinPath [ mescc-tools-extra ];
+      PATH = lib.makeBinPath [ stage0-posix.mescc-tools-extra ];
       destinationDir = builtins.dirOf destination;
       inherit destination;
     };
