@@ -8,6 +8,9 @@
   mkAzExtension,
   mycli,
   python3Packages,
+  autoPatchelfHook,
+  python3,
+  openssl_1_1,
 }:
 
 {
@@ -56,6 +59,26 @@
       ]
     );
     meta.maintainers = with lib.maintainers; [ mikut ];
+  };
+
+  confcom = mkAzExtension rec {
+    pname = "confcom";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
+    sha256 = "73823e10958a114b4aca84c330b4debcc650c4635e74c568679b6c32c356411d";
+    description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ openssl_1_1 ];
+    propagatedBuildInputs = with python3Packages; [
+      pyyaml
+      deepdiff
+      docker
+      tqdm
+    ];
+    postInstall = ''
+      chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
+    '';
+    meta.maintainers = with lib.maintainers; [ miampf ];
   };
 
   containerapp = mkAzExtension rec {
