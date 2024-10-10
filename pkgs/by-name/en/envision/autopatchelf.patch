@@ -1,0 +1,108 @@
+diff --git a/src/builders/build_basalt.rs b/src/builders/build_basalt.rs
+index 237fc24..3c9c8ec 100644
+--- a/src/builders/build_basalt.rs
++++ b/src/builders/build_basalt.rs
+@@ -86,6 +86,13 @@ pub fn get_build_basalt_jobs(profile: &Profile, clean_build: bool) -> VecDeque<W
+             format!("{}/share/basalt/thirdparty", profile.prefix),
+         ]),
+     ));
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
+diff --git a/src/builders/build_libsurvive.rs b/src/builders/build_libsurvive.rs
+index 8ddd206..587de7f 100644
+--- a/src/builders/build_libsurvive.rs
++++ b/src/builders/build_libsurvive.rs
+@@ -60,6 +60,13 @@ pub fn get_build_libsurvive_jobs(profile: &Profile, clean_build: bool) -> VecDeq
+     }
+     jobs.push_back(cmake.get_build_job());
+     jobs.push_back(cmake.get_install_job());
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
+diff --git a/src/builders/build_monado.rs b/src/builders/build_monado.rs
+index fb049c5..e21a764 100644
+--- a/src/builders/build_monado.rs
++++ b/src/builders/build_monado.rs
+@@ -68,6 +68,13 @@ pub fn get_build_monado_jobs(profile: &Profile, clean_build: bool) -> VecDeque<W
+     }
+     jobs.push_back(cmake.get_build_job());
+     jobs.push_back(cmake.get_install_job());
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
+diff --git a/src/builders/build_opencomposite.rs b/src/builders/build_opencomposite.rs
+index bf45567..9fe0264 100644
+--- a/src/builders/build_opencomposite.rs
++++ b/src/builders/build_opencomposite.rs
+@@ -43,6 +43,13 @@ pub fn get_build_opencomposite_jobs(profile: &Profile, clean_build: bool) -> Vec
+         jobs.push_back(cmake.get_prepare_job());
+     }
+     jobs.push_back(cmake.get_build_job());
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
+diff --git a/src/builders/build_openhmd.rs b/src/builders/build_openhmd.rs
+index 5fe612c..5211229 100644
+--- a/src/builders/build_openhmd.rs
++++ b/src/builders/build_openhmd.rs
+@@ -55,6 +55,13 @@ pub fn get_build_openhmd_jobs(profile: &Profile, clean_build: bool) -> VecDeque<
+     }
+     jobs.push_back(cmake.get_build_job());
+     jobs.push_back(cmake.get_install_job());
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
+diff --git a/src/builders/build_wivrn.rs b/src/builders/build_wivrn.rs
+index 52bfb66..b28ab5c 100644
+--- a/src/builders/build_wivrn.rs
++++ b/src/builders/build_wivrn.rs
+@@ -52,6 +52,13 @@ pub fn get_build_wivrn_jobs(profile: &Profile, clean_build: bool) -> VecDeque<Wo
+     }
+     jobs.push_back(cmake.get_build_job());
+     jobs.push_back(cmake.get_install_job());
++    jobs.push_back(WorkerJob::new_cmd(
++        None,
++        "autopatchelf".into(),
++        Some(vec![
++            build_dir.clone()
++        ]),
++    ));
+ 
+     jobs
+ }
