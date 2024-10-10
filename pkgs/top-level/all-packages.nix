@@ -30445,7 +30445,7 @@ with pkgs;
 
   kile = callPackage ../applications/editors/kile { };
 
-  kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
+  kitsas = qt6Packages.callPackage ../applications/office/kitsas { };
 
   kiwitalk = callPackage ../by-name/ki/kiwitalk/package.nix { pnpm = pnpm_8; };
 
