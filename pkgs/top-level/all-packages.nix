@@ -25449,6 +25449,10 @@ with pkgs;
     enableExperimental = true;
   };
 
+  bluez-no-python = bluez.override {
+    withPython = false;
+  };
+
   bolt = callPackage ../os-specific/linux/bolt { };
 
   bpf-linker = callPackage ../development/tools/bpf-linker { };
