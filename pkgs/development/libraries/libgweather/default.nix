@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, buildPackages
 , fetchurl
+, makeWrapper
 , meson
 , ninja
 , pkg-config
@@ -16,7 +18,7 @@
 , geocode-glib_2
 , vala
 , gnome
-, withIntrospection ? stdenv.buildPlatform == stdenv.hostPlatform
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -38,6 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [
+    makeWrapper
     pkg-config
   ];
 
@@ -70,25 +73,33 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs build-aux/meson/gen_locations_variant.py
+    patchShebangs --build build-aux/meson/gen_locations_variant.py
+    wrapProgram $PWD/build-aux/meson/gen_locations_variant.py \
+      --prefix GI_TYPELIB_PATH : ${lib.getLib buildPackages.glib}/lib/girepository-1.0 \
 
     # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
     # it should be a build-time dep for build
     # TODO: send upstream
     substituteInPlace doc/meson.build \
-      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
+      --replace-fail "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
+      --replace-fail "'gi-docgen', req" "'gi-docgen', native:true, req"
 
     # gir works for us even when cross-compiling
     # TODO: send upstream because downstream users can use the option to disable gir if they don't have it working
-    substituteInPlace libgweather/meson.build \
-      --replace "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
+    substituteInPlace meson.build \
+      --replace-fail "g_ir_scanner.found() and not meson.is_cross_build()" "g_ir_scanner.found()"
+
+    substituteInPlace libgweather/meson.build --replace-fail \
+      "dependency('vapigen', required: enable_vala == 'true')" \
+      "dependency('vapigen', native: true, required: enable_vala == 'true')"
   '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
   '';
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
