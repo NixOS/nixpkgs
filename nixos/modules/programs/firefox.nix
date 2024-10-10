@@ -1,8 +1,7 @@
-{
-  pkgs,
-  config,
-  lib,
-  ...
+{ pkgs
+, config
+, lib
+, ...
 }:
 
 let
@@ -81,6 +80,30 @@ in
       ];
     };
 
+    finalPackage = lib.mkOption {
+      description = "Final package (read-only)";
+      type = lib.types.package;
+      readOnly = true;
+      default = cfg.package.override (old: {
+        extraPrefsFiles =
+          old.extraPrefsFiles or [ ]
+          ++ cfg.autoConfigFiles
+          ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+        nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+        cfg = (old.cfg or { }) // cfg.wrapperConfig;
+      });
+      defaultText = lib.literalExpression ''
+        cfg.package.override (old: {
+          extraPrefsFiles =
+            old.extraPrefsFiles or [ ]
+            ++ cfg.autoConfigFiles
+            ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
+          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
+          cfg = (old.cfg or { }) // cfg.wrapperConfig;
+        });
+      '';
+    };
+
     wrapperConfig = lib.mkOption {
       type = lib.types.attrs;
       default = { };
@@ -88,7 +111,7 @@ in
     };
 
     policies = lib.mkOption {
-      type = policyFormat.type;
+      inherit (policyFormat) type;
       default = { };
       description = ''
         Group policies to install.
@@ -143,113 +166,111 @@ in
 
     languagePacks = lib.mkOption {
       # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
-      type = lib.types.listOf (
-        lib.types.enum ([
-          "ach"
-          "af"
-          "an"
-          "ar"
-          "ast"
-          "az"
-          "be"
-          "bg"
-          "bn"
-          "br"
-          "bs"
-          "ca-valencia"
-          "ca"
-          "cak"
-          "cs"
-          "cy"
-          "da"
-          "de"
-          "dsb"
-          "el"
-          "en-CA"
-          "en-GB"
-          "en-US"
-          "eo"
-          "es-AR"
-          "es-CL"
-          "es-ES"
-          "es-MX"
-          "et"
-          "eu"
-          "fa"
-          "ff"
-          "fi"
-          "fr"
-          "fur"
-          "fy-NL"
-          "ga-IE"
-          "gd"
-          "gl"
-          "gn"
-          "gu-IN"
-          "he"
-          "hi-IN"
-          "hr"
-          "hsb"
-          "hu"
-          "hy-AM"
-          "ia"
-          "id"
-          "is"
-          "it"
-          "ja"
-          "ka"
-          "kab"
-          "kk"
-          "km"
-          "kn"
-          "ko"
-          "lij"
-          "lt"
-          "lv"
-          "mk"
-          "mr"
-          "ms"
-          "my"
-          "nb-NO"
-          "ne-NP"
-          "nl"
-          "nn-NO"
-          "oc"
-          "pa-IN"
-          "pl"
-          "pt-BR"
-          "pt-PT"
-          "rm"
-          "ro"
-          "ru"
-          "sat"
-          "sc"
-          "sco"
-          "si"
-          "sk"
-          "skr"
-          "sl"
-          "son"
-          "sq"
-          "sr"
-          "sv-SE"
-          "szl"
-          "ta"
-          "te"
-          "tg"
-          "th"
-          "tl"
-          "tr"
-          "trs"
-          "uk"
-          "ur"
-          "uz"
-          "vi"
-          "xh"
-          "zh-CN"
-          "zh-TW"
-        ])
-      );
+      type = lib.types.listOf (lib.types.enum [
+        "ach"
+        "af"
+        "an"
+        "ar"
+        "ast"
+        "az"
+        "be"
+        "bg"
+        "bn"
+        "br"
+        "bs"
+        "ca-valencia"
+        "ca"
+        "cak"
+        "cs"
+        "cy"
+        "da"
+        "de"
+        "dsb"
+        "el"
+        "en-CA"
+        "en-GB"
+        "en-US"
+        "eo"
+        "es-AR"
+        "es-CL"
+        "es-ES"
+        "es-MX"
+        "et"
+        "eu"
+        "fa"
+        "ff"
+        "fi"
+        "fr"
+        "fur"
+        "fy-NL"
+        "ga-IE"
+        "gd"
+        "gl"
+        "gn"
+        "gu-IN"
+        "he"
+        "hi-IN"
+        "hr"
+        "hsb"
+        "hu"
+        "hy-AM"
+        "ia"
+        "id"
+        "is"
+        "it"
+        "ja"
+        "ka"
+        "kab"
+        "kk"
+        "km"
+        "kn"
+        "ko"
+        "lij"
+        "lt"
+        "lv"
+        "mk"
+        "mr"
+        "ms"
+        "my"
+        "nb-NO"
+        "ne-NP"
+        "nl"
+        "nn-NO"
+        "oc"
+        "pa-IN"
+        "pl"
+        "pt-BR"
+        "pt-PT"
+        "rm"
+        "ro"
+        "ru"
+        "sat"
+        "sc"
+        "sco"
+        "si"
+        "sk"
+        "skr"
+        "sl"
+        "son"
+        "sq"
+        "sr"
+        "sv-SE"
+        "szl"
+        "ta"
+        "te"
+        "tg"
+        "th"
+        "tl"
+        "tr"
+        "trs"
+        "uk"
+        "ur"
+        "uz"
+        "vi"
+        "xh"
+        "zh-CN"
+        "zh-TW"
+      ]);
       default = [ ];
       description = ''
         The language packs to install.
@@ -280,7 +301,7 @@ in
       '';
     };
 
-    nativeMessagingHosts = ({
+    nativeMessagingHosts = {
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
@@ -288,7 +309,7 @@ in
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
+    } // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config =
@@ -300,51 +321,43 @@ in
         );
     in
     lib.mkIf cfg.enable {
-      warnings = forEachEnabledNmh (
-        k: v:
+      warnings = forEachEnabledNmh (k: v:
         "The `programs.firefox.nativeMessagingHosts.${k}` option is deprecated, "
         + "please add `${v.package.pname}` to `programs.firefox.nativeMessagingHosts.packages` instead."
       );
       programs.firefox.nativeMessagingHosts.packages = forEachEnabledNmh (_: v: v.package);
 
-      environment.systemPackages = [
-        (cfg.package.override (old: {
-          extraPrefsFiles =
-            old.extraPrefsFiles or [ ]
-            ++ cfg.autoConfigFiles
-            ++ [ (pkgs.writeText "firefox-autoconfig.js" cfg.autoConfig) ];
-          nativeMessagingHosts = old.nativeMessagingHosts or [ ] ++ cfg.nativeMessagingHosts.packages;
-          cfg = (old.cfg or { }) // cfg.wrapperConfig;
-        }))
-      ];
+      environment.systemPackages = [ cfg.finalPackage ];
 
       environment.etc =
         let
           policiesJSON = policyFormat.generate "firefox-policies.json" { inherit (cfg) policies; };
         in
         lib.mkIf (cfg.policies != { }) {
-          "firefox/policies/policies.json".source = "${policiesJSON}";
-        };
+          "firefox/policies/policies.json".source = policiesJSON;
 
-      # Preferences are converted into a policy
-      programs.firefox.policies = {
-        DisableAppUpdate = true;
-        Preferences = (
-          builtins.mapAttrs (_: value: {
-            Value = value;
-            Status = cfg.preferencesStatus;
-          }) cfg.preferences
-        );
-        ExtensionSettings = builtins.listToAttrs (
-          builtins.map (
-            lang:
-            lib.attrsets.nameValuePair "langpack-${lang}@firefox.mozilla.org" {
-              installation_mode = "normal_installed";
-              install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
-            }
-          ) cfg.languagePacks
-        );
-      };
+          # Preferences are converted into a policy
+          programs.firefox.policies = {
+            DisableAppUpdate = true;
+            Preferences =
+              builtins.mapAttrs
+                (_: value: {
+                  Value = value;
+                  Status = cfg.preferencesStatus;
+                })
+                cfg.preferences;
+            ExtensionSettings = builtins.listToAttrs (builtins.map
+              (lang: lib.nameValuePair
+                "langpack-${lang}@firefox.mozilla.org"
+                {
+                  installation_mode = "normal_installed";
+                  install_url = "https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/${lang}.xpi";
+                }
+              )
+              cfg.languagePacks);
+          };
+
+        };
     };
 
   meta.maintainers = with lib.maintainers; [
