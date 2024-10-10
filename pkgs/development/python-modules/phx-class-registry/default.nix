@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "class-registry";
-  version = "4.1.0";
+  version = "5.0.0";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "todofixthis";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-kJbyUzyklVSvW6bBxTTTrY+WhfcV0GUf/+Pzyv+7sEA=";
+    hash = "sha256-E2gKRpTATRjM8Rj0XYwiIyHAgDBUGUo0B2WyDNaeCtY=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];
