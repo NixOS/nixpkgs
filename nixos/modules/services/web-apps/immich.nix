@@ -227,7 +227,6 @@ in
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
         enable = true;
-        user = cfg.user;
         port = cfg.redis.port;
         bind = mkIf (!isRedisUnixSocket) cfg.redis.host;
       };
@@ -286,6 +285,12 @@ in
         RuntimeDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
+        # ensure that immich-server has permission to connect to the redis socket.
+        SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
+          # the redis module uses services.redis.servers.*.user for the group name
+          # as well as the user name.
+          config.services.redis.servers.immich.user
+        ];
       };
     };
 
