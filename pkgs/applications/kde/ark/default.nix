@@ -32,7 +32,7 @@ mkDerivation {
     homepage = "https://apps.kde.org/ark/";
     description = "Graphical file compression/decompression utility";
     mainProgram = "ark";
-    license = with licenses; [ gpl2 lgpl3 ] ++ optional unfreeEnableUnrar unfree;
+    license = with licenses; [ gpl2 lgpl3 ] ++ optional unfreeEnableUnrar unrar;
     maintainers = [ maintainers.ttuegel ];
   };
 }
