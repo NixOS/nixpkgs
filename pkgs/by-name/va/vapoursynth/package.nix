@@ -8,7 +8,6 @@
   runCommandCC,
   runCommand,
   vapoursynth,
-  writeText,
   buildEnv,
   zimg,
   libass,
@@ -28,8 +27,6 @@ stdenv.mkDerivation rec {
     rev = "R${version}";
     hash = "sha256-T2bCVNH0dLM9lFYChXzvD6AJM3xEtOVCb2tI10tIXJs=";
   };
-
-  patches = [ ./nix-plugin-loader.patch ];
 
   nativeBuildInputs = [
     pkg-config
@@ -53,6 +50,7 @@ stdenv.mkDerivation rec {
     ];
 
   enableParallelBuilding = true;
+  doInstallCheck = true;
 
   passthru = rec {
     # If vapoursynth is added to the build inputs of mpv and then
@@ -66,7 +64,6 @@ stdenv.mkDerivation rec {
         lib
         python3
         buildEnv
-        writeText
         runCommandCC
         stdenv
         runCommand
@@ -83,6 +80,14 @@ stdenv.mkDerivation rec {
     };
   };
 
+  postPatch = ''
+    # Export weak symbol nixPluginDir to permit override of default plugin path
+    sed -E -i \
+      -e 's/(VS_PATH_PLUGINDIR)/(nixPluginDir ? nixPluginDir : \1)/g' \
+      -e '1i\extern char const __attribute__((weak)) nixPluginDir[];' \
+      src/core/vscore.cpp
+  '';
+
   postInstall = ''
     wrapProgram $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}
@@ -90,6 +95,18 @@ stdenv.mkDerivation rec {
     # VapourSynth does not include any plugins by default
     # and emits a warning when the system plugin directory does not exist.
     mkdir $out/lib/vapoursynth
+  '';
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    libv="$out/lib/libvapoursynth${stdenv.hostPlatform.extensions.sharedLibrary}"
+    if ! $NM -g -P "$libv" | grep -q '^nixPluginDir w'; then
+      echo "Weak symbol nixPluginDir is missing from $libv." >&2
+      exit 1
+    fi
+
+    runHook postInstallCheck
   '';
 
   meta = with lib; {
