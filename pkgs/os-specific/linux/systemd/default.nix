@@ -4,6 +4,7 @@
 , lib
 , nixosTests
 , pkgsCross
+, testers
 , fetchFromGitHub
 , fetchzip
 , fetchpatch2
@@ -795,6 +796,7 @@ stdenv.mkDerivation (finalAttrs: {
             else "aarch64-multiplatform";
         in
         pkgsCross.${systemString}.systemd;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -830,6 +832,7 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
+    pkgConfigModules = [ "libsystemd" "libudev" "systemd" "udev" ];
     # See src/basic/missing_syscall_def.h
     platforms = with lib.platforms; lib.intersectLists linux
       (aarch ++ x86 ++ loongarch64 ++ m68k ++ mips ++ power ++ riscv ++ s390);
