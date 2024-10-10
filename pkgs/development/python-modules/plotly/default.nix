@@ -2,37 +2,43 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   setuptools,
+
+  # dependencies
+  kaleido,
   packaging,
   tenacity,
-  kaleido,
-  pytestCheckHook,
-  pandas,
-  requests,
-  matplotlib,
-  xarray,
-  pillow,
-  scipy,
-  psutil,
-  statsmodels,
+
+  # tests
   ipython,
   ipywidgets,
-  which,
-  orca,
+  matplotlib,
   nbformat,
+  orca,
+  pandas,
+  pillow,
+  psutil,
+  pytestCheckHook,
+  requests,
   scikit-image,
+  scipy,
+  statsmodels,
+  which,
+  xarray,
 }:
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.24.0";
+  version = "5.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-frSUybQxst4wG8g8U43Nay9dYCUXuR3dBealwPVyFdI=";
+    hash = "sha256-ONuX5/GlirPF8+7bZtib1Xsv5llcXcSelFfGyeTc5L8=";
   };
 
   sourceRoot = "${src.name}/packages/python/plotly";
@@ -47,30 +53,34 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    kaleido
     packaging
     tenacity
-    kaleido
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pandas
-    requests
-    matplotlib
-    xarray
-    pillow
-    scipy
-    psutil
-    statsmodels
     ipython
     ipywidgets
-    which
-    orca
+    matplotlib
     nbformat
+    orca
+    pandas
+    pillow
+    psutil
+    pytestCheckHook
+    requests
     scikit-image
+    scipy
+    statsmodels
+    which
+    xarray
   ];
 
   disabledTests = [
+    # Require unpackaged `vaex`
+    "test_build_df_with_hover_data_from_vaex_and_polars"
+    "test_build_df_from_vaex_and_polars"
+
     # FAILED plotly/matplotlylib/mplexporter/tests/test_basic.py::test_legend_dots - AssertionError: assert '3' == '2'
     "test_legend_dots"
     # FAILED plotly/matplotlylib/mplexporter/tests/test_utils.py::test_linestyle - AssertionError:
