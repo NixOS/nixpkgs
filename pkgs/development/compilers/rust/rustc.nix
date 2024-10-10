@@ -222,6 +222,10 @@ in stdenv.mkDerivation (finalAttrs: {
     substituteInPlace compiler/rustc_target/src/spec/*/*.rs \
       --replace-quiet '"rust-lld"' '"lld"'
 
+    # Figuring out when this should be False is a rustc FIXME. Nixpkgs needs it false.
+    substituteInPlace compiler/rustc_target/src/spec/targets/wasm32_wasi*.rs \
+      --replace LinkSelfContainedDefault::True LinkSelfContainedDefault::False
+
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
     # Useful debugging parameter
