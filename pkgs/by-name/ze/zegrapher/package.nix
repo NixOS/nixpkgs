@@ -1,9 +1,11 @@
 { lib, stdenv
 , fetchFromGitHub
-, qmake
-, wrapQtAppsHook
+, qt5
 , boost }:
 
+let
+  inherit (qt5) qmake wrapQtAppsHook;
+in
 stdenv.mkDerivation rec {
   pname = "zegrapher";
   version = "3.1.1";
