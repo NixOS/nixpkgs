@@ -34,8 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "upower";
   version = "1.90.4";
 
-  outputs = [ "out" "dev" "installedTests" ]
-    ++ lib.optionals withDocs [ "devdoc" ];
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals withDocs [ "devdoc" ]
+    ++ lib.optionals withIntrospection [ "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -82,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     udev
     systemd
+  ] ++ lib.optionals withIntrospection [
     # Duplicate from nativeCheckInputs until https://github.com/NixOS/nixpkgs/issues/161570 is solved
     umockdev
 
@@ -97,12 +99,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    libeatmydata
+  ] ++ lib.optionals withIntrospection [
     python3.pkgs.dbus-python
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
     dbus
     umockdev
-    libeatmydata
     python3.pkgs.packaging
   ];
 
@@ -180,7 +183,7 @@ stdenv.mkDerivation (finalAttrs: {
     ! test -e "$DESTDIR"
   '';
 
-  postFixup = ''
+  postFixup = lib.optionalString withIntrospection ''
     wrapProgram "$installedTests/libexec/upower/integration-test.py" \
       --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [
         "$out"
