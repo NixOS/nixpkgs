@@ -36183,17 +36183,37 @@ with pkgs;
 
   clmagma = callPackage ../development/libraries/science/math/clmagma { };
 
-  mathematica = callPackage ../applications/science/math/mathematica { };
+  mathematica = callPackage ../applications/science/math/wolfram {
+    version = "14.0.0";
+  };
 
-  mathematica-webdoc = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc = callPackage ../applications/science/math/wolfram {
+    version = "14.0.0";
     webdoc = true;
   };
 
-  mathematica-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-cuda = callPackage ../applications/science/math/wolfram {
+    version = "14.0.0";
     cudaSupport = true;
   };
 
-  mathematica-webdoc-cuda = callPackage ../applications/science/math/mathematica {
+  mathematica-webdoc-cuda = callPackage ../applications/science/math/wolfram {
+    version = "14.0.0";
+    webdoc = true;
+    cudaSupport = true;
+  };
+
+  wolfram = callPackage ../applications/science/math/wolfram { };
+
+  wolfram-webdoc = callPackage ../applications/science/math/wolfram {
+    webdoc = true;
+  };
+
+  wolfram-cuda = callPackage ../applications/science/math/wolfram {
+    cudaSupport = true;
+  };
+
+  wolfram-webdoc-cuda = callPackage ../applications/science/math/wolfram {
     webdoc = true;
     cudaSupport = true;
   };
