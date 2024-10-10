@@ -26,11 +26,11 @@ let mkPrefetchScript = tool: src: deps:
     };
   };
 in rec {
-  nix-prefetch-bzr = mkPrefetchScript "bzr" ../../../build-support/fetchbzr/nix-prefetch-bzr [ breezy ];
-  nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
-  nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [ coreutils findutils gawk git git-lfs ];
-  nix-prefetch-hg  = mkPrefetchScript "hg"  ../../../build-support/fetchhg/nix-prefetch-hg   [ mercurial ];
-  nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [ subversion ];
+  nix-prefetch-bzr = mkPrefetchScript "bzr" ./scripts/nix-prefetch-bzr [ breezy ];
+  nix-prefetch-cvs = mkPrefetchScript "cvs" ./scripts/nix-prefetch-cvs [ cvs ];
+  nix-prefetch-git = mkPrefetchScript "git" ./scripts/nix-prefetch-git [ coreutils findutils gawk git git-lfs ];
+  nix-prefetch-hg  = mkPrefetchScript "hg"  ./scripts/nix-prefetch-hg [ mercurial ];
+  nix-prefetch-svn = mkPrefetchScript "svn" ./scripts/nix-prefetch-svn [ subversion ];
 
   nix-prefetch-scripts = buildEnv {
     name = "nix-prefetch-scripts";
