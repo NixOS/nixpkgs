@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "babel";
-  version = "2.15.0";
+  version = "2.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ja8OJl0FdovGx6MUzxMh6aEjr8MozGNcGGIqLzCgRBM=";
+    hash = "sha256-0fNVTKJmBf4XPz3gxl91D1pC+SRJm/E03mQjWCKY4xY=";
   };
 
   build-system = [ setuptools ];
