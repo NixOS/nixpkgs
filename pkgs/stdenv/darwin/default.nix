@@ -238,6 +238,7 @@ let
       autoconf
       automake
       bison
+      bmake
       brotli
       cmake
       cpio
