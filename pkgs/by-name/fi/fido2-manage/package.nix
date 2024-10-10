@@ -79,19 +79,19 @@ stdenv.mkDerivation rec {
 
   postInstall =
     lib.optionalString stdenv.isLinux ''
-      install $src/fido2-manage.sh $out/bin/${pname}
+      install $src/fido2-manage.sh $out/bin/fido2-manage
       install -D ${./token2.png} $out/share/icons/hicolor/512x512/apps/token2/token2.png
-      install $src/gui.py $out/bin/${pname}-gui
+      install $src/gui.py $out/bin/fido2-manage-gui
     ''
     + lib.optionalString stdenv.isDarwin ''
-      install $src/fido2-manage-mac.sh $out/bin/${pname}
+      install $src/fido2-manage-mac.sh $out/bin/fido2-manage
     '';
 
   desktopItems = lib.optionals stdenv.isLinux [
     (makeDesktopItem rec {
       desktopName = "Fido2 Manager";
-      name = pname;
-      exec = "${pname}-gui";
+      name = "fido2-manage";
+      exec = "fido2-manage-gui";
       icon = "token2";
       comment = meta.description;
       categories = [
@@ -104,25 +104,25 @@ stdenv.mkDerivation rec {
 
   postFixup =
     ''
-      substituteInPlace $out/bin/${pname} \
+      substituteInPlace $out/bin/fido2-manage \
         --replace-fail "/usr/local/bin/" "$out/bin/" \
-        --replace-fail "./fido2-manage.sh" "${pname}" \
+        --replace-fail "./fido2-manage.sh" "fido2-manage" \
         --replace-fail "awk" "${gawk}/bin/awk"
     ''
     + lib.optionalString stdenv.isLinux ''
-      substituteInPlace $out/bin/${pname}-gui \
-        --replace-fail "./fido2-manage.sh" "$out/bin/${pname}" \
+      substituteInPlace $out/bin/fido2-manage-gui \
+        --replace-fail "./fido2-manage.sh" "$out/bin/fido2-manage" \
         --replace-fail "x-terminal-emulator" "${xterm}/bin/xterm" \
-        --replace-fail "tk.Tk()" "tk.Tk(className='${pname}')" \
+        --replace-fail "tk.Tk()" "tk.Tk(className='fido2-manage')" \
         --replace-fail 'root.title("FIDO2.1 Manager - Python version 0.1 - (c) Token2")' "root.title('Fido2 Manager')"
 
-      substituteInPlace $out/bin/${pname} \
+      substituteInPlace $out/bin/fido2-manage \
         --replace-fail "grep" "${gnugrep}/bin/grep"
 
-      sed -i '1i #!${pythonEnv.interpreter}' $out/bin/${pname}-gui
+      sed -i '1i #!${pythonEnv.interpreter}' $out/bin/fido2-manage-gui
     ''
     + lib.optionalString stdenv.isDarwin ''
-      substituteInPlace $out/bin/${pname} \
+      substituteInPlace $out/bin/fido2-manage \
         --replace-fail "ggrep" "${gnugrep}/bin/grep"
     '';
 
