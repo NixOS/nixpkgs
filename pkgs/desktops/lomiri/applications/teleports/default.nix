@@ -7,8 +7,8 @@
   gitUpdater,
   nixosTests,
   cmake,
-  content-hub,
   intltool,
+  lomiri-content-hub,
   lomiri-indicator-network,
   lomiri-push-qml,
   lomiri-thumbnailer,
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    content-hub
+    lomiri-content-hub
     lomiri-indicator-network
     lomiri-push-qml
     lomiri-thumbnailer
@@ -102,10 +102,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -p $out/share/{applications,content-hub/peers,icons/hicolor/scalable/apps,lomiri-app-launch/splash,lomiri-url-dispatcher/urls}
+    mkdir -p $out/share/{applications,lomiri-content-hub/peers,icons/hicolor/scalable/apps,lomiri-app-launch/splash,lomiri-url-dispatcher/urls}
 
     ln -s $out/share/teleports/teleports.desktop $out/share/applications/teleports.desktop
-    ln -s $out/share/teleports/teleports.content-hub $out/share/content-hub/peers/teleports
+    ln -s $out/share/teleports/teleports.content-hub $out/share/lomiri-content-hub/peers/teleports
     ln -s $out/share/teleports/assets/icon.svg $out/share/icons/hicolor/scalable/apps/teleports.svg
     ln -s $out/share/teleports/assets/splash.svg $out/share/lomiri-app-launch/splash/teleports.svg
     ln -s $out/share/teleports/teleports.url-dispatcher $out/share/lomiri-url-dispatcher/urls/teleports.url-dispatcher
