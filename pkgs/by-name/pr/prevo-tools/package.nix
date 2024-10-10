@@ -15,6 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ];
   buildInputs = [ glib expat ];
 
+  postPatch = ''
+    # https://github.com/bpeel/prevodb/issues/8
+    substituteInPlace src/prevo.c \
+      --replace-fail "g_utf8_next_char" "(char *) g_utf8_next_char"
+  '';
+
   postInstall = ''
     installShellCompletion --bash src/prevo-completion
   '';

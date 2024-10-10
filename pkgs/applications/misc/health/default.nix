@@ -11,7 +11,7 @@
 , blueprint-compiler
 , libadwaita
 , libsecret
-, tracker
+, tinysparql
 , darwin
 }:
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libadwaita
     libsecret
-    tracker
+    tinysparql
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.Foundation
