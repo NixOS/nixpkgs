@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, libmnl, gitUpdater }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.7";
+  version = "1.2.8";
   pname = "libnftnl";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/${pname}/files/${pname}-${version}.tar.xz";
-    hash = "sha256-kSJ3T5aAk9XAus3dZ95IDzH6QHNAWn/AWKNLDzh67LM=";
+    hash = "sha256-N/6l1rXJsI3nkg0pjePNyULnrmSxo+i4gLLTkK5nrZU=";
   };
 
   configureFlags = lib.optional (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") "LDFLAGS=-Wl,--undefined-version";

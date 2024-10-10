@@ -7,15 +7,16 @@
 , withCli ? true, libedit
 , withXtables ? true, iptables
 , nixosTests
+, gitUpdater
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.0";
+  version = "1.1.1";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-7zNzKUiGxbYH7nvoLFaiW8BOdfgC+OitzVWqyR6wqiQ=";
+    hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
   };
 
   nativeBuildInputs = [
@@ -36,10 +37,17 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!withDebugSymbols) "--disable-debug"
     ++ lib.optional withXtables "--with-xtables";
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
     lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
+  };
+
+  passthru.updateScript = gitUpdater {
+    url = "https://git.netfilter.org/nftables";
+    rev-prefix = "v";
   };
 
   meta = with lib; {
