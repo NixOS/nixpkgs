@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gnif/vendor-reset/commit/5bbffcd6fee5348e8808bdbfcb5b21d455b02f55.patch";
       sha256 = "sha256-L1QxVpcZAVYiaMFCBfL2EJgeMyOR8sDa1UqF1QB3bns=";
     })
+    # Fix build with Linux 6.8+
+    # https://github.com/gnif/vendor-reset/pull/77
+    ./linux68.patch
   ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
