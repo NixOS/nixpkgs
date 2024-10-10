@@ -16,9 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    ./getcwd-chroot.patch
-    ./CVE-2012-0804.patch
-    ./CVE-2017-12836.patch
+    ./patches/0000-readdir-errno.patch
+    ./patches/0001-getcwd-chroot.patch
+    ./patches/0002-CVE-2012-0804.patch
+    ./patches/0003-CVE-2017-12836.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24118ec737c7/cvs/vasnprintf-high-sierra-fix.diff";
       hash = "sha256-r/pIUzL2a7GCljaA+QVSk3vxRVuFU4j3wG72o6JShuI=";
@@ -46,14 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   doCheck = false; # fails 1 of 1 tests
-
-  preConfigure = ''
-    # Apply the Debian patches.
-    for p in "debian/patches/"*; do
-      echo "applying \`$p' ..."
-      patch --verbose -p1 < "$p"
-    done
-  '';
 
   meta = {
     homepage = "http://cvs.nongnu.org";
