@@ -13,28 +13,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "krun";
-  version = "0-unstable-2024-06-18";
+  pname = "muvm";
+  version = "0-unstable-2024-10-10";
 
   src = fetchFromGitHub {
-    owner = "slp";
+    owner = "AsahiLinux";
     repo = pname;
-    rev = "912afa5c6525b7c8f83dffd65ec4b1425b3f7521";
-    hash = "sha256-rDuxv3UakAemDnj4Nsbpqsykts2IcseuQmDwO24L+u8=";
+    rev = "98e2563f2380ff33eb4527c845f8792808c212c6";
+    hash = "sha256-KLHfm48a2/nPwnozMwpqxTFlvEezx9SbxI63yy7sxgc=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/slp/krun/pull/39.diff";
-      hash = "sha256-CV69L+VDDLRcWgpgDCAYKLlTU9ytFcHhzNgOibWD8KY=";
-    })
-    (fetchpatch {
-      url = "https://github.com/slp/krun/pull/38.diff";
-      hash = "sha256-cK3iDhh+33H16V65lWUXahjmpSxI1HhiLUmkjfkRB7A=";
-    })
-  ];
-
-  cargoHash = "sha256-NahnigxJaY2QwWnySCRrnf3JyqZ+7jRA1CpE7ON0OOE=";
+  cargoHash = "sha256-8Bj8tfFVUDMB2ixcvS7A/Y7Lev4vT1NGm6WiBzYmOSU=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -43,6 +32,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     (libkrun.override {
+      withBlk = true;
       withGpu = true;
       withNet = true;
     })
@@ -54,13 +44,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postFixup = ''
-    wrapProgram $out/bin/krun $wrapArgs \
+    wrapProgram $out/bin/muvm $wrapArgs \
       --set-default OPENGL_DRIVER ${opengl-driver}
   '';
 
   meta = {
     description = "Run programs from your system in a microVM";
-    homepage = "https://github.com/slp/krun";
+    homepage = "https://github.com/AsahiLinux/muvm";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ RossComputerGuy ];
     platforms = libkrun.meta.platforms;
