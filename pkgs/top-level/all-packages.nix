@@ -8613,10 +8613,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ifuse = callPackage ../tools/filesystems/ifuse { };
-  ideviceinstaller = callPackage ../tools/misc/ideviceinstaller { };
-  idevicerestore = callPackage ../tools/misc/idevicerestore { };
-
   inherit (callPackages ../tools/filesystems/irods rec {
     stdenv = llvmPackages_13.libcxxStdenv;
     libcxx = llvmPackages_13.libcxx;
@@ -13271,8 +13267,6 @@ with pkgs;
   urn-timer = callPackage ../tools/misc/urn-timer { };
 
   ursadb = callPackage ../servers/ursadb { };
-
-  usbmuxd = callPackage ../tools/misc/usbmuxd { };
 
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
@@ -21096,11 +21090,9 @@ with pkgs;
 
   libieee1284 = callPackage ../development/libraries/libieee1284 { };
 
-  libimobiledevice = callPackage ../development/libraries/libimobiledevice {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation;
+  libimobiledevice = callPackage ../by-name/li/libimobiledevice/package.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration;
   };
-
-  libimobiledevice-glue = callPackage ../development/libraries/libimobiledevice-glue { };
 
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
@@ -21111,8 +21103,6 @@ with pkgs;
   libiodbc = callPackage ../development/libraries/libiodbc {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
-
-  libirecovery = callPackage ../development/libraries/libirecovery { };
 
   libivykis = callPackage ../development/libraries/libivykis { };
 
@@ -21178,8 +21168,6 @@ with pkgs;
   libnsl = callPackage ../development/libraries/libnsl { };
 
   liboping = callPackage ../development/libraries/liboping { };
-
-  libplist = callPackage ../development/libraries/libplist { };
 
   libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
     inherit (lomiri) cmake-extras;

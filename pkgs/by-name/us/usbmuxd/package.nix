@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libimobiledevice
-, libusb1
-}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
 
-stdenv.mkDerivation rec {
+  autoreconfHook,
+  pkg-config,
+
+  libimobiledevice,
+  libusb1,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbmuxd";
-  version = "1.1.1+date=2023-05-05";
+  version = "1.1.1-unstable-2024-09-15";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = pname;
-    rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
-    hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
+    repo = "usbmuxd";
+    rev = "0b1b233b57d581515978a09e5a4394bfa4ee4962";
+    hash = "sha256-KXsOYE5PEPO897HWXJDpwsIOj/VwTthil6HDJXOJ8DM=";
   };
+
+  passthru.updateScript = unstableGitUpdater { };
 
   nativeBuildInputs = [
     autoreconfHook
@@ -28,14 +33,14 @@ stdenv.mkDerivation rec {
     libusb1
   ];
 
-  preAutoreconf = ''
-    export RELEASE_VERSION=${version}
-  '';
-
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ];
+
+  preAutoreconf = ''
+    export RELEASE_VERSION=${finalAttrs.version}
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/usbmuxd";
@@ -49,9 +54,12 @@ stdenv.mkDerivation rec {
       a virtual network device. Multiple connections to different TCP ports can happen
       in parallel. The higher-level layers are handled by libimobiledevice.
     '';
-    license = licenses.gpl2Plus;
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+    ];
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = with maintainers; [ frontear ];
     mainProgram = "usbmuxd";
   };
-}
+})
