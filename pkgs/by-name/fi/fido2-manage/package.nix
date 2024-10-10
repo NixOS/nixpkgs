@@ -61,7 +61,6 @@ stdenv.mkDerivation rec {
       libuv
       libsolv
       libcouchbase
-      gnugrep
       darwin.apple_sdk.frameworks.IOKit
       darwin.apple_sdk.frameworks.PCSC
     ];
