@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , nix
+, nixosTests
 , boost
 , pkg-config
 , stdenv
@@ -53,7 +54,13 @@ rustPlatform.buildRustPackage {
     fi
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = {
+      inherit (nixosTests) atticd;
+    };
+
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Multi-tenant Nix Binary Cache";
