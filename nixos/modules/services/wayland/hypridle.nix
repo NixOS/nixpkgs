@@ -17,7 +17,10 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    systemd.packages = [ cfg.package ];
+    systemd = {
+      packages = [ cfg.package ];
+      user.services.hypridle.wantedBy = [ "graphical-session.target" ];
+    };
   };
 
   meta.maintainers = with lib.maintainers; [ johnrtitor ];
