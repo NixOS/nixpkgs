@@ -25,6 +25,13 @@ jobs:
     steps:
     - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
 
+    - uses: cachix/cachix-action@ad2ddac53f961de1989924296a1f236fcfbaa4fc # v15
+      if: github.repository_owner == 'NixOS'
+      with:
+        # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
+        name: nixpkgs-ci
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
     # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR itself.
     # We later build and run code from the base branch with access to secrets,
     # so it's important this is not the PRs code.
