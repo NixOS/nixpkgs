@@ -1,4 +1,9 @@
 if [[ -n "${__nix_qtbase-}" ]]; then
+    # This check comes before dumpVars is defined
+    # TODO: Maybe move dumpVars up in setup.sh
+    if [ "${noDumpEnvVars:-0}" != 1 ]; then
+        export 2>/dev/null >| "$NIX_BUILD_TOP/env-vars" || true
+    fi
     # Throw an error if a different version of Qt was already set up.
     if [[ "$__nix_qtbase" != "@dev@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
