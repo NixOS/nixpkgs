@@ -145,13 +145,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.17.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-4jtIh6wpZ/rexnwhqicU1gUk6DerGLXM9OY+GkmiEnI=";
+    sha256 = "sha256-nZB20APU3QEihsIEmVzXcTBIKnKtnvYV4IFgbaYHrO4=";
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];
