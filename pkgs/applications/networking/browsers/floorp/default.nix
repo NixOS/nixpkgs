@@ -9,7 +9,7 @@
 (
   (buildMozillaMach rec {
     pname = "floorp";
-    packageVersion = "11.19.0";
+    packageVersion = "11.19.1";
     applicationName = "Floorp";
     binaryName = "floorp";
     branding = "browser/branding/official";
@@ -17,14 +17,14 @@
     allowAddonSideload = true;
 
     # Must match the contents of `browser/config/version.txt` in the source tree
-    version = "128.3.0";
+    version = "128.4.0";
 
     src = fetchFromGitHub {
       owner = "Floorp-Projects";
       repo = "Floorp";
       fetchSubmodules = true;
       rev = "v${packageVersion}";
-      hash = "sha256-Sk7oMegNr01tLC1BXpUuImg03C6lEEhaVTSjISV9xAE=";
+      hash = "sha256-RFJ3aRbLwCf0qaluqImcF9+6frvJbw8QE3jBpxNxFjE=";
     };
 
     extraConfigureFlags = [
@@ -57,9 +57,6 @@
       maxSilent = 14400; # 4h, double the default of 7200s (c.f. #129212, #129115)
       license = lib.licenses.mpl20;
       mainProgram = "floorp";
-      knownVulnerabilities = [
-        "CVE-2024-9680"
-      ];
     };
     tests = [ nixosTests.floorp ];
   }).override
