@@ -3,16 +3,16 @@
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-bin_file="$(realpath ./bin.nix)"
+bin_file="$(realpath ./package.nix)"
 
 new_version="$(curl -s "https://api.github.com/repos/ppy/osu/releases?per_page=1" | jq -r '.[0].name')"
-old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./bin.nix)"
+old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./package.nix)"
 if [[ "$new_version" == "$old_version" ]]; then
     echo "Already up to date."
     exit 0
 fi
 
-cd ../../..
+cd ../../../..
 
 echo "Updating osu-lazer-bin from $old_version to $new_version..."
 sed -Ei.bak '/ *version = "/s/".+"/"'"$new_version"'"/' "$bin_file"

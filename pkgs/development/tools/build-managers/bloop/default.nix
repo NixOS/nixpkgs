@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "2.0.2";
+  version = "2.0.3";
 
   platform =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "x86_64-pc-linux"
@@ -36,9 +36,9 @@ stdenv.mkDerivation rec {
   bloop-binary = fetchurl rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
-      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "sha256-xYVfgi3ANjBiuf4/5FDgSYDL/fPsvuJn4jFxAEVYct4="
-      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "sha256-lq0S2AsulcUUYDd3qnWonwd/W0/gb7lJwC+QTYTlTdg="
-      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "sha256-e+9Q7xIEsHloaKOj13vZnGs2vulkOJv7tCOuACobHvk="
+      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "sha256-aEsEXGaKi+wziNAuuX3s/LWB6/fIjon9NF3w9c/lTUE="
+      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "sha256-dEVWDwFVsg1eqrAAfuuR5FUFyAt44ev7UP7zxByzW14="
+      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "sha256-0rYdivIas6ECwGPm3bACMzHhS+yxQNLtEPxPQAXkSg0="
       else throw "unsupported platform";
   };
 
@@ -70,6 +70,6 @@ stdenv.mkDerivation rec {
     description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ kubukoz tomahna ];
+    maintainers = with maintainers; [ agilesteel kubukoz tomahna ];
   };
 }

@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ]
     ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "test";
+  separateDebugInfo = true;
 
   nativeBuildInputs = [
     autoreconfHook

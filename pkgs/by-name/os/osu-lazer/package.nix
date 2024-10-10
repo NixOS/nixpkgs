@@ -1,30 +1,31 @@
-{ lib
-, stdenvNoCC
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, makeDesktopItem
-, copyDesktopItems
-, makeWrapper
-, ffmpeg
-, alsa-lib
-, SDL2
-, lttng-ust
-, numactl
-, libglvnd
-, xorg
-, udev
+{
+  lib,
+  stdenvNoCC,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  makeDesktopItem,
+  copyDesktopItems,
+  makeWrapper,
+  ffmpeg,
+  alsa-lib,
+  SDL2,
+  lttng-ust,
+  numactl,
+  libglvnd,
+  xorg,
+  udev,
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.906.2";
+  version = "2024.1009.1";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
-    hash = "sha256-ykCO+q28IUJumt3nra1BUlwuXqLS1FYOqcDe2LPPGVY=";
+    hash = "sha256-odWTLvx41miFgn4O/EDzwm2pfWKxj4B1ieSfNS0hrW8=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -76,27 +77,32 @@ buildDotnetModule rec {
     runHook postFixup
   '';
 
-  desktopItems = [(makeDesktopItem {
-    desktopName = "osu!";
-    name = "osu";
-    exec = "osu!";
-    icon = "osu!";
-    comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
-    type = "Application";
-    categories = [ "Game" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "osu!";
+      name = "osu";
+      exec = "osu!";
+      icon = "osu!";
+      comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
+      type = "Application";
+      categories = [ "Game" ];
+    })
+  ];
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
     homepage = "https://osu.ppy.sh";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit
       cc-by-nc-40
       unfreeRedistributable # osu-framework contains libbass.so in repository
     ];
-    maintainers = with maintainers; [ gepbird thiagokokada ];
+    maintainers = with lib.maintainers; [
+      gepbird
+      thiagokokada
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "osu!";
   };

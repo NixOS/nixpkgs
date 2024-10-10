@@ -3216,8 +3216,6 @@ with pkgs;
 
   boxxy = callPackage ../tools/misc/boxxy { };
 
-  boundary = callPackage ../tools/networking/boundary { };
-
   chamber = callPackage ../tools/admin/chamber {  };
 
   chaos = callPackage ../tools/networking/chaos {  };
@@ -3823,8 +3821,6 @@ with pkgs;
   qes = callPackage ../os-specific/darwin/qes {
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
-
-  waydroid = callPackage ../os-specific/linux/waydroid { };
 
   wgo = callPackage ../development/tools/wgo { };
 
@@ -6069,10 +6065,6 @@ with pkgs;
 
   bacula = callPackage ../tools/backup/bacula {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit Kerberos;
-  };
-
-  bacon = callPackage ../development/tools/bacon {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
   bats = callPackage ../development/interpreters/bats { };
@@ -8446,7 +8438,9 @@ with pkgs;
 
   heimdall-gui = heimdall.override { enableGUI = true; };
 
-  headscale = callPackage ../servers/headscale { };
+  headscale = callPackage ../servers/headscale {
+    buildGoModule = buildGo123Module;
+  };
 
   health = callPackage ../applications/misc/health { };
 
@@ -10155,8 +10149,6 @@ with pkgs;
   };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
-
-  mtdutils = callPackage ../tools/filesystems/mtdutils { };
 
   mtools = callPackage ../tools/filesystems/mtools { };
 
@@ -26355,8 +26347,6 @@ with pkgs;
 
   rojo = callPackage ../development/tools/rojo { };
 
-  mediamtx = callPackage ../servers/mediamtx { };
-
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt-tests = callPackage ../os-specific/linux/rt-tests { };
@@ -28428,7 +28418,7 @@ with pkgs;
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_18;
   };
 
   calf = callPackage ../applications/audio/calf {
@@ -33516,7 +33506,7 @@ with pkgs;
 
   webcamoid = libsForQt5.callPackage ../applications/video/webcamoid { };
 
-  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_30; };
+  webcord = callPackage ../by-name/we/webcord/package.nix { electron = electron_32; };
 
   webcord-vencord = callPackage ../by-name/we/webcord-vencord/package.nix { electron = electron_30; };
 
@@ -34429,10 +34419,6 @@ with pkgs;
   openrct2 = callPackage ../games/openrct2 { };
 
   opensearch = callPackage ../servers/search/opensearch { };
-
-  osu-lazer = callPackage ../games/osu-lazer { };
-
-  osu-lazer-bin = callPackage ../games/osu-lazer/bin.nix { };
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
