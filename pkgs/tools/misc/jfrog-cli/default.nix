@@ -1,37 +1,22 @@
 { lib
-, buildGoModule
+, buildGo123Module
 , fetchFromGitHub
 , nodejs
 , nix-update-script
 }:
 
-buildGoModule rec {
+buildGo123Module rec {
   pname = "jfrog-cli";
-  version = "2.56.1";
+  version = "2.70.0";
 
   src = fetchFromGitHub {
     owner = "jfrog";
     repo = "jfrog-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oUICnpVHRNCauWEplz7xH6AdP6CbbYX/Uy/QUPjwGHc=";
+    hash = "sha256-ddwGmXb616kDNNNTNUykiEWX/2ihUpgetZ/va943RiQ=";
   };
 
-  vendorHash = "sha256-zQjOOUlqL0Mj2DKHiG9rOfu41SKMO7C99JBJDycXAs4=";
-
-  # Upgrade the Go version during the vendoring FOD build because it fails otherwise.
-  overrideModAttrs = _: {
-    preBuild = ''
-      substituteInPlace go.mod --replace-fail 'go 1.20' 'go 1.21'
-    '';
-    postInstall = ''
-      cp go.mod "$out/go.mod"
-    '';
-  };
-
-  # Copy the modified go.mod we got from the vendoring process.
-  preBuild = ''
-    cp vendor/go.mod go.mod
-  '';
+  vendorHash = "sha256-CT+flwvPC9IRWBMyCHtj25F/szeeno9OHMs3+D0J58g=";
 
   postPatch = ''
     # Patch out broken test cleanup.
