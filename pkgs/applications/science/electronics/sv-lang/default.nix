@@ -5,36 +5,18 @@
 , catch2_3
 , cmake
 , ninja
-, fmt_9
+, fmt_10
 , python3
 }:
-
-let
-  # dependency for this library has been removed in master (i.e. next release)
-  unordered_dense = stdenv.mkDerivation rec {
-    version = "2.0.1";
-    pname = "unordered_dense";
-    src = fetchFromGitHub {
-      owner = "martinus";
-      repo = pname;
-      rev = "v${version}";
-      sha256 = "sha256-9zlWYAY4lOQsL9+MYukqavBi5k96FvglRgznLIwwRyw=";
-    };
-    nativeBuildInputs = [
-      cmake
-    ];
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "sv-lang";
-  version = "3.0";
+  version = "6.0";
 
   src = fetchFromGitHub {
     owner = "MikePopoloski";
     repo = "slang";
     rev = "v${version}";
-    sha256 = "sha256-v2sStvukLFMRXGeATxvizmnwEPDE4kwnS06n+37OrJA=";
+    sha256 = "sha256-mT8sfUz0H4jWM/SkV/uW4kmVKE9UQy6XieG65yJvIA8=";
   };
 
   cmakeFlags = [
@@ -43,6 +25,7 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
 
     "-DSLANG_INCLUDE_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DSLANG_USE_MIMALLOC=OFF"
   ];
 
   nativeBuildInputs = [
@@ -55,9 +38,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    unordered_dense
+    catch2_3
     boost182
-    fmt_9
+    fmt_10
   ];
 
   # TODO: a mysterious linker error occurs when building the unittests on darwin.
