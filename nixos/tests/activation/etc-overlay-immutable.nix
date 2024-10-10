@@ -50,6 +50,9 @@
     with subtest("switching to the same generation"):
       machine.succeed("/run/current-system/bin/switch-to-configuration test")
 
+    with subtest("the initrd didn't get rebuilt"):
+      machine.succeed("test /run/current-system/initrd -ef /run/current-system/specialisation/new-generation/initrd")
+
     with subtest("switching to a new generation"):
       machine.fail("stat /etc/newgen")
 
