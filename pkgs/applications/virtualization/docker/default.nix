@@ -118,6 +118,15 @@ rec {
           url = "https://github.com/moby/moby/pull/45534/commits/c8930105bc9fc3c1a8a90886c23535cc6c41e130.patch";
           hash = "sha256-nyGLxFrJaD0TrDqsAwOD6Iph0aHcFH9sABj1Fy74sec=";
         })
+      ] ++ lib.optionals (lib.versionAtLeast version "25") [
+        # This patch fixes Dockerd rootless so that it's able to read
+        # /etc/cdi and /var/run/cdi specs. More information at:
+        # https://github.com/moby/moby/pull/48541
+        (fetchpatch {
+          name = "dockerd-rootless-make-etc-var-run-cdi-available.patch";
+          url = "https://github.com/moby/moby/pull/48541.patch";
+          hash = "sha256-bDbNeNGR5zSVJvJEz1fgehx9J0EHq/I5n/xyctaeQSE=";
+        })
       ];
 
       postPatch = ''
