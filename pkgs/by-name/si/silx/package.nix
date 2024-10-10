@@ -1,0 +1,37 @@
+{
+  python3Packages,
+  fetchPypi,
+  lib,
+}:
+
+python3Packages.buildPythonApplication rec {
+  pname = "silx";
+  version = "2.1.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LfCRWkUrqQb7zxiFTPhy/g9FWhNMXTRbhEgek4tZb5I=";
+  };
+
+  nativeBuildInputs = [ python3Packages.cython ];
+
+  propagatedBuildInputs = with python3Packages; [
+    h5py
+    numpy
+    matplotlib
+    pyopengl
+    python-dateutil
+    pyside6
+    fabio
+  ];
+
+  meta = {
+    changelog = "https://github.com/silx-kit/silx/blob/main/CHANGELOG.rst";
+    description = "Software to support data assessment, reduction and analysis at synchrotron radiation facilities";
+    homepage = "https://github.com/silx-kit/silx";
+    license = [ lib.licenses.mit ];
+    maintainers = [ lib.maintainers.pmiddend ];
+    mainProgram = "silx";
+  };
+
+}
