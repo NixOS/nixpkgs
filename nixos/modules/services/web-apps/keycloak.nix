@@ -650,6 +650,7 @@ in
 
               ln -s ${themesBundle} /run/keycloak/themes
               ln -s ${keycloakBuild}/providers /run/keycloak/
+              ln -s ${keycloakBuild}/lib /run/keycloak/
 
               install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
 
