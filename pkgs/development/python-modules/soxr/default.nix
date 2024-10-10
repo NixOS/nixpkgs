@@ -2,17 +2,22 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
 
   # build-system
-  cython,
-  numpy,
-  oldest-supported-numpy,
+  cmake,
+  nanobind,
+  ninja,
+  scikit-build-core,
   setuptools,
   setuptools-scm,
-  gnutar,
+  typing-extensions,
 
-  # native
+  # native dependencies
   libsoxr,
+
+  # dependencies
+  numpy,
 
   # tests
   pytestCheckHook,
@@ -21,7 +26,7 @@
 buildPythonPackage rec {
   pname = "soxr";
   version = "0.5.0.post1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dofuuz";
@@ -31,21 +36,31 @@ buildPythonPackage rec {
     hash = "sha256-Fpayc+MOpDUCdpoyJaIqSbMzuO0jYb6UN5ARFaxxOHk=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "SYS_LIBSOXR = False" "SYS_LIBSOXR = True"
-  '';
+  patches = [ ./cmake-nanobind.patch ];
 
   nativeBuildInputs = [
-    cython
-    gnutar
-    numpy
-    oldest-supported-numpy
+    cmake
+    ninja
+  ];
+
+  dontUseCmakeConfigure = true;
+
+  pypaBuildFlags = [
+    "--config=cmake.define.USE_SYSTEM_LIBSOXR=ON"
+  ];
+
+  build-system = [
+    scikit-build-core
+    nanobind
     setuptools
     setuptools-scm
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    typing-extensions
   ];
 
   buildInputs = [ libsoxr ];
+
+  dependencies = [ numpy ];
 
   pythonImportsCheck = [ "soxr" ];
 
