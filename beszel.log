@@ -1,0 +1,49 @@
+warning: found empty hash, assuming 'sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
+warning: error: unable to download 'https://nix-community.cachix.org/aqii60g5nvfgqil4j9qvgfw2k79cl9jq.narinfo': Error in the HTTP2 framing layer (16); retrying in 334 ms
+warning: error: unable to download 'https://nix-community.cachix.org/rliymqcw22ysnbnrqh3c8zndmiqjk5ql.narinfo': SSL connect error (35); retrying in 266 ms
+these 3 derivations will be built:
+  /nix/store/jqfvp80v0rbl0cpa7wl4nhwdjf6brna8-beszel-0.5.1-npm-deps.drv
+  /nix/store/k6n453qq2l8ch7blr5qv1vh6w4ybrgxy-beszel-0.5.1.drv
+  /nix/store/h5wq29wmxxv5qpcpmsr992gfdgxcp2z8-beszel-0.5.1-go-modules.drv
+this path will be fetched (40.47 MiB download, 212.77 MiB unpacked):
+  /nix/store/chzgk756zb2cqlzbjr86m0lfxi63cdfy-go-1.22.7
+copying path '/nix/store/chzgk756zb2cqlzbjr86m0lfxi63cdfy-go-1.22.7' from 'https://mirrors.ustc.edu.cn/nix-channels/store'...
+building '/nix/store/jqfvp80v0rbl0cpa7wl4nhwdjf6brna8-beszel-0.5.1-npm-deps.drv'...
+Running phase: unpackPhase
+unpacking source archive /nix/store/a1nza0a3q3r0b22bzg9fbxp3sin44b4r-source
+source root is source/beszel/site
+Running phase: patchPhase
+Running phase: updateAutotoolsGnuConfigScriptsPhase
+Running phase: configurePhase
+no configure script, doing nothing
+Running phase: buildPhase
+Error: No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`.
+error: builder for '/nix/store/jqfvp80v0rbl0cpa7wl4nhwdjf6brna8-beszel-0.5.1-npm-deps.drv' failed with exit code 1;
+       last 9 log lines:
+       > Running phase: unpackPhase
+       > unpacking source archive /nix/store/a1nza0a3q3r0b22bzg9fbxp3sin44b4r-source
+       > source root is source/beszel/site
+       > Running phase: patchPhase
+       > Running phase: updateAutotoolsGnuConfigScriptsPhase
+       > Running phase: configurePhase
+       > no configure script, doing nothing
+       > Running phase: buildPhase
+       > Error: No cacheable dependencies were found. Please inspect the upstream `package-lock.json` file and ensure that remote dependencies have `resolved` URLs and `integrity` hashes. If the lockfile is missing this data, attempt to get upstream to fix it via a tool like <https://github.com/jeslie0/npm-lockfile-fix>. If generating an empty cache is intentional and you would like to do it anyways, set `forceEmptyCache = true`.
+       For full logs, run 'nix log /nix/store/jqfvp80v0rbl0cpa7wl4nhwdjf6brna8-beszel-0.5.1-npm-deps.drv'.
+error: 1 dependencies of derivation '/nix/store/k6n453qq2l8ch7blr5qv1vh6w4ybrgxy-beszel-0.5.1.drv' failed to build
+error: 1 dependencies of derivation '/nix/store/h5wq29wmxxv5qpcpmsr992gfdgxcp2z8-beszel-0.5.1-go-modules.drv' failed to build
+Traceback (most recent call last):
+  File "/nix/store/sy4nw98mprmxcf8xpqzqm227ghhvaakq-nix-update-1.5.2/bin/.nix-update-wrapped", line 9, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "/nix/store/sy4nw98mprmxcf8xpqzqm227ghhvaakq-nix-update-1.5.2/lib/python3.12/site-packages/nix_update/__init__.py", line 311, in main
+    package = update(options)
+              ^^^^^^^^^^^^^^^
+  File "/nix/store/sy4nw98mprmxcf8xpqzqm227ghhvaakq-nix-update-1.5.2/lib/python3.12/site-packages/nix_update/update.py", line 459, in update
+    update_go_modules_hash(opts, package.filename, package.go_modules)
+  File "/nix/store/sy4nw98mprmxcf8xpqzqm227ghhvaakq-nix-update-1.5.2/lib/python3.12/site-packages/nix_update/update.py", line 151, in update_go_modules_hash
+    target_hash = nix_prefetch(opts, "goModules")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/nix/store/sy4nw98mprmxcf8xpqzqm227ghhvaakq-nix-update-1.5.2/lib/python3.12/site-packages/nix_update/update.py", line 128, in nix_prefetch
+    raise UpdateError(
+nix_update.errors.UpdateError: failed to retrieve hash when trying to update beszel.goModules
