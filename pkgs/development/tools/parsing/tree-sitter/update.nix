@@ -49,8 +49,14 @@ let
   ignoredTreeSitterOrgRepos = [
     "tree-sitter"
     "tree-sitter-cli"
+    # this is the go language bindings, tree-sitter-go is the grammar
+    "go-tree-sitter"
     # this is the haskell language bindings, tree-sitter-haskell is the grammar
     "haskell-tree-sitter"
+    # this is the java language bindings, tree-sitter-java is the grammar
+    "java-tree-sitter"
+    # this is the kotlin language bindings, tree-sitter-kotlin is the grammar
+    "kotlin-tree-sitter"
     # this is the ruby language bindings, tree-sitter-ruby is the grammar
     "ruby-tree-sitter.old"
     # this is the (unmaintained) rust language bindings, tree-sitter-rust is the grammar
@@ -438,6 +444,10 @@ let
     "tree-sitter-earthfile" = {
       orga = "glehmann";
       repo = "tree-sitter-earthfile";
+    };
+    "tree-sitter-moonbit" = {
+      orga = "moonbitlang";
+      repo = "tree-sitter-moonbit";
     };
   };
 
