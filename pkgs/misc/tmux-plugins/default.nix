@@ -224,10 +224,9 @@ in rec {
       sha256 = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.python3 ];
     postInstall = ''
-      for f in extrakto.py extrakto_plugin.py; do
-        sed -i -e 's|#!/usr/bin/env python3|#!${pkgs.python3}/bin/python3|g' $target/$f
-      done
+     patchShebangs extrakto.py extrakto_plugin.py
 
       wrapProgram $target/scripts/open.sh \
         --prefix PATH : ${ with pkgs; lib.makeBinPath
