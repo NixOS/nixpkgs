@@ -36,6 +36,7 @@ buildPythonPackage rec {
     substituteInPlace tox.ini \
       --replace " --cov=can --cov-config=tox.ini --cov-report=lcov --cov-report=term" ""
   '';
+  pythonRelaxDeps = [ "msgpack" ];
 
   nativeBuildInputs = [ setuptools ];
 
