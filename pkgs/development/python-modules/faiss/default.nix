@@ -7,7 +7,6 @@
   packaging,
   setuptools,
   pip,
-  wheel,
 }:
 
 buildPythonPackage {
@@ -24,7 +23,6 @@ buildPythonPackage {
   build-system = [
     setuptools
     pip
-    wheel
   ];
 
   dependencies = [
