@@ -27,8 +27,12 @@ callPackage ../base.nix rec {
 
     # These tests fails
     export GTEST_FILTER="*:-nan*_test:-utils_test"
+
+    substituteInPlace ../libc/utils/HdrGen/CMakeLists.txt \
+      --replace-fail LibcTableGenUtil "LibcTableGenUtil ncurses"
   '';
 
+  extraInstallTargets = [ "install-libc-headers" ];
   checkTargets = [ "check-${targetName}" ];
   hardeningDisable = [ "fortify" ]; # Prevent `error: "Assumed value of MB_LEN_MAX wrong"`
 }

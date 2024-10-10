@@ -38,6 +38,7 @@
     else "check-all"
   )
 )]
+, extraInstallTargets ? [ ]
 , extraPostInstall ? ""
 , hardeningDisable ? [ ]
 , requiredSystemFeatures ? [ ]
@@ -119,6 +120,7 @@ in stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (targetDir == "runtimes") [
     # https://github.com/llvm/llvm-project/issues/98440
     "-DCXX_SUPPORTS_NOSTDLIBXX_FLAG=OFF"
+    "-DLLVM_LIBC_FULL_BUILD=ON"
   ] ++ lib.optionals finalAttrs.passthru.isLLVM [
     "-DLLVM_INSTALL_UTILS=ON"
     "-DLLVM_INSTALL_GTEST=ON"
@@ -140,6 +142,8 @@ in stdenv.mkDerivation (finalAttrs: {
     cd ../
     chmod -R u+w .
   '';
+
+  installTargets = lib.concatStringsSep " " ([ "install" ] ++ extraInstallTargets);
 
   postPatch = ''
     cd ${targetDir}
