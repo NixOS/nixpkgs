@@ -16,7 +16,8 @@ buildGo123Module rec {
     hash = "sha256-ddwGmXb616kDNNNTNUykiEWX/2ihUpgetZ/va943RiQ=";
   };
 
-  vendorHash = "sha256-CT+flwvPC9IRWBMyCHtj25F/szeeno9OHMs3+D0J58g=";
+  proxyVendor = true;
+  vendorHash = "sha256-1xUCQF2UDHAmzibixv9pR6G2gvXxIStCyBuz608UpIQ=";
 
   postPatch = ''
     # Patch out broken test cleanup.
