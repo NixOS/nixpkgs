@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, apple-sdk_14
 , cmake
 , ninja
 , perl
@@ -19,7 +20,10 @@ stdenv.mkDerivation (args // {
   inherit pname version src;
   patches = args.patches or patches.${pname} or [ ];
 
-  buildInputs = args.buildInputs or [ ];
+  buildInputs =
+    args.buildInputs or [ ]
+    # Per https://doc.qt.io/qt-6/macos.html#supported-versions
+    ++ lib.optionals stdenv.isDarwin [ apple-sdk_14 ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
   propagatedBuildInputs =
