@@ -26,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.24.0";
+  version = "5.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-frSUybQxst4wG8g8U43Nay9dYCUXuR3dBealwPVyFdI=";
+    hash = "sha256-ONuX5/GlirPF8+7bZtib1Xsv5llcXcSelFfGyeTc5L8=";
   };
 
   sourceRoot = "${src.name}/packages/python/plotly";
