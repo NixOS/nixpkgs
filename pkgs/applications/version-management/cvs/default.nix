@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{ lib, stdenv, fetchurl, fetchpatch, nano, runCommand }:
 
 stdenv.mkDerivation rec {
   pname = "cvs";
@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     url = "mirror://savannah/cvs/source/feature/${version}/cvs-${version}.tar.bz2";
     sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
   };
+
+  fake-ssh = runCommand "fakeSsh" {} ''
+    mkdir -p $out/bin
+    touch $out/bin/ssh
+    chmod +x $out/bin/ssh
+  '';
+
+  buildInputs = [fake-ssh];
 
   patches = [
     ./getcwd-chroot.patch
