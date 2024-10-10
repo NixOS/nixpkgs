@@ -143,7 +143,7 @@ in
 
         socket = mkOption {
           type = types.nullOr types.path;
-          default = if (cfg.database.createDatabase && usePostgresql) then "/run/postgresql" else if (cfg.database.createDatabase && useMysql) then "/run/mysqld/mysqld.sock" else null;
+          default = if usePostgresql then "/run/postgresql" else if useMysql then "/run/mysqld/mysqld.sock" else null;
           defaultText = literalExpression "null";
           example = "/run/mysqld/mysqld.sock";
           description = "Path to the unix socket file to use for authentication.";
@@ -400,7 +400,7 @@ in
         message = ''
           When creating a database via NixOS, the db user and db name must be equal!
           If you already have an existing DB+user and this assertion is new, you can safely set
-          `services.gitea.createDatabase` to `false` because removal of `ensureUsers`
+          `services.gitea.database.createDatabase` to `false` because removal of `ensureUsers`
           and `ensureDatabases` doesn't have any effect.
         '';
       }
@@ -523,7 +523,7 @@ in
     systemd.services.gitea = {
       description = "gitea";
       after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
-      requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
+      requires = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
