@@ -3,7 +3,11 @@
   fetchpatch2,
   fetchurl,
   nano,
+  openssh,
   stdenv,
+  # Boolean flags
+  ___forceSSH ? true, # Sets SSH (openssh) as the remote shell
+  ___withEditor ? true, # Sets the default editor (nano)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   configureFlags = [
-    "--with-editor=${nano}/bin/nano"
-
+    (lib.withFeatureAs ___forceSSH "rsh" (lib.getExe openssh))
+    (lib.withFeatureAs ___withEditor "editor" (lib.getExe nano))
     # Required for cross-compilation.
     "cvs_cv_func_printf_ptr=yes"
   ];
