@@ -56,6 +56,14 @@
 , libselinux
 }:
 
+let
+  webrtc-audio-processing' =
+    lib.findFirst (lib.meta.availableOn stdenv.hostPlatform) null [
+      webrtc-audio-processing_1
+      webrtc-audio-processing
+    ];
+in
+
 stdenv.mkDerivation(finalAttrs: {
   pname = "pipewire";
   version = "1.2.5";
@@ -121,7 +129,7 @@ stdenv.mkDerivation(finalAttrs: {
     readline
     sbc
   ] ++ (if enableSystemd then [ systemd ] else [ udev ])
-  ++ (if lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1 then [ webrtc-audio-processing_1 ] else [ webrtc-audio-processing ])
+  ++ lib.filter (x: x != null) [ webrtc-audio-processing' ]
   ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ldacbt) ldacbt
   ++ lib.optional zeroconfSupport avahi
   ++ lib.optional raopSupport openssl
@@ -139,6 +147,7 @@ stdenv.mkDerivation(finalAttrs: {
     (lib.mesonEnable "installed_tests" true)
     (lib.mesonOption "installed_test_prefix" (placeholder "installedTests"))
     (lib.mesonOption "libjack-path" "${placeholder "jack"}/lib")
+    (lib.mesonEnable "echo-cancel-webrtc" (webrtc-audio-processing' != null))
     (lib.mesonEnable "libcamera" true)
     (lib.mesonEnable "libffado" ffadoSupport)
     (lib.mesonEnable "roc" rocSupport)
