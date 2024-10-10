@@ -1,4 +1,4 @@
-{ appimageTools, lib, fetchurl }:
+{ appimageTools, lib, fetchurl, asar, dos2unix }:
 let
   pname = "notion-app-enhanced";
   version = "2.0.18-1";
@@ -8,9 +8,22 @@ let
     sha256 = "sha256-SqeMnoMzxxaViJ3NPccj3kyMc1xvXWULM6hQIDZySWY=";
   };
 
-  appimageContents = appimageTools.extract { inherit pname version src; };
-in appimageTools.wrapType2 {
-  inherit pname version src;
+  appimageContents = appimageTools.extract {
+    inherit pname version src;
+    postExtract = ''
+      # fix https://github.com/notion-enhancer/notion-enhancer/issues/812
+      ${asar}/bin/asar extract $out/resources/app.asar app
+      ${dos2unix}/bin/dos2unix app/renderer/preload.js
+      patch app/renderer/preload.js ${./notion-infinite-load-fix.patch}
+      ${dos2unix}/bin/unix2dos app/renderer/preload.js
+      ${asar}/bin/asar pack app $out/resources/app.asar
+    '';
+  };
+  # wrapAppImage instead of wrapType2 to avoid re-extracting the AppImage
+in appimageTools.wrapAppImage {
+  inherit pname version;
+
+  src = appimageContents;
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
