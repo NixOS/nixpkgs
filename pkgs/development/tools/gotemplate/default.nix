@@ -13,6 +13,10 @@ buildGo123Module rec {
 
   vendorHash = "sha256-xtvexOmzTXjP3QsGp0aL3FdJe3mdBSCnTeM6hLq/tIo=";
 
+  # This is the value reported when running `gotemplate --version`,
+  # see https://github.com/coveooss/gotemplate/issues/262
+  ldflags = [ "-X main.version=${version}" ];
+
   meta = with lib; {
     description = "CLI for go text/template";
     mainProgram = "gotemplate";
