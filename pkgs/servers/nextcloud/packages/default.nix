@@ -7,7 +7,6 @@
   pkgs,
   newScope,
   apps,
-  callPackage,
 }:
 
 let
@@ -29,7 +28,7 @@ let
         pkgs.fetchNextcloudApp {
           appName = pname;
           appVersion = data.version;
-          license = appBaseDefs.${pname};
+          licenses = appBaseDefs.${pname};
           inherit (data)
             url
             hash
