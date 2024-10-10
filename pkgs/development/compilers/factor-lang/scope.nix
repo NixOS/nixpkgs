@@ -1,16 +1,22 @@
-{ lib, pkgs
-, overrides ? (self: super: {})}:
+{ lib, pkgs, overrides ? (self: super: { }) }:
 
 let
-  inside = (self:
-  let callPackage = pkgs.newScope self;
-  in rec {
-    interpreter = callPackage ./factor99.nix { inherit (pkgs) stdenv; };
+  inside = self:
+    let callPackage = pkgs.newScope self;
+    in {
 
-    # Convenience access for using the returned attribute the same way as the
-    # interpreter derivation. Takes a list of runtime libraries as its only
-    # argument.
-    inherit (self.interpreter) withLibs;
-  });
+      buildFactorApplication = callPackage ./mk-factor-application.nix { };
+
+      factor-unwrapped = callPackage ./unwrapped.nix { };
+
+      factor-lang = callPackage ./wrapper.nix { };
+      factor-no-gui = callPackage ./wrapper.nix { guiSupport = false; };
+      factor-minimal = callPackage ./wrapper.nix {
+        enableDefaults = false;
+        guiSupport = false;
+      };
+    } // lib.optionalAttrs pkgs.config.allowAliases {
+      interpreter = builtins.throw "factor-lang-scope now offers various wrapped factor runtimes (see documentation) and the buildFactorApplication helper.";
+    };
   extensible-self = lib.makeExtensible (lib.extends overrides inside);
 in extensible-self
