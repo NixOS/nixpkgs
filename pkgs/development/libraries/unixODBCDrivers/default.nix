@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, unixODBC, cmake, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub, psqlodbc }:
+{ fetchurl, stdenv, unixODBC, cmake, mariadb, sqlite, zlib, libxml2, dpkg, lib, openssl, libkrb5, libuuid, patchelf, libiconv, fixDarwinDylibNames, fetchFromGitHub, psqlodbc, mdbtools }:
 
 # Each of these ODBC drivers can be configured in your odbcinst.ini file using
 # the various passthru and meta values. Of note are:
@@ -309,4 +309,6 @@
       maintainers = with maintainers; [ sir4ur0n ];
     };
   };
+
+  mdb = mdbtools.override { withUnixODBC = true; withLibiodbc = false; };
 }
