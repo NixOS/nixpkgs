@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "go-md2man";
-  version = "2.0.4";
+  version = "2.0.5";
 
   vendorHash = "sha256-aMLL/tmRLyGze3RSB9dKnoTv5ZK1eRtgV8fkajWEbU0=";
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "cpuguy83";
     repo = "go-md2man";
-    sha256 = "sha256-pQ+H8Psh92KWTang8hK0cHFLomH+4X0rMMilIJUQ4Qc=";
+    sha256 = "sha256-UX9FajFqZApVFED3MYcq167iPwztnIck25ehfcOeFD8=";
   };
 
   meta = with lib; {
