@@ -889,6 +889,7 @@ in {
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
+  saunafs = handleTest ./saunafs.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
