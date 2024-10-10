@@ -3,6 +3,9 @@
   apple-sdk,
   apple-sdk_11,
   bison,
+  bmake,
+  buildPackages,
+  fetchFromGitHub,
   flex,
   libxo,
   mkAppleDerivation,
@@ -29,6 +32,16 @@ let
         '${xnu}/bsd/sys/proc.h'
     '';
   };
+
+  # This data is not exactly what macOS has, but it’s close. The actual source does not appear to be part of the
+  # source releases anymore. There is some older data, but it is not compatible with the current version of adv_cmds.
+  localeSrc = fetchFromGitHub {
+    owner = "freebsd";
+    repo = "freebsd-src";
+    rev = "release/14.1.0";
+    hash = "sha256-k4Bs5zR17wHPYrL04aUyPswYGdCWVcRYZOTCDp2VTfk=";
+  };
+
 in
 mkAppleDerivation {
   releaseName = "adv_cmds";
@@ -63,9 +76,51 @@ mkAppleDerivation {
       substituteInPlace genwrap/$file \
         --replace-fail '/usr/local' "$out"
     done
+
+    # Set up the locale data
+    unpackFile '${localeSrc}'
+    LOCALE_TOPLEVEL=$PWD/source
+    chmod -R u+w "$LOCALE_TOPLEVEL/share"
+
+    # Remove these from `SUBDIRS` with sed because they’re always built otherwise
+    sed -i -e '/keys\|misc\|skel\|tabset\|termcap/d' "$LOCALE_TOPLEVEL/share/Makefile"
+
+    # Don’t set installed locale data ownership to root:wheel (let the builder take care of that).
+    substituteInPlace "$LOCALE_TOPLEVEL/share/mk/bsd.dirs.mk" \
+      --replace-fail '-g ''${''${dir}_GRP}' "" \
+      --replace-fail '-o ''${''${dir}_OWN}' ""
+
+    substituteInPlace "$LOCALE_TOPLEVEL/share/mk/bsd.files.mk" \
+      --replace-fail '-g ''${''${group}GRP_''${file}}' "" \
+      --replace-fail '-o ''${''${group}OWN_''${file}}' ""
+  '';
+
+  dontUpdateAutotoolsGnuConfigScripts = true;
+
+  preConfigure = ''
+    makeFlags+=(-m "$LOCALE_TOPLEVEL/share/mk")
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
+
+  makeFlags = [
+    "-DWITH_LOCALES"
+    "-DWITHOUT_BSNMP"
+    "-DWITHOUT_CDDL"
+    "-DWITHOUT_DICT"
+    "-DWITHOUT_EXAMPLES"
+    "-DWITHOUT_ICONV"
+    "-DWITHOUT_MAKE"
+    "-DWITHOUT_MAN"
+    "-DWITHOUT_SENDMAIL"
+    "-DWITHOUT_SHAREDOCS"
+    "-DWITHOUT_SYSCONS"
+    "-DWITHOUT_TESTS"
+    "-DWITHOUT_VT"
+    "-DWITHOUT_ZONEINFO"
+    "-C"
+    "share"
+  ];
 
   buildInputs = [
     # Use the 11.3 SDK because CMake depends on adv_cmds.ps, so it can’t simply be omitted when using an older SDK.
@@ -76,9 +131,12 @@ mkAppleDerivation {
 
   nativeBuildInputs = [
     bison
+    bmake
     flex
     pkg-config
   ];
+
+  enableParallelBuilding = true;
 
   mesonFlags = [
     # Even though adv_cmds is built with a newer SDK, the default SDK is still the deployment target.
@@ -86,16 +144,44 @@ mkAppleDerivation {
     (lib.mesonOption "sdk_version" (lib.getVersion apple-sdk))
   ];
 
-  postBuild = ''
-    # Build the locales TODO
-  '';
-  # timedef - grep -v -E '^(#$$|#[ ])' < ${.IMPSRC} > ${.TARGET}
+  buildPhase =
+    ''
+      ninjaBuildPhase
+    ''
+    +
+      # Cross-compilation requires using adv_cmds from the buildPlatform.
+      (
+        if stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform then
+          ''
+            export PATH=$PWD:$PATH
+          ''
+        else
+          ''
+            export PATH=$PWD:${lib.getBin buildPackages.darwin.adv_cmds}/bin
+          ''
+      )
+    + ''
+      pushd "$LOCALE_TOPLEVEL"
+      bmakeBuildPhase
+      popd
+    '';
 
-  postInstall = ''
-    moveToOutput share/locale "$locale"
+  enableParallelInstalling = true;
+
+  installFlags = [
+    "SHAREDIR=${placeholder "locale"}/share"
+    "INSTALL_SYMLINK=ln -s"
+    "SYMLINK="
+  ];
+
+  installPhase = ''
+    ninjaInstallPhase
+
     moveToOutput bin/ps "$ps"
     ln -s "$ps/bin/ps" "$out/bin/ps"
-    mkdir -p "$locale/share/locale"
+
+    cd "$LOCALE_TOPLEVEL"
+    bmakeInstallPhase
   '';
 
   meta = {
