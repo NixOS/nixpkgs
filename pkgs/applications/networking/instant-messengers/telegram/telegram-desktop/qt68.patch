@@ -1,0 +1,355 @@
+diff --git a/Telegram/SourceFiles/data/data_document.cpp b/Telegram/SourceFiles/data/data_document.cpp
+index 9c25a7861..5456ef280 100644
+--- a/Telegram/SourceFiles/data/data_document.cpp
++++ b/Telegram/SourceFiles/data/data_document.cpp
+@@ -936,14 +936,14 @@ void DocumentData::setFileName(const QString &remoteFileName) {
+ 	// in filenames, because they introduce a security issue, when
+ 	// an executable "Fil[x]gepj.exe" may look like "Filexe.jpeg".
+ 	QChar controls[] = {
+-		0x200E, // LTR Mark
+-		0x200F, // RTL Mark
+-		0x202A, // LTR Embedding
+-		0x202B, // RTL Embedding
+-		0x202D, // LTR Override
+-		0x202E, // RTL Override
+-		0x2066, // LTR Isolate
+-		0x2067, // RTL Isolate
++		QChar(0x200E), // LTR Mark
++		QChar(0x200F), // RTL Mark
++		QChar(0x202A), // LTR Embedding
++		QChar(0x202B), // RTL Embedding
++		QChar(0x202D), // LTR Override
++		QChar(0x202E), // RTL Override
++		QChar(0x2066), // LTR Isolate
++		QChar(0x2067), // RTL Isolate
+ 	};
+ 	for (const auto &ch : controls) {
+ 		_filename = std::move(_filename).replace(ch, "_");
+diff --git a/Telegram/SourceFiles/data/data_wall_paper.cpp b/Telegram/SourceFiles/data/data_wall_paper.cpp
+index 1bfd65335..0234bdbb4 100644
+--- a/Telegram/SourceFiles/data/data_wall_paper.cpp
++++ b/Telegram/SourceFiles/data/data_wall_paper.cpp
+@@ -150,8 +150,8 @@ using Ui::MaybeColorFromSerialized;
+ 		const auto hex = [](int value) {
+ 			value = std::clamp(value, 0, 15);
+ 			return (value > 9)
+-				? ('a' + (value - 10))
+-				: ('0' + value);
++				? QChar('a' + (value - 10))
++				: QChar('0' + value);
+ 		};
+ 		return QString() + hex(value / 16) + hex(value % 16);
+ 	};
+diff --git a/Telegram/SourceFiles/lang/lang_cloud_manager.cpp b/Telegram/SourceFiles/lang/lang_cloud_manager.cpp
+index 8c98b96d1..d7692e0be 100644
+--- a/Telegram/SourceFiles/lang/lang_cloud_manager.cpp
++++ b/Telegram/SourceFiles/lang/lang_cloud_manager.cpp
+@@ -434,7 +434,6 @@ void CloudManager::requestLanguageAndSwitch(
+ 
+ void CloudManager::sendSwitchingToLanguageRequest() {
+ 	if (!_api) {
+-		_switchingToLanguageId = -1;
+ 		return;
+ 	}
+ 	_api->request(_switchingToLanguageRequest).cancel();
+diff --git a/Telegram/SourceFiles/passport/ui/passport_details_row.cpp b/Telegram/SourceFiles/passport/ui/passport_details_row.cpp
+index b50ff5164..55739b7db 100644
+--- a/Telegram/SourceFiles/passport/ui/passport_details_row.cpp
++++ b/Telegram/SourceFiles/passport/ui/passport_details_row.cpp
+@@ -527,9 +527,9 @@ void DateInput::correctValue(
+ 	if (accumulated > _maxValue
+ 		|| (limit == _maxDigits && oldLength > _maxDigits)) {
+ 		if (oldCursor > limit) {
+-			_putNext.fire('0' + (accumulated % 10));
++			_putNext.fire(QChar('0' + (accumulated % 10)));
+ 		} else {
+-			_putNext.fire(0);
++			_putNext.fire(QChar(0));
+ 		}
+ 	}
+ }
+diff --git a/Telegram/SourceFiles/settings/business/settings_quick_replies.cpp b/Telegram/SourceFiles/settings/business/settings_quick_replies.cpp
+index 941409f98..e59ef7061 100644
+--- a/Telegram/SourceFiles/settings/business/settings_quick_replies.cpp
++++ b/Telegram/SourceFiles/settings/business/settings_quick_replies.cpp
+@@ -171,10 +171,10 @@ void QuickReplies::setupContent(
+ 	}
+ 	for (const auto &ch : name) {
+ 		if (!ch.isLetterOrNumber()
+-			&& (ch != '_')
+-			&& (ch != 0x200c)
+-			&& (ch != 0x00b7)
+-			&& (ch < 0x0d80 || ch > 0x0dff)) {
++			&& (ch != QChar('_'))
++			&& (ch.unicode() != 0x200c)
++			&& (ch.unicode() != 0x00b7)
++			&& (ch.unicode() < 0x0d80 || ch.unicode() > 0x0dff)) {
+ 			return false;
+ 		}
+ 	}
+diff --git a/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp b/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp
+index 0ef6baa63..b4338484f 100644
+--- a/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp
++++ b/Telegram/SourceFiles/storage/details/storage_file_utilities.cpp
+@@ -243,7 +243,7 @@ QString ToFilePart(FileKey val) {
+ 	result.reserve(0x10);
+ 	for (int32 i = 0; i < 0x10; ++i) {
+ 		uchar v = (val & 0x0F);
+-		result.push_back((v < 0x0A) ? ('0' + v) : ('A' + (v - 0x0A)));
++		result.push_back((v < 0x0A) ? QChar('0' + v) : QChar('A' + (v - 0x0A)));
+ 		val >>= 4;
+ 	}
+ 	return result;
+diff --git a/Telegram/SourceFiles/ui/widgets/color_editor.cpp b/Telegram/SourceFiles/ui/widgets/color_editor.cpp
+index bf2ba26fc..c8fc937f8 100644
+--- a/Telegram/SourceFiles/ui/widgets/color_editor.cpp
++++ b/Telegram/SourceFiles/ui/widgets/color_editor.cpp
+@@ -997,9 +997,9 @@ void ColorEditor::updateResultField() {
+ 	auto text = QString();
+ 	const auto addHex = [&text](int value) {
+ 		if (value >= 0 && value <= 9) {
+-			text.append('0' + value);
++			text.append(QChar('0' + value));
+ 		} else if (value >= 10 && value <= 15) {
+-			text.append('a' + (value - 10));
++			text.append(QChar('a' + (value - 10)));
+ 		}
+ 	};
+ 	const auto addValue = [&](int value) {
+diff --git a/Telegram/SourceFiles/window/themes/window_theme_editor_block.cpp b/Telegram/SourceFiles/window/themes/window_theme_editor_block.cpp
+index 9c0c85cc3..cd5b5d84e 100644
+--- a/Telegram/SourceFiles/window/themes/window_theme_editor_block.cpp
++++ b/Telegram/SourceFiles/window/themes/window_theme_editor_block.cpp
+@@ -134,9 +134,9 @@ void EditorBlock::Row::setValue(QColor value) {
+ void EditorBlock::Row::fillValueString() {
+ 	auto addHex = [=](int code) {
+ 		if (code >= 0 && code < 10) {
+-			_valueString.append('0' + code);
++			_valueString.append(QChar('0' + code));
+ 		} else if (code >= 10 && code < 16) {
+-			_valueString.append('a' + (code - 10));
++			_valueString.append(QChar('a' + (code - 10)));
+ 		}
+ 	};
+ 	auto addCode = [=](int code) {
+Submodule Telegram/codegen contains modified content
+diff --git a/Telegram/codegen/codegen/emoji/replaces.cpp b/Telegram/codegen/codegen/emoji/replaces.cpp
+index 2d26fbb..ce0d342 100644
+--- a/Telegram/codegen/codegen/emoji/replaces.cpp
++++ b/Telegram/codegen/codegen/emoji/replaces.cpp
+@@ -85,11 +85,11 @@ bool AddReplacement(Replaces &result, const Id &id, const QString &replacement,
+ 	return true;
+ }
+ 
+-QString ComposeString(const std::initializer_list<QChar> &chars) {
++QString ComposeString(const std::initializer_list<int> &chars) {
+ 	auto result = QString();
+ 	result.reserve(chars.size());
+ 	for (auto ch : chars) {
+-		result.append(ch);
++		result.append(QChar(ch));
+ 	}
+ 	return result;
+ }
+@@ -119,10 +119,10 @@ const auto NotSupported = [] {
+ 
+ const auto ConvertMap = ([] {
+ 	auto result = QMap<QString, QString>();
+-	auto insert = [&result](const std::initializer_list<QChar> &from, const std::initializer_list<QChar> &to) {
++	auto insert = [&result](const std::initializer_list<int> &from, const std::initializer_list<int> &to) {
+ 		result.insert(ComposeString(from), ComposeString(to));
+ 	};
+-	auto insertWithAdd = [&result](const std::initializer_list<QChar> &from, const QString &added) {
++	auto insertWithAdd = [&result](const std::initializer_list<int> &from, const QString &added) {
+ 		auto code = ComposeString(from);
+ 		result.insert(code, code + added);
+ 	};
+diff --git a/Telegram/codegen/codegen/lang/generator.cpp b/Telegram/codegen/codegen/lang/generator.cpp
+index b8be5e8..c12de72 100644
+--- a/Telegram/codegen/codegen/lang/generator.cpp
++++ b/Telegram/codegen/codegen/lang/generator.cpp
+@@ -221,7 +221,7 @@ QChar DefaultData[] = {";
+ 				}
+ 				source_->stream() << " ";
+ 			}
+-			source_->stream() << "0x" << QString::number(ch.unicode(), 16);
++			source_->stream() << "QChar(0x" << QString::number(ch.unicode(), 16) << ")";
+ 			++fulllength;
+ 		}
+ 	}
+diff --git a/Telegram/codegen/codegen/style/generator.cpp b/Telegram/codegen/codegen/style/generator.cpp
+index f12b79c..5cab58c 100644
+--- a/Telegram/codegen/codegen/style/generator.cpp
++++ b/Telegram/codegen/codegen/style/generator.cpp
+@@ -133,9 +133,9 @@ QString colorFallbackName(structure::Value value) {
+ QChar paletteColorPart(uchar part) {
+ 	part = (part & 0x0F);
+ 	if (part >= 10) {
+-		return 'a' + (part - 10);
++		return QChar('a' + (part - 10));
+ 	}
+-	return '0' + part;
++	return QChar('0' + part);
+ }
+ 
+ QString paletteColorComponent(uchar value) {
+Submodule Telegram/lib_base contains modified content
+diff --git a/Telegram/lib_base/base/base_file_utilities.cpp b/Telegram/lib_base/base/base_file_utilities.cpp
+index 640c731..c0f3c66 100644
+--- a/Telegram/lib_base/base/base_file_utilities.cpp
++++ b/Telegram/lib_base/base/base_file_utilities.cpp
+@@ -27,7 +27,7 @@ QString FileNameFromUserString(QString name) {
+ 		0x2067, // RTL Isolate
+ 		'/', '\\', '<', '>', ':', '"', '|', '?', '*' };
+ 	for (auto &ch : name) {
+-		if (ch < 32 || ranges::find(kBad, ch.unicode()) != end(kBad)) {
++		if (ch.unicode() < 32 || ranges::find(kBad, ch.unicode()) != end(kBad)) {
+ 			ch = '_';
+ 		}
+ 	}
+Submodule Telegram/lib_ui contains modified content
+diff --git a/Telegram/lib_ui/ui/effects/numbers_animation.h b/Telegram/lib_ui/ui/effects/numbers_animation.h
+index fc4bf25..0f5809d 100644
+--- a/Telegram/lib_ui/ui/effects/numbers_animation.h
++++ b/Telegram/lib_ui/ui/effects/numbers_animation.h
+@@ -35,8 +35,8 @@ public:
+ 
+ private:
+ 	struct Digit {
+-		QChar from = 0;
+-		QChar to = 0;
++		QChar from = QChar(0);
++		QChar to = QChar(0);
+ 		int fromWidth = 0;
+ 		int toWidth = 0;
+ 	};
+diff --git a/Telegram/lib_ui/ui/text/text.cpp b/Telegram/lib_ui/ui/text/text.cpp
+index 43bb27b..29aa440 100644
+--- a/Telegram/lib_ui/ui/text/text.cpp
++++ b/Telegram/lib_ui/ui/text/text.cpp
+@@ -1830,13 +1830,13 @@ void String::clear() {
+ }
+ 
+ bool IsBad(QChar ch) {
+-	return (ch == 0)
+-		|| (ch >= 8232 && ch < 8237)
+-		|| (ch >= 65024 && ch < 65040 && ch != 65039)
+-		|| (ch >= 127 && ch < 160 && ch != 156)
++	return (ch.unicode() == 0)
++		|| (ch.unicode() >= 8232 && ch.unicode() < 8237)
++		|| (ch.unicode() >= 65024 && ch.unicode() < 65040 && ch.unicode() != 65039)
++		|| (ch.unicode() >= 127 && ch.unicode() < 160 && ch.unicode() != 156)
+ 
+ 		// qt harfbuzz crash see https://github.com/telegramdesktop/tdesktop/issues/4551
+-		|| (Platform::IsMac() && ch == 6158);
++		|| (Platform::IsMac() && ch.unicode() == 6158);
+ }
+ 
+ bool IsWordSeparator(QChar ch) {
+@@ -1906,12 +1906,12 @@ bool IsLinkEnd(QChar ch) {
+ 
+ bool IsNewline(QChar ch) {
+ 	return (ch == QChar::LineFeed)
+-		|| (ch == 156);
++		|| (ch.unicode() == 156);
+ }
+ 
+ bool IsSpace(QChar ch) {
+ 	return ch.isSpace()
+-		|| (ch < 32)
++		|| (ch.unicode() < 32)
+ 		|| (ch == QChar::ParagraphSeparator)
+ 		|| (ch == QChar::LineSeparator)
+ 		|| (ch == QChar::ObjectReplacementCharacter)
+@@ -1921,8 +1921,8 @@ bool IsSpace(QChar ch) {
+ 
+ bool IsDiacritic(QChar ch) { // diacritic and variation selectors
+ 	return (ch.category() == QChar::Mark_NonSpacing)
+-		|| (ch == 1652)
+-		|| (ch >= 64606 && ch <= 64611);
++		|| (ch.unicode() == 1652)
++		|| (ch.unicode() >= 64606 && ch.unicode() <= 64611);
+ }
+ 
+ bool IsReplacedBySpace(QChar ch) {
+@@ -1934,13 +1934,13 @@ bool IsReplacedBySpace(QChar ch) {
+ 	// \xcc[\xb3\xbf\x8a] // 819, 831, 778
+ 	// QString bad1 = QString::fromUtf8("\xcc\xb3"), bad2 = QString::fromUtf8("\xcc\xbf"), bad3 = QString::fromUtf8("\xcc\x8a");
+ 	// [\x00\x01\x02\x07\x08\x0b-\x1f] // '\t' = 0x09
+-	return (/*code >= 0x00 && */ch <= 0x02)
+-		|| (ch >= 0x07 && ch <= 0x09)
+-		|| (ch >= 0x0b && ch <= 0x1f)
+-		|| (ch == 819)
+-		|| (ch == 831)
+-		|| (ch == 778)
+-		|| (ch >= 8232 && ch <= 8237);
++	return (/*code >= 0x00 && */ch.unicode() <= 0x02)
++		|| (ch.unicode() >= 0x07 && ch.unicode() <= 0x09)
++		|| (ch.unicode() >= 0x0b && ch.unicode() <= 0x1f)
++		|| (ch.unicode() == 819)
++		|| (ch.unicode() == 831)
++		|| (ch.unicode() == 778)
++		|| (ch.unicode() >= 8232 && ch.unicode() <= 8237);
+ }
+ 
+ bool IsTrimmed(QChar ch) {
+diff --git a/Telegram/lib_ui/ui/text/text_block_parser.cpp b/Telegram/lib_ui/ui/text/text_block_parser.cpp
+index bc815a7..4d06cc3 100644
+--- a/Telegram/lib_ui/ui/text/text_block_parser.cpp
++++ b/Telegram/lib_ui/ui/text/text_block_parser.cpp
+@@ -478,7 +478,7 @@ void BlockParser::skipBadEntities() {
+ }
+ 
+ void BlockParser::parseCurrentChar() {
+-	_ch = ((_ptr < _end) ? *_ptr : 0);
++	_ch = ((_ptr < _end) ? *_ptr : QChar(0));
+ 	_emojiLookback = 0;
+ 	const auto inCustomEmoji = !_customEmojiData.isEmpty();
+ 	const auto isNewLine = !inCustomEmoji && _multiline && IsNewline(_ch);
+@@ -488,7 +488,7 @@ void BlockParser::parseCurrentChar() {
+ 	const auto skip = [&] {
+ 		if (IsBad(_ch) || _ch.isLowSurrogate()) {
+ 			return true;
+-		} else if (_ch == 0xFE0F && Platform::IsMac()) {
++		} else if (_ch.unicode() == 0xFE0F && Platform::IsMac()) {
+ 			// Some sequences like 0x0E53 0xFE0F crash OS X harfbuzz text processing :(
+ 			return true;
+ 		} else if (isDiacritic) {
+@@ -536,7 +536,7 @@ void BlockParser::parseCurrentChar() {
+ 		if (_ptr < _end) {
+ 			_t->insertModifications(_tText.size(), -1);
+ 		}
+-		_ch = 0;
++		_ch = QChar(0);
+ 		_allowDiacritic = false;
+ 	} else {
+ 		if (isTilde) { // Tilde fix in OpenSans.
+diff --git a/Telegram/lib_ui/ui/widgets/fields/time_part_input.cpp b/Telegram/lib_ui/ui/widgets/fields/time_part_input.cpp
+index a2e7b40..95bc1d0 100644
+--- a/Telegram/lib_ui/ui/widgets/fields/time_part_input.cpp
++++ b/Telegram/lib_ui/ui/widgets/fields/time_part_input.cpp
+@@ -130,9 +130,9 @@ void TimePart::correctValue(
+ 	if (accumulated > _maxValue
+ 		|| (limit == _maxDigits && oldLength > _maxDigits)) {
+ 		if (oldCursor > limit) {
+-			_putNext.fire('0' + (accumulated % 10));
++			_putNext.fire(QChar('0' + (accumulated % 10)));
+ 		} else {
+-			_putNext.fire(0);
++			_putNext.fire(QChar(0));
+ 		}
+ 	}
+ }
+Submodule cmake contains modified content
+diff --git a/cmake/options.cmake b/cmake/options.cmake
+index 7ad2804..775c8e6 100644
+--- a/cmake/options.cmake
++++ b/cmake/options.cmake
+@@ -12,7 +12,6 @@ INTERFACE
+     $<$<CONFIG:Debug>:_DEBUG>
+     QT_NO_KEYWORDS
+     QT_NO_CAST_FROM_BYTEARRAY
+-    QT_IMPLICIT_QCHAR_CONSTRUCTION
+     QT_DEPRECATED_WARNINGS_SINCE=0x051500
+ )
+ 
