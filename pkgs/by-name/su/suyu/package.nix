@@ -82,7 +82,9 @@ stdenv.mkDerivation(finalAttrs: {
   src = fetchgit {
     url = "https://git.suyu.dev/suyu/suyu";
     rev = "v${finalAttrs.version}";
-    sha256 = "wLUPNRDR22m34OcUSB1xHd+pT7/wx0pHYAZj6LnEN4g=";
+    # hash = "sha256-wLUPNRDR22m34OcUSB1xHd+pT7/wx0pHYAZj6LnEN4g=";
+    deepClone = true;
+    hash = "";
   };
 
   nativeBuildInputs = [
@@ -201,18 +203,13 @@ stdenv.mkDerivation(finalAttrs: {
     install -Dm444 $src/dist/72-suyu-input.rules $out/lib/udev/rules.d/72-suyu-input.rules
   ";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://suyu.dev";
-    changelog = "https://suyu.dev/blog";
     description = "An experimental Nintendo Switch emulator written in C++";
-    longDescription = ''
-      An experimental Nintendo Switch emulator written in C++.
-      Using the master/ branch is recommended for general usage.
-      Using the dev branch is recommended if you would like to try out experimental features, with a cost of stability.
-    '';
     mainProgram = "suyu";
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
-    license = with licenses; [
+    platforms =  lib.platforms.linux;
+    hydraPlatforms = [ ]; # Better safe than sorry
+    license = with lib.licenses; [
       gpl3Plus
       # Icons
       asl20 mit cc0
