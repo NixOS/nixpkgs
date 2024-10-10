@@ -2,6 +2,8 @@
   autoreconfHook,
   callPackage,
   git,
+  iproute2,
+  kmod,
   lib,
   systemdMinimal,
 
@@ -90,6 +92,10 @@ common.overrideAttrs (
 
     postFixup = ''
       mv $out/{share,lib,etc} $bin
+      sed -i \
+        -e 's|=/sbin|=${kmod}/bin|' \
+        -e 's|=/bin|=${iproute2}/bin|' \
+        "$bin"/bin/ethercatctl
     '';
   }
 )
