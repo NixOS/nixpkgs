@@ -1,4 +1,5 @@
 { lib
+, cmake
 , dbus
 , fetchFromGitHub
 , fetchYarnDeps
@@ -11,8 +12,8 @@
 , perl
 , cyrus_sasl
 , stdenv
-, fixup_yarn_lock
-, yarnConfigHook
+, fixup-yarn-lock
+, yarn
 , nodejs-slim
 , cargo-tauri
 , cargo
@@ -20,18 +21,28 @@
 , rustc
 , jq
 , moreutils
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "insulator2";
-  version = "2.12.2";
+  version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "andrewinci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Bi9GCQr7yox5Plc7o0svRKYi1XoK/HDGj1VbW1z4jac=";
+    hash = "sha256-34JRIB7/x7miReWOxR/m+atjfUiE3XGyh9OBSbMg3m4=";
   };
+
+  patches = [
+    # see: https://github.com/andrewinci/insulator2/pull/733
+    (fetchpatch {
+      name = "fix-rust-1.80.0";
+      url = "https://github.com/andrewinci/insulator2/commit/7dbff0777c4364eec68cf90488d99f06b11dfa98.patch";
+      hash = "sha256-P8rBufYpREP5tOO9vSymvms4f2JbsUEjK7/yn9P7gYk=";
+    })
+  ];
 
   # Yarn *really* wants us to use corepack if this is set
   postPatch = ''
@@ -40,31 +51,50 @@ stdenv.mkDerivation rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-ih5NSOvYje981SkVfPHm/u2sS1B36kgxpfe9LmQaxdo=";
+    hash = "sha256-5wOgVrcHJVF07QpnN52d4VWEM3FKw3NdLrZ1goAP2oI=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "apache-avro-0.15.0" = "sha256-bjA/x/IDzAYugsc1vn9fBVKaCiLOJYdA1Q9H2pffBh0=";
-      "openssl-src-111.25.0+1.1.1t" = "sha256-1BEtb38ilJJAw35KW+NOIe1rhxxOPsnz0gA2zJnof8c=";
-      "rdkafka-0.29.0" = "sha256-a739Fc+qjmIrK754GT22Gb/Ftd82lLSUzv53Ej7Khu4=";
+      "apache-avro-0.16.0" = "sha256-v4TeJEhLEqQUgj+EHgFRVUGoLC+SpOUhAXngMP7R7nM=";
       "rust-keystore-0.1.1" = "sha256-Cj64uJFZNxnrplhRuqf9/HK/RAaawzfYHo/J9snZ+TU=";
     };
   };
 
+  configurePhase = ''
+    export HOME=$(mktemp -d)
+    export COREPACK_ROOT="true"
+    export SKIP_YARN_COREPACK_CHECK="true"
+    yarn config --offline set yarn-offline-mirror ${yarnOfflineCache}
+    fixup-yarn-lock yarn.lock
+    yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+    patchShebangs node_modules/
+    yarn run postinstall --offline
+  '';
+
+  preBuild = ''
+    yarn tauri build -b deb
+  '';
+
   cargoRoot = "backend/";
+
+  preInstall = ''
+    mv backend/target/release/bundle/deb/*/data/usr/ "$out"
+  '';
+
   buildAndTestDir = cargoRoot;
 
   nativeBuildInputs = [
+    cmake
     pkg-config
     perl
     rustPlatform.cargoSetupHook
     cargo
     rustc
-    cargo-tauri.hook
-    fixup_yarn_lock
-    yarnConfigHook
+    cargo-tauri
+    fixup-yarn-lock
+    yarn
     nodejs-slim
     cyrus_sasl
     jq
@@ -87,5 +117,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tc-kaluza ];
     mainProgram = "insulator-2";
   };
-
 }
