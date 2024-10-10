@@ -85,7 +85,7 @@ buildDunePackage rec {
         stdune
       ]
     else if lib.versionAtLeast version "1.7.0" then
-      [ pp re ppx_yojson_conv_lib octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
+      [ re octavius dune-build-info omd cmdliner ocamlformat-rpc-lib ]
     else
       [
         ppx_yojson_conv_lib
@@ -113,7 +113,7 @@ buildDunePackage rec {
     ] else if lib.versionAtLeast version "1.7.0" then [
       csexp
       jsonrpc
-      pp
+      (pp.override { version = "1.2.0"; })
       ppx_yojson_conv_lib
       result
       uutf
