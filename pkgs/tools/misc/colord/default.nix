@@ -10,7 +10,9 @@
 , gusb
 , lcms2
 , sqlite
+, udev
 , systemd
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , dbus
 , gobject-introspection
 , argyllcms
@@ -60,6 +62,11 @@ stdenv.mkDerivation rec {
     "-Dvapi=true"
     "-Ddaemon=${lib.boolToString enableDaemon}"
     "-Ddaemon_user=colord"
+    (lib.mesonBool "systemd" enableSystemd)
+
+    # The presence of the "udev" pkg-config module (as opposed to "libudev")
+    # indicates whether rules are supported.
+    (lib.mesonBool "udev_rules" (lib.elem "udev" udev.meta.pkgConfigModules))
   ];
 
   nativeBuildInputs = [
@@ -90,6 +97,8 @@ stdenv.mkDerivation rec {
     libgudev
     sane-backends
     sqlite
+    udev
+  ] ++ lib.optionals enableSystemd [
     systemd
   ] ++ lib.optionals enableDaemon [
     polkit
