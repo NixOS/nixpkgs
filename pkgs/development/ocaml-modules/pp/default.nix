@@ -2,12 +2,12 @@
 
 buildDunePackage rec {
   pname = "pp";
-  version = "1.2.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url =
       "https://github.com/ocaml-dune/pp/releases/download/${version}/pp-${version}.tbz";
-    hash = "sha256-pegiVzxVr7Qtsp7FbqzR8qzY9lzy3yh44pHeN0zmkJw=";
+    hash = "sha256-hlE1FRiwkrSi3vTggXHCdhUvkvtqhKixm2uSnM20RBk=";
   };
 
   duneVersion = "3";
