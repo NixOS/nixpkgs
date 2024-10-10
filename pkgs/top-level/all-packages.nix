@@ -313,8 +313,6 @@ with pkgs;
 
   beeper = callPackage ../applications/networking/instant-messengers/beeper { };
 
-  bakelite = callPackage ../tools/backup/bakelite { };
-
   bearer = callPackage ../development/tools/bearer { };
 
   benthos = callPackage ../development/tools/benthos { };
