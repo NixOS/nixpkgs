@@ -11724,6 +11724,12 @@
     github = "lachrymaLF";
     githubId = 13716477;
   };
+  lactose = {
+    name = "lactose";
+    email = "lactose@allthingslinux.com";
+    github = "juuyokka";
+    githubId = 15185244;
+  };
   lafrenierejm = {
     email = "joseph@lafreniere.xyz";
     github = "lafrenierejm";
