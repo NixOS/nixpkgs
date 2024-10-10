@@ -49,10 +49,11 @@ buildPythonPackage rec {
     "click"
     "dbt-common"
     "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
     "urllib3"
   ];
 
