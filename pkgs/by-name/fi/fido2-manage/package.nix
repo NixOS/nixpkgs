@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchurl,
   pkg-config,
   cmake,
   libcbor,
@@ -12,6 +13,7 @@
   # Linux only
   pcsclite,
   udev,
+  imagemagick,
   # GUI
   python3,
   xterm,
@@ -37,6 +39,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-rXTL6wpdvCifakmxH14wBLbhTptNYNFGEPskpUy3IjA=";
   };
 
+  icon = fetchurl {
+    url = "https://token2.net/img/icon/logo-white.png";
+    hash = "sha256-UpxRzn24v1vigMFlofVU+YOzKrkxCu2Pk5iktqFgNO8=";
+  };
+
   nativeBuildInputs =
     [
       pkg-config
@@ -44,6 +51,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.isLinux [
       copyDesktopItems
+      imagemagick
     ];
 
   buildInputs =
@@ -80,7 +88,8 @@ stdenv.mkDerivation rec {
   postInstall =
     lib.optionalString stdenv.isLinux ''
       install $src/fido2-manage.sh $out/bin/fido2-manage
-      install -D ${./token2.png} $out/share/icons/hicolor/512x512/apps/token2/token2.png
+      magick ${icon} -background none -gravity center -extent 512x512 token2.png
+      install -Dm444 token2.png $out/share/icons/hicolor/512x512/apps/token2.png
       install $src/gui.py $out/bin/fido2-manage-gui
     ''
     + lib.optionalString stdenv.isDarwin ''
@@ -96,8 +105,6 @@ stdenv.mkDerivation rec {
       comment = meta.description;
       categories = [
         "Utility"
-        "Settings"
-        "HardwareSettings"
       ];
     })
   ];
