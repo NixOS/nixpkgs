@@ -39,9 +39,8 @@ in
         Specify the bypass parameters for Zapret binary.
         There are no universal parameters as they vary between different networks, so you'll have to find them yourself.
 
-        This can be done by downloading project source code from https://github.com/bol-van/zapret
-        and running the `blockcheck.sh` script. It'll try different params and then tell you
-        which params are working for your network.
+        This can be done by running the `blockcheck` binary from zapret package.
+        It'll try different params and then tell you which params are working for your network.
       '';
     };
     whitelist = lib.mkOption {
