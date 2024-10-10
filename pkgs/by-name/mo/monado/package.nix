@@ -5,6 +5,7 @@
 , bluez
 , cjson
 , cmake
+, config
 , dbus
 , doxygen
 , eigen
@@ -51,6 +52,8 @@
 , zlib
 , zstd
 , nixosTests
+, cudaPackages
+, enableCuda ? config.cudaSupport
   # Set as 'false' to build monado without service support, i.e. allow VR
   # applications linking against libopenxr_monado.so to use OpenXR standalone
   # instead of via the monado-service program. For more information see:
@@ -84,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "XRT_HAVE_TRACY" true)
     (lib.cmakeBool "XRT_FEATURE_TRACING" true)
     (lib.cmakeBool "XRT_HAVE_STEAM" true)
+    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
   ];
 
   buildInputs = [
