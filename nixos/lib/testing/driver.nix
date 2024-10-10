@@ -96,6 +96,7 @@ let
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
+          ${lib.optionalString (!config.rewriteAsserts) "--add-flags --no-rewrite-asserts"} \
           ${lib.escapeShellArgs (lib.concatMap (arg: ["--add-flags" arg]) config.extraDriverArgs)}
       '';
 
@@ -183,6 +184,14 @@ in
         Disable type checking. This must not be enabled for new NixOS tests.
 
         This may speed up your iteration cycle, unless you're working on the [{option}`testScript`](#test-opt-testScript).
+      '';
+    };
+
+    rewriteAsserts = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to rewrite assert statements akin to what pytest does, for debugging purposes.
       '';
     };
   };

@@ -3,6 +3,7 @@ import re
 import signal
 import tempfile
 import threading
+import types
 from contextlib import contextmanager
 from pathlib import Path
 from typing import Any, Callable, ContextManager, Dict, Iterator, List, Optional, Union
@@ -12,6 +13,7 @@ from colorama import Fore, Style
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
+from test_driver.rewrite import rewrite_and_compile_python_test_code
 from test_driver.vlan import VLan
 
 SENTINEL = object()
@@ -60,12 +62,14 @@ class Driver:
         logger: AbstractLogger,
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
+        rewrite_asserts: bool = True,
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
+        self.rewrite_asserts = rewrite_asserts
 
         tmp_dir = get_tmp_dir()
 
@@ -155,7 +159,14 @@ class Driver:
         """Run the test script"""
         with self.logger.nested("run the VM test script"):
             symbols = self.test_symbols()  # call eagerly
-            exec(self.tests, symbols, None)
+
+            tests: str | types.CodeType
+            if self.rewrite_asserts:
+                tests = rewrite_and_compile_python_test_code(self.tests)
+            else:
+                tests = self.tests
+
+            exec(tests, symbols, None)
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""
