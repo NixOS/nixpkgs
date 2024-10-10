@@ -207,14 +207,14 @@ in
   config = lib.mkIf enableDHCP {
 
     assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+      # dhcpcd doesn't start properly with malloc ∉ [ jemalloc libc mimalloc scudo ]
       # see https://github.com/NixOS/nixpkgs/issues/151696
       assertion =
         dhcpcd.enablePrivSep
-          -> lib.elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
+          -> lib.elem config.environment.memoryAllocator.provider [ "jemalloc" "libc" "mimalloc" "scudo" ];
       message = ''
         dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently only the `libc` and `scudo` allocators are known to work.
+          Currently `graphene-hardened` allocator is known to be broken.
           To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
           to set `enablePrivSep = false`.
       '';

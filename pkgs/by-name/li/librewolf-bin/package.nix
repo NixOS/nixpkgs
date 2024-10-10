@@ -31,5 +31,8 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
     mainProgram = "librewolf";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [
+      "CVE-2024-9680"
+    ];
   };
 }

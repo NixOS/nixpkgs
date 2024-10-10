@@ -5,24 +5,24 @@
 , rust-analyzer
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "ra-multiplex";
-  version = "0.2.2";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "pr2502";
     repo = "ra-multiplex";
-    rev = "dcb5f83890cb91016b0a1590cc1b732606bb6ec1";
-    hash = "sha256-Hf4Gj9eXEP4gXiqNV4Jq0oiGLX3DtDF9At1feEZ+bUE=";
+    rev = "v${version}";
+    hash = "sha256-aBrn9g+MGXLAsOmHqw1Tt6NPFGJTyYv/L9UI/vQU4i8=";
   };
 
-  cargoHash = "sha256-MeUtkPjOsL1kQ2W0Q1/OqhKDVXs4cECkATHISpyfp9U=";
+  cargoHash = "sha256-Z5KK+tFkQjnZkU1wNT0Xk1ERjYcQT8MNGDBK53u36hE=";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/ra-multiplex \
-      --suffix PATH ${lib.makeBinPath [ rust-analyzer ]}
+      --suffix PATH : ${lib.makeBinPath [ rust-analyzer ]}
   '';
 
   meta = with lib; {

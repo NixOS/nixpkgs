@@ -1147,6 +1147,8 @@ self: super: with self; {
 
   azure-identity = callPackage ../development/python-modules/azure-identity { };
 
+  azure-iot-device = callPackage ../development/python-modules/azure-iot-device { };
+
   azure-keyvault = callPackage ../development/python-modules/azure-keyvault { };
 
   azure-keyvault-administration = callPackage ../development/python-modules/azure-keyvault-administration { };
@@ -1411,6 +1413,8 @@ self: super: with self; {
   pulumi-azure-native = pkgs.pulumiPackages.pulumi-azure-native.sdks.python;
 
   pulumi-command = pkgs.pulumiPackages.pulumi-command.sdks.python;
+
+  pulumi-hcloud = callPackage ../development/python-modules/pulumi-hcloud { };
 
   pulumi-random = pkgs.pulumiPackages.pulumi-random.sdks.python;
 
@@ -9397,6 +9401,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
 
+  opentelemetry-instrumentation-requests = callPackage ../development/python-modules/opentelemetry-instrumentation-requests { };
+
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
@@ -13596,6 +13602,8 @@ self: super: with self; {
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket { };
+
+  requests-unixsocket2 = callPackage ../development/python-modules/requests-unixsocket2 { };
 
   requests-wsgi-adapter = callPackage ../development/python-modules/requests-wsgi-adapter { };
 
