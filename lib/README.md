@@ -57,6 +57,17 @@ Don't have multiple changes in one PR, instead split it up into multiple ones.
 
 This keeps the conversation focused and has a higher chance of getting merged.
 
+### Ensure backwards compatibility
+
+`lib` is the effective standard library for Nix, both for Nixpkgs and third-parties.
+Because of that it's important to make sure that the interface isn't changed in a breaking way.
+
+The only exceptions are:
+- Breaking changes to interfaces that aren't in a release yet
+- Breaking changes that are unlikely to cause problems for users
+- Removal of functions that have been deprecated for at least one release
+- Breaking changes to functions/sub-libraries that are explicitly marked as experimental
+
 ### Name the interface appropriately
 
 When introducing new names to the interface, such as new function, or new function attributes,
