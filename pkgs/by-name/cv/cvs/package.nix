@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{
+  lib,
+  fetchpatch,
+  fetchurl,
+  nano,
+  stdenv,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cvs";
   version = "1.12.13";
 
   src = fetchurl {
-    url = "mirror://savannah/cvs/source/feature/${version}/cvs-${version}.tar.bz2";
-    sha256 = "0pjir8cwn0087mxszzbsi1gyfc6373vif96cw4q3m1x6p49kd1bq";
+    url = "mirror://savannah/cvs/source/feature/${finalAttrs.version}/cvs-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-eIU2E7mmhzow4cwkF/c4wzDnX4h6/a97PQgAyxnKUV4=";
   };
 
   patches = [
@@ -15,19 +21,14 @@ stdenv.mkDerivation rec {
     ./CVE-2017-12836.patch
     (fetchpatch {
       url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24118ec737c7/cvs/vasnprintf-high-sierra-fix.diff";
-      sha256 = "1ql6aaia7xkfq3vqhlw5bd2z2ywka82zk01njs1b2szn699liymg";
+      hash = "sha256-r/pIUzL2a7GCljaA+QVSk3vxRVuFU4j3wG72o6JShuI=";
     })
   ];
 
-  hardeningDisable = [ "fortify" "format" ];
-
-  preConfigure = ''
-    # Apply the Debian patches.
-    for p in "debian/patches/"*; do
-      echo "applying \`$p' ..."
-      patch --verbose -p1 < "$p"
-    done
-  '';
+  hardeningDisable = [
+    "fortify"
+    "format"
+  ];
 
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
@@ -46,10 +47,23 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 1 of 1 tests
 
-  meta = with lib; {
+  preConfigure = ''
+    # Apply the Debian patches.
+    for p in "debian/patches/"*; do
+      echo "applying \`$p' ..."
+      patch --verbose -p1 < "$p"
+    done
+  '';
+
+  meta = {
     homepage = "http://cvs.nongnu.org";
-    description = "Concurrent Versions System - a source control system";
-    license = licenses.gpl2Plus; # library is GPLv2, main is GPLv1
-    platforms = platforms.all;
+    description = "Concurrent Versions System";
+    license = with lib.licenses; [
+      gpl1Plus # program
+      gpl2Plus # library
+    ];
+    mainProgram = "cvs";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = lib.platforms.all;
   };
-}
+})
