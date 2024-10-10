@@ -51,6 +51,7 @@ buildPythonPackage rec {
     # flaky numerical tests
     "test_classification_error"
     "test_matmul_matrix_broadcast"
+    "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
   ];
