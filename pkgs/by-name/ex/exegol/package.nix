@@ -4,8 +4,8 @@
   python3,
 }:
 python3.pkgs.buildPythonApplication rec {
-  pname = "Exegol";
-  version = "4.3.1";
+  pname = "exegol";
+  version = "4.3.6";
   format = "setuptools";
 
   # Project has no unit tests
@@ -22,7 +22,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cMbMmkG52A104iHVwe+6k1Fazi7fISeU/doWJqw5Whw=";
+    hash = "sha256-+D2svCcVBPkXUG6gsyez7tvEo2Cuepf0xyYt9qFySw0=";
   };
 
   meta = with lib; {
@@ -39,6 +39,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/ThePorgs/Exegol/releases/tag/${version}";
     license = licenses.gpl3Only;
     mainProgram = "exegol";
-    maintainers = with maintainers; [ _0b11stan ];
+    maintainers = with maintainers; [
+      _0b11stan
+      charB66
+    ];
   };
 }
