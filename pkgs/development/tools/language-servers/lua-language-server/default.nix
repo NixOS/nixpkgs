@@ -61,7 +61,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postBuild = ''
     popd
-    ./3rd/luamake/luamake rebuild
+    # https://github.com/NixOS/nixpkgs/issues/347742
+    ./3rd/luamake/luamake rebuild \
+      ${if stdenv.hostPlatform.isDarwin then "--notest" else ""}
   '';
 
   installPhase = ''
