@@ -4,14 +4,17 @@
   fetchFromGitHub,
   pythonOlder,
 
-  # tested using
+  # build-system
+  setuptools,
+
+  # tests
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "hiredis";
   version = "2.4.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -22,6 +25,8 @@ buildPythonPackage rec {
     fetchSubmodules = true;
     hash = "sha256-PnCSf7ZEPNtweQEnWTHCCVCvg5QGxGeBSAZCFHOziDQ=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "hiredis" ];
 
