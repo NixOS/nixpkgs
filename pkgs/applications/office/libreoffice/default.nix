@@ -99,7 +99,7 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "af" "am" "ar" "as" "ast" "be" "bg" "bn" "bn-IN" "bo" "br" "brx" "bs" "ca" "ca-valencia" "ckb" "cs" "cy" "da" "de" "dgo" "dsb" "dz" "el" "en-GB" "en-US" "en-ZA" "eo" "es" "et" "eu" "fa" "fi" "fr" "fur" "fy" "ga" "gd" "gl" "gu" "gug" "he" "hsb" "hi" "hr" "hu" "hy" "id" "is" "it" "ja" "ka" "kab" "kk" "km" "kmr-Latn" "kn" "ko" "kok" "ks" "lb" "lo" "lt" "lv" "mai" "mk" "ml" "mn" "mni" "mr" "my" "nb" "ne" "nl" "nn" "nr" "nso" "oc" "om" "or" "pa-IN" "pl" "pt" "pt-BR" "ro" "ru" "rw" "sa-IN" "sat" "sd" "sr-Latn" "si" "sid" "sk" "sl" "sq" "sr" "ss" "st" "sv" "sw-TZ" "szl" "ta" "te" "tg" "th" "tn" "tr" "ts" "tt" "ug" "uk" "uz" "ve" "vec" "vi" "xh" "zh-CN" "zh-TW" "zu" ]
 , withFonts ? false
 , withHelp ? true
 , kdeIntegration ? false
