@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, makeWrapper, jre_headless }:
+{ stdenv, lib, fetchurl, makeWrapper, jre_headless, nixosTests }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "Reposilite";
@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    reposilite = nixosTests.reposilite;
+  };
 
   meta = {
     description = "Lightweight and easy-to-use repository management software dedicated for the Maven based artifacts in the JVM ecosystem";
