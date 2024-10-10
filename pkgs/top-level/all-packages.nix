@@ -26919,12 +26919,6 @@ with pkgs;
   dm-sans = callPackage ../data/fonts/dm-sans { };
   dns-root-data = callPackage ../data/misc/dns-root-data { };
 
-  docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
-
-  docbook_sgml_dtd_31 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/3.1.nix { };
-
-  docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
-
   docbook_xml_dtd_412 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix { };
 
   docbook_xml_dtd_42 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.2.nix { };
@@ -26935,8 +26929,6 @@ with pkgs;
 
   docbook_xml_dtd_45 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.5.nix { };
 
-  docbook_xml_ebnf_dtd = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook-ebnf { };
-
   inherit (callPackages ../data/sgml+xml/stylesheets/xslt/docbook-xsl { })
     docbook-xsl-nons
     docbook-xsl-ns;
@@ -26944,6 +26936,10 @@ with pkgs;
   # TODO: move this to aliases
   docbook_xsl = docbook-xsl-nons;
   docbook_xsl_ns = docbook-xsl-ns;
+  docbook5 = docbook-5;
+  docbook_sgml_dtd_31 = docbook-sgml-dtd-3_1;
+  docbook_sgml_dtd_41 = docbook-sgml-dtd-4_1;
+  docbook_xml_ebnf_dtd = docbook-xml-ebnf-dtd;
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
@@ -27920,8 +27916,6 @@ with pkgs;
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };
 
   wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
-
-  xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
 
   xits-math = callPackage ../data/fonts/xits-math { };
 
