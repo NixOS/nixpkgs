@@ -40,7 +40,7 @@ in
       restartIfChanged = true;
 
       path = mkIf cfg.ui.enable [
-        pkgs.handheld-daemon-ui
+        cfg.ui.package
         pkgs.lsof
       ];
 
