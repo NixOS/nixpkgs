@@ -9570,6 +9570,18 @@ final: prev:
     meta.homepage = "https://github.com/nomnivore/ollama.nvim/";
   };
 
+  codecompanion-nvim = buildVimPlugin {
+    pname = "codecompanion.nvim";
+    version = "2024-10-09";
+    src = fetchFromGitHub {
+      owner = "olimorris";
+      repo = "codecompanion.nvim";
+      rev = "dba83b9c632d099a6f8acc3cc178f7b51156750f";
+      sha256 = "1m4qcyx9nx4h4vqn1wgardql5gm5gvnwrpaplfa46380fsz716si";
+    };
+    meta.homepage = "https://github.com/olimorris/codecompanion.nvim/";
+  };
+
   omni-vim = buildVimPlugin {
     pname = "omni.vim";
     version = "2022-06-17";

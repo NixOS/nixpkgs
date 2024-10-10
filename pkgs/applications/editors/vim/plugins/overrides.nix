@@ -478,6 +478,18 @@ in
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
   };
 
+  codecompanion-nvim = super.codecompanion-nvim.overrideAttrs {
+    buildInputs = [ curl ];
+    dependencies = with self; [
+      plenary-nvim
+      nvim-treesitter
+    ];
+    postFixup = ''
+      mkdir -p $target/binaries/${curl.version}
+      ln -s ${curl}/bin/ $target/binaries/${curl.version}/curl
+    '';
+  };
+
   codeium-nvim =
     let
       # Update according to https://github.com/Exafunction/codeium.nvim/blob/main/lua/codeium/versions.json
