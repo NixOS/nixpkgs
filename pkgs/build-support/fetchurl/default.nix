@@ -57,6 +57,11 @@ in
   # locations.  They are tried in order.
   urls ? [ ],
 
+  # In addition to `url` and `urls`, a bash script that outputs URLs
+  # on its standard output (one URL per line). They are tried in
+  # order.
+  urlScript ? "",
+
   # Additional curl options needed for the download to succeed.
   # Warning: Each space (no matter the escaping) will start a new argument.
   # If you wish to pass arguments with spaces, use `curlOptsList`
@@ -127,8 +132,9 @@ let
       (if lib.isList urls then urls else throw "`urls` is not a list")
     else if urls == [ ] && url != "" then
       (if lib.isString url then [ url ] else throw "`url` is not a string")
-    else
-      throw "fetchurl requires either `url` or `urls` to be set";
+    else if urlScript == "" then
+      throw "fetchurl requires either `url` or `urls` to be set"
+    else [];
 
   hash_ =
     if
@@ -212,6 +218,8 @@ stdenvNoCC.mkDerivation (
     nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
 
     urls = urls_;
+
+    inherit urlScript;
 
     # If set, prefer the content-addressable mirrors
     # (http://tarballs.nixos.org) over the original URLs.
