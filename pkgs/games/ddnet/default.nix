@@ -32,6 +32,9 @@
 , OpenGL
 , Security
 , buildClient ? true
+, ApplicationServices
+, CoreGraphics
+, ImageIO
 }:
 
 stdenv.mkDerivation rec {
@@ -90,6 +93,9 @@ stdenv.mkDerivation rec {
     Cocoa
     OpenGL
     Security
+    ApplicationServices
+    CoreGraphics
+    ImageIO
   ]);
 
   patches = [
