@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
+    (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.doCheck or false))
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
     (lib.cmakeBool "USE_SDL2" useSDL2)
     # Ensure we use system libraries
@@ -90,8 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
     gmp
     libspatialindex
-  ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform luajit) [
+    luajit
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     OpenGL
     OpenAL
@@ -118,7 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
+    substituteInPlace src/filesys.cpp \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
   '';
@@ -129,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/Applications
     mv $out/minetest.app $out/Applications
   '';
+
+  doCheck = true;
 
   passthru.updateScript = gitUpdater {
     allowedVersions = "\\.";
@@ -141,5 +147,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
+    mainProgram = if buildClient then "minetest" else "minetestserver";
   };
 })
