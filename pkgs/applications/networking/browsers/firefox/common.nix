@@ -6,6 +6,8 @@
 , binaryName ? "firefox"
 , application ? "browser"
 , applicationName ? "Mozilla Firefox"
+, appstreamMetadataSourceFile ? "../taskcluster/docker/${pname}-flatpak/${appstreamDistributionName}.appdata.xml.in"
+, appstreamDistributionName ? "org.mozilla.firefox"
 , branding ? null
 , requireSigning ? true
 , allowAddonSideload ? false
@@ -37,6 +39,7 @@ in
 , autoconf
 , cargo
 , dump_syms
+, envsubst
 , makeWrapper
 , mimalloc
 , nodejs
@@ -273,6 +276,7 @@ buildStdenv.mkDerivation {
   nativeBuildInputs = [
     autoconf
     cargo
+    envsubst
     gnum4
     llvmPackagesBuildBuild.bintools
     makeWrapper
@@ -539,6 +543,16 @@ buildStdenv.mkDerivation {
     # Install distribution customizations
     install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
     install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
+
+  '' + lib.optionalString (appstreamMetadataSourceFile != null && appstreamDistributionName != null) ''
+    # Install appstream metadata
+    mkdir -p $out/share/metainfo
+    # We cannot provide a data for reproducibility reasons
+    substituteInPlace "${appstreamMetadataSourceFile}" \
+      --replace ' date="$DATE"' ""
+    VERSION="${version}" envsubst \
+      < "${appstreamMetadataSourceFile}" \
+      > "$out/share/metainfo/${appstreamDistributionName}.appdata.xml"
 
   '' + lib.optionalString buildStdenv.hostPlatform.isLinux ''
     # Remove SDK cruft. FIXME: move to a separate output?
