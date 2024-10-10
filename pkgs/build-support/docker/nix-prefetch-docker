@@ -133,7 +133,7 @@ else
 fi
 
 # Compute the hash.
-imageHash=$(nix-hash --flat --type $hashType --base32 "$tmpFile")
+imageHash=$(nix-hash --flat --type $hashType --sri "$tmpFile")
 
 # Add the downloaded file to Nix store.
 finalPath=$(nix-store --add-fixed "$hashType" "$tmpFile")
@@ -152,7 +152,7 @@ cat <<EOF
 {
   imageName = "$imageName";
   imageDigest = "$imageDigest";
-  sha256 = "$imageHash";
+  hash = "$imageHash";
   finalImageName = "$finalImageName";
   finalImageTag = "$finalImageTag";
 }
@@ -164,7 +164,7 @@ cat <<EOF
 {
   "imageName": "$imageName",
   "imageDigest": "$imageDigest",
-  "sha256": "$imageHash",
+  "hash": "$imageHash",
   "finalImageName": "$finalImageName",
   "finalImageTag": "$finalImageTag"
 }
