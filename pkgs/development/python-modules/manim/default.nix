@@ -203,6 +203,9 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--no-cov-on-fail --cov=manim --cov-report xml --cov-report term" ""
+
+    substituteInPlace manim/_config/default.cfg \
+      --replace "ffmpeg_executable = ffmpeg" "ffmpeg_executable = ${lib.getExe ffmpeg}"
   '';
 
   buildInputs = [ cairo ];
