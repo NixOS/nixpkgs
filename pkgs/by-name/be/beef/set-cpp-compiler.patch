@@ -1,0 +1,76 @@
+diff --git a/BeefBoot/BootApp.cpp b/BeefBoot/BootApp.cpp
+index 46c02f2..1c893c1 100644
+--- a/BeefBoot/BootApp.cpp
++++ b/BeefBoot/BootApp.cpp
+@@ -738,11 +738,7 @@ void BootApp::DoLinkMS()
+ 
+ void BootApp::DoLinkGNU()
+ {
+-    String linkerPath;
+-    if (FileExists("/usr/bin/clang++"))
+-    	linkerPath = "/usr/bin/clang++";
+-    else
+-    	linkerPath = "/usr/bin/c++";
++    String linkerPath = "@cpp@";
+ 
+     String linkLine;
+ 
+diff --git a/IDE/src/BuildContext.bf b/IDE/src/BuildContext.bf
+index 6659e1b..d1e1067 100644
+--- a/IDE/src/BuildContext.bf
++++ b/IDE/src/BuildContext.bf
+@@ -508,30 +508,6 @@ namespace IDE
+ 					linkLine.Append(" ");
+ 				}
+ 
+-				String gccExePath;
+-				String clangExePath;
+-				if (isMinGW)
+-				{
+-				    gccExePath = "c:/mingw/bin/g++.exe";
+-				    clangExePath = scope String(llvmDir, "bin/clang++.exe");
+-				}
+-				else
+-				{
+-			        gccExePath = "/usr/bin/c++";
+-			        clangExePath = scope String("/usr/bin/c++");
+-
+-			        if (File.Exists("/usr/bin/clang++"))
+-			        {
+-						gccExePath = "/usr/bin/clang++";
+-			        	clangExePath = scope String("/usr/bin/clang++");
+-			        }
+-			        else
+-			        {
+-						gccExePath = "/usr/bin/c++";
+-			        	clangExePath = scope String("/usr/bin/c++");
+-			        }
+-				}
+-
+ 				UpdateCacheStr(project, linkLine, workspaceOptions, options, depPaths, libPaths);
+ 
+ 			    if (project.mNeedsTargetRebuild)
+@@ -585,7 +561,7 @@ namespace IDE
+ 						linkLine.Append(linkFlags, " ");
+ 					}
+ 
+-			        String compilerExePath = (workspaceOptions.mToolsetType == .GNU) ? gccExePath : clangExePath;
++			        String compilerExePath = "@cpp@";
+ 					String workingDir = scope String();
+ 					if (!llvmDir.IsEmpty)
+ 					{
+diff --git a/IDEHelper/Tests/BeefProj.toml b/IDEHelper/Tests/BeefProj.toml
+index 3f2f846..fb17a6f 100644
+--- a/IDEHelper/Tests/BeefProj.toml
++++ b/IDEHelper/Tests/BeefProj.toml
+@@ -14,8 +14,8 @@ LibPaths = ["$(ProjectDir)/CLib/Debug/CLib.lib"]
+ 
+ [Configs.Test.Linux64]
+ OtherLinkFlags = "$(LinkFlags) $(ProjectDir)/CLib/main.o -Wl,--export-dynamic"
+-PreBuildCmds = ["/usr/bin/c++ $(ProjectDir)/CLib/main.cpp -g -c -o $(ProjectDir)/CLib/main.o"]
++PreBuildCmds = ["@cpp@ $(ProjectDir)/CLib/main.cpp -g -c -o $(ProjectDir)/CLib/main.o"]
+ 
+ [Configs.Test.macOS]
+ OtherLinkFlags = "$(LinkFlags) $(ProjectDir)/CLib/main.o"
+-PreBuildCmds = ["/usr/bin/c++ $(ProjectDir)/CLib/main.cpp -g -c -o $(ProjectDir)/CLib/main.o"]
++PreBuildCmds = ["@cpp@ $(ProjectDir)/CLib/main.cpp -g -c -o $(ProjectDir)/CLib/main.o"]
