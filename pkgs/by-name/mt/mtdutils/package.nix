@@ -1,17 +1,45 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  cmocka,
+  acl,
+  libuuid,
+  lzo,
+  util-linux,
+  zlib,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchgit {
     url = "git://git.infradead.org/mtd-utils.git";
     rev = "v${version}";
-    hash = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
+    hash = "sha256-vGgBOKu+ClmyRZHQkAS8r/YJtZihr/oD/yj8V7DeAQ8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
-  buildInputs = [ acl libuuid lzo zlib zstd ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ] ++ lib.optional doCheck cmocka;
+  buildInputs = [
+    acl
+    libuuid
+    lzo
+    util-linux
+    zlib
+    zstd
+  ];
+
+  postPatch = ''
+    substituteInPlace ubifs-utils/mount.ubifs \
+      --replace-fail "/bin/mount" "${util-linux}/bin/mount"
+  '';
 
   enableParallelBuilding = true;
 
@@ -20,13 +48,14 @@ stdenv.mkDerivation rec {
     (lib.enableFeature doCheck "tests")
   ];
 
-  makeFlags = [
-    "AR:=$(AR)"
-  ];
+  makeFlags = [ "AR:=$(AR)" ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $dev/lib

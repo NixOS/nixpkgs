@@ -3826,8 +3826,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon;
   };
 
-  waydroid = callPackage ../os-specific/linux/waydroid { };
-
   wgo = callPackage ../development/tools/wgo { };
 
   wiiload = callPackage ../development/tools/wiiload { };
@@ -10157,8 +10155,6 @@ with pkgs;
   };
 
   ms-sys = callPackage ../tools/misc/ms-sys { };
-
-  mtdutils = callPackage ../tools/filesystems/mtdutils { };
 
   mtools = callPackage ../tools/filesystems/mtools { };
 
@@ -26356,8 +26352,6 @@ with pkgs;
 
   rojo = callPackage ../development/tools/rojo { };
 
-  mediamtx = callPackage ../servers/mediamtx { };
-
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rt-tests = callPackage ../os-specific/linux/rt-tests { };
@@ -28429,7 +28423,7 @@ with pkgs;
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_18;
   };
 
   calf = callPackage ../applications/audio/calf {
@@ -34430,10 +34424,6 @@ with pkgs;
   openrct2 = callPackage ../games/openrct2 { };
 
   opensearch = callPackage ../servers/search/opensearch { };
-
-  osu-lazer = callPackage ../games/osu-lazer { };
-
-  osu-lazer-bin = callPackage ../games/osu-lazer/bin.nix { };
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 

@@ -668,6 +668,12 @@
     githubId = 19290901;
     name = "Andrew Brooks";
   };
+  agilesteel = {
+    email = "agilesteel@gmail.com";
+    github = "agilesteel";
+    githubId = 1141462;
+    name = "Vladyslav Pekker";
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
@@ -8238,6 +8244,13 @@
     email = "hacker1024@users.sourceforge.net";
     github = "hacker1024";
     githubId = 20849728;
+  };
+  hadilq = {
+    name = "Hadi Lashkari Ghouchani";
+    email = "hadilq.dev@gmail.com";
+    github = "hadilq";
+    githubId = 5190539;
+    keys = [ { fingerprint = "AD3D 53CB A68A FEC0 8065  BCBB 416A D9E8 E372 C075"; } ];
   };
   hagl = {
     email = "harald@glie.be";

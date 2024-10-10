@@ -15,25 +15,26 @@ in
 buildGoModule rec {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DCt0P0DHlWFAQ5i4+7U5+Q2XcCPlSZrlj+Ljcyg/Wj0=";
+    hash = "sha256-aHVSGyrLuLX/RYf1I1dDackmOeU3m24QcwBus4Uly0I=";
   };
 
-  vendorHash = "sha256-YKNNQPEdO8K7Lpm/S86GKD3QcNcyvwZSrBspZJMJ78Y=";
+  vendorHash = "sha256-YpwbFCfI2kfmX3nI1G9OGUv5qpZ/JMis5VyUkqsESZA=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
+    echo "v${version}" > internal/core/VERSION
   '';
+
+  subPackages = [ "." ];
 
   # Tests need docker
   doCheck = false;
-
-  ldflags = [ "-X github.com/bluenviron/mediamtx/internal/core.version=v${version}" ];
 
   passthru.tests = {
     inherit (nixosTests) mediamtx;
