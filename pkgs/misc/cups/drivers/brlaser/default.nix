@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Owl-Maintain/brlaser";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ StijnDW ];
+    maintainers = with maintainers; [ ahydronous ];
   };
 }
