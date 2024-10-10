@@ -16469,6 +16469,12 @@
     githubId = 722550;
     name = "Peter Hoeg";
   };
+  peterldowns = {
+    name = "Peter Downs";
+    email = "github@peterdowns.com";
+    github = "peterldowns";
+    githubId = 824173;
+  };
   peterromfeldhk = {
     email = "peter.romfeld.hk@gmail.com";
     github = "peterromfeldhk";
