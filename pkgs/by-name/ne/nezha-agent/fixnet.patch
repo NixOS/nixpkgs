@@ -1,0 +1,135 @@
+diff --git a/cmd/agent/main_test.go b/cmd/agent/main_test.go
+index 717cce9..2d801e7 100644
+--- a/cmd/agent/main_test.go
++++ b/cmd/agent/main_test.go
+@@ -1,8 +1,6 @@
+ package main
+ 
+ import (
+-	"fmt"
+-	"net"
+ 	"reflect"
+ 	"testing"
+ )
+@@ -25,25 +23,3 @@ func Test(t *testing.T) {
+ 		}
+ 	}
+ }
+-
+-func TestLookupIP(t *testing.T) {
+-	ip, err := lookupIP("www.google.com")
+-	fmt.Printf("ip: %v, err: %v\n", ip, err)
+-	if err != nil {
+-		t.Errorf("lookupIP failed: %v", err)
+-	}
+-	_, err = net.ResolveIPAddr("ip", "www.google.com")
+-	if err != nil {
+-		t.Errorf("ResolveIPAddr failed: %v", err)
+-	}
+-
+-	ip, err = lookupIP("ipv6.google.com")
+-	fmt.Printf("ip: %v, err: %v\n", ip, err)
+-	if err != nil {
+-		t.Errorf("lookupIP failed: %v", err)
+-	}
+-	_, err = net.ResolveIPAddr("ip", "ipv6.google.com")
+-	if err != nil {
+-		t.Errorf("ResolveIPAddr failed: %v", err)
+-	}
+-}
+diff --git a/pkg/monitor/myip_test.go b/pkg/monitor/myip_test.go
+deleted file mode 100644
+index 51ce951..0000000
+--- a/pkg/monitor/myip_test.go
++++ /dev/null
+@@ -1,32 +0,0 @@
+-package monitor
+-
+-import (
+-	"io"
+-	"testing"
+-)
+-
+-func TestGeoIPApi(t *testing.T) {
+-	for i := 0; i < len(cfList); i++ {
+-		resp, err := httpGetWithUA(httpClientV4, cfList[i])
+-		if err != nil {
+-			t.Fatalf("httpGetWithUA(%s) error: %v", cfList[i], err)
+-		}
+-		body, err := io.ReadAll(resp.Body)
+-		if err != nil {
+-			t.Fatalf("io.ReadAll(%s) error: %v", cfList[i], err)
+-		}
+-		resp.Body.Close()
+-		ip := string(body)
+-		t.Logf("%s %s", cfList[i], ip)
+-		if ip == "" {
+-			t.Fatalf("httpGetWithUA(%s) error: %v", cfList[i], err)
+-		}
+-	}
+-}
+-
+-func TestFetchGeoIP(t *testing.T) {
+-	ip := fetchIP(cfList, false)
+-	if ip == "" {
+-		t.Fatalf("fetchGeoIP() error: %v", ip)
+-	}
+-}
+diff --git a/pkg/utls/roundtripper_test.go b/pkg/utls/roundtripper_test.go
+deleted file mode 100644
+index a3a6f9d..0000000
+--- a/pkg/utls/roundtripper_test.go
++++ /dev/null
+@@ -1,52 +0,0 @@
+-package utls_test
+-
+-import (
+-	"net/http"
+-	"testing"
+-
+-	utls "github.com/refraction-networking/utls"
+-
+-	"github.com/nezhahq/agent/pkg/util"
+-	utlsx "github.com/nezhahq/agent/pkg/utls"
+-)
+-
+-const url = "https://www.patreon.com/login"
+-
+-func TestCloudflareDetection(t *testing.T) {
+-	client := http.DefaultClient
+-
+-	t.Logf("testing connection to %s", url)
+-	resp, err := doRequest(client, url)
+-	if err != nil {
+-		t.Errorf("Get %s failed: %v", url, err)
+-	}
+-
+-	if resp.StatusCode == 403 {
+-		t.Log("Default client is detected, switching to client with utls transport")
+-		headers := util.BrowserHeaders()
+-		client.Transport = utlsx.NewUTLSHTTPRoundTripperWithProxy(
+-			utls.HelloChrome_Auto, new(utls.Config),
+-			http.DefaultTransport, nil, headers,
+-		)
+-		resp, err = doRequest(client, url)
+-		if err != nil {
+-			t.Errorf("Get %s failed: %v", url, err)
+-		}
+-		if resp.StatusCode == 403 {
+-			t.Fail()
+-		} else {
+-			t.Log("Client with utls transport passed Cloudflare detection")
+-		}
+-	} else {
+-		t.Log("Default client passed Cloudflare detection")
+-	}
+-}
+-
+-func doRequest(client *http.Client, url string) (*http.Response, error) {
+-	resp, err := client.Get(url)
+-	if err != nil {
+-		return nil, err
+-	}
+-	defer resp.Body.Close()
+-	return resp, nil
+-}
