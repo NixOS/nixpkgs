@@ -23297,7 +23297,9 @@ with pkgs;
 
   tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
 
-  tdb = callPackage ../development/libraries/tdb { };
+  tdb = callPackage ../development/libraries/tdb {
+    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  };
 
   tdlib = callPackage ../development/libraries/tdlib { };
 
