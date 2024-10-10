@@ -1,14 +1,25 @@
 # Setup hook for pytest
+#
+# Note: For compatibility purposes,
+# this setup hook Bash-evaluates the flags attributes
+# before concatenating them to the command
+# when __structuredAttrs is false.
+#
+# shellcheck shell=bash
+
 echo "Sourcing pytest-check-hook"
 
-declare -ar disabledTests
-declare -a disabledTestPaths
+# shellcheck source=pkgs/development/interpreters/python/compat-helpers.sh
+source @compatHelpers@
+
+expandStringAndConvertToArray pytestFlagsArray
 
 function _concatSep {
     local result
     local sep="$1"
     local -n arr=$2
     for index in ${!arr[*]}; do
+        # shellcheck disable=SC2086
         if [ $index -eq 0 ]; then
             result="${arr[index]}"
         else
@@ -19,9 +30,10 @@ function _concatSep {
 }
 
 function _pytestComputeDisabledTestsString() {
-    declare -a tests
-    local tests=($1)
+    local -a tests=()
+    expandStringAndConcatTo tests "$@"
     local prefix="not "
+    # shellcheck disable=SC2034
     prefixed=("${tests[@]/#/$prefix}")
     result=$(_concatSep "and" prefixed)
     echo "$result"
@@ -32,25 +44,27 @@ function pytestCheckPhase() {
     runHook preCheck
 
     # Compose arguments
-    args=" -m pytest"
-    if [ -n "$disabledTests" ]; then
-        disabledTestsString=$(_pytestComputeDisabledTestsString "${disabledTests[@]}")
-        args+=" -k \""$disabledTestsString"\""
+    local -a defaultFlags=()
+    defaultFlags+=(-m pytest)
+    if [ -n "${disabledTests[*]-}" ]; then
+        local disabledTestsString
+        disabledTestsString=$(_pytestComputeDisabledTestsString disabledTests)
+        defaultFlags+=(-k "$disabledTestsString")
     fi
 
-    if [ -n "${disabledTestPaths-}" ]; then
-        eval "disabledTestPaths=($disabledTestPaths)"
-    fi
+    local -a disabledTestPathsArray=()
+    expandStringAndConcatTo disabledTestPathsArray disabledTestPaths
 
-    for path in ${disabledTestPaths[@]}; do
+    for path in "${disabledTestPathsArray[@]}"; do
         if [ ! -e "$path" ]; then
             echo "Disabled tests path \"$path\" does not exist. Aborting"
             exit 1
         fi
-        args+=" --ignore=\"$path\""
+        defaultFlags+=("--ignore=$path")
     done
-    args+=" ${pytestFlagsArray[@]}"
-    eval "@pythonCheckInterpreter@ $args"
+    local -a flagsArray
+    concatTo defaultFlags pytestFlagsArray
+    @pythonCheckInterpreter@ "${flagsArray[@]}"
 
     runHook postCheck
     echo "Finished executing pytestCheckPhase"
