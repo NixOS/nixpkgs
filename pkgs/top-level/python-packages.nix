@@ -15415,6 +15415,7 @@ self: super: with self; {
   callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.config) cudaSupport;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    clang = pkgs.clang_16;
     flatbuffers-core = pkgs.flatbuffers;
     flatbuffers-python = self.flatbuffers;
     cudaPackages = compat.cudaPackagesTF;
