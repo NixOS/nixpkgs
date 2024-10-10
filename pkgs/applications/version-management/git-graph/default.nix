@@ -6,7 +6,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-graph";
-  version = "unstable-2023-01-14";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "mlange-42";
@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-tMM/mpt9yzZYSpnOGBuGLM0XTJiiyChfUrERMuyn3mQ=";
   };
 
-  cargoHash = "sha256-ZLF/l2HnIbmkayWXhjYr01M6lGaGiK2UYyp654ncxgo=";
+  cargoHash = "sha256-NLFkjn/qCn+FetpbMiLpQhkzDEVIkKuPRhuFuT8AnNY=";
 
   meta = with lib; {
     description = "Command line tool to show clear git graphs arranged for your branching model";
