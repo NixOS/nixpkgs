@@ -1,27 +1,35 @@
-{ lib, buildDotnetModule, fetchFromGitHub, fetchpatch, dotnetCorePackages }:
+{ lib, buildDotnetModule, fetchFromGitHub, fetchpatch, dotnetCorePackages, nuget-to-nix, writeShellScript, breakpointHook }:
 
 buildDotnetModule rec {
   pname = "fsautocomplete";
-  version = "0.73.2";
+  version = "0.74.1";
 
   src = fetchFromGitHub {
     owner = "fsharp";
     repo = "FsAutoComplete";
     rev = "v${version}";
-    hash = "sha256-iiV/Tw3gOteARrOEbLjPA/jGawoxJVBZg6GvF9p9HHA=";
+    hash = "sha256-GVIBd0FX3rYn7KM0+QytNlMDobABBkRR6heFUCJq+Tg=";
   };
 
   patches = [
-    (fetchpatch {
-      url = "https://github.com/ionide/FsAutoComplete/pull/1311/commits/e258ba3db47daec9d5befcdc1ae79484c2804cf4.patch";
-      hash = "sha256-bKTk5gszyVZObvq78emAtqE6bBg+1doseoxjUnrjOH4=";
-    })
+    # (fetchpatch {
+    #   url = "https://github.com/ionide/FsAutoComplete/pull/1311/commits/e258ba3db47daec9d5befcdc1ae79484c2804cf4.patch";
+    #   hash = "sha256-bKTk5gszyVZObvq78emAtqE6bBg+1doseoxjUnrjOH4=";
+    # })
   ];
 
+  nativeBuildInputs = [ breakpointHook ];
+
+  passthru = {
+    fetch-deps = import ./restore.nix { dotnet = lib.getExe dotnet-sdk; nuget-to-nix = (nuget-to-nix.override { inherit dotnet-sdk; }); inherit writeShellScript; };
+    };
+
   nugetDeps = ./deps.nix;
+  dotnetFlags = [ "--use-current-runtime" "-p:AutomaticallyUseReferenceAssemblyPackages=true" ];
 
   postPatch = ''
-    rm global.json
+    # echo foo
+    # rm global.json
 
     substituteInPlace src/FsAutoComplete/FsAutoComplete.fsproj \
       --replace TargetFrameworks TargetFramework \
