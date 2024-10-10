@@ -3320,9 +3320,7 @@
     github = "cageyv";
     githubId = 51059484;
     name = "Vladmir Samoylov";
-    keys = [
-      { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; }
-    ];
+    keys = [ { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; } ];
   };
   CaiqueFigueiredo = {
     email = "public@caiquefigueiredo.me";
@@ -9329,6 +9327,13 @@
     name = "Christoph Hüffelmann";
     github = "istoph";
     githubId = 114227790;
+  };
+  itsvic-dev = {
+    email = "contact@itsvic.dev";
+    name = "Victor B.";
+    github = "itsvic-dev";
+    githubId = 17727163;
+    keys = [ { fingerprint = "FBAA B86A 101B 4C5F D4F1  25D2 E93D DAC1 7E5D 6CA1"; } ];
   };
   ius = {
     email = "j.de.gram@gmail.com";
