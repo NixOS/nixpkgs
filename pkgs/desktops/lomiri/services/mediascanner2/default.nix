@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mediascanner2";
-  version = "0.115";
+  version = "0.116";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/mediascanner2";
     rev = finalAttrs.version;
-    hash = "sha256-UEwFe65VB2asxQhuWGEAVow/9rEvZxry4dd2/60fXN4=";
+    hash = "sha256-aRNT3DSPxz/vf6gqipf5Qc5zyDGFMHWONevAslwOrCY=";
   };
 
   outputs = [
