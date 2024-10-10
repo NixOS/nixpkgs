@@ -1032,4 +1032,35 @@ rec {
     readmeFile = "README_el_GR.txt";
     license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
   };
+
+  /* KOREAN */
+  ko_KR = ko-kr;
+  ko-kr = mkDict rec {
+    pname = "hunspell-dict-ko-kr";
+    version = "0.7.94";
+
+    src = fetchFromGitHub {
+      owner = "spellcheck-ko";
+      repo = "hunspell-dict-ko";
+      rev = version;
+      hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
+    };
+
+    dictFileName = "ko_KR";
+    readmeFile = "README.md";
+
+    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+
+    preInstall = ''
+      mv ko.aff ko_KR.aff
+      mv ko.dic ko_KR.dic
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for Korean (South Korea)";
+      homepage = "https://github.com/spellcheck-ko/hunspell-dict-ko";
+      license = with lib.licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+      maintainers = with lib.maintainers; [ honnip ];
+    };
+  };
 }
