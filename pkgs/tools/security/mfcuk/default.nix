@@ -1,16 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, libnfc }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libnfc }:
 
 stdenv.mkDerivation {
   pname = "mfcuk";
   version = "0.3.8";
 
-  src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/mfcuk/mfcuk-0.3.8.tar.gz";
-    sha256 = "0m9sy61rsbw63xk05jrrmnyc3xda0c3m1s8pg3sf8ijbbdv9axcp";
+  src = fetchFromGitHub {
+    owner = "nfc-tools";
+    repo = "mfcuk";
+    rev = "mfcuk-0.3.8";
+    hash = "sha256-eSJHO0Dew8JqU0u52wDqafK5EHgqXqO5IZBcjXSGwaA=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libnfc ];
+
+  postConfigure = ''
+    substituteInPlace src/mfcuk_finger.c --replace ./data/ $out/share/
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share
+    cp -r src/data/tmpls_fingerprints $out/share/
+  '';
 
   meta = with lib; {
     description = "MiFare Classic Universal toolKit";
