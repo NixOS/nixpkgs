@@ -294,6 +294,12 @@ let
                   path = ../14;
                 }
               ];
+              "libclc/use-default-paths.patch" = [
+                {
+                  after = "19";
+                  path = ../19;
+                }
+              ];
             };
 
             constraints = patches."${p}" or null;

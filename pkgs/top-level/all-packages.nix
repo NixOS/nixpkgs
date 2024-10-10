@@ -2380,8 +2380,6 @@ with pkgs;
 
   gitweb = callPackage ../applications/version-management/gitweb { };
 
-  glab = callPackage ../applications/version-management/glab { };
-
   glitter = callPackage ../applications/version-management/glitter { };
 
   globalping-cli = callPackage ../tools/networking/globalping-cli { };
@@ -6259,8 +6257,6 @@ with pkgs;
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
-  chrony = callPackage ../tools/networking/chrony { };
-
   chunkfs = callPackage ../tools/filesystems/chunkfs { };
 
   chunksync = callPackage ../tools/backup/chunksync { };
@@ -6828,6 +6824,8 @@ with pkgs;
   decode-spam-headers = callPackage ../tools/networking/decode-spam-headers { };
 
   deer = callPackage ../shells/zsh/zsh-deer { };
+
+  deno_1 = callPackage ../by-name/de/deno/1/package.nix { };
 
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
@@ -15253,6 +15251,7 @@ with pkgs;
   mlir_16 = llvmPackages_16.mlir;
   mlir_17 = llvmPackages_17.mlir;
 
+  libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 

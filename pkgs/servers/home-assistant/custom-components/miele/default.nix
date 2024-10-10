@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "astrandb";
   domain = "miele";
-  version = "2024.3.0";
+  version = "2024.8.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     rev = "refs/tags/v${version}";
-    hash = "sha256-J9n4PFcd87L301B2YktrLcxp5Vu1HwDeCYnrMEJ0+TA=";
+    hash = "sha256-XwaOQJvosCUXMZYrKX7sMWJIrMx36RhuVYUq163vvNg=";
   };
 
   propagatedBuildInputs = [
