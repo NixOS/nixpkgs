@@ -36,7 +36,8 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "google_cloud_bigquery";
+    inherit version;
     hash = "sha256-7b3HiL7qZZ4EwK9/5NzW2RVTRLmJUaDVBVvS8V2kuiM=";
   };
 
