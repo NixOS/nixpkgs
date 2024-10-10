@@ -54,6 +54,7 @@ let
             humanfriendly
             jmespath
             knack
+            microsoft-security-utilities-secret-masker
             msal-extensions
             msal
             msrestazure
