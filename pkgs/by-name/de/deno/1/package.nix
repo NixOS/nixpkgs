@@ -10,25 +10,21 @@
   libiconv,
   darwin,
   librusty_v8 ? callPackage ./librusty_v8.nix {
-    inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
+    inherit (callPackage ../fetchers.nix { }) fetchLibrustyV8;
   },
 }:
-
-let
-  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
-  version = "2.0.0";
+  version = "1.46.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3PfAjn2zWgxJOYgKwR7lvXu+rIENIHBMPwMM6dWNgR4=";
+    hash = "sha256-AM6SjcIHo6Koxcnznhkv3cXoKaMy2TEVpiWe/bczDuA=";
   };
 
-  cargoHash = "sha256-3r5B9yWXKO/8ah+Etflws8RnlRTAdaaC5HZMlZduyHE=";
+  cargoHash = "sha256-D+CZpb6OTzM5Il0k8GQB7qSONy4myE5yKlaSkLLqHT8=";
 
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
@@ -76,22 +72,21 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (canExecute) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
       --zsh <($out/bin/deno completions zsh)
   '';
 
-  doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString (canExecute) ''
+  doInstallCheck = true;
+  installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/deno --help
     $out/bin/deno --version | grep "deno ${version}"
     runHook postInstallCheck
   '';
 
-  passthru.updateScript = ./update/update.ts;
   passthru.tests = callPackage ./tests { };
 
   meta = with lib; {
