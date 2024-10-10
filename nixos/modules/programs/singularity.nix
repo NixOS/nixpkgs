@@ -112,8 +112,12 @@ in
       group = "root";
       source = "${cfg.packageOverriden}/libexec/${cfg.packageOverriden.projectName}/bin/starter-suid.orig";
     };
-    systemd.tmpfiles.rules = lib.mkIf cfg.enableExternalLocalStateDir [
-      "d /var/lib/${cfg.packageOverriden.projectName}/mnt/session 0770 root root -"
-    ];
+    systemd.tmpfiles.settings."10-singularity" = lib.mkIf cfg.enableExternalLocalStateDir {
+      "/var/lib/${cfg.packageOverriden.projectName}/mnt/session".d = {
+        user = "root";
+        group = "root";
+        mode = "0770";
+      };
+    };
   };
 }

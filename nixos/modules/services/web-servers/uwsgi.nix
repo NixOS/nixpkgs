@@ -187,9 +187,12 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = optional (cfg.runDir != "/run/uwsgi") ''
-      d ${cfg.runDir} 775 ${cfg.user} ${cfg.group}
-    '';
+    systemd.tmpfiles.settings."10-uwsgi" = mkIf (cfg.runDir != "/run/uwsgi") {
+      ${cfg.runDir}.d ={
+        inherit (cfg) user group;
+        mode = "0775";
+      };
+    };
 
     systemd.services.uwsgi = {
       wantedBy = [ "multi-user.target" ];

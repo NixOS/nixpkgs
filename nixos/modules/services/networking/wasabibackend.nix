@@ -112,9 +112,10 @@ in {
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0770 '${cfg.user}' '${cfg.group}' - -"
-    ];
+    systemd.tmpfiles.settings."10-wasabibackend".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0770";
+    };
 
     systemd.services.wasabibackend = {
       description = "wasabibackend server";

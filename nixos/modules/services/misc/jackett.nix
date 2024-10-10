@@ -45,9 +45,10 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-jackett".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+      mode = "0700";
+    };
 
     systemd.services.jackett = {
       description = "Jackett";

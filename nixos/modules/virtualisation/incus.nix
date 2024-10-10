@@ -308,7 +308,11 @@ in
     # Note: the following options are also declared in virtualisation.lxc, but
     # the latter can't be simply enabled to reuse the formers, because it
     # does a bunch of unrelated things.
-    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
+    systemd.tmpfiles.settings."10-incus"."/var/lib/lxc/rootfs".d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
 
     security.apparmor = {
       packages = [ cfg.lxcPackage ];

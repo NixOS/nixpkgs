@@ -118,10 +118,16 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' 0700 zookeeper - - -"
-      "Z '${cfg.dataDir}' 0700 zookeeper - - -"
-    ];
+    systemd.tmpfiles.settings."10-zookeeper".${cfg.dataDir} = {
+      d = {
+        user = "zookeeper";
+        mode = "0700";
+      };
+      Z = {
+        user = "zookeeper";
+        mode = "0700";
+      };
+    };
 
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";

@@ -55,9 +55,10 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - nobody nogroup - -"
-    ];
+    systemd.tmpfiles.settings."10-heartbeat".${cfg.stateDir}.d = {
+      user = "nobody";
+      group = "nogroup";
+    };
 
     systemd.services.heartbeat = with pkgs; {
       description = "heartbeat log shipper";

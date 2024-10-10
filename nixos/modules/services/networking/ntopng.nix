@@ -138,7 +138,11 @@ in
     # nice to have manual page and ntopng command in PATH
     environment.systemPackages = [ pkgs.ntopng ];
 
-    systemd.tmpfiles.rules = [ "d /var/lib/ntopng 0700 ntopng ntopng -" ];
+    systemd.tmpfiles.settings."10-ntopng"."/var/lib/ntopng".d = {
+      user = "ntopng";
+      group = "ntopng";
+      mode = "0700";
+    };
 
     systemd.services.ntopng = {
       description = "Ntopng Network Monitor";

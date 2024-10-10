@@ -163,16 +163,16 @@ in
 
     users.groups.${cfg.group} = {};
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.home}' - ${cfg.user} - - -"
-      "d /run/confluence - - - - -"
+    systemd.tmpfiles.settings."10-confluence" = {
+      ${cfg.home}.d.user = cfg.user;
+      "/run/confluence".d = { };
 
-      "L+ /run/confluence/home - - - - ${cfg.home}"
-      "L+ /run/confluence/logs - - - - ${cfg.home}/logs"
-      "L+ /run/confluence/temp - - - - ${cfg.home}/temp"
-      "L+ /run/confluence/work - - - - ${cfg.home}/work"
-      "L+ /run/confluence/server.xml - - - - ${cfg.home}/server.xml"
-    ];
+      "/run/confluence/home"."L+".argument = cfg.home;
+      "/run/confluence/logs"."L+".argument = "${cfg.home}/logs";
+      "/run/confluence/temp"."L+".argument = "${cfg.home}/temp";
+      "/run/confluence/work"."L+".argument = "${cfg.home}/work";
+      "/run/confluence/server.xml"."L+".argument = "${cfg.home}/server.xml";
+    };
 
     systemd.services.confluence = {
       description = "Atlassian Confluence";
