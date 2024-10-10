@@ -5391,7 +5391,9 @@ self: super: with self; {
 
   graphrag = callPackage ../development/python-modules/graphrag { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool { };
+  graph-tool = callPackage ../development/python-modules/graph-tool {
+    inherit (pkgs) cgal;
+  };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
@@ -5496,7 +5498,9 @@ self: super: with self; {
     qemu = pkgs.qemu;
   };
 
-  gudhi = callPackage ../development/python-modules/gudhi { };
+  gudhi = callPackage ../development/python-modules/gudhi {
+    inherit (pkgs) cgal;
+  };
 
   guidance = callPackage ../development/python-modules/guidance { };
 
@@ -5990,7 +5994,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) libxml2;
+    inherit (pkgs) cgal libxml2;
   };
 
   ignite = callPackage ../development/python-modules/ignite { };
