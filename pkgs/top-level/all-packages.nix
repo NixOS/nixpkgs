@@ -3089,13 +3089,7 @@ with pkgs;
 
   ascii = callPackage ../tools/text/ascii { };
 
-  asciinema = callPackage ../tools/misc/asciinema { };
-
-  asciinema-agg = callPackage ../tools/misc/asciinema-agg {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  asciinema-scenario = callPackage ../tools/misc/asciinema-scenario { };
+  asciinema = asciinema_2;
 
   asciiquarium = callPackage ../applications/misc/asciiquarium { };
 
