@@ -30365,8 +30365,6 @@ with pkgs;
 
   kitsas = libsForQt5.callPackage ../applications/office/kitsas { };
 
-  kiwitalk = callPackage ../by-name/ki/kiwitalk/package.nix { pnpm = pnpm_8; };
-
   kiwix = libsForQt5.callPackage ../applications/misc/kiwix { };
 
   kiwix-tools = callPackage ../applications/misc/kiwix/tools.nix { };
