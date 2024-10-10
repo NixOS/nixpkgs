@@ -47,7 +47,7 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.6.2";
+  version = "0.6.2.post1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     owner = "reflex-dev";
     repo = "reflex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-d/1Pb8jI97pvaKnWwauuyFCMt/35G/30BlAn7nyj61U=";
+    hash = "sha256-JW1hebcoBMMEirJkJ5Cquh23p9Gv3RU5AxPbXUcwPK4=";
   };
 
   pythonRelaxDeps = [
