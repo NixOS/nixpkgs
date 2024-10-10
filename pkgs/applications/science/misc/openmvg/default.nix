@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    openmp
     osi
     zlib
-  ];
+  ]
+  ++ lib.optional stdenv.cc.isClang openmp;
 
   nativeBuildInputs = [ cmake pkg-config ];
 
