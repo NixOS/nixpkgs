@@ -7,6 +7,7 @@
   go,
   git,
   cacert,
+  nixosTests,
 }:
 let
   pname = "homebox";
@@ -71,6 +72,12 @@ buildGoModule {
     "-X main.version=${version}"
     "-X main.commit=${version}"
   ];
+
+  passthru = {
+    tests = {
+      inherit (nixosTests) homebox;
+    };
+  };
 
   meta = {
     mainProgram = "api";
