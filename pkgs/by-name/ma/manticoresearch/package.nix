@@ -18,12 +18,12 @@
 let
   columnar = stdenv.mkDerivation (finalAttrs: {
     pname = "columnar";
-    version = "c21-s10"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API in Manticore's cmake/GetColumnar.cmake
+    version = "c25-s15-k3"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API/NEED_KNN_API in Manticore's cmake/GetColumnar.cmake
     src = fetchFromGitHub {
       owner = "manticoresoftware";
       repo = "columnar";
       rev = finalAttrs.version;
-      hash = "sha256-TGFGFfoyHnPSr2U/9dpqFLUN3Dt2jDQrTF/xxDY4pdE=";
+      hash = "sha256-WD84JVmHrXJkAre7fgsnWkGA84WSuw6Pa2EXyE/k4zA=";
     };
     nativeBuildInputs = [ cmake ];
     cmakeFlags = [ "-DAPI_ONLY=ON" ];
@@ -51,16 +51,57 @@ let
       platforms = lib.platforms.all;
     };
   });
+
+  cctz = stdenv.mkDerivation {
+    pname = "manticore-cctz";
+    version = "0-unstable-2024-05-08";
+
+    src = fetchFromGitHub {
+      owner = "manticoresoftware";
+      repo = "cctz";
+      rev = "cf11f758e2532161c9e21c3ec2461b0fafb15853";
+      hash = "sha256-oXn6YowOg+9jaXXSX1fggkgE9o9xZ4hlmrpdpEHot68=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    meta = {
+      description = "Library for translating between absolute and civil times using the rules of a time zone";
+      homepage = "https://github.com/manticoresoftware/cctz";
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.all;
+    };
+  };
+
+  xxhash = stdenv.mkDerivation {
+    pname = "manticore-xxhash";
+    version = "0.8.2-unstable-2024-07-24";
+
+    src = fetchFromGitHub {
+      owner = "manticoresoftware";
+      repo = "xxHash";
+      rev = "72997b0070a031c063f86a308aec77ae742706d3";
+      hash = "sha256-QAIxZeMiohm/BYyO0f70En6GOv7t3yLH2pJfkUek7Js=";
+    };
+
+    nativeBuildInputs = [ cmake ];
+    meta = {
+      description = "Extremely fast non-cryptographic hash algorithm";
+      homepage = "https://github.com/manticoresoftware/xxhash";
+      license = with lib.licenses; [ bsd2 gpl2 ];
+      platforms = lib.platforms.all;
+    };
+  };
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "manticoresearch";
-  version = "6.2.12";
+  version = "6.3.6";
 
   src = fetchFromGitHub {
     owner = "manticoresoftware";
     repo = "manticoresearch";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-UD/r7rlJ5mR3wg4doKT/nTwTWzlulngUjOPNEjmykB8=";
+    hash = "sha256-lQGr8iiIdbeGHlwkNYcj0KyjYTjy4GM4pHqRKegoIYA=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    cctz
     columnar
     icu.dev
     libstemmer
@@ -79,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     uni-algo
     re2
+    xxhash
   ];
 
   postPatch = ''
@@ -104,9 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/lib/systemd/system
     cp ${finalAttrs.src}/dist/deb/manticore.service.in $out/lib/systemd/system/manticore.service
     substituteInPlace $out/lib/systemd/system/manticore.service \
-      --replace "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
-      --replace "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
-      --replace "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+      --replace-fail "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
+      --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
+      --replace-fail "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
   '';
 
   passthru.tests.version = testers.testVersion {
