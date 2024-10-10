@@ -565,6 +565,7 @@ in {
   minio = handleTest ./minio.nix {};
   miriway = handleTest ./miriway.nix {};
   misc = handleTest ./misc.nix {};
+  misskey = handleTest ./misskey.nix {};
   mjolnir = handleTest ./matrix/mjolnir.nix {};
   mobilizon = handleTest ./mobilizon.nix {};
   mod_perl = handleTest ./mod_perl.nix {};
