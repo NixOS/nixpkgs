@@ -15,3 +15,4 @@ mkShell {
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin pkgs.libiconv;
 }
+

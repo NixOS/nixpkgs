@@ -138,3 +138,4 @@ perlPackages.buildPerlPackage rec {
     mainProgram = "gscan2pdf";
   };
 }
+

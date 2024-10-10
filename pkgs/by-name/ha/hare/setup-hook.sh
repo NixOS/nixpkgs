@@ -34,3 +34,4 @@ HARECACHE="$(mktemp -d)"
 export HARECACHE
 
 addEnvHooks "$hostOffset" addHarepath
+

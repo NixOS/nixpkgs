@@ -103,3 +103,4 @@ in
       (stringAfter [ "etc" "users" ] (builtins.readFile ./nix-channel/activation-check.sh));
   };
 }
+

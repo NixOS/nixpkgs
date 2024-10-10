@@ -27,3 +27,4 @@ do
 
   update-source-version "protonmail-desktop" "$latestVersion" "$latestSha" --system="$platform" --ignore-same-version --file=./pkgs/by-name/pr/protonmail-desktop/package.nix
 done
+

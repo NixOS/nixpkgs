@@ -229,3 +229,4 @@ stdenv.mkDerivation rec {
     ] ++ lib.teams.haskell.members;
   };
 }
+

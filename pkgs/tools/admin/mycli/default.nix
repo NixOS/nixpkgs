@@ -60,3 +60,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ jojosch ];
   };
 }
+

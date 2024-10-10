@@ -22,3 +22,4 @@ stdenv.mkDerivation {
     grep -q "add a new subscriber" $out/kamctl-stdout || (echo "ERROR: kamctl cannot be run"; exit 1)
   '';
 }
+

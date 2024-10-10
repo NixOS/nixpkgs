@@ -204,3 +204,4 @@ stdenv.mkDerivation rec {
     mainProgram = "curl-impersonate-chrome";
   };
 }
+

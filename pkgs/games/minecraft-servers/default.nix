@@ -26,3 +26,4 @@ lib.recurseIntoAttrs (
     vanilla = builtins.getAttr "vanilla-${escapeVersion latestVersion}" packages;
   }
 )
+

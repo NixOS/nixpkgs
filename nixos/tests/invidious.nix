@@ -143,3 +143,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     curl_assert_status_code(f"{url}/search", 200)
   '';
 })
+

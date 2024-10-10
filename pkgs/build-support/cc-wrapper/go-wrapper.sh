@@ -9,3 +9,4 @@ fi
 export GCCGO="@out@/bin/gccgo"
 
 exec @prog@ "$@"
+

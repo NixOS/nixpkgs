@@ -52,3 +52,4 @@ if bad_archives:
 
 with open(sys.argv[1], "w") as f:
     print(json.dumps(d, sort_keys=True, indent=4), file=f)
+

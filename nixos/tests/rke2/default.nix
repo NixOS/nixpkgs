@@ -11,3 +11,4 @@ in
   # Run a multi-node rke2 cluster and verify pod networking works across nodes
   multiNode = lib.mapAttrs (_: rke2: import ./multi-node.nix { inherit system pkgs rke2; }) allRKE2;
 }
+

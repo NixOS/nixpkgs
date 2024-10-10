@@ -81,3 +81,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "swayimg";
   };
 })
+

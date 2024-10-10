@@ -25,3 +25,4 @@ if [ ! -e "$STEAMROOT/steamcmd.sh" ]; then
 fi
 
 @steamRun@/bin/steam-run "$STEAMROOT/steamcmd.sh" "$@"
+

@@ -55,3 +55,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ kaction jk qjoly ];
   };
 }
+

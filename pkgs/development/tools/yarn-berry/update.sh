@@ -19,3 +19,4 @@ EOF
 version=$(jq -r "[.data.repository.tag.nodes[].name | select(contains(\"-\")|not)] | max_by(split(\".\") | map(tonumber))" <<< "$payload")
 
 update-source-version yarn-berry "$version"
+

@@ -23,3 +23,4 @@ in
     environment.systemPackages = [ pkgs.pekwm ];
   };
 }
+

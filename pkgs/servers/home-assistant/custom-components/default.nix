@@ -88,3 +88,4 @@
 
   yassi = callPackage ./yassi {};
 }
+

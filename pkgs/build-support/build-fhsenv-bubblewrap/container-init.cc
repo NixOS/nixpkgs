@@ -61,3 +61,4 @@ int main(int, const char *argv[]) {
   perror("Failed to exec stage 2 init");
   return 1;
 }
+

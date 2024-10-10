@@ -70,3 +70,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ pbsds ];
   };
 }
+

@@ -21,3 +21,4 @@ mkKdeDerivation {
     "-DQtWaylandScanner_EXECUTABLE=${qtwayland}/libexec/qtwaylandscanner"
   ];
 }
+

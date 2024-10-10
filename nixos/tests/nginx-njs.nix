@@ -25,3 +25,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     assert "Hello world!" == response, f"Expected 'Hello world!', got '{response}'"
   '';
 })
+

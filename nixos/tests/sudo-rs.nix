@@ -93,3 +93,4 @@ in
             strict.fail('faketty -- su - noadmin -c "sudo --help"')
       '';
   })
+

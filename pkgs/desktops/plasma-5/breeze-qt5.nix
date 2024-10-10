@@ -37,3 +37,4 @@ mkDerivation {
   outputs = [ "bin" "dev" "out" ];
   cmakeFlags = [ "-DUSE_Qt4=OFF" ];
 }
+

@@ -38,3 +38,4 @@ bindkey '^u'   _cb-kill-whole-line
 bindkey '\ed'  _cb-kill-word
 bindkey '\e^?' _cb-backward-kill-word
 bindkey '\ew'  _cb-copy-region-as-kill
+

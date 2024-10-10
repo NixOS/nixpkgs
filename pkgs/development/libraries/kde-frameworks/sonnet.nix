@@ -9,3 +9,4 @@ mkDerivation {
   buildInputs = [ aspell hunspell qttools ];
   propagatedBuildInputs = [ qtbase ];
 }
+

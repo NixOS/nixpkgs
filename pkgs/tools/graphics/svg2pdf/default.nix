@@ -29,3 +29,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "svg2pdf";
   };
 }
+

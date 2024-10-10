@@ -79,3 +79,4 @@ in
     services.xserver.displayManager.session = cfg.session;
   };
 }
+

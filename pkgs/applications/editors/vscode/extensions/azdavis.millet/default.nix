@@ -28,3 +28,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.smasher164 ];
   };
 }
+

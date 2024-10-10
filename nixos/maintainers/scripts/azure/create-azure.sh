@@ -6,3 +6,4 @@ export TIMESTAMP=$(date +%Y%m%d%H%M)
 
 nix-build '<nixpkgs/nixos>' \
    -A config.system.build.azureImage --argstr system x86_64-linux -o azure -j 10
+

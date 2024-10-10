@@ -40,3 +40,4 @@ fi
 
 echo "Successfully updated"
 echo "slack: $nixpkgs_linux_version -> $latest_linux_version"
+

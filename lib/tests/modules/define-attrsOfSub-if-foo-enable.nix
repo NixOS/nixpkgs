@@ -5,3 +5,4 @@
     foo.enable = true;
   };
 }
+

@@ -80,3 +80,4 @@ import ./make-test-python.nix ({ lib, pkgs, ...} :
         machine.screenshot("QOwnNotes-NewNote")
   '';
 })
+

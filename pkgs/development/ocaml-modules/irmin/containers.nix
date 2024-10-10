@@ -31,3 +31,4 @@ buildDunePackage {
     description = "Mergeable Irmin data structures";
   };
 }
+

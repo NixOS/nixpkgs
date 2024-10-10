@@ -66,3 +66,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ arjan-s fpletz ];
   };
 }
+

@@ -98,3 +98,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = if withGUI then "galice" else "alice";
   };
 })
+

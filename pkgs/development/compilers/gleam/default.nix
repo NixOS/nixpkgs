@@ -39,3 +39,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = teams.beam.members ++ [ lib.maintainers.philtaken ];
   };
 }
+

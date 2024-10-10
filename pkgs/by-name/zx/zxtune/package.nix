@@ -164,3 +164,4 @@ in stdenv.mkDerivation rec {
     mainProgram = if withQt then "zxtune-qt" else "zxtune123";
   };
 }
+

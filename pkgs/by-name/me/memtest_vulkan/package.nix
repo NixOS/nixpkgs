@@ -35,3 +35,4 @@ rustPlatform.buildRustPackage rec {
       || stdenv.hostPlatform.isDarwin; # Can't find Vulkan; might work though?
   };
 }
+

@@ -80,3 +80,4 @@ in {
     services.etcd.enable = lib.mkIf (cfg.backend == "etcd") (lib.mkDefault true);
   };
 }
+

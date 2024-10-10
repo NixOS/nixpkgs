@@ -47,3 +47,4 @@ in
     x86_64-cygwin = stagesNative;
     x86_64-freebsd = stagesFreeBSD;
   }.${localSystem.system} or stagesNative
+

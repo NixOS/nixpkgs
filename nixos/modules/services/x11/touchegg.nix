@@ -31,3 +31,4 @@ in {
     environment.systemPackages = [ cfg.package ];
   };
 }
+

@@ -28,3 +28,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://sourceforge.net/projects/soi/files/";
   };
 }
+

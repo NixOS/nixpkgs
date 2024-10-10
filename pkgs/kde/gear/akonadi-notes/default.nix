@@ -2,3 +2,4 @@
 mkKdeDerivation {
   pname = "akonadi-notes";
 }
+

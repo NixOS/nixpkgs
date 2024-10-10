@@ -6,3 +6,4 @@
     Idown 10mA
     io 0x0000-0x003f [lines=6] [16bit]
     irq mask 0xffff [level] [pulse]
+

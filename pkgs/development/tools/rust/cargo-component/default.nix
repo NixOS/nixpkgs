@@ -42,3 +42,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-component";
   };
 }
+

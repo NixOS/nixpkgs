@@ -39,3 +39,4 @@ in
     environment.systemPackages = [ pkgs.mlvwm ];
   };
 }
+

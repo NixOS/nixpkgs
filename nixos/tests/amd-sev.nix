@@ -54,3 +54,4 @@
         assert "sevtest:" in out
     '';
 }
+

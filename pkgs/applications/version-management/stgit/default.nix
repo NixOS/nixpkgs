@@ -87,3 +87,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "stg";
   };
 }
+

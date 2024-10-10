@@ -12,3 +12,4 @@ class RenderedOption(NamedTuple):
     links: Optional[list[str]] = None
 
 RenderFn = Callable[[Token, Sequence[Token], int], str]
+

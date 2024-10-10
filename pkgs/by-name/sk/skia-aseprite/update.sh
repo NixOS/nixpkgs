@@ -69,3 +69,4 @@ update_version > "$temp"
 cp "$temp" "$pkgfile"
 update_deps > "$temp"
 cp "$temp" "$depfile"
+

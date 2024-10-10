@@ -101,3 +101,4 @@ buildGoModule {
     mainProgram = "mailpit";
   };
 }
+

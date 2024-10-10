@@ -30,3 +30,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/marceltschoppch/flask-elastic";
   };
 }
+

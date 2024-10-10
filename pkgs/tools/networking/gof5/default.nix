@@ -29,3 +29,4 @@ buildGoModule rec {
     mainProgram = "gof5";
   };
 }
+

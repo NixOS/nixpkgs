@@ -36,3 +36,4 @@ writeShellApplication {
     fi
   '';
 }
+

@@ -41,3 +41,4 @@ buildGo123Module rec {
     maintainers = with maintainers; [ SuperSandro2000 mic92 ];
   };
 }
+

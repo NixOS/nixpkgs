@@ -29,3 +29,4 @@ buildGoModule {
   postPatch = "rm -r docs/investigation";
   vendorHash = "sha256-R+pW3xcfpkTRqfS2ETVOwG8PZr0iH5ewroiF7u8hcYI=";
 }
+

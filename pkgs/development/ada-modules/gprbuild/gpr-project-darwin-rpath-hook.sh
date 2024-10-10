@@ -8,3 +8,4 @@ fixGprProjectDarwinRpath() {
 }
 
 preFixupPhases+=" fixGprProjectDarwinRpath"
+

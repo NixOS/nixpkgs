@@ -9,3 +9,4 @@ runCommand "purescript-test-minimal-module" {} ''
 
   touch $out
 ''
+

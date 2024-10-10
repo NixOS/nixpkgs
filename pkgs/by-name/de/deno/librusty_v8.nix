@@ -21,3 +21,4 @@ fetch_librusty_v8 {
     aarch64-darwin = "sha256-ZuWBnvxu1PgDtjtguxtj3BhFO01AChlbjAS0kZUws3A=";
   };
 }
+

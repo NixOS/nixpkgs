@@ -182,3 +182,4 @@
 
   shellcheck = callPackage ./shellcheck/tester.nix { };
 }
+

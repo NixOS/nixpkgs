@@ -43,3 +43,4 @@ buildNpmPackage rec {
     mainProgram = "triton";
   };
 }
+

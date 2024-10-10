@@ -152,3 +152,4 @@ stdenv.mkDerivation rec {
     mainProgram = "monero-wallet-gui";
   };
 }
+

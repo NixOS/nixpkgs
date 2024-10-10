@@ -7,3 +7,4 @@ update-source-version river $latest_tag
 http get $"https://codeberg.org/river/river/raw/tag/v($latest_tag)/build.zig.zon" | save build.zig.zon
 zon2nix | save -f pkgs/by-name/ri/river/build.zig.zon.nix
 rm build.zig.zon
+

@@ -29,3 +29,4 @@ cat >sources.nix <<EOF
   amd64_hash = "$amd64_hash";
 }
 EOF
+

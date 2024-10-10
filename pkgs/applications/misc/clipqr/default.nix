@@ -73,3 +73,4 @@ buildGoModule rec {
     mainProgram = "clipqr";
   };
 }
+

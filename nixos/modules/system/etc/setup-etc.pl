@@ -157,3 +157,4 @@ write_file("/etc/.clean", map { "$_\n" } sort @copied);
 # so we need to check and re-create it during activation.
 open TAG, ">>/etc/NIXOS";
 close TAG;
+

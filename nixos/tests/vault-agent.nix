@@ -50,3 +50,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed('grep "example" /example')
   '';
 })
+

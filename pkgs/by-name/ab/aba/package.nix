@@ -56,3 +56,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "aba";
   };
 }
+

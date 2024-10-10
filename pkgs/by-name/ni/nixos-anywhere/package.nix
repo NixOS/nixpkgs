@@ -57,3 +57,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.mic92 maintainers.lassulus maintainers.phaer ];
   };
 })
+

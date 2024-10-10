@@ -52,3 +52,4 @@ buildGoModule rec {
 # 1. Keylight lists at: `avahi-browse --all --resolve --ignore-local`
 # 2. Ping Keylight's IP
 # 3. Resolve Keylight's hostname: `getent hosts elgato-key-light-XXXX.local`
+

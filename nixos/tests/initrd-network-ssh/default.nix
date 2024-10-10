@@ -71,3 +71,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     client.shutdown()
   '';
 })
+

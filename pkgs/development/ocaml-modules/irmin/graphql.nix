@@ -24,3 +24,4 @@ buildDunePackage rec {
     description = "GraphQL server for Irmin";
   };
 }
+

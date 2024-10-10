@@ -73,3 +73,4 @@ stdenv.mkDerivation (drvAttrs // {
     fish "${writeScript "${name}-test" checkPhase}"
   '';
 })
+

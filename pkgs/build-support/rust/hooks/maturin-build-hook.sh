@@ -38,3 +38,4 @@ maturinBuildHook() {
 }
 
 buildPhase=maturinBuildHook
+

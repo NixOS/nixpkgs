@@ -188,3 +188,4 @@ class CommonMarkRenderer(Renderer):
         if title := cast(str, token.attrs.get('title', '')):
             title = ' "' + title.replace('"', '\\"') + '"'
         return f'![{token.content}]({token.attrs["src"]}{title})'
+

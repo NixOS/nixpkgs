@@ -33,3 +33,4 @@ let
 in with pkgs; {
   unifi8 = makeAppTest unifi8;
 }
+

@@ -52,3 +52,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
         machine.require_unit_state("testchill.service", "active")
   '';
 })
+

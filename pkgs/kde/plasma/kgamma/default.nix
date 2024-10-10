@@ -7,3 +7,4 @@ mkKdeDerivation {
 
   extraBuildInputs = [ xorg.libXxf86vm ];
 }
+

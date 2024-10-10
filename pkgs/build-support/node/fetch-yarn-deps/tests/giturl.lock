@@ -9,3 +9,4 @@
 "find-and-replace@https://github.com/atom-community/find-and-replace/archive/refs/tags/v0.220.1.tar.gz":
   version "0.220.1"
   resolved "https://github.com/atom-community/find-and-replace/archive/refs/tags/v0.220.1.tar.gz#d7a0f56511e38ee72a89895a795bbbcab4a1a405"
+

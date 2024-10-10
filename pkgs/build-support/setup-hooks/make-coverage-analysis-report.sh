@@ -23,3 +23,4 @@ coverageReportPhase() {
 
     echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
 }
+

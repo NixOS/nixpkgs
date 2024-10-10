@@ -100,3 +100,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dunst";
   };
 })
+

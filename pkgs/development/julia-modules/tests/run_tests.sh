@@ -13,3 +13,4 @@ TESTER_PROGRAM=$(nix build --impure --expr 'with import ../../../../. {}; haskel
 echo "Built tester program: $TESTER_PROGRAM"
 
 "$TESTER_PROGRAM" --tui -c "$TOP_N_FILE" $*
+

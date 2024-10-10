@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     homepage = "https://web.archive.org/web/20221003060115/https://www.xskat.de/xskat.html";
   };
 }
+

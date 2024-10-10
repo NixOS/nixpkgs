@@ -82,3 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.davidmhewitt.torrential";
   };
 }
+

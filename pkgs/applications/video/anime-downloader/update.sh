@@ -6,3 +6,4 @@ set -eu -o pipefail
 version="$(curl --silent "https://api.github.com/repos/anime-dl/anime-downloader/releases" | jq '.[0].tag_name' --raw-output)"
 
 update-source-version anime-downloader "$version"
+

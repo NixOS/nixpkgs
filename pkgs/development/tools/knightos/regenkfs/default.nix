@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "regenkfs";
   };
 }
+

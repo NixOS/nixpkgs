@@ -114,3 +114,4 @@
   (fetchNuGet { pname = "System.Threading.Tasks.Extensions"; version = "4.5.4"; hash = "sha256-owSpY8wHlsUXn5xrfYAiu847L6fAKethlvYx97Ri1ng="; })
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; hash = "sha256-4gk2vXDjKFaBh82gTkwg3c/5GRjiH+bvM5elfDSbKTU="; })
 ]
+

@@ -24,3 +24,4 @@ import ./make-test-python.nix {
     machine.succeed("ntfy user list")
   '';
 }
+

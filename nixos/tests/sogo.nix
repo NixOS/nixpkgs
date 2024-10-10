@@ -56,3 +56,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     sogo.succeed("curl -sSfL http://sogo/SOGo")
   '';
 })
+

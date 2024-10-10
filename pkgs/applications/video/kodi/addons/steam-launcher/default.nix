@@ -35,3 +35,4 @@ buildKodiAddon {
     maintainers = teams.kodi.members;
   };
 }
+

@@ -17,3 +17,4 @@ mkKdeDerivation {
     qtwayland
   ];
 }
+

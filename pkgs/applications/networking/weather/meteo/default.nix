@@ -69,3 +69,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.gitlab.bitseater.meteo";
   };
 }
+

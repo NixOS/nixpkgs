@@ -20,3 +20,4 @@ buildDotnetGlobalTool {
     mainProgram = "csharprepl";
   };
 }
+

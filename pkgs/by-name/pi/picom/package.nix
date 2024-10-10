@@ -120,3 +120,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "picom";
   };
 })
+

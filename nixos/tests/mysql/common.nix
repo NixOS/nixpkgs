@@ -8,3 +8,4 @@
   };
   mkTestName = pkg: "mariadb_${builtins.replaceStrings ["."] [""] (lib.versions.majorMinor pkg.version)}";
 }
+

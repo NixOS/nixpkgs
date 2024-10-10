@@ -51,3 +51,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl1Only;
   };
 })
+

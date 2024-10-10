@@ -11,3 +11,4 @@ addPkgToClassPath () {
 }
 
 addEnvHooks "$targetOffset" addPkgToClassPath
+

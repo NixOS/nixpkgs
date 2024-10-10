@@ -19,3 +19,4 @@ buildGoModule {
     mainProgram = "woodpecker-server";
   };
 }
+

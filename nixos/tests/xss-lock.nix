@@ -38,3 +38,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         perform_xsslock_test(custom_lockcmd, "xlock")
   '';
 })
+

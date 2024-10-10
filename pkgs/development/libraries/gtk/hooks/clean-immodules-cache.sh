@@ -13,3 +13,4 @@ _gtkCleanImmodulesCache() {
         sed 's|Created by .*bin/gtk-query-|Created by bin/gtk-query-|' -i "$f"
     fi
 }
+

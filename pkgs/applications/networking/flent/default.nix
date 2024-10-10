@@ -53,3 +53,4 @@ buildPythonApplication rec {
     maintainers = [maintainers.mmlb];
   };
 }
+

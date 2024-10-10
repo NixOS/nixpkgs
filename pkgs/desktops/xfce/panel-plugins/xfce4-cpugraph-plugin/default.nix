@@ -36,3 +36,4 @@ mkXfceDerivation rec {
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }
+

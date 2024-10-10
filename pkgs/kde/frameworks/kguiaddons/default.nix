@@ -10,3 +10,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtwayland ];
   meta.mainProgram = "kde-geo-uri-handler";
 }
+

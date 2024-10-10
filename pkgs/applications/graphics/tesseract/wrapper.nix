@@ -82,3 +82,4 @@ in
   else
     lib.warn "Argument `enableLanguagesHash` is obsolete and can be removed."
     tesseract
+

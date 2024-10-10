@@ -8,3 +8,4 @@ callPackage ./generic.nix (args // rec {
   sha256 = "0aqhdrxqa49liyvbbw5x32kwk0h1spzvmizmdxklrfs64vvr9bvh";
   homepage = "https://midasconsoles.com/midas/product?modelCode=P0B3I";
 })
+

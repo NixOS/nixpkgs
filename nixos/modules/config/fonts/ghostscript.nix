@@ -18,3 +18,4 @@
     fonts.packages = [ pkgs.ghostscript.fonts ];
   };
 }
+

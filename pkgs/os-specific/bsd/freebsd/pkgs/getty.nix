@@ -19,3 +19,4 @@ mkDerivation {
     cp $BSDSRCDIR/libexec/getty/gettytab $out/etc/gettytab
   '';
 }
+

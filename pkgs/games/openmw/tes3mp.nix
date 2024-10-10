@@ -170,3 +170,4 @@ symlinkJoin {
       --chdir "$out/bin"
   '';
 }
+

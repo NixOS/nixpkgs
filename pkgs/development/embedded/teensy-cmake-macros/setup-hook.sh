@@ -3,3 +3,4 @@ teensyCMakeMacrosEnvHook() {
 }
 
 addEnvHooks "$targetOffset" teensyCMakeMacrosEnvHook
+

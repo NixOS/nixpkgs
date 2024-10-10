@@ -5,3 +5,4 @@ callPackage ./generic.nix {
   kde-channel = "stable";
   hash = "sha256-SNcShVT99LTpLFSuMbUq95IfR6jabOyqBnRKu/yC1fs=";
 }
+

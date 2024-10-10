@@ -12,3 +12,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtx11extras qtquickcontrols2 kconfig kiconthemes kirigami2 ];
 }
+

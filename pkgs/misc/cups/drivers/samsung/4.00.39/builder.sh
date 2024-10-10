@@ -34,3 +34,4 @@ for i in $(ls); do
 done
 
 ln -s $ghostscript/bin/gs $out/lib/cups/filter
+

@@ -42,3 +42,4 @@ buildPythonPackage rec {
     mainProgram = "kde-material-you-colors";
   };
 }
+

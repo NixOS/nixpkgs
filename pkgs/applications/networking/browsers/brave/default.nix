@@ -22,3 +22,4 @@ callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ])
     else
       throw "Unsupported platform."
   )
+

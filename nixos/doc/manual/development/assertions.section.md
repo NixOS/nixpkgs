@@ -38,3 +38,4 @@ This example, extracted from the [`syslogd` module](https://github.com/NixOS/nix
   };
 }
 ```
+

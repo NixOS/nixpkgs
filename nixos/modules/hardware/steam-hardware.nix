@@ -27,3 +27,4 @@ in
     boot.kernelModules = [ "uinput" ];
   };
 }
+

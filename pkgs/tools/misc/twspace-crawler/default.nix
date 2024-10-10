@@ -22,3 +22,4 @@ buildNpmPackage rec {
     mainProgram = "twspace-crawler";
   };
 }
+

@@ -27,3 +27,4 @@ mkDerivation {
 
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
 }
+

@@ -36,3 +36,4 @@ luarocks_bootstrap.overrideAttrs (old: {
     mainProgram = "luarocks";
   };
 })
+

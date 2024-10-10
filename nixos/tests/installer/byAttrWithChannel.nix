@@ -8,3 +8,4 @@ evalConfig {
     ( import <nixpkgs/nixos/modules/testing/test-instrumentation.nix> )
   ];
 }
+

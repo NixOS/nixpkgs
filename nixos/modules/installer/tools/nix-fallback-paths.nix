@@ -6,3 +6,4 @@
   x86_64-darwin = "/nix/store/1dhc9a68j5lcnkgdrcm2kbydnbzrlldg-nix-2.24.8";
   aarch64-darwin = "/nix/store/7gv39q83hm8b7cwcpx1vlcs424qmp67p-nix-2.24.8";
 }
+

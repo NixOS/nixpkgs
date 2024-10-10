@@ -24,3 +24,4 @@ in
     assert "<title>simple-mpv-webui" in machine.succeed("curl -s localhost:${port}")
   '';
 })
+

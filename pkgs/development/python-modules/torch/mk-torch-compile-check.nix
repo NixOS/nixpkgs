@@ -36,3 +36,4 @@ in
         torch.randn(10, 10${deviceStr}),
         torch.randn(10, 10${deviceStr})))
   ''
+

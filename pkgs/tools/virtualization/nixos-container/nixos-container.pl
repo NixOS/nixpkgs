@@ -487,3 +487,4 @@ elsif ($action eq "show-host-key") {
 else {
     die "$0: unknown action ‘$action’\n";
 }
+

@@ -345,3 +345,4 @@ if get_option('tests') == true
 #         test(test, atf_sh, args : [test_charset, test], suite : 'libcharset', timeout : 300)
 #     endforeach
 endif
+

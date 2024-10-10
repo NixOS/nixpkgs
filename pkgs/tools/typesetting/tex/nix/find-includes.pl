@@ -14,7 +14,7 @@ sub addName {
     my ($type, $name) = @_;
     print OUT "{ type = \"$type\"; name = \"$name\"; }\n";
 }
-    
+
 while (<FILE>) {
     if (/\\input\{(.*)\}/) {
         my $fn2 = $1;
@@ -67,3 +67,4 @@ close FILE;
 
 print OUT "]\n";
 close OUT;
+

@@ -56,3 +56,4 @@ learning Kinos require `gcc` and `gnumake`.  To add these, use
   services.livebook.extraPackages = with pkgs; [ gcc gnumake ];
 }
 ```
+

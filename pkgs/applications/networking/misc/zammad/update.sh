@@ -61,3 +61,4 @@ jq --arg VERSION "$VERSION" '. += {name: "Zammad", version: $VERSION}' package.j
 popd
 popd
 popd
+

@@ -45,3 +45,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ eureka-cpu RGBCube ];
   };
 })
+

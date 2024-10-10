@@ -70,3 +70,4 @@ fi
 if [ -z "${dontUseGradleCheck-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=gradleCheckPhase
 fi
+

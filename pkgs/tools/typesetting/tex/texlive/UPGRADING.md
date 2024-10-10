@@ -136,3 +136,4 @@ functionality of the package, then it should be made available in the bin
 containers (by patching `PATH`), or in `texlive.combine` (as we do for
 Ghostscript). Non-essential runtime dependencies should be ignored if they
 increase the closure substantially.
+

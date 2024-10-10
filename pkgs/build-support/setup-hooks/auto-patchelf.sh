@@ -101,3 +101,4 @@ autoPatchelfPostFixup() {
 }
 
 postFixupHooks+=(autoPatchelfPostFixup)
+

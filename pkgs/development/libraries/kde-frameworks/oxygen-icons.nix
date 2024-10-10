@@ -11,3 +11,4 @@ mkDerivation {
   buildInputs = [ qtbase ];
   outputs = [ "out" ]; # only runtime outputs
 }
+

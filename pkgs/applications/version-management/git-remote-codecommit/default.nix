@@ -38,3 +38,4 @@ buildPythonApplication rec {
     mainProgram = "git-remote-codecommit";
   };
 }
+

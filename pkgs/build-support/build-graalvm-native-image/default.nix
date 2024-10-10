@@ -82,3 +82,4 @@ stdenv.mkDerivation ({
     mainProgram = executable;
   } // meta;
 } // extraArgs)
+

@@ -79,3 +79,4 @@ if [ ! "$havePlatformVersionFlag" ]; then
         extraBefore+=(-@darwinPlatform@_version_min "${@darwinMinVersionVariable@_@suffixSalt@:-@darwinMinVersion@}")
     fi
 fi
+

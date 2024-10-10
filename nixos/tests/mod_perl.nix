@@ -51,3 +51,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     assert "Hello mod_perl!" in response, "/modperl handler did not respond"
   '';
 })
+

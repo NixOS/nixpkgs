@@ -43,3 +43,4 @@ writeTextFile rec {
     export SAGE_INCLUDE_DIRECTORIES="${cysignals}/${cysignals.pythonModule.sitePackages}"
   '';
 }
+

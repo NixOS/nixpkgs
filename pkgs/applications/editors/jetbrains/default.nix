@@ -280,3 +280,4 @@ rec {
   plugins = callPackage ./plugins { } // { __attrsFailEvaluation = true; };
 
 }
+

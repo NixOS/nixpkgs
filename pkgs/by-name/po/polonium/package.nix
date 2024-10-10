@@ -53,3 +53,4 @@ buildNpmPackage rec {
     inherit (libsForQt5.plasma-framework.meta) platforms;
   };
 }
+

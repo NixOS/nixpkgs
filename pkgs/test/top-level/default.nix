@@ -45,3 +45,4 @@ lib.recurseIntoAttrs {
     assert lib.all (p: p.buildPlatform != p.hostPlatform) pkgsCross;
     pkgs.emptyFile;
 }
+

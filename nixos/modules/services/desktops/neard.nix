@@ -71,3 +71,4 @@ in
     systemd.packages = [ pkgs.neard ];
   };
 }
+

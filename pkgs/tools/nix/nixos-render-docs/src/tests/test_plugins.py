@@ -526,3 +526,4 @@ def test_footnotes() -> None:
         Token(type='footnote_close', tag='', nesting=-1),
         Token(type='footnote_block_close', tag='', nesting=-1),
     ]
+

@@ -123,3 +123,4 @@ Such port forwardings connect via the VM's virtual network interface.
 Thus they cannot connect to ports that are only bound to the VM's
 loopback interface (`127.0.0.1`), and the VM's NixOS firewall
 must be configured to allow these connections.
+

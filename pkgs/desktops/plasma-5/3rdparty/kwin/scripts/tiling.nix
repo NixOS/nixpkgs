@@ -51,3 +51,4 @@ mkDerivation rec {
     inherit (kwindowsystem.meta) platforms;
   };
 }
+

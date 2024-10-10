@@ -23,3 +23,4 @@ buildPythonPackage {
     inherit (nftables.meta) description homepage license platforms maintainers;
   };
 }
+

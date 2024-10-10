@@ -15,3 +15,4 @@ print_requirements () {
 };
 
 cached_output print_requirements "$module_basename" "$module_name" "direct.deps";
+

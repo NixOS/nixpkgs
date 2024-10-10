@@ -35,3 +35,4 @@ qtModule {
     ln -s "$out/bin" "$dev/bin"
   '';
 }
+

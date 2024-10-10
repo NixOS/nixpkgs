@@ -164,3 +164,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "messaging-menu" ];
   };
 })
+

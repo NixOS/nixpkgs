@@ -23,3 +23,4 @@ if [ -z "${dontCheckManifest-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using manifestCheckPhase"
     appendToVar preDistPhases manifestCheckPhase
 fi
+

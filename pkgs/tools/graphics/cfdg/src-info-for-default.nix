@@ -4,3 +4,4 @@
   sourceRegexp = ".*[.]tgz";
   versionExtractorSedScript = ''s/[^0-9]*([0-9.]*)[.]tgz/\1/'';
 }
+

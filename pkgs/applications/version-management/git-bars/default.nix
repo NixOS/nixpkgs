@@ -24,3 +24,4 @@ python3Packages.buildPythonApplication {
     mainProgram = "git-bars";
   };
 }
+

@@ -6,3 +6,4 @@ callPackage ./generic.nix args {
   version = "2021-08-08";
   sha256 = "1lwkyhfhw0zd7daqz466n7x5cddf0danr799h4jg3s0yvd4galjl";
 }
+

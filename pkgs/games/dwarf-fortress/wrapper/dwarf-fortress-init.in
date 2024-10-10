@@ -196,3 +196,4 @@ if [ "$os_name" == Darwin ]; then
     export DYLD_FALLBACK_FRAMEWORK_PATH="$NIXPKGS_DF_ENV/libs"
   fi
 fi
+

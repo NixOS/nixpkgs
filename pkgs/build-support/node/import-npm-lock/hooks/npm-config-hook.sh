@@ -68,3 +68,4 @@ npmConfigHook() {
 }
 
 postConfigureHooks+=(npmConfigHook)
+

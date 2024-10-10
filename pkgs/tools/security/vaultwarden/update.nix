@@ -28,3 +28,4 @@ lib.getExe (writeShellApplication {
     nix-update "vaultwarden.webvault" --version "$WEBVAULT_VERSION"
   '';
 })
+

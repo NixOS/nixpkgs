@@ -41,3 +41,4 @@ const tasks = [
 ];
 await Promise.all(tasks);
 log("Updating deno complete");
+

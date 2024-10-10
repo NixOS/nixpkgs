@@ -27,3 +27,4 @@ stdenv.mkDerivation {
     grep -q SimpleMessage $out/simple.pb.h || (echo "ERROR: SimpleMessage not found in $out/simple.pb.h"; exit 1)
   '';
 }
+

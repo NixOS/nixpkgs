@@ -119,3 +119,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       bob.succeed("curl --fail -g http://[{}]".format(alice_ip6))
     '';
 })
+

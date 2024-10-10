@@ -52,3 +52,4 @@ cargoBuildHook() {
 if [ -z "${dontCargoBuild-}" ] && [ -z "${buildPhase-}" ]; then
   buildPhase=cargoBuildHook
 fi
+

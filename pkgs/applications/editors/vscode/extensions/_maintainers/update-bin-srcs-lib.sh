@@ -156,3 +156,4 @@ jsonToNix() {
   false
   cat - | sed -E -e 's/": /" = /g' -e 's/,$/;/g' -e 's/  }$/  };/g'  -e 's/  ]$/  ];/g'
 }
+

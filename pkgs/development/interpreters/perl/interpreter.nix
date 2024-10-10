@@ -287,3 +287,4 @@ stdenv.mkDerivation (rec {
   # TODO merge setup hooks
   setupHook = ./setup-hook-cross.sh;
 })
+

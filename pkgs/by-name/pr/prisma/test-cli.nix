@@ -62,3 +62,4 @@ runCommand "prisma-cli-tests"
     # Introspect the database
     prisma db pull > /dev/null
   ''
+

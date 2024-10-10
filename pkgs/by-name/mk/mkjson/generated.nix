@@ -44,3 +44,4 @@ mkDerivation rec {
   maintainers = with lib.maintainers; [ athas ];
   mainProgram = "mkjson";
 }
+

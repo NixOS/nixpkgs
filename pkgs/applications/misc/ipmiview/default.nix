@@ -82,3 +82,4 @@ stdenv.mkDerivation rec {
     mainProgram = "IPMIView";
   };
 }
+

@@ -22,3 +22,4 @@ in
     (import ./wayland-session.nix { inherit lib pkgs; })
   ]);
 }
+

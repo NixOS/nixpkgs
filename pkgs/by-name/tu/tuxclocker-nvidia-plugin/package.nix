@@ -28,3 +28,4 @@ stdenv.mkDerivation {
     "-Dplugins-cpu=false" # provided by tuxclocker-plugins
   ];
 }
+

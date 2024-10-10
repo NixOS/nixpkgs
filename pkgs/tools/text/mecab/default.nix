@@ -20,3 +20,4 @@ stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
     maintainers = with maintainers; [ auntie ];
   };
 }))
+

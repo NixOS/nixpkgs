@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit libdvdread; };
 }
+

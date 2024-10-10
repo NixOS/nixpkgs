@@ -40,3 +40,4 @@ replace_sha "linux_arm64" "$CLI_LINUX_AARCH64_SHA256"
 replace_sha "linux_386" "$CLI_LINUX_I686_SHA256"
 replace_sha "linux_amd64" "$CLI_LINUX_X64_SHA256"
 replace_sha "apple_universal" "$CLI_DARWIN_UNIVERSAL_SHA256"
+

@@ -1762,3 +1762,4 @@ dumpVars
 [[ $__nixpkgs_setup_set_original == *e* ]] || set +e
 [[ $__nixpkgs_setup_set_original == *u* ]] || set +u
 unset -v __nixpkgs_setup_set_original
+

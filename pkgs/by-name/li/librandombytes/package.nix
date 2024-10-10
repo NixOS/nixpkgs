@@ -86,3 +86,4 @@ stdenv.mkDerivation (finalAttrs: {
     ] ++ lib.platforms.darwin; # Work on MacOS X mentioned: https://randombytes.cr.yp.to/download.html
   };
 })
+

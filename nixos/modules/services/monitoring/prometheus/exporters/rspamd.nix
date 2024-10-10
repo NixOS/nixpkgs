@@ -102,3 +102,4 @@ in
      ({ options.warnings = options.warnings; options.assertions = options.assertions; })
   ];
 }
+

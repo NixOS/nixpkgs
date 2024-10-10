@@ -97,3 +97,4 @@ buildPythonApplication rec {
     maintainers = with lib.maintainers; [ sebtm ];
   };
 }
+

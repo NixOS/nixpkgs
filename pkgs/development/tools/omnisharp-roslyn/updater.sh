@@ -18,3 +18,4 @@ cd ../../../..
 update-source-version omnisharp-roslyn "${new_version//v}"
 
 $(nix-build -A omnisharp-roslyn.fetch-deps --no-out-link)
+

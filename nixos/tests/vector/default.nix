@@ -10,3 +10,4 @@
   nginx-clickhouse = import ./nginx-clickhouse.nix { inherit system pkgs; };
   syslog-quickwit = import ./syslog-quickwit.nix { inherit system pkgs; };
 }
+

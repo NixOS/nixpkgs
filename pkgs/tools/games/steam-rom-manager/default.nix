@@ -27,3 +27,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "steam-rom-manager";
   };
 }
+

@@ -100,3 +100,4 @@ with python311.pkgs; buildPythonApplication rec {
     maintainers = with maintainers; [ milibopp ];
   };
 }
+

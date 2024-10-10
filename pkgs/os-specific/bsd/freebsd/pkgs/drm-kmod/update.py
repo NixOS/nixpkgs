@@ -19,3 +19,4 @@ for branch in BRANCHES:
 with open(os.path.join(BASE_DIR, "versions.json"), "w") as out:
     json.dump(versions, out, sort_keys=True, indent=2)
     out.write("\n")
+

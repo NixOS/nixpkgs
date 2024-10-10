@@ -39,3 +39,4 @@ def main(repo_metadata: pathlib.Path, nixpkgs: pathlib.Path, unstable: bool):
 
 if __name__ == "__main__":
     main()  # type: ignore
+

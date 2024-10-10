@@ -24,3 +24,4 @@ for platform in x86_64-linux x86_64-darwin; do
         --ignore-same-version \
         --source-key="passthru.sources.$platform"
 done
+

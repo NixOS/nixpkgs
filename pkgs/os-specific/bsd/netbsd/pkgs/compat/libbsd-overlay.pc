@@ -9,3 +9,4 @@ Version: @version@
 URL: https://www.netbsd.org/
 Libs: -L${libdir} -lnbcompat
 Cflags: -I${includedir} -DHAVE_NBTOOL_CONFIG_H -include nbtool_config.h
+

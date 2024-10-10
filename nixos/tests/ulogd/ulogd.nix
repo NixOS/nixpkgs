@@ -54,3 +54,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
 
   testScript = lib.readFile ./ulogd.py;
 })
+

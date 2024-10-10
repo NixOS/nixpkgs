@@ -56,3 +56,4 @@ in {
     users.groups.flatpak = { };
   };
 }
+

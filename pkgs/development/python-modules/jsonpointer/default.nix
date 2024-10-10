@@ -21,3 +21,4 @@ buildPythonPackage rec {
     license = licenses.bsd2; # "Modified BSD license, says pypi"
   };
 }
+

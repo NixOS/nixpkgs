@@ -102,3 +102,4 @@ function attemptToMarkBroken() {
 for attr in $@; do
         attemptToMarkBroken $attr
 done
+

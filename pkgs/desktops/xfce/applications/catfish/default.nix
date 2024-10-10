@@ -87,3 +87,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }
+

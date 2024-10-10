@@ -20,3 +20,4 @@ buildDunePackage {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }
+

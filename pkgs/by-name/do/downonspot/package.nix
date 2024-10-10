@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "down_on_spot";
   };
 }
+

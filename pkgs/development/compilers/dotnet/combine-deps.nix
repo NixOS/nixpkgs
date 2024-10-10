@@ -54,3 +54,4 @@ writeText "deps.nix" ''
   ${concatMapStringsSep "\n" fetchExpr allPackages}
   ]
 ''
+

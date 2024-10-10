@@ -150,3 +150,4 @@ buildGoModule rec {
     maintainers = [ maintainers.nrabulinski ];
   };
 }
+

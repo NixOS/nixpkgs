@@ -46,3 +46,4 @@ update_version_and_hashes $LATEST_STABLE_VERSION "stable"
 
 # Update mainline channel
 update_version_and_hashes $LATEST_MAINLINE_VERSION "mainline"
+

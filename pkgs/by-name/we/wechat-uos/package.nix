@@ -302,3 +302,4 @@ buildFHSEnv {
 
   extraOutputsToInstall = [ "usr" "var/lib/uos" "var/uos" "etc" ];
 }
+

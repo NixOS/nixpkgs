@@ -59,3 +59,4 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : "${gnuplot}/bin"'' ];
 }
+

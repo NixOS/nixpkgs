@@ -38,3 +38,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = with maintainers; [ obadz ];
   };
 }
+

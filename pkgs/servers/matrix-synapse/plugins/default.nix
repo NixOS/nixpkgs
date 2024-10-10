@@ -8,3 +8,4 @@
   matrix-synapse-s3-storage-provider = callPackage ./s3-storage-provider.nix { };
   matrix-synapse-shared-secret-auth = callPackage ./shared-secret-auth.nix { };
 }
+

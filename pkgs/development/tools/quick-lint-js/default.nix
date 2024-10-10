@@ -60,3 +60,4 @@ stdenv.mkDerivation rec {
   # Expose quick-lint-js-build-tools to nix repl as quick-lint-js.build-tools.
   passthru.build-tools = quick-lint-js-build-tools;
 }
+

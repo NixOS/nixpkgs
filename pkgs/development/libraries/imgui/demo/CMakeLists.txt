@@ -9,3 +9,4 @@ find_package(OpenGL REQUIRED)
 target_link_libraries(demo PRIVATE imgui glfw OpenGL::GL)
 
 install(TARGETS demo RUNTIME DESTINATION bin)
+

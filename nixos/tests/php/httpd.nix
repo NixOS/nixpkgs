@@ -32,3 +32,4 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
         assert ext in response, f"Missing {ext} extension"
   '';
 })
+

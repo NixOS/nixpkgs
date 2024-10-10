@@ -41,3 +41,4 @@ import ./make-test-python.nix ({ lib, ... }: {
       client.succeed(f"dd if=/dev/zero of={devices[0]['name']} bs=1M count=64")
   '';
 })
+

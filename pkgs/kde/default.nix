@@ -99,3 +99,4 @@ makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "kdePackages";
   f = allPackages;
 }
+

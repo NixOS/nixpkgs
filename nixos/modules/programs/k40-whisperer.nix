@@ -28,3 +28,4 @@ in
     services.udev.packages = [ pkg ];
   };
 }
+

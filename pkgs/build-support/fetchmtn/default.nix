@@ -22,3 +22,4 @@ lib.fetchers.withNormalizedHash { } (
 
   }
 )
+

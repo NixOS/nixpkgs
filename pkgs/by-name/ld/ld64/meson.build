@@ -247,3 +247,4 @@ objcimageinfo = executable(
         'src/other/objcimageinfo.cpp',
     ],
 )
+

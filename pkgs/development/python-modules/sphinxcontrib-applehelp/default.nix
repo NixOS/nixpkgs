@@ -34,3 +34,4 @@ buildPythonPackage rec {
     maintainers = teams.sphinx.members;
   };
 }
+

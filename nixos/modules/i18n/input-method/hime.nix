@@ -16,3 +16,4 @@ in
     services.xserver.displayManager.sessionCommands = "${pkgs.hime}/bin/hime &";
   };
 }
+

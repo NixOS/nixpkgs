@@ -44,3 +44,4 @@ buildPythonApplication rec {
     mainProgram = "rednotebook";
   };
 }
+

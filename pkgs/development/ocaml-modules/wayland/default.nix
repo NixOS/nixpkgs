@@ -48,3 +48,4 @@ buildDunePackage rec {
     mainProgram = "wayland-scanner-ocaml";
   };
 }
+

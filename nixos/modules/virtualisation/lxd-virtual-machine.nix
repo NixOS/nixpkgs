@@ -48,3 +48,4 @@ in {
     virtualisation.lxd.agent.enable = lib.mkDefault true;
   };
 }
+

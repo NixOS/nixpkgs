@@ -102,3 +102,4 @@ buildNpmPackage rec {
     mainProgram = "spectral-language-server";
   };
 }
+

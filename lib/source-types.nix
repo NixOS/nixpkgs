@@ -17,3 +17,4 @@ in lib.mapAttrs (tname: tset: defaultSourceType tname // tset) {
 
   binaryFirmware = {};
 }
+

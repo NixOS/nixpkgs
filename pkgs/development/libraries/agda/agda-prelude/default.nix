@@ -26,3 +26,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ mudri alexarice turion ];
   };
 }
+

@@ -8,3 +8,4 @@ runCommand "cue-test-001-all-good-${cue.version}" {
 } ''
     cue eval - <<<'a: "all good"' > $out
   ''
+

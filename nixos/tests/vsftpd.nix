@@ -40,3 +40,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     assert client.succeed("cat /tmp/test.file.down") == server.succeed("cat /tmp/test.file.up")
   '';
 })
+

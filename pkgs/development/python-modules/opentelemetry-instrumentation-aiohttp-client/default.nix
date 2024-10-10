@@ -48,3 +48,4 @@ buildPythonPackage {
     description = "OpenTelemetry Instrumentation for aiohttp-client";
   };
 }
+

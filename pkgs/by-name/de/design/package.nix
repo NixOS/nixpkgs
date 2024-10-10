@@ -56,3 +56,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.github.dubstar_04.design";
   };
 }
+

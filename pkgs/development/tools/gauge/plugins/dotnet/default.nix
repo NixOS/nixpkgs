@@ -23,3 +23,4 @@ makeGaugePlugin {
     inherit (gauge-unwrapped.meta) platforms;
   };
 }
+

@@ -69,3 +69,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "noaa-apt";
   };
 }
+

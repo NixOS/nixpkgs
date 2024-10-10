@@ -25,3 +25,4 @@ buildGoModule rec {
     changelog = "https://github.com/beeper/bridge-manager/releases/tag/v${version}";
   };
 }
+

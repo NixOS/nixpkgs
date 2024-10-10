@@ -10,3 +10,4 @@ setup( name         = "waitress-django"
      , package_dir  = {"" : "src"}
      , scripts      = ["src/waitress-serve-django"]
      )
+

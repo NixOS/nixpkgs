@@ -32,3 +32,4 @@ buildDunePackage rec {
 
   meta.timeout = 60;
 }
+

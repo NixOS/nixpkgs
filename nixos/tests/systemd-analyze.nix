@@ -43,3 +43,4 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
         machine.copy_from_vm("systemd-analyze/systemd-analyze.svg", "")
   '';
 })
+

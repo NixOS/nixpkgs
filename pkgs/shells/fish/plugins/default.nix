@@ -74,3 +74,4 @@ lib.makeScope newScope (self: with self; {
 } // lib.optionalAttrs config.allowAliases {
   autopair-fish = self.autopair; # Added 2023-03-10
 })
+

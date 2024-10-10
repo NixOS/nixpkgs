@@ -99,3 +99,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "edgedb";
   };
 }
+

@@ -294,3 +294,4 @@ in runCommandLocal name (nameAttrs // {
 
   ${extraInstallCommands}
 ''
+

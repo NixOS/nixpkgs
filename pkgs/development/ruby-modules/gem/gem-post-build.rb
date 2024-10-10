@@ -79,3 +79,4 @@ load Gem.activate_bin_path(#{spec.name.inspect}, #{exe.inspect}, #{spec.version.
 
   FileUtils.chmod("+x", "#{bin_path}/#{exe}")
 end
+

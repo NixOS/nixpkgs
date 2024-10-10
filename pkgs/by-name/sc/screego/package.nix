@@ -82,3 +82,4 @@ buildGo123Module rec {
     mainProgram = "screego";
   };
 }
+

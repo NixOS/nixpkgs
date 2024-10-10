@@ -63,3 +63,4 @@ in
      "bspwm package does not provide bspwm-session anymore.")
   ];
 }
+

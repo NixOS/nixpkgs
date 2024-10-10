@@ -199,3 +199,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mame";
   };
 }
+

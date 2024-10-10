@@ -91,3 +91,4 @@ else
         install -Dm444 ${appimageContents}/hoppscotch.png -t $out/share/pixmaps
       '';
   }
+

@@ -37,3 +37,4 @@ CC cp.c -o ${out}/bin/cp
 CC chmod.c -o ${out}/bin/chmod
 CC rm.c -o ${out}/bin/rm
 CC replace.c -o ${out}/bin/replace
+

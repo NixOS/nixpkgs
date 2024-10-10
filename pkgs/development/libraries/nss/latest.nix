@@ -8,3 +8,4 @@ import ./generic.nix {
   version = "3.105";
   hash = "sha256-Nfd7u0sdGqUCznnUxEJQFs+QuRSb+b7rZrcvKryimOQ=";
 }
+

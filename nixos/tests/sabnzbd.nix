@@ -23,3 +23,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.fail("grep 'SABCTools disabled: no correct version found!' /var/lib/sabnzbd/logs/sabnzbd.log")
   '';
 })
+

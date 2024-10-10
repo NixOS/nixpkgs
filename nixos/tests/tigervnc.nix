@@ -53,3 +53,4 @@ makeTest {
     # assert 'TigerVNC' in text
   '';
 }
+

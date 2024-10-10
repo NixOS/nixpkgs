@@ -31,3 +31,4 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://travisf.net/i3-wk-switcher";
   };
 }
+

@@ -63,3 +63,4 @@ buildPythonPackage rec {
     inherit (openzwave.meta) platforms;
   };
 }
+

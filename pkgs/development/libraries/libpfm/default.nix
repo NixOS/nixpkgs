@@ -50,3 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux ++ platforms.windows;
   };
 })
+

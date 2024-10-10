@@ -27,3 +27,4 @@ mkKdeDerivation {
   # to freak out when loading. Disable it to not confuse users.
   excludeDependencies = [ "packagekit-qt" ];
 }
+

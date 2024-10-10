@@ -22,3 +22,4 @@ qtModule {
     "bin/qmltestrunner"
   ];
 }
+

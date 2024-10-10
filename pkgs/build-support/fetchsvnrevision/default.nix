@@ -8,3 +8,4 @@ runCommand: subversion: repository:
       echo "[ \"$rev\" ]" > $out
       echo Latest revision is $rev
     '')
+

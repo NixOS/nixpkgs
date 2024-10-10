@@ -20,3 +20,4 @@ runCommandLocal "install-shell-files--install-completion-inference"
     cmp bar.zsh $out/share/zsh/site-functions/_bar
     cmp baz.fish $out/share/fish/vendor_completions.d/baz.fish
   ''
+

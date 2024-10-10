@@ -74,3 +74,4 @@ lib.fix (self: {
     verify = v: any (func: func v) funcs;
   };
 })
+

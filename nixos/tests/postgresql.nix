@@ -222,3 +222,4 @@ in
     ${name + "-backup-all"} = make-postgresql-test "${name + "-backup-all"}" package true;
     ${name + "-clauses"} = mk-ensure-clauses-test name package;
   }) postgresql-versions
+

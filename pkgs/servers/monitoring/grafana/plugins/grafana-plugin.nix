@@ -39,3 +39,4 @@ let plat = stdenvNoCC.hostPlatform.system; in stdenvNoCC.mkDerivation ({
     homepage = "https://grafana.com/grafana/plugins/${pname}";
   } // meta;
 } // (builtins.removeAttrs args [ "zipHash" "pname" "versionPrefix" "version" "sha256" "meta" ]))
+

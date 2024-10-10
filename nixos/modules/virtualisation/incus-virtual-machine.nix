@@ -59,3 +59,4 @@ in
     virtualisation.incus.agent.enable = lib.mkDefault true;
   };
 }
+

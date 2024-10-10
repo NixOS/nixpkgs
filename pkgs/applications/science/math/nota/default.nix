@@ -39,3 +39,4 @@ mkDerivation rec {
   maintainers = [ ];
   mainProgram = "nota";
 }
+

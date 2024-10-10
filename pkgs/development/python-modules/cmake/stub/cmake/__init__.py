@@ -17,3 +17,4 @@ def cpack():
 
 def ctest():
     raise SystemExit(_program('ctest', sys.argv[1:]))
+

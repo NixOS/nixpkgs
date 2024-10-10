@@ -13,3 +13,4 @@ runCommand "${kaleido.pname}-tests" {
     pandas
   ];
 } "python3 ${./tests.py}"
+

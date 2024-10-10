@@ -42,3 +42,4 @@ with open(os.path.dirname(__file__) + "/sources.json", "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
     f.write('\n')
 
+

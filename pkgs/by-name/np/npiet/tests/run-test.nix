@@ -17,3 +17,4 @@ runCommand "npiet-test-${testName}" { } ''
   echo "The program successfully output $actual_output"
   touch "$out"
 ''
+

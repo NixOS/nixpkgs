@@ -19,3 +19,4 @@
 
   imports = [(lib.mkRenamedOptionModule [ "hardware" "usbStorage" "manageStartStop" ] [ "hardware" "usbStorage" "manageShutdown" ])];
 }
+

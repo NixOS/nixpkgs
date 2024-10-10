@@ -27,3 +27,4 @@ in
 
   meta.maintainers = pkgs.asusctl.meta.maintainers;
 }
+

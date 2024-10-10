@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ xapian ];
   meta.mainProgram = "akonadiconsole";
 }
+

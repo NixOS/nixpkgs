@@ -66,3 +66,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ figsoda foo-dogsquared aleksana ];
   };
 }
+

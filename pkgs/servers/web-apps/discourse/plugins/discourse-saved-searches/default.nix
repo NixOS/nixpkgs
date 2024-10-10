@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Allow users to save searches and be notified of new results";
   };
 }
+

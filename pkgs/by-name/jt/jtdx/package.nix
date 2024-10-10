@@ -14,3 +14,4 @@ wsjtx.overrideAttrs (old: {
     homepage = "https://github.com/jtdx-project/jtdx";
   };
 })
+

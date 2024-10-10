@@ -40,3 +40,4 @@ in
 // {
   inherit mkHyprlandPlugin;
 }
+

@@ -53,3 +53,4 @@ in melpaBuild {
     maintainers = with lib.maintainers; [ pimeys ];
   };
 }
+

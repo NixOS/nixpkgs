@@ -23,3 +23,4 @@ require next_rbconfig
 
 # Now we have RbConfig, and can modify it for our own ends.
 RbConfig::CONFIG["ridir"] = File.expand_path("../../../share/ri", __dir__)
+

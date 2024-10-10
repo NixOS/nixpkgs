@@ -19,3 +19,4 @@ bgr_encoded = encoder.encode(bgr, method)
 
 output_file = os.path.join(output_dir, 'test_wm.png')
 cv2.imwrite(output_file, bgr_encoded)
+

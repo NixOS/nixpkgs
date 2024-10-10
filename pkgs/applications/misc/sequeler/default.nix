@@ -48,3 +48,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "com.github.alecaddd.sequeler";
   };
 }
+

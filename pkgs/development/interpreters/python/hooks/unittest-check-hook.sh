@@ -15,3 +15,4 @@ if [ -z "${dontUseUnittestCheck-}" ] && [ -z "${installCheckPhase-}" ]; then
     echo "Using unittestCheckPhase"
     appendToVar preDistPhases unittestCheckPhase
 fi
+

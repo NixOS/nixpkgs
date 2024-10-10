@@ -11,3 +11,4 @@
     services.dbus.packages = [ pkgs.hamster ];
   };
 }
+

@@ -81,3 +81,4 @@ this could be most useful for testing a particular plug-in in isolation.
     ```ShellSession
     $ flatpak remote-add --if-not-exists appcenter https://flatpak.elementary.io/repo.flatpakrepo
     ```
+

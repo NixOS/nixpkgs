@@ -137,3 +137,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vips";
   };
 })
+

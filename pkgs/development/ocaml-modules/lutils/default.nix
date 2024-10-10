@@ -23,3 +23,4 @@ buildDunePackage rec {
     mainProgram = "gnuplot-rif";
   };
 }
+

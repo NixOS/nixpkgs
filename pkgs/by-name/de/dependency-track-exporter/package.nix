@@ -32,3 +32,4 @@ buildGoModule rec {
     mainProgram = "dependency-track-exporter";
   };
 }
+

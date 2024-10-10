@@ -7,3 +7,4 @@ makeInstalledTest {
     appstream.enable = true;
   };
 }
+

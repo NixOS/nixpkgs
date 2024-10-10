@@ -127,3 +127,4 @@ makeTest {
       host2.fail("ip --json -6 r | jq -e 'map(select(.dst == \"fd00::\")) | any'")
   '';
 }
+

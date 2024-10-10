@@ -26,3 +26,4 @@ stdenvNoCC.mkDerivation (lib.recursiveUpdate {
 
   meta.description = description;
 } (removeAttrs args [ "name" "description" "deps" ]))
+

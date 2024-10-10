@@ -7,3 +7,4 @@ makeInstalledTest {
     services.upower.enable = true;
   };
 }
+

@@ -52,3 +52,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.fail("pgrep xterm")
   '';
 })
+

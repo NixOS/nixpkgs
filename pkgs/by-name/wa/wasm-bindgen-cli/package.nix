@@ -47,3 +47,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wasm-bindgen";
   };
 }
+

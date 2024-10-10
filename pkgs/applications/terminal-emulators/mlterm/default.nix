@@ -222,3 +222,4 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = desktopBinary;
   };
 })
+

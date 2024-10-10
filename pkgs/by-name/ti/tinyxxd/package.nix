@@ -48,3 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
     priority = (vim.xxd.meta.priority or lib.meta.defaultPriority) - 1;
   };
 })
+

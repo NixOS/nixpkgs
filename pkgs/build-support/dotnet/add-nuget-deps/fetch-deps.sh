@@ -9,3 +9,4 @@ genericBuild
 
 mv deps.nix "$1"
 echo "Succesfully wrote lockfile to $1"
+

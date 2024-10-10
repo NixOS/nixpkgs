@@ -31,3 +31,4 @@ for section in {1..8}; do
     echo "  \"${page}(${section})\": \"https://www.freedesktop.org/software/systemd/man/${page}.html\","
   done
 done
+

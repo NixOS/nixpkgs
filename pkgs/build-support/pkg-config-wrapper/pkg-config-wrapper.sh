@@ -21,3 +21,4 @@ else
     # pkg-config isn't a real dependency so ignore setup hook entirely
     exec @prog@ "$@"
 fi
+

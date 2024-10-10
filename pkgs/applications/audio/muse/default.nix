@@ -86,3 +86,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "muse4";
   };
 })
+

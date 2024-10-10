@@ -34,3 +34,4 @@ in callPackage ../base.nix rec {
   checkTargets = [ ];
   isBroken = true; # ROCm 5.7.0 doesn't have IR/AttributeMask.h yet...?
 }
+

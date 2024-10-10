@@ -120,3 +120,4 @@ libomptarget/test/unified_shared_memory/close_enter_exit.c
 libomptarget/test/unified_shared_memory/close_manual.c
 libomptarget/test/unified_shared_memory/close_member.c
 libomptarget/test/unified_shared_memory/close_modifier.c
+

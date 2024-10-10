@@ -89,3 +89,4 @@ stdenv.mkDerivation rec {
     # https://github.com/opensoldat/opensoldat/issues/45
   };
 }
+

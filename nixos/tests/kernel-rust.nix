@@ -43,3 +43,4 @@ let
     in success && value && available))
     pkgs.linuxKernel.vanillaPackages;
 in mapAttrs (const kernelRustTest) kernels
+

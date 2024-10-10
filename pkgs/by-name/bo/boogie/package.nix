@@ -57,3 +57,4 @@ buildDotnetModule rec {
     platforms = with platforms; (linux ++ darwin);
   };
 }
+

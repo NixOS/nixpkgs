@@ -79,3 +79,4 @@ in if thunarPlugins == [] then unwrapped
     inherit makeWrapper symlinkJoin thunarPlugins lib;
     thunar = unwrapped;
   }
+

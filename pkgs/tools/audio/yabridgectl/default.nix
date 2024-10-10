@@ -47,3 +47,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "yabridgectl";
   };
 }
+

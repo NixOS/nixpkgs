@@ -22,3 +22,4 @@ buildDunePackage {
     inherit (zelus.meta) homepage license maintainers;
   };
 }
+

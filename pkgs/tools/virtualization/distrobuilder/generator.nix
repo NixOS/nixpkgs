@@ -17,3 +17,4 @@ stdenvNoCC.mkDerivation {
     wrapProgram $out/lib/systemd/system-generators/lxc --prefix PATH : ${lib.makeBinPath [coreutils findutils gnugrep systemd]}:${systemd}/lib/systemd
   '';
 }
+

@@ -32,3 +32,4 @@ flutter.buildFlutterApplication rec {
     platforms = platforms.linux;
   };
 }
+

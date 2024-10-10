@@ -34,3 +34,4 @@ cat > pin.json << EOF
   "npmHash": "$npm_hash"
 }
 EOF
+

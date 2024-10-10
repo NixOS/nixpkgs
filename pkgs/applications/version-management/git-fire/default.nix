@@ -29,3 +29,4 @@ stdenv.mkDerivation {
     mainProgram = "git-fire";
   };
 }
+

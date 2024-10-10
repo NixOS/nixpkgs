@@ -87,3 +87,4 @@ buildPythonPackage rec {
     broken = pythonAtLeast "3.12"; # Because it requires packages removed from 3.12 onwards
   };
 }
+

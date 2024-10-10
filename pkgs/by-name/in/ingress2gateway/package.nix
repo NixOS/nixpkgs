@@ -26,3 +26,4 @@ buildGoModule rec {
     mainProgram = "ingress2gateway";
   };
 }
+

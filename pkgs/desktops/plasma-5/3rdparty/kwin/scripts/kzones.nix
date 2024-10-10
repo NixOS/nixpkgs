@@ -51,3 +51,4 @@ stdenv.mkDerivation(finalAttrs: {
     inherit (kwindowsystem.meta) platforms;
   };
 })
+

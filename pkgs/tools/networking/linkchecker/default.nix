@@ -61,3 +61,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ peterhoeg tweber ];
   };
 }
+

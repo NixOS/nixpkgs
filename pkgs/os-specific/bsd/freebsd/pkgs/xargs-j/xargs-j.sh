@@ -15,3 +15,4 @@ while (( $# )); do
 done
 
 exec "${args[@]}"
+

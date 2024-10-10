@@ -34,3 +34,4 @@ python3Packages.buildPythonApplication rec {
     inherit (python3Packages.broadlink.meta) homepage license;
   };
 }
+

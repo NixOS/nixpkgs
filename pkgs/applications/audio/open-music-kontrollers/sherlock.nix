@@ -10,3 +10,4 @@ callPackage ./generic.nix (args // rec {
 
   description = "Plugins for visualizing LV2 atom, MIDI and OSC events";
 })
+

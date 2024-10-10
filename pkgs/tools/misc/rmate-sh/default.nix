@@ -53,3 +53,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rmate";
   };
 }
+

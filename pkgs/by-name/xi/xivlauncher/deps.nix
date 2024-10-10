@@ -231,3 +231,4 @@
   (fetchNuGet { pname = "Vortice.DXGI"; version = "2.3.0"; sha256 = "0j47ywcs1rq8q4hjj0axchjv08dnvyd33yy4nxilz4synyiidf77"; })
   (fetchNuGet { pname = "Vortice.Mathematics"; version = "1.4.25"; sha256 = "0vl6g087disxyzskvkbnwym74s47lkza0ly3nk4y0y88zibcggrj"; })
 ]
+

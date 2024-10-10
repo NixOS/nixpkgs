@@ -118,3 +118,4 @@ esac
 
 cd ..
 python3 ./generate-libreoffice-srcs.py > src-$variant/deps.nix
+

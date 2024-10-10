@@ -13,3 +13,4 @@ callPackage ./generic.nix (args // {
   extraPostInstall = ''
   '';
 })
+

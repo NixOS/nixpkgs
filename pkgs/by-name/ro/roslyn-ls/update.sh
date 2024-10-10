@@ -23,3 +23,4 @@ cd ../../../..
 update-source-version roslyn-ls "${new_vs_version}" --version-key=vsVersion
 
 $(nix-build -A roslyn-ls.fetch-deps --no-out-link)
+

@@ -80,3 +80,4 @@ flutterVersions // {
   stable = flutterVersions.${lib.last (lib.naturalSort (builtins.attrNames stableFlutterVersions))};
   inherit wrapFlutter mkFlutter;
 }
+

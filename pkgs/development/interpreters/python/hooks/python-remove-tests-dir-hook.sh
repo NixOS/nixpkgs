@@ -13,3 +13,4 @@ pythonRemoveTestsDir() {
 if [ -z "${dontUsePythonRemoveTestsDir-}" ]; then
     postFixupHooks+=(pythonRemoveTestsDir)
 fi
+

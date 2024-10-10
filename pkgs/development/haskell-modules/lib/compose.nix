@@ -525,3 +525,4 @@ rec {
       testPkgconfigDepends = propagatedPlainBuildInputs old.testPkgconfigDepends or [ ];
     });
 }
+

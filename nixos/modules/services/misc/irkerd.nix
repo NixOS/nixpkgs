@@ -62,3 +62,4 @@ in
     networking.firewall.allowedUDPPorts = lib.mkIf cfg.openPorts ports;
   };
 }
+

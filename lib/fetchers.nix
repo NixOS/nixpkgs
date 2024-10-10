@@ -187,3 +187,4 @@ in rec {
       (args: fetcher (normalize args))
       (removeAttrs fArgs [ "outputHash" "outputHashAlgo" ] // { hash = fArgs.outputHash; });
 }
+

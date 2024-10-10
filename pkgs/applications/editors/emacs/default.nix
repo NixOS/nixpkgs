@@ -60,3 +60,4 @@ lib.makeScope pkgs.newScope (self:
 
     emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
   })
+

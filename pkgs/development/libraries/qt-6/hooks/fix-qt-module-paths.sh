@@ -25,3 +25,4 @@ fixQtModulePaths() {
         echo "fixQtModulePaths: Warning: \`$dir' does not exist"
     fi
 }
+

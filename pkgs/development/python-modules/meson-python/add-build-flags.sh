@@ -8,3 +8,4 @@ mesonPythonBuildFlagsHook() {
 }
 
 postConfigureHooks+=(mesonPythonBuildFlagsHook)
+

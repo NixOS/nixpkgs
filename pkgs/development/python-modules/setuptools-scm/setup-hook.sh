@@ -30,3 +30,4 @@ include-tracked-files-hook() {
 }
 
 preBuildHooks+=(version-pretend-hook include-tracked-files-hook)
+

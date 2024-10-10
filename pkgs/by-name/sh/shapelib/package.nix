@@ -25,3 +25,4 @@ stdenv.mkDerivation rec {
     changelog = "http://shapelib.maptools.org/release.html";
   };
 }
+

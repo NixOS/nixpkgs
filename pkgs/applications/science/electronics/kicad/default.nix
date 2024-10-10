@@ -290,3 +290,4 @@ stdenv.mkDerivation rec {
     mainProgram = "kicad";
   };
 }
+

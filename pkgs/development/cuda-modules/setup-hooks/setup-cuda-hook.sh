@@ -121,3 +121,4 @@ propagateCudaLibraries() {
     printWords "${propagatedBuildInputs[@]}" >> "${!cudaPropagateToOutput}/nix-support/propagated-build-inputs"
 }
 postFixupHooks+=(propagateCudaLibraries)
+

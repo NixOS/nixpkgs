@@ -165,3 +165,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "firefoxpwa";
   };
 }
+

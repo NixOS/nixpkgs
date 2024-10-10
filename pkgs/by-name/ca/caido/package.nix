@@ -91,3 +91,4 @@ lib.checkListOfEnum "${pname}: appVariants" appVariantList appVariants (
       '';
     }
 )
+

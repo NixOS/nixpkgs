@@ -15,3 +15,4 @@
 "fate-suite/sub/vobsub.sub" = { url = "http://fate.ffmpeg.org/fate-suite/sub/vobsub.sub", hash = "sha256-X2rEMyTlo1xuUlqgx2uvqd2WWhfOCID9fraeGbaFPIs=" }
 "pyav-curated/pexels/time-lapse-video-of-night-sky-857195.mp4" = { url = "https://pyav.org/datasets/pexels/time-lapse-video-of-night-sky-857195.mp4", hash = "sha256-6307VwepfoVNKeGm8WEMZtfowJZ27Hv2fwgp6J/Q0oE=" }
 "pyav-curated/pexels/time-lapse-video-of-sunset-by-the-sea-854400.mp4" = { url = "https://pyav.org/datasets/pexels/time-lapse-video-of-sunset-by-the-sea-854400.mp4", hash = "sha256-2RWphhz5KWPSnJh8ARrC7aPjBa77DJO1Fv0/I4kWxYg=" }
+

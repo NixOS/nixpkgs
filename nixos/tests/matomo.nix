@@ -52,3 +52,4 @@ in {
     meta.maintainers = with maintainers; [ florianjacob mmilata twey boozedog ] ++ lib.teams.flyingcircus.members;
   };
 }
+

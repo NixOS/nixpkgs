@@ -27,3 +27,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
   };
 }
+

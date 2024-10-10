@@ -40,3 +40,4 @@ rustPlatform.buildRustPackage {
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
+

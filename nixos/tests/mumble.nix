@@ -87,3 +87,4 @@ in
     server.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
   '';
 })
+

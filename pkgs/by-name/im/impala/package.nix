@@ -24,3 +24,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.nydragon ];
   };
 }
+

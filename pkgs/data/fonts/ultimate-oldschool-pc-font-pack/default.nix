@@ -27,3 +27,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = [ maintainers.endgame ];
   };
 }
+

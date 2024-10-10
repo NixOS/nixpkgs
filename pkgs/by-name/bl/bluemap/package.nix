@@ -28,3 +28,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "bluemap";
   };
 }
+

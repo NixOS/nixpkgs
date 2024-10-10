@@ -30,3 +30,4 @@ for ((n = 0; n < ${#ttys[*]}; n++)); do
 
     ln -sfn $themeName $out/$tty
 done
+

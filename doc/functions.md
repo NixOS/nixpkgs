@@ -9,3 +9,4 @@ functions/debug.section.md
 functions/prefer-remote-fetch.section.md
 functions/nix-gitignore.section.md
 ```
+

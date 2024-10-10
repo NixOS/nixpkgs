@@ -67,3 +67,4 @@ qtModule {
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }
+

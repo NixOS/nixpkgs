@@ -34,3 +34,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert "awesome" in machine.succeed("echo ''${NIXCON}")
   '';
 })
+

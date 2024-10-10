@@ -15,3 +15,4 @@ mkShell {
 
   NVIM_TREESITTER = nvim-treesitter;
 }
+

@@ -57,3 +57,4 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
         machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
   '';
 })
+

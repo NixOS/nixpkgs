@@ -18,3 +18,4 @@ PATH_SENDMAIL="@coreutils@/bin/false"
 PATH_VGETTY="@coreutils@/bin/false"
 SYSVINIT=no
 TIFFBIN="@libtiff@/bin"
+

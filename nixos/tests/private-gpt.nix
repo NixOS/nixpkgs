@@ -25,3 +25,4 @@ in
     machine.succeed("curl http://127.0.0.1:${mainPort}")
   '';
 })
+

@@ -23,3 +23,4 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.ajgrf ];
   };
 }
+

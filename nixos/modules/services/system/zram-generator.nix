@@ -36,3 +36,4 @@ in
     environment.etc."systemd/zram-generator.conf".source = settingsFormat.generate "zram-generator.conf" cfg.settings;
   };
 }
+

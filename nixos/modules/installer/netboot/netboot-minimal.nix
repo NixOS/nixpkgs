@@ -13,3 +13,4 @@
   system.extraDependencies = lib.mkOverride 70 [];
   networking.wireless.enable = lib.mkOverride 500 false;
 }
+

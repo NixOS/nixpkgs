@@ -54,3 +54,4 @@ lib.makeScope pkgs.newScope
       lamdera = callPackage ./packages/lamdera { };
     })
   )
+

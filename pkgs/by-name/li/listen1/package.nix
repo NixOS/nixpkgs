@@ -30,3 +30,4 @@ appimageTools.wrapType2 {
     mainProgram = "listen1";
   };
 }
+

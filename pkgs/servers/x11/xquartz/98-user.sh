@@ -4,3 +4,4 @@ if [ -d "${HOME}/.xinitrc.d" ] ; then
     done
     unset f
 fi
+

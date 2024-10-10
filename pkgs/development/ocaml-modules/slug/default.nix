@@ -32,3 +32,4 @@ buildDunePackage rec {
     homepage = "https://github.com/thangngoc89/ocaml-slug";
   };
 }
+

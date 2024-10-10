@@ -97,3 +97,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "filebot";
   };
 })
+

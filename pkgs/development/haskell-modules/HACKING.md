@@ -353,3 +353,4 @@ Here are some additional tips that didn't fit in above.
     1.  Optionally, have the new member add themselves to the Haskell
         section in [`CODEOWNERS`](../../../.github/CODEOWNERS).  This
         will cause them to get pinged on most Haskell-related PRs.
+

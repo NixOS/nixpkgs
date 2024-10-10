@@ -19,3 +19,4 @@ htop.overrideAttrs (oldAttrs: rec {
     mainProgram = "htop";
   };
 })
+

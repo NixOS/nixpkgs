@@ -24,3 +24,4 @@ deployAndroidPackage {
   '' + postInstall;
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
 }
+

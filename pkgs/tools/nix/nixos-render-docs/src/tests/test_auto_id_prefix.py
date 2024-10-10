@@ -90,3 +90,4 @@ def test_auto_id_prefix_maximum_nested() -> None:
         {"id": "TEST_PREFIX-1.1.1.1.1.1", "tag": "h6"},
         {"id": "TEST_PREFIX-1.2", "tag": "h2"},
     ]
+

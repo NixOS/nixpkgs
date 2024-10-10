@@ -201,3 +201,4 @@ in {
     maintainers = pkgs.fwupd.meta.maintainers;
   };
 }
+

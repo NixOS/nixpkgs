@@ -38,3 +38,4 @@ buildPythonPackage {
     find . -name "_libdftd3*" -exec cp {} ./dftd3/. \;
   '';
 }
+

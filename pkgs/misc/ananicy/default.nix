@@ -51,3 +51,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ananicy";
   };
 }
+

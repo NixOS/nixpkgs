@@ -34,3 +34,4 @@
     print(machine.succeed("adb devices"))
   '';
 }
+

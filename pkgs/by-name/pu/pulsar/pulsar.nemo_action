@@ -7,3 +7,4 @@ Exec=pulsar -n %U
 Icon-Name=pulsar
 Selection=any
 Extensions=any
+

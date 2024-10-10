@@ -32,3 +32,4 @@ makeOpenBSDUnversionedLinks() {
 preConfigureHooks+=(addOpenBSDMakeFlags)
 postPatchHooks+=(fixOpenBSDInstallDirs setBinownBingrp)
 preFixupHooks+=(makeOpenBSDUnversionedLinks)
+

@@ -67,3 +67,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (gtk3.meta) platforms;
   };
 })
+

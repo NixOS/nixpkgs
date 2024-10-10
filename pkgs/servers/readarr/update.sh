@@ -42,3 +42,4 @@ updateHash $latestVersion x64 linux
 updateHash $latestVersion arm64 linux
 updateHash $latestVersion x64 osx
 
+

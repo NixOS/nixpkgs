@@ -51,3 +51,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ zendo Ruixi-rebirth aleksana ];
   };
 }
+

@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-code-analysis-cli";
   };
 }
+

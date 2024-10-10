@@ -58,3 +58,4 @@ if postgresql == null then
 # but if postgresql is set, we're being made as a passthru test for a specific postgres + wal2json version, just run one
 else
   makePostgresqlWal2jsonTest postgresql
+

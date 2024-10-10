@@ -183,3 +183,4 @@
   (fetchNuGet { pname = "System.Xml.XDocument"; version = "4.3.0"; hash = "sha256-rWtdcmcuElNOSzCehflyKwHkDRpiOhJJs8CeQ0l1CCI="; })
   (fetchNuGet { pname = "Tmds.DBus"; version = "0.9.0"; hash = "sha256-w332WVsJrdAOnlSUtgvatSTtnoC81C3LG6J2ip42fW8="; })
 ]
+

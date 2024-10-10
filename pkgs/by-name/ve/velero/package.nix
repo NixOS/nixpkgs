@@ -47,3 +47,4 @@ buildGoModule rec {
     maintainers = [ maintainers.mbode maintainers.bryanasdev000 ];
   };
 }
+

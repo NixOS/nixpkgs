@@ -32,3 +32,4 @@ in appimageTools.wrapType2 {
     maintainers = with maintainers; [ zendo ];
   };
 }
+

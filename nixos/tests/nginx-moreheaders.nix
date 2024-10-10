@@ -35,3 +35,4 @@ import ./make-test-python.nix {
     webserver.succeed("curl --fail --resolve test:80:127.0.0.1 --head --verbose http://test/some | grep -q \"Referrer-Policy: no-referrer\"")
   '';
 }
+

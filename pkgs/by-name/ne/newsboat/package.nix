@@ -112,3 +112,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "newsboat";
   };
 }
+

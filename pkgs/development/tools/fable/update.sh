@@ -37,3 +37,4 @@ HASH=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$NUGET_URL")")
 
 sed -i "s/version = \".*\"/version = \"$VER\"/" "$NIX_DRV"
 sed -i "s#nugetHash = \"sha256-.\{44\}\"#nugetHash = \"$HASH\"#" "$NIX_DRV"
+

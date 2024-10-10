@@ -7,3 +7,4 @@ pkgs.substituteAll {
   path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   inherit firmware configTxt;
 }
+

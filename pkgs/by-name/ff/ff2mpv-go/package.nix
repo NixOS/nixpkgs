@@ -37,3 +37,4 @@ buildGoModule rec {
     mainProgram = "ff2mpv-go";
   };
 }
+

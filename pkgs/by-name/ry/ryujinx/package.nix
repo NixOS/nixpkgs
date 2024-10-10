@@ -125,3 +125,4 @@ buildDotnetModule rec {
     mainProgram = "Ryujinx";
   };
 }
+

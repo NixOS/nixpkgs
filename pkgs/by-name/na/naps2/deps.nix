@@ -178,3 +178,4 @@
   (fetchNuGet { pname = "Unosquare.Swan.Lite"; version = "3.1.0"; sha256 = "0yjbchc2rhgssfvb1qxg3kq3lzyx089r3rngpcjgrkw85bf0vgrw"; })
   (fetchNuGet { pname = "ZXing.Net"; version = "0.16.9"; sha256 = "0bpki21p2wjjjviayhza0gam7s9lm7qj6g8hdcp2csd0mv54l980"; })
 ]
+

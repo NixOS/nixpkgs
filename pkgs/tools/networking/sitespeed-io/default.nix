@@ -95,3 +95,4 @@ buildNpmPackage rec {
     mainProgram = "sitespeed-io";
   };
 }
+

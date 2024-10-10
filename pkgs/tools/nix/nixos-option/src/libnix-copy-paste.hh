@@ -7,3 +7,4 @@
 nix::Strings parseAttrPath(const std::string & s);
 bool isVarName(const std::string & s);
 std::ostream & printStringValue(std::ostream & str, const char * string);
+

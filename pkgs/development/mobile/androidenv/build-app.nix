@@ -46,3 +46,4 @@ stdenv.mkDerivation ({
     echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
 } // extraArgs)
+

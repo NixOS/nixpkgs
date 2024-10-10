@@ -24,3 +24,4 @@ buildGoModule rec {
     mainProgram = "up_rewrite";
   };
 }
+

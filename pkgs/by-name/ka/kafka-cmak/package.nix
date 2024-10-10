@@ -47,3 +47,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "cmak";
   };
 })
+

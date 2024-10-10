@@ -21,3 +21,4 @@ symlinkJoin {
 
   inherit (geany.meta);
 }
+

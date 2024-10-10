@@ -24,3 +24,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ offline ];
   };
 }
+

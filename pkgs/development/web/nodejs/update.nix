@@ -27,3 +27,4 @@ writeScript "update-nodejs" ''
 
   update-source-version nodejs_${majorVersion} "''${version}" "''${hash}"
 ''
+

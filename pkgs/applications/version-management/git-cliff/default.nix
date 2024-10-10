@@ -35,3 +35,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "git-cliff";
   };
 }
+

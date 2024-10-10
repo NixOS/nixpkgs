@@ -19,3 +19,4 @@ buildOctavePackage rec {
     description = "Provides COM interface and additional functionality on Windows";
   };
 }
+

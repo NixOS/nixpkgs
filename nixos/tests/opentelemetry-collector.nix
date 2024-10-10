@@ -76,3 +76,4 @@ in {
     assert flag in machine.execute("journalctl -u opentelemetry-collector")[-1]
   '';
 })
+

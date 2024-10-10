@@ -21,3 +21,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = [ maintainers.Gonzih ];
   };
 }
+

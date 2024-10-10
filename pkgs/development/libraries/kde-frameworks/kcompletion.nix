@@ -11,3 +11,4 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];
 }
+

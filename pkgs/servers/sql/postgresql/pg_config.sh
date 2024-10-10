@@ -33,3 +33,4 @@ fi
 # - some other pg_config on PATH, not from our -dev output
 echo The real pg_config can be found in the -dev output.
 exit 1
+

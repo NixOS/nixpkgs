@@ -67,3 +67,4 @@ if __name__ == "__main__":
                 version = match.group(2)
                 if (not args.extra_regex) or re.fullmatch(args.extra_regex, version):
                     print(version)
+

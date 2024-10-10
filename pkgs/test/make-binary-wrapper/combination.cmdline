@@ -4,3 +4,4 @@
     --suffix PATH : /usr/local/bin/ \
     --add-flags "-x -y -z" \
     --set MESSAGE2 WORLD
+

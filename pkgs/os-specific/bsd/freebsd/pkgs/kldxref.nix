@@ -13,3 +13,4 @@ mkDerivation {
     sed -i 's/FTS_PHYSICAL/FTS_LOGICAL/' $BSDSRCDIR/usr.sbin/kldxref/kldxref.c
   '';
 }
+

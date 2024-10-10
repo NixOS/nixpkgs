@@ -35,3 +35,4 @@ buildGoModule {
     mainProgram = "saucectl";
   };
 }
+

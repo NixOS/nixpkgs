@@ -54,3 +54,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ _0x4A6F anpin ];
   };
 }
+

@@ -9,3 +9,4 @@ import ./generic.nix rec {
     "--with-gcc-arch=generic" # don't guess -march=/mtune=
   ];
 }
+

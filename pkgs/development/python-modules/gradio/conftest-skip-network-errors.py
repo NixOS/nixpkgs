@@ -57,3 +57,4 @@ urllib.request.Request = deny_network_access
 urllib.request.urlopen = deny_network_access
 urllib3.connection.HTTPSConnection._new_conn = deny_network_access
 websockets.connect = deny_network_access
+

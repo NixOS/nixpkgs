@@ -14,3 +14,4 @@ mkDerivation {
   propagatedBuildInputs = [ kwidgetsaddons qtbase ];
   outputs = [ "out" "dev" ];
 }
+

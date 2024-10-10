@@ -64,3 +64,4 @@ in {
     assert is_master(backup_host), "backup did not take over"
   '';
 })
+

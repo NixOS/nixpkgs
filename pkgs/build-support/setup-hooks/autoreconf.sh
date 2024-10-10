@@ -13,3 +13,4 @@ autoreconfPhase() {
     autoreconf "${flagsArray[@]}"
     runHook postAutoreconf
 }
+

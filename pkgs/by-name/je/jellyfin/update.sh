@@ -14,3 +14,4 @@ fi
 update-source-version jellyfin "$latestVersion"
 
 $(nix-build . -A jellyfin.fetch-deps --no-out-link)
+

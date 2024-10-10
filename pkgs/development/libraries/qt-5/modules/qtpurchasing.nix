@@ -12,3 +12,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation StoreKit ];
 }
+

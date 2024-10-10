@@ -42,3 +42,4 @@ lib.makeScope newScope (
       self.callPackage ./nvidia-docker.nix { };
   }
 )
+

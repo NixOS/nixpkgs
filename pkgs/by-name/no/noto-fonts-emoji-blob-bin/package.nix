@@ -28,3 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = with lib.maintainers; [ rileyinman jk ];
   };
 }
+

@@ -161,3 +161,4 @@ new_data["!version"] = 1  # type: ignore
 with open(sys.argv[2], "wt") as f:
     json.dump(new_data, f, sort_keys=True, indent=1)
     f.write("\n")
+

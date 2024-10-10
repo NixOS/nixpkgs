@@ -47,3 +47,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       assert result["summary"]["test-count"] == 8, f".summary.test-count should be 10, was {result['summary']['test-count']}"
     '';
 })
+

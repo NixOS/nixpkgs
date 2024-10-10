@@ -10,3 +10,4 @@ appendToVar postPhases removeBuildDir
 removeBuildDir() {
     rm -rf $out/.build
 }
+

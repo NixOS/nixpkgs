@@ -58,3 +58,4 @@ sed -i -E \
     -e "s/rpcs3Revision\s*=\s*\"[a-z0-9]+\";$/rpcs3Revision = \"${commit_sha}\";/g" \
     -e "s|rpcs3Hash\s*=\s*\"sha256-.*\";$|rpcs3Hash = \"${nix_hash}\";|g" \
     "$ROOT/package.nix"
+

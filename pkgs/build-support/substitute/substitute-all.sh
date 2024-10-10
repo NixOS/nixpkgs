@@ -17,3 +17,4 @@ if test -n "$isExecutable"; then
 fi
 
 eval "$postInstall"
+

@@ -41,3 +41,4 @@ mkKdeDerivation {
     "--set FREI0R_PATH ${frei0r}/lib/frei0r-1"
   ];
 }
+

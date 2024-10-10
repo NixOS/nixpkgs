@@ -25,3 +25,4 @@ in
     machine.succeed("curl -f http://localhost:${toString port}/")
   '';
 })
+

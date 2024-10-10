@@ -64,3 +64,4 @@ nix-instantiate -A lib.maintainers --eval --strict --json \
 
 # To check some arbitrary users:
 # parallel -j100 checkUser ::: "eelco" "profpatsch" "Profpatsch" "a"
+

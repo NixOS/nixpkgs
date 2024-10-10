@@ -132,3 +132,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ Madouura muscaln ];
   };
 }
+

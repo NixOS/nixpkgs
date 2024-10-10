@@ -5,3 +5,4 @@
 {
   networking.hostName = "{{ container.name }}";
 }
+

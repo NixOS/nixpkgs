@@ -24,3 +24,4 @@ else
       nix-diff $drvA $drvB
       exit 1
     ''
+

@@ -36,3 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix; # supports Windows and MacOS as well, but those require more work
   };
 }
+

@@ -19,3 +19,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     assert machine.succeed("PATH= ${pkgs.kbd}/bin/setfont font.psf.zst 2>&1") == ""
   '';
 })
+

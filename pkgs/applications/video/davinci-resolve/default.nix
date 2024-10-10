@@ -293,3 +293,4 @@ buildFHSEnv {
     mainProgram = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
   };
 }
+

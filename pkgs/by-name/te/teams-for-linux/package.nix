@@ -123,3 +123,4 @@ buildNpmPackage rec {
     platforms = with lib.platforms; darwin ++ linux;
   };
 }
+

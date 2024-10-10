@@ -13,3 +13,4 @@
   containerdSha256 = "00gdmd617mxf246m3mfz8if8snaciib4zdb7fm12mdhf52w031a6";
   criCtlVersion = "1.26.0-rc.0-k3s1";
 }
+

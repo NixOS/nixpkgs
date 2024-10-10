@@ -42,3 +42,4 @@ buildGo122Module rec {
     maintainers = with maintainers; [ willibutz ];
   };
 }
+

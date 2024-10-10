@@ -113,3 +113,4 @@ including its file system, do
 ```ShellSession
 # nixos-container destroy foo
 ```
+

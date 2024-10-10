@@ -58,3 +58,4 @@ buildNpmPackage rec {
     inherit (olm.meta) knownVulnerabilities;
   };
 }
+

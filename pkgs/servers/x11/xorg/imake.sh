@@ -4,3 +4,4 @@ preInstall() {
     #touch $out/lib/X11/config/host.def # !!! hack
     #touch $out/lib/X11/config/date.def # !!! hack
 }
+

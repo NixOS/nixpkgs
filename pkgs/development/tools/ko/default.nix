@@ -70,3 +70,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ nickcao jk vdemeester developer-guy ];
   };
 }
+

@@ -8,3 +8,4 @@ MimeType=text/xml;text/plain;chemical/x-cml;chemical/x-mdl-molfile;chemical/x-md
 Categories=Education;Science;Chemistry;
 StartupWMClass=com-install4j-runtime-launcher-UnixLauncher
 Comment=Molecular modelling, analysis and structure drawing program
+

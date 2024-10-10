@@ -10,3 +10,4 @@ runCommand "check-meta-pkg-config-modules-for-${package.name}" {
 } ''
   echo "found all of ${toString package.meta.pkgConfigModules}" > "$out"
 ''
+

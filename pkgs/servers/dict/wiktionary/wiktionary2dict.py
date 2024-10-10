@@ -773,3 +773,4 @@ out.write("%%h English Wiktionary\n%s" % info)
 xml.sax.parse(f, WordHandler())
 f.close()
 out.close()
+

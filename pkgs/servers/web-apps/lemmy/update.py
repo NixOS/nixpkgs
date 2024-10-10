@@ -153,3 +153,4 @@ if __name__ == "__main__":
     pin = Pin(server_version, ui_version, filename=os.path.join(SCRIPT_DIR, "pin.json"))
     make_server_pin(pin, "lemmy-server")
     make_ui_pin(pin, "lemmy-ui")
+

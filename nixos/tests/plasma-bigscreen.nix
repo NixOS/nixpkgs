@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.wait_for_window("Plasma Big Screen")
   '';
 })
+

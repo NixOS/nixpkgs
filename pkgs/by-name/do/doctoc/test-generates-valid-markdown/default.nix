@@ -12,3 +12,4 @@ runCommandNoCC "doctoc-test-generates-valid-markdown.md" { nativeBuildInputs = [
 
   cp target.md $out
 ''
+

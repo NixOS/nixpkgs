@@ -22,3 +22,4 @@ stdenv.mkDerivation {
   inherit sigtool;
   codesignAllocate = "${cctools}/bin/${cctools.targetPrefix}codesign_allocate";
 }
+

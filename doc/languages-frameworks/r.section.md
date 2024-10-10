@@ -128,3 +128,4 @@ patches and special requirements. These overrides are specified in the
 `pkgs/development/r-modules/default.nix` file. As the `*-packages.json`
 contents are automatically generated it should not be edited and broken
 builds should be addressed using overrides.
+

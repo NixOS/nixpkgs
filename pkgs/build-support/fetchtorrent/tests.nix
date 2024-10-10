@@ -45,3 +45,4 @@ in
     inherit (wired-cd) meta;
   };
 }
+

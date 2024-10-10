@@ -21,3 +21,4 @@ buildGoModule {
     mainProgram = "duckling-proxy";
   };
 }
+

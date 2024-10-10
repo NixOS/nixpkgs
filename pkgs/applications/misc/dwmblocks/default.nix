@@ -34,3 +34,4 @@ stdenv.mkDerivation {
     mainProgram = "dwmblocks";
   };
 }
+

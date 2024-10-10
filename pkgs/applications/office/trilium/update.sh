@@ -21,3 +21,4 @@ setKV ./desktop.nix darwinSource.sha256 $sha256_darwin64
 sha256_linux64_server=$(nix-prefetch-url --quiet https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-server-${version}.tar.xz)
 setKV ./server.nix version $version
 setKV ./server.nix serverSource.sha256 $sha256_linux64_server
+

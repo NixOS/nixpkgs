@@ -32,3 +32,4 @@ moveQtDevTools() {
         fi
     fi
 }
+

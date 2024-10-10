@@ -107,3 +107,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "diesel";
   };
 }
+

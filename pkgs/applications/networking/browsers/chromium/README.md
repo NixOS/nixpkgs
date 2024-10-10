@@ -89,3 +89,4 @@ Useful tests:
 - WebGL: https://get.webgl.org/
 - VA-API: https://wiki.archlinux.org/index.php/chromium#Hardware_video_acceleration
 - Optional: Widevine CDM (proprietary), Benchmarks, Ozone, etc.
+

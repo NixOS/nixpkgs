@@ -25,3 +25,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }
+

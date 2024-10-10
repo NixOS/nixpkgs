@@ -40,3 +40,4 @@ runCommand "sddm-wrapped" {
     makeQtWrapper ${unwrapped}/$i $out/$i --set SDDM_GREETER_DIR $out/bin
   done
 ''
+

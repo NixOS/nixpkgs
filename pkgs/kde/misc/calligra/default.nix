@@ -74,3 +74,4 @@ mkKdeDerivation rec {
     mainProgram = "calligralauncher";
   };
 }
+

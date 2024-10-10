@@ -44,3 +44,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = hyprland.meta.platforms;
   };
 })
+

@@ -37,3 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sway-audio-idle-inhibit";
   };
 })
+

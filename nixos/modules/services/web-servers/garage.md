@@ -94,3 +94,4 @@ packages, but mark them as insecure in an expression like this (in
 Ideally we should make sure that it's possible to jump two NixOS versions forward:
 i.e. the warnings and the logic in the module should guard a user to upgrade from a
 Garage on e.g. 22.11 to a Garage on 23.11.
+

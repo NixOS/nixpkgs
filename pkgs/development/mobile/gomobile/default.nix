@@ -63,3 +63,4 @@ buildGoModule {
     maintainers = with maintainers; [ jakubgs ];
   };
 }
+

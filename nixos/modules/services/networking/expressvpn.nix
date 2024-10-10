@@ -26,3 +26,4 @@
 
   meta.maintainers = with lib.maintainers; [ yureien ];
 }
+

@@ -79,3 +79,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       #            raise Exception("Inserted bookmark doesn't have same URL or title")
     '';
   })
+

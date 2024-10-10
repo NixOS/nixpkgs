@@ -27,3 +27,4 @@ libgit2.overrideAttrs (oldAttrs: {
 
   patches = [ ];
 })
+

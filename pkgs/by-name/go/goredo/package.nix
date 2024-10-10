@@ -60,3 +60,4 @@ buildGoModule rec {
     maintainers = [ maintainers.spacefrogg ];
   };
 }
+

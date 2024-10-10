@@ -16,3 +16,4 @@ qtModule rec {
 
   propagatedBuildInputs = [ qtbase ];
 }
+

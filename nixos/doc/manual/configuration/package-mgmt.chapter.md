@@ -16,3 +16,4 @@ NixOS has two distinct styles of package management:
 declarative-packages.section.md
 ad-hoc-packages.section.md
 ```
+

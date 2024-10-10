@@ -93,3 +93,4 @@ buildFHSEnv {
     mainProgram = "dropbox";
   };
 }
+

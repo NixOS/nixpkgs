@@ -18,3 +18,4 @@ output_bytes = bg.remove(
 )
 
 args.output.write_bytes(output_bytes)
+

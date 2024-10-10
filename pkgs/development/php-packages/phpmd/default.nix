@@ -29,3 +29,4 @@ php.buildComposerProject (finalAttrs: {
     maintainers = lib.teams.php.members;
   };
 })
+

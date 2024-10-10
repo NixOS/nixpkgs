@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ qttools shared-mime-info ];
   propagatedBuildInputs = [ qtbase ];
 }
+

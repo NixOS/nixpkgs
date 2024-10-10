@@ -62,3 +62,4 @@ in writeShellScript "update-${pname}" ''
     update-source-version "${pname}" "$version" "$hash" --ignore-same-version --source-key="sources.$platform"
   done
 ''
+

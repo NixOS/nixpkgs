@@ -21,3 +21,4 @@ args:
       --prefix PATH ':' "${lib.makeBinPath [ gnupg ]}"
   '';
 })
+

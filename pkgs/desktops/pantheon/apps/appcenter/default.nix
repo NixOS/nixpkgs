@@ -78,3 +78,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.elementary.appcenter";
   };
 }
+

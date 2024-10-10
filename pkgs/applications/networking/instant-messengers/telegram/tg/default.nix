@@ -46,3 +46,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ sikmir ];
   };
 }
+

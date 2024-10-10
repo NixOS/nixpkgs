@@ -16,3 +16,4 @@ fi
 update-source-version parabolic "$version"
 
 $(nix-build -A parabolic.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+

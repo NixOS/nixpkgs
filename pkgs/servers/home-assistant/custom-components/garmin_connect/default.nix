@@ -33,3 +33,4 @@ buildHomeAssistantComponent {
     license = licenses.mit;
   };
 }
+

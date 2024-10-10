@@ -8,3 +8,4 @@ pdm-version-pretend-hook() {
 if [ -z "${dontSetPdmBackendVersion-}" ]; then
   preBuildHooks+=(pdm-version-pretend-hook)
 fi
+

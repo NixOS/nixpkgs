@@ -868,3 +868,4 @@ def update_all(bin_only: bool, source_only: bool, commit: bool) -> None:
 
 if __name__ == "__main__":
     cli()
+

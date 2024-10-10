@@ -36,3 +36,4 @@ buildGoModule {
     mainProgram = "hexxy";
   };
 }
+

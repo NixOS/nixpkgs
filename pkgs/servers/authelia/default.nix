@@ -78,3 +78,4 @@ buildGoModule rec {
     mainProgram = "authelia";
   };
 }
+

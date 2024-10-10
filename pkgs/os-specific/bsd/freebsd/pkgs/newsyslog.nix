@@ -13,3 +13,4 @@ mkDerivation {
     sed -E -i -e '/^SUBDIR/d' $BSDSRCDIR/usr.sbin/newsyslog/Makefile
   '';
 }
+

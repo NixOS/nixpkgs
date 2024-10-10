@@ -313,3 +313,4 @@ buildEnv' {
 };
   # outputsToInstall must be set *after* overrideAttrs (used in buildEnv') or it fails the checkMeta tests
 in if __combine || __formatsOf != null then out else lib.addMetaAttrs { inherit (pkgList) outputsToInstall; } out)
+

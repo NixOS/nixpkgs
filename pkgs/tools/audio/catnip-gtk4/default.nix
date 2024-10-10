@@ -44,3 +44,4 @@ buildGoModule {
     mainProgram = "catnip-gtk4";
   };
 }
+

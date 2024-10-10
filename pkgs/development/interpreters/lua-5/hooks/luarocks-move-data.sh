@@ -13,3 +13,4 @@ luarocksMoveDataHook () {
 
 echo "Using luarocksMoveDataHook"
 preFixupHooks+=(luarocksMoveDataHook)
+

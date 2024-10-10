@@ -3,3 +3,4 @@ add_meson_exe_wrapper_cross_flag() {
 }
 
 preConfigureHooks+=(add_meson_exe_wrapper_cross_flag)
+

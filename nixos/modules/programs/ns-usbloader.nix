@@ -16,3 +16,4 @@ in
 
   meta.maintainers = pkgs.ns-usbloader.meta.maintainers;
 }
+

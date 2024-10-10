@@ -67,3 +67,4 @@ buildPythonPackage (common // {
     mainProgram = "openrazer-daemon";
   };
 })
+

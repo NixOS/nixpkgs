@@ -26,3 +26,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pw-volume";
   };
 }
+

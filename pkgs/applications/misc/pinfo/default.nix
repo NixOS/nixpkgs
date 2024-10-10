@@ -70,3 +70,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pinfo";
   };
 }
+

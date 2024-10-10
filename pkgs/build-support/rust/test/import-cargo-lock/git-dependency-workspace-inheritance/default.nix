@@ -5,3 +5,4 @@ runCommand "git-dependency-workspace-inheritance-test" { } ''
   ${replaceWorkspaceValues} "$out" ${./workspace.toml}
   diff -u "$out" ${./want.toml}
 ''
+

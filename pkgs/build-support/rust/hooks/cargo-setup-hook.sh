@@ -91,3 +91,4 @@ fi
 if [ -z ${cargoVendorDir-} ]; then
   postPatchHooks+=(cargoSetupPostPatchHook)
 fi
+

@@ -231,3 +231,4 @@ This is not required, but the above solution also allows exposing the package se
   inherit (foo-versions) foo_1 foo_2;
 }
 ```
+

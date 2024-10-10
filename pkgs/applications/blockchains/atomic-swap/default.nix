@@ -41,3 +41,4 @@ buildGoModule {
     maintainers = with maintainers; [ happysalada lord-valen ];
   };
 }
+

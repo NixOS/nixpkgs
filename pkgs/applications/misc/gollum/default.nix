@@ -22,3 +22,4 @@ bundlerApp rec {
     mainProgram = "gollum";
   };
 }
+

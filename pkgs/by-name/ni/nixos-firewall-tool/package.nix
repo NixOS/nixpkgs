@@ -13,3 +13,4 @@ writeShellApplication {
     maintainers = with maintainers; [ clerie ];
   };
 }
+

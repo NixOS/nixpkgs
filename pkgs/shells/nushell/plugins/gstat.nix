@@ -39,3 +39,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with platforms; all;
   };
 }
+

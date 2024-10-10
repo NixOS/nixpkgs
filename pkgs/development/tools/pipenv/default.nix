@@ -105,3 +105,4 @@ in buildPythonApplication rec {
     maintainers = with maintainers; [ berdario ];
   };
 }
+

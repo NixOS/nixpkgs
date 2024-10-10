@@ -59,3 +59,4 @@ in stdenv.mkDerivation {
     mainProgram = "cloc";
   };
 }
+

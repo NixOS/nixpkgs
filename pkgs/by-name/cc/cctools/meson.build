@@ -655,3 +655,4 @@ install_man(
     'man/getsegbyname.3',
     'man/stab.5',
 )
+

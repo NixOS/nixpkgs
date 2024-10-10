@@ -27,3 +27,4 @@ buildHomeAssistantComponent rec {
     maintainers = with maintainers; [ jnsgruk ];
   };
 }
+

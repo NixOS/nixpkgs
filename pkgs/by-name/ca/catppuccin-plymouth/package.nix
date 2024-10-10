@@ -54,3 +54,4 @@ lib.checkListOfEnum "${pname}: color variant" validVariants [ variant ]
       ];
     };
   })
+

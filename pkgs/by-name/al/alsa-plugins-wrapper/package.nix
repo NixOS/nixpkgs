@@ -8,3 +8,4 @@ in
 writeShellScriptBin "ap${arch}" ''
   ALSA_PLUGIN_DIRS=${alsa-plugins}/lib/alsa-lib "$@"
 ''
+

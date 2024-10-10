@@ -26,3 +26,4 @@ buildNpmPackage rec {
     mainProgram = "gtop";
   };
 }
+

@@ -15,3 +15,4 @@ graalvmCEPackages.buildGraalvmProduct {
     $out/bin/npx --help
   '';
 }
+

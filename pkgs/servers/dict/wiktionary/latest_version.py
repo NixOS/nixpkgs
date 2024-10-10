@@ -40,3 +40,4 @@ with urlopen('https://dumps.wikimedia.org/enwiktionary/') as resp:
     parser.feed(resp.read())
 
 print(parser.latest_version)
+

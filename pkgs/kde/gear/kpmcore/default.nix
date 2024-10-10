@@ -74,3 +74,4 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ pkg-config ];
 }
+

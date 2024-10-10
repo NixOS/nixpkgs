@@ -17,3 +17,4 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config intltool glib ];
   propagatedBuildInputs = [ libart_lgpl gtk2 ];
 }
+

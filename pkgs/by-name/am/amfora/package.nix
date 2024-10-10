@@ -27,3 +27,4 @@ buildGoModule rec {
     changelog = "https://github.com/makeworld-the-better-one/amfora/blob/v${version}/CHANGELOG.md";
   };
 }
+

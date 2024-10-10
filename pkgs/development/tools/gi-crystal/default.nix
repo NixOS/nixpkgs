@@ -46,3 +46,4 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ sund3RRR ];
   };
 }
+

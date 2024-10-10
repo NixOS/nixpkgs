@@ -97,3 +97,4 @@ in
 if fromSource
   then buildFromSource
   else installBinary
+

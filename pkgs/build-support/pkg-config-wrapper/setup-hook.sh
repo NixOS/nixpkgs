@@ -27,3 +27,4 @@ export PKG_CONFIG${role_post}=@targetPrefix@@baseBinName@
 
 # No local scope in sourced file
 unset -v role_post
+

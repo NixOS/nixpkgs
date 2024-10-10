@@ -24,3 +24,4 @@ echo "$index_file" | while read -r line; do
         Version=""
     fi
 done | tail -n 1 | (read version; update-source-version intune-portal $version)
+

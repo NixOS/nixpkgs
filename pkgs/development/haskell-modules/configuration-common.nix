@@ -3101,3 +3101,4 @@ self: super: {
   }) super.quickcheck-state-machine;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+

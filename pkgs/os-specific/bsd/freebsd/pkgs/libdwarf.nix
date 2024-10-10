@@ -18,3 +18,4 @@ mkDerivation {
   buildInputs = compatIfNeeded ++ [ zlib ];
   MK_TESTS = "no";
 }
+

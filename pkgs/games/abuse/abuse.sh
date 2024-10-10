@@ -16,3 +16,4 @@ fi
 # like /etc for its configuration file.
 cd @out@/etc
 exec @out@/bin/.abuse-bin "$@"
+

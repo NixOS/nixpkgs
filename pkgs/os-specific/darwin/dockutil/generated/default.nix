@@ -5,3 +5,4 @@
     "swift-argument-parser" = "1fpdgivmwdszggvx0ligs3vidv9kpp9777v649hs8w7vpcifc2ji";
   };
 }
+

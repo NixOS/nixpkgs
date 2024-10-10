@@ -58,3 +58,4 @@ stdenvNoCC.mkDerivation {
     inherit (johnny-reborn-engine.meta) homepage platforms mainProgram;
   };
 }
+

@@ -9,3 +9,4 @@ runCommand "ssh-copy-id-${openssh.version}" {
   install -Dm 755 {${openssh},$out}/bin/ssh-copy-id
   install -Dm 644 {${openssh},$out}/share/man/man1/ssh-copy-id.1.gz
 ''
+

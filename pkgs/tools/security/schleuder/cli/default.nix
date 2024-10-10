@@ -32,3 +32,4 @@ bundlerApp {
     maintainers = with maintainers; [ hexa ];
   };
 }
+

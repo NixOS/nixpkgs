@@ -92,3 +92,4 @@ in rec {
 
   vala = vala_0_56;
 }
+

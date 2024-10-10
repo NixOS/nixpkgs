@@ -26,3 +26,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "desed";
   };
 }
+

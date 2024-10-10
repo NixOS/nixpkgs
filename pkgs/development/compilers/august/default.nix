@@ -28,3 +28,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "ag";
   };
 }
+

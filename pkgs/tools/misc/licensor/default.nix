@@ -29,3 +29,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "licensor";
   };
 }
+

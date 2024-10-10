@@ -104,3 +104,4 @@ have to declare:
 ```
 
 You need to configure appropriate `restartTriggers` specific to your service.
+

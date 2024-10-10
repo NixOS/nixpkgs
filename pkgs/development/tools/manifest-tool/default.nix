@@ -61,3 +61,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ tricktron ];
   };
 }
+

@@ -38,3 +38,4 @@ in rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ ProducerMatt ];
   };
 }
+

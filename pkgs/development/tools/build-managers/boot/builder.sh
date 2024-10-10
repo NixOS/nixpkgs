@@ -12,3 +12,4 @@ patchShebangs $boot_bin
 sed -i \
     -e "s;\${BOOT_JAVA_COMMAND:-java};\${BOOT_JAVA_COMMAND:-${jdk}/bin/java};g" \
     $boot_bin
+

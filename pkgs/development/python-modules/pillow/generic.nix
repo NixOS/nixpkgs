@@ -107,3 +107,4 @@ buildPythonPackage rec {
       export CFLAGS="$CFLAGS -I${libxcb.dev}/include"
     '';
 }
+

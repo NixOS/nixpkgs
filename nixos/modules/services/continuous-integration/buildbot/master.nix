@@ -303,3 +303,4 @@ in {
 
   meta.maintainers = lib.teams.buildbot.members;
 }
+

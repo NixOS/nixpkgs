@@ -38,3 +38,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client.succeed("curl --fail http://$(getent ahostsv4 server | head -n1 | cut -f 1 -d ' '):8200/")
   '';
 })
+

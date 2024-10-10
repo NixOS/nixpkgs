@@ -80,3 +80,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };
 }
+

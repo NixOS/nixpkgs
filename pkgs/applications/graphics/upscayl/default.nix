@@ -39,3 +39,4 @@ in
       mainProgram = "upscayl";
     };
   }
+

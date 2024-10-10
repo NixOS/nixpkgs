@@ -18,3 +18,4 @@
     assert torch.cuda.is_available() and torch.version.${versionAttr}, message
     print(message)
   ''
+

@@ -33,3 +33,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "gnome-randr";
   };
 }
+

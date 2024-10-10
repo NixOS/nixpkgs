@@ -53,3 +53,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ jlesquembre ];
   };
 }
+

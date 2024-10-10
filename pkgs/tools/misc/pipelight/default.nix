@@ -66,3 +66,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "pipelight-plugin";
   };
 }
+

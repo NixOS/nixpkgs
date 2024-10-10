@@ -38,3 +38,4 @@ stdenv.mkDerivation {
     diff --color --report-identical-files "${output}" "${placeholder "out"}/share/ppds/test.ppd"
   '';
 }
+

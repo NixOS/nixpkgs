@@ -11,3 +11,4 @@ Conflicts:
 Libs: -L${libdir} -lyuv -lm
 Libs.private: -lm -lpthread
 Cflags: -I${includedir}
+

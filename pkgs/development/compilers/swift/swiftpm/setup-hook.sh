@@ -60,3 +60,4 @@ swiftpmBinPath() {
 
     swift-build --show-bin-path "${flagsArray[@]}"
 }
+

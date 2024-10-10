@@ -7,3 +7,4 @@ qtModule {
   pname = "qtquicktimeline";
   propagatedBuildInputs = [ qtbase qtdeclarative ];
 }
+

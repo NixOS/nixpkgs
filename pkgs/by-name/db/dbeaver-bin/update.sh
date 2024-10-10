@@ -24,3 +24,4 @@ do
 
     update-source-version dbeaver-bin $latestVersion $hash --system=$1 --ignore-same-version
 done
+

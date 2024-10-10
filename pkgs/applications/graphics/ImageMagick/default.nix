@@ -151,3 +151,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "magick";
   };
 })
+

@@ -16,3 +16,4 @@ fi
 update-source-version cavalier "$version"
 
 $(nix-build -A cavalier.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+

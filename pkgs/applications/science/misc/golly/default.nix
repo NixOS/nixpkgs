@@ -54,3 +54,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://sourceforge.net/projects/golly/files/golly";
   };
 }
+

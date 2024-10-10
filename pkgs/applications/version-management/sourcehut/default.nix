@@ -116,3 +116,4 @@ with python.pkgs; recurseIntoAttrs ({
   # Added 2022-10-29
   dispatchsrht = throw "dispatch is deprecated. See https://sourcehut.org/blog/2022-08-01-dispatch-deprecation-plans/ for more information.";
 })
+

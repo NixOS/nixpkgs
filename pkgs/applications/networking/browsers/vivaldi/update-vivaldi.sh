@@ -13,3 +13,4 @@ update_hash() {
 
 update_hash aarch64-linux arm64
 update_hash x86_64-linux amd64
+

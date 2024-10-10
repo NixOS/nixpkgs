@@ -52,3 +52,4 @@ in {
     environment.systemPackages = [ pkgs.bloop ];
   };
 }
+

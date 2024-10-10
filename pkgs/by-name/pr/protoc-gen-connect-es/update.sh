@@ -28,3 +28,4 @@ sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 popd
 
 nix-update protoc-gen-connect-es --version "$version"
+

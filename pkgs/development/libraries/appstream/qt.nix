@@ -43,3 +43,4 @@ stdenv.mkDerivation {
     description = "Software metadata handling library - Qt";
  };
 }
+

@@ -7,3 +7,4 @@ callPackage ./generic.nix ({
   enableParallelBuilding = false; # #32386, https://hydra.nixos.org/build/65600645
   extraPatches = lib.optionals stdenv.hostPlatform.isLinux [ ./mono4-glibc.patch ];
 })
+

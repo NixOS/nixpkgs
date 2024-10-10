@@ -54,3 +54,4 @@ stdenv.mkDerivation rec {
     mainProgram = "terminal-colors";
   };
 }
+

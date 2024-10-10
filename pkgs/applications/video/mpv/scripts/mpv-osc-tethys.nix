@@ -24,3 +24,4 @@ buildLua (finalAttrs: {
     maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
   };
 })
+

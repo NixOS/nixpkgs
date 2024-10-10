@@ -34,3 +34,4 @@ in appimageTools.wrapType1 {
     platforms = [ "x86_64-linux" ];
   };
 }
+

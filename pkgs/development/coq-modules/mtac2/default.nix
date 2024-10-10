@@ -20,3 +20,4 @@ mkCoqDerivation {
     patchShebangs tests/sf-5/configure.sh
   '';
 }
+

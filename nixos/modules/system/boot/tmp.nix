@@ -64,3 +64,4 @@ in
     systemd.tmpfiles.rules = lib.optional cfg.cleanOnBoot "D! /tmp 1777 root root";
   };
 }
+

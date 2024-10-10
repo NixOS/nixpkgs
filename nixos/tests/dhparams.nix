@@ -128,3 +128,4 @@ import ./make-test-python.nix {
         assert_param_bits("${getParamPath 5 "bar3"}", 1029)
   '';
 }
+

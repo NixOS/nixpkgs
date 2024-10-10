@@ -27,3 +27,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
+

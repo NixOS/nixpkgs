@@ -10,3 +10,4 @@ version="$(
   | sed 's/^v//'
 )"
 update-source-version furnace "$version"
+

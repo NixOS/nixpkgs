@@ -56,3 +56,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "clipcatd";
   };
 }
+

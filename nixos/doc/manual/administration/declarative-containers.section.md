@@ -50,3 +50,4 @@ the imperative method: `nixos-container destroy foo`.
 Declarative containers can be started and stopped using the
 corresponding systemd service, e.g.
 `systemctl start container@database`.
+

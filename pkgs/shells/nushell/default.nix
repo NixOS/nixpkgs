@@ -83,3 +83,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "nu";
   };
 }
+

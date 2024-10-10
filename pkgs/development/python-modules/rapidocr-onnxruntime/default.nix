@@ -124,3 +124,4 @@ buildPythonPackage {
     mainProgram = "rapidocr_onnxruntime";
   };
 }
+

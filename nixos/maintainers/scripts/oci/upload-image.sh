@@ -98,3 +98,4 @@ if [[ -n $par_id ]]; then
 fi
 
 oci os object delete -bn "$bucket" --object-name nixos.qcow2 --force
+

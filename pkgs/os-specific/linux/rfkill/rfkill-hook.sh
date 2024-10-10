@@ -17,3 +17,4 @@ elif [ ! -z "$RFKILL_HOOK" ]; then
 else
   echo "rfkill-hook: $RFKILL_STATE"
 fi
+

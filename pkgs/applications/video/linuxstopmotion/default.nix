@@ -26,3 +26,4 @@ mkDerivation rec {
     mainProgram = "stopmotion";
   };
 }
+

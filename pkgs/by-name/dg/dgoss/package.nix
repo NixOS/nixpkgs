@@ -46,3 +46,4 @@ resholve.mkDerivation rec {
     mainProgram = "dgoss";
   };
 }
+

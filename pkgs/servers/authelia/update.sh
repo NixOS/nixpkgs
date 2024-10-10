@@ -68,3 +68,4 @@ replace "$OLD_GO_VENDOR_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
 NEW_GO_VENDOR_HASH="$(fetchNewHash authelia.goModules)"
 echo "New go vendor hash $NEW_GO_VENDOR_HASH"
 replace "$TMP_HASH" "$NEW_GO_VENDOR_HASH" "$DRV_DIR/sources.nix"
+

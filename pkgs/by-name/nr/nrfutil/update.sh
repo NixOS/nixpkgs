@@ -35,3 +35,4 @@ done
     done
     printf "}\n"
 } > "${nixpkgs}/pkgs/by-name/nr/nrfutil/source.nix"
+

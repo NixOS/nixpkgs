@@ -176,3 +176,4 @@ in {
 
   meta.maintainers = with lib.maintainers; [ oxzi ];
 }
+

@@ -21,3 +21,4 @@ runCommandLocal "test-trivial-builders-writeClosure-union" {
     <(cat "''${closures[@]}" | sort | uniq)
   touch "$out"
 ''
+

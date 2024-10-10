@@ -27,3 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ c-h-johnson ];
   };
 }
+

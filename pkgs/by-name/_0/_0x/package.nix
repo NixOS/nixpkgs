@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }
+

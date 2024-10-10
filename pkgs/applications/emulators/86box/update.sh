@@ -10,3 +10,4 @@ roms_hash=$(nix-prefetch-github --json --rev "v$version" 86Box roms | jq -r '.ha
 
 update-source-version _86Box "_$version" "$main_hash"
 update-source-version _86Box "$version" "$roms_hash" --source-key=roms
+

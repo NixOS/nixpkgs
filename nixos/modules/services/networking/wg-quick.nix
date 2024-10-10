@@ -368,3 +368,4 @@ in {
     systemd.network.wait-online.ignoredInterfaces = builtins.attrNames cfg.interfaces;
   };
 }
+

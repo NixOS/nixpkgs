@@ -49,3 +49,4 @@ buildNpmPackage {
     mainProgram = "snyk";
   };
 }
+

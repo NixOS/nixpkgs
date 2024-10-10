@@ -17995,3 +17995,4 @@ self: super: with self; {
     libzxing-cpp = pkgs.zxing-cpp;
   };
 }
+

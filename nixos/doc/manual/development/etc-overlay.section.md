@@ -38,3 +38,4 @@ configuration where `system.etc.overlay.mutable = false;`, you will not be able
 to see the previously made changes in `/etc` anymore. However the changes are
 not completely gone, they are still in the upperdir of the previous overlay in
 `/.rw-etc/upper`.
+

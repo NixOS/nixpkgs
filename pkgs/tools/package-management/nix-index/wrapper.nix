@@ -12,3 +12,4 @@ symlinkJoin {
       --prefix PATH : ${lib.makeBinPath [ nix ]}
   '';
 }
+

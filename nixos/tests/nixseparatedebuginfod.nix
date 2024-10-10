@@ -78,3 +78,4 @@ in
     assert 'main.cc' in out
   '';
 })
+

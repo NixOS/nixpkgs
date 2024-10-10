@@ -64,3 +64,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "attic";
   };
 }
+

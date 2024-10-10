@@ -74,3 +74,4 @@ in stdenv'.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin && lib.versionAtLeast qtbase.version "6";
   };
 }
+

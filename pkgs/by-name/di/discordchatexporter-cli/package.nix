@@ -44,3 +44,4 @@ buildDotnetModule rec {
     mainProgram = "discordchatexporter-cli";
   };
 }
+

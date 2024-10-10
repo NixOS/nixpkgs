@@ -6,3 +6,4 @@ addPrivateFrameworks() {
 }
 
 addEnvHooks "$hostOffset" addPrivateFrameworks
+

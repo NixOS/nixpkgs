@@ -40,3 +40,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "autotrash";
   };
 }
+

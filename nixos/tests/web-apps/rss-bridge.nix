@@ -20,3 +20,4 @@
     machine.succeed("curl -sS -f 'http://localhost/?action=display&bridge=DemoBridge&context=testCheckbox&format=Atom'")
   '';
 }
+

@@ -59,3 +59,4 @@ in
             assert server["safemode"] == None
   '';
 })
+

@@ -48,3 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 # TODO: option for install the non-standalone executable
+

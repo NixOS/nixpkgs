@@ -32,3 +32,4 @@ stdenv.mkDerivation rec {
     mainProgram = "influxdb2-provision";
   };
 }
+

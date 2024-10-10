@@ -81,3 +81,4 @@ pub fn make_sri_hash(path: &Path) -> Result<String, NarError> {
 
     Ok(format!("sha256-{}", BASE64.encode(&hasher.finalize())))
 }
+

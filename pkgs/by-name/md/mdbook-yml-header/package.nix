@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage {
     maintainers = [ lib.maintainers.pinage404 ];
   };
 }
+

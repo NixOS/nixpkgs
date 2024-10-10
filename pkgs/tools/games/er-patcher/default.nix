@@ -39,3 +39,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "er-patcher";
   };
 }
+

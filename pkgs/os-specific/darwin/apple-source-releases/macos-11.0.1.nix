@@ -43,3 +43,4 @@ text_cmds = applePackage' "text_cmds" "106" "macos-11.0.1" "17fn35m6i866zjrf8da6
 top = applePackage' "top" "129" "macos-11.0.1" "0d9pqmv3mwkfcv7c05hfvnvnn4rbsl92plr5hsazp854pshzqw2k" {};
 xnu = applePackage' "xnu" "7195.50.7.100.1" "macos-11.0.1" "11zjmpw11rcc6a0xlbwramra1rsr65s4ypnxwpajgbr2c657lipl" {};
 }
+

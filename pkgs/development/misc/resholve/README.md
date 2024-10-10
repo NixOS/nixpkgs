@@ -316,3 +316,4 @@ do it piecemeal:
 
 The format is fairly simple to generate--you can script your own generator if
 you need to modify the lore.
+

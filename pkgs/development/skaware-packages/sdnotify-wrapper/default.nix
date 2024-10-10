@@ -34,3 +34,4 @@ in runCommandCC "sdnotify-wrapper" {
   # copy the documentation comment
   sed -ne '/Usage:/,/*\//p' ${src} > $doc/share/doc/sdnotify-wrapper/README
 ''
+

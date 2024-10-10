@@ -86,3 +86,4 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     };
   };
 }
+

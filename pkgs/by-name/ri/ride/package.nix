@@ -157,3 +157,4 @@ buildNpmPackage rec {
     platforms = electron.meta.platforms;
   };
 }
+

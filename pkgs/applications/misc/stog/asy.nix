@@ -12,3 +12,4 @@ buildDunePackage {
     description = "Stog plugin to include Asymptote results in documents";
   };
 }
+

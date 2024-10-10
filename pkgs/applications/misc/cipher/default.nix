@@ -61,3 +61,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.arshubham.cipher";
   };
 }
+

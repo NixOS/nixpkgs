@@ -97,3 +97,4 @@ flutter324.buildFlutterApplication (rec {
       cp -r '${olmJs}/javascript' assets/js/package
     '';
 })
+

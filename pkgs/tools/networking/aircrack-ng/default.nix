@@ -101,3 +101,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/aircrack-ng/aircrack-ng/blob/${src.rev}/ChangeLog";
   };
 }
+

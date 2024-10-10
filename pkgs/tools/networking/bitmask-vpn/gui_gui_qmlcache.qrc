@@ -105,3 +105,4 @@
         <file alias="providers.json">../../gui/providers/providers.json</file>
     </qresource>
 </RCC>
+

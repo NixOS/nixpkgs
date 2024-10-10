@@ -4,3 +4,4 @@ if [ "$#" -ge 1 ]; then
 else
     exec "$(dirname "$0")"/gyroflow "$@"
 fi
+

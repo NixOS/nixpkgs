@@ -8,3 +8,4 @@ URL: https://github.com/jupp0r/prometheus-cpp
 Version: @version@
 Cflags: -isystem${includedir}
 Libs: -Wl,-rpath,${libdir} -L${libdir} -lprometheus-cpp-core -lprometheus-cpp-pull -lprometheus-cpp-push
+

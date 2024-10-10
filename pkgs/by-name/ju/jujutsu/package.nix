@@ -122,3 +122,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "jj";
   };
 }
+

@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = lib.teams.deepin.members;
   };
 }
+

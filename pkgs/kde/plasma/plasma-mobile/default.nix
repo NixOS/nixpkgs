@@ -17,3 +17,4 @@ mkKdeDerivation {
   '';
   passthru.providedSessions = [ "plasma-mobile" ];
 }
+

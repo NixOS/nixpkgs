@@ -15,3 +15,4 @@ stdenv.mkDerivation rec {
   # a library, nothing to wrap
   dontWrapQtApps = true;
 }
+

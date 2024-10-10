@@ -52,3 +52,4 @@ beamPackages.mixRelease rec {
     platforms = beamPackages.erlang.meta.platforms;
   };
 }
+

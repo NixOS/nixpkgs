@@ -11,3 +11,4 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ apple_sdk_sierra.sdk xnu-new ];
 }
+

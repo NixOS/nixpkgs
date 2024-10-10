@@ -45,3 +45,4 @@ mkDerivation {
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtbase qtmultimedia ];
 }
+

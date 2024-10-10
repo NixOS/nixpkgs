@@ -9,3 +9,4 @@ lib.makeOverridable (
   meta.homepage = "https://bitbucket.org/${owner}/${repo}/";
 } // removeAttrs args [ "owner" "repo" "rev" ]) // { inherit rev; }
 )
+

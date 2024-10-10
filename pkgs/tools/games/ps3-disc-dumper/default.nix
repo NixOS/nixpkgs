@@ -41,3 +41,4 @@ buildDotnetModule rec {
     mainProgram = "ps3-disc-dumper";
   };
 }
+

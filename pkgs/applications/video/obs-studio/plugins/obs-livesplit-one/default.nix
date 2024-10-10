@@ -41,3 +41,4 @@ rustPlatform.buildRustPackage rec {
     platforms = obs-studio.meta.platforms;
   };
 }
+

@@ -59,3 +59,4 @@ stdenv.mkDerivation rec {
 
   inherit (wingpanel) meta;
 }
+

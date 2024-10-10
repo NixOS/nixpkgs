@@ -47,3 +47,4 @@ npmInstallHook() {
 if [ -z "${dontNpmInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=npmInstallHook
 fi
+

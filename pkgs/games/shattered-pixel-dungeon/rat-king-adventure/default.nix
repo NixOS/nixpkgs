@@ -21,3 +21,4 @@ callPackage ../generic.nix rec {
     description = "An expansive fork of RKPD2, itself a fork of the Shattered Pixel Dungeon roguelike";
   };
 }
+

@@ -45,3 +45,4 @@
   (fetchNuGet { pname = "System.Text.Json"; version = "8.0.0"; hash = "sha256-XFcCHMW1u2/WujlWNHaIWkbW1wn8W4kI0QdrwPtWmow="; })
   (fetchNuGet { pname = "System.Threading.Tasks.Extensions"; version = "4.5.4"; hash = "sha256-owSpY8wHlsUXn5xrfYAiu847L6fAKethlvYx97Ri1ng="; })
 ]
+

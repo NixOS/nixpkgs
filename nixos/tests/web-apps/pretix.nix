@@ -46,3 +46,4 @@
     pretix.log(pretix.succeed("systemd-analyze security pretix-web.service"))
   '';
 }
+

@@ -94,3 +94,4 @@ if [[ -z "${__nix_wrapGNUstepAppsHook-}" ]]; then
 
     fixupOutputHooks+=(wrapGNUstepAppsHook)
 fi
+

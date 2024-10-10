@@ -131,3 +131,4 @@ if [ -n "$optPrint" ]; then
     echo
     cat "$newlist"
 fi
+

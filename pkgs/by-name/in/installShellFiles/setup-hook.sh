@@ -254,3 +254,4 @@ installBin() {
         install -D --mode=755 --no-target-directory "$path" "${outRoot}/bin/$basename"
     done
 }
+

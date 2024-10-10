@@ -81,3 +81,4 @@ postgresqlStop() {
   echo 'stopping postgresql'
   pg_ctl stop
 }
+

@@ -23,3 +23,4 @@ setKV gitRevision ${GIT_REVISION}
 setKV chromiumVersion ${CHROMIUM_VERSION}
 setKV 'platforms."aarch64-linux".sha256' ${SHA256_LINUXARM64}
 setKV 'platforms."x86_64-linux".sha256' ${SHA256_LINUX64}
+

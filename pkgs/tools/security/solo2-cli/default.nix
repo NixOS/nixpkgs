@@ -49,3 +49,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "solo2";
   };
 }
+

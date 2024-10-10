@@ -23,3 +23,4 @@ buildNpmPackage rec {
     mainProgram = "eslint_d";
   };
 }
+

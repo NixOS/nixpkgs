@@ -38,3 +38,4 @@ rec {
     inherit stdenv cargo rustc;
   }) cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook maturinBuildHook bindgenHook;
 }
+

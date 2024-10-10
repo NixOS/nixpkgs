@@ -41,3 +41,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hdr10plus_tool";
   };
 }
+

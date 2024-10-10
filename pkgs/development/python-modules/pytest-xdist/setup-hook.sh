@@ -22,3 +22,4 @@ if [ -z "${dontUsePytestXdist-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
         appendToVar preDistPhases pytestXdistHook
     fi
 fi
+

@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("[ -d /var/lib/prowlarr ]")
   '';
 })
+

@@ -55,3 +55,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = lib.teams.budgie.members;
   };
 })
+

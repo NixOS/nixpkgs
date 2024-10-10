@@ -24,3 +24,4 @@ buildPythonApplication rec {
     mainProgram = "tidal-dl";
   };
 }
+

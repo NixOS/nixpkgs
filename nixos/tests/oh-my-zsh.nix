@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("zsh -c 'source /etc/zshrc && echo $ZSH | grep oh-my-zsh-${pkgs.oh-my-zsh.version}'")
   '';
 })
+

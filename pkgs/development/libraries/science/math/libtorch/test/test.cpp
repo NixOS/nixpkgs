@@ -18,3 +18,4 @@ int main() {
 
   assert(tensor.allclose(check));
 }
+

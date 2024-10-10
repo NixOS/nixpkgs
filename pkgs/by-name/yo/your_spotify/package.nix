@@ -78,3 +78,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "your_spotify_server";
   };
 })
+

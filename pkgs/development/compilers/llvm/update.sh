@@ -53,3 +53,4 @@ for SOURCE in "${SOURCES[@]}"; do
 done
 
 echo OK
+

@@ -56,3 +56,4 @@ buildGoModule rec {
     mainProgram = "docker-credential-gcr";
   };
 }
+

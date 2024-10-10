@@ -12,3 +12,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.succeed("${pkgs.pykms}/bin/client")
     '';
   })
+

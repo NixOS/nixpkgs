@@ -28,3 +28,4 @@ rustPlatform.buildRustPackage {
     $out/bin/git-dependency-tag
   '';
 }
+

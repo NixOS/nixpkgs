@@ -31,3 +31,4 @@ buildDotnetGlobalTool rec {
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
+

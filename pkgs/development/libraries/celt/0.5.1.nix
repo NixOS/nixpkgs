@@ -15,3 +15,4 @@ callPackage ./generic.nix (args // rec {
                 'SUBDIRS = libcelt'
   '';
 })
+

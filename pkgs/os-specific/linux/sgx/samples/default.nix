@@ -138,3 +138,4 @@ in
   # # SEGFAULTs in simulation mode?
   # sampleEnclavePCL = buildSample "SampleEnclavePCL";
 }
+

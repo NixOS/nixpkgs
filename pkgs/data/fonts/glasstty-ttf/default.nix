@@ -16,3 +16,4 @@ runCommand "glasstty-ttf" {
   mkdir -p $out/share/fonts/truetype
   cp $src $out/share/fonts/truetype/Glass_TTY_VT220.ttf
 ''
+

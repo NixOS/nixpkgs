@@ -29,3 +29,4 @@ mkDerivation {
       --replace "__strong_alias(vwscanw, vw_scanw)" 'extern int vwscanw(WINDOW*, const char*, va_list) __attribute__ ((alias ("vw_scanw")));'
   '';
 }
+

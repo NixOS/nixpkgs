@@ -9,3 +9,4 @@ All of [the PDF sets made available by the LHAPDF project](https://lhapdf.hepfor
 ### Setup hook {#lhapdf-sets-hook}
 
 Each package provided in the `lhapdf.pdf_sets` attrset contains a setup hook which adds itself to [the `LHAPDF_DATA_PATH` environment variable](https://lhapdf.hepforge.org/#sets).
+

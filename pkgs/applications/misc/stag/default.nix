@@ -39,3 +39,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "stag";
   };
 })
+

@@ -30,3 +30,4 @@ stdenv_32bit.mkDerivation rec {
     mainProgram = "mpclient";
   };
 }
+

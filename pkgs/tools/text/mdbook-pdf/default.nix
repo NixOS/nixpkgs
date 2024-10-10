@@ -47,3 +47,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ hollowman6 matthiasbeyer ];
   };
 }
+

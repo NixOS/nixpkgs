@@ -34,3 +34,4 @@ mkKdeDerivation {
     "-DWITH_PYTHON_VENDORING=0"
   ];
 }
+

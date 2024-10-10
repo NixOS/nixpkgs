@@ -55,3 +55,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xwaylandvideobridge";
   };
 })
+

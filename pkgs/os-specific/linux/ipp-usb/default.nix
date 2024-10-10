@@ -41,3 +41,4 @@ buildGoModule rec {
     license = lib.licenses.bsd2;
   };
 }
+

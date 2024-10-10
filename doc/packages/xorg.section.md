@@ -32,3 +32,4 @@ For each of the tarballs in the `.list` files, the script downloads it, unpacks 
 ## Overriding the Generator {#overriding-the-generator}
 
 If the expression for a package requires derivation attributes that the generator cannot figure out automatically (say, `patches` or a `postInstall` hook), you should modify `pkgs/servers/x11/xorg/overrides.nix`.
+

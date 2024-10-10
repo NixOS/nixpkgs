@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage {
     platforms = platforms.all;
   };
 }
+

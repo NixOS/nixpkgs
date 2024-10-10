@@ -17,3 +17,4 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-dicdir=${placeholder "out"}"
   ];
 })
+

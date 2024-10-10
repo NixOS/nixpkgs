@@ -78,3 +78,4 @@ buildDotnetModule (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 })
+

@@ -76,3 +76,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "esptool.py";
   };
 }
+

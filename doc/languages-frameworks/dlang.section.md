@@ -67,3 +67,4 @@ The following parameters are specific to `buildDubPackage`:
 * `dubBuildFlags ? []`: The flags to pass to `dub build`.
 * `dubTestFlags ? []`: The flags to pass to `dub test`.
 * `compiler ? ldc`: The D compiler to be used by `dub`.
+

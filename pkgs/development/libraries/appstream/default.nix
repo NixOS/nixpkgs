@@ -133,3 +133,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "appstream" ];
   };
 })
+

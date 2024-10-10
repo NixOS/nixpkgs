@@ -47,3 +47,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "zf";
   };
 })
+

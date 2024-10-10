@@ -34,3 +34,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wg_netmanager";
   };
 }
+

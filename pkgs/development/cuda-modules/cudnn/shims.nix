@@ -19,3 +19,4 @@
     inherit (package) version;
   };
 }
+

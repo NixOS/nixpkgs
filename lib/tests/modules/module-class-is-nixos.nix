@@ -2,3 +2,4 @@
   _class = "nixos";
   config = {};
 }
+

@@ -187,3 +187,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "go";
   };
 })
+

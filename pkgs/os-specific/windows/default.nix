@@ -44,3 +44,4 @@ lib.makeScope newScope (self: with self; {
 
   libgnurx = callPackage ./libgnurx { };
 })
+

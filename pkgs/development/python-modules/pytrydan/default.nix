@@ -61,3 +61,4 @@ buildPythonPackage rec {
     mainProgram = "pytrydan";
   };
 }
+

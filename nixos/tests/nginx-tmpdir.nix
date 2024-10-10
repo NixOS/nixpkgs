@@ -58,3 +58,4 @@ in
         machine.fail("curl -X PUT http://localhost/upload/test3 --fail --data-raw 'Raw data 3'")
     '';
   }
+

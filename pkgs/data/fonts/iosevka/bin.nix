@@ -45,3 +45,4 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update-bin.sh;
 }
+

@@ -41,3 +41,4 @@ The prefered method to run this service is behind a reverse proxy not to expose 
 ```
 
 Furthermore, you can increase the maximal size of an uploaded file with the option [services.nginx.clientMaxBodySize](#opt-services.nginx.clientMaxBodySize).
+

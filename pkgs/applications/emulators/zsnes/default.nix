@@ -73,3 +73,4 @@ in stdenv.mkDerivation {
     mainProgram = "zsnes";
   };
 }
+

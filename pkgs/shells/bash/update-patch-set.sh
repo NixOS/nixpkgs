@@ -50,3 +50,4 @@ echo "]" >> "$PATCH_LIST"
 # bash interprets numbers starting with 0 as octals
 echo "Got $((10#$i - 1)) patches."
 echo "Patch list has been written to \`$PATCH_LIST'."
+

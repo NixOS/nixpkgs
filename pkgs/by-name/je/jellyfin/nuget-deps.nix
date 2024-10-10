@@ -303,3 +303,4 @@
   (fetchNuGet { pname = "UTF.Unknown"; version = "2.5.1"; hash = "sha256-9D6TqKSPsjzSly0mtUGZJbrNAJ7ftz9LJjWNwnnQMz4="; })
   (fetchNuGet { pname = "zlib.net-mutliplatform"; version = "1.0.6"; hash = "sha256-xteOxDSWtNY5nHrPRDrMJR80lcE+TMOiSQBG316vOsE="; })
 ]
+

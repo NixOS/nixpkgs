@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Simple checklist rendering plugin for discourse";
   };
 }
+

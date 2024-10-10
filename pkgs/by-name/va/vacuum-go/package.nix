@@ -40,3 +40,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ konradmalik ];
   };
 }
+

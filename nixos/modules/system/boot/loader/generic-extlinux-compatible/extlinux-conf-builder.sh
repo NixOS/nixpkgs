@@ -161,3 +161,4 @@ for fn in $target/nixos/*; do
         rm -rf -- "$fn"
     fi
 done
+

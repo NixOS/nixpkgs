@@ -133,3 +133,4 @@ if test -n "$compressImage"; then
 else
     echo "file iso $out/iso/$isoName" >> $out/nix-support/hydra-build-products
 fi
+

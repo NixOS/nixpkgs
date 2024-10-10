@@ -39,3 +39,4 @@ import ./make-test-python.nix ({ lib, ... }: {
         machine.wait_until_succeeds("curl -fs localhost:8080")
   '';
 })
+

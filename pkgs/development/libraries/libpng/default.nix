@@ -49,3 +49,4 @@ in stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ vcunat ];
   };
 })
+

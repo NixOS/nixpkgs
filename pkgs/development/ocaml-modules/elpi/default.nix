@@ -69,3 +69,4 @@ buildDunePackage {
     substituteInPlace elpi_REPL.ml --replace-warn "tput cols" "${ncurses}/bin/tput cols"
   '';
 }
+

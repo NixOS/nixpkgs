@@ -28,3 +28,4 @@ setKV specVersion ${SPEC_VERSION}
 setKV specHash ${SPEC_SHA256}
 setKV version ${VERSION}
 setKV hash ${SHA256}
+

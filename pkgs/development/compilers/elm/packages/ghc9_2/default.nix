@@ -52,3 +52,4 @@ self: pkgs.haskell.packages.ghc92.override {
       relude = overrideCabal (drv: { doCheck = false; }) super.relude;
     };
 }
+

@@ -212,3 +212,4 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gimp";
   };
 })
+

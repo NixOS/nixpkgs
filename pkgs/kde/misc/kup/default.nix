@@ -22,3 +22,4 @@ mkKdeDerivation rec {
     maintainers = [ maintainers.pwoelfel ];
   };
 }
+

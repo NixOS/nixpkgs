@@ -75,3 +75,4 @@ echo '}' >> $SRC_FILE
 
 log "moving tempfile to target directory"
 mv "$SRC_FILE" "$MY_PATH/sources.nix"
+

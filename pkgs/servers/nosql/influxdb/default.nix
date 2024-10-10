@@ -88,3 +88,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ offline zimbatm ];
   };
 }
+

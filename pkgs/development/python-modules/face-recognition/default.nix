@@ -47,3 +47,4 @@ buildPythonPackage rec {
     description = "World's simplest facial recognition api for Python and the command line";
   };
 }
+

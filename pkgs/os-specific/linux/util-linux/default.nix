@@ -147,3 +147,4 @@ stdenv.mkDerivation rec {
     priority = 6; # lower priority than coreutils ("kill") and shadow ("login" etc.) packages
   };
 }
+

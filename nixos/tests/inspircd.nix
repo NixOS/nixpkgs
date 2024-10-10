@@ -91,3 +91,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         (lib.zipListsWith (cs: c: cs + c))
         (builtins.map clientScript clients));
 })
+

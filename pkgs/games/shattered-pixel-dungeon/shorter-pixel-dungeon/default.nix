@@ -21,3 +21,4 @@ callPackage ../generic.nix rec {
     description = "A shorter fork of the Shattered Pixel Dungeon roguelike";
   };
 }
+

@@ -46,3 +46,4 @@ with python3.pkgs; buildPythonApplication rec {
     mainProgram = "poetry2conda";
   };
 }
+

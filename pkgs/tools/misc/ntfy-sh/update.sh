@@ -20,3 +20,4 @@ rm -f package-lock.json
 
 popd
 nix-update ntfy-sh --version $version
+

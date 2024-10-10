@@ -34,3 +34,4 @@ in
   crashreporterSupport = false;
   enableOfficialBranding = false;
 }
+

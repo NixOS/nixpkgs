@@ -34,3 +34,4 @@ stdenv.mkDerivation rec {
     mainProgram = "smlfut";
   };
 }
+

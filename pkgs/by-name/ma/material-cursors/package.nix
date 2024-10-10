@@ -40,3 +40,4 @@ stdenvNoCC.mkDerivation {
     maintainers = with lib.maintainers; [ RGBCube ];
   };
 }
+

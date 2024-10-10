@@ -25,3 +25,4 @@ mkDerivation {
     kdbusaddons ki18n kconfigwidgets kcrash kxmlgui libkdegames
   ];
 }
+

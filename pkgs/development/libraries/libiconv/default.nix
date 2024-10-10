@@ -88,3 +88,4 @@ stdenv.mkDerivation rec {
     hydraPlatforms = with lib.platforms; cygwin ++ darwin ++ freebsd;
   };
 }
+

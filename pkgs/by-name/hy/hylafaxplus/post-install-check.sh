@@ -5,3 +5,4 @@ do
 done
 test -d "$out/spool/config"
 test -f "$out/spool/etc/setup.cache"
+

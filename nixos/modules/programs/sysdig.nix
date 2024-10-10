@@ -10,3 +10,4 @@ in {
     boot.extraModulePackages = [ config.boot.kernelPackages.sysdig ];
   };
 }
+

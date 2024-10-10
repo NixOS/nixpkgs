@@ -35,3 +35,4 @@ buildDunePackage rec {
     maintainers = with maintainers; [ locallycompact sternenseemann ];
   };
 }
+

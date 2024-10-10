@@ -58,3 +58,4 @@ import ./make-test-python.nix ({ lib, ... }: {
         machine.wait_for_unit("multi-user.target")
   '';
 })
+

@@ -19,3 +19,4 @@ rm package.json
 popd
 
 nix-update node-red --version "$tag"
+

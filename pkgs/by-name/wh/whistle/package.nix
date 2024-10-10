@@ -24,3 +24,4 @@ buildNpmPackage rec {
     mainProgram = "whistle";
   };
 }
+

@@ -45,3 +45,4 @@ buildGoModule rec {
     mainProgram = "mangal";
   };
 }
+

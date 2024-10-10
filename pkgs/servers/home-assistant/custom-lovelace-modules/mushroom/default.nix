@@ -33,3 +33,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
+

@@ -33,3 +33,4 @@ with haskellPackages; mkDerivation {
   license = lib.licenses.gpl3Only;
   mainProgram = "Naproche-SAD";
 }
+

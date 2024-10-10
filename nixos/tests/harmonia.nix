@@ -38,3 +38,4 @@
     client01.succeed("nix-store --realise ${pkgs.emptyFile} --store /root/other-store")
   '';
 }
+

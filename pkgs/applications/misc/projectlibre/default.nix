@@ -77,3 +77,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = jre.meta.platforms;
   };
 })
+

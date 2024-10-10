@@ -6,3 +6,4 @@
     <testcase name="empty" file="tests/unit/libutil/args.cc" line="18" status="run" result="completed" time="0." timestamp="2024-06-16T13:50:02.511" classname="parseShebangContent" />
   </testsuite>
 </testsuites>
+

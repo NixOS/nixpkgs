@@ -47,3 +47,4 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
     mainProgram = "bpftop";
   };
 }
+

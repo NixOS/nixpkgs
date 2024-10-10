@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "simple-http-server";
   };
 }
+

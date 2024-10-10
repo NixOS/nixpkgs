@@ -26,3 +26,4 @@ buildGoModule rec {
     license = lib.licenses.bsd3;
   };
 }
+

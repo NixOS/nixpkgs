@@ -350,3 +350,4 @@ This requires setting
 [{option}`services.akkoma.dist.cookie`](options.html#opt-services.akkoma.dist.cookie). The
 specifics depend strongly on the deployment environment. For more information please check the
 relevant [Erlang documentation](https://www.erlang.org/doc/reference_manual/distributed.html).
+

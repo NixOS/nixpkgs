@@ -51,3 +51,4 @@ runCommand "${alsa-lib.pname}-${alsa-lib.version}" {
       -e "s@${alsa-lib}@$out@g"
   ''
 )
+

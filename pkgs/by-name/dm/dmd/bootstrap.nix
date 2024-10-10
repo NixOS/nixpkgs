@@ -7,3 +7,4 @@ callPackage ./binary.nix {
     linux = "sha256-ByCrIA4Nt7i9YT0L19VXIL1IqIp+iObcZux407amZu4=";
   };
 }
+

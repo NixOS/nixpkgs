@@ -11,3 +11,4 @@ bundlerApp {
     maintainers = with lib.maintainers; [ laalsaas ];
   };
 }
+

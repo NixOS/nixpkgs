@@ -11,3 +11,4 @@ buildHex {
     homepage = "https://github.com/ferd/rebar3_proper";
   };
 }
+

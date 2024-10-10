@@ -16,3 +16,4 @@ melpaBuild {
     maintainers = [ lib.maintainers.alexarice ];
   };
 }
+

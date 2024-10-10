@@ -58,3 +58,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/wtforms/flask-wtf/releases/tag/v${version}";
   };
 }
+

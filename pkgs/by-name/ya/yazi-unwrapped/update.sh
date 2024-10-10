@@ -39,3 +39,4 @@ sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBui
 cargoHash=$(nix-prefetch "{ sha256 }: (import $NIXPKGS_DIR {}).yazi-unwrapped.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
 sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' package.nix
 popd
+

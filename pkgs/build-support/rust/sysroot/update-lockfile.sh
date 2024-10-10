@@ -25,3 +25,4 @@ cargo generate-lockfile
 cp Cargo.lock "$HERE"
 
 rm -rf "$tempdir"
+

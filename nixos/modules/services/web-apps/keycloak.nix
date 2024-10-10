@@ -681,3 +681,4 @@ in
   meta.doc = ./keycloak.md;
   meta.maintainers = [ maintainers.talyz ];
 }
+

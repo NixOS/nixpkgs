@@ -33,3 +33,4 @@ buildGoModule rec {
     description = "Command line interface for the Namespaces platform";
   };
 }
+

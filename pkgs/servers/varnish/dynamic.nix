@@ -24,3 +24,4 @@ stdenv.mkDerivation {
     inherit (varnish.meta) license platforms maintainers;
   };
 }
+

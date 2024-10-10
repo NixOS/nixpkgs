@@ -41,3 +41,4 @@ mkDerivation rec {
     inherit (qtbase.meta) platforms;
   };
 }
+

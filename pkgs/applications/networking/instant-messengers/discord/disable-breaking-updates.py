@@ -54,3 +54,4 @@ else:
 
     settings_path_temp.rename(settings_path)
     print("[Nix] Disabled updates")
+

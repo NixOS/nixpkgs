@@ -15,3 +15,4 @@
   services.displayManager.defaultSession = lib.mkDefault "none+icewm";
   services.xserver.windowManager.icewm.enable = true;
 }
+

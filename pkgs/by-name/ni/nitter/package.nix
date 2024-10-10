@@ -51,3 +51,4 @@ buildNimPackage (finalAttrs: prevAttrs: {
     mainProgram = "nitter";
   };
 })
+

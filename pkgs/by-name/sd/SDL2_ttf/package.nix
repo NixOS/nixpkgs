@@ -63,3 +63,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "SDL2_ttf" ];
   };
 })
+

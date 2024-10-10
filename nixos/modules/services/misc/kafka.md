@@ -61,3 +61,4 @@ Notable changes to be aware of include:
 - Removal of `services.apache-kafka.zookeeper`
   - Translate using: `services.apache-kafka.settings."zookeeper.connect"`
   - [Upstream docs](https://kafka.apache.org/documentation.html#brokerconfigs_zookeeper.connect)
+

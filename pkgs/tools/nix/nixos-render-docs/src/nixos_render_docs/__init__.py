@@ -53,3 +53,4 @@ def main() -> None:
         traceback.print_exc()
         pretty_print_exc(e)
         sys.exit(1)
+

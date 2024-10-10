@@ -42,3 +42,4 @@ stdenv.mkDerivation rec {
     mainProgram = "convimg";
   };
 }
+

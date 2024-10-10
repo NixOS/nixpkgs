@@ -19,3 +19,4 @@ K3s is a simplified [Kubernetes](https://wiki.nixos.org/wiki/Kubernetes) version
 
 * [Package Versioning Rationale](docs/VERSIONING.md)
 * [Package Maintenance Documentation](docs/PKG_UPKEEP.md)
+

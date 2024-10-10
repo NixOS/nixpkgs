@@ -74,3 +74,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ amarshall mbaillie ];
   };
 }
+

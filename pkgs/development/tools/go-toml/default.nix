@@ -43,3 +43,4 @@ buildGoModule {
     license = lib.licenses.mit;
   };
 }
+

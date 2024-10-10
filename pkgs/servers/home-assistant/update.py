@@ -261,3 +261,4 @@ if __name__ == "__main__":
     run_sync(["ruff", "check", "--ignore=E501", __file__])
     run_sync(["isort", __file__])
     asyncio.run(main())
+

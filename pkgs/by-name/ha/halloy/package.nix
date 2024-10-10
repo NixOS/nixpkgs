@@ -128,3 +128,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "halloy";
   };
 }
+

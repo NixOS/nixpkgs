@@ -45,3 +45,4 @@ stdenv.mkDerivation rec {
     pkgConfigModules = [ "datrie-0.2" ];
   };
 }
+

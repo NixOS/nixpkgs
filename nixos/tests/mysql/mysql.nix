@@ -149,3 +149,4 @@ in
     name = builtins.replaceStrings ["-"] ["_"] package.pname;
     hasMroonga = false; useSocketAuth = false;
   }) perconaPackages)
+

@@ -22,3 +22,4 @@ $jre/bin/java -cp $classpath -Xms200M -Xmx400M org.antlr.Tool \$*
 EOF
 
 chmod u+x $out/bin/antlr
+

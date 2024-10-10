@@ -6,3 +6,4 @@ addAdaObjectsPath() {
 }
 
 addEnvHooks "$targetOffset" addAdaObjectsPath
+

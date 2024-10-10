@@ -103,3 +103,4 @@ A nominal type marker, always `"configuration"`.
 #### `class` {#module-system-lib-evalModules-return-value-_configurationClass}
 
 The [`class` argument](#module-system-lib-evalModules-param-class).
+

@@ -44,3 +44,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "koko";
 }
+

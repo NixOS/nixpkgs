@@ -11,3 +11,4 @@ mkDerivation {
   meta.platforms = lib.platforms.netbsd;
   extraPaths = [ sys.path ];
 }
+

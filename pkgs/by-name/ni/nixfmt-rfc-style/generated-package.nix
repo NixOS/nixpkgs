@@ -28,3 +28,4 @@ mkDerivation {
   license = lib.licenses.mpl20;
   mainProgram = "nixfmt";
 }
+

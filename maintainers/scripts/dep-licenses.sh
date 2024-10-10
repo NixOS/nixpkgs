@@ -55,3 +55,4 @@ d
 nix-store -q --tree $(cat "$tmp/drvPath") | sed -f "$tmp/filter.sed"
 
 exit 0;
+

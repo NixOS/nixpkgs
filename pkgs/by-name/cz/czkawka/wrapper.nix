@@ -31,3 +31,4 @@ symlinkJoin {
 
   meta = czkawka.meta;
 }
+

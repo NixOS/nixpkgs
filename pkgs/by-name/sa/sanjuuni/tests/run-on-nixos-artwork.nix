@@ -32,3 +32,4 @@ runCommand "sanjuuni-test-run-on-nixos-artwork"
     ${makeCommand nixos-artwork.wallpapers.simple-dark-gray "nix-wallpaper-simple-dark-gray"}
     ${makeCommand nixos-artwork.wallpapers.stripes "nix-wallpaper-stripes"}
   ''
+

@@ -21,3 +21,4 @@ in
     services.udev.packages = with pkgs; [ acpilight ];
   };
 }
+

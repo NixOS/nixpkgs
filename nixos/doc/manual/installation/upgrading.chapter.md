@@ -120,3 +120,4 @@ modules. You can also specify a channel explicitly, e.g.
   system.autoUpgrade.channel = "https://channels.nixos.org/nixos-24.05";
 }
 ```
+

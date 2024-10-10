@@ -23,3 +23,4 @@ newhash=$(nix-prefetch "{ stdenv, fetchurl }: stdenv.mkDerivation rec {
 }")
 
 update-source-version noto-fonts-monochrome-emoji "$newver" "$newhash" --rev="$newrev"
+

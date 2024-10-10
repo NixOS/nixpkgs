@@ -75,3 +75,4 @@ in
     expected = ./fixtures/example-project-wrapped-settings-constructor-patched;
   };
 }
+

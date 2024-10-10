@@ -62,3 +62,4 @@ buildGoModule rec {
     changelog = "https://github.com/simulot/immich-go/releases/tag/${version}";
   };
 }
+

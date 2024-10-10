@@ -33,3 +33,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ ehmry gazally lassulus peigongdsd ];
   };
 }
+

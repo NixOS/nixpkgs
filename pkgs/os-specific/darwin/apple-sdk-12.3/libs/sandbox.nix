@@ -11,3 +11,4 @@ stdenvNoCC.mkDerivation {
     ln -s libsandbox.1.tbd $out/lib/libsandbox.tbd
   '';
 }
+

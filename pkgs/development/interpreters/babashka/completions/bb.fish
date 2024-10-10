@@ -7,3 +7,4 @@ function __bb_complete_tasks
 end
 
 complete -c bb -a "(__bb_complete_tasks)" -d 'tasks'
+

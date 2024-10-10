@@ -13,3 +13,4 @@ allowed-confusables = ["‐"]
 [tool.ruff.format]
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+

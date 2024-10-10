@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
     inherit (wxGTK.meta) platforms;
   };
 }
+

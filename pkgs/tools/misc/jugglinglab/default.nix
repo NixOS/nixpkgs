@@ -71,3 +71,4 @@ maven.buildMavenPackage rec {
     platforms = platforms.all;
   };
 }
+

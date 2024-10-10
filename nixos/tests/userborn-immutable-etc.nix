@@ -68,3 +68,4 @@ in
       print(machine.succeed("getent passwd new-normalo"))
   '';
 }
+

@@ -18,3 +18,4 @@ nix-required-mounts = "nix_required_mounts:entrypoint"
 
 [tool.black]
 line-length = 79
+

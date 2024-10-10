@@ -64,3 +64,4 @@ $evalline
 from the haskell-updates jobset on hydra under https://hydra.nixos.org/jobset/nixpkgs/haskell-updates
 EOF
 fi
+

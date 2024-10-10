@@ -9,3 +9,4 @@ pkgs.runCommand "diagnostics-multiuser" { } ''
   test "$(groups)" == "nixbld"
   touch $out
 ''
+

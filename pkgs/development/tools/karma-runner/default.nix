@@ -30,3 +30,4 @@ buildNpmPackage rec {
     maintainers = [ ];
   };
 }
+

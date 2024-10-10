@@ -10,3 +10,4 @@ callPackage ./generic.nix (args // rec {
 
   description = "Just-in-Time C/Rust compiler embedded in an LV2 plugin";
 })
+

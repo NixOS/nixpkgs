@@ -40,3 +40,4 @@ buildGoModule {
     mainProgram = "ardugotools";
   };
 }
+

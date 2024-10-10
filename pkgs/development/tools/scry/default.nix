@@ -38,3 +38,4 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ peterhoeg Br1ght0ne ];
   };
 }
+

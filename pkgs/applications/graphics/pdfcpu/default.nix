@@ -67,3 +67,4 @@ buildGoModule rec {
     mainProgram = "pdfcpu";
   };
 }
+

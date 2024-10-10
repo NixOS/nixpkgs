@@ -42,3 +42,4 @@ lib.makeScope pkgs.newScope (self: { }) // lib.optionalAttrs config.allowAliases
   xreader = lib.warn "cinnamon.xreader was moved to top-level. Please use pkgs.xreader directly." pkgs.xreader; # Added on 2024-07-14
   xviewer = lib.warn "cinnamon.xviewer was moved to top-level. Please use pkgs.xviewer directly." pkgs.xviewer; # Added on 2024-07-14
 }
+

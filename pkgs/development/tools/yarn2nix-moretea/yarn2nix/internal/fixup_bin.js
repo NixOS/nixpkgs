@@ -51,3 +51,4 @@ function processPackage(name) {
 packagesToPublishBin.forEach(pkg => {
   processPackage(pkg);
 });
+

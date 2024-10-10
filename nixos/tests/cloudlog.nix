@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds("curl -s -L --fail http://localhost | grep 'Login - Cloudlog'")
   '';
 })
+

@@ -48,3 +48,4 @@ EOF
 } > "${PACKAGE_DIR}/data.nix"
 
 curl "${CHANNEL_URL}/components-v${VERSION}.json" -w "\n" > "${PACKAGE_DIR}/components.json"
+

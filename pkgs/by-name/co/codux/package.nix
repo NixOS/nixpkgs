@@ -33,3 +33,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "codux";
   };
 }
+

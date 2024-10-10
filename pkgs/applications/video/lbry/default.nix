@@ -44,3 +44,4 @@ appimageTools.wrapAppImage rec {
     mainProgram = "lbry";
   };
 }
+

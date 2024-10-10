@@ -28,3 +28,4 @@ import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.hbase, ... }:
     assert "NAME => 'f1'" in hbase.succeed("echo \"describe 't1'\" | sudo -u hbase hbase shell -n")
   '';
 })
+

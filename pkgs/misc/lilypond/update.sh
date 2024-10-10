@@ -23,3 +23,4 @@ echo "[{\"commitMessage\":\"$ATTR: $PREV -> $NEXT\"}]"
 PREV=$(nix eval --raw -f default.nix $ATTR.src.outputHash)
 NEXT=$(nix hash to-sri --type sha256 $(nix-prefetch-url --type sha256 $(nix eval --raw -f default.nix $ATTR.src.url)))
 sed -i "s|$PREV|$NEXT|" "$FILE"
+

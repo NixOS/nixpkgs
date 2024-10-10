@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ qttools ];
   meta.mainProgram = "kquitapp6";
 }
+

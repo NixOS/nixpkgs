@@ -74,3 +74,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ tomodachi94 sigmanificient ];
   };
 }
+

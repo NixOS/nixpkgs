@@ -203,3 +203,4 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.parsed.cpu.bits < 64;
   };
 }
+

@@ -40,3 +40,4 @@ stdenv.mkDerivation {
     mainProgram = "ryzen_monitor";
   };
 }
+

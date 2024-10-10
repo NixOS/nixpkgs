@@ -38,3 +38,4 @@ makeTest {
     unnamed.succeed("grep -q successful /tmp/evidence")
   '';
 }
+

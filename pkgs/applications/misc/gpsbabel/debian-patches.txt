@@ -4,3 +4,4 @@ gpsbabelfe_opt-in-for-usage-data-reporting
 gpsbabelfe_do-not-check-for-newer-version
 htmldoc-location
 Disable-donation-nagging
+

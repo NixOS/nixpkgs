@@ -44,3 +44,4 @@ stdenv.mkDerivation rec {
     platforms = ["i686-linux"];  # doesn't want to work on 64-bit platforms
   };
 }
+

@@ -173,3 +173,4 @@
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "6.0.0"; hash = "sha256-N+qg1E6FDJ9A9L50wmVt3xPQV8ZxlG1xeXgFuxO+yfM="; })
   (fetchNuGet { pname = "Tomlyn"; version = "0.16.2"; hash = "sha256-ULW4n8s2lvTMG3I18rpsVfXtKXN7C8nPrMXQowxGIsU="; })
 ]
+

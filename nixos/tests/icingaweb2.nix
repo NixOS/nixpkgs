@@ -69,3 +69,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     icingaweb2.succeed("curl -sSf http://icingaweb2/authentication/login")
   '';
 })
+

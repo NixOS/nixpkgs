@@ -46,3 +46,4 @@ in appimageTools.wrapType2 {
     mainProgram = "MyCrypto";
   };
 }
+

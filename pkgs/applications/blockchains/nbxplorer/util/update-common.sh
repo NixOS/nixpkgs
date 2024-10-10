@@ -74,3 +74,4 @@ echo
 
 # Create deps file
 $(nix-build "$nixpkgs" -A $pkgName.fetch-deps --no-out-link)
+

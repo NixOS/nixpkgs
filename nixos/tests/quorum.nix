@@ -101,3 +101,4 @@ in
     machine.succeed('geth attach /var/lib/quorum/geth.ipc --exec "eth.accounts" | grep ${keystore.address}')
   '';
 })
+

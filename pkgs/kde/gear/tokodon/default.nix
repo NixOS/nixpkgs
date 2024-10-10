@@ -22,3 +22,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "tokodon";
 }
+

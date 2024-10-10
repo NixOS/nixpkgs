@@ -65,3 +65,4 @@ buildGoModule rec {
     mainProgram = "process-compose";
   };
 }
+

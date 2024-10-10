@@ -381,3 +381,4 @@
   (fetchNuGet { pname = "WindowsAzure.Storage"; version = "9.3.3"; hash = "sha256-3bXdQwkgMx4cSliwLv+aVsRm5BwZPgSB9dsXJC1YYJE="; })
   (fetchNuGet { pname = "YamlDotNet"; version = "8.0.0"; hash = "sha256-9VInbvbrc9su5rcSyT4/t0wBSfLDpHvSvAy6WqMMGSY="; })
 ]
+

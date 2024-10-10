@@ -57,3 +57,4 @@ tags=$(git ls-remote --tags --refs "$url")
 tags=$(echo "$tags" | cut --delimiter=/ --field=3-)
 
 echo "$tags"
+

@@ -89,3 +89,4 @@ else # Only set up Qt once.
     addEnvHooks "$hostOffset" addQtModulePrefix
 
 fi
+

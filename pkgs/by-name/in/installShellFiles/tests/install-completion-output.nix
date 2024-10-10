@@ -25,3 +25,4 @@ runCommandLocal "install-shell-files--install-completion-output"
 
     touch $out
   ''
+

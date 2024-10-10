@@ -80,3 +80,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       peer2.wait_until_succeeds("tailscale ping peer1")
     '';
   })
+

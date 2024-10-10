@@ -14,3 +14,4 @@ pkgs.stdenv.mkDerivation {
 
   AZURE_CONFIG_DIR = "/tmp/azure-cli/.azure";
 }
+

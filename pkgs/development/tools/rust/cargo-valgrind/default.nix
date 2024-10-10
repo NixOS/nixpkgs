@@ -42,3 +42,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ otavio matthiasbeyer ];
   };
 }
+

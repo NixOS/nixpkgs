@@ -23,3 +23,4 @@ mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   propagatedBuildInputs = [ kconfig kcrash kinit ];
 }
+

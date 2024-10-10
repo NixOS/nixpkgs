@@ -102,3 +102,4 @@ def test_heading_id_suffixed() -> None:
         Token(type='heading_close', tag='h1', nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup='#', info='', meta={}, block=True, hidden=False)
     ]
+

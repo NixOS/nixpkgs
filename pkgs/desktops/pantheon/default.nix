@@ -243,3 +243,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   wingpanel-indicator-session = throw "pantheon.wingpanel-indicator-session has been removed, abandoned by upstream."; # added 2024-08-23
 
 }
+

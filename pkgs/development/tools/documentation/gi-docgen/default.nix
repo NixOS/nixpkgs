@@ -58,3 +58,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = teams.gnome.members;
   };
 }
+

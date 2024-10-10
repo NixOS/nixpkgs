@@ -14,3 +14,4 @@ makeSetupHook {
     inherit (teensy-cmake-macros.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh
+

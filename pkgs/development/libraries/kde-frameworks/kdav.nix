@@ -13,3 +13,4 @@ mkDerivation {
   buildInputs = [ kcoreaddons kio qtxmlpatterns ];
   outputs = [ "out" "dev" ];
 }
+

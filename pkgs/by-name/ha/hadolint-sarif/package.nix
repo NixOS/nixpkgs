@@ -31,3 +31,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hadolint-sarif";
   };
 }
+

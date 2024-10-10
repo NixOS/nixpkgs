@@ -9,3 +9,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ openssl ];
 }
+

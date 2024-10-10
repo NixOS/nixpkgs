@@ -72,3 +72,4 @@ subprocess.run(['git', 'add', DATA_JSON], check=True)
 subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
 
 logging.info("Done.")
+

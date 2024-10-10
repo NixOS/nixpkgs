@@ -35,3 +35,4 @@ rustPlatform.buildRustPackage {
     changelog = "https://github.com/ckampfe/russ/blob/master/CHANGELOG.md";
   };
 }
+

@@ -24,3 +24,4 @@ writeShellScript "make-darwin-bundle-${name}" (''
 
   appendToVar preDistPhases makeDarwinBundlePhase
 '')
+

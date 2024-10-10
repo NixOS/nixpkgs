@@ -53,3 +53,4 @@ Following [k8s-device-plugin](https://github.com/NVIDIA/k8s-device-plugin#deploy
 ```
 
 to test its working exec onto a pod and run nvidia-smi. For more configurability of nvidia related matters in k3s look in [k3s-docs](https://docs.k3s.io/advanced#nvidia-container-runtime-support).
+

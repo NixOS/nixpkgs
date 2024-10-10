@@ -36,3 +36,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gitlab-ci-ls";
   };
 }
+

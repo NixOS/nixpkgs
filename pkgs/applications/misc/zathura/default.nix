@@ -32,3 +32,4 @@ lib.makeScope newScope (
     zathuraWrapper = callPackage ./wrapper.nix { };
   }
 )
+

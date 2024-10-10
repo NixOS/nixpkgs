@@ -6,3 +6,4 @@ lib.makeScope newScope (self: {
   mullvad = self.callPackage ./mullvad.nix { };
   openvpn-mullvad = self.callPackage ./openvpn.nix { };
 })
+

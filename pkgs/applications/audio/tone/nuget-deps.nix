@@ -52,3 +52,4 @@
   (fetchNuGet { pname = "Ude.NetStandard"; version = "1.2.0"; sha256 = "074yff6g272zpkhk0zvmbfiaaxyp3b05fl24i7ffp2jf9r8bnfpl"; })
   (fetchNuGet { pname = "z440.atl.core"; version = "4.19.0"; sha256 = "16290hcf42yhs69ymjrg2znk7s56nnp4hj8rqwi1i8rdajmfr2v1"; })
 ]
+

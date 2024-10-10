@@ -7,3 +7,4 @@ rec {
 
   simulateApp = callPackage ./simulate-app.nix { inherit composeXcodeWrapper; };
 }
+

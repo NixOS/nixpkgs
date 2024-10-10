@@ -26,3 +26,4 @@ melpaBuild {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }
+

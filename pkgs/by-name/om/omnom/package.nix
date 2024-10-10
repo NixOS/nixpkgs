@@ -58,3 +58,4 @@ buildGoModule {
     mainProgram = "omnom";
   };
 }
+

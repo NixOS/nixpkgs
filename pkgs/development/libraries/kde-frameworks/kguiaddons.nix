@@ -14,3 +14,4 @@ mkDerivation {
 
   meta.homepage = "https://invent.kde.org/frameworks/kguiaddons";
 }
+

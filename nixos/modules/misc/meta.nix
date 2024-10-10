@@ -74,3 +74,4 @@ in
 
   meta.maintainers = singleton lib.maintainers.pierron;
 }
+

@@ -71,3 +71,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
             assert machine.succeed(f"stat {file}") == expected_stats[file]
   '';
 })
+

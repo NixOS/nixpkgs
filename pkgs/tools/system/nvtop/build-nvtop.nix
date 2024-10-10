@@ -88,3 +88,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nvtop";
   };
 })
+

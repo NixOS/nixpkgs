@@ -16,3 +16,4 @@
   (:documentation
    "Generate a nix expression from the package database and write it
    into outfile."))
+

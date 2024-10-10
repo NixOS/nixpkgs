@@ -39,3 +39,4 @@ buildGoModule rec {
     mainProgram = "systrayhelper";
   };
 }
+

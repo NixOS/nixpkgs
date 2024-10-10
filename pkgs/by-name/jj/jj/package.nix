@@ -71,3 +71,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ katexochen ];
   };
 }
+

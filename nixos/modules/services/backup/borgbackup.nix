@@ -797,3 +797,4 @@ in {
         [ config.services.borgbackup.package ] ++ (lib.mapAttrsToList mkBorgWrapper jobs);
     });
 }
+

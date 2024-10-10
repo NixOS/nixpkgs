@@ -34,3 +34,4 @@ buildPecl {
     maintainers = with lib.maintainers; [ drupol ];
   };
 }
+

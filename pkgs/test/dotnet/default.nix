@@ -7,3 +7,4 @@
   final-attrs = lib.recurseIntoAttrs (callPackage ./final-attrs { });
   nuget-deps = lib.recurseIntoAttrs (callPackage ./nuget-deps { });
 }
+

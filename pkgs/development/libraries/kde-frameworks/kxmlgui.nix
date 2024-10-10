@@ -14,3 +14,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfig kconfigwidgets qtbase qttools ];
 }
+

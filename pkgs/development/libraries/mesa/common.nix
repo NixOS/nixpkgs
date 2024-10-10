@@ -33,3 +33,4 @@ rec {
     maintainers = with lib.maintainers; [ k900 primeos vcunat ]; # Help is welcome :)
   };
 }
+

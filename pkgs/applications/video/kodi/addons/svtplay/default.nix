@@ -27,3 +27,4 @@ buildKodiAddon rec {
     broken = true; # no release for kodi 21
   };
 }
+

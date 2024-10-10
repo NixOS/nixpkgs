@@ -52,3 +52,4 @@ buildGoModule rec {
     platforms = obs-studio.meta.platforms;
   };
 }
+

@@ -161,3 +161,4 @@ in
       format.generate "journal-remote.conf" cfg.settings;
   };
 }
+

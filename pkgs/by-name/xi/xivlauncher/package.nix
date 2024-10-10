@@ -85,3 +85,4 @@ in
       mainProgram = "XIVLauncher.Core";
     };
   }
+

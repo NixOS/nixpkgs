@@ -40,3 +40,4 @@ stdenv.mkDerivation rec {
     homepage = "http://gfxmonk.net/dist/0install/gnome-shell-impatience.xml";
   };
 }
+

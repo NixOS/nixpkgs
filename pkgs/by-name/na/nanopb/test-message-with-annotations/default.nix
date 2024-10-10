@@ -30,3 +30,4 @@ stdenv.mkDerivation {
     grep -q "#define WithAnnotations_size" $out/withannotations.pb.h || (echo "error: the size of WithAnnotations is not known in $out/withannotations.pb.h"; exit 1)
   '';
 }
+

@@ -27,3 +27,4 @@ buildMongoDB {
   ];
   # passthru.tests = { inherit (nixosTests) mongodb; }; # currently tests mongodb-7_0
 }
+

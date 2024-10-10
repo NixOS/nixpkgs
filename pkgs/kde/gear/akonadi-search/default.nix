@@ -34,3 +34,4 @@ mkKdeDerivation rec {
     xapian
   ];
 }
+

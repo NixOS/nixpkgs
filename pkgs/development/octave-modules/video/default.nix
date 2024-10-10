@@ -32,3 +32,4 @@ buildOctavePackage rec {
     description = "Wrapper for OpenCV's CvCapture_FFMPEG and CvVideoWriter_FFMPEG";
   };
 }
+

@@ -71,3 +71,4 @@ in
 
   explicitDomain = makeHostNameTest "ahost" "adomain" "ahost.adomain";
 }
+

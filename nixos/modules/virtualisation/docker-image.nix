@@ -55,3 +55,4 @@
 # $ docker run --privileged -it nixos-docker /init
 # Log into the container
 # $ docker exec -it <container-name> /run/current-system/sw/bin/bash
+

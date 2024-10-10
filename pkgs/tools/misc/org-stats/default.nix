@@ -61,3 +61,4 @@ buildGoModule rec {
     mainProgram = "org-stats";
   };
 }
+

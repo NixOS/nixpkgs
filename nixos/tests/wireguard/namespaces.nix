@@ -81,3 +81,4 @@ import ../make-test-python.nix ({ pkgs, lib, kernelPackages ? null, ... } : {
     peer3.succeed("ip link show wg0")
   '';
 })
+

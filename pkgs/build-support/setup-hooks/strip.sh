@@ -100,3 +100,4 @@ stripDirs() {
         find $paths -name '*.a' -type f -exec $ranlibCmd '{}' \; 2>/dev/null
     fi
 }
+

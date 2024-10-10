@@ -74,3 +74,4 @@
     sub.nixosFail = { imports = [ ./module-class-is-darwin.nix ]; };
   };
 }
+

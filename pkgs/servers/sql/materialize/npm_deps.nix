@@ -60,3 +60,4 @@
     js_dev_file = "umd/react-dom.development.js";
   }
 ]
+

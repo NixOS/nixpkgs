@@ -60,3 +60,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.donadigo.appeditor";
   };
 }
+

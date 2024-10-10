@@ -36,3 +36,4 @@ lib.fix (self: {
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];
   };
 })
+

@@ -55,3 +55,4 @@ stdenv.mkDerivation (swift._wrapperParams // {
     inherit (swift) swiftOs swiftArch swiftModuleSubdir swiftLibSubdir;
   };
 })
+

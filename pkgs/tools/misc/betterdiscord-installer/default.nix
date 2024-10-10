@@ -28,3 +28,4 @@ in appimageTools.wrapType2 {
     mainProgram = "betterdiscord-installer";
   };
 }
+

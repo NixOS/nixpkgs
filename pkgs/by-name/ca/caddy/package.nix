@@ -77,3 +77,4 @@ buildGoModule {
     maintainers = with maintainers; [ Br1ght0ne emilylange techknowlogick ];
   };
 }
+

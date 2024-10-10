@@ -8,3 +8,4 @@ callPackage ./build.nix rec {
     sha256 = "sha256-4o74218OexFZcgwVAFPcq498TK4fDlyDiUR5cHP4wdw=";
   };
 }
+

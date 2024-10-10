@@ -81,3 +81,4 @@ buildGoModule rec {
     mainProgram = "fastly";
   };
 }
+

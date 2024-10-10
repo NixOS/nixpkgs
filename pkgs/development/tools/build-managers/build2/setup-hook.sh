@@ -89,3 +89,4 @@ fi
 if [ -z "${dontUseBuild2Install-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=build2InstallPhase
 fi
+

@@ -31,3 +31,4 @@ in
 
   meta.maintainers = with lib.maintainers; [ passivelemon ];
 }
+

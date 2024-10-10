@@ -3,3 +3,4 @@ import ./generic.nix rec {
   rev = "refs/tags/v${version}";
   sourceSha256 = "sha256-1RSWgH0iQ2NQNsieW2m37udXWQlqYslJNM3TXC9xeP4=";
 }
+

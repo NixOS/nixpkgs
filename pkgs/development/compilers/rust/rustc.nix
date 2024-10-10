@@ -323,3 +323,4 @@ in stdenv.mkDerivation (finalAttrs: {
     badPlatforms = rustc.badTargetPlatforms;
   };
 })
+

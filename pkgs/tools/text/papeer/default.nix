@@ -23,3 +23,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ehmry ];
   };
 }
+

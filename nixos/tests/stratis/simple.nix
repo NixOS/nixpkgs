@@ -37,3 +37,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
       assert "test1" in machine.succeed("cat /mnt/testfs2/test1")
     '';
   })
+

@@ -13,3 +13,4 @@ makeSetupHook {
     maintainers = with lib.maintainers; [ doronbehar ];
   };
 } ./hook.sh
+

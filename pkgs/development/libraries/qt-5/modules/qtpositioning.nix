@@ -12,3 +12,4 @@ qtModule {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
 }
+

@@ -10,3 +10,4 @@ updateAutotoolsGnuConfigScriptsPhase() {
         done
     done
 }
+

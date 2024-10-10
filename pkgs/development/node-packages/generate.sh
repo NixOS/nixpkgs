@@ -21,3 +21,4 @@ rm -f ./node-env.nix
 # it's safer to just remove the link after the script finishes
 # see https://github.com/NixOS/nixpkgs/issues/112846 for more details
 rm ./result
+

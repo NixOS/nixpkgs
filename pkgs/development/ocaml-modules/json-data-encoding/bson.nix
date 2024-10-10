@@ -19,3 +19,4 @@ buildDunePackage {
     description = "Type-safe encoding to and decoding from JSON (bson support)";
   };
 }
+

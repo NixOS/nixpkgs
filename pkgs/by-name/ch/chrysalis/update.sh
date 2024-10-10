@@ -14,3 +14,4 @@ newhash=$(curl -sL "$hashurl" | grep -Po '^sha512: \K.*')
 sed -i package.nix \
     -e "/^  version =/ s|\".*\"|\"$newver\"|" \
     -e "/sha512-/ s|\".*\"|\"sha512-$newhash\"|" \
+

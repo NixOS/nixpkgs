@@ -90,3 +90,4 @@ in {
     users.groups.telegraf = {};
   };
 }
+

@@ -49,3 +49,4 @@ pythonNamespacesHook() {
 if [ -z "${dontUsePythonNamespacesHook-}" -a -n "${pythonNamespaces-}" ]; then
     postFixupHooks+=(pythonNamespacesHook)
 fi
+

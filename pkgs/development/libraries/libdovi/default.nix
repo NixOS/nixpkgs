@@ -49,3 +49,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ kranzes ];
   };
 }
+

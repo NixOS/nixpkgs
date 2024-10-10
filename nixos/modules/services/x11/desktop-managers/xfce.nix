@@ -184,3 +184,4 @@ in
     xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }
+

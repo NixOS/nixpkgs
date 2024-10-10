@@ -21,3 +21,4 @@ in
     environment.systemPackages = [ pkgs.cwm ];
   };
 }
+

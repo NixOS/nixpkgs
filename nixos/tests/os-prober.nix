@@ -131,3 +131,4 @@ in {
     machine.succeed("egrep 'menuentry.*debian' /boot/grub/grub.cfg")
   '';
 })
+

@@ -21,3 +21,4 @@ NixOS system through several other means:
     you to provision VirtualBox and EC2 NixOS instances from declarative
     specifications. Check out the [NixOps
     homepage](https://nixos.org/nixops) for details.
+

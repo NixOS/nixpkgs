@@ -43,3 +43,4 @@ mkDerivation rec {
     mainProgram = "gitqlient";
   };
 }
+

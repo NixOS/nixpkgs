@@ -61,3 +61,4 @@ in
       assert machine.succeed("stat -c '%U' /new-sysuser") == "new-sysuser\n"
   '';
 }
+

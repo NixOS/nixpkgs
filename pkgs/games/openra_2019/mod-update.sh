@@ -158,3 +158,4 @@ for type in mod engine; do
   nix-upfetch --yes --version "$version" "$(nix-preupfetch --file "$nixpkgs" "openraPackages.mods.$mod" --index $i -- "${fetcher_args[@]}")"
   (( i++ ))
 done
+

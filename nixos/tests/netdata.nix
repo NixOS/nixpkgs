@@ -42,3 +42,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     netdata.succeed("sudo netdatacli ping")
   '';
 })
+

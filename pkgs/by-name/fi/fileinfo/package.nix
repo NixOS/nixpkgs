@@ -22,3 +22,4 @@ python3Packages.buildPythonApplication {
     mainProgram = "fileinfo";
   };
 }
+

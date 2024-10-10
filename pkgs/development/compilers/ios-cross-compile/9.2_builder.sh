@@ -152,3 +152,4 @@ function do_build {
 }
 
 do_build $src armv7
+

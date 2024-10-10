@@ -48,3 +48,4 @@ in
       in
       test.run "Filter excludes based on groups" gemSet (set: functions.filterGemset {inherit ruby; groups = ["a" "b"];} set == {}))
   ]
+

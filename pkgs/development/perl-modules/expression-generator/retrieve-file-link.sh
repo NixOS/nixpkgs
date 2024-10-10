@@ -12,3 +12,4 @@ author_regexp="[A-Z0-9]+";
     sed -re 's@^/@http://search.cpan.org/@';
 
 echo "$link_line";
+

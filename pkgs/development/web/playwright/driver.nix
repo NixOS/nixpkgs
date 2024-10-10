@@ -264,3 +264,4 @@ in
   playwright-core = playwright-core;
   playwright-test = playwright-test;
 }
+

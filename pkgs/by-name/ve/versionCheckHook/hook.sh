@@ -64,3 +64,4 @@ if [[ -z "${dontVersionCheck-}" ]]; then
     echo "Using versionCheckHook"
     preInstallCheckHooks+=(versionCheckHook)
 fi
+

@@ -30,3 +30,4 @@ buildDunePackage rec {
     maintainers = with maintainers; [ dandellion ];
   };
 }
+

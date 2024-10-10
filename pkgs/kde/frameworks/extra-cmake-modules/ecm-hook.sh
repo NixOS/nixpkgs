@@ -111,3 +111,4 @@ ecmHostPathHook() {
     fi
 }
 addEnvHooks "$hostOffset" ecmHostPathHook
+

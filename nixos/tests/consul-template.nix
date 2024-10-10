@@ -34,3 +34,4 @@ import ./make-test-python.nix ({ ... }: {
     machine.succeed('grep "example" /example')
   '';
 })
+

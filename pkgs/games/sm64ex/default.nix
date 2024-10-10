@@ -7,3 +7,4 @@
 
   sm64ex-coop = callPackage ./coop.nix { };
 }.${branch}
+

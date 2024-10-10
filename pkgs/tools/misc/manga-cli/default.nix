@@ -38,3 +38,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "manga-cli";
   };
 }
+

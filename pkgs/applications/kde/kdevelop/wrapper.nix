@@ -5,3 +5,4 @@ symlinkJoin {
 
   paths = [ kdevelop-unwrapped ] ++ (lib.optionals (plugins != null) plugins);
 }
+

@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "This plugin integrates Discourse with a number of external chatroom systems";
   };
 }
+

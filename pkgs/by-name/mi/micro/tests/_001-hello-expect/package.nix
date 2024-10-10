@@ -24,3 +24,4 @@ runCommand "micro-expect-hello-world"
     grep "Hello world!" file.txt
     cat file.txt > $out
   ''
+

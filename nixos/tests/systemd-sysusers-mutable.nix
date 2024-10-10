@@ -76,3 +76,4 @@ in
       assert "${newSysuserPassword}" in machine.succeed("getent shadow new-sysuser"), "new-sysuser user password is not correct"
   '';
 }
+

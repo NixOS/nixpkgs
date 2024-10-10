@@ -25,3 +25,4 @@ grep -q $srcHash $fname
 imageHash="$(nix-prefetch-url https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz)"
 sed -i -E 's#(sha256 = ").*(";)#\1'$imageHash'\2#g' $fname
 grep -q $imageHash $fname
+

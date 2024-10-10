@@ -73,3 +73,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = platforms.darwin ++ platforms.linux;
   };
 }
+

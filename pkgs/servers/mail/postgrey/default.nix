@@ -32,3 +32,4 @@ in runCommand name {
     sed -i -e "s,#!/usr/bin/perl,#!${perlPackages.perl}/bin/perl ${policy-test-flags}," \
         bin/policy-test
 ''
+

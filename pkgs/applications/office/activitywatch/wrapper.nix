@@ -16,3 +16,4 @@ symlinkJoin {
     aw-watcher-window.out
   ] ++ (lib.forEach extraWatchers (p: p.out));
 }
+

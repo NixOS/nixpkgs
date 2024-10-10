@@ -32,3 +32,4 @@ buildNpmPackage rec {
     license = lib.licenses.mit;
   };
 }
+

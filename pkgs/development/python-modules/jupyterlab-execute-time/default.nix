@@ -40,3 +40,4 @@ buildPythonPackage rec {
     maintainers = [ lib.maintainers.vglfr ];
   };
 }
+

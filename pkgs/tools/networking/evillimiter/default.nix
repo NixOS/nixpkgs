@@ -52,3 +52,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ fab ];
   };
 }
+

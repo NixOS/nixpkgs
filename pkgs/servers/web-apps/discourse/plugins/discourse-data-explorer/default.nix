@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "SQL Queries for admins in Discourse";
   };
 }
+

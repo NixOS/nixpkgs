@@ -42,3 +42,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://mcabber.com/files/";
   };
 }
+

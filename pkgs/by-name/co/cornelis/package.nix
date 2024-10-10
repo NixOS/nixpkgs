@@ -25,3 +25,4 @@ lib.pipe haskellPackages.cornelis [
   # Reduce closure size
   justStaticExecutables
 ]
+

@@ -46,3 +46,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       machine.succeed("free -h | grep -E 'Swap:\s+2[45][0-9]Mi'")
   '';
 })
+

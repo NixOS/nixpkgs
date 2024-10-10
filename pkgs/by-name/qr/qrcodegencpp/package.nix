@@ -30,3 +30,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (qrcodegen.meta) description homepage license maintainers platforms;
   };
 })
+

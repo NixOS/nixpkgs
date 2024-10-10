@@ -28,3 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "qtrvsim_gui";
   };
 }
+

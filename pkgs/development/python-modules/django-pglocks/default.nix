@@ -31,3 +31,4 @@ buildPythonPackage rec {
   # tests need a postgres database
   doCheck = false;
 }
+

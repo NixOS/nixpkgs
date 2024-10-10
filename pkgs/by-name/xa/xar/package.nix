@@ -176,3 +176,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xar";
   };
 })
+

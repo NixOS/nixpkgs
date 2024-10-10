@@ -33,3 +33,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mp3cat";
   };
 }
+

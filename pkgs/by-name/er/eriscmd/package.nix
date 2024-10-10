@@ -32,3 +32,4 @@ buildNimPackage (final: prev: {
     badPlatforms = lib.platforms.darwin;
   };
 })
+

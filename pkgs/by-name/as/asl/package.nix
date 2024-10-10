@@ -55,3 +55,4 @@ stdenv.mkDerivation (finalAttrs: {
 # TODO: customize TeX input
 # TODO: report upstream about `mkdir -p .objdir/`
 # TODO: suggest upstream about building docs as an option
+

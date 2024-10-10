@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ lib, ... }: {
       assert "inactive" in machine.fail("systemctl is-active srv-data.mount")
     '';
 })
+

@@ -29,3 +29,4 @@ runCommand "openapi-generator-cli-test" {
   set +x
   echo "Looks OK!"
 ''
+

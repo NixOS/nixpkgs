@@ -59,3 +59,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           assert len(response["hits"]) >= 1, "no results found"
     '';
   })
+

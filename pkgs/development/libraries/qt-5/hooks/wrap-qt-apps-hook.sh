@@ -105,3 +105,4 @@ wrapQtAppsHook() {
 fixupOutputHooks+=(wrapQtAppsHook)
 
 fi
+

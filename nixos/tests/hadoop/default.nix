@@ -6,3 +6,4 @@
   yarn = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./yarn.nix { inherit package; };
   hbase = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./hbase.nix { inherit package; };
 }
+

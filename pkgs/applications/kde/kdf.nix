@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kcmutils ki18n kiconthemes kio knotifications kxmlgui ];
 }
+

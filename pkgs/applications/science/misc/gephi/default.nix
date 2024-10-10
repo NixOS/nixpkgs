@@ -43,3 +43,4 @@ maven.buildMavenPackage rec {
     maintainers = [ maintainers.taeer ];
   };
 }
+

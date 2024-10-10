@@ -20,3 +20,4 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
 
   x86_64-unknown-freebsd = x86_64-freebsd;
 })
+

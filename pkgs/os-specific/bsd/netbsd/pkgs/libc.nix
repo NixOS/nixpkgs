@@ -50,3 +50,4 @@ symlinkJoin rec {
 
   meta.platforms = lib.platforms.netbsd;
 }
+

@@ -33,3 +33,4 @@ if ! gsutil ls "gs://${BUCKET_NAME}/$img_name"; then
     --member='allAuthenticatedUsers' \
     --role='roles/compute.imageUser'
 fi
+

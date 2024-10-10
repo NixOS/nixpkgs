@@ -108,3 +108,4 @@ to the Synapse plugin list and enable the `mjolnir.Module` module.
   };
 }
 ```
+

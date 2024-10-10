@@ -110,3 +110,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "appflowy";
   };
 })
+

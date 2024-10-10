@@ -41,3 +41,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     platforms = craftos-pc.meta.platforms;
   };
 }
+

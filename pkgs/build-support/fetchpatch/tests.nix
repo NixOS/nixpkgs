@@ -33,3 +33,4 @@ in
     sha256 = if isFetchpatch2 then "sha256-oMvPlmzE51ArI+EvFxONXkqmNee39106/O1ikG0Bdso=" else "sha256-SJHk8XrutqAyoIdORlhCpBCN626P+uzed7mjKz5eQYY=";
   };
 }
+

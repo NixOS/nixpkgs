@@ -248,3 +248,4 @@ in
 
   meta.maintainers = [ lib.maintainers.phfroidmont ];
 }
+

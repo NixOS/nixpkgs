@@ -31,3 +31,4 @@ import ./make-test-python.nix ({ lib, ... }: {
         client.wait_until_succeeds("curl -fs machine:9876")
   '';
 })
+

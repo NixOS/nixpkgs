@@ -12,3 +12,4 @@ stdenv.mkDerivation {
     install -Dm444 -t $out/share/collectd/ src/*.{db,conf}
   '';
 }
+

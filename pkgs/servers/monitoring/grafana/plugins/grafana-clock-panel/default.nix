@@ -11,3 +11,4 @@ grafanaPlugin rec {
     platforms = platforms.unix;
   };
 }
+

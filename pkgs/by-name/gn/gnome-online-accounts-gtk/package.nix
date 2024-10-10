@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.cinnamon.members;
   };
 })
+

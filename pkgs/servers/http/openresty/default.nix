@@ -59,3 +59,4 @@ callPackage ../nginx/generic.nix args rec {
     maintainers = with lib.maintainers; [ thoughtpolice lblasc ];
   };
 }
+

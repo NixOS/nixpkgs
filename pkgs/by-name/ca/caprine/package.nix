@@ -88,3 +88,4 @@ buildNpmPackage rec {
     inherit (electron.meta) platforms;
   };
 }
+

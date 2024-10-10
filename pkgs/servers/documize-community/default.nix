@@ -38,3 +38,4 @@ buildGoModule rec {
     homepage = "https://www.documize.com/";
   };
 }
+

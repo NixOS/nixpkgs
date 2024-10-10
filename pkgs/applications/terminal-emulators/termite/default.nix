@@ -79,3 +79,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "termite";
   };
 }
+

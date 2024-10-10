@@ -27,3 +27,4 @@ buildFishPlugin {
     platforms = with platforms; unix;
   };
 }
+

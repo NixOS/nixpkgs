@@ -59,3 +59,4 @@ mkDerivation {
     mainProgram = "coreboot-configurator";
   };
 }
+

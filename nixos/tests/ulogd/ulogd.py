@@ -47,3 +47,4 @@ with subtest("Reloading service reopens log file"):
     _, echo_reply_packets = machine.execute("grep TYPE=0 /var/log/ulogd_pkts.log")
     expected, actual = 5 * 2, len(echo_reply_packets.splitlines())
     assert expected == actual, f"Expected {expected} ICMP reply packets from logfile, got: {actual}"
+

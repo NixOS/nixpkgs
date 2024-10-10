@@ -54,3 +54,4 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/vifm/vifm/blob/v${version}/ChangeLog";
   };
 }
+

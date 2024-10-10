@@ -44,3 +44,4 @@ stdenv.mkDerivation rec {
     inherit (qtbase.meta) platforms license homepage;
   };
 }
+

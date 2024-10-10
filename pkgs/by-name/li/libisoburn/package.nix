@@ -62,3 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (libisofs.meta) platforms;
   };
 })
+

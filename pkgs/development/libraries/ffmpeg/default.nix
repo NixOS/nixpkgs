@@ -69,3 +69,4 @@ rec {
   ffmpeg-headless = ffmpeg_7-headless;
   ffmpeg-full = ffmpeg_7-full;
 }
+

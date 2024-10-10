@@ -12,3 +12,4 @@ mkPythonMetaPackage {
     inherit (phonenumbers.meta) changelog description homepage;
   };
 }
+

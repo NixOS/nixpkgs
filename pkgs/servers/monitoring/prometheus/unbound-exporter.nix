@@ -33,3 +33,4 @@ buildGoModule {
     maintainers = with maintainers; [ hexa ];
   };
 }
+

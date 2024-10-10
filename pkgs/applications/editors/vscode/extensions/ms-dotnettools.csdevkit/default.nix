@@ -128,3 +128,4 @@ buildVscodeMarketplaceExtension {
     ];
   };
 }
+

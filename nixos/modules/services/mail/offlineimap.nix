@@ -62,3 +62,4 @@ in {
     } // lib.optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
   };
 }
+

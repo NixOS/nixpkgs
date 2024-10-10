@@ -41,3 +41,4 @@ buildPythonPackage rec {
     mainProgram = "jget";
   };
 }
+

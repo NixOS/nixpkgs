@@ -70,3 +70,4 @@ installSphinxPhase() {
 }
 
 appendToVar preDistPhases buildSphinxPhase installSphinxPhase
+

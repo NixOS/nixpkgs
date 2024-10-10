@@ -81,3 +81,4 @@ fi
 if [ -z "${dontUseSconsInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=sconsInstallPhase
 fi
+

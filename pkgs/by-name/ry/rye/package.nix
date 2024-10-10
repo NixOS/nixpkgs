@@ -113,3 +113,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rye";
   };
 }
+

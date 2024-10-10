@@ -90,3 +90,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mise";
   };
 }
+

@@ -11,3 +11,4 @@
     <xsl:value-of select='concat("@out@", substring-after(substring-after(., "@nixStore@"), "/"))'/>
   </xsl:template>
 </xsl:stylesheet>
+

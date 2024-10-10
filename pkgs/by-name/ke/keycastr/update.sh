@@ -18,3 +18,4 @@ HASH="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type sha256 "https
 
 sed -i "s#hash = \".*\"#hash = \"$HASH\"#g" package.nix
 sed -i "s#version = \".*\";#version = \"$LATEST_VER\";#g" package.nix
+

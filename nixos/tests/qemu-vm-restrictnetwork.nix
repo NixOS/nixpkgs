@@ -36,3 +36,4 @@ import ./make-test-python.nix ({
       restricted.fail("curl -s http://10.0.2.2:8000")
     '';
 })
+

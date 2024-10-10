@@ -49,3 +49,4 @@ buildDunePackage rec {
     mainProgram = "lambda-term-actions";
   };
 }
+

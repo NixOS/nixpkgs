@@ -21,3 +21,4 @@ sabctoolsHash=$(nurl --hash https://pypi.org/project/sabctools "$sabctoolsVersio
 
 sed -i -E -e "s#sabctoolsVersion = \".*\"#sabctoolsVersion = \"$sabctoolsVersion\"#" ./pkgs/by-name/sa/sabnzbd/package.nix
 sed -i -E -e "s#sabctoolsHash = \".*\"#sabctoolsHash = \"$sabctoolsHash\"#" ./pkgs/by-name/sa/sabnzbd/package.nix
+

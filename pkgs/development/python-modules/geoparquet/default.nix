@@ -45,3 +45,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }
+

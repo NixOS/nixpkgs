@@ -32,3 +32,4 @@ i3lock-color.overrideAttrs (oldAttrs : rec {
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/i3lock-blur.x86_64-darwin
   };
 })
+

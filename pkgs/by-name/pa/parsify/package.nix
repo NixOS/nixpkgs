@@ -32,3 +32,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "parsify";
   };
 }
+

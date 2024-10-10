@@ -43,3 +43,4 @@ import ../make-test-python.nix ({ package, ... }: {
     nodemanager.succeed("curl -f http://localhost:8042")
   '';
 })
+

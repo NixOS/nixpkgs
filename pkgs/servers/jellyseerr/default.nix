@@ -94,3 +94,4 @@ mkYarnPackage rec {
     mainProgram = "jellyseerr";
   };
 }
+

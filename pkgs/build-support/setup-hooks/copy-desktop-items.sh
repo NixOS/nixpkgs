@@ -41,3 +41,4 @@ copyDesktopItems() {
         fi
     done
 }
+

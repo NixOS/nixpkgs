@@ -236,3 +236,4 @@ in
         ++ lib.optional cfg.enableGitAnnex pkgs.git-annex;
   });
 }
+

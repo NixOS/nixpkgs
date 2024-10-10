@@ -65,3 +65,4 @@ Release: https://github.com/etcd-io/etcd/releases/tag/v$LATEST_VERSION"
 else
     echo "etcd is already up-to-date at $OLD_VERSION"
 fi
+

@@ -100,3 +100,4 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ thepuzzlemaker ];
   };
 }
+

@@ -16,3 +16,4 @@ fi
 cd ../../../..
 update-source-version bicep "${new_version//v/}"
 "$(nix-build . -A bicep.fetch-deps --no-out-link)" "$deps_file"
+

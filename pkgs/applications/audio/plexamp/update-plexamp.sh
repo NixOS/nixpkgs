@@ -53,3 +53,4 @@ NEXT_URL=$(rg --only-matching '(.*)/[0-9]+' --replace "\$1/$NEXT_CHANGELOG" <<< 
 sed -i "s@changelog = \".*\";@changelog = \"$NEXT_URL\";@" $WORKING_NIX
 
 mv $WORKING_NIX $DEFAULT_NIX
+

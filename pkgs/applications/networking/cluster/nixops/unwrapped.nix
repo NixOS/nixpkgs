@@ -65,3 +65,4 @@ buildPythonApplication rec {
     mainProgram = "nixops";
   };
 }
+

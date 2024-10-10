@@ -51,3 +51,4 @@ buildDotnetModule (args // {
     runHook postInstall
   '';
 })
+

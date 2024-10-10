@@ -56,3 +56,4 @@ stdenvNoCC.mkDerivation ({
       pkgs.substitute: For "${name}", `substitutions` is passed, which is expected to be a list, but it's a ${builtins.typeOf args.substitutions} instead.'';
     lib.escapeShellArgs args.substitutions;
 })
+

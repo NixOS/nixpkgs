@@ -41,3 +41,4 @@ signIfRequired() {
         sign "$file"
     fi
 }
+

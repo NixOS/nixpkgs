@@ -48,3 +48,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-randr";
   };
 }
+

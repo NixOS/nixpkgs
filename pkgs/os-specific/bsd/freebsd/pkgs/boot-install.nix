@@ -21,3 +21,4 @@ buildPackages.writeShellScriptBin "boot-install" (
     ${buildPackages.coreutils}/bin/install "''${fixed_args[@]}"
   ''
 )
+

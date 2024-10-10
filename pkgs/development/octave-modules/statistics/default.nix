@@ -26,3 +26,4 @@ buildOctavePackage rec {
     description = "Statistics package for GNU Octave";
   };
 }
+

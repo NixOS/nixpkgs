@@ -76,3 +76,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     inherit (nodejs.meta) platforms;
   };
 })
+

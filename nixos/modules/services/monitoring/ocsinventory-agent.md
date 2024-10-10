@@ -31,3 +31,4 @@ A minimal configuration looks like this:
 This configuration will periodically run the ocsinventory-agent SystemD service.
 
 The OCS Inventory Agent will inventory the computer and then sends the results to the specified OCS Inventory Server.
+

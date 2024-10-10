@@ -9,3 +9,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "katomic";
 }
+

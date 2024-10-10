@@ -214,3 +214,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "PrusaSlicer";
   };
 })
+

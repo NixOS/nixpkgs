@@ -12,3 +12,4 @@ nodejsInstallManuals() {
         elif $typ == "null" then empty
         else "invalid type " + $typ | halt_error end' "$packageJson")
 }
+

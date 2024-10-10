@@ -152,3 +152,4 @@ foreach my $name (sort (keys %answers)) {
         if $config{$name} && $config{$name} ne $answers{$name};
 }
 exit $ret;
+

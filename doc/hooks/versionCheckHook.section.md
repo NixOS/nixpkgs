@@ -33,3 +33,4 @@ The variables that this phase control are:
 - `versionCheckProgramArg`: The argument that needs to be passed to `versionCheckProgram`. If undefined the hook tries first `--help` and then `--version`. Examples: `version`, `-V`, `-v`.
 - `preVersionCheck`: A hook to run before the check is done.
 - `postVersionCheck`: A hook to run after the check is done.
+

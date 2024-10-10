@@ -30,3 +30,4 @@ if [ -z "${dontUsePytestForked-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
         appendToVar preDistPhases pytestForkedHook
     fi
 fi
+

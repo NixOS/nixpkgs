@@ -307,3 +307,4 @@ if missing_kernel_versions:
 
 if failures:
     sys.exit(1)
+

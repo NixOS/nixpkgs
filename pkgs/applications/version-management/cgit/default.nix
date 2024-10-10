@@ -25,3 +25,4 @@ callPackage (import ./common.nix rec {
   description = "Web frontend for git repositories";
   maintainers = with lib.maintainers; [ bjornfor ];
 }) {}
+

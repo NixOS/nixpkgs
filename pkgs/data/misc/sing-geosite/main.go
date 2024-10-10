@@ -50,3 +50,4 @@ func main() {
 		outputRuleSet.Close()
 	}
 }
+

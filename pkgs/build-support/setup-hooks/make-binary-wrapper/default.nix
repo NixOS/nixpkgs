@@ -25,3 +25,4 @@ makeSetupHook {
     tests = tests.makeBinaryWrapper;
   };
 } ./make-binary-wrapper.sh
+

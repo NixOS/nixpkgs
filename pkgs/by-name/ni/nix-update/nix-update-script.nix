@@ -9,3 +9,4 @@
 }:
 
 [ "${lib.getExe nix-update}" ] ++ extraArgs ++ lib.optionals (attrPath != null) [ attrPath ]
+

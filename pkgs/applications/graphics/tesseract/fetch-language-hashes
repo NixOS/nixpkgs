@@ -33,3 +33,4 @@ for lang in $langCodes; do
     hash=$(nix hash to-sri --type sha256 $(nix-prefetch-url $url 2>/dev/null))
     echo "$lang = \"$hash\";"
 done
+

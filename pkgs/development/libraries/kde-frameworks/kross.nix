@@ -11,3 +11,4 @@ mkDerivation {
     ki18n kiconthemes kio kparts kwidgetsaddons qtbase qtscript qtxmlpatterns
   ];
 }
+

@@ -87,3 +87,4 @@ mkDerivation rec {
     mainProgram = "bitcoin-cli";
   };
 }
+

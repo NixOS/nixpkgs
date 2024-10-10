@@ -52,3 +52,4 @@ buildDunePackage rec {
     maintainers = [ maintainers.romildo ];
   };
 }
+

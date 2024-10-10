@@ -9,3 +9,4 @@ moveKF6DevTools() {
 }
 
 postInstallHooks+=('moveKF6DevTools')
+

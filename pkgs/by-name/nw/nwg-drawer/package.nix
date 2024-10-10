@@ -63,3 +63,4 @@ buildGoModule {
     platforms = with lib.platforms; linux;
   };
 }
+

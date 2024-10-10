@@ -22,3 +22,4 @@ rm "$out/spool/etc/config.dummy"
 
 # Ensure all binaries are reachable within the spooling area.
 ln --symbolic --target-directory="$out/spool/bin/" "$out/bin/"*
+

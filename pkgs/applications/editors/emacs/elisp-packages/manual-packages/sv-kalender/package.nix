@@ -20,3 +20,4 @@ melpaBuild {
     maintainers = [ lib.maintainers.rycee ];
   };
 }
+

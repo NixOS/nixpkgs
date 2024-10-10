@@ -60,3 +60,4 @@ python311Packages.buildPythonApplication rec {
     mainProgram = "frescobaldi";
   };
 }
+

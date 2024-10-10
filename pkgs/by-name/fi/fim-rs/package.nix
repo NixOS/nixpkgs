@@ -67,3 +67,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fim";
   };
 }
+

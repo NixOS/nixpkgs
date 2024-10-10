@@ -78,3 +78,4 @@ in stdenv.mkDerivation {
     mainProgram = "kega-fusion";
   };
 }
+

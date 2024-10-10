@@ -10,3 +10,4 @@ mkDerivation {
   propagatedBuildInputs = [ qtquickcontrols2 ];
   outputs = [ "out" "dev" ];
 }
+

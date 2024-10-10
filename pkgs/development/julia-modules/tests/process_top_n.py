@@ -31,3 +31,4 @@ for (uuid, count) in rows:
   results.append({ "uuid": uuid, "name": uuid_to_name.get(uuid), "count": count })
 
 yaml.dump(results, sys.stdout, default_flow_style=False)
+

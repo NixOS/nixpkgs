@@ -100,3 +100,4 @@ switch arg [
       version = "dev" ;
       src = builtins.path {path = arg; name = location.name or "source";}; }; }
 ] (throw "not a valid source description")
+

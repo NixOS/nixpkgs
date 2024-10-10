@@ -177,3 +177,4 @@ function generateNix(pkgs, builtinFetchGit) {
 }
 
 module.exports = generateNix;
+

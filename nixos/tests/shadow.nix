@@ -170,3 +170,4 @@ in import ./make-test-python.nix ({ pkgs, ... }: {
         shadow.send_chars("logout\n")
   '';
 })
+

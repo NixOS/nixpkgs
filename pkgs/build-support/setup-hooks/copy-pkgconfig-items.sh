@@ -44,3 +44,4 @@ copyPkgconfigItems() {
         fi
     done
 }
+

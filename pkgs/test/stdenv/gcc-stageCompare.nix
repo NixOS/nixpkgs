@@ -30,3 +30,4 @@ in (runCommand "gcc-stageCompare" {} ''
 '').overrideAttrs (a: {
   meta = (a.meta or { }) // { platforms = lib.platforms.linux; };
 })
+

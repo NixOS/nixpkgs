@@ -8,3 +8,4 @@ import ./generic.nix {
     sha256 = "1d671lcjckjri28xfbf6dq7y3xnkppa910w1jin8rjc35dx06kjf";
   };
 }
+

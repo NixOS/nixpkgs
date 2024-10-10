@@ -92,3 +92,4 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
     inherit (qtbase.meta) platforms;
   };
 }
+

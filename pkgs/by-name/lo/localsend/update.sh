@@ -24,3 +24,4 @@ GIT_SRC_URL="https://github.com/localsend/localsend/archive/refs/tags/v${latestV
 GIT_SRC_SHA=$(nix hash to-sri --type sha256 $(nix-prefetch-url --unpack ${GIT_SRC_URL}))
 sed -i "/linux/,/hash/{s|hash = \".*\"|hash = \"${GIT_SRC_SHA}\"|}" "$ROOT/package.nix"
 curl https://raw.githubusercontent.com/localsend/localsend/v${latestVersion}/app/pubspec.lock | yq . > $ROOT/pubspec.lock.json
+

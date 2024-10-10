@@ -15,3 +15,4 @@ if [ -z "${dontWriteRequiredOctavePackagesPhase-}" ]; then
     echo "Using octaveWriteRequiredOctavePackagesPhase"
     appendToVar preDistPhases octaveWriteRequiredOctavePackagesPhase
 fi
+

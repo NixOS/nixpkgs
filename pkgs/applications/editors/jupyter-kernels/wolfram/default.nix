@@ -24,3 +24,4 @@ in {
     logo64 = "${wolfram-engine}/share/icons/hicolor/64x64/apps/wolfram-wolframlanguage.png";
   };
 }
+

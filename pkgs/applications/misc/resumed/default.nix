@@ -21,3 +21,4 @@ buildNpmPackage rec {
     mainProgram = "resumed";
   };
 }
+

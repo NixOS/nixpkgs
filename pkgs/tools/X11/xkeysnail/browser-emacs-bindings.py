@@ -51,3 +51,4 @@ define_keymap(re.compile("Google-chrome|Chromium-browser|firefox"), {
     K("C-g"): [K("esc"), aa_setvar(False)],
     K("enter"): aa_ifvar()
 })
+

@@ -94,3 +94,4 @@ mkChromiumDerivation (base: rec {
     timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
   };
 })
+

@@ -27,3 +27,4 @@ do
     echo "warning: modem initialization timed out"
   fi
 done
+

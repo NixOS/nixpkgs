@@ -38,3 +38,4 @@ runCommand
   HOME=$PWD xvfb-run ${lib.getExe testScript}
   touch ${placeholder "out"}
 ''
+

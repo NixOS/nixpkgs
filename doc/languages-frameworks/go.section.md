@@ -365,3 +365,4 @@ If a larger amount of tests should be skipped, the following pattern can be used
 
 To disable tests altogether, set `doCheck = false;`.
 `buildGoPackage` does not execute tests by default.
+

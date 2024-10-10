@@ -24,3 +24,4 @@ qtModule {
   installFlags = [ "install_docs" ];
   outputs = [ "out" ];
 }
+

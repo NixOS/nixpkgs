@@ -62,3 +62,4 @@ example:
 ```
 
 This will set the socket to interact with the netbird service to `/var/run/toto.sock`.
+

@@ -32,3 +32,4 @@ in
     programs.firefox.nativeMessagingHosts.packages = [ pkgs.gnome-browser-connector ];
   };
 }
+

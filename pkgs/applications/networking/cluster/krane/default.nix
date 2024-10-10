@@ -18,3 +18,4 @@ bundlerApp {
     maintainers = with maintainers; [ kira-bruneau ];
   };
 }
+

@@ -57,3 +57,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ schneefux Br1ght0ne Frostman ];
   };
 }
+

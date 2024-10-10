@@ -37,3 +37,4 @@ in appimageTools.wrapType2 {
     license = licenses.unfree;
   };
 }
+

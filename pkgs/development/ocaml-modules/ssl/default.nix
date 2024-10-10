@@ -39,3 +39,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ anmonteiro dandellion maggesi ];
   };
 }
+

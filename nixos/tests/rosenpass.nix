@@ -212,3 +212,4 @@ in
       client = sshAndKeyGeneration // niceConsoleAndAutologin;
     };
 })
+

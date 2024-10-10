@@ -21,3 +21,4 @@ callPackage ../generic.nix rec {
     description = "Fork of popular roguelike game Shattered Pixel Dungeon that drastically buffs heroes and thus makes the game significantly easier";
   };
 }
+

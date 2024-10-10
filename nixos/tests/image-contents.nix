@@ -60,3 +60,4 @@ in makeEc2Test {
     assert "image-contents.nix" in dirList
   '';
 }
+

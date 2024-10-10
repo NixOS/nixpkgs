@@ -33,3 +33,4 @@ in {
     services.udev.packages = [ scdaemonUdevRulesPkg ];
   };
 }
+

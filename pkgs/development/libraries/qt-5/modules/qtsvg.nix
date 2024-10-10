@@ -5,3 +5,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" "bin" ];
 }
+

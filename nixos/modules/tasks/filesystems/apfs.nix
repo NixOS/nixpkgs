@@ -20,3 +20,4 @@ in
     # Don't copy apfsck into the initramfs since it does not support repairing the filesystem
   };
 }
+

@@ -23,3 +23,4 @@ pkgs.writers.writePython3Bin "jax-test-cuda"
 
     print("success!")
   ''
+

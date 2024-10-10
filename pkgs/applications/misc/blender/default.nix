@@ -459,3 +459,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "blender";
   };
 })
+

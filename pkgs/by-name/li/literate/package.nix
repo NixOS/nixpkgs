@@ -38,3 +38,4 @@ buildDubPackage {
     platforms = lib.platforms.unix;
   };
 }
+

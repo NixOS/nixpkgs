@@ -28,3 +28,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = with lib.maintainers; [ pandapip1 ];
   };
 }
+

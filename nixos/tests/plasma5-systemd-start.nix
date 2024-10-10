@@ -41,3 +41,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
     assert 'ActiveState=active' in result.split('\n'), 'Systemd service not active'
   '';
 })
+

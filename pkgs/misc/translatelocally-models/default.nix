@@ -39,3 +39,4 @@ let
 in allModelPkgs // {
   passthru.updateScript = ./update.sh;
 }
+

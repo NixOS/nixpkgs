@@ -31,3 +31,4 @@ compressManPages() {
         fi
     done
 }
+

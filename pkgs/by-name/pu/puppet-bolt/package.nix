@@ -48,3 +48,4 @@
 }).overrideAttrs (old: {
   name = "puppet-bolt-${(import ./gemset.nix).bolt.version}";
 })
+

@@ -78,3 +78,4 @@ let
 in lib.mapAttrs'
   (majorVersion: versionInfo: lib.nameValuePair "apacheKafka_${majorVersion}" (build versionInfo))
   versionMap
+

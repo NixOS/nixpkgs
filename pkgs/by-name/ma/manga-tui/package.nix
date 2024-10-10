@@ -48,3 +48,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "manga-tui";
   };
 }
+

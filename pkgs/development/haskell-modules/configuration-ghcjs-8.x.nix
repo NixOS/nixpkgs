@@ -136,3 +136,4 @@ self: super:
   # Tests take unacceptably long.
   vector = dontCheck super.vector;
 }
+

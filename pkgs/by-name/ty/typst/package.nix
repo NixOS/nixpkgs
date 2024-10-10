@@ -76,3 +76,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ drupol figsoda kanashimia ];
   };
 }
+

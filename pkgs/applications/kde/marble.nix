@@ -22,3 +22,4 @@ mkDerivation {
     cmakeFlags+=" -DINCLUDE_INSTALL_DIR=''${!outputDev}/include"
   '';
 }
+

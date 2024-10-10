@@ -126,3 +126,4 @@ in phpPackage.buildComposerProject rec {
     platforms   = platforms.linux;
   };
 }
+

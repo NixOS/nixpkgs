@@ -7,3 +7,4 @@ fn main() {
     let roll: u8 = rng.gen_range(0..1);
     assert_eq!(roll, 0);
 }
+

@@ -62,3 +62,4 @@ stdenv.mkDerivation rec {
     platforms = wineWow64Packages.stable.meta.platforms;
   };
 }
+

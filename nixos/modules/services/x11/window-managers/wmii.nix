@@ -37,3 +37,4 @@ in
     environment.systemPackages = [ wmii ];
   };
 }
+

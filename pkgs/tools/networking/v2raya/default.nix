@@ -96,3 +96,4 @@ buildGoModule {
     maintainers = with maintainers; [ ChaosAttractor ];
   };
 }
+

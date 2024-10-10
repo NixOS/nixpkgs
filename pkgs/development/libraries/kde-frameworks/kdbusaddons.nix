@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ qttools qtx11extras ];
   propagatedBuildInputs = [ qtbase ];
 }
+

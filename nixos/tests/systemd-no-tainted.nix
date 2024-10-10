@@ -12,3 +12,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert "unmerged-usr" not in output
   '';
 })
+

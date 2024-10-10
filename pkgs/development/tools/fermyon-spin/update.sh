@@ -29,3 +29,4 @@ else
     print_hash "macos" "aarch64" "$VER"
 fi
 
+

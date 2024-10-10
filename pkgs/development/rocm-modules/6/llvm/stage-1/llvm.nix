@@ -8,3 +8,4 @@ callPackage ../base.nix {
   requiredSystemFeatures = [ "big-parallel" ];
   isBroken = stdenv.hostPlatform.isAarch64; # https://github.com/ROCm/ROCm/issues/1831#issuecomment-1278205344
 }
+

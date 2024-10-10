@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/BLAKE3-team/BLAKE3/releases/tag/${version}";
   };
 }
+

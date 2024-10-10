@@ -173,3 +173,4 @@ in stdenv.mkDerivation (finalAttrs: {
     broken = isBroken || versionAtLeast finalAttrs.version "6.0.0";
   };
 })
+

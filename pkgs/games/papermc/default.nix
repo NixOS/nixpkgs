@@ -15,3 +15,4 @@ in
 lib.recurseIntoAttrs (packages // {
   papermc = builtins.getAttr "papermc-${escapeVersion latestVersion}" packages;
 })
+

@@ -241,3 +241,4 @@ if coqAtLeast "8.17" then self.overrideAttrs(_: {
     runHook postInstall
   '';
 }) else self
+

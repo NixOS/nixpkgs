@@ -14,3 +14,4 @@ runCommand "${pname}-${version}"
   mkdir -p $out/bin
   makeWrapper ${tubekit-unwrapped}/bin/tubectl $out/bin/tubectl --set-default TUBEKIT_KUBECTL ${kubectl}/bin/kubectl
 ''
+

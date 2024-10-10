@@ -55,3 +55,4 @@ stdenv.mkDerivation {
     mainProgram = "midimonster";
   };
 }
+

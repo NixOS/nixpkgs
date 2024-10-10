@@ -13,3 +13,4 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
   propagatedUserEnvPkgs = lib.optionals stdenv.hostPlatform.isLinux [ media-player-info ];
 }
+

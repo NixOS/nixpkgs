@@ -32,3 +32,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "zsh-history-to-fish";
   };
 }
+

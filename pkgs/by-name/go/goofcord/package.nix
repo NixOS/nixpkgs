@@ -123,3 +123,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "goofcord";
   };
 })
+

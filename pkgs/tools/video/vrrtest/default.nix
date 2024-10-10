@@ -44,3 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (love.meta) platforms;
   };
 })
+

@@ -120,3 +120,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           machine.fail("nixos-rebuild boot -c foo")
     '';
 })
+

@@ -10,3 +10,4 @@ fetchcvs {
   tag = "netbsd-${lib.replaceStrings [ "." ] [ "-" ] version}-RELEASE";
   hash = "sha256-+onT/ajWayaKALucaZBqoiEkvBBI400Fs2OCtMf/bYU=";
 }
+

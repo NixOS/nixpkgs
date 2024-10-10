@@ -45,3 +45,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 }
+

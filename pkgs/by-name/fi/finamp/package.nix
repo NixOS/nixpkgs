@@ -69,3 +69,4 @@ flutter324.buildFlutterApplication {
     platforms = lib.platforms.linux;
   };
 }
+

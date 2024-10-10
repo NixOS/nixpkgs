@@ -28,3 +28,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.all;
   };
 }
+

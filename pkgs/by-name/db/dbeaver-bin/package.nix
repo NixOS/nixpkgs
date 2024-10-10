@@ -126,3 +126,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "dbeaver";
   };
 })
+

@@ -33,3 +33,4 @@ This section has been moved to [CONTRIBUTING.md](https://github.com/NixOS/nixpkg
 ## Merging pull requests {#reviewing-contributions--merging-pull-requests}
 
 This section has been moved to [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md).
+

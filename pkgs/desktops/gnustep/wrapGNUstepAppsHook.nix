@@ -6,3 +6,4 @@ makeSetupHook
     propagatedBuildInputs = [makeBinaryWrapper];
   }
   ./wrapGNUstepAppsHook.sh
+

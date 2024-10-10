@@ -51,3 +51,4 @@ Here is the minimal configuration with additional configurations:
   security.acme.acceptTerms = true;
 }
 ```
+

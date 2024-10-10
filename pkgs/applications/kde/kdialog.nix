@@ -18,3 +18,4 @@ mkDerivation {
 
   propagatedBuildInputs = [ kinit kguiaddons kwindowsystem ];
 }
+

@@ -45,3 +45,4 @@ python3.pkgs.buildPythonApplication {
     broken = stdenv.hostPlatform.isDarwin; # pyobjc-framework-Cocoa is missing
   };
 }
+

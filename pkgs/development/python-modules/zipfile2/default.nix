@@ -29,3 +29,4 @@ buildPythonPackage rec {
     broken = pythonAtLeast "3.12"; # tests are failing because the signature of ZipInfo._decodeExtra changed
   };
 }
+

@@ -138,3 +138,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nautilus";
   };
 })
+

@@ -116,3 +116,4 @@ symlinkJoin rec {
     platforms = lib.unique (lib.concatMap (drv: drv.meta.platforms) paths);
   };
 }
+

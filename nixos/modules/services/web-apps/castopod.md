@@ -23,3 +23,4 @@ Use the following configuration to start a public instance of Castopod on `casto
 ```
 
 Go to `https://castopod.example.com/cp-install` to create superadmin account after applying the above configuration.
+

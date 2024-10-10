@@ -56,3 +56,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ImageLOL";
   };
 }
+

@@ -28,3 +28,4 @@ fn main() {
     let mut file = std::fs::File::create(out_path.join("logind_manager.rs")).unwrap();
     file.write_all(logind_manager_code.as_bytes()).unwrap();
 }
+

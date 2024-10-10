@@ -65,3 +65,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       client.succeed("xxh server -i /root/.ssh/id_ecdsa +hc \'echo $0\' +i +s zsh +I xxh-shell-zsh+path+${xxh-shell-zsh} | grep -Fq '/root/.xxh/.xxh/shells/xxh-shell-zsh/build/zsh-bin/bin/zsh'")
     '';
   })
+

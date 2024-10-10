@@ -45,3 +45,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     client.succeed("[[ $(cat /public/foo) = bar ]]")
   '';
 })
+

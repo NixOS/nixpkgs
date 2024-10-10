@@ -45,3 +45,4 @@ For example, to create a service for `swaylock`:
 ```
 
 See [upstream documentation](https://sr.ht/~whynothugo/systemd-lock-handler) for more information.
+

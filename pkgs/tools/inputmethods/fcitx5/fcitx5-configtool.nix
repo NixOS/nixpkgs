@@ -86,3 +86,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fcitx5-config-qt";
   };
 }
+

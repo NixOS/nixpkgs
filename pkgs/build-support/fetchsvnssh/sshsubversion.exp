@@ -20,3 +20,4 @@ send -- "$password\r"
 # Send blank line
 send -- "\r"
 expect eof
+

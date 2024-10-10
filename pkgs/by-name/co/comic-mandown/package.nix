@@ -14,3 +14,4 @@ mandownApp // {
     mainProgram = "mandown";
   };
 }
+

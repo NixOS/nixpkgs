@@ -21,3 +21,4 @@ in
     vimrcConfig.packages.myVimPackage.start = with vimPlugins; [ vim-nix ];
   };
 })
+

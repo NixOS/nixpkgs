@@ -47,3 +47,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "rfc";
   };
 }
+

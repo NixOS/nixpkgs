@@ -65,3 +65,4 @@ runCommand "configured-ghcjs-src" {
   patchShebangs .
   ./utils/makePackages.sh copy
 ''
+

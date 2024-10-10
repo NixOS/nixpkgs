@@ -171,3 +171,4 @@ in
 lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
   "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
   cudaPackages
+

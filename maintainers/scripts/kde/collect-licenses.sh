@@ -29,3 +29,4 @@ for k in "${!sources[@]}"; do
 done
 
 jq -s 'add' -S "$TMPDIR"/*.json > pkgs/kde/generated/licenses.json
+

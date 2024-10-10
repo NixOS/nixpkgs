@@ -26,3 +26,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

@@ -104,3 +104,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "srb2kart";
   };
 })
+

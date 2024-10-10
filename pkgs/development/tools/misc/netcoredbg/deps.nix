@@ -120,3 +120,4 @@
   (fetchNuGet { pname = "System.Xml.XPath"; version = "4.3.0"; hash = "sha256-kd1JMqj6obhxzEPRJeYvcUyJqkOs/9A0UOQccC6oYrM="; })
   (fetchNuGet { pname = "System.Xml.XPath.XDocument"; version = "4.3.0"; hash = "sha256-dqk4CWuwocj5qsUAYlS+XAe6GGcY/N/HIPEGe5afrPM="; })
 ]
+

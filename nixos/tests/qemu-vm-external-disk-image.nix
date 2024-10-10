@@ -74,3 +74,4 @@ in
     machine.succeed("[ ! -e /homeless-shelter ]")
   '';
 }
+

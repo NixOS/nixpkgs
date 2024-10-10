@@ -34,3 +34,4 @@ buildGoModule {
     maintainers = with maintainers; [ abbe ];
   };
 }
+

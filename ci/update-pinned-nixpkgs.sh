@@ -15,3 +15,4 @@ rev=${1:-$defaultRev}
 sha256=$(nix-prefetch-url --unpack "$repo/archive/$rev.tar.gz" --name source)
 
 jq -n --arg rev "$rev" --arg sha256 "$sha256" '$ARGS.named' | tee /dev/stderr > $file
+

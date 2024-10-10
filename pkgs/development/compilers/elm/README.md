@@ -22,3 +22,4 @@ Finally, we set ELM_HOME to point to these pre-fetched artifacts so
 that the default of ~/.elm isn't used.
 
 More: https://blog.hercules-ci.com/elm/2019/01/03/elm2nix-0.1/
+

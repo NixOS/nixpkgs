@@ -4,3 +4,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "sweeper";
 }
+

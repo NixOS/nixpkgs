@@ -40,3 +40,4 @@ mkDerivation rec {
     maintainers = [ maintainers.hrdinka ];
   };
 }
+

@@ -136,3 +136,4 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
 })
+

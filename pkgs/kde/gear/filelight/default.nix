@@ -14,3 +14,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "filelight";
 }
+

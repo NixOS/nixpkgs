@@ -37,3 +37,4 @@ echo
 echo "Finished.  Make sure you run the following commands to confirm Spago builds correctly:"
 echo ' - `nix build -L -f ./. spago`'
 echo ' - `sudo nix build -L -f ./. spago.passthru.tests --option sandbox relaxed`'
+

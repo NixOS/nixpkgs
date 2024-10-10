@@ -68,3 +68,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = jre8.meta.platforms;
   };
 }
+

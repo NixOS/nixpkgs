@@ -22,3 +22,4 @@ in
 
   referenceAssembly35Path = "/cygdrive/c/PROGRA~1/REFERE~1/Microsoft/Framework/v3.5";
 }
+

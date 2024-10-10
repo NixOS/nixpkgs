@@ -12,3 +12,4 @@ symlinkJoin {
       --set DEADBEEF_PLUGIN_DIR "$out/lib/deadbeef"
   '';
 }
+

@@ -138,3 +138,4 @@ in stdenv.mkDerivation (finalAttrs: {
     broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
+

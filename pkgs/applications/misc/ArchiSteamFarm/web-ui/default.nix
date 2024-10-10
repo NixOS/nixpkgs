@@ -31,3 +31,4 @@ buildNpmPackage rec {
     inherit (ArchiSteamFarm.meta) maintainers platforms;
   };
 }
+

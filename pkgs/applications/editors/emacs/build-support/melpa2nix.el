@@ -27,3 +27,4 @@
        (setf (oref recipe commit) commit)
        (setf (oref recipe version) version)
        (melpa2nix-build-package-1 recipe)))))
+

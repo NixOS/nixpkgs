@@ -62,3 +62,4 @@ if __name__ == "__main__":
         raise RuntimeError(f"Usage {sys.argv[0]} <manifest>")
     manifest_file = sys.argv[1]
     check_manifest(manifest_file)
+

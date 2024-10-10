@@ -39,3 +39,4 @@ buildGoModule rec {
     maintainers = [ maintainers.austinbutler ];
   };
 }
+

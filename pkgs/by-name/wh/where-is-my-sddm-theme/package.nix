@@ -80,3 +80,4 @@ lib.checkListOfEnum "where-is-my-sddm-theme: variant" validVariants variants
       maintainers = with lib.maintainers; [ name-snrl ];
     };
   })
+

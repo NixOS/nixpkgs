@@ -97,3 +97,4 @@ in lib.genAttrs plugins (plugin: stdenv.mkDerivation (rec {
     maintainers = with maintainers; [ ollieB thoughtpolice ];
   };
 }))
+

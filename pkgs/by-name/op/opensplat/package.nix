@@ -80,3 +80,4 @@ stdenv'.mkDerivation {
     platforms = lib.platforms.linux ++ lib.optionals (!cudaSupport) lib.platforms.darwin;
   };
 }
+

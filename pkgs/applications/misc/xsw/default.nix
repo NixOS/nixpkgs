@@ -34,3 +34,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "xsw";
   };
 }
+

@@ -20,3 +20,4 @@ _pruneLibtoolFiles() {
          -exec grep -q "^old_library=''" {} \; \
          -exec sed -i {} -e "/^dependency_libs='[^']/ c dependency_libs='' #pruned" \;
 }
+

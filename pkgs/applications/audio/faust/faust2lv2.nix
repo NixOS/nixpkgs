@@ -16,3 +16,4 @@ faust.wrapWithBuildEnv {
     sed -i "/QMAKE=/c\ QMAKE="${qtbase.dev}/bin/qmake"" "$out"/bin/faust2lv2;
   '';
 }
+

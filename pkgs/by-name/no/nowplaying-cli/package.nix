@@ -38,3 +38,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "nowplaying-cli";
   };
 })
+

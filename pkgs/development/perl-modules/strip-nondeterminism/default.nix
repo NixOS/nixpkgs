@@ -67,3 +67,4 @@ buildPerlPackage rec {
     maintainers = with maintainers; [ pSub artturin ];
   };
 }
+

@@ -4,3 +4,4 @@ testers.testVersion {
   package = zchunk;
   command = "zck --version";
 }
+

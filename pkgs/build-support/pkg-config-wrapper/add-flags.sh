@@ -10,3 +10,4 @@ for var in "${var_templates_list[@]}"; do
 done
 
 export NIX_PKG_CONFIG_WRAPPER_FLAGS_SET_@suffixSalt@=1
+

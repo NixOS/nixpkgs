@@ -71,3 +71,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
   };
 }
+

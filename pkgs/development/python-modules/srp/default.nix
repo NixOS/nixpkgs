@@ -36,3 +36,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jefflabonte ];
   };
 }
+

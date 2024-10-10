@@ -37,3 +37,4 @@ Use the following configuration to start a public instance of Glance locally:
   };
 }
 ```
+

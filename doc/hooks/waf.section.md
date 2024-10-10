@@ -52,3 +52,4 @@ The following variables commonly used by `stdenv.mkDerivation` are honored by `w
 - `prefixKey`
 - `enableParallelBuilding`
 - `enableParallelInstalling`
+

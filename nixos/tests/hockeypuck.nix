@@ -61,3 +61,4 @@ in {
     machine.succeed("GNUPGHOME=$(mktemp -d) gpg --keyserver hkp://127.0.0.1:11371 --recv-keys " + keyId)
   '';
 })
+

@@ -35,3 +35,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ pinpox matthiasbeyer ];
   };
 }
+

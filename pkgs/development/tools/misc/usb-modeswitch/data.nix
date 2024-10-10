@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     inherit (usb-modeswitch.meta) license maintainers platforms;
   };
 }
+

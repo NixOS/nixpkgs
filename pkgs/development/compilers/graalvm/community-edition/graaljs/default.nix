@@ -15,3 +15,4 @@ graalvmCEPackages.buildGraalvmProduct {
     echo '1 + 1' | $out/bin/js
   '';
 }
+

@@ -115,3 +115,4 @@ buildGo122Module rec {
     mainProgram = "grafana-agent";
   };
 }
+

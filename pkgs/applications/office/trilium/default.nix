@@ -15,3 +15,4 @@ in {
   trilium-server = callPackage ./server.nix { metaCommon = metaCommon; };
 
 }
+

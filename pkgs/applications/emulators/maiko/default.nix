@@ -25,3 +25,4 @@ stdenv.mkDerivation rec {
     inherit (xorg.libX11.meta) platforms;
   };
 }
+

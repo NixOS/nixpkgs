@@ -37,3 +37,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ edwtjo ];
   };
 }
+

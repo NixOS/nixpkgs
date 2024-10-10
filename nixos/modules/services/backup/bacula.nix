@@ -733,3 +733,4 @@ in {
     users.groups.bacula.gid = config.ids.gids.bacula;
   };
 }
+

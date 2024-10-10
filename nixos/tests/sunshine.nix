@@ -68,3 +68,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     moonlight.wait_for_text("hello world")
   '';
 })
+

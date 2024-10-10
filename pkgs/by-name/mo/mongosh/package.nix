@@ -42,3 +42,4 @@ buildNpmPackage {
     mainProgram = "mongosh";
   };
 }
+

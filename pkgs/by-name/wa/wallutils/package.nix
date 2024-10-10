@@ -71,3 +71,4 @@ buildGoModule rec {
     badPlatforms = lib.platforms.darwin;
   };
 }
+

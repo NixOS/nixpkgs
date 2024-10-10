@@ -7,3 +7,4 @@ _addWebOSCMakeFlags() {
 }
 
 preConfigureHooks+=(_addWebOSCMakeFlags)
+

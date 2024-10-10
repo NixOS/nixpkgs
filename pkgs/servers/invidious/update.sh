@@ -69,3 +69,4 @@ else
     (cd "$git_dir" && crystal2nix)
     mv "$git_dir/shards.nix" .
 fi
+

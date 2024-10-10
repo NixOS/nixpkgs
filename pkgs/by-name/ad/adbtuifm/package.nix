@@ -23,3 +23,4 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 }
+

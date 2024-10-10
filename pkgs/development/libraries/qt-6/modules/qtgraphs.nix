@@ -14,3 +14,4 @@ qtModule {
     qtquicktimeline
   ];
 }
+

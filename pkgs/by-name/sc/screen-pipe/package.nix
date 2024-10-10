@@ -86,3 +86,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "screen-pipe";
   };
 }
+

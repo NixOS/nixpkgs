@@ -22,3 +22,4 @@ buildPythonPackage rec {
   buildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ six ];
 }
+

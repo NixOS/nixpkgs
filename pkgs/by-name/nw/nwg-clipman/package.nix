@@ -66,3 +66,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "nwg-clipman";
   };
 }
+

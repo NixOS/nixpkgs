@@ -109,3 +109,4 @@ stdenv.mkDerivation {
       -b ${squash-block-size} -comp ${squash-compression}
   '';
 }
+

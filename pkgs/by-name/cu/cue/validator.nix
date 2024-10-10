@@ -15,3 +15,4 @@ cueSchemaFile: { document ? null }:
       ${cueSchemaFile} \
       ${lib.optionalString (document != null) "-d \"${document}\""}
   ''
+

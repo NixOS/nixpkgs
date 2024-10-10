@@ -31,3 +31,4 @@ kio knotifications kwindowsystem kxmlgui ktextwidgets
     maintainers = [ ];
   };
 }
+

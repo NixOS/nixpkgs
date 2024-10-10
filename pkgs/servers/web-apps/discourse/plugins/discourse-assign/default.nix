@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Discourse Plugin for assigning users to a topic";
   };
 }
+

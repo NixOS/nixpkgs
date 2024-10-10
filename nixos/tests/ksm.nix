@@ -20,3 +20,4 @@ import ./make-test-python.nix ({ lib, ...} :
       machine.wait_until_succeeds("test $(</sys/kernel/mm/ksm/sleep_millisecs) -eq 300")
     '';
 })
+

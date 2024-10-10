@@ -109,3 +109,4 @@ lnsymfrc --no-target-directory "@userAccessFile@" hosts.hfaxd
 # hfaxd reads these file after locking itself up in a chroot
 cprd --no-target-directory "@globalConfigPath@" config
 cprd --target-directory=. "@modemConfigPath@"/*
+

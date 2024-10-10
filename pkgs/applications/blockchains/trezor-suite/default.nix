@@ -60,3 +60,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "trezor-suite";
   };
 }
+

@@ -4,3 +4,4 @@
 SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 
 exec emacs --fg-daemon=updater --quick -l $SCRIPT_DIR/update-melpa.el -f run-updater "$@"
+

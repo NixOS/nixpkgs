@@ -41,3 +41,4 @@ stdenv.mkDerivation {
   meta.platforms = go.meta.platforms;
   meta.mainProgram = "tarsum";
 }
+

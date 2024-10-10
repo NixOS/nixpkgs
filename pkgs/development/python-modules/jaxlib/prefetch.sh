@@ -16,3 +16,4 @@ for py in "39" "310" "311" "312"; do
     prefetch "$py" "x86_64-darwin" "false"
     prefetch "$py" "x86_64-linux" "true"
 done
+

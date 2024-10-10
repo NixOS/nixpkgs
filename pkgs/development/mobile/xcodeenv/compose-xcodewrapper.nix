@@ -50,3 +50,4 @@ stdenv.mkDerivation {
     ln -s "${xcodeBaseDir}/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs"
   '';
 }
+

@@ -34,3 +34,4 @@ buildGoModule rec {
       "https://github.com/esnet/gdg/releases/tag/v${version}";
   };
 }
+

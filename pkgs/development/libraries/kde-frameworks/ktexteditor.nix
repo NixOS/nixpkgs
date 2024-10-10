@@ -21,3 +21,4 @@ mkDerivation ({
       --replace "kpart.desktop" "${kparts}/share/kservicetypes5/kpart.desktop"
   '';
 })
+

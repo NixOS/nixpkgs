@@ -23,3 +23,4 @@ qtModule {
     cp ${wayland-scanner}/share/wayland/wayland.xml src/3rdparty/protocol/wayland/wayland.xml
   '';
 }
+

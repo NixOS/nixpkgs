@@ -187,3 +187,4 @@ makeCmakeFindLibs() {
 # not using setupHook, because it could be a setupHook adding additional
 # include flags to NIX_CFLAGS_COMPILE
 postHooks+=(makeCmakeFindLibs)
+

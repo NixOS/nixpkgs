@@ -46,3 +46,4 @@ NetworkManager to ignore those interfaces like:
 Refer to the option description for the exact syntax and references to
 external documentation.
 :::
+

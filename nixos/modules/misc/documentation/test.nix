@@ -47,3 +47,4 @@ runCommand "documentation-check"
   grep 'The foobar option was added via specialArgs' <"$json" >/dev/null
   touch $out
 ''
+

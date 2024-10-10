@@ -111,3 +111,4 @@ in wrapFirefox firefox-unwrapped {
     pref('browser.download.animateNotifications', false);
   '';
 }
+

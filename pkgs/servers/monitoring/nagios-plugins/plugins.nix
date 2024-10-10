@@ -12,3 +12,4 @@
 
   inherit (callPackage ./labs_consol_de { }) check_mssql_health check_nwc_health check_ups_health;
 }
+

@@ -30,3 +30,4 @@ buildGoModule rec {
     shellPath = "/bin/murex";
   };
 }
+

@@ -174,3 +174,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "notmuch";
   };
 })
+

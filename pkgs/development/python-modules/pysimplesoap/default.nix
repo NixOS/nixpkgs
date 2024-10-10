@@ -72,3 +72,4 @@ buildPythonPackage rec {
     maintainers = [ maintainers.nicoo ];
   };
 }
+

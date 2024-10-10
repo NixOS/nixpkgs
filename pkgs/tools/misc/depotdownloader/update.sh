@@ -14,3 +14,4 @@ fi
 
 update-source-version depotdownloader "$latestVersion"
 $(nix-build -A depotdownloader.fetch-deps --no-out-link)
+

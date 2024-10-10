@@ -150,3 +150,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     alertmanager.log(alertmanager.succeed("systemd-analyze security alertmanager.service | grep -v '✓'"))
   '';
 })
+

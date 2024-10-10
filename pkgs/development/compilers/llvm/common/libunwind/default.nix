@@ -87,3 +87,4 @@ stdenv.mkDerivation (rec {
   // (if (lib.versionAtLeast release_version "15") then { inherit postInstall; } else {})
   // (if prePatch != "" then { inherit prePatch; } else {})
   // (if postPatch != "" then { inherit postPatch; } else {}))
+

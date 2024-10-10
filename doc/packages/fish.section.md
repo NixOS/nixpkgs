@@ -48,3 +48,4 @@ wrapFish {
   confDirs = [ "/path/to/some/fish/init/dir/" ];
 }
 ```
+

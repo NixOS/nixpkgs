@@ -178,3 +178,4 @@ if ($newComponent != 1) {
     print STDERR "argh: ", keys %forward, "\n";
     exit 1;
 }
+

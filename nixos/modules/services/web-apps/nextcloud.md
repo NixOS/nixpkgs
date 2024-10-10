@@ -299,3 +299,4 @@ packages, but mark them as insecure in an expression like this (in
 Ideally we should make sure that it's possible to jump two NixOS versions forward:
 i.e. the warnings and the logic in the module should guard a user to upgrade from a
 Nextcloud on e.g. 19.09 to a Nextcloud on 20.09.
+

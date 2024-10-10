@@ -3,3 +3,4 @@
 {
   disabledModules = [ ./declare-enable.nix ];
 }
+

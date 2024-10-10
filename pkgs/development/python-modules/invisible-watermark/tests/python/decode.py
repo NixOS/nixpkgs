@@ -17,3 +17,4 @@ message = watermark.decode('utf-8')
 
 with open(output_file_path, 'w') as f:
     f.write(message)
+

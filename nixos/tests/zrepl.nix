@@ -67,3 +67,4 @@ import ./make-test-python.nix (
           ), "zrepl snapshot counter for test was not found in Prometheus output"
     '';
   })
+

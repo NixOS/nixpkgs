@@ -4,3 +4,4 @@
 if ($path = getenv('PIWIK_USER_PATH')) {
   define('PIWIK_USER_PATH', $path);
 }
+

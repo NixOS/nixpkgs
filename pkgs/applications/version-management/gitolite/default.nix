@@ -52,3 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];
   };
 }
+

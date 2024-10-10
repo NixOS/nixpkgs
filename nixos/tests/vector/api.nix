@@ -37,3 +37,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     machineapi.wait_until_succeeds("curl -sSf http://localhost:8686/health")
   '';
 })
+

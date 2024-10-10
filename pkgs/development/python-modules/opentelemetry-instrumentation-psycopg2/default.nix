@@ -40,3 +40,4 @@ buildPythonPackage {
     description = "OpenTelemetry Psycopg Instrumentation";
   };
 }
+

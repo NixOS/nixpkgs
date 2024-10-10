@@ -24,3 +24,4 @@ in buildDunePackage rec {
     maintainers = with maintainers; [ Zimmi48 Julow ];
   };
 }
+

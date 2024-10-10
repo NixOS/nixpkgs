@@ -22,3 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ stupremee matthiasbeyer ];
   };
 }
+

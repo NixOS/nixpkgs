@@ -18,3 +18,4 @@ runCommandLocal "test-maid-run" {
     maid clean --rules rules.rb --force
     [ -f test/b.txt ] && [ ! -f test/a.iso ]
   ''
+

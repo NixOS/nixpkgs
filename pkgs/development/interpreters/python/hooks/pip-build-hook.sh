@@ -50,3 +50,4 @@ if [ -z "${shellHook-}" ]; then
     echo "Using pipShellHook"
     shellHook=pipShellHook
 fi
+

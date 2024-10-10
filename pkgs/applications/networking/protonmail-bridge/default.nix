@@ -55,3 +55,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ mrfreezeex daniel-fahey ];
   };
 }
+

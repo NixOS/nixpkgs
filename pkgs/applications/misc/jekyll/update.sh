@@ -12,3 +12,4 @@ for directory in "basic" "full"; do
   rm -rf .bundle vendor
   popd
 done
+

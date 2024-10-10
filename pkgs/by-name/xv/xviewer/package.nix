@@ -73,3 +73,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tu-maurice ] ++ teams.cinnamon.members;
   };
 }
+

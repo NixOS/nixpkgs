@@ -26,3 +26,4 @@ cat > $directory/pin.json << EOF
 EOF
 
 cat $directory/pin.json
+

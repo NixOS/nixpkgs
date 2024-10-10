@@ -22,3 +22,4 @@ stdenv.mkDerivation {
     description = "Enable recursive processing of pth files anywhere in sys.path";
   };
 }
+

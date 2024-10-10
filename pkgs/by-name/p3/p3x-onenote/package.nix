@@ -63,3 +63,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "p3x-onenote";
   };
 }
+

@@ -105,3 +105,4 @@ rec {
   deluged = generic { pname = "deluged"; withGUI = false; };
   deluge = deluge-gtk;
 }
+

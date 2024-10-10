@@ -21,3 +21,4 @@ stdenv.mkDerivation {
 
   makeFlags = [ "installpath=$(out)/share/tegaki/models/zinnia/" ];
 }
+

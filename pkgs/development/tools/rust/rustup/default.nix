@@ -125,3 +125,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.mic92 ];
   };
 }
+

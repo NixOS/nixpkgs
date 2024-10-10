@@ -25,3 +25,4 @@ if [ -z "${installPhase-}" ]; then
     echo "Using condaInstallPhase"
     installPhase=condaInstallPhase
 fi
+

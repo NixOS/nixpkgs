@@ -182,3 +182,4 @@ in
   mariadb = keycloakTest "mariadb";
   mysql = keycloakTest "mysql";
 }
+

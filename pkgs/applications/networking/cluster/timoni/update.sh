@@ -43,3 +43,4 @@ cat <<EOF
     "files": ["$PWD/default.nix.nix"]
 }]
 EOF
+

@@ -26,3 +26,4 @@ import ./make-test-python.nix ({ lib, ... }:
     qemuGuest.succeed('systemctl is-active chronyd.service')
   '';
 })
+

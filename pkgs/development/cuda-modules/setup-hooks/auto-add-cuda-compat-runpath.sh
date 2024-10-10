@@ -25,3 +25,4 @@ addCudaCompatRunpath() {
 }
 
 postFixupHooks+=("autoFixElfFiles addCudaCompatRunpath")
+

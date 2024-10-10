@@ -28,3 +28,4 @@ in
     mv ${domainSanitized}/key.pem $out/${domainSanitized}.key.pem
     mv ${domainSanitized}/cert.pem $out/${domainSanitized}.cert.pem
   ''
+

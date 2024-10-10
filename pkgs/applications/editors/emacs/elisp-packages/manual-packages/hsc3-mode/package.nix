@@ -21,3 +21,4 @@ melpaBuild {
     description = "Emacs mode for hsc3";
   };
 }
+

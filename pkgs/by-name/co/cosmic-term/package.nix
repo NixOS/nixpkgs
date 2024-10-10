@@ -119,3 +119,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-term";
   };
 }
+

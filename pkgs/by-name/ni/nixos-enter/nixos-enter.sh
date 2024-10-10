@@ -110,3 +110,4 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
 unset TMPDIR
 
 exec chroot "$mountPoint" "${command[@]}"
+

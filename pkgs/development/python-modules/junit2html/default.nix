@@ -36,3 +36,4 @@ buildPythonPackage rec {
     mainProgram = "junit2html";
   };
 }
+

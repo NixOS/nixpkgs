@@ -10,3 +10,4 @@ curl https://repology.org/api/v1/repository/nix_unstable/problems \
    | sort | uniq | tee script.sed
 find -name '*.nix' | xargs -P4 -- sed -f script.sed -i
 rm script.sed
+

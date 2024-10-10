@@ -68,3 +68,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     priority = (lomiri-system-settings-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 })
+

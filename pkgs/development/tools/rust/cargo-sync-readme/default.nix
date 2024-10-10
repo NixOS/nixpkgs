@@ -22,3 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
   };
 }
+

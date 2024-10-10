@@ -146,3 +146,4 @@ in {
     carol.wait_until_succeeds("ping -c 1 alice")
   '';
 })
+

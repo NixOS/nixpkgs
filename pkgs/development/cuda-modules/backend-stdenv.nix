@@ -22,3 +22,4 @@ in
 # TODO: Consider testing whether we in fact use the newer libstdc++
 
 lib.extendDerivation assertCondition passthruExtra cudaStdenv
+

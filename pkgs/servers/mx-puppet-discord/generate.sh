@@ -22,3 +22,4 @@ node2nix \
 sed -i 's|<nixpkgs>|../../..|' node-composition.nix
 
 rm -f package.json
+

@@ -24,3 +24,4 @@ mkKdeDerivation rec {
 
   meta.license = with lib.licenses; [ lgpl21Plus ];
 }
+

@@ -49,3 +49,4 @@ in
     machine.succeed("test $(seatd-client-pid) = $(pgrep dwl)")
   '';
 })
+

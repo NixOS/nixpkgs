@@ -42,3 +42,4 @@ $ flatpak install flathub org.freedesktop.Bustle
 $ flatpak run org.freedesktop.Bustle
 ```
 Again, GNOME Software offers graphical interface for these tasks.
+

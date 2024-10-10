@@ -6,3 +6,4 @@ if [ -z "${dontAddExtraLibs-}" ]; then
     getHostRole
     export NIX_LDFLAGS${role_post}+=" -liconv"
 fi
+

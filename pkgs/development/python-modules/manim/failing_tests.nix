@@ -90,3 +90,4 @@
   # It is a wrapper shell script instead.
   "test_manim_checkhealth_subcommand"
 ]
+

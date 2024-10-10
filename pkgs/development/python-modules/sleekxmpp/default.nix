@@ -35,3 +35,4 @@ buildPythonPackage rec {
     homepage = "http://sleekxmpp.com/";
   };
 }
+

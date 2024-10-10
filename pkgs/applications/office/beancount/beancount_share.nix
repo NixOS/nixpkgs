@@ -29,3 +29,4 @@ python3.pkgs.buildPythonApplication rec {
                    # https://hydra.nixos.org/build/262800507/nixlog/1
   };
 }
+

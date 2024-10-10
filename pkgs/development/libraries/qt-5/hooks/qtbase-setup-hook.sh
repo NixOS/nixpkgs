@@ -110,3 +110,4 @@ qtPreHook() {
 appendToVar prePhases qtPreHook
 
 fi
+

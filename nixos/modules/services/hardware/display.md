@@ -128,3 +128,4 @@ And finally this is a complete working example for a 2014 (first) batch of [Asus
   hardware.display.outputs."DP-1".mode = "e";
 }
 ```
+

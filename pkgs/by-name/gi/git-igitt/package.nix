@@ -50,3 +50,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-igitt";
   };
 }
+

@@ -104,3 +104,4 @@ rustPlatform.buildRustPackage rec {
   };
   passthru.updateScript = ./update.sh;
 }
+

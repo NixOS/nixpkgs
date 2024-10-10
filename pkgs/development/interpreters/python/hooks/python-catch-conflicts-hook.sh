@@ -8,3 +8,4 @@ pythonCatchConflictsPhase() {
 if [ -z "${dontUsePythonCatchConflicts-}" ]; then
     appendToVar preDistPhases pythonCatchConflictsPhase
 fi
+

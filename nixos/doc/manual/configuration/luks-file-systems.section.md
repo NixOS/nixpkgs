@@ -123,3 +123,4 @@ location and can be entered wherever a password would be entered.
 ```ShellSession
 # systemd-cryptenroll --recovery-key /dev/sda2
 ```
+

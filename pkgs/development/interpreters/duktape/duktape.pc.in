@@ -8,3 +8,4 @@ Description: An embeddable Javascript engine, with a focus on portability and co
 Version: @version@
 Libs: -L${libdir} -lduktape
 Cflags: -I${includedir}
+

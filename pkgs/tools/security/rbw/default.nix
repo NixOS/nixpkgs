@@ -81,3 +81,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rbw";
   };
 }
+

@@ -63,3 +63,4 @@ writeScript "update-librewolf" ''
   jq ".firefox.sha512 = \"$ffHash\"" $srcJson | sponge $srcJson
   jq ".packageVersion = \"$lwVersion\"" $srcJson | sponge $srcJson
 ''
+

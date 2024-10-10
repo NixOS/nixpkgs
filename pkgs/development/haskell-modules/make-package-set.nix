@@ -650,3 +650,4 @@ in package-set { inherit pkgs lib callPackage; } self // {
       buildTools = drv.buildTools or [ ] ++ [ self.llvmPackages.llvm ];
     });
   }
+

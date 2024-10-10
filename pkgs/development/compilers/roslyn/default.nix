@@ -66,3 +66,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ corngood ];
   };
 }
+

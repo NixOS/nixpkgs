@@ -32,3 +32,4 @@ rofi-unwrapped.overrideAttrs (oldAttrs: rec {
     platforms = with platforms; linux;
   };
 })
+

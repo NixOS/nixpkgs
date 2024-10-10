@@ -24,3 +24,4 @@ echo "Running cabal2nix and outputting to ${dconf2nix_derivation_file}..."
 cabal2nix --revision "$new_version" "https://github.com/gvolpe/dconf2nix.git" > "$dconf2nix_derivation_file"
 
 echo "Finished."
+

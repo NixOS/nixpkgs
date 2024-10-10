@@ -5,3 +5,4 @@ plugins {
 application {
     mainClass = 'Main'
 }
+

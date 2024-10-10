@@ -64,3 +64,4 @@ mkDerivation rec {
     mainProgram = "chiaki";
   };
 }
+

@@ -20,3 +20,4 @@ if test -z "${sgmlHookDone-}"; then
     export SGML_CATALOG_FILES
     addEnvHooks "$targetOffset" addSGMLCatalogs
 fi
+

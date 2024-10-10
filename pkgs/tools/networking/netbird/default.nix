@@ -114,3 +114,4 @@ buildGoModule rec {
     mainProgram = "netbird";
   };
 }
+

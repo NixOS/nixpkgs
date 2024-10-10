@@ -18,3 +18,4 @@ let
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in
 mapAttrs' mkPnpm variants
+

@@ -59,3 +59,4 @@ libsForQt5.mkDerivation rec {
     mainProgram = "qdirstat";
   };
 }
+

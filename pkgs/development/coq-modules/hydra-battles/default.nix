@@ -35,3 +35,4 @@
   let inherit (o) version; in {
     propagatedBuildInputs = [ equations ] ++ lib.optional (lib.versions.isGe "0.6" version || version == "dev") LibHyps;
   })
+

@@ -122,3 +122,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "speech-dispatcher";
   };
 }
+

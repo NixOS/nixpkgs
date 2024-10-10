@@ -33,3 +33,4 @@ buildNimPackage (finalAttrs: {
     mainProgram = "swaycwd";
   };
 })
+

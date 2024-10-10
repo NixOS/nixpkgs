@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     homepage = "http://minisat.se/";
   };
 }
+

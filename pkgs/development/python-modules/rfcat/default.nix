@@ -51,3 +51,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/atlas0fd00m/rfcat/releases/tag/v${version}";
   };
 }
+

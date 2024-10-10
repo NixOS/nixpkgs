@@ -150,3 +150,4 @@ in with lib; {
     environment.systemPackages = [ cfg.package ];
   };
 }
+

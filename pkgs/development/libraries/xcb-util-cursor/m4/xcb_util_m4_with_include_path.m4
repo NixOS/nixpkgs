@@ -22,3 +22,4 @@ AC_CACHE_CHECK([for m4 that supports -I option], [ac_cv_path_M4],
 
 AC_SUBST([M4], [$ac_cv_path_M4])
 ]) # XCB_UTIL_M4_WITH_INCLUDE_PATH
+

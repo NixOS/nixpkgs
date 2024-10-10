@@ -17,3 +17,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtmultimedia ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 }
+

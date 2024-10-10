@@ -117,3 +117,4 @@ if package == null then
 else
   # Called directly from <package>.tests
   makePostgresqlWalReceiverTest package
+

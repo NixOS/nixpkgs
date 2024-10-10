@@ -97,3 +97,4 @@ in {
     mainProgram = "logseq";
   };
 })
+

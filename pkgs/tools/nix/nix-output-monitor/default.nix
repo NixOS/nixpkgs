@@ -29,3 +29,4 @@ in
     (overrideCabal overrides)
     justStaticExecutables
   ]
+

@@ -30,3 +30,4 @@ buildDunePackage rec {
     mainProgram = "merge-fmt";
   };
 }
+

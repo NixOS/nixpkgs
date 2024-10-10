@@ -121,3 +121,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cudatext";
   };
 }
+

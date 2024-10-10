@@ -53,3 +53,4 @@ mkKdeDerivation {
     moveToOutput 'lib/liboxygenstyleconfig5*' $qt5
   '';
 }
+

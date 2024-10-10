@@ -53,3 +53,4 @@ in
       ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
       ln -s '${bin}/bin' "$out/"
     ''
+

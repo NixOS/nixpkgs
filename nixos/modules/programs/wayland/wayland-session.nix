@@ -28,3 +28,4 @@
   # autostart files, so force them to run the service
   services.xserver.desktopManager.runXdgAutostartIfNone = lib.mkDefault true;
 }
+

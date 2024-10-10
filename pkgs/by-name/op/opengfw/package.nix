@@ -35,3 +35,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ eum3l ];
   };
 }
+

@@ -62,3 +62,4 @@ in mkDerivation rec {
   platforms = lib.platforms.linux;
   mainProgram = "deadd-notification-center";
 }
+

@@ -49,3 +49,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pre-commit-hook-ensure-sops";
   };
 }
+

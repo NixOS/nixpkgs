@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert '<span class="ext_name disabled">YouTube Video Feed</span>' in response, "Extension not present in extensions page."
   '';
 })
+
