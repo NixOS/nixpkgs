@@ -6,6 +6,7 @@
 , makeWrapper
 , writeText
 , autoPatchelfHook
+, patchelfUnstable # have to use patchelfUnstable to support --no-clobber-old-sections
 , wrapGAppsHook3
 , callPackage
 
@@ -101,7 +102,7 @@ lib.warnIf (useHardenedMalloc != null)
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "13.5.7";
+  version = "14.0";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -111,7 +112,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-w+W3J07+7/DERDsX0EubHKZfCr9Bc3dKmnS33UA3sdU=";
+      hash = "sha256-RNsTj8/HP10ElIjutYCqp50gN7W7Kz+DA94rkkU/VaI=";
     };
 
     i686-linux = fetchurl {
@@ -121,7 +122,7 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
       ];
-      hash = "sha256-GZ6tBxnX3Y4Ot71phDYkpiWDecr3AltuAVFWSNhX3CY=";
+      hash = "sha256-rHInikR2UvsB8A0cC7gqj09CWajJtR9ZhS3WFrv2z94=";
     };
   };
 
@@ -144,13 +145,22 @@ stdenv.mkDerivation rec {
 
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook copyDesktopItems makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    patchelfUnstable
+    copyDesktopItems
+    makeWrapper
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gtk3
     alsa-lib
     dbus-glib
     libXtst
   ];
+
+  # Firefox uses "relrhack" to manually process relocations from a fixed offset
+  patchelfFlags = [ "--no-clobber-old-sections" ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -178,7 +188,6 @@ stdenv.mkDerivation rec {
 
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
-    interp=$(< $NIX_CC/nix-support/dynamic-linker)
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
@@ -186,10 +195,7 @@ stdenv.mkDerivation rec {
     pushd "$TBB_IN_STORE"
 
     # Set ELF interpreter
-    for exe in firefox.real TorBrowser/Tor/tor ; do
-      echo "Setting ELF interpreter on $exe ..." >&2
-      patchelf --set-interpreter "$interp" "$exe"
-    done
+    autoPatchelf firefox.real TorBrowser/Tor
 
     # firefox is a wrapper that checks for a more recent libstdc++ & appends it to the ld path
     mv firefox.real firefox
@@ -209,16 +215,6 @@ stdenv.mkDerivation rec {
     # Fixup paths to pluggable transports.
     substituteInPlace TorBrowser/Data/Tor/torrc-defaults \
       --replace-fail './TorBrowser' "$TBB_IN_STORE/TorBrowser"
-
-    # Fixup obfs transport.  Work around patchelf failing to set
-    # interpreter for pre-compiled Go binaries by invoking the interpreter
-    # directly.
-    sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s|\(ClientTransportPlugin meek_lite,obfs2,obfs3,obfs4,scramblesuit\) exec|\1 exec $interp|"
-
-    # Similarly fixup snowflake
-    sed -i TorBrowser/Data/Tor/torrc-defaults \
-        -e "s|\(ClientTransportPlugin snowflake\) exec|\1 exec $interp|"
 
     # Prepare for autoconfig.
     #
