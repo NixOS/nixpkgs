@@ -4,7 +4,7 @@
   buildPythonPackage,
   async-timeout,
   uvloop,
-  postgresql,
+  postgresql_16,
   pythonOlder,
   pytest-xdist,
   pytestCheckHook,
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   };
 
   # sandboxing issues on aarch64-darwin, see https://github.com/NixOS/nixpkgs/issues/198495
-  doCheck = postgresql.doCheck;
+  doCheck = postgresql_16.doCheck;
 
   # required for compatibility with Python versions older than 3.11
   # see https://github.com/MagicStack/asyncpg/blob/v0.29.0/asyncpg/_asyncio_compat.py#L13
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     uvloop
-    postgresql
+    postgresql_16
     pytest-xdist
     pytestCheckHook
   ];
