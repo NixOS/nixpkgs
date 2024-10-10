@@ -11028,6 +11028,13 @@
     github = "keenanweaver";
     githubId = 37268985;
   };
+  keksgesicht = {
+    name = "Jan Braun";
+    email = "git@keksgesicht.net";
+    github = "Keksgesicht";
+    githubId = 32649612;
+    keys = [ { fingerprint = "019B EA80 C49D 47D2 A00A  3A96 47D0 99E3 32A6 194F"; } ];
+  };
   keldu = {
     email = "mail@keldu.de";
     github = "keldu";
