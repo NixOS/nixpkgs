@@ -35652,8 +35652,8 @@ with pkgs;
 
   gnome-session-ctl = callPackage ../by-name/gn/gnome-session/ctl.nix { };
 
-  # Using 43 to match Mutter used in Pantheon
-  gnome-settings-daemon43 = callPackage ../by-name/gn/gnome-settings-daemon/43 { };
+  # Using 46 to match Mutter used in Pantheon
+  gnome-settings-daemon46 = callPackage ../by-name/gn/gnome-settings-daemon/46 { };
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
@@ -35684,7 +35684,7 @@ with pkgs;
   mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   # Needed for elementary's gala, wingpanel and greeter until support for higher versions is provided
-  mutter43 = callPackage ../by-name/mu/mutter/43 { };
+  mutter46 = callPackage ../by-name/mu/mutter/46 { };
 
   pantheon = recurseIntoAttrs (callPackage ../desktops/pantheon { });
 
