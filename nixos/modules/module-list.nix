@@ -1487,6 +1487,7 @@
   ./services/web-apps/plantuml-server.nix
   ./services/web-apps/plausible.nix
   ./services/web-apps/powerdns-admin.nix
+  ./services/web-apps/pr-tracker.nix
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
   ./services/web-apps/privatebin.nix
