@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "odin";
-  version = "0-unstable-2024-08-05";
+  version = "dev-2024-10";
 
   src = fetchFromGitHub {
     owner = "odin-lang";
