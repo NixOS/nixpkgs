@@ -1,4 +1,5 @@
 { lib
+, callPackage
 , cmake
 , coin3d
 , doxygen
@@ -60,8 +61,9 @@ let
     scipy
     shiboken2
     ;
+  freecad-utils = callPackage ./freecad-utils.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
   version = "1.0rc4";
 
@@ -215,4 +217,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
-})
+}))
