@@ -1,13 +1,18 @@
-{ lib
-, rustPlatform
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
-, gtk3
-, libsoup
-, webkitgtk
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchNpmDeps,
+
+  npmHooks,
+  nodejs,
+
+  cargo-tauri,
+  pkg-config,
+
+  libsoup,
+  webkitgtk,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,23 +22,14 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "b-inary";
     repo = "desktop-postflop";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-pOPxNHM4mseIuyyWNoU0l+dGvfURH0+9+rmzRIF0I5s=";
   };
 
-  npmDist = buildNpmPackage {
-    name = "${pname}-${version}-dist";
+  npmDeps = fetchNpmDeps {
     inherit src;
-
-    npmDepsHash = "sha256-HWZLicyKL2FHDjZQj9/CRwVi+uc/jHmVNxtlDuclf7s=";
-
-    installPhase = ''
-      mkdir -p $out
-      cp -r dist/* $out
-    '';
+    hash = "sha256-HWZLicyKL2FHDjZQj9/CRwVi+uc/jHmVNxtlDuclf7s=";
   };
-
-  sourceRoot = "${src.name}/src-tauri";
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -43,46 +39,36 @@ rustPlatform.buildRustPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace tauri.conf.json \
-        --replace "../dist" "${npmDist}"
+    cp ${./Cargo.lock} src-tauri/Cargo.lock
   '';
+
+  cargoRoot = "src-tauri";
+  buildAndTestSubdir = cargoRoot;
 
   # postflop-solver requires unstable rust features
   env.RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [
-    copyDesktopItems
+    npmHooks.npmConfigHook
+    nodejs
+
+    cargo-tauri.hook
     pkg-config
   ];
 
-  buildInputs = [
-    gtk3
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libsoup
     webkitgtk
   ];
 
-  postInstall = ''
-    install -Dm644 ${src}/public/favicon.png $out/share/icons/hicolor/128x128/apps/desktop-postflop.png
-  '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "desktop-postflop";
-      exec = "desktop-postflop";
-      icon = "desktop-postflop";
-      desktopName = "Desktop Postflop";
-      comment = meta.description;
-      categories = [ "Utility" ];
-      terminal = false;
-    })
-  ];
-
   meta = {
-    changelog = "https://github.com/b-inary/desktop-postflop/releases/tag/${src.rev}";
+    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/b-inary/desktop-postflop/releases/tag/v${version}";
     description = "Free, open-source GTO solver for Texas hold'em poker";
     homepage = "https://github.com/b-inary/desktop-postflop";
     license = lib.licenses.agpl3Plus;
     mainProgram = "desktop-postflop";
     maintainers = with lib.maintainers; [ tomasajt ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
