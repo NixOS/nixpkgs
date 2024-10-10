@@ -1,8 +1,12 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+{ hostPkgs, ... }: {
   name = "nixos-rebuild-target-host";
 
+  # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
+  #        make it a _small package instead, then remove pkgsReadOnly = false;.
+  node.pkgsReadOnly = false;
+
   nodes = {
-    deployer = { lib, ... }: let
+    deployer = { lib, pkgs, ... }: let
       inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
     in {
       imports = [ ../modules/profiles/installation-device.nix ];
@@ -16,6 +20,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       environment.systemPackages = [ pkgs.passh ];
 
       system.includeBuildDependencies = true;
+      # Just so that dependencies for the target build are pulled in:
+      system.switch.enable = true;
 
       virtualisation = {
         cores = 2;
@@ -55,6 +61,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           system.build = {
             inherit targetConfig;
           };
+          system.switch.enable = true;
 
           networking.hostName = "target";
         }
@@ -69,13 +76,13 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         StrictHostKeyChecking=no
       '';
 
-      targetConfigJSON = pkgs.writeText "target-configuration.json"
+      targetConfigJSON = hostPkgs.writeText "target-configuration.json"
         (builtins.toJSON nodes.target.system.build.targetConfig);
 
-      targetNetworkJSON = pkgs.writeText "target-network.json"
+      targetNetworkJSON = hostPkgs.writeText "target-network.json"
         (builtins.toJSON nodes.target.system.build.networkConfig);
 
-      configFile = hostname: pkgs.writeText "configuration.nix" ''
+      configFile = hostname: hostPkgs.writeText "configuration.nix" ''
         { lib, modulesPath, ... }: {
           imports = [
             (modulesPath + "/virtualisation/qemu-vm.nix")
@@ -138,4 +145,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         deployer.succeed(f"mkdir -p {tmp_dir}")
         deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
     '';
-})
+}
