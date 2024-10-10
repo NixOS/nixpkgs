@@ -739,6 +739,7 @@ in
           lib.nameValuePair "zfs-sync-${pool}" {
             description = "Sync ZFS pool \"${pool}\"";
             wantedBy = [ "shutdown.target" ];
+            before = [ "final.target" ];
             unitConfig = {
               DefaultDependencies = false;
             };
