@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitLab,
+  fetchpatch,
   gitUpdater,
   testers,
   accountsservice,
@@ -61,7 +62,16 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [ ./2000-Support-wrapping-for-Nixpkgs.patch ];
+  patches = [
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/454 merged & in release
+    (fetchpatch {
+      name = "0001-lomiri-system-settings-Fix-security-privacy-translations.patch";
+      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/38994139041246cd7c4423433912699c9e5a22f7.patch";
+      hash = "sha256-6hGhLhEYrO1rdwyb12YIDommM8bXTox5E16n6TiaArc=";
+    })
+
+    ./2000-Support-wrapping-for-Nixpkgs.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
