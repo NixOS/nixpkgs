@@ -1501,7 +1501,6 @@ dont-distribute-packages:
  - gi-cairo-again
  - gi-ges
  - gi-gstpbutils
- - gi-gtk-declarative-app-simple
  - git-config
  - git-fmt
  - git-gpush
@@ -2440,7 +2439,6 @@ dont-distribute-packages:
  - keera-hails-reactivelenses
  - keera-posture
  - keid-resource-gltf
- - keid-ui-dearimgui
  - kerry
  - kevin
  - key-vault
