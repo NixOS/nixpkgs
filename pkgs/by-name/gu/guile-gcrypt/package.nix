@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, guile
-, libgcrypt
-, autoreconfHook
-, pkg-config
-, texinfo
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitea,
+  guile,
+  libgcrypt,
+  pkg-config,
+  stdenv,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,27 +21,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-vbm31EsOJiMeTs2tu5KPXckxPcAQbi3/PGJ5EHCC5VQ=";
   };
 
-  strictDeps = true;
   nativeBuildInputs = [
-    autoreconfHook guile libgcrypt pkg-config texinfo
-  ];
-  buildInputs = [
+    autoreconfHook
     guile
-  ];
-  propagatedBuildInputs = [
     libgcrypt
+    pkg-config
+    texinfo
   ];
+
+  buildInputs = [ guile ];
+
+  propagatedBuildInputs = [ libgcrypt ];
+
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
   doCheck = true;
+
+  strictDeps = true;
 
   # In procedure bytevector-u8-ref: Argument 2 out of range
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
-    description = "Bindings to Libgcrypt for GNU Guile";
+  meta = {
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ethancedwards8 ];
-    platforms = guile.meta.platforms;
+    description = "Bindings to Libgcrypt for GNU Guile";
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ ethancedwards8 ];
+    inherit (guile.meta) platforms;
   };
 }

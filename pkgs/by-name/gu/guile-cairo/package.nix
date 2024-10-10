@@ -1,37 +1,48 @@
-{ lib
-, stdenv
-, fetchurl
-, cairo
-, expat
-, guile
-, guile-lib
-, pkg-config
+{
+  lib,
+  autoreconfHook,
+  cairo,
+  expat,
+  fetchFromSavannah,
+  guile,
+  guile-lib,
+  pkg-config,
+  stdenv,
+  texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-cairo";
   version = "1.11.2";
 
-  src = fetchurl {
-    url = "mirror://savannah/${pname}/${pname}-${version}.tar.gz";
-    hash = "sha256-YjLU3Cxb2dMxE5s7AfQ0PD4fucp4mDYaaZIGcwlBoHs=";
+  src = fetchFromSavannah {
+    repo = "guile-cairo";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fPK5sMHnqmj/2BcY16uy7IUO/aSsWVwnSplZowCEdZA=";
   };
 
   nativeBuildInputs = [
+    autoreconfHook
+    guile
     pkg-config
+    texinfo
   ];
+
   buildInputs = [
     cairo
     expat
     guile
   ];
 
-  enableParallelBuilding = true;
-
-  doCheck = false; # Cannot find unit-test module from guile-lib
   nativeCheckInputs = [ guile-lib ];
 
-  meta = with lib; {
+  doCheck = true; # Cannot find unit-test module from guile-lib
+
+  enableParallelBuilding = true;
+
+  strictDeps = true;
+
+  meta = {
     homepage = "https://www.nongnu.org/guile-cairo/";
     description = "Cairo bindings for GNU Guile";
     longDescription = ''
@@ -43,8 +54,8 @@ stdenv.mkDerivation rec {
       maintained graphics library with all of the benefits of Scheme: memory
       management, exceptions, macros, and a dynamic programming environment.
     '';
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
-    platforms = guile.meta.platforms;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ vyp ];
+    inherit (guile.meta) platforms;
   };
-}
+})

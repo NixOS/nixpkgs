@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,7 +54,10 @@ stdenv.mkDerivation rec {
       for Guile".
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ vyp foo-dogsquared ];
+    maintainers = with maintainers; [
+      vyp
+      foo-dogsquared
+    ];
     platforms = guile.meta.platforms;
   };
 }

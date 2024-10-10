@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,9 +33,7 @@ stdenv.mkDerivation rec {
     "--with-guile-site-ccache-dir=$(out)/${guile.siteCcacheDir}"
   ];
 
-  makeFlags = [
-    "GUILE_AUTO_COMPILE=0"
-  ];
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   meta = with lib; {
     homepage = "https://github.com/mwitmer/guile-xcb";
