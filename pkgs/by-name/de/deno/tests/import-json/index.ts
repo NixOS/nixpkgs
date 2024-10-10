@@ -1,2 +1,2 @@
-import file from "./data.json" assert { type: "json" };
+import file from "./data.json" with { type: "json" };
 console.log(file.msg);
