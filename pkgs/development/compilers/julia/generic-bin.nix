@@ -24,6 +24,11 @@ let
     "REPL"
     # Test flaky
     "ccall"
+  ] ++ lib.optionals (lib.versionAtLeast version "1.11") [
+    # Test flaky
+    # https://github.com/JuliaLang/julia/issues/54280
+    "loading"
+    "cmdlineargs"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test flaky on ofborg
     "FileWatching"
@@ -81,6 +86,17 @@ stdenv.mkDerivation {
     runHook preInstall
     cp -r . $out
     runHook postInstall
+  '';
+
+  # Align libccalllazy* SONAMEs
+  # https://github.com/JuliaLang/julia/pull/55968
+  preFixup = lib.optionalString (version == "1.11.0" && stdenv.hostPlatform.isLinux) ''
+    patchelf "$out/lib/julia/libccalllazyfoo.so" \
+      --set-soname libccalllazyfoo.so \
+      --replace-needed ccalllazybar.so libccalllazybar.so
+    patchelf "$out/lib/julia/libccalllazybar.so" \
+      --set-soname libccalllazybar.so \
+      --replace-needed ccalllazyfoo.so libccalllazyfoo.so
   '';
 
   # Breaks backtraces, etc.
