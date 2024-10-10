@@ -10726,6 +10726,12 @@
     githubId = 1792886;
     name = "Julien Malka";
   };
+  juliosueiras = {
+    email = "juliosueiras@gmail.com";
+    github = "juliosueiras";
+    githubId = 3680302;
+    name = "Julio Tain Sueiras";
+  };
   juliusrickert = {
     email = "nixpkgs@juliusrickert.de";
     github = "juliusrickert";
