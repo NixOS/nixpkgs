@@ -27299,8 +27299,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  lxgw-wenkai = callPackage ../data/fonts/lxgw-wenkai { };
-
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 
   mailcap = callPackage ../data/misc/mailcap { };
