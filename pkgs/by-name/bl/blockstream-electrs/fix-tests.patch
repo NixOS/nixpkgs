@@ -1,0 +1,40 @@
+diff --git a/tests/common.rs b/tests/common.rs
+index 78932aa..c85ebf7 100644
+--- a/tests/common.rs
++++ b/tests/common.rs
+@@ -57,7 +57,7 @@ impl TestRunner {
+         }
+
+         // Setup node
+-        let node = NodeD::with_conf(noded::downloaded_exe_path().unwrap(), &node_conf).unwrap();
++        let node = NodeD::with_conf(noded::exe_path().unwrap(), &node_conf).unwrap();
+
+         #[cfg(not(feature = "liquid"))]
+         let (node_client, params) = (&node.client, &node.params);
+diff --git a/tests/electrum.rs b/tests/electrum.rs
+index d35d91e..80c3306 100644
+--- a/tests/electrum.rs
++++ b/tests/electrum.rs
+@@ -23,8 +23,7 @@ fn test_electrum() -> Result<()> {
+     let server_arg = format!("{}:t", electrum_addr.to_string());
+     electrum_wallet_conf.args = vec!["-v", "--server", &server_arg];
+     electrum_wallet_conf.view_stdout = true;
+-    let electrum_wallet =
+-        ElectrumD::with_conf(electrumd::downloaded_exe_path()?, &electrum_wallet_conf)?;
++    let electrum_wallet = ElectrumD::with_conf(electrumd::exe_path()?, &electrum_wallet_conf)?;
+
+     let notify_wallet = || {
+         electrum_server.notify();
+@@ -126,7 +125,11 @@ fn test_electrum() -> Result<()> {
+         )?]),
+     )?;
+     notify_wallet();
+-    assert_balance(0.3, -0.161);
++
++    // As of electrum 4.3.0, only incoming transactions are considered part
++    // of the unconfirmed balance: <https://github.com/spesmilo/electrum/blob/1705e47a88d60064bb7e7f541e8cd03bb9de3358/RELEASE-NOTES#L427-L435>
++    //
++    assert_balance(0.139, 0.0);
+
+     tester.mine()?;
+     notify_wallet();
