@@ -49,6 +49,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/markqvist/Reticulum";
     changelog = "https://github.com/markqvist/Reticulum/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      qbit
+    ];
   };
 }
