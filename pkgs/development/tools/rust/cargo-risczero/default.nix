@@ -9,14 +9,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-risczero";
-  version = "0.17.0";
+  version = "1.1.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-UXCZ4l45zcyn2AnfDW6dNdEnXCWL2waNwDTbermgS6M=";
+    hash = "sha256-mFzQxDCUYpdZKsXHsBBxKDbOLnabDmLcPFs/lLtoiV8=";
   };
 
-  cargoHash = "sha256-KkV+ZQAPegbeZKj3ixDSFQEyKwkKeMYceSc27xGtQms=";
+  cargoHash = "sha256-2OJRyiJD5ZjdoqAGkFEkArsylXZwoS5qOGhiPE1VjMw=";
 
   nativeBuildInputs = [
     pkg-config
