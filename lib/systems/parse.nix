@@ -108,54 +108,54 @@ rec {
   types.cpuType = enum (attrValues cpuTypes);
 
   cpuTypes = let inherit (significantBytes) bigEndian littleEndian; in setTypes types.openCpuType {
-    arm      = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; arch = "armv5t"; };
-    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6-m"; };
-    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6"; };
-    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-a"; };
-    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-r"; };
-    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-m"; };
-    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7"; };
-    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
-    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
-    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-m"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; };
+    arm      = { bits = 32; significantByte = littleEndian; family = "arm"; as64bit = "aarch64"; };
+    armv5tel = { bits = 32; significantByte = littleEndian; family = "arm"; version = "5"; arch = "armv5t"; as64bit = "aarch64"; };
+    armv6m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6-m"; as64bit = "aarch64"; };
+    armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "6"; arch = "armv6"; as64bit = "aarch64"; };
+    armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-a"; as64bit = "aarch64"; };
+    armv7r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-r"; as64bit = "aarch64"; };
+    armv7m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7-m"; as64bit = "aarch64"; };
+    armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "7"; arch = "armv7"; as64bit = "aarch64"; };
+    armv8a   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; as64bit = "aarch64"; };
+    armv8r   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; as64bit = "aarch64"; };
+    armv8m   = { bits = 32; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-m"; as64bit = "aarch64"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; version = "8"; arch = "armv8-a"; as32bit = "arm"; };
     aarch64_be = { bits = 64; significantByte = bigEndian; family = "arm"; version = "8";  arch = "armv8-a"; };
 
-    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i386"; };
-    i486     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i486"; };
-    i586     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i586"; };
-    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; };
-    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; };
+    i386     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i386"; as64bit = "x86_64"; };
+    i486     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i486"; as64bit = "x86_64"; };
+    i586     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i586"; as64bit = "x86_64"; };
+    i686     = { bits = 32; significantByte = littleEndian; family = "x86"; arch = "i686"; as64bit = "x86_64"; };
+    x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; arch = "x86-64"; as32bit = "i686"; };
 
     microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
     microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
 
-    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
-    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
-    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
-    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; as64bit = "mips64"; };
+    mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; as64bit = "mips64el"; };
+    mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; as32bit = "mips"; };
+    mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; as32bit = "mipsel"; };
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
     m68k     = { bits = 32; significantByte = bigEndian; family = "m68k"; };
 
-    powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; };
-    powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; };
-    powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; };
-    powerpcle = { bits = 32; significantByte = littleEndian; family = "power"; };
+    powerpc  = { bits = 32; significantByte = bigEndian;    family = "power"; as64bit = "powerpc64"; };
+    powerpc64 = { bits = 64; significantByte = bigEndian; family = "power"; as32bit = "powerpc"; };
+    powerpc64le = { bits = 64; significantByte = littleEndian; family = "power"; as32bit = "powerpcle"; };
+    powerpcle = { bits = 32; significantByte = littleEndian; family = "power"; as64bit = "powerpc64le"; };
 
-    riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; };
-    riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; };
+    riscv32  = { bits = 32; significantByte = littleEndian; family = "riscv"; as64bit = "riscv64"; };
+    riscv64  = { bits = 64; significantByte = littleEndian; family = "riscv"; as32bit = "riscv32"; };
 
-    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; };
-    s390x    = { bits = 64; significantByte = bigEndian; family = "s390"; };
+    s390     = { bits = 32; significantByte = bigEndian; family = "s390"; as64bit = "s390x"; };
+    s390x    = { bits = 64; significantByte = bigEndian; family = "s390"; as32bit = "s390"; };
 
-    sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; };
-    sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; };
+    sparc    = { bits = 32; significantByte = bigEndian;    family = "sparc"; as64bit = "sparc64"; };
+    sparc64  = { bits = 64; significantByte = bigEndian;    family = "sparc"; as32bit = "sparc"; };
 
-    wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; };
-    wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; };
+    wasm32   = { bits = 32; significantByte = littleEndian; family = "wasm"; as64bit = "wasm64"; };
+    wasm64   = { bits = 64; significantByte = littleEndian; family = "wasm"; as32bit = "wasm32"; };
 
     alpha    = { bits = 64; significantByte = littleEndian; family = "alpha"; };
 

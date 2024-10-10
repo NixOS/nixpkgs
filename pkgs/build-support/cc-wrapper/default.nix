@@ -115,6 +115,8 @@ let
   # adjusted to be a valid bash identifier. This should be considered an
   # unstable implementation detail, however.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
+  suffixSalt32 = if (lib.systems.as32bit targetPlatform != null) then replaceStrings ["-" "."] ["_" "_"] (lib.systems.as32bit targetPlatform).config else suffixSalt;
+  suffixSalt64 = if (lib.systems.as64bit targetPlatform != null) then replaceStrings ["-" "."] ["_" "_"] (lib.systems.as64bit targetPlatform).config else suffixSalt;
 
   useGccForLibs = useCcForLibs
     && libcxx == null
@@ -278,6 +280,14 @@ let
     then cc.hardeningUnsupportedFlagsByTargetPlatform targetPlatform
     else (cc.hardeningUnsupportedFlags or []);
 
+  ccHardeningUnsupportedFlags32 = if cc ? hardeningUnsupportedFlagsByTargetPlatform
+    then cc.hardeningUnsupportedFlagsByTargetPlatform (if (lib.systems.as32bit targetPlatform != null) then lib.systems.as32bit targetPlatform else targetPlatform)
+    else (cc.hardeningUnsupportedFlags or []);
+
+  ccHardeningUnsupportedFlags64 = if cc ? hardeningUnsupportedFlagsByTargetPlatform
+    then cc.hardeningUnsupportedFlagsByTargetPlatform (if (lib.systems.as64bit targetPlatform != null) then lib.systems.as64bit targetPlatform else targetPlatform)
+    else (cc.hardeningUnsupportedFlags or []);
+
   darwinPlatformForCC = optionalString targetPlatform.isDarwin (
     if (targetPlatform.darwinPlatform == "macos" && isGNU) then "macosx"
     else targetPlatform.darwinPlatform
@@ -314,7 +324,7 @@ stdenvNoCC.mkDerivation {
   inherit isArocc;
 
   passthru = {
-    inherit targetPrefix suffixSalt;
+    inherit targetPrefix suffixSalt suffixSalt32 suffixSalt64;
     # "cc" is the generic name for a C compiler, but there is no one for package
     # providing the linker and related tools. The two we use now are GNU
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
@@ -649,6 +659,8 @@ stdenvNoCC.mkDerivation {
     ##
     + ''
       export hardening_unsupported_flags="${concatStringsSep " " ccHardeningUnsupportedFlags}"
+      export hardening_unsupported_flags32="${concatStringsSep " " ccHardeningUnsupportedFlags32}"
+      export hardening_unsupported_flags64="${concatStringsSep " " ccHardeningUnsupportedFlags64}"
     ''
 
     # For clang, this is handled in add-clang-cc-cflags-before.sh
@@ -702,6 +714,10 @@ stdenvNoCC.mkDerivation {
         substituteInPlace "$flags" --replace $'\n' ' '
       done
 
+      export defaultTarget=${targetPlatform.config}
+      export target32=${if (lib.systems.as32bit targetPlatform != null) then (lib.systems.as32bit targetPlatform).config else targetPlatform.config}
+      export target64=${if (lib.systems.as64bit targetPlatform != null) then (lib.systems.as64bit targetPlatform).config else targetPlatform.config}
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash
@@ -745,7 +761,7 @@ stdenvNoCC.mkDerivation {
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
     cc = optionalString (!nativeTools) cc;
     wrapperName = "CC_WRAPPER";
-    inherit suffixSalt coreutils_bin bintools;
+    inherit suffixSalt suffixSalt32 suffixSalt64 coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
     inherit darwinPlatformForCC darwinMinVersion darwinMinVersionVariable;
     default_hardening_flags_str = builtins.toString defaultHardeningFlags;
