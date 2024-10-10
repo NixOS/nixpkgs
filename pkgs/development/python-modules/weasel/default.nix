@@ -36,11 +36,9 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpathlib
     confection
     packaging
@@ -59,14 +57,16 @@ buildPythonPackage rec {
   disabledTests = [
     # This test requires internet access
     "test_project_assets"
+    "test_project_git_dir_asset"
+    "test_project_git_file_asset"
   ];
 
   meta = with lib; {
     description = "Small and easy workflow system";
-    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    mainProgram = "weasel";
   };
 }
