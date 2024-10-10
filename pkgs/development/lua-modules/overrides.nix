@@ -783,6 +783,21 @@ in
       '';
   });
 
+  sofa = prev.sofa.overrideAttrs (oa: {
+    nativeBuildInputs = oa.nativeBuildInputs ++ [
+      installShellFiles
+    ];
+    postInstall = ''
+      sofa --completion bash > $TMPDIR/sofa.bash
+      sofa --completion zsh > $TMPDIR/_sofa
+      sofa --completion fish > $TMPDIR/sofa.fish
+      installShellCompletion --cmd sofa \
+        --zsh $TMPDIR/_sofa \
+        --bash $TMPDIR/sofa.bash \
+        --fish $TMPDIR/sofa.fish
+    '';
+  });
+
   sqlite = prev.sqlite.overrideAttrs (drv: {
     doCheck = stdenv.hostPlatform.isLinux;
     nativeCheckInputs = [ final.plenary-nvim neovim-unwrapped ];
