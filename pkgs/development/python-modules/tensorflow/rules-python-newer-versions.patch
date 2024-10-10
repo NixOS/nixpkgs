@@ -1,0 +1,56 @@
+diff -Naurd python/pip_install/repositories.bzl python-newer-setuptools/pip_install/repositories.bzl
+--- python/pip_install/repositories.bzl	2024-10-03 09:59:00.750017690 +0000
++++ python-newer-versions/pip_install/repositories.bzl	2024-10-03 11:00:46.256594416 +0000
+@@ -52,8 +52,8 @@
+     ),
+     (
+         "pypi__pip",
+-        "https://files.pythonhosted.org/packages/09/bd/2410905c76ee14c62baf69e3f4aa780226c1bbfc9485731ad018e35b0cb5/pip-22.3.1-py3-none-any.whl",
+-        "908c78e6bc29b676ede1c4d57981d490cb892eb45cd8c214ab6298125119e077",
++        "https://files.pythonhosted.org/packages/08/e3/57d4c24a050aa0bcca46b2920bff40847db79535dc78141eb83581a52eb8/pip-23.1.2-py3-none-any.whl",
++        "3ef6ac33239e4027d9a5598a381b9d30880a1477e50039db2eac6e8a8f6d1b18",
+     ),
+     (
+         "pypi__pip_tools",
+@@ -62,8 +62,8 @@
+     ),
+     (
+         "pypi__setuptools",
+-        "https://files.pythonhosted.org/packages/7c/5b/3d92b9f0f7ca1645cba48c080b54fe7d8b1033a4e5720091d1631c4266db/setuptools-60.10.0-py3-none-any.whl",
+-        "782ef48d58982ddb49920c11a0c5c9c0b02e7d7d1c2ad0aa44e1a1e133051c96",
++        "https://files.pythonhosted.org/packages/c5/94/00e3d21daa5a47c4f13d278ff08c1b3dbd167231e4a1c4b2c99e4616790e/setuptools-66.1.0-py3-none-any.whl",
++        "fc19f9f62120a763300fd78e234b3cbd3417be098f08c156eaaf36420627e57b",
+     ),
+     (
+         "pypi__tomli",
+diff -Naurd python/versions.bzl python-use-nix/versions.bzl
+--- python/versions.bzl	2024-10-09 21:07:44.707544923 +0000
++++ python-newer-versions/versions.bzl	2024-10-09 21:09:02.499715560 +0000
+@@ -243,6 +243,19 @@
+         },
+         "strip_prefix": "python",
+     },
++    "3.12.0": {
++        "url": "20231002/cpython-{python_version}+20231002-{platform}-{build}.tar.gz",
++        "sha256": {
++            "aarch64-apple-darwin": "4734a2be2becb813830112c780c9879ac3aff111a0b0cd590e65ec7465774d02",
++            "aarch64-unknown-linux-gnu": "bccfe67cf5465a3dfb0336f053966e2613a9bc85a6588c2fcf1366ef930c4f88",
++            "ppc64le-unknown-linux-gnu": "b5dae075467ace32c594c7877fe6ebe0837681f814601d5d90ba4c0dfd87a1f2",
++            "s390x-unknown-linux-gnu": "5681621349dd85d9726d1b67c84a9686ce78f72e73a6f9e4cc4119911655759e",
++            "x86_64-apple-darwin": "5a9e88c8aa52b609d556777b52ebde464ae4b4f77e4aac4eb693af57395c9abf",
++            "x86_64-pc-windows-msvc": "facfaa1fbc8653f95057f3c4a0f8aa833dab0e0b316e24ee8686bc761d4b4f8d",
++            "x86_64-unknown-linux-gnu": "e51a5293f214053ddb4645b2c9f84542e2ef86870b8655704367bd4b29d39fe9",
++        },
++        "strip_prefix": "python",
++    },
+ }
+ 
+ # buildifier: disable=unsorted-dict-items
+@@ -251,6 +264,7 @@
+     "3.9": "3.9.16",
+     "3.10": "3.10.9",
+     "3.11": "3.11.1",
++    "3.12": "3.12.0",
+ }
+ 
+ PLATFORMS = {
