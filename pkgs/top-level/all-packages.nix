@@ -25884,6 +25884,10 @@ with pkgs;
 
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
+  ryzen-ppd = callPackage ../os-specific/linux/ryzen-ppd {
+    inherit python3Packages;
+  };
+
   smemstat = callPackage ../os-specific/linux/smemstat { };
 
   tgt = callPackage ../tools/networking/tgt { };
