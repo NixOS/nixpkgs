@@ -35,8 +35,11 @@ python3Packages.buildPythonApplication rec {
     pygobject3
     pycairo
     pyxdg
+    setuptools
     dbus-python
   ];
+
+  PYTHONDIR = "${placeholder "out"}/${python3Packages.python.sitePackages}";
 
   dontWrapGApps = true;
 
