@@ -144,3 +144,4 @@ let
     (lib.mapAttrs framework deps) // (lib.mapAttrs privateFramework private-frameworks);
 in
 bareFrameworks // fixup-frameworks.overrideFrameworks bareFrameworks
+

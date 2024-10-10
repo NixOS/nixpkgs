@@ -53,3 +53,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-codspeed";
   };
 }
+

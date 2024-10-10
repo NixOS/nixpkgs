@@ -34,3 +34,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (emacs.meta) platforms;
   };
 })
+

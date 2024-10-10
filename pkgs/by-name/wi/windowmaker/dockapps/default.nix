@@ -27,3 +27,4 @@ lib.makeScope pkgs.newScope (self: {
 
   wmsystemtray = self.callPackage ./wmsystemtray.nix { };
 })
+

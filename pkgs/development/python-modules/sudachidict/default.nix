@@ -42,3 +42,4 @@ buildPythonPackage rec {
     touch sudachidict_${sudachidict.dict-type}/__init__.py
   '';
 }
+

@@ -81,3 +81,4 @@ stdenv.mkDerivation rec {
     mainProgram = "amberol";
   };
 }
+

@@ -42,3 +42,4 @@ in mkDerivation rec {
     inherit (kconfig.meta) platforms;
   };
 }
+

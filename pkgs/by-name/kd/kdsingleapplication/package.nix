@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/KDAB/KDSingleApplication/releases/tag/v${version}";
   };
 }
+

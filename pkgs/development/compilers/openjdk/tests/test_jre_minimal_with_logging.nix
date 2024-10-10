@@ -19,3 +19,4 @@ in
     ${hello-logging}/bin/hello &>/dev/stdout | grep "Hello, world!"
     touch $out
   ''
+

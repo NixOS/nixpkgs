@@ -266,7 +266,7 @@ in lib.makeExtensible (self: ({
       nix;
 
   # Read ./README.md before bumping a major release
-  stable = addFallbackPathsCheck self.nix_2_18;
+  stable = addFallbackPathsCheck self.nix_2_24;
 } // lib.optionalAttrs config.allowAliases (
   lib.listToAttrs (map (
     minor:
@@ -279,3 +279,4 @@ in lib.makeExtensible (self: ({
     unstable = throw "nixVersions.unstable has been removed. For bleeding edge (Nix master, roughly weekly updated) use nixVersions.git, otherwise use nixVersions.latest.";
   }
 )))
+

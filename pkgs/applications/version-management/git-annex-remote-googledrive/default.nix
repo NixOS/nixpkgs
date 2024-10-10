@@ -47,3 +47,4 @@ buildPythonApplication rec {
     mainProgram = "git-annex-remote-googledrive";
   };
 }
+

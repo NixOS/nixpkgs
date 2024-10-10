@@ -15,3 +15,4 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 }
+

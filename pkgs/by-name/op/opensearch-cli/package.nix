@@ -36,3 +36,4 @@ buildGoModule rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 }
+

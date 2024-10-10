@@ -123,3 +123,4 @@ This means that Bower was looking for a package version which doesn't exist in t
 If `bower.json` has been updated, then run `bower2nix` again.
 
 It could also be a bug in `bower2nix` or `fetchbower`. If possible, try reformulating the version specification in `bower.json`.
+

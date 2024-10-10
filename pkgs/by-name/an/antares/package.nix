@@ -50,3 +50,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ eymeric ];
   };
 }
+

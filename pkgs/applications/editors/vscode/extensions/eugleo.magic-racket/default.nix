@@ -30,3 +30,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     license = lib.licenses.agpl3Only;
   };
 }
+

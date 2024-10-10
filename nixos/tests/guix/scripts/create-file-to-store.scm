@@ -6,3 +6,4 @@
             (display (add-text-to-store store "guix-basic-test-text"
                                         (string-join
                                           (cdr (command-line))))))
+

@@ -30,3 +30,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... } : {
       influxdb.succeed("curl -f http://localhost:8080/containers/")
     '';
 })
+

@@ -15,3 +15,4 @@ findGdkPixbufLoaders() {
 }
 
 addEnvHooks "$targetOffset" findGdkPixbufLoaders
+

@@ -125,3 +125,4 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "electrum-grs";
   };
 }
+

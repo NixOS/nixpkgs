@@ -429,3 +429,4 @@ in
     (lib.mkRenamedOptionModule [ "services" "kubo" "ipnsMountDir" ] [ "services" "kubo" "settings" "Mounts" "IPNS" ])
   ];
 }
+

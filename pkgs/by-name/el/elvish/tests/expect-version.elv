@@ -6,3 +6,4 @@ fn expect {|key expected|
 }
 
 expect version @version@
+

@@ -30,3 +30,4 @@ buildDunePackage rec {
     homepage = "https://github.com/Gbury/dolmen";
   };
 }
+

@@ -66,3 +66,4 @@ mkOpenModelicaDerivation ({
 } // lib.optionalAttrs isCross {
   configureFlags = [ "--with-omc=${nativeOMCompiler}/bin/omc" ];
 })
+

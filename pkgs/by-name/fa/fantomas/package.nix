@@ -15,3 +15,4 @@ buildDotnetGlobalTool {
     mainProgram = "fantomas";
   };
 }
+

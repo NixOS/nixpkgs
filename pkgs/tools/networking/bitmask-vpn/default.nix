@@ -180,3 +180,4 @@ buildGoModule rec {
     platforms = lib.platforms.linux;
   };
 }
+

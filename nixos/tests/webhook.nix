@@ -63,3 +63,4 @@ in
       assert response.content == b"Templates are working!"
   '';
 }
+

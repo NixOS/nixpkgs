@@ -222,3 +222,4 @@ You can rely on applications depending on the library setting the necessary envi
 ### I need to wrap a binary outside `bin` and `libexec` directories. {#ssec-gnome-common-issues-weird-location}
 
 You can manually trigger the wrapping with `wrapGApp` in `preFixup` phase. It takes a path to a program as a first argument; the remaining arguments are passed directly to [`wrapProgram`](#fun-wrapProgram) function.
+

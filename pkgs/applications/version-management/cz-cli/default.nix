@@ -24,3 +24,4 @@ buildNpmPackage rec {
     license = licenses.mit;
   };
 }
+

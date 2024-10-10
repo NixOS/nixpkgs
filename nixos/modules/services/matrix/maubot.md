@@ -107,3 +107,4 @@ framework for Matrix.
     `https://matrix.example.org/_matrix/maubot`. If you want to use the
     `mbc` CLI, it's available using the `maubot` package (`nix-shell -p
     maubot`).
+

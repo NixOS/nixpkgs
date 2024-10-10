@@ -6,3 +6,4 @@ for dir in pkg-config-*; do
     substituteInPlace "$dir/src/lib.rs" \
         --replace '"/usr"' '"'"$NIX_STORE"'/"'
 done
+

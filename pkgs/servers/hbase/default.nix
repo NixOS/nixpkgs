@@ -58,3 +58,4 @@ in
     tests.standalone = nixosTests.hbase3;
   };
 }
+

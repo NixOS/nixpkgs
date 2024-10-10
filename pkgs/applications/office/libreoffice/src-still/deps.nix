@@ -952,3 +952,4 @@
     md5name = "6d54e403592ec7a143791c6526c1baafddf4c0897bb49b1af72b70a0f0c4a3fe-zxing-cpp-2.1.0.tar.gz";
   }
 ]
+

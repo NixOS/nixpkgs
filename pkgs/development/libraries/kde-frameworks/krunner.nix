@@ -16,3 +16,4 @@ let
     propagatedBuildInputs = [ plasma-framework qtbase kwindowsystem ];
   };
 in self
+

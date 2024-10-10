@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Adds the ability for voting on a topic within a specified category in Discourse";
   };
 }
+

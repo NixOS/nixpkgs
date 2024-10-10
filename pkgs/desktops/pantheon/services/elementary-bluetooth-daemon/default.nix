@@ -49,3 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "io.elementary.bluetooth";
   };
 })
+

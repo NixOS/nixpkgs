@@ -39,3 +39,4 @@ buildPythonPackage rec {
     inherit (deltachat-rpc-server.meta) maintainers;
   };
 }
+

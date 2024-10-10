@@ -71,3 +71,4 @@ sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$srcFile")
 
 update-source-version electrum "$version" "$sha256"
 ''
+

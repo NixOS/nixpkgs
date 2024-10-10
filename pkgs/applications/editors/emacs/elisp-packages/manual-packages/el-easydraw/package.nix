@@ -21,8 +21,6 @@ melpaBuild {
 
   files = ''(:defaults "msg")'';
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
   meta = {
@@ -32,3 +30,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ brahyerr ];
   };
 }
+

@@ -27,3 +27,4 @@ in
     boot.kernelPatches = [ kernelPatch ];
   };
 }
+

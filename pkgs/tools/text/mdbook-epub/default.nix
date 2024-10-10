@@ -40,3 +40,4 @@ in rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ yuu matthiasbeyer ];
   };
 }
+

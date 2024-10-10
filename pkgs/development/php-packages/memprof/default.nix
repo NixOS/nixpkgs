@@ -31,3 +31,4 @@ buildPecl {
     maintainers = with lib.maintainers; [ gaelreyrol ];
   };
 }
+

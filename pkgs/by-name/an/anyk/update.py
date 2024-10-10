@@ -27,3 +27,4 @@ print("Writing version.json...")
   "sha256": sha256,
   "version": version,
 }, indent=2) + "\n")
+

@@ -57,3 +57,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.copy_from_vm("/tmp/tinywl.log")
     '';
   })
+

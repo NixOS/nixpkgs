@@ -15,3 +15,4 @@ if [ -n "@gettextNeedsLdflags@" -a -z "${dontAddExtraLibs-}" ]; then
     getHostRole
     export NIX_LDFLAGS${role_post}+=" -lintl"
 fi
+

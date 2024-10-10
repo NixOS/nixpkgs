@@ -212,3 +212,4 @@ in buildNpmPackage rec {
     mainProgram = "bitwarden";
   };
 }
+

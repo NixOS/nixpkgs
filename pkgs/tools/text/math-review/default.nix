@@ -32,3 +32,4 @@ buildNpmPackage rec {
     inherit (nodejs.meta) platforms;
   };
 }
+

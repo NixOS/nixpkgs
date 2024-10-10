@@ -18,3 +18,4 @@ mkDerivation {
     boost karchive kcrash kiconthemes kparts ktexteditor qtsvg qtxmlpatterns
   ];
 }
+

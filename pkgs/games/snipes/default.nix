@@ -45,3 +45,4 @@ in stdenv.mkDerivation {
     broken      = stdenv.hostPlatform.isDarwin; # not supported upstream - https://github.com/Davidebyzero/Snipes/issues/8#issuecomment-433720046
   };
 }
+

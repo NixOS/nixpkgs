@@ -15,3 +15,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       assert "CONFIG_ATH_USER_REGD=y" in machine.succeed("zcat /proc/config.gz")
     '';
 })
+

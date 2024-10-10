@@ -78,3 +78,4 @@ stdenv.mkDerivation rec {
     platforms   = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
+

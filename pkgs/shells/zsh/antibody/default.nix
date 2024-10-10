@@ -33,3 +33,4 @@ buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
+

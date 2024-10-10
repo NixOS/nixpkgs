@@ -39,3 +39,4 @@ in appimageTools.wrapType2 {
     mainProgram = "zulip";
   };
 }
+

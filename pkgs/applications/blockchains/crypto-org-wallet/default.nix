@@ -30,3 +30,4 @@ in appimageTools.wrapType2 rec {
     mainProgram = "chain-desktop-wallet";
   };
 }
+

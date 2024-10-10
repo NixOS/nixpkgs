@@ -172,3 +172,4 @@ to the team without an approval by at least one existing member.
 Various utility scripts, which are mainly useful for nixpkgs maintainers,
 are available under `./scripts/`.  See its [README](./scripts/README.md)
 for further information.
+

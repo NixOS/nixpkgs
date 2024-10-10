@@ -94,3 +94,4 @@ buildRustPackage rec {
     mainProgram = "fedimint-cli";
   };
 }
+

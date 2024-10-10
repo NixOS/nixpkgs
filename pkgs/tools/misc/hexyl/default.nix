@@ -28,3 +28,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "hexyl";
   };
 }
+

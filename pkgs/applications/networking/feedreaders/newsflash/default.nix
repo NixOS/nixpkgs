@@ -107,3 +107,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "io.gitlab.news_flash.NewsFlash";
   };
 })
+

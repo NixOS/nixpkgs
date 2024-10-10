@@ -17,3 +17,4 @@ npmDepsHash=$(prefetch-npm-deps ./package-lock.json)
 sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$npmDepsHash"'"#' -i default.nix
 
 rm package-lock.json
+

@@ -25,3 +25,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "aarch64-esr-decoder";
   };
 }
+

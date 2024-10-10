@@ -613,3 +613,4 @@ class Converter(ABC, Generic[TR]):
     def _render(self, src: str) -> str:
         tokens = self._parse(src)
         return self._renderer.render(tokens)
+

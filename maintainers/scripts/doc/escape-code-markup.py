@@ -95,3 +95,4 @@ if __name__ == '__main__':
         replace_element_by_text(markup, text)
 
     tree.write(sys.argv[2])
+

@@ -46,3 +46,4 @@ in
     # but a minimal pandoc is important enough to patch it manually.
     disallowedReferences = [ haskellPackages.pandoc-types haskellPackages.warp haskellPackages.pandoc ];
   })
+

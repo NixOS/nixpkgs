@@ -16,3 +16,4 @@ mkDerivation {
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [ qtbase kconfigwidgets kxmlgui kcrash kdoctools kitemviews ];
 }
+

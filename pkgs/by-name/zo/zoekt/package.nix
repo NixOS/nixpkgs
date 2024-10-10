@@ -39,3 +39,4 @@ buildGoModule {
     mainProgram = "zoekt";
   };
 }
+

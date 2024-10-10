@@ -54,3 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
   };
 }
+

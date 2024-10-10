@@ -27,11 +27,10 @@ melpaBuild rec {
     mv tmp.el jam-mode.el
   '';
 
-  ignoreCompilationError = false;
-
   meta = {
     description = "Emacs major mode for editing Jam files";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ qyliss ];
   };
 }
+

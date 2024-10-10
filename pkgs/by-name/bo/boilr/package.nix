@@ -73,3 +73,4 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     mainProgram = "boilr";
   };
 }
+

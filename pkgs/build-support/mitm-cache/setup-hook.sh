@@ -19,3 +19,4 @@ mitmCacheConfigureHook() {
 
 # prepend it so any other configure hooks can use the generated root CA
 preConfigureHooks=(mitmCacheConfigureHook "${preConfigureHooks[@]}")
+

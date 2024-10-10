@@ -11,3 +11,4 @@ addSlibPath () {
 }
 
 addEnvHooks "$hostOffset" addSlibPath
+

@@ -1,4 +1,4 @@
-postPhases+=" coverageReportPhase"
+appendToVar postPhases coverageReportPhase
 
 coverageReportPhase() {
     lcov --directory . --capture --output-file app.info
@@ -23,3 +23,4 @@ coverageReportPhase() {
 
     echo "report coverage $out/coverage" >> $out/nix-support/hydra-build-products
 }
+

@@ -145,3 +145,4 @@ if __name__ == "__main__":
         sys.exit(64)
 
     scan_sdk(sys.argv[1])
+

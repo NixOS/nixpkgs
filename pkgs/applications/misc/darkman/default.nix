@@ -57,3 +57,4 @@ buildGoModule rec {
     mainProgram = "darkman";
   };
 }
+

@@ -5,3 +5,4 @@ let
   };
 in
 pkgs.nixpkgs-manual.shell
+

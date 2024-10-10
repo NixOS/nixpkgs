@@ -14,3 +14,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_open_port(1025) # SMTP
   '';
 })
+

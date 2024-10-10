@@ -40,3 +40,4 @@ runCommand "netlify-cli-test" {
   # Success
   touch $out
 ''
+

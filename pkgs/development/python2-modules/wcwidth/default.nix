@@ -22,3 +22,4 @@ wcwidth.overridePythonAttrs(oldAttrs: {
     maintainers = with lib.maintainers; [ bryango ];
   };
 })
+

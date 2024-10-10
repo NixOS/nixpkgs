@@ -26,3 +26,4 @@ find $out -type f -perm -0100 \
     -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
 find $out -type f -perm -0100 \
     -exec patchelf --set-rpath "$rpath" {} \;
+

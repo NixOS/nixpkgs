@@ -28,3 +28,4 @@
     programs.firefox.nativeMessagingHosts.packages = [ pkgs.browserpass ];
   };
 }
+

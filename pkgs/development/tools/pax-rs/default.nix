@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-2gXd1rwj82Ywin4QW3g9cB9R0PkXhE73F9xSJ6EozzQ=";
 }
+

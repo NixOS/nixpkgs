@@ -31,3 +31,4 @@ php.buildComposerWithPlugin {
     platforms = lib.platforms.all;
   };
 }
+

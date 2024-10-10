@@ -86,3 +86,4 @@ in
 
   meta.doc = ./emacs.md;
 }
+

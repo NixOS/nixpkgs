@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     mv $out/go-agent-${version} $out/go-agent
   ";
 }
+

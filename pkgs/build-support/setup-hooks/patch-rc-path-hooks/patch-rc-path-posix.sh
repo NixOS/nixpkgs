@@ -37,3 +37,4 @@ EOF
     cat "$FILE_TO_WORK_ON" > "$FILE_TO_PATCH"
     rm "$FILE_TO_WORK_ON"
 }
+

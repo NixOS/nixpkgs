@@ -126,3 +126,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.elementary.greeter";
   };
 }
+

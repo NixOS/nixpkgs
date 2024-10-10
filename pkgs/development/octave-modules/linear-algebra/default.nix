@@ -20,3 +20,4 @@ buildOctavePackage rec {
     description = "Additional linear algebra code, including matrix functions";
   };
 }
+

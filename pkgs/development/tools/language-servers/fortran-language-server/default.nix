@@ -20,3 +20,4 @@ buildPythonApplication rec {
     maintainers = [ maintainers.sheepforce ];
   };
 }
+

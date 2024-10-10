@@ -42,3 +42,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ lesuisse developer-guy ];
   };
 }
+

@@ -29,3 +29,4 @@ Or if you want to extend your `configuration.nix`:
   ];
 }
 ```
+

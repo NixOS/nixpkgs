@@ -86,3 +86,4 @@ Categories=
 NoDisplay=true
 OnlyShowIn=GNOME;XFCE;Unity;
 AutostartCondition=GNOME3 unless-session gnome
+

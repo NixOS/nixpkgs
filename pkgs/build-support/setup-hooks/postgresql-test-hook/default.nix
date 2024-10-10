@@ -6,3 +6,4 @@ makeSetupHook {
     simple = callPackage ./test.nix { };
   };
 } ./postgresql-test-hook.sh
+

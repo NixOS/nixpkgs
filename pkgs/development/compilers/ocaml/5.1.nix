@@ -4,3 +4,4 @@ import ./generic.nix {
   patch_version = "1";
   sha256 = "sha256-jX6Yv9o76UBgK3o53PkSotL96reR7UDmKgmkzWfd7vE=";
 }
+

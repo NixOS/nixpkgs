@@ -32,3 +32,4 @@ buildGoModule {
     mainProgram = "invidious-router";
   };
 }
+

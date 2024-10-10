@@ -24,3 +24,4 @@ SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="ce81", MODE:="0
 # also 1ea7:7777
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="1ea7", ATTRS{idProduct}=="cd87", MODE:="0660", GROUP="input"
 
+

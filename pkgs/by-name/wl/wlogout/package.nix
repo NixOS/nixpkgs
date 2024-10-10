@@ -80,3 +80,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (wayland.meta) platforms;
   };
 })
+

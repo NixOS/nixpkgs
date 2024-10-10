@@ -73,3 +73,4 @@
   syntax-highlighting = callPackage ./syntax-highlighting { };
   threadweaver = callPackage ./threadweaver { };
 }
+

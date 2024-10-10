@@ -228,3 +228,4 @@ in
     machine.succeed("sudo -u public-inbox public-inbox-compact --all")
   '';
 })
+

@@ -139,3 +139,4 @@ stdenv.mkDerivation rec {
     mainProgram = "hw-probe";
   };
 }
+

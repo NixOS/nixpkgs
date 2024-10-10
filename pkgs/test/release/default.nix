@@ -50,3 +50,4 @@ pkgs.runCommand "all-attrs-eval-under-tryEval" {
   mkdir $out
   echo success > $out/${nix.version}
 ''
+

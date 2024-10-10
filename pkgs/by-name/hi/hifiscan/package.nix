@@ -26,3 +26,4 @@ in
       mainProgram = "hifiscan";
     };
   }
+

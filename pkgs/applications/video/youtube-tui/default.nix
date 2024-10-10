@@ -63,3 +63,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "youtube-tui";
   };
 }
+

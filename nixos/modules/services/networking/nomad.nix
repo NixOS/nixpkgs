@@ -189,3 +189,4 @@ in
     virtualisation.docker.enable = mkIf cfg.enableDocker true;
   };
 }
+

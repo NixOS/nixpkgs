@@ -50,3 +50,4 @@ in mapAttrs (_: lP: testsForLinuxPackages lP) kernels // {
     testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
   };
 }
+

@@ -17,3 +17,4 @@ buildDotnetGlobalTool {
     maintainers = with maintainers; [ anpin mdarocha ];
   };
 }
+

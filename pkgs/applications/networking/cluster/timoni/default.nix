@@ -47,3 +47,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ votava ];
   };
 }
+

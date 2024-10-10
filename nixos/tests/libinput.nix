@@ -36,3 +36,4 @@ import ./make-test-python.nix ({ ... }:
     expect_xserver_option("HorizontalScrolling", "off")
   '';
 })
+

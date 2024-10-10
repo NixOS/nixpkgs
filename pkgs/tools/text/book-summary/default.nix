@@ -22,3 +22,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with teams; iog.members;
   };
 }
+

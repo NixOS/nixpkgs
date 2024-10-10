@@ -65,3 +65,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/uclouvain/openjpeg/blob/v${version}/CHANGELOG.md";
   };
 }
+

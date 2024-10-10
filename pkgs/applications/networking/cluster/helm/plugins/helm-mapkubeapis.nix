@@ -32,3 +32,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ aos ];
   };
 }
+

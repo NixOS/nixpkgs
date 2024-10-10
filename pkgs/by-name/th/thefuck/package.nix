@@ -57,3 +57,4 @@ python311Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ marcusramberg ];
   };
 }
+

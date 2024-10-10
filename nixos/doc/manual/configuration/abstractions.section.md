@@ -76,3 +76,4 @@ but not `{ let commonConfig = ...; in ...; }` since attributes (as opposed to at
 ```
 
 Here, `makeVirtualHost` is a function that takes a single argument `webroot` and returns the configuration for a virtual host. That function is then called for several names to produce the list of virtual host configurations.
+

@@ -48,3 +48,4 @@ Release: https://github.com/fluxcd/flux2/releases/tag/v${LATEST_VERSION}"
 else
     echo "fluxcd is already up-to-date at $OLD_VERSION"
 fi
+

@@ -226,3 +226,4 @@ in
   # uses version info nixpkgs, which requires a full nixpkgs path
   meta.buildDocsInSandbox = false;
 }
+

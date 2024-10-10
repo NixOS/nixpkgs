@@ -16,3 +16,4 @@ pkgs.runCommandNoCC "${feature}-present-structured"
       echo "Do we fail to parse __structuredAttrs=true derivations?" >&2
     fi
   ''
+

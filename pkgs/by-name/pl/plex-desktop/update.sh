@@ -82,3 +82,4 @@ fi
 # Commit changes
 git add "$plex_nix"
 git commit -m "plex-desktop: ${current_version} -> ${upstream_version}"
+

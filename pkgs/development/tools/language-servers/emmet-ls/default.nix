@@ -35,3 +35,4 @@ buildNpmPackage rec {
     mainProgram = "emmet-ls";
   };
 }
+

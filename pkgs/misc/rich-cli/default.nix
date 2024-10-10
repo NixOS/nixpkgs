@@ -62,3 +62,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "rich";
   };
 }
+

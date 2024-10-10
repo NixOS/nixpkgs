@@ -27,3 +27,4 @@ if (( "${NIX_DEBUG:-0}" >= 1 )); then
 fi
 
 exec @prog@ "${extraBefore[@]}" "$@" "${extraAfter[@]}"
+

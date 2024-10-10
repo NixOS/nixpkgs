@@ -65,3 +65,4 @@ import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... }: {
     machine.succeed("PYTHONUNBUFFERED=1 selenium-script")
   '';
 })
+

@@ -34,3 +34,4 @@ lib.pipe raw-pkg [
   (overrideCabal overrides)
   justStaticExecutables
 ]
+

@@ -55,3 +55,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = teams.cinnamon.members;
   };
 }
+

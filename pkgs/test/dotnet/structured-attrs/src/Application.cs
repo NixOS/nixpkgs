@@ -8,3 +8,4 @@ Console.Write(
             .GetCustomAttributes(typeof(AssemblyCopyrightAttribute), true)[0]
     ).Copyright
 );
+

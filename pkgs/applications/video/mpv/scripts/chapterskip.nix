@@ -28,3 +28,4 @@ buildLua {
     maintainers = with lib.maintainers; [ nicoo ];
   };
 }
+

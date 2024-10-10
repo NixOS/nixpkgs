@@ -54,3 +54,4 @@ makeSetupHook {
     inherit (hare.meta) badPlatforms platforms;
   };
 } ./setup-hook.sh
+

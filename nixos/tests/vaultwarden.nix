@@ -214,3 +214,4 @@ builtins.mapAttrs (k: v: makeVaultwardenTest k v) {
     '';
   };
 }
+

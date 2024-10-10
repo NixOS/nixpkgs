@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mozlz4a";
   };
 }
+

@@ -30,3 +30,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ majewsky ] ++ teams.c3d2.members;
   };
 }
+

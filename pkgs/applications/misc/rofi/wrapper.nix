@@ -40,3 +40,4 @@ symlinkJoin {
     priority = (rofi-unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }
+

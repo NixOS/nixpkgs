@@ -46,3 +46,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ bryanasdev000 veehaitch ];
   };
 }
+

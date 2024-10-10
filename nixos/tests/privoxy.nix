@@ -124,3 +124,4 @@ in
               m.succeed("http_proxy=http://localhost:8118 curl -v http://does-not-exist/ 2>&1 | grep 'HTTP/1.1 503'")
     '';
 })
+

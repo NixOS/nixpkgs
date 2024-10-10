@@ -5,6 +5,8 @@
   cmake,
   python3,
   opencc,
+  rapidjson,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +29,19 @@ stdenv.mkDerivation rec {
       opencc # opencc_dict
     ];
 
+  buildInputs = [
+    rapidjson
+  ];
+
+  # TODO use more system dependencies
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_RAPIDJSON" true)
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "ver."; };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = licenses.asl20;
@@ -41,3 +56,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ darwin;
   };
 }
+

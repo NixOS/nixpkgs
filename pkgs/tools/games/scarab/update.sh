@@ -14,3 +14,4 @@ fi
 update-source-version scarab "$new_version"
 
 $(nix-build . -A scarab.fetch-deps --no-out-link)
+

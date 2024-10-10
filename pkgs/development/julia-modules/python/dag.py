@@ -57,3 +57,4 @@ class DAG:
         for node_name, node in self.nodes.items():
             graph_str += f"{node_name} -> {', '.join(node.dependencies)}\n"
         return graph_str
+

@@ -154,3 +154,4 @@ in {
       machine.succeed('ldapsearch -LLL -D "cn=root,dc=example" -w foobar')
   '';
 })
+

@@ -30,3 +30,4 @@ runCommand "signwriting-1.1.4" {
   cp $src1 $out/share/fonts/truetype/SignWriting_2010.ttf
   cp $src2 $out/share/fonts/truetype/SignWriting_2010_Filling.ttf
 ''
+

@@ -44,3 +44,4 @@ telegram-desktop.overrideAttrs (old: rec {
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
+

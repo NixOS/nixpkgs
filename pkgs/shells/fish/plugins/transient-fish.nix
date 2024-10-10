@@ -20,3 +20,4 @@ buildFishPlugin {
     maintainers = with maintainers; [ iynaix ];
   };
 }
+

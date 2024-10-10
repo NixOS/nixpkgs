@@ -25,3 +25,4 @@ import ./make-test-python.nix ({pkgs, lib, ... }: {
     machine.succeed("curl http://localhost:8081 --compressed | grep -o myMPD")
   '';
 })
+

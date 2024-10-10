@@ -16,3 +16,4 @@ case "$choice" in
         zxing read "$choice" "$@"
         ;;
 esac
+

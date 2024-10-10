@@ -34,3 +34,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ bananad3v ];
   };
 }
+

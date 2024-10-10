@@ -53,3 +53,4 @@ bash.runCommand "${pname}-${version}" {
   # Install
   make install -j $NIX_BUILD_CORES PREFIX=$out
 ''
+

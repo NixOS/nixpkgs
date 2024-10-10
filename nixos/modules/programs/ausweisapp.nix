@@ -21,3 +21,4 @@ in
     networking.firewall.allowedUDPPorts = lib.optionals cfg.openFirewall [ 24727 ];
   };
 }
+

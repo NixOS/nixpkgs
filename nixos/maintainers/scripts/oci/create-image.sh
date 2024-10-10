@@ -22,3 +22,4 @@ nix-build '<nixpkgs/nixos>' \
     --argstr system "$system" \
     --option system-features kvm \
     -o oci-image
+

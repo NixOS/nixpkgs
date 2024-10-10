@@ -55,3 +55,4 @@ rec {
   wayland = base.override { wineRelease = "wayland"; waylandSupport = true; };
   waylandFull = full.override { wineRelease = "wayland"; waylandSupport = true; };
 }
+

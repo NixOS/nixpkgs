@@ -57,3 +57,4 @@ lib.makeScope newScope (self: {
   egg2nix = self.callPackage ./egg2nix.nix { };
 
 })
+

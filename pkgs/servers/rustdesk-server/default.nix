@@ -60,3 +60,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ gaelreyrol tjni ];
   };
 }
+

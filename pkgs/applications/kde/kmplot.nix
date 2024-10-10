@@ -16,3 +16,4 @@ mkDerivation {
     kcrash kguiaddons ki18n kparts kwidgetsaddons kdbusaddons
   ];
 }
+

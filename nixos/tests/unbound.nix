@@ -313,3 +313,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           test(local_resolver, ["::1", "127.0.0.1"], zone="something.local.", records=r)
     '';
   })
+

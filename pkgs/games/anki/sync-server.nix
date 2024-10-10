@@ -49,3 +49,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "anki-sync-server";
   };
 }
+

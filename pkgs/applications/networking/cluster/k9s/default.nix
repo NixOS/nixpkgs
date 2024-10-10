@@ -62,3 +62,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ Gonzih markus1189 bryanasdev000 qjoly ];
   };
 }
+

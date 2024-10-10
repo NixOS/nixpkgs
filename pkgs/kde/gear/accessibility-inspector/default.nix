@@ -2,3 +2,4 @@
 mkKdeDerivation {
   pname = "accessibility-inspector";
 }
+

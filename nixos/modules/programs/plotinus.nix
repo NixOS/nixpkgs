@@ -32,3 +32,4 @@ in
     environment.variables.GTK3_MODULES = [ "${pkgs.plotinus}/lib/libplotinus.so" ];
   };
 }
+

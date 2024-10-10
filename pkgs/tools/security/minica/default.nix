@@ -33,3 +33,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ m1cr0man ];
   };
 }
+

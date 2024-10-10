@@ -26,3 +26,4 @@ in makeOverridable( {format ? "setuptools", sha256 ? "", hash ? "", ... } @attrs
   in fetchurl {
     inherit url sha256 hash;
   })
+

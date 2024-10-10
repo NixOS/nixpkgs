@@ -32,3 +32,4 @@ stdenvNoCC.mkDerivation rec {
     downloadPage = "http://culmus.sourceforge.net/download.html";
   };
 }
+

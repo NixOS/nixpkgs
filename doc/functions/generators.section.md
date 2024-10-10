@@ -55,3 +55,4 @@ Nix store paths can be converted to strings by enclosing a derivation attribute 
 :::
 
 Detailed documentation for each generator can be found [here](#sec-functions-library-generators)
+

@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     inherit (SDL2.meta) platforms;
   };
 }
+

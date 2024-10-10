@@ -84,3 +84,4 @@ mkDerivation rec {
     mainProgram = "qstopmotion";
   };
 }
+

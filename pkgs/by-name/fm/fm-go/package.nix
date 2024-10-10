@@ -28,3 +28,4 @@ let
   };
 in
 buildGoModule finalAttrs
+

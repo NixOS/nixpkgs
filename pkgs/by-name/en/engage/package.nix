@@ -49,3 +49,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ CobaltCause ];
   };
 }
+

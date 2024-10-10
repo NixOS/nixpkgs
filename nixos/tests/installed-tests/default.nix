@@ -110,3 +110,4 @@ in
   upower = callInstalledTest ./upower.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }
+

@@ -96,3 +96,4 @@ class QMPSession:
         self.writer.write("\n")
         self.writer.flush()
         return self._wait_for_new_result()
+

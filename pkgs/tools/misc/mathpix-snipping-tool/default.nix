@@ -27,3 +27,4 @@ in appimageTools.wrapType2 {
     mainProgram = "mathpix-snipping-tool";
   };
 }
+

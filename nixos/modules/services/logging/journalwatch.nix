@@ -263,3 +263,4 @@ in {
     maintainers = with lib.maintainers; [ florianjacob ];
   };
 }
+

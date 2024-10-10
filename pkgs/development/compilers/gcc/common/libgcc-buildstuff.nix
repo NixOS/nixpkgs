@@ -51,3 +51,4 @@ in
 + lib.optionalString (stdenv.targetPlatform.isLoongArch64 || stdenv.targetPlatform.isS390 || stdenv.targetPlatform.isAlpha) ''
   touch libgcc/config/${stdenv.targetPlatform.parsed.cpu.family}/crt{i,n}.S
 ''
+

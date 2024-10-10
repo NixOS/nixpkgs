@@ -38,3 +38,4 @@ mkDerivation {
     moveToOutput "share/man" "$dev"
   '';
 }
+

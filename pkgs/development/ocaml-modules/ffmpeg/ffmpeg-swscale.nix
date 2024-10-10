@@ -22,3 +22,4 @@ buildDunePackage {
     description = "Bindings for the ffmpeg swscale library";
   };
 }
+

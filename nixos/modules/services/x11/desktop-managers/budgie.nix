@@ -254,3 +254,4 @@ in {
     programs.zsh.vteIntegration = true;
   };
 }
+

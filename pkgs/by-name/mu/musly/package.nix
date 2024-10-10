@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   eigen,
-  ffmpeg_7,
+  ffmpeg,
   libresample,
   kissfft,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     eigen
-    ffmpeg_7
+    ffmpeg
     libresample
     kissfft
   ];
@@ -70,3 +70,4 @@ stdenv.mkDerivation {
     mainProgram = "musly";
   };
 }
+

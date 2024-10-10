@@ -142,3 +142,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "openobserve";
   };
 }
+

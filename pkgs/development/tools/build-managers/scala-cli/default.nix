@@ -86,3 +86,4 @@ stdenv.mkDerivation {
     command = "scala-cli version --offline";
   };
 }
+

@@ -24,3 +24,4 @@ i3.overrideAttrs (oldAttrs: rec {
     platforms = platforms.unix;
   };
 })
+

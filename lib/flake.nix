@@ -8,3 +8,4 @@
       lib = lib0.extend (import ./flake-version-info.nix self);
     };
 }
+

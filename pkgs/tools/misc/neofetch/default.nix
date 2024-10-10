@@ -61,3 +61,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "neofetch";
   };
 }
+

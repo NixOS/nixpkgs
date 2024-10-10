@@ -19,3 +19,4 @@ buildVscodeMarketplaceExtension {
     license = lib.licenses.bsd3;
   };
 }
+

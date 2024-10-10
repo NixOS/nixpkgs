@@ -73,3 +73,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ zimbatm ] ++ teams.gitlab.members;
   };
 }
+

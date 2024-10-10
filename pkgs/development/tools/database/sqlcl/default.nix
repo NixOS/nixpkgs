@@ -37,3 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ misterio77 ];
   };
 })
+

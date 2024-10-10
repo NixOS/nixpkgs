@@ -54,3 +54,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (jdk.meta) platforms;
   };
 })
+

@@ -26,3 +26,4 @@ godot3.overrideAttrs (self: base: {
     homepage = "https://docs.godotengine.org/en/stable/development/compiling/compiling_for_x11.html#building-export-templates";
   };
 })
+

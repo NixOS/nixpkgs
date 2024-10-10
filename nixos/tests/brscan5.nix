@@ -41,3 +41,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert """device `brother5:net1;dev1' is a Brother a ADS-1200""" in scanimage
   '';
 })
+

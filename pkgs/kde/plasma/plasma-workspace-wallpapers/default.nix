@@ -7,3 +7,4 @@ mkKdeDerivation {
 
   extraBuildInputs = [ extra-cmake-modules ];
 }
+

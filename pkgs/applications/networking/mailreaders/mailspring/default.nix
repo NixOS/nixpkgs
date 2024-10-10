@@ -24,3 +24,4 @@ let
   linux = callPackage ./linux.nix { inherit pname version meta; };
   darwin = callPackage ./darwin.nix { inherit pname version meta; };
 in if stdenv.hostPlatform.isDarwin then darwin else linux
+

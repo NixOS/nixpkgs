@@ -26,3 +26,4 @@ with open(args.secret_file) as sf, open(args.file, 'r+') as f:
     f.seek(0)
     f.write(new_content)
     f.truncate()
+

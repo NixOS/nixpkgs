@@ -65,3 +65,4 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.linux;
   };
 }
+

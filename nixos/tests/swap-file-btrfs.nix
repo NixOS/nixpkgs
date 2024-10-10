@@ -48,3 +48,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("swapon --show | grep /var/swapfile")
   '';
 })
+

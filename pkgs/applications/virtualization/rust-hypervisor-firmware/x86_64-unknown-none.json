@@ -18,3 +18,4 @@
     "ld.lld": ["--script=x86_64-unknown-none.ld"]
   }
 }
+

@@ -37,3 +37,4 @@ SUBSYSTEMS=="usb", ATTRS{idVendor}=="1fc9", ATTRS{idProduct}=="013*", MODE:="066
 # rule.  Changing ModemManager's filter policy from "strict" to "default"
 # may also help.  But if you don't use a modem, completely removing
 # the troublesome ModemManager is the most effective solution.
+

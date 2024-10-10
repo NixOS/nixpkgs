@@ -29,7 +29,7 @@ self: let
 
     super = imported;
 
-    commonOverrides = import ./nongnu-common-overrides.nix pkgs;
+    commonOverrides = import ./nongnu-common-overrides.nix pkgs lib;
 
     overrides = self: super: { };
 
@@ -37,3 +37,4 @@ self: let
   let super' = super // (commonOverrides self super); in super' // (overrides self super'));
 
 in generateNongnu { }
+

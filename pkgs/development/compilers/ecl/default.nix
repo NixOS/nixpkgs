@@ -90,3 +90,4 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/embeddable-common-lisp/ecl/-/raw/${version}/CHANGELOG";
   };
 }
+

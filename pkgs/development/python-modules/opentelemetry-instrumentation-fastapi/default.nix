@@ -48,3 +48,4 @@ buildPythonPackage {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/blob/main/instrumentation/opentelemetry-instrumentation-fastapi";
   };
 }
+

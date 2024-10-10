@@ -41,3 +41,4 @@ sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" default.nix
 
 # Also update the git hash shown in the UI
 sed -i -E -e "s#GIT_VERSION: \&str = \".*\"#GIT_VERSION: \&str = \"$rev\"#" make-build-reproducible.patch
+

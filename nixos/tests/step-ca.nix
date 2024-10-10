@@ -98,3 +98,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
         catester.succeed("curl https://caclientcaddy/ | grep \"Welcome to Caddy!\"")
       '';
   })
+

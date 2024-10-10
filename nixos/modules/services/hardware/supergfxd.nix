@@ -40,3 +40,4 @@ in
 
   meta.maintainers = pkgs.supergfxctl.meta.maintainers;
 }
+

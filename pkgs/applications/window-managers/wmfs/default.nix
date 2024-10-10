@@ -48,3 +48,4 @@ stdenv.mkDerivation {
     mainProgram = "wmfs";
   };
 }
+

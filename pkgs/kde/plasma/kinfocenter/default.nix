@@ -70,3 +70,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "kinfocenter";
 }
+

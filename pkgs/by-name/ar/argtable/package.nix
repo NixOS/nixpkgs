@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
 # TODO: multiple outputs
 # TODO: documentation
 # TODO: build both shared and static libs
+

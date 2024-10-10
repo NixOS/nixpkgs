@@ -27,3 +27,4 @@ buildPythonApplication rec {
     maintainers = [ maintainers.nkpvk ];
   };
 }
+

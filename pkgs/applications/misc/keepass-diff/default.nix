@@ -19,3 +19,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "keepass-diff";
   };
 }
+

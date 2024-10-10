@@ -35,3 +35,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       machine.wait_until_succeeds("cat /mnt/btrbk/local/*/bar | grep foo")
     '';
   })
+

@@ -33,3 +33,4 @@ applyPatches ({
 } // lib.optionalAttrs (appName != null && appVersion != null) {
   name = "nextcloud-app-${appName}-${appVersion}";
 })
+

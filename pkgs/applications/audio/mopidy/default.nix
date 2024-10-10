@@ -49,3 +49,4 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-subidy = callPackage ./subidy.nix { };
 })
+

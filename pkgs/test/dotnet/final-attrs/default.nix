@@ -74,3 +74,4 @@ in
     actual = run "dotnet-final-attrs-test-override-rec-output" (override app-recursive);
   };
 }
+

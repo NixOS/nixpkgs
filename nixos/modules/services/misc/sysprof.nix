@@ -17,3 +17,4 @@
 
   meta.maintainers = pkgs.sysprof.meta.maintainers;
 }
+

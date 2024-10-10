@@ -69,3 +69,4 @@ php.buildComposerProject (finalAttrs: {
     homepage = "https://grocy.info/";
   };
 })
+

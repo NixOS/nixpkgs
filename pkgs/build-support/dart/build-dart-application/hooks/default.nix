@@ -18,3 +18,4 @@
     name = "dart-fixup-hook";
   } ./dart-fixup-hook.sh;
 }
+

@@ -31,3 +31,4 @@ buildDotnetModule rec {
     mainProgram = "cyclonedx";
   };
 }
+

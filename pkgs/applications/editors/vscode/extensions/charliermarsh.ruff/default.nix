@@ -42,3 +42,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.azd325 ];
   };
 }
+

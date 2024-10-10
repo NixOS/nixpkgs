@@ -20,3 +20,4 @@ cabal2nix 'https://github.com/gren-lang/compiler.git' --revision "${latest_versi
 nixfmt "${derivation_file}"
 
 echo 'Finished.'
+

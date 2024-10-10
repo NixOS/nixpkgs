@@ -26,3 +26,4 @@ godot3-mono.overrideAttrs (self: base: {
     homepage = "https://docs.godotengine.org/en/stable/development/compiling/compiling_with_mono.html#export-templates";
   };
 })
+

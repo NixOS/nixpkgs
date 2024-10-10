@@ -31,3 +31,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ dit7ya ];
   };
 }
+

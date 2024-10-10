@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/moretension/duti/";
   };
 }
+

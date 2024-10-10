@@ -35,3 +35,4 @@ Tools for manipulating and evaluating the hOCR format for representing multi-lin
     maintainers = [ ];
   };
 }
+

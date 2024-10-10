@@ -38,3 +38,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ Br1ght0ne ];
   };
 }
+

@@ -19,3 +19,4 @@ import ./make-test-python.nix {
     machine.succeed('test "$(curl -fvvv http://localhost/~foo/bar.txt)" = bar')
   '';
 }
+

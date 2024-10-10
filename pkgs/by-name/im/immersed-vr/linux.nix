@@ -7,3 +7,4 @@
 appimageTools.wrapType2 {
   inherit pname version src meta;
 }
+

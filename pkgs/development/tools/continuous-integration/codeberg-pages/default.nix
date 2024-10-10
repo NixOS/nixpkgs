@@ -34,3 +34,4 @@ buildGoModule rec {
     changelog = "https://codeberg.org/Codeberg/pages-server/releases/tag/v${version}";
   };
 }
+

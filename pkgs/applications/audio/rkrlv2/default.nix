@@ -24,3 +24,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isAarch64; # g++: error: unrecognized command line option '-mfpmath=sse'
   };
 }
+

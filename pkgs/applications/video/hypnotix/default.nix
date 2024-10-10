@@ -95,3 +95,4 @@ stdenv.mkDerivation rec {
     mainProgram = "hypnotix";
   };
 }
+

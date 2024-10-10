@@ -74,3 +74,4 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/tconbeer/harlequin/releases/tag/v${version}";
   };
 }
+

@@ -135,3 +135,4 @@ stdenv.mkDerivation rec {
     mainProgram = "monero-wallet-cli";
   };
 }
+

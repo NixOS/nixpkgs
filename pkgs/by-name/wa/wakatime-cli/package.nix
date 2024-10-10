@@ -55,3 +55,4 @@ buildGoModule rec {
     mainProgram = "wakatime-cli";
   };
 }
+

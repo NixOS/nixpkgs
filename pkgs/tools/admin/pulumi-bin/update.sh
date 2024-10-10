@@ -157,3 +157,4 @@ EOF
   echo "}"
 
 } > "${SCRIPT_DIR}/data.nix"
+

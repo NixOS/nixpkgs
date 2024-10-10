@@ -50,3 +50,4 @@ stdenvNoCC.mkDerivation rec {
     inherit (jre.meta) platforms;
   };
 }
+

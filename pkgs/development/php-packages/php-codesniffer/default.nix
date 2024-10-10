@@ -26,3 +26,4 @@ php.buildComposerProject (finalAttrs: {
     maintainers = with lib.maintainers; [ javaguirre ] ++ lib.teams.php.members;
   };
 })
+

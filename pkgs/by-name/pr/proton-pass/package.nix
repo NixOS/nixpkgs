@@ -54,3 +54,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "proton-pass";
   };
 })
+

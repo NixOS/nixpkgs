@@ -32,3 +32,4 @@ buildDunePackage rec {
     maintainers = with maintainers; [ niols ];
   };
 }
+

@@ -72,3 +72,4 @@ stdenv.mkDerivation {
     mainProgram = "s0ix-selftest-tool";
   };
 }
+

@@ -15,3 +15,4 @@ write_link() {
 }
 
 cached_output write_link "$module_basename" "$module_basename" src.link;
+

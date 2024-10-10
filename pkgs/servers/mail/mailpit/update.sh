@@ -71,3 +71,4 @@ cat <<-EOF
   "files": ["$SOURCE_NIX"]
 }]
 EOF
+

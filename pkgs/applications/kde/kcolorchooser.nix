@@ -16,3 +16,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ ki18n kwidgetsaddons kxmlgui ];
 }
+

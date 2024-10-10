@@ -47,3 +47,4 @@ buildLua (finalAttrs: {
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
 })
+

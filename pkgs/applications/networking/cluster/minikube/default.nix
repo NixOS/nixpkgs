@@ -72,3 +72,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
   };
 }
+

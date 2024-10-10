@@ -55,3 +55,4 @@ appleDerivation {
     install_name_tool -change $PWD/Products/Release/libdtrace.dylib $out/lib/libdtrace.dylib $out/bin/dtrace
   '';
 }
+

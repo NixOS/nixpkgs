@@ -49,3 +49,4 @@ done
 
 echo "  };" >> $hashfile
 echo "done."
+

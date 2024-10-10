@@ -73,3 +73,4 @@ runTest ({ config, ... }: {
         nextcloud.succeed("grep -vE '^HBEGIN:oc_encryption_module' /var/lib/nextcloud-data/data/root/files/test-shared-file")
   '';
 })
+

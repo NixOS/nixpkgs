@@ -77,3 +77,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "file-roller";
   };
 })
+

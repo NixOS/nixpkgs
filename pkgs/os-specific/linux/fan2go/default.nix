@@ -35,3 +35,4 @@ buildGo123Module rec {
     platforms = platforms.linux;
   };
 }
+

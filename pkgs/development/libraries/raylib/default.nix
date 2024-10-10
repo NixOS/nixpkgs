@@ -83,3 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/raysan5/raylib/blob/${finalAttrs.version}/CHANGELOG";
   };
 })
+

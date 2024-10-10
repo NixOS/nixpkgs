@@ -14,3 +14,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfigwidgets kservice ];
 }
+

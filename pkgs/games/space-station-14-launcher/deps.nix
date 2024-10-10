@@ -141,3 +141,4 @@
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; hash = "sha256-4gk2vXDjKFaBh82gTkwg3c/5GRjiH+bvM5elfDSbKTU="; })
   (fetchNuGet { pname = "YamlDotNet"; version = "13.0.2"; hash = "sha256-aCI7NH5iDAOcQJZNdyArt9ksqfrINreCzV7uFg3bNww="; })
 ]
+

@@ -14,3 +14,4 @@ Requires: \
   SDL_net
 Cflags: -isystem${includedir}
 Libs: -L${libdir} -lsparrow3d -lsparrowNet -lsparrowSound
+

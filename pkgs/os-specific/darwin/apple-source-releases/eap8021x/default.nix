@@ -8,3 +8,4 @@ appleDerivation' stdenv {
     cp EAP8021X.fproj/EAPClientProperties.h $out/Library/Frameworks/EAP8021X.framework/Headers
   '';
 }
+

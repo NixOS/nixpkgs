@@ -5,3 +5,4 @@ fetchFromGitHub {
   rev = "@flutter_version@";
   hash = "@hash@";
 }
+

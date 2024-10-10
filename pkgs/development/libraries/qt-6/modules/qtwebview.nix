@@ -12,3 +12,4 @@ qtModule {
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ qtwebengine ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ WebKit ];
 }
+

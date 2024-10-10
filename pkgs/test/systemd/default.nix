@@ -3,3 +3,4 @@
 lib.recurseIntoAttrs {
   nixos = callPackage ./nixos { };
 }
+

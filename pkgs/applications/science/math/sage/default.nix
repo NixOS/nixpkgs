@@ -176,3 +176,4 @@ callPackage ./sage.nix {
   inherit sage-tests sage-with-env sagedoc jupyter-kernel-definition jupyter-kernel-specs;
   inherit withDoc requireSageTests;
 }
+

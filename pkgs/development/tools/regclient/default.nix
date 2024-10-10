@@ -77,3 +77,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ maxbrunet ];
   };
 }
+

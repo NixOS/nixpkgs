@@ -34,3 +34,4 @@ stdenv.mkDerivation rec {
     homepage = "http://www.mathe2.uni-bayreuth.de/stoll/programs/";
   };
 }
+

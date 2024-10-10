@@ -67,3 +67,4 @@ stdenv.mkDerivation {
     mainProgram = "jetbrains-toolbox";
   };
 }
+

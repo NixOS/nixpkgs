@@ -7,3 +7,4 @@ cd source
 crystal run scripts/fetch-player-dependencies.cr -- --minified
 rm -f assets/videojs/.gitignore
 mv assets/videojs "$out"
+

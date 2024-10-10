@@ -11,3 +11,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   buildInputs = [ libiconv icu openssl ];
 }
+

@@ -66,3 +66,4 @@ int main(void) {
   CHECK(cudaFree(xDevice));
   CHECK(cudaFree(yDevice));
 }
+

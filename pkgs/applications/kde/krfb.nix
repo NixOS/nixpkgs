@@ -26,3 +26,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kdnssd ];
 }
+

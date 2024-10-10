@@ -22,3 +22,4 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.msiedlarek ];
   };
 }
+

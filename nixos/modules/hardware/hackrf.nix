@@ -21,3 +21,4 @@ in
     users.groups.plugdev = { };
   };
 }
+

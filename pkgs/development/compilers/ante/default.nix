@@ -57,3 +57,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ ehllie ];
   };
 }
+

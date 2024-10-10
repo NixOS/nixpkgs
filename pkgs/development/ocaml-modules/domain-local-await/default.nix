@@ -42,3 +42,4 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ toastal ];
   };
 }
+

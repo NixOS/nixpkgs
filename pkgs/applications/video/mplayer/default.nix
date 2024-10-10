@@ -1,4 +1,4 @@
-{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg_7
+{ config, lib, stdenv, fetchurl, fetchsvn, pkg-config, freetype, yasm, ffmpeg
 , aalibSupport ? true, aalib
 , fontconfigSupport ? true, fontconfig, freefont_ttf
 , fribidiSupport ? true, fribidi
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkg-config yasm ];
-  buildInputs = [ freetype ffmpeg_7 ]
+  buildInputs = [ freetype ffmpeg ]
     ++ lib.optional aalibSupport aalib
     ++ lib.optional fontconfigSupport fontconfig
     ++ lib.optional fribidiSupport fribidi
@@ -204,3 +204,4 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
   };
 }
+

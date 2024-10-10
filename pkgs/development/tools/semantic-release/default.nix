@@ -40,3 +40,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers.sestrella ];
   };
 }
+

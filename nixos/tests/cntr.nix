@@ -73,3 +73,4 @@ in {
   nixos-container = mkContainersTest;
 } // (lib.foldl' (attrs: backend: attrs // { ${backend} = mkOCITest backend; })
   { } [ "docker" "podman" ])
+

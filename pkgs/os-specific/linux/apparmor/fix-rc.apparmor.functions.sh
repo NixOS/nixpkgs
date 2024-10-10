@@ -30,3 +30,4 @@ aa_log_skipped_msg() {
    [ -n "$1" ] && echo -n $1
    echo ": Skipped."
 }
+

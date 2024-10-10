@@ -20,3 +20,4 @@ bundlerEnv {
     mainProgram = "git-fame";
   };
 }
+

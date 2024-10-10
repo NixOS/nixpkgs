@@ -20,3 +20,4 @@ buildGoModule {
     maintainers = [ ];
   };
 }
+

@@ -46,3 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "unused-features";
   };
 }
+

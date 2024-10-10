@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 sh autogen.sh
   '';
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   meta = with lib; {
     description = "TN3270 client Library";
@@ -54,3 +54,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.vifino ];
   };
 }
+

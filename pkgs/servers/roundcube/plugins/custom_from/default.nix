@@ -9,3 +9,4 @@ roundcubePlugin rec {
     hash = "sha256-QvMYwFWY0BZOkzhDtW7XJ77i5mVkDNAiN4JBdsCuUy0=";
   };
 }
+

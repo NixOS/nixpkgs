@@ -136,3 +136,4 @@ in
         client.fail("sudo -i -u bob git clone gitolite@server:alice-project.git")
   '';
 })
+

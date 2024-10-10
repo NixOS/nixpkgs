@@ -78,3 +78,4 @@ writeTclLibPathHook() {
 
 postFixupHooks+=(writeTclLibPathHook)
 postFixupHooks+=(wrapTclBins)
+

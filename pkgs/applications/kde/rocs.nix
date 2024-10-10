@@ -24,3 +24,4 @@ mkDerivation {
     kxmlgui kcrash kdeclarative karchive ktexteditor kguiaddons
   ];
 }
+

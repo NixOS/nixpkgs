@@ -12,3 +12,4 @@ mkDerivation {
   setupHook = propagateBin; # XDG_CONFIG_DIRS
   meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }
+

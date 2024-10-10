@@ -94,3 +94,4 @@
     startupWMClass = "tm";
   };
 }
+

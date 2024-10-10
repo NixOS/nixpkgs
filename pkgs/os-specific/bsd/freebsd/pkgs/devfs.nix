@@ -8,3 +8,4 @@ mkDerivation {
     sed -i 's/^CONFS=.*$//' $BSDSRCDIR/sbin/devfs/Makefile
   '';
 }
+

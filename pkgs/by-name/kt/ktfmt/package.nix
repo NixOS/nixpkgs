@@ -39,3 +39,4 @@ maven.buildMavenPackage rec {
     inherit (jre_headless.meta) platforms;
   };
 }
+

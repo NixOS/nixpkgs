@@ -23,3 +23,4 @@ buildPythonApplication rec {
     mainProgram = "setconf";
   };
 }
+

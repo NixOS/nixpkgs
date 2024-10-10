@@ -22,3 +22,4 @@ in
     pathInStore.bad5 = "/foo/bar";
   };
 }
+

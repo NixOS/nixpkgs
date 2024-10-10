@@ -158,3 +158,4 @@ in
     echo "COMMIT_HASH = '${final.src.rev}'" > inputremapper/commit_hash.py
   '';
 })
+

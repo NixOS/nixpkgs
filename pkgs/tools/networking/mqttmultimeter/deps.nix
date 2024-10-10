@@ -119,3 +119,4 @@
   (fetchNuGet { pname = "TextMateSharp.Grammars"; version = "1.0.56"; sha256 = "1jzvhwx13dyg7iirk2c1m8h0dca8b0pki4yh0r8r89y4c1ighx98"; })
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; sha256 = "0d99kcs7r9cp6gpyc7z230czkkyx4164x86dhy0mca73f2ykc2g2"; })
 ]
+

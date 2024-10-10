@@ -42,3 +42,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ patka ];
   };
 }
+

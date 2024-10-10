@@ -49,3 +49,4 @@ buildPythonApplication rec {
     maintainers = teams.ororatech.members;
   };
 }
+

@@ -57,3 +57,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mucommander";
   };
 })
+

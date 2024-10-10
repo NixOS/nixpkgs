@@ -8,3 +8,4 @@ options.mkOption {
   example = trivial.importJSON ../../../../cuda/manifests/feature_11.5.2.json;
   type = types.attrsOf Release.type;
 }
+

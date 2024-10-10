@@ -19,3 +19,4 @@ python310Packages.buildPythonPackage rec {
     mainProgram = "pixel2svg.py";
   };
 }
+

@@ -14,3 +14,4 @@ whool-post-version-strategy-hook() {
 }
 
 preBuildHooks+=(whool-post-version-strategy-hook)
+

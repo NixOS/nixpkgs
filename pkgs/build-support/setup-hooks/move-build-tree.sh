@@ -1,12 +1,13 @@
-prePhases+=" moveBuildDir"
+appendToVar prePhases moveBuildDir
 
 moveBuildDir() {
     mkdir -p $out/.build
     cd $out/.build
 }
 
-postPhases+=" removeBuildDir"
+appendToVar postPhases removeBuildDir
 
 removeBuildDir() {
     rm -rf $out/.build
 }
+

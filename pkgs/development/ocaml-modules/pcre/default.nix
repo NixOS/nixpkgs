@@ -24,3 +24,4 @@ buildDunePackage rec {
     maintainers = with maintainers; [ maggesi vbmithr ];
   };
 }
+

@@ -22,3 +22,4 @@ EOF
 }
 
 preFixupPhases+=" pythonOutputDistPhase"
+

@@ -31,3 +31,4 @@ python3Packages.buildPythonApplication rec {
     platforms = with platforms; linux;
   };
 }
+

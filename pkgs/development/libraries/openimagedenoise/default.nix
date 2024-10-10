@@ -71,3 +71,4 @@ stdenv'.mkDerivation (finalAttrs: {
     changelog = "https://github.com/OpenImageDenoise/oidn/blob/v${version}/CHANGELOG.md";
   };
 })
+

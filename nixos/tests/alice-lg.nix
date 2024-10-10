@@ -42,3 +42,4 @@ makeTest {
     host1.succeed("curl http://[::]:7340 | grep 'Alice BGP Looking Glass'")
   '';
 }
+

@@ -299,3 +299,4 @@ let
     ln -s ${desktopItem}/share/applications $out/share/applications
   '';
 in mkAndroidStudioWrapper { inherit androidStudio; }
+

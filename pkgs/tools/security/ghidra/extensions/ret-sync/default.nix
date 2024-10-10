@@ -40,3 +40,4 @@ buildGhidraExtension {
     license = licenses.gpl3Only;
   };
 }
+

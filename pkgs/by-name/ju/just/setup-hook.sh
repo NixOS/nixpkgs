@@ -57,3 +57,4 @@ fi
 if [ -z "${dontUseJustInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=justInstallPhase
 fi
+

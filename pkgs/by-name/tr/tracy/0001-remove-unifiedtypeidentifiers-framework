@@ -11,3 +11,4 @@ index 24765f1a..8baffb68 100644
  	else
  		ifdef TRACY_GTK_FILESELECTOR
  			SRC += ../../../nfd/nfd_gtk.cpp
+

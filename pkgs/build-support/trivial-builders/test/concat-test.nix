@@ -10,3 +10,4 @@ runCommand "test-concatPaths" { } ''
   diff -U3 ${concatText "void" []} ${emptyFile}
   touch $out
 ''
+

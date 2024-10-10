@@ -63,3 +63,4 @@ maven.buildMavenPackage {
     maintainers = with maintainers; [ eigengrau ];
   };
 }
+

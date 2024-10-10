@@ -50,3 +50,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     assert result, "HTTP response from localhost:3000 must not be empty!"
   '';
 })
+

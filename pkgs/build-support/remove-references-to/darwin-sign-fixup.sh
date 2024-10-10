@@ -3,3 +3,4 @@
 source @signingUtils@
 
 fixupHooks+=(signIfRequired)
+

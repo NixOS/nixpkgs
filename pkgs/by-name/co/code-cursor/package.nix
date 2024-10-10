@@ -69,3 +69,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "cursor";
   };
 }
+

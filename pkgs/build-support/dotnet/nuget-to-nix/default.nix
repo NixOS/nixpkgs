@@ -35,3 +35,4 @@ runCommandLocal "nuget-to-nix" {
 } ''
   install -Dm755 $script $out/bin/nuget-to-nix
 ''
+

@@ -17,3 +17,4 @@ for i, item in */*/*.egg {
   export EGG_SHA256
   csi -s $_this_dir/read-egg.scm < $item
 } >> $_this_dir/deps.toml
+

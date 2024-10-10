@@ -57,3 +57,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.flyingcircus.members ++ [ maintainers.izorkin ];
   };
 })
+

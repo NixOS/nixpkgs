@@ -75,3 +75,4 @@ break the command-not-found utility though). If you want to go back to
 the default state, you may just remove the `~/.nix-defexpr` directory
 completely, log out and log in again and it should have been recreated
 with a link to the root channels.
+

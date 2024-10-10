@@ -73,3 +73,4 @@ buildPythonApplication rec {
     mainProgram = "rofi-rbw";
   };
 }
+

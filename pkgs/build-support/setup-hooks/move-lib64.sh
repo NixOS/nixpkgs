@@ -20,3 +20,4 @@ _moveLib64() {
     rmdir $prefix/lib64
     ln -s lib $prefix/lib64
 }
+

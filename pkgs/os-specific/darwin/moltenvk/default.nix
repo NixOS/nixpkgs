@@ -107,10 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   env.NIX_LDFLAGS = toString [
-    "-lMachineIndependent"
-    "-lGenericCodeGen"
     "-lglslang"
-    "-lOSDependent"
     "-lSPIRV"
     "-lSPIRV-Tools"
     "-lSPIRV-Tools-opt"
@@ -204,3 +201,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.darwin;
   };
 })
+

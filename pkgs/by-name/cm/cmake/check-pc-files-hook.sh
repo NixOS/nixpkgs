@@ -16,3 +16,4 @@ cmakePcfileCheckPhase() {
 }
 
 postFixupHooks+=(cmakePcfileCheckPhase)
+

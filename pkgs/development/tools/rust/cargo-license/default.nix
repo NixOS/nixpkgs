@@ -19,3 +19,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ basvandijk figsoda matthiasbeyer ];
   };
 }
+

@@ -11,3 +11,4 @@ if [ ! "${oldVersion}" = "${targetVersion}" ]; then
 else
   echo "wiki-js is already up-to-date"
 fi
+

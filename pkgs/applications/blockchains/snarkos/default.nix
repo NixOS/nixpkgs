@@ -57,3 +57,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "snarkos";
   };
 }
+

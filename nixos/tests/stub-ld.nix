@@ -71,3 +71,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
           ${if32 "machine.succeed('test -L /${libDir32}/${ldsoBasename32}')"}
     '';
 })
+

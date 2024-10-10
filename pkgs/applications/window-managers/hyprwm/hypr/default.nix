@@ -79,3 +79,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "Hypr";
   };
 })
+

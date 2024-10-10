@@ -21,3 +21,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jack_meter";
   };
 }
+

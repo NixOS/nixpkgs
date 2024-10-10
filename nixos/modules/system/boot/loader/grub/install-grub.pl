@@ -803,3 +803,4 @@ if ($requireNewInstall != 0) {
     # Atomically switch to the new state file
     rename $stateFileTmp, $stateFile or die "cannot rename $stateFileTmp to $stateFile: $!\n";
 }
+

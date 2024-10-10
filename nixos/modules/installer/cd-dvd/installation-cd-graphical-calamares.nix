@@ -21,3 +21,4 @@ in
   # Support choosing from any locale
   i18n.supportedLocales = [ "all" ];
 }
+

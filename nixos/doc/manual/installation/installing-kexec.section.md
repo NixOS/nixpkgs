@@ -62,3 +62,4 @@ nix-build '<nixpkgs/nixos>' \
 
 Make sure your `configuration.nix` does still import `netboot-minimal.nix` (or
 `netboot-base.nix`).
+

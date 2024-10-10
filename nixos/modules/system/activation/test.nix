@@ -25,3 +25,4 @@ lib.recurseIntoAttrs {
   test-forbiddenDependencies-fail = testers.testBuildFailure node-forbiddenDependencies-fail.config.system.build.toplevel;
   test-forbiddenDependencies-succeed = node-forbiddenDependencies-succeed.config.system.build.toplevel;
 }
+

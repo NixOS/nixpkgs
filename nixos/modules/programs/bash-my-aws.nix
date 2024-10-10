@@ -21,3 +21,4 @@ in
       programs.bash.interactiveShellInit = initScript;
     };
   }
+

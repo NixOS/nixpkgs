@@ -22,3 +22,4 @@ mkDerivation {
     libkdegames
   ];
 }
+

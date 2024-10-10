@@ -5,3 +5,4 @@
   fetchSubmodules = true;
 }
 # Update with: nix run -f ./nixpkgs/default.nix nix-prefetch-git -c nix-prefetch-git 'https://github.com/OpenModelica/OpenModelica/' 'v1.18.0' --fetch-submodules
+

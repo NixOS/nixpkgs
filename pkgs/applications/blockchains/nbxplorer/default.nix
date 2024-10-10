@@ -34,3 +34,4 @@ buildDotnetModule rec {
     mainProgram = "nbxplorer";
   };
 }
+

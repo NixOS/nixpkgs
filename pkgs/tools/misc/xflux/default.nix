@@ -40,3 +40,4 @@ stdenv.mkDerivation {
     mainProgram = "xflux";
   };
 }
+

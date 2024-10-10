@@ -18,3 +18,4 @@ lib.appendToName "with-packages" (symlinkJoin {
   '';
 
 })
+

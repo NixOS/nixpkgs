@@ -34,3 +34,4 @@ buildGoModule rec {
     platforms = lib.platforms.all;
   };
 }
+

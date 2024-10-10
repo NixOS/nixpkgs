@@ -57,3 +57,4 @@ buildGoModule rec {
     platforms = platforms.unix;
   };
 }
+

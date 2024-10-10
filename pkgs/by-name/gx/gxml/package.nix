@@ -59,3 +59,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ jmarmstrong1207 ] ++ teams.gnome.members;
   };
 })
+

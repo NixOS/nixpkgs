@@ -38,3 +38,4 @@ in
     esphomeUnix.succeed("curl --fail --unix-socket ${unixSocket} http://localhost/")
   '';
 })
+

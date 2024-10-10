@@ -41,3 +41,4 @@ buildDunePackage {
     description = "Distributed database built on the same principles as Git";
   };
 }
+

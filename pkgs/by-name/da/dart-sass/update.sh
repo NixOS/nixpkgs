@@ -43,3 +43,4 @@ fi
 yq . pubspec.lock > "$PACKAGE_DIR/pubspec.lock.json"
 
 rm -rf "$TMPDIR"
+

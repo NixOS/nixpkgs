@@ -94,3 +94,4 @@ stdenv.mkDerivation {
     mainProgram = "olive-editor";
   };
 }
+

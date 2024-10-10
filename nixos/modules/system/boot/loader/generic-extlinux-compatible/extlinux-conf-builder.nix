@@ -6,3 +6,4 @@ pkgs.substituteAll {
   path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   inherit (pkgs) bash;
 }
+

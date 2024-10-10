@@ -158,3 +158,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/supertuxkart/stk-code/blob/${version}/CHANGELOG.md";
   };
 }
+

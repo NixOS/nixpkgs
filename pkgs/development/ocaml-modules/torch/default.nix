@@ -67,3 +67,4 @@ buildDunePackage rec {
     broken = true; # Not compatible with libtorch ≥ 2.3.0
   };
 }
+

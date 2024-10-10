@@ -6,3 +6,4 @@ curl "https://api.github.com/users/dfgraphics/repos" | jq -r '.[].name | ascii_d
     sha256="$(nix-prefetch-git "https://github.com/DFgraphics/${repo}" "${version}" | jq -r ".sha256")"
     echo "{}" | jq ".name=\"${repo}\" | .version=\"${version}\" | .sha256=\"${sha256}\""
 done | jq -s . > themes.json
+

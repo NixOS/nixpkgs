@@ -52,3 +52,4 @@ stdenv.mkDerivation {
       --prefix PATH : "${lib.getBin polkit}/bin:$PATH"
   '';
 }
+

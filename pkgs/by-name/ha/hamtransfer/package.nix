@@ -40,3 +40,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ matthewcroughan sarcasticadmin pkharvey ];
   };
 }
+

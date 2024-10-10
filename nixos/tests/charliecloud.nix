@@ -41,3 +41,4 @@ in {
     host.succeed('su - alice -c "ch-run /var/tmp/hello -- echo Running_From_Container_OK"')
   '';
 })
+

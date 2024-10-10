@@ -163,3 +163,4 @@ import ../make-test-python.nix ({ lib, ...}:
           testclient.succeed("nc -w 2 192.168.2.3 12345 | grep -q TESTVALUE")
     '';
 })
+

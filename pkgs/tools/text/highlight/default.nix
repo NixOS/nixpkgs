@@ -61,3 +61,4 @@ let
 in
   if stdenv.hostPlatform.isDarwin then self
   else perl.pkgs.toPerlModule self
+

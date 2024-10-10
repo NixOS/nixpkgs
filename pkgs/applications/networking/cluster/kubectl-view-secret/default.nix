@@ -28,3 +28,4 @@ buildGoModule rec {
     maintainers = [ maintainers.sagikazarmark ];
   };
 }
+

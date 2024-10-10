@@ -42,3 +42,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "psql2csv";
   };
 }
+

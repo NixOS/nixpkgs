@@ -28,3 +28,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ natsukium ];
   };
 }
+

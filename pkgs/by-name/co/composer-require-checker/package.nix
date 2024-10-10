@@ -25,3 +25,4 @@ php.buildComposerProject (finalAttrs: {
     mainProgram = "composer-require-checker";
   };
 })
+

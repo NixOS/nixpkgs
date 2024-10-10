@@ -36,3 +36,4 @@ npmBuildHook() {
 if [ -z "${dontNpmBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=npmBuildHook
 fi
+

@@ -35,3 +35,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [motiejus apfelkuchen6];
   };
 }
+

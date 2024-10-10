@@ -20,3 +20,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed("watchdogctl test")
   '';
 })
+

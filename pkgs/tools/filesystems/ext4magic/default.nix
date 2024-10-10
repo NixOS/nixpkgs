@@ -39,3 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ext4magic";
   };
 }
+

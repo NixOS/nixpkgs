@@ -90,3 +90,4 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
     '';
   };
 }
+

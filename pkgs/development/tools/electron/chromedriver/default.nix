@@ -12,3 +12,4 @@ lib.mapAttrs' (majorVersion: info:
     "electron-chromedriver_${majorVersion}"
     (mkElectronChromedriver info.version info.hashes)
 ) infoJson
+

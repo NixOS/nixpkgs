@@ -110,3 +110,4 @@ dotnetInstallHook() {
 if [[ -z "${dontDotnetInstall-}" && -z "${installPhase-}" ]]; then
     installPhase=dotnetInstallHook
 fi
+

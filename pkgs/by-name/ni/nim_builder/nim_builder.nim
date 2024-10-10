@@ -177,3 +177,4 @@ when isMainModule:
   of "install": installPhase()
   of "check": checkPhase()
   else: quit("unhandled phase " & phase)
+

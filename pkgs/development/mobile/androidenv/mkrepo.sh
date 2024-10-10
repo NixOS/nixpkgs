@@ -18,3 +18,4 @@ cat ./repo.json | ruby mkrepo.rb \
          | sponge repo.json
 
 popd &>/dev/null
+

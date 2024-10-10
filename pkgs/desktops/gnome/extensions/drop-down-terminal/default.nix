@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zzrough/gs-extensions-drop-down-terminal";
   };
 }
+

@@ -73,3 +73,4 @@ writeText "get-nix-license.rs" ''
       }
   }
 ''
+

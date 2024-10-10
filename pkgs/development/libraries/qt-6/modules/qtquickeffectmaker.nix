@@ -8,3 +8,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtquick3d ];
   meta.mainProgram = "qqem";
 }
+

@@ -32,3 +32,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   meta.maintainers = with pkgs.lib.maintainers; [ ambroisie ];
 })
+

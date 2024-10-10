@@ -34,3 +34,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://www.ggzgamingzone.org/releases/";
   };
 }
+

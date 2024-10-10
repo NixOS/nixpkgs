@@ -6,3 +6,4 @@ gem "jekyll-mentions"
 gem "jekyll-seo-tag"
 gem "jekyll-sitemap"
 gem "jemoji"
+

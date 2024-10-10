@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraPropagatedBuildInputs = [ modemmanager ];
 }
+

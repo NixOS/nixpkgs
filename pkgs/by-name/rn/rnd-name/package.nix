@@ -31,3 +31,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ fd ];
   };
 }
+

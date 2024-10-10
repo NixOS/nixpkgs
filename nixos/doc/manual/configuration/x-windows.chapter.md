@@ -356,3 +356,4 @@ To learn how to write layouts take a look at the XKB [documentation
 ](https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts).
 More example layouts can also be found [here
 ](https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples).
+

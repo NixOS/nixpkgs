@@ -78,3 +78,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ dbohdan fgaz ];
   };
 })
+

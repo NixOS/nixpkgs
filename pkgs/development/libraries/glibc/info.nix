@@ -21,3 +21,4 @@ callPackage ./common.nix {} {
 
   meta.description = "GNU Info manual of the GNU C Library";
 }
+

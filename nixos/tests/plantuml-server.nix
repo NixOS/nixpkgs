@@ -18,3 +18,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       machine.succeed("curl -sSf http://localhost:8080/plantuml/txt/{}".format(chart_id))
   '';
 })
+

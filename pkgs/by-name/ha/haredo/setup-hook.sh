@@ -67,3 +67,4 @@ fi
 if [[ -z "${dontUseHaredoInstall-}" && -z "${installPhase-}" ]]; then
     installPhase="haredoInstallPhase"
 fi
+

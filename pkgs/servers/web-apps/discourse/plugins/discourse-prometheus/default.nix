@@ -24,3 +24,4 @@
     description = "Official Discourse Plugin for Prometheus Monitoring";
   };
 }
+

@@ -85,3 +85,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "microbin";
   };
 }
+

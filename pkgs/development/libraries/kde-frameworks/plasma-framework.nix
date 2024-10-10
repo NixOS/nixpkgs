@@ -18,3 +18,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kpackage kservice qtbase kirigami2 ];
 }
+

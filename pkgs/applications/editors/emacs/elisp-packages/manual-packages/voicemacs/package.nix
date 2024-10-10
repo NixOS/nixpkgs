@@ -49,8 +49,6 @@ melpaBuild {
     el-patch
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -60,3 +58,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

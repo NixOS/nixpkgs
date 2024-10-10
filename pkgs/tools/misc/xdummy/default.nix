@@ -83,3 +83,4 @@ in writeScriptBin "xdummy" ''
     "$@" \
     -config "${xorgConfig}"
 ''
+

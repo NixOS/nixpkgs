@@ -15,3 +15,4 @@ mkDerivation {
     akonadi akonadi-search kconfig kservice kio mailcommon mailimporter messagelib
   ];
 }
+

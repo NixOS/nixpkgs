@@ -26,3 +26,4 @@ runCommandNoCC "mime-module-test" { nativeBuildInputs = [ hare ]; } ''
   ./$binout
   : 1>$out
 ''
+

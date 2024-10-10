@@ -13,3 +13,4 @@
     environment.systemPackages = [ pkgs.hello pkgs.figlet ];
   };
 }
+

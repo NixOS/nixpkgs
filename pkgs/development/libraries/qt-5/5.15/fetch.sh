@@ -15,3 +15,4 @@ while read -r module; do
 done < "$modules" | jq -s 'from_entries' > "${srcs}.tmp"
 
 mv "${srcs}.tmp" "$srcs"
+

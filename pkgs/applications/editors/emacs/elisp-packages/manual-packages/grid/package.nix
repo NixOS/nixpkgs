@@ -16,8 +16,6 @@ melpaBuild {
     hash = "sha256-3QDw4W3FbFvb2zpkDHAo9BJKxs3LaehyvUVJPKqS9RE=";
   };
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -27,3 +25,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

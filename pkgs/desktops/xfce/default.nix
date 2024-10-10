@@ -178,3 +178,4 @@ makeScopeWithSplicing' {
       xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
     });
 }
+

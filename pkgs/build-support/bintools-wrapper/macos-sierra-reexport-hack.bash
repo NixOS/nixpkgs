@@ -244,3 +244,4 @@ fi
 
 PATH="$path_backup"
 exec @prog@ "${parentArgs[@]}"
+

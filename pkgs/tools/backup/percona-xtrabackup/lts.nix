@@ -15,3 +15,4 @@ callPackage ./generic.nix (args // {
     rm -r "$out"/docs
   '';
 })
+

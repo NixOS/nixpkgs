@@ -116,6 +116,13 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_path_GDK_PIXBUF_CSOURCE=${buildPackages.gdk-pixbuf.dev}/bin/gdk-pixbuf-csource"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ];
+  };
+
   enableParallelBuilding = true;
 
   installFlags = [
@@ -163,3 +170,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 })
+

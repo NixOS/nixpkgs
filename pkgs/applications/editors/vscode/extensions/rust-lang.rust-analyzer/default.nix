@@ -101,3 +101,4 @@ vscode-utils.buildVscodeExtension {
     platforms = lib.platforms.all;
   };
 }
+

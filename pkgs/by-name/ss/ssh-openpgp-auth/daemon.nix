@@ -12,3 +12,4 @@ callPackage ./generic.nix {
   metaDescription =
     "Command-line tool for creating and managing OpenPGP based trust anchors for SSH host keys";
 }
+

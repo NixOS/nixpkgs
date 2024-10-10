@@ -101,3 +101,4 @@ mkDerivation {
     ln -sf ${systemsettings}/bin/systemsettings $out/bin/kinfocenter
   '';
 }
+

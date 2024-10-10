@@ -16,6 +16,9 @@ melpaBuild {
     hash = "sha256-7E8r56dzfD06tsQEnqU5mWSbwz9x9QPbzken2J/fhlg=";
   };
 
+  # https://github.com/NixOS/nixpkgs/issues/335408
+  ignoreCompilationError = true;
+
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -25,3 +28,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

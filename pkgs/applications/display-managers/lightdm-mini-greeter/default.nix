@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/prikhi/lightdm-mini-greeter/blob/master/CHANGELOG.md";
   };
 }
+

@@ -44,3 +44,4 @@ runCommand "invisible-watermark-test-python" { } ''
   fi
   touch "$out"
 ''
+

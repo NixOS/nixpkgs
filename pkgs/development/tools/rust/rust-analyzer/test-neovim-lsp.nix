@@ -60,3 +60,4 @@ runCommand "test-neovim-rust-analyzer" {
   [[ "$result" == *"var: Vec<Option<String>>"* ]]
   touch $out
 ''
+

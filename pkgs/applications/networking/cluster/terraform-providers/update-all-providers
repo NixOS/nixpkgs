@@ -23,3 +23,4 @@ EOF
 for provider in "${providers[@]}"; do
   ./update-provider --no-spdx "$@" "${provider}"
 done
+

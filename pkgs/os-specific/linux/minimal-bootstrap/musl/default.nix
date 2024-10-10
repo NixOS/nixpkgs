@@ -79,3 +79,4 @@ bash.runCommand "${pname}-${version}" {
   sed -i 's|/bin/sh|${bash}/bin/bash|' $out/bin/*
   ln -s ../lib/libc.so $out/bin/ldd
 ''
+

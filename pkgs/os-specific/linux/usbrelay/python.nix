@@ -14,3 +14,4 @@ buildPythonPackage {
 
   inherit (usbrelay) meta;
 }
+

@@ -32,3 +32,4 @@ buildDunePackage {
     $out/bin/console_test | grep -q "{\"Hello fellow Nixer!\"}" > /dev/null
   '';
 }
+

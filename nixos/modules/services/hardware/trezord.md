@@ -15,3 +15,4 @@ To enable Trezor support, add the following to your {file}`configuration.nix`:
     services.trezord.enable = true;
 
 This will add all necessary udev rules and start Trezor Bridge.
+

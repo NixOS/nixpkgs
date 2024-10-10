@@ -36,3 +36,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/deltachat/deltachat-core-rust/tree/main/deltachat-rpc-client";
   };
 }
+

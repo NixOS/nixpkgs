@@ -1,4 +1,4 @@
-{ lib, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
+{ lib, config, stdenv, buildPackages, removeReferencesTo, addDriverRunpath, pkg-config, perl, texinfo, texinfo6, yasm
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -46,12 +46,14 @@
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
+, withCdio ? withFullDeps && withGPL # Audio CD grabbing
 , withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
 , withCoreImage ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple CoreImage framework
 , withCuda ? withFullDeps && withNvcodec
 , withCudaLLVM ? withFullDeps
+, withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
 , withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
 , withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin # IIDC-1394 grabbing (ieee 1394)
@@ -81,9 +83,9 @@
 , withModplug ? withFullDeps && !stdenv.hostPlatform.isDarwin # ModPlug support
 , withMp3lame ? withHeadlessDeps # LAME MP3 encoder
 , withMysofa ? withFullDeps # HRTF support via SOFAlizer
+, withNpp ? withFullDeps && withUnfree && config.cudaSupport # Nvidia Performance Primitives-based code
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
-, withOgg ? withHeadlessDeps # Ogg container used by vorbis & theora
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
 , withOpencl ? withFullDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
@@ -119,7 +121,7 @@
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
 , withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW # Vdpau hardware acceleration
 , withVideoToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple VideoToolbox
-, withVidStab ? withFullDeps && withGPL # Video stabilization
+, withVidStab ? withHeadlessDeps && withGPL # Video stabilization
 , withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5" # Netflix's VMAF (Video Multi-Method Assessment Fusion)
 , withVoAmrwbenc ? withFullDeps && withVersion3 # AMR-WB encoder
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
@@ -251,6 +253,8 @@
 , libbluray
 , libbs2b
 , libcaca
+, libcdio
+, libcdio-paranoia
 , libdc1394
 , libdrm
 , libdvdnav
@@ -263,7 +267,6 @@
 , libjxl
 , libmodplug
 , libmysofa
-, libogg
 , libopenmpt
 , libopus
 , libplacebo
@@ -335,6 +338,12 @@
 , CoreImage
 , VideoToolbox
 , xcode # unfree contains metalcc and metallib
+/*
+ *  Cuda Packages
+ */
+, cuda_cudart
+, cuda_nvcc
+, libnpp
 /*
  *  Testing
  */
@@ -451,16 +460,9 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
       })
     ]
-    ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
-      (fetchpatch2 {
-        # Will likely be obsolete in >7.0
-        name = "fate_avoid_dependency_on_samples";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
-        hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
-      })
-    ]
-    ++ optionals (lib.versionAtLeast version "7.0") [
+    ++ optionals (lib.versionAtLeast version "7.1") [
       ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
+      ./fix-fate-ffmpeg-spec-disposition-7.1.patch
 
       # Expose a private API for Chromium / Qt WebEngine.
       (fetchpatch2 {
@@ -566,12 +568,14 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
+    (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCodec2 "libcodec2")
     (enableFeature withCoreImage "coreimage")
     (enableFeature withCuda "cuda")
     (enableFeature withCudaLLVM "cuda-llvm")
+    (enableFeature withCudaNVCC "cuda-nvcc")
     (enableFeature withCuvid "cuvid")
     (enableFeature withDav1d "libdav1d")
     (enableFeature withDc1394 "libdc1394")
@@ -612,6 +616,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withModplug "libmodplug")
     (enableFeature withMp3lame "libmp3lame")
     (enableFeature withMysofa "libmysofa")
+    (enableFeature withNpp "libnpp")
     (enableFeature withNvdec "nvdec")
     (enableFeature withNvenc "nvenc")
     (enableFeature withOpenal "openal")
@@ -717,7 +722,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ removeReferencesTo addDriverRunpath perl pkg-config yasm ]
   # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
   ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
-  ++ optionals withCudaLLVM [ clang ];
+  ++ optionals withCudaLLVM [ clang ]
+  ++ optionals withCudaNVCC [ cuda_nvcc ];
 
   buildInputs = []
   ++ optionals withAlsa [ alsa-lib ]
@@ -733,10 +739,12 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
+  ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withCodec2 [ codec2 ]
   ++ optionals withCoreImage [ CoreImage ]
+  ++ optionals withCudaNVCC [ cuda_cudart cuda_nvcc ]
   ++ optionals withDav1d [ dav1d ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
@@ -764,7 +772,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withModplug [ libmodplug ]
   ++ optionals withMp3lame [ lame ]
   ++ optionals withMysofa [ libmysofa ]
-  ++ optionals withOgg [ libogg ]
+  ++ optionals withNpp [ libnpp cuda_cudart cuda_nvcc ]
   ++ optionals withOpenal [ openal ]
   ++ optionals withOpencl [ ocl-icd opencl-headers ]
   ++ optionals (withOpencoreAmrnb || withOpencoreAmrwb) [ opencore-amr ]
@@ -822,6 +830,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildFlags = [ "all" ]
     ++ optional buildQtFaststart "tools/qt-faststart"; # Build qt-faststart executable
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
@@ -906,3 +921,4 @@ stdenv.mkDerivation (finalAttrs: {
   # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
   hardeningDisable = [ "zerocallusedregs" ];
 })
+

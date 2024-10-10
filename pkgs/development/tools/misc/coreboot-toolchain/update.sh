@@ -36,3 +36,4 @@ echo ']' >>"$tmp"
 sed -ie 's/https\:\/\/ftpmirror\.gnu\.org/mirror\:\/\/gnu/g' "$tmp"
 
 mv "$tmp" "${pkg_dir}/sources.nix"
+

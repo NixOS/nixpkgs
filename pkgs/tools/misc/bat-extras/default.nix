@@ -153,3 +153,4 @@ in
     ++ optionalDep withClangTools clang-tools
     ++ optionalDep withRustFmt rustfmt);
 }
+

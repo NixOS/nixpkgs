@@ -52,3 +52,4 @@ for system in aarch64-linux armv7l-linux x86_64-linux; do
 
     sed -i -e "s|\"$curhash\"|\"$newhash\"|" "$pkgpath"
 done
+

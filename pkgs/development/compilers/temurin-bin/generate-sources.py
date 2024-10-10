@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-feature_versions = (8, 11, 17, 21, 22)
+feature_versions = (8, 11, 17, 21, 23)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)
@@ -71,3 +71,4 @@ for feature_version in feature_versions:
 with open("sources.json", "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
     f.write('\n')
+

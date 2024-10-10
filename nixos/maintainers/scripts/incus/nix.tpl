@@ -10,3 +10,4 @@
 {
   networking.hostName = "{{ container.name }}";
 }
+

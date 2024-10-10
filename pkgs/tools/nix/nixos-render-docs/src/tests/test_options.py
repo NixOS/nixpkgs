@@ -12,3 +12,4 @@ def test_option_headings() -> None:
         type='heading_open', tag='h1', nesting=1, attrs={}, map=[0, 1], level=0, children=None,
         content='', markup='#', info='', meta={}, block=True, hidden=False
     )
+

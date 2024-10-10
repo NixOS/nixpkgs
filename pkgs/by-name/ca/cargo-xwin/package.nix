@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ shivaraj-bh ];
   };
 }
+

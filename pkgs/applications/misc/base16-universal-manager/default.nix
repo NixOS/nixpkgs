@@ -21,3 +21,4 @@ buildGoModule rec {
     mainProgram = "base16-universal-manager";
   };
 }
+

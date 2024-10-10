@@ -19,3 +19,4 @@
     sddm.autoLogin.relogin = true;
   };
 }
+

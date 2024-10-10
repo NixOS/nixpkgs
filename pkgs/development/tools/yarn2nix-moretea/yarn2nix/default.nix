@@ -455,3 +455,4 @@ in rec {
   # Aliases
   spdxLicense = getLicenseFromSpdxId; # added 2021-12-01
 }
+

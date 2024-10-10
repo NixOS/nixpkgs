@@ -88,3 +88,4 @@ buildDartApplication rec {
     maintainers = with lib.maintainers; [ lelgenio ];
   };
 }
+

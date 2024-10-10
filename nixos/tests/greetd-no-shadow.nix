@@ -47,3 +47,4 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           machine.wait_for_file("/home/alice/done")
   '';
 })
+

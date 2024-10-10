@@ -75,3 +75,4 @@ buildGoModule rec {
     mainProgram = "picocrypt-gui";
   };
 }
+

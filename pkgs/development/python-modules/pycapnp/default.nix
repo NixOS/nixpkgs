@@ -43,3 +43,4 @@ buildPythonPackage rec {
     broken = lib.versionAtLeast capnproto.version "1.0";
   };
 }
+

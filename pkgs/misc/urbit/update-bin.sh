@@ -38,3 +38,4 @@ replace_sha "aarch64-linux" "$VERE_LINUX_AARCH64_SHA256"
 replace_sha "x86_64-linux" "$VERE_LINUX_X64_SHA256"
 replace_sha "aarch64-darwin" "$VERE_DARWIN_AARCH64_SHA256"
 replace_sha "x86_64-darwin" "$VERE_DARWIN_X64_SHA256"
+

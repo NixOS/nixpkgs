@@ -69,3 +69,4 @@ buildGoModule rec {
     mainProgram = "artalk";
   };
 }
+

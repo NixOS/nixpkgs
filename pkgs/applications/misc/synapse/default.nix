@@ -36,3 +36,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "synapse";
   };
 }
+

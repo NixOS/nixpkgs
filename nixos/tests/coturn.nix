@@ -32,3 +32,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           secretsfile.succeed("${pkgs.coturn}/bin/turnutils_uclient -W some-very-secret-string 192.168.1.2 -DgX -e 192.168.1.2 -n 1 -c -y")
     '';
 })
+

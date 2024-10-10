@@ -26,3 +26,4 @@ with subtest("All expected lines are in the file"):
 
 with subtest("All remaining lines are empty or comments"):
     assert not unexpected_functional_lines, f"Unexpected lines: {unexpected_functional_lines}"
+

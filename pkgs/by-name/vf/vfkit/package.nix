@@ -40,3 +40,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "vfkit";
   };
 })
+

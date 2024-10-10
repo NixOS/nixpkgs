@@ -77,3 +77,4 @@ runCommand "nixpkgs-metrics"
     lines=$(find ${nixpkgs} -name "*.nix" -type f | xargs cat | wc -l)
     echo "loc $lines" >> $out/nix-support/hydra-metrics
   ''
+

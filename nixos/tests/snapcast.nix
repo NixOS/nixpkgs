@@ -88,3 +88,4 @@ in {
         client.wait_until_succeeds("journalctl -o cat -u snapcast-client | grep -q 'buffer: ${toString bufferSize}'")
   '';
 })
+

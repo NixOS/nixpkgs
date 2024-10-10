@@ -36,3 +36,4 @@ perlPackages.buildPerlPackage rec {
     mainProgram = "wakeonlan";
   };
 }
+

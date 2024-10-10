@@ -56,3 +56,4 @@ def map(fn: Callable[[S, T], R], d: Iterable[T], chunk_size: int,
         return [ fn(state, i) for i in d ]
     with multiprocessing.Pool(pool_processes, _map_worker_init, (fn, state_fn, state_arg)) as p:
         return list(p.imap(_map_worker_step, d, chunk_size))
+

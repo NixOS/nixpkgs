@@ -17,3 +17,4 @@ if [[ "$1" != "--deps-only" ]]; then
 fi
 
 $(nix-build . -A osu-lazer.fetch-deps --no-out-link)
+

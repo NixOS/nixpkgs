@@ -7,3 +7,4 @@
    (fetchNuGet { pname = "Monocypher"; version = "0.3.0"; hash = "sha256-InbhO6d2wZ96Zl69b+KIUVM6XRU1X1op6e15afx6hps="; })
    (fetchNuGet { pname = "System.ComponentModel.Annotations"; version = "5.0.0"; hash = "sha256-0pST1UHgpeE6xJrYf5R+U7AwIlH3rVC3SpguilI/MAg="; })
 ]
+

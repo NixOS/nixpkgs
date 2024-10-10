@@ -98,3 +98,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ludusavi";
   };
 }
+

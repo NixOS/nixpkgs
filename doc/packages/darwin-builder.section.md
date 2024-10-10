@@ -188,3 +188,4 @@ nix-repl> :p darwin.linux-builder.nixosOptions.virtualisation.memorySize.definit
 [ { file = "/home/user/src/nixpkgs/nixos/modules/profiles/macos-builder.nix"; value = 3072; } ]
 
 ```
+

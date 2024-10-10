@@ -13,8 +13,6 @@ melpaBuild rec {
     hash = "sha256-GFEDWT88Boz/DxEcmFgf7u2NOoMjAN05yRiYwoYtvXc=";
   };
 
-  ignoreCompilationError = false;
-
   meta = {
     homepage = "https://gitweb.gentoo.org/proj/ebuild-mode.git/";
     description = "Major modes for Gentoo package files";
@@ -22,3 +20,4 @@ melpaBuild rec {
     maintainers = with lib.maintainers; [ qyliss ];
   };
 }
+

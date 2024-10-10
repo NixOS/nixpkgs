@@ -19,3 +19,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     eintopf.succeed("curl -sSfL http://eintopf:3333 | grep 'Es sind keine Veranstaltungen eingetragen'")
   '';
 })
+

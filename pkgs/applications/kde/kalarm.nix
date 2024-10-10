@@ -39,3 +39,4 @@ mkDerivation {
   ];
   propagatedUserEnvPkgs = [ kdepim-runtime ];
 }
+

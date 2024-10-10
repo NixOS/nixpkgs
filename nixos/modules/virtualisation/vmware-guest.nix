@@ -81,3 +81,4 @@ in
     services.udev.packages = [ open-vm-tools ];
   };
 }
+

@@ -46,3 +46,4 @@ writeScript "update-${attrPath}" ''
 
   update-source-version ${attrPath} "$version" "$hash" "" --version-key=${versionKey}
 ''
+

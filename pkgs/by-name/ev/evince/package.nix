@@ -140,3 +140,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 })
+

@@ -40,3 +40,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "ghostwriter";
 }
+

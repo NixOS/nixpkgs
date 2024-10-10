@@ -11,3 +11,4 @@ class NixOSPathNamespace(FedoraPathNamespace):
     KDESTROY = "@kerberos@/bin/kdestroy"
 
 paths = NixOSPathNamespace()
+

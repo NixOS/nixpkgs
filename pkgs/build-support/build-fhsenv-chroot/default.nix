@@ -51,3 +51,4 @@ in runCommandLocal nameAndVersion {
   chmod +x $out/bin/${name}
   ${extraInstallCommands}
 ''
+

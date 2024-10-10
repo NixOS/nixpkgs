@@ -44,3 +44,4 @@ import ../make-test-python.nix ({pkgs, ...}: {
 
   meta.maintainers = [ pkgs.lib.maintainers.dblsaiko ];
 })
+

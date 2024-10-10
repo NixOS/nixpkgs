@@ -88,3 +88,4 @@ jobs:
             echo "If you're having trouble, please ping @NixOS/nix-formatting"
             exit 1
           fi
+

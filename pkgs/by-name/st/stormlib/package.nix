@@ -59,3 +59,4 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin; # installation directory mismatch
   };
 })
+

@@ -26,3 +26,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "vimv";
   };
 }
+

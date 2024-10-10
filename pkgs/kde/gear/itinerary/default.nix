@@ -23,3 +23,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "itinerary";
 }
+

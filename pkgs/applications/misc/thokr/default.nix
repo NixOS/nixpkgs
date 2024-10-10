@@ -21,3 +21,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "thokr";
   };
 }
+

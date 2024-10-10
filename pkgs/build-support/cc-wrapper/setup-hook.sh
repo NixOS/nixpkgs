@@ -116,3 +116,4 @@ export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_post
+

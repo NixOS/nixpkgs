@@ -276,3 +276,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }
+

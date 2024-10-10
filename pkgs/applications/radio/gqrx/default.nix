@@ -96,3 +96,4 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }
+

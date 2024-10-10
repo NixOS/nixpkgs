@@ -76,3 +76,4 @@ report "All tests passed." severity NOTE;
 wait;
 end process;
 end beh;
+

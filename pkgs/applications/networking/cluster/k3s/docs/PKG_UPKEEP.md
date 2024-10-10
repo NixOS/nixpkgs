@@ -58,3 +58,4 @@ Quick checklist for reviewers of the k3s package:
   * For GitHub CI, [OfBorg](https://github.com/NixOS/ofborg) can be used to test all platforms.
   * For Local testing, the following can be run in nixpkgs root on the upgrade branch: `nix build .#k3s_1_29.passthru.tests.{etcd,single-node,multi-node}` (Replace "29" to the version tested)
 * Anything unusual in the nix build logs or test logs?
+

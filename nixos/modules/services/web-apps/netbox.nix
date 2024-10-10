@@ -393,3 +393,4 @@ in {
     users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
   };
 }
+

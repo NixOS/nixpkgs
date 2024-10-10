@@ -329,3 +329,4 @@
   (fetchNuGet { pname = "Vortice.Mathematics"; version = "1.4.25"; hash = "sha256-Mr/HVvwIeeDJtMNToP6kh2hyqud2zT31913HdhB4hm4="; })
   (fetchNuGet { pname = "ZstdSharp.Port"; version = "0.7.4"; hash = "sha256-z39r5ekafRbZAsKbOtAlL7ymW5SLosb0NUlStqvPBwE="; })
 ]
+

@@ -68,3 +68,4 @@ buildNpmPackage rec {
     mainProgram = "sieve-editor-gui";
   };
 }
+

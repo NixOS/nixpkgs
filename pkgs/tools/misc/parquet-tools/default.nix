@@ -80,3 +80,4 @@ buildPythonApplication rec {
     mainProgram = "parquet-tools";
   };
 }
+

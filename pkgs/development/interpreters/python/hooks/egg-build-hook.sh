@@ -13,3 +13,4 @@ if [ -z "${dontUseEggBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using eggBuildPhase"
     buildPhase=eggBuildPhase
 fi
+

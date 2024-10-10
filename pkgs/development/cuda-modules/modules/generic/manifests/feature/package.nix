@@ -8,3 +8,4 @@ options.mkOption {
   example = (import ./release.nix { inherit lib; }).linux-x86_64;
   type = types.submodule { options.outputs = Outputs; };
 }
+

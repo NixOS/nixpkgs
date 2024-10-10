@@ -66,3 +66,4 @@ Expanding the previous example with two plugins using the above functions, we ha
   };
 }
 ```
+

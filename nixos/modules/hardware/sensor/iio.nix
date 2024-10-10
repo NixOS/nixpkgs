@@ -30,3 +30,4 @@
     systemd.packages = with pkgs; [ iio-sensor-proxy ];
   };
 }
+

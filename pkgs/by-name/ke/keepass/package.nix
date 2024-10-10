@@ -149,3 +149,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "keepass";
   };
 })
+

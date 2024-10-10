@@ -23,3 +23,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ClangBuildAnalyzer";
   };
 })
+

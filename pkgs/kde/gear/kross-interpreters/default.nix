@@ -9,3 +9,4 @@ mkKdeDerivation {
   # FIXME(qt5)
   meta.broken = true;
 }
+

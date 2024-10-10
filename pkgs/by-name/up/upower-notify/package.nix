@@ -31,3 +31,4 @@ buildGoModule {
     maintainers = with maintainers; [ kamilchm ];
   };
 }
+

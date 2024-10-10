@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage {
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }
+

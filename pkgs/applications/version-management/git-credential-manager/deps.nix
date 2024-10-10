@@ -39,3 +39,4 @@
   (fetchNuGet { pname = "System.Security.Cryptography.ProtectedData"; version = "4.5.0"; hash = "sha256-Z+X1Z2lErLL7Ynt2jFszku6/IgrngO3V1bSfZTBiFIc="; })
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.16.0"; hash = "sha256-vKYEaa1EszR7alHj48R8G3uYArhI+zh2ZgiBv955E98="; })
 ]
+

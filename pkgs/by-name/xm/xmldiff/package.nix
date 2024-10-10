@@ -39,3 +39,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = with lib.maintainers; [ AndersonTorres anpryl ];
   };
 }
+

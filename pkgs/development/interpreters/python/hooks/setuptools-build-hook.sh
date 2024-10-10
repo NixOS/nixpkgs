@@ -29,3 +29,4 @@ if [ -z "${dontUseSetuptoolsBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using setuptoolsBuildPhase"
     buildPhase=setuptoolsBuildPhase
 fi
+

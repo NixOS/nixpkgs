@@ -94,3 +94,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "termusic";
   };
 }
+

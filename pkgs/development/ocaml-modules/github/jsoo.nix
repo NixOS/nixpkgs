@@ -19,3 +19,4 @@ buildDunePackage {
     description = "GitHub APIv3 JavaScript library";
   };
 }
+

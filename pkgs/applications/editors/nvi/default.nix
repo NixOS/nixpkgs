@@ -38,3 +38,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/nvi.x86_64-darwin
   };
 }
+

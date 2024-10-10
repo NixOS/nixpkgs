@@ -34,3 +34,4 @@ buildGoModule rec {
     license = with lib.licenses; [ gpl3 ];
   };
 }
+

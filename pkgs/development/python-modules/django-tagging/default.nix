@@ -24,3 +24,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/Fantomas42/django-tagging";
   };
 }
+

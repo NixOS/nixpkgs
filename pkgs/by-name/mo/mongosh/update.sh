@@ -23,3 +23,4 @@ jq ".deps = \"$DEPS\"" source.json | sponge source.json
 popd
 
 cp -t . -- "$TMPDIR/source.json" "$TMPDIR/package/package-lock.json"
+

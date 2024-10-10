@@ -34,3 +34,4 @@ in
   cp ${registryDat} .elm/${ver}/packages/registry.dat;
   chmod -R +w .elm
 ''
+

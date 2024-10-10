@@ -15,3 +15,4 @@ in {
 
   config.fun = input: "input is ${input}";
 }
+

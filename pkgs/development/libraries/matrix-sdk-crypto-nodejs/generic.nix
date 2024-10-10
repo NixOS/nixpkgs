@@ -58,3 +58,4 @@ stdenv.mkDerivation rec {
     inherit (nodejs.meta) platforms;
   };
 }
+

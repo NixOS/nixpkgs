@@ -15,3 +15,4 @@ bundlerApp {
     mainProgram = "lolcat";
   };
 }
+

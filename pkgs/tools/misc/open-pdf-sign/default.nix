@@ -41,3 +41,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "open-pdf-sign";
   };
 })
+

@@ -49,3 +49,4 @@ $ nix-env --rollback
 
 `nix-env` has many more flags. For details, see the nix-env(1) manpage or
 the Nix manual.
+

@@ -40,3 +40,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ mguentner nathyong oxzi ];
   };
 }
+

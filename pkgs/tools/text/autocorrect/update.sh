@@ -13,3 +13,4 @@ trap 'rm -rf -- "${tmp}"' EXIT
 git clone --depth 1 --branch "${version}" https://github.com/huacnlee/autocorrect.git "${tmp}/autocorrect"
 cargo generate-lockfile --manifest-path "${tmp}/autocorrect/Cargo.toml"
 cp "${tmp}/autocorrect/Cargo.lock" "$(dirname "$0")/Cargo.lock"
+

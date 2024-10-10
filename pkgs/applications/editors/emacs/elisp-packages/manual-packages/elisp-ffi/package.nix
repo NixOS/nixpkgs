@@ -29,8 +29,6 @@ melpaBuild {
     make CXX=$CXX
   '';
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
@@ -46,3 +44,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

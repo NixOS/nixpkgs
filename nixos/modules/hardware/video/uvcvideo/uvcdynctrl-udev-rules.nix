@@ -45,3 +45,4 @@ runCommand "uvcdynctrl-udev-rules-${version}"
     "$out/lib/udev/rules.d/80-uvcdynctrl.rules"
 ''
 
+

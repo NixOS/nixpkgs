@@ -52,3 +52,4 @@ appimageTools.wrapType2 {
     mainProgram = "mqttx";
   };
 }
+

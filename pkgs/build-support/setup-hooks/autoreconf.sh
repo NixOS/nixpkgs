@@ -1,4 +1,4 @@
-preConfigurePhases="${preConfigurePhases:-} autoreconfPhase"
+appendToVar preConfigurePhases autoreconfPhase
 
 autoreconfPhase() {
     runHook preAutoreconf
@@ -13,3 +13,4 @@ autoreconfPhase() {
     autoreconf "${flagsArray[@]}"
     runHook postAutoreconf
 }
+

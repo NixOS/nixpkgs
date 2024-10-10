@@ -23,8 +23,6 @@ melpaBuild {
     popon
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -34,3 +32,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ kira-bruneau ];
   };
 }
+

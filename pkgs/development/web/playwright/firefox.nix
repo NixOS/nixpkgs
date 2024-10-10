@@ -37,3 +37,4 @@ stdenv.mkDerivation {
     cp -R . $out/firefox
   '';
 }
+

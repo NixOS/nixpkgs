@@ -27,3 +27,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ mkez ];
   };
 })
+

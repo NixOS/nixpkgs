@@ -87,3 +87,4 @@ sed -e "s/version =.*;/version = \"$VERSION\";/g" \
     -e "s/url =.*;/url = \"$URL\";/g" \
     -e "s/sha256 =.*;/sha256 = \"$SHA256\";/g" \
     -i "$castopod_nix"
+

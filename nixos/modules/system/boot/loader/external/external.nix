@@ -34,3 +34,4 @@ in
     system.build.installBootLoader = cfg.installHook;
   };
 }
+

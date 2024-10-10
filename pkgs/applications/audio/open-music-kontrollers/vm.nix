@@ -8,3 +8,4 @@ callPackage ./generic.nix (args // rec {
 
   description = "Programmable virtual machine LV2 plugin";
 })
+

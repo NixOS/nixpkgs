@@ -39,3 +39,4 @@ stdenv.mkDerivation rec {
     mkdir -p $out/go-server/conf
   ";
 }
+

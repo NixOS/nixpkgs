@@ -11,3 +11,4 @@ callPackage ./generic.nix (args // rec {
 
   description = "Lightweight Nonlinear LV2 Plugin Container";
 })
+

@@ -46,3 +46,4 @@ stdenvNoCC.mkDerivation {
     description = "Repack of GraphicsMagick that provides compatibility with ImageMagick interfaces";
   };
 }
+

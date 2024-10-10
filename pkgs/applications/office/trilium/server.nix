@@ -49,3 +49,4 @@ in stdenv.mkDerivation {
     trilium-server = nixosTests.trilium-server;
   };
 }
+

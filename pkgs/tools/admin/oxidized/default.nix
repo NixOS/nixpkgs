@@ -18,3 +18,4 @@ bundlerApp {
     platforms   = platforms.linux;
   };
 }
+

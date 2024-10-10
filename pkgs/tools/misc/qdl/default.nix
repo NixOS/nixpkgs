@@ -39,3 +39,4 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 }
+

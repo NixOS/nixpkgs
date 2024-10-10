@@ -112,3 +112,4 @@ buildPythonPackage rec {
     broken = lib.versionAtLeast msgraph-core.version "1.0.0";
   };
 }
+

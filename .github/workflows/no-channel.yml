@@ -24,3 +24,4 @@ jobs:
         Please target the equivalent release-* branch or master instead.
         EOF
         exit 1
+

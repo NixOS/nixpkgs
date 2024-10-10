@@ -26,10 +26,9 @@ elpaBuild {
     tar --create --verbose --file=$src $content_directory
   '';
 
-  ignoreCompilationError = false;
-
   meta = removeAttrs mu.meta [ "mainProgram" ] // {
     description = "Full-featured e-mail client";
     maintainers = mu.meta.maintainers ++ (with lib.maintainers; [ linj ]);
   };
 }
+

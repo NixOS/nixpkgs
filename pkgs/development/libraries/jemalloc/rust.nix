@@ -22,3 +22,4 @@ in jemalloc.overrideAttrs (oldAttrs: {
     export JEMALLOC_OVERRIDE="@out@/lib/libjemalloc${stdenv.hostPlatform.extensions.library}"
   '';
 })
+

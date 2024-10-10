@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  CFG_RELEASE = version;
+  env.CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''
@@ -69,3 +69,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-analyzer";
   };
 }
+

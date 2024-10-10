@@ -21,3 +21,4 @@ buildDunePackage rec {
     maintainers = with maintainers; [ sternenseemann ];
   };
 }
+

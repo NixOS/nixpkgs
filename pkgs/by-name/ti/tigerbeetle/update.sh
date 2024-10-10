@@ -33,3 +33,4 @@ retrieve_hash "https://github.com/tigerbeetle/tigerbeetle/releases/download/${la
 sed -i "s|\(\"aarch64-linux\" = \"\)\(.*\)\"|\1$retrieved_hash\"|" $nixFile
 retrieve_hash "https://github.com/tigerbeetle/tigerbeetle/releases/download/${latestVersion}/tigerbeetle-universal-macos.zip"
 sed -i "s|\(\"universal-macos\" = \"\)\(.*\)\"|\1$retrieved_hash\"|" $nixFile
+

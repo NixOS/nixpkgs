@@ -3,3 +3,4 @@
 {
   wallpapers = callPackage ./wallpapers.nix { };
 }
+

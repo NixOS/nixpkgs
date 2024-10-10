@@ -24,3 +24,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ das_j ];
   };
 }
+

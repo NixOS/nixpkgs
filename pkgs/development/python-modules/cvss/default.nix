@@ -44,3 +44,4 @@ buildPythonPackage rec {
     mainProgram = "cvss_calculator";
   };
 }
+

@@ -320,3 +320,4 @@ in
     doc = ./firefox-syncserver.md;
   };
 }
+

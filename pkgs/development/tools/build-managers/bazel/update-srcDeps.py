@@ -60,3 +60,4 @@ with open(sys.argv[1]) as f:
 d = { el['name']: el for el in http_archives }
 
 print(json.dumps(d, sort_keys=True, indent=4))
+

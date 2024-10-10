@@ -14,3 +14,4 @@ executable bar
   main-is:             Bar.hs
   build-depends:       base
   default-language:    Haskell2010
+

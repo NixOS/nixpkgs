@@ -24,3 +24,4 @@ buildPythonPackage {
     wasmer-compiler-singlepass
   ];
 }
+

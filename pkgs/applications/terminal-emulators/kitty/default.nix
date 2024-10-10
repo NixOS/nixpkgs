@@ -257,3 +257,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ tex rvolosatovs Luflosi kashw2 ];
   };
 }
+

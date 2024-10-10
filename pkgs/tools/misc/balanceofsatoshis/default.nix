@@ -43,3 +43,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ mmilata ];
   };
 }
+

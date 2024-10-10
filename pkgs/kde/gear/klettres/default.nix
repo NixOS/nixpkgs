@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "klettres";
 }
+

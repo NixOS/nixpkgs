@@ -56,3 +56,4 @@ in
   # uses extendModules
   meta.buildDocsInSandbox = false;
 }
+

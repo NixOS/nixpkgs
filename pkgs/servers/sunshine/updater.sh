@@ -21,3 +21,4 @@ rm -f package.json
 
 popd
 nix-update sunshine --version $version
+

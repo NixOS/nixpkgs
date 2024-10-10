@@ -54,3 +54,4 @@ buildPythonPackage rec {
   # cirq's importlib hook doesn't work here
   #pythonImportsCheck = [ "cirq_rigetti" ];
 }
+

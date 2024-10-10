@@ -32,3 +32,4 @@ For more technical details on how channels work, you can see the [channelserver 
 > the [Kubernetes version skew policy](https://kubernetes.io/docs/setup/release/version-skew-policy) applies.
 > Ensure that your plan **does not skip intermediate minor versions** when upgrading. Nothing in the upgrade process will
 > protect you against unsupported changes to the Kubernetes version.
+

@@ -51,3 +51,4 @@ in python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ prusnak ];
   };
 }
+

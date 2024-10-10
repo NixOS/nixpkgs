@@ -22,3 +22,4 @@ in {
     (input: [ input.b ])
   ];
 }
+

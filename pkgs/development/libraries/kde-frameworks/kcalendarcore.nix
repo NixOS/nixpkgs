@@ -10,3 +10,4 @@ mkDerivation {
   propagatedBuildInputs = [ libical ];
   outputs = [ "out" "dev" ];
 }
+

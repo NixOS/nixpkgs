@@ -100,3 +100,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/solvespace/solvespace/raw/v${version}/CHANGELOG.md";
   };
 }
+

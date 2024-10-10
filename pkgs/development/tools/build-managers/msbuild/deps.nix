@@ -233,3 +233,4 @@
   (fetchNuGet { pname = "xunit.runner.console"; version = "2.4.1"; hash = "sha256-I/C0ntv+W+j4VU5/QxejkJSbuWvbL4MJ6+J8aFX6048="; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/xunit.runner.console/2.4.1/xunit.runner.console.2.4.1.nupkg"; })
   (fetchNuGet { pname = "xunit.runner.visualstudio"; version = "2.4.3"; hash = "sha256-42axn0yDDiJWKV8UEYzYWgiKbpc6mHh9M/eeylYGLUg="; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/xunit.runner.visualstudio/2.4.3/xunit.runner.visualstudio.2.4.3.nupkg"; })
 ]
+

@@ -26,3 +26,4 @@ stdenv.mkDerivation rec {
     mainProgram = "cp437";
   };
 }
+

@@ -75,3 +75,4 @@ You can use other web servers by forwarding calls for
 fastcgi unix socket. You can use
 the nginx configuration in the module code as a reference to what else
 should be configured.
+

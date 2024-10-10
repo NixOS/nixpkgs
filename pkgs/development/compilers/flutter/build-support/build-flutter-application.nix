@@ -206,3 +206,4 @@ let
   buildAppWith = flutter: buildDartApplication.override { dart = flutter; };
 in
 buildAppWith minimalFlutter (builderArgs // { passthru = builderArgs.passthru or { } // { multiShell = buildAppWith flutter builderArgs; }; })
+

@@ -70,3 +70,4 @@ in (rustPlatform.buildRustPackage rec {
     mainProgram = "lorri";
   };
 })
+

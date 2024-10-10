@@ -46,3 +46,4 @@ buildLuarocksPackage {
     broken = lua.luaversion != "5.1";
   };
 }
+

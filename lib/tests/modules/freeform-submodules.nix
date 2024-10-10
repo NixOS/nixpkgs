@@ -20,3 +20,4 @@
   config.free.xxx.foo = 10;
   config.free.yyy.bar = 10;
 }
+

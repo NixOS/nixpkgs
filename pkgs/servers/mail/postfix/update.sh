@@ -8,3 +8,4 @@ set -eu -o pipefail
 new_version="$(curl -s http://cdn.postfix.johnriley.me/mirrors/postfix-release/index.html |
     pcregrep -o1 '"official/postfix-([0-9.]+)[.]tar[.]gz">' | head -n1)"
 update-source-version postfix "$new_version"
+

@@ -2,3 +2,4 @@
 mkKdeDerivation {
   pname = "plasma-activities-stats";
 }
+

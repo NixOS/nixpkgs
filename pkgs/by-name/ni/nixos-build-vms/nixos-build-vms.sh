@@ -52,3 +52,4 @@ fi
 nix-build @buildVms@ \
     --argstr networkExpr "$networkExpr" "${nixBuildArgs[@]}" \
     --arg nixpkgs "<nixpkgs>"
+

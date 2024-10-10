@@ -268,3 +268,4 @@
   (fetchNuGet { pname = "xunit.runner.visualstudio"; version = "2.4.1"; hash = "sha256-Fm5DjFXZJzTJuApib0thPGUD0w0eavfBfSh9FOYtljo="; })
   (fetchNuGet { pname = "YamlDotNet.Signed"; version = "5.3.0"; hash = "sha256-K/aWN3NDNkfIxBvxcr8+4AJ/bVBZ2LWC2ef9L5Qq174="; })
 ]
+

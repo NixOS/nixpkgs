@@ -31,3 +31,4 @@ buildPecl {
     maintainers = teams.helsinki-systems.members ++ teams.php.members;
   };
 }
+

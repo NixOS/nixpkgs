@@ -20,3 +20,4 @@ cabal2nix --revision "${latest_version}" https://github.com/pdobsan/oama.git >> 
 nixfmt "${derivation_file}"
 
 echo "Finished."
+

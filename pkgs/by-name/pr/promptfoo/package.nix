@@ -27,3 +27,4 @@ buildNpmPackage rec {
     maintainers = [ maintainers.nathanielbrough ];
   };
 }
+

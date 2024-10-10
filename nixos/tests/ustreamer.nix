@@ -73,3 +73,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client.succeed("curl http://camera:8000")
   '';
 })
+

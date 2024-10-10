@@ -40,3 +40,4 @@ buildGo123Module rec {
     description = "Runner for Gitea based on act";
   };
 }
+

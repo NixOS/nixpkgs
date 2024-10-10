@@ -53,3 +53,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin; # aws-lc-sys currently broken on darwin x86_64
   };
 }
+

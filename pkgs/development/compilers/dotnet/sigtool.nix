@@ -27,3 +27,4 @@ darwin.sigtool.overrideAttrs (old: {
           "${cctools}/bin/${cctools.targetPrefix}codesign_allocate"
     '';
 })
+

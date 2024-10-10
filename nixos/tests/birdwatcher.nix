@@ -92,3 +92,4 @@ makeTest {
     host1.succeed("curl http://[::]:29184/protocols | jq -r .protocols.device1.state | grep 'up'")
   '';
 }
+

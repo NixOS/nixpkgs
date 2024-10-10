@@ -29,3 +29,4 @@ signDarwinBinariesInAllOutputs() {
      signDarwinBinariesIn "${!output}"
   done
 }
+

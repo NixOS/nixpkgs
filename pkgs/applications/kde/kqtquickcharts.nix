@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ qtbase qtdeclarative ];
 }
+

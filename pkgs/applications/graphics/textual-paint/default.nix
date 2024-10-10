@@ -78,3 +78,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "textual-paint";
   };
 }
+

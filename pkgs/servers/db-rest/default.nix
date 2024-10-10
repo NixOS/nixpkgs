@@ -37,3 +37,4 @@ buildNpmPackage rec {
     mainProgram = "db-rest";
   };
 }
+

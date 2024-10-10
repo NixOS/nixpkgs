@@ -10,3 +10,4 @@ fixLibsystemRefs() {
         @targetPrefix@install_name_tool -change @libsystem@ /usr/lib/libSystem.B.dylib {} \;
   fi
 }
+

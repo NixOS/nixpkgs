@@ -77,3 +77,4 @@ buildPythonPackage rec {
     broken = versionAtLeast pydantic.version "2";
   };
 }
+

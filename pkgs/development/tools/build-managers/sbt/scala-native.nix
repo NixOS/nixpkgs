@@ -12,3 +12,4 @@ sbt.overrideAttrs(previousAttrs: {
       --set NIX_CFLAGS_LINK "-lc++"
   '';
 })
+

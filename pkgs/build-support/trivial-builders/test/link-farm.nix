@@ -43,3 +43,4 @@ runCommand "test-linkFarm" { } ''
   assertPathEquals "${linkFarmFromAttrs}/hello" "${hello}"
   touch $out
 ''
+

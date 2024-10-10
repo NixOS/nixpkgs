@@ -69,3 +69,4 @@ for pname in depsDict:
         lockedDepsDict[pname] = {"version": version, "sha256": sha256}
 
 print(json.dumps({"dependencies": lockedDepsDict}, indent=2))
+

@@ -52,3 +52,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.icculus.org/SDL_sound/";
   };
 }
+

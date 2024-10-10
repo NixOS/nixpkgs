@@ -59,3 +59,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ff2mpv-rust";
   };
 }
+

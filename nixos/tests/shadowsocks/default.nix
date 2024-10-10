@@ -14,3 +14,4 @@
     pluginOpts = "host=nixos.org";
   };
 }
+

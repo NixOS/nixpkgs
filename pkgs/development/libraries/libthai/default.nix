@@ -30,3 +30,4 @@ stdenv.mkDerivation rec {
     pkgConfigModules = [ "libthai" ];
   };
 }
+

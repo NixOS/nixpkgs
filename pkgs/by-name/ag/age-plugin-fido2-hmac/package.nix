@@ -49,3 +49,4 @@ buildGoModule rec {
     mainProgram = "age-plugin-fido2-hmac";
   };
 }
+

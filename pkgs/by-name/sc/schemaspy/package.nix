@@ -51,3 +51,4 @@ maven.buildMavenPackage rec {
     ];
   };
 }
+

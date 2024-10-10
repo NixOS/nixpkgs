@@ -28,3 +28,4 @@ hashcheck=$(nix hash path "$repo")
 (cd "$nixpkgs" && update-source-version teos "$version" "$hashcheck" && update-source-version teos --ignore-same-version --source-key=cargoDeps)
 echo
 echo "rust-teos: $oldVersion -> $version"
+

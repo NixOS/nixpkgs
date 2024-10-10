@@ -56,3 +56,4 @@ stdenv.mkDerivation rec {
 
   passthru = { glrSupport = true; };
 }
+

@@ -61,3 +61,4 @@ in
 
   meta.doc = ./weechat.md;
 }
+

@@ -74,3 +74,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "polaris";
   };
 }
+

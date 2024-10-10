@@ -40,3 +40,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       assert len(locales) > 0, "expected a list of locales"
     '';
 })
+

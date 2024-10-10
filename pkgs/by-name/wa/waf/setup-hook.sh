@@ -74,3 +74,4 @@ fi
 if [ -z "${dontUseWafInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=wafInstallPhase
 fi
+

@@ -28,3 +28,4 @@ buildHomeAssistantComponent rec {
     license = licenses.asl20;
   };
 }
+

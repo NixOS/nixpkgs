@@ -38,3 +38,4 @@ df1 = df1.drop('bias_weight').withColumnRenamed('explode_val_1', 'bias_weight')
 df1.show()
 
 assert(df1.count() == 12)
+

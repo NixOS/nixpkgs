@@ -15,3 +15,4 @@ lib.appendToName "with-fonts" (symlinkJoin {
     done
   '';
 })
+

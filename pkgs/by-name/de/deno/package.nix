@@ -116,3 +116,4 @@ rustPlatform.buildRustPackage rec {
     badPlatforms = [ "x86_64-darwin" ];
   };
 }
+

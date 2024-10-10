@@ -13,3 +13,4 @@ runCommand "${pname}-${version}" {
   makeWrapper ${rust-analyzer-unwrapped}/bin/rust-analyzer $out/bin/rust-analyzer \
     --set-default RUST_SRC_PATH "${rustSrc}"
 ''
+

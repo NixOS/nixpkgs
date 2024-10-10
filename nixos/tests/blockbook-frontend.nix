@@ -26,3 +26,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("curl -sSfL http://localhost:9030 | grep 'Blockbook'")
   '';
 })
+

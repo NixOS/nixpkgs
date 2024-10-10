@@ -27,3 +27,4 @@ buildGoModule {
     maintainers = with maintainers; [ dan-theriault ];
   };
 }
+

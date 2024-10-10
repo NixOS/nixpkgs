@@ -12,3 +12,4 @@ callPackage ./default.nix rec {
 
   inherit self passthruFun;
 }
+

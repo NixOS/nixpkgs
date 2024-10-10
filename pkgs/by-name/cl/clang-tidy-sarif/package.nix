@@ -31,3 +31,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
   };
 }
+

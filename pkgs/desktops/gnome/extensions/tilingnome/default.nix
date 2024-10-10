@@ -39,3 +39,4 @@ stdenv.mkDerivation rec {
     platforms = gnome-shell.meta.platforms;
   };
 }
+

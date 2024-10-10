@@ -42,3 +42,4 @@ sed -i 's#env.VERGEN_BUILD_DATE = "[^"]*"#env.VERGEN_BUILD_DATE = "'"${latestBui
 cargoHash=$(nix-prefetch --option extra-experimental-features flakes "{ sha256 }: (import $NIXPKGS_DIR {}).viddy.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
 sed -i -E 's#\bcargoHash = ".*?"#cargoHash = "'"$cargoHash"'"#' default.nix
 popd
+

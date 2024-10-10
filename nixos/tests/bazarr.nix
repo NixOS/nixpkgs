@@ -22,3 +22,4 @@ in
     machine.succeed("curl --fail http://localhost:${toString port}/")
   '';
 })
+

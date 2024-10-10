@@ -29,3 +29,4 @@ if [ -z "${dontLinkNodeModules:-}" ]; then
     echo "Using linkNodeModulesHook preConfigure hook"
     preConfigureHooks+=(linkNodeModulesHook)
 fi
+

@@ -26,3 +26,4 @@ ${gnutar}/bin/tar \
   -c "${manifest}" "${repositories}" -T "${imageFileStorePaths}"
 EOF
 chmod +x "${out}/compositeImage.sh"
+

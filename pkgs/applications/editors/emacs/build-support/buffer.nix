@@ -75,3 +75,4 @@ rec {
     in
       lib.optionalAttrs is-haskell-package (withPackages [ haskell-package-env ]);
 }
+

@@ -41,3 +41,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; x86_64 ++ aarch64;
   };
 }
+

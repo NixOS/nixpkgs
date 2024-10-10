@@ -47,3 +47,4 @@ buildPythonPackage rec {
     mainProgram = "zwave-js-server-python";
   };
 }
+

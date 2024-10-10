@@ -41,3 +41,4 @@ if [ "$updated" -eq 0 ]; then
 fi
 
 (cd "$(dirname "$pkgpath")" && "$(nixbuildscript "$attr.fetch-deps")" "$(dirname "$pkgpath")/deps.nix")
+

@@ -113,3 +113,4 @@ python.pkgs.buildPythonApplication rec {
     inherit (immich.meta) platforms;
   };
 }
+

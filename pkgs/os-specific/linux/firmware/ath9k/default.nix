@@ -152,3 +152,4 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/qca/open-ath9k-htc-firmware/tags";
   };
 })
+

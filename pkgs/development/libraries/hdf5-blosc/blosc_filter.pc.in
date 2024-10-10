@@ -11,3 +11,4 @@ Requires: \
   hdf5
 Cflags: -isystem${includedir}
 Libs: -L${libdir} -Wl,-rpath,${libdir} -lblosc_filter
+

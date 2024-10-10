@@ -67,3 +67,4 @@ nix-shell -p 'julia.withPackages ["Plots"]' --run julia
 
   This normally points at a special augmented version of the Julia [General packages registry](https://github.com/JuliaRegistries/General).
   If you want to use a bleeding-edge version to pick up the latest package updates, you can plug in a later revision than the one in Nixpkgs.
+

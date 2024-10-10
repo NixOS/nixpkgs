@@ -24,3 +24,4 @@ do
 done < <(jq -r '.assets[] | select(.name | test("xz")) | .name, .browser_download_url' <<<"$latest_release")
 
 printf '}\n' >> "$dirname/shas.nix"
+

@@ -82,3 +82,4 @@ buildGraalvmNativeImage rec {
     maintainers = [ lib.maintainers.ericdallo ];
   };
 }
+

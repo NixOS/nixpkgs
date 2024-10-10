@@ -146,3 +146,4 @@ Shorthand for `vmTools.diskImageFuns.<attr> { extraPackages = ... }`.
 ## `vmTools.diskImages` {#vm-tools-diskImages}
 
 Shorthand for `vmTools.diskImageFuns.<attr> { }`.
+

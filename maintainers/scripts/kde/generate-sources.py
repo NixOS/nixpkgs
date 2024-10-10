@@ -23,7 +23,8 @@ mkKdeDerivation {
 '''.strip())
 
 ROOT_TEMPLATE = jinja2.Template('''
-{callPackage}: {
+{ callPackage }:
+{
   {%- for p in packages %}
   {{ p }} = callPackage ./{{ p }} { };
   {%- endfor %}
@@ -119,3 +120,4 @@ def main(set: str, version: str, nixpkgs: pathlib.Path, sources_url: Optional[st
 
 if __name__ == "__main__":
     main()  # type: ignore
+

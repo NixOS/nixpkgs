@@ -16,3 +16,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "kcalc";
 }
+

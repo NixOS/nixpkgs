@@ -61,3 +61,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ Br1ght0ne yanganto mfrw ];
   };
 }
+

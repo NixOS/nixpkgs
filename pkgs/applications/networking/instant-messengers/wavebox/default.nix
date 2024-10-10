@@ -245,3 +245,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wavebox";
   };
 })
+

@@ -13,3 +13,4 @@ mkDerivation {
     ./0002-QDirIterator-follow-symlinks.patch
   ];
 }
+

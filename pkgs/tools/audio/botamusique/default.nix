@@ -155,3 +155,4 @@ stdenv.mkDerivation rec {
     mainProgram = "botamusique";
   };
 }
+

@@ -7,3 +7,4 @@ Kakoune can be built to autoload plugins:
   plugins = with pkgs.kakounePlugins; [ parinfer-rust ];
 })
 ```
+

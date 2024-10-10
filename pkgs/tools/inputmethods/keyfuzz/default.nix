@@ -20,3 +20,4 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--without-initdir" "--disable-lynx" ];
 }
+

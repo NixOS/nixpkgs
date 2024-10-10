@@ -42,3 +42,4 @@ A minimal configuration looks like this:
   };
 }
 ```
+

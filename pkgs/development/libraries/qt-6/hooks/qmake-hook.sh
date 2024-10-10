@@ -13,7 +13,7 @@ qmakePrePhase() {
       "NIX_OUTPUT_QML=${!outputBin}/${qtQmlPrefix:?}" \
       "NIX_OUTPUT_PLUGIN=${!outputBin}/${qtPluginPrefix:?}"
 }
-prePhases+=" qmakePrePhase"
+appendToVar prePhases qmakePrePhase
 
 qmakeConfigurePhase() {
     runHook preConfigure
@@ -41,3 +41,4 @@ qmakeConfigurePhase() {
 if [ -z "${dontUseQmakeConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=qmakeConfigurePhase
 fi
+

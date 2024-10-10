@@ -42,3 +42,4 @@ buildGo123Module {
     mainProgram = "wakapi";
   };
 }
+

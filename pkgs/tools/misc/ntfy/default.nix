@@ -92,3 +92,4 @@ in python.pkgs.buildPythonApplication rec {
     mainProgram = "ntfy";
   };
 }
+

@@ -108,3 +108,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "taler-wallet-cli";
   };
 })
+

@@ -22,3 +22,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       customPackageMachine.succeed("curl -f -vvv -s http://127.0.0.1:8787")
     '';
   })
+

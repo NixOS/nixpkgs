@@ -48,3 +48,4 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     homeserver.wait_for_unit("matrix-synapse-worker-federation_sender.service");
   '';
 })
+

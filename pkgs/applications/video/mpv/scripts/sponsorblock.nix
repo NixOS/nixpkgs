@@ -50,3 +50,4 @@ buildLua {
     maintainers = with maintainers; [ pacien ];
   };
 }
+

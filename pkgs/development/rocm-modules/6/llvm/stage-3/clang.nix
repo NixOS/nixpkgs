@@ -71,3 +71,4 @@ wrapCCWith rec {
       --replace-fail "-MM) dontLink=1 ;;" "-MM | --cuda-device-only) dontLink=1 ;;''\n--cuda-host-only | --cuda-compile-host-device) dontLink=0 ;;"
   '';
 }
+

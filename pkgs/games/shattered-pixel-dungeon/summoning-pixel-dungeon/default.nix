@@ -32,3 +32,4 @@ callPackage ../generic.nix rec {
   # Probably due to https://github.com/gradle/gradle/issues/17236
   gradle = gradle_6;
 }
+

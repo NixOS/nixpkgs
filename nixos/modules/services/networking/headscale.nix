@@ -588,3 +588,4 @@ in {
 
   meta.maintainers = with lib.maintainers; [kradalby misterio77];
 }
+

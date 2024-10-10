@@ -13,3 +13,4 @@ in {
   screenshot = callPackage ./screenshot { };
   xml-report = callPackage ./xml-report { };
 })
+

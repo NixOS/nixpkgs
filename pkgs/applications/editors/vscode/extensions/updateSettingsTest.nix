@@ -4,3 +4,4 @@ callPackage (import ./updateSettings.nix) { } {
     a = "fdsdf";
   };
 }
+

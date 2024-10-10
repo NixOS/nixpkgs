@@ -140,3 +140,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
   };
 }
+

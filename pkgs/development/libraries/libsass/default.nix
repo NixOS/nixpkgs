@@ -32,6 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  enableParallelBuilding = true;
+
   passthru.tests = {
     inherit gtk3 gtk4 sassc;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -46,3 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 })
+

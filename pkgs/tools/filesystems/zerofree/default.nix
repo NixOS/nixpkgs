@@ -32,3 +32,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "zerofree";
   };
 }
+

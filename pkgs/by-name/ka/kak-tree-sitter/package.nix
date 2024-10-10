@@ -25,3 +25,4 @@ symlinkJoin rec {
 
   inherit (kak-tree-sitter-unwrapped) meta;
 }
+

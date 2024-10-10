@@ -6,3 +6,4 @@ pkgs.runCommandNoCC "nix-required-mounts-structured-attrs-no-features" { __struc
   ''
     touch $out
   ''
+

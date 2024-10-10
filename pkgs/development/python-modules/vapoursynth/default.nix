@@ -32,3 +32,4 @@ buildPythonPackage {
 
   inherit (vapoursynth) meta;
 }
+

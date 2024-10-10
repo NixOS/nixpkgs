@@ -139,3 +139,4 @@ A basic configuration with some custom settings could look like this:
   };
 }
 ```
+

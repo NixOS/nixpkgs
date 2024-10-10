@@ -30,3 +30,4 @@ After that, `davis` can be deployed like this:
 ```
 
 This deploys Davis using a sqlite database running out of `/var/lib/davis`.
+

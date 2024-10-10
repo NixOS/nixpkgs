@@ -6,3 +6,4 @@ buildDunePackage {
   propagatedBuildInputs = [ lablgtk3 ];
   inherit (lablgtk3) src version meta nativeBuildInputs;
 }
+

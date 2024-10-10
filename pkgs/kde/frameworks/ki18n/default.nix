@@ -11,3 +11,4 @@ mkKdeDerivation {
   propagatedNativeBuildInputs = [ gettext ];
   extraBuildInputs = [ qtdeclarative ];
 }
+

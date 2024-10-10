@@ -72,3 +72,4 @@ bundlerApp {
     mainProgram = "image_optim";
   };
 }
+

@@ -80,3 +80,4 @@ in rec {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
 }
 
+

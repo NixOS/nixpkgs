@@ -54,3 +54,4 @@ If you wish to use a filter that would search for .gitignore files in subdirecto
   gitignoreRecursiveSource = gitignoreFilterSourcePure (_: _: true);
 }
 ```
+

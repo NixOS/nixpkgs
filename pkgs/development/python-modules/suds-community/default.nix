@@ -12,3 +12,4 @@ mkPythonMetaPackage {
     inherit (suds.meta) changelog description homepage;
   };
 }
+

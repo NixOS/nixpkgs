@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed('[ "$(stat -c %a /users/carol)" == "700" ]')
   '';
 })
+

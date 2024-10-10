@@ -21,3 +21,4 @@ writeShellScript "update-esphome" ''
   nix-update esphome.dashboard --version $DASHBOARD_VERSION
   nix-update esphome --version $LATEST
 ''
+

@@ -173,3 +173,4 @@ in
   meta.maintainers = with lib.maintainers; [ picnoir ];
   meta.doc = ./pleroma.md;
 }
+

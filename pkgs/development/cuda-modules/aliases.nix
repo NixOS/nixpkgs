@@ -12,3 +12,4 @@ in
 mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
 }
+

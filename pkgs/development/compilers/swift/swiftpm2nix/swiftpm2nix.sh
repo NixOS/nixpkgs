@@ -43,3 +43,4 @@ cat > nix/default.nix << EOF
 }
 EOF
 echo >&2 "-- Generated ./nix"
+

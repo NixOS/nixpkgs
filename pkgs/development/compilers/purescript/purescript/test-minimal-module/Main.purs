@@ -7,3 +7,4 @@ foreign import log :: String -> Effect Unit
 
 main :: Effect Unit
 main = log "hello world"
+

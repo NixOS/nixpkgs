@@ -105,3 +105,4 @@ let
   allVersions = builtins.mapAttrs (_name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))) versions;
 in
 allVersions.stable
+

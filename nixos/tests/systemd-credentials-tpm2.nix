@@ -67,3 +67,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         systemd_run(machine, f"cmp --silent -- $CREDENTIALS_DIRECTORY/{CRED_NAME} {CRED_RAW_FILE}")
   '';
 })
+

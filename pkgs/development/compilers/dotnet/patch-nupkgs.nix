@@ -90,3 +90,4 @@ writeShellScriptBin "patch-nupkgs" (
     done
   ''
 )
+

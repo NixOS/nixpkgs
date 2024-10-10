@@ -177,3 +177,4 @@ EOF
     mainProgram = "beet";
   };
 }
+

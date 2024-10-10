@@ -586,3 +586,4 @@ let
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [
   "name" "gnFlags" "buildTargets"
 ] // { passthru = base.passthru // (extraAttrs.passthru or {}); })
+

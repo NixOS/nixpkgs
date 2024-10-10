@@ -235,3 +235,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "openvscode-server";
   };
 })
+

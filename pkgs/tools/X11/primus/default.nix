@@ -32,3 +32,4 @@ in writeScriptBin "primusrun" ''
   export __GLVND_DISALLOW_PATCHING=1
   exec "$@"
 ''
+

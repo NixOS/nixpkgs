@@ -20,3 +20,4 @@ mkKdeDerivation {
     "-DSYSTEMSTATS_DBUS_INTERFACE=${libksysguard}/share/dbus-1/interfaces/org.kde.ksystemstats1.xml"
   ];
 }
+

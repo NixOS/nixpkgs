@@ -27,7 +27,7 @@ buildPythonPackage rec {
     paramiko
     lxml
     six
-  ];
+  ] ++ paramiko.optional-dependencies.ed25519;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -41,3 +41,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ xnaveira ];
   };
 }
+

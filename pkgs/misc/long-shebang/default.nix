@@ -20,3 +20,4 @@ in stdenv.mkDerivation {
     mainProgram = "long-shebang";
   };
 }
+

@@ -218,3 +218,4 @@
   (fetchNuGet { pname = "System.Xml.XmlSerializer"; version = "4.0.11"; hash = "sha256-v6x4d6W18dijG5cDqQmVHdtWRf6Y4OkdBolT3d5g3wY="; })
   (fetchNuGet { pname = "System.Xml.XmlSerializer"; version = "4.3.0"; hash = "sha256-IqTGPENWYoI06x2NHFPVtHlLEq9tazbom32bFLom6h4="; })
 ]
+

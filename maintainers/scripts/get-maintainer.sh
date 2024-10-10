@@ -71,3 +71,4 @@ query() {
 
 parseArgs "$@"
 listAsJSON | jq -e "$(query)"
+

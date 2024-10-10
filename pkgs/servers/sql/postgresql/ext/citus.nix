@@ -50,3 +50,4 @@ stdenv.mkDerivation rec {
     inherit (postgresql.meta) platforms;
   };
 }
+

@@ -22,3 +22,4 @@ runCommandLocal "install-shell-files--install-completion-cmd"
     cmp baz.fish $out/share/fish/vendor_completions.d/foobar.fish
     cmp qux.fish $out/share/fish/vendor_completions.d/qux
   ''
+

@@ -13,3 +13,4 @@ if configFile == null then termite else symlinkJoin {
 
   passthru.terminfo = termite.terminfo;
 }
+

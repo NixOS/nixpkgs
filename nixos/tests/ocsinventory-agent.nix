@@ -31,3 +31,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       assert tag == "MY_INVENTORY_TAG", f"tag is not valid, was '{tag}'"
   '';
 })
+

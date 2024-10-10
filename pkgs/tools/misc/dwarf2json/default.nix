@@ -21,3 +21,4 @@ buildGoModule rec {
     mainProgram = "dwarf2json";
   };
 }
+

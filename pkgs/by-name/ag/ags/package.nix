@@ -78,3 +78,4 @@ buildNpmPackage rec {
     platforms = lib.platforms.linux;
   };
 }
+

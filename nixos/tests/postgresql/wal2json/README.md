@@ -9,3 +9,4 @@ Changes:
 - `\o /dev/null` has been added before commands that print LSNs since LSNs aren't reproducible
 - `now()` has been replaced with a hardcoded timestamp string for reproducibility
 - The test is run with `--quiet`, and the expected output has been trimmed accordingly
+

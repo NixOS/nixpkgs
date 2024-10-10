@@ -19,3 +19,4 @@ mkKdeDerivation {
     lm_sensors
   ];
 }
+

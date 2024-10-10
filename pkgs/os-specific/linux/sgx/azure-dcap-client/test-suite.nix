@@ -30,3 +30,4 @@ sgx-azure-dcap-client.overrideAttrs (old: {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ sgx-azure-dcap-client ]}"
   '';
 })
+

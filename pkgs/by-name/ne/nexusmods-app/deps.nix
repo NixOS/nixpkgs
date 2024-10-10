@@ -674,3 +674,4 @@
   (fetchNuGet { pname = "xunit.runner.visualstudio"; version = "2.8.0"; hash = "sha256-pZzKEO3zMO/kgPQ6UuWcBJZUzccs/sTnFp8ClQDad2c="; })
   (fetchNuGet { pname = "Xunit.SkippableFact"; version = "1.4.13"; hash = "sha256-pLtx0/2oTKYO1Y1Vg3k/Eli2OWHT5uorGdBp2uXvFfw="; })
 ]
+

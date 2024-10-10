@@ -215,3 +215,4 @@ Decision: Subpaths should be preferred over list of path component strings.
 - [Haskell](https://hackage.haskell.org/package/filepath-1.4.100.0/docs/System-FilePath.html)
 - [Nodejs](https://nodejs.org/api/path.html)
 - [POSIX.1-2017](https://pubs.opengroup.org/onlinepubs/9699919799/nframe.html)
+

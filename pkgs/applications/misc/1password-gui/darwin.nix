@@ -31,3 +31,4 @@ stdenv.mkDerivation {
   # 1Password is notarized.
   dontFixup = true;
 }
+

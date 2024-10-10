@@ -265,3 +265,4 @@ Coercing paths that don't exist to file sets always gives an error.
   - (+) `difference ./. (maybeMissing ./does-not-exist)` can be used to do this more explicitly.
   - (+) `difference ./. (difference ./foo ./foo/bar)` should report an error when `./foo/bar` does not exist ("double negation"). Unfortunately, the current internal representation does not lend itself to a behavior where both `difference x ./does-not-exists` and double negation are handled and checked correctly.
     This could be fixed, but would require significant changes to the internal representation that are not worth the effort and the risk of introducing implicit behavior.
+

@@ -88,3 +88,4 @@ in buildGoModule rec {
     maintainers = with maintainers; [ rushmorem rtreffer deltaevo ];
   };
 }
+

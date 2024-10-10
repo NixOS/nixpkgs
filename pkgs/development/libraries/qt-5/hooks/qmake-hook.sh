@@ -20,7 +20,7 @@ qmakePrePhase() {
     # do the stripping ourselves (needed for separateDebugInfo)
     prependToVar qmakeFlags "CONFIG+=nostrip"
 }
-prePhases+=" qmakePrePhase"
+appendToVar prePhases qmakePrePhase
 
 qmakeConfigurePhase() {
     runHook preConfigure
@@ -48,3 +48,4 @@ qmakeConfigurePhase() {
 if [ -z "${dontUseQmakeConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=qmakeConfigurePhase
 fi
+

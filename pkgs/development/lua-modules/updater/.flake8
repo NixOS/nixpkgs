@@ -6,3 +6,4 @@ ignore =
 	E501,E265,E402
 
 max-line-length = 120
+

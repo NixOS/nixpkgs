@@ -182,3 +182,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
   };
 })
+

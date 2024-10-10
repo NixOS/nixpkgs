@@ -24,3 +24,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "rofi-obsidian";
   };
 }
+

@@ -86,3 +86,4 @@ _shortenPerlShebang() {
         die "shortenPerlShebang: shebang line is $new_length characters--still too long for Darwin!"
     fi
 }
+

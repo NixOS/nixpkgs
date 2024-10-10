@@ -138,3 +138,4 @@ rustPlatform.buildRustPackage {
     changelog = "https://codeberg.org/solver-orgz/treedome/releases/tag/${version}";
   };
 }
+

@@ -30,3 +30,4 @@ in
 
     passthru.updateScript = nix-update-script {};
   }
+

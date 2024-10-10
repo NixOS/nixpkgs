@@ -102,3 +102,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wlx-overlay-s";
   };
 }
+

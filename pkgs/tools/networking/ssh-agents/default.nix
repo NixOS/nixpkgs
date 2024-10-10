@@ -42,3 +42,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "ssh-agents";
   };
 }
+

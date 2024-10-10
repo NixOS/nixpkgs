@@ -8,3 +8,4 @@ runCommand "${pname}-tests" { meta.timeout = 60; }
     ${pdal}/bin/pdal --drivers
     touch $out
   ''
+

@@ -96,3 +96,4 @@ in
 {
   inherit buildGhidraExtension buildGhidraScripts;
 }
+

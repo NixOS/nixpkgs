@@ -17,3 +17,4 @@ gem "fusuma-plugin-wmctrl"
 # thumbsense pulls in remap, and at best remap requires further configuration to allow the use access to event devices.
 #gem "fusuma-plugin-thumbsense"
 #gem "fusuma-plugin-remap"
+

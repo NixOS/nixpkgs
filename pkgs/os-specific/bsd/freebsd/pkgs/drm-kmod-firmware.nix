@@ -52,3 +52,4 @@ mkDerivation rec {
     sourceProvenance = [ lib.sourceTypes.binaryFirmware ];
   };
 }
+

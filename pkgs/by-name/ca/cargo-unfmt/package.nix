@@ -32,3 +32,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ cafkafk ];
   };
 }
+

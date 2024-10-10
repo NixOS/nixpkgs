@@ -15,3 +15,4 @@ mkCoqDerivation rec {
     maintainers = with lib.maintainers; [ ineol ];
   };
 }
+

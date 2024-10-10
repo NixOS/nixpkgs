@@ -23,3 +23,4 @@ runCommand "hackage-package-list" { }
     mkdir -p $out/bin
     echo -n "$(tar -t -f ${all-cabal-hashes} | sed 's![^/]*/\([^/]*\)/.*!"\1"!' | sort -u | join -t , - ${all-haskellPackages})" > $out/nixos-hackage-packages.csv
   ''
+

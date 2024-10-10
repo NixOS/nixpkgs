@@ -68,3 +68,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "catt";
   };
 }
+

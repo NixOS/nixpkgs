@@ -43,3 +43,4 @@ pkgs.runCommand "hadoop-conf" {} (with cfg; ''
   cp ${log4jProperties} $out/log4j.properties
   ${lib.concatMapStringsSep "\n" (dir: "cp -f -r ${dir}/* $out/") extraConfDirs}
 '')
+

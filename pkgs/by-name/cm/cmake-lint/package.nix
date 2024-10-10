@@ -40,3 +40,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "cmakelint";
   };
 }
+

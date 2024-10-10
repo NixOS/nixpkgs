@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -31,6 +32,10 @@ buildPythonPackage rec {
     certifi
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   pythonImportsCheck = [ "curl_cffi" ];
 
   meta = with lib; {
@@ -40,3 +45,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ chuangzhu ];
   };
 }
+

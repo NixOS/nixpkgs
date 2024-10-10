@@ -96,3 +96,4 @@ runCommand yazi-unwrapped.name
       --prefix PATH : ${lib.makeBinPath runtimePaths} \
       ${lib.optionalString (configHome != null) "--set YAZI_CONFIG_HOME ${configHome}"}
   ''
+

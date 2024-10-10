@@ -83,3 +83,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     assert "PHP Version ${pkgs.php81.version}" in response, "PHP version not detected"
   '';
 })
+

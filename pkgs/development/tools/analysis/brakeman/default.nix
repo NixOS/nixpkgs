@@ -17,3 +17,4 @@ bundlerApp rec {
     mainProgram = "brakeman";
   };
 }
+

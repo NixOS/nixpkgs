@@ -9,3 +9,4 @@
 ./test/mlir-vulkan-runner/subf.mlir
 ./test/mlir-vulkan-runner/time.mlir
 ./test/mlir-vulkan-runner/umul_extended.mlir
+

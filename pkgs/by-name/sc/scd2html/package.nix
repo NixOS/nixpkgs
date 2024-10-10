@@ -41,3 +41,4 @@ stdenv.mkDerivation rec {
     mainProgram = "scd2html";
   };
 }
+

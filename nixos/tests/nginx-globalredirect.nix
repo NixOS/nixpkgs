@@ -22,3 +22,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     webserver.fail("curl --fail -si http://localhost/noredirect | grep '^Location:'")
   '';
 })
+

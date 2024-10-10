@@ -20,11 +20,10 @@ melpaBuild {
 
   dontConfigure = true;
 
-  ignoreCompilationError = false;
-
   meta = {
     description = "Major mode for editing Ur/Web";
     inherit (urweb.meta) license homepage;
     maintainers = [ lib.maintainers.sternenseemann ];
   };
 }
+

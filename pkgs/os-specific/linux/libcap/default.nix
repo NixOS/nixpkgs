@@ -1,4 +1,4 @@
-{ stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
+{ stdenv, lib, buildPackages, fetchurl, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
 
@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = lib.optional usePam pam;
-
-  propagatedBuildInputs = [ attr ];
 
   makeFlags = [
     "lib=lib"
@@ -90,3 +88,4 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
   };
 }
+

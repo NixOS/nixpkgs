@@ -46,3 +46,4 @@ php.buildComposerProject (finalAttrs: {
     platforms = php.meta.platforms;
   };
 })
+

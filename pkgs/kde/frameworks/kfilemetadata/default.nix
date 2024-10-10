@@ -27,3 +27,4 @@ mkKdeDerivation {
     libappimage
   ];
 }
+

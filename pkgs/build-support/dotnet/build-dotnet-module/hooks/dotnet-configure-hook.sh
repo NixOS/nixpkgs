@@ -68,3 +68,4 @@ dotnetConfigureHook() {
 if [[ -z "${dontDotnetConfigure-}" && -z "${configurePhase-}" ]]; then
     configurePhase=dotnetConfigureHook
 fi
+

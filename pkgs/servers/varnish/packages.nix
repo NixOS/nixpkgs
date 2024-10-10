@@ -22,3 +22,4 @@
     modules = (callPackages ./modules.nix { inherit varnish; }).modules24;
   };
 }
+

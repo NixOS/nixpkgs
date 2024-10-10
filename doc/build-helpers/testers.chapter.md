@@ -439,3 +439,4 @@ Notable attributes:
  * `nodes`: the evaluated NixOS configurations. Useful for debugging and exploring the configuration.
 
  * `driverInteractive`: a script that launches an interactive Python session in the context of the `testScript`.
+

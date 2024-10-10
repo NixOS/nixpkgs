@@ -39,7 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
+  nativeBuildInputs = [ pkg-config python wafHook ]
+    ++ lib.optionals (optDbus != null) [ makeWrapper ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -89,3 +90,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
   };
 })
+

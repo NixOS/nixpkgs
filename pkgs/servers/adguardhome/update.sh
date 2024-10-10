@@ -45,3 +45,4 @@ echo '}' >> "$bins"
 
 sed -i -r -e "s/version\s*?=\s*?.*?;/version = \"${version#v}\";/" "$dirname/default.nix"
 sed -i -r -e "s/schema_version\s*?=\s*?.*?;/schema_version = ${schema_version};/" "$dirname/default.nix"
+

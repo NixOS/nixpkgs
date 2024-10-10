@@ -107,3 +107,4 @@ windows for the ghc's public library.
 > chunkList :: Int -> [a] -> [[a]]
 > chunkList _ [] = []
 > chunkList n xs = as : chunkList n bs where (as,bs) = splitAt n xs
+

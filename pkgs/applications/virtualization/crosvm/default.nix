@@ -52,3 +52,4 @@ rustPlatform.buildRustPackage rec {
     platforms = [ "aarch64-linux" "x86_64-linux" ];
   };
 }
+

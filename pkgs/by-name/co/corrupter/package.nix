@@ -33,3 +33,4 @@ buildGoModule {
     mainProgram = "corrupter";
   };
 }
+

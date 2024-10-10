@@ -28,3 +28,4 @@ and suspended to disk using `systemctl hibernate`.
 These commands can be run by any user who is logged in locally, i.e. on
 a virtual console or in X11; otherwise, the user is asked for
 authentication.
+

@@ -34,3 +34,4 @@ buildDunePackage rec {
     mainProgram = "coin.generate";
   };
 }
+

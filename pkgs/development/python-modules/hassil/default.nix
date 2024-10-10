@@ -50,3 +50,4 @@ buildPythonPackage {
     maintainers = teams.home-assistant.members;
   };
 }
+

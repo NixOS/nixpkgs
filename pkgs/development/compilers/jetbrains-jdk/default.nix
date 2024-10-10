@@ -154,3 +154,4 @@ jdk.overrideAttrs (oldAttrs: rec {
     home = "${jetbrains.jdk}/lib/openjdk";
   };
 })
+

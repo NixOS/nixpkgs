@@ -25,3 +25,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
     machine.succeed("vgchange -a n")
   '';
 })
+

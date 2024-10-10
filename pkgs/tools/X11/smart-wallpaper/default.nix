@@ -37,3 +37,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "smart-wallpaper";
   };
 }
+

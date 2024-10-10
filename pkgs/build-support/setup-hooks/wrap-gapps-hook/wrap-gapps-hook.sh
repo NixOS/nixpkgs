@@ -87,3 +87,4 @@ wrapGAppsHook() {
 }
 
 fixupOutputHooks+=(wrapGAppsHook)
+

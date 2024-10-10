@@ -16,3 +16,4 @@ in {
     services.udev.packages = [ cfg.package ];
   };
 }
+

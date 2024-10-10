@@ -49,3 +49,4 @@ if [ -n "$makeUInitrd" ]; then
 else
     ln -s "initrd" "$out/initrd$extension"
 fi
+

@@ -83,3 +83,4 @@ runTest ({ config, ... }: let inherit (config) adminuser; in {
         nextcloud.fail('test 0 -lt "$(redis-cli --pass secret --json KEYS "*" | jq "len")"')
   '';
 })
+

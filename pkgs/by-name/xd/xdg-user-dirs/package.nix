@@ -41,3 +41,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xdg-user-dirs-update";
   };
 })
+

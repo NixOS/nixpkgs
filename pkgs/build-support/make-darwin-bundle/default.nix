@@ -22,5 +22,6 @@ writeShellScript "make-darwin-bundle-${name}" (''
     ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}"
   }
 
-  preDistPhases+=" makeDarwinBundlePhase"
+  appendToVar preDistPhases makeDarwinBundlePhase
 '')
+

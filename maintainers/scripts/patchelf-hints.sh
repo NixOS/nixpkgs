@@ -82,3 +82,4 @@ for bin in $(find $binaryDist -executable -type f) :; do
 
 "
 done;
+

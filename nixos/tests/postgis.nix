@@ -36,3 +36,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     master.succeed("sudo -u postgres psql --no-psqlrc --tuples-only -c 'select st_makepoint(1, 1)'")
   '';
 })
+

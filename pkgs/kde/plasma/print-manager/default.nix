@@ -8,3 +8,4 @@ mkKdeDerivation {
   # FIXME: cups-smb?
   extraBuildInputs = [ cups ];
 }
+

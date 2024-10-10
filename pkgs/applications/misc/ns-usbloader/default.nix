@@ -104,3 +104,4 @@ maven.buildMavenPackage rec {
     mainProgram = "ns-usbloader";
   };
 }
+

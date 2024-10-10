@@ -28,3 +28,4 @@ crystal.buildCrystalPackage rec {
     mainProgram = "blahaj";
   };
 }
+

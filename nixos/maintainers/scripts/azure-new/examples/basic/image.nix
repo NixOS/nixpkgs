@@ -8,3 +8,4 @@ let
   };
 in
   machine.config.system.build.azureImage
+

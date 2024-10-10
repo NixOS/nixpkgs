@@ -27,3 +27,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       bridge.wait_for_open_port(6667)
     '';
 })
+

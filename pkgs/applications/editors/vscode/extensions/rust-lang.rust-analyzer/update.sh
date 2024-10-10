@@ -49,3 +49,4 @@ else
 fi
 
 echo "Remember to also update the releaseTag and hash in default.nix!"
+

@@ -35,3 +35,4 @@ appimageTools.wrapType2 rec {
       substituteInPlace $out/share/applications/${pname}.desktop --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
 }
+

@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert '<title>Main stream · FreshRSS</title>' in response, "FreshRSS stream page didn't load successfully"
   '';
 })
+

@@ -57,3 +57,4 @@ godot3-mono.overrideAttrs (self: base: {
     description = "Derivation with no output that exists to provide an environment for make-deps.sh";
   };
 })
+

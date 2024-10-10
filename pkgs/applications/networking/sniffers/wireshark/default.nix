@@ -213,3 +213,4 @@ stdenv.mkDerivation rec {
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }
+

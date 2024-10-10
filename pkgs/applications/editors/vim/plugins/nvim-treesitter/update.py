@@ -96,3 +96,4 @@ def update_grammars(nvim_treesitter_dir: str):
 if __name__ == "__main__":
     generated = update_grammars(sys.argv[1])
     open(join(os.path.dirname(__file__), "generated.nix"), "w").write(generated)
+

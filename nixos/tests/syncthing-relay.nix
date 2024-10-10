@@ -24,3 +24,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert "nixos-test" in out
   '';
 })
+

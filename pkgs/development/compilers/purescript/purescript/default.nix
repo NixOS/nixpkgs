@@ -75,3 +75,4 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };
 }
+

@@ -50,3 +50,4 @@ buildPythonPackage rec {
     mainProgram = "namespaced-openvpn";
   };
 }
+

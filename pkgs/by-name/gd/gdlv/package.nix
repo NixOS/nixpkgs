@@ -44,3 +44,4 @@ buildGoModule rec {
     license = licenses.gpl3;
   };
 }
+

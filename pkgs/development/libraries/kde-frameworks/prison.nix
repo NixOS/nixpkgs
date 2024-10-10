@@ -11,3 +11,4 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase qtmultimedia ];
   outputs = [ "out" "dev" ];
 }
+

@@ -45,3 +45,4 @@ crystal.buildCrystalPackage rec {
     platforms = platforms.unix;
   };
 }
+

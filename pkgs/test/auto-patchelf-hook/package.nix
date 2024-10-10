@@ -60,7 +60,6 @@ stdenv.mkDerivation {
   # Additional phase performing the actual test.
   installCheckPhase =
     let allDeps = runtimeDependencies ++ [
-        (lib.getLib stdenv.cc.libc)
         (lib.getLib freetype)
       ];
     in
@@ -97,3 +96,4 @@ stdenv.mkDerivation {
   doInstallCheck = true;
   inherit __structuredAttrs;
 }
+

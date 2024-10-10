@@ -139,3 +139,4 @@ The variable `c` however also has some additional functions, like
 [c.override](#sec-pkg-override) which can be used to override the
 default arguments. In this example the value of
 `(c.override { a = 4; }).result` is 6.
+

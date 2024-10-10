@@ -10,3 +10,4 @@ callPackage ./common.nix rec {
   buildInputs = [ zlib zstd ];
   knownVulnerabilities = [];
 }
+

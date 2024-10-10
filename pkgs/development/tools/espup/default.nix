@@ -75,3 +75,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "espup";
   };
 }
+

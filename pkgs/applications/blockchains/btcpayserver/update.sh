@@ -9,3 +9,4 @@ echo "Updating nbxplorer"
 echo
 echo "Updating btcpayserver"
 ../nbxplorer/util/update-common.sh btcpayserver deps.nix
+

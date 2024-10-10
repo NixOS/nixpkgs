@@ -5,3 +5,4 @@ version=$(curl --silent "https://api.github.com/repos/zerotier/ZeroTierOne/relea
 
 curl --silent "https://raw.githubusercontent.com/zerotier/ZeroTierOne/$version/rustybits/Cargo.lock" > "$(dirname "$0")/Cargo.lock"
 update-source-version zerotierone "$version"
+

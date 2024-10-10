@@ -259,3 +259,4 @@ in
     (mkRenamedOptionModule [ "services" "usbguard" "implictPolicyTarget" ] [ "services" "usbguard" "implicitPolicyTarget" ])
   ];
 }
+

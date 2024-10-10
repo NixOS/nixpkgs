@@ -52,3 +52,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

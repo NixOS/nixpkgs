@@ -19,3 +19,4 @@ bundlerApp {
     mainProgram = "docker-sync";
   };
 }
+

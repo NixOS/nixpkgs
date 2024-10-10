@@ -121,3 +121,4 @@ that depends on `emacs` will be passed your customised instance.
 (However, the value `pkgs.emacs` in `nixpkgs.config.packageOverrides`
 refers to the original rather than overridden instance, to prevent an
 infinite recursion.)
+

@@ -46,3 +46,4 @@ buildGoModule rec {
     mainProgram = "dnscontrol";
   };
 }
+

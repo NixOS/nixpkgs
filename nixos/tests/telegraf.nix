@@ -38,3 +38,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.wait_until_succeeds("grep -q ping /tmp/metrics.out")
   '';
 })
+

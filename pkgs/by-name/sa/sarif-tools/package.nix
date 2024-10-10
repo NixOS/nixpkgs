@@ -2,3 +2,4 @@
 
 with python3Packages;
 toPythonApplication sarif-tools
+

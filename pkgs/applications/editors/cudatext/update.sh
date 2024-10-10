@@ -31,3 +31,4 @@ while IFS=$'\t' read repo owner rev; do
     jq ".\"${repo}\".rev = \"${latest}\" | .\"${repo}\".hash = \"${sriHash}\"" deps.json | sponge deps.json
   fi
 done <<< $(jq -r 'to_entries[]|[.key,.value.owner,.value.rev]|@tsv' deps.json)
+

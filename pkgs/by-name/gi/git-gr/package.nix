@@ -69,3 +69,4 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = nix-update-script { };
 }
+

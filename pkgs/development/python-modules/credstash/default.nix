@@ -67,3 +67,4 @@ buildPythonPackage rec {
     mainProgram = "credstash";
   };
 }
+

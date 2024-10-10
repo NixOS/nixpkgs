@@ -31,3 +31,4 @@ import ./make-test-python.nix ({pkgs, ...}: {
     assert "<title>Your Spotify</title>" in out
   '';
 })
+

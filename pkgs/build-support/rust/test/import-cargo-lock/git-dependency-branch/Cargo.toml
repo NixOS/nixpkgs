@@ -6,3 +6,4 @@ edition = "2018"
 
 [dependencies]
 rand = { git = "https://github.com/rust-random/rand.git", branch = "master" }
+

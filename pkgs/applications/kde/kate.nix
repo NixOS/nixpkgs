@@ -36,3 +36,4 @@ mkDerivation {
   ];
   propagatedUserEnvPkgs = [ konsole ];
 }
+

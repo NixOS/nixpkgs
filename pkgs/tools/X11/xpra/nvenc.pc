@@ -9,3 +9,4 @@ Requires:
 Conflicts:
 Libs: -L${libdir} -lnvidia-encode
 Cflags: -I${includedir}
+

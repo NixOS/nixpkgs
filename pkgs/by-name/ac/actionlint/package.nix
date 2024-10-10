@@ -60,3 +60,4 @@ buildGoModule {
     mainProgram = "actionlint";
   };
 }
+

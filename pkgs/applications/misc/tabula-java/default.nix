@@ -48,3 +48,4 @@ maven.buildMavenPackage rec {
     mainProgram = "tabula-java";
   };
 }
+

@@ -5,3 +5,4 @@ godot3-debug-server.overrideAttrs (self: base: {
   godotBuildDescription = "server";
   godotBuildTarget = "release";
 })
+

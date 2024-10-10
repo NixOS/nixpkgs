@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "alpine-make-vm-image";
   };
 }
+

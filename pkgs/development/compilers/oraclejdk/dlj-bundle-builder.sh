@@ -58,3 +58,4 @@ fi
 mkdir $jrePath/lib/$architecture/plugins
 ln -s $jrePath/lib/$architecture/libnpjp2.so $jrePath/lib/$architecture/plugins
 
+

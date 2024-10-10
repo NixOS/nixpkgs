@@ -48,3 +48,4 @@ rec {
         assert "NixOS Foundation donation" in transactions
   '';
 })
+

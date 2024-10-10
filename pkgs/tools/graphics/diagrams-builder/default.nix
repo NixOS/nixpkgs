@@ -41,3 +41,4 @@ stdenv.mkDerivation {
   preferLocalBuild = true;
   meta = diagrams-builder.meta;
 }
+

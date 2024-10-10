@@ -10,3 +10,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative qtwebsockets ];
   buildInputs = [ openssl ];
 }
+

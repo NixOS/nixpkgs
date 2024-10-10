@@ -202,3 +202,4 @@ in {
     environment.systemPackages = [ xmonad ];
   };
 }
+

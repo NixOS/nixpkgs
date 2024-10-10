@@ -10,3 +10,4 @@
   # if you are able to see this comment.
   imports = [ "${modulesPath}/virtualisation/azure-common.nix" ];
 }
+

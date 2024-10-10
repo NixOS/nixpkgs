@@ -28,3 +28,4 @@ buildDotnetModule rec {
     mainProgram = "DepotDownloader";
   };
 }
+

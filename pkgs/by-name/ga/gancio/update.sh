@@ -17,3 +17,4 @@ sed -i "$nixFile" -re "s|\"$old_yarn_hash\"|\"$new_yarn_hash\"|"
 rm "$nixFolder/yarn.lock"
 
 update-source-version gancio "$latest_version"
+

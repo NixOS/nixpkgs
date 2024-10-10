@@ -33,3 +33,4 @@ namespace {
 
 	require(__DIR__ . '/adminer.php');
 }
+

@@ -34,3 +34,4 @@ mkFranzDerivation rec {
     hydraPlatforms = [ ];
   };
 }
+

@@ -27,3 +27,4 @@ bundlerApp {
     platforms = platforms.unix;
   };
 }
+

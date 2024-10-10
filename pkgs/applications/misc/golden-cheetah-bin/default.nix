@@ -36,3 +36,4 @@ appimageTools.wrapType2 {
     knownVulnerabilities = [ "Vendors libwebp vulnerable to CVE-2023-4863" ];
   };
 }
+

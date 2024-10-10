@@ -6,12 +6,30 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.10.0";
+  version = "6.11.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-kaYvgnN7RJBaAPqAM2nER9VJ6RTpoqQBj911sdVOjc4=";
+    hash = "sha256-H3lTmKBK6qzQao9qziz9kTwz+llTypnaroO7XFNGEcM=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "musl-endian.patch";
+      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
+      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
+    })
+    (fetchurl {
+      name = "musl-msghdr.patch";
+      url = "https://lore.kernel.org/netdev/20240712191209.31324-2-contact@hacktivis.me/raw";
+      hash = "sha256-X5BYSZBxcvdjtX1069a1GfcpdoVd0loSAe4xTpbCipA=";
+    })
+    (fetchurl {
+      name = "musl-basename.patch";
+      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
+      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -71,3 +89,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }
+

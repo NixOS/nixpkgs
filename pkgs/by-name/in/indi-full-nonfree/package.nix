@@ -13,3 +13,4 @@ indi-with-drivers.override {
     builtins.attrValues indi-3rdparty
   );
 }
+

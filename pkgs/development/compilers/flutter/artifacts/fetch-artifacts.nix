@@ -71,3 +71,4 @@ runCommand "flutter-artifacts-${flutterPlatform}-${systemPlatform}"
 
   cp -r bin/cache "$out"
 ''
+

@@ -67,3 +67,4 @@ in rustPlatform.buildRustPackage rec {
     mainProgram = "rga";
   };
 }
+

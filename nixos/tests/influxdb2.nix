@@ -223,3 +223,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         assert_contains(out, "new specifics")
     '';
 })
+

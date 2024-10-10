@@ -16,3 +16,4 @@ fi
 update-source-version marksman "$version"
 
 $(nix-build -A marksman.fetch-deps --no-out-link)
+

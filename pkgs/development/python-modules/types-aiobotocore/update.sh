@@ -394,3 +394,4 @@ for package in "${packages[@]}"; do
 done
 
 nixfmt ${source_file}
+

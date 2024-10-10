@@ -21,3 +21,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     server.succeed("eriscmd get http://[::1] $(echo 'Hail ERIS!' | eriscmd put coap+tcp://[::1]:5683)")
   '';
 })
+

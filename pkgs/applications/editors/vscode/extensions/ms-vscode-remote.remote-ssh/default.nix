@@ -103,3 +103,4 @@ buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.tbenst ];
   };
 }
+

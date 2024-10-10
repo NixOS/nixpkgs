@@ -10,3 +10,4 @@ version="$(curl https://download.jitsi.org/stable/ | \
     tail -n 1)"
 
 update-source-version jitsi-meet "$version"
+

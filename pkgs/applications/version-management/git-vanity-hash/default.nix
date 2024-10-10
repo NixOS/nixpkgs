@@ -31,3 +31,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-vanity-hash";
   };
 }
+

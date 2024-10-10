@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ karchive kcoreaddons ];
   propagatedBuildInputs = [ kservice qtbase ];
 }
+

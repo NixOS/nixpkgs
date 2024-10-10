@@ -1281,3 +1281,4 @@ in
   # uses types of services/x11/xserver.nix
   meta.buildDocsInSandbox = false;
 }
+

@@ -91,3 +91,4 @@ buildGoModule rec {
     mainProgram = "kubescape";
   };
 }
+

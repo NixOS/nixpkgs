@@ -76,3 +76,4 @@ rec {
   simpleTest = as: (makeTest as).test;
 
 }
+

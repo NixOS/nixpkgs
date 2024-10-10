@@ -79,3 +79,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         assert output[-9:-1] == "SAFE :-}"
   '';
 })
+

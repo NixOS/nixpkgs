@@ -80,3 +80,4 @@ symlinkJoin {
   name = "kubo-migrator-all-fs-repo-migrations-${version}";
   paths = all-migrations;
 }
+

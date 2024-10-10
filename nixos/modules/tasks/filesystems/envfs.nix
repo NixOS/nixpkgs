@@ -62,3 +62,4 @@ in {
     system.activationScripts.binsh = lib.mkForce "";
   };
 }
+

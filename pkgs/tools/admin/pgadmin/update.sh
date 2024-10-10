@@ -108,3 +108,4 @@ sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$YARN_HASH\"#" ${scriptDir}/defau
 
 update-source-version pgadmin4 "$newest_version" --print-changes
 touch $TMPDIR/.done
+

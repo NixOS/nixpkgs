@@ -6,3 +6,4 @@ in
 stdenv.mkDerivation (finalAttrs: ((mecab-base finalAttrs) // {
   pname = "mecab-nodic";
 }))
+

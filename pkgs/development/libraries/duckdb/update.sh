@@ -43,3 +43,4 @@ sri=$(nix-prefetch -I nixpkgs="${nixpkgs}" -E "duckdb.overrideAttrs { version = 
 json_set ".version" "${version}"
 json_set ".rev" "${sha}"
 json_set ".hash" "${sri}"
+

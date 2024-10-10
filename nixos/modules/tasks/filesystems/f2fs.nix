@@ -19,3 +19,4 @@ in
     boot.initrd.systemd.initrdBin = mkIf inInitrd [ pkgs.f2fs-tools ];
   };
 }
+

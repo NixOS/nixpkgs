@@ -53,3 +53,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ elasticdog ];
   };
 }
+

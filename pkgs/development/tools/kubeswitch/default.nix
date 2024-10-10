@@ -50,3 +50,4 @@ buildGoModule rec {
     mainProgram = "switcher";
   };
 }
+

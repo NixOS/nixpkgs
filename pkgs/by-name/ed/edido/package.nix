@@ -16,3 +16,4 @@ writeShellApplication {
     ${builtins.readFile ./edido.sh}
   '';
 }
+

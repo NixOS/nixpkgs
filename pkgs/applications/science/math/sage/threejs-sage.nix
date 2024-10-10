@@ -17,3 +17,4 @@ stdenv.mkDerivation rec {
     cp -r build "$out/lib/node_modules/three/$(cat version)"
   '';
 }
+

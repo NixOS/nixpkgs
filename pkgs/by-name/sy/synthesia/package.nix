@@ -74,3 +74,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = wineWowPackages.stable.meta.platforms;
   };
 }
+

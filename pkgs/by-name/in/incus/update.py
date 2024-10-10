@@ -85,3 +85,4 @@ with open(file, "r+") as f:
     file_content = re.sub(current_vendor_hash, latest_vendor_hash, file_content)
     f.seek(0)
     f.write(file_content)
+

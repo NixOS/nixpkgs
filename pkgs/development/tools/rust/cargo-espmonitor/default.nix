@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ xanderio ];
   };
 }
+

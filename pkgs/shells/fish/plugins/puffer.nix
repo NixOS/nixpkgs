@@ -22,3 +22,4 @@ buildFishPlugin rec {
     maintainers = with lib.maintainers; [ quantenzitrone ];
   };
 }
+

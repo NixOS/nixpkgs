@@ -20,3 +20,4 @@ azure-vhd-utils-for-go  upload --localvhdpath azure/disk.vhd  --stgaccountname "
 
 
 
+

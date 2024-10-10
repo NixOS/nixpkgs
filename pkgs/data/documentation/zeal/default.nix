@@ -68,3 +68,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (qtbase.meta) platforms;
   };
 })
+

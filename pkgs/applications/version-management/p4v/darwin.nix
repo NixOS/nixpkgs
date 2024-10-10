@@ -22,3 +22,4 @@ stdenv.mkDerivation {
       --replace /Applications $out/Applications
   '';
 }
+

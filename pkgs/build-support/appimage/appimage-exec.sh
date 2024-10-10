@@ -144,3 +144,4 @@ if [ -n "$apprun_opt" ] && [ -f "$APPIMAGE" ]; then
   wrap "$@"
   exit
 fi
+

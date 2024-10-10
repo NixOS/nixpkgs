@@ -32,3 +32,4 @@ mkHyprlandPlugin hyprland rec {
     ];
   };
 }
+

@@ -9,3 +9,4 @@
   (fetchNuGet { pname = "Sledge.Formats.Map"; version = "1.1.5"; sha256 = "1bww60hv9xcyxpvkzz5q3ybafdxxkw6knhv97phvpkw84pd0jil6"; })
   (fetchNuGet { pname = "System.Numerics.Vectors"; version = "4.5.0"; sha256 = "1kzrj37yzawf1b19jq0253rcs8hsq1l2q8g69d7ipnhzb0h97m59"; })
 ]
+

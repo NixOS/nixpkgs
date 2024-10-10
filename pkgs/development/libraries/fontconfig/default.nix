@@ -94,3 +94,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "fontconfig" ];
   };
 })
+

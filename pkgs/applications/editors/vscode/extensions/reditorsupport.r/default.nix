@@ -40,3 +40,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.pandapip1 ];
   };
 }
+

@@ -26,3 +26,4 @@ lib.makeScope pkgs.newScope (self:
 
   truffleruby = self.callPackage ./truffleruby { };
 })
+

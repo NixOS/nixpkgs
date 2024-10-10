@@ -28,3 +28,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ mic92 ];
   };
 }
+

@@ -37,3 +37,4 @@ deployAndroidPackage {
 
   meta.license = lib.licenses.unfree;
 }
+

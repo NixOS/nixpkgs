@@ -31,3 +31,4 @@ stdenv.mkDerivation {
     makeWrapper ${why3}/bin/why3 $out/bin/why3 --add-flags "--config $out/share/why3/why3.conf"
   '';
 }
+

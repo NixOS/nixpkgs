@@ -140,3 +140,4 @@ in {
           assert "vsyscall=emulate" in machine.succeed("cat /proc/cmdline")
     '';
 })
+

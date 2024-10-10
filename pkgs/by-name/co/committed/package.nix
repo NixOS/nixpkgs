@@ -41,3 +41,4 @@ rustPlatform.buildRustPackage {
     maintainers = [ lib.maintainers.pigeonf ];
   };
 }
+

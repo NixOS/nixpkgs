@@ -182,3 +182,4 @@ buildNpmPackage' rec {
     mainProgram = "bruno";
   };
 }
+

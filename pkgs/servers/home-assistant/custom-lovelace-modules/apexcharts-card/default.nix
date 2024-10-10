@@ -35,3 +35,4 @@ buildNpmPackage rec {
     platforms = platforms.all;
   };
 }
+

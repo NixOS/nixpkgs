@@ -73,3 +73,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = lib.teams.deepin.members;
   };
 })
+

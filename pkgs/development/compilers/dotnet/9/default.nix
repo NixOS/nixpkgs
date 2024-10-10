@@ -7,3 +7,4 @@
   depsFile = ./deps.nix;
   bootstrapSdk = dotnetCorePackages.sdk_9_0;
 }
+

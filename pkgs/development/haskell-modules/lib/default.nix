@@ -362,3 +362,4 @@ rec {
   # built. Will delay failures, if any, to compile time.
   allowInconsistentDependencies = compose.allowInconsistentDependencies;
 }
+

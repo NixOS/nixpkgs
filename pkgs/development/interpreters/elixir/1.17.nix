@@ -6,3 +6,4 @@ mkDerivation {
   minimumOTPVersion = "25";
   escriptPath = "lib/elixir/scripts/generate_app.escript";
 }
+

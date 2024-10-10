@@ -48,3 +48,4 @@ let
 
   checkedTeams = lib.mapAttrs checkTeam lib.teams;
 in pkgs.writeTextDir "maintainer-teams.json" (builtins.toJSON checkedTeams)
+

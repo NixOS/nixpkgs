@@ -83,3 +83,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (kmod.meta) platforms;
   };
 })
+

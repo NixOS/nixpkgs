@@ -4,3 +4,4 @@ qtModule {
   pname = "qtwebglplugin";
   propagatedBuildInputs = [ qtbase qtwebsockets ];
 }
+

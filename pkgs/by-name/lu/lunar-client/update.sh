@@ -10,3 +10,4 @@ hash=$(echo "$metadata" | yq .sha512 -r)
 
 sed -i "s@version = .*;@version = \"$version\";@g" "$target"
 sed -i "s@hash.* = .*;@hash = \"sha512-$hash\";@g" "$target"
+

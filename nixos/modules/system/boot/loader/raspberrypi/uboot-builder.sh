@@ -36,3 +36,4 @@ copyForced @uboot@/u-boot.bin $target/u-boot-rpi.bin
 
 # Add the config.txt
 copyForced @configTxt@ $target/config.txt
+

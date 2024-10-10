@@ -25,3 +25,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ nim65s ];
   };
 }
+

@@ -7,3 +7,4 @@
     hardware.enableRedistributableFirmware = true;
   };
 }
+

@@ -159,3 +159,4 @@ echo
 echo "------------- Nix mono ---------------"
 print_nix_version_mono
 
+

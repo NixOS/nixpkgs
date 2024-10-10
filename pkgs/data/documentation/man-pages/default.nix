@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     priority = 30; # if a package comes with its own man page, prefer it
   };
 }
+

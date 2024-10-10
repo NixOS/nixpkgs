@@ -26,3 +26,4 @@
   (fetchNuGet { pname = "System.Security.Cryptography.Cng"; version = "5.0.0"; sha256 = "06hkx2za8jifpslkh491dfwzm5dxrsyxzj5lsc0achb6yzg4zqlw"; })
   (fetchNuGet { pname = "System.Security.Cryptography.Pkcs"; version = "7.0.0"; sha256 = "0834gh4k84xbv73mk6s9djkksq3bd6m2k1ixincjnaawv0pyz7fw"; })
 ]
+

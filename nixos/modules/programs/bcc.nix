@@ -7,3 +7,4 @@
     boot.extraModulePackages = [ pkgs.bcc ];
   };
 }
+

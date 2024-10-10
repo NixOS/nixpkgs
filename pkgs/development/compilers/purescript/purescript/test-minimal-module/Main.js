@@ -6,3 +6,4 @@ export const log = function (s) {
         return {};
     };
 };
+

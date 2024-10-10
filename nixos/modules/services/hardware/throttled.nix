@@ -31,3 +31,4 @@ in {
       lib.mkIf (lib.versionAtLeast config.boot.kernelPackages.kernel.version "5.9") "on";
   };
 }
+

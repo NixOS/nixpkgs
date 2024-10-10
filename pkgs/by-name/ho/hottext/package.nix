@@ -35,3 +35,4 @@ buildNimPackage (finalAttrs: {
     mainProgram = "hottext";
   };
 })
+

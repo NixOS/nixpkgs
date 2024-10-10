@@ -43,3 +43,4 @@ buildGoModule {
     mainProgram = "pinact";
   };
 }
+

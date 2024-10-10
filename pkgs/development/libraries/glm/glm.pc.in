@@ -5,3 +5,4 @@ Name: GLM
 Description: OpenGL Mathematics
 Version: @version@
 Cflags: -I${includedir}
+

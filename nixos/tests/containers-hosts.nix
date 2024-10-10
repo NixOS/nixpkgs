@@ -47,3 +47,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             machine.succeed(f"ping -n -c 1 {host}")
   '';
 })
+

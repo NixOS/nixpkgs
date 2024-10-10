@@ -12,3 +12,4 @@ in {
     fonts.fontDir.enable = true;
   };
 }
+

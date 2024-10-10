@@ -38,3 +38,4 @@ buildGoModule {
     maintainers = with maintainers; [ happysalada ];
   };
 }
+

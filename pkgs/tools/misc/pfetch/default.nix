@@ -26,3 +26,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "pfetch";
   };
 }
+

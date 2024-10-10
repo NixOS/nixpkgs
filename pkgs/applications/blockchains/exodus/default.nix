@@ -105,3 +105,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ mmahut rople380 Crafter ];
   };
 })
+

@@ -33,3 +33,4 @@ rustPlatform.buildRustPackage rec {
     inherit (clippy.meta) platforms;
   };
 }
+

@@ -41,3 +41,4 @@ mkDerivation rec {
     homepage = "https://skrooge.org/";
   };
 }
+

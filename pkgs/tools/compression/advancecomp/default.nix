@@ -34,3 +34,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/amadvance/advancecomp/blob/v${version}/HISTORY";
   };
 }
+

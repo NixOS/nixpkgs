@@ -17,3 +17,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtwayland ];
   meta.mainProgram = "kscreen-doctor";
 }
+

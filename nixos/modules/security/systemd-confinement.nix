@@ -203,3 +203,4 @@ in {
     '';
   in lib.optional cfg.confinement.enable chrootPaths) config.systemd.services);
 }
+

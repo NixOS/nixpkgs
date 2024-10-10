@@ -51,3 +51,4 @@ in
       lib.concatStrings (lib.mapAttrsToList (n: v: "${n}=${builtins.toString v}\n") cfg.settings);
   };
 }
+

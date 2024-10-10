@@ -49,3 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (guile.meta) platforms;
   };
 })
+

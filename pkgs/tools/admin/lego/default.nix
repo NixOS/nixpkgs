@@ -31,3 +31,4 @@ buildGoModule rec {
 
   passthru.tests.lego = nixosTests.acme;
 }
+

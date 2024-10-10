@@ -335,3 +335,4 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })
+

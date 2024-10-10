@@ -63,3 +63,4 @@ buildPythonPackage rec {
     mainProgram = "tldextract";
   };
 }
+

@@ -97,3 +97,4 @@ if [[ -z "${__nix_wrapQtAppsHook-}" ]]; then
     fixupOutputHooks+=(wrapQtAppsHook)
 
 fi
+

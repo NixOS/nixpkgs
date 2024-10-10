@@ -16,3 +16,4 @@ srcHash=$(nix-prefetch-github ralph-irving squeezelite --rev "$latestRev" | jq -
 
 
 update-source-version squeezelite "$latestVersion" "$srcHash" --rev="${latestRev}"
+

@@ -21,3 +21,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = [ maintainers.jbedo ];
   };
 }
+

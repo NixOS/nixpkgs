@@ -52,3 +52,4 @@ runCommand "manual.epub"
     zip -0Xq -b "$TMPDIR" "$out" mimetype
     cd scratch && zip -Xr9D -b "$TMPDIR" "$out" *
   ''
+

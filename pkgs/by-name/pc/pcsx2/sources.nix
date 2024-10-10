@@ -71,3 +71,4 @@ in
 {
   inherit pcsx2 pcsx2_patches shaderc-patched;
 }
+

@@ -80,3 +80,4 @@ The exim config needs some special additions to work with Mailman. Currently
 NixOS can't manage Exim config with such granularity. Please refer to
 [Mailman documentation](https://mailman.readthedocs.io/en/latest/src/mailman/docs/mta.html)
 for more info on configuring Mailman for working with Exim.
+

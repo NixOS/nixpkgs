@@ -49,3 +49,4 @@ cd $TMP/wine-wow && make install -j$NIX_BUILD_CORES
 cd $TMP/wine64 && make install -j$NIX_BUILD_CORES
 eval "$postInstall"
 fixupPhase
+

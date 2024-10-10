@@ -22,3 +22,4 @@ mkDerivation {
     inherit (lazarus.meta) license platforms;
   };
 }
+

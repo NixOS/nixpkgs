@@ -22,3 +22,4 @@ buildGhidraExtension rec {
     license = lib.licenses.asl20;
   };
 }
+

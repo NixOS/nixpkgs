@@ -36,3 +36,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }
+

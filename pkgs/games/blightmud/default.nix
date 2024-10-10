@@ -78,3 +78,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.linux ++ platforms.darwin;
   };
 }
+

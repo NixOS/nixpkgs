@@ -72,3 +72,4 @@ echo $hash
 if test -n "$PRINT_PATH"; then
     echo $finalPath
 fi
+

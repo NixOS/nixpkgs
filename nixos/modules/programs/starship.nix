@@ -98,3 +98,4 @@ in
 
   meta.maintainers = pkgs.starship.meta.maintainers;
 }
+

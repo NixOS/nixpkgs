@@ -20,3 +20,4 @@ collectd.overrideAttrs (oldAttrs: {
     maintainers = [ maintainers.sheenobu maintainers.bjornfor ];
   };
 })
+

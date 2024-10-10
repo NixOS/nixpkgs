@@ -38,3 +38,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "gltfpack";
   };
 }
+

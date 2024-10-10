@@ -123,3 +123,4 @@ mkDerivation rec {
     knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
   };
 }
+

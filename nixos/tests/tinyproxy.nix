@@ -18,3 +18,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed('curl -s http://localhost:8080 |grep -i tinyproxy')
   '';
 })
+

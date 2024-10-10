@@ -28,3 +28,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "imgur-screenshot";
   };
 }
+

@@ -25,3 +25,4 @@ buildGoModule {
     broken = stdenv.hostPlatform.isDarwin;
   };
 }
+

@@ -32,3 +32,4 @@ buildHomeAssistantComponent rec {
     maintainers = with maintainers; [ pathob ];
   };
 }
+

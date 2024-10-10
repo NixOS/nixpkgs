@@ -22,3 +22,4 @@ in runCommand "cue-validation" {} ''
   fi
   touch $out
 ''
+

@@ -87,3 +87,4 @@ dotnetBuildHook() {
 if [[ -z ${dontDotnetBuild-} && -z ${buildPhase-} ]]; then
     buildPhase=dotnetBuildHook
 fi
+

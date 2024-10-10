@@ -83,3 +83,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ hardselius anthonyroussel ];
   };
 }
+

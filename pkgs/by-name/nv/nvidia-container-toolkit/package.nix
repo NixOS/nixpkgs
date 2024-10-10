@@ -109,3 +109,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ cpcloud ];
   };
 }
+

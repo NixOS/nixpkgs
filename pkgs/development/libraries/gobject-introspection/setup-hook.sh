@@ -32,3 +32,4 @@ _multioutMoveGlibGir() {
 }
 
 preFixupHooks+=(_multioutMoveGlibGir)
+

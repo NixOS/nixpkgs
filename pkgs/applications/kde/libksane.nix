@@ -15,3 +15,4 @@ mkDerivation {
   buildInputs = [ qtbase ki18n ktextwidgets kwallet kwidgetsaddons ];
   propagatedBuildInputs = [ ksanecore sane-backends ];
 }
+

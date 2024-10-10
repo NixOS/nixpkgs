@@ -12,3 +12,4 @@ in
   options.nest.unused = lib.mkOption deathtrapArgs;
   config.nest.bar = "bar";
 }
+

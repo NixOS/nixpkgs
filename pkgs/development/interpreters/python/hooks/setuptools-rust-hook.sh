@@ -16,3 +16,4 @@ setuptoolsRustSetup() {
 }
 
 preConfigureHooks+=(setuptoolsRustSetup)
+

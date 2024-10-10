@@ -266,3 +266,4 @@ let
 in
 
 listToAttrs (map makeForgejoTest supportedDbTypes)
+

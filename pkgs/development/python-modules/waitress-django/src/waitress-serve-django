@@ -12,3 +12,4 @@ if __name__ == "__main__":
   # These arguments are specific to the runner, not waitress itself.
   del kw['call'], kw['help']
   serve(StaticFilesHandler(WSGIHandler()), **kw)
+

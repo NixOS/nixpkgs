@@ -72,3 +72,4 @@ and manifest agree about the domain name.
 
 There shouldn't be a need to disable this hook, but you can set
 `dontCheckManifest` to `true` in the derivation to achieve that.
+

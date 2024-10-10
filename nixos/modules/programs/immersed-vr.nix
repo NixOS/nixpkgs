@@ -32,3 +32,4 @@ in
 
   meta.maintainers = pkgs.immersed-vr.meta.maintainers;
 }
+

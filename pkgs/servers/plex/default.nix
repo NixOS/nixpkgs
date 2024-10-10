@@ -137,3 +137,4 @@ buildFHSEnv {
     LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$root exec "$root/Plex Media Server"
   '';
 }
+

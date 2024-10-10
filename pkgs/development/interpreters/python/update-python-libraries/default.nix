@@ -12,3 +12,4 @@ runCommand "update-python-libraries" {
   patchShebangs $out
   substituteInPlace $out --replace 'GIT = "git"' 'GIT = "${git}/bin/git"'
 ''
+

@@ -114,3 +114,4 @@ EOF
 fi
 
 echo "Regeneration of hackage-packages.nix finished."
+

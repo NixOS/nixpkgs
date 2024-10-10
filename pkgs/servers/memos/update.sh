@@ -54,3 +54,4 @@ NPM_HASH=$(prefetch-npm-deps ./package-lock.json)
 popd
 
 sed -i -E -e "s#npmDepsHash = \".*\"#npmDepsHash = \"$NPM_HASH\"#" ./pkgs/servers/memos/default.nix
+

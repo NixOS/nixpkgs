@@ -39,3 +39,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "diswall";
   };
 }
+

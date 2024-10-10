@@ -37,3 +37,4 @@ in {
 ```
 
 On your developer machine, you will also want to install [the client](https://blackfire.io/docs/up-and-running/installation#install-a-profiling-client) (see `blackfire` package) or the browser extension to actually trigger the profiling.
+

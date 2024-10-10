@@ -232,3 +232,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
           "PYTHONUNBUFFERED=1 systemd-cat -t browser-test browser-test")
   '';
 })
+

@@ -66,3 +66,4 @@ $ sudo gotosocial-admin account create --username <nickname> --email <email> --p
 $ sudo gotosocial-admin account confirm --username <nickname>
 $ sudo gotosocial-admin account promote --username <nickname>
 ```
+

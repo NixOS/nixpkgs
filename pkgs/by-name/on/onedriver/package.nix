@@ -70,3 +70,4 @@ buildGoModule {
     platforms = platforms.linux;
   };
 }
+

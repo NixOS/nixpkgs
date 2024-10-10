@@ -45,3 +45,4 @@ buildDir() {
 }
 
 eval "$installPhase"
+

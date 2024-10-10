@@ -46,3 +46,4 @@ buildGoModule rec {
     license = with lib.licenses; [ bsd2 bsd3 gpl3 ];
   };
 }
+

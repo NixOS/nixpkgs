@@ -98,3 +98,4 @@ resholve.mkDerivation rec {
     mainProgram = "git-ftp";
   };
 }
+

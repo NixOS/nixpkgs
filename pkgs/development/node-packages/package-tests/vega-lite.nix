@@ -22,3 +22,4 @@ runCommand "${packageName}-tests" { meta.timeout = 60; }
     # needed for Nix to register the command as successful
     touch $out
   ''
+

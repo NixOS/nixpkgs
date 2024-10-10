@@ -127,3 +127,4 @@ EOF
 
 echo "Opening a PR for the next haskell-updates merge cycle..."
 gh pr create --repo NixOS/nixpkgs --base master --head haskell-updates --title "haskellPackages: update stackage and hackage" --body "$new_pr_body"
+

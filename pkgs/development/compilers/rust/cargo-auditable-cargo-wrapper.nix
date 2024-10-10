@@ -22,3 +22,4 @@ runCommand "auditable-${cargo.name}" {
     --prefix PATH : ${lib.makeBinPath [ cargo cargo-auditable ]} \
     --add-flags auditable
 ''
+

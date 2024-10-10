@@ -51,3 +51,4 @@ in myNodePackages.package.override {
     mainProgram = "mx-puppet-discord";
   };
 }
+

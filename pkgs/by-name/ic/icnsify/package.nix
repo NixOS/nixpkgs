@@ -27,3 +27,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "icnsify";
   };
 }
+

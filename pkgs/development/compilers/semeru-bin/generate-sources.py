@@ -83,3 +83,4 @@ for feature_version in feature_versions:
 with open("sources.json", "w") as f:
     json.dump(out, f, indent=2, sort_keys=True)
     f.write('\n')
+

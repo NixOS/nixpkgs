@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     mainProgram = "u3-tool";
   };
 }
+

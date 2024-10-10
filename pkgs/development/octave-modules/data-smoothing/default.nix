@@ -24,3 +24,4 @@ buildOctavePackage rec {
     description = "Algorithms for smoothing noisy data";
   };
 }
+

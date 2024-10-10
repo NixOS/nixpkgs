@@ -44,3 +44,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert 'Server1.Name = "this is a test"' in config
   '';
 })
+

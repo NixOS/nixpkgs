@@ -99,3 +99,4 @@ lib.overrideDerivation (buildLinux (args // {
     copyDTB bcm2711-rpi-4-b.dtb bcm2838-rpi-4-b.dtb
   '';
 })
+

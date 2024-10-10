@@ -31,3 +31,4 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     maintainers = [ lib.maintainers.rhoriguchi ];
   };
 }
+

@@ -23,3 +23,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ dywedir ];
   };
 }
+

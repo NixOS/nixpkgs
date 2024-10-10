@@ -40,3 +40,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ doronbehar ];
   };
 }
+

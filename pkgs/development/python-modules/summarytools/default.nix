@@ -8,7 +8,6 @@
   matplotlib,
   numpy,
   pandas,
-  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,8 +31,6 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckImports = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "summarytools" ];
 
   meta = with lib; {
@@ -44,3 +41,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ bcdarwin ];
   };
 }
+

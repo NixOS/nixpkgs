@@ -40,3 +40,4 @@ wrapCCWith {
       targetPlatform.isLinux && !(targetPackages.isStatic or false)
     ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
 }
+

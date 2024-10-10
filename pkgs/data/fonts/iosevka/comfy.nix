@@ -66,3 +66,4 @@ builtins.listToAttrs (builtins.map
     value = makeIosevkaFont set;
   })
   sets)
+

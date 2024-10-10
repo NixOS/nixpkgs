@@ -94,3 +94,4 @@ in {
     client.succeed("avahi-browse --resolve --terminate _guix_publish._tcp | grep '_guix_publish._tcp'")
   '';
 })
+

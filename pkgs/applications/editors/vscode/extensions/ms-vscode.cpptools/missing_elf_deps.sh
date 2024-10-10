@@ -49,3 +49,4 @@ function print_nix_version_mono() {
   echo "nixMonoBin='$nixMonoBin'"
   $nixMonoBin/mono --version
 }
+

@@ -49,3 +49,4 @@ buildGoModule rec {
     mainProgram = "aws-sso";
   };
 }
+

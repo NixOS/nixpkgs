@@ -107,3 +107,4 @@ new_info = {
 print(f'osquery_info: {new_info}')
 
 write_info(new_info)
+

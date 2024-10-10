@@ -457,3 +457,4 @@ in
   meta.maintainers = with lib.maintainers; [ chayleaf ];
   meta.doc = ./maubot.md;
 }
+

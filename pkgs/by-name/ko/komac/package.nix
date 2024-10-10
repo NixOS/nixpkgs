@@ -60,3 +60,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "komac";
   };
 }
+

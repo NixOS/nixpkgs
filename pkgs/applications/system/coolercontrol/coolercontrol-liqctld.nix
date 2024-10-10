@@ -34,3 +34,4 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "coolercontrol-liqctld";
   };
 }
+

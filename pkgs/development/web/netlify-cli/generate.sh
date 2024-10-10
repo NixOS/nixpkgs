@@ -12,3 +12,4 @@ node2nix \
   --node-env node-env.nix \
   --nodejs-18 \
   ;
+

@@ -11,3 +11,4 @@ populateBindgenEnv () {
 }
 
 postHook="${postHook:-}"$'\n'"populateBindgenEnv"$'\n'
+

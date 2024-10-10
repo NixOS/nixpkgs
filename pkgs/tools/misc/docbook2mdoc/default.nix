@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     mainProgram = "docbook2mdoc";
   };
 }
+

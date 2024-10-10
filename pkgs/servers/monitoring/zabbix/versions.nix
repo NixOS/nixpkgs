@@ -21,3 +21,4 @@ generic: {
     vendorHash = "sha256-qLDoNnEFiSrWXbLtYlmQaqY8Rv6JaG8WbMYBlry5Evc=";
   };
 }
+

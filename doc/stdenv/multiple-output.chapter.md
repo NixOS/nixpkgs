@@ -94,3 +94,4 @@ is for info pages, typically residing in `share/info/`. They go to `info` or `$o
 - Most of split packages contain their core functionality in libraries. These libraries tend to refer to various kind of data that typically gets into `out`, e.g. locale strings, so there is often no advantage in separating the libraries into `lib`, as keeping them in `out` is easier.
 
 - Some packages have hidden assumptions on install paths, which complicates splitting.
+

@@ -130,3 +130,4 @@ in {
       connect_with_remote_ssh(screenshot="build_node_with_nix", should_succeed=True)
   '';
 })
+

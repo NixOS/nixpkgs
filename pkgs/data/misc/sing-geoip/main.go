@@ -66,3 +66,4 @@ func main() {
 		outputRuleSet.Close()
 	}
 }
+

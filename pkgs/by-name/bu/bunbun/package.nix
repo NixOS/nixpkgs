@@ -46,3 +46,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "bunbun";
   };
 }
+

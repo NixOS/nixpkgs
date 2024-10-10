@@ -6,3 +6,4 @@ paxmark() {
     paxctl -c "$@"
     paxctl -zex -${flags} "$@"
 }
+

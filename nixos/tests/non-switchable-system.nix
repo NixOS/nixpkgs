@@ -13,3 +13,4 @@
     machine.succeed("test ! -e /run/current-system/bin/switch-to-configuration")
   '';
 }
+

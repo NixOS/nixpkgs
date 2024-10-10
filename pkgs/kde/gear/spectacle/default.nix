@@ -21,3 +21,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "spectacle";
 }
+

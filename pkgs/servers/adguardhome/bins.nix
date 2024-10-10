@@ -29,3 +29,4 @@ armv7l-linux = fetchurl {
   url = "https://github.com/AdguardTeam/AdGuardHome/releases/download/v0.107.53/AdGuardHome_linux_armv7.tar.gz";
 };
 }
+

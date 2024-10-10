@@ -11,3 +11,4 @@ mkDerivation {
   propagatedBuildInputs = [ exiv2 ];
   outputs = [ "out" "dev" ];
 }
+

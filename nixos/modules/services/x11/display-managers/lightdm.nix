@@ -326,3 +326,4 @@ in
     services.xserver.display = null; # We specify our own display (and logfile) in xserver-wrapper up there
   };
 }
+

@@ -41,6 +41,11 @@ buildPythonPackage rec {
     "pyroute2.protocols"
   ];
 
+  postPatch = ''
+    patchShebangs util
+    make VERSION
+  '';
+
   meta = with lib; {
     description = "Python Netlink library";
     homepage = "https://github.com/svinota/pyroute2";
@@ -56,3 +61,4 @@ buildPythonPackage rec {
     platforms = platforms.unix;
   };
 }
+

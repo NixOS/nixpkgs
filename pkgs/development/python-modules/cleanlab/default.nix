@@ -96,3 +96,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ happysalada ];
   };
 }
+

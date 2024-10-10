@@ -43,3 +43,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.k900 ];
   };
 }
+

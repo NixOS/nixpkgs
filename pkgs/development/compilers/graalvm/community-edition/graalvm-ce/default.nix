@@ -10,3 +10,4 @@ graalvmCEPackages.buildGraalvm {
   version = (import ./hashes.nix).version;
   meta.platforms = builtins.attrNames (import ./hashes.nix).hashes;
 }
+

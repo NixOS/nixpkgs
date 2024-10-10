@@ -11,3 +11,4 @@
   pushgateway = import ./pushgateway.nix { inherit system pkgs; };
   remote-write = import ./remote-write.nix { inherit system pkgs; };
 }
+

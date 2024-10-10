@@ -23,3 +23,4 @@ toKodiAddon (stdenv.mkDerivation ({
     runHook postInstall
   '';
 } // attrs))
+

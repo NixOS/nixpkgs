@@ -12,3 +12,4 @@
     result = lib.concatStringsSep "%" config.warnings;
   };
 }
+

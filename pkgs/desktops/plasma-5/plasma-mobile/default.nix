@@ -74,3 +74,4 @@ mkDerivation {
 
   passthru.providedSessions = [ "plasma-mobile" ];
 }
+

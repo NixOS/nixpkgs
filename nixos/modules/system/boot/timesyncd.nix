@@ -117,3 +117,4 @@ in
     users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
   };
 }
+

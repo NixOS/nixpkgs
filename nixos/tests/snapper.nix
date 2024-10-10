@@ -36,3 +36,4 @@ import ./make-test-python.nix ({ ... }:
     machine.${if snapshotRootOnBoot then "succeed" else "fail"}("systemctl cat snapper-boot.service")
   '';
 })
+

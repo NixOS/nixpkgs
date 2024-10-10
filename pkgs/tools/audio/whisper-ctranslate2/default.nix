@@ -53,3 +53,4 @@ python3.pkgs.buildPythonApplication {
     mainProgram = "whisper-ctranslate2";
   };
 }
+

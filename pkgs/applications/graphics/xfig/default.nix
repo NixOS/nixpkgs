@@ -69,3 +69,4 @@ stdenv.mkDerivation rec {
     inherit (fig2dev.meta) license homepage platforms maintainers;
   };
 }
+

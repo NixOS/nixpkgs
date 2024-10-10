@@ -58,3 +58,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (rizin.meta) platforms;
   };
 })
+

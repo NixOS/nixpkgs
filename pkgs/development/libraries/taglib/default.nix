@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "taglib" "taglib_c" ];
   };
 })
+

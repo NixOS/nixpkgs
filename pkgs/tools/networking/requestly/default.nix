@@ -31,3 +31,4 @@ appimageTools.wrapType2 {
     mainProgram = "requestly";
   };
 }
+

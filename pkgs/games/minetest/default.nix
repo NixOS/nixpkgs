@@ -143,3 +143,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
   };
 })
+

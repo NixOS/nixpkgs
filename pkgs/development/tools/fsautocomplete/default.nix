@@ -45,3 +45,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ gbtb mdarocha ];
   };
 }
+

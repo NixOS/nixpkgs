@@ -57,3 +57,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "tere";
   };
 }
+

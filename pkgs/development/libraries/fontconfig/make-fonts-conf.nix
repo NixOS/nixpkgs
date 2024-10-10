@@ -39,3 +39,4 @@ runCommand "fonts.conf"
       ${./make-fonts-conf.xsl} ${fontconfig.out}/etc/fonts/fonts.conf \
       > $out
   ''
+

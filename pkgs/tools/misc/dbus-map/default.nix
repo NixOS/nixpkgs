@@ -26,3 +26,4 @@ stdenv.mkDerivation {
     mainProgram = "dbus-map";
   };
 }
+

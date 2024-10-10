@@ -12,3 +12,4 @@ version="$(curl --silent https://raw.githubusercontent.com/${owner}/${repo}/mast
 rev=$(curl -s -H "Accept: application/vnd.github.VERSION.sha" https://api.github.com/repos/${owner}/${repo}/commits/master)
 
 update-source-version ssdfs-utils "$version" --rev="$rev"
+

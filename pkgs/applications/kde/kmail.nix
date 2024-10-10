@@ -112,3 +112,4 @@ mkDerivation {
       --prefix PATH : "${lib.makeBinPath [ akonadi akonadi-import-wizard kaddressbook kleopatra kmail-account-wizard pim-data-exporter ]}"
   '';
 }
+

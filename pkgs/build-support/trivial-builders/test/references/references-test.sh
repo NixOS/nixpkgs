@@ -66,3 +66,4 @@ diff -U3 \
   <(nix-store -q --requisites "${samples[@]}" | sort)
 
 echo 'OK!'
+

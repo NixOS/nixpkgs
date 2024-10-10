@@ -27,3 +27,4 @@ if [[ $current != $latest ]]; then
 }
 EOF
 fi
+

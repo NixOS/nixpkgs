@@ -16,3 +16,4 @@ EOF
   [[ "$(cargo asm --mir add | tee /dev/stderr)" == *"= Add("* ]]
   touch $out
 ''
+

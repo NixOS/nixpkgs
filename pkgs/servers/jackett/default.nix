@@ -49,3 +49,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ edwtjo nyanloutre purcell ];
   };
 }
+

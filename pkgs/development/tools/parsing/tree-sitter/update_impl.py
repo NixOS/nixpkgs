@@ -220,3 +220,4 @@ match mode:
         printAllGrammarsNixFile()
     case _:
         sys.exit(f"mode {mode} unknown")
+

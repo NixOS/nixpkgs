@@ -56,3 +56,4 @@ in rec {
   # Runtimes
   pstl = callPackage ./stage-3/pstl.nix { inherit rocmUpdateScript; stdenv = rocmClangStdenv; };
 }
+

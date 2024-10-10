@@ -16,3 +16,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ qtbase qtsvg qttools ];
 }
+

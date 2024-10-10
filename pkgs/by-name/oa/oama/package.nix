@@ -30,3 +30,4 @@ lib.pipe raw-pkg [
   # see https://github.com/NixOS/nixpkgs/issues/318013
   (if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then lib.id else justStaticExecutables)
 ]
+

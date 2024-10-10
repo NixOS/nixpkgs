@@ -190,3 +190,4 @@ buildPythonApplication rec {
     mainProgram = "pre-commit";
   };
 }
+

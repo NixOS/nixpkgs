@@ -104,3 +104,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ cole-h ];
   };
 }
+

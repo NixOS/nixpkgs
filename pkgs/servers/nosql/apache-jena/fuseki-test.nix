@@ -16,3 +16,4 @@ runCommand "fuseki-test-${apache-jena-fuseki.name}"
   curl -d 'query=select+?s+?p+?o+where+{+?s+?p+?o+.+}' http://127.0.0.1:3030/dataset/query | grep -C999 'test://predicate'
   touch $out
 ''
+

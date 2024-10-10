@@ -65,3 +65,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... } :
       machine.succeed("lxc storage show nixostest_pool")
   '';
 })
+

@@ -25,3 +25,4 @@ buildGoModule rec {
     license = lib.licenses.mit;
   };
 }
+

@@ -222,3 +222,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.succeed("test -e /etc/systemd/system/${nodes.machine.systemd.services.testservice1.name}")
   '';
 })
+

@@ -267,3 +267,4 @@ mapAttrs (channel: chromiumPkg: makeTest {
     machine.shutdown()
   '';
 }) channelMap
+

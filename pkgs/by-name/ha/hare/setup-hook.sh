@@ -18,7 +18,7 @@ echoCmd "HAREPATH" "$HAREPATH"
 echoCmd "hare" "$(command -v hare)"
 echoCmd "hare-native" "$(command -v hare-native)"
 '
-prePhases+=("hareSetStdlibPhase" "hareInfoPhase")
+appendToVar prePhases hareSetStdlibPhase hareInfoPhase
 
 readonly hare_unconditional_flags="@hare_unconditional_flags@"
 case "${hareBuildType:-"release"}" in
@@ -34,3 +34,4 @@ HARECACHE="$(mktemp -d)"
 export HARECACHE
 
 addEnvHooks "$hostOffset" addHarepath
+

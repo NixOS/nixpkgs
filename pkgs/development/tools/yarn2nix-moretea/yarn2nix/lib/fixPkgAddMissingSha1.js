@@ -62,3 +62,4 @@ async function fixPkgAddMissingSha1(pkg) {
 }
 
 module.exports = fixPkgAddMissingSha1;
+

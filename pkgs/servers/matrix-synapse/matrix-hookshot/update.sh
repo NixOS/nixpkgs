@@ -35,3 +35,4 @@ cat > pin.json << EOF
   "cargoHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 }
 EOF
+

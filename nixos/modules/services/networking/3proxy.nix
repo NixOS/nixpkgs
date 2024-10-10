@@ -378,3 +378,4 @@ in {
 
   meta.maintainers = with lib.maintainers; [ misuzu ];
 }
+

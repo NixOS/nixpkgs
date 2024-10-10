@@ -212,3 +212,4 @@
   (fetchNuGet { pname = "telplin"; version = "0.9.6"; hash = "sha256-kBiLPgmdKpCx+0x06E7Sq3xoDAFVjLrBPI5F4rU1j3I="; })
   (fetchNuGet { pname = "YoloDev.Expecto.TestSdk"; version = "0.14.2"; hash = "sha256-Kufv0plq7ypcEeZdZja+PYja9U1aPyjt6IFy5EZ+56A="; })
 ]
+

@@ -20,3 +20,4 @@ buildGoModule rec {
     license = licenses.osl3;
   };
 }
+

@@ -62,3 +62,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ happysalada ];
   };
 }
+

@@ -17,3 +17,4 @@ if [ ! "${oldVersion}" = "${targetVersion}" ]; then
 else
   echo "git is already up-to-date"
 fi
+

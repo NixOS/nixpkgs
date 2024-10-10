@@ -14,3 +14,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     machine.succeed("journalctl --grep=systemd")
   '';
 })
+

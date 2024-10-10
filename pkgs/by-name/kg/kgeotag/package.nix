@@ -25,3 +25,4 @@ libsForQt5.mkDerivation rec {
     mainProgram = "kgeotag";
   };
 }
+

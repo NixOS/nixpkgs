@@ -63,3 +63,4 @@ buildPythonApplication rec {
     mainProgram = "rare";
   };
 }
+

@@ -39,3 +39,4 @@ except:
 
 with open(versions_path, "w") as out_file:
     out_file.write(json.dumps(out, sort_keys=True, indent=2) + "\n")
+

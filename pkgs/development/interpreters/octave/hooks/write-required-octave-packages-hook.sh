@@ -13,5 +13,6 @@ writeRequiredOctavePackagesPhase() {
 # Yes its a bit long...
 if [ -z "${dontWriteRequiredOctavePackagesPhase-}" ]; then
     echo "Using writeRequiredOctavePackagesPhase"
-    preDistPhases+=" writeRequiredOctavePackagesPhase"
+    appendToVar preDistPhases writeRequiredOctavePackagesPhase
 fi
+

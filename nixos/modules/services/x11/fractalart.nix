@@ -34,3 +34,4 @@ in {
         + optionalString (cfg.height != null) " -h ${toString cfg.height}";
   };
 }
+

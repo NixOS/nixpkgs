@@ -88,3 +88,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     assert added_entry["SYSLOG_IDENTIFIER"] == identifier and added_entry["MESSAGE"] == message, "journal entry does not correspond"
   '';
 })
+

@@ -48,3 +48,4 @@ stdenv.mkDerivation {
 `patchRcPathCsh` and `patchRcPathPosix` implementation depends on `sed` to do the string processing.
 The others are in vanilla shell and have no third-party dependencies.
 :::
+

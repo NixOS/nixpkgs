@@ -15,3 +15,4 @@ mkCoqDerivation {
 
   propagatedBuildInputs = [ StructTact ];
 }
+

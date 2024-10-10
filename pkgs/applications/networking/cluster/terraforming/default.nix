@@ -18,3 +18,4 @@ bundlerApp rec {
     maintainers = with maintainers; [ kalbasit ];
   };
 }
+

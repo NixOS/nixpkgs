@@ -33,3 +33,4 @@ buildGoModule rec {
     cp ../../dist/pulumi-analyzer-policy-python $out/bin
   '';
 }
+

@@ -9,3 +9,4 @@ add_library(ilbc SHARED ${ilbc_SRCS})
 
 install(TARGETS ilbc DESTINATION lib)
 install(FILES ${ilbc_HDRS} DESTINATION include/ilbc)
+

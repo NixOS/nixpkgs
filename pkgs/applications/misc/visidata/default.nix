@@ -171,3 +171,4 @@ buildPythonApplication rec {
     changelog = "https://github.com/saulpw/visidata/blob/v${version}/CHANGELOG.md";
   };
 }
+

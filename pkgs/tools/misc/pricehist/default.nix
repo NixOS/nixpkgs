@@ -48,3 +48,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ chrpinedo ];
   };
 }
+

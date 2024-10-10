@@ -60,3 +60,4 @@ in cases.${fetcher}.fetch cases.${fetcher}.arguments // {
   meta.homepage = "${baseUrl}";
 }
 )
+

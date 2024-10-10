@@ -14,3 +14,4 @@ _trySourceRock() {
     cp "$curSrc" "$renamed"
     luarocks unpack --force "$renamed"
 }
+

@@ -76,9 +76,6 @@ buildPythonPackage rec {
 
     # ImportError: attempted relative import beyond top-level package
     rm tests/test_greenthreads.py
-
-    # git crashes; https://github.com/jelmer/dulwich/issues/1359
-    rm tests/compat/test_pack.py
   '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;
@@ -100,3 +97,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ koral ];
   };
 }
+

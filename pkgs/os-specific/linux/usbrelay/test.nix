@@ -62,3 +62,4 @@ import ../../../../nixos/tests/make-test-python.nix ({ pkgs, ... }: {
     print("Did you see the relay switching on and off?")
   '';
 })
+

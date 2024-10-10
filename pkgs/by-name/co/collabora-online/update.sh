@@ -36,3 +36,4 @@ prev_npm_hash="$(nix-instantiate "$NIXPKGS_DIR" \
 new_npm_hash="$(prefetch-npm-deps ./package-lock.json)"
 
 sd --fixed-strings "$prev_npm_hash" "$new_npm_hash" "$PACKAGE_DIR/package.nix"
+

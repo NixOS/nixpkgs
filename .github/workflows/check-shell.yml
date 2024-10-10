@@ -29,3 +29,4 @@ jobs:
       - uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
       - name: Build shell
         run: nix-build shell.nix
+

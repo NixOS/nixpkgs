@@ -48,3 +48,4 @@ The binaries are made available via a [binary cache](https://cache.nixos.org).
 The current Nix expressions of the channels are available in the
 [nixpkgs repository](https://github.com/NixOS/nixpkgs) in branches
 that correspond to the channel names (e.g. `nixos-22.11-small`).
+

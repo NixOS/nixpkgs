@@ -26,3 +26,4 @@ sed -i "s/$oldVersion/$version/" bin.nix
     done
     echo '}'
 } >variants.nix
+

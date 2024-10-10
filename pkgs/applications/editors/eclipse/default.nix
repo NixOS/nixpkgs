@@ -242,3 +242,4 @@ in rec {
   plugins = callPackage ./plugins.nix { };
 
 }
+

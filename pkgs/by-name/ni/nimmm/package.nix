@@ -24,3 +24,4 @@ buildNimPackage (finalAttrs: {
     maintainers = [ lib.maintainers.joachimschmidt557 ];
   };
 })
+

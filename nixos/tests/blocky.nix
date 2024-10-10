@@ -32,3 +32,4 @@ import ./make-test-python.nix {
         server.succeed("dig @127.0.0.1 +short -x 192.168.178.3 | grep -qF printer.lan")
   '';
 }
+

@@ -73,3 +73,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ kalekseev ];
   };
 }
+

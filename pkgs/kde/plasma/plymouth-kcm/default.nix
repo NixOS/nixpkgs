@@ -10,3 +10,4 @@ mkKdeDerivation {
   extraBuildInputs = [ plymouth ];
   meta.mainProgram = "kplymouththemeinstaller";
 }
+

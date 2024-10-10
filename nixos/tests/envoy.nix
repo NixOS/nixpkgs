@@ -52,3 +52,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
         machine.succeed('test -f /var/log/envoy/access.log')
     '';
 })
+

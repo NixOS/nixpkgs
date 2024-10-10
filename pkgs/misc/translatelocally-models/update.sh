@@ -12,3 +12,4 @@ curl https://translatelocally.com/models.json \
       "checksum"
     ]))))' \
   > "$(dirname "$0")/models.json"
+

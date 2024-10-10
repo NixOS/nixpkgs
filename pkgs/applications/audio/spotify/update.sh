@@ -86,3 +86,4 @@ fi
 # Commit changes
 git add "$spotify_nix"
 git commit -m "spotify: ${current_nix_version} -> ${upstream_version}"
+

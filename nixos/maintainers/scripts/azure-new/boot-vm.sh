@@ -34,3 +34,4 @@ az vm create \
   --storage-sku "Premium_LRS" \
   --ssh-key-values "$(ssh-add -L)"
 
+

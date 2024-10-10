@@ -33,3 +33,4 @@ in
     environment.systemPackages = [ fvwm3 ];
   };
 }
+

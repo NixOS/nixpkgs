@@ -47,3 +47,4 @@ commit_change "elpa-devel-packages" "elpa-devel-generated.nix"
 commit_change "melpa-packages" "recipes-archive-melpa.json"
 commit_change "nongnu-packages" "nongnu-generated.nix"
 commit_change "nongnu-devel-packages" "nongnu-devel-generated.nix"
+

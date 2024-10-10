@@ -39,3 +39,4 @@ The host name is set using [](#opt-networking.hostName):
 
 The default host name is `nixos`. Set it to the empty string (`""`) to
 allow the DHCP server to provide the host name.
+

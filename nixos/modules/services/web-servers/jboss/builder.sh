@@ -71,3 +71,4 @@ fi
 EOF
 
 chmod +x $out/bin/*
+

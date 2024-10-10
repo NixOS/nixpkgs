@@ -49,3 +49,4 @@ symlinkJoin {
 } // {
   inherit (bird-lg-frontend) version meta;
 }
+

@@ -53,3 +53,4 @@ Nix installed add-ons do not have a valid signature, which is why signature veri
 If add-ons are marked as broken or the signature is invalid, make sure you have Firefox ESR installed. Normal Firefox does not provide the ability anymore to disable signature verification for add-ons thus nix add-ons get disabled by the normal Firefox binary.
 
 If add-ons do not appear installed despite being defined in your nix configuration file, reset the local add-on state of your Firefox profile by clicking `Help -> More Troubleshooting Information -> Refresh Firefox`. This can happen if you switch from manual add-on mode to nix add-on mode and then back to manual mode and then again to nix add-on mode.
+

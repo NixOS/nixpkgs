@@ -18,3 +18,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... }: {
 
   meta.maintainers = with lib.maintainers; [ McSinyx ];
 })
+

@@ -16,3 +16,4 @@ stdenv.mkDerivation rec {
   dontStrip = true;
   hardeningDisable = [ "stackprotector" "fortify" ];
 }
+

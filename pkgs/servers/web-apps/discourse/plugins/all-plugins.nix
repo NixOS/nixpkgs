@@ -25,3 +25,4 @@ in
   discourse-voting = callPackage ./discourse-voting {};
   discourse-yearly-review = callPackage ./discourse-yearly-review {};
 }
+

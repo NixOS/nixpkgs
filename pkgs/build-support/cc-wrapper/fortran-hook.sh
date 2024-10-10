@@ -8,3 +8,4 @@ export FC${role_post}=@named_fc@
 export NIX_HARDENING_ENABLE
 
 unset -v role_post
+

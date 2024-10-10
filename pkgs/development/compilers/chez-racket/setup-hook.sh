@@ -3,3 +3,4 @@ addChezLibraryPath() {
 }
 
 addEnvHooks "$targetOffset" addChezLibraryPath
+

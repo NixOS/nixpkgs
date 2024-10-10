@@ -41,3 +41,4 @@
   (fetchNuGet { pname = "System.Text.Encodings.Web"; version = "8.0.0"; sha256 = "1wbypkx0m8dgpsaqgyywz4z760xblnwalb241d5qv9kx8m128i11"; })
   (fetchNuGet { pname = "System.Text.Json"; version = "8.0.0"; sha256 = "134savxw0sq7s448jnzw17bxcijsi1v38mirpbb6zfxmqlf04msw"; })
 ]
+

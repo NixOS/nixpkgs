@@ -43,3 +43,4 @@ for pattern in config:
 
 with open(os.environ["out"], "w") as f:
     json.dump(config, f)
+

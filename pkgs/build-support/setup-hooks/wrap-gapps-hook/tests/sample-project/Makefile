@@ -28,3 +28,4 @@ typelib:
 # Adds `typelib-${foo}` targets, that install `${foo}-1.0.typelib` file to `$(TYPELIBDIR)`.
 typelib-%: typelib
 	touch $(TYPELIBDIR)/$(@:typelib-%=%)-1.0.typelib
+

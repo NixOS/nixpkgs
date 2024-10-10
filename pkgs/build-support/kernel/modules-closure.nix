@@ -13,3 +13,4 @@ stdenvNoCC.mkDerivation {
   inherit kernel firmware rootModules allowMissing;
   allowedReferences = ["out"];
 }
+

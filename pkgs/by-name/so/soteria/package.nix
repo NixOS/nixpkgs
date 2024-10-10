@@ -60,3 +60,4 @@ rustPlatform.buildRustPackage {
     inherit (polkit.meta) platforms;
   };
 }
+

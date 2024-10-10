@@ -38,3 +38,4 @@ mkHyprlandPlugin hyprland {
     maintainers = with lib.maintainers; [ donovanglover ];
   };
 }
+

@@ -41,3 +41,4 @@ g++ hello2.cc -o $out/bin/hello2 -DVALUE="1 + 2 * 3"
 $out/bin/hello2
 
 ld -v
+

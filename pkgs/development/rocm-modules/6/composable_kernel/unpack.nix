@@ -14,3 +14,4 @@ in runCommandLocal "unpack-${ck.name}" {
     substituteInPlace $out/lib/cmake/composable_kernel/*.cmake \
       --replace "${ck}" "$out"
   ''
+

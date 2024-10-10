@@ -54,3 +54,4 @@ in rustPlatform.buildRustPackage rec {
 
   disallowedReferences = [ stdenv.cc.cc ];
 }
+

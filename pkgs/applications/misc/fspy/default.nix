@@ -21,3 +21,4 @@ in appimageTools.wrapType2 {
     mainProgram = "fspy";
   };
 }
+

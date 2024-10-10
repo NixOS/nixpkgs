@@ -711,3 +711,4 @@ There are some [problems with npm v7](https://github.com/tweag/npmlock2nix/issue
 #### Pitfalls {#javascript-nix-npm-buildpackage-pitfalls}
 
 There are some [problems with npm v7](https://github.com/serokell/nix-npm-buildpackage/issues/33).
+

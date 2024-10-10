@@ -50,3 +50,4 @@
   (fetchNuGet { pname = "Tmds.DBus"; version = "0.15.0"; sha256 = "1bz5j6wfp9hn4fg5vjxl6mr9lva4gx6zqncqyqxrcb8lw7hvhwc6"; })
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; sha256 = "0d99kcs7r9cp6gpyc7z230czkkyx4164x86dhy0mca73f2ykc2g2"; })
 ]
+

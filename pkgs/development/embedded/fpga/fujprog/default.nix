@@ -38,3 +38,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/kost/fujprog/releases/tag/v${version}";
   };
 }
+

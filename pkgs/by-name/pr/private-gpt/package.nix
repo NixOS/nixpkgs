@@ -17,3 +17,4 @@ python3Packages.toPythonApplication (python3Packages.private-gpt.overrideAttrs (
       --add-flags "-m private_gpt"
   '';
 }))
+

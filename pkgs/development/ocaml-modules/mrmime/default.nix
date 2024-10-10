@@ -67,3 +67,4 @@ buildDunePackage rec {
     mainProgram = "mrmime.generate";
   };
 }
+

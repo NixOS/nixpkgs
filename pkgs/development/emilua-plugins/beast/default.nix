@@ -35,3 +35,4 @@ stdenv.mkDerivation (self: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 })
+

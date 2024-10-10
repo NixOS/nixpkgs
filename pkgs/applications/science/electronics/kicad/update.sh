@@ -258,3 +258,4 @@ if [[ -n ${UPDATE_NIX_ATTR_PATH} ]]; then
   "files": [ $file ]
 }]'
 fi
+

@@ -43,3 +43,4 @@ libwacom.overrideAttrs (prevAttrs: {
     maintainers = with lib.maintainers; [ dotlambda ];
   };
 })
+

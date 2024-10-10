@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed("[ ! -e ~bob/only_alice ]")
   '';
 })
+

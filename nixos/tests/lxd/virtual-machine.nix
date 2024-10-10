@@ -58,3 +58,4 @@ in {
         machine.succeed("lxc exec ${instance-name} systemctl is-active lxd-agent")
   '';
 })
+

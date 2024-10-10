@@ -18,11 +18,10 @@ melpaBuild {
       --replace-fail ";;; gn-mode.el - " ";;; gn-mode.el --- "
   '';
 
-  ignoreCompilationError = false;
-
   meta = {
     inherit (gn.meta) homepage license;
     maintainers = with lib.maintainers; [ rennsax ];
     description = "Major mode for editing GN files; taken from GN sources";
   };
 }
+

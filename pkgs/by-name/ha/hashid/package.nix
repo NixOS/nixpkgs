@@ -22,3 +22,4 @@ python3Packages.buildPythonApplication {
     maintainers = with maintainers; [ d3vil0p3r ];
   };
 }
+

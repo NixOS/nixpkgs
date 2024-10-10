@@ -173,3 +173,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pagefind";
   };
 }
+

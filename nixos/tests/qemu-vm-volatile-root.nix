@@ -15,3 +15,4 @@
     machine.succeed("findmnt --kernel --types tmpfs /")
   '';
 }
+

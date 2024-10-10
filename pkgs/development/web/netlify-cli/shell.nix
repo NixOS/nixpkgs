@@ -5,3 +5,4 @@ pkgs.mkShell {
     pkgs.nix-prefetch-github
   ];
 }
+

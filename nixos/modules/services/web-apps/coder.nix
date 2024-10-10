@@ -225,3 +225,4 @@ in {
   };
   meta.maintainers = pkgs.coder.meta.maintainers;
 }
+

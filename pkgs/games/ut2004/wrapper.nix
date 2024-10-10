@@ -44,3 +44,4 @@ in runCommand "ut2004" {
   mkdir -p $out/share/applications
   ln -s ${desktop}/share/applications/* $out/share/applications
 ''
+

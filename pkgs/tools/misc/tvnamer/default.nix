@@ -52,3 +52,4 @@ pypkgs.buildPythonApplication rec {
     mainProgram = "tvnamer";
   };
 }
+

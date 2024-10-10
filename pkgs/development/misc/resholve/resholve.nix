@@ -77,3 +77,4 @@ in python27.pkgs.buildPythonApplication {
     '' ];
   };
 }
+

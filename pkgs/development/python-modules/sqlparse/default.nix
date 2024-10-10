@@ -56,3 +56,4 @@ buildPythonPackage rec {
     mainProgram = "sqlformat";
   };
 }
+

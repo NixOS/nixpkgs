@@ -23,8 +23,6 @@ melpaBuild {
     markdown-mode
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -34,3 +32,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ leungbk ];
   };
 }
+

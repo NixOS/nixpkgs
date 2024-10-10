@@ -647,3 +647,4 @@ in python.pkgs.buildPythonApplication rec {
     mainProgram = "hass";
   };
 }
+

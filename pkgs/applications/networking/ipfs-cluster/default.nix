@@ -20,3 +20,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ Luflosi jglukasik ];
   };
 }
+

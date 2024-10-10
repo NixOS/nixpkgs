@@ -10,3 +10,4 @@ mkKdeDerivation {
   extraBuildInputs = [ gpgme ];
   meta.mainProgram = "kgpg";
 }
+

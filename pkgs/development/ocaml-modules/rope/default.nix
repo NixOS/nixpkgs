@@ -31,3 +31,4 @@ buildDunePackage {
     maintainers = [ ];
   };
 }
+

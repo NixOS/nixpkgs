@@ -3,9 +3,12 @@ xcbuildBuildPhase() {
 
     runHook preBuild
 
-    echo "running xcodebuild"
+    local flagsArray=()
+    concatTo flagsArray xcbuildFlags
 
-    xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates $xcbuildFlags build
+    echoCmd 'running xcodebuild' "${flagsArray[@]}"
+
+    xcodebuild SYMROOT=$PWD/Products OBJROOT=$PWD/Intermediates "${flagsArray[@]}" build
 
     runHook postBuild
 }
@@ -27,3 +30,4 @@ fi
 # if [ -d "*.xcodeproj" ]; then
 #     buildPhase=xcbuildPhase
 # fi
+

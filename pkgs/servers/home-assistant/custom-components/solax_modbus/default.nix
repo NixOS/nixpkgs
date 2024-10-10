@@ -27,3 +27,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [ Luflosi ];
   };
 }
+

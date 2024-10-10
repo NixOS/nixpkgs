@@ -34,3 +34,4 @@ buildGoModule rec {
     mainProgram = "git-credential-oauth";
   };
 }
+

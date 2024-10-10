@@ -38,3 +38,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ ivan-babrou developer-guy ];
   };
 }
+

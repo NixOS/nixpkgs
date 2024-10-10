@@ -22,3 +22,4 @@ buildGoModule rec {
     mainProgram = "lnch";
   };
 }
+

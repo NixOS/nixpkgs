@@ -3,3 +3,4 @@
     type = lib.types.either lib.types.int lib.types.str;
   };
 }
+

@@ -36,3 +36,4 @@
     pretalx.log(pretalx.succeed("systemd-analyze security pretalx-web.service"))
   '';
 }
+

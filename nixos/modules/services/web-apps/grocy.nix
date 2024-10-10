@@ -182,3 +182,4 @@ in {
     doc = ./grocy.md;
   };
 }
+

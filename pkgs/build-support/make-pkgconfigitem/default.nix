@@ -67,3 +67,4 @@ writeTextFile {
   text = builtins.concatStringsSep "\n" content;
   checkPhase = ''${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config --validate "$target"'';
 }
+

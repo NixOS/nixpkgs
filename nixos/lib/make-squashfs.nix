@@ -57,3 +57,4 @@ stdenv.mkDerivation {
       echo "file squashfs-image $out/${fileName}.squashfs" >> $out/nix-support/hydra-build-products
     '';
 }
+

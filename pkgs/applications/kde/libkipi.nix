@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ kconfig ki18n kservice kxmlgui ];
   outputs = [ "out" "dev" ];
 }
+

@@ -63,3 +63,4 @@ in stdenv.mkDerivation {
 
   passthru = { inherit minimal full-ttf; };
 }
+

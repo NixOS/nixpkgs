@@ -1,6 +1,3 @@
-(require 'package)
-(package-initialize)
-
 (require 'package-recipe)
 (require 'package-build)
 
@@ -30,3 +27,4 @@
        (setf (oref recipe commit) commit)
        (setf (oref recipe version) version)
        (melpa2nix-build-package-1 recipe)))))
+

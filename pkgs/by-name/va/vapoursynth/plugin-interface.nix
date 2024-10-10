@@ -138,3 +138,4 @@ runCommand "${vapoursynth.name}-with-plugins"
     makeWrapper $out/bin/.vspipe-wrapped $out/bin/vspipe \
         --prefix PYTHONPATH : $out/${python3.sitePackages}
   ''
+

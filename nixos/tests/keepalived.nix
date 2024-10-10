@@ -41,3 +41,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     node1.succeed("ping -c1 192.168.1.200")
   '';
 })
+

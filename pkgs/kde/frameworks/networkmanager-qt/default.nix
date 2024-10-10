@@ -11,3 +11,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtdeclarative ];
   extraPropagatedBuildInputs = [ networkmanager ];
 }
+

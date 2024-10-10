@@ -43,3 +43,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         printer.wait_until_succeeds("systemctl --no-pager show klipper.service | grep ActiveState=inactive", timeout=10)
   '';
 })
+

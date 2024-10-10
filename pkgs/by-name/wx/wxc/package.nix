@@ -41,3 +41,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = wxGTK32.meta.platforms;
   };
 })
+

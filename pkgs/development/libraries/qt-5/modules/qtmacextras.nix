@@ -8,3 +8,4 @@ qtModule {
     platforms = platforms.darwin;
   };
 }
+

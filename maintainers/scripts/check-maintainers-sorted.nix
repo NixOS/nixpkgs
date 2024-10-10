@@ -55,3 +55,4 @@ assert errors == 0; "all good!"
 #    in map
 #      (c: "sed -ne '${c}' maintainers/maintainer-list.nix")
 #      ([ "1,${toString (first - 1)} p" ] ++ commands))
+

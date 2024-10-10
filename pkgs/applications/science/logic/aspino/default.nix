@@ -49,3 +49,4 @@ stdenv.mkDerivation {
     homepage = "https://alviano.net/software/maxino/";
   };
 }
+

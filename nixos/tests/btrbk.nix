@@ -109,3 +109,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
           archive.succeed("cat /mnt/*/bar | grep bar")
     '';
   })
+

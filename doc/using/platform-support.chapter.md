@@ -16,3 +16,4 @@ A more formal definition of the platform support tiers is provided in [RFC046], 
 
 [RFC046]: https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md
 [Appendix A]: https://github.com/NixOS/rfcs/blob/master/rfcs/0046-platform-support-tiers.md#appendix-a-non-normative-description-of-platforms-in-november-2019
+

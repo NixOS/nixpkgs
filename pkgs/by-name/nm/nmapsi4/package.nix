@@ -67,3 +67,4 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
   };
 }
+

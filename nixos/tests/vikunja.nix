@@ -72,3 +72,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       vikunjaPostgresql.succeed("curl --fail http://localhost")
     '';
 })
+

@@ -54,3 +54,4 @@
     machine.crash()
   '';
 }
+

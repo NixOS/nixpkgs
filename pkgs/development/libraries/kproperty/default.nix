@@ -27,3 +27,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ zraexy ];
   };
 }
+

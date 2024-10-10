@@ -20,3 +20,4 @@ in
     assert ${machineName}.succeed("npm config get ${settingName}") == "${settingValue}\n"
   '';
 })
+

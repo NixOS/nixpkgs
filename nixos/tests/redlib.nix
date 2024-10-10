@@ -18,3 +18,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed("curl --fail http://localhost:80/settings")
   '';
 })
+

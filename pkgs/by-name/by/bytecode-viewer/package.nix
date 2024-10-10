@@ -79,3 +79,4 @@ maven.buildMavenPackage rec {
     license = with licenses; [ gpl3Only ];
   };
 }
+

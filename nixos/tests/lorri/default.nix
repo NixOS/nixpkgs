@@ -26,3 +26,4 @@ import ../make-test-python.nix {
     machine.wait_until_succeeds("grep --fixed-strings 'Completed' lorri.stderr")
   '';
 }
+

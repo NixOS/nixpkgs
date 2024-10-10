@@ -79,3 +79,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nix-prefetch";
   };
 }
+

@@ -134,3 +134,4 @@ in
 
     meta.doc = ./oh-my-zsh.md;
   }
+

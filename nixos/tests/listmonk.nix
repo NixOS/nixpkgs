@@ -74,3 +74,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     assert messages['total'] == 2
   '';
 })
+

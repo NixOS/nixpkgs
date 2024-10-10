@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     mainProgram = "epub2txt";
   };
 }
+

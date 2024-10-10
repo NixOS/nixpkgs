@@ -38,3 +38,4 @@ buildNimPackage {
     platforms = with platforms; linux ++ darwin;
   };
 }
+

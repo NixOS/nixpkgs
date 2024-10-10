@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     inherit (pari.meta) license maintainers platforms broken;
   };
 }
+

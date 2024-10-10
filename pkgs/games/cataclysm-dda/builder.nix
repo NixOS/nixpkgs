@@ -47,3 +47,4 @@ stdenvNoCC.mkDerivation (args // rec {
     forCurses = type == "mod";
   };
 })
+

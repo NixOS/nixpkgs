@@ -55,3 +55,4 @@ buildDunePackage rec {
     maintainers = [ maintainers.osener ];
   };
 }
+

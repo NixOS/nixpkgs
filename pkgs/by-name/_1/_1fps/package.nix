@@ -33,3 +33,4 @@ buildGoModule rec {
     mainProgram = "1fps";
   };
 }
+

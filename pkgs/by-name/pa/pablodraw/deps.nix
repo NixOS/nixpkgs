@@ -26,3 +26,4 @@
   (fetchNuGet { pname = "System.Runtime.CompilerServices.Unsafe"; version = "6.0.0"; hash = "sha256-bEG1PnDp7uKYz/OgLOWs3RWwQSVYm+AnPwVmAmcgp2I="; })
   (fetchNuGet { pname = "System.Text.Encoding.CodePages"; version = "6.0.0"; hash = "sha256-nGc2A6XYnwqGcq8rfgTRjGr+voISxNe/76k2K36coj4="; })
 ]
+

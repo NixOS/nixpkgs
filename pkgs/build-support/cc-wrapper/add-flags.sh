@@ -88,3 +88,4 @@ fi
 
 # That way forked processes will not extend these environment variables again.
 export NIX_CC_WRAPPER_FLAGS_SET_@suffixSalt@=1
+

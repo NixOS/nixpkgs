@@ -103,3 +103,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "sublime-music";
   };
 }
+

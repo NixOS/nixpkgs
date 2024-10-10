@@ -62,3 +62,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-bg";
   };
 }
+

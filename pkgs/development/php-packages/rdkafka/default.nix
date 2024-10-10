@@ -28,3 +28,4 @@ buildPecl {
     maintainers = teams.php.members;
   };
 }
+

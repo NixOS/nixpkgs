@@ -32,3 +32,4 @@ buildGoModule rec {
     platforms = [ "aarch64-darwin" ];
   };
 }
+

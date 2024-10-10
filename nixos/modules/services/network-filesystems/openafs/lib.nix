@@ -31,3 +31,4 @@ in {
   openafsBin = config.services.openafsClient.packages.programs;
   openafsSrv = config.services.openafsServer.package;
 }
+

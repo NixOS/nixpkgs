@@ -32,3 +32,4 @@ echo -e '{
   "date": "'"$date"'",
   "tag": "'"$tag"'"
 }' >"$dir/info.json" || echo "Please run the script in the root of the Nixpkgs repo"
+

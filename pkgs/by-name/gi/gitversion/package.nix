@@ -19,3 +19,4 @@ buildDotnetGlobalTool rec {
     maintainers = with maintainers; [ acesyde ];
   };
 }
+

@@ -53,3 +53,4 @@ buildDunePackage rec {
     homepage = "https://github.com/janestreet/magic-trace";
   };
 }
+

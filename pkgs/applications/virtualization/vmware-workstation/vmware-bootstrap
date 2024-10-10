@@ -9,3 +9,4 @@ MANDIR="@@PREFIXDIR@@/share/man"
 INCLUDEDIR="@@PREFIXDIR@@/include"
 INITDIR="@@PREFIXDIR@@/etc"
 INITSCRIPTDIR="@@PREFIXDIR@@/etc/init.d"
+

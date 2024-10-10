@@ -71,3 +71,4 @@ mapper_serial, _citrus_mapper_serial_mapper_getops
 mapper_parallel, _citrus_mapper_parallel_mapper_getops
 mapper_std, _citrus_mapper_std_mapper_getops
 mapper_zone, _citrus_mapper_zone_mapper_getops
+

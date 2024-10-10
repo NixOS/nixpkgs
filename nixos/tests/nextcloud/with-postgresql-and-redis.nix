@@ -58,3 +58,4 @@ runTest ({ config, ... }: {
         nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")
   '';
 })
+

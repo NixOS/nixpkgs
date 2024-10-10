@@ -32,3 +32,4 @@ in {
   # This test only consists of evaluating the test machine
   testScript = "pass";
 })
+

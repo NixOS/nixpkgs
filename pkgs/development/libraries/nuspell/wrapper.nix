@@ -11,3 +11,4 @@ stdenv.mkDerivation {
   '';
   meta = removeAttrs nuspell.meta ["outputsToInstall"];
 }
+

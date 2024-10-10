@@ -37,3 +37,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.drupol ];
   };
 }
+

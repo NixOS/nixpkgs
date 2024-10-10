@@ -56,3 +56,4 @@ runCommand "${tsm-client.name}-test-cli" env ''
 
   touch $out
 ''
+

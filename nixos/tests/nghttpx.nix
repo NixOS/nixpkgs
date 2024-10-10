@@ -59,3 +59,4 @@ in
       client.wait_until_succeeds("curl -s --fail http://proxy/hello-world.txt")
     '';
   })
+

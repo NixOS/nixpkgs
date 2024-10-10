@@ -63,3 +63,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "xvfb-run";
   };
 }
+

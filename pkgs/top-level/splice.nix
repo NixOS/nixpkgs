@@ -172,3 +172,4 @@ in
   # `newScope`.
   __splicedPackages = splicedPackages // { recurseForDerivations = false; };
 }
+

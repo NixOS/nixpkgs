@@ -8,3 +8,4 @@ callPackage ./generic.nix ( rec {
     hash = "sha256-nnAjoVESAGDSgGpupME8qZM+zk6s/FyUZNIO3dt2sKA=";
   };
 })
+

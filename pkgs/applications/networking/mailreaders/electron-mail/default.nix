@@ -43,3 +43,4 @@ appimageTools.wrapType2 {
     changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };
 }
+

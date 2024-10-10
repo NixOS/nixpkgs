@@ -62,3 +62,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ detegr aidalgol ];
   };
 }
+

@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
@@ -50,3 +54,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
+

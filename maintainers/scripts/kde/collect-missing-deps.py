@@ -72,6 +72,7 @@ OK_MISSING_BY_PACKAGE = {
     },
     "kwin": {
         "display-info",  # newer versions identify as libdisplay-info
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "libksysguard": {
         "Libcap",  # used to call setcap at build time and nothing else
@@ -90,6 +91,7 @@ OK_MISSING_BY_PACKAGE = {
     },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "print-manager": {
         "PackageKitQt6",  # used for auto-installing drivers which does not work for obvious reasons
@@ -143,3 +145,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

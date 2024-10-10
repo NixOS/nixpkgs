@@ -130,3 +130,4 @@ in
     users.groups.zigbee2mqtt.gid = config.ids.gids.zigbee2mqtt;
   };
 }
+

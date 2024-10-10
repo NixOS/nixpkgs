@@ -120,3 +120,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...}:
           machine.succeed(as_alice("ssh -i alice -o StrictHostKeyChecking=no server exit"))
     '';
 })
+

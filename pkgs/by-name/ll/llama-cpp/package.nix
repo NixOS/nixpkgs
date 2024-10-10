@@ -166,3 +166,4 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
   };
 })
+

@@ -28,3 +28,4 @@ buildNpmPackage rec {
     mainProgram = "swagger-cli";
   };
 }
+

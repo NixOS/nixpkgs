@@ -62,3 +62,4 @@ buildPythonApplication {
     mainProgram = "pandoc-acro";
   };
 }
+

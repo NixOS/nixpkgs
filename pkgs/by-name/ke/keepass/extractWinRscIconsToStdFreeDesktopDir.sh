@@ -59,3 +59,4 @@ for i in $tmp/png/*.png; do
 done
 
 rm -rf $tmp/png $tmp/ico
+

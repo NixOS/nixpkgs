@@ -29,3 +29,4 @@ mkDerivation {
   ];
   propagatedUserEnvPkgs = [ kipi-plugins libkipi (lib.getBin kinit) ];
 }
+

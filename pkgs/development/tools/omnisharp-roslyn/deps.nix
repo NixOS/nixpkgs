@@ -143,3 +143,4 @@
   (fetchNuGet { pname = "System.ValueTuple"; version = "4.5.0"; hash = "sha256-niH6l2fU52vAzuBlwdQMw0OEoRS/7E1w5smBFoqSaAI="; })
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "6.0.0"; hash = "sha256-N+qg1E6FDJ9A9L50wmVt3xPQV8ZxlG1xeXgFuxO+yfM="; })
 ]
+

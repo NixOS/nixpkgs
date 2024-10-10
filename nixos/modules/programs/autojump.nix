@@ -29,3 +29,4 @@ in
     programs.fish.interactiveShellInit = lib.mkIf prg.fish.enable "source ${pkgs.autojump}/share/autojump/autojump.fish";
   };
 }
+

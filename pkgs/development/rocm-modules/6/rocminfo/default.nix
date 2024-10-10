@@ -61,3 +61,4 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isAarch64 || versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
+

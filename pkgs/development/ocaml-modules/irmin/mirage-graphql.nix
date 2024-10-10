@@ -19,3 +19,4 @@ buildDunePackage {
 
   inherit (irmin-mirage) meta;
 }
+

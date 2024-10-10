@@ -72,3 +72,4 @@ lib.makeScope libsForQt5.newScope packages
 // lib.optionalAttrs config.allowAliases {
   lomiri-system-settings-security-privacy = lib.warn "`lomiri-system-settings-security-privacy` upstream was merged into `lomiri-system-settings`. Please use `pkgs.lomiri.lomiri-system-settings-unwrapped` if you need to directly access the plugins that belonged to this project." pkgs.lomiri.lomiri-system-settings-unwrapped; # Added on 2024-08-08
 }
+

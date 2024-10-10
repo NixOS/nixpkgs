@@ -141,3 +141,4 @@ for fn in $target/old/*linux* $target/old/*initrd-initrd* $target/bcm*.dtb; do
         rm -vf -- "$fn"
     fi
 done
+

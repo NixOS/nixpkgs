@@ -1,6 +1,6 @@
 addOpenBSDMakeFlags() {
-  makeFlags="INCSDIR=${!outputDev}/include $makeFlags"
-  makeFlags="MANDIR=${!outputMan}/share/man $makeFlags"
+  prependToVar makeFlags "INCSDIR=${!outputDev}/include"
+  prependToVar makeFlags "MANDIR=${!outputMan}/share/man"
 }
 
 fixOpenBSDInstallDirs() {
@@ -32,3 +32,4 @@ makeOpenBSDUnversionedLinks() {
 preConfigureHooks+=(addOpenBSDMakeFlags)
 postPatchHooks+=(fixOpenBSDInstallDirs setBinownBingrp)
 preFixupHooks+=(makeOpenBSDUnversionedLinks)
+

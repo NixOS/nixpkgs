@@ -51,3 +51,4 @@ in buildNpmPackage rec {
     mainProgram = "kaufdbclean";
   };
 }
+

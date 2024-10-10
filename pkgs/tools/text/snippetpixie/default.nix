@@ -87,3 +87,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.bytepixie.snippetpixie";
   };
 }
+

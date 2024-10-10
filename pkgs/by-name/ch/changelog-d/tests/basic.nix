@@ -23,3 +23,4 @@ runCommand "changelog-d-basic-test" {
   grep -F 'https://github.com/NixOS/boondoggle/issues/1234' $out >/dev/null
   set +x
 ''
+

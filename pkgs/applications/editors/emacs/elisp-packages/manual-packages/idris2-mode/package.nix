@@ -24,8 +24,6 @@ melpaBuild {
     prop-menu
   ];
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = gitUpdater { };
 
   meta = {
@@ -35,3 +33,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ wuyoli AndersonTorres ];
   };
 }
+

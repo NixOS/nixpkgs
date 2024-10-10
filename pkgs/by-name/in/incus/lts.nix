@@ -10,3 +10,4 @@ import ./generic.nix {
   lts = true;
   updateScriptArgs = "--lts --regex '6.0.*'";
 }
+

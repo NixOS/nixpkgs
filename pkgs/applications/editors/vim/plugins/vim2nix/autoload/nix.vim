@@ -305,3 +305,4 @@ fun! nix#ExportPluginsForNix(opts) abort
     unlet k v
   endfor
 endf
+

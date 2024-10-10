@@ -25,3 +25,4 @@ stdenv.mkDerivation {
     mainProgram = "u9fs";
   };
 }
+

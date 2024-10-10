@@ -162,3 +162,4 @@ buildGoModule rec {
     mainProgram = "gitea";
   };
 }
+

@@ -62,3 +62,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.elementary.calculator";
   };
 }
+

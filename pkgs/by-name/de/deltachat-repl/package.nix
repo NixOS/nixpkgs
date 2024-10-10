@@ -25,3 +25,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "deltachat-repl";
   };
 }
+

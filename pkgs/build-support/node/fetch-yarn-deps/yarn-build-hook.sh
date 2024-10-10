@@ -22,3 +22,4 @@ yarnBuildHook() {
 if [[ -z "${dontYarnBuild-}" && -z "${buildPhase-}" ]]; then
     buildPhase=yarnBuildHook
 fi
+

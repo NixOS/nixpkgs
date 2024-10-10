@@ -42,3 +42,4 @@ buildNpmPackage rec {
     mainProgram = "uivonim";
   };
 }
+

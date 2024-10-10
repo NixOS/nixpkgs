@@ -103,3 +103,4 @@ stdenv.mkDerivation (builtins.removeAttrs args [ "mvnFetchExtraArgs" ] // {
     platforms = args.meta.platforms or maven.meta.platforms;
   };
 })
+

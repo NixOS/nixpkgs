@@ -101,3 +101,4 @@ in
             strict.fail('su - noadmin -c "sudo --help"')
       '';
   })
+

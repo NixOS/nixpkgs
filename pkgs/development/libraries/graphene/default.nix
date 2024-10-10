@@ -127,3 +127,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "graphene-1.0" "graphene-gobject-1.0" ];
   };
 })
+

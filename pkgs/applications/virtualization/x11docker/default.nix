@@ -28,3 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "x11docker";
   };
 }
+

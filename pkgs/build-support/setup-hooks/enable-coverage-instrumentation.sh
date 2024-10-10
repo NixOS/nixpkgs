@@ -1,4 +1,4 @@
-postPhases+=" cleanupBuildDir"
+appendToVar postPhases cleanupBuildDir
 
 # Force GCC to build with coverage instrumentation.  Also disable
 # optimisation, since it may confuse things.
@@ -18,3 +18,4 @@ cleanupBuildDir() {
         mv "$i" "$(echo $i | sed s/.tmp_//)"
     done
 }
+

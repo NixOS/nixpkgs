@@ -13,3 +13,4 @@ mkKdeDerivation {
     "--suffix PATH : ${lib.makeBinPath [ graphviz ]}"
   ];
 }
+

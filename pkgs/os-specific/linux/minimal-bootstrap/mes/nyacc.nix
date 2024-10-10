@@ -37,3 +37,4 @@ kaem.runCommand "${pname}-${version}" {
   cd ''${out}/share
   untar --file ''${NIX_BUILD_TOP}/nyacc.tar
 ''
+

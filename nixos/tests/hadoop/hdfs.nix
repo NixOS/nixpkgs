@@ -81,3 +81,4 @@ import ../make-test-python.nix ({ package, lib, ... }:
     assert "testfilecontents" in datanode.succeed("curl -f \"http://namenode:14000/webhdfs/v1/testfile?user.name=hdfs&op=OPEN\" 2>&1")
   '';
 })
+

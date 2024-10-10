@@ -47,3 +47,4 @@ mkKdeDerivation {
   '';
   meta.mainProgram = "breeze-settings6";
 }
+

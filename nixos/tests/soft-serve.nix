@@ -100,3 +100,4 @@ in
               raise Exception("Metrics did not contain key 'go_gc_duration_seconds_count'")
     '';
 })
+

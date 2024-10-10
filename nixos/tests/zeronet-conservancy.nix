@@ -23,3 +23,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("curl --fail -H 'Accept: text/html, application/xml, */*' localhost:${toString port}/Stats")
   '';
 })
+

@@ -13,3 +13,4 @@ buildDunePackage {
 
   meta = builtins.removeAttrs js_of_ocaml-compiler.meta [ "mainProgram" ];
 }
+

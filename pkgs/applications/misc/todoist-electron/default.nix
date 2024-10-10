@@ -41,3 +41,4 @@ in appimageTools.wrapAppImage {
     mainProgram = "todoist-electron";
   };
 }
+

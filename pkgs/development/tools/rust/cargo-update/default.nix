@@ -67,3 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor matthiasbeyer ];
   };
 }
+

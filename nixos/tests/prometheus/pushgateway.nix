@@ -94,3 +94,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     pushgateway.log(pushgateway.succeed("systemd-analyze security pushgateway.service | grep -v '✓'"))
   '';
 })
+

@@ -21,3 +21,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     peerflix.wait_until_succeeds("curl -f localhost:9000")
   '';
 })
+

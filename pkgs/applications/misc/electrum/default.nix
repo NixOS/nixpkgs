@@ -163,3 +163,4 @@ python.pkgs.buildPythonApplication {
     mainProgram = "electrum";
   };
 }
+

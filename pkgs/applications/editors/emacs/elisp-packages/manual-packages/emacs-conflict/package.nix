@@ -16,8 +16,6 @@ melpaBuild {
     hash = "sha256-DIGvnotSQYIgHxGxtyCALHd8ZbrfkmdvjLXlkcqQ6v4=";
   };
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
@@ -27,3 +25,4 @@ melpaBuild {
     maintainers = with lib.maintainers; [ ibizaman ];
   };
 }
+

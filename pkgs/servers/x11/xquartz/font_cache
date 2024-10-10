@@ -238,3 +238,4 @@ trap cleanup SIGINT SIGQUIT SIGABRT SIGTERM
 setup_fontdirs
 
 rm -f "${FC_LOCKFILE}"
+

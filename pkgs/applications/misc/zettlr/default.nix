@@ -6,3 +6,4 @@ builtins.mapAttrs (pname: attrs: callPackage ./generic.nix (attrs // { inherit p
     hash = "sha256-gttDGWFJ/VmOyqgOSKnCqqPtNTKJd1fmDpa0ZAX3xc8=";
   };
 }
+

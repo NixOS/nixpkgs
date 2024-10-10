@@ -40,3 +40,4 @@ in symlinkJoin rec {
 
   meta = qgis-unwrapped.meta;
 }
+

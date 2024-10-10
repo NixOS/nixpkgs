@@ -11,3 +11,4 @@ makeSetupHook {
     jq = "${jq}/bin/jq";
   };
 } ./hook.sh
+

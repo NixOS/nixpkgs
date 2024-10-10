@@ -39,3 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "scantailor-universal-cli";
   };
 }
+

@@ -60,3 +60,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "amdgpu_top";
   };
 }
+

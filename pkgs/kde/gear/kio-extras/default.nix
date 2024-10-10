@@ -45,3 +45,4 @@ mkKdeDerivation {
       --replace-fail Exec=$out/libexec/kf6/kiod6 Exec=${kio}/libexec/kf6/kiod6
   '';
 }
+

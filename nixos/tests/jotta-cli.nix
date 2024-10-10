@@ -23,3 +23,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.succeed('XDG_RUNTIME_DIR=/run/user/${uid} su alice -c "jotta-cli version"')
     '';
 })
+

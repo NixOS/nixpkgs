@@ -72,3 +72,4 @@ in
       mainProgram = "satysfi";
     };
   }
+

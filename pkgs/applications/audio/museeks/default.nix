@@ -35,3 +35,4 @@ appimageTools.wrapType2 {
     mainProgram = "museeks";
   };
 }
+

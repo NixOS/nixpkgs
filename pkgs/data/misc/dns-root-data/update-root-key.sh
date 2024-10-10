@@ -8,3 +8,4 @@ grep -Ev "^($$|;)" "$TMP" | sed -e 's/ ;;.*//' > root.key
 unbound-anchor -F -a "$TMP"
 sed '/^;/d' < "$TMP" > root.ds
 rm $TMP
+

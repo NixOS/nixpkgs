@@ -299,3 +299,4 @@ runCommand "Platforms" {} ''
   mkdir -p $platform/Developer
   ln -s ${sdks} $platform/Developer/SDKs
 ''
+

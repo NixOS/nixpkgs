@@ -79,3 +79,4 @@
 { url = "https://github.com/modelica-3rdparty/netCDF-DataReader.git"; rev = "v2.5.0"; sha256 = "1pd5xf5bgz010lryv8bj6lvlfqn9p184csiffwj8icx7rycnlcqb"; fetchSubmodules = true; }
 { url = "https://github.com/joewa/open-bldc-modelica.git"; rev = "58a83b5b36f267613de4676c95163489b1ddc2e7"; sha256 = "0wf6dn64d2psv9b3xg5227vzpk109r3dqzi4m2wwhrilaxs3v004"; fetchSubmodules = true; }
 ]
+

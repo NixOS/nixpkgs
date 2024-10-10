@@ -169,3 +169,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.succeed("test ! -e /var/lib/nixos-containers/b0rk")
     '';
 })
+

@@ -7,3 +7,4 @@ set -o errexit -o nounset -o pipefail
 package=nexusmods-app
 nix-update "$package"
 "$(nix-build --attr "$package".fetch-deps --no-out-link)"
+

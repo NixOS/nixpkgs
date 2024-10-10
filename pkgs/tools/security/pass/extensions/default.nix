@@ -14,3 +14,4 @@ in
   pass-genphrase = callPackage ./genphrase.nix {};
   pass-file = callPackage ./file.nix {};
 }
+

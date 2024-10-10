@@ -48,3 +48,4 @@ rustPlatform.buildRustPackage {
     updateScript = nix-update-script { };
   };
 }
+

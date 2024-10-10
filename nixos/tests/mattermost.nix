@@ -138,3 +138,4 @@ in
     environmentFile.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")
   '';
 })
+

@@ -243,3 +243,4 @@ in {
         hass.log(hass.succeed("systemd-analyze security home-assistant.service"))
   '';
 })
+

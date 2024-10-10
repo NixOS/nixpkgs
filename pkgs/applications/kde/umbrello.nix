@@ -23,3 +23,4 @@ mkDerivation {
     karchive ki18n kiconthemes kdelibs4support ktexteditor
   ];
 }
+

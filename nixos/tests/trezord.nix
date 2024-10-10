@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds("curl -fL http://localhost:21325/status/ | grep Version")
   '';
 })
+

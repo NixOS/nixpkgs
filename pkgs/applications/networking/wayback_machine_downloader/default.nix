@@ -15,3 +15,4 @@ bundlerApp {
     mainProgram = "wayback_machine_downloader";
   };
 }
+

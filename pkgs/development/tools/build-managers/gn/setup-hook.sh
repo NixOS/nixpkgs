@@ -18,3 +18,4 @@ gnConfigurePhase() {
 if [ -z "${dontUseGnConfigure-}" ] && [ -z "${configurePhase-}" ]; then
     configurePhase=gnConfigurePhase
 fi
+

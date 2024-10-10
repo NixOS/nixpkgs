@@ -174,3 +174,4 @@ if [[ "$operating_system" = "1" ]]; then
 fi
 
 echo "${output[@]}"
+

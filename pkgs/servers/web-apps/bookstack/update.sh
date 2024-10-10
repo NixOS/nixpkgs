@@ -48,3 +48,4 @@ cd ../../../..
 nix-build -A bookstack
 
 exit $?
+

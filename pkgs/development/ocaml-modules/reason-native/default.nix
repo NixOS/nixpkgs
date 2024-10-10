@@ -45,3 +45,4 @@ lib.makeScope newScope (self: {
   unicode = self.callPackage ./unicode.nix { };
   utf8 = self.callPackage ./utf8.nix { };
 })
+

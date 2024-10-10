@@ -20,3 +20,4 @@ trace "$latestVersion"
 
 trace "Updating $pin_file"
 echo "$latestVersion" > "$pin_file"
+

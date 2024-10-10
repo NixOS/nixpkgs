@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 /* and */ bsd3 ];
   };
 }
+

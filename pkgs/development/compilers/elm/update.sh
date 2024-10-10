@@ -23,3 +23,4 @@ echo "need to manually copy registry.dat from an existing elm project"
 pushd "$(nix-build -A elmPackages.elm.src --no-out-link ../../../..)/reactor"
   elm2nix convert > $OLDPWD/packages/elm-srcs.nix
 popd
+

@@ -12,3 +12,4 @@ stdenv.mkDerivation {
     ${faircamp}/bin/faircamp --build-dir $out
   '';
 }
+

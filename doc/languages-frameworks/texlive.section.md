@@ -229,3 +229,4 @@ To resolve font issues that might follow, the cache can be removed by the user:
 ```ShellSession
 luaotfload-tool --cache=erase --flush-lookups --force
 ```
+

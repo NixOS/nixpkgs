@@ -62,3 +62,4 @@ buildPythonApplication rec {
     smoke-test = nixosTests.rss2email;
   };
 }
+

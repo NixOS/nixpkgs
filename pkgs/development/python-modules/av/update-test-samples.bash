@@ -42,3 +42,4 @@ fetch_all() {
 
 fetch_all fate_suite fate-suite "http://fate.ffmpeg.org/fate-suite"
 fetch_all curated pyav-curated "https://pyav.org/datasets"
+

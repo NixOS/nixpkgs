@@ -78,3 +78,4 @@ stdenv.mkDerivation rec {
   # Force linking to "libgcc" so tests pass
   NIX_CFLAGS_COMPILE = "-lgcc";
 }
+

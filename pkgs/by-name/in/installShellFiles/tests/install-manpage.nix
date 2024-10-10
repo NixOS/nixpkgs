@@ -21,3 +21,4 @@ runCommandLocal "install-shell-files--install-manpage"
     cmp doc/bar.2.gz $out/share/man/man2/bar.2.gz
     cmp doc/baz.3 $out/share/man/man3/baz.3
   ''
+

@@ -154,3 +154,4 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mainProgram = "element-desktop";
   };
 })
+

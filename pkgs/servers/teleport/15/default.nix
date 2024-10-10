@@ -20,3 +20,4 @@ import ../generic.nix (args // {
     cargoHash = "sha256-aACJ+lYNEU8FFBs158G1/JG8sc6Rq080PeKCMnwdpH0=";
   };
 })
+

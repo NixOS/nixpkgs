@@ -189,3 +189,4 @@ in
 {
   inherit paths names;
 }
+

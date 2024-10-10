@@ -19,3 +19,4 @@ if [ ! -d "$DATA_FOLDER" ]; then
 fi
 
 cp -r "$DATA_FOLDER"/!(db.*) "$BACKUP_FOLDER"/
+

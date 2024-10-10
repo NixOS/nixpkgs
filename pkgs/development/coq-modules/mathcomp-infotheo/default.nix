@@ -31,3 +31,4 @@
   ++ lib.optional (lib.versions.isGe "0.7.2" o.version || o.version == "dev") interval
   ;
 })
+

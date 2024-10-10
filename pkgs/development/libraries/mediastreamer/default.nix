@@ -3,7 +3,7 @@
 , cmake
 , fetchFromGitLab
 , fetchpatch2
-, ffmpeg_7
+, ffmpeg
 , glew
 , gsm
 , lib
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     bzrtp
     ortp
 
-    ffmpeg_7
+    ffmpeg
     glew
     libX11
     libXext
@@ -100,3 +100,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jluttine ];
   };
 }
+

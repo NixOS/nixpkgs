@@ -115,3 +115,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (electron.meta) platforms;
   };
 })
+

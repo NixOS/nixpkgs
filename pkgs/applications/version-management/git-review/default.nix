@@ -51,3 +51,4 @@ buildPythonApplication rec {
     mainProgram = "git-review";
   };
 }
+

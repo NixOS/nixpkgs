@@ -69,3 +69,4 @@ stdenv.mkDerivation rec {
 
   passthru.tests.libuiohook = nixosTests.libuiohook;
 }
+

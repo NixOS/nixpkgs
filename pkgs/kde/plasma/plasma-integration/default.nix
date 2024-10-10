@@ -72,3 +72,4 @@ mkKdeDerivation {
     mv $out/${qtbase.qtPluginPrefix}/platformthemes/KDEPlasmaPlatformTheme5.so $qt5/${libsForQt5.qtbase.qtPluginPrefix}/platformthemes
   '';
 }
+

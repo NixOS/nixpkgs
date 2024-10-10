@@ -66,3 +66,4 @@ let recent = lib.versions.isGe "8.7" coq.coq-version || coq.coq-version == "dev"
     propagatedBuildInputs = o.propagatedBuildInputs
     ++ lib.optionals after_1_6 (with coq.ocamlPackages; [ findlib zarith ]);
 })
+

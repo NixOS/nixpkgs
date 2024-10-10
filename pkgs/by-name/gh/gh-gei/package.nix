@@ -25,3 +25,4 @@ buildDotnetModule rec {
     mainProgram = "gei";
   };
 }
+

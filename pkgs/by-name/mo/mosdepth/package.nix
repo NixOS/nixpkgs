@@ -32,3 +32,4 @@ buildNimPackage (finalAttrs: {
     platforms = platforms.linux;
   };
 })
+

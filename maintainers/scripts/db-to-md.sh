@@ -86,3 +86,4 @@ for file in "${files[@]}"; do
     echo "Converted $file to $outFile" > /dev/stderr
   fi
 done
+

@@ -1596,3 +1596,4 @@ checkFileset 'maybeMissing ./b'
 # TODO: Once we have combinators and a property testing library, derive property tests from https://en.wikipedia.org/wiki/Algebra_of_sets
 
 echo >&2 tests ok
+

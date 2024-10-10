@@ -36,3 +36,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ kaction ];
   };
 }
+

@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.lumiguide.members;
   };
 }
+

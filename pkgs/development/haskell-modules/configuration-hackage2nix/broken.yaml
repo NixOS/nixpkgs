@@ -6888,3 +6888,4 @@ broken-packages:
   - zxcvbn-dvorak # failure in job https://hydra.nixos.org/build/233194326 at 2023-09-02
   - zydiskell # failure in job https://hydra.nixos.org/build/233259592 at 2023-09-02
   - zyre2 # failure in job https://hydra.nixos.org/build/233215215 at 2023-09-02
+

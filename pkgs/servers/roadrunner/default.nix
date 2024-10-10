@@ -56,3 +56,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ shyim ];
   };
 }
+

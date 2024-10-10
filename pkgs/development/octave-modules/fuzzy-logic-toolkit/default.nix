@@ -21,3 +21,4 @@ buildOctavePackage rec {
     description = "Mostly MATLAB-compatible fuzzy logic toolkit for Octave";
   };
 }
+

@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-wizard";
   };
 }
+

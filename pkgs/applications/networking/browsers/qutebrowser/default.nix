@@ -133,3 +133,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry dotlambda nrdxp ];
   };
 }
+

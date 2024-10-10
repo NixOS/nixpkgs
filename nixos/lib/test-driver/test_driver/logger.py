@@ -306,3 +306,4 @@ class XMLLogger(AbstractLogger):
         self.log(f"(finished: {message}, in {toc - tic:.2f} seconds)")
 
         self.xml.endElement("nest")
+

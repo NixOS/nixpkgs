@@ -8,3 +8,4 @@ scala.bare.overrideAttrs (oldAttrs: {
     hash = "sha256-pRfoCXFVnnEh3zyB9HbUZK3qrQ94Gq3iXX2fWGS/l9o=";
   };
 })
+

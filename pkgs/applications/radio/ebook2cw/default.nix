@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ebook2cw";
   };
 }
+

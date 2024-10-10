@@ -21,3 +21,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ syntax-highlighting ];
 }
+

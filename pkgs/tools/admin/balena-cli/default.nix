@@ -73,3 +73,4 @@ in buildNpmPackage' rec {
     mainProgram = "balena";
   };
 }
+

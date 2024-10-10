@@ -377,3 +377,4 @@ foreach my $u (values %usersOut) {
 updateFile("/etc/subuid", join("\n", @subUids) . "\n");
 updateFile("/etc/subgid", join("\n", @subGids) . "\n");
 updateFile($subUidMapFile, encode_json($subUidMap) . "\n");
+

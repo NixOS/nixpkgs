@@ -37,3 +37,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.succeed("su -- alice -c env XDG_RUNTIME_DIR=${runtimePath} openxr_runtime_list")
     '';
 })
+

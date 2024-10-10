@@ -12,3 +12,4 @@ runCommand "${stdenv.targetPlatform.config}-cargo-${lib.getVersion pkgsBuildBuil
   makeWrapper "${pkgsBuildBuild.cargo}/bin/cargo" "$out/bin/cargo" \
     --prefix PATH : "${rustc}/bin"
  ''
+

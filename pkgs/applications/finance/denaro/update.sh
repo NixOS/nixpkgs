@@ -16,3 +16,4 @@ fi
 update-source-version denaro "$version"
 
 $(nix-build -A denaro.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+

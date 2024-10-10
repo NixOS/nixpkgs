@@ -95,3 +95,4 @@ in
       ln -s "initrd" "$out/initrd$extension"
   fi
 ''
+

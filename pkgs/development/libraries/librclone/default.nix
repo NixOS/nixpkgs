@@ -33,3 +33,4 @@ in buildGoModule rec {
     inherit (rclone.meta) license platforms;
   };
 }
+

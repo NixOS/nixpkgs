@@ -37,3 +37,4 @@ EOF
     mainProgram = "tree-from-tags";
   };
 }
+

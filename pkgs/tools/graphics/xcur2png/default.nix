@@ -50,3 +50,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xcur2png";
   };
 }
+

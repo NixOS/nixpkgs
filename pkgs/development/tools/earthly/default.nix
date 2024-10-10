@@ -54,3 +54,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ zoedsoupe konradmalik ];
   };
 }
+

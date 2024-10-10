@@ -24,3 +24,4 @@ buildGoModule rec {
     maintainers = [ maintainers.raboof ];
   };
 }
+

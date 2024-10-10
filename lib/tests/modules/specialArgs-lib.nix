@@ -26,3 +26,4 @@
     assert config.weird.foo == "alright";
     "ok";
 }
+

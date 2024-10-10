@@ -56,3 +56,4 @@ buildGoModule rec {
     mainProgram = "myks";
   };
 }
+

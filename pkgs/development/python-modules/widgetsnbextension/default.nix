@@ -28,3 +28,4 @@ buildPythonPackage rec {
     license = ipywidgets.meta.license; # Build from same repo
   };
 }
+

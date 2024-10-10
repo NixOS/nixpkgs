@@ -21,3 +21,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ minijackson erictapen ];
   };
 }
+

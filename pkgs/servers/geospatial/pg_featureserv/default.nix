@@ -43,3 +43,4 @@ buildGoModule rec {
     maintainers = teams.geospatial.members;
   };
 }
+

@@ -20,3 +20,4 @@ in
     services.udev.packages = [ pkgs.uhk-udev-rules ];
   };
 }
+

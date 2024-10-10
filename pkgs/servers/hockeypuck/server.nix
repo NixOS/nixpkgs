@@ -19,3 +19,4 @@ buildGoModule {
     maintainers = [ maintainers.etu ];
   };
 }
+

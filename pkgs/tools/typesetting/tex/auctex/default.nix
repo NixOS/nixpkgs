@@ -39,3 +39,4 @@ let auctex = stdenv.mkDerivation ( rec {
 });
 
 in auctex // { pkgs = [ auctex.tex ]; }
+

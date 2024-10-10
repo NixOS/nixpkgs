@@ -57,3 +57,4 @@ writeShellScript "update-script" ''
   cd "$toplevel"
   update-source-version "$attrPath" "$newVersion" --file="$gemdir"/package.nix --ignore-same-hash
 ''
+

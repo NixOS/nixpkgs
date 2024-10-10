@@ -76,3 +76,4 @@
   (fetchNuGet { pname = "System.Threading.Tasks"; version = "4.3.0"; sha256 = "134z3v9abw3a6jsw17xl3f6hqjpak5l682k2vz39spj4kmydg6k7"; })
   (fetchNuGet { pname = "TunnelVisionLabs.ReferenceAssemblyAnnotator"; version = "1.0.0-alpha.160"; sha256 = "1wvfa3098a984kydjgjvx43gncnr89fw20if2gqvz8kqn9pxqjbq"; })
 ]
+

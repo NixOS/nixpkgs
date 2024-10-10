@@ -35,3 +35,4 @@ buildPythonPackage rec {
     "cirq_pasqal/_version_test.py"
   ];
 }
+

@@ -53,3 +53,4 @@ callPackage' ./hadrian.nix ({
   # in ./hadrian.nix without requiring intervention here.)
   inherit ghc-platform ghc-toolchain;
 })
+

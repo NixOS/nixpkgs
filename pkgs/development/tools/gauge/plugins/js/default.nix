@@ -40,3 +40,4 @@ buildNpmPackage rec {
     inherit (gauge-unwrapped.meta) platforms;
   };
 }
+

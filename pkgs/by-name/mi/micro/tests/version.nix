@@ -4,3 +4,4 @@ testers.testVersion {
   package = micro;
   command = "micro -version";
 }
+

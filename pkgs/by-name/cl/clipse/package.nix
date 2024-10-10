@@ -24,3 +24,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.savedra1 ];
   };
 }
+

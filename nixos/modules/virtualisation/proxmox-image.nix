@@ -324,3 +324,4 @@ with lib;
     proxmox.qemuExtraConf.${cfg.cloudInit.device} = "${cfg.cloudInit.defaultStorage}:vm-9999-cloudinit,media=cdrom";
   };
 }
+

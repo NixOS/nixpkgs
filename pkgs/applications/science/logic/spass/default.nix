@@ -40,3 +40,4 @@ stdenv.mkDerivation {
     downloadPage = "http://www.spass-prover.org/download/index.html";
   };
 }
+

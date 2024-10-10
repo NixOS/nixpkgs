@@ -18,3 +18,4 @@ mkDerivation {
   nativeBuildInputs = [ wrapGAppsHook3 extra-cmake-modules kdoctools ];
   buildInputs = [ kio libksane ];
 }
+

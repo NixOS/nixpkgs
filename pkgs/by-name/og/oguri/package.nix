@@ -40,3 +40,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin; # this should be enfoced by wayland platforms in the future
   };
 }
+

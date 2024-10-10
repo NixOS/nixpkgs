@@ -86,3 +86,4 @@ stdenv.mkDerivation rec {
     broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
 }
+

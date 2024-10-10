@@ -48,3 +48,4 @@ buildPythonPackage {
     description = "OpenTelemetry Collector Protobuf over HTTP Exporter";
   };
 }
+

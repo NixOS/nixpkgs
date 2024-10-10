@@ -39,3 +39,4 @@ buildPythonPackage rec {
     broken = stdenv.hostPlatform.isDarwin; # requires pyobjc-core, pyobjc-framework-Cocoa
   };
 }
+

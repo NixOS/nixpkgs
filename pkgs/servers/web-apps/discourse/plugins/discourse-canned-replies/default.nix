@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Adds support for inserting a canned reply into the composer window via a UI";
   };
 }
+

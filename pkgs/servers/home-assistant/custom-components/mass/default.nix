@@ -43,3 +43,4 @@ buildHomeAssistantComponent rec {
     maintainers = with maintainers; [ hexa ];
   };
 }
+

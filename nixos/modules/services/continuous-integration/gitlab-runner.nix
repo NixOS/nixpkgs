@@ -782,3 +782,4 @@ in {
 
   meta.maintainers = teams.gitlab.members;
 }
+

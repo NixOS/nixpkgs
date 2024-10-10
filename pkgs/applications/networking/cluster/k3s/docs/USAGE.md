@@ -55,3 +55,4 @@ Any other subsequent nodes can be added with a slightly different config:
 For this to work you need to open the aforementioned API, etcd, and flannel ports in the firewall. Official documentation on what ports need to be opened for specific use cases can be found on [k3s' documentation site](https://docs.k3s.io/installation/requirements#inbound-rules-for-k3s-nodes). Note that it is [recommended](https://etcd.io/docs/v3.3/faq/#why-an-odd-number-of-cluster-members) to use an odd number of nodes in such a cluster.
 
 Tip: If you run into connectivity issues between nodes for specific applications (e.g. ingress controller), please verify the firewall settings you have enabled (example under [Single Node](#single-node)) against the documentation for that specific application. In the ingress controller example, you may want to open 443 or 80 depending on your use case.
+

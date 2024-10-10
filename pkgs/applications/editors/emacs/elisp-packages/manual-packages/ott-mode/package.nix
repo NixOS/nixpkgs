@@ -15,10 +15,9 @@ melpaBuild {
     popd
   '';
 
-  ignoreCompilationError = false;
-
   meta = {
     description = "Emacs ott mode (from ott sources)";
     inherit (ott.meta) homepage license;
   };
 }
+

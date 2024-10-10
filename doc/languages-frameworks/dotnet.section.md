@@ -261,3 +261,4 @@ If you ever need to update the dependencies of a package, you instead do
 * `nix-build -A package.fetch-deps` to generate the update script for `package`
 * Run `./result` to regenerate the lockfile to the path passed for `nugetDeps` (keep in mind if it can't be resolved to a local path, the script will write to `$1` or a temporary path instead)
 * Finally, ensure the correct file was written and the derivation can be built.
+

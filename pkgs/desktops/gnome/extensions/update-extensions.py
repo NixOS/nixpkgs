@@ -322,3 +322,4 @@ if __name__ == "__main__":
     logging.info(
         "Done. Writing name collisions to collisions.json (please check manually)"
     )
+

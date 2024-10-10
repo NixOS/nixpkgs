@@ -64,3 +64,4 @@ stdenv.mkDerivation rec {
     mainProgram = "pdf2djvu";
   };
 }
+

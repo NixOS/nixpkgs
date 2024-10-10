@@ -2,3 +2,4 @@
 if [[ -z ${IN_NIX_SHELL-} && -z ${CARGO_HOME-} ]]; then
     export CARGO_HOME=$TMPDIR
 fi
+

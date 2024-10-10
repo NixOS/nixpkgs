@@ -34,3 +34,4 @@ buildPerlPackage rec {
     license = with lib.licenses; [ artistic1 ];
   };
 }
+

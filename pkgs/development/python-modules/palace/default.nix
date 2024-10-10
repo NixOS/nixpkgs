@@ -50,3 +50,4 @@ buildPythonPackage rec {
     maintainers = [ maintainers.McSinyx ];
   };
 }
+

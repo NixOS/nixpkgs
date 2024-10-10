@@ -63,3 +63,4 @@ stdenv.mkDerivation {
     mainProgram = "qolibri";
   };
 }
+

@@ -39,3 +39,4 @@ buildGo123Module rec {
     mainProgram = "traefik";
   };
 }
+

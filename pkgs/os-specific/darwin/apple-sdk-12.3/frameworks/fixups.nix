@@ -161,3 +161,4 @@
     JavaVM = super.JavaNativeFoundation;
   };
 }
+

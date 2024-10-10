@@ -9,3 +9,4 @@ import ./common-hadrian.nix {
     rm -rf "$out/libraries/stm/bench"
   '';
 }
+

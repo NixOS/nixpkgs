@@ -55,3 +55,4 @@ stdenv.mkDerivation rec {
     maintainers = lib.teams.gitlab.members;
   };
 }
+

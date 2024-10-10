@@ -72,7 +72,7 @@ stdenv.mkDerivation {
       --replace "/usr/local" "${valgrind}"
 
     substituteInPlace cpp/CMakeLists.txt \
-      --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${fuse}/lib"'
+      --replace '"/lib64" "/usr/lib64"' '"${attr.out}/lib" "${lib.getLib fuse}/lib"'
 
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${fuse}/include"
     export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -L${fuse}/lib"
@@ -112,3 +112,4 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
   };
 }
+

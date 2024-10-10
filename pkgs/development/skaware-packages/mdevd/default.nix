@@ -25,3 +25,4 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/mdevd/examples
   '';
 }
+

@@ -67,3 +67,4 @@ import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... } :
       machine.succeed("ovs-vsctl br-exists nixostestbr0")
   '';
 })
+

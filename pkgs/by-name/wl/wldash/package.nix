@@ -74,3 +74,4 @@ rustPlatform.buildRustPackage {
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 }
+

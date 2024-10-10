@@ -23,3 +23,4 @@
     hash = "sha256-xHxzBxriSd/OU8gEcDG00VRkJYPYJDfAfPh/FkQe+zg=";
   }).passthru.jar;
 }
+

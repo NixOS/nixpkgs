@@ -30,3 +30,4 @@ In case you want to update your NixOS configuration, compare the migrated config
 at `/var/lib/mautrix-signal/config.yaml` with the default configuration
 (`nix-shell -p mautrix-signal --run "mautrix-signal -c example.yaml -e"`) and
 update your module configuration accordingly.
+

@@ -187,3 +187,4 @@ The Gradle setup hook accepts the following environment variables:
   - Note that if you disable the configure hook, you may face issues
     such as `Failed to load native library 'libnative-platform.so'`,
     because the configure hook is responsible for initializing Gradle.
+

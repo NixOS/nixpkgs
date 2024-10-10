@@ -18,3 +18,4 @@ let args = rec {
   tilt-assets = callPackage ./assets.nix args;
 in callPackage ./binary.nix (args // { inherit tilt-assets; })
 
+

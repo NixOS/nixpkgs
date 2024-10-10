@@ -15,3 +15,4 @@ bundlerApp {
     platforms = platforms.x86_64;
   };
 }
+

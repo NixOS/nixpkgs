@@ -39,3 +39,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.succeed(f"curl --fail -H 'Accept: application/dns-message' '{url}?dns={query}' | grep -F {bin_ip}")
   '';
 })
+

@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage {
     $out/bin/git-dependency-rev-non-workspace-nested-crate
   '';
 }
+

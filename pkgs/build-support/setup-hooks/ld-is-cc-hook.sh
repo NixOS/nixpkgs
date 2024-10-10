@@ -3,3 +3,4 @@ ld-is-cc-hook() {
 }
 
 preConfigureHooks+=(ld-is-cc-hook)
+

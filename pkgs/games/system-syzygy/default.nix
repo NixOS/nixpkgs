@@ -51,3 +51,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.marius851000 ];
   };
 }
+

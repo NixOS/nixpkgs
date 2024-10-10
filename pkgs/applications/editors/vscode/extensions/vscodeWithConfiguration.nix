@@ -59,3 +59,4 @@ writeShellScriptBin "code" ''
     lib.optionalString (user-data-dir != "") "--user-data-dir ${user-data-dir}"
   } "$@"
 ''
+

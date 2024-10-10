@@ -78,3 +78,4 @@ in {
     users.groups = lib.mkIf (cfg.group == "ombi") { ombi = { }; };
   };
 }
+

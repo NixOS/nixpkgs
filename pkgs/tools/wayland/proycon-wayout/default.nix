@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
     mainProgram = "proycon-wayout";
   };
 }
+

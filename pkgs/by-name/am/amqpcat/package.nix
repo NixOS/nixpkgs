@@ -31,3 +31,4 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ aaronjheng ];
   };
 }
+

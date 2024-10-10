@@ -42,3 +42,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ makefu ];
   };
 }
+

@@ -16,3 +16,4 @@ pkgs.mkShell rec {
   newAarch64Sha256 = getSha256 aarch64Url version newVersion;
   newX86_64Sha256 = getSha256 x86_64Url version newVersion;
 }
+

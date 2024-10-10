@@ -22,10 +22,9 @@ melpaBuild {
     hash = "sha256-DJJfjbu27Gi7Nzsa1cdi8nIQowKH8ZxgQBwfXLB0Q/I=";
   };
 
-  ignoreCompilationError = false;
-
   meta = {
     description = "Major mode for Prisma Schema Language";
     license = lib.licenses.gpl2Only;
   };
 }
+

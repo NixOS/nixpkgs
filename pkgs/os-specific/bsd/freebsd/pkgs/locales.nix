@@ -49,3 +49,4 @@ symlinkJoin {
   name = "freebsd-locales";
   paths = lib.mapAttrsToList build directories;
 }
+

@@ -104,3 +104,4 @@ for fn in /boot/kernels/*; do
         rm -vf -- "$fn"
     fi
 done
+

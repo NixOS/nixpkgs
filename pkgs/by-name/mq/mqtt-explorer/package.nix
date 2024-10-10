@@ -178,3 +178,4 @@ stdenv.mkDerivation rec {
     mainProgram = "mqtt-explorer";
   };
 }
+

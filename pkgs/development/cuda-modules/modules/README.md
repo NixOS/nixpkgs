@@ -54,3 +54,4 @@ the same name, which leads to the manifests overwriting each other.
 
 The modules in `generic/types` define reusable types used in both
 `generic/manifests` and `generic/releases`.
+

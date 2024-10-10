@@ -79,3 +79,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "radicle-httpd";
   };
 }
+

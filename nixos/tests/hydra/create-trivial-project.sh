@@ -57,3 +57,4 @@ cat >data.json <<EOF
 }
 EOF
 mycurl --silent -X PUT $URL/jobset/$PROJECT_NAME/$JOBSET_NAME -d @data.json -b hydra-cookie.txt
+

@@ -55,3 +55,4 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
 }
+

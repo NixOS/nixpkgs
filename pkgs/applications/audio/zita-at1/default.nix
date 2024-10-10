@@ -36,3 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "zita-at1";
   };
 }
+

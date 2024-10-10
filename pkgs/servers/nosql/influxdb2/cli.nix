@@ -41,3 +41,4 @@ in buildGoModule {
     mainProgram = "influx";
   };
 }
+

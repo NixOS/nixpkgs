@@ -17,3 +17,4 @@ _moveSbin() {
     rmdir $prefix/sbin
     ln -s bin $prefix/sbin
 }
+

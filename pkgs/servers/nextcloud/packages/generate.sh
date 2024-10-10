@@ -12,3 +12,4 @@ APPS=`cat nextcloud-apps.json | jq -r 'keys|.[]' | sed -z 's/\n/,/g;s/,$/\n/'`
 
 nc4nix -apps $APPS
 rm *.log
+

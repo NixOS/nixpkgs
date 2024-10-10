@@ -44,3 +44,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         one.wait_for_file("/var/www/munin/one/one/diskstat_iops_vda-day.png", timeout=60)
   '';
 })
+

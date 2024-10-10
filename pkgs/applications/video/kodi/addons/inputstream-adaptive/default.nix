@@ -42,3 +42,4 @@ buildKodiBinaryAddon rec {
     maintainers = teams.kodi.members;
   };
 }
+

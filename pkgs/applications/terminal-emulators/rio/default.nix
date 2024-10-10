@@ -132,3 +132,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rio";
   };
 }
+

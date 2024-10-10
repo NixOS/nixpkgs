@@ -40,3 +40,4 @@ buildGoModule rec {
     mainProgram = "git-credential-gopass";
   };
 }
+

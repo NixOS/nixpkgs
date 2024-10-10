@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/owncloud/libre-graph-api-cpp-qt-client/releases/tag/v${version}";
   };
 }
+

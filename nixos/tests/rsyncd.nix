@@ -34,3 +34,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     a.succeed("rsync b::")
   '';
 })
+

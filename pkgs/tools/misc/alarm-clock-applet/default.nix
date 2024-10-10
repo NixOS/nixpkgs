@@ -59,3 +59,4 @@ stdenv.mkDerivation rec {
     mainProgram = "alarm-clock-applet";
   };
 }
+

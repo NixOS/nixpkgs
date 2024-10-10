@@ -30,3 +30,4 @@ pkgs.runCommand "nixos-build-vms" { nativeBuildInputs = [ pkgs.makeWrapper ]; } 
      --set testScript "${pkgs.writeText "start-all" "start_all(); join_all();"}" \
      --add-flags "--no-interactive"
 ''
+
