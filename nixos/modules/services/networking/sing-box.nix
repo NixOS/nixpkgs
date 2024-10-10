@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
   cfg = config.services.sing-box;
   settingsFormat = pkgs.formats.json { };
@@ -20,20 +26,24 @@ in
           freeformType = settingsFormat.type;
           options = {
             route = {
-              geoip.path = lib.mkOption {
-                type = lib.types.path;
-                default = "${pkgs.sing-geoip}/share/sing-box/geoip.db";
-                defaultText = lib.literalExpression "\${pkgs.sing-geoip}/share/sing-box/geoip.db";
+              geoip = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = settingsFormat.type;
+                };
+                default = { };
+                example = lib.literalExpression "{ path = \"\${pkgs.sing-geoip}/share/sing-box/geoip.db\"; }";
                 description = ''
-                  The path to the sing-geoip database.
+                  The path or download url to the sing-geoip database.
                 '';
               };
-              geosite.path = lib.mkOption {
-                type = lib.types.path;
-                default = "${pkgs.sing-geosite}/share/sing-box/geosite.db";
-                defaultText = lib.literalExpression "\${pkgs.sing-geosite}/share/sing-box/geosite.db";
+              geosite = lib.mkOption {
+                type = lib.types.submodule {
+                  freeformType = settingsFormat.type;
+                };
+                default = { };
+                example = lib.literalExpression "{ path = \"\${pkgs.sing-geosite}/share/sing-box/geosite.db\"; }";
                 description = ''
-                  The path to the sing-geosite database.
+                  The path or download url to the sing-geosite database.
                 '';
               };
             };
@@ -52,6 +62,33 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions =
+      let
+        rules = cfg.settings.route.rules or [ ];
+      in
+      [
+        {
+          assertion = lib.any (r: r ? source_geoip || r ? geoip) rules -> cfg.settings.route.geoip != { };
+          message = ''
+            Deprecated option `services.sing-box.settings.route.rules.*.{source_geoip,geoip}` is set,
+            but `services.sing-box.settings.route.geoip` is missing.
+
+            Please either set geoip database location, or migrate to rule-sets,
+            see https://sing-box.sagernet.org/migration/#migrate-geoip-to-rule-sets for instructions.
+          '';
+        }
+        {
+          assertion = lib.any (r: r ? geosite) rules -> cfg.settings.route.geosite != { };
+          message = ''
+            Deprecated option `services.sing-box.settings.route.rules.*.geosite` is set,
+            but `services.sing-box.settings.route.geosite` is missing.
+
+            Please either set geosite database location, or migrate to rule-sets,
+            see https://sing-box.sagernet.org/migration/#migrate-geosite-to-rule-sets for instructions.
+          '';
+        }
+      ];
+
     systemd.packages = [ cfg.package ];
 
     systemd.services.sing-box = {
