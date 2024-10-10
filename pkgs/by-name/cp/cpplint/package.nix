@@ -1,4 +1,9 @@
-{ lib, fetchpatch, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  fetchpatch,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "cpplint";
