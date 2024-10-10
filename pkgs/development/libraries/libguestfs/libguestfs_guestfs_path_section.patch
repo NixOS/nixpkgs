@@ -1,0 +1,28 @@
+--- a/lib/handle.c
++++ b/lib/handle.c
+@@ -52,6 +52,8 @@ static pthread_mutex_t init_lock = PTHREAD_MUTEX_INITIALIZER;
+ 
+ static void init_libguestfs (void) __attribute__((constructor));
+ 
++const char guestfs_default_path[] __attribute__((section("guestfs_path_str"))) = GUESTFS_DEFAULT_PATH;
++
+ /**
+  * No initialization is required by libguestfs, but libvirt and
+  * libxml2 require initialization if they might be called from
+@@ -115,7 +117,7 @@ guestfs_create_flags (unsigned flags, ...)
+   /* Default is uniprocessor appliance. */
+   g->smp = 1;
+ 
+-  g->path = strdup (GUESTFS_DEFAULT_PATH);
++  g->path = strdup (guestfs_default_path);
+   if (!g->path) goto error;
+ 
+ #ifdef QEMU
+@@ -522,7 +524,7 @@ guestfs_impl_set_path (guestfs_h *g, const char *path)
+ 
+   g->path =
+     path == NULL ?
+-    safe_strdup (g, GUESTFS_DEFAULT_PATH) : safe_strdup (g, path);
++    safe_strdup (g, guestfs_default_path) : safe_strdup (g, path);
+   return 0;
+ }

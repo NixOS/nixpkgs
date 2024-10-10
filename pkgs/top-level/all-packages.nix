@@ -21061,11 +21061,7 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook264;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
-  libguestfs-with-appliance = libguestfs.override {
-    appliance = libguestfs-appliance;
-    autoreconfHook = buildPackages.autoreconfHook264;
-  };
-
+  libguestfs-with-appliance = pkgs.callPackage ../development/libraries/libguestfs/with-appliance.nix { };
 
   libhangul = callPackage ../development/libraries/libhangul { };
 
