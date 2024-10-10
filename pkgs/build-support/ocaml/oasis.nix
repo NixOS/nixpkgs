@@ -1,16 +1,17 @@
 { lib, stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
 
 { pname, version, nativeBuildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
-  minimumOCamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
   ...
 }@args:
 
-if args ? minimumOCamlVersion &&
-   lib.versionOlder ocaml.version args.minimumOCamlVersion
-then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
-else
+lib.warnIf (args ? minimumOCamlVersion)
+  "The `minimumOCamlVersion` argument is deprecated, use `minimalOCamlVersion` instead."
+
+lib.throwIf ((args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion) ||
+             (args ? minimalOCamlVersion && lib.versionOlder ocaml.version args.minimalOCamlVersion))
+  "${pname}-${version} is not available for OCaml ${ocaml.version}"
 
 stdenv.mkDerivation (args // {
   name = "ocaml${ocaml.version}-${pname}-${version}";
