@@ -27,8 +27,8 @@ index 5441339..0bbf566 100644
 +				       config_filepath);
  			else
  				error (FAIL, 0,
- 				       _("can't open the manpath "
- 					 "configuration file %s"),
+ 				       _ ("can't open the manpath "
+ 				          "configuration file %s"),
 -				       CONFIG_FILE);
 +				       config_filepath);
  		} else {
