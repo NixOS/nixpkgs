@@ -32,6 +32,7 @@
 , OpenGL
 , Security
 , buildClient ? true
+, gcc
 }:
 
 stdenv.mkDerivation rec {
@@ -107,6 +108,9 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DAUTOUPDATE=OFF"
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_C_COMPILER=${gcc}/bin/gcc"
+    "-DCMAKE_CXX_COMPILER=${gcc}/bin/g++"
   ];
 
   # Tests loop forever on Darwin for some reason
