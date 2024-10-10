@@ -11,6 +11,7 @@
   SDL2_mixer,
   zlib,
   unstableGitUpdater,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    makeWrapper
   ];
 
   buildInputs = [
@@ -45,17 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
 
     for app in smw smw-leveledit smw-worldedit; do
-      chmod +x $out/games/$app
-
-      cat << EOF > $out/bin/$app
-      $out/games/$app --datadir $out/share/games/smw
-    EOF
-      chmod +x $out/bin/$app
+      makeWrapper $out/games/$app $out/bin/$app \
+        --add-flags "--datadir $out/share/games/smw"
     done
 
     ln -s $out/games/smw-server $out/bin/smw-server
   '';
+
   passthru.updateScript = unstableGitUpdater { };
+
   meta = {
     description = "A fan-made multiplayer Super Mario Bros. style deathmatch game";
     homepage = "https://github.com/mmatyas/supermariowar";
