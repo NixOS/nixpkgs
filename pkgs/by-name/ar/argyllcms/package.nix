@@ -2,6 +2,7 @@
   stdenv,
   fetchzip,
   jam,
+  pkg-config,
   unzip,
   libX11,
   libXxf86vm,
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     jam
+    pkg-config
     unzip
   ];
 
@@ -70,7 +72,10 @@ stdenv.mkDerivation rec {
       -s HAVE_PNG=true
       -s HAVE_Z=true
       -s HAVE_SSL=true
-      -s LINKFLAGS="-ljpeg -ltiff -lpng -lz -lssl"
+      -s LINKFLAGS="$($PKG_CONFIG --libs libjpeg libtiff-4 libpng zlib libssl)"
+      -s GUILINKFLAGS="$($PKG_CONFIG --libs x11 xext xxf86vm xinerama xrandr xau xdmcp xscrnsaver)"
+    )
+
     export AR="$AR rusc"
   '';
 
