@@ -1,0 +1,25 @@
+From ef6178446363682f969186c42443d95f98e06584 Mon Sep 17 00:00:00 2001
+From: alexyao2015 <33379584+alexyao2015@users.noreply.github.com>
+Date: Wed, 25 Sep 2024 23:17:47 -0500
+Subject: [PATCH 1/2] plasmastyle.cpp: Use relative path
+
+---
+ src/plasmastyle.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/plasmastyle.cpp b/src/plasmastyle.cpp
+index a266150..c86fd20 100644
+--- a/src/plasmastyle.cpp
++++ b/src/plasmastyle.cpp
+@@ -8,7 +8,7 @@ PlasmaStyle::PlasmaStyle()
+ void PlasmaStyle::setPlasmaStyle(QString plasmaStyle)
+ {
+     styleProcess = new QProcess;
+-    QString style = "/usr/bin/plasma-apply-desktoptheme";
++    QString style = "plasma-apply-desktoptheme";
+     QStringList styleArgs = {plasmaStyle};
+     styleProcess->start(style, styleArgs);
+     styleProcess->waitForFinished();
+-- 
+2.44.1
+
