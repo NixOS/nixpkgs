@@ -1918,11 +1918,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   luit = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "luit";
-    version = "20240102";
+    version = "20240910";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://invisible-mirror.net/archives/luit/luit-20240102.tgz";
-      sha256 = "10n0xf8m3j6xhj5dgc0km40n9vy38hwnvjfq4pr0xiffrllflym0";
+      url = "https://invisible-mirror.net/archives/luit/luit-20240910.tgz";
+      sha256 = "1ma978xdmkxm3q3v1cxpwzb4ahd0dgzj7v0ssr9i9bi5zk5pypd1";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
