@@ -838,6 +838,7 @@ mapAliases {
   libgnome-keyring3 = libgnome-keyring; # Added 2024-06-22
   libgpgerror = libgpg-error; # Added 2021-09-04
   libheimdal = heimdal; # Added 2022-11-18
+  libiconv-darwin = darwin.libiconv;
   libintlOrEmpty = throw "'libintlOrEmpty' has been replaced by gettext"; # Converted to throw 2023-09-10
   libixp_hg = libixp;
   libjpeg_drop = libjpeg_original; # Added 2020-06-05
