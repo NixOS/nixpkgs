@@ -1938,7 +1938,6 @@ broken-packages:
   - gearhash # failure in job https://hydra.nixos.org/build/252728216 at 2024-03-16
   - gelatin # failure in job https://hydra.nixos.org/build/233249394 at 2023-09-02
   - gemcap # failure in job https://hydra.nixos.org/build/233202506 at 2023-09-02
-  - gemini-server # failure in job https://hydra.nixos.org/build/252717988 at 2024-03-16
   - gemmula-altera # failure in job https://hydra.nixos.org/build/252721416 at 2024-03-16
   - gemstone # failure in job https://hydra.nixos.org/build/233202246 at 2023-09-02
   - gender # failure in job https://hydra.nixos.org/build/233235712 at 2023-09-02
@@ -3418,7 +3417,6 @@ broken-packages:
   - language-elm # failure in job https://hydra.nixos.org/build/233214012 at 2023-09-02
   - language-fortran # failure in job https://hydra.nixos.org/build/233205480 at 2023-09-02
   - language-gcl # failure in job https://hydra.nixos.org/build/233218957 at 2023-09-02
-  - language-gemini # failure in job https://hydra.nixos.org/build/233211812 at 2023-09-02
   - language-go # failure in job https://hydra.nixos.org/build/233194866 at 2023-09-02
   - language-guess # failure in job https://hydra.nixos.org/build/233257420 at 2023-09-02
   - language-hcl # failure in job https://hydra.nixos.org/build/233212998 at 2023-09-02
