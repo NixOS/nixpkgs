@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "2.5.2";
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/project/freetype/ftjam/${finalAttrs.version}/ftjam-${finalAttrs.version}.tar.bz2";
+    url = "mirror://sourceforge/project/freetype/ftjam/${finalAttrs.version}/ftjam-${finalAttrs.version}.tar.bz2";
     hash = "sha256-6JdzUAqSkS3pGOn+v/q+S2vOedaa8ZRDX04DK4ptZqM=";
   };
 
