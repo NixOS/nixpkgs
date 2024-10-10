@@ -24776,12 +24776,6 @@ with pkgs;
     libOnly = true;
   };
 
-  apulse = callPackage ../misc/apulse { };
-
-  libpressureaudio = callPackage ../misc/apulse/pressureaudio.nix { };
-
-  libcardiacarrest = callPackage ../misc/libcardiacarrest { };
-
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
 
   tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
