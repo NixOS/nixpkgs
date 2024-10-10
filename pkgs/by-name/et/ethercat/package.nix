@@ -10,6 +10,8 @@
   graphviz,
   texlive,
   git,
+  kmod,
+  iproute2,
   withDocs ? false,
 }:
 let
@@ -86,6 +88,10 @@ common.overrideAttrs (
 
     postFixup = ''
       mv $out/{share,lib,etc} $bin
+      sed -i \
+        -e 's|/sbin|${kmod}/bin|' \
+        -e 's|/bin|${iproute2}/bin|' \
+        "$bin"/bin/ethercatctl
     '';
   }
 )
