@@ -14005,6 +14005,8 @@ self: super: with self; {
 
   schedule = callPackage ../development/python-modules/schedule { };
 
+  scheduler = callPackage ../development/python-modules/scheduler { };
+
   schema = callPackage ../development/python-modules/schema { };
 
   schemainspect = callPackage ../development/python-modules/schemainspect { };
@@ -14903,6 +14905,8 @@ self: super: with self; {
   sqlalchemy-utils = callPackage ../development/python-modules/sqlalchemy-utils { };
 
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
+
+  sqlalchemy-cockroachdb = callPackage ../development/python-modules/sqlalchemy-cockroachdb { };
 
   sqlbag = callPackage ../development/python-modules/sqlbag { };
 
