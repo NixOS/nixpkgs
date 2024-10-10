@@ -18,7 +18,7 @@
 , doxygen
 , python3
 , lcms2
-, enablePlugins ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+, enablePlugins ? true
 }:
 
 let
@@ -127,6 +127,9 @@ stdenv.mkDerivation rec {
     GDK_PIXBUF_MODULEDIR="$out/${gdk-pixbuf.moduleDir}" \
     GDK_PIXBUF_MODULE_FILE="$out/${loadersPath}" \
       gdk-pixbuf-query-loaders --update-cache
+  ''
+  # Cross-compiled gdk-pixbuf doesn't support thumbnailers
+  + lib.optionalString (enablePlugins && stdenv.hostPlatform == stdenv.buildPlatform) ''
     mkdir -p "$out/bin"
     makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-jxl" \
       --set GDK_PIXBUF_MODULE_FILE "$out/${loadersPath}"
