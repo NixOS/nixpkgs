@@ -97,6 +97,24 @@ in
     };
   };
 
+  analysis-smartcn = esPlugin rec {
+    pluginName = "analysis-smartcn";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      hash =
+        if version == "7.17.16" then
+          "sha256-Ym2h7Qe+L4PFhcFjsSBSfXbYoG3PgfaVKXfkaPwvuFM="
+        else
+          throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with lib; {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-smartcn";
+      description = "Smart Chinese Analysis plugin integrates Lucene Smart Chinese analysis module into Elasticsearch";
+      license = licenses.asl20;
+    };
+  };
+
   discovery-ec2 = esPlugin rec {
     pluginName = "discovery-ec2";
     version = esVersion;
