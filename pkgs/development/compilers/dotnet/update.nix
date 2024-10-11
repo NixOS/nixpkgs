@@ -13,6 +13,7 @@
 
   releaseManifestFile,
   releaseInfoFile,
+  bootstrapSdkFile,
   allowPrerelease,
 }:
 
@@ -42,16 +43,33 @@ let
 in
 writeScript "update-dotnet-vmr.sh" ''
   #! ${nix}/bin/nix-shell
-  #! nix-shell -i ${runtimeShell} --pure ${drv}
+  #! nix-shell -i ${runtimeShell} --pure ${drv} --keep UPDATE_NIX_ATTR_PATH
   set -euo pipefail
 
-  query=$(cat <<EOF
-      map(
-          select(
-              ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
-              .draft == false and
-              (.name | startswith(".NET ${channel}")))) |
-      first | (
+  tag=''${1-}
+
+  if [[ -n $tag ]]; then
+      query=$(cat <<EOF
+          map(
+              select(
+                  (.tag_name == "$tag"))) |
+          first
+  EOF
+      )
+  else
+      query=$(cat <<EOF
+          map(
+              select(
+                  ${lib.optionalString (!allowPrerelease) ".prerelease == false and"}
+                  .draft == false and
+                  (.tag_name | startswith("v${channel}")))) |
+          first
+  EOF
+      )
+  fi
+
+  query="$query "$(cat <<EOF
+      | (
           .tag_name,
           (.assets |
               .[] |
@@ -65,7 +83,7 @@ writeScript "update-dotnet-vmr.sh" ''
   )
 
   (
-      curl -fsL https://api.github.com/repos/dotnet/dotnet/releases | \
+      curl -fsSL https://api.github.com/repos/dotnet/dotnet/releases | \
       jq -r "$query" \
   ) | (
       read tagName
@@ -75,12 +93,15 @@ writeScript "update-dotnet-vmr.sh" ''
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
+      echo ${lib.escapeShellArg (toString ./update.sh)} \
+          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk foo
+
       cd "$tmp"
 
-      curl -fsL "$releaseUrl" -o release.json
+      curl -fsSL "$releaseUrl" -o release.json
       release=$(jq -r .release release.json)
 
-      if [[ "$release" == "${release}" ]]; then
+      if [[ -z $tag && "$release" == "${release}" ]]; then
           >&2 echo "release is already $release"
           exit
       fi
@@ -91,13 +112,13 @@ writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      curl -L "$sigUrl" -o release.sig
+      curl -fssL "$sigUrl" -o release.sig
 
       export GNUPGHOME=$PWD/.gnupg
       gpg --batch --import ${releaseKey}
       gpg --batch --verify release.sig "$tarball"
 
-      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props
+      tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
           map(select(.PrivateSourceBuiltArtifactsVersion))
           | .[] | .PrivateSourceBuiltArtifactsVersion' eng/Versions.props)
@@ -112,6 +133,8 @@ writeScript "update-dotnet-vmr.sh" ''
 
       artifactsHash=$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url "$artifactsUrl")")
 
+      sdkVersion=$(jq -r .tools.dotnet global.json)
+
       jq --null-input \
           --arg _0 "$tarballHash" \
           --arg _1 "$artifactsUrl" \
@@ -123,5 +146,13 @@ writeScript "update-dotnet-vmr.sh" ''
           }' > "${toString releaseInfoFile}"
 
       cp release.json "${toString releaseManifestFile}"
+
+      cd -
+
+      # needs to be run in nixpkgs
+      ${lib.escapeShellArg (toString ./update.sh)} \
+          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk "$sdkVersion"
+
+      $(nix-build -A $UPDATE_NIX_ATTR_PATH.fetch-deps --no-out-link)
   )
 ''
