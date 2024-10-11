@@ -41,7 +41,10 @@ vimUtils.buildVimPlugin {
   meta = {
     description = "Performant, batteries-included completion plugin for Neovim";
     homepage = "https://github.com/saghen/blink.cmp";
-    maintainers = with lib.maintainers; [ balssh redxtech ];
+    maintainers = with lib.maintainers; [
+      balssh
+      redxtech
+    ];
   };
   doInstallCheck = true;
   nvimRequireCheck = "blink-cmp";
