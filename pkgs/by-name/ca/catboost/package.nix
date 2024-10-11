@@ -139,5 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       natsukium
     ];
     mainProgram = "catboost";
+    # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })
