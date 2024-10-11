@@ -27,7 +27,7 @@
 
 # Libraries
 /lib                        @infinisil
-/lib/systems                @alyssais @ericson2314
+/lib/systems                @alyssais @ericson2314 @NixOS/stdenv
 /lib/generators.nix         @infinisil @Profpatsch
 /lib/cli.nix                @infinisil @Profpatsch
 /lib/debug.nix              @infinisil @Profpatsch
@@ -49,10 +49,10 @@
 /pkgs/top-level/splice.nix                       @Ericson2314
 /pkgs/top-level/release-cross.nix                @Ericson2314
 /pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
-/pkgs/stdenv                                     @philiptaron
-/pkgs/stdenv/generic                             @Ericson2314
-/pkgs/stdenv/generic/check-meta.nix              @Ericson2314
-/pkgs/stdenv/cross                               @Ericson2314
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
 /pkgs/build-support                              @philiptaron
 /pkgs/build-support/cc-wrapper                   @Ericson2314
 /pkgs/build-support/bintools-wrapper             @Ericson2314
