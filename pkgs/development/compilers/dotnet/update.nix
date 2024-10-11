@@ -114,9 +114,12 @@ writeScript "update-dotnet-vmr.sh" ''
 
       curl -fssL "$sigUrl" -o release.sig
 
-      export GNUPGHOME=$PWD/.gnupg
-      gpg --batch --import ${releaseKey}
-      gpg --batch --verify release.sig "$tarball"
+      (
+          export GNUPGHOME=$PWD/.gnupg
+          trap 'gpgconf --kill all' EXIT
+          gpg --batch --import ${releaseKey}
+          gpg --batch --verify release.sig "$tarball"
+      )
 
       tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json
       artifactsVersion=$(xq -r '.Project.PropertyGroup |
