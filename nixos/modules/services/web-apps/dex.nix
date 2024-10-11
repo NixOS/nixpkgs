@@ -16,6 +16,10 @@ let
       replace-secret '${file}' '${file}' /run/dex/config.yaml
     '')
     secretFiles));
+
+  restartTriggers = []
+  ++ (optionals (cfg.environmentFile != null) [ cfg.environmentFile ])
+  ++ (filter (file: builtins.typeOf file == "path") secretFiles);
 in
 {
   options.services.dex = {
@@ -72,6 +76,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ] ++ (optional (cfg.settings.storage.type == "postgres") "postgresql.service");
       path = with pkgs; [ replace-secret ];
+      restartTriggers = restartTriggers;
       serviceConfig = {
         ExecStart = "${pkgs.dex-oidc}/bin/dex serve /run/dex/config.yaml";
         ExecStartPre = [
