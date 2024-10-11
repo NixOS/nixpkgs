@@ -1,20 +1,20 @@
-{ mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
-, qtbase, qtcharts, qtmultimedia, qtquickcontrols, qtquickcontrols2, qtgraphicaleffects
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config,wrapQtAppsHook
+, qtbase, qtcharts, qtmultimedia, qtdeclarative, qt5compat
 , faad2, rtl-sdr, soapysdr-with-plugins, libusb-compat-0_1, fftwSinglePrec, lame, mpg123
 } :
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "welle-io";
-  version = "2.4";
+  version = "2.5";
 
   src = fetchFromGitHub {
     owner = "AlbrechtL";
     repo = "welle.io";
     rev = "v${version}";
-    sha256 = "sha256-xXiCL/A2SwCSr5SA4AQQEdieRzBksXx9Z78bHtlFiW4=";
+    hash = "sha256-sSknzZiD9/MLyO+gAYopogOQu5HRcqaRcfqwq4Rld7A=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   buildInputs = [
     faad2
@@ -25,9 +25,7 @@ mkDerivation rec {
     qtbase
     qtcharts
     qtmultimedia
-    qtquickcontrols
-    qtquickcontrols2
-    qtgraphicaleffects
+    qt5compat
     rtl-sdr
     soapysdr-with-plugins
   ];

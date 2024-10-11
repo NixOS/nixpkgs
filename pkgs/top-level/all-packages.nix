@@ -29364,7 +29364,7 @@ with pkgs;
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
-  welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
+  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
 
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
