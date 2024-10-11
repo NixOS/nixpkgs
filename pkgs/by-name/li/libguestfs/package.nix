@@ -5,6 +5,7 @@
   pkg-config,
   autoreconfHook,
   makeWrapper,
+  removeReferencesTo,
   libxcrypt,
   ncurses,
   cpio,
@@ -20,7 +21,7 @@
   libcap,
   libcap_ng,
   libconfig,
-  systemd,
+  systemdLibs,
   fuse,
   yajl,
   libvirt,
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       autoreconfHook
+      removeReferencesTo
       bison
       cdrkit
       cpio
@@ -94,7 +96,7 @@ stdenv.mkDerivation rec {
       libcap
       libcap_ng
       libconfig
-      systemd
+      systemdLibs
       fuse
       yajl
       libvirt
@@ -114,6 +116,10 @@ stdenv.mkDerivation rec {
       gettext-stub
       ounit
     ])
+    ++ [
+      ocamlPackages'.augeas
+      (hivex.override { ocamlPackages = ocamlPackages'; })
+    ]
     ++ lib.optional javaSupport jdk;
 
   prePatch = ''
@@ -129,9 +135,14 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
   configureFlags = [
+    "--enable-daemon"
+    "--enable-install-daemon"
     "--disable-appliance"
-    "--disable-daemon"
     "--with-distro=NixOS"
+    "--disable-perl" # build broken since 1.53.x
+    "--with-readline"
+    "CPPFLAGS=-I${lib.getDev libxml2}/include/libxml2"
+    "INSTALL_OCAMLLIB=${placeholder "out"}/lib/ocaml"
     "--with-guestfs-path=${placeholder "out"}/lib/guestfs"
   ] ++ lib.optionals (!javaSupport) [ "--without-java" ];
   patches = [ ./libguestfs-syms.patch ];
@@ -141,7 +152,17 @@ stdenv.mkDerivation rec {
   installFlags = [ "REALLY_INSTALL=yes" ];
   enableParallelBuilding = true;
 
+  outputs = [
+    "out"
+    "guestfsd"
+  ];
+
   postInstall = ''
+    # move guestfsd (the component running in the appliance) to a separate output
+    mkdir -p $guestfsd/bin
+    mv $out/sbin/guestfsd $guestfsd/bin/guestfsd
+    remove-references-to -t $out $guestfsd/bin/guestfsd
+
     mv "$out/lib/ocaml/guestfs" "$OCAMLFIND_DESTDIR/guestfs"
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
