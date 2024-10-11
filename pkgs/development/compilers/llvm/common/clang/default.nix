@@ -24,12 +24,14 @@ let
   pname = "clang";
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} ''
+    runCommand "${pname}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${pname} "$out"
       cp -r ${monorepoSrc}/clang-tools-extra "$out"
-    '' else src;
+    '') else src;
 
   self = stdenv.mkDerivation (finalAttrs: rec {
     inherit pname version patches;
