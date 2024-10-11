@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchurl
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -24,8 +25,14 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "VM appliance disk image used in libguestfs package";
     homepage = "https://libguestfs.org";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     hydraPlatforms = [ ]; # Hydra fails with "Output limit exceeded"
   };
 }
