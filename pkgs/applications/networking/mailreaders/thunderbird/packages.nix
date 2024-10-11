@@ -56,12 +56,13 @@ in rec {
   thunderbird = thunderbird-128;
 
   thunderbird-115 = common {
-    version = "115.15.0";
-    sha512 = "b161b99e09b6d1ba833f77264e35034ad199438b4fc88d244a6b68c84693fa2e90fbab60dafb827a2e23b37c484f9843a58751d93826ba7cdd0391114d253de2";
+    version = "115.16.0esr";
+    sha512 = "1c70050a773c92593dca2a34b25e9e6edcef6fbb9b081024e4dba024450219e06aace52d9fb90ccc2e8069b7bba0396258c86cc19848a7ac705b42641f6e36a5";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-115";
       versionPrefix = "115";
+      versionSuffix = "esr";
     };
   };
 
