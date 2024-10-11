@@ -2382,8 +2382,6 @@ with pkgs;
 
   gitweb = callPackage ../applications/version-management/gitweb { };
 
-  glab = callPackage ../applications/version-management/glab { };
-
   glitter = callPackage ../applications/version-management/glitter { };
 
   globalping-cli = callPackage ../tools/networking/globalping-cli { };
@@ -6269,8 +6267,6 @@ with pkgs;
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
-  chrony = callPackage ../tools/networking/chrony { };
-
   chunkfs = callPackage ../tools/filesystems/chunkfs { };
 
   chunksync = callPackage ../tools/backup/chunksync { };
@@ -6838,6 +6834,8 @@ with pkgs;
   decode-spam-headers = callPackage ../tools/networking/decode-spam-headers { };
 
   deer = callPackage ../shells/zsh/zsh-deer { };
+
+  deno_1 = callPackage ../by-name/de/deno/1/package.nix { };
 
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
@@ -15274,6 +15272,7 @@ with pkgs;
   mlir_16 = llvmPackages_16.mlir;
   mlir_17 = llvmPackages_17.mlir;
 
+  libclc = llvmPackages.libclc;
   libllvm = llvmPackages.libllvm;
   llvm-manpages = llvmPackages.llvm-manpages;
 
@@ -27326,8 +27325,6 @@ with pkgs;
   luna-icons = callPackage ../data/icons/luna-icons {
     inherit (plasma5Packages) breeze-icons;
   };
-
-  lxgw-wenkai = callPackage ../data/fonts/lxgw-wenkai { };
 
   maia-icon-theme = libsForQt5.callPackage ../data/icons/maia-icon-theme { };
 

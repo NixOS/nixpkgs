@@ -16,6 +16,11 @@ in {
           Enable `localtimed`, a simple daemon for keeping the
           system timezone up-to-date based on the current location. It uses
           geoclue2 to determine the current location.
+
+          To avoid silent overriding by the service, if you have explicitly set a
+          timezone, either remove it or ensure that it is set with a lower priority
+          than the default value using `lib.mkDefault` or `lib.mkOverride`. This is
+          to make the choice deliberate. An error will be presented otherwise.
         '';
       };
       package = mkPackageOption pkgs "localtime" { };
@@ -24,6 +29,10 @@ in {
   };
 
   config = mkIf cfg.enable {
+    # This will give users an error if they have set an explicit time
+    # zone, rather than having the service silently override it.
+    time.timeZone = null;
+
     services.geoclue2.appConfig.localtimed = {
       isAllowed = true;
       isSystem = true;

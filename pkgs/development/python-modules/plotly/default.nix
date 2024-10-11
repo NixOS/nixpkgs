@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "5.24.0";
+  version = "5.24.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-frSUybQxst4wG8g8U43Nay9dYCUXuR3dBealwPVyFdI=";
+    hash = "sha256-ONuX5/GlirPF8+7bZtib1Xsv5llcXcSelFfGyeTc5L8=";
   };
 
   sourceRoot = "${src.name}/packages/python/plotly";
@@ -69,6 +70,9 @@ buildPythonPackage rec {
     nbformat
     scikit-image
   ];
+
+  # the check inputs are broken on darwin
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTests = [
     # FAILED plotly/matplotlylib/mplexporter/tests/test_basic.py::test_legend_dots - AssertionError: assert '3' == '2'
@@ -116,6 +120,9 @@ buildPythonPackage rec {
     "test_dependencies_not_imported"
     # FAILED test_init/test_lazy_imports.py::test_lazy_imports - AssertionError: assert 'plotly' not in {'IPython': <module 'IPython' from '...
     "test_lazy_imports"
+    # requires vaex and polars, vaex is not packaged
+    "test_build_df_from_vaex_and_polars"
+    "test_build_df_with_hover_data_from_vaex_and_polars"
   ];
 
   pythonImportsCheck = [ "plotly" ];
