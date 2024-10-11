@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
-  apple-sdk_14,
+  apple-sdk_15,
   darwinMinVersionHook,
   cereal,
   libcxx,
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   buildInputs = [
-    apple-sdk_14
+    apple-sdk_15
     cereal
     (darwinMinVersionHook "10.15")
     glslang
