@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     }."${version}";
   };
 
-  patches = [ ./qt68.patch ];
+  patches = lib.optionals (lib.versionAtLeast version "4") [ ./qt68.patch ];
 
   nativeBuildInputs = [
     cmake
