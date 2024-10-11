@@ -5714,8 +5714,6 @@ self: super: with self; {
 
   hkavr = callPackage ../development/python-modules/hkavr { };
 
-  hkdf = callPackage ../development/python-modules/hkdf { };
-
   hledger-utils = callPackage ../development/python-modules/hledger-utils { };
 
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
