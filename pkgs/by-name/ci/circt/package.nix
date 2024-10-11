@@ -72,6 +72,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "check-circt check-circt-integration";
 
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    echo moving libarc-jit-env.dylib to '$lib' before check because archilator links to the output path
+    mkdir -pv $lib/lib
+    cp -v ./lib/libarc-jit-env.dylib $lib/lib
+  '';
+
   outputs = [
     "out"
     "lib"

@@ -80,7 +80,7 @@ stdenv.mkDerivation {
   #
   # Inspired by fixDarwinDylibNames.
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    local flags=(-delete_rpath @loader_path/../lib)
+    local flags
     for file in "$lib"/lib/*.dylib; do
       flags+=(-change @rpath/"$(basename "$file")" "$file")
     done
