@@ -64,6 +64,9 @@ buildNpmPackage {
     mkdir -p $out/share/homepage/.next
     cp -r .next/static $out/share/homepage/.next/static
 
+    # https://github.com/vercel/next.js/discussions/58864
+    ln -s /var/cache/nextjs-ollama-llm-ui $out/share/homepage/.next/cache
+
     chmod +x $out/share/homepage/server.js
 
     # we set a default port to support "nix run ..."
