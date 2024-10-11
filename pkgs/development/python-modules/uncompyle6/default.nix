@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
   spark-parser,
   xdis,
   nose,
@@ -14,14 +15,16 @@
 buildPythonPackage rec {
   pname = "uncompyle6";
   version = "3.9.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-b3CYD/4IpksRS2hxgy/QLYbJkDX4l2qPH4Eh2tb8pCU=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     spark-parser
     xdis
   ];
