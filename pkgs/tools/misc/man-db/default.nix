@@ -14,6 +14,9 @@
 , zstd
 }:
 
+let
+  libiconv' = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
+in
 stdenv.mkDerivation rec {
   pname = "man-db";
   version = "2.13.0";
@@ -28,9 +31,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ] # (Yes, 'groff' is both native and build input)
-    ++ lib.optional stdenv.isFreeBSD libiconvReal;
-  nativeCheckInputs = [ (if stdenv.isFreeBSD then libiconvReal else libiconv) ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
+  buildInputs = [ libpipeline db groff libiconv' ]; # (Yes, 'groff' is both native and build input)
+  nativeCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
