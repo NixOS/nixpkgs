@@ -6802,8 +6802,6 @@ with pkgs;
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
-  deno_1 = callPackage ../by-name/de/deno/1/package.nix { };
-
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
   detox = callPackage ../tools/misc/detox { };
