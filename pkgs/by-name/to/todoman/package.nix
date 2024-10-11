@@ -4,6 +4,7 @@
   jq,
   lib,
   python3,
+  sphinxHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,6 +21,9 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     installShellFiles
+    sphinxHook
+    python3.pkgs.sphinx-click
+    python3.pkgs.sphinx-rtd-theme
   ];
 
   build-system = with python3.pkgs; [
