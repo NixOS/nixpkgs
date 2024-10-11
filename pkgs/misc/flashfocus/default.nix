@@ -38,6 +38,10 @@ python3Packages.buildPythonApplication rec {
   # Tests require access to a X session
   doCheck = false;
 
+  preFixup = ''
+    set -x
+  '';
+
   pythonImportsCheck = [ "flashfocus" ];
 
   passthru.updateScript = nix-update-script { };

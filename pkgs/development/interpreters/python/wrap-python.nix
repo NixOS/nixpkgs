@@ -1,15 +1,33 @@
 { lib
 , python
 , makePythonHook
-, makeWrapper }:
+, makeWrapper
+, stdenv
+, targetPackages
+}:
 
 makePythonHook {
       name = "wrap-python-hook";
       propagatedBuildInputs = [ makeWrapper ];
       substitutions.sitePackages = python.sitePackages;
       substitutions.executable = python.interpreter;
-      substitutions.python = python.pythonOnBuildForHost;
-      substitutions.pythonHost = python;
+      substitutions.python = python;
+      #substitutions.pythonHost =
+      #if ((targetPackages.stdenv.buildPlatform != targetPackages.stdenv.targetPlatform) && (targetPackages.stdenv.hostPlatform == targetPackages.stdenv.targetPlatform))
+      #  then python.__spliced.hostHost
+      #else if (stdenv.buildPlatform != (stdenv.hostPlatform == stdenv.targetPlatform))
+      #  then python
+      #else if (stdenv.hostPlatform != stdenv.targetPlatform)
+      #  then python.__spliced.hostHost
+      #else throw "don't reach";
+      substitutions.pythonHost =
+      if ((targetPackages.stdenv.buildPlatform != targetPackages.stdenv.targetPlatform) && (targetPackages.stdenv.hostPlatform == targetPackages.stdenv.targetPlatform))
+        then python.__spliced.hostHost
+      else python;
+      passthru = {
+        python1 = python;
+        targetstdenv = targetPackages.stdenv;
+      };
       substitutions.magicalSedExpression = let
         # Looks weird? Of course, it's between single quoted shell strings.
         # NOTE: Order DOES matter here, so single character quotes need to be
