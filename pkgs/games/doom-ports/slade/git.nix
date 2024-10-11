@@ -15,6 +15,7 @@
 , glew
 , lua
 , mpg123
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     zip
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -58,6 +60,12 @@ stdenv.mkDerivation rec {
   ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GDK_BACKEND : x11
+    )
+  '';
 
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/sirjuddington/SLADE.git";
