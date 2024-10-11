@@ -6,7 +6,7 @@ let
 
   cfg = config.services.dbus;
 
-  configDir = pkgs.makeDBusConf {
+  configDir = pkgs.makeDBusConf.override {
     inherit (cfg) apparmor;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
@@ -123,7 +123,7 @@ in
       boot.initrd.systemd = {
         users.messagebus = { };
         groups.messagebus = { };
-        contents."/etc/dbus-1".source = pkgs.makeDBusConf {
+        contents."/etc/dbus-1".source = pkgs.makeDBusConf.override {
           inherit (cfg) apparmor;
           suidHelper = "/bin/false";
           serviceDirectories = [ pkgs.dbus config.boot.initrd.systemd.package ];
