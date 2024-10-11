@@ -77,11 +77,15 @@ let
 
   pname = "llvm";
 
+  # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${pname} "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/${pname}/tools"
