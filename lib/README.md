@@ -27,6 +27,7 @@ Most files in this directory are definitions of sub-libraries, but there are a f
   - All other files in this directory exist to support the tests
 - [`systems`](systems): The `lib.systems` sub-library, structured into a directory instead of a file due to its complexity
 - [`path`](path): The `lib.path` sub-library, which includes tests as well as a document describing the design goals of `lib.path`
+- [`network`](network): The `lib.network` sub-library, which mostly includes functions to work with IP addresses
 - All other files in this directory are sub-libraries
 
 ### Module system
@@ -136,6 +137,9 @@ path/tests/prop.sh
 
 # Run the lib.fileset tests
 fileset/tests.sh
+
+# Run the lib.network tests
+network/tests.sh
 ```
 
 ## Commit conventions

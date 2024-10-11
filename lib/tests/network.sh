@@ -91,7 +91,7 @@ expectSuccess '(internal._ipv6.split "1:1:1:1:1:1:1::").address'                
 expectSuccess '(internal._ipv6.split "1:1:1:1::1:1:1").address'                          '[1,1,1,1,0,1,1,1]'
 expectSuccess '(internal._ipv6.split "1::1").address'                                    '[1,0,0,0,0,0,0,1]'
 
-expectFailure 'internal._ipv6.split "0:0:0:0:0:0:0:-1"' "contains malformed characters for IPv6 address"
+expectFailure 'internal._ipv6.split "0:0:0:0:0:0:0:-1"'  "contains malformed characters for IPv6 address"
 expectFailure 'internal._ipv6.split "::0:"'              "is not a valid IPv6 address"
 expectFailure 'internal._ipv6.split ":0::"'              "is not a valid IPv6 address"
 expectFailure 'internal._ipv6.split "0::0:"'             "is not a valid IPv6 address"
@@ -100,6 +100,7 @@ expectFailure 'internal._ipv6.split "0:0:0:0:0:0:0:0:0"' "is not a valid IPv6 ad
 expectFailure 'internal._ipv6.split "0:0:0:0:0:0:0:0:"'  "is not a valid IPv6 address"
 expectFailure 'internal._ipv6.split "::0:0:0:0:0:0:0:0"' "is not a valid IPv6 address"
 expectFailure 'internal._ipv6.split "0::0:0:0:0:0:0:0"'  "is not a valid IPv6 address"
+expectFailure 'internal._ipv6.split ":::ffff/64"'        "is not a valid IPv6 address"
 expectFailure 'internal._ipv6.split "::10000"'           "0x10000 is not a valid u16 integer"
 
 expectSuccess '(internal._ipv6.split "::").prefixLength'     '128'
@@ -110,8 +111,48 @@ expectFailure '(internal._ipv6.split "::/0").prefixLength'   "IPv6 subnet should
 expectFailure '(internal._ipv6.split "::/129").prefixLength' "IPv6 subnet should be in range \[1;128\], got 129"
 expectFailure '(internal._ipv6.split "/::/").prefixLength'   "is not a valid IPv6 address in CIDR notation"
 
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 1)'   '[32768,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 16)'  '[65535,0,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 17)'  '[65535,32768,0,0,0,0,0,0]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [65535 65535 65535 65535 65535 65535 65535 65535] 128)' '[65535,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateFirstAddress [0 0 0 0 65535 65535 65535 65535] 64)'                  '[0,0,0,0,0,0,0,0]'
+
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 1)'       '[32767,65535,65535,65535,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 0 0 0 0 0 0] 64)'      '[0,0,0,0,65535,65535,65535,65535]'
+expectSuccess '(internal._ipv6.calculateLastAddress [0 0 1 0 0 0 0 65535] 127)' '[0,0,1,0,0,0,0,65535]'
+
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 0]) 64'                                 '[0,0,0,0,0,0,0,1]'
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 65535]) 64'                             '[0,0,0,0,0,0,1,0]'
+expectSuccess '(internal._ipv6.calculateNextAddress [0 0 0 0 0 0 0 65535]) 112'                            'null'
+
+expectSuccess '(internal._common.modList 10 [0 0])' '[0,0]'
+expectSuccess '(internal._common.modList 10 [0 100])' '[1,0,0]'
+expectSuccess '(internal._common.modList 10 [9 9 9 10])' '[1,0,0,0,0]'
+expectSuccess '(internal._common.modList 10 [10 0 0 10])' '[1,0,0,1,0]'
+expectSuccess '(internal._common.modList 10 [])' '[]'
+
+expectFailure '(internal._common.modList (-1) [])' 'module must be positive integer'
+
 # Library API
-expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"2001:db8:0:0:0:0:0:ffff","prefixLength":64}'
-expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","prefixLength":44}'
+expectSuccess 'ipv6.isValidIpStr "2001:DB8::ffff/64"' 'true'
+expectSuccess 'ipv6.isValidIpStr ":::ffff/64"'        'false'
+
+expectSuccess '(ipv6.fromString "2001:DB8::ffff/64").address'     '"2001:db8:0:0:0:0:0:ffff"'
+expectSuccess '(ipv6.fromString "2001:DB8::ffff/64").addressCidr' '"2001:db8:0:0:0:0:0:ffff/64"'
+expectSuccess '(ipv6.fromString "2001:DB8::ffff").addressCidr'    '"2001:db8:0:0:0:0:0:ffff/128"'
+expectSuccess '(ipv6.fromString "2001:DB8::ffff").url'    '"[2001:db8:0:0:0:0:0:ffff]"'
+expectSuccess '(ipv6.fromString "2001:DB8::ffff").urlWithPort 80'    '"[2001:db8:0:0:0:0:0:ffff]:80"'
+
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:0:0:0:0/64"'
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90a0:0:0:0:0:0/44"'
+expectSuccess '(ipv6.firstAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")).addressCidr'    '"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"'
+
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:ffff:ffff:ffff:ffff/64"'
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90af:ffff:ffff:ffff:ffff:ffff/44"'
+expectSuccess '(ipv6.lastAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")).addressCidr'    '"ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/128"'
+
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "2001:DB8::ffff/64")).addressCidr'                          '"2001:db8:0:0:0:0:1:0/64"'
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44")).addressCidr' '"1234:5678:90ab:cdef:fedc:ba09:8765:4322/44"'
+expectSuccess '(ipv6.nextAddress (ipv6.fromString "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff/1"))'              'null'
 
 echo >&2 tests ok
