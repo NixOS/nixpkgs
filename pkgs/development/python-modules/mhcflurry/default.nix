@@ -5,7 +5,6 @@
   keras,
   lib,
   mhcgnomes,
-  nose,
   pandas,
   pytestCheckHook,
   pyyaml,
@@ -38,8 +37,9 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  # Tests currently depend on nose; see
+  # <https://github.com/openvax/mhcflurry/pull/244>.
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 
