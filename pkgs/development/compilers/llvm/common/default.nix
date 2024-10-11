@@ -346,13 +346,7 @@ let
   tools = lib.makeExtensible (
     tools:
     let
-      callPackage = newScope (
-        tools
-        // args
-        // metadata
-        # Previously monorepoSrc was erroneously not being passed through.
-        // lib.optionalAttrs (lib.versionOlder metadata.release_version "14") { monorepoSrc = null; } # Preserve a bug during #307211, TODO: remove; causes llvm 13 rebuild.
-      );
+      callPackage = newScope (tools // args // metadata);
       clangVersion =
         if (lib.versionOlder metadata.release_version "16") then
           metadata.release_version
