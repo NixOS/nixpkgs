@@ -23,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.10";
+  version = "1.2.11";
 
   strictDeps = true;
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-5hc+bnsyc8Am9My2kzsU7fv+1CePCHgxL82Mxz/zJRo=";
+    hash = "sha256-24qQnJ0RnJP2M4zSlSlQ4c4dVZtHutNiCvjrsCDw6wY=";
   };
 
   postPatch = ''
