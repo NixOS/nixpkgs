@@ -60,7 +60,7 @@ for package in "${packages[@]}"; do
 
     packageHash=$(nix --extra-experimental-features nix-command hash path "$package-$packageTag")
 
-    pkgsjson="{\"$package\": {\"version\": \"$packageVersion\", \"hash\": \"$packageHash\"}}"
+    pkgsjson="{\"$sdkVersion\": {\"$package\": {\"version\": \"$packageVersion\", \"hash\": \"$packageHash\"}}}"
 
     echo "   - Locking $package to version $packageVersion with hash '$packageHash'"
     jq --argjson pkg "$pkgsjson" -S '. * $pkg' "$lockfile" | sponge "$lockfile"
