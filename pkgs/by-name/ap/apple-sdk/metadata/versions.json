@@ -38,5 +38,10 @@
     "url": "https://swcdn.apple.com/content/downloads/14/48/052-59890-A_I0F5YGAY0Y/p9n40hio7892gou31o1v031ng6fnm9sb3c/CLTools_macOSNMOS_SDK.pkg",
     "version": "14.4",
     "hash": "sha256-QozDiwY0Czc0g45vPD7G4v4Ra+3DujCJbSads3fJjjM="
+  },
+  "15": {
+    "url": "https://swcdn.apple.com/content/downloads/33/46/042-32691-A_3MH7S3118O/3dblccqo9ws17dc5lk3hojfbt3s74q0ql6/CLTools_macOSNMOS_SDK.pkg",
+    "version": "15.0",
+    "hash": "sha256-JhaAPyfX46D+9sematdAYAORw40JP3xvleWRz7Hj/1s="
   }
 }
