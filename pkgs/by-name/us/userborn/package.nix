@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     description = "Declaratively bear (manage) Linux users and groups";
     changelog = "https://github.com/nikstur/userborn/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with lib.maintainers; [ nikstur ];
     mainProgram = "userborn";
   };
