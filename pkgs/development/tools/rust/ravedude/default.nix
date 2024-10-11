@@ -6,6 +6,8 @@
 , nix-update-script
 , testers
 , ravedude
+, stdenv
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +21,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-HeFmQsgr6uHrWi6s5sMQ6n63a44Msarb5p0+wUzKFkE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = [ udev ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [ udev ]
+    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ IOKit ]);
 
   passthru = {
     updateScript = nix-update-script { };
@@ -35,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "Tool to easily flash code onto an AVR microcontroller with avrdude";
     homepage = "https://crates.io/crates/ravedude";
     license = with licenses; [ mit /* or */ asl20 ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = with maintainers; [ rvarago ];
     mainProgram = "ravedude";
   };
