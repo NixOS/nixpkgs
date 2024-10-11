@@ -179,7 +179,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy
+/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
