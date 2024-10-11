@@ -29720,9 +29720,6 @@ with pkgs;
     boost = boost175;
   };
 
-
-  armcord = callPackage ../applications/networking/instant-messengers/armcord { };
-
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
   };
