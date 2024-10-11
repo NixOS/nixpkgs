@@ -23545,8 +23545,6 @@ with pkgs;
     gtk3 = gtk4;
   };
 
-  webkitgtk = webkitgtk_4_0;
-
   webp-pixbuf-loader = callPackage ../development/libraries/webp-pixbuf-loader { };
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
