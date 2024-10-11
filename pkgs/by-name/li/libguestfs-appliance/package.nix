@@ -29,6 +29,7 @@ stdenvNoCC.mkDerivation rec {
       gpl2Plus
       lgpl2Plus
     ];
+    maintainers = with maintainers; [ lukts30 ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
