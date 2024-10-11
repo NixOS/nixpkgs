@@ -23642,8 +23642,6 @@ with pkgs;
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
-  xmake-core-sv = callPackage ../development/libraries/xmake-core-sv { };
-
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
   xmlsec = callPackage ../development/libraries/xmlsec { };
