@@ -39,9 +39,7 @@ let
   releaseRev = v: "v${v}";
 
   # list of core metacoq packages sorted by dependency order
-  packages = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev"
-     then [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ]
-     else [ "template-coq" "pcuic" "safechecker" "erasure" "all" ];
+  packages = [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ];
 
   template-coq = metacoq_ "template-coq";
 
@@ -105,6 +103,14 @@ let
           {
             propagatedBuildInputs = o.propagatedBuildInputs ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
           });
-  in derivation;
+      # utils, common, template-pcuic, quotation, safechecker-plugin, and erasure-plugin
+      # packages didn't exist before 1.2, so bulding nothing in that case
+      patched-derivation = derivation.overrideAttrs (o:
+        lib.optionalAttrs (o.pname != null &&
+          lib.elem package [ "utils" "common" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin" ] &&
+          o.version != null && o.version != "dev" && lib.versions.isLt "1.2" o.version)
+        { patchPhase = ""; configurePhase = ""; preBuild = ""; buildPhase = "echo doing nothing"; installPhase = "echo doing nothing"; }
+      );
+  in patched-derivation;
 in
 metacoq_ (if single then "single" else "all")
