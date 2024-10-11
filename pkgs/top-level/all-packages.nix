@@ -5363,8 +5363,6 @@ with pkgs;
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
 
-  libnvidia-container = callPackage ../applications/virtualization/libnvidia-container { };
-
   librenms = callPackage ../servers/monitoring/librenms { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
