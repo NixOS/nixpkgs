@@ -8797,6 +8797,8 @@ self: super: with self; {
 
   navec = callPackage ../development/python-modules/navec { };
 
+  narwhals = callPackage ../development/python-modules/narwhals { };
+
   natasha = callPackage ../development/python-modules/natasha { };
 
   natural = callPackage ../development/python-modules/natural { };
