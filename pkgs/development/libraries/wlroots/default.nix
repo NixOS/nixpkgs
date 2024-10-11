@@ -31,7 +31,7 @@
 }:
 
 let
-  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], patches ? [ ], postPatch ? "" }:
+  generic = { version, hash, extraBuildInputs ? [ ] }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wlroots";
       inherit version;
@@ -46,18 +46,18 @@ let
         inherit hash;
       };
 
-      inherit patches postPatch;
-
       # $out for the library and $examples for the example programs (in examples):
       outputs = [ "out" "examples" ];
 
       strictDeps = true;
       depsBuildBuild = [ pkg-config ];
 
-      nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ]
-        ++ extraNativeBuildInputs;
+      nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang hwdata ];
 
       buildInputs = [
+        ffmpeg
+        libliftoff
+        libdisplay-info
         libGL
         libcap
         libinput
@@ -126,26 +126,12 @@ rec {
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
-    extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
-    ];
   };
 
   wlroots_0_18 = generic {
     version = "0.18.1";
     hash = "sha256-BlI3EUoGEHdO6IBh99o/Aadct2dd7Xjc4PG0Sv+flqI=";
-    extraNativeBuildInputs = [
-      hwdata
-    ];
     extraBuildInputs = [
-      ffmpeg
-      libliftoff
-      libdisplay-info
       lcms2
     ];
   };
