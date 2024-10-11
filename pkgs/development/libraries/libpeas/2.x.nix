@@ -7,6 +7,7 @@
 , gobject-introspection
 , meson
 , ninja
+, vala
 , gjs
 , glib
 , lua5_1
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    vala
   ];
 
   buildInputs = [
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ];
 
   postPatch = ''
