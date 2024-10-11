@@ -500,6 +500,15 @@ in {
   ];
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        # This is stricter than it needs to be but is exactly what upstream does:
+        # https://github.com/kradalby/headscale/blob/adc084f20f843d7963c999764fa83939668d2d2c/hscontrol/types/config.go#L799
+        assertion = with cfg.settings; dns.use_username_in_magic_dns or false || dns.base_domain == "" || !lib.hasInfix dns.base_domain server_url;
+        message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
+      }
+    ];
+
     services.headscale.settings = lib.mkMerge [
       cliConfig
       {
