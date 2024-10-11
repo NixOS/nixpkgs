@@ -23,13 +23,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2dfCCCa0LheytkLRbYuBd25M320f1kbhBWKIVjslor0=";
+    hash = "sha256-I3geFdVQ1Pm61eRXi+ueaxel3QRb8EJV9f4zV2Q7kk4=";
   };
 
   patches = [
@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     );
 
   env = {
+    PROGRAM_VERSION = finalAttrs.version;
+
     # catboost requires clang 14+ for build, but does clang 12 for cuda build.
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
@@ -128,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       library, used for ranking, classification, regression and other machine
       learning tasks for Python, R, Java, C++. Supports computation on CPU and GPU.
     '';
+    changelog = "https://github.com/catboost/catboost/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     homepage = "https://catboost.ai";
