@@ -4,12 +4,12 @@
   fetchFromGitHub,
   pyserial,
   pythonOlder,
-  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pylitejet";
-  version = "0.3.0";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joncar";
     repo = "pylitejet";
-    rev = "refs/tags/${version}";
-    hash = "sha256-fgsAb8zvmIKtitgAQbAPfTzbEGGaj3dU6FXzlSyy4Dk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-LHNMKU7aMDtSi4K+pZqRF9vAL3EKOFRFFNXKsQJVP2Y=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ setuptools-scm ];
 
   dependencies = [ pyserial ];
 
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = {
     description = "Library for interfacing with the LiteJet lighting system";
     homepage = "https://github.com/joncar/pylitejet";
+    changelog = "https://github.com/joncar/pylitejet/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
