@@ -206,15 +206,6 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
 
   lsusb = callPackage ../os-specific/darwin/lsusb { };
 
-  moltenvk = callPackage ../os-specific/darwin/moltenvk {
-    stdenv = pkgs.overrideSDK stdenv {
-      darwinMinVersion = "10.15";
-      darwinSdkVersion = "12.3";
-    };
-    inherit (apple_sdk.frameworks) AppKit Foundation Metal QuartzCore;
-    inherit (apple_sdk.libs) simd;
-  };
-
   openwith = callPackage ../os-specific/darwin/openwith { };
 
   stubs = pkgs.callPackages ../os-specific/darwin/stubs { };
