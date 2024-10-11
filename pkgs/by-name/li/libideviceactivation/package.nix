@@ -1,55 +1,60 @@
 {
+  lib,
   stdenv,
   fetchFromGitHub,
-  lib,
-  pkg-config,
+  unstableGitUpdater,
+
   automake,
   autoreconfHook,
-  libtool,
-  libplist,
-  libimobiledevice,
-  libxml2,
+  pkg-config,
+
   curl,
+  libimobiledevice,
+  libplist,
+  libtool,
+  libxml2,
   usbmuxd,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "libideviceactivation";
-  version = "1.1.1";
+  version = "1.1.1-unstable-2024-05-29";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = "libideviceactivation";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-owcQpCN4+A785oy9pCboJIyfpgZ6X+8PRzqGtWpYl2w=";
+    rev = "ecc10ef8048c6591b936c5ca1b0971157087e6b2";
+    hash = "sha256-iD6TJGwKjR6otzN0KL4BX+6DeEX5Z0oJcZlfzHr1lMc=";
   };
 
+  passthru.updateScript = unstableGitUpdater { };
+
   nativeBuildInputs = [
-    pkg-config
     automake
     autoreconfHook
+    pkg-config
   ];
 
   buildInputs = [
-    libtool
-    libplist
-    libimobiledevice
-    libxml2
     curl
+    libimobiledevice
+    libplist
+    libtool
+    libxml2
     usbmuxd
   ];
 
-  installFlags = [ "PREFIX=$(out)" ];
-
-  meta = {
+  meta = with lib; {
+    homepage = "https://github.com/libimobiledevice/libideviceactivation";
     description = "Library to manage the activation process of Apple iOS devices";
-    homepage = "https://libimobiledevice.org";
-    license = with lib.licenses; [
-      lgpl21
-      gpl3
+    license = with licenses; [
+      gpl3Only
+      lgpl21Only
+    ];
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      clebs
+      frontear
     ];
     mainProgram = "ideviceactivation";
-    platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ clebs ];
   };
 })

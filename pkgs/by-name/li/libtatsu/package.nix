@@ -7,18 +7,18 @@
   autoreconfHook,
   pkg-config,
 
-  libimobiledevice-glue,
+  curl,
   libplist,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "libusbmuxd";
-  version = "2.1.0-unstable-2024-04-16";
+  pname = "libtatsu";
+  version = "1.0.3-unstable-2024-09-25";
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
-    repo = "libusbmuxd";
-    rev = "a7f0543fb1ecb20ac7121c0fd77297200e0e43fc";
-    hash = "sha256-CETq4sguBwtIufwraMwMmzFcNm7MTkitvfM2jF2G02E=";
+    repo = "libtatsu";
+    rev = "263f3b315d17cdd500b46bb122163df162f769e0";
+    hash = "sha256-LnjHAgzL+EsxLyRRkVP40Iuhsi/YO8HDwVd98eV7UEI=";
   };
 
   passthru.updateScript = unstableGitUpdater { };
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libimobiledevice-glue
+    curl
     libplist
   ];
 
@@ -38,12 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/libimobiledevice/libusbmuxd";
-    description = "Client library to multiplex connections from and to iOS devices";
-    license = with licenses; [
-      gpl2Only
-      lgpl21Only
-    ];
+    homepage = "https://github.com/libimobiledevice/libtatsu";
+    description = "Library handling the communication with Apple's Tatsu Signing Server (TSS).";
+    license = licenses.lgpl21Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ frontear ];
   };
