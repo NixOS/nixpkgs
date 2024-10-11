@@ -137,7 +137,15 @@ in
     host = mkOption {
       type = types.str;
       default = "localhost";
-      description = "The host that immich will listen on.";
+      example = ""; # all interfaces
+      # hint: the use of "" for IMMICH_HOST is not documented
+      # see https://docs.immich.app/install/environment-variables/#ports
+      # or https://github.com/immich-app/immich/blob/767caf9bfec2ec74ebdef6f58643ee9505da8550/docs/docs/install/environment-variables.md?plain=1#L70
+      # impl: https://github.com/immich-app/immich/blob/60f4dedb2991c8356d2977f1dc9cfa2cf666788c/server/src/app.common.ts#L90
+      description = ''
+        The host that immich will listen on.
+        Set to `""` to listen on all interfaces.
+      '';
     };
     port = mkOption {
       type = types.port;
