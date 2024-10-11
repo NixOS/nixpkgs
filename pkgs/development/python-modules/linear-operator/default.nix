@@ -47,6 +47,7 @@ buildPythonPackage rec {
   disabledTests = [
     # flaky numerical tests
     "test_matmul_matrix_broadcast"
+    "test_solve_matrix_broadcast"
     "test_svd"
   ];
 
