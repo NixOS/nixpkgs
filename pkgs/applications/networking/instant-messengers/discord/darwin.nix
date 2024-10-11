@@ -54,11 +54,8 @@ stdenv.mkDerivation {
       #!nix-shell -i bash -p curl gnugrep common-updater-scripts
       set -x
       set -eou pipefail;
-      url=$(curl -sI "https://discordapp.com/api/download/${
-        builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-      }?platform=osx&format=dmg" | grep -oP 'location: \K\S+')
-      version=''${url##https://dl*.discordapp.net/apps/osx/}
-      version=''${version%%/*.dmg}
+      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=osx&format=dmg")
+      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
       update-source-version ${lib.optionalString (!stdenv.buildPlatform.isDarwin) "pkgsCross.aarch64-darwin."}${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
