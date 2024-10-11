@@ -55,17 +55,17 @@ stdenv.mkDerivation rec {
     "-DSOAPYSDR=true"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DAB/DAB+ Software Radio";
     homepage = "https://www.welle.io/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       ck3d
       markuskowa
     ];
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     platforms = [
       "x86_64-linux"
       "i686-linux"
-    ] ++ platforms.darwin;
+    ] ++ lib.platforms.darwin;
   };
 }
