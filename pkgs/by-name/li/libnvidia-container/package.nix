@@ -1,25 +1,27 @@
-{ stdenv
-, lib
-, addDriverRunpath
-, fetchFromGitHub
-, pkg-config
-, elfutils
-, libcap
-, libseccomp
-, rpcsvc-proto
-, libtirpc
-, makeWrapper
-, substituteAll
-, removeReferencesTo
-, go
+{
+  stdenv,
+  lib,
+  addDriverRunpath,
+  fetchFromGitHub,
+  pkg-config,
+  elfutils,
+  libcap,
+  libseccomp,
+  rpcsvc-proto,
+  libtirpc,
+  makeWrapper,
+  substituteAll,
+  removeReferencesTo,
+  replaceVars,
+  go,
 }:
 let
-  modprobeVersion = "495.44";
+  modprobeVersion = "550.54.14";
   nvidia-modprobe = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nvidia-modprobe";
     rev = modprobeVersion;
-    sha256 = "sha256-Y3ZOfge/EcmhqI19yWO7UfPqkvY1CHHvFC5l9vYyGuU=";
+    sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
   };
   modprobePatch = substituteAll {
     src = ./modprobe.patch;
@@ -28,21 +30,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.9.0";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = pname;
+    repo = "libnvidia-container";
     rev = "v${version}";
-    sha256 = "sha256-7OTawWwjeKU8wIa8I/+aSvAJli4kEua94nJSNyCajpE=";
+    sha256 = "sha256-hX+2B+0kHiAC2lyo6kwe7DctPLJWgRdbhlc316OO3r8=";
   };
 
   patches = [
-    # locations of nvidia-driver libraries are not resolved via ldconfig which
-    # doesn't get used on NixOS. Additional support binaries like nvidia-smi
+    # Locations of nvidia driver libraries are not resolved via ldconfig which
+    # doesn't get used on NixOS.
+    # TODO: The latter doesn't really apply anymore.
+    # Additional support binaries like nvidia-smi
     # are not resolved via the environment PATH but via the derivation output
     # path.
-    ./libnvc-ldconfig-and-path-fixes.patch
+    (replaceVars ./fix-library-resolving.patch {
+      inherit (addDriverRunpath) driverLink;
+    })
 
     # fix bogus struct declaration
     ./inline-c-struct.patch
@@ -53,6 +59,11 @@ stdenv.mkDerivation rec {
       -e 's/^REVISION ?=.*/REVISION = ${src.rev}/' \
       -e 's/^COMPILER :=.*/COMPILER = $(CC)/' \
       mk/common.mk
+
+    sed -i \
+      -e 's/^GIT_TAG ?=.*/GIT_TAG = ${version}/' \
+      -e 's/^GIT_COMMIT ?=.*/GIT_COMMIT = ${src.rev}/' \
+      versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
     cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
@@ -84,12 +95,26 @@ stdenv.mkDerivation rec {
     HOME="$(mktemp -d)"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-L${libtirpc.dev}/lib" "-ltirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getInclude libtirpc}/include/tirpc" ];
+  NIX_LDFLAGS = [
+    "-L${lib.getLib libtirpc}/lib"
+    "-ltirpc"
+  ];
 
-  nativeBuildInputs = [ pkg-config go rpcsvc-proto makeWrapper removeReferencesTo ];
+  nativeBuildInputs = [
+    pkg-config
+    go
+    rpcsvc-proto
+    makeWrapper
+    removeReferencesTo
+  ];
 
-  buildInputs = [ elfutils libcap libseccomp libtirpc ];
+  buildInputs = [
+    elfutils
+    libcap
+    libseccomp
+    libtirpc
+  ];
 
   makeFlags = [
     "WITH_LIBELF=yes"
@@ -103,10 +128,14 @@ stdenv.mkDerivation rec {
   postInstall =
     let
       inherit (addDriverRunpath) driverLink;
-      libraryPath = lib.makeLibraryPath [ "$out" driverLink "${driverLink}-32" ];
+      libraryPath = lib.makeLibraryPath [
+        "$out"
+        driverLink
+        "${driverLink}-32"
+      ];
     in
     ''
-      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.1.9.0
+      remove-references-to -t "${go}" $out/lib/libnvidia-container-go.so.${version}
       wrapProgram $out/bin/nvidia-container-cli --prefix LD_LIBRARY_PATH : ${libraryPath}
     '';
   disallowedReferences = [ go ];
