@@ -1,8 +1,3 @@
-{
-libguestfs,
-libguestfs-appliance,
-}:
+{ libguestfs, libguestfs-appliance }:
 
-libguestfs.override {
-    appliance = libguestfs-appliance;
-}
+libguestfs.override { appliance = libguestfs-appliance; }
