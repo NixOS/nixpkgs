@@ -6733,6 +6733,8 @@ self: super: with self; {
 
   kegtron-ble = callPackage ../development/python-modules/kegtron-ble { };
 
+  keke = callPackage ../development/python-modules/keke { };
+
   keras-applications = callPackage ../development/python-modules/keras-applications { };
 
   keras = callPackage ../development/python-modules/keras { };
