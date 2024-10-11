@@ -456,6 +456,9 @@ in {
           name = "iconv";
           buildInputs = [ libiconv ];
           configureFlags = [ "--with-iconv" ];
+          # Some other extensions support separate libdirs, but iconv does not. This causes problems with detecting
+          # Darwin’s libiconv because it has separate outputs. Adding `-liconv` works around the issue.
+          env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-liconv"; };
           doCheck = stdenv.hostPlatform.isLinux;
         }
         {
