@@ -199,6 +199,8 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
+  blink-cmp = callPackage ./blink-cmp { };
+
   # The GitHub repository returns 404, which breaks the update script
   vim-pony = buildVimPlugin {
     pname = "vim-pony";
