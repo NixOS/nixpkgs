@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   gitUpdater,
   apple-sdk_15,
   darwinMinVersionHook,
@@ -53,6 +54,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-24qQnJ0RnJP2M4zSlSlQ4c4dVZtHutNiCvjrsCDw6wY=";
   };
 
+  patches = [
+    # Cherry-pick patch to fix build failure due to a hardcoded SPIRV-Cross namespace.
+    # This can be dropped for MoltenVK 1.2.12.
+    (fetchpatch2 {
+      url = "https://github.com/KhronosGroup/MoltenVK/commit/856c8237ac3b32178caae3408effc35bedfdffa1.patch?full_index=1";
+      hash = "sha256-dVTop8sU19Swdb3ajbI+6S715NaxTqd7d0yQ/FDqxqY=";
+    })
+  ];
+
   postPatch = ''
     # Move `mvkGitRevDerived.h` to a stable location
     substituteInPlace Scripts/gen_moltenvk_rev_hdr.sh \
@@ -91,10 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Link glslang source because MoltenVK needs non-public headers to build.
     mkdir -p build/include
     ln -s "${glslang.src}" "build/include/glslang"
-
-    # MoltenVK should be using SPIRV_CROSS_NAMESPACE instead of hardcoding the namespace.
-    substituteInPlace MoltenVK/MoltenVK/GPUObjects/MVKDescriptorSet.mm \
-      --replace-fail MVK_spirv_cross SPIRV_CROSS_NAMESPACE
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
