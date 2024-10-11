@@ -3,6 +3,7 @@
 , rustPlatform
 , fetchFromGitHub
 , darwin
+, uutils-coreutils
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,6 +25,13 @@ rustPlatform.buildRustPackage rec {
     ./update-time-rs-in-cargo-lock.patch
   ];
 
+  patches = [
+    # Fix rcodesign’s verbosity level to set the logging level as intended. Needed for cli_tests.
+    ./fix-verbosity-level.patch
+    # Disable cli_tests test that requires network access.
+    ./disable-sign-for-notarization-test.patch
+  ];
+
   cargoHash = "sha256-VrexypkCW58asvzXo3wj/Rgi72tiGuchA31BkEZoYpI=";
 
 
@@ -36,7 +44,18 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # Does network IO
     "--skip=ticket_lookup::test::lookup_ticket"
+    # These tests require Xcode to be installed
+    "--skip=find_all_platform_directories"
+    "--skip=find_all_sdks"
   ];
+
+  # Set up uutils-coreutils for cli_tests. Without this, it will be installed with `cargo install`, which will fail
+  # due to the lack of network access in the build environment.
+  preCheck = ''
+    coreutils_dir=''${CARGO_TARGET_DIR:-"$(pwd)/target"}/${stdenv.hostPlatform.rust.cargoShortTarget}/coreutils/bin
+    install -m 755 -d "$coreutils_dir"
+    ln -s '${lib.getExe' uutils-coreutils "uutils-coreutils"}' "$coreutils_dir/coreutils"
+  '';
 
   meta = with lib; {
     description = "Cross-platform CLI interface to interact with Apple code signing";

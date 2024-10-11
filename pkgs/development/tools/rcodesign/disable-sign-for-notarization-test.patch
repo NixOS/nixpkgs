@@ -1,0 +1,14 @@
+diff --git a/apple-codesign/tests/cli_tests.rs b/apple-codesign/tests/cli_tests.rs
+index 22166712ec..8721a92753 100644
+--- a/apple-codesign/tests/cli_tests.rs
++++ b/apple-codesign/tests/cli_tests.rs
+@@ -271,6 +271,9 @@
+ 
+     cases.case("tests/cmd/*.trycmd").case("tests/cmd/*.toml");
+ 
++    // Disable in nixpkgs because it requires network access
++    cases.skip("tests/cmd/sign-for-notarization.trycmd");
++
+     // Help output breaks without notarize feature.
+     if cfg!(not(feature = "notarize")) {
+         cases.skip("tests/cmd/encode-app-store-connect-api-key.trycmd");
