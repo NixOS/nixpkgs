@@ -1,7 +1,7 @@
 {
   lib,
   apple-sdk_11,
-  #  apple-sdk_15,
+  apple-sdk_15,
   bison,
   bluez,
   fetchFromGitHub,
@@ -16,15 +16,7 @@
 }:
 
 let
-  # Get it from the SDK once the 15.0 SDK is available in nixpkgs.
-  #  xnu = apple-sdk_15.sourceRelease "xnu";
-
-  xnu = fetchFromGitHub {
-    owner = "apple-oss-distributions";
-    repo = "xnu";
-    rev = "xnu-11215.1.10";
-    hash = "sha256-9cFPrWtTpCb02YrvKX1KWoExoH2VjPdOBU4dscmKL4A=";
-  };
+  xnu = apple-sdk_15.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "libpcap-deps-private-headers";
