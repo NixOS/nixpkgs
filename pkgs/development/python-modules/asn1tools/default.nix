@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "asn1tools";
-  version = "0.166.0";
+  version = "0.167.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "eerimoq";
     repo = "asn1tools";
     rev = "refs/tags/${version}";
-    hash = "sha256-TWAOML6nsLX3TYqoQ9fcSjrUmC4byXOfczfkmSaSa0k=";
+    hash = "sha256-86bdBYlAVJfd3EY8s0t6ZDRA/qZVWuHD4Jxa1n1Ke5E=";
   };
 
   nativeBuildInputs = [ setuptools ];
