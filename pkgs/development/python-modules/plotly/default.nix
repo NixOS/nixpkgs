@@ -20,6 +20,8 @@
   which,
   nbformat,
   scikit-image,
+  orca,
+  psutil,
 }:
 
 buildPythonPackage rec {
@@ -50,6 +52,15 @@ buildPythonPackage rec {
     tenacity
     kaleido
   ];
+
+  # packages/python/plotly/optional-requirements.txt
+  optional-dependencies = {
+    orca = [
+      orca
+      requests
+      psutil
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
