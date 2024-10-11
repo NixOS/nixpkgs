@@ -89,5 +89,8 @@ buildGoModule rec {
     maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
+    knownVulnerabilities = [
+      "Scope check of access tokens is broken (https://github.com/go-gitea/gitea/pull/32218)"
+    ];
   };
 }
