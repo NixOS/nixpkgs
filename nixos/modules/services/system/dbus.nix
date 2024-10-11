@@ -6,8 +6,6 @@ let
 
   cfg = config.services.dbus;
 
-  homeDir = "/run/dbus";
-
   configDir = pkgs.makeDBusConf {
     inherit (cfg) apparmor;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
@@ -94,7 +92,7 @@ in
       users.users.messagebus = {
         uid = config.ids.uids.messagebus;
         description = "D-Bus system message bus daemon user";
-        home = homeDir;
+        home = "/run/dbus";
         homeMode = "0755";
         group = "messagebus";
       };
