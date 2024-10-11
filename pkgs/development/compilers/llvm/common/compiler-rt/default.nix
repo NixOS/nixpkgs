@@ -47,11 +47,13 @@ let
   pname = baseName + lib.optionalString (haveLibc) "-libc";
 
   src' = if monorepoSrc != null then
-    runCommand "${baseName}-src-${version}" {} ''
+    runCommand "${baseName}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${baseName} "$out"
-    '' else src;
+    '') else src;
 
   preConfigure = lib.optionalString (!haveLibc) ''
     cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
