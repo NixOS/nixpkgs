@@ -20,7 +20,6 @@ buildDunePackage {
   pname = "dns-resolver";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
     dns

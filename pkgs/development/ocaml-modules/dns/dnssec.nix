@@ -1,5 +1,4 @@
 { buildDunePackage
-, cstruct
 , dns
 , mirage-crypto
 , mirage-crypto-pk
@@ -14,10 +13,8 @@ buildDunePackage {
   pname = "dnssec";
 
   inherit (dns) version src;
-  duneVersion = "3";
 
   propagatedBuildInputs = [
-    cstruct
     dns
     mirage-crypto
     mirage-crypto-pk
