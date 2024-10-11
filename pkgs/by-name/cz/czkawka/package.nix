@@ -17,6 +17,7 @@
   testers,
   wrapGAppsHook4,
   xvfb-run,
+  versionCheckHook,
 }:
 
 let
@@ -79,6 +80,13 @@ let
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
     '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
+    versionCheckProgramArg = [ "--version" ];
+    doInstallCheck = true;
 
     passthru = {
       tests.version = testers.testVersion {
