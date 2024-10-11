@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bakelite";
-  version = "unstable-2022-02-12";
+  version = "unstable-2023-03-30";
 
   src = fetchFromGitHub {
     owner = "richfelker";
     repo = pname;
-    rev = "373901734d114e42aa385e6a7843745674e4ca08";
-    hash = "sha256-HBnYlUyTkvPTbdsZD02yCq5C7yXOHYK4l4mDRUkcN5I=";
+    rev = "65d69e88e0972d1493ebbd9bf9d1bfde36272636";
+    hash = "sha256-OjBw9aYD2h7BWYgQzZp03hGCyQcRgmm2AjrcT/QrQAo=";
   };
 
   hardeningEnable = [ "pie" ];
