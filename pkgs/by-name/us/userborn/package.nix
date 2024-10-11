@@ -51,6 +51,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/nikstur/userborn";
     description = "Declaratively bear (manage) Linux users and groups";
+    changelog = "https://github.com/nikstur/userborn/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with lib.maintainers; [ nikstur ];
