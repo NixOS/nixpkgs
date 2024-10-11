@@ -10,6 +10,7 @@
   zlib,
   mbedtls,
   cacert,
+  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,7 @@ stdenv.mkDerivation rec {
     zlib
     mbedtls
     cacert
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postPatch = ''
     patchShebangs .

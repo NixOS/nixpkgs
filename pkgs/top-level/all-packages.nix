@@ -29202,7 +29202,9 @@ with pkgs;
     };
   };
 
-  gaucheBootstrap = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche/boot.nix { };
+  gaucheBootstrap = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche/boot.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
+  };
 
   gauche = darwin.apple_sdk_11_0.callPackage ../development/interpreters/gauche {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices;
