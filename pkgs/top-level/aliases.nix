@@ -1230,6 +1230,7 @@ mapAliases {
   partition-manager = libsForQt5.partitionmanager; # Added 2024-01-08
   pash = throw "'pash' has been removed: abandoned by upstream. Use 'powershell' instead"; # Added 2023-09-16
   patchelfStable = patchelf; # Added 2024-01-25
+  paup = lib.warn "'paup' has been renamed to 'paup-cli'" paup-cli; # Added 2024-09-11
   pcsctools = pcsc-tools; # Added 2023-12-07
   pcsxr = throw "pcsxr was removed as it has been abandoned for over a decade; please use DuckStation, Mednafen, or the RetroArch PCSX ReARMed core"; # Added 2024-08-20
   pdf2xml = throw "'pdf2xml' was removed: abandoned for years."; # Added 2023-10-22
