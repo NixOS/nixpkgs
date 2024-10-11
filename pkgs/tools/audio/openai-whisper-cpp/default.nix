@@ -67,7 +67,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cudaNewStr = "-lcuda -L${cudaPackages.cuda_cudart}/lib/stubs ";
   in lib.optionalString cudaSupport ''
     substituteInPlace Makefile \
-      --replace '${cudaOldStr}' '${cudaNewStr}'
+      --replace-fail '${cudaOldStr}' '${cudaNewStr}'
   '';
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
@@ -75,7 +75,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     WHISPER_COREML_ALLOW_FALLBACK = "1";
     WHISPER_METAL_EMBED_LIBRARY = "1";
   } // lib.optionalAttrs cudaSupport {
-    WHISPER_CUBLAS = "1";
+    GGML_CUDA = "1";
   };
 
   makeFlags = [ "main" "stream" "command" ];
