@@ -2,11 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools,
   spark-parser,
   xdis,
-  nose,
   pytestCheckHook,
   hypothesis,
   six,
@@ -32,7 +30,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "spark-parser" ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     hypothesis
     six
@@ -40,7 +37,7 @@ buildPythonPackage rec {
 
   # No tests are provided for versions past 3.8,
   # as the project only targets bytecode of versions <= 3.8
-  doCheck = pythonOlder "3.9";
+  doCheck = false;
 
   meta = {
     description = "A bytecode decompiler for Python versions 3.8 and below";
