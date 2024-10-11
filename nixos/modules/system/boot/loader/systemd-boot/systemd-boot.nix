@@ -42,6 +42,8 @@ let
 
     timeout = if config.boot.loader.timeout == null then "menu-force" else config.boot.loader.timeout;
 
+    defaultEntry = if cfg.defaultEntry == null then "" else cfg.defaultEntry;
+
     configurationLimit = if cfg.configurationLimit == null then 0 else cfg.configurationLimit;
 
     inherit (cfg) consoleMode graceful editor rebootForBitlocker;
@@ -347,6 +349,21 @@ in {
         system. The firmware will then start Windows Boot Manager
         directly, leaving the TPM PCRs in expected states so that
         Windows can unseal the encryption key.
+      '';
+    };
+
+    defaultEntry = mkOption {
+      default = null;
+
+      type = types.nullOr types.str;
+
+      description = ''
+        Default boot entry. Sets the "default" configuration option
+        of the loader.conf file.
+
+        If not set, the latest Nix generation will be used as the default entry.
+
+        See <https://www.freedesktop.org/software/systemd/man/latest/loader.conf.html#Options>.
       '';
     };
   };
