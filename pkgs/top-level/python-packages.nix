@@ -15576,6 +15576,8 @@ self: super: with self; {
 
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
+  term-image = callPackage ../development/python-modules/term-image { };
+
   termcolor = callPackage ../development/python-modules/termcolor { };
 
   termgraph = callPackage ../development/python-modules/termgraph { };
