@@ -1325,6 +1325,7 @@ mapAliases {
   protobuf3_23 = protobuf_23;
   protobuf3_21 = protobuf_21;
   protonup = protonup-ng; # Added 2022-11-06
+  protonvpn-gui_legacy = throw "protonvpn-gui_legacy source code was removed from upstream. Use protonvpn-gui instead."; # Added 2024-10-12
   proxmark3-rrg = proxmark3; # Added 2023-07-25
   proxmark3-unstable = throw "removed in favor of rfidresearchgroup fork"; # Added 2023-07-25
   psensor = throw "'psensor' has been removed due to lack of maintenance upstream. Consider using 'mission-center', 'resources' or 'monitorets' instead"; # Added 2024-09-14

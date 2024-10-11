@@ -31991,7 +31991,6 @@ with pkgs;
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
 
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
-  protonvpn-gui_legacy = python3Packages.callPackage ../applications/networking/protonvpn-gui/legacy.nix { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
