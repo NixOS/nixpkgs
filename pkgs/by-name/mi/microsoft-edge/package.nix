@@ -1,197 +1,287 @@
-{ stdenv
-, fetchurl
-, lib
-, makeWrapper
+{
+  fetchurl,
+  lib,
+  makeWrapper,
+  patchelf,
+  stdenv,
 
-, binutils-unwrapped
-, xz
-, gnutar
-, file
+  # Linked dynamic libraries.
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  gtk4,
+  libdrm,
+  libglvnd,
+  libkrb5,
+  libX11,
+  libxcb,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libxkbcommon,
+  libXrandr,
+  libXrender,
+  libXScrnSaver,
+  libxshmfence,
+  libXtst,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  pipewire,
+  vulkan-loader,
+  wayland, # ozone/wayland
 
-, glibc
-, glib
-, nss
-, nspr
-, atk
-, at-spi2-atk
-, xorg
-, cups
-, dbus
-, expat
-, libdrm
-, libxkbcommon
-, pipewire
-, gtk3
-, pango
-, cairo
-, gdk-pixbuf
-, mesa
-, alsa-lib
-, at-spi2-core
-, libuuid
-, systemd
-, wayland
-, libGL
+  # Command line programs
+  coreutils,
 
-# command line arguments which are always set e.g "--disable-gpu"
-, commandLineArgs ? ""
+  # command line arguments which are always set e.g "--disable-gpu"
+  commandLineArgs ? "",
+
+  # Will crash without.
+  systemd,
+
+  # Loaded at runtime.
+  libexif,
+  pciutils,
+
+  # Additional dependencies according to other distros.
+  ## Ubuntu
+  curl,
+  liberation_ttf,
+  util-linux,
+  wget,
+  xdg-utils,
+  ## Arch Linux.
+  flac,
+  harfbuzz,
+  icu,
+  libopus,
+  libpng,
+  snappy,
+  speechd-minimal,
+  ## Gentoo
+  bzip2,
+  libcap,
+
+  # Necessary for USB audio devices.
+  libpulseaudio,
+  pulseSupport ? true,
+
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+
+  # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder)
+  libva,
+  libvaSupport ? true,
+
+  # For Vulkan support (--enable-features=Vulkan)
+  addDriverRunpath,
+
+  # Edge Specific
+  libuuid,
 }:
 
 let
 
-  baseName = "microsoft-edge";
+  opusWithCustomModes = libopus.override { withCustomModes = true; };
 
-  channel = "stable";
-
-  shortName = if channel == "stable"
-              then "msedge"
-              else "msedge-" + channel;
-
-  longName = if channel == "stable"
-             then baseName
-             else baseName + "-" + channel;
-
-  iconSuffix = lib.optionalString (channel != "stable") "_${channel}";
-
-  desktopSuffix = lib.optionalString (channel != "stable") "-${channel}";
+  deps =
+    [
+      alsa-lib
+      at-spi2-atk
+      at-spi2-core
+      atk
+      bzip2
+      cairo
+      coreutils
+      cups
+      curl
+      dbus
+      expat
+      flac
+      fontconfig
+      freetype
+      gcc-unwrapped.lib
+      gdk-pixbuf
+      glib
+      harfbuzz
+      icu
+      libcap
+      libdrm
+      liberation_ttf
+      libexif
+      libglvnd
+      libkrb5
+      libpng
+      libX11
+      libxcb
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libxkbcommon
+      libXrandr
+      libXrender
+      libXScrnSaver
+      libxshmfence
+      libXtst
+      mesa
+      nspr
+      nss
+      opusWithCustomModes
+      pango
+      pciutils
+      pipewire
+      snappy
+      speechd-minimal
+      systemd
+      util-linux
+      vulkan-loader
+      wayland
+      wget
+      libuuid
+    ]
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional libvaSupport libva
+    ++ [
+      gtk3
+      gtk4
+    ];
 in
 
-stdenv.mkDerivation rec {
-  pname="${baseName}-${channel}";
+stdenv.mkDerivation (finalAttrs: {
+  pname = "microsoft-edge";
   version = "129.0.2792.65";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/repos/edge/pool/main/m/${baseName}-${channel}/${baseName}-${channel}_${version}-1_amd64.deb";
+    url = "https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_${finalAttrs.version}-1_amd64.deb";
     hash = "sha256-xuCtHptE2CG4aiY7gu2sWW3Km4qfB0E/L/PBACIaKOc=";
   };
 
+  # With strictDeps on, some shebangs were not being patched correctly
+  # ie, $out/share/microsoft/msedge/microsoft-edge
+  strictDeps = false;
+
   nativeBuildInputs = [
     makeWrapper
+    patchelf
   ];
 
-  unpackCmd = "${binutils-unwrapped}/bin/ar p $src data.tar.xz | ${xz}/bin/xz -dc | ${gnutar}/bin/tar -xf -";
-  sourceRoot = ".";
+  buildInputs = [
+    # needed for XDG_ICON_DIRS
+    adwaita-icon-theme
+    glib
+    gtk3
+    gtk4
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings-desktop-schemas
+  ];
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontPatchELF = true;
-
-  buildPhase = let
-    libPath = {
-      msedge = lib.makeLibraryPath [
-        glibc glib nss nspr atk at-spi2-atk xorg.libX11
-        xorg.libxcb cups.lib dbus.lib expat libdrm
-        xorg.libXcomposite xorg.libXdamage xorg.libXext
-        xorg.libXfixes xorg.libXrandr libxkbcommon
-        pipewire gtk3 pango cairo gdk-pixbuf mesa
-        alsa-lib at-spi2-core xorg.libxshmfence systemd wayland
-      ];
-      naclHelper = lib.makeLibraryPath [
-        glib nspr atk libdrm xorg.libxcb mesa xorg.libX11
-        xorg.libXext dbus.lib libxkbcommon
-      ];
-      libwidevinecdm = lib.makeLibraryPath [
-        glib nss nspr
-      ];
-      libGLESv2 = lib.makeLibraryPath [
-        xorg.libX11 xorg.libXext xorg.libxcb wayland libGL
-      ];
-      liboneauth = lib.makeLibraryPath [
-        libuuid xorg.libX11
-      ];
-    };
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath.msedge}" \
-      opt/microsoft/${shortName}/msedge
-
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      opt/microsoft/${shortName}/msedge-sandbox
-
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      opt/microsoft/${shortName}/msedge_crashpad_handler
-
-    patchelf \
-      --set-rpath "${libPath.libwidevinecdm}" \
-      opt/microsoft/${shortName}/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
-
-    patchelf \
-      --set-rpath "${libPath.libGLESv2}" \
-      opt/microsoft/${shortName}/libGLESv2.so
-
-    patchelf \
-      --set-rpath "${libPath.liboneauth}" \
-      opt/microsoft/${shortName}/liboneauth.so
-  '' + lib.optionalString (lib.versionOlder version "121") ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath.naclHelper}" \
-      opt/microsoft/${shortName}/nacl_helper
+  unpackPhase = ''
+    runHook preUnpack
+    ar x $src
+    tar xf data.tar.xz
+    runHook postUnpack
   '';
+
+  rpath = lib.makeLibraryPath deps + ":" + lib.makeSearchPathOutput "lib" "lib64" deps;
+  binpath = lib.makeBinPath deps;
 
   installPhase = ''
-    mkdir -p $out
-    cp -R opt usr/bin usr/share $out
+    runHook preInstall
 
-    ${if channel == "stable"
-      then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
-      else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
+    appname=msedge
+    dist=stable
 
-    ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}
+    exe=$out/bin/microsoft-edge
 
-    rm -rf $out/share/doc
-    rm -rf $out/opt/microsoft/${shortName}/cron
+    mkdir -p $out/bin $out/share
+    cp -v -a opt/* $out/share
+    cp -v -a usr/share/* $out/share
 
-    for icon in '16' '24' '32' '48' '64' '128' '256'
-    do
-      ${ "icon_source=$out/opt/microsoft/${shortName}/product_logo_\${icon}${iconSuffix}.png" }
-      ${ "icon_target=$out/share/icons/hicolor/\${icon}x\${icon}/apps" }
-      mkdir -p $icon_target
-      cp $icon_source $icon_target/microsoft-edge${desktopSuffix}.png
+    # replace bundled vulkan-loader
+    rm -v $out/share/microsoft/$appname/libvulkan.so.1
+    ln -v -s -t "$out/share/microsoft/$appname" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
+
+    substituteInPlace $out/share/microsoft/$appname/microsoft-edge \
+      --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
+    substituteInPlace $out/share/applications/microsoft-edge.desktop \
+      --replace-fail /usr/bin/microsoft-edge-$dist $exe
+    substituteInPlace $out/share/gnome-control-center/default-apps/microsoft-edge.xml \
+      --replace-fail /opt/microsoft/msedge $exe
+    substituteInPlace $out/share/menu/microsoft-edge.menu \
+      --replace-fail /opt $out/share \
+      --replace-fail $out/share/microsoft/$appname/microsoft-edge $exe
+
+    for icon_file in $out/share/microsoft/msedge/product_logo_[0-9]*.png; do
+      num_and_suffix="''${icon_file##*logo_}"
+      if [ $dist = "stable" ]; then
+        icon_size="''${num_and_suffix%.*}"
+      else
+        icon_size="''${num_and_suffix%_*}"
+      fi
+      logo_output_prefix="$out/share/icons/hicolor"
+      logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
+      mkdir -p "$logo_output_path"
+      mv "$icon_file" "$logo_output_path/microsoft-edge.png"
     done
 
-    substituteInPlace $out/share/applications/${longName}.desktop \
-      --replace /usr/bin/${baseName}-${channel} $out/bin/${longName}
-
-    substituteInPlace $out/share/gnome-control-center/default-apps/${longName}.xml \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
-
-    substituteInPlace $out/share/menu/${longName}.menu \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
-
-    substituteInPlace $out/opt/microsoft/${shortName}/xdg-mime \
-      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "xdg_system_dirs=/usr/local/share/:/usr/share/" "xdg_system_dirs=/run/current-system/sw/share/" \
-      --replace /usr/bin/file ${file}/bin/file
-
-    substituteInPlace $out/opt/microsoft/${shortName}/default-app-block \
-      --replace /opt/microsoft/${shortName} $out/opt/microsoft/${shortName}
-
-    substituteInPlace $out/opt/microsoft/${shortName}/xdg-settings \
-      --replace "\''${XDG_DATA_DIRS:-/usr/local/share:/usr/share}" "\''${XDG_DATA_DIRS:-/run/current-system/sw/share}" \
-      --replace "\''${XDG_CONFIG_DIRS:-/etc/xdg}" "\''${XDG_CONFIG_DIRS:-/run/current-system/sw/etc/xdg}"
-  '';
-
-  postFixup = ''
-    wrapProgram "$out/bin/${longName}" \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.pname}-${gtk3.version}" \
+    # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
+    makeWrapper "$out/share/microsoft/$appname/microsoft-edge" "$exe" \
+      --prefix LD_LIBRARY_PATH : "$rpath" \
+      --prefix PATH            : "$binpath" \
+      --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
+      --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
+      --set CHROME_WRAPPER  "microsoft-edge-$dist" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+      --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
+
+    # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
+    patchelf --set-rpath $rpath $out/share/microsoft/$appname/lib*GL*
+
+    # Edge specific set liboneauth
+    patchelf --set-rpath $rpath $out/share/microsoft/$appname/liboneauth.so
+
+    for elf in $out/share/microsoft/$appname/{msedge,msedge-sandbox,msedge_crashpad_handler}; do
+      patchelf --set-rpath $rpath $elf
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+    done
+
+    runHook postInstall
   '';
 
-  # We only want automatic updates for stable, beta and dev will get updated by the same script
-  # and are only used for testing.
-  passthru = lib.optionalAttrs (channel == "stable") { updateScript = ./update.py; };
+  passthru.updateScript = ./update.py;
 
-  meta = with lib; {
-    homepage = "https://www.microsoft.com/en-us/edge";
+  meta = {
+    changelog = "https://learn.microsoft.com/en-us/deployedge/microsoft-edge-relnote-stable-channel";
     description = "Web browser from Microsoft";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    homepage = "https://www.microsoft.com/en-us/edge";
+    license = lib.licenses.unfree;
+    mainProgram = "microsoft-edge";
+    maintainers = with lib.maintainers; [
+      zanculmarktum
+      kuwii
+      rhysmdnz
+    ];
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ zanculmarktum kuwii rhysmdnz ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+})
