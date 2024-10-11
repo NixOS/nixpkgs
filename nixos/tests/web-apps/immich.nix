@@ -18,6 +18,7 @@ import ../make-test-python.nix (
         services.immich = {
           enable = true;
           environment.IMMICH_LOG_LEVEL = "verbose";
+          host = ""; # all interfaces (example from module option)
         };
       };
 
@@ -27,6 +28,8 @@ import ../make-test-python.nix (
       machine.wait_for_unit("immich-server.service")
 
       machine.wait_for_open_port(3001) # Server
+      # verify listening to any IP (testing a undocumented feature)
+      machine.succeed("ss -tln | grep -F '*:3001'")
       machine.wait_for_open_port(3003) # Machine learning
       machine.succeed("curl --fail http://localhost:3001/")
 
