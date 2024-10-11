@@ -289,9 +289,14 @@ let
       ;
   };
 
-  darwinPackages = prevStage: { inherit (prevStage.darwin) locale sigtool; };
+  darwinPackages = prevStage: { inherit (prevStage.darwin) sigtool; };
   darwinPackagesNoCC = prevStage: {
-    inherit (prevStage.darwin) binutils binutils-unwrapped libSystem;
+    inherit (prevStage.darwin)
+      binutils
+      binutils-unwrapped
+      libSystem
+      locale
+      ;
   };
 
   # These packages are not allowed to be used in the Darwin bootstrap
