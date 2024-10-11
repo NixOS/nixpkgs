@@ -29,6 +29,8 @@ buildPythonPackage rec {
     xdis
   ];
 
+  pythonRelaxDeps = [ "spark-parser" ];
+
   nativeCheckInputs = [
     nose
     pytestCheckHook
