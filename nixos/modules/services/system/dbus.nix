@@ -8,6 +8,7 @@ let
 
   configDir = pkgs.makeDBusConf.override {
     inherit (cfg) apparmor;
+    dbus = cfg.dbusPackage;
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
@@ -35,6 +36,10 @@ in
         '';
       };
 
+      dbusPackage = lib.mkPackageOption pkgs "dbus" {};
+
+      brokerPackage = lib.mkPackageOption pkgs "dbus-broker" {};
+
       implementation = mkOption {
         type = types.enum [ "dbus" "broker" ];
         default = "dbus";
@@ -44,7 +49,6 @@ in
           performance and reliability, while keeping compatibility to the D-Bus
           reference implementation.
         '';
-
       };
 
       packages = mkOption {
@@ -101,16 +105,16 @@ in
 
       # Install dbus for dbus tools even when using dbus-broker
       environment.systemPackages = [
-        pkgs.dbus
+        cfg.dbusPackage
       ];
 
       # You still need the dbus reference implementation installed to use dbus-broker
       systemd.packages = [
-        pkgs.dbus
+        cfg.dbusPackage
       ];
 
       services.dbus.packages = [
-        pkgs.dbus
+        cfg.dbusPackage
         config.system.path
       ];
 
@@ -125,12 +129,13 @@ in
         groups.messagebus = { };
         contents."/etc/dbus-1".source = pkgs.makeDBusConf.override {
           inherit (cfg) apparmor;
+          dbus = cfg.dbusPackage;
           suidHelper = "/bin/false";
-          serviceDirectories = [ pkgs.dbus config.boot.initrd.systemd.package ];
+          serviceDirectories = [ cfg.dbusPackage config.boot.initrd.systemd.package ];
         };
-        packages = [ pkgs.dbus ];
+        packages = [ cfg.dbusPackage ];
         storePaths = [
-          "${pkgs.dbus}/bin/dbus-daemon"
+          "${cfg.dbusPackage}/bin/dbus-daemon"
           "${config.boot.initrd.systemd.package}/share/dbus-1/system-services"
           "${config.boot.initrd.systemd.package}/share/dbus-1/system.d"
         ];
@@ -140,7 +145,7 @@ in
 
     (mkIf (cfg.implementation == "dbus") {
       security.wrappers.dbus-daemon-launch-helper = {
-        source = "${pkgs.dbus}/libexec/dbus-daemon-launch-helper";
+        source = "${cfg.dbusPackage}/libexec/dbus-daemon-launch-helper";
         owner = "root";
         group = "messagebus";
         setuid = true;
@@ -179,11 +184,11 @@ in
 
     (mkIf (cfg.implementation == "broker") {
       environment.systemPackages = [
-        pkgs.dbus-broker
+        cfg.brokerPackage
       ];
 
       systemd.packages = [
-        pkgs.dbus-broker
+        cfg.brokerPackage
       ];
 
       # Just to be sure we don't restart through the unit alias
