@@ -33,7 +33,7 @@
 , jansson
 , getopt
 , perlPackages
-, ocamlPackages
+, ocaml-ng
 , libtirpc
 , appliance ? null
 , javaSupport ? false
@@ -43,6 +43,10 @@
 
 assert appliance == null || lib.isDerivation appliance;
 
+let
+  # GetoptLong not avaible with newer ocaml
+  ocamlPackages' = ocaml-ng.ocamlPackages_4_14;
+in
 stdenv.mkDerivation rec {
   pname = "libguestfs";
   version = "1.50.1";
@@ -66,7 +70,7 @@ stdenv.mkDerivation rec {
     qemu
     zstd
   ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
-  ++ (with ocamlPackages; [ ocaml findlib ]);
+  ++ (with ocamlPackages'; [ ocaml findlib ]);
   buildInputs = [
     libxcrypt
     ncurses
@@ -91,7 +95,7 @@ stdenv.mkDerivation rec {
     libapparmor
     perlPackages.ModuleBuild
     libtirpc
-  ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
+  ] ++ (with ocamlPackages'; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
   ++ lib.optional javaSupport jdk;
 
   prePatch = ''
@@ -99,7 +103,7 @@ stdenv.mkDerivation rec {
     substituteInPlace run.in        --replace '#!/bin/bash' '#!${stdenv.shell}'
     substituteInPlace ocaml-link.sh.in --replace '#!/bin/bash' '#!${stdenv.shell}'
 
-    # $(OCAMLLIB) is read-only "${ocamlPackages.ocaml}/lib/ocaml"
+    # $(OCAMLLIB) is read-only "${ocamlPackages'.ocaml}/lib/ocaml"
     substituteInPlace ocaml/Makefile.am            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
 
