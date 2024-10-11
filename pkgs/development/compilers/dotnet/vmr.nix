@@ -2,6 +2,7 @@
   clangStdenv,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -53,6 +54,12 @@ let
   sigtool = callPackage ./sigtool.nix { };
 
   _icu = if isDarwin then darwin.ICU else icu;
+
+  # error NU1903: Package 'System.Text.Json' 8.0.4 has a known high severity vulnerability,
+  disableNU1903 = fetchpatch {
+    url = "https://github.com/dotnet/sdk/pull/44028.patch";
+    hash = "sha256-r6AOhXhwT8ar3aS0r5CA9sPiBsp3pnnPIVO+5l5CUGM=";
+  };
 
 in
 stdenv.mkDerivation rec {
@@ -218,6 +225,9 @@ stdenv.mkDerivation rec {
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
         src/aspnetcore/eng/DotNetBuild.props
+
+      # patch is from sdk repo where vmr bits are in src/SourceBuild/content
+      patch -p4 < ${disableNU1903}
     ''
     + lib.optionalString (lib.versionAtLeast version "9") ''
       # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805
