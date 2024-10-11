@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qqc2-suru-style";
-  version = "0.20230206";
+  version = "0.20230630";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/qqc2-suru-style";
     rev = finalAttrs.version;
-    hash = "sha256-ZLPuXnhlR1IDhGnprcdWHLnOeS6ZzVkFhQML0iKMjO8=";
+    hash = "sha256-kAgHsNWwUWxHg26bTMmlq8m9DR4+ob4pl/oUX7516hM=";
   };
 
   # QMake can't find Qt modules from buildInputs
