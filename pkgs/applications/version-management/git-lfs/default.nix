@@ -33,9 +33,23 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     unset subPackages
   '';
+
+  checkFlags = let
+    # Skip tests that require network access
+    skippedTests = [
+      "TestCertFromSSLCAInfoConfig"
+      "TestCertFromSSLCAInfoEnv"
+      "TestCertFromSSLCAInfoEnvWithSchannelBackend"
+      "TestCertFromSSLCAPathConfig"
+      "TestCertFromSSLCAPathEnv"
+    ];
+  in lib.optionals stdenv.hostPlatform.isDarwin
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installManPage man/man*/*
