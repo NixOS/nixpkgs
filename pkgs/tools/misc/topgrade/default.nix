@@ -6,20 +6,21 @@
 , Cocoa
 , Foundation
 , installShellFiles
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "16.0.0";
+  version = "16.0.1";
 
   src = fetchFromGitHub {
     owner = "topgrade-rs";
     repo = "topgrade";
     rev = "v${version}";
-    hash = "sha256-MYilhVUaf5+gsRNv3tJm5UL8mH2T49r8jLPkd4vHRTw=";
+    hash = "sha256-/zSr6PEtfzLI/c32KrBlfHPja34T5DyiiR5a1/GDH/0=";
   };
 
-  cargoHash = "sha256-RP86Wk4rsM6MBH6zAiZ5JqQhkm0HCEMFrUj9ULqB978=";
+  cargoHash = "sha256-ANmVdT0irhD3d6E4yNBOWqex3ApdfWgmQHxhGKsI4jA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -45,6 +46,8 @@ rustPlatform.buildRustPackage rec {
     $out/bin/topgrade --gen-manpage > topgrade.8
     installManPage topgrade.8
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Upgrade all the things";
