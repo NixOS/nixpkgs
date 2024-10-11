@@ -2,7 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
-, darwin
+, apple-sdk_11
 , uutils-coreutils
 }:
 
@@ -17,9 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-F6Etl3Zbpmh3A/VeCcSXIy3W1WYFg8WUSJBJV/akCxU=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
-  ];
   cargoPatches = [
     # Update time to a version that is compatible with Rust 1.80
     ./update-time-rs-in-cargo-lock.patch
@@ -34,6 +31,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-VrexypkCW58asvzXo3wj/Rgi72tiGuchA31BkEZoYpI=";
 
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   cargoBuildFlags = [
     # Only build the binary we want
