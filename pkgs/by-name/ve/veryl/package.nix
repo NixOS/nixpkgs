@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  installShellFiles,
   dbus,
   stdenv,
   darwin,
@@ -24,6 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
   ];
 
   buildInputs =
@@ -36,6 +38,13 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd veryl \
+      --bash <($out/bin/veryl metadata --completion bash) \
+      --fish <($out/bin/veryl metadata --completion fish) \
+      --zsh <($out/bin/veryl metadata --completion zsh)
+  '';
 
   checkFlags = [
     # takes over an hour
@@ -53,7 +62,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=analyzer::test_68_std"
     "--skip=emitter::test_25_dependency"
     "--skip=emitter::test_68_std"
-
   ];
 
   meta = {
