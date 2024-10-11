@@ -6,6 +6,37 @@ let
 
   cfg = config.services.shairport-sync;
 
+  # This is based off the upstream versions, but they can't be used directly because
+  # we allow customising the user.
+  dbusPolicy = pkgs.writeTextDir "etc/dbus-1/system.d/shairport-sync-dbus-policy.conf" ''
+    <!-- initial version, based on /etc/dbus-1/system.d/avahi-dbus.conf, with thanks -->
+    <!DOCTYPE busconfig PUBLIC
+              "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+              "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+    <busconfig>
+
+      <!-- Allow users "root" and "${cfg.user}" to own the Shairport Sync services -->
+      <policy user="root">
+        <allow own="org.gnome.ShairportSync"/>
+        <allow own="org.mpris.MediaPlayer2.ShairportSync"/>
+      </policy>
+      <policy user="${cfg.user}">
+        <allow own="org.gnome.ShairportSync"/>
+        <allow own="org.mpris.MediaPlayer2.ShairportSync"/>
+      </policy>
+
+
+      <!-- Allow anyone to invoke methods on Shairport Sync servers -->
+      <policy context="default">
+        <allow send_destination="org.gnome.ShairportSync"/>
+        <allow receive_sender="org.gnome.ShairportSync"/>
+        <allow send_destination="org.mpris.MediaPlayer2.ShairportSync"/>
+        <allow receive_sender="org.mpris.MediaPlayer2.ShairportSync"/>
+      </policy>
+
+    </busconfig>
+  '';
+
 in
 
 {
@@ -103,9 +134,18 @@ in
           ExecStart = "${pkgs.shairport-sync}/bin/shairport-sync ${cfg.arguments}";
           RuntimeDirectory = "shairport-sync";
         };
+
+        environment = {
+          # Force to use system dbus.
+          DBUS_SESSION_BUS_ADDRESS = "unix:path=/run/dbus/system_bus_socket";
+        };
       };
 
     environment.systemPackages = [ pkgs.shairport-sync ];
+
+    services.dbus.packages = [
+      dbusPolicy
+    ];
 
   };
 
