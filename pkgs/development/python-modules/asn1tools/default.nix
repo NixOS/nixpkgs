@@ -26,14 +26,14 @@ buildPythonPackage rec {
     hash = "sha256-86bdBYlAVJfd3EY8s0t6ZDRA/qZVWuHD4Jxa1n1Ke5E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bitstruct
     pyparsing
   ];
 
-  passthru.optional-depdendencies = {
+  optional-dependencies = {
     shell = [ prompt-toolkit ];
     cache = [ diskcache ];
   };
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-depdendencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "asn1tools" ];
 
@@ -53,10 +53,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "ASN.1 parsing, encoding and decoding";
-    mainProgram = "asn1tools";
     homepage = "https://github.com/eerimoq/asn1tools";
     changelog = "https://github.com/eerimoq/asn1tools/releases/tag/${version}";
     license = licenses.mit;
     maintainers = [ ];
+    mainProgram = "asn1tools";
   };
 }
