@@ -49,7 +49,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Declarative disk partitioning and formatting using nix";
     license = lib.licenses.mit;
     mainProgram = "disko";
-    maintainers = with lib.maintainers; [ mic92 lassulus ];
+    maintainers = with lib.maintainers; [ mic92 lassulus iFreilicht ];
     platforms = lib.platforms.linux;
   };
 })
