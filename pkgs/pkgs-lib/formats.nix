@@ -111,11 +111,11 @@ rec {
       };
       iniAtom = { listsAsDuplicateKeys, listToValue }:
         if listsAsDuplicateKeys then
-          coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
+          oneOf [ singleIniAtom (listOf singleIniAtom) ] // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
         else if listToValue != null then
-          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+          oneOf [ singleIniAtom (nonEmptyListOf singleIniAtom) ] // {
             description = singleIniAtom.description + " or a non-empty list of them";
           }
         else
