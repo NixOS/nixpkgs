@@ -243,6 +243,12 @@ stdenvNoCC.mkDerivation {
         basename=$(basename "$variant")
         wrap $basename ${./ld-wrapper.sh} $variant
       done
+    '' + optionalString targetPlatform.isWasi ''
+      wrap ${targetPrefix}wasm-ld ${./ld-wrapper.sh} $ldPath/${targetPrefix}wasm-ld
+      # clang doesn't properly normalize the target triple[1] before using it as a search path,
+      # and rustc passes wasm32-wasi as `-target`, which gets used as is. Work around.
+      # [1] https://github.com/llvm/llvm-project/blob/ad7aeb0ff58ebd29f68adb85c64e8010639e2a76/clang/lib/Driver/Driver.cpp#L6187
+      ln -s $out/bin/${targetPrefix}wasm-ld $out/bin/wasm32-wasi-wasm-ld
     '';
 
   strictDeps = true;

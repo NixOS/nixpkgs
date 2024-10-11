@@ -44,8 +44,7 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
-# Enable except on aarch64 pkgsStatic, where we use lld for reasons
-, auditable ? !cargo-auditable.meta.broken && !(stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isDarwin)
+, auditable ? !cargo-auditable.meta.broken
 
 , depsExtraArgs ? {}
 
