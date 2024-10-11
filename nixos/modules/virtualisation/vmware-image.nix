@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   boolToStr = value: if value then "on" else "off";
   cfg = config.vmware;
@@ -12,6 +17,10 @@ let
   ];
 
 in {
+  imports = [
+    ../image/builder-option.nix
+  ];
+
   options = {
     vmware = {
       baseImageSize = lib.mkOption {
@@ -51,6 +60,7 @@ in {
   };
 
   config = {
+    image.builder = config.system.build.vmwareImage;
     system.build.vmwareImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
       postVM = ''

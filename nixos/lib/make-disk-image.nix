@@ -163,6 +163,9 @@ To solve this, you can run `fdisk -l $image` and generate `dd if=$image of=$imag
 , # Disk image format, one of qcow2, qcow2-compressed, vdi, vpc, raw.
   format ? "raw"
 
+, # Disk image filename, without any extensions (e.g. `image_1`).
+  baseName ? "nixos"
+
   # Whether to fix:
   #   - GPT Disk Unique Identifier (diskGUID)
   #   - GPT Partition Unique Identifier: depends on the layout, root partition UUID can be controlled through `rootGPUID` option
@@ -208,7 +211,7 @@ let format' = format; in let
 
   compress = lib.optionalString (format' == "qcow2-compressed") "-c";
 
-  filename = "nixos." + {
+  filename = "${baseName}." + {
     qcow2 = "qcow2";
     vdi   = "vdi";
     vpc   = "vhd";

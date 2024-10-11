@@ -1,22 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.virtualisation.azureImage;
 in
 {
-  imports = [ ./azure-common.nix ];
+  imports = [
+    ./azure-common.nix
+    ./disk-size-option.nix
+    ../image/builder-option.nix
+    (lib.mkRenamedOptionModuleWith {
+      sinceRelease = 2411;
+      from = [
+        "virtualisation"
+        "azureImage"
+        "diskSize"
+      ];
+      to = [
+        "virtualisation"
+        "diskSize"
+      ];
+    })
+  ];
 
   options.virtualisation.azureImage = {
-    diskSize = mkOption {
-      type = with types; either (enum [ "auto" ]) int;
-      default = "auto";
-      example = 2048;
-      description = ''
-        Size of disk image. Unit is MB.
-      '';
-    };
-
     bootSize = mkOption {
       type = types.int;
       default = 256;
@@ -35,7 +47,12 @@ in
     };
 
     vmGeneration = mkOption {
-      type = with types; enum [ "v1" "v2" ];
+      type =
+        with types;
+        enum [
+          "v1"
+          "v2"
+        ];
       default = "v1";
       description = ''
         VM Generation to use.
@@ -45,6 +62,7 @@ in
   };
 
   config = {
+    image.builder = config.system.build.azureImage;
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
       postVM = ''
@@ -57,7 +75,8 @@ in
       bootSize = "${toString cfg.bootSize}M";
       partitionTableType = if cfg.vmGeneration == "v2" then "efi" else "legacy";
 
-      inherit (cfg) diskSize contents;
+      inherit (cfg) contents;
+      inherit (config.virtualisation) diskSize;
       inherit config lib pkgs;
     };
   };
