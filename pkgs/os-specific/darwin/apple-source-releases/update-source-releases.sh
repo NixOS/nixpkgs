@@ -25,6 +25,7 @@ tag="macos-${sdkVersion//.}"
 
 declare -A ignoredPackages=(
     [libsbuf]=1
+    [locale]=1
     [mkAppleDerivation]=1
     [update-source-releases.sh]=1
     [versions.json]=1
