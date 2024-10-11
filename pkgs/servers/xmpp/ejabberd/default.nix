@@ -1,13 +1,20 @@
-{ stdenv, writeScriptBin, makeWrapper, lib, fetchurl, git, cacert, libpng, libjpeg, libwebp
+{ stdenv, makeWrapper, lib, fetchurl, libpng, libjpeg, libwebp
 , erlang, openssl, expat, libyaml, bash, gnused, gnugrep, coreutils, util-linux, procps, gd
-, flock, autoreconfHook
+, autoreconfHook
 , gawk
+, rebar3WithPlugins
+, fetchFromGitHub
+, fetchgit
+, fetchHex
+, beamPackages
 , nixosTests
 , withMysql ? false
 , withPgsql ? false
 , withSqlite ? false, sqlite
 , withPam ? false, pam
 , withZlib ? true, zlib
+, withSip ? false
+, withLua ? false
 , withTools ? false
 , withRedis ? false
 , withImagemagick ? false, imagemagick
@@ -15,75 +22,107 @@
 
 let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep gawk coreutils util-linux procps ];
+
+  provider_asn1 = beamPackages.buildRebar3 {
+    name = "provider_asn1";
+    version = "0.3.0";
+    src = fetchHex {
+      pkg = "provider_asn1";
+      version = "0.3.0";
+      sha256 = "sha256-MuelWYZi01rBut8jM6a5alMZizPGZoBE/LveSRu/+wU=";
+    };
+    beamDeps = [ ];
+  };
+  rebar3_hex = beamPackages.buildRebar3 {
+    name = "rebar3_hex";
+    version = "7.0.7";
+    src = fetchHex {
+      pkg = "rebar3_hex";
+      version = "7.0.7";
+      sha256 = "sha256-1S2igSwiInATUgULZ1E6e2dK6YI5gvRffHRfF1Gg5Ok=";
+    };
+    beamDeps = [ ];
+  };
+
+  allBeamDeps = import ./rebar-deps.nix {  # TODO(@chuangzhu) add updateScript
+    inherit fetchHex fetchgit fetchFromGitHub;
+    builder = lib.makeOverridable beamPackages.buildRebar3;
+
+    overrides = final: prev: {
+      jiffy = prev.jiffy.override { buildPlugins = [ beamPackages.pc ]; };
+      cache_tab = prev.cache_tab.override { buildPlugins = [ beamPackages.pc ]; };
+      mqtree = prev.mqtree.override { buildPlugins = [ beamPackages.pc ]; };
+      stringprep = prev.stringprep.override { buildPlugins = [ beamPackages.pc ]; };
+      p1_acme = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      eimp = prev.eimp.override {
+        buildInputs = [ gd libwebp libpng libjpeg ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      fast_tls = prev.fast_tls.override {
+        buildInputs = [ openssl ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      fast_xml = prev.fast_xml.override {
+        buildInputs = [ expat ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      fast_yaml = prev.fast_yaml.override {
+        buildInputs = [ libyaml ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      xmpp = prev.xmpp.override {
+        buildPlugins = [ beamPackages.pc provider_asn1 ];
+      };
+      # Optional deps
+      sqlite3 = prev.sqlite3.override {
+        buildInputs = [ sqlite ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      p1_mysql = prev.p1_acme.override { buildPlugins = [ beamPackages.pc ]; };
+      epam = prev.epam.override {
+        buildInputs = [ pam ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+      esip = prev.esip.override { buildPlugins = [ beamPackages.pc ]; };
+      ezlib = prev.ezlib.override {
+        buildInputs = [ zlib ];
+        buildPlugins = [ beamPackages.pc ];
+      };
+    };
+  };
+
+  beamDeps = builtins.removeAttrs allBeamDeps [ "sqlite3" "p1_pgsql" "p1_mysql" "luerl" "esip" "eredis" "epam" "ezlib" ];
+
 in stdenv.mkDerivation rec {
   pname = "ejabberd";
-  version = "23.10";
+  version = "24.07";
 
-  nativeBuildInputs = [ makeWrapper autoreconfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoreconfHook
+    (rebar3WithPlugins { plugins = [ provider_asn1 rebar3_hex ]; })
+  ];
 
-  buildInputs = [ erlang openssl expat libyaml gd ]
-    ++ lib.optional withSqlite sqlite
-    ++ lib.optional withPam pam
-    ++ lib.optional withZlib zlib
+  buildInputs = [ erlang ]
+    ++ builtins.attrValues beamDeps
+    ++ lib.optional withMysql allBeamDeps.p1_mysql
+    ++ lib.optional withPgsql allBeamDeps.p1_pgsql
+    ++ lib.optional withSqlite allBeamDeps.sqlite3
+    ++ lib.optional withPam allBeamDeps.epam
+    ++ lib.optional withZlib allBeamDeps.ezlib
+    ++ lib.optional withSip allBeamDeps.esip
+    ++ lib.optional withLua allBeamDeps.luerl
+    ++ lib.optional withRedis allBeamDeps.eredis
   ;
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/downloads-action.php?file=/${version}/ejabberd-${version}.tar.gz";
-    hash = "sha256-DW5/DYLZHNqJ4lddmag1B0E9ov/eObIVGASUeioPolg=";
-    # remember to update the deps FOD hash & its pinned ejabberd-po commit
+    hash = "sha256-wPt0asuoGl20Hel8A5aMH2gaE7G2waiVtxguM4IMGNk=";
+    # remember to update rebar-deps.nix
   };
 
   passthru.tests = {
     inherit (nixosTests) ejabberd;
-  };
-
-  deps = stdenv.mkDerivation {
-    pname = "ejabberd-deps";
-
-    inherit src version;
-
-    # pin ejabberd-po dep
-    # update: curl -L api.github.com/repos/processone/ejabberd-po/branches/main | jq .commit.sha -r
-    postPatch = ''
-      substituteInPlace rebar.config \
-        --replace \
-          '{git, "https://github.com/processone/ejabberd-po", {branch, "main"}}' \
-          '{git, "https://github.com/processone/ejabberd-po", {tag, "26d6463386588d39f07027dabff3cb8dd938bf6b"}}'
-    '';
-
-    configureFlags = [ "--enable-all" "--with-sqlite3=${sqlite.dev}" ];
-
-    nativeBuildInputs = [
-      git erlang openssl expat libyaml sqlite pam zlib autoreconfHook
-    ];
-
-    GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-    makeFlags = [ "deps" ];
-
-    installPhase = ''
-      for i in deps/*; do
-        ( cd $i
-          git reset --hard
-          git clean -ffdx
-          git describe --always --tags > .rev
-          rm -rf .git .github
-        )
-      done
-      # not a typo; comes from `make deps`
-      rm deps/.got
-
-      cp -r deps $out
-    '';
-
-    dontPatchELF = true;
-    dontStrip = true;
-    # avoid /nix/store references in the source
-    dontPatchShebangs = true;
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-HrLu3wTF+cUxpGX0yK3nbB57SRM2ND3Crlxs5/8FIwI=";
   };
 
   configureFlags = [
@@ -92,6 +131,8 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature withSqlite "sqlite")
     (lib.enableFeature withPam "pam")
     (lib.enableFeature withZlib "zlib")
+    (lib.enableFeature withSip "sip")
+    (lib.enableFeature withLua "lua")
     (lib.enableFeature withTools "tools")
     (lib.enableFeature withRedis "redis")
   ] ++ lib.optional withSqlite "--with-sqlite3=${sqlite.dev}";
@@ -99,21 +140,20 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
-    cp -r $deps deps
-    chmod -R +w deps
     patchShebangs .
+    mkdir -p _build/default/lib
+    touch _build/default/lib/.got
+    touch _build/default/lib/.built
   '';
+
+  REBAR_IGNORE_DEPS = 1;
 
   postInstall = ''
     sed -i \
       -e '2iexport PATH=${ctlpath}:$PATH' \
-      -e 's,\(^ *FLOCK=\).*,\1${flock}/bin/flock,' \
-      -e 's,\(^ *JOT=\).*,\1,' \
-      -e 's,\(^ *CONNLOCKDIR=\).*,\1/var/lock/ejabberdctl,' \
+      -e "s,\(^ *ERL_LIBS=.*\),\1:$ERL_LIBS," \
       $out/sbin/ejabberdctl
-    wrapProgram $out/lib/eimp-*/priv/bin/eimp --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libpng libjpeg libwebp ]}"
     ${lib.optionalString withImagemagick ''wrapProgram $out/lib/ejabberd-*/priv/bin/captcha.sh --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"''}
-    rm $out/bin/{mix,iex,elixir}
   '';
 
   meta = with lib; {
@@ -122,6 +162,6 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://www.ejabberd.im";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ];
+    maintainers = with maintainers; [ sander abbradar chuangzhu ];
   };
 }
