@@ -15,7 +15,7 @@
 , modRoot ? "./"
 
   # The SRI hash of the vendored dependencies.
-  # If `vendorHash` is `nulL`, no dependencies are fetched and
+  # If `vendorHash` is `null`, no dependencies are fetched and
   # the build relies on the vendor folder within the source.
 , vendorHash ? throw (
     if args'?vendorSha256 then
