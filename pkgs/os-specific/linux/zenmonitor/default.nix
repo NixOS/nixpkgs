@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
+    inherit (src.meta) homepage;
     description = "Monitoring software for AMD Zen-based CPUs";
     mainProgram = "zenmonitor";
-    homepage = "https://github.com/Ta180m/zenmonitor3";
     license = licenses.mit;
     platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ alexbakker artturin ];
