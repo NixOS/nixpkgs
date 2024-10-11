@@ -142,14 +142,11 @@ in
       In x86's APIC (Advanced Programmable Interrupt Controller) architecture,
       error conditions are reported in a status register.  Furthermore, the OS
       can opt to receive an interrupt when a new error occurs.
-
       It is possible to configure the error interrupt with an illegal vector,
       which generates an error when an error interrupt is raised.
-
       This case causes Xen to recurse through vlapic_error().  The recursion
       itself is bounded; errors accumulate in the the status register and only
       generate an interrupt when a new status bit becomes set.
-
       However, the lock protecting this state in Xen will try to be taken
       recursively, and deadlock.
     '';
