@@ -7367,6 +7367,8 @@ with pkgs;
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
+  eontimer = libsForQt5.callPackage ../tools/games/eontimer { };
+
   eplot = callPackage ../tools/graphics/eplot { };
 
   epstool = callPackage ../tools/graphics/epstool { };
@@ -11610,6 +11612,8 @@ with pkgs;
   qrscan = callPackage ../tools/misc/qrscan { };
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
+
+  qtsass = with python3.pkgs; toPythonApplication qtsass;
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
 

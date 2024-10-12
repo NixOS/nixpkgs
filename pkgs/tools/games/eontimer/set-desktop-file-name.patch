@@ -1,0 +1,12 @@
+diff --git a/src/main.cpp b/src/main.cpp
+index 8ad1666..37cce71 100644
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -8,6 +8,7 @@ int main(int argc, char **argv) {
+     QCoreApplication::setApplicationName(APP_NAME);
+     QCoreApplication::setOrganizationName("DylanMeadows");
+     QCoreApplication::setOrganizationDomain("io.github.dylmeadows");
++    QGuiApplication::setDesktopFileName("eontimer");
+     qRegisterMetaTypeStreamOperators<QList<int>>("QList<int>");
+ 
+     gui::ApplicationWindow window;
