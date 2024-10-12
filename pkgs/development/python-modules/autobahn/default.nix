@@ -4,25 +4,14 @@
   fetchFromGitHub,
   attrs,
   argon2-cffi,
-  base58,
   cbor2,
   cffi,
-  click,
   cryptography,
-  ecdsa,
-  eth-abi,
-  eth-account,
   flatbuffers,
-  jinja2,
-  hkdf,
   hyperlink,
-  mnemonic,
   mock,
   msgpack,
   passlib,
-  py-ecc,
-  # , py-eth-sig-utils
-  py-multihash,
   py-ubjson,
   pynacl,
   pygobject3,
@@ -32,19 +21,11 @@
   python-snappy,
   pytestCheckHook,
   pythonOlder,
-  # , pytrie
-  rlp,
   service-identity,
   setuptools,
-  spake2,
   twisted,
   txaio,
   ujson,
-  # , web3
-  # , wsaccel
-  # , xbr
-  yapf,
-  # , zlmdb
   zope-interface,
 }@args:
 
@@ -71,13 +52,11 @@ buildPythonPackage rec {
     txaio
   ];
 
-  nativeCheckInputs =
-    [
-      mock
-      pytest-asyncio
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.scram ++ optional-dependencies.serialization ++ optional-dependencies.xbr;
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ] ++ optional-dependencies.scram ++ optional-dependencies.serialization;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
@@ -92,7 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "autobahn" ];
 
   optional-dependencies = rec {
-    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
+    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui;
     accelerate = [
       # wsaccel
     ];
@@ -122,22 +101,6 @@ buildPythonPackage rec {
       zope-interface
     ];
     ui = [ pygobject3 ];
-    xbr = [
-      base58
-      cbor2
-      click
-      ecdsa
-      eth-abi
-      jinja2
-      hkdf
-      mnemonic
-      py-ecc # py-eth-sig-utils
-      py-multihash
-      rlp
-      spake2
-      twisted # web3 xbr
-      yapf # zlmdb
-    ];
   };
 
   meta = with lib; {

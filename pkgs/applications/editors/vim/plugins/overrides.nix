@@ -2134,6 +2134,10 @@ in
     meta.platforms = lib.platforms.all;
   });
 
+  telescope-git-conflicts-nvim = super.telescope-git-conflicts-nvim.overrideAttrs {
+    dependencies = with self; [ telescope-nvim ];
+  };
+
   telescope-media-files-nvim = super.telescope-media-files-nvim.overrideAttrs {
     dependencies = with self; [
       telescope-nvim

@@ -82,6 +82,7 @@ in {
       ) {
         webadmin = lib.mkDefault "file://${cfg.package.webadmin}/webadmin.zip";
       };
+      webadmin.path = "/var/cache/stalwart-mail";
     };
 
     # This service stores a potentially large amount of data.
@@ -117,6 +118,7 @@ in {
           StandardOutput = "journal";
           StandardError = "journal";
 
+          CacheDirectory = "stalwart-mail";
           StateDirectory = "stalwart-mail";
 
           # Bind standard privileged ports

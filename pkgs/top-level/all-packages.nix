@@ -281,7 +281,9 @@ with pkgs;
 
   fission = callPackage ../development/tools/fission { };
 
-  apko = callPackage ../development/tools/apko { };
+  apko = callPackage ../development/tools/apko {
+    buildGoModule = buildGo123Module;
+  };
 
   melange = callPackage ../development/tools/melange { };
 
@@ -312,8 +314,6 @@ with pkgs;
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
   beeper = callPackage ../applications/networking/instant-messengers/beeper { };
-
-  bakelite = callPackage ../tools/backup/bakelite { };
 
   bearer = callPackage ../development/tools/bearer { };
 
@@ -4999,8 +4999,6 @@ with pkgs;
   pplatex = callPackage ../tools/typesetting/tex/pplatex { };
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
-
-  tex-match = callPackage ../tools/typesetting/tex/tex-match { };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
@@ -17381,8 +17379,6 @@ with pkgs;
 
   cov-build = callPackage ../development/tools/analysis/cov-build { };
 
-  cpplint = callPackage ../development/tools/analysis/cpplint { };
-
   credstash = with python3Packages; toPythonApplication credstash;
 
   creduce = callPackage ../development/tools/misc/creduce {
@@ -19181,8 +19177,6 @@ with pkgs;
   codecserver = callPackage ../applications/audio/codecserver {
     protobuf = protobuf_21;
   };
-
-  coeurl = callPackage ../development/libraries/coeurl { };
 
   coercer = callPackage ../tools/security/coercer { };
 
@@ -22164,8 +22158,6 @@ with pkgs;
 
   mtpfs = callPackage ../tools/filesystems/mtpfs { };
 
-  mtxclient = callPackage ../development/libraries/mtxclient { };
-
   mu = callPackage ../tools/networking/mu { };
 
   mueval = callPackage ../development/tools/haskell/mueval { };
@@ -23640,8 +23632,6 @@ with pkgs;
   xgboostWithCuda = xgboost.override { cudaSupport = true; };
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
-
-  xmake-core-sv = callPackage ../development/libraries/xmake-core-sv { };
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
 
@@ -28265,9 +28255,6 @@ with pkgs;
     boost = boost175;
   };
 
-
-  armcord = callPackage ../applications/networking/instant-messengers/armcord { };
-
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
   ausweisapp = qt6Packages.callPackage ../applications/misc/ausweisapp { };
@@ -31595,8 +31582,6 @@ with pkgs;
 
   ngt = callPackage ../development/libraries/ngt { };
 
-  nheko = qt6Packages.callPackage ../applications/networking/instant-messengers/nheko { };
-
   notepad-next = libsForQt5.callPackage ../applications/editors/notepad-next { };
 
   notepadqq = libsForQt5.callPackage ../applications/editors/notepadqq { };
@@ -32003,7 +31988,6 @@ with pkgs;
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
 
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
-  protonvpn-gui_legacy = python3Packages.callPackage ../applications/networking/protonvpn-gui/legacy.nix { };
 
   ps2client = callPackage ../applications/networking/ps2client { };
 
@@ -36309,8 +36293,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   });
 
-  zegrapher = libsForQt5.callPackage ../applications/science/math/zegrapher { };
-
   ### SCIENCE/MEDICINE
 
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
@@ -38082,7 +38064,9 @@ with pkgs;
 
   tusk = callPackage ../applications/office/tusk { };
 
-  trufflehog = callPackage ../tools/security/trufflehog { };
+  trufflehog = callPackage ../tools/security/trufflehog {
+    buildGoModule = buildGo123Module;
+  };
 
   tunnelx = callPackage ../applications/gis/tunnelx { };
 
