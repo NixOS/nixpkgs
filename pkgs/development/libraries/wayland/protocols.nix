@@ -2,7 +2,7 @@
 , pkg-config
 , meson, ninja, wayland-scanner
 , python3, wayland
-, testers
+, gitUpdater, testers
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "wayland-protocols" ];
   };
 
+  passthru.updateScript = gitUpdater {
+    url = "https://gitlab.freedesktop.org/wayland/wayland-protocols.git";
+  };
   passthru.version = finalAttrs.version;
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
