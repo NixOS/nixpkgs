@@ -17330,6 +17330,8 @@ with pkgs;
 
   confluent-platform = callPackage ../servers/confluent-platform { };
 
+  croodle = callPackage ../servers/web-apps/croodle { };
+
   ctags = callPackage ../development/tools/misc/ctags { };
 
   ctagsWrapped = callPackage ../development/tools/misc/ctags/wrapped.nix { };
