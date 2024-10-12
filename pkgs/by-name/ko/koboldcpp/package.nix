@@ -166,6 +166,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   meta = {
     changelog = "https://github.com/LostRuins/koboldcpp/releases/tag/v${finalAttrs.version}";
     description = "Way to run various GGML and GGUF models";
+    homepage = "https://github.com/LostRuins/koboldcpp";
     license = lib.licenses.agpl3Only;
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
