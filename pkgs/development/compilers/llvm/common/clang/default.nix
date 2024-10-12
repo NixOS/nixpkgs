@@ -81,10 +81,6 @@ let
         --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
       (cd tools && ln -s ../../clang-tools-extra extra)
     '' + lib.optionalString (lib.versionOlder release_version "13") ''
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
-
       substituteInPlace tools/extra/clangd/quality/CompletionModel.cmake \
         --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
     ''

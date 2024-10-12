@@ -540,11 +540,9 @@ let
             # mis-compilation in firefox.
             # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1741454
             (metadata.getVersionFile "clang/revert-malloc-alignment-assumption.patch")
-          ++ lib.optionals (lib.versionAtLeast metadata.release_version "13") [
-            # TODO: This also applies for clang == 12, do we need it?
-            ./clang/add-nostdlibinc-flag.patch
-          ]
           ++ [
+            ./clang/add-nostdlibinc-flag.patch
+
             (substituteAll {
               src =
                 if (lib.versionOlder metadata.release_version "16") then
