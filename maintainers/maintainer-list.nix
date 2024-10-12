@@ -15997,6 +15997,11 @@
     githubId = 111265;
     name = "Ozan Sener";
   };
+  osmano807 = {
+    github = "osmano807";
+    githubId = 321379;
+    name = "Joaquim Pedro";
+  };
   osnyx = {
     email = "os@flyingcircus.io";
     github = "osnyx";
