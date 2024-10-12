@@ -1,16 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, alsa-lib
-, cmake
-, fluidsynth
-, libsndfile
-, mpg123
-, ninja
-, pkg-config
-, soundfont-fluid
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  fluidsynth,
+  libsndfile,
+  mpg123,
+  ninja,
+  pkg-config,
+  soundfont-fluid,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-rEE3MZLwqnvn5MqbSTCErbsGRjKMK8cC3wTJxtf8WaU=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   patches = [
     ./fluidsynth.patch
@@ -50,16 +53,19 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "GZDoom's music system as a standalone library";
     homepage = "https://github.com/ZDoom/ZMusic";
-    license = with licenses; [
+    license = with lib.licenses; [
       free
       gpl3Plus
       lgpl21Plus
       lgpl3Plus
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ azahi lassulus ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      azahi
+      lassulus
+    ];
   };
 }
