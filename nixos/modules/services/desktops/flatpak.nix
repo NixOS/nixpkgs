@@ -38,7 +38,7 @@ let
       done
     ''}
 
-    ${lib.optionalString cfg.updateDuringBuild ''
+    ${lib.optionalString cfg.update.duringBuild ''
       echo "Updating all Flatpak packages..."
       ${flatpakCommand} update --assumeyes
     ''}
@@ -70,16 +70,28 @@ in {
         description = "Whether to remove Flatpak packages not listed in 'packages'.";
       };
 
-      automaticUpdates = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to automatically update Flatpak packages on boot.";
-      };
-
-      updateDuringBuild = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to update Flatpak packages during system rebuild.";
+      update = {
+        auto = {
+          enable = lib.mkOption {
+            type = lib.types.bool;
+            default = false;
+            description = "Whether to automatically update Flatpak packages.";
+          };
+          onCalendar = lib.mkOption {
+            type = lib.types.nullOr lib.types.str;
+            default = null;
+            example = "weekly";
+            description = ''
+              When to perform automatic updates. Uses systemd calendar format. If null, no timer will be created.
+              See systemd.time for more information on the calendar event syntax.
+            '';
+          };
+        };
+        duringBuild = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to update Flatpak packages during system rebuild.";
+        };
       };
 
       remote = lib.mkOption {
@@ -135,7 +147,7 @@ in {
     '';
 
     # Systemd service for automatic updates
-    systemd.services.flatpak-update = lib.mkIf cfg.automaticUpdates {
+    systemd.services.flatpak-update = lib.mkIf cfg.update.auto.enable {
       description = "Flatpak package updates";
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ];
@@ -147,6 +159,15 @@ in {
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+      };
+    };
+
+    systemd.timers.flatpak-update = lib.mkIf (cfg.update.auto.enable && cfg.update.auto.onCalendar != null) {
+      wantedBy = [ "timers.target" ];
+      timerConfig = {
+        OnCalendar = cfg.update.auto.onCalendar;
+        Persistent = true;
+        Unit = "flatpak-update.service";
       };
     };
 
