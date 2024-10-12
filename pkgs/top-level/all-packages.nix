@@ -33644,6 +33644,8 @@ with pkgs;
 
   x42-gmsynth = callPackage ../applications/audio/x42-gmsynth { };
 
+  x42-mtc = callPackage ../applications/audio/x42-mtc { };
+
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xannotate = callPackage ../tools/X11/xannotate { };
