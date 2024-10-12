@@ -26,12 +26,15 @@ let
       ifaceArg = concatStringsSep " -N " (map (i: "-i${i}") (splitString " " iface));
       driverArg = optionalString (suppl.driver != null) "-D${suppl.driver}";
       bridgeArg = optionalString (suppl.bridge!="") "-b${suppl.bridge}";
-      confFileArg = optionalString (suppl.configFile.path!=null) "-c${suppl.configFile.path}";
       extraConfFile = pkgs.writeText "supplicant-extra-conf-${replaceStrings [" "] ["-"] iface}" ''
         ${optionalString suppl.userControlled.enable "ctrl_interface=DIR=${suppl.userControlled.socketDir} GROUP=${suppl.userControlled.group}"}
         ${optionalString suppl.configFile.writable "update_config=1"}
         ${suppl.extraConf}
       '';
+      confArgs = escapeShellArgs
+        (if suppl.configFile.path == null
+         then [ "-c${extraConfFile}" ]
+         else [ "-c${suppl.configFile.path}" "-I${extraConfFile}" ]);
     in
       { description = "Supplicant ${iface}${optionalString (iface=="WLAN"||iface=="LAN") " %I"}";
         wantedBy = [ "multi-user.target" ] ++ deps;
@@ -51,7 +54,7 @@ let
           ''}
         '';
 
-        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confFileArg} -I${extraConfFile} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
+        serviceConfig.ExecStart = "${pkgs.wpa_supplicant}/bin/wpa_supplicant -s ${driverArg} ${confArgs} ${bridgeArg} ${suppl.extraCmdArgs} ${if (iface=="WLAN"||iface=="LAN") then "-i%I" else (if (iface=="DBUS") then "-u" else ifaceArg)}";
 
       };
 
