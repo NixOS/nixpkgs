@@ -4204,6 +4204,8 @@ self: super: with self; {
     python3Packages = self;
   });
 
+  examples = callPackage ../development/python-modules/examples { };
+
   exdown = callPackage ../development/python-modules/exdown { };
 
   exceptiongroup = callPackage ../development/python-modules/exceptiongroup { };
