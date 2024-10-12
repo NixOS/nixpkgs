@@ -269,6 +269,15 @@ let
             If this option is set to false, the container has to be started on-demand via its service.
           '';
         };
+
+        pod = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = lib.mdDoc ''
+            If backend podman is selected, this can be used to group the containers in pods.
+            take a look at #TODO insert link to manual here
+          '';
+        };
       };
     };
 
@@ -300,6 +309,9 @@ let
         ${optionalString (cfg.backend == "podman") ''
           rm -f /run/podman-${escapedName}.ctr-id
         ''}
+        ${optionalString (cfg.backend == "podman" && container.pod != null) ''
+          ${cfg.backend} pod create --name ${container.pod}
+        ''};
       '';
     };
   in {
@@ -328,6 +340,8 @@ let
       "--entrypoint=${escapeShellArg container.entrypoint}"
       ++ optional (container.hostname != null)
       "--hostname=${escapeShellArg container.hostname}"
+      ++ optional (cfg.backend == "podman" && container.pod != null)
+      "--pod ${container.pod}"
       ++ lib.optionals (cfg.backend == "podman") [
         "--cidfile=/run/podman-${escapedName}.ctr-id"
         "--cgroups=no-conmon"
