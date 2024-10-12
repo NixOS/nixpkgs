@@ -12550,6 +12550,8 @@ with pkgs;
 
   ssb-patchwork = callPackage ../applications/networking/ssb-patchwork { };
 
+  ssb-patchbay = callPackage ../applications/networking/ssb-patchbay { };
+
   ssdeep = callPackage ../tools/security/ssdeep { };
 
   ssh-ident = callPackage ../tools/networking/ssh-ident { };
