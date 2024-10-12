@@ -1,10 +1,12 @@
 { lib
+, callPackage
 , fetchFromGitHub
 , gitUpdater
 , substituteAll
 , ffmpeg
 , python3Packages
 , sox
+, doCheck ? false
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,9 +30,11 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [ crcmod ffmpeg-python mutagen tqdm ];
   nativeCheckInputs = with python3Packages; [ requests sox ];
 
-  # Testing downloads media files for testing, which requires the
-  # sandbox to be disabled.
-  doCheck = false;
+  # The tests require unredistributable media files, so they're not run
+  # by default.  Maintainers can override `doCheck` to toggle testing on
+  # locally (provided building non-free packages is enabled).
+  inherit doCheck;
+  TEST_DL_CACHE_DIR = if doCheck then callPackage ./test-files.nix { } else null;
 
   passthru.updateScript = gitUpdater { };
 
