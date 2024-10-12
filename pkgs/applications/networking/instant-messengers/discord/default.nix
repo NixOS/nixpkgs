@@ -73,6 +73,7 @@ let
     mainProgram = "discord";
     maintainers = with maintainers; [
       artturin
+      donteatoreo
       infinidoge
       jopejoe1
       Scrumplex
