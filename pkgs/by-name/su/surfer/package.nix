@@ -12,6 +12,7 @@
   libXcursor,
   libXi,
   stdenv,
+  darwin,
   makeWrapper,
   zenity,
 }:
@@ -27,19 +28,21 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
     autoPatchelfHook
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl
-    stdenv.cc.cc.lib
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      openssl
+      stdenv.cc.cc.lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   # Wayland and X11 libs are required at runtime since winit uses dlopen
-  runtimeDependencies = [
+  runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     wayland
     libxkbcommon
     libGL
@@ -60,7 +63,7 @@ rustPlatform.buildRustPackage rec {
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/surfer \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
@@ -71,7 +74,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ hakan-demirli ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "surfer";
   };
 }
