@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   installPhase = ''
-    # Needed so that `man` can find the manpage, since it looks via PATH
-    mkdir -p $out/bin
     install -D zsh-abbr.plugin.zsh $out/share/zsh/${pname}/zsh-abbr.plugin.zsh
     install -D zsh-abbr.zsh        $out/share/zsh/${pname}/zsh-abbr.zsh
     install -D completions/_abbr   $out/share/zsh/${pname}/completions/_abbr
+
+    # Required for `man` to find the manpage of abbr, since it looks via PATH
     mv man $out/share/man
   '';
 
