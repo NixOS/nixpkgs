@@ -1972,6 +1972,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
   };
 
+  testkube = callPackage ../development/tools/testkube { };
+
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
   thumbs = callPackage ../tools/misc/thumbs { };
