@@ -72,10 +72,10 @@ let
     license = licenses.unfree;
     mainProgram = "discord";
     maintainers = with maintainers; [
-      Scrumplex
       artturin
       infinidoge
       jopejoe1
+      Scrumplex
     ];
     platforms = [
       "x86_64-linux"
