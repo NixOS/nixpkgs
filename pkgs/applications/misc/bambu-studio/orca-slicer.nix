@@ -16,20 +16,15 @@ bambu-studio.overrideAttrs (
       hash = "sha256-7fusdSYpZb4sYl5L/+81PzMd42Nsejj+kCZsq0f7eIk=";
     };
 
-    patches =
-      previousAttrs.patches
-      ++ [
-        # FIXME: only required for 2.1.1, can be removed in the next version
-        ./0002-fix-build-for-gcc-13.diff
-
-        ./dont-link-opencv-world.patch
-      ];
-
-    buildInputs =
-      previousAttrs.buildInputs
-      ++ [
-        opencv
-      ];
+    patches =[
+      # FIXME: only required for 2.1.1, can be removed in the next version
+      ./patches/0002-fix-build-for-gcc-13.diff
+      # Fix for webkitgtk linking
+      ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+      # Fix build with cgal-5.6.1+
+      ./patches/meshboolean-const.patch
+      ./patches/dont-link-opencv-world-orca.patch
+    ];
 
     preFixup = ''
       gappsWrapperArgs+=(

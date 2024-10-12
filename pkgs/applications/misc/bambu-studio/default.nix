@@ -22,10 +22,7 @@
   glib,
   glib-networking,
   gmp,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-bad,
-  gst-plugins-good,
+  gst_all_1,
   gtest,
   gtk3,
   hicolor-icon-theme,
@@ -36,23 +33,29 @@
   nlopt,
   opencascade-occt_7_6,
   openvdb,
+  opencv,
   pcre,
   systemd,
   tbb_2021_11,
-  webkitgtk_4_0,
+  webkitgtk,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
-  opencascade-occt = opencascade-occt_7_6;
-  wxGTK31' = wxGTK31.overrideAttrs (old: {
-    configureFlags = old.configureFlags ++ [
-      # Disable noisy debug dialogs
-      "--enable-debug=no"
-    ];
-  });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: {
+  wxGTK' = (wxGTK31.override {
+      withCurl = true;
+      withPrivateFonts = true;
+      withWebKit = true;
+    })
+    .overrideAttrs (old: {
+      configureFlags = old.configureFlags ++ [
+        # Disable noisy debug dialogs
+        "--enable-debug=no"
+      ];
+    });
+
+  openvdb' = openvdb.overrideAttrs (old: {
     buildInputs = [
       openexr
       boost179
@@ -65,13 +68,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.09.00.70";
+  version = "01.09.07.52";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
+    hash = "sha256-fhH4N29P/ysdHHbZt+FnBl3+QtTNhbVE3j4ZnFJyJH0=";
   };
 
   nativeBuildInputs = [
@@ -95,10 +98,10 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gmp
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
     gtk3
     hicolor-icon-theme
     ilmbase
@@ -106,20 +109,23 @@ stdenv.mkDerivation rec {
     mesa.osmesa
     mpfr
     nlopt
-    opencascade-occt
-    openvdb_tbb_2021_8
+    opencascade-occt_7_6
+    openvdb'
     pcre
     tbb_2021_11
-    webkitgtk_4_0
-    wxGTK31'
+    webkitgtk
+    wxGTK'
     xorg.libX11
+    opencv
   ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
-    ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
+    ./patches/0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch
     # Fix build with cgal-5.6.1+
-    ./meshboolean-const.patch
+    ./patches/meshboolean-const.patch
+    # Fix an issue with
+    ./patches/dont-link-opencv-world-bambu.patch
   ];
 
   doCheck = true;
@@ -136,7 +142,10 @@ stdenv.mkDerivation rec {
   # Disable compiler warnings that clutter the build log.
   # It seems to be a known issue for Eigen:
   # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
-  NIX_CFLAGS_COMPILE = "-Wno-ignored-attributes";
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-ignored-attributes"
+    "-I${opencv.out}/include/opencv4"
+  ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
   NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
@@ -181,8 +190,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ zhaofengli ];
+    maintainers = with maintainers; [ zhaofengli dsluijk ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;
   };
