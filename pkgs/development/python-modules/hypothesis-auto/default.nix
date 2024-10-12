@@ -5,6 +5,7 @@
   hypothesis,
   poetry-core,
   pydantic,
+  pytest,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -33,6 +34,10 @@ buildPythonPackage rec {
     hypothesis
     pydantic
   ];
+
+  optional-dependencies = {
+    pytest = [ pytest ];
+  };
 
   pythonImportsCheck = [ "hypothesis_auto" ];
 
