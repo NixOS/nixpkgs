@@ -56,4 +56,5 @@ lib.makeExtensible (self: {
   alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
   copyartifacts = callPackage ./plugins/copyartifacts.nix { beets = self.beets-minimal; };
   extrafiles = callPackage ./plugins/extrafiles.nix { beets = self.beets-minimal; };
+  beetcamp = callPackage ./plugins/beetcamp.nix { beets = self.beets-minimal; };
 })
