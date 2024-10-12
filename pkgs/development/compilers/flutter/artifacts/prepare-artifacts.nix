@@ -16,6 +16,7 @@
 
     mkdir -p "$out/bin"
     cp -r . "$out/bin/cache"
+    rm -f "$out/bin/cache/flutter.version.json"
 
     runHook postInstall
   '';
