@@ -3,7 +3,7 @@
 buildEnv {
   inherit name;
 
-  paths = modules;
+  paths = builtins.map (x: x.out) modules;
 
   postBuild =
     ''
