@@ -5364,6 +5364,8 @@ with pkgs;
 
   lexicon = with python3Packages; toPythonApplication dns-lexicon;
 
+  lexbor = callPackage ../development/libraries/lexbor { };
+
   lenpaste = callPackage ../servers/lenpaste { };
 
   lief = callPackage ../development/libraries/lief {
