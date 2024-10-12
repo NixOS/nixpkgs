@@ -208,7 +208,6 @@ stdenv.mkDerivation (finalAttrs: {
       # nginx-http3 = useThisCurl nixosTests.nginx-http3;
       nginx-http3 = nixosTests.nginx-http3;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    } // lib.optionalAttrs (stdenv.hostPlatform.system != "x86_64-darwin") {
       static = pkgsStatic.curl;
     };
   };
