@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl }:
 
 let
-  version = "30+20230519-1ubuntu3"; # mantic 2023-08-26
+  version = "31+20240202-2ubuntu8"; # Oriole 2024-10-03
 
 in stdenv.mkDerivation {
   pname = "kmod-blacklist";
@@ -9,7 +9,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";
-    hash = "sha256-VGw1/rUjl9/j6026ut0dvC0/8maAAz8umb0D3YGf8p4=";
+    hash = "sha256-i4XdCRedZIzMBbZL305enz8OAso3X14pdzNIITqK5hE=";
   };
 
   installPhase = ''
