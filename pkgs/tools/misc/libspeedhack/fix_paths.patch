@@ -1,0 +1,51 @@
+diff --git a/libspeedhack.cpp b/libspeedhack.cpp
+index 4663f61..657a0ba 100644
+--- a/libspeedhack.cpp
++++ b/libspeedhack.cpp
+@@ -10,6 +10,8 @@
+ #include <fcntl.h>
+ #include <clocale>
+ #include <cstring>
++#include <string>
++#include <sstream>
+ #include <mutex>
+ 
+ using namespace std;
+@@ -330,8 +332,12 @@ static void init_libspeedhack()
+ 	the_mutex = new mutex;
+ 	gettimeofday_orig = decltype(gettimeofday_orig)(dlsym(RTLD_NEXT,"gettimeofday"));
+ 	clock_gettime_orig = decltype(clock_gettime_orig)(dlsym(RTLD_NEXT,"clock_gettime"));
+-	efile = fopen("/tmp/speedhack_log", "a");
+-	fd = open("/tmp/speedhack_pipe", O_RDONLY | O_NONBLOCK);
++    std::stringstream log_path;
++	log_path << getenv("XDG_RUNTIME_DIR") << "/speedhack_log";
++	efile = fopen(log_path.str().c_str(), "a");
++    std::stringstream pipe_path;
++	pipe_path << getenv("XDG_RUNTIME_DIR") << "/speedhack_pipe";
++	fd = open(pipe_path.str().c_str(), O_RDONLY | O_NONBLOCK);
+ 	fix_timescale();
+ }
+ 
+diff --git a/speedhack b/speedhack
+index 172c7c3..596a1cc 100755
+--- a/speedhack
++++ b/speedhack
+@@ -1,13 +1,14 @@
+ #!/bin/bash
+ 
+ # Remove old pipe and log
+-rm -f /tmp/speedhack_{pipe,log}
++rm -f $XDG_RUNTIME_DIR/speedhack_{pipe,log}
+ # Create pipe for speed control commands
+-mkfifo /tmp/speedhack_pipe
++mkfifo $XDG_RUNTIME_DIR/speedhack_pipe
++
++echo control pipe and log available at $XDG_RUNTIME_DIR/speedhack_pipe and $XDG_RUNTIME_DIR/speedhack_log
+ 
+-_libdir=$(cd $(dirname "$0"); echo $PWD)  # Directory where this script resides
+ # Fix line below if you put libs in different location
+-LD_LIBRARY_PATH="${_libdir}/lib:${_libdir}/lib64:${_libdir}/lib32${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
++LD_LIBRARY_PATH="%OUT%/lib/64:%OUT%/lib/32${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+ LD_PRELOAD="libspeedhack.so${LD_PRELOAD:+:$LD_PRELOAD}" \
+ exec "$@"
+ 
