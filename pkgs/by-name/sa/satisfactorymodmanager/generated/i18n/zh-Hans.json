@@ -1,0 +1,303 @@
+{
+  "announcement" : {
+    "go-offline" : "进入离线模式",
+    "go-online" : "进入在线模式",
+    "healthcheck" : "无法访问模组仓库 ficsit.app。检查网络连接，或使用离线模式。（设置 > 进入离线模式）",
+    "offline" : "您目前处于离线状态。某些功能不可用。（设置 > 进入在线模式）"
+  },
+  "common" : {
+    "add" : "添加",
+    "cancel" : "取消",
+    "close" : "关闭",
+    "delete" : "删除",
+    "import" : "导入",
+    "loading" : "加载中…",
+    "rename" : "重命名"
+  },
+  "error" : {
+    "failed_to_generate_debug" : null,
+    "generate_debug_info" : "生成调试信息",
+    "help" : "出错了？点击下方按钮并将生成的 zip 文件发送到 <1>模组 Discord</1> 的 #help-using-mods 频道。",
+    "invalid_installs" : "{invalidInstalls, plural, other {已找到 {invalidInstalls} 个无效的幸福工厂安装路径}}",
+    "no_installs" : "未找到到幸福工厂安装路径",
+    "open_log_docs" : null,
+    "open_modding_discord" : null,
+    "open_modding_discord.must_generate_debug_first" : null,
+    "reporting_directions" : null,
+    "title" : "出错了！"
+  },
+  "external-install-mod" : {
+    "already-installed" : "已安装",
+    "error-loading" : "加载模组详细信息时出错",
+    "in-queue" : "在队列中",
+    "install" : "安装",
+    "latest-version" : "最新版本",
+    "title" : "安装模组",
+    "version" : "版本 {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : null,
+    "change_later_hint" : null,
+    "intro" : null,
+    "open_welcome_guide" : null,
+    "option" : {
+      "language" : {
+        "title" : null
+      },
+      "queue-auto-start" : {
+        "disabled" : null,
+        "enabled" : null,
+        "title" : null
+      }
+    },
+    "title" : null
+  },
+  "launch-button" : {
+    "apply-profile-change" : null,
+    "apply-queued" : "应用 {queued} 个更新",
+    "are-you-sure-warning" : "您确定要启动吗？",
+    "cant-launch" : "SMM 无法启动游戏",
+    "cant-launch-tooltip" : "模组管理器无法启动该游戏版本，但仍会管理您的模组文件。您可从游戏启动器正常启动幸福工厂。",
+    "changes-queued" : "模组文件尚未进行更改。单击以应用已排队的更改。\n\n（队列模式为手动开始）",
+    "game-running" : "游戏启动器显示游戏已在运行（或在关闭中）",
+    "incompatible-mods" : "{versionIncompatible, plural, other {{versionIncompatible} 个不兼容的模组，游戏可能无法加载或崩溃}}",
+    "launch-in-progress" : "启动中…",
+    "operation-in-progress" : "正在进行操作。",
+    "play" : "幸福工厂 启动",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {{versionPossiblyCompatible} 个模组可能与您的游戏不兼容}}",
+    "profile-change-queued" : null,
+    "ready" : "准备就绪！\n\n注意：模组管理器已经为您完成了模组的安装。也可以从游戏启动器正常启动游戏，模组仍会加载。",
+    "reported-incompatible-mods" : "{reportedPossiblyCompatible} 个模组已被报告损坏，请阅读模组描述或兼容性说明",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible} 个模组已被报告危险，请阅读模组描述或兼容性说明",
+    "you-have-warning-mods" : "您有："
+  },
+  "left-bar" : {
+    "export" : "导出",
+    "ficsit-app" : "ficsit.app（模组仓库）",
+    "game-version" : "游戏版本",
+    "help" : "帮助",
+    "install-invalid" : "无效",
+    "install-invalid-tooltip" : "状态：SMM 无法管理此游戏版本",
+    "install-loading" : "加载中…",
+    "install-loading-tooltip" : "状态：加载中…",
+    "install-unknown" : "未知",
+    "install-unknown-tooltip" : "状态：无法获取有关此游戏版本的信息",
+    "links" : null,
+    "manage-servers" : "服务器管理",
+    "mods-off" : "关闭模组",
+    "mods-on" : "开启模组",
+    "other" : "其他选项",
+    "profile" : "配置文件",
+    "queue-blocking-switching-tooltip" : null,
+    "satisfactory-modding-discord" : "幸福工厂模组 Discord",
+    "smm-github" : "SMM GitHub",
+    "updates" : "更新"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> 更新日志"
+  },
+  "mod-details" : {
+    "change-version" : "更改版本",
+    "change-version-any" : "任意版本",
+    "change-version-or-newer" : "或更新",
+    "changelogs" : "更新日志",
+    "compatibility" : "兼容性",
+    "compatibility-branch" : "该模组在 {branch} 中被报告 {state}。",
+    "compatibility-unknown" : "未知",
+    "compatibility-unknown-tooltip" : "目前没有报告兼容性信息。请测试并在 Discord 上联系我们，以保持更新。",
+    "contributors" : "贡献者 <1>（{authors}）</1>",
+    "created" : "创建于",
+    "downloads" : "下载量",
+    "installed-version" : "已安装版本",
+    "latest-version" : "最新版本",
+    "mod-author" : "作者：",
+    "offline-mode" : "离线模式已启用。无法浏览更新日志和模组详情。",
+    "size" : "大小",
+    "updated" : "更新于",
+    "view-on-ficsit-app" : "在 ficsit.app 上查看",
+    "views" : "浏览量"
+  },
+  "mod-list-item" : {
+    "by-author" : "by",
+    "compatibility-note" : "该模组在当前游戏版本中被报告 {state}。",
+    "compatibility-note-none" : "（无详情）",
+    "compatibility-warning" : "该模组被报告存在问题，但您仍然可以尝试安装它。详情：",
+    "dependency" : "该模组是其他模组的依赖项。它不能单独安装或卸载。",
+    "disable" : "该模组已启用于本配置文件。单击以禁用模组，启动游戏时不加载此模组，但其仍将保留在本配置文件中。",
+    "disable-queued" : "该模组正在等待禁用。单击以取消操作。",
+    "disabled-tooltip" : "该模组已禁用。单击暂停图标以启用模组。",
+    "enable" : "单击以启用模组。",
+    "enable-queued" : "该模组正在等待启用。单击以取消操作。",
+    "favorite" : "单击以添加到收藏夹。模组收藏仅为当前配置档的标记，与它是否安装无关。",
+    "hidden" : "该模组已被作者隐藏。",
+    "install" : "单击以安装此模组。",
+    "no-tags" : "（暂无标签）",
+    "not-installable" : "无法安装此模组。原因：",
+    "queued" : "该模组已排队等候另一项操作。",
+    "queued-install" : "该模组正在等待安装。单击以取消操作。",
+    "queued-uninstall" : "该模组正在等待卸载。单击以取消操作。",
+    "unavailable" : "该模组在 ficsit.app 上不再可用。您或许可以将其删除。",
+    "unfavorite" : "单击以取消收藏。",
+    "uninstall" : "该模组已安装于本配置文件。单击以卸载模组。",
+    "wait" : "等待当前操作完成。"
+  },
+  "mod" : {
+    "compatibility-no-notes" : "（未提供更多信息）"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "所有模组",
+      "compatible" : "版本兼容",
+      "dependency" : "依赖项",
+      "disabled" : "已禁用",
+      "enabled" : "已启用",
+      "favorite" : "已收藏",
+      "installed" : "已安装",
+      "not-installed" : "未安装",
+      "queued" : "准备安装"
+    },
+    "order-by" : {
+      "downloads" : "下载量",
+      "hotness" : "近期热度",
+      "last-updated" : "最近更新",
+      "name" : "名称",
+      "popularity" : "近期人气",
+      "views" : "浏览量"
+    },
+    "search" : "搜索模组"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "没有符合条件的模组",
+    "no-mods-found" : "未找到模组",
+    "show-all" : "展示所有"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "配置名",
+      "profile-name-placeholder" : "新配置名称",
+      "title" : "添加配置文件"
+    },
+    "delete" : {
+      "profile-name" : "配置名",
+      "title" : "删除配置文件"
+    },
+    "import" : {
+      "profile-file" : "配置文件",
+      "profile-name" : "配置名",
+      "profile-name-placeholder" : "新配置名称",
+      "profile-version-warning" : "此配置文件是使用较新版本的游戏创建的。可能与此版本不兼容。",
+      "title" : "导入配置文件"
+    },
+    "rename" : {
+      "new-profile" : "新配置",
+      "new-profile-placeholder" : "新配置名称",
+      "old-profile" : "旧配置",
+      "old-profile-placeholder" : "旧配置名称",
+      "title" : "重命名配置文件"
+    }
+  },
+  "server-manager" : {
+    "add" : "添加",
+    "advanced-note" : "请注意转义用户名和密码中的某些字符",
+    "advanced-path-placeholder" : "user:pass@host:port/path",
+    "failed-to-connect" : "服务器连接失败，请点击重试",
+    "get-help" : null,
+    "host-placeholder" : "主机地址",
+    "invalid" : "SMM 无法管理此服务器",
+    "loading" : "加载中…",
+    "local-path-placeholder" : "服务器路径 C:\\...",
+    "name-placeholder" : "用户名（默认：{default}）",
+    "password-placeholder" : "密码",
+    "path-placeholder" : "路径",
+    "port-placeholder" : "端口（默认：{default}）",
+    "switch-to-advanced" : "切换到高级模式",
+    "switch-to-simple" : "切换到简单模式",
+    "title" : "独立服务器",
+    "username-placeholder" : "用户名",
+    "validating" : "验证中…"
+  },
+  "server-picker" : {
+    "failed-list-dir" : "无法列出目录",
+    "failed-valid-check" : "无法检查所选路径是否为有效服务器"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "缓存路径",
+      "reset" : "重置为默认",
+      "save" : "保存并移动",
+      "title" : "更改下载缓存路径"
+    },
+    "change-cache-location" : "更改缓存路径",
+    "copy-mod-list" : "复制模组列表",
+    "debug" : "调试",
+    "generate-debug-info" : "生成调试信息",
+    "go-online-offline" : "进入{offline, select, true {在线} other {离线}}模式",
+    "language" : "语言",
+    "launch-button" : "启动按钮",
+    "launch-button.button" : "按钮",
+    "launch-button.cat" : "彩虹猫",
+    "launch-button.normal" : "正常",
+    "proxy" : {
+      "proxy" : "代理",
+      "remove" : "删除代理",
+      "save" : "保存并重启",
+      "title" : "代理设置"
+    },
+    "queue" : "更新队列",
+    "queue.start-immediately" : "立即开始",
+    "queue.start-manually" : "手动开始",
+    "secret-settings" : "神秘设置",
+    "set-proxy" : "代理设置",
+    "settings" : "设置",
+    "smm-debug-logging" : "记录 SMM 调试日志",
+    "start-view" : "启动时样式",
+    "start-view.compact" : "紧凑",
+    "start-view.expanded" : "展开",
+    "title" : "模组管理器设置",
+    "update-check" : "检查更新",
+    "update-check.ask" : "查询到更新时",
+    "update-check.on-exit" : "退出时",
+    "update-check.on-start" : "启动时"
+  },
+  "smm-update" : {
+    "downloading" : "后台下载",
+    "downloading-stats" : "更新下载中：{current}/{total}，{speed}/s，预计 {eta}",
+    "title" : "有可用的 SMM 更新 - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : null,
+      "performance.description" : null,
+      "platform_support" : null,
+      "platform_support.description" : null,
+      "profile_format" : null,
+      "profile_format.description" : null,
+      "queue" : null,
+      "queue.description" : null,
+      "servers" : null,
+      "servers.description" : null,
+      "translation" : null,
+      "translation.description" : null,
+      "ui" : null,
+      "ui.description" : null
+    },
+    "intro" : null,
+    "open_guide" : null,
+    "title" : null
+  },
+  "updates" : {
+    "changelog" : "更新日志",
+    "check-for-updates" : "检查更新",
+    "checking-for-updates" : "正在检查更新…",
+    "hide-ignored" : "隐藏已忽略",
+    "ignore" : "忽略",
+    "mod-update-available" : "{updates, plural, other {{updates} 个模组可更新}}",
+    "no-updates" : "暂无 SMM 和模组更新",
+    "show-ignored" : "显示已忽略",
+    "smm-update-available" : "已准备好 SMM 更新",
+    "title" : "更新",
+    "unignore" : "取消忽略",
+    "update-all" : "更新全部",
+    "update-selected" : "更新所选"
+  }
+}
