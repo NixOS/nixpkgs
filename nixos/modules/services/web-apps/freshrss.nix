@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.services.freshrss;
-
+  usePostgresql = cfg.database.type == "pgsql";
+  useMysql = cfg.database.type == "mysql";
   poolName = "freshrss";
 
   extension-env = pkgs.buildEnv {
@@ -291,6 +292,9 @@ in
         in
         {
           description = "Set up the state directory for FreshRSS before use";
+          wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          bindsTo = [ ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
           wantedBy = [ "multi-user.target" ];
           serviceConfig = defaultServiceConfig // {
             RemainAfterExit = true;
@@ -326,6 +330,8 @@ in
 
       systemd.services.freshrss-updater = {
         description = "FreshRSS feed updater";
+        wants = [ "network-online.target" ];
+        bindsTo = optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
         after = [ "freshrss-config.service" ];
         startAt = "*:0/5";
         environment = env-vars;
