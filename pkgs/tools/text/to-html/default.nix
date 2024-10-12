@@ -4,17 +4,19 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.1.4";
+  version = "0.1.5";
   pname = "to-html";
 
   src = fetchFromGitHub {
     owner = "Aloso";
     repo = "to-html";
     rev = "v${version}";
-    hash = "sha256-zkTBjsMFhRz7lVRh8i+XkaJ/qWmTAMPnkH5aDhbHf8U=";
+    hash = "sha256-NNukUzL6S+Vc57OUYt6wcQU7zvCZplQfFWeIB0KEeZo=";
   };
 
-  cargoHash = "sha256-hXc+lB3DKnRZkp1U5wW/vPKSZ0c1UknQCAxDfE7Eubg=";
+  cargoHash = "sha256-1E6HawenMSRtgOoGcp8m3iTAg8B/Jce84vpo/tFl6Jc=";
+
+  cargoPatches = [ ./cargo-lock.patch ];
 
   # Requires external resources
   doCheck = false;
