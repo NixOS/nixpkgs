@@ -555,9 +555,7 @@ let
           # compilers breaking libclang when we can do Linux‐to‐Darwin
           # cross‐compilation again.
           ++ lib.optional (
-            # TODO: This also applies for clang == 12, do we need it?
-            lib.versionAtLeast metadata.release_version "13" &&
-            (!args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin)
+            !args.stdenv.hostPlatform.isDarwin || !args.stdenv.targetPlatform.isDarwin
           ) ./clang/add-nostdlibinc-flag.patch
           ++ [
             (substituteAll {

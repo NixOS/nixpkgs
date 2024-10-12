@@ -78,17 +78,7 @@ let
       substituteInPlace lib/Driver/ToolChains/Darwin.cpp \
         --replace-fail 'StringRef P = llvm::sys::path::parent_path(D.Dir);' 'StringRef P = "${lib.getLib libllvm}";'
       (cd tools && ln -s ../../clang-tools-extra extra)
-    '' + lib.optionalString (
-      lib.versionOlder release_version "13"
-      # See the comment on the `add-nostdlibinc-flag.patch` patch in
-      # `../default.nix` for why we skip Darwin here.
-      && (!stdenv.hostPlatform.isDarwin || !stdenv.targetPlatform.isDarwin
-    ) ''
-      sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
-             -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' \
-             lib/Driver/ToolChains/*.cpp
-    ''
-    + lib.optionalString (lib.versionOlder release_version "13") ''
+    '' + lib.optionalString (lib.versionOlder release_version "13") ''
       substituteInPlace tools/extra/clangd/quality/CompletionModel.cmake \
         --replace ' ''${CMAKE_SOURCE_DIR}/../clang-tools-extra' ' ''${CMAKE_SOURCE_DIR}/tools/extra'
     ''
