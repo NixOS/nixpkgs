@@ -28,23 +28,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glamoroustoolkit";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchzip {
     url = "https://github.com/feenkcom/gtoolkit-vm/releases/download/v${finalAttrs.version}/GlamorousToolkit-x86_64-unknown-linux-gnu.zip";
     stripRoot = false;
-    hash = "sha256-C48zAKkkOIHe7ggjtjBVLbfCVRdY6BJGqdvTI/rCfns=";
+    hash = "sha256-/p/oCE1fmlPjy1Xg36rsczZ74L0M7qWsdcFm6cHPVVY=";
   };
 
   nativeBuildInputs = [
     wrapGAppsHook3
-    (patchelf.overrideAttrs (old: {
-      version = "0.11";
-      src = fetchurl {
-        url = "https://nixos.org/releases/patchelf/patchelf-0.11/patchelf-0.11.tar.bz2";
-        sha256 = "16ms3ijcihb88j3x6cl8cbvhia72afmfcphczb9cfwr0gbc22chx";
-      };
-    }))
   ];
 
   sourceRoot = ".";
