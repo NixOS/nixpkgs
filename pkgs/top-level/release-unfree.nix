@@ -1,5 +1,5 @@
 /*
-    Nixpkgs unfree packages.
+    Nixpkgs unfree+redistributable packages.
 
     This release file MUST NOT be used by <https://hydra.nixos.org>. Please
     check with your lawyers before using this file.
@@ -76,7 +76,11 @@ let
       lib.optionals res.success res.value
     );
 
+  # Unfree is any license not OSI-approved.
   isUnfree = pkg: lib.lists.any (l: !(l.free or true)) (lib.lists.toList (pkg.meta.license or [ ]));
+
+  # Whenever the license allows re-distribution of the binaries
+  isRedistributable = pkg: lib.lists.any (l: l.redistributable or false) (lib.lists.toList (pkg.meta.license or [ ]));
 
   isSource =
     pkg: !lib.lists.any (x: !(x.isSource)) (lib.lists.toList (pkg.meta.sourceProvenance or [ ]));
@@ -95,6 +99,7 @@ let
   cond =
     attrPath: pkg:
     (isUnfree pkg)
+    && (isRedistributable pkg)
     && (isSource pkg)
     && (canSubstituteSrc pkg)
     && (
