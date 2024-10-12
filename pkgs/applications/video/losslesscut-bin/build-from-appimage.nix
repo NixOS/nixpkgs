@@ -1,9 +1,6 @@
-{ lib
-, appimageTools
+{ appimageTools
 , fetchurl
 , makeWrapper
-, gtk3
-, gsettings-desktop-schemas
 , pname
 , version
 , hash
@@ -22,17 +19,16 @@ let
     inherit pname version src;
   };
 in
-(appimageTools.wrapType2 {
+appimageTools.wrapType2 {
   inherit pname version src;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   profile = ''
     export LC_ALL=C.UTF-8
   '';
 
-  extraPkgs = ps: appimageTools.defaultFhsEnvArgs.multiPkgs ps;
-
   extraInstallCommands = ''
-    mv $out/bin/{${pname}-${version},losslesscut}
     (
       mkdir -p $out/share
       cd ${extracted}/usr
@@ -44,7 +40,6 @@ in
     cp ${extracted}/losslesscut.desktop $out/share/applications
     substituteInPlace $out/share/applications/losslesscut.desktop \
       --replace AppRun losslesscut
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/losslesscut" \
       --add-flags "--disable-seccomp-filter-sandbox"
   '';
@@ -53,6 +48,4 @@ in
     platforms = [ "x86_64-linux" ];
     mainProgram = "losslesscut";
   };
-}) // {
-  inherit pname version;
 }

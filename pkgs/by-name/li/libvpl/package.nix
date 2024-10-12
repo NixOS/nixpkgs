@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "intel";
-    repo = finalAttrs.pname;
+    repo = "libvpl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-2yfJo4iwI/h0CJ+mJJ3cAyG5S7KksUibwJHebF3MR+E=";
   };
@@ -24,7 +24,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-      "-DCMAKE_BUILD_TYPE=Release"
       "-DENABLE_DRI3=ON"
       "-DENABLE_DRM=ON"
       "-DENABLE_VA=ON"

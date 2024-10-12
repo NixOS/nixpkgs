@@ -1,37 +1,42 @@
-{ lib
-, clang
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  clang,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
+  gitUpdater,
 }:
 buildGoModule rec {
   pname = "dae";
-  version = "0.4.0";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "daeuniverse";
     repo = "dae";
     rev = "v${version}";
-    hash = "sha256-hvAuWCacaWxXwxx5ktj57hnWt8fcnwD6rUuRj1+ZtFA=";
+    hash = "sha256-bJ/a/SCNCutQDbmxPp36SYY7qhji2XRv6awp7buZVc0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-qK+x6ciAebwIWHRjRpNXCAqsfnmEx37evS4+7kwcFIs=";
+  vendorHash = "sha256-CVQTBJDwu7AYz6q0MnFPMINRShcnS1JOGqH+Ro4lIRo=";
 
   proxyVendor = true;
 
   nativeBuildInputs = [ clang ];
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X github.com/daeuniverse/dae/cmd.Version=${version}"
-    "-X github.com/daeuniverse/dae/common/consts.MaxMatchSetLen_=64"
+  hardeningDisable = [
+    "zerocallusedregs"
   ];
 
-  preBuild = ''
+  buildPhase = ''
+    runHook preBuild
+
     make CFLAGS="-D__REMOVE_BPF_PRINTK -fno-stack-protector -Wno-unused-command-line-argument" \
     NOSTRIP=y \
-    ebpf
+    VERSION=${version} \
+    OUTPUT=$out/bin/dae
+
+    runHook postBuild
   '';
 
   # network required
@@ -43,11 +48,23 @@ buildGoModule rec {
       --replace /usr/bin/dae $out/bin/dae
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) dae;
+  };
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = with lib; {
-    description = "A Linux high-performance transparent proxy solution based on eBPF";
+    description = "Linux high-performance transparent proxy solution based on eBPF";
     homepage = "https://github.com/daeuniverse/dae";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ oluceps pokon548 ];
+    maintainers = with maintainers; [
+      oluceps
+      pokon548
+      luochen1990
+    ];
     platforms = platforms.linux;
     mainProgram = "dae";
   };

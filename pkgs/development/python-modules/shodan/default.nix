@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, click-plugins
-, colorama
-, fetchPypi
-, pythonOlder
-, requests
-, setuptools
-, tldextract
-, xlsxwriter
+{
+  lib,
+  buildPythonPackage,
+  click-plugins,
+  colorama,
+  fetchPypi,
+  pythonOlder,
+  requests,
+  setuptools,
+  tldextract,
+  xlsxwriter,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +35,7 @@ buildPythonPackage rec {
   # The tests require a shodan api key, so skip them.
   doCheck = false;
 
-  pythonImportsCheck = [
-    "shodan"
-  ];
+  pythonImportsCheck = [ "shodan" ];
 
   meta = with lib; {
     description = "Python library and command-line utility for Shodan";
@@ -44,6 +43,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/achillean/shodan-python";
     changelog = "https://github.com/achillean/shodan-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab lihop ];
+    maintainers = with maintainers; [
+      fab
+      lihop
+    ];
   };
 }

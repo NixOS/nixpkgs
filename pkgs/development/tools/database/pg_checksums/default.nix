@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_checksums";
-  version = "1.1";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "credativ";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Ij+4ceQauX3tC97ftk/JS3/WlocPBf7A7PJrylpTLzw=";
+    sha256 = "sha256-joGaCoRMGpEqq7pnT4Qd7XySjZ5wlZPW27WfOv1UFF4=";
   };
 
   nativeBuildInputs = [ libxslt.bin ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Activate/deactivate/verify checksums in offline PostgreSQL clusters";
     homepage = "https://github.com/credativ/pg_checksums";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     mainProgram = "pg_checksums_ext";
     platforms = postgresql.meta.platforms;
     license = licenses.postgresql;

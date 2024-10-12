@@ -2,15 +2,15 @@
 let
   pname = "synology-drive-client";
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
-  version = "3.4.0-15724";
-  buildNumber = with lib; last (splitString "-" version);
+  version = "3.5.1-16101";
+  buildNumber = lib.last (lib.splitString "-" version);
   meta = with lib; {
-    description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server.";
+    description = "Desktop application to synchronize files and folders between the computer and the Synology Drive server";
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ jcouyang MoritzBoehme ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "synology-drive";
   };
   passthru.updateScript = writeScript "update-synology-drive-client" ''
@@ -30,7 +30,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Ubuntu/Installer/synology-drive-client-${buildNumber}.x86_64.deb";
-      sha256 = "sha256-Zf6JMghXy8ODbR4MhVSPmD4QDu003MTc7YNfbiRVRoY=";
+      sha256 = "sha256-VeS5bPcMM4JDCSH5GXkl4OgQjrPKaNDh5PfX28/zqaU=";
     };
 
     nativeBuildInputs = [ autoPatchelfHook dpkg ];
@@ -60,7 +60,7 @@ let
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
-      sha256 = "sha256-65mZeRYHGl+n9TeTx7bxRrGPjcZiV9UlyfcCZ3GwOhE=";
+      sha256 = "sha256-VyhROpQCeVHNxxYgPUZdAlng15aJ1/IYadz30FThlsw=";
     };
 
     nativeBuildInputs = [ cpio xar undmg ];
@@ -78,4 +78,4 @@ let
       cp -R 'Synology Drive Client.app' $out/Applications/
     '';
   };
-in if stdenv.isDarwin then darwin else linux
+in if stdenv.hostPlatform.isDarwin then darwin else linux

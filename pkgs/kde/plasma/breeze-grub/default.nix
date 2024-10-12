@@ -1,10 +1,12 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "breeze-grub";
 
   # doesn't actually use cmake or anything
-  nativeBuildInputs = [];
-  buildInputs = [];
+  nativeBuildInputs = [ ];
+  buildInputs = [ ];
+
+  outputs = [ "out" ];
 
   installPhase = ''
     runHook preInstall

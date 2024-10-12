@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "brummer10";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
+    hash = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
     fetchSubmodules = true;
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/brummer10/GxPlugins.lv2";
-    description = "A set of extra lv2 plugins from the guitarix project";
+    description = "Set of extra lv2 plugins from the guitarix project";
     maintainers = [ maintainers.magnetophon ];
     license = licenses.gpl3Plus;
   };

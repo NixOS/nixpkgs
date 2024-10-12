@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fonttools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fonttools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -18,14 +19,10 @@ buildPythonPackage rec {
     hash = "sha256-l988SW6OWKXzJK0WGAJZR/QDFvgnSir+5TwMMvFcOxg=";
   };
 
-  propagatedBuildInputs = [
-    fonttools
-  ];
+  propagatedBuildInputs = [ fonttools ];
 
   doCheck = true;
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Utility for removing hinting data from TrueType and OpenType fonts";
@@ -35,4 +32,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

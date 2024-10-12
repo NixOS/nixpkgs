@@ -1,19 +1,23 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "art";
-  version = "6.1";
-  format = "setuptools";
+  version = "6.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sepandhaghighi";
     repo = "art";
-    rev = "v${version}";
-    hash = "sha256-RJexYOGWwAwxQ7lWGgXzFSR2aly1twB9pC4QFs5m7k8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9kz6uyLdcrQqgWzT9g2qI9a+IituY/OFmbot+HlQsCE=";
   };
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "art" ];
 

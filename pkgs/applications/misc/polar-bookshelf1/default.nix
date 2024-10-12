@@ -36,7 +36,7 @@
 , nss
 , openssl
 , pango
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     dpkg
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   runtimeLibs = lib.makeLibraryPath [ libudev0-shim glibc curl openssl libnghttp2 ];

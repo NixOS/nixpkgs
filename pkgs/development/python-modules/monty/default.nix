@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, msgpack
-, numpy
-, pandas
-, pydantic
-, pymongo
-, pytestCheckHook
-, pythonOlder
-, ruamel-yaml
-, setuptools
-, setuptools-scm
-, torch
-, tqdm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  msgpack,
+  numpy,
+  pandas,
+  pydantic,
+  pymongo,
+  pytestCheckHook,
+  pythonOlder,
+  ruamel-yaml,
+  setuptools,
+  setuptools-scm,
+  torch,
+  tqdm,
 }:
 
 buildPythonPackage rec {
   pname = "monty";
-  version = "2024.2.26";
+  version = "2024.7.29";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "materialsvirtuallab";
     repo = "monty";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+NxgZ8JCoAih4nHq+KP4jym0xnKCjUXJqs+xPpKZPbs=";
+    hash = "sha256-ydt1T2agKUCBiMZ4uvQ3qshEiAQ0PP9EjPiWDXgH3Wo=";
   };
 
   postPatch = ''
@@ -54,9 +55,7 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonImportsCheck = [
-    "monty"
-  ];
+  pythonImportsCheck = [ "monty" ];
 
   disabledTests = [
     # Test file was removed and re-added after 2022.9.9
@@ -64,6 +63,8 @@ buildPythonPackage rec {
     "test_Path_objects"
     "test_zopen"
     "test_zpath"
+    # flaky, precision/rounding error
+    "TestJson.test_datetime"
   ];
 
   meta = with lib; {

@@ -1,23 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "uptime";
   version = "3.0.1";
-  format = "setuptools";
+  pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wr9jkixprlywz0plyn5p42a5fd31aiwvjrxdvj7r02vfxa04c3w";
+    hash = "sha256-fDACVHdbgHzkbj3LzaMKo7miBLnFenrB557m2+OUKXM=";
   };
 
+  build-system = [ setuptools ];
+
+  # Tests are not shipped
+  doCheck = false;
+
+  pythonImportsCheck = [ "uptime" ];
+
   meta = with lib; {
-    homepage = "https://github.com/Cairnarvon/uptime";
     description = "Cross-platform way to retrieve system uptime and boot time";
+    homepage = "https://github.com/Cairnarvon/uptime";
     license = licenses.bsd2;
     maintainers = with maintainers; [ rob ];
   };
-
 }

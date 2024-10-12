@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  python3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sad";
-  version = "0.4.27";
+  version = "0.4.31";
 
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "sad";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hb09YwF59I8zQ6dIrGkCWJ98VeB5EYoNloTGg5v2BIs=";
+    hash = "sha256-frsOfv98VdetlwgNA6O0KEhcCSY9tQeEwkl2am226ko=";
   };
 
-  cargoHash = "sha256-wFmC19uGEaS8Rn+bKdljAZY24/AL9VDV183xXBjt79M=";
+  cargoHash = "sha256-2oZf2wim2h/krGZMg7Psxx0VLFE/Xf1d1vWqkVtjSmo=";
 
   nativeBuildInputs = [ python3 ];
 

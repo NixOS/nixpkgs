@@ -20,7 +20,7 @@ buildGoModule {
 
   nativeBuildInputs = [ cmake ninja perl ];
 
-  vendorHash = "sha256-McSmG+fMO8/T/bJR6YAJDYw9pxsWJoj1hcSTPv/wMsI=";
+  vendorHash = "sha256-074bgtoBRS3SOxLrwZbBdK1jFpdCvF6tRtU1CkrhoDY=";
   proxyVendor = true;
 
   # hack to get both go and cmake configure phase
@@ -41,7 +41,7 @@ buildGoModule {
   '';
 
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
-  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
+  cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
   installPhase = ''
     mkdir -p $bin/bin $dev $out/lib

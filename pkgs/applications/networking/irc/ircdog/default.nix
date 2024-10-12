@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "ircdog";
-  version = "0.5.2";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "goshuirc";
     repo = "ircdog";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rV9IBa30v1T3Zw/av8nfmX9Bg20FPAGdJkMn17r8rYw=";
+    hash = "sha256-maF53Z0FHAhGmnOnMsX0dDnmckPNBY4Bcm4OBM/x4hQ=";
   };
 
   vendorHash = null;

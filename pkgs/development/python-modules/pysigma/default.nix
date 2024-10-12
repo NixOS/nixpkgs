@@ -1,21 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, jinja2
-, packaging
-, poetry-core
-, pyparsing
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jinja2,
+  packaging,
+  poetry-core,
+  pyparsing,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  requests,
 }:
 
 buildPythonPackage rec {
   pname = "pysigma";
-  version = "0.11.4";
+  version = "0.11.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tlFrUAwOTK+O/YJjfA6nwsVAcZrMNXFmCYoxHc2ykVY=";
+    hash = "sha256-jxVTXw3WZcOL5IDUHs+DRGoXDRFn99UWOz5j5mCEf8A=";
   };
 
   pythonRelaxDeps = [
@@ -32,10 +31,8 @@ buildPythonPackage rec {
     "packaging"
   ];
 
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
+
 
   dependencies = [
     jinja2
@@ -45,9 +42,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests require network connection
@@ -55,9 +50,7 @@ buildPythonPackage rec {
     "test_sigma_plugin_installation"
   ];
 
-  pythonImportsCheck = [
-    "sigma"
-  ];
+  pythonImportsCheck = [ "sigma" ];
 
   meta = with lib; {
     description = "Library to parse and convert Sigma rules into queries";

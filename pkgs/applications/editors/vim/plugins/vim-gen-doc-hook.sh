@@ -23,7 +23,7 @@ vimPluginGenTags() {
         echo "$addonInfo" > $target/addon-info.json
     fi
 
-    echo "Finished executing vimPluginInstallPhase"
+    echo "Finished executing vimPluginGenTags"
 }
 
 preFixupHooks+=(vimPluginGenTags)

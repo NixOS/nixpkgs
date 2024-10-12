@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     homepage = "https://vwm.sourceforge.net/";
     description = "Dynamic window manager for the console";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "vwm";
   };

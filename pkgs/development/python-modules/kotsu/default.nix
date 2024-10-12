@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pandas
-, typing-extensions
-, pytestCheckHook
-, pytest-mock
-, scikit-learn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pandas,
+  typing-extensions,
+  pytestCheckHook,
+  pytest-mock,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-V5OkgiLUTRNbNt6m94+aYUZd9Nw+/60LfhrqqdFhiUw=";
   };
 
-  patches = [
-    ./disable-pytest-coverage-flags.patch
-  ];
+  patches = [ ./disable-pytest-coverage-flags.patch ];
 
-  propagatedBuildInputs = [ pandas typing-extensions ];
+  propagatedBuildInputs = [
+    pandas
+    typing-extensions
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

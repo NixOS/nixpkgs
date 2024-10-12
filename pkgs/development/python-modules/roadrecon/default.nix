@@ -1,19 +1,19 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchPypi
-, flask
-, flask-cors
-, flask-marshmallow
-, flask-sqlalchemy
-, marshmallow
-, marshmallow-sqlalchemy
-, openpyxl
-, pythonOlder
-, pythonRelaxDepsHook
-, roadlib
-, setuptools
-, sqlalchemy
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchPypi,
+  flask,
+  flask-cors,
+  flask-marshmallow,
+  flask-sqlalchemy,
+  marshmallow,
+  marshmallow-sqlalchemy,
+  openpyxl,
+  pythonOlder,
+  roadlib,
+  setuptools,
+  sqlalchemy,
 }:
 
 buildPythonPackage rec {
@@ -28,12 +28,9 @@ buildPythonPackage rec {
     hash = "sha256-OEftVwU30tLP091Z5CIl67hkjjcqY+Qo04/wHZlbuFc=";
   };
 
-  pythonRelaxDeps = [
-    "flask"
-  ];
+  pythonRelaxDeps = [ "flask" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -50,9 +47,7 @@ buildPythonPackage rec {
     sqlalchemy
   ];
 
-  pythonImportsCheck = [
-    "roadtools.roadrecon"
-  ];
+  pythonImportsCheck = [ "roadtools.roadrecon" ];
 
   meta = with lib; {
     description = "Azure AD recon";

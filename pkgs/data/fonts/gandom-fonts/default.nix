@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/gandom-font";
-    description = "A Persian (Farsi) Font - فونت (قلم) فارسی گندم";
+    description = "Persian (Farsi) Font - فونت (قلم) فارسی گندم";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ ];

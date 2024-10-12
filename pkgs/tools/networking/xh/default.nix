@@ -11,23 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "xh";
-  version = "0.21.0";
+  version = "0.22.2";
 
   src = fetchFromGitHub {
     owner = "ducaale";
     repo = "xh";
     rev = "v${version}";
-    sha256 = "sha256-nsxXNlDycn7W7X+AthYCFQu8i2bEPQv7r2LCbc3gFrE=";
+    sha256 = "sha256-FhhVodpIdcB+2s4AkFk6phvoXFLYll/CFJV2/lHS0ww=";
   };
 
-  cargoHash = "sha256-THj8tE12P/K+t/R1xUxo042FIX6JP3riCvm2a8zVEzw=";
+  cargoHash = "sha256-P/OLzMpqWThrdCReWcPlVPGqVSjVD1veq3xL0TJ/soM=";
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 
   buildInputs = lib.optionals withNativeTls
-    (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
+    (if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;

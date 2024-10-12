@@ -1,6 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage
-, psutil
-, pytest }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  psutil,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pyprind";
@@ -24,6 +28,6 @@ buildPythonPackage rec {
     description = "Python Progress Bar and Percent Indicator Utility";
     homepage = "https://github.com/rasbt/pyprind";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     description = "Private libraries of Dune";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

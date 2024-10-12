@@ -1,5 +1,4 @@
-{ stdenv
-, lib
+{ lib
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -12,16 +11,16 @@ let bins = [ "regbot" "regctl" "regsync" ]; in
 
 buildGoModule rec {
   pname = "regclient";
-  version = "0.5.7";
+  version = "0.7.1";
   tag = "v${version}";
 
   src = fetchFromGitHub {
     owner = "regclient";
     repo = "regclient";
     rev = tag;
-    sha256 = "sha256-GT8SJg24uneEbV8WY8Wl2w3lxqLJ7pFCa+654ksBfG4=";
+    sha256 = "sha256-QG0qwilYqsueyI3rzpNj9z8gYYRzIorlOID+baORgJU=";
   };
-  vendorHash = "sha256-cxydurN45ovb4XngG4L/K6L+QMfsaRBZhfLYzKohFNY=";
+  vendorHash = "sha256-gqnE3kfBLjV8CroYcJwa9QWCFOL/dBIblPQJZR2DW+4=";
 
   outputs = [ "out" ] ++ bins;
 
@@ -51,6 +50,11 @@ buildGoModule rec {
       unset bin outputBin
     '')
     bins;
+
+  checkFlags = [
+    # touches network
+    "-skip=^ExampleNew$"
+  ];
 
   passthru.tests = lib.mergeAttrsList (
     map

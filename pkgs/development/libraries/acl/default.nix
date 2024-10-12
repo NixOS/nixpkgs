@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    inherit (attr.meta) platforms badPlatforms;
     homepage = "https://savannah.nongnu.org/projects/acl";
     description = "Library and tools for manipulating access control lists";
-    platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
 }

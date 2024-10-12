@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, django-stubs
-, fetchFromGitHub
-, mypy
-, py
-, coreapi
-, pytest-mypy-plugins
-, pytestCheckHook
-, pythonOlder
-, requests
-, types-pyyaml
-, setuptools
-, types-markdown
-, types-requests
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  django-stubs,
+  fetchFromGitHub,
+  mypy,
+  py,
+  coreapi,
+  pytest-mypy-plugins,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  types-pyyaml,
+  setuptools,
+  types-markdown,
+  types-requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-stubs";
-  version = "3.14.5";
+  version = "3.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,12 +28,10 @@ buildPythonPackage rec {
     owner = "typeddjango";
     repo = "djangorestframework-stubs";
     rev = "refs/tags/${version}";
-    hash = "sha256-AOhNlhTZ6Upevb/7Z1sUQoIkIlwYlIcf1CC+Ag7H4bg=";
+    hash = "sha256-m9KxC3dGe+uRB3YIykV/SCOHeItRYNKopF9fqCd10Vk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     django-stubs
@@ -42,30 +41,22 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    compatible-mypy = [
-      mypy
-    ] ++ django-stubs.optional-dependencies.compatible-mypy;
-    coreapi = [
-      coreapi
-    ];
-    markdown = [
-      types-markdown
-    ];
+  optional-dependencies = {
+    compatible-mypy = [ mypy ] ++ django-stubs.optional-dependencies.compatible-mypy;
+    coreapi = [ coreapi ];
+    markdown = [ types-markdown ];
   };
 
   nativeCheckInputs = [
     py
     pytest-mypy-plugins
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # Upstream recommends mypy > 1.7 which we don't have yet, thus all testsare failing with 3.14.5 and below
   doCheck = false;
 
-  pythonImportsCheck = [
-    "rest_framework-stubs"
-  ];
+  pythonImportsCheck = [ "rest_framework-stubs" ];
 
   meta = with lib; {
     description = "PEP-484 stubs for Django REST Framework";
@@ -75,4 +66,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ elohmeier ];
   };
 }
-

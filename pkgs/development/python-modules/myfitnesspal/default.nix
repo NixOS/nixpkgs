@@ -1,21 +1,22 @@
-{ lib
-, blessed
-, browser-cookie3
-, buildPythonPackage
-, cloudscraper
-, fetchPypi
-, keyring
-, keyrings-alt
-, lxml
-, measurement
-, mock
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, rich
-, setuptools
-, typing-extensions
+{
+  lib,
+  blessed,
+  browser-cookie3,
+  buildPythonPackage,
+  cloudscraper,
+  fetchPypi,
+  keyring,
+  keyrings-alt,
+  lxml,
+  measurement,
+  mock,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-H9oKSio+2x4TDCB4YN5mmERUEeETLKahPlW3TDDFE/E=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     blessed
@@ -63,9 +62,7 @@ buildPythonPackage rec {
     "test_integration"
   ];
 
-  pythonImportsCheck = [
-    "myfitnesspal"
-  ];
+  pythonImportsCheck = [ "myfitnesspal" ];
 
   meta = with lib; {
     description = "Python module to access meal tracking data stored in MyFitnessPal";

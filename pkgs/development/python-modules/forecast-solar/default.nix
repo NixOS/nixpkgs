@@ -1,42 +1,43 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, aiodns
-, aiohttp
-, backports-zoneinfo
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  aiodns,
+  aiohttp,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "forecast-solar";
-  version = "3.0.0";
+  version = "3.1.0";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "forecast_solar";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Go0DF2qyVyGVYEeoEEuxsSR9Ge8Pg4S77zM1HL83ELc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-iol0XtfPZI95o/uEyBcXgeQjcfl2kI+4mugtywa6BXI=";
   };
 
-  PACKAGE_VERSION = version;
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  env.PACKAGE_VERSION = version;
+
+  dependencies = [
     aiodns
     aiohttp
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
   ];
 
   pythonImportsCheck = [ "forecast_solar" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
+    changelog = "https://github.com/home-assistant-libs/forecast_solar/releases/tag/v${version}";
     description = "Asynchronous Python client for getting forecast solar information";
     homepage = "https://github.com/home-assistant-libs/forecast_solar";
     license = licenses.mit;

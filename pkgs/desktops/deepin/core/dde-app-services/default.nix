@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, cmake
-, wrapQtAppsHook
-, qtbase
-, qttools
-, doxygen
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  doxygen,
 }:
 
 stdenv.mkDerivation rec {

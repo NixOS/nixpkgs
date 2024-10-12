@@ -11,9 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-UPpqkz/PwoMaJan9itfldjyTmZmiMb6PzCyu9Vtjj1s=";
   };
 
-  cargoSha256 = "sha256-8qrpW/gU7BvxN3nSbFWhbgu5bwsdzYZTS3w3kcwsGbU=";
+  cargoHash = "sha256-8qrpW/gU7BvxN3nSbFWhbgu5bwsdzYZTS3w3kcwsGbU=";
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   meta = with lib; {
     description = "Cargo plugin to manage dependency features";

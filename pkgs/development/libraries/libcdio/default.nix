@@ -31,14 +31,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config help2man ];
   buildInputs = [ libcddb libiconv ncurses ]
-    ++ lib.optionals stdenv.isDarwin [ Carbon IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon IOKit ];
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A library for OS-independent CD-ROM and CD image access";
+    description = "Library for OS-independent CD-ROM and CD image access";
     longDescription = ''
       GNU libcdio is a library for OS-independent CD-ROM and
       CD image access.  It includes a library for working with

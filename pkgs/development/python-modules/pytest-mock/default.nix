@@ -1,25 +1,26 @@
-{ lib
-, buildPythonPackage
-, pythonAtLeast
-, pythonOlder
-, fetchPypi
-, pytest
-, pytest-asyncio
-, pytestCheckHook
-, setuptools
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  pythonAtLeast,
+  pythonOlder,
+  fetchPypi,
+  pytest,
+  pytest-asyncio,
+  pytestCheckHook,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.12.0";
+  version = "3.14.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MaQPA4wiytMih7tDkyBURR/1WD/wlLym9nXfL4vBpuk=";
+    hash = "sha256-JxklWh7+zq28BW1r8989HFAVUw+0DPNHwPmvrIhBC9A=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   nativeCheckInputs = [
     pytest-asyncio

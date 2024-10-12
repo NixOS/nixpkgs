@@ -1,40 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonAtLeast
-, spark-parser
-, xdis
-, nose
-, pytest
-, hypothesis
-, six
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  spark-parser,
+  xdis,
+  nose,
+  pytestCheckHook,
+  hypothesis,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "uncompyle6";
-  version = "3.9.0";
+  version = "3.9.2";
   format = "setuptools";
-  disabled = pythonAtLeast "3.9"; # See: https://github.com/rocky/python-uncompyle6/issues/331
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HmqQLeYOpcP30q9+J0UAa05Lm97eiIoH+EQcmTjy7n0=";
+    hash = "sha256-b3CYD/4IpksRS2hxgy/QLYbJkDX4l2qPH4Eh2tb8pCU=";
   };
 
-  nativeCheckInputs = [ nose pytest hypothesis six ];
-  propagatedBuildInputs = [ spark-parser xdis ];
+  propagatedBuildInputs = [
+    spark-parser
+    xdis
+  ];
 
-  # six import errors (yet it is supplied...)
-  checkPhase = ''
-    runHook preCheck
-    pytest ./pytest --ignore=pytest/test_function_call.py
-    runHook postCheck
-  '';
+  nativeCheckInputs = [
+    nose
+    pytestCheckHook
+    hypothesis
+    six
+  ];
 
-  meta = with lib; {
-    description = "Python cross-version byte-code deparser";
-    homepage = "https://github.com/rocky/python-uncompyle6/";
-    license = licenses.gpl3;
+  # No tests are provided for versions past 3.8,
+  # as the project only targets bytecode of versions <= 3.8
+  doCheck = pythonOlder "3.9";
+
+  meta = {
+    description = "A bytecode decompiler for Python versions 3.8 and below";
+    homepage = "https://github.com/rocky/python-uncompyle6";
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ melvyn2 ];
   };
-
 }

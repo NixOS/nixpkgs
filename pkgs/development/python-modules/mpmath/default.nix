@@ -1,10 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, gmpy2
-, isPyPy
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  gmpy2,
+  isPyPy,
+  setuptools,
+  pytestCheckHook,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -19,25 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-9BGcaC3TyolGeO65/H42T/WQY6z5vc1h+MA+8MGFChU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
-    gmpy = lib.optionals (!isPyPy) [
-      gmpy2
-    ];
+  optional-dependencies = {
+    gmpy = lib.optionals (!isPyPy) [ gmpy2 ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  passthru.tests = {
+    inherit sage;
+  };
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
-    homepage    = "https://mpmath.org/";
-    description = "A pure-Python library for multiprecision floating arithmetic";
-    license     = licenses.bsd3;
+    homepage = "https://mpmath.org/";
+    description = "Pure-Python library for multiprecision floating arithmetic";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

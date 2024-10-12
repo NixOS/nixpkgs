@@ -1,10 +1,11 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, isPy3k
-, dawg-python
-, docopt
-, pymorphy2-dicts-ru
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  isPy3k,
+  dawg-python,
+  docopt,
+  pymorphy2-dicts-ru,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     mainProgram = "pymorphy";
     homepage = "https://github.com/kmike/pymorphy2";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

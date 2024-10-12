@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, requests
-, pytestCheckHook
-, responses
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  pytestCheckHook,
+  responses,
 }:
 
 buildPythonPackage rec {
   pname = "herepy";
-  version = "3.6.1";
+  version = "3.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,25 +20,19 @@ buildPythonPackage rec {
     owner = "abdullahselek";
     repo = "HerePy";
     rev = "refs/tags/${version}";
-    hash = "sha256-DOtlXoVelTGY/fKkHW/K0d0w52Q7N91Whi9AHG4tRZQ=";
+    hash = "sha256-ht4EZBfREU7tDNo6tCPyECjm0H+yuhjsfJ60M4ss0jE=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = [
-    requests
-  ];
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
 
-  pythonImportsCheck = [
-    "herepy"
-  ];
+  pythonImportsCheck = [ "herepy" ];
 
   meta = with lib; {
     changelog = "https://github.com/abdullahselek/HerePy/releases/tag/${version}";

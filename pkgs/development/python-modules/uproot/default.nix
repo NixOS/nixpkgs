@@ -1,47 +1,52 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, awkward
-, cramjam
-, hatch-vcs
-, hatchling
-, numpy
-, fsspec
-, packaging
-, pandas
-, pytestCheckHook
-, pytest-timeout
-, rangehttpserver
-, scikit-hep-testdata
-, xxhash
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  hatch-vcs,
+  hatchling,
+
+  # dependencies
+  awkward,
+  cramjam,
+  numpy,
+  fsspec,
+  packaging,
+
+  # checks
+  pandas,
+  pytestCheckHook,
+  pytest-timeout,
+  rangehttpserver,
+  scikit-hep-testdata,
+  xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "5.3.2";
+  version = "5.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "uproot5";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dq362pevqgLx5KwZ19zQ6aOn5NCyiqynPCF7YdI6tkw=";
+    hash = "sha256-MWqkEbw6hdNaXrRLWoxUcppT+X9a+DmEhho9GpG29XM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     awkward
     cramjam
     numpy
     fsspec
     packaging
+    xxhash
   ];
 
   nativeCheckInputs = [
@@ -50,7 +55,6 @@ buildPythonPackage rec {
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
-    xxhash
   ];
 
   preCheck = ''
@@ -76,6 +80,7 @@ buildPythonPackage rec {
     "test_http_size"
     "test_http_size_port"
     "test_issue_1054_filename_colons"
+    "test_multiple_page_lists"
     "test_no_multipart"
     "test_open_fsspec_github"
     "test_open_fsspec_http"
@@ -83,7 +88,9 @@ buildPythonPackage rec {
     "test_pickle_roundtrip_http"
     "test_split_ranges_if_large_file_in_http"
     # Cyclic dependency with dask-awkward
+    "test_dask_duplicated_keys"
     "test_decompression_executor_for_dask"
+    "test_decompression_threadpool_executor_for_dask"
   ];
 
   disabledTestPaths = [
@@ -91,20 +98,15 @@ buildPythonPackage rec {
     "tests/test_0066_fix_http_fallback_freeze.py"
     "tests/test_0088_read_with_http.py"
     "tests/test_0220_contiguous_byte_ranges_in_http.py"
-
-    # FileNotFoundError: uproot-issue-1043.root
-    "tests/test_1043_const_std_string.py"
   ];
 
-  pythonImportsCheck = [
-    "uproot"
-  ];
+  pythonImportsCheck = [ "uproot" ];
 
-  meta = with lib; {
+  meta = {
     description = "ROOT I/O in pure Python and Numpy";
     homepage = "https://github.com/scikit-hep/uproot5";
     changelog = "https://github.com/scikit-hep/uproot5/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

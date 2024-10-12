@@ -2,26 +2,27 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+, stdenv
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
-  version = "1.8.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
     rev = "v${version}";
-    hash = "sha256-ykrtvXPXxNYrUQNScit+REb7/6mE0FOzBQxPdbWodgk=";
+    hash = "sha256-hzlrhawHQOM12pYAHqmkk+PPI/3tJx8rFFQ9+znv9c8=";
   };
 
-  cargoHash = "sha256-/oIezLqd3hkWrfO2pml31de+pgpEXhXHxIxt10rPJZo=";
+  cargoHash = "sha256-yHtKgQZlKJ/vmecjzMHkmA/0sbiNJdP0zoUSIowWttQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
   buildFeatures = [ "go" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd typeshare \
       --bash <($out/bin/typeshare completions bash) \
       --fish <($out/bin/typeshare completions fish) \

@@ -2,8 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , autoPatchelfHook
+, autoAddDriverRunpath
 , makeWrapper
 , buildNpmPackage
+, nixosTests
 , cmake
 , avahi
 , libevdev
@@ -16,12 +18,14 @@
 , pkg-config
 , libdrm
 , wayland
+, wayland-scanner
 , libffi
 , libcap
 , mesa
 , curl
 , pcre
 , pcre2
+, python3
 , libuuid
 , libselinux
 , libsepol
@@ -49,26 +53,27 @@ let
 in
 stdenv'.mkDerivation rec {
   pname = "sunshine";
-  version = "0.22.2";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "LizardByte";
     repo = "Sunshine";
     rev = "v${version}";
-    sha256 = "sha256-So8fX0XQoW2cdTWWENoE07EU6e8vvjeTpizLoaDTjeg=";
+    hash = "sha256-D5ee5m2ZTKVqZDH07nzJuFEbZBQ4xW7m4nYnJQe0EaA=";
     fetchSubmodules = true;
   };
 
   patches = [
-    # remove npm install as it needs internet access -- handled separately below
-    ./dont-build-webui.patch
+    # fix(upnp): support newer miniupnpc library (#2782)
+    # Manually cherry-picked on to 0.23.1.
+    ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
   ];
 
   # build webui
   ui = buildNpmPackage {
     inherit src version;
     pname = "sunshine-ui";
-    npmDepsHash = "sha256-0487ntbJZ20MZHezQ+Z3EJkidF3Dgoh/mynYwR7k/+I=";
+    npmDepsHash = "sha256-9FuMtxTwrU9UIhZXQn/tmGN0IHZBdunV0cY/EElj4bA=";
 
     # use generated package-lock.json as upstream does not provide one
     postPatch = ''
@@ -84,10 +89,13 @@ stdenv'.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    autoPatchelfHook
+    python3
     makeWrapper
+    wayland-scanner
+    # Avoid fighting upstream's usage of vendored ffmpeg libraries
+    autoPatchelfHook
   ] ++ lib.optionals cudaSupport [
-    cudaPackages.autoAddDriverRunpath
+    autoAddDriverRunpath
   ];
 
   buildInputs = [
@@ -131,7 +139,7 @@ stdenv'.mkDerivation rec {
     miniupnpc
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cudatoolkit
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     intel-media-sdk
   ];
 
@@ -171,17 +179,31 @@ stdenv'.mkDerivation rec {
     cp -r ${ui}/build ../
   '';
 
+  buildFlags = [
+    "sunshine"
+  ];
+
   # allow Sunshine to find libvulkan
   postFixup = lib.optionalString cudaSupport ''
     wrapProgram $out/bin/sunshine \
       --set LD_LIBRARY_PATH ${lib.makeLibraryPath [ vulkan-loader ]}
   '';
 
+  # redefine installPhase to avoid attempt to build webui
+  installPhase = ''
+    runHook preInstall
+    cmake --install .
+    runHook postInstall
+  '';
+
   postInstall = ''
     install -Dm644 ../packaging/linux/${pname}.desktop $out/share/applications/${pname}.desktop
   '';
 
-  passthru.updateScript = ./updater.sh;
+  passthru = {
+    tests.sunshine = nixosTests.sunshine;
+    updateScript = ./updater.sh;
+  };
 
   meta = with lib; {
     description = "Sunshine is a Game stream host for Moonlight";

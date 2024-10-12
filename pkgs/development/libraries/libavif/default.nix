@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libavif";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "AOMediaCodec";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9YP4Zq6dehIJanNkpAJK1aYwSOAueqonF8k2t/3B4kw=";
+    hash = "sha256-yNJiMTWgOKR1c2pxTkLY/uPWGIY4xgH+Ee0r15oroDU=";
   };
 
   # reco: encode libaom slowest but best, decode dav1d fastest
@@ -48,11 +48,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gdk-pixbuf
-    libaom
     zlib
     libpng
     libjpeg
+  ];
+
+  propagatedBuildInputs = [
     dav1d
+    libaom
     libyuv
   ];
 

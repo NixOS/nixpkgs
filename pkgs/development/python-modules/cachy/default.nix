@@ -1,7 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi
-, redis
-, python-memcached
-, msgpack
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  redis,
+  python-memcached,
+  msgpack,
 }:
 
 buildPythonPackage rec {

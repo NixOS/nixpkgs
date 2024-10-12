@@ -6,7 +6,7 @@
 }:
 let
   makefile =
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then "makefile.mac"
     else "makefile";
 in
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     mainProgram = "tpm_server";
     homepage = "https://sourceforge.net/projects/ibmswtpm2/";
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ delroth ];
+    maintainers = with maintainers; [ tomfitzhenry ];
     license = licenses.bsd3;
   };
 }

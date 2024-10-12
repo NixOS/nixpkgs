@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, packaging
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  packaging,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,9 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = [
-    packaging
-  ];
+  pythonRelaxDeps = [ "packaging" ];
+
+  propagatedBuildInputs = [ packaging ];
 
   pythonImportsCheck = [ "rmscene" ];
 

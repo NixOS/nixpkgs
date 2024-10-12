@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A next-generation plugin manager for zsh";
+    description = "Next-generation plugin manager for zsh";
     homepage = "https://github.com/zplug/zplug";
     license = licenses.mit;
     maintainers = [ maintainers.s1341 ];

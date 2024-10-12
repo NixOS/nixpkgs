@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "varlink";
-    repo = finalAttrs.pname;
+    repo = "libvarlink";
     rev = finalAttrs.version;
     sha256 = "sha256-oUy9HhybNMjRBWoqqal1Mw8cC5RddgN4izxAl0cgnKE=";
   };

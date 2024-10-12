@@ -2,7 +2,6 @@
 , lib
 , fetchFromGitea
 , fetchurl
-, fetchpatch
 , runCommand
 , fcft
 , freetype
@@ -27,7 +26,7 @@
 }:
 
 let
-  version = "1.16.2";
+  version = "1.18.1";
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -40,7 +39,7 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
-      hash = "sha256-NvkKJ75n/OzgEd2WHX1NQIXPn9R0Z+YI1rpFmNxaDhk=";
+      hash = "sha256-/KykHPqM0WQ1HO83bOrxJ88mvEAf0Ah3S8gSvKb3AJM=";
     };
 
     dontUnpack = true;
@@ -99,7 +98,7 @@ stdenv.mkDerivation {
     owner = "dnkl";
     repo = "foot";
     rev = version;
-    hash = "sha256-hT+btlfqfwGBDWTssYl8KN6SbR9/Y2ors4ipECliigM=";
+    hash = "sha256:15s7fbkibvq53flf5yy9ad37y53pl83rcnjwlnfh96a4s5mj6v5d";
   };
 
   separateDebugInfo = true;
@@ -157,6 +156,8 @@ stdenv.mkDerivation {
     "-Dcustom-terminfo-install-location=${terminfoDir}"
     # Install systemd user units for foot-server
     "-Dsystemd-units-dir=${placeholder "out"}/lib/systemd/user"
+    # Especially -Wunused-command-line-argument is a problem with clang
+    "-Dwerror=false"
   ];
 
   # build and run binary generating PGO profiles,
@@ -208,7 +209,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://codeberg.org/dnkl/foot/";
     changelog = "https://codeberg.org/dnkl/foot/releases/tag/${version}";
-    description = "A fast, lightweight and minimalistic Wayland terminal emulator";
+    description = "Fast, lightweight and minimalistic Wayland terminal emulator";
     license = licenses.mit;
     maintainers = [ maintainers.sternenseemann maintainers.abbe ];
     platforms = platforms.linux;

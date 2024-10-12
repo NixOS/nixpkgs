@@ -1,7 +1,7 @@
-{ stdenv
-, lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -18,10 +18,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Cross-platform system power status information";
     homepage = "https://github.com/Kentzo/Power";
     license = licenses.mit;
   };
-
 }

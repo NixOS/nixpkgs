@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cryptography
-, deprecated
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cryptography,
+  deprecated,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-dxqHdioMCBrmFmlYqVT4CEiCCyqwZpN9yLg3nWWxsDk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cryptography
@@ -33,15 +32,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "jwcrypto"
-  ];
+  pythonImportsCheck = [ "jwcrypto" ];
 
   meta = with lib; {
     description = "Implementation of JOSE Web standards";
     homepage = "https://github.com/latchset/jwcrypto";
     changelog = "https://github.com/latchset/jwcrypto/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

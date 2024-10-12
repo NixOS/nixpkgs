@@ -1,9 +1,5 @@
 # Module for VirtualBox guests.
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
@@ -31,37 +27,39 @@ let
   };
 in
 {
-  ###### interface
+  imports = [
+    (lib.mkRenamedOptionModule [ "virtualisation" "virtualbox" "guest" "draganddrop" ] [ "virtualisation" "virtualbox" "guest" "dragAndDrop" ])
+  ];
 
   options.virtualisation.virtualbox.guest = {
-    enable = mkOption {
+    enable = lib.mkOption {
       default = false;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable the VirtualBox service and other guest additions.";
+      type = lib.types.bool;
+      description = "Whether to enable the VirtualBox service and other guest additions.";
     };
 
-    clipboard = mkOption {
+    clipboard = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable clipboard support.";
+      type = lib.types.bool;
+      description = "Whether to enable clipboard support.";
     };
 
-    seamless = mkOption {
+    seamless = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
+      type = lib.types.bool;
+      description = "Whether to enable seamless mode. When activated windows from the guest appear next to the windows of the host.";
     };
 
-    draganddrop = mkOption {
+    dragAndDrop = lib.mkOption {
       default = true;
-      type = types.bool;
-      description = lib.mdDoc "Whether to enable drag and drop support.";
+      type = lib.types.bool;
+      description = "Whether to enable drag and drop support.";
     };
   };
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       assertions = [{
         assertion = pkgs.stdenv.hostPlatform.isx86;
@@ -102,13 +100,18 @@ in
       systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session";
     }
     (
-      mkIf cfg.clipboard {
+      lib.mkIf cfg.clipboard {
         systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
       }
     )
     (
-      mkIf cfg.seamless {
+      lib.mkIf cfg.seamless {
         systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
+      }
+    )
+    (
+      lib.mkIf cfg.dragAndDrop {
+        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
       }
     )
   ]);

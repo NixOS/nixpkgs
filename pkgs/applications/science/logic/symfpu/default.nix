@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib, stdenv, fetchFromGitHub, copyPkgconfigItems, makePkgconfigItem }:
 
 stdenv.mkDerivation rec {
   pname = "symfpu";
@@ -11,9 +11,32 @@ stdenv.mkDerivation rec {
     sha256 = "1jf5lkn67q136ppfacw3lsry369v7mdr1rhidzjpbz18jfy9zl9q";
   };
 
+  nativeBuildInputs = [ copyPkgconfigItems ];
+
+  pkgconfigItems = [
+    (makePkgconfigItem {
+      name = "symfpu";
+      inherit version;
+      cflags = [ "-I\${includedir}" ];
+      variables = {
+        includedir = "@includedir@";
+      };
+      inherit (meta) description;
+    })
+  ];
+
+  env = {
+    # copyPkgconfigItems will substitute this in the pkg-config file
+    includedir = "${placeholder "out"}/include";
+  };
+
   installPhase = ''
-    mkdir -p $out/symfpu
-    cp -r * $out/symfpu/
+    runHook preInstall
+
+    mkdir -p $out/include/symfpu
+    cp -r * $out/include/symfpu/
+
+    runHook postInstall
   '';
 
   meta = with lib; {

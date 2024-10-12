@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.envoy;
   format = pkgs.formats.json { };
@@ -15,24 +12,24 @@ in
 
 {
   options.services.envoy = {
-    enable = mkEnableOption (lib.mdDoc "Envoy reverse proxy");
+    enable = lib.mkEnableOption "Envoy reverse proxy";
 
-    package = mkPackageOption pkgs "envoy" { };
+    package = lib.mkPackageOption pkgs "envoy" { };
 
-    requireValidConfig = mkOption {
-      type = types.bool;
+    requireValidConfig = lib.mkOption {
+      type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether a failure during config validation at build time is fatal.
         When the config can't be checked during build time, for example when it includes
         other files, disable this option.
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           admin = {
             access_log_path = "/dev/null";
@@ -50,13 +47,13 @@ in
           };
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         Specify the configuration for Envoy in Nix.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     systemd.services.envoy = {
       description = "Envoy reverse proxy";

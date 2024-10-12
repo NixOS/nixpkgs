@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation {
   inherit pname buildFlags buildInputs nativeBuildInputs postFixup;
-  version = "unstable-2023-08-03";
+  version = "0-unstable-2024-04-13";
 
   src = fetchFromGitHub {
     owner = "fte-team";
     repo = "fteqw";
-    rev = "3adec5d0a53ba9ae32a92fc0a805cf6d5ec107fb";
-    hash = "sha256-p/U02hwKI+YqlVXIS/7+gujknNDLr5L53unjvG5qLJU=";
+    rev = "1f9f3635f0aef3b2eed6b40e35fcf6223c6ad533";
+    hash = "sha256-AgTkkP8pT6yioIcVNpxmfCFF0M+7BGx3TXgQSkOgfPI=";
   };
 
   makeFlags = [

@@ -1,48 +1,49 @@
-{ lib
-, backports-zoneinfo
-, buildPythonPackage
-, cached-property
-, defusedxml
-, dnspython
-, fetchFromGitHub
-, flake8
-, isodate
-, lxml
-, oauthlib
-, psutil
-, pygments
-, python-dateutil
-, pythonOlder
-, pytz
-, pyyaml
-, requests
-, requests-ntlm
-, requests-gssapi
-, requests-oauthlib
-, requests-kerberos
-, requests-mock
-, setuptools
-, tzdata
-, tzlocal
+{
+  lib,
+  backports-zoneinfo,
+  buildPythonPackage,
+  cached-property,
+  defusedxml,
+  dnspython,
+  fetchFromGitHub,
+  flake8,
+  isodate,
+  lxml,
+  oauthlib,
+  psutil,
+  pygments,
+  python-dateutil,
+  pythonOlder,
+  pytz,
+  pyyaml,
+  requests,
+  requests-ntlm,
+  requests-gssapi,
+  requests-oauthlib,
+  requests-kerberos,
+  requests-mock,
+  setuptools,
+  tzdata,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
   pname = "exchangelib";
-  version = "5.2.0";
+  version = "5.4.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = "exchangelib";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q45aYVyp75PUiqYSMSvSFMy3vaclv93QVkjKWVrxWc4=";
+    hash = "sha256-SX5F0OXKdxA2HoDwvCe4M7RftdjUEdQuFbxRyuABC4E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "defusedxml" ];
+
+  build-system = [ setuptools ];
 
   dependencies = [
     cached-property
@@ -58,18 +59,14 @@ buildPythonPackage rec {
     requests-kerberos
     tzdata
     tzlocal
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     complete = [
       requests-gssapi
       # requests-negotiate-sspi
     ];
-    kerberos = [
-      requests-gssapi
-    ];
+    kerberos = [ requests-gssapi ];
     # sspi = [
     #   requests-negotiate-sspi
     # ];
@@ -84,9 +81,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "exchangelib"
-  ];
+  pythonImportsCheck = [ "exchangelib" ];
 
   meta = with lib; {
     description = "Client for Microsoft Exchange Web Services (EWS)";

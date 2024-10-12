@@ -1,10 +1,11 @@
-{ lib
-, babel
-, buildPythonPackage
-, fetchFromGitHub
-, pygments
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  babel,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pygments,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-7Dtf87erBElqVgqRx8BYHYOWv1uI84JJ0LHrcneczCI=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [
     babel
     pygments
   ];
 
-  pythonImportsCheck = [
-    "colout"
-  ];
+  pythonImportsCheck = [ "colout" ];
 
   # This project does not have a unit test
   doCheck = false;

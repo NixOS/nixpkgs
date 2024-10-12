@@ -1,15 +1,13 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
   cfg = config.programs.usbtop;
 in {
   options = {
-    programs.usbtop.enable = mkEnableOption (lib.mdDoc "usbtop and required kernel module");
+    programs.usbtop.enable = lib.mkEnableOption "usbtop and required kernel module, to show estimated USB bandwidth";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       usbtop
     ];

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, poetry-core
-, tomlkit
-, typer
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  poetry-core,
+  tomlkit,
+  typer,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pipenv-poetry-migrate";
-  version = "0.5.4";
+  version = "0.5.10";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,12 +21,10 @@ buildPythonPackage rec {
     owner = "yhino";
     repo = "pipenv-poetry-migrate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5qOOklwjTGrlvaPg7hVYLAAHvQ7633VAt3L2PHw2V9U=";
+    hash = "sha256-ROi5Yj4Ht91Go2jkm6BQZyaJWtBKHk4ar1ly8jAPGlc=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     setuptools # for pkg_resources
@@ -33,9 +32,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "This is simple migration script, migrate pipenv to poetry";

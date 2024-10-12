@@ -32,6 +32,9 @@ buildDotnetModule rec {
   projectFile = "ICSharpCode.ILSpyCmd/ICSharpCode.ILSpyCmd.csproj";
   nugetDeps = ./deps.nix;
 
+  # see: https://github.com/tunnelvisionlabs/ReferenceAssemblyAnnotator/issues/94
+  linkNugetPackages = true;
+
   meta = with lib; {
     description = "Tool for decompiling .NET assemblies and generating portable PDBs";
     mainProgram = "ilspycmd";

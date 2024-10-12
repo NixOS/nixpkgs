@@ -23,6 +23,6 @@ stdenvNoCC.mkDerivation rec {
     signs that are carved using a router bit'';
     homepage = "https://nationalparktypeface.com/";
     license = licenses.ofl;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 }

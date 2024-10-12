@@ -144,7 +144,7 @@ let
         substituteInPlace spec/std/socket/udp_socket_spec.cr \
           --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      '' + lib.optionalString (stdenv.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
+      '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "1.3.0" && lib.versionOlder version "1.7.0") ''
         # See https://github.com/NixOS/nixpkgs/pull/195606#issuecomment-1356491277
         substituteInPlace spec/compiler/loader/unix_spec.cr \
           --replace 'it "parses file paths"' 'pending "parses file paths"'
@@ -175,7 +175,7 @@ let
         libxml2
         openssl
       ] ++ extraBuildInputs
-      ++ lib.optionals stdenv.isDarwin [ libiconv ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
       makeFlags = [
         "CRYSTAL_CONFIG_VERSION=${version}"
@@ -249,7 +249,7 @@ let
 
       meta = with lib; {
         inherit (binary.meta) platforms;
-        description = "A compiled language with Ruby like syntax and type inference";
+        description = "Compiled language with Ruby like syntax and type inference";
         mainProgram = "crystal";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;

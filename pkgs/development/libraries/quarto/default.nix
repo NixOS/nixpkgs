@@ -19,10 +19,10 @@
 
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.4.552";
+  version = "1.5.57";
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    sha256 = "sha256-I6uRqKgwb+VnbghA20BXEGrrLKOERc/IfF1TIDoymBw=";
+    sha256 = "sha256-ZBjv/Z98il8EMZe88fMKSi1YjeOZ8jEh7OxYDKUTMpY=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (final: {
 
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {
-      nativeBuildInputs = lib.optionals stdenv.isDarwin [ sysctl ];
+      nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ sysctl ];
     } ''
       export HOME="$(mktemp -d)"
       ${quarto}/bin/quarto check

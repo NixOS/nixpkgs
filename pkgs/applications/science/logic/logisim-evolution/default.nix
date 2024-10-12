@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeBinaryWrapper
     copyDesktopItems
     unzip
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 

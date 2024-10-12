@@ -1,48 +1,47 @@
-{ lib
-, asgiref
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, hiro
-, limits
-, ordered-set
-, pymemcache
-, pymongo
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, redis
-, rich
-, setuptools
-, typing-extensions
+{
+  lib,
+  asgiref,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  hiro,
+  limits,
+  ordered-set,
+  pymemcache,
+  pymongo,
+  pytest-cov-stub,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  rich,
+  setuptools,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "flask-limiter";
-  version = "3.5.1";
+  version = "3.8.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
     repo = "flask-limiter";
     rev = "refs/tags/${version}";
-    hash = "sha256-U7qgl8yg0ddKDPXqYE2Vqyc2ofxSP+6liWs5j4qD6fM=";
+    hash = "sha256-RkeG5XdanSp2syKrQgYUZ4r8D28Zt33/MsW0UxWxaU0=";
   };
 
   postPatch = ''
-    sed -i "/--cov/d" pytest.ini
-
     # flask-restful is unmaintained and breaks regularly, don't depend on it
-    sed -i "/import flask_restful/d" tests/test_views.py
+    substituteInPlace tests/test_views.py \
+      --replace-fail "import flask_restful" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     limits
     ordered-set
@@ -50,8 +49,15 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    redis = limits.optional-dependencies.redis;
+    memcached = limits.optional-dependencies.memcached;
+    mongodb = limits.optional-dependencies.mongodb;
+  };
+
   nativeCheckInputs = [
     asgiref
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
     hiro
@@ -85,15 +91,13 @@ buildPythonPackage rec {
     "tests/test_storage.py"
   ];
 
-  pythonImportsCheck = [
-    "flask_limiter"
-  ];
+  pythonImportsCheck = [ "flask_limiter" ];
 
   meta = with lib; {
     description = "Rate limiting for flask applications";
     homepage = "https://flask-limiter.readthedocs.org/";
     changelog = "https://github.com/alisaifee/flask-limiter/blob/${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

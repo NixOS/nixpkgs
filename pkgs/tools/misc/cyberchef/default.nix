@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cyberchef";
-  version = "10.9.0";
+  version = "10.19.2";
 
   src = fetchzip {
     url = "https://github.com/gchq/CyberChef/releases/download/v${version}/CyberChef_v${version}.zip";
-    sha256 = "sha256-lsQC86gTfDQy7wonoYdQitdF+4hn8qyFpXKg+AL5TnU=";
+    sha256 = "sha256-+ICoJnW92IOi/QDwJXRNxP9tN99hNfH6BwLKJvzZFF4=";
     stripRoot = false;
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The Cyber Swiss Army Knife for encryption, encoding, compression and data analysis";
+    description = "Cyber Swiss Army Knife for encryption, encoding, compression and data analysis";
     homepage = "https://gchq.github.io/CyberChef";
     changelog = "https://github.com/gchq/CyberChef/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [ sebastianblunt ];

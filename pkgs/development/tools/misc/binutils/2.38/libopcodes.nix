@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A library from binutils for manipulating machine code";
+    description = "Library from binutils for manipulating machine code";
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ericson2314 ];

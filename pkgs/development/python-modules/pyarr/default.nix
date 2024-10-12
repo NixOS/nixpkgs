@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, overrides
-, poetry-core
-, pythonOlder
-, requests
-, pytestCheckHook
-, types-requests
-, responses
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  overrides,
+  poetry-core,
+  pythonOlder,
+  requests,
+  pytestCheckHook,
+  types-requests,
+  responses,
 }:
 
 buildPythonPackage rec {
@@ -30,9 +31,7 @@ buildPythonPackage rec {
       --replace "poetry.masonry.api" "poetry.core.masonry.api"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     overrides
@@ -45,9 +44,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pythonImportsCheck = [
-    "pyarr"
-  ];
+  pythonImportsCheck = [ "pyarr" ];
 
   disabledTests = [
     # Tests require a running sonarr instance

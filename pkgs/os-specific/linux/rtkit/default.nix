@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/heftig/rtkit";
-    description = "A daemon that hands out real-time priority to processes";
+    description = "Daemon that hands out real-time priority to processes";
     mainProgram = "rtkitctl";
     license = with licenses; [ gpl3 bsd0 ]; # lib is bsd license
     platforms = platforms.linux;

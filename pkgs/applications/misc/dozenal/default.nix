@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm $out/bin/gdozdc";
 
   meta = {
-    description = "A complete suite of dozenal (base twelve) programs";
+    description = "Complete suite of dozenal (base twelve) programs";
     longDescription = ''
       Programs
 

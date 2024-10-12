@@ -14,7 +14,9 @@
 , libtool
 , libwebp
 , libxml2
+, libheifSupport ? true, libheif
 , nukeReferences
+, pkg-config
 , quantumdepth ? 8
 , runCommand
 , stdenv
@@ -46,10 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     libwebp
     libxml2
     zlib
-  ];
+  ] ++ lib.optionals libheifSupport [ libheif ];
 
   nativeBuildInputs = [
     nukeReferences
+    pkg-config
     xz
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 

@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.36.140";
-  x86_64-darwin-sha256 = "0w1fxza3aglh7513znv190gsha12rk7k1ybdp4ml2pffwmm8diad";
+  x86_64-darwin-version = "4.40.128";
+  x86_64-darwin-sha256 = "0hfgl2pfarnd9gh921rfz9s9kkvyf8fmmhgb6j87jgbwf8rjrjmm";
 
-  x86_64-linux-version = "4.36.140";
-  x86_64-linux-sha256 = "0zahhhpcb1dxdhfmam32iqr5w3pspzbmcdv53ciqfnbkmwzkc3xr";
+  x86_64-linux-version = "4.40.128";
+  x86_64-linux-sha256 = "1p7ybwrsfy5iq5ggpz1p4mx58ilwzsvn7k149i5ifi0zifahwwdg";
 
-  aarch64-darwin-version = "4.36.140";
-  aarch64-darwin-sha256 = "118mzkpk431dcm61gkbj5m4sdxkwnk6fvmxg9f96xiv6n22n7pnx";
+  aarch64-darwin-version = "4.40.128";
+  aarch64-darwin-sha256 = "0h6659lny80kxrqaf9qidirkw702wi7hjwwdhk9y0gcy87s9rqwd";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -65,15 +65,15 @@ let
     base = "https://downloads.slack-edge.com";
   in {
     x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/universal/${version}/Slack-${version}-macOS.dmg";
       sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
-      url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+      url = "${base}/desktop-releases/linux/x64/${version}/slack-desktop-${version}-amd64.deb";
       sha256 = x86_64-linux-sha256;
     };
     aarch64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/arm64/${version}/Slack-${version}-macOS.dmg";
       sha256 = aarch64-darwin-sha256;
     };
   }.${system} or throwSystem;
@@ -84,7 +84,7 @@ let
     changelog = "https://slack.com/release-notes";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ mmahut amaxine ];
+    maintainers = with maintainers; [ mmahut teutat3s ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-darwin" ];
     mainProgram = "slack";
   };
@@ -207,6 +207,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

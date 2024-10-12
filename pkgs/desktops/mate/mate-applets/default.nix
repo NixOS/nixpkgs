@@ -21,7 +21,7 @@
 , upower
 , wirelesstools
 , hicolor-icon-theme
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

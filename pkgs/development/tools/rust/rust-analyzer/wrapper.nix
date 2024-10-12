@@ -1,4 +1,4 @@
-{ lib, rustPlatform, runCommand, makeWrapper, rust-analyzer-unwrapped
+{ rustPlatform, runCommand, makeWrapper, rust-analyzer-unwrapped
 , pname ? "rust-analyzer"
 , version ? rust-analyzer-unwrapped.version
   # Use name from `RUST_SRC_PATH`

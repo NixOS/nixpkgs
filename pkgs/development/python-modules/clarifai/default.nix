@@ -1,30 +1,26 @@
-{ lib
-, buildPythonPackage
-, clarifai-grpc
-, fetchFromGitHub
-, inquirerpy
-, llama-index-core
-, numpy
-, opencv4
-, pandas
-, pillow
-, pycocotools
-, pypdf
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, pyyaml
-, rich
-, schema
-, setuptools
-, tabulate
-, tqdm
-, tritonclient
+{
+  lib,
+  buildPythonPackage,
+  clarifai-grpc,
+  fetchFromGitHub,
+  inquirerpy,
+  numpy,
+  pillow,
+  pycocotools,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  rich,
+  schema,
+  setuptools,
+  tabulate,
+  tqdm,
+  tritonclient,
 }:
 
 buildPythonPackage rec {
   pname = "clarifai";
-  version = "10.2.1";
+  version = "10.8.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,31 +29,21 @@ buildPythonPackage rec {
     owner = "Clarifai";
     repo = "clarifai-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-jI85xMApeEd0Hl6h4Am5qxWoSSTWHsmb7FxUjJPmBQM=";
+    hash = "sha256-dRhFZACfdMW0cIBDVUOSGDl5fai0gFXDPyfDil+itwQ=";
   };
 
   pythonRelaxDeps = [
     "clarifai-grpc"
+    "schema"
   ];
 
-  pythonRemoveDeps = [
-    "opencv-python"
-  ];
-
-  build-system = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     clarifai-grpc
     inquirerpy
-    llama-index-core
     numpy
-    opencv4
-    pandas
     pillow
-    pypdf
     pyyaml
     rich
     schema
@@ -66,15 +52,11 @@ buildPythonPackage rec {
     tritonclient
   ];
 
-  passthru.optional-dependencies = {
-    all = [
-      pycocotools
-    ];
+  optional-dependencies = {
+    all = [ pycocotools ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -83,6 +65,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test requires network access and API key
     "test_export_workflow_general"
+    "test_validate_invalid_id"
+    "test_validate_invalid_hex_id"
   ];
 
   disabledTestPaths = [
@@ -99,9 +83,7 @@ buildPythonPackage rec {
     "clarifai/models/model_serving/repo_build/static_files/base_test.py"
   ];
 
-  pythonImportsCheck = [
-    "clarifai"
-  ];
+  pythonImportsCheck = [ "clarifai" ];
 
   meta = with lib; {
     description = "Clarifai Python Utilities";

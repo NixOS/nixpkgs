@@ -31,7 +31,7 @@ let
       postConfigure = ''
         # speakeasy hardcodes /bin/stty https://github.com/bgentry/speakeasy/issues/22
         substituteInPlace vendor/github.com/bgentry/speakeasy/speakeasy_unix.go \
-          --replace "/bin/stty" "${coreutils}/bin/stty"
+          --replace-fail "/bin/stty" "${coreutils}/bin/stty"
       '';
 
       nativeBuildInputs = [ installShellFiles ];
@@ -56,9 +56,7 @@ let
         license = licenses.bsl11;
         maintainers = with maintainers; [
           Chili-Man
-          babariviere
           kalbasit
-          amaxine
           timstott
           zimbatm
           zowoq
@@ -167,9 +165,9 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
-    version = "1.7.5";
-    hash = "sha256-k/ugXlHK7lEKfOpSBXQNUdcq26rVVdjo53U+7ChJLIc=";
-    vendorHash = "sha256-5sCf65gFpI3y+qwDYvD08OZHNsDMg2IuDL65NMsLQ4Y=";
+    version = "1.9.7";
+    hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
+    vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

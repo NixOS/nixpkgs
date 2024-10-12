@@ -1,36 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, unicrypto
-, asyauth
-, asysocks
-, asn1crypto
-, winacl
-, prompt-toolkit
-, tqdm
-, wcwidth
-, tabulate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  unicrypto,
+  asyauth,
+  asysocks,
+  asn1crypto,
+  winacl,
+  prompt-toolkit,
+  tqdm,
+  wcwidth,
+  tabulate,
 }:
 
 buildPythonPackage rec {
   pname = "msldap";
-  version = "0.5.10";
+  version = "0.5.12";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Zb/g5QLJTSb0XTZvVnzbYkYvJ/ZVvQri8CKP48n5ibg=";
+    hash = "sha256-RKKj0oUPkl5QtrgtRRXHTO6lSLfB/E09DT9t9loMxUA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     unicrypto
     asyauth
     asysocks
@@ -45,9 +44,7 @@ buildPythonPackage rec {
   # Project doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "msldap"
-  ];
+  pythonImportsCheck = [ "msldap" ];
 
   meta = with lib; {
     description = "Python LDAP library for auditing MS AD";

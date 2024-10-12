@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, httpx
-, pytest-asyncio
-, pytest-httpserver
-, pytestCheckHook
-, python-slugify
-, python-status
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  httpx,
+  pytest-asyncio,
+  pytest-httpserver,
+  pytestCheckHook,
+  python-slugify,
+  python-status,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -45,13 +46,9 @@ buildPythonPackage rec {
       --replace "asyncmock" ""
   '';
 
-  disabledTestPaths = [
-    "tests/test_decorators.py"
-  ];
+  disabledTestPaths = [ "tests/test_decorators.py" ];
 
-  pythonImportsCheck = [
-    "simple_rest_client"
-  ];
+  pythonImportsCheck = [ "simple_rest_client" ];
 
   meta = with lib; {
     description = "Simple REST client for Python";

@@ -1,4 +1,11 @@
-{ stdenv, lib, buildPythonPackage, fetchFromGitHub, humanfriendly, pytestCheckHook }:
+{
+  stdenv,
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanfriendly,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "capturer";
@@ -15,7 +22,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ humanfriendly ];
 
   # hangs on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {

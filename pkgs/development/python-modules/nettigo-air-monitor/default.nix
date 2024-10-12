@@ -1,39 +1,41 @@
-{ lib
-, aiohttp
-, aioresponses
-, aqipy-atmotech
-, buildPythonPackage
-, dacite
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  aqipy-atmotech,
+  buildPythonPackage,
+  dacite,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "nettigo-air-monitor";
-  version = "2.2.2";
+  version = "3.3.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = "nettigo-air-monitor";
     rev = "refs/tags/${version}";
-    hash = "sha256-Z88IkXQi9Uqc+HX++Cp5nj4S0puwMfToqXzBCnbG59g=";
+    hash = "sha256-u4BfmdSP7UbwuS04MzsKRTWIsztBoNawcLXwhy4P4YA=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     aqipy-atmotech
     dacite
+    tenacity
   ];
 
   nativeCheckInputs = [
@@ -41,11 +43,16 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "nettigo_air_monitor"
+  disabledTests = [
+    # stuck in epoll
+    "test_retry_fail"
+    "test_retry_success"
   ];
+
+  pythonImportsCheck = [ "nettigo_air_monitor" ];
 
   meta = with lib; {
     description = "Python module to get air quality data from Nettigo Air Monitor devices";

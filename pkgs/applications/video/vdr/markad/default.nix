@@ -2,29 +2,16 @@
 , stdenv
 , vdr
 , fetchFromGitHub
-, graphicsmagick
-, pcre
-, xorgserver
 , ffmpeg
-, libiconv
-, boost
-, libgcrypt
-, perl
-, util-linux
-, groff
-, libva
-, xorg
-, ncurses
-, callPackage
 }:
 stdenv.mkDerivation rec {
   pname = "vdr-markad";
-  version = "3.4.13";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     repo = "vdr-plugin-markad";
     owner = "kfb77";
-    sha256 = "sha256-pDnziIWX6deBXuVIN7w6F6TdYDCcEO6MSaUIMB63uAg=";
+    sha256 = "sha256-O958GNQI6Z+m4sIJfGQzLaCrzyrdpn+ZY8COx7RoUZs=";
     rev = "V${version}";
   };
 

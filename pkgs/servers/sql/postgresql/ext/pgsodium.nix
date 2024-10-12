@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/michelp/pgsodium";
     changelog = "https://github.com/michelp/pgsodium/releases/tag/v${finalAttrs.version}";
     license = licenses.postgresql;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = postgresql.meta.platforms;
   };
 })

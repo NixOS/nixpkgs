@@ -15,19 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fb303";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
     rev = "v${version}";
-    sha256 = "sha256-EQpe0REGWUpYg+llsCo4x6vJ7UPdWXk3uPM3b8b9Uf0=";
+    sha256 = "sha256-Jtztb8CTqvRdRjUa3jaouP5PFAwoM4rKLIfgvOyXUIg=";
   };
 
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [
     "-DPYTHON_EXTENSIONS=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "a base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
+    description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
     homepage = "https://github.com/facebook/fb303";
     license = licenses.asl20;
     platforms = platforms.unix;

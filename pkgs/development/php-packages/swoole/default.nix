@@ -1,15 +1,17 @@
-{ lib
-, stdenv
-, buildPecl
-, php
-, valgrind
-, pcre2
-, fetchFromGitHub
- }:
+{
+  lib,
+  stdenv,
+  buildPecl,
+  php,
+  valgrind,
+  pcre2,
+  fetchFromGitHub,
+}:
 
 let
   version = "5.1.2";
-in buildPecl {
+in
+buildPecl {
   inherit version;
   pname = "swoole";
 
@@ -20,7 +22,7 @@ in buildPecl {
     hash = "sha256-WTsntvauiooj081mOoFcK6CVpnCCR/cEQtJbsOIJ/wo=";
   };
 
-  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
+  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   # tests require internet access
   doCheck = false;

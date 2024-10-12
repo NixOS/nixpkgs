@@ -14,7 +14,7 @@ perlPackages.buildPerlPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.isDarwin [ shortenPerlShebang ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ shortenPerlShebang ];
 
   buildInputs = with perlPackages; [
     CryptPassphrase CryptPassphraseArgon2 CryptPassphraseBcrypt
@@ -79,7 +79,7 @@ perlPackages.buildPerlPackage rec {
     ln -s $AUTO_SHARE_PATH/public/assets $out/assets
     cp -vR templates $out/templates
     cp Makefile.PL $out/Makefile.PL
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/convos
   '' + ''
     wrapProgram $out/bin/convos --set MOJO_HOME $out

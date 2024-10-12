@@ -11,7 +11,7 @@
   openssl,
 
   pkg-config,
-  protobuf_23,
+  protobuf_25,
   grpc,
   pandoc,
   python3,
@@ -19,6 +19,7 @@
   wget,
   lib,
   jq,
+  coreutils,
 
   curl,
   libarchive,
@@ -27,23 +28,23 @@ let stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.2.4";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "v${version}";
-    sha256 = "sha256-+ZQuMWqZyK7x/tPSi2ldSOpAexpX6ku4ikk/V8m6Ksg=";
+    hash = "sha256-kv7HpDEYZml5uk06s8Cxt5rEpxaJBz9s+or6Od1q4Io=";
   };
 
   bazelapi = fetchurl {
     url = "https://github.com/bazelbuild/remote-apis/archive/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz";
-    sha256 = "7421abd5352ccf927c2050453a4dbfa1f7b1c7170ec3e8702b6fe2d39b8805fe";
+    hash = "sha256-dCGr1TUsz5J8IFBFOk2/ofexxxcOw+hwK2/i05uIBf4=";
   };
 
   googleapi = fetchurl {
     url = "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz";
-    sha256 = "5bb6b0253ccf64b53d6c7249625a7e3f6c3bc6402abd52d3778bfa48258703a0";
+    hash = "sha256-W7awJTzPZLU9bHJJYlp+P2w7xkAqvVLTd4v6SCWHA6A=";
   };
 
   nativeBuildInputs =
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
       python3
       unzip
       wget
+      coreutils
 
       # Dependencies of just
       cli11
@@ -75,25 +77,20 @@ stdenv.mkDerivation rec {
     grpc
     libgit2
     openssl
-    # Using protobuf 23 because this is the same version upstream currently
-    # uses for bundled builds
-    # For future updates: The currently used version can be found in the file
-    # etc/repos.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.json
-    # under the key .repositories.protobuf
-    protobuf_23
+    protobuf_25
     python3
   ];
 
   postPatch = ''
     sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
     sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_23}"' etc/repos.json > etc/repos.json.patched
+    jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_25}"' etc/repos.json > etc/repos.json.patched
     mv etc/repos.json.patched etc/repos.json
     jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
     mv etc/repos.json.patched etc/repos.json
     jq '.unknown.PATH = []' etc/toolchain/CC/TARGETS > etc/toolchain/CC/TARGETS.patched
     mv etc/toolchain/CC/TARGETS.patched etc/toolchain/CC/TARGETS
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -ie 's|-Wl,-z,stack-size=8388608|-Wl,-stack_size,0x800000|' bin/bootstrap.py
   '';
 
@@ -131,7 +128,6 @@ stdenv.mkDerivation rec {
     __EOF__
     export PKG_CONFIG_PATH=`pwd`/.pkgconfig''${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH
 
-
     # Bootstrap just
     export PACKAGE=YES
     export NON_LOCAL_DEPS='[ "google_apis", "bazel_remote_apis" ]'
@@ -141,8 +137,7 @@ stdenv.mkDerivation rec {
     python3 ./bin/bootstrap.py `pwd` ../build "`pwd`/.distfiles"
 
     # Build compiled just-mr
-    mkdir ../build-root
-    ../build/out/bin/just install 'installed just-mr' -c ../build/build-conf.json -C ../build/repo-conf.json --output-dir ../build/out --local-build-root ../build-root
+    ../build/out/bin/just install 'installed just-mr' -c ../build/build-conf.json -C ../build/repo-conf.json --output-dir ../build/out --local-build-root ../build/.just
 
     # convert man pages from Markdown to man
     find "./share/man" -name "*.md" -exec sh -c '${pandoc}/bin/pandoc --standalone --to man -o "''${0%.md}" "''${0}"' {} \;
@@ -158,6 +153,7 @@ stdenv.mkDerivation rec {
     install -m 755 -Dt "$out/bin" "../build/out/bin/just"
     install -m 755 -Dt "$out/bin" "../build/out/bin/just-mr"
     install -m 755 -DT "bin/just-import-git.py" "$out/bin/just-import-git"
+    install -m 755 -DT "bin/just-deduplicate-repos.py" "$out/bin/just-deduplicate-repos"
 
     mkdir -p "$out/share/bash-completion/completions"
     install -m 0644 ./share/just_complete.bash "$out/share/bash-completion/completions/just"
@@ -170,8 +166,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = true; # last successful build 2024-01-26
-    description = "a generic build tool";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
     license = licenses.asl20;
     maintainers = with maintainers; [clkamp];

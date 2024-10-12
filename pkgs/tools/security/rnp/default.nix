@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , asciidoctor
-, botan2
+, botan3
 , bzip2
 , cmake
 , fetchFromGitHub
@@ -16,20 +16,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rnp";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "rnp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4fB7Sl9+ATrJTRnhbNG5BoW3XLxR7IP167RK96+gxj0=";
+    hash = "sha256-jUh7BxRnB6KePCk1jIvKzXgxSmWdKlQYmxshZZY4SBQ";
   };
 
-  buildInputs = [ zlib bzip2 json_c botan2 sexpp ];
+  buildInputs = [ zlib bzip2 json_c botan3 sexpp ];
 
   patches = [
-    ./unbundle-sexpp.patch
-    ./sexp_sexpp_rename.patch
   ];
 
   cmakeFlags = [
@@ -38,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_TESTING=on"
     "-DDOWNLOAD_GTEST=off"
     "-DDOWNLOAD_RUBYRNP=off"
+    "-DSYSTEM_LIBSEXPP=on"
   ];
 
   nativeBuildInputs = [ asciidoctor cmake gnupg gtest pkg-config python3 ];

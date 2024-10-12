@@ -1,60 +1,59 @@
-{ lib
-, awscli
-, fetchFromGitHub
-, python3
+{
+  lib,
+  awscli,
+  fetchFromGitHub,
+  python3,
 }:
-
 
 let
   python = python3.override {
-    packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
-    };
+    self = python;
+    packageOverrides = self: super: { sqlalchemy = super.sqlalchemy_1_4; };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pacu";
-  version = "1.5.2";
+  version = "1.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "pacu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Ty++jNJTk8YKy6Sl6xj1Xs25ZxJCeF9m/iwdA2fRXnI=";
+    hash = "sha256-Td5H4O6/7Gh/rvP191xjCJmIbyc4ezZC5Fh4FZ39ZUM=";
   };
 
   pythonRelaxDeps = [
     "dsnap"
     "sqlalchemy-utils"
     "sqlalchemy"
+    "pycognito"
     "urllib3"
   ];
 
-  nativeBuildInputs = with python.pkgs; [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = with python.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = [
-    awscli
-  ] ++ (with python.pkgs; [
-    awscli
-    boto3
-    botocore
-    chalice
-    dsnap
-    jq
-    policyuniverse
-    pycognito
-    pyyaml
-    qrcode
-    requests
-    sqlalchemy
-    sqlalchemy-utils
-    toml
-    typing-extensions
-    urllib3
-  ]);
+
+  dependencies =
+    [ awscli ]
+    ++ (with python.pkgs; [
+      awscli
+      boto3
+      botocore
+      chalice
+      dsnap
+      jq
+      policyuniverse
+      pycognito
+      pyyaml
+      qrcode
+      requests
+      sqlalchemy
+      sqlalchemy-utils
+      toml
+      typing-extensions
+      urllib3
+    ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto
@@ -65,13 +64,12 @@ in python.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
-  pythonImportsCheck = [
-    "pacu"
-  ];
+  pythonImportsCheck = [ "pacu" ];
 
   disabledTests = [
-    # sqlalchemy.exc.ArgumentError: Textual SQL expression
-    #"test_migrations"
+    # sAttributeError: module 'moto' has no attribute 'mock_s3'
+    "test_update"
+    "test_update_second_time"
   ];
 
   meta = with lib; {

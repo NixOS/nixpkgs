@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
+    hash = "sha256-IYjLx9/4oWSXa4jhOtGw1GOHmrR7LQ6bWyN5zbOuEFs=";
   };
 
-  cargoSha256 = "sha256-i7MPmO9MoANZLzmR5gsD+v0gyDtFbzhsmE9xOsb88L0=";
+  cargoHash = "sha256-i7MPmO9MoANZLzmR5gsD+v0gyDtFbzhsmE9xOsb88L0=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postInstall = ''
     wrapProgram $out/bin/perseus \
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://arctic-hen7.github.io/perseus";
-    description = "A high-level web development framework for Rust with full support for server-side rendering and static generation";
+    description = "High-level web development framework for Rust with full support for server-side rendering and static generation";
     maintainers = with maintainers; [ max-niederman ];
     license = with licenses; [ mit ];
     mainProgram = "perseus";

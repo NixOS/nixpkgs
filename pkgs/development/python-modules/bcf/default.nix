@@ -1,16 +1,17 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, appdirs
-, click
-, colorama
-, intelhex
-, packaging
-, pyaml
-, pyftdi
-, pyserial
-, requests
-, schema
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  appdirs,
+  click,
+  colorama,
+  intelhex,
+  packaging,
+  pyaml,
+  pyftdi,
+  pyserial,
+  requests,
+  schema,
 }:
 buildPythonPackage rec {
   pname = "bcf";

@@ -1,9 +1,10 @@
-{ lib
-, callPackage
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, hatchling
+{
+  lib,
+  callPackage,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  hatchling,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     substituteAllInPlace pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
   outputs = [
     "out"
@@ -41,9 +40,7 @@ buildPythonPackage rec {
     cp -R conftest.py tests $testout
   '';
 
-  pythonImportsCheck = [
-    "attr"
-  ];
+  pythonImportsCheck = [ "attr" ];
 
   # pytest depends on attrs, so we can't do this out-of-the-box.
   # Instead, we do this as a passthru.tests test.
@@ -58,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-attrs/attrs";
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

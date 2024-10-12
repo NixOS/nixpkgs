@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, pybind11, tinyobjloader }:
+{
+  lib,
+  buildPythonPackage,
+  pybind11,
+  tinyobjloader,
+}:
 
 buildPythonPackage rec {
   pname = "tinyobjloader-py";
@@ -16,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "tinyobjloader" ];
 
-  meta = with lib; tinyobjloader.meta // {
+  meta = tinyobjloader.meta // {
     description = "Python wrapper for the C++ wavefront .obj loader tinyobjloader";
   };
 }

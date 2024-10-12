@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.gnunet;
@@ -44,82 +41,82 @@ in
 
     services.gnunet = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc ''
+        description = ''
           Whether to run the GNUnet daemon.  GNUnet is GNU's anonymous
           peer-to-peer communication and file sharing framework.
         '';
       };
 
       fileSharing = {
-        quota = mkOption {
-          type = types.int;
+        quota = lib.mkOption {
+          type = lib.types.int;
           default = 1024;
-          description = lib.mdDoc ''
+          description = ''
             Maximum file system usage (in MiB) for file sharing.
           '';
         };
       };
 
       udp = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 2086;  # assigned by IANA
-          description = lib.mdDoc ''
+          description = ''
             The UDP port for use by GNUnet.
           '';
         };
       };
 
       tcp = {
-        port = mkOption {
-          type = types.port;
+        port = lib.mkOption {
+          type = lib.types.port;
           default = 2086;  # assigned by IANA
-          description = lib.mdDoc ''
+          description = ''
             The TCP port for use by GNUnet.
           '';
         };
       };
 
       load = {
-        maxNetDownBandwidth = mkOption {
-          type = types.int;
+        maxNetDownBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 50000;
-          description = lib.mdDoc ''
+          description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
         };
 
-        maxNetUpBandwidth = mkOption {
-          type = types.int;
+        maxNetUpBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 50000;
-          description = lib.mdDoc ''
+          description = ''
             Maximum bandwidth usage (in bits per second) for GNUnet
             when downloading data.
           '';
         };
 
-        hardNetUpBandwidth = mkOption {
-          type = types.int;
+        hardNetUpBandwidth = lib.mkOption {
+          type = lib.types.int;
           default = 0;
-          description = lib.mdDoc ''
+          description = ''
             Hard bandwidth limit (in bits per second) when uploading
             data.
           '';
         };
       };
 
-      package = mkPackageOption pkgs "gnunet" {
+      package = lib.mkPackageOption pkgs "gnunet" {
         example = "gnunet_git";
       };
 
-      extraOptions = mkOption {
-        type = types.lines;
+      extraOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
-        description = lib.mdDoc ''
+        description = ''
           Additional options that will be copied verbatim in `gnunet.conf`.
           See {manpage}`gnunet.conf(5)` for details.
         '';
@@ -131,7 +128,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.gnunet.enable {
+  config = lib.mkIf config.services.gnunet.enable {
 
     users.users.gnunet = {
       group = "gnunet";

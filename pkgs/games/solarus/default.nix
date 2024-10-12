@@ -22,13 +22,17 @@ mkDerivation rec {
     openal libmodplug libvorbis
     qtbase glm ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-DGLM_ENABLE_EXPERIMENTAL")
+  ];
+
   preFixup = ''
     mkdir $lib/
     mv $out/lib $lib
   '';
 
   meta = with lib; {
-    description = "A Zelda-like ARPG game engine";
+    description = "Zelda-like ARPG game engine";
     longDescription = ''
       Solarus is a game engine for Zelda-like ARPG games written in lua.
       Many full-fledged games have been writen for the engine.

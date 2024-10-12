@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     homepage = "http://www.marcuscom.com/downloads/";
   };
 }

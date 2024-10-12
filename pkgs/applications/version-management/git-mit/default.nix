@@ -10,7 +10,7 @@
 }:
 
 let
-  version = "5.12.191";
+  version = "5.13.29";
 in
 rustPlatform.buildRustPackage {
   pname = "git-mit";
@@ -20,10 +20,10 @@ rustPlatform.buildRustPackage {
     owner = "PurpleBooth";
     repo = "git-mit";
     rev = "v${version}";
-    hash = "sha256-aSEoAs0s7zyALf3s77eVlrjkCrn7ihW/4OW5hN8YL8k=";
+    hash = "sha256-8XUpUpsd2q/1N28ZAPt7rW0pJu0WzE6oVSOwdJxhSBk=";
   };
 
-  cargoHash = "sha256-pm+XreLGxZJKRcrmU1ooMjN7MTRJqgKOy2J1OqdodxE=";
+  cargoHash = "sha256-KtdbYzXHpdg0Rf4ENrWpP0+vG3+HlLVi7MLeXp9HoVw=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 

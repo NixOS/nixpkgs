@@ -1,26 +1,27 @@
-{ lib
-, elasticsearch-curator
-, fetchFromGitHub
-, nix-update-script
-, python3
-, testers
+{
+  lib,
+  elasticsearch-curator,
+  fetchFromGitHub,
+  nix-update-script,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
-  version = "8.0.12";
-  format = "pyproject";
+  version = "8.0.16";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CU/8l5607eKodcdpMKu0Wdlg+K6YnFX6uoDju12NDR0=";
+    hash = "sha256-nSBsLzem+eZBM0ebhW1Omh+pYYPYdly/VraM89iJe3E=";
   };
 
-  build-system = with python3.pkgs; [
-    hatchling
-  ];
+  pythonRelaxDeps = [ "es-client" ];
+
+  build-system = with python3.pkgs; [ hatchling ];
 
   dependencies = with python3.pkgs; [
     certifi

@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, requests
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -21,24 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-n9FRX2Pnn96H0HVT4SHLJgONc0XzQ005itMNpvl9IYg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "zoneminder"
-  ];
+  pythonImportsCheck = [ "zoneminder" ];
 
   meta = with lib; {
-    description = "A loose python wrapper around the ZoneMinder REST API";
+    description = "Loose python wrapper around the ZoneMinder REST API";
     homepage = "https://github.com/rohankapoorcom/zm-py";
     changelog = "https://github.com/rohankapoorcom/zm-py/releases/tag/v${version}";
     license = licenses.asl20;

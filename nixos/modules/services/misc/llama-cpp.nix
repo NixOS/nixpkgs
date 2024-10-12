@@ -20,7 +20,7 @@ in {
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         description = "Extra flags passed to llama-cpp-server.";
-        example = ["-c" "4096" "-ngl" "32" "--numa"];
+        example = ["-c" "4096" "-ngl" "32" "--numa" "numactl"];
         default = [];
       };
 
@@ -92,7 +92,6 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-          "~@resources"
         ];
         SystemCallErrorNumber = "EPERM";
         ProtectProc = "invisible";

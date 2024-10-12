@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, httpcore
-, httpx
-, wsproto
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  httpcore,
+  httpx,
+  wsproto,
 }:
 
 buildPythonPackage rec {
@@ -32,6 +33,6 @@ buildPythonPackage rec {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
     homepage = "https://github.com/python-hyper/h11";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

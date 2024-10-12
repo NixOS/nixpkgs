@@ -65,6 +65,7 @@ makeScopeWithSplicing' {
   };
   qcoro = callPackage ../development/libraries/qcoro { };
   qgpgme = callPackage ../development/libraries/gpgme { };
+  qmlbox2d = callPackage ../development/libraries/qmlbox2d { };
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
   qt6ct = callPackage ../tools/misc/qt6ct { };
@@ -103,7 +104,9 @@ makeScopeWithSplicing' {
 
   # Not a library, but we do want it to be built for every qt version there
   # is, to allow users to choose the right build if needed.
-  sddm = callPackage ../applications/display-managers/sddm {};
+  sddm = kdePackages.callPackage ../applications/display-managers/sddm {};
+
+  sierra-breeze-enhanced = kdePackages.callPackage ../data/themes/kwin-decorations/sierra-breeze-enhanced { };
 
   signond = callPackage ../development/libraries/signond {};
 
@@ -111,10 +114,9 @@ makeScopeWithSplicing' {
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
+  xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   } // lib.optionalAttrs pkgs.config.allowAliases {
-    # Convert to a throw on 01-01-2023.
-    # Warnings show up in various cli tool outputs, throws do not.
-    # Remove completely before 24.05
-    overrideScope' = lib.warn "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+    # Remove completely before 24.11
+    overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";
   });
 }

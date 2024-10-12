@@ -1,60 +1,64 @@
-{ lib,
+{
+  lib,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
   asteval,
-  numpy,
-  scipy,
-  uncertainties,
-  pytestCheckHook,
-  pandas,
+  dill,
+  fetchPypi,
   matplotlib,
+  numpy,
+  pandas,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools-scm,
+  setuptools,
+  uncertainties,
 }:
 
 buildPythonPackage rec {
   pname = "lmfit";
-  version = "1.2.2";
+  version = "1.3.2";
+  pyproject = true;
 
-  format = "pyproject";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BEoFKhGmHaBXYnRQTBfrfigDtBEo4lgh6WYyIH8jyIw=";
+    hash = "sha256-Mb7q4fAnwbjBTc1/LoSIqAt1+zied/ymd1Sb3C/ll7s=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg --replace "--cov=lmfit --cov-report html" ""
+    substituteInPlace pyproject.toml \
+      --replace-fail "--cov=lmfit --cov-report html" ""
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asteval
+    dill
     numpy
     scipy
     uncertainties
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pandas
     matplotlib
+    pandas
+    pytestCheckHook
   ];
 
-  disabledTests = [
-    # https://github.com/lmfit/lmfit-py/issues/878
-    "test_emcee_multiprocessing"
-    "test_explicit_independent_vars"
-    "test_result_eval_custom_x"
-  ];
+  pythonImportsCheck = [ "lmfit" ];
+
+  disabledTests = [ "test_check_ast_errors" ];
 
   meta = with lib; {
     description = "Least-Squares Minimization with Bounds and Constraints";
-    homepage = "https://lmfit-py.readthedocs.io/";
+    homepage = "https://lmfit.github.io/lmfit-py/";
+    changelog = "https://github.com/lmfit/lmfit-py/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ nomeata ];
   };

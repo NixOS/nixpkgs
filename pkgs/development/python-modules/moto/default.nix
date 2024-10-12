@@ -1,61 +1,62 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, boto3
-, botocore
-, cryptography
-, jinja2
-, python-dateutil
-, requests
-, responses
-, werkzeug
-, xmltodict
+  # dependencies
+  boto3,
+  botocore,
+  cryptography,
+  jinja2,
+  python-dateutil,
+  requests,
+  responses,
+  werkzeug,
+  xmltodict,
 
-# optional-dependencies
-, aws-xray-sdk
-, cfn-lint
-, flask
-, flask-cors
-, docker
-, graphql-core
-, joserfc
-, jsondiff
-, multipart
-, openapi-spec-validator
-, py-partiql-parser
-, pyparsing
-, pyyaml
+  # optional-dependencies
+  antlr4-python3-runtime,
+  aws-xray-sdk,
+  cfn-lint,
+  flask,
+  flask-cors,
+  docker,
+  graphql-core,
+  joserfc,
+  jsonpath-ng,
+  jsondiff,
+  multipart,
+  openapi-spec-validator,
+  py-partiql-parser,
+  pyparsing,
+  pyyaml,
 
-# tests
-, freezegun
-, pytestCheckHook
-, pytest-order
-, pytest-xdist
+  # tests
+  freezegun,
+  pytestCheckHook,
+  pytest-order,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.3";
+  version = "5.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BwrC7fia167ihTRIHOaOLzRMimqP7+xUJ+6g1Zm/29s=";
+    hash = "sha256-EL1DS/2jKWOf6VKUcMTCeTgGTBOZhAJOamJRPlCv9Cc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     boto3
     botocore
     cryptography
@@ -67,9 +68,10 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     # non-exhaustive list of extras, that was cobbled together for testing
     all = [
+      antlr4-python3-runtime
       aws-xray-sdk
       cfn-lint
       docker
@@ -78,6 +80,7 @@ buildPythonPackage rec {
       graphql-core
       joserfc
       jsondiff
+      jsonpath-ng
       multipart
       openapi-spec-validator
       pyparsing
@@ -85,9 +88,7 @@ buildPythonPackage rec {
       pyyaml
       setuptools
     ];
-    cognitoidp = [
-      joserfc
-    ];
+    cognitoidp = [ joserfc ];
   };
 
   __darwinAllowLocalNetworking = true;
@@ -97,17 +98,19 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-order
     pytest-xdist
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
   pytestFlagsArray = [
-    "-m" "'not network and not requires_docker'"
+    "-m"
+    "'not network and not requires_docker'"
 
     # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist" "loadscope"
+    "--dist"
+    "loadscope"
 
     # Fails at local name resolution
     "--deselect=tests/test_s3/test_multiple_accounts_server.py::TestAccountIdResolution::test_with_custom_request_header"
@@ -153,6 +156,12 @@ buildPythonPackage rec {
     # Threading tests regularly blocks test execution
     "tests/test_utilities/test_threaded_server.py"
     "tests/test_s3/test_s3_bucket_policy.py"
+
+    # https://github.com/getmoto/moto/issues/7786
+    "tests/test_dynamodb/test_dynamodb_import_table.py"
+
+    # Infinite recursion with pycognito
+    "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
   meta = with lib; {

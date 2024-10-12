@@ -24,7 +24,7 @@ with self;
     hash = "0gl89zpgsf3n30nb6v5cns27g2bfg4rf3s2427gqvwbkr5gcf7ri";
     meta.description = "Full standard library replacement for OCaml";
     propagatedBuildInputs = [ sexplib0 ];
-    buildInputs = [ dune_1 ];
+    buildInputs = [ dune-configurator ];
   };
 
   stdio = janePackage {
@@ -169,8 +169,9 @@ with self;
   };
 
   base_quickcheck = janePackage {
+    version = "0.12.1";
     pname = "base_quickcheck";
-    hash = "1la6qgq1zwmfyq1hqy6i337w435ym5yqgx2ygk86qip6nws0s6r3";
+    hash = "sha256-ABfUtOzdtGrYR6EgtVYkmxRvsH48jJwSVVOwf4Od12Y=";
     meta.description = "Randomized testing framework, designed for compatibility with Base";
     propagatedBuildInputs = [ ppx_base ppx_fields_conv ppx_let splittable_random ];
   };
@@ -208,7 +209,7 @@ with self;
     pname = "jst-config";
     hash = "0yxcz13vda1mdh9ah7qqxwfxpcqang5sgdssd8721rszbwqqaw93";
     meta.description = "Compile-time configuration for Jane Street libraries";
-    buildInputs = [ dune_1 ppx_assert ];
+    buildInputs = [ dune-configurator ppx_assert ];
   };
 
   ppx_optcomp = janePackage {
@@ -304,8 +305,8 @@ with self;
 
   core_kernel = janePackage {
     pname = "core_kernel";
-    version = "0.12.2";
-    hash = "0c85bjvadrb4pmjcg0gjk3bkkgka62r90pjm690mjvcbbv5zjxzj";
+    version = "0.12.3";
+    hash = "sha256-bDgxuOILAs4FYB8o92ysPHDdEzflZMsU/jk5hB9xfuc=";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ base_bigstring sexplib ];
@@ -386,7 +387,8 @@ with self;
 
   re2 = janePackage {
     pname = "re2";
-    hash = "1sw32lb0y501y971ij7287796lvfhs0nfgla895r74ymfks2rcjb";
+    version = "0.12.1";
+    hash = "sha256-NPQKKUSwckZx4GN4wX2sc0Mn7bes6p79oZrN6xouc6o=";
     meta.description = "OCaml bindings for RE2, Google's regular expression library";
     propagatedBuildInputs = [ core_kernel ];
     prePatch = ''
@@ -458,40 +460,6 @@ with self;
     hash = "0n9xi6agc3lgyj2nsi10cbif0xwn57xyaranad9r285rmbxrgjh7";
     meta.description = "Library for writing Emacs plugin in OCaml";
     propagatedBuildInputs = [ async expect_test_helpers_kernel ];
-  };
-
-  ### Packages at version 0.11, with dependencies at version 0.12
-
-  configurator = janePackage {
-    pname = "configurator";
-    version = "0.11.0";
-    hash = "0h686630cscav7pil8c3w0gbh6rj4b41dvbnwmicmlkc746q5bfk";
-    propagatedBuildInputs = [ stdio ];
-    meta.description = "Helper library for gathering system configuration";
-  };
-
-  ppx_core = janePackage {
-    pname = "ppx_core";
-    version = "0.11.0";
-    hash = "11hgm9mxig4cm3c827f6dns9mjv3pf8g6skf10x0gw9xnp1dmzmx";
-    propagatedBuildInputs = [ ppxlib ];
-    meta.description = "Deprecated (see ppxlib)";
-  };
-
-  ppx_driver = janePackage {
-    pname = "ppx_driver";
-    version = "0.11.0";
-    hash = "00kfx6js2kxk57k4v7hiqvwk7h35whgjihnxf75m82rnaf4yzvfi";
-    propagatedBuildInputs = [ ppxlib ];
-    meta.description = "Deprecated (see ppxlib)";
-  };
-
-  ppx_type_conv = janePackage {
-    pname = "ppx_type_conv";
-    version = "0.11.0";
-    hash = "04dbrglqqhkas25cpjz8xhjcbpk141c35qggzw66bn69izczfmaf";
-    propagatedBuildInputs = [ ppxlib ];
-    meta.description = "Deprecated (see ppxlib)";
   };
 
 }

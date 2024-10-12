@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, click
-, dm-tree
-, docutils
-, etils
-, fetchFromGitHub
-, fetchpatch
-, numpy
-, pythonOlder
-, tabulate
-, tensorflow
-, tensorflow-datasets
-, wrapt
+{
+  lib,
+  buildPythonPackage,
+  click,
+  dm-tree,
+  docutils,
+  etils,
+  fetchFromGitHub,
+  fetchpatch,
+  numpy,
+  pythonOlder,
+  tabulate,
+  tensorflow,
+  tensorflow-datasets,
+  wrapt,
 }:
 
 buildPythonPackage rec {
@@ -44,10 +45,8 @@ buildPythonPackage rec {
     wrapt
   ] ++ etils.optional-dependencies.epath;
 
-  passthru.optional-dependencies = {
-    tensorflow = [
-      tensorflow
-    ];
+  optional-dependencies = {
+    tensorflow = [ tensorflow ];
   };
 
   nativeCheckInputs = [
@@ -57,9 +56,7 @@ buildPythonPackage rec {
     tensorflow-datasets
   ];
 
-  pythonImportsCheck = [
-    "sonnet"
-  ];
+  pythonImportsCheck = [ "sonnet" ];
 
   meta = with lib; {
     description = "Library for building neural networks in TensorFlow";

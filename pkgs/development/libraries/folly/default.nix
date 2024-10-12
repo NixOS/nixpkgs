@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folly";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "sha256-+z1wuEOgr7CMHFnOn5gLm9mtVH7mVURLstOoDqzxKbk=";
+    sha256 = "sha256-INvWTw27fmVbKQIT9ebdRGMCOIzpc/NepRN2EnKLJx0=";
   };
 
   nativeBuildInputs = [
@@ -55,10 +55,10 @@ stdenv.mkDerivation rec {
     libunwind
     fmt_8
     zstd
-  ] ++ lib.optional stdenv.isLinux jemalloc;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
   # jemalloc headers are required in include/folly/portability/Malloc.h
-  propagatedBuildInputs = lib.optional stdenv.isLinux jemalloc;
+  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DFOLLY_MOBILE=${if follyMobile then "1" else "0"}" "-fpermissive" ];
   cmakeFlags = [
@@ -66,12 +66,14 @@ stdenv.mkDerivation rec {
 
     # temporary hack until folly builds work on aarch64,
     # see https://github.com/facebook/folly/issues/1880
-    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.hostPlatform.isx86_64 then "x86_64" else "dummy"}"
 
     # ensure correct dirs in $dev/lib/pkgconfig/libfolly.pc
     # see https://github.com/NixOS/nixpkgs/issues/144170
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
   ];
 
   # split outputs to reduce downstream closure sizes
@@ -97,7 +99,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "An open-source C++ library developed and used at Facebook";
+    description = "Open-source C++ library developed and used at Facebook";
     homepage = "https://github.com/facebook/folly";
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103

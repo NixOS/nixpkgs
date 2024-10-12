@@ -2,6 +2,7 @@
 , stdenv
 , version
 , hash
+, patches ? []
 , fetchFromGitHub
 
 , cmake
@@ -21,7 +22,11 @@ stdenv.mkDerivation rec {
     repo = "mbedtls";
     rev = "${pname}-${version}";
     inherit hash;
+    # mbedtls >= 3.6.0 uses git submodules
+    fetchSubmodules = true;
   };
+
+  inherit patches;
 
   nativeBuildInputs = [ cmake ninja perl python3 ];
 

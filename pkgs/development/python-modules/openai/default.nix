@@ -1,32 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hatchling
-# propagated
-, httpx
-, pydantic
-, typing-extensions
-, anyio
-, distro
-, sniffio
-, cached-property
-, tqdm
-# optional
-, numpy
-, pandas
-, pandas-stubs
-# tests
-, pytestCheckHook
-, pytest-asyncio
-, pytest-mock
-, respx
-, dirty-equals
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
+
+  # dependencies
+  anyio,
+  cached-property,
+  distro,
+  httpx,
+  jiter,
+  pydantic,
+  sniffio,
+  tqdm,
+  typing-extensions,
+
+  numpy,
+  pandas,
+  pandas-stubs,
+
+  # check deps
+  pytestCheckHook,
+  dirty-equals,
+  inline-snapshot,
+  pytest-asyncio,
+  pytest-mock,
+  respx,
+
 }:
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.13.3";
+  version = "1.51.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7.1";
@@ -35,26 +44,26 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8SHXUrPLZ7lgvB0jqZlcvKq5Zv2d2UqXjJpgiBpR8P8=";
+    hash = "sha256-VwsW7wVNSVlZg+RJoQ3C9AuqHL5dFO+f9pyfUbRbrSM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
+    hatch-fancy-pypi-readme
   ];
 
-  propagatedBuildInputs = [
-    httpx
-    pydantic
-    typing-extensions
+  dependencies = [
     anyio
     distro
+    httpx
+    jiter
+    pydantic
     sniffio
     tqdm
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    cached-property
-  ];
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     datalib = [
       numpy
       pandas
@@ -62,28 +71,25 @@ buildPythonPackage rec {
     ];
   };
 
-  pythonImportsCheck = [
-    "openai"
-  ];
+  pythonImportsCheck = [ "openai" ];
 
   nativeCheckInputs = [
     pytestCheckHook
+    dirty-equals
+    inline-snapshot
     pytest-asyncio
     pytest-mock
     respx
-    dirty-equals
   ];
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   disabledTests = [
     # Tests make network requests
-    "test_streaming_response"
     "test_copy_build_request"
-
-    # Test fails with pytest>=8
     "test_basic_attribute_access_works"
   ];
 
@@ -94,10 +100,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python client library for the OpenAI API";
-    mainProgram = "openai";
     homepage = "https://github.com/openai/openai-python";
     changelog = "https://github.com/openai/openai-python/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ malo ];
+    mainProgram = "openai";
   };
 }

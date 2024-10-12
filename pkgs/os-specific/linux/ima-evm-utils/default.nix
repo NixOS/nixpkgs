@@ -1,23 +1,26 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, openssl
-, keyutils
-, asciidoc
-, libxslt
-, docbook_xsl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  openssl,
+  tpm2-tss,
+  keyutils,
+  asciidoc,
+  libxslt,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ima-evm-utils";
-  version = "1.5";
+  version = "1.6.2";
 
-  src = fetchgit {
-    url = "git://git.code.sf.net/p/linux-ima/ima-evm-utils";
-    rev = "v${version}";
-    sha256 = "sha256-WPBG7v29JHZ+ZGeLgA2gtLzZmaG0Xdvpq+BZ6NriY+A=";
+  src = fetchFromGitHub {
+    owner = "linux-integrity";
+    repo = "ima-evm-utils";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-vIu12Flc2DiEqUSKAfoUi7Zg6D25pURvlYKEQKHER4I=";
   };
 
   strictDeps = true;
@@ -30,8 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl
     keyutils
+    openssl
+    tpm2-tss
   ];
 
   env.MANPAGE_DOCBOOK_XSL = "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
@@ -39,8 +43,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "evmctl utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
     mainProgram = "evmctl";
-    homepage = "https://sourceforge.net/projects/linux-ima/";
-    license = lib.licenses.gpl2;
+    homepage = "https://github.com/linux-integrity/ima-evm-utils";
+    license = with lib.licenses; [
+      lgpl2Plus # libimaevm
+      gpl2Plus # evmctl
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ nickcao ];
   };

@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
@@ -13,10 +10,10 @@ let
 in {
   options = {
     services.mautrix-telegram = {
-      enable = mkEnableOption (lib.mdDoc "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge");
+      enable = lib.mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
 
-      settings = mkOption rec {
-        apply = recursiveUpdate default;
+      settings = lib.mkOption rec {
+        apply = lib.recursiveUpdate default;
         inherit (settingsFormat) type;
         default = {
           homeserver = {
@@ -64,7 +61,7 @@ in {
             };
           };
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             homeserver = {
               address = "http://localhost:8008";
@@ -85,7 +82,7 @@ in {
             };
           }
         '';
-        description = lib.mdDoc ''
+        description = ''
           {file}`config.yaml` configuration as a Nix attribute set.
           Configuration options should match those described in
           [example-config.yaml](https://github.com/mautrix/telegram/blob/master/mautrix_telegram/example-config.yaml).
@@ -95,10 +92,10 @@ in {
         '';
       };
 
-      environmentFile = mkOption {
-        type = types.nullOr types.path;
+      environmentFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           File containing environment variables to be passed to the mautrix-telegram service,
           in which secret tokens can be specified securely by defining values for e.g.
           `MAUTRIX_TELEGRAM_APPSERVICE_AS_TOKEN`,
@@ -120,20 +117,20 @@ in {
         '';
       };
 
-      serviceDependencies = mkOption {
-        type = with types; listOf str;
-        default = optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
-        defaultText = literalExpression ''
-          optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
+      serviceDependencies = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit;
+        defaultText = lib.literalExpression ''
+          lib.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit
         '';
-        description = lib.mdDoc ''
+        description = ''
           List of Systemd services to require and wait for when starting the application service.
         '';
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
@@ -192,5 +189,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien vskilet ];
+  meta.maintainers = with lib.maintainers; [ pacien vskilet ];
 }

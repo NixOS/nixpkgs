@@ -1,5 +1,4 @@
 { lib
-, ocaml
 , buildDunePackage
 , mirage-crypto
 , dune-configurator

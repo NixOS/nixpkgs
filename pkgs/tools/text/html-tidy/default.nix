@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
 
   meta = with lib; {
-    description = "A HTML validator and `tidier'";
+    description = "HTML validator and `tidier'";
     longDescription = ''
       HTML Tidy is a command-line tool and C library that can be
       used to validate and fix HTML data.

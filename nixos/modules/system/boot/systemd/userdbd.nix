@@ -4,9 +4,9 @@ let
   cfg = config.services.userdbd;
 in
 {
-  options.services.userdbd.enable = lib.mkEnableOption (lib.mdDoc ''
+  options.services.userdbd.enable = lib.mkEnableOption ''
     the systemd JSON user/group record lookup service
-  '');
+  '';
   config = lib.mkIf cfg.enable {
     systemd.additionalUpstreamSystemUnits = [
       "systemd-userdbd.socket"

@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -14,16 +15,12 @@ buildPythonPackage rec {
     hash = "sha256-UuMWsDeDiGqKKr3CKPcHFoC6ZYlFRc0ghevjz4hoSg4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "decorator-stubs"
-  ];
+  pythonImportsCheck = [ "decorator-stubs" ];
 
   meta = with lib; {
     description = "Typing stubs for decorator";

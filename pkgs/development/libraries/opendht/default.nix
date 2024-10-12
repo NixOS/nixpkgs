@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
-  version = "3.1.4";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "v${version}";
-    hash = "sha256-KtsQ25uStmlf7RZLAcabhPMyGbxKxvpR6Vm632+EBvw=";
+    hash = "sha256-s172Sj1EvV7Lmnmd+xyKmYF2cDEa8Bot10ovggEsOFg=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     restinio
     http-parser
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "lib" "dev" "man" ];
 
   meta = with lib; {
-    description = "A C++11 Kademlia distributed hash table implementation";
+    description = "C++11 Kademlia distributed hash table implementation";
     homepage = "https://github.com/savoirfairelinux/opendht";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ taeer olynch thoughtpolice ];

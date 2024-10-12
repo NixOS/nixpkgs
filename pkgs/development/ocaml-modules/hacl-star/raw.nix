@@ -2,11 +2,9 @@
 , which
 , stdenv
 , fetchzip
-, opaline
 , cmake
 , ocaml
 , findlib
-, hacl-star
 , ctypes
 , cppo
 }:

@@ -1,9 +1,10 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, calmjs-types
-, calmjs-parse
-, pytestCheckHook
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+  calmjs-types,
+  calmjs-parse,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-73NQiY1RMdBrMIlm/VTvHY4dCHL1pQoj6a48CWRos3o=";
+    hash = "sha256-73NQiY1RMdBrMIlm/VTvHY4dCHL1pQoj6a48CWRos3o=";
     extension = "zip";
   };
 
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     calmjs-types
   ];
 
-  checkInputs = [
-    pytestCheckHook
-  ];
+  checkInputs = [ pytestCheckHook ];
 
   # ModuleNotFoundError: No module named 'calmjs.types'
   # Not yet clear how to run these tests correctly

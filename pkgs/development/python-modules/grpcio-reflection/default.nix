@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, grpcio
-, protobuf
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  grpcio,
+  protobuf,
 }:
 
 buildPythonPackage rec {
   pname = "grpcio-reflection";
-  version = "1.62.1";
-  format = "setuptools";
+  version = "1.66.2";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-q9RTABmRhxAxMV7y2Cr/6TCAwEM/o6AHvjS/Qn4oqIo=";
+    pname = "grpcio_reflection";
+    inherit version;
+    hash = "sha256-rdgn4t61bpaAPIKs4dTnf6DI7DdH1jmOmVH3OdcQZ9Q=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
+  build-system = [ setuptools ];
+
   pythonRelaxDeps = [
     "grpcio"
+    "protobuf"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     grpcio
     protobuf
   ];

@@ -135,7 +135,7 @@ in
       type = types.lines;
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
-      description = lib.mdDoc ''
+      description = ''
         Additional shell commands executed as part of the nat
         initialisation script.
 
@@ -147,7 +147,7 @@ in
       type = types.lines;
       default = "";
       example = "iptables -D INPUT -p icmp -j ACCEPT || true";
-      description = lib.mdDoc ''
+      description = ''
         Additional shell commands executed as part of the nat
         teardown script.
 

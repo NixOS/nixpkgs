@@ -18,7 +18,7 @@
 , systemd
 , enableSystemdResolved ? false
 , tinyxml-2
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     python3.pkgs.docutils
     python3.pkgs.jinja2
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     python3.pkgs.wrapPython
   ] ++ pythonPath;
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     description = "OpenVPN 3 Linux client";
     license = licenses.agpl3Plus;
     homepage = "https://github.com/OpenVPN/openvpn3-linux/";
-    maintainers = with maintainers; [ shamilton kfears ];
+    maintainers = with maintainers; [ shamilton ];
     platforms = platforms.linux;
   };
 }

@@ -2,21 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shadowsocks-rust";
-  version = "1.18.2";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "shadowsocks";
     repo = pname;
-    hash = "sha256-wbbh4IpAla3I/xgmiuzy9E9npS/PUtRFCZS4dl7JYRQ=";
+    hash = "sha256-B4RufyxqcKd5FJulKRV+33sos+cYrL2/QPmKEYw3aTU=";
   };
 
-  cargoHash = "sha256-TPW+dic9KdtGXGlcEi7YAmt442ZJRifumnrmcX8+unM=";
+  cargoHash = "sha256-2uYLrYFuzvaOZxw2hN4DcrEbwW5rnXxqKoI2q6yZaGU=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
 
   buildFeatures = [
     "trust-dns"
@@ -48,10 +48,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A Rust port of Shadowsocks";
+    description = "Rust port of Shadowsocks";
     homepage = "https://github.com/shadowsocks/shadowsocks-rust";
     changelog = "https://github.com/shadowsocks/shadowsocks-rust/raw/v${version}/debian/changelog";
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

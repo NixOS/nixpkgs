@@ -7,7 +7,7 @@ let
   cfg = xcfg.desktopManager.cde;
 in {
   options.services.xserver.desktopManager.cde = {
-    enable = mkEnableOption (lib.mdDoc "Common Desktop Environment");
+    enable = mkEnableOption "Common Desktop Environment";
 
     extraPackages = mkOption {
       type = with types; listOf package;
@@ -19,7 +19,7 @@ in {
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
       '';
-      description = lib.mdDoc ''
+      description = ''
         Extra packages to be installed system wide.
       '';
     };

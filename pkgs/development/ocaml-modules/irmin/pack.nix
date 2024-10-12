@@ -1,4 +1,4 @@
-{ lib, buildDunePackage
+{ buildDunePackage
 , index, ppx_irmin, irmin, optint, fmt, logs, lwt, mtime, cmdliner, checkseum, rusage
 , alcotest, alcotest-lwt, astring, irmin-test
 }:
@@ -8,7 +8,7 @@ buildDunePackage rec {
 
   pname = "irmin-pack";
 
-  inherit (irmin) version src strictDeps;
+  inherit (irmin) version src;
 
   nativeBuildInputs = [ ppx_irmin ];
 

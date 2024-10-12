@@ -11,11 +11,11 @@
 , gtksourceview
 , libgee
 , nix-update-script
-, webkitgtk
+, webkitgtk_4_0
 , libqalculate
 , intltool
 , gnuplot
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     gtksourceview
     libgee
     pantheon.granite
-    webkitgtk
+    webkitgtk_4_0
     # We add libqalculate's runtime dependencies because nasc has it as a modified subproject.
   ] ++ libqalculate.buildInputs ++ libqalculate.propagatedBuildInputs;
 

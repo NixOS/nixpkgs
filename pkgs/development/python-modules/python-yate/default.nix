@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
+{
+  lib,
+  aiohttp,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -23,13 +24,9 @@ buildPythonPackage rec {
     async-timeout
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "yate"
-  ];
+  pythonImportsCheck = [ "yate" ];
 
   meta = with lib; {
     description = "Python library for the yate telephony engine";

@@ -6,10 +6,10 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-5GvHM05qY/Jj1mPYwn88Zybn6Nn5nJIaw0XP8iCcrwE=";
+    hash = "sha256-5GvHM05qY/Jj1mPYwn88Zybn6Nn5nJIaw0XP8iCcrwE=";
   };
 
-  cargoSha256 = "sha256-pwDaLHJbVpZe7dAtd5/ytyHZkUHjCcNjtw3q7HF1qVQ=";
+  cargoHash = "sha256-pwDaLHJbVpZe7dAtd5/ytyHZkUHjCcNjtw3q7HF1qVQ=";
 
   meta = with lib; {
     description = "Command line utility to remove duplicates from the given input";

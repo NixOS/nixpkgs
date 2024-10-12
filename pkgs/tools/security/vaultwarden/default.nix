@@ -9,25 +9,25 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "vaultwarden";
-  version = "1.30.5";
+  version = "1.32.1";
 
   src = fetchFromGitHub {
     owner = "dani-garcia";
-    repo = pname;
+    repo = "vaultwarden";
     rev = version;
-    hash = "sha256-OwFB5ULWBefDHSkUM3nT0v2jcc5vHUvs8Ex0JauDu8w=";
+    hash = "sha256-bjLa3/B+H49BHXU9xYAtoSsaJBtDJIm6+coGEplzxdM=";
   };
 
-  cargoHash = "sha256-K0T0uTERjxlI3bGG/Tz6sJ0A08J0ROAhpppdZcdQPB8=";
+  cargoHash = "sha256-3JfdgGHhj2Fva9BB5vNYDX1eHk2EZl/7f6AeLRqkaGQ=";
 
   # used for "Server Installed" version in admin panel
   env.VW_VERSION = version;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = with lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
-    ++ optional (dbBackend == "mysql") libmysqlclient
-    ++ optional (dbBackend == "postgresql") postgresql;
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Security CoreServices SystemConfiguration ]
+    ++ lib.optional (dbBackend == "mysql") libmysqlclient
+    ++ lib.optional (dbBackend == "postgresql") postgresql;
 
   buildFeatures = dbBackend;
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "Grumbel";
     repo = "sdl-jstest";
     rev = "aafbdb1ed3e687583037ba55ae88b1210d6ce98b";
-    sha256 = "sha256-Mw+ENOVZ0O8WercdDNLAAkNMPZ2NyxSa+nMtgNmXjFw=";
+    hash = "sha256-Mw+ENOVZ0O8WercdDNLAAkNMPZ2NyxSa+nMtgNmXjFw=";
     fetchSubmodules = true;
   };
 

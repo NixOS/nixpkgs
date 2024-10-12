@@ -7,17 +7,17 @@
 , makeWrapper
 }:
 
-assert nvidiaSupport -> stdenv.isLinux;
+assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.14.0-unstable-2023-11-21";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
-    repo = pname;
-    rev = "0ed09e6a68c1517b4d050f5e3163421718226040";
-    hash = "sha256-vw/ar2Qi06HxPfPsfcxtfRhMTqY4FCE+7tCfe9sLEv0=";
+    repo = "zenith";
+    rev = version;
+    hash = "sha256-y+/s0TDVAFGio5uCzHjf+kHFZB0G8dDgTt2xaqSSz1c=";
   };
 
   # remove cargo config so it can find the linker on aarch64-linux
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
 

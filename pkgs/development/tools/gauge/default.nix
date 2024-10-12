@@ -2,16 +2,22 @@
 
 buildGoModule rec {
   pname = "gauge";
-  version = "1.6.4";
+  version = "1.6.8";
+
+  patches = [
+    # adds a check which adds an error message when trying to
+    # install plugins imperatively when using the wrapper
+    ./nix-check.patch
+  ];
 
   src = fetchFromGitHub {
     owner = "getgauge";
     repo = "gauge";
     rev = "v${version}";
-    hash = "sha256-Hefhhexy3Kl4fmYXlNBgZBSdOGPJefS1BjKWoblIVaw=";
+    hash = "sha256-ifE+6lwBYVZl0eAOCUTrqqTwVnKvCB44AHXTyLhsMX8=";
   };
 
-  vendorHash = "sha256-csS7lRTczno77LIDq2q3DeuJxQcOLr1cQf11NuWixG8=";
+  vendorHash = "sha256-yh7hAKmt2qn2jmPKGF+ATvZd4miNHuHsKlFNaWibTJQ=";
 
   excludedPackages = [ "build" "man" ];
 
@@ -20,6 +26,6 @@ buildGoModule rec {
     mainProgram = "gauge";
     homepage = "https://gauge.org";
     license = licenses.asl20;
-    maintainers = [ maintainers.vdemeester ];
+    maintainers = with maintainers; [ vdemeester marie ];
   };
 }

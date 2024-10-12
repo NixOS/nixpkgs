@@ -10,7 +10,6 @@
 , mypy
 , systemd
 , fakeroot
-, util-linux
 
   # filesystem tools
 , dosfstools
@@ -31,7 +30,7 @@
 , imageFileBasename
 , compression
 , fileSystems
-, partitionsJSON
+, finalPartitions
 , split
 , seed
 , definitionsDirectory
@@ -41,6 +40,25 @@
 }:
 
 let
+  systemdArch = let
+    inherit (stdenvNoCC) hostPlatform;
+  in
+    if hostPlatform.isAarch32 then "arm"
+    else if hostPlatform.isAarch64 then "arm64"
+    else if hostPlatform.isx86_32 then "x86"
+    else if hostPlatform.isx86_64 then "x86-64"
+    else if hostPlatform.isMips32 then "mips-le"
+    else if hostPlatform.isMips64 then "mips64-le"
+    else if hostPlatform.isPower then "ppc"
+    else if hostPlatform.isPower64 then "ppc64"
+    else if hostPlatform.isRiscV32 then "riscv32"
+    else if hostPlatform.isRiscV64 then "riscv64"
+    else if hostPlatform.isS390 then "s390"
+    else if hostPlatform.isS390x then "s390x"
+    else if hostPlatform.isLoongArch64 then "loongarch64"
+    else if hostPlatform.isAlpha then "alpha"
+    else hostPlatform.parsed.cpu.name;
+
   amendRepartDefinitions = runCommand "amend-repart-definitions.py"
     {
       # TODO: ruff does not splice properly in nativeBuildInputs
@@ -51,7 +69,7 @@ let
     patchShebangs --build $out
 
     black --check --diff $out
-    ruff --line-length 88 $out
+    ruff check --line-length 88 $out
     mypy --strict $out
   '';
 
@@ -72,8 +90,8 @@ let
   }."${compression.algorithm}";
 
   compressionCommand = {
-    "zstd" = "zstd --no-progress --threads=0 -${toString compression.level}";
-    "xz" = "xz --keep --verbose --threads=0 -${toString compression.level}";
+    "zstd" = "zstd --no-progress --threads=$NIX_BUILD_CORES -${toString compression.level}";
+    "xz" = "xz --keep --verbose --threads=$NIX_BUILD_CORES -${toString compression.level}";
   }."${compression.algorithm}";
 in
   stdenvNoCC.mkDerivation (finalAttrs:
@@ -86,19 +104,21 @@ in
   nativeBuildInputs = [
     systemd
     fakeroot
-    util-linux
   ] ++ lib.optionals (compression.enable) [
     compressionPkg
   ] ++ fileSystemTools;
 
   env = mkfsEnv;
 
-  inherit partitionsJSON definitionsDirectory;
+  inherit finalPartitions definitionsDirectory;
+
+  partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
   # relative path to the repart definitions that are read by systemd-repart
   finalRepartDefinitions = "repart.d";
 
   systemdRepartFlags = [
+    "--architecture=${systemdArch}"
     "--dry-run=no"
     "--size=auto"
     "--seed=${seed}"
@@ -118,7 +138,7 @@ in
   patchPhase = ''
     runHook prePatch
 
-    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} $partitionsJSON $definitionsDirectory)
+    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} <(echo "$partitionsJSON") $definitionsDirectory)
     ln -vs $amendedRepartDefinitionsDir $finalRepartDefinitions
 
     runHook postPatch
@@ -128,7 +148,7 @@ in
     runHook preBuild
 
     echo "Building image with systemd-repart..."
-    unshare --map-root-user fakeroot systemd-repart \
+    fakeroot systemd-repart \
       ''${systemdRepartFlags[@]} \
       ${imageFileBasename}.raw \
       | tee repart-output.json

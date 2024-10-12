@@ -8,24 +8,24 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.7.7";
+  version = "0.8.2";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "sha256-nWSMWaz1UvjsA2V7q7WKx44G45VVaoQxteZqrKAlxY8=";
+    sha256 = "sha256-HqTPC7J3hf5+dcsWlqc/FR7ev3f6J4jxhDwgM4GxYww=";
   };
 
-  cargoHash = "sha256-ezub+pOqNjCfH7QgjLBrYtsyYbPM3/SADLpNgPtlG+I=";
+  cargoHash = "sha256-ZUdjdKUUrQCUjwTh+T61Wn5gle4kzAbi3P1LvkS+NfQ=";
 
   nativeBuildInputs = [
     pkg-config
   ];
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];

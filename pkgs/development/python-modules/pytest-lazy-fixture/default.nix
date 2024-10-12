@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,17 +22,11 @@ buildPythonPackage rec {
     ./pytest-8-compatible.patch
   ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "pytest_lazyfixture"
-  ];
+  pythonImportsCheck = [ "pytest_lazyfixture" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Helps to use fixtures in pytest.mark.parametrize";

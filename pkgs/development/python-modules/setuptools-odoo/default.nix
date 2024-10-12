@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
-, writeScript
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  writeScript,
 }:
 
 buildPythonPackage rec {
@@ -22,9 +23,7 @@ buildPythonPackage rec {
     hash = "sha256-38YlkDH/PuJ1yvQ43OYmdnRd1SGJULv6fC/+fitLDJ8=";
   };
 
-  propagatedBuildInputs = [
-    setuptools-scm
-  ];
+  propagatedBuildInputs = [ setuptools-scm ];
 
   # HACK https://github.com/NixOS/nixpkgs/pull/229460
   patchPhase = ''
@@ -37,9 +36,7 @@ buildPythonPackage rec {
     runHook postPatch
   '';
 
-  pythonImportsCheck = [
-    "setuptools_odoo"
-  ];
+  pythonImportsCheck = [ "setuptools_odoo" ];
 
   setupHook = writeScript "setupHook.sh" ''
     setuptoolsOdooHook() {

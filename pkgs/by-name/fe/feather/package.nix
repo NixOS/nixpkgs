@@ -9,6 +9,7 @@
 , openssl
 , pkg-config
 , protobuf
+, python3
 , qrencode
 , qt6
 , readline
@@ -21,19 +22,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather";
-  version = "2.6.5";
+  version = "2.6.8";
 
   src = fetchFromGitHub {
     owner = "feather-wallet";
     repo = "feather";
     rev = finalAttrs.version;
-    hash = "sha256-HvjcjiVXTK9mZOvh91iCMf/cZ9BMlPxXjgFKYWolJ74=";
+    hash = "sha256-l1kyNpUIqezMfInhrKgnTnArqeSjvhBwdqVi0aUlKF8=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
     qt6.wrapQtAppsHook
   ];
 
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A free Monero desktop wallet";
+    description = "Free Monero desktop wallet";
     homepage = "https://featherwallet.org/";
     changelog = "https://featherwallet.org/changelog/#${finalAttrs.version}%20changelog";
     platforms = platforms.linux;

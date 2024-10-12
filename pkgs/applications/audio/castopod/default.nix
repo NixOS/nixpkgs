@@ -3,15 +3,15 @@
 , ffmpeg-headless
 , lib
 , nixosTests
-, stateDirectory ? "/var/lib/castopod"
+, dataDir ? "/var/lib/castopod"
 }:
 stdenv.mkDerivation {
   pname = "castopod";
-  version = "1.10.5";
+  version = "1.11.0";
 
   src = fetchurl {
-    url = "https://code.castopod.org/adaures/castopod/uploads/66de724407be8f940af5eb1d633fbbc3/castopod-1.10.5.tar.gz";
-    sha256 = "0ssdgqxqldg2f6ni54k5vlndnjjy9lah47q1crpz5nnkkjgvc96y";
+    url = "https://code.castopod.org/adaures/castopod/uploads/0f1fbf6eb849b208e26b53d930b9e22f/castopod-1.11.0.tar.gz";
+    sha256 = "09l4q8v809jnvgx9vpa1fyjhgqdbbrwkyk591kx5k1gg935rmgnx";
   };
 
   dontBuild = true;
@@ -20,13 +20,16 @@ stdenv.mkDerivation {
   postPatch = ''
     # not configurable at runtime unfortunately:
     substituteInPlace app/Config/Paths.php \
-      --replace "__DIR__ . '/../../writable'" "'${stateDirectory}/writable'"
+      --replace "__DIR__ . '/../../writable'" "'${dataDir}/writable'"
 
-    # configuration file must be writable, place it to ${stateDirectory}
+    substituteInPlace modules/Admin/Controllers/DashboardController.php \
+      --replace "disk_total_space('./')" "disk_total_space('${dataDir}')"
+
+    # configuration file must be writable, place it to ${dataDir}
     substituteInPlace modules/Install/Controllers/InstallController.php \
-      --replace "ROOTPATH" "'${stateDirectory}/'"
+      --replace "ROOTPATH" "'${dataDir}/'"
     substituteInPlace public/index.php spark \
-      --replace "DotEnv(ROOTPATH)" "DotEnv('${stateDirectory}')"
+      --replace "DotEnv(ROOTPATH)" "DotEnv('${dataDir}')"
 
     # ffmpeg is required for Video Clips feature
     substituteInPlace modules/MediaClipper/VideoClipper.php \
@@ -44,10 +47,10 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   meta = with lib; {
-    description = "An open-source hosting platform made for podcasters who want to engage and interact with their audience";
+    description = "Open-source hosting platform made for podcasters who want to engage and interact with their audience";
     homepage = "https://castopod.org";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ alexoundos misuzu ];
+    maintainers = with maintainers; [ alexoundos ];
     platforms = platforms.all;
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, fetchurl }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "whisper";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Short read sequence mapper";
     license = licenses.gpl3;
     homepage = "https://github.com/refresh-bio/whisper";

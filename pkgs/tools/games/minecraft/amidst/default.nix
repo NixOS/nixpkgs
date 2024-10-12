@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mainProgram = "amidst";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
-    maintainers = [ maintainers.ivar ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

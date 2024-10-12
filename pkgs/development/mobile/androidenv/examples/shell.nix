@@ -1,6 +1,6 @@
 {
   # If you copy this example out of nixpkgs, use these lines instead of the next.
-  # This example pins nixpkgs: https://nix.dev/tutorials/towards-reproducibility-pinning-nixpkgs.html
+  # This example pins nixpkgs: https://nix.dev/tutorials/first-steps/towards-reproducibility-pinning-nixpkgs.html
   /*nixpkgsSource ? (builtins.fetchTarball {
     name = "nixpkgs-20.09";
     url = "https://github.com/NixOS/nixpkgs/archive/20.09.tar.gz";
@@ -25,18 +25,18 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
-      cmdLineToolsVersion = "11.0";
-      platformTools = "34.0.5";
-      buildTools = "34.0.0";
+      cmdLineToolsVersion = "13.0";
+      platformTools = "35.0.2";
+      buildTools = "35.0.0";
       ndk = [
-        "26.1.10909125"
+        "27.0.12077973"
       ];
       cmake = "3.6.4111459";
-      emulator = "34.1.9";
+      emulator = "35.1.4";
     };
 
-    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
-    abis = ["armeabi-v7a" "arm64-v8a"];
+    platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" "35" ];
+    abis = [ "x86_64" ];
     extras = ["extras;google;gcm"];
   };
 
@@ -163,21 +163,24 @@ pkgs.mkShell rec {
       output="$(sdkmanager --list)"
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
+      # FIXME couldn't find platforms;android-34, even though it's in the correct directory!! sdkmanager's bug?!
       packages=(
-        "build-tools;34.0.0" "platform-tools" \
+        "build-tools;35.0.0" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
-        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-34" \
+        "platforms;android-31" "platforms;android-32" "platforms;android-33" "platforms;android-35" \
         "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
         "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
         "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
-        "system-images;android-28;google_apis_playstore;arm64-v8a" \
-        "system-images;android-29;google_apis_playstore;arm64-v8a" \
-        "system-images;android-30;google_apis_playstore;arm64-v8a" \
-        "system-images;android-31;google_apis_playstore;arm64-v8a" \
-        "system-images;android-32;google_apis_playstore;arm64-v8a" \
-        "system-images;android-33;google_apis_playstore;arm64-v8a" \
-        "system-images;android-34;google_apis_playstore;arm64-v8a"
+        "sources;android-35" \
+        "system-images;android-28;google_apis_playstore;x86_64" \
+        "system-images;android-29;google_apis_playstore;x86_64" \
+        "system-images;android-30;google_apis_playstore;x86_64" \
+        "system-images;android-31;google_apis_playstore;x86_64" \
+        "system-images;android-32;google_apis_playstore;x86_64" \
+        "system-images;android-33;google_apis_playstore;x86_64" \
+        "system-images;android-34;google_apis;x86_64" \
+        "system-images;android-35;google_apis_playstore_ps16k;x86_64"
       )
 
       for package in "''${packages[@]}"; do

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
+{ lib, stdenv, fetchurl, pcre, pcre2, jemalloc, libunwind, libxslt, groff, ncurses, pkg-config, readline, libedit
 , coreutils, python3, makeWrapper, nixosTests }:
 
 let
@@ -32,7 +32,7 @@ let
       '';
 
       # https://github.com/varnishcache/varnish-cache/issues/1875
-      env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-fexcess-precision=standard";
+      env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-fexcess-precision=standard";
 
       outputs = [ "out" "dev" "man" ];
 
@@ -60,5 +60,10 @@ in
   varnish74 = common {
     version = "7.4.3";
     hash = "sha256-655DUH+Dbu8uMoAtRt08+S7KPVR7pLZA/aWbQHzbG4g=";
+  };
+  # EOL 2025-03-15
+  varnish75 = common {
+    version = "7.5.0";
+    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
   };
 }

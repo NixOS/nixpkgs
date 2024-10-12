@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "clarkwang";
-    repo = finalAttrs.pname;
+    repo = "passh";
     rev = "7112e667fc9e65f41c384f89ff6938d23e86826c";
     sha256 = "1g0rx94vqg36kp46f8v4x6jcmvdk85ds6bkrpayq772hbdm1b5z5";
   };
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/clarkwang/passh";
-    description = "An sshpass alternative for non-interactive ssh auth";
+    description = "Sshpass alternative for non-interactive ssh auth";
     license = licenses.gpl3;
     maintainers = [ maintainers.lovesegfault ];
     mainProgram = finalAttrs.pname;

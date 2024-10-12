@@ -19,7 +19,7 @@ let
     };
 
     # patch the ptrace reference for darwin
-    installPhase = lib.optionalString stdenv.isDarwin ''
+    installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace v.c \
         --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
     '' + ''
@@ -56,9 +56,9 @@ stdenv.mkDerivation {
 
   buildInputs = [
     binaryen
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libX11
     xorg.libXau
     xorg.libXdmcp

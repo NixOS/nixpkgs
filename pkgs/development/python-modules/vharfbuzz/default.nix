@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fonttools
-, pythonImportsCheckHook
-, uharfbuzz
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fonttools,
+  uharfbuzz,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +20,6 @@ buildPythonPackage rec {
     fonttools
     uharfbuzz
   ];
-  nativeBuildInputs = [
-    pythonImportsCheckHook
-  ];
 
   # Package has no tests.
   doCheck = false;
@@ -35,4 +32,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ danc86 ];
   };
 }
-

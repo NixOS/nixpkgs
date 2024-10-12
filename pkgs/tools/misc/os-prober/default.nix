@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     description = "Utility to detect other OSs on a set of drives";
     homepage = "http://packages.debian.org/source/sid/os-prober";
     license = licenses.gpl2Plus;
+    mainProgram = "os-prober";
     maintainers = with maintainers; [ symphorien ];
+    platforms = platforms.linux;
   };
 }

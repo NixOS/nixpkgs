@@ -5,6 +5,7 @@
 , makeDesktopItem
 , jdk
 , ant
+, stripJavaArchivesHook
 , gtk3
 , gsettings-desktop-schemas
 , sweethome3dApp
@@ -13,10 +14,7 @@
 
 let
 
-  sweetExec = with lib;
-    m: "sweethome3d-"
-    + removeSuffix "libraryeditor" (toLower m)
-    + "-editor";
+  sweetExec = m: "sweethome3d-" + lib.removeSuffix "libraryeditor" (lib.toLower m) + "-editor";
 
   mkEditorProject =
   { pname, module, version, src, license, description, desktopName }:
@@ -33,7 +31,7 @@ let
       categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
 
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper stripJavaArchivesHook ];
     buildInputs = [ ant jdk gtk3 gsettings-desktop-schemas ];
 
     # upstream targets Java 7 by default

@@ -12,7 +12,7 @@ buildDunePackage rec {
   meta = with lib; {
     description = "XDG Base Directory Specification";
     inherit (dune_3.meta) homepage;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = licenses.mit;
   };
 }

@@ -35,18 +35,18 @@ perlPackages.buildPerlPackage rec {
       --replace "'INSTALLDIRS'  => \$INSTALLDIRS," "'INSTALLDIRS'  => \$INSTALLDIRS, 'INSTALLVENDORLIB' => 'bin/lib', 'INSTALLVENDORBIN' => 'bin', 'INSTALLVENDORSCRIPT' => 'bin', 'INSTALLVENDORMAN1DIR' => 'share/man/man1', 'INSTALLVENDORMAN3DIR' => 'share/man/man3',"
   '';
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/pg_format
   '';
 
   doCheck = false;
 
   meta = with lib; {
-    description = "A PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
+    description = "PostgreSQL SQL syntax beautifier that can work as a console program or as a CGI";
     homepage = "https://github.com/darold/pgFormatter";
     changelog = "https://github.com/darold/pgFormatter/releases/tag/v${version}";
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     license = [ licenses.postgresql licenses.artistic2 ];
     mainProgram = "pg_format";
   };

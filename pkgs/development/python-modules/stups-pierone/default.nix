@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, requests
-, stups-cli-support
-, stups-zign
-, pytest
-, pytest-cov
-, hypothesis
-, pythonOlder
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  setuptools,
+  requests,
+  stups-cli-support,
+  stups-zign,
+  pytestCheckHook,
+  hypothesis,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "stups-pierone";
   version = "1.1.51";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -24,7 +25,11 @@ buildPythonPackage rec {
     hash = "sha256-OypGYHfiFUfcUndylM2N2WfPnfXXJ4gvWypUbltYAYE=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "stups-zign" ];
+
+  dependencies = [
     requests
     stups-cli-support
     stups-zign
@@ -35,14 +40,11 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
-    pytest-cov
+    pytestCheckHook
     hypothesis
   ];
 
-  pythonImportsCheck = [
-    "pierone"
-  ];
+  pythonImportsCheck = [ "pierone" ];
 
   meta = with lib; {
     description = "Convenient command line client for STUPS' Pier One Docker registry";

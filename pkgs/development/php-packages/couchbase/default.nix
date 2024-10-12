@@ -1,4 +1,11 @@
-{ lib, buildPecl, fetchFromGitHub, writeText, libcouchbase, zlib, php, substituteAll }:
+{
+  lib,
+  buildPecl,
+  fetchFromGitHub,
+  libcouchbase,
+  zlib,
+  substituteAll,
+}:
 let
   pname = "couchbase";
   version = "3.2.2";
@@ -15,7 +22,10 @@ buildPecl {
 
   configureFlags = [ "--with-couchbase" ];
 
-  buildInputs = [ libcouchbase zlib ];
+  buildInputs = [
+    libcouchbase
+    zlib
+  ];
 
   patches = [
     (substituteAll {

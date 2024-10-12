@@ -4,32 +4,29 @@
 , makeWrapper
 , rustPlatform
 , testers
-
 , cachix
 , darwin
-, libgit2
-, nix
+, sqlx-cli
+, nixVersions
 , openssl
 , pkg-config
-
 , devenv  # required to run version test
 }:
 
 let
-  devenv_nix = nix.overrideAttrs (old: {
-    version = "2.21-devenv";
+  devenv_nix = nixVersions.nix_2_24.overrideAttrs (old: {
+    version = "2.24-devenv";
     src = fetchFromGitHub {
       owner = "domenkozar";
       repo = "nix";
-      rev = "c5bbf14ecbd692eeabf4184cc8d50f79c2446549";
-      hash = "sha256-zvCqeUO2GLOm7jnU23G4EzTZR7eylcJN+HJ5svjmubI=";
+      rev = "f6c5ae4c1b2e411e6b1e6a8181cc84363d6a7546";
+      hash = "sha256-X8ES7I1cfNhR9oKp06F6ir4Np70WGZU5sfCOuNBEwMg=";
     };
-    buildInputs = old.buildInputs ++ [ libgit2 ];
     doCheck = false;
     doInstallCheck = false;
   });
 
-  version = "1.0.2";
+  version = "1.3";
 in rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
@@ -38,14 +35,26 @@ in rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     rev = "v${version}";
-    hash = "sha256-JCxjmWr2+75KMPOoVybNZhy9zhhrg9BAKA8D+J6MNBc=";
+    hash = "sha256-14hqEeVy72nYDOFn7HK6Mff7L49kUI5K6wMLVHG3A90=";
   };
 
-  cargoHash = "sha256-FGB8p9ClGokYDrV0b47PnjeSlOv7p+IgThNajve3yms=";
+  cargoHash = "sha256-E4pU/tZHxMrKSheqWF5qeOfS/NZ/Uw5jY+AbSUHmoaI=";
 
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildAndTestSubdir = "devenv";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+  # Force sqlx to use the prepared queries
+  SQLX_OFFLINE = true;
+  # A local database to use for preparing queries
+  DATABASE_URL = "sqlite:nix-eval-cache.db";
+
+  preBuild = ''
+    cargo sqlx database setup --source devenv-eval-cache/migrations
+    cargo sqlx prepare --workspace
+  '';
+
+  nativeBuildInputs = [ makeWrapper pkg-config sqlx-cli ];
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -66,6 +75,6 @@ in rustPlatform.buildRustPackage {
     homepage = "https://github.com/cachix/devenv";
     license = lib.licenses.asl20;
     mainProgram = "devenv";
-    maintainers = with lib.maintainers; [ domenkozar drupol ];
+    maintainers = with lib.maintainers; [ domenkozar ];
   };
 }

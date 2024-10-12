@@ -1,12 +1,12 @@
 {lib, stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  version = "6.8.1";
+  version = "6.10.0";
   pname = "commons-bcel";
 
   src = fetchurl {
     url    = "mirror://apache/commons/bcel/binaries/bcel-${version}-bin.tar.gz";
-    hash   = "sha256-a7PqcVvS+7tHSU2uXi5gLpl82ZN9hA03VEnCnc5cnRc=";
+    hash   = "sha256-RRVXxPtwbT9AX92T60uDJpFWF6DiotcG1KvKrlFfEWU=";
   };
 
   installPhase = ''

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, matplotlib
-, numpy
-, pendulum
-, pillow
-, poetry-core
-, pyquaternion
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  matplotlib,
+  numpy,
+  pendulum,
+  pillow,
+  poetry-core,
+  pyquaternion,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-FrJ8FhlqwmnEB/QvPlkDfqZncNGPhwY9aagM9yv1LGs=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [
     pyquaternion
@@ -47,9 +46,7 @@ buildPythonPackage rec {
     "test_multi_jaccard_index_2d_performance"
   ];
 
-  pythonImportsCheck = [
-    "bbox"
-  ];
+  pythonImportsCheck = [ "bbox" ];
 
   meta = with lib; {
     description = "Python library for 2D/3D bounding boxes";

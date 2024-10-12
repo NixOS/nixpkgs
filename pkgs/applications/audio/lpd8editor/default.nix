@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A linux editor for the Akai LPD8";
+    description = "Linux editor for the Akai LPD8";
     homepage = "https://github.com/charlesfleche/lpd8editor";
     license = licenses.mit;
     maintainers = with maintainers; [ pinpox ];

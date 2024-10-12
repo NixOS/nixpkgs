@@ -48,7 +48,7 @@ in
       enable = mkOption {
         default = false;
         type = types.bool;
-        description = lib.mdDoc ''
+        description = ''
           Whether to create files with the system generations in
           `/boot`.
           `/boot/old` will hold files from old generations.
@@ -62,14 +62,14 @@ in
       version = mkOption {
         default = 2;
         type = types.enum [ 0 1 2 3 4 ];
-        description = lib.mdDoc "";
+        description = "";
       };
 
       uboot = {
         enable = mkOption {
           default = false;
           type = types.bool;
-          description = lib.mdDoc ''
+          description = ''
             Enable using uboot as bootmanager for the raspberry pi.
 
             ::: {.note}
@@ -82,7 +82,7 @@ in
           default = 20;
           example = 10;
           type = types.int;
-          description = lib.mdDoc ''
+          description = ''
             Maximum number of configurations in the boot menu.
 
             ::: {.note}
@@ -96,7 +96,7 @@ in
       firmwareConfig = mkOption {
         default = null;
         type = types.nullOr types.lines;
-        description = lib.mdDoc ''
+        description = ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
 

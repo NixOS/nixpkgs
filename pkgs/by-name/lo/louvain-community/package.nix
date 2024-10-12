@@ -7,7 +7,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "louvain-community";
-  version = "unstable-2024-01-30";
+  version = "0-unstable-2024-01-30";
 
   src = fetchFromGitHub {
     owner = "meelgroup";

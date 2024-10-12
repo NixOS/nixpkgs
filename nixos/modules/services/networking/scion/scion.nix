@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -7,21 +7,42 @@ let
 in
 {
   options.services.scion = {
-    enable = mkEnableOption (lib.mdDoc "all of the scion components and services");
+    enable = mkEnableOption "all of the scion components and services";
+    package = mkPackageOption pkgs "scion" { };
+    stateless = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Setting this value to false (stateful) can lead to improved caching and
+        performance.
+
+        This option decides whether to persist the SCION path sqlite databases
+        on disk or not. Persisting this data can lead to database corruption in
+        extreme cases such as power outage, meaning SCION fails to work on the
+        next boot. This is being investigated.
+
+        If true, /run/scion-* is used for data
+        If false, use /var/lib/scion-* is used for data
+      '';
+    };
     bypassBootstrapWarning = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         bypass Nix warning about SCION PKI bootstrapping
       '';
     };
   };
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      cfg.package
+    ];
     services.scion = {
       scion-dispatcher.enable = true;
       scion-daemon.enable = true;
       scion-router.enable = true;
       scion-control.enable = true;
+      scion-ip-gateway.enable = true;
     };
     assertions = [
       { assertion = cfg.bypassBootstrapWarning == true;

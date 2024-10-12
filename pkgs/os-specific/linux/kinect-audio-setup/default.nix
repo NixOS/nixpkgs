@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.ao2.it/kinect-audio-setup.git";
     rev = "v${version}";
-    sha256 = "sha256-bFwmWh822KvFwP/0Gu097nF5K2uCwCLMB1RtP7k+Zt0=";
+    hash = "sha256-bFwmWh822KvFwP/0Gu097nF5K2uCwCLMB1RtP7k+Zt0=";
   };
 
   # These patches are not upstream because the project has seen no

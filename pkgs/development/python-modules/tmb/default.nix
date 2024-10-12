@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, requests
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  requests,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,13 +22,9 @@ buildPythonPackage rec {
 
   VERSION = version;
 
-  propagatedBuildInputs = [
-    requests
-  ];
+  propagatedBuildInputs = [ requests ];
 
-  pythonImportsCheck = [
-    "tmb"
-  ];
+  pythonImportsCheck = [ "tmb" ];
 
   # Project has no tests
   doCheck = false;

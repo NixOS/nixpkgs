@@ -13,7 +13,7 @@
         host = "127.0.0.1";
         port = 80;
       };
-      description = lib.mdDoc ''
+      description = ''
         Frontend server interface binding specification as either a
         host:port pair or a unix domain docket.
 
@@ -28,7 +28,7 @@
         tls   = "tls";
       };
       default     = null;
-      description = lib.mdDoc ''
+      description = ''
         Parameters to configure a backend.
       '';
     };

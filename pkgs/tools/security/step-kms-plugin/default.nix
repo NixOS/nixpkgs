@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "step-kms-plugin";
-  version = "0.11.0";
+  version = "0.11.5";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-FQ9UW1zz+8HMFETZVef7oyh2+Nm5z3ksvmOv/MTiKAU=";
+    hash = "sha256-MxGhG8ehXT7ftXfoVHMSpyIr25tWj5Yq50nZZW/q5sQ=";
   };
 
-  vendorHash = "sha256-bpQHe7B7dG1oeGP/V3su0Zc6in7tive7lmh18KqxGfo=";
+  vendorHash = "sha256-5TWofXHtiBhfsSg3UgSju+7EO+t9bUktsd/WUAH5R5U=";
 
   proxyVendor = true;
 
@@ -48,6 +48,6 @@ buildGoModule rec {
     maintainers = with maintainers; [ qbit ];
     mainProgram = "step-kms-plugin";
     # can't find pcsclite header files
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

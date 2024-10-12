@@ -49,6 +49,10 @@ in
 , # The standard environment to use for building packages.
   stdenv
 
+, # `stdenv` without a C compiler. Passing in this helps avoid infinite
+  # recursions, and may eventually replace passing in the full stdenv.
+  stdenvNoCC ? stdenv.override { cc = null; hasCC = false; }
+
 , # This is used because stdenv replacement and the stdenvCross do benefit from
   # the overridden configuration provided by the user, as opposed to the normal
   # bootstrapping stdenvs.
@@ -57,9 +61,7 @@ in
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
-           && stdenv.buildPlatform.system != "i686-freebsd"
-           && stdenv.buildPlatform.system != "x86_64-solaris"
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-solaris"
            && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
 
 , # The configuration attribute set
@@ -143,7 +145,7 @@ let
     pkgs = self.pkgsHostTarget;
     targetPackages = self.pkgsTargetTarget;
 
-    inherit stdenv;
+    inherit stdenv stdenvNoCC;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
@@ -199,8 +201,38 @@ let
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.hostPlatform // {
+      crossSystem = stdenv.targetPlatform // {
         useLLVM = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsArocc = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsArocc = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Aro C compiler.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useArocc = true;
+        linker = "lld";
+      };
+    };
+
+    pkgsZig = nixpkgsFun {
+      overlays = [
+        (self': super': {
+          pkgsZig = super';
+        })
+      ] ++ overlays;
+      # Bootstrap a cross stdenv using the Zig toolchain.
+      # This is currently not possible when compiling natively,
+      # so we don't need to check hostPlatform != buildPlatform.
+      crossSystem = stdenv.hostPlatform // {
+        useZig = true;
         linker = "lld";
       };
     };
@@ -280,11 +312,11 @@ let
       crossSystem = {
         isStatic = true;
         parsed =
-          if stdenv.isLinux
+          if stdenv.hostPlatform.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc.abi = "elfv2";
+        gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
+          stdenv.hostPlatform.gcc or {};
       };
     });
 
@@ -294,10 +326,21 @@ let
           pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
-              "zerocallusedregs"
+              "shadowstack"
+              "pacret"
+              "stackclashprotection"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
+          glibc = super'.glibc.override rec {
+            enableCET = if self'.stdenv.hostPlatform.isx86_64 then "permissive" else false;
+            enableCETRuntimeDefault = enableCET != false;
+          };
+        } // lib.optionalAttrs (with super'.stdenv.hostPlatform; isx86_64 && isLinux) {
+          # causes shadowstack disablement
+          pcre = super'.pcre.override { enableJit = false; };
+          pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
+          pcre16 = super'.pcre16.override { enableJit = false; };
         })
       ] ++ overlays;
     };

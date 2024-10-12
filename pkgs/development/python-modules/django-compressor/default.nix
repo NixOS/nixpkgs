@@ -1,42 +1,41 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, calmjs
-, django-appconf
-, jinja2
-, rcssmin
-, rjsmin
+  # dependencies
+  calmjs,
+  django-appconf,
+  jinja2,
+  rcssmin,
+  rjsmin,
 
-# tests
-, beautifulsoup4
-, brotli
-, csscompressor
-, django-sekizai
-, pytestCheckHook
-, pytest-django
+  # tests
+  beautifulsoup4,
+  brotli,
+  csscompressor,
+  django-sekizai,
+  pytestCheckHook,
+  pytest-django,
 
 }:
 
 buildPythonPackage rec {
   pname = "django-compressor";
-  version = "4.4";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_compressor";
     inherit version;
-    hash = "sha256-GwrMnPup9pvDjnxB2psNcKILyVWHtkP/75YJz0YGT2c=";
+    hash = "sha256-wdikii7k2LfyPEEeucl+LYjbGKGLocnoF41fW4NmqCI=";
   };
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -67,9 +66,7 @@ buildPythonPackage rec {
   # Getting error: compressor.exceptions.OfflineGenerationError: You have
   # offline compression enabled but key "..." is missing from offline manifest.
   # You may need to run "python manage.py compress"
-  disabledTestPaths = [
-    "compressor/tests/test_offline.py"
-  ];
+  disabledTestPaths = [ "compressor/tests/test_offline.py" ];
 
   pythonImportsCheck = [ "compressor" ];
 

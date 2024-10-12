@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, callPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  callPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -29,9 +30,7 @@ buildPythonPackage rec {
   # and shouldn't be used in production code
   propagatedBuildInputs = [ (callPackage ./infix.nix { }) ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Implementation of some concepts from category theory";

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -18,16 +19,12 @@ buildPythonPackage rec {
     hash = "sha256-xM+7NlcxlC0fEJKhFvR9/a4K7xjFsn8QcrWCStXqjHw=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  nativeBuildInputs = [ setuptools-scm ];
 
   # Physical SMBus is not present
   doCheck = false;
 
-  pythonImportsCheck = [
-    "Adafruit_PureIO"
-  ];
+  pythonImportsCheck = [ "Adafruit_PureIO" ];
 
   meta = with lib; {
     description = "Python interface to Linux IO including I2C and SPI";

@@ -1,14 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, setuptools-scm
-# install requirements
-, fido2
-, keyring
-, cryptography
-# test requirements
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools-scm,
+  # install requirements
+  fido2,
+  keyring,
+  cryptography,
+  # test requirements
+  pytestCheckHook,
 }:
 
 let
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
+    hash = "sha256-pEJkuz0wxKt2PkowmLE2YC+HPYa2ZiENK7FAW14Ec/Y=";
   };
 
   # removing optional dependency needing pyobjc
@@ -39,7 +39,6 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 

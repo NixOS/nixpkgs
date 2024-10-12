@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkg-config }:
+{ lib, stdenv, fetchurl, e2fsprogs, openldap, pkg-config, binlore, linuxquota }:
 
 stdenv.mkDerivation rec {
   version = "4.09";
@@ -14,10 +14,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ e2fsprogs openldap ];
 
+  passthru.binlore.out = binlore.synthesize linuxquota ''
+    execer cannot bin/quota
+  '';
+
   meta = with lib; {
     description = "Tools to manage kernel-level quotas in Linux";
     homepage = "https://sourceforge.net/projects/linuxquota/";
-    license = licenses.gpl2; # With some files being BSD as an exception
+    license = licenses.gpl2Plus; # With some files being BSD as an exception
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];
   };

@@ -113,20 +113,12 @@ buildDunePackage rec {
 
   meta = {
     homepage = "https://github.com/flowtype/ocaml-wtf8";
-    description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates.";
+    description = "WTF-8 is a superset of UTF-8 that allows unpaired surrogates";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.eqyiel ];
   };
 }
 ```
-
-Note about `minimalOCamlVersion`.  A deprecated version of this argument was
-spelled `minimumOCamlVersion`; setting the old attribute wrongly modifies the
-derivation hash and is therefore inappropriate. As a technical dept, currently
-packaged libraries may still use the old spelling: maintainers are invited to
-fix this when updating packages. Massive renaming is strongly discouraged as it
-would be challenging to review, difficult to test, and will cause unnecessary
-rebuild.
 
 The build will automatically fail if two distinct versions of the same library
 are added to `buildInputs` (which usually happens transitively because of

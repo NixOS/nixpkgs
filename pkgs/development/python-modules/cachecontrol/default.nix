@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, cherrypy
-, fetchFromGitHub
-, flit-core
-, filelock
-, mock
-, msgpack
-, pytestCheckHook
-, pythonOlder
-, redis
-, requests
+{
+  lib,
+  buildPythonPackage,
+  cherrypy,
+  fetchFromGitHub,
+  flit-core,
+  filelock,
+  mock,
+  msgpack,
+  pytestCheckHook,
+  pythonOlder,
+  redis,
+  requests,
 }:
 
 buildPythonPackage rec {
@@ -28,22 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-myyqiUGna+5S2GJGnwZTOfLh49NhjfHAvpUB49dQbgY=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
   propagatedBuildInputs = [
     msgpack
     requests
   ];
 
-  passthru.optional-dependencies = {
-    filecache = [
-      filelock
-    ];
-    redis = [
-      redis
-    ];
+  optional-dependencies = {
+    filecache = [ filelock ];
+    redis = [ redis ];
   };
 
   nativeCheckInputs = [
@@ -51,11 +46,9 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  pythonImportsCheck = [
-    "cachecontrol"
-  ];
+  pythonImportsCheck = [ "cachecontrol" ];
 
   meta = with lib; {
     description = "Httplib2 caching for requests";

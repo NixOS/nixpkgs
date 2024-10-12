@@ -1,25 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-common
-, azure-mgmt-core
-, isodate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-common,
+  azure-mgmt-core,
+  isodate,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-netapp";
-  version = "11.0.0";
-  format = "setuptools";
+  version = "13.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-00cDFHpaEciRQLHM+Kt3uOtw/geOn5+onrY7lav6EeU=";
+    hash = "sha256-31wzzDeQrs04AL8Qsz050RY/AllvXwy+8Ng+QbUihjo=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     azure-common
     azure-mgmt-core
     isodate
@@ -38,6 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-netapp_${version}/sdk/netapp/azure-mgmt-netapp/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

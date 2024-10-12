@@ -1,17 +1,18 @@
-{ lib
-, bcrypt
-, buildPythonPackage
-, cryptography
-, fetchpatch
-, fetchPypi
-, gssapi
-, icecream
-, invoke
-, mock
-, pyasn1
-, pynacl
-, pytestCheckHook
-, six
+{
+  lib,
+  bcrypt,
+  buildPythonPackage,
+  cryptography,
+  fetchpatch,
+  fetchPypi,
+  gssapi,
+  icecream,
+  invoke,
+  mock,
+  pyasn1,
+  pynacl,
+  pytestCheckHook,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -31,6 +32,11 @@ buildPythonPackage rec {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
     })
+    (fetchpatch {
+      name = "paramiko-pytest8-compat.patch";
+      url = "https://github.com/paramiko/paramiko/commit/d71046151d9904df467ff72709585cde39cdd4ca.patch";
+      hash = "sha256-4CTIZ9BmzRdh+HOwxSzfM9wkUGJOnndctK5swqqsIvU=";
+    })
   ];
 
   propagatedBuildInputs = [
@@ -38,11 +44,17 @@ buildPythonPackage rec {
     cryptography
     pyasn1
     six
-  ] ++ passthru.optional-dependencies.ed25519; # remove on 3.0 update
+  ] ++ optional-dependencies.ed25519; # remove on 3.0 update
 
-  passthru.optional-dependencies = {
-    gssapi = [ pyasn1 gssapi ];
-    ed25519 = [ pynacl bcrypt ];
+  optional-dependencies = {
+    gssapi = [
+      pyasn1
+      gssapi
+    ];
+    ed25519 = [
+      pynacl
+      bcrypt
+    ];
     invoke = [ invoke ];
   };
 
@@ -50,11 +62,7 @@ buildPythonPackage rec {
     icecream
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # disable tests that require pytest-relaxed, which is broken
@@ -62,9 +70,7 @@ buildPythonPackage rec {
     "tests/test_ssh_gss.py"
   ];
 
-  pythonImportsCheck = [
-    "paramiko"
-  ];
+  pythonImportsCheck = [ "paramiko" ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -79,6 +85,6 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

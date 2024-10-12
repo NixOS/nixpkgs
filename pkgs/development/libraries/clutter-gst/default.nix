@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
     license = lib.licenses.lgpl2Plus;
 
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

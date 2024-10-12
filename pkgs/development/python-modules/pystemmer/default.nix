@@ -1,55 +1,49 @@
-{ lib
-, python
-, fetchPypi
-, fetchFromGitHub
-, fetchpatch
-, buildPythonPackage
-, cython
-, libstemmer
- }:
+{
+  lib,
+  python,
+  fetchFromGitHub,
+  fetchpatch2,
+  buildPythonPackage,
+  cython,
+  setuptools,
+  libstemmer,
+}:
 
 buildPythonPackage rec {
   pname = "pystemmer";
-  version = "2.2.0";
-  format = "setuptools";
+  version = "2.2.0.1";
+  pyproejct = true;
 
   src = fetchFromGitHub {
     owner = "snowballstem";
     repo = "pystemmer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bJVFeO7XP+aZ2nowQiuws5ziL/FmS1eaOllW6QxA70U=";
+    hash = "sha256-ngPx95ybgJmndpNPBwCa3BCNsozRg+dlEw+nhlIwI58=";
   };
 
-  nativeBuildInputs = [ cython ];
-
   patches = [
-    (fetchpatch {
-      # Allow building with system libstemmer
-      url = "https://github.com/snowballstem/pystemmer/commit/2f52b4b2ff113fe6c33cebe14ed4fd4388bb1742.patch";
-      hash = "sha256-JqR/DUmABgWaq23CNjoKSasL0mNhM2QuU986mouK6A8=";
+    (fetchpatch2 {
+      # relax cython constraint
+      name = "pystemmer-relax-cython.patch";
+      url = "https://github.com/snowballstem/pystemmer/commit/d3d423dc877b4f49e0ab1776f7edaff37feb6799.patch";
+      hash = "sha256-9K6gy/cLFPfW82XYHVVPXUbQhf8XyB4NUi4YqNtyWcw=";
     })
-    (fetchpatch {
-      # Fix doctests
-      url = "https://github.com/snowballstem/pystemmer/commit/b2826f19fe8ba65238b5f3b4cee7096a698f048e.patch";
-      hash = "sha256-VTZydjYaJJ/KoHD4KbON36kZnkuAyO51H0Oeg6VXTqg=";
-    })
+  ];
+
+  build-system = [
+    cython
+    setuptools
   ];
 
   postConfigure = ''
     export PYSTEMMER_SYSTEM_LIBSTEMMER="${lib.getDev libstemmer}/include"
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-I${lib.getDev libstemmer}/include"
-  ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${lib.getDev libstemmer}/include" ];
 
-  NIX_CFLAGS_LINK = [
-    "-L${libstemmer}/lib"
-  ];
+  NIX_CFLAGS_LINK = [ "-L${libstemmer}/lib" ];
 
-  pythonImportsCheck = [
-    "Stemmer"
-  ];
+  pythonImportsCheck = [ "Stemmer" ];
 
   checkPhase = ''
     runHook preCheck
@@ -59,8 +53,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Snowball stemming algorithms, for information retrieval";
+    downloadPage = "https://github.com/snowballstem/pystemmer";
     homepage = "http://snowball.tartarus.org/";
-    license = licenses.mit;
+    license = with licenses; [
+      bsd3
+      mit
+    ];
     platforms = platforms.unix;
   };
 }

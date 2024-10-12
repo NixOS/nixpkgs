@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-, setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -15,9 +16,7 @@ buildPythonPackage rec {
     hash = "sha256-u2UaEALzD583+hbgwTItQOdGQ6GIhdVy79C2gfJwzlI=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "xdxf2html" ];
 

@@ -117,7 +117,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A recoloring of the Afterglow Cursors x-cursor theme";
+    description = "Recoloring of the Afterglow Cursors x-cursor theme";
     homepage = "https://github.com/TeddyBearKilla/Afterglow-Cursors-Recolored";
     maintainers = with maintainers; [ d3vil0p3r ];
     platforms = platforms.all;

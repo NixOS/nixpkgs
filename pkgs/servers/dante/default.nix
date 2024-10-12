@@ -16,16 +16,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ pam libkrb5 cyrus_sasl miniupnpc libxcrypt ];
 
-  configureFlags = if !stdenv.isDarwin
+  configureFlags = if !stdenv.hostPlatform.isDarwin
     then [ "--with-libc=libc.so.6" ]
     else [ "--with-libc=libc${stdenv.hostPlatform.extensions.sharedLibrary}" ];
 
-  dontAddDisableDepTrack = stdenv.isDarwin;
+  dontAddDisableDepTrack = stdenv.hostPlatform.isDarwin;
 
   patches = [
     # Fixes several issues with `osint.m4` that causes incorrect check failures when using newer
     # versions of clang: missing `stdint.h` for `uint8_t` and unused `sa_len_ptr`.
     ./clang-osint-m4.patch
+    # Fixes build with miniupnpc 2.2.8.
+    ./dante-1.4.3-miniupnpc-2.2.8.patch
   ] ++ lib.optionals remove_getaddrinfo_checks [
     (fetchpatch {
       name = "0002-osdep-m4-Remove-getaddrinfo-too-low-checks.patch";
@@ -39,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
+    description = "Circuit-level SOCKS client/server that can be used to provide convenient and secure network connectivity";
     homepage    = "https://www.inet.no/dante/";
     maintainers = [ maintainers.arobyn ];
     license     = licenses.bsdOriginal;

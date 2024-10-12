@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-CAiIqT5KuzrqbV9FVK3nZUe8MDs2KDdsKplJMI7rN9w=";
   };
 
-  cargoSha256 = "sha256-eLN917L6l0vUWlAn3ROKrRdtyqaaMKjBQD2tEGWECUU=";
+  cargoHash = "sha256-eLN917L6l0vUWlAn3ROKrRdtyqaaMKjBQD2tEGWECUU=";
 
   meta = with lib; {
     description = "Maintain a database sorted by frecency (frequency + recency)";
@@ -19,6 +19,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/YodaEmbedding/frece";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

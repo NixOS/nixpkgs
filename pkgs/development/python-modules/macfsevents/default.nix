@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, CoreFoundation
-, CoreServices
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  CoreFoundation,
+  CoreServices,
 }:
 
 buildPythonPackage rec {
@@ -12,10 +13,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MacFSEvents";
     inherit version;
-    sha256 = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
+    hash = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
-  buildInputs = [ CoreFoundation CoreServices ];
+  buildInputs = [
+    CoreFoundation
+    CoreServices
+  ];
 
   # Some tests fail under nix build directory
   doCheck = false;
@@ -27,7 +31,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/malthe/macfsevents";
     changelog = "https://github.com/malthe/macfsevents/blob/${version}/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.darwin;
   };
 }

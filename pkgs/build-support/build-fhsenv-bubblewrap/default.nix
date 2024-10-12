@@ -9,10 +9,8 @@
 , bubblewrap
 }:
 
-{ name ? null
-, pname ? null
-, version ? null
-, runScript ? "bash"
+{ runScript ? "bash"
+, nativeBuildInputs ? []
 , extraInstallCommands ? ""
 , meta ? {}
 , passthru ? {}
@@ -29,20 +27,30 @@
 , ...
 } @ args:
 
-assert (pname != null || version != null) -> (name == null && pname != null); # You must declare either a name or pname + version (preferred).
+assert (!args ? pname || !args ? version) -> (args ? name); # You must provide name if pname or version (preferred) is missing.
 
-with builtins;
 let
-  pname = if args ? name && args.name != null then args.name else args.pname;
-  versionStr = lib.optionalString (version != null) ("-" + version);
-  name = pname + versionStr;
+  inherit (lib)
+    concatLines
+    concatStringsSep
+    escapeShellArgs
+    filter
+    optionalString
+    splitString
+    ;
+
+  inherit (lib.attrsets) removeAttrs;
+
+  name = args.name or "${args.pname}-${args.version}";
+  executableName = args.pname or args.name;
+  # we don't know which have been supplied, and want to avoid defaulting missing attrs to null. Passed into runCommandLocal
+  nameAttrs = lib.filterAttrs (key: value: builtins.elem key [ "name" "pname" "version" ]) args;
 
   buildFHSEnv = callPackage ./buildFHSEnv.nix { };
 
-  fhsenv = buildFHSEnv (removeAttrs (args // { inherit name; }) [
+  fhsenv = buildFHSEnv (removeAttrs args [
     "runScript" "extraInstallCommands" "meta" "passthru" "extraPreBwrapCmds" "extraBwrapArgs" "dieWithParent"
     "unshareUser" "unshareCgroup" "unshareUts" "unshareNet" "unsharePid" "unshareIpc" "privateTmp"
-    "pname" "version"
   ]);
 
   etcBindEntries = let
@@ -116,13 +124,14 @@ let
     exec ${run} "$@"
   '';
 
-  indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
+  indentLines = str: concatLines (map (s: "  " + s) (filter (s: s != "") (splitString "\n" str)));
   bwrapCmd = { initArgs ? "" }: ''
-    ${extraPreBwrapCmds}
-    ignored=(/nix /dev /proc /etc ${lib.optionalString privateTmp "/tmp"})
+    ignored=(/nix /dev /proc /etc ${optionalString privateTmp "/tmp"})
     ro_mounts=()
     symlinks=()
     etc_ignored=()
+
+    ${extraPreBwrapCmds}
 
     # loop through all entries of root in the fhs environment, except its /etc.
     for i in ${fhsenv}/*; do
@@ -164,7 +173,7 @@ let
     fi
 
     # link selected etc entries from the actual root
-    for i in ${lib.escapeShellArgs etcBindEntries}; do
+    for i in ${escapeShellArgs etcBindEntries}; do
       if [[ "''${etc_ignored[@]}" =~ "$i" ]]; then
         continue
       fi
@@ -189,13 +198,15 @@ let
     x11_args+=(--tmpfs /tmp/.X11-unix)
 
     # Try to guess X socket path. This doesn't cover _everything_, but it covers some things.
-    if [[ "$DISPLAY" == :* ]]; then
-      display_nr=''${DISPLAY#?}
+    if [[ "$DISPLAY" == *:* ]]; then
+      # recover display number from $DISPLAY formatted [host]:num[.screen]
+      display_nr=''${DISPLAY/#*:} # strip host
+      display_nr=''${display_nr/%.*} # strip screen
       local_socket=/tmp/.X11-unix/X$display_nr
       x11_args+=(--ro-bind-try "$local_socket" "$local_socket")
     fi
 
-    ${lib.optionalString privateTmp ''
+    ${optionalString privateTmp ''
     # sddm places XAUTHORITY in /tmp
     if [[ "$XAUTHORITY" == /tmp/* ]]; then
       x11_args+=(--ro-bind-try "$XAUTHORITY" "$XAUTHORITY")
@@ -220,15 +231,15 @@ let
       --dev-bind /dev /dev
       --proc /proc
       --chdir "$(pwd)"
-      ${lib.optionalString unshareUser "--unshare-user"}
-      ${lib.optionalString unshareIpc "--unshare-ipc"}
-      ${lib.optionalString unsharePid "--unshare-pid"}
-      ${lib.optionalString unshareNet "--unshare-net"}
-      ${lib.optionalString unshareUts "--unshare-uts"}
-      ${lib.optionalString unshareCgroup "--unshare-cgroup"}
-      ${lib.optionalString dieWithParent "--die-with-parent"}
+      ${optionalString unshareUser "--unshare-user"}
+      ${optionalString unshareIpc "--unshare-ipc"}
+      ${optionalString unsharePid "--unshare-pid"}
+      ${optionalString unshareNet "--unshare-net"}
+      ${optionalString unshareUts "--unshare-uts"}
+      ${optionalString unshareCgroup "--unshare-cgroup"}
+      ${optionalString dieWithParent "--die-with-parent"}
       --ro-bind /nix /nix
-      ${lib.optionalString privateTmp "--tmpfs /tmp"}
+      ${optionalString privateTmp "--tmpfs /tmp"}
       # Our glibc will look for the cache in its own path in `/nix/store`.
       # As such, we need a cache to exist there, because pressure-vessel
       # depends on the existence of an ld cache. However, adding one
@@ -242,7 +253,7 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
-  '' + lib.optionalString (stdenv.isx86_64 && stdenv.isLinux) (indentLines ''
+  '' + optionalString fhsenv.isMultiBuild (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
       --symlink /etc/ld.so.cache ${pkgsi686Linux.glibc}/etc/ld.so.cache \
@@ -260,9 +271,8 @@ let
   '';
 
   bin = writeShellScript "${name}-bwrap" (bwrapCmd { initArgs = ''"$@"''; });
-in runCommandLocal name {
-  inherit pname version;
-  inherit meta;
+in runCommandLocal name (nameAttrs // {
+  inherit nativeBuildInputs meta;
 
   passthru = passthru // {
     env = runCommandLocal "${name}-shell-env" {
@@ -275,9 +285,9 @@ in runCommandLocal name {
     '';
     inherit args fhsenv;
   };
-} ''
+}) ''
   mkdir -p $out/bin
-  ln -s ${bin} $out/bin/${pname}
+  ln -s ${bin} $out/bin/${executableName}
 
   ${extraInstallCommands}
 ''

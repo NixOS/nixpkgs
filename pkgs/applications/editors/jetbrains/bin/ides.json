@@ -1,4 +1,15 @@
 {
+  "aqua": {
+    "product": "Aqua",
+    "wmClass": "jetbrains-aqua",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Test automation IDE from JetBrains",
+      "maintainers": [ "remcoschrijver" ],
+      "longDescription": "Aqua is a test automation IDE from jetbrains that can deal with many languages and frameworks to improve your test workflows. Has support for popular testing frameworks like Selenium, Cypress, and Playwright.",
+      "homepage": "https://www.jetbrains.com/aqua/"
+    }
+  },
   "clion": {
     "product": "CLion",
     "wmClass": "jetbrains-clion",
@@ -167,6 +178,17 @@
       "maintainers": [ "abaldeau", "tymscar"],
       "longDescription": "WebStorm provides an editor for HTML, JavaScript (incl. Node.js), and CSS with on-the-fly code analysis, error prevention and automated refactorings for JavaScript code.",
       "homepage": "https://www.jetbrains.com/webstorm/"
+    }
+  },
+  "writerside": {
+    "product": "Writerside",
+    "wmClass": "jetbrains-writerside",
+    "meta": {
+      "isOpenSource": false,
+      "description": "Documentation IDE from JetBrains",
+      "maintainers": [ "zlepper"],
+      "longDescription": "The most powerful development environment – now adapted for writing documentation.",
+      "homepage": "https://www.jetbrains.com/writerside/"
     }
   }
 }

@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, cffi, pytest }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy27,
+  cffi,
+  pytest,
+}:
 
 buildPythonPackage rec {
   pname = "pycmarkgfm";

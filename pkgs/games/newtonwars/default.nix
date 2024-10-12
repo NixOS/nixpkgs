@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, freeglut
+, libglut
 , libGLU
 , libGL
 }:
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ freeglut libGL libGLU ];
+  buildInputs = [ libglut libGL libGLU ];
 
   patchPhase = ''
     sed -i "s;font24.raw;$out/share/font24.raw;g" display.c
@@ -33,13 +33,13 @@ stdenv.mkDerivation {
     cp font24.raw $out/share
 
     wrapProgram $out/bin/nw \
-      --prefix LD_LIBRARY_PATH ":" ${freeglut}/lib \
+      --prefix LD_LIBRARY_PATH ":" ${libglut}/lib \
       --prefix LD_LIBRARY_PATH ":" ${libGLU}/lib \
       --prefix LD_LIBRARY_PATH ":" ${libGL}/lib
   '';
 
   meta = with lib; {
-    description = "A space battle game with gravity as the main theme";
+    description = "Space battle game with gravity as the main theme";
     mainProgram = "nw";
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.linux;

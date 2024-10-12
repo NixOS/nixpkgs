@@ -2,27 +2,28 @@
 , stdenv
 , python3
 , fetchFromGitHub
-, makeWrapper
 , pkgs
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deface";
-  version = "1.4.0";
-  format = "pyproject";
+  version = "1.5.0";
+  pyproject = true;
+
+  disabled = python3.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "ORB-HD";
     repo = "deface";
-    rev = "v${version}";
-    hash = "sha256-tLNTgdnKKmyYHVajz0dHIb7cvC1by5LQ5CFIbMvPEYk=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-/mXWeL6OSgW4BMXtAZD/3UxQUGt7UE5ZvH8CXNCueJo=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools-scm
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     imageio
     imageio-ffmpeg
     numpy
@@ -38,17 +39,21 @@ python3.pkgs.buildPythonApplication rec {
     ''--prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ pkgs.onnxruntime ]}"''
   ];
 
-  patchPhase = ''
-    substituteInPlace pyproject.toml requirements.txt --replace "opencv-python" "opencv"
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "opencv-python" "opencv"
   '';
 
   pythonImportsCheck = [ "deface" "onnx" "onnxruntime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Video anonymization by face detection";
     homepage = "https://github.com/ORB-HD/deface";
-    license = licenses.mit;
-    maintainers = with maintainers; [ lurkki ];
+    changelog = "https://github.com/ORB-HD/deface/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ lurkki ];
     mainProgram = "deface";
+    # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+    broken = stdenv.hostPlatform.system == "aarch64-linux";
   };
 }

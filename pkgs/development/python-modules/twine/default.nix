@@ -1,28 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, importlib-metadata
-, keyring
-, pkginfo
-, readme-renderer
-, requests
-, requests-toolbelt
-, rich
-, rfc3986
-, setuptools-scm
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  importlib-metadata,
+  keyring,
+  pkginfo,
+  readme-renderer,
+  requests,
+  requests-toolbelt,
+  rich,
+  rfc3986,
+  setuptools-scm,
+  urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "5.0.0";
+  version = "5.1.0";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ibDMfTcKS2ZCHMYQLyaaqRD+DxhhwST1c88t3tvBDPQ=";
+    hash = "sha256-TXR3DIjE/K+BNNKmqdhj5A8IJV/32OKss8u9V9Jfbp0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -49,6 +50,5 @@ buildPythonPackage rec {
     mainProgram = "twine";
     homepage = "https://github.com/pypa/twine";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ fridh ];
   };
 }

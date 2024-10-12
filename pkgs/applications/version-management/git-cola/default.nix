@@ -10,17 +10,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.6.1";
+  version = "4.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     rev = "v${version}";
-    hash = "sha256-qAvoBVZt2IwrWFNzGWpCZqj8gbjysGlB/VXaa1CMH4o=";
+    hash = "sha256-8OErZ6uKTWE245BoBu9lQyTLA43DfWaYDv3wbPWaufg=";
   };
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     qt5.qtwayland
   ];
 
@@ -47,7 +47,7 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     "qtpy/"
     "contrib/win32"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "cola/inotify.py"
   ];
 
@@ -61,8 +61,9 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/git-cola/git-cola";
-    description = "A sleek and powerful Git GUI";
+    description = "Sleek and powerful Git GUI";
     license = licenses.gpl2;
     maintainers = [ maintainers.bobvanderlinden ];
+    mainProgram = "git-cola";
   };
 }

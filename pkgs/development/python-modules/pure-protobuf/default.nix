@@ -1,19 +1,20 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, poetry-dynamic-versioning
-, typing-extensions
-, pytestCheckHook
-, pytest-benchmark
-, pytest-cov
-, pydantic
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  poetry-dynamic-versioning,
+  typing-extensions,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov-stub,
+  pydantic,
 }:
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.0.1";
+  version = "3.1.2";
 
   format = "pyproject";
   # < 3.10 requires get-annotations which isn't packaged yet
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "eigenein";
     repo = "protobuf";
     rev = "refs/tags/${version}";
-    hash = "sha256-sGKnta+agrpJkQB0twFkqRreD5WB2O/06g75N0ic4mc=";
+    hash = "sha256-up/01Q2IdaW41Ple+nCRpWjYnl/IAlOppdGcg4djRZY=";
   };
 
   build-system = [
@@ -32,24 +33,18 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  dependencies = [
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pydantic
     pytestCheckHook
     pytest-benchmark
-    pytest-cov
+    pytest-cov-stub
   ];
 
-  pytestFlagsArray = [
-    "--benchmark-disable"
-  ];
+  pytestFlagsArray = [ "--benchmark-disable" ];
 
-  pythonImportsCheck = [
-    "pure_protobuf"
-  ];
+  pythonImportsCheck = [ "pure_protobuf" ];
 
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";

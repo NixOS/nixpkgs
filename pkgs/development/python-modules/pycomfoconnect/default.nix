@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, protobuf
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  protobuf,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -19,16 +20,12 @@ buildPythonPackage rec {
     hash = "sha256-I/0vCgSEi6mgYg1fMH4Ha7PoonewtqYYsvXZT8y4rJE=";
   };
 
-  propagatedBuildInputs = [
-    protobuf
-  ];
+  propagatedBuildInputs = [ protobuf ];
 
   # Project has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pycomfoconnect"
-  ];
+  pythonImportsCheck = [ "pycomfoconnect" ];
 
   meta = with lib; {
     description = "Python module to interact with ComfoAir Q350/450/600 units";

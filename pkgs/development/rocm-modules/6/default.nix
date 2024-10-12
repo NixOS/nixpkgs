@@ -10,7 +10,6 @@
 , opencv
 , ffmpeg_4
 , libjpeg_turbo
-, rapidjson-unstable
 }:
 
 let
@@ -115,8 +114,7 @@ in rec {
   };
 
   rocgdb = callPackage ./rocgdb {
-    inherit rocmUpdateScript;
-    elfutils = elfutils.override { enableDebuginfod = true; };
+    inherit rocmUpdateScript rocdbgapi;
     stdenv = llvm.rocmClangStdenv;
   };
 
@@ -150,7 +148,10 @@ in rec {
     stdenv = llvm.rocmClangStdenv;
   };
 
-  hiprand = rocrand; # rocrand includes hiprand
+  hiprand = callPackage ./hiprand {
+    inherit rocmUpdateScript rocm-cmake clr rocrand;
+    stdenv = llvm.rocmClangStdenv;
+  };
 
   rocfft = callPackage ./rocfft {
     inherit rocmUpdateScript rocm-cmake rocrand rocfft clr;
@@ -191,7 +192,7 @@ in rec {
   };
 
   rocblas = callPackage ./rocblas {
-    inherit rocblas rocmUpdateScript rocm-cmake clr tensile;
+    inherit rocmUpdateScript rocm-cmake clr tensile;
     inherit (llvm) openmp;
     stdenv = llvm.rocmClangStdenv;
   };
@@ -240,10 +241,12 @@ in rec {
     It is still available for some time as part of rocmPackages_5.
   ''; # Added 2024-3-3
 
-  composable_kernel = callPackage ./composable_kernel {
-    inherit rocmUpdateScript rocm-cmake clr;
-    inherit (llvm) openmp clang-tools-extra;
-    stdenv = llvm.rocmClangStdenv;
+  composable_kernel = callPackage ./composable_kernel/unpack.nix {
+    composable_kernel_build = callPackage ./composable_kernel {
+      inherit rocmUpdateScript rocm-cmake clr;
+      inherit (llvm) openmp clang-tools-extra;
+      stdenv = llvm.rocmClangStdenv;
+    };
   };
 
   half = callPackage ./half {
@@ -299,7 +302,6 @@ in rec {
     inherit (llvm) clang openmp;
     opencv = opencv.override { enablePython = true; };
     ffmpeg = ffmpeg_4;
-    rapidjson = rapidjson-unstable;
     stdenv = llvm.rocmClangStdenv;
 
     # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice
@@ -313,6 +315,9 @@ in rec {
         rev = "640d7ee1917fcd3b6a5271aa6cf4576bccc7c5fb";
         sha256 = "sha256-T52whJ7nZi8jerJaZtYInC2YDN0QM+9tUDqiNr6IsNY=";
       };
+
+      # overwrite all patches, since patches for newer version do not apply
+      patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ];
     };
   };
 

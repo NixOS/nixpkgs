@@ -19,9 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-skUG1B6TCFEXeQSRwA6vWjXmNifk5bTR4+JESw7CZMo=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Foundation Cocoa ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation Cocoa ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "-framework" "AppKit" ];
 
   # `test with_cargo` tries to call cargo-watch as a cargo subcommand
   # (calling cargo-watch with command `cargo watch`)
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Cargo subcommand for watching over Cargo project's source";
+    description = "Cargo subcommand for watching over Cargo project's source";
     mainProgram = "cargo-watch";
     homepage = "https://github.com/watchexec/cargo-watch";
     license = licenses.cc0;

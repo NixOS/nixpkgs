@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pytestCheckHook,
+  pythonAtLeast,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     "test_get_origin"
   ];
 
-  pythonImportsCheck = [
-    "typish"
-  ];
+  pythonImportsCheck = [ "typish" ];
 
   meta = with lib; {
     description = "Python module for checking types of objects";

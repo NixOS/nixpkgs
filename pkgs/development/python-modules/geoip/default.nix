@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, libgeoip
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  libgeoip,
 }:
 
 buildPythonPackage rec {
@@ -16,13 +17,9 @@ buildPythonPackage rec {
     sha256 = "1rphxf3vrn8wywjgr397f49s0s22m83lpwcq45lm0h2p45mdm458";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    libgeoip
-  ];
+  propagatedBuildInputs = [ libgeoip ];
 
   # Tests cannot be run because they require data that isn't included in the
   # release tarball.

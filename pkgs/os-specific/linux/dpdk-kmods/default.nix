@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, fetchpatch, kernel }:
+{ lib, stdenv, fetchzip, kernel }:
 
 stdenv.mkDerivation rec {
   pname = "dpdk-kmods";
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     maintainers = [ maintainers.mic92 ];
     platforms = platforms.linux;
-    broken = kernel.isHardened;
   };
 }

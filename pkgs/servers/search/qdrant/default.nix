@@ -13,28 +13,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qdrant";
-  version = "1.7.4";
+  version = "1.11.5";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BgsLmE50mGmB5fcUjov8wcAHRTKMYaoyoXjSUyIddlc=";
+    sha256 = "sha256-yE7/xnAf0U9BpEEmtgXSH+EerUB20KeFePavuGW08f0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "quantization-0.1.0" = "sha256-ggVqJiftu0nvyEM0dzsH0JqIc/Z1XILyUSKiJHeuuZs=";
-      "tonic-0.9.2" = "sha256-ZlcDUZy/FhxcgZE7DtYhAubOq8DMSO17T+TCmXar1jE=";
-      "wal-0.1.2" = "sha256-nBGwpphtj+WBwL9TmWk7qXiEqlIWkgh/2V9uProqhMk=";
+      "tar-0.4.41" = "sha256-32n96yoGbDzhgVZvISLGwxHuv7PGtxde5ma/YlsR1Gg=";
+      "wal-0.1.2" = "sha256-QcyS0v7O1BziVT3oahebpq+u4l5JGaujCaRIPdmsJl4=";
     };
   };
 
   buildInputs = [
     openssl
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
   ];

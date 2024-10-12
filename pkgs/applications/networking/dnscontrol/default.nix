@@ -1,21 +1,29 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, dnscontrol }:
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, dnscontrol }:
 
 buildGoModule rec {
   pname = "dnscontrol";
-  version = "4.8.2";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     rev = "v${version}";
-    hash = "sha256-9myo073/yl9CWwmVb3Gkihf6I/60kSOl0Pk8+dE39KM=";
+    hash = "sha256-qDCt1Ld3xHPexpCv/0SbvQwGhWE46cVX3BJ0PoBsKcA=";
   };
 
-  vendorHash = "sha256-jOLFqCeBxQLXgUAdDbk/QnPBAtMBQi5VR+oKjgZLb28=";
+  vendorHash = "sha256-qEIvxQ4PRtDWyIw3MWmyXV4HLraCLSglHivlV7UJ9jM=";
+
+  nativeBuildInputs = [ installShellFiles ];
 
   subPackages = [ "." ];
 
   ldflags = [ "-s" "-w" "-X=main.version=${version}" ];
+
+  postInstall = ''
+    installShellCompletion --cmd dnscontrol \
+      --bash <($out/bin/dnscontrol shell-completion bash) \
+      --zsh <($out/bin/dnscontrol shell-completion zsh)
+  '';
 
   preCheck = ''
     # requires network

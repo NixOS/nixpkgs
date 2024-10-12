@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, hypothesis
-, pytest-xdist
-, pytestCheckHook
-, typing-extensions
-, pythonOlder
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  hypothesis,
+  pytest-xdist,
+  pytestCheckHook,
+  typing-extensions,
+  pythonOlder,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -36,20 +37,22 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  pytestFlagsArray = [
-    # Pass -c /dev/null so that pytest does not use the bundled pytest.ini, which adds
-    # options to run additional integration tests that are overkill for our purposes.
-    "-c"
-    "/dev/null"
-  ];
+  # Remove the bundled pytest.ini, which adds options to run additional integration
+  # tests that are overkill for our purposes.
+  preCheck = ''
+    rm pytest.ini
+  '';
 
   pythonImportsCheck = [ "bidict" ];
 
   meta = with lib; {
     homepage = "https://bidict.readthedocs.io";
     changelog = "https://bidict.readthedocs.io/changelog.html";
-    description = "The bidirectional mapping library for Python.";
+    description = "Bidirectional mapping library for Python";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ jab jakewaksbaum ];
+    maintainers = with maintainers; [
+      jab
+      jakewaksbaum
+    ];
   };
 }

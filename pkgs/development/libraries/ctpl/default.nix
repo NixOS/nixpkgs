@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ctpl";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/ctpl/releases/ctpl-${version}.tar.gz";
-    sha256 = "1yr92xv9n6kgyixwg9ps4zb404ic5pgb171k4bi3mv9p6k8gv59s";
+    sha256 = "sha256-IRCPx1Z+0hbe6kWRrb/s6OiLH0uxynfDdACSBkTXVr4=";
   };
 
   nativeBuildInputs = [ pkg-config ];

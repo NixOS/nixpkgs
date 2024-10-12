@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , requireFile
-, fetchpatch
 , runCommand
 , rcu
 , testers
@@ -15,19 +14,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "2024.001n";
+  version = "2024.001q";
 
   format = "other";
 
   src = let
     src-tarball = requireFile {
       name = "rcu-d${version}-source.tar.gz";
-      sha256 = "1snmf2cr242k946q6fh5b5fqdyafdbs8gbbdzchjhm7n9r1kxyca";
+      hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
       url = "http://www.davisr.me/projects/rcu/";
     };
   in runCommand "${src-tarball.name}-unpacked" {} ''
     gunzip -ck ${src-tarball} | tar -xvf-
     mv rcu $out
+    ln -s ${src-tarball} $out/src
   '';
 
   patches = [
@@ -148,5 +148,6 @@ python3Packages.buildPythonApplication rec {
     homepage = "http://www.davisr.me/projects/rcu/";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ OPNA2608 ];
+    hydraPlatforms = [ ]; # requireFile used as src
   };
 }

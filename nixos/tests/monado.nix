@@ -5,7 +5,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     { pkgs, ... }:
 
     {
-      hardware.opengl.enable = true;
+      hardware.graphics.enable = true;
       users.users.alice = {
         isNormalUser = true;
         uid = 1000;

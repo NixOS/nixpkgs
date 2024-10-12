@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     sed -i \
       -e 's,\(local app_path\)=`which $1`,\1=`type -P $1`,' \
       src/bin/torsocks.in
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     sed -i \
       -e 's,\(local getcap\)=.*,\1=${libcap}/bin/getcap,' \
       src/bin/torsocks.in
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     description      = "Wrapper to safely torify applications";
     mainProgram = "torsocks";
     homepage         = "https://gitlab.torproject.org/tpo/core/torsocks";
-    license          = lib.licenses.gpl2;
+    license          = lib.licenses.gpl2Plus;
     platforms        = lib.platforms.unix;
     maintainers      = with lib.maintainers; [ thoughtpolice ];
   };

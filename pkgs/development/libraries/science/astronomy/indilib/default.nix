@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.0.6";
+  version = "2.0.9";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-3MeF2G/rr//c7cgGzqDzmqoNKvR+7Kkbid1g8znKPkg=";
+    hash = "sha256-CV8nSz53wFeS/h7hGj9adN8qmyhsqOkTYj/0nuvhlSM=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Socket address collisions between tests
   enableParallelChecking = false;
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in $out/lib/udev/rules.d/*.rules
     do
       substituteInPlace $f --replace "/bin/sh" "${bash}/bin/sh" \
@@ -81,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ hjones2199 sheepforce ];
+    maintainers = with maintainers; [ hjones2199 sheepforce returntoreality ];
     platforms = platforms.unix;
   };
 })

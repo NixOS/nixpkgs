@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openloco";
-  version = "24.01.1";
+  version = "24.04";
 
   src = fetchFromGitHub {
     owner = "OpenLoco";
     repo = "OpenLoco";
     rev = "v${version}";
-    hash = "sha256-QkJmJGObp5irk66SSGTxjydcp3sPaCbxcjcU3XGTVfo=";
+    hash = "sha256-LyA1Wl2xto05DUp3kuWEQo7Hbk8PAy990PC7bLeBFto=";
   };
 
   # the upstream build process determines the version tag from git; since we
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "An open source re-implementation of Chris Sawyer's Locomotion";
+    description = "Open source re-implementation of Chris Sawyer's Locomotion";
     homepage = "https://github.com/OpenLoco/OpenLoco";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

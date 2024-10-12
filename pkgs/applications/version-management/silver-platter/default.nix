@@ -37,9 +37,9 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [ setuptools breezy dulwich jinja2 pyyaml ruamel-yaml ];
   nativeBuildInputs = [ setuptools-rust rustPlatform.cargoSetupHook cargo rustc ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "silver_platter" ];
 

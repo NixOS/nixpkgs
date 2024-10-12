@@ -14,14 +14,12 @@ let
 in
 appimageTools.wrapType2 {
   inherit pname version src;
+  nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands = ''
-    ln -s $out/bin/${pname}-${version} $out/bin/${pname}
     install -m 444 -D ${appimageContents}/frame.desktop $out/share/applications/frame.desktop
     install -m 444 -D ${appimageContents}/frame.png \
       $out/share/icons/hicolor/512x512/apps/frame.png
-
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram "$out/bin/${pname}" \
        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
 

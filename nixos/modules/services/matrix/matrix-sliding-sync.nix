@@ -9,7 +9,7 @@ in
   ];
 
   options.services.matrix-sliding-sync = {
-    enable = lib.mkEnableOption (lib.mdDoc "sliding sync");
+    enable = lib.mkEnableOption "sliding sync";
 
     package = lib.mkPackageOption pkgs "matrix-sliding-sync" { };
 
@@ -19,7 +19,7 @@ in
         options = {
           SYNCV3_SERVER = lib.mkOption {
             type = lib.types.str;
-            description = lib.mdDoc ''
+            description = ''
               The destination homeserver to talk to not including `/_matrix/` e.g `https://matrix.example.org`.
             '';
           };
@@ -27,7 +27,7 @@ in
           SYNCV3_DB = lib.mkOption {
             type = lib.types.str;
             default = "postgresql:///matrix-sliding-sync?host=/run/postgresql";
-            description = lib.mdDoc ''
+            description = ''
               The postgres connection string.
               Refer to <https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING>.
             '';
@@ -37,18 +37,18 @@ in
             type = lib.types.str;
             default = "127.0.0.1:8009";
             example = "[::]:8008";
-            description = lib.mdDoc "The interface and port or path (for unix socket) to listen on.";
+            description = "The interface and port or path (for unix socket) to listen on.";
           };
 
           SYNCV3_LOG_LEVEL = lib.mkOption {
             type = lib.types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
             default = "info";
-            description = lib.mdDoc "The level of verbosity for messages logged.";
+            description = "The level of verbosity for messages logged.";
           };
         };
       };
       default = { };
-      description = lib.mdDoc ''
+      description = ''
         Freeform environment variables passed to the sliding sync proxy.
         Refer to <https://github.com/matrix-org/sliding-sync#setup> for all supported values.
       '';
@@ -57,7 +57,7 @@ in
     createDatabase = lib.mkOption {
       type = lib.types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable and configure `services.postgres` to ensure that the database user `matrix-sliding-sync`
         and the database `matrix-sliding-sync` exist.
       '';
@@ -65,7 +65,7 @@ in
 
     environmentFile = lib.mkOption {
       type = lib.types.str;
-      description = lib.mdDoc ''
+      description = ''
         Environment file as defined in {manpage}`systemd.exec(5)`.
 
         This must contain the {env}`SYNCV3_SECRET` variable which should

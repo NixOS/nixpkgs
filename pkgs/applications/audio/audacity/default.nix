@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , pkg-config
 , python3
 , gettext
@@ -30,7 +30,7 @@
 , libid3tag
 , libopus
 , libuuid
-, ffmpeg_6
+, ffmpeg_7
 , soundtouch
 , pcre
 , portaudio # given up fighting their portaudio.patch?
@@ -62,23 +62,23 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
-  version = "3.4.2";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${version}";
-    hash = "sha256-YlRWCu6kQYdzast7Mf29p4FvpXJHQLG7vqqo/5SNQCQ=";
+    hash = "sha256-72k79UFxhk8JUCnMzbU9lZ0Ua3Ui41EkhPGSnGkf9mE=";
   };
 
   postPatch = ''
     mkdir src/private
     substituteInPlace scripts/build/macOS/fix_bundle.py \
       --replace "path.startswith('/usr/lib/')" "path.startswith('${builtins.storeDir}')"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libraries/lib-files/FileNames.cpp \
       --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
-  '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     sed -z -i "s/NSAppearanceName.*systemAppearance//" src/AudacityApp.mm
   '';
 
@@ -88,14 +88,14 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     makeWrapper
-    wrapGAppsHook
-  ] ++ lib.optionals stdenv.isLinux [
+    wrapGAppsHook3
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     linuxHeaders
   ];
 
   buildInputs = [
     expat
-    ffmpeg_6
+    ffmpeg_7
     file
     flac
     gtk3
@@ -125,7 +125,7 @@ stdenv.mkDerivation rec {
     portaudio
     wavpack
     wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # for portaudio
     at-spi2-core
     dbus
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     libsepol
     libuuid
     util-linux
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     CoreAudioKit # for portaudio
     libpng
@@ -176,13 +176,13 @@ stdenv.mkDerivation rec {
   # Replace audacity's wrapper, to:
   # - put it in the right place, it shouldn't be in "$out/audacity"
   # - Add the ffmpeg dynamic dependency
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram "$out/bin/audacity" \
       "''${gappsWrapperArgs[@]}" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_6 ]} \
+      --prefix LD_LIBRARY_PATH : "$out/lib/audacity":${lib.makeLibraryPath [ ffmpeg_7 ]} \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/audacity/modules" \
       --suffix AUDACITY_PATH : "$out/share/audacity"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/Audacity.app $out/Applications/
     makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
@@ -202,7 +202,7 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [ lheckemann veprbl wegank ];
+    maintainers = with maintainers; [ veprbl wegank ];
     platforms = platforms.unix;
   };
 }

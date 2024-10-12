@@ -1,13 +1,11 @@
 { lib
 , fetchFromGitHub
-, buildGoPackage
+, buildGoModule
 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "assetfinder";
   version = "0.1.1";
-
-  goPackagePath = "github.com/tomnomnom/assetfinder";
 
   src = fetchFromGitHub {
     owner = "tomnomnom";
@@ -15,6 +13,12 @@ buildGoPackage rec {
     rev = "v${version}";
     hash = "sha256-7+YF1VXBcFehKw9JzurmXNu8yeZPdqfQEuaqwtR4AuA=";
   };
+
+  postPatch = ''
+    go mod init github.com/tomnomnom/assetfinder
+  '';
+
+  vendorHash = null;
 
   meta = with lib; {
     homepage = "https://github.com/tomnomnom/assetfinder";

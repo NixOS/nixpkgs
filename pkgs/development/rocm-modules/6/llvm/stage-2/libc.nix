@@ -14,11 +14,11 @@ callPackage ../base.nix rec {
     # `Failed to match ... against ...` `Match value not within tolerance value of MPFR result:`
     # We need a better way, but I don't know enough sed magic and patching `CMakeLists.txt` isn't working...
     substituteInPlace ../libc/test/src/math/log10_test.cpp \
-      --replace "i < N" "i < 0" \
-      --replace "test(mpfr::RoundingMode::Nearest);" "" \
-      --replace "test(mpfr::RoundingMode::Downward);" "" \
-      --replace "test(mpfr::RoundingMode::Upward);" "" \
-      --replace "test(mpfr::RoundingMode::TowardZero);" ""
+      --replace-fail "i < N" "i < 0" \
+      --replace-fail "test(mpfr::RoundingMode::Nearest);" "" \
+      --replace-fail "test(mpfr::RoundingMode::Downward);" "" \
+      --replace-fail "test(mpfr::RoundingMode::Upward);" "" \
+      --replace-fail "test(mpfr::RoundingMode::TowardZero);" ""
   '';
 
   checkTargets = [ "check-${targetName}" ];

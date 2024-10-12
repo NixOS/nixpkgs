@@ -15,12 +15,12 @@ in
   options = {
 
     services.munge = {
-      enable = mkEnableOption (lib.mdDoc "munge service");
+      enable = mkEnableOption "munge service";
 
       password = mkOption {
         default = "/etc/munge/munge.key";
         type = types.path;
-        description = lib.mdDoc ''
+        description = ''
           The path to a daemon's secret key.
         '';
       };

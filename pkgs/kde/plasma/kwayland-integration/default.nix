@@ -1,4 +1,4 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kwayland-integration";
   # FIXME(qt5)

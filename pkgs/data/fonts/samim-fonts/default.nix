@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/rastikerdar/samim-font";
-    description = "A Persian (Farsi) Font - فونت (قلم) فارسی صمیم";
+    description = "Persian (Farsi) Font - فونت (قلم) فارسی صمیم";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = [ ];

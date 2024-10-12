@@ -46,8 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    description = "A pie-menu tool";
+    description = "Pie-menu tool";
     homepage = "https://github.com/phillbush/pmenu";
+    changelog = "https://github.com/phillbush/pmenu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     longDescription = ''
       πmenu is a pie menu utility for X. πmenu receives a menu specification in

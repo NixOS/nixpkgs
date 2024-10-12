@@ -16,14 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake docutils ];
 
   buildInputs = [ cjson libev openssl ]
-    ++ lib.optionals stdenv.isLinux [ systemd ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
 
   meta = with lib; {
     description = "High-performance connection pool for PostgreSQL";
     homepage = "https://agroal.github.io/pgagroal/";
     changelog = "https://github.com/agroal/pgagroal/releases/tag/${finalAttrs.version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

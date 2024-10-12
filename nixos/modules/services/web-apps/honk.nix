@@ -21,12 +21,12 @@ in
 {
   options = {
     services.honk = {
-      enable = lib.mkEnableOption (lib.mdDoc "the Honk server");
+      enable = lib.mkEnableOption "the Honk server";
       package = lib.mkPackageOption pkgs "honk" { };
 
       host = lib.mkOption {
         default = "127.0.0.1";
-        description = lib.mdDoc ''
+        description = ''
           The host name or IP address the server should listen to.
         '';
         type = lib.types.str;
@@ -34,21 +34,21 @@ in
 
       port = lib.mkOption {
         default = 8080;
-        description = lib.mdDoc ''
+        description = ''
           The port the server should listen to.
         '';
         type = lib.types.port;
       };
 
       username = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The admin account username.
         '';
         type = lib.types.str;
       };
 
       passwordFile = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           Password for admin account.
           NOTE: Should be string not a store path, to prevent the password from being world readable
         '';
@@ -56,7 +56,7 @@ in
       };
 
       servername = lib.mkOption {
-        description = lib.mdDoc ''
+        description = ''
           The server name.
         '';
         type = lib.types.str;
@@ -64,7 +64,7 @@ in
 
       extraJS = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           An extra JavaScript file to be loaded by the client.
         '';
         type = lib.types.nullOr lib.types.path;
@@ -72,7 +72,7 @@ in
 
       extraCSS = lib.mkOption {
         default = null;
-        description = lib.mdDoc ''
+        description = ''
           An extra CSS file to be loaded by the client.
         '';
         type = lib.types.nullOr lib.types.path;

@@ -1,6 +1,6 @@
 { lib, stdenv, cmake, pkg-config, git, curl, SDL2, xercesc, openal, lua, libvlc
 , libjpeg, wxGTK32, cppunit, ftgl, glew, libogg, libvorbis, buildEnv, libpng
-, fontconfig, freetype, xorg, makeWrapper, bash, which, gnome, libGLU, glib
+, fontconfig, freetype, xorg, makeWrapper, bash, which, zenity, libGLU, glib
 , fetchFromGitHub, fetchpatch
 }:
 let
@@ -13,7 +13,7 @@ let
   };
   path-env = buildEnv {
     name = "megaglest-path-env";
-    paths = [ bash which gnome.zenity ];
+    paths = [ bash which zenity ];
   };
 in
 stdenv.mkDerivation {
@@ -79,7 +79,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
+    description = "Entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = licenses.gpl3;
     homepage = "https://megaglest.org/";
     maintainers = [ maintainers.matejc ];

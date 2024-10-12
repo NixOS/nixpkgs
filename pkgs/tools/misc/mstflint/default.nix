@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , rdma-core
 , openssl
 , zlib
@@ -26,21 +25,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mstflint";
-  version = "4.26.0-1";
+
+  # if you update the version of this package, also update the input hash in mstflint_access!
+  version = "4.29.0-1";
 
   src = fetchurl {
     url = "https://github.com/Mellanox/mstflint/releases/download/v${version}/mstflint-${version}.tar.gz";
-    hash = "sha256-P8XACcz6d8UTOhFFeTijfFOthBqnUghGlDj9K145sZ8=";
+    hash = "sha256-G9BIFG8f4Ek9R3CyRLAuMpgbScrtBo/ZaiJwAQMiBlQ=";
   };
-
-  patches = [
-    # needed to introduce this with GCC 13. Remove, when https://github.com/Mellanox/mstflint/pull/916 is upstream.
-    (fetchpatch {
-      name = "elf.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/Mellanox/mstflint/pull/916.patch";
-      hash = "sha256-quBdmiuzwThu4MkAaT74eJDlZwIcUZMrLZa8OIcO96w=";
-    })
-  ];
 
   nativeBuildInputs = [
     autoconf
@@ -121,7 +113,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [ gpl2 bsd2 ];
+    license = with licenses; [ gpl2Only bsd2 ];
     maintainers = with maintainers; [ thillux ];
     platforms = platforms.linux;
   };

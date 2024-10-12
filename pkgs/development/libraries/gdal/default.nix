@@ -5,7 +5,7 @@
 , fetchpatch
 
 , useMinimalFeatures ? false
-, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
+, useTiledb ? (!useMinimalFeatures) && !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 , useLibHEIF ? (!useMinimalFeatures)
 , useLibJXL ? (!useMinimalFeatures)
 , useMysql ? (!useMinimalFeatures)
@@ -79,21 +79,24 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "gdal";
-  version = "3.8.4";
+  pname = "gdal" + lib.optionalString useMinimalFeatures "-minimal";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-R9VLof13OXPbWGHOG1Q4WZWSPoF739C6WuNWxoIwKTw=";
+    hash = "sha256-BXnpNfi9tUd6nnwYdstuOfGsFVif8kkmkW97X1UAgt8=";
   };
 
   patches = [
-    # bump java source option to fix build with JDK 21
     (fetchpatch {
-      url = "https://github.com/OSGeo/gdal/commit/ca2eb4130750b0e6365f738a5f8ff77081f5c5bb.patch";
-      sha256 = "sha256-wShYm9yA7twJR72co+Tvf/IuYXqbI0OrjWl0uqC3bwo=";
+      url = "https://github.com/OSGeo/gdal/commit/91e4f55f8f374a75f8f2ecd05670edcfa4c0af84.patch";
+      sha256 = "sha256-C2lkZLsORso7WVxgX79r5swkoVu/APPwQp2C/rmmCAo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/OSGeo/gdal/commit/40c3212fe4ba93e5176df4cd8ae5e29e06bb6027.patch";
+      sha256 = "sha256-D55iT6E/YdpSyfN7KUDTh1gdmIDLHXW4VC5d6D9B7ls=";
     })
   ];
 
@@ -116,9 +119,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ] ++ lib.optionals (!useTiledb) [
     "-DGDAL_USE_TILEDB=OFF"
@@ -154,8 +157,8 @@ stdenv.mkDerivation (finalAttrs: {
       netCdfDeps = lib.optionals useNetCDF [ netcdf ];
       armadilloDeps = lib.optionals useArmadillo [ armadillo ];
 
-      darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
-      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
+      darwinDeps = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+      nonDarwinDeps = lib.optionals (!stdenv.hostPlatform.isDarwin) ([
         # tests for formats enabled by these packages fail on macos
         openexr
         xercesc
@@ -177,7 +180,7 @@ stdenv.mkDerivation (finalAttrs: {
       json_c
       lerc
       xz
-      libxml2
+      (libxml2.override { enableHttp = true; })
       lz4
       openjpeg
       openssl
@@ -229,8 +232,8 @@ stdenv.mkDerivation (finalAttrs: {
     export GDAL_DOWNLOAD_TEST_DATA=OFF
     # allows to skip tests that fail because of file handle leak
     # the issue was not investigated
-    # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
-    export BUILD_NAME=fedora
+    # https://github.com/OSGeo/gdal/blob/v3.9.0/autotest/gdrivers/bag.py#L54
+    export CI=1
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -265,10 +268,13 @@ stdenv.mkDerivation (finalAttrs: {
     # failing with PROJ 9.3.1
     # https://github.com/OSGeo/gdal/issues/8908
     "test_osr_esri_28"
-  ] ++ lib.optionals (!stdenv.isx86_64) [
+    # flakey tests, to remove on next release
+    "test_vsiaz_write_blockblob_chunk_size_1"
+    "test_vsiaz_fake_write"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # flaky on macos
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [

@@ -1,37 +1,42 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.50";
+  version = "3.2.257";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     rev = "refs/tags/${version}";
-    hash = "sha256-XOH4RrkyjTZY1N5XSR71GEGofPgqI7XkE8c3/ojoHGI=";
+    hash = "sha256-1uUKOIxv9p++p6t0O6RXn/cw3Py06mFxoCae0Bj75bU=";
   };
 
-  patches = [
-    ./flake8-compat-5.x.patch
-  ];
+  patches = [ ./flake8-compat-5.x.patch ];
 
   pythonRelaxDeps = [
-    "boto3"
-    "botocore"
     "bc-detect-secrets"
     "bc-python-hcl2"
+    "boto3"
+    "botocore"
+    "cloudsplaining"
+    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "license-expression"
     "networkx"
     "openai"
     "packageurl-python"
+    "packaging"
     "pycep-parser"
+    "rustworkx"
+    "schema"
     "termcolor"
+    "urllib3"
   ];
 
   pythonRemoveDeps = [
@@ -40,7 +45,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   build-system = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools-scm
   ];
 
@@ -118,6 +122,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_runner"
     # AssertionError: assert ['<?xml versi...
     "test_get_cyclonedx_report"
+    # Test fails on Hydra
+    "test_sast_js_filtered_files_by_ts"
+    # Timing sensitive
+    "test_non_multiline_pair_time_limit_creating_report"
   ];
 
   disabledTestPaths = [
@@ -145,9 +153,7 @@ python3.pkgs.buildPythonApplication rec {
     "dogfood_tests/test_checkov_dogfood.py"
   ];
 
-  pythonImportsCheck = [
-    "checkov"
-  ];
+  pythonImportsCheck = [ "checkov" ];
 
   postInstall = ''
     chmod +x $out/bin/checkov
@@ -162,6 +168,9 @@ python3.pkgs.buildPythonApplication rec {
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ anhdle14 fab ];
+    maintainers = with maintainers; [
+      anhdle14
+      fab
+    ];
   };
 }

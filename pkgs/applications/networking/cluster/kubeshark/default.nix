@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubeshark";
-  version = "52.1.77";
+  version = "52.3.82";
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = "v${version}";
-    hash = "sha256-BpixzQ88JfA1cS5bLMHmLhE5Si5UbC9zRf9GAELrJwM=";
+    hash = "sha256-PjQX+OAE2UujGc+XHn2izrHgjvGbSK84IU9z5aBM+VM=";
   };
 
-  vendorHash = "sha256-SmvO9DYOXxnmN2dmHPPOguVwEbWSH/xNLBB+idpzopo=";
+  vendorHash = "sha256-fjkuDX6SC23An0zZW0ocoFJ/K6JKsyVUQdxzfHCUFJs=";
 
   ldflags = let t = "github.com/kubeshark/kubeshark"; in [
    "-s" "-w"
@@ -47,7 +47,7 @@ buildGoModule rec {
 
   meta = with lib; {
     changelog = "https://github.com/kubeshark/kubeshark/releases/tag/${version}";
-    description = "The API Traffic Viewer for Kubernetes";
+    description = "API Traffic Viewer for Kubernetes";
     mainProgram = "kubeshark";
     homepage = "https://kubeshark.co/";
     license = licenses.asl20;

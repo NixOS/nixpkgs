@@ -31,7 +31,7 @@
 , postgresql_15
 , gobject-introspection
 , yelp-tools
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 let
@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
     doxygen
     graphviz
     sphinx-build
-    wrapGAppsHook
+    wrapGAppsHook3
     gobject-introspection # for setup hook
   ];
 
@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An easy-to-use database designer and user interface";
+    description = "Easy-to-use database designer and user interface";
     homepage = "http://www.glom.org/";
     license = [ licenses.lgpl2 licenses.gpl2 ];
     maintainers = teams.gnome.members;

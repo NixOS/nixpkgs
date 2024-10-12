@@ -98,7 +98,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    description = "A multiplayer tactical FPS on top of Quake 3 engine";
+    description = "Multiplayer tactical FPS on top of Quake 3 engine";
     homepage = "https://www.urbanterror.info";
     license = lib.licenses.unfreeRedistributable;
     longDescription = ''

@@ -1,40 +1,67 @@
-{ lib
-, buildPythonPackage
-, hypothesis
-, fetchpatch
-, fetchPypi
-, setuptools
-, setuptools-scm
-, cloudpickle
-, cython
-, jinja2
-, numpy
-, psutil
-, pynvml
-, pytestCheckHook
-, pythonOlder
-, rich
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+  cloudpickle,
+  cython,
+  hypothesis,
+  jinja2,
+  numpy,
+  nvidia-ml-py,
+  psutil,
+  pydantic,
+  pynvml,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  setuptools-scm,
+  setuptools,
 }:
+
+let
+  heap-layers-src = fetchFromGitHub {
+    owner = "emeryberger";
+    repo = "heap-layers";
+    name = "Heap-Layers";
+    rev = "a2048eae91b531dc5d72be7a194e0b333c06bd4c";
+    sha256 = "sha256-vl3z30CBX7hav/DM/UE0EQ9lLxZF48tMJrYMXuSulyA=";
+  };
+
+  printf-src = fetchFromGitHub {
+    owner = "mpaland";
+    repo = "printf";
+    name = "printf";
+    rev = "v4.0.0";
+    sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
+  };
+in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.38";
+  version = "1.5.45";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LR1evkn2m6FNBmJnUUJubesxIPeHG6RDgLFBHDuxe38=";
+  src = fetchFromGitHub {
+    owner = "plasma-umass";
+    repo = "scalene";
+    rev = "v${version}";
+    hash = "sha256-0DhoLsXv2tUEkynMkoA14pNxF6GGLe30bfUOii7+PYE=";
   };
 
   patches = [
-    # fix scalene_config import. remove on next update
-    (fetchpatch {
-      name = "scalene_config-import-fix.patch";
-      url = "https://github.com/plasma-umass/scalene/commit/cd437be11f600ac0925ce77efa516e6d83934200.patch";
-      hash = "sha256-YjFh+mu5jyIJYUQFhmGqLXhec6lgQAdj4tWxij3NkwU=";
-    })
+    ./01-manifest-no-git.patch
   ];
+
+  prePatch = ''
+    cp -r ${heap-layers-src} vendor/Heap-Layers
+    mkdir vendor/printf
+    cp ${printf-src}/printf.c vendor/printf/printf.cpp
+    cp -r ${printf-src}/* vendor/printf
+    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+  '';
 
   nativeBuildInputs = [
     cython
@@ -45,28 +72,29 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cloudpickle
     jinja2
+    numpy
     psutil
+    pydantic
     pynvml
     rich
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
+
+  pythonRemoveDeps = [
+    "nvidia-ml-py3"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "nvidia-ml-py" ];
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [
     hypothesis
     numpy
   ];
 
-  disabledTestPaths = [
-    # remove on next update
-    # Failing Darwin-specific tests that were subsequently removed from the source repo.
-    "tests/test_coverup_35.py"
-    "tests/test_coverup_42.py"
-    "tests/test_coverup_43.py"
+  disabledTests = [
+    # Flaky -- socket collision
+    "test_show_browser"
   ];
 
   # remove scalene directory to prevent pytest import confusion

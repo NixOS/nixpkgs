@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchpatch
 , rustPlatform
 , cmake
 , pkg-config
@@ -15,29 +14,34 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tpnote";
-  version = "1.23.10";
+  version = "1.24.8";
 
   src = fetchFromGitHub {
     owner = "getreu";
     repo = "tp-note";
     rev = "v${version}";
-    hash = "sha256-HOCd5N8oS8N+9alR3cG7IEghvhvcc8A+O24L6FD1F38=";
+    hash = "sha256-tn6GCBX3DrqyZZz2FJLTn1vJd4eEbawyJM5huco21/8=";
   };
 
-  cargoHash = "sha256-hI9vzPLcMaFSQpPgIf39UsWDpdHAmQ56D8pSWZ/R1aI=";
+  cargoHash = "sha256-2qGObTu7g6GbUwd4obgqufig7bABFLBsCWSyZt8AVac=";
 
   nativeBuildInputs = [
     cmake
     pkg-config
     installShellFiles
   ];
+
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
      AppKit
      CoreServices
      SystemConfiguration
   ]);
+
+  postInstall = ''
+    installManPage docs/build/man/man1/tpnote.1
+  '';
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 

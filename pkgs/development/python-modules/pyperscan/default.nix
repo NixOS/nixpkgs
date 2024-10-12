@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, rustPlatform
-, pytestCheckHook
-, libiconv
-, vectorscan
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  rustPlatform,
+  pytestCheckHook,
+  libiconv,
+  vectorscan,
 }:
 
 buildPythonPackage rec {
   pname = "pyperscan";
-  version = "0.2.2";
+  version = "0.3.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "vlaci";
     repo = "pyperscan";
     rev = "v${version}";
-    hash = "sha256-ioNGEmWy+lEzazF1RzMFS06jYLNYll3QSlWAF0AoU7Y=";
+    hash = "sha256-uGZ0XFxnZHSLEWcwoHVd+xMulDRqEIrQ5Lf7886GdlM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-2zppyxJ+XaI/JCkp7s27/jgtSbwxnI4Yil5KT8WgrVI=";
+    hash = "sha256-a4jNofPIHoKwsD82y2hG2QPu+eM5D7FSGCm2nDo2cLA=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -34,18 +35,22 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
-  buildInputs = [ vectorscan ] ++ lib.optional stdenv.isDarwin libiconv;
-
-  # Disable default features to use the system vectorscan library instead of a vendored one.
-  maturinBuildFlags = [ "--no-default-features" ];
+  buildInputs = [ vectorscan ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   pythonImportsCheck = [ "pyperscan" ];
 
   meta = with lib; {
-    description = "a hyperscan binding for Python, which supports vectorscan";
-    homepage = "https://github.com/vlaci/pyperscan";
+    description = "Hyperscan binding for Python, which supports vectorscan";
+    homepage = "https://vlaci.github.io/pyperscan/";
+    changelog = "https://github.com/vlaci/pyperscan/releases/tag/${src.rev}";
     platforms = platforms.unix;
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ tnias vlaci ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      tnias
+      vlaci
+    ];
   };
 }

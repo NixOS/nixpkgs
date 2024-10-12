@@ -4,7 +4,7 @@ let
   cfg = config.services.system76-scheduler;
 
   inherit (builtins) concatStringsSep map toString attrNames;
-  inherit (lib) boolToString types mkOption literalExpression mdDoc optional mkIf mkMerge;
+  inherit (lib) boolToString types mkOption literalExpression optional mkIf mkMerge;
   inherit (types) nullOr listOf bool int ints float str enum;
 
   withDefaults = optionSpecs: defaults:
@@ -16,49 +16,49 @@ let
   latencyProfile = withDefaults {
     latency = {
       type = int;
-      description = mdDoc "`sched_latency_ns`.";
+      description = "`sched_latency_ns`.";
     };
     nr-latency = {
       type = int;
-      description = mdDoc "`sched_nr_latency`.";
+      description = "`sched_nr_latency`.";
     };
     wakeup-granularity = {
       type = float;
-      description = mdDoc "`sched_wakeup_granularity_ns`.";
+      description = "`sched_wakeup_granularity_ns`.";
     };
     bandwidth-size = {
       type = int;
-      description = mdDoc "`sched_cfs_bandwidth_slice_us`.";
+      description = "`sched_cfs_bandwidth_slice_us`.";
     };
     preempt = {
       type = enum [ "none" "voluntary" "full" ];
-      description = mdDoc "Preemption mode.";
+      description = "Preemption mode.";
     };
   };
   schedulerProfile = withDefaults {
     nice = {
       type = nullOr (ints.between (-20) 19);
-      description = mdDoc "Niceness.";
+      description = "Niceness.";
     };
     class = {
       type = nullOr (enum [ "idle" "batch" "other" "rr" "fifo" ]);
       example = literalExpression "\"batch\"";
-      description = mdDoc "CPU scheduler class.";
+      description = "CPU scheduler class.";
     };
     prio = {
       type = nullOr (ints.between 1 99);
       example = literalExpression "49";
-      description = mdDoc "CPU scheduler priority.";
+      description = "CPU scheduler priority.";
     };
     ioClass = {
       type = nullOr (enum [ "idle" "best-effort" "realtime" ]);
       example = literalExpression "\"best-effort\"";
-      description = mdDoc "IO scheduler class.";
+      description = "IO scheduler class.";
     };
     ioPrio = {
       type = nullOr (ints.between 0 7);
       example = literalExpression "4";
-      description = mdDoc "IO scheduler priority.";
+      description = "IO scheduler priority.";
     };
     matchers = {
       type = nullOr (listOf str);
@@ -69,7 +69,7 @@ let
           "emacs"
         ]
       '';
-      description = mdDoc "Process matchers.";
+      description = "Process matchers.";
     };
   };
 
@@ -91,19 +91,19 @@ let
 in {
   options = {
     services.system76-scheduler = {
-      enable = lib.mkEnableOption (lib.mdDoc "system76-scheduler");
+      enable = lib.mkEnableOption "system76-scheduler";
 
       package = mkOption {
         type = types.package;
         default = config.boot.kernelPackages.system76-scheduler;
         defaultText = literalExpression "config.boot.kernelPackages.system76-scheduler";
-        description = mdDoc "Which System76-Scheduler package to use.";
+        description = "Which System76-Scheduler package to use.";
       };
 
       useStockConfig = mkOption {
         type = bool;
         default = true;
-        description = mdDoc ''
+        description = ''
           Use the (reasonable and featureful) stock configuration.
 
           When this option is `true`, `services.system76-scheduler.settings`
@@ -116,7 +116,7 @@ in {
           enable = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Tweak CFS latency parameters when going on/off battery";
+            description = "Tweak CFS latency parameters when going on/off battery";
           };
 
           default = latencyProfile {
@@ -139,26 +139,26 @@ in {
           enable = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Tweak scheduling of individual processes in real time.";
+            description = "Tweak scheduling of individual processes in real time.";
           };
 
           useExecsnoop = mkOption {
             type = bool;
             default = true;
-            description = mdDoc "Use execsnoop (otherwise poll the precess list periodically).";
+            description = "Use execsnoop (otherwise poll the precess list periodically).";
           };
 
           refreshInterval = mkOption {
             type = int;
             default = 60;
-            description = mdDoc "Process list poll interval, in seconds";
+            description = "Process list poll interval, in seconds";
           };
 
           foregroundBoost = {
             enable = mkOption {
               type = bool;
               default = true;
-              description = mdDoc ''
+              description = ''
                 Boost foreground process priorities.
 
                 (And de-boost background ones).  Note that this option needs cooperation
@@ -181,7 +181,7 @@ in {
             enable = mkOption {
               type = bool;
               default = true;
-              description = mdDoc "Boost Pipewire client priorities.";
+              description = "Boost Pipewire client priorities.";
             };
             profile = schedulerProfile {
               nice = -6;
@@ -209,7 +209,7 @@ in {
             };
           }
         '';
-        description = mdDoc "Process profile assignments.";
+        description = "Process profile assignments.";
       };
 
       exceptions = mkOption {
@@ -221,7 +221,7 @@ in {
             "schedtool"
           ]
         '';
-        description = mdDoc "Processes that are left alone.";
+        description = "Processes that are left alone.";
       };
     };
   };

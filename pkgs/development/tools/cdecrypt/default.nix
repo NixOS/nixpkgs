@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A utility that decrypts Wii U NUS content files";
+    description = "Utility that decrypts Wii U NUS content files";
     mainProgram = "cdecrypt";
     homepage = "https://github.com/VitaSmith/cdecrypt";
     changelog = "https://github.com/VitaSmith/cdecrypt/releases/tag/v${version}";

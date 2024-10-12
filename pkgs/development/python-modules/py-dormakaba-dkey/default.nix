@@ -1,13 +1,14 @@
-{ lib
-, bleak
-, bleak-retry-connector
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  bleak,
+  bleak-retry-connector,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  fetchpatch,
+  pythonOlder,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "py_dormakaba_dkey"
-  ];
+  pythonImportsCheck = [ "py_dormakaba_dkey" ];
 
   meta = with lib; {
     description = "Library to interact with a Dormakaba dkey lock";

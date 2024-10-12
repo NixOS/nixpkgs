@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "4.0";
+  version = "4.1";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "sha256-UYnX2tad3Jg00kdX5WHStI6u2pyts+SZlgj/jv4o/TU=";
+    sha256 = "sha256-3t8OhvRPj3oanFJKRaUVhGlF0B4E+UAlcfGMIpcet9s=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/share/kpcli.pl $out/bin/kpcli --set PERL5LIB \
       "${with perlPackages; makePerlPath ([
          CaptureTiny Clipboard Clone CryptRijndael SortNaturally TermReadKey TermShellUI FileKeePass TermReadLineGnu XMLParser
-      ] ++ lib.optional stdenv.isDarwin MacPasteboard)}"
+      ] ++ lib.optional stdenv.hostPlatform.isDarwin MacPasteboard)}"
   '';
 
 

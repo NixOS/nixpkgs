@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, dnspython
-, fetchPypi
-, idna
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  dnspython,
+  fetchPypi,
+  idna,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "email-validator";
-  version = "2.1.1";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,17 +18,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "email_validator";
     inherit version;
-    hash = "sha256-IApwaAugiQS+bR7vcpIFzA1odjQ5mlkk2EJTPvuCS4Q=";
+    hash = "sha256-y2kPNExhenFPIuZq53FEWhzrRoIRUt+OFlxfmjZFgrc=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     dnspython
     idna
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     # dns.resolver.NoResolverConfiguration: cannot open /etc/resolv.conf
@@ -35,9 +34,7 @@ buildPythonPackage rec {
     "tests/test_main.py"
   ];
 
-  pythonImportsCheck = [
-    "email_validator"
-  ];
+  pythonImportsCheck = [ "email_validator" ];
 
   meta = with lib; {
     description = "Email syntax and deliverability validation library";

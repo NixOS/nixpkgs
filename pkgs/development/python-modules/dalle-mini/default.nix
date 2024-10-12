@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, fetchpatch
-, einops
-, emoji
-, flax
-, ftfy
-, jax
-, jaxlib
-, pillow
-, transformers
-, unidecode
-, wandb
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  fetchpatch,
+  einops,
+  emoji,
+  flax,
+  ftfy,
+  jax,
+  jaxlib,
+  pillow,
+  transformers,
+  unidecode,
+  wandb,
 }:
 
 buildPythonPackage rec {

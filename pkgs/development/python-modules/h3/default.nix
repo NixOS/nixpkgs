@@ -1,14 +1,15 @@
-{ autoPatchelfHook
-, buildPythonPackage
-, cmake
-, cython
-, fetchFromGitHub
-, h3
-, lib
-, numpy
-, pytestCheckHook
-, scikit-build
-, stdenv
+{
+  autoPatchelfHook,
+  buildPythonPackage,
+  cmake,
+  cython,
+  fetchFromGitHub,
+  h3,
+  lib,
+  numpy,
+  pytestCheckHook,
+  scikit-build,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -28,14 +29,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  nativeBuildInputs = [
-    scikit-build cmake cython
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # On Linux the .so files ends up referring to libh3.so instead of the full
-    # Nix store path. I'm not sure why this is happening! On Darwin it works
-    # fine.
-    autoPatchelfHook
-  ];
+  nativeBuildInputs =
+    [
+      scikit-build
+      cmake
+      cython
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # On Linux the .so files ends up referring to libh3.so instead of the full
+      # Nix store path. I'm not sure why this is happening! On Darwin it works
+      # fine.
+      autoPatchelfHook
+    ];
 
   # This is not needed per-se, it's only added for autoPatchelfHook to work
   # correctly. See the note above ^^
@@ -53,7 +58,8 @@ buildPythonPackage rec {
         include_directories(${lib.getDev h3}/include/h3)
         link_directories(${h3}/lib)
       '';
-    in ''
+    in
+    ''
       rm -r src/h3lib
       substituteInPlace CMakeLists.txt --replace "add_subdirectory(src/h3lib)" "${cmakeCommands}"
     '';

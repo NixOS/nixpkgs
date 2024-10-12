@@ -27,7 +27,7 @@ mkDerivation rec {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    sha256 = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
+    hash = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ mkDerivation rec {
     qtbase
     qtsvg
     qttools
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     VideoDecodeAcceleration
   ];
 
@@ -58,6 +58,6 @@ mkDerivation rec {
     homepage = "https://ovito.org";
     license = with licenses;  [ gpl3Only mit ];
     maintainers = with maintainers; [ twhitehead ];
-    broken = stdenv.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
+    broken = stdenv.hostPlatform.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
 }

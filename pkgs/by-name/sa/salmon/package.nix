@@ -1,7 +1,5 @@
 { lib
 , stdenv
-, autoreconfHook
-, bash
 , boost
 , bzip2
 , cereal_1_3_2
@@ -13,7 +11,7 @@
 , libiconv
 , libstaden-read
 , pkg-config
-, tbb_2021_8
+, tbb_2021_11
 , xz
 , zlib
 }:
@@ -51,10 +49,10 @@ stdenv.mkDerivation (finalAttrs: {
     jemalloc
     libgff
     libstaden-read
-    tbb_2021_8
+    tbb_2021_11
     xz
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 

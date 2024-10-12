@@ -1,7 +1,8 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
 }:
 
 let
@@ -17,9 +18,7 @@ buildPythonPackage {
     hash = "sha256-tmVaPr/zoQVA6u0EnoeI7qOsk9a3GzpqwrACJLvs6ag=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Rijndael algorithm library";

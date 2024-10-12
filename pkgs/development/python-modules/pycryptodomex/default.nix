@@ -7,7 +7,5 @@
     touch .separate_namespace
   '';
 
-  pythonImportsCheck = [
-    "Cryptodome"
-  ];
+  pythonImportsCheck = [ "Cryptodome" ];
 }))

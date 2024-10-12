@@ -23,7 +23,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     fonts.packages = with pkgs; [
       # Intended font & helps with OCR
-      ubuntu_font_family
+      ubuntu-classic
     ];
 
     services.upower.enable = true;

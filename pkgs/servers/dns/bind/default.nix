@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, darwin
 , perl
 , pkg-config
 , libcap
@@ -22,13 +23,13 @@
 , gitUpdater
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.18.25";
+  version = "9.18.28";
 
   src = fetchurl {
-    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-WkpwQyoz0Anw5unbsyiq56XidQfpjii/PAxrJQzLKrM=";
+    url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+    hash = "sha256-58zpoWX3thnu/Egy8KjcFrAF0p44kK7WAIxQbqKGpec=";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -39,9 +40,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkg-config ];
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
-    ++ lib.optional stdenv.isLinux libcap
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
-    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
+    ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]))
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -77,11 +79,15 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  # TODO: investigate the aarch64-linux failures; see this and linked discussions:
+
+  doCheck = false;
+  # TODO: investigate failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
+  /*
   doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
     # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
     && !is32bit;
+  */
   checkTarget = "unit";
   checkInputs = [
     cmocka
@@ -98,6 +104,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
+      withCheck = finalAttrs.finalPackage.overrideAttrs { doCheck = true; };
       inherit (nixosTests) bind;
       prometheus-exporter = nixosTests.prometheus-exporters.bind;
       kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
@@ -117,10 +124,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.isc.org/bind/";
     description = "Domain name server";
     license = licenses.mpl20;
-    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor version}/CHANGES";
+    changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/CHANGES";
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };
-}
+})

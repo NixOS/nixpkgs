@@ -1,26 +1,30 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, flask
-, flask-migrate
-, ldap3
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  flask,
+  flask-migrate,
+  ldap3,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "automx2";
-  version = "unstable-2023-08-23";
-  format = "setuptools";
+  version = "2024.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rseichter";
-    repo = pname;
-    rev = "f3e3fc8e769c3799361001d51b7d9335a6a9d1a8";
-    hash = "sha256-NkeazjjGDYUXfoydvEfww6e7SkSZ8rMRlML+oOaf374=";
+    repo = "automx2";
+    rev = "refs/tags/${version}";
+    hash = "sha256-7SbSKSjDHTppdqfPPKvuWbdoksHa6BMIOXOq0jDggTE=";
   };
+
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     flask
@@ -28,13 +32,9 @@ buildPythonPackage rec {
     ldap3
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "automx2"
-  ];
+  pythonImportsCheck = [ "automx2" ];
 
   meta = with lib; {
     description = "Email client configuration made easy";

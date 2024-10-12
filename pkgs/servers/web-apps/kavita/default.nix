@@ -1,22 +1,22 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildDotnetModule
-, buildNpmPackage
-, dotnetCorePackages
-, nixosTests
-, substituteAll
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildDotnetModule,
+  buildNpmPackage,
+  dotnetCorePackages,
+  nixosTests,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "kavita";
-  version = "0.7.13";
+  version = "0.8.3.2";
 
   src = fetchFromGitHub {
     owner = "kareadita";
     repo = "kavita";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-S4lJTLxNjGmgBJt89i3whBglMU2EQ0VelLG6iP6bY8g=";
+    hash = "sha256-8ZE3zlWX8DxLYUFj3AA04cIJTUWYgnNM+5FZhGmlRz8=";
   };
 
   backend = buildDotnetModule {
@@ -26,6 +26,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     patches = [
       # The webroot is hardcoded as ./wwwroot
       ./change-webroot.diff
+      # Upstream removes database migrations between versions
+      # Restore them to avoid breaking on updates
+      # Info: Restores migrations for versions between v0.7.1.4 and v0.7.9
+      # On update: check if more migrations need to be restored!
+      # Migrations should at least allow updates from previous NixOS versions
+      ./restore-migrations.diff
     ];
     postPatch = ''
       substituteInPlace API/Services/DirectoryService.cs --subst-var out
@@ -42,7 +48,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   };
 
-  frontend =  buildNpmPackage {
+  frontend = buildNpmPackage {
     pname = "kavita-frontend";
     inherit (finalAttrs) version src;
 
@@ -51,7 +57,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     npmBuildScript = "prod";
     npmFlags = [ "--legacy-peer-deps" ];
     npmRebuildFlags = [ "--ignore-scripts" ]; # Prevent playwright from trying to install browsers
-    npmDepsHash = "sha256-jseoczC2Ay3D1wDUZbWXTYQJGSWdgobJ3+Z1bp+PQG4=";
+    npmDepsHash = "sha256-EB4B6BHiRi6A4nhj2dR+3q1MZKcfcYUuo4ls4WMJEUI=";
   };
 
   dontBuild = true;
@@ -68,17 +74,22 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = { inherit (nixosTests) kavita; };
+    tests = {
+      inherit (nixosTests) kavita;
+    };
     updateScript = ./update.sh;
   };
 
   meta = {
-    description = "A fast, feature rich, cross platform reading server";
+    description = "Fast, feature rich, cross platform reading server";
     homepage = "https://kavitareader.com";
     changelog = "https://github.com/kareadita/kavita/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ misterio77 nevivurn ];
+    maintainers = with lib.maintainers; [
+      misterio77
+      nevivurn
+    ];
     mainProgram = "kavita";
   };
 })

@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A Mac OSX like theme for GTK based desktop environments";
+    description = "Mac OSX like theme for GTK based desktop environments";
     homepage = "https://github.com/vinceliuice/Sierra-gtk-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;

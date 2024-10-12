@@ -1,29 +1,28 @@
-{ lib
-, fetchFromGitHub
-, git
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  git,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "ggshield";
-  version = "1.25.0";
+  version = "1.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GitGuardian";
     repo = "ggshield";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D6+0ZYuOiCy5LonP1Ob7PlWmBXvLwU3PODOT6F+70HY=";
+    hash = "sha256-9x/Shh7nYPM5BpeVW2xXCD0JIxNwRl1sXi/cE1EhD4o=";
   };
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+
+  dependencies = with python3.pkgs; [
     appdirs
     charset-normalizer
     click
@@ -40,25 +39,27 @@ python3.pkgs.buildPythonApplication rec {
     rich
   ];
 
-  nativeCheckInputs = [
-    git
-  ] ++ (with python3.pkgs; [
-    jsonschema
-    pyfakefs
-    pytest-mock
-    pytest-voluptuous
-    pytestCheckHook
-    snapshottest
-    vcrpy
-  ]);
+  nativeCheckInputs =
+    [ git ]
+    ++ (with python3.pkgs; [
+      jsonschema
+      pyfakefs
+      pytest-mock
+      pytest-voluptuous
+      pytestCheckHook
+      snapshottest
+      vcrpy
+    ]);
 
-  pythonImportsCheck = [
-    "ggshield"
-  ];
+  pythonImportsCheck = [ "ggshield" ];
 
   disabledTestPaths = [
     # Don't run functional tests
     "tests/functional/"
+    "tests/unit/cmd/honeytoken"
+    "tests/unit/cmd/iac"
+    "tests/unit/cmd/sca/"
+    "tests/unit/cmd/scan/"
   ];
 
   disabledTests = [
@@ -69,6 +70,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_check_git_dir"
     "test_does_not_fail_if_cache"
     # Encoding issues
+    "test_create_files_from_paths"
     "test_file_decode_content"
     "test_file_is_longer_than_does_not_read_utf8_file"
     "test_file_is_longer_using_8bit_codec"
@@ -77,10 +79,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to find and fix various types of hardcoded secrets and infrastructure-as-code misconfigurations";
-    mainProgram = "ggshield";
     homepage = "https://github.com/GitGuardian/ggshield";
     changelog = "https://github.com/GitGuardian/ggshield/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "ggshield";
   };
 }

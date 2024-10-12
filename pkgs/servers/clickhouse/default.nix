@@ -11,6 +11,7 @@
 , nixosTests
 , darwin
 , findutils
+, libiconv
 
 , rustSupport ? true
 
@@ -23,20 +24,20 @@
 let
   inherit (llvmPackages) stdenv;
   mkDerivation = (
-    if stdenv.isDarwin
+    if stdenv.hostPlatform.isDarwin
     then darwin.apple_sdk_11_0.llvmPackages_16.stdenv
     else llvmPackages.stdenv).mkDerivation;
 in mkDerivation rec {
   pname = "clickhouse";
-  version = "23.11.1.2711";
+  version = "24.3.7.30";
 
   src = fetchFromGitHub rec {
     owner = "ClickHouse";
     repo = "ClickHouse";
-    rev = "v${version}-stable";
+    rev = "v${version}-lts";
     fetchSubmodules = true;
     name = "clickhouse-${rev}.tar.gz";
-    hash = "sha256-xRg9NzUkjTbR2Lp6DgDzcUp2Hrc4sfgkot7KxPw2Uy8=";
+    hash = "sha256-xIqn1cRbuD3NpUC2c7ZzvC8EAmg+XOXCkp+g/HTdIc0=";
     postFetch = ''
       # delete files that make the source too big
       rm -rf $out/contrib/llvm-project/llvm/test
@@ -82,10 +83,10 @@ in mkDerivation rec {
     python3
     perl
     llvmPackages.lld
-  ] ++ lib.optionals stdenv.isx86_64 [
+  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
     yasm
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.bintools
     findutils
     darwin.bootstrap_cmds
@@ -94,6 +95,8 @@ in mkDerivation rec {
     cargo
     rustPlatform.cargoSetupHook
   ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
   corrosionSrc = if rustSupport then fetchFromGitHub {
@@ -112,7 +115,7 @@ in mkDerivation rec {
     inherit src;
     name = "rust-deps";
     preBuild = "cd rust";
-    hash = "sha256-fWDAGm19b7uZv8aBdBoieY5c6POd8IxFXbGdtONpZbw=";
+    hash = "sha256-rbEfCRB2QAZ2WBgSLYYUqeYtI4Y5d9oQ2G8/mPirIp4=";
   } else null;
 
   dontCargoSetupPostUnpack = true;
@@ -151,7 +154,7 @@ in mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|gfind|find|' cmake/tools.cmake
     sed -i 's|ggrep|grep|' cmake/tools.cmake
   '' + lib.optionalString rustSupport ''
@@ -165,7 +168,7 @@ in mkDerivation rec {
     popd
 
     cargoSetupPostPatchHook() { true; }
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Make sure Darwin invokes lld.ld64 not lld.
     substituteInPlace cmake/tools.cmake \
       --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
@@ -177,10 +180,13 @@ in mkDerivation rec {
     "-DENABLE_EMBEDDED_COMPILER=ON"
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
-    # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
-    # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+  env = {
+    NIX_CFLAGS_COMPILE =
+      # undefined reference to '__sync_val_compare_and_swap_16'
+      lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16" +
+      # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+      # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+      lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
@@ -206,7 +212,7 @@ in mkDerivation rec {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej mbalatsko ];
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);

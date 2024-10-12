@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , makeDesktopItem
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , stripJavaArchivesHook
 , ant
 , jdk
@@ -47,9 +47,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
   };
 
-  nativeBuildInputs = [ ant jdk wrapGAppsHook makeWrapper stripJavaArchivesHook ];
-  buildInputs = lib.optionals stdenv.isLinux [ gtk2 glib libXtst ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+  nativeBuildInputs = [ ant jdk wrapGAppsHook3 makeWrapper stripJavaArchivesHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ gtk2 glib libXtst ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   dontWrapGApps = true;
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
       --add-flags "-cp $out/share/java/jameica.jar:$out/share/jameica-${version}/* ${
-        lib.optionalString stdenv.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
+        lib.optionalString stdenv.hostPlatform.isDarwin ''-Xdock:name="Jameica" -XstartOnFirstThread''
       } de.willuhn.jameica.Main" \
       --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg (lib.makeLibraryPath buildInputs)} \
       --chdir "$out/share/java/" \

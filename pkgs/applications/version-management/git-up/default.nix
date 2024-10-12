@@ -30,7 +30,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     git
-    pythonPackages.pytestCheckHook
+    pythonPackages.pytest7CheckHook
   ];
 
   # 1. git fails to run as it cannot detect the email address, so we set it
@@ -48,7 +48,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/msiemens/PyGitUp";
-    description = "A git pull replacement that rebases all local branches when pulling";
+    description = "Git pull replacement that rebases all local branches when pulling";
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;

@@ -12,6 +12,7 @@
 , MediaToolbox
 , OpenGL
 , Security
+, SystemConfiguration
 , VideoToolbox
 , ipu6ep-camera-hal
 , ipu6epmtl-camera-hal
@@ -32,7 +33,7 @@
 
   gst-plugins-viperfx = callPackage ./viperfx { };
 
-  gst-plugins-rs = callPackage ./rs { inherit Security; };
+  gst-plugins-rs = callPackage ./rs { inherit Security SystemConfiguration; };
 
   gst-rtsp-server = callPackage ./rtsp-server { };
 

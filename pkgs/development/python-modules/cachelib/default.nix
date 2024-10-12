@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-xprocess
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-xprocess,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "cachelib";
-  version = "0.12.0";
+  version = "0.13.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "pallets";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-gSBY8zMGVn5Ndu4OexMP1v7bhXAAdl2UcEjjKFa21rE=";
+    hash = "sha256-8jg+zfdIATvu/GSFvqHl4cNMu+s2IFWC22vPZ7Q3WYI=";
   };
 
   nativeCheckInputs = [

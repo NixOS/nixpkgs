@@ -2,7 +2,7 @@
 , mkDerivation
 
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , futuresql
 , gst_all_1
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   nativeBuildInputs = [
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
     python3Packages.wrapPython
     python3Packages.pybind11
   ];
@@ -66,6 +66,6 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/plasma-mobile/audiotube";
     # https://invent.kde.org/plasma-mobile/audiotube/-/tree/c503d0607a3386112beaa9cf990ab85fe33ef115/LICENSES
     license = with licenses; [ bsd2 cc0 gpl2Only gpl3Only ];
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

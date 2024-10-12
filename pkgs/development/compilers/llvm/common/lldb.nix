@@ -5,8 +5,7 @@
 , cmake
 , zlib
 , ncurses
-, swig3
-, swig4
+, swig
 , which
 , libedit
 , libxml2
@@ -24,22 +23,25 @@
 , monorepoSrc ? null
 , patches ? [ ]
 , enableManpages ? false
+, devExtraCmakeFlags ? [ ]
 , ...
 }:
 
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } ''
+      runCommand "lldb-src-${version}" { } (''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/lldb "$out"
-      '' else src;
+      '' + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
+        mkdir -p "$out/llvm"
+        cp -r ${monorepoSrc}/llvm/docs "$out/llvm/docs"
+      '') else src;
   vscodeExt = {
     name = if lib.versionAtLeast release_version "18" then "lldb-dap" else "lldb-vscode";
     version = if lib.versionAtLeast release_version "18" then "0.2.0" else "0.1.0";
   };
-  swig = if lib.versionAtLeast release_version "18" then swig4 else swig3;
 in
 
 stdenv.mkDerivation (rec {
@@ -50,7 +52,9 @@ stdenv.mkDerivation (rec {
   src = src';
   inherit patches;
 
-  outputs = [ "out" "lib" "dev" ];
+  # LLDB expects to find the path to `bin` relative to `lib` on Darwin. It can’t be patched with the location of
+  # the `lib` output because that would create a cycle between it and the `out` output.
+  outputs = [ "out" "dev" ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ "lib" ];
 
   sourceRoot = lib.optional (lib.versionAtLeast release_version "13") "${src.name}/${pname}";
 
@@ -83,7 +87,7 @@ stdenv.mkDerivation (rec {
     # libclang into the rpath of the lldb executables. By putting it into
     # buildInputs cc-wrapper will set up rpath correctly for us.
     (lib.getLib libclang)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
     darwin.apple_sdk.libs.xpc
     darwin.apple_sdk.frameworks.Foundation
@@ -101,7 +105,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional
     (
       stdenv.targetPlatform.isDarwin
-        && !stdenv.targetPlatform.isAarch64
+        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
         && (lib.versionAtLeast release_version "15")
     )
     (
@@ -119,9 +123,9 @@ stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_RTTI=OFF"
     "-DClang_DIR=${lib.getDev libclang}/lib/cmake"
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/lit"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DLLDB_USE_SYSTEM_DEBUGSERVER=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DLLDB_CODESIGN_IDENTITY=" # codesigning makes nondeterministic
   ] ++ lib.optionals (lib.versionAtLeast release_version "17") [
     "-DCLANG_RESOURCE_DIR=../../../../${libclang.lib}"
@@ -139,7 +143,7 @@ stdenv.mkDerivation (rec {
   ]) ++ lib.optionals doCheck [
     "-DLLDB_TEST_C_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
     "-DLLDB_TEST_CXX_COMPILER=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++"
-  ];
+  ] ++ devExtraCmakeFlags;
 
   doCheck = false;
   doInstallCheck = lib.versionOlder release_version "15";
@@ -174,17 +178,14 @@ stdenv.mkDerivation (rec {
 
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
-    description = "A next-generation high-performance debugger";
+    description = "Next-generation high-performance debugger";
     longDescription = ''
       LLDB is a next generation, high-performance debugger. It is built as a set
       of reusable components which highly leverage existing libraries in the
       larger LLVM Project, such as the Clang expression parser and LLVM
       disassembler.
     '';
-    # llvm <10 never built on aarch64-darwin since first introduction in nixpkgs
-    broken =
-      (lib.versionOlder release_version "11" && stdenv.isDarwin && stdenv.isAarch64)
-        || (((lib.versions.major release_version) == "13") && stdenv.isDarwin);
+    broken = lib.versionOlder release_version "14";
     mainProgram = "lldb";
   };
 } // lib.optionalAttrs enableManpages {

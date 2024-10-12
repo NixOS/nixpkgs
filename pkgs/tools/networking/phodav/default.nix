@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     "-Dudevrulesdir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lintl";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lintl";
 
   passthru = {
     updateScript = gnome.updateScript {
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "WebDav server implementation and library using libsoup";
-    homepage = "https://wiki.gnome.org/phodav";
+    homepage = "https://gitlab.gnome.org/GNOME/phodav";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

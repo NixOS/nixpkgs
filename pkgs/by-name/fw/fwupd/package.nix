@@ -49,6 +49,7 @@
 , libmbim
 , libcbor
 , xz
+, nix-update-script
 , enableFlashrom ? false
 , enablePassim ? false
 }:
@@ -66,7 +67,7 @@ let
   haveDell = isx86;
 
   # only redfish for x86_64
-  haveRedfish = stdenv.isx86_64;
+  haveRedfish = stdenv.hostPlatform.isx86_64;
 
   # only use msr if x86 (requires cpuid)
   haveMSR = isx86;
@@ -92,7 +93,7 @@ let
 
   test-firmware =
     let
-      version = "unstable-2022-04-02";
+      version = "0-unstable-2022-04-02";
       src = fetchFromGitHub {
         name = "fwupd-test-firmware-${version}";
         owner = "fwupd";
@@ -120,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.15";
+  version = "1.9.25";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -131,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-w0egw5FKNAOnIYjp2RUx74taivnClQmRfhaFHdKOGZc=";
+    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
   };
 
   patches = [
@@ -228,7 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_msr=disabled"
   ];
 
-  # TODO: wrapGAppsHook wraps efi capsule even though it is not ELF
+  # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
 
   doCheck = true;
@@ -325,6 +326,7 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
 
   passthru = {
+    updateScript = nix-update-script { };
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
       "fwupd/fwupd.conf"
@@ -371,10 +373,11 @@ stdenv.mkDerivation (finalAttrs: {
       };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://fwupd.org/";
-    maintainers = with maintainers; [ rvdp ];
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
+    changelog = "https://github.com/fwupd/fwupd/releases/tag/${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ rvdp ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
   };
 })

@@ -19,7 +19,7 @@ in
   ###### interface
 
   options.services.openntpd = {
-    enable = mkEnableOption (lib.mdDoc "OpenNTP time synchronization server");
+    enable = mkEnableOption "OpenNTP time synchronization server";
 
     servers = mkOption {
       default = config.services.ntp.servers;
@@ -35,7 +35,7 @@ in
         listen on 127.0.0.1
         listen on ::1
       '';
-      description = lib.mdDoc ''
+      description = ''
         Additional text appended to {file}`openntpd.conf`.
       '';
     };
@@ -44,7 +44,7 @@ in
       type = with types; separatedString " ";
       default = "";
       example = "-s";
-      description = lib.mdDoc ''
+      description = ''
         Extra options used when launching openntpd.
       '';
     };

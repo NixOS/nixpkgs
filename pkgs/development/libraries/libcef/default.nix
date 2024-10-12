@@ -73,7 +73,7 @@ let
   platforms."aarch64-linux".sha256 = "16sbfk599h96wcsmpbxlwsvq0n1pssmm8dpwmjsqfrn1464dvs68";
   platforms."x86_64-linux".sha256 = "1wa4nv28saz96kar9svdarfz6c4rnbcqz0rqxzl9zclnhfzhqdiw";
 
-  platformInfo = builtins.getAttr stdenv.hostPlatform.system platforms;
+  platformInfo = platforms.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation rec {
   pname = "cef-binary";

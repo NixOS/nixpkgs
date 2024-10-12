@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "apko";
-  version = "0.10.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Dyu/cPoYI8dm/p/91oL5g8ilz9ksw4i0opsPT6rGztc=";
+    hash = "sha256-uUsNYQPW2MtXxohdenXbNWfikp8TW0chJ5SDYU8ayV4=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +24,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-Jsp4rGIltszpQe05S3W+UFzPxhb6N5lCzUaZWBkXNWY=";
+  vendorHash = "sha256-2Tuhya70R++Nv5KEd+4vjxiTTansraSXQtGm/FqRktk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,12 +41,19 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
+  preCheck = ''
+    # some tests require a writable HOME
+    export HOME=$(mktemp -d)
+
+    # some test data include SOURCE_DATE_EPOCH (which is different from our default)
+    # and the default version info which we get by unsetting our ldflags
+    export SOURCE_DATE_EPOCH=0
+    ldflags=
+  '';
+
   checkFlags = [
-    # networking required to fetch alpine-keys
-    # pulled out into a separate library next release
-    "-skip=TestInitDB"
-    # fails to build image on read-only filesystem
-    "-skip=TestPublish"
+    # requires networking (apk.chainreg.biz)
+    "-skip=TestInitDB_ChainguardDiscovery"
   ];
 
   postInstall = ''
@@ -72,6 +79,6 @@ buildGoModule rec {
     description = "Build OCI images using APK directly without Dockerfile";
     mainProgram = "apko";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk developer-guy ];
+    maintainers = with maintainers; [ jk developer-guy emilylange ];
   };
 }

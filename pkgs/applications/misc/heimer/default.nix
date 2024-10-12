@@ -8,13 +8,13 @@
 
 mkDerivation rec {
   pname = "heimer";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "juzzlin";
     repo = pname;
     rev = version;
-    hash = "sha256-VIlNahpSRQNpfOKXnI/GQANuhZ+vnoXsudwHmRbHIjs=";
+    hash = "sha256-47bQmT2bHcbWpeosuF/vpSJcws4SqTmalY/XFEf7cxQ=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ mkDerivation rec {
     homepage = "https://github.com/juzzlin/Heimer";
     changelog = "https://github.com/juzzlin/Heimer/blob/${version}/CHANGELOG";
     license = licenses.gpl3Plus;
-    maintainers  = with maintainers; [ dtzWill ];
+    maintainers  = [ ];
     platforms = platforms.linux;
   };
 }

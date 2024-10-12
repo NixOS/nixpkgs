@@ -1,11 +1,12 @@
-{ lib
-, azure-common
-, azure-mgmt-core
-, buildPythonPackage
-, fetchPypi
-, isodate
-, pythonOlder
-, setuptools
+{
+  lib,
+  azure-common,
+  azure-mgmt-core,
+  buildPythonPackage,
+  fetchPypi,
+  isodate,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,9 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-oIQzBJVUQ2yQhEvIqWgg6INplITm/8mQMv0lcfjF99Y=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     isodate
@@ -30,9 +29,7 @@ buildPythonPackage rec {
     azure-mgmt-core
   ];
 
-  pythonNamespaces = [
-    "azure.mgmt"
-  ];
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # Module has no tests
   doCheck = false;

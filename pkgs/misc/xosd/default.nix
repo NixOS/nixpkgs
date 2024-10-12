@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Displays text on your screen";
     homepage = "https://sourceforge.net/projects/libxosd";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];
   };

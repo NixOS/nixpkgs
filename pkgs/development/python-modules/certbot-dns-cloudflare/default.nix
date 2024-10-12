@@ -1,9 +1,10 @@
-{ buildPythonPackage
-, acme
-, certbot
-, cloudflare
-, pytestCheckHook
-, pythonOlder
+{
+  buildPythonPackage,
+  acme,
+  certbot,
+  cloudflare,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,9 +22,7 @@ buildPythonPackage rec {
     cloudflare
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"

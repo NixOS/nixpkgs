@@ -1,23 +1,23 @@
-{ lib
-, buildPythonPackage
-, cairocffi
-, cython_3
-, fetchPypi
-, igraph
-, leidenalg
-, pandas
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, scipy
-, setuptools
-, spacy
-, spacy-lookups-data
-, en_core_web_sm
-, toolz
-, tqdm
-, wasabi
+{
+  lib,
+  buildPythonPackage,
+  cairocffi,
+  cython,
+  fetchPypi,
+  igraph,
+  leidenalg,
+  pandas,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  scipy,
+  setuptools,
+  spacy,
+  spacy-lookups-data,
+  en_core_web_sm,
+  toolz,
+  tqdm,
+  wasabi,
 }:
 
 buildPythonPackage rec {
@@ -33,13 +33,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
-    cython_3
+    cython
     poetry-core
     setuptools
   ];
 
-  pythonRelaxDeps = [ "igraph" "leidenalg" ];
+  pythonRelaxDeps = [
+    "igraph"
+    "leidenalg"
+  ];
 
   propagatedBuildInputs = [
     cairocffi
@@ -59,9 +61,7 @@ buildPythonPackage rec {
     en_core_web_sm
   ];
 
-  pythonImportsCheck = [
-    "textnets"
-  ];
+  pythonImportsCheck = [ "textnets" ];
 
   # Enables the package to find the cythonized .so files during testing. See #255262
   preCheck = ''

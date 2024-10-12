@@ -22,7 +22,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit nccl;
+  inherit (cudaPackages) backendStdenv cudatoolkit nccl;
   # The default for cudatoolkit 10.1 is CUDNN 8.0.5, the last version to support CUDA 10.1.
   # However, this caffe does not build with CUDNN 8.x, so we use CUDNN 7.6.5 instead.
   # Earlier versions of cudatoolkit use pre-8.x CUDNN, so we use the default.
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
       "-DBLAS=open"
     ] ++ (if cudaSupport then [
            "-DCUDA_ARCH_NAME=All"
-           "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+           "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
          ] else [ "-DCPU_ONLY=ON" ])
       ++ ["-DUSE_NCCL=${toggle ncclSupport}"]
       ++ ["-DUSE_LEVELDB=${toggle leveldbSupport}"]
@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
                 ++ lib.optional ncclSupport nccl
                 ++ lib.optionals leveldbSupport [ leveldb snappy ]
                 ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
+                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate CoreGraphics CoreVideo ]
                 ;
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
     let pp = python.pkgs; in ([
       pp.numpy pp.scipy pp.scikit-image pp.h5py
-      pp.matplotlib pp.ipython pp.networkx pp.nose
+      pp.matplotlib pp.ipython pp.networkx
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
       Center (BVLC) and by community contributors.
     '';
     homepage = "http://caffe.berkeleyvision.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken =
       (pythonSupport && (python.isPy310))
       || cudaSupport

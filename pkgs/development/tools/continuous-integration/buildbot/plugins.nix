@@ -1,14 +1,14 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
+{ lib, buildPythonPackage, fetchurl, callPackage, mock, cairosvg, klein, jinja2, buildbot-pkg }:
 {
   # this is exposed for potential plugins to use and for nix-update
   inherit buildbot-pkg;
   www = buildPythonPackage rec {
-    pname = "buildbot-www";
+    pname = "buildbot_www";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-5q4N76XHUhvc2lIqup0dYwrEdI5bR/96N7m2rhvPJh4=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-wBwJXDR52jDRd+8efIjQ+ncWe708k1F21MuvBwhjEwc=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -30,12 +30,12 @@
   };
 
   www-react = buildPythonPackage rec {
-    pname = "buildbot-www-react";
+    pname = "buildbot_www_react";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-kjow5WksdBzeo8nwXk5Djm/4tym8XvMo+VgiqSSAyKk=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-JJK1vmTdOImKIM1glrTjo2E0KnotU2QJVc2OIzVQQ1Y=";
     };
 
     # Remove unnecessary circular dependency on buildbot
@@ -57,12 +57,12 @@
   };
 
   console-view = buildPythonPackage rec {
-    pname = "buildbot-console-view";
+    pname = "buildbot_console_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-IrXDwO0YSpiZfw6B/lorEQdbAIZ5qCja75L/PFRmJms=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-kzj4IPNn/cUW7nidOLyO7AD98uXxWcqvMxaOhXhFn74=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -79,12 +79,12 @@
   };
 
   react-console-view = buildPythonPackage rec {
-    pname = "buildbot-react-console-view";
+    pname = "buildbot_react_console_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-ZkUsAN56OEI/SphQydv4HkVV6Eobd0pd+UbXa23mBfQ=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-4quLblPknI/vrCNF7Frl5+UlY50vuspW0XmMJubvVXI=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -101,12 +101,12 @@
   };
 
   waterfall-view = buildPythonPackage rec {
-    pname = "buildbot-waterfall-view";
+    pname = "buildbot_waterfall_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-qL1+bpgxflcRTFPOvDHKdHilio28bbHClqy1Um4Se+o=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-VC84rftiA7/x0X3lJfHTrEZve/ZDncVDuq6fisEI8nc=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -123,12 +123,12 @@
   };
 
   react-waterfall-view = buildPythonPackage rec {
-    pname = "buildbot-react-waterfall-view";
+    pname = "buildbot_react_waterfall_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-5D0N/5Sf8YNQBKt8GzAk1htdEY/xOmE5Abt5y7P9h34=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-2HZBnVvxPhU6rLmG6l9hX51zm8pvA5amsjExGx65+OQ=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -145,12 +145,12 @@
   };
 
   grid-view = buildPythonPackage rec {
-    pname = "buildbot-grid-view";
+    pname = "buildbot_grid_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-snyJbQZqSIqOk6dTJidSv1VmE/Gn+pblcZs8BpZ+fdA=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-IwTANqPNGon4lvT2ASpguEf8GcD1hz/7flNBml0NTdc=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -167,12 +167,12 @@
   };
 
   react-grid-view = buildPythonPackage rec {
-    pname = "buildbot-react-grid-view";
+    pname = "buildbot_react_grid_view";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-0Ggm3NQn1ZZfMsMqf1qdCD1+HkJZmM1p+TqOPF0Q9CE=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-SQiaIcupEtNePr4LUzwYm3RRKT9xa7RnHUaiE8EaRzQ=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -189,12 +189,12 @@
   };
 
   wsgi-dashboards = buildPythonPackage rec {
-    pname = "buildbot-wsgi-dashboards";
+    pname = "buildbot_wsgi_dashboards";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-rBUrYSeAWrxn5mlXaAAtE58jIZVLs/q69ARY2u6rTsI=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-dzK4WvBRxWoAfhsdKoYUnsG97OKmM8Jgr4Uv7NPpiVk=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -211,12 +211,12 @@
   };
 
   react-wsgi-dashboards = buildPythonPackage rec {
-    pname = "buildbot-react-wsgi-dashboards";
+    pname = "buildbot_react_wsgi_dashboards";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-U0DHWFMmvTKFBW1C5bnoemjMOKpw1H3GXnBn/AU52vY=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-vytU7WRdXWHazc/LYZSWlslkOb3lnTitEW3UZQ/VmTU=";
     };
 
     buildInputs = [ buildbot-pkg ];
@@ -233,12 +233,12 @@
   };
 
   badges = buildPythonPackage rec {
-    pname = "buildbot-badges";
+    pname = "buildbot_badges";
     inherit (buildbot-pkg) version;
 
-    src = fetchPypi {
-      inherit pname version;
-      hash = "sha256-7t4E7twn4TeJJCE5Vn83UzIRE2Okvcox2us1d8j50Os=";
+    src = fetchurl {
+      url = "https://github.com/buildbot/buildbot/releases/download/v${version}/${pname}-${version}.tar.gz";
+      hash = "sha256-O71qB9uIigYcK/t2t+481oktHjF5up1nk1dS4eEMb3A=";
     };
 
     buildInputs = [ buildbot-pkg ];

@@ -12,7 +12,7 @@ with lib;
   ];
 
   options = {
-    boot.growPartition = mkEnableOption (lib.mdDoc "growing the root partition on boot");
+    boot.growPartition = mkEnableOption "growing the root partition on boot";
   };
 
   config = mkIf config.boot.growPartition {
@@ -43,7 +43,7 @@ with lib;
         while [ "''${parentDevice%[0-9]}" != "''${parentDevice}" ]; do
           parentDevice="''${parentDevice%[0-9]}";
         done
-        partNum="''${rootDevice#''${parentDevice}}"
+        partNum="''${rootDevice#"''${parentDevice}"}"
         if [ "''${parentDevice%[0-9]p}" != "''${parentDevice}" ] && [ -b "''${parentDevice%p}" ]; then
           parentDevice="''${parentDevice%p}"
         fi

@@ -1,76 +1,83 @@
-{ stdenv
-, lib
-, openexr
-, jemalloc
-, c-blosc
-, binutils
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook
-, boost179
-, cereal
-, cgal_5
-, curl
-, dbus
-, eigen
-, expat
-, gcc-unwrapped
-, glew
-, glfw
-, glib
-, glib-networking
-, gmp
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gst-plugins-good
-, gtest
-, gtk3
-, hicolor-icon-theme
-, ilmbase
-, libpng
-, mesa
-, mpfr
-, nlopt
-, opencascade-occt
-, openvdb
-, pcre
-, qhull
-, systemd
-, tbb_2021_8
-, webkitgtk
-, wxGTK31
-, xorg
-, fetchpatch
-, withSystemd ? stdenv.isLinux
+{
+  stdenv,
+  lib,
+  openexr,
+  jemalloc,
+  c-blosc,
+  binutils,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  boost179,
+  cereal,
+  cgal_5,
+  curl,
+  dbus,
+  eigen,
+  expat,
+  gcc-unwrapped,
+  glew,
+  glfw,
+  glib,
+  glib-networking,
+  gmp,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gst-plugins-good,
+  gtest,
+  gtk3,
+  hicolor-icon-theme,
+  ilmbase,
+  libpng,
+  mesa,
+  mpfr,
+  nlopt,
+  opencascade-occt_7_6,
+  openvdb,
+  pcre,
+  systemd,
+  tbb_2021_11,
+  webkitgtk_4_0,
+  wxGTK31,
+  xorg,
+  withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
+  opencascade-occt = opencascade-occt_7_6;
   wxGTK31' = wxGTK31.overrideAttrs (old: {
     configureFlags = old.configureFlags ++ [
       # Disable noisy debug dialogs
       "--enable-debug=no"
     ];
   });
-  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: rec {
-    buildInputs = [ openexr boost179 tbb_2021_8 jemalloc c-blosc ilmbase ];
+  openvdb_tbb_2021_8 = openvdb.overrideAttrs (old: {
+    buildInputs = [
+      openexr
+      boost179
+      tbb_2021_11
+      jemalloc
+      c-blosc
+      ilmbase
+    ];
   });
 in
 stdenv.mkDerivation rec {
   pname = "bambu-studio";
-  version = "01.09.00.60";
+  version = "01.09.00.70";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     rev = "v${version}";
-    hash = "sha256-LJK+hGhBXCewbNIBA8CeE01vMQ/n1mO+bervN/y45P0=";
+    hash = "sha256-RBctBhKo7mjxsP7OJhGfoU1eIiGVuMiAqwwSU+gsMds=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -102,13 +109,11 @@ stdenv.mkDerivation rec {
     opencascade-occt
     openvdb_tbb_2021_8
     pcre
-    tbb_2021_8
-    webkitgtk
+    tbb_2021_11
+    webkitgtk_4_0
     wxGTK31'
     xorg.libX11
-  ] ++ lib.optionals withSystemd [
-    systemd
-  ] ++ checkInputs;
+  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -164,6 +169,13 @@ stdenv.mkDerivation rec {
       # The upstream setup links in glew statically
       --prefix LD_PRELOAD : "${glew.out}/lib/libGLEW.so"
     )
+  '';
+
+  # needed to prevent collisions between the LICENSE.txt files of
+  # bambu-studio and orca-slicer.
+  postInstall = ''
+    mv $out/LICENSE.txt $out/share/BambuStudio/LICENSE.txt
+    mv $out/README.md $out/share/BambuStudio/README.md
   '';
 
   meta = with lib; {

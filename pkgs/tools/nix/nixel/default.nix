@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-dQ3wzBTjteqk9rju+FMAO+ydimnGu24Y2DEDLX/P+1A=";
   };
 
-  cargoSha256 = "sha256-1OsHs0W3ji9Kgpv7nGY9XyGxJ4c0faN2VuFLsdwkgKY=";
+  cargoHash = "sha256-1OsHs0W3ji9Kgpv7nGY9XyGxJ4c0faN2VuFLsdwkgKY=";
 
   # Package requires a non reproducible submodule
   # https://github.com/kamadorueda/nixel/blob/2873bd84bf4fc540d0ae8af062e109cc9ad40454/.gitmodules#L7

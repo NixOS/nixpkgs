@@ -14,27 +14,36 @@
   pytestCheckHook,
   python,
   libiconv,
+  semver,
+  opencv4,
 }:
 
 buildPythonPackage {
   pname = "rerun-sdk";
-  inherit (rerun) version;
   pyproject = true;
 
-  inherit (rerun) src;
-  inherit (rerun) cargoDeps;
+  inherit (rerun)
+    src
+    version
+    cargoDeps
+    cargoPatches
+    patches
+    ;
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     rustPlatform.maturinBuildHook
+    rerun
   ];
 
-  buildInputs = [
-    libiconv # No-op on Linux, necessary on Darwin.
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      libiconv # No-op on Linux, necessary on Darwin.
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   propagatedBuildInputs = [
     attrs
@@ -42,6 +51,8 @@ buildPythonPackage {
     pillow
     pyarrow
     typing-extensions
+    semver
+    opencv4
   ];
 
   buildAndTestSubdir = "rerun_py";
@@ -64,7 +75,7 @@ buildPythonPackage {
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
-  postPhases = lib.optionals stdenv.isLinux [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"
@@ -73,7 +84,12 @@ buildPythonPackage {
 
   meta = {
     description = "Python bindings for `rerun` (an interactive visualization tool for stream data)";
-    inherit (rerun.meta) changelog homepage license maintainers;
+    inherit (rerun.meta)
+      changelog
+      homepage
+      license
+      maintainers
+      ;
     mainProgram = "rerun";
   };
 }

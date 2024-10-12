@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, flet-client-flutter
-, poetry-core
-, pythonRelaxDepsHook
-, flet-core
-, httpx
-, oauthlib
+{
+  lib,
+  buildPythonPackage,
+  flet-client-flutter,
+  poetry-core,
+  flet-core,
+  httpx,
+  oauthlib,
 }:
 
 buildPythonPackage rec {
@@ -25,12 +25,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "httpx"
-  ];
+  pythonRelaxDeps = [ "httpx" ];
 
   propagatedBuildInputs = [
     flet-core
@@ -38,13 +35,11 @@ buildPythonPackage rec {
     oauthlib
   ];
 
-  pythonImportsCheck = [
-    "flet_runtime"
-  ];
+  pythonImportsCheck = [ "flet_runtime" ];
 
   meta = {
     changelog = "https://github.com/flet-dev/flet/releases/tag/v${version}";
-    description = "A base package for Flet desktop and Flet mobile";
+    description = "Base package for Flet desktop and Flet mobile";
     homepage = "https://flet.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ lucasew ];

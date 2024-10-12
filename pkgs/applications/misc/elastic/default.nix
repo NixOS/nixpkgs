@@ -11,21 +11,20 @@
 , gtksourceview5
 , blueprint-compiler
 , wrapGAppsHook4
-, appstream-glib
 , desktop-file-utils
 , template-glib
 }:
 
 stdenv.mkDerivation rec {
   pname = "elastic";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
     rev = version;
-    hash = "sha256-EExVhf71SEWVcAOAt+IuQH3umNOY4hzzkFVIqnESppo=";
+    hash = "sha256-y/XBXN5RIqnFmxnmkThBGW0B5owgy/1Q/6jmkBCi+rk=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     vala
     pkg-config
     wrapGAppsHook4
-    appstream-glib
     desktop-file-utils
     blueprint-compiler
   ];

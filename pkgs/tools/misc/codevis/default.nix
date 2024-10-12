@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A tool to take all source code in a folder and render them to one image";
+    description = "Tool to take all source code in a folder and render them to one image";
     homepage = "https://github.com/sloganking/codevis";
     changelog = "https://github.com/sloganking/codevis/releases/tag/${src.rev}";
     license = licenses.mit;

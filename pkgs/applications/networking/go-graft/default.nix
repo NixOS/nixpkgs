@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "go-graft";
-  version = "0.2.18";
+  version = "0.2.19";
 
   src = fetchFromGitHub {
     owner = "mzz2017";
     repo = "gg";
     rev = "v${version}";
-    sha256 = "sha256-07fP3dVFs4MZrFOH/8/4e3LHjFGZd7pNu6J3LBOWAd8=";
+    sha256 = "sha256-DXW0NtFYvcCX4CgMs5/5HPaO9f9eFtw401wmJdCbHPU=";
   };
 
   CGO_ENABLED = 0;
@@ -18,7 +18,7 @@ buildGoModule rec {
   subPackages = [ "." ];
 
   meta = with lib; {
-    description = "A command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
+    description = "Command-line tool for one-click proxy in your research and development without installing v2ray or anything else";
     homepage = "https://github.com/mzz2017/gg";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ xyenon ];

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build
-, poetry-core
+  # build
+  poetry-core,
 
-# runtime
-, backports-zoneinfo
+  # runtime
+  backports-zoneinfo,
 
-# tests
-, pytestCheckHook
-, freezegun
+  # tests
+  pytestCheckHook,
+  freezegun,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-m3w7QS6eadFyz7JL4Oat3MnxvQGijbi+vmbXXMxTPYg=";
   };
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
-    backports-zoneinfo
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
 
   nativeCheckInputs = [
     freezegun

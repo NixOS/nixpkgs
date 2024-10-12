@@ -13,9 +13,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-03GZASte0ZhcQGnWqH/xjl4fWi3yfkApkfr0XcTyIyw=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     darwin.autoSignDarwinBinariesHook
   ];
   buildInputs = [ ncurses libiconv libX11 libuuid ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description  = "A powerful and incredibly fast R6RS Scheme compiler";
+    description  = "Powerful and incredibly fast R6RS Scheme compiler";
     homepage     = "https://cisco.github.io/ChezScheme/";
     license      = lib.licenses.asl20;
     maintainers  = with lib.maintainers; [ thoughtpolice ];

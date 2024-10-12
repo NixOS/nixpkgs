@@ -38,8 +38,10 @@ let
     };
 
     installPhase = ''
+      runHook preInstall
       mkdir -p $out/lib/yquake2/${id}
       cp release/* $out/lib/yquake2/${id}
+      runHook postInstall
     '';
 
     meta = with lib; {

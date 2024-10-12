@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gst_all_1
 , cmake
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0so4jV56nl3tZHuZpvtyMrpOZ4tNJ59Pyj6zbV5bJ5Y=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
 
   propagatedBuildInputs = [
     gst_all_1.gstreamer

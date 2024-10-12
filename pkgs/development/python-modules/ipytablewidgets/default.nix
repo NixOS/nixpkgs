@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pytestCheckHook
-, pythonOlder
-, ipywidgets
-, jupyter-packaging
-, jupyterlab
-, lz4
-, numpy
-, pandas
-, setuptools
-, traitlets
-, traittypes
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pytestCheckHook,
+  pythonOlder,
+  ipywidgets,
+  jupyter-packaging,
+  jupyterlab,
+  lz4,
+  numpy,
+  pandas,
+  setuptools,
+  traitlets,
+  traittypes,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -52,9 +53,7 @@ buildPythonPackage rec {
     traittypes
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ipytablewidgets" ];
 

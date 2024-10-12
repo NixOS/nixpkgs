@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, cramjam
-, setuptools
-, snappy
-, unittestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  cramjam,
+  setuptools,
+  snappy,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ snappy ];
 
-  dependencies = [
-    cramjam
-  ];
+  dependencies = [ cramjam ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 
@@ -34,6 +33,6 @@ buildPythonPackage rec {
     description = "Python library for the snappy compression library from Google";
     homepage = "https://github.com/intake/python-snappy";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

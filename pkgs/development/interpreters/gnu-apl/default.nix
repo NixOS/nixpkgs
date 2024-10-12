@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "gnu-apl";
-  version = "1.8";
+  version = "1.9";
 
   src = fetchurl {
     url = "mirror://gnu/apl/apl-${version}.tar.gz";
-    sha256 = "1jxvv2h3y1am1fw6r5sn3say1n0dj8shmscbybl0qhqdia2lqkql";
+    sha256 = "sha256-KRhn8bGTdpOrtXvn2aN2GLA3bj4nCVdIVKe75Suyjrg=";
   };
 
   buildInputs = [ readline gettext ncurses ];
 
-  env.NIX_CFLAGS_COMPILE = with lib; toString ((optionals stdenv.cc.isGNU [
+  env.NIX_CFLAGS_COMPILE = toString ((lib.optionals stdenv.cc.isGNU [
     # Needed with GCC 8
     "-Wno-error=int-in-bool-context"
     "-Wno-error=class-memaccess"
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
     "-Wno-error=nonnull"
     "-Wno-error=stringop-overflow"
     "-Wno-error=use-after-free"
-   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
+   ]) ++ lib.optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
-  patchPhase = lib.optionalString stdenv.isDarwin ''
+  patchPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
   '';
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Free interpreter for the APL programming language";
     homepage    = "https://www.gnu.org/software/apl/";
     license     = licenses.gpl3Plus;

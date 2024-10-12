@@ -1,22 +1,23 @@
-{ lib
-, aiohttp
-, aresponses
-, buildPythonPackage
-, certifi
-, fetchFromGitHub
-, poetry-core
-, pytest-aiohttp
-, pytest-asyncio
-, pytestCheckHook
-, python-engineio
-, python-socketio
-, pythonOlder
-, websockets
+{
+  lib,
+  aiohttp,
+  aresponses,
+  buildPythonPackage,
+  certifi,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-aiohttp,
+  pytest-asyncio,
+  pytestCheckHook,
+  python-engineio,
+  python-socketio,
+  pythonOlder,
+  websockets,
 }:
 
 buildPythonPackage rec {
   pname = "aioambient";
-  version = "2024.01.0";
+  version = "2024.08.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,12 +26,10 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = "aioambient";
     rev = "refs/tags/${version}";
-    hash = "sha256-eqZVY0L+2BWF7cCXW/VLQYYXNPtUF6tJHQmeZNW1W5o=";
+    hash = "sha256-GedGwG4Lm28BvfSBOGcspUQ3LCmdb2IC2rLifuKGOes=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
@@ -50,13 +49,9 @@ buildPythonPackage rec {
   ];
 
   # Ignore the examples directory as the files are prefixed with test_
-  disabledTestPaths = [
-    "examples/"
-  ];
+  disabledTestPaths = [ "examples/" ];
 
-  pythonImportsCheck = [
-    "aioambient"
-  ];
+  pythonImportsCheck = [ "aioambient" ];
 
   meta = with lib; {
     description = "Python library for the Ambient Weather API";

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.Security
   ];
@@ -36,6 +36,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-kroki-preprocessor";
     homepage = "https://github.com/joelcourtney/mdbook-kroki-preprocessor";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
   };
 }

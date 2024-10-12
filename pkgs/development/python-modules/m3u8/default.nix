@@ -1,29 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, iso8601
-, bottle
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  iso8601,
+  bottle,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "4.0.0";
-  format = "setuptools";
+  version = "6.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "globocom";
-    repo = pname;
+    repo = "m3u8";
     rev = "refs/tags/${version}";
-    hash = "sha256-sxLT3a9f38RZqzEzqyZos3G38vzHPzhMexfBN2qzbxQ=";
+    hash = "sha256-1SOuKKNBg67Yc0a6Iqb1goTE7sraptzpFIB2lvrbMQg=";
   };
 
-  propagatedBuildInputs = [
-    iso8601
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ iso8601 ];
 
   nativeCheckInputs = [
     bottle
@@ -38,14 +40,12 @@ buildPythonPackage rec {
     "test_raise_timeout_exception_if_timeout_happens_when_loading_from_uri"
   ];
 
-  pythonImportsCheck = [
-    "m3u8"
-  ];
+  pythonImportsCheck = [ "m3u8" ];
 
   meta = with lib; {
     description = "Python m3u8 parser";
     homepage = "https://github.com/globocom/m3u8";
-    changelog = "https://github.com/globocom/m3u8/releases/tag//${version}";
+    changelog = "https://github.com/globocom/m3u8/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Scriptkiddi ];
   };

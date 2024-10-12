@@ -1,11 +1,8 @@
 { lib
-, callPackage
 , clangStdenv
 , cmake
 , fetchFromGitHub
-, gcc
-, git
-, llvmPackages_9
+, llvmPackages_13
 # Libraries
 , argparse
 , cling
@@ -60,7 +57,7 @@ clangStdenv.mkDerivation rec {
     cling.unwrapped
     cppzmq
     libuuid
-    llvmPackages_9.llvm
+    llvmPackages_13.llvm
     ncurses
     openssl
     pugixml
@@ -71,9 +68,16 @@ clangStdenv.mkDerivation rec {
     zlib
   ];
 
-  cmakeFlags = lib.optionals debug [
-    "-DCMAKE_BUILD_TYPE=Debug"
-  ];
+  cmakeBuildType = if debug then "Debug" else "Release";
+
+  postPatch = ''
+    substituteInPlace src/xmagics/executable.cpp \
+      --replace "getDataLayout" "getDataLayoutString"
+    substituteInPlace src/xmagics/execution.cpp \
+      --replace "simplisticCastAs" "castAs"
+    substituteInPlace src/xmime_internal.hpp \
+      --replace "code.str()" "code.str().str()"
+  '';
 
   dontStrip = debug;
 

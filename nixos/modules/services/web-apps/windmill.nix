@@ -5,18 +5,18 @@ let
 in
 {
   options.services.windmill = {
-    enable = lib.mkEnableOption (lib.mdDoc "windmill service");
+    enable = lib.mkEnableOption "windmill service";
 
     serverPort = lib.mkOption {
       type = lib.types.port;
       default = 8001;
-      description = lib.mdDoc "Port the windmill server listens on.";
+      description = "Port the windmill server listens on.";
     };
 
     lspPort = lib.mkOption {
       type = lib.types.port;
       default = 3001;
-      description = lib.mdDoc "Port the windmill lsp listens on.";
+      description = "Port the windmill lsp listens on.";
     };
 
     database = {
@@ -24,33 +24,48 @@ in
         type = lib.types.str;
         # the simplest database setup is to have the database named like the user.
         default = "windmill";
-        description = lib.mdDoc "Database name.";
+        description = "Database name.";
       };
 
       user = lib.mkOption {
         type = lib.types.str;
         # the simplest database setup is to have the database user like the name.
         default = "windmill";
-        description = lib.mdDoc "Database user.";
+        description = "Database user.";
+      };
+
+      url = lib.mkOption {
+        type = lib.types.str;
+        default = "postgres://${config.services.windmill.database.name}?host=/var/run/postgresql";
+        defaultText = lib.literalExpression ''
+          "postgres://\$\{config.services.windmill.database.name}?host=/var/run/postgresql";
+        '';
+        description = "Database url. Note that any secret here would be world-readable. Use `services.windmill.database.urlPath` unstead to include secrets in the url.";
       };
 
       urlPath = lib.mkOption {
-        type = lib.types.path;
-        description = lib.mdDoc ''
+        type = lib.types.nullOr lib.types.path;
+        description = ''
           Path to the file containing the database url windmill should connect to. This is not deducted from database user and name as it might contain a secret
         '';
+        default = null;
         example = "config.age.secrets.DATABASE_URL_FILE.path";
       };
+
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Whether to create a local database automatically.";
+        description = "Whether to create a local database automatically.";
       };
     };
 
     baseUrl = lib.mkOption {
       type = lib.types.str;
-      description = lib.mdDoc ''
+      default = "https://localhost:${toString config.services.windmill.serverPort}";
+      defaultText = lib.literalExpression ''
+        "https://localhost:\$\{toString config.services.windmill.serverPort}";
+      '';
+      description = ''
         The base url that windmill will be served on.
       '';
       example = "https://windmill.example.com";
@@ -59,7 +74,7 @@ in
     logLevel = lib.mkOption {
       type = lib.types.enum [ "error" "warn" "info" "debug" "trace" ];
       default = "info";
-      description = lib.mdDoc "Log level";
+      description = "Log level";
     };
   };
 
@@ -79,6 +94,7 @@ in
 
    systemd.services =
     let
+      useUrlPath = (cfg.database.urlPath != null);
       serviceConfig = {
         DynamicUser = true;
         # using the same user to simplify db connection
@@ -86,9 +102,15 @@ in
         ExecStart = "${pkgs.windmill}/bin/windmill";
 
         Restart = "always";
+      } // lib.optionalAttrs useUrlPath {
         LoadCredential = [
           "DATABASE_URL_FILE:${cfg.database.urlPath}"
         ];
+      };
+      db_url_envs = lib.optionalAttrs useUrlPath {
+        DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
+      } // lib.optionalAttrs (!useUrlPath) {
+        DATABASE_URL = cfg.database.url;
       };
     in
     {
@@ -132,12 +154,11 @@ EOF
         serviceConfig = serviceConfig // { StateDirectory = "windmill";};
 
         environment = {
-          DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
           PORT = builtins.toString cfg.serverPort;
           WM_BASE_URL = cfg.baseUrl;
           RUST_LOG = cfg.logLevel;
           MODE = "server";
-        };
+        } // db_url_envs;
       };
 
      windmill-worker = {
@@ -148,13 +169,12 @@ EOF
         serviceConfig = serviceConfig // { StateDirectory = "windmill-worker";};
 
         environment = {
-          DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
           WM_BASE_URL = cfg.baseUrl;
           RUST_LOG = cfg.logLevel;
           MODE = "worker";
           WORKER_GROUP = "default";
           KEEP_JOB_DIR = "false";
-        };
+        } // db_url_envs;
       };
 
      windmill-worker-native = {
@@ -165,12 +185,11 @@ EOF
         serviceConfig = serviceConfig // { StateDirectory = "windmill-worker-native";};
 
         environment = {
-          DATABASE_URL_FILE = "%d/DATABASE_URL_FILE";
           WM_BASE_URL = cfg.baseUrl;
           RUST_LOG = cfg.logLevel;
           MODE = "worker";
           WORKER_GROUP = "native";
-        };
+        } // db_url_envs;
       };
     };
   };

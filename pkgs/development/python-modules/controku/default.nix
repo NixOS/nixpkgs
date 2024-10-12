@@ -1,18 +1,19 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, setuptools
-, requests
-, ssdpy
-, appdirs
-, pygobject3
-, gobject-introspection
-, gtk3
-, wrapGAppsHook
-, buildApplication ? false
+{
+  lib,
+  fetchFromGitHub,
+  setuptools,
+  requests,
+  ssdpy,
+  appdirs,
+  pygobject3,
+  gobject-introspection,
+  gtk3,
+  wrapGAppsHook3,
+  buildPythonPackage,
+  buildApplication ? false,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "controku";
   version = "1.1.0";
   format = "pyproject";
@@ -24,21 +25,23 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-sye2GtL3a77pygllZc6ylaIP7faPb+NFbyKKyqJzIXw=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ] ++ lib.optionals buildApplication [
-    gobject-introspection
-    wrapGAppsHook
-  ];
+  nativeBuildInputs =
+    [ setuptools ]
+    ++ lib.optionals buildApplication [
+      gobject-introspection
+      wrapGAppsHook3
+    ];
 
-  propagatedBuildInputs = [
-    requests
-    ssdpy
-  ] ++ lib.optionals buildApplication [
-    gtk3
-    appdirs
-    pygobject3
-  ];
+  propagatedBuildInputs =
+    [
+      requests
+      ssdpy
+    ]
+    ++ lib.optionals buildApplication [
+      gtk3
+      appdirs
+      pygobject3
+    ];
 
   pythonImportsCheck = [ "controku" ];
 

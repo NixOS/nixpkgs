@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
+    description = "Easy to use tool for subjective comparison of the visual quality of different encodings of the same video source";
     homepage = "https://github.com/vivictorg/vivictpp";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

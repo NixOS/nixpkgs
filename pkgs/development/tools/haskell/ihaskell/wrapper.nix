@@ -1,4 +1,4 @@
-{ lib, stdenv, writeScriptBin, makeWrapper, buildEnv, haskell, ghcWithPackages, jupyter, packages }:
+{ lib, stdenv, writeScriptBin, makeWrapper, buildEnv, ghcWithPackages, jupyter, packages }:
 let
   ihaskellEnv = ghcWithPackages (self: [
     self.ihaskell

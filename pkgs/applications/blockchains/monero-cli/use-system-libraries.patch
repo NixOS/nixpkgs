@@ -1,11 +1,12 @@
 diff --git a/external/CMakeLists.txt b/external/CMakeLists.txt
-index 5b7f69a56..5536debe8 100644
+index 5b7f69a56..cc4b0a346 100644
 --- a/external/CMakeLists.txt
 +++ b/external/CMakeLists.txt
-@@ -36,22 +36,9 @@
+@@ -35,25 +35,14 @@
+ # ...except for FreeBSD, because FreeBSD is a special case that doesn't play well with
  # others.
  
- find_package(Miniupnpc REQUIRED)
+-find_package(Miniupnpc REQUIRED)
 -
 -message(STATUS "Using in-tree miniupnpc")
 -set(UPNPC_NO_INSTALL TRUE CACHE BOOL "Disable miniupnp installation" FORCE)
@@ -22,22 +23,27 @@ index 5b7f69a56..5536debe8 100644
 -endif()
 -
 -set(UPNP_LIBRARIES "libminiupnpc-static" PARENT_SCOPE)
-+set(UPNP_STATIC false PARENT_SCOPE)
-+set(UPNP_INCLUDE ${MINIUPNP_INCLUDE_DIR} PARENT_SCOPE)
-+set(UPNP_LIBRARIES ${MINIUPNP_LIBRARY} PARENT_SCOPE)
++find_package(PkgConfig REQUIRED)
++pkg_check_modules(MINIUPNPC REQUIRED miniupnpc)
++link_libraries(${MINIUPNPC_LIBRARIES})
++include_directories(${MINIUPNPC_INCLUDE_DIRS})
  
++find_package(RapidJSON)
  find_package(Unbound)
++find_library(RANDOMX_LIBRARY randomx)
  
-@@ -69,4 +56,3 @@ endif()
+ if(NOT UNBOUND_INCLUDE_DIR)
+   die("Could not find libunbound")
+@@ -69,4 +58,3 @@ endif()
  add_subdirectory(db_drivers)
  add_subdirectory(easylogging++)
  add_subdirectory(qrcodegen)
 -add_subdirectory(randomx EXCLUDE_FROM_ALL)
 diff --git a/src/p2p/net_node.inl b/src/p2p/net_node.inl
-index d4b39869c..13071d898 100644
+index 71f5393e8..bb48083d0 100644
 --- a/src/p2p/net_node.inl
 +++ b/src/p2p/net_node.inl
-@@ -61,9 +61,9 @@
+@@ -60,9 +60,9 @@
  #include "cryptonote_core/cryptonote_core.h"
  #include "net/parse.h"
  
@@ -50,3 +56,23 @@ index d4b39869c..13071d898 100644
  
  #undef MONERO_DEFAULT_LOG_CATEGORY
  #define MONERO_DEFAULT_LOG_CATEGORY "net.p2p"
+@@ -2989,7 +2989,8 @@ namespace nodetool
+     UPNPUrls urls;
+     IGDdatas igdData;
+     char lanAddress[64];
+-    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
++    char wanAddress[64];
++    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
+     freeUPNPDevlist(deviceList);
+     if (result > 0) {
+       if (result == 1) {
+@@ -3057,7 +3058,8 @@ namespace nodetool
+     UPNPUrls urls;
+     IGDdatas igdData;
+     char lanAddress[64];
+-    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress);
++    char wanAddress[64];
++    result = UPNP_GetValidIGD(deviceList, &urls, &igdData, lanAddress, sizeof lanAddress, wanAddress, sizeof wanAddress);
+     freeUPNPDevlist(deviceList);
+     if (result > 0) {
+       if (result == 1) {

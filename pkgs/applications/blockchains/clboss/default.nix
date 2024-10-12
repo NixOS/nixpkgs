@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "clboss";
-  version = "0.13";
+  version = "0.13.3";
 
   src = fetchFromGitHub {
     owner = "ZmnSCPxj";
     repo = "clboss";
     rev = "v${version}";
-    hash = "sha256-NP9blymdqDXo/OtGLQg/MXK24PpPvCrzqXRdtfCvpfI=";
+    hash = "sha256-T61rkTEGLCZrEBp1WFhHnQ7DQyhctMf5lgbOs6u9E0o=";
   };
 
   nativeBuildInputs = [ autoconf-archive autoreconfHook pkg-config libev curlWithGnuTls sqlite ];

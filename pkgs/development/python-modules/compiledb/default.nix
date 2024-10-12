@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest
-, bashlex
-, click
-, shutilwhich
-, gcc
-, coreutils
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest,
+  bashlex,
+  click,
+  shutilwhich,
+  gcc,
+  coreutils,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +28,16 @@ buildPythonPackage rec {
                       --replace /bin/echo ${coreutils}/bin/echo
   '';
 
-  nativeCheckInputs = [ pytest gcc coreutils ];
-  propagatedBuildInputs = [ click bashlex shutilwhich ];
+  nativeCheckInputs = [
+    pytest
+    gcc
+    coreutils
+  ];
+  propagatedBuildInputs = [
+    click
+    bashlex
+    shutilwhich
+  ];
 
   checkPhase = ''
     pytest

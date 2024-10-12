@@ -1,32 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-container";
-  version = "2.44.0";
+  version = "2.51.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-heNvRcepXqayn/impyP5h4L+eOJjGV1hMrZyg96aZKU=";
+    pname = "google_cloud_container";
+    inherit version;
+    hash = "sha256-q1F+/uzyVY10pP/XrF1sL0+6o7uKfITSuZTc+NqA/Zw=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     google-api-core
@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-container";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-container-v${version}/packages/google-cloud-container/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

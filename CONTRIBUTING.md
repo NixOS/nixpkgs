@@ -193,19 +193,12 @@ The last checkbox is about whether it fits the guidelines in this `CONTRIBUTING.
 [rebase]: #rebasing-between-branches-ie-from-master-to-staging
 
 From time to time, changes between branches must be rebased, for example, if the
-number of new rebuilds they would cause is too large for the target branch. When
-rebasing, care must be taken to include only the intended changes, otherwise
-many CODEOWNERS will be inadvertently requested for review. To achieve this,
-rebasing should not be performed directly on the target branch, but on the merge
-base between the current and target branch. As an additional precautionary measure,
-you should temporarily mark the PR as draft for the duration of the operation.
-This reduces the probability of mass-pinging people. (OfBorg might still
-request a couple of persons for reviews though.)
+number of new rebuilds they would cause is too large for the target branch.
 
 In the following example, we assume that the current branch, called `feature`,
 is based on `master`, and we rebase it onto the merge base between
-`master` and `staging` so that the PR can eventually be retargeted to
-`staging` without causing a mess. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
+`master` and `staging` so that the PR can be retargeted to
+`staging`. The example uses `upstream` as the remote for `NixOS/nixpkgs.git`
 while `origin` is the remote you are pushing to.
 
 
@@ -232,36 +225,6 @@ git rebase upstream/staging
 git status
 # Force push your changes
 git push origin feature --force-with-lease
-```
-
-#### Something went wrong and a lot of people were pinged
-
-It happens. Remember to be kind, especially to new contributors.
-There is no way back, so the pull request should be closed and locked
-(if possible). The changes should be re-submitted in a new PR, in which the people
-originally involved in the conversation need to manually be pinged again.
-No further discussion should happen on the original PR, as a lot of people
-are now subscribed to it.
-
-The following message (or a version thereof) might be left when closing to
-describe the situation, since closing and locking without any explanation
-is kind of rude:
-
-```markdown
-It looks like you accidentally mass-pinged a bunch of people, which are now subscribed
-and getting notifications for everything in this pull request. Unfortunately, they
-cannot be automatically unsubscribed from the issue (removing review request does not
-unsubscribe), therefore development cannot continue in this pull request anymore.
-
-Please open a new pull request with your changes, link back to this one and ping the
-people actually involved in here over there.
-
-In order to avoid this in the future, there are instructions for how to properly
-rebase between branches in our [contribution guidelines](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#rebasing-between-branches-ie-from-master-to-staging).
-Setting your pull request to draft prior to rebasing is strongly recommended.
-In draft status, you can preview the list of people that are about to be requested
-for review, which allows you to sidestep this issue.
-This is not a bulletproof method though, as OfBorg still does review requests even on draft PRs.
 ```
 
 ## How to backport pull requests
@@ -315,13 +278,29 @@ When reviewing a pull request, please always be nice and polite. Controversial c
 
 GitHub provides reactions as a simple and quick way to provide feedback to pull requests or any comments. The thumb-down reaction should be used with care and if possible accompanied with some explanation so the submitter has directions to improve their contribution.
 
+When doing a review:
+- Aim to drive the proposal to a timely conclusion.
+- Focus on the proposed changes to keep the scope of the discussion narrow.
+- Help the contributor prioritise their efforts towards getting their change merged.
+
+If you find anything related that could be improved but is not immediately required for acceptance, consider
+- Implementing the changes yourself in a follow-up pull request (and request review from the person who inspired you)
+- Tracking your idea in an issue
+- Offering the original contributor to review a follow-up pull request
+- Making concrete [suggestions](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/incorporating-feedback-in-your-pull-request) in the same pull request.
+
+For example, follow-up changes could involve refactoring code in the affected files.
+
+But please remember not to make such additional considerations a blocker, and communicate that to the contributor, for example by following the [conventional comments](https://conventionalcomments.org/) pattern.
+If the related change is essential for the contribution at hand, make clear why you think it is important to address that first.
+
 Pull request reviews should include a list of what has been reviewed in a comment, so other reviewers and mergers can know the state of the review.
 
 All the review template samples provided in this section are generic and meant as examples. Their usage is optional and the reviewer is free to adapt them to their liking.
 
 To get more information about how to review specific parts of Nixpkgs, refer to the documents linked to in the [overview section][overview].
 
-If a pull request contains documentation changes that might require feedback from the documentation team, ping [@NixOS/documentation-reviewers](https://github.com/orgs/nixos/teams/documentation-reviewers) on the pull request.
+If a pull request contains documentation changes that might require feedback from the documentation team, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on the pull request.
 
 If you consider having enough knowledge and experience in a topic and would like to be a long-term reviewer for related submissions, please contact the current reviewers for that topic. They will give you information about the reviewing process. The main reviewers for a topic can be hard to find as there is no list, but checking past pull requests to see who reviewed or git-blaming the code to see who committed to that topic can give some hints.
 
@@ -330,7 +309,14 @@ Container system, boot system and library changes are some examples of the pull 
 ## How to merge pull requests
 [pr-merge]: #how-to-merge-pull-requests
 
-The *Nixpkgs committers* are people who have been given
+To streamline automated updates, leverage the nixpkgs-merge-bot by simply commenting `@NixOS/nixpkgs-merge-bot merge`. The bot will verify if the following conditions are met, refusing to merge otherwise:
+
+- the commenter that issued the command should be among the package maintainers;
+- the package should reside in `pkgs/by-name`.
+
+Further, nixpkgs-merge-bot will ensure all ofBorg checks (except the Darwin-related ones) are successfully completed before merging the pull request. Should the checks still be underway, the bot patiently waits for ofBorg to finish before attempting the merge again.
+
+For other pull requests, the *Nixpkgs committers* are people who have been given
 permission to merge.
 
 It is possible for community members that have enough knowledge and experience on a special topic to contribute by merging pull requests.
@@ -347,7 +333,7 @@ The following paragraphs about how to deal with unactive contributors is just a 
 Please note that contributors with commit rights unactive for more than three months will have their commit rights revoked.
 -->
 
-Please see the discussion in [GitHub nixpkgs issue #50105](https://github.com/NixOS/nixpkgs/issues/50105) for information on how to proceed to be granted this level of access.
+Please see the discussion in [GitHub nixpkgs issue #321665](https://github.com/NixOS/nixpkgs/issues/321665) for information on how to proceed to be granted this level of access.
 
 In a case a contributor definitively leaves the Nix community, they should create an issue or post on [Discourse](https://discourse.nixos.org) with references of packages and modules they maintain so the maintainership can be taken over by other contributors.
 
@@ -359,7 +345,7 @@ See [Nix Channel Status](https://status.nixos.org/) for the current channels and
 Here's a brief overview of the main Git branches and what channels they're used for:
 
 - `master`: The main branch, used for the unstable channels such as `nixpkgs-unstable`, `nixos-unstable` and `nixos-unstable-small`.
-- `release-YY.MM` (e.g. `release-23.11`): The NixOS release branches, used for the stable channels such as `nixos-23.11`, `nixos-23.11-small` and `nixpkgs-23.11-darwin`.
+- `release-YY.MM` (e.g. `release-24.05`): The NixOS release branches, used for the stable channels such as `nixos-24.05`, `nixos-24.05-small` and `nixpkgs-24.05-darwin`.
 
 When a channel is updated, a corresponding Git branch is also updated to point to the corresponding commit.
 So e.g. the [`nixpkgs-unstable` branch](https://github.com/nixos/nixpkgs/tree/nixpkgs-unstable) corresponds to the Git commit from the [`nixpkgs-unstable` channel](https://channels.nixos.org/nixpkgs-unstable).
@@ -372,10 +358,12 @@ See [this section][branch] to know when to use the release branches.
 [staging]: #staging
 
 The staging workflow exists to batch Hydra builds of many packages together.
+It is coordinated in the [Staging room](https://matrix.to/#/#staging:nixos.org) on Matrix.
 
 It works by directing commits that cause [mass rebuilds][mass-rebuild] to a separate `staging` branch that isn't directly built by Hydra.
 Regularly, the `staging` branch is _manually_ merged into a `staging-next` branch to be built by Hydra using the [`nixpkgs:staging-next` jobset](https://hydra.nixos.org/jobset/nixpkgs/staging-next).
-The `staging-next` branch should then only receive direct commits in order to fix Hydra builds.
+The `staging-next` branch should then only receive changes that fix Hydra builds;
+**for anything else, ask the [Staging room](https://matrix.to/#/#staging:nixos.org) first**.
 Once it is verified that there are no major regressions, it is merged into `master` using [a pull request](https://github.com/NixOS/nixpkgs/pulls?q=head%3Astaging-next).
 This is done manually in order to ensure it's a good use of Hydra's computing resources.
 By keeping the `staging-next` branch separate from `staging`, this batching does not block developers from merging changes into `staging`.
@@ -512,6 +500,7 @@ To get a sense for what changes are considered mass rebuilds, see [previously me
 - Check for unnecessary whitespace with `git diff --check` before committing.
 
 - If you have commits `pkg-name: oh, forgot to insert whitespace`: squash commits in this case. Use `git rebase -i`.
+  See [Squashing Commits](https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History#_squashing) for additional information.
 
 - For consistency, there should not be a period at the end of the commit message's summary line (the first line of the commit message).
 
@@ -547,138 +536,11 @@ Names of files and directories should be in lowercase, with dashes between words
 
 ### Syntax
 
-- Use 2 spaces of indentation per indentation level in Nix expressions, 4 spaces in shell scripts.
-
-- Do not use tab characters, i.e. configure your editor to use soft tabs. For instance, use `(setq-default indent-tabs-mode nil)` in Emacs. Everybody has different tab settings so it’s asking for trouble.
+- Set up [editorconfig](https://editorconfig.org/) for your editor, such that [the settings](./.editorconfig) are automatically applied.
 
 - Use `lowerCamelCase` for variable names, not `UpperCamelCase`. Note, this rule does not apply to package attribute names, which instead follow the rules in [package naming](./pkgs/README.md#package-naming).
 
-- Function calls with attribute set arguments are written as
-
-  ```nix
-  foo {
-    arg = <...>;
-  }
-  ```
-
-  not
-
-  ```nix
-  foo
-  {
-    arg = <...>;
-  }
-  ```
-
-  Also fine is
-
-  ```nix
-  foo { arg = <...>; }
-  ```
-
-  if it's a short call.
-
-- In attribute sets or lists that span multiple lines, the attribute names or list elements should be aligned:
-
-  ```nix
-  {
-    # A long list.
-    list = [
-      elem1
-      elem2
-      elem3
-    ];
-
-    # A long attribute set.
-    attrs = {
-      attr1 = short_expr;
-      attr2 =
-        if true then big_expr else big_expr;
-    };
-
-    # Combined
-    listOfAttrs = [
-      {
-        attr1 = 3;
-        attr2 = "fff";
-      }
-      {
-        attr1 = 5;
-        attr2 = "ggg";
-      }
-    ];
-  }
-  ```
-
-- Short lists or attribute sets can be written on one line:
-
-  ```nix
-  {
-    # A short list.
-    list = [ elem1 elem2 elem3 ];
-
-    # A short set.
-    attrs = { x = 1280; y = 1024; };
-  }
-  ```
-
-- Breaking in the middle of a function argument can give hard-to-read code, like
-
-  ```nix
-  someFunction { x = 1280;
-    y = 1024; } otherArg
-    yetAnotherArg
-  ```
-
-  (especially if the argument is very large, spanning multiple lines).
-
-  Better:
-
-  ```nix
-  someFunction
-    { x = 1280; y = 1024; }
-    otherArg
-    yetAnotherArg
-  ```
-
-  or
-
-  ```nix
-  let res = { x = 1280; y = 1024; };
-  in someFunction res otherArg yetAnotherArg
-  ```
-
-- The bodies of functions, asserts, and withs are not indented to prevent a lot of superfluous indentation levels, i.e.
-
-  ```nix
-  { arg1, arg2 }:
-  assert system == "i686-linux";
-  stdenv.mkDerivation { /* ... */ }
-  ```
-
-  not
-
-  ```nix
-  { arg1, arg2 }:
-    assert system == "i686-linux";
-      stdenv.mkDerivation { /* ... */ }
-  ```
-
-- Function formal arguments are written as:
-
-  ```nix
-  { arg1, arg2, arg3 }: { /* ... */ }
-  ```
-
-  but if they don't fit on one line they're written as:
-
-  ```nix
-  { arg1, arg2, arg3
-  , arg4
-  # Some comment...
-  ,  argN
-  }: { }
-  ```
+- New files must be formatted by entering the `nix-shell` from the repository root and running `nixfmt`.
 
 - Functions should list their expected arguments as precisely as possible. That is, write
 
@@ -738,7 +600,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = lib.optional stdenv.isDarwin iconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin iconv;
   }
   ```
 
@@ -746,7 +608,7 @@ Names of files and directories should be in lowercase, with dashes between words
 
   ```nix
   {
-    buildInputs = if stdenv.isDarwin then [ iconv ] else null;
+    buildInputs = if stdenv.hostPlatform.isDarwin then [ iconv ] else null;
   }
   ```
 

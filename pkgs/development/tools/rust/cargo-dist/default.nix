@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-dist";
-  version = "0.11.1";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "axodotdev";
     repo = "cargo-dist";
     rev = "v${version}";
-    hash = "sha256-SnwTfRHa/1iVG5tcypFQXUTHEOTiXkICzyjdKNYXQcM=";
+    hash = "sha256-Pq7gVZWvtWhS7HJPwKPDq3TJqwurG6fXisM5FsSMZ9k=";
   };
 
-  cargoHash = "sha256-Z3usfwxUQzrxAoINUZnM6Gffj1GEVaRNOg+XW5g8PH8=";
+  cargoHash = "sha256-0j3u4oQ8JxJP+lBufDiSMyvFrW70X1snpHstjaM9tDg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     bzip2
     xz
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A tool for building final distributable artifacts and uploading them to an archive";
+    description = "Tool for building final distributable artifacts and uploading them to an archive";
     mainProgram = "cargo-dist";
     homepage = "https://github.com/axodotdev/cargo-dist";
     changelog = "https://github.com/axodotdev/cargo-dist/blob/${src.rev}/CHANGELOG.md";

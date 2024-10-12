@@ -5,8 +5,7 @@
 let
   avro-cpp = avro-cpp_llvm;
   nanodbc = nanodbc_llvm;
-in
-let
+
   common = import ./common.nix {
     inherit lib stdenv bzip2 zlib autoconf automake cmake
       help2man texinfo libtool cppzmq libarchive
@@ -19,34 +18,35 @@ rec {
 
   # irods: libs and server package
   irods = stdenv.mkDerivation (finalAttrs: common // {
-    version = "4.3.0";
+    version = "4.3.1";
     pname = "irods";
 
     src = fetchFromGitHub {
       owner = "irods";
       repo = "irods";
       rev = finalAttrs.version;
-      sha256 = "sha256-rceDGFpfoFIByzDOtgNIo9JRoVd0syM21MjEKoZUQaE=";
+      sha256 = "sha256-gWgNY8+zD2lRCV5ydOTF0qAgZ1dlQSQKxtdw+U235vg=";
       fetchSubmodules = true;
     };
 
     # fix build with recent llvm versions
     env.NIX_CFLAGS_COMPILE = "-Wno-deprecated-register -Wno-deprecated-declarations";
 
+    cmakeFlags = common.cmakeFlags or [ ] ++ [
+      "-DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+      "-DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+      "-DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,${placeholder "out"}/lib"
+    ];
+
     postPatch = common.postPatch + ''
       patchShebangs ./test
-      substituteInPlace plugins/database/CMakeLists.txt --replace "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
+      substituteInPlace plugins/database/CMakeLists.txt --replace-fail "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
       for file in unit_tests/cmake/test_config/*.cmake
       do
-        substituteInPlace $file --replace "CATCH2}/include" "CATCH2}/include/catch2"
+        substituteInPlace $file --replace-quiet "CATCH2}/include" "CATCH2}/include/catch2"
       done
-      export cmakeFlags="$cmakeFlags
-        -DCMAKE_EXE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_MODULE_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        -DCMAKE_SHARED_LINKER_FLAGS=-Wl,-rpath,$out/lib
-        "
 
-      substituteInPlace server/auth/CMakeLists.txt --replace SETUID ""
+      substituteInPlace server/auth/CMakeLists.txt --replace-fail SETUID ""
     '';
 
     meta = common.meta // {
@@ -57,14 +57,14 @@ rec {
 
   # icommands (CLI) package, depends on the irods package
   irods-icommands = stdenv.mkDerivation (finalAttrs: common // {
-    version = "4.3.0";
+    version = "4.3.1";
     pname = "irods-icommands";
 
     src = fetchFromGitHub {
       owner = "irods";
       repo = "irods_client_icommands";
       rev = finalAttrs.version;
-      sha256 = "sha256-90q1GPkoEUoiQXM6cA+DWwth7g8v93V471r9jm+l9aw=";
+      sha256 = "sha256-BjBg13KrCGRLOtGnp23qXOLudLctvu2gJ7wxHFjM5Ug=";
     };
 
     buildInputs = common.buildInputs ++ [ irods ];

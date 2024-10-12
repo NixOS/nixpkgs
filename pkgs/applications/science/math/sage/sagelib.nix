@@ -6,6 +6,7 @@
 , perl
 , pkg-config
 , sage-setup
+, setuptools
 , gd
 , iml
 , libpng
@@ -48,7 +49,7 @@
 , cvxopt
 , cypari2
 , cysignals
-, cython_3
+, cython
 , fpylll
 , gmpy2
 , importlib-metadata
@@ -62,6 +63,7 @@
 , lrcalc-python
 , matplotlib
 , memory-allocator
+, meson-python
 , mpmath
 , networkx
 , numpy
@@ -78,7 +80,6 @@
 , sphinx
 , sympy
 , typing-extensions
-, nbclassic
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -102,6 +103,11 @@ buildPythonPackage rec {
     pip # needed to query installed packages
     pkg-config
     sage-setup
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "networkx"
   ];
 
   buildInputs = [
@@ -153,7 +159,7 @@ buildPythonPackage rec {
     cvxopt
     cypari2
     cysignals
-    cython_3
+    cython
     fpylll
     gmpy2
     importlib-metadata
@@ -167,6 +173,7 @@ buildPythonPackage rec {
     lrcalc-python
     matplotlib
     memory-allocator
+    meson-python
     mpmath
     networkx
     numpy
@@ -183,8 +190,6 @@ buildPythonPackage rec {
     sphinx
     sympy
     typing-extensions
-
-    nbclassic
   ];
 
   preBuild = ''

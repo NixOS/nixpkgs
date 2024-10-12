@@ -1,18 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-
-, pythonOlder
-
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "hurry-filesize";
   version = "0.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.3";
 
   src = fetchPypi {
     pname = "hurry.filesize";
@@ -24,14 +20,12 @@ buildPythonPackage rec {
   # fix implicit namespaces (PEP 420) warning
   patches = [ ./use-pep-420-implicit-namespace-package.patch ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "hurry.filesize" ];
 
   meta = with lib; {
-    description = "A simple Python library for human readable file sizes (or anything sized in bytes)";
+    description = "Simple Python library for human readable file sizes (or anything sized in bytes)";
     homepage = "https://pypi.org/project/hurry.filesize/";
     license = licenses.zpl21;
     maintainers = with maintainers; [ vizid ];

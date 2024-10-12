@@ -1,47 +1,48 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, dacite
-, pysnmp-lextudio
-, pytest-asyncio
-, pytest-error-for-skips
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  freezegun,
+  dacite,
+  pysnmp,
+  pytest-asyncio,
+  pytest-error-for-skips,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
+  syrupy
 }:
 
 buildPythonPackage rec {
   pname = "brother";
-  version = "4.0.2";
+  version = "4.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "bieniu";
-    repo = pname;
+    repo = "brother";
     rev = "refs/tags/${version}";
-    hash = "sha256-n1CIozKuF0+N8Vg3QA2jy5xNLDBJPdnhVT/xg1R+t90=";
+    hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dacite
-    pysnmp-lextudio
+    pysnmp
   ];
 
   nativeCheckInputs = [
+    freezegun
     pytest-asyncio
     pytest-error-for-skips
     pytestCheckHook
+    syrupy
   ];
 
-  pythonImportsCheck = [
-    "brother"
-  ];
+  pythonImportsCheck = [ "brother" ];
 
   meta = with lib; {
     description = "Python wrapper for getting data from Brother laser and inkjet printers via SNMP";

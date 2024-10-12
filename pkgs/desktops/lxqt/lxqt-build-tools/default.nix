@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 , pkg-config
@@ -7,36 +7,37 @@
 , qtbase
 , glib
 , perl
+, wrapQtAppsHook
 , gitUpdater
+, version ? "2.0.0"
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "lxqt-build-tools";
-  version = "0.13.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+    hash = {
+      "0.13.0" = "sha256-4/hVlEdqqqd6CNitCRkIzsS1R941vPJdirIklp4acXA=";
+      "2.0.0" = "sha256-ZFvnIumP03Mp+4OHPe1yMVsSYhMmYUY1idJGCAy5IhA=";
+    }."${version}";
   };
 
   postPatch = ''
     # Nix clang on darwin identifies as 'Clang', not 'AppleClang'
     # Without this, dependants fail to link.
     substituteInPlace cmake/modules/LXQtCompilerSettings.cmake \
-      --replace AppleClang Clang
-
-    # GLib 2.72 moved the file from gio-unix-2.0 to gio-2.0.
-    # https://github.com/lxqt/lxqt-build-tools/pull/74
-    substituteInPlace cmake/find-modules/FindGLIB.cmake \
-      --replace gio/gunixconnection.h gio/gunixfdlist.h
+      --replace-fail AppleClang Clang
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
     setupHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -54,8 +55,7 @@ mkDerivation rec {
   # We're dependent on this macro doing add_definitions in most places
   # But we have the setup-hook to set the values.
   postInstall = ''
-    rm $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
-    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt-build-tools/modules/LXQtConfigVars.cmake
+    cp ${./LXQtConfigVars.cmake} $out/share/cmake/lxqt${lib.optionalString (lib.versionAtLeast version "2.0.0") "2"}-build-tools/modules/LXQtConfigVars.cmake
   '';
 
   passthru.updateScript = gitUpdater { };

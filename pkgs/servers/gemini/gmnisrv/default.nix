@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl mailcap ];
 
   meta = with lib; {
-    description = "A simple Gemini protocol server";
+    description = "Simple Gemini protocol server";
     mainProgram = "gmnisrv";
     homepage = "https://git.sr.ht/~sircmpwn/gmnisrv";
     license = licenses.gpl3Only;

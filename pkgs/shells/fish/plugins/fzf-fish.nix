@@ -5,13 +5,13 @@ let
 in
 buildFishPlugin rec {
   pname = "fzf.fish";
-  version = "10.2";
+  version = "10.3";
 
   src = fetchFromGitHub {
     owner = "PatrickF1";
     repo = "fzf.fish";
     rev = "v${version}";
-    hash = "sha256-1/MLKkUHe4c9YLDrH+cnL+pLiSOSERbIZSM4FTG3wF0=";
+    hash = "sha256-T8KYLA/r/gOKvAivKRoeqIwE2pINlxFQtZJHpOy9GMM=";
   };
 
   nativeCheckInputs = [ fzf fd unixtools.script procps ];
@@ -31,7 +31,7 @@ buildFishPlugin rec {
     # Disable tests that are failing, because there is not 'rev' command
     rm tests/preview_file/custom_file_preview.fish
   '' + (
-    if stdenv.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
+    if stdenv.hostPlatform.isDarwin then ''script /dev/null fish -c "fishtape tests/*/*.fish"''
     else ''script -c 'fish -c "fishtape tests/*/*.fish"' ''
   );
 

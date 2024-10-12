@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dool";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "scottchiefbaker";
     repo = "dool";
     rev = "v${version}";
-    hash = "sha256-g74XyNtNdYf2qTCFBWIVZ3LhngDln/yu3bRJzO890JU=";
+    hash = "sha256-VII8Om43YILP3w0CsiKKdJDuK2Lc1rit2EY+eAArvng=";
   };
 
   buildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/scottchiefbaker/dool/blob/${src.rev}/ChangeLog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "dool";
   };
 }

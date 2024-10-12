@@ -3,11 +3,8 @@
 , src
 , patches ? [ ]
 , version
-, coreutils
-, buildPackages
 , bison
 , flex
-, gdb
 , gperf
 , lndir
 , perl
@@ -36,7 +33,6 @@
 , libdatrie
 , lttng-ust
 , libepoxy
-, libiconv
 , dbus
 , fontconfig
 , freetype
@@ -92,21 +88,16 @@
   # options
 , libGLSupported ? stdenv.hostPlatform.isLinux
 , libGL
-, debug ? false
-, developerBuild ? false
 , qttranslations ? null
 }:
 
 let
-  debugSymbols = debug || developerBuild;
   isCrossBuild = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 in
 stdenv.mkDerivation rec {
   pname = "qtbase";
 
   inherit src version;
-
-  debug = debugSymbols;
 
   propagatedBuildInputs = [
     libxml2
@@ -195,7 +186,6 @@ stdenv.mkDerivation rec {
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional developerBuild gdb
   ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
@@ -260,13 +250,11 @@ stdenv.mkDerivation rec {
     moveToOutput      "mkspecs/modules" "$dev"
     fixQtModulePaths  "$dev/mkspecs/modules"
     fixQtBuiltinPaths "$out" '*.pr?'
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     # FIXME: not sure why this isn't added automatically?
     patchelf --add-rpath "${libmysqlclient}/lib/mariadb" $out/${qtPluginPrefix}/sqldrivers/libqsqlmysql.so
   '';
-
-  dontStrip = debugSymbols;
 
   dontWrapQtApps = true;
 
@@ -274,7 +262,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
-    description = "A cross-platform application framework for C++";
+    description = "Cross-platform application framework for C++";
     license = with licenses; [ fdl13Plus gpl2Plus lgpl21Plus lgpl3Plus ];
     maintainers = with maintainers; [ milahu nickcao LunNova ];
     platforms = platforms.unix ++ platforms.windows;

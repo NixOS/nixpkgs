@@ -6,14 +6,14 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-/vG5LkQiA8iPP+UV1opLeJwbYfmzqYwpsoMizpGT98o=";
+    hash = "sha256-/vG5LkQiA8iPP+UV1opLeJwbYfmzqYwpsoMizpGT98o=";
   };
 
   cargoHash = "sha256-iZxV099582LuZ8A3uOsKPyekAQG2cQusLZhW+W1wW/8=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 

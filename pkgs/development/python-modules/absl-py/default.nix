@@ -1,10 +1,9 @@
-{ buildPythonPackage
-, lib
-, pythonOlder
-, fetchPypi
-, setuptools
-, six
-, enum34
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
+  setuptools,
+  six,
 }:
 
 buildPythonPackage rec {
@@ -17,15 +16,9 @@ buildPythonPackage rec {
     hash = "sha256-eCB5DvuzFnOc3otOGTVyQ/w2CKFSAkKIUT3ZaNfZWf8=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    six
-  ] ++ lib.optionals (pythonOlder "3.4") [
-    enum34
-  ];
+  propagatedBuildInputs = [ six ];
 
   # checks use bazel; should be revisited
   doCheck = false;
@@ -34,6 +27,6 @@ buildPythonPackage rec {
     description = "Abseil Python Common Libraries";
     homepage = "https://github.com/abseil/abseil-py";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -116,7 +116,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://eunomia.dev";
-    description = "the eBPF compile toolchain for eunomia-bpf";
+    description = "EBPF compile toolchain for eunomia-bpf";
     mainProgram = "ecc-rs";
     maintainers = with maintainers; [ oluceps ];
     platforms = platforms.linux;

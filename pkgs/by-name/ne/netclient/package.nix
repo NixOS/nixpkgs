@@ -8,19 +8,19 @@
 
 buildGoModule rec {
   pname = "netclient";
-  version = "0.23.0";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
     repo = "netclient";
     rev = "v${version}";
-    hash = "sha256-Wglh6tcpanEmXwoRKdAot/l4RS+EbIIHI1etQ9ic7BI=";
+    hash = "sha256-cc0OBDDyg+egnQWPoteGVVHtg8vfYC9RVIpe7A+ZJPQ=";
   };
 
-  vendorHash = "sha256-or/0z+RiOkZ2qgEqXNI/LafN+eWAzvLuSZta/QNUI3g=";
+  vendorHash = "sha256-DzTTESPxYuZYNGjEG3PufLoS02+R9275arVcUzImpBU=";
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
-    ++ lib.optional stdenv.isLinux libX11;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa
+    ++ lib.optional stdenv.hostPlatform.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];
 

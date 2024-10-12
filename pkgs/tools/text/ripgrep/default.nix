@@ -14,21 +14,21 @@ let
   rg = "${stdenv.hostPlatform.emulator buildPackages} $out/bin/rg";
 in rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "14.1.0";
+  version = "14.1.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = pname;
     rev = version;
-    hash = "sha256-CBU1GzgWMPTVsgaPMy39VRcENw5iWRUrRpjyuGiZpPI=";
+    hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
   };
 
-  cargoHash = "sha256-8FxN5MhYduMkzym7Xx4dnVbWaBKv9pgbXMIRGiRRQew=";
+  cargoHash = "sha256-b+iA8iTYWlczBpNq9eyHrWG8LMU4WPBzaU6pQRht+yE=";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2
-    ++ lib.optional stdenv.isDarwin Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
 
@@ -53,7 +53,7 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
+    description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";
     homepage = "https://github.com/BurntSushi/ripgrep";
     changelog = "https://github.com/BurntSushi/ripgrep/releases/tag/${version}";
     license = with licenses; [ unlicense /* or */ mit ];

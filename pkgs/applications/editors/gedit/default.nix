@@ -4,18 +4,17 @@
 , mesonEmulatorHook
 , fetchurl
 , python3
-, python3Packages
 , pkg-config
 , gtk3
 , gtk-mac-integration
 , glib
-, tepl
 , libgedit-amtk
 , libgedit-gtksourceview
+, libgedit-tepl
 , libpeas
 , libxml2
 , gsettings-desktop-schemas
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtk-doc
 , gobject-introspection
 , docbook-xsl-nons
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "46.2";
+  version = "48.0";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "wIZkErrRR+us4tKC/8u1oOmjBLIP1VZAvuIcgebVAe8=";
+    sha256 = "/g/vm3sHmRINuGrok6BgA2oTRFNS3tkWm6so04rPDoA=";
   };
 
   patches = [
@@ -54,9 +53,8 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
-    python3Packages.wrapPython
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
     gtk-doc
     gobject-introspection
     docbook-xsl-nons
@@ -65,15 +63,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    tepl
     glib
     gsettings-desktop-schemas
     gspell
     gtk3
     libgedit-amtk
     libgedit-gtksourceview
+    libgedit-tepl
     libpeas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration
   ];
 
@@ -87,16 +85,6 @@ stdenv.mkDerivation rec {
   # Reliably fails to generate gedit-file-browser-enum-types.h in time
   enableParallelBuilding = false;
 
-  pythonPath = with python3Packages; [
-    # https://github.com/NixOS/nixpkgs/issues/298716
-    pycairo
-  ];
-
-  postFixup = ''
-    buildPythonPath "$pythonPath"
-    patchPythonScript $out/lib/gedit/plugins/snippets/document.py
-  '';
-
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "gedit";
@@ -104,7 +92,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "https://gedit-technology.github.io/apps/gedit/";
+    homepage = "https://gitlab.gnome.org/World/gedit/gedit";
     description = "Former GNOME text editor";
     maintainers = with maintainers; [ bobby285271 ];
     license = licenses.gpl2Plus;

@@ -18,7 +18,6 @@ python3.pkgs.buildPythonApplication rec {
   pythonRelaxDeps = true;
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -38,7 +37,8 @@ python3.pkgs.buildPythonApplication rec {
     python-dateutil
     rich
     trio
-  ];
+    packaging
+  ] ++ httpx.optional-dependencies.http2;
 
   # Project has no tests
   doCheck = false;

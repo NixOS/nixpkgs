@@ -1,9 +1,10 @@
-{ pkgs
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, pyqt5
-, asyncua
+{
+  pkgs,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  pyqt5,
+  asyncua,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,6 @@ buildPythonPackage rec {
     description = "Common widgets for opcua-modeler og opcua-client-gui";
     homepage = "https://github.com/FreeOpcUa/opcua-widgets";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ janik ];
+    maintainers = [ ];
   };
 }

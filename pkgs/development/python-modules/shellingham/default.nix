@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,14 @@ buildPythonPackage rec {
     hash = "sha256-xeBo3Ok+XPrHN4nQd7M8/11leSV/8z1f7Sj33+HFVtQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "shellingham"
-  ];
+  pythonImportsCheck = [ "shellingham" ];
 
   meta = with lib; {
     description = "Tool to detect the surrounding shell";

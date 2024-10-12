@@ -1,16 +1,18 @@
-{ lib, stdenv, fetchurl, zlib, imagemagick, libpng, glib, pkg-config, libgsf
+{ lib, stdenv, fetchFromGitHub, zlib, imagemagick, libpng, glib, pkg-config, libgsf
 , libxml2, bzip2
 , autoreconfHook
 , buildPackages
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "wv";
   version = "1.2.9";
 
-  src = fetchurl {
-    url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
-    sha256 = "17f16lkdv1c3amaz2hagiicih59ynpp4786k1m2qa1sw68xhswsc";
+  src = fetchFromGitHub {
+    owner = "AbiWord";
+    repo = "wv";
+    rev = "wv-${builtins.replaceStrings ["."] ["-"] finalAttrs.version}";
+    hash = "sha256-xcC+/M1EzFqQFeF5Dw9qd8VIy7r8JdKMp2X/GHkFiPA=";
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
@@ -20,18 +22,25 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
+  env.NIX_CFLAGS_COMPILE =
+    # Suppress incompatible function pointer and int conversion errors when building with newer versions of clang 16.
+    lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types -Wno-error=int-conversion";
+
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
 
-  # autoreconfHook fails hard if these two files do not exist
+  # autoreconfHook fails hard if these two files do not exist.
+  # The extra move is to work around case-insensitive filesystems.
   postPatch = ''
-    touch AUTHORS ChangeLog
+    touch AUTHORS
+    mv CHANGELOG ChangeLog~ && mv ChangeLog~ ChangeLog
   '';
 
   meta = {
+    homepage = "https://github.com/AbiWord/wv";
     description = "Converter from Microsoft Word formats to human-editable ones";
     platforms = lib.platforms.unix;
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Plus;
   };
-}
+})

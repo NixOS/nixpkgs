@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = with lib; {
-    description = "A general purpose classical molecular simulation package";
+    description = "General purpose classical molecular simulation package";
     homepage = "https://iraspa.org/raspa/";
     license = licenses.mit;
     platforms = platforms.all;

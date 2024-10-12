@@ -1,7 +1,6 @@
 { buildGoModule
 , dependabot-cli
 , fetchFromGitHub
-, fetchpatch
 , installShellFiles
 , lib
 , testers
@@ -54,7 +53,7 @@ buildGoModule {
 
   meta = with lib; {
     changelog = "https://github.com/dependabot/cli/releases/tag/v${version}";
-    description = "A tool for testing and debugging Dependabot update jobs";
+    description = "Tool for testing and debugging Dependabot update jobs";
     mainProgram = "dependabot";
     homepage = "https://github.com/dependabot/cli";
     license = licenses.mit;

@@ -28,15 +28,16 @@ rec {
     meta = with lib; {
       homepage = "https://www.rust-lang.org/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "A safe, concurrent, practical language";
+      description = "Safe, concurrent, practical language";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
-    nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+    nativeBuildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
-      ++ lib.optionals (!stdenv.isDarwin) [ gcc.cc.lib zlib ]
-      ++ lib.optional stdenv.isDarwin Security;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) zlib
+      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -73,16 +74,16 @@ rec {
     meta = with lib; {
       homepage = "https://doc.rust-lang.org/cargo/";
       sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      description = "The Rust package manager";
+      description = "Rust package manager";
       maintainers = with maintainers; [ qknight ];
       license = [ licenses.mit licenses.asl20 ];
     };
 
     nativeBuildInputs = [ makeWrapper ]
-      ++ lib.optional (!stdenv.isDarwin) autoPatchelfHook;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin) autoPatchelfHook;
     buildInputs = [ bash ]
-      ++ lib.optional (!stdenv.isDarwin) gcc.cc.lib
-      ++ lib.optional stdenv.isDarwin Security;
+      ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isFreeBSD) gcc.cc.lib
+      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
     postPatch = ''
       patchShebangs .

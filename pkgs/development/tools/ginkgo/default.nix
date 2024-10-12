@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "ginkgo";
-  version = "2.17.1";
+  version = "2.20.2";
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
-    sha256 = "sha256-fxP4+YqhYPeGVpW6VkSm3+FGnmgbKx77anSYUv41PSE=";
+    sha256 = "sha256-/emP4U2s7/hYJZCJ+TdE5sM45q0C8OrrIFreSupq3ig=";
   };
-  vendorHash = "sha256-XtO7HiaE/xCT3tjVZzzMcO9y8Yk8Wyy1S3S1qioMaQU=";
+  vendorHash = "sha256-6HlCj2Wq+lH6OQxG18fCMj1eC2Xy++IQx35nCAtHQ/U=";
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation
@@ -26,7 +26,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://onsi.github.io/ginkgo/";
     changelog = "https://github.com/onsi/ginkgo/blob/master/CHANGELOG.md";
-    description = "A Modern Testing Framework for Go";
+    description = "Modern Testing Framework for Go";
     mainProgram = "ginkgo";
     longDescription = ''
       Ginkgo is a testing framework for Go designed to help you write expressive

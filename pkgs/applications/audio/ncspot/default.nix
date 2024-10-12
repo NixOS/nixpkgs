@@ -6,12 +6,13 @@
 , ncurses
 , openssl
 , Cocoa
-, withALSA ? true, alsa-lib
+, withALSA ? false, alsa-lib
 , withClipboard ? true, libxcb, python3
 , withCover ? false, ueberzug
-, withPulseAudio ? false, libpulseaudio
+, withPulseAudio ? true, libpulseaudio
 , withPortAudio ? false, portaudio
 , withMPRIS ? true, withNotify ? true, dbus
+, withCrossterm ? true
 , nix-update-script
 , testers
 , ncspot
@@ -19,31 +20,31 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
-  version = "1.1.0";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "hrkfdn";
     repo = "ncspot";
     rev = "v${version}";
-    hash = "sha256-RgA3jV/vD6qgIVQCZ0Sm+9CST4SlqN4MUurVM3nIdh0=";
+    hash = "sha256-Lt2IuoiXYgSVPi4u8y16u9m5ya4HdpQme6snvNJrwso=";
   };
 
-  cargoHash = "sha256-8ZUgm1O4NmZpxgNRKnh1MNhiFNoBWQHo22kyP3hWJwI=";
+  cargoHash = "sha256-JJTnaq0JLWHQxAbDpzDRPi5B+ePlQNlDOAsugPah7j4=";
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional withClipboard python3;
 
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.isLinux openssl
+    ++ lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withClipboard libxcb
     ++ lib.optional withCover ueberzug
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DNCURSES_UNCTRL_H_incl";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
   buildNoDefaultFeatures = true;
 
@@ -54,6 +55,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio "pulseaudio_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
     ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withCrossterm "crossterm_backend"
     ++ lib.optional withNotify "notify";
 
   postInstall = ''
@@ -71,7 +73,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hrkfdn/ncspot";
     changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ marsam liff ];
+    maintainers = with maintainers; [ liff ];
     mainProgram = "ncspot";
   };
 }

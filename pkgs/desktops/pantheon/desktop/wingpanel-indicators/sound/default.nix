@@ -4,7 +4,6 @@
 , nix-update-script
 , pkg-config
 , meson
-, python3
 , ninja
 , vala
 , gnome-settings-daemon
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-sound";
-  version = "7.0.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gQyL8g4Y5kM9/1EDLAQYiTSZ6CxuvfQv7LBRZNcGPVk=";
+    sha256 = "sha256-5VJnRFjyiy+CIOrwabmgWjVF4Jh0lfkhPUoGXivnbtY=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +33,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
   ];
 
@@ -48,11 +46,6 @@ stdenv.mkDerivation rec {
     pulseaudio
     wingpanel
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

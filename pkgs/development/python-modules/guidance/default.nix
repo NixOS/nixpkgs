@@ -1,26 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, pybind11
-, setuptools
-, wheel
-, aiohttp
-, diskcache
-, fastapi
-, gptcache
-, msal
-, numpy
-, openai
-, ordered-set
-, platformdirs
-, protobuf
-, pyformlang
-, requests
-, tiktoken
-, torch
-, uvicorn
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  pybind11,
+  setuptools,
+  wheel,
+  aiohttp,
+  diskcache,
+  fastapi,
+  gptcache,
+  msal,
+  numpy,
+  openai,
+  ordered-set,
+  platformdirs,
+  protobuf,
+  pyformlang,
+  requests,
+  tiktoken,
+  torch,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
@@ -37,9 +38,7 @@ buildPythonPackage rec {
     hash = "sha256-dvIJeSur3DdNBhrEPNPghxqmDEEig59Iz83LWksim6U=";
   };
 
-  nativeBuildInputs = [
-    pybind11
-  ];
+  nativeBuildInputs = [ pybind11 ];
 
   build-system = [
     setuptools
@@ -80,6 +79,9 @@ buildPythonPackage rec {
     "test_recursion_error"
     "test_openai_class_detection"
     "test_openai_chat_without_roles"
+
+    # flaky tests
+    "test_remote_mock_gen" # frequently fails when building packages in parallel
   ];
 
   disabledTestPaths = [
@@ -96,9 +98,9 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A guidance language for controlling large language models";
+    description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.rev}";
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

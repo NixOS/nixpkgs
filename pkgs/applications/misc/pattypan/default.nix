@@ -4,7 +4,7 @@
 , ant
 , jdk
 , makeWrapper
-, wrapGAppsHook
+, wrapGAppsHook3
 , makeDesktopItem
 , copyDesktopItems
 , stripJavaArchivesHook
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     ant
     jdk
     makeWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     stripJavaArchivesHook
   ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    description = "An uploader for Wikimedia Commons";
+    description = "Uploader for Wikimedia Commons";
     homepage = "https://commons.wikimedia.org/wiki/Commons:Pattypan";
     license = licenses.mit;
     mainProgram = "pattypan";

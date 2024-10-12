@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, entrypoints
-, fastentrypoints
-, fetchFromGitHub
-, freezegun
-, funcy
-, git
-, pydantic
-, pytest-mock
-, pytest-test-utils
-, pytestCheckHook
-, pythonOlder
-, rich
-, ruamel-yaml
-, scmrepo
-, semver
-, setuptools
-, setuptools-scm
-, tabulate
-, typer
+{
+  lib,
+  buildPythonPackage,
+  entrypoints,
+  fastentrypoints,
+  fetchFromGitHub,
+  freezegun,
+  funcy,
+  git,
+  pydantic,
+  pytest-mock,
+  pytest-test-utils,
+  pytestCheckHook,
+  pythonOlder,
+  rich,
+  ruamel-yaml,
+  scmrepo,
+  semver,
+  setuptools,
+  setuptools-scm,
+  tabulate,
+  typer,
 }:
 
 buildPythonPackage rec {
@@ -82,9 +83,7 @@ buildPythonPackage rec {
     "test_action_doesnt_push_even_if_repo_has_remotes_set"
   ];
 
-  pythonImportsCheck = [
-    "gto"
-  ];
+  pythonImportsCheck = [ "gto" ];
 
   meta = with lib; {
     description = "Module for Git Tag Operations";

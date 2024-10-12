@@ -1,29 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, dtkcommon
-, qtbase
-, qtx11extras
-, mtdev
-, cairo
-, xorg
-, wayland
-, dwayland
-, qtwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  dtkcommon,
+  libsForQt5,
+  mtdev,
+  cairo,
+  xorg,
+  wayland,
+  dwayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qt5platform-plugins";
-  version = "5.6.22";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-0XQ4s6xpFHoG6SC8RE8WVnbHH7qNeOYkhrYUkDEH8Dc=";
+    hash = "sha256-jbt+ym6TQX3tecFCSlz8Z2ZnqOa69zYgaB5ohQM3lQg=";
   };
 
   nativeBuildInputs = [
@@ -36,17 +35,17 @@ stdenv.mkDerivation rec {
     dtkcommon
     mtdev
     cairo
-    qtbase
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
     xorg.libSM
     wayland
     dwayland
-    qtwayland
+    libsForQt5.qtwayland
   ];
 
   cmakeFlags = [
-    "-DINSTALL_PATH=${placeholder "out"}/${qtbase.qtPluginPrefix}/platforms"
-    "-DQT_XCB_PRIVATE_HEADERS=${qtbase.src}/src/plugins/platforms/xcb"
+    "-DINSTALL_PATH=${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/platforms"
+    "-DQT_XCB_PRIVATE_HEADERS=${libsForQt5.qtbase.src}/src/plugins/platforms/xcb"
   ];
 
   dontWrapQtApps = true;

@@ -1,30 +1,31 @@
 { lib
+, stdenv
 , buildNpmPackage
 , fetchFromGitHub
-, nodejs_18
 , systemdMinimal
 , nixosTests
 , nix-update-script
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 }:
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
-  version = "1.36.0";
+  version = "1.40.2";
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
-    hash = "sha256-Eyp6VQAt0bd3rXovoaUvTuEY8E67cI5vFadpClhHcrA=";
+    hash = "sha256-gm4MQabvm8NipV6Szml6l2Dy7q3O6YsurGGg9DzahHI=";
   };
 
-  npmDepsHash = "sha256-Kr2gjCMf7yRldvLImuU92sN7a4T2ARFcTshwGOWX+zw=";
+  npmDepsHash = "sha256-FF7RCV5SDzLUZ/dY8mnPEmYmBhJNjJScQ1R2yKDSawU=";
 
-  nodejs = nodejs_18;
-
-  buildInputs = [
+  buildInputs = lib.optionals withSystemd [
     systemdMinimal
   ];
+
+  npmFlags = lib.optionals (!withSystemd) [ "--omit=optional" ];
 
   passthru.tests.zigbee2mqtt = nixosTests.zigbee2mqtt;
   passthru.updateScript = nix-update-script { };
@@ -41,7 +42,6 @@ buildNpmPackage rec {
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
     maintainers = with maintainers; [ sweber hexa ];
-    platforms = platforms.linux;
     mainProgram = "zigbee2mqtt";
   };
 }

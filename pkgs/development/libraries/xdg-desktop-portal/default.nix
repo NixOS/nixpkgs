@@ -20,18 +20,20 @@
 , pipewire
 , gdk-pixbuf
 , librsvg
+, gobject-introspection
 , python3
 , pkg-config
 , stdenv
 , runCommand
-, wrapGAppsHook
+, wrapGAppsHook3
 , xmlto
 , enableGeoLocation ? true
+, enableSystemd ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.2";
+  version = "1.18.4";
 
   outputs = [ "out" "installedTests" ];
 
@@ -39,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
     rev = finalAttrs.version;
-    hash = "sha256-Pd5IKrVp/OOE10Ozy4R3XbubVc6iz0znG+YB0Uu+68E=";
+    hash = "sha256-o+aO7uGewDPrtgOgmp/CE2uiqiBLyo07pVCFrtlORFQ=";
   };
 
   patches = [
@@ -58,7 +60,16 @@ stdenv.mkDerivation (finalAttrs: {
     # While upstream has `XDG_DESKTOP_PORTAL_DIR`, it is meant for tests and actually blocks
     # any configs from being loaded from anywhere else.
     ./nix-pkgdatadir-env.patch
+
+    # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
+    ./trash-test.patch
   ];
+
+  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+  '';
 
   nativeBuildInputs = [
     docbook_xml_dtd_412
@@ -69,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
     xmlto
   ];
 
@@ -77,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     flatpak
     fuse3
     bubblewrap
-    systemdMinimal # libsystemd
     glib
     gsettings-desktop-schemas
     json-glib
@@ -94,9 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]))
   ] ++ lib.optionals enableGeoLocation [
     geoclue2
+  ] ++ lib.optionals enableSystemd [
+    systemdMinimal # libsystemd
   ];
 
   nativeCheckInputs = [
+    gobject-introspection
     python3.pkgs.pytest
     python3.pkgs.python-dbusmock
     python3.pkgs.pygobject3
@@ -107,9 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
     "--sysconfdir=/etc"
     "-Dinstalled-tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    (lib.mesonEnable "systemd" enableSystemd)
   ] ++ lib.optionals (!enableGeoLocation) [
     "-Dgeoclue=disabled"
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    "-Dpytest=disabled"
   ];
+
+  strictDeps = true;
 
   doCheck = true;
 

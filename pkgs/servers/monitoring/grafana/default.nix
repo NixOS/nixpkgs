@@ -3,25 +3,12 @@
 , yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests, xcbuild
+, faketty
 }:
 
-let
-  # We need dev dependencies to run webpack, but patch away
-  # `cypress` (and @grafana/e2e which has a direct dependency on cypress).
-  # This attempts to download random blobs from the Internet in
-  # postInstall. Also, it's just a testing framework, so not worth the hassle.
-  patchAwayGrafanaE2E = ''
-    find . -name package.json | while IFS=$'\n' read -r pkg_json; do
-      <"$pkg_json" jq '. + {
-        "devDependencies": .devDependencies | del(."@grafana/e2e") | del(.cypress)
-      }' | sponge "$pkg_json"
-    done
-    rm -r packages/grafana-e2e
-  '';
-in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.1";
+  version = "11.2.2";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -29,11 +16,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-wKYn6EcfQlWj/6rKnGYphzq3IThRj6qCjpqwllNPht8=";
+    hash = "sha256-rELvOqKVf/Dmh38fxvvFzNM9zRQF9J8OyidXJvuubzs=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix error: no member named 'aligned_alloc' in the global namespace.
     # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
     NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
@@ -46,10 +35,7 @@ buildGoModule rec {
       yarn nodejs cacert
       jq moreutils python3
     # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-    postPatch = ''
-      ${patchAwayGrafanaE2E}
-    '';
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
@@ -65,24 +51,21 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-3CZgs732c6Z64t2sfWjPAmMFKVTzoolv2TwrbjeRCBA=";
+      x86_64-linux = "sha256-rz/IP6wi4VKWgO8P4Mov3oviwsDe5iBSKamArVR/+T0=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-NKEajOe9uDZw0MF5leiKBIRH1CHUELRho7gyCa96BO8=";
+      aarch64-darwin = "sha256-9J9wD8nJ4JEUKroxCEBYZytywzjGkGhujdj9FcNe0rM=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-puPgbgfRqbPvMVks+gyOPOTTfdClWqbOf89X0ihMLPY=";
+  vendorHash = "sha256-shQ39N9YxksfzHDgHx3qjLbZfv5D1+sqtpALI0hCK3U=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-
-  postPatch = ''
-    ${patchAwayGrafanaE2E}
-  '';
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -90,7 +73,6 @@ buildGoModule rec {
     wire gen -tags oss ./pkg/server
     wire gen -tags oss ./pkg/cmd/grafana-cli/runner
 
-    GOARCH= CGO_ENABLED=0 go generate ./pkg/plugins/plugindef
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
     # Setup node_modules
@@ -105,7 +87,7 @@ buildGoModule rec {
 
     yarn config set enableTelemetry 0
     yarn config set cacheFolder $offlineCache
-    yarn --immutable-cache
+    yarn install --immutable-cache
 
     # The build OOMs on memory constrained aarch64 without this
     export NODE_OPTIONS=--max_old_space_size=4096
@@ -113,7 +95,9 @@ buildGoModule rec {
 
   postBuild = ''
     # After having built all the Go code, run the JS builders now.
-    yarn run build
+
+    # Workaround for https://github.com/nrwl/nx/issues/22445
+    faketty yarn run build
     yarn run plugins:build-bundled
   '';
 

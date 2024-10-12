@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SkvAtV613+ARk79dB2zRKoLjPgdzoEKQa3JrRw9qBkA=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
 
@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/blyxyas/mdbook-emojicodes";
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao ];
+    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
   };
 }

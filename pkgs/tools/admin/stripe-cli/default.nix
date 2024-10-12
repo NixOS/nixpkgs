@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.19.3";
+  version = "1.21.7";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VHTr/+sc34Z9WazURXNq7EXKPbpf08cQ0FI98OV7CAA=";
+    hash = "sha256-3UZD5zBSCFwq4lhiH8MAxFX4vtyGYh3h3Em+7w8id1k=";
   };
-  vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
+  vendorHash = "sha256-TuxYJ3u4/5PJYRoRgom+M1au9XerZ+vj9X3jUWTPM58=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,7 +60,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://stripe.com/docs/stripe-cli";
     changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${version}";
-    description = "A command-line tool for Stripe";
+    description = "Command-line tool for Stripe";
     longDescription = ''
       The Stripe CLI helps you build, test, and manage your Stripe integration
       right from the terminal.

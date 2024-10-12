@@ -5,17 +5,19 @@
 , makeWrapper
 , nixosTests
 , systemd
+, testers
+, grafana-loki
 }:
 
 buildGoModule rec {
-  version = "2.9.6";
+  version = "3.2.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-79hK7axHf6soku5DvdXkE/0K4WKc4pnS9VMbVc1FS2I=";
+    hash = "sha256-dche8MbVSlwKMD/znOCj80FNf5KZmEuI3uodrFLrmjM=";
   };
 
   vendorHash = null;
@@ -26,21 +28,28 @@ buildGoModule rec {
     "cmd/loki-canary"
     "clients/cmd/promtail"
     "cmd/logcli"
+    "cmd/lokitool"
   ];
 
   tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev ];
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';
 
-  passthru.tests = { inherit (nixosTests) loki; };
+  passthru.tests = {
+    inherit (nixosTests) loki;
+    version = testers.testVersion {
+      command = "loki --version";
+      package = grafana-loki;
+    };
+  };
 
-  ldflags = let t = "github.com/grafana/loki/pkg/util/build"; in [
+  ldflags = let t = "github.com/grafana/loki/v3/pkg/util/build"; in [
     "-s"
     "-w"
     "-X ${t}.Version=${version}"

@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, cython_3
-, pdm-backend
-, setuptools
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  cython,
+  pdm-backend,
+  setuptools,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "editdistance";
   version = "0.8.1";
-  pyproject =true;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,18 +24,14 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    cython_3
+    cython
     pdm-backend
     setuptools
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "editdistance"
-  ];
+  pythonImportsCheck = [ "editdistance" ];
 
   meta = with lib; {
     description = "Python implementation of the edit distance (Levenshtein distance)";

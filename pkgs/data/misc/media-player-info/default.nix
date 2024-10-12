@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-udevdir=${placeholder "out"}/lib/udev" ];
 
   meta = with lib; {
-    description = "A repository of data files describing media player capabilities";
+    description = "Repository of data files describing media player capabilities";
     homepage = "https://www.freedesktop.org/wiki/Software/media-player-info/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel ];

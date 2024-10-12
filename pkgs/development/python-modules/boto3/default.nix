@@ -1,19 +1,19 @@
-{ lib
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, jmespath
-, pytest-xdist
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, s3transfer
-, setuptools
+{
+  lib,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jmespath,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  s3transfer,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "boto3";
-  version = "1.34.58"; # N.B: if you change this, change botocore and awscli to a matching version
+  inherit (botocore) version; # N.B: botocore, boto3, awscli needs to be updated in lockstep, bump botocore version for updating these.
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,17 +22,14 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-2L4pHjrDoy7dPZm0nx+NXZV/K3ZVx7FrNGYZTMrwAs4=";
+    hash = "sha256-fiUguOzNF9T3CcGD1mYl2b5QFbvBG8wNOd3Or2NR66E=";
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "s3transfer"
-  ];
+  pythonRelaxDeps = [ "s3transfer" ];
 
   propagatedBuildInputs = [
     botocore
@@ -45,19 +42,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "boto3"
-  ];
+  pythonImportsCheck = [ "boto3" ];
 
   disabledTestPaths = [
     # Integration tests require networking
     "tests/integration"
   ];
 
-  passthru.optional-dependencies = {
-    crt = [
-      botocore.optional-dependencies.crt
-    ];
+  optional-dependencies = {
+    crt = [ botocore.optional-dependencies.crt ];
   };
 
   meta = with lib; {

@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     owner = "alebastr";
     repo = "sway-systemd";
     rev = "v${version}";
-    sha256 = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
+    hash = "sha256-wznYE1/lVJtvf5Nq96gbPYisxc2gWLahVydwcH1vwoQ=";
   };
   format = "other";
 
@@ -24,7 +24,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Place GUI applications into systemd scopes for systemd-oomd compatibility.";
+    description = "Place GUI applications into systemd scopes for systemd-oomd compatibility";
     mainProgram = "assign-cgroups.py";
     longDescription = ''
       Automatically assign a dedicated systemd scope to the GUI applications

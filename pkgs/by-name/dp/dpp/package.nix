@@ -6,18 +6,17 @@
 , zlib
 , libsodium
 , pkg-config
-, autoPatchelfHook
 , lib
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dpp";
-  version = "10.0.29";
+  version = "10.0.31";
 
   src = fetchFromGitHub {
     owner = "brainboxdotcc";
     repo = "DPP";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BJMg3MLSfb9x/2lPHITeI3SWwW1OZVUUMVltTWUcw9I=";
+    hash = "sha256-IsgYGfPcqiJBQ1MM97jI7ksvc49ZcCn3i6/yMe8zLjY=";
   };
 
   nativeBuildInputs = [

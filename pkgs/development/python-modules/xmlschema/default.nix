@@ -1,17 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, elementpath
-, jinja2
-, lxml
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  elementpath,
+  fetchFromGitHub,
+  jinja2,
+  lxml,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "3.0.2";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,16 +21,12 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jYFhoNx4Oxm7c0LsSQ0xw9fY/yxfQU5JoP5RteHzeYM=";
+    hash = "sha256-0x8nk8F+kg5SSDQI4dOnv67ilyN4z2MZ5phPC3PW4WQ=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    elementpath
-  ];
+  dependencies = [ elementpath ];
 
   nativeCheckInputs = [
     jinja2
@@ -37,15 +34,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "xmlschema"
+  disabledTests = [
+    # Incorrect error message in pickling test for Python 3.12 in Debian
+    # https://github.com/sissaschool/xmlschema/issues/412
+    "test_pickling_subclassed_schema__issue_263"
   ];
 
+  pythonImportsCheck = [ "xmlschema" ];
+
   meta = with lib; {
-    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     description = "XML Schema validator and data conversion library for Python";
     homepage = "https://github.com/sissaschool/xmlschema";
+    changelog = "https://github.com/sissaschool/xmlschema/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

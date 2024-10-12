@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake halibut ];
 
   meta = with lib; {
-    description = "A Unix utility for tracking down wasted disk space";
+    description = "Unix utility for tracking down wasted disk space";
     longDescription = ''
        Most Unix file systems, in their default mode, helpfully record when a
        file was last accessed. So if you generated a large amount of data years

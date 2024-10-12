@@ -10,7 +10,7 @@
 , xylib
 , readline
 , gnuplot
-, swig3
+, swig
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     xylib
     readline
     gnuplot
-    swig3
+    swig
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

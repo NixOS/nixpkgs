@@ -8,7 +8,7 @@ buildGoModule rec {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
-    sha256 = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
   };
 
   vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
@@ -47,7 +47,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard.";
+    description = "High performance, self-hosted, newsletter and mailing list manager with a modern dashboard";
     mainProgram = "listmonk";
     homepage = "https://github.com/knadh/listmonk";
     changelog = "https://github.com/knadh/listmonk/releases/tag/v${version}";

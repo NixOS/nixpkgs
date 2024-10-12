@@ -1,44 +1,43 @@
-{ lib
-, stdenv
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, cachetools
-, cryptography
-, fetchPypi
-, flask
-, freezegun
-, grpcio
-, mock
-, oauth2client
-, pyasn1-modules
-, pyopenssl
-, pytest-asyncio
-, pytest-localserver
-, pytestCheckHook
-, pythonOlder
-, pyu2f
-, requests
-, responses
-, rsa
-, setuptools
+{
+  lib,
+  stdenv,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  cachetools,
+  cryptography,
+  fetchPypi,
+  flask,
+  freezegun,
+  grpcio,
+  mock,
+  oauth2client,
+  pyasn1-modules,
+  pyopenssl,
+  pytest-asyncio,
+  pytest-localserver,
+  pytestCheckHook,
+  pythonOlder,
+  pyu2f,
+  requests,
+  responses,
+  rsa,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.28.1";
+  version = "2.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NPwwRsJXztzxYi/Esx/Cvnkj2bTUSXPUgRJezFDYOIU=";
+    hash = "sha256-q2MKEyD2cgkJrXan29toQc31xmsyjWkAJ+SGe9+xZog=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     cachetools
@@ -46,7 +45,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       requests
@@ -59,35 +58,33 @@ buildPythonPackage rec {
       cryptography
       pyopenssl
     ];
-    reauth = [
-      pyu2f
-    ];
-    requests = [
-      requests
-    ];
+    reauth = [ pyu2f ];
+    requests = [ requests ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    flask
-    freezegun
-    grpcio
-    mock
-    oauth2client
-    pytest-asyncio
-    pytest-localserver
-    pytestCheckHook
-    responses
-  ] ++ passthru.optional-dependencies.aiohttp
-  ++ passthru.optional-dependencies.enterprise_cert
-  ++ passthru.optional-dependencies.reauth;
+  nativeCheckInputs =
+    [
+      aioresponses
+      flask
+      freezegun
+      grpcio
+      mock
+      oauth2client
+      pytest-asyncio
+      pytest-localserver
+      pytestCheckHook
+      responses
+    ]
+    ++ optional-dependencies.aiohttp
+    ++ optional-dependencies.enterprise_cert
+    ++ optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Disable tests using pyOpenSSL as it does not build on M1 Macs
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"
@@ -106,6 +103,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

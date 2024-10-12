@@ -67,17 +67,17 @@ let
 in
 {
   options.services.davis = {
-    enable = lib.mkEnableOption (lib.mdDoc "Davis is a caldav and carddav server");
+    enable = lib.mkEnableOption "Davis is a caldav and carddav server";
 
     user = lib.mkOption {
       default = "davis";
-      description = lib.mdDoc "User davis runs as.";
+      description = "User davis runs as.";
       type = lib.types.str;
     };
 
     group = lib.mkOption {
       default = "davis";
-      description = lib.mdDoc "Group davis runs as.";
+      description = "Group davis runs as.";
       type = lib.types.str;
     };
 
@@ -86,7 +86,7 @@ in
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/davis";
-      description = lib.mdDoc ''
+      description = ''
         Davis data directory.
       '';
     };
@@ -94,7 +94,7 @@ in
     hostname = lib.mkOption {
       type = lib.types.str;
       example = "davis.yourdomain.org";
-      description = lib.mdDoc ''
+      description = ''
         Domain of the host to serve davis under. You may want to change it if you
         run Davis on a different URL than davis.yourdomain.
       '';
@@ -121,7 +121,7 @@ in
                         lib.types.path
                       ]
                     );
-                    description = lib.mdDoc ''
+                    description = ''
                       The path to a file containing the value the
                       option should be set to in the final
                       configuration file.
@@ -135,19 +135,19 @@ in
       default = { };
 
       example = '''';
-      description = lib.mdDoc '''';
+      description = '''';
     };
 
     adminLogin = lib.mkOption {
       type = lib.types.str;
       default = "root";
-      description = lib.mdDoc ''
+      description = ''
         Username for the admin account.
       '';
     };
     adminPasswordFile = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc ''
+      description = ''
         The full path to a file that contains the admin's password. Must be
         readable by the user.
       '';
@@ -156,7 +156,7 @@ in
 
     appSecretFile = lib.mkOption {
       type = lib.types.path;
-      description = lib.mdDoc ''
+      description = ''
         A file containing the Symfony APP_SECRET - Its value should be a series
         of characters, numbers and symbols chosen randomly and the recommended
         length is around 32 characters. Can be generated with <code>cat
@@ -173,13 +173,13 @@ in
           "mysql"
         ];
         default = "sqlite";
-        description = lib.mdDoc "Database type, required in all circumstances.";
+        description = "Database type, required in all circumstances.";
       };
       urlFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
         example = "/run/secrets/davis-db-url";
-        description = lib.mdDoc ''
+        description = ''
           A file containing the database connection url. If set then it
           overrides all other database settings (except driver). This is
           mandatory if you want to use an external database, that is when
@@ -189,12 +189,12 @@ in
       name = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = "davis";
-        description = lib.mdDoc "Database name, only used when the databse is created locally.";
+        description = "Database name, only used when the databse is created locally.";
       };
       createLocally = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = lib.mdDoc "Create the database and database user locally.";
+        description = "Create the database and database user locally.";
       };
     };
 
@@ -202,19 +202,19 @@ in
       dsn = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc "Mail DSN for sending emails. Mutually exclusive with `services.davis.mail.dsnFile`.";
+        description = "Mail DSN for sending emails. Mutually exclusive with `services.davis.mail.dsnFile`.";
         example = "smtp://username:password@example.com:25";
       };
       dsnFile = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/run/secrets/davis-mail-dsn";
-        description = lib.mdDoc "A file containing the mail DSN for sending emails.  Mutually exclusive with `servies.davis.mail.dsn`.";
+        description = "A file containing the mail DSN for sending emails.  Mutually exclusive with `servies.davis.mail.dsn`.";
       };
       inviteFromAddress = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
-        description = lib.mdDoc "Email address to send invitations from.";
+        description = "Email address to send invitations from.";
         example = "no-reply@dav.example.com";
       };
     };
@@ -234,7 +234,7 @@ in
           enableACME = true;
         }
       '';
-      description = lib.mdDoc ''
+      description = ''
         With this option, you can customize the nginx virtualHost settings.
       '';
     };
@@ -255,7 +255,7 @@ in
         "pm.max_spare_servers" = 4;
         "pm.max_requests" = 500;
       };
-      description = lib.mdDoc ''
+      description = ''
         Options for the davis PHP pool. See the documentation on <literal>php-fpm.conf</literal>
         for details on configuration directives.
       '';
@@ -315,10 +315,10 @@ in
       services.davis.config =
         {
           APP_ENV = "prod";
-          CACHE_DIR = "${cfg.dataDir}/var/cache";
+          APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
           # note: we do not need the log dir (we log to stdout/journald), by davis/symfony will try to create it, and the default value is one in the nix-store
           #       so we set it to a path under dataDir to avoid something like: Unable to create the "logs" directory (/nix/store/5cfskz0ybbx37s1161gjn5klwb5si1zg-davis-4.4.1/var/log).
-          LOG_DIR = "${cfg.dataDir}/var/log";
+          APP_LOG_DIR = "${cfg.dataDir}/var/log";
           LOG_FILE_PATH = "/dev/stdout";
           DATABASE_DRIVER = db.driver;
           INVITE_FROM_ADDRESS = mail.inviteFromAddress;
@@ -340,9 +340,9 @@ in
                 else if
                   pgsqlLocal
                 # note: davis expects a non-standard postgres uri (due to the underlying doctrine library)
-                # specifically the charset query parameter, and the dummy hostname which is overriden by the host query parameter
+                # specifically the dummy hostname which is overriden by the host query parameter
                 then
-                  "postgres://${user}@localhost/${db.name}?host=/run/postgresql&charset=UTF-8"
+                  "postgres://${user}@localhost/${db.name}?host=/run/postgresql"
                 else if mysqlLocal then
                   "mysql://${user}@localhost/${db.name}?socket=/run/mysqld/mysqld.sock"
                 else
@@ -378,8 +378,8 @@ in
         '';
         phpEnv = {
           ENV_DIR = "${cfg.dataDir}";
-          CACHE_DIR = "${cfg.dataDir}/var/cache";
-          #LOG_DIR = "${cfg.dataDir}/var/log";
+          APP_CACHE_DIR = "${cfg.dataDir}/var/cache";
+          APP_LOG_DIR = "${cfg.dataDir}/var/log";
         };
         settings =
           {
@@ -447,8 +447,8 @@ in
           RemainAfterExit = true;
           Environment = [
             "ENV_DIR=${cfg.dataDir}"
-            "CACHE_DIR=${cfg.dataDir}/var/cache"
-            "LOG_DIR=${cfg.dataDir}/var/log"
+            "APP_CACHE_DIR=${cfg.dataDir}/var/cache"
+            "APP_LOG_DIR=${cfg.dataDir}/var/log"
           ];
           EnvironmentFile = "${cfg.dataDir}/.env.local";
         };
@@ -493,7 +493,7 @@ in
                 };
                 "~* ^/.well-known/(caldav|carddav)$" = {
                   extraConfig = ''
-                    return 302 $http_x_forwarded_proto://$host/dav/;
+                    return 302 https://$host/dav/;
                   '';
                 };
                 "~ ^(.+\.php)(.*)$" = {
@@ -505,7 +505,7 @@ in
                     fastcgi_param            SCRIPT_FILENAME  $document_root$fastcgi_script_name;
                     fastcgi_param            PATH_INFO        $fastcgi_path_info;
                     fastcgi_split_path_info  ^(.+\.php)(.*)$;
-                    fastcgi_param            X-Forwarded-Proto $http_x_forwarded_proto;
+                    fastcgi_param            X-Forwarded-Proto https;
                     fastcgi_param            X-Forwarded-Port $http_x_forwarded_port;
                   '';
                 };

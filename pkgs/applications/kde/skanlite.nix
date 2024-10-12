@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  wrapGAppsHook,
+  wrapGAppsHook3,
   extra-cmake-modules, kdoctools,
   kio, libksane
 }:
@@ -15,6 +15,6 @@ mkDerivation {
     maintainers = with maintainers; [ polendri ];
   };
 
-  nativeBuildInputs = [ wrapGAppsHook extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ wrapGAppsHook3 extra-cmake-modules kdoctools ];
   buildInputs = [ kio libksane ];
 }

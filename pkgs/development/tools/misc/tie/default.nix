@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
-    ${stdenv.cc.targetPrefix}cc tie.c -o tie
+    ${stdenv.cc.targetPrefix}cc -std=c89 tie.c -o tie
   '';
 
   installPhase = ''
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Allow multiple web change files";
     mainProgram = "tie";
     platforms = platforms.all;
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
     license = licenses.abstyles;
   };
 }

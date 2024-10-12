@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, azure-common
-, azure-mgmt-core
-, isodate
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  azure-common,
+  azure-mgmt-core,
+  isodate,
 }:
 
 buildPythonPackage rec {
@@ -38,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-containerregistry_${version}/sdk/containerregistry/azure-mgmt-containerregistry/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ jonringer ];
+    maintainers = [ ];
   };
 }

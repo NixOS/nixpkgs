@@ -12,12 +12,12 @@ let
     if extension == "zip" then fetchzip args else fetchurl args;
 
   pname = "1password-cli";
-  version = "2.26.1";
+  version = "2.29.0";
   sources = rec {
-    aarch64-linux = fetch "linux_arm64" "sha256-dV3VDPjiA9xKbL4tmDJ6T4B8NmPHBB2aKj3HWNGifr4=" "zip";
-    i686-linux = fetch "linux_386" "sha256-61zjjg2+UU3cMP+kcn1zXopTdRR2v/Wom3Vtz0/KnUQ=" "zip";
-    x86_64-linux = fetch "linux_amd64" "sha256-2Cq0tbdFpvFYSGRmdPclCw4jqfIKPoixv/gZKkBqgH0=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-NOCRGKF32tAh5HwwYgm+f3el3l1djqvIHNdpR5NsoM8=" "pkg";
+    aarch64-linux = fetch "linux_arm64" "sha256-sBbdkoacGI/gawM4YH+BBCLDhC2B+cE4iKVGHBhwkic=" "zip";
+    i686-linux = fetch "linux_386" "sha256-TTd5juT0Aqp1+OfunXcuk0KbL6HIHQV31+1Q1e0GYMY=" "zip";
+    x86_64-linux = fetch "linux_amd64" "sha256-Bb6fNoeNxlbDfwt7Jr8BaKCmFUwSdsLQdVoCmQCNmLA=" "zip";
+    aarch64-darwin = fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo=" "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -32,11 +32,11 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xar cpio ];
 
-  unpackPhase = lib.optionalString stdenv.isDarwin ''
+  unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
     zcat op.pkg/Payload | cpio -i
   '';
@@ -55,13 +55,15 @@ stdenv.mkDerivation {
       --zsh <($out/bin/${mainProgram} completion zsh)
   '';
 
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
   installCheckPhase = ''
     $out/bin/${mainProgram} --version
   '';
+
+  passthru.updateScript = ./update.sh;
 
   passthru.tests.version = testers.testVersion {
     package = _1password;
@@ -71,7 +73,7 @@ stdenv.mkDerivation {
     description = "1Password command-line tool";
     homepage = "https://developer.1password.com/docs/cli/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI2";
-    maintainers = with maintainers; [ joelburget marsam ];
+    maintainers = with maintainers; [ joelburget ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     inherit mainProgram platforms;

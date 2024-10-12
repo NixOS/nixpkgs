@@ -5,17 +5,19 @@
 , fetchFromGitHub
 , Cocoa
 , pkgsBuildHost
+, openssl
+, pkg-config
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.4.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-UTjTXUc0W+vlO77ilveAy0HWF5KSKbDnrg5ewTyuTdA=";
+    hash = "sha256-g0V6FPkCpIEWx+/kDG9+0NtlCVj6jc1gbkkzOSl/lAo=";
   };
 
   postPatch = ''
@@ -25,21 +27,26 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "libsignal-protocol-0.1.0" = "sha256-FCrJO7porlY5FrwZ2c67UPd4tgN7cH2/3DTwfPjihwM=";
-      "libsignal-service-0.1.0" = "sha256-OWLtaxldKgYPP/aJuWezNkNN0990l3RtDWK38R1fL90=";
-      "curve25519-dalek-4.0.0" = "sha256-KUXvYXeVvJEQ/+dydKzXWCZmA2bFa2IosDzaBL6/Si0=";
-      "presage-0.6.0-dev" = "sha256-65YhxMAAFsnOprBWiB0uH/R9iITt+EYn+kMVjAwTgOQ=";
+      "libsignal-protocol-0.1.0" = "sha256-4aHINlpVAqVTtm7npwXQRutZUmIxYgkhXhApg7jSM4M=";
+      "libsignal-service-0.1.0" = "sha256-AOGw76A9R2qH3hc7B+MBE3okzW8b5LTZdepzUDOv9lM=";
+      "curve25519-dalek-4.1.3" = "sha256-bPh7eEgcZnq9C3wmSnnYv0C4aAP+7pnwk9Io29GrI4A=";
+      "presage-0.6.2" = "sha256-t9t8ecPtefI/jYlk+Ul8WdgH26VJIkfMptbKxprekS0=";
       "qr2term-0.3.1" = "sha256-U8YLouVZTtDwsvzZiO6YB4Pe75RXGkZXOxHCQcCOyT8=";
     };
   };
 
-  nativeBuildInputs = [ protobuf ];
+  nativeBuildInputs = [ protobuf pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  NIX_LDFLAGS = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "-framework" "AppKit" ];
+  NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ "-framework" "AppKit" ];
 
   PROTOC = "${pkgsBuildHost.protobuf}/bin/protoc";
+
+  OPENSSL_NO_VENDOR = true;
+
+  useNextest = true;
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";

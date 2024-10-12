@@ -1,18 +1,18 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
-, flit-core
-, certifi
-, cryptography
-, python-dateutil
-, typing-extensions
-, urllib3
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  certifi,
+  cryptography,
+  python-dateutil,
+  typing-extensions,
+  urllib3,
 }:
 
 let
   pname = "nethsm";
-  version = "1.0.0";
+  version = "1.2.1";
 in
 
 buildPythonPackage {
@@ -21,7 +21,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sENuSdA4pYt8v2w2RvDkcQLYCP9V0vZOdWOlkNBi3/o=";
+    hash = "sha256-EPxGJFCGGl3p3yLlM7NH7xtEVS2woRigKJhL57A0gAE=";
   };
 
   propagatedBuildInputs = [
@@ -34,7 +34,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     flit-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

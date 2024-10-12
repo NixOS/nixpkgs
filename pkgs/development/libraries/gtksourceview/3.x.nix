@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    homepage = "https://wiki.gnome.org/Projects/GtkSourceView";
+    homepage = "https://gitlab.gnome.org/GNOME/gtksourceview";
     pkgConfigModules = [ "gtksourceview-3.0" ];
     platforms = with platforms; linux ++ darwin;
     license = licenses.lgpl21;

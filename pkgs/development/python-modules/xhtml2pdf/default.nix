@@ -1,20 +1,20 @@
-{ lib
-, arabic-reshaper
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, html5lib
-, pillow
-, pyhanko
-, pyhanko-certvalidator
-, pypdf
-, pytestCheckHook
-, python-bidi
-, pythonOlder
-, pythonRelaxDepsHook
-, reportlab
-, setuptools
-, svglib
+{
+  lib,
+  arabic-reshaper,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  html5lib,
+  pillow,
+  pyhanko,
+  pyhanko-certvalidator,
+  pypdf,
+  pytestCheckHook,
+  python-bidi,
+  pythonOlder,
+  reportlab,
+  setuptools,
+  svglib,
 }:
 
 buildPythonPackage rec {
@@ -41,13 +41,10 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
-  pythonRelaxDeps = [
-    "reportlab"
-  ];
+  pythonRelaxDeps = [ "reportlab" ];
 
   propagatedBuildInputs = [
     arabic-reshaper
@@ -61,9 +58,7 @@ buildPythonPackage rec {
     svglib
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # Tests requires network access
@@ -77,11 +72,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A PDF generator using HTML and CSS";
+    description = "PDF generator using HTML and CSS";
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     changelog = "https://github.com/xhtml2pdf/xhtml2pdf/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "xhtml2pdf";
   };
 }

@@ -1,39 +1,43 @@
-{ lib
-, aiohttp
-, apscheduler
-, azure-identity
-, azure-keyvault-secrets
-, backoff
-, buildPythonPackage
-, click
-, fastapi
-, fastapi-sso
-, fetchFromGitHub
-, google-cloud-kms
-, gunicorn
-, importlib-metadata
-, jinja2
-, openai
-, orjson
-, poetry-core
-, prisma
-, pyjwt
-, python-dotenv
-, python-multipart
-, pythonOlder
-, pyyaml
-, requests
-, resend
-, rq
-, streamlit
-, tiktoken
-, tokenizers
-, uvicorn
+{
+  lib,
+  aiohttp,
+  apscheduler,
+  azure-identity,
+  azure-keyvault-secrets,
+  backoff,
+  buildPythonPackage,
+  click,
+  cryptography,
+  fastapi,
+  fastapi-sso,
+  fetchFromGitHub,
+  google-cloud-kms,
+  gunicorn,
+  importlib-metadata,
+  jinja2,
+  jsonschema,
+  openai,
+  orjson,
+  poetry-core,
+  prisma,
+  pydantic,
+  pyjwt,
+  pynacl,
+  python-dotenv,
+  python-multipart,
+  pythonOlder,
+  pyyaml,
+  requests,
+  resend,
+  rq,
+  tiktoken,
+  tokenizers,
+  uvicorn,
 }:
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.34.16";
+  version = "1.47.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -42,33 +46,30 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ei4fMjEL7IytpQs/szTjRNu+3TByLZLVYX7qxwjT4OQ=";
+    hash = "sha256-onFBSClB+FDbpc7VYkm2jks8G6L/LGsZq9tyFW+uHZc=";
   };
 
-  postPatch = ''
-    rm -rf dist
-  '';
-
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
     click
     importlib-metadata
     jinja2
+    jsonschema
     openai
-    requests
+    pydantic
     python-dotenv
+    requests
     tiktoken
     tokenizers
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     proxy = [
       apscheduler
       backoff
+      cryptography
       fastapi
       fastapi-sso
       gunicorn
@@ -84,15 +85,14 @@ buildPythonPackage rec {
       azure-keyvault-secrets
       google-cloud-kms
       prisma
+      pynacl
       resend
-      streamlit
     ];
   };
 
-  # the import check phase fails trying to do a network request to openai
-  # pythonImportsCheck = [ "litellm" ];
+  pythonImportsCheck = [ "litellm" ];
 
-  # no tests
+  # access network
   doCheck = false;
 
   meta = with lib; {

@@ -1,21 +1,21 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, pythonRelaxDepsHook
-, aiodns
-, aiohttp
-, awesomeversion
-, backoff
-, cachetools
-, mashumaro
-, orjson
-, pycountry
-, yarl
-, aresponses
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  aiodns,
+  aiohttp,
+  awesomeversion,
+  backoff,
+  cachetools,
+  mashumaro,
+  orjson,
+  pycountry,
+  yarl,
+  aresponses,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -24,7 +24,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   disabled = pythonOlder "3.11";
-
 
   src = fetchFromGitHub {
     owner = "frenck";
@@ -41,12 +40,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  pythonRelaxDeps = [
-    "pycountry"
-  ];
+  pythonRelaxDeps = [ "pycountry" ];
 
   propagatedBuildInputs = [
     aiodns

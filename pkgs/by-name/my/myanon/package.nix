@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "myanon";
-  version = "0.5";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "ppomes";
     repo = "myanon";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-tTGr8bTxZc75GYhpJ0uzpkPtMB3r/DXRMNqSlG+1eaA=";
+    hash = "sha256-sB6ykRywaoG2gfHOEQ9UoVn62nMciBWgCM9DhovBoe0=";
   };
 
   nativeBuildInputs = [ autoreconfHook flex bison ];

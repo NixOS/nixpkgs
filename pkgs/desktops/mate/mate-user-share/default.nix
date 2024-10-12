@@ -13,7 +13,7 @@
 , apacheHttpdPackages
 , hicolor-icon-theme
 , mate
-, wrapGAppsHook
+, wrapGAppsHook3
 , mateUpdateScript
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     gettext
     itstool
     libxml2
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

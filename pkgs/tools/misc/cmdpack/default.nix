@@ -13,7 +13,7 @@ let
     buildPhase = ''
       runHook preBuild
 
-      gcc -o ${pname} src/${pname}.c
+      $CC -o "$pname" "src/$pname.c"
 
       runHook postBuild
     '';
@@ -21,8 +21,7 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/bin
-      cp ${pname} $out/bin
+      install -Dm555 -t "$out/bin" "$pname"
 
       runHook postInstall
     '';

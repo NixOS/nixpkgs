@@ -1,21 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , cmake, which, m4, python3, bison, flex, llvmPackages, ncurses, xcode, tbb
   # the default test target is sse4, but that is not supported by all Hydra agents
-, testedTargets ? if stdenv.isAarch64 || stdenv.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
+, testedTargets ? if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then [ "neon-i32x4" ] else [ "sse2-i32x4" ]
 }:
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.23.0";
+  version = "1.24.0";
+
+  dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
   src = fetchFromGitHub {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-zixPt7YICCG0N8t1pcXEu/sPKCVLQVPCiJsQEqEXl+A=";
+    sha256 = "sha256-1Ns8w34fXgYrSu3XE89uowjaVoW3MOgKYV1Jb/XRj1Q=";
   };
 
-  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.isDarwin [ xcode ];
+  nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ] ++ lib.lists.optionals stdenv.hostPlatform.isDarwin [ xcode ];
 
   buildInputs = with llvmPackages; [
     libllvm libclang openmp ncurses
@@ -59,9 +61,9 @@ stdenv.mkDerivation rec {
     "-DCLANGPP_EXECUTABLE=${llvmPackages.clang}/bin/clang++"
     "-DISPC_INCLUDE_EXAMPLES=OFF"
     "-DISPC_INCLUDE_UTILS=OFF"
-    ("-DARM_ENABLED=" + (if stdenv.isAarch64 || stdenv.isAarch32 then "TRUE" else "FALSE"))
-    ("-DX86_ENABLED=" + (if stdenv.isx86_64 || stdenv.isx86_32 then "TRUE" else "FALSE"))
-  ] ++ lib.lists.optionals stdenv.isDarwin [
+    ("-DARM_ENABLED=" + (if stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32 then "TRUE" else "FALSE"))
+    ("-DX86_ENABLED=" + (if stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isx86_32 then "TRUE" else "FALSE"))
+  ] ++ lib.lists.optionals stdenv.hostPlatform.isDarwin [
     "-DISPC_MACOS_SDK_PATH=${xcode}/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
   ];
 

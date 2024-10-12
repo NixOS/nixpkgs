@@ -14,7 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gtk-doc";
-  version = "1.33.2";
+  version = "1.34.0";
 
   outputDevdoc = "out";
 
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GNOME";
     repo = pname;
     rev = version;
-    sha256 = "A6OXpazrJ05SUIO1ZPVN0xHTXOSov8UnPvUolZAv/Iw=";
+    hash = "sha256-Jt6d5wbhAoSQ2sWyYWW68Y81duc3+QOJK/5JR/lCmnQ=";
   };
 
   patches = [

@@ -2,7 +2,6 @@
 , buildNpmPackage
 , fetchFromGitHub
 , fetchPypi
-, fetchpatch2
 , nodejs
 , python3
 , gettext
@@ -12,8 +11,28 @@
 
 let
   python = python3.override {
+    self = python;
     packageOverrides = self: super: {
+      bleach = super.bleach.overridePythonAttrs (oldAttrs: rec {
+        version = "5.0.1";
+
+        src = fetchPypi {
+          pname = "bleach";
+          inherit version;
+          hash = "sha256-DQMlXEfrm9Lyaqm7fyEHcy5+j+GVyi9kcJ/POwpKCFw=";
+        };
+      });
+
       django = super.django_4;
+
+      django-oauth-toolkit = super.django-oauth-toolkit.overridePythonAttrs (oldAttrs: {
+        version = "2.3.0";
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          rev = "refs/tags/v${version}";
+          hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+        };
+      });
 
       stripe = super.stripe.overridePythonAttrs rec {
         version = "7.9.0";
@@ -26,17 +45,19 @@ let
       };
 
       pretix-plugin-build = self.callPackage ./plugin-build.nix { };
+
+      sentry-sdk = super.sentry-sdk_2;
     };
   };
 
   pname = "pretix";
-  version = "2024.2.0";
+  version = "2024.9.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-emtF5dDXEXN8GIucHbjF+m9Vkg1Jj6nmQdHhBOkXMAs=";
+    hash = "sha256-L6mTfLIx8kD/5s0Dfp24TEATmjxBXERQjynB0szH3DM=";
   };
 
   npmDeps = buildNpmPackage {
@@ -44,7 +65,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-kE13dcTdWZZNHPMcHEiK0a2dEcu3Z3/q815YhaVkLbQ=";
+    npmDepsHash = "sha256-zUui5tYINTDKA91WgRV51ilIPFBJpZ+S2fJwW85KJ9k=";
 
     dontBuild = true;
 
@@ -66,18 +87,23 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+  ];
 
-    # Configure django-statici18n to compile all available languages at
-    # build time.
-    ./language-build.patch
+  pythonRelaxDeps = [
+    "django-phonenumber-field"
+    "importlib-metadata"
+    "kombu"
+    "markdown"
+    "pillow"
+    "protobuf"
+    "pyjwt"
+    "python-bidi"
+    "requests"
+    "sentry-sdk"
+  ];
 
-    (fetchpatch2 {
-      # Allow customization of cache and log directory
-      # https://github.com/pretix/pretix/pull/3997
-      name = "pretix-directory-customization.patch";
-      url = "https://github.com/pretix/pretix/commit/e151d1d1f08917e547df49da0779b36bb73b7294.patch";
-      hash = "sha256-lO5eCKSqUaCwSm7rouMTFMwauWl9Tz/Yf0JE/IO+bnI=";
-    })
+  pythonRemoveDeps = [
+    "vat-moss-forked" # we provide a patched vat-moss package
   ];
 
   postPatch = ''
@@ -90,24 +116,13 @@ python.pkgs.buildPythonApplication rec {
     sed -i "/setuptools-rust/d" pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace-fail phonenumberslite phonenumbers \
-      --replace-fail psycopg2-binary psycopg2 \
-      --replace-fail vat_moss_forked==2020.3.20.0.11.0 vat-moss \
-      --replace-fail "bleach==5.0.*" bleach \
-      --replace-fail "dnspython==2.5.*" dnspython \
-      --replace-fail "importlib_metadata==7.*" importlib_metadata \
-      --replace-fail "protobuf==4.25.*" protobuf \
-      --replace-fail "pycryptodome==3.20.*" pycryptodome \
-      --replace-fail "pypdf==3.9.*" pypdf \
-      --replace-fail "python-dateutil==2.8.*" python-dateutil \
-      --replace-fail "sentry-sdk==1.40.*" sentry-sdk \
-      --replace-fail "stripe==7.9.*" stripe
+      --replace-fail '"backend"' '"setuptools.build_meta"' \
+      --replace-fail 'backend-path = ["_build"]' ""
   '';
 
   build-system = with python.pkgs; [
     gettext
     nodejs
-    pythonRelaxDepsHook
     setuptools
     tomli
   ];
@@ -122,7 +137,6 @@ python.pkgs.buildPythonApplication rec {
     cryptography
     css-inline
     defusedcsv
-    dj-static
     django
     django-bootstrap3
     django-compressor
@@ -160,11 +174,11 @@ python.pkgs.buildPythonApplication rec {
     paypalrestsdk
     paypal-checkout-serversdk
     pyjwt
-    phonenumbers
+    phonenumberslite
     pillow
     pretix-plugin-build
     protobuf
-    psycopg2
+    psycopg2-binary
     pycountry
     pycparser
     pycryptodome
@@ -181,16 +195,18 @@ python.pkgs.buildPythonApplication rec {
     sentry-sdk
     sepaxml
     slimit
-    static3
     stripe
     text-unidecode
     tlds
     tqdm
+    ua-parser
     vat-moss
     vobject
     webauthn
     zeep
-  ] ++ plugins;
+  ]
+  ++ django.optional-dependencies.argon2
+  ++ plugins;
 
   optional-dependencies = with python.pkgs; {
     memcached = [
@@ -222,11 +238,18 @@ python.pkgs.buildPythonApplication rec {
 
   pytestFlagsArray = [
     "--reruns" "3"
+  ];
 
-    # tests fail when run before 4:30am
-    # https://github.com/pretix/pretix/pull/3987
-    "--deselect=src/tests/base/test_orders.py::PaymentReminderTests::test_sent_days"
-    "--deselect=src/tests/plugins/sendmail/test_rules.py::test_sendmail_rule_specified_subevent"
+  disabledTests = [
+    # unreliable around day changes
+    "test_order_create_invoice"
+
+    # outdated translation files
+    # https://github.com/pretix/pretix/commit/c4db2a48b6ac81763fa67475d8182aee41c31376
+    "test_different_dates_spanish"
+    "test_same_day_spanish"
+    "test_same_month_spanish"
+    "test_same_year_spanish"
   ];
 
   preCheck = ''

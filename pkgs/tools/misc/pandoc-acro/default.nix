@@ -15,7 +15,7 @@ let
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
+    hash = "sha256-JMfSQXX+BCGdFQYPFB+r08WRnhT3aXfnBNINROxCUA0=";
   };
 in
 buildPythonApplication {

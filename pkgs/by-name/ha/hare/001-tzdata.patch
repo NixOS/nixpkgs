@@ -1,28 +1,45 @@
 diff --git a/time/chrono/+freebsd.ha b/time/chrono/+freebsd.ha
-index 26d78ab1..6861bfe8 100644
+index af49080e..3dde7963 100644
 --- a/time/chrono/+freebsd.ha
 +++ b/time/chrono/+freebsd.ha
-@@ -2,7 +2,7 @@
+@@ -2,8 +2,8 @@
  // (c) Hare authors <https://harelang.org>
- 
+
  def LOCALTIME_PATH: str = "/etc/localtime";
--def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
-+def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
- 
+-def TZDB_PATH: str = "/usr/share/zoneinfo/";
++def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
+
  // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
  // leap second data.
+-export def UTC_LEAPSECS_PATH: str = "/var/db/ntpd.leap-seconds.list";
++export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
 diff --git a/time/chrono/+linux.ha b/time/chrono/+linux.ha
-index 600f606c..8d5617e2 100644
+index 2756fd6f..1ea22385 100644
 --- a/time/chrono/+linux.ha
 +++ b/time/chrono/+linux.ha
 @@ -2,8 +2,8 @@
  // (c) Hare authors <https://harelang.org>
- 
+
  def LOCALTIME_PATH: str = "/etc/localtime";
--def ZONEINFO_PREFIX: str = "/usr/share/zoneinfo/";
-+def ZONEINFO_PREFIX: str = "@tzdata@/share/zoneinfo/";
- 
+-def TZDB_PATH: str = "/usr/share/zoneinfo/";
++def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
+
  // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
  // leap second data.
--export def UTC_LEAPSECS_FILE: str = "/usr/share/zoneinfo/leap-seconds.list";
-+export def UTC_LEAPSECS_FILE: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
+-export def UTC_LEAPSECS_PATH: str = "/usr/share/zoneinfo/leap-seconds.list";
++export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";
+diff --git a/time/chrono/+openbsd.ha b/time/chrono/+openbsd.ha
+index 2756fd6f..1ea22385 100644
+--- a/time/chrono/+openbsd.ha
++++ b/time/chrono/+openbsd.ha
+@@ -2,8 +2,8 @@
+ // (c) Hare authors <https://harelang.org>
+
+ def LOCALTIME_PATH: str = "/etc/localtime";
+-def TZDB_PATH: str = "/usr/share/zoneinfo/";
++def TZDB_PATH: str = "@tzdata@/share/zoneinfo/";
+
+ // The filepath of the system's "leap-seconds.list" file, which contains UTC/TAI
+ // leap second data.
+-export def UTC_LEAPSECS_PATH: str = "/usr/share/zoneinfo/leap-seconds.list";
++export def UTC_LEAPSECS_PATH: str = "@tzdata@/share/zoneinfo/leap-seconds.list";

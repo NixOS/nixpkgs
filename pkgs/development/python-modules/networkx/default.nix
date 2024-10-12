@@ -1,44 +1,46 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# optional-dependencies
-, lxml
-, matplotlib
-, numpy
-, pandas
-, pydot
-, pygraphviz
-, scipy
-, sympy
+  # optional-dependencies
+  lxml,
+  matplotlib,
+  numpy,
+  pandas,
+  pydot,
+  pygraphviz,
+  scipy,
+  sympy,
 
-# tests
-, pytest-xdist
-, pytestCheckHook
+  # tests
+  pytest-xdist,
+  pytestCheckHook,
+
+  # reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
   pname = "networkx";
   # upgrade may break sage, please test the sage build or ping @timokau on upgrade
-  version = "3.2.1";
+  version = "3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-nxu1zzQJvzJOCnIsIL20wg7jm/HDDOiuSZyFArC14MY=";
+    hash = "sha256-DBJ9iy9IZfWa6cuKr81gtccPMkHr1m997618SrkBJsk=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     default = [
       numpy
       scipy
@@ -51,6 +53,10 @@ buildPythonPackage rec {
       pydot
       sympy
     ];
+  };
+
+  passthru.tests = {
+    inherit sage;
   };
 
   nativeCheckInputs = [

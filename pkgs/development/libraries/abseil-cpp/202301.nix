@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7C/QIXYRyUyNVVE0tqmv8b5g/uWc58iBI5jzdtddQ+U=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Don’t propagate the path to CoreFoundation. Otherwise, it’s impossible to build packages
     # that require a different SDK other than the default one.
     ./cmake-core-foundation.patch
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ gtest ];
 
   meta = with lib; {
-    description = "An open-source collection of C++ code designed to augment the C++ standard library";
+    description = "Open-source collection of C++ code designed to augment the C++ standard library";
     homepage = "https://abseil.io/";
     license = licenses.asl20;
     platforms = platforms.all;

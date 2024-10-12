@@ -1,32 +1,31 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# propagates
-, django
-, jwcrypto
-, requests
-, oauthlib
+  # propagates
+  django,
+  jwcrypto,
+  requests,
+  oauthlib,
 
-# tests
-, djangorestframework
-, pytest-django
-, pytest-xdist
-, pytest-mock
-, pytestCheckHook
+  # tests
+  djangorestframework,
+  pytest-django,
+  pytest-mock,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "django-oauth-toolkit";
-  version = "2.3.0";
+  version = "2.4.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-oGg5MD9p4PSUVkt5pGLwjAF4SHHf4Aqr+/3FsuFaybY=";
+    hash = "sha256-nfLjjVp+6OsjFdJHUZ2gzZic/E/sCklj+YeFyb/EZdw=";
   };
 
   postPatch = ''
@@ -40,10 +39,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [
-    "django"
-  ];
+  pythonRelaxDeps = [ "django" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 

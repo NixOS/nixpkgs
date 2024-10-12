@@ -1,31 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, scikit-build-core
-, cmake
-, pathspec
-, ninja
-, pyproject-metadata
-, setuptools-scm
+  # build-system
+  scikit-build-core,
+  cmake,
+  pathspec,
+  ninja,
+  pyproject-metadata,
+  setuptools-scm,
 
-# dependencies
-, numpy
+  # dependencies
+  numpy,
 
-# tests
-, pytestCheckHook
-, pyyaml
+  # tests
+  pytestCheckHook,
+  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "2.3.1";
+  version = "2.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-c24l7GfCIMsg+rcBfE/mOC7t7iIwdtV/QEc0KxvGjOM=";
+    hash = "sha256-+LtjiJe+kbnb1MCF2f3h9pBI9ZSeIPODLLlDjldBjUs=";
   };
 
   nativeBuildInputs = [
@@ -39,18 +40,20 @@ buildPythonPackage rec {
 
   dontUseCmakeConfigure = true;
 
-  propagatedBuildInputs = [
-    numpy
-  ];
+  postPatch = ''
+    # relax v2 constrain in [build-system] intended for binary backward compat
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy~=2.0" "numpy"
+  '';
+
+  propagatedBuildInputs = [ numpy ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "spglib"
-  ];
+  pythonImportsCheck = [ "spglib" ];
 
   meta = with lib; {
     description = "Python bindings for C library for finding and handling crystal symmetries";

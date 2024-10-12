@@ -8,6 +8,7 @@
 , librttopo
 , libspatialite
 , libxml2
+, libz
 , minizip
 , proj
 , readosm
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     librttopo
     libspatialite
     libxml2
+    libz
     minizip
     proj
     readosm
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A complete sqlite3-compatible CLI front-end for libspatialite";
+    description = "Complete sqlite3-compatible CLI front-end for libspatialite";
     homepage = "https://www.gaia-gis.it/fossil/spatialite-tools";
     license = with licenses; [ mpl11 gpl2Plus lgpl21Plus ];
     platforms = platforms.unix;

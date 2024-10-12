@@ -5,7 +5,7 @@
 }:
 
 let
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn;
+  inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn;
 in
 
 assert cudnnSupport -> cudaSupport;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "apache-mxnet-src-${version}-incubating.tar.gz";
-    url = "https://dlcdn.apache.org/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    url = "mirror://apache/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
 
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ (if cudaSupport then [
       "-DUSE_OLDCMAKECUDA=ON"  # see https://github.com/apache/incubator-mxnet/issues/10743
       "-DCUDA_ARCH_NAME=All"
-      "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
+      "-DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin/cc"
       "-DMXNET_CUDA_ARCH=${builtins.concatStringsSep ";" cudaFlags.realArches}"
     ] else [ "-DUSE_CUDA=OFF" ])
     ++ lib.optional (!cudnnSupport) "-DUSE_CUDNN=OFF";

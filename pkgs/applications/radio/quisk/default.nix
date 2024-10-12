@@ -8,11 +8,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.30";
+  version = "4.2.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1CpIb8Hj9hpsOkxhY3HNKaYYbWa5cZY5//WAzeuvY/o=";
+    hash = "sha256-LE7VPKzpDycUNHpdmO43GqlHnF/gwr6H7LWq8DpcXdk=";
   };
 
   buildInputs = [
@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A SDR transceiver for radios that use the Hermes protocol";
+    description = "SDR transceiver for radios that use the Hermes protocol";
     longDescription = ''
       QUISK is a Software Defined Radio (SDR) transceiver. You supply radio
       hardware that converts signals at the antenna to complex (I/Q) data at an

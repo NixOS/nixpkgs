@@ -1,4 +1,4 @@
-{ runCommand, haskellPackages, lib, all-cabal-hashes, writeShellScript }:
+{ runCommand, haskellPackages, lib, all-cabal-hashes }:
 let
   # Checks if the version looks like a Haskell PVP version which is the format
   # Hackage enforces. This will return false if the version strings is empty or

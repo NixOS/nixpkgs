@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, hatchling
-, django
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  django,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -18,17 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-qAkE5ubzfTNO1LuMQXMW2Sot1cn/bhuXlWa/J/wD5SI=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  nativeBuildInputs = [ hatchling ];
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
-  pythonImportsCheck = [
-    "js_asset"
-  ];
+  pythonImportsCheck = [ "js_asset" ];
 
   checkPhase = ''
     runHook preCheck

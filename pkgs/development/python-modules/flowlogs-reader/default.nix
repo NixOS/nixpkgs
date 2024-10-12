@@ -1,12 +1,13 @@
-{ lib
-, boto3
-, botocore
-, buildPythonPackage
-, fetchFromGitHub
-, parquet
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  boto3,
+  botocore,
+  buildPythonPackage,
+  fetchFromGitHub,
+  parquet,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,13 +32,9 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "flowlogs_reader"
-  ];
+  pythonImportsCheck = [ "flowlogs_reader" ];
 
   meta = with lib; {
     description = "Python library to make retrieving Amazon VPC Flow Logs from CloudWatch Logs a bit easier";

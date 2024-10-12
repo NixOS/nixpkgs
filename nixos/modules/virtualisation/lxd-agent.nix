@@ -45,12 +45,8 @@ let
     chown -R root:root "$PREFIX"
   '';
 in {
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
   options = {
-    virtualisation.lxd.agent.enable = lib.mkEnableOption (lib.mdDoc "Enable LXD agent");
+    virtualisation.lxd.agent.enable = lib.mkEnableOption "LXD agent";
   };
 
   config = lib.mkIf cfg.enable {

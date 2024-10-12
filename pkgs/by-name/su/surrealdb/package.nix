@@ -4,25 +4,28 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, rocksdb
+, rocksdb_8_3
 , testers
 , surrealdb
 , darwin
 , protobuf
 }:
 
+let
+  rocksdb = rocksdb_8_3;
+in
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
-  version = "1.3.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
     rev = "v${version}";
-    hash = "sha256-dnfgU7nTX3vvqN9Mox6USRfpFdEI/dAOKIVZ2Jd4t9o=";
+    hash = "sha256-kTTZx/IXXJrkC0qm4Nx0hYPbricNjwFshCq0aFYCTo0=";
   };
 
-  cargoHash = "sha256-B+x+xEcwHqoYMolAuMQzSiO/QA1FiBGO3eis9kgN1S4=";
+  cargoHash = "sha256-K62RqJqYyuAPwm8zLIiASH7kbw6raXS6ZzINMevWav0=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -35,13 +38,15 @@ rustPlatform.buildRustPackage rec {
   ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
+  RUSTFLAGS = "--cfg surrealdb_unstable";
+
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
   ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   doCheck = false;
 
@@ -60,10 +65,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
+    description = "Scalable, distributed, collaborative, document-graph database, for the realtime web";
     homepage = "https://surrealdb.com/";
     mainProgram = "surreal";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sikmir happysalada ];
+    maintainers = with maintainers; [ sikmir happysalada siriobalmelli ];
   };
 }

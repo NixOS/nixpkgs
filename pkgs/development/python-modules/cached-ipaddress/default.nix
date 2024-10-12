@@ -1,54 +1,47 @@
-{ lib
-, buildPythonPackage
-, cython_3
-, fetchFromGitHub
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, wheel
+{
+  lib,
+  buildPythonPackage,
+  cython,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "0.3.0";
+  version = "0.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iTQ1DSCZqjAzsf95nYUxnNj5YCb1Y4JIUW5VGIi7yoY=";
+    hash = "sha256-wF5GBQCmKHo3sX4lYA9/wS69x4fFNNh08VG3qMp9UKs=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=cached_ipaddress --cov-report=term-missing:skip-covered" "" \
-      --replace "Cython>=3.0.5" "Cython"
-  '';
-
-  nativeBuildInputs = [
-    cython_3
+  build-system = [
+    cython
     poetry-core
     setuptools
-    wheel
   ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "cached_ipaddress"
-  ];
+  pythonImportsCheck = [ "cached_ipaddress" ];
 
   meta = with lib; {
     description = "Cache construction of ipaddress objects";
     homepage = "https://github.com/bdraco/cached-ipaddress";
-    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/bdraco/cached-ipaddress/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

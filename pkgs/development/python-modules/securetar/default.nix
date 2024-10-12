@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, cryptography
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  cryptography,
+  fetchFromGitHub,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -21,21 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-D50ceRlK+v5Uo3qBBpVtKwI8zKU/qh1Njn3qeKM4LiY=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cryptography
-  ];
+  propagatedBuildInputs = [ cryptography ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "securetar"
-  ];
+  pythonImportsCheck = [ "securetar" ];
 
   meta = with lib; {
     description = "Module to handle tarfile backups";

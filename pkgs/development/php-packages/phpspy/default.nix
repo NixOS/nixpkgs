@@ -1,34 +1,59 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, php
-, testers
-, phpPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gnugrep,
+  binutils,
+  makeBinaryWrapper,
+  php,
+  testers,
+  phpPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "phpspy";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "adsr";
     repo = "phpspy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-iQOeZLHRc5yUgXc6xz52t/6oc07eZfH5ZgzSdJBcaak=";
+    hash = "sha256-QphoDdnSFPVRvEro0WDUC/yRsOf4I5p5BpHq32olqJI=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ php.unwrapped ];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/adsr/phpspy/commit/8854e60ac38cfd2455d4a3d797f283eb3940cb7b.patch";
+      hash = "sha256-IMO9GV0Z8PDEAVhLevg5jGh/PHcbNq3f3fMGFaKoLL4=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+    php.unwrapped
+  ];
 
   env.USE_ZEND = 1;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp phpspy $out/bin
+    install -Dt "$out/bin" phpspy stackcollapse-phpspy.pl
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/bin/phpspy" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gnugrep
+          # for objdump
+          binutils
+        ]
+      }"
   '';
 
   passthru.tests.version = testers.testVersion {

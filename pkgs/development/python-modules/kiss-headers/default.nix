@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, hatchling, requests, pytestCheckHook }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  hatchling,
+  requests,
+  pytestCheckHook,
+}:
 
 buildPythonPackage rec {
   pname = "kiss-headers";
@@ -36,6 +43,6 @@ buildPythonPackage rec {
     description = "Python package for HTTP/1.1 style headers";
     homepage = "https://github.com/Ousret/kiss-headers";
     license = licenses.mit;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

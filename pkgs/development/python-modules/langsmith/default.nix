@@ -1,42 +1,47 @@
-{ lib
-, attr
-, buildPythonPackage
-, fetchFromGitHub
-, freezegun
-, orjson
-, poetry-core
-, pydantic
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, requests
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
+  orjson,
+  pydantic,
+  requests,
+
+  # tests
+  anthropic,
+  dataclasses-json,
+  fastapi,
+  freezegun,
+  httpx,
+  instructor,
+  pytest-asyncio,
+  pytestCheckHook,
+  uvicorn,
+  attr,
 }:
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.1.38";
+  version = "0.1.129";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hK9zPEmO0LaRnbLTbc9ABE9a7UAZU9yZZUswu955CJU=";
+    hash = "sha256-GIWDGr6zd/YaSgcSrIw0a1Ul9RxdmtJBMTEbGapudtw=";
   };
 
   sourceRoot = "${src.name}/python";
 
-  pythonRelaxDeps = [
-    "orjson"
-  ];
+  pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
   dependencies = [
     orjson
@@ -45,11 +50,16 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    attr
+    anthropic
+    dataclasses-json
+    fastapi
     freezegun
+    httpx
+    instructor
     pytest-asyncio
     pytestCheckHook
-  ];
+    uvicorn
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access
@@ -59,7 +69,7 @@ buildPythonPackage rec {
     "test_as_runnable_batch"
     "test_as_runnable_async"
     "test_as_runnable_async_batch"
-    # requires git repo
+    # Test requires git repo
     "test_git_info"
     # Tests require OpenAI API key
     "test_chat_async_api"
@@ -71,21 +81,23 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # due to circular import
     "tests/integration_tests/test_client.py"
+    "tests/integration_tests/test_prompts.py"
     "tests/unit_tests/test_client.py"
+    # Tests require a Langsmith API key
+    "tests/evaluation/test_evaluation.py"
+    "tests/external/test_instructor_evals.py"
   ];
 
-  pythonImportsCheck = [
-    "langsmith"
-  ];
+  pythonImportsCheck = [ "langsmith" ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Client library to connect to the LangSmith LLM Tracing and Evaluation Platform";
-    mainProgram = "langsmith";
     homepage = "https://github.com/langchain-ai/langsmith-sdk";
     changelog = "https://github.com/langchain-ai/langsmith-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
+    mainProgram = "langsmith";
   };
 }

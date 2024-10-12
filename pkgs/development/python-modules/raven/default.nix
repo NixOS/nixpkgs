@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, blinker
-, flask
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  blinker,
+  flask,
 }:
 
 buildPythonPackage rec {
@@ -22,8 +23,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "raven" ];
 
-  passthru.optional-dependencies = {
-    flask = [ blinker flask ];
+  optional-dependencies = {
+    flask = [
+      blinker
+      flask
+    ];
   };
 
   meta = {

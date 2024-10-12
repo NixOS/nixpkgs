@@ -5,7 +5,7 @@
 , gettext
 , intltool
 , pkg-config
-, wrapGAppsHook
+, wrapGAppsHook3
 , gtkmm3
 , libuuid
 , poppler
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     gettext
     intltool
     pkg-config
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -45,8 +45,12 @@ stdenv.mkDerivation rec {
     qpdf
   ];
 
+  CXXFLAGS =
+    # Pending upstream compatibility with GCC 13
+    lib.optional (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "13") "-Wno-changes-meaning";
+
   meta = with lib; {
-    description = "A simple application to extract, merge, rotate and reorder pages of PDF documents";
+    description = "Simple application to extract, merge, rotate and reorder pages of PDF documents";
     homepage = "https://junrrein.github.io/pdfslicer/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

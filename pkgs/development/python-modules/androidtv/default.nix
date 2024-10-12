@@ -1,13 +1,14 @@
-{ lib
-, adb-shell
-, aiofiles
-, async-timeout
-, buildPythonPackage
-, fetchFromGitHub
-, mock
-, pure-python-adb
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  adb-shell,
+  aiofiles,
+  async-timeout,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mock,
+  pure-python-adb,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -30,28 +31,22 @@ buildPythonPackage rec {
     pure-python-adb
   ];
 
-  passthru.optional-dependencies = {
-    async = [
-      aiofiles
-    ];
+  optional-dependencies = {
+    async = [ aiofiles ];
     inherit (adb-shell.optional-dependencies) usb;
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ]
-  ++ passthru.optional-dependencies.async
-  ++ passthru.optional-dependencies.usb;
+  ] ++ optional-dependencies.async ++ optional-dependencies.usb;
 
   disabledTests = [
     # Requires git but fails anyway
     "test_no_underscores"
   ];
 
-  pythonImportsCheck = [
-    "androidtv"
-  ];
+  pythonImportsCheck = [ "androidtv" ];
 
   meta = with lib; {
     description = "Communicate with an Android TV or Fire TV device via ADB over a network";

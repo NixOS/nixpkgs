@@ -14,22 +14,20 @@ rec {
       pkgs.alacritty
     ];
 
+    services.displayManager.autoLogin = {
+      enable = true;
+      user = "alice";
+    };
+
     services.xserver = {
       enable = true;
-
-      displayManager = {
-        lightdm.enable = true;
-        autoLogin = {
-          enable = true;
-          user = "alice";
-        };
-      };
-
+      displayManager.lightdm.enable = true;
       desktopManager.xfce.enable = true;
     };
 
     i18n.inputMethod = {
-      enabled = "fcitx5";
+      enable = true;
+      type = "fcitx5";
       fcitx5.addons = [
         pkgs.fcitx5-chinese-addons
         pkgs.fcitx5-hangul
@@ -89,10 +87,13 @@ rec {
             machine.succeed("xauth merge ${xauth}")
             machine.sleep(5)
 
+            machine.wait_until_succeeds("pgrep fcitx5")
             machine.succeed("su - ${user.name} -c 'kill $(pgrep fcitx5)'")
             machine.sleep(1)
 
             machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
+            machine.wait_for_window("alice@machine")
+
             machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
             machine.sleep(10)
 

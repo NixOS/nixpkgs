@@ -4,18 +4,23 @@
 , enableAppletSymlinks ? true
 }:
 
-rustPlatform.buildRustPackage rec {
+let
+  version = "1.4";
+in rustPlatform.buildRustPackage {
   pname = "rsbkb";
-  version = "1.3";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "trou";
     repo = "rsbkb";
     rev = "release-${version}";
-    hash = "sha256-SGV7ovaOVnOFlCSyxKrd4Tg8Ak71BzvLgEvCneHhx0w=";
+    hash = "sha256-c5+Q/y2tZfhXQIAs1W67/xfB+qz1Xn33tKXRGDAi3qs=";
   };
 
-  cargoHash = "sha256-UC9i1rPdQ4YLQoMQYXyL0j6EUhMwyKuD+vk4z5XLLAk=";
+  cargoPatches = [
+    ./time.patch
+  ];
+  cargoHash = "sha256-jRkwfIEB9DEzoV5xogTDz1cHfdsvLM6E27E7hQBa9JY=";
 
   # Setup symlinks for all the utilities,
   # busybox style

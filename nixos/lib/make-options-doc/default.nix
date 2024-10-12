@@ -1,5 +1,5 @@
 /**
-  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/module-system.html).
+  Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
   It uses the declared `options` to generate documentation in various formats.
 
@@ -117,9 +117,7 @@
 # deprecated since 23.11.
 # TODO remove in a while.
 , allowDocBook ? false
-# whether lib.mdDoc is required for descriptions to be read as markdown.
-# deprecated since 23.11.
-# TODO remove in a while.
+# TODO remove in a while (see https://github.com/NixOS/nixpkgs/issues/300735)
 , markdownByDefault ? true
 }:
 

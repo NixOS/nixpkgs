@@ -1,21 +1,18 @@
-{ lib, stdenv, pname, version, src, meta, appimageTools, makeWrapper, nss_latest }:
+{ pname, version, src, meta, appimageTools, makeWrapper }:
 let
-
-  name = "${pname}-${version}";
-
   appimageContents = appimageTools.extractType2 {
-    inherit name src;
+    inherit pname version src;
   };
 
 in
 
 appimageTools.wrapType2 {
-  inherit name src meta;
+  inherit pname version src meta;
+
+  nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands =
     ''
-      mv $out/bin/${name} $out/bin/${pname}
-      source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/${pname} \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
       install -m 444 -D ${appimageContents}/${pname}.desktop $out/share/applications/${pname}.desktop
@@ -25,5 +22,5 @@ appimageTools.wrapType2 {
         --replace 'Exec=AppRun' 'Exec=${pname}'
     '';
 
-  extraPkgs = _: [ nss_latest ];
+  extraPkgs = pkgs: [ pkgs.nss_latest ];
 }

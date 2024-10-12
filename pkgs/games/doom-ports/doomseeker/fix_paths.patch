@@ -1,40 +1,30 @@
-diff -ru3 source-old/src/core/datapaths.cpp source-new/src/core/datapaths.cpp
---- source-old/src/core/datapaths.cpp	1970-01-01 03:00:01.000000000 +0300
-+++ source-new/src/core/datapaths.cpp	2018-03-04 00:10:25.247262567 +0300
-@@ -335,7 +335,7 @@
- 	paths.append(workingDirectory());
- 	paths.append("./");
- #ifndef Q_OS_WIN32
--	paths.append(INSTALL_PREFIX "/" INSTALL_LIBDIR "/doomseeker/");
-+	paths.append(INSTALL_PREFIX "/lib/doomseeker/");
- #endif
- 	paths = uniquePaths(paths);
- 	return Strings::combineManyPaths(paths, "engines/");
-diff -ru3 source-old/src/core/pathfinder/pathfinder.cpp source-new/src/core/pathfinder/pathfinder.cpp
---- source-old/src/core/pathfinder/pathfinder.cpp	1970-01-01 03:00:01.000000000 +0300
-+++ source-new/src/core/pathfinder/pathfinder.cpp	2018-03-04 00:09:34.862556976 +0300
-@@ -128,9 +128,7 @@
+diff --git a/src/core/pathfinder/pathfinder.cpp b/src/core/pathfinder/pathfinder.cpp
+index f277283a..454a8145 100644
+--- a/src/core/pathfinder/pathfinder.cpp
++++ b/src/core/pathfinder/pathfinder.cpp
+@@ -137,9 +137,7 @@ PathFinder PathFinder::genericPathFinder(const QStringList &suffixes)
  		<< DataPaths::programFilesDirectory(DataPaths::x64)
  		<< DataPaths::programFilesDirectory(DataPaths::x86);
- #else
+ 	#else
 -	paths << "/usr/bin" << "/usr/local/bin" << "/usr/share/bin"
 -		<< "/usr/games/" << "/usr/local/games/"
--		<< "/usr/share/games/" << gDefaultDataPaths->workingDirectory() << ".";
-+	paths << gDefaultDataPaths->workingDirectory() << ".";
- #endif
+-		<< "/usr/share/games/" << QCoreApplication::applicationDirPath() << ".";
++  paths << gDefaultDataPaths->workingDirectory() << ".";
+ 	#endif
  	QStringList pathsCopy(paths);
- 	foreach (const QString &path, pathsCopy)
-diff -ru3 source-old/src/core/pathfinder/wadpathfinder.cpp source-new/src/core/pathfinder/wadpathfinder.cpp
---- source-old/src/core/pathfinder/wadpathfinder.cpp	1970-01-01 03:00:01.000000000 +0300
-+++ source-new/src/core/pathfinder/wadpathfinder.cpp	2018-03-04 00:09:56.822865339 +0300
-@@ -84,10 +84,6 @@
- 		QStringList defaultPaths()
- 		{
- 			QStringList paths;
--			#ifdef Q_OS_UNIX
--			paths << "/usr/local/share/games/doom/"
--				<< "/usr/share/games/doom/";
--			#endif
- 			return paths;
- 		}
+ 	for (const QString &path : pathsCopy)
+diff --git a/src/core/pathfinder/wadpathfinder.cpp b/src/core/pathfinder/wadpathfinder.cpp
+index 07df0b64..6300542d 100644
+--- a/src/core/pathfinder/wadpathfinder.cpp
++++ b/src/core/pathfinder/wadpathfinder.cpp
+@@ -84,10 +84,6 @@ public:
+ 	QStringList defaultPaths()
+ 	{
+ 		QStringList paths;
+-		#ifdef Q_OS_UNIX
+-		paths << "/usr/local/share/games/doom/"
+-			<< "/usr/share/games/doom/";
+-		#endif
+ 		return paths;
+ 	}
  };

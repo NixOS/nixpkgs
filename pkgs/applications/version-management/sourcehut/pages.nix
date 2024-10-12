@@ -6,21 +6,25 @@
 
 buildGoModule (rec {
   pname = "pagessrht";
-  version = "0.15.4";
+  version = "0.15.7";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "pages.sr.ht";
     rev = version;
-    hash = "sha256-3kdQVIL7xaIPu2elxj1k+4/y75bd+OKP5+VPSniF7w8=";
+    hash = "sha256-Lobuf12ybSO7Y4ztOLMFW0dmPFaBSEPCy4Nmh89tylI=";
   };
 
   postPatch = ''
     substituteInPlace Makefile \
       --replace "all: server" ""
+
+    # fix build failure due to unused import
+    substituteInPlace server.go \
+      --replace-warn '	"fmt"' ""
   '';
 
-  vendorHash = "sha256-DP+6rxjiXzs0RbSuMD20XwO/+v7QXCNgXj2LxZ96lWE=";
+  vendorHash = "sha256-9hpOkP6AYSZe7MW1mrwFEKq7TvVt6OcF6eHWY4jARuU=";
 
   postInstall = ''
     mkdir -p $out/share/sql/
@@ -36,4 +40,4 @@ buildGoModule (rec {
   };
   # There is no ./loaders but this does not cause troubles
   # to go generate
-} // import ./fix-gqlgen-trimpath.nix { inherit unzip; })
+} // import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.42"; })

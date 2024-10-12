@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "frozendict";
-  version = "2.4.1";
-  format = "setuptools";
+  version = "2.4.5";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cPDuJ6AzMxOmJztSf6IZ04acJhjJCphQSl0DaN9cChI=";
+    hash = "sha256-/lsf5lF+3uzE6KvP1GJQ5gymyKAVX4CflgLXnB7qeeY=";
   };
 
   # build C version if it exists
@@ -32,13 +33,11 @@ buildPythonPackage rec {
     fi
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  pythonImportsCheck = [
-    "frozendict"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "frozendict" ];
 
   meta = with lib; {
     description = "Module for immutable dictionary";

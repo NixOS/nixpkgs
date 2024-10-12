@@ -1,16 +1,17 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, dnspython
-, fetchFromGitHub
-, poetry-core
-, pythonOlder
-, tenacity
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  dnspython,
+  fetchFromGitHub,
+  poetry-core,
+  pythonOlder,
+  tenacity,
 }:
 
 buildPythonPackage rec {
   pname = "linear-garage-door";
-  version = "0.2.9";
+  version = "0.2.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     owner = "IceBotYT";
     repo = "linear-garage-door";
     rev = "refs/tags/${version}";
-    hash = "sha256-hWWJgZnEItYaSxka7zBHPeVlTEiOqRnA2vg6/MvpJGE=";
+    hash = "sha256-ibOCqy7krIVC7N75SwEyUII3Tknb60nwA+zGbjOENv4=";
   };
 
   postPatch = ''
@@ -28,11 +29,9 @@ buildPythonPackage rec {
       -e "/--no-cov/d"
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     dnspython
     tenacity
@@ -41,9 +40,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "linear_garage_door"
-  ];
+  pythonImportsCheck = [ "linear_garage_door" ];
 
   meta = with lib; {
     description = "Control Linear Garage Doors with Python";

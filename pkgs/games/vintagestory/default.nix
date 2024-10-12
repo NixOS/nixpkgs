@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.19.5";
+  version = "1.19.8";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-noweIb+lZhme1kEjU2+tIc0E99iShNngxEEyDMKJcpk=";
+    hash = "sha256-R6J+ACYDQpOzJZFBizsQGOexR7lMyeoZqz9TnWxfwyM=";
   };
 
 
@@ -48,14 +48,16 @@ stdenv.mkDerivation rec {
     libXi
   ]));
 
-  desktopItems = makeDesktopItem {
-    name = "vintagestory";
-    desktopName = "Vintage Story";
-    exec = "vintagestory";
-    icon = "vintagestory";
-    comment = "Innovate and explore in a sandbox world";
-    categories = [ "Game" ];
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = "vintagestory";
+      desktopName = "Vintage Story";
+      exec = "vintagestory";
+      icon = "vintagestory";
+      comment = "Innovate and explore in a sandbox world";
+      categories = [ "Game" ];
+    })
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -83,7 +85,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "An in-development indie sandbox game about innovation and exploration";
+    description = "In-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = licenses.unfree;
     maintainers = with maintainers; [ artturin gigglesquid ];

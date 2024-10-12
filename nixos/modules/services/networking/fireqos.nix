@@ -1,23 +1,20 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.fireqos;
   fireqosConfig = pkgs.writeText "fireqos.conf" "${cfg.config}";
 in {
   options.services.fireqos = {
-    enable = mkOption {
-      type = types.bool;
+    enable = lib.mkOption {
+      type = lib.types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         If enabled, FireQOS will be launched with the specified
         configuration given in `config`.
       '';
     };
 
-    config = mkOption {
-      type = types.str;
+    config = lib.mkOption {
+      type = lib.types.str;
       default = "";
       example = ''
         interface wlp3s0 world-in input rate 10mbit ethernet
@@ -28,13 +25,13 @@ in {
           class web commit 50kbit
             match tcp ports 80,443
       '';
-      description = lib.mdDoc ''
+      description = ''
         The FireQOS configuration goes here.
       '';
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.fireqos = {
       description = "FireQOS";
       after = [ "network.target" ];

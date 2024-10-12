@@ -1,10 +1,11 @@
 { ffmpeg_6-full
 , fetchFromGitHub
+, fetchpatch
 , lib
 }:
 
 let
-  version = "6.0.1-3";
+  version = "6.0.1-8";
 in
 
 (ffmpeg_6-full.override {
@@ -13,13 +14,19 @@ in
     owner = "jellyfin";
     repo = "jellyfin-ffmpeg";
     rev = "v${version}";
-    hash = "sha256-UINiXO61nB/AL0HJJy7G7emujakk/mQv81aUioyJz0Y=";
+    hash = "sha256-29g3BUdNcFEGjHkc/1qxOGazIfg0DLDIwoiDCI/aEKc=";
   };
 }).overrideAttrs (old: {
   pname = "jellyfin-ffmpeg";
 
   # Clobber upstream patches as they don't apply to the Jellyfin fork
-  patches = [];
+  patches = [
+    (fetchpatch {
+      name = "fix_build_failure_due_to_libjxl_version_to_new";
+      url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/75b1a555a70c178a9166629e43ec2f6250219eb2";
+      hash = "sha256-+2kzfPJf5piim+DqEgDuVEEX5HLwRsxq0dWONJ4ACrU=";
+    })
+  ];
 
   configureFlags = old.configureFlags ++ [
     "--extra-version=Jellyfin"

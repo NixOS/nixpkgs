@@ -1,59 +1,112 @@
-{ copyDesktopItems, fetchurl, jre, lib, makeDesktopItem, makeWrapper, stdenv, udev, xorg }:
+{
+  fetchFromGitHub,
+  gradle,
+  jre,
+  lib,
+  makeWrapper,
+  stdenvNoCC,
 
-stdenv.mkDerivation (finalAttrs: {
+  gamemodeSupport ? stdenvNoCC.hostPlatform.isLinux,
+  textToSpeechSupport ? stdenvNoCC.hostPlatform.isLinux,
+  additionalLibs ? [ ],
+
+  # dependencies
+  flite,
+  gamemode,
+  libglvnd,
+  libpulseaudio,
+  udev,
+  xorg,
+}:
+
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "atlauncher";
-  version = "3.4.35.9";
+  version = "3.4.37.3";
 
-  src = fetchurl {
-    url = "https://github.com/ATLauncher/ATLauncher/releases/download/v${finalAttrs.version}/ATLauncher-${finalAttrs.version}.jar";
-    hash = "sha256-Y2MGhzq4IbtjEG+CER+FWU8CY+hn5ehjMOcP02zIsR4=";
+  src = fetchFromGitHub {
+    owner = "ATLauncher";
+    repo = "ATLauncher";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-XdTbrM7FPR0o0d+p4ko48UonMsY+nLfiXj5fP2a3/zI=";
   };
 
-  env.ICON = fetchurl {
-    url = "https://atlauncher.com/assets/images/logo.svg";
-    hash = "sha256-XoqpsgLmkpa2SdjZvPkgg6BUJulIBIeu6mBsJJCixfo=";
-  };
-
-  dontUnpack = true;
-
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $out/bin $out/share/java
-    cp $src $out/share/java/ATLauncher.jar
-
-    makeWrapper ${jre}/bin/java $out/bin/atlauncher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ xorg.libXxf86vm udev ]}" \
-      --add-flags "-jar $out/share/java/ATLauncher.jar" \
-      --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
-      --add-flags "--no-launcher-update"
-
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp $ICON $out/share/icons/hicolor/scalable/apps/atlauncher.svg
-
-    runHook postInstall
+  postPatch = ''
+    # exclude UI tests
+    sed -i "/test {/a\    exclude '**/BasicLauncherUiTest.class'" build.gradle
   '';
 
-  desktopItems = [
-    (makeDesktopItem {
-      categories = [ "Game" ];
-      desktopName = "ATLauncher";
-      exec = "atlauncher";
-      icon = "atlauncher";
-      name = "atlauncher";
-    })
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
   ];
 
-  meta = with lib; {
-    description = "A simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
+  mitmCache = gradle.fetchDeps {
+    inherit (finalAttrs) pname;
+    data = ./deps.json;
+  };
+
+  doCheck = true;
+
+  gradleBuildTask = "shadowJar";
+
+  gradleFlags = [
+    "--exclude-task"
+    "createExe"
+  ];
+
+  installPhase =
+    let
+      runtimeLibraries =
+        [
+          libglvnd
+          libpulseaudio
+          udev
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXxf86vm
+        ]
+        ++ lib.optional gamemodeSupport gamemode.lib
+        ++ lib.optional textToSpeechSupport flite
+        ++ additionalLibs;
+    in
+    ''
+      runHook preInstall
+
+      mkdir -p $out/{bin,share/java}
+      cp build/libs/ATLauncher-${finalAttrs.version}.jar $out/share/java/ATLauncher.jar
+
+      makeWrapper ${lib.getExe jre} $out/bin/atlauncher \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath runtimeLibraries}" \
+        --add-flags "-jar $out/share/java/ATLauncher.jar" \
+        --add-flags "--working-dir \"\''${XDG_DATA_HOME:-\$HOME/.local/share}/ATLauncher\"" \
+        --add-flags "--no-launcher-update"
+
+      runHook postInstall
+    '';
+
+  postInstall =
+    let
+      packagingDir = "${finalAttrs.src}/packaging/linux/_common";
+    in
+    ''
+      install -D -m444 ${packagingDir}/atlauncher.desktop -t $out/share/applications
+      install -D -m444 ${packagingDir}/atlauncher.metainfo.xml -t $out/share/metainfo
+      install -D -m444 ${packagingDir}/atlauncher.png -t $out/share/pixmaps
+      install -D -m444 ${packagingDir}/atlauncher.svg -t $out/share/icons/hicolor/scalable/apps
+    '';
+
+  meta = {
+    changelog = "https://github.com/ATLauncher/ATLauncher/blob/v${finalAttrs.version}/CHANGELOG.md";
+    description = "Simple and easy to use Minecraft launcher which contains many different modpacks for you to choose from and play";
     downloadPage = "https://atlauncher.com/downloads";
     homepage = "https://atlauncher.com";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "atlauncher";
-    maintainers = [ maintainers.getpsyched ];
-    platforms = platforms.all;
-    sourceProvenance = [ sourceTypes.binaryBytecode ];
+    maintainers = with lib.maintainers; [ getpsyched ];
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode # mitm cache
+    ];
   };
 })

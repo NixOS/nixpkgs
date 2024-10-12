@@ -1,16 +1,17 @@
-{ lib
-, awesomeversion
-, buildPythonPackage
-, aiohttp
-, fetchFromGitHub
-, setuptools
-, pythonOlder
-, packaging
+{
+  lib,
+  awesomeversion,
+  buildPythonPackage,
+  aiohttp,
+  fetchFromGitHub,
+  setuptools,
+  pythonOlder,
+  packaging,
 }:
 
 buildPythonPackage rec {
   pname = "pyswitchbee";
-  version = "1.8.0";
+  version = "1.8.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,12 +20,10 @@ buildPythonPackage rec {
     owner = "jafar-atili";
     repo = "pySwitchbee";
     rev = "refs/tags/${version}";
-    hash = "sha256-bMxWrapFX689yvC6+9NUunEtTe79+QNauFa1ZjG9ON4=";
+    hash = "sha256-at/HCY6htUz1ej09XPrb2QEyoiOWhIEpgSwJange1cU=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aiohttp
@@ -35,9 +34,7 @@ buildPythonPackage rec {
   # Module doesn't have tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "switchbee"
-  ];
+  pythonImportsCheck = [ "switchbee" ];
 
   meta = with lib; {
     description = "Library to control SwitchBee smart home device";

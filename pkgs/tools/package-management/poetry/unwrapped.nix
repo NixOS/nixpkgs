@@ -38,7 +38,7 @@
 
 buildPythonPackage rec {
   pname = "poetry";
-  version = "1.8.2";
+  version = "1.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -47,11 +47,16 @@ buildPythonPackage rec {
     owner = "python-poetry";
     repo = "poetry";
     rev = "refs/tags/${version}";
-    hash = "sha256-MBWVeS/UHpzeeNUeiHMoXnLA3enRO/6yGIbg4Vf2GxU=";
+    hash = "sha256-PPHt9GG5XJzrhnuAS8L+0Pa3El3RNCdEbXbLnHopDWg=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  pythonRelaxDeps = [
+    "dulwich"
+    "keyring"
   ];
 
   propagatedBuildInputs = [
@@ -76,7 +81,7 @@ buildPythonPackage rec {
     tomlkit
     trove-classifiers
     virtualenv
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xattr
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
@@ -97,18 +102,18 @@ buildPythonPackage rec {
     httpretty
     pytest-mock
     pytest-xdist
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.ps
   ];
 
   preCheck = (''
     export HOME=$TMPDIR
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';
   '');
 
-  postCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
   '';
 

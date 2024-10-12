@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pymongo
-, isPy27
-, six
-, blinker
-, nose
-, pillow
-, coverage
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pymongo,
+  isPy27,
+  six,
+  blinker,
+  pytestCheckHook,
+  pillow,
+  coverage,
 }:
 
 buildPythonPackage rec {
@@ -29,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
+    pytestCheckHook
     pillow
     coverage
     blinker

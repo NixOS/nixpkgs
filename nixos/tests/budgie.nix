@@ -18,10 +18,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
+    # We don't ship gnome-text-editor in Budgie module, we add this line mainly
+    # to catch eval issues related to this option.
+    environment.budgie.excludePackages = [ pkgs.gnome-text-editor ];
+
     services.xserver.desktopManager.budgie = {
       enable = true;
       extraPlugins = [
-        pkgs.budgiePlugins.budgie-analogue-clock-applet
+        pkgs.budgie-analogue-clock-applet
       ];
     };
   };
@@ -59,7 +63,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Check if various environment variables are set"):
           cmd = "xargs --null --max-args=1 echo < /proc/$(pgrep -xf /run/current-system/sw/bin/budgie-wm)/environ"
           machine.succeed(f"{cmd} | grep 'XDG_CURRENT_DESKTOP' | grep 'Budgie:GNOME'")
-          machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie.budgie-desktop-with-plugins.pname}'")
+          machine.succeed(f"{cmd} | grep 'BUDGIE_PLUGIN_DATADIR' | grep '${pkgs.budgie-desktop-with-plugins.pname}'")
 
       with subtest("Open run dialog"):
           machine.send_key("alt-f2")

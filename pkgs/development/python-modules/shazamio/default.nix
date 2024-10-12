@@ -1,18 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, poetry-core
-, wheel
-, aiofiles
-, aiohttp
-, dataclass-factory
-, numpy
-, pydantic
-, pydub
-, ffmpeg
-, pytest-asyncio
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  poetry-core,
+  wheel,
+  aiofiles,
+  aiohttp,
+  dataclass-factory,
+  numpy,
+  pydantic,
+  pydub,
+  ffmpeg,
+  pytest-asyncio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -67,9 +68,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "shazamio" ];
 
   meta = with lib; {
-    description = "A free asynchronous library from reverse engineered Shazam API";
+    description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
-    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${src.rev}";
+    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     # https://github.com/shazamio/ShazamIO/issues/80

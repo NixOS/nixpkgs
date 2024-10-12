@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 makeWrapper ];
   buildInputs = [ libbsd ] ++ (with perlPackages; [ perl SysCPU ]);
 
+  CXXFLAGS = "-std=c++98";
+
   postInstall = ''
     substituteInPlace $out/bin/compiler_test.pl \
       --replace '$CSMITH_HOME/runtime' $out/include/${pname}-${version} \
@@ -32,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A random generator of C programs";
+    description = "Random generator of C programs";
     homepage = "https://embed.cs.utah.edu/csmith";
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
     license = licenses.bsd2;
@@ -43,7 +45,7 @@ stdenv.mkDerivation rec {
       Csmith has found bugs in every tool that it has tested, and has been used
       to find and report more than 400 previously unknown compiler bugs.
     '';
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

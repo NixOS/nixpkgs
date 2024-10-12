@@ -1,12 +1,16 @@
-{ lib
-, buildPythonPackage
-, python
-, fetchpatch
-, fetchPypi
-, pari
-, gmp
-, cython_3
-, cysignals
+{
+  lib,
+  buildPythonPackage,
+  python,
+  fetchpatch,
+  fetchPypi,
+  pari,
+  gmp,
+  cython,
+  cysignals,
+
+  # Reverse dependency
+  sage,
 }:
 
 buildPythonPackage rec {
@@ -17,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-GiWGXDTyCx3JWDB5jjSrZDbieLjgyA3HvwqzTF2wOrg=";
+    hash = "sha256-GiWGXDTyCx3JWDB5jjSrZDbieLjgyA3HvwqzTF2wOrg=";
   };
 
   patches = [
@@ -35,23 +39,23 @@ buildPythonPackage rec {
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
-  nativeBuildInputs = [
-    pari
-  ];
+  nativeBuildInputs = [ pari ];
 
-  buildInputs = [
-    gmp
-  ];
+  buildInputs = [ gmp ];
 
   propagatedBuildInputs = [
     cysignals
-    cython_3
+    cython
   ];
 
   checkPhase = ''
     test -f "$out/${python.sitePackages}/cypari2/auto_paridecl.pxd"
     make check
   '';
+
+  passthru.tests = {
+    inherit sage;
+  };
 
   meta = with lib; {
     description = "Cython bindings for PARI";

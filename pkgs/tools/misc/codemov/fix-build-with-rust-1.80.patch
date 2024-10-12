@@ -1,0 +1,107 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index a4c40ab..b3451ea 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -378,9 +378,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "deranged"
+-version = "0.3.7"
++version = "0.3.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7684a49fb1af197853ef7b2ee694bc1f5b4179556f1e5710e1760c5db6f5e929"
++checksum = "b42b6fa04a440b495c8b04d0e71b707c585f83cb9cb28cf8cd0d976c315e31b4"
++dependencies = [
++ "powerfmt",
++]
+ 
+ [[package]]
+ name = "either"
+@@ -811,6 +814,12 @@ dependencies = [
+  "getrandom",
+ ]
+ 
++[[package]]
++name = "num-conv"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
++
+ [[package]]
+ name = "num-integer"
+ version = "0.1.45"
+@@ -1007,6 +1016,12 @@ dependencies = [
+  "miniz_oxide",
+ ]
+ 
++[[package]]
++name = "powerfmt"
++version = "0.2.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "439ee305def115ba05938db6eb1644ff94165c5ab5e9420d1c1bcedbba909391"
++
+ [[package]]
+ name = "proc-macro2"
+ version = "1.0.66"
+@@ -1185,18 +1200,18 @@ checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
+ 
+ [[package]]
+ name = "serde"
+-version = "1.0.183"
++version = "1.0.193"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "32ac8da02677876d532745a130fc9d8e6edfa81a269b107c5b00829b91d8eb3c"
++checksum = "25dd9975e68d0cb5aa1120c288333fc98731bd1dd12f561e468ea4728c042b89"
+ dependencies = [
+  "serde_derive",
+ ]
+ 
+ [[package]]
+ name = "serde_derive"
+-version = "1.0.183"
++version = "1.0.193"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "aafe972d60b0b9bee71a91b92fee2d4fb3c9d7e8f6b179aa99f27203d99a4816"
++checksum = "43576ca501357b9b071ac53cdc7da8ef0cbd9493d8df094cd821777ea6e894d3"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -1356,12 +1371,14 @@ dependencies = [
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.25"
++version = "0.3.36"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "b0fdd63d58b18d663fbdf70e049f00a22c8e42be082203be7f26589213cd75ea"
++checksum = "5dfd88e563464686c916c7e46e623e520ddc6d79fa6641390f2e3fa86e83e885"
+ dependencies = [
+  "deranged",
+  "itoa",
++ "num-conv",
++ "powerfmt",
+  "serde",
+  "time-core",
+  "time-macros",
+@@ -1369,16 +1386,17 @@ dependencies = [
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.1"
++version = "0.1.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
++checksum = "ef927ca75afb808a4d64dd374f00a2adf8d0fcff8e7b184af886c3c87ec4a3f3"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.11"
++version = "0.2.18"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "eb71511c991639bb078fd5bf97757e03914361c48100d52878b8e52b46fb92cd"
++checksum = "3f252a68540fde3a3877aeea552b832b40ab9a69e318efd078774a01ddee1ccf"
+ dependencies = [
++ "num-conv",
+  "time-core",
+ ]
+ 

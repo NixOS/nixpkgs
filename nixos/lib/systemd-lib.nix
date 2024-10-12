@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, utils }:
 
 let
   inherit (lib)
@@ -12,22 +12,30 @@ let
     concatStringsSep
     const
     elem
+    elemAt
     filter
     filterAttrs
+    flatten
     flip
     head
     isInt
+    isFloat
     isList
+    isPath
+    isString
     length
     makeBinPath
     makeSearchPathOutput
     mapAttrs
     mapAttrsToList
+    mapNullable
+    match
     mkAfter
     mkIf
     optional
     optionalAttrs
     optionalString
+    pipe
     range
     replaceStrings
     reverseList
@@ -97,6 +105,8 @@ in rec {
     optional (attr ? ${name} && ! isByteFormat attr.${name})
       "Systemd ${group} field `${name}' must be in byte format [0-9]+[KMGT].";
 
+  toIntBaseDetected = value: assert (match "[0-9]+|0x[0-9a-fA-F]+" value) != null; (builtins.fromTOML "v=${value}").v;
+
   hexChars = stringToCharacters "0123456789abcdefABCDEF";
 
   isMacAddress = s: stringLength s == 17
@@ -148,6 +158,27 @@ in rec {
     optional (attr ? ${name} && !(min <= attr.${name} && max >= attr.${name}))
       "Systemd ${group} field `${name}' is outside the range [${toString min},${toString max}]";
 
+  assertRangeOrOneOf = name: min: max: values: group: attr:
+    optional (attr ? ${name} && !(((isInt attr.${name} || isFloat attr.${name}) && min <= attr.${name} && max >= attr.${name}) || elem attr.${name} values))
+      "Systemd ${group} field `${name}' is not a value in range [${toString min},${toString max}], or one of ${toString values}";
+
+  assertRangeWithOptionalMask = name: min: max: group: attr:
+    if (attr ? ${name}) then
+      if isInt attr.${name} then
+        assertRange name min max group attr
+      else if isString attr.${name} then
+        let
+          fields = match "([0-9]+|0x[0-9a-fA-F]+)(/([0-9]+|0x[0-9a-fA-F]+))?" attr.${name};
+        in if fields == null then ["Systemd ${group} field `${name}' must either be an integer or two integers separated by a slash (/)."]
+        else let
+          value = toIntBaseDetected (elemAt fields 0);
+          mask = mapNullable toIntBaseDetected (elemAt fields 2);
+        in
+          optional (!(min <= value && max >= value)) "Systemd ${group} field `${name}' has main value outside the range [${toString min},${toString max}]."
+          ++ optional (mask != null && !(min <= mask && max >= mask)) "Systemd ${group} field `${name}' has mask outside the range [${toString min},${toString max}]."
+      else ["Systemd ${group} field `${name}' must either be an integer or a string."]
+    else [];
+
   assertMinimum = name: min: group: attr:
     optional (attr ? ${name} && attr.${name} < min)
       "Systemd ${group} field `${name}' must be greater than or equal to ${toString min}";
@@ -161,6 +192,10 @@ in rec {
     optional (attr ? ${name} && !isInt attr.${name})
       "Systemd ${group} field `${name}' is not an integer";
 
+  assertRemoved = name: see: group: attr:
+    optional (attr ? ${name})
+      "Systemd ${group} field `${name}' has been removed. See ${see}";
+
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
     # unit options might contain attributes from mkOverride and mkIf that we need to
@@ -173,6 +208,30 @@ in rec {
     errors = concatMap (c: c group defs) checks;
   in if errors == [] then true
      else trace (concatStringsSep "\n" errors) false;
+
+  checkUnitConfigWithLegacyKey = legacyKey: group: checks: attrs:
+    let
+      dump = lib.generators.toPretty { }
+        (lib.generators.withRecursion { depthLimit = 2; throwOnDepthLimit = false; } attrs);
+      attrs' =
+        if legacyKey == null
+          then attrs
+        else if ! attrs?${legacyKey}
+          then attrs
+        else if removeAttrs attrs [ legacyKey ] == {}
+          then attrs.${legacyKey}
+        else throw ''
+          The declaration
+
+          ${dump}
+
+          must not mix unit options with the legacy key '${legacyKey}'.
+
+          This can be fixed by moving all settings from within ${legacyKey}
+          one level up.
+        '';
+    in
+    checkUnitConfig group checks attrs';
 
   toOption = x:
     if x == true then "true"
@@ -327,18 +386,27 @@ in rec {
       ''}
     ''; # */
 
-  makeJobScript = name: text:
+  makeJobScript = { name, text, enableStrictShellChecks }:
     let
       scriptName = replaceStrings [ "\\" "@" ] [ "-" "_" ] (shellEscape name);
-      out = (pkgs.writeShellScriptBin scriptName ''
-        set -e
-        ${text}
-      '').overrideAttrs (_: {
+      out = (
+        if ! enableStrictShellChecks then
+          pkgs.writeShellScriptBin scriptName ''
+            set -e
+
+            ${text}
+          ''
+        else
+          pkgs.writeShellApplication {
+            name = scriptName;
+            inherit text;
+          }
+      ).overrideAttrs (_: {
         # The derivation name is different from the script file name
         # to keep the script file name short to avoid cluttering logs.
         name = "unit-script-${scriptName}";
       });
-    in "${out}/bin/${scriptName}";
+    in lib.getExe out;
 
   unitConfig = { config, name, options, ... }: {
     config = {
@@ -362,9 +430,17 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
-          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (toString config.restartTriggers)}"; }
+          { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers-${name}" (pipe config.restartTriggers [
+              flatten
+              (map (x: if isPath x then "${x}" else x))
+              toString
+            ])}"; }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
-          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (toString config.reloadTriggers)}"; }
+          { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers-${name}" (pipe config.reloadTriggers [
+              flatten
+              (map (x: if isPath x then "${x}" else x))
+              toString
+            ])}"; }
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -381,8 +457,47 @@ in rec {
     };
   };
 
-  serviceConfig = { config, ... }: {
-    config.environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+  serviceConfig =
+  let
+    nixosConfig = config;
+  in
+  { name, lib, config, ... }: {
+    config = {
+      name = "${name}.service";
+      environment.PATH = mkIf (config.path != []) "${makeBinPath config.path}:${makeSearchPathOutput "bin" "sbin" config.path}";
+
+      enableStrictShellChecks = lib.mkOptionDefault nixosConfig.systemd.enableStrictShellChecks;
+    };
+  };
+
+  pathConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.path";
+    };
+  };
+
+  socketConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.socket";
+    };
+  };
+
+  sliceConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.slice";
+    };
+  };
+
+  targetConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.target";
+    };
+  };
+
+  timerConfig = { name, config, ... }: {
+    config = {
+      name = "${name}.timer";
+    };
   };
 
   stage2ServiceConfig = {
@@ -401,6 +516,7 @@ in rec {
 
   mountConfig = { config, ... }: {
     config = {
+      name = "${utils.escapeSystemdPath config.where}.mount";
       mountConfig =
         { What = config.what;
           Where = config.where;
@@ -414,6 +530,7 @@ in rec {
 
   automountConfig = { config, ... }: {
     config = {
+      name = "${utils.escapeSystemdPath config.where}.automount";
       automountConfig =
         { Where = config.where;
         };
@@ -429,8 +546,8 @@ in rec {
       WantedBy=${concatStringsSep " " def.wantedBy}
     '';
 
-  targetToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  targetToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text =
         ''
           [Unit]
@@ -438,8 +555,8 @@ in rec {
         '';
     };
 
-  serviceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  serviceToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def (''
         [Service]
       '' + (let env = cfg.globalEnvironment // def.environment;
@@ -448,7 +565,7 @@ in rec {
             "Environment=${toJSON "${n}=${env.${n}}"}\n";
           # systemd max line length is now 1MiB
           # https://github.com/systemd/systemd/commit/e6dde451a51dc5aaa7f4d98d39b8fe735f73d2af
-          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${name}.service’ is too long." else s) (attrNames env))
+          in if stringLength s >= 1048576 then throw "The value of the environment variable ‘${n}’ in systemd service ‘${def.name}.service’ is too long." else s) (attrNames env))
       + (if def ? reloadIfChanged && def.reloadIfChanged then ''
         X-ReloadIfChanged=true
       '' else if (def ? restartIfChanged && !def.restartIfChanged) then ''
@@ -459,8 +576,8 @@ in rec {
       '' + attrsToSection def.serviceConfig);
     };
 
-  socketToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  socketToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Socket]
         ${attrsToSection def.socketConfig}
@@ -469,40 +586,40 @@ in rec {
       '';
     };
 
-  timerToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  timerToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Timer]
         ${attrsToSection def.timerConfig}
       '';
     };
 
-  pathToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  pathToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Path]
         ${attrsToSection def.pathConfig}
       '';
     };
 
-  mountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  mountToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Mount]
         ${attrsToSection def.mountConfig}
       '';
     };
 
-  automountToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  automountToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Automount]
         ${attrsToSection def.automountConfig}
       '';
     };
 
-  sliceToUnit = name: def:
-    { inherit (def) aliases wantedBy requiredBy upheldBy enable overrideStrategy;
+  sliceToUnit = def:
+    { inherit (def) name aliases wantedBy requiredBy upheldBy enable overrideStrategy;
       text = commonUnitText def ''
         [Slice]
         ${attrsToSection def.sliceConfig}
@@ -524,5 +641,10 @@ in rec {
         (map (pkg: "cp ${pkg} $out/${pkg.name}") listOfDefinitions)
       )}
     '';
+
+  # The maximum number of characters allowed in a GPT partition label. This
+  # limit is specified by UEFI and enforced by systemd-repart.
+  # Corresponds to GPT_LABEL_MAX from systemd's gpt.h.
+  GPTMaxLabelLength = 36;
 
 }

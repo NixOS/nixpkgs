@@ -1,48 +1,58 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, nose
-, cython
-, numpy
-, scipy
-, sympy
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  numpy,
+  scipy,
+  sympy,
+  setuptools,
+  pytestCheckHook,
+  cython,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
   pname = "pydy";
   version = "0.7.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-aaRinJMGR8v/OVkeSp1hA4+QLOrmDWq50wvA6b/suvk=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  patches = [
+    # Migrate tests to pytest
+    (fetchpatch2 {
+      url = "https://github.com/pydy/pydy/commit/e679638fecf80def25f5ed20f01c49c5d931e4d8.patch?full_index=1";
+      hash = "sha256-wJmYkyc5Yh0152OyNL5ZbZJxmpX7C65Hqrms4gm3zt0=";
+      excludes = [
+        ".github/workflows/oldest.yml"
+        ".github/workflows/tests.yml"
+        "bin/test"
+      ];
+    })
+  ];
+
+  dependencies = [
     numpy
     scipy
     sympy
   ];
 
   nativeCheckInputs = [
-    nose
-    cython
     pytestCheckHook
+    cython
   ];
 
-  disabledTests = [
-    # Tests not fixed yet. Check https://github.com/pydy/pydy/issues/465
-    "test_generate_cse"
-    "test_generate_code_blocks"
-    "test_doprint"
-    "test_OctaveMatrixGenerator"
-  ];
+  pythonImportsCheck = [ "pydy" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python tool kit for multi-body dynamics";
     homepage = "http://pydy.org";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sigmanificient ];
   };
 }

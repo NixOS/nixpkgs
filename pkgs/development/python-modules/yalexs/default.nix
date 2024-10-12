@@ -1,24 +1,31 @@
-{ lib
-, aiofiles
-, aiohttp
-, aioresponses
-, aiounittest
-, buildPythonPackage
-, ciso8601
-, fetchFromGitHub
-, pubnub
-, pyjwt
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
-, setuptools
+{
+  lib,
+  aiofiles,
+  aiohttp,
+  aioresponses,
+  aiounittest,
+  buildPythonPackage,
+  ciso8601,
+  fetchFromGitHub,
+  freenub,
+  poetry-core,
+  propcache,
+  pyjwt,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-freezegun,
+  pytestCheckHook,
+  python-dateutil,
+  python-socketio,
+  pythonOlder,
+  requests-mock,
+  requests,
+  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "3.0.0";
+  version = "8.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,47 +34,42 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "yalexs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hY46hUUmbQUWmI+Oa9qIQ1rZdXT5daGo1Vd5JRKfDHE=";
+    hash = "sha256-0fC12QsCOgFc6GJk5T7kCjVHe9W4Fhwmtv3dwJVh9mM=";
   };
 
-  postPatch = ''
-    # Not used requirement
-    substituteInPlace setup.py \
-      --replace-fail '"vol",' ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  pythonRelaxDeps = [ "aiohttp" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     aiohttp
     ciso8601
-    pubnub
+    freenub
+    propcache
     pyjwt
     python-dateutil
+    python-socketio
     requests
-  ];
-
-  # aiounittest is not supported on 3.12
-  doCheck = pythonOlder "3.12";
+    typing-extensions
+  ] ++ python-socketio.optional-dependencies.asyncio_client;
 
   nativeCheckInputs = [
     aioresponses
     aiounittest
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-freezegun
     pytestCheckHook
     requests-mock
   ];
 
-  pythonImportsCheck = [
-    "yalexs"
-  ];
+  pythonImportsCheck = [ "yalexs" ];
 
   meta = with lib; {
     description = "Python API for Yale Access (formerly August) Smart Lock and Doorbell";
     homepage = "https://github.com/bdraco/yalexs";
-    changelog = "https://github.com/bdraco/yalexs/releases/tag/v${version}";
+    changelog = "https://github.com/bdraco/yalexs/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

@@ -2,7 +2,7 @@
 , lib
 , autoreconfHook
 , gitUpdater
-, gnome
+, gnome-common
 , which
 , fetchgit
 , libgtop
@@ -17,7 +17,7 @@
 , xorgserver
 , dbus
 , python3
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -37,13 +37,13 @@ stdenv.mkDerivation rec {
     autoreconfHook
     dbus
     docbook_xsl
-    gnome.gnome-common
+    gnome-common
     gobject-introspection
     gtk-doc
     pkg-config
     vala
     which
-    wrapGAppsHook
+    wrapGAppsHook3
     xorgserver
   ];
 

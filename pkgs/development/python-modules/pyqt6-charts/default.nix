@@ -1,17 +1,19 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, sip
-, pyqt-builder
-, qt6Packages
-, pythonOlder
-, pyqt6
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  sip,
+  pyqt-builder,
+  qt6Packages,
+  pythonOlder,
+  pyqt6,
+  python,
+  mesa,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt6-charts";
-  version = "6.6.0";
+  version = "6.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_Charts";
     inherit version;
-    sha256 = "sha256-FMxuXRnK6AEpUkpC+mMy0NXa2kKCqUI0Jea5rhtrxW0=";
+    hash = "sha256-xPfPNpko978DLk4z9xjTuP5m2hdtSVn+MHNalw2G81w=";
   };
 
   # fix include path and increase verbosity
@@ -51,28 +53,22 @@ buildPythonPackage rec {
     pyqt-builder
   ];
 
-  buildInputs = with qt6Packages; [
-    qtcharts
-  ];
+  buildInputs = with qt6Packages; [ qtcharts ];
 
-  propagatedBuildInputs = [
-    pyqt6
-  ];
+  propagatedBuildInputs = [ pyqt6 ];
 
   dontConfigure = true;
 
   # has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "PyQt6.QtCharts"
-  ];
+  pythonImportsCheck = [ "PyQt6.QtCharts" ];
 
   meta = with lib; {
     description = "Python bindings for Qt6 QtCharts";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ dandellion ];
   };
 }

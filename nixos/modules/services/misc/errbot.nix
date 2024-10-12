@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.errbot;
   pluginEnv = plugins: pkgs.buildEnv {
@@ -17,7 +14,7 @@ let
     BOT_LOG_LEVEL = logging.${instanceCfg.logLevel}
     BOT_LOG_FILE = False
 
-    BOT_ADMINS = (${concatMapStringsSep "," (name: "'${name}'") instanceCfg.admins})
+    BOT_ADMINS = (${lib.concatMapStringsSep "," (name: "'${name}'") instanceCfg.admins})
 
     BOT_IDENTITY = ${builtins.toJSON instanceCfg.identity}
 
@@ -25,64 +22,64 @@ let
   '';
 in {
   options = {
-    services.errbot.instances = mkOption {
+    services.errbot.instances = lib.mkOption {
       default = {};
-      description = lib.mdDoc "Errbot instance configs";
-      type = types.attrsOf (types.submodule {
+      description = "Errbot instance configs";
+      type = lib.types.attrsOf (lib.types.submodule {
         options = {
-          dataDir = mkOption {
-            type = types.nullOr types.path;
+          dataDir = lib.mkOption {
+            type = lib.types.nullOr lib.types.path;
             default = null;
-            description = lib.mdDoc "Data directory for errbot instance.";
+            description = "Data directory for errbot instance.";
           };
 
-          plugins = mkOption {
-            type = types.listOf types.package;
+          plugins = lib.mkOption {
+            type = lib.types.listOf lib.types.package;
             default = [];
-            description = lib.mdDoc "List of errbot plugin derivations.";
+            description = "List of errbot plugin derivations.";
           };
 
-          logLevel = mkOption {
-            type = types.str;
+          logLevel = lib.mkOption {
+            type = lib.types.str;
             default = "INFO";
-            description = lib.mdDoc "Errbot log level";
+            description = "Errbot log level";
           };
 
-          admins = mkOption {
-            type = types.listOf types.str;
+          admins = lib.mkOption {
+            type = lib.types.listOf lib.types.str;
             default = [];
-            description = lib.mdDoc "List of identifiers of errbot admins.";
+            description = "List of identifiers of errbot admins.";
           };
 
-          backend = mkOption {
-            type = types.str;
+          backend = lib.mkOption {
+            type = lib.types.str;
             default = "XMPP";
-            description = lib.mdDoc "Errbot backend name.";
+            description = "Errbot backend name.";
           };
 
-          identity = mkOption {
-            type = types.attrs;
-            description = lib.mdDoc "Errbot identity configuration";
+          identity = lib.mkOption {
+            type = lib.types.attrs;
+            description = "Errbot identity configuration";
           };
 
-          extraConfig = mkOption {
-            type = types.lines;
+          extraConfig = lib.mkOption {
+            type = lib.types.lines;
             default = "";
-            description = lib.mdDoc "String to be appended to the config verbatim";
+            description = "String to be appended to the config verbatim";
           };
         };
       });
     };
   };
 
-  config = mkIf (cfg.instances != {}) {
+  config = lib.mkIf (cfg.instances != {}) {
     users.users.errbot = {
       group = "errbot";
       isSystemUser = true;
     };
     users.groups.errbot = {};
 
-    systemd.services = mapAttrs' (name: instanceCfg: nameValuePair "errbot-${name}" (
+    systemd.services = lib.mapAttrs' (name: instanceCfg: lib.nameValuePair "errbot-${name}" (
     let
       dataDir = if instanceCfg.dataDir != null then instanceCfg.dataDir else
         "/var/lib/errbot/${name}";

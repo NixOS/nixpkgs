@@ -13,7 +13,7 @@ grafanaPlugin rec {
     description = "Connects Grafana to ClickHouse";
     license = licenses.asl20;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ moody yuka ];
+    maintainers = with maintainers; [ moody ];
     platforms = attrNames zipHash;
   };
 }

@@ -1,25 +1,25 @@
-{ lib
-, stdenv
-, aocd-example-parser
-, beautifulsoup4
-, buildPythonPackage
-, fetchFromGitHub
-, numpy
-, pebble
-, pook
-, pytest-freezegun
-, pytest-mock
-, pytest-raisin
-, pytest-socket
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
-, requests
-, requests-mock
-, rich
-, setuptools
-, termcolor
-, tzlocal
+{
+  lib,
+  aocd-example-parser,
+  beautifulsoup4,
+  buildPythonPackage,
+  fetchFromGitHub,
+  numpy,
+  pebble,
+  pook,
+  pytest-freezegun,
+  pytest-mock,
+  pytest-raisin,
+  pytest-socket,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
+  requests,
+  requests-mock,
+  rich,
+  setuptools,
+  termcolor,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
@@ -36,9 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-YZvcR97uHceloqwoP+azaBmj3GLusYNbItLIaeJ3QD0=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     aocd-example-parser
@@ -101,9 +99,7 @@ buildPythonPackage rec {
     "test_submit_float_warns"
   ];
 
-  pythonImportsCheck = [
-    "aocd"
-  ];
+  pythonImportsCheck = [ "aocd" ];
 
   meta = with lib; {
     description = "Get your Advent of Code data with a single import statement";

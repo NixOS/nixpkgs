@@ -1,18 +1,19 @@
-{ lib
-, ascii-magic
-, buildPythonPackage
-, fetchFromGitHub
-, oauthlib
-, pillow
-, pytestCheckHook
-, pythonOlder
-, requests
-, setuptools
+{
+  lib,
+  ascii-magic,
+  buildPythonPackage,
+  fetchFromGitHub,
+  oauthlib,
+  pillow,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "weconnect";
-  version = "0.60.2";
+  version = "0.60.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-VM4qCe+VMnfKXioUHTjOeBSniwpq44fvbN1k1jG6puk=";
+    hash = "sha256-vWnqitYGh68PM9IM2qKJG3g0JrVfIA+s9Ngh8jpNJKg=";
   };
 
   postPatch = ''
@@ -35,29 +36,23 @@ buildPythonPackage rec {
       --replace-fail "required_plugins = pytest-cov" ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
     oauthlib
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     Images = [
       ascii-magic
       pillow
     ];
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "weconnect"
-  ];
+  pythonImportsCheck = [ "weconnect" ];
 
   meta = with lib; {
     description = "Python client for the Volkswagen WeConnect Services";

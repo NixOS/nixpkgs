@@ -1,34 +1,29 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "shortuuid";
-  version = "1.0.12";
+  version = "1.0.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w58bNIs8HpsRWpVLM7dsjFItLRd6nSCs27INJPrDzP0=";
+    hash = "sha256-O7nPB/YGJgWEsd9GOZwLh92Edz57JZErfjkeMHl8XnI=";
   };
 
-  build-system = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "shortuuid"
-  ];
+  pythonImportsCheck = [ "shortuuid" ];
 
   meta = with lib; {
     description = "Library to generate concise, unambiguous and URL-safe UUIDs";

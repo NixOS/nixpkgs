@@ -1,32 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, jaraco-classes
-, keyring
-, pytestCheckHook
-, pythonOlder
-, setuptools-scm
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  jaraco-classes,
+  jaraco-context,
+  keyring,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "keyrings-alt";
-  version = "5.0.0";
-  format = "pyproject";
+  version = "5.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    pname = "keyrings.alt";
-    inherit version;
-    hash = "sha256-nURstHu86pD/ouzD6AA6z0FXP8IBv0S0vxO9DhFISCg=";
+  src = fetchFromGitHub {
+    owner = "jaraco";
+    repo = "keyrings.alt";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m/hIXjri3FZ3rPIymiIBy8cKNOwJoj14WjsOyDtcWmU=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-classes
+    jaraco-context
   ];
 
   nativeCheckInputs = [
@@ -34,9 +36,7 @@ buildPythonPackage rec {
     keyring
   ];
 
-  pythonImportsCheck = [
-    "keyrings.alt"
-  ];
+  pythonImportsCheck = [ "keyrings.alt" ];
 
   meta = with lib; {
     description = "Alternate keyring implementations";

@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-duplicates";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "cargo-duplicates";
     rev = "v${version}";
-    hash = "sha256-e0cegK4obUVIJyx5XKF+xicvkRvQwuObwB8tprrJnrw=";
+    hash = "sha256-OwytBecRGizkDC2S92FKAy3/mc4Jg/NwaYIPahfiG6k=";
   };
 
-  cargoHash = "sha256-i1IyHCa/w4DOGlPWjDE4IbVm3s/40DIwjwUGIMTYH4Y=";
+  cargoHash = "sha256-LsdzHCQ4uG6+dwiUoC36VPuqUf8oPlcMHxNgdkvYzu8=";
 
   nativeBuildInputs = [
     curl
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   meta = with lib; {
-    description = "A cargo subcommand for displaying when different versions of a same dependency are pulled in";
+    description = "Cargo subcommand for displaying when different versions of a same dependency are pulled in";
     mainProgram = "cargo-duplicates";
     homepage = "https://github.com/Keruspe/cargo-duplicates";
     license = licenses.mit;

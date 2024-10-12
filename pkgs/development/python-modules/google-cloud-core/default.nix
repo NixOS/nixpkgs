@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-auth
-, grpcio
-, mock
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-auth,
+  grpcio,
+  mock,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,31 +27,27 @@ buildPythonPackage rec {
     google-api-core
   ];
 
-  passthru.optional-dependencies = {
-    grpc = [
-      grpcio
-    ];
+  optional-dependencies = {
+    grpc = [ grpcio ];
   };
 
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.grpc;
+  ] ++ optional-dependencies.grpc;
 
   # prevent google directory from shadowing google imports
   preCheck = ''
     rm -r google
   '';
 
-  pythonImportsCheck = [
-    "google.cloud"
-  ];
+  pythonImportsCheck = [ "google.cloud" ];
 
   meta = with lib; {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/googleapis/python-cloud-core";
     changelog = "https://github.com/googleapis/python-cloud-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

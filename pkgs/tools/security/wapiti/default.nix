@@ -1,63 +1,61 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.1.8";
-  format = "pyproject";
+  version = "3.2.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
-    repo = pname;
+    repo = "wapiti";
     rev = "refs/tags/${version}";
-    hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
+    hash = "sha256-Ekh31MXqxY6iSyQRX0YZ0Tl7DFhYqGtOepYS/VObZc0=";
   };
 
-  postPatch = ''
-    # Ignore pinned versions
-    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" pyproject.toml
+  pythonRelaxDeps = true;
 
-    # Remove code coverage checking
-    substituteInPlace pyproject.toml \
-      --replace "--cov --cov-report=xml" ""
-  '';
+  build-system = with python3.pkgs; [ setuptools ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-    wheel
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    aiocache
-    aiohttp
-    aiosqlite
-    arsenic
-    beautifulsoup4
-    browser-cookie3
-    dnspython
-    h11
-    httpcore
-    httpx
-    httpx-ntlm
-    loguru
-    mako
-    markupsafe
-    mitmproxy
-    pyasn1
-    six
-    sqlalchemy
-    tld
-    yaswfp
-  ] ++ httpx.optional-dependencies.brotli
-  ++ httpx.optional-dependencies.socks;
+  dependencies =
+    with python3.pkgs;
+    [
+      aiocache
+      aiohttp
+      aiosqlite
+      arsenic
+      beautifulsoup4
+      browser-cookie3
+      dnspython
+      h11
+      httpcore
+      httpx
+      httpx-ntlm
+      humanize
+      loguru
+      mako
+      markupsafe
+      mitmproxy
+      prance
+      pyasn1
+      six
+      sqlalchemy
+      tld
+      yaswfp
+    ]
+    ++ httpx.optional-dependencies.brotli
+    ++ httpx.optional-dependencies.socks
+    ++ prance.optional-dependencies.osv;
 
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
@@ -102,6 +100,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_save_and_restore_state"
     "test_script"
     "test_ssrf"
+    "test_swagger_parser"
     "test_tag_name_escape"
     "test_timeout"
     "test_title_false_positive"
@@ -123,6 +122,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_cookies"
     "test_fallback_to_html_injection"
     "test_loknop_lfi_to_rce"
+    "test_open_redirect"
     "test_redirect"
     "test_timesql"
     "test_xss_inside_href_link"
@@ -138,9 +138,7 @@ python3.pkgs.buildPythonApplication rec {
     "tests/attack/test_mod_ssl.py"
   ];
 
-  pythonImportsCheck = [
-    "wapitiCore"
-  ];
+  pythonImportsCheck = [ "wapitiCore" ];
 
   meta = with lib; {
     description = "Web application vulnerability scanner";
@@ -154,7 +152,7 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://wapiti-scanner.github.io/";
     changelog = "https://github.com/wapiti-scanner/wapiti/blob/${version}/doc/ChangeLog_Wapiti";
-    license = with licenses; [ gpl2Only ];
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
   };
 }

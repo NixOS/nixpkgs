@@ -5,14 +5,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "whatsapp-chat-exporter";
-  version = "0.9.7";
+  version = "0.10.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "KnugiHK";
     repo = "Whatsapp-Chat-Exporter";
     rev = "refs/tags/${version}";
-    hash = "sha256-ySKZM7zmPKb+AHAK7IDpn07qinwz0YY8btb4KWGfy7w=";
+    hash = "sha256-W66qEQa7jlgd8v6dsIVAz6gmWsYr3SMqyhF2KIwC6hI=";
   };
 
   propagatedBuildInputs = with python3Packages; [

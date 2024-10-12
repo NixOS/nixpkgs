@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A GPU switching utility, mostly for ASUS laptops";
+    description = "GPU switching utility, mostly for ASUS laptops";
     homepage = "https://gitlab.com/asus-linux/supergfxctl";
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];

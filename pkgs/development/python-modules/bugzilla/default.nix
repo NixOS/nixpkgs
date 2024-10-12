@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, requests
-, pytestCheckHook
-, glibcLocalesUtf8
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  requests,
+  pytestCheckHook,
+  glibcLocalesUtf8,
 }:
 
 buildPythonPackage rec {
@@ -20,7 +21,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests ];
 
   nativeCheckInputs = [
-    pytestCheckHook glibcLocalesUtf8
+    pytestCheckHook
+    glibcLocalesUtf8
   ];
 
   preCheck = ''

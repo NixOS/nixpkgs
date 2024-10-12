@@ -1,13 +1,13 @@
-{ buildPythonPackage
-, fetchFromGitHub
-, lib
-, commandlines
-, unittestCheckHook
-, pexpect
-, naked
-, nix-update-script
-, setuptools
-, wheel
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  commandlines,
+  unittestCheckHook,
+  pexpect,
+  naked,
+  setuptools,
+  wheel,
 }:
 
 buildPythonPackage rec {
@@ -24,9 +24,16 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ commandlines ];
 
-  nativeBuildInputs = [ setuptools wheel ];
+  nativeBuildInputs = [
+    setuptools
+    wheel
+  ];
 
-  nativeCheckInputs = [ unittestCheckHook pexpect naked ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    pexpect
+    naked
+  ];
 
   preCheck = "cd tests";
 

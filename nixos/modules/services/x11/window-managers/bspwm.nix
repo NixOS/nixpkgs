@@ -9,7 +9,7 @@ in
 {
   options = {
     services.xserver.windowManager.bspwm = {
-      enable = mkEnableOption (lib.mdDoc "bspwm");
+      enable = mkEnableOption "bspwm";
 
       package = mkPackageOption pkgs "bspwm" {
         example = "bspwm-unstable";
@@ -18,7 +18,7 @@ in
         type        = with types; nullOr path;
         example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/bspwmrc"'';
         default     = null;
-        description = lib.mdDoc ''
+        description = ''
           Path to the bspwm configuration file.
           If null, $HOME/.config/bspwm/bspwmrc will be used.
         '';
@@ -32,7 +32,7 @@ in
           type        = with types; nullOr path;
           example     = literalExpression ''"''${pkgs.bspwm}/share/doc/bspwm/examples/sxhkdrc"'';
           default     = null;
-          description = lib.mdDoc ''
+          description = ''
             Path to the sxhkd configuration file.
             If null, $HOME/.config/sxhkd/sxhkdrc will be used.
           '';

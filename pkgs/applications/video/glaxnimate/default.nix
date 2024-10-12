@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     owner = "mattbas";
     repo = "${pname}";
     rev = version;
-    sha256 = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
+    hash = "sha256-8oHJCQdP2xxSSDM0MDkSrG89WgCtMKm1AKlddnq3gig=";
     fetchSubmodules = true;
   };
 
@@ -72,14 +72,14 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
-  passthru.tests.version = lib.optionalAttrs stdenv.isLinux (testers.testVersion {
+  passthru.tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (testers.testVersion {
     package = glaxnimate;
     command = "${xvfb-run}/bin/xvfb-run glaxnimate --version";
   });
 
   meta = with lib; {
     homepage = "https://gitlab.com/mattbas/glaxnimate";
-    description = "Simple vector animation program.";
+    description = "Simple vector animation program";
     license = licenses.gpl3;
     maintainers = with maintainers; [ tobiasBora ];
     mainProgram = "glaxnimate";

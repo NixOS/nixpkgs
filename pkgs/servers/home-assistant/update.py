@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=channel:nixpkgs-unstable -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp packaging ])" -p git nurl nodePackages.pyright ruff isort
+#!nix-shell -I nixpkgs=channel:nixpkgs-unstable -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp packaging ])" -p git nurl pyright ruff isort
 
 import asyncio
 import json
@@ -222,7 +222,7 @@ class HomeAssistant:
 
     async def update_components(self):
         await run_async([
-            f"{ROOT}/pkgs/servers/home-assistant/parse-requirements.py"
+            f"{ROOT}/pkgs/servers/home-assistant/update-component-packages.py"
         ])
 
 

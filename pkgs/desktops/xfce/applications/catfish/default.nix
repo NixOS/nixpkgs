@@ -11,7 +11,7 @@
 , gtk3
 , python3Packages
 , xfconf
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -32,7 +32,7 @@ python3Packages.buildPythonApplication rec {
     which
     intltool
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [

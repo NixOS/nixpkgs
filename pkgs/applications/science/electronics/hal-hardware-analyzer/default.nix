@@ -38,7 +38,7 @@ let
         hash = "sha256-adU5SctH+H54UaAmr5BZInytD3wjUzLtQbCwngAWs4o=";
       })
     ];
-    postPatch = prev.postPatch + lib.optionalString stdenv.isAarch64 ''
+    postPatch = prev.postPatch + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       # https://github.com/igraph/igraph/issues/1694
       substituteInPlace tests/CMakeLists.txt \
         --replace "igraph_scg_grouping3" "" \
@@ -136,14 +136,14 @@ in stdenv.mkDerivation rec {
   cmakeBuildType = "MinSizeRel";
 
   # some plugins depend on other plugins and need to be able to load them
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     find $out/lib/hal_plugins -name '*.so*' | while read -r f ; do
       patchelf --set-rpath "$(patchelf --print-rpath "$f"):$out/lib/hal_plugins" "$f"
     done
   '';
 
   meta = with lib; {
-    description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
+    description = "Comprehensive reverse engineering and manipulation framework for gate-level netlists";
     mainProgram = "hal";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;

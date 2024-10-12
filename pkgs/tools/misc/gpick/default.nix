@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
-, wrapGAppsHook
+, wrapGAppsHook3
 , boost
 , pkg-config
 , gtk3
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook3 ];
   buildInputs = [ boost gtk3 ragel lua ];
 
   meta = with lib; {

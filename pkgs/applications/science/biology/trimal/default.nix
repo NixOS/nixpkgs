@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "trimal";
-  version = "1.4.1";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "scapella";
     rev = "v${version}";
-    sha256 = "0isc7s3514di4z953xq53ncjkbi650sh4q9yyw5aag1n9hqnh7k0";
+    sha256 = "sha256-6GXirih7nY0eD2XS8aplLcYf53EeLuae+ewdUgBiKQQ=";
   };
 
   postUnpack = ''
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
+    description = "Tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
     license = licenses.gpl3;
     platforms = platforms.linux;
     homepage = "http://trimal.cgenomics.org";

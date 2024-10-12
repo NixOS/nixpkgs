@@ -33,14 +33,14 @@ let
   }.${system} or throwSystem;
 
   hash = {
-    x86_64-linux = "sha256-GcFds6PCEuvZ7oIfWMEkRIWMWU/jmCsj4zCkMe3+QM0=";
+    x86_64-linux = "sha256-0Cdu1ntG8ZPHbLOIFvVFO6Dj8ZBHl4Rb+MM46luRKj4=";
   }.${system} or throwSystem;
 
   displayname = "XPipe";
 
 in stdenvNoCC.mkDerivation rec {
   pname = "xpipe";
-  version = "8.5";
+  version = "12.0";
 
   src = fetchzip {
     url = "https://github.com/xpipe-io/xpipe/releases/download/${version}/xpipe-portable-linux-${arch}.tar.gz";
@@ -118,7 +118,7 @@ in stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A cross-platform shell connection hub and remote file manager";
+    description = "Cross-platform shell connection hub and remote file manager";
     homepage = "https://github.com/xpipe-io/${pname}";
     downloadPage = "https://github.com/xpipe-io/${pname}/releases/latest";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, pythonOlder
-, setuptools
-, zope-interface
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  pythonOlder,
+  setuptools,
+  zope-interface,
 }:
 
 buildPythonPackage rec {
@@ -19,24 +20,20 @@ buildPythonPackage rec {
     hash = "sha256-93fVbCqy/PQNAmraHmfx45z2MY497rmhzVCH/MsfKG4=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ zope-interface ];
 
   # circular deps
   doCheck = false;
 
-  pythonImportsCheck = [
-    "zope.proxy"
-  ];
+  pythonImportsCheck = [ "zope.proxy" ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.proxy";
     description = "Generic Transparent Proxies";
     changelog = "https://github.com/zopefoundation/zope.proxy/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

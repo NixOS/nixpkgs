@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "2.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    hash = "sha256-TjGvY3eqpF+DDwatT7A78flyPcTkcLHQ1xcg+MKgCoE=";
+    hash = "sha256-4HfwNAkIhk1yC/oSxZ30xilzUM5/22nzbUSqTjcW5Ng=";
   };
 
   nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
@@ -22,7 +22,7 @@ mkDerivation rec {
   passthru.tests = { inherit (nixosTests) agda; };
   meta = with lib; {
     homepage = "https://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
-    description = "A standard library for use with the Agda compiler";
+    description = "Standard library for use with the Agda compiler";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with maintainers; [ jwiegley mudri alexarice turion ];

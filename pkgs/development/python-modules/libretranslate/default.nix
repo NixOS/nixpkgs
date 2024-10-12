@@ -1,48 +1,47 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonRelaxDepsHook
-, pytestCheckHook
-, hatchling
-, argostranslate
-, flask
-, flask-swagger
-, flask-swagger-ui
-, flask-limiter
-, flask-babel
-, flask-session
-, waitress
-, expiringdict
-, langdetect
-, lexilang
-, ltpycld2
-, morfessor
-, appdirs
-, apscheduler
-, translatehtml
-, argos-translate-files
-, requests
-, redis
-, prometheus-client
-, polib
-, python
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  hatchling,
+  argostranslate,
+  flask,
+  flask-swagger,
+  flask-swagger-ui,
+  flask-limiter,
+  flask-babel,
+  flask-session,
+  waitress,
+  expiringdict,
+  langdetect,
+  lexilang,
+  ltpycld2,
+  morfessor,
+  appdirs,
+  apscheduler,
+  translatehtml,
+  argos-translate-files,
+  requests,
+  redis,
+  prometheus-client,
+  polib,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "libretranslate";
-  version = "1.5.6";
+  version = "1.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-43VnxgtapMRKyXxqsvBgSMUxvpbLI+iOfW3FA0/POpE=";
+    hash = "sha256-c/MbO8KST2QnP32Y2FfXjJcfh6O7hqQFcZOn1U0FqRM=";
   };
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
@@ -79,9 +78,7 @@ buildPythonPackage rec {
 
   doCheck = false; # needs network access
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # required for import check to work (argostranslate)
   env.HOME = "/tmp";

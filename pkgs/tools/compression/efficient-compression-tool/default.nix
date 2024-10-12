@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "fhanau";
     repo = "Efficient-Compression-Tool";
     rev = "v${version}";
-    sha256 = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
+    hash = "sha256-TSV5QXf6GuHAwQrde3Zo9MA1rtpAhtRg0UTzMkBnHB8=";
     fetchSubmodules = true;
   };
 

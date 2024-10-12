@@ -26,10 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ boost libcpr ]
-    ++ lib.optionals finalAttrs.doCheck [ catch2_3 trompeloeil ];
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [ catch2_3 trompeloeil ];
 
   cmakeFlags = [
-    (lib.cmakeBool "INFLUXCXX_TESTING" finalAttrs.doCheck)
+    (lib.cmakeBool "INFLUXCXX_TESTING" finalAttrs.finalPackage.doCheck)
     (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;BoostSupportTest") # requires network access
   ];
 

@@ -1,14 +1,15 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sybil";
   version = "6.0.3";
-  pyproject =  true;
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -19,22 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-SqAP+hj+pivsuGxx9/TvmfVrfrLSWQRYIjKh0ui0AVc=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # Circular dependency with testfixtures
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sybil"
-  ];
+  pythonImportsCheck = [ "sybil" ];
 
   meta = with lib; {
     description = "Automated testing for the examples in your documentation";
     homepage = "https://github.com/cjw296/sybil";
     changelog = "https://github.com/simplistix/sybil/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

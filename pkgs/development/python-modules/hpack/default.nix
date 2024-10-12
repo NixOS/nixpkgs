@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, hypothesis
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  hypothesis,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -30,6 +31,6 @@ buildPythonPackage rec {
     description = "Pure-Python HPACK header compression";
     homepage = "https://github.com/python-hyper/hpack";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

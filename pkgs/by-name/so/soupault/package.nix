@@ -1,17 +1,15 @@
 { lib
+, darwin
 , fetchzip
 , ocamlPackages
 , soupault
+, stdenv
 , testers
 }:
 
-let
+ocamlPackages.buildDunePackage rec {
   pname = "soupault";
-
-  version = "4.9.0";
-in
-ocamlPackages.buildDunePackage {
-  inherit pname version;
+  version = "4.11.0";
 
   minimalOCamlVersion = "4.13";
 
@@ -20,8 +18,10 @@ ocamlPackages.buildDunePackage {
       "https://github.com/PataphysicalSociety/soupault/archive/${version}.tar.gz"
       "https://codeberg.org/PataphysicalSociety/soupault/archive/${version}.tar.gz"
     ];
-    hash = "sha256-vGTJUbAeYs/EYFykNSmCc4c9G66/Lz3BsUYnZQ8feFo=";
+    hash = "sha256-UABbrNNcNaN9NgtAjCs4HUoNXMaK4QvCuWERuEnMG6I=";
   };
+
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ darwin.sigtool ];
 
   buildInputs = with ocamlPackages; [
     base64
@@ -51,7 +51,7 @@ ocamlPackages.buildDunePackage {
   };
 
   meta = {
-    description = "A tool that helps you create and manage static websites";
+    description = "Tool that helps you create and manage static websites";
     homepage = "https://soupault.app/";
     changelog = "https://codeberg.org/PataphysicalSociety/soupault/src/branch/main/CHANGELOG.md";
     license = lib.licenses.mit;

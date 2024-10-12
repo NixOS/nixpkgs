@@ -1,45 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6Packages,
+  dtk6core,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dde-application-manager";
-  version = "1.1.8";
+  version = "1.2.15";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ImyXSyQWMFLvmtx9mBxrr4/IFOgOH1BW650mbiwFh5U=";
+    hash = "sha256-9WKKM3SAMgW+UL0DnzDFqA+HHi7euF/yyTyKSbrIgV4=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "set-more-scale-envs-to-application.patch";
-      url = "https://github.com/linuxdeepin/dde-application-manager/commit/a1f8ad276d88c81249dd3468779862186a180238.patch";
-      hash = "sha256-/iKg6NZZomNEKYsZCZP1IfNr7ZAXiA9RVBnyf+M/f4w=";
-    })
-    (fetchpatch {
-      name = "support-execSearchPath-to-prevent-systemd-from-finding-binaries.patch";
-      url = "https://github.com/linuxdeepin/dde-application-manager/commit/2eaca7c6b8b841d571e9d3510f9f14c321cd976e.patch";
-      hash = "sha256-GWUIv4NIBLQpnY4GcjLShMjiXAfPi3zKdol3whchC/Y=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    qt6Packages.qtbase
+    dtk6core
   ];
 
   meta = with lib; {

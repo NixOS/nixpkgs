@@ -1,62 +1,69 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, libxkbcommon
-, openssl
-, pkg-config
-, rustPlatform
-, vulkan-loader
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  libxkbcommon,
+  makeWrapper,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  vulkan-loader,
+  wayland,
+  xorg,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.5";
+  version = "2024.11";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     rev = "refs/tags/${version}";
-    hash = "sha256-F/yQYLYrq3MZFV6igQe4sQi84ChIKCCPdS5151nD6hs=";
+    hash = "sha256-kmdsC0SQoL5gppzBhnF0LfOFj14zeI3C6SdCBiVoKj0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "iced-0.13.0-dev" = "sha256-8L0AoHPwRUeCiJK/N0NTs1Nl4BX0wbM7SLgundhvra0=";
-      "winit-0.29.10" = "sha256-YoXJEvEhMvk3pK5EbXceVFeJEJLL6KTjiw0kBJxgHIE=";
+      "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
+      "glyphon-0.5.0" = "sha256-OGXLqiMjaZ7gR5ANkuCgkfn/I7c/4h9SRE6MZZMW3m4=";
+      "iced-0.13.0-dev" = "sha256-XQUaI16lGEMGFxqK3UNd8jQfUiBzomxlT/I+yeZncFo=";
     };
   };
 
   nativeBuildInputs = [
     copyDesktopItems
+    makeWrapper
     pkg-config
   ];
 
-  buildInputs = [
-    libxkbcommon
-    openssl
-    vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Metal
-    darwin.apple_sdk.frameworks.QuartzCore
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      libxkbcommon
+      openssl
+      vulkan-loader
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.Metal
+      darwin.apple_sdk.frameworks.QuartzCore
+      darwin.apple_sdk.frameworks.Security
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -66,25 +73,50 @@ rustPlatform.buildRustPackage rec {
       icon = "org.squidowl.halloy";
       exec = pname;
       terminal = false;
-      mimeTypes = [ "x-scheme-handler/irc" "x-scheme-handler/ircs" ];
-      categories = [ "Network" "IRCClient" ];
-      keywords = [ "IM" "Chat" ];
+      mimeTypes = [
+        "x-scheme-handler/irc"
+        "x-scheme-handler/ircs"
+      ];
+      categories = [
+        "Network"
+        "IRCClient"
+      ];
+      keywords = [
+        "IM"
+        "Chat"
+      ];
       startupWMClass = "org.squidowl.halloy";
     })
   ];
 
-  postFixup = lib.optional stdenv.isLinux (
+  postFixup = lib.optional stdenv.hostPlatform.isLinux (
     let
-      rpathWayland = lib.makeLibraryPath [ wayland vulkan-loader libxkbcommon ];
+      rpathWayland = lib.makeLibraryPath [
+        wayland
+        vulkan-loader
+        libxkbcommon
+      ];
     in
     ''
       rpath=$(patchelf --print-rpath $out/bin/halloy)
       patchelf --set-rpath "$rpath:${rpathWayland}" $out/bin/halloy
-    '');
+    ''
+  );
 
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    APP_DIR="$out/Applications/Halloy.app/Contents"
+
+    mkdir -p "$APP_DIR/MacOS"
+    cp -r ${src}/assets/macos/Halloy.app/Contents/* "$APP_DIR"
+
+    substituteInPlace "$APP_DIR/Info.plist" \
+      --replace-fail "{{ VERSION }}" "${version}" \
+      --replace-fail "{{ BUILD }}" "${version}-nixpkgs"
+
+    makeWrapper "$out/bin/halloy" "$APP_DIR/MacOS/halloy"
   '';
 
   meta = with lib; {
@@ -92,7 +124,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/squidowl/halloy";
     changelog = "https://github.com/squidowl/halloy/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [ fab iivusly ];
     mainProgram = "halloy";
   };
 }

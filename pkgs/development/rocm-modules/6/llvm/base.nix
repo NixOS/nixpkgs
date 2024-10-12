@@ -54,8 +54,8 @@ in
 
 let
   llvmNativeTarget =
-    if stdenv.isx86_64 then "X86"
-    else if stdenv.isAarch64 then "AArch64"
+    if stdenv.hostPlatform.isx86_64 then "X86"
+    else if stdenv.hostPlatform.isAarch64 then "AArch64"
     else throw "Unsupported ROCm LLVM platform";
   inferNativeTarget = t: if t == "NATIVE" then llvmNativeTarget else t;
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
@@ -86,7 +86,7 @@ in stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     git
-    python3Packages.python
+    (python3Packages.python.withPackages (p: [ p.setuptools ]))
   ] ++ lib.optionals (buildDocs || buildMan) [
     doxygen
     sphinx
@@ -133,7 +133,14 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DLLVM_EXTERNAL_LIT=${lit}/bin/.lit-wrapped"
   ] ++ extraCMakeFlags;
 
-  postPatch = lib.optionalString finalAttrs.passthru.isLLVM ''
+  prePatch = ''
+    cd ../
+    chmod -R u+w .
+  '';
+
+  postPatch = ''
+    cd ${targetDir}
+  '' + lib.optionalString finalAttrs.passthru.isLLVM ''
     patchShebangs lib/OffloadArch/make_generated_offload_arch_h.sh
   '' + lib.optionalString (buildTests && finalAttrs.passthru.isLLVM) ''
     # FileSystem permissions tests fail with various special bits
@@ -141,7 +148,7 @@ in stdenv.mkDerivation (finalAttrs: {
     rm unittests/Support/Path.cpp
 
     substituteInPlace unittests/Support/CMakeLists.txt \
-      --replace "Path.cpp" ""
+      --replace-fail "Path.cpp" ""
   '' + extraPostPatch;
 
   doCheck = buildTests;

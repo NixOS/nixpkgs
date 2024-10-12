@@ -10,11 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bloop";
-  version = "1.5.15";
+  version = "2.0.3";
 
   platform =
-    if stdenv.isLinux && stdenv.isx86_64 then "x86_64-pc-linux"
-    else if stdenv.isDarwin && stdenv.isx86_64 then "x86_64-apple-darwin"
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "x86_64-pc-linux"
+    else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "x86_64-apple-darwin"
+    else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "aarch64-apple-darwin"
     else throw "unsupported platform";
 
   bloop-bash = fetchurl {
@@ -35,14 +36,15 @@ stdenv.mkDerivation rec {
   bloop-binary = fetchurl rec {
     url = "https://github.com/scalacenter/bloop/releases/download/v${version}/bloop-${platform}";
     sha256 =
-      if stdenv.isLinux && stdenv.isx86_64 then "sha256-bC43GBIGxelSx++I1ElPd8twrr5nDaZHC2G0OCsx5xQ="
-      else if stdenv.isDarwin && stdenv.isx86_64 then "sha256-lgWXdhDjE8lIzbUkWFJV3k+muUZaSpsc9n6PuuXv1hc="
+      if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64 then "sha256-aEsEXGaKi+wziNAuuX3s/LWB6/fIjon9NF3w9c/lTUE="
+      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then "sha256-dEVWDwFVsg1eqrAAfuuR5FUFyAt44ev7UP7zxByzW14="
+      else if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 then "sha256-0rYdivIas6ECwGPm3bACMzHhS+yxQNLtEPxPQAXkSg0="
       else throw "unsupported platform";
   };
 
   dontUnpack = true;
   nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optional stdenv.isLinux autoPatchelfHook;
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs = [ stdenv.cc.cc.lib zlib ];
   propagatedBuildInputs = [ jre ];
 
@@ -65,9 +67,9 @@ stdenv.mkDerivation rec {
     homepage = "https://scalacenter.github.io/bloop/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    description = "A Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
+    description = "Scala build server and command-line tool to make the compile and test developer workflows fast and productive in a build-tool-agnostic way";
     mainProgram = "bloop";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ kubukoz tomahna ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [ agilesteel kubukoz tomahna ];
   };
 }

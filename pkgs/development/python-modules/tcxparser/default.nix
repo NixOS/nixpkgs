@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, lxml
-, pytestCheckHook
-, python-dateutil
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  lxml,
+  pytestCheckHook,
+  python-dateutil,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -26,13 +27,9 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "tcxparser"
-  ];
+  pythonImportsCheck = [ "tcxparser" ];
 
   meta = with lib; {
     description = "Simple parser for Garmin TCX files";
@@ -41,4 +38,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ firefly-cpp ];
   };
 }
-

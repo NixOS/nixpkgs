@@ -1,5 +1,4 @@
-{ lib
-, lua
+{ lua
 , makeSetupHook
 , makeWrapper
 }:
@@ -11,6 +10,4 @@ makeSetupHook {
   propagatedBuildInputs = [ makeWrapper ];
   substitutions.executable = lua.interpreter;
   substitutions.lua = lua;
-  substitutions.LuaPathSearchPaths = lib.escapeShellArgs lua.LuaPathSearchPaths;
-  substitutions.LuaCPathSearchPaths = lib.escapeShellArgs lua.LuaPathSearchPaths;
 } ./wrap.sh

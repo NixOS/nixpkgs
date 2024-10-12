@@ -1,12 +1,12 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook, glib }:
+{ lib, stdenv, makeDesktopItem, fetchurl, jdk21, wrapGAppsHook3, glib }:
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "5.2.2";
+  version = "5.2.6";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam_${version}-1_amd64.deb";
-    hash = "sha256-+Hc3f8rf0ymddIu52vLtdqNZO4ODW9JnPlyneSZt/OQ=";
+    hash = "sha256-u9ldHJkY3/VfykBFgVY8Ah/uYNpTIkLyvPY7zfLWN38=";
   };
 
   unpackPhase = ''
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     tar xvf data.tar.gz
   '';
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsHook3 ];
   buildInputs = [ glib ];
 
   preFixup = ''

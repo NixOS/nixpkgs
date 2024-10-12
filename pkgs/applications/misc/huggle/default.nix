@@ -5,7 +5,6 @@
 , ncurses
 , which
 , cmake
-, unzip
 , wrapQtAppsHook
 , qtwebengine
 , yaml-cpp

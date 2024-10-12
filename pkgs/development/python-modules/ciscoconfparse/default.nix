@@ -1,34 +1,32 @@
-{ lib
-, buildPythonPackage
-, deprecat
-, dnspython
-, fetchFromGitHub
-, loguru
-, passlib
-, poetry-core
-, pytestCheckHook
-, pythonOlder
-, pythonRelaxDepsHook
-, toml
+{
+  lib,
+  buildPythonPackage,
+  deprecat,
+  dnspython,
+  fetchFromGitHub,
+  loguru,
+  passlib,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
+  toml,
 }:
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
   version = "1.7.24";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mpenning";
-    repo = pname;
+    repo = "ciscoconfparse";
     rev = "refs/tags/${version}";
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 
-  pythonRelaxDeps = [
-    "loguru"
-  ];
+  pythonRelaxDeps = [ "loguru" ];
 
   postPatch = ''
     # The line below is in the [build-system] section, which is invalid and
@@ -37,17 +35,14 @@ buildPythonPackage rec {
     sed -i '/requires-python/d' pyproject.toml
 
     substituteInPlace pyproject.toml \
-      --replace '"poetry>=1.3.2",' ""
+      --replace-fail '"poetry>=1.3.2",' ""
 
     patchShebangs tests
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     passlib
     deprecat
     dnspython
@@ -55,13 +50,9 @@ buildPythonPackage rec {
     toml
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [
-    "tests/parse_test.py"
-  ];
+  disabledTestPaths = [ "tests/parse_test.py" ];
 
   disabledTests = [
     # Tests require network access
@@ -71,9 +62,7 @@ buildPythonPackage rec {
     "testParse_valid_filepath"
   ];
 
-  pythonImportsCheck = [
-    "ciscoconfparse"
-  ];
+  pythonImportsCheck = [ "ciscoconfparse" ];
 
   meta = with lib; {
     description = "Module to parse, audit, query, build, and modify Cisco IOS-style configurations";

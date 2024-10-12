@@ -11,18 +11,23 @@
 
 stdenv.mkDerivation rec {
   pname = "edencommon";
-  version = "2024.01.22.00";
+  version = "2024.03.11.00";
 
   src = fetchFromGitHub {
     owner = "facebookexperimental";
     repo = "edencommon";
     rev = "v${version}";
-    sha256 = "sha256-KY0vXptzOEJLDjHvGd3T5oiCCvggND2bPBzvll+YBo4=";
+    sha256 = "sha256-1z4QicS98juv4bUEbHBkCjVJHEhnoJyLYp4zMHmDbMg=";
   };
+
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Test discovery timeout is bizarrely flaky on `x86_64-darwin`
+    ./increase-test-discovery-timeout.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -35,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
+    description = "Shared library for Meta's source control filesystem tools (EdenFS and Watchman)";
     homepage = "https://github.com/facebookexperimental/edencommon";
     license = licenses.mit;
     platforms = platforms.unix;

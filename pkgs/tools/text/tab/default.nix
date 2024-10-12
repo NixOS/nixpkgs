@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ python3 ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkTarget = "test";
 

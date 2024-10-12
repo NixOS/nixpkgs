@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SU5HLAFA7IHnVhsmVtxskteeKKIEvvVSqHIeEk5BkfA=";
   };
 
-  cargoSha256 = "sha256-RHD2/Uvj8NWpZ+xK16xTN5K/hDWYhwHnu2E5NslGFQI=";
+  cargoHash = "sha256-RHD2/Uvj8NWpZ+xK16xTN5K/hDWYhwHnu2E5NslGFQI=";
 
   # https://github.com/rschmitt/heatseeker/issues/42
   # I've suggested using `/usr/bin/env stty`, but doing that isn't quite as simple
@@ -25,10 +25,10 @@ rustPlatform.buildRustPackage rec {
   TRAVIS = "true";
 
   meta = with lib; {
-    description = "A general-purpose fuzzy selector";
+    description = "General-purpose fuzzy selector";
     homepage = "https://github.com/rschmitt/heatseeker";
     license = licenses.mit;
-    maintainers = [ maintainers.michaelpj ];
+    maintainers = [ ];
     mainProgram = "hs";
     platforms = platforms.unix;
   };

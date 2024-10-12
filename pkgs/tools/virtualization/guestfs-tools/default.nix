@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     description = "Extra tools for accessing and modifying virtual machine disk images";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     homepage = "https://libguestfs.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

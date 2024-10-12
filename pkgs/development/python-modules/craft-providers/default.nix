@@ -1,27 +1,27 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, nix-update-script
-, packaging
-, platformdirs
-, pydantic_1
-, pyyaml
-, requests-unixsocket
-, setuptools
-, setuptools-scm
-, urllib3
-, pytest-check
-, pytest-mock
-, pytestCheckHook
-, responses
-, freezegun
-, pytest-subprocess
-, pytest-logdog
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  nix-update-script,
+  packaging,
+  platformdirs,
+  pydantic,
+  pyyaml,
+  requests-unixsocket,
+  setuptools-scm,
+  urllib3,
+  pytest-check,
+  pytest-mock,
+  pytestCheckHook,
+  responses,
+  freezegun,
+  pytest-subprocess,
+  pytest-logdog,
 }:
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "1.23.0";
+  version = "2.0.3";
 
   pyproject = true;
 
@@ -29,10 +29,15 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     rev = "refs/tags/${version}";
-    hash = "sha256-9ZoNgpuGytwozRsw0wnS3d2UBOIsh3VI/uzB1RD2Zac=";
+    hash = "sha256-DTUXT5vFIDI06oxka3diWJ5E5oqiX6GXB4ivq6+VrDk=";
   };
 
   patches = [
+    # This lib will try to inject snaps *from the host system* into the build
+    # system. This patch short-circuits that logic and ensures that snaps are
+    # installed on the build system from the snap store - because there is no
+    # snapd on NixOS hosts that can be used for the injection. This patch will
+    # likely never be accepted upstream.
     ./inject-snaps.patch
   ];
 
@@ -46,27 +51,24 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==67.8.0" "setuptools" \
+      --replace-fail "setuptools==73.0.1" "setuptools" \
       --replace-fail "urllib3<2" "urllib3"
   '';
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  pythonRelaxDeps = [ "requests" ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     packaging
     platformdirs
-    pydantic_1
+    pydantic
     pyyaml
     requests-unixsocket
     urllib3
   ];
 
-  pythonImportsCheck = [
-    "craft_providers"
-  ];
+  pythonImportsCheck = [ "craft_providers" ];
 
   nativeCheckInputs = [
     freezegun

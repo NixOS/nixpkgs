@@ -35,14 +35,11 @@ let
   cfg = config.services.netbird;
 in
 {
-  meta.maintainers = with maintainers; [
-    misuzu
-    thubrecht
-  ];
+  meta.maintainers = with maintainers; [ ];
   meta.doc = ./netbird.md;
 
   options.services.netbird = {
-    enable = mkEnableOption (lib.mdDoc "Netbird daemon");
+    enable = mkEnableOption "Netbird daemon";
     package = mkPackageOption pkgs "netbird" { };
 
     tunnels = mkOption {

@@ -1,93 +1,82 @@
-{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2 }:
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, icu73, fetchpatch2, config }:
 
-rec {
-  thunderbird = thunderbird-115;
+let
+  icu73' = icu73.overrideAttrs (attrs: {
+    # standardize vtzone output
+    # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
+    patches = attrs.patches ++ [(fetchpatch2 {
+      url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
+      stripLen = 3;
+      hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
+    })];
+  });
 
-  thunderbird-102 = (buildMozillaMach rec {
+  common = { version, sha512, updateScript }: (buildMozillaMach rec {
     pname = "thunderbird";
-    version = "102.14.0";
+    inherit version updateScript;
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      hash = "sha512-SuPyFoM67FVCH4J9VbwbX8LwrU/v7LJ3JKW+MxjDUd8k0wpIl7kk5zPtLjmVvihLbRNQSdRgARQ/sclh/vwYMA==";
+      inherit sha512;
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
       ./no-buildconfig.patch
     ];
 
+    extraPassthru = {
+      icu73 = icu73';
+    };
+
     meta = with lib; {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
-      description = "A full-featured e-mail client";
+      description = "Full-featured e-mail client";
       homepage = "https://thunderbird.net/";
       mainProgram = "thunderbird";
-      maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
+      maintainers = with maintainers; [ lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
       broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
                                              # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
       license = licenses.mpl20;
-      knownVulnerabilities = [ "Thunderbird 102 support has ended" ];
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbird-unwrapped";
-      versionPrefix = "102";
     };
   }).override {
     geolocationSupport = false;
     webrtcSupport = false;
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+
+    icu73 = icu73';
   };
 
-  thunderbird-115 = (buildMozillaMach rec {
-    pname = "thunderbird";
-    version = "115.9.0";
-    application = "comm/mail";
-    applicationName = "Mozilla Thunderbird";
-    binaryName = pname;
-    src = fetchurl {
-      url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
-      sha512 = "8ff0bed6e6d7f337ebae09011a10b59343ae7a8355ed1da2d72ec0d4218010adfae78e42565e5b784df26cef4702f313dc9616ac5ca5530fb772d77bdf7f2ea4";
-    };
-    extraPatches = [
-      # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
-      ./no-buildconfig-115.patch
-    ];
+in rec {
+  thunderbird = thunderbird-128;
 
-    meta = with lib; {
-      changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
-      description = "A full-featured e-mail client";
-      homepage = "https://thunderbird.net/";
-      mainProgram = "thunderbird";
-      maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
-      platforms = platforms.unix;
-      badPlatforms = platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-      license = licenses.mpl20;
-    };
+  thunderbird-115 = common {
+    version = "115.15.0";
+    sha512 = "b161b99e09b6d1ba833f77264e35034ad199438b4fc88d244a6b68c84693fa2e90fbab60dafb827a2e23b37c484f9843a58751d93826ba7cdd0391114d253de2";
+
     updateScript = callPackage ./update.nix {
-      attrPath = "thunderbird-unwrapped";
+      attrPath = "thunderbirdPackages.thunderbird-115";
       versionPrefix = "115";
     };
-  }).override {
-    geolocationSupport = false;
-    webrtcSupport = false;
+  };
 
-    pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+  thunderbird-128 = common {
+    version = "128.2.3esr";
+    sha512 = "f852d1fe6b8d41aa2f0fbc0fceae93cccf1e5f88d9c0447f504de775283289b82b246b79a01e8eb26e9c87197fb33138fb18c75ecc3f5f1bcfefa3920a7c7512";
 
-    icu = icu.overrideAttrs (attrs: {
-      # standardize vtzone output
-      # Work around ICU-22132 https://unicode-org.atlassian.net/browse/ICU-22132
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1790071
-      patches = attrs.patches ++ [(fetchpatch2 {
-        url = "https://hg.mozilla.org/mozilla-central/raw-file/fb8582f80c558000436922fb37572adcd4efeafc/intl/icu-patches/bug-1790071-ICU-22132-standardize-vtzone-output.diff";
-        stripLen = 3;
-        hash = "sha256-MGNnWix+kDNtLuACrrONDNcFxzjlUcLhesxwVZFzPAM=";
-      })];
-    });
+    updateScript = callPackage ./update.nix {
+      attrPath = "thunderbirdPackages.thunderbird-128";
+      versionPrefix = "128";
+      versionSuffix = "esr";
+    };
   };
 }
+ // lib.optionalAttrs config.allowAliases {
+  thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
+}
+

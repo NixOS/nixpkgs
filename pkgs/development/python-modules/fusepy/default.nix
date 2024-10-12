@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  fetchPypi,
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -22,7 +23,7 @@ buildPythonPackage rec {
 
   # On macOS, users are expected to install macFUSE. This means fusepy should
   # be able to find libfuse in /usr/local/lib.
-  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
+  patchPhase = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace fuse.py --replace \
       "find_library('fuse')" "'${pkgs.fuse}/lib/libfuse.so'"
   '';
@@ -37,5 +38,4 @@ buildPythonPackage rec {
     license = licenses.isc;
     platforms = platforms.unix;
   };
-
 }

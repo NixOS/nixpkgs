@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HFS/HFS+ user space utils";
-    license = lib.licenses.apsl20;
+    license = lib.licenses.apple-psl20;
     platforms = lib.platforms.linux;
   };
 }

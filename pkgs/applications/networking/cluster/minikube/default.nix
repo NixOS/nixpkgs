@@ -15,9 +15,9 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.32.0";
+  version = "1.34.0";
 
-  vendorHash = "sha256-MzB+my1NwvZx9qfojuOlTHmuY6CyLFlrgr4UEuC5FBk=";
+  vendorHash = "sha256-gw5Ol7Gp26KyIaiMvwik8FJpABpMT86vpFnZnAJ6hhs=";
 
   doCheck = false;
 
@@ -25,18 +25,18 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-2EWaMpcr4F1wRzIP1rPg1a/Sjd1x+oo2ee90k4Ie8cU=";
+    sha256 = "sha256-Z7x3MOQUF3a19X4SSiIUfSJ3xl3482eKH700m/9pqcU=";
   };
   postPatch =
     (
-      lib.optionalString (withQemu && stdenv.isDarwin) ''
+      lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
           --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
           --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
       ''
     ) + (
-      lib.optionalString (withQemu && stdenv.isLinux) ''
+      lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
         substituteInPlace \
           pkg/minikube/registry/drvs/qemu2/qemu2.go \
           --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
 
-  buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
+  buildInputs = if stdenv.hostPlatform.isDarwin then [ vmnet ] else if stdenv.hostPlatform.isLinux then [ libvirt ] else null;
 
   buildPhase = ''
     make COMMIT=${src.rev}
@@ -66,7 +66,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://minikube.sigs.k8s.io";
-    description = "A tool that makes it easy to run Kubernetes locally";
+    description = "Tool that makes it easy to run Kubernetes locally";
     mainProgram = "minikube";
     license = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];

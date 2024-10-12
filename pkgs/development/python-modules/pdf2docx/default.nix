@@ -1,19 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, python
-, buildPythonPackage
-, pythonRelaxDepsHook
-, imagemagick
-, pip
-, pytestCheckHook
-, pymupdf
-, fire
-, fonttools
-, numpy
-, opencv4
-, tkinter
-, python-docx
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  python,
+  buildPythonPackage,
+  imagemagick,
+  pip,
+  pytestCheckHook,
+  pymupdf,
+  fire,
+  fonttools,
+  numpy,
+  opencv4,
+  tkinter,
+  python-docx,
 }:
 let
   version = "0.5.8";
@@ -32,7 +32,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     pip
-    pythonRelaxDepsHook
     imagemagick
   ];
 
@@ -50,7 +49,7 @@ buildPythonPackage {
     python-docx
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # on linux the icon file can only be xbm format
     convert $out/${python.sitePackages}/pdf2docx/gui/icon.ico \
       $out/${python.sitePackages}/pdf2docx/gui/icon.xbm
@@ -61,7 +60,10 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-v" "./test/test.py::TestConversion" ];
+  pytestFlagsArray = [
+    "-v"
+    "./test/test.py::TestConversion"
+  ];
 
   # Test fails due to "RuntimeError: cannot find builtin font with name 'Arial'":
   disabledTests = [ "test_unnamed_fonts" ];

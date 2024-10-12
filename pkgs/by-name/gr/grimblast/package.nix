@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A helper for screenshots within Hyprland, based on grimshot";
+    description = "Helper for screenshots within Hyprland, based on grimshot";
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ donovanglover ];

@@ -29,18 +29,18 @@ stdenv.mkDerivation rec {
     libXinerama
   ];
 
-  postPatch = with lib;
+  postPatch =
     let
       configFile =
-        if isDerivation conf || builtins.isPath conf
+        if lib.isDerivation conf || builtins.isPath conf
         then conf else writeText "config.h" conf;
     in
-    optionalString (conf != null) "cp ${configFile} config.h";
+    lib.optionalString (conf != null) "cp ${configFile} config.h";
 
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {
-    description = "A tool to read notifications from stdin and pop them up on the screen";
+    description = "Tool to read notifications from stdin and pop them up on the screen";
     longDescription = ''
       XNotify displays a notification on the screen. XNotify receives a
       notification specification in stdin and shows a notification for the user

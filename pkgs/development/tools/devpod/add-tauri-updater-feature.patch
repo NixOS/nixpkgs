@@ -7,7 +7,6 @@ index 03f64e53..9e2ddcb6 100644
  # Tauri
  tauri = { version = "1.2.4", features = [
 +        "updater",
+         "dialog-save",
          "process-relaunch",
          "window-close",
-         "notification-all",
-

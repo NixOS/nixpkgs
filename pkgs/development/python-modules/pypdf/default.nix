@@ -1,34 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch2
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchpatch2,
+  pythonOlder,
 
-# build-system
-, flit-core
+  # build-system
+  flit-core,
 
-# docs
-, sphinxHook
-, sphinx-rtd-theme
-, myst-parser
+  # docs
+  sphinxHook,
+  sphinx-rtd-theme,
+  myst-parser,
 
-# propagates
-, typing-extensions
+  # propagates
+  typing-extensions,
 
-# optionals
-, cryptography
-, pillow
+  # optionals
+  cryptography,
+  pillow,
 
-# tests
-, fpdf2
-, pytestCheckHook
-, pytest-timeout
+  # tests
+  fpdf2,
+  pytestCheckHook,
+  pytest-timeout,
 }:
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "4.1.0";
-  format = "pyproject";
+  version = "5.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "py-pdf";
@@ -36,19 +37,8 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-Z3flDC102FwEaNtef0YAfmAFSxpimQNyxt9tRfpKueg=";
+    hash = "sha256-omnNC1mzph59aqrXqLCuCk0LgzfJv/JhbQRrAgRhAIg=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # add missing test marker on networked test
-      url = "https://github.com/py-pdf/pypdf/commit/f43268734a529d4098e6258bf346148fd24c54f0.patch";
-      includes = [
-        "tests/test_generic.py"
-      ];
-      hash = "sha256-Ow32UB4crs3OgT+AmA9TNmcO5Y9SoSahybzD3AmWmVk=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -64,52 +54,46 @@ buildPythonPackage rec {
     myst-parser
   ];
 
+  patches = [
+    (fetchpatch2 {
+      # Mark test_increment_writer as enable_socket (https://github.com/py-pdf/pypdf/pull/2867)
+      url = "https://github.com/py-pdf/pypdf/commit/d974d5c755a7b65f3b9c68c5742afdbc0c1693f6.patch";
+      hash = "sha256-4xiCAStP615IktTUgk31JbIxkxx8d6PQdu8Nfmhc1jo=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--disable-socket" ""
+      --replace-fail "--disable-socket" ""
   '';
 
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [ typing-extensions ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     full = crypto ++ image;
-    crypto = [
-      cryptography
-    ];
-    image = [
-      pillow
-    ];
+    crypto = [ cryptography ];
+    image = [ pillow ];
   };
 
-  pythonImportsCheck = [
-    "pypdf"
-  ];
+  pythonImportsCheck = [ "pypdf" ];
 
   nativeCheckInputs = [
-    (fpdf2.overridePythonAttrs { doCheck = false; })  # avoid reference loop
+    (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
-  ] ++ passthru.optional-dependencies.full;
+  ] ++ optional-dependencies.full;
 
   pytestFlagsArray = [
     # don't access the network
-    "-m" "'not enable_socket'"
-  ];
-
-  disabledTests = [
-    # requires fpdf2 which we don't package yet
-    "test_compression"
-    # infinite recursion when including fpdf2
-    "test_merging_many_temporary_files"
+    "-m"
+    "'not enable_socket'"
   ];
 
   meta = with lib; {
-    description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
+    description = "Pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";
     changelog = "https://github.com/py-pdf/pypdf/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ javaes ];
   };
 }

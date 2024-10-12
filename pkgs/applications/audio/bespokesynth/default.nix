@@ -24,12 +24,12 @@
 , xcbutilkeysyms
 , xcb-util-cursor
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , python3
 , curl
 , pcre
 , mount
-, gnome
+, zenity
 , Accelerate
 , Cocoa
 , WebKit
@@ -85,13 +85,13 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     curl
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     freetype
     libGL
     libusb1
     alsa-lib
     libjack2
-    gnome.zenity
+    zenity
     alsa-tools
     libxcb
     xcbutil
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
       # These X11 libs get dlopen'd, they cause visual bugs when unavailable.
       wrapProgram $out/bin/BespokeSynth \
         --prefix PATH : '${lib.makeBinPath [
-          gnome.zenity
+          zenity
           (python3.withPackages (ps: with ps; [ jedi ]))
         ]}'
     '';

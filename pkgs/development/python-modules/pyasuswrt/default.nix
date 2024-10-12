@@ -1,9 +1,10 @@
-{ lib
-, aiohttp
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, setuptools
+{
+  lib,
+  aiohttp,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -20,26 +21,20 @@ buildPythonPackage rec {
     hash = "sha256-kg475AWmc0i/W4dBg8jFmNyz3V67xjvzPkSlS09/9Oc=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    aiohttp
-  ];
+  propagatedBuildInputs = [ aiohttp ];
 
   # Tests require physical hardware
   doCheck = false;
 
-  pythonImportsCheck = [
-    "pyasuswrt"
-  ];
+  pythonImportsCheck = [ "pyasuswrt" ];
 
   meta = with lib; {
     description = "Library for communication with ASUSWRT routers via HTTP";
     homepage = "https://github.com/ollo69/pyasuswrt";
     changelog = "https://github.com/ollo69/pyasuswrt/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, msrest
-, msrestazure
-, azure-common
-, azure-mgmt-core
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  msrest,
+  msrestazure,
+  azure-common,
+  azure-mgmt-core,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,7 @@ buildPythonPackage rec {
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "azure.mgmt.logic"
-  ];
+  pythonImportsCheck = [ "azure.mgmt.logic" ];
 
   meta = with lib; {
     description = "This is the Microsoft Azure Logic Apps Management Client Library";

@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://compression.ca/pbzip2/";
-    description = "A parallel implementation of bzip2 for multi-core machines";
+    description = "Parallel implementation of bzip2 for multi-core machines";
     license = licenses.bsd2;
-    maintainers = with maintainers; [viric];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

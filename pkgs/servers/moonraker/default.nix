@@ -19,11 +19,12 @@ let
       dbus-next
       apprise
       python-periphery
+      ldap3
     ]
   );
 in stdenvNoCC.mkDerivation rec {
   pname = "moonraker";
-  version = "unstable-2023-12-27";
+  version = "0.8.0-unstable-2023-12-27";
 
   src = fetchFromGitHub {
     owner = "Arksine";
@@ -43,7 +44,10 @@ in stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = unstableGitUpdater { url = meta.homepage; };
+    updateScript = unstableGitUpdater {
+      url = meta.homepage;
+      tagPrefix = "v";
+    };
     tests.moonraker = nixosTests.moonraker;
   };
 

@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     owner = "utsushi";
     repo = pname;
     rev = version;
-    sha256 = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
+    hash = "sha256-CrN9F/WJKmlDN7eozEHtKgGUQBWVwTqwjnrfiATk7lI=";
   };
 
   patches = [

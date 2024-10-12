@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     glib.out
     brotli
     libnghttp2
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libsysprof-capture
   ];
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
     (lib.mesonEnable "docs" withIntrospection)
     (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "sysprof" stdenv.isLinux)
+    (lib.mesonEnable "sysprof" stdenv.hostPlatform.isLinux)
     (lib.mesonEnable "vapi" withIntrospection)
   ];
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "HTTP client/server library for GNOME";
-    homepage = "https://wiki.gnome.org/Projects/libsoup";
+    homepage = "https://gitlab.gnome.org/GNOME/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
   };

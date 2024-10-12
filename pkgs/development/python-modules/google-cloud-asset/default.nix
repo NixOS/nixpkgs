@@ -1,37 +1,37 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, google-api-core
-, google-cloud-access-context-manager
-, google-cloud-org-policy
-, google-cloud-os-config
-, google-cloud-testutils
-, grpc-google-iam-v1
-, libcst
-, mock
-, proto-plus
-, protobuf
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  google-api-core,
+  google-cloud-access-context-manager,
+  google-cloud-org-policy,
+  google-cloud-os-config,
+  google-cloud-testutils,
+  grpc-google-iam-v1,
+  libcst,
+  mock,
+  proto-plus,
+  protobuf,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.25.1";
+  version = "3.26.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xKiqk55Ccm6DaB2aG5xo08nVqL69q8hvro+BPaY0/m4=";
+    pname = "google_cloud_asset";
+    inherit version;
+    hash = "sha256-c/xmHAD8zXdi+2ifs4bHWPS2B49Fcnr4RqLfrpGwQzs=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     grpc-google-iam-v1
@@ -44,10 +44,8 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
-    libcst = [
-      libcst
-    ];
+  optional-dependencies = {
+    libcst = [ libcst ];
   };
 
   nativeCheckInputs = [
@@ -71,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-asset";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-asset-v${version}/packages/google-cloud-asset/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

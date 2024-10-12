@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/pgvector/pgvector/raw/v${version}/CHANGELOG.md";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

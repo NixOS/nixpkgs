@@ -3,7 +3,7 @@
 
 , cmake
 , extra-cmake-modules
-, wrapGAppsHook
+, wrapGAppsHook3
 
 , gst_all_1
 , kconfig
@@ -29,7 +29,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -63,6 +63,6 @@ mkDerivation rec {
     homepage = "https://apps.kde.org/kasts/";
     # https://invent.kde.org/plasma-mobile/kasts/-/tree/master/LICENSES
     license = with licenses; [ bsd2 cc-by-sa-40 cc0 gpl2Only gpl2Plus gpl3Only gpl3Plus lgpl3Plus ];
-    maintainers = with maintainers; [ samueldr ];
+    maintainers = [ ];
   };
 }

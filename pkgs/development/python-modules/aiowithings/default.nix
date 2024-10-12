@@ -1,19 +1,20 @@
-{ lib
-, aiohttp
-, aioresponses
-, buildPythonPackage
-, fetchFromGitHub
-, poetry-core
-, pytest-asyncio
-, pytestCheckHook
-, pythonOlder
-, syrupy
-, yarl
+{
+  lib,
+  aiohttp,
+  aioresponses,
+  buildPythonPackage,
+  fetchFromGitHub,
+  poetry-core,
+  pytest-asyncio,
+  pytestCheckHook,
+  pythonOlder,
+  syrupy,
+  yarl,
 }:
 
 buildPythonPackage rec {
   pname = "aiowithings";
-  version = "2.1.0";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-withings";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+pIIVCR+QsW9M3pH9Ss3dMvkeKM1OdhQ1y+s/T6pHtk=";
+    hash = "sha256-pTDHbnL5MfcsQFiaRnKTDAoJ1JwwxRUTB6fQsXjIFl0=";
   };
 
   postPatch = ''
@@ -30,11 +31,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     yarl
   ];
@@ -46,8 +45,29 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  pythonImportsCheck = [
-    "aiowithings"
+  pythonImportsCheck = [ "aiowithings" ];
+
+  pytestFlagsArray = [ "--snapshot-update" ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_creating_own_session"
+    "test_error_codes"
+    "test_get_activities"
+    "test_get_devices"
+    "test_get_goals"
+    "test_get_measurement"
+    "test_get_new_device"
+    "test_get_sleep_summary"
+    "test_get_sleep"
+    "test_get_workouts"
+    "test_list_all_subscriptions"
+    "test_list_subscriptions"
+    "test_putting_in_own_session"
+    "test_revoking"
+    "test_subscribing"
+    "test_timeout"
+    "test_unexpected_server_response"
   ];
 
   meta = with lib; {

@@ -1,11 +1,12 @@
-{ lib
-, alejandra
-, buildPythonPackage
-, fetchFromGitHub
-, mdformat
-, poetry-core
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  alejandra,
+  buildPythonPackage,
+  fetchFromGitHub,
+  mdformat,
+  poetry-core,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -27,21 +28,13 @@ buildPythonPackage rec {
       --replace-fail '"alejandra"' '"${lib.getExe alejandra}"'
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [
-    mdformat
-  ];
+  propagatedBuildInputs = [ mdformat ];
 
-  pythonImportsCheck = [
-    "mdformat_nix_alejandra"
-  ];
+  pythonImportsCheck = [ "mdformat_nix_alejandra" ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Mdformat plugin format Nix code blocks with alejandra";

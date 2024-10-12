@@ -1,5 +1,6 @@
 { config
 , lib
+, linuxPackages
 , pkgs
 , generateSplicesForMkScope
 , makeScopeWithSplicing'
@@ -80,6 +81,8 @@ makeScopeWithSplicing' {
 
       ristretto = callPackage ./applications/ristretto { };
 
+      xfmpc = callPackage ./applications/xfmpc { };
+
       xfce4-taskmanager = callPackage ./applications/xfce4-taskmanager { };
 
       xfce4-dict = callPackage ./applications/xfce4-dict { };
@@ -122,8 +125,6 @@ makeScopeWithSplicing' {
 
       xfce4-docklike-plugin = callPackage ./panel-plugins/xfce4-docklike-plugin { };
 
-      xfce4-embed-plugin = callPackage ./panel-plugins/xfce4-embed-plugin { };
-
       xfce4-eyes-plugin = callPackage ./panel-plugins/xfce4-eyes-plugin { };
 
       xfce4-fsguard-plugin = callPackage ./panel-plugins/xfce4-fsguard-plugin { };
@@ -131,8 +132,6 @@ makeScopeWithSplicing' {
       xfce4-genmon-plugin = callPackage ./panel-plugins/xfce4-genmon-plugin { };
 
       xfce4-i3-workspaces-plugin = callPackage ./panel-plugins/xfce4-i3-workspaces-plugin { };
-
-      xfce4-namebar-plugin = callPackage ./panel-plugins/xfce4-namebar-plugin { };
 
       xfce4-netload-plugin = callPackage ./panel-plugins/xfce4-netload-plugin { };
 
@@ -142,7 +141,9 @@ makeScopeWithSplicing' {
 
       xfce4-mpc-plugin = callPackage ./panel-plugins/xfce4-mpc-plugin { };
 
-      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin { };
+      xfce4-sensors-plugin = callPackage ./panel-plugins/xfce4-sensors-plugin {
+        libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
+      };
 
       xfce4-systemload-plugin = callPackage ./panel-plugins/xfce4-systemload-plugin { };
 
@@ -171,6 +172,9 @@ makeScopeWithSplicing' {
 
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
+      xfce4-embed-plugin = throw "xfce4-embed-plugin has been removed, as it was broken"; # Added 2024-07-15
+
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
+      xfce4-namebar-plugin = throw "xfce.xfce4-namebar-plugin has been removed: abandoned by upstream and does not build"; # added 2024-05-08
     });
 }

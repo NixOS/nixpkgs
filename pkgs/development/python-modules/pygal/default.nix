@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
 
-# build-system
-, setuptools
+  # build-system
+  setuptools,
 
-# dependencies
-, importlib-metadata
+  # dependencies
+  importlib-metadata,
 
-# optional-dependencies
-, lxml
-, cairosvg
+  # optional-dependencies
+  lxml,
+  cairosvg,
 
-# tests
-, pyquery
-, pytestCheckHook
+  # tests
+  pyquery,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -32,15 +33,11 @@ buildPythonPackage rec {
       --replace pytest-runner ""
   '';
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    importlib-metadata
-  ];
+  propagatedBuildInputs = [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
     png = [ cairosvg ];
   };
@@ -48,7 +45,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pyquery
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.png;
+  ] ++ optional-dependencies.png;
 
   preCheck = ''
     # necessary on darwin to pass the testsuite
@@ -62,6 +59,6 @@ buildPythonPackage rec {
     mainProgram = "pygal_gen.py";
     homepage = "http://www.pygal.org";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

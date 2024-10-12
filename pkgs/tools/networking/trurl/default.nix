@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "trurl";
-  version = "0.10";
+  version = "0.16";
 
   src = fetchFromGitHub {
     owner = "curl";
     repo = pname;
     rev = "${pname}-${version}";
-    hash = "sha256-/eivtsxNzW6IlX08Zfnj06C1kdaaRs4yvqLlbBuo8ec=";
+    hash = "sha256-Og7+FVCBWohVd58GVxFN3KChcG0Kts1MokiOQXZ1OTc=";
   };
 
   outputs = [ "out" "dev" "man" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   enableParallelBuilding = true;
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A command line tool for URL parsing and manipulation";
+    description = "Command line tool for URL parsing and manipulation";
     homepage = "https://curl.se/trurl";
     changelog = "https://github.com/curl/trurl/releases/tag/${pname}-${version}";
     license = licenses.curl;

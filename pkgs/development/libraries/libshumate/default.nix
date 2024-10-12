@@ -1,35 +1,35 @@
 { lib
 , stdenv
-, fetchFromGitLab
+, fetchurl
 , gi-docgen
 , meson
 , ninja
 , pkg-config
 , vala
 , gobject-introspection
+, gperf
 , glib
 , cairo
 , sqlite
 , libsoup_3
 , gtk4
 , libsysprof-capture
+, json-glib
+, protobufc
 , xvfb-run
 , gnome
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
-  version = "1.1.3";
+  version = "1.2.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "libshumate";
-    rev = version;
-    sha256 = "+h0dKLECtvfsxwD5aRTIgiNI9jG/tortUJYFiYMe60g=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
+    hash = "sha256-TMbNc/bYcVX2J2arY+WqzEc72aDONZBpMqz8g56WTAw=";
   };
 
   depsBuildBuild = [
@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
     pkg-config
     vala
     gobject-introspection
+    gperf
   ];
 
   buildInputs = [
@@ -53,6 +54,8 @@ stdenv.mkDerivation rec {
     libsoup_3
     gtk4
     libsysprof-capture
+    json-glib
+    protobufc
   ];
 
   nativeCheckInputs = [
@@ -63,7 +66,7 @@ stdenv.mkDerivation rec {
     "-Ddemos=true"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck
@@ -83,7 +86,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "libshumate";
     };
   };
 
@@ -95,4 +98,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
-}
+})

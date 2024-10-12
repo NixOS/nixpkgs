@@ -10,6 +10,7 @@
 , meson
 , ninja
 , pkg-config
+, wayland-scanner
 , udev
 , unstableGitUpdater
 , wayland
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wio";
-  version = "unstable-2024-03-23";
+  version = "0.17.3-unstable-2024-04-30";
 
   src = fetchFromGitHub {
     owner = "Rubo3";
     repo = "wio";
-    rev = "a68fbaf0011610d55db0413ebb7aca6ff79a8dc3";
-    hash = "sha256-iQulldgYuz++ank2rOL92Ydj6IOiBtNEVEEcVOlhkMk=";
+    rev = "9d459df379efdcf20ea10906c48c79c506c32066";
+    hash = "sha256-Bn7mCVQPH/kH2WRsGPPGIGgvk0r894zZHCHl6BVmWVg=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

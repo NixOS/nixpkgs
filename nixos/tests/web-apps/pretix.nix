@@ -20,6 +20,7 @@
         plugins = with pkgs.pretix.plugins; [
           passbook
           pages
+          zugferd
         ];
         settings = {
           pretix = {

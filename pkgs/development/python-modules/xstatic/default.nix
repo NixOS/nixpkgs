@@ -1,6 +1,7 @@
-{ buildPythonPackage
-, lib
-, fetchPypi
+{
+  buildPythonPackage,
+  lib,
+  fetchPypi,
 }:
 
 buildPythonPackage rec {
@@ -10,17 +11,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "XStatic";
     inherit version;
-    sha256 = "sha256-QCVEzJ4XlIlEEFTwnIB4BOEV6iRpB96HwDVftPWjEmg=";
+    hash = "sha256-QCVEzJ4XlIlEEFTwnIB4BOEV6iRpB96HwDVftPWjEmg=";
   };
 
   # no tests implemented
   doCheck = false;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://bitbucket.org/thomaswaldmann/xstatic";
     description = "Base packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];
   };
-
 }

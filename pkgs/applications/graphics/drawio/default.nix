@@ -4,7 +4,7 @@
 , fetchYarnDeps
 , makeDesktopItem
 , copyDesktopItems
-, prefetch-yarn-deps
+, fixup-yarn-lock
 , makeWrapper
 , autoSignDarwinBinariesHook
 , nodejs
@@ -14,34 +14,34 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
-  version = "24.0.4";
+  version = "24.7.17";
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-+TCnVXcmAEpa7MiL0dyeoh2aUfIIO8eze9pEaHgKnME=";
+    hash = "sha256-DWNFh3ocU5WVi5WZheMOMUYH6FHJ+LJbaUC1XkQ5TFo=";
   };
 
   # `@electron/fuses` tries to run `codesign` and fails. Disable and use autoSignDarwinBinariesHook instead
   postPatch = ''
-    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.js
+    sed -i -e 's/resetAdHocDarwinSignature:.*/resetAdHocDarwinSignature: false,/' build/fuses.cjs
   '';
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-QS0bkDDQq3sn79TQ+pTZsmbmXgMccyLmlPLTsko7eGg=";
+    hash = "sha256-bAvS7AXmmS+yYsEkXxvszlErpZ3J5hVVXxxzYcsVP5Y=";
   };
 
   nativeBuildInputs = [
-    prefetch-yarn-deps
+    fixup-yarn-lock
     makeWrapper
     nodejs
     yarn
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     autoSignDarwinBinariesHook
   ];
 
@@ -62,15 +62,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
-  '' + lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cp -R ${electron.dist}/Electron.app Electron.app
     chmod -R u+w Electron.app
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" electron-builder-linux-mac.json
   '' + ''
     yarn --offline run electron-builder --dir \
-      ${if stdenv.isDarwin then "--config electron-builder-linux-mac.json" else ""} \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+      ${lib.optionalString stdenv.hostPlatform.isDarwin "--config electron-builder-linux-mac.json"} \
+      -c.electronDist=${if stdenv.hostPlatform.isDarwin then "." else electron.dist} \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv dist/mac*/draw.io.app $out/Applications
 
     # Symlinking `draw.io` doesn't work; seems to look for files in the wrong place.
     makeWrapper $out/Applications/draw.io.app/Contents/MacOS/draw.io $out/bin/drawio
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p "$out/share/lib/drawio"
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/drawio"
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A desktop application for creating diagrams";
+    description = "Desktop application for creating diagrams";
     homepage = "https://about.draw.io/";
     license = licenses.asl20;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";

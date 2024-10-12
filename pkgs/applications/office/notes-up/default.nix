@@ -8,7 +8,7 @@
 , pkg-config
 , python3
 , vala
-, wrapGAppsHook
+, wrapGAppsHook3
 , discount
 , glib
 , gtk3
@@ -17,7 +17,7 @@
 , libgee
 , pantheon
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
     vala
-    wrapGAppsHook
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libgee
     pantheon.granite
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

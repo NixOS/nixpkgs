@@ -1,7 +1,7 @@
 diff --git a/hadrian.cabal b/hadrian.cabal
 index 70fded11aa..3893537f05 100644
---- a/hadrian.cabal
-+++ b/hadrian.cabal
+--- a/hadrian/hadrian.cabal
++++ b/hadrian/hadrian.cabal
 @@ -150,7 +150,7 @@ executable hadrian
                         , TypeOperators
      other-extensions:    MultiParamTypeClasses

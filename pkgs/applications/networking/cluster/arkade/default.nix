@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -7,13 +6,13 @@
 
 buildGoModule rec {
   pname = "arkade";
-  version = "0.11.6";
+  version = "0.11.27";
 
   src = fetchFromGitHub {
     owner = "alexellis";
     repo = "arkade";
     rev = version;
-    hash = "sha256-PCyPdUgvW2wCo1MZ/5jbPLfermbYKZKDbAFsc2goqlY=";
+    hash = "sha256-5/QAtaAAiIzpvOl43A4OqnIcKlfdxehGjmCREFRKXTs=";
   };
 
   CGO_ENABLED = 0;

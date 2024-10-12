@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A script which lets you set your $terminal theme";
+    description = "Script which lets you set your $terminal theme";
     homepage = "https://github.com/lemnos/theme.sh";
     license = licenses.mit;
     platforms = platforms.all;

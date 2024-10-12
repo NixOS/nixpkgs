@@ -18,15 +18,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "metadata-cleaner";
-  version = "2.5.4";
+  version = "2.5.6";
 
   format = "other";
 
   src = fetchFromGitLab {
     owner = "rmnvgr";
-    repo = pname;
+    repo = "metadata-cleaner";
     rev = "v${version}";
-    hash = "sha256-2+ZY+ca/CTIdCiFrBOkMWKflzKjSYJ8yfwFkULNg7Xk=";
+    hash = "sha256-J+nwgLbAFoh1gq3J4cqQEShZJCSZesyCjT9DfkCWIHs=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     poppler_gi
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     mat2
     pygobject3
   ];

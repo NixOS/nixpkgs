@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.clamsmtp;
   clamdSocket = "/run/clamav/clamd.ctl"; # See services/security/clamav.nix
@@ -9,20 +7,19 @@ in
   ##### interface
   options = {
     services.clamsmtp = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
-        description = lib.mdDoc "Whether to enable clamsmtp.";
+        description = "Whether to enable clamsmtp.";
       };
 
-      instances = mkOption {
-        description = lib.mdDoc "Instances of clamsmtp to run.";
-        type = types.listOf (types.submodule { options = {
-          action = mkOption {
-            type = types.enum [ "bounce" "drop" "pass" ];
+      instances = lib.mkOption {
+        description = "Instances of clamsmtp to run.";
+        type = lib.types.listOf (lib.types.submodule { options = {
+          action = lib.mkOption {
+            type = lib.types.enum [ "bounce" "drop" "pass" ];
             default = "drop";
-            description =
-              lib.mdDoc ''
+            description = ''
                 Action to take when a virus is detected.
 
                 Note that viruses often spoof sender addresses, so bouncing is
@@ -30,22 +27,20 @@ in
               '';
           };
 
-          header = mkOption {
-            type = types.str;
+          header = lib.mkOption {
+            type = lib.types.str;
             default = "";
             example = "X-Virus-Scanned: ClamAV using ClamSMTP";
-            description =
-              lib.mdDoc ''
+            description = ''
                 A header to add to scanned messages. See clamsmtpd.conf(5) for
                 more details. Empty means no header.
               '';
           };
 
-          keepAlives = mkOption {
-            type = types.int;
+          keepAlives = lib.mkOption {
+            type = lib.types.int;
             default = 0;
-            description =
-              lib.mdDoc ''
+            description = ''
                 Number of seconds to wait between each NOOP sent to the sending
                 server. 0 to disable.
 
@@ -54,78 +49,72 @@ in
               '';
           };
 
-          listen = mkOption {
-            type = types.str;
+          listen = lib.mkOption {
+            type = lib.types.str;
             example = "127.0.0.1:10025";
-            description =
-              lib.mdDoc ''
+            description = ''
                 Address to wait for incoming SMTP connections on. See
                 clamsmtpd.conf(5) for more details.
               '';
           };
 
-          quarantine = mkOption {
-            type = types.bool;
+          quarantine = lib.mkOption {
+            type = lib.types.bool;
             default = false;
-            description =
-              lib.mdDoc ''
+            description = ''
                 Whether to quarantine files that contain viruses by leaving them
                 in the temporary directory.
               '';
           };
 
-          maxConnections = mkOption {
-            type = types.int;
+          maxConnections = lib.mkOption {
+            type = lib.types.int;
             default = 64;
-            description = lib.mdDoc "Maximum number of connections to accept at once.";
+            description = "Maximum number of connections to accept at once.";
           };
 
-          outAddress = mkOption {
-            type = types.str;
-            description =
-              lib.mdDoc ''
+          outAddress = lib.mkOption {
+            type = lib.types.str;
+            description = ''
                 Address of the SMTP server to send email to once it has been
                 scanned.
               '';
           };
 
-          tempDirectory = mkOption {
-            type = types.str;
+          tempDirectory = lib.mkOption {
+            type = lib.types.str;
             default = "/tmp";
-            description =
-              lib.mdDoc ''
+            description = ''
                 Temporary directory that needs to be accessible to both clamd
                 and clamsmtpd.
               '';
           };
 
-          timeout = mkOption {
-            type = types.int;
+          timeout = lib.mkOption {
+            type = lib.types.int;
             default = 180;
-            description = lib.mdDoc "Time-out for network connections.";
+            description = "Time-out for network connections.";
           };
 
-          transparentProxy = mkOption {
-            type = types.bool;
+          transparentProxy = lib.mkOption {
+            type = lib.types.bool;
             default = false;
-            description = lib.mdDoc "Enable clamsmtp's transparent proxy support.";
+            description = "Enable clamsmtp's transparent proxy support.";
           };
 
-          virusAction = mkOption {
-            type = with types; nullOr path;
+          virusAction = lib.mkOption {
+            type = with lib.types; nullOr path;
             default = null;
-            description =
-              lib.mdDoc ''
+            description = ''
                 Command to run when a virus is found. Please see VIRUS ACTION in
                 clamsmtpd(8) for a discussion of this option and its safe use.
               '';
           };
 
-          xClient = mkOption {
-            type = types.bool;
+          xClient = lib.mkOption {
+            type = lib.types.bool;
             default = false;
-            description =
-              lib.mdDoc ''
+            description = ''
                 Send the XCLIENT command to the receiving server, for forwarding
                 client addresses and connection information if the receiving
                 server supports this feature.
@@ -152,19 +141,19 @@ in
         TimeOut: ${toString conf.timeout}
         TransparentProxy: ${if conf.transparentProxy then "on" else "off"}
         User: clamav
-        ${optionalString (conf.virusAction != null) "VirusAction: ${conf.virusAction}"}
+        ${lib.optionalString (conf.virusAction != null) "VirusAction: ${conf.virusAction}"}
         XClient: ${if conf.xClient then "on" else "off"}
       '';
   in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       assertions = [
         { assertion = config.services.clamav.daemon.enable;
           message = "clamsmtp requires clamav to be enabled";
         }
       ];
 
-      systemd.services = listToAttrs (imap1 (i: conf:
-        nameValuePair "clamsmtp-${toString i}" {
+      systemd.services = lib.listToAttrs (lib.imap1 (i: conf:
+        lib.nameValuePair "clamsmtp-${toString i}" {
           description = "ClamSMTP instance ${toString i}";
           wantedBy = [ "multi-user.target" ];
           script = "exec ${pkgs.clamsmtp}/bin/clamsmtpd -f ${configfile conf}";

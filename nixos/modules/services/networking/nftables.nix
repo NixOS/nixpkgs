@@ -8,21 +8,21 @@ let
       enable = mkOption {
         type = types.bool;
         default = true;
-        description = lib.mdDoc "Enable this table.";
+        description = "Enable this table.";
       };
 
       name = mkOption {
         type = types.str;
-        description = lib.mdDoc "Table name.";
+        description = "Table name.";
       };
 
       content = mkOption {
         type = types.lines;
-        description = lib.mdDoc "The table content.";
+        description = "The table content.";
       };
 
       family = mkOption {
-        description = lib.mdDoc "Table family.";
+        description = "Table family.";
         type = types.enum [ "ip" "ip6" "inet" "arp" "bridge" "netdev" ];
       };
     };
@@ -39,8 +39,7 @@ in
     networking.nftables.enable = mkOption {
       type = types.bool;
       default = false;
-      description =
-        lib.mdDoc ''
+      description = ''
           Whether to enable nftables and use nftables based firewall if enabled.
           nftables is a Linux-based packet filtering framework intended to
           replace frameworks like iptables.
@@ -61,7 +60,7 @@ in
     networking.nftables.checkRuleset = mkOption {
       type = types.bool;
       default = true;
-      description = lib.mdDoc ''
+      description = ''
         Run `nft check` on the ruleset to spot syntax errors during build.
         Because this is executed in a sandbox, the check might fail if it requires
         access to any environmental factors or paths outside the Nix store.
@@ -84,7 +83,7 @@ in
           "/etc/services" = config.environment.etc.services.source;
         }
       '';
-      description = mdDoc ''
+      description = ''
         Set of paths that should be intercepted and rewritten while checking the ruleset
         using `pkgs.buildPackages.libredirect`.
       '';
@@ -96,14 +95,14 @@ in
       example = lib.literalExpression ''
         sed 's/skgid meadow/skgid nogroup/g' -i ruleset.conf
       '';
-      description = lib.mdDoc ''
+      description = ''
         This script gets run before the ruleset is checked. It can be used to
         create additional files needed for the ruleset check to work, or modify
         the ruleset for cases the build environment cannot cover.
       '';
     };
 
-    networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "flushing the entire ruleset on each reload");
+    networking.nftables.flushRuleset = mkEnableOption "flushing the entire ruleset on each reload";
 
     networking.nftables.extraDeletions = mkOption {
       type = types.lines;
@@ -114,8 +113,7 @@ in
 
         delete table inet some-table;
       '';
-      description =
-        lib.mdDoc ''
+      description = ''
           Extra deletion commands to be run on every firewall start, reload
           and after stopping the firewall.
         '';
@@ -166,8 +164,7 @@ in
           }
         }
       '';
-      description =
-        lib.mdDoc ''
+      description = ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
           Note that if the tables should be cleaned first, either:
@@ -179,8 +176,7 @@ in
     networking.nftables.rulesetFile = mkOption {
       type = types.nullOr types.path;
       default = null;
-      description =
-        lib.mdDoc ''
+      description = ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
         '';
@@ -189,7 +185,7 @@ in
     networking.nftables.flattenRulesetFile = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Use `builtins.readFile` rather than `include` to handle {option}`networking.nftables.rulesetFile`. It is useful when you want to apply {option}`networking.nftables.preCheckRuleset` to {option}`networking.nftables.rulesetFile`.
 
         ::: {.note}
@@ -203,7 +199,7 @@ in
 
       default = {};
 
-      description = lib.mdDoc ''
+      description = ''
         Tables to be added to ruleset.
         Tables will be added together with delete statements to clean up the table before every update.
       '';

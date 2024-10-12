@@ -31,7 +31,7 @@ buildGoModule rec {
 
   meta = with lib; {
     inherit (src.meta) homepage;
-    description = "A Prometheus exporter for PostgreSQL";
+    description = "Prometheus exporter for PostgreSQL";
     mainProgram = "postgres_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ fpletz globin willibutz ma27 ];

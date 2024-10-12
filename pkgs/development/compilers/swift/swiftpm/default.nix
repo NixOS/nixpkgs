@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , callPackage
+, fetchpatch
 , cmake
 , ninja
 , git
@@ -80,7 +81,7 @@ let
 
   # Tools invoked by swiftpm at run-time.
   runtimeDeps = [ git ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild.xcrun
       # These tools are part of cctools, but adding that as a build input puts
       # an unwrapped linker in PATH, and breaks builds. This small derivation
@@ -98,13 +99,13 @@ let
   mkBootstrapDerivation = attrs: stdenv.mkDerivation (attrs // {
     nativeBuildInputs = (attrs.nativeBuildInputs or [ ])
       ++ [ cmake ninja swift ]
-      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
 
     buildInputs = (attrs.buildInputs or [ ])
       ++ [ Foundation ];
 
     postPatch = (attrs.postPatch or "")
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # On Darwin only, Swift uses arm64 as cpu arch.
         if [ -e cmake/modules/SwiftSupport.cmake ]; then
           substituteInPlace cmake/modules/SwiftSupport.cmake \
@@ -120,7 +121,7 @@ let
       '';
 
     postInstall = (attrs.postInstall or "")
-      + lib.optionalString stdenv.isDarwin ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
         # The install name of libraries is incorrectly set to lib/ (via our
         # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
         # fixDarwinDylibNames, but some builds create libraries that reference
@@ -148,7 +149,7 @@ let
   # are part of libsystem. Adding its headers to the search path causes strange
   # mixing and errors.
   # TODO: Find a better way to prevent this conflict.
-  ncursesInput = if stdenv.isDarwin then ncurses.out else ncurses;
+  ncursesInput = if stdenv.hostPlatform.isDarwin then ncurses.out else ncurses;
 
   # Derivations for bootstrapping dependencies using CMake.
   # This is based on the `swiftpm/Utilities/bootstrap` script.
@@ -167,7 +168,7 @@ let
     src = generated.sources.swift-system;
 
     postInstall = cmakeGlue.SwiftSystem
-      + lib.optionalString (!stdenv.isDarwin) ''
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
@@ -187,7 +188,7 @@ let
     '';
 
     postInstall = cmakeGlue.SwiftCollections
-      + lib.optionalString (!stdenv.isDarwin) ''
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
         mkdir -p $out/${swiftStaticModuleSubdir}
@@ -195,12 +196,22 @@ let
       '';
   };
 
+  # Part of this patch fixes for glibc 2.39: glibc patch 64b1a44183a3094672ed304532bedb9acc707554
+  # marks the `FILE*` argument to a few functions including `ferror` & `fread` as non-null. However
+  # the code passes an `Optional<T>` to these functions.
+  # This patch uses a `guard` which effectively unwraps the type (or throws an exception).
+  swift-tools-support-core-glibc-fix = fetchpatch {
+    url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
+    hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
+    includes = [ "Sources/TSCBasic/FileSystem.swift" ];
+  };
+
   swift-tools-support-core = mkBootstrapDerivation {
     name = "swift-tools-support-core";
     src = generated.sources.swift-tools-support-core;
 
     patches = [
-      ./patches/force-unwrap-file-handles.patch
+      swift-tools-support-core-glibc-fix
     ];
 
     buildInputs = [
@@ -234,7 +245,7 @@ let
     ];
 
     postInstall = cmakeGlue.ArgumentParser
-      + lib.optionalString stdenv.isLinux ''
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
         # Fix rpath so ArgumentParserToolInfo can be found.
         patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
           $out/lib/swift/${swiftOs}/libArgumentParser.so
@@ -255,7 +266,7 @@ let
     name = "llbuild";
     src = generated.sources.swift-llbuild;
 
-    nativeBuildInputs = lib.optional stdenv.isDarwin xcbuild;
+    nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin xcbuild;
     buildInputs = [ ncursesInput sqlite ];
 
     patches = [
@@ -378,7 +389,7 @@ in stdenv.mkDerivation (commonAttrs // {
     sqlite
     XCTest
   ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CryptoKit
       LocalAuthentication
     ];
@@ -389,7 +400,7 @@ in stdenv.mkDerivation (commonAttrs // {
     swiftpmMakeMutable swift-tools-support-core
     substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
       --replace 'canImport(Darwin)' 'false'
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${./patches/force-unwrap-file-handles.patch}
+    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
 
     # Prevent a warning about SDK directories we don't have.
     swiftpmMakeMutable swift-driver
@@ -444,10 +455,10 @@ in stdenv.mkDerivation (commonAttrs // {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    description = "The Package Manager for the Swift Programming Language";
+    description = "Package Manager for the Swift Programming Language";
     homepage = "https://github.com/apple/swift-package-manager";
     platforms = with lib.platforms; linux ++ darwin;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
   };
 })

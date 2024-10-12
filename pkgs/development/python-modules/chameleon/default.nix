@@ -1,39 +1,32 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, importlib-metadata
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  importlib-metadata,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "chameleon";
-  version = "4.5.2";
+  version = "4.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "malthe";
     repo = "chameleon";
     rev = "refs/tags/${version}";
-    hash = "sha256-SVLKT6JeFUpF7gYkq3B7Lm9b9SG2qa6Ekp8i8xM0Xh0=";
+    hash = "sha256-TbXx3reRpUqnMVDsr38FM1SLgARjqXAduO3k87U5TIg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  dependencies = lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ];
+  dependencies = lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "chameleon"
-  ];
+  pythonImportsCheck = [ "chameleon" ];
 
   meta = with lib; {
     changelog = "https://github.com/malthe/chameleon/blob/${version}/CHANGES.rst";
@@ -43,5 +36,4 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };
-
 }

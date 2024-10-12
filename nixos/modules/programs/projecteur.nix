@@ -5,7 +5,7 @@ let
 in
 {
   options.programs.projecteur = {
-    enable = lib.mkEnableOption (lib.mdDoc "projecteur");
+    enable = lib.mkEnableOption "projecteur, an application for the Logitech Spotlight device (and similar)";
     package = lib.mkPackageOption pkgs "projecteur" { };
   };
 

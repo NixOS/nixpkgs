@@ -1,55 +1,63 @@
-{ lib
-, buildPythonPackage
-, click
-, fetchFromGitHub
-, fetchpatch
-, pytestCheckHook
-, pythonAtLeast
-, pythonOlder
-, six
+{
+  lib,
+  buildPythonPackage,
+  click,
+  fetchFromGitHub,
+  fetchpatch,
+  pytestCheckHook,
+  pythonOlder,
+  six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "6.0.5";
+  version = "6.1.1";
   format = "setuptools";
 
-  # No support for Python 3.11, https://github.com/rocky/python-xdis/issues/98
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = "refs/tags/${version}";
-    hash = "sha256-3mL0EuPHF/dithovrYvMjweYGwGhrN75N9MRfLjNC34=";
+    hash = "sha256-Fn1cyUPMrn1SEXl4sdQwJiNHaY+BbxBDz3nKZY965/0=";
   };
 
-  postPatch = ''
-    # Our Python release is not in the test matrix
-    substituteInPlace xdis/magics.py \
-      --replace "3.10.4" "3.10.5 3.10.6 3.10.7 3.10.8 3.10.10 3.10.11 3.10.12 3.10.13 3.10.14"
-  '';
+  # Backport magics for newer newer python versions
+  # 6.1.1 only supports up to 3.12.4 while nixpkgs is already on 3.12.5+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/rocky/python-xdis/commit/fcba74a7f64c5e2879ca0779ff10f38f9229e7da.patch";
+      hash = "sha256-D7eJ97g4G6pmYL/guq0Ndf8yKTVBD2gAuUCAKwvlYbE=";
+    })
+    (fetchpatch {
+      url = "https://github.com/rocky/python-xdis/commit/b66976ff53a2c6e17a73fb7652ddd6c8054df8db.patch";
+      hash = "sha256-KO1y0nDTPmEZ+0/3Pjh+CvTdpr/p4AYZ8XdH5J+XzXo=";
+    })
+  ];
 
   propagatedBuildInputs = [
     click
     six
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "xdis"
-  ];
+  pythonImportsCheck = [ "xdis" ];
 
-  # import file mismatch:
-  # imported module 'test_disasm' has this __file__ attribute:
-  #   /build/source/pytest/test_disasm.py
-  # which is not the same as the test file we want to collect:
-  #   /build/source/test_unit/test_disasm.py
   disabledTestPaths = [
+    # import file mismatch:
+    # imported module 'test_disasm' has this __file__ attribute:
+    #   /build/source/pytest/test_disasm.py
+    # which is not the same as the test file we want to collect:
+    #   /build/source/test_unit/test_disasm.py
     "test_unit/test_disasm.py"
+
+    # Doesn't run on non-2.7 but has global-level mis-import
+    "test_unit/test_dis27.py"
+
+    # Has Python 2 style prints
+    "test/decompyle/test_nested_scopes.py"
   ];
 
   disabledTests = [
@@ -59,11 +67,14 @@ buildPythonPackage rec {
     "test_basic"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python cross-version byte-code disassembler and marshal routines";
     homepage = "https://github.com/rocky/python-xdis";
     changelog = "https://github.com/rocky/python-xdis/releases/tag/${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
+      onny
+      melvyn2
+    ];
   };
 }

@@ -19,7 +19,7 @@ in
     services.atd.enable = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to enable the {command}`at` daemon, a command scheduler.
       '';
     };
@@ -27,7 +27,7 @@ in
     services.atd.allowEveryone = mkOption {
       type = types.bool;
       default = false;
-      description = lib.mdDoc ''
+      description = ''
         Whether to make {file}`/var/spool/at{jobs,spool}`
         writeable by everyone (and sticky).  This is normally not
         needed since the {command}`at` commands are

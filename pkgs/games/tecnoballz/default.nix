@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://linux.tlk.fr/games/TecnoballZ/";
     downloadPage = "https://linux.tlk.fr/games/TecnoballZ/download/";
-    description = "A brick breaker game with a sophisticated system of weapons and bonuses";
+    description = "Brick breaker game with a sophisticated system of weapons and bonuses";
     mainProgram = "tecnoballz";
     longDescription = ''
       A exciting Brick Breaker with 50 levels of game and 11 special levels,
@@ -65,6 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

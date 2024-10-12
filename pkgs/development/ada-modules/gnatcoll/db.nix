@@ -5,7 +5,6 @@
 , gprbuild
 , which
 , gnatcoll-core
-, xmlada
 , component
 # components built by this derivation other components depend on
 , gnatcoll-sql

@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, django
-, fetchPypi
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  django,
+  fetchPypi,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,16 +18,12 @@ buildPythonPackage rec {
     hash = "sha256-VV7mb3501aZVuXUqzVqQYUttvkYa4pAECYWn7HksOmI=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "admin_datta"
-  ];
+  pythonImportsCheck = [ "admin_datta" ];
 
   meta = with lib; {
     description = "Modern template for Django that covers Admin Section";

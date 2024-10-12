@@ -1,14 +1,15 @@
 { lib
 , stdenv
 , fetchurl
-, fetchpatch
 , wrapGAppsHook4
+, buildPackages
 , cargo
 , desktop-file-utils
 , meson
 , ninja
 , pkg-config
 , rustc
+, gettext
 , gdk-pixbuf
 , glib
 , gtk4
@@ -19,11 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
-  version = "0.0.18";
+  version = "0.0.19";
 
   src = fetchurl {
-    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/874b27fcf34662d9686f670d406142c2/icon-library-${version}.tar.xz";
-    hash = "sha256-qCGwTePA817mulFjyRZKw+Fw1S77+QTtA7WH+KocL48=";
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/7725604ce39be278abe7c47288085919/icon-library-${version}.tar.xz";
+    hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
+  };
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
+    # The vendored gettext does not build with clang 16.
+    GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
+    GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
+    GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
   };
 
   nativeBuildInputs = [
@@ -41,7 +50,7 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

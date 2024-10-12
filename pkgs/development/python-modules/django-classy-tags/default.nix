@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, django
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  django,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -17,22 +18,18 @@ buildPythonPackage rec {
     hash = "sha256-yNnRqi+m5xxNhm303RHSOmm40lu7dQskkKF7Fhd07lk=";
   };
 
-  propagatedBuildInputs = [
-    django
-  ];
+  propagatedBuildInputs = [ django ];
 
   # pypi version doesn't include runtest.py, needed to run tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "classytags"
-  ];
+  pythonImportsCheck = [ "classytags" ];
 
   meta = with lib; {
     description = "Class based template tags for Django";
     homepage = "https://github.com/divio/django-classy-tags";
     changelog = "https://github.com/django-cms/django-classy-tags/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

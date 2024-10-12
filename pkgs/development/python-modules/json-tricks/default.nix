@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, pythonOlder
-, pytestCheckHook
-, numpy
-, pandas
-, pytz
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  pythonOlder,
+  pytest7CheckHook,
+  numpy,
+  pandas,
+  pytz,
 }:
 
 buildPythonPackage rec {
@@ -26,16 +27,10 @@ buildPythonPackage rec {
     numpy
     pandas
     pytz
-    pytestCheckHook
+    pytest7CheckHook
   ];
 
-  pytestFlagsArray = [
-    "-W" "ignore::pytest.PytestRemovedIn8Warning"
-  ];
-
-  pythonImportsCheck = [
-    "json_tricks"
-  ];
+  pythonImportsCheck = [ "json_tricks" ];
 
   meta = with lib; {
     description = "Extra features for Python JSON handling";

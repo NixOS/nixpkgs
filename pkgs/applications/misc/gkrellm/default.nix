@@ -12,7 +12,7 @@
 , IOKit
 , copyDesktopItems
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 }:
 
 stdenv.mkDerivation rec {
@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "01lccz4fga40isv09j8rjgr0qy10rff9vj042n6gi6gdv4z69q0y";
   };
 
-  nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook ];
+  nativeBuildInputs = [ copyDesktopItems pkg-config which wrapGAppsHook3 ];
   buildInputs = [ gettext glib gtk2 libX11 libSM libICE ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   hardeningDisable = [ "format" ];
 

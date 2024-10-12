@@ -1,14 +1,15 @@
-{ lib
-, pythonOlder
-, flit-core
-, fetchPypi
-, buildPythonPackage
-, betterproto
+{
+  lib,
+  pythonOlder,
+  flit-core,
+  fetchPypi,
+  buildPythonPackage,
+  betterproto,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-protobuf-specs";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,23 +17,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sigstore_protobuf_specs";
     inherit version;
-    hash = "sha256-MyKttzmSvKDz3G1MLDi6wpCGoR0mMamDrbJ5jljjKlQ=";
+    hash = "sha256-yuBBtAUCYAuKYz9DwldpXQIiqU76HlEQp+x62njDnZk=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  nativeBuildInputs = [ flit-core ];
 
-  propagatedBuildInputs = [
-    betterproto
-  ];
+  propagatedBuildInputs = [ betterproto ];
 
   # Module has no tests
   doCheck = false;
 
-  pythonImportsCheck = [
-    "sigstore_protobuf_specs"
-  ];
+  pythonImportsCheck = [ "sigstore_protobuf_specs" ];
 
   meta = with lib; {
     description = "Library for serializing and deserializing Sigstore messages";

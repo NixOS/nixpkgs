@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A dbus-binding leveraging C++-11";
+    description = "Dbus-binding leveraging C++-11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [ OPNA2608 ];

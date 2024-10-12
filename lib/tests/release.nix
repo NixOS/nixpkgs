@@ -2,7 +2,7 @@
   # Don't test properties of pkgs.lib, but rather the lib in the parent directory
   pkgs ? import ../.. {} // { lib = throw "pkgs.lib accessed, but the lib tests should use nixpkgs' lib path directly!"; },
   nix ? pkgs-nixVersions.stable,
-  nixVersions ? [ pkgs-nixVersions.minimum nix pkgs-nixVersions.unstable ],
+  nixVersions ? [ pkgs-nixVersions.minimum nix pkgs-nixVersions.latest ],
   pkgs-nixVersions ? import ./nix-for-tests.nix { inherit pkgs; },
 }:
 
@@ -24,7 +24,9 @@ in
       #
       #   https://github.com/NixOS/nixpkgs/issues/272591
       #
-      [(import ../../pkgs/test/release {})]
+      [(import ../../pkgs/test/release {
+        inherit pkgs lib nix;
+      })]
     ;
 
   }

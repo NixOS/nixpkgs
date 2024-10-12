@@ -17,21 +17,25 @@
 , vulkan-loader
 , libxkbcommon
 
-, withX11 ? !stdenv.isDarwin
+, withX11 ? !stdenv.hostPlatform.isDarwin
 , libX11
 , libXcursor
 , libXi
 , libXrandr
 , libxcb
 
-, withWayland ? !stdenv.isDarwin
+, withWayland ? !stdenv.hostPlatform.isDarwin
 , wayland
+
+, testers
+, rio
 }:
 let
-  rlinkLibs = if stdenv.isDarwin then [
+  rlinkLibs = if stdenv.hostPlatform.isDarwin then [
     darwin.libobjc
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.AVFoundation
+    darwin.apple_sdk_11_0.frameworks.MetalKit
     darwin.apple_sdk_11_0.frameworks.Vision
   ] else [
     (lib.getLib gcc-unwrapped)
@@ -51,20 +55,20 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "rio";
-  version = "0.0.36";
+  version = "0.1.17";
 
   src = fetchFromGitHub {
     owner = "raphamorim";
     repo = "rio";
     rev = "v${version}";
-    hash = "sha256-QCQFFnlKD5olaGjRwDlj5/EBV6Qy/bFAZOQRtCSPamc=";
+    hash = "sha256-10E7tIuix0BGKFbADLhcReRC01FXV/dBivJjfSe/X/c=";
   };
 
-  cargoHash = "sha256-Ea0scCbM9mfxC1YL3HCoBk93eVW20bj2mJyauyDSzT8=";
+  cargoHash = "sha256-yGOvY5+ThSey/k8ilTTC0CzaOIJtc4hDYmdrHJC3HyE=";
 
   nativeBuildInputs = [
     ncurses
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     cmake
     pkg-config
     autoPatchelfHook
@@ -83,7 +87,7 @@ rustPlatform.buildRustPackage rec {
 
   checkFlags = [
     # Fail to run in sandbox environment.
-    "--skip=screen::context::test"
+    "--skip=sys::unix::eventedfd::EventedFd"
   ];
 
   postInstall = ''
@@ -95,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     tic -xe rio,rio-direct -o "$terminfo/share/terminfo" misc/rio.terminfo
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications/
     mv misc/osx/Rio.app/ $out/Applications/
     mkdir $out/Applications/Rio.app/Contents/MacOS/
@@ -107,16 +111,24 @@ rustPlatform.buildRustPackage rec {
       extraArgs = [ "--version-regex" "v([0-9.]+)" ];
     };
 
-    tests.test = nixosTests.terminal-emulators.rio;
+    tests = {
+      version = testers.testVersion { package = rio; };
+    } // lib.optionalAttrs stdenv.buildPlatform.isLinux {
+      # FIXME: Restrict test execution inside nixosTests for Linux devices as ofborg
+      # 'passthru.tests' nixosTests are failing on Darwin architectures.
+      #
+      # Ref: https://github.com/NixOS/nixpkgs/issues/345825
+      test = nixosTests.terminal-emulators.rio;
+    };
   };
 
   meta = {
-    description = "A hardware-accelerated GPU terminal emulator powered by WebGPU";
+    description = "Hardware-accelerated GPU terminal emulator powered by WebGPU";
     homepage = "https://raphamorim.io/rio";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tornax otavio oluceps ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/raphamorim/rio/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/raphamorim/rio/blob/v${version}/docs/docs/releases.md";
     mainProgram = "rio";
   };
 }

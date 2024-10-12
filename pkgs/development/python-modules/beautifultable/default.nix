@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, wcwidth
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  wcwidth,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -20,21 +21,13 @@ buildPythonPackage rec {
     hash = "sha256-/SReCEvSwiNjBoz/3tGJ9zUNBAag4mLsHlUXwm47zCw=";
   };
 
-  propagatedBuildInputs = [
-    wcwidth
-  ];
+  propagatedBuildInputs = [ wcwidth ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "test.py"
-  ];
+  pytestFlagsArray = [ "test.py" ];
 
-  pythonImportsCheck = [
-    "beautifultable"
-  ];
+  pythonImportsCheck = [ "beautifultable" ];
 
   meta = with lib; {
     description = "Python package for printing visually appealing tables";

@@ -15,14 +15,13 @@ let
       '');
 in
 builtins.listToAttrs (
-  map
-    texTest
-    (lib.attrsets.cartesianProductOfSets {
+  lib.mapCartesianProduct texTest
+    {
       tex = [ "xelatex" "lualatex" ];
       fonttype = [ "ttf" "otf" ];
       package = [ "junicode" ];
       file = [ ./test.tex ];
-    })
+    }
   ++
   [
     (texTest {

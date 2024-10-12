@@ -1,35 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchPypi
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
 
-# build-system
-, hatchling
+  # build-system
+  hatchling,
 
-# dependencies
-, anyio
-, typing-extensions
+  # dependencies
+  anyio,
+  typing-extensions,
 
-# optional dependencies
-, itsdangerous
-, jinja2
-, python-multipart
-, pyyaml
-, httpx
+  # optional dependencies
+  itsdangerous,
+  jinja2,
+  python-multipart,
+  pyyaml,
+  httpx,
 
-# tests
-, pytest
-, pytestCheckHook
-, pythonOlder
-, trio
+  # tests
+  pytestCheckHook,
+  pythonOlder,
+  trio,
 
-# reverse dependencies
-, fastapi
+  # reverse dependencies
+  fastapi,
 }:
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.37.1";
+  version = "0.37.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,20 +37,14 @@ buildPythonPackage rec {
     owner = "encode";
     repo = "starlette";
     rev = "refs/tags/${version}";
-    hash = "sha256-SJdBss1WKC30oulVTYUwUAJ8WM0KF5xbn/gvV97WM2g=";
+    hash = "sha256-GiCN1sfhLu9i19d2OcLZrlY8E64DFrFh+ITRSvLaxdE=";
   };
 
-  nativeBuildInputs = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
-    anyio
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    typing-extensions
-  ];
+  dependencies = [ anyio ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
-  passthru.optional-dependencies.full = [
+  optional-dependencies.full = [
     itsdangerous
     jinja2
     python-multipart
@@ -60,30 +53,21 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    (pytestCheckHook.override {
-      # pytest 8 changes warning message
-      # see https://github.com/encode/starlette/commit/8da52c2243b8855426c40c16ae24b27734824078
-      pytest = pytest.overridePythonAttrs (old: rec {
-        version = "8.1.0";
-        src = fetchPypi {
-          pname = "pytest";
-          inherit version;
-          hash = "sha256-+PoEq4+Y0YUROuYOptecIvgUOxS8HK7O1EoKuESSgyM=";
-        };
-      });
-    })
+    pytestCheckHook
     trio
     typing-extensions
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
-    "-W" "ignore::DeprecationWarning"
-    "-W" "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::DeprecationWarning"
+    "-W"
+    "ignore::trio.TrioDeprecationWarning"
+    "-W"
+    "ignore::ResourceWarning" # FIXME remove once test suite is fully compatible with anyio 4.4.0
   ];
 
-  pythonImportsCheck = [
-    "starlette"
-  ];
+  pythonImportsCheck = [ "starlette" ];
 
   passthru.tests = {
     inherit fastapi;
@@ -93,7 +77,7 @@ buildPythonPackage rec {
     changelog = "https://www.starlette.io/release-notes/#${lib.replaceStrings [ "." ] [ "" ] version}";
     downloadPage = "https://github.com/encode/starlette";
     homepage = "https://www.starlette.io/";
-    description = "The little ASGI framework that shines";
+    description = "Little ASGI framework that shines";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wd15 ];
   };

@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytest-asyncio
-, pytest-cov
-, pytestCheckHook
-, pythonOlder
-, requests
-, requests-mock
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
-    pytest-cov
+    pytest-cov-stub
     pytestCheckHook
     requests
     requests-mock

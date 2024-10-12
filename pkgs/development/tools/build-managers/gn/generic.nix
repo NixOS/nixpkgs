@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, darwin, writeText
+{ stdenv, lib, fetchgit, cctools, darwin, writeText
 , ninja, python3
 , ...
 }:
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ ninja python3 ];
-  buildInputs = lib.optionals stdenv.isDarwin (with darwin; with apple_sdk.frameworks; [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (with darwin; with apple_sdk.frameworks; [
     libobjc
     cctools
 
@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
   setupHook = ./setup-hook.sh;
 
   meta = with lib; {
-    description = "A meta-build system that generates build files for Ninja";
+    description = "Meta-build system that generates build files for Ninja";
     mainProgram = "gn";
     homepage = "https://gn.googlesource.com/gn";
     license = licenses.bsd3;

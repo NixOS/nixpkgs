@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     cd libtrellis
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/bin/* ; do
       install_name_tool -change "$out/lib/libtrellis.dylib" "$out/lib/trellis/libtrellis.dylib" "$f"
     done
@@ -64,7 +64,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://github.com/YosysHQ/prjtrellis";
     license     = licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice emily rowanG077 ];
+    maintainers = with maintainers; [ q3k thoughtpolice rowanG077 ];
     platforms   = platforms.all;
   };
 }

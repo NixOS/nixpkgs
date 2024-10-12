@@ -1,4 +1,4 @@
-{ asciidoc
+{ asciidoctor
 , dbus
 , docbook_xml_dtd_45
 , docbook_xsl
@@ -33,25 +33,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "picom";
-  version = "11.2";
+  version = "12.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7ohtI890CutwprPEY5njqWou0fD6T9eu51EBSQ2/lWs=";
+    hash = "sha256-tT4OIzIX+phbze2+9f3WQN6RuGKlSQ+Ocp4xodvdPC0=";
     fetchSubmodules = true;
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    asciidoc
+    asciidoctor
     docbook_xml_dtd_45
     docbook_xsl
     makeWrapper
     meson
     ninja
     pkg-config
-    uthash
   ];
 
   buildInputs = [
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pcre2
     pixman
+    uthash
     xcbutil
     xcbutilimage
     xcbutilrenderutil
@@ -96,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A fork of XCompMgr, a sample compositing manager for X servers";
+    description = "Fork of XCompMgr, a sample compositing manager for X servers";
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X
       servers supporting the XFIXES, DAMAGE, RENDER, and COMPOSITE

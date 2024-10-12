@@ -13,11 +13,9 @@
 , gdk-pixbuf
 , pango
 , cairo
-, coreutils
 , atk
 , pkg-config
 , libxml2
-, runtimeShell
 , libredirect
 , ghostscript
 , pkgs
@@ -32,13 +30,15 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  version = "5.70";
-  dl = "8/0100007658/33";
+  version = "5.90";
+  dl = "8/0100007658/40";
+  suffix1 = "m17n";
+  suffix2 = "03";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-m17n-11.tar.gz";
-    hash = "sha256-d5VHlPpUPAr3RWVdQRdn42YLuVekOw1IaMFLVt1Iu7o=";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-${suffix1}-${suffix2}.tar.gz";
+    hash = "sha256-HvuRQYqkHRCwfajSJPridDcADq7VkYwBEo4qr9W5mqA=";
   };
 
   buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     (
       cd $sourceRoot
-      tar -xf Sources/cnrdrvcups-lb-${version}-1.11.tar.xz
+      tar -xf Sources/cnrdrvcups-lb-${version}-1.${suffix2}.tar.xz
       sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh

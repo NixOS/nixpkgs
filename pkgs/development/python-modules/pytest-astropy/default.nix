@@ -1,20 +1,20 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, attrs
-, hypothesis
-, pytest
-, pytest-arraydiff
-, pytest-astropy-header
-, pytest-cov
-, pytest-doctestplus
-, pytest-filter-subpackage
-, pytest-mock
-, pytest-openfiles
-, pytest-remotedata
-, setuptools
-, setuptools-scm
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  attrs,
+  hypothesis,
+  pytest,
+  pytest-arraydiff,
+  pytest-astropy-header,
+  pytest-cov,
+  pytest-doctestplus,
+  pytest-filter-subpackage,
+  pytest-mock,
+  pytest-remotedata,
+  setuptools,
+  setuptools-scm,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -34,9 +34,7 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  buildInputs = [
-    pytest
-  ];
+  buildInputs = [ pytest ];
 
   propagatedBuildInputs = [
     attrs
@@ -47,7 +45,6 @@ buildPythonPackage rec {
     pytest-doctestplus
     pytest-filter-subpackage
     pytest-mock
-    pytest-openfiles
     pytest-remotedata
   ];
 
@@ -58,6 +55,6 @@ buildPythonPackage rec {
     description = "Meta-package containing dependencies for testing";
     homepage = "https://astropy.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

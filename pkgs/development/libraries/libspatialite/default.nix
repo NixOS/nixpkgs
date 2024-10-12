@@ -11,6 +11,7 @@
 , proj
 , sqlite
 , libiconv
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -34,17 +35,18 @@ stdenv.mkDerivation rec {
     freexl
     geos
     librttopo
-    libxml2
+    (libxml2.override { enableHttp = true; })
     minizip
     proj
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+    zlib
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/mod_spatialite.{so,dylib}
   '';
 

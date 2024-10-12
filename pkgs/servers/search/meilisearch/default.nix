@@ -1,14 +1,16 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, Security
-, SystemConfiguration
-, nixosTests
-, nix-update-script
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+  SystemConfiguration,
+  nixosTests,
+  nix-update-script,
 }:
 
-let version = "1.7.3";
+let
+  version = "1.9.0";
 in
 rustPlatform.buildRustPackage {
   pname = "meilisearch";
@@ -16,31 +18,34 @@ rustPlatform.buildRustPackage {
 
   src = fetchFromGitHub {
     owner = "meilisearch";
-    repo = "MeiliSearch";
+    repo = "meiliSearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2kwogur6hS7/xjUhH9aRJevWbtgg5xQkvB/aIj7wyJ8=";
+    hash = "sha256-fPXhayS8OKiiiDvVvBry3njZ74/W6oVL0p85Z5qf3KA==";
   };
 
-  cargoBuildFlags = [
-    "--package=meilisearch"
+  cargoPatches = [
+    # fix build with Rust 1.80
+    ./time-crate.patch
   ];
+
+  cargoBuildFlags = [ "--package=meilisearch" ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "actix-web-static-files-3.0.5" = "sha256-2BN0RzLhdykvN3ceRLkaKwSZtel2DBqZ+uz4Qut+nII=";
-      "candle-core-0.3.3" = "sha256-umWvG+82B793PQtY9VeHjPTtTVmSPdts25buw4v4TQc=";
-      "candle-kernels-0.3.1" = "sha256-KlkjTUcbnP+uZoA0fDZlEPT5qKC2ogMAuR8X14xRFgA=";
       "hf-hub-0.3.2" = "sha256-tsn76b+/HRvPnZ7cWd8SBcEdnMPtjUEIRJipOJUbz54=";
-      "tokenizers-0.14.1" = "sha256-cq7dQLttNkV5UUhXujxKKMuzhD7hz+zTTKxUKlvz1s0=";
+      "tokenizers-0.15.2" = "sha256-lWvCu2hDJFzK6IUBJ4yeL4eZkOA08LHEMfiKXVvkog8=";
     };
   };
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    Security SystemConfiguration
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    SystemConfiguration
   ];
 
   passthru = {
@@ -53,13 +58,18 @@ rustPlatform.buildRustPackage {
   # Tests will try to compile with mini-dashboard features which downloads something from the internet.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Powerful, fast, and an easy to use search engine";
     mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
     changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ happysalada ];
-    platforms = [ "aarch64-linux" "aarch64-darwin" "x86_64-linux" "x86_64-darwin" ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ happysalada ];
+    platforms = [
+      "aarch64-linux"
+      "aarch64-darwin"
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

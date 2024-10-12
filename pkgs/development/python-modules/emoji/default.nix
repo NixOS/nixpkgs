@@ -1,35 +1,36 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pytestCheckHook
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  typing-extensions,
+  pytestCheckHook,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "2.10.1";
-  format = "setuptools";
+  version = "2.13.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "carpedm20";
-    repo = pname;
+    repo = "emoji";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cCYZ+0IFHIR9++RfUbFTRMKYB9nC5dBaPMH6dSiAXK0=";
+    hash = "sha256-FTQTbp5Ud3CyqkAiGvY8hBOKnvFR29CgZPbz4eZp/ik=";
   };
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  build-system = [ setuptools ];
 
-  disabledTests = [
-    "test_emojize_name_only"
-  ];
+  dependencies = [ typing-extensions ];
 
-  pythonImportsCheck = [
-    "emoji"
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [ "test_emojize_name_only" ];
+
+  pythonImportsCheck = [ "emoji" ];
 
   meta = with lib; {
     description = "Emoji for Python";

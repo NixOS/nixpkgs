@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     owner = "amarao";
     repo = "sdled";
     rev = "60fd6c728112f2f1feb317355bdb1faf9d2f76da";
-    sha256 = "1qygzjzsv305662317435nsc6r15k7r6qidp48lgspvy9x5xli73";
+    hash = "sha256-40TaS09+X/0oIrdFbPKZJWTDtC2DnDCEMQWMrb/8z+M=";
   };
 
   buildInputs = [ python3 ];
@@ -23,6 +23,6 @@ stdenv.mkDerivation {
     mainProgram = "encled";
     homepage = "https://github.com/amarao/sdled";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.lheckemann ];
+    maintainers = [ ];
   };
 }

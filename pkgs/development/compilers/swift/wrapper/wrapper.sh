@@ -242,17 +242,26 @@ if [[ -e $cc_wrapper/nix-support/add-local-cc-cflags-before.sh ]]; then
     source $cc_wrapper/nix-support/add-local-cc-cflags-before.sh
 fi
 
-# May need to transform the triple injected by the above.
-for ((i = 1; i < ${#extraBefore[@]}; i++)); do
-    if [[ "${extraBefore[i]}" = -target ]]; then
+for ((i=0; i < ${#extraBefore[@]}; i++));do
+    case "${extraBefore[i]}" in
+    -target)
         i=$((i + 1))
         # On Darwin only, need to change 'aarch64' to 'arm64'.
         extraBefore[i]="${extraBefore[i]/aarch64-apple-/arm64-apple-}"
         # On Darwin, Swift requires the triple to be annotated with a version.
         # TODO: Assumes macOS.
         extraBefore[i]="${extraBefore[i]/-apple-darwin/-apple-macosx${MACOSX_DEPLOYMENT_TARGET:-11.0}}"
-        break
-    fi
+        ;;
+    -march=*|-mcpu=*|-mfloat-abi=*|-mfpu=*|-mmode=*|-mthumb|-marm|-mtune=*)
+        [[ i -gt 0 && ${extraBefore[i-1]} == -Xcc ]] && continue
+        extraBefore=(
+            "${extraBefore[@]:0:i}"
+            -Xcc
+            "${extraBefore[@]:i:${#extraBefore[@]}}"
+        )
+        i=$((i + 1))
+        ;;
+    esac
 done
 
 # As a very special hack, if the arguments are just `-v', then don't

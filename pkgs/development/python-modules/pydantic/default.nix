@@ -1,33 +1,34 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchpatch
-, pythonOlder
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
 
-# build-system
-, hatchling
-, hatch-fancy-pypi-readme
+  # build-system
+  hatchling,
+  hatch-fancy-pypi-readme,
 
-# native dependencies
-, libxcrypt
+  # native dependencies
+  libxcrypt,
 
-# dependencies
-, annotated-types
-, pydantic-core
-, typing-extensions
+  # dependencies
+  annotated-types,
+  pydantic-core,
+  typing-extensions,
 
-# tests
-, cloudpickle
-, email-validator
-, dirty-equals
-, faker
-, pytestCheckHook
-, pytest-mock
+  # tests
+  cloudpickle,
+  email-validator,
+  dirty-equals,
+  pytestCheckHook,
+  pytest-mock,
+  eval-type-backport,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pydantic";
-  version = "2.6.3";
+  version = "2.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -36,21 +37,10 @@ buildPythonPackage rec {
     owner = "pydantic";
     repo = "pydantic";
     rev = "refs/tags/v${version}";
-    hash = "sha256-neTdG/IcXopCmevzFY5/XDlhPHmOb6dhyAnzaobmeG8=";
+    hash = "sha256-9Tbm5Y1wSPa3lTdI8y95csYHua7nKUIYAfxSn+3J5zI=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/pydantic/pydantic/pull/8678
-      name = "fix-pytest8-compatibility.patch";
-      url = "https://github.com/pydantic/pydantic/commit/825a6920e177a3b65836c13c7f37d82b810ce482.patch";
-      hash = "sha256-Dap5DtDzHw0jS/QUo5CRI9sLDJ719GRyC4ZNDWEdzus=";
-     })
-  ];
-
-  buildInputs = lib.optionals (pythonOlder "3.9") [
-    libxcrypt
-  ];
+  buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
 
   build-system = [
     hatch-fancy-pypi-readme
@@ -63,27 +53,28 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    email = [
-      email-validator
-    ];
+  optional-dependencies = {
+    email = [ email-validator ];
   };
 
-  nativeCheckInputs = [
-    cloudpickle
-    dirty-equals
-    faker
-    pytest-mock
-    pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      cloudpickle
+      dirty-equals
+      pytest-mock
+      pytestCheckHook
+      rich
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies)
+    ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
     substituteInPlace pyproject.toml \
-      --replace "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
-      --replace "'--benchmark-group-by', 'group'," "" \
-      --replace "'--benchmark-warmup', 'on'," "" \
-      --replace "'--benchmark-disable'," ""
+      --replace-fail "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
+      --replace-fail "'--benchmark-group-by', 'group'," "" \
+      --replace-fail "'--benchmark-warmup', 'on'," "" \
+      --replace-fail "'--benchmark-disable'," ""
   '';
 
   pytestFlagsArray = [

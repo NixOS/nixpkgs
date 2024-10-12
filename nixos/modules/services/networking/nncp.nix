@@ -34,12 +34,10 @@ in {
           [](#opt-programs.nncp.settings)
         '';
         socketActivation = {
-          enable = mkEnableOption ''
-            Whether to run nncp-daemon persistently or socket-activated.
-          '';
+          enable = mkEnableOption "socket activation for nncp-daemon";
           listenStreams = mkOption {
             type = with types; listOf str;
-            description = lib.mdDoc ''
+            description = ''
               TCP sockets to bind to.
               See [](#opt-systemd.sockets._name_.listenStreams).
             '';

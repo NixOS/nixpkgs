@@ -72,6 +72,6 @@ stdenv.mkDerivation rec {
     mainProgram = "nscd";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

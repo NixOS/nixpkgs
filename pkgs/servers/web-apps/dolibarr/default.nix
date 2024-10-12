@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
-  version = "19.0.0";
+  version = "19.0.3";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
     rev = version;
-    hash = "sha256-Guq3CHdVqGfprXo0O3VriWSfWR/sIgj3Znso1BUeLNY=";
+    hash = "sha256-7LLlmJ5h8EmxPvRl+PJxAtjGRS44Zg8RQzwtoAsm6Kg=";
   };
 
   dontBuild = true;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   passthru.tests = { inherit (nixosTests) dolibarr; };
 
   meta = with lib; {
-    description = "A enterprise resource planning (ERP) and customer relationship manager (CRM) server";
+    description = "Enterprise resource planning (ERP) and customer relationship manager (CRM) server";
     homepage = "https://dolibarr.org/";
     license = licenses.gpl3Plus;
     maintainers = [ ];

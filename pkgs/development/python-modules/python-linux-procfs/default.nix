@@ -1,16 +1,24 @@
-{ lib, buildPythonPackage, fetchzip, six }:
+{
+  lib,
+  buildPythonPackage,
+  fetchurl,
+  setuptools,
+  six,
+}:
 
 buildPythonPackage rec {
   pname = "python-linux-procfs";
-  version = "0.6.3";
-  format = "setuptools";
+  version = "0.7.3";
+  pyproject = true;
 
-  src = fetchzip {
+  src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/snapshot/python-linux-procfs-v${version}.tar.gz";
-    hash = "sha256-iaKL7CWJbIvvcUCah7bKdwKZoZJehbQpZ7n0liO8N64=";
+    hash = "sha256-6js8+PBqMwNYSe74zqZP8CZ5nt1ByjCWnex+wBY/LZU=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
+
+  dependencies = [ six ];
 
   # contains no tests
   doCheck = false;
@@ -21,6 +29,5 @@ buildPythonPackage rec {
     mainProgram = "pflags";
     homepage = "https://git.kernel.org/pub/scm/libs/python/python-linux-procfs/python-linux-procfs.git/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elohmeier ];
   };
 }

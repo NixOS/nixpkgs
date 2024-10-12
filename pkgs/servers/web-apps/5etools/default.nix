@@ -10,7 +10,7 @@ fetchFromGitHub rec {
   hash = "sha256-0+QjtcmKsfcSehvn4DChBhSVooy9wlqaSCgeAFgeL+w=";
 
   meta = with lib; {
-    description = "A suite of browser-based tools for players and DMs of D&D 5e";
+    description = "Suite of browser-based tools for players and DMs of D&D 5e";
     homepage = "https://5e.tools";
     changelog = "https://github.com/5etools-mirror-1/5etools-mirror-1.github.io/releases/tag/v${version}";
     license = [ licenses.mit ];

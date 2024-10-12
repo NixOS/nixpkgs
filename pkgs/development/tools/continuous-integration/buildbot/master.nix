@@ -1,14 +1,13 @@
 { lib
 , stdenv
 , buildPythonApplication
-, fetchPypi
+, fetchFromGitHub
 , makeWrapper
 # Tie withPlugins through the fixed point here, so it will receive an
 # overridden version properly
 , buildbot
 , pythonOlder
 , python
-, pythonRelaxDepsHook
 , twisted
 , jinja2
 , msgpack
@@ -72,18 +71,19 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "3.11.1";
+  version = "4.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-ruYW1sVoGvFMi+NS+xiNsn0Iq2RmKlax4bxHgYrj6ZY=";
+  src = fetchFromGitHub {
+    owner = "buildbot";
+    repo = "buildbot";
+    rev = "v${version}";
+    hash = "sha256-4jxA8qvLX53cLooCpkn9hvcz4SFGc29TKxUah80Ufp4=";
   };
 
   build-system = [
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -137,14 +137,17 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
+  '';
+  preBuild = ''
+    cd master
   '';
 
   # Silence the depreciation warning from SqlAlchemy
   SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
   # TimeoutErrors on slow machines -> aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
@@ -158,16 +161,19 @@ buildPythonApplication rec {
 
   passthru = {
     inherit withPlugins;
-    tests.buildbot = nixosTests.buildbot;
     updateScript = ./update.sh;
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+    tests = {
+      inherit (nixosTests) buildbot;
+    };
   };
 
   meta = with lib; {
-    description = "An open-source continuous integration framework for automating software build, test, and release processes";
+    description = "Open-source continuous integration framework for automating software build, test, and release processes";
     homepage = "https://buildbot.net/";
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2Only;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

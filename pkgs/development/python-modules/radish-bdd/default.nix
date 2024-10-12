@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, click
-, colorful
-, docopt
-, fetchFromGitHub
-, freezegun
-, humanize
-, lark
-, lxml
-, parse-type
-, pysingleton
-, pytest-mock
-, pytestCheckHook
-, pythonOlder
-, pyyaml
-, tag-expressions
+{
+  lib,
+  buildPythonPackage,
+  click,
+  colorful,
+  docopt,
+  fetchFromGitHub,
+  freezegun,
+  humanize,
+  lark,
+  lxml,
+  parse-type,
+  pysingleton,
+  pytest-mock,
+  pytestCheckHook,
+  pythonOlder,
+  pyyaml,
+  tag-expressions,
 }:
 
 buildPythonPackage rec {
@@ -50,13 +51,9 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  pythonImportsCheck = [
-    "radish"
-  ];
+  pythonImportsCheck = [ "radish" ];
 
-  disabledTests = [
-    "test_main_cli_calls"
-  ];
+  disabledTests = [ "test_main_cli_calls" ];
 
   meta = with lib; {
     description = "Behaviour-Driven-Development tool for python";
