@@ -59,8 +59,8 @@ let
 in
 {
   nextcloud28 = generic {
-    version = "28.0.10";
-    hash = "sha256-LoAVJtKJHBhf6sWYXL084pLOcKQl9Tb5GfkBuftMwhA=";
+    version = "28.0.11";
+    hash = "sha256-S6rs7GpvFFgy28PGNdcuIM1IBKytmmZOanS5CnmB40g=";
     packages = nextcloud28Packages;
   };
 
