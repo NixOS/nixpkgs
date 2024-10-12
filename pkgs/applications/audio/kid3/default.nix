@@ -1,46 +1,43 @@
-{ chromaprint
-, cmake
-, docbook_xml_dtd_45
-, docbook_xsl
-, fetchurl
-, ffmpeg
-, flac
-, id3lib
-, kdePackages
-, lib
-, libogg
-, libvorbis
-, libxslt
-, mp4v2
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, qttools
-, readline
-, stdenv
-, taglib
-, wrapQtAppsHook
-, zlib
-, withCLI ? true
-, withKDE ? true
-, withQt ? false
+{
+  lib,
+  chromaprint,
+  cmake,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  fetchurl,
+  ffmpeg,
+  flac,
+  id3lib,
+  kdePackages,
+  libogg,
+  libvorbis,
+  libxslt,
+  mp4v2,
+  pkg-config,
+  python3,
+  qt6,
+  readline,
+  stdenv,
+  taglib,
+  zlib,
+  # Boolean flags
+  withCLI ? true,
+  withKDE ? true,
+  withQt ? false,
 }:
 
 let
-  inherit (lib) optionals;
+  inherit (qt6)
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qttools
+    wrapQtAppsHook
+    ;
 
   apps = lib.concatStringsSep ";" (
-    optionals withCLI [ "CLI" ]
-    ++ optionals withKDE [ "KDE" ]
-    ++ optionals withQt [ "Qt" ]
+    lib.optionals withCLI [ "CLI" ] ++ lib.optionals withKDE [ "KDE" ] ++ lib.optionals withQt [ "Qt" ]
   );
-
-  mainProgram =
-    if withQt then "kid3-qt"
-    else if withKDE then "kid3"
-    else "kid3-cli";
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -62,29 +59,34 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    chromaprint
-    ffmpeg
-    flac
-    id3lib
-    libogg
-    libvorbis
-    libxslt
-    mp4v2
-    qtbase
-    qtdeclarative
-    qtmultimedia
-    readline
-    taglib
-    zlib
-  ] ++ lib.optionals withKDE (with kdePackages; [
-    kconfig
-    kconfigwidgets
-    kcoreaddons
-    kio
-    kxmlgui
-    phonon
-  ]);
+  buildInputs =
+    [
+      chromaprint
+      ffmpeg
+      flac
+      id3lib
+      libogg
+      libvorbis
+      libxslt
+      mp4v2
+      qtbase
+      qtdeclarative
+      qtmultimedia
+      readline
+      taglib
+      zlib
+    ]
+    ++ lib.optionals withKDE (
+      with kdePackages;
+      [
+        kconfig
+        kconfigwidgets
+        kcoreaddons
+        kio
+        kxmlgui
+        phonon
+      ]
+    );
 
   cmakeFlags = [ (lib.cmakeFeature "WITH_APPS" apps) ];
 
@@ -95,10 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "Simple and powerful audio tag editor";
-    inherit mainProgram;
     homepage = "https://kid3.kde.org/";
-    license = lib.licenses.lgpl2Plus;
+    description = "Simple and powerful audio tag editor";
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
       MP2, Opus, Speex, TrueAudio, WavPack, WMA, WAV and AIFF files (e.g. full
@@ -128,6 +128,14 @@ stdenv.mkDerivation (finalAttrs: {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
+    license = lib.licenses.lgpl2Plus;
+    mainProgram =
+      if withQt then
+        "kid3-qt"
+      else if withKDE then
+        "kid3"
+      else
+        "kid3-cli";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
