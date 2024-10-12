@@ -6,9 +6,10 @@ let
   openjfx17 = callPackage ../development/compilers/openjdk/openjfx/17 { };
   openjfx21 = callPackage ../development/compilers/openjdk/openjfx/21 { };
   openjfx22 = callPackage ../development/compilers/openjdk/openjfx/22 { };
+  openjfx23 = callPackage ../development/compilers/openjdk/openjfx/23 { };
 
 in {
-  inherit openjfx17 openjfx21 openjfx22;
+  inherit openjfx17 openjfx21 openjfx22 openjfx23;
 
   compiler = let
     mkOpenjdk = path-linux: path-darwin: args:
@@ -67,6 +68,14 @@ in {
       {
         openjdk22-bootstrap = temurin-bin.jdk-22;
         openjfx = openjfx22;
+      };
+
+    openjdk23 = mkOpenjdk
+      ../development/compilers/openjdk/23.nix
+      ../development/compilers/zulu/23.nix
+      {
+        openjdk23-bootstrap = temurin-bin.jdk-22;
+        openjfx = openjfx23;
       };
 
     temurin-bin = recurseIntoAttrs (callPackage (
