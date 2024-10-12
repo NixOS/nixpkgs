@@ -17,13 +17,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "imaginer";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "ImaginerApp";
     repo = "Imaginer";
     rev = "v${version}";
-    hash = "sha256-x1ZnmfaMfxnITiuFDlMPfTU8KZbd1ME9jDevnlsrbJs=";
+    hash = "sha256-t9CHpukeJvTajdD32a8a4Ws9A/n6E/jcq0QgDBCPNBA=";
   };
 
   format = "other";
