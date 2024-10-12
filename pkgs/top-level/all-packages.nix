@@ -3045,7 +3045,9 @@ with pkgs;
 
   arandr = callPackage ../tools/X11/arandr { };
 
-  arangodb = callPackage ../servers/nosql/arangodb { };
+  arangodb_3_10 = callPackage ../servers/nosql/arangodb { };
+
+  arangodb = arangodb_3_10;
 
   arduino = arduino-core.override { withGui = true; };
 
