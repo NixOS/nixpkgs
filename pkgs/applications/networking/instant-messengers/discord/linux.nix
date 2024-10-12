@@ -1,34 +1,92 @@
-{ pname, version, src, meta, binaryName, desktopName, autoPatchelfHook
-, makeDesktopItem, lib, stdenv, wrapGAppsHook3, makeShellWrapper, alsa-lib, at-spi2-atk
-, at-spi2-core, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk-pixbuf
-, glib, gtk3, libcxx, libdrm, libglvnd, libnotify, libpulseaudio, libuuid, libX11
-, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
-, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, mesa, nspr, nss
-, pango, systemd, libappindicator-gtk3, libdbusmenu, writeScript, python3, runCommand
-, libunity
-, speechd-minimal
-, wayland
-, branch
-, withOpenASAR ? false, openasar
-, withVencord ? false, vencord
-, withTTS ? true }:
+{
+  pname,
+  version,
+  src,
+  meta,
+  binaryName,
+  desktopName,
+  autoPatchelfHook,
+  makeDesktopItem,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  makeShellWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libcxx,
+  libdrm,
+  libglvnd,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  libappindicator-gtk3,
+  libdbusmenu,
+  writeScript,
+  python3,
+  runCommand,
+  libunity,
+  speechd-minimal,
+  wayland,
+  branch,
+  withOpenASAR ? false,
+  openasar,
+  withVencord ? false,
+  vencord,
+  withTTS ? true,
+}:
 
 let
-  disableBreakingUpdates = runCommand "disable-breaking-updates.py"
-    {
-      pythonInterpreter = "${python3.interpreter}";
-      configDirName = lib.toLower binaryName;
-      meta.mainProgram = "disable-breaking-updates.py";
-    } ''
-    mkdir -p $out/bin
-    cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
-    substituteAllInPlace $out/bin/disable-breaking-updates.py
-    chmod +x $out/bin/disable-breaking-updates.py
-  '';
+  disableBreakingUpdates =
+    runCommand "disable-breaking-updates.py"
+      {
+        pythonInterpreter = "${python3.interpreter}";
+        configDirName = lib.toLower binaryName;
+        meta.mainProgram = "disable-breaking-updates.py";
+      }
+      ''
+        mkdir -p $out/bin
+        cp ${./disable-breaking-updates.py} $out/bin/disable-breaking-updates.py
+        substituteAllInPlace $out/bin/disable-breaking-updates.py
+        chmod +x $out/bin/disable-breaking-updates.py
+      '';
 in
 
 stdenv.mkDerivation rec {
-  inherit pname version src meta;
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   nativeBuildInputs = [
     alsa-lib
@@ -50,48 +108,51 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  libPath = lib.makeLibraryPath ([
-    libcxx
-    systemd
-    libpulseaudio
-    libdrm
-    mesa
-    stdenv.cc.cc
-    alsa-lib
-    atk
-    at-spi2-atk
-    at-spi2-core
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gtk3
-    libglvnd
-    libnotify
-    libX11
-    libXcomposite
-    libunity
-    libuuid
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    nspr
-    libxcb
-    pango
-    libXScrnSaver
-    libappindicator-gtk3
-    libdbusmenu
-    wayland
-  ] ++ lib.optional withTTS speechd-minimal);
+  libPath = lib.makeLibraryPath (
+    [
+      libcxx
+      systemd
+      libpulseaudio
+      libdrm
+      mesa
+      stdenv.cc.cc
+      alsa-lib
+      atk
+      at-spi2-atk
+      at-spi2-core
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gtk3
+      libglvnd
+      libnotify
+      libX11
+      libXcomposite
+      libunity
+      libuuid
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      nspr
+      libxcb
+      pango
+      libXScrnSaver
+      libappindicator-gtk3
+      libdbusmenu
+      wayland
+    ]
+    ++ lib.optional withTTS speechd-minimal
+  );
 
   installPhase = ''
     runHook preInstall
@@ -113,9 +174,7 @@ stdenv.mkDerivation rec {
 
     ln -s $out/opt/${binaryName}/${binaryName} $out/bin/
     # Without || true the install would fail on case-insensitive filesystems
-    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${
-      lib.strings.toLower binaryName
-    } || true
+    ln -s $out/opt/${binaryName}/${binaryName} $out/bin/${lib.strings.toLower binaryName} || true
 
     ln -s $out/opt/${binaryName}/discord.png $out/share/pixmaps/${pname}.png
     ln -s $out/opt/${binaryName}/discord.png $out/share/icons/hicolor/256x256/apps/${pname}.png
@@ -125,14 +184,16 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postInstall = lib.strings.optionalString withOpenASAR ''
-    cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
-  '' + lib.strings.optionalString withVencord ''
-    mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
-    mkdir $out/opt/${binaryName}/resources/app.asar
-    echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
-    echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
-  '';
+  postInstall =
+    lib.strings.optionalString withOpenASAR ''
+      cp -f ${openasar} $out/opt/${binaryName}/resources/app.asar
+    ''
+    + lib.strings.optionalString withVencord ''
+      mv $out/opt/${binaryName}/resources/app.asar $out/opt/${binaryName}/resources/_app.asar
+      mkdir $out/opt/${binaryName}/resources/app.asar
+      echo '{"name":"discord","main":"index.js"}' > $out/opt/${binaryName}/resources/app.asar/package.json
+      echo 'require("${vencord}/patcher.js")' > $out/opt/${binaryName}/resources/app.asar/index.js
+    '';
 
   desktopItem = makeDesktopItem {
     name = pname;
@@ -140,7 +201,10 @@ stdenv.mkDerivation rec {
     icon = pname;
     inherit desktopName;
     genericName = meta.description;
-    categories = [ "Network" "InstantMessaging" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+    ];
     mimeTypes = [ "x-scheme-handler/discord" ];
   };
 
