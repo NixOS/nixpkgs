@@ -2412,6 +2412,8 @@ with pkgs;
     inherit (ocamlPackages) buildDunePackage cmdliner base stdio;
    };
 
+  misc-gitology = callPackage ../applications/version-management/misc-gitology {};
+
   pass-git-helper = python3Packages.callPackage ../applications/version-management/pass-git-helper { };
 
   qgit = qt5.callPackage ../applications/version-management/qgit { };
