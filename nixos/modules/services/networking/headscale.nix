@@ -289,7 +289,6 @@ in {
                 default = true;
                 description = ''
                   Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
-                  Only works if there is at least a nameserver defined.
                 '';
                 example = false;
               };
@@ -299,11 +298,13 @@ in {
                 default = "";
                 description = ''
                   Defines the base domain to create the hostnames for MagicDNS.
-                  {option}`baseDomain` must be a FQDNs, without the trailing dot.
-                  The FQDN of the hosts will be
-                  `hostname.namespace.base_domain` (e.g.
-                  `myhost.mynamespace.example.com`).
+                  This domain must be different from the {option}`server_url`
+                  domain.
+                  {option}`base_domain` must be a FQDN, without the trailing dot.
+                  The FQDN of the hosts will be `hostname.base_domain` (e.g.
+                  `myhost.tailnet.example.com`).
                 '';
+                example = "tailnet.example.com";
               };
 
               nameservers = {
