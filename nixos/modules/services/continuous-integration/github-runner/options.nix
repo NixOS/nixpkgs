@@ -142,6 +142,14 @@ with lib;
           default = false;
         };
 
+        nixInPath = mkOption {
+          type = types.bool;
+          description = mdDoc ''
+            Add Nix to `PATH` of the service to make it available to workflows.
+          '';
+          default = true;
+        };
+
         replace = mkOption {
           type = types.bool;
           description = ''
