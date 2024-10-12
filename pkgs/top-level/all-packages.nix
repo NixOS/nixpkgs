@@ -30005,6 +30005,8 @@ with pkgs;
 
   skate = callPackage ../applications/misc/skate { };
 
+  postrunner = callPackage ../applications/misc/postrunner { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
