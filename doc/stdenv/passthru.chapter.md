@@ -75,17 +75,18 @@ The Nixpkgs systems for continuous integration [Hydra](https://hydra.nixos.org/)
 #### Package tests {#var-passthru-tests-packages}
 []{#var-meta-tests-packages} <!-- legacy anchor -->
 
-Besides tests provided by upstream, that you run in the [`checkPhase`](#ssec-check-phase), you may want to define tests derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](#sec-stdenv-phases):
+Besides tests provided by upstream, usually executed during the [`checkPhase`](#ssec-check-phase), you may want to define test derivations in the `passthru.tests` attribute, which won't change the build. `passthru.tests` have several advantages over running tests during any of the [standard phases](#sec-stdenv-phases):
 
-- They access the package as consumers would, independently from the environment in which it was built
-- They can be run and debugged without rebuilding the package, which is useful if that takes a long time
-- They don't add overhead to each build, as opposed checks added to the [`installCheckPhase`](#ssec-installCheck-phase), such as [`versionCheckHook`](#versioncheckhook).
+- They are derivations themselves, therefore they have access to the whole feature set provided by Nix and Nixpkgs.
+  - For example, they can invoke extra tools, build reverse dependencies, fetch external files etc.
+- They access the package as consumers would, independently from the environment in which it was built.
+- They can be executed and debugged without rebuilding the package, which is useful when that rebuild takes a long time.
+- For content-addressed derivations, they test the executable __after__ rewriting instead of _before_, catching cases when the rewriting would break the executable.
+- They don't add overhead to each build, as opposed to checks added by the [`installCheckPhase`](#ssec-installCheck-phase), such as [`versionCheckHook`](#versioncheckhook).
 
-It is also possible to use `passthru.tests` to test the version with [`testVersion`](#tester-testVersion), but since that is pretty trivial and recommended thing to do, we recommend using [`versionCheckHook`](#versioncheckhook) for that, which has the following advantages over `passthru.tests`:
+Note: Especifically for version-testing, Nixpkgs provides [`testers.testVersion`](#tester-testVersion), traditionally used as `passthru.tests.version` attribute, as well as the `versionCheckHook` mentioned above.
 
-- If the `versionCheckPhase` (the phase defined by [`versionCheckHook`](#versioncheckhook)) fails, it triggers a failure which can't be ignored if you use the package, or if you find out about it in a [`nixpkgs-review`](https://github.com/Mic92/nixpkgs-review) report.
-- Sometimes packages become silently broken - meaning they fail to launch but their build passes because they don't perform any tests in the `checkPhase`. If you use this tool infrequently, such a silent breakage may rot in your system / profile configuration, and you will not notice the failure until you will want to use this package. Testing such basic functionality ensures you have to deal with the failure when you update your system / profile.
-- When you open a PR, [ofborg](https://github.com/NixOS/ofborg)'s CI _will_ run `passthru.tests` of [packages that are directly changed by your PR (according to your commits' messages)](https://github.com/NixOS/ofborg?tab=readme-ov-file#automatic-building), but if you'd want to use the [`@ofborg build`](https://github.com/NixOS/ofborg?tab=readme-ov-file#build) command for dependent packages, you won't have to specify in addition the `.tests` attribute of the packages you want to build, and no body will be able to avoid these tests.
+Note: As shown in this [comparison](#versioncheckhook-comparison-testversion), `versionCheckHook` fits better than `testers.testVersion` in most of typical situations.
 
 <!-- NOTE(@fricklerhandwerk): one may argue whether that testing guide should rather be in the user's manual -->
 For more on how to write and run package tests for Nixpkgs, see the [testing section in the package contributor guide](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#package-tests).
