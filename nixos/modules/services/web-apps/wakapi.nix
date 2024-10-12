@@ -112,6 +112,7 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        StateDirectory = "wakapi";
         StateDirectoryMode = "0700";
         Restart = "always";
       };
