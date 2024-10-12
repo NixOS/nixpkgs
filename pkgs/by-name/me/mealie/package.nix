@@ -164,3 +164,4 @@ pythonpkgs.buildPythonApplication rec {
     mainProgram = "mealie";
   };
 }
+

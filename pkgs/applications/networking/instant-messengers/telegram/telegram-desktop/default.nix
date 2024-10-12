@@ -234,3 +234,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = if stdenv.hostPlatform.isLinux then "telegram-desktop" else "Telegram";
   };
 })
+

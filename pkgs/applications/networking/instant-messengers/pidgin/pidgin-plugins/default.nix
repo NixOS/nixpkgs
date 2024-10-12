@@ -69,3 +69,4 @@ lib.makeScope newScope (self:
 
     purple-facebook = callPackage ./purple-facebook { };
 })
+

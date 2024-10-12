@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
     platforms = intersectLists platforms.linux platforms.x86; # broken on ARM and Darwin
   };
 }
+

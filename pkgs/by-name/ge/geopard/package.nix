@@ -56,3 +56,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "geopard";
   };
 })
+

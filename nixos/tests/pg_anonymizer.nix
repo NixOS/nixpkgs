@@ -92,3 +92,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         check_anonymized_rows(get_player_table_contents())
   '';
 })
+

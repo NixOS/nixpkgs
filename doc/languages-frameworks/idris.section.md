@@ -141,3 +141,4 @@ build-idris-package {
 ```
 
 to require verbose output during `idris` build phase.
+

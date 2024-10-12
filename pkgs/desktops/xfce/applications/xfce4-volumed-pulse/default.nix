@@ -16,3 +16,4 @@ mkXfceDerivation {
     maintainers = with maintainers; [ abbradar ] ++ teams.xfce.members;
   };
 }
+

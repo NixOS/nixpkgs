@@ -75,3 +75,4 @@ import ./make-test-python.nix {
     test_ntfysh()
   '';
 }
+

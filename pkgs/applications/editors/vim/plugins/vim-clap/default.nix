@@ -72,3 +72,4 @@ vimUtils.buildVimPlugin {
     };
   };
 }
+

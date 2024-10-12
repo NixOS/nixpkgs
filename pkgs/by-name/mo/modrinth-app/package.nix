@@ -68,3 +68,4 @@ symlinkJoin rec {
 
   inherit (modrinth-app-unwrapped) meta;
 }
+

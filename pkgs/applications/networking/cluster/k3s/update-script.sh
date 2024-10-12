@@ -162,3 +162,4 @@ cat <<EOF
     "files": ["$PWD/versions.nix","$PWD/chart-versions.nix"]
 }]
 EOF
+

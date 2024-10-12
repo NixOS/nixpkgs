@@ -97,3 +97,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ zane sochotnicky ];
   };
 }
+

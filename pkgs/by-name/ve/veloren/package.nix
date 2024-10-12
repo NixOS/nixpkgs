@@ -123,3 +123,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ rnhmjoj tomodachi94 ];
   };
 }
+

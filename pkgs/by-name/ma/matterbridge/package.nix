@@ -27,3 +27,4 @@ buildGoModule {
     mainProgram = "matterbridge";
   };
 }
+

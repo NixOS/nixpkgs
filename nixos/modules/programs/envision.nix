@@ -49,3 +49,4 @@ in
 
   meta.maintainers = pkgs.envision.meta.maintainers;
 }
+

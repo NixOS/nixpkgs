@@ -22,3 +22,4 @@ in {
     assert machine.wait_until_succeeds("curl --fail http://localhost:${toString testPort}/health") == '{"ok":true}'
   '';
 })
+

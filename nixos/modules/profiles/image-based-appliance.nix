@@ -24,3 +24,4 @@
   boot.initrd.systemd.enable = lib.mkDefault true;
   networking.useNetworkd = lib.mkDefault true;
 }
+

@@ -31,3 +31,4 @@ if [ -n "${COMMIT-}" ]; then
        $nixpkgs/pkgs/os-specific/linux/kernel/linux-libre.nix
     echo "Updated linux_latest-libre $old_rev -> $rev"
 fi
+

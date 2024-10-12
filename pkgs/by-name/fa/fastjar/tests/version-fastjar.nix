@@ -4,3 +4,4 @@ testers.testVersion {
   package = fastjar;
   command = "fastjar --version";
 }
+

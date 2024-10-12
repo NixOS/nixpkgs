@@ -22,3 +22,4 @@ runCommand "${xrootd.pname}-run-tests-${xrootd.version}" {
   mkdir -p "$out/bin"
   ln -s "$testRunnerPath" "$out/bin/test-runner"
 ''
+

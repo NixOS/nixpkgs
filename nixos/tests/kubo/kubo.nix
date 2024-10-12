@@ -58,3 +58,4 @@
         machine.succeed("test ! -e /var/lib/ipfs/")
   '';
 }
+

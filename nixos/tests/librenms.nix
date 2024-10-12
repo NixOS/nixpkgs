@@ -102,3 +102,4 @@ in
     librenms.wait_until_succeeds("test $(curl -H 'X-Auth-Token: ${api_token}' http://localhost/api/v0/devices/snmphost | jq -Mr .devices[0].last_polled) != 'null'")
   '';
 })
+

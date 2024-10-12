@@ -55,3 +55,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
         raise Exception("Unable to set balanced profile with powerprofilectl")
   '';
 })
+

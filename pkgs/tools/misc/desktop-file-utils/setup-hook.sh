@@ -4,3 +4,4 @@ mimeinfoPreFixupPhase() {
 }
 
 preFixupPhases="${preFixupPhases-} mimeinfoPreFixupPhase"
+

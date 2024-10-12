@@ -42,3 +42,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client.succeed("curl http://[fd00::1]:8080/api/status")
   '';
 })
+

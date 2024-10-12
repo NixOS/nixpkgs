@@ -182,3 +182,4 @@ in runCommand
     ln -s ${androidStudioForPlatform}/bin/studio.png $out/share/pixmaps/${pname}.png
     ln -s ${desktopItem}/share/applications $out/share/applications
   ''
+

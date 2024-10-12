@@ -45,3 +45,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ lord-valen ];
   };
 }
+

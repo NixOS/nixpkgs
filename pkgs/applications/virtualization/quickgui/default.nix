@@ -54,3 +54,4 @@ flutter.buildFlutterApplication rec {
     mainProgram = "quickgui";
   };
 }
+

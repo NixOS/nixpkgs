@@ -37,3 +37,4 @@ stdenv.mkDerivation {
     inherit (usbrelay.meta) homepage license maintainers platforms;
   };
 }
+

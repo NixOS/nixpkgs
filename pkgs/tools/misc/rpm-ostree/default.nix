@@ -123,3 +123,4 @@ stdenv.mkDerivation rec {
     mainProgram = "rpm-ostree";
   };
 }
+

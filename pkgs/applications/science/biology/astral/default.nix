@@ -77,3 +77,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ bzizou tomasajt ];
   };
 })
+

@@ -70,3 +70,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (olm.meta) knownVulnerabilities;
   };
 })
+

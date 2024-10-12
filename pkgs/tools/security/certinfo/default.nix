@@ -28,3 +28,4 @@ buildGo123Module rec {
     maintainers = with maintainers; [ jakuzure ];
   };
 }
+

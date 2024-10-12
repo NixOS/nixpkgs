@@ -22,3 +22,4 @@ runCommand
       ln -s ${pythonEnv}/bin/$(basename "$bin") $out/bin/
     done
   ''
+

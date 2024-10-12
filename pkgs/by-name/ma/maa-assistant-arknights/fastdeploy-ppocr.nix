@@ -77,3 +77,4 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     broken = cudaSupport && stdenv.hostPlatform.system != "x86_64-linux";
   };
 })
+

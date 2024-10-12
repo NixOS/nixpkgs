@@ -22,3 +22,4 @@ in
     services.udev.packages = [ pkgs.libnitrokey ];
   };
 }
+

@@ -4,3 +4,4 @@ qtModule {
   pname = "qtvirtualkeyboard";
   propagatedBuildInputs = [ qtbase qtdeclarative qtsvg hunspell ];
 }
+

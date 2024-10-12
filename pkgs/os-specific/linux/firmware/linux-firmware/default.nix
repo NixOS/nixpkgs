@@ -34,3 +34,4 @@ stdenvNoCC.mkDerivation rec {
   };
   passthru.updateScript = ./update.sh;
 }
+

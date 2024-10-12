@@ -9,3 +9,4 @@
     <Exec Command='@codesign@ -f -s - "$(PublishedSingleFilePath)" 2>&amp;1'/>
   </Target>
 </Project>
+

@@ -123,3 +123,4 @@ in buildGoModule rec {
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }
+

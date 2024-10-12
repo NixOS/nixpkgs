@@ -74,3 +74,4 @@ exit if failing.empty?
 puts "Following gems failed: #{failing.keys.join(' ')}"
 puts "tests for failing gems remain in #{tmpdir}"
 exit 1
+

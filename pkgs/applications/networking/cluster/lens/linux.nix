@@ -24,3 +24,4 @@ appimageTools.wrapType2 {
 
   extraPkgs = pkgs: [ pkgs.nss_latest ];
 }
+

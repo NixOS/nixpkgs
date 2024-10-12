@@ -30,3 +30,4 @@ buildNimPackage {
     mainProgram = "nitch";
   };
 }
+

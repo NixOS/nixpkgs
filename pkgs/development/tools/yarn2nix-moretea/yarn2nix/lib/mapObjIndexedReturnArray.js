@@ -19,3 +19,4 @@ const mapObjIndexedReturnArray = _curry2((fn, obj) =>
 );
 
 module.exports = mapObjIndexedReturnArray;
+

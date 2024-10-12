@@ -293,3 +293,4 @@ in
 
   meta.maintainers = [ ];
 }
+

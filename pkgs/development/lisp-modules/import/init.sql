@@ -39,3 +39,4 @@ CREATE VIEW IF NOT EXISTS system_view AS
   JOIN sha256 sha ON sha.id = src.sha256_id
   LEFT JOIN dep ON dep.system_id = sys.id
   GROUP BY sys.name;
+

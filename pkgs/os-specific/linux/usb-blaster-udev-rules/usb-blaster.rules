@@ -6,3 +6,4 @@ ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6003", TAG+="uaccess"
 # USB-Blaster II
 ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6010", TAG+="uaccess"
 ATTRS{idVendor}=="09fb", ATTRS{idProduct}=="6810", TAG+="uaccess"
+

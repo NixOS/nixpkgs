@@ -37,3 +37,4 @@ substituteAll {
     '';
     meta.mainProgram = "nixos-container";
 }
+

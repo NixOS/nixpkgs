@@ -60,3 +60,4 @@ in {
       "${pkgs.smartdns}/etc/default/smartdns";
   };
 }
+

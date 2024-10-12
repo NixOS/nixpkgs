@@ -54,3 +54,4 @@ stdenv.mkDerivation rec {
     homepage = "https://fbb-git.gitlab.io/bisoncpp/";
   };
 }
+

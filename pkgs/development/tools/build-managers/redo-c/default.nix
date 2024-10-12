@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ck3d ];
   };
 }
+

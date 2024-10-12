@@ -60,3 +60,4 @@ in stdenv.mkDerivation {
     mainProgram = "spideroak";
   };
 }
+

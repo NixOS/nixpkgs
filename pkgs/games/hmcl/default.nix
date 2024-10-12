@@ -107,3 +107,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (jre.meta) platforms;
   };
 })
+

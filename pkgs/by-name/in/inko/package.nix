@@ -66,3 +66,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "inko";
   };
 }
+

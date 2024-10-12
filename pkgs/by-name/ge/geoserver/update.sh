@@ -39,3 +39,4 @@ for EXT_NAME in "${EXT_NAMES[@]}" ; do
 done
 
 cd -
+

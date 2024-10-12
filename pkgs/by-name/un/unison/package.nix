@@ -62,3 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = if enableX11 then "unison-gui" else "unison";
   };
 })
+

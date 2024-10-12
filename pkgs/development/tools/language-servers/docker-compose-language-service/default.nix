@@ -25,3 +25,4 @@ buildNpmPackage rec {
     mainProgram = "docker-compose-langserver";
   };
 }
+

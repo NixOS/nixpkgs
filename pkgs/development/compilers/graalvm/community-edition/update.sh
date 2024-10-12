@@ -128,3 +128,4 @@ info "Moving the temporary file to '$hashes_nix'"
 mv "$tmpfile" "$hashes_nix"
 
 info "Done!"
+

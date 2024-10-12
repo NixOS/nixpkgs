@@ -85,3 +85,4 @@ in {
     virtualisation.vmware.guest.enable = true;
   };
 }
+

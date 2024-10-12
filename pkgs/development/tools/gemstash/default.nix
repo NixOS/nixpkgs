@@ -17,3 +17,4 @@ bundlerApp rec {
     maintainers = [ maintainers.viraptor ];
   };
 }
+

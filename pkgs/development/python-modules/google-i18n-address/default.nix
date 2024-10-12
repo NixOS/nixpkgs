@@ -39,3 +39,4 @@ buildPythonPackage rec {
     mainProgram = "update-validation-files";
   };
 }
+

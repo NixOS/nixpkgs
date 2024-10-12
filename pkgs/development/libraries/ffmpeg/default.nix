@@ -58,3 +58,4 @@ rec {
   ffmpeg-headless = ffmpeg_6-headless;
   ffmpeg-full = ffmpeg_6-full;
 }
+

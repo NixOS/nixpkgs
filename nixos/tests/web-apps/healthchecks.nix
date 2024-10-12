@@ -40,3 +40,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
         assert "foo\n" == machine.succeed("echo 'print(\"foo\")' | healthchecks-manage shell")
   '';
 })
+

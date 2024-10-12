@@ -62,3 +62,4 @@ buildGoModule {
     mainProgram = "media_repo";
   };
 }
+

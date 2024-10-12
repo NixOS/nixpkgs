@@ -21,3 +21,4 @@ qtModule {
     PCSC
   ];
 }
+

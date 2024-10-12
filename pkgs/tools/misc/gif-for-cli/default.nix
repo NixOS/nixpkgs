@@ -54,3 +54,4 @@ python3Packages.buildPythonApplication {
     mainProgram = "gif-for-cli";
   };
 }
+

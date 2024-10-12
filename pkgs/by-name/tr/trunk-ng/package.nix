@@ -33,3 +33,4 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 ];
   };
 }
+

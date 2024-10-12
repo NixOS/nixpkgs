@@ -78,3 +78,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ lluchs doronbehar bryango ];
   };
 }
+

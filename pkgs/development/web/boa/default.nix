@@ -54,3 +54,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ dit7ya ];
   };
 }
+

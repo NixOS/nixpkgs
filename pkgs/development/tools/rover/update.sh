@@ -49,3 +49,4 @@ cargoHash=$(
 sed --in-place \
     "s|cargoHash = \".*\"|cargoHash = \"$cargoHash\"|" \
     "$dirname/default.nix"
+

@@ -20,3 +20,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_until_succeeds("curl http://localhost/ | grep 'You are not logged in'")
   '';
 })
+

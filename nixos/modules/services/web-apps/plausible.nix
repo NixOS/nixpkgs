@@ -332,3 +332,4 @@ in {
   meta.maintainers = teams.cyberus.members;
   meta.doc = ./plausible.md;
 }
+

@@ -36,3 +36,4 @@ stdenv.mkDerivation  rec {
     mainProgram = "petri-foo";
   };
 }
+

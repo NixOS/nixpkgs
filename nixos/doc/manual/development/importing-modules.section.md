@@ -44,3 +44,4 @@ Like any NixOS module, this module can import additional modules:
   services.exampleModule1.enable = true;
 }
 ```
+

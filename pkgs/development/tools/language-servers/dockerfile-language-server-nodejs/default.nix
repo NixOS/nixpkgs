@@ -29,3 +29,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ rvolosatovs net-mist ];
   };
 }
+

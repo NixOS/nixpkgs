@@ -18,3 +18,4 @@ bundlerApp {
     mainProgram = "serverspec-init";
   };
 }
+

@@ -324,3 +324,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "code-server";
   };
 })
+

@@ -38,3 +38,4 @@ in {
   meta.maintainers = with lib.maintainers; [ evenbrenden ];
   meta.doc = ./jotta-cli.md;
 }
+

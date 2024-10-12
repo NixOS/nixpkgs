@@ -4,3 +4,4 @@ addNetBSDMakeFlags() {
 }
 
 preConfigureHooks+=(addNetBSDMakeFlags)
+

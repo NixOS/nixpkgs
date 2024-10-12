@@ -26,3 +26,4 @@ php82.buildComposerProject (finalAttrs: {
     maintainers = lib.teams.php.members;
   };
 })
+

@@ -5,3 +5,4 @@ This setup hook attempts to configure the package using [the Premake build confi
 []{#premake-hook-premakefile} The Premakefile to use can be specified by setting `premakefile` in the derivation.
 
 []{#premake-hook-premakeFlagsArray} The flags passed to Premake can be configured by adding strings to the `premakeFlags` list.
+

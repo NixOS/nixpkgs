@@ -9,3 +9,4 @@ import ./generic.nix {
   cargoLock = ./Cargo-beta.6.lock;
   patches = [];
 }
+

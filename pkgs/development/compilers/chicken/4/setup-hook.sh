@@ -4,3 +4,4 @@ addChickenRepositoryPath() {
 }
 
 addEnvHooks "$targetOffset" addChickenRepositoryPath
+

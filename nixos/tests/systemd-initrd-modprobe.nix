@@ -22,3 +22,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert int(rtt) == 42, "Parameter should be respected for initrd kernel modules"
   '';
 })
+

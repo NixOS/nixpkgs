@@ -106,3 +106,4 @@ by the cargo-tauri setup hook.
 - `cargoBuildType`
 - `cargoBuildNoDefaultFeatures`
 - `cargoBuildFeatures`
+

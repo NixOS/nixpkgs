@@ -114,3 +114,4 @@ A list of all available rake tasks can be obtained by running:
 ```ShellSession
 $ sudo -u git -H gitlab-rake -T
 ```
+

@@ -63,3 +63,4 @@ To test the build process of every IDE (as well as the process for adding plugin
  - on `aarch64-darwin`:
    - test plugins
    - from source build
+

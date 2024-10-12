@@ -6,3 +6,4 @@ in
 {
   standard = handleTestOn supportedSystems ./standard.nix { inherit system; };
 }
+

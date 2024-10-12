@@ -54,3 +54,4 @@ mkDerivation rec {
     inherit (kconfig.meta) platforms;
   };
 }
+

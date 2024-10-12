@@ -30,3 +30,4 @@ import ../make-test-python.nix ({ pkgs, lib, ... } : {
     machine.wait_for_unit("static-web-server.service")
   '';
 })
+

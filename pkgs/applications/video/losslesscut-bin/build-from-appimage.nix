@@ -49,3 +49,4 @@ appimageTools.wrapType2 {
     mainProgram = "losslesscut";
   };
 }
+

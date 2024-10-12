@@ -4,3 +4,4 @@ moveBuildDir() {
     mkdir -p $out/.build
     cd $out/.build
 }
+

@@ -334,3 +334,4 @@ for srcpath in "${!action_paths[@]}"; do
     "${action}_file" "$srcpath" "${action_paths["$srcpath"]}" "${args:-}"
     "${action}_override" "$(basename "$srcpath" .dll)"
 done
+

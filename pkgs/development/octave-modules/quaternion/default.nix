@@ -27,3 +27,4 @@ buildOctavePackage rec {
     description = "Quaternion package for GNU Octave, includes a quaternion class with overloaded operators";
   };
 }
+

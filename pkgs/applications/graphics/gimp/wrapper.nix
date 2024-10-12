@@ -30,3 +30,4 @@ in symlinkJoin {
 
   inherit (gimp) meta;
 }
+

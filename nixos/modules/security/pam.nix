@@ -1685,3 +1685,4 @@ in
     security.sudo-rs.extraConfig = optionalSudoConfigForSSHAgentAuth;
   };
 }
+

@@ -32,3 +32,4 @@ buildDubPackage rec {
     maintainers = with maintainers; [ imrying ];
   };
 }
+

@@ -67,3 +67,4 @@ symlinkJoin {
     mainProgram = "zathura";
   };
 }
+

@@ -7,3 +7,4 @@ rec {
   mkBuildInputs = pkgArches: pkgNames:
     toBuildInputs pkgArches (toPackages pkgNames);
 }
+

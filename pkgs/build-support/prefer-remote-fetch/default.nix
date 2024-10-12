@@ -24,3 +24,4 @@ self: super: {
   fetchsvn = args: super.fetchsvn ({ preferLocalBuild = false; } // args);
   fetchurl = args: super.fetchurl ({ preferLocalBuild = false; } // args);
 }
+

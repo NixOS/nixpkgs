@@ -655,3 +655,4 @@ in
     pkgs.runCommand name {}
       (prepareImage + moveOrConvertImage + createHydraBuildProducts + postVM)
   else buildImage
+

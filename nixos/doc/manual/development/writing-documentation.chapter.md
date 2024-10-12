@@ -29,3 +29,4 @@ nix-build nixos/release.nix -A manual.x86_64-linux
 When this command successfully finishes, it will tell you where the
 manual got generated. The HTML will be accessible through the `result`
 symlink at `./result/share/doc/nixos/index.html`.
+

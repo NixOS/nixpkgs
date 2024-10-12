@@ -86,3 +86,4 @@ stdenvNoCC.mkDerivation rec {
     description = "Open-source emojis for designers, developers and everyone else";
   };
 }
+

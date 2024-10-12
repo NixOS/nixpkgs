@@ -79,3 +79,4 @@ dotnetCheckHook() {
 if [[ -z "${dontDotnetCheck-}" && -z "${checkPhase-}" ]]; then
     checkPhase=dotnetCheckHook
 fi
+

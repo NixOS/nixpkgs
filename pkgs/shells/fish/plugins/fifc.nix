@@ -21,3 +21,4 @@ buildFishPlugin rec {
     maintainers = with maintainers; [ hmajid2301 ];
   };
 }
+

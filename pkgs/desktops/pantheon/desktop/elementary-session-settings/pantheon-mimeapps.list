@@ -166,3 +166,4 @@ x-scheme-handler/https=org.gnome.Epiphany.desktop
 x-scheme-handler/mailto=io.elementary.mail.desktop
 x-scheme-handler/trash=io.elementary.files.desktop
 
+

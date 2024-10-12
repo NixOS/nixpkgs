@@ -22,3 +22,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = with maintainers; [ wenngle ];
   };
 }
+

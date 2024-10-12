@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ pkg-config ];
   extraBuildInputs = [ libraw ];
 }
+

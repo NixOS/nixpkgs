@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fontfor";
   };
 }
+

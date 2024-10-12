@@ -83,3 +83,4 @@ in stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin; # FIX: this check: https://github.com/GPlates/GPlates/blob/gplates/cmake/modules/Config_h.cmake#L72
   };
 })
+

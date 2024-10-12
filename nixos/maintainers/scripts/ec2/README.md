@@ -34,3 +34,4 @@ nix run github:NixOS/amis#upload-ami -- --image-info ./result/nix-support/image-
 * @arianvp is planning to rewrite the image builder to use the repart-based image builder.
 * @arianvp is planning to perhaps rewrite `upload-ami` to use coldnsap
 * @arianvp is planning to move `upload-ami` tooling into nixpkgs once it has stabilized. And only keep the Github Action in separate repo
+

@@ -166,3 +166,4 @@ stdenv.mkDerivation rec {
     hydraPlatforms = if appliance != null then appliance.meta.hydraPlatforms else platforms.linux;
   };
 }
+

@@ -7,3 +7,4 @@ contactPoints:
         type: prometheus-alertmanager
         settings:
           url: http://localhost:9000
+

@@ -48,3 +48,4 @@ in {
     maintainers = with lib.maintainers; [ nicoo ];
   };
 }
+

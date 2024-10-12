@@ -346,3 +346,4 @@ buildDotnetModule rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }
+

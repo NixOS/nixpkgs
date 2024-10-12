@@ -67,3 +67,4 @@ python310Packages.buildPythonApplication rec {
     mainProgram = "nwg-displays";
   };
 }
+

@@ -68,3 +68,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.cassidyjames.ephemeral";
   };
 }
+

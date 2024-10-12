@@ -46,3 +46,4 @@ buildGoModule rec {
     license = licenses.mit;
   };
 }
+

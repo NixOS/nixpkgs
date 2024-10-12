@@ -29,3 +29,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ qjoly ];
   };
 }
+

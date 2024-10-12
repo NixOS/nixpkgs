@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
   };
 }
+

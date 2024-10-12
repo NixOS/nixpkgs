@@ -93,3 +93,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "kavita";
   };
 })
+

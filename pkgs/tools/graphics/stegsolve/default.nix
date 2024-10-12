@@ -58,3 +58,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "stegsolve";
   };
 })
+

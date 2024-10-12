@@ -77,3 +77,4 @@ buildGoModule rec {
     mainProgram = "distrobuilder";
   };
 }
+

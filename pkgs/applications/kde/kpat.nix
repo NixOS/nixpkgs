@@ -25,3 +25,4 @@ mkDerivation {
     maintainers = with lib.maintainers; [ rnhmjoj ];
   };
 }
+

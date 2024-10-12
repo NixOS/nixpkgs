@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qt5compat ];
   meta.mainProgram = "ktimer";
 }
+

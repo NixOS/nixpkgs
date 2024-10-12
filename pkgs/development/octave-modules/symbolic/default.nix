@@ -32,3 +32,4 @@ buildOctavePackage rec {
     description = "Adds symbolic calculation features to GNU Octave";
   };
 }
+

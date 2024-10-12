@@ -176,3 +176,4 @@ in stdenv.mkDerivation rec {
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
   };
 }
+

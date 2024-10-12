@@ -41,3 +41,4 @@ in rustPlatform.buildRustPackage rec {
 
   passthru.mkSource = callPackage ./source.nix {};
 }
+

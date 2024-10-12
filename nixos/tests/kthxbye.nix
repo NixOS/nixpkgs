@@ -108,3 +108,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       server.succeed("amtool --alertmanager.url 'http://localhost:9093' silence | grep 'ACK'")
   '';
 })
+

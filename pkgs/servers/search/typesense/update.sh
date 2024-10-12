@@ -41,3 +41,4 @@ for platform in "${!platforms[@]}"; do
 done
 
 cp "$sources_tmp" sources.json
+

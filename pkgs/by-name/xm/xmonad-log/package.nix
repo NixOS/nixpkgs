@@ -23,3 +23,4 @@ buildGoModule {
     mainProgram = "xmonad-log";
   };
 }
+

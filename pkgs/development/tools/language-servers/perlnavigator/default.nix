@@ -78,3 +78,4 @@ in buildNpmPackage rec {
     maintainers = [ ];
   };
 }
+

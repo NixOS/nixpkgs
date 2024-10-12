@@ -25,3 +25,4 @@ FishSound has been developed and tested on GNU/Linux, Darwin/MacOSX and Win32. I
     license = licenses.bsd3;
   };
 }
+

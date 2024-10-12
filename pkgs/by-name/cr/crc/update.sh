@@ -69,3 +69,4 @@ sed -i "s|microshiftVersion = \".*\"|microshiftVersion = \"${MICROSHIFT_VERSION:
 
 sed -i "s|writeKey = \".*\"|writeKey = \"${WRITE_KEY:-}\"|" \
     ${NIXPKGS_CRC_FOLDER}/package.nix
+

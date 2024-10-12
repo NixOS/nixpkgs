@@ -62,3 +62,4 @@ python3.pkgs.buildPythonPackage rec {
     mainProgram = "mautrix-facebook";
   };
 }
+

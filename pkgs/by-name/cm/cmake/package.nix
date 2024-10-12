@@ -210,3 +210,4 @@ stdenv.mkDerivation (finalAttrs: {
     broken = (qt5UI && stdenv.hostPlatform.isDarwin);
   };
 })
+

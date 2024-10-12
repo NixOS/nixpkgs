@@ -15,3 +15,4 @@ bundlerApp {
     platforms = platforms.all;
   };
 }
+

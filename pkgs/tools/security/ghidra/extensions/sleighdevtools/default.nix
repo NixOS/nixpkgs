@@ -39,3 +39,4 @@ buildGhidraExtension {
     ];
   };
 }
+

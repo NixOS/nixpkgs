@@ -27,3 +27,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     master.succeed("sudo -u postgres psql -c 'SELECT hll_sketch_to_string(hll_sketch_build(1));'")
   '';
 })
+

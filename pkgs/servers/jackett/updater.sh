@@ -14,3 +14,4 @@ fi
 cd ../../..
 update-source-version jackett "${new_version//v}"
 $(nix-build -A jackett.fetch-deps --no-out-link)
+

@@ -10,3 +10,4 @@ lib.makeOverridable (
   meta.homepage = "https://git.savannah.gnu.org/cgit/${repo}.git/";
 } // removeAttrs args [ "repo" "rev" ]) // { inherit rev; }
 )
+

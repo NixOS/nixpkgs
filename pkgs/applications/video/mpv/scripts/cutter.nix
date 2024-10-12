@@ -46,3 +46,4 @@ buildLua {
     maintainers = with maintainers; [ lom ];
   };
 }
+

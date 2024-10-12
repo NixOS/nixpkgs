@@ -31,3 +31,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       docker.succeed("docker run --rm -u 1000:1000 ${pkgs.dockerTools.examples.bash.imageName} bash --version")
     '';
 })
+

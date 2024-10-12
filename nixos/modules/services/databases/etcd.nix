@@ -227,3 +227,4 @@ in {
     users.groups.etcd = {};
   };
 }
+

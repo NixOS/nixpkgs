@@ -58,3 +58,4 @@ Running `nix-shell` on it would drop you into a shell inside an FHS env where th
 You can build a wrapper by running your binary in `runScript`, e.g. `./bin/start.sh`. Relative paths work as expected.
 
 Additionally, the FHS builder links all relocated gsettings-schemas (the glib setup-hook moves them to `share/gsettings-schemas/${name}/glib-2.0/schemas`) to their standard FHS location. This means you don't need to wrap binaries with `wrapGApps*` hook.
+

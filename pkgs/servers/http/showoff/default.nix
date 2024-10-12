@@ -16,3 +16,4 @@ bundlerApp {
     maintainers = with maintainers; [ maxwilson nicknovitski ];
   };
 }
+

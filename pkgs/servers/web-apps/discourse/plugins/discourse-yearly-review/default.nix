@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Publishes an automated Year in Review topic";
   };
 }
+

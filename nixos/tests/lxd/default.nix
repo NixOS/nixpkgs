@@ -10,3 +10,4 @@
   ui = import ./ui.nix {inherit system pkgs;};
   virtual-machine = handleTestOn ["x86_64-linux"] ./virtual-machine.nix { inherit system pkgs; };
 }
+

@@ -1186,3 +1186,4 @@ self: super:
     mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist //
     mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
 )
+

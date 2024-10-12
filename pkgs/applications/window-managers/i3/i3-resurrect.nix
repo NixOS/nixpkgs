@@ -21,3 +21,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ magnetophon ];
   };
 }
+

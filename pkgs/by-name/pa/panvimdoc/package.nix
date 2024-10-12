@@ -48,3 +48,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "panvimdoc";
   };
 })
+

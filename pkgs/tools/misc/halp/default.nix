@@ -78,3 +78,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "halp";
   };
 }
+

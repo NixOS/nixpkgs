@@ -75,3 +75,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ fgaz ];
   };
 }
+

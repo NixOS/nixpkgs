@@ -29,3 +29,4 @@ crystal.buildCrystalPackage rec {
     mainProgram = "thicket";
   };
 }
+

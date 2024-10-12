@@ -16,3 +16,4 @@ alephone.makeWrapper rec {
     homepage = "https://lochnits.com/marathon/yuge/";
   };
 }
+

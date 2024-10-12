@@ -80,3 +80,4 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
     ];
   };
 }
+

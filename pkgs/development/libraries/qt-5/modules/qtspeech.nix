@@ -7,3 +7,4 @@ qtModule {
   nativeBuildInputs = [ pkg-config ];
   outputs = [ "out" "dev" ];
 }
+

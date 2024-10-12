@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Allow accepted answers on topics";
   };
 }
+

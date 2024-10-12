@@ -19,3 +19,4 @@ mkDerivation {
     messagelib qtbase libkdepim akonadi-search xapian
   ];
 }
+

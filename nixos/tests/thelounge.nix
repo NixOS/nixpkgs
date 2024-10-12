@@ -29,3 +29,4 @@ import ./make-test-python.nix {
     public.wait_until_succeeds("journalctl -u thelounge.service | grep 'in public mode'")
   '';
 }
+

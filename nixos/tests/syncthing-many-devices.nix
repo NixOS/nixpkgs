@@ -201,3 +201,4 @@ in {
     machine.copy_from_vm(mergeScript, "")
   '';
 })
+

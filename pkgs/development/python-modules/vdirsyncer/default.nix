@@ -91,3 +91,4 @@ buildPythonPackage rec {
     mainProgram = "vdirsyncer";
   };
 }
+

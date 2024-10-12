@@ -12,3 +12,4 @@ stdenv.mkDerivation rec {
     /bin/ln -sv /usr/X11/{bin,include,share} $out/
   '';
 }
+

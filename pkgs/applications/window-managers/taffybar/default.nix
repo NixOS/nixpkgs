@@ -27,3 +27,4 @@ in stdenv.mkDerivation {
 
   inherit (taffybar) meta;
 }
+

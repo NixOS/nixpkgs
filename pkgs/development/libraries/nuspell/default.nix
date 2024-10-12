@@ -30,3 +30,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/nuspell/nuspell/blob/v${version}/CHANGELOG.md";
   };
 }
+

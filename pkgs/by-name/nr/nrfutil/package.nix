@@ -57,3 +57,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "nrfutil";
   };
 })
+

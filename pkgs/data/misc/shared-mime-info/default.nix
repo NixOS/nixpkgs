@@ -52,3 +52,4 @@ stdenv.mkDerivation rec {
     mainProgram = "update-mime-database";
   };
 }
+

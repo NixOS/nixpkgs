@@ -37,3 +37,4 @@ buildDunePackage {
     mainProgram = "ocamlformat";
   };
 }
+

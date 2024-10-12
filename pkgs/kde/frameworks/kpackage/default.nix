@@ -7,3 +7,4 @@ mkKdeDerivation {
   patches = [ ./follow-symlinks.patch ];
   meta.mainProgram = "kpackagetool6";
 }
+

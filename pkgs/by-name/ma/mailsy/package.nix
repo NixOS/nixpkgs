@@ -34,3 +34,4 @@ buildNpmPackage rec {
     maintainers = [ lib.maintainers._404wolf ];
   };
 }
+

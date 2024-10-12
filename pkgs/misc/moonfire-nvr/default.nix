@@ -83,3 +83,4 @@ in rustPlatform.buildRustPackage {
     mainProgram = "moonfire-nvr";
   };
 }
+

@@ -2,3 +2,4 @@
 getHostRole
 
 export NIX_LDFLAGS${role_post}+=" -lfts"
+

@@ -107,3 +107,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client.succeed("${jmtpfs.jmtpfsTest} >&2")
   '';
 })
+

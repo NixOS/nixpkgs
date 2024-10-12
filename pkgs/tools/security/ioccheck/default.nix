@@ -94,3 +94,4 @@ in py.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ fab ];
   };
 }
+

@@ -230,3 +230,4 @@ let
     };
 
 in lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform ) (environmentTests // integrationTests // overrideTests // condaTests // editableTests)
+

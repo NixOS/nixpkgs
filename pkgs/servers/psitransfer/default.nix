@@ -55,3 +55,4 @@ in buildNpmPackage {
     mainProgram = "psitransfer";
   };
 }
+

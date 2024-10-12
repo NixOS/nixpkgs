@@ -32,3 +32,4 @@ stdenv.mkDerivation rec {
     smoke-tests = nixosTests.memcached;
   };
 }
+

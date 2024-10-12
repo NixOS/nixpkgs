@@ -115,3 +115,4 @@ if [ -z "${dontUseBmakeDist-}" ] && [ -z "${distPhase-}" ]; then
     distPhase=bmakeDistPhase
     nixInfoLog "${FUNCNAME[0]}: set distPhase to bmakeDistPhase"
 fi
+

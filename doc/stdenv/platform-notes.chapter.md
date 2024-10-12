@@ -65,3 +65,4 @@ Some common issues when packaging software for Darwin:
   the 11.0 SDK used by aarch64-darwin is available for use on x86_64-darwin. To use it, reference `apple_sdk_11_0` instead of
   `apple_sdk` in your derivation and use `pkgs.darwin.apple_sdk_11_0.callPackage` instead of `pkgs.callPackage`. On Linux, this will
   have the same effect as `pkgs.callPackage`, so you can use `pkgs.darwin.apple_sdk_11_0.callPackage` regardless of platform.
+

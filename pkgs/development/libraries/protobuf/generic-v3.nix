@@ -57,3 +57,4 @@ mkProtobufDerivation = buildProtobuf: stdenv: stdenv.mkDerivation {
 in mkProtobufDerivation(if (stdenv.buildPlatform != stdenv.hostPlatform)
                         then (mkProtobufDerivation null buildPackages.stdenv)
                         else null) stdenv
+

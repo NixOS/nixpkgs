@@ -61,3 +61,4 @@ in
     ), "opensearch url doesn't match the configured port"
   '';
 }
+

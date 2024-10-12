@@ -294,3 +294,4 @@ in
   mips64el-nixCrossStatic = mapTestOnCross systems.examples.mips64el-linux-gnuabi64 nixCrossStatic;
   powerpc64le-nixCrossStatic = mapTestOnCross systems.examples.powernv nixCrossStatic;
 }
+

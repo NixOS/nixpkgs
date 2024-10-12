@@ -22,3 +22,4 @@ how to start the display manager.
 
 Several settings are tweaked so that the installer has a better chance of
 succeeding under low-memory environments.
+

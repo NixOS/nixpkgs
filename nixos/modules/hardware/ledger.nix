@@ -9,3 +9,4 @@ in {
     services.udev.packages = [ pkgs.ledger-udev-rules ];
   };
 }
+

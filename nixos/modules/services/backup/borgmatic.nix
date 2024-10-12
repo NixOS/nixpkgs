@@ -115,3 +115,4 @@ in
         system.checks = mkIf cfg.enableConfigCheck (mapAttrsToList borgmaticCheck configFiles);
       };
 }
+

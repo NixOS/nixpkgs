@@ -40,3 +40,4 @@ stdenv.mkDerivation {
     ln -s ${distutilsCfg} $dest/distutils.cfg
   '';
 }
+

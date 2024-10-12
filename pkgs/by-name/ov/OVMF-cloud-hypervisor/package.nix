@@ -5,3 +5,4 @@ OVMF.override {
   fwPrefix = "CLOUDHV";
   metaPlatforms = builtins.filter (lib.hasPrefix "x86_64-") OVMF.meta.platforms;
 }
+

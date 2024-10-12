@@ -9,3 +9,4 @@ The enabled kernel modules include support for SATA and PATA, SCSI
 Hyper-V. Additionally, [](#opt-hardware.enableAllFirmware) is
 enabled, and the firmware for the ZyDAS ZD1211 chipset is specifically
 installed.
+

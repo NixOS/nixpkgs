@@ -26,3 +26,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ peterromfeldhk kashw2 ];
   };
 }
+

@@ -172,3 +172,4 @@ fi
 fact "version" "$(nix-env --version)"
 channel_facts
 last_fact "nixpkgs" "$(desc_nixpkgs_path)"
+

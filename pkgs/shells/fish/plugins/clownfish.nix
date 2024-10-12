@@ -18,3 +18,4 @@ buildFishPlugin {
     maintainers = with maintainers; [ pacien ];
   };
 }
+

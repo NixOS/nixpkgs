@@ -127,3 +127,4 @@ testScript = ''
     node1.succeed("sudo ip rule | grep 'from all fwmark 0x10/0x1f lookup 70'")
 '';
 })
+

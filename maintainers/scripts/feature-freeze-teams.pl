@@ -96,3 +96,4 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
 
     print {*STDERR} "\n";
 }
+

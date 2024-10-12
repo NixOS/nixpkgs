@@ -66,3 +66,4 @@ in
 
 fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo; }
 )
+

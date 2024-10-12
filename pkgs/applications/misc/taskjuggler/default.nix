@@ -19,3 +19,4 @@ bundlerApp {
     maintainers = with maintainers; [ manveru nicknovitski ];
   };
 }
+

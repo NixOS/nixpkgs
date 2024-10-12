@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("curl -sSfL http://localhost/ | grep 'fluidd'")
   '';
 })
+

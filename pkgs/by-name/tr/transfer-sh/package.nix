@@ -34,3 +34,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ ocfox pinpox ];
   };
 }
+

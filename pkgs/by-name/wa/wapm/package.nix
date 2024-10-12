@@ -36,3 +36,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.lucperkins ];
   };
 }
+

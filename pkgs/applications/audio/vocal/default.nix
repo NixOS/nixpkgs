@@ -95,3 +95,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.needleandthread.vocal";
   };
 }
+

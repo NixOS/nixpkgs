@@ -13,3 +13,4 @@ fi
 cd ../../../..
 update-source-version git-credential-manager "$new_version"
 $(nix-build -A git-credential-manager.fetch-deps --no-out-link)
+

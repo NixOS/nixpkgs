@@ -49,3 +49,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ jk qjoly kashw2 ];
   };
 }
+

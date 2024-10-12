@@ -79,3 +79,4 @@ Make sure to disable `services.gitea`, when doing this.
   users.groups.gitea = {};
 }
 ```
+

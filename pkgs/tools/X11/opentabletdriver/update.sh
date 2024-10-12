@@ -22,3 +22,4 @@ sed -i ./default.nix -re "s|\"$oldDebSha256\"|\"$newDebSha256\"|"
 pushd ../../../..
 update-source-version opentabletdriver "$new_version"
 $(nix-build -A opentabletdriver.fetch-deps --no-out-link)
+

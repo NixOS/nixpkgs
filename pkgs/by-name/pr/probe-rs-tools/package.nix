@@ -67,3 +67,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ xgroleau newam ];
   };
 }
+

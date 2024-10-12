@@ -96,3 +96,4 @@ buildGoModule rec {
     mainProgram = "victoria-metrics";
   };
 }
+

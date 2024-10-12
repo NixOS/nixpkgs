@@ -7,3 +7,4 @@ makeInstalledTest {
   # https://github.com/flatpak/xdg-desktop-portal/pull/428
   meta.broken = true;
 }
+

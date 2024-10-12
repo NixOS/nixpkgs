@@ -195,3 +195,4 @@ runCommand "julia-package-closure.yml" { buildInputs = [julia (python3.withPacka
     julia -e '${juliaExpression packageNames}';
   fi
 ''
+

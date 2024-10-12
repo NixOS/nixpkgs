@@ -42,3 +42,4 @@ in
       machine2.wait_until_succeeds("stat /var/lib/crasher/core", timeout=10)
   '';
 })
+

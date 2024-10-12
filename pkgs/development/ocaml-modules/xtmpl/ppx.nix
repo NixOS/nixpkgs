@@ -13,3 +13,4 @@ buildDunePackage {
     description = "Xml templating library, ppx extension";
   };
 }
+

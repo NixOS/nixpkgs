@@ -5,3 +5,4 @@ exec node2nix --nodejs-18 \
      --output node-packages-generated.nix \
      --composition node-packages.nix \
      --node-env ./../../development/node-packages/node-env.nix \
+

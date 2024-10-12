@@ -30,3 +30,4 @@ rec {
     "x86_64-linux"  = "0x00600000";
   }.${hostPlatform.system} or (throw "Unsupported system: ${hostPlatform.system}");
 }
+

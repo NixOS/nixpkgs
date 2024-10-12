@@ -52,3 +52,4 @@ with urlopen(f'https://chromium.googlesource.com/chromiumos/platform/crosvm/+log
 
 # Update the version, git revision, and hash in crosvm's default.nix.
 subprocess.run(['update-source-version', 'crosvm', f'--rev={rev}', version])
+

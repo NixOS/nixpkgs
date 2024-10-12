@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ amar1729 Br1ght0ne ];
   };
 }
+

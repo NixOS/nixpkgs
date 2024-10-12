@@ -30,3 +30,4 @@ buildPythonPackage rec {
     description = "Trained models for the face_recognition python library";
   };
 }
+

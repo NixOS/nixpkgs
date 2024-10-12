@@ -28,3 +28,4 @@ buildPythonApplication rec {
     license = licenses.gpl3;
   };
 }
+

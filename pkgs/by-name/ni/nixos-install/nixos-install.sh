@@ -278,3 +278,4 @@ if [[ -z $noRootPasswd ]] && [ -t 0 ]; then
 fi
 
 echo "installation finished!"
+

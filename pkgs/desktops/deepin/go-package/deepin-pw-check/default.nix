@@ -72,3 +72,4 @@ buildGoModule rec {
     maintainers = teams.deepin.members;
   };
 }
+

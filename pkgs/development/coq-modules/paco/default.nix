@@ -32,3 +32,4 @@ mkCoqDerivation {
     maintainers = with lib.maintainers; [ jwiegley ptival ];
   };
 }
+

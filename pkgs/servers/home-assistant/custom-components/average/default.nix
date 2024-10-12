@@ -23,3 +23,4 @@ buildHomeAssistantComponent rec {
     license = licenses.cc-by-nc-40;
   };
 }
+

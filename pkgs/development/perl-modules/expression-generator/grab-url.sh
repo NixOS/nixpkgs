@@ -17,3 +17,4 @@ name="$2";
 name=${name:-$(basename "$url")}
 
 cached_output get_file "${name%%.*}" "$url" "${name#*.}"
+

@@ -11,3 +11,4 @@ import ../make-test-python.nix ({ ... }:
       assert str(np.zeros(4) == "array([0., 0., 0., 0.])")
     '';
   })
+

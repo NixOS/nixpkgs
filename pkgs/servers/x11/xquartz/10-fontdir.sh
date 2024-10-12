@@ -5,3 +5,4 @@ fontpath="@SYSTEM_FONTS@"
 [ -e /System/Library/Fonts/fonts.dir ] && fontpath="$fontpath,/System/Library/Fonts"
 @XSET@ fp= "$fontpath"
 unset fontpath
+

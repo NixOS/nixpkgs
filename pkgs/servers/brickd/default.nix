@@ -62,3 +62,4 @@ stdenv.mkDerivation {
     mainProgram = "brickd";
   };
 }
+

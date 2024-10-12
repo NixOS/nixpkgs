@@ -5,3 +5,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtserialport ];
   meta.mainProgram = "canbusutil";
 }
+

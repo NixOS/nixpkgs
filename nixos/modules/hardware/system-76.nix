@@ -87,3 +87,4 @@ in {
 
   config = mkMerge [ moduleConfig firmwareConfig powerConfig ];
 }
+

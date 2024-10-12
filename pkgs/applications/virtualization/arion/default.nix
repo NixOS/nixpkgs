@@ -84,3 +84,4 @@ let
     in composition.config.out.dockerComposeYaml;
 
 in arion
+

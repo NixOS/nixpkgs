@@ -123,3 +123,4 @@ buildDotnetModule rec {
     mainProgram = "FamiStudio";
   };
 }
+

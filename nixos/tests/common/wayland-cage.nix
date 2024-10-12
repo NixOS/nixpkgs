@@ -11,3 +11,4 @@
     qemu.options = [ "-vga virtio" ];
   };
 }
+

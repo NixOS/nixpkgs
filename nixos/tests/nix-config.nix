@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     print(machine.succeed("nix-instantiate --find-file nonextra"))
   '';
 })
+

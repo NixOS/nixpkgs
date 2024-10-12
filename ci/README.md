@@ -41,3 +41,4 @@ Why not just build the tooling right from the PRs Nixpkgs version?
 - Because it improves security, since we don't have to build potentially untrusted code from PRs.
   The tool only needs a very minimal Nix evaluation at runtime, which can work with [readonly-mode](https://nixos.org/manual/nix/stable/command-ref/opt-common.html#opt-readonly-mode) and [restrict-eval](https://nixos.org/manual/nix/stable/command-ref/conf-file.html#conf-restrict-eval).
 
+

@@ -40,3 +40,4 @@
   (fetchNuGet { pname = "TestableIO.System.IO.Abstractions"; version = "19.2.64"; sha256 = "0ayrz1n777cgjgnp4iff90z43s9w3df62r93nkxg6wkga8v0dyr5"; })
   (fetchNuGet { pname = "TestableIO.System.IO.Abstractions.Wrappers"; version = "19.2.64"; sha256 = "0l2lv45mcr54b8h37bwqag9n9qbh8vyyxz88mw6pcdz2k3z475jc"; })
 ]
+

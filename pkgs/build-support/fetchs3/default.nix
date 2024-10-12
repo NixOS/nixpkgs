@@ -35,3 +35,4 @@ lib.fetchers.withNormalizedHash { } (
     aws s3 cp ${s3url} $out
   '')
 )
+

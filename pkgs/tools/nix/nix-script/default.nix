@@ -40,3 +40,4 @@ stdenv.mkDerivation {
     platforms   = haskellPackages.ghc.meta.platforms;
   };
 }
+

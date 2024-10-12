@@ -57,3 +57,4 @@ in stdenv.mkDerivation rec {
     broken = lib.versionAtLeast kernel.modDirVersion "6.9";
   };
 }
+

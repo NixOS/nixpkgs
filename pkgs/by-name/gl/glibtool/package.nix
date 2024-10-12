@@ -5,3 +5,4 @@ libtool.overrideAttrs {
   meta.mainProgram = "glibtool";
   configureFlags = [ "--program-prefix=g" ];
 }
+

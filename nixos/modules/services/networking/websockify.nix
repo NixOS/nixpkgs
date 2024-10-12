@@ -52,3 +52,4 @@ let cfg = config.services.networking.websockify; in {
     };
   };
 }
+

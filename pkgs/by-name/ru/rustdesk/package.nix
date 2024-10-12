@@ -191,3 +191,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rustdesk";
   };
 }
+

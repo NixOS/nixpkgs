@@ -10,3 +10,4 @@ let
   f' = lib.setFunctionArgs f (builtins.functionArgs (import ./generic.nix));
 in
 callPackages f' (builtins.removeAttrs args [ "callPackages" ])
+

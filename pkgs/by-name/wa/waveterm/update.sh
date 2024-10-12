@@ -23,3 +23,4 @@ for i in \
 
     update-source-version waveterm $latestVersion $hash --system=$1 --ignore-same-version
 done
+

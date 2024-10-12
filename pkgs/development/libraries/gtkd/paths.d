@@ -140,3 +140,4 @@ else
 		LIBRARY.RSVG:          "@librsvg@/lib/librsvg-2.so.2",
 	];
 }
+

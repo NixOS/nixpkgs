@@ -77,3 +77,4 @@ in
     mainProgram = "sensu-agent";
   };
 }
+

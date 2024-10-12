@@ -20,3 +20,4 @@ buildNimPackage (finalAttrs: {
     mainProgram = "promexplorer";
   };
 })
+

@@ -154,3 +154,4 @@ in {
     users.groups.zookeeper = {};
   };
 }
+

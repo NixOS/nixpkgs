@@ -60,3 +60,4 @@ buildDotnetModule rec {
     mainProgram = "git-credential-manager";
   };
 }
+

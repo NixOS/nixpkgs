@@ -9,3 +9,4 @@ makeSetupHook {
     checkManifest = ./check_manifest.py;
   };
 } ./manifest-requirements-check-hook.sh
+

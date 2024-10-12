@@ -68,3 +68,4 @@ stdenv.mkDerivation rec {
   };
   passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
 }
+

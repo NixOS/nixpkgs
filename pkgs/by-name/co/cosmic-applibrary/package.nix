@@ -76,3 +76,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cosmic-app-library";
   };
 }
+

@@ -47,3 +47,4 @@ buildPythonPackage {
     broken = (pkgs.mxnet.broken or false) || (isPy310 && pkgs.mxnet.cudaSupport);
   };
 }
+

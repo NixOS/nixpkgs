@@ -166,3 +166,4 @@ in {
       submit.succeed("srun -N 3 --mpi=pmix mpitest | grep size=3")
   '';
 })
+

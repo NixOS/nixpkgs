@@ -61,3 +61,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "symbolicator";
   };
 }
+

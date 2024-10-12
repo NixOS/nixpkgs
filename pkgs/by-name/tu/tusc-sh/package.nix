@@ -48,3 +48,4 @@ writeShellApplication {
     platforms = platforms.all;
   };
 }
+

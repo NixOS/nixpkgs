@@ -24,3 +24,4 @@ symlinkJoin {
 
   inherit (typing-booster) meta;
 }
+

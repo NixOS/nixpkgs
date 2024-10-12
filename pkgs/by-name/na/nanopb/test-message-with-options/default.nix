@@ -33,3 +33,4 @@ stdenv.mkDerivation {
     grep -q "#define WithOptions_size" $out/withoptions.pb.h || (echo "error: the size of WithOptions is not known in $out/withoptions.pb.h"; exit 1)
   '';
 }
+

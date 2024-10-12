@@ -115,3 +115,4 @@ self: super: {
   # https://github.com/haskell-crypto/cryptonite/issues/367
   cryptonite = dontCheck super.cryptonite;
 }
+

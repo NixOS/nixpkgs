@@ -91,3 +91,4 @@ composerWithPluginInstallHook() {
 composerWithPluginInstallCheckHook() {
     composer global show $pluginName
 }
+

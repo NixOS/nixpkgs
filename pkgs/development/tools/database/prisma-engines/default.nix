@@ -96,3 +96,4 @@ rustPlatform.buildRustPackage rec {
 # Run prisma client from `node_modules/.bin/prisma`.
 # Run `./node_modules/.bin/prisma --version` and check if both prisma packages versions are equal, current platform is `linux-nixos`, and other keys equal to the prisma environment variables you defined for prisma.
 # Test prisma with `generate`, `db push`, etc. It should work. If not, open an issue.
+

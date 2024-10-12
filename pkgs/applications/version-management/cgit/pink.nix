@@ -21,3 +21,4 @@ callPackage (import ./common.nix rec {
   description = "cgit fork aiming for better maintenance";
   maintainers = with lib.maintainers; [ sternenseemann ];
 }) {}
+

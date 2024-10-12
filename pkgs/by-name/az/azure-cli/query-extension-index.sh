@@ -161,3 +161,4 @@ jq -r \
     --arg nix "${nix:-}" \
     --arg requirements "${requirements:-}" \
     "$jqProgram" "${extensionFile}"
+

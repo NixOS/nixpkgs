@@ -40,3 +40,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mpd-discord-rpc";
   };
 }
+

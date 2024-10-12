@@ -89,3 +89,4 @@ composerInstallInstallHook() {
 
     echo "Finished composerInstallInstallHook"
 }
+

@@ -15,3 +15,4 @@ mkDerivation {
     "STRIP=-s"
   ];
 }
+

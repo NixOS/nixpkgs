@@ -15,3 +15,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kguiaddons kidletime kwindowsystem kwayland qtbase wayland-scanner wayland wayland-protocols ];
 }
+

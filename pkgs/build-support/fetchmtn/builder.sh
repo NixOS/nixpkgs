@@ -44,3 +44,4 @@ fi;
 echo "clearing _MTN in the output"
 
 rm -rf "$out/_MTN"
+

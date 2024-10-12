@@ -43,3 +43,4 @@ in
 {
   inherit buildFreshRssExtension;
 }
+

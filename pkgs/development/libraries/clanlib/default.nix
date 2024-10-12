@@ -56,3 +56,4 @@ stdenv.mkDerivation rec {
     platforms = with lib.platforms; lib.intersectLists linux (x86 ++ arm ++ aarch64 ++ riscv);
   };
 }
+

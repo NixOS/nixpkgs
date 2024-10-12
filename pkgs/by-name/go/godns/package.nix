@@ -62,3 +62,4 @@ buildGoModule rec {
     mainProgram = "godns";
   };
 }
+

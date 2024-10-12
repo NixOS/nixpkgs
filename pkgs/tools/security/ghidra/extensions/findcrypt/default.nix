@@ -26,3 +26,4 @@ buildGhidraExtension {
     maintainers = [ lib.maintainers.BonusPlay ];
   };
 }
+

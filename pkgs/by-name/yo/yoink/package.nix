@@ -26,3 +26,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ hogcycle ];
   };
 }
+

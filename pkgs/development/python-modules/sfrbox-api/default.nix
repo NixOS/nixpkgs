@@ -60,3 +60,4 @@ buildPythonPackage rec {
     mainProgram = "sfrbox-api";
   };
 }
+

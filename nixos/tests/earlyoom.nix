@@ -14,3 +14,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_unit("earlyoom.service")
   '';
 })
+

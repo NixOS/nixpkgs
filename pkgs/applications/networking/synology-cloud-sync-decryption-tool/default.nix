@@ -42,3 +42,4 @@ qt5.mkDerivation rec {
     mainProgram = "SynologyCloudSyncDecryptionTool";
   };
 }
+

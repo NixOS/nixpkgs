@@ -74,3 +74,4 @@ stdenv.mkDerivation rec {
     mainProgram = "yoshimi";
   };
 }
+

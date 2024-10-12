@@ -60,3 +60,4 @@ runCommand name {
   export HOME=$TMP
   rqbit --disable-dht-persistence --http-api-listen-addr "127.0.0.1:$(shuf -n 1 -i 49152-65535)" download -o $out --exit-on-finish "$url"
 '')
+

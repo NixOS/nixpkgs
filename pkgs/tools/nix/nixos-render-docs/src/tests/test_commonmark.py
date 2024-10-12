@@ -97,3 +97,4 @@ def test_images() -> None:
     assert c._render("![*alt text*](foo \"title \\\"quoted\\\" text\")") == (
         "![*alt text*](foo \"title \\\"quoted\\\" text\")"
     )
+

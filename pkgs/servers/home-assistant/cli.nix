@@ -62,3 +62,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = lib.teams.home-assistant.members;
   };
 }
+

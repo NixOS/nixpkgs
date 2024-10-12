@@ -176,3 +176,4 @@ in {
     filesToInstall = [ "build/${platform}/release/bl31.bin"];
   };
 }
+

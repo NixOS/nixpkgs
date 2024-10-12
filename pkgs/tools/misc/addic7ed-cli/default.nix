@@ -30,3 +30,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "addic7ed";
   };
 }
+

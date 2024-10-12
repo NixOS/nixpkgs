@@ -74,3 +74,4 @@ in
       assert 1001 == int(machine.succeed("id --user new-normalo")), "new-normalo user doesn't have UID 1001"
   '';
 }
+

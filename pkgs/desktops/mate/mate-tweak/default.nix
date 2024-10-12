@@ -84,3 +84,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = teams.mate.members ++ (with maintainers; [ luc65r ]);
   };
 }
+

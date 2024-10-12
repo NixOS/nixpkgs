@@ -33,3 +33,4 @@ buildGoModule rec {
     knownVulnerabilities = [ "CVE-2024-41254" ];
   };
 }
+

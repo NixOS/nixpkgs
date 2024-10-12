@@ -39,3 +39,4 @@ mkHyprlandPlugin hyprland {
     platforms = lib.platforms.linux;
   };
 }
+

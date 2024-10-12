@@ -78,3 +78,4 @@ in builtins.mapAttrs (key: val: mkTest val) {
   userFull = { systemWide = false; fullVersion = true; };
   systemFull = { systemWide = true; fullVersion = true; };
 }
+

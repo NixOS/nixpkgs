@@ -350,3 +350,4 @@ class HTMLRenderer(Renderer):
         return "section"
     def _build_toc(self, tokens: Sequence[Token], i: int) -> str:
         return ""
+

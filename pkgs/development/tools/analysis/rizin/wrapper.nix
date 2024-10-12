@@ -42,3 +42,4 @@ symlinkJoin {
     priority = (unwrapped.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }
+

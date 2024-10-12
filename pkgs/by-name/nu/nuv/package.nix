@@ -70,3 +70,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ msciabarra d4rkstar ];
   };
 }
+

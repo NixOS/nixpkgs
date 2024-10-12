@@ -186,3 +186,4 @@ def test_list_narrow(ordered: bool) -> None:
         Token(type=f'{t}_list_close', tag=tag, nesting=-1, attrs={}, map=None, level=0, children=None,
               content='', markup=m, info='', meta={}, block=True, hidden=False)
     ]
+

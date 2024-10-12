@@ -20,3 +20,4 @@ buildNimPackage (final: prev: {
     license = [ lib.licenses.mit ];
   };
 })
+

@@ -26,3 +26,4 @@ appimageTools.wrapType2 {
   '';
 }
 
+

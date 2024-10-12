@@ -24,3 +24,4 @@ buildGoModule rec {
     maintainers = teams.helsinki-systems.members ++ teams.gitlab.members;
   };
 }
+

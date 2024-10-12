@@ -55,3 +55,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/owncloud/client/releases/tag/v${version}";
   };
 }
+

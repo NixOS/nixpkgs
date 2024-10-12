@@ -722,3 +722,4 @@ in
     doc = ./mosquitto.md;
   };
 }
+

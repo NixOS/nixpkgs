@@ -58,3 +58,4 @@ buildPythonApplication {
     mainProgram = "ansible-cmdb";
   };
 }
+

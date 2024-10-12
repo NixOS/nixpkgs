@@ -24,3 +24,4 @@ runCommandLocal "install-shell-files--install-completion"
     cmp qux.zsh $out/share/zsh/site-functions/_qux
     cmp quux $out/share/fish/vendor_completions.d/quux
   ''
+

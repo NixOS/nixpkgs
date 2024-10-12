@@ -55,3 +55,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "matrix-zulip-bridge";
   };
 }
+

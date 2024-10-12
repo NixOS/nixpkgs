@@ -35,3 +35,4 @@ buildGoModule rec {
     maintainers = lib.teams.acme.members;
   };
 }
+

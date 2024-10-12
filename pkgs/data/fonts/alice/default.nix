@@ -32,3 +32,4 @@ stdenv.mkDerivation (attrs: {
     maintainers = with maintainers; [ ncfavier ];
   };
 })
+

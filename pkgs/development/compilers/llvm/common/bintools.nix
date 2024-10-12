@@ -47,3 +47,4 @@ runCommand "llvm-binutils-${version}"
   '' + lib.optionalString (lib.versionAtLeast release_version "13") ''
     ln -s $llvmBin/llvm-rc $out/bin/${targetPrefix}windres
   '')
+

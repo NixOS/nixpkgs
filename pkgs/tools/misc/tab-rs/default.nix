@@ -27,3 +27,4 @@ rustPlatform.buildRustPackage rec {
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13
   };
 }
+

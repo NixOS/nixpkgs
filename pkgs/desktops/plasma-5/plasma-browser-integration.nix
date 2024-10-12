@@ -40,3 +40,4 @@ mkDerivation {
     homepage = "https://community.kde.org/Plasma/Browser_Integration";
   };
 }
+

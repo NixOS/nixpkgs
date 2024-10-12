@@ -6,3 +6,4 @@
     <Exec Command="patch-nupkgs '$(NUGET_PACKAGES)' 2>&amp;1"/>
   </Target>
 </Project>
+

@@ -31,3 +31,4 @@ else
     echo "Update failed. VENDOR_HASH is empty."
     exit 1
 fi
+

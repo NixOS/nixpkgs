@@ -9,3 +9,4 @@ NIX_CFLAGS_COMPILE="${NIX_CFLAGS_COMPILE:-} -frandom-seed=$(
     echo $randomseed
 )"
 export NIX_CFLAGS_COMPILE
+

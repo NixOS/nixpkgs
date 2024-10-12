@@ -14,3 +14,4 @@ buildPecl rec {
     maintainers = lib.teams.php.members ++ [ lib.maintainers.ostrolucky ];
   };
 }
+

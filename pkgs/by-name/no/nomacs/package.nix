@@ -92,3 +92,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (libsForQt5.qtbase.meta) platforms;
   };
 })
+

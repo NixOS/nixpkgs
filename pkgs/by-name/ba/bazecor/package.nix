@@ -67,3 +67,4 @@ appimageTools.wrapAppImage {
     mainProgram = "bazecor";
   };
 }
+

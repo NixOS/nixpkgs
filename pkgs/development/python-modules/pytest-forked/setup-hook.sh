@@ -23,3 +23,4 @@ if [ -z "${dontUsePytestForked-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
         preDistPhases+=" pytestForkedHook"
     fi
 fi
+

@@ -10,3 +10,4 @@ local qml = qt.load_qml(byte_span.append([[
 assert(qml.object('foobar(int,int)', 1, 2), 3)
 
 print("done 👍")
+

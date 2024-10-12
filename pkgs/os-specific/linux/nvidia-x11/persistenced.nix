@@ -47,3 +47,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nvidia-persistenced";
   };
 }
+

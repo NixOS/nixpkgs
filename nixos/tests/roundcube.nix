@@ -29,3 +29,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     roundcube.succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'")
   '';
 })
+

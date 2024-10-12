@@ -47,3 +47,4 @@ buildGoModule rec {
     mainProgram = "lf";
   };
 }
+

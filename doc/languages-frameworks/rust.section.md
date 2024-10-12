@@ -1072,3 +1072,4 @@ nix-build $NIXPKGS -A package-broken-by-rust-changes
 The `git submodule update --init` and `cargo vendor` commands above
 require network access, so they can't be performed from within the
 `rustc` derivation, unfortunately.
+

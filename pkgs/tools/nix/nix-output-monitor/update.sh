@@ -28,3 +28,4 @@ cabal2nix \
   >> "$derivation_file"
 
 echo "Finished."
+

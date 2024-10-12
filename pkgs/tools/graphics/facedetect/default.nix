@@ -44,3 +44,4 @@ stdenv.mkDerivation rec {
     mainProgram = "facedetect";
   };
 }
+

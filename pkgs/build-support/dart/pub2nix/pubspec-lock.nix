@@ -117,3 +117,4 @@ in
     # An attribute set of package names to their sources.
     dependencySources;
 }
+

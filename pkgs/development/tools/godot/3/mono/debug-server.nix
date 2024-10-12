@@ -5,3 +5,4 @@ godot3-mono-headless.overrideAttrs (self: base: {
   godotBuildDescription = "mono debug server";
   shouldBuildTools = false;
 })
+

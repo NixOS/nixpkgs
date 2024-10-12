@@ -17,3 +17,4 @@ lib.fetchers.withNormalizedHash { } (
     inherit username password url rev sshSupport openssh;
   }
 )
+

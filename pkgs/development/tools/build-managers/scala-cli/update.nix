@@ -35,3 +35,4 @@ writeShellScript "${pname}-update-script" ''
     jq --arg version $latest_version \
       '{ version: $version, assets: . }' > $sources_json
 ''
+

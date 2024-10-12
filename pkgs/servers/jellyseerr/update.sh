@@ -14,3 +14,4 @@ old_yarn_hash=$(nix-instantiate --eval --strict -A "jellyseerr.offlineCache.outp
 lock_file=$(nix-instantiate --eval --expr 'with import ./default.nix { }; "${jellyseerr.src}/yarn.lock"' | sed 's/"//g')
 new_yarn_hash=$(nix hash to-sri --type sha256 $(prefetch-yarn-deps $lock_file))
 sed -i "$nix_file" -re "s|\"$old_yarn_hash\"|\"$new_yarn_hash\"|"
+

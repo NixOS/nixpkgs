@@ -24,3 +24,4 @@ Before upgrading a NixOS release, certify to upgrade etcd to the latest version 
 Manual steps might be required for the upgrade.
 
 NixOS release notes might have instructions on how to proceed on upgrades.
+

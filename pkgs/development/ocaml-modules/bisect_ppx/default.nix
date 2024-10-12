@@ -26,3 +26,4 @@ buildDunePackage rec {
     mainProgram = "bisect-ppx-report";
   };
 }
+

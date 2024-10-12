@@ -100,3 +100,4 @@ if __name__ == "__main__":
 
     if not all(tests):
         sys.exit(1)
+

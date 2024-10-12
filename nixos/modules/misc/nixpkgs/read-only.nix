@@ -72,3 +72,4 @@ in
     nixpkgs.buildPlatform = cfg.pkgs.stdenv.buildPlatform;
   };
 }
+

@@ -41,3 +41,4 @@ writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (fileName)}'' (
       ''
   )
 )
+

@@ -117,3 +117,4 @@ flutter324.buildFlutterApplication rec {
     ];
   };
 }
+

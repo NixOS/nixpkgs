@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tommilligan/mdbook-admonish";
   };
 }
+

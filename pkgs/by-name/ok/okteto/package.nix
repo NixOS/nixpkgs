@@ -71,3 +71,4 @@ buildGoModule rec {
     mainProgram = "okteto";
   };
 }
+

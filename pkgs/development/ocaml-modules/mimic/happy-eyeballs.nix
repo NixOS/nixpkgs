@@ -20,3 +20,4 @@ buildDunePackage {
     inherit (mimic.meta) license homepage;
   };
 }
+

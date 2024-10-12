@@ -53,3 +53,4 @@ runCommand "gnome-gsettings-overrides" { preferLocalBuild = true; } ''
 
   ${glib.dev}/bin/glib-compile-schemas --strict "$schema_dir"
 ''
+

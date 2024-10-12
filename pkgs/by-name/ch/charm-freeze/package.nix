@@ -24,3 +24,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ caarlos0 maaslalani ];
   };
 }
+

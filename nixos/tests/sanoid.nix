@@ -131,3 +131,4 @@ in {
     assert len(source.succeed("zfs allow pool/syncoid")) == 0, "Syncoid dataset shouldn't have delegated permissions set after syncing snapshots"
   '';
 })
+

@@ -34,3 +34,4 @@ Don't be afraid to close an issue that holds valuable information. Closed issues
 - [Open Issues with any stale-bot interaction](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+commenter%3Aapp%2Fstale+)
 - [Open Issues with any stale-bot interaction and `2.status: stale`](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+commenter%3Aapp%2Fstale+label%3A%222.status%3A+stale%22+)
 - [Open Issues with any stale-bot interaction and NOT `2.status: stale`](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+commenter%3Aapp%2Fstale+-label%3A%222.status%3A+stale%22+)
+

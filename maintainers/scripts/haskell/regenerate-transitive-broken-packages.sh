@@ -23,3 +23,4 @@ EOF
 nix-instantiate --eval --option restrict-eval true -I . --strict --json maintainers/scripts/haskell/transitive-broken-packages.nix | jq -r . | LC_ALL=C.UTF-8 sort -i >> $tmpfile
 
 mv $tmpfile $config_file
+

@@ -31,3 +31,4 @@ let
 in {
   inherit buildMoodlePlugin;
 }
+

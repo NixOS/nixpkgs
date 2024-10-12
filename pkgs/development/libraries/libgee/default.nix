@@ -54,3 +54,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
   };
 })
+

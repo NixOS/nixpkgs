@@ -16,3 +16,4 @@ bundlerApp {
     mainProgram = "hue";
   };
 }
+

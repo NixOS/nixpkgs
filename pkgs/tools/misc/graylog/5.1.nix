@@ -7,3 +7,4 @@ in buildGraylog {
   maintainers = [ lib.maintainers.f2k1de ];
   license = lib.licenses.sspl;
 }
+

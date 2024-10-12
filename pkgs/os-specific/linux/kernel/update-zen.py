@@ -120,3 +120,4 @@ if __name__ == "__main__":
     if old_version != zen_version or old_suffix != zen_suffix:
         zen_hash = nix_prefetch_git('https://github.com/zen-kernel/zen-kernel.git', zen_tag)
         update_file('zen-kernels.nix', variant, zen_version, zen_suffix, zen_hash)
+

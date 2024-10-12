@@ -11,3 +11,4 @@ rustPlatform.buildRustPackage {
   sourceRoot = "${src.name or src}/lix-doc";
   inherit version src cargoHash cargoLock;
 }
+

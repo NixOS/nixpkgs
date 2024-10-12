@@ -20,3 +20,4 @@ executable ghc-settings-edit
                   , containers
   main-is:          ghc-settings-edit.lhs
   hs-source-dirs:   .
+

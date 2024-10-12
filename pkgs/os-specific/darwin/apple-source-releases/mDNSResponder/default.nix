@@ -10,3 +10,4 @@ appleDerivation' stdenvNoCC {
       --replace '#define _DNS_SD_LIBDISPATCH 0' '#define _DNS_SD_LIBDISPATCH 1'
   '';
 }
+

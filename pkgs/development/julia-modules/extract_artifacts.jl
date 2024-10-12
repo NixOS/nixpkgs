@@ -61,3 +61,4 @@ end
 for (artifacts_toml, artifacts) in collect_artifacts(dir; platform)
     TOML.print(artifacts)
 end
+

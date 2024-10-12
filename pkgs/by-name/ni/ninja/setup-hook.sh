@@ -84,3 +84,4 @@ fi
 if [ -z "${dontUseNinjaInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=ninjaInstallPhase
 fi
+

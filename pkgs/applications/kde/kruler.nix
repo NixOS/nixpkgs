@@ -18,3 +18,4 @@ mkDerivation {
     kwindowsystem knotifications kxmlgui qtx11extras
   ];
 }
+

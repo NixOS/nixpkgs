@@ -69,3 +69,4 @@ in pkgs.recurseIntoAttrs rec {
   engines = buildOpenRASet (import ./engines.nix) { inherit buildOpenRAEngine; };
   mods = buildOpenRASet (import ./mods.nix) { inherit buildOpenRAMod; };
 }
+

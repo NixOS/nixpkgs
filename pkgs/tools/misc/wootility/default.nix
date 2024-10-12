@@ -48,3 +48,4 @@ appimageTools.wrapType2 {
     mainProgram = "wootility";
   };
 }
+

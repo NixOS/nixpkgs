@@ -7,3 +7,4 @@ qtModule {
   pname = "qtlottie";
   propagatedBuildInputs = [ qtbase qtdeclarative ];
 }
+

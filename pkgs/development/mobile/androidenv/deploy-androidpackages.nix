@@ -114,3 +114,4 @@ stdenv.mkDerivation ({
     description = lib.concatMapStringsSep "\n" (package: package.displayName) packages;
   } // meta;
 } // extraParams)
+

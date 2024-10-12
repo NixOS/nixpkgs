@@ -126,3 +126,4 @@ in {
     environment.etc."default/surf-display".text = surfDisplayConf;
   };
 }
+

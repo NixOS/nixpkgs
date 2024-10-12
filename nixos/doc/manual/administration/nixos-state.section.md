@@ -26,3 +26,4 @@ NixOS needs the entirety of `/nix` to be persistent, as it includes:
   - {manpage}`passwd(5)` and {manpage}`group(5)`,
   - {manpage}`shadow(5)` and {manpage}`gshadow(5)`,
   - {manpage}`subuid(5)` and {manpage}`subgid(5)`.
+

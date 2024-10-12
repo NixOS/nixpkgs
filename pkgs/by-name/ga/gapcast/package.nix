@@ -40,3 +40,4 @@ buildGoModule rec {
     broken = stdenv.isDarwin;
   };
 }
+

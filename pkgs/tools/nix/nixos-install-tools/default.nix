@@ -74,3 +74,4 @@ in
   inherit version;
   pname = "nixos-install-tools";
 }
+

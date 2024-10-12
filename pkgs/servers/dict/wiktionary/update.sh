@@ -5,3 +5,4 @@ set -ueo pipefail
 
 version="$(python "$(dirname "${BASH_SOURCE[0]}")"/latest_version.py)"
 update-source-version dictdDBs.wiktionary "$version"
+

@@ -21,3 +21,4 @@ done < <(find "$NIX_BUILD_TOP" -type d)
 exec @emulator@ ${GIR_EXTRA_OPTIONS:-} \
     ${GIR_EXTRA_LIBS_PATH:+-E LD_LIBRARY_PATH="${GIR_EXTRA_LIBS_PATH}"} \
     "$@"
+

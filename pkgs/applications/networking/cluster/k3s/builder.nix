@@ -477,3 +477,4 @@ buildGoModule rec {
 
   meta = baseMeta;
 }
+

@@ -15,3 +15,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "konversation";
 }
+

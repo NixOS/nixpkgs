@@ -103,3 +103,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cinny";
   };
 }
+

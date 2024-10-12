@@ -29,3 +29,4 @@ buildGoModule {
     maintainers = with maintainers; [ meain ];
   };
 }
+

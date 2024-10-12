@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kcoreaddons kdeclarative ki18n kio kwidgetsaddons samba qcoro ];
 }
+

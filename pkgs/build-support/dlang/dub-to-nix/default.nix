@@ -24,3 +24,4 @@ runCommand "dub-to-nix"
     wrapProgram "$out/bin/dub-to-nix" \
         --prefix PATH : ${binPath}
   ''
+

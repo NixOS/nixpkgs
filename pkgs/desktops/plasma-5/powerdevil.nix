@@ -43,3 +43,4 @@ mkDerivation {
     qtx11extras
   ];
 }
+

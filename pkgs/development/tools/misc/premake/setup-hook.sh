@@ -18,3 +18,4 @@ premakeConfigurePhase() {
 if [ -z "${configurePhase-}" ]; then
     configurePhase=premakeConfigurePhase
 fi
+

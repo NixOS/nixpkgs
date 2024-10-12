@@ -51,3 +51,4 @@ process must be run for the build to complete --- *e. g.*, when using Hare's
 
 In those cases, `hareHook` provides the `hare-native` script, which is a wrapper
 around the hare binary for using the native (`buildPlatform`) toolchain.
+

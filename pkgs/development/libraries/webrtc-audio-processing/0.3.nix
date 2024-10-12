@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     platforms = intersectLists platforms.unix (platforms.arm ++ platforms.aarch64 ++ platforms.mips ++ platforms.power ++ platforms.riscv ++ platforms.x86);
   };
 }
+

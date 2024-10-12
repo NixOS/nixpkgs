@@ -93,3 +93,4 @@ fi
 for service in "${services[@]}"; do
   update_version "$service"
 done
+

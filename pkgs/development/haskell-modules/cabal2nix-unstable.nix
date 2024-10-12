@@ -39,3 +39,4 @@ mkDerivation {
   description = "Convert Cabal files into Nix build instructions";
   license = lib.licenses.bsd3;
 }
+

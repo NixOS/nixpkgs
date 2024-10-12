@@ -115,3 +115,4 @@ kaem.runCommand "${pname}-${version}" {
   ./src/mkdir -p ''${out}/bin
   make -f ${makefile} install PREFIX=''${out}
 ''
+

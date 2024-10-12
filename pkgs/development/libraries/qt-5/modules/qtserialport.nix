@@ -5,3 +5,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase ];
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isLinux "-DNIXPKGS_LIBUDEV=\"${lib.getLib systemd}/lib/libudev\"";
 }
+

@@ -3,3 +3,4 @@ mkKdeDerivation {
   pname = "kwrited";
   meta.mainProgram = "kwrited";
 }
+

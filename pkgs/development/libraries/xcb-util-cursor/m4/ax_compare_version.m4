@@ -172,3 +172,4 @@ x$B" | sed 's/^ *//' | sort -r | sed "s/x${A}/true/;s/x${B}/false/;1q"`
     m4_ifvaln([$5],[else $5])dnl
   fi
 ]) dnl AX_COMPARE_VERSION
+

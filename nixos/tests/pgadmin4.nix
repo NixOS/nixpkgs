@@ -78,3 +78,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine2.wait_for_console_text("Password must be at least 12 characters long")
   '';
 })
+

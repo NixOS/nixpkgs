@@ -8,3 +8,4 @@ kyuaCheckPhase() {
 if [ -z "${dontUseKyuaCheck-}" ] && [ -z "${checkPhase-}" ]; then
     checkPhase=kyuaCheckPhase
 fi
+

@@ -13,3 +13,4 @@ LXQtCMakePostHook() {
 }
 
 postHooks+=(LXQtCMakePostHook)
+

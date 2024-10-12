@@ -7,3 +7,4 @@ in buildGraylog {
   maintainers = with lib.maintainers; [ bbenno ];
   license = lib.licenses.sspl;
 }
+

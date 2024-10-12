@@ -49,3 +49,4 @@ sed -i \
   "$NFILE"
 
 echo "Done; wrote $HFILE and updated version in $NFILE."
+

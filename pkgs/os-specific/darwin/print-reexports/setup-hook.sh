@@ -17,3 +17,4 @@ checkTbdReexports() {
     done < <(print-reexports "$tbd")
   done < <(find $prefix -type f -name '*.tbd' -print0)
 }
+

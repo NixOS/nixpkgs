@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qttools ];
   extraNativeBuildInputs = [ libxslt ];
 }
+

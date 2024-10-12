@@ -222,3 +222,4 @@
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "6.0.0"; hash = "sha256-N+qg1E6FDJ9A9L50wmVt3xPQV8ZxlG1xeXgFuxO+yfM="; })
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; hash = "sha256-4gk2vXDjKFaBh82gTkwg3c/5GRjiH+bvM5elfDSbKTU="; })
 ]
+

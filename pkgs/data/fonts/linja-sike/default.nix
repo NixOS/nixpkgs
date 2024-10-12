@@ -23,3 +23,4 @@ fetchurl {
     maintainers = with maintainers; [ somasis ];
   };
 }
+

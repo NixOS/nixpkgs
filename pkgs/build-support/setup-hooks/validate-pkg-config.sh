@@ -16,3 +16,4 @@ _validatePkgConfig() {
         exit 1
     fi
 }
+

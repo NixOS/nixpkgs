@@ -32,3 +32,4 @@ buildPythonPackage rec {
     broken = true; # https://github.com/stv0g/keyrings.passwordstore/issues/2
   };
 }
+

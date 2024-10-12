@@ -21,3 +21,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert '<title>PhotoPrism</title>' in response, "Login page didn't load successfully"
   '';
 })
+

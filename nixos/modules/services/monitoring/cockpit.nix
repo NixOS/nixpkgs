@@ -229,3 +229,4 @@ in {
 
   meta.maintainers = pkgs.cockpit.meta.maintainers;
 }
+

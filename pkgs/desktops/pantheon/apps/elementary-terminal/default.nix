@@ -66,3 +66,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.elementary.terminal";
   };
 }
+

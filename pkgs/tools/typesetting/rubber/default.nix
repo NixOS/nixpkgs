@@ -53,3 +53,4 @@ pypkgs.buildPythonApplication rec {
     mainProgram = "rubber";
   };
 }
+

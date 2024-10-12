@@ -11,3 +11,4 @@ pkgs.callPackage ../../../pkgs/tools/nix/web-devmode.nix {
   buildArgs = "../../release.nix -A manualHTML.${builtins.currentSystem}";
   open = "/${outputPath}/${indexPath}";
 }
+

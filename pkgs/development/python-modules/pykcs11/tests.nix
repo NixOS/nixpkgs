@@ -31,3 +31,4 @@ buildPythonPackage {
     ${softhsm}/bin/softhsm2-util --init-token --label "A token" --pin 1234 --so-pin 123456 --slot 0
   '';
 }
+

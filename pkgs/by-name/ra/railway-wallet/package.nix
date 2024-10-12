@@ -20,3 +20,4 @@ appimageTools.wrapType2 rec {
     platforms = [ "x86_64-linux" ];
   };
 }
+

@@ -40,3 +40,4 @@ runCommand "project-references-test" { } ''
   ${application}/bin/Application
   mkdir $out
 ''
+

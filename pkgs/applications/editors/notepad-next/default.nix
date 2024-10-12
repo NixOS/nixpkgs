@@ -42,3 +42,4 @@ mkDerivation rec {
     mainProgram = "NotepadNext";
   };
 }
+

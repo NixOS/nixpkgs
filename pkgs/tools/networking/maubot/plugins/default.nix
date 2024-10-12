@@ -66,3 +66,4 @@ generated // {
       (x: !x.meta.broken)
       (builtins.attrValues generated);
 }
+

@@ -57,3 +57,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     client.succeed("ping -n -w 10 -c 1 192.168.10.1 >&2")
   '';
 })
+

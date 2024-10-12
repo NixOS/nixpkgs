@@ -24,3 +24,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "alpaka";
 }
+

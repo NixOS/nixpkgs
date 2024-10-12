@@ -67,3 +67,4 @@ def test_verbs(doc_en_core_web_sm):
         'turn',
         'talk',
         'say']
+

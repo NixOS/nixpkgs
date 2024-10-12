@@ -32,3 +32,4 @@ buildGoModule {
     maintainers = with maintainers; [ binarycat ];
   };
 }
+

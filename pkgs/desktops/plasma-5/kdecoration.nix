@@ -6,3 +6,4 @@ mkDerivation {
   buildInputs = [ qtbase ki18n kcoreaddons ];
   outputs = [ "out" "dev" ];
 }
+

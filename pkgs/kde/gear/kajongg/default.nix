@@ -14,3 +14,4 @@ mkKdeDerivation {
   # FIXME: completely horked, is actually a Python app, needs a lot of fixing
   meta.broken = true;
 }
+

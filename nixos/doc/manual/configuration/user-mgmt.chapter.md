@@ -155,3 +155,4 @@ original files are by default stored in `/var/lib/nixos`.
 Userborn implements immutable users by re-mounting the password files
 read-only. This means that unlike when using the Perl script, trying to add a
 new user (e.g. via `useradd`) will fail right away.
+

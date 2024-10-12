@@ -50,3 +50,4 @@ import ../make-test-python.nix ({ pkgs, lib, php, ... }: {
       machine.succeed("${php}/bin/php -f ${pcreJitSeallocForkIssue}")
     '';
 })
+

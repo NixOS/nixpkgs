@@ -19,3 +19,4 @@ pkgs.runCommand "gpg-keyring" { nativeBuildInputs = [ pkgs.gnupg ]; } ''
   rm $out/S.gpg-agent $out/S.gpg-agent.*
   gpg --export bob@foo.bar -a > $out/pubkey.gpg
 ''
+

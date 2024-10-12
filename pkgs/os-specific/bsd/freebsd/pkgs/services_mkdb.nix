@@ -6,3 +6,4 @@ mkDerivation {
     cp $BSDSRCDIR/usr.sbin/services_mkdb/services $out/etc/services
   '';
 }
+

@@ -23,3 +23,4 @@ mkDerivation {
     kitinerary kontactinterface kaddressbook discount
   ];
 }
+

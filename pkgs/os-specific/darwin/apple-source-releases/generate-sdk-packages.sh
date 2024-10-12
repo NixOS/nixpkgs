@@ -35,3 +35,4 @@ parse_line() {
 readarray -s1 -c1 -C parse_line < <(curl -sSL "https://github.com/apple-oss-distributions/distribution-${1//-/_}/raw/${sdkName//./}/release.json" | jq -r ".projects[].tag")
 
 >>$outfile echo '}'
+

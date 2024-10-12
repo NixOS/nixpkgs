@@ -8,3 +8,4 @@ org.ice4j.level = SEVERE
 org.jitsi.impl.neomedia.level = SEVERE
 net.java.sip.communicator.service.resources.AbstractResourcesService.level = SEVERE
 net.java.sip.communicator.util.ScLogFormatter.disableTimestamp = true
+

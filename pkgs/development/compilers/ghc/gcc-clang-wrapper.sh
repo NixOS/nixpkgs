@@ -44,3 +44,4 @@ then
 else
     exec clang $extraClangArgs "${@/-nodefaultlibs/}"
 fi
+

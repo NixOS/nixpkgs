@@ -12,3 +12,4 @@ grafanaPlugin {
     platforms = platforms.unix;
   };
 }
+

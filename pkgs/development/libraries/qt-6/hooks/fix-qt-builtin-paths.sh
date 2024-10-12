@@ -61,3 +61,4 @@ fixQtBuiltinPaths() {
         echo "fixQtBuiltinPaths: Warning: \`$dir' does not exist"
     fi
 }
+

@@ -53,3 +53,4 @@ buildPerlPackage rec {
     mainProgram = "exiftool";
   };
 }
+

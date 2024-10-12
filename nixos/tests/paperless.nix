@@ -88,3 +88,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     test_paperless(postgres)
   '';
 })
+

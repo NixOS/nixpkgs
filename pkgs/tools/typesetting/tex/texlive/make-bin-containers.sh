@@ -58,3 +58,4 @@ for alias in $binlinks ; do
   bintargets="${bintargets#* }"
   ln -s "$(realpath "$target")" "$out/bin/$alias"
 done
+

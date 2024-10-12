@@ -45,3 +45,4 @@ npmDepsHash=$(prefetch-npm-deps ./package-lock.json)
 popd
 sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'$npmDepsHash'"#' --in-place "$nixFile"
 
+

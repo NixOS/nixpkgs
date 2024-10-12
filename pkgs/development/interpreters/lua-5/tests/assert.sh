@@ -19,3 +19,4 @@ function assertStringContains() {
         fail "expected \"$1\" to contain \"$2\""
     fi
 }
+

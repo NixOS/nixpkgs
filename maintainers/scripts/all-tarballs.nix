@@ -14,3 +14,4 @@ import ../../pkgs/top-level/release.nix
     supportedSystems = [ "x86_64-linux" ];
     bootstrapConfigs = [];
   }
+

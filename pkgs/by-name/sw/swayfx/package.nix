@@ -23,3 +23,4 @@ sway.override {
     ;
   sway-unwrapped = swayfx-unwrapped;
 }
+

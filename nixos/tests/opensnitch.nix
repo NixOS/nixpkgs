@@ -60,3 +60,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     clientAllowed.succeed("curl http://server")
   '';
 })
+

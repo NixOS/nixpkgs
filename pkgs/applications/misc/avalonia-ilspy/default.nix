@@ -113,3 +113,4 @@ buildDotnetModule rec {
     mainProgram = "ILSpy";
   };
 }
+

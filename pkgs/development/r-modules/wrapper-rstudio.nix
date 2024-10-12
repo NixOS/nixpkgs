@@ -52,3 +52,4 @@ runCommand (rstudio.name + "-wrapper")
           --set R_PROFILE_USER $out/$fixLibsR
       '')
   )
+

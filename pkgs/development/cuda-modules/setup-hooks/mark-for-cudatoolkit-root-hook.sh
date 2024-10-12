@@ -23,3 +23,4 @@ markForCUDAToolkit_ROOT() {
 }
 
 fixupOutputHooks+=(markForCUDAToolkit_ROOT)
+

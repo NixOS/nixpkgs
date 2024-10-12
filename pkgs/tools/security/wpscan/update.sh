@@ -14,3 +14,4 @@ bundler config set --local force_ruby_platform true
 bundler lock
 BUNDLE_GEMFILE=Gemfile bundler lock --lockfile=Gemfile.lock
 bundix --gemfile=Gemfile --lockfile=Gemfile.lock --gemset=gemset.nix
+

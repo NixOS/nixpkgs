@@ -29,3 +29,4 @@ import "struct"
 Document: #RestrictedDocument & {
 	"org.nixos.specialisation.v1"?: #BootspecSpecialisationV1
 }
+

@@ -37,3 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.kupac ];
   };
 })
+

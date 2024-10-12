@@ -52,3 +52,4 @@ buildGoModule rec {
     mainProgram = "gotop";
   };
 }
+

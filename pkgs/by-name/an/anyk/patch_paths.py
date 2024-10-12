@@ -33,3 +33,4 @@ assert b".internal." not in clazz
 
 class_file.write_bytes(clazz)
 
+

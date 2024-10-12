@@ -10,3 +10,4 @@ def get_commit_info(repo):
     subprocess.check_output(["git", "config", "--global", "--add", "safe.directory", repo], env=env_with_home)
     lines = subprocess.check_output(["git", "log", "--pretty=raw"], cwd=repo, env=env_with_home).decode().split("\n")
     return dict([x.split() for x in lines if len(x.split()) == 2])
+

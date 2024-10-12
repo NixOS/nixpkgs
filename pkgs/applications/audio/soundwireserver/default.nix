@@ -39,3 +39,4 @@ qt5.mkDerivation {
     license = licenses.unfree;
   };
 }
+

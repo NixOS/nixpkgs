@@ -72,3 +72,4 @@ lib.makeOverridable buildMaubotPlugin (entry.attrs // {
     make maubot.yaml
   '';
 }))
+

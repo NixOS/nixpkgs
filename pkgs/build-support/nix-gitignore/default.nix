@@ -196,3 +196,4 @@ in rec {
 
   gitignoreRecursiveSource = gitignoreFilterSourcePure (_: _: true);
 }
+

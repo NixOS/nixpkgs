@@ -19,3 +19,4 @@ in
     grep -F foos-missing-anchor $failure/testBuildFailure.log >/dev/null
     touch $out
   ''
+

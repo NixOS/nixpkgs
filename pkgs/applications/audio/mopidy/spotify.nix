@@ -60,3 +60,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ getchoo ];
   };
 }
+

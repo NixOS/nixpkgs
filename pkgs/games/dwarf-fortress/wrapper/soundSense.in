@@ -8,3 +8,4 @@ for path in soundsense/*; do
 done
 
 PATH="@jre@/bin:$PATH" go
+

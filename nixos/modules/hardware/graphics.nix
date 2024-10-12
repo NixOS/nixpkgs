@@ -124,3 +124,4 @@ in
     hardware.graphics.package32 = lib.mkDefault pkgs.pkgsi686Linux.mesa.drivers;
   };
 }
+

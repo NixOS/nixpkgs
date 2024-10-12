@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Hide spoilers behind the spoiler-alert jQuery plugin";
   };
 }
+

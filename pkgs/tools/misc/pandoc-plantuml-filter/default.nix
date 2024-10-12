@@ -25,3 +25,4 @@ buildPythonApplication rec {
     mainProgram = "pandoc-plantuml";
   };
 }
+

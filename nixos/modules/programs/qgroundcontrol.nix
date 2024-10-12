@@ -51,3 +51,4 @@ in
 
   meta.maintainers = pkgs.qgroundcontrol.meta.maintainers;
 }
+

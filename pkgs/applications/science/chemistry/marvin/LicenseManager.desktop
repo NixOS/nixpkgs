@@ -7,3 +7,4 @@ Icon=LicenseManager
 Categories=Education;Science;Chemistry;
 StartupWMClass=com-install4j-runtime-launcher-UnixLauncher
 Comment=License manager for ChemAxon software like MarvinSketch
+

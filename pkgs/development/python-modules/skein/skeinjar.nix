@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     install -D ./skein/java/skein.jar $out
   '';
 }
+

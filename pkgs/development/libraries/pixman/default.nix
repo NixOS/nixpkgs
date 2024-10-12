@@ -86,3 +86,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "pixman-1" ];
   };
 })
+

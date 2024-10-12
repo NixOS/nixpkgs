@@ -167,3 +167,4 @@ in {
     users.groups.subsonic.gid = config.ids.gids.subsonic;
   };
 }
+

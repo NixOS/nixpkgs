@@ -71,3 +71,4 @@ stdenv.mkDerivation {
     mainProgram = "bilibili";
   };
 }
+

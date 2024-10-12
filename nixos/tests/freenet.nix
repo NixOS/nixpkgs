@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("systemctl stop freenet")
   '';
 })
+

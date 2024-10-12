@@ -7,3 +7,4 @@
     inherit gamePacks;
   };
 }
+

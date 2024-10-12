@@ -23,3 +23,4 @@ buildHomeAssistantComponent rec {
     license = licenses.gpl3Only;
   };
 }
+

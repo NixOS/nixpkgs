@@ -98,3 +98,4 @@ maven.buildMavenPackage rec {
     platforms = [ "x86_64-linux" ];
   };
 }
+

@@ -38,3 +38,4 @@ stdenv.mkDerivation rec {
     inherit (olm.meta) knownVulnerabilities;
   };
 }
+

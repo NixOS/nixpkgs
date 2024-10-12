@@ -69,3 +69,4 @@ mkKdeDerivation {
     "plasmax11"
   ];
 }
+

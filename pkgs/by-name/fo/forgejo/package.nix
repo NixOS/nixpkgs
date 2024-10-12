@@ -9,3 +9,4 @@ import ./generic.nix {
     "pkgs/by-name/fo/forgejo/package.nix"
   ];
 }
+

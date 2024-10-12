@@ -19,3 +19,4 @@ curl -s "https://raw.githubusercontent.com/KhronosGroup/VK-GL-CTS/$rawVersion/ex
 sed -i '/from ctsbuild.common import/d' "$tmpDir/fetch_sources.py"
 cd "$(dirname "$0")"
 PYTHONPATH="$tmpDir/" ./vk-cts-sources.py
+

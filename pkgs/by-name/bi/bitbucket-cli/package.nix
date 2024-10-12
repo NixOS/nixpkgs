@@ -28,3 +28,4 @@ buildGoModule rec {
     platforms = with lib.platforms; linux ++ darwin;
   };
 }
+

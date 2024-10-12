@@ -38,3 +38,4 @@ buildNimPackage (finalAttrs: {
     license = lib.licenses.unlicense;
   };
 })
+

@@ -316,3 +316,4 @@ in import ../make-test-python.nix ({ lib, pkgs, netbox, ... }: {
         assert any(group["name"] == "${testGroup}" for group in result["results"][0]["groups"])
   '';
 })
+

@@ -34,3 +34,4 @@ sed -i "s/version = \".*\"/version = \"$MULLVAD_VER\"/" "$NIX_DRV"
 
 replace_sha "x86_64-linux" "$MULLVAD_LINUX_X64_SHA256"
 replace_sha "aarch64-linux" "$MULLVAD_LINUX_AARCH64_SHA256"
+

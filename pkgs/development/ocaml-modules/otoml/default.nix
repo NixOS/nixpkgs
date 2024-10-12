@@ -31,3 +31,4 @@ buildDunePackage rec {
     inherit (src.meta) homepage;
   };
 }
+

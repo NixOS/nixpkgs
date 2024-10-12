@@ -16,3 +16,4 @@ mkDiscoursePlugin rec {
     description = "Basic OAuth2 plugin for use with Discourse";
   };
 }
+

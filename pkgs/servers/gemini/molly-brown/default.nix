@@ -24,3 +24,4 @@ buildGoModule rec {
     license = licenses.bsd2;
   };
 }
+

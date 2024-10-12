@@ -40,3 +40,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
       machine.succeed("curl -L localhost:20123 | grep 'Type password'")
     '';
 })
+

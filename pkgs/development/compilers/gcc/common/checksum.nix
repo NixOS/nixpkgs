@@ -38,3 +38,4 @@ in
     install -Dt $checksum/checksums/ gcc/cc*-checksum.o
   '';
 }))
+

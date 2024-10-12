@@ -51,3 +51,4 @@ stdenv.mkDerivation rec {
     maintainers = lib.teams.lxqt.members;
   };
 }
+

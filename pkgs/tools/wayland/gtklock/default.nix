@@ -55,3 +55,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gtklock";
   };
 }
+

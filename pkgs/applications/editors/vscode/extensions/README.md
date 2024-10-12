@@ -40,3 +40,4 @@
       >
       > Release: https://github.com/owner/project/releases/tag/2.3.4
   - Multiple extensions can be added in a single PR, but each extension requires it's own commit.
+

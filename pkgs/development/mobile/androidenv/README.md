@@ -13,3 +13,4 @@ $ export NIXPKGS_ALLOW_UNFREE=1
 $ cd path/to/nixpkgs
 $ nix-build -A androidenv.test-suite.tests
 ```
+

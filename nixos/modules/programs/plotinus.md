@@ -17,3 +17,4 @@ To enable Plotinus, add the following to your
   programs.plotinus.enable = true;
 }
 ```
+

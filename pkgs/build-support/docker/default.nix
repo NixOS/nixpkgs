@@ -1298,3 +1298,4 @@ rec {
         nativeBuildInputs = compress.nativeInputs;
       } "${stream} | ${compress.compress} > $out";
 }
+

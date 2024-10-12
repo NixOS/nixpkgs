@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtwebengine ];
   meta.mainProgram = "kimagemapeditor";
 }
+

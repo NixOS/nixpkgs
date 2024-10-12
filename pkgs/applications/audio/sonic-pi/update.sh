@@ -48,3 +48,4 @@ if [ -n "$newhash" ] && [ "$curhash" != "$newhash" ]; then
 else
     echo 'update.sh: New vendorHash same as old vendorHash, nothing to do.'
 fi
+

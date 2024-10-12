@@ -12,3 +12,4 @@ lib.mapAttrs' (majorVersion: info:
     "electron_${majorVersion}-bin"
     (mkElectron info.version info.hashes)
 ) infoJson
+

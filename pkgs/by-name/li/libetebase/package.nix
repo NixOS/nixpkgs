@@ -43,3 +43,4 @@ rustPlatform.buildRustPackage rec {
     pkgConfigModules = [ "etebase" ];
   };
 }
+

@@ -16,3 +16,4 @@ mkDiscoursePlugin {
     description = "Support migrated password hashes";
   };
 }
+

@@ -155,3 +155,4 @@ in recurseIntoAttrs (libs // {
   inherit gawkextlib buildExtension;
   full = builtins.attrValues libs;
 })
+

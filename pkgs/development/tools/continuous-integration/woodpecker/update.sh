@@ -32,3 +32,4 @@ sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
 src_hash=$(nix-prefetch-url --type sha256 --unpack "https://github.com/woodpecker-ci/woodpecker/releases/download/v$version/woodpecker-src.tar.gz")
 src_hash=$(nix hash to-sri --type sha256 "$src_hash")
 sed -i -E -e "s#srcHash = \".*\"#srcHash = \"$src_hash\"#" common.nix
+

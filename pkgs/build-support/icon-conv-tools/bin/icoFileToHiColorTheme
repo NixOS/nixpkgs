@@ -26,3 +26,4 @@ $SCRIPT_DIR/extractWinRscIconsToStdFreeDesktopDir.sh \
   "$targetIconName" \
   "$out" \
   "$tmp"
+

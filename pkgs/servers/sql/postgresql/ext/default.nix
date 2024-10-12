@@ -111,3 +111,4 @@ self: super: {
 
     wal2json = super.callPackage ./wal2json.nix { };
 }
+

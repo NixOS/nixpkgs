@@ -17,3 +17,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     node.succeed("netbird status | grep -q 'Daemon status: NeedsLogin'")
   '';
 })
+

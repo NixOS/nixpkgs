@@ -38,3 +38,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ bertof ];
   };
 }
+

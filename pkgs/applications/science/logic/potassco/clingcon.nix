@@ -40,3 +40,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/potassco/clingcon/releases/tag/v${version}";
   };
 }
+

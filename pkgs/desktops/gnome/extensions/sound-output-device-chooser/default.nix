@@ -48,3 +48,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/kgshank/gse-sound-output-device-chooser";
   };
 }
+

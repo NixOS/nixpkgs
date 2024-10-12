@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hrdinka medv ];
   };
 }
+

@@ -163,3 +163,4 @@ _nixos-rebuild() {
 }
 
 complete -F _nixos-rebuild nixos-rebuild
+

@@ -95,3 +95,4 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/mobile-broadband/libqmi/-/blob/${version}/NEWS";
   };
 }
+

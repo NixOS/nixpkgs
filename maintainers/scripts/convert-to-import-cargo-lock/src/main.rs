@@ -239,3 +239,4 @@ fn nix_eval(attr: impl AsRef<str>) -> anyhow::Result<Option<String>> {
         ))
     }
 }
+

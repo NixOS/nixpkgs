@@ -91,3 +91,4 @@ buildPerlModule rec {
     mainProgram = "pipe-viewer";
   };
 }
+

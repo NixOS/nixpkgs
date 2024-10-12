@@ -42,3 +42,4 @@ buildNimPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ xtrayambak ];
   };
 })
+

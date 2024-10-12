@@ -28,3 +28,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }
+

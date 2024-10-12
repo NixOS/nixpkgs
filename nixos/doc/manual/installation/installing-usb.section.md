@@ -70,3 +70,4 @@ select the image, select the USB flash drive and click "Write".
   ```ShellSession
   diskutil eject /dev/diskX
   ```
+

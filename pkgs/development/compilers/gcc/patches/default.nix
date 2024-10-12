@@ -264,3 +264,4 @@ in
   sha256 = "1jf1ciz4gr49lwyh8knfhw6l5gvfkwzjy90m7qiwkcbsf4a3fqn2";
 })
 ++ optional ((is7 || is8) && !atLeast9 && targetPlatform.libc == "musl") ./libgomp-dont-force-initial-exec.patch
+

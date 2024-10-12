@@ -9,3 +9,4 @@ nix-env -qaP -f . -A kdePackages --json --out-path | from json | values | par-ea
         nix-store --read-log $it.outputs.out | save -f $"logs/($it.pname).log"
     }
 }
+

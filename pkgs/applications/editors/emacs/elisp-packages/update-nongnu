@@ -4,3 +4,4 @@
 output="nongnu-generated.nix"
 nongnu-packages.sh --names $EMACS2NIX/names.nix -o "$output"
 nixfmt "$output"
+

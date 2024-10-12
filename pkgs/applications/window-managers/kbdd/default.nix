@@ -23,3 +23,4 @@ stdenv.mkDerivation {
     mainProgram = "kbdd";
   };
 }
+

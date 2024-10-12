@@ -23,3 +23,4 @@ buildFishPlugin rec {
     maintainers = with maintainers; [ pacien ];
   };
 }
+

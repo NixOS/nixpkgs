@@ -35,3 +35,4 @@
     boot.initrd.systemd.extraBin.find = "${pkgs.findutils}/bin/find";
   };
 }
+

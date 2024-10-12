@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.lxqt.members;
   };
 }
+

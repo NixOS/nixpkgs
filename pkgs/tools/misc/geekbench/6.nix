@@ -64,3 +64,4 @@ stdenv.mkDerivation {
     mainProgram = "geekbench6";
   };
 }
+

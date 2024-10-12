@@ -69,3 +69,4 @@
   (fetchNuGet { pname = "Vortice.Mathematics"; version = "1.7.8"; hash = "sha256-8tHkHDvHMT3iDKDkVIms9tZnspBaw0nbvYyXUsUGv8A="; })
   (fetchNuGet { pname = "Vortice.XInput"; version = "3.5.0"; hash = "sha256-w4VJlkGjEmD/QElDZ3ZJS+GbN/4+yyVeJq1Le7Mdas8="; })
 ]
+

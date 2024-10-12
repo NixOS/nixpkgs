@@ -51,3 +51,4 @@ buildPythonPackage {
     (m: m // { description = "Bindings for faiss, the similarity search library"; })
   ];
 }
+

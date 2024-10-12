@@ -50,3 +50,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.shutdown()
   '';
 })
+

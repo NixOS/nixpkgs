@@ -22,3 +22,4 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 sed -i default.nix -e "s|$old_src_hash|$src_hash|"
 sed -i default.nix -e "s|$old_src_doc_hash|$src_doc_hash|"
 sed -i default.nix -e "/ version =/s|\"${UPDATE_NIX_OLD_VERSION}\"|\"${latest_version}\"|"
+

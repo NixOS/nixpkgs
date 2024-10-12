@@ -17,3 +17,4 @@
   (fetchNuGet { pname = "System.Security.Principal.Windows"; version = "4.7.0"; hash = "sha256-rWBM2U8Kq3rEdaa1MPZSYOOkbtMGgWyB8iPrpIqmpqg="; })
   (fetchNuGet { pname = "Tmds.DBus"; version = "0.11.0"; hash = "sha256-xNArjhSaEZcRiRB+mb9ZwUPQUqbLjRYt4JV2WUtM+hg="; })
 ]
+

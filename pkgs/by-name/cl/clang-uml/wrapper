@@ -29,3 +29,4 @@ export CPLUS_INCLUDE_PATH=${CPLUS_INCLUDE_PATH}${CPLUS_INCLUDE_PATH:+':'}$(build
                                                                                       $(<@clang@/nix-support/libc-cflags)):@clang@/resource-root/include
 
 exec @unwrapped_clang_uml@ "$@"
+

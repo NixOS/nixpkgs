@@ -79,3 +79,4 @@ rustPlatform.buildRustPackage {
     mainProgram = pname;
   };
 }
+

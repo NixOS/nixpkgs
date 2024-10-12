@@ -26,3 +26,4 @@ buildNpmPackage {
     mainProgram = "leetcode";
   };
 }
+

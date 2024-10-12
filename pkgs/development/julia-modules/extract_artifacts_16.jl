@@ -31,3 +31,4 @@ for name in keys(artifact_dict)
     results[name] = meta
 end
 TOML.print(results)
+

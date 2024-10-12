@@ -22,3 +22,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "datefmt";
   };
 })
+

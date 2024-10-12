@@ -34,3 +34,4 @@ in
 
 fetcher fetcherArgs // { meta.homepage = "${protocol}://${domain}/${slug}/"; inherit rev owner repo; }
 )
+

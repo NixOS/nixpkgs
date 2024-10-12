@@ -45,3 +45,4 @@ maven.buildMavenPackage rec {
     mainProgram = "ki";
   };
 }
+

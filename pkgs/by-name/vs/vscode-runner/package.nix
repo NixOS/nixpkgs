@@ -53,3 +53,4 @@ buildDartApplication {
     inherit (kdePackages.krunner.meta) platforms;
   };
 }
+

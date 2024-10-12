@@ -35,3 +35,4 @@ _makeSymlinksRelativeInAllOutputs() {
     prefix="${!output}" _makeSymlinksRelative
   done
 }
+

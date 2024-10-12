@@ -41,3 +41,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rust-motd";
   };
 }
+

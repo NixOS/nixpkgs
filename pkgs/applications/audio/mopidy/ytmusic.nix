@@ -46,3 +46,4 @@ in python.pkgs.buildPythonApplication rec {
     maintainers = [ maintainers.nickhu ];
   };
 }
+

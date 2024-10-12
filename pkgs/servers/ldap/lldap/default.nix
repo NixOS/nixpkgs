@@ -88,3 +88,4 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     mainProgram = "lldap";
   };
 })
+

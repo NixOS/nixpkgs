@@ -9,3 +9,4 @@ unpackGog() {
 
     runHook postUnpackGog
 }
+

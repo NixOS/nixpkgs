@@ -11,3 +11,4 @@ for pdf_set in `curl -L $BASE_URL 2>/dev/null | "$SED" -n -e 's/.*<a href=".*\/\
     nix-prefetch-url "${BASE_URL}${pdf_set}" 2>/dev/null | tr -d '\n'
     echo "\";"
 done
+

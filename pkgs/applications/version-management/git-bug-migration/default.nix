@@ -33,3 +33,4 @@ buildGoModule rec {
     mainProgram = "git-bug-migration";
   };
 }
+

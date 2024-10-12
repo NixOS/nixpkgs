@@ -49,3 +49,4 @@ stdenv.mkDerivation rec {
     mainProgram = "gphoto2";
   };
 }
+

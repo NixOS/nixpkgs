@@ -179,3 +179,4 @@ stdenv'.mkDerivation (finalAttrs: {
     mainProgram = "fastfetch";
   };
 })
+

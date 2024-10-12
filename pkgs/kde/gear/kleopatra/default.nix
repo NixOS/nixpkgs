@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ shared-mime-info ];
   extraBuildInputs = [ akonadi-mime ];
 }
+

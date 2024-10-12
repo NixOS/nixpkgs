@@ -106,3 +106,4 @@ stdenv.mkDerivation rec {
     inherit (glib.meta) maintainers platforms;
   };
 }
+

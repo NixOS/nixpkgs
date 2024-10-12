@@ -56,3 +56,4 @@ buildPythonPackage rec {
     maintainers = lib.teams.sphinx.members;
   };
 }
+

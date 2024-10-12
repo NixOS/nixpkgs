@@ -46,3 +46,4 @@ pythonEnv.pkgs.buildPythonApplication {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
+

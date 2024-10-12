@@ -35,3 +35,4 @@ group :extra do
   gem 'redis-namespace'
   gem 'yard'
 end
+

@@ -9,3 +9,4 @@ _tryUnzip() {
     # Pick en_US.UTF-8 as most possible to be present on glibc, musl and darwin.
     LANG=en_US.UTF-8 unzip -qq "$curSrc"
 }
+

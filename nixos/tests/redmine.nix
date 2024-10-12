@@ -43,3 +43,4 @@ in {
   mysql = redmineTest { name = "mysql"; type = "mysql2"; };
   pgsql = redmineTest { name = "pgsql"; type = "postgresql"; };
 }
+

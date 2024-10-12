@@ -45,3 +45,4 @@ in rebar3Relx rec {
     mainProgram = "elvis";
   };
 }
+

@@ -290,3 +290,4 @@ rec {
 } // lib.optionalAttrs (stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64)) {
   inherit s0ix-selftest-tool;
 }
+

@@ -15,3 +15,4 @@ fi
 update-source-version retrospy "$new_version"
 
 eval "$(nix-build . -A retrospy.fetch-deps --no-out-link)"
+

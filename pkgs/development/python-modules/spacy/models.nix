@@ -99,3 +99,4 @@ let
     models: lib.listToAttrs (map (m: lib.nameValuePair m.pname (buildModelPackage m)) models);
 in
 makeModelSet (lib.importJSON ./models.json)
+

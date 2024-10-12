@@ -46,3 +46,4 @@ rustPlatform.buildRustPackage rec {
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
+

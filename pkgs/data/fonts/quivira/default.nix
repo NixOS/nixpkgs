@@ -27,3 +27,4 @@ in fetchurl {
     platforms = lib.filter (platform: !lib.hasInfix "darwin" platform) lib.platforms.all;
   };
 }
+

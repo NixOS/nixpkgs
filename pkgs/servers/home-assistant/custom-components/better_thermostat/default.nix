@@ -24,3 +24,4 @@ buildHomeAssistantComponent rec {
     license = lib.licenses.agpl3Only;
   };
 }
+

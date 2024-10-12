@@ -35,3 +35,4 @@ buildNpmPackage rec {
     mainProgram = "lint-staged";
   };
 }
+

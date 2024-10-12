@@ -21,3 +21,4 @@ for tool in $required; do
         echo $tool
     fi
 done | sort
+

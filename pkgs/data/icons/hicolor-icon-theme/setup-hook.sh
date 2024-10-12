@@ -51,3 +51,4 @@ symlinkParentIconThemes() {
 }
 
 preFixupHooks+=(symlinkParentIconThemes)
+

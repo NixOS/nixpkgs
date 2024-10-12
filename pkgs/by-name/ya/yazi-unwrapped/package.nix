@@ -55,3 +55,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "yazi";
   };
 }
+

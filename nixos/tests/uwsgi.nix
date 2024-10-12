@@ -79,3 +79,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
           assert "Hello World" in machine.succeed("curl -fv http://machine:8000")
     '';
 })
+

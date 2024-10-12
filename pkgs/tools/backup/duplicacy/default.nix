@@ -23,3 +23,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ ffinkdevs devusb ];
   };
 }
+

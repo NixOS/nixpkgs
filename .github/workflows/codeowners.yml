@@ -80,3 +80,4 @@ jobs:
       run: result/bin/request-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
+

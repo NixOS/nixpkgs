@@ -37,3 +37,4 @@ signal-desktop-beta)
   echo "Unknown attr path $UPDATE_NIX_ATTR_PATH"
   ;;
 esac
+

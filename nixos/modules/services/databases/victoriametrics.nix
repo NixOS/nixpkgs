@@ -69,3 +69,4 @@ let cfg = config.services.victoriametrics; in
     };
   };
 }
+

@@ -109,3 +109,4 @@ in
     assert "Boot Loader Specification Type #2 (.efi)" in bootctl_status
   '';
 }
+

@@ -64,3 +64,4 @@ lib.makeScope newScope (self: rec {
     in
     lib.recurseIntoAttrs packages;
 })
+

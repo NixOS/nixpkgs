@@ -20,3 +20,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = [ maintainers.romildo ];
   };
 }
+

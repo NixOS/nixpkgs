@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ qtx11extras wayland wayland-protocols plasma-wayland-protocols ];
   propagatedBuildInputs = [ qtbase ];
 }
+

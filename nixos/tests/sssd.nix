@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.succeed("sssctl config-check")
     '';
 })
+

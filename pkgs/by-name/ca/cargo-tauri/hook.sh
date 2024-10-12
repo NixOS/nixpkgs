@@ -99,3 +99,4 @@ fi
 if [ -z "${dontTauriInstall:-}" ] && [ -z "${installPhase:-}" ]; then
     installPhase=tauriInstallHook
 fi
+

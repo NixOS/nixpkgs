@@ -13,3 +13,4 @@ fi
 
 update-source-version _7zz "$NEW_VERSION"
 update-source-version _7zz-rar "$NEW_VERSION" --ignore-same-version
+

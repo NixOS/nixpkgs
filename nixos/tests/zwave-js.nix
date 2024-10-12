@@ -29,3 +29,4 @@ in {
     machine.wait_until_succeeds("journalctl --since -1m --unit zwave-js --grep 'ZwaveJS server listening'")
   '';
 })
+

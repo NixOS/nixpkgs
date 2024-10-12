@@ -668,3 +668,4 @@ in
 } // lib.optionalAttrs config.allowAliases {
   octoprint-dashboard = super.dashboard;
 }
+

@@ -17,3 +17,4 @@ mkKdeDerivation rec {
 
   meta.license = [ lib.licenses.gpl3Plus ];
 }
+

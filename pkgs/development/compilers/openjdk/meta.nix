@@ -9,3 +9,4 @@ lib: version: with lib; {
     "This OpenJDK version has reached its end of life."
   ];
 }
+

@@ -36,3 +36,4 @@ $ ls -l /nix/var/nix/profiles/system-*-link
 ...
 lrwxrwxrwx 1 root root 78 Aug 12 13:54 /nix/var/nix/profiles/system-268-link -> /nix/store/202b...-nixos-13.07pre4932_5a676e4-4be1055
 ```
+

@@ -30,3 +30,4 @@ maven.buildMavenPackage {
     maintainers = with maintainers; [ s1341 ];
   };
 }
+

@@ -19,3 +19,4 @@ runCommandLocal "install-shell-files--install-bin"
     cmp bin/amigo $out/bin/amigo
     cmp bin/hello $out/bin/hello
   ''
+

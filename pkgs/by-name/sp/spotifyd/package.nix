@@ -80,3 +80,4 @@ rustPackages.rustPlatform.buildRustPackage rec {
     mainProgram = "spotifyd";
   };
 }
+

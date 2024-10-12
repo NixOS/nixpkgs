@@ -15,3 +15,4 @@ import ../make-test-python.nix ({ pkgs, ...} : {
       assert "These GitHub commands are provided by hub" in hub.succeed("hub help")
     '';
 })
+

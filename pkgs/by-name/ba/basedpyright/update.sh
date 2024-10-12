@@ -42,3 +42,4 @@ while IFS= read -r source_root_line; do
     # Call the function to download and update the hash
     update_hash "$source_root_path" "$existing_hash"
 done < "$FILE_PATH"
+

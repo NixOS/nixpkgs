@@ -27,3 +27,4 @@ jobs:
           extra_nix_config: sandbox = true
       - name: Check that maintainer-list.nix is sorted
         run: nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+

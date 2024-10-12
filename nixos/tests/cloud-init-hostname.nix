@@ -44,3 +44,4 @@ in makeTest {
     assert "testhostname" in unnamed.succeed("hostname")
   '';
 }
+

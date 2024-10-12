@@ -27,3 +27,4 @@
 
     clion-with-vim = jetbrains.plugins.addPlugins jetbrains.clion [ "ideavim" ];
 }
+

@@ -38,3 +38,4 @@ buildPythonApplication {
     inherit (minijail.meta) maintainers platforms;
   };
 }
+

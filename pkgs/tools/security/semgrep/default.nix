@@ -140,3 +140,4 @@ buildPythonApplication rec {
     inherit (semgrep-core.meta) platforms;
   };
 }
+

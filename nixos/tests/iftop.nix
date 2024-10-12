@@ -29,3 +29,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         withoutIftop.fail("su -l alice -c 'iftop -t -s 1 -n -i eth1'")
   '';
 })
+

@@ -8,3 +8,4 @@ callPackage ./generic.nix (args // rec {
   sha256 = "0zsw7qfmcci87skkpq8vx5zxk35phn8y4byispvki9ascifnnb33";
   homepage = "https://www.behringer.com/behringer/product?modelCode=P0ASF";
 })
+

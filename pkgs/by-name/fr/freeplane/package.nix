@@ -100,3 +100,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "freeplane";
   };
 })
+

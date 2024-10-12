@@ -23,3 +23,4 @@ buildPythonPackage rec {
     description = "Automatic support for console colors";
   };
 }
+

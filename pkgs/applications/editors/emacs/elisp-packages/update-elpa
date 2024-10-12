@@ -4,3 +4,4 @@
 output="elpa-generated.nix"
 elpa-packages.sh --names $EMACS2NIX/names.nix -o "$output"
 nixfmt "$output"
+

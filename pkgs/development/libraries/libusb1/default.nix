@@ -71,3 +71,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ prusnak realsnick ];
   };
 }
+

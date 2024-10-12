@@ -16,3 +16,4 @@ buildDunePackage rec {
     mainProgram = "menhir";
   };
 }
+

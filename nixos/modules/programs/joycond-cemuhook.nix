@@ -14,3 +14,4 @@
     environment.systemPackages = [ pkgs.joycond-cemuhook ];
   };
 }
+

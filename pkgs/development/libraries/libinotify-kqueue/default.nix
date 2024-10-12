@@ -24,3 +24,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; darwin ++ freebsd ++ netbsd ++ openbsd;
   };
 }
+

@@ -42,3 +42,4 @@ stdenvNoCC.mkDerivation {
     inherit (gawk.meta) platforms;
   };
 }
+

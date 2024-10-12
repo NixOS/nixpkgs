@@ -42,3 +42,4 @@ done
 
 rm "$lock"
 mv "$sources_tmp" sources.json
+

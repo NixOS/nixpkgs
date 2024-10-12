@@ -56,3 +56,4 @@ mkDerivation rec {
     mainProgram = "vokoscreen";
   };
 }
+

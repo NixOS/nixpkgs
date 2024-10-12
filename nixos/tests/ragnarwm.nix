@@ -30,3 +30,4 @@ import ./make-test-python.nix ({ lib, ...} : {
         machine.screenshot("terminal")
   '';
 })
+

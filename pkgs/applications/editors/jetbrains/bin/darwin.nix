@@ -38,3 +38,4 @@ stdenvNoCC.mkDerivation {
   nativeBuildInputs = [ undmg ];
   sourceRoot = ".";
 }
+

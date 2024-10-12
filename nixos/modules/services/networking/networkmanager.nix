@@ -677,3 +677,4 @@ in
     services.udev.packages = packages;
   };
 }
+

@@ -199,3 +199,4 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
     inherit mainProgram;
   };
 })
+

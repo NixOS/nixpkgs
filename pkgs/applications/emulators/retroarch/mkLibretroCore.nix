@@ -83,3 +83,4 @@ stdenv.mkDerivation ({
     maintainers = with maintainers; teams.libretro.members ++ [ hrdinka ];
   } // (args.meta or { });
 } // extraArgs)
+

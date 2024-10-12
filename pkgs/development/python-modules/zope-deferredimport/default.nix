@@ -33,3 +33,4 @@ buildPythonPackage rec {
     license = licenses.zpl21;
   };
 }
+

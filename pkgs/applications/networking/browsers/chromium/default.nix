@@ -181,3 +181,4 @@ in stdenv.mkDerivation {
 # builtins.unsafeGetAttrPos, which is what ofborg uses to
 # decide which maintainers need to be pinged.
 // builtins.removeAttrs chromium.browser (builtins.filter (e: e != "version") (builtins.attrNames chromium.browser))
+

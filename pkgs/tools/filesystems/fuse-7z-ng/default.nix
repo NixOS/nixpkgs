@@ -47,3 +47,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fuse-7z-ng";
   };
 }
+

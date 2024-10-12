@@ -8,3 +8,4 @@ pythonCatchConflictsPhase() {
 if [ -z "${dontUsePythonCatchConflicts-}" ]; then
     preDistPhases+=" pythonCatchConflictsPhase"
 fi
+

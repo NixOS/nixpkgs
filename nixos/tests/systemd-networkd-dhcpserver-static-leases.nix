@@ -87,3 +87,4 @@ import ./make-test-python.nix ({ lib, ... }: {
       router.wait_until_succeeds("ping -c 5 10.0.0.10")
   '';
 })
+

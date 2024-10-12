@@ -245,3 +245,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
           client.succeed("do_test ${username} ${facebookBotUsername} ${homeserverUrl} >&2")
     '';
   })
+

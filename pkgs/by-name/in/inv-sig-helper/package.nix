@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "inv_sig_helper_rust";
   };
 }
+

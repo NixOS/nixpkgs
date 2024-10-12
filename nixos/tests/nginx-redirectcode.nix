@@ -23,3 +23,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     webserver.succeed("curl -si http://localhost | grep '^HTTP/[0-9.]\+ 308 Permanent Redirect'")
   '';
 })
+

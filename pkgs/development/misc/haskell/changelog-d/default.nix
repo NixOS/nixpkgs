@@ -29,3 +29,4 @@ mkDerivation rec {
   license = lib.licenses.gpl3Plus;
   mainProgram = "changelog-d";
 }
+

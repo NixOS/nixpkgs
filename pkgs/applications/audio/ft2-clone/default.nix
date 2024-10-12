@@ -48,3 +48,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ft2-clone";
   };
 }
+

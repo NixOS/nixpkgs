@@ -74,3 +74,4 @@ buildDotnetModule rec {
     maintainers = with lib.maintainers; [ zendo ];
   };
 }
+

@@ -33,3 +33,4 @@ runCommand "gauge-test" { nativeBuildInputs = [ gaugeWithPlugins ]; } ''
     p: "checkPlugin '${lib.removePrefix "gauge-plugin-" p.pname}' '${p.version}'"
   ) plugins}
 ''
+

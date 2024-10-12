@@ -92,3 +92,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "redict-cli";
   };
 })
+

@@ -41,3 +41,4 @@
     environment.etc."usb_modeswitch.d".source = "${pkgs.usb-modeswitch-data}/share/usb_modeswitch";
   };
 }
+

@@ -19,3 +19,4 @@ mkDerivation {
 
   meta.platforms = lib.platforms.freebsd;
 }
+

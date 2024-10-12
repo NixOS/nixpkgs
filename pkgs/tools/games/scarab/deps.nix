@@ -267,3 +267,4 @@
   (fetchNuGet { pname = "xunit.extensibility.execution"; version = "2.4.1"; sha256 = "1pbilxh1gp2ywm5idfl0klhl4gb16j86ib4x83p8raql1dv88qia"; })
   (fetchNuGet { pname = "xunit.runner.visualstudio"; version = "2.4.3"; sha256 = "0j1d0rbcm7pp6dypi61sjxp8l22sv261252z55b243l39jgv2rp3"; })
 ]
+

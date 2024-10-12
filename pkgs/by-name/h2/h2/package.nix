@@ -61,3 +61,4 @@ maven.buildMavenPackage rec {
     mainProgram = "h2";
   };
 }
+

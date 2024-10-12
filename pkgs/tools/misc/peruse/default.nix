@@ -60,3 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (kirigami2.meta) platforms;
   };
 })
+

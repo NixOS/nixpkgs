@@ -23,3 +23,4 @@ symlinkJoin rec {
     tests = {inherit (nixosTests) curl-impersonate;};
   };
 }
+

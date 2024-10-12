@@ -20,3 +20,4 @@ in {
     systemd.packages = [ pkgs.blueman ];
   };
 }
+

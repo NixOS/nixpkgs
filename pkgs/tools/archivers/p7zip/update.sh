@@ -45,3 +45,4 @@ echo "updating unfree hash"
 sed -i "s@unfree = \"$OLD_UNFREE_HASH\";@unfree = \"$NEW_UNFREE_HASH\";@" "$DRV_DIR/default.nix"
 
 echo "done"
+

@@ -10,3 +10,4 @@ mkDerivation {
   buildInputs = [ ki18n qtsvg ];
   propagatedBuildInputs = [ kjs ];
 }
+

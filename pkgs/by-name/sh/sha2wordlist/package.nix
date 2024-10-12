@@ -38,3 +38,4 @@ stdenv.mkDerivation {
     mainProgram = "sha2wordlist";
   };
 }
+

@@ -36,3 +36,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sus_compiler";
   };
 }
+

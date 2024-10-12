@@ -36,3 +36,4 @@ stdenvNoCC.mkDerivation rec {
     platforms = jre.meta.platforms;
   };
 }
+

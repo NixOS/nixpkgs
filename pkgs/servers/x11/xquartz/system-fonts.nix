@@ -32,3 +32,4 @@ stdenv.mkDerivation {
     cat $( find ${xorg.fontalias}/ -name fonts.alias) >fonts.alias
   '';
 }
+

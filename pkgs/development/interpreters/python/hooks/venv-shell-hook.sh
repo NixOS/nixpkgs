@@ -26,3 +26,4 @@ if [ -z "${dontUseVenvShellHook:-}" ] && [ -z "${shellHook-}" ]; then
         shellHook=venvShellHook
     fi
 fi
+

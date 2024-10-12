@@ -475,3 +475,4 @@ fixup_result = fixup(result)
 output = merge input, fixup_result
 
 puts JSON.pretty_generate(sort_recursively(output))
+

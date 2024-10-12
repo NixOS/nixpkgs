@@ -69,3 +69,4 @@ stdenv.mkDerivation rec {
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };
 }
+

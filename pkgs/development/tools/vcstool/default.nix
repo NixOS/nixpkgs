@@ -25,3 +25,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ sivteck ];
   };
 }
+

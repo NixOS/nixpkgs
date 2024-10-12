@@ -36,3 +36,4 @@ bundlerApp {
     maintainers = with lib.maintainers; [ netali anthonyroussel ];
   };
 }
+

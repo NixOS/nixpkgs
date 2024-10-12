@@ -20,3 +20,4 @@ build-idris-package  {
     maintainers = with lib.maintainers; [ imuli ];
   };
 }
+

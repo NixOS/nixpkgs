@@ -80,3 +80,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "video-trimmer";
   };
 })
+

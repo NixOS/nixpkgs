@@ -15,3 +15,4 @@ if [ -z "${dontUseEggUnpack-}" ] && [ -z "${unpackPhase-}" ]; then
     echo "Using eggUnpackPhase"
     unpackPhase=eggUnpackPhase
 fi
+

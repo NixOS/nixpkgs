@@ -48,3 +48,4 @@ fixupPhase = ''
     mainProgram = "bsync";
   };
 }
+

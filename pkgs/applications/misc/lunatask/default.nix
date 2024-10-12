@@ -41,3 +41,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "lunatask";
   };
 }
+

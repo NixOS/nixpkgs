@@ -11,3 +11,4 @@ executable local
     build-depends:    base
     hs-source-dirs:   app
     default-language: Haskell2010
+

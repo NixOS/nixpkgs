@@ -40,3 +40,4 @@ buildGoModule rec {
     mainProgram = "ipam";
   };
 }
+

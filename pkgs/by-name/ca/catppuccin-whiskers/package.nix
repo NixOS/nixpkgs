@@ -21,3 +21,4 @@ in rustPlatform.buildRustPackage {
     mainProgram = "whiskers";
   };
 }
+

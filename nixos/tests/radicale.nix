@@ -93,3 +93,4 @@ in {
         assert output[-9:-1] == "SAFE :-}"
   '';
 })
+

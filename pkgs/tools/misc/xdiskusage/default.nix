@@ -20,3 +20,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "xdiskusage";
   };
 })
+

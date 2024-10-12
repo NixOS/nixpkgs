@@ -61,3 +61,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-gamble";
   };
 }
+

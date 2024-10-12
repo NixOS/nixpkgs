@@ -26,3 +26,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("curl --fail bar.localhost | grep 'Hello bar'")
   '';
 })
+

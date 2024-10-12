@@ -14,3 +14,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kio ktextwidgets kxmlgui ];
 }
+

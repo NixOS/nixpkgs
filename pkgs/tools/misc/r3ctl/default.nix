@@ -47,3 +47,4 @@ qt5.mkDerivation {
     platforms = platforms.linux;
   };
 }
+

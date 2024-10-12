@@ -44,3 +44,4 @@ buildPythonPackage rec {
     description = "Celery instrumentation for OpenTelemetry";
   };
 }
+

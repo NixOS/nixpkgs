@@ -42,3 +42,4 @@ buildNpmPackage' rec {
     maintainers = [ lib.maintainers.onny ];
   };
 }
+

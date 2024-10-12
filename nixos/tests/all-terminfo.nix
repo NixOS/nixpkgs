@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
       machine.fail("grep . /etc/terminfo-extra-outs >&2")
     '';
 })
+

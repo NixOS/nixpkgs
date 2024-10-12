@@ -51,3 +51,4 @@ mkDerivation rec {
     mainProgram = "krusader";
   };
 }
+

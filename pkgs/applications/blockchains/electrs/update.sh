@@ -37,3 +37,4 @@ hash=$(nix hash path $repo)
 (cd "$nixpkgs" && update-source-version electrs "$version" "$hash" && update-source-version electrs --ignore-same-version --source-key=cargoDeps)
 echo
 echo "electrs: $oldVersion -> $version"
+

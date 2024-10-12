@@ -157,3 +157,4 @@ runCommand "test-nixos-rebuild-repl" {
   echo Done
   touch $out
 ''
+

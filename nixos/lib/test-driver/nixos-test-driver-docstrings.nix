@@ -11,3 +11,4 @@ runCommand "nixos-test-driver-docstrings" env ''
   python3 ${./extract-docstrings.py} ${./test_driver/machine.py} \
     > $out/machine-methods.md
 ''
+

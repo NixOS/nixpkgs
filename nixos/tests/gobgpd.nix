@@ -69,3 +69,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
           node2.wait_until_succeeds("gobgp neighbor ${addr1} | grep -q ESTABLISHED")
     '';
   })
+

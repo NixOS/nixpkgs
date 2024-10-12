@@ -15,3 +15,4 @@ buildDunePackage {
     description = "Command line tool for interfacing with xenstore";
   };
 }
+

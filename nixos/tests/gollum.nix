@@ -12,3 +12,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     webserver.wait_for_open_port(${toString nodes.webserver.services.gollum.port})
   '';
 })
+

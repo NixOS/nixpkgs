@@ -56,3 +56,4 @@ following options:
   services.anki-sync-server.openFirewall = true;
 }
 ```
+

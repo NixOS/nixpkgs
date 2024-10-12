@@ -30,3 +30,4 @@ import ./make-test-python.nix ({ lib, ... }:
     machine.succeed("fc-match emoji | grep '\"Twitter Color Emoji\"'")
   '';
 })
+

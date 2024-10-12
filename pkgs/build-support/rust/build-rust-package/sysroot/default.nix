@@ -33,3 +33,4 @@ in rustPlatform.buildRustPackage {
   # allows support for cross-compilation
   meta.platforms = lib.platforms.all;
 }
+

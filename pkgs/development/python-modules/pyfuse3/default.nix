@@ -74,3 +74,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/libfuse/pyfuse3/blob/${version}/Changes.rst";
   };
 }
+

@@ -35,3 +35,4 @@ import ../../make-test-python.nix {
     # server.succeed("curl -H 'Host: pixefed.local' -H 'Accept: application/json' -H 'Authorization: Bearer secret' -F'status'='test' http://localhost/api/v1/statuses")
   '';
 }
+

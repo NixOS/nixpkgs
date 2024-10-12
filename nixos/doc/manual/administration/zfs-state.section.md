@@ -14,3 +14,4 @@ it, in case additional pools are added later on, temporarily or permanently:
 While mishandling the cachefile does not lead to data loss by itself, it may
 cause zpools not to be imported during boot, and services may then write to a
 location where a dataset was expected to be mounted.
+

@@ -106,3 +106,4 @@ depmod -b $out -a $version
 # remove original hints from final derivation
 rm $out/lib/modules/"$version"/modules.order
 rm $out/lib/modules/"$version"/modules.builtin
+

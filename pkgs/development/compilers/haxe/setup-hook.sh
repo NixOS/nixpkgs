@@ -5,3 +5,4 @@ addHaxeLibPath() {
 }
 
 addEnvHooks "$targetOffset" addHaxeLibPath
+

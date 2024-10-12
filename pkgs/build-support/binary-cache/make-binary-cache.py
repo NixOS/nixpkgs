@@ -41,3 +41,4 @@ for item in closures:
       "NarSize: " + str(item["narSize"]),
       "References: " + " ".join(dropPrefix(ref) for ref in item["references"]),
     ]))
+

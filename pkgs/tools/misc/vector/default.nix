@@ -177,3 +177,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "vector";
   };
 }
+

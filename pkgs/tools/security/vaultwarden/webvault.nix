@@ -75,3 +75,4 @@ in buildNpmPackage rec {
     inherit (vaultwarden.meta) maintainers;
   };
 }
+

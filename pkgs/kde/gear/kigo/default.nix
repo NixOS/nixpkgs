@@ -10,3 +10,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kigo";
 }
+

@@ -52,3 +52,4 @@ platformHostHs = unlines
         , "  , platformMini_os = cHostPlatformOS"
         , "  }"
         ]
+

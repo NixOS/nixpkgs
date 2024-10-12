@@ -40,3 +40,4 @@ buildDubPackage rec {
     mainProgram = "btdu";
   };
 }
+

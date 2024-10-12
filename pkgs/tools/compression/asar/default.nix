@@ -46,3 +46,4 @@ mkYarnPackage rec {
     maintainers = with lib.maintainers; [ xvapx ];
   };
 }
+

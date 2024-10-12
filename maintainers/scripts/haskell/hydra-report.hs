@@ -824,3 +824,4 @@ probableErrorCause "running tests" = Just "test failure"
 probableErrorCause build_line | ByteString.isPrefixOf "Building" build_line = Just ("failure building " <> fromUTF8BS (fst $ ByteString.breakSubstring " for" $ ByteString.drop 9 build_line))
 probableErrorCause build_line | ByteString.isSuffixOf "Phase" build_line = Just ("failure in " <> fromUTF8BS build_line)
 probableErrorCause _ = Nothing
+

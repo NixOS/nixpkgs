@@ -21,3 +21,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ talyz ];
   };
 }
+

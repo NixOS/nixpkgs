@@ -16,3 +16,4 @@ B9AE9905FFD7803F25714661B63B535A4C206CA9
 EOF
 
 gpg -a --export > nodejs-release-keys.asc
+

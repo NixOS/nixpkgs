@@ -81,3 +81,4 @@ buildNpmPackage rec {
     mainProgram = "vdhcoapp";
   };
 }
+

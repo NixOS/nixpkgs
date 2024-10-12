@@ -102,3 +102,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ dit7ya xyven1 _71zenith ];
   };
 }
+

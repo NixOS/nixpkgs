@@ -47,3 +47,4 @@ symlinkJoin {
 
   inherit (fcitx5) meta;
 }
+

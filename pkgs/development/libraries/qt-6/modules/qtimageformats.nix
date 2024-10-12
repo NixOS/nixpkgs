@@ -11,3 +11,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase ];
   buildInputs = [ libwebp jasper libmng libtiff ];
 }
+

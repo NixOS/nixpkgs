@@ -71,3 +71,4 @@ EOF
 ) || die "cleanSourceWith + cleanSource"
 
 echo >&2 tests ok
+

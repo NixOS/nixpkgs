@@ -87,3 +87,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "deja-dup";
   };
 })
+

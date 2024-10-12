@@ -17,3 +17,4 @@ To update this package
 #. Bump the ``./package.json`` version pin
 #. Run ``nix-shell -p nodejs --command "npm i --package-lock-only"``
 #. Update ``npmDeps.hash`` in the ``package.nix``
+

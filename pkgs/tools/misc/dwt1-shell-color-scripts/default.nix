@@ -54,3 +54,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "colorscript";
   };
 }
+

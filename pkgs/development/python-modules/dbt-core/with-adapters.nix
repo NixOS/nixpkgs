@@ -22,3 +22,4 @@ adapterFun:
   ignoreCollisions = true;
 }).overrideAttrs
   { meta.mainProgram = dbt-core.meta.mainProgram; }
+

@@ -26,3 +26,4 @@ let
   checksums = lib.mapAttrs getChecksum generated;
 in
 lib.filterAttrs (n: v: v != null) checksums
+

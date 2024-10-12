@@ -29,3 +29,4 @@ in
     machine.succeed("sojuctl user create -username ${user} -password ${pass}")
   '';
 })
+

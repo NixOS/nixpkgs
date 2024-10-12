@@ -57,3 +57,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.succeed(f'curl -f -X POST http://localhost/index.php?mainmenu=login&token={csrf_token}&username=root&password=hunter2')
   '';
 })
+

@@ -28,3 +28,4 @@ bundlerApp {
     maintainers = with lib.maintainers; [ anthonyroussel ];
   };
 }
+

@@ -19,3 +19,4 @@ instead:
 ```ShellSession
 # nixos-rebuild switch --option binary-caches http://my-cache.example.org/
 ```
+

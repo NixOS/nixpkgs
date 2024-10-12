@@ -35,3 +35,4 @@ _updateSourceDateEpochFromSourceRoot() {
         updateSourceDateEpoch "$sourceRoot"
     fi
 }
+

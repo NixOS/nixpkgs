@@ -49,3 +49,4 @@ buildGoModule rec {
     platforms = steampipe.meta.platforms;
   };
 }
+

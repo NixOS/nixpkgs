@@ -60,3 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (eintopf.meta) homepage description license maintainers;
   };
 })
+

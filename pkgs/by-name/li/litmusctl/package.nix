@@ -41,3 +41,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ vinetos sailord ];
   };
 }
+

@@ -66,3 +66,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.lesuisse ];
   };
 })
+

@@ -32,3 +32,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "typos-lsp";
   };
 }
+

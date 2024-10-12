@@ -30,3 +30,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (postgresql.meta) platforms;
   };
 })
+

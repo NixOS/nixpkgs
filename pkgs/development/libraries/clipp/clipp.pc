@@ -7,3 +7,4 @@ handling for C++11/14/17
 URL: https://github.com/muellan/clipp
 Version: @version@
 Cflags: -I${includedir}
+

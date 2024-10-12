@@ -37,3 +37,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ makefu ];
   };
 }
+

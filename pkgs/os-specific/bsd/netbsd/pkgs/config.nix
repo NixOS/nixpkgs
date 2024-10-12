@@ -25,3 +25,4 @@ mkDerivation {
   buildInputs = compatIfNeeded;
   extraPaths = [ cksum.path ];
 }
+

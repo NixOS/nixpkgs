@@ -72,3 +72,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.akiraux.akira";
   };
 }
+

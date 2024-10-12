@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ _7zz ];
   extraBuildInputs = [ qtsvg ];
 }
+

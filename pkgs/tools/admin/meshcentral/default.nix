@@ -50,3 +50,4 @@ yarn2nix-moretea.mkYarnPackage {
     mainProgram = "meshcentral";
   };
 }
+

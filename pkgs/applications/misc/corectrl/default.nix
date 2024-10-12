@@ -90,3 +90,4 @@ stdenv.mkDerivation rec{
   };
 }
 # TODO: report upstream that libdrm is not detected at configure time
+

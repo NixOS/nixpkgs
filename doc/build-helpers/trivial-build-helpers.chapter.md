@@ -804,3 +804,4 @@ produces an output path `/nix/store/<hash>-runtime-references` containing
 
 but none of `hello`'s dependencies because those are not referenced directly
 by `hi`'s output.
+

@@ -42,3 +42,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mimame ];
   };
 }
+

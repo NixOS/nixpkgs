@@ -105,3 +105,4 @@ buildGoModule rec {
     mainProgram = "pufferpanel";
   };
 }
+

@@ -69,3 +69,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mympd";
   };
 })
+

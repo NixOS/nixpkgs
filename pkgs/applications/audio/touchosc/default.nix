@@ -106,3 +106,4 @@ stdenv.mkDerivation rec {
     mainProgram = "TouchOSC";
   };
 }
+

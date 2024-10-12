@@ -18,3 +18,4 @@ sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'"$npmDepsHash"'"#' -i default.ni
 popd
 
 $(nix-build -A kavita.backend.fetch-deps --no-out-link)
+

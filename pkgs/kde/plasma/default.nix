@@ -65,3 +65,4 @@
   wacomtablet = callPackage ./wacomtablet { };
   xdg-desktop-portal-kde = callPackage ./xdg-desktop-portal-kde { };
 }
+

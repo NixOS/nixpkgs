@@ -158,3 +158,4 @@ with tempfile.TemporaryDirectory() as work_dir:
 
     shutil.copy(deps_file, os.path.join(package_dir, deps_file_name))
     shutil.copy(package_file, os.path.join(package_dir, package_file_name))
+

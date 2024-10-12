@@ -18,3 +18,4 @@ lib.mapAttrs (
 
   esp-idf.CPPFLAGS = [ "-DSPIFFS_OBJ_META_LEN=4" ];
 }
+

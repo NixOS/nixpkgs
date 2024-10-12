@@ -32,3 +32,4 @@ in
     assert hash == "00e61c2ef171093fbf194e420c17bb84bcdb823238d70eb46e375bab2427cc21  -", f"The disk image contents differ from what was expected (was {hash})"
   '';
 }
+

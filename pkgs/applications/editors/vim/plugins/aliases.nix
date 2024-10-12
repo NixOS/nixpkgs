@@ -148,3 +148,4 @@ mapAliases (with prev; {
   xterm-color-table   = xterm-color-table-vim;
   zeavim              = zeavim-vim;
 } // deprecations)
+

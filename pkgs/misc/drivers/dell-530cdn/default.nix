@@ -11,3 +11,4 @@ in runCommand "Dell-5130cdn-Color-Laser-1.3-1" {} ''
   mkdir -p $out/share/ppd
   mv usr/share/cups/model/Dell $out/share/ppd
 ''
+

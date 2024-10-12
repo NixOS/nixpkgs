@@ -16,3 +16,4 @@ mkDerivation {
     kwidgetsaddons ];
   outputs = [ "out" "dev" ];
 }
+

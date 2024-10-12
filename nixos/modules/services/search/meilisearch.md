@@ -39,3 +39,4 @@ you first need to add documents to an index before you can search for documents.
 ## Missing {#module-services-meilisearch-missing}
 
 - the snapshot feature is not yet configurable from the module, it's just a matter of adding the relevant environment variables.
+

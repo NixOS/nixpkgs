@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ kconfig kconfigwidgets ki18n qtx11extras libXxf86vm ];
 }
+

@@ -23,3 +23,4 @@ mkDerivation {
   license = lib.licenses.asl20;
   mainProgram = "dconf2nix";
 }
+

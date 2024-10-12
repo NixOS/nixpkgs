@@ -64,3 +64,4 @@ in
     assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
   '';
 }
+

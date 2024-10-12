@@ -119,3 +119,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/audacious-media-player/audacious-plugins";
   };
 }
+

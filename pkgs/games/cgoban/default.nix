@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     platforms = temurin-jre-bin-17.meta.platforms;
   };
 }
+

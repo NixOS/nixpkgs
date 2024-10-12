@@ -37,3 +37,4 @@ php82.buildComposerProject (finalAttrs: {
     maintainers = with lib.maintainers; [ drupol ];
   };
 })
+

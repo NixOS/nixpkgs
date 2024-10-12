@@ -105,3 +105,4 @@ with tempfile.NamedTemporaryFile(mode="w") as t:
     t.write(file_content)
     t.flush()
     shutil.copyfile(t.name, file_path)
+

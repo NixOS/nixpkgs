@@ -91,3 +91,4 @@ let finalPackage = buildDotnetModule rec {
     mainProgram = "OmniSharp";
   };
 }; in finalPackage
+

@@ -10,3 +10,4 @@ buildDunePackage {
     description = "PostgreSQL driver for Caqti based on C bindings";
   };
 }
+

@@ -26,3 +26,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.winpat ];
   };
 }
+

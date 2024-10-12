@@ -60,3 +60,4 @@ mkDerivation rec {
     mainProgram = "kcollectd";
   };
 }
+

@@ -47,3 +47,4 @@ buildPythonApplication {
     mainProgram = "scfbuild";
   };
 }
+

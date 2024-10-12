@@ -46,3 +46,4 @@ in rustPlatform.buildRustPackage rec {
     mainProgram = "fishnet";
   };
 }
+

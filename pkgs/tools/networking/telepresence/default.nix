@@ -43,3 +43,4 @@ in pythonPackages.buildPythonPackage rec {
     maintainers = with lib.maintainers; [ offline ];
   };
 }
+

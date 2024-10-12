@@ -12,3 +12,4 @@ if [ -z "${dontUseAutoAddDriverRunpath-}" -a -z "${dontUseAutoAddOpenGLRunpath-}
   echo "Using autoAddDriverRunpath"
   postFixupHooks+=("autoFixElfFiles addDriverRunpath")
 fi
+

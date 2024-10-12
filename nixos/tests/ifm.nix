@@ -34,3 +34,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
     server.succeed("shasum testfile >> checksums && shasum --check checksums")
   '';
 })
+

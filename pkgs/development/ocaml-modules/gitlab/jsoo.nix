@@ -25,3 +25,4 @@ buildDunePackage {
     description = "Gitlab APIv4 JavaScript library";
   };
 }
+

@@ -118,3 +118,4 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ natsukium samlich ];
   };
 }
+

@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraPropagatedBuildInputs = [ qtdeclarative ];
   meta.mainProgram = "kcmshell6";
 }
+

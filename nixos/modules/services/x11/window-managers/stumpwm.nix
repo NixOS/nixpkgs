@@ -22,3 +22,4 @@ in
     environment.systemPackages = [ pkgs.sbclPackages.stumpwm ];
   };
 }
+

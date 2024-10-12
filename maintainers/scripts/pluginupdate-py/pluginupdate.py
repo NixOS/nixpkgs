@@ -827,3 +827,4 @@ def update_plugins(editor: Editor, args):
                 f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )
+

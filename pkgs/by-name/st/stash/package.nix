@@ -48,3 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "stash";
   };
 })
+

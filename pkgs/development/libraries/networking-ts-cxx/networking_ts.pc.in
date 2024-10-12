@@ -6,3 +6,4 @@ Description: Experimental implementation of the C++ Networking Technical Specifi
 URL: https://github.com/chriskohlhoff/networking-ts-impl
 Version: ${networking_ts_version}
 Cflags: -isystem${includedir}
+

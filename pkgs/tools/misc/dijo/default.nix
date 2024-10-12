@@ -20,3 +20,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dijo";
   };
 }
+

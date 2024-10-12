@@ -74,3 +74,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "7z";
   };
 })
+

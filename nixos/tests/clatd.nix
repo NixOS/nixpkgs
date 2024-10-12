@@ -234,3 +234,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     client.log(client.execute("systemd-analyze security clatd.service")[1])
   '';
 })
+

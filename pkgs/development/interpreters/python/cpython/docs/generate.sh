@@ -69,3 +69,4 @@ EOF
 done
 
 echo "}; in pythonDocs" >> default.nix
+

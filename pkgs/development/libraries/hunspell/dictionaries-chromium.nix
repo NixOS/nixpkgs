@@ -77,3 +77,4 @@ rec {
     shortDescription = "French (France)";
   };
 }
+

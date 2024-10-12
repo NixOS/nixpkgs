@@ -44,3 +44,4 @@ Using the above as the example, a three NixOS release example would look like:
   * k3s_1_32 (Backported)
 * NixOS 24.11
   * k3s/k3s_1_32 (Release Version, patches backported)
+

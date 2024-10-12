@@ -90,3 +90,4 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail Exec=mailspring Exec=$out/bin/mailspring
   '';
 })
+

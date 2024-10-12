@@ -24,3 +24,4 @@ done
 fetch addon2-1.xml xml/addon2-1.xml
 
 popd &>/dev/null
+

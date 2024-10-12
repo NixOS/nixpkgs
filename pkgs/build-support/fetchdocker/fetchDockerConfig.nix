@@ -11,3 +11,4 @@ generic-fetcher ({
   name    = "${repository}_${imageName}_${tag}-config.json";
   tag     = "unused";
 } // args)
+

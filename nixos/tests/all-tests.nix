@@ -1148,3 +1148,4 @@ in {
   zsh-history = handleTest ./zsh-history.nix {};
   zwave-js = handleTest ./zwave-js.nix {};
 }
+

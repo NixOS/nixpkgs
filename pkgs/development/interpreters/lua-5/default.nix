@@ -153,3 +153,4 @@ rec {
     inherit callPackage fetchFromGitHub passthruFun;
   };
 }
+

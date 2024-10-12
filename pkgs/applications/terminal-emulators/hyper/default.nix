@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
     broken = true; # Error: 'node-pty' failed to load
   };
 }
+

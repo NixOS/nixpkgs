@@ -64,3 +64,4 @@ import ./make-test-python.nix ({ lib, ... }:
         machine.fail('su - user5 -c "EDITOR=cat pleaseedit /etc/hosts"')
   '';
 })
+

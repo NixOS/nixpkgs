@@ -131,3 +131,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     client.fail(f"{mpc} -h serverPulseAudio status")
   '';
 })
+

@@ -99,3 +99,4 @@ stdenv.mkDerivation rec {
     tests = { inherit (nixosTests) shadow; };
   };
 }
+

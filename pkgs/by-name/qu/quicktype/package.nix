@@ -33,3 +33,4 @@ buildNpmPackage rec {
     mainProgram = "quicktype";
   };
 }
+

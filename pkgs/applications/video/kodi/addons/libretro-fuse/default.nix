@@ -29,3 +29,4 @@ buildKodiBinaryAddon rec {
     maintainers = with maintainers; teams.kodi.members ++ [ kazenyuk ];
   };
 }
+

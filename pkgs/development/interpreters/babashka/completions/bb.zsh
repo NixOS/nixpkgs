@@ -4,3 +4,4 @@ _bb_tasks() {
     _files # autocomplete filenames as well
 }
 compdef _bb_tasks bb
+

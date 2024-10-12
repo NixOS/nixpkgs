@@ -10,3 +10,4 @@ E.g. `fzf` can then be used in the `.bashrc` like this:
 source "$(fzf-share)/completion.bash"
 source "$(fzf-share)/key-bindings.bash"
 ```
+

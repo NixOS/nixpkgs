@@ -14,3 +14,4 @@ makeSetupHook { name = "netbsd-stat-hook"; } (
     makeFlagsArray+=(TOOL_STAT=${stat}/bin/stat)
   ''
 )
+

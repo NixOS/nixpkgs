@@ -83,3 +83,4 @@ in
     assert "${text}" in output, f"expected text ${text} was not found, OCR found {output!r}"
   '';
 })
+

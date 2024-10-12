@@ -16,3 +16,4 @@ melpaBuild {
     description = "Major mode for the LLVM assembler language";
   };
 }
+

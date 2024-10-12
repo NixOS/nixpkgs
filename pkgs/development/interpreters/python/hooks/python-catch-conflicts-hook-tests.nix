@@ -186,3 +186,4 @@ in {
   in
     expectFailure toplevel "Found duplicated packages in closure for dependency 'leaf'";
 }
+

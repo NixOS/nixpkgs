@@ -19,3 +19,4 @@ sed -i package.nix \
     -e "/^  version =/ s|\".*\"|\"$newver\"|" \
     -e "/^  timestamp =/ s|\".*\"|\"$newtimestamp\"|" \
     -e "/^    hash =/ s|\".*\"|\"$newhash\"|" \
+

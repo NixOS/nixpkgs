@@ -32,3 +32,4 @@
     machine.succeed("curl -s http://localhost:8080/metrics | grep go_info")
   '';
 }
+

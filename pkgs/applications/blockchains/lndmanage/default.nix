@@ -43,3 +43,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "lndmanage";
   };
 }
+

@@ -65,3 +65,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "coolercontrol";
   };
 }
+

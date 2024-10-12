@@ -176,3 +176,4 @@ mkDerivation {
     ''-DNIXPKGS_KDEINIT5_SHUTDOWN="${getBin kinit}/bin/kdeinit5_shutdown"''
   ];
 }
+

@@ -38,3 +38,4 @@ mkDerivation rec {
     mainProgram = "qjoypad";
   };
 }
+

@@ -9,3 +9,4 @@ buildDhallGitHubPackage {
   sha256 = "1i8b98xx20b73afkmr78l4x4ci3dk2sc737hxkcaxp3sgncwnz1b";
   dependencies = [ Prelude ];
 }
+

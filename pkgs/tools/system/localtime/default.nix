@@ -42,3 +42,4 @@ buildGoModule {
     mainProgram = "localtimed";
   };
 }
+

@@ -55,3 +55,4 @@ buildPythonPackage rec {
     mainProgram = "logilab-pytest";
   };
 }
+

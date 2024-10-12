@@ -36,3 +36,4 @@ in
       programs.fish.interactiveShellInit = lib.mkIf prg.fish.enable fishInitScript;
     };
   }
+

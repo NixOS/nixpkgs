@@ -80,3 +80,4 @@ buildPythonPackage rec {
     mainProgram = "faraday-plugins";
   };
 }
+

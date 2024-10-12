@@ -26,3 +26,4 @@ callPackage ./generic.nix (args // rec {
 
   archive = "office${edition}.tar.lzma";
 })
+

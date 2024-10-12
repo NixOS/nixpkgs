@@ -292,3 +292,4 @@ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default 
 lib.warn '''buildGoPackage' is deprecated and will be removed for the 25.05 release.
 Please use 'buildGoModule' instead. Tips for migration can be found in the Go section of the nixpkgs manual.''
   package
+

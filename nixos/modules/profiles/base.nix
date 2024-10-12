@@ -50,3 +50,4 @@
   # Configure host id for ZFS to work
   networking.hostId = lib.mkDefault "8425e349";
 }
+

@@ -13,3 +13,4 @@ in
   pulumi-random = callPackage' ./pulumi-random.nix { };
   pulumi-yandex-unofficial = callPackage' ./pulumi-yandex-unofficial.nix { };
 }
+

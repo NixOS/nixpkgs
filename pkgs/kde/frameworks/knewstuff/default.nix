@@ -18,3 +18,4 @@ mkKdeDerivation {
   extraPropagatedBuildInputs = [ kcmutils ];
   meta.mainProgram = "knewstuff-dialog6";
 }
+

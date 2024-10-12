@@ -138,3 +138,4 @@ rec {
     fma4Support    = featureSupport "fma4";
   };
 }
+

@@ -47,3 +47,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Perceptual image comparison tool";
   };
 })
+

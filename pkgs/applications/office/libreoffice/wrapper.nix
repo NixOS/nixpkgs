@@ -132,3 +132,4 @@ in runCommand "${unwrapped.name}-wrapped" {
   # A symlink many users rely upon
   ln -s $out/bin/soffice $out/bin/libreoffice
 '')
+

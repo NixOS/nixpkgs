@@ -18,3 +18,4 @@ LOOPWM_DARWIN_HASH="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --type
 
 sed -i "s#hash = \".*\"#hash = \"$LOOPWM_DARWIN_HASH\"#g" package.nix
 sed -i "s#version = \".*\";#version = \"$LOOPWM_LATEST_VER\";#g" package.nix
+

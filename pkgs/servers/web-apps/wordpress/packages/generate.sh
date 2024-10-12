@@ -21,3 +21,4 @@ wp4nix -t $THEMES -tl en
 wp4nix -l $LANGUAGES
 
 rm *.log themeLanguages.json pluginLanguages.json
+

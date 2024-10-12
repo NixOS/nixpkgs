@@ -5,3 +5,4 @@ mkDerivation {
   noCC = true;
   makeFlags = defaultMakeFlags ++ [ "BINDIR=$(out)/share" ];
 }
+

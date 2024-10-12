@@ -24,3 +24,4 @@ mkDerivation rec {
     mainProgram = "qgit";
   };
 }
+

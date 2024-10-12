@@ -158,3 +158,4 @@ with python.pkgs; buildPythonApplication rec {
     mainProgram = "baserow";
   };
 }
+

@@ -94,3 +94,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
         hedgedocPostgresWithUNIXSocket.wait_until_succeeds("curl -sSf http://localhost:3000/new")
   '';
 })
+

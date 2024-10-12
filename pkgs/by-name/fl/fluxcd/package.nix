@@ -84,3 +84,4 @@ buildGoModule rec {
     mainProgram = "flux";
   };
 }
+

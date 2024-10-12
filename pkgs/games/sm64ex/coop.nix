@@ -39,3 +39,4 @@ callPackage ./generic.nix {
     description = "Super Mario 64 online co-op mod, forked from sm64ex";
   };
 }
+

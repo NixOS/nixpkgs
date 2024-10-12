@@ -213,3 +213,4 @@
   (fetchNuGet { pname = "xunit.runner.console"; version = "2.4.1"; sha256 = "13ykz9anhz72xc4q6byvdfwrp54hlcbl6zsfapwfhnzyvfgb9w13"; })
   (fetchNuGet { pname = "xunit.runner.visualstudio"; version = "2.4.3"; sha256 = "0j1d0rbcm7pp6dypi61sjxp8l22sv261252z55b243l39jgv2rp3"; })
 ]
+

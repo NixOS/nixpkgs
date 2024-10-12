@@ -43,3 +43,4 @@ mapAliases ({
   kak-prelude            = overridden.prelude-kak; # backwards compat, added 2021-01-04
   kak-vertical-selection = overridden.kakoune-vertical-selection; # backwards compat, added 2021-01-04
 } // deprecations)
+

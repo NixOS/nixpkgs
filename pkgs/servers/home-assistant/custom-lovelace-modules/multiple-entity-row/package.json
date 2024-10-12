@@ -37,3 +37,4 @@
     "build": "yarn lint && webpack -c webpack.config.js"
   }
 }
+

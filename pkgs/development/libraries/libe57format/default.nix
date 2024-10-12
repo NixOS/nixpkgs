@@ -88,3 +88,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux; # because of the .so buiding in `postInstall` above
   };
 })
+

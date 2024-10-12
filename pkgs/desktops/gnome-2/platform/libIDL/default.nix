@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
   ];
   meta.mainProgram = "libIDL-config-2";
 }
+

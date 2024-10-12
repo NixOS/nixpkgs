@@ -36,3 +36,4 @@ python3.pkgs.buildPythonApplication {
     maintainers = [ maintainers.crem ];
   };
 }
+

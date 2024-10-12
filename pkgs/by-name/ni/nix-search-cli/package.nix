@@ -32,3 +32,4 @@ buildGoModule {
     mainProgram = "nix-search";
   };
 }
+

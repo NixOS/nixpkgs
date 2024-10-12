@@ -42,3 +42,4 @@ mkDerivation {
   '';
   extraPaths = [ "share/terminfo" ];
 }
+

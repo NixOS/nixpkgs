@@ -206,3 +206,4 @@ let
     };
 in
 mkArmagetron srcs.${latestVersionMajor} dedicatedServer
+

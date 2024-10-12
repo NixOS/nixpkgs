@@ -14,3 +14,4 @@ in
     services.udev.packages = [ pkgs.teck-udev-rules ];
   };
 }
+

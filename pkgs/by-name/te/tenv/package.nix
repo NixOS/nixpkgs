@@ -44,3 +44,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ rmgpinto nmishin kvendingoldo ];
   };
 }
+

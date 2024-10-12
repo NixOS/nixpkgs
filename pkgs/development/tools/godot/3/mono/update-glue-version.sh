@@ -37,3 +37,4 @@ sed -i "s/^+    glue_version = [0-9]\+$/+    glue_version = $glueversion/" $patc
 mv $patchdir/$patchprefix*.patch $patchdir/$patchprefix$gdversion.patch
 
 echo "Updated $patchdir/$patchprefix$gdversion.patch with glue_version: $glueversion"
+

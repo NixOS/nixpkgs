@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
     description = "Library to integrate compressed files management with GNOME";
   };
 }
+

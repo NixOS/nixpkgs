@@ -70,3 +70,4 @@ else
     }
     nix-store --dump ${drv} | sed -f rewrite.sed | nix-store --restore $out
   ''
+

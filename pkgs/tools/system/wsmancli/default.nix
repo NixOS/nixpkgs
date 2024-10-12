@@ -33,3 +33,4 @@ stdenv.mkDerivation rec {
     inherit (openwsman.meta) homepage license maintainers platforms;
   };
 }
+

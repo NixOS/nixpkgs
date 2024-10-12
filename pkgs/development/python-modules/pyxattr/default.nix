@@ -26,3 +26,4 @@ buildPythonPackage rec {
     inherit (pkgs.attr.meta) platforms;
   };
 }
+

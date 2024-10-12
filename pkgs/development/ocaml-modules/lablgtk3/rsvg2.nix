@@ -18,3 +18,4 @@ buildDunePackage rec {
     description = "OCaml interface to Gnome rsvg2 library";
   };
 }
+

@@ -102,3 +102,4 @@ if hasWarnings and warningsAreErrors:
     sys.exit(1)
 
 json.dump(unpivot(options), fp=sys.stdout)
+

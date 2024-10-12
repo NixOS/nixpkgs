@@ -35,3 +35,4 @@ libsForQt5.mkDerivation {
 
   inherit (unwrapped) meta;
 }
+

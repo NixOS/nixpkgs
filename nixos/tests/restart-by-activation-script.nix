@@ -73,3 +73,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         machine.fail("test -f /run/nixos/activation-reload-list")
   '';
 })
+

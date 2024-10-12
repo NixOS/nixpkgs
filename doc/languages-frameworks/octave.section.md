@@ -90,3 +90,4 @@ To this end, when all the requested packages have been built, the Octave package
 This database file is unique for each different (according to Nix) environment invocation.
 5. Rewrite the Octave-wide startup file to read from the list of packages installed in that particular environment.
 6. Wrap any programs that are required by the Octave packages so that they work with all the paths defined within the environment.
+

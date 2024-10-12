@@ -138,3 +138,4 @@ rm -rf -- *
 touch {0..1000}
 bench 'toSource { root = ./.; fileset = unions (mapAttrsToList (name: value: ./. + "/${name}") (builtins.readDir ./.)); }'
 rm -rf -- *
+

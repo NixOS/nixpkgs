@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qgpgme ];
   meta.mainProgram = "isoimagewriter";
 }
+

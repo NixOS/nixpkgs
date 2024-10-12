@@ -29,3 +29,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ cheriimoya ];
   };
 }
+

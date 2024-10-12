@@ -38,3 +38,4 @@ buildLua (finalAttrs: {
     maintainers = with maintainers; [ Guanran928 ];
   };
 })
+

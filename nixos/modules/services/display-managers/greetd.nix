@@ -128,3 +128,4 @@ in
 
   meta.maintainers = with lib.maintainers; [ queezle ];
 }
+

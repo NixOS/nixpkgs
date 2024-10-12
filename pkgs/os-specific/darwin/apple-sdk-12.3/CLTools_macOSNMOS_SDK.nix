@@ -26,3 +26,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mv Library/Developer/CommandLineTools/SDKs/MacOSX${lib.versions.majorMinor version}.sdk $out
   '';
 })
+

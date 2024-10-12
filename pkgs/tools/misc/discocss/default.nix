@@ -41,3 +41,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "discocss";
   };
 }
+

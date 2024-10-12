@@ -6,3 +6,4 @@ Type=Application
 Exec=@exec@
 X-KDE-autostart-phase=1
 GenericName[en_US]=
+

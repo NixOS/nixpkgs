@@ -437,3 +437,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.linux-kernel kernelPat
 
   karch = stdenv.hostPlatform.linuxArch;
 } // (optionalAttrs (pos != null) { inherit pos; })))
+

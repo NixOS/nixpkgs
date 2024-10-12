@@ -65,3 +65,4 @@ python312Packages.buildPythonPackage rec {
     platforms = lib.platforms.all;
   };
 }
+

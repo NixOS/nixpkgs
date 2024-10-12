@@ -68,3 +68,4 @@ buildGoModule rec {
     ];
   };
 }
+

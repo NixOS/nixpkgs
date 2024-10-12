@@ -38,3 +38,4 @@ wget "${TOKEN_ARGS[@]}" "$src/Cargo.lock" -O Cargo.lock
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" package.nix
 sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" package.nix
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" package.nix
+

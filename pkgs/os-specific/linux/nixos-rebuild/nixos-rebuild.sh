@@ -889,3 +889,4 @@ if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
 Done.  The virtual machine can be started by running $(echo "${pathToConfig}/bin/"run-*-vm)
 EOF
 fi
+

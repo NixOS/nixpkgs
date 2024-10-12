@@ -36,3 +36,4 @@ Dec 29 01:30:22 mandark kernel[6131]: [1053513.909444] CPU6: Core temperature ab
 The system journal is readable by root and by users in the `wheel` and
 `systemd-journal` groups. All users have a private journal that can be
 read using `journalctl`.
+

@@ -16,3 +16,4 @@ mkDiscoursePlugin {
     description = "Discourse plugin to enable LDAP/Active Directory authentication";
   };
 }
+

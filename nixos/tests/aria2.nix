@@ -41,3 +41,4 @@ rec {
 
   meta.maintainers = [ pkgs.lib.maintainers.timhae ];
 })
+

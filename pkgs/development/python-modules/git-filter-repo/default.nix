@@ -73,3 +73,4 @@ buildPythonPackage rec {
     [[ "${docs_version}" = "$docs_latest" ]] || update-source-version ${pname} "$docs_latest" --version-key=docs_version --source-key=docs
   '';
 }
+

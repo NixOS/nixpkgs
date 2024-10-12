@@ -28,3 +28,4 @@ callPackage ./generic.nix args {
 
   maintainers = [ lib.maintainers.raitobezarius ];
 }
+

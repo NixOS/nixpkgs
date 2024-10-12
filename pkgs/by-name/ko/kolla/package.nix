@@ -76,3 +76,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = teams.openstack.members ++ [ maintainers.astro ];
   };
 }
+

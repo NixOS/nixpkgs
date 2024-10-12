@@ -21,3 +21,4 @@
   # and tries to invoke `file` from its own ./configure script.
   pkgs.file
 ]
+

@@ -32,3 +32,4 @@ get_download_info() {
     get_download_info darwin arm64
 ) | jq --slurp 'map ({ (.sys): . }) | add' \
     >versions.json
+

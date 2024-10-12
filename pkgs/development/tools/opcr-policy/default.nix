@@ -46,3 +46,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ naphta jk ];
   };
 }
+

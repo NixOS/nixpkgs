@@ -8,3 +8,4 @@ Description: A minimal, zero-config, BSD licensed, readline replacement.
 Version: @version@
 Libs: -L${libdir} -llinenoise
 Cflags: -I${includedir}
+

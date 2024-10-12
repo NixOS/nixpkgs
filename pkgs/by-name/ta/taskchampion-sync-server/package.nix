@@ -27,3 +27,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "taskchampion-sync-server";
   };
 }
+

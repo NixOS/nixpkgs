@@ -38,3 +38,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (m2libc.meta) platforms;
   };
 })
+

@@ -16,3 +16,4 @@
     stripRoot = false;
   };
 }
+

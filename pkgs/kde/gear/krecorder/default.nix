@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtmultimedia ];
   meta.mainProgram = "krecorder";
 }
+

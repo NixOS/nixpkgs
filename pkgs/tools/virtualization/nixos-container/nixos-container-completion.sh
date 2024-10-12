@@ -31,3 +31,4 @@ _nixos-container() {
 
 complete -F _nixos-container nixos-container
 
+

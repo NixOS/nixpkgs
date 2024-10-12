@@ -32,3 +32,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "nss-xhosts";
   };
 }
+

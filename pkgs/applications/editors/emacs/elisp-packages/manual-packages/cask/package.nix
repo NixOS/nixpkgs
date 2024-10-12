@@ -78,3 +78,4 @@ melpaBuild (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 })
+

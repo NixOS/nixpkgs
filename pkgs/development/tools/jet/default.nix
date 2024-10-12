@@ -35,3 +35,4 @@ buildGraalvmNativeImage rec {
     maintainers = with maintainers; [ ericdallo ];
   };
 }
+

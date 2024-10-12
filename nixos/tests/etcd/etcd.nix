@@ -23,3 +23,4 @@ import ../make-test-python.nix ({ pkgs, ... } : {
         node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
 })
+

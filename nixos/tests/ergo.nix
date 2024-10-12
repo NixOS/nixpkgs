@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_unit("ergo.service")
   '';
 })
+

@@ -82,3 +82,4 @@ buildPythonPackage rec {
     maintainers = teams.jupyter.members;
   };
 }
+

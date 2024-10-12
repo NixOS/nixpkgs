@@ -69,3 +69,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ bwc9876 spoonbaker locochoco ];
   };
 }
+

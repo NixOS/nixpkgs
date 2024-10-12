@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ danth yusdacra zowoq ];
   };
 }
+

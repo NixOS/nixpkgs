@@ -19,3 +19,4 @@ sha256=$(nix-prefetch-url --type sha256 "file://$PWD/$depname")
 popd
 
 update-source-version bisq-desktop "$version" "$sha256"
+

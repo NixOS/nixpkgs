@@ -71,3 +71,4 @@ buildPerlPackage rec {
     mainProgram = "pgbadger";
   };
 }
+

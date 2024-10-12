@@ -30,3 +30,4 @@ if __name__ == '__main__':
         parent.replace(xref, link)
 
     tree.write(sys.argv[2])
+

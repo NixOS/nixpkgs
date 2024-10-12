@@ -50,3 +50,4 @@ replace_hash_in_file "$LINUX_NIX" "$MIRU_LINUX_HASH"
 replace_hash_in_file "$DARWIN_NIX" "$MIRU_DARWIN_HASH"
 
 replace_version_in_file "$PACKAGE_NIX" "$MIRU_LATEST_VER"
+

@@ -440,3 +440,4 @@ return Promise to resolve in that process."
                         ;;       (all-threads))
 
                         (kill-emacs 0))))))
+

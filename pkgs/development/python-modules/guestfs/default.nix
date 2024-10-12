@@ -33,3 +33,4 @@ buildPythonPackage rec {
     inherit (libguestfs.meta) platforms;
   };
 }
+

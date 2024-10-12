@@ -58,3 +58,4 @@ in
       mainProgram = "nix-inspect";
     };
   }
+

@@ -285,3 +285,4 @@ class ManpageRenderer(Renderer):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""
+

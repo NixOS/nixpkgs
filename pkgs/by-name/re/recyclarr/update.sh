@@ -18,3 +18,4 @@ fi
 update-source-version recyclarr "$latestVersion"
 
 . "$(nix-build . -A recyclarr.fetch-deps --no-out-link)"
+

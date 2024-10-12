@@ -322,3 +322,4 @@ versionArgs:
 # passed by default.nix
 { self, ... } @defaultArgs:
 self.callPackage generic (defaultArgs // versionArgs)
+

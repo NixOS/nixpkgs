@@ -88,3 +88,4 @@ rustPlatform.buildRustPackage rec {
     platforms = platforms.all;
   };
 }
+

@@ -12,3 +12,4 @@ symlinkJoin {
       --prefix NIX_CFLAGS_LINK " " "-L${lib.getLib gmp}/lib"
   '';
 }
+

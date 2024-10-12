@@ -26,3 +26,4 @@ buildDunePackage rec {
     mainProgram = "js_of_ocaml";
   };
 }
+

@@ -34,3 +34,4 @@ buildNimPackage (finalAttrs: {
     mainProgram = "nph";
   };
 })
+

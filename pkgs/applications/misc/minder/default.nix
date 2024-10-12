@@ -80,3 +80,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.phase1geo.minder";
   };
 }
+

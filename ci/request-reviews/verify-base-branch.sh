@@ -102,3 +102,4 @@ for testBranch in "${devBranches[@]}"; do
 done
 
 log "Base branch is correct, no commits from development branches are included"
+

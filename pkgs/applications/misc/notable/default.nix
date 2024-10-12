@@ -44,3 +44,4 @@ appimageTools.wrapType2 rec {
     maintainers = [ ];
   };
 }
+

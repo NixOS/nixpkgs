@@ -48,3 +48,4 @@ buildGoModule rec {
     mainProgram = "gtrash";
   };
 }
+

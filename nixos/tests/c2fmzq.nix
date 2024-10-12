@@ -80,3 +80,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
         machine.succeed("systemctl show -p ExecStart --value c2fmzq-server.service | grep -F -- '--licenses=false'");
   '';
 })
+

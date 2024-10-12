@@ -45,3 +45,4 @@ nix-build -A linuxKernel.kernels.kernel_2_6_22
 If it compiles, ship it! For extra credit, try booting NixOS with it.
 
 5.  It may be that the new kernel requires updating the external kernel modules and kernel-dependent packages listed in the `linuxPackagesFor` function in `linux-kernels.nix` (such as the NVIDIA drivers, AUFS, etc.). If the updated packages aren’t backwards compatible with older kernels, you may need to keep the older versions around.
+

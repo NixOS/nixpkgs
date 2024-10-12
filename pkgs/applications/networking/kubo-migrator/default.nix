@@ -21,3 +21,4 @@ buildEnv {
 
   inherit (kubo-migrator-unwrapped) meta;
 }
+

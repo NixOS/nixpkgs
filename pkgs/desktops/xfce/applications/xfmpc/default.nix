@@ -37,3 +37,4 @@ mkXfceDerivation rec {
     mainProgram = "xfmpc";
   };
 }
+

@@ -9,3 +9,4 @@ stdenv.mkDerivation rec {
   };
   meta.mainProgram = "libart2-config";
 }
+

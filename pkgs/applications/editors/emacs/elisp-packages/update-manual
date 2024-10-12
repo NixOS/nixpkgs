@@ -5,3 +5,4 @@ SCRIPT_DIR="$( cd "$(dirname "$0")" ; pwd -P )"
 cd "$SCRIPT_DIR"
 
 nix-build --no-out-link update-manual.nix | xargs -n 1 -P $(nproc) bash -c
+

@@ -59,3 +59,4 @@ writeScript "update-mendeley" ''
   EOF
   exit 1
 ''
+

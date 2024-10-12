@@ -27,3 +27,4 @@ This phase attempts to build the `install.do` target, if it exists.
 []{#haredo-hook-haredoInstallTargets} Targets can be explicitly set by adding a string to the `haredoInstallTargets` list.
 
 []{#haredo-hook-dontUseHaredoInstall} This behavior can be disabled by setting `dontUseHaredoInstall` to `true`.
+

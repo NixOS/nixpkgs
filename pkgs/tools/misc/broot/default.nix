@@ -97,3 +97,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "broot";
   };
 }
+

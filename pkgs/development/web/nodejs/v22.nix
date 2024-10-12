@@ -24,3 +24,4 @@ buildNodejs {
     ./bin-sh-node-run-v22.patch
   ] ++ gypPatches;
 }
+

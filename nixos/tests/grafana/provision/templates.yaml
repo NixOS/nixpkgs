@@ -3,3 +3,4 @@ apiVersion: 1
 templates:
   - name: "Test Template"
     template: "Test message"
+

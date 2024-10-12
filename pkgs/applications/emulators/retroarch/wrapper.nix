@@ -56,3 +56,4 @@ symlinkJoin {
     mainProgram = "retroarch";
   };
 }
+

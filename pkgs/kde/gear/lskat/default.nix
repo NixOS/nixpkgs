@@ -11,3 +11,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "lskat";
 }
+

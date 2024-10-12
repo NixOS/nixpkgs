@@ -52,3 +52,4 @@ cp fonts/LinLibertine*.otf $BUNDLE/Resources/Fonts
 
 mkdir -p ${out}/bin
 ln -s $BUNDLE/MacOS/Gargoyle ${out}/bin/gargoyle
+

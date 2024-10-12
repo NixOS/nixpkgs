@@ -22,3 +22,4 @@ runCommand "playwright-chromium"
       --set-default SSL_CERT_FILE /etc/ssl/certs/ca-bundle.crt \
       --set-default FONTCONFIG_FILE ${fontconfig_file}
   ''
+

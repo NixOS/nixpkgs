@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ spirv-tools ];
   extraBuildInputs = [ qtdeclarative ];
 }
+

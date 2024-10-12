@@ -19,3 +19,4 @@ cd ../../../..
 update-source-version eventstore "${new_version//v}"
 
 $(nix-build -A eventstore.fetch-deps --no-out-link)
+

@@ -145,3 +145,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ thoughtpolice smironov vcunat lblasc ];
   } // extraMeta;
 })
+

@@ -1432,3 +1432,4 @@ self: super: builtins.intersectAttrs super {
     ];
   }) super.doctest;
 }
+

@@ -114,3 +114,4 @@ print("Committing...")
 
 subprocess.run(["git", "add", "default.nix", "tarballs.list"], check=True)
 subprocess.run(["git", "commit", "-mxorg.*: update\n\n%s" % "\n".join(changes_text)], check=True)
+

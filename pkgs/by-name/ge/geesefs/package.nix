@@ -30,3 +30,4 @@ in buildGoModule {
     mainProgram = "geesefs";
   };
 }
+

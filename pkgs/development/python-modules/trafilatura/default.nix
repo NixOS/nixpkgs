@@ -76,3 +76,4 @@ buildPythonPackage rec {
     mainProgram = "trafilatura";
   };
 }
+

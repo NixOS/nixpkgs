@@ -32,3 +32,4 @@ dartBuildHook() {
 if [ -z "${dontDartBuild-}" ] && [ -z "${buildPhase-}" ]; then
     buildPhase=dartBuildHook
 fi
+

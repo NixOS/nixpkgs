@@ -49,3 +49,4 @@ in {
     machine.fail("systemctl status demo.service")
   '';
 })
+

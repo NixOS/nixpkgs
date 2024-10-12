@@ -6,3 +6,4 @@ in {
   config.warnings = [ msg ];
   config.virtualisation.virtualbox.host.enable = true;
 }
+

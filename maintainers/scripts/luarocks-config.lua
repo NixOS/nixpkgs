@@ -6,3 +6,4 @@ rocks_servers = {
 	"https://raw.githubusercontent.com/rocks-moonscript-org/moonrocks-mirror/master/"
 }
 version_check_on_fail = false
+

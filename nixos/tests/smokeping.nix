@@ -40,3 +40,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     sm.succeed("systemctl --failed | grep -q '0 loaded units listed'")
   '';
 })
+

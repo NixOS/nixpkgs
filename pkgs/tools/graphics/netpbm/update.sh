@@ -38,3 +38,4 @@ minorRelease=$(grep --perl-regex --only-matching 'NETPBM_MINOR_RELEASE = \K.+' <
 pointRelease=$(grep --perl-regex --only-matching 'NETPBM_POINT_RELEASE = \K.+' <<< "$versionInfo")
 
 update-source-version "$attr" "$majorRelease.$minorRelease.$pointRelease"
+

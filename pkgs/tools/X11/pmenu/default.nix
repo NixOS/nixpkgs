@@ -60,3 +60,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pmenu";
   };
 })
+

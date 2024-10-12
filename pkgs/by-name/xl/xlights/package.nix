@@ -18,3 +18,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "xlights";
   };
 }
+

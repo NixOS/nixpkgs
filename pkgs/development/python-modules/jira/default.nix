@@ -89,3 +89,4 @@ buildPythonPackage rec {
     mainProgram = "jirashell";
   };
 }
+

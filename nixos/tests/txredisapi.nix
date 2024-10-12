@@ -27,3 +27,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     tests = machine.succeed("PYTHONPATH=\"${pkgs.python3Packages.txredisapi.src}\" python -m twisted.trial ${pkgs.python3Packages.txredisapi.src}/tests")
   '';
 })
+

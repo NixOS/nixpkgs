@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ _7zz ];
   meta.mainProgram = "kgoldrunner";
 }
+

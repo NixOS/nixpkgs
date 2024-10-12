@@ -23,3 +23,4 @@ addGuileLibPath () {
 }
 
 addEnvHooks "$hostOffset" addGuileLibPath
+

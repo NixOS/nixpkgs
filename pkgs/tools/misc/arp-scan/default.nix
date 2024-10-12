@@ -45,3 +45,4 @@ stdenv.mkDerivation rec {
     mainProgram = "arp-scan";
   };
 }
+

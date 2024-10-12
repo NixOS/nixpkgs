@@ -26,3 +26,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "kalk";
 }
+

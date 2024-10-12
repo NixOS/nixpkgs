@@ -42,3 +42,4 @@ buildGoModule rec {
     mainProgram = "changelogger";
   };
 }
+

@@ -112,3 +112,4 @@ lib.checkListOfEnum "${pname}: theme variants"
       ];
     };
   })
+

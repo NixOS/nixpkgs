@@ -45,3 +45,4 @@ bundlerApp {
     mainProgram = "r10k";
   };
 }
+

@@ -29,3 +29,4 @@ INCDIR = @incdir@
 MANDIR = @mandir@
 LIBDIR = @libdir@
 DOCDIR = @docdir@
+

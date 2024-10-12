@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ecs-cli";
   };
 }
+

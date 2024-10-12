@@ -22,3 +22,4 @@ stdenv.mkDerivation {
     homepage = "http://log4cpp.sf.net";
   };
 }
+

@@ -7,3 +7,4 @@ version="$(curl https://www.jetbrains.com/youtrack/update.xml | \
     xq -x "/products/product[@name='YouTrack']/channel/build/@version")"
 
 update-source-version youtrack "$version"
+

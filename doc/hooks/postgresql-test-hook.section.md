@@ -64,3 +64,4 @@ Some test suites hardcode a value for `host` though, so a patch may be required.
 ::: {.note}
 The error `libpq: failed (could not receive data from server: Connection refused` is generally an indication that the test suite is trying to connect through TCP.
 :::
+

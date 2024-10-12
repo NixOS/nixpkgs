@@ -37,3 +37,4 @@ if [[ "$CURRENT_HASH" !=  "$PATCHED_HASH" ]]; then
     NSS_VERSION=$(nix-instantiate --json --eval -E "with import $BASEDIR {}; nss_latest.version" | jq -r .)
     update-source-version --version-key=srcVersion cacert.src "$NSS_VERSION"
 fi
+

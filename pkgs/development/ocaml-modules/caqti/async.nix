@@ -10,3 +10,4 @@ buildDunePackage {
 
   meta = caqti.meta // { description = "Async support for Caqti"; };
 }
+

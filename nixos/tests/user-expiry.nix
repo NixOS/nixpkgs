@@ -68,3 +68,4 @@ in
       machine.wait_until_succeeds("pgrep -u ${eve} bash")
   '';
 }
+

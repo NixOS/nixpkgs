@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     inherit (tt-rss.meta) platforms;
   };
 }
+

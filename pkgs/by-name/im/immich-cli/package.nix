@@ -34,3 +34,4 @@ buildNpmPackage {
     mainProgram = "immich";
   };
 }
+

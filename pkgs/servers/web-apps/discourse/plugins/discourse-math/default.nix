@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Official MathJax support for Discourse";
   };
 }
+

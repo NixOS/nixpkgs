@@ -34,3 +34,4 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ manveru peterhoeg ];
   };
 }
+

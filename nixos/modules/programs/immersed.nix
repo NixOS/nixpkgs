@@ -47,3 +47,4 @@ in
 
   meta.maintainers = pkgs.immersed.meta.maintainers;
 }
+

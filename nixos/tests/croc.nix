@@ -49,3 +49,4 @@ in {
     assert "Hello Earth" in receiver.succeed("cat testfile02.txt")
   '';
 })
+

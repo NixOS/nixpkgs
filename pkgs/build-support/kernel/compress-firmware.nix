@@ -41,3 +41,4 @@ runCommand "${firmware.name}-${type}" args ''
   echo "Checking for broken symlinks:"
   find -L $out -type l -print -execdir false -- '{}' '+'
 ''
+

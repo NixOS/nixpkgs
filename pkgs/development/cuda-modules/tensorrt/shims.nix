@@ -22,3 +22,4 @@
     inherit (package) version;
   };
 }
+

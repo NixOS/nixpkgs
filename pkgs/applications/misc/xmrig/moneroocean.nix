@@ -23,3 +23,4 @@ xmrig.overrideAttrs (oldAttrs: rec {
     maintainers = with maintainers; [ j0hax redhawk ];
   };
 })
+

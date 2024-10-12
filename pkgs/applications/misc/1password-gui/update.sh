@@ -56,3 +56,4 @@ else
     print_hash "mac" "beta" "x86_64" "$BETA_VER"
     print_hash "mac" "beta" "aarch64" "$BETA_VER"
 fi
+

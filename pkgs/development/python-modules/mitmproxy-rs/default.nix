@@ -54,3 +54,4 @@ buildPythonPackage rec {
     inherit (mitmproxy.meta) maintainers;
   };
 }
+

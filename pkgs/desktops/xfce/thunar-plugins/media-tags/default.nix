@@ -35,3 +35,4 @@ mkXfceDerivation {
     maintainers = with maintainers; [ ncfavier ] ++ teams.xfce.members;
   };
 }
+

@@ -34,3 +34,4 @@ mkDerivation rec {
     platforms = qtbase.meta.platforms;
   };
 }
+

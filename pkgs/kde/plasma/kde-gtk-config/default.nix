@@ -44,3 +44,4 @@ mkKdeDerivation {
     echo "${procps} ${xsettingsd}" > $out/nix-support/depends
   '';
 }
+

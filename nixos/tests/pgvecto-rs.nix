@@ -74,3 +74,4 @@ mapAttrs'
     value = make-postgresql-test name package;
   })
   applicablePostgresqlVersions
+

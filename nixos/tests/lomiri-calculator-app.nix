@@ -57,3 +57,4 @@
         machine.wait_for_text("352")
   '';
 }
+

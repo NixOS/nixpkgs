@@ -58,3 +58,4 @@ in pkgs.lib.listToAttrs (builtins.map ({ predictable, withNetworkd, systemdStage
     '';
   };
 }) testCombinations)
+

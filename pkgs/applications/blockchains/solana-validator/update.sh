@@ -31,3 +31,4 @@ if ("$latest_version" === "$current_version") {
 
   jq ".cargoHash = \"$new_cargo_hash\"" $directory/pin.json | sponge $directory/pin.json
 }
+

@@ -9,3 +9,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ pcre qtbase ];
 }
+

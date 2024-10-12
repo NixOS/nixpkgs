@@ -39,3 +39,4 @@ symlinkJoin {
       " (with plugins: ${concatStringsSep  ", " (map (x: x.name) thunarPlugins)})";
   };
 }
+

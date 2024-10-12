@@ -26,3 +26,4 @@
     machine.succeed("curl -sS -f http://localhost:8081/nodeinfo/2.0 | jq '.usage.users.total' | grep -q '^1$'")
   '';
 }
+

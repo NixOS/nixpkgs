@@ -128,3 +128,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
   };
 }
+

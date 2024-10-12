@@ -16,3 +16,4 @@ NIX_ETC_PROTOCOLS=/nix/store/aj866hr8fad8flnggwdhrldm0g799ccz-iana-etc-20210225/
 ```
 
 Nixpkg's version of [glibc](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/libraries/glibc/default.nix) has been patched to check for the existence of these environment variables. If the environment variables are *not* set, then it will attempt to find the files at the default location within `/etc`.
+

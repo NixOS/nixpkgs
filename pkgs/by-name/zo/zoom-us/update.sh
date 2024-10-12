@@ -32,3 +32,4 @@ echo >&2 "=== Updating package.nix ..."
 (cd "$nixpkgs" && update-source-version zoom-us "$version_x86_64_linux" $hash_x86_64_linux --system=x86_64-linux --version-key=versions.x86_64-linux)
 
 echo >&2 "=== Done!"
+

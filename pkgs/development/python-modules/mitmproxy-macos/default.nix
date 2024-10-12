@@ -33,3 +33,4 @@ buildPythonPackage rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }
+

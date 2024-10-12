@@ -30,3 +30,4 @@ cat >"${BASH_SOURCE%/*}/meta.json" <<EOF
   }
 }
 EOF
+

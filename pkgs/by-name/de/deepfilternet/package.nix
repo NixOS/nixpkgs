@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Rikorose/DeepFilterNet/releases/tag/${src.rev}";
   };
 }
+

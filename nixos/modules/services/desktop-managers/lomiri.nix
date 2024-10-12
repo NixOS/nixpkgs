@@ -202,3 +202,4 @@ in {
 
   meta.maintainers = lib.teams.lomiri.members;
 }
+

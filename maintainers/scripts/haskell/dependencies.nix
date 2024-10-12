@@ -10,3 +10,4 @@ let
   };
 in
   lib.mapAttrs getDeps pkgs.haskellPackages
+

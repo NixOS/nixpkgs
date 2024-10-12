@@ -16,3 +16,4 @@ in runCommand "powerline-symbols-${version}" {
     ${powerline.src}/font/10-powerline-symbols.conf \
     $out/etc/fonts/conf.d/10-powerline-symbols.conf
 ''
+

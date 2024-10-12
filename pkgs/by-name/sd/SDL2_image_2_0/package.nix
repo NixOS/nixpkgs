@@ -8,3 +8,4 @@ SDL2_image.overrideAttrs (oldAttrs: {
     hash = "sha256-vdX24CZoL31+G+C2BRsgnaL0AqLdi9HEvZwlrSYxCNA";
   };
 })
+

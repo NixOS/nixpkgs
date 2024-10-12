@@ -26,3 +26,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ c0deaddict ];
   };
 }
+

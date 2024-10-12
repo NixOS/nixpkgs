@@ -79,3 +79,4 @@ To update module `$module` from `$oldversion` in branch `$oldmajor` to version
 4. Fix any conflicts.
 5. Open a pull request for the changes.
 6. Follow the instructions above to recreate the module patch in Nixpkgs.
+

@@ -89,3 +89,4 @@ mkDerivation rec {
     mainProgram = "jellyfinmediaplayer";
   };
 }
+

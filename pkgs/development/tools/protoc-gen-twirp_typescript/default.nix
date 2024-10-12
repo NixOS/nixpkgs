@@ -24,3 +24,4 @@ buildGoModule {
     maintainers = with maintainers; [ jojosch dgollings ];
   };
 }
+

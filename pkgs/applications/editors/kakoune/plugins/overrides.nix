@@ -213,3 +213,4 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
     };
   };
 }
+

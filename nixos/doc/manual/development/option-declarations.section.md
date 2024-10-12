@@ -258,3 +258,4 @@ argument.
 Extensible option types work with any of the composed variants of `enum`
 such as `with types; nullOr (enum [ "foo" "bar" ])` or `with types;
 listOf (enum [ "foo" "bar" ])`.
+

@@ -55,3 +55,4 @@ let
     fi
   '';
 in [ updateScript ]
+

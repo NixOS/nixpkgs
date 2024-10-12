@@ -106,3 +106,4 @@ in mkYarnPackage rec {
     mainProgram = "matrix-appservice-discord";
   };
 }
+

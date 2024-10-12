@@ -146,3 +146,4 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     };
   })
 )) home-assistant.supportedComponentsWithTests)
+

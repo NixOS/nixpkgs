@@ -72,3 +72,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "maestral_qt";
   };
 }
+

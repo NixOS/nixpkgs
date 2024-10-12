@@ -45,3 +45,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ berbiche ];
   };
 }
+

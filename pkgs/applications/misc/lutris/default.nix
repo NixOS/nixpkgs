@@ -150,3 +150,4 @@ buildPythonApplication rec {
     mainProgram = "lutris";
   };
 }
+

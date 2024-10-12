@@ -30,3 +30,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
         machine.succeed("stratis pool start --name testpool --unlock-method keyring")
       '';
   })
+

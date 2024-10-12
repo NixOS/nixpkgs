@@ -32,3 +32,4 @@ buildPythonPackage {
     description = "OpenTelemetry Semantic Conventions";
   };
 }
+

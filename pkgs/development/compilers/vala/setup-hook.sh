@@ -13,3 +13,4 @@ _multioutMoveVapiDirs() {
 }
 
 preFixupHooks+=(_multioutMoveVapiDirs)
+

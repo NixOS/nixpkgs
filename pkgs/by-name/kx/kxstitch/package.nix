@@ -42,3 +42,4 @@ stdenv.mkDerivation {
     mainProgram = "kxstitch";
   };
 }
+

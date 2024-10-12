@@ -16,3 +16,4 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ openssl ];
 }
+

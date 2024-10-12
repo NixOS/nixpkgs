@@ -38,3 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/usi-verification-and-security/opensmt";
   };
 }
+

@@ -37,3 +37,4 @@ buildDubPackage rec {
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
+

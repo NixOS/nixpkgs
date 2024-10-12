@@ -43,3 +43,4 @@ stdenv.mkDerivation rec {
     mainProgram = "OttoMatic";
   };
 }
+

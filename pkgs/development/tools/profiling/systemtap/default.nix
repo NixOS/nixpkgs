@@ -55,3 +55,4 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   makeWrapper $stapBuild/bin/dtrace $out/bin/dtrace \
     --prefix PYTHONPATH : ${pypkgs}
 ''
+

@@ -31,3 +31,4 @@
   documentation.nixos.enable = true;
   services.logrotate.enable = true;
 }
+

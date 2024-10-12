@@ -110,3 +110,4 @@ postPatchHooks+=(cdBSDPath)
 preConfigureHooks+=(addMakeFlags)
 preInstallHooks+=(includesPhase)
 fixupOutputHooks+=(moveUsrDir)
+

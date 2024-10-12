@@ -15,3 +15,4 @@ mkDerivation {
   cmakeFlags = lib.optionals useSudo [ "-DKDESU_USE_SUDO_DEFAULT=On" ];
   meta.platforms = lib.platforms.linux ++ lib.platforms.freebsd;
 }
+

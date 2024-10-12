@@ -47,3 +47,4 @@ buildRubyGem rec {
     platforms = lib.platforms.all;
   };
 }
+

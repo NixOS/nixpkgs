@@ -95,3 +95,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }
+

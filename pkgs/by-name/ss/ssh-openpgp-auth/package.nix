@@ -8,3 +8,4 @@ callPackage ./generic.nix {
   metaDescription =
     "Command-line tool that provides client-side functionality to transparently verify the identity of remote SSH hosts";
 }
+

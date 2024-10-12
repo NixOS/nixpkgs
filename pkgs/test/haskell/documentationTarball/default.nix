@@ -19,3 +19,4 @@ in pkgs.runCommand "test haskell.lib.compose.documentationTarball" {
 
   touch "$out"
 ''
+

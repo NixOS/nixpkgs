@@ -35,3 +35,4 @@ stdenv.mkDerivation {
   };
   inherit (electron-unwrapped) meta;
 }
+

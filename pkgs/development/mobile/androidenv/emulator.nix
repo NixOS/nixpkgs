@@ -71,3 +71,4 @@ deployAndroidPackage {
   '';
   dontMoveLib64 = true;
 }
+

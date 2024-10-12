@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/sagemath/symmetrica";
   };
 }
+

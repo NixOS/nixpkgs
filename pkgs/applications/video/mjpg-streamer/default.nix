@@ -31,3 +31,4 @@ stdenv.mkDerivation {
     mainProgram = "mjpg_streamer";
   };
 }
+

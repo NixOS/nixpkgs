@@ -68,3 +68,4 @@ dartConfigHook() {
 }
 
 postConfigureHooks+=(dartConfigHook)
+

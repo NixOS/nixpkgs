@@ -219,3 +219,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
           assert hs_token_registration == expected_hs_token, f"hs_token in registration should match the one specified (is: {hs_token_registration}, expected: {expected_hs_token})"
     '';
   })
+

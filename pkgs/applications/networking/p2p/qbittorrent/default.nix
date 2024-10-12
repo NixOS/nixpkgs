@@ -98,3 +98,4 @@ stdenv.mkDerivation rec {
       + lib.optionalString (!guiSupport) "-nox";
   };
 }
+

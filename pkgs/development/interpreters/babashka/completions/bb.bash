@@ -3,3 +3,4 @@ _bb_tasks() {
 }
 # autocomplete filenames as well
 complete -f -F _bb_tasks bb
+

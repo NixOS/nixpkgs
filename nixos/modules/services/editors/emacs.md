@@ -366,3 +366,4 @@ convenient if you regularly edit Nix files.
 You can use `woman` to get completion of all available
 man pages. For example, type `M-x woman <RET> nixos-rebuild <RET>.`
 
+

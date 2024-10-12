@@ -19,3 +19,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.succeed("echo 'stat -fc %T /sys/fs/cgroup/ | grep cgroup2fs' | nixos-container root-login test-container")
   '';
 })
+

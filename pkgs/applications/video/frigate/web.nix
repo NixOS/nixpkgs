@@ -31,3 +31,4 @@ buildNpmPackage {
     cp -rv dist/ $out
   '';
 }
+

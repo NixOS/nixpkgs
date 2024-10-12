@@ -41,3 +41,4 @@ for im in ${imlist[@]}; do
     echo "}} package/rime/$im"
 done
 echo \'\'
+

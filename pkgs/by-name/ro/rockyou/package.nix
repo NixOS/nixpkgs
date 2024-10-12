@@ -18,3 +18,4 @@ stdenvNoCC.mkDerivation {
     description = "Famous wordlist often used for brute force attacks";
   };
 }
+

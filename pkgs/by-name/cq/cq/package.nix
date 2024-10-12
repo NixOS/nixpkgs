@@ -44,3 +44,4 @@ buildGraalvmNativeImage rec {
     platforms = platforms.unix;
   };
 }
+

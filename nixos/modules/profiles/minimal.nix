@@ -40,3 +40,4 @@ with lib;
   xdg.mime.enable = mkDefault false;
   xdg.sounds.enable = mkDefault false;
 }
+

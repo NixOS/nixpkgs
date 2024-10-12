@@ -4073,3 +4073,4 @@ sha256 = "0hqhzlwlmngwd9sgkrrhmvfaq8gc7dc2c719y6h2ys3ahym4iaxn"
 synopsis = "zxcvbn password entropy estimation"
 version = "1.0.0"
 
+

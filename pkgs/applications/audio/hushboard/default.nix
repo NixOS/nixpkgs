@@ -72,3 +72,4 @@ buildPythonApplication {
     maintainers = with maintainers; [ sersorrel ];
   };
 }
+

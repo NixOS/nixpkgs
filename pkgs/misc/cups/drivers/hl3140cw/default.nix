@@ -78,3 +78,4 @@ stdenv.mkDerivation {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=eu_ot&lang=en&prod=hl3140cw_us_eu&os=128";
   };
 }
+

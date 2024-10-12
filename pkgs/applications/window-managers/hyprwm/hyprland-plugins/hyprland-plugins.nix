@@ -52,3 +52,4 @@ let
       };
 in
 hyprland-plugins
+

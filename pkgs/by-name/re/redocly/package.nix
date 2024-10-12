@@ -57,3 +57,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ szlend ];
   };
 }
+

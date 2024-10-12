@@ -86,3 +86,4 @@ with fileinput.FileInput(DEFAULT_NIX, inplace=True) as f:
 commit_message = f"llvmPackages_git: {old_date} -> {date}"
 subprocess.run(['git', 'add', DEFAULT_NIX], check=True)
 subprocess.run(['git', 'commit', '--file=-'], input=commit_message.encode(), check=True)
+

@@ -25,3 +25,4 @@ buildGoModule rec {
     mainProgram = "ascii2der"; # has stable output, unlike its inverse
   };
 }
+

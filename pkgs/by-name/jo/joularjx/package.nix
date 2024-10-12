@@ -40,3 +40,4 @@ maven.buildMavenPackage rec {
     platforms = platforms.linux;
   };
 }
+

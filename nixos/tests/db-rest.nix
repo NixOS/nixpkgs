@@ -105,3 +105,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       client.succeed("curl --fail --get http://192.168.2.12:3000/stations --data-urlencode 'query=Köln Hbf' | jq -r '.\"8000207\".name' | grep 'Köln Hbf'")
   '';
 })
+

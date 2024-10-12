@@ -29,3 +29,4 @@ buildGoModule rec {
     license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
   };
 }
+

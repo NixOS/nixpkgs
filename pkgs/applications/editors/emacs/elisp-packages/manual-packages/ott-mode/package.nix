@@ -22,3 +22,4 @@ melpaBuild {
     inherit (ott.meta) homepage license;
   };
 }
+

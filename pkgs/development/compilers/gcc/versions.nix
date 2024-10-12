@@ -32,3 +32,4 @@ in {
   inherit srcHashForVersion;
   allMajorVersions = builtins.attrNames majorMinorToVersionMap;
 }
+

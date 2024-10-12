@@ -28,3 +28,4 @@ for nupkg_name in glob("*.nupkg", root_dir=nupkg_dir):
                 all_licenses.update([license.text for license in licenses])
 
 print("\n".join(sorted(all_licenses)))
+

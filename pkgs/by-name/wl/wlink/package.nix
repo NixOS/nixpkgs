@@ -50,3 +50,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wlink";
   };
 }
+

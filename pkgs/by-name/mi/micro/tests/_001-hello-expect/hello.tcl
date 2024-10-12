@@ -11,3 +11,4 @@ expect "Save changes to file.txt before closing?"
 send "y"
 
 expect eof
+

@@ -32,3 +32,4 @@ stdenv.mkDerivation rec {
     inherit (pam.meta) platforms;
   };
 }
+

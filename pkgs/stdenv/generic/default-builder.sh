@@ -2,3 +2,4 @@ if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh
 
 source $stdenv/setup
 genericBuild
+

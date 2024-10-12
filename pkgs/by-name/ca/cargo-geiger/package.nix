@@ -74,3 +74,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ evanjs gepbird jk matthiasbeyer ];
   };
 }
+

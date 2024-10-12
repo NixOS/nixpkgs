@@ -88,3 +88,4 @@ expectSuccess "pathIsRegularFile $PWD/fifo" "false"
 expectSuccess "pathIsRegularFile $PWD/non-existent" "false"
 
 echo >&2 tests ok
+

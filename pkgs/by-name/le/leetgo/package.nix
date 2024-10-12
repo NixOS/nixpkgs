@@ -43,3 +43,4 @@ buildGoModule rec {
     mainProgram = "leetgo";
   };
 }
+

@@ -39,3 +39,4 @@ in haskellLib.overrideCabal (self: {
       --prefix PATH ":" '${bins}'
   '';
 }) haskellPackages.lambdabot
+

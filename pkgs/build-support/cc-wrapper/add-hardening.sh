@@ -136,3 +136,4 @@ for flag in "${!hardeningEnableMap[@]}"; do
       ;;
   esac
 done
+

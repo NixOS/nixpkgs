@@ -5,3 +5,4 @@
 
   config.value.foo = lib.mkIf false "should not be defined";
 }
+

@@ -22,3 +22,4 @@ buildGoModule rec {
     maintainers = [ maintainers.ivankovnatsky ];
   };
 }
+

@@ -111,3 +111,4 @@ buildGoModule {
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }
+

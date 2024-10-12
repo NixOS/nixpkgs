@@ -11,3 +11,4 @@ mkPythonMetaPackage {
     inherit (psycopg2.meta) description homepage;
   };
 }
+

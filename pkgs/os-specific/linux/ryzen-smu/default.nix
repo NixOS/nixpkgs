@@ -67,3 +67,4 @@ stdenv.mkDerivation {
     mainProgram = "monitor_cpu";
   };
 }
+

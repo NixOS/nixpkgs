@@ -3,3 +3,4 @@ VERSION="@@IVERSION@@" # For backwards compability
 VMISVERSION="@@IVERSION@@"
 VMISBUILDNUM="@@BUILD@@"
 VMISPYVERSION="39"
+

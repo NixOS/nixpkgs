@@ -51,3 +51,4 @@ in
       stdout = vm.succeed(curl_request_ollama(prompt, port), timeout = 100)
   '';
 }
+

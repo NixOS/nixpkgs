@@ -97,3 +97,4 @@ for (uuid, versions) in uuid_to_versions.items():
 
 with open(out_path / "Registry.toml", "w") as f:
     toml.dump(registry, f)
+

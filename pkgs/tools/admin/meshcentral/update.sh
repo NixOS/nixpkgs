@@ -52,3 +52,4 @@ sed -i "$expr_dir/default.nix" -e "s|\"$old_yarn_hash\"|\"$new_yarn_hash\"|"
 # Only clean up if everything worked
 cd /
 rm -rf "$tmp"
+

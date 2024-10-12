@@ -36,3 +36,4 @@ buildPythonPackage rec {
     mainProgram = "qrcode-terminal-py";
   };
 }
+

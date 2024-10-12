@@ -56,3 +56,4 @@ while(my($k, $v) = each %$maintainers_json) {
         $file->spew_utf8($data);
     }
 }
+

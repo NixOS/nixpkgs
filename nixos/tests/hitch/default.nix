@@ -31,3 +31,4 @@ import ../make-test-python.nix ({ pkgs, ... }:
       assert "We are all good!" in machine.succeed("curl -fk https://localhost:443/index.txt")
     '';
 })
+

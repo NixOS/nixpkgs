@@ -19,3 +19,4 @@ let
     else
       {};
 in lib.zipAttrsWith (_: builtins.head) (lib.mapAttrsToList mkMailGithubPair maintainers)
+

@@ -35,3 +35,4 @@ in lib.mapAttrs (n: make) (with lib.systems.examples; {
   armv6l-unknown-linux-musleabihf = muslpi;
   x86_64-unknown-linux-musl = musl64;
 })
+

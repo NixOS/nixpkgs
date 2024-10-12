@@ -81,3 +81,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (undetected-chromedriver.meta) platforms;
   };
 })
+

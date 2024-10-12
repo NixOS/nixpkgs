@@ -41,3 +41,4 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/dstat-real/dstat/blob/v${version}/ChangeLog";
   };
 }
+

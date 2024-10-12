@@ -10,3 +10,4 @@ callPackage ./generic.nix (args // rec {
     sha256 = "02dxgzxlwn8g9ca2j4m0rjvdq1k2iciy6ickj615daz5w8pcjajd";
   };
 })
+

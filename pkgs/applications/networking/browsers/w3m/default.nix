@@ -103,3 +103,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "w3m";
   };
 }
+

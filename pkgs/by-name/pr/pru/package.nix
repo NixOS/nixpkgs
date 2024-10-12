@@ -22,3 +22,4 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "pru";
 }
+

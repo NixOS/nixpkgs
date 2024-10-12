@@ -9,3 +9,4 @@
   (fetchNuGet { pname = "runtime.osx-x64.Microsoft.NETCore.ILAsm"; sha256 = "249166f90b4ed837c0797d8c7bed45d55d058aae223e9f163590bee2bbeaf996"; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ilasm/8.0.7-servicing.24313.11/runtime.osx-x64.microsoft.netcore.ilasm.8.0.7-servicing.24313.11.nupkg"; version = "8.0.7-servicing.24313.11"; })
   (fetchNuGet { pname = "runtime.osx-x64.Microsoft.NETCore.ILDAsm"; sha256 = "ad9bda1369dab0aeb3179735a653f6cd92af08a01c33b220a902f9da1b0b9e65"; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/a65e5cb4-26c0-410f-9457-06db3c5254be/nuget/v3/flat2/runtime.osx-x64.microsoft.netcore.ildasm/8.0.7-servicing.24313.11/runtime.osx-x64.microsoft.netcore.ildasm.8.0.7-servicing.24313.11.nupkg"; version = "8.0.7-servicing.24313.11"; })
 ]
+

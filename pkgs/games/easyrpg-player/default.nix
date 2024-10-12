@@ -133,3 +133,4 @@ stdenv.mkDerivation rec {
     mainProgram = lib.optionalString stdenv.hostPlatform.isDarwin "EasyRPG Player";
   };
 }
+

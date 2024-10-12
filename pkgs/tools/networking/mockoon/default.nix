@@ -37,3 +37,4 @@ appimageTools.wrapType2 {
     mainProgram = "mockoon";
   };
 }
+

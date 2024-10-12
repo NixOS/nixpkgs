@@ -68,3 +68,4 @@ stdenv.mkDerivation rec {
     mainProgram = "realesrgan-ncnn-vulkan";
   };
 }
+

@@ -15,3 +15,4 @@ builtins.mapAttrs (_: pkg:
   then pkg.override { withAWS = false; }
   else pkg)
   pkgs.nixVersions
+

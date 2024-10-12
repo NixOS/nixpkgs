@@ -28,3 +28,4 @@ writeShellApplication {
       --store-dir "$storePath"
   '';
 }
+

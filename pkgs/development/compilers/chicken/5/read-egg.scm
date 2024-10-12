@@ -41,3 +41,4 @@
 
 (printf "version = ~S\n" (env-var "EGG_VERSION"))
 (print)
+

@@ -16,3 +16,4 @@
     assert "i" in machine.succeed("lsattr -d /var/empty")
   '';
 }
+

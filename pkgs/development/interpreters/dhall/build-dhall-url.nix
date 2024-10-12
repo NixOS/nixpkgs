@@ -96,3 +96,4 @@ in
   lib.optionalString source ''
     ${dhallNoHTTP}/bin/dhall decode --file ${downloadedEncodedFile} > $out/${sourceFile}
   '')
+

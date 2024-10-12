@@ -58,3 +58,4 @@ buildGoModule rec {
     mainProgram = "go2tv";
   };
 }
+

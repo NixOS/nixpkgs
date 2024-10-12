@@ -49,3 +49,4 @@ if [ ! "$oldVersion" = "$latestVersion" ]; then
 else
   echo "$attr is already up-to-date"
 fi
+

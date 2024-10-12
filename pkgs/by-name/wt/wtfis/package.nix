@@ -42,3 +42,4 @@ in python3.pkgs.buildPythonApplication {
     maintainers = [ lib.maintainers.AndersonTorres ];
   };
 }
+

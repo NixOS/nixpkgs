@@ -80,3 +80,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ dotlambda ];
   };
 }
+

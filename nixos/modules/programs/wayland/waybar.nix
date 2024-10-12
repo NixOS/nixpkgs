@@ -28,3 +28,4 @@ in
 
   meta.maintainers = [ lib.maintainers.FlorianFranzen ];
 }
+

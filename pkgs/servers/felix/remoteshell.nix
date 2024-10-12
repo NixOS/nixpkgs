@@ -13,3 +13,4 @@ stdenv.mkDerivation rec {
     cp ${src} $out/bundle/org.apache.felix.shell.remote-${version}.jar
   '';
 }
+

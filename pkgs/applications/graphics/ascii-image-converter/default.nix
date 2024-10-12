@@ -21,3 +21,4 @@ buildGoModule rec {
     mainProgram = "ascii-image-converter";
   };
 }
+

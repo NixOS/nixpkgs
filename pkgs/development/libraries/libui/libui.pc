@@ -9,3 +9,4 @@ Version: @version@
 
 Libs: -L${libdir} -lui
 Cflags: -I${includedir}
+

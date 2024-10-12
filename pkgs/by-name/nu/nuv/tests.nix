@@ -15,3 +15,4 @@ runCommand "nuv-test-run"
   diff -U3 --color=auto <(echo "$V") <(echo "${version}")
   touch $out
 ''
+

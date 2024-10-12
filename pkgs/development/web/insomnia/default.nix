@@ -73,3 +73,4 @@ if stdenv.hostPlatform.isDarwin then stdenv.mkDerivation {
         --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=insomnia'
   '';
 }
+

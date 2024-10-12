@@ -107,3 +107,4 @@ in rec {
   wordnet = callPackage ./dictd-wordnet.nix {};
   wiktionary = callPackage ./wiktionary {};
 }
+

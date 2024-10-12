@@ -352,3 +352,4 @@ in
     apparmor-kernel-patches
     apparmorRulesFromClosure;
 }
+

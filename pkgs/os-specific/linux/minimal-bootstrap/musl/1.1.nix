@@ -114,3 +114,4 @@ bash.runCommand "${pname}-${version}" {
   make install
   cp ${tinycc.libs}/lib/libtcc1.a $out/lib
 ''
+

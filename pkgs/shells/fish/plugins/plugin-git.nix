@@ -19,3 +19,4 @@ buildFishPlugin rec {
     maintainers = with lib.maintainers; [ GaetanLepage unsolvedcypher ];
   };
 }
+

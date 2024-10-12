@@ -58,3 +58,4 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cppe" ];
 }
+

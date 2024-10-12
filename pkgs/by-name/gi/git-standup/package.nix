@@ -32,3 +32,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "git-standup";
   };
 })
+

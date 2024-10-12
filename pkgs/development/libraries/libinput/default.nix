@@ -136,3 +136,4 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
   };
 }
+

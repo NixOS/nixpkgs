@@ -49,3 +49,4 @@ if !buildTests then ''
 
   runHook postInstall
 ''
+

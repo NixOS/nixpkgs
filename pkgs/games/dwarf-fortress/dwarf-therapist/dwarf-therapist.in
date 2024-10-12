@@ -23,3 +23,4 @@ cd "$install_dir/share/dwarftherapist"
 update_path memory_layouts
 
 exec "$therapist_dir/bin/dwarftherapist" "$@"
+

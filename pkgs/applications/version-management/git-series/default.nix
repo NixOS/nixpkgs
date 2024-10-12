@@ -63,3 +63,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "git-series";
   };
 }
+

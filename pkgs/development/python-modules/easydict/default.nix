@@ -24,3 +24,4 @@ buildPythonPackage rec {
     description = "Access dict values as attributes (works recursively)";
   };
 }
+

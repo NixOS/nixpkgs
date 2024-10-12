@@ -229,3 +229,4 @@ in {
     users.groups.${cfg.group} = {};
   };
 }
+

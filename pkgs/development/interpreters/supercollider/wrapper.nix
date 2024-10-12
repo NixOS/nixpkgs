@@ -16,3 +16,4 @@ symlinkJoin {
 
   inherit (supercollider) pname version meta;
 }
+

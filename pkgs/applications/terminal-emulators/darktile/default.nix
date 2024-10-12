@@ -53,3 +53,4 @@ buildGoModule rec {
     mainProgram = "darktile";
   };
 }
+

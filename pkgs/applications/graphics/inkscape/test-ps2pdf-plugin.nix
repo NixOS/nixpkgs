@@ -25,3 +25,4 @@ runCommand "inkscape-test-eps"
   # inkscape does not return an error code, only does not create files
   [[ -f test.ps.svg && -f test.eps.svg ]] && touch $out
 ''
+

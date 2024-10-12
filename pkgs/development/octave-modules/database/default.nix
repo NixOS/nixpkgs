@@ -33,3 +33,4 @@ buildOctavePackage rec {
     description = "Interface to SQL databases, currently only postgresql using libpq";
   };
 }
+

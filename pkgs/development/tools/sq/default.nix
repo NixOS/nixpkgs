@@ -49,3 +49,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ raitobezarius ];
   };
 }
+

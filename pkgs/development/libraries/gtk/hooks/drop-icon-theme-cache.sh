@@ -17,3 +17,4 @@ dropIconThemeCache() {
 }
 
 preFixupPhases="${preFixupPhases-} dropIconThemeCache"
+

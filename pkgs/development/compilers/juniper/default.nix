@@ -38,3 +38,4 @@ buildDotnetModule rec {
     inherit (dotnet-sdk.meta) platforms;
   };
 }
+

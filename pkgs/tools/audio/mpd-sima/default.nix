@@ -37,3 +37,4 @@ buildPythonApplication rec {
     mainProgram = "mpd-sima";
   };
 }
+

@@ -37,3 +37,4 @@ buildGoModule rec {
     mainProgram = "carapace";
   };
 }
+

@@ -38,3 +38,4 @@ buildGoModule {
     mainProgram = "izrss";
   };
 }
+

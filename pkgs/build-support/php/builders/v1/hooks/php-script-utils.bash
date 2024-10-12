@@ -93,3 +93,4 @@ checkComposerValidate() {
         fi
     fi
 }
+

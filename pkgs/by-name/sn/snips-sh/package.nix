@@ -31,3 +31,4 @@ buildGoModule rec {
     mainProgram = "snips.sh";
   };
 }
+

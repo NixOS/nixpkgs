@@ -36,3 +36,4 @@ in stdenv.mkDerivation rec {
     platforms = pyqt5.meta.platforms;
   };
 }
+

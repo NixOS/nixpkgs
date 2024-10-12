@@ -17,3 +17,4 @@ in {
     machine.wait_until_succeeds('curl -d "language=en-US" -d "text=a simple test" http://localhost:${toString port}/v2/check')
   '';
 })
+

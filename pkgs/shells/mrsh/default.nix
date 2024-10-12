@@ -30,3 +30,4 @@ stdenv.mkDerivation rec {
     shellPath = "/bin/mrsh";
   };
 }
+

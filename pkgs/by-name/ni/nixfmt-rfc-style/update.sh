@@ -31,3 +31,4 @@ cabal2nix --jailbreak \
 date --date="$new_date" -I > "$date_file"
 
 echo "Finished."
+

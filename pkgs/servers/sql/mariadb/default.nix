@@ -267,3 +267,4 @@ in
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
   }
+

@@ -24,3 +24,4 @@ stdenv.mkDerivation {
     cp ${./Cargo.lock} $out/Cargo.lock
   '';
 }
+

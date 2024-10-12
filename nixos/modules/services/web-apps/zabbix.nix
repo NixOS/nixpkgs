@@ -359,3 +359,4 @@ in
     users.groups.${group} = mapAttrs (name: mkDefault) { gid = config.ids.gids.zabbix; };
   };
 }
+

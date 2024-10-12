@@ -43,3 +43,4 @@ buildGo123Module rec {
     mainProgram = "pwru";
   };
 }
+

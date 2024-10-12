@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ libksysguard libnl lm_sensors networkmanager-qt ];
 }
+

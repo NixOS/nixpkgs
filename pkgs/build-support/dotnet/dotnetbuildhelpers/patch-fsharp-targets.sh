@@ -18,3 +18,4 @@ find -iname \*.fsproj -print -exec \
   sed --in-place=.bak \
     -e 's,<FSharpTargetsPath>\([^<]*\)</FSharpTargetsPath>,<FSharpTargetsPath Condition="Exists('\'\\1\'')">\1</FSharpTargetsPath>,'g \
     {} \;
+

@@ -81,3 +81,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "imagej";
   };
 }
+

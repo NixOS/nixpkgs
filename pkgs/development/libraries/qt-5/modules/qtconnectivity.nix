@@ -11,3 +11,4 @@ qtModule {
   ];
   outputs = [ "out" "dev" "bin" ];
 }
+

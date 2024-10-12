@@ -33,3 +33,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (ponyc.meta) platforms;
   };
 })
+

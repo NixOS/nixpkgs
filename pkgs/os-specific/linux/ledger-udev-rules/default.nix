@@ -27,3 +27,4 @@ stdenv.mkDerivation {
     homepage = "https://github.com/LedgerHQ/udev-rules";
   };
 }
+

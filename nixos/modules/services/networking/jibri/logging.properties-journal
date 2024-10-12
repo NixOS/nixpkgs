@@ -30,3 +30,4 @@ org.jitsi.jibri.config.level = INFO
 org.glassfish.level = INFO
 org.osgi.level = INFO
 org.jitsi.xmpp.level = INFO
+

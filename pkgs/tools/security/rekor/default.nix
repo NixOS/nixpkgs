@@ -69,3 +69,4 @@ in {
     description = "Sigstore server, the Signature Transparency Log";
   };
 }
+

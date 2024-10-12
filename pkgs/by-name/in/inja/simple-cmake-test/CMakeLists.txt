@@ -3,3 +3,4 @@ find_package(inja REQUIRED)
 add_executable(simple-cmake-test main.cpp)
 target_link_libraries(simple-cmake-test PRIVATE pantor::inja)
 install(TARGETS simple-cmake-test DESTINATION bin)
+

@@ -28,3 +28,4 @@ These features are autodetected locally, but `apple-virt` is only autodetected s
 Features of **remote builders** must additionally be configured manually on the client, e.g. on NixOS with [`nix.buildMachines.*.supportedFeatures`](https://search.nixos.org/options?show=nix.buildMachines.*.supportedFeatures&sort=alpha_asc&query=nix.buildMachines) or through general [Nix configuration](https://nixos.org/manual/nix/stable/advanced-topics/distributed-builds).
 
 If you run the tests on a **macOS** machine, you also need a "remote" builder for Linux; possibly a VM. [nix-darwin](https://daiderd.com/nix-darwin/) users may enable [`nix.linux-builder.enable`](https://daiderd.com/nix-darwin/manual/index.html#opt-nix.linux-builder.enable) to launch such a VM.
+

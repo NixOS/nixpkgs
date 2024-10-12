@@ -14,3 +14,4 @@ stdenv.mkDerivation {
     cd mingw-w64-libraries/winpthreads
   '';
 }
+

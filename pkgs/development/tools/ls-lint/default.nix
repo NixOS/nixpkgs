@@ -21,3 +21,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ flokli ];
   };
 }
+

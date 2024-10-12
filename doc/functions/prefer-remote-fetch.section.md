@@ -15,3 +15,4 @@ $ cat > ~/.config/nixpkgs/overlays/prefer-remote-fetch.nix <<EOF
   self: super: super.prefer-remote-fetch self super
 EOF
 ```
+

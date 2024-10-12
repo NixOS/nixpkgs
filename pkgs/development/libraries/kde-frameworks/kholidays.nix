@@ -14,3 +14,4 @@ mkDerivation {
   buildInputs = [ qtbase qtdeclarative qttools ];
   outputs = [ "out" "dev" ];
 }
+

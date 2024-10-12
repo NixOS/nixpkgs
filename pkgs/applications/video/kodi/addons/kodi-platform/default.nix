@@ -13,3 +13,4 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ kodi libcec_platform tinyxml ];
 }
+

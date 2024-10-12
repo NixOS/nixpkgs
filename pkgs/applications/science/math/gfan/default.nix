@@ -38,3 +38,4 @@ stdenv.mkDerivation rec {
     homepage = "http://home.math.au.dk/jensen/software/gfan/gfan.html";
   };
 }
+

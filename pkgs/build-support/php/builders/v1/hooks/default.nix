@@ -58,3 +58,4 @@ in
     };
   } ./composer-with-plugin-vendor-hook.sh;
 }
+

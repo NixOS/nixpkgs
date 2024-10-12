@@ -20,3 +20,4 @@ substituteAll {
     platforms = platforms.linux;
   };
 }
+

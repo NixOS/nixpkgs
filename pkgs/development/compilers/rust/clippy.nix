@@ -44,3 +44,4 @@ rustPlatform.buildRustPackage {
     platforms = platforms.unix;
   };
 }
+

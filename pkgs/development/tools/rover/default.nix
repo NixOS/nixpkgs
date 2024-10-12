@@ -60,3 +60,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.ivanbrennan maintainers.aaronarinder ];
   };
 }
+

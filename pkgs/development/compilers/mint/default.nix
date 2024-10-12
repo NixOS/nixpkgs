@@ -33,3 +33,4 @@ crystal.buildCrystalPackage rec {
     broken = lib.versionOlder crystal.version "1.0";
   };
 }
+

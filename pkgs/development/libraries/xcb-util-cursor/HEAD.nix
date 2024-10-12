@@ -38,3 +38,4 @@ stdenv.mkDerivation {
     ${stdenv.shell} autogen.sh --prefix="$out"
   '';
 }
+

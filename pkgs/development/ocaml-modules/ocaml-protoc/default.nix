@@ -17,3 +17,4 @@ buildDunePackage rec {
     description = "Protobuf Compiler for OCaml";
   };
 }
+

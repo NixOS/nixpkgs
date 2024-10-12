@@ -16,3 +16,4 @@ symlinkJoin {
       ${lib.optionalString willCite "--add-flags --will-cite"}
   '';
 }
+

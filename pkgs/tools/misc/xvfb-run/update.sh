@@ -19,3 +19,4 @@ if [[ "$newXvfbsha" != "$oldXvfbsha" ]]; then
         update-source-version xvfb-run "1+g${rev:0:7}" "$sha256" --rev="$rev"
     )
 fi
+

@@ -16,3 +16,4 @@ latest_entry = feed.entries[0]
 latest_version = latest_entry.title.split()[-1].lstrip("v")
 
 subprocess.run(["update-source-version", "lunatask", latest_version], check=True)
+

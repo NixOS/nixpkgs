@@ -25,3 +25,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.seehuhn.de/pages/moon-buggy";
   };
 }
+

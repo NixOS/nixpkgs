@@ -15,3 +15,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_until_succeeds("curl -s --fail -L http://localhost/time.php | grep 'Anuko Time Tracker'")
   '';
 })
+

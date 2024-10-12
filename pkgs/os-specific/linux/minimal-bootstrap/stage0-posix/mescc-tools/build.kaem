@@ -202,3 +202,4 @@ ${hex2} --architecture ${m2libcArch} \
 	-f ${m2libc}/${m2libcArch}/ELF-${m2libcArch}-debug.hex2 \
 	-f ./M2-1.hex2 \
 	-o ${out}/bin/M2-Planet
+

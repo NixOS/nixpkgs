@@ -163,3 +163,4 @@ in
 
   meta.doc = ./dnsmasq.md;
 }
+

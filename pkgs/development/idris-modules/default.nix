@@ -209,3 +209,4 @@
     protobuf = throw "idrisPackages.protobuf has been removed: abandoned by upstream"; # Added 2022-02-06
   };
 in fix' (extends overrides idrisPackages)
+

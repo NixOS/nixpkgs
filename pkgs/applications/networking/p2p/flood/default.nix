@@ -29,3 +29,4 @@ buildNpmPackage rec {
     mainProgram = "flood";
   };
 }
+

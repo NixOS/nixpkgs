@@ -25,3 +25,4 @@ npmDepsFile=$(nix-instantiate --eval -A "$package".npmDepsFile)
     echo ']'
 ) > "$npmDepsFile"
 "$(nix-build -A "$package".fetch-deps --no-out-link)"
+

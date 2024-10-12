@@ -36,3 +36,4 @@ stdenv.mkDerivation {
 
   meta = mate.mate-settings-daemon.meta // { priority = -10; };
 }
+

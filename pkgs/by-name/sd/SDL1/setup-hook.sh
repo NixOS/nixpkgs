@@ -14,3 +14,4 @@ addSDLPath () {
 }
 
 addEnvHooks "$hostOffset" addSDLPath
+

@@ -45,3 +45,4 @@ stdenv.mkDerivation {
   # Carry the maintainer, licenses, and various useful information.
   inherit (matrix-synapse-unwrapped) meta;
 }
+

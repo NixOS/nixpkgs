@@ -416,3 +416,4 @@ in
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
+

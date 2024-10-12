@@ -51,3 +51,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ rhoriguchi ];
   };
 }
+

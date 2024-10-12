@@ -42,3 +42,4 @@ in buildDotnetModule rec {
     mainProgram = "dotnet-outdated";
   };
 }
+

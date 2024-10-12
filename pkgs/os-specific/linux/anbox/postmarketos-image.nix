@@ -17,3 +17,4 @@ in
       sha256 = "16vmiz5al2r19wjpd44nagvz7d901ljxdms8gjp2w4xz1d91vzpm";
     };
   }.${stdenv.system} or (throw "Unsupported platform ${stdenv.system}")
+

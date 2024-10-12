@@ -29,3 +29,4 @@ EOF
     echo "@version@ (@codeName@)"
     ;;
 esac
+

@@ -26,3 +26,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ gepbird loskutov ];
   };
 })
+

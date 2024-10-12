@@ -12,3 +12,4 @@
     machine.succeed("twingate config log-level | grep 'debug' >&2")
   '';
 }
+

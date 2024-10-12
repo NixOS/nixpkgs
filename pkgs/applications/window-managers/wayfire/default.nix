@@ -95,3 +95,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wayfire";
   };
 })
+

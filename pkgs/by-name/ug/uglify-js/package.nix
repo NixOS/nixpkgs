@@ -60,3 +60,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ lelgenio ];
   };
 }
+

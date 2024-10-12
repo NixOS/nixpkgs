@@ -29,3 +29,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xplugd";
   };
 }
+

@@ -30,3 +30,4 @@ buildNimPackage (finalAttrs: {
     maintainers = [ lib.maintainers.annaaurora ];
   };
 })
+

@@ -19,3 +19,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       client.succeed("su - alice -c ${pkgs.libuiohook.test}/share/uiohook_tests >&2 &")
     '';
 })
+

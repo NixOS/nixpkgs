@@ -50,3 +50,4 @@ If not, one can set `Storage=volatile` in {manpage}`journald.conf(5)`
 ([`services.journald.storage = "volatile";`](#opt-services.journald.storage)),
 which disables journal persistence and causes it to be written to
 `/run/log/journal`.
+

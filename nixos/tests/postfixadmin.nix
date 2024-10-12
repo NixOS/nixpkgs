@@ -29,3 +29,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     postfixadmin.succeed("curl -sSfL http://postfixadmin/ | grep 'Mail admins login here'")
   '';
 })
+

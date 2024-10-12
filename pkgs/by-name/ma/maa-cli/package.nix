@@ -84,3 +84,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "maa";
   };
 }
+

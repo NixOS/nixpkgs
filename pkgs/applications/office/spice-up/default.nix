@@ -68,3 +68,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.philip_scott.spice-up";
   };
 }
+

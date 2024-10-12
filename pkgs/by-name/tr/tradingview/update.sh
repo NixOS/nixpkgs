@@ -68,3 +68,4 @@ fi
 git add "$tradingview_nix"
 git commit -m "tradingview: ${current_nix_version} -> ${upstream_version}"
 
+

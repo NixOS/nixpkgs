@@ -21,3 +21,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.succeed('curl http://localhost:7777/raw/$(cat bla | jq -r .key) | grep "Hello World"')
     '';
   })
+

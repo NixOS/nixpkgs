@@ -462,3 +462,4 @@ in stdenv.mkDerivation (commonAttrs // {
     maintainers = lib.teams.swift.members;
   };
 })
+

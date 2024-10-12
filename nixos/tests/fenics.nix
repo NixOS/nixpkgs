@@ -47,3 +47,4 @@ in
       fenicsnode.succeed("${fenicsScript}")
     '';
 })
+

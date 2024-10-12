@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (SDL.meta) platforms;
   };
 })
+

@@ -36,3 +36,4 @@ buildNpmPackage rec {
     mainProgram = "lineselect";
   };
 }
+

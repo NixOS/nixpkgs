@@ -262,3 +262,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "sparrow-desktop";
   };
 }
+

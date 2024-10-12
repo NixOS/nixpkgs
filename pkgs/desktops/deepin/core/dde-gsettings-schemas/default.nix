@@ -47,3 +47,4 @@ runCommand "nixos-gsettings-desktop-schemas" { preferLocalBuild = true; }
 
     ${glib.dev}/bin/glib-compile-schemas $schema_dir
   ''
+

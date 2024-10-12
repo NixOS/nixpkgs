@@ -15,3 +15,4 @@ runCommand "${pname}-tests" { meta.timeout = 5; } ''
   ${fontbakery}/bin/fontbakery check-ufo --no-progress --no-colors data/test/test.ufo >>$out
   # TODO add more
 ''
+

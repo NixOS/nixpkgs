@@ -45,3 +45,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "sandbar";
   };
 })
+

@@ -58,3 +58,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "texlab";
   };
 }
+

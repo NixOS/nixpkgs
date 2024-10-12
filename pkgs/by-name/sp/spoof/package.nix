@@ -32,3 +32,4 @@ buildNpmPackage rec {
     maintainers = with lib.maintainers; [ modderme123 ];
   };
 }
+

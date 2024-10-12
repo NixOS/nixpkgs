@@ -46,3 +46,4 @@ Using it together with the Wordpress module could look like this:
 ```
 
 The same scheme applies to `themes` and `languages`.
+

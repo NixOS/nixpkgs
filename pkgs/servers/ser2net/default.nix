@@ -36,3 +36,4 @@ stdenv.mkDerivation rec {
     mainProgram = "ser2net";
   };
 }
+

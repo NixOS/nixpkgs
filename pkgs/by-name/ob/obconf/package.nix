@@ -52,3 +52,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "obconf";
   };
 })
+

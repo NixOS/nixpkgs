@@ -6,3 +6,4 @@ int main() {
   nlohmann::json data = {{"name", "world"}};
   inja::render_to(std::cout, "Hello {{ name }}!", data);
 }
+

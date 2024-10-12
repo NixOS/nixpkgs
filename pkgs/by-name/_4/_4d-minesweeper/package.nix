@@ -87,3 +87,4 @@ stdenv.mkDerivation {
     mainProgram = "4d-minesweeper";
   };
 }
+

@@ -13,3 +13,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ ki18n qtbase qttools sonnet ];
 }
+

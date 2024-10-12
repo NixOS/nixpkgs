@@ -41,3 +41,4 @@ buildGoModule {
     mainProgram = "bloat";
   };
 }
+

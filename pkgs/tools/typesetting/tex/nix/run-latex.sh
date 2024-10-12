@@ -162,3 +162,4 @@ printf "%5d pages\n" \
 echo
 
 bzip2 $tmpFile
+

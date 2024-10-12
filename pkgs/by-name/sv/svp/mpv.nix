@@ -14,3 +14,4 @@ mpv-unwrapped.wrapper {
     "/run/opengl-driver/lib:${lib.makeLibraryPath [ ocl-icd ]}"
   ];
 }
+

@@ -47,3 +47,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
   };
 }
+

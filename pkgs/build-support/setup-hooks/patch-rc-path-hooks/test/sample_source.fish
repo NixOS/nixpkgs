@@ -7,3 +7,4 @@ begin
     set -g PATH $TEMPORARY_PATH
 end
 set PATH "$PWD/charlie" $PATH
+

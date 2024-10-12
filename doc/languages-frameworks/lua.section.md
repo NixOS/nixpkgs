@@ -259,3 +259,4 @@ Now, `ps` is set to `lua5_1.pkgs`, matching the version of the interpreter.
 Following rules should be respected:
 
 * Commit names of Lua libraries should reflect that they are Lua libraries, so write for example `luaPackages.luafilesystem: 1.11 -> 1.12`.
+

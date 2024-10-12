@@ -47,3 +47,4 @@ stdenvNoCC.mkDerivation {
     mainProgram = "ad-ldap-enum";
   };
 }
+

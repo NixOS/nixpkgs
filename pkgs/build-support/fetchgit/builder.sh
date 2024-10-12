@@ -18,3 +18,4 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" \
   ${branchName:+--branch-name "$branchName"}
 
 runHook postFetch
+

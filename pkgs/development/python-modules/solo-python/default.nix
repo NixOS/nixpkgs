@@ -66,3 +66,4 @@ buildPythonPackage rec {
     broken = versionAtLeast fido2.version "1.0.0";
   };
 }
+

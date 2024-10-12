@@ -13,3 +13,4 @@ mkKdeDerivation {
   ];
   extraBuildInputs = [ recastnavigation ];
 }
+

@@ -25,3 +25,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = builtins.attrValues { inherit (lib.maintainers) jraygauthier V; };
   };
 }
+

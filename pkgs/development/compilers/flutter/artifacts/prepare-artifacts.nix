@@ -25,3 +25,4 @@
   then callPackage (./overrides + "/${src.flutterPlatform}.nix") { }
   else ({ ... }: { })
 )
+

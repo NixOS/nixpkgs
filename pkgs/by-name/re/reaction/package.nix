@@ -43,3 +43,4 @@ in buildGoModule {
     platforms = platforms.unix;
   };
 }
+

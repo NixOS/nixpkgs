@@ -15,3 +15,4 @@ lib.makeScope newScope (self:
     omshell = callQtPackage ./omshell { };
     combined = callPackage ./combined { };
   })
+

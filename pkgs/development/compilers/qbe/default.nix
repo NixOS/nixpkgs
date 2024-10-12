@@ -40,3 +40,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "qbe";
   };
 })
+

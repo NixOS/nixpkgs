@@ -26,3 +26,4 @@ import ./make-test-python.nix ({ pkgs, ...} :
     server.wait_until_succeeds("curl -s -f localhost:8153/go")
   '';
 })
+

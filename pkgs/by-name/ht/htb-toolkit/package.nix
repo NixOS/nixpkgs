@@ -67,3 +67,4 @@ rustPlatform.buildRustPackage {
     license = licenses.gpl3Plus;
   };
 }
+

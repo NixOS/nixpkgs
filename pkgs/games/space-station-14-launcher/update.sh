@@ -14,3 +14,4 @@ fi
 cd ../../..
 update-source-version space-station-14-launcher.unwrapped "$new_version"
 $(nix-build -A space-station-14-launcher.fetch-deps --no-out-link)
+

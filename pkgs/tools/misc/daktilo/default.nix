@@ -64,3 +64,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "daktilo";
   };
 }
+

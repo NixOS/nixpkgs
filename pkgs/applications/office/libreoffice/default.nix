@@ -666,3 +666,4 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = "libreoffice";
   };
 })
+

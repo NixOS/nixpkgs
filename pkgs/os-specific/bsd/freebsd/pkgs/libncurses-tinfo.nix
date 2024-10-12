@@ -13,3 +13,4 @@ mkDerivation {
     make $makeFlags "CFLAGS=-D_VA_LIST -D_VA_LIST_DECLARED -Dva_list=__builtin_va_list -I$BSDSRCDIR/contrib/ncurses/ncurses -I$BSDSRCDIR/contrib/ncurses/include -I." ncurses_dll.h make_hash make_keys
   '';
 }
+

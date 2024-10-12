@@ -33,3 +33,4 @@ buildGo123Module rec {
     mainProgram = "agebox";
   };
 }
+

@@ -5,3 +5,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [ kcodecs ki18n kxmlgui kio ];
 }
+

@@ -45,3 +45,4 @@ in
     environment.systemPackages = [ fvwm2 ];
   };
 }
+

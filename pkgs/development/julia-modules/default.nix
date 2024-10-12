@@ -189,3 +189,4 @@ runCommand "julia-${julia.version}-env" {
 '' + lib.optionalString setDefaultDepot ''
   sed -i '2 i\JULIA_DEPOT_PATH=''${JULIA_DEPOT_PATH-"$HOME/.julia"}' $out/bin/julia
 '')
+

@@ -9,3 +9,4 @@ qtModule {
   # Doesn't have version set
   dontCheckQtModuleVersion = true;
 }
+

@@ -171,3 +171,4 @@ print "Number of missing licenses: $nrMissingLicenses\n";
 print "Number of missing descriptions: $nrMissingDescriptions\n";
 print "Number of bad descriptions: $nrBadDescriptions\n";
 print "Number of name collisions: $nrCollisions\n";
+

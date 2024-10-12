@@ -51,3 +51,4 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "tessen";
   };
 }
+

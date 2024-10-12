@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     broken = (lib.versions.majorMinor kernel.modDirVersion) == "5.10" || (lib.versions.majorMinor kernel.modDirVersion) == "5.4";
   };
 }
+

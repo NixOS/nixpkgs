@@ -91,3 +91,4 @@ field1: conflicting values 3 and string (mismatched types int and string):
 **Known limitations**
 
 * The script will enforce **concrete** values and will not accept lossy transformations (strictness). You can add these options if you need them.
+

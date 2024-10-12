@@ -27,3 +27,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "mnencode";
   };
 })
+

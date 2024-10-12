@@ -115,3 +115,4 @@ bootBash.runCommand "${pname}-${version}" {
   make -j $NIX_BUILD_CORES install
   ln -s bash $out/bin/sh
 ''
+

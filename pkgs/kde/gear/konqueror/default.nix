@@ -13,3 +13,4 @@ mkKdeDerivation {
     "-DWebEngineDictConverter_EXECUTABLE=${qtwebengine}/libexec/qwebengine_convert_dict"
   ];
 }
+

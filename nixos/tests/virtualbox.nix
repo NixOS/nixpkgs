@@ -548,3 +548,4 @@ in mapAttrs (mkVBoxTest {} vboxVMs) {
 }
 // (optionalAttrs enableKvm kvmTests)
 // (optionalAttrs enableUnfree unfreeTests)
+

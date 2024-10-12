@@ -21,3 +21,4 @@ buildNimPackage (finalAttrs: {
     mainProgram = "emocli";
   };
 })
+

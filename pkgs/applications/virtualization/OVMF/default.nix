@@ -209,3 +209,4 @@ edk2.mkDerivation projectDscPath (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
+

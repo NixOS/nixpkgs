@@ -40,3 +40,4 @@ in symlinkJoin rec {
 
   inherit (qgis-ltr-unwrapped) meta;
 }
+

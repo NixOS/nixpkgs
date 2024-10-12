@@ -49,3 +49,4 @@ import ./make-test-python.nix {
       assert "Gerbera" in page and "MediaTomb" not in page
     '';
 }
+

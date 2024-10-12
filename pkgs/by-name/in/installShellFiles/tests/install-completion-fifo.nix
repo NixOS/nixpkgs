@@ -19,3 +19,4 @@ runCommandLocal "install-shell-files--install-completion-fifo"
     [[ $(<$out/share/zsh/site-functions/_foo) == bar ]] || { echo "_foo comparison failed"; exit 1; }
     [[ $(<$out/share/fish/vendor_completions.d/foo.fish) == baz ]] || { echo "foo.fish comparison failed"; exit 1; }
   ''
+

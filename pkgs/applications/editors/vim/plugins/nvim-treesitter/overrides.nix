@@ -92,3 +92,4 @@ in
   };
   nvimRequireCheck = "nvim-treesitter";
 }
+

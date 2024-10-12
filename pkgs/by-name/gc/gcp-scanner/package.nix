@@ -54,3 +54,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "gcp-scanner";
   };
 }
+

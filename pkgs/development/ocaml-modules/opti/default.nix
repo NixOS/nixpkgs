@@ -20,3 +20,4 @@ buildDunePackage rec {
     homepage = "https://github.com/magnusjonsson/opti";
   };
 }
+

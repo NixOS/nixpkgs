@@ -36,3 +36,4 @@ fi
 updateVersion "$latestVersion"
 updateBaseVersion "$latestVersion"
 updateHash "$latestVersion"
+

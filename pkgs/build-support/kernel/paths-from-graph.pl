@@ -39,9 +39,9 @@ foreach my $graph (@ARGV) {
             push @refs, $ref;
         }
         $refs{$storePath} = \@refs;
-        
+
     }
-    
+
     close GRAPH;
 }
 
@@ -52,7 +52,7 @@ if ($ENV{"printRegistration"} eq "1") {
     foreach my $storePath (sort (keys %storePaths)) {
         print "$storePath\n";
         print "0000000000000000000000000000000000000000000000000000000000000000\n"; # !!! fix
-        print "0\n"; # !!! fix	
+        print "0\n"; # !!! fix
         print "\n"; # don't care about preserving the deriver
         print scalar(@{$refs{$storePath}}), "\n";
         foreach my $ref (@{$refs{$storePath}}) {
@@ -66,3 +66,4 @@ else {
         print "$storePath\n";
     }
 }
+

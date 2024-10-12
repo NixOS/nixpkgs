@@ -19,3 +19,4 @@ buildDunePackage rec {
     description = "Entropy collection for a cryptographically secure PRNG";
   };
 }
+

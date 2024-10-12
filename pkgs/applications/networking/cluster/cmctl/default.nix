@@ -67,3 +67,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ joshvanl ];
   };
 }
+

@@ -20,3 +20,4 @@ import ./generic.nix {
     sed 's|V4.2|V4.1.2|g' < ${docbook42catalog} > catalog.xml
   ";
 }
+

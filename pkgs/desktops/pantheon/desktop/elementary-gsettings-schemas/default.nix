@@ -50,3 +50,4 @@ runCommand "elementary-gsettings-desktop-schemas" { preferLocalBuild = true; }
 
     ${glib.dev}/bin/glib-compile-schemas $schema_dir
   ''
+

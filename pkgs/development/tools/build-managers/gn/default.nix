@@ -8,3 +8,4 @@ callPackage ./generic.nix args {
   version = "2020-03-09";
   sha256 = "1asc14y8by7qcn10vbk467hvx93s30pif8r0brissl0sihsaqazr";
 }
+

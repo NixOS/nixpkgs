@@ -12,3 +12,4 @@ lilypond.overrideAttrs (oldAttrs: rec {
     supportedFeatures = [ "commit" ];
   };
 })
+

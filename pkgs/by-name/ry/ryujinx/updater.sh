@@ -76,3 +76,4 @@ fi
 echo "building Nuget lockfile"
 
 eval "$(nix-build -A ryujinx.fetch-deps --no-out-link)"
+

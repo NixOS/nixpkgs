@@ -40,3 +40,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
       machine.succeed(f"guix repl -- {scripts_dir}/add-existing-files-to-store.scm {scripts_dir}")
   '';
 })
+

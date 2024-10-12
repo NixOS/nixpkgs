@@ -117,3 +117,4 @@ npmConfigHook() {
 }
 
 postPatchHooks+=(npmConfigHook)
+

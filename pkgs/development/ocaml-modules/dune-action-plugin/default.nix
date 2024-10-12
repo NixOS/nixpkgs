@@ -21,3 +21,4 @@ buildDunePackage rec {
     license = licenses.mit;
   };
 }
+

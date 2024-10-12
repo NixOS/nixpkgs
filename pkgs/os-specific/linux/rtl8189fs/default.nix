@@ -20,3 +20,4 @@ rtl8189es.overrideAttrs (drv: rec {
     maintainers = with maintainers; [ puffnfresh ];
   };
 })
+

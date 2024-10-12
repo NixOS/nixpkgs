@@ -76,3 +76,4 @@ buildGoModule rec {
     mainProgram = "gopass";
   };
 }
+

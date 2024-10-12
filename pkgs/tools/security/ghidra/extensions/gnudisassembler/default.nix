@@ -67,3 +67,4 @@ buildGhidraExtension {
     license = licenses.gpl2Only;
   };
 }
+

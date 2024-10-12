@@ -212,3 +212,4 @@ _multioutPropagateDev() {
         echo -n " ${!output}" >> "${!propagaterOutput}"/nix-support/propagated-build-inputs
     done
 }
+

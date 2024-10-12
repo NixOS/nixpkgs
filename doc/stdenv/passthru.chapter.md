@@ -132,3 +132,4 @@ For more information see the NixOS manual on [NixOS module tests](https://nixos.
 
 Nixpkgs tries to automatically update all packages that have an `passthru.updateScript` attribute.
 See the [section on automatic package updates in the package contributor guide](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#automatic-package-updates) for details.
+

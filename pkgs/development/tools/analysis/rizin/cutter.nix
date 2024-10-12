@@ -91,3 +91,4 @@ let cutter = stdenv.mkDerivation rec {
     inherit (rizin.meta) platforms;
   };
 }; in cutter
+

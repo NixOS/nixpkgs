@@ -658,3 +658,4 @@ in {
     filesToInstall = [ "u-boot.itb" "idbloader.img"];
   };
 }
+

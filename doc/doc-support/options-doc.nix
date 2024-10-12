@@ -26,3 +26,4 @@ nixosOptionsDoc {
   documentType = "none";
   transformOptions = opt: opt // { declarations = map transformDeclaration opt.declarations; };
 }
+

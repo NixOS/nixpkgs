@@ -32,3 +32,4 @@ sed -i -e '/normalizeId(/d' $MERGED_COMMANDS
 sqlite3 <$MERGED_COMMANDS >$TARGET_FILE
 
 echo $LATEST_VERSION > $VERSION_FILE
+

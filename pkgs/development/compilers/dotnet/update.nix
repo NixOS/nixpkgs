@@ -125,3 +125,4 @@ writeScript "update-dotnet-vmr.sh" ''
       cp release.json "${toString releaseManifestFile}"
   )
 ''
+

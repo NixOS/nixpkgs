@@ -53,3 +53,4 @@ stdenv.mkDerivation {
     mainProgram = "gnome-monitor-config";
   };
 }
+

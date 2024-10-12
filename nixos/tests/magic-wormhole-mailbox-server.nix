@@ -36,3 +36,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     client_bob.succeed("grep mysecret secretfile")
   '';
 })
+

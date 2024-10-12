@@ -26,3 +26,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ cole-h ];
   };
 }
+

@@ -11,3 +11,4 @@ bossa.overrideAttrs (attrs: rec {
     sha256 = "sha256-sBJ6QMd7cTClDnGCeOU0FT6IczEjqqRxCD7kef5GuY8=";
   };
 })
+

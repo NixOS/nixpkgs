@@ -5,3 +5,4 @@ godot3-mono-debug-server.overrideAttrs (self: base: {
   godotBuildDescription = "mono server";
   godotBuildTarget = "release";
 })
+

@@ -60,3 +60,4 @@ in stdenv.mkDerivation rec {
     changelog = "https://cvs.savannah.gnu.org/viewvc/global/global/NEWS?view=markup&pathrev=VERSION-${lib.replaceStrings [ "." ] [ "_" ] version}";
   };
 }
+

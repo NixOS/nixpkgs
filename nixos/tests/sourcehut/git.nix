@@ -94,3 +94,4 @@ in
            machine.succeed("diff test-v0.1/hello.txt test/hello.txt")
     '';
 })
+

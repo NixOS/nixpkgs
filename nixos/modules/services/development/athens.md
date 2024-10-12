@@ -50,3 +50,4 @@ To use the local proxy in Go builds, you can set the proxy as environment variab
 It is currently not possible to use the local proxy for builds done by the Nix daemon. This might be enabled
 by experimental features, specifically [`configurable-impure-env`](https://nixos.org/manual/nix/unstable/contributing/experimental-features#xp-feature-configurable-impure-env),
 in upcoming Nix versions.
+

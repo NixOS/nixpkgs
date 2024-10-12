@@ -41,3 +41,4 @@ buildPythonPackage {
     ${python.interpreter} -m django test
   '';
 }
+

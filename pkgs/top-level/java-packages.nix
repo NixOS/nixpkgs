@@ -86,3 +86,4 @@ in {
   jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";
   mavenfod = throw "'mavenfod' is renamed to/replaced by 'maven.buildMavenPackage'";
 }
+

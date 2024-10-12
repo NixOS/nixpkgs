@@ -17,3 +17,4 @@ qtModule {
     libmng libtiff
   ];
 }
+

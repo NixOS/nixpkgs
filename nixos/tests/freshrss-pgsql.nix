@@ -44,3 +44,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert '<title>Login · FreshRSS</title>' in response, "Login page didn't load successfully"
   '';
 })
+

@@ -66,3 +66,4 @@ in {
 
   meta.maintainers = with lib.maintainers; [ mac-chaffee ];
 }
+

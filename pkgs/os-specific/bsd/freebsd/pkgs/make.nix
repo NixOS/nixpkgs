@@ -23,3 +23,4 @@ mkDerivation {
   '';
   extraPaths = [ "share/mk" ] ++ lib.optional (!stdenv.hostPlatform.isFreeBSD) "tools/build/mk";
 }
+

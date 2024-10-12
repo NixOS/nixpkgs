@@ -18,3 +18,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "kasts";
 }
+

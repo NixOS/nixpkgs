@@ -73,3 +73,4 @@ if __name__ == "__main__":
     with open(join(cwd, "default-grammars.json"), mode="w") as f:
         json.dump(sorted(existing), f, indent=2)
         f.write("\n")
+

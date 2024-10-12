@@ -12,3 +12,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "ark";
 }
+

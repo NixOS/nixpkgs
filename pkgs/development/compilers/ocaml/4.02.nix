@@ -20,3 +20,4 @@ import ./generic.nix {
   #     `caml_code_fragments_table'; libcamlrun.a(backtrace.o):(.bss+0x20): first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 }
+

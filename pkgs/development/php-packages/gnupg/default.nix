@@ -54,3 +54,4 @@ buildPecl {
     maintainers = with lib.maintainers; [ taikx4 ] ++ lib.teams.php.members;
   };
 }
+

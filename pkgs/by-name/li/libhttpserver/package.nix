@@ -44,3 +44,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin; # configure: error: cannot find required auxiliary files: ltmain.sh
   };
 }
+

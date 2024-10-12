@@ -78,3 +78,4 @@ mixRelease {
   };
   passthru.updateScript = nix-update-script { };
 }
+

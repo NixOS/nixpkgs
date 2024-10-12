@@ -69,3 +69,4 @@ bash.runCommand "${pname}-${version}" {
   # Install
   make -j $NIX_BUILD_CORES install
 ''
+

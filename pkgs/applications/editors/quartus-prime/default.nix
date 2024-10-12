@@ -192,3 +192,4 @@ in buildFHSEnv rec {
 
   inherit (unwrapped) meta;
 }
+

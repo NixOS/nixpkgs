@@ -99,3 +99,4 @@ If you set any options within
 [service.taskserver.pki.manual](#opt-services.taskserver.pki.manual.ca.cert).*,
 {command}`nixos-taskserver` won't issue certificates, but you can
 still use it for adding or removing user accounts.
+

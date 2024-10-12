@@ -50,3 +50,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (ncurses.meta) platforms;
   };
 })
+

@@ -185,3 +185,4 @@ lib.fix (self: {
 
   __functor = self: self.importNpmLock;
 })
+

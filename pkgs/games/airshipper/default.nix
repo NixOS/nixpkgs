@@ -122,3 +122,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ yusdacra ];
   };
 }
+

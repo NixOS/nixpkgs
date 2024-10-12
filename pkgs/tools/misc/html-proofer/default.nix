@@ -19,3 +19,4 @@ bundlerEnv rec {
     mainProgram = "htmlproofer";
   };
 }
+

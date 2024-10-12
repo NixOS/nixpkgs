@@ -48,3 +48,4 @@ stdenv.mkDerivation rec {
     mainProgram = "docbook2odf";
   };
 }
+

@@ -28,3 +28,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xrandr-invert-colors";
   };
 }
+

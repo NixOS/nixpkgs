@@ -55,3 +55,4 @@ s!^jarpath=`kpsewhich --progname=[^ ]* --format=texmfscripts \([^ ]*\)`$!jarpath
 
 # replace CYGWIN grep test with bash builtin
 s!echo "$kernel" | grep CYGWIN >/dev/null;![[ "$kernel" == *CYGWIN* ]]!g
+

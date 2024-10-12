@@ -75,3 +75,4 @@ maven.buildMavenPackage rec {
     maintainers = with maintainers; [ Dettorer ];
   };
 }
+

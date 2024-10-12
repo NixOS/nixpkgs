@@ -59,3 +59,4 @@ if [[ $WINDECSTYLENAME == "Modern" ]]; then
 elif [[ $WINDECSTYLENAME == "Classic" ]]; then
     WINDECSTYLE=2
 fi
+

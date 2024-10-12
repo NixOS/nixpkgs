@@ -30,3 +30,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zsa/wally/wiki/Linux-install#2-create-a-udev-rule-file";
   };
 }
+

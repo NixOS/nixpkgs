@@ -60,3 +60,4 @@ buildGoModule rec {
     mainProgram = "nsc";
   };
 }
+

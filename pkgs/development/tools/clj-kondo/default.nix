@@ -26,3 +26,4 @@ buildGraalvmNativeImage rec {
     maintainers = with maintainers; [ jlesquembre bandresen ];
   };
 }
+

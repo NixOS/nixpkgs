@@ -30,3 +30,4 @@ buildGoModule rec {
     mainProgram = "urban-cli";
   };
 }
+

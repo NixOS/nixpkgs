@@ -62,3 +62,4 @@ buildPythonApplication rec {
     mainProgram = "git-archive-all";
   };
 }
+

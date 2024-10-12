@@ -35,3 +35,4 @@
       machine.wait_for_open_port(${toString nodes.machine.services.fedimintd.mainnet.api.port})
     '';
 }
+

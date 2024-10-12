@@ -53,3 +53,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ anthonyroussel ];
   };
 })
+

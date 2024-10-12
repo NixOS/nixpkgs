@@ -34,3 +34,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/${src.owner}/${src.repo}/blob/${src.rev}/CHANGELOG.md";
   };
 }
+

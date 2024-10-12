@@ -43,3 +43,4 @@ However, a better solution might be to fix the build script upstream to use
 `PKG_CHECK_MODULES` instead. This approach wouldn't suffer from the problem that
 `AC_CHECK_HEADERS`/`AC_CHECK_LIBS` has at the price of introducing a dependency
 on pkg-config.
+

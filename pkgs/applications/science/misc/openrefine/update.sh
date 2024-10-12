@@ -18,3 +18,4 @@ sed -E -i "s|${MVNHASH_OLD_ESCAPED}|${FAKEHASH}|g" "${FILE}"
 MVNHASH_NEW="$(nix-build . -A "${UPDATE_NIX_ATTR_PATH}" 2>&1 | tail -n10 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
 
 sed -E -i "s|${FAKEHASH_ESCAPED}|${MVNHASH_NEW}|g" "${FILE}"
+

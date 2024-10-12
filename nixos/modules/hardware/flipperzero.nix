@@ -13,3 +13,4 @@ in
     services.udev.packages = [ pkgs.qFlipper ];
   };
 }
+

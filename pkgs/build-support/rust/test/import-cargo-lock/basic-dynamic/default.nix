@@ -23,3 +23,4 @@ rustPlatform.buildRustPackage {
     $out/bin/basic-dynamic
   '';
 }
+

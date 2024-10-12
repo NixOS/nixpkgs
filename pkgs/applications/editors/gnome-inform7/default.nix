@@ -116,3 +116,4 @@ in stdenv.mkDerivation {
     mainProgram = "gnome-inform7";
   };
 }
+

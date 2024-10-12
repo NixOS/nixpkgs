@@ -44,3 +44,4 @@ with open(dir / "treesitter-parsers.nix", "w") as f:
 """
         )
     f.write("}\n")
+

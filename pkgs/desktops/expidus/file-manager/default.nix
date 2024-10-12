@@ -48,3 +48,4 @@ flutter.buildFlutterApplication rec {
     mainProgram = "expidus-file-manager";
   };
 }
+

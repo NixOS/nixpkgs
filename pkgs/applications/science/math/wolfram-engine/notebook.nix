@@ -7,3 +7,4 @@ in
     #! ${stdenv.shell}
     ${wolfram-jupyter}/bin/jupyter-notebook
   ''
+

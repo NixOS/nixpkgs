@@ -7,3 +7,4 @@
     (lib.mkRemovedOptionModule [ "services" "gnome" "gnome-online-miners" ] "It was broken for a while now.")
   ];
 }
+

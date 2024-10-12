@@ -25,3 +25,4 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "sanic_testing" ];
 }
+

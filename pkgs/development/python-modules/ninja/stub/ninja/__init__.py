@@ -11,3 +11,4 @@ def _program(name, args):
 
 def ninja():
     raise SystemExit(_program('ninja', sys.argv[1:]))
+

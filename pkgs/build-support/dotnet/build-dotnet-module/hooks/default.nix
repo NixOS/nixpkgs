@@ -58,3 +58,4 @@
     }
     ./dotnet-fixup-hook.sh;
 }
+

@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qtspeech ];
   meta.mainProgram = "kanagram";
 }
+

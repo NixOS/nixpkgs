@@ -31,3 +31,4 @@ in lib.concatLists [
     ]))
   (lib.optional targetPlatform.isMips64n32 "--disable-libsanitizer") # libsanitizer does not compile on mips64n32
 ]
+

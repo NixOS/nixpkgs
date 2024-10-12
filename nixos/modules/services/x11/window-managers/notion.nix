@@ -24,3 +24,4 @@ in
     environment.systemPackages = [ pkgs.notion ];
   };
 }
+

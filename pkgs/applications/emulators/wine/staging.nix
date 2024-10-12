@@ -23,3 +23,4 @@ in assert lib.versions.majorMinor wineUnstable.version == lib.versions.majorMino
     description = wineUnstable.meta.description + " (with staging patches)";
   };
 }
+

@@ -26,3 +26,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = platforms.all;
   };
 }
+

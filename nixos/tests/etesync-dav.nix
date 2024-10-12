@@ -19,3 +19,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           assert "Add User" in machine.succeed("curl -s http://localhost:37358/.web/add/")
     '';
 })
+

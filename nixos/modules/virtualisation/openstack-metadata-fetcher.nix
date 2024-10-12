@@ -20,3 +20,4 @@
   wget_imds -O "$metaDir/hostname" http://169.254.169.254/1.0/meta-data/hostname || true
   wget_imds -O "$metaDir/public-keys-0-openssh-key" http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key || true
 ''
+

@@ -27,3 +27,4 @@ buildDunePackage rec {
     maintainers = [ maintainers.jirkamarsik ];
   };
 }
+

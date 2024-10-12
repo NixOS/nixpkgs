@@ -50,3 +50,4 @@ _separateDebugInfo() {
         ) || rmdir -p "$dst/${id:0:2}"
     done < <(find "$prefix" -type f -print0 | sort -z)
 }
+

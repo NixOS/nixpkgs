@@ -47,3 +47,4 @@ python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ henrirosten ];
   };
 }
+

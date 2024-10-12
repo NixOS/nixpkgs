@@ -50,3 +50,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with lib.maintainers; [ marie ];
   };
 }
+

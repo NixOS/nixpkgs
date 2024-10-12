@@ -33,3 +33,4 @@ dartFixupHook() {
 }
 
 postFixupHooks+=(dartFixupHook)
+

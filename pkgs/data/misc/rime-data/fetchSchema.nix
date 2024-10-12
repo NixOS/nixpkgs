@@ -135,3 +135,4 @@ ln -sv ${fetchFromGitHub {
   sha256 = "0qn54d3cclny106ixdw08r5n6wn52ffs1hgrma3k0j4pv0kr9nlq";
 }} package/rime/wugniu
 ''
+

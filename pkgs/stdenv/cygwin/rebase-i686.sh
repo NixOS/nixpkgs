@@ -22,3 +22,4 @@ _cygwinFixAutoImageBase() {
         echo $NEXTBASE > /etc/rebasenix.nextbase
     done
 }
+

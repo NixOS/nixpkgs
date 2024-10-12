@@ -13,3 +13,4 @@ echo 'Creating ppc* symlink..'
 for i in $out/lib/fpc/*/ppc*; do
   ln -fs $i $out/bin/$(basename $i)
 done
+

@@ -109,3 +109,4 @@ buildGoModule rec {
     outputsToInstall = [ "out" "share" ];
   };
 }
+

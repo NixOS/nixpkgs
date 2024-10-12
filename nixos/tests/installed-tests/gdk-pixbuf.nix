@@ -11,3 +11,4 @@ makeInstalledTest {
 
   testRunnerFlags = [ "--timeout" "1800" ];
 }
+

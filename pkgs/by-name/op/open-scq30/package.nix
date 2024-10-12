@@ -73,3 +73,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "open-scq30";
   };
 }
+

@@ -311,3 +311,4 @@ EOF
     # delete temp files
     rm -- "$latest_build" "$eval_meta"
 done
+

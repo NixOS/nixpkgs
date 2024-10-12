@@ -76,3 +76,4 @@ else
       signIfRequired "$input"
     done
 fi
+

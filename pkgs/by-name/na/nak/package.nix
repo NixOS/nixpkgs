@@ -34,3 +34,4 @@ buildGo123Module rec {
     mainProgram = "nak";
   };
 }
+

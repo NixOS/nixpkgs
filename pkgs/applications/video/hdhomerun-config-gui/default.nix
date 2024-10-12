@@ -30,3 +30,4 @@ stdenv.mkDerivation rec {
     mainProgram = "hdhomerun_config_gui";
   };
 }
+

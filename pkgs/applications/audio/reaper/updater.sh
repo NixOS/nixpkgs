@@ -22,3 +22,4 @@ function set_hash_for_darwin() {
 set_hash_for_linux aarch64
 set_hash_for_linux x86_64
 set_hash_for_darwin aarch64
+

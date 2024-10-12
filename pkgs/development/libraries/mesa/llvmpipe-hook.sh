@@ -12,3 +12,4 @@ export __EGL_VENDOR_LIBRARY_FILENAMES=@drivers@/share/glvnd/egl_vendor.d/50_mesa
 # echo is needed to force-expand the glob
 VK_DRIVER_FILES="$(echo @drivers@/share/vulkan/icd.d/lvp_icd.*.json)"
 export VK_DRIVER_FILES
+

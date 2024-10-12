@@ -54,3 +54,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nix-doc";
   };
 }
+

@@ -23,3 +23,4 @@ pythonPackages.buildPythonApplication rec {
     maintainers = with maintainers; [ pSub liberodark ];
   };
 }
+

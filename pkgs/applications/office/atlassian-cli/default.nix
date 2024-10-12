@@ -47,3 +47,4 @@ stdenv.mkDerivation rec {
     inherit (jre.meta) platforms;
   };
 }
+

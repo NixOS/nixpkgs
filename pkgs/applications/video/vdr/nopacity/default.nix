@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     inherit (vdr.meta) platforms;
   };
 }
+

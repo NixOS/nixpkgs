@@ -646,3 +646,4 @@ in
     environment.systemPackages = [ mediawikiScripts ];
   };
 }
+

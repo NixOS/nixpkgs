@@ -57,3 +57,4 @@ python3.pkgs.buildPythonApplication rec {
     platforms = lib.platforms.linux;
   };
 }
+

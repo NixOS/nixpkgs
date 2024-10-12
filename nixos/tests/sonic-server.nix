@@ -20,3 +20,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       assert result[2] == "PONG", f"expected 'PONG', got '{result[2]}'"
   '';
 })
+

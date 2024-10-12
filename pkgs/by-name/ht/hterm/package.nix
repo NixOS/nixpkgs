@@ -70,3 +70,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hterm";
   };
 })
+

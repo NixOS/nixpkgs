@@ -31,3 +31,4 @@ stdenv.mkDerivation rec {
     mainProgram = "focus-stack";
   };
 }
+

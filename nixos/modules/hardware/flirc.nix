@@ -10,3 +10,4 @@ in
     services.udev.packages = [ pkgs.flirc ];
   };
 }
+

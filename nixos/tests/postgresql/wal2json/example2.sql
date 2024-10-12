@@ -29,3 +29,4 @@ SELECT 'stop' FROM pg_drop_replication_slot('test_slot');
 
 DROP TABLE table2_with_pk;
 DROP TABLE table2_without_pk;
+

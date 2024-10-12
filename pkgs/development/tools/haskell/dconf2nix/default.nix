@@ -30,3 +30,4 @@ dconf2nix.overrideAttrs (oldAttrs: {
         '';
   };
 })
+

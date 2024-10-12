@@ -77,3 +77,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "ncspot";
   };
 }
+

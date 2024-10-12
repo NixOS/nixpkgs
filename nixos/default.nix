@@ -18,3 +18,4 @@ in
 
   inherit (eval.config.system.build) vm vmWithBootLoader;
 }
+

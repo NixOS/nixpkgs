@@ -90,3 +90,4 @@ runCommand "${drv.name}-compressed"
 
     ${lib.concatStringsSep "\n\n" (lib.mapAttrsToList mkCmd compressors)}
   ''
+

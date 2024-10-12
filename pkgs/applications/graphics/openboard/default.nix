@@ -138,3 +138,4 @@ in stdenv.mkDerivation (finalAttrs: {
     mainProgram = "OpenBoard";
   };
 })
+

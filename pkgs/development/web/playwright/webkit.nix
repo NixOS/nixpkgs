@@ -133,3 +133,4 @@ stdenv.mkDerivation {
       --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/"
   '';
 }
+

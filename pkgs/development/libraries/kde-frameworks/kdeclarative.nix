@@ -13,3 +13,4 @@ mkDerivation {
   ];
   propagatedBuildInputs = [ kconfig kpackage qtdeclarative ];
 }
+

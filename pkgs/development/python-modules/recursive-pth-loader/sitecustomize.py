@@ -44,3 +44,4 @@ for path_idx, sitedir in enumerate(sys.path):
                 dir, dircase = site.makepath(sitedir, line)
                 if not dircase in sys.path:
                     sys.path.insert(path_idx+1, dir)
+

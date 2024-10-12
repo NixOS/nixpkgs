@@ -13,3 +13,4 @@
 
   zugferd = callPackage ./zugferd.nix { };
 }
+

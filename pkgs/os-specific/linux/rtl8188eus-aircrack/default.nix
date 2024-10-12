@@ -42,3 +42,4 @@ stdenv.mkDerivation {
     broken = (lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened;
   };
 }
+

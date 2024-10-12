@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # does not build on M1 mac (asm/hwcap.h file not found) maybe needs gcc not clang?
   };
 }
+

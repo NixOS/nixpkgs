@@ -45,3 +45,4 @@ mkHyprlandPlugin hyprland rec {
     platforms = lib.platforms.linux;
   };
 }
+

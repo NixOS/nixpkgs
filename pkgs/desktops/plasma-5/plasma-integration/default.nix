@@ -40,3 +40,4 @@ mkDerivation {
     homepage = "https://invent.kde.org/plasma/plasma-integration";
   };
 }
+

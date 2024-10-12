@@ -25,3 +25,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "plasmatube";
 }
+

@@ -23,3 +23,4 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   lxtask = callPackage ./core/lxtask { };
 })
+

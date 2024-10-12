@@ -53,3 +53,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ zupo luisnquin ];
   };
 }
+

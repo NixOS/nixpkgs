@@ -35,3 +35,4 @@ let
     update-source-version rocmPackages_5.${pname} "$version" --ignore-same-hash
   '';
 in [ updateScript ]
+

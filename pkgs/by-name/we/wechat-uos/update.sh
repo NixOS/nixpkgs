@@ -58,3 +58,4 @@ cat >sources.nix <<EOF
 EOF
 
 rm -r Packages.gz
+

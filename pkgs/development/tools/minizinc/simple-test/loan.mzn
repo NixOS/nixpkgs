@@ -22,3 +22,4 @@ output [
  "% interest, and repaying ", show_float(0, 2, R),
   "\nper quarter for 1 year leaves ", show_float(0, 2, B4), " owing\n"
 ];
+

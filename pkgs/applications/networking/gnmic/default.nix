@@ -44,3 +44,4 @@ buildGoModule rec {
     mainProgram = "gnmic";
   };
 }
+

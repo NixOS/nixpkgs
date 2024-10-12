@@ -83,3 +83,4 @@ in
       "i3-gaps was merged into i3. Use services.xserver.windowManager.i3.enable instead.")
   ];
 }
+

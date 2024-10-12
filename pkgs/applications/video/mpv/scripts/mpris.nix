@@ -49,3 +49,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
   };
 }
+

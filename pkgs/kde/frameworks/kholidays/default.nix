@@ -9,3 +9,4 @@ mkKdeDerivation {
   extraNativeBuildInputs = [ qttools ];
   extraBuildInputs = [ qtdeclarative ];
 }
+

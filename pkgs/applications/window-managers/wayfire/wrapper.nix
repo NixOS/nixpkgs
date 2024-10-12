@@ -30,3 +30,4 @@ symlinkJoin {
     priority = (wayfire.meta.priority or lib.meta.defaultPriority) - 1;
   };
 }
+

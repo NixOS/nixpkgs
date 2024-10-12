@@ -84,3 +84,4 @@ buildPythonApplication {
     mainProgram = "svtplay-dl";
   };
 }
+

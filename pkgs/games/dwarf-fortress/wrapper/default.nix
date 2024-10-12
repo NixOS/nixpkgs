@@ -249,3 +249,4 @@ stdenv.mkDerivation rec {
 
   inherit (dwarf-fortress) meta;
 }
+

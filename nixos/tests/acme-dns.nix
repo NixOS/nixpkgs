@@ -48,3 +48,4 @@ import ./make-test-python.nix ({ ... }: {
     assert txt in machine.succeed(f'dig -t TXT +short @localhost {registration["fulldomain"]}')
   '';
 })
+

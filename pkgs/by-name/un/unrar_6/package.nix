@@ -13,3 +13,4 @@ unrar.overrideAttrs (finalAttrs: _: {
 
   sourceRoot = finalAttrs.src.name;
 })
+

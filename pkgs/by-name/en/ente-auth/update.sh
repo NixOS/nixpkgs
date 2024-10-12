@@ -33,3 +33,4 @@ nix-prefetch-github --rev "$simple_icons_rev" simple-icons simple-icons > "$pkg_
 # Update package version and hash
 echo "Updating package source"
 update-source-version ente-auth "$short_version" --file="$pkg_dir/package.nix"
+

@@ -36,3 +36,4 @@ buildGoModule rec {
     license = with licenses; [ mpl20 ];
   };
 }
+

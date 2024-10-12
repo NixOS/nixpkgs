@@ -32,3 +32,4 @@ rustPlatform.buildRustPackage {
 
   cargoHash = service-cargo-hash;
 }
+

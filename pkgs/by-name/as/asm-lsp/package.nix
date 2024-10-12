@@ -50,3 +50,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.unix;
   };
 }
+

@@ -46,3 +46,4 @@ appimageTools.wrapType2 rec {
     mainProgram = "zettlr";
   };
 }
+

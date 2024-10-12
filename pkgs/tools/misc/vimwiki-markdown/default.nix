@@ -27,3 +27,4 @@ buildPythonApplication rec {
     mainProgram = "vimwiki_markdown";
   };
 }
+

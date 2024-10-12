@@ -52,3 +52,4 @@ qtModule {
     maintainers = with lib.maintainers; [ OPNA2608 ];
   };
 }
+

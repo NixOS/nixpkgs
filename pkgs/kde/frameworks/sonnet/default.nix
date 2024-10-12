@@ -20,3 +20,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "parsetrigrams6";
 }
+

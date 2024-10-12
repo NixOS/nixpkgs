@@ -67,3 +67,4 @@ stdenv.mkDerivation rec {
     fontDirectories = [ freefont_ttf ];
   });
 }
+

@@ -117,3 +117,4 @@ stdenv.mkDerivation rec {
     mainProgram = "roomeqwizard";
   };
 }
+

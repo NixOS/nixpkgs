@@ -44,3 +44,4 @@ buildPythonPackage rec {
     mainProgram = "withings-sync";
   };
 }
+

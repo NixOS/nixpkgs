@@ -136,3 +136,4 @@ in
 (lib.fix toFix) // {
   inherit buildFreshRssExtension;
 }
+

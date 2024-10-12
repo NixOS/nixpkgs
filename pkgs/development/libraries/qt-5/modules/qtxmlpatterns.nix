@@ -5,3 +5,4 @@ qtModule {
   propagatedBuildInputs = [ qtbase qtdeclarative ];
   devTools = [ "bin/xmlpatterns" "bin/xmlpatternsvalidator" ];
 }
+

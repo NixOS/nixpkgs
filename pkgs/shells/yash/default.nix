@@ -26,3 +26,4 @@ stdenv.mkDerivation rec {
 
   passthru.shellPath = "/bin/yash";
 }
+

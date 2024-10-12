@@ -437,3 +437,4 @@ This will give you an executable shell-script that launches your JAR with all th
 ❯ $(nix-build --no-out-link --option tarball-ttl 1 runnable-jar.nix)/bin/maven-demo
 NixOS 😀 is super cool 😃!
 ```
+

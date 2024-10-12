@@ -51,3 +51,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "handlr";
   };
 }
+

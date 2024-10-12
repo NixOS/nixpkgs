@@ -27,3 +27,4 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/utmps/examples
   '';
 }
+

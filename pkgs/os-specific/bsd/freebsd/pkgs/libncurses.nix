@@ -23,3 +23,4 @@ mkDerivation {
     ln -s $out/lib/libncursesw.so.9 $out/lib/libncursesw.so.8
   '';
 }
+

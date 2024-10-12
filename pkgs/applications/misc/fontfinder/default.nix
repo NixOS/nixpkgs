@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fontfinder-gtk";
   };
 }
+

@@ -49,3 +49,4 @@ makeSetupHook {
     inherit (zig.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh
+

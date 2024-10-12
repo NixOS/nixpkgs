@@ -19,3 +19,4 @@
     machine.log(machine.succeed("systemd-analyze security music-assistant.service | grep -v ✓"))
   '';
 }
+

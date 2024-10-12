@@ -906,3 +906,4 @@ stdenv.mkDerivation (finalAttrs: {
   # remove once https://github.com/NixOS/nixpkgs/issues/318674 is addressed properly
   hardeningDisable = [ "zerocallusedregs" ];
 })
+

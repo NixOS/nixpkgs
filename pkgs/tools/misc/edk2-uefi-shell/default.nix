@@ -41,3 +41,4 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })
+

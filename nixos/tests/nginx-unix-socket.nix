@@ -25,3 +25,4 @@ in
     webserver.succeed("curl --fail --silent --unix-socket '${nginxSocketPath}' http://localhost/test | grep '^foo$'")
   '';
 })
+

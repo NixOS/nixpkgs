@@ -70,3 +70,4 @@ buildDotnetModule rec {
     mainProgram = "NetworkMiner";
   };
 }
+

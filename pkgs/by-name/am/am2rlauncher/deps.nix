@@ -41,3 +41,4 @@
   (fetchNuGet { pname = "System.Security.Principal.Windows"; version = "5.0.0"; sha256 = "1mpk7xj76lxgz97a5yg93wi8lj0l8p157a5d50mmjy3gbz1904q8"; })
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "6.0.0"; sha256 = "1wy9pq9vn1bqg5qnv53iqrbx04yzdmjw4x5yyi09y3459vaa1sip"; })
 ]
+

@@ -66,3 +66,4 @@ The following example assumes that
 - Upstream website: <https://dnsmasq.org>
 - Manpage: <https://dnsmasq.org/docs/dnsmasq-man.html>
 - FAQ: <https://dnsmasq.org/docs/FAQ>
+

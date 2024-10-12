@@ -37,3 +37,4 @@ lib.makeScope pkgs.newScope (self:
   libwapcaplet   = callPackage ./libwapcaplet.nix { };
   nsgenbind      = callPackage ./nsgenbind.nix { };
 })
+

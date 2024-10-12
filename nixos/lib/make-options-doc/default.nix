@@ -232,3 +232,4 @@ in rec {
 
   optionsDocBook = throw "optionsDocBook has been removed in 24.05";
 }
+

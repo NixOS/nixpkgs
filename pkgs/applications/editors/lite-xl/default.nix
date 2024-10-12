@@ -46,3 +46,4 @@ stdenv.mkDerivation rec {
     mainProgram = "lite-xl";
   };
 }
+

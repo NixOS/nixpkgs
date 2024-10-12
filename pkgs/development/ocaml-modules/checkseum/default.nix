@@ -38,3 +38,4 @@ buildDunePackage rec {
     mainProgram = "checkseum.checkseum";
   };
 }
+

@@ -26,3 +26,4 @@ do
 done < <(jq -r '.[].browser_download_url' <<<"$theme_archives")
 
 printf '}\n' >> "$dirname/shas.nix"
+

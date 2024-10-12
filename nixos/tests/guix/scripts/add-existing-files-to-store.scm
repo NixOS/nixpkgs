@@ -50,3 +50,4 @@
             (map (lambda (path)
                    (add-and-check-item-to-store store (readlink* path)))
                  (cdr (command-line))))
+

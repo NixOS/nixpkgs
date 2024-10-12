@@ -35,3 +35,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ c0bw3b fab ];
   };
 }
+

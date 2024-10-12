@@ -72,3 +72,4 @@ buildPythonPackage rec {
     mainProgram = "aws-adfs";
   };
 }
+

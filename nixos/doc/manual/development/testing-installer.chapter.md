@@ -16,3 +16,4 @@ To start a login shell in the new NixOS installation in `/mnt`:
 $ nix-build '<nixpkgs>' -A nixos-enter
 # ./result/bin/nixos-enter
 ```
+

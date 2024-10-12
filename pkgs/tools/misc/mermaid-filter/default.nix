@@ -38,3 +38,4 @@ buildNpmPackage rec {
     mainProgram = "mermaid-filter";
   };
 }
+

@@ -54,3 +54,4 @@ buildGoModule rec {
     mainProgram = "static-server";
   };
 }
+

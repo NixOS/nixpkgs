@@ -22,3 +22,4 @@ haskellPackages.mkDerivation {
   license = lib.licenses.mit;
   mainProgram = "lngen";
 }
+

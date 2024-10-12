@@ -28,3 +28,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.t4ccer ];
   };
 }
+

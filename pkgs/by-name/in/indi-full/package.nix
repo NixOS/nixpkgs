@@ -21,3 +21,4 @@ indi-with-drivers.override {
   inherit (indilib) version;
   extraDrivers = drivers;
 }
+

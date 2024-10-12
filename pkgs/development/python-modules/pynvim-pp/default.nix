@@ -29,3 +29,4 @@ buildPythonPackage {
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
+

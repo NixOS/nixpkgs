@@ -36,3 +36,4 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/arcmenu/ArcMenu";
   };
 }
+

@@ -37,3 +37,4 @@ runCommand "inko-test" { } ''
   cat $out | grep -q Hello
   cat $out | grep -q world
 ''
+

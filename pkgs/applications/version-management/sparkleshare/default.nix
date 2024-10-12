@@ -93,3 +93,4 @@ stdenv.mkDerivation rec {
     mainProgram = "sparkleshare";
   };
 }
+

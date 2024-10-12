@@ -63,3 +63,4 @@ stdenv.mkDerivation rec {
     mainProgram = "wofi-pass";
   };
 }
+

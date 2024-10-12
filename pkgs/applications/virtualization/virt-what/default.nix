@@ -18,3 +18,4 @@ stdenv.mkDerivation rec {
     mainProgram = "virt-what";
   };
 }
+

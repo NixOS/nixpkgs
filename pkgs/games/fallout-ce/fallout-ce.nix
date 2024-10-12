@@ -27,3 +27,4 @@ callPackage ./build.nix rec {
     homepage = "https://github.com/alexbatalov/fallout1-ce";
   };
 }
+

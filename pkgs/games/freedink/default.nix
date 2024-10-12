@@ -61,3 +61,4 @@ in stdenv.mkDerivation rec {
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }
+

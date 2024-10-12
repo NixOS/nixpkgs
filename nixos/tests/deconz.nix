@@ -26,3 +26,4 @@ in
     machine.succeed("curl -sfL http://localhost:${toString httpPort}")
   '';
 })
+

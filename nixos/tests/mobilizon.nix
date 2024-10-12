@@ -42,3 +42,4 @@ import ./make-test-python.nix ({ lib, ... }:
       server.succeed("curl --fail https://${mobilizonDomain}/")
     '';
   })
+

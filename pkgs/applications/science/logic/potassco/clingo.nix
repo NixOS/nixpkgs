@@ -24,3 +24,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://github.com/potassco/clingo/releases/";
   };
 }
+

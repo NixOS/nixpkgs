@@ -167,3 +167,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gamescope";
   };
 })
+

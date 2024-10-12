@@ -26,3 +26,4 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgmodule-2.0";
 }
+

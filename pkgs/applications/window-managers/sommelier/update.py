@@ -56,3 +56,4 @@ subprocess.run(['update-source-version', 'sommelier', f'--rev={rev}', version])
 argv = ['nix-instantiate', '--eval', '--json', '-A', 'sommelier.meta.position']
 position = json.loads(subprocess.check_output(argv).decode('utf-8'))
 filename = re.match(r'[^:]*', position)[0]
+

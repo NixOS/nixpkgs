@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     default.succeed("/run/current-system/sw/bin/history list | grep -q foobar")
   '';
 })
+

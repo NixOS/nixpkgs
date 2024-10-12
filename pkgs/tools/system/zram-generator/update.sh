@@ -13,3 +13,4 @@ trap 'rm -rf -- "${tmp}"' EXIT
 git clone --depth 1 --branch "${version}" https://github.com/systemd/zram-generator.git "${tmp}/zram-generator"
 cargo generate-lockfile --manifest-path "${tmp}/zram-generator/Cargo.toml"
 cp "${tmp}/zram-generator/Cargo.lock" "$(dirname "$0")/Cargo.lock"
+

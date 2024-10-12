@@ -69,3 +69,4 @@ trace -n "Building tool.. "
 nix-build https://github.com/NixOS/nixpkgs-vet/tarball/"$toolVersion" -o "$tmp/tool" -A build
 trace "Running nixpkgs-vet.."
 "$tmp/tool/bin/nixpkgs-vet" --base "$tmp/base" "$tmp/merged"
+

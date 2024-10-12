@@ -44,3 +44,4 @@ screen -x weechat/weechat-screen
 ```
 
 *The session name can be changed using [services.weechat.sessionName.](options.html#opt-services.weechat.sessionName)*
+

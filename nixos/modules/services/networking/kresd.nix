@@ -140,3 +140,4 @@ in {
     systemd.services."kresd@".stopIfChanged = false;
   };
 }
+

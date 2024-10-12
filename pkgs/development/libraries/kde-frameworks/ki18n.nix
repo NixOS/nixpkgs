@@ -10,3 +10,4 @@ mkDerivation {
   propagatedNativeBuildInputs = [ gettext python3 ];
   buildInputs = [ qtdeclarative qtscript ];
 }
+

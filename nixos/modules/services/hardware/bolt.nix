@@ -26,3 +26,4 @@ in
     systemd.packages = [ cfg.package ];
   };
 }
+

@@ -8695,3 +8695,4 @@ zulip@0.1.0:
   integrity sha512-zsnsxRN0tcR3Qc6GEPg3t2ZrCoLtERE5VqdjHWxTH7Uq+A2hPSfxWEPKbsntpXHgsmywfDMo+P+IdeOcVdX6HA==
   dependencies:
     request "~2.27.0"
+

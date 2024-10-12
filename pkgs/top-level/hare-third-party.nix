@@ -12,3 +12,4 @@ in
   hare-toml = callPackage ../development/hare-third-party/hare-toml { };
   hare-png = callPackage ../development/hare-third-party/hare-png { };
 })
+

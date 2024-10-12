@@ -26,3 +26,4 @@ runCommand "make-binary-wrapper-test-cross" {
     exit 1
   fi
 ''
+

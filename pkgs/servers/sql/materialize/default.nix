@@ -139,3 +139,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.petrosagg ];
   };
 }
+

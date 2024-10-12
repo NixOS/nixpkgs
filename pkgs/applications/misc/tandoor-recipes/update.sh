@@ -39,3 +39,4 @@ yarn_hash=$(nix hash to-sri --type sha256 "$yarn_hash")
 sed -i -E -e "s#version = \".*\"#version = \"$version\"#" common.nix
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" common.nix
 sed -i -E -e "s#yarnHash = \".*\"#yarnHash = \"$yarn_hash\"#" common.nix
+

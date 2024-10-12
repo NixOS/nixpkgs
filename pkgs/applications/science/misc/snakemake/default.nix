@@ -136,3 +136,4 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
   };
 }
+

@@ -35,3 +35,4 @@ list of previous plugins via `pkgs.krita.binaryPlugins`:
    └── kritaplugins
       └── krita_example.so
 ```
+

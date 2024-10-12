@@ -26,3 +26,4 @@ buildGoModule rec {
     license = licenses.cc0;
   };
 }
+

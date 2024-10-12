@@ -37,3 +37,4 @@ buildPythonPackage rec {
     license = licenses.asl20; # XXX: setup.py lists BSD but git repo has Apache 2.0 LICENSE
   };
 }
+

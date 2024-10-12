@@ -58,3 +58,4 @@ python3Packages.buildPythonApplication rec {
     broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/52658#issuecomment-449565790
   };
 }
+

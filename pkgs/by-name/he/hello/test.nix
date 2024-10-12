@@ -6,3 +6,4 @@ runCommand "hello-test-run" {
   diff -U3 --color=auto <(hello) <(echo 'Hello, world!')
   touch $out
 ''
+

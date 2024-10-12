@@ -27,3 +27,4 @@ buildFishPlugin rec {
     maintainers = with maintainers; [ Scrumplex ];
   };
 }
+

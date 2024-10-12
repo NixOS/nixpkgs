@@ -167,3 +167,4 @@ rustPlatform.buildRustPackage {
     broken = !stdenv.hostPlatform.isx86_64;
   };
 }
+

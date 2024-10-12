@@ -109,3 +109,4 @@ in with pkgs; {
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
   kafka_kraft = makeKafkaTest "kafka_kraft" { kafkaPackage = apacheKafka; mode = "kraft"; };
 }
+

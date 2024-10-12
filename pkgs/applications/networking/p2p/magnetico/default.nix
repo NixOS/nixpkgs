@@ -37,3 +37,4 @@ buildGoModule rec {
     maintainers  = with maintainers; [ rnhmjoj ];
   };
 }
+

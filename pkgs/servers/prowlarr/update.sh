@@ -43,3 +43,4 @@ updateHash $latestVersion aarch64-darwin arm64 osx
 updateHash $latestVersion aarch64-linux arm64 linux
 updateHash $latestVersion x86_64-darwin x64 osx
 updateHash $latestVersion x86_64-linux x64 linux
+

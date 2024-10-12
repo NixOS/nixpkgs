@@ -700,3 +700,4 @@ in
     assert isBuiltByNixpkgsCompiler prevStage.patchelf;
     { inherit (prevStage) config overlays stdenv; })
 ]
+

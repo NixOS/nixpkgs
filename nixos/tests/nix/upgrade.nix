@@ -106,3 +106,4 @@ pkgs.testers.nixosTest {
         machine.succeed("${nixVersions.stable}/bin/nix-collect-garbage")
   '';
 }
+

@@ -45,3 +45,4 @@ buildPythonPackage rec {
     mainProgram = "generate-token";
   };
 }
+

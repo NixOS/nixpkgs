@@ -91,3 +91,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "photoprism";
   };
 })
+

@@ -74,3 +74,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         gui.wait_for_unit("maestral.service", "${user.name}")
     '';
 })
+

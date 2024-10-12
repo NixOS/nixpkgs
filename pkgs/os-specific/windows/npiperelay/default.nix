@@ -21,3 +21,4 @@ buildGoModule rec {
     platforms = lib.platforms.windows;
   };
 }
+

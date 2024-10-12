@@ -48,3 +48,4 @@ rec {
     maintainers = with maintainers; [ fare ];
   };
 }
+

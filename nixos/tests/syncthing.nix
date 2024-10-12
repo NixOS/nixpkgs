@@ -63,3 +63,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     b.wait_for_file("/var/lib/syncthing/foo/a2b")
   '';
 })
+

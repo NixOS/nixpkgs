@@ -88,3 +88,4 @@ mkDerivation rec {
     mainProgram = "calamares";
   };
 }
+

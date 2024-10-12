@@ -46,3 +46,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.pmyjavec ];
   };
 }
+

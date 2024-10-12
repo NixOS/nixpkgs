@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xcpc";
   };
 }
+

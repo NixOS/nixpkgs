@@ -90,3 +90,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "figma-linux";
   };
 })
+

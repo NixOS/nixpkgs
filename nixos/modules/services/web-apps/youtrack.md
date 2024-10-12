@@ -28,3 +28,4 @@ A one-time manual update is required:
 6. Change the data directory location to `/var/lib/youtrack/data/`. The other paths should already be right.
 
 If you migrate a larger YouTrack instance, it might be useful to set `-Dexodus.entityStore.refactoring.forceAll=true` in `services.youtrack.generalParameters` for the first startup of YouTrack 2023.x.
+

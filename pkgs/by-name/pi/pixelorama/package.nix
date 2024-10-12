@@ -102,3 +102,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pixelorama";
   };
 })
+

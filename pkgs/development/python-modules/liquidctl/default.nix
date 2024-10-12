@@ -95,3 +95,4 @@ buildPythonPackage rec {
     mainProgram = "liquidctl";
   };
 }
+

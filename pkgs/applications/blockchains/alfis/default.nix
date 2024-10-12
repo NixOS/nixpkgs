@@ -70,3 +70,4 @@ rustPlatform.buildRustPackage rec {
     broken = withGui && stdenv.hostPlatform.isDarwin;
   };
 }
+

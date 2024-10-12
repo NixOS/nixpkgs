@@ -63,3 +63,4 @@ in
 
   meta.maintainers = with lib.maintainers; [ GaetanLepage ];
 }
+

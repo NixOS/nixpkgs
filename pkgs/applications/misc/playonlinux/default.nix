@@ -149,3 +149,4 @@ in stdenv.mkDerivation {
     mainProgram = "playonlinux";
   };
 }
+

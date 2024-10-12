@@ -14,3 +14,4 @@ mkDerivation {
   description = "Platform information used by GHC and friends";
   license = lib.licenses.bsd3;
 }
+

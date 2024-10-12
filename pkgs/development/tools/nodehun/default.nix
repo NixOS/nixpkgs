@@ -63,3 +63,4 @@ buildNpmPackage {
     maintainers = [ maintainers.thomasjm ];
   };
 }
+

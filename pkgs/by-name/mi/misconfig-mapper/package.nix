@@ -31,3 +31,4 @@ buildGoModule rec {
     mainProgram = "misconfig-mapper";
   };
 }
+

@@ -33,3 +33,4 @@ stdenv.mkDerivation {
     inherit (hareHook.meta) platforms badPlatforms;
   };
 }
+

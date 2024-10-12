@@ -9,3 +9,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [ kcoreaddons kwidgetsaddons qtx11extras ];
 }
+

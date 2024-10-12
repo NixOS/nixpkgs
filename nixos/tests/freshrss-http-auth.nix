@@ -18,3 +18,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert 'Account: testuser' in response, "http_auth method didn't work."
   '';
 })
+

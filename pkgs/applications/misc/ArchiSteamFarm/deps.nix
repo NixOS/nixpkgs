@@ -141,3 +141,4 @@
   (fetchNuGet { pname = "System.Text.Encoding.CodePages"; version = "8.0.0"; hash = "sha256-fjCLQc1PRW0Ix5IZldg0XKv+J1DqPSfu9pjMyNBp7dE="; })
   (fetchNuGet { pname = "System.ValueTuple"; version = "4.5.0"; hash = "sha256-niH6l2fU52vAzuBlwdQMw0OEoRS/7E1w5smBFoqSaAI="; })
 ]
+

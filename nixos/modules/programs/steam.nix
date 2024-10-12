@@ -231,3 +231,4 @@ in {
 
   meta.maintainers = lib.teams.steam.members;
 }
+

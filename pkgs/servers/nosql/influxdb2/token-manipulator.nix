@@ -24,3 +24,4 @@ buildGoModule rec {
     mainProgram = "influxdb2-token-manipulator";
   };
 }
+

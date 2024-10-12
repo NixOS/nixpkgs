@@ -26,3 +26,4 @@ buildGoModule rec {
     mainProgram = "go-cover-treemap";
   };
 }
+

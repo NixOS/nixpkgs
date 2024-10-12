@@ -13,3 +13,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     assert "192.0.2.1" in server.succeed("host example.com localhost")
   '';
 })
+

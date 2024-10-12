@@ -66,3 +66,4 @@ perlPackages.buildPerlPackage rec {
     mainProgram = "awstats";
   };
 }
+

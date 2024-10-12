@@ -8,3 +8,4 @@ options.mkOption {
   example = (import ./manifest.nix { inherit lib; }).cuda_cccl;
   type = types.attrsOf Package.type;
 }
+

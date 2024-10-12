@@ -23,3 +23,4 @@ appimageTools.wrapType2 rec {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
+

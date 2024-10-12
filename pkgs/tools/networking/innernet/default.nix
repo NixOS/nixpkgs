@@ -58,3 +58,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ tomberek _0x4A6F ];
   };
 }
+

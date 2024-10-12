@@ -109,3 +109,4 @@ in
       format.generate "journal-upload.conf" cfg.settings;
   };
 }
+

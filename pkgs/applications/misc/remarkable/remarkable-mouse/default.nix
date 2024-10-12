@@ -22,3 +22,4 @@ buildPythonApplication rec {
     maintainers = [ maintainers.nickhu ];
   };
 }
+

@@ -114,3 +114,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
           client2.succeed('[ `cat test01/first_file` = "bla" ]')
     '';
   })
+

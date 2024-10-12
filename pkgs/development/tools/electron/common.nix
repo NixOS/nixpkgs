@@ -250,3 +250,4 @@ in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     dist = finalAttrs.finalPackage + "/libexec/electron";
   };
 })
+

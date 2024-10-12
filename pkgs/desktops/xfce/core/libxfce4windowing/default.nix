@@ -37,3 +37,4 @@ mkXfceDerivation {
     maintainers = lib.teams.xfce.members;
   };
 }
+

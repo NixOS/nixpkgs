@@ -78,3 +78,4 @@ std::ostream & printStringValue(std::ostream & str, const char * string)
     str << "\"";
     return str;
 }
+

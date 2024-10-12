@@ -54,3 +54,4 @@ nixos-options.md
 ```{=include=} appendix html:into-file=//release-notes.html
 release-notes/release-notes.md
 ```
+

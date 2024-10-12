@@ -57,3 +57,4 @@ stdenv.mkDerivation rec {
     description = "Tools for installing software on the GNOME desktop using PackageKit";
   };
 }
+

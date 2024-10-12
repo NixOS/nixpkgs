@@ -224,3 +224,4 @@ in
     nix.settings = mkIf (!cfg.distributedBuilds) { builders = null; };
   };
 }
+

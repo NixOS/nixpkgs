@@ -14,3 +14,4 @@ stdenvNoCC.mkDerivation {
     cp ${MacOSX-SDK}/usr/lib/libcharset* $out/lib
   '';
 }
+

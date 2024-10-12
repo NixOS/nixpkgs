@@ -30,3 +30,4 @@ in {
       machine.succeed("su - ${testUser} -c 'otd detect'")
     '';
 })
+

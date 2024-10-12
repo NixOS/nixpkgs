@@ -220,3 +220,4 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
 }
 
   ) tests
+

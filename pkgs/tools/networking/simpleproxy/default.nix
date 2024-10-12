@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     mainProgram = "simpleproxy";
   };
 }
+

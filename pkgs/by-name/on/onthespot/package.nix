@@ -84,3 +84,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "onthespot_gui";
   };
 }
+

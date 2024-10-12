@@ -107,3 +107,4 @@ buildDotnetModule rec {
     mainProgram = "osu!";
   };
 }
+

@@ -49,3 +49,4 @@ buildGoModule {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
+

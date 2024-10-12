@@ -103,3 +103,4 @@ if lib.versions.isLe "8.19.0+0.19.3" o.version && o.version != "dev" then
 else
   { propagatedBuildInputs = o.propagatedBuildInputs ++ [ coq-lsp ]; }
 )
+

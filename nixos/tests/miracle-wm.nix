@@ -129,3 +129,4 @@
           machine.wait_until_fails("pgrep alacritty")
     '';
 }
+

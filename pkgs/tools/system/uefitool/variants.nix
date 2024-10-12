@@ -13,3 +13,4 @@ in rec {
     installFiles = [ "UEFITool" "UEFIReplace/UEFIReplace" "UEFIPatch/UEFIPatch" ];
   };
 }
+

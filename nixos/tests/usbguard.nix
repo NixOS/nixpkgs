@@ -60,3 +60,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         machine.fail("usbguard list-devices | grep -E ' block .*QEMU USB HARDDRIVE'")
   '';
 })
+

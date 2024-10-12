@@ -15,3 +15,4 @@ mkKdeDerivation {
 
   excludeDependencies = [ "kirigami" ];
 }
+

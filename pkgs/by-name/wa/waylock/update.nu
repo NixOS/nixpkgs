@@ -6,3 +6,4 @@ update-source-version waylock $latest_tag
 
 http get $"https://codeberg.org/ifreund/waylock/raw/tag/v($latest_tag)/build.zig.zon" | save build.zig.zon
 zon2nix > pkgs/by-name/wa/waylock/build.zig.zon.nix
+

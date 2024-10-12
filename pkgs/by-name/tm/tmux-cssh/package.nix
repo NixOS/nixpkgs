@@ -41,3 +41,4 @@ stdenv.mkDerivation {
     mainProgram = "tmux-cssh";
   };
 }
+

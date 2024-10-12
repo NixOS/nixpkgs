@@ -48,3 +48,4 @@ nixt.mkSuite "LibreOffice Updater"
     in
     "50ed3deb8d9c987516e2687ebb865bca15486c69da79f1b6d74381e43f2ec863" == actual;
 }
+

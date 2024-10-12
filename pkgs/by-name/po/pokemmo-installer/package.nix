@@ -71,3 +71,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "pokemmo-installer";
   };
 })
+

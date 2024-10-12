@@ -9,3 +9,4 @@ latest_tag=`echo $tags | jq -r '.[] | .name' | grep -oP "^tp-smapi/\K.*" | sort 
 
 update-source-version linuxPackages.tp_smapi "$latest_tag"
 ''
+

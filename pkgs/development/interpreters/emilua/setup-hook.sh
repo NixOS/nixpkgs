@@ -15,3 +15,4 @@ toEmiluaPath() {
 if [ -z "${dontAddEmiluaPath:-}" ]; then
     addEnvHooks "$hostOffset" addEmiluaPath
 fi
+

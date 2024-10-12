@@ -22,3 +22,4 @@ To update discourse, do the following:
    commit. No manual fixes that would be overwritten by the
    `./update.py` script should be committed - the script should be
    fixed instead.
+

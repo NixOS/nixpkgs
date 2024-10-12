@@ -34,3 +34,4 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [ patka ];
   };
 }
+

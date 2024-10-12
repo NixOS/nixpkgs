@@ -10,3 +10,4 @@ _tryDpkgDeb() {
     mkdir root
     dpkg-deb --fsys-tarfile "$curSrc" | tar --extract --directory=root
 }
+

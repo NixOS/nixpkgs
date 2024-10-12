@@ -23,3 +23,4 @@ buildDunePackage rec {
     maintainers = [ maintainers.maurer ];
   };
 }
+

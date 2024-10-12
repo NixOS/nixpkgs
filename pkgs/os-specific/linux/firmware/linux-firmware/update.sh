@@ -8,3 +8,4 @@ repo="https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.gi
 revision="$(git ls-remote --refs --tags --sort refname "$repo" | tail -n1 | cut -f2 | cut -d '/' -f3)"
 
 update-source-version linux-firmware "$revision"
+

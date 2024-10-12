@@ -35,3 +35,4 @@ if [ -e @out@/nix-support/libc-ldflags-before ]; then
 fi
 
 export NIX_BINTOOLS_WRAPPER_FLAGS_SET_@suffixSalt@=1
+

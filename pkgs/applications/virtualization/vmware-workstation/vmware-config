@@ -19,3 +19,4 @@ installerDefaults.componentDownloadEnabled = "no"
 installerDefaults.transferVersion = "1"
 acceptOVFEULA = "yes"
 acceptEULA = "yes"
+

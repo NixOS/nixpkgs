@@ -111,3 +111,4 @@ finalAttrs: prevAttrs: {
     maintainers = prevAttrs.meta.maintainers ++ [ maintainers.aidalgol ];
   };
 }
+

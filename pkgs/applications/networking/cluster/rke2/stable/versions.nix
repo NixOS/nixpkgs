@@ -12,3 +12,4 @@
   golangVersion = "go1.22.6";
   eol = "2025-06-28";
 }
+

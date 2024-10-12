@@ -38,3 +38,4 @@ appimageTools.wrapType2 {
     mainProgram = "via";
   };
 }
+

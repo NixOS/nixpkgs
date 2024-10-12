@@ -38,3 +38,4 @@ buildGoModule rec {
     mainProgram = "slides";
   };
 }
+

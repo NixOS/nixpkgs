@@ -78,3 +78,4 @@ flutter.buildFlutterApplication rec {
     mainProgram = "flet";
   };
 }
+

@@ -20,3 +20,4 @@ if [ -z "${libxmlHookDone-}" ]; then
     if [ -z "$XML_CATALOG_FILES" ]; then XML_CATALOG_FILES=" "; fi
     addEnvHooks "$hostOffset" addXMLCatalogs
 fi
+

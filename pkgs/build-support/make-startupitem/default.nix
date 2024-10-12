@@ -42,3 +42,4 @@ stdenv.mkDerivation {
   # put its startup item in there.
   propagatedBuildInputs = [ package ];
 }
+

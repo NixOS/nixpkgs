@@ -36,3 +36,4 @@ in
 
     meta = kakoune.meta // { priority = (kakoune.meta.priority or lib.meta.defaultPriority) - 1; };
   }
+

@@ -61,3 +61,4 @@ in rustPlatform.buildRustPackage rec {
     mainProgram = "rg";
   };
 }
+

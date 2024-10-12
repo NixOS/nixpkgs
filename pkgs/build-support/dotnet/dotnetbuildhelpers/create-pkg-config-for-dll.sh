@@ -21,3 +21,4 @@ Libs: -r:$dllFileName
 EOF
 
 echo "Created $targetPcFile"
+

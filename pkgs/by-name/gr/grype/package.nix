@@ -126,3 +126,4 @@ buildGoModule rec {
     mainProgram = "grype";
   };
 }
+

@@ -14,3 +14,4 @@ lib.addMetaAttrs { mainProgram = "vmagent"; } (
     withVmAgent = true;
   }
 )
+

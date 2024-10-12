@@ -11,3 +11,4 @@ mihomo.overrideAttrs (finalAttrs: previousAttrs: {
     mainProgram = "clash-meta";
   };
 })
+

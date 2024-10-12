@@ -20,3 +20,4 @@ runCommandLocal "install-shell-files--install-completion-name"
     cmp bar $out/share/zsh/site-functions/_foobar
     cmp baz $out/share/fish/vendor_completions.d/baz
   ''
+

@@ -37,3 +37,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "nux";
   };
 }
+

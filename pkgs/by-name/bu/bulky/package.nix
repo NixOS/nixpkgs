@@ -65,3 +65,4 @@ stdenv.mkDerivation rec {
     maintainers = teams.cinnamon.members;
   };
 }
+

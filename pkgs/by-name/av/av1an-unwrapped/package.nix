@@ -62,3 +62,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "av1an";
   };
 }
+

@@ -92,3 +92,4 @@ runCommand "julia-depot" {
     Pkg.Registry.rm("General")
   '
 ''
+

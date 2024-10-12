@@ -26,3 +26,4 @@ faust.wrapWithBuildEnv {
   ];
 
 }
+

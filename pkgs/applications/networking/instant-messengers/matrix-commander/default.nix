@@ -62,3 +62,4 @@ buildPythonApplication rec {
     maintainers = [ maintainers.seb314 ];
   };
 }
+

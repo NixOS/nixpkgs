@@ -50,3 +50,4 @@ function additionalMount {
 cdiGenerate |
   ${mountsToCommands mounts} > $RUNTIME_DIRECTORY/nvidia-container-toolkit.json
 ''
+

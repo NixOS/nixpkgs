@@ -47,3 +47,4 @@ autobump() {
 do_update() {
     [[ "${#sed_exprs[@]}" -eq 0 ]] || sed -i "${sed_exprs[@]}" "$sources_file"
 }
+

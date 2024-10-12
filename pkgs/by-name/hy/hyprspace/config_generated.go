@@ -111,3 +111,4 @@ func (j *Config) UnmarshalJSON(b []byte) error {
 	*j = Config(plain)
 	return nil
 }
+

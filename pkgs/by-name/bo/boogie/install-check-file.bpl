@@ -59,3 +59,4 @@ procedure foo() {
   assert MultisetMinus(MultisetPlus(MultisetEmpty, MultisetSingleton(x)), MultisetSingleton(x)) == MultisetEmpty;
   assert MultisetMinus(MultisetEmpty, MultisetSingleton(x)) == MultisetEmpty;
 }
+

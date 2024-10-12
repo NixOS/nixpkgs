@@ -7,3 +7,4 @@ pkgs.runCommand "diagnostics-sandbox" { } ''
   test -d "$(dirname "$out")/../var/nix"
   touch $out
 ''
+

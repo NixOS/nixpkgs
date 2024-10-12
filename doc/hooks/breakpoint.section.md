@@ -15,3 +15,4 @@ Caution with remote builds
 
 This won’t work with remote builds as the build environment is on a different machine and can’t be accessed by `cntr`. Remote builds can be turned off by setting `--option builders ''` for `nix-build` or `--builders ''` for `nix build`.
 :::
+

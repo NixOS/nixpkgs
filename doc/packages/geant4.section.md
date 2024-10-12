@@ -13,3 +13,4 @@ All of [the Geant4 datasets provided by CERN](https://geant4.web.cern.ch/support
 ### Setup hook {#geant4-datasets-hook}
 
 The hook provided by the packages in `geant4.data` will set an appropriate environment variable in the form of `G4[...]DATA`. For example, for the `G4RadioactiveDecay` dataset, the `G4RADIOACTIVEDATA` environment variable is set to the value expected by Geant4.
+

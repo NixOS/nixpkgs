@@ -66,3 +66,4 @@ substitute {
     mainProgram = "nixos-rebuild";
   };
 }
+

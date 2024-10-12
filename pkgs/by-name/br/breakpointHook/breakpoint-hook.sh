@@ -7,3 +7,4 @@ breakpointHook() {
     sh -c "echo '   cntr attach -t command cntr-${out}'; while true; do sleep 99999999; done"
 }
 failureHooks+=(breakpointHook)
+

@@ -26,3 +26,4 @@ buildGoModule rec {
     maintainers = [ maintainers.enorris ];
   };
 }
+

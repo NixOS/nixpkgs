@@ -4,3 +4,4 @@ import ./generic.nix {
   vendorHash = "sha256-Cpbgn2WHMVKtPrAzuNnXkS1rYvzLwde6oTcKTKW3XHs=";
   patches = [ ];
 }
+

@@ -185,3 +185,4 @@ def assert_permissions(subdirs: dict[str, Accessibility]) -> None:
     for file in absolute_subdirs.keys():
         msg = f'Expected {file} to exist, but it was nowwhere to be found.'
         raise AssertionError(msg)
+

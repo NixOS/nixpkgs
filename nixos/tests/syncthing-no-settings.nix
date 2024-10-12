@@ -16,3 +16,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     a.succeed("systemctl list-unit-files | awk '$1 == \"syncthing-init.service\" {exit 1;}'")
   '';
 })
+

@@ -45,3 +45,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ leo60228 soupglasses ];
   };
 }
+

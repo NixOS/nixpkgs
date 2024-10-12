@@ -78,3 +78,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "Weasis";
   };
 }
+

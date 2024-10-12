@@ -143,3 +143,4 @@ fresh identifier SCHEMA_DIRECTORY = script:python(SCHEMA_ID) { get_schema_direct
 +   schema = g_settings_schema_source_lookup(schema_source, SCHEMA_ID, FALSE);
 +   settings = g_settings_new_full(schema, NULL, PATH);
 +}
+

@@ -58,3 +58,4 @@ rustPlatform.buildRustPackage rec {
     inherit (cargo-tauri.hook.meta) platforms;
   };
 }
+

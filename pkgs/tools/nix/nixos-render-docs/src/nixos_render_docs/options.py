@@ -558,3 +558,4 @@ def run_cli(args: argparse.Namespace) -> None:
         _run_cli_asciidoc(args)
     else:
         raise RuntimeError('format not hooked up', args)
+

@@ -188,3 +188,4 @@ if [[ "$OS_RELEASE_FOUND" = "0" ]]; then
     exit 3
   fi
 fi
+

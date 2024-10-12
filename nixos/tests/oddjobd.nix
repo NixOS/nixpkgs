@@ -21,3 +21,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       assert ('(service="com.redhat.oddjob",object="/com/redhat/oddjob",interface="com.redhat.oddjob",method="listall")' in result)
   '';
 })
+

@@ -41,3 +41,4 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/xbindkeys-config --prefix PATH ":" "${procps}/bin"
   '';
 }
+

@@ -6,3 +6,4 @@ qtModule {
   # cycle is detected in build when adding "dev" "bin" too
   outputs = [ "out" ];
 }
+

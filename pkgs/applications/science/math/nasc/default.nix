@@ -84,3 +84,4 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.parnold_x.nasc";
   };
 }
+

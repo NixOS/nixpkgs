@@ -13,3 +13,4 @@ mkDerivation {
   buildInputs = [ qtbase karchive ];
   outputs = [ "out" "dev" ];
 }
+

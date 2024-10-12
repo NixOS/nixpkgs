@@ -40,3 +40,4 @@ stdenvNoCC.mkDerivation rec {
     priority = 10;
   };
 }
+

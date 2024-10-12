@@ -23,3 +23,4 @@
     services.dbus.packages = [ pkgs.dleyna-renderer ];
   };
 }
+

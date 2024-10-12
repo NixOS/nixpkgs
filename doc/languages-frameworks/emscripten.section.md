@@ -165,3 +165,4 @@ Use `nix-shell -I nixpkgs=/some/dir/nixpkgs -A emscriptenPackages.libz` and from
 5. `configurePhase`
 6. `buildPhase`
 7. ... happy hacking...
+

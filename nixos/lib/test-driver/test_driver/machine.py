@@ -1252,3 +1252,4 @@ class Machine:
         )
         self.connected = False
         self.connect()
+

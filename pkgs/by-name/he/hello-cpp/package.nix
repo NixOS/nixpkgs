@@ -16,3 +16,4 @@ stdenv.mkDerivation {
     mainProgram = "hello-cpp";
   };
 }
+

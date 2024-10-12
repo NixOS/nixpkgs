@@ -118,3 +118,4 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
       maintainers = with lib.maintainers; [ d3vil0p3r ];
     };
   }
+

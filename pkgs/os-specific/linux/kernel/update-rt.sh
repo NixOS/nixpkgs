@@ -78,3 +78,4 @@ update-if-needed() {
 }
 
 return 2>/dev/null || main "$@"
+

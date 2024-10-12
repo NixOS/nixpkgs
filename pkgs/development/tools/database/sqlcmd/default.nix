@@ -54,3 +54,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.ratsclub ];
   };
 }
+

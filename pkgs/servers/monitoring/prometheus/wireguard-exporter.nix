@@ -30,3 +30,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "prometheus_wireguard_exporter";
   };
 }
+

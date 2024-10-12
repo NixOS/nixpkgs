@@ -49,3 +49,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     mainProgram = "qrencode";
   };
 })
+

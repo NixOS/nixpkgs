@@ -22,3 +22,4 @@ qtModule {
   ];
   nativeBuildInputs = [ pkg-config ];
 }
+

@@ -6,3 +6,4 @@
 
   config.foo = lib.mkIf (config.value != null) config.value;
 }
+

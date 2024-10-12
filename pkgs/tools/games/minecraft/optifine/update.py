@@ -58,3 +58,4 @@ print(json.dumps(changes))
 with open(os.path.join(d, 'versions.json'), 'w') as f:
     json.dump(catalogue, f, indent=4)
     f.write('\n')
+

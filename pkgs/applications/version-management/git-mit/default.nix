@@ -47,3 +47,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ figsoda ];
   };
 }
+

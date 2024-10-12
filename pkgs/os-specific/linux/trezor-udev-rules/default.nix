@@ -33,3 +33,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/trezor/trezor-firmware/tree/master/common/udev";
   };
 }
+

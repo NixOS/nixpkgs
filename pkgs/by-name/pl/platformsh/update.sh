@@ -27,3 +27,4 @@ jq -n \
     "linux-amd64": { "hash": $linux_amd64_hash, "url": $linux_amd64_url },
     "linux-arm64": { "hash": $linux_arm64_hash, "url": $linux_arm64_url }
 }' > pkgs/by-name/pl/platformsh/versions.json
+

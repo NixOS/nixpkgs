@@ -147,3 +147,4 @@ in
         got new dependency 1
         got new dependency 2'';
 }
+

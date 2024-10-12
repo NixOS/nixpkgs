@@ -92,3 +92,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ zeorin ];
   };
 }
+

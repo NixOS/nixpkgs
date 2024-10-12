@@ -36,3 +36,4 @@ buildHomeAssistantComponent rec {
     maintainers = with lib.maintainers; [kkoniuszy];
   };
 }
+

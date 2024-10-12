@@ -42,3 +42,4 @@ stdenv.mkDerivation rec {
     inherit (neovim.meta) platforms;
   };
 }
+

@@ -24,3 +24,4 @@ buildGoModule rec {
     "-X github.com/matsuridayo/libneko/neko_common.Version_v2ray=${extraSources.Xray-core.rev}"
   ];
 }
+

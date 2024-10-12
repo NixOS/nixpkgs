@@ -56,3 +56,4 @@ fi
 
 imageid="$(az image show -g "${group}" -n "${img_name}" -o json | jq -r .id)"
 echo "${imageid}"
+

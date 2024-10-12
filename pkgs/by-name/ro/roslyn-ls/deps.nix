@@ -205,3 +205,4 @@
   (fetchNuGet { pname = "System.ValueTuple"; version = "4.5.0"; hash = "sha256-niH6l2fU52vAzuBlwdQMw0OEoRS/7E1w5smBFoqSaAI="; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.valuetuple/4.5.0/system.valuetuple.4.5.0.nupkg"; })
   (fetchNuGet { pname = "System.Windows.Extensions"; version = "8.0.0"; hash = "sha256-aHkz7LtmUDDRS7swQM0i6dDVUytRCMYeA2CfaeVA2Y0="; url = "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/45bacae2-5efb-47c8-91e5-8ec20c22b4f8/nuget/v3/flat2/system.windows.extensions/8.0.0/system.windows.extensions.8.0.0.nupkg"; })
 ]
+

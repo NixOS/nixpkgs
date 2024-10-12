@@ -40,3 +40,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ ratcornu ];
   };
 }
+

@@ -49,3 +49,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "gtksourceview-2.0" ];
   };
 })
+

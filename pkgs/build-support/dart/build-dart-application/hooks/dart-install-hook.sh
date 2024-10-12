@@ -41,3 +41,4 @@ fi
 if [ -z "${dontDartInstallCache-}" ]; then
     postInstallHooks+=(dartInstallCacheHook)
 fi
+

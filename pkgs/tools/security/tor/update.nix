@@ -68,3 +68,4 @@ sha256sum -c "$checksumFile"
 
 update-source-version tor "$version" "$(cut -d ' ' "$checksumFile")"
 ''
+

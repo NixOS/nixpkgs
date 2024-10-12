@@ -96,3 +96,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "tasks";
   };
 }
+

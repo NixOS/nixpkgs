@@ -75,3 +75,4 @@ rec {
     logo64 = sizedLogo "64";
   };
 }
+

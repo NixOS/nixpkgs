@@ -29,3 +29,4 @@ for d in $datasets; do
     sed -i 's/'$d' = "[0-9a-z]\+/'$d' = "'$datasetHash'/g' $fname
     echoerr updated hash for dataset "'$d'"
 done
+

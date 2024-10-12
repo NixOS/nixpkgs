@@ -27,3 +27,4 @@ buildFHSEnv {
 
   meta = sparrow-unwrapped.meta;
 }
+

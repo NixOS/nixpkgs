@@ -65,3 +65,4 @@ runCommand "invisible-watermark-test-${testName}" { nativeBuildInputs = [ invisi
     fi
     touch "$out"
   ''
+

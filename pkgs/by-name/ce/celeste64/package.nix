@@ -85,3 +85,4 @@ buildDotnetModule rec {
     downloadPage = "https://maddymakesgamesinc.itch.io/celeste64";
   };
 }
+

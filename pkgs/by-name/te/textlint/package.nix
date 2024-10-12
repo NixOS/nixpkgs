@@ -144,3 +144,4 @@ buildNpmPackage rec {
     mainProgram = "textlint";
   };
 }
+

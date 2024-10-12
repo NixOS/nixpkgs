@@ -56,3 +56,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         client.succeed("curl -kv server:92/metrics")
   '';
 })
+

@@ -73,3 +73,4 @@ stdenv.mkDerivation {
     downloadPage = "http://support.brother.com/g/b/downloadlist.aspx?c=eu_ot&lang=en&prod=hl1110_us_eu_as&os=128#SelectLanguageType-561_0_1";
   };
 }
+

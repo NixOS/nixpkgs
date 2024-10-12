@@ -25,3 +25,4 @@ in {
     assert json.loads(out)["mollysocket"]["version"] == "${toString pkgs.mollysocket.version}"
   '';
 })
+

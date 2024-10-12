@@ -43,3 +43,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ ivankovnatsky qjoly ];
   };
 }
+

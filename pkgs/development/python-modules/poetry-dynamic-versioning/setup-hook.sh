@@ -6,3 +6,4 @@ version-pretend-hook() {
 if [ -z "${dontBypassPoetryDynamicVersioning-}" ]; then
   preBuildHooks+=(version-pretend-hook)
 fi
+

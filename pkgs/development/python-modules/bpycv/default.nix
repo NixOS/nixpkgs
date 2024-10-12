@@ -65,3 +65,4 @@ buildPythonPackage rec {
     inherit (blender.meta) platforms;
   };
 }
+

@@ -26,3 +26,4 @@ else
     sha256 = "0s2hilqixjmv4y8n67zaq374sgnbscp95lgz5ignp69g3p1vmhwz";
     platforms = lib.platforms.linux;
   }
+

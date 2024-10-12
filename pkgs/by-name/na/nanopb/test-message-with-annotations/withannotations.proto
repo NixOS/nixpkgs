@@ -5,3 +5,4 @@ import "nanopb.proto";
 message WithAnnotations {
   bytes uuid = 1 [(nanopb).max_size = 16, (nanopb).fixed_length = true];
 }
+

@@ -26,3 +26,4 @@ php.buildComposerProject (finalAttrs: {
     maintainers = with maintainers; [ fsagbuya jasonodoom ];
   };
 })
+

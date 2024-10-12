@@ -71,3 +71,4 @@ assert enableQt -> qwt != null;
     maintainers = with maintainers; [ fgaz ];
   };
 }
+

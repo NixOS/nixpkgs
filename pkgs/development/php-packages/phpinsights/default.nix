@@ -28,3 +28,4 @@ php.buildComposerProject (finalAttrs: {
     maintainers = [ ];
   };
 })
+

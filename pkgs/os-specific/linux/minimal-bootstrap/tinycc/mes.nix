@@ -94,3 +94,4 @@ buildTinyccMes {
     "-D CONFIG_TCC_SEMLOCK=0"
   ];
 }
+

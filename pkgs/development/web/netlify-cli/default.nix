@@ -16,3 +16,4 @@ in
     meta.maintainers = with lib.maintainers; [ roberth ];
     meta.mainProgram = "netlify";
   }
+

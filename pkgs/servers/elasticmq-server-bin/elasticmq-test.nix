@@ -45,3 +45,4 @@ in {
   # needed on darwin
   kill $SERVER_PID
 ''
+

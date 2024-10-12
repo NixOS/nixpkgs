@@ -18,3 +18,4 @@ cleanupBuildDir() {
         mv "$i" "$(echo $i | sed s/.tmp_//)"
     done
 }
+

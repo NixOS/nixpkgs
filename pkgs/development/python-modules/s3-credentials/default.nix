@@ -58,3 +58,4 @@ buildPythonPackage rec {
     mainProgram = "s3-credentials";
   };
 }
+

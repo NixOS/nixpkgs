@@ -35,3 +35,4 @@ The Alegreya type system is a "super family", originally intended for literature
     maintainers = with maintainers; [ Thra11 ];
   };
 }
+

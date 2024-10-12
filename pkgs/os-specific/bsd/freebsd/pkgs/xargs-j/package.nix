@@ -7,3 +7,4 @@ substituteAll {
   dir = "bin";
   isExecutable = true;
 }
+

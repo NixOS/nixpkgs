@@ -25,3 +25,4 @@ stdenvNoCC.mkDerivation {
     cp ${generator-out}/bin/nanopb_generator.py $out/bin/
   '';
 }
+

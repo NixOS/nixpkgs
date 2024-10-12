@@ -157,3 +157,4 @@ if __name__ == "__main__":
     with open(Path(__file__).parent / "versions.json", "w") as file:
         json.dump(generate(), file, indent=2)
         file.write("\n")
+

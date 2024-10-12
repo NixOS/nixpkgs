@@ -70,3 +70,4 @@ buildGoModule rec {
     mainProgram = "snippetexpandergui";
   };
 }
+

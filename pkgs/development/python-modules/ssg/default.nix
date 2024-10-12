@@ -55,3 +55,4 @@ buildPythonPackage {
     mainProgram = "ssg-cli";
   };
 }
+

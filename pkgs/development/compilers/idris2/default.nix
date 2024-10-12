@@ -6,3 +6,4 @@
 
   buildIdris = callPackage ./build-idris.nix { };
 }
+

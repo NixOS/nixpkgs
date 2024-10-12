@@ -38,3 +38,4 @@ for pair in \
     sed -Ei.bak '/ *'"$1"' = /{N;N; s@("sha256-)[^;"]+@"'"$hash"'@}' "$bin_file"
     rm "$bin_file.bak"
 done
+

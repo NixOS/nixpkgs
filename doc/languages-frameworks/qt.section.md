@@ -79,3 +79,4 @@ stdenv.mkDerivation {
 This means that scripts won't be automatically wrapped so you'll need to manually wrap them as previously mentioned.
 An example of when you'd always need to do this is with Python applications that use PyQt.
 :::
+

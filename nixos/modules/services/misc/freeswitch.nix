@@ -94,3 +94,4 @@ in {
     environment.systemPackages = [ pkg ];
   };
 }
+

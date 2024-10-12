@@ -48,3 +48,4 @@ buildNpmPackage rec {
     mainProgram = "yarn-lock-converter";
   };
 }
+

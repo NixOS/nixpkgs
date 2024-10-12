@@ -6,3 +6,4 @@ ETCDIR=/etc/vmware
 . $ETCDIR/bootstrap
 
 exec "$LIBDIR"/vmware/bin/vmware-zenity --error --text "Reboot is required to load VMware kernel modules (make sure that 'virtualisation.vmware.host.enable' is enabled)"
+

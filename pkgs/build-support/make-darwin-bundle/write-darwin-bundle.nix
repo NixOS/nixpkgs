@@ -45,3 +45,4 @@ EOF
       ln -s "$binary" "$bundleExecutable"
     fi
 ''
+

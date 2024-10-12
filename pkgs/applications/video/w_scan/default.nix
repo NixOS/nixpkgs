@@ -23,3 +23,4 @@ stdenv.mkDerivation rec {
     mainProgram = "w_scan";
   };
 }
+

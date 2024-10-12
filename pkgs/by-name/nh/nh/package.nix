@@ -59,3 +59,4 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ drupol viperML ];
   };
 }
+

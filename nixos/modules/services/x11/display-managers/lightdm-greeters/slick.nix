@@ -147,3 +147,4 @@ in
     environment.etc."lightdm/slick-greeter.conf".source = slickGreeterConf;
   };
 }
+

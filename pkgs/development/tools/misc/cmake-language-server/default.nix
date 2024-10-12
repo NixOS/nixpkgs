@@ -70,3 +70,4 @@ buildPythonApplication rec {
     mainProgram = "cmake-language-server";
   };
 }
+

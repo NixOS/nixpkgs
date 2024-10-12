@@ -41,3 +41,4 @@ deps_hash=$(nix hash to-sri --type sha256 "$deps_hash")
 sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" default.nix
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" default.nix
 sed -i -E -e "s#npmDepsHash = \".*\"#npmDepsHash = \"$deps_hash\"#" default.nix
+

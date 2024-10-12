@@ -85,3 +85,4 @@ in
   };
   config.systemd.services = lib.mapAttrs' mkSystemdService config.services.gitwatch;
 }
+

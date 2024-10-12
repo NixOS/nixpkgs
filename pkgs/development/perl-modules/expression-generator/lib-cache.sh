@@ -16,3 +16,4 @@ cached_output () {
 
     cat "cache-${ext//./-}/${basename}.${ext}";
 }
+

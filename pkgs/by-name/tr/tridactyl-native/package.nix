@@ -28,3 +28,4 @@ buildNimPackage {
     maintainers = with maintainers; [ timokau dit7ya kiike ];
   };
 }
+

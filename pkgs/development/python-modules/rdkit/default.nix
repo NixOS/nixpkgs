@@ -159,3 +159,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
   };
 }
+

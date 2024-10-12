@@ -3,3 +3,4 @@ import ./generic.nix {
   minorVersion = "6";
   sourceSha256 = "sha256-BvyNScTlb0mMQPyzilY+2NTsMTWNAQHomI8LtNU53RI=";
 }
+

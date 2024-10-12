@@ -31,3 +31,4 @@ mkHyprlandPlugin hyprland rec {
     broken = true; # Doesn't work after Hyprland v0.41.2 https://gitee.com/DreamMaoMao/hycov/issues/IANYC8#note_31512295_link
   };
 }
+

@@ -76,3 +76,4 @@ stdenv.mkDerivation rec {
     mainProgram = "spatialite_gui";
   };
 }
+

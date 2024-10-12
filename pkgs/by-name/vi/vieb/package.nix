@@ -63,3 +63,4 @@ buildNpmPackage rec {
     license = licenses.gpl3Plus;
   };
 }
+

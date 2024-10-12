@@ -62,3 +62,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ zendo ratcornu ];
   };
 }
+

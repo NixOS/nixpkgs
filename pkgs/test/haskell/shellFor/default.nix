@@ -55,3 +55,4 @@
       inherit (cabal-install.meta) platforms;
     };
 })
+

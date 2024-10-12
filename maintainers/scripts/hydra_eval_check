@@ -11,3 +11,4 @@ hydra_eval_jobs \
   --arg officialRelease false \
   --arg nixpkgs "{ outPath = builtins.storePath ./. ; rev = 1234; }" \
   $@
+

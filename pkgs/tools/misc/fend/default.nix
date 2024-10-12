@@ -89,3 +89,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fend";
   };
 }
+

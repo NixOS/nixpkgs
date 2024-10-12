@@ -23,3 +23,4 @@ stdenv.mkDerivation rec {
     mainProgram = "streamripper";
   };
 }
+

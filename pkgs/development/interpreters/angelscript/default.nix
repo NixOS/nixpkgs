@@ -37,3 +37,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.angelcode.com/angelscript/";
   };
 }
+

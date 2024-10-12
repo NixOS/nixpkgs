@@ -50,3 +50,4 @@ buildDunePackage {
     description = "CoHTTP client with its HTTP/AF implementation";
   };
 }
+

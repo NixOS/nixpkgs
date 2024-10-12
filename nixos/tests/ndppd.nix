@@ -58,3 +58,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     upstream.wait_until_succeeds("ping -c5 fd42::2")
   '';
 })
+

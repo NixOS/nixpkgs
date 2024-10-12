@@ -36,3 +36,4 @@ sed -i "s/version = \".*\"/version = \"$ZROK_VER\"/" "$NIX_DRV"
 replace_sha "x86_64-linux" "$ZROK_LINUX_X64_SHA256"
 replace_sha "aarch64-linux" "$ZROK_LINUX_AARCH64_SHA256"
 replace_sha "armv7l-linux" "$ZROK_LINUX_ARMV7L_SHA256"
+

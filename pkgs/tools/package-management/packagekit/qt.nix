@@ -26,3 +26,4 @@ in stdenv.mkDerivation rec {
     description = "System to facilitate installing and updating packages - Qt";
   };
 }
+

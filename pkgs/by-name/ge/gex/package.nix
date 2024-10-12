@@ -59,3 +59,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "gex";
   };
 }
+

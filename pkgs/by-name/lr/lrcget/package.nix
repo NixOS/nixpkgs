@@ -116,3 +116,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with lib.platforms; unix ++ windows;
   };
 }
+

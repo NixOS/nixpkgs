@@ -12,3 +12,4 @@ makeSetupHook {
     stripNondeterminism = strip-nondeterminism;
   };
 } ./nuget-package-hook.sh
+

@@ -104,3 +104,4 @@ if (!sha256Sums.x86_64 || !sha256Sums.aarch64) {
     process.exit(1);
 }
 updateFile(newVersion, sha256Sums, currentFile);
+

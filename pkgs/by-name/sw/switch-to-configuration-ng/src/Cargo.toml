@@ -19,3 +19,4 @@ syslog = "6.1.1"
 
 [build-dependencies]
 dbus-codegen = "0.11.0"
+

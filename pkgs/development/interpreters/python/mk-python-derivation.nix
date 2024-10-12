@@ -343,3 +343,4 @@ in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")
   passthru
   self
+

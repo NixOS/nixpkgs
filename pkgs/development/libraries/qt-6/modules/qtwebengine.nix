@@ -329,3 +329,4 @@ qtModule {
     broken = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "12";
   };
 }
+

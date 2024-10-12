@@ -284,3 +284,4 @@
   (fetchNuGet { pname = "System.Xml.XPath.XDocument"; version = "4.3.0"; sha256 = "1wxckyb7n1pi433xzz0qcwcbl1swpra64065mbwwi8dhdc4kiabn"; })
   (fetchNuGet { pname = "YamlDotNet"; version = "13.1.1"; sha256 = "1jwc9a4p08j0nhlw850v0x31bra13ans9zrklv4nh41zd2h4rszg"; })
 ]
+

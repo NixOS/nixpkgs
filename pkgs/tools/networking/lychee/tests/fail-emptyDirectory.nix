@@ -26,3 +26,4 @@ in
     grep 'empty-directory/foo.*Cannot find file' $failure/testBuildFailure.log >/dev/null
     touch $out
   ''
+

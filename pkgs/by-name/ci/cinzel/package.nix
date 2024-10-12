@@ -37,3 +37,4 @@ stdenvNoCC.mkDerivation {
     maintainers = [ lib.maintainers.marijanp ];
   };
 }
+

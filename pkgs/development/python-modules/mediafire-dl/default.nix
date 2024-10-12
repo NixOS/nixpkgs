@@ -34,3 +34,4 @@ buildPythonPackage {
     mainProgram = "mediafire-dl";
   };
 }
+

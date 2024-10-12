@@ -59,3 +59,4 @@ stdenv.mkDerivation {
 
   inherit (mate-panel.meta);
 }
+

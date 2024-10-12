@@ -19,3 +19,4 @@ recurseIntoAttrs {
 
   frontend = callPackage ./frontend.nix { inherit src version; };
 }
+

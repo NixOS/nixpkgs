@@ -52,3 +52,4 @@ buildNpmPackage {
     mainProgram = "single-file";
   };
 }
+

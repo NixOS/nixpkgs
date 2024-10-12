@@ -19,3 +19,4 @@ if [ -z "${dontUseEggInstall-}" ] && [ -z "${installPhase-}" ]; then
     echo "Using eggInstallPhase"
     installPhase=eggInstallPhase
 fi
+

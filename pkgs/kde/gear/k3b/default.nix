@@ -68,3 +68,4 @@ mkKdeDerivation {
 
   meta.mainProgram = "k3b";
 }
+

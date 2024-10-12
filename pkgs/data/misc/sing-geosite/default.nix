@@ -49,3 +49,4 @@ buildGoModule {
     maintainers = with maintainers; [ linsui ];
   };
 }
+

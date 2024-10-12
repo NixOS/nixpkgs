@@ -20,3 +20,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     server.succeed("systemctl reload lighttpd")
   '';
 })
+

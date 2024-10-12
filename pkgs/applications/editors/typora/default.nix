@@ -101,3 +101,4 @@ in stdenv.mkDerivation {
     mainProgram = "typora";
   };
 }
+

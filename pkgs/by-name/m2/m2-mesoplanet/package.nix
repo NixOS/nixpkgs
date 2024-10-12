@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "M2-Mesoplanet";
   };
 })
+

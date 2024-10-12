@@ -50,3 +50,4 @@ buildPythonApplication rec {
     mainProgram = "plex-mpv-shim";
   };
 }
+

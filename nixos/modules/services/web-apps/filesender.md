@@ -47,3 +47,4 @@ Minimal working instance of FileSender that uses password-authentication would l
 ::: {.warning}
 Example above uses hardcoded clear-text password, in production you should use other authentication method like LDAP. You can check supported authentication methods [in SimpleSAMLphp documentation](https://simplesamlphp.org/docs/stable/simplesamlphp-idp.html).
 :::
+

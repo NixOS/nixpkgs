@@ -103,3 +103,4 @@ in
       mainProgram = "squirreldisk";
     };
   }
+

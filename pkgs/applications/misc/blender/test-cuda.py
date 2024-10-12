@@ -6,3 +6,4 @@ ids = [d.id for d in devices]
 
 assert any("CUDA" in i for i in ids), f"CUDA not present in {ids}"
 print("CUDA is available")
+

@@ -12,3 +12,4 @@ with ocamlPackages; buildDunePackage {
     mainProgram = "msat";
   };
 }
+

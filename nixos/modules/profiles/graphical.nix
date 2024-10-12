@@ -16,3 +16,4 @@
 
   environment.systemPackages = [ pkgs.mesa-demos pkgs.firefox ];
 }
+

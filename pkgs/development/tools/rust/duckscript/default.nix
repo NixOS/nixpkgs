@@ -33,3 +33,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "duck";
   };
 }
+

@@ -14,3 +14,4 @@ bundlerApp rec {
     maintainers = with maintainers; [ fabianhjr ];
   };
 }
+

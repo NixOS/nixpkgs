@@ -24,3 +24,4 @@ mkCoqDerivation {
     license = lib.licenses.bsd3;
   };
 }
+

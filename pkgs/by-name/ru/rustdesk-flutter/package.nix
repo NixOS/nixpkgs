@@ -247,3 +247,4 @@ flutter319.buildFlutterApplication rec {
     platforms = platforms.linux; # should work on darwin as well but I have no machine to test with
   };
 }
+

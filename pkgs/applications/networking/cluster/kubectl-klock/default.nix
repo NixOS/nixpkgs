@@ -27,3 +27,4 @@ buildGoModule rec {
     maintainers = [ maintainers.scm2342 ];
   };
 }
+

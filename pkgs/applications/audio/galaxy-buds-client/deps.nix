@@ -236,3 +236,4 @@
   (fetchNuGet { pname = "Tmds.DBus"; version = "0.9.1"; sha256 = "095vinsbb9pbphbhh7x7rxvs8a3b9w1nnz7gxn9bw5is01qnhgdm"; })
   (fetchNuGet { pname = "Trinet.Core.IO.Ntfs"; version = "4.1.1"; sha256 = "0a30xjmxjr6l8fdjivy70zsxk9p6qlgjs3g8h1q26jn40hpjbswr"; })
 ]
+

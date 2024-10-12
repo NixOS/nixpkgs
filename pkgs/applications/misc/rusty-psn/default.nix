@@ -93,3 +93,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rusty-psn";
   };
 }
+

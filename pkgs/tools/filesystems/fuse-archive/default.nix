@@ -43,3 +43,4 @@ stdenv.mkDerivation rec {
 
   inherit (fuse.meta) platforms;
 }
+

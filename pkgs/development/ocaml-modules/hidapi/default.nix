@@ -31,3 +31,4 @@ buildDunePackage rec {
     mainProgram = "ocaml-hid-enumerate";
   };
 }
+

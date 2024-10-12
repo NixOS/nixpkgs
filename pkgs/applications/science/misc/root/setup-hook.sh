@@ -17,3 +17,4 @@ addRootIncludePath() {
 }
 
 addEnvHooks "$targetOffset" addRootIncludePath
+

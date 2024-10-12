@@ -6,3 +6,4 @@ addNetBSDInstallMakeFlags() {
 }
 
 preConfigureHooks+=(addNetBSDInstallMakeFlags)
+

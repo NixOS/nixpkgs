@@ -30,3 +30,4 @@ buildGo123Module {
     maintainers = with maintainers; [ phaer ];
   };
 }
+

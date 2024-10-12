@@ -25,3 +25,4 @@
     maintainers = with maintainers; [ fare ];
   };
 }
+

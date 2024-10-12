@@ -28,3 +28,4 @@ stdenv.mkDerivation rec {
     homepage = "https://page.mi.fu-berlin.de/lex/leo3/";
   };
 }
+

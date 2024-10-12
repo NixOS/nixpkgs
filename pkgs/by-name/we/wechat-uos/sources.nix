@@ -9,3 +9,4 @@
   arm64_hash = "sha256-5KA4ekhVdXoin/7VhuMbG8XIlx0w7vHAedZ1fnBOBYo=";
   loongarch64_hash = "sha256-kMMnb9jjOOtQFivLDu+aQctVMYeFHQ1fNg49AQE4yLk=";
 }
+

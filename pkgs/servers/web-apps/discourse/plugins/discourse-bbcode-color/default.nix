@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Support BBCode color tags";
   };
 }
+

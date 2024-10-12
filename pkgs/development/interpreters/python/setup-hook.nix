@@ -14,3 +14,4 @@ in runCommand "python-setup-hook.sh" {
   substituteAllInPlace hook.sh
   mv hook.sh $out
 ''
+

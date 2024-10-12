@@ -35,3 +35,4 @@ buildGoModule {
     maintainers = with maintainers; [ cole-h ];
   };
 }
+

@@ -98,3 +98,4 @@ stdenv.mkDerivation (finalAttrs: {
     broken = enableDiscordRpc; # Some obscure `ld` error
   };
 })
+

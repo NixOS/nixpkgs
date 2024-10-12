@@ -56,3 +56,4 @@ in
         config.environment.wordlist.lists;
   };
 }
+

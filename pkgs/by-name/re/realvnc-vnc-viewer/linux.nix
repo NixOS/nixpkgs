@@ -44,3 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = meta // { mainProgram = "vncviewer"; };
 })
+

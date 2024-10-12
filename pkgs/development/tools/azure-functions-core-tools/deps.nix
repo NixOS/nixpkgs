@@ -671,3 +671,4 @@
   (fetchNuGet { pname = "YamlDotNet"; version = "6.0.0"; sha256 = "15p23jw0cw7y9lij8n6iiyh85rl2plr2z4clnxjgdh2iz7783v51"; })
   (fetchNuGet { pname = "Yarp.ReverseProxy"; version = "2.0.1"; sha256 = "1bgf4wxn4q64byxs0nwzafan8lj342ffma19gpsxj4yzarad5h8x"; })
 ]
+

@@ -67,3 +67,4 @@ in
     environment.systemPackages = [ exwm-emacs ];
   };
 }
+

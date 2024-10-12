@@ -66,3 +66,4 @@ in symlinkJoin rec {
 
   inherit (sway) meta;
 }
+

@@ -56,3 +56,4 @@ buildOctavePackage rec {
     # dolfin needs to be its own stand-alone library for the last tests to pass.
   };
 }
+

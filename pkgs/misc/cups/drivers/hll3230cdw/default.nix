@@ -74,3 +74,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://support.brother.com/g/b/downloadend.aspx?c=us&lang=en&prod=hll3230cdw_us_eu_as&os=128&dlid=dlf103925_000&flang=4&type3=10283";
   };
 }
+

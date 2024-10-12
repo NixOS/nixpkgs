@@ -157,3 +157,4 @@ in
     users.groups.minio.gid = config.ids.uids.minio;
   };
 }
+

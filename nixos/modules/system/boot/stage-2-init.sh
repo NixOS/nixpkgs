@@ -137,3 +137,4 @@ if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then
     echo "starting systemd..."
     exec @systemdExecutable@ "$@"
 fi
+

@@ -29,3 +29,4 @@ mkKdeDerivation rec {
     lgpl2Plus
   ];
 }
+

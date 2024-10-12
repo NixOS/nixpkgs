@@ -68,3 +68,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "msfconsole";
   };
 }
+

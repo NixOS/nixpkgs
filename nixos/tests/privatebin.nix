@@ -19,3 +19,4 @@
     dataImporter.succeed("curl -fvvv -Ls http://localhost/ | grep 'PrivateBin'")
   '';
 }
+

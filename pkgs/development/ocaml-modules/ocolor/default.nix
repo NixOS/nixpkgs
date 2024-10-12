@@ -28,3 +28,4 @@ buildDunePackage rec {
     homepage = "https://github.com/marc-chevalier/ocolor";
   };
 }
+

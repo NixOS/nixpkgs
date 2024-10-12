@@ -13,3 +13,4 @@ mkKdeDerivation {
   ];
   extraNativeBuildInputs = [ shared-mime-info ];
 }
+

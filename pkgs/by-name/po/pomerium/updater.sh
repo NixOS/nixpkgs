@@ -21,3 +21,4 @@ rm -f yarn.lock
 
 popd
 nix-update pomerium --version $version
+

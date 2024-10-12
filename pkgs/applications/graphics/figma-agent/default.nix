@@ -43,3 +43,4 @@ buildRustPackage {
     mainProgram = "figma-agent";
   };
 }
+

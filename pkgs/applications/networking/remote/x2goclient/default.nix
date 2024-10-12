@@ -67,3 +67,4 @@ qt5.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
+

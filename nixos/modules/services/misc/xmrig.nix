@@ -70,3 +70,4 @@ with lib;
     maintainers = with maintainers; [ ratsclub ];
   };
 }
+

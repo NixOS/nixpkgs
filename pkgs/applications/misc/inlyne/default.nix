@@ -72,3 +72,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "inlyne";
   };
 }
+

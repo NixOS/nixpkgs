@@ -45,3 +45,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "This package contains the file manager emblem icons for Insync file manager extensions";
   };
 })
+

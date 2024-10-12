@@ -146,3 +146,4 @@ patchShebangsAuto () {
         fi
     fi
 }
+

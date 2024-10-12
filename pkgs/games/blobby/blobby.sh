@@ -8,3 +8,4 @@ test -d ~/.blobby || {
 }
 
 exec @out@/bin/blobby.bin "$@"
+

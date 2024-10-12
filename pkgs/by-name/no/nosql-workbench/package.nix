@@ -98,3 +98,4 @@ else
             --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=nosql-workbench'
       '';
   }
+

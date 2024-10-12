@@ -154,3 +154,4 @@ buildFHSEnv {
   '';
   passthru.updateScript = ./update.sh;
 }
+

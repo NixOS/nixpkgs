@@ -7,3 +7,4 @@ exemptLabels:
 staleLabel: "2.status: stale"
 markComment: false
 closeComment: false
+

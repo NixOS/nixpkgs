@@ -318,3 +318,4 @@ if (__name__ == '__main__'):
 
    wnd.dict_generate(open(options.oi, 'w'),open(options.od, 'w'))
    print('All done.')
+

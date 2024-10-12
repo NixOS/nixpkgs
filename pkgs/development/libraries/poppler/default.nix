@@ -176,3 +176,4 @@ stdenv.mkDerivation (finalAttrs: rec {
     maintainers = with maintainers; [ ttuegel ] ++ teams.freedesktop.members;
   };
 })
+

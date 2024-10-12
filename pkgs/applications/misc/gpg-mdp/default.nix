@@ -42,3 +42,4 @@ in stdenv.mkDerivation {
     ln -s $out/share/man/man1/mdp.1.gz $out/share/man/man1/gpg-mdp.1.gz
   '';
 }
+

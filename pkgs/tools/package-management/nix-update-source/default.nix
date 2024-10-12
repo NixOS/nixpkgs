@@ -63,3 +63,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "nix-update-source";
   };
 }
+

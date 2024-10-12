@@ -97,3 +97,4 @@ in buildGoModule rec {
     mainProgram = "gitea";
   };
 }
+

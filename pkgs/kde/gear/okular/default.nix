@@ -29,3 +29,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "okular";
 }
+

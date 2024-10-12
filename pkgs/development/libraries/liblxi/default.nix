@@ -44,3 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.vq ];
   };
 })
+

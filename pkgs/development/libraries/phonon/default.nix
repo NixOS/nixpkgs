@@ -89,3 +89,4 @@ stdenv.mkDerivation rec {
         -e "/^exec_prefix=/ c exec_prefix=''${!outputBin}/bin"
   '';
 }
+

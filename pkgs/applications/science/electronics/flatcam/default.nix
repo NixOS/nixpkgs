@@ -102,3 +102,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ trepetti ];
   };
 }
+

@@ -44,3 +44,4 @@ buildMongoDB {
     inherit (nixosTests) mongodb;
   };
 }
+

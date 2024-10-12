@@ -32,3 +32,4 @@ module_name="$1";
 module_basename="${module_name//::/-}";
 
 cached_output print_expression "$module_basename" "$module_name" "nix";
+

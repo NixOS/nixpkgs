@@ -30,3 +30,4 @@ runCommand "SDKs" {} ''
 
   ln -s $sdk $out/${xcodePlatform}.sdk
 ''
+

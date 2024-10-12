@@ -15,3 +15,4 @@ mkDiscoursePlugin {
     description = "Find and filter knowledge base topics";
   };
 }
+

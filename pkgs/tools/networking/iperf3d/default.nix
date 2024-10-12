@@ -27,3 +27,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
   };
 }
+

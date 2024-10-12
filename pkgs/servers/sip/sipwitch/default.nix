@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     broken = true; # Require libexosip2 < 5.0.0 which is vulnerable to CVE-2014-10375.
   };
 }
+

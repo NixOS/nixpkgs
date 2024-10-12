@@ -64,3 +64,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.all;
   };
 }
+

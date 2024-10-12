@@ -51,3 +51,4 @@ buildGoModule rec {
     mainProgram = "docker-credential-osxkeychain";
   };
 }
+

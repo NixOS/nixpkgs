@@ -19,3 +19,4 @@ if [ "$RESULT_PATH_FROM_UNPATCHED" != "$RESULT_PATH_FROM_PATCHED" ]; then
     echo "Result path mismatched: $UNPATCHED_SOURCE_FILE ($RESULT_PATH_FROM_UNPATCHED) and $PATCHED_SOURCE_FILE ($RESULT_PATH_FROM_PATCHED)" > /dev/stderr
     exit 1
 fi
+

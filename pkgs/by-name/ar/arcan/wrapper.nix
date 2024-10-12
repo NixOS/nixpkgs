@@ -27,3 +27,4 @@ symlinkJoin rec {
 # TODO: set ARCAN_STATEBASEPATH to $HOME/.arcan/resources/savestates/ - possibly
 # via a suitable script
 # TODO: set ARCAN_FONTPATH to a set of default-but-configurable fontset
+

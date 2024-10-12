@@ -36,3 +36,4 @@ buildBazelPackage rec {
     maintainers = [ ];
   };
 }
+

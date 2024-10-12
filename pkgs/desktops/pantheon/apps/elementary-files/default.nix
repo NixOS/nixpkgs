@@ -76,3 +76,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.elementary.files";
   };
 }
+

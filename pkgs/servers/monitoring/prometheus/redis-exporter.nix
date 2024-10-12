@@ -32,3 +32,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ eskytthe srhb ma27 ];
   };
 }
+

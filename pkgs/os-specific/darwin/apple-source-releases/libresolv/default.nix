@@ -50,3 +50,4 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) {
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';
 }
+

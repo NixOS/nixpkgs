@@ -10,3 +10,4 @@ target_compile_options(saxpy PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
                                      --expt-relaxed-constexpr>)
 
 install(TARGETS saxpy)
+

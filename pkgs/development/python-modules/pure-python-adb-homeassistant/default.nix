@@ -26,3 +26,4 @@ buildPythonPackage rec {
     maintainers = [ maintainers.makefu ];
   };
 }
+

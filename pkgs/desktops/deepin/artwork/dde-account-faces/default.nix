@@ -28,3 +28,4 @@ stdenvNoCC.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
+

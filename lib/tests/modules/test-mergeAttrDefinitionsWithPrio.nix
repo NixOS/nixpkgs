@@ -19,3 +19,4 @@ in
     assert defs.force.highestPrio == (lib.mkForce (assertLazy __curPos)).priority;
     true;
 }
+

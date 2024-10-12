@@ -79,3 +79,4 @@ buildGoModule rec {
     mainProgram = "blockbook";
   };
 }
+

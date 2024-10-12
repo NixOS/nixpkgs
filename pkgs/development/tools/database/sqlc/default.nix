@@ -27,3 +27,4 @@ buildGoModule {
     maintainers = [ lib.maintainers.adisbladis ];
   };
 }
+

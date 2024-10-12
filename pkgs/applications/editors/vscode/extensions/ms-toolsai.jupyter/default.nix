@@ -45,3 +45,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.jraygauthier ];
   };
 }
+

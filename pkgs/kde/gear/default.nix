@@ -251,3 +251,4 @@
   yakuake = callPackage ./yakuake { };
   zanshin = callPackage ./zanshin { };
 }
+

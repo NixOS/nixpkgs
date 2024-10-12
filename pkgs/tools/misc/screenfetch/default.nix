@@ -61,3 +61,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "screenfetch";
   };
 }
+

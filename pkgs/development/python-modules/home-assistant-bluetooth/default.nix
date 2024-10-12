@@ -59,3 +59,4 @@ buildPythonPackage rec {
     maintainers = teams.home-assistant.members;
   };
 }
+

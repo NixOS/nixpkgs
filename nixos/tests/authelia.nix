@@ -167,3 +167,4 @@ import ./make-test-python.nix ({ lib, ... }: {
           authelia.succeed("curl --insecure -sSf -u 'bob:password' -H Host:static-basic-auth.example.com https://authelia:443/")
   '';
 })
+

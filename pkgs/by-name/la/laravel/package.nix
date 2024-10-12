@@ -34,3 +34,4 @@ php.buildComposerProject (finalAttrs: {
     maintainers = with lib.maintainers; [ heisfer ];
   };
 })
+

@@ -27,3 +27,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
       assert '<title>ttyd - Terminal</title>' in response, "Page didn't load successfully"
   '';
 })
+

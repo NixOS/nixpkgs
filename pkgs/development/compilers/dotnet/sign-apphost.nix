@@ -10,3 +10,4 @@ substituteAll {
   src = ./sign-apphost.proj;
   codesign = "${sigtool}/bin/codesign";
 }
+

@@ -10,3 +10,4 @@ version="$(curl -Ls https://fedorapeople.org/groups/virt/virtio-win/repo/latest/
         tail -n1)"
 
 update-source-version virtio-win "$version"
+

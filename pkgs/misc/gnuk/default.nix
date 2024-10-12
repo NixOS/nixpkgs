@@ -9,3 +9,4 @@ callPackage ./generic.nix (args // {
     sha256 = "16wa3xsaq4r8caw6c24hnv4j78bklacix4in2y66j35h68ggr3j1";
   };
 })
+

@@ -64,3 +64,4 @@ buildPythonPackage {
   pythonImportsCheck = [ "tblite" "tblite.interface" ];
   mesonFlags = [ "-Dpython=true" ];
 }
+

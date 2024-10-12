@@ -56,3 +56,4 @@ qtModule {
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin
     "-framework AudioToolbox";
 }
+

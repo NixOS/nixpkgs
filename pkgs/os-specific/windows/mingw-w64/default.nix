@@ -24,3 +24,4 @@ stdenv.mkDerivation {
   buildInputs = [ windows.mingw_w64_headers ];
   hardeningDisable = [ "stackprotector" "fortify" ];
 }
+

@@ -43,3 +43,4 @@ in appimageTools.wrapType2 {
   };
 
 }
+

@@ -178,3 +178,4 @@ The following snippet can be used to configure Kime:
   };
 }
 ```
+

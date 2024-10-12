@@ -12,3 +12,4 @@
     };
   config.foo.bar = "ok";
 }
+

@@ -21,3 +21,4 @@
     mvnDeps = ./idea_maven_artefacts.json;
   };
 }
+

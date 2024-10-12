@@ -29,3 +29,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.raroh73 ];
   };
 }
+

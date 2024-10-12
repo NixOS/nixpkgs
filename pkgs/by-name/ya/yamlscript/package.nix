@@ -38,3 +38,4 @@ buildGraalvmNativeImage rec {
     maintainers = with maintainers; [ sgo ];
   };
 }
+

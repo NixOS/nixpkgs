@@ -34,3 +34,4 @@ buildPythonApplication rec {
     mainProgram = "pass-git-helper";
   };
 }
+

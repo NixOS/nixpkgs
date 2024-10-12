@@ -137,3 +137,4 @@ if withScripts then
     paths = [ binaries scripts ];
     passthru = { inherit binaries scripts; };
   } else binaries
+

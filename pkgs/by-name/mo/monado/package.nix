@@ -156,3 +156,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "monado-cli";
   };
 })
+

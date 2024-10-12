@@ -77,3 +77,4 @@ buildNpmPackage rec {
     maintainers = with maintainers; [ dotlambda ];
   };
 }
+

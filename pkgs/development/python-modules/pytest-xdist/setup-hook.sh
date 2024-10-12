@@ -15,3 +15,4 @@ if [ -z "${dontUsePytestXdist-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
         preDistPhases+=" pytestXdistHook"
     fi
 fi
+

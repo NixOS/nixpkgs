@@ -67,3 +67,4 @@ in
     boot.loader.grub.extraFiles."memtest.bin" = "${memtest86}/memtest.bin";
   };
 }
+

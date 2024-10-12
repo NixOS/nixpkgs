@@ -40,3 +40,4 @@
         machine.succeed(f"cat /ipfs/{ipfs_hash} | grep fnord3")
   '';
 }
+

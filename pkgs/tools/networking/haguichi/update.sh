@@ -11,3 +11,4 @@ version="$(
 )"
 
 update-source-version haguichi "$version"
+

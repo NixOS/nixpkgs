@@ -58,3 +58,4 @@ buildGoModule rec {
     mainProgram = "hyprspace";
   };
 }
+

@@ -49,3 +49,4 @@ lib.packagesFromDirectoryRecursive {
   matrix-client = throw "emacsPackages.matrix-client is deprecated in favor of emacsPackages.ement."; # Added 2024-08-17
   perl-completion = throw "emacsPackages.perl-completion was removed, since it is broken."; # Added 2024-07-19
 }
+

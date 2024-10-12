@@ -46,3 +46,4 @@ maven.buildMavenPackage rec {
     mainProgram = "slipstream";
   };
 }
+

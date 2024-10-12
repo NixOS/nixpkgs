@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ lib, ... }: {
       machine.wait_for_file("${user.home}/xdg-autostart-executed")
     '';
 })
+

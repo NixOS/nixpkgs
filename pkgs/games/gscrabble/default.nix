@@ -42,3 +42,4 @@ buildPythonApplication {
     maintainers = with maintainers; [ onny ];
   };
 }
+

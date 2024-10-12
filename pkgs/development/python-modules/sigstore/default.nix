@@ -86,3 +86,4 @@ buildPythonPackage rec {
     mainProgram = "sigstore";
   };
 }
+

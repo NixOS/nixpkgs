@@ -72,3 +72,4 @@ buildGoModule rec {
     mainProgram = "git-town";
   };
 }
+

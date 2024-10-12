@@ -21,3 +21,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dupe-krill";
   };
 }
+

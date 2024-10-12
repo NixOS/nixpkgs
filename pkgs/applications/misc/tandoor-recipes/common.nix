@@ -17,3 +17,4 @@ rec {
     maintainers = with maintainers; [ ambroisie ];
   };
 }
+

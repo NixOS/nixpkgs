@@ -23,3 +23,4 @@ buildGoModule rec {
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
   };
 }
+

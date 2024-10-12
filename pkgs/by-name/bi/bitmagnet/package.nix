@@ -34,3 +34,4 @@ buildGoModule rec {
     mainProgram = "bitmagnet";
   };
 }
+

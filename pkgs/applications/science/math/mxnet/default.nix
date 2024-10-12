@@ -88,3 +88,4 @@ stdenv.mkDerivation rec {
     broken = cudaSupport;
   };
 }
+

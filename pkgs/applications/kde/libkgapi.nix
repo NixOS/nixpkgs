@@ -14,3 +14,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [ qtwebengine kio kcalendarcore kcontacts cyrus_sasl ];
 }
+

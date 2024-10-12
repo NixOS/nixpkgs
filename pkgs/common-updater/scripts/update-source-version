@@ -289,3 +289,4 @@ rm -f "$attr.fetchlog"
 if [ -n "$printChanges" ]; then
     printf '[{"attrPath":"%s","oldVersion":"%s","newVersion":"%s","files":["%s"]}]\n' "$attr" "$oldVersion" "$newVersion" "$nixFile"
 fi
+

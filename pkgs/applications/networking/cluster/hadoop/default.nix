@@ -169,3 +169,4 @@ in
     tests = nixosTests.hadoop2;
   };
 }
+

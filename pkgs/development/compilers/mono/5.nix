@@ -6,3 +6,4 @@ callPackage ./generic.nix ({
   sha256 = "12vw5dkhmp1vk9l658pil8jiqirkpdsc5z8dm5mpj595yr6d94fd";
   enableParallelBuilding = true;
 })
+

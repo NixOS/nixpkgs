@@ -27,3 +27,4 @@ buildLua rec {
     maintainers = with lib.maintainers; [ idlip ];
   };
 }
+

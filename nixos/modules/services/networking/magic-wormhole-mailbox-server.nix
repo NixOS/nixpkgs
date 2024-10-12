@@ -36,3 +36,4 @@ in
 
   meta.maintainers = [ lib.maintainers.mjoerg ];
 }
+

@@ -70,3 +70,4 @@ appimageTools.wrapType2 {
     maintainers = with maintainers; [ j-hui newam ];
   };
 }
+

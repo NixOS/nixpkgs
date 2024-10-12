@@ -65,3 +65,4 @@ rec {
     maintainers = [ maintainers.fufexan ];
   };
 }
+

@@ -80,3 +80,4 @@ bepastyPython.pkgs.buildPythonPackage rec {
     maintainers = with maintainers; [ aither64 makefu ];
   };
 }
+

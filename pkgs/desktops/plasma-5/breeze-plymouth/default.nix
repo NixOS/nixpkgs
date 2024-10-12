@@ -46,3 +46,4 @@ mkDerivation {
     pngtopnm tmp.png | pnmquant 16 | pnmtopng > breeze/images/16bit/${resolvedLogoName}.logo.png
   '';
 }
+

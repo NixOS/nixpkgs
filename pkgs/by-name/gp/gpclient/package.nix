@@ -39,3 +39,4 @@ rustPlatform.buildRustPackage rec {
       --replace-fail /usr/bin/gpclient $out/bin/gpclient
   '';
 }
+

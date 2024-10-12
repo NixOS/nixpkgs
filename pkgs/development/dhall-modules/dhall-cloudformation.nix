@@ -12,3 +12,4 @@ in buildDhallGitHubPackage {
   file = "package.dhall";
   dependencies = [ Prelude ];
 }
+

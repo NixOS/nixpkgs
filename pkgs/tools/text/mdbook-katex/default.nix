@@ -21,3 +21,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
   };
 }
+

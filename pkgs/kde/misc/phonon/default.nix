@@ -41,3 +41,4 @@ mkKdeDerivation rec {
   ];
   meta.mainProgram = "phononsettings";
 }
+

@@ -48,3 +48,4 @@ mkDerivation {
   meta.platforms = lib.platforms.netbsd;
   makeFlags = defaultMakeFlags ++ [ "RPCGEN_CPP=${stdenv.cc.cc}/bin/cpp" ];
 }
+

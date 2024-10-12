@@ -25,3 +25,4 @@ buildGoModule rec {
     mainProgram = "powerline-go";
   };
 }
+

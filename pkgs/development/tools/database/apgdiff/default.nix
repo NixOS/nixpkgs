@@ -44,3 +44,4 @@ maven.buildMavenPackage rec {
     maintainers = [ maintainers.misterio77 ];
   };
 }
+

@@ -192,3 +192,4 @@ py.pkgs.buildPythonApplication rec {
     mainProgram = "aws";
   };
 }
+

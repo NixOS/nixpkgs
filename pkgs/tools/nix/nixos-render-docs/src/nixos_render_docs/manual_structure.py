@@ -218,3 +218,4 @@ _xml_id_translate_table = {
 # now.
 def make_xml_id(s: str) -> str:
     return s.translate(_xml_id_translate_table)
+

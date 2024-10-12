@@ -105,3 +105,4 @@ stdenv.mkDerivation rec {
 // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
   makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }
+

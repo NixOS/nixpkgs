@@ -60,3 +60,4 @@ sed -ne '/" = fetchgit {/ { s/.*"\(.*\)".*/\1/; p }' < ${file_path} | while read
 done
 
 echo done.
+

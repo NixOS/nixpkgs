@@ -24,3 +24,4 @@ sed -i 's#npmDepsHash = "[^"]*"#npmDepsHash = "'"$npm_hash"'"#' package.nix
 rm package.json
 
 popd
+

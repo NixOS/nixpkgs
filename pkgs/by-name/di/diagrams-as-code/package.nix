@@ -56,3 +56,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "diagrams-as-code";
   };
 }
+

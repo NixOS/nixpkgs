@@ -70,3 +70,4 @@ installSphinxPhase() {
 }
 
 preDistPhases+=" buildSphinxPhase installSphinxPhase"
+

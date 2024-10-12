@@ -298,3 +298,4 @@ if len(sys.argv) == 2 and sys.argv[1] == '--commit':
 else:
     save_dict_as_nix(PIN_PATH, sorted_channels)
     print_updates(last_channels, sorted_channels)
+

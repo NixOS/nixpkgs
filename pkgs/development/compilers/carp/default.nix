@@ -62,3 +62,4 @@ haskellPackages.mkDerivation rec {
   # Windows not (yet) supported.
   platforms   = with lib.platforms; unix ++ darwin;
 }
+

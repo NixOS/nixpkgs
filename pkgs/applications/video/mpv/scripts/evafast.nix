@@ -26,3 +26,4 @@ buildLua {
     maintainers = with lib.maintainers; [ purrpurrn ];
   };
 }
+

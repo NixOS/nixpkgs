@@ -147,3 +147,4 @@ in
       one_gpu_invalid_host_paths.fail("grep 'non-existant-path' /var/run/cdi/nvidia-container-toolkit.json")
   '';
 }
+

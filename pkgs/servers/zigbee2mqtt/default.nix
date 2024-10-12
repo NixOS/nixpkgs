@@ -45,3 +45,4 @@ buildNpmPackage rec {
     mainProgram = "zigbee2mqtt";
   };
 }
+

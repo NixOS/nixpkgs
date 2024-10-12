@@ -15,3 +15,4 @@ recurseIntoAttrs (
     (name: value: callPackage ./generic.nix value)
     (lib.importJSON ./versions.json)
 )
+

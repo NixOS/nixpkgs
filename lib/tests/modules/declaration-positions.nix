@@ -55,3 +55,4 @@ assert
       (options.submoduleLine38.type.getSubOptions [ ]).submodDeclLine45.declarationPositions;
   };
 }
+

@@ -62,3 +62,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     assert '"xscreensaver-auth" must be setuid root' in output_bad_wrapperPrefix
   '';
 })
+

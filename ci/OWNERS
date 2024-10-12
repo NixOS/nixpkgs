@@ -393,3 +393,4 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/in/installShellFiles/*     @Ericson2314
 /pkgs/test/install-shell-files/*         @Ericson2314
 /doc/hooks/installShellFiles.section.md  @Ericson2314
+

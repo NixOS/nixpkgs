@@ -41,3 +41,4 @@ buildPythonApplication rec {
     mainProgram = "mpremote";
   };
 }
+

@@ -155,3 +155,4 @@ in {
         node1.succeed("etcdctl get /foo/bar | grep 'Hello degraded world'")
   '';
 })
+

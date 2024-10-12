@@ -52,3 +52,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ carlosdagos saschagrunert wilsonehusin ];
   };
 }
+

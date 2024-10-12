@@ -115,3 +115,4 @@ this example:
 ```nix
 blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
 ```
+

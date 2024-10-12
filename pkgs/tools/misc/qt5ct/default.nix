@@ -30,3 +30,4 @@ mkDerivation rec {
     mainProgram = "qt5ct";
   };
 }
+

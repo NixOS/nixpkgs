@@ -18,3 +18,4 @@ sed -i 's/nokogiri = {/nokogiri = {\n    dependencies = ["mini_portile2" "racc"]
 
 cd "../../../../"
 nix-update metasploit --version "$latest"
+

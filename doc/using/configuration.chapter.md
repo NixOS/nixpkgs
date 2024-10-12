@@ -365,3 +365,4 @@ Configuring GNU info is a little bit trickier than man pages. To work correctly,
 ```
 
 `postBuild` tells Nixpkgs to run a command after building the environment. In this case, `install-info` adds the installed info pages to `dir` which is GNU info's default root node. Note that `texinfoInteractive` is added to the environment to give the `install-info` command.
+

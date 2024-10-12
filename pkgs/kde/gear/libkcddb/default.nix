@@ -7,3 +7,4 @@ mkKdeDerivation {
 
   extraBuildInputs = [ libmusicbrainz5 ];
 }
+

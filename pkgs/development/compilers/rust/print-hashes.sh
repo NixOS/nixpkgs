@@ -43,3 +43,4 @@ do
     SHA256=$(curl -sSfL $URL | cut -d ' ' -f 1)
     echo "$PLATFORM = \"$SHA256\";"
 done
+

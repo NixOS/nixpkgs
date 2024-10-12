@@ -47,3 +47,4 @@ fi
     ${extraAfter+"${extraAfter[@]}"}
 
 sign "$input"
+

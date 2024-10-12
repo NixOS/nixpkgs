@@ -45,3 +45,4 @@ out = toml.dumps(base)
 
 with open('Cargo.toml', 'x') as f:
   f.write(out)
+

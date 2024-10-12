@@ -48,3 +48,4 @@ runCommand "mkdocs-macros-example-docs" env ''
   # General info on macros
   cat simple/index.html | grep "Macros Plugin Environment"
 ''
+

@@ -60,3 +60,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "kube-hunter";
   };
 }
+

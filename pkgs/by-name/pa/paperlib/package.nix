@@ -70,3 +70,4 @@ else
 
     extraPkgs = pkgs: [ pkgs.libsecret ];
   }
+

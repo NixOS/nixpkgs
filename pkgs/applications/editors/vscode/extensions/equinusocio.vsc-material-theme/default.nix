@@ -17,3 +17,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = with maintainers; [ stunkymonkey ];
   };
 }
+

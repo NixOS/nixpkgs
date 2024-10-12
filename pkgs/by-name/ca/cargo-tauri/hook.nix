@@ -54,3 +54,4 @@ makeSetupHook {
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
   };
 } ./hook.sh
+

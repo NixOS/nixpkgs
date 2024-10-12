@@ -134,3 +134,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "libadwaita-1" ];
   };
 })
+

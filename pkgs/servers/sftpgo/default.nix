@@ -63,3 +63,4 @@ buildGoModule rec {
     mainProgram = "sftpgo";
   };
 }
+

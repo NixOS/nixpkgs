@@ -26,3 +26,4 @@ buildNpmPackage {
     maintainers = with maintainers; [ benesim ];
   };
 }
+

@@ -35,3 +35,4 @@ It is possible to enable your own bootloader through [`boot.loader.external.inst
 
 Currently, there is no good story to compose existing bootloaders to enrich their features, e.g. SecureBoot, etc.
 It will be necessary to reimplement or reuse existing parts.
+

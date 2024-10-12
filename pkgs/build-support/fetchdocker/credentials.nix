@@ -37,3 +37,4 @@ let
     builtins.nixPath);
 in
   lib.optionalString (pathParts != []) ((builtins.head pathParts).path)
+

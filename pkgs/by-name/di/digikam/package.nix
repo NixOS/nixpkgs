@@ -203,3 +203,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "digikam";
   };
 })
+

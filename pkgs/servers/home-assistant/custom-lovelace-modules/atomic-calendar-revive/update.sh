@@ -40,3 +40,4 @@ curl -o ./package.json "https://raw.githubusercontent.com/totaldebug/atomic-cale
 # update package
 cd "$ROOT" || exit 1
 nix-update --version "$LATEST_VERSION" "$ATTR"
+

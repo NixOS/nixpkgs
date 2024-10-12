@@ -14,3 +14,4 @@ _cygwinAllBuildInputsAsRuntimeDep() {
         echo "$nativeBuildInputs" >> "$out/nix-support/cygwin-buildinputs-as-runtime-deps"
     fi
 }
+

@@ -32,3 +32,4 @@ buildHomeAssistantComponent rec {
     ];
   };
 }
+

@@ -66,3 +66,4 @@ buildGoModule rec {
     mainProgram = "snippetexpanderd";
   };
 }
+

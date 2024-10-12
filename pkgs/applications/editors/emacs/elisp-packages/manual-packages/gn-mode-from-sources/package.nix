@@ -26,3 +26,4 @@ melpaBuild {
     description = "Major mode for editing GN files; taken from GN sources";
   };
 }
+

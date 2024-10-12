@@ -41,3 +41,4 @@ buildKodiAddon rec {
     maintainers = teams.kodi.members ++ [ maintainers.pks ];
   };
 }
+

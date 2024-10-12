@@ -28,3 +28,4 @@ in {
   d1x-rebirth-full = generic 1 descent1-assets;
   d2x-rebirth-full = generic 2 descent2-assets;
 }
+

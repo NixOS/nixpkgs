@@ -120,3 +120,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ bjornfor ] ++ teams.jupyter.members;
   };
 }
+

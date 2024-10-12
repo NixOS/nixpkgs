@@ -27,3 +27,4 @@
     services.xserver.desktopManager.cinnamon.sessionPath = [ pkgs.gpaste ];
   };
 }
+

@@ -29,3 +29,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "create-dmg";
   };
 })
+

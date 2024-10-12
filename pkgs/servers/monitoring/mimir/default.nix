@@ -54,3 +54,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ happysalada bryanhonof ];
   };
 }
+

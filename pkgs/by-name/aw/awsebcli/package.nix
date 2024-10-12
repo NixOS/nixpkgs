@@ -100,3 +100,4 @@ localPython.pkgs.buildPythonApplication rec {
     mainProgram = "eb";
   };
 }
+

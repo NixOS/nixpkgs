@@ -62,3 +62,4 @@ autoFixElfFiles() {
     fi
   done
 }
+

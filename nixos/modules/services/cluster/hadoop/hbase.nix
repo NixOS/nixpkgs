@@ -211,3 +211,4 @@ in
     rest = with cfg.hbase.rest; [ port infoPort ];
   }));
 }
+

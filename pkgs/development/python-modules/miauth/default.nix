@@ -48,3 +48,4 @@ buildPythonPackage rec {
     mainProgram = "miauth";
   };
 }
+

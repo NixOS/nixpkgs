@@ -148,3 +148,4 @@ in
 assert !(builtins.isString dartOutputType && dartOutputType != "") ->
 throw "dartOutputType must be a non-empty string";
 baseDerivation
+

@@ -93,3 +93,4 @@ composerVendorInstallHook() {
 
     echo "Finished composerVendorInstallHook"
 }
+

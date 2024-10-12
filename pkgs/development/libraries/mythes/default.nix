@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     inherit (hunspell.meta) platforms;
   };
 }
+

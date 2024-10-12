@@ -64,3 +64,4 @@
   "timepp@zagortenay333" = "timepp"; # extensionPortalSlug is "time"
   "windowIsReady_Remover@nunofarruca@gmail.com" = "window-is-ready-remover"; # extensionPortalSlug is "window-is-ready-notification-remover"
 }
+

@@ -63,3 +63,4 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nih-at/libzip/blob/v${finalAttrs.version}/NEWS.md";
   };
 })
+

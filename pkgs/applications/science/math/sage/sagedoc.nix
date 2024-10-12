@@ -61,3 +61,4 @@ stdenv.mkDerivation rec {
       xargs ${sage-with-env}/bin/sage -t --optional=sage,sagemath_doc_html
   '';
 }
+

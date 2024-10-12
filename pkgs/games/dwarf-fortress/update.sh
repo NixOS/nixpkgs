@@ -38,3 +38,4 @@ done | jq --slurp --raw-input \
 # this but all other attempts failed for me.
 jq -M --slurpfile a "$tmp1" '. + $a[]' < "$(dirname "$0")/game.json" > "$tmp2"
 cat "$tmp2" > "$(dirname "$0")/game.json"
+

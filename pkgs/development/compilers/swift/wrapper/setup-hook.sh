@@ -26,3 +26,4 @@ swiftWrapper_postHook () {
 }
 
 postHooks+=(swiftWrapper_postHook)
+

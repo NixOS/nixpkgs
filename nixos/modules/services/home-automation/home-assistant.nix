@@ -738,3 +738,4 @@ in {
     users.groups.hass.gid = config.ids.gids.hass;
   };
 }
+

@@ -54,3 +54,4 @@ stdenv.mkDerivation {
     mainProgram = "thcrap_proton";
   };
 }
+

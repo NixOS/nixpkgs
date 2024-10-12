@@ -68,3 +68,4 @@ bash.runCommand "${pname}-${version}" {
   install -D gawk $out/bin/gawk
   ln -s gawk $out/bin/awk
 ''
+

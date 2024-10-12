@@ -31,3 +31,4 @@ vscode-utils.buildVscodeMarketplaceExtension {
     maintainers = [ lib.maintainers.dbirks ];
   };
 }
+

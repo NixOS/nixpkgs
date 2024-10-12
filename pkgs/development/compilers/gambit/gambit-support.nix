@@ -40,3 +40,4 @@ rec {
     maintainers = with maintainers; [ thoughtpolice raskin fare ];
   };
 }
+

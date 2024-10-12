@@ -267,3 +267,4 @@ let
     };
 
 in lib.makeScope libsForQt5.newScope packages
+

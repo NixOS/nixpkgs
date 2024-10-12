@@ -16,3 +16,4 @@ substituteInPlace etc/faxsetup.sh.in \
 
 # Create `config.site`
 substitute "@configSite@" config.site --subst-var out
+

@@ -14,3 +14,4 @@ done
 [ ! -e data -o -L data ] && ln -sf @out@/share/sdlpop/data .
 
 exec -a "prince" @out@/bin/.prince-bin "$@"
+

@@ -123,3 +123,4 @@ buildPythonApplication rec {
     mainProgram = "jellyfin-mpv-shim";
   };
 }
+

@@ -254,3 +254,4 @@ stdenv.mkDerivation (finalAttrs: {
     pkgConfigModules = [ "sdl2" ];
   };
 })
+

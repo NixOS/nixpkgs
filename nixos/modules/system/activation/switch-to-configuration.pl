@@ -1004,3 +1004,4 @@ if ($res == 0) {
 
 close($stc_lock) or die "Could not close lock - $!";
 exit($res);
+

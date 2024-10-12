@@ -48,3 +48,4 @@ lib.warnIf (openidPassword != "WILL_NEVER_BE_SET") "Using `crowdProperties` is d
     maintainers = [ ];
   };
 })
+

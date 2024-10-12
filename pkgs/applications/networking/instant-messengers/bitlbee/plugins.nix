@@ -11,3 +11,4 @@ plugins: runCommandLocal "bitlbee-plugins" {
     done
   done
 ''
+

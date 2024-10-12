@@ -43,3 +43,4 @@ in
     };
   } ./composer-install-hook.sh;
 }
+

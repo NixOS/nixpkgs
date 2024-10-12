@@ -41,3 +41,4 @@ in appimageTools.wrapType2 rec {
     mainProgram = "timeular";
   };
 }
+

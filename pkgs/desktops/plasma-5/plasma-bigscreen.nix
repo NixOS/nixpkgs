@@ -45,3 +45,4 @@ mkDerivation {
 
   passthru.providedSessions = [ "plasma-bigscreen-x11" "plasma-bigscreen-wayland" ];
 }
+

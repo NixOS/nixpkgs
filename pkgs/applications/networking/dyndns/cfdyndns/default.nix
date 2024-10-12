@@ -26,3 +26,4 @@ rustPlatform.buildRustPackage rec {
     platforms = with platforms; linux;
   };
 }
+

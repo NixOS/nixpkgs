@@ -62,3 +62,4 @@ buildPythonPackage {
     mainProgram = "datalad-gooey";
   };
 }
+

@@ -55,3 +55,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ orivej rnhmjoj ];
   };
 }
+

@@ -29,3 +29,4 @@ if len(found_versions) == 0:
 found_versions.sort()
 subprocess.run(["nix-update", "--version", found_versions[-1], "steamPackages.steam"])
 found_versions[0]
+

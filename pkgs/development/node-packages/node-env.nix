@@ -687,3 +687,4 @@ in
   buildNodeDependencies = lib.makeOverridable buildNodeDependencies;
   buildNodeShell = lib.makeOverridable buildNodeShell;
 }
+

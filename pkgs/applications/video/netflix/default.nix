@@ -60,3 +60,4 @@ symlinkJoin {
   inherit name meta;
   paths = [ script desktopItem ];
 }
+

@@ -100,3 +100,4 @@ in
     server.succeed("curl -L --fail-with-body --max-redirs 1 -b /tmp/cookies http://${movim.domain}/chat")
   '';
 })
+

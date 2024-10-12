@@ -28,3 +28,4 @@ def main [] {
 
   {before: $current_version, after: $latest_tag}
 }
+

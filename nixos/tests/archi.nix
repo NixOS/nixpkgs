@@ -31,3 +31,4 @@ import ./make-test-python.nix ({ lib, ... }: {
          machine.screenshot("welcome-screen")
   '';
 })
+

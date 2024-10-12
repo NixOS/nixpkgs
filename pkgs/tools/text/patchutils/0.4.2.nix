@@ -7,3 +7,4 @@ callPackage ./generic.nix (args // {
   extraBuildInputs = [ python3 ];
   patches = [ ./Revert-Fix-grepdiff-test.patch ];
 })
+

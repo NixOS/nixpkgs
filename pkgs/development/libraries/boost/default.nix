@@ -28,3 +28,4 @@ in {
   boost185 = makeBoost ./1.85.nix;
   boost186 = makeBoost ./1.86.nix;
 }
+

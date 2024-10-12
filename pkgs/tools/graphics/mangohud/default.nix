@@ -252,3 +252,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ kira-bruneau zeratax ];
   };
 })
+

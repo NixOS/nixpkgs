@@ -38,3 +38,4 @@ mkOpenModelicaDerivation rec {
     platforms = platforms.linux;
   };
 }
+

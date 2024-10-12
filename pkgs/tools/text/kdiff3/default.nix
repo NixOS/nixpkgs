@@ -40,3 +40,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with platforms; linux ++ darwin;
   };
 })
+

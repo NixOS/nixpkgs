@@ -38,3 +38,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ lewo SuperSandro2000 ];
   };
 }
+

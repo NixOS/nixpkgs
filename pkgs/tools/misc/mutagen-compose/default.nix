@@ -28,3 +28,4 @@ buildGoModule rec {
     mainProgram = "mutagen-compose";
   };
 }
+

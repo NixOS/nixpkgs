@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ maintainers.s1341 ];
   };
 }
+

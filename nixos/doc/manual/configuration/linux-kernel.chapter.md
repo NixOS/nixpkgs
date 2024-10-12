@@ -133,3 +133,4 @@ This section was moved to the [Nixpkgs manual](https://nixos.org/nixpkgs/manual#
 It's a common issue that the latest stable version of ZFS doesn't support the latest
 available Linux kernel. It is recommended to use the latest available LTS that's compatible
 with ZFS. Usually this is the default kernel provided by nixpkgs (i.e. `pkgs.linuxPackages`).
+

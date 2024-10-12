@@ -41,3 +41,4 @@ in buildNpmPackage rec {
     mainProgram = "perl-debug-adapter";
   };
 }
+

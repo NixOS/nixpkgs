@@ -13,3 +13,4 @@ for majorVersion in 6 7 8 9 10; do
     curl "$source/9000-gcc-$majorVersion-branch-$name" \
          > "$dest/$majorVersion/$name"
 done
+

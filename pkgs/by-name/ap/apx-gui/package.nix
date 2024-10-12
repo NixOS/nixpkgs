@@ -59,3 +59,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "apx-gui";
   };
 })
+

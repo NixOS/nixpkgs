@@ -78,3 +78,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         raise Exception ("swap device encryption does not use the key size specified in the configuration")
   '';
 })
+

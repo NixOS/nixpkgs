@@ -17,3 +17,4 @@ while true; do
   commitmsg="azure-cli-extensions.${pname}: ${oldver} -> ${newver}"
   git commit -m "$commitmsg"
 done
+

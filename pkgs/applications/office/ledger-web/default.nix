@@ -22,3 +22,4 @@ bundlerApp {
     mainProgram = "ledger_web";
   };
 }
+

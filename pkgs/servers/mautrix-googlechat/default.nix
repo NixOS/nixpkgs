@@ -71,3 +71,4 @@
     mainProgram = "mautrix-googlechat";
   };
 }
+

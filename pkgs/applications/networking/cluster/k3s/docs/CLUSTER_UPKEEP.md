@@ -84,3 +84,4 @@ To fix the problem, you can add these things to your configuration.nix.
 > KillPodSandboxError: failed to get network "cbr0" cached result: decoding version from network config: unexpected end of JSON input
 
 Workaround: https://github.com/k3s-io/k3s/issues/6185#issuecomment-1581245331
+

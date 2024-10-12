@@ -22,3 +22,4 @@ nix-update glslang --version-regex '(\d+\.\d+\.\d+)' --commit
 for P in "${SDK_PACKAGES[@]}"; do
     nix-update "$P" --version-regex "(?:vulkan-sdk-)(.*)" --commit
 done
+

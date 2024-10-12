@@ -143,3 +143,4 @@ let
   };
 in
 makeScope kdePackages.newScope packages
+

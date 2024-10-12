@@ -32,3 +32,4 @@ with lib;
   };
   # impl of assertions is in <nixpkgs/nixos/modules/system/activation/top-level.nix>
 }
+

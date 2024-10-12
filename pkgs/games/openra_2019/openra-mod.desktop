@@ -9,3 +9,4 @@ Icon=openra-@name@
 Exec=openra-@name@
 Terminal=false
 Categories=Game;StrategyGame;X-RTS;X-RealTimeStrategy;X-RealTimeStrategyGame;
+

@@ -87,3 +87,4 @@ stdenv.mkDerivation (finalAttrs: {
     priority = 1; # over the emacs implementation
   };
 })
+

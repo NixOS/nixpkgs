@@ -40,3 +40,4 @@ appimageTools.wrapType2 {
     platforms = [ "x86_64-linux" ];
   };
 }
+

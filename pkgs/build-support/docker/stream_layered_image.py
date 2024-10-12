@@ -431,3 +431,4 @@ Docker Image Specification v1.2 as reference [1].
 
 if __name__ == "__main__":
     main()
+

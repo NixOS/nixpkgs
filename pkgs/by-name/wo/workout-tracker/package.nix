@@ -58,3 +58,4 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ bhankas ];
   };
 }
+

@@ -16,3 +16,4 @@ in symlinkJoin {
 
   inherit (brasero-unwrapped) meta;
 }
+

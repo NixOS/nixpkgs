@@ -711,3 +711,4 @@ The only required parameter is `name`.
     :   A binary operation that can merge the payloads of two same
         types. Defined as a function that take two payloads as
         parameters and return the payloads merged.
+

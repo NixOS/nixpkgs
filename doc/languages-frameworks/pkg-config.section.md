@@ -53,3 +53,4 @@ Normal pkg-config commands to look up dependencies by name will then work with t
 The `defaultPkgConfigPackages` package set is a set of aliases, named after the modules they provide.
 This is meant to be used by language-to-nix integrations.
 Hand-written packages should use the normal Nixpkgs attribute name instead.
+

@@ -3,3 +3,4 @@ syntax = "proto3";
 message WithOptions {
   bytes uuid = 1;
 }
+

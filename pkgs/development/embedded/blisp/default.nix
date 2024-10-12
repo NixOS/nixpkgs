@@ -48,3 +48,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.bdd ];
   };
 })
+

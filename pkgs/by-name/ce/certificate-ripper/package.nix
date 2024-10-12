@@ -59,3 +59,4 @@ buildGraalvmNativeImage {
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
+

@@ -76,3 +76,4 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "opsdroid";
   };
 }
+

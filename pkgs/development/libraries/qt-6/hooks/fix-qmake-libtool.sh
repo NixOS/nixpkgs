@@ -23,3 +23,4 @@ fixQmakeLibtool() {
 }
 
 fixupOutputHooks+=('fixQmakeLibtool $prefix')
+

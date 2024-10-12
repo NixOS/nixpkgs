@@ -5,3 +5,4 @@ let
 in {
   boot.extraModulePackages = lib.mkIf (lib.elem "virtualbox" videoDrivers) [ kernelPackages.virtualboxGuestAdditions ];
 }
+

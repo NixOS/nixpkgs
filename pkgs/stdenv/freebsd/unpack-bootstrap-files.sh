@@ -55,3 +55,4 @@ for f in $(find $out -type f); do
     done
 done
 echo $out
+

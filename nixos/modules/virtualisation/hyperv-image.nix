@@ -68,3 +68,4 @@ in {
     virtualisation.hypervGuest.enable = true;
   };
 }
+

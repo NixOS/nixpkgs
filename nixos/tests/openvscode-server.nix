@@ -20,3 +20,4 @@ import ./make-test-python.nix ({pkgs, lib, ...}:
 
   meta.maintainers = [ lib.maintainers.drupol ];
 })
+

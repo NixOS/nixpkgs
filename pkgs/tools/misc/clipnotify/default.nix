@@ -25,3 +25,4 @@ stdenv.mkDerivation rec {
     mainProgram = "clipnotify";
   };
 }
+

@@ -32,3 +32,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ zhaofengli matthiasbeyer ];
   };
 }
+

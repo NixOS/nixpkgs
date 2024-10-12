@@ -29,3 +29,4 @@ done
 
 echo "No version eligible for bump."
 exit 0
+

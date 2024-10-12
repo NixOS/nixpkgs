@@ -107,3 +107,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ offline totoroot ];
   };
 }
+

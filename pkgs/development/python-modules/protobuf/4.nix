@@ -129,3 +129,4 @@ buildPythonPackage {
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }
+

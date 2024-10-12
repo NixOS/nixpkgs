@@ -29,3 +29,4 @@ callPackage ../base.nix rec {
   # `flang/lib/Semantics/check-omp-structure.cpp:1905:1: error: no member named 'v' in 'Fortran::parser::OmpClause::OmpxDynCgroupMem'`
   isBroken = true;
 }
+

@@ -14,3 +14,4 @@ mkDerivation {
     moveToOutput ''${qtPluginPrefix:?}/designer/kconfigwidgets5widgets.so "$out"
   '';
 }
+

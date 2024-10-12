@@ -49,3 +49,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "wallust";
   };
 }
+

@@ -32,3 +32,4 @@ buildNpmPackage rec {
     maintainers = [ maintainers.ehllie ];
   };
 }
+

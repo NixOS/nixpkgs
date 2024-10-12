@@ -121,3 +121,4 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }
+

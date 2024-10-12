@@ -47,3 +47,4 @@ buildDunePackage rec {
     changelog = "https://github.com/ocaml-doc/odoc-parser/raw/${version}/CHANGES.md";
   };
 }
+

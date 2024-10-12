@@ -78,3 +78,4 @@ for sys in darwin linux_x86_64 linux_aarch64; do
         json_set ".${sys}.hash" "${sri}"
     fi
 done
+

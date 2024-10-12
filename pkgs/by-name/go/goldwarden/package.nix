@@ -97,3 +97,4 @@ buildGoModule rec {
     platforms = platforms.linux; # Support for other platforms is not yet ready, see https://github.com/quexten/goldwarden/issues/4
   };
 }
+

@@ -33,3 +33,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ obreitwi ];
   };
 }
+

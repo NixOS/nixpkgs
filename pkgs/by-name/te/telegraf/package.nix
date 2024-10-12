@@ -47,3 +47,4 @@ buildGo123Module rec {
     maintainers = with maintainers; [ mic92 roblabla timstott zowoq ];
   };
 }
+

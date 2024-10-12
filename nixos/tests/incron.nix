@@ -50,3 +50,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     machine.fail("grep 'IN_OPEN' /root/incron.log")
   '';
 })
+

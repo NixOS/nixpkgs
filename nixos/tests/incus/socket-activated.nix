@@ -30,3 +30,4 @@ import ../make-test-python.nix ({ pkgs, lib, incus ? pkgs.incus-lts, ... } :
     machine.wait_for_unit("incus.service")
   '';
 })
+

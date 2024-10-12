@@ -77,3 +77,4 @@ stdenv.mkDerivation rec {
     inherit (ncurses.meta) platforms;
   };
 }
+

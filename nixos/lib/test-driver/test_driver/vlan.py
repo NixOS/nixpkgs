@@ -63,3 +63,4 @@ class VLan:
         self.logger.info(f"kill vlan (pid {self.pid})")
         self.fd.close()
         self.process.terminate()
+

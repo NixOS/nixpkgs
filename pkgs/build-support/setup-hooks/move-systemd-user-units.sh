@@ -23,3 +23,4 @@ _moveSystemdUserUnits() {
     rmdir "$source"
     ln -s "$target" "$source"
 }
+

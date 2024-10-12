@@ -32,3 +32,4 @@ buildGoModule rec {
     platforms = platforms.darwin ++ platforms.linux;
   };
 }
+

@@ -15,3 +15,4 @@ mkKdeDerivation {
 
   setupHook = ./ecm-hook.sh;
 }
+

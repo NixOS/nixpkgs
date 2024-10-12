@@ -52,3 +52,4 @@ in {
     pre1909.succeed("systemctl status systemd-timesyncd.service")
   '';
 })
+

@@ -30,3 +30,4 @@ let
   ];
 in citrix_workspace.override { inherit extraCerts; }
 ```
+

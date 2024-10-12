@@ -370,3 +370,4 @@ rec {
     config = "javascript-unknown-ghcjs";
   };
 }
+

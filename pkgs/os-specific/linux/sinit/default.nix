@@ -29,3 +29,4 @@ stdenv.mkDerivation rec {
     downloadPage = "https://git.suckless.org/sinit";
   };
 }
+

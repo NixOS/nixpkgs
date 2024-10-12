@@ -29,3 +29,4 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }
+

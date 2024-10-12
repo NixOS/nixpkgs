@@ -35,3 +35,4 @@ for region in "${regions[@]}"; do
         eval "$hook" "$region"
     done
 done
+

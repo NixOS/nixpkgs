@@ -238,3 +238,4 @@ in rec {
   coqPackages = recurseIntoAttrs coqPackages_8_20;
   coq = coqPackages.coq;
 }
+

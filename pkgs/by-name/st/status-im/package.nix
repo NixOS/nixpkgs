@@ -47,3 +47,4 @@ in appimageTools.wrapType2 {
     platforms = platforms.linux;
   };
 }
+

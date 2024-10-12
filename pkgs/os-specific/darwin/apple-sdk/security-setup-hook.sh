@@ -8,3 +8,4 @@ noDeprecatedDeclarations() {
 }
 
 addEnvHooks "$hostOffset" noDeprecatedDeclarations
+

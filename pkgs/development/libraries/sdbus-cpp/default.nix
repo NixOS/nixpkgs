@@ -51,3 +51,4 @@ stdenv.mkDerivation rec {
     mainProgram = "sdbus-c++-xml2cpp";
   };
 }
+

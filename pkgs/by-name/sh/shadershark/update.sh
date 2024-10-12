@@ -12,3 +12,4 @@ echo "new rev: $rev"
 
 update-source-version shadershark "$rev" \
   --print-changes
+

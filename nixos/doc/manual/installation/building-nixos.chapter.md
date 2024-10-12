@@ -78,3 +78,4 @@ layout because there can't be any other guarantees on a live medium than those g
 by the live medium itself. The latter is especially true before formatting the target
 block device(s). On the other hand, the netboot iso only overrides its minimum dependencies
 since netboot images are always made-to-target.
+

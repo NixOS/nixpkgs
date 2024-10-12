@@ -260,3 +260,4 @@ in
     users.groups.lighttpd.gid = config.ids.gids.lighttpd;
   };
 }
+

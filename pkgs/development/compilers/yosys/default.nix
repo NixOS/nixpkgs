@@ -163,3 +163,4 @@ in stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ shell thoughtpolice Luflosi ];
   };
 })
+

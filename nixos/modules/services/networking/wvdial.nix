@@ -45,3 +45,4 @@ in
     environment.etc."ppp/peers/wvdial".source = pkgs.writeText "wvdial" cfg.pppDefaults;
   };
 }
+

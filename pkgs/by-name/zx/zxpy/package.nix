@@ -52,3 +52,4 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "zxpy";
   };
 }
+

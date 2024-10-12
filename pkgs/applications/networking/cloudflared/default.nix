@@ -86,3 +86,4 @@ buildGoModule rec {
     mainProgram = "cloudflared";
   };
 }
+

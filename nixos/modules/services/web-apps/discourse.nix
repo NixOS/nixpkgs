@@ -1091,3 +1091,4 @@ in
   meta.doc = ./discourse.md;
   meta.maintainers = [ lib.maintainers.talyz ];
 }
+

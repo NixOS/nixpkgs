@@ -6,3 +6,4 @@ set_property(TARGET FoundationNetworking PROPERTY IMPORTED_LOCATION "@out@/lib/s
 
 add_library(FoundationXML SHARED IMPORTED)
 set_property(TARGET FoundationXML PROPERTY IMPORTED_LOCATION "@out@/lib/swift/@swiftOs@/libFoundationXML@dylibExt@")
+

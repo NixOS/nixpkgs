@@ -44,3 +44,4 @@ buildPythonPackage rec {
     mainProgram = "tolo-cli";
   };
 }
+

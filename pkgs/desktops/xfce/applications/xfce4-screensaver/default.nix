@@ -60,3 +60,4 @@ mkXfceDerivation {
     maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
   };
 }
+

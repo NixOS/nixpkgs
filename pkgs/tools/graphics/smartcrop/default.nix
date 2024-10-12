@@ -26,3 +26,4 @@ buildGoModule {
     mainProgram = "smartcrop";
   };
 }
+

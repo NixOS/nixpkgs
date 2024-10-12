@@ -17,3 +17,4 @@ in
     services.xserver.displayManager.sessionCommands = "${pkgs.nabi}/bin/nabi &";
   };
 }
+

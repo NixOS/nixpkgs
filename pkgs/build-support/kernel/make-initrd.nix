@@ -111,3 +111,4 @@ in stdenvNoCC.mkDerivation (rec {
 } // lib.optionalAttrs makeUInitrd {
   uInitrdCompression = uInitrdCompression;
 })
+

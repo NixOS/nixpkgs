@@ -29,3 +29,4 @@ bundlerApp {
     maintainers = with lib.maintainers; [ baloo ];
   };
 }
+

@@ -26,3 +26,4 @@
     users.groups.camera = {};
   };
 }
+

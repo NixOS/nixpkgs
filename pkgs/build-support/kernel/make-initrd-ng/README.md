@@ -80,3 +80,4 @@ initrd to a minimum.
 
 - Rust was favored over Python for its type system, and because if you
   want to go fast, why not go *really fast*?
+

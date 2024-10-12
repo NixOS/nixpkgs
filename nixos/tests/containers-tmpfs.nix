@@ -88,3 +88,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.fail(tmpfs_cmd("ls -l /var | grep -q test.file"))
     '';
 })
+

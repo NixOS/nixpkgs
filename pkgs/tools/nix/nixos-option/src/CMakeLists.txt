@@ -9,3 +9,4 @@ target_link_libraries(nixos-option PRIVATE -lnixmain -lnixexpr -lnixstore -lnixu
 target_compile_features(nixos-option PRIVATE cxx_std_20)
 
 install (TARGETS nixos-option DESTINATION bin)
+

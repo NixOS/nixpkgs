@@ -51,3 +51,4 @@ in
 
   meta.maintainers = with lib.maintainers; [ orichter thillux ];
 }
+

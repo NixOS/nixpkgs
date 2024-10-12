@@ -32,3 +32,4 @@ in buildRustPackage rec {
     maintainers = with maintainers; [ lucperkins ];
   };
 }
+

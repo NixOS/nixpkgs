@@ -68,3 +68,4 @@ maven.buildMavenPackage rec {
     mainProgram = "runelite";
   };
 }
+

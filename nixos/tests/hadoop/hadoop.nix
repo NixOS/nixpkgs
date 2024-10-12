@@ -254,3 +254,4 @@ import ../make-test-python.nix ({ package, ... }: {
     assert "SUCCEEDED" in client.succeed("yarn application -list -appStates FINISHED")
   '';
 })
+

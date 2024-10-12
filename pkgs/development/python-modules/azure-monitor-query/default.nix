@@ -40,3 +40,4 @@ buildPythonPackage rec {
     maintainers = azure-cli.meta.maintainers;
   };
 }
+

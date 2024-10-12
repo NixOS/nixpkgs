@@ -12,3 +12,4 @@ rec {
   vendorHash = "sha256-kSuIyL+6ue8voTzHTfnAYr9q4hUzIv/lkRopGSFaLv8=";
   pnpmDepsHash = "sha256-NAn7ExVmN6Sk2hOFHfBYvbNgXPQDhkFmvF1sZeTMomE=";
 }
+

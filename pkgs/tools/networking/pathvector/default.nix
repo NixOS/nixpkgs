@@ -27,3 +27,4 @@ buildGoModule rec {
     mainProgram = "pathvector";
   };
 }
+

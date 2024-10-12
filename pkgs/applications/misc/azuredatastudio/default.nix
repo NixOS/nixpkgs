@@ -201,3 +201,4 @@ stdenv.mkDerivation rec {
     mainProgram = "azuredatastudio";
   };
 }
+

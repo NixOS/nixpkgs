@@ -51,3 +51,4 @@ overrideMeta shellcheck (old: {
   mainProgram = "shellcheck";
   outputsToInstall = [ "bin" "man" "doc" ];
 })
+

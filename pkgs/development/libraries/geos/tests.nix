@@ -13,3 +13,4 @@ runCommand "${pname}-tests" { meta.timeout = 60; }
       | grep 'POLYGON ((200 100, 100 100, 200 200, 200 100))'
     touch $out
   ''
+

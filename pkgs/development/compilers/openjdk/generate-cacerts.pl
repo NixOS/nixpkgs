@@ -364,3 +364,4 @@ if ($certs_written_count != $pem_file_count)
     die "Number of certs added to keystore does not match".
         " number of certs read from $file.";
 }
+

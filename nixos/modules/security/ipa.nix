@@ -274,3 +274,4 @@ in {
     security.pki.certificateFiles = singleton cfg.certificate;
   };
 }
+

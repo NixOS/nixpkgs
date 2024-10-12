@@ -75,3 +75,4 @@ with fileinput.FileInput(DICTIONARIES_CHROMIUM_NIX, inplace=True) as file:
         result = re.sub(r'^        rev = ".*";', f'        rev = "{hunspell_dictionaries_commit}";', result)
         result = re.sub(r'^        hash = ".+";', f'        hash = "{hunspell_dictionaries_hash}";', result)
         print(result, end='')
+

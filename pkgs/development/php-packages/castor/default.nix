@@ -48,3 +48,4 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "castor";
   };
 })
+

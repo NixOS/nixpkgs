@@ -134,3 +134,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ adamcstephens erictapen Flakebi ];
   };
 }
+

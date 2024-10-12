@@ -59,3 +59,4 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ fab ];
   };
 }
+

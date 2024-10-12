@@ -91,3 +91,4 @@ stdenv.mkDerivation rec {
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };
 }
+

@@ -20,3 +20,4 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/BioPP/bppsuite/blob/master/ChangeLog";
   };
 }
+

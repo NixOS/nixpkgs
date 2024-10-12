@@ -35,3 +35,4 @@ buildGoModule rec {
     mainProgram = "pb";
   };
 }
+

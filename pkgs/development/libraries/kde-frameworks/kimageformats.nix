@@ -17,3 +17,4 @@ mkDerivation {
     "-DKIMAGEFORMATS_HEIF=ON"
   ];
 }
+

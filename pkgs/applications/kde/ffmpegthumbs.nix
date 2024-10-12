@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ ffmpeg_7 kio taglib ];
 }
+

@@ -32,3 +32,4 @@ stdenv.mkDerivation rec {
     mainProgram = "jitterentropy-rngd";
   };
 }
+

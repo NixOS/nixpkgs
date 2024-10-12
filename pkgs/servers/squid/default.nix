@@ -58,3 +58,4 @@ stdenv.mkDerivation (finalAttrs: {
     knownVulnerabilities = [ "Squid has multiple unresolved security vulnerabilities, for more information see https://megamansec.github.io/Squid-Security-Audit/" ];
   };
 })
+

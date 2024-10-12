@@ -62,3 +62,4 @@ in buildBazelPackage rec {
     platforms = platforms.linux;
   };
 }
+

@@ -32,3 +32,4 @@ buildNpmPackage rec {
     mainProgram = "vue-language-server";
   };
 }
+

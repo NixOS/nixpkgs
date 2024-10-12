@@ -6,3 +6,4 @@ mkDerivation {
   buildInputs = [ qtbase qtquickcontrols2 qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
 }
+

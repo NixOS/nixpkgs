@@ -13,3 +13,4 @@ makeSetupHook {
   substitutions.executable = octave.interpreter;
   substitutions.octave = octave;
 } ./wrap.sh
+

@@ -3,3 +3,4 @@ mkKdeDerivation {
   pname = "kolourpaint";
   meta.mainProgram = "kolourpaint";
 }
+

@@ -89,3 +89,4 @@ maven.buildMavenPackage rec {
     sourceProvenance = with lib.sourceTypes; [ fromSource binaryBytecode ];
   };
 }
+

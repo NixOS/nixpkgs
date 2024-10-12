@@ -33,3 +33,4 @@ runCommand "nano-test-expect"
   grep "Hello world!" file.txt
   touch $out
 ''
+

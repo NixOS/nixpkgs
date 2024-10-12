@@ -69,3 +69,4 @@ in
         boot.kernelParams = mkIf cfg.enableAMD [ "amdgpu.ppfeaturemask=0xfffd7fff" ];
       };
 }
+

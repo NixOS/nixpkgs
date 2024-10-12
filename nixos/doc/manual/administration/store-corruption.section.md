@@ -26,3 +26,4 @@ You can also scan the entire Nix store for corrupt paths:
 
 Any corrupt paths will be redownloaded if they're available in a binary
 cache; otherwise, they cannot be repaired.
+

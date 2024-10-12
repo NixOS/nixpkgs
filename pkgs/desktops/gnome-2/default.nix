@@ -70,3 +70,4 @@ lib.makeScope pkgs.newScope (self: with self; {
   libgtkhtml = throw "gnome2.libgtkhtml has been removed"; # 2023-01-15
   python_rsvg = throw "gnome2.python_rsvg has been removed"; # 2023-01-14
 })
+

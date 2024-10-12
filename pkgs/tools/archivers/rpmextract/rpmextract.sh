@@ -8,3 +8,4 @@ fi
 for i in "$@"; do
   @rpm@/bin/rpm2cpio "$i" | @cpio@/bin/cpio -idv
 done
+

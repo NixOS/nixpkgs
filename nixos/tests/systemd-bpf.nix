@@ -40,3 +40,4 @@ import ./make-test-python.nix ({ lib, ... }: {
       node1.fail("systemd-run -t -p RestrictNetworkInterfaces='lo' ping -c 5 192.168.1.2")
   '';
 })
+

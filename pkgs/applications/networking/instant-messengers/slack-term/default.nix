@@ -20,3 +20,4 @@ buildGoModule rec {
     mainProgram = "slack-term";
   };
 }
+

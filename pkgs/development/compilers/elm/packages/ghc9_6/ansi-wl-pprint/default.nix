@@ -15,3 +15,4 @@ mkDerivation {
   description = "Wadler/Leijen Pretty Printer for colored ANSI terminal output";
   license = lib.licenses.bsd3;
 }
+

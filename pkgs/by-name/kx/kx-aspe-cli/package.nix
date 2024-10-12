@@ -34,3 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.nobbz ];
   };
 }
+

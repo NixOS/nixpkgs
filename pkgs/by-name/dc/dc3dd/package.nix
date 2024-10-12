@@ -37,3 +37,4 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus; # Refer to https://sourceforge.net/p/dc3dd/code/HEAD/tree/COPYING
   };
 })
+

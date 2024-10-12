@@ -23,3 +23,4 @@ buildGoModule rec {
     mainProgram = "protoc-go-inject-tag";
   };
 }
+

@@ -12,3 +12,4 @@ if $latest_tag != $current_version {
 } else {
   "No new version"
 }
+

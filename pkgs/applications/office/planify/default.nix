@@ -81,3 +81,4 @@ stdenv.mkDerivation rec {
     mainProgram = "io.github.alainm23.planify";
   };
 }
+

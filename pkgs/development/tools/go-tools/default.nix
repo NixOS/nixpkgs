@@ -27,3 +27,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ rvolosatovs kalbasit smasher164 ];
   };
 }
+

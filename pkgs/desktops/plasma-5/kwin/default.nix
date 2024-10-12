@@ -156,3 +156,4 @@ mkDerivation {
           ''${!outputBin}/share/kservicetypes5/kwin-script.desktop
   '';
 }
+

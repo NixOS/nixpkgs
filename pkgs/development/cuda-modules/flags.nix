@@ -395,3 +395,4 @@ assert
   cudaCapabilities = if cudaCapabilities == [ ] then defaultCapabilities else cudaCapabilities;
   enableForwardCompat = cudaForwardCompat;
 }
+

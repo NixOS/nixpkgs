@@ -67,3 +67,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "git-cola";
   };
 }
+

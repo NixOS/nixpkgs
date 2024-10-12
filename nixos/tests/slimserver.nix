@@ -44,3 +44,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           assert player_mac == json.loads(player_id)["result"]["_id"], "squeezelite player not found"
     '';
 })
+

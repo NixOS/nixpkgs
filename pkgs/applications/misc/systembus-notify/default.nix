@@ -65,3 +65,4 @@ stdenv.mkDerivation rec {
     mainProgram = "systembus-notify";
   };
 }
+

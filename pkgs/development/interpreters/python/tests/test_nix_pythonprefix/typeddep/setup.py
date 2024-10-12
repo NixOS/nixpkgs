@@ -16,3 +16,4 @@ setup(**{
     'entry_points': {},
     'python_requires': '>=3.7,<4.0',
 })
+

@@ -42,3 +42,4 @@ buildGraalvmNativeImage rec {
     maintainers = with maintainers; [ sg-qwt ];
   };
 }
+

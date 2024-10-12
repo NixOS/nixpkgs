@@ -41,3 +41,4 @@ sed -i $out/share/applications/AdobeReader.desktop \
 # Not sure if this works.
 mkdir -p $out/share/mimelnk/application
 mv $p/Resource/Support/vnd*.desktop $out/share/mimelnk/application
+

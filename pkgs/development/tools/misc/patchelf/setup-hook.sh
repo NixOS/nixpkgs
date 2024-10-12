@@ -18,3 +18,4 @@ patchELF() {
         patchelf --shrink-rpath "$i" || true
     done < <(find "$dir" -type f -print0)
 }
+

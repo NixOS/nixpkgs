@@ -55,7 +55,7 @@ namespace @NAMESPACE@Wrapper
                     break;
             }
 
-            // Load the assembly from the specified path. 					
+            // Load the assembly from the specified path.
             MyAssembly = Assembly.LoadFrom(assemblyPath);
 
             // Return the loaded assembly.

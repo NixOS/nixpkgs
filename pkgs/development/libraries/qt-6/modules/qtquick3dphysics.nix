@@ -12,3 +12,4 @@ qtModule {
     "-faligned-allocation";
   meta.mainProgram = "cooker";
 }
+

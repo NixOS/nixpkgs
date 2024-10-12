@@ -84,3 +84,4 @@ python3.pkgs.buildPythonApplication rec {
     broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
   };
 }
+

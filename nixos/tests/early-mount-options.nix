@@ -17,3 +17,4 @@ import ./make-test-python.nix {
     assert "nosuid" in options and "nodev" in options and "noexec" in options
   '';
 }
+

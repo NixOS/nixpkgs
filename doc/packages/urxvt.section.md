@@ -71,3 +71,4 @@ If the plugin is itself a Perl package that needs to be imported from other plug
 ```
 
 This will make the urxvt wrapper pick up the dependency and set up the Perl path accordingly.
+

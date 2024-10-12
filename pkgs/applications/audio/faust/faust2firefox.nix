@@ -12,3 +12,4 @@ faust.wrap {
   runtimeInputs = [ xdg-utils ];
 
 }
+

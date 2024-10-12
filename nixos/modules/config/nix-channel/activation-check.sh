@@ -19,3 +19,4 @@ if [[ $explainChannelWarning -eq 1 ]]; then
     echo "Due to https://github.com/NixOS/nix/issues/9574, Nix may still use these channels when NIX_PATH is unset." 1>&2
     echo "Delete the above directory or directories to prevent this." 1>&2
 fi
+

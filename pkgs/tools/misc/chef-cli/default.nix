@@ -17,3 +17,4 @@ bundlerApp {
     mainProgram = "chef-cli";
   };
 }
+

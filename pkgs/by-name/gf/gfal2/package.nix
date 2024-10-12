@@ -126,3 +126,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "gfal2";
   };
 })
+

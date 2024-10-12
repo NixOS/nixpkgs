@@ -41,3 +41,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ j4m3s ];
   };
 }
+

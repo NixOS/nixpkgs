@@ -50,3 +50,4 @@ stdenv.mkDerivation rec {
     homepage = "https://www.maxmind.com";
   };
 }
+

@@ -147,3 +147,4 @@ python.pkgs.buildPythonApplication rec {
     mainProgram = "esphome";
   };
 }
+

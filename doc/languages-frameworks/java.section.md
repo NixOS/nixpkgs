@@ -129,3 +129,4 @@ OpenJDK. For instance, to use the GNU Java Compiler:
 
 Here, Ant will automatically use `gij` (the GNU Java Runtime) instead of
 the OpenJRE.
+

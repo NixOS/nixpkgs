@@ -43,3 +43,4 @@ in stdenv.mkDerivation {
     buildDir "${toString bins}" "${toString (map lib.getBin allPkgs)}"
   '';
 }
+

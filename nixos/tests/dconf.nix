@@ -32,3 +32,4 @@ import ./make-test-python.nix
       machine.succeed("sudo -u alice dbus-run-session -- dconf write /test/not/locked \"@i 2\"")
     '';
   })
+

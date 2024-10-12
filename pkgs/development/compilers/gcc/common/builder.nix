@@ -326,3 +326,4 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
     done
   '';
 }))
+

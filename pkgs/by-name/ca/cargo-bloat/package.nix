@@ -22,3 +22,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-bloat";
   };
 }
+

@@ -20,3 +20,4 @@ in
     resultFooFoo = lib.concatMapStringsSep " " toString (attrNames config.variants.foo.variants.foo.attrs);
   };
 }
+

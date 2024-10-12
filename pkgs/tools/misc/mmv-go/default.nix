@@ -23,3 +23,4 @@ buildGoModule rec {
     mainProgram = "mmv";
   };
 }
+

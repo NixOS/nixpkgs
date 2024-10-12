@@ -19,3 +19,4 @@ in {
     machine.succeed("curl --fail http://localhost:${toString jackettPort}/")
   '';
 })
+

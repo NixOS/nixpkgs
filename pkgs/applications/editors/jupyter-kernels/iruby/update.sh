@@ -16,3 +16,4 @@ bundle lock
 
 # Regenerate gemset.nix
 bundix -l
+

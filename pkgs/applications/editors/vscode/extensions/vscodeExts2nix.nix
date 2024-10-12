@@ -54,3 +54,4 @@ writeShellScriptBin "vscodeExts2nix" ''
 
   echo ']'
 ''
+

@@ -33,3 +33,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
     assert status.get("data", {}).get("data", {}).get("bar") == "baz"
   '';
 })
+

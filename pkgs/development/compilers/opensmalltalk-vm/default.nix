@@ -184,3 +184,4 @@ in
     "Unsupported platform ${platform}: only the following platforms are supported: " +
     builtins.toString (builtins.attrNames vmsByPlatform)
   ))
+

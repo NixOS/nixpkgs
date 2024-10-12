@@ -81,3 +81,4 @@ in
     boot.kernel.sysctl."vm.max_map_count" = lib.mkDefault 1048576;
   };
 }
+

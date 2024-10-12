@@ -95,3 +95,4 @@ mkDerivation rec {
   maintainers = with lib.maintainers; [ aidalgol ];
   mainProgram = "mailctl";
 }
+

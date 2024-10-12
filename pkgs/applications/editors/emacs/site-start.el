@@ -88,3 +88,4 @@ least specific (the system profile)"
         emacs-version))
       (src (file-name-as-directory "src")))
   (setq find-function-C-source-directory (concat emacs version src)))
+

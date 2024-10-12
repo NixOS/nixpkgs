@@ -211,3 +211,4 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
     router.succeed("curl --no-buffer 127.0.0.1:9547 | grep -qE '^kea_dhcp4_addresses_assigned_total.*1.0$'")
   '';
 })
+

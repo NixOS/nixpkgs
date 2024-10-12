@@ -62,3 +62,4 @@ stdenv.mkDerivation {
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=nz&lang=en&prod=hl1210w_eu_as&os=128";
   };
 }
+

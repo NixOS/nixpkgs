@@ -28,3 +28,4 @@ appimageTools.wrapType2 {
     mainProgram = "molotov";
   };
 }
+

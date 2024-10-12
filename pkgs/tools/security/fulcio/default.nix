@@ -82,3 +82,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ lesuisse jk ];
   };
 }
+

@@ -59,3 +59,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ nicknovitski ];
   };
 }
+

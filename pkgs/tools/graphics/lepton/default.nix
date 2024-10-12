@@ -23,3 +23,4 @@ stdenv.mkDerivation rec {
     knownVulnerabilities = [ "CVE-2022-4104" ];
   };
 }
+

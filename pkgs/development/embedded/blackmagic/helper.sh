@@ -49,3 +49,4 @@ for platform in platforms/*/Makefile.inc; do
   probe=$(basename "$(dirname "$platform")")
   make_platform "$probe"
 done
+

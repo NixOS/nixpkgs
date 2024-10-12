@@ -40,3 +40,4 @@ buildPythonApplication rec {
 
   passthru.updateScript = gitUpdater { };
 }
+

@@ -42,3 +42,4 @@ buildPythonPackage rec {
     mainProgram = "css-html-js-minify";
   };
 }
+

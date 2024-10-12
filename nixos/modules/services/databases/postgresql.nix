@@ -638,3 +638,4 @@ in
   meta.doc = ./postgresql.md;
   meta.maintainers = with lib.maintainers; [ thoughtpolice danbst ];
 }
+

@@ -353,3 +353,4 @@ rec {
       allowedRequisites = lib.mapNullable (rs: rs ++ [ bintools ]) (stdenv.allowedRequisites or null);
     });
 }
+

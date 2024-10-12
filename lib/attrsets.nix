@@ -2140,3 +2140,4 @@ rec {
   cartesianProductOfSets = warnIf (oldestSupportedReleaseIsAtLeast 2405)
     "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }
+

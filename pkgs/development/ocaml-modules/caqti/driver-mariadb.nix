@@ -10,3 +10,4 @@ buildDunePackage {
     description = "MariaDB driver for Caqti using C bindings";
   };
 }
+

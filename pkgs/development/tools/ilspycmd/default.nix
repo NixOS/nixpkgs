@@ -50,3 +50,4 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ emilytrau ];
   };
 }
+

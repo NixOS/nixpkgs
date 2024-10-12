@@ -38,3 +38,4 @@ lib.makeScope pkgs.newScope (self:
   s6-portable-utils-man-pages = self.s6-portable-utils.passthru.manpages;
   s6-rc-man-pages = self.s6-rc.passthru.manpages;
 })
+

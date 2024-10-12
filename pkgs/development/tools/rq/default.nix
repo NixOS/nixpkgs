@@ -34,3 +34,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ aristid Br1ght0ne figsoda ];
   };
 }
+

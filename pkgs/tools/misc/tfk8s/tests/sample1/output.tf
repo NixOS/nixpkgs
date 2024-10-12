@@ -10,3 +10,4 @@ resource "kubernetes_manifest" "configmap_test" {
     }
   }
 }
+

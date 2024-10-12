@@ -150,3 +150,4 @@ if __name__ == '__main__':
     version_manager.fetch_latest_version_builds()
     version_manager.generate_version_hashes()
     version_manager.write_versions()
+

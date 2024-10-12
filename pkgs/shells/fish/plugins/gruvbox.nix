@@ -15,3 +15,4 @@ buildFishPlugin {
     maintainers = with lib.maintainers; [ msladecek ];
   };
 }
+

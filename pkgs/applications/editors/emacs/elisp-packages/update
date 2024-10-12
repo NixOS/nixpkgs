@@ -8,3 +8,4 @@ cd "$SCRIPT_DIR"
 
 ./update-manual
 git commit -m "emacs.pkgs.manualPackages: $(date --iso)" -- .
+

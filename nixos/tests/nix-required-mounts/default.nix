@@ -56,3 +56,4 @@ in
     person_do("nix-build ${./test-structured-attrs-empty.nix}")
   '';
 }
+

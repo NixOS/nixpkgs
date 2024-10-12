@@ -117,3 +117,4 @@ writeTextFile {
   text = builtins.concatStringsSep "\n" content;
   checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
 })
+

@@ -232,3 +232,4 @@ in
 
   meta.maintainers = lib.teams.jitsi.members;
 }
+

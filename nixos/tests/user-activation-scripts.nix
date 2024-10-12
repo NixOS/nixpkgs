@@ -35,3 +35,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.succeed("[[ ! -f /home/alice/file-to-remove ]] || false")
   '';
 })
+

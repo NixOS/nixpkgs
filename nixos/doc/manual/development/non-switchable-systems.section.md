@@ -19,3 +19,4 @@ The profile sets `config.system.switch.enable = false;`, which excludes
 `switch-to-configuration`, the central script called by `nixos-rebuild`, from
 your system. Removing this script makes the image lighter and slightly more
 secure.
+

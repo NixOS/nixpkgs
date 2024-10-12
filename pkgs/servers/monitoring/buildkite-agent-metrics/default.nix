@@ -29,3 +29,4 @@ buildGoModule rec {
     maintainers = teams.determinatesystems.members;
   };
 }
+

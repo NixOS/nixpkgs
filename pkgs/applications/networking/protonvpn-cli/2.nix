@@ -49,3 +49,4 @@ buildPythonApplication rec {
     mainProgram = "protonvpn";
   };
 }
+

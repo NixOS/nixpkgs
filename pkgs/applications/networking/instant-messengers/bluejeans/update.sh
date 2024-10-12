@@ -10,3 +10,4 @@ version="$(curl -Ls https://www.bluejeans.com/downloads | \
     awk -F'[ ._ ]' '{printf $6"."$7"."$8"."$9"\n"}')"
 
 update-source-version bluejeans-gui "$version"
+

@@ -36,3 +36,4 @@ stdenv.mkDerivation {
     mainProgram = "boinctui";
   };
 }
+

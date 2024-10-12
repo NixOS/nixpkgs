@@ -29,3 +29,4 @@ buildGoModule {
     mainProgram = "wait4x";
   };
 }
+

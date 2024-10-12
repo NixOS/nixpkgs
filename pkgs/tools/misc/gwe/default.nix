@@ -89,3 +89,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "gwe";
   };
 }
+

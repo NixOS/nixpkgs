@@ -112,3 +112,4 @@ stdenv.mkDerivation rec {
     mainProgram = "termius-app";
   };
 }
+

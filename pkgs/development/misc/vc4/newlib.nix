@@ -26,3 +26,4 @@ stdenvNoLibc.mkDerivation {
     libdir = "/${stdenv.targetPlatform.config}/lib";
   };
 }
+

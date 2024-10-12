@@ -62,3 +62,4 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${version}/RELEASES.md";
   };
 }
+

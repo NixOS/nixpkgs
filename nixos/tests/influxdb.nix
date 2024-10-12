@@ -38,3 +38,4 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     assert "0.64" in out
   '';
 })
+

@@ -12,3 +12,4 @@ stdenv.mkDerivation {
     substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook
   '';
 }
+

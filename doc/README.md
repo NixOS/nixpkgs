@@ -373,3 +373,4 @@ Typographic replacements are enabled. Check the [list of possible replacement pa
 ## Getting help
 
 If you need documentation-specific help or reviews, ping [@NixOS/documentation-team](https://github.com/orgs/nixos/teams/documentation-team) on your pull request.
+

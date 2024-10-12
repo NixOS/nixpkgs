@@ -45,3 +45,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "code2prompt";
   };
 }
+

@@ -33,3 +33,4 @@ replace_hash "x86_64-linux" "$CODEIUM_LINUX_X64_HASH"
 replace_hash "aarch64-linux" "$CODEIUM_LINUX_AARCH64_HASH"
 replace_hash "x86_64-darwin" "$CODEIUM_DARWIN_X64_HASH"
 replace_hash "aarch64-darwin" "$CODEIUM_DARWIN_AARCH64_HASH"
+

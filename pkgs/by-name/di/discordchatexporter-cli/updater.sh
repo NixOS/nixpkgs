@@ -13,3 +13,4 @@ fi
 cd ../../../..
 update-source-version discordchatexporter-cli "$new_version"
 $(nix-build -A discordchatexporter-cli.fetch-deps --no-out-link)
+

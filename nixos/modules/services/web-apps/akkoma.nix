@@ -1139,3 +1139,4 @@ in {
   meta.maintainers = with maintainers; [ mvs ];
   meta.doc = ./akkoma.md;
 }
+

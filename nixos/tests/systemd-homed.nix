@@ -97,3 +97,4 @@ in
       machine.succeed("userdbctl group wheel -s io.systemd.NameServiceSwitch | grep test-homed-user")
   '';
 })
+

@@ -39,3 +39,4 @@ stdenv.mkDerivation rec {
     mainProgram = "xwallpaper";
   };
 }
+

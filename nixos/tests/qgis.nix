@@ -28,3 +28,4 @@ import ./make-test-python.nix ({ pkgs, lib, qgisPackage, ... }:
       machine.succeed("${qgisPackage}/bin/qgis --code ${testScript}")
     '';
   })
+

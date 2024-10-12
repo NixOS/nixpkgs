@@ -28,3 +28,4 @@ in rustPlatform.buildRustPackage {
     platforms = platforms.linux;
   };
 }
+

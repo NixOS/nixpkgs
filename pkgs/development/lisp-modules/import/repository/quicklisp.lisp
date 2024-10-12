@@ -198,3 +198,4 @@
   (or (sqlite:execute-single db "select hash from sha256 where url=?" url)
       (let ((sha256 (shell-command-to-string (str:concat "nix-prefetch-url --unpack " url))))
         sha256)))
+

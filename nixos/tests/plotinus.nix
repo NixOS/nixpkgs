@@ -30,3 +30,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.wait_for_window("Preferences", timeout=120)
   '';
 })
+

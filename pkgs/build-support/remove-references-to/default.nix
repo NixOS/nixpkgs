@@ -34,3 +34,4 @@ stdenv.mkDerivation {
   signingUtils = if darwinCodeSign then signingUtils else null;
   meta.mainProgram = "remove-references-to";
 }
+

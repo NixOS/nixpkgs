@@ -44,3 +44,4 @@ in
   "25" = makeNdkPkgs "25.2.9519653" pkgs.llvmPackages_14;
   "26" = makeNdkPkgs "26.3.11579264" pkgs.llvmPackages_17;
 }
+

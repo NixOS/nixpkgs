@@ -34,3 +34,4 @@ buildGoModule rec {
     description = "Command line client for the Drone continuous integration server";
   };
 }
+

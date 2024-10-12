@@ -14,3 +14,4 @@ mkKdeDerivation {
   # lots of icons, takes forever, does absolutely nothing
   dontStrip = true;
 }
+

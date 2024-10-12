@@ -11,3 +11,4 @@ On the affected hardware errors like `Illegal instruction` will occur. In those 
 ```nix
 self: super: { dlib = super.dlib.override { avxSupport = false; }; }
 ```
+

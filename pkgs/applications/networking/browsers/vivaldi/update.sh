@@ -45,3 +45,4 @@ if [[ "$chromium_version" != "$chromium_version_old" ]]; then
   git add "${ffmpeg_nix}"
   git commit -m "vivaldi-ffmpeg-codecs: $chromium_version_old -> $chromium_version"
 fi
+

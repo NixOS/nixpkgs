@@ -93,3 +93,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "xplorer";
   };
 }
+

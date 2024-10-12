@@ -21,3 +21,4 @@ callPackage ../generic.nix rec {
     description = "A fork of the Shattered Pixel Dungeon roguelike without limits on experience and items";
   };
 }
+

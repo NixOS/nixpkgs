@@ -5,3 +5,4 @@ mkDerivation {
   buildInputs = [ libncurses-tinfo ];
   MK_TESTS = "no";
 }
+

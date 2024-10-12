@@ -66,3 +66,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ fwc ];
   };
 }
+

@@ -242,3 +242,4 @@
   (fetchNuGet { pname = "System.Xml.XPath"; version = "4.0.1"; sha256 = "0fjqgb6y66d72d5n8qq1h213d9nv2vi8mpv8p28j3m9rccmsh04m"; })
   (fetchNuGet { pname = "System.Xml.XPath.XDocument"; version = "4.0.1"; sha256 = "1fndc70lbjvh8kxs71c7cidfm8plznd61bg4fwpiyq3mq0qg5z0z"; })
 ]
+

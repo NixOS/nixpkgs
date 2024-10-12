@@ -17,3 +17,4 @@ luarocks-packages-updater = "updater:main"
 [tool.ruff]
 line-length = 120
 indent-width = 4
+

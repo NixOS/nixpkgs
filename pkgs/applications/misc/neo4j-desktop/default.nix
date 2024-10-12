@@ -30,3 +30,4 @@ in appimageTools.wrapType2 {
     mainProgram = "neo4j-desktop";
   };
 }
+

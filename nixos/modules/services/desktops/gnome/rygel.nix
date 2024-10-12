@@ -32,3 +32,4 @@
     environment.etc."rygel.conf".source = "${pkgs.rygel}/etc/rygel.conf";
   };
 }
+

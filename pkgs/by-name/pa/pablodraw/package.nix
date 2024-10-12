@@ -67,3 +67,4 @@ buildDotnetModule rec {
     broken = stdenv.hostPlatform.isDarwin; # Eto.Platform.Mac64 not found in nugetSource
   };
 }
+

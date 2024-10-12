@@ -67,3 +67,4 @@ import ./make-test-python.nix ({ pkgs, ... }:
       machine.succeed("vault status || test $? -eq 2")
     '';
 })
+

@@ -204,3 +204,4 @@
   (fetchNuGet { pname = "Tmds.DBus.Protocol"; version = "0.15.0"; hash = "sha256-4gk2vXDjKFaBh82gTkwg3c/5GRjiH+bvM5elfDSbKTU="; })
   (fetchNuGet { pname = "UnicornEngine.Unicorn"; version = "2.0.2-rc1-fb78016"; hash = "sha256-NrJ4/o4FmCt2zoB1fWAzqdonvpYhTFsWwh3h0lxZg+Q="; })
 ]
+

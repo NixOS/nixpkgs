@@ -85,3 +85,4 @@ buildGoModule rec {
     mainProgram = "alice-lg";
   };
 }
+

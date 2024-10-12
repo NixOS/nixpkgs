@@ -220,3 +220,4 @@ in {
     primary.log(primary.succeed("systemd-analyze security knot.service | grep -v '✓'"))
   '';
 })
+

@@ -28,3 +28,4 @@ platform :ruby, :mswin, :mingw, :x64_mingw do
   gem "liquid-c", "~> 4.0"
   gem "yajl-ruby", "~> 1.4"
 end
+

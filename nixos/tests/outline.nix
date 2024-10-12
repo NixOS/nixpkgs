@@ -52,3 +52,4 @@ in
       outline.succeed("curl --fail http://localhost:3000/")
     '';
 })
+

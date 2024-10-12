@@ -38,3 +38,4 @@ buildPythonApplication rec {
     mainProgram = "pandoc-include";
   };
 }
+

@@ -93,3 +93,4 @@ pypkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ peterhoeg zopieux ];
   };
 }
+

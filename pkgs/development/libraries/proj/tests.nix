@@ -9,3 +9,4 @@ runCommand "${pname}-tests" { meta.timeout = 60; }
       | grep '+proj=longlat +datum=WGS84 +no_defs +type=crs'
     touch $out
   ''
+

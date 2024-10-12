@@ -84,3 +84,4 @@ buildPythonPackage rec {
     homepage = "https://www.riverbankcomputing.com/software/qscintilla/";
   };
 }
+

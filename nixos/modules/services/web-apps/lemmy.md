@@ -31,3 +31,4 @@ On first connection you will be asked to define an admin user.
 
 - Exposing with nginx is not implemented yet.
 - This has been tested using a local database with a unix socket connection. Using different database settings will likely require modifications
+

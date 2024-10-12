@@ -49,3 +49,4 @@ pkgs.runCommand "test haskell.lib.compose.setBuildTarget" {
   touch "$out"
 ''
 
+

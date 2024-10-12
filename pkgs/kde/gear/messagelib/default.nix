@@ -7,3 +7,4 @@ mkKdeDerivation {
 
   extraPropagatedBuildInputs = [ qtwebengine ];
 }
+

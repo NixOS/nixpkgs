@@ -5,3 +5,4 @@
 
   config.value.bar = throw "is not lazy";
 }
+

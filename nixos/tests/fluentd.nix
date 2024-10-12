@@ -47,3 +47,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.succeed("grep '${testMessage}' /tmp/current-log")
   '';
 })
+

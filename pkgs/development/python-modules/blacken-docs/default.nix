@@ -40,3 +40,4 @@ buildPythonPackage rec {
     mainProgram = "blacken-docs";
   };
 }
+

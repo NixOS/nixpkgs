@@ -45,3 +45,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert "Total devices 2" in machine.succeed("btrfs filesystem show")
   '';
 })
+

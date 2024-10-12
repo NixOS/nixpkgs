@@ -8,3 +8,4 @@ mkKdeDerivation {
   extraBuildInputs = [ qttools ];
   meta.mainProgram = "korganizer";
 }
+

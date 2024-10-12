@@ -24,3 +24,4 @@ buildFishPlugin {
     maintainers = with lib.maintainers; [ anomalocaris ];
   };
 }
+

@@ -25,3 +25,4 @@ in {
     machine.wait_for_shutdown()
   '';
 })
+

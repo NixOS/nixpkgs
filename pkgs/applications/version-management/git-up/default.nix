@@ -55,3 +55,4 @@ pythonPackages.buildPythonApplication rec {
     mainProgram = "git-up";
   };
 }
+

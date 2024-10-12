@@ -25,3 +25,4 @@ rustPlatform.buildRustPackage {
     platforms = lib.platforms.linux;
   };
 }
+

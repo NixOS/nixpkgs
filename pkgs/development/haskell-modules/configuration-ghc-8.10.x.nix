@@ -191,3 +191,4 @@ self: super: {
     ghc-prim = self.hashable;
   });
 }
+

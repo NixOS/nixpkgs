@@ -162,3 +162,4 @@ buildDotnetModule {
     # platforms inherited from dotnet-sdk.
   };
 }
+

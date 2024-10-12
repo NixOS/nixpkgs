@@ -45,3 +45,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     configured.succeed(f"test -d '{SPACEDIR}'")
   '';
 })
+

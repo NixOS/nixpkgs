@@ -42,3 +42,4 @@ in rustPlatform.buildRustPackage {
     maintainers = [ maintainers.cmm ];
   };
 }
+

@@ -10,3 +10,4 @@ stdenv.mkDerivation {
   '';
   meta = removeAttrs hunspell.meta ["outputsToInstall"];
 }
+

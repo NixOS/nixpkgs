@@ -47,3 +47,4 @@ buildGoModule rec {
     mainProgram = "double-entry-generator";
   };
 }
+

@@ -51,3 +51,4 @@ echo "Finished.  Make sure you run the following commands to confirm PureScript 
 echo ' - `nix build -L -f ./. purescript`'
 echo ' - `nix build -L -f ./. purescript.passthru.tests.minimal-module`'
 echo ' - `sudo nix build -L -f ./. spago.passthru.tests --option sandbox relaxed`'
+

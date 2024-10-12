@@ -25,3 +25,4 @@ For GNOME updates,
 ## Manually packaged extensions
 
 Manually packaged extensions overwrite some of the automatically packaged ones in `pkgs.gnomeExtensions`. They are listed in `manuallyPackaged.nix`, every extension has its own sub-folder.
+

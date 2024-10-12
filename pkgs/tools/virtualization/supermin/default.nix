@@ -29,3 +29,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "supermin";
   };
 })
+

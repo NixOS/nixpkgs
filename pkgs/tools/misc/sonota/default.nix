@@ -53,3 +53,4 @@ in buildPythonApplication rec {
     mainProgram = "sonota";
   };
 }
+

@@ -21,3 +21,4 @@ mkKdeDerivation {
     qtsvg
   ];
 }
+

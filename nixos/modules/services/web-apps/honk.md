@@ -21,3 +21,4 @@ A minimal configuration looks like this:
   networking.firewall.allowedTCPPorts = [ 8080 ];
 }
 ```
+

@@ -16,3 +16,4 @@ while read -r -d ':' lib; do
     ln -s "$dir" "$build_dir"
     done
 done <<< "$ERL_LIBS:"
+

@@ -96,3 +96,4 @@ lib.mapAttrs networkRequiringTestPkg {
       | grep '"version 2" Tectonic command-line interface activated'
   '';
 }
+

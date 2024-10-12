@@ -56,3 +56,4 @@ buildNpmPackage rec {
     mainProgram = "fx_cast_bridge";
   };
 }
+

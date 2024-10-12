@@ -9,3 +9,4 @@ if ! diff -U3 netlify-cli.json{.old,}; then
     ./generate.sh
 fi
 rm -f netlify-cli.json.old
+

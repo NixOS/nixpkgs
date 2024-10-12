@@ -13,3 +13,4 @@ BUNDLE_GEMFILE=Gemfile-beta bundler lock --lockfile=Gemfile-beta.lock
 
 bundix --gemfile=Gemfile --lockfile=Gemfile.lock --gemset=gemset.nix
 bundix --gemfile=Gemfile-beta --lockfile=Gemfile-beta.lock --gemset=gemset-beta.nix
+

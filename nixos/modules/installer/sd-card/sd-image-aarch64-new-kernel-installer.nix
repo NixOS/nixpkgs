@@ -8,3 +8,4 @@
   # so we don't want to provide the installation configuration.nix.
   installer.cloneConfig = false;
 }
+

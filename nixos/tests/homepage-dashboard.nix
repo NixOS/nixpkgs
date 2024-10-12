@@ -34,3 +34,4 @@ import ./make-test-python.nix ({ lib, ... }: {
     managed_conf.fail("test -f /var/lib/private/homepage-dashboard/settings.yaml")
   '';
 })
+

@@ -71,3 +71,4 @@ stdenv.mkDerivation rec {
     mainProgram = "granite-7-demo";
   };
 }
+

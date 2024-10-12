@@ -24,3 +24,4 @@ in stdenv.mkDerivation {
     mainProgram = "termonad";
   };
 }
+

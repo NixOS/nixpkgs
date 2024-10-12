@@ -39,3 +39,4 @@ On NixOS, it can be installed using the following expression:
   fonts.packages = with pkgs; [ noto-fonts-color-emoji ];
 }
 ```
+

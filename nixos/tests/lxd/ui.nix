@@ -60,3 +60,4 @@ import ../make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("PYTHONUNBUFFERED=1 selenium-script")
   '';
 })
+

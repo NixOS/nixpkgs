@@ -33,3 +33,4 @@ mkPulumiPackage rec {
     maintainers = with maintainers; [ veehaitch trundle ];
   };
 }
+

@@ -20,3 +20,4 @@ stdenvNoCC.mkDerivation {
   outputHashMode = "recursive";
   outputHash = versions.videojs.hash;
 }
+

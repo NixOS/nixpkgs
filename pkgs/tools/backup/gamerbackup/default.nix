@@ -28,3 +28,4 @@ buildGoModule {
     maintainers = with maintainers; [ babbaj ];
   };
 }
+

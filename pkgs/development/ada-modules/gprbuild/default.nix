@@ -69,3 +69,4 @@ stdenv.mkDerivation {
     rm $out/doinstall
   '';
 }
+

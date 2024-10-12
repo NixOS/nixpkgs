@@ -65,3 +65,4 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
           assert boot_id1 != boot_id2
   '';
 })
+

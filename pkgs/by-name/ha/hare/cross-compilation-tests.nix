@@ -38,3 +38,4 @@ runCommandNoCC "${hare.pname}-cross-compilation-test"
 
     : 1>$out
   ''
+

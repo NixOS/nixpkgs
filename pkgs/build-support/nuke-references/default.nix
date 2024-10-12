@@ -41,3 +41,4 @@ stdenvNoCC.mkDerivation {
 
   meta.mainProgram = "nuke-refs";
 }
+

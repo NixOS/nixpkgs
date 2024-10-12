@@ -116,3 +116,4 @@ added to Grafana as well.
   users.users.nginx.extraGroups = [ "grafana" ];
 }
 ```
+

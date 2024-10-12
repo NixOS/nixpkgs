@@ -50,3 +50,4 @@ in
       machine.succeed("test -d $(dirname ${cfg.flags.pidfile})")
     '';
 })
+

@@ -35,3 +35,4 @@ buildPythonPackage rec {
     homepage = "https://github.com/jsocol/pystatsd";
   };
 }
+

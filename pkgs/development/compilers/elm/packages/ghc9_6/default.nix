@@ -41,3 +41,4 @@ self: pkgs.haskell.packages.ghc96.override {
         (self.callPackage ./ansi-wl-pprint { });
     };
 }
+

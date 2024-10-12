@@ -513,3 +513,4 @@ in rec {
       substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
    '';
 }
+

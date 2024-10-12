@@ -18,3 +18,4 @@
   (fetchNuGet { pname = "System.IdentityModel.Tokens.Jwt"; version = "7.3.1"; hash = "sha256-Si60aDtJSjvXvY5ZkVQKF3JzxAkmkAKOw5D/q8CwuyQ="; })
   (fetchNuGet { pname = "System.Security.Cryptography.Pkcs"; version = "8.0.0"; hash = "sha256-yqfIIeZchsII2KdcxJyApZNzxM/VKknjs25gDWlweBI="; })
 ]
+

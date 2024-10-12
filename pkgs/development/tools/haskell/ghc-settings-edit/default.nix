@@ -26,3 +26,4 @@ mkDerivation {
   description = "Tool for editing GHC's settings file";
   mainProgram = "ghc-settings-edit";
 }
+

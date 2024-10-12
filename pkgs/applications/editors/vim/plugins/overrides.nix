@@ -2749,3 +2749,4 @@ in
   in
   lib.genAttrs nodePackageNames nodePackage2VimPackage
 )
+

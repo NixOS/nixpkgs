@@ -31,3 +31,4 @@ buildGoModule rec {
     platforms   = platforms.all;
   };
 }
+

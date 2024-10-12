@@ -25,3 +25,4 @@ in
     environment.systemPackages = [ pkgs.spectrwm ];
   };
 }
+

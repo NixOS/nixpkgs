@@ -27,3 +27,4 @@ buildDartApplication rec {
     maintainers = with maintainers; [ lelgenio ];
   };
 }
+

@@ -21,3 +21,4 @@ addFreeBSDMakeFlags() {
 
 postUnpackHooks+=(setFreeBSDSrcTop)
 preConfigureHooks+=(addFreeBSDMakeFlags)
+

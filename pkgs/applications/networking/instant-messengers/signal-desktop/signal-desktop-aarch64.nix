@@ -6,3 +6,4 @@ callPackage ./generic.nix { } rec {
   url = "https://github.com/0mniteck/Signal-Desktop-Mobian/raw/${version}/builds/release/signal-desktop_${version}_arm64.deb";
   hash = "sha256-fQb2nYE1+q6DNcMF0z5NadGlffYaCFNgcu8IIGVUtf8=";
 }
+

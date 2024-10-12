@@ -89,3 +89,4 @@ rustPlatform.buildRustPackage rec {
     platforms = intersectLists platforms.unix (platforms.aarch64 ++ platforms.s390x ++ platforms.riscv64 ++ platforms.x86);
   };
 }
+

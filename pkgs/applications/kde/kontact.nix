@@ -26,3 +26,4 @@ mkDerivation {
     akregator kaddressbook kmail knotes korganizer zanshin
   ];
 }
+

@@ -24,3 +24,4 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tweag/opam2json";
   };
 }
+

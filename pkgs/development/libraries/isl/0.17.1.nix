@@ -6,3 +6,4 @@ import ./generic.nix rec {
   ];
   sha256 = "be152e5c816b477594f4c6194b5666d8129f3a27702756ae9ff60346a8731647";
 }
+

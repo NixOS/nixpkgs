@@ -52,3 +52,4 @@ buildPythonPackage rec {
     mainProgram = "gehome-appliance-data";
   };
 }
+

@@ -37,3 +37,4 @@ if (pname != "" && version != "") then {
 } else {
   name = if (name != "") then name else (baseNameOf finalAttrs.url);
 })
+

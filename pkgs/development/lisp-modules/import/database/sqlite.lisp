@@ -173,3 +173,4 @@ in lib.makeScope pkgs.newScope (self: {")
                           ,@(unless (find name hydra:+allowlist+ :test #'string=)
                               '(("hydraPlatforms" (:list)))))))))))))
       (format f "~%})~%"))))
+

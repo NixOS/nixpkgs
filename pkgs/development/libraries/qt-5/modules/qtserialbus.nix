@@ -4,3 +4,4 @@ qtModule {
   pname = "qtserialbus";
   propagatedBuildInputs = [ qtbase qtserialport ];
 }
+

@@ -268,3 +268,4 @@ fi
 if [ -e "@out@/nix-support/post-link-hook" ]; then
     source @out@/nix-support/post-link-hook
 fi
+

@@ -115,3 +115,4 @@ expectSuccess 'lib.network.ipv6.fromString "2001:DB8::ffff/64"' '{"address":"200
 expectSuccess 'lib.network.ipv6.fromString "1234:5678:90ab:cdef:fedc:ba09:8765:4321/44"' '{"address":"1234:5678:90ab:cdef:fedc:ba09:8765:4321","prefixLength":44}'
 
 echo >&2 tests ok
+

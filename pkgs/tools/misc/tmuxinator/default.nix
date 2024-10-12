@@ -52,3 +52,4 @@ buildRubyGem rec {
     mainProgram = "tmuxinator";
   };
 }
+

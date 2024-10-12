@@ -5,3 +5,4 @@ godot3-headless.overrideAttrs (self: base: {
   godotBuildDescription = "debug server";
   shouldBuildTools = false;
 })
+

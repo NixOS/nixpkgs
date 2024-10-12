@@ -95,3 +95,4 @@ in {
     users.groups.lirc.gid = config.ids.gids.lirc;
   };
 }
+

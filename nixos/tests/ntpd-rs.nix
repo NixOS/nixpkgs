@@ -49,3 +49,4 @@ import ./make-test-python.nix ({ lib, ... }:
       machine.succeed('curl http://localhost:9975/metrics | grep ntp_uptime_seconds')
   '';
 })
+

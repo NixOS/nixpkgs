@@ -27,3 +27,4 @@ runCommand name {
   cp $script $out/bin/service
   chmod a+x $out/bin/service
 ''
+

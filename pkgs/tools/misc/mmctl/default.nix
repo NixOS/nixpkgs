@@ -10,3 +10,4 @@ mattermost.overrideAttrs (o: {
     mainProgram = "mmctl";
   };
 })
+

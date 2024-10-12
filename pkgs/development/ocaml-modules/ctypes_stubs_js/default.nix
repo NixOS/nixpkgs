@@ -37,3 +37,4 @@ buildDunePackage rec {
     homepage = "https://gitlab.com/nomadic-labs/ctypes_stubs_js";
   };
 }
+

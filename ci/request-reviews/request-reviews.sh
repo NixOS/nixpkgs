@@ -93,3 +93,4 @@ if ! response=$(effect gh api \
 fi
 
 log "Successfully requested reviews"
+

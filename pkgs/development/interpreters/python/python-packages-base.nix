@@ -109,3 +109,4 @@ in {
   # Prevent `pkgs/top-level/release-attrpaths-superset.nix` from recursing more than one level here.
   pythonPackages = self // { __attrsFailEvaluation = true; };
 }
+

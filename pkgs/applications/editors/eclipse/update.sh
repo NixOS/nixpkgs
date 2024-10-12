@@ -70,3 +70,4 @@ for u in $(grep 'url = ' pkgs/applications/editors/eclipse/default.nix | grep ar
     done
     echo '        }.${arch};';
 done
+

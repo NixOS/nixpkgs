@@ -21,3 +21,4 @@ in nodePackages.buildNodePackage {
     maintainers = with lib.maintainers; [ offline ];
   };
 }
+

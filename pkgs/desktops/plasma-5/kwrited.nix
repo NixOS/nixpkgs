@@ -13,3 +13,4 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kcoreaddons kdbusaddons ki18n knotifications kpty qtbase ];
 }
+

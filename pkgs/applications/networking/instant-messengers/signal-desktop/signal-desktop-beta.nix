@@ -6,3 +6,4 @@ callPackage ./generic.nix { } rec {
   url = "https://updates.signal.org/desktop/apt/pool/s/signal-desktop-beta/signal-desktop-beta_${version}_amd64.deb";
   hash = "sha256-7L+ldJYJXB9VkC12s8AyUdECVXnyN8PNo7AFIyEHcS8=";
 }
+

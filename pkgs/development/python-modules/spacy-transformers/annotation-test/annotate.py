@@ -67,3 +67,4 @@ def test_verbs(doc_en_core_web_trf):
         'turn',
         'talk',
         'say']
+

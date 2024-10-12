@@ -30,3 +30,4 @@ for i in $substFiles; do
 done
 
 mkdir -p $out/bin
+

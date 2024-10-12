@@ -29,3 +29,4 @@ If you are switching networks with different proxy configurations, use
 the `specialisation` option in `configuration.nix` to switch proxies at
 runtime. Refer to [](#ch-options) for more information.
 :::
+

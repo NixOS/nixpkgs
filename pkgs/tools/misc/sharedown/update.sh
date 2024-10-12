@@ -24,3 +24,4 @@ cd "$tempDir"
 PUPPETEER_SKIP_DOWNLOAD=1 yarn install
 yarn2nix > "$dirname/yarndeps.nix"
 cp -r yarn.lock "$dirname"
+

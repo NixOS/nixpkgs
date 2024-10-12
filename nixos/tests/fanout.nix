@@ -28,3 +28,4 @@ import ./make-test-python.nix ({lib, pkgs, ...}: {
     machine.succeed("test -c /dev/fanout1")
   '';
 })
+

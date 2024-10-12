@@ -55,3 +55,4 @@ lib.throwIf (attrs ? name) "buildPerlPackage: `name` (\"${attrs.name}\") is depr
   });
 
 in toPerlModule package)
+

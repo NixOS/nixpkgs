@@ -67,3 +67,4 @@ fi
 if [ -z "${dontUseZigInstall-}" ] && [ -z "${installPhase-}" ]; then
     installPhase=zigInstallPhase
 fi
+

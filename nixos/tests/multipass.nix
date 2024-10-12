@@ -35,3 +35,4 @@ in
     machine.succeed("multipass list")
   '';
 })
+

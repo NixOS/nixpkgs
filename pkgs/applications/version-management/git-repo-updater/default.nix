@@ -30,3 +30,4 @@ buildPythonApplication rec {
     mainProgram = "gitup";
   };
 }
+

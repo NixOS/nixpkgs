@@ -117,3 +117,4 @@ stdenv.mkDerivation {
     mainProgram = "Fritzing";
   };
 }
+

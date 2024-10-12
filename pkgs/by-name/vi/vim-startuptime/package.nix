@@ -37,3 +37,4 @@ buildGoModule {
     mainProgram = "vim-startuptime";
   };
 }
+

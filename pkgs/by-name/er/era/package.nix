@@ -43,3 +43,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (deno.meta) platforms;
   };
 })
+

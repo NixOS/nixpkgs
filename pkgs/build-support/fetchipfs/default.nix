@@ -34,3 +34,4 @@ lib.fetchers.withNormalizedHash { hashTypes = [ "sha1" "sha256" "sha512" ]; } (
     inherit preferLocalBuild;
   }
 )
+

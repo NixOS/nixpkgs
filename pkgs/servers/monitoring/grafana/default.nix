@@ -140,3 +140,4 @@ buildGoModule rec {
     mainProgram = "grafana-server";
   };
 }
+

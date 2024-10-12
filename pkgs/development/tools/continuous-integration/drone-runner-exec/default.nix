@@ -25,3 +25,4 @@ buildGoModule rec {
     mainProgram = "drone-runner-exec";
   };
 }
+

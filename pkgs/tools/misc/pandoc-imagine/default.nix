@@ -27,3 +27,4 @@ buildPythonApplication rec {
     mainProgram = "pandoc-imagine";
   };
 }
+

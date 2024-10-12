@@ -170,3 +170,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "nethack";
   };
 }
+

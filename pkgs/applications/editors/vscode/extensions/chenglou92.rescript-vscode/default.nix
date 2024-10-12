@@ -38,3 +38,4 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     license = lib.licenses.mit;
   };
 }
+

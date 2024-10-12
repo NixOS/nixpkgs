@@ -84,3 +84,4 @@ stdenv.mkDerivation {
   # For obtaining the closure of `storeContents'.
   closureInfo = closureInfo { rootPaths = map (x: x.object) storeContents; };
 }
+

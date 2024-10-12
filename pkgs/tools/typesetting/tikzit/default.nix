@@ -32,3 +32,4 @@ mkDerivation {
     mainProgram = "tikzit";
   };
 }
+

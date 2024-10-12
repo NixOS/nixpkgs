@@ -14,3 +14,4 @@ qtModule {
   ];
   meta.badPlatforms = lib.platforms.darwin;
 }
+

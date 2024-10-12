@@ -38,3 +38,4 @@ buildGo123Module rec {
     maintainers = with lib.maintainers; [ katexochen ];
   };
 }
+

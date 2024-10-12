@@ -111,3 +111,4 @@ in stdenv.mkDerivation (cleanAttrs // {
     mainProgram = pname;
   } // meta;
 })
+

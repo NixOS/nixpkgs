@@ -5,3 +5,4 @@ qtModule {
   nativeBuildInputs = [ qttools ];
   outputs = [ "out" ];
 }
+

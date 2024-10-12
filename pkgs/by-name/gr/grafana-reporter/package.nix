@@ -39,3 +39,4 @@ buildGoModule rec {
     maintainers = [ lib.maintainers.disassembler ];
   };
 }
+

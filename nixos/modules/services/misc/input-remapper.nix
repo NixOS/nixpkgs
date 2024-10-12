@@ -25,3 +25,4 @@ let cfg = config.services.input-remapper; in
 
   meta.maintainers = with lib.maintainers; [ LunNova ];
 }
+

@@ -29,3 +29,4 @@ callPackage ./generic.nix args {
 
   hash = "sha256-wkgoYg6uQOHVq8a9sJXzO/QXJ6q28l7JXWkC+BFvOb0=";
 }
+

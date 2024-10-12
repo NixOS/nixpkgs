@@ -59,3 +59,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "grimblast";
   };
 })
+

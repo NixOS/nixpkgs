@@ -21,3 +21,4 @@ mkKdeDerivation rec {
 
   meta.license = [ lib.licenses.gpl2Only ];
 }
+

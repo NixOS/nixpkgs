@@ -87,3 +87,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ Luflosi ];
   };
 }
+

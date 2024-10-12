@@ -42,3 +42,4 @@ Using it together with the Nextcloud module could look like this:
 Adapt the version number in the Nextcloud package and nextcloudPackages set
 according to the Nextcloud version you wish to use. There are several supported
 stable Nextcloud versions available in the repository.
+

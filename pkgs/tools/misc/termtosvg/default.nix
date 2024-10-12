@@ -19,3 +19,4 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "termtosvg";
   };
 }
+

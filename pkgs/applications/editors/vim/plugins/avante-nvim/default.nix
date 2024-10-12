@@ -74,3 +74,4 @@ vimUtils.buildVimPlugin {
   # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
   # nvimRequireCheck = "avante";
 }
+

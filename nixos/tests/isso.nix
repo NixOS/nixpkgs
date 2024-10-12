@@ -28,3 +28,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     machine.succeed("curl --fail http://localhost:${toString port}/js/embed.min.js")
   '';
 })
+

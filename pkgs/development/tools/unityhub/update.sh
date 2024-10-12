@@ -11,3 +11,4 @@ if [[ "$new_version" == "$old_version" ]]; then
 fi
 
 update-source-version unityhub "$new_version"
+

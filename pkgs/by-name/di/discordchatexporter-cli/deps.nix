@@ -21,3 +21,4 @@
   (fetchNuGet { pname = "WebMarkupMin.Core"; version = "2.16.0"; sha256 = "0cbkgrrkam76bhygrjzd4nj4mpzpgbnsddfzwry1933rcvjlqh6m"; })
   (fetchNuGet { pname = "YoutubeExplode"; version = "6.3.16"; sha256 = "1f6d47g1qmmahx6pn2sp0fff7hsmdqwm7z09j47hs6r1yn9a7kyj"; })
 ]
+

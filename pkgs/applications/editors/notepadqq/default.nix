@@ -58,3 +58,4 @@ mkDerivation rec {
     mainProgram = "notepadqq";
   };
 }
+

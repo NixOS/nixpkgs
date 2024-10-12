@@ -16,3 +16,4 @@ in
   # so that existing `unzip` hooks takes care of the unpacking.
   name = "${publisher}-${name}.zip";
 }
+

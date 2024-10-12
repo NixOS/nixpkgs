@@ -22,3 +22,4 @@ buildPythonPackage rec {
     mainProgram = "i3_balance_workspace";
   };
 }
+

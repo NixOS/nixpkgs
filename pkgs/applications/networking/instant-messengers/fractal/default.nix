@@ -89,3 +89,4 @@ stdenv.mkDerivation rec {
     mainProgram = "fractal";
   };
 }
+

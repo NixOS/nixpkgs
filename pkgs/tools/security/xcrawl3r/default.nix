@@ -30,3 +30,4 @@ buildGoModule rec {
     mainProgram = "xcrawl3r";
   };
 }
+

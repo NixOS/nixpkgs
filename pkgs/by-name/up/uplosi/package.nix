@@ -49,3 +49,4 @@ buildGoModule rec {
     platforms = lib.platforms.unix;
   };
 }
+

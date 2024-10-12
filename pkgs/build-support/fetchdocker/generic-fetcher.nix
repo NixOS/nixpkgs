@@ -91,3 +91,4 @@ stdenv.mkDerivation {
 
   inherit registry dockerCredentialsFile;
 }
+

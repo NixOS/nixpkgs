@@ -25,3 +25,4 @@
   environment.systemPackages = [pkgs.nixos-rebuild];
 
 }
+

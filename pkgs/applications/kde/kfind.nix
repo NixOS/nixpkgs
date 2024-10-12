@@ -18,3 +18,4 @@ mkDerivation {
     karchive kcoreaddons kfilemetadata ktextwidgets kwidgetsaddons kio
   ];
 }
+

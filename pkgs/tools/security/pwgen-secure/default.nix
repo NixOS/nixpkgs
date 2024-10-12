@@ -48,3 +48,4 @@ buildPythonApplication rec {
     mainProgram = "spwgen";
   };
 }
+

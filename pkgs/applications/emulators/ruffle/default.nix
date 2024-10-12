@@ -123,3 +123,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "ruffle_desktop";
   };
 }
+

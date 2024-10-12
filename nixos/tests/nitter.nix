@@ -31,3 +31,4 @@ in
     machine.succeed("curl --fail http://localhost:80/")
   '';
 })
+

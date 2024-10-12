@@ -78,3 +78,4 @@ self: pkgs.haskell.packages.ghc810.override {
       elm-format = null;
     };
 }
+

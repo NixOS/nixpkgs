@@ -35,3 +35,4 @@ in buildFHSEnv (lib.recursiveUpdate fhsArgs {
 
   meta.mainProgram = "appimage-run";
 })
+

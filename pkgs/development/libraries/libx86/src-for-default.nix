@@ -5,3 +5,4 @@ rec {
    url="http://www.codon.org.uk/~mjg59/libx86/downloads/libx86-${version}.tar.gz";
    advertisedUrl="http://www.codon.org.uk/~mjg59/libx86/downloads/libx86-${version}.tar.gz";
 }
+

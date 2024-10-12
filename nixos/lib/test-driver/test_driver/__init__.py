@@ -158,3 +158,4 @@ def generate_driver_symbols() -> None:
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))
+

@@ -394,3 +394,4 @@ Initializing the project will require the following steps:
 - start the postgres instance `pg_ctl -l "$PGDATA/server.log" start`
 - add the `/db` folder to your `.gitignore`
 - you can start your phoenix server and get a shell with `iex -S mix phx.server`
+

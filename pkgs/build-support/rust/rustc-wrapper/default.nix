@@ -50,3 +50,4 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
   ${lib.concatMapStrings (output: "ln -s ${rustc-unwrapped.${output}} \$${output}\n")
     (lib.remove "out" rustc-unwrapped.outputs)}
 ''
+

@@ -42,3 +42,4 @@ swiftPackages.stdenv.mkDerivation (final: {
     mainProgram = "dark-mode-notify";
   };
 })
+

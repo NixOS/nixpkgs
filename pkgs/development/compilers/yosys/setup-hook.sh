@@ -3,3 +3,4 @@ addYosysPluginPath() {
 }
 
 addEnvHooks "$targetOffset" addYosysPluginPath
+

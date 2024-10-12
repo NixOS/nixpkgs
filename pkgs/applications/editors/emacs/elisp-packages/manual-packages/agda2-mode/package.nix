@@ -15,3 +15,4 @@ melpaBuild {
     description = "Agda2-mode for Emacs extracted from Agda package";
   };
 }
+

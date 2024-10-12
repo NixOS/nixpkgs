@@ -307,3 +307,4 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vlc";
   };
 })
+

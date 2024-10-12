@@ -38,3 +38,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nu_plugin_net";
   };
 }
+

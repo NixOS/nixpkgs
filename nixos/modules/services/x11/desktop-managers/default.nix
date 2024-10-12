@@ -87,3 +87,4 @@ in
 
   config.services.xserver.displayManager.session = cfg.session;
 }
+

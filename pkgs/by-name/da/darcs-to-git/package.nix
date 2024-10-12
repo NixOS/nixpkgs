@@ -94,3 +94,4 @@ stdenv.mkDerivation {
     mainProgram = "darcs-to-git";
   };
 }
+

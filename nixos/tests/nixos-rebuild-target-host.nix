@@ -139,3 +139,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         deployer.succeed(f"TMPDIR={tmp_dir} nixos-rebuild switch -I nixos-config=/root/configuration-1.nix --target-host root@target &>/dev/console")
     '';
 })
+

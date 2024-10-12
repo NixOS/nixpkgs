@@ -35,3 +35,4 @@ stdenv.mkDerivation rec {
     mainProgram = "zs-apc-spdu-ctl";
   };
 }
+

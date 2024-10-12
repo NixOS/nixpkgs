@@ -40,3 +40,4 @@ is designed to be served behind a reverse proxy or only accessed via localhost.
 ```
 
 For more information, see <https://github.com/c2FmZQ/c2FmZQ/>.
+

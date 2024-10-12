@@ -20,3 +20,4 @@ substituteAll {
 
   meta.mainProgram = "nixos-build-vms";
 }
+

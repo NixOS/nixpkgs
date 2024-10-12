@@ -46,3 +46,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "This package contains the Python extension and icons for integrating Insync with Nautilus";
   };
 })
+

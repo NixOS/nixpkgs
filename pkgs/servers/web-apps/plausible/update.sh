@@ -60,3 +60,4 @@ cp yarn.lock "$dir/yarn.lock"
 popd
 
 nix-build -A plausible
+

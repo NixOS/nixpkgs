@@ -37,3 +37,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ zendo fpletz ];
   };
 }
+

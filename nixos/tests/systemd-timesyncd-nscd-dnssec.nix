@@ -59,3 +59,4 @@ in
     machine.wait_until_succeeds("journalctl -u systemd-timesyncd.service --grep='Resolved address ${ntpIP}:123 for ${ntpHostname}'")
   '';
 })
+

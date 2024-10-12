@@ -216,3 +216,4 @@ if __name__ == "__main__":
     run_sync(["isort", __file__])
     run_sync(["ruff", "format", __file__])
     asyncio.run(main())
+

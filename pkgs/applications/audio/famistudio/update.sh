@@ -21,3 +21,4 @@ if [[ "$1" != "--deps-only" ]]; then
 fi
 
 $(nix-build . -A famistudio.fetch-deps --no-out-link) "$deps_file"
+

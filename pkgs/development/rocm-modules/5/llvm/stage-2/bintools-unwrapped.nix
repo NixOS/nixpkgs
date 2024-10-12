@@ -26,3 +26,4 @@ runCommand "rocm-llvm-binutils-${llvm.version}" { preferLocalBuild = true; } ''
   ln -s ${llvm}/bin/llvm-strip $out/bin/strip
   ln -s ${lld}/bin/lld $out/bin/ld
 ''
+

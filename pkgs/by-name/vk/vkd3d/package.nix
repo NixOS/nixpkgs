@@ -61,3 +61,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (wine.meta) platforms;
   };
 })
+

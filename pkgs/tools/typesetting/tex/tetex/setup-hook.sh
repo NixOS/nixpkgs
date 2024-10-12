@@ -5,3 +5,4 @@ addTeXMFPath () {
 }
 
 addEnvHooks "$targetOffset" addTeXMFPath
+

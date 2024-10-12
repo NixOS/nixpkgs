@@ -16,3 +16,4 @@ let
 
   } // attrs;
 in callPackage ./build.nix overrides
+

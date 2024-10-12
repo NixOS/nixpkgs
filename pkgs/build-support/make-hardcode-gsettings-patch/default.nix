@@ -78,3 +78,4 @@ runCommand
     spatch --sp-file "${./hardcode-gsettings.cocci}" --dir . --in-place
     git diff > "$out"
   ''
+

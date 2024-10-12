@@ -14,3 +14,4 @@ lib.makeScope pkgs.newScope (self:
     wwp-switcher = callPackage ./wwp-switcher.nix { };
   }
 )
+

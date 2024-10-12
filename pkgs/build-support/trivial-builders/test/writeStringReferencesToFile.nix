@@ -15,3 +15,4 @@ runCommand "test-writeStringReferencesToFile" { } ''
   diff -U3 <(sort ${stringReferencesText}) <(sort ${sampleText})
   touch $out
 ''
+

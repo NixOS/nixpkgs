@@ -71,3 +71,4 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.succeed("ls /tmp/qemu_hook_is_working")
   '';
 })
+

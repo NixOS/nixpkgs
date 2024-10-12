@@ -10,3 +10,4 @@ faust.wrapWithBuildEnv {
   propagatedBuildInputs = [ boost ladspaH ];
 
 }
+

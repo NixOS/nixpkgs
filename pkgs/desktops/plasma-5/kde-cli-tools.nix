@@ -48,3 +48,4 @@ mkDerivation {
     wrapQtApp $out/libexec/kf5/kdesu --suffix PATH : ${lib.getBin kinit}/bin
   '';
 }
+

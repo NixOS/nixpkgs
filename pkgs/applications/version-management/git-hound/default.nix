@@ -41,3 +41,4 @@ buildGoModule rec {
     mainProgram = "git-hound";
   };
 }
+

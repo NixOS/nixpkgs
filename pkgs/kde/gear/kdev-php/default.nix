@@ -7,3 +7,4 @@ mkKdeDerivation {
 
   extraNativeBuildInputs = [ kdevelop-pg-qt ];
 }
+

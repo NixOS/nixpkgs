@@ -32,3 +32,4 @@ buildLua {
     maintainers = with lib.maintainers; [ tomasajt ];
   };
 }
+

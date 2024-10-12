@@ -44,3 +44,4 @@ in
     mainProgram = "sqlite3_analyzer";
   };
 }
+

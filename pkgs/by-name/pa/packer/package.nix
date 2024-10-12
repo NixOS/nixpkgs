@@ -35,3 +35,4 @@ buildGoModule rec {
     changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
   };
 }
+

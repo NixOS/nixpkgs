@@ -111,3 +111,4 @@ in python.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ mkg20001 siriobalmelli ];
   };
 }
+

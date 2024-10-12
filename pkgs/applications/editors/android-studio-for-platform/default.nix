@@ -29,3 +29,4 @@ in {
     pname = "android-studio-for-platform-canary";
   });
 }
+

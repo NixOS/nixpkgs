@@ -76,3 +76,4 @@ flutterPackages.v3_19.buildFlutterApplication rec {
     platforms = platforms.linux;
   };
 }
+

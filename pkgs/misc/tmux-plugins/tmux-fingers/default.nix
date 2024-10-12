@@ -44,3 +44,4 @@ mkTmuxPlugin {
     })
   ];
 }
+

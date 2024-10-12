@@ -41,3 +41,4 @@ buildGoModule rec {
     mainProgram = "cloud-sql-proxy";
   };
 }
+

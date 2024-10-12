@@ -101,3 +101,4 @@ in stdenv.mkDerivation (lib.recursiveUpdate packageAttrs rec {
     inherit (mod) description homepage;
   };
 })
+

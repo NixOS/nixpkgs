@@ -41,3 +41,4 @@ buildGoModule rec {
     maintainers = with maintainers; [ luleyleo nicolas-goudry ];
   };
 }
+

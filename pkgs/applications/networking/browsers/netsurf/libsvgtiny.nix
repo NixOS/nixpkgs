@@ -44,3 +44,4 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (buildsystem.meta) maintainers platforms;
   };
 })
+

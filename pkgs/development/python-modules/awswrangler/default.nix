@@ -87,3 +87,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ mcwitt ];
   };
 }
+

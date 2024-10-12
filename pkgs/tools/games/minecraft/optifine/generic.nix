@@ -48,3 +48,4 @@ runCommand "optifine-${mcVersion}" {
   makeWrapper ${jre}/bin/java $out/bin/optifine \
     --add-flags "-jar $out/lib/optifine/optifine.jar"
 ''
+

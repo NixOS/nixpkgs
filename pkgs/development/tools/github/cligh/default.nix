@@ -31,3 +31,4 @@ buildPythonApplication rec {
     maintainers = [ ];
   };
 }
+

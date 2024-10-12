@@ -49,3 +49,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "minecraft-server";
   };
 })
+

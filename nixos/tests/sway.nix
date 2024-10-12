@@ -191,3 +191,4 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_for_file("/tmp/sway-exit-ok")
   '';
 })
+

@@ -52,3 +52,4 @@ in
     fonts = [{ name = "Fira Code"; package = pkgs.fira-code; }];
   };
 })
+

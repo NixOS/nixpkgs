@@ -47,3 +47,4 @@ buildDotnetModule rec {
     mainProgram = "bicep";
   };
 }
+

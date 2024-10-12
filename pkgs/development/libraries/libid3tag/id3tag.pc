@@ -9,3 +9,4 @@ Version: @version@
 
 Libs: -L${libdir} -lid3tag
 Cflags: -I${includedir}
+

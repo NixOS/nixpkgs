@@ -17,3 +17,4 @@ imakeConfigurePhase() {
 if [ -z "${dontUseImakeConfigure-}" -a -z "${configurePhase-}" ]; then
     configurePhase=imakeConfigurePhase
 fi
+

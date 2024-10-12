@@ -40,3 +40,4 @@ import ./make-test-python.nix {
         assert f"/dev/zram{i} partition  10M" in swap
   '';
 }
+

@@ -20,3 +20,4 @@ mkDerivation {
     homepage = "https://invent.kde.org/plasma/kwayland-integration";
   };
 }
+

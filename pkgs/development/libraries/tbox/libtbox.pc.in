@@ -8,3 +8,4 @@ Description: A glib-like multi-platform c library
 Version: @version@
 Libs: -L${libdir} -ltbox
 Cflags: -I${includedir}
+

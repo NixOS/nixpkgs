@@ -8,3 +8,4 @@ version="$(curl -sL https://cdn.cypress.io/desktop/ | jq '.version' --raw-output
 
 cd "$basedir"
 update-source-version cypress "$version"
+

@@ -180,3 +180,4 @@ test_idempotency_realpath
 test_normalise_uniqueness
 
 echo >&2 tests ok
+

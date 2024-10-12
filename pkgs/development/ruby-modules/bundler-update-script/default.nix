@@ -24,3 +24,4 @@ let
     bundix
   '';
 in [ updateScript attrPath ]
+

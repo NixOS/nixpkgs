@@ -49,3 +49,4 @@ buildPythonPackage rec {
     maintainers = [ maintainers.starcraft66 ];
   };
 }
+

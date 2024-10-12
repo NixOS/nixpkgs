@@ -308,3 +308,4 @@ in
     [ (mkRenamedOptionModule [ "users" "ldap" "bind" "password"] [ "users" "ldap" "bind" "passwordFile"])
     ];
 }
+

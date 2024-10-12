@@ -69,3 +69,4 @@ for outputName in ${outputs:-out}; do
     @coreutils@/bin/mkdir "${outputPath}";
   fi
 done
+

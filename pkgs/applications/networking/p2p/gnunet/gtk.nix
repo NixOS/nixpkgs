@@ -49,3 +49,4 @@ stdenv.mkDerivation rec {
     homepage = "https://git.gnunet.org/gnunet-gtk.git";
   };
 }
+

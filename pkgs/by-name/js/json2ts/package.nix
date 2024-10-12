@@ -24,3 +24,4 @@ buildNpmPackage {
     platforms = platforms.all;
   };
 }
+

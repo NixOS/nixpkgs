@@ -41,3 +41,4 @@ session's processes are gone:
 ```ShellSession
 # loginctl terminate-session c3
 ```
+

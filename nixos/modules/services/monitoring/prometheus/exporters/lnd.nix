@@ -43,3 +43,4 @@ in
     ReadOnlyPaths = [ cfg.lndTlsPath cfg.lndMacaroonDir ];
   };
 }
+

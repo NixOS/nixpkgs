@@ -93,3 +93,4 @@ buildNpmPackage rec {
     mainProgram = "open-stage-control";
   };
 }
+

@@ -85,3 +85,4 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
     prometheus1.log(prometheus1.succeed("systemd-analyze security prometheus.service | grep -v '✓'"))
   '';
 })
+

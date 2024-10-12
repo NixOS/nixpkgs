@@ -14,3 +14,4 @@ mkDerivation {
     gtk-update-icon-cache "''${out:?}/share/icons/breeze-dark"
   '';
 }
+

@@ -40,3 +40,4 @@ in stdenv.mkDerivation {
     maintainers = lib.teams.swift.members ++ (with lib.maintainers; [ cmm ]);
   };
 }
+

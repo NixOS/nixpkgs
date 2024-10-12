@@ -96,3 +96,4 @@ in {
   options.services.iperf3 = api;
   config = mkIf cfg.enable imp;
 }
+

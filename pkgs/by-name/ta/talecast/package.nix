@@ -40,3 +40,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ confusedalex getchoo ];
   };
 }
+

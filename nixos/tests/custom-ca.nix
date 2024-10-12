@@ -193,3 +193,4 @@ in
   qutebrowser = { args = "-T"; error = "Certificate error"; };
   midori = { args = "-p"; error = "Security"; };
 }
+

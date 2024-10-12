@@ -24,3 +24,4 @@ mkDerivation {
   description = "Common code for haskell projects";
   license = lib.licenses.bsd3;
 }
+

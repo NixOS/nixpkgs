@@ -10,3 +10,4 @@ haskell.lib.compose.justStaticExecutables (haskell.lib.compose.overrideCabal (ol
   buildDepends = (oldAttrs.buildDepends or []) ++ [haskellPackages.optparse-applicative];
 }) haskellPackages.pretty-simple)
 
+

@@ -36,3 +36,4 @@ appimageTools.wrapType2 {
     maintainers = with lib.maintainers; [ nook ];
   };
 }
+

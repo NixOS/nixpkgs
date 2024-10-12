@@ -22,3 +22,4 @@ func main() {
 
 	fmt.Println(ts.Sum(nil))
 }
+

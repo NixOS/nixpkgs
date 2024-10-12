@@ -58,3 +58,4 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     machine.succeed("[ -d %s ] || exit 1" % storePath)
   '';
 })
+

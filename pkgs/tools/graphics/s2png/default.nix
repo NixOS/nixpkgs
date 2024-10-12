@@ -24,3 +24,4 @@ stdenv.mkDerivation rec {
     mainProgram = "s2png";
   };
 }
+

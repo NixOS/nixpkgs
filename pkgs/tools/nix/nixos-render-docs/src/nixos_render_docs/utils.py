@@ -19,3 +19,4 @@ class Freezeable:
             })
             _frozen_classes[cls] = frozen
         self.__class__ = frozen
+

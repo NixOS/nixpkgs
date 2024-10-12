@@ -31,3 +31,4 @@ The file can either be a tar file or an Emacs Lisp file."
 
 ;; Allow installing package tarfiles larger than 10MB
 (setq large-file-warning-threshold nil)
+

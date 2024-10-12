@@ -22,3 +22,4 @@ stdenv.mkDerivation rec {
     mainProgram = "x2x";
   };
 }
+

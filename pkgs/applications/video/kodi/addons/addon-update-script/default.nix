@@ -21,3 +21,4 @@ let
   '';
 in
   [ updateScript attrPath ]
+

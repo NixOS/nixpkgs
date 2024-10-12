@@ -47,3 +47,4 @@ crystal.buildCrystalPackage {
     maintainers = with maintainers; [ donovanglover ];
   };
 }
+

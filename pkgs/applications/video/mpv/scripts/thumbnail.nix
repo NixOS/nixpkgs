@@ -35,3 +35,4 @@ buildLua rec {
     maintainers = with maintainers; [ figsoda ];
   };
 }
+

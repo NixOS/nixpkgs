@@ -47,3 +47,4 @@ mkXfceDerivation {
     mainProgram = "xfce4-terminal";
   };
 }
+

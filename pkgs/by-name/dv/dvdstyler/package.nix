@@ -124,3 +124,4 @@ in stdenv.mkDerivation rec {
     mainProgram = "dvdstyler";
   };
 }
+

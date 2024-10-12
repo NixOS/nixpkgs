@@ -44,3 +44,4 @@ in {
 
   meta.maintainers = with maintainers; [ McSinyx ];
 }
+

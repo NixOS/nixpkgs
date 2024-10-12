@@ -52,3 +52,4 @@ cargoNextestHook() {
 if [ -z "${dontCargoCheck-}" ] && [ -z "${checkPhase-}" ]; then
   checkPhase=cargoNextestHook
 fi
+

@@ -37,3 +37,4 @@ buildGoModule rec {
     maintainers = [ maintainers.sweenu ];
   };
 }
+

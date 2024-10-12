@@ -23,3 +23,4 @@ runCommand "frog-test" {} ''
   deps="$(echo $(awk 'BEGIN { FS = "\t*" } ; {print $1 " -> " $9 "; "}' <$out))"
   test "1 -> 2; 2 -> 0; 3 -> 4; 4 -> 2; -> ;" = "$deps" || expected "Dependency parsing works"
 ''
+

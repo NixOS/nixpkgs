@@ -28,3 +28,4 @@ stdenvNoCC.mkDerivation {
     ln -s libXplugin.1.tbd $out/lib/libXplugin.tbd
   '';
 }
+

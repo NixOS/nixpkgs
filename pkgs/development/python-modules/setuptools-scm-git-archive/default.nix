@@ -38,3 +38,4 @@ buildPythonPackage rec {
     broken = versionAtLeast setuptools-scm.version "8";
   };
 }
+

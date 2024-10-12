@@ -14,3 +14,4 @@ runCommandCC "xkbvalidate" {
   $CC -std=c11 -Wall -pedantic -lxkbcommon ${./xkbvalidate.c} \
     -o "$out/bin/xkbvalidate"
 ''
+

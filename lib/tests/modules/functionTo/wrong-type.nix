@@ -16,3 +16,4 @@ in {
 
   config.fun = input: input + 1;
 }
+

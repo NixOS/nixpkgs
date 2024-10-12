@@ -78,3 +78,4 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   mkdir $out
   echo success > $out/${nix.version}
 ''
+

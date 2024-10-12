@@ -21,3 +21,4 @@ from googlecloudsdk.calliope import base
 @base.ReleaseTracks(base.ReleaseTrack.ALPHA)
 class Alpha(base.Group):
   """Alpha versions of gcloud commands."""
+

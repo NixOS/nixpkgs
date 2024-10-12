@@ -73,3 +73,4 @@ import ../make-test-python.nix ({ pkgs, lib, rke2, ... }:
       machine.shutdown()
     '';
   })
+

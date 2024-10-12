@@ -31,3 +31,4 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ Br1ght0ne matthiasbeyer brokenpip3 ];
   };
 }
+

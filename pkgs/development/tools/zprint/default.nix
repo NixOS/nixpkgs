@@ -42,3 +42,4 @@ buildGraalvmNativeImage rec {
     mainProgram = "zprint";
   };
 }
+

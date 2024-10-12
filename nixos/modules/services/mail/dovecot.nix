@@ -674,3 +674,4 @@ in
 
   meta.maintainers = [ lib.maintainers.dblsaiko ];
 }
+

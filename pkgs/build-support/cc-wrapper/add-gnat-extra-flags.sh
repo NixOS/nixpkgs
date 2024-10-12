@@ -21,3 +21,4 @@ if [ "@darwinMinVersion@" ]; then
 fi
 
 export NIX_GNAT_WRAPPER_EXTRA_FLAGS_SET_@suffixSalt@=1
+

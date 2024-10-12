@@ -18,3 +18,4 @@ buildFishPlugin rec {
     maintainers = with maintainers; [ vanilla ];
   };
 }
+

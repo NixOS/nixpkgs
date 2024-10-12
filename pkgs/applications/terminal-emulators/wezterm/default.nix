@@ -145,3 +145,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ SuperSandro2000 mimame ];
   };
 }
+

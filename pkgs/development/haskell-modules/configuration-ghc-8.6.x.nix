@@ -109,3 +109,4 @@ self: super: {
   # https://github.com/fpco/inline-c/issues/127 (recommend to upgrade to Nixpkgs GHC >=9.0)
   inline-c-cpp = (if isDarwin then dontCheck else x: x) super.inline-c-cpp;
 }
+

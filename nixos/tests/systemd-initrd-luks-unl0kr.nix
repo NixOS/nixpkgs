@@ -73,3 +73,4 @@ in {
     assert "/dev/mapper/cryptroot2 on /cryptroot2 type ext4" in machine.succeed("mount")
   '';
 })
+

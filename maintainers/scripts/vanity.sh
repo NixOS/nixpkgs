@@ -120,3 +120,4 @@ echo "$git_data" | cut -f 1 |
     sed -e "$cleaner_script" |
     sort | uniq -c | sort -k1n | sed -rf "$github_adder_script" |
     sed -re 's/^ *([0-9]+) /\1\t/'
+

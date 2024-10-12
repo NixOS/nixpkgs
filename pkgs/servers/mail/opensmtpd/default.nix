@@ -72,3 +72,4 @@ stdenv.mkDerivation rec {
     rspamd-integration = nixosTests.opensmtpd-rspamd;
   };
 }
+

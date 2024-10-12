@@ -5,7 +5,7 @@ BEGIN { srcname = "nothing"; }
     srcname = $2;
     printf("creating source file %s\n", srcname);
   }else if (srcname != "nothing") {
-    if (/Andersen,* *et* *al\./) 
+    if (/Andersen,* *et* *al\./)
       printf("skipping %s\n", $0);
     else if (//)
       printf("skipping2 %s\n", $0);
@@ -22,3 +22,4 @@ END {
   printf("ending file %s\n", srcname);
   close(srcname);
 }
+

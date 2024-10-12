@@ -66,3 +66,4 @@ buildPythonPackage rec {
     mainProgram = "stack-data";
   };
 }
+

@@ -37,3 +37,4 @@ mkKdeDerivation {
     echo "${mariadb}" > $out/nix-support/depends
   '';
 }
+

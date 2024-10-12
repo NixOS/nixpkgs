@@ -51,3 +51,4 @@ mkKdeDerivation {
   ];
   meta.mainProgram = "audiotube";
 }
+

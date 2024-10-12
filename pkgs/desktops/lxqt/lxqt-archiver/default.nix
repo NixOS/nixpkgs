@@ -56,3 +56,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jchw ] ++ teams.lxqt.members;
   };
 }
+

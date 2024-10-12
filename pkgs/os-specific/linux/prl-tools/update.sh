@@ -37,3 +37,4 @@ sed -i -e "s,version = \"$old_version\",version = \"$version\"," \
 
 git commit -qm "linuxPackages_latest.prl-tools: $old_version -> $version" "$path"
 echo "Updated linuxPackages_latest.prl-tools $old_version -> $version"
+

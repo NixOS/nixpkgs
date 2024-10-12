@@ -70,3 +70,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fernglas";
   };
 }
+

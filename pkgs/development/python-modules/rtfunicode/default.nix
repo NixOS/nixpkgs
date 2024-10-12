@@ -28,3 +28,4 @@ buildPythonPackage rec {
     changelog = "https://github.com/mjpieters/rtfunicode/releases/tag/${version}";
   };
 }
+

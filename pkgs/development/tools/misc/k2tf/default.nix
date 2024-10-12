@@ -32,3 +32,4 @@ buildGoModule rec {
     maintainers = [ maintainers.flokli ];
   };
 }
+

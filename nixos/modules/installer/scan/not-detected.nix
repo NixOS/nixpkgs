@@ -4,3 +4,4 @@
 {
   hardware.enableRedistributableFirmware = lib.mkDefault true;
 }
+

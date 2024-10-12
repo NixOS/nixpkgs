@@ -42,3 +42,4 @@ in
   latest = (lib.last pkgsList).wrapped;
 }
 // pkgsAttrs
+

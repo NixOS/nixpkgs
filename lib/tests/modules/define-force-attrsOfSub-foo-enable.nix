@@ -3,3 +3,4 @@
 lib.mkForce {
   attrsOfSub.foo.enable = false;
 }
+

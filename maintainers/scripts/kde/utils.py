@@ -183,3 +183,4 @@ class KDERepoMetadata:
 
         self.dep_graph = dep_graph
         return self
+

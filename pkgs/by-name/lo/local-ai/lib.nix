@@ -37,3 +37,4 @@
     in
     linkFarmFromDrvs name (lib.flatten (lib.mapAttrsToList genModelFiles configs));
 }
+

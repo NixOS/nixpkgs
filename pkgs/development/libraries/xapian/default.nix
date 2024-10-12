@@ -66,3 +66,4 @@ in {
   # should always be built with the equivalent xapian version.
   xapian_1_4 = generic "1.4.26" "sha256-nmp5A4BpZtFs4iC0k3fJyPrWZ8jw/8sjo0QpRiaTY6c=";
 }
+

@@ -105,3 +105,4 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "sqlpage";
   };
 }
+

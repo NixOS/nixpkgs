@@ -189,3 +189,4 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ Profpatsch ];
   };
 }
+

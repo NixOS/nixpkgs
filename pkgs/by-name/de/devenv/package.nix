@@ -78,3 +78,4 @@ in rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ domenkozar ];
   };
 }
+

@@ -69,3 +69,4 @@ in
     machine.log(machine.execute("systemd-analyze security cryptpad.service")[1])
   '';
 }
+

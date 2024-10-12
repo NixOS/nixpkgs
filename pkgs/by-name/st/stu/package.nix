@@ -39,3 +39,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "stu";
   };
 }
+

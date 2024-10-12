@@ -22,3 +22,4 @@ buildOasisPackage rec {
     mainProgram = "pgsolver-bin";
   };
 }
+

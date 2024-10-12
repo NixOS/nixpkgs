@@ -30,3 +30,4 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Extension to mask or replace personally identifiable information (PII) or commercially sensitive data from a PostgreSQL database";
   };
 })
+

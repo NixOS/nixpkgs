@@ -26,3 +26,4 @@ import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.odoo, ...} : {
     server.succeed("curl -s http://localhost/web/database/selector | grep '<title>Odoo</title>'")
   '';
 })
+

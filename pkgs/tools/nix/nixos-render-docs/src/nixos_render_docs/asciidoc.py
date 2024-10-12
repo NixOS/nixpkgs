@@ -214,3 +214,4 @@ class AsciiDocRenderer(Renderer):
         return self._list_open(token, '.')
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return self._list_close()
+

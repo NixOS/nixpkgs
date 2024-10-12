@@ -22,3 +22,4 @@ crystal.buildCrystalPackage rec {
     maintainers = with maintainers; [ kimburgess ];
   };
 }
+
