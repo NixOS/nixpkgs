@@ -6333,6 +6333,8 @@ self: super: with self; {
 
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
+  jalali-core = callPackage ../development/python-modules/jalali-core { };
+
   jamo = callPackage ../development/python-modules/jamo { };
 
   janus = callPackage ../development/python-modules/janus { };
