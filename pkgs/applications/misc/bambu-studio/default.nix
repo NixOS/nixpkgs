@@ -43,17 +43,18 @@
   withSystemd ? stdenv.hostPlatform.isLinux,
 }:
 let
-  wxGTK' = (wxGTK31.override {
+  wxGTK' =
+    (wxGTK31.override {
       withCurl = true;
       withPrivateFonts = true;
       withWebKit = true;
-    })
-    .overrideAttrs (old: {
-      configureFlags = old.configureFlags ++ [
-        # Disable noisy debug dialogs
-        "--enable-debug=no"
-      ];
-    });
+    }).overrideAttrs
+      (old: {
+        configureFlags = old.configureFlags ++ [
+          # Disable noisy debug dialogs
+          "--enable-debug=no"
+        ];
+      });
 
   openvdb' = openvdb.overrideAttrs (old: {
     buildInputs = [
@@ -192,7 +193,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/bambulab/BambuStudio";
     changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ zhaofengli dsluijk ];
+    maintainers = with maintainers; [
+      zhaofengli
+      dsluijk
+    ];
     mainProgram = "bambu-studio";
     platforms = platforms.linux;
   };
