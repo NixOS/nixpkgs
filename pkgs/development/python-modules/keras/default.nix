@@ -63,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://keras.io";
     changelog = "https://github.com/keras-team/keras/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ NikolaMandic ];
+    maintainers = with lib.maintainers; [ ];
   };
 }
