@@ -17060,6 +17060,8 @@ with pkgs;
 
   buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
 
+  aspect-cli = callPackage ../development/tools/aspect-cli { };
+
   bear = callPackage ../development/tools/build-managers/bear { };
 
   bingrep = callPackage ../development/tools/analysis/bingrep { };

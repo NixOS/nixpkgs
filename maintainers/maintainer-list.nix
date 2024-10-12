@@ -1661,6 +1661,12 @@
     githubId = 8436007;
     name = "Aria Edmonds";
   };
+  ar3s3ru = {
+    email = "danilocianfr+nixpkgs@gmail.com";
+    name = "Danilo Cianfrone";
+    github = "ar3s3ru";
+    githubId = 6481571;
+  };
   arcadio = {
     email = "arc@well.ox.ac.uk";
     github = "arcadio";
