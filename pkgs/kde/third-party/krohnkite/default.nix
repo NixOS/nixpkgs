@@ -40,8 +40,8 @@ buildNpmPackage rec {
     runHook preInstall
 
     substituteInPlace Makefile --replace-fail '7z a -tzip' 'zip -r'
-    make krohnkite-${version}.kwinscript
-    kpackagetool6 --type=KWin/Script --install=krohnkite-${version}.kwinscript --packageroot=$out/share/kwin/scripts
+    make KWINPKG_FILE=krohnkite.kwinscript krohnkite.kwinscript
+    kpackagetool6 --type=KWin/Script --install=krohnkite.kwinscript --packageroot=$out/share/kwin/scripts
 
     runHook postInstall
   '';
