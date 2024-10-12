@@ -15329,9 +15329,7 @@ with pkgs;
     llvm_19
     bolt_19;
 
-  lorri = callPackage ../tools/misc/lorri {
-    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
+  lorri = callPackageWithExtraSet "darwin.apple_sdk.frameworks" ../tools/misc/lorri { };
 
   lunarml = callPackage ../development/compilers/lunarml { };
 
