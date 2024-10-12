@@ -415,3 +415,8 @@ pkgs/by-name/lx/lxc*                    @adamcstephens
 /pkgs/by-name/in/installShellFiles/*     @Ericson2314
 /pkgs/test/install-shell-files/*         @Ericson2314
 /doc/hooks/installShellFiles.section.md  @Ericson2314
+
+# Darwin
+/pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
+/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/stdenv/darwin                            @NixOS/darwin-core
