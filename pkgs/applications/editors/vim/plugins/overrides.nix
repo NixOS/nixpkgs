@@ -370,6 +370,11 @@ in
     nvimRequireCheck = "cmp_neosnippet";
   };
 
+  cmp-nixpkgs-maintainers = super.cmp-nixpkgs-maintainers.overrideAttrs {
+    dependencies = with self; [ nvim-cmp ];
+    nvimRequireCheck = "cmp_nixpkgs_maintainers";
+  };
+
   cmp-npm = super.cmp-npm.overrideAttrs {
     dependencies = with self; [
       nvim-cmp
