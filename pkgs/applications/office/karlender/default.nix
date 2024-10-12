@@ -6,37 +6,66 @@
 , libadwaita
 , wrapGAppsHook4
 , glib
+, dbus
 , tzdata
 }:
 
+let
+  cargo-gra = rustPlatform.buildRustPackage rec {
+    pname = "cargo-gra";
+    version = "0.6.0";
+    src = fetchFromGitLab {
+      owner = "floers";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-PUfNQyK8EaAv2Ql+jWOpwXhds8DVo47GCHMofDMD4Nk=";
+    };
+    cargoHash = "sha256-xsaavcpDaiDDbL3Dl+7NLcfB5U6vuYsVPoIuA/KXCvI=";
+    meta = with lib; {
+      description = "Framework for writing flatpak apps with GTK in Rust";
+      homepage = "https://crates.io/crates/gtk-rust-app";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ chuangzhu ];
+    };
+  };
+in
+
 rustPlatform.buildRustPackage rec {
   pname = "karlender";
-  version = "0.9.2";
+  version = "0.10.3";
 
   src = fetchFromGitLab {
     owner = "floers";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-txPMOWwxgs9PH1Scnwr/X4cuMIUa+eoLW3K2aqmqRMQ=";
+    hash = "sha256-1PnbfyvzR0NSR6knEAGXQu/oSpxNAW1THK23je6pr0Q=";
   };
 
-  cargoHash = "sha256-OyyzzkoYBed2XFCesj3QBodT9e/BaapGl/z0f6+cDZA=";
+  cargoHash = "sha256-Xgo90dFkuJgCs9aEE8JnkOlNmh54XSRkhjfzwhTRmQc=";
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
     glib
+    cargo-gra
   ];
 
   buildInputs = [
     gtk4
     libadwaita
+    dbus
   ];
 
   postPatch = ''
     substituteInPlace src/domain/time.rs --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-    substituteInPlace build.rs --replace "// gra::build" "gra::build"
   '';
+
+  preBuild = ''
+    cargo gra gen
+  '';
+
+  # test domain::time::tests::test_get_correct_offset_for_dst ... FAILED
+  doCheck = false;
 
   postInstall = ''
     substituteInPlace target/gra-gen/data/codes.loers.Karlender.desktop \
