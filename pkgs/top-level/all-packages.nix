@@ -26563,6 +26563,7 @@ with pkgs;
     ubootBananaPim64
     ubootAmx335xEVM
     ubootClearfog
+    ubootCM3588NAS
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
@@ -26575,6 +26576,7 @@ with pkgs;
     ubootOlimexA64Olinuxino
     ubootOlimexA64Teres1
     ubootOrangePi3
+    ubootOrangePi3B
     ubootOrangePi5
     ubootOrangePi5Plus
     ubootOrangePiPc
