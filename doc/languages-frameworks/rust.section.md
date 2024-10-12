@@ -243,6 +243,35 @@ rustPlatform.buildRustPackage rec {
 }
 ```
 
+### Cargo Workspaces {#rust-cargo-workspaces}
+
+If your project uses cargo workspaces, and if you wish to compile only one of the crates in the workspace,
+use the `buildAndTestSubdir` option of `buildRustPackage`.
+
+Example:
+
+If you want to build the `bar/baz` workspace member only:
+
+```toml
+# myproject/Cargo.toml
+[workspace]
+members = [
+  "foo",
+  "bar/baz",
+]
+```
+
+```nix
+rustPlatform.buildRustPackage rec {
+  pname = "myproject";
+  version = "1.0.0";
+
+  buildAndTestSubdir = "bar/baz";
+  
+  # ...
+}
+```
+
 ### Cross compilation {#cross-compilation}
 
 By default, Rust packages are compiled for the host platform, just like any
