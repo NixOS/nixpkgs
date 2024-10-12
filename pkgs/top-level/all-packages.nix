@@ -7552,6 +7552,8 @@ with pkgs;
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
 
+  em100 = callPackage ../tools/misc/em100 { };
+
   flashrom = callPackage ../tools/misc/flashrom { };
 
   flent = python3Packages.callPackage ../applications/networking/flent { };
