@@ -169,14 +169,22 @@ The build will fail if `shellcheck` finds any issues.
 
 Checks that the output from running a command contains the specified version string in it as a whole word.
 
-NOTE: In most cases, [`versionCheckHook`](#versioncheckhook) should be preferred, but this function is provided and documented here anyway. The motivation for adding either tests would be:
+Note: Given the current limitations of Nixpkgs's tooling and CI, `versionCheckHook` fits better than `testers.testVersion` in most of typical situations.
 
-- Catch dynamic linking errors and such and missing environment variables that should be added by wrapping.
-- Probable protection against accidentally building the wrong version, for example when using an "old" hash in a fixed-output derivation.
+Although being very simple and naive, this test is useful:
 
-By default, the command to be run will be inferred from the given `package` attribute:
-it will check `meta.mainProgram` first, and fall back to `pname` or `name`.
+- It assures the main program can run.
+- It brings awareness to dynamic linking errors, missing or malformed environment variables and other runtime errors.
+- It provides a minor protection against fixed-output hash errors that usually happen when forgetting to update hashes.
+
+By default, the command to be run will be inferred from the given `package` attribute: it will check `meta.mainProgram` first, falling back to `pname` or `name`.
+
 The default argument to the command is `--version`, and the version to be checked will be inferred from the given `package` attribute as well.
+
+Note: see also:
+
+- [`versionCheckHook`](#versioncheckhook), an independent hook with similar functionality.
+  - [A comparison between both](#versioncheckhook-comparison-testversion).
 
 :::{.example #ex-testversion-hello}
 
