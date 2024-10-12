@@ -1,0 +1,311 @@
+{
+  "announcement" : {
+    "go-offline" : "Atsijunkite",
+    "go-online" : "Prisijunkite",
+    "healthcheck" : "Nepavyko pasiekti ficsit.app. Patikrinkite interneto ryšį arba apsvarstykite galimybę naudoti neprisijungus režimą. (Modų Tvarkyklės Nustatymai > Atsijungti)",
+    "offline" : "Šiuo metu esate neprisijungę. Kai kurios funkcijos gali būti nepasiekiamos. (Kad prisijungti, naudokite Modų Tvarkyklės Nustatymai > Prisijungti)"
+  },
+  "common" : {
+    "add" : "Pridėti",
+    "cancel" : "Atšaukti",
+    "close" : "Uždaryti",
+    "delete" : "Ištrinti",
+    "import" : "Importuoti",
+    "loading" : "Kraunama...",
+    "rename" : "Pervadinti"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "Įvyko klaida generuojant derinimo failą. Prašome rankiniu būdu patikrinti savo Satisfactory Modų Tvarkyklės žurnalo failus, kad gautumėte daugiau informacijos, ir pranešti apie tai Discordo platformoje. Naudokite žemiau esantį mygtuką, kad atidarytumėte dokumentaciją ir sužinotumėte, kaip tai padaryti.",
+    "generate_debug_info" : "Generuokite derinimo informaciją",
+    "help" : "Atrodo neteisinga? Spustelėkite žemiau esantį mygtuką ir nusiųskite sugeneruotą ZIP failą <1>modifikacijų Discorde</1>, skyriuje #help-using-mods.",
+    "invalid_installs" : "{invalidInstalls, plural, one {{invalidInstalls} rastas netinkamas Satisfactory įdiegimas} few {{invalidInstalls} rasta keletas netinkamų „Satisfactory“ įdiegimų} many {{invalidInstalls} rasta daug netinkamų „Satisfactory“ įdiegimų} other {{invalidInstalls} rastas kitas netinkamas „Satisfactory“ įdiegimas}}",
+    "no_installs" : "Nerasta jokiu Satisfactory įdiegimų",
+    "open_log_docs" : "Atidaryti Žurnalo Dokumentaciją",
+    "open_modding_discord" : "Atidaryti Modifikacijų Discordą",
+    "open_modding_discord.must_generate_debug_first" : "Pirmiausia turite sugeneruoti derinimo informaciją",
+    "reporting_directions" : "Kažkas ne taip? Spustelėkite mygtuką žemiau, kad surinktumėte žurnalus, tuomet nusiųskite sugeneruotą zip failą į modifikacijų Discordo kanalą #help-using-mods.",
+    "title" : "Kažkas nepavyko"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Jau įdiegtas",
+    "error-loading" : "Klaida įkeliant modo informaciją",
+    "in-queue" : "Eilėje",
+    "install" : "Įdiegti",
+    "latest-version" : "Naujausia versija",
+    "title" : "Įdiegti modą",
+    "version" : "Versija {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Pradėti!",
+    "change_later_hint" : "Šiuos nustatymus bet kada galite pakeisti meniu „Modų tvarkyklės nustatymai“.",
+    "intro" : "Pasirinkite šias nuostatas kad pradėtumėte.",
+    "open_welcome_guide" : "Atidarykite Pasveikinimo vadovą",
+    "option" : {
+      "language" : {
+        "title" : "Jei įmanoma, naudoti šią kalbą:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "Palaukti, kol paspausiu „Taikyti“",
+        "enabled" : "Priimti pakeitimus iškarto",
+        "title" : "Kai pridedu arba pašalinu modą ar pakeičiu profilius..."
+      }
+    },
+    "title" : "Sveiki atvykę į Satisfactory modifikacijų tvarkyklę!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "taikyti {profile}",
+    "apply-queued" : "Taikyti {queued, plural, one {vieną pakeitimą} other {# pakeitimus}}",
+    "are-you-sure-warning" : "Ar tikrai norite paleisti?",
+    "cant-launch" : "SMM negali paleisti šios instaliacijos",
+    "cant-launch-tooltip" : "Modų tvarkyklė negali paleisti šio instaliacijos tipo, tačiau ji vis tiek tvarkys modų failus už jus. Paleiskite Satisfactory naudodami savo įprastą žaidimo paleidiklį.",
+    "changes-queued" : "Pakeitimai dar nebuvo atlikti jūsų modų failuose. Spustelėkite žemiau esantį mygtuką, kad pritaikytumėte laukiančius pakeitimus.\n\n(Jūs esate „Pradėti rankiniu būdu“ režime)",
+    "game-running" : "Jūsų žaidimo paleidiklis praneša, kad žaidimas jau veikia (vis dar yra uždarymo procese).",
+    "incompatible-mods" : "{versionIncompatible, plural, one {{versionIncompatible} vienas nesuderinamas modas, kuris nebus įkeltas arba sugadins mūsų žaidimą} other {{versionIncompatible} nesuderinami modai, kurie nebus įkelti arba sugadins mūsų žaidimą}}",
+    "launch-in-progress" : "Paleidimas vyksta...",
+    "operation-in-progress" : "Veikla jau vyksta.",
+    "play" : "Žaisti Satisfactory",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Vienas modas, kuris {versionPossiblyCompatible, plural, one {yra} other {yra}} greičiausiai nesuderinamas su jūsų žaidimu} other {# modai, kurie {versionPossiblyCompatible, plural, one {yra} other {yra}} greičiausiai nesuderinami su jūsų žaidimu.}}",
+    "profile-change-queued" : "Pakeitimai dar nebuvo atlikti jūsų modų failuose. Spustelėkite žemiau esantį mygtuką, kad pritaikytumėte naują profilį.\n\n(Jūs esate „Pradėti rankiniu būdu“ režime)",
+    "ready" : "Jūs esate pasiruošę veiksmui!\n\n\"Pastaba: Modų tvarkyklė jau baigė diegti modų failus už jus. Galite paleisti žaidimą naudodami savo įprastą žaidimo paleidiklį, o modai vis tiek bus įkelti.\"",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip neveikiantys šioje žaidimo versijoje. Perskaitykite {versionIncompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Vienas modas praneštas} other {# modai pranešti}} kaip pažeisti šioje žaidimo versijoje. Perskaitykite {versionIncompatible, plural, one {modo} other {modų}} aprašymą arba suderinamumo pastabas, kad sužinotumėte daugiau informacijos.",
+    "you-have-warning-mods" : "Jus turite:"
+  },
+  "left-bar" : {
+    "export" : "Eksportuoti",
+    "ficsit-app" : "ficsit.app (Modų saugykla)",
+    "game-version" : "Pasirinkite Žaidimo Įdiegimą",
+    "help" : "Pagalba",
+    "install-invalid" : "Netinkamas",
+    "install-invalid-tooltip" : "Būsena: SMM negali valdyti šios diegimo versijos",
+    "install-loading" : "Kraunama...",
+    "install-loading-tooltip" : "Statusas: Kraunama...",
+    "install-unknown" : "Nežinoma",
+    "install-unknown-tooltip" : "Būsena: Nepavyko gauti informacijos apie šią diegimo versiją",
+    "links" : "Nuorados",
+    "manage-servers" : "Tvarkyti Serverius",
+    "mods-off" : "Modai išjungti",
+    "mods-on" : "Modai įjungti",
+    "other" : "Kitka",
+    "profile" : "Profilis",
+    "queue-blocking-switching-tooltip" : null,
+    "satisfactory-modding-discord" : "Satisfactory Modifikacijų Discordas",
+    "smm-github" : "SMM GitHubas",
+    "updates" : "Atnaujinimai"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1>Pakeitimų žurnalas"
+  },
+  "mod-details" : {
+    "change-version" : "Pakeisti versija",
+    "change-version-any" : "Betkuris",
+    "change-version-or-newer" : "arba naujesnė",
+    "changelogs" : "Pakeitimų žurnalai",
+    "compatibility" : "Suderinamumas",
+    "compatibility-branch" : "Šis modas buvo praneštas kaip {state} ant {branch}.",
+    "compatibility-unknown" : "Nežinoma",
+    "compatibility-unknown-tooltip" : "Dar nėra pateikta suderinamumo informacijos apie šį modą. Išbandykite jį ir susisiekite su mumis Discord platformoje, kad galėtume ją atnaujinti!",
+    "contributors" : "Prisidėjėliai <1>{authors}</1>",
+    "created" : "Sukurta",
+    "downloads" : "Bendrai atsisiūsta",
+    "installed-version" : "Įdiegta versija",
+    "latest-version" : "Naujausia versija",
+    "mod-author" : "Modas nuo:",
+    "offline-mode" : null,
+    "size" : "Dydis",
+    "updated" : "Atnaujinta",
+    "view-on-ficsit-app" : "Peržiūrėti ficsit.app",
+    "views" : "Peržiūros"
+  },
+  "mod-list-item" : {
+    "by-author" : "nuo",
+    "compatibility-note" : "Šis modas buvo praneštas kaip {state} ant šios žaidimo versijos.",
+    "compatibility-note-none" : "(Nenurodyta)",
+    "compatibility-warning" : "Su šiuo modu pranešta problemų, tačiau galite pabandyti jį įdiegti vis tiek. Detalės:",
+    "dependency" : "Šis modas yra įdiegtas kaip kito modo priklausomybė. Jo negalima įdiegti ar pašalinti atskirai.",
+    "disable" : "Šis modas yra įjungtas šiame profilyje. Spustelėkite, kad jį išjungtumėte, kas neleis jam įsikrauti, kai paleidžiate žaidimą, tačiau jis vis tiek liks šio profilio dalimi.",
+    "disable-queued" : null,
+    "disabled-tooltip" : null,
+    "enable" : "Spustelėkite, kad įjungtumėte šį modą.",
+    "enable-queued" : null,
+    "favorite" : "Spustelėkite, kad pridėtumėte šį modą prie mėgstamiausių. Mėgstamo modo pasirinkimas nėra susijęs su tuo, ar jis įdiegtas, ar ne - tai būdas sekti modą vėliau, nepriklausomai nuo pasirinkto profilio.",
+    "hidden" : null,
+    "install" : "Spustelėkite, kad įdiegtumėte šį modą.",
+    "no-tags" : "(Nėra jokių žymų)",
+    "not-installable" : "Jūs negalite įdiegti šio modo dėl šios priežasties:",
+    "queued" : null,
+    "queued-install" : null,
+    "queued-uninstall" : null,
+    "unavailable" : "Šis modas nebegalimas ficsit.app svetainėje. Galbūt norėsite jį pašalinti.",
+    "unfavorite" : null,
+    "uninstall" : "Šis modas yra įdiegtas šiame profilyje. Spustelėkite, kad pašalintumėte šį modą.",
+    "wait" : null
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(Daugiau pastabų nepateikta)"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "Visi modai",
+      "compatible" : "Suderinta",
+      "dependency" : "Priklausomi",
+      "disabled" : "Išjungta",
+      "enabled" : "Įjungta",
+      "favorite" : "Mėgstamiausia",
+      "installed" : "Įdiegta",
+      "not-installed" : "Neįdiegta",
+      "queued" : "Eilėje"
+    },
+    "order-by" : {
+      "downloads" : "Parsisiųsti",
+      "hotness" : "Karščiausi",
+      "last-updated" : "Paskutinį kartą atnaujinta",
+      "name" : "Pavadinimas",
+      "popularity" : "Populiarumas",
+      "views" : "Peržiūros"
+    },
+    "search" : "Ieškoti modų"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : null,
+    "no-mods-found" : "Nerasta jokių modų",
+    "show-all" : "Rodyti visus"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "Profilio vardas",
+      "profile-name-placeholder" : "Naujo Profilio Vardas",
+      "title" : "Pridėti profilį"
+    },
+    "delete" : {
+      "profile-name" : "Profilio vardas",
+      "title" : "Ištrinti profilį"
+    },
+    "import" : {
+      "profile-file" : "Profilio failas",
+      "profile-name" : "Profilio vardas",
+      "profile-name-placeholder" : "Naujo Profilio Vardas",
+      "profile-version-warning" : "Šis profilis buvo sukurtas naudojant naujesnę žaidimo versiją. Jis gali būti nesuderinamas su šia versija",
+      "title" : "Importuoti profilį"
+    },
+    "rename" : {
+      "new-profile" : "Naujo Profilio Vardas",
+      "new-profile-placeholder" : "Naujas profilis",
+      "old-profile" : "Seno profilio vardas",
+      "old-profile-placeholder" : "Senas profilis",
+      "title" : "Pervadinti profilį"
+    }
+  },
+  "server-manager" : {
+    "add" : "Pridėti",
+    "advanced-note" : "Atkreipkite dėmesį, kad naudotojo varde ir slaptažodyje gali reikėti vengti tam tikrų simbolių",
+    "advanced-path-placeholder" : "vartotojas:slaptazodis@savininkas:prievadas/vieta",
+    "existing-servers" : {
+      "none-yet" : null,
+      "title" : null
+    },
+    "failed-to-connect" : "Nepavyko prisijungti prie serverio, spustelėkite, kad bandytumėte dar kartą",
+    "get-help" : null,
+    "host-placeholder" : "Savininkas",
+    "invalid" : null,
+    "loading" : "Kraunama...",
+    "local-path-placeholder" : null,
+    "name-placeholder" : null,
+    "new-server" : {
+      "title" : "Pridėti Naują Serverį"
+    },
+    "password-placeholder" : "slaptažodis",
+    "path-placeholder" : "vietovė",
+    "port-placeholder" : "prievadas (numatytasis: {default})",
+    "switch-to-advanced" : "Pereiti prie išplėstinio režimo",
+    "switch-to-simple" : "Pereiti prie paprasto režimo",
+    "title" : "Dedikuotas serveris",
+    "username-placeholder" : "Vartotojo vardas",
+    "validating" : "Validuojama..."
+  },
+  "server-picker" : {
+    "failed-list-dir" : "Nepavyko išvardyti katalogo",
+    "failed-valid-check" : null
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "Talpyklos vietą",
+      "reset" : "Atstatyti į numatytąsias reikšmes",
+      "save" : "Išsaugoti ir perkelti",
+      "title" : "Keisti atsisiuntimo talpyklos vietą"
+    },
+    "change-cache-location" : "Keisti talpyklos vietą",
+    "copy-mod-list" : "Kopijuoti modų sarašą",
+    "debug" : "Derinimas",
+    "generate-debug-info" : "Generuokite derinimo informaciją",
+    "go-online-offline" : "Eiti {offline, select, true {prisijungus} other {neprisijungus}}",
+    "language" : "Kalba",
+    "launch-button" : "Paleidimo mygtukas",
+    "launch-button.button" : "Mygtukas",
+    "launch-button.cat" : "Nyan",
+    "launch-button.normal" : "Normalus",
+    "proxy" : {
+      "proxy" : "Tarpinis serveris",
+      "remove" : "Pašalinti tarpinį serverį",
+      "save" : "Išsaugoti ir perkrauti",
+      "title" : "Nustatyti tarpinį serverį"
+    },
+    "queue" : "Eilė",
+    "queue.start-immediately" : "Pradėti nedelsiant",
+    "queue.start-manually" : "Pradėti rankiniu būdu",
+    "save-window-position" : "Išsaugoti lango padėtį",
+    "secret-settings" : "Slapti nustatymai",
+    "set-proxy" : "Nustatyti tarpinį serverį",
+    "settings" : "Nustatymai",
+    "smm-debug-logging" : "SMM derinimo įrašinėjimas",
+    "start-view" : "Pradėti peržiūrą",
+    "start-view.compact" : "Kompaktiškas",
+    "start-view.expanded" : "Išplėstas",
+    "title" : "Modų Tvarkyklės Nustatymai",
+    "update-check" : "Atnaujinimo patikrinimas",
+    "update-check.ask" : "Paklausti, kai randama",
+    "update-check.on-exit" : "Išeinant",
+    "update-check.on-start" : "Pradžioje"
+  },
+  "smm-update" : {
+    "downloading" : "Atsisiunčiama fone",
+    "downloading-stats" : "Atsisiunčiama naujinys: {current} / {total}, {speed}/s, liko {eta}",
+    "title" : "SMM atnaujinimas prieinamas - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "Patobulintas našumas",
+      "performance.description" : "Užtikrina jūsų efektyvumą!",
+      "platform_support" : "Gimtoji Linux Heroic, Steam Snap, Mac palaikymas",
+      "platform_support.description" : "Gaukite versiją iš GitHubo išleidimų, jei dar to nepadarėte!",
+      "profile_format" : "Naujas profilio formatas",
+      "profile_format.description" : "SMM2 profiliai nėra suderinami su SMM3! Esami profiliai buvo automatiškai perkelti, tačiau negalite importuoti profilių, sukurtų su SMM2.",
+      "queue" : "Veiksmo eilės sudarymas",
+      "queue.description" : "Vienu metu sudėkite į eilę kelis modų atsisiuntimus/pašalinimus.",
+      "servers" : "Dedikuoto serverio valdymas",
+      "servers.description" : "Lengvai valdykite serverius per failų sistemą, SFTP, FTP ir SMB!",
+      "translation" : "Vertimo pagalba",
+      "translation.description" : "Prisijunkite prie mūsų Discordo, kad išverstumėte SMM į savo kalbą!",
+      "ui" : "Naudotojo sąsajos atnaujinimas",
+      "ui.description" : "Naujas apdailos sluoksnis, skirtas Satisfactory 1.0 šventei!"
+    },
+    "intro" : "Šioje versijoje padarėme daug patobulinimų. Štai keletas svarbiausių akcentų:",
+    "open_guide" : "Atidaryti SMM3 Documentaciją",
+    "title" : "Sveiki atvykę į Satisfactory Modifikacijų Tvarkyklę, 3 Versiją!"
+  },
+  "updates" : {
+    "changelog" : "Pakeitimų žurnalas",
+    "check-for-updates" : "Patikrinti, ar yra atnaujinimų",
+    "checking-for-updates" : "Tikrinama, ar yra atnaujinimų...",
+    "hide-ignored" : "Paslėpti ignoruojamus",
+    "ignore" : "Ignoruoti",
+    "mod-update-available" : "{updates, plural, one {{updates} pasiekiamas modo atnaujinimas} few {{updates} pasiekiami keli modų atnaujinimai} many {{updates} pasiekiama daug modų atnaujinimų} other {{updates} pasiekiami kiti modų atnaujinimai}}",
+    "no-updates" : "Šiuo metu nėra modų ar SMM atnaujinimų",
+    "show-ignored" : "Rodyti ignoruojamus",
+    "smm-update-available" : "Yra SMM atnaujinimas",
+    "title" : "Atnaujinimai",
+    "unignore" : "Nebeignoruoti",
+    "update-all" : "Atnaujinti visus",
+    "update-selected" : "Atnaujinti pasirinktus"
+  }
+}
