@@ -57,7 +57,9 @@ buildPythonPackage rec {
   pythonRemoveDeps = [ "shap" ];
   pythonRelaxDeps = [
     "gunicorn"
+    "importlib-metadata"
     "packaging"
+    "protobuf"
     "pytz"
     "pyarrow"
   ];
