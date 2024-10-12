@@ -367,7 +367,13 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      environment.pathsToLink = [ "/share/doc" ];
+      environment.pathsToLink = [
+        "/share/doc"
+
+        # Legacy paths used by gtk-doc & adjacent tools.
+        "/share/gtk-doc"
+        "/share/devhelp"
+      ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })
 
