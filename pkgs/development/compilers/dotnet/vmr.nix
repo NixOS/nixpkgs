@@ -28,6 +28,7 @@
   unzip,
   yq,
 
+  baseName ? "dotnet",
   bootstrapSdk,
   releaseManifestFile,
   tarballHash,
@@ -63,7 +64,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  pname = "dotnet-vmr";
+  pname = "${baseName}-vmr";
   version = release;
 
   # TODO: fix this in the binary sdk packages
