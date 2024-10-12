@@ -67,10 +67,10 @@ let
 
   meta = with lib; {
     description = "All-in-one cross-platform voice and text chat for gamers";
-    homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    homepage = "https://discordapp.com/";
     license = licenses.unfree;
+    mainProgram = "discord";
     maintainers = with maintainers; [
       Scrumplex
       artturin
@@ -82,7 +82,7 @@ let
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    mainProgram = "discord";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
   package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
