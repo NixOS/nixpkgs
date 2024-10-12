@@ -1002,13 +1002,9 @@ let
       );
 
       compiler-rtPatches =
-        lib.optionals (lib.versions.major metadata.release_version == "12") [
-          # Revert compiler-rt commit that makes codesign mandatory
-          ./compiler-rt/7-12-codesign.patch
-        ]
-        ++ lib.optional (
-          lib.versionAtLeast metadata.release_version "13" && lib.versionOlder metadata.release_version "15"
-        ) (metadata.getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
+        lib.optional (lib.versionOlder metadata.release_version "15") (
+          metadata.getVersionFile "compiler-rt/codesign.patch"
+        ) # Revert compiler-rt commit that makes codesign mandatory
         ++ [
           (metadata.getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
         ]
