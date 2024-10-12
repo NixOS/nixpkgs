@@ -43,6 +43,8 @@ in
 , description ? null
 , doCheck ? !isCross
 , doBenchmark ? false
+, benchmarkPhase ? null, preBenchmark ? null, postBenchmark ? null
+, benchTarget ? "", benchFlags ? ""
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle
 , doInstallIntermediates ? false
@@ -423,7 +425,7 @@ stdenv.mkDerivation ({
 
   prePhases = ["setupCompilerEnvironmentPhase"];
   preConfigurePhases = ["compileBuildDriverPhase"];
-  preInstallPhases = ["haddockPhase"];
+  preInstallPhases = ["benchmarkPhase" "haddockPhase"];
 
   inherit src;
 
@@ -616,6 +618,12 @@ stdenv.mkDerivation ({
     export NIX_GHC_PACKAGE_PATH_FOR_TEST="''${NIX_GHC_PACKAGE_PATH_FOR_TEST:-$packageConfDir:}"
     ${setupCommand} test ${testTarget} $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
     runHook postCheck
+  '';
+
+  benchmarkPhase = ''
+    runHook preBenchmark
+    ${setupCommand} bench ${benchTarget} ${benchFlags}
+    runHook postBenchmark
   '';
 
   haddockPhase = ''
@@ -835,7 +843,9 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? postConfigure)          { inherit postConfigure; }
 // optionalAttrs (args ? preBuild)               { inherit preBuild; }
 // optionalAttrs (args ? postBuild)              { inherit postBuild; }
-// optionalAttrs (args ? doBenchmark)            { inherit doBenchmark; }
+// optionalAttrs (args ? benchmarkPhase)         { inherit benchmarkPhase; }
+// optionalAttrs (args ? preBenchmark)           { inherit preBenchmark; }
+// optionalAttrs (args ? postBenchmark)          { inherit postBenchmark; }
 // optionalAttrs (args ? checkPhase)             { inherit checkPhase; }
 // optionalAttrs (args ? preCheck)               { inherit preCheck; }
 // optionalAttrs (args ? postCheck)              { inherit postCheck; }
