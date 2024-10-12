@@ -45,7 +45,7 @@ buildPythonPackage rec {
     dm-tree
     h5py
     markdown-it-py
-    ml-dtypes
+    ({ ml-dtypesTF = ml-dtypes; } // tensorflow).ml-dtypesTF
     namex
     numpy
     optree
