@@ -1,30 +1,35 @@
 {
   lib,
   buildPythonPackage,
+  duckdb,
+  elastic-transport,
   elasticsearch,
   fastavro,
   fetchFromGitHub,
+  httpx,
   lz4,
+  maxminddb,
   msgpack,
   pytest7CheckHook,
   pythonOlder,
-  setuptools,
+  pytz,
   setuptools-scm,
+  setuptools,
   zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "flow-record";
-  version = "3.15";
+  version = "3.17";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "flow.record";
     rev = "refs/tags/${version}";
-    hash = "sha256-j5N66p7feB9Ae+Fu5RhVzh8XCHiq55jJMg0Fe+C6Jvg=";
+    hash = "sha256-fFP2bdO4wTR9Y+9no3FabtVmLicTD76Jw5aWDMPOB0w=";
   };
 
   build-system = [
@@ -39,11 +44,18 @@ buildPythonPackage rec {
       lz4
       zstandard
     ];
+    duckdb = [
+      duckdb
+      pytz
+    ];
     elastic = [ elasticsearch ];
+    geoip = [ maxminddb ];
     avro = [ fastavro ] ++ fastavro.optional-dependencies.snappy;
+    splunk = [ httpx ];
   };
 
   nativeCheckInputs = [
+    elastic-transport
     pytest7CheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
