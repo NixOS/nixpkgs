@@ -51,6 +51,9 @@ in {
         default = null;
         description = ''
           Alertmanager configuration as nix attribute set.
+
+          The contents of the resulting config file are processed using envsubst.
+          `$` needs to be escaped as `$$` to be preserved.
         '';
       };
 
@@ -62,6 +65,9 @@ in {
           defines the text that is written to alertmanager.yml. If null, the
           contents of alertmanager.yml is generated from the structured config
           options.
+
+          The contents of the resulting config file are processed using envsubst.
+          `$` needs to be escaped as `$$` to be preserved.
         '';
       };
 
