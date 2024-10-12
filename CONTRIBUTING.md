@@ -707,6 +707,24 @@ If ofBorg reveals the build to be broken on some platform and you don't have acc
 
 When in any doubt, please simply ask via a comment in your PR or through one of the help channels.
 
+## I received a review on my PR, how do I get it over the finish line?
+
+In the review process, the committer will have left some sort of feedback on your PR.
+They may have immediately approved of your PR or even merged it but the more likely case is that they want you to change a few things or that they require further input.
+
+A reviewer may have taken a look at the code and it looked good to them ("Diff LGTM") but they still need to be convinced of the artefact's quality.
+They might also be waiting on input from other users of the component or its listed maintainer on whether the intention of your PR makes sense for the component.
+If you know of people who could help clarify any of this, please bring the PR to their attention.
+The current state of the PR is frequently not clearly communicated, so please don't hesitate to ask about it if it's unclear to you.
+
+It's also possible for the reviewer to not be convinced that your PR is necessary or that the method you've chose to achieve your intention is the right one.
+
+Please explain your intentions and reasoning to the committer in such a case.
+There may be constraints you had to work with which they're not aware of or qualities of your approach that they didn't immediately notice.
+(If these weren't clear to the reviewer, that's a good sign you should explain them in your commit message or code comments!)
+
+There are some further pitfalls and realities which this section intends to make you aware of.
+
 ### A reviewer requested a bunch of insubstantial changes on my PR
 
 The people involved in Nixpkgs care about code quality because, once in Nixpkgs, it needs to be maintained for many years to come.
@@ -734,3 +752,36 @@ This will usually reveal how important they deem it to be and will help educate 
 
 Some committers may have stronger opinions on some things and therefore (understandably) may not want to merge your PR if you don't follow their requests.
 It is totally fine to get yourself a second or third opinion in such a case.
+
+### Committers work on a push-basis
+
+It's possible for you to get a review but nothing happens afterwards, even if you reply to review comments.
+A committer not following up on your PR does not necessarily mean they're disinterested or unresponsive, they may have simply forgotten to follow up on it or had some other circumstances preventing them from doing so.
+
+Committers typically handle many other PRs besides yours and it is not realistic for them to keep up with all of them to a degree where they could reasonably remember to follow up on all PRs that they had intended following up upon.
+If someone left an approving review on your PR and didn't merge a few days later, the most likely case is that they simply forgot.
+
+Please see it as your responsibility to actively remind reviewers of your open PRs.
+
+The easiest way to do so is to simply cause them a Github notification.
+Github notifies people involved in the PR when you add a comment to your PR, push your PR or re-request their review.
+Doing any of that will get you people's attention again.
+
+It may very well be the case that you have to do this every time you need the committer to follow up upon your PR.
+Again, this is a community project so please be mindful of people's circumstances here; be nice when requesting reviews again.
+
+It may also be the case that the committer has lost interest or isn't familiar enough with the component you're touching to be comfortable merging your PR.
+They will likely not immediately state that fact however, so please ask for clarification and don't hesitate to find yourself another committer to take a look at your PR.
+
+### Nothing helped
+
+If you followed these guidelines but still got no results or if you feel that you have been wronged in some way, please explicitly reach out to the greater community via its communication channels.
+
+The [NixOS Discourse](https://discourse.nixos.org/) is a great place to do this as it has historically been the asynchronous medium with the greatest concentration of committers and other people who are significantly involved in Nixpkgs.
+There is a dedicated discourse thread [PRs in distress](https://discourse.nixos.org/t/prs-in-distress/3604) where you can link your PR if everything else fails.
+The [Nixpkgs / NixOS contributions Matrix channel](https://matrix.to/#/#dev:nixos.org) is the best synchronous channel with the same qualities.
+
+Please reserve these for cases where you've made a serious effort in trying to get the attention of multiple active committers and provided realistic means for them to assess your PR's quality though.
+As mentioned previously, it is unfortunately perfectly normal for a PR to sit around for weeks on end due to the realities of this being a community project.
+Please don't blow up situations where progress is happening but is merely not going fast enough for your tastes.
+Honking in a traffic jam will not make you go any faster.
