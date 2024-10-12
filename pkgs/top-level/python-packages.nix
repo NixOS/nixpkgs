@@ -15889,8 +15889,6 @@ self: super: with self; {
 
   transmission-rpc = callPackage ../development/python-modules/transmission-rpc { };
 
-  transmissionrpc = callPackage ../development/python-modules/transmissionrpc { };
-
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
