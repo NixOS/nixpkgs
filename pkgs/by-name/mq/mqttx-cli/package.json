@@ -1,0 +1,77 @@
+{
+  "name": "mqttx-cli",
+  "version": "1.10.1",
+  "description": "MQTTX Command Line Tools",
+  "keywords": [
+    "mqtt",
+    "publish/subscribe",
+    "publish",
+    "subscribe"
+  ],
+  "scripts": {
+    "dev": "tsc -w",
+    "build": "tsc"
+  },
+  "main": "./dist/src/index.js",
+  "bin": {
+    "mqttx": "./bin/index.js"
+  },
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^5.0.3",
+    "axios": "^0.27.2",
+    "cbor": "^9.0.1",
+    "chalk": "~4.1.2",
+    "cli-table3": "^0.6.3",
+    "commander": "^9.3.0",
+    "compare-versions": "^5.0.1",
+    "concat-stream": "^2.0.0",
+    "core-js": "^3.26.0",
+    "ini": "^4.1.2",
+    "js-yaml": "^4.1.0",
+    "json-bigint": "^1.0.0",
+    "lodash": "^4.17.21",
+    "mqtt": "^4.3.7",
+    "ora": "^5.4.1",
+    "protobufjs": "^7.2.3",
+    "pump": "^3.0.0",
+    "readable-stream": "^3.6.0",
+    "signale": "^1.4.0",
+    "split2": "^4.1.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.1.0",
+    "@types/concat-stream": "^2.0.0",
+    "@types/debug": "^4.1.12",
+    "@types/ini": "^4.1.0",
+    "@types/js-yaml": "^4.0.5",
+    "@types/json-bigint": "^1.0.4",
+    "@types/lodash": "^4.17.1",
+    "@types/node": "^17.0.43",
+    "@types/pump": "^1.1.1",
+    "@types/readable-stream": "^2.3.13",
+    "@types/signale": "^1.4.4",
+    "@types/split2": "^3.2.1",
+    "@types/ws": "^8.5.3",
+    "typescript": "^4.7.3"
+  },
+  "pkg": {
+    "targets": [
+      "node18-linux-x64",
+      "node18-macos-x64",
+      "node18-win-x64",
+      "node18-alpine-x64",
+      "node18-linux-arm64",
+      "node18-macos-arm64",
+      "node18-win-arm64",
+      "node18-alpine-arm64"
+    ],
+    "outputPath": "release",
+    "scripts": [
+      "dist/src/scenarios/**/*"
+    ]
+  }
+}
