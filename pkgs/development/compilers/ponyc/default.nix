@@ -40,9 +40,8 @@ stdenv.mkDerivation (rec {
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
   buildInputs = [ libxml2 z3 ];
 
-  # Sandbox disallows network access, so disabling problematic networking tests
+  __darwinAllowLocalNetworking = true;
   patches = [
-    ./disable-tests.patch
     (substituteAll {
       src = ./make-safe-for-sandbox.patch;
       googletest = fetchFromGitHub {
