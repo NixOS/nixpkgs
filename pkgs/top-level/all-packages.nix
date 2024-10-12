@@ -14998,8 +14998,6 @@ with pkgs;
 
   hop = callPackage ../development/compilers/hop { };
 
-  hop-cli = throw "hop-cli has been removed as the service has been shut-down"; #Added 2024-08-13
-
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
   };
