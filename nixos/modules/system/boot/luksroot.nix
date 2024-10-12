@@ -192,12 +192,6 @@ let
                     # and try reading it from /dev/console with a timeout
                     IFS= read -t 1 -r passphrase
                     if [ -n "$passphrase" ]; then
-                       ${if luks.reusePassphrases then ''
-                         # remember it for the next device
-                         echo -n "$passphrase" > /crypt-ramfs/passphrase
-                       '' else ''
-                         # Don't save it to ramfs. We are very paranoid
-                       ''}
                        echo
                        break
                     fi
@@ -208,9 +202,10 @@ let
             if [ $? == 0 ]; then
                 echo " - success"
                 ${if luks.reusePassphrases then ''
-                  # we don't rm here because we might reuse it for the next device
+                  # remember it for the next device
+                  echo -n "$passphrase" > /crypt-ramfs/passphrase
                 '' else ''
-                  rm -f /crypt-ramfs/passphrase
+                  # Don't save it to ramfs. We are very paranoid
                 ''}
                 break
             else
@@ -299,12 +294,6 @@ let
                     # Try reading it from /dev/console with a timeout
                     IFS= read -t 1 -r k_user
                     if [ -n "$k_user" ]; then
-                       ${if luks.reusePassphrases then ''
-                         # Remember it for the next device
-                         echo -n "$k_user" > /crypt-ramfs/passphrase
-                       '' else ''
-                         # Don't save it to ramfs. We are very paranoid
-                       ''}
                        echo
                        break
                     fi
@@ -323,9 +312,10 @@ let
             if [ $? == 0 ]; then
                 opened=true
                 ${if luks.reusePassphrases then ''
-                  # We don't rm here because we might reuse it for the next device
+                  # Remember it for the next device
+                  echo -n "$k_user" > /crypt-ramfs/passphrase
                 '' else ''
-                  rm -f /crypt-ramfs/passphrase
+                  # Don't save it to ramfs. We are very paranoid
                 ''}
                 break
             else
