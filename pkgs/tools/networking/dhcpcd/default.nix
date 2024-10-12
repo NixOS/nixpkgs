@@ -7,6 +7,7 @@
 , runtimeShellPackage
 , runtimeShell
 , nixosTests
+, enablePrivSep ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--disable-privsep"
     "--dbdir=/var/lib/dhcpcd"
-  ];
+    (lib.enableFeature enablePrivSep "privsep")
+  ] ++ lib.optional enablePrivSep "--privsepuser=dhcpcd";
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
