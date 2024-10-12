@@ -307,6 +307,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-ZmOuk2uNnFQzXSfRp6Lz/1bplEm0AuB/M94+dRnqhHU="
   },
+  "deno": {
+    "hash": "sha256-7IvJrhXMeAmf8e21QBdYNSJyVMEzLpat4Tm4zHWglW8=",
+    "homepage": "https://registry.terraform.io/providers/denoland/deno",
+    "owner": "denoland",
+    "repo": "terraform-provider-deno",
+    "rev": "v0.1.0",
+    "spdx": "MPL-2.0",
+    "vendorHash": "sha256-mJXQVfCmW7ssFCrrRSiNb5Vg2QnS9NoBCgZlDDPMoEU="
+  },
   "dexidp": {
     "hash": "sha256-ommpazPlY4dMAOB1pgI7942aGH6YYPn6WtaowucQpZY=",
     "homepage": "https://registry.terraform.io/providers/marcofranssen/dexidp",
