@@ -20,7 +20,7 @@
 , wrapGAppsHook4
 , gobject-introspection
 # withWebkit enables the "webkit" feature, also known as Google Fonts
-, withWebkit ? true, glib-networking, libsoup, webkitgtk
+, withWebkit ? true, glib-networking, libsoup_3, webkitgtk_6_0
 }:
 
 stdenv.mkDerivation rec {
@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme
   ] ++ lib.optionals withWebkit [
     glib-networking # for SSL so that Google Fonts can load
-    libsoup
-    webkitgtk
+    libsoup_3
+    webkitgtk_6_0
   ];
 
   mesonFlags = [

@@ -22,7 +22,7 @@
 , unicode ? true
 , withMesa ? !stdenv.hostPlatform.isDarwin
 , withWebKit ? true
-, webkitgtk
+, webkitgtk_4_0
 , setfile
 , AGL
 , Carbon
@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     xorgproto
   ]
   ++ lib.optional withMesa libGLU
-  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk
+  ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
   ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat

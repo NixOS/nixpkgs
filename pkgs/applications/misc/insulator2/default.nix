@@ -7,7 +7,7 @@
 , freetype
 , libsoup
 , gtk3
-, webkitgtk
+, webkitgtk_4_0
 , perl
 , cyrus_sasl
 , stdenv
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     freetype
     libsoup
     gtk3
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   meta = with lib; {
