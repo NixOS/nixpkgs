@@ -9,19 +9,20 @@
   requests,
   requests-mock,
   setuptools,
+  typing-extensions,
   versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "tableauserverclient";
-  version = "0.31";
+  version = "0.33";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e00/+yVKg7dGGq3Os+oWu/F93j5e9dnwWZxKwm+soqM=";
+    hash = "sha256-7yj/Ey3mIR2GZ0gtNkrrtoKEmuA5LihZlM9qPhbROQw=";
   };
 
   postPatch = ''
@@ -29,7 +30,10 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  pythonRelaxDeps = [ "urllib3" ];
+  pythonRelaxDeps = [
+    "defusedxml"
+    "urllib3"
+  ];
 
   nativeBuildInputs = [
     setuptools
@@ -40,6 +44,7 @@ buildPythonPackage rec {
     defusedxml
     requests
     packaging
+    typing-extensions
   ];
 
   nativeCheckInputs = [
