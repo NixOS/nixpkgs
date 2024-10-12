@@ -151,11 +151,8 @@ stdenv.mkDerivation rec {
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl gnugrep common-updater-scripts
       set -eou pipefail;
-      url=$(curl -sI "https://discordapp.com/api/download/${
-        builtins.replaceStrings [ "discord-" "discord" ] [ "" "stable" ] pname
-      }?platform=linux&format=tar.gz" | grep -oP 'location: \K\S+')
-      version=''${url##https://dl*.discordapp.net/apps/linux/}
-      version=''${version%%/*.tar.gz}
+      url=$(curl -sI -o /dev/null -w '%header{location}' "https://discord.com/api/download/${branch}?platform=linux&format=tar.gz")
+      version=$(echo $url | grep -oP '/\K(\d+\.){2}\d+')
       update-source-version ${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
   };
