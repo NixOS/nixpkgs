@@ -963,6 +963,8 @@
   ./services/network-filesystems/orangefs/client.nix
   ./services/network-filesystems/orangefs/server.nix
   ./services/network-filesystems/rsyncd.nix
+  ./services/network-filesystems/s3fs-fuse.nix
+  ./services/network-filesystems/samba.nix
   ./services/network-filesystems/samba-wsdd.nix
   ./services/network-filesystems/samba.nix
   ./services/network-filesystems/tahoe.nix
