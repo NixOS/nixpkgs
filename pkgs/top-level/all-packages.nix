@@ -1966,6 +1966,8 @@ with pkgs;
 
   tauon = callPackage ../applications/audio/tauon { };
 
+  tauray = callPackage ../applications/graphics/tauray { };
+
   tere = callPackage ../tools/misc/tere { };
 
   termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
