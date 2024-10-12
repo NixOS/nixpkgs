@@ -5,6 +5,7 @@
   pythonOlder,
   fetchFromGitHub,
   python,
+  toPythonModule,
 
   # build-system
   libclang,
@@ -75,7 +76,7 @@ buildPythonPackage rec {
     gumbo
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [ memstreamHook ];
 
-  propagatedBuildInputs = [ mupdf-cxx ];
+  propagatedBuildInputs = [ (toPythonModule mupdf-cxx) ];
 
   env = {
     # force using system MuPDF (must be defined in environment and empty)
