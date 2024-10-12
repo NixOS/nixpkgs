@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
     lib.optional enableUdev udev ++
     lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit Security ];
 
+  # Not providing the deps dir breaks the build on Windows.
+  dontAddDisableDepTrack = if stdenv.hostPlatform.isWindows then true else null;
+
   dontDisableStatic = withStatic;
 
   # libusb-1.0.rc:11: fatal error: opening dependency file .deps/libusb-1.0.Tpo: No such file or directory

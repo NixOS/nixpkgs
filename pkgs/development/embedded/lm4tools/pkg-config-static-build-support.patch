@@ -1,0 +1,51 @@
+diff --git a/lm4flash/Makefile b/lm4flash/Makefile
+index 0a85b35..1f6beef 100644
+--- a/lm4flash/Makefile
++++ b/lm4flash/Makefile
+@@ -2,13 +2,16 @@ EXE := lm4flash
+
+ CC ?= gcc
+ PKG_CONFIG ?= pkg-config
++ifdef STATIC_BUILD
++	PKG_CONFIG_FLAGS += --static
++endif
+ CFLAGS += -Wall
+
+ ifeq ($(shell uname),FreeBSD)
+ LDFLAGS += -lusb
+ else
+-CFLAGS += $(shell $(PKG_CONFIG) --cflags libusb-1.0)
+-LDFLAGS += $(shell $(PKG_CONFIG) --libs libusb-1.0)
++CFLAGS += $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags libusb-1.0)
++LDFLAGS += $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs libusb-1.0)
+ endif
+
+ ifeq ($(shell uname),Darwin)
+diff --git a/lmicdiusb/Makefile b/lmicdiusb/Makefile
+index 088973c..4db4ee4 100644
+--- a/lmicdiusb/Makefile
++++ b/lmicdiusb/Makefile
+@@ -37,6 +37,9 @@
+ #//
+ #//*****************************************************************************
+ PKG_CONFIG ?= pkg-config
++ifdef STATIC_BUILD
++	PKG_CONFIG_FLAGS += --static
++endif
+
+ ifeq ($(shell uname),Darwin)
+ 	LDFLAGS += -framework AppKit -framework IOKit -framework Security
+@@ -48,11 +51,11 @@ ifeq ($(shell uname),FreeBSD)
+ 	LIBUSB_LIBS := -lusb
+ endif
+
+-	LIBUSB_CFLAGS ?= $(shell $(PKG_CONFIG) --cflags libusb-1.0)
+-	LIBUSB_LIBDIR ?= $(shell $(PKG_CONFIG) --variable=libdir libusb-1.0)
++	LIBUSB_CFLAGS ?= $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --cflags libusb-1.0)
++	LIBUSB_LIBDIR ?= $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --variable=libdir libusb-1.0)
+	LIBUSB_LIBS ?= $(shell $(PKG_CONFIG) --libs-only-l libusb-1.0)
+
+ VPATH += $(LIBUSB_LIBDIR)
+
+-LDFLAGS += -L$(LIBUSB_LIBDIR) -g
++LDFLAGS += $(shell $(PKG_CONFIG) $(PKG_CONFIG_FLAGS) --libs libusb-1.0) -g

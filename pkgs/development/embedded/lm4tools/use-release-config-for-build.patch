@@ -1,0 +1,11 @@
+diff --git a/lm4flash/Makefile b/lm4flash/Makefile
+index 20bd741..c872783 100644
+--- a/lm4flash/Makefile
++++ b/lm4flash/Makefile
+@@ -12,5 +12,5 @@ endif
+
+-all: $(EXE)
++all: release
+
+ release: CFLAGS += -O2
+ release: $(EXE)
