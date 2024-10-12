@@ -1,0 +1,479 @@
+diff --git a/package-lock.json b/package-lock.json
+index 4000d085..3beae8db 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -9,7 +9,6 @@
+       "version": "0.4.6",
+       "license": "ISC",
+       "dependencies": {
+-        "@ffmpeg-installer/ffmpeg": "^1.1.0",
+         "@mapbox/node-pre-gyp": "^1.0.10",
+         "@scrypted/types": "^0.2.18",
+         "adm-zip": "^0.5.9",
+@@ -19,7 +18,6 @@
+         "debug": "^4.3.4",
+         "engine.io": "^6.2.0",
+         "express": "^4.18.2",
+-        "ffmpeg-static": "^5.1.0",
+         "http-auth": "^4.2.0",
+         "ip": "^1.1.8",
+         "level": "^6.0.1",
+@@ -68,137 +66,6 @@
+         "node-pty-prebuilt-multiarch": "^0.10.1-pre.5"
+       }
+     },
+-    "node_modules/@derhuerst/http-basic": {
+-      "version": "8.2.4",
+-      "resolved": "https://registry.npmjs.org/@derhuerst/http-basic/-/http-basic-8.2.4.tgz",
+-      "integrity": "sha512-F9rL9k9Xjf5blCz8HsJRO4diy111cayL2vkY2XE4r4t3n0yPXVYy3KD3nJ1qbrSn9743UWSXH4IwuCa/HWlGFw==",
+-      "dependencies": {
+-        "caseless": "^0.12.0",
+-        "concat-stream": "^2.0.0",
+-        "http-response-object": "^3.0.1",
+-        "parse-cache-control": "^1.0.1"
+-      },
+-      "engines": {
+-        "node": ">=6.0.0"
+-      }
+-    },
+-    "node_modules/@ffmpeg-installer/darwin-arm64": {
+-      "version": "4.1.5",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/darwin-arm64/-/darwin-arm64-4.1.5.tgz",
+-      "integrity": "sha512-hYqTiP63mXz7wSQfuqfFwfLOfwwFChUedeCVKkBtl/cliaTM7/ePI9bVzfZ2c+dWu3TqCwLDRWNSJ5pqZl8otA==",
+-      "cpu": [
+-        "arm64"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "darwin"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/darwin-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/darwin-x64/-/darwin-x64-4.1.0.tgz",
+-      "integrity": "sha512-Z4EyG3cIFjdhlY8wI9aLUXuH8nVt7E9SlMVZtWvSPnm2sm37/yC2CwjUzyCQbJbySnef1tQwGG2Sx+uWhd9IAw==",
+-      "cpu": [
+-        "x64"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "darwin"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/ffmpeg": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/ffmpeg/-/ffmpeg-1.1.0.tgz",
+-      "integrity": "sha512-Uq4rmwkdGxIa9A6Bd/VqqYbT7zqh1GrT5/rFwCwKM70b42W5gIjWeVETq6SdcL0zXqDtY081Ws/iJWhr1+xvQg==",
+-      "optionalDependencies": {
+-        "@ffmpeg-installer/darwin-arm64": "4.1.5",
+-        "@ffmpeg-installer/darwin-x64": "4.1.0",
+-        "@ffmpeg-installer/linux-arm": "4.1.3",
+-        "@ffmpeg-installer/linux-arm64": "4.1.4",
+-        "@ffmpeg-installer/linux-ia32": "4.1.0",
+-        "@ffmpeg-installer/linux-x64": "4.1.0",
+-        "@ffmpeg-installer/win32-ia32": "4.1.0",
+-        "@ffmpeg-installer/win32-x64": "4.1.0"
+-      }
+-    },
+-    "node_modules/@ffmpeg-installer/linux-arm": {
+-      "version": "4.1.3",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-arm/-/linux-arm-4.1.3.tgz",
+-      "integrity": "sha512-NDf5V6l8AfzZ8WzUGZ5mV8O/xMzRag2ETR6+TlGIsMHp81agx51cqpPItXPib/nAZYmo55Bl2L6/WOMI3A5YRg==",
+-      "cpu": [
+-        "arm"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "linux"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/linux-arm64": {
+-      "version": "4.1.4",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-arm64/-/linux-arm64-4.1.4.tgz",
+-      "integrity": "sha512-dljEqAOD0oIM6O6DxBW9US/FkvqvQwgJ2lGHOwHDDwu/pX8+V0YsDL1xqHbj1DMX/+nP9rxw7G7gcUvGspSoKg==",
+-      "cpu": [
+-        "arm64"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "linux"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/linux-ia32": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-ia32/-/linux-ia32-4.1.0.tgz",
+-      "integrity": "sha512-0LWyFQnPf+Ij9GQGD034hS6A90URNu9HCtQ5cTqo5MxOEc7Rd8gLXrJvn++UmxhU0J5RyRE9KRYstdCVUjkNOQ==",
+-      "cpu": [
+-        "ia32"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "linux"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/linux-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-x64/-/linux-x64-4.1.0.tgz",
+-      "integrity": "sha512-Y5BWhGLU/WpQjOArNIgXD3z5mxxdV8c41C+U15nsE5yF8tVcdCGet5zPs5Zy3Ta6bU7haGpIzryutqCGQA/W8A==",
+-      "cpu": [
+-        "x64"
+-      ],
+-      "hasInstallScript": true,
+-      "optional": true,
+-      "os": [
+-        "linux"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/win32-ia32": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/win32-ia32/-/win32-ia32-4.1.0.tgz",
+-      "integrity": "sha512-FV2D7RlaZv/lrtdhaQ4oETwoFUsUjlUiasiZLDxhEUPdNDWcH1OU9K1xTvqz+OXLdsmYelUDuBS/zkMOTtlUAw==",
+-      "cpu": [
+-        "ia32"
+-      ],
+-      "optional": true,
+-      "os": [
+-        "win32"
+-      ]
+-    },
+-    "node_modules/@ffmpeg-installer/win32-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/win32-x64/-/win32-x64-4.1.0.tgz",
+-      "integrity": "sha512-Drt5u2vzDnIONf4ZEkKtFlbvwj6rI3kxw1Ck9fpudmtgaZIHD4ucsWB2lCZBXRxJgXR+2IMSti+4rtM4C4rXgg==",
+-      "cpu": [
+-        "x64"
+-      ],
+-      "optional": true,
+-      "os": [
+-        "win32"
+-      ]
+-    },
+     "node_modules/@gar/promisify": {
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz",
+@@ -818,11 +685,6 @@
+         "url": "https://github.com/sponsors/ljharb"
+       }
+     },
+-    "node_modules/caseless": {
+-      "version": "0.12.0",
+-      "resolved": "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz",
+-      "integrity": "sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw=="
+-    },
+     "node_modules/chownr": {
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/chownr/-/chownr-2.0.0.tgz",
+@@ -861,20 +723,6 @@
+       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
+       "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
+     },
+-    "node_modules/concat-stream": {
+-      "version": "2.0.0",
+-      "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-2.0.0.tgz",
+-      "integrity": "sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==",
+-      "engines": [
+-        "node >= 6.0"
+-      ],
+-      "dependencies": {
+-        "buffer-from": "^1.0.0",
+-        "inherits": "^2.0.3",
+-        "readable-stream": "^3.0.2",
+-        "typedarray": "^0.0.6"
+-      }
+-    },
+     "node_modules/console-control-strings": {
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz",
+@@ -1239,21 +1087,6 @@
+       "resolved": "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz",
+       "integrity": "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="
+     },
+-    "node_modules/ffmpeg-static": {
+-      "version": "5.1.0",
+-      "resolved": "https://registry.npmjs.org/ffmpeg-static/-/ffmpeg-static-5.1.0.tgz",
+-      "integrity": "sha512-eEWOiGdbf7HKPeJI5PoJ0oCwkL0hckL2JdS4JOuB/gUETppwkEpq8nF0+e6VEQnDCo/iuoipbTUsn9QJmtpNkg==",
+-      "hasInstallScript": true,
+-      "dependencies": {
+-        "@derhuerst/http-basic": "^8.2.0",
+-        "env-paths": "^2.2.0",
+-        "https-proxy-agent": "^5.0.0",
+-        "progress": "^2.0.3"
+-      },
+-      "engines": {
+-        "node": ">=16"
+-      }
+-    },
+     "node_modules/finalhandler": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/finalhandler/-/finalhandler-1.2.0.tgz",
+@@ -1487,19 +1320,6 @@
+         "node": ">= 6"
+       }
+     },
+-    "node_modules/http-response-object": {
+-      "version": "3.0.2",
+-      "resolved": "https://registry.npmjs.org/http-response-object/-/http-response-object-3.0.2.tgz",
+-      "integrity": "sha512-bqX0XTF6fnXSQcEJ2Iuyr75yVakyjIDCqroJQ/aHfSdlM743Cwqoi2nDYMzLGWUcuTWGWy8AAvOKXTfiv6q9RA==",
+-      "dependencies": {
+-        "@types/node": "^10.0.3"
+-      }
+-    },
+-    "node_modules/http-response-object/node_modules/@types/node": {
+-      "version": "10.17.60",
+-      "resolved": "https://registry.npmjs.org/@types/node/-/node-10.17.60.tgz",
+-      "integrity": "sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw=="
+-    },
+     "node_modules/https-proxy-agent": {
+       "version": "5.0.1",
+       "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz",
+@@ -2274,11 +2094,6 @@
+         "url": "https://github.com/sponsors/sindresorhus"
+       }
+     },
+-    "node_modules/parse-cache-control": {
+-      "version": "1.0.1",
+-      "resolved": "https://registry.npmjs.org/parse-cache-control/-/parse-cache-control-1.0.1.tgz",
+-      "integrity": "sha512-60zvsJReQPX5/QP0Kzfd/VrpjScIQ7SHBW6bFCYfEP+fp0Eppr1SHhIO5nd1PjZtvclzSzES9D/p5nFJurwfWg=="
+-    },
+     "node_modules/parseurl": {
+       "version": "1.3.3",
+       "resolved": "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz",
+@@ -2466,14 +2281,6 @@
+       "integrity": "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==",
+       "optional": true
+     },
+-    "node_modules/progress": {
+-      "version": "2.0.3",
+-      "resolved": "https://registry.npmjs.org/progress/-/progress-2.0.3.tgz",
+-      "integrity": "sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==",
+-      "engines": {
+-        "node": ">=0.4.0"
+-      }
+-    },
+     "node_modules/promise-inflight": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/promise-inflight/-/promise-inflight-1.0.1.tgz",
+@@ -3011,11 +2818,6 @@
+         "node": ">= 0.6"
+       }
+     },
+-    "node_modules/typedarray": {
+-      "version": "0.0.6",
+-      "resolved": "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz",
+-      "integrity": "sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA=="
+-    },
+     "node_modules/typescript": {
+       "version": "4.8.4",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.8.4.tgz",
+@@ -3167,80 +2969,6 @@
+     }
+   },
+   "dependencies": {
+-    "@derhuerst/http-basic": {
+-      "version": "8.2.4",
+-      "resolved": "https://registry.npmjs.org/@derhuerst/http-basic/-/http-basic-8.2.4.tgz",
+-      "integrity": "sha512-F9rL9k9Xjf5blCz8HsJRO4diy111cayL2vkY2XE4r4t3n0yPXVYy3KD3nJ1qbrSn9743UWSXH4IwuCa/HWlGFw==",
+-      "requires": {
+-        "caseless": "^0.12.0",
+-        "concat-stream": "^2.0.0",
+-        "http-response-object": "^3.0.1",
+-        "parse-cache-control": "^1.0.1"
+-      }
+-    },
+-    "@ffmpeg-installer/darwin-arm64": {
+-      "version": "4.1.5",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/darwin-arm64/-/darwin-arm64-4.1.5.tgz",
+-      "integrity": "sha512-hYqTiP63mXz7wSQfuqfFwfLOfwwFChUedeCVKkBtl/cliaTM7/ePI9bVzfZ2c+dWu3TqCwLDRWNSJ5pqZl8otA==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/darwin-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/darwin-x64/-/darwin-x64-4.1.0.tgz",
+-      "integrity": "sha512-Z4EyG3cIFjdhlY8wI9aLUXuH8nVt7E9SlMVZtWvSPnm2sm37/yC2CwjUzyCQbJbySnef1tQwGG2Sx+uWhd9IAw==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/ffmpeg": {
+-      "version": "1.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/ffmpeg/-/ffmpeg-1.1.0.tgz",
+-      "integrity": "sha512-Uq4rmwkdGxIa9A6Bd/VqqYbT7zqh1GrT5/rFwCwKM70b42W5gIjWeVETq6SdcL0zXqDtY081Ws/iJWhr1+xvQg==",
+-      "requires": {
+-        "@ffmpeg-installer/darwin-arm64": "4.1.5",
+-        "@ffmpeg-installer/darwin-x64": "4.1.0",
+-        "@ffmpeg-installer/linux-arm": "4.1.3",
+-        "@ffmpeg-installer/linux-arm64": "4.1.4",
+-        "@ffmpeg-installer/linux-ia32": "4.1.0",
+-        "@ffmpeg-installer/linux-x64": "4.1.0",
+-        "@ffmpeg-installer/win32-ia32": "4.1.0",
+-        "@ffmpeg-installer/win32-x64": "4.1.0"
+-      }
+-    },
+-    "@ffmpeg-installer/linux-arm": {
+-      "version": "4.1.3",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-arm/-/linux-arm-4.1.3.tgz",
+-      "integrity": "sha512-NDf5V6l8AfzZ8WzUGZ5mV8O/xMzRag2ETR6+TlGIsMHp81agx51cqpPItXPib/nAZYmo55Bl2L6/WOMI3A5YRg==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/linux-arm64": {
+-      "version": "4.1.4",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-arm64/-/linux-arm64-4.1.4.tgz",
+-      "integrity": "sha512-dljEqAOD0oIM6O6DxBW9US/FkvqvQwgJ2lGHOwHDDwu/pX8+V0YsDL1xqHbj1DMX/+nP9rxw7G7gcUvGspSoKg==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/linux-ia32": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-ia32/-/linux-ia32-4.1.0.tgz",
+-      "integrity": "sha512-0LWyFQnPf+Ij9GQGD034hS6A90URNu9HCtQ5cTqo5MxOEc7Rd8gLXrJvn++UmxhU0J5RyRE9KRYstdCVUjkNOQ==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/linux-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/linux-x64/-/linux-x64-4.1.0.tgz",
+-      "integrity": "sha512-Y5BWhGLU/WpQjOArNIgXD3z5mxxdV8c41C+U15nsE5yF8tVcdCGet5zPs5Zy3Ta6bU7haGpIzryutqCGQA/W8A==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/win32-ia32": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/win32-ia32/-/win32-ia32-4.1.0.tgz",
+-      "integrity": "sha512-FV2D7RlaZv/lrtdhaQ4oETwoFUsUjlUiasiZLDxhEUPdNDWcH1OU9K1xTvqz+OXLdsmYelUDuBS/zkMOTtlUAw==",
+-      "optional": true
+-    },
+-    "@ffmpeg-installer/win32-x64": {
+-      "version": "4.1.0",
+-      "resolved": "https://registry.npmjs.org/@ffmpeg-installer/win32-x64/-/win32-x64-4.1.0.tgz",
+-      "integrity": "sha512-Drt5u2vzDnIONf4ZEkKtFlbvwj6rI3kxw1Ck9fpudmtgaZIHD4ucsWB2lCZBXRxJgXR+2IMSti+4rtM4C4rXgg==",
+-      "optional": true
+-    },
+     "@gar/promisify": {
+       "version": "1.1.3",
+       "resolved": "https://registry.npmjs.org/@gar/promisify/-/promisify-1.1.3.tgz",
+@@ -3777,11 +3505,6 @@
+         "get-intrinsic": "^1.0.2"
+       }
+     },
+-    "caseless": {
+-      "version": "0.12.0",
+-      "resolved": "https://registry.npmjs.org/caseless/-/caseless-0.12.0.tgz",
+-      "integrity": "sha512-4tYFyifaFfGacoiObjJegolkwSU4xQNGbVgUiNYVUxbQ2x2lUsFvY4hVgVzGiIe6WLOPqycWXA40l+PWsxthUw=="
+-    },
+     "chownr": {
+       "version": "2.0.0",
+       "resolved": "https://registry.npmjs.org/chownr/-/chownr-2.0.0.tgz",
+@@ -3808,17 +3531,6 @@
+       "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",
+       "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="
+     },
+-    "concat-stream": {
+-      "version": "2.0.0",
+-      "resolved": "https://registry.npmjs.org/concat-stream/-/concat-stream-2.0.0.tgz",
+-      "integrity": "sha512-MWufYdFw53ccGjCA+Ol7XJYpAlW6/prSMzuPOTRnJGcGzuhLn4Scrz7qf6o8bROZ514ltazcIFJZevcfbo0x7A==",
+-      "requires": {
+-        "buffer-from": "^1.0.0",
+-        "inherits": "^2.0.3",
+-        "readable-stream": "^3.0.2",
+-        "typedarray": "^0.0.6"
+-      }
+-    },
+     "console-control-strings": {
+       "version": "1.1.0",
+       "resolved": "https://registry.npmjs.org/console-control-strings/-/console-control-strings-1.1.0.tgz",
+@@ -4100,17 +3812,6 @@
+         }
+       }
+     },
+-    "ffmpeg-static": {
+-      "version": "5.1.0",
+-      "resolved": "https://registry.npmjs.org/ffmpeg-static/-/ffmpeg-static-5.1.0.tgz",
+-      "integrity": "sha512-eEWOiGdbf7HKPeJI5PoJ0oCwkL0hckL2JdS4JOuB/gUETppwkEpq8nF0+e6VEQnDCo/iuoipbTUsn9QJmtpNkg==",
+-      "requires": {
+-        "@derhuerst/http-basic": "^8.2.0",
+-        "env-paths": "^2.2.0",
+-        "https-proxy-agent": "^5.0.0",
+-        "progress": "^2.0.3"
+-      }
+-    },
+     "finalhandler": {
+       "version": "1.2.0",
+       "resolved": "https://registry.npmjs.org/finalhandler/-/finalhandler-1.2.0.tgz",
+@@ -4290,21 +3991,6 @@
+         "debug": "4"
+       }
+     },
+-    "http-response-object": {
+-      "version": "3.0.2",
+-      "resolved": "https://registry.npmjs.org/http-response-object/-/http-response-object-3.0.2.tgz",
+-      "integrity": "sha512-bqX0XTF6fnXSQcEJ2Iuyr75yVakyjIDCqroJQ/aHfSdlM743Cwqoi2nDYMzLGWUcuTWGWy8AAvOKXTfiv6q9RA==",
+-      "requires": {
+-        "@types/node": "^10.0.3"
+-      },
+-      "dependencies": {
+-        "@types/node": {
+-          "version": "10.17.60",
+-          "resolved": "https://registry.npmjs.org/@types/node/-/node-10.17.60.tgz",
+-          "integrity": "sha512-F0KIgDJfy2nA3zMLmWGKxcH2ZVEtCZXHHdOQs2gSaQ27+lNeEfGxzkIw90aXswATX7AZ33tahPbzy6KAfUreVw=="
+-        }
+-      }
+-    },
+     "https-proxy-agent": {
+       "version": "5.0.1",
+       "resolved": "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-5.0.1.tgz",
+@@ -4879,11 +4565,6 @@
+         "aggregate-error": "^3.0.0"
+       }
+     },
+-    "parse-cache-control": {
+-      "version": "1.0.1",
+-      "resolved": "https://registry.npmjs.org/parse-cache-control/-/parse-cache-control-1.0.1.tgz",
+-      "integrity": "sha512-60zvsJReQPX5/QP0Kzfd/VrpjScIQ7SHBW6bFCYfEP+fp0Eppr1SHhIO5nd1PjZtvclzSzES9D/p5nFJurwfWg=="
+-    },
+     "parseurl": {
+       "version": "1.3.3",
+       "resolved": "https://registry.npmjs.org/parseurl/-/parseurl-1.3.3.tgz",
+@@ -5043,11 +4724,6 @@
+       "integrity": "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==",
+       "optional": true
+     },
+-    "progress": {
+-      "version": "2.0.3",
+-      "resolved": "https://registry.npmjs.org/progress/-/progress-2.0.3.tgz",
+-      "integrity": "sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA=="
+-    },
+     "promise-inflight": {
+       "version": "1.0.1",
+       "resolved": "https://registry.npmjs.org/promise-inflight/-/promise-inflight-1.0.1.tgz",
+@@ -5466,11 +5142,6 @@
+         "mime-types": "~2.1.24"
+       }
+     },
+-    "typedarray": {
+-      "version": "0.0.6",
+-      "resolved": "https://registry.npmjs.org/typedarray/-/typedarray-0.0.6.tgz",
+-      "integrity": "sha512-/aCDEGatGvZ2BIk+HmLf4ifCJFwvKFNb9/JeZPMulfgFracn9QFcAf5GO8B/mweUjSoblS5In0cWhqpfs/5PQA=="
+-    },
+     "typescript": {
+       "version": "4.8.4",
+       "resolved": "https://registry.npmjs.org/typescript/-/typescript-4.8.4.tgz",
+diff --git a/package.json b/package.json
+index 7def4856..692eade6 100644
+--- a/package.json
++++ b/package.json
+@@ -3,7 +3,6 @@
+   "version": "0.4.6",
+   "description": "",
+   "dependencies": {
+-    "@ffmpeg-installer/ffmpeg": "^1.1.0",
+     "@mapbox/node-pre-gyp": "^1.0.10",
+     "@scrypted/types": "^0.2.18",
+     "adm-zip": "^0.5.9",
+@@ -13,7 +12,6 @@
+     "debug": "^4.3.4",
+     "engine.io": "^6.2.0",
+     "express": "^4.18.2",
+-    "ffmpeg-static": "^5.1.0",
+     "http-auth": "^4.2.0",
+     "ip": "^1.1.8",
+     "level": "^6.0.1",

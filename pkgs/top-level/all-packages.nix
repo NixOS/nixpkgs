@@ -25145,6 +25145,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  scrypted = callPackage ../servers/scrypted { };
+
   sampler = callPackage ../applications/misc/sampler { };
 
   scalene = with python3Packages; toPythonApplication scalene;
