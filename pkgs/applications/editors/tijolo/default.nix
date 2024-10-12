@@ -11,6 +11,11 @@
 , wrapGAppsHook4
 , gobject-introspection
 , desktopToDarwinBundle
+, _experimental-update-script-combinators
+, gitUpdater
+, writeShellScript
+, crystal2nix
+, runCommand
 }:
 
 crystal.buildCrystalPackage rec {
@@ -46,6 +51,18 @@ crystal.buildCrystalPackage rec {
 
   installTargets = [ "install" "post-install" "install-fonts"];
   doInstallCheck = false;
+
+  passthru = {
+    updateScript = _experimental-update-script-combinators.sequence [
+      (gitUpdater { rev-prefix = "v"; })
+      (_experimental-update-script-combinators.copyAttrOutputToFile "tijolo.shardLock" ./shard.lock)
+      { command = [ (writeShellScript "update-lock" "cd $1; ${lib.getExe crystal2nix}") ./. ]; supportedFeatures = [ "silent" ]; }
+      { command = [ "rm" ./shard.lock ]; supportedFeatures = [ "silent" ]; }
+    ];
+    shardLock = runCommand "shard.lock" { inherit src; } ''
+      cp $src/shard.lock $out
+    '';
+  };
 
   meta = with lib; {
     description = "Lightweight, keyboard-oriented IDE for the masses";
