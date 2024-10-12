@@ -1,0 +1,303 @@
+{
+  "announcement" : {
+    "go-offline" : "오프라인으로 변경",
+    "go-online" : "온라인으로 변경",
+    "healthcheck" : "ficsit.app에 연결할 수 없습니다. 인터넷 연결을 확인하거나 오프라인 모드 사용을 고려해 주십시오. (모드 관리자 설정 > 오프라인으로 변경)",
+    "offline" : "현재 오프라인 상태입니다. 일부 기능이 제한될 수 있습니다. (모드 관리자 설정 > 온라인으로 변경을 통해 재연결)"
+  },
+  "common" : {
+    "add" : "추가",
+    "cancel" : "취소",
+    "close" : "닫기",
+    "delete" : "삭제",
+    "import" : "불러오기",
+    "loading" : "불러오는 중...",
+    "rename" : "이름 변경"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "디버그 파일 생성 중 오류가 발생했습니다. 추가 정보 확인을 위해 Satisfactory 모드 관리자 로그 파일을 수동으로 확인 후 디스코드에 보고해 주십시오. 아래 버튼을 눌러 지침서를 엽니다.",
+    "generate_debug_info" : "디버그 정보 생성",
+    "help" : "잘못된 정보가 있습니까? 아래 버튼을 눌러 생성된 압축 파일을 <1>모딩 디스코드</1>의 #help-using-mods 채널에 보내주십시오.",
+    "invalid_installs" : "{invalidInstalls, plural, other {설치된 Satisfactory {invalidInstalls}개가 유효하지 않음}}",
+    "no_installs" : "Satisfactory가 설치되지 않음",
+    "open_log_docs" : "기록 문서 열기",
+    "open_modding_discord" : "모딩 디스코드 열기",
+    "open_modding_discord.must_generate_debug_first" : "디버그 정보를 먼저 생성해야 합니다",
+    "reporting_directions" : "잘못된 정보가 있습니까? 아래 버튼을 눌러 로그를 수집 후 생성된 압축 파일을 모딩 디스코드의 #help-using-mods 채널에 보내주십시오.",
+    "title" : "문제 발생"
+  },
+  "external-install-mod" : {
+    "already-installed" : "이미 설치됨",
+    "error-loading" : "모드 세부정보를 불러오던 중 오류 발생",
+    "in-queue" : "대기 중",
+    "install" : "설치",
+    "latest-version" : "최신 버전",
+    "title" : "모드 설치",
+    "version" : "버전 {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "시작하기!",
+    "change_later_hint" : "이러한 설정들은 \"모드 관리자 설정\" 메뉴에서 언제든지 변경할 수 있습니다.",
+    "intro" : "기본 설정을 선택하여 시작합니다.",
+    "open_welcome_guide" : "환영 지침서 열기",
+    "option" : {
+      "language" : {
+        "title" : "가능한 경우 다음 언어 사용:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "\"적용\"을 누를 때까지 기다리기",
+        "enabled" : "변경 사항 즉시 적용",
+        "title" : "모드를 제거 또는 추가하거나 프로필을 변경할 때..."
+      }
+    },
+    "title" : "Satisfactory 모드 관리자에 오신 것을 환영합니다!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "{profile} 적용",
+    "apply-queued" : "변경사항 {queued}개 적용",
+    "are-you-sure-warning" : "정말 실행하시겠습니까?",
+    "cant-launch" : "이 설치에서는 SMM를 구동할 수 없음",
+    "cant-launch-tooltip" : "모드 관리자가 이 설치 유형을 실행할 순 없지만 여전히 관리하고 있습니다. 평소 사용하는 게임 런처를 사용해 Satisfactory를 실행하십시오.",
+    "changes-queued" : "모드 파일이 아직 변경되지 않았습니다. 버튼을 클릭하여 대기 중인 변경 사항을 적용하십시오.\n\n(현재 대기열 \"수동 시작\" 모드에 있음)",
+    "game-running" : "게임 런처가 이미 게임을 실행 또는 종료 중입니다.",
+    "incompatible-mods" : "{versionIncompatible, plural, other {불러올 수 없거나 게임을 충돌시키는 호환되지 않는 모드 {versionIncompatible}개}}",
+    "launch-in-progress" : "실행 중...",
+    "operation-in-progress" : "작업이 이미 실행 중입니다.",
+    "play" : "Satisfactory 실행",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {게임과의 비호환이 의심되는 모드 #개}}",
+    "profile-change-queued" : "모드 파일이 아직 변경되지 않았습니다. 버튼을 클릭하여 대기 중인 변경 사항을 적용하십시오.\n\n(현재 대기열 \"수동 시작\" 모드에 있음)",
+    "ready" : "발사 준비 완료!\n\n참고: 모드 관리자가 이미 모드 파일 설치를 마쳤습니다. 일반적인 게임 실행기를 사용하여 실행해도 모드는 계속 불러와질 것입니다.",
+    "reported-incompatible-mods" : "현재 게임 버전에서 {reportedIncompatible}개의 모드가 작동하지 않는다고 확인됐습니다. 자세한 내용은 모드의 설명이나 호환성 정보를 확인해 주십시오",
+    "reported-possibly-compatible-mods" : "현재 게임 버전에서 {reportedIncompatible}개의 모드가 손상됐다고 확인됐습니다. 자세한 내용은 모드의 설명이나 호환성 정보를 확인해 주십시오",
+    "you-have-warning-mods" : "소유 중:"
+  },
+  "left-bar" : {
+    "export" : "내보내기",
+    "ficsit-app" : "ficsit.app (모드 저장소)",
+    "game-version" : "게임 버전",
+    "help" : "도움말",
+    "install-invalid" : "잘못됨",
+    "install-invalid-tooltip" : "상태: SMM가 해당 설치를 관리할 수 없음",
+    "install-loading" : "불러오는 중...",
+    "install-loading-tooltip" : "상태: 불러오는 중...",
+    "install-unknown" : "알 수 없음",
+    "install-unknown-tooltip" : "상태: 해당 설치에 대한 정보를 얻을 수 없음",
+    "links" : "링크",
+    "manage-servers" : "서버 관리",
+    "mods-off" : "모드 꺼짐",
+    "mods-on" : "모드 켜짐",
+    "other" : "그 외",
+    "profile" : "프로필",
+    "queue-blocking-switching-tooltip" : "{number, plural, other {{number}개의 변경 사항이 있습니다. 설치 또는 프로필을 변경하기 전에 변경 사항을 처리해 주십시오.}}",
+    "satisfactory-modding-discord" : "Satisfactory 모딩 디스코드",
+    "smm-github" : "SMM 깃허브",
+    "updates" : "업데이트"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> 변경사항"
+  },
+  "mod-details" : {
+    "change-version" : "버전 변경",
+    "change-version-any" : "모두",
+    "change-version-or-newer" : "이상",
+    "changelogs" : "변경사항",
+    "compatibility" : "호환성",
+    "compatibility-branch" : "이 모드는 {branch} 버전에서 {state} 상태로 확인되었습니다.",
+    "compatibility-unknown" : "알 수 없음",
+    "compatibility-unknown-tooltip" : "아직 이 모드에 대한 호환성 보고가 없습니다. 시도 후 디스코드를 통해 연락해 업데이트할 수 있게 기여해 주십시오!",
+    "contributors" : "기여자 <1>({authors})</1>",
+    "created" : "생성일",
+    "downloads" : "총 다운로드",
+    "installed-version" : "설치된 버전",
+    "latest-version" : "최신 버전",
+    "mod-author" : "모드 제작:",
+    "offline-mode" : "오프라인 모드가 활성화 되었습니다. 변경사항과 설명에 접근할 수 없습니다.",
+    "size" : "크기",
+    "updated" : "업데이트됨",
+    "view-on-ficsit-app" : "ficsit.app에서 보기",
+    "views" : "조회수"
+  },
+  "mod-list-item" : {
+    "by-author" : "by",
+    "compatibility-note" : "이 모드는 현재 게임 버전에서 {state} 상태로 확인되었습니다.",
+    "compatibility-note-none" : "(제공된 추가 참고 없음)",
+    "compatibility-warning" : "모드에 문제가 보고되었지만 설치할 순 있습니다. 세부정보:",
+    "dependency" : "이 모드는 다른 모드의 의존성으로 설치되어 있습니다. 독립적으로 설치되거나 제거될 수 없습니다.",
+    "disable" : "이 모드는 현재 프로필에서 활성화되어 있습니다. 클릭하여 비활성화하면 게임을 시작할 때 불러와지지 않지만 프로필에는 유지할 수 있습니다.",
+    "disable-queued" : "이 모드는 비활성화 대기열에 있습니다. 클릭하여 작업을 취소합니다.",
+    "disabled-tooltip" : "이 모드는 비활성화 되었습니다. 일시정지 아이콘을 눌러 활성화합니다.",
+    "enable" : "클릭하여 모드를 활성화합니다.",
+    "enable-queued" : "이 모드는 활성화 대기열에 있습니다. 클릭하여 작업을 취소합니다.",
+    "favorite" : "클릭하여 모드를 즐겨찾기에 추가합니다. 이 기능은 모드에 직접적으로 영향을 주지 않습니다",
+    "hidden" : "이 모드는 소유자에 의해 숨겨졌습니다.",
+    "install" : "클릭하여 모드를 설치합니다.",
+    "no-tags" : "(항목 없음)",
+    "not-installable" : "다음 이유로 모드를 설치할 수 없음:",
+    "queued" : "이 모드는 이미 대기열에 있습니다.",
+    "queued-install" : "이 모드는 설치 대기열에 있습니다. 클릭하여 작업을 취소합니다.",
+    "queued-uninstall" : "이 모드는 삭제 대기열에 있습니다. 클릭하여 작업을 취소합니다.",
+    "unavailable" : "이 모드는 더 이상 ficsit.app에서 사용할 수 없습니다. 원한다면 제거할 수 있습니다.",
+    "unfavorite" : "클릭하여 모드를 즐겨찾기에서 제거합니다.",
+    "uninstall" : "이 모드는 현재 프로필에 설치되어 있습니다. 클릭하여 모드를 제거합니다.",
+    "wait" : "현재 작업이 완료될 때까지 기다려 주십시오."
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(추가 참고 사항 없음)"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "모든 모드",
+      "compatible" : "호환됨",
+      "dependency" : "의존성",
+      "disabled" : "비활성화됨",
+      "enabled" : "활성화됨",
+      "favorite" : "즐겨찾기",
+      "installed" : "설치됨",
+      "not-installed" : "미설치됨",
+      "queued" : "예약됨"
+    },
+    "order-by" : {
+      "downloads" : "다운로드 수",
+      "hotness" : "인기",
+      "last-updated" : "최근 업데이트",
+      "name" : "이름",
+      "popularity" : "인기도",
+      "views" : "조회수"
+    },
+    "search" : "모드 검색"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "필터 결과에 맞는 모드 없음",
+    "no-mods-found" : "모드 없음",
+    "show-all" : "전부 보기"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "프로필 이름",
+      "profile-name-placeholder" : "새 프로필 이름",
+      "title" : "프로필 추가"
+    },
+    "delete" : {
+      "profile-name" : "프로필 이름",
+      "title" : "프로필 삭제"
+    },
+    "import" : {
+      "profile-file" : "프로필 파일",
+      "profile-name" : "프로필 이름",
+      "profile-name-placeholder" : "새 프로필 이름",
+      "profile-version-warning" : "이 프로필은 상위 버전의 게임에서 생성되었습니다. 현재 버전에서 호환되지 않을 수 있습니다.",
+      "title" : "프로필 불러오기"
+    },
+    "rename" : {
+      "new-profile" : "새 프로필 이름",
+      "new-profile-placeholder" : "새 프로필",
+      "old-profile" : "이전 프로필 이름",
+      "old-profile-placeholder" : "이전 프로필",
+      "title" : "프로필 이름 바꾸기"
+    }
+  },
+  "server-manager" : {
+    "add" : "추가",
+    "advanced-note" : "참고: 사용자 이름과 비밀번호에는 특정 문자를 사용할 수 없습니다",
+    "advanced-path-placeholder" : "user:pass@host:port/path",
+    "failed-to-connect" : "서버와 연결할 수 없습니다. 클릭하여 재시도합니다",
+    "get-help" : "서버 연결 도움 받기",
+    "host-placeholder" : "호스트",
+    "invalid" : "SMM이 해당 설치를 관리할 수 없음",
+    "loading" : "불러오는 중...",
+    "local-path-placeholder" : "C:",
+    "name-placeholder" : "이름 (기본: {default})",
+    "password-placeholder" : "비밀번호",
+    "path-placeholder" : "경로",
+    "port-placeholder" : "포트 (기본: {default})",
+    "switch-to-advanced" : "고급 모드로 변경",
+    "switch-to-simple" : "간단 모드로 변경",
+    "title" : "전용 서버",
+    "username-placeholder" : "사용자 이름",
+    "validating" : "유효성 확인 중..."
+  },
+  "server-picker" : {
+    "failed-list-dir" : "경로를 나열할 수 없음",
+    "failed-valid-check" : "선택된 경로가 유효한 서버인지 확인할 수 없음"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "캐시 위치",
+      "reset" : "기본으로 재설정",
+      "save" : "저장 후 이동",
+      "title" : "다운로드 캐시 위치 변경"
+    },
+    "change-cache-location" : "캐시 위치 변경",
+    "copy-mod-list" : "모드 목록 복사",
+    "debug" : "디버그",
+    "generate-debug-info" : "디버그 정보 생성",
+    "go-online-offline" : "{offline, select, true {온} other {오프}}라인으로 전환",
+    "language" : "언어",
+    "launch-button" : "실행 버튼",
+    "launch-button.button" : "버튼",
+    "launch-button.cat" : "냥",
+    "launch-button.normal" : "일반",
+    "proxy" : {
+      "proxy" : "프록시",
+      "remove" : "프록시 제거",
+      "save" : "저장 후 재시작",
+      "title" : "프록시 설정"
+    },
+    "queue" : "대기열",
+    "queue.start-immediately" : "즉시 시작",
+    "queue.start-manually" : "수동 시작",
+    "secret-settings" : "비밀 설정",
+    "set-proxy" : "프록시 설정",
+    "settings" : "설정",
+    "smm-debug-logging" : "SMM 디버그 기록",
+    "start-view" : "시작 보기",
+    "start-view.compact" : "요약",
+    "start-view.expanded" : "확장",
+    "title" : "모드 관리자 설정",
+    "update-check" : "업데이트 확인",
+    "update-check.ask" : "찾으면 알림",
+    "update-check.on-exit" : "종료할 때",
+    "update-check.on-start" : "시작할 때"
+  },
+  "smm-update" : {
+    "downloading" : "백그라운드에서 다운로드 중",
+    "downloading-stats" : "업데이트 다운로드 중: {current} / {total}, {speed}/초, {eta} 남음",
+    "title" : "SMM 업데이트 사용 가능 - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "개선된 성능",
+      "performance.description" : "항상 효율적으로 지내십시오!",
+      "platform_support" : "기본 Linux Heroic, Steam Snap, Mac 지원됨",
+      "platform_support.description" : "아직 받지 않았다면 깃허브에서 빌드를 받으십시오!",
+      "profile_format" : "새 프로필 형식",
+      "profile_format.description" : "SMM2 프로필은 SMM3과 호환되지 않습니다! 이미 존재하는 프로필은 자동으로 마이그레이션 되지만 SMM2에서 생성된 프로필을 불러올 순 없습니다.",
+      "queue" : "지시 추가 중",
+      "queue.description" : "한 번에 여러 모드의 다운로드/제거를 예약하십시오.",
+      "servers" : "전용 서버 관리",
+      "servers.description" : "filesystem, SFTP, FTP, SMB를 사용하여 서버를 쉽게 관리하십시오!",
+      "translation" : "번역 지원",
+      "translation.description" : "디스코드에 참여하여 SMM를 자신의 언어로 번역하십시오!",
+      "ui" : "사용자 인터페이스 새로고침",
+      "ui.description" : "Satisfactory 1.0을 기념하기 위한 새로운 페인트 코팅!"
+    },
+    "intro" : "이 버전에서 많은 것을 개선했습니다. 주목할 만한 요소는:",
+    "open_guide" : "SMM3 문서 열기",
+    "title" : "Satisfactory 모드 관리자 버전 3에 오신 것을 환영합니다!"
+  },
+  "updates" : {
+    "changelog" : "변경사항",
+    "check-for-updates" : "업데이트 확인",
+    "checking-for-updates" : "업데이트 확인 중...",
+    "hide-ignored" : "무시 항목 숨기기",
+    "ignore" : "무시",
+    "mod-update-available" : "{updates, plural, other {모드 업데이트 {updates}개 사용 가능}}",
+    "no-updates" : "모드/SMM 업데이트 없음",
+    "show-ignored" : "무시 항목 보이기",
+    "smm-update-available" : "SMM 업데이트 사용 가능",
+    "title" : "업데이트",
+    "unignore" : "무시 해제",
+    "update-all" : "전부 업데이트",
+    "update-selected" : "선택 항목 업데이트"
+  }
+}

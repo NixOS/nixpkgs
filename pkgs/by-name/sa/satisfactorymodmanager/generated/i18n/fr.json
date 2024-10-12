@@ -1,0 +1,303 @@
+{
+  "announcement" : {
+    "go-offline" : "Passer hors-ligne",
+    "go-online" : "Passer en ligne",
+    "healthcheck" : "Impossible de joindre ficsit.app. Vérifiez votre connection internet ou essayer d'utiliser le mode hors-ligne. (Paramètres SMM > Passer en ligne)",
+    "offline" : "Vous êtes actuellement hors-ligne. Certaines fonctionnalités peuvent ne pas être disponibles. (Pour se reconnecter, aller dans Paramètres SMM > Passer en ligne) "
+  },
+  "common" : {
+    "add" : "Ajouter",
+    "cancel" : "Annuler",
+    "close" : "Fermer",
+    "delete" : "Supprimer",
+    "import" : "Importer",
+    "loading" : "Chargement...",
+    "rename" : "Renommer"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "Une erreur est survenue lors de la génération du fichier de débogage. Veuillez vérifier manuellement les logs de SMM pour plus d'informations et le reporter sur le DIscord. Utilisez le bouton ci-dessous pour ouvrir la documentation savoir comment faire.",
+    "generate_debug_info" : "Générer les infos de débogage",
+    "help" : "Cela vous paraît faux ? Cliquez sur le bouton ci-dessous et envoyez le fichier zip généré sur le <1>discord modding</1> dans #help-using-mods.",
+    "invalid_installs" : "{invalidInstalls, plural, one {{invalidInstalls} installation invalide de Satisfactory trouvée} many {{invalidInstalls} installations invalide de Satisfactory trouvées} other {}}",
+    "no_installs" : "Aucune installations de Satisfactory trouvées",
+    "open_log_docs" : "Ouvrir la documentation des logs",
+    "open_modding_discord" : "Ouvrir le DIscord de Modding",
+    "open_modding_discord.must_generate_debug_first" : "Vous devez d'abord générer les infos de débogage",
+    "reporting_directions" : "Cela vous paraît faux ? Cliquez sur le bouton ci-dessous pour récupérer les logs et envoyez le fichier zip généré sur le Discord Modding dans #help-using-mods.",
+    "title" : "Un problème est survenu"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Déjà installé",
+    "error-loading" : "Erreur durant le chargement des détails du mod",
+    "in-queue" : "En attente",
+    "install" : "Installer",
+    "latest-version" : "Dernière version",
+    "title" : "Installer le mod",
+    "version" : "Version {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Commencer !",
+    "change_later_hint" : "Changez ces paramètres à tout moment dans le menu \"Paramètres SMM\"",
+    "intro" : "Choisissez vos préférences pour commencer.",
+    "open_welcome_guide" : "Ouvrir le Guide de Bienvenue",
+    "option" : {
+      "language" : {
+        "title" : "Utiliser cette langue quand disponible :"
+      },
+      "queue-auto-start" : {
+        "disabled" : "Devoir cliquer sur \"Appliquer\"",
+        "enabled" : "Appliquer les changements immédiatement",
+        "title" : "Quand j'ajoute ou supprime un mode, ou change de profil..."
+      }
+    },
+    "title" : "Bienvenue sur le Satisfactory Mod Manager (Gestionnaire de Mod de Satisfactory / SMM) !"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "Appliquer {profile}",
+    "apply-queued" : "Appliquer {queued, plural, one {un changement} other {les # modifications}}",
+    "are-you-sure-warning" : "Êtes-vous sûr de vouloir lancer ?",
+    "cant-launch" : "SMM ne peut pas lancer cette installation",
+    "cant-launch-tooltip" : "Le Gestionnaire de Mods n'est pas capable de lancer ce type d'installation, mais va toujours gérer les fichiers de mods pour vous. Lancer Satisfactory avec votre lanceur habituel.",
+    "changes-queued" : "Les modifications n'ont pas encore été faites à vos fichiers. Cliquez sur le bouton ci-dessus pour appliquer les modification en attente. ",
+    "game-running" : "Votre lanceur du jeu nous rapporte que le jeu est déjà lancé (ou encore en train de se fermer)",
+    "incompatible-mods" : "{versionIncompatible, plural, one {{versionIncompatible} mod incompatible qui ne se chargera pas ou fera planter le jeu} other {{versionIncompatible} mods incompatibles qui ne se chargeront pas ou feront planter le jeu}}",
+    "launch-in-progress" : "Lancement en cours...",
+    "operation-in-progress" : "Une opération est déjà en cours.",
+    "play" : "Jouer à Satisfactory",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Un mod {versionPossiblyCompatible, plural, one {n'est} other {ne sont}} probablement pas compatibles avec votre jeu} other {# Des mods {versionPossiblyCompatible, plural, one {n'est} other {ne sont}} probablement pas compatibles avec votre jeu}}",
+    "profile-change-queued" : "Les modifications n'ont pas encore été faites à vos fichiers. Cliquez sur le bouton ci-dessus pour appliquer les modification en attente. ",
+    "ready" : "Vous êtes prêt pour jouer !\n\nNote : Le Gestionnaire de Mod à déjà fini d'installer les fichiers de mod pour vous. Vous pouvez désormais lancer le jeu avec votre lanceur habituel et vos mods se chargeront toujours.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'incompatible.s. Lisez la description ou les notes de comptabilité {versionIncompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
+    "reported-possibly-compatible-mods" : "{reportedIncompatible, plural, one {Un mod} other {# mods}} {reportedIncompatible, plural, one {est} other {sont}} signalé.s en tant qu'endommagé.s. Lisez la description ou les notes de comptabilité {versionIncompatible, plural, one {du mod} other {des mods}} pour plus d'informations.",
+    "you-have-warning-mods" : "Vous avez :"
+  },
+  "left-bar" : {
+    "export" : "Exporter",
+    "ficsit-app" : "ficsit.app (Dépôt de Mods)",
+    "game-version" : "Sélectionnez l'installation du jeu",
+    "help" : "Aide",
+    "install-invalid" : "Invalide",
+    "install-invalid-tooltip" : "Statut : SMM ne peut pas gérer cette installation",
+    "install-loading" : "Chargement...",
+    "install-loading-tooltip" : "Statut : Chargement...",
+    "install-unknown" : "Inconnu",
+    "install-unknown-tooltip" : "Statut : Impossible de récupérer des informations sur cette installation",
+    "links" : "Liens",
+    "manage-servers" : "Gérer les serveurs",
+    "mods-off" : "Désactiver les mods",
+    "mods-on" : "Activer les mods",
+    "other" : "Autre",
+    "profile" : "Profile",
+    "queue-blocking-switching-tooltip" : "{number, plural, one {Vous avez {number} action en attentes. Appliquez ou annuler {number, plural, one {là} other {les}} avant de changer d'installation ou de profile.} other {Vous avez {number} actions en attentes. Appliquez ou annuler {number, plural, one {là} other {les}} avant de changer d'installation ou de profile.}}",
+    "satisfactory-modding-discord" : "Discord de Modding",
+    "smm-github" : "GitHub",
+    "updates" : "Mises à jour"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> Journal des modifications"
+  },
+  "mod-details" : {
+    "change-version" : "Changer la version",
+    "change-version-any" : "Toutes",
+    "change-version-or-newer" : "Ou plus récent",
+    "changelogs" : "Journal des modifications",
+    "compatibility" : "Comptabilité",
+    "compatibility-branch" : "Ce mod à été signalé en tant que {state} sur {branch}.",
+    "compatibility-unknown" : "Inconnu",
+    "compatibility-unknown-tooltip" : "Aucune information de comptabilité n'a encore été reporté pour ce mod. Essayez le et contacte-nous sur le Discord pour qu'il puisse être mis à jour !",
+    "contributors" : "Contributeurs <1>({authors})</1>",
+    "created" : "Créé",
+    "downloads" : "Téléchargements",
+    "installed-version" : "Version installé",
+    "latest-version" : "Dernière version",
+    "mod-author" : "Auteur(s) : ",
+    "offline-mode" : "Le mode hors-ligne est activé. Les journaux des modification et les descriptions ne seront pas disponibles.",
+    "size" : "Taille",
+    "updated" : "Mis à jour le ",
+    "view-on-ficsit-app" : "Voir sur ficsit.app",
+    "views" : "Vues"
+  },
+  "mod-list-item" : {
+    "by-author" : "Par",
+    "compatibility-note" : "Ce mod à été signalé en tant que {state} sur cette version du jeu.",
+    "compatibility-note-none" : "(Aucun spécifié)",
+    "compatibility-warning" : "Il y a eu des problèmes liés à ce mod, mais vous pouvez quand même essayer de l'installer. Détails :",
+    "dependency" : "Ce mod est installé en tant que dépendance d'un autre mod. Il ne peut pas être installé ou supprimé seul.",
+    "disable" : "Ce mod est activé dans le profil actuel. Cliquez pour le désactiver, ce qui l'empêchera de se charger quand vous lancerez le jeu, mais il sera toujours présent dans ce profil.",
+    "disable-queued" : "Ce mod est en attente de désactivation. Cliquez pour annuler.",
+    "disabled-tooltip" : "Le mod est désactivé. Cliquez sur l'icone de pause pour l'activer.",
+    "enable" : "Cliquez pour activer ce mod.",
+    "enable-queued" : "Ce mod est en attente d'activation. Cliquez pour annuler.",
+    "favorite" : "Cliquez pour ajouter ce mod en tant que favori. Avoir un mod en favori n'est pas lié au fait qu'il soit installé ou non, c'est un moyen de garder une trace d'un mod, peu importe quel Profile est séléctionné.",
+    "hidden" : "Ce mod à été caché par l'auteur.",
+    "install" : "Cliquez pour installer ce mod.",
+    "no-tags" : "(Aucuns tags)",
+    "not-installable" : "Vous ne pouvez pas installer ce mod car :",
+    "queued" : "Ce mod est déjà en attente pour une autre action.",
+    "queued-install" : "Ce mod est en attente d'être installé. Cliquez pour annuler.",
+    "queued-uninstall" : "Ce mod est en attente d'être désinstaller. Cliquez pour annuler.",
+    "unavailable" : "Ce mod n'est plus disponible sur ficsit.app. Vous pouvez le supprimer.",
+    "unfavorite" : "Cliquez pour enlever ce mod des Favoris.",
+    "uninstall" : "Ce mod est installé sur ce profil. Cliquez pour désinstaller ce mod.",
+    "wait" : "Veuillez attendre que l'opération en cours se termine."
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(Aucunes autres informations données)"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "Tous les mods",
+      "compatible" : "Compatibles",
+      "dependency" : "Dépendances",
+      "disabled" : "Désactivés",
+      "enabled" : "Activés",
+      "favorite" : "Favoris",
+      "installed" : "Installés",
+      "not-installed" : "Non installés",
+      "queued" : "En attente"
+    },
+    "order-by" : {
+      "downloads" : "Téléchargements",
+      "hotness" : "Tendance",
+      "last-updated" : "Dernier mis à jour",
+      "name" : "Nom",
+      "popularity" : "Popularité",
+      "views" : "Vues"
+    },
+    "search" : "Rechercher un mod"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "Aucun mod trouvés avec ces filtres",
+    "no-mods-found" : "Aucuns mods trouvé",
+    "show-all" : "Tout montrer"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "Nom du profil",
+      "profile-name-placeholder" : "Nouveau nom du profil",
+      "title" : "Ajouter un profil"
+    },
+    "delete" : {
+      "profile-name" : "Nom du profil",
+      "title" : "Supprimer le profil"
+    },
+    "import" : {
+      "profile-file" : "Fichier du profil",
+      "profile-name" : "Nom du profil",
+      "profile-name-placeholder" : "Nouveau nom du profil",
+      "profile-version-warning" : "Ce profil à été avec une version plus récente du jeu. Il est possible qu'il ne soit pas compatible avec cette version.",
+      "title" : "Importer un profil"
+    },
+    "rename" : {
+      "new-profile" : "Nouveau nom du profil",
+      "new-profile-placeholder" : "Nouveau profile",
+      "old-profile" : "Ancien nom du profil",
+      "old-profile-placeholder" : "Ancien profil",
+      "title" : "Renommer le profil"
+    }
+  },
+  "server-manager" : {
+    "add" : "Ajouter",
+    "advanced-note" : "Notez que vous devrez peut être éviter certain caractères dans l'identifiant et le mot de passe",
+    "advanced-path-placeholder" : "utilisateur:MotDePasse@hôte:port/chemin",
+    "failed-to-connect" : "Impossible de se connecter au serveur, cliquez pour réessayer",
+    "get-help" : "Avoir de l'aide pour se connecter aux serveurs",
+    "host-placeholder" : "hôte",
+    "invalid" : "SMM ne peut pas gérer cette installation",
+    "loading" : "Chargement...",
+    "local-path-placeholder" : "C:\\Chemin\\Vers\\Serveur",
+    "name-placeholder" : "Nom (par défaut : {default})",
+    "password-placeholder" : "mot de passe",
+    "path-placeholder" : "chemin",
+    "port-placeholder" : "port (par défaut : {default})",
+    "switch-to-advanced" : "Passer en mode avancé",
+    "switch-to-simple" : "Passer en mode simple",
+    "title" : "Serveurs Dédiés",
+    "username-placeholder" : "identifiant",
+    "validating" : "Validation..."
+  },
+  "server-picker" : {
+    "failed-list-dir" : "Impossible de lister le répertoire",
+    "failed-valid-check" : "Impossible de vérifier si le chemin sélectionné est un serveur valide"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "Localisation du cache",
+      "reset" : "Réinitialiser par défaut",
+      "save" : "Sauvegarder et déplacer",
+      "title" : "Changer la localisation du cache de téléchargement"
+    },
+    "change-cache-location" : "Changer la localisation du cache ",
+    "copy-mod-list" : "Copier la liste des mod",
+    "debug" : "Débogage",
+    "generate-debug-info" : "Générer les infos de débogage",
+    "go-online-offline" : "passer {hors-ligne, select, true {en ligne} other {hors-ligne}}",
+    "language" : "Langue",
+    "launch-button" : "Bouton de lancement",
+    "launch-button.button" : "Bouton",
+    "launch-button.cat" : "Miaou",
+    "launch-button.normal" : "Normal",
+    "proxy" : {
+      "proxy" : "Proxy",
+      "remove" : "Enlever le proxy",
+      "save" : "Sauvegarder et redémarrer",
+      "title" : "Définir le proxy"
+    },
+    "queue" : "File d'attente",
+    "queue.start-immediately" : "Démarrer immédiatement",
+    "queue.start-manually" : "Démarrer manuellement",
+    "secret-settings" : "Paramètres secrets",
+    "set-proxy" : "Définir le proxy",
+    "settings" : "Paramètres",
+    "smm-debug-logging" : "log de débogage de SMM",
+    "start-view" : "Vue de départ",
+    "start-view.compact" : "Compact",
+    "start-view.expanded" : "Étendu",
+    "title" : "Paramètres",
+    "update-check" : "Vérification de la mise à jour",
+    "update-check.ask" : "Demander une fois trouvé",
+    "update-check.on-exit" : "En quittant",
+    "update-check.on-start" : "Au démarrage"
+  },
+  "smm-update" : {
+    "downloading" : "Télécharger en arrière-plan",
+    "downloading-stats" : "Vitesse de téléchargement : {current} / {total}, {speed}/s, ETA {eta}",
+    "title" : "Mise à jour de SMM disponible - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "Performances améliorées",
+      "performance.description" : "Vous garder productif !",
+      "platform_support" : "Support natif de Linux Heroic, Steam Snap et Mac",
+      "platform_support.description" : "Récupérer une version depuis la page GitHub si vous ne l'avez pas déjà fait !",
+      "profile_format" : "Nouveau format de profil",
+      "profile_format.description" : "Les profils de SMM2 ne sont pas compatibles avec SMM3 ! Vos profils existants ont automatiquement été migré, mais vous ne pouvez pas importer de profils créés avec SMM2.",
+      "queue" : "Action en attente",
+      "queue.description" : "Mettre en file d'attente plusieurs téléchargements/désinstallations de mod en même temps.",
+      "servers" : "Gestion de serveur dédié",
+      "servers.description" : "Gérer facilement des serveurs via filesystem, SFTP, FTP et SMB",
+      "translation" : "Problème de traduction ?",
+      "translation.description" : "Rejoignez notre Discord pour traduire SMM dans votre langue !",
+      "ui" : "Rafraichir l'interface utilisateur",
+      "ui.description" : "Une couche de peinture fraiche pour célébrer Satisfactory 1.0 !"
+    },
+    "intro" : "On a amélioré beaucoup de points dans cette version. Voici quelques exemples :",
+    "open_guide" : "Ouvrir la documentation de SMM3",
+    "title" : "Bienvenue sur le Gestionnaire de Mod de Satisfactory Version 3 (SMM3)"
+  },
+  "updates" : {
+    "changelog" : "Journal des modifications",
+    "check-for-updates" : "Vérifier les mises à jour",
+    "checking-for-updates" : "Vérification des mises à jour...",
+    "hide-ignored" : "Masquer ignorés",
+    "ignore" : "Ignorer",
+    "mod-update-available" : "{updates, plural, one {{updates} mise à jour de mod disponible} other {{updates} mises à jour de mod disponibles}}",
+    "no-updates" : "Aucunes mises à jour de mods/SMM actuellement",
+    "show-ignored" : "Montrer les MAJ ignorées",
+    "smm-update-available" : "Mise à jour de SMM disponible",
+    "title" : "Mises à jour",
+    "unignore" : "Annuler ignorer",
+    "update-all" : "Tout mettre à jour",
+    "update-selected" : "Mise à jour sélectionné"
+  }
+}

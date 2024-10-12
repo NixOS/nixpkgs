@@ -1,0 +1,303 @@
+{
+  "announcement" : {
+    "go-offline" : "オフラインモードにする",
+    "go-online" : "オンラインモードにする",
+    "healthcheck" : "ficsit.appに接続できませんでした。インターネットへの接続状況を確認するか、オフラインモードの使用を検討してください。(Modマネージャー設定 > オフラインモードにする)",
+    "offline" : "現在オフラインモードです。幾つかの機能が使用できないかもしれません。（再接続するには Modマネージャー設定 > オンラインモードにする を選択してください）"
+  },
+  "common" : {
+    "add" : "追加",
+    "cancel" : "キャンセル",
+    "close" : "閉じる",
+    "delete" : "削除",
+    "import" : "取り込み",
+    "loading" : "ロード中…",
+    "rename" : "名称変更"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "デバッグファイルを生成中にエラーが発生しました。追加の情報を見るには Satisfactory Mod マネージャーのログを確認し、Discordにて不具合をお知らせください（会話は英語を使用すること）。不具合報告のやり方を確認するには、下部にあるボタンを押してドキュメントを開いてください。",
+    "generate_debug_info" : "Debug info （デバッグ情報）を生成する",
+    "help" : "何か変ですか? 下部のボタンを押して生成されたZipファイルを <1>modding discord</1> の #help-using-mods チャンネルに送信してください。（会話は英語を使用すること）",
+    "invalid_installs" : "{invalidInstalls, plural, other {{invalidInstalls}つの無効なSatisfactoryのインストールを発見しました。}}",
+    "no_installs" : "Satisfactory （ゲーム本体）を発見できませんでした",
+    "open_log_docs" : "ログについてのドキュメントを開く",
+    "open_modding_discord" : "Modding Discordを開く",
+    "open_modding_discord.must_generate_debug_first" : "最初にデバッグ情報を生成してください。",
+    "reporting_directions" : "何か変ですか? 下部のボタンを押してログを収集し、生成されたZipファイルを modding Discord の #help-using-mods チャンネルに送信してください。（会話は英語を使用すること）",
+    "title" : "不具合が発生しました。"
+  },
+  "external-install-mod" : {
+    "already-installed" : "インストール済み",
+    "error-loading" : "Mod 詳細情報の取得に失敗",
+    "in-queue" : "キュー待ち",
+    "install" : "インストール",
+    "latest-version" : "最新バージョン",
+    "title" : "Mod をインストールする",
+    "version" : "バージョン {version}"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "始める！",
+    "change_later_hint" : "これらの設定はいつでも \"Mod マネージャー設定\" から変更できます。",
+    "intro" : "使い始める前にあなたの好みを選択してください。",
+    "open_welcome_guide" : "\"初めに\"のガイドを表示する",
+    "option" : {
+      "language" : {
+        "title" : "使用する言語:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "”適用”を押すまで待つ",
+        "enabled" : "すぐに変更を適用する",
+        "title" : "Mod を追加、削除又はプロファイルを変更したときに…"
+      }
+    },
+    "title" : "Satisfactory Mod マネージャーへようこそ！"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "{profile}に適用する",
+    "apply-queued" : "{queued, plural, one {# つ} other {# つ}}の変更を適用する",
+    "are-you-sure-warning" : "本当に実行しますか？",
+    "cant-launch" : "SMMはこのインストールでは実行できません。",
+    "cant-launch-tooltip" : "Mod マネージャーはこのゲームのインストール方法に対応しておりません。Modは管理できますが、Satisfacotryを実行するにはあなたの使用しているランチャーをお使いください。",
+    "changes-queued" : "変更はまだ適用されていません。下部のボタンを押して変更を適用してください。（現在、キューが”手動”になっています）",
+    "game-running" : "ゲームランチャーはまだゲームが実行中と判断しているようです。（またはゲーム閉じている最中のようです）",
+    "incompatible-mods" : "{versionIncompatible, plural, other {読み込まれない又はクラッシュする可能性のある{versionIncompatible}つの互換性のないModが含まれています}}",
+    "launch-in-progress" : "ゲームを実行中…",
+    "operation-in-progress" : "処理中…",
+    "play" : "Satisfactory を実行する",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, other {#つのModがゲームと互換性の無い可能性があります。}}",
+    "profile-change-queued" : "変更はまだ適用されていません。下部のボタンを押してプロファイルに変更を適用してください。（現在、キューが”手動”になっています）",
+    "ready" : "準備ができました！\n\nメモ: ModマネージャーはModをインストールし終えました。ゲームをゲームランチャーを用いて起動してもModは読み込まれます。",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {# つ} other {# つ}} のModが現在のゲームのバージョンに対して”故障中”と報告されています。Modページの詳細情報か互換情報をご確認ください。",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {# つ} other {# つ}}のModが現在のゲームのバージョンに対して”一部故障中”と報告されています。Modページの詳細情報か互換情報をご確認ください。",
+    "you-have-warning-mods" : "　"
+  },
+  "left-bar" : {
+    "export" : "書き出し",
+    "ficsit-app" : "ficsit.app (Mod 保管所)",
+    "game-version" : "ゲームのインストール方法の選択",
+    "help" : "ヘルプ",
+    "install-invalid" : "無効",
+    "install-invalid-tooltip" : "状況: このインストール方法ではSMMは管理できません",
+    "install-loading" : "ロード中…",
+    "install-loading-tooltip" : "状況: ロード中…",
+    "install-unknown" : "不明",
+    "install-unknown-tooltip" : "状況: このインストール方法についての情報が取得できませんでした",
+    "links" : "リンク",
+    "manage-servers" : "サーバー管理",
+    "mods-off" : "Mod オフ",
+    "mods-on" : "Mod オン",
+    "other" : "その他",
+    "profile" : "プロファイル",
+    "queue-blocking-switching-tooltip" : "{number, plural, other {現在{number}つの処理が待機中です。プロファイルを変更する又はインストール方法を変更する前に、適用するかキャンセルしてください。}}",
+    "satisfactory-modding-discord" : "Satisfactory Modding Discord",
+    "smm-github" : "SMM GitHub",
+    "updates" : "アップデート"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> 変更履歴"
+  },
+  "mod-details" : {
+    "change-version" : "バージョンを変更",
+    "change-version-any" : "どれでも",
+    "change-version-or-newer" : "またはこれよりも最新",
+    "changelogs" : "変更履歴",
+    "compatibility" : "互換性",
+    "compatibility-branch" : "このModは{branch}ブランチで{state}と報告されています。",
+    "compatibility-unknown" : "不明",
+    "compatibility-unknown-tooltip" : "このModには互換情報が登録されていません。このModを試してから結果をDiscordにて報告して頂けると幸いです。",
+    "contributors" : "貢献者 <1>{authors}</1>",
+    "created" : "作成日",
+    "downloads" : "全ダウンロード数",
+    "installed-version" : "インストール中のバージョン",
+    "latest-version" : "最新バージョン",
+    "mod-author" : "製作者:",
+    "offline-mode" : "現在オフラインモードです。変更履歴と詳細情報は利用できません。",
+    "size" : "容量",
+    "updated" : "最終更新日",
+    "view-on-ficsit-app" : "ficsit.app で閲覧する",
+    "views" : "閲覧数"
+  },
+  "mod-list-item" : {
+    "by-author" : "製作者:",
+    "compatibility-note" : "このModは今のゲームバージョンに対して{state}と報告されています。",
+    "compatibility-note-none" : "(未指定)",
+    "compatibility-warning" : "このModは幾つかの問題を抱えているようですが、インストールすることはできます。詳細情報:",
+    "dependency" : "このModは他のModで必須とされています。単体でのインストールと削除はできません。",
+    "disable" : "このModはこのプロファイル内で有効化されています。ここを押して無効化します。無効化されたModはゲームに読み込まれませんがプロファイル内には残ります。",
+    "disable-queued" : "このModは無効化の適用待ちをしています。ここを押して無効化をキャンセルします。",
+    "disabled-tooltip" : "このModは無効化状態です。このポーズアイコンを押して有効化します。",
+    "enable" : "ここを押して有効化する",
+    "enable-queued" : "このModは有効化の適用待ちをしています。ここを押して有効化をキャンセルします。",
+    "favorite" : "ここを押してこのModをお気に入りに登録します。インストールに直接関係はありませんが、後にプロファイルを変更した際にこのModを探しやすくなります。",
+    "hidden" : "このModは製作者によって隠されています。",
+    "install" : "ここを押してこのModをインストールします。",
+    "no-tags" : "（タグなし）",
+    "not-installable" : "このModはインストールできません。理由:",
+    "queued" : "このModはまだ他の処理を待っています。",
+    "queued-install" : "このModはインストール待ちをしています。ここを押してキャンセルします。",
+    "queued-uninstall" : "このModはアンインストール待ちをしています。ここを押してキャンセルします。",
+    "unavailable" : "このModはもうficsit.app上で利用できません。削除することをお勧めします。",
+    "unfavorite" : "ここを押してお気に入りから外します。",
+    "uninstall" : "このModは現在のプロファイルにインストール済みです。ここを押してアンインストールします。",
+    "wait" : "処理が完了するまでお待ちください。"
+  },
+  "mod" : {
+    "compatibility-no-notes" : "（詳細情報無し）"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "全Mod",
+      "compatible" : "互換性有り",
+      "dependency" : "必須",
+      "disabled" : "無効化状態",
+      "enabled" : "有効化状態",
+      "favorite" : "お気に入り",
+      "installed" : "インストール済み",
+      "not-installed" : "未インストール",
+      "queued" : "キュー入り"
+    },
+    "order-by" : {
+      "downloads" : "ダウンロード数",
+      "hotness" : "話題",
+      "last-updated" : "最終更新日",
+      "name" : "名前",
+      "popularity" : "人気",
+      "views" : "閲覧数"
+    },
+    "search" : "Modを探す…"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "検索に該当するModがありませんでした",
+    "no-mods-found" : "該当Mod無し",
+    "show-all" : "全て表示する"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "プロファイル名",
+      "profile-name-placeholder" : "新しいプロファイル名",
+      "title" : "プロファイルの追加"
+    },
+    "delete" : {
+      "profile-name" : "プロファイル名",
+      "title" : "プロファイルの削除"
+    },
+    "import" : {
+      "profile-file" : "プロファイルのファイル",
+      "profile-name" : "プロファイル名",
+      "profile-name-placeholder" : "新しいプロファイル名",
+      "profile-version-warning" : "このプロファイルは新しいゲームバージョン用に作成されているようです。現在のゲームのバージョンと互換性が無い可能性があります。",
+      "title" : "プロファイルの取り込み"
+    },
+    "rename" : {
+      "new-profile" : "新しいプロファイル名",
+      "new-profile-placeholder" : "新しいプロファイル",
+      "old-profile" : "前のプロファイル名",
+      "old-profile-placeholder" : "前のプロファイル",
+      "title" : "プロファイル名の変更"
+    }
+  },
+  "server-manager" : {
+    "add" : "追加",
+    "advanced-note" : "ユーザー名とパスワードを入力する際に一部の文字前にエスケープ文字を入れる必要があります。",
+    "advanced-path-placeholder" : "ユーザー名:パスワード@ホストIP:ポート番号/パス",
+    "failed-to-connect" : "サーバーに接続できませんでした。ここを押して再試行します。",
+    "get-help" : "サーバーへの接続方法についてのヘルプを見る",
+    "host-placeholder" : "ホスト",
+    "invalid" : "このインストール方法はSMMでは管理できません",
+    "loading" : "ロード中…",
+    "local-path-placeholder" : "C:\\Path\\To\\Server",
+    "name-placeholder" : "サーバー名（デフォルト: {default}）",
+    "password-placeholder" : "パスワード",
+    "path-placeholder" : "パス",
+    "port-placeholder" : "ポート番号（デフォルト: {default}）",
+    "switch-to-advanced" : "上級者モードに切り替える",
+    "switch-to-simple" : "シンプルモードに切り替える",
+    "title" : "専用サーバー",
+    "username-placeholder" : "ユーザー名",
+    "validating" : "検証中…"
+  },
+  "server-picker" : {
+    "failed-list-dir" : "ディレクトリのリスト化に失敗",
+    "failed-valid-check" : "指定されたパスが有効なサーバーかどうかの検証に失敗"
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "キャッシュフォルダー",
+      "reset" : "デフォルトに戻す",
+      "save" : "保存して移動する",
+      "title" : "ダウンロード時の一時ファイルの保存場所を変更する"
+    },
+    "change-cache-location" : "一時ファイル保存場所の変更",
+    "copy-mod-list" : "Modリストのコピー",
+    "debug" : "デバッグ",
+    "generate-debug-info" : "デバッグ情報を生成する",
+    "go-online-offline" : "{offline, select, true {オンライン} other {オフライン}}モードにする",
+    "language" : "言語",
+    "launch-button" : "起動ボタン",
+    "launch-button.button" : "ボタン",
+    "launch-button.cat" : "ニャン",
+    "launch-button.normal" : "通常",
+    "proxy" : {
+      "proxy" : "プロキシ",
+      "remove" : "プロキシを削除する",
+      "save" : "保存して再スタート",
+      "title" : "プロキシを設定する"
+    },
+    "queue" : "キュー",
+    "queue.start-immediately" : "すぐに適用",
+    "queue.start-manually" : "手動で適用",
+    "secret-settings" : "隠し設定",
+    "set-proxy" : "プロキシを設定する",
+    "settings" : "設定",
+    "smm-debug-logging" : "SMMのデバッグをログに書き込む",
+    "start-view" : "ウィンドウの大きさ",
+    "start-view.compact" : "コンパクト",
+    "start-view.expanded" : "拡大",
+    "title" : "Modマネージャー設定",
+    "update-check" : "アップデートの確認",
+    "update-check.ask" : "発見時に確認を取る",
+    "update-check.on-exit" : "終了時",
+    "update-check.on-start" : "起動時"
+  },
+  "smm-update" : {
+    "downloading" : "バックグラウンドでダウンロード中",
+    "downloading-stats" : "アップデートをダウンロード中: {current} / {total}, {speed}/秒, 残り時間: {eta}",
+    "title" : "SMMのアップデートが利用可能 - {version}"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "パフォーマンスの向上",
+      "performance.description" : "もっと効率良く働けるようになりました！",
+      "platform_support" : "Linux Heroic, Steam Snap, Mac のサポート",
+      "platform_support.description" : "Githubにてダウンロード可能です。まだの際は是非！",
+      "profile_format" : "新しいプロファイルの書式",
+      "profile_format.description" : "SMM2のプロファイルはSMM3では使えません！現在残っている過去のプロファイルは自動的に更新されますが、SMM2からのプロファイルは取り込むことはできません。",
+      "queue" : "処理のキュー",
+      "queue.description" : "一斉にModのダウンロードとアンインストール等ができるようになりました。",
+      "servers" : "専用サーバーの管理",
+      "servers.description" : "ファイルシステム（SFTP, FTP, SMB）を通して簡単にサーバーの管理ができるように！",
+      "translation" : "翻訳のサポート",
+      "translation.description" : "我々のDiscordに入ってSMMをあなたの言語に翻訳しましょう！",
+      "ui" : "UIの抜本的改善",
+      "ui.description" : "新しいUIでSatisfactory1.0をお祝いします！"
+    },
+    "intro" : "SMM3では我々は沢山の改善を致しました。その幾つかをご紹介します:",
+    "open_guide" : "SMM3のドキュメントを開く",
+    "title" : "Satisfactory Mod マネージャー バージョン 3へようこそ！"
+  },
+  "updates" : {
+    "changelog" : "変更履歴",
+    "check-for-updates" : "アップデートの確認",
+    "checking-for-updates" : "アップデートの確認中…",
+    "hide-ignored" : "無視したModを隠す",
+    "ignore" : "無視する",
+    "mod-update-available" : "{updates, plural, other {{updates}つのModのアップデートが利用可能}}",
+    "no-updates" : "現在、アップデート事項はありません",
+    "show-ignored" : "無視したModを表示する",
+    "smm-update-available" : "SMMのアップデートが利用可能",
+    "title" : "アップデート",
+    "unignore" : "無視しない",
+    "update-all" : "全てをアップデート",
+    "update-selected" : "選択したModをアップデート"
+  }
+}
