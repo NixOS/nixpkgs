@@ -1,21 +1,26 @@
 /*
-    Nixpkgs unfree+redistributable packages.
+  Nixpkgs unfree+redistributable packages.
 
-    This release file MUST NOT be used by <https://hydra.nixos.org>. Please
-    check with your lawyers before using this file.
+  NOTE: This file is used by the sister nix-community project.
 
-    This file is used by the sister nix-community project. Our intent is to
-    test all the code paths of nixpkgs. To contact us, send an email to
-    <admin@nix-community.org>
+  The official Hydra instance only builds and provides binary caches for free
+  packages (as in OSI-approved).
 
-    See also:
+  Some unfree packages such as MongoDB, ZeroTier, ... take a while to be
+  built. While their license is not free, they allow redistribution of
+  build artefacts.
 
-    * <https://hydra.nix-community.org/jobset/nixpkgs/unfree>
-    * <https://github.com/nix-community/infra/pull/1406>
+  The sister project nix-community will build and distribute those packages
+  for a subset of the channels to <https://nix-community.cachix.org>.
 
-    Test for example like this:
+  See also:
 
-        $ hydra-eval-jobs pkgs/top-level/release-unfree.nix -I .
+  * <https://hydra.nix-community.org/jobset/nixpkgs/unfree-redistributable>
+  * <https://github.com/nix-community/infra/pull/1406>
+
+  Test for example like this:
+
+    $ hydra-eval-jobs pkgs/top-level/release-unfree-redistributable.nix -I .
 */
 
 {
