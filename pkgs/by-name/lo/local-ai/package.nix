@@ -147,8 +147,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "70392f1f81470607ba3afef04aa56c9f65587664";
-          hash = "sha256-PgdH3Q4lM45a7aLeN/19i0Ld4NuTfzh/caYOSdooFao=";
+          rev = "96776405a17034dcfd53d3ddf5d142d34bdbb657";
+          hash = "sha256-V5Z+8cpllhDR0s4InoXyEU59a/qo2b5Xj8oeZd0rtGk=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -299,8 +299,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "0d2e2aed80109e8696791083bde3b58e190b7812";
-      hash = "sha256-HE9FLwLGVCggEF7VjWtdNhNnhe7c1RQp30spEIkK4TI=";
+      rev = "fdbfb460ed546452a5d53611bba66d10d842e719";
+      hash = "sha256-ZLSVPQUw1sp7sETk2w38qKq8ut7XNGuof2TUvFzjdPk=";
     };
 
     nativeBuildInputs = [
@@ -431,12 +431,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.21.1";
+  version = "2.22.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-UlXBg/FKv/GNz2PCEVvzhILNdyQvTfkw157sNpunf2I=";
+    hash = "sha256-EwBgw0WXnK3E3ZyA1+Xk/o7Te7OCJWi7njefA4PDUJ0=";
   };
 
   prepare-sources =
