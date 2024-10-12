@@ -85,6 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
       includes = [ "*/CompilerConfig.cmake" ];
     })
+
+    (fetchpatch {
+      name = "qt-6.8.patch";
+      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
+      extraPrefix = "plugins/obs-websocket/";
+      stripLen = 1;
+      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
+    })
   ];
 
   nativeBuildInputs = [
