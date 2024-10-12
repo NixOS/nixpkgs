@@ -9,6 +9,7 @@
 , vala
 , libadwaita
 , libgee
+, libical
 , granite7
 , gtk4
 , libxml2
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-PE1ig8p9H4MfipIpN3ubXAJNzLwGVW89adn+SF3rEuQ=";
+    sha256 = "sha256-VOL0F0obuXVz0G5hMI/hpUf2T3H8XUw64wu4MxRi57g=";
   };
 
   patches = [
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libgee
+    libical
     switchboard
   ];
 
