@@ -19,7 +19,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool to list listening sockets";
     license = licenses.mit;
-    maintainers = [ maintainers.k900 ];
+    maintainers = [
+      maintainers.k900
+      maintainers.jcaesar
+    ];
     platforms = platforms.linux;
     homepage = "https://github.com/jcaesar/lls";
     mainProgram = "lls";
