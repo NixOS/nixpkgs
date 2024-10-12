@@ -15,23 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "zmusic";
-  version = "1.1.13";
+  version = "1.1.14";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "ZMusic";
     rev = version;
-    hash = "sha256-rvvMS5KciHEvoY4hSfgAEyWJiDMqBto4o09oIpQIGTQ=";
+    hash = "sha256-rEE3MZLwqnvn5MqbSTCErbsGRjKMK8cC3wTJxtf8WaU=";
   };
 
   outputs = [ "out" "dev" ];
 
   patches = [
-    (fetchpatch {
-      name = "system-fluidsynth.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/zmusic/system-fluidsynth.patch?id=ca353107ef4f2e5c55c3cc824b0840e2838fb894";
-      hash = "sha256-xKaqiNk1Kt9yNLB22IVmSEtGeOtxrCi7YtFCmhNr0MI=";
-    })
+    ./fluidsynth.patch
   ];
 
   postPatch = ''
