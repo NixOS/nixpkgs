@@ -195,6 +195,7 @@ with lib.maintainers;
 
   darwin = {
     members = [
+      emily
       reckenrode
       toonn
     ];
