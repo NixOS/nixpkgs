@@ -44,13 +44,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
-    hash = "sha256-86AMmp8R9/NibTsMFTTFcMeIqZ5x8din9RcBvhGO9xg=";
+    hash = "sha256-MNQPLIB1hlZy0x+qCFe/dOsNZPsjA50hei/JWDYg3bk=";
     fetchSubmodules = true;
   };
 
