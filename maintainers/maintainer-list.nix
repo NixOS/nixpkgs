@@ -6549,6 +6549,11 @@
     githubId = 2544204;
     name = "Erik Skytthe";
   };
+  EstebanMacanek = {
+    name = "Esteban Macanek";
+    github = "EstebanMacanek";
+    githubId = 75503218;
+  };
   ethancedwards8 = {
     email = "ethan@ethancedwards.com";
     github = "ethancedwards8";
