@@ -16,7 +16,7 @@
 , json-glib
 , libappindicator
 , libsoup
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     json-glib
     libappindicator
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

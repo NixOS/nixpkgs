@@ -8,7 +8,7 @@
 , pkg-config
 , alsa-lib
 , freetype
-, webkitgtk
+, webkitgtk_4_0
 , zenity
 , curl
 , xorg
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     curl
     freetype
-    webkitgtk
+    webkitgtk_4_0
     xorg.libX11
     xorg.libXcursor
     xorg.libXext
