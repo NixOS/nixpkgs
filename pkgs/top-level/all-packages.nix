@@ -30338,10 +30338,9 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3-cli = callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = false; };
-  kid3-kde = callPackage ../applications/audio/kid3 { withCLI = true; withKDE = true; withQt = false; };
-  kid3-qt = callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
-  kid3 = kid3-kde;
+  kid3-cli = kid3.override { withCLI = true; withKDE = false; withQt = false; };
+  kid3-kde = kid3.override { withCLI = true; withKDE = true; withQt = false; };
+  kid3-qt = kid3.override { withCLI = true; withKDE = false; withQt = true; };
 
   kile = callPackage ../applications/editors/kile { };
 
