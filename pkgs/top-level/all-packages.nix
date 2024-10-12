@@ -522,6 +522,12 @@ with pkgs;
 
   crow-translate = libsForQt5.callPackage ../applications/misc/crow-translate { };
 
+  inherit (callPackage ../misc/crust { })
+    buildCrustFirmware
+    crustFirmwareOrangePi3LTS
+    crustFirmwareOlimexA64Teres1
+  ;
+
   dae = callPackage ../tools/networking/dae { };
 
   darling = callPackage ../applications/emulators/darling { };
