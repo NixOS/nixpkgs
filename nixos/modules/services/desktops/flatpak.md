@@ -1,5 +1,7 @@
 # Flatpak {#module-services-flatpak}
-*Source:* {file}`modules/services/desktop/flatpak.nix`  
+
+*Source:* {file}`modules/services/desktop/flatpak.nix`
+
 *Upstream documentation:* <https://github.com/flatpak/flatpak/wiki>
 
 Flatpak is a system for building, distributing, and running sandboxed desktop
