@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];
 
-  prePatch = ''
+  postPatch = ''
     substituteInPlace tools/pkg-config/* \
       --replace-fail 'libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@' "libdir=@CMAKE_INSTALL_FULL_LIBDIR@"
   '';
