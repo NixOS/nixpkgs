@@ -129,7 +129,8 @@ while [ "$#" -gt 0 ]; do
         fi
         if [ "$1" != system ]; then
             profile="/nix/var/nix/profiles/system-profiles/$1"
-            mkdir -p -m 0755 "$(dirname "$profile")"
+            mkdir -p "$(dirname "$profile")"
+            chmod 0755 "$(dirname "$profile")"
         fi
         shift 1
         ;;
