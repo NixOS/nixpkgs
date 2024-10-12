@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   postPatch =
     ''
-      patchShebangs tp/maintain
+      patchShebangs tp/maintain/regenerate_commands_perl_info.pl
     ''
     # This patch is needed for IEEE-standard long doubles on
     # powerpc64; it does not apply cleanly to texinfo 5.x or
