@@ -7880,8 +7880,6 @@ with pkgs;
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
-  gogs = callPackage ../applications/version-management/gogs { };
-
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gokart = callPackage ../development/tools/gokart { };
@@ -23536,17 +23534,17 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
+  webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
   };
 
-  webkitgtk_4_1 = webkitgtk.override {
+  webkitgtk_4_1 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
   };
 
-  webkitgtk_6_0 = webkitgtk.override {
+  webkitgtk_6_0 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
     gtk3 = gtk4;
   };
@@ -26028,8 +26026,6 @@ with pkgs;
   kaitai-struct-compiler = callPackage ../development/compilers/kaitai-struct-compiler { };
 
   kmod = callPackage ../os-specific/linux/kmod { };
-
-  kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
 
   kmod-debian-aliases = callPackage ../os-specific/linux/kmod-debian-aliases { };
 
@@ -29190,11 +29186,6 @@ with pkgs;
 
   foliate = callPackage ../applications/office/foliate { };
 
-  font-manager = callPackage ../by-name/fo/font-manager/package.nix {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_6_0;
-  };
-
   fontfinder = callPackage ../applications/misc/fontfinder { };
 
   fontpreview = callPackage ../applications/misc/fontpreview { };
@@ -30784,10 +30775,7 @@ with pkgs;
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_4_1;
-  };
+  liferea = callPackage ../applications/networking/newsreaders/liferea { };
 
   lightworks = callPackage ../applications/video/lightworks { };
 
@@ -31342,9 +31330,7 @@ with pkgs;
   netmaker = callPackage ../applications/networking/netmaker {subPackages = ["."];};
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
-  newsflash = callPackage ../applications/networking/feedreaders/newsflash {
-    webkitgtk = webkitgtk_6_0;
-  };
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
 
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
@@ -32211,7 +32197,7 @@ with pkgs;
   };
 
   quodlibet-full = quodlibet.override {
-    inherit gtksourceview webkitgtk;
+    inherit gtksourceview webkitgtk_4_0;
     kakasi = kakasi;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
@@ -38212,7 +38198,9 @@ with pkgs;
 
   wcalc = callPackage ../applications/misc/wcalc { };
 
-  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
+  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {
+    webkitgtk = webkitgtk_4_0;
+  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
 

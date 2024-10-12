@@ -19,7 +19,7 @@
   moreutils,
   openssl,
   rust,
-  webkitgtk,
+  webkitgtk_4_0,
   nix-update-script,
   cacert,
 }:
@@ -71,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
