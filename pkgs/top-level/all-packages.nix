@@ -3137,6 +3137,8 @@ with pkgs;
 
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator { };
 
+  aws-codeartifact-proxy = callPackage ../servers/aws-codeartifact-proxy { };
+
   awscli = callPackage ../tools/admin/awscli { };
 
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
