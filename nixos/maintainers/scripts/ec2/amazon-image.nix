@@ -75,6 +75,7 @@ in
       configFile = pkgs.writeText "configuration.nix" ''
         { modulesPath, ... }: {
           imports = [ "''${modulesPath}/virtualisation/amazon-image.nix" ];
+          system.stateVersion = "${config.system.stateVersion}";
           ${optionalString config.ec2.efi ''
             ec2.efi = true;
           ''}
