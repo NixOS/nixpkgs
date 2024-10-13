@@ -808,15 +808,20 @@ let
         # missing optional dependencies
         boogie-friends = addPackageRequires super.boogie-friends [ self.lsp-mode ];
 
-        # https://github.com/melpa/melpa/pull/9181
-        bpr = super.bpr.overrideAttrs (old: {
-          preBuild =
-            old.preBuild or ""
-            + "\n"
-            + ''
-              rm --verbose --force test-bpr.el
-            '';
-        });
+        bpr = super.bpr.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            # https://github.com/melpa/melpa/pull/9181
+            preBuild =
+              if lib.versionOlder finalAttrs.version "20241013.1803" then
+                previousAttrs.preBuild or ""
+                + "\n"
+                + ''
+                  rm --verbose --force test-bpr.el
+                ''
+              else
+                previousAttrs;
+          }
+        );
 
         bts = ignoreCompilationError super.bts; # elisp error
 
