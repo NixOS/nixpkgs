@@ -12,7 +12,6 @@
 , readline70
 , xz
 , cups
-, glibc
 , libaio
 , vulkan-loader
 , alsa-lib
@@ -20,8 +19,7 @@
 , libxcrypt-legacy
 , libGL
 , numactl
-, libX11
-, libXi
+, xorg
 , kmod
 , python3
 , autoPatchelfHook
@@ -73,7 +71,6 @@ stdenv.mkDerivation rec {
     readline
     xz
     cups
-    glibc
     libaio
     vulkan-loader
     alsa-lib
@@ -81,9 +78,21 @@ stdenv.mkDerivation rec {
     libxcrypt-legacy
     libGL
     numactl
-    libX11
-    libXi
-    kmod
+    xorg.libX11
+    xorg.libXau
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXdamage
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXft
+    xorg.libXinerama
+    xorg.libXi
+    xorg.libXrandr
+    xorg.libXrender
+    xorg.libXScrnSaver
+    xorg.libXtst
   ];
 
   nativeBuildInputs = [ python3 vmware-unpack-env autoPatchelfHook makeWrapper ]
@@ -217,8 +226,8 @@ stdenv.mkDerivation rec {
         --add-needed ${libpulseaudio}/lib/libpulse.so.0 \
         --add-needed ${libGL}/lib/libEGL.so.1 \
         --add-needed ${numactl}/lib/libnuma.so.1 \
-        --add-needed ${libX11}/lib/libX11.so.6 \
-        --add-needed ${libXi}/lib/libXi.so.6 \
+        --add-needed ${xorg.libX11}/lib/libX11.so.6 \
+        --add-needed ${xorg.libXi}/lib/libXi.so.6 \
         --add-needed ${libGL}/lib/libGL.so.1 \
         $out/lib/vmware/bin/$binary
     done
@@ -344,6 +353,14 @@ stdenv.mkDerivation rec {
     wrapProgram $out/lib/vmware/bin/vmware-vmx
     rm $out/lib/vmware/bin/vmware-vmx
     ln -s /run/wrappers/bin/vmware-vmx $out/lib/vmware/bin/vmware-vmx
+
+    # Remove shipped X11 libraries
+    for lib in $out/lib/vmware/lib/* $out/lib/vmware-ovftool/lib*.so*; do
+      lib_name="$(basename "$lib")"
+      if [[ "$lib_name" == libX* || "$lib_name" == libxcb* ]]; then
+        rm -rf "$lib"
+      fi
+    done
 
     runHook postInstall
   '';
