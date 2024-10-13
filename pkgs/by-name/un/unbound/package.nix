@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchurl
+, fetchpatch
 , openssl
 , nettle
 , expat
@@ -56,6 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
     hash = "sha256-VrTO7TNjlSIAD9lndVdt34eCuzYXYQcV1/Hnd8XsHb8=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-8508.patch";
+      url = "https://nlnetlabs.nl/downloads/unbound/patch_CVE-2024-8508.diff";
+      hash = "sha256-u9een9NSm0WgDYhCIQjLDT743Smm0df7xBXnpPBvhJs=";
+    })
+  ];
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
