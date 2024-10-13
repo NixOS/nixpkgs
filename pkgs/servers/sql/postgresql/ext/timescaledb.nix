@@ -62,6 +62,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.kirillrdy ];
     platforms = postgresql.meta.platforms;
     license = with licenses; if enableUnfree then tsl else asl20;
-    broken = versionOlder postgresql.version "13";
+    broken = versionOlder postgresql.version "14";
   };
 }
