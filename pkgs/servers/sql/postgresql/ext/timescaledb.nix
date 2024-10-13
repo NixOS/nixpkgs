@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, cmake, postgresql, openssl, libkrb5, nixosTests, enableUnfree ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  postgresql,
+  openssl,
+  libkrb5,
+  nixosTests,
+  enableUnfree ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "timescaledb${lib.optionalString (!enableUnfree) "-apache"}";
   version = "2.17.0";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ postgresql openssl libkrb5 ];
+  buildInputs = [
+    postgresql
+    openssl
+    libkrb5
+  ];
 
   src = fetchFromGitHub {
     owner = "timescale";
@@ -14,7 +28,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-6e/PdHpCXn5Dxdip8ICG+vXxezDATQkwHqDqkt7SS48=";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" "-DTAP_CHECKS=OFF" ]
+  cmakeFlags =
+    [
+      "-DSEND_TELEMETRY_DEFAULT=OFF"
+      "-DREGRESS_CHECKS=OFF"
+      "-DTAP_CHECKS=OFF"
+    ]
     ++ lib.optionals (!enableUnfree) [ "-DAPACHE_ONLY=ON" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLINTER=OFF" ];
 
@@ -32,7 +51,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests = { inherit (nixosTests) timescaledb; };
+  passthru.tests = {
+    inherit (nixosTests) timescaledb;
+  };
 
   meta = with lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
