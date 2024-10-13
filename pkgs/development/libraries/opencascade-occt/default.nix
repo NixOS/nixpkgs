@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     libXi
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
   meta = with lib; {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";
     homepage = "https://www.opencascade.org/";
