@@ -11,7 +11,7 @@
   openssl,
 
   pkg-config,
-  protobuf_25,
+  protobuf,
   grpc,
   pandoc,
   python3,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     grpc
     libgit2
     openssl
-    protobuf_25
+    protobuf
     python3
   ];
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ''
       sed -ie 's|\./bin/just-mr.py|${python3}/bin/python3 ./bin/just-mr.py|' bin/bootstrap.py
       sed -ie 's|#!/usr/bin/env python3|#!${python3}/bin/python3|' bin/parallel-bootstrap-traverser.py
-      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf_25}"' etc/repos.json > etc/repos.json.patched
+      jq '.repositories.protobuf.pkg_bootstrap.local_path = "${protobuf}"' etc/repos.json > etc/repos.json.patched
       mv etc/repos.json.patched etc/repos.json
       jq '.repositories.com_github_grpc_grpc.pkg_bootstrap.local_path = "${grpc}"' etc/repos.json > etc/repos.json.patched
       mv etc/repos.json.patched etc/repos.json
