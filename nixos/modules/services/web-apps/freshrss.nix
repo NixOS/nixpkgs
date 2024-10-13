@@ -269,9 +269,9 @@ in
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"${cfg.authType}"'';
-              "--base_url" = ''"${cfg.baseUrl}"'';
+              "--default-user" = ''"${cfg.defaultUser}"'';
+              "--auth-type" = ''"${cfg.authType}"'';
+              "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
               # The following attributes are optional depending on the type of
