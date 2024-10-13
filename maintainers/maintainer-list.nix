@@ -7595,6 +7595,12 @@
     githubId = 91987;
     name = "Jim Garrison";
   };
+  garyguo = {
+    email = "gary@garyguo.net";
+    github = "nbdd0121";
+    githubId = 4065244;
+    name = "Gary Guo";
+  };
   gavin = {
     email = "gavin.rogers@holo.host";
     github = "gavinrogers";
@@ -18688,6 +18694,12 @@
     github = "R-VdP";
     githubId = 141248;
     name = "Ramses";
+  };
+  rvfg = {
+    email = "i@rvf6.com";
+    github = "duament";
+    githubId = 30264485;
+    name = "Rvfg";
   };
   rvl = {
     email = "dev+nix@rodney.id.au";
