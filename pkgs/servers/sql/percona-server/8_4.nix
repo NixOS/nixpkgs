@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
       MySQL® that provides superior performance, scalability and instrumentation.
       Long-term support release.
     '';
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = teams.flyingcircus.members;
     platforms = platforms.unix;
   };
