@@ -15,7 +15,7 @@
 , openssl
 , pkg-config
 , rustPlatform
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , sqlite
 }:
@@ -97,7 +97,7 @@ rustPlatform.buildRustPackage {
     freetype
     libsoup
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     gsettings-desktop-schemas
     sqlite
   ];

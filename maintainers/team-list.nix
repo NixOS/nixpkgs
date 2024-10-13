@@ -278,7 +278,11 @@ with lib.maintainers;
   };
 
   emacs = {
-    members = [ adisbladis ];
+    members = [
+      AndersonTorres
+      adisbladis
+      linj
+    ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
   };

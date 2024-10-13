@@ -20,7 +20,7 @@
 , pcre
 , pcre2
 , pkg-config
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , xorg
 }:
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
     pcre2
     sqlite
-    webkitgtk
+    webkitgtk_4_0
     xorg.libXdmcp
     xorg.libXtst
   ];

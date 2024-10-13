@@ -853,9 +853,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Resolves domains of proxyPass targets at runtime
-          and not only at start, you have to set
-          services.nginx.resolver, too.
+          Resolves domains of proxyPass targets at runtime and not only at startup.
+          This can be used as a workaround if nginx fails to start because of not-yet-working DNS.
+
+          :::{.warn}
+          `services.nginx.resolver` must be set for this option to work.
+          :::
         '';
       };
 

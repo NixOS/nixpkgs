@@ -7893,8 +7893,6 @@ with pkgs;
 
   gitqlient = libsForQt5.callPackage ../applications/version-management/gitqlient { };
 
-  gogs = callPackage ../applications/version-management/gogs { };
-
   git-latexdiff = callPackage ../tools/typesetting/git-latexdiff { };
 
   gokart = callPackage ../development/tools/gokart { };
@@ -14543,6 +14541,7 @@ with pkgs;
   flutterPackages-source = recurseIntoAttrs (callPackage ../development/compilers/flutter { useNixpkgsEngine = true; });
   flutterPackages = flutterPackages-bin;
   flutter = flutterPackages.stable;
+  flutter326 = flutterPackages.v3_26;
   flutter324 = flutterPackages.v3_24;
   flutter319 = flutterPackages.v3_19;
 
@@ -14998,8 +14997,6 @@ with pkgs;
   inherit (haxePackages) hxcpp;
 
   hop = callPackage ../development/compilers/hop { };
-
-  hop-cli = throw "hop-cli has been removed as the service has been shut-down"; #Added 2024-08-13
 
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
@@ -19074,7 +19071,7 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  catboost = callPackage ../development/libraries/catboost {
+  catboost = callPackage ../by-name/ca/catboost/package.nix {
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
   };
@@ -23530,17 +23527,17 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/science/astronomy/wcslib { };
 
-  webkitgtk = callPackage ../development/libraries/webkitgtk {
+  webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
     inherit (darwin) apple_sdk;
   };
 
-  webkitgtk_4_1 = webkitgtk.override {
+  webkitgtk_4_1 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
   };
 
-  webkitgtk_6_0 = webkitgtk.override {
+  webkitgtk_6_0 = webkitgtk_4_0.override {
     libsoup = libsoup_3;
     gtk3 = gtk4;
   };
@@ -24511,8 +24508,10 @@ with pkgs;
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
   mastodon = callPackage ../servers/mastodon {
-    nodejs-slim = nodejs-slim_20;
-    ruby = ruby_3_2;
+    nodejs-slim = nodejs-slim_22;
+    python3 = python311;
+    ruby = ruby_3_3;
+    yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
   };
 
   gotosocial = callPackage ../servers/gotosocial { };
@@ -25990,8 +25989,6 @@ with pkgs;
 
   kmod = callPackage ../os-specific/linux/kmod { };
 
-  kmod-blacklist-ubuntu = callPackage ../os-specific/linux/kmod-blacklist-ubuntu { };
-
   kmod-debian-aliases = callPackage ../os-specific/linux/kmod-debian-aliases { };
 
   libcap = callPackage ../os-specific/linux/libcap { };
@@ -26568,6 +26565,7 @@ with pkgs;
     ubootBananaPim64
     ubootAmx335xEVM
     ubootClearfog
+    ubootCM3588NAS
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
@@ -26580,6 +26578,7 @@ with pkgs;
     ubootOlimexA64Olinuxino
     ubootOlimexA64Teres1
     ubootOrangePi3
+    ubootOrangePi3B
     ubootOrangePi5
     ubootOrangePi5Plus
     ubootOrangePiPc
@@ -28103,8 +28102,6 @@ with pkgs;
 
   anytone-emu = callPackage ../applications/radio/anytone-emu { };
 
-  ao = libfive;
-
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio { };
 
   apkeep = callPackage ../tools/misc/apkeep {
@@ -29153,11 +29150,6 @@ with pkgs;
 
   foliate = callPackage ../applications/office/foliate { };
 
-  font-manager = callPackage ../by-name/fo/font-manager/package.nix {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_6_0;
-  };
-
   fontfinder = callPackage ../applications/misc/fontfinder { };
 
   fontpreview = callPackage ../applications/misc/fontpreview { };
@@ -29365,7 +29357,7 @@ with pkgs;
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
-  welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
+  welle-io = qt6Packages.callPackage ../applications/radio/welle-io { };
 
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
@@ -30747,10 +30739,7 @@ with pkgs;
 
   lifelines = callPackage ../applications/misc/lifelines { };
 
-  liferea = callPackage ../applications/networking/newsreaders/liferea {
-    libsoup = libsoup_3;
-    webkitgtk = webkitgtk_4_1;
-  };
+  liferea = callPackage ../applications/networking/newsreaders/liferea { };
 
   lightworks = callPackage ../applications/video/lightworks { };
 
@@ -31305,9 +31294,7 @@ with pkgs;
   netmaker = callPackage ../applications/networking/netmaker {subPackages = ["."];};
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
-  newsflash = callPackage ../applications/networking/feedreaders/newsflash {
-    webkitgtk = webkitgtk_6_0;
-  };
+  newsflash = callPackage ../applications/networking/feedreaders/newsflash { };
 
   nice-dcv-client = callPackage ../applications/networking/remote/nice-dcv-client { };
 
@@ -32174,7 +32161,7 @@ with pkgs;
   };
 
   quodlibet-full = quodlibet.override {
-    inherit gtksourceview webkitgtk;
+    inherit gtksourceview webkitgtk_4_0;
     kakasi = kakasi;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
@@ -38179,7 +38166,9 @@ with pkgs;
 
   wcalc = callPackage ../applications/misc/wcalc { };
 
-  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {  };
+  webkit2-sharp = callPackage ../development/libraries/webkit2-sharp {
+    webkitgtk = webkitgtk_4_0;
+  };
 
   websocketd = callPackage ../applications/networking/websocketd { };
 

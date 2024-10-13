@@ -11,6 +11,7 @@
 , ipu6-camera-bins
 , libtool
 , gst_all_1
+, libdrm
 
 # Pick one of
 # - ipu6 (Tiger Lake)
@@ -27,13 +28,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-hal";
-  version = "unstable-2023-09-25";
+  version = "unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "9fa05a90886d399ad3dda4c2ddc990642b3d20c9";
-    hash = "sha256-yS1D7o6dsQ4FQkjfwcisOxcP7Majb+4uQ/iW5anMb5c=";
+    rev = "f98f72b156563fe8373e4f8d017a9f609676bb33";
+    hash = "sha256-zVcgKW7/GHYd1oMvsaI77cPyj3G68dL+OXBJDz5+Td4=";
   };
 
   nativeBuildInputs = [
@@ -41,12 +42,16 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  PKG_CONFIG_PATH = "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}/pkgconfig";
 
   cmakeFlags = [
     "-DIPU_VER=${ipuVersion}"
+    "-DTARGET_SUFFIX=-${ipuVersion}"
     # missing libiacss
     "-DUSE_PG_LITE_PIPE=ON"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
+    "-DCMAKE_INSTALL_SUB_PATH=${ipuTarget}"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   NIX_CFLAGS_COMPILE = [
@@ -61,21 +66,28 @@ stdenv.mkDerivation {
     libtool
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    libdrm
   ];
 
   postPatch = ''
     substituteInPlace src/platformdata/PlatformData.h \
-      --replace '/usr/share/' "${placeholder "out"}/share/"
+      --replace '/usr/share/' "${placeholder "out"}/share/" \
+      --replace '#define CAMERA_DEFAULT_CFG_PATH "/etc/camera/"' '#define CAMERA_DEFAULT_CFG_PATH "${placeholder "out"}/etc/camera/"'
+  '';
+
+  postInstall = ''
+    mkdir -p $out/include/${ipuTarget}/
+    cp -r $src/include $out/include/${ipuTarget}/libcamhal
   '';
 
   postFixup = ''
     for lib in $out/lib/*.so; do
-      patchelf --add-rpath "${lib.makeLibraryPath [ ipu6-camera-bins ]}/${ipuTarget}" $lib
+      patchelf --add-rpath "${ipu6-camera-bins}/lib" $lib
     done
   '';
 
   passthru = {
-    inherit ipuVersion;
+    inherit ipuVersion ipuTarget;
   };
 
   meta = with lib; {

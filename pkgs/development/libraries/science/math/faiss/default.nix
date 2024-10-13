@@ -105,6 +105,10 @@ stdenv.mkDerivation {
     cp faiss/python/dist/*.whl "$dist/"
   '';
 
+  passthru = {
+    inherit cudaSupport cudaPackages pythonSupport;
+  };
+
   meta = {
     description = "Library for efficient similarity search and clustering of dense vectors by Facebook Research";
     mainProgram = "demo_ivfpq_indexing";

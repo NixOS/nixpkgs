@@ -10,7 +10,7 @@
   openjdk17,
   stdenvNoCC,
   swt,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -30,7 +30,7 @@ let
     gtk3
     libsecret
     swt
-    webkitgtk
+    webkitgtk_4_0
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
