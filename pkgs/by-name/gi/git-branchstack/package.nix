@@ -1,26 +1,30 @@
-{ lib
-, fetchPypi
-, python3Packages
+{
+  lib,
+  fetchPypi,
+  python3Packages,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "git-branchstack";
-  version = "0.2.0";
-
-  src = fetchPypi {
+let
+  self = python3Packages.buildPythonApplication {
     pname = "git-branchstack";
-    inherit version;
-    hash = "sha256-gja93LOcVCQ6l+Cygvsm+3uomvxtvUl6t23GIb/tKyQ=";
-  };
+    version = "0.2.0";
 
-  buildInputs = with python3Packages; [
-    git-revise
-  ];
+    src = fetchPypi {
+      pname = "git-branchstack";
+      inherit (self) version;
+      hash = "sha256-gja93LOcVCQ6l+Cygvsm+3uomvxtvUl6t23GIb/tKyQ=";
+    };
 
-  meta = with lib; {
-    homepage = "https://github.com/krobelus/git-branchstack";
-    description = "Efficiently manage Git branches without leaving your local branch";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    buildInputs = with python3Packages; [
+      git-revise
+    ];
+
+    meta = {
+      homepage = "https://github.com/krobelus/git-branchstack";
+      description = "Efficiently manage Git branches without leaving your local branch";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ AndersonTorres ];
+    };
   };
-}
+in
+self
