@@ -138,8 +138,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     inherit (nixosTests)
+      cups-pdf
       printing-service
       printing-socket
+      printing-service-notcp
+      printing-socket-notcp
     ;
   };
 
