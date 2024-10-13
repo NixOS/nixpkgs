@@ -90,6 +90,7 @@ let
         ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
         Restart = "on-failure";
         RestartMode = "direct";
+        RuntimeDirectory = "unlock";
         # Ideally, this service would lock the key on stop.
         # As is, RemainAfterExit doesn't accomplish anything.
         RemainAfterExit = true;
@@ -97,15 +98,20 @@ let
       script = let
         unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
         unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
-      in if useClevis fs then ''
+      in ''
+        # try mounting it temporarily; if that succeeds, the key is
+        # already loaded and we don't need to do any more
+        if unshare -m mount -t bcachefs ${device} -o X-mount.mkdir /run/unlock/tmp ; then
+           exit 0
+        fi
+      '' + (lib.optionalString (useClevis fs) ''
         if ${config.boot.initrd.clevis.package}/bin/clevis decrypt < "/etc/clevis/${device}.jwe" | ${unlock}
         then
           printf "unlocked ${name} using clevis\n"
-        else
-          printf "falling back to interactive unlocking...\n"
-          ${unlockInteractively}
+          exit 0
         fi
-      '' else ''
+        printf "falling back to interactive unlocking...\n"
+      '') + ''
         ${unlockInteractively}
       '';
     };
@@ -154,6 +160,7 @@ in
         # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
         "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
         "mount.bcachefs" = "${pkgs.bcachefs-tools}/bin/mount.bcachefs";
+        "unshare" = "${pkgs.util-linux}/bin/unshare";
       };
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
