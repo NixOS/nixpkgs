@@ -1,4 +1,9 @@
-{ lib, buildNimPackage, fetchFromGitHub, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "ttop";
@@ -29,7 +34,10 @@ buildNimPackage (finalAttrs: {
     changelog = "https://github.com/inv2004/ttop/releases/tag/${finalAttrs.src.rev}";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ figsoda sikmir ];
+    maintainers = with maintainers; [
+      figsoda
+      sikmir
+    ];
     mainProgram = "ttop";
   };
 })
