@@ -211,7 +211,8 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ lib.optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" ];
+        wants = [ "network.target"  "resolvconf.service" ];
+        after = [ "resolvconf.service" ];
         before = [ "network-online.target" ];
 
         restartTriggers = [ cfg.runHook ];
