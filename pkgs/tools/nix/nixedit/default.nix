@@ -11,9 +11,7 @@ pkgs.stdenv.mkDerivation {
     sha256 = "1hmda40xcqdb5akbbafyhhkhnarn677fjvd264ki5pbz71lmlbfl";
   };
 
-  nativeBuildInputs = [
-    pkgs.makeWrapper
-  ];
+  nativeBuildInputs = [ pkgs.makeWrapper ];
 
   buildInputs = [
     pkgs.bash
