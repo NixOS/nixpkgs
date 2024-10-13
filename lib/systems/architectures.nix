@@ -49,7 +49,9 @@ rec {
   };
 
   # a superior CPU has all the features of an inferior and is able to build and test code for it
-  inferiors = {
+  inferiors = let
+    withInferiors = archs: lib.unique (archs ++ lib.flatten (lib.attrVals archs inferiors));
+  in {
     # x86_64 Generic
     default   = [ ];
     x86-64    = [ ];
@@ -129,6 +131,17 @@ rec {
     "armv9.2-a"    = lib.unique ([ "armv9.1-a" "armv8.7-a" ] ++ inferiors."armv9.1-a" ++ inferiors."armv8.7-a");
     "armv9.3-a"    = lib.unique ([ "armv9.2-a" "armv8.8-a" ] ++ inferiors."armv9.2-a" ++ inferiors."armv8.8-a");
     "armv9.4-a"    = [ "armv9.3-a" ] ++ inferiors."armv9.3-a";
+
+    # ARM
+    cortex-a53     = [ "armv8-a" ];
+    cortex-a72     = [ "armv8-a" ];
+    cortex-a55     = [ "armv8.2-a" "cortex-a53" "cortex-a72" ] ++ inferiors."armv8.2-a";
+    cortex-a76     = [ "armv8.2-a" "cortex-a53" "cortex-a72" ] ++ inferiors."armv8.2-a";
+
+    # Ampere
+    ampere1        = withInferiors [ "armv8.6-a" "cortex-a55" "cortex-a76" ];
+    ampere1a       = [ "ampere1"   ] ++ inferiors.ampere1;
+    ampere1b       = [ "ampere1a"  ] ++ inferiors.ampere1a;
 
     # other
     armv5te        = [ ];
