@@ -12,12 +12,12 @@
 , libXrandr
 , pkg-config
 , zlib
-, Accelerate
-, AGL
-, Cocoa
-, Foundation
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
   version = "0.3.3";

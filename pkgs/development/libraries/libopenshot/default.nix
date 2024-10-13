@@ -11,14 +11,18 @@
 , libopenshot-audio
 , llvmPackages
 , pkg-config
-, python3
+, python311Packages
 , qtbase
 , qtmultimedia
 , swig
 , zeromq
+, overrideSDK
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit (if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv) mkDerivation;
+in
+mkDerivation (finalAttrs: {
   pname = "libopenshot";
   version = "0.3.3";
 
@@ -47,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     imagemagick
     jsoncpp
     libopenshot-audio
-    python3
+    python311Packages.python
     qtbase
     qtmultimedia
     zeromq
@@ -65,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_RUBY" false)
-    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
+    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python311Packages.python.sitePackages)
   ];
 
   passthru = {
