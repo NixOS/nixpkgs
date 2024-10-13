@@ -1,22 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, doxygen
-, libX11
-, libXcursor
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, pkg-config
-, zlib
-, darwin
+{
+  lib,
+  alsa-lib,
+  cmake,
+  darwin,
+  doxygen,
+  fetchFromGitHub,
+  libX11,
+  libXcursor,
+  libXext,
+  libXft,
+  libXinerama,
+  libXrandr,
+  pkg-config,
+  stdenv,
+  zlib,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
+  inherit (darwin.apple_sdk.frameworks)
+    Accelerate
+    AGL
+    Cocoa
+    Foundation
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libopenshot-audio";
@@ -40,22 +46,29 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    Accelerate
-    AGL
-    Cocoa
-    Foundation
-    zlib
-  ] else [
-    libX11
-    libXcursor
-    libXext
-    libXft
-    libXinerama
-    libXrandr
-  ]);
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        [
+          Accelerate
+          AGL
+          Cocoa
+          Foundation
+          zlib
+        ]
+      else
+        [
+          libX11
+          libXcursor
+          libXext
+          libXft
+          libXinerama
+          libXrandr
+        ]
+    );
 
   strictDeps = true;
 

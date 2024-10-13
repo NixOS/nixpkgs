@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python311Packages
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
-, overrideSDK
+{
+  lib,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  fetchFromGitHub,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  overrideSDK,
+  pkg-config,
+  python311Packages,
+  qtbase,
+  qtmultimedia,
+  stdenv,
+  swig,
+  zeromq,
 }:
 
 let
@@ -45,20 +46,28 @@ mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python311Packages.python
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.openmp
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python311Packages.python
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_RUBY" false)
+    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python311Packages.python.sitePackages)
   ];
 
   strictDeps = true;
@@ -66,11 +75,6 @@ mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   doCheck = true;
-
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_RUBY" false)
-    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python311Packages.python.sitePackages)
-  ];
 
   passthru = {
     inherit libopenshot-audio;
