@@ -1053,12 +1053,32 @@ let
       inherit priority content;
     };
 
-  mkOptionDefault = mkOverride 1500; # priority of option defaults
-  mkDefault = mkOverride 1000; # used in config sections of non-user modules to set a default
-  defaultOverridePriority = 100;
-  mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
-  mkForce = mkOverride 50;
-  mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
+  priorities = {
+    # Priority of options' default values
+    optionDefault = 1500;
+    # Used in config sections of non-user modules to set a default.
+    # (This is not the default priority assigned to values!)
+    configDefault = 1000;
+    # The priority that values get assigned by default around which other
+    # priorities scale. This is the true "default" priority.
+    baseline = 100;
+    # image media profiles can be derived by inclusion into host config, hence
+    # needing to override host config, but do allow user to mkForce
+    mediaOverride = 60;
+    # Forcefully override a value
+    force = 50;
+    # Used by ‘nixos-rebuild build-vm’
+    vmOverride = 10;
+  };
+  mkOptionDefault = mkOverride priorities.optionDefault;
+  mkConfigDefault = mkOverride priorities.configDefault;
+  mkImageMediaOverride = mkOverride priorities.mediaOverride;
+  mkForce = mkOverride priorities.force;
+  mkVMOverride = mkOverride priorities.vmOverride;
+
+  # Legacy aliases
+  mkDefault = mkConfigDefault;
+  defaultOverridePriority = priorities.baseline; # Deprecated! Please use priorities.baseline instead.
 
   defaultPriority = warnIf (oldestSupportedReleaseIsAtLeast 2305) "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead." defaultOverridePriority;
 
@@ -1612,6 +1632,7 @@ private //
     mkAssert
     mkBefore
     mkChangedOptionModule
+    mkConfigDefault
     mkDefault
     mkDerivedConfig
     mkFixStrictness
@@ -1627,6 +1648,7 @@ private //
     mkRenamedOptionModule
     mkRenamedOptionModuleWith
     mkVMOverride
+    priorities
     setDefaultModuleLocation
     sortProperties;
 }
