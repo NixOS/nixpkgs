@@ -66,9 +66,9 @@ stdenv.mkDerivation {
     perl
     bison
     flex
+    perlPackages.JSON
     texinfo
-  ]
-  ++ (with perlPackages; [ JSON ]);
+  ];
 
   buildInputs = [ db libedit pam ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ CoreFoundation Security SystemConfiguration ]
@@ -107,6 +107,15 @@ stdenv.mkDerivation {
     "--enable-hdb-openldap-module"
   ] ++ lib.optionals (withSQLite3) [
     "--with-sqlite3=${sqlite.dev}"
+  ];
+
+  patches = [
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1262
+    ./0001-Include-db.h-for-nbdb-compat-mode.patch
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1264
+    ./0001-Define-HAVE_DB_185_H.patch
+    # Proposed @ https://github.com/heimdal/heimdal/pull/1265
+    ./0001-Link-tests-with-libresolv.patch
   ];
 
   # (check-ldap) slapd resides within ${openldap}/libexec,
