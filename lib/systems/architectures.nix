@@ -426,11 +426,44 @@ rec {
     );
     znver5 = [ "znver4" ] ++ inferiors.znver4;
 
+    # ARM64 (AArch64)
+    armv8-a = [ ];
+    "armv8.1-a" = [ "armv8-a" ];
+    "armv8.2-a" = [ "armv8.1-a" ] ++ inferiors."armv8.1-a";
+    "armv8.3-a" = [ "armv8.2-a" ] ++ inferiors."armv8.2-a";
+    "armv8.4-a" = [ "armv8.3-a" ] ++ inferiors."armv8.3-a";
+    "armv8.5-a" = [ "armv8.4-a" ] ++ inferiors."armv8.4-a";
+    "armv8.6-a" = [ "armv8.5-a" ] ++ inferiors."armv8.5-a";
+    "armv8.7-a" = [ "armv8.6-a" ] ++ inferiors."armv8.6-a";
+    "armv8.8-a" = [ "armv8.7-a" ] ++ inferiors."armv8.7-a";
+    "armv8.9-a" = [ "armv8.8-a" ] ++ inferiors."armv8.8-a";
+    armv9-a = [ "armv8.5-a" ] ++ inferiors."armv8.5-a";
+    "armv9.1-a" = [
+      "armv9-a"
+      "armv8.6-a"
+    ] ++ inferiors."armv8.6-a";
+    "armv9.2-a" = lib.unique (
+      [
+        "armv9.1-a"
+        "armv8.7-a"
+      ]
+      ++ inferiors."armv9.1-a"
+      ++ inferiors."armv8.7-a"
+    );
+    "armv9.3-a" = lib.unique (
+      [
+        "armv9.2-a"
+        "armv8.8-a"
+      ]
+      ++ inferiors."armv9.2-a"
+      ++ inferiors."armv8.8-a"
+    );
+    "armv9.4-a" = [ "armv9.3-a" ] ++ inferiors."armv9.3-a";
+
     # other
     armv5te = [ ];
     armv6 = [ ];
     armv7-a = [ ];
-    armv8-a = [ ];
     mips32 = [ ];
     loongson2f = [ ];
   };
