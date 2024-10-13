@@ -14,14 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
-  version = "3.35";
+  version = "3.36";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-WaFANZiPfiN/utfNZbwyH5mxgJNWafPMCcL863V8w0g=";
+    sha256 = "sha256-7w4ObbMem1Y8Lh9MOcdCSEktTDRkvVKmKlS9adm15oE=";
   };
 
   propagatedBuildInputs = [ boost ];
