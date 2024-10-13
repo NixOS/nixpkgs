@@ -991,6 +991,7 @@ let
       JOYSTICK_PSXPAD_SPI_FF = yes;
       LOGIG940_FF        = yes;
       NINTENDO_FF        = whenAtLeast "5.16" yes;
+      NVIDIA_SHIELD_FF   = whenAtLeast "6.5" yes;
       PLAYSTATION_FF     = whenAtLeast "5.12" yes;
       SONY_FF            = yes;
       SMARTJOYPLUS_FF    = yes;
