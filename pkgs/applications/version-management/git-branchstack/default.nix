@@ -13,7 +13,7 @@ buildPythonApplication rec {
     hash = "sha256-gja93LOcVCQ6l+Cygvsm+3uomvxtvUl6t23GIb/tKyQ=";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
     git-revise
   ];
 
