@@ -31,10 +31,13 @@ in
 
 rec {
   constraints =
-    {
+    rec {
       OR = fns: platform: any (fn: fn platform) fns;
       AND = fns: platform: all (fn: fn platform) fns;
       NOT = fn: platform: !fn platform;
+
+      ANY = makeConstraint { };
+      NONE = NOT ANY;
     }
     # Put patterns in this set for convenient use
     // lib.mapAttrs (_: makeConstraint) lib.systems.inspect.patterns
