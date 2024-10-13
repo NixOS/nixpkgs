@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
   ];
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
   outputs = [
     "out"
     "dev"
@@ -73,12 +75,6 @@ stdenv.mkDerivation rec {
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
     make -C craftos2-lua ${if stdenv.hostPlatform.isDarwin then "macosx" else "linux"}
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
   '';
 
   patches = [
