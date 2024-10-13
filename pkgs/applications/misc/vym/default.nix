@@ -3,15 +3,15 @@
 , cmake
 , fetchFromGitHub
 , pkg-config
-, qtbase
-, qtscript
-, qtsvg
 , substituteAll
 , unzip
-, wrapQtAppsHook
 , zip
+, qt5
 }:
 
+let
+  inherit (qt5) qtbase qtscript qtsvg wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vym";
   version = "2.9.26";

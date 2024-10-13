@@ -33402,7 +33402,7 @@ with pkgs;
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
-  vym = libsForQt5.callPackage ../applications/misc/vym { };
+  vym = callPackage ../applications/misc/vym { };
 
   wad = callPackage ../tools/security/wad { };
 
