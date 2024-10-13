@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, pkgs
-, fetchFromGitHub
-, fetchpatch2
-, writeText
-, openjdk21_headless
-, gradle
-, pkg-config
-, perl
-, cmake
-, gperf
-, gtk2
-, gtk3
-, libXtst
-, libXxf86vm
-, glib
-, alsa-lib
-, ffmpeg_7
-, python3
-, ruby
-, withMedia ? true
-, withWebKit ? false
+{
+  stdenv,
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  fetchpatch2,
+  writeText,
+  openjdk21_headless,
+  gradle,
+  pkg-config,
+  perl,
+  cmake,
+  gperf,
+  gtk2,
+  gtk3,
+  libXtst,
+  libXxf86vm,
+  glib,
+  alsa-lib,
+  ffmpeg_7,
+  python3,
+  ruby,
+  withMedia ? true,
+  withWebKit ? false,
 }:
 
 let
@@ -31,7 +32,8 @@ let
   repover = "${major}${update}${build}";
   jdk = openjdk21_headless;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   version = "${major}${update}${build}";
 
@@ -51,8 +53,24 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_7 ];
-  nativeBuildInputs = [ gradle perl pkg-config cmake gperf python3 ruby ];
+  buildInputs = [
+    gtk2
+    gtk3
+    libXtst
+    libXxf86vm
+    glib
+    alsa-lib
+    ffmpeg_7
+  ];
+  nativeBuildInputs = [
+    gradle
+    perl
+    pkg-config
+    cmake
+    gperf
+    python3
+    ruby
+  ];
 
   dontUseCmakeConfigure = true;
 
@@ -99,7 +117,10 @@ in stdenv.mkDerivation {
     done
   '';
 
-  disallowedReferences = [ jdk gradle.jdk ];
+  disallowedReferences = [
+    jdk
+    gradle.jdk
+  ];
 
   meta = with lib; {
     homepage = "https://openjdk.org/projects/openjfx/";
