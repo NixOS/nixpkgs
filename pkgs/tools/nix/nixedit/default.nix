@@ -48,7 +48,7 @@ pkgs.stdenv.mkDerivation {
       exit 1
     fi
 
-    $out/bin/nixedit --help 
+    $out/bin/nixedit --help > /dev/null
   '';
 
   meta = with pkgs.lib; {
