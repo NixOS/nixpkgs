@@ -6333,6 +6333,8 @@ self: super: with self; {
 
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
+  jalali-core = callPackage ../development/python-modules/jalali-core { };
+
   jamo = callPackage ../development/python-modules/jamo { };
 
   janus = callPackage ../development/python-modules/janus { };
@@ -9399,6 +9401,8 @@ self: super: with self; {
 
   opentelemetry-instrumentation-celery = callPackage ../development/python-modules/opentelemetry-instrumentation-celery { };
 
+  opentelemetry-instrumentation-botocore = callPackage ../development/python-modules/opentelemetry-instrumentation-botocore { };
+
   opentelemetry-instrumentation-dbapi = callPackage ../development/python-modules/opentelemetry-instrumentation-dbapi { };
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
@@ -9416,6 +9420,8 @@ self: super: with self; {
   opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
 
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
+
+  opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 

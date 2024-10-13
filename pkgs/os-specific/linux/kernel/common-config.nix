@@ -36,7 +36,11 @@ let
   # Currently only enabling Rust by default on kernel 6.12+,
   # which actually has features that use Rust that we want.
   defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
-  withRust = (forceRust || defaultRust) && kernelSupportsRust;
+  withRust =
+    assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
+      Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
+    '';
+    (forceRust || defaultRust) && kernelSupportsRust;
 
   options = {
 

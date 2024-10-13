@@ -720,6 +720,7 @@ mapAliases {
   hip-common = throw "'hip-common' has been replaced with 'rocmPackages.hip-common'"; # Added 2023-10-08
   hip-nvidia = throw "'hip-nvidia' has been removed in favor of 'rocmPackages.clr'"; # Added 2023-10-08
   hll2390dw-cups = throw "The hll2390dw-cups package was dropped since it was unmaintained."; # Added 2024-06-21
+  hop-cli = throw "hop-cli has been removed as the service has been shut-down"; # Added 2024-08-13
   ht-rust = xh; # Added 2021-02-13
   hydra_unstable = hydra; # Added 2024-08-22
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";

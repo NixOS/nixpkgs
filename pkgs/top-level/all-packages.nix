@@ -14978,8 +14978,6 @@ with pkgs;
 
   hop = callPackage ../development/compilers/hop { };
 
-  hop-cli = throw "hop-cli has been removed as the service has been shut-down"; #Added 2024-08-13
-
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
   };
@@ -19061,7 +19059,7 @@ with pkgs;
 
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
-  catboost = callPackage ../development/libraries/catboost {
+  catboost = callPackage ../by-name/ca/catboost/package.nix {
     # https://github.com/catboost/catboost/issues/2540
     cudaPackages = cudaPackages_11;
   };
@@ -24550,8 +24548,10 @@ with pkgs;
   maker-panel = callPackage ../tools/misc/maker-panel { };
 
   mastodon = callPackage ../servers/mastodon {
-    nodejs-slim = nodejs-slim_20;
-    ruby = ruby_3_2;
+    nodejs-slim = nodejs-slim_22;
+    python3 = python311;
+    ruby = ruby_3_3;
+    yarn-berry = yarn-berry.override { nodejs = nodejs-slim_22; };
   };
 
   gotosocial = callPackage ../servers/gotosocial { };
@@ -26603,6 +26603,7 @@ with pkgs;
     ubootBananaPim64
     ubootAmx335xEVM
     ubootClearfog
+    ubootCM3588NAS
     ubootCubieboard2
     ubootGuruplug
     ubootJetsonTK1
@@ -26615,6 +26616,7 @@ with pkgs;
     ubootOlimexA64Olinuxino
     ubootOlimexA64Teres1
     ubootOrangePi3
+    ubootOrangePi3B
     ubootOrangePi5
     ubootOrangePi5Plus
     ubootOrangePiPc
