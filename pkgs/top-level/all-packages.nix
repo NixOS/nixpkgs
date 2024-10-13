@@ -34694,7 +34694,9 @@ with pkgs;
 
   extremetuxracer = callPackage ../games/extremetuxracer { };
 
-  exult = callPackage ../games/exult { };
+  exult = callPackage ../games/exult {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+  };
 
   fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
   fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
