@@ -93,7 +93,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
   ]
   else [ "-DHDF4_BUILD_FORTRAN=OFF" ]
-  );
+  ) ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DTEST_LFS_WORKS_RUN=OFF"
+    "-DH4_PRINTF_LL_TEST_RUN=OFF"
+    "-DH4_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT="
+  ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
