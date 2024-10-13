@@ -817,9 +817,11 @@ let
   evalOptionValue = loc: opt: defs:
     let
       # Add in the default value for this option, if any.
-      defs' =
-          (optional (opt ? default)
-            { file = head opt.declarations; value = mkOptionDefault opt.default; }) ++ defs;
+      defs' = (optional (opt ? default) {
+        file = head opt.declarations;
+        value = mkOverride (opt.defaultPriority or priorities.optionDefault) opt.default;
+      })
+      ++ defs;
 
       # Handle properties, check types, and merge everything together.
       res =
