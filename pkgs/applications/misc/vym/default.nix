@@ -1,16 +1,22 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, pkg-config
-, substituteAll
-, unzip
-, zip
-, qt5
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  pkg-config,
+  qt5,
+  stdenv,
+  substituteAll,
+  unzip,
+  zip,
 }:
 
 let
-  inherit (qt5) qtbase qtscript qtsvg wrapQtAppsHook;
+  inherit (qt5)
+    qtbase
+    qtscript
+    qtsvg
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vym";
@@ -23,13 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5cHhv9GDjJvSqGJ+7fI0xaWCiXw/0WP0Bem/ZRV8Y7M=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     (substituteAll {
-      src = ./000-fix-zip-paths.diff;
-      zipPath = "${zip}/bin/zip";
-      unzipPath = "${unzip}/bin/unzip";
+      src = ./patches/0000-fix-zip-paths.diff;
+      zipPath = "${lib.getExe zip}";
+      unzipPath = "${lib.getExe unzip}";
     })
   ];
 
@@ -45,16 +54,20 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
   ];
 
-  strictDeps = true;
-
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ unzip zip ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        unzip
+        zip
+      ]
+    }"
   ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "http://www.insilmaril.de/vym/";
     description = "Mind-mapping software";
-    mainProgram = "vym";
     longDescription = ''
       VYM (View Your Mind) is a tool to generate and manipulate maps which show
       your thoughts. Such maps can help you to improve your creativity and
@@ -67,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
       work with such maps.
     '';
     license = with lib.licenses; [ gpl2Plus ];
+    mainProgram = "vym";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
   };
