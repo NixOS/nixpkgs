@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "2.0.0";
+  version = "2.0.1";
   disabled = pythonOlder "3.7";
 
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
+    hash = "sha256-AZS7JwaxLQN9sSxRko/p67NrctnnGVZdq6WmxZUyL68=";
   };
 
   # https://github.com/gawel/pyquery/issues/248

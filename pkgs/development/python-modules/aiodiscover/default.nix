@@ -8,16 +8,17 @@
   fetchFromGitHub,
   ifaddr,
   netifaces,
+  poetry-core,
   pyroute2,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "aiodiscover";
-  version = "2.1.0";
+  version = "2.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,12 +27,12 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiodiscover";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+DcROb6jR0veD3oSKgyJHUi1VtCT54yBKvVqir5y+R4=";
+    hash = "sha256-A12YeNIm9Pv4zpzaejTk8VvLzKLHxZV2EzVpchLX1k8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     aiodns
     cached-ipaddress
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "symspellpy";
-  version = "6.7.7";
+  version = "6.7.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     owner = "mammothb";
     repo = "symspellpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-D8xdMCy4fSff3nuS2sD2QHWk0869AlFDE+lFRvayYDQ=";
+    hash = "sha256-ZnkZE7v4o0o6iPdkjCycDgVdLhsE3Vn1uuGT7o0F86I=";
   };
 
   build-system = [ setuptools ];

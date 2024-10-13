@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "pygame";
-  version = "2.5.2";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The documentation
     # has such files and will be removed.
-    hash = "sha256-+gRv3Rim+2aL2uhPPGfVD0QDgB013lTf6wPx8rOwgXg=";
+    hash = "sha256-wNXcmH0IIuAOoomIdmhAPxe4TiEzes3Kq+Vth2r4/IA=";
     postFetch = "rm -rf $out/docs/reST";
   };
 
@@ -65,15 +65,9 @@ buildPythonPackage rec {
         ]) buildInputs
       );
     })
-    # Skip tests that should be disabled without video driver
-    ./skip-surface-tests.patch
 
-    # removes distutils unbreaking py312, part of https://github.com/pygame/pygame/pull/4211
-    (fetchpatch {
-      name = "remove-distutils.patch";
-      url = "https://github.com/pygame/pygame/commit/6038e7d6583a7a25fcc6e15387cf6240e427e5a7.patch";
-      hash = "sha256-HxcYjjhsu/Y9HiK9xDvY4X5dgWPP4XFLxdYGXC6tdWM=";
-    })
+    # mixer queue test returns busy queue when it shouldn't
+    ./skip-mixer-test.patch
   ];
 
   postPatch = ''

@@ -30,14 +30,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.31.1";
+  version = "0.32.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-DdV78o089Jkc7mSsGvlJgVpv8kPpMILo7lC6EbLxkxg=";
+    hash = "sha256-t8gMBebqVVij6R2KEOq3/j1ql4ZiVdE5236uqGUchE0=";
   };
 
   build-system = [

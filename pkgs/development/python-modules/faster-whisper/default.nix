@@ -33,7 +33,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [ "tokenizers" ];
+  pythonRelaxDeps = [
+    "av"
+    "tokenizers"
+  ];
 
   dependencies = [
     av

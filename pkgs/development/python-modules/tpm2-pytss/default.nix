@@ -23,14 +23,14 @@ let
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
-  version = "2.2.1";
+  version = "2.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uPFUc0IvN39ZxyF9zRR5FlzOYt+jOTTsl2oni68unv4=";
+    hash = "sha256-IAcRKTeWVvXzw7wW02RhJnKxR9gRkftOufn/n77khBA=";
   };
 
   patches =

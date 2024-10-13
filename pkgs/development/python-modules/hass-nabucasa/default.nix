@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.1";
+  version = "0.82.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -32,16 +32,8 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-/sY/JijBCcGcbMjoX0yuhFIWvU+TFVN8sRxBx+CDVVs=";
+    hash = "sha256-hRhRXpiIPrI3umOhsVWLwkSwtEfwevC3fNvJElhKy+I=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      name = "aiohttp-3.10.6-compat.patch";
-      url = "https://github.com/NabuCasa/hass-nabucasa/commit/b53bc12924ca6260583e250f49f663b2d1c11541.patch";
-      hash = "sha256-Z5vTl0zuidFIo92Po8oLB0VfMC7c6mlq/mJkeHXOSpQ=";
-    })
-  ];
 
   pythonRelaxDeps = [ "acme" ];
 

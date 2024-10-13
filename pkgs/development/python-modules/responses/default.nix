@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytest-asyncio,
   pytest-httpserver,
   pytestCheckHook,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.25.0";
+  version = "0.25.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,16 +29,8 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-FHtuZ6NUmCveAJOXEajfTLRMR8W1Jz/pjFKdE6PHW2g=";
+    hash = "sha256-+iRrmRAe8RWcts2LMFvykroQ5sL7+hW6Wrs7Kd1mzBM=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # adds missing pytest asyncio markers
-      url = "https://github.com/getsentry/responses/commit/d5e7402f1782692d04742562370abaca8d54a972.patch";
-      hash = "sha256-A/DYSKvuangolkcQX4k/uom//AQ9in7BsTmVtlCqmXQ=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools ];
 

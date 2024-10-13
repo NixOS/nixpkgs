@@ -42,6 +42,7 @@ buildPythonPackage rec {
     # gzip.BadGzipFile: Not a gzipped file
     "test_ddf_read"
     "test_dm_thin"
+    "test_lvm"
     "test_lvm_mirro"
     "test_lvm_thin"
     "test_lvm"
