@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-benchcmp";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "cargo-benchcmp";
     rev = version;
-    hash = "sha256-pg3/VUC1DQ7GbSQDfVZ0WNisXvzXy0O0pr2ik2ar2h0=";
+    hash = "sha256-J8KFI0V/mOhUlYtVnFAQgPIpXL9/dLhOFxSly4bR00I=";
   };
 
-  cargoHash = "sha256-vxy9Ym3Twx034I1E5fWNnbP1ttfLolMbO1IgRiPfhRw=";
+  cargoHash = "sha256-2V9ILHnDsUI+x3f5o+V7p8rPUKf33PAkpyTabCPdd0g=";
 
   patches = [
     # patch the binary path so tests can find the binary when `--target` is present
