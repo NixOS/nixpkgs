@@ -13,7 +13,7 @@
 , pantheon
 , pkg-config
 , python3
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , glib-networking
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libdazzle
     libgee
     pantheon.granite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

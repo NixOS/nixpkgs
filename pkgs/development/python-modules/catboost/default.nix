@@ -3,15 +3,18 @@
   buildPythonPackage,
   catboost,
   python,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   graphviz,
   matplotlib,
   numpy,
   pandas,
   plotly,
   scipy,
-  setuptools,
   six,
-  wheel,
 }:
 
 buildPythonPackage rec {
@@ -21,16 +24,15 @@ buildPythonPackage rec {
     src
     meta
     ;
-  format = "pyproject";
+  pyproject = true;
 
   sourceRoot = "${src.name}/catboost/python-package";
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     graphviz
     matplotlib
     numpy

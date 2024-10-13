@@ -9,7 +9,6 @@
   biometryd,
   cmake,
   cmake-extras,
-  content-hub,
   dbus,
   deviceinfo,
   geonames,
@@ -24,6 +23,7 @@
   libqofono,
   libqtdbustest,
   libqtdbusmock,
+  lomiri-content-hub,
   lomiri-indicator-network,
   lomiri-schemas,
   lomiri-settings-components,
@@ -122,8 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     ayatana-indicator-datetime
     biometryd
-    content-hub
     libqofono
+    lomiri-content-hub
     lomiri-indicator-network
     lomiri-schemas
     lomiri-settings-components

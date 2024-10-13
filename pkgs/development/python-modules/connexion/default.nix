@@ -37,18 +37,18 @@ buildPythonPackage rec {
   version = "3.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";
-    repo = pname;
+    repo = "connexion";
     rev = "refs/tags/${version}";
     hash = "sha256-rngQDU9kXw/Z+Al0SCVnWN8xnphueTtZ0+xPBR5MbEM=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     asgiref
     httpx
     inflection
@@ -80,6 +80,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "connexion" ];
 
   disabledTests = [
+    "test_build_example"
+    "test_mock_resolver_no_example"
+    # Tests require network access
+    "test_remote_api"
     # AssertionError
     "test_headers"
     # waiter.acquire() deadlock
@@ -91,9 +95,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Swagger/OpenAPI First framework on top of Flask";
-    mainProgram = "connexion";
     homepage = "https://github.com/spec-first/connexion";
     changelog = "https://github.com/spec-first/connexion/releases/tag/${version}";
     license = licenses.asl20;
+    maintainers = [ ];
+    mainProgram = "connexion";
   };
 }

@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
-  version = "3.18";
+  version = "3.19";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
-    hash = "sha256-jR+f4t0QXmm007lrGdMyF9vFa3NW35gZxs7pe9sdjfg=";
+    hash = "sha256-D5YgCAKcnPyBrZTpcSuvKfWfIIcCxKGxn+mj8Jqzmws=";
   };
 
   postPatch = ''
@@ -138,6 +138,8 @@ buildPythonPackage rec {
       "test_systemd_basic_syntax"
       "test_target_cli_unicode_argparse"
       "test_target_query"
+      "test_target_info"
+      "test_yara"
     ]
     ++
     # test is broken on Darwin

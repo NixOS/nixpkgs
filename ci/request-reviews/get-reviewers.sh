@@ -35,6 +35,7 @@ log "This PR touches ${#touchedFiles[@]} files"
 git -C "$gitRepo" show "$baseRef":"$ownersFile" > "$tmp"/codeowners
 
 # Associative array with the user as the key for easy de-duplication
+# Make sure to always lowercase keys to avoid duplicates with different casings
 declare -A users=()
 
 for file in "${touchedFiles[@]}"; do
@@ -87,20 +88,20 @@ for file in "${touchedFiles[@]}"; do
             log "Team $entry has these members: ${members[*]}"
 
             for user in "${members[@]}"; do
-                users[$user]=
+                users[${user,,}]=
             done
         else
             # Everything else is a user
-            users[$entry]=
+            users[${entry,,}]=
         fi
     done
 
 done
 
 # Cannot request a review from the author
-if [[ -v users[$prAuthor] ]]; then
+if [[ -v users[${prAuthor,,}] ]]; then
     log "One or more files are owned by the PR author, ignoring"
-    unset 'users[$prAuthor]'
+    unset 'users[${prAuthor,,}]'
 fi
 
 gh api \
@@ -111,9 +112,9 @@ gh api \
 
 # And we don't want to rerequest reviews from people who already reviewed
 while read -r user; do
-    if [[ -v users[$user] ]]; then
+    if [[ -v users[${user,,}] ]]; then
         log "User $user is a code owner but has already left a review, ignoring"
-        unset 'users[$user]'
+        unset 'users[${user,,}]'
     fi
 done < "$tmp/already-reviewed-by"
 

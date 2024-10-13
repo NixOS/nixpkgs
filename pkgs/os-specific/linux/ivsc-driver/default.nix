@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "ivsc-driver";
-  version = "unstable-2023-11-09";
+  version = "unstable-2024-09-18";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ivsc-driver";
-    rev = "73a044d9633212fac54ea96cdd882ff5ab40573e";
-    hash = "sha256-vE5pOtVqjiWovlUMSEoBKTk/qvs8K8T5oY2r7njh0wQ=";
+    rev = "10f440febe87419d5c82d8fe48580319ea135b54";
+    hash = "sha256-jc+8geVquRtaZeIOtadCjY9F162Rb05ptE7dk8kuof0=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

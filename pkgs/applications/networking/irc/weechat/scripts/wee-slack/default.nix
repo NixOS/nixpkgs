@@ -2,22 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
-  version = "2.10.2";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
-    sha256 = "sha256-EtPhaNFYDxxSrSLXHHnY4ARpRycNNxbg5QPKtnPem04=";
+    sha256 = "sha256-xQO/yi4pJSnO/ldzVQkC7UhAfpy57xzO58NV7KZm4E8=";
   };
 
   patches = [
-    # Fix for https://github.com/wee-slack/wee-slack/issues/930
-    (fetchpatch {
-      url = "https://github.com/wee-slack/wee-slack/commit/e610b39aee2d9a49d080924d47d96c5d140f66ac.patch";
-      hash = "sha256-+yBZSx0LsoXmTmdN9d3VV2KNzpXfgfNVp4ZqfS4oKzg=";
-    })
-
     (substituteAll {
       src = ./libpath.patch;
       env = "${buildEnv {

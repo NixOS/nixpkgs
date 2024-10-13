@@ -60,9 +60,8 @@ git -C "$tmp/nixpkgs.git" remote add fork https://github.com/"$prRepo".git
 git -C "$tmp/nixpkgs.git" config remote.fork.partialclonefilter tree:0
 git -C "$tmp/nixpkgs.git" config remote.fork.promisor true
 
-# Our local branches mirror Nixpkgs, so make sure to not try to update any to avoid conflicts
 git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch"
-headRef=$(git -C "$tmp/nixpkgs.git" rev-parse HEAD)
+headRef=$(git -C "$tmp/nixpkgs.git" rev-parse refs/remotes/fork/"$prBranch")
 
 log "Checking correctness of the base branch"
 if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRepo" "$baseBranch" "$prRepo" "$prBranch" | tee "$tmp/invalid-base-error" >&2; then

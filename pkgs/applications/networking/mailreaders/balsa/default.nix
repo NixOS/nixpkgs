@@ -18,7 +18,7 @@
 , openssl
 , pkg-config
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     libsecret
     openssl
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   configureFlags = [

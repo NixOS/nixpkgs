@@ -18,7 +18,7 @@
   libevdev,
   gtk3,
   libsoup,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Tauri deps
     gtk3
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {

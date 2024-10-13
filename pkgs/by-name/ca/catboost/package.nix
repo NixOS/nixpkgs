@@ -1,20 +1,21 @@
-{ lib
-, config
-, fetchFromGitHub
-, cmake
-, cctools
-, libiconv
-, llvmPackages
-, ninja
-, openssl
-, python3Packages
-, ragel
-, yasm
-, zlib
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
-, llvmPackages_12
-, pythonSupport ? false
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  cmake,
+  cctools,
+  libiconv,
+  llvmPackages,
+  ninja,
+  openssl,
+  python3Packages,
+  ragel,
+  yasm,
+  zlib,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  llvmPackages_12,
+  pythonSupport ? false,
 }:
 let
   inherit (llvmPackages) stdenv;
@@ -22,13 +23,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "catboost";
-  version = "1.2.5";
+  version = "1.2.7";
 
   src = fetchFromGitHub {
     owner = "catboost";
     repo = "catboost";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-2dfCCCa0LheytkLRbYuBd25M320f1kbhBWKIVjslor0=";
+    hash = "sha256-I3geFdVQ1Pm61eRXi+ueaxel3QRb8EJV9f4zV2Q7kk4=";
   };
 
   patches = [
@@ -50,33 +51,50 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.bintools
-    ninja
-    (python3Packages.python.withPackages (ps: with ps; [ six ]))
-    ragel
-    yasm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      llvmPackages.bintools
+      ninja
+      (python3Packages.python.withPackages (ps: with ps; [ six ]))
+      ragel
+      yasm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_nvcc
+      ]
+    );
 
-  buildInputs = [
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-    cuda_cccl
-    libcublas
-  ]);
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        cuda_cccl
+        libcublas
+      ]
+    );
 
   env = {
+    PROGRAM_VERSION = finalAttrs.version;
+
     # catboost requires clang 14+ for build, but does clang 12 for cuda build.
     # after bumping the default version of llvm, check for compatibility with the cuda backend and pin it.
     # see https://catboost.ai/en/docs/installation/build-environment-setup-for-cmake#compilers,-linkers-and-related-tools
@@ -112,10 +130,16 @@ stdenv.mkDerivation (finalAttrs: {
       library, used for ranking, classification, regression and other machine
       learning tasks for Python, R, Java, C++. Supports computation on CPU and GPU.
     '';
+    changelog = "https://github.com/catboost/catboost/releases/tag/v${finalAttrs.version}";
     license = licenses.asl20;
     platforms = platforms.unix;
     homepage = "https://catboost.ai";
-    maintainers = with maintainers; [ PlushBeaver natsukium ];
+    maintainers = with maintainers; [
+      PlushBeaver
+      natsukium
+    ];
     mainProgram = "catboost";
+    # /nix/store/hzxiynjmmj35fpy3jla7vcqwmzj9i449-Libsystem-1238.60.2/include/sys/_types/_mbstate_t.h:31:9: error: unknown type name '__darwin_mbstate_t'
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 })

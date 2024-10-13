@@ -267,9 +267,11 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /nixos/modules/services/mail/rspamd.nix     @peti
 
 # Emacs
-/pkgs/applications/editors/emacs/elisp-packages @adisbladis
-/pkgs/applications/editors/emacs                @adisbladis
-/pkgs/top-level/emacs-packages.nix              @adisbladis
+/pkgs/applications/editors/emacs/elisp-packages @NixOS/emacs
+/pkgs/applications/editors/emacs                @NixOS/emacs
+/pkgs/top-level/emacs-packages.nix              @NixOS/emacs
+/doc/packages/emacs.section.md                  @NixOS/emacs
+/nixos/modules/services/editors/emacs.md        @NixOS/emacs
 
 # Kakoune
 /pkgs/applications/editors/kakoune     @philiptaron
