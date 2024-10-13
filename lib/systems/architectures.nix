@@ -75,11 +75,9 @@ rec {
     cascadelake    = [ "cannonlake"     ] ++ inferiors.cannonlake;
     cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
     tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
+    alderlake      = [ "skylake"        ] ++ inferiors.skylake;
     sapphirerapids = [ "tigerlake"      ] ++ inferiors.tigerlake;
     emeraldrapids  = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
-
-    # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
-    alderlake      = [ ];
 
     # x86_64 AMD
     # TODO: fill this (need testing)
