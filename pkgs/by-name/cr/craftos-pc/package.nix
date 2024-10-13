@@ -112,9 +112,12 @@ stdenv.mkDerivation rec {
     ''}
   '';
 
-  passthru.tests = {
-    eval-hello-world = callPackage ./test-eval-hello-world { };
-    eval-periphemu = callPackage ./test-eval-periphemu { };
+  passthru = {
+    updateScript = ./update.sh;
+    tests = {
+      eval-hello-world = callPackage ./test-eval-hello-world { };
+      eval-periphemu = callPackage ./test-eval-periphemu { };
+    };
   };
 
   meta = with lib; {
