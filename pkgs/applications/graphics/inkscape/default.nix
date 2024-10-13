@@ -7,7 +7,6 @@
 , cmake
 , desktopToDarwinBundle
 , fetchurl
-, fetchpatch
 , gettext
 , ghostscript
 , glib
@@ -48,32 +47,36 @@
 let
   python3Env = python3.withPackages
     (ps: with ps; [
-      appdirs
+      # Dependencies listed in CMakeScripts/ConfigCPack.cmake, line starts with set(CPACK_DEBIAN_INKSCAPE-EXTENSIONS_PACKAGE_DEPENDS
+      numpy
+      lxml
+      scour
+      packaging
+      cssselect
+      webencodings
+      tinycss2
       beautifulsoup4
-      cachecontrol
+      requests
     ]
     # CacheControl requires extra runtime dependencies for FileCache
     # https://gitlab.com/inkscape/extras/extension-manager/-/commit/9a4acde6c1c028725187ff5972e29e0dbfa99b06
     ++ cachecontrol.optional-dependencies.filecache
     ++ [
-      numpy
-      lxml
-      packaging
+      appdirs
+      cachecontrol
       pillow
-      scour
       pyparsing
       pyserial
-      requests
       pygobject3
     ] ++ inkex.propagatedBuildInputs);
 in
 stdenv.mkDerivation rec {
   pname = "inkscape";
-  version = "1.3.2";
+  version = "1.4";
 
   src = fetchurl {
     url = "https://inkscape.org/release/inkscape-${version}/source/archive/xz/dl/inkscape-${version}.tar.xz";
-    sha256 = "sha256-29GETcRD/l4Q0+mohxROX7ciOFL/8ZHPte963qsOCGs=";
+    sha256 = "sha256-xZqFRTtpmt3rzVHB3AdoTdlqEMiuxxaxlVHbUFYuE/U=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -94,22 +97,6 @@ stdenv.mkDerivation rec {
       src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
     })
-
-    # Fix build with libxml2 2.12
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/6089
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/694d8ae43d06efff21adebf377ce614d660b24cd.patch";
-      hash = "sha256-9IXJzpZbNU5fnt7XKgqCzUDrwr08qxGwo8TqnL+xc6E=";
-    })
-
-    # Improve distribute along path precision
-    # https://gitlab.com/inkscape/extensions/-/issues/580
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
-      extraPrefix = "share/extensions/";
-      stripLen = 1;
-      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
-    })
   ];
 
   postPatch = ''
@@ -119,7 +106,7 @@ stdenv.mkDerivation rec {
 
     # double-conversion is a dependency of 2geom
     substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
-      --replace 'find_package(DoubleConversion REQUIRED)' ""
+      --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [
