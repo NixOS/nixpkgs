@@ -281,6 +281,19 @@ in {
         If set to false, apps need to be enabled in the Nextcloud web user interface or with `nextcloud-occ app:enable`.
       '';
     };
+    appConfig = mkOption {
+      type = with types; attrsOf (attrsOf (oneOf [ str int bool ]));
+      default = {};
+      example = ''
+        theming = {
+          name = "My Nextcloud";
+        };
+      '';
+      description = ''
+        App configuration, to be applied at startup with 'occ <appid>:config <configkey> <configvalue>',
+        e.g. 'occ theming:config name "My Nextcloud"'.
+      '';
+    };
     appstoreEnable = mkOption {
       type = types.nullOr types.bool;
       default = null;
@@ -961,6 +974,17 @@ in {
             ${occ}/bin/nextcloud-occ maintenance:install \
                 ${installFlags}
           '';
+          occApplyAppConfig = concatStringsSep "\n" (
+            concatMap (
+              appid:
+              (map (
+                configkey:
+                "${occ}/bin/nextcloud-occ ${appid}:config ${configkey} ${
+                  escapeShellArg cfg.appConfig.${appid}.${configkey}
+                }"
+              ) (attrNames cfg.appConfig.${appid}))
+            ) (attrNames cfg.appConfig)
+          );
           occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
             (i: v: ''
               ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
@@ -1015,6 +1039,8 @@ in {
                 # Try to enable apps
                 ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
+
+            ${occApplyAppConfig}
 
             ${occSetTrustedDomainsCmd}
           '';
