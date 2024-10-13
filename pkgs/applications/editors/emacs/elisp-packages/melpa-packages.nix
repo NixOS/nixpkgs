@@ -861,6 +861,18 @@ let
           '';
         });
 
+        clingo-mode = super.clingo-mode.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches = previousAttrs.patches or [ ] ++ [
+              (pkgs.fetchpatch {
+                name = "add-missing-end-parenthesis.patch";
+                url = "https://github.com/llaisdy/clingo-mode/pull/3/commits/063445a24afb176c3f16af7a2763771dbdc4ecf6.patch";
+                hash = "sha256-OYP5LaZmCUJFgFk1Pf30e7sml8fC+xI4HSyDz7lck7E=";
+              })
+            ];
+          }
+        );
+
         # https://github.com/atilaneves/cmake-ide/issues/176
         cmake-ide = addPackageRequires super.cmake-ide [ self.dash ];
 
