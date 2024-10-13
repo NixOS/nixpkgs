@@ -5,11 +5,14 @@
 , lua
 , minizip
 , pkg-config
+, qt5
 , stdenv
-, wrapQtAppsHook
 , x264
 }:
 
+let
+  inherit (qt5) wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
   version = "2.6.6-unstable-2024-01-19";
