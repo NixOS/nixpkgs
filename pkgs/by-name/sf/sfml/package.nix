@@ -73,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/SFML/SFML/pull/2835.patch";
       hash = "sha256-kdOAXR9YPQllx64z9dgwCV+vy0cJvIsZZboZKFc4Q8Q=";
-      excludes = [ "changelog.md" "CMakeLists.txt" ];
+      excludes = [
+        "changelog.md"
+        "CMakeLists.txt"
+      ];
     })
     ./CMakeLists.txt-pkgconfig.patch
   ];
@@ -87,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
       It is written in C++, and has bindings for various languages such as C, .Net, Ruby, Python.
     '';
     license = lib.licenses.zlib;
-    maintainers = with lib.maintainers; [ drawbu astsmtl ];
+    maintainers = with lib.maintainers; [
+      drawbu
+      astsmtl
+    ];
     platforms = lib.platforms.unix;
   };
 })
