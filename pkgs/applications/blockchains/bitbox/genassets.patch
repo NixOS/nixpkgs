@@ -1,0 +1,26 @@
+diff --git a/frontends/qt/Makefile b/frontends/qt/Makefile
+index 5ab350554..49d07c0e0 100644
+--- a/frontends/qt/Makefile
++++ b/frontends/qt/Makefile
+@@ -16,7 +16,7 @@ include ../../env.mk.inc
+ 
+ base:
+ 	mkdir build
+-	./genassets.sh
++	bash genassets.sh
+ 	qmake -set MACOS_MIN_VERSION $(MACOS_MIN_VERSION)
+ 	qmake -o build/Makefile
+ 	cd build && $(MAKE)
+diff --git a/frontends/qt/genassets.sh b/frontends/qt/genassets.sh
+index 4b1ba87be..b5a9ad279 100755
+--- a/frontends/qt/genassets.sh
++++ b/frontends/qt/genassets.sh
+@@ -20,7 +20,7 @@ if [ ! -d ../web/build ]; then
+ fi
+ 
+ echo '<!DOCTYPE RCC><RCC version="1.0"><qresource>' > assets.qrc
+-/usr/bin/find ../web/build/ -maxdepth 3 -type f | sed -e "s|../web/build/||" | awk '{ print "<file alias=\"" $1 "\">../web/build/" $1 "</file>" '} >> assets.qrc
++find ../web/build/ -maxdepth 3 -type f | sort | sed -e "s|../web/build/||" | awk '{ print "<file alias=\"" $1 "\">../web/build/" $1 "</file>" '} >> assets.qrc
+ 
+ echo '<file alias="trayicon.png">resources/trayicon.png</file>' >> assets.qrc
+ echo '</qresource></RCC>' >> assets.qrc
