@@ -8,6 +8,7 @@
   darwin,
   withQuic ? false, # with QUIC protocol support
 }:
+rustPlatform.buildRustPackage rec {
 
   pname = "easytier";
   version = "2.0.3";
