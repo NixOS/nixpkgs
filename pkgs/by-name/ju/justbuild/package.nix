@@ -23,6 +23,9 @@
 
   curl,
   libarchive,
+
+  testers,
+  justbuild,
 }:
 let
   stdenv = gccStdenv;
@@ -166,6 +169,14 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = justbuild;
+      command = "just version";
+      version = builtins.replaceStrings [ "." ] [ "," ] version;
+    };
+  };
 
   meta = {
     broken = stdenv.hostPlatform.isDarwin;
