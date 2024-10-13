@@ -29,16 +29,18 @@ let
 
 in
 
-{
+rec {
   constraints =
     {
       OR = fns: platform: any (fn: fn platform) fns;
       AND = fns: platform: all (fn: fn platform) fns;
-      NOT = fn: platform: ! fn platform;
+      NOT = fn: platform: !fn platform;
     }
     # Put patterns in this set for convenient use
-    // lib.mapAttrs (_: pattern: platform: platformMatch platform pattern) lib.systems.inspect.patterns
+    // lib.mapAttrs (_: makeConstraint) lib.systems.inspect.patterns
     # Platform patterns too. We can just do this because platforms (i.e. `hostPlatform`) have all of these
     # mashed together too.
-    // lib.mapAttrs (_: pattern: platform: platformMatch platform pattern) lib.systems.inspect.platformPatterns;
+    // lib.mapAttrs (_: makeConstraint) lib.systems.inspect.platformPatterns;
+
+  makeConstraint = pattern: platform: platformMatch platform pattern;
 }
