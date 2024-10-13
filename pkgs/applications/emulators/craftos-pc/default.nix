@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ poco openssl SDL2 SDL2_mixer ncurses libpng pngpp libwebp ];
   strictDeps = true;
 
+  enableParallelBuilding = true;
+
   outputs = [
     "out"
     "dev"
@@ -53,13 +55,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     cp -R ${craftos2-lua}/* ./craftos2-lua/
     chmod -R u+w ./craftos2-lua
-    make -C craftos2-lua linux
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    make
-    runHook postBuild
+    make $makeFlags -C craftos2-lua linux
   '';
 
   dontStrip = true;
