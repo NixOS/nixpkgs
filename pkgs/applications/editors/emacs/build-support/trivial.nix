@@ -19,7 +19,7 @@ args:
       foundMakefile=1
     fi
 
-    emacs -L . --batch -f batch-byte-compile *.el
+    emacs -l package -f package-initialize -L . --batch -f batch-byte-compile *.el
 
     runHook postBuild
   '';

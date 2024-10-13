@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.6.0";
+  version = "4.7.0";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qCg5qjsPPynCHIg0JsPJldwVdcYkI68zYmyNAKUCoyw=";
+    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
   };
 
   patches = [
@@ -44,15 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
-    # Fix static linking of `libtiff` via `pkg-config` not working
-    # because `libtiff` does not declare `Lerc` dependency.
-    # nixpkgs has `lerc` >= 4 which provides a `.pc` file.
-    # TODO: Close when https://gitlab.com/libtiff/libtiff/-/merge_requests/633 is merged and available
-    (fetchpatch {
-      name = "libtiff-4.pc-Fix-Requires.private-missing-Lerc.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/ea882c3c240c14a897b9be38d815cc1893aafa59.patch";
-      hash = "sha256-C0xA3k1sgKmGJjEnyG9UxhXqYBYShKUDQsyjhbEDJbQ=";
-    })
   ];
 
   postPatch = ''
@@ -92,6 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+  # Avoid flakiness like https://gitlab.com/libtiff/libtiff/-/commit/94f6f7315b1
+  # - except that we have many x86_64-linux binaries depending on this already
+  enableParallelChecking = stdenv.system == "x86_64-linux";
 
   passthru = {
     tests = {

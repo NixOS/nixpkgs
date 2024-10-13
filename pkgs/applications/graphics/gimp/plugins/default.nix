@@ -17,7 +17,7 @@ let
   pluginDerivation = attrs: let
     name = attrs.name or "${attrs.pname}-${attrs.version}";
   in stdenv.mkDerivation ({
-    prePhases = "extraLib";
+    prePhases = [ "extraLib" ];
     extraLib = ''
       installScripts(){
         mkdir -p $out/${gimp.targetScriptDir}/${name};
@@ -54,7 +54,7 @@ let
   });
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    prePhases = "extraLib";
+    prePhases = [ "extraLib" ];
     dontUnpack = true;
     installPhase = ''
       runHook preInstall

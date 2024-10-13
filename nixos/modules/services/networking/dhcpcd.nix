@@ -10,7 +10,7 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || lib.any (i: i.useDHCP == true) interfaces);
 
-  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
+  useResolvConf = config.networking.resolvconf.enable;
 
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
@@ -88,23 +88,6 @@ let
       ${cfg.extraConfig}
     '';
 
-  exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
-    ${lib.optionalString enableNTPService ''
-      if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-        # Restart ntpd. We need to restart it to make sure that it will actually do something:
-        # if ntpd cannot resolve the server hostnames in its config file, then it will never do
-        # anything ever again ("couldn't resolve ..., giving up on it"), so we silently lose
-        # time synchronisation. This also applies to openntpd.
-        ${lib.optionalString config.services.ntp.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service || true"}
-        ${lib.optionalString config.services.ntpd-rs.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd-rs.service || true"}
-        ${lib.optionalString config.services.openntpd.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart openntpd.service || true"}
-        ${lib.optionalString config.services.chrony.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart chronyd.service || true"}
-      fi
-    ''}
-
-    ${cfg.runHook}
-  '';
-
 in
 
 {
@@ -181,6 +164,19 @@ in
       description = ''
          Shell code that will be run after all other hooks. See
          `man dhcpcd-run-hooks` for details on what is possible.
+
+         ::: {.note}
+         To use sudo or similar tools in your script you may have to set:
+
+             systemd.services.dhcpcd.serviceConfig.NoNewPrivileges = false;
+
+         In addition, as most of the filesystem is inaccessible to dhcpcd
+         by default, you may want to define some exceptions, e.g.
+
+             systemd.services.dhcpcd.serviceConfig.ReadOnlyPaths = [
+               "/run/user/1000/bus"  # to send desktop notifications
+             ];
+         :::
       '';
     };
 
@@ -206,22 +202,6 @@ in
 
   config = lib.mkIf enableDHCP {
 
-    assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ jemalloc libc mimalloc scudo ]
-      # see https://github.com/NixOS/nixpkgs/issues/151696
-      assertion =
-        dhcpcd.enablePrivSep
-          -> lib.elem config.environment.memoryAllocator.provider [ "jemalloc" "libc" "mimalloc" "scudo" ];
-      message = ''
-        dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently `graphene-hardened` allocator is known to be broken.
-          To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
-          to set `enablePrivSep = false`.
-      '';
-    } ];
-
-    environment.etc."dhcpcd.conf".source = dhcpcdConf;
-
     systemd.services.dhcpcd = let
       cfgN = config.networking;
       hasDefaultGatewaySet = (cfgN.defaultGateway != null && cfgN.defaultGateway.address != "")
@@ -233,7 +213,7 @@ in
         wants = [ "network.target" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = lib.optional (enableNTPService || cfg.runHook != "") [ exitHook ];
+        restartTriggers = [ cfg.runHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -247,46 +227,64 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd/pid";
+            SupplementaryGroups = lib.optional useResolvConf "resolvconf";
+            User = "dhcpcd";
+            Group = "dhcpcd";
+            StateDirectory = "dhcpcd";
             RuntimeDirectory = "dhcpcd";
+
+            ExecStartPre = "+${pkgs.writeShellScript "migrate-dhcpcd" ''
+              # migrate from old database directory
+              if test -f /var/db/dhcpcd/duid; then
+                echo 'migrating DHCP leases from /var/db/dhcpcd to /var/lib/dhcpcd ...'
+                mv /var/db/dhcpcd/* -t /var/lib/dhcpcd
+                chown dhcpcd:dhcpcd /var/lib/dhcpcd/*
+                rmdir /var/db/dhcpcd || true
+                echo done
+              fi
+            ''}";
+
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --quiet ${lib.optionalString cfg.persistent "--persistent"} --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             Restart = "always";
-          } // lib.optionalAttrs (cfg.runHook == "") {
-            # Proc filesystem
-            ProcSubset = "all";
-            ProtectProc = "invisible";
-            # Access write directories
-            UMask = "0027";
-            # Capabilities
-            CapabilityBoundingSet = [ "CAP_NET_ADMIN" "CAP_NET_BIND_SERVICE" "CAP_NET_RAW" "CAP_SETGID" "CAP_SETUID" "CAP_SYS_CHROOT" ];
-            # Security
-            NoNewPrivileges = true;
-            # Sandboxing
-            ProtectSystem = true;
-            ProtectHome = true;
-            PrivateTmp = true;
-            PrivateDevices = true;
-            PrivateUsers = false;
-            ProtectHostname = true;
-            ProtectClock = true;
-            ProtectKernelTunables = false;
-            ProtectKernelModules = true;
-            ProtectKernelLogs = true;
-            ProtectControlGroups = true;
-            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_PACKET" ];
-            RestrictNamespaces = true;
+            AmbientCapabilities = [ "CAP_NET_ADMIN" "CAP_NET_RAW" "CAP_NET_BIND_SERVICE" ];
+            ReadWritePaths = [ "/proc/sys/net/ipv6" ]
+              ++ lib.optionals useResolvConf [ "/etc/resolv.conf" "/run/resolvconf" ];
+            DeviceAllow = "";
             LockPersonality = true;
             MemoryDenyWriteExecute = true;
+            NoNewPrivileges = lib.mkDefault true;  # may be disabled for sudo in runHook
+            PrivateDevices = true;
+            PrivateMounts = true;
+            PrivateTmp = true;
+            PrivateUsers = false;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = "tmpfs";  # allow exceptions to be added to ReadOnlyPaths, etc.
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "strict";
+            RemoveIPC = true;
+            RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" "AF_PACKET" ];
+            RestrictNamespaces = true;
             RestrictRealtime = true;
             RestrictSUIDSGID = true;
-            RemoveIPC = true;
-            PrivateMounts = true;
-            # System Call Filtering
+            SystemCallFilter = [
+              "@system-service"
+              "~@aio" "~@chown" "~@keyring" "~@memlock"
+            ];
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @resources" "chroot" "gettid" "setgroups" "setuid" ];
+            UMask = "0027";
           };
       };
 
+    # Note: the service could run with `DynamicUser`, however that makes
+    # impossible (for no good reason, see systemd issue #20495) to disable
+    # `NoNewPrivileges` or `ProtectHome`, which users may want to in order
+    # to run certain scripts in `networking.dhcpcd.runHook`.
     users.users.dhcpcd = {
       isSystemUser = true;
       group = "dhcpcd";
@@ -295,9 +293,7 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc."dhcpcd.exit-hook" = lib.mkIf (enableNTPService || cfg.runHook != "") {
-      source = exitHook;
-    };
+    environment.etc."dhcpcd.exit-hook".text = cfg.runHook;
 
     powerManagement.resumeCommands = lib.mkIf config.systemd.services.dhcpcd.enable
       ''

@@ -59,18 +59,23 @@ let
   });
 
 in
+
 stdenv.mkDerivation rec {
-  version = "1.24.8";
+  version = "1.24.9";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-pRjZvpds2yAG1FOC1/+xubjWS8P9PLc8picNdS+n9Eg=";
+    hash = "sha256-C0RqoO7MEU6ZadzNcMl4k1j8y2WJqB1HDclBoIdNqYo=";
   };
 
   patches = [
-    ./0002-Add-Darwin-deps.patch
-    ./0003-Fix-cpp-build.patch
+    # Upstream makefile does not work with system deps on macOS by default, so
+    # we reuse the Linux section instead.
+    ./fix-darwin-system-deps.patch
+    # Upstream C++ wrap script only defines fixed-sized integers on macOS but
+    # this is required on aarch64-linux too.
+    ./fix-cpp-build.patch
   ];
 
   postPatch = ''
@@ -99,7 +104,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
     ++ lib.optional (stdenv.hostPlatform.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
-    ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
+    ++ lib.optionals (enableCxx || enablePython) [ (python3.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ps.libclang ])) ]
     ++ lib.optionals (enablePython) [ which swig ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames xcbuild ];
 
@@ -114,6 +119,7 @@ stdenv.mkDerivation rec {
     )
     ++ lib.optionals enableOcr [ leptonica tesseract ]
   ;
+
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -166,7 +172,6 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-    cp ./build/shared-release/libmupdf${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib
   '' + (lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
@@ -180,16 +185,18 @@ stdenv.mkDerivation rec {
     ln -s "$bin/bin/mupdf-x11" "$bin/bin/mupdf"
   '') + (lib.optionalString (enableCxx) ''
     cp platform/c++/include/mupdf/*.h $out/include/mupdf
-    cp build/*/libmupdfcpp.so* $out/lib
+    cp build/*/libmupdfcpp.so $out/lib
   '') + (lib.optionalString (enablePython) (''
     mkdir -p $out/${python3.sitePackages}/mupdf
-    cp build/*/_mupdf.so $out/${python3.sitePackages}
+    cp build/*/_mupdf.so $out/${python3.sitePackages}/mupdf
     cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py
   '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/_mupdf.so
+    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/mupdf/_mupdf.so
   ''));
 
   enableParallelBuilding = true;
+
+  env.USE_SONAME = "no";
 
   passthru = {
     tests = {
@@ -212,8 +219,5 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
-    # ImportError: cannot import name '_mupdf' from partially initialized module 'mupdf'
-    # (most likely due to a circular import)
-    broken = enablePython;
   };
 }

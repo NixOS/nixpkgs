@@ -1,7 +1,8 @@
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
---- perl-5.20.0-orig/Configure	2014-05-26 15:34:18.000000000 +0200
-+++ perl-5.20.0/Configure	2014-06-25 10:43:35.368285986 +0200
-@@ -106,15 +106,7 @@
+diff --git a/Configure b/Configure
+index 4da7088bff..1a86e0a77d 100755
+--- a/Configure
++++ b/Configure
+@@ -108,15 +108,7 @@ if test -d c:/. || ( uname -a | grep -i 'os\(/\|\)2' 2>&1 ) 2>&1 >/dev/null ; th
  fi
  
  : Proper PATH setting
@@ -18,8 +19,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  for p in $paths
  do
-@@ -1337,8 +1329,7 @@
- archname=''
+@@ -1459,8 +1451,7 @@ groupstype=''
+ i_whoami=''
  : Possible local include directories to search.
  : Set locincpth to "" in a hint file to defeat local include searches.
 -locincpth="/usr/local/include /opt/local/include /usr/gnu/include"
@@ -28,8 +29,8 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  :
  : no include file wanted by default
  inclwanted=''
-@@ -1349,17 +1340,12 @@
- 
+@@ -1474,19 +1465,12 @@ DEBUGGING=''
+ archobjs=''
  libnames=''
  : change the next line if compiling for Xenix/286 on Xenix/386
 -xlibpth='/usr/lib/386 /lib/386'
@@ -45,12 +46,14 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
 -test -f /usr/shlib/libc.so && glibpth="/usr/shlib $glibpth"
 -test -f /shlib/libc.so     && glibpth="/shlib $glibpth"
 -test -d /usr/lib64         && glibpth="$glibpth /lib64 /usr/lib64 /usr/local/lib64"
+-
+-: Private path used by Configure to find libraries.  Its value
 +glibpth=""
- 
- : Private path used by Configure to find libraries.  Its value
  : is prepended to libpth. This variable takes care of special
-@@ -1391,8 +1377,6 @@
- libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
+ : machines, like the mips.  Usually, it should be empty.
+ plibpth=''
+@@ -1519,8 +1503,6 @@ libswanted="cl pthread socket bind inet ndbm gdbm dbm db malloc dl ld"
+ libswanted="$libswanted sun m crypt sec util c cposix posix ucb bsd BSD"
  : We probably want to search /usr/shlib before most other libraries.
  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
 -glibpth=`echo " $glibpth " | sed -e 's! /usr/shlib ! !'`
@@ -58,7 +61,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  : Do not use vfork unless overridden by a hint file.
  usevfork=false
  
-@@ -2446,7 +2430,6 @@
+@@ -2585,7 +2567,6 @@ uname
  zip
  "
  pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -66,7 +69,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  for file in $loclist; do
  	eval xxx=\$$file
  	case "$xxx" in
-@@ -4936,7 +4919,7 @@
+@@ -5032,7 +5013,7 @@ esac
  : Set private lib path
  case "$plibpth" in
  '') if ./mips; then
@@ -75,7 +78,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
      fi;;
  esac
  case "$libpth" in
-@@ -8600,13 +8583,8 @@
+@@ -8869,13 +8850,8 @@ esac
  echo " "
  case "$sysman" in
  '')
@@ -91,7 +94,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  	;;
  esac
  if $test -d "$sysman"; then
-@@ -19900,9 +19878,10 @@
+@@ -21740,9 +21716,10 @@ $rm_try tryp
  case "$full_ar" in
  '') full_ar=$ar ;;
  esac
@@ -103,29 +106,11 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/Configure perl-5.20.0/Configure
  
  : see what type gids are declared as in the kernel
  echo " "
-Only in perl-5.20.0/: Configure.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/ext/Errno/Errno_pm.PL perl-5.20.0/ext/Errno/Errno_pm.PL
---- perl-5.20.0-orig/ext/Errno/Errno_pm.PL	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/ext/Errno/Errno_pm.PL	2014-06-25 10:31:24.317970047 +0200
-@@ -134,12 +126,7 @@
- 	if ($dep =~ /(\S+errno\.h)/) {
- 	     $file{$1} = 1;
- 	}
--    } elsif ($^O eq 'linux' &&
--	      $Config{gccversion} ne '' && 
--	      $Config{gccversion} !~ /intel/i &&
--	      # might be using, say, Intel's icc
--	      $linux_errno_h
--	     ) {
-+    } elsif (0) {
-	$file{$linux_errno_h} = 1;
-     } elsif ($^O eq 'haiku') {
-	# hidden in a special place
-Only in perl-5.20.0/ext/Errno: Errno_pm.PL.orig
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/freebsd.sh
---- perl-5.20.0-orig/hints/freebsd.sh	2014-01-31 22:55:51.000000000 +0100
-+++ perl-5.20.0/hints/freebsd.sh	2014-06-25 10:25:53.263964680 +0200
-@@ -119,21 +119,21 @@
+diff --git a/hints/freebsd.sh b/hints/freebsd.sh
+index 70bb90ee95..6580219c17 100644
+--- a/hints/freebsd.sh
++++ b/hints/freebsd.sh
+@@ -127,21 +127,21 @@ case "$osvers" in
          objformat=`/usr/bin/objformat`
          if [ x$objformat = xaout ]; then
              if [ -e /usr/lib/aout ]; then
@@ -153,10 +138,11 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/freebsd.sh perl-5.20.0/hints/
         ldflags="-Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
-diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/linux.sh
---- perl-5.20.0-orig/hints/linux.sh	2014-05-26 15:34:20.000000000 +0200
-+++ perl-5.20.0/hints/linux.sh	2014-06-25 10:33:47.354883843 +0200
-@@ -150,28 +150,6 @@ case "$optimize" in
+diff --git a/hints/linux.sh b/hints/linux.sh
+index 83ba0c5c97..d7b6ce04fe 100644
+--- a/hints/linux.sh
++++ b/hints/linux.sh
+@@ -176,27 +176,6 @@ case "$optimize" in
      ;;
  esac
  
@@ -164,7 +150,7 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
 -# (such as -lm) in /lib or /usr/lib.  So we have to ask gcc to tell us
 -# where to look.  We don't want gcc's own libraries, however, so we
 -# filter those out.
--# This could be conditional on Unbuntu, but other distributions may
+-# This could be conditional on Ubuntu, but other distributions may
 -# follow suit, and this scheme seems to work even on rather old gcc's.
 -# This unconditionally uses gcc because even if the user is using another
 -# compiler, we still need to find the math library and friends, and I don't
@@ -176,16 +162,15 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
 -if [ -x /usr/bin/gcc ] ; then
 -    gcc=/usr/bin/gcc
 -# clang also provides -print-search-dirs
--elif ${cc:-cc} --version 2>/dev/null | grep -q '^clang ' ; then
+-elif ${cc:-cc} --version 2>/dev/null | grep -q -e '^clang version' -e ' clang version'; then
 -    gcc=${cc:-cc}
 -else
 -    gcc=gcc
 -fi
--
+ 
  case "$plibpth" in
  '') plibpth=`LANG=C LC_ALL=C $gcc $ccflags $ldflags -print-search-dirs | grep libraries |
- 	cut -f2- -d= | tr ':' $trnl | grep -v 'gcc' | sed -e 's:/$::'`
-@@ -208,32 +186,6 @@ case "$usequadmath" in
+@@ -234,31 +213,6 @@ case "$usequadmath" in
    ;;
  esac
  
@@ -214,11 +199,10 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
 -    done
 -    ;;
 -esac
--
+ 
  if ${sh:-/bin/sh} -c exit; then
    echo ''
-   echo 'You appear to have a working bash.  Good.'
-@@ -311,33 +263,6 @@ sparc*)
+@@ -337,32 +291,6 @@ sparc*)
  	;;
  esac
  
@@ -248,7 +232,6 @@ diff -ru -x '*~' -x '*.rej' perl-5.20.0-orig/hints/linux.sh perl-5.20.0/hints/li
 -    fi
 -    ;;
 -esac
--
+ 
  # Linux on Synology.
  if [ -f /etc/synoinfo.conf -a -d /usr/syno ]; then
-     # Tested on Synology DS213 and DS413

@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isAarch64;
   checkTarget = "test";
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-std=c++17";
+  };
+
   meta = with lib; {
     description = "Experimental range library for C++11/14/17";
     homepage = "https://github.com/ericniebler/range-v3";

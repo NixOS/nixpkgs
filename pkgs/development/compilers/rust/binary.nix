@@ -61,6 +61,37 @@ rec {
     dontStrip = true;
 
     setupHooks = ./setup-hook.sh;
+
+    passthru = rec {
+      tier1TargetPlatforms = [
+        # Platforms with host tools from
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        "x86_64-darwin" "i686-darwin" "aarch64-darwin"
+        "i686-freebsd" "x86_64-freebsd"
+        "x86_64-solaris"
+        "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
+        "loongarch64-linux" "powerpc64-linux" "powerpc64le-linux"
+        "riscv64-linux" "s390x-linux" "x86_64-linux"
+        "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
+        "x86_64-netbsd"
+        "i686-openbsd" "x86_64-openbsd"
+        "i686-windows" "x86_64-windows"
+      ];
+      targetPlatforms = tier1TargetPlatforms ++ [
+        # Platforms without host tools from
+        # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+        "armv7a-darwin"
+        "armv5tel-linux" "armv7a-linux" "m68k-linux" "mips-linux"
+        "mips64-linux" "mipsel-linux" "mips64el-linux" "riscv32-linux"
+        "armv6l-netbsd" "mipsel-netbsd" "riscv64-netbsd"
+        "x86_64-redox"
+        "wasm32-wasi"
+      ];
+      badTargetPlatforms = [
+        # Rust is currently unable to target the n32 ABI
+        lib.systems.inspect.patterns.isMips64n32
+      ];
+    };
   };
 
   rustc = wrapRustc rustc-unwrapped;

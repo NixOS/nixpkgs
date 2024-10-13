@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     LOCATE_TARGET = "bin.unix";
     # Jam uses c89 conventions
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-std=c89";
+    NIX_CFLAGS_COMPILE = "-std=c89";
   };
 
   enableParallelBuilding = true;

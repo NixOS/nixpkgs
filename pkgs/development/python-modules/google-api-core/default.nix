@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   google-auth,
   googleapis-common-protos,
   grpcio,
@@ -19,14 +19,16 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
-  version = "2.19.0";
+  version = "2.20.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zxt8JpQEeIbSrxEooDrpnjkRCKCIBPh8/TWXDknJzRA=";
+  src = fetchFromGitHub {
+    owner = "googleapis";
+    repo = "python-api-core";
+    rev = "v${version}";
+    hash = "sha256-ccjkGQNaPRefI6+j/O+NwdBGEVNuZ5q5m1d8EAJGcbs=";
   };
 
   nativeBuildInputs = [ setuptools ];

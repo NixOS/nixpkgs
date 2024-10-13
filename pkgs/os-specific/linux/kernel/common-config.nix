@@ -11,6 +11,7 @@
 
 # Configuration
 { lib, stdenv, version
+, rustAvailable
 
 , features ? {}
 }:
@@ -32,8 +33,9 @@ let
   forceRust = features.rust or false;
   kernelSupportsRust = lib.versionAtLeast version "6.7";
 
-  # Currently not enabling Rust by default, as upstream requires rustc 1.81
-  defaultRust = false;
+  # Currently only enabling Rust by default on kernel 6.12+,
+  # which actually has features that use Rust that we want.
+  defaultRust = lib.versionAtLeast version "6.12" && rustAvailable;
   withRust =
     assert lib.assertMsg (!(forceRust && !kernelSupportsRust)) ''
       Kernels below 6.7 (the kernel being built is ${version}) don't support Rust.
@@ -642,7 +644,10 @@ let
       NFS_V4_1              = yes;  # NFSv4.1 client support
       NFS_V4_2              = yes;
       NFS_V4_SECURITY_LABEL = yes;
-      NFS_LOCALIO           = whenAtLeast "6.12" yes;
+
+      # Fails with
+      # `fs/nfs/localio.o: relocation R_AARCH64_ADR_PREL_PG_HI21 against symbol `nfs_to' which may bind externally can not be used when making a shared object; recompile with -fPIC`
+      NFS_LOCALIO           = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenAtLeast "6.12" yes);
 
       CIFS_XATTR        = yes;
       CIFS_POSIX        = option yes;

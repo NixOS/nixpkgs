@@ -15,7 +15,7 @@
   qtdbusextended,
   gsettings-qt,
   elfutils,
-  ffmpeg,
+  ffmpeg_6,
   ffmpegthumbnailer,
   mpv,
   xorg,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       qtmpris
       gsettings-qt
       elfutils
-      ffmpeg
+      ffmpeg_6
       ffmpegthumbnailer
       xorg.libXtst
       xorg.libXdmcp
@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
     "--prefix LD_LIBRARY_PATH : ${
       lib.makeLibraryPath [
         mpv
-        ffmpeg
+        ffmpeg_6
         ffmpegthumbnailer
         gst_all_1.gstreamer
         gst_all_1.gst-plugins-base
