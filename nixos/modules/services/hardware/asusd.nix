@@ -23,14 +23,14 @@ in
     )
   ];
 
-  options = {
+  options = with lib.types; {
     services.asusd = {
       enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
 
       package = lib.mkPackageOption pkgs "asusctl" { };
 
       enableUserService = lib.mkOption {
-        type = lib.types.bool;
+        type = bool;
         default = false;
         description = ''
           Activate the asusd-user service.
@@ -38,7 +38,7 @@ in
       };
 
       animeConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/anime.ron.
@@ -47,7 +47,7 @@ in
       };
 
       asusdConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/asusd.ron.
@@ -56,7 +56,7 @@ in
       };
 
       auraConfigs = lib.mkOption {
-        type = lib.types.attrsOf lib.types.str;
+        type = attrsOf (either str path);
         default = { };
         description = ''
           The content of /etc/asusd/aura_<name>.ron.
@@ -65,7 +65,7 @@ in
       };
 
       profileConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/profile.ron.
@@ -74,7 +74,7 @@ in
       };
 
       fanCurvesConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/fan_curves.ron.
@@ -83,7 +83,7 @@ in
       };
 
       userLedModesConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/asusd-user-ledmodes.ron.
@@ -101,7 +101,7 @@ in
         maybeConfig =
           name: cfg:
           lib.mkIf (cfg != null) {
-            source = pkgs.writeText name cfg;
+            source = if builtins.isPath cfg || lib.isStorePath cfg then cfg else pkgs.writeText name cfg;
             mode = "0644";
           };
       in
