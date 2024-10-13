@@ -498,6 +498,10 @@ in {
         assertion = with cfg.settings; dns.use_username_in_magic_dns or false || dns.base_domain == "" || !lib.hasInfix dns.base_domain server_url;
         message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
       }
+      {
+        assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
+        message = "dns.base_domain must be set when using MagicDNS";
+      }
       (assertRemovedOption ["settings" "acl_policy_path"] "Use `policy.path` instead.")
       (assertRemovedOption ["settings" "db_host"] "Use `database.postgres.host` instead.")
       (assertRemovedOption ["settings" "db_name"] "Use `database.postgres.name` instead.")
