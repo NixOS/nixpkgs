@@ -19,13 +19,14 @@ class EnvDefault(argparse.Action):
     environment variable as the flags default value.
     """
 
-    def __init__(self, envvar, required=False, default=None, nargs=None, **kwargs):  # type: ignore
+    def __init__(self, envvar, required=False, default=None, nargs=None, type=None, **kwargs):  # type: ignore
+        type_fn = type if type else lambda x: x
         if not default and envvar:
             if envvar in os.environ:
                 if nargs is not None and (nargs.isdigit() or nargs in ["*", "+"]):
-                    default = os.environ[envvar].split()
+                    default = list(map(type_fn, os.environ[envvar].split()))
                 else:
-                    default = os.environ[envvar]
+                    default = type_fn(os.environ[envvar])
                 kwargs["help"] = (
                     kwargs["help"] + f" (default from environment: {default})"
                 )
@@ -80,6 +81,7 @@ def main() -> None:
         envvar="vlans",
         nargs="*",
         help="vlans to span by the driver",
+        type=int,
     )
     arg_parser.add_argument(
         "--global-timeout",
@@ -103,6 +105,26 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
+        "--rebuild-cmd",
+        action=EnvDefault,
+        envvar="rebuildCmd",
+        help="When running the driver interactively, this command builds a new version of the driver when rebuild() is called",
+        type=str,
+    )
+    arg_parser.add_argument(
+        "--rebuild-exe",
+        action=EnvDefault,
+        envvar="rebuildExe",
+        help="When running the driver interactively, rebuild() will execute this to find out new driver information. It should be behind a symlink.",
+        type=str,
+    )
+    arg_parser.add_argument(
+        "--internal-print-update-driver-info-and-exit",
+        action="store_true",
+        # For internal use. Don't print help text.
+        help=argparse.SUPPRESS,
+    )
+    arg_parser.add_argument(
         "testscript",
         action=EnvDefault,
         envvar="testScript",
@@ -111,6 +133,15 @@ def main() -> None:
     )
 
     args = arg_parser.parse_args()
+
+    # print the info needed to update another Driver
+    # TODO: properly escape these arguments
+    if args.internal_print_update_driver_info_and_exit:
+        print(*args.start_scripts)
+        print(*args.vlans)
+        print(args.testscript)
+        print(args.output_directory)
+        exit(0)
 
     output_directory = args.output_directory.resolve()
     logger = CompositeLogger([TerminalLogger()])
@@ -124,6 +155,11 @@ def main() -> None:
     if not args.keep_vm_state:
         logger.info("Machine state will be reset. To keep it, pass --keep-vm-state")
 
+    if args.rebuild_cmd and not args.interactive:
+        logger.warning("--rebuild-cmd is not useful outside of interactive mode")
+    if args.rebuild_exe and not args.interactive:
+        logger.warning("--rebuild-exe is not useful outside of interactive mode")
+
     with Driver(
         args.start_scripts,
         args.vlans,
@@ -132,6 +168,8 @@ def main() -> None:
         logger,
         args.keep_vm_state,
         args.global_timeout,
+        args.rebuild_cmd,
+        args.rebuild_exe,
     ) as driver:
         if args.interactive:
             history_dir = os.getcwd()
