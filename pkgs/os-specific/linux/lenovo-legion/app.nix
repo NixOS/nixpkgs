@@ -1,14 +1,21 @@
-{ lib, fetchFromGitHub, xorg, libsForQt5, wrapQtAppsHook, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  xorg,
+  libsForQt5,
+  wrapQtAppsHook,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.12";
+  version = "0.0.18";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
-    rev = "v${version}-prerelease";
-    hash = "sha256-BNrRv9EBmNINQbAw+BzVxKl/XoDgH1tsNZHJxfSpNoU=";
+    rev = "v${version}";
+    hash = "sha256-Tn94oW400XMwWde1G3OR7Eyrc0LVPAo9UA1daIChjVo=";
   };
 
   sourceRoot = "${src.name}/python/legion_linux";
@@ -28,8 +35,6 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace ./setup.cfg \
       --replace-fail "_VERSION" "${version}"
-    substituteInPlace ../../extra/service/fancurve-set \
-      --replace-fail "FOLDER=/etc/legion_linux/" "FOLDER=$out/share/legion_linux"
     substituteInPlace ./legion_linux/legion.py \
       --replace-fail "/etc/legion_linux" "$out/share/legion_linux"
     substituteInPlace ./legion_linux/legion_gui.desktop \
@@ -47,8 +52,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/johnfanv2/LenovoLegionLinux";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.ulrikstrid ];
+    maintainers = with lib.maintainers; [
+      ulrikstrid
+      realsnick
+    ];
     mainProgram = "legion_gui";
   };
 }
-
