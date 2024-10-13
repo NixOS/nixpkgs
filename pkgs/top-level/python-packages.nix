@@ -10453,6 +10453,8 @@ self: super: with self; {
 
   pyunpack = callPackage ../development/python-modules/pyunpack { };
 
+  pyunormalize = callPackage ../development/python-modules/pyunormalize { };
+
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
@@ -14482,8 +14484,6 @@ self: super: with self; {
   slicer = callPackage ../development/python-modules/slicer { };
 
   slicerator = callPackage ../development/python-modules/slicerator { };
-
-  slither-analyzer = callPackage ../development/python-modules/slither-analyzer { };
 
   slimit = callPackage ../development/python-modules/slimit { };
 

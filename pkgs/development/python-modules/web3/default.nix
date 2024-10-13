@@ -16,20 +16,19 @@
   protobuf,
   requests,
   websockets,
+  pyunormalize,
 }:
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "6.5.0";
+  version = "6.20.3";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
     rev = "v${version}";
-    hash = "sha256-RNWCZQjcse415SSNkHhMWckDcBJGFZnjisckF7gbYY8=";
+    hash = "sha256-lxCd1Cc79SW8uQrKom9Lqeb7VPuj2nKFlCj51EgSSuk=";
   };
 
   # Note: to reflect the extra_requires in main/setup.py.
@@ -37,24 +36,21 @@ buildPythonPackage rec {
     ipfs = [ ipfshttpclient ];
   };
 
-  propagatedBuildInputs =
-    [
-      aiohttp
-      eth-abi
-      eth-account
-      eth-hash
-    ]
-    ++ eth-hash.optional-dependencies.pycryptodome
-    ++ [
-      eth-typing
-      eth-utils
-      hexbytes
-      jsonschema
-      lru-dict
-      protobuf
-      requests
-      websockets
-    ];
+  dependencies = [
+    aiohttp
+    eth-abi
+    eth-account
+    eth-hash
+    eth-typing
+    eth-utils
+    hexbytes
+    jsonschema
+    lru-dict
+    protobuf
+    requests
+    websockets
+    pyunormalize
+  ] ++ eth-hash.optional-dependencies.pycryptodome;
 
   # TODO: package eth-tester required for tests
   doCheck = false;
