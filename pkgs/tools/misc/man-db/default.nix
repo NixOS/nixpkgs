@@ -14,6 +14,9 @@
 , zstd
 }:
 
+let
+  libiconv' = if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD then libiconvReal else libiconv;
+in
 stdenv.mkDerivation rec {
   pname = "man-db";
   version = "2.13.0";
@@ -28,9 +31,8 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ] # (Yes, 'groff' is both native and build input)
-    ++ lib.optional stdenv.isFreeBSD libiconvReal;
-  nativeCheckInputs = [ (if stdenv.isFreeBSD then libiconvReal else libiconv) ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
+  buildInputs = [ libpipeline db groff libiconv' ]; # (Yes, 'groff' is both native and build input)
+  nativeCheckInputs = [ libiconv' ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -46,11 +48,6 @@ stdenv.mkDerivation rec {
 
     # Add mandb locations for the above
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # This test fails on Darwin. man-db expects libiconv to skip over the invalid character in the source data, but
-    # Darwin’s libiconv returns EILSEQ without skipping it. This causes the `manconv` to go into an infinite loop
-    # because it keeps trying to convert the invalid character.
-    sed -i '/manconv-odd-combinations/d' src/tests/Makefile.am
   '';
 
   configureFlags = [
