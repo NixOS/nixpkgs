@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     license = licenses.unfree;
     maintainers = with maintainers; [
       dan4ik605743
+      husjon
       orivej
     ];
     platforms = [ "x86_64-linux" ];
