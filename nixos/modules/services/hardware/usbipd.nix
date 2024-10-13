@@ -41,8 +41,8 @@ in {
     boot.extraModulePackages = [ cfg.kernelPackage ];
     boot.kernelModules = [ "usbip-core" "usbip-host" ];
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 3240 ];
-    services.udev.extraRules = strings.concatLines 
-      ((map (dev: 
+    services.udev.extraRules = strings.concatLines
+      ((map (dev:
         "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTRS{idProduct}==\"${dev.productid}\", ATTRS{idVendor}==\"${dev.vendorid}\", RUN+=\"${pkgs.systemd}/bin/systemctl restart usbip-${dev.vendorid}:${dev.productid}.service\"") cfg.devices));
 
     systemd.services = (builtins.listToAttrs (map (dev: { name = "usbip-${dev.vendorid}:${dev.productid}"; value = {
@@ -72,4 +72,5 @@ in {
         };
       };
   };
+  meta.maintainers = with maintainers; [ cbingman ];
 }
