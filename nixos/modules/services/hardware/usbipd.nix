@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 with lib;
 let
   cfg = config.services.usbipd;
@@ -12,7 +17,8 @@ let
       };
     };
   };
-in {
+in
+{
   options.services.usbipd = {
     enable = mkEnableOption "usbip server";
     kernelPackage = mkOption {
@@ -22,7 +28,7 @@ in {
     };
     devices = mkOption {
       type = types.listOf device;
-      default = [];
+      default = [ ];
       description = "List of USB devices to watch and automatically export.";
       example = {
         productid = "xxxx";
@@ -39,32 +45,44 @@ in {
 
   config = mkIf cfg.enable {
     boot.extraModulePackages = [ cfg.kernelPackage ];
-    boot.kernelModules = [ "usbip-core" "usbip-host" ];
+    boot.kernelModules = [
+      "usbip-core"
+      "usbip-host"
+    ];
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 3240 ];
-    services.udev.extraRules = strings.concatLines
-      ((map (dev:
-        "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTRS{idProduct}==\"${dev.productid}\", ATTRS{idVendor}==\"${dev.vendorid}\", RUN+=\"${pkgs.systemd}/bin/systemctl restart usbip-${dev.vendorid}:${dev.productid}.service\"") cfg.devices));
+    services.udev.extraRules = strings.concatLines (
+      (map (
+        dev:
+        "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTRS{idProduct}==\"${dev.productid}\", ATTRS{idVendor}==\"${dev.vendorid}\", RUN+=\"${pkgs.systemd}/bin/systemctl restart usbip-${dev.vendorid}:${dev.productid}.service\""
+      ) cfg.devices)
+    );
 
-    systemd.services = (builtins.listToAttrs (map (dev: { name = "usbip-${dev.vendorid}:${dev.productid}"; value = {
-          after = [ "usbipd.service" ];
-          script = ''
-            set +e
-            devices=$(${cfg.kernelPackage}/bin/usbip list -l | grep -E "^.*- busid.*(${dev.vendorid}:${dev.productid})" )
-            output=$(${cfg.kernelPackage}/bin/usbip -d bind -b $(echo $devices | ${pkgs.gawk}/bin/awk '{ print $3 }') 2>&1)
-            code=$?
+    systemd.services =
+      (builtins.listToAttrs (
+        map (dev: {
+          name = "usbip-${dev.vendorid}:${dev.productid}";
+          value = {
+            after = [ "usbipd.service" ];
+            script = ''
+              set +e
+              devices=$(${cfg.kernelPackage}/bin/usbip list -l | grep -E "^.*- busid.*(${dev.vendorid}:${dev.productid})" )
+              output=$(${cfg.kernelPackage}/bin/usbip -d bind -b $(echo $devices | ${pkgs.gawk}/bin/awk '{ print $3 }') 2>&1)
+              code=$?
 
-            echo $output
-            if [[ $output =~ "already bound" ]]; then
-              exit 0
-            else
-              exit $code
-            fi
-          '';
-          serviceConfig.Type = "oneshot";
-          serviceConfig.RemainAfterExit = true;
-          restartTriggers = [ "usbipd.service" ];
-        };
-      }) cfg.devices)) // {
+              echo $output
+              if [[ $output =~ "already bound" ]]; then
+                exit 0
+              else
+                exit $code
+              fi
+            '';
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            restartTriggers = [ "usbipd.service" ];
+          };
+        }) cfg.devices
+      ))
+      // {
         usbipd = {
           wantedBy = [ "multi-user.target" ];
           serviceConfig.ExecStart = "${cfg.kernelPackage}/bin/usbipd -D";
