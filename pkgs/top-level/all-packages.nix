@@ -33402,8 +33402,6 @@ with pkgs;
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
-  vym = callPackage ../applications/misc/vym { };
-
   wad = callPackage ../tools/security/wad { };
 
   wafw00f = callPackage ../tools/security/wafw00f { };
