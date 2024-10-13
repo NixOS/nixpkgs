@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     ''
     + lib.optionalString withSystemd ''
       install -Dm0755 resources/niri-session -t $out/bin
-      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/share/systemd/user
+      install -Dm0644 resources/niri{-shutdown.target,.service} -t $out/lib/systemd/user
     '';
 
   env = {
