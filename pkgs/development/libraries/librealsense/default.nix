@@ -1,7 +1,13 @@
 { stdenv
 , config
 , lib
+, makeWrapper
+, v4l-utils
+, coreutils
+, gnugrep
+, gawk
 , fetchFromGitHub
+, runtimeShell
 , cmake
 , libusb1
 , nlohmann_json
@@ -59,6 +65,7 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     pkg-config
+    makeWrapper
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_nvcc
   ];
@@ -87,6 +94,32 @@ stdenv.mkDerivation rec {
     # based on scripts/setup_udev_rules.sh
     install -Dm644 -t $out/lib/udev/rules.d/ ../config/99-realsense-libusb.rules
     install -Dm644 -t $out/lib/udev/rules.d/ ../config/99-realsense-d4xx-mipi-dfu.rules
+
+    substituteInPlace $out/lib/udev/rules.d/99-realsense-libusb.rules \
+      --replace-fail "/bin/sh" "${runtimeShell}" \
+      --replace-fail "chmod" "${coreutils}/bin/chmod" \
+      --replace-fail "uname" "${coreutils}/bin/uname" \
+      --replace-fail "sleep" "${coreutils}/bin/sleep" \
+      --replace-fail "cut" "${coreutils}/bin/cut" \
+      --replace-fail "/usr/local/bin/usb-R200-in_udev" "$out/opt/librealsense/usb-R200-in_udev"
+    substituteInPlace $out/lib/udev/rules.d/99-realsense-d4xx-mipi-dfu.rules \
+      --replace-fail "/bin/bash" "${runtimeShell}" \
+      --replace-fail "rs-enum.sh" "$out/bin/rs-enum.sh" \
+      --replace-fail "rs_ipu6_d457_bind.sh" "$out/bin/rs_ipu6_d457_bind.sh"
+
+    # install udev-required binaries, we avoid putting some of them in PATH
+    install -Dm755 -t $out/opt/librealsense/ ../config/usb-R200-in_udev
+    install -Dm755 -t $out/opt/librealsense/ ../config/usb-R200-in
+    install -Dm755 -t $out/bin/ ../scripts/rs-enum.sh
+    install -Dm755 -t $out/bin/ ../scripts/rs_ipu6_d457_bind.sh
+
+    substituteInPlace $out/opt/librealsense/usb-R200-in_udev \
+      --replace-fail "/usr/local/bin/usb-R200-in" "$out/opt/librealsense/usb-R200-in"
+    wrapProgram "$out/bin/rs-enum.sh" \
+      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gawk v4l-utils ]}
+    wrapProgram "$out/bin/rs_ipu6_d457_bind.sh" \
+      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep v4l-utils ]}
+    patchShebangs $out/opt/librealsense/
   '';
 
   meta = with lib; {
