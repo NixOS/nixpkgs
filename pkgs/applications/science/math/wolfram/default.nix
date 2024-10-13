@@ -59,13 +59,21 @@ let versions = callPackage ./versions.nix { };
 in
 
 callPackage ./generic.nix {
+
   inherit cudaSupport cudaPackages;
+
   inherit (found-version) version lang;
+
   src = if source == null then found-version.src else source;
-  name = ("mathematica"
-          + lib.optionalString cudaSupport "-cuda"
-          + "-${found-version.version}"
-          + lib.optionalString (lang != "en") "-${lang}");
+
+  name =
+    (if lib.versionAtLeast found-version.version "14.1.0"
+     then "wolfram"
+     else "mathematica")
+    + lib.optionalString cudaSupport "-cuda"
+    + "-${found-version.version}"
+    + lib.optionalString (lang != "en") "-${lang}";
+
   meta = with lib; {
     description = "Wolfram Mathematica computational software system";
     homepage = "http://www.wolfram.com/mathematica/";
