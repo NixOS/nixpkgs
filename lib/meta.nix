@@ -211,6 +211,8 @@ rec {
 
     3. (modern) a pattern for the platform `parsed` field (see `lib.systems.inspect.patterns`).
 
+    4. (modern) a partial attribute set of the platform structure.
+
     We can inject these into a pattern for the whole of a structured platform,
     and then match that.
 
@@ -249,7 +251,8 @@ rec {
     else matchAttrs (
       # Normalize platform attrset.
       if elem ? parsed then elem
-      else { parsed = elem; }
+      else if elem ? _type && elem._type == "system" then { parsed = elem; }
+      else elem
     ) platform
   );
 
