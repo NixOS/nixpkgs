@@ -127,7 +127,7 @@ in buildFHSEnv {
     libselinux
 
     # Winetricks
-    fribidi
+    fribidi pango
   ] ++ xorgDeps pkgs
     ++ gstreamerDeps pkgs
     ++ extraLibraries pkgs;
