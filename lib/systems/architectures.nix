@@ -386,8 +386,7 @@ rec {
       sapphirerapids = [ "tigerlake" ] ++ inferiors.tigerlake;
       emeraldrapids = [ "sapphirerapids" ] ++ inferiors.sapphirerapids;
 
-      # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
-      alderlake = [ ];
+      alderlake = [ "skylake" ] ++ inferiors.skylake;
       sierraforest = [ "alderlake" ] ++ inferiors.alderlake;
 
       # x86_64 AMD
