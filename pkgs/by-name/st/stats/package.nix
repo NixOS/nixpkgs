@@ -34,7 +34,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "macOS system monitor in your menu bar";
     homepage = "https://github.com/exelban/stats";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ donteatoreo emilytrau ];
+    maintainers = with lib.maintainers; [
+      donteatoreo
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
