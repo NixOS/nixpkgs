@@ -19,26 +19,25 @@
 , libportal
 , openssl
 , pkg-config
-, qtbase
-, qttools
+, kdePackages
 , wrapGAppsHook3
 }:
 
 mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-12-27";
+  version = "v3.0.1";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "ecf1fb6645af7b79e6ea984d3c9698ca0ab6f391";
-    hash = "sha256-TEv1xR1wUG3wXNATLLIZKOtW05X96wsPNOlE77OQK54=";
+    rev = "v3.0.1";
+    hash = "sha256-YF9WqIaI5SuLwU8KbN22kndJUG5eHoqy1mk8Yte0suE=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 kdePackages.qttools ];
   buildInputs = [
-    curl qtbase avahi
+    curl kdePackages.qtbase avahi
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM
   ] ++ lib.optionals withLibei [ libei libportal ];
 
