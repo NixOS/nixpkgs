@@ -23,8 +23,10 @@ maven.buildMavenPackage rec {
     hash = "sha256-voqQ4JqYkHRxVdxMGsHmKirQXMP7s44rTXeasWWW2Jw=";
   };
 
+  patches = [ ./fix-maven-plugin-versions.patch ];
+
   mvnParameters = "-f h2/pom.xml";
-  mvnHash = "sha256-ue1X0fswi3C9uqJ/cVCf/qd2XStMve1k1qA+IsREOGk=";
+  mvnHash = "sha256-qPhYrodP/9Eb6jQqXpkX/17NJJJeqkMjFamTlMp7u7Y=";
 
   nativeBuildInputs = [ makeWrapper ];
 
