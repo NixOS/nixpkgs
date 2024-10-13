@@ -14,7 +14,7 @@ in
 , zlib
 , python3
 , lldb
-, dotnet-sdk_7
+, dotnet-sdk_8
 , maven
 , openssl
 , expat
@@ -126,7 +126,7 @@ rec {
 
         for dir in plugins/clion-radler/DotFiles/linux-*; do
           rm -rf $dir/dotnet
-          ln -s ${dotnet-sdk_7} $dir/dotnet
+          ln -s ${dotnet-sdk_8} $dir/dotnet
         done
       )
     '';
@@ -230,7 +230,7 @@ rec {
 
           for dir in lib/ReSharperHost/linux-*; do
             rm -rf $dir/dotnet
-            ln -s ${dotnet-sdk_7} $dir/dotnet
+            ln -s ${dotnet-sdk_8} $dir/dotnet
           done
         )
       '';
