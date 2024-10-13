@@ -40,7 +40,9 @@ stdenv.mkDerivation rec {
     mainProgram = "enigma";
     license = with licenses; [ gpl2Plus free ]; # source + bundles libs + art
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    badPlatforms = [
+      { isDarwin = true; }
+    ];
     maintainers = with maintainers; [ iblech ];
     homepage = "https://www.nongnu.org/enigma/";
   };
