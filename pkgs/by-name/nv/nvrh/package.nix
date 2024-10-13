@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "nvrh";
-  version = "0.1.9";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "mikew";
     repo = "nvrh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QM8VVvNTPvu6Yg1G8FW/694RyTbw36AqkvISeP70gpE=";
+    hash = "sha256-rOEzzKvz4z0KEu39snNJsxr9chx/hCf5PCQ99NJR4qI=";
   };
 
   postPatch = ''

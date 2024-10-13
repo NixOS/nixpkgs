@@ -18624,5 +18624,17 @@ final: prev:
     meta.homepage = "https://github.com/jhradilek/vim-snippets/";
   };
 
+  cmp-nixpkgs-maintainers = buildVimPlugin {
+    pname = "cmp-nixpkgs-maintainers";
+    version = "2024-10-12";
+    src = fetchFromGitHub {
+      owner = "GaetanLepage";
+      repo = "cmp-nixpkgs-maintainers";
+      rev = "da6a5050bc6be7a55c333d0009ae87d909e30b3f";
+      sha256 = "sha256-z/k7lC2tZvll+BlXoj5N7EwOGN3f3Lu4gT6YWocCL8c=";
+    };
+    meta.homepage = "https://github.com/GaetanLepage/cmp-nixpkgs-maintainers/";
+  };
+
 
 }
