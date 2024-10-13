@@ -75,7 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
   postBuild = ''
     cd ../
     mkdir out
-    find org/ -name '*.java' -type f -exec javac -d out/ {} +
+    find org/ -name '*.java' -type f -exec javac -encoding utf8 -d out/ {} +
+    # Copy non Java resource files
+    find org/ -not -name '*.java' -not -name '*.html' -type f -exec cp {} out/{} \;
   '';
 
   # The makefile doesn't have an install target, the installation of the shared
