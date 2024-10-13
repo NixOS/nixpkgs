@@ -8,7 +8,6 @@ lib.makeScope (self: newScope (self.python.pkgs // self)) (self: {
   python = python3.override {
     self = self.python;
     packageOverrides = self: super: {
-      sqlalchemy = super.sqlalchemy_1_4;
       moto = super.moto.overridePythonAttrs (oldAttrs: {
         # a lot of tests -> very slow, we already build them when building python packages
         doCheck = false;
