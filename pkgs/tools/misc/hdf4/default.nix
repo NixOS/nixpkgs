@@ -18,36 +18,36 @@
   netcdfSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hdf";
   version = "4.2.15";
 
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${version}/src/hdf-${version}.tar.bz2";
-    sha256 = "04nbgfxyj5jg4d6sr28162cxbfwqgv0sa7vz1ayzvm8wbbpkbq5x";
+    url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${finalAttrs.version}/src/hdf-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-veA171oc1f29Cn8fpcF+mLvVmTABiaxNI08W6bt7yxI=";
   };
 
   patches = [
     # Note that the PPC, SPARC and s390 patches are only needed so the aarch64 patch applies cleanly
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-ppc.patch";
-      sha256 = "0dbbfpsvvqzy9zyfv38gd81zzc44gxjib9sd8scxqnkkqprj6jq0";
+      hash = "sha256-AEsj88VzWtyZRk2nFWV/hLD/A2oPje38T/7jvfV1azU=";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-4.2.4-sparc.patch";
-      sha256 = "0ip4prcjpa404clm87ib7l71605mws54x9492n9pbz5yb51r9aqh";
+      hash = "sha256-EKuUQ1m+/HWTFYmkTormtQATDj0rHlQpI4CoK1m+5EY=";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-s390.patch";
-      sha256 = "0aiqbr4s1l19y3r3y4wjd5fkv9cfc8rlr4apbh1p0d57wyvqa7i3";
+      hash = "sha256-Ix6Ft+enNHADXFeRTDNijqU9XWmSEz/y8CnQoEleOCo=";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-arm.patch";
-      sha256 = "157k1avvkpf3x89m1fv4a1kgab6k3jv74rskazrmjivgzav4qaw3";
+      hash = "sha256-gytMtvpvR1nzV1NncrYc0yz1ZlBku1AT6sPdubcK85Q=";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
-      sha256 = "112svcsilk16ybbsi8ywnxfl2p1v44zh3rfn4ijnl8z08vfqrvvs";
+      hash = "sha256-eu+M3UbgI2plJNblAT8hO1xBXbfco6jX8iZMGjXbWoQ=";
     })
     ./darwin-aarch64.patch
   ];
@@ -74,8 +74,8 @@ stdenv.mkDerivation rec {
     lib.optionalString uselibtirpc ''
       # Make tirpc discovery work with CMAKE_PREFIX_PATH
       substituteInPlace config/cmake/FindXDR.cmake \
-        --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
-                  'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
+        --replace-fail 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
+                       'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
     ''
     + lib.optionalString szipSupport ''
       export SZIP_INSTALL=${szip}
@@ -83,32 +83,24 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DHDF4_BUILD_TOOLS=ON"
-      "-DHDF4_BUILD_UTILS=ON"
-      "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
-      "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
-      "-DHDF4_ENABLE_NETCDF=${if netcdfSupport then "ON" else "OFF"}"
-      "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
-      "-DJPEG_DIR=${libjpeg}"
+      (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+      (lib.cmakeBool "HDF4_BUILD_TOOLS" true)
+      (lib.cmakeBool "HDF4_BUILD_UTILS" true)
+      (lib.cmakeBool "HDF4_BUILD_WITH_INSTALL_NAME" false)
+      (lib.cmakeBool "HDF4_ENABLE_JPEG_LIB_SUPPORT" true)
+      (lib.cmakeBool "HDF4_ENABLE_Z_LIB_SUPPORT" true)
+      (lib.cmakeBool "HDF4_ENABLE_NETCD" netcdfSupport)
+      (lib.cmakeBool "HDF4_BUILD_FORTRAN" fortranSupport)
+      (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
+      (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
+      (lib.cmakeBool "HDF4_BUILD_JAVA" javaSupport)
     ]
     ++ lib.optionals javaSupport [
-      "-DHDF4_BUILD_JAVA=ON"
-      "-DJAVA_HOME=${jdk}"
+      (lib.cmakeFeature "JAVA_HOME" "${jdk}")
     ]
-    ++ lib.optionals szipSupport [
-      "-DHDF4_ENABLE_SZIP_ENCODING=ON"
-      "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
-    ]
-    ++ (
-      if fortranSupport then
-        [
-          "-DHDF4_BUILD_FORTRAN=ON"
-          "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
-        ]
-      else
-        [ "-DHDF4_BUILD_FORTRAN=OFF" ]
-    );
+    ++ lib.optionals fortranSupport [
+      (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fallow-argument-mismatch")
+    ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
@@ -129,8 +121,8 @@ stdenv.mkDerivation rec {
   checkPhase =
     let
       excludedTestsRegex = lib.optionalString (
-        excludedTests != [ ]
-      ) "(${lib.concatStringsSep "|" excludedTests})";
+        finalAttrs.excludedTests != [ ]
+      ) "(${lib.concatStringsSep "|" finalAttrs.excludedTests})";
     in
     ''
       runHook preCheck
@@ -166,4 +158,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.bsdOriginal;
   };
-}
+})
