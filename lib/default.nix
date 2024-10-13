@@ -99,6 +99,8 @@ let
       # back-compat aliases
       platforms = self.systems.doubles;
 
+      platform = callLibs ./platform.nix;
+
       # linux kernel configuration
       kernel = callLibs ./kernel.nix;
 
