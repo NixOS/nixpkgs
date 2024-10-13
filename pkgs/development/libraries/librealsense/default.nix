@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
-    repo = pname;
+    repo = "librealsense";
     rev = "v${version}";
     sha256 = "sha256-1ICSJqr5WRePLIHsD3T2L0Nxdn1LWaHqHDJrfTIRl88=";
   };
@@ -80,8 +80,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
     --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
-  '' + lib.optionalString enablePython  ''
+  '' + lib.optionalString enablePython ''
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
+  '' + ''
+    # install udev rules
+    # based on scripts/setup_udev_rules.sh
+    install -Dm644 -t $out/lib/udev/rules.d/ ../config/99-realsense-libusb.rules
+    install -Dm644 -t $out/lib/udev/rules.d/ ../config/99-realsense-d4xx-mipi-dfu.rules
   '';
 
   meta = with lib; {
