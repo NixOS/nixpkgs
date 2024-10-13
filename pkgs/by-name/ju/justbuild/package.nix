@@ -24,6 +24,7 @@
   curl,
   libarchive,
 
+  nix-update-script,
   testers,
   justbuild,
 }:
@@ -171,6 +172,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+    updateScript = nix-update-script { };
     tests.version = testers.testVersion {
       package = justbuild;
       command = "just version";
