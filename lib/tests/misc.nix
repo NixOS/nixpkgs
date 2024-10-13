@@ -2501,6 +2501,19 @@ in {
       lib.meta.platform.evalConstraints exampleSystem (NOT is64bit);
     expected = false;
   };
+
+  test_evalPatternMatch_ANY = {
+    expr =
+      with lib.meta.platform.constraints;
+      lib.meta.platform.evalConstraints exampleSystem ANY;
+    expected = true;
+  };
+  test_evalPatternMatch_NONE = {
+    expr =
+      with lib.meta.platform.constraints;
+      lib.meta.platform.evalConstraints exampleSystem NONE;
+    expected = false;
+  };
 }) // lib.mapAttrs' (system: expected:
   lib.nameValuePair "test_evalPatternMatch_nested_combination_${system}" {
     expr =

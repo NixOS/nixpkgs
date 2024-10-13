@@ -26,7 +26,7 @@
 
 {
   constraints =
-    {
+    rec {
       OR = value: {
         __operation = "OR";
         inherit value;
@@ -39,6 +39,9 @@
         __operation = "NOT";
         value = [ value ]; # Also make this a list for simplicity
       };
+
+      ANY = { };
+      NONE = NOT ANY;
     }
     # Put patterns in this set for convenient use
     // lib.systems.inspect.patterns
