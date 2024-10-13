@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
-    rev = "v${version}";
-    hash = "sha256-kv7HpDEYZml5uk06s8Cxt5rEpxaJBz9s+or6Od1q4Io=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-N9K1n2ttxhD0q2BXprt/nQdQseUtpaFmEZUcxRJV5C8=";
   };
 
   bazelapi = fetchurl {
@@ -167,11 +167,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Generic build tool";
     homepage = "https://github.com/just-buildsystem/justbuild";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ clkamp ];
+    changelog = "https://github.com/just-buildsystem/justbuild/releases/tag/v${version}";
+    mainProgram = "just";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ clkamp ];
   };
 }
