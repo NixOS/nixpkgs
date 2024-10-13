@@ -5,7 +5,7 @@
 , doxygen
 , gtk3
 , libopenshot
-, python3
+, python311
 , qtbase
 , qtsvg
 , qtwayland
@@ -24,7 +24,7 @@ let
     hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
   };
 in
-mkDerivationWith python3.pkgs.buildPythonApplication {
+mkDerivationWith python311.pkgs.buildPythonApplication {
   inherit pname version src;
 
   outputs = [ "out" ]; # "lib" can't be split
@@ -41,7 +41,7 @@ mkDerivationWith python3.pkgs.buildPythonApplication {
     wayland
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  propagatedBuildInputs = with python311.pkgs; [
     httplib2
     libopenshot
     pyqtwebengine

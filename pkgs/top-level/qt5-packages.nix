@@ -153,16 +153,11 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../development/libraries/libopenshot {
-    stdenv = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.overrideSDK pkgs.stdenv "11.0" else pkgs.stdenv;
-    python3 = pkgs.python311;
-  };
+  libopenshot = callPackage ../development/libraries/libopenshot { };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
-  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio {
-    inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate AGL Cocoa Foundation;
-  };
+  libopenshot-audio = callPackage ../development/libraries/libopenshot-audio { };
 
   libqglviewer = callPackage ../development/libraries/libqglviewer {
     inherit (pkgs.darwin.apple_sdk.frameworks) AGL;
