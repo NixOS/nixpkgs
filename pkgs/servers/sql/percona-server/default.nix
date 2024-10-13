@@ -14,4 +14,5 @@ pkgs: {
     # newer versions cause linking failures against `libabsl_spinlock_wait`
     protobuf = pkgs.protobuf_21;
   };
+  percona-server = pkgs.percona-server_8_4;
 }
