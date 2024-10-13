@@ -1,26 +1,26 @@
 { lib
 , fetchPypi
-, buildPythonApplication
-, git-revise
+, python3Packages
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-branchstack";
   version = "0.2.0";
 
   src = fetchPypi {
-    inherit pname version;
+    pname = "git-branchstack";
+    inherit version;
     hash = "sha256-gja93LOcVCQ6l+Cygvsm+3uomvxtvUl6t23GIb/tKyQ=";
   };
 
-  buildInputs = [
+  buildInputs = with python3Packages; [
     git-revise
   ];
 
   meta = with lib; {
     homepage = "https://github.com/krobelus/git-branchstack";
     description = "Efficiently manage Git branches without leaving your local branch";
-    license = licenses.mit;
-    maintainers = [ maintainers.AndersonTorres ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }
