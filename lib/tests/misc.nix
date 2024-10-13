@@ -2474,44 +2474,50 @@ in {
   test_evalPatternMatch_AND = {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints exampleSystem (AND [ is64bit is32bit ]);
+      (AND [ is64bit is32bit ])
+      exampleSystem;
     expected = false;
   };
   test_evalPatternMatch_AND_is_noop = {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints exampleSystem (AND [ is64bit ]);
+      (AND [ is64bit ])
+      exampleSystem;
     expected = true;
   };
   test_evalPatternMatch_OR = {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints exampleSystem (OR [ is64bit is32bit ]);
+      (OR [ is64bit is32bit ])
+      exampleSystem;
     expected = true;
   };
   test_evalPatternMatch_OR_is_noop = {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints exampleSystem (OR [ is64bit ]);
+      (OR [ is64bit ])
+      exampleSystem;
     expected = true;
   };
   test_evalPatternMatch_NOT = {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints exampleSystem (NOT is64bit);
+      (NOT is64bit)
+      exampleSystem;
     expected = false;
   };
 }) // lib.mapAttrs' (system: expected:
   lib.nameValuePair "test_evalPatternMatch_nested_combination_${system}" {
     expr =
       with lib.meta.platform.constraints;
-      lib.meta.platform.evalConstraints (lib.systems.elaborate system) (AND [
+      (AND [
         (NOT is32bit)
         (OR [
           isLinux
           isFreeBSD
         ])
-      ]);
+      ])
+      (lib.systems.elaborate system);
     inherit expected;
   }) {
     aarch64-darwin = false;
@@ -2523,7 +2529,6 @@ in {
     aarch64-freebsd = true;
     i686-freebsd = false;
   }
-
 // {
 
   testPackagesFromDirectoryRecursive = {
