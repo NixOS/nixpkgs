@@ -6060,6 +6060,12 @@
     githubId = 1148549;
     name = "Eelco Dolstra";
   };
+  efirestone = {
+    email = "eric.firestone2+nixpkgs@gmail.com";
+    github = "efirestone";
+    githubId = 656555;
+    name = "Eric Firestone";
+  };
   ehegnes = {
     email = "eric.hegnes@gmail.com";
     github = "ehegnes";
