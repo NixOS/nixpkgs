@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpu-screen-recorder-gtk";
-  version = "4.1.11";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://dec05eba.com/snapshot/gpu-screen-recorder-gtk.git.${finalAttrs.version}.tar.gz";
-    hash = "sha256-aLdzMOtKGR0llt+CyTVVX5xc18L9ddlYApe+dcqGRWY=";
+    hash = "sha256-qk5bI23fypvv0yN9Ql7TOerBhoRzj65EcoAy3lMGMqc=";
   };
 
   sourceRoot = ".";
