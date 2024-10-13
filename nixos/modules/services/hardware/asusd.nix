@@ -9,6 +9,20 @@ let
   cfg = config.services.asusd;
 in
 {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "asusd"
+        "auraConfig"
+      ]
+      ''
+        This option has been replaced by `services.asusd.auraConfigs' because asusd
+        supports multiple aura devices since version 6.0.0.
+      ''
+    )
+  ];
+
   options = {
     services.asusd = {
       enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
@@ -41,11 +55,11 @@ in
         '';
       };
 
-      auraConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
+      auraConfigs = lib.mkOption {
+        type = lib.types.attrsOf lib.types.str;
+        default = { };
         description = ''
-          The content of /etc/asusd/aura.ron.
+          The content of /etc/asusd/aura_<name>.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';
       };
@@ -94,11 +108,13 @@ in
       {
         "asusd/anime.ron" = maybeConfig "anime.ron" cfg.animeConfig;
         "asusd/asusd.ron" = maybeConfig "asusd.ron" cfg.asusdConfig;
-        "asusd/aura.ron" = maybeConfig "aura.ron" cfg.auraConfig;
         "asusd/profile.ron" = maybeConfig "profile.ron" cfg.profileConfig;
         "asusd/fan_curves.ron" = maybeConfig "fan_curves.ron" cfg.fanCurvesConfig;
         "asusd/asusd_user_ledmodes.ron" = maybeConfig "asusd_user_ledmodes.ron" cfg.userLedModesConfig;
-      };
+      }
+      // lib.attrsets.concatMapAttrs (prod_id: value: {
+        "asusd/aura_${prod_id}.ron" = maybeConfig "aura_${prod_id}.ron" value;
+      }) cfg.auraConfigs;
 
     services.dbus.enable = true;
     systemd.packages = [ cfg.package ];
