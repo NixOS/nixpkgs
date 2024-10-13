@@ -40,7 +40,7 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
-  version = "0.5.3";
+  version = "0.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -49,11 +49,11 @@ mkDerivationWith buildPythonPackage rec {
     owner = "napari";
     repo = "napari";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+xgG0mbtVuB6XcpXSDDKaopCxXVTcVl3lKBt1CRmw/s=";
+    hash = "sha256-wJifLRrHlDzPgBU7OOPqjdzYpr9M+Klc+yAc/IpyZN8=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
+    substituteInPlace pyproject.toml \
       --replace-fail "scikit-image[data]>=0.19.1" "scikit-image"
   '';
 
