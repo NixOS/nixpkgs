@@ -745,8 +745,6 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
-  eslint_d = callPackage ../development/tools/eslint_d { };
-
   oauth2c = callPackage ../tools/security/oauth2c { };
 
   octodns = python3Packages.callPackage ../tools/networking/octodns { };
