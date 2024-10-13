@@ -34,18 +34,9 @@ stdenv.mkDerivation rec {
     inherit (srcs.${stdenv.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}")) urls sha256;
   };
 
-  icon = fetchurl {
-    urls = [
-      "https://www.hex-rays.com/products/ida/news/8_1/images/icon_free.png"
-      "https://web.archive.org/web/20221105181231if_/https://hex-rays.com/products/ida/news/8_1/images/icon_free.png"
-    ];
-    hash = "sha256-widkv2VGh+eOauUK/6Sz/e2auCNFAsc8n9z0fdrSnW0=";
-  };
-
   desktopItem = makeDesktopItem {
     name = "ida-free";
     exec = "ida64";
-    icon = icon;
     comment = meta.description;
     desktopName = "IDA Free";
     genericName = "Interactive Disassembler";
