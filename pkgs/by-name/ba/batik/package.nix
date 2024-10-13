@@ -10,11 +10,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "batik";
-  version = "1.17";
+  version = "1.18";
 
   src = fetchurl {
     url = "mirror://apache/xmlgraphics/batik/binaries/batik-bin-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sEJphF3grlwZCEt3gHHm4JF8RpvKKBLLvKXf2lu/dhA=";
+    hash = "sha256-k2kC/441o0qizY9nwbWJh3Hv45FJeuDgrhynPhvZg0Y=";
   };
 
   nativeBuildInputs = [
