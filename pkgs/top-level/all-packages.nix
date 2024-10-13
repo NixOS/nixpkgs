@@ -30778,9 +30778,7 @@ with pkgs;
 
   lime = callPackage ../development/libraries/lime { };
 
-  luakit = callPackage ../applications/networking/browsers/luakit {
-    inherit (luajitPackages) luafilesystem;
-  };
+  luakit = callPackage ../applications/networking/browsers/luakit { };
 
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 

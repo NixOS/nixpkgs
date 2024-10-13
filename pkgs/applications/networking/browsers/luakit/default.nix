@@ -7,12 +7,15 @@
 , glib-networking
 , gst_all_1
 , gtk3
-, luafilesystem
+, luajitPackages
 , luajit
 , sqlite
 , webkitgtk_4_0
 }:
 
+let
+  inherit (luajitPackages) luafilesystem;
+in
 stdenv.mkDerivation rec {
   pname = "luakit";
   version = "2.3.3";
