@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
-  version = "12.1.0";
+  version = "12.1.1";
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
-    hash = "sha256-C+FFmWExEzPsDAmUiu/HmRVmb1Km4dJujagxN+v0uWw=";
+    hash = "sha256-r4V0iX+7169QG7nW2RjoUfrDh11zm6zdvtGt4E91kIE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])
-  ++ optionals stdenv.isDarwin [ ApplicationServices Foundation ];
+  ++ optionals stdenv.hostPlatform.isDarwin [ ApplicationServices Foundation ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  CPPFLAGS = optionalString (withXorg && stdenv.isDarwin)
+  CPPFLAGS = optionalString (withXorg && stdenv.hostPlatform.isDarwin)
     "-I${cairo.dev}/include/cairo";
 
   doCheck = false; # fails with "Graphviz test suite requires ksh93" which is not in nixpkgs

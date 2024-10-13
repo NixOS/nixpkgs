@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-fLazKCQnOT3bN3Kz25Q80RLk54EU5U6HCf6kPLcXn9c=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace-fail "-flto" "" \
       --replace-fail "lib/LZMA/Alloc.o" "lib/LZMA/CpuArch.o lib/LZMA/Alloc.o" \
       --replace-quiet "-Werror" ""
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   doCheck = true;
 

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "git-town";
-  version = "16.1.1";
+  version = "16.3.0";
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
-    hash = "sha256-H4FtFSI/c7UxRLZB8kz873DIN6kLUwmRZtz3+4zaR7w=";
+    hash = "sha256-q4bRUz6ZI6y0AYEDMUBMN1YJxmHkIDDkUiMd4rQbDHk=";
   };
 
   vendorHash = null;

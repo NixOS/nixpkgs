@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake pkg-config ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ autoSignDarwinBinariesHook ];
 
   propagatedBuildInputs = [ SDL2 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv Cocoa ]

@@ -69,7 +69,7 @@ buildPythonPackage rec {
     uncertainties
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ase = [ ase ];
     joblib = [ joblib ];
     seekpath = [ seekpath ];
@@ -78,7 +78,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     # ensure tests can find these

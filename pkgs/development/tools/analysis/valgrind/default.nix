@@ -49,18 +49,18 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ]  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ autoreconfHook perl ];
 
   enableParallelBuilding = true;
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
-  preConfigure = lib.optionalString stdenv.isFreeBSD ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isFreeBSD ''
     substituteInPlace configure --replace '`uname -r`' \
         ${toString stdenv.hostPlatform.parsed.kernel.version}.0-
-  '' + lib.optionalString stdenv.isDarwin (
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin (
     let OSRELEASE = ''
       $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
       <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
@@ -133,6 +133,6 @@ stdenv.mkDerivation rec {
       (x86 ++ power ++ s390x ++ armv7 ++ aarch64 ++ mips)
       (darwin ++ freebsd ++ illumos ++ linux);
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    broken = stdenv.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
+    broken = stdenv.hostPlatform.isDarwin; # https://hydra.nixos.org/build/128521440/nixlog/2
   };
 }

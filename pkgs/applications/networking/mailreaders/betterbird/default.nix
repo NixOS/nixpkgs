@@ -112,6 +112,8 @@ in ((buildMozillaMach {
   webrtcSupport = false;
 
   pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
+
+  inherit (thunderbird-unwrapped.passthru) icu73;
 }).overrideAttrs (oldAttrs: {
   postInstall = oldAttrs.postInstall or "" + ''
     mv $out/lib/thunderbird/* $out/lib/betterbird

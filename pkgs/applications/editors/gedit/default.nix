@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libgedit-gtksourceview
     libgedit-tepl
     libpeas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     gtk-mac-integration
   ];
 

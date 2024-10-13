@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # for man pages
     docutils
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ] ++ lib.optionals withIntrospection [
     gi-docgen
@@ -105,7 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput "bin" "$dev"
       moveToOutput "bin/gdk-pixbuf-thumbnailer" "$out"
 
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # meson erroneously installs loaders with .dylib extension on Darwin.
       # Their @rpath has to be replaced before gdk-pixbuf-query-loaders looks at them.
       for f in $out/${finalAttrs.passthru.moduleDir}/*.dylib; do
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   # The fixDarwinDylibNames hook doesn't patch binaries.
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for f in $out/bin/* $dev/bin/*; do
         install_name_tool -change @rpath/libgdk_pixbuf-2.0.0.dylib $out/lib/libgdk_pixbuf-2.0.0.dylib $f
     done
@@ -134,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = {
     updateScript = gnome.updateScript {

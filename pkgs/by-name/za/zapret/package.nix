@@ -77,6 +77,6 @@ stdenv.mkDerivation {
     mainProgram = "zapret";
 
     # probably gonna work on darwin, but untested
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

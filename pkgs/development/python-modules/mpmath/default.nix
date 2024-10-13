@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     gmpy = lib.optionals (!isPyPy) [ gmpy2 ];
   };
 

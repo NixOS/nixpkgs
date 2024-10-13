@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl
     glib
-  ] ++ lib.optionals stdenv.isLinux [ fuse ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ fuse ];
 
   enableParallelBuilding = true;
   strictDeps = true;

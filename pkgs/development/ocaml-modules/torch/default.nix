@@ -57,7 +57,7 @@ buildDunePackage rec {
 
   preBuild = "export LIBTORCH=${torch.dev}/";
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     inherit (src.meta) homepage;

@@ -19,11 +19,11 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/cli";
-  cargoHash = "sha256-hILG2YcwsAzzJPJno+2KzAHM226HYmQPQt9JVVYn9Jk=";
+  cargoHash = "sha256-2694O2q6UbNySgn76aBTjdqt2Hh1GrdRaro064fGBrI=";
   cargoPatches = [ ./cargo_lock.patch ];
 
   buildInputs = [ kclvm rustc ] ++ (
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

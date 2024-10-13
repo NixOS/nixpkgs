@@ -3,14 +3,14 @@
 , zlib, curl, pkg-config, libgcrypt
 , cmake, libobjc, libresolv, libiconv
 , asciidoctor # manpages
-, enableTests ? !stdenv.isDarwin, cpputest
+, enableTests ? !stdenv.hostPlatform.isDarwin, cpputest
 , guileSupport ? true, guile
 , luaSupport ? true, lua5
 , perlSupport ? true, perl
 , pythonSupport ? true, python3Packages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
-, phpSupport ? !stdenv.isDarwin, php, systemd, libxml2, pcre2, libargon2
+, phpSupport ? !stdenv.hostPlatform.isDarwin, php, systemd, libxml2, pcre2, libargon2
 , extraBuildInputs ? []
 }:
 
@@ -29,7 +29,7 @@ let
     { name = "python"; enabled = pythonSupport; cmakeFlag = "ENABLE_PYTHON3"; buildInputs = [ python ]; }
     { name = "php"; enabled = phpSupport; cmakeFlag = "ENABLE_PHP"; buildInputs = [
       php-embed.unwrapped.dev libxml2 pcre2 libargon2
-    ] ++ lib.optional stdenv.isLinux systemd; }
+    ] ++ lib.optional stdenv.hostPlatform.isLinux systemd; }
   ];
   enabledPlugins = builtins.filter (p: p.enabled) plugins;
 
@@ -57,19 +57,19 @@ let
         "-DENABLE_DOC_INCOMPLETE=ON"
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
-        ++ lib.optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       nativeBuildInputs = [ cmake pkg-config asciidoctor ] ++ lib.optional enableTests cpputest;
       buildInputs = [ ncurses openssl aspell cjson gnutls gettext zlib curl libgcrypt ]
-        ++ lib.optionals stdenv.isDarwin [ libobjc libresolv ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libobjc libresolv ]
         ++ lib.concatMap (p: p.buildInputs) enabledPlugins
         ++ extraBuildInputs;
 
       env.NIX_CFLAGS_COMPILE = "-I${python}/include/${python.libPrefix}"
         # Fix '_res_9_init: undefined symbol' error
-        + (lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
+        + (lib.optionalString stdenv.hostPlatform.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
       postInstall = ''
         for p in ${lib.concatMapStringsSep " " (p: p.name) enabledPlugins}; do

@@ -72,12 +72,12 @@ stdenv.mkDerivation rec {
     libSM  # XXX: these should be propagated by SDL2?
     libICE
   ]
-  ++ lib.optional stdenv.isLinux libXext
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ++ lib.optional stdenv.hostPlatform.isLinux libXext
+  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
   ]);
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm444 -t $out/share/applications ../xdg/org.widelands.Widelands.desktop
 
     for s in 16 32 48 64 128; do

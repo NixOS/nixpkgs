@@ -74,7 +74,7 @@
 , meta ? { }
 }:
 
-assert wxSupport -> (if stdenv.isDarwin
+assert wxSupport -> (if stdenv.hostPlatform.isDarwin
 then wxGTK != null
 else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
@@ -84,7 +84,7 @@ assert ex_docSupport -> ex_doc != null;
 
 let
   inherit (lib) optional optionals optionalAttrs optionalString;
-  wxPackages2 = if stdenv.isDarwin then [ wxGTK ] else wxPackages;
+  wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
 
 in
 stdenv.mkDerivation ({
@@ -105,7 +105,7 @@ stdenv.mkDerivation ({
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages
     ++ optional systemdSupport systemd
-    ++ optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
+    ++ optionals stdenv.hostPlatform.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [ AGL Carbon Cocoa WebKit ]);
 
   debugInfo = enableDebugInfo;
 
@@ -148,9 +148,9 @@ stdenv.mkDerivation ({
     ++ optional odbcSupport "--with-odbc=${unixODBC}"
     ++ optional wxSupport "--enable-wx"
     ++ optional systemdSupport "--enable-systemd"
-    ++ optional stdenv.isDarwin "--enable-darwin-64bit"
+    ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
     # make[3]: *** [yecc.beam] Segmentation fault: 11
-    ++ optional (stdenv.isDarwin && stdenv.isx86_64) "--disable-jit"
+    ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
     ++ configureFlags;
 
   # install-docs will generate and install manpages and html docs

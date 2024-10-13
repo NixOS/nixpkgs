@@ -27,22 +27,28 @@ buildDotnetModule rec {
 
   projectFile = "ArchiSteamFarm.sln";
   executable = "ArchiSteamFarm";
+
+  enableParallelBuilding = false;
+
+  useAppHost = false;
   dotnetFlags = [
+    # useAppHost doesn't explicitly disable this
     "-p:UseAppHost=false"
-  ];
-  dotnetInstallFlags = [
+    "-p:RuntimeIdentifiers="
+  ]
+  ;
+  dotnetBuildFlags = [
     "--framework=net8.0"
   ];
+  dotnetInstallFlags = dotnetBuildFlags;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
   doCheck = true;
 
-  preBuild = ''
-    dotnetProjectFiles=(ArchiSteamFarm)
-  '';
-
   preInstall = ''
+    dotnetProjectFiles=(ArchiSteamFarm)
+
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
@@ -55,7 +61,7 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:UseAppHost=false
+        $dotnetFlags $dotnetInstallFlags
     }
 
     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher

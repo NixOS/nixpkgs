@@ -8,7 +8,7 @@ let
    * to a menuentry for use in grub.
    *
    *  * defaults: {name, image, params, initrd}
-   *  * options: [ option... ]
+   *  * options: [ option... ]
    *  * option: {name, params, class}
    */
   menuBuilderGrub2 =
@@ -772,9 +772,10 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
+    environment.systemPackages =  [ grubPkgs.grub2 ]
       ++ lib.optional (config.isoImage.makeBiosBootable) pkgs.syslinux
     ;
+    system.extraDependencies = [ grubPkgs.grub2_efi ];
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
     # that we don't need to know its device.  We pass the label of the

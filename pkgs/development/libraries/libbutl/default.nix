@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     build2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # but especially important when bootstrapping
   disallowedReferences = [ build2 ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
       --replace '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
   '';

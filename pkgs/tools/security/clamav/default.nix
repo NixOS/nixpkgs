@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config rustc rust-bindgen rustfmt cargo python3 ];
   buildInputs = [
     zlib bzip2 libxml2 openssl ncurses curl libiconv libmilter pcre2 libmspack json_c check
-  ] ++ lib.optional stdenv.isLinux systemd
-    ++ lib.optional stdenv.isDarwin Foundation;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux systemd
+    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   cmakeFlags = [
     "-DSYSTEMD_UNIT_DIR=${placeholder "out"}/lib/systemd"

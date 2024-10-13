@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     linuxHeaders
   ];
 
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
     twolame
     wxGTK32
     gtk3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     at-spi2-core
     dbus
     libepoxy

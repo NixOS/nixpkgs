@@ -67,7 +67,7 @@ let
   haveDell = isx86;
 
   # only redfish for x86_64
-  haveRedfish = stdenv.isx86_64;
+  haveRedfish = stdenv.hostPlatform.isx86_64;
 
   # only use msr if x86 (requires cpuid)
   haveMSR = isx86;
@@ -121,7 +121,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.24";
+  version = "1.9.25";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -132,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
-    hash = "sha256-jAR/c8hedprteCj5wrjST4yo8TxJ4JmLbPXSwBO3gJs=";
+    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
   };
 
   patches = [

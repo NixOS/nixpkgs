@@ -16,10 +16,17 @@ pytestForkedHook() {
 # until we have dependency mechanism in generic builder, we need to use this ugly hack.
 
 if [ -z "${dontUsePytestForked-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
-    if [[ " ${preDistPhases:-} " =~ " pytestCheckPhase " ]]; then
-        preDistPhases+=" "
-        preDistPhases="${preDistPhases/ pytestCheckPhase / pytestForkedHook pytestCheckPhase }"
+    if [[ " ${preDistPhases[*]:-} " =~ " pytestCheckPhase " ]]; then
+        _preDistPhases="${preDistPhases[*]} "
+        _preDistPhases="${_preDistPhases/ pytestCheckPhase / pytestForkedHook pytestCheckPhase }"
+        if [[ -n "${__structuredAttrs-}" ]]; then
+            preDistPhases=()
+        else
+            preDistPhases=""
+        fi
+        appendToVar preDistPhases $_preDistPhases
+        unset _preDistPhases
     else
-        preDistPhases+=" pytestForkedHook"
+        appendToVar preDistPhases pytestForkedHook
     fi
 fi

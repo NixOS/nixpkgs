@@ -127,7 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
     readline
     rtrlib
     zeromq
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ] ++ lib.optionals snmpSupport [
     net-snmp
@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
-    "--sbindir=$(out)/libexec/frr"
+    "--sbindir=${placeholder "out"}/libexec/frr"
     "--sysconfdir=/etc/frr"
     "--with-clippy=${finalAttrs.clippy-helper}/bin/clippy"
     # general options
@@ -198,7 +198,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace tools/frr-reload \
-      --replace /usr/lib/frr/ $out/libexec/frr/
+      --replace-quiet /usr/lib/frr/ $out/libexec/frr/
+    sed -i '/^PATH=/ d' tools/frr.in tools/frrcommon.sh.in
   '';
 
   doCheck = true;

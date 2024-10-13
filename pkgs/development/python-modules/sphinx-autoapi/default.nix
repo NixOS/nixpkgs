@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.3.1";
+  version = "3.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "sphinx_autoapi";
     inherit version;
-    hash = "sha256-5EoiWCfQ73F4dIIlpm8wyVRU39AO48Iq+9+4BW99/7U=";
+    hash = "sha256-6/i0Sy66tcKPAmPsbC+KzdFW6bLVOaWOyjnS82hEUXM=";
   };
 
   build-system = [ setuptools ];

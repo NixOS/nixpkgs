@@ -75,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Applets for use with the GNOME panel";
     mainProgram = "cpufreq-selector";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-applets";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-applets/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

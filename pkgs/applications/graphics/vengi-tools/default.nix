@@ -67,12 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
     lzfse
     SDL2
     SDL2_mixer
-  ] ++ lib.optional stdenv.isLinux wayland-protocols
-    ++ lib.optionals stdenv.isDarwin [ Carbon CoreServices OpenCL ]
-    ++ lib.optional (!stdenv.isDarwin) opencl-headers;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon CoreServices OpenCL ]
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
   cmakeFlags =
-    lib.optional stdenv.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+    lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   # one.
   # This is not needed on darwin, since on that platform data files are saved
   # in *.app/Contents/Resources/ too, and are picked up automatically.
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" \
         --set CORE_PATH $out/share/$(basename "$prog")/
@@ -113,6 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = [ licenses.mit licenses.cc-by-sa-30 ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

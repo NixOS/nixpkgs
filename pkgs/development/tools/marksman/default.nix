@@ -8,13 +8,13 @@
 
 buildDotnetModule rec {
   pname = "marksman";
-  version = "2023-12-09";
+  version = "2024-10-07";
 
   src = fetchFromGitHub {
     owner = "artempyanykh";
     repo = "marksman";
     rev = version;
-    sha256 = "sha256-g+Y4BZh5r4FQJe1q79hxj7WZe7z9346+5cB7tgJ5+Wo=";
+    sha256 = "sha256-BU9ttJsAQ8du9NUs69c7/FxZodUS/BhzKm+P1RocCms=";
   };
 
   projectFile = "Marksman/Marksman.fsproj";

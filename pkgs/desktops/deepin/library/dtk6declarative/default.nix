@@ -11,18 +11,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6declarative";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6declarative";
     rev = finalAttrs.version;
-    hash = "sha256-/bQGb87UbnIRWwR6Of67VrRUkrNk6dmY7bjgwDXc30Y";
+    hash = "sha256-BxWPLJeuQDbNg4UoyHD/VAMV2QFWDjWZiFx5JOEmLxg=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    ./fix-build-on-qt-6.8.patch
   ];
 
   nativeBuildInputs = [

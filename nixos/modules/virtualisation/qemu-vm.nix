@@ -141,6 +141,7 @@ let
           --absolute-names \
           --verbatim-files-from \
           --transform 'flags=rSh;s|/nix/store/||' \
+          --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
           --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
           | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
             --quiet \
@@ -1169,7 +1170,7 @@ in
           value.fsType = "9p";
           value.neededForBoot = true;
           value.options =
-            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
+            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" "x-systemd.requires=modprobe@9pnet_virtio.service" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
     in lib.mkMerge [

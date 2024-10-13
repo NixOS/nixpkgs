@@ -75,7 +75,7 @@ buildPythonPackage rec {
     "orbax.checkpoint"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Probably failing because of a filesystem impurity
     # self.assertFalse(os.path.exists(dst_dir))
     # AssertionError: True is not false

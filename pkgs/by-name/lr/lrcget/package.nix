@@ -2,7 +2,7 @@
   dbus,
   openssl,
   gtk3,
-  webkitgtk,
+  webkitgtk_4_0,
   pkg-config,
   wrapGAppsHook3,
   fetchFromGitHub,
@@ -69,11 +69,11 @@ rustPlatform.buildRustPackage rec {
       openssl
       gtk3
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      webkitgtk
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      webkitgtk_4_0
       alsa-lib
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreAudio
       darwin.apple_sdk.frameworks.WebKit
     ];

@@ -18,18 +18,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.57.0";
+  version = "1.61.0";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     rev = "n8n@${finalAttrs.version}";
-    hash = "sha256-0ShG/9Hj132mbNC06HzduMCosAefufbI1M/KJUYK1TQ=";
+    hash = "sha256-9hIwpid/uly7wUcrBgLkSw+Aah8OQ66MgrMQbs/5v1Y=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-EfK8cmfkVebc/kIYaW+Eje1oPW1EpVpa2/jMs+KE5wg=";
+    hash = "sha256-OUZpPXXGWW7ceWxpHqjQolCr+OVeVO4DgRwsU8VvgWo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp # required to build sqlite3 bindings
     cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   buildInputs = [
     nodejs

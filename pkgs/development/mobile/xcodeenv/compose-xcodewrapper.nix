@@ -3,7 +3,7 @@
   writeShellScriptBin }:
 { versions ? [ ] , xcodeBaseDir ? "/Applications/Xcode.app" }:
 
-assert stdenv.isDarwin;
+assert stdenv.hostPlatform.isDarwin;
 let
   xcodebuildPath = "${xcodeBaseDir}/Contents/Developer/usr/bin/xcodebuild";
 

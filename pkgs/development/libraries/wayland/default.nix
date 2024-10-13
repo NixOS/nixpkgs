@@ -5,7 +5,7 @@
 , pkg-config
 , ninja
 , wayland-scanner
-, withTests ? stdenv.isLinux
+, withTests ? stdenv.hostPlatform.isLinux
 , libffi
 , epoll-shim
 , withDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform

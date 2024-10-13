@@ -156,7 +156,7 @@ files_before=$(grep -c 'src = ' "$SRCS")
 echo "writing output file $SRCS ..."
 cat >"$SRCS" <<EOF
 # DO NOT EDIT! This file is generated automatically.
-# Command: $0 $@
+# Command: ./maintainers/scripts/fetch-kde-qt.sh $@
 { fetchurl, mirror }:
 
 {

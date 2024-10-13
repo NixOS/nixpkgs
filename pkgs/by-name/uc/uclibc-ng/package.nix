@@ -49,7 +49,7 @@ let
     KERNEL_HEADERS "${linuxHeaders}/include"
   '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
     UCLIBC_HAS_FPU n
-  '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && isCross) ''
     CONFIG_ARM_EABI y
     ARCH_WANTS_BIG_ENDIAN n
     ARCH_BIG_ENDIAN n

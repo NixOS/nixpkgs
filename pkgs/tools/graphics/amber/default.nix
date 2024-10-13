@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 

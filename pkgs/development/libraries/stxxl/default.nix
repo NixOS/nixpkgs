@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, parallelSupport ? (!stdenv.isDarwin)
+, parallelSupport ? (!stdenv.hostPlatform.isDarwin)
 }:
 
 let

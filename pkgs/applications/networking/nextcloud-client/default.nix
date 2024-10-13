@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.14.0";
+  version = "3.14.1";
 
   outputs = [ "out" "dev" ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/jRD0swNs59xugsXLbesGcTtyGdc/y/iwiDVoErW+d4=";
+    hash = "sha256-bUqHegW38NQJn4TnEQt9wRJFqR6fbLpvQvmWF3akekc=";
   };
 
   patches = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
-    description = "Nextcloud themed desktop client";
+    description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ kranzes SuperSandro2000 ];

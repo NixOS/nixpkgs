@@ -30,7 +30,7 @@
 , imageFileBasename
 , compression
 , fileSystems
-, partitionsJSON
+, finalPartitions
 , split
 , seed
 , definitionsDirectory
@@ -110,7 +110,9 @@ in
 
   env = mkfsEnv;
 
-  inherit partitionsJSON definitionsDirectory;
+  inherit finalPartitions definitionsDirectory;
+
+  partitionsJSON = builtins.toJSON finalAttrs.finalPartitions;
 
   # relative path to the repart definitions that are read by systemd-repart
   finalRepartDefinitions = "repart.d";
@@ -136,7 +138,7 @@ in
   patchPhase = ''
     runHook prePatch
 
-    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} $partitionsJSON $definitionsDirectory)
+    amendedRepartDefinitionsDir=$(${amendRepartDefinitions} <(echo "$partitionsJSON") $definitionsDirectory)
     ln -vs $amendedRepartDefinitionsDir $finalRepartDefinitions
 
     runHook postPatch

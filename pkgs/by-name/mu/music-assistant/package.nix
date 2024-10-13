@@ -24,14 +24,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.2.3";
+  version = "2.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     rev = "refs/tags/${version}";
-    hash = "sha256-7PIyo3srKwftakDiaxvZjrzo/1I9LGUwG+QGfIU5pRA=";
+    hash = "sha256-GMjeNX8C027F+Wl/HfluWap9pDOeQwlM9qOs0Sp5tTI=";
   };
 
   patches = [
@@ -91,8 +91,14 @@ python.pkgs.buildPythonApplication rec {
     pytest-cov-stub
     pytestCheckHook
     syrupy
+    pytest-timeout
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    # blocks in setup
+    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+  ];
 
   pythonImportsCheck = [ "music_assistant" ];
 

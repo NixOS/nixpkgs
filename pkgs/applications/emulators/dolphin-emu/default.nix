@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
     wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild # for plutil
   ];
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
     xz
     # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
     #zlib-ng
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     bluez
     libevdev
@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreBluetooth
     ForceFeedback
     IOBluetooth
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDOLPHIN_WC_REVISION=${finalAttrs.src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${finalAttrs.version}"
     "-DDOLPHIN_WC_BRANCH=master"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
     "-DMACOS_CODE_SIGNING=OFF"
@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_AUTOUPDATE=OFF"
   ];
 
-  qtWrapperArgs = lib.optionals stdenv.isLinux [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}"
     # https://bugs.dolphin-emu.org/issues/11807
     # The .desktop file should already set this, but Dolphin may be launched in other ways

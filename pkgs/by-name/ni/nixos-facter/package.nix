@@ -16,23 +16,23 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "42b014495b2de8735eeec950bc2d3afbefc65ec4";
-      hash = "sha256-OXbGF8M1r8GSgqeY4TqfjF+IO0SXXB/dX2jE2JtkPUk=";
+      rev = "a559f34934098d54096ed2078e750a8245ae4044";
+      hash = "sha256-3abkWPr98qXXQ17r1Z43gh2M5hl/DHjW2hfeWl+GSAs=";
     };
   };
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
     rev = "v${version}";
-    hash = "sha256-TBSzIaOuD/IEObgwSx0UwFFAkqF1pAAWhDrNDtQShdY=";
+    hash = "sha256-vlPmvCrgX64dcf//BPtQszBt7dkq35JpgQg+/LW0AqM=";
   };
 
-  vendorHash = "sha256-8yQO7topYvXL6bP0oSVN1rApiPjse4Q2bjFNM5jVl8c=";
+  vendorHash = "sha256-5leiTNp3FJmgFd0SKhu18hxYZ2G9SuQPhZJjki2SDVs=";
 
   CGO_ENABLED = 1;
 

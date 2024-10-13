@@ -21,8 +21,6 @@ buildPythonPackage rec {
     [
     ];
 
-  nativeCheckInputs = [ ];
-
   meta = {
     description = "Some handy archive helpers for Python.";
     homepage = "https://github.com/domdfcoding/handy-archives";

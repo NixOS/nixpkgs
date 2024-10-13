@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.8";
+  version = "2.6.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2VhG4Elv1neBEfogfhjwlPltQK64wjaLUMhDg7xB/Ow=";
+    hash = "sha256-kYDihmfzMH5LPXSgXpC64qMPqxIX59VzflhP0gWu92Y=";
   };
 
   build-system = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
       pytest-xdist
       pytestCheckHook
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # no support for darwin
       jax
       jaxlib
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests-cuda"
     # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
   disabledTests = [
     # AssertionError: Regex pattern did not match.

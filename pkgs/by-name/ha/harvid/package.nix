@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs =
     [ pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       which
       unixtools.xxd
     ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libharvid/Makefile \
       --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
   '';

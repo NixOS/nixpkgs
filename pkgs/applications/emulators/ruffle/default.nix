@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs =
     [ jre_minimal ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib
       gsettings-desktop-schemas
       makeWrapper
@@ -46,10 +46,10 @@ rustPlatform.buildRustPackage {
       python3
       wrapGAppsHook3
     ]
-    ++ lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       cairo
       gtk3
@@ -64,11 +64,11 @@ rustPlatform.buildRustPackage {
       vulkan-loader
       udev
     ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
 
   dontWrapGApps = true;
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/ruffle_desktop \
       --add-needed libxkbcommon-x11.so \
       --add-needed libwayland-client.so \
@@ -80,7 +80,7 @@ rustPlatform.buildRustPackage {
       # This name is too generic
       mv $out/bin/exporter $out/bin/ruffle_exporter
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       vulkanWrapperArgs+=(
         --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
       )

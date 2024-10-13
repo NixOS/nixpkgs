@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
       vulkan-loader
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.isLinux [ (lib.getLib wayland) ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ (lib.getLib wayland) ];
 
   addDlopenRunpaths = map (p: "${lib.getLib p}/lib") (
     lib.optionals stdenv.hostPlatform.isLinux [

@@ -52,7 +52,7 @@
 
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
-  enableTk ? (!stdenv.isDarwin && !isPyPy),
+  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
   tcl,
   tk,
   tkinter,
@@ -114,7 +114,7 @@ buildPythonPackage rec {
         --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
       patchShebangs tools
     ''
-    + lib.optionalString (stdenv.isLinux && interactive) ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
       # fix paths to libraries in dlopen calls (headless detection)
       substituteInPlace src/_c_internal_utils.cpp \
         --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
@@ -139,10 +139,10 @@ buildPythonPackage rec {
       tcl
       tk
     ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   build-system = [
     certifi

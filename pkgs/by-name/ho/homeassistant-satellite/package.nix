@@ -27,7 +27,7 @@ python3.pkgs.buildPythonApplication rec {
     aiohttp
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pulseaudio = with python3.pkgs; [
       pasimple
       pulsectl

@@ -16,7 +16,7 @@
 , gnugrep
 # Configuration options for the wrapper
 , extraMakeWrapperArgs ? []
-, dbusVerify ? stdenv.isLinux
+, dbusVerify ? stdenv.hostPlatform.isLinux
 , dbus
 }:
 

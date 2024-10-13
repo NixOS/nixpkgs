@@ -9,17 +9,17 @@ let
 
 in buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.14.8";
+  version = "1.14.11";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-y831v6ar1RdDvGQMZf2lZKgq2IQzAAQrNwDCL0xbj24=";
+    hash = "sha256-y4tUV5TGhvvaLTukT0jVhoBWxXQlDFVKHScQC8Ytl/A=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-CLGf64Fftu4u8Vaj66Q4xuRKBEMNZmpltUyaUMVyVJk=";
+  vendorHash = "sha256-xPFTvzsHMWVyeAt7m++6v2l8m5ZvnLaIDGki/TWe5kU=";
 
   doCheck = false;
 
@@ -50,7 +50,7 @@ in buildGoModule rec {
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =
-    lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc IOKit ];
 
   passthru.tests = { inherit (nixosTests) geth; };
 

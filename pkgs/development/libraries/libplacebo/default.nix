@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     (lib.mesonEnable "glslang" false) # rely on shaderc for GLSL compilation instead
     (lib.mesonEnable "vk-proc-addr" vulkanSupport)
     (lib.mesonOption "vulkan-registry" "${vulkan-headers}/share/vulkan/registry/vk.xml")
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.mesonEnable "unwind" false) # libplacebo doesn’t build with `darwin.libunwind`
   ];
 

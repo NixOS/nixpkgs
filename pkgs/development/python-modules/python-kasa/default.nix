@@ -14,6 +14,7 @@
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
+  pytest-socket,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.3";
+  version = "0.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     owner = "python-kasa";
     repo = "python-kasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-41FY1KaPDQxOHtxgaKRakNbiBm/qPYCICpvzxVAmSD8=";
+    hash = "sha256-bRhE9pC2SJwy4blkv27JsfFTLEDJPCeWUtnQvVb8Vfs=";
   };
 
   build-system = [ hatchling ];
@@ -48,11 +49,12 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-freezer
     pytest-mock
+    pytest-socket
     pytestCheckHook
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     shell = [
       ptpython
       rich

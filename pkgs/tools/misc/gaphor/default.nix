@@ -51,13 +51,15 @@ buildPythonApplication rec {
     tinycss2
   ];
 
-  desktopItems = makeDesktopItem {
-    name = pname;
-    exec = "gaphor";
-    icon = "gaphor";
-    comment = meta.description;
-    desktopName = "Gaphor";
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      exec = "gaphor";
+      icon = "gaphor";
+      comment = meta.description;
+      desktopName = "Gaphor";
+    })
+  ];
 
   # Disable automatic wrapGAppsHook3 to prevent double wrapping
   dontWrapGApps = true;

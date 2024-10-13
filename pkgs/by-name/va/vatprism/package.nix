@@ -60,7 +60,7 @@ maven.buildMavenPackage rec {
   ];
 
   mvnHash =
-    if (stdenv.isLinux && stdenv.isAarch64) then
+    if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then
       "sha256-x0nFt2C7dZqMdllI1+Io9SPBY2J/dVgBTVb9T24vFFI="
     else
       "sha256-9uyNCUqnMgpiwm2kz544pWNB/SkRpASm2Dln0e4yZos=";

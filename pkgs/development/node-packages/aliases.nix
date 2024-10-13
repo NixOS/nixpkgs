@@ -63,6 +63,7 @@ mapAliases {
   inherit (pkgs) bash-language-server; # added 2024-06-07
   bibtex-tidy = pkgs.bibtex-tidy; # added 2023-07-30
   bitwarden-cli = pkgs.bitwarden-cli; # added 2023-07-25
+  inherit (pkgs) bower2nix; # added 2024-08-23
   inherit (pkgs) btc-rpc-explorer; # added 2023-08-17
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
@@ -133,7 +134,9 @@ mapAliases {
   node-inspector = throw "node-inspector was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) node-gyp; # added 2024-08-13
   inherit (pkgs) node-pre-gyp; # added 2024-08-05
+  inherit (pkgs) node-red; # added 2024-10-06
   inherit (pkgs) nodemon; # added 2024-06-28
+  npm = pkgs.nodejs.overrideAttrs (old: { meta = old.meta // { mainProgram = "npm"; }; }); # added 2024-10-04
   inherit (pkgs) npm-check-updates; # added 2023-08-22
   ocaml-language-server = throw "ocaml-language-server was removed because it was abandoned upstream"; # added 2023-09-04
   parcel-bundler = self.parcel; # added 2023-09-04

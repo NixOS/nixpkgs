@@ -17,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "awslambdaric";
-  version = "2.1.0";
+  version = "2.2.1";
   pyproject = true;
 
   disabled = isPy27;
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "aws-lambda-python-runtime-interface-client";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-FHZ7ZTCOzElW/DM07TScp6bfOOFe4b307q/ALVX1fWQ=";
+    sha256 = "sha256-IA2Kx4+U0+8lPl9TTTZC46Y3WhSUb5HR5Hr9QZSJIDU=";
   };
 
   propagatedBuildInputs = [ simplejson ];
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     description = "AWS Lambda Runtime Interface Client for Python";
     homepage = "https://github.com/aws/aws-lambda-python-runtime-interface-client";
     license = licenses.asl20;

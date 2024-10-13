@@ -30,7 +30,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
-  nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemdMinimal ];
 
   # We don't inject the package into propagatedBuildInputs unless
   # asked to avoid hard-requiring a large package. For the journald

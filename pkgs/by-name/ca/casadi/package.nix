@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
         "if (SWIG_IMPORT)" \
         "if (NOT SWIG_IMPORT)"
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # this is only printing stuff, and is not defined on all CPU
       substituteInPlace casadi/interfaces/hpipm/hpipm_runtime.hpp --replace-fail \
         "d_print_exp_tran_mat" \
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.numpy
       python3Packages.python
     ]
-    ++ lib.optionals stdenv.isDarwin [ llvmPackages_17.openmp ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages_17.openmp ];
 
   cmakeFlags = [
     (lib.cmakeBool "WITH_PYTHON" pythonSupport)

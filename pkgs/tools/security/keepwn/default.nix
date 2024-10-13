@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     termcolor
   ];
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/KeePwn $out/bin/$pname
   '';
 

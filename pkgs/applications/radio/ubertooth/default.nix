@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libbtbb libpcap libusb1 bluez ];
 
-  cmakeFlags = lib.optionals stdenv.isLinux [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
     "-DINSTALL_UDEV_RULES=TRUE"
     "-DUDEV_RULES_PATH=etc/udev/rules.d"
     "-DUDEV_RULES_GROUP=${udevGroup}"

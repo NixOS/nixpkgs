@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     zstd
   ] ++ lib.optionals sslSupport [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 

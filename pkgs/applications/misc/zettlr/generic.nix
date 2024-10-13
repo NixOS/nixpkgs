@@ -26,8 +26,9 @@ appimageTools.wrapType2 rec {
     pkgs.pandoc
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
-    source "${makeWrapper}/nix-support/setup-hook"
     wrapProgram $out/bin/zettlr \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
     install -m 444 -D ${appimageContents}/Zettlr.desktop $out/share/applications/Zettlr.desktop

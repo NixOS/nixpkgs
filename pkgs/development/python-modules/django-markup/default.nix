@@ -46,7 +46,7 @@ buildPythonPackage rec {
 
   dependencies = [ django ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all_filter_dependencies = [
       bleach
       docutils
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.all_filter_dependencies;
+  ] ++ optional-dependencies.all_filter_dependencies;
 
   preCheck = ''
     export DJANGO_SETTINGS_MODULE=django_markup.tests

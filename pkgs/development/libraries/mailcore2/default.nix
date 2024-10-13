@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libetpan cyrus_sasl libctemplate libuchardet
     html-tidy libxml2 openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     glib
     icu
     libuuid
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
       --replace buffio.h tidybuffio.h
     substituteInPlace src/core/basetypes/MCString.cpp \
       --replace "xmlErrorPtr" "const xmlError *"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace src/core/basetypes/MCICUTypes.h \
       --replace "__CHAR16_TYPE__ UChar" "char16_t UChar"
   '';
 
-  cmakeFlags = lib.optionals (!stdenv.isDarwin) [
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     cp src/libMailCore.* $out/lib
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   checkPhase = ''
     (
       cd unittest

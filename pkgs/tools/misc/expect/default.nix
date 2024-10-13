@@ -38,11 +38,16 @@ tcl.mkTclDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper ];
 
   strictDeps = true;
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   hardeningDisable = [ "format" ];
 
   postInstall = ''
     tclWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ tcl ]})
-    ${lib.optionalString stdenv.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
+    ${lib.optionalString stdenv.hostPlatform.isDarwin "tclWrapperArgs+=(--prefix DYLD_LIBRARY_PATH : $out/lib/expect${version})"}
   '';
 
   outputs = [ "out" "dev" ];

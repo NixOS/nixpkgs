@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     dbus # For dbus-run-session
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
   checkPhase = ''
     runHook preCheck
 
@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/gedit/libgedit-amtk";
+    changelog = "https://gitlab.gnome.org/World/gedit/libgedit-amtk/-/blob/${version}/NEWS?ref_type=tags";
     description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl21Plus;

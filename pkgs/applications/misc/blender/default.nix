@@ -19,6 +19,7 @@
   dbus,
   embree,
   fetchgit,
+  fetchpatch2,
   fetchzip,
   ffmpeg,
   fftw,
@@ -71,22 +72,24 @@
   python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
-  spaceNavSupport ? stdenv.isLinux,
+  spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
   tbb,
   wayland,
   wayland-protocols,
   wayland-scanner,
-  waylandSupport ? stdenv.isLinux,
+  waylandSupport ? stdenv.hostPlatform.isLinux,
   zlib,
   zstd,
 }:
 
 let
-  embreeSupport = (!stdenv.isAarch64 && stdenv.isLinux) || stdenv.isDarwin;
-  openImageDenoiseSupport = (!stdenv.isAarch64 && stdenv.isLinux) || stdenv.isDarwin;
-  openUsdSupport = !stdenv.isDarwin;
+  embreeSupport =
+    (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+  openImageDenoiseSupport =
+    (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
+  openUsdSupport = !stdenv.hostPlatform.isDarwin;
 
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override { withOsl = false; };
@@ -105,18 +108,18 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.2.1";
+  version = "4.2.2";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-+Y4JbzeK+30fO8WdEmvjOeQjm094ofsUhRFXs9mkcxI=";
+      hash = "sha256-wv9EwB4DXSVS5K+lb+7gU3pTrMDO/ELeV2eErivfsWU=";
     })
     (fetchgit {
       name = "assets";
       url = "https://projects.blender.org/blender/blender-assets.git";
-      rev = "6864f1832e71a31e1e04f72bb7a5a1f53f0cd01c";
+      rev = "v${finalAttrs.version}";
       fetchLFS = true;
       hash = "sha256-vepK0inPMuleAJBSipwoI99nMBBiFaK/eSMHDetEtjY=";
     })
@@ -130,10 +133,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "source";
 
-  patches = [ ./draco.patch ] ++ lib.optional stdenv.isDarwin ./darwin.patch;
+  patches = [
+    ./draco.patch
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-1.patch";
+      hash = "sha256-YXXqP/+79y3f41n3cJ3A1RBzgdoYqfKZD/REqmWYdgQ=";
+    })
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/blender/-/raw/4b6214600e11851d7793256e2f6846a594e6f223/ffmpeg-7-2.patch";
+      hash = "sha256-mF6IA/dbHdNEkBN5XXCRcLIZ/8kXoirNwq7RDuLRAjw=";
+    })
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin.patch;
 
   postPatch =
-    (lib.optionalString stdenv.isDarwin ''
+    (lib.optionalString stdenv.hostPlatform.isDarwin ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
       substituteInPlace source/creator/CMakeLists.txt \
         --replace-fail '${"$"}{LIBDIR}/python' \
@@ -200,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DLIBDIR=/does-not-exist"
       "-DSSE2NEON_INCLUDE_DIR=${sse2neon}/lib"
     ]
@@ -275,7 +288,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional embreeSupport embree
     ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
     ++ (
-      if (!stdenv.isDarwin) then
+      if (!stdenv.hostPlatform.isDarwin) then
         [
           libGL
           libGLU
@@ -328,14 +341,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   blenderExecutable =
     placeholder "out"
-    + (if stdenv.isDarwin then "/Applications/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        "/Applications/Blender.app/Contents/MacOS/Blender"
+      else
+        "/bin/blender"
+    );
 
   postInstall =
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir $out/Applications
       mv $out/Blender.app $out/Applications
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       mv $out/share/blender/${lib.versions.majorMinor finalAttrs.version}/python{,-ext}
     ''
     + ''
@@ -355,7 +373,7 @@ stdenv.mkDerivation (finalAttrs: {
         addDriverRunpath "$program"
       done
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       makeWrapper $out/Applications/Blender.app/Contents/MacOS/Blender $out/bin/blender
     '';
 
@@ -377,7 +395,7 @@ stdenv.mkDerivation (finalAttrs: {
         import bpy
         bpy.context.scene.eevee.taa_render_samples = 32
         bpy.context.scene.cycles.samples = 32
-        if ${if (stdenv.isAarch64 && stdenv.isLinux) then "True" else "False"}:
+        if ${if (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) then "True" else "False"}:
             bpy.context.scene.cycles.use_denoising = False
         bpy.context.scene.render.resolution_x = 100
         bpy.context.scene.render.resolution_y = 100
@@ -433,7 +451,7 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
       "aarch64-darwin"
     ];
-    broken = stdenv.isDarwin; # fails due to too-old SDK, using newer SDK fails to compile
+    broken = stdenv.hostPlatform.isDarwin; # fails due to too-old SDK, using newer SDK fails to compile
     maintainers = with lib.maintainers; [
       amarshall
       veprbl

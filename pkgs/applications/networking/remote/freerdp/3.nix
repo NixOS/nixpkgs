@@ -152,13 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2_image
     uriparser
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
     fuse3
     systemd
     wayland
     wayland-scanner
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AVFoundation
     Carbon
@@ -179,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     WITH_CUPS = cups != null;
     WITH_FAAC = withUnfree && faac != null;
     WITH_FAAD2 = faad2 != null;
-    WITH_FUSE = stdenv.isLinux && fuse3 != null;
+    WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
     WITH_JPEG = libjpeg_turbo != null;
     WITH_KRB5 = libkrb5 != null;
     WITH_OPENH264 = openh264 != null;
@@ -194,7 +194,7 @@ stdenv.mkDerivation (finalAttrs: {
     WITH_X11 = true;
   };
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-DTARGET_OS_IPHONE=0"
     "-DTARGET_OS_WATCH=0"
     "-include AudioToolbox/AudioToolbox.h"
@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=incompatible-function-pointer-types"
   ]);
 
-  env.NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_LDFLAGS = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-framework AudioToolbox"
   ]);
 

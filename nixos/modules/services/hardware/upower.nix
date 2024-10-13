@@ -85,7 +85,7 @@ in
 
       percentageLow = lib.mkOption {
         type = lib.types.ints.unsigned;
-        default = 10;
+        default = 20;
         description = ''
           When `usePercentageForPolicy` is
           `true`, the levels at which UPower will consider the
@@ -103,7 +103,7 @@ in
 
       percentageCritical = lib.mkOption {
         type = lib.types.ints.unsigned;
-        default = 3;
+        default = 5;
         description = ''
           When `usePercentageForPolicy` is
           `true`, the levels at which UPower will consider the

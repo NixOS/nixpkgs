@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
-  propagatedBuildInputs = lib.optional (!stdenv.isLinux) libiconv;
-  buildInputs = lib.optionals stdenv.isDarwin [
+  propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];

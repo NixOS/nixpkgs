@@ -31,7 +31,7 @@
     let
       inherit (prev) pname version;
     in
-    if stdenvNoCC.isLinux then
+    if stdenvNoCC.hostPlatform.isLinux then
       {
         src = fetchurl {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-linux.AppImage";
@@ -64,7 +64,7 @@
         '';
       }
     else
-      assert stdenvNoCC.isDarwin;
+      assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-mac.zip";

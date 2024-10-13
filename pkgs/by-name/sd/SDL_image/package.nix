@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature false "png-shared")
     (lib.enableFeature false "tif-shared")
     (lib.enableFeature false "webp-shared")
-    (lib.enableFeature (!stdenv.isDarwin) "sdltest")
+    (lib.enableFeature (!stdenv.hostPlatform.isDarwin) "sdltest")
   ];
 
   nativeBuildInputs = [
@@ -58,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     libtiff
     libwebp
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   outputs = [
     "out"

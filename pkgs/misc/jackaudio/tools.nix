@@ -16,7 +16,7 @@
 , zita-alsa-pcmi
 , zita-resampler
 
-, enableAlsa ? stdenv.isLinux
+, enableAlsa ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation (final: {

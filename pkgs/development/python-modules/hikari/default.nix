@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server = [ pynacl ];
   };
 

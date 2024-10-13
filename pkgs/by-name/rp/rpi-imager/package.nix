@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       qt5.qttools
       xz
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       qt5.qtwayland
     ];
 
@@ -81,6 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.all;
     # does not build on darwin
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -31,13 +31,13 @@
 , luajit
 , swig
 , python3
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libcef
 , pciutils
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , withFdk ? true
 , pipewire
 , libdrm
@@ -84,6 +84,14 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
       hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
       includes = [ "*/CompilerConfig.cmake" ];
+    })
+
+    (fetchpatch {
+      name = "qt-6.8.patch";
+      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
+      extraPrefix = "plugins/obs-websocket/";
+      stripLen = 1;
+      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
     })
   ];
 
@@ -162,6 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
+    "-Wno-error=stringop-overflow="
   ];
 
   dontWrapGApps = true;
@@ -183,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addDriverRunpath $out/lib/lib*.so
     addDriverRunpath $out/lib/obs-plugins/*.so
 

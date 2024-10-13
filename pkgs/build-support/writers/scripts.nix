@@ -131,7 +131,7 @@ rec {
             # On darwin a script cannot be used as an interpreter in a shebang but
             # there doesn't seem to be a limit to the size of shebang and multiple
             # arguments to the interpreter are allowed.
-            if [[ -n "${toString pkgs.stdenvNoCC.isDarwin}" ]] && isScript $interpreter
+            if [[ -n "${toString pkgs.stdenvNoCC.hostPlatform.isDarwin}" ]] && isScript $interpreter
             then
               wrapperInterpreterLine=$(head -1 "$interpreter" | tail -c+3)
               # Get first word from the line (note: xargs echo remove leading spaces)
@@ -523,6 +523,89 @@ rec {
   writeFishBin = name: writeFish "/bin/${name}";
 
   /**
+    Like writeScript but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` without arguments
+
+    ```nix
+    writeBabashka "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashka` with arguments
+
+    ```nix
+    writeBabashka "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashka =
+    name: argsOrScript:
+    if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
+      makeScriptWriter (
+        argsOrScript
+        // {
+          interpreter = "${lib.getExe pkgs.babashka}";
+          check = "${lib.getExe pkgs.clj-kondo} --lint";
+        }
+      ) name
+    else
+      makeScriptWriter {
+        interpreter = "${lib.getExe pkgs.babashka}";
+        check = "${lib.getExe pkgs.clj-kondo} --lint";
+      } name argsOrScript;
+
+  /**
+    Like writeScriptBin but the first line is a shebang to babashka
+
+    Can be called with or without extra arguments.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` without arguments
+
+    ```nix
+    writeBabashkaBin "example" ''
+      (println "hello world")
+    ''
+    ```
+    :::
+
+    :::{.example}
+    ## `pkgs.writers.writeBabashkaBin` with arguments
+
+    ```nix
+    writeBabashkaBin "example"
+    {
+      makeWrapperArgs = [
+        "--prefix" "PATH" ":" "${lib.makeBinPath [ pkgs.hello ]}"
+      ];
+    }
+    ''
+      (require '[babashka.tasks :as tasks])
+      (tasks/shell "hello" "-g" "Hello babashka!")
+    ''
+    ```
+    :::
+  */
+  writeBabashkaBin = name: writeBabashka "/bin/${name}";
+
+  /**
     writeHaskell takes a name, an attrset with libraries and haskell version (both optional)
     and some haskell source code and returns an executable.
 
@@ -567,6 +650,53 @@ rec {
     writeHaskellBin takes the same arguments as writeHaskell but outputs a directory (like writeScriptBin)
   */
   writeHaskellBin = name: writeHaskell "/bin/${name}";
+
+  /**
+    writeNim takes a name, an attrset with an optional Nim compiler, and some
+    Nim source code, returning an executable.
+
+    # Examples
+    :::{.example}
+    ## `pkgs.writers.writeNim` usage example
+
+    ```nix
+      writeNim "hello-nim" { nim = pkgs.nim2; } ''
+        echo "hello nim"
+      '';
+    ```
+    :::
+  */
+  writeNim =
+    name:
+    {
+      makeWrapperArgs ? [ ],
+      nim ? pkgs.nim2,
+      nimCompileOptions ? { },
+      strip ? true,
+    }:
+    let
+      nimCompileCmdArgs = lib.cli.toGNUCommandLineShell { optionValueSeparator = ":"; } (
+        {
+          d = "release";
+          nimcache = ".";
+        }
+        // nimCompileOptions
+      );
+    in
+    makeBinWriter {
+      compileScript = ''
+        cp $contentPath tmp.nim
+        ${lib.getExe nim} compile ${nimCompileCmdArgs} tmp.nim
+        mv tmp $out
+      '';
+      inherit makeWrapperArgs strip;
+    } name;
+
+  /**
+    writeNimBin takes the same arguments as writeNim but outputs a directory
+    (like writeScriptBin)
+  */
+  writeNimBin = name: writeNim "/bin/${name}";
 
   /**
     Like writeScript but the first line is a shebang to nu
@@ -753,7 +883,7 @@ rec {
       strip ? true,
     }:
     let
-      darwinArgs = lib.optionals stdenv.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
+      darwinArgs = lib.optionals stdenv.hostPlatform.isDarwin [ "-L${lib.getLib libiconv}/lib" ];
     in
     makeBinWriter {
       compileScript = ''

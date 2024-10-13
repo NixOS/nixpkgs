@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/gdraheim/zziplib";
+    changelog = "https://github.com/gdraheim/zziplib/blob/${version}/ChangeLog";
     description = "Library to extract data from files archived in a zip file";
     longDescription = ''
       The zziplib library is intentionally lightweight, it offers the ability to

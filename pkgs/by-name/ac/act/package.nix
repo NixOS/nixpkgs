@@ -1,20 +1,24 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
-buildGoModule rec {
+let
+  version = "0.2.67";
+in
+buildGoModule {
   pname = "act";
-  version = "0.2.66";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "nektos";
-    repo = pname;
+    repo = "act";
     rev = "refs/tags/v${version}";
-    hash = "sha256-84ssbd0qF0p2x+cFYwYNW4P79KSZqhvF4Zd6wlRhgLo=";
+    hash = "sha256-yNa6o35YUP8D8K3kQLHQOG3V9mWGoxNvYgw5UQOqAtc=";
   };
 
-  vendorHash = "sha256-fzGnswfzvKhzs7iYnsiQb1c+TTk9+113uj7ryOAvUJk=";
+  vendorHash = "sha256-bkOLortxztmzAO/KCbQC4YsZ5iAero1yxblCkDZg8Ds=";
 
   doCheck = false;
 
@@ -24,12 +28,15 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Run your GitHub Actions locally";
     mainProgram = "act";
     homepage = "https://github.com/nektos/act";
     changelog = "https://github.com/nektos/act/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne kashw2 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      Br1ght0ne
+      kashw2
+    ];
   };
 }

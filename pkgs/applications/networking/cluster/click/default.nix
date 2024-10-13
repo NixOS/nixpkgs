@@ -13,10 +13,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fcJTxZX9mdF4oFl/Cn1egczRy+yhWt2zLKsdLKz6Q+s=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = ''The "Command Line Interactive Controller for Kubernetes"'';

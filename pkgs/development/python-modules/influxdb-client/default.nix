@@ -39,7 +39,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     async = [
       aiocsv
       aiohttp

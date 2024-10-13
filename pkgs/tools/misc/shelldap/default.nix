@@ -28,7 +28,7 @@ perlPackages.buildPerlPackage rec {
     YAMLSyck
   ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   prePatch = ''
     touch Makefile.PL
@@ -40,7 +40,7 @@ perlPackages.buildPerlPackage rec {
     runHook postInstall
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/shelldap
   '';
 

@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
 let
   cfg = config.services.mame;
-  mame = "mame${lib.optionalString pkgs.stdenv.is64bit "64"}";
+  mame = "mame${lib.optionalString pkgs.stdenv.hostPlatform.is64bit "64"}";
 in
 {
   options = {

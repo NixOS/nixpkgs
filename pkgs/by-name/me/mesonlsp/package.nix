@@ -52,11 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
       libpkgconf
       nlohmann_json
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libossp_uuid
       pkgsStatic.fmt
     ]
-    ++ lib.optionals stdenv.isLinux [ libuuid ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libuuid ];
 
   mesonFlags = [ "-Dbenchmarks=false" ];
 

@@ -81,7 +81,7 @@ buildPythonApplication rec {
     "--forked"
   ];
 
-  preCheck = lib.optionalString (!(stdenv.isLinux && stdenv.isAarch64)) ''
+  preCheck = lib.optionalString (!(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)) ''
     # Disable outline atomics for rust tests on aarch64-linux.
     export RUSTFLAGS="-Ctarget-feature=-outline-atomics"
   '' + ''

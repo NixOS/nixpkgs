@@ -88,8 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals enableQt [ qt5.qttools qt5.qtbase ]
   ++ lib.optionals enableGTK3 [ gtk3 xorg.libpthreadstubs ]
   ++ lib.optionals enableSystemd [ systemd ]
-  ++ lib.optionals stdenv.isLinux [ inotify-tools ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   postInstall = ''
     mkdir $apparmor
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
       include "${apparmorRulesFromClosure { name = "transmission-daemon"; } ([
         curl libevent openssl pcre zlib libnatpmp miniupnpc
       ] ++ lib.optionals enableSystemd [ systemd ]
-        ++ lib.optionals stdenv.isLinux [ inotify-tools ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify-tools ]
       )}"
       r @{PROC}/sys/kernel/random/uuid,
       r @{PROC}/sys/vm/overcommit_memory,

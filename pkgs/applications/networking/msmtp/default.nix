@@ -48,10 +48,10 @@ let
     inherit version src meta;
 
     configureFlags = [ "--sysconfdir=/etc" "--with-libgsasl" ]
-      ++ optionals stdenv.isDarwin [ "--with-macosx-keyring" ];
+      ++ optionals stdenv.hostPlatform.isDarwin [ "--with-macosx-keyring" ];
 
     buildInputs = [ gnutls gsasl libidn2 ]
-      ++ optionals stdenv.isDarwin [ Security ]
+      ++ optionals stdenv.hostPlatform.isDarwin [ Security ]
       ++ optionals withKeyring [ libsecret ];
 
     nativeBuildInputs = [ autoreconfHook pkg-config texinfo ];

@@ -36,6 +36,8 @@
   torch,
   tqdm,
   transformers,
+
+  tinygrad,
 }:
 
 buildPythonPackage rec {
@@ -67,6 +69,18 @@ buildPythonPackage rec {
       substituteInPlace tinygrad/runtime/autogen/opencl.py \
         --replace-fail "ctypes.util.find_library('OpenCL')" "'${ocl-icd}/lib/libOpenCL.so'"
     ''
+    # Patch `clang` directly in the source file
+    + ''
+      substituteInPlace tinygrad/runtime/ops_clang.py \
+        --replace-fail "'clang'" "'${lib.getExe clang}'"
+    ''
+    # `cuda_fp16.h` and co. are needed at runtime to compile kernels
+    + lib.optionalString cudaSupport ''
+      substituteInPlace tinygrad/runtime/support/compiler_cuda.py \
+        --replace-fail \
+        ', "-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include/"' \
+        ', "-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
+    ''
     + lib.optionalString rocmSupport ''
       substituteInPlace tinygrad/runtime/autogen/hip.py \
         --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
@@ -82,12 +96,18 @@ buildPythonPackage rec {
     [
       numpy
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # pyobjc-framework-libdispatch
       # pyobjc-framework-metal
     ];
 
-  pythonImportsCheck = [ "tinygrad" ];
+  pythonImportsCheck =
+    [
+      "tinygrad"
+    ]
+    ++ lib.optionals cudaSupport [
+      "tinygrad.runtime.ops_nv"
+    ];
 
   nativeCheckInputs = [
     blobfile
@@ -170,6 +190,10 @@ buildPythonPackage rec {
     "extra/"
   ];
 
+  passthru.tests = {
+    withCuda = tinygrad.override { cudaSupport = true; };
+  };
+
   meta = {
     description = "Simple and powerful neural network framework";
     homepage = "https://github.com/tinygrad/tinygrad";
@@ -177,6 +201,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # Requires unpackaged pyobjc-framework-libdispatch and pyobjc-framework-metal
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

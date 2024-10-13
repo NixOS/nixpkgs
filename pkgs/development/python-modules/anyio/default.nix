@@ -56,7 +56,7 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trio = [ trio ];
   };
 
@@ -69,7 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
     uvloop
-  ] ++ passthru.optional-dependencies.trio;
+  ] ++ optional-dependencies.trio;
 
   pytestFlagsArray = [
     "-W"
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
     "test_is_block_device"
   ];

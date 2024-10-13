@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     cp ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
 
   cargoBuildFlags = [ "-p" "autocorrect-cli" ];
   cargoTestFlags = [ "-p" "autocorrect-cli" ];

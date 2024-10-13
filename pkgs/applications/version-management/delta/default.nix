@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/dandavison/delta/issues/1660
   dontUseCargoParallelTests = true;
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # This test tries to read /etc/passwd, which fails with the sandbox
     # enabled on Darwin
     "--skip=test_diff_real_files"

@@ -28,6 +28,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "barrage";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

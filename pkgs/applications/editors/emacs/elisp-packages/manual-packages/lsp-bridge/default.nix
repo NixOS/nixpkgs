@@ -24,18 +24,19 @@ let
       setuptools
       sexpdata
       six
+      watchdog
     ]
   );
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-09-11";
+  version = "0-unstable-2024-10-07";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "fb64891c2585f9fc0b7f2062cc2b98321aa4e4ca";
-    hash = "sha256-ChpZhFEKvN+1oYHbQKBUMbTjk/U++kCDnImMVtcYVBc=";
+    rev = "f726a341c283a5b84d3587cf84e40817b8ec72c6";
+    hash = "sha256-JL02pYjM5DyUt5wCNN0UnLVSXv9DCfSaSBGy5PzLvyA=";
   };
 
   patches = [
@@ -85,8 +86,6 @@ melpaBuild {
   '';
 
   __darwinAllowLocalNetworking = true;
-
-  ignoreCompilationError = false;
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 

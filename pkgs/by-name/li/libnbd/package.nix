@@ -1,15 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, pkg-config
-, perl
-, buildPythonBindings ? false, python3
-, libxml2
-, fuse
-, fuse3
-, gnutls
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash-completion,
+  pkg-config,
+  perl,
+  buildPythonBindings ? false,
+  buildOcamlBindings ? false,
+  ocamlPackages,
+  python3,
+  libxml2,
+  fuse,
+  fuse3,
+  gnutls,
+  autoreconfHook,
 }:
+
+lib.throwIf (buildOcamlBindings && !lib.versionAtLeast ocamlPackages.ocaml.version "4.05")
+  "OCaml binding are not available for OCaml < 4.05"
 
 stdenv.mkDerivation rec {
   pname = "libnbd";
@@ -20,12 +28,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-7DgviwGPPLccTPvomyH+0CMknXmR2wENsxpXD97OP84=";
   };
 
-  nativeBuildInputs = [
-    bash-completion
-    pkg-config
-    perl
-  ]
-    ++ lib.optionals buildPythonBindings [ python3 ];
+  nativeBuildInputs =
+    [
+      bash-completion
+      pkg-config
+      perl
+      autoreconfHook
+    ]
+    ++ lib.optionals buildPythonBindings [ python3 ]
+    ++ lib.optionals buildOcamlBindings (
+      with ocamlPackages;
+      [
+        findlib
+        ocaml
+      ]
+    );
 
   buildInputs = [
     fuse
@@ -34,7 +51,14 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  configureFlags = lib.optionals buildPythonBindings [ "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}" ];
+  postPatch = lib.optionalString buildOcamlBindings ''
+    substituteInPlace ocaml/Makefile.am \
+        --replace-fail '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib'
+  '';
+
+  configureFlags = lib.optionals buildPythonBindings [
+    "--with-python-installdir=${placeholder "out"}/${python3.sitePackages}"
+  ];
 
   installFlags = [ "bashcompdir=$(out)/share/bash-completion/completions" ];
 
@@ -63,10 +87,13 @@ stdenv.mkDerivation rec {
       - Shell (nbdsh) for command line and scripting.
     '';
     license = with licenses; lgpl21Plus;
-    maintainers = with maintainers; [ AndersonTorres humancalico ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      humancalico
+    ];
     platforms = with platforms; linux;
   };
 }
 # TODO: package the 1.6-stable version too
 # TODO: git version needs ocaml
-# TODO: bindings for go and ocaml
+# TODO: bindings for go

@@ -5,7 +5,6 @@ let
 
   poolName = "rss-bridge";
 
-  configAttr = lib.recursiveUpdate { FileCache.path = "${cfg.dataDir}/cache/"; } cfg.config;
   cfgHalf = lib.mapAttrsRecursive (path: value: let
     envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
     envValue = if lib.isList value then
@@ -14,7 +13,7 @@ let
       lib.boolToString value
     else
       toString value;
-  in "fastcgi_param \"${envName}\" \"${envValue}\";") configAttr;
+  in if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null) cfg.config;
   cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
@@ -70,9 +69,26 @@ in
       };
 
       config = mkOption {
-        type = with types; attrsOf (attrsOf (oneOf [ bool int str (listOf str) ]));
-        default = {};
-        defaultText = options.literalExpression "FileCache.path = \"\${config.services.rss-bridge.dataDir}/cache/\"";
+        type = types.submodule {
+          freeformType = (pkgs.formats.ini {}).type;
+          options = {
+            system = {
+              enabled_bridges = mkOption {
+                type = with types; nullOr (either str (listOf str));
+                description = "Only enabled bridges are available for feed production";
+                default = null;
+              };
+            };
+            FileCache = {
+              path = mkOption {
+                type = types.str;
+                description = "Directory where to store cache files (if cache.type = \"file\").";
+                default = "${cfg.dataDir}/cache/";
+                defaultText = options.literalExpression "\${config.services.rss-bridge.dataDir}/cache/";
+              };
+            };
+          };
+        };
         example = options.literalExpression ''
           {
             system.enabled_bridges = [ "*" ];
@@ -112,15 +128,13 @@ in
         };
       };
     };
-    systemd.tmpfiles.settings.rss-bridge = let
-      perm = {
-        mode = "0750";
-        user = cfg.user;
-        group = cfg.group;
-      };
-    in {
-      "${configAttr.FileCache.path}".d = perm;
-      "${cfg.dataDir}/config.ini.php".z = perm;
+
+    systemd.tmpfiles.settings.rss-bridge = {
+      "${cfg.config.FileCache.path}".d = {
+          mode = "0750";
+          user = cfg.user;
+          group = cfg.group;
+        };
     };
 
     services.nginx = mkIf (cfg.virtualHost != null) {
@@ -139,7 +153,6 @@ in
               fastcgi_split_path_info ^(.+\.php)(/.+)$;
               fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-              fastcgi_param RSSBRIDGE_DATA ${cfg.dataDir};
               ${cfgEnv}
             '';
           };

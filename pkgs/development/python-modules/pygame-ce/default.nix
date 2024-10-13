@@ -77,7 +77,7 @@ buildPythonPackage rec {
         --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
         --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # flaky
       rm test/system_test.py
       substituteInPlace test/meson.build \
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   nativeCheckInputs = [
     numpy

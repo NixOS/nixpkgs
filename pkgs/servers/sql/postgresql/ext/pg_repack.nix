@@ -4,7 +4,6 @@
 , postgresql
 , postgresqlTestHook
 , testers
-, zlib
 }:
 
 stdenv.mkDerivation (finalAttrs: {

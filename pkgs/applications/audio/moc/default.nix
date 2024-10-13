@@ -3,7 +3,7 @@
 , ncurses, db , popt, libtool
 , libiconv, CoreServices
 # Sound sub-systems
-, alsaSupport ? (!stdenv.isDarwin), alsa-lib
+, alsaSupport ? (!stdenv.hostPlatform.isDarwin), alsa-lib
 , pulseSupport ? true, libpulseaudio
 , jackSupport ? true, libjack2
 , ossSupport ? true
@@ -16,7 +16,7 @@
 , musepackSupport ? true, libmpc, libmpcdec, taglib
 , vorbisSupport ? true, libvorbis
 , speexSupport ? true, speex
-, ffmpegSupport ? true, ffmpeg_7
+, ffmpegSupport ? true, ffmpeg
 , sndfileSupport ? true, libsndfile
 , wavpackSupport ? true, wavpack
 # Misc
@@ -74,13 +74,13 @@ stdenv.mkDerivation {
     ++ lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ lib.optional vorbisSupport libvorbis
     ++ lib.optional speexSupport speex
-    ++ lib.optional ffmpegSupport ffmpeg_7
+    ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional sndfileSupport libsndfile
     ++ lib.optional wavpackSupport wavpack
     # Misc
     ++ lib.optional curlSupport curl
     ++ lib.optional samplerateSupport libsamplerate
-    ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv CoreServices ];
 
   configureFlags = [
     # Sound sub-systems

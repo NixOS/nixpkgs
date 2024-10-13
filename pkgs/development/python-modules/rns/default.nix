@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "rns";
-  version = "0.7.8";
+  version = "0.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "Reticulum";
     rev = "refs/tags/${version}";
-    hash = "sha256-2UXkfijLeMOpyurR1Bz0dbQxKO7efRp3UcqXIUWRjs0=";
+    hash = "sha256-A1ZDyYHjbC2jz+m4EHRPlOMzkpwCCxo902bMK4I/+I4=";
   };
 
   patches = [
@@ -49,6 +49,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/markqvist/Reticulum";
     changelog = "https://github.com/markqvist/Reticulum/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      qbit
+    ];
   };
 }

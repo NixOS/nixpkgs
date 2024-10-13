@@ -11,7 +11,7 @@
 , perl
 , sqlite
 , tzdata
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , xvfb-run
 }:
@@ -54,7 +54,7 @@ in python.pkgs.buildPythonApplication rec {
   buildInputs = [
     sqlite
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     glib-networking
     adwaita-icon-theme
     gdk-pixbuf

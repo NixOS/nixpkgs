@@ -4,7 +4,6 @@
   fetchurl,
   appimageTools,
   undmg,
-  copyDesktopItems,
 }:
 
 let
@@ -39,7 +38,7 @@ let
     '';
     homepage = "https://hoppscotch.com";
     downloadPage = "https://hoppscotch.com/downloads";
-    changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/2024.8.1";
+    changelog = "https://github.com/hoppscotch/hoppscotch/releases/tag/20${lib.head (lib.splitString "-" version)}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ DataHearth ];
     mainProgram = "hoppscotch";
@@ -51,7 +50,7 @@ let
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 in
-if stdenv.isDarwin then
+if stdenv.hostPlatform.isDarwin then
   stdenv.mkDerivation {
     inherit
       pname

@@ -45,7 +45,7 @@
 # - the source build doesn't work on NVIDIA Jetson platforms
 
 # unsupported combination
-assert !(stdenv.isDarwin && cudaSupport);
+assert !(stdenv.hostPlatform.isDarwin && cudaSupport);
 
 let
   packages = import ./binary-hashes.nix;
@@ -160,7 +160,7 @@ buildPythonPackage {
 
       rpath = lib.makeLibraryPath (libpaths ++ cudapaths);
     in
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       # This is an array containing all the directories in the tensorflow2
       # package that contain .so files.
       #

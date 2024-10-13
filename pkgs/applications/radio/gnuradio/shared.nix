@@ -88,7 +88,7 @@ in {
       remove-references-to -t ${stdenv.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
     # Clang references in InstalledDir
-    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.isDarwin) ''
+    + lib.optionalString (hasFeature "gnuradio-runtime" && stdenv.hostPlatform.isDarwin) ''
       remove-references-to -t ${stdenv.cc.cc} $(readlink -f $out/lib/libgnuradio-runtime${stdenv.hostPlatform.extensions.sharedLibrary})
     ''
   ;
@@ -116,7 +116,7 @@ in {
   dontWrapQtApps = true;
   # On darwin, it requires playing with DYLD_FALLBACK_LIBRARY_PATH to make if
   # find libgnuradio-runtim.3.*.dylib .
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen

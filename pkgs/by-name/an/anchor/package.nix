@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  cargoPatches = [
+    ./0001-update-time-rs.patch
+  ];
+
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -24,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
@@ -35,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_check_and_get_full_commit_when_partial_commit"
     "--skip=tests::test_get_anchor_version_from_commit"
   ];
-
 
   meta = with lib; {
     description = "Solana Sealevel Framework";

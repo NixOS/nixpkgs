@@ -72,6 +72,7 @@ stdenv.mkDerivation rec {
     description = "GSettings editor for GNOME";
     mainProgram = "dconf-editor";
     homepage = "https://apps.gnome.org/DconfEditor/";
+    changelog = "https://gitlab.gnome.org/GNOME/dconf-editor/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;

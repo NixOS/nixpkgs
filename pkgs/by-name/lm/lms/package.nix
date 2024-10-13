@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lms";
-  version = "3.57.0";
+  version = "3.58.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "lms";
     rev = "v${version}";
-    hash = "sha256-KeskFVTZMxsFefbjnRBfrbS88Wt+2kwzboDziBsZJrY=";
+    hash = "sha256-sWlD/n9Qjwiu/UfZrxRxwv2rc4XwRZN35fyjIriGZPY=";
   };
 
   strictDeps = true;
@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/epoupon/lms";
+    changelog = "https://github.com/epoupon/lms/releases/tag/${src.rev}";
     description = "Lightweight Music Server - Access your self-hosted music using a web interface";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;

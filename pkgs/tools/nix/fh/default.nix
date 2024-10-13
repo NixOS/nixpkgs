@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fh";
-  version = "0.1.17";
+  version = "0.1.18";
 
   src = fetchFromGitHub {
     owner = "DeterminateSystems";
     repo = "fh";
     rev = "v${version}";
-    hash = "sha256-+Q7mZ2uzMjShKWVvYLz9qH8g0w8oP93lNlJiYxFFoAI=";
+    hash = "sha256-McfJXbr/oadsfQV7hzB6sEMy9sfXthHcjsbOiQs2+rU=";
   };
 
-  cargoHash = "sha256-DJOj9EJswnPIm66u585k4ZWSi6Su/naQ+myQuLiGLFE=";
+  cargoHash = "sha256-PGXd4spD2gNyQIloVZuhWZ1VQtacXPLMCQiBekZbEp4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,13 +29,13 @@ rustPlatform.buildRustPackage rec {
 
   checkInputs = [ cacert ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.SystemConfiguration
     gcc.cc.lib
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-I${lib.getDev libcxx}/include/c++/v1";
   };
 

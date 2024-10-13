@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-W9LnUBUKwx1x3+BEeUanisBGR2Q4dnbcMM5k8mCondM=";
   };
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     substituteInPlace meson.build --replace "'-arch', 'arm64'" ""
   '';
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs =
-    if stdenv.isDarwin then [
+    if stdenv.hostPlatform.isDarwin then [
       darwin.libobjc
       darwin.apple_sdk_11_0.Libsystem
       darwin.apple_sdk_11_0.frameworks.Cocoa
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     ];
 
   mesonFlags = [
-    (lib.mesonBool "examples" (!stdenv.isDarwin))
+    (lib.mesonBool "examples" (!stdenv.hostPlatform.isDarwin))
   ];
 
   passthru.updateScript = unstableGitUpdater {

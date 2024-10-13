@@ -15,7 +15,7 @@
   protobufc,
   libiconv,
   libxslt,
-  docbook_xml_dtd_45,
+  docbook5,
   cunit,
   pcre2,
   nixosTests,
@@ -28,7 +28,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "postgis";
-  version = "3.4.3";
+  version = "3.5.0";
 
   outputs = [
     "out"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    hash = "sha256-+N7VBdrrj1dlnaK55Xf/ceGDqqCUcI0u7OLFbZM2H2I=";
+    hash = "sha256-ymmKIswrKzRnrE4GO0OihBPzAE3dUFvczddMVqZH9RA=";
   };
 
   buildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     json_c
     protobufc
     pcre2.dev
-  ] ++ lib.optional stdenv.isDarwin libiconv;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libiconv;
   nativeBuildInputs = [
     perl
     pkg-config
@@ -89,13 +89,13 @@ stdenv.mkDerivation rec {
     ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preCheck = ''
     substituteInPlace regress/run_test.pl --replace-fail "/share/contrib/postgis" "$out/share/postgresql/contrib/postgis"
     substituteInPlace regress/Makefile --replace-fail 's,\$$libdir,$(REGRESS_INSTALLDIR)/lib,g' "s,\\$\$libdir,$PWD/regress/00-regress-install$out/lib,g" \
       --replace-fail '$(REGRESS_INSTALLDIR)/share/contrib/postgis/*.sql' "$PWD/regress/00-regress-install$out/share/postgresql/contrib/postgis/*.sql"
-    substituteInPlace doc/postgis-out.xml --replace-fail "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" "${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd"
+    substituteInPlace doc/postgis-out.xml --replace-fail "http://docbook.org/xml/5.0/dtd/docbook.dtd" "${docbook5}/xml/dtd/docbook/docbookx.dtd"
     # The test suite hardcodes it to use /tmp.
     export PGIS_REG_TMPDIR="$TMPDIR/pgis_reg"
   '';

@@ -33,7 +33,7 @@ let
   # support for C++17 aligned allocations on macOS.
   # Tell clang we’re targeting 10.13 on x86_64-darwin while continuing to use the default SDK.
   stdenv' =
-    if stdenv.isDarwin && stdenv.isx86_64 then
+    if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
       python.stdenv.override (oldStdenv: {
         buildPlatform = oldStdenv.buildPlatform // {
           darwinMinVersion = "10.13";
@@ -115,7 +115,7 @@ buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"

@@ -100,7 +100,7 @@ buildPythonPackage rec {
     "test_valid_dblp_key"
     "test_validate_arxivid"
     "test_yaml"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_default_opener" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_default_opener" ];
 
   pythonImportsCheck = [ "papis" ];
 

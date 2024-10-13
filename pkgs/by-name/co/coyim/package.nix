@@ -34,6 +34,6 @@ buildGoModule {
     homepage = "https://coy.im/";
     license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

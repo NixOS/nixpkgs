@@ -12,8 +12,8 @@
 { pkgs, haskellLib }:
 
 let
-  inherit (pkgs) fetchpatch fetchpatch2 lib;
-  inherit (lib) throwIfNot versionOlder versions;
+  inherit (pkgs) fetchpatch lib;
+  inherit (lib) throwIfNot versionOlder;
 in
 
 with haskellLib;
@@ -184,6 +184,13 @@ self: super: {
   # Too strict bounds on hspec < 2.11
   http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
+
+  # Out of date test data: https://github.com/ocharles/weeder/issues/176
+  weeder = appendPatch (pkgs.fetchpatch {
+    name = "weeder-2.9.0-test-fix-expected.patch";
+    url = "https://github.com/ocharles/weeder/commit/56028d0c80fe89d4f2ae25275aedb72714fec7da.patch";
+    sha256 = "10zkvclyir3zf21v41zdsvg68vrkq89n64kv9k54742am2i4aygf";
+  }) super.weeder;
 
   # Allow aeson == 2.1.*
   # https://github.com/hdgarrood/aeson-better-errors/issues/23
@@ -387,7 +394,7 @@ self: super: {
   numerals-base = dontCheck (doJailbreak super.numerals-base);
 
   # This test keeps being aborted because it runs too quietly for too long
-  Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
+  Lazy-Pbkdf2 = if pkgs.stdenv.hostPlatform.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
   # check requires mysql server
   mysql-simple = dontCheck super.mysql-simple;
@@ -404,7 +411,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1h0vbz95jgj8c380rpy688frnbwind5c2y3ylaw06l2l3j6gdaq3";
+      sha256 = "0j037sis64gnrll7ajg48cvzzvxqsrhj7vnhiwcqv8wbmbfv0avn";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -454,31 +461,33 @@ self: super: {
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
-    version = "1.7.4";
+    version = "1.7.5";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.4";
-      sha256 = "sha256-lHy5kgx6J8uD+16SO47dPrbob98sh+W1tf4ceSqPVK4=";
+      rev = "v1.7.5";
+      sha256 = "sha256-KxuGSoVUFnQLB2ZcYODW7AVPAh9JqRlD5BrfsC/Q4qs=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix-api";
   }) super.cachix-api;
   cachix = (overrideCabal (drv: {
-    version = "1.7.4";
+    version = "1.7.5";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.7.4";
-      sha256 = "sha256-lHy5kgx6J8uD+16SO47dPrbob98sh+W1tf4ceSqPVK4=";
+      rev = "v1.7.5";
+      sha256 = "sha256-KxuGSoVUFnQLB2ZcYODW7AVPAh9JqRlD5BrfsC/Q4qs=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
   }) (lib.pipe
         (super.cachix.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
+          hnix-store-core = self.hnix-store-core_0_8_0_0;
         })
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
          (addBuildTool pkgs.buildPackages.pkg-config)
+         (addBuildDepend self.hnix-store-nar)
         ]
   ));
 
@@ -593,6 +602,10 @@ self: super: {
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
+
+  # 2024-09-27: dependent-sum-template pinned to 0.1.1.1, however 0.2.0.1+ required
+  hnix-store-core_0_8_0_0 = super.hnix-store-core_0_8_0_0.override { dependent-sum-template = self.dependent-sum-template_0_2_0_1; };
+
   # 2023-12-11: Needs older core
   hnix-store-remote = super.hnix-store-remote.override { hnix-store-core = self.hnix-store-core_0_6_1_0; };
 
@@ -901,12 +914,12 @@ self: super: {
   Cabal-ide-backend = dontCheck super.Cabal-ide-backend;
 
   # This package can't be built on non-Windows systems.
-  Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.isCygwin; }) super.Win32;
+  Win32 = overrideCabal (drv: { broken = !pkgs.stdenv.hostPlatform.isCygwin; }) super.Win32;
   inline-c-win32 = dontDistribute super.inline-c-win32;
   Southpaw = dontDistribute super.Southpaw;
 
   # https://ghc.haskell.org/trac/ghc/ticket/9825
-  vimus = overrideCabal (drv: { broken = pkgs.stdenv.isLinux && pkgs.stdenv.isi686; }) super.vimus;
+  vimus = overrideCabal (drv: { broken = pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isi686; }) super.vimus;
 
   # https://github.com/kazu-yamamoto/logger/issues/42
   logger = dontCheck super.logger;
@@ -1456,6 +1469,11 @@ self: super: {
       substituteInPlace hledger-flow.cabal --replace "-static" ""
     '';
   }) super.hledger-flow;
+
+  # xmonad-contrib >= 0.18.1 for latest XMonad
+  xmonad-contrib_0_18_1 = super.xmonad-contrib_0_18_1.override {
+    xmonad = self.xmonad_0_18_0;
+  };
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
@@ -2044,6 +2062,11 @@ self: super: {
     tls = self.tls_2_0_6;
   });
 
+  # Requests version 2 of tls, can be removed once it's the default
+  diohsc = super.diohsc.overrideScope (self: super: {
+    tls = self.tls_2_0_6;
+  });
+
   # Need https://github.com/obsidiansystems/cli-extras/pull/12 and more
   cli-extras = doJailbreak super.cli-extras;
 
@@ -2441,9 +2464,7 @@ self: super: {
   # See: https://gitlab.haskell.org/ghc/ghc/-/issues/17188
   #
   # Overwrite the build cores
-  raaz = overrideCabal (drv: {
-    enableParallelBuilding = false;
-  }) super.raaz;
+  raaz = disableParallelBuilding super.raaz;
 
   # https://github.com/andreymulik/sdp/issues/3
   sdp = disableLibraryProfiling super.sdp;
@@ -2548,8 +2569,9 @@ self: super: {
     relative = "dependent-sum-template";
   }) super.dependent-sum-template;
 
-  # Too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
-  system-fileio = doJailbreak super.system-fileio;
+  # doJailbreak: too strict bounds on chell: https://github.com/fpco/haskell-filesystem/issues/24
+  # dontCheck:   tests don't typecheck after ghc 8.4 (possibly introduced by api change of unix library)
+  system-fileio = doJailbreak (dontCheck super.system-fileio);
 
   # Bounds too strict on base and ghc-prim: https://github.com/tibbe/ekg-core/pull/43 (merged); waiting on hackage release
   ekg-core = assert super.ekg-core.version == "0.1.1.7"; doJailbreak super.ekg-core;
@@ -2649,7 +2671,7 @@ self: super: {
       purescript =
         lib.pipe
           (super.purescript.overrideScope purescriptOverlay)
-          ([
+          [
             # https://github.com/purescript/purescript/pull/4547
             (appendPatches [
               (pkgs.fetchpatch {
@@ -2668,7 +2690,7 @@ self: super: {
             doJailbreak
             # Generate shell completions
             (self.generateOptparseApplicativeCompletions [ "purs" ])
-          ]);
+          ];
 
       purenix =
         lib.pipe

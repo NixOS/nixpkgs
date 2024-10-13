@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "2024-09-15";
+  version = "2024-09-30";
 
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "f9520c4fdfed08e9cc609d6cd319b358e4ea33a5";
-    hash = "sha256-8zTDGPnhNI2rQA0uJc8gQRj4JCyg+IkO/D3oHYy4f9U=";
+    rev = "0705234991d03170a72582085dc508600a03a779";
+    hash = "sha256-tAigYqS3ZAtZJp7RaarbXrDxrjiYu2wjNHq6GP/BMfk=";
   };
 
   meta = with lib; {
@@ -47,7 +47,7 @@ let
       [
         openssl
       ]
-      ++ lib.optionals stdenv.isDarwin [
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
         darwin.apple_sdk.frameworks.Security
       ];
 
@@ -65,6 +65,7 @@ vimUtils.buildVimPlugin {
     in
     ''
       mkdir -p $out/build
+      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
     '';

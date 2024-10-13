@@ -38,7 +38,7 @@ let
         is_nixenv = "False";
         is_virtualenv = "False";
       };
-    } // lib.optionalAttrs (!python.isPyPy && !stdenv.isDarwin) {
+    } // lib.optionalAttrs (!python.isPyPy && !stdenv.hostPlatform.isDarwin) {
       # Use virtualenv from a Nix env.
       # Fails on darwin with
       #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
@@ -106,7 +106,7 @@ let
   # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
   integrationTests = lib.optionalAttrs (!python.isPyPy) (
-    lib.optionalAttrs (python.isPy3k && !stdenv.isDarwin) { # darwin has no split-debug
+    lib.optionalAttrs (python.isPy3k && !stdenv.hostPlatform.isDarwin) { # darwin has no split-debug
       cpython-gdb = callPackage ./tests/test_cpython_gdb {
         interpreter = python;
       };
@@ -222,7 +222,7 @@ let
       }
     ) {};
     pythonWithRequests = requests.pythonModule.withPackages (ps: [ requests ]);
-    in lib.optionalAttrs (python.isPy3k && stdenv.isLinux)
+    in lib.optionalAttrs (python.isPy3k && stdenv.hostPlatform.isLinux)
     {
       condaExamplePackage = runCommand "import-requests" {} ''
         ${pythonWithRequests.interpreter} -c "import requests" > $out

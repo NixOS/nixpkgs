@@ -28,7 +28,7 @@ let
         # is not the case with pure nix environments. Thus, we need to include zsh
         # when we build for darwin in tests. While this is impure, this is also what
         # we find in real darwin hosts.
-        nativeBuildInputs = lib.optionals stdenv.isDarwin [ zsh ];
+        nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
       }
       ''
         set -eo pipefail

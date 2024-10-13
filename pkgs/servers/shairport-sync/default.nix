@@ -28,8 +28,8 @@
 , enablePipewire ? true
 , enableJack ? true
 , enableMetadata ? false
-, enableMpris ? stdenv.isLinux
-, enableDbus ? stdenv.isLinux
+, enableMpris ? stdenv.hostPlatform.isLinux
+, enableDbus ? stdenv.hostPlatform.isLinux
 , enableSoxr ? true
 , enableLibdaemon ? false
 }:
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     libuuid
     ffmpeg
   ]
-  ++ optional stdenv.isLinux glib;
+  ++ optional stdenv.hostPlatform.isLinux glib;
 
   postPatch = ''
     sed -i -e 's/G_BUS_TYPE_SYSTEM/G_BUS_TYPE_SESSION/g' dbus-service.c

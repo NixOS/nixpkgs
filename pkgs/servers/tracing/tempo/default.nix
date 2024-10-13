@@ -1,6 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo122Module, fetchFromGitHub }:
 
-buildGoModule rec {
+# Does not build with Go 1.23
+# FIXME: check again for next release
+buildGo122Module rec {
   pname = "tempo";
   version = "2.6.0";
 

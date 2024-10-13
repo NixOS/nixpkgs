@@ -29,6 +29,8 @@ lib.packagesFromDirectoryRecursive {
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+  zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
+
   # From old emacsPackages (pre emacsPackagesNg)
   cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };
 

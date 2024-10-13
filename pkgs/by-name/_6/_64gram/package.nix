@@ -41,6 +41,6 @@ telegram-desktop.overrideAttrs (old: rec {
     changelog = "https://github.com/TDesktop-x64/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ clot27 ];
     mainProgram = "telegram-desktop";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

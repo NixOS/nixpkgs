@@ -72,14 +72,14 @@
 , enableIscsi ? false
 , openiscsi
 , libiscsi
-, enableXen ? stdenv.isLinux && stdenv.isx86_64
+, enableXen ? stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64
 , xen
-, enableZfs ? stdenv.isLinux
+, enableZfs ? stdenv.hostPlatform.isLinux
 , zfs
 }:
 
 let
-  inherit (stdenv) isDarwin isLinux isx86_64;
+  inherit (stdenv.hostPlatform) isDarwin isLinux isx86_64;
   binPath = lib.makeBinPath ([
     dnsmasq
   ] ++ lib.optionals isLinux [

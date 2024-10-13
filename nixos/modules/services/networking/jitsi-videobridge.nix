@@ -156,7 +156,7 @@ in
         default = null;
         example = "192.168.1.42";
         description = ''
-          Local address when running behind NAT.
+          Local address to assume when running behind NAT.
         '';
       };
 
@@ -165,7 +165,25 @@ in
         default = null;
         example = "1.2.3.4";
         description = ''
-          Public address when running behind NAT.
+          Public address to assume when running behind NAT.
+        '';
+      };
+
+      harvesterAddresses = lib.mkOption {
+        type = listOf str;
+        default = [
+          "stunserver.stunprotocol.org:3478"
+          "stun.framasoft.org:3478"
+          "meet-jit-si-turnrelay.jitsi.net:443"
+        ];
+        example = [];
+        description = ''
+          Addresses of public STUN services to use to automatically find
+          the public and local addresses of this Jitsi-Videobridge instance
+          without the need for manual configuration.
+
+          This option is ignored if {option}`services.jitsi-videobridge.nat.localAddress`
+          and {option}`services.jitsi-videobridge.nat.publicAddress` are set.
         '';
       };
     };
@@ -199,10 +217,13 @@ in
   config = lib.mkIf cfg.enable {
     users.groups.jitsi-meet = {};
 
-    services.jitsi-videobridge.extraProperties = lib.optionalAttrs (cfg.nat.localAddress != null) {
-      "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
-      "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
-    };
+    services.jitsi-videobridge.extraProperties =
+      if (cfg.nat.localAddress != null) then {
+        "org.ice4j.ice.harvest.NAT_HARVESTER_LOCAL_ADDRESS" = cfg.nat.localAddress;
+        "org.ice4j.ice.harvest.NAT_HARVESTER_PUBLIC_ADDRESS" = cfg.nat.publicAddress;
+      } else {
+        "org.ice4j.ice.harvest.STUN_MAPPING_HARVESTER_ADDRESSES" = lib.concatStringsSep "," cfg.nat.harvesterAddresses;
+      };
 
     systemd.services.jitsi-videobridge2 = let
       jvbProps = {

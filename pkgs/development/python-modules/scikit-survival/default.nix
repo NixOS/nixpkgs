@@ -71,7 +71,7 @@ buildPythonPackage rec {
       "test_survival_svm"
       "test_tree"
     ]
-    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64)
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
       # floating point mismatch on aarch64
       # 27079905.88052468 to far from 27079905.880496684
       "test_coxnet";

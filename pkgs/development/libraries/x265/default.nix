@@ -10,14 +10,14 @@
 , numactl
 
   # Multi bit-depth support (8bit+10bit+12bit):
-, multibitdepthSupport ? (stdenv.is64bit && !(stdenv.isAarch64 && stdenv.isLinux))
+, multibitdepthSupport ? (stdenv.hostPlatform.is64bit && !(stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux))
 
   # Other options:
 , cliSupport ? true # Build standalone CLI application
 , custatsSupport ? false # Internal profiling of encoder work
 , debugSupport ? false # Run-time sanity checks (debugging)
 , ppaSupport ? false # PPA profiling instrumentation
-, unittestsSupport ? stdenv.isx86_64 # Unit tests - only testing x64 assembly
+, unittestsSupport ? stdenv.hostPlatform.isx86_64 # Unit tests - only testing x64 assembly
 , vtuneSupport ? false # Vtune profiling instrumentation
 , werrorSupport ? false # Warnings as errors
 }:

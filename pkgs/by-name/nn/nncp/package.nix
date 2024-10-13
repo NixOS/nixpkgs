@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "http://www.nncpgo.org/News.html";
     description = "Secure UUCP-like store-and-forward exchanging";
     downloadPage = "http://www.nncpgo.org/Tarballs.html";

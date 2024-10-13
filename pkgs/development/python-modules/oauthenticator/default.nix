@@ -44,7 +44,7 @@ buildPythonPackage rec {
     traitlets
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     googlegroups = [
       google-api-python-client
       google-auth-oauthlib
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     requests-mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = [
     # Tests are outdated, https://github.com/jupyterhub/oauthenticator/issues/432

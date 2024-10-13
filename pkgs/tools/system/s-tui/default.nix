@@ -31,7 +31,7 @@ python3Packages.buildPythonPackage rec {
     description = "Stress-Terminal UI monitoring tool";
     license = licenses.gpl2Plus;
     maintainers = [ ];
-    broken = stdenv.isDarwin; # https://github.com/amanusk/s-tui/issues/49
+    broken = stdenv.hostPlatform.isDarwin; # https://github.com/amanusk/s-tui/issues/49
     mainProgram = "s-tui";
   };
 }

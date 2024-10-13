@@ -27,7 +27,7 @@ buildNpmPackage rec {
 
   # Fix error: no member named 'aligned_alloc' in the global namespace
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
-    stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
+    stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0"
   ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ buildNpmPackage rec {
     pixman
     cairo
     pango
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.CoreText ];
 
   installPhase = ''
     runHook preInstall

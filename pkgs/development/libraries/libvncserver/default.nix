@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libpng
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
   ];
 

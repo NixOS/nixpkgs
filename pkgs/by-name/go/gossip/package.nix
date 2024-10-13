@@ -61,7 +61,7 @@ rustPlatform.buildRustPackage rec {
       pkg-config
       rustPlatform.bindgenHook
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland-scanner
     ];
 
@@ -73,7 +73,7 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
       openssl
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.Cocoa
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -81,7 +81,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.ForceFeedback
       darwin.apple_sdk.frameworks.AVFoundation
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
       xorg.libX11
       xorg.libXcursor
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     ln -s $out/logo/gossip.png $out/share/icons/hicolor/128x128/apps/gossip.png
   '';
 
-  postFixup = lib.optionalString (!stdenv.isDarwin) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     patchelf $out/bin/gossip \
       --add-rpath ${
         lib.makeLibraryPath [

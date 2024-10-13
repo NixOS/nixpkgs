@@ -10,13 +10,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "marwaita";
-  version = "21";
+  version = "22";
 
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = pname;
     rev = version;
-    hash = "sha256-5igOzHfkW+HJtll2wLT5qWtLavoPCo170M8v4ID0Wf8=";
+    hash = "sha256-Aa6qJGLQ+MLn/QeZzjMj/O5vEp/Cr/g7n8JFFlSgfOc=";
   };
 
   buildInputs = [

@@ -21,7 +21,7 @@ buildGoModule rec {
   vendorHash = "sha256-gtl8T8wXnpLgDZc6qSgFKpA+XbcLNHf20ieBkyNdE+s=";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   subPackages = [
     "."

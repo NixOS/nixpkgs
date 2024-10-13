@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-NLGEaIGUqgyGegzVyZloLckVGYmfMjwhzVXh327kxRA=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
   cargoBuildFlags = [ "--package nu_plugin_gstat" ];
 
   checkPhase = ''

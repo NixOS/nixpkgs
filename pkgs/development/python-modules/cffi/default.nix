@@ -19,12 +19,12 @@ if isPyPy then
 else
   buildPythonPackage rec {
     pname = "cffi";
-    version = "1.17.0";
+    version = "1.17.1";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-8xV2JLdVi5FMsDn9Gvc15egEmofIF8whUQmtHId533Y=";
+      hash = "sha256-HDnGAWwyvEjdVFYZUOvWg24WcPKuRhKPZ89J54nFKCQ=";
     };
 
     patches =
@@ -49,7 +49,7 @@ else
         ./clang-pointer-substraction-warning.diff
       ];
 
-    postPatch = lib.optionalString stdenv.isDarwin ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Remove setup.py impurities
       substituteInPlace setup.py \
         --replace "'-iwithsysroot/usr/include/ffi'" "" \
@@ -57,14 +57,13 @@ else
         --replace '/usr/include/libffi' '${lib.getDev libffi}/include'
     '';
 
-    nativeBuildInputs = [
-      pkg-config
-      setuptools
-    ];
+    nativeBuildInputs = [ pkg-config ];
+
+    build-system = [ setuptools ];
 
     buildInputs = [ libffi ];
 
-    propagatedBuildInputs = [ pycparser ];
+    dependencies = [ pycparser ];
 
     # The tests use -Werror but with python3.6 clang detects some unreachable code.
     env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument -Wno-unreachable-code -Wno-c++11-narrowing";

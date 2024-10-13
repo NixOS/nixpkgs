@@ -13,6 +13,7 @@
   castxml,
   swig,
   expat,
+  eigen,
   fftw,
   gdcm,
   hdf5-cpp,
@@ -106,9 +107,7 @@ stdenv.mkDerivation {
       "-DBUILD_SHARED_LIBS=ON"
       "-DITK_FORBID_DOWNLOADS=ON"
       "-DITK_USE_SYSTEM_LIBRARIES=ON" # finds common libraries e.g. hdf5, libpng, libtiff, zlib, but not GDCM, NIFTI, MINC, etc.
-      # note ITK_USE_SYSTEM_EIGEN, part of ITK_USE_SYSTEM_LIBRARIES,
-      # causes "...-itk-5.2.1/include/ITK-5.2/itkSymmetricEigenAnalysis.h:23:31: fatal error: Eigen/Eigenvalues: No such file or directory"
-      # when compiling c3d, but maybe an ITK 5.2/eigen version issue:
+      "-DITK_USE_SYSTEM_EIGEN=ON"
       "-DITK_USE_SYSTEM_EIGEN=OFF"
       "-DITK_USE_SYSTEM_GOOGLETEST=OFF" # ANTs build failure due to https://github.com/ANTsX/ANTs/issues/1489
       "-DITK_USE_SYSTEM_GDCM=ON"
@@ -144,10 +143,11 @@ stdenv.mkDerivation {
 
   buildInputs =
     [
+      eigen
       libX11
       libuuid
     ]
-    ++ lib.optionals stdenv.isDarwin [ Cocoa ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ]
     ++ lib.optionals enablePython [ python ]
     ++ lib.optionals withVtk [ vtk ];
   # Due to ITKVtkGlue=ON and the additional dependencies needed to configure VTK 9

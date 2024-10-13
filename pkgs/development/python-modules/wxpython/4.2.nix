@@ -30,7 +30,7 @@
   mesa,
   pango,
   SDL,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK,
   xorgproto,
 
@@ -75,14 +75,14 @@ buildPythonPackage rec {
     sip
     which
     wxGTK
-  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   buildInputs =
     [
       wxGTK
       SDL
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       gst_all_1.gst-plugins-base
       gst_all_1.gstreamer
       libGL
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       libXxf86vm
       libglvnd
       mesa
-      webkitgtk
+      webkitgtk_4_0
       xorgproto
     ];
 

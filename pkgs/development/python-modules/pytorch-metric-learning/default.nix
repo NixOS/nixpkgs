@@ -83,7 +83,7 @@ buildPythonPackage rec {
     "test_get_nearest_neighbors"
     "test_list_of_text"
     "test_untrained_indexer"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
     "test_single_proc"
   ] ++ lib.optionals cudaSupport [

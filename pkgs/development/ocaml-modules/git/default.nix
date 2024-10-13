@@ -31,7 +31,7 @@ buildDunePackage rec {
   checkInputs = [
     alcotest alcotest-lwt mirage-crypto-rng crowbar cmdliner
   ];
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   meta = {
     description = "Git format and protocol in pure OCaml";

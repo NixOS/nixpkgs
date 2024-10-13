@@ -67,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-tour";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-tour/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     description = "GNOME Greeter & Tour";
     mainProgram = "gnome-tour";
     maintainers = teams.gnome.members;

@@ -41,7 +41,7 @@ buildPythonPackage rec {
     orjson
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       clevercsv
       click
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     tomli-w
-  ] ++ passthru.optional-dependencies.cli;
+  ] ++ optional-dependencies.cli;
 
   disabledTests = [
     # not compatible with pydantic 2.x

@@ -102,7 +102,7 @@ buildPythonPackage rec {
       "test_binary_suppresses_when_not_terminal_but_pretty"
       "test_binary_included_and_correct_when_suitable"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Test is flaky
       "test_daemon_runner"
     ];

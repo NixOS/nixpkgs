@@ -60,7 +60,7 @@ buildPythonPackage rec {
     # fails also on Linux
     "test_show_completion"
     "test_install_completion"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "test_install_completion" ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [ "test_install_completion" ];
 
   pythonImportsCheck = [ "typer" ];
 

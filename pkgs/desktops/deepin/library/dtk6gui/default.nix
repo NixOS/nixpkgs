@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   doxygen,
@@ -12,18 +13,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6gui";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6gui";
     rev = finalAttrs.version;
-    hash = "sha256-w8tyc06v/juTP0YSsyWai1ONl4Aa7dzREIc5wLnI/vw=";
+    hash = "sha256-nqwkBMcCQiW4iqYhceTaSNNxoR5tvCNfjKUVVHkzN3A=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    (fetchpatch {
+      name = "fix-build-on-qt-6.8.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6gui/-/raw/b6b8521fd69c28dbca5f6e8d1d8258c904b6caf1/qt-6.8.patch";
+      hash = "sha256-Fu5vwvKJGMW94JYoIPvDCeXs8WrAskQlVRX/3FYQFGY=";
+    })
   ];
 
   postPatch = ''

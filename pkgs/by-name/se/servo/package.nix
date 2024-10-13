@@ -130,7 +130,7 @@ rustPlatform.buildRustPackage {
     libGL
     xorg.libX11
     xorg.libxcb
-  ] ++ (lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AppKit ]);
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ]);
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries

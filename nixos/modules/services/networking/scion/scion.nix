@@ -42,6 +42,7 @@ in
       scion-daemon.enable = true;
       scion-router.enable = true;
       scion-control.enable = true;
+      scion-ip-gateway.enable = true;
     };
     assertions = [
       { assertion = cfg.bypassBootstrapWarning == true;

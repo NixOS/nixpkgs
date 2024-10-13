@@ -43,7 +43,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     Images = [
       ascii-magic
       pillow

@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ pcsclite ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ pcsclite ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.PCSC
     darwin.apple_sdk.frameworks.Security
   ];

@@ -1,4 +1,5 @@
 { lib
+, stdenvNoCC
 , fetchFromGitHub
 , buildDotnetModule
 , dotnetCorePackages
@@ -24,6 +25,7 @@ let
     rev = "v${version}";
     hash = "sha256-RDhJUf8P2STTug69EGozW0q87qDE40jf5G7n7pezWeY=";
   };
+  rid = dotnetCorePackages.systemToDotnetRid stdenvNoCC.hostPlatform.system;
 in
 buildDotnetModule {
   pname = "sonarr";
@@ -100,6 +102,7 @@ buildDotnetModule {
     "--property:Copyright=Copyright 2014-2024 sonarr.tv (GNU General Public v3)"
     "--property:AssemblyVersion=${version}"
     "--property:AssemblyConfiguration=main"
+    "--property:RuntimeIdentifier=${rid}"
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.

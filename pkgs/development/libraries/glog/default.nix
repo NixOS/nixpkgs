@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
         # Clang optimizes an expected allocation away.
         # See https://github.com/google/glog/issues/937
         "DeathNoAllocNewHook.logging"
-      ] ++ lib.optionals stdenv.isDarwin [
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
       ];
     in
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
 
   checkPhase =
     let
-      excludedTests = lib.optionals stdenv.isDarwin [
+      excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
         "mock-log"
-      ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
         "logging"   # works around segfaults on aarch64-darwin for now
       ];
       excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";

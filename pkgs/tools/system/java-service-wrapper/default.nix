@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     export JAVA_TOOL_OPTIONS=-Djava.home=$JAVA_HOME
     export CLASSPATH=${jdk}/lib/openjdk/lib/tools.jar
 
-    ant -f build.xml -Dbits=${if stdenv.isi686 then "32" else "64"}
+    ant -f build.xml -Dbits=${if stdenv.hostPlatform.isi686 then "32" else "64"}
 
     runHook postBuild
   '';

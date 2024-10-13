@@ -101,7 +101,7 @@ buildPythonPackage rec {
       # AssertionError: assert [('specializa..., 'Ancestor')] == [('aggregatio..., 'Ancestor')]
       "test_functional_relation_extraction"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "test_parallel_execution"
       "test_py3k_jobs_option"
     ];

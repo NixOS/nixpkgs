@@ -16,7 +16,7 @@
 }:
 stdenv.mkDerivation (finalAttrs:
   let
-  nvim-lpeg-dylib = luapkgs: if stdenv.isDarwin
+  nvim-lpeg-dylib = luapkgs: if stdenv.hostPlatform.isDarwin
     then (luapkgs.lpeg.overrideAttrs (oa: {
       preConfigure = ''
         # neovim wants clang .dylib
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs:
       nativeBuildInputs =
         oa.nativeBuildInputs
         ++ (
-          lib.optional stdenv.isDarwin fixDarwinDylibNames
+          lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames
         );
     }))
     else luapkgs.lpeg;
@@ -66,15 +66,15 @@ stdenv.mkDerivation (finalAttrs:
 
 in {
     pname = "neovim-unwrapped";
-    version = "0.10.1";
+    version = "0.10.2";
 
     __structuredAttrs = true;
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "v${finalAttrs.version}";
-      hash = "sha256-OsHIacgorYnB/dPbzl1b6rYUzQdhTtsJYLsFLJxregk=";
+      rev = "refs/tags/v${finalAttrs.version}";
+      hash = "sha256-+qjjelYMB3MyjaESfCaGoeBURUzSVh/50uxUqStxIfY=";
     };
 
     patches = [
@@ -104,7 +104,7 @@ in {
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ lib.optionals stdenv.isDarwin [ libiconv CoreServices ]
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv CoreServices ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [ glibcLocales procps ]
     ;
 
@@ -168,7 +168,7 @@ in {
       "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
     ];
 
-    preConfigure = lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '' + ''
       mkdir -p $out/lib/nvim/parser

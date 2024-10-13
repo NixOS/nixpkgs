@@ -23,6 +23,7 @@
   pydantic,
   pytest-asyncio,
   pytest-mock,
+  playwright,
   pytestCheckHook,
   python-engineio,
   python-multipart,
@@ -46,16 +47,16 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.5.10";
+  version = "0.6.2.post1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8nwVB5FthDbhQRO663vRTqT8KPtStbdSgEoZ75EnhmE=";
+    hash = "sha256-JW1hebcoBMMEirJkJ5Cquh23p9Gv3RU5AxPbXUcwPK4=";
   };
 
   pythonRelaxDeps = [
@@ -106,6 +107,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-asyncio
     pytest-mock
+    playwright
     attrs
     numpy
     plotly
@@ -114,11 +116,16 @@ buildPythonPackage rec {
     unzip
   ];
 
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
+
   disabledTests = [
-    # Tests touche network
+    # Tests touch network
     "test_find_and_check_urls"
     "test_event_actions"
     "test_upload_file"
+    "test_node_version"
     # /proc is too funky in nix sandbox
     "test_get_cpu_info"
     # broken
@@ -130,7 +137,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     "benchmarks/"
-    "integration/"
+    "tests/integration/"
   ];
 
   pythonImportsCheck = [ "reflex" ];
@@ -138,7 +145,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web apps in pure Python";
     homepage = "https://github.com/reflex-dev/reflex";
-    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${src.rev}";
+    changelog = "https://github.com/reflex-dev/reflex/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ pbsds ];
     mainProgram = "reflex";

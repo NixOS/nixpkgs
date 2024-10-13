@@ -125,8 +125,6 @@
   (fetchNuGet { pname = "runtime.unix.System.Diagnostics.Debug"; version = "4.3.0"; hash = "sha256-ReoazscfbGH+R6s6jkg5sIEHWNEvjEoHtIsMbpc7+tI="; })
   (fetchNuGet { pname = "runtime.unix.System.Private.Uri"; version = "4.3.0"; hash = "sha256-c5tXWhE/fYbJVl9rXs0uHh3pTsg44YD1dJvyOA0WoMs="; })
   (fetchNuGet { pname = "runtime.unix.System.Runtime.Extensions"; version = "4.3.0"; hash = "sha256-l8S9gt6dk3qYG6HYonHtdlYtBKyPb29uQ6NDjmrt3V4="; })
-  (fetchNuGet { pname = "runtime.win.System.Diagnostics.Debug"; version = "4.3.0"; hash = "sha256-DpU+PGIUCtaK6gQEl/OWSO/JKg/TA9yeD01Zzxaxy5k="; })
-  (fetchNuGet { pname = "runtime.win.System.Runtime.Extensions"; version = "4.3.0"; hash = "sha256-+TMflNyjP+Lf5bge0xVN5AKxMAk4/caWY6zZrqtyAJw="; })
   (fetchNuGet { pname = "Serilog"; version = "2.10.0"; hash = "sha256-+8wilkt+VVvW+KFWuLryj7cSFpz9D+sz92KYWICAcSE="; })
   (fetchNuGet { pname = "Serilog"; version = "2.8.0"; hash = "sha256-MBL9AWGV8UthhiHXnqH3EsfIyXnxdLWqAdFa6QvQ2To="; })
   (fetchNuGet { pname = "Serilog"; version = "3.1.0"; hash = "sha256-1CDAp+AjfFjQqoLvKYp/j6pKTUfNOGfKVlWyqCGHo7k="; })

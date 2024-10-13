@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
-  version = "4.8.2";
+  version = "4.8.4";
 
   src = fetchFromGitHub {
     owner = "texstudio-org";
     repo = "texstudio";
     rev = finalAttrs.version;
-    hash = "sha256-q6dy9CS8zxMlLC4M76t4RjYlMJyUG55Cb0KREyDfM78=";
+    hash = "sha256-gGL9eM0OsUg34GXFsz5LJ738WSl8L8mGfOcZZPNceT4=";
   };
 
   nativeBuildInputs = [
@@ -28,11 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
     quazip
     zlib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv "$out/bin/texstudio.app" "$out/Applications"
     rm -d "$out/bin"

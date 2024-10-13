@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ validatePkgConfig ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     runHook preBuild

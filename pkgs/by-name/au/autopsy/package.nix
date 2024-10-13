@@ -1,6 +1,6 @@
 { stdenv, lib, makeWrapper, fetchzip, testdisk, imagemagick, jdk, findutils, sleuthkit, ... }:
 let
-  jdkWithJfx = jdk.override (lib.optionalAttrs stdenv.isLinux {
+  jdkWithJfx = jdk.override (lib.optionalAttrs stdenv.hostPlatform.isLinux {
     enableJavaFX = true;
   });
 in

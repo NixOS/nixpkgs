@@ -14,6 +14,8 @@
 
   better_thermostat = callPackage ./better_thermostat {};
 
+  bodymiscale = callPackage ./bodymiscale { };
+
   dwd = callPackage ./dwd { };
 
   elevenlabs_tts = callPackage ./elevenlabs_tts {};
@@ -49,6 +51,8 @@
   miele = callPackage ./miele {};
 
   moonraker = callPackage ./moonraker {};
+
+  nest_protect = callPackage ./nest_protect {};
 
   ntfy = callPackage ./ntfy {};
 

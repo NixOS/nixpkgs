@@ -58,7 +58,7 @@ buildPythonPackage rec {
       libiconv
       protobuf
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         IOKit

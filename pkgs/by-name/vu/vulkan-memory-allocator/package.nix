@@ -1,6 +1,7 @@
 { lib
 , stdenvNoCC
 , fetchFromGitHub
+, fetchpatch
 , cmake
 }:
 
@@ -14,6 +15,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-j0Z9OEwQx3RB2cni9eK3gYfwkhOc2ST213b6VseaVzg=";
   };
+
+  patches = [
+    # Allows specifying version constraints on the CMake module
+    # Remove when version > 3.1.0
+    (fetchpatch {
+      name = "0001-vulkan-memory-allocator-add-cmake-package-version-file.patch";
+      url = "https://github.com/GPUOpen-LibrariesAndSDKs/VulkanMemoryAllocator/commit/257138b8f5686ae84491a3df9f90a77d5660c3bd.patch";
+      hash = "sha256-qbQhIJho/WQqzAwB2zzWgGKx4QK9zKmbaGisbNOV8mg=";
+    })
+  ];
 
   # A compiler is only required for the samples. This lets us use stdenvNoCC.
   postPatch = ''

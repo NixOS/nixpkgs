@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     libpcap
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
   ];
 

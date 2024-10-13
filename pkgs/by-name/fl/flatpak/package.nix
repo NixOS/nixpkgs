@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   runCommand,
   appstream,
   autoreconfHook,
@@ -120,6 +121,22 @@ stdenv.mkDerivation (finalAttrs: {
     # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
     # https://github.com/NixOS/nixpkgs/issues/119433
     ./fix-fonts-icons.patch
+
+    # TODO: Remove when updating to 1.16
+    # Ensure flatpak uses the system's zoneinfo from $TZDIR
+    # https://github.com/NixOS/nixpkgs/issues/238386
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/a8a35bf4d9fc3d76e1a5049a6a591faec04a42fd.patch";
+      hash = "sha256-JqkPbnzgZNZq/mplZqohhHFdjRrvYFjE4C02pI3feBo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/5ea13b09612215559081c27b60df4fb720cb08d5.patch";
+      hash = "sha256-BWbyQ2en3RtN4Ec5n62CULAhvywlQLhcl3Fmd4fsR1s=";
+    })
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/7c8a81f08908019bbf69358de199748a9bcb29e3.patch";
+      hash = "sha256-RiG2jPmG+Igskxv8oQquOUYsG4srgdMXWe34ojMXslo=";
+    })
   ];
 
   nativeBuildInputs = [

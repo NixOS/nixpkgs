@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.quickfixengine.org";
     license = licenses.free; # similar to BSD 4-clause
     maintainers = with maintainers; [ bhipple ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -220,6 +220,8 @@ The NixOS installer ships with multiple partitioning tools. The examples
 below use `parted`, but also provides `fdisk`, `gdisk`, `cfdisk`, and
 `cgdisk`.
 
+Use the command 'lsblk' to find the name of your 'disk' device.
+
 The recommended partition scheme differs depending if the computer uses
 *Legacy Boot* or *UEFI*.
 

@@ -39,7 +39,7 @@ buildDotnetModule rec {
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
 
   # socket cannot bind to localhost on darwin for tests
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # net7.0 replacement needed until upstream bumps to dotnet 7
   postPatch = ''
@@ -54,9 +54,9 @@ buildDotnetModule rec {
 
   # need to make sure proprietary worldline resampler is copied
   postInstall = let
-    runtime = if (stdenv.isLinux && stdenv.isx86_64) then "linux-x64"
-         else if (stdenv.isLinux && stdenv.isAarch64) then "linux-arm64"
-         else if stdenv.isDarwin then "osx"
+    runtime = if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64) then "linux-x64"
+         else if (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) then "linux-arm64"
+         else if stdenv.hostPlatform.isDarwin then "osx"
          else null;
   in lib.optionalString (runtime != null) ''
     cp runtimes/${runtime}/native/libworldline${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/OpenUtau/

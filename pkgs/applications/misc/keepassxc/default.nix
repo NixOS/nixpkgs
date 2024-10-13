@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
     "-Wno-old-style-cast"
     "-Wno-error"
-    "-D__BIG_ENDIAN__=${if stdenv.isBigEndian then "1" else "0"}"
+    "-D__BIG_ENDIAN__=${if stdenv.hostPlatform.isBigEndian then "1" else "0"}"
   ]);
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-rpath ${libargon2}/lib";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-rpath ${libargon2}/lib";
 
   patches = [
     ./darwin.patch
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
     "-DWITH_XC_UPDATECHECK=OFF"
   ]
   ++ (lib.optional (!withKeePassX11) "-DWITH_XC_X11=OFF")
-  ++ (lib.optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
-  ++ (lib.optional (withKeePassYubiKey && stdenv.isLinux) "-DWITH_XC_YUBIKEY=ON")
+  ++ (lib.optional (withKeePassFDOSecrets && stdenv.hostPlatform.isLinux) "-DWITH_XC_FDOSECRETS=ON")
+  ++ (lib.optional (withKeePassYubiKey && stdenv.hostPlatform.isLinux) "-DWITH_XC_YUBIKEY=ON")
   ++ (lib.optional withKeePassBrowser "-DWITH_XC_BROWSER=ON")
   ++ (lib.optional withKeePassBrowserPasskeys "-DWITH_XC_BROWSER_PASSKEYS=ON")
   ++ (lib.optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     # testcli, testgui and testkdbx4 are flaky - skip them all
     # testautotype on darwin throws "QWidget: Cannot create a QWidget without QApplication"
-    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
+    make test ARGS+="-E 'testcli|testgui${lib.optionalString stdenv.hostPlatform.isDarwin "|testautotype|testkdbx4"}' --output-on-failure"
 
     runHook postCheck
   '';
@@ -98,12 +98,12 @@ stdenv.mkDerivation rec {
     qttools
     pkg-config
   ]
-  ++ lib.optional (!stdenv.isDarwin) wrapGAppsHook3;
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) wrapGAppsHook3;
 
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp "$out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC"
   '';
 
@@ -128,9 +128,9 @@ stdenv.mkDerivation rec {
     readline
     zlib
   ]
-  ++ lib.optional (stdenv.isDarwin && withKeePassTouchID) LocalAuthentication
-  ++ lib.optional stdenv.isDarwin qtmacextras
-  ++ lib.optional stdenv.isLinux libusb1
+  ++ lib.optional (stdenv.hostPlatform.isDarwin && withKeePassTouchID) LocalAuthentication
+  ++ lib.optional stdenv.hostPlatform.isDarwin qtmacextras
+  ++ lib.optional stdenv.hostPlatform.isLinux libusb1
   ++ lib.optional withKeePassX11 qtx11extras;
 
   passthru.tests = nixosTests.keepassxc;

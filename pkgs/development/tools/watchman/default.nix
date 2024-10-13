@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_EDEN_SUPPORT=NO" # requires sapling (formerly known as eden), which is not packaged in nixpkgs
     "-DWATCHMAN_STATE_DIR=${stateDir}"
     "-DWATCHMAN_VERSION_OVERRIDE=${version}"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     lz4
     zstd
     libiconv
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cargoRoot = "watchman/cli";
 

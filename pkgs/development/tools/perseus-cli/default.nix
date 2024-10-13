@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-i7MPmO9MoANZLzmR5gsD+v0gyDtFbzhsmE9xOsb88L0=";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   postInstall = ''
     wrapProgram $out/bin/perseus \

@@ -38,6 +38,7 @@ let
       dtk6log = callPackage ./library/dtk6log { };
       qt6platform-plugins = callPackage ./library/qt6platform-plugins { };
       qt6integration = callPackage ./library/qt6integration { };
+      qt6mpris = callPackage ./library/qt6mpris { };
 
       #### CORE
       deepin-kwin = callPackage ./core/deepin-kwin { };

@@ -33,7 +33,7 @@ pythonPackages.buildPythonApplication rec {
       requests
       setuptools
       tornado
-    ] ++ lib.optional (!stdenv.isDarwin) dbus-python
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) dbus-python
   );
 
   propagatedNativeBuildInputs = [

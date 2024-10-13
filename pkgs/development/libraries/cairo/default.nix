@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, gtk-doc, meson, ninja, pkg-config, python3
 , docbook_xsl, fontconfig, freetype, libpng, pixman, zlib
-, x11Support? !stdenv.isDarwin || true, libXext, libXrender
+, x11Support? !stdenv.hostPlatform.isDarwin || true, libXext, libXrender
 , gobjectSupport ? true, glib
 , xcbSupport ? x11Support, libxcb
 , darwin
@@ -13,11 +13,11 @@ in stdenv.mkDerivation (finalAttrs: let
   inherit (finalAttrs) pname version;
 in {
   pname = "cairo";
-  version = "1.18.0";
+  version = "1.18.2";
 
   src = fetchurl {
     url = "https://cairographics.org/${if lib.mod (builtins.fromJSON (lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
-    hash = "sha256-JDoHNrl4oz3uKfnMp1IXM7eKZbVBggb+970cPUzxC2Q=";
+    hash = "sha256-piubtCQl6ETMPW3d4EP/Odur7dFULrpXout5+FiJ1Fo=";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -34,7 +34,7 @@ in {
 
   buildInputs = [
     docbook_xsl
-  ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     CoreGraphics
     CoreText
     ApplicationServices
@@ -87,7 +87,7 @@ in {
     # `-I' flags to be propagated.
     sed -i "$out/lib/pkgconfig/cairo.pc" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
-  '' + lib.optionalString stdenv.isDarwin glib.flattenInclude;
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin glib.flattenInclude;
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 

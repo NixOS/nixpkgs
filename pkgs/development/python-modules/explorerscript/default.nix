@@ -47,9 +47,9 @@ buildPythonPackage rec {
     igraph
   ];
 
-  passthru.optional-dependencies.pygments = [ pygments ];
+  optional-dependencies.pygments = [ pygments ];
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pygments;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.pygments;
 
   pythonImportsCheck = [ "explorerscript" ];
 

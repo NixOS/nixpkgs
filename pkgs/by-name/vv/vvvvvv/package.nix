@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     physfs
     SDL2
     tinyxml-2
-  ] ++ lib.optionals stdenv.isDarwin [ Foundation IOKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit ];
 
   cmakeDir = "../desktop_version";
 

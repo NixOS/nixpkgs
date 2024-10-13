@@ -114,6 +114,7 @@ makeScopeWithSplicing' {
 
   wayqt = callPackage ../development/libraries/wayqt { };
 
+  xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   } // lib.optionalAttrs pkgs.config.allowAliases {
     # Remove completely before 24.11
     overrideScope' = builtins.throw "qt6Packages now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\".";

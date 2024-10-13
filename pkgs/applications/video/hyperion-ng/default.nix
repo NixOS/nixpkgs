@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     qtserialport
     qtsvg
     qtx11extras
-  ] ++ lib.optional stdenv.isLinux libcec
+  ] ++ lib.optional stdenv.hostPlatform.isLinux libcec
     ++ lib.optional withRPiDispmanx libraspberrypi;
 
   nativeBuildInputs = [
     cmake wrapQtAppsHook
-  ] ++ lib.optional stdenv.isDarwin perl; # for macos bundle
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin perl; # for macos bundle
 
   patchPhase =  ''
     patchShebangs test/testrunner.sh

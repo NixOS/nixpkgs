@@ -51,7 +51,7 @@ stdenv.mkDerivation (final: {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ glibc.static ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/share/dssat/" ];
 
@@ -69,6 +69,6 @@ stdenv.mkDerivation (final: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ pcboy ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isAarch64 && stdenv.isLinux;
+    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })

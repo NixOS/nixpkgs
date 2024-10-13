@@ -15,7 +15,7 @@
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
   inherit (lib) makeBinPath;
-  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux crun;
+  bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.hostPlatform.isLinux crun;
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
@@ -43,7 +43,7 @@ in pkg.overrideAttrs (finalAttrs: o: {
           package = finalAttrs.finalPackage;
           command = "hercules-ci-agent --help";
         };
-      } // lib.optionalAttrs (stdenv.isLinux) {
+      } // lib.optionalAttrs (stdenv.hostPlatform.isLinux) {
         # Does not test the package, but evaluation of the related NixOS module.
         nixos-simple-config = (nixos {
           boot.loader.grub.enable = false;

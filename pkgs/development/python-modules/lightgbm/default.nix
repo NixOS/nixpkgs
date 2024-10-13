@@ -29,7 +29,7 @@
   boost,
   ocl-icd,
   opencl-headers,
-  gpuSupport ? stdenv.isLinux && !cudaSupport,
+  gpuSupport ? stdenv.hostPlatform.isLinux && !cudaSupport,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
 }:
@@ -84,7 +84,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arrow = [
       cffi
       pyarrow

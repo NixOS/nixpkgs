@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     llvm
     zlib
-  ] ++ lib.optionals (!stdenv.isDarwin) [ libclang ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libclang ];
 
   cmakeFlags =
     [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "SPHINX_HTML" withHTML)
       (lib.cmakeBool "SPHINX_MAN" withManual)
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeOptionType "path" "Clang_DIR" "${lib.getDev libclang}/lib/cmake/clang")
     ];
 

@@ -48,7 +48,7 @@ buildPythonPackage rec {
     setuptools-rust
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     h5py
@@ -64,7 +64,7 @@ buildPythonPackage rec {
       "tests/test_paddle_comparison.py"
       "tests/test_tf_comparison.py"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # don't require mlx (not in Nixpkgs) to run tests
       "tests/test_mlx_comparison.py"
     ];

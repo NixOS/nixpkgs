@@ -38,8 +38,11 @@ stdenvNoCC.mkDerivation (
   dotnetCorePackages.addNuGetDeps
     {
       nugetDeps = ./deps.nix;
-      overrideFetchAttrs = old: {
+      overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
+        buildInputs =
+          old.buildInputs
+          ++ lib.concatLists (lib.attrValues (lib.getAttrs runtimeIds dotnet-sdk.targetPackages));
       };
     }
     rec {
@@ -159,7 +162,7 @@ stdenvNoCC.mkDerivation (
         nodejs
         dotnet-sdk
       ];
-      buildInputs = [ dotnet-sdk.packages ];
+      buildInputs = dotnet-sdk.packages;
 
       buildTarget = "Package";
 

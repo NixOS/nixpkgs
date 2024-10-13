@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS_RELEASE" "-Wno-error")
   ];
 
-  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isDarwin);
 
   nativeCheckInputs = [
     valgrind

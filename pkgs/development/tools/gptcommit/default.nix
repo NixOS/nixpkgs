@@ -23,15 +23,21 @@ rustPlatform.buildRustPackage {
     hash = "sha256-JhMkK2zw3VL9o7j8DJmjY/im+GyCjfV2TJI3GDo8T8c=";
   };
 
-  cargoHash = "sha256-ye9MAfG3m24ofV95Kr+KTP4FEqfrsm3aTQ464hG9q08=";
+  cargoPatches = [
+    # Bump `time` and friends to fix compilation with rust 1.80.
+    # See https://github.com/NixOS/nixpkgs/issues/332957
+    ./0001-update-time.patch
+  ];
+
+  cargoHash = "sha256-0UAttCCbSH91Dn7IvEX+Klp/bSYZM4rml7/dD3a208A=";
 
   nativeBuildInputs = [ pkg-config ];
 
   # 0.5.6 release has failing tests
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ]
-    ++ lib.optionals stdenv.isLinux [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -24,7 +24,7 @@ buildLua {
       substituteInPlace platform.lua \
       --replace \'curl\' \'${lib.getExe curl}\' \
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       --replace xclip ${lib.getExe xclip} \
       --replace wl-copy ${lib.getExe' wl-clipboard "wl-copy"}
     '';

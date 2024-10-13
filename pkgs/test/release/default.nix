@@ -13,7 +13,7 @@ pkgs.runCommand "all-attrs-eval-under-tryEval" {
   nativeBuildInputs = [
     nix
     pkgs.gitMinimal
-  ] ++ lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools;
+  ] ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
   strictDeps = true;
 
   src = with lib.fileset; toSource {

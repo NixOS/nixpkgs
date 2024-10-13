@@ -300,7 +300,7 @@ self: super: builtins.intersectAttrs super {
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
     ] ++
-    ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
+    ( if pkgs.stdenv.hostPlatform.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
@@ -585,7 +585,7 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+  ${if pkgs.stdenv.hostPlatform.isDarwin then null else "GLUT"} = overrideCabal (drv: {
     pkg-configDepends = drv.pkg-configDepends or [] ++ [
       pkgs.freeglut
     ];
@@ -823,9 +823,9 @@ self: super: builtins.intersectAttrs super {
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
   }) (super.git-annex.override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+    dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
   });
 
   # The test suite has undeclared dependencies on git.
@@ -1431,4 +1431,9 @@ self: super: builtins.intersectAttrs super {
       "--skip=/Cabal.Paths/paths"
     ];
   }) super.doctest;
+
+  # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
+  # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
+  # security level 2
+  openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
 }

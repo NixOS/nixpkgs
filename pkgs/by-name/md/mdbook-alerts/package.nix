@@ -7,7 +7,7 @@
   CoreServices ? darwin.apple_sdk.frameworks.CoreServices,
 }:
 let
-  version = "0.6.5";
+  version = "0.6.7";
 in
 rustPlatform.buildRustPackage {
   pname = "mdbook-alerts";
@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage {
     owner = "lambdalisue";
     repo = "rs-mdbook-alerts";
     rev = "v${version}";
-    hash = "sha256-vlp1tjtdbaH1sax3HAN665fspqRheHZzu5u/QjEejHg=";
+    hash = "sha256-H3xpaluEUYWuP+JR4Zx8zs/EqeEZPiBa2wcaAtPdvGY=";
   };
 
-  cargoHash = "sha256-nzVvktweqrow7P/I8DhDoVJNj1COCeEhx6HLY536hYE=";
+  cargoHash = "sha256-epnhKGvKN/iHcI77wEJlq7A5S2CkVRoPFTD+fGp1BH8=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   meta = {
     description = "Preprocessor for mdbook to support the inclusion of Markdown alerts";

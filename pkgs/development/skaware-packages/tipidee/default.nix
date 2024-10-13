@@ -35,5 +35,5 @@ skawarePackages.buildPackage {
     mv examples $doc/share/doc/tipidee/examples
   '';
 
-  broken = stdenv.isDarwin;
+  broken = stdenv.hostPlatform.isDarwin;
 }

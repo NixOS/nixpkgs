@@ -22,7 +22,7 @@ buildPecl rec {
 
   buildInputs =
     [ pcre2 ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.CoreFoundation
       darwin.apple_sdk_11_0.Libsystem
       libiconv

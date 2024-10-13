@@ -3,7 +3,7 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt
 , withPdfReader      ? true
-, pipewireSupport    ? stdenv.isLinux
+, pipewireSupport    ? stdenv.hostPlatform.isLinux
 , pipewire
 , qtwayland
 , qtbase
@@ -43,7 +43,7 @@ python3.pkgs.buildPythonApplication {
   buildInputs = [
     qtbase
     glib-networking
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 

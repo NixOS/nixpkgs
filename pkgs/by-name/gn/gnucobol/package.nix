@@ -79,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       aclocal
       automake
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # when building with nix on darwin, configure will use GNU strip,
       # which fails due to using --strip-unneeded, which is not supported
       substituteInPlace configure --replace-fail '"GNU strip"' 'FAKE GNU strip'
@@ -87,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # error: call to undeclared function 'xmlCleanupParser'
   # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-  env.CFLAGS = lib.optionalString stdenv.isDarwin "-Wno-error=implicit-function-declaration";
+  env.CFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-error=implicit-function-declaration";
 
   enableParallelBuilding = true;
 

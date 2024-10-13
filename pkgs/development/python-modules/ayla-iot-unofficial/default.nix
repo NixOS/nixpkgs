@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "ayla-iot-unofficial";
-  version = "1.3.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rewardone";
     repo = "ayla-iot-unofficial";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WfaDTKht+WEnozVFWGYwNvrC8Rr/IePxjNp5O7jz/9A=";
+    hash = "sha256-E0vDaKZxrOwzRsqVYw+RVgFYgRB+klW1yb07KA+9zWc=";
   };
 
   build-system = [ setuptools ];

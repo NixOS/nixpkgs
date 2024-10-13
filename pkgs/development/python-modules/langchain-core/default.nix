@@ -34,14 +34,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-core";
-  version = "0.3.0";
+  version = "0.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-core==${version}";
-    hash = "sha256-BCqrJuy7R2jT3QmTvYwn8gHX7bc6Tq8HArK+F3PjBhw=";
+    hash = "sha256-s2tqBJpWJNy0SnHWt0RQowmRbBD+7zqFEeDuFrUzr2U=";
   };
 
   sourceRoot = "${src.name}/libs/core";
@@ -118,7 +118,7 @@ buildPythonPackage rec {
       "test_chat_prompt_template_variable_names"
       "test_create_model_v2"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Langchain-core the following tests due to the test comparing execution time with magic values.
       "test_queue_for_streaming_via_sync_call"
       "test_same_event_loop"

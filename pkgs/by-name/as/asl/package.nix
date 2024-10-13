@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = lib.optionalString (!buildDocs) ''
     substituteInPlace Makefile --replace "all: binaries docs" "all: binaries"
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     substituteInPlace sysdefs.h --replace "x86_64" "aarch64"
   '';
 

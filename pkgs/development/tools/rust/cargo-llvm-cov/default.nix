@@ -94,6 +94,6 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [ wucke13 matthiasbeyer CobaltCause ];
 
     # The profiler runtime is (currently) disabled on non-Linux platforms
-    broken = !(stdenv.isLinux && !stdenv.targetPlatform.isRedox);
+    broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);
   };
 }

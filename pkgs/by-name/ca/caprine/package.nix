@@ -40,7 +40,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/caprine
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/caprine
 
@@ -53,7 +53,7 @@ buildNpmPackage rec {
       install -Dm644 build/icon.png $out/share/icons/hicolor/512x512/apps/caprine.png
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Caprine.app" $out/Applications
       makeWrapper "$out/Applications/Caprine.app/Contents/MacOS/Caprine" $out/bin/caprine

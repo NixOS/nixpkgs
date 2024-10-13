@@ -4,17 +4,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
-  version = "3.37";
+  version = "3.38";
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
-    sha256 = "sha256-dKHTxVglH10aV44RuSeIFATn83DVdmCYtuaiS3b0+zo=";
+    sha256 = "sha256-hjU6be1+x4YsY9hztqSD5zIxojs6qRZH7GwEkxPwdus=";
   };
 
   buildInputs = [ python3 zlib ]
-    ++ lib.optional (!stdenv.isDarwin) libaio;
+    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio;
 
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.

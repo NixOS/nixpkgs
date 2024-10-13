@@ -65,7 +65,7 @@
   # which in turn depends on systemd. systemd is not supported on Darwin, so
   # for now we disable GTK GUI support on Darwin. (It may be possible to remove
   # this restriction later.)
-  useGtk ? !stdenv.isDarwin,
+  useGtk ? !stdenv.hostPlatform.isDarwin,
   appstream,
   desktop-file-utils,
   meson,
@@ -198,7 +198,7 @@ let
             -e '/    ## Additional library and tool checks/,/    ## MinGW specific library and tool checks/d' \
             -i make/configure.py
       ''
-      + optionalString stdenv.isDarwin ''
+      + optionalString stdenv.hostPlatform.isDarwin ''
         # Prevent the configure script from failing if xcodebuild isn't available,
         # which it isn't in the Nix context. (The actual build goes fine without
         # xcodebuild.)
@@ -269,7 +269,7 @@ let
         xz
         zimg
       ]
-      ++ optional (!stdenv.isDarwin) numactl
+      ++ optional (!stdenv.hostPlatform.isDarwin) numactl
       ++ optionals useGtk [
         dbus-glib
         glib
@@ -286,7 +286,7 @@ let
         udev
       ]
       ++ optional useFdk fdk_aac
-      ++ optionals stdenv.isDarwin [
+      ++ optionals stdenv.hostPlatform.isDarwin [
         AudioToolbox
         Foundation
         libobjc
@@ -294,7 +294,7 @@ let
       ]
       # NOTE: 2018-12-27: Handbrake supports nv-codec-headers for Linux only,
       # look at ./make/configure.py search "enable_nvenc"
-      ++ optional stdenv.isLinux nv-codec-headers;
+      ++ optional stdenv.hostPlatform.isLinux nv-codec-headers;
 
     configureFlags =
       [
@@ -303,7 +303,7 @@ let
       ]
       ++ optional (!useGtk) "--disable-gtk"
       ++ optional useFdk "--enable-fdk-aac"
-      ++ optional stdenv.isDarwin "--disable-xcode"
+      ++ optional stdenv.hostPlatform.isDarwin "--disable-xcode"
       ++ optional stdenv.hostPlatform.isx86 "--harden";
 
     # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
@@ -362,7 +362,7 @@ let
       ];
       mainProgram = "HandBrakeCLI";
       platforms = with platforms; unix;
-      broken = stdenv.isDarwin; # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
+      broken = stdenv.hostPlatform.isDarwin; # https://github.com/NixOS/nixpkgs/pull/297984#issuecomment-2016503434
     };
   };
 in

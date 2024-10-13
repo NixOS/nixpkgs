@@ -75,7 +75,7 @@ buildPythonPackage {
   ];
 
   inherit (rerun) addDlopenRunpaths addDlopenRunpathsPhase;
-  postPhases = lib.optionals stdenv.isLinux [ "addDlopenRunpathsPhase" ];
+  postPhases = lib.optionals stdenv.hostPlatform.isLinux [ "addDlopenRunpathsPhase" ];
 
   disabledTestPaths = [
     # "fixture 'benchmark' not found"

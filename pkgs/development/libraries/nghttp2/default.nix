@@ -32,11 +32,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.62.1";
+  version = "1.63.0";
 
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-OWbsgv2n/DgFBtNyomDY2bbpRr5N6u8f7MGnS0gJrj0=";
+    sha256 = "sha256-YHsXRVTSKoKLxTLR1zT+D3KbXV7SB/LxLpamLoPynFU=";
   };
 
   outputs = [ "out" "dev" "lib" "doc" "man" ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     (lib.enableFeature enableHttp3 "http3")
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     "-faligned-allocation"
   ]);
 

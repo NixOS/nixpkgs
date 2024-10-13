@@ -54,7 +54,7 @@ buildGoModule rec {
   nativeCheckInputs = [ binaryen ];
   nativeBuildInputs = [ makeWrapper lld ];
   buildInputs = [ llvm clang.cc ]
-    ++ lib.optionals stdenv.isDarwin [ xar ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xar ];
 
   doCheck = (stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   inherit tinygoTests;
@@ -112,7 +112,7 @@ buildGoModule rec {
 
   # GDB upstream does not support ARM darwin
   runtimeDeps = [ go clang.cc lld avrdude openocd binaryen ]
-    ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [ gdb ];
+    ++ lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [ gdb ];
 
   installPhase = ''
     runHook preInstall

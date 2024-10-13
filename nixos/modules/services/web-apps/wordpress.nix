@@ -154,8 +154,8 @@ let
             (l: warn "setting this option with a list is deprecated"
               listToAttrs (map (p: nameValuePair (p.name or (throw "${p} does not have a name")) p) l))
             (attrsOf path);
-          default = { inherit (pkgs.wordpressPackages.themes) twentytwentythree; };
-          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentythree; }";
+          default = { inherit (pkgs.wordpressPackages.themes) twentytwentyfour; };
+          defaultText = literalExpression "{ inherit (pkgs.wordpressPackages.themes) twentytwentyfour; }";
           description = ''
             Path(s) to respective theme(s) which are copied from the 'theme' directory.
 

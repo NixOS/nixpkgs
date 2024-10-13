@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pcsclite
     libusb1
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ];
 

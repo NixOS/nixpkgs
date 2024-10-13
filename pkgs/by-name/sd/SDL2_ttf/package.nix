@@ -10,7 +10,7 @@
   stdenv,
   testers,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,10 +32,10 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     harfbuzz
   ]
-  ++ lib.optionals (!stdenv.isDarwin) [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     libGL
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 

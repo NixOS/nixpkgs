@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dezoomify-rs";
-  version = "2.12.5";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "dezoomify-rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PbtsrvNHo/SvToQJTTAPLoNDFotDPmSjr6C3IJZUjqU=";
+    hash = "sha256-uo0QTaAAbNYMidlWBauW+3hdd0snEWH+I5KQL6Vxgug=";
   };
 
-  cargoHash = "sha256-K9LNommagWjVxOXq6YUE4eg/3zpj3+MR5BugGCcVUlA=";
+  cargoHash = "sha256-0T5zvd78l3ghop/KoIgXYoGssVV9F+ppJV2pWyLnwxo=";
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       SystemConfiguration

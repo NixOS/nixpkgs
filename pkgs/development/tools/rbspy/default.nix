@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     ruby
     which
-  ] ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
   passthru.updateScript = nix-update-script { };
 

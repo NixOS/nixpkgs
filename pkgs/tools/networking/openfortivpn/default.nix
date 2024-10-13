@@ -7,7 +7,7 @@
 , ppp
 , systemd
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, withPpp ? stdenv.isLinux
+, withPpp ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation rec {

@@ -3,10 +3,14 @@
 # Checkout ./README.md for more information.
 
 {
+  config,
   lib,
   mkAzExtension,
   mycli,
   python3Packages,
+  autoPatchelfHook,
+  python3,
+  openssl_1_1,
 }:
 
 {
@@ -28,6 +32,53 @@
     description = "Tools for managing Azure DevOps";
     propagatedBuildInputs = with python3Packages; [ distro ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
+  };
+
+  azure-iot = mkAzExtension rec {
+    pname = "azure-iot";
+    description = "The Azure IoT extension for Azure CLI.";
+    version = "0.25.0";
+    url = "https://github.com/Azure/azure-iot-cli-extension/releases/download/v${version}/azure_iot-${version}-py3-none-any.whl";
+    sha256 = "7db4bc07667efa8472513d9e121fb2551fcaeae68255c7bc0768ad4177c1b1c6";
+    propagatedBuildInputs = (
+      with python3Packages;
+      [
+        azure-core
+        azure-identity
+        azure-iot-device
+        azure-mgmt-core
+        azure-storage-blob
+        jsonschema
+        msrest
+        msrestazure
+        packaging
+        tomli
+        tomli-w
+        tqdm
+        treelib
+      ]
+    );
+    meta.maintainers = with lib.maintainers; [ mikut ];
+  };
+
+  confcom = mkAzExtension rec {
+    pname = "confcom";
+    version = "1.0.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/confcom-${version}-py3-none-any.whl";
+    sha256 = "73823e10958a114b4aca84c330b4debcc650c4635e74c568679b6c32c356411d";
+    description = "Microsoft Azure Command-Line Tools Confidential Container Security Policy Generator Extension";
+    nativeBuildInputs = [ autoPatchelfHook ];
+    buildInputs = [ openssl_1_1 ];
+    propagatedBuildInputs = with python3Packages; [
+      pyyaml
+      deepdiff
+      docker
+      tqdm
+    ];
+    postInstall = ''
+      chmod +x $out/${python3.sitePackages}/azext_confcom/bin/genpolicy-linux
+    '';
+    meta.maintainers = with lib.maintainers; [ miampf ];
   };
 
   containerapp = mkAzExtension rec {
@@ -82,7 +133,8 @@
     propagatedBuildInputs = with python3Packages; [ azure-core ];
     meta.maintainers = with lib.maintainers; [ katexochen ];
   };
-
+}
+// lib.optionalAttrs config.allowAliases {
   # Removed extensions
   blockchain = throw "The 'blockchain' extension for azure-cli was deprecated upstream"; # Added 2024-04-26
   vm-repair = throw "The 'vm-repair' extension for azure-cli was deprecated upstream"; # Added 2024-08-06

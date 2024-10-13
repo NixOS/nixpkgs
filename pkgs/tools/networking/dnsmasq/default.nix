@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, pkg-config, nettle
 , libidn, libnetfilter_conntrack, nftables, buildPackages
-, dbusSupport ? stdenv.isLinux
+, dbusSupport ? stdenv.hostPlatform.isLinux
 , dbus
 , nixosTests
 }:
@@ -11,7 +11,7 @@ let
     "-DHAVE_DNSSEC"
   ] ++ lib.optionals dbusSupport [
     "-DHAVE_DBUS"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-DHAVE_CONNTRACK"
     "-DHAVE_NFTSET"
   ]);
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
-  postBuild = lib.optionalString stdenv.isLinux ''
+  postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     make -C contrib/lease-tools
   '';
 
@@ -51,12 +51,12 @@ stdenv.mkDerivation rec {
   # module can create it in Nix-land?
   postInstall = ''
     install -Dm644 trust-anchors.conf $out/share/dnsmasq/trust-anchors.conf
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     install -Dm644 contrib/MacOSX-launchd/uk.org.thekelleys.dnsmasq.plist \
       $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist
     substituteInPlace $out/Library/LaunchDaemons/uk.org.thekelleys.dnsmasq.plist \
       --replace "/usr/local/sbin" "$out/bin"
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -Dm755 contrib/lease-tools/dhcp_lease_time $out/bin/dhcp_lease_time
     install -Dm755 contrib/lease-tools/dhcp_release $out/bin/dhcp_release
     install -Dm755 contrib/lease-tools/dhcp_release6 $out/bin/dhcp_release6
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ nettle libidn ]
     ++ lib.optionals dbusSupport [ dbus ]
-    ++ lib.optionals stdenv.isLinux [ libnetfilter_conntrack nftables ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnetfilter_conntrack nftables ];
 
   passthru.tests = {
     prometheus-exporter = nixosTests.prometheus-exporters.dnsmasq;

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches =
     # fix build with linux headers >= 5.13
-    lib.optional stdenv.isLinux
+    lib.optional stdenv.hostPlatform.isLinux
       (fetchpatch {
         name = "fix-build-linux-headers-gte-5.13.patch";
         url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/net-dns/pdnsd/files/pdnsd-1.2.9a-linux-5.13_build_fix.patch?id=7ce35657f269c3b7016e8940ad36e59cf06e12a4";

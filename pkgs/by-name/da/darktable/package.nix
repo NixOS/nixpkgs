@@ -106,17 +106,17 @@ stdenv.mkDerivation rec {
     libaom
     portmidi
     lua
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     colord
     colord-gtk
     libX11
     ocl-icd
-  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DUSE_COLORD=OFF"
     "-DUSE_KWALLET=OFF"
   ];
@@ -127,8 +127,8 @@ stdenv.mkDerivation rec {
   # the wrappers:
   preFixup =
     let
-      libPathEnvVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
-      libPathPrefix = "$out/lib/darktable" + lib.optionalString stdenv.isLinux ":${ocl-icd}/lib";
+      libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      libPathPrefix = "$out/lib/darktable" + lib.optionalString stdenv.hostPlatform.isLinux ":${ocl-icd}/lib";
     in
     ''
       for f in $out/share/darktable/kernels/*.cl; do

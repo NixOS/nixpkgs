@@ -68,7 +68,7 @@ buildPythonPackage rec {
     ];
   };
 
-  env = lib.optionalAttrs stdenv.isDarwin { MPLBACKEND = "Agg"; };
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { MPLBACKEND = "Agg"; };
 
   nativeCheckInputs = [
     pytest-mock
@@ -83,7 +83,7 @@ buildPythonPackage rec {
   # test_calibration.py generates a divide by zero error on darwin
   # https://github.com/scikit-rf/scikit-rf/issues/972
   disabledTestPaths = lib.optional (
-    stdenv.isAarch64 && stdenv.isDarwin
+    stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin
   ) "skrf/calibration/tests/test_calibration.py";
 
   pythonImportsCheck = [ "skrf" ];

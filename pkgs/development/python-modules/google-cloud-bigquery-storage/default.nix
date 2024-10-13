@@ -34,7 +34,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fastavro = [ fastavro ];
     pandas = [ pandas ];
     pyarrow = [ pyarrow ];

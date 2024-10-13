@@ -17,7 +17,7 @@ buildPythonPackage rec {
   version = "21.4.4";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7" || stdenv.isDarwin;
+  disabled = pythonOlder "3.7" || stdenv.hostPlatform.isDarwin;
 
   src = fetchFromGitHub {
     owner = "greenbone";

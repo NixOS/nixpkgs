@@ -312,7 +312,7 @@ let
       crossSystem = {
         isStatic = true;
         parsed =
-          if stdenv.isLinux
+          if stdenv.hostPlatform.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
         gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //

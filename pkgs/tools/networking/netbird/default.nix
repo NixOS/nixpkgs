@@ -2,7 +2,7 @@
 , lib
 , nixosTests
 , nix-update-script
-, buildGo123Module
+, buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
@@ -29,28 +29,28 @@ let
       signal = "netbird-signal";
     };
 in
-buildGo123Module rec {
+buildGoModule rec {
   pname = "netbird";
-  version = "0.29.3";
+  version = "0.30.0";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     rev = "v${version}";
-    hash = "sha256-0KLx3kxXGriKZqyvcLRoz8y4y729ZQVuOKDkm8p2te4=";
+    hash = "sha256-YtKGiF45fNoiYQFTE3NReUaosRGDJOyjfqtc+tBKopI=";
   };
 
-  vendorHash = "sha256-CD34U+Z8bUKN0Z4nxIVC+mYDp71Q8q1bmUypRDGgb3U=";
+  vendorHash = "sha256-t6kqEmL2lKKYlqxaQ1OsAvB3BSmmyfogghGoE9jw+AI=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
-  buildInputs = lib.optionals (stdenv.isLinux && ui) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
     gtk3
     libayatana-appindicator
     libX11
     libXcursor
     libXxf86vm
-  ] ++ lib.optionals (stdenv.isDarwin && ui) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
     Cocoa
     IOKit
     Kernel
@@ -88,7 +88,7 @@ buildGo123Module rec {
           --fish <($out/bin/${binary} completion fish) \
           --zsh <($out/bin/${binary} completion zsh)
       '')
-      modules) + lib.optionalString (stdenv.isLinux && ui) ''
+      modules) + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
     cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
 

@@ -5,7 +5,6 @@ with haskellLib;
 let
   inherit (pkgs) lib;
 
-  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -55,9 +54,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  gi-gtk = disableParallelBuilding super.gi-gtk;
-
   #
   # Version upgrades
   #
@@ -67,14 +63,18 @@ self: super: {
   aeson = doDistribute self.aeson_2_2_3_0;
   apply-refact = doDistribute self.apply-refact_0_14_0_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
+  auto-update = super.auto-update_0_2_1;
   extensions = doDistribute self.extensions_0_1_0_2;
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20240511;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
+  http2 = super.http2_5_3_4;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
+  network-control = super.network-control_0_1_3;
+  network-run = super.network-run_0_4_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
   primitive = doDistribute (dontCheck self.primitive_0_9_0_0); # tests introduce a recursive dependency via hspec
   quickcheck-instances = doDistribute self.quickcheck-instances_0_3_31;
@@ -82,6 +82,7 @@ self: super: {
   rerebase = doDistribute self.rerebase_1_21_1;
   scientific = doDistribute self.scientific_0_3_8_0;
   semirings = doDistribute self.semirings_0_7;
+  time-manager = super.time-manager_0_1_0;
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
   uuid-types = doDistribute self.uuid-types_1_0_6;
 
@@ -101,9 +102,11 @@ self: super: {
   #
   base64 = doJailbreak super.base64; # base <4.20
   commutative-semigroups = doJailbreak super.commutative-semigroups; # base <4.20
+  dejafu = doJailbreak super.dejafu; # containers <0.7
   floskell = doJailbreak super.floskell; # base <4.20
   lucid = doJailbreak super.lucid; # base <4.20
   tar = doJailbreak super.tar; # base <4.20
+  tasty-coverage = doJailbreak super.tasty-coverage; # base <4.20, filepath <1.5
   tree-diff = doJailbreak super.tree-diff; # base <4.20
   time-compat = doJailbreak super.time-compat; # base <4.20
 
@@ -123,6 +126,9 @@ self: super: {
   lukko_0_1_2 = dontCheck super.lukko_0_1_2; # doesn't compile with tasty ==1.4.*
   resolv = dontCheck super.resolv; # doesn't compile with filepath ==1.5.*
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
+  bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
+  hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_1; # test suite assumes it can freely call curl
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
 

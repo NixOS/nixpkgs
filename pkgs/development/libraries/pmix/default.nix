@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" ] ++ lib.optionals stdenv.isLinux [ "dev" ];
+  outputs = [ "out" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "dev" ];
 
   postPatch = ''
     patchShebangs ./autogen.pl
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
     # From some reason the Darwin build doesn't include this file, so we
     # currently disable this substitution for any non-Linux platform, until a
     # Darwin user will care enough about this cross platform fix.
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Pin the compiler to the current version in a cross compiler friendly way.
       # Same pattern as for openmpi (see https://github.com/NixOS/nixpkgs/pull/58964#discussion_r275059427).
       substituteInPlace "''${!outputDev}"/share/pmix/pmixcc-wrapper-data.txt \

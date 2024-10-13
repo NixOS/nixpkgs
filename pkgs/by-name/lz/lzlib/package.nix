@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     # hash from release email
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.in --replace '-Wl,--soname=' '-Wl,-install_name,$(out)/lib/'
   '';
 

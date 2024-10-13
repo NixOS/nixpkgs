@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 
@@ -74,9 +74,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   configurePhase = let
     platform =
-      if stdenv.isLinux then
+      if stdenv.hostPlatform.isLinux then
         "linux"
-      else if stdenv.isDarwin then
+      else if stdenv.hostPlatform.isDarwin then
         "macosx-catalina"
       else
         throw "Unsupported platform: ${stdenv.hostPlatform.system}";

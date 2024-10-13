@@ -118,7 +118,7 @@ buildPythonPackage rec {
       setuptools
     ]
     # ld: library not found for -lcups
-    ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [ cups ];
+    ++ lib.optionals (withPrintSupport && stdenv.hostPlatform.isDarwin) [ cups ];
 
   passthru = {
     inherit sip pyqt6-sip;
@@ -145,7 +145,7 @@ buildPythonPackage rec {
     # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
     ++ lib.optional withLocation "PyQt6.QtPositioning";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-address-of-temporary";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-address-of-temporary";
 
   meta = with lib; {
     description = "Python bindings for Qt6";

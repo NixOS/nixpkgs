@@ -1,7 +1,23 @@
 { buildGoModule
 , fetchFromGitHub
 , lib
-, tags ? [ "autopilotrpc" "signrpc" "walletrpc" "chainrpc" "invoicesrpc" "watchtowerrpc" "routerrpc" "monitoring" "kvdb_postgres" "kvdb_etcd" ]
+, tags ? [
+    # `RELEASE_TAGS` from https://github.com/lightningnetwork/lnd/blob/master/make/release_flags.mk
+    "autopilotrpc"
+    "chainrpc"
+    "invoicesrpc"
+    "kvdb_etcd"
+    "kvdb_postgres"
+    "kvdb_sqlite"
+    "monitoring"
+    "neutrinorpc"
+    "peersrpc"
+    "signrpc"
+    "walletrpc"
+    "watchtowerrpc"
+    # Extra tags useful for testing
+    "routerrpc"
+  ]
 }:
 
 buildGoModule rec {

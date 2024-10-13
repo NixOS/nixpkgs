@@ -6,7 +6,7 @@
 }:
 stdenv.mkDerivation rec {
   pname = "system_stats";
-  version = "3.0";
+  version = "3.2";
 
   buildInputs = [ postgresql ];
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "EnterpriseDB";
     repo = "system_stats";
     rev = "v${version}";
-    hash = "sha256-LuX7/LOi0rl6L/kjbjq7rr2zPcGIOYB7hdZBNJ9xqak=";
+    hash = "sha256-/xXnui0S0ZjRw7P8kMAgttHVv8T41aOhM3pM8P0OTig=";
   };
 
   installPhase = ''

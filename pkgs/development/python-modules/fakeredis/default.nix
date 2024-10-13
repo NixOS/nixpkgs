@@ -43,7 +43,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lua = [ lupa ];
     json = [ jsonpath-ng ];
     bf = [ pyprobables ];

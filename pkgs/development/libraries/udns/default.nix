@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   # udns uses a very custom build and hardcodes a .so name in a few places.
   # Instead of fighting with it to apply the standard dylib script, change
   # the right place in the Makefile itself.
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.in \
       --replace --soname, -install_name,$out/lib/
   '';

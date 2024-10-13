@@ -158,6 +158,6 @@ in
       maintainers = with maintainers; [connorbaker];
       platforms = platforms.linux;
       # g++: error: unrecognized command-line option '-mf16c'
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
   })

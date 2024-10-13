@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test/
   '';
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" finalAttrs.finalPackage.doCheck)
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change "@rpath/libspatialindex.7.dylib" "$out/lib/libspatialindex.7.dylib" $out/lib/libspatialindex_c.dylib
   '';
 

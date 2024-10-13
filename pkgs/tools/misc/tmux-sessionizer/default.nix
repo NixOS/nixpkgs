@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage {
   OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   meta = with lib; {
     description = "Fastest way to manage projects as tmux sessions";

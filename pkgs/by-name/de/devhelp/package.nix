@@ -80,6 +80,7 @@ stdenv.mkDerivation rec {
     description = "API documentation browser for GNOME";
     mainProgram = "devhelp";
     homepage = "https://apps.gnome.org/Devhelp/";
+    changelog = "https://gitlab.gnome.org/GNOME/devhelp/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

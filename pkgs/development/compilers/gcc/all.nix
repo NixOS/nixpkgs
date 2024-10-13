@@ -24,7 +24,7 @@ let
         profiledCompiler = false;
         libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then args.libcCross else null;
         threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
-        isl = if       stdenv.isDarwin then null
+        isl = if       stdenv.hostPlatform.isDarwin then null
               else if    atLeast "9"   then isl_0_20
               else    /* atLeast "7" */     isl_0_17;
       } // lib.optionalAttrs (!(atLeast "9")) {

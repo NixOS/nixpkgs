@@ -191,6 +191,6 @@ stdenv.mkDerivation rec {
       samuela
       tmplt
     ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

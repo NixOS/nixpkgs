@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alire";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "alire-project";
     repo = "alire";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-fJXt3mM/v87hWumML6L3MH1O/uKkzmpE58B9nDRohzM=";
+    hash = "sha256-m4EPiqh7KCeNgq4G727jrW5ABb+uecvvpmZyskqtml4=";
 
     fetchSubmodules = true;
   };
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ gprbuild gnat ];
 
   postPatch = ''
-    patchShebangs ./dev/build.sh
+    patchShebangs ./dev/build.sh ./scripts/version-patcher.sh
   '';
 
   buildPhase = ''

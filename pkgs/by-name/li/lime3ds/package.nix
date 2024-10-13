@@ -41,11 +41,11 @@
   inherit (lib) optional optionals cmakeBool optionalString getLib makeLibraryPath;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "lime3ds";
-  version = "2118";
+  version = "2118.2";
 
   src = fetchzip {
     url = "https://github.com/Lime3DS/Lime3DS/releases/download/${finalAttrs.version}/lime3ds-unified-source-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Dt0YKWj+yLUic1F7uOxfWPYlPda3snTUPwFbn23i2rY=";
+    hash = "sha256-DovVkk5QolOizV3mfxtMNMeIJWYs3xAu96icrTcQN68=";
   };
 
   nativeBuildInputs = [

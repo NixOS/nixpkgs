@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Soundfont editor for creating musical instruments";
     mainProgram = "polyphone";
     homepage = "https://www.polyphone-soundfonts.com/";

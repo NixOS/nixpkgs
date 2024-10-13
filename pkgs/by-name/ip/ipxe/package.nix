@@ -19,7 +19,7 @@
 let
   targets =
     additionalTargets
-    // lib.optionalAttrs stdenv.isx86_64 {
+    // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
       "bin-x86_64-efi/ipxe.efi" = null;
       "bin-x86_64-efi/ipxe.efirom" = null;
       "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
@@ -32,13 +32,13 @@ let
       "bin/ipxe.lkrn" = null;
       "bin/undionly.kpxe" = null;
     }
-    // lib.optionalAttrs stdenv.isAarch32 {
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch32 {
       "bin-arm32-efi/ipxe.efi" = null;
       "bin-arm32-efi/ipxe.efirom" = null;
       "bin-arm32-efi/ipxe.usb" = "ipxe-efi.usb";
       "bin-arm32-efi/snp.efi" = null;
     }
-    // lib.optionalAttrs stdenv.isAarch64 {
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
       "bin-arm64-efi/ipxe.efi" = null;
       "bin-arm64-efi/ipxe.efirom" = null;
       "bin-arm64-efi/ipxe.usb" = "ipxe-efi.usb";
@@ -48,7 +48,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ipxe";
-  version = "1.21.1-unstable-2024-09-13";
+  version = "1.21.1-unstable-2024-09-27";
 
   nativeBuildInputs = [
     gnu-efi
@@ -66,8 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "c85ad1246890cf3c0c5f2ac6de06ab046ddd0043";
-    hash = "sha256-Py0mXcCj/NhVW3crngR9ZLHvH9N0QJeVmykc3k+yi6Y=";
+    rev = "3f4f843920afdc1d808a8b20354cf3eca481401a";
+    hash = "sha256-+Zpl8xhiWrnkFVL+DLuV0N9pn6hjw5JxDMxeDmfcNS4=";
   };
 
   # Calling syslinux on a FAT image isn't going to work on Aarch64.

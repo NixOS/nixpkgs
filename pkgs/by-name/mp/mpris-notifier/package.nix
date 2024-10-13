@@ -7,18 +7,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mpris-notifier";
-  version = "0.1.9";
+  version = "0.1.10";
 
   src = fetchFromGitHub {
     owner = "l1na-forever";
     repo = "mpris-notifier";
     rev = "v${version}";
-    hash = "sha256-s7/eN2gn8VmNtrI9zEBASs7jzxgfszJjNlXR7IVr3G4=";
+    hash = "sha256-X9d410ijZZcHvf8+f6DgnMl8ETGeY/fN13Gpz6q3BBA=";
   };
 
-  cargoHash = "sha256-DTB1Ranz2oeuWVMuFNe+kjuQFnPqBoDeqxuYFU9svSs=";
+  cargoHash = "sha256-f8BCnjgv7OLWQ/2X3dTUuAarCl+u+4CRARSQsO+09zE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

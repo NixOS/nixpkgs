@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, pkg-config, libuuid, gettext, texinfo
-, withFuse ? stdenv.isLinux, fuse3
+, withFuse ? stdenv.hostPlatform.isLinux, fuse3
 , shared ? !stdenv.hostPlatform.isStatic
 , e2fsprogs, runCommand
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags =
-    if stdenv.isLinux then [
+    if stdenv.hostPlatform.isLinux then [
       # It seems that the e2fsprogs is one of the few packages that cannot be
       # build with shared and static libs.
       (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")

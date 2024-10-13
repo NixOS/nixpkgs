@@ -6,7 +6,7 @@
 , texinfo
 , boehmgc
 , readline
-, nbdSupport ? !stdenv.isDarwin, libnbd
+, nbdSupport ? !stdenv.hostPlatform.isDarwin, libnbd
 , textStylingSupport ? true, gettext
 , dejagnu
 
@@ -86,6 +86,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres kira-bruneau ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

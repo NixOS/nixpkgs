@@ -318,14 +318,12 @@ in
           format
           (lib.mapAttrs (_n: v: { Partition = v.repartConfig; }) cfg.finalPartitions);
 
-        partitionsJSON = pkgs.writeText "partitions.json" (builtins.toJSON cfg.finalPartitions);
-
         mkfsEnv = mkfsOptionsToEnv cfg.mkfsOptions;
       in
       pkgs.callPackage ./repart-image.nix {
         systemd = cfg.package;
-        inherit (cfg) name version imageFileBasename compression split seed sectorSize;
-        inherit fileSystems definitionsDirectory partitionsJSON mkfsEnv;
+        inherit (cfg) name version imageFileBasename compression split seed sectorSize finalPartitions;
+        inherit fileSystems definitionsDirectory mkfsEnv;
       };
 
     meta.maintainers = with lib.maintainers; [ nikstur willibutz ];

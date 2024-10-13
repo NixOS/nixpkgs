@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+, cmocka, uthash, swtpm, iproute2, procps, which
 , libuuid
 }:
 let
@@ -10,7 +10,7 @@ let
   # needs to be conditional based on isLinux because procps for other systems
   # might not support the withSystemd option.
   procpsWithoutSystemd = procps.override { withSystemd = false; };
-  procps_pkg = if stdenv.isLinux then procpsWithoutSystemd else procps;
+  procps_pkg = if stdenv.hostPlatform.isLinux then procpsWithoutSystemd else procps;
 in
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka which openssl procps_pkg iproute2 swtpm
   ];
 
   strictDeps = true;

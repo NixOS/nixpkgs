@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
       "--disable-resample"
       "--disable-libwebrtc"
       "--with-gnutls=yes"
-    ] ++ lib.optionals stdenv.isLinux [ "--enable-epoll" ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-epoll" ];
 
     buildInputs = old.buildInputs ++ [ gnutls ];
   });

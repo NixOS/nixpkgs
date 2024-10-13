@@ -197,8 +197,8 @@ stdenv.mkDerivation rec {
     chmod 755 $out/bin/soundsense
   '';
 
-  doInstallCheck = stdenv.isLinux;
-  nativeInstallCheckInputs = lib.optionals stdenv.isLinux [ expect xvfb-run ];
+  doInstallCheck = stdenv.hostPlatform.isLinux;
+  nativeInstallCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [ expect xvfb-run ];
 
   installCheckPhase = let
     commonExpectStatements = fmod: lib.optionalString isAtLeast50 ''

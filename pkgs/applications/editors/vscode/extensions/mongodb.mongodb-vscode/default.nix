@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "mongodb-vscode";
     publisher = "mongodb";
-    version = "1.8.1";
-    hash = "sha256-dHvYl3bg5OB/HYBoHQnUODhAob/ZylFNGLAuUQByvdM=";
+    version = "1.9.1";
+    hash = "sha256-XWWBk/QW37Dg0RJJwJ65w1r9WGC6iAGCgigsnGm/ilc=";
   };
 
   meta = {

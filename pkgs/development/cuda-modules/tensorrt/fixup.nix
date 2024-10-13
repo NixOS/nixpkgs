@@ -65,7 +65,7 @@ finalAttrs: prevAttrs: {
   # We need to look inside the extracted output to get the files we need.
   sourceRoot = "TensorRT-${finalAttrs.version}";
 
-  buildInputs = prevAttrs.buildInputs ++ [ finalAttrs.passthru.cudnn.lib ];
+  buildInputs = prevAttrs.buildInputs ++ [ (finalAttrs.passthru.cudnn.lib or null) ];
 
   preInstall =
     (prevAttrs.preInstall or "")

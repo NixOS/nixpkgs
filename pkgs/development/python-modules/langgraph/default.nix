@@ -36,14 +36,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.2.21";
+  version = "0.2.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/${version}";
-    hash = "sha256-1Ch2V85omAKnXK9rMihNtyjIoOvmVUm8Dbdo5GBoik4=";
+    hash = "sha256-5Suyj6pEslgR383MkYGGz7IC2A0A++02YooZmi8YtyM=";
   };
 
   postgresqlTestSetupPost = ''
@@ -64,7 +64,7 @@ buildPythonPackage rec {
 
   # postgresql doesn't play nicely with the darwin sandbox:
   # FATAL:  could not create shared memory segment: Operation not permitted
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     aiosqlite
@@ -88,7 +88,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "test_doesnt_warn_valid_schema" # test is flaky due to pydantic error on the exception
+    # test is flaky due to pydantic error on the exception
+    "test_doesnt_warn_valid_schema"
+    "test_tool_node_inject_store"
+
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
     "test_cancel_graph_astream_events_v2"

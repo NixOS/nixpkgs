@@ -745,7 +745,7 @@ stdenv.mkDerivation {
 Nixpkgs periodically tries to update all packages that have a `passthru.updateScript` attribute.
 
 > [!Note]
-> A common pattern is to use the [`nix-update-script`](../pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
+> A common pattern is to use the [`nix-update-script`](../pkgs/by-name/ni/nix-update/nix-update-script.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 >
 > ```nix
 > { stdenv, nix-update-script }:
@@ -755,7 +755,7 @@ Nixpkgs periodically tries to update all packages that have a `passthru.updateSc
 > }
 > ```
 >
-> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released.
+> For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://github.com/nix-community/nixpkgs-update) when a new version is released.
 > The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set.
 > While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
 

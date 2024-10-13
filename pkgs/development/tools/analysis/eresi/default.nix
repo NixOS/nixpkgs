@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (if stdenv.is64bit then "--enable-32-64" else "--enable-32")
+    (if stdenv.hostPlatform.is64bit then "--enable-32-64" else "--enable-32")
     "--enable-readline"
   ];
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   enableParallelInstalling = false;
 
   installTargets = lib.singleton "install"
-                ++ lib.optional stdenv.is64bit "install64";
+                ++ lib.optional stdenv.hostPlatform.is64bit "install64";
 
   meta = {
     description = "ERESI Reverse Engineering Software Interface";

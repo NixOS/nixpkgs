@@ -127,7 +127,7 @@ let
       platforms = platforms.linux ++ platforms.darwin;
     };
 
-  } // lib.optionalAttrs stdenv.isDarwin {
+  } // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     CXX = "clang++";
     CC = "clang";
     CPP = "clang -E";
@@ -136,7 +136,7 @@ let
 
 in {
   subversion = common {
-    version = "1.14.3";
-    sha256 = "sha256-lJ79RRoJQ19+hXNXTHHHtxsZTYRIkPpJzWHSJi6hpEA=";
+    version = "1.14.4";
+    sha256 = "sha256-ROrRFucuSA8Q8SPJFLtvn4wEFxHAQe16v/G4Y0oZnjw=";
   };
 }

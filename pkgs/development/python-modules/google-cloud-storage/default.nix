@@ -41,7 +41,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     protobuf = [ protobuf ];
   };
 

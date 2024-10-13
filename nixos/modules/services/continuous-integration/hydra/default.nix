@@ -311,7 +311,7 @@ in
     ];
 
     systemd.slices.system-hydra = {
-      description = "Hydra Slice";
+      description = "Hydra CI Server Slice";
       documentation = [ "file://${cfg.package}/share/doc/hydra/index.html" "https://nixos.org/hydra/manual/" ];
     };
 

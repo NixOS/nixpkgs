@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     graphviz
     pkg-config
   ] ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
-  buildInputs = [ fmt ] ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = [ fmt ] ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
   propagatedBuildInputs =
     [ suitesparse ]
     ++ lib.optionals pythonSupport [

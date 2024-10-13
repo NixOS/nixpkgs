@@ -15,9 +15,9 @@
 
 let
   version = "12.1";
-  bootstrapFromC = ! ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isx86_64);
+  bootstrapFromC = ! ((stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isx86_64);
 
-  arch = if stdenv.isLinux && stdenv.isAarch64 then
+  arch = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64 then
     "-aarch64le"
    else
      "-x86-64";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   # leads to more efficient code than when building the tarball that contains
   # generated C code instead of those binaries.
   src =
-    if stdenv.isLinux && stdenv.isAarch64
+    if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
       sha256 = "12ra9bc93x8g07impbd8jr6djjzwpb9qvh9zhxvvrba3332zx3vh";

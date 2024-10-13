@@ -43,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ubpm";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kurnevsky ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -1,34 +1,31 @@
 {
   lib,
-  appdirs,
   buildPythonPackage,
   configargparse,
   decorator,
   dict2xml,
   fetchFromGitHub,
   google-i18n-address,
-  html5lib,
   intervaltree,
   jinja2,
   lxml,
-  markupsafe,
   platformdirs,
   pycairo,
   pycountry,
-  pyflakes,
-  pypdf2,
+  pypdf,
   pytestCheckHook,
   python-fontconfig,
   pythonOlder,
   pyyaml,
   requests,
+  setuptools,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "xml2rfc";
-  version = "3.23.1";
-  format = "setuptools";
+  version = "3.23.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -36,7 +33,7 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8AtQxLOOgEKhkbza9YwXrZVh/++UeJq8n8a7VwIzHSc=";
+    hash = "sha256-KL3kIntydUAOS7qGq6ZDrShEcyME1Qwf2VjM/9mw96Q=";
   };
 
   postPatch = ''
@@ -45,20 +42,20 @@ buildPythonPackage rec {
       --replace-fail "test flaketest" "test"
   '';
 
-  propagatedBuildInputs = [
-    appdirs
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [ "lxml" ];
+
+  dependencies = [
     configargparse
     dict2xml
     google-i18n-address
-    html5lib
     intervaltree
     jinja2
     lxml
-    markupsafe
     platformdirs
     pycountry
-    pyflakes
-    pypdf2
+    pypdf
     pyyaml
     requests
     wcwidth

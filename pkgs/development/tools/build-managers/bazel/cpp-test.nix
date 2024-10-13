@@ -36,7 +36,7 @@ let
     cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
     find $out -type d -exec chmod 755 {} \;
   ''
-  + (lib.optionalString stdenv.isDarwin ''
+  + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/tools
     cp ${toolsBazel} $out/tools/bazel
   ''));
@@ -51,10 +51,10 @@ let
         --distdir=${distDir} \
         --curses=no \
         ${extraBazelArgs} \
-    '' + lib.optionalString (stdenv.isDarwin) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
         --cxxopt=-x --cxxopt=c++ --host_cxxopt=-x --host_cxxopt=c++ \
         --linkopt=-stdlib=libc++ --host_linkopt=-stdlib=libc++ \
-    '' + lib.optionalString (stdenv.isDarwin && Foundation != null) ''
+    '' + lib.optionalString (stdenv.hostPlatform.isDarwin && Foundation != null) ''
         --linkopt=-Wl,-F${Foundation}/Library/Frameworks \
         --linkopt=-L${darwin.libobjc}/lib \
     '';

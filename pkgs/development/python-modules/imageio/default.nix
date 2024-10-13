@@ -4,6 +4,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   isPyPy,
   substituteAll,
 
@@ -44,12 +45,22 @@ buildPythonPackage rec {
     hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
   };
 
-  patches = lib.optionals (!stdenv.isDarwin) [
-    (substituteAll {
-      src = ./libgl-path.patch;
-      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
-    })
-  ];
+  patches =
+    [
+      # Fix tests failing with new enough ffmpeg
+      # Upstream PR: https://github.com/imageio/imageio/pull/1101
+      # FIXME: remove when merged
+      (fetchpatch {
+        url = "https://github.com/imageio/imageio/commit/8d1bea4b560f3aa10ed2d250e483173f488f50fe.patch";
+        hash = "sha256-68CzSoJzbr21N97gWu5qVYh6QeBS9zon8XmytcVK89c=";
+      })
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      (substituteAll {
+        src = ./libgl-path.patch;
+        libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+      })
+    ];
 
   build-system = [ setuptools ];
 
@@ -100,7 +111,7 @@ buildPythonPackage rec {
     "tests/test_swf.py"
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "test_bayer_write"
     # RuntimeError: No valid H.264 encoder was found with the ffmpeg installation

@@ -20,7 +20,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   passthru.updateScript = nix-update-script { };
 

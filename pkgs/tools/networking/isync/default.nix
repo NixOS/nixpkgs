@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkg-config perl ]
     ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [ openssl db cyrus_sasl zlib ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = lib.optionalString withCyrusSaslXoauth2 ''
     wrapProgram "$out/bin/mbsync" \

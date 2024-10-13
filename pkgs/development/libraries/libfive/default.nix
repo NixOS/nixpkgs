@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config python.pkgs.pythonImportsCheckHook ];
   buildInputs = [ eigen zlib libpng boost guile python qtbase ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk_11_0.frameworks.Cocoa ];
 
   preConfigure = ''
     substituteInPlace studio/src/guile/interpreter.cpp \
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DGUILE_CCACHE_DIR=${placeholder "out"}/${guile.siteCcacheDir}"
-  ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
     # warning: 'aligned_alloc' is only available on macOS 10.15 or newer
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.15"
   ];
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     NIX_CFLAGS_COMPILE = "-Wno-error=enum-constexpr-conversion";
   };
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
     cp -r studio/Studio.app $out/Applications/Studio.app

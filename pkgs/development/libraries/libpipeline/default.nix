@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libpipeline";
-  version = "1.5.7";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "mirror://savannah/libpipeline/libpipeline-${version}.tar.gz";
-    sha256 = "sha256-uLRRlJiQIqeewTF/ZKKnWxVRsqVb6gb2dwTLKi5GkLA=";
+    hash = "sha256-GxIDyhUszWOYPD8hEvf+b6Wv1FMhjt5RU9GzHhG7hAU=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [ ./fix-on-osx.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./fix-on-osx.patch ];
 
   # necessary to build on FreeBSD native pending inclusion of
   # https://git.savannah.gnu.org/cgit/config.git/commit/?id=e4786449e1c26716e3f9ea182caf472e4dbc96e0

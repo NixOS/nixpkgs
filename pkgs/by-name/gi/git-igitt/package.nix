@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage {
     libgit2
     oniguruma
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;

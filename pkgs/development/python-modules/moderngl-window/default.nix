@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pyrr
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trimesh = [
       trimesh
       scipy
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
     inherit (mesa.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

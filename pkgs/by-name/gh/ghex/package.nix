@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dvapi=true"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # mremap does not exist on darwin
     "-Dmmap-buffer-backend=false"
   ];
@@ -76,6 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/ghex";
+    changelog = "https://gitlab.gnome.org/GNOME/ghex/-/blob/${version}/NEWS?ref_type=tags";
     description = "Hex editor for GNOME desktop environment";
     mainProgram = "ghex";
     platforms = platforms.linux;

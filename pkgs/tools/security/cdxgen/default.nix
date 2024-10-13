@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     node-gyp # required for sqlite3 bindings
     pnpm_9.configHook
     python3 # required for sqlite3 bindings
-  ] ++ lib.optional stdenv.isDarwin [ xcbuild ];
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;

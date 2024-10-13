@@ -97,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace tapi/test/CMakeLists.txt \
         --replace-fail tapi-configs ""
     ''
-    + lib.optionalString stdenv.isLinux ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Remove Darwin-specific versioning flags.
       substituteInPlace tapi/tools/libtapi/CMakeLists.txt \
           --replace-fail '-current_version ''${DYLIB_VERSION} -compatibility_version 1' ""

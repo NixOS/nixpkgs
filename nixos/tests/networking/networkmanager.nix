@@ -121,6 +121,7 @@ let
         static.wait_for_unit("NetworkManager.service")
 
         dynamic.wait_until_succeeds("cat /etc/resolv.conf | grep -q '192.168.1.1'")
+        dynamic.wait_until_succeeds("cat /etc/resolv.conf | grep -q '2001:db8::1'")
         static.wait_until_succeeds("cat /etc/resolv.conf | grep -q '10.10.10.10'")
         static.wait_until_fails("cat /etc/resolv.conf | grep -q '192.168.1.1'")
       '';

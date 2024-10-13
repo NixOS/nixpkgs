@@ -23,7 +23,7 @@ let
     };
   } ./setup-hook-darwin.sh;
 
-  darwinFrameworks = lib.optionals stdenv.isDarwin (
+  darwinFrameworks = lib.optionals stdenv.hostPlatform.isDarwin (
     toBuildInputs pkgArches (pkgs: with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
       CoreServices Foundation ForceFeedback AppKit OpenGL IOKit DiskArbitration PCSC Security
       ApplicationServices AudioToolbox CoreAudio AudioUnit CoreMIDI OpenCL Cocoa Carbon
@@ -40,7 +40,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs:
 lib.optionalAttrs (buildScript != null) { builder = buildScript; }
-// lib.optionalAttrs stdenv.isDarwin {
+// lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     postBuild = ''
       # The Wine preloader must _not_ be linked to any system libraries, but `NIX_LDFLAGS` will link
       # to libintl, libiconv, and CoreFoundation no matter what. Delete the one that was built and
@@ -68,12 +68,12 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
     pkg-config
   ]
   ++ lib.optionals supportFlags.mingwSupport (mingwGccs
-    ++ lib.optional stdenv.isDarwin setupHookDarwin);
+    ++ lib.optional stdenv.hostPlatform.isDarwin setupHookDarwin);
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
   [ pkgs.freetype pkgs.perl pkgs.libunwind ]
-  ++ lib.optional stdenv.isLinux         pkgs.libcap
-  ++ lib.optional stdenv.isDarwin        pkgs.libinotify-kqueue
+  ++ lib.optional stdenv.hostPlatform.isLinux         pkgs.libcap
+  ++ lib.optional stdenv.hostPlatform.isDarwin        pkgs.libinotify-kqueue
   ++ lib.optional cupsSupport            pkgs.cups
   ++ lib.optional gettextSupport         pkgs.gettext
   ++ lib.optional dbusSupport            pkgs.dbus
@@ -92,7 +92,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   ++ lib.optional pulseaudioSupport      pkgs.libpulseaudio
   ++ lib.optional (xineramaSupport && x11Support) pkgs.xorg.libXinerama
   ++ lib.optional udevSupport            pkgs.udev
-  ++ lib.optional vulkanSupport          (if stdenv.isDarwin then moltenvk else pkgs.vulkan-loader)
+  ++ lib.optional vulkanSupport          (if stdenv.hostPlatform.isDarwin then moltenvk else pkgs.vulkan-loader)
   ++ lib.optional sdlSupport             pkgs.SDL2
   ++ lib.optional usbSupport             pkgs.libusb1
   ++ lib.optionals gstreamerSupport      (with pkgs.gst_all_1;
@@ -100,8 +100,8 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   ++ lib.optionals gtkSupport    [ pkgs.gtk3 pkgs.glib ]
   ++ lib.optionals openclSupport [ pkgs.opencl-headers pkgs.ocl-icd ]
   ++ lib.optionals tlsSupport    [ pkgs.openssl pkgs.gnutls ]
-  ++ lib.optionals (openglSupport && !stdenv.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
-  ++ lib.optionals stdenv.isDarwin darwinFrameworks
+  ++ lib.optionals (openglSupport && !stdenv.hostPlatform.isDarwin) [ pkgs.libGLU pkgs.libGL pkgs.mesa.osmesa pkgs.libdrm ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin darwinFrameworks
   ++ lib.optionals (x11Support) (with pkgs.xorg; [
     libX11 libXcomposite libXcursor libXext libXfixes libXi libXrandr libXrender libXxf86vm
   ])
@@ -115,7 +115,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   configureFlags = prevConfigFlags
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
-    ++ lib.optionals ((stdenv.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
+    ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
   # them to the RPATH so that the user doesn't have to set them in

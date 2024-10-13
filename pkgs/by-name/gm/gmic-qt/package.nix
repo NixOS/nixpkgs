@@ -12,6 +12,7 @@
 , libpng
 , libsForQt5
 , libtiff
+, llvmPackages
 , ninja
 , nix-update-script
 , openexr
@@ -79,7 +80,9 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ (with libsForQt5; [
     qtbase
     qttools
-  ]) ++ variants.${variant}.extraDeps;
+  ]) ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ] ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \

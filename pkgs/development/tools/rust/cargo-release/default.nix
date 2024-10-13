@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libgit2
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     curl
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];

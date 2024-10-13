@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
-  passthru.optional-dependencies = rec {
+  optional-dependencies = rec {
     array-types = enp;
     eapp = [
       absl-py # FIXME package simple-parsing
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     yapf
-  ] ++ passthru.optional-dependencies.all;
+  ] ++ optional-dependencies.all;
 
   disabledTests = [
     "test_public_access" # requires network access

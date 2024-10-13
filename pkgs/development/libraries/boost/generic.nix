@@ -52,7 +52,7 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
-  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.isDarwin && enableShared);
+  needUserConfig = stdenv.hostPlatform != stdenv.buildPlatform || useMpi || (stdenv.hostPlatform.isDarwin && enableShared);
 
   b2Args = lib.concatStringsSep " " ([
     "--includedir=$dev/include"
@@ -107,7 +107,7 @@ stdenv.mkDerivation {
   patchFlags = [];
 
   patches = patches
-  ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
+  ++ lib.optional stdenv.hostPlatform.isDarwin ./darwin-no-system-python.patch
   ++ [ ./cmake-paths-173.patch ]
   ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
@@ -177,7 +177,7 @@ stdenv.mkDerivation {
   # On darwin we need to add the `$out/lib` to the libraries' rpath explicitly,
   # otherwise the dynamic linker is unable to resolve the reference to @rpath
   # when the boost libraries want to load each other at runtime.
-  + lib.optionalString (stdenv.isDarwin && enableShared) ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && enableShared) ''
     cat << EOF >> user-config.jam
     using clang-darwin : : ${stdenv.cc.targetPrefix}c++
       : <linkflags>"-rpath $out/lib/"
@@ -214,7 +214,7 @@ stdenv.mkDerivation {
   '';
 
   env = {
-    NIX_CFLAGS_LINK = lib.optionalString stdenv.isDarwin "-headerpad_max_install_names";
+    NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-headerpad_max_install_names";
     # copyPkgconfigItems will substitute these in the pkg-config file
     includedir = "${placeholder "dev"}/include";
     libdir = "${placeholder "out"}/lib";

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sqlalchemy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     asyncpg = [ asyncpg ];
     aiopg = [ aiopg ];

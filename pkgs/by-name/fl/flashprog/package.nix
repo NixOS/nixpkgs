@@ -9,7 +9,7 @@
 , pkg-config
 , stdenv
 , withJlink ? true
-, withGpio ? stdenv.isLinux
+, withGpio ? stdenv.hostPlatform.isLinux
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libftdi1
     libusb1
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pciutils
   ] ++ lib.optionals (withJlink) [
     libjaylink
@@ -46,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
       "PREFIX=$(out)"
       "CONFIG_JLINK_SPI=${yesNo withJlink}"
       "CONFIG_LINUX_GPIO_SPI=${yesNo withGpio}"
-      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.isDarwin)}"
-      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
-      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
-      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.isDarwin) && stdenv.isx86_64)}"
+      "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=${yesNo (!stdenv.hostPlatform.isDarwin)}"
+      "CONFIG_INTERNAL_X86=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
+      "CONFIG_INTERNAL_DMI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
+      "CONFIG_RAYER_SPI=${yesNo (!(stdenv.hostPlatform.isDarwin) && stdenv.hostPlatform.isx86_64)}"
     ];
 
   meta = with lib; {
