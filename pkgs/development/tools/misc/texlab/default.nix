@@ -26,6 +26,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-A/stdJ1baV0hdDXTdLd9gi8+JO7qPgQbNiYjHkp1GPQ=";
 
+  # https://github.com/latex-lsp/texlab/pull/1237
+  preBuild = ''
+    rm .cargo/config.toml
+  '';
+
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
   nativeBuildInputs = [ installShellFiles ]
