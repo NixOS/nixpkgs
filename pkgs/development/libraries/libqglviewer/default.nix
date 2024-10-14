@@ -9,6 +9,17 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-J4+DKgstPvvg1pUhGd+8YFh5C3oPGHaQmDfLZzzkP/M=";
   };
 
+  # Fix build on darwin, and install dylib instead of framework
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace QGLViewer/QGLViewer.pro \
+      --replace-fail \
+        "LIB_DIR_ = /Library/Frameworks" \
+        "LIB_DIR_ = \$\$""{PREFIX_}/lib" \
+      --replace-fail \
+        "!staticlib: CONFIG *= lib_bundle" \
+        ""
+  '';
+
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase libGLU ]
     ++ lib.optional stdenv.hostPlatform.isDarwin AGL;
