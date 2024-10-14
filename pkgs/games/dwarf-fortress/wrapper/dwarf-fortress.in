@@ -32,4 +32,4 @@ else
   done
 fi
 
-go
+go "$@"
