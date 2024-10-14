@@ -50,6 +50,7 @@
   libmbim,
   libcbor,
   xz,
+  versionCheckHook,
   nix-update-script,
   enableFlashrom ? false,
   enablePassim ? false,
@@ -123,7 +124,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
-  version = "1.9.25";
+  version = "1.9.26";
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -140,8 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "fwupd";
     repo = "fwupd";
-    rev = finalAttrs.version;
-    hash = "sha256-Yfj2Usto4BSnnBSvffdF02UeK4Ys8ZKzEsxrd2/XZe8=";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-OjVmJ86gqjKRubkhFjSK9mP5VR1XrMlpG7YEbzzHYAI=";
   };
 
   patches = [
@@ -341,6 +342,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   separateDebugInfo = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/fwupdtool";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
