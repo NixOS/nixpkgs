@@ -1,0 +1,12 @@
+{
+  "name": "nixpkgs",
+  "image": "mcr.microsoft.com/devcontainers/universal:2-linux",
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      "multiUser": false
+    }
+  },
+  "remoteEnv": {
+    "NIXPKGS": "/workspaces/nixpkgs"
+  }
+}
