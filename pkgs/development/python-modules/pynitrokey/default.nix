@@ -16,16 +16,16 @@
   python-dateutil,
   pyusb,
   requests,
-  spsdk,
   tqdm,
   tlv8,
   typing-extensions,
-  pyserial,
-  protobuf,
   click-aliases,
   semver,
   nethsm,
   importlib-metadata,
+  nitrokey,
+  pyscard,
+  asn1crypto,
 }:
 
 let
@@ -43,7 +43,11 @@ buildPythonPackage {
     hash = "sha256-pY6ATORZDPGRnkN6dse1s/DzQRpplDbPAGUHU4E7U9M=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     certifi
     cffi
     click
@@ -55,21 +59,16 @@ buildPythonPackage {
     python-dateutil
     pyusb
     requests
-    spsdk
     tqdm
     tlv8
     typing-extensions
-    pyserial
-    protobuf
     click-aliases
     semver
     nethsm
     importlib-metadata
-  ];
-
-  nativeBuildInputs = [
-    flit-core
-    installShellFiles
+    nitrokey
+    pyscard
+    asn1crypto
   ];
 
   pythonRelaxDeps = true;
