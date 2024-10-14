@@ -1,0 +1,8 @@
+--- a/bin/startup.sh
++++ b/bin/startup.sh
+@@ -86,4 +86,4 @@ echo "GEOSERVER DATA DIR is ${GEOSERVER_DATA_DIR}"
+ #added headless to true by default, if this messes anyone up let the list
+ #know and we can change it back, but it seems like it won't hurt -ch
+ IFS=$(printf '\n\t ')
+-exec "${_RUNJAVA}" ${JAVA_OPTS:--DNoJavaOpts} "${MARLIN_ENABLER:--DMarlinDisabled}" "${RENDERER:--DDefaultrenderer}" "-Djetty.base=${GEOSERVER_HOME}" "-DGEOSERVER_DATA_DIR=${GEOSERVER_DATA_DIR}" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar "${GEOSERVER_HOME}/start.jar"
++exec "${_RUNJAVA}" ${JAVA_OPTS:--DNoJavaOpts} "${MARLIN_ENABLER:--DMarlinDisabled}" "${RENDERER:--DDefaultrenderer}" "-Djetty.base=${GEOSERVER_HOME}" "-DGEOSERVER_DATA_DIR=${GEOSERVER_DATA_DIR}" -Djava.awt.headless=true -DSTOP.PORT=8079 -DSTOP.KEY=geoserver -jar "${GEOSERVER_HOME}/start.jar" ${JETTY_OPTS:-}
