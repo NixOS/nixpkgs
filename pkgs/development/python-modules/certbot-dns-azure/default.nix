@@ -42,12 +42,12 @@ buildPythonPackage rec {
     pytest -rA tests/
   '';
 
-  pythonImportsCheck = ["certbot_dns_azure"];
+  pythonImportsCheck = [ "certbot_dns_azure" ];
 
   meta = with lib; {
     description = "Azure DNS Authenticator plugin for Certbot";
     homepage = "https://github.com/terricain/certbot-dns-azure";
     license = licenses.asl20;
-    maintainers = with maintainers; [naillizard];
+    maintainers = with maintainers; [ naillizard ];
   };
 }
