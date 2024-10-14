@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeflate";
-  version = "1.21";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-JsPvftpl9drmhlNdqorr92q7dnYzXpIIO8prMPPGHFk=";
+    hash = "sha256-KpKY0A1cRV9XR1WrE15Eewf2fDWwIFGjQm/fFCnBDrg=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
