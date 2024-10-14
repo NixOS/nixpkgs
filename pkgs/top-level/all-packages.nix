@@ -745,8 +745,6 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
-  eslint_d = callPackage ../development/tools/eslint_d { };
-
   oauth2c = callPackage ../tools/security/oauth2c { };
 
   octodns = python3Packages.callPackage ../tools/networking/octodns { };
@@ -7253,8 +7251,6 @@ with pkgs;
   xob = callPackage ../tools/X11/xob { };
 
   z-lua = callPackage ../tools/misc/z-lua { };
-
-  zabbix-cli = callPackage ../tools/misc/zabbix-cli { };
 
   zabbixctl = callPackage ../tools/misc/zabbixctl { };
 
@@ -17278,8 +17274,6 @@ with pkgs;
 
   cl-launch = callPackage ../development/tools/misc/cl-launch { };
 
-  clean-css-cli = callPackage ../development/tools/clean-css-cli { };
-
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
@@ -25492,8 +25486,6 @@ with pkgs;
 
   coredns = callPackage ../servers/dns/coredns { };
 
-  corerad = callPackage ../tools/networking/corerad { };
-
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cpupower-gui = python3Packages.callPackage ../os-specific/linux/cpupower-gui {
@@ -29386,7 +29378,6 @@ with pkgs;
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
-  firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-128-unwrapped = firefoxPackages.firefox-esr-128;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-128;
 
@@ -29407,12 +29398,6 @@ with pkgs;
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr-128 = wrapFirefox firefox-esr-128-unwrapped {
-    nameSuffix = "-esr";
-    desktopName = "Firefox ESR";
-    wmClass = "firefox-esr";
-    icon = "firefox-esr";
-  };
-  firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped {
     nameSuffix = "-esr";
     desktopName = "Firefox ESR";
     wmClass = "firefox-esr";
@@ -30778,10 +30763,6 @@ with pkgs;
 
   lime = callPackage ../development/libraries/lime { };
 
-  luakit = callPackage ../applications/networking/browsers/luakit {
-    inherit (luajitPackages) luafilesystem;
-  };
-
   looking-glass-client = callPackage ../applications/virtualization/looking-glass-client { };
 
   ltc-tools = callPackage ../applications/audio/ltc-tools { };
@@ -31554,7 +31535,6 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
-  notmuch-mailmover = callPackage ../applications/networking/mailreaders/notmuch/notmuch-mailmover.nix { };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
