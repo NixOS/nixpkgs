@@ -63,8 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postInstall = glib.flattenInclude;
-
   passthru = {
     tests = {
       inherit cairo qemu scribus tigervnc wlroots_0_17 wlroots_0_18 xwayland;
