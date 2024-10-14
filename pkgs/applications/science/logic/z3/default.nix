@@ -16,7 +16,7 @@
 assert javaBindings -> jdk != null;
 assert ocamlBindings -> ocaml != null && findlib != null && zarith != null;
 
-let common = { version, sha256, patches ? [ ], tag ? "z3" }:
+let common = { version, sha256, patches ? [ ], tag ? "z3", doCheck ? true }:
   stdenv.mkDerivation rec {
     pname = "z3";
     inherit version sha256 patches;
@@ -58,9 +58,9 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
           ++ lib.optional pythonBindings "--python --pypkgdir=$out/${python.sitePackages}"
       ) + "\n" + "cd build";
 
-    doCheck = true;
+    inherit doCheck;
     checkPhase = ''
-      make test
+      make -j $NIX_BUILD_CORES test
       ./test-z3 -a
     '';
 
@@ -94,6 +94,10 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
   };
 in
 {
+  z3_4_13 = common {
+    version = "4.13.4";
+    sha256 = "sha256-8hWXCr6IuNVKkOegEmWooo5jkdmln9nU7wI8T882BSE=";
+  };
   z3_4_12 = common {
     version = "4.12.6";
     sha256 = "sha256-X4wfPWVSswENV0zXJp/5u9SQwGJWocLKJ/CNv57Bt+E=";
