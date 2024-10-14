@@ -1,6 +1,6 @@
 {
   "name": "mjolnir",
-  "version": "1.6.5",
+  "version": "1.8.3",
   "description": "A moderation tool for Matrix",
   "main": "lib/index.js",
   "repository": "git@github.com:matrix-org/mjolnir.git",
@@ -34,7 +34,7 @@
     "@types/pg": "^8.6.5",
     "@types/request": "^2.48.8",
     "@types/shell-quote": "1.7.1",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "eslint": "^7.32",
     "expect": "^27.0.6",
     "mocha": "^9.0.1",
@@ -46,16 +46,20 @@
   "dependencies": {
     "@sentry/node": "^7.17.2",
     "@sentry/tracing": "^7.17.2",
+    "@tensorflow/tfjs-node": "^4.21.0",
+    "@vector-im/matrix-bot-sdk": "^0.7.1-element.6",
     "await-lock": "^2.2.2",
+    "axios": "^1.7.6",
     "body-parser": "^1.20.1",
     "config": "^3.3.8",
-    "express": "^4.17",
+    "express": "^4.20",
     "html-to-text": "^8.0.0",
     "humanize-duration": "^3.27.1",
     "humanize-duration-ts": "^2.1.1",
     "js-yaml": "^4.1.0",
     "jsdom": "^16.6.0",
-    "matrix-appservice-bridge": "8.1.2",
+    "matrix-appservice-bridge": "10.3.1",
+    "nsfwjs": "^4.1.0",
     "parse-duration": "^1.0.2",
     "pg": "^8.8.0",
     "prom-client": "^14.1.0",
@@ -64,6 +68,6 @@
     "yaml": "^2.2.2"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   }
 }
