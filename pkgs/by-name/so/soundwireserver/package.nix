@@ -1,12 +1,13 @@
 {
   lib,
+  stdenvNoCC,
   qt5,
   autoPatchelfHook,
   fetchzip,
   portaudio,
 }:
 
-qt5.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "soundwire";
   version = "3.0";
 
@@ -17,6 +18,7 @@ qt5.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
