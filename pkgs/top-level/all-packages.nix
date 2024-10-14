@@ -34240,7 +34240,7 @@ with pkgs;
   colobot = callPackage ../games/colobot { };
 
   corsix-th = callPackage ../games/corsix-th {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreVideo;
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreVideo CoreMedia VideoToolbox;
   };
 
   enigma = callPackage ../games/enigma { };
