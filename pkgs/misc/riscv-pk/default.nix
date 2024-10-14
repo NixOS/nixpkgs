@@ -1,14 +1,14 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, payload ? null }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "riscv-pk";
-  version = "1.0.0";
+  version = "1.0.0-unstable-2024-10-09";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "riscv-pk";
-    rev = "v${version}";
-    sha256 = "1cc0rz4q3a1zw8756b8yysw8lb5g4xbjajh5lvqbjix41hbdx6xz";
+    rev = "abadfdc507d5a75b6272dc360e70a80a510c758a";
+    sha256 = "sha256-02qcj0TAs7g4CSorWWbUzouS6mNthUOSdeocibw5g2A=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
+  # pk by default installs things in $out/$target_prefix/{bin,include,lib},
+  # we want to remove the target prefix directory hierarchy
   postInstall = ''
     mv $out/* $out/.cleanup
     mv $out/.cleanup/* $out
