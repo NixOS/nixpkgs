@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   libxcb,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   rustPlatform,
   unstableGitUpdater,
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-1EtwGMoLfYK0VZj8jdQiweO/RHGBzyEoeMEI4pmqfu8=";
 
   nativeBuildInputs = [
-    makeWrapper
+    makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
   ];
