@@ -220,6 +220,29 @@ netcore_target_packages () {
     generate_package_list "$version" '      ' "${pkgs[@]}"
 }
 
+windowsdesktop_packages () {
+    local version=$1
+    local pkgs=(
+        Microsoft.WindowsDesktop.App.Ref
+    )
+
+    generate_package_list "$version" '    ' "${pkgs[@]}"
+}
+
+windowsdesktop_target_packages () {
+    local version=$1
+    local rid=$2
+    local pkgs=()
+
+    if [[ "$rid" = win-*  ]]; then
+        pkgs+=(
+            "Microsoft.WindowsDesktop.App.Runtime.$rid"
+        )
+    fi
+
+    generate_package_list "$version" '      ' "${pkgs[@]}"
+}
+
 usage () {
     echo "Usage: $pname [[--sdk] [-o output] sem-version] ...
 Get updated dotnet src (platform - url & sha512) expressions for specified versions
@@ -265,12 +288,13 @@ update() {
     fi
     local major_minor_underscore=${major_minor/./_}
 
-    local release_content aspnetcore_version runtime_version
+    local release_content aspnetcore_version runtime_version windowsdesktop_version
     local -a sdk_versions
 
     release_content=$(release "$content" "$major_minor_patch")
     aspnetcore_version=$(jq -r '."aspnetcore-runtime".version' <<< "$release_content")
     runtime_version=$(jq -r '.runtime.version' <<< "$release_content")
+    windowsdesktop_version=$(jq -r '.windowsdesktop.version' <<< "$release_content")
 
     if [[ -n $sdk ]]; then
         sdk_versions=("$sem_version")
@@ -319,6 +343,7 @@ let
   commonPackages = ["
         aspnetcore_packages "${aspnetcore_version}"
         netcore_packages "${runtime_version}"
+        windowsdesktop_packages "${windowsdesktop_version}"
         echo "  ];
 
   hostPackages = {"
@@ -334,6 +359,7 @@ let
             echo "    $rid = ["
             aspnetcore_target_packages "${aspnetcore_version}" "$rid"
             netcore_target_packages "${runtime_version}" "$rid"
+            windowsdesktop_target_packages "${windowsdesktop_version}" "$rid"
             echo "    ];"
         done
         echo "  };
