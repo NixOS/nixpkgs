@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, python3
-, stress
+{
+  lib,
+  fetchPypi,
+  python3,
+  stress,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -133,6 +134,10 @@ python3.pkgs.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
+    maintainers = with maintainers; [
+      helkafen
+      renatoGarcia
+      veprbl
+    ];
   };
 }
