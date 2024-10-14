@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, flex, cadical, symfpu, gmp, python3, gtest, libantlr3c, antlr3_4, boost, jdk }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, cmake, flex, cadical, symfpu, gmp, python3, gtest, libantlr3c, antlr3_4, boost, jdk }:
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
@@ -10,6 +10,15 @@ stdenv.mkDerivation rec {
     rev    = "cvc5-${version}";
     hash  = "sha256-v+3/2IUslQOySxFDYgTBWJIDnyjbU2RPdpfLcIkEtgQ=";
   };
+
+  patches = [
+    ./1.1.2-CVE-2024-37794-CVE-2024-37795.part-1.patch
+    (fetchpatch {
+      name = "CVE-2024-37794-CVE-2024-37795.part-2.patch";
+      url = "https://github.com/cvc5/cvc5/commit/a2c2f5e971916d947e9efa41e22036db8a0a7956.patch";
+      hash  = "sha256-kvqHiAF/C66if0Pkr2jAXFmAcUPv0TeZBMYLKQ1INPw=";
+    })
+  ];
 
   nativeBuildInputs = [ pkg-config cmake flex ];
   buildInputs = [
