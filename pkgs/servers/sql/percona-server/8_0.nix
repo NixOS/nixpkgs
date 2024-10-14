@@ -1,24 +1,63 @@
-{ lib, stdenv, fetchurl, bison, cmake, pkg-config
-, boost, icu, libedit, libevent, lz4, ncurses, openssl, perl, protobuf, re2, readline, zlib, zstd, libfido2
-, numactl, cctools, CoreServices, developer_cmds, libtirpc, rpcsvc-proto, curl, DarwinTools, nixosTests
-, coreutils, procps, gnused, gnugrep, hostname, makeWrapper
-# Percona-specific deps
-, cyrus_sasl, gnumake, openldap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  cmake,
+  pkg-config,
+  boost,
+  icu,
+  libedit,
+  libevent,
+  lz4,
+  ncurses,
+  openssl,
+  perl,
+  protobuf,
+  re2,
+  readline,
+  zlib,
+  zstd,
+  libfido2,
+  numactl,
+  cctools,
+  CoreServices,
+  developer_cmds,
+  libtirpc,
+  rpcsvc-proto,
+  curl,
+  DarwinTools,
+  nixosTests,
+  coreutils,
+  procps,
+  gnused,
+  gnugrep,
+  hostname,
+  makeWrapper,
+  # Percona-specific deps
+  cyrus_sasl,
+  gnumake,
+  openldap,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "percona-server_lts";
-  version = "8.0.36-28";
+  pname = "percona-server";
+  version = "8.0.37-29";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-8.0/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iktEvZz3mjjmJ16PX51OjSwwiFS3H9W/XRco//Q6aEQ=";
+    hash = "sha256-zZgq3AxCRYdte3dTUJiuMvVGdl9U01s8jxcAqDxZiNM=";
   };
 
   nativeBuildInputs = [
-    bison cmake pkg-config makeWrapper
+    bison
+    cmake
+    pkg-config
+    makeWrapper
     # required for scripts/CMakeLists.txt
-    coreutils gnugrep procps
+    coreutils
+    gnugrep
+    procps
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ rpcsvc-proto ];
 
   patches = [
@@ -36,16 +75,41 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace storage/rocksdb/get_rocksdb_files.sh --replace "make --" "${gnumake}/bin/make --"
   '';
 
-  buildInputs = [
-    boost (curl.override { inherit openssl; }) icu libedit libevent lz4 ncurses openssl protobuf re2 readline zlib
-    zstd libfido2 openldap perl cyrus_sasl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    numactl libtirpc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools CoreServices developer_cmds DarwinTools
-  ];
+  buildInputs =
+    [
+      boost
+      (curl.override { inherit openssl; })
+      icu
+      libedit
+      libevent
+      lz4
+      ncurses
+      openssl
+      protobuf
+      re2
+      readline
+      zlib
+      zstd
+      libfido2
+      openldap
+      perl
+      cyrus_sasl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      numactl
+      libtirpc
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      CoreServices
+      developer_cmds
+      DarwinTools
+    ];
 
-  outputs = [ "out" "static" ];
+  outputs = [
+    "out"
+    "static"
+  ];
 
   cmakeFlags = [
     # Percona-specific flags.
@@ -78,11 +142,39 @@ stdenv.mkDerivation (finalAttrs: {
     so=${stdenv.hostPlatform.extensions.sharedLibrary}
     ln -s libmysqlclient$so $out/lib/libmysqlclient_r$so
 
-    wrapProgram $out/bin/mysqld_safe --prefix PATH : ${lib.makeBinPath [ coreutils procps gnugrep gnused hostname ]}
-    wrapProgram $out/bin/mysql_config --prefix PATH : ${lib.makeBinPath [ coreutils gnused ]}
-    wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
-    wrapProgram $out/bin/ps-admin --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
-    wrapProgram $out/bin/mysqld_multi --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
+    wrapProgram $out/bin/mysqld_safe --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        procps
+        gnugrep
+        gnused
+        hostname
+      ]
+    }
+    wrapProgram $out/bin/mysql_config --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnused
+      ]
+    }
+    wrapProgram $out/bin/ps_mysqld_helper --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
+    wrapProgram $out/bin/ps-admin --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
+    wrapProgram $out/bin/mysqld_multi --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+      ]
+    }
   '';
 
   passthru = {
@@ -98,8 +190,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = ''
       A free, fully compatible, enhanced, open source drop-in replacement for
       MySQL® that provides superior performance, scalability and instrumentation.
+      Long-term support release.
     '';
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     maintainers = teams.flyingcircus.members;
     platforms = platforms.unix;
   };
