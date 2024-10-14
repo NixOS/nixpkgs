@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   cfg = config.services.coturn;
   pidfile = "/run/turnserver/turnserver.pid";
@@ -341,25 +341,66 @@ in {
           '' }
           chmod 640 ${runConfig}
         '';
-        serviceConfig = {
+        serviceConfig = rec {
           Type = "simple";
-          ExecStart = "${pkgs.coturn}/bin/turnserver -c ${runConfig}";
-          RuntimeDirectory = "turnserver";
+          ExecStart = utils.escapeSystemdExecArgs [
+            (lib.getExe' pkgs.coturn "turnserver")
+            "-c"
+            runConfig
+          ];
           User = "turnserver";
           Group = "turnserver";
-          AmbientCapabilities =
-            lib.mkIf (
-              cfg.listening-port < 1024 ||
-              cfg.alt-listening-port < 1024 ||
-              cfg.tls-listening-port < 1024 ||
-              cfg.alt-tls-listening-port < 1024 ||
-              cfg.min-port < 1024
-            ) "cap_net_bind_service";
+          RuntimeDirectory = [
+            "coturn"
+            "turnserver"
+          ];
+          RuntimeDirectoryMode = "0700";
           Restart = "on-abort";
+
+          # Hardening
+          AmbientCapabilities = if
+            cfg.listening-port < 1024 ||
+            cfg.alt-listening-port < 1024 ||
+            cfg.tls-listening-port < 1024 ||
+            cfg.alt-tls-listening-port < 1024 ||
+            cfg.min-port < 1024
+            then [ "CAP_NET_BIND_SERVICE" ] else [ "" ];
+          CapabilityBoundingSet = AmbientCapabilities;
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ] ++ lib.optionals (cfg.listening-ips == [ ]) [
+            # only used for interface discovery when no listening ips are configured
+            "AF_NETLINK"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
         };
       };
-    systemd.tmpfiles.rules = [
-      "d  /run/coturn 0700 turnserver turnserver - -"
-    ];
   }]));
 }
