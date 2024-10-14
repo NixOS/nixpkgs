@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, cargo, rustPlatform, rustc, napi-rs-cli, nodejs, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  napi-rs-cli,
+  nodejs,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +63,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs";
     changelog = "https://github.com/matrix-org/matrix-rust-sdk-crypto-nodejs/blob/main/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ winter dandellion ];
+    maintainers = with maintainers; [
+      winter
+      dandellion
+    ];
     inherit (nodejs.meta) platforms;
   };
 }
