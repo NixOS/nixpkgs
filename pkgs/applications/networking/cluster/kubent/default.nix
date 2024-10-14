@@ -1,20 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kubent }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  kubent,
+  lib,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "kubent";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "doitintl";
     repo = "kube-no-trouble";
     rev = version;
-    sha256 = "sha256-/gCbj0RDwV5E8kNkEu+37ilzw/A0BAXiYfHGPdkCsRs=";
+    hash = "sha256-7bn7DxbZ/Nqob7ZEWRy1UVg97FiJN5JWEgpH1CDz6jQ=";
   };
 
-  vendorHash = "sha256-6hp7mzE45Tlmt4ybhpdJLYCv+WqQ9ak2S47kJTwyGVI=";
+  vendorHash = "sha256-+V+/TK60V8NYUDfF5/EgSZg4CLBn6Mt57diiyXm179k=";
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X main.version=v${version}"
   ];
 
@@ -26,11 +33,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
-    homepage = "https://github.com/doitintl/kube-no-trouble";
+  meta = {
     description = "Easily check your cluster for use of deprecated APIs";
+    homepage = "https://github.com/doitintl/kube-no-trouble";
+    license = lib.licenses.mit;
     mainProgram = "kubent";
-    license = licenses.mit;
-    maintainers = with maintainers; [ peterromfeldhk ];
+    maintainers = with lib.maintainers; [ peterromfeldhk ];
   };
 }
