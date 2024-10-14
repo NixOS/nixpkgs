@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   isPyPy,
@@ -33,34 +32,22 @@
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.35.1";
+  version = "2.36.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-WeoZE2TPBAhzBBcZNQqoiqvribMCLSZWk/XpdMydvCQ=";
+    hash = "sha256-dQrAVPXtDdibaxxfqW29qY7j5LyegvmI0Y7/btXmsyY=";
   };
 
-  patches =
-    [
-      # Fix tests failing with new enough ffmpeg
-      # Upstream PR: https://github.com/imageio/imageio/pull/1101
-      # FIXME: remove when merged
-      (fetchpatch {
-        url = "https://github.com/imageio/imageio/commit/8d1bea4b560f3aa10ed2d250e483173f488f50fe.patch";
-        hash = "sha256-68CzSoJzbr21N97gWu5qVYh6QeBS9zon8XmytcVK89c=";
-      })
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      (substituteAll {
-        src = ./libgl-path.patch;
-        libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
-      })
-    ];
+  patches = lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (substituteAll {
+      src = ./libgl-path.patch;
+      libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   build-system = [ setuptools ];
 
