@@ -1,6 +1,6 @@
-{ cmake, extra-cmake-modules, fetchFromGitLab, lib, libsForQt5 }:
+{ stdenv, cmake, extra-cmake-modules, fetchFromGitLab, lib, libsForQt5 }:
 
-libsForQt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "kgeotag";
   version = "1.5.0";
 
@@ -12,7 +12,7 @@ libsForQt5.mkDerivation rec {
     hash = "sha256-G9SyGvoSOL6nsWnMuSIUSFHFUwZUzExBJBkKN46o8GI=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
 
   buildInputs = [ libsForQt5.libkexiv2 libsForQt5.marble ];
 
