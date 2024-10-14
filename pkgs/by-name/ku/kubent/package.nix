@@ -35,6 +35,7 @@ buildGoModule rec {
 
   meta = {
     description = "Easily check your cluster for use of deprecated APIs";
+    changelog = "https://github.com/doitintl/kube-no-trouble/releases/tag/${version}";
     homepage = "https://github.com/doitintl/kube-no-trouble";
     license = lib.licenses.mit;
     mainProgram = "kubent";
