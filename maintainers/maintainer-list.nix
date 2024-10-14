@@ -7107,6 +7107,12 @@
     githubId = 1149048;
     name = "Florent Ch.";
   };
+  florentulve = {
+    email = "florent.ulve@protonmail.com";
+    github = "florentulve";
+    githubId = 2817358;
+    name = "Florent Ulve";
+  };
   FlorianFranzen = {
     email = "Florian.Franzen@gmail.com";
     github = "FlorianFranzen";

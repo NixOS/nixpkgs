@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0V2DTpEjDgo+NQHw1d01g24zi6u1PxS4jB8LPfC6MP0=";
 
-  meta = {
+  meta = with lib; {
     description =
       "Podlet generates Podman Quadlet files from a Podman command, compose file, or existing object.";
     homepage = "https://github.com/containers/podlet";
     license = lib.licenses.mpl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ florentulve ];
   };
 }
