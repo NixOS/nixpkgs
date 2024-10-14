@@ -3,38 +3,42 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  setuptools,
+  hatchling,
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  narwhals,
   packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  pyyaml,
   ruff,
   starlette,
   tomlkit,
   uvicorn,
   websockets,
-  pyyaml,
-  pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+let
   pname = "marimo";
-  version = "0.9.1";
+  version = "0.9.9";
+in
+buildPythonPackage {
+  inherit pname version;
+
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7sG6i1WusNuCpuaojFXhSfPWCA2/nzHXvMF29ApGTDg=";
+    hash = "sha256-sCN17Q98TWhscNTCItuarrpbs6sMVAZYXwka8pUzq28=";
   };
 
-  build-system = [ setuptools ];
+  nativeBuildInputs = [ hatchling ];
 
   # ruff is not packaged as a python module in nixpkgs
   pythonRemoveDeps = [ "ruff" ];
@@ -45,19 +49,18 @@ buildPythonPackage rec {
     itsdangerous
     jedi
     markdown
+    narwhals
     packaging
     psutil
     pygments
     pymdown-extensions
+    pyyaml
     ruff
     starlette
     tomlkit
     uvicorn
     websockets
-    pyyaml
   ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "marimo" ];
 
