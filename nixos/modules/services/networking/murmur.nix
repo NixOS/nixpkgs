@@ -6,7 +6,7 @@ let
   cfg = config.services.murmur;
   forking = cfg.logFile != null;
   configFile = pkgs.writeText "murmurd.ini" ''
-    database=/var/lib/murmur/murmur.sqlite
+    database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
 
     autobanAttempts=${toString cfg.autobanAttempts}
@@ -66,6 +66,14 @@ in
         default = false;
         description = ''
           Open ports in the firewall for the Murmur Mumble server.
+        '';
+      };
+
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/lib/murmur";
+        description = ''
+          Directory to store data for the server.
         '';
       };
 
@@ -257,7 +265,7 @@ in
       environmentFile = mkOption {
         type = types.nullOr types.path;
         default = null;
-        example = "/var/lib/murmur/murmurd.env";
+        example = literalExpression ''"''${config.services.murmur.stateDir}/murmurd.env"'';
         description = ''
           Environment file as defined in {manpage}`systemd.exec(5)`.
 
@@ -291,7 +299,7 @@ in
   config = mkIf cfg.enable {
     users.users.murmur = {
       description     = "Murmur Service user";
-      home            = "/var/lib/murmur";
+      home            = cfg.stateDir;
       createHome      = true;
       uid             = config.ids.uids.murmur;
       group           = "murmur";
@@ -387,9 +395,9 @@ in
 
         r ${config.environment.etc."os-release".source},
         r ${config.environment.etc."lsb-release".source},
-        owner rwk /var/lib/murmur/murmur.sqlite,
-        owner rw /var/lib/murmur/murmur.sqlite-journal,
-        owner r /var/lib/murmur/,
+        owner rwk ${cfg.stateDir}/murmur.sqlite,
+        owner rw ${cfg.stateDir}/murmur.sqlite-journal,
+        owner r ${cfg.stateDir}/,
         r /run/murmur/murmurd.pid,
         r /run/murmur/murmurd.ini,
         r ${configFile},
