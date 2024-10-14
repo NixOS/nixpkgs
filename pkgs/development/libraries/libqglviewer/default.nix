@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, qmake, qtbase, libGLU, AGL }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqglviewer";
   version = "2.9.1";
 
   src = fetchurl {
-    url = "http://www.libqglviewer.com/src/libQGLViewer-${version}.tar.gz";
+    url = "http://www.libqglviewer.com/src/libQGLViewer-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-J4+DKgstPvvg1pUhGd+8YFh5C3oPGHaQmDfLZzzkP/M=";
   };
 
@@ -25,4 +25,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.all;
   };
-}
+})
