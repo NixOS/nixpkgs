@@ -2,7 +2,6 @@
   lib,
   qt5,
   autoPatchelfHook,
-  unzip,
   fetchzip,
   portaudio,
 }:
@@ -17,7 +16,6 @@ qt5.mkDerivation {
   };
 
   nativeBuildInputs = [
-    unzip
     autoPatchelfHook
   ];
 
