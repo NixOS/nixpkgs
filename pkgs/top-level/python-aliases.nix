@@ -407,6 +407,7 @@ mapAliases ({
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11
+  premailer = throw "premailer was removed, as it is not compatible with lxml>4.9.4.";
   privacyidea-ldap-proxy = throw "privacyidea-ldap-proxy has been removed from nixpkgs"; # added 2023-10-31
   proboscis = throw "proboscis has been removed since it has not been maintained for 11 years"; # added 2024-05-20
   prometheus_client = prometheus-client; # added 2021-06-10
