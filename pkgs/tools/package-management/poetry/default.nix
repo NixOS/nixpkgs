@@ -12,13 +12,14 @@ let
       # We keep the override around even when the versions match, as
       # it's likely to become relevant again after the next Poetry update.
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.9.0";
+        version = "1.9.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = "refs/tags/${version}";
-          hash = "sha256-vvwKbzGlvv2LTbXfJxQVM3nUXFGntgJxsku6cbRxCzw=";
+          hash = "sha256-L8lR9sUdRYqjkDCQ0XHXZm5X6xD40t1gxlGiovvb/+8=";
         };
+        patches = [ ];
       });
     } // (plugins self);
   python = python3.override (old: {
@@ -39,7 +40,7 @@ let
   withPlugins = selector: let
     selected = selector (plugins python.pkgs);
   in python.pkgs.toPythonApplication (python.pkgs.poetry.overridePythonAttrs (old: {
-    propagatedBuildInputs = old.propagatedBuildInputs ++ selected;
+    dependencies = old.dependencies ++ selected;
 
     # save some build time when adding plugins by disabling tests
     doCheck = selected == [ ];
