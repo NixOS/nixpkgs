@@ -57,6 +57,7 @@ let
   # latter case it makes one last attempt at importing, allowing the system to
   # (eventually) boot even with a degraded pool.
   importLib = {zpoolCmd, awkCmd, cfgZfs}: ''
+    # shellcheck disable=SC2013
     for o in $(cat /proc/cmdline); do
       case $o in
         zfs_force|zfs_force=1|zfs_force=y)
@@ -80,6 +81,7 @@ let
     }
     poolImport() {
       pool="$1"
+      # shellcheck disable=SC2086
       "${zpoolCmd}" import -d "${cfgZfs.devNodes}" -N $ZFS_FORCE "$pool"
     }
   '';
@@ -146,7 +148,7 @@ let
         if ! poolImported "${pool}"; then
           echo -n "importing ZFS pool \"${pool}\"..."
           # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-          for trial in `seq 1 60`; do
+          for _ in $(seq 1 60); do
             poolReady "${pool}" && poolImport "${pool}" && break
             sleep 1
           done
@@ -157,7 +159,7 @@ let
 
 
           ${lib.optionalString keyLocations.hasKeys ''
-            ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
+            ${keyLocations.command} | while IFS=$'\t' read -r ds kl ks; do
               {
               if [[ "$ks" != unavailable ]]; then
                 continue
@@ -613,7 +615,7 @@ in
             echo -n "importing root ZFS pool \"${pool}\"..."
             # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
             if ! poolImported "${pool}"; then
-              for trial in `seq 1 60`; do
+              for _ in $(seq 1 60); do
                 poolReady "${pool}" > /dev/null && msg="$(poolImport "${pool}" 2>&1)" && break
                 sleep 1
                 echo -n .
@@ -865,6 +867,7 @@ in
           Type = "simple";
         };
         script = ''
+          # shellcheck disable=SC2046
           ${cfgZfs.package}/bin/zpool scrub -w ${
             if cfgScrub.pools != [] then
               (lib.concatStringsSep " " cfgScrub.pools)
