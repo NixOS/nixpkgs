@@ -1337,6 +1337,11 @@ let
 
         org-edit-latex = mkHome super.org-edit-latex;
 
+        # https://github.com/GuiltyDolphin/org-evil/issues/24
+        # hydra has that error: https://hydra.nixos.org/build/274852065
+        # but I cannot reproduce that locally
+        org-evil = ignoreCompilationError super.org-evil;
+
         org-gnome = ignoreCompilationError super.org-gnome; # elisp error
 
         org-gtd = ignoreCompilationError super.org-gtd; # elisp error
