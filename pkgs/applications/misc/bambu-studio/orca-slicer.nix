@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   bambu-studio,
-  opencv,
 }:
 bambu-studio.overrideAttrs (
   finalAttrs: previousAttrs: {
