@@ -136,7 +136,7 @@ stdenv.mkDerivation (
 
       # Packages with git dependencies generate non-default cargo configs, so
       # always install it rather than trying to write a standard default template.
-      install -D $CARGO_CONFIG $name/.cargo/config;
+      install -D $CARGO_CONFIG $name/.cargo/config
 
       runHook postBuild
     '';

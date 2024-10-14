@@ -190,6 +190,21 @@ let
                   path = ../12;
                 }
               ];
+              "compiler-rt/armv6-scudo-libatomic.patch" = [
+                {
+                  after = "19";
+                  path = ../19;
+                }
+                {
+                  after = "15";
+                  before = "19";
+                  path = ../15;
+                }
+                {
+                  before = "15";
+                  path = ../14;
+                }
+              ];
               "compiler-rt/armv7l.patch" = [
                 {
                   before = "15";
@@ -484,7 +499,18 @@ let
               stripLen = 1;
               hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
             })
-          ];
+          ]
+          ++
+            lib.optionals
+              (lib.versionAtLeast metadata.release_version "17" && lib.versionOlder metadata.release_version "19")
+              [
+                # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+                (fetchpatch2 {
+                  url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+                  hash = "sha256-EX+PYGicK73lsL/J0kSZ4S5y1/NHIclBddhsnV6NPPI=";
+                  stripLen = 1;
+                })
+              ];
         pollyPatches =
           [ (metadata.getVersionFile "llvm/gnu-install-dirs-polly.patch") ]
           ++ lib.optional (lib.versionAtLeast metadata.release_version "15")
@@ -731,12 +757,9 @@ let
               && stdenv.targetPlatform.useLLVM or false
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
-          nixSupport.cc-ldflags =
-            lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD)
-              (
-                [ "-L${targetLlvmLibraries.libunwind}/lib" ]
-                ++ lib.optional (lib.versionAtLeast metadata.release_version "17") "--undefined-version"
-              );
+          nixSupport.cc-ldflags = lib.optionals (
+            !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
+          ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
         }
       );
 
@@ -939,10 +962,10 @@ let
           lib.optional (lib.versionOlder metadata.release_version "18")
             # Prevent a compilation error on darwin
             (metadata.getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-        ++
-          lib.optional (lib.versionAtLeast metadata.release_version "15")
-            # See: https://github.com/NixOS/nixpkgs/pull/186575
-            ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ++ lib.optionals (lib.versionAtLeast metadata.release_version "15") [
+          # See: https://github.com/NixOS/nixpkgs/pull/186575
+          ./compiler-rt/darwin-plistbuddy-workaround.patch
+        ]
         ++
           lib.optional (lib.versions.major metadata.release_version == "15")
             # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
@@ -953,9 +976,15 @@ let
           # Fix build on armv6l
           ./compiler-rt/armv6-mcr-dmb.patch
           ./compiler-rt/armv6-sync-ops-no-thumb.patch
-          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+        ]
+        ++ lib.optionals (lib.versionOlder metadata.release_version "18") [
+          # Fix build on armv6l
           ./compiler-rt/armv6-scudo-no-yield.patch
-          ./compiler-rt/armv6-scudo-libatomic.patch
+        ]
+        ++ [
+          # Fix build on armv6l
+          ./compiler-rt/armv6-no-ldrexd-strexd.patch
+          (metadata.getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
         ]
         ++ lib.optional (lib.versionAtLeast metadata.release_version "19") (fetchpatch {
           url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";

@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "qmk_hid";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "FrameworkComputer";
     repo = "qmk_hid";
     rev = "v${version}";
-    hash = "sha256-k5cZcrjen7nNJM9mKQEwNTVfBPawXwbwNlCyTARdH/g=";
+    hash = "sha256-wJi7FQrvMbdTwvbbjBnzmxupMbEuM8TeZ0JIK5ulQKI=";
   };
 
-  cargoHash = "sha256-GrerrNDoSFtOEAf0vB9MlkBl+yLnzd/szrpFsAmkB6s=";
+  cargoHash = "sha256-X8pBv4dFiiLDKDjyW3XpVOdzq5c5/4GcRL6jnJ8Rf1A=";
 
   nativeBuildInputs = [
     pkg-config

@@ -61,7 +61,7 @@ let
 
   cleanAttrs = lib.flip removeAttrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "pyproject" "format"
-    "disabledTestPaths" "outputs" "stdenv"
+    "disabledTestPaths" "disabledTests" "pytestFlagsArray" "unittestFlagsArray" "outputs" "stdenv"
     "dependencies" "optional-dependencies" "build-system"
   ];
 
@@ -335,9 +335,19 @@ let
     # If given use the specified checkPhase, otherwise use the setup hook.
     # Longer-term we should get rid of `checkPhase` and use `installCheckPhase`.
     installCheckPhase = attrs.checkPhase;
-  } //  optionalAttrs (disabledTestPaths != []) {
+  } // optionalAttrs (attrs.doCheck or true) (
+    optionalAttrs (disabledTestPaths != []) {
       disabledTestPaths = escapeShellArgs disabledTestPaths;
-  }));
+    } // optionalAttrs (attrs ? disabledTests) {
+      # `escapeShellArgs` should be used as well as `disabledTestPaths`,
+      # but some packages rely on existing raw strings.
+      disabledTests = attrs.disabledTests;
+    } // optionalAttrs (attrs ? pytestFlagsArray) {
+      pytestFlagsArray = attrs.pytestFlagsArray;
+    } // optionalAttrs (attrs ? unittestFlagsArray) {
+      unittestFlagsArray = attrs.unittestFlagsArray;
+    }
+  )));
 
 in extendDerivation
   (disabled -> throw "${name} not supported for interpreter ${python.executable}")

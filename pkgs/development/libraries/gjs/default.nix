@@ -28,7 +28,7 @@
 
 let
   testDeps = [
-    gtk3 atk pango.out gdk-pixbuf harfbuzz
+    gtk3 atk pango.out gdk-pixbuf harfbuzz glib.out
   ];
 in stdenv.mkDerivation (finalAttrs: {
   pname = "gjs";

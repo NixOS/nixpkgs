@@ -18,5 +18,5 @@ pythonImportsCheckPhase () {
 
 if [ -z "${dontUsePythonImportsCheck-}" ]; then
     echo "Using pythonImportsCheckPhase"
-    preDistPhases+=" pythonImportsCheckPhase"
+    appendToVar preDistPhases pythonImportsCheckPhase
 fi

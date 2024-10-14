@@ -6,7 +6,8 @@ let
       , glibc, zlib, readline, openssl, icu, lz4, zstd, systemdLibs, libossp_uuid
       , pkg-config, libxml2, tzdata, libkrb5, substituteAll, darwin
       , linux-pam
-      , removeReferencesTo
+
+      , removeReferencesTo, writeShellApplication
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
       , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs && !stdenv.hostPlatform.isStatic
@@ -54,6 +55,11 @@ let
         })
       else
         stdenv;
+
+    pg_config = writeShellApplication {
+      name = "pg_config";
+      text = builtins.readFile ./pg_config.sh;
+    };
   in stdenv'.mkDerivation (finalAttrs: {
     inherit version;
     pname = pname + lib.optionalString jitSupport "-jit";
@@ -160,6 +166,23 @@ let
         src = ./patches/locale-binary-path.patch;
         locale = "${if stdenv.hostPlatform.isDarwin then darwin.adv_cmds else lib.getBin stdenv.cc.libc}/bin/locale";
       })
+
+      # TODO: Remove this with the next set of minor releases
+      (fetchpatch (
+        if atLeast "14" then {
+          url = "https://github.com/postgres/postgres/commit/b27622c90869aab63cfe22159a459c57768b0fa4.patch";
+          hash = "sha256-7G+BkJULhyx6nlMEjClcr2PJg6awgymZHr2JgGhXanA=";
+          excludes = [ "doc/*" ];
+        } else if atLeast "13" then {
+          url = "https://github.com/postgres/postgres/commit/b28b9b19bbe3410da4a805ef775e0383a66af314.patch";
+          hash = "sha256-meFFskNWlcc/rv4BWo6fNR/tTFgQRgXGqTkJkoX7lHU=";
+          excludes = [ "doc/*" ];
+        } else {
+          url = "https://github.com/postgres/postgres/commit/205813da4c264d80db3c3215db199cc119e18369.patch";
+          hash = "sha256-L8/ns/fxTh2ayfDQXtBIKaArFhMd+v86UxVFWQdmzUw=";
+          excludes = [ "doc/*" ];
+        })
+      )
     ] ++ lib.optionals stdenv'.hostPlatform.isMusl (
       # Using fetchurl instead of fetchpatch on purpose: https://github.com/NixOS/nixpkgs/issues/240141
       map fetchurl (lib.attrValues muslPatches)
@@ -183,15 +206,10 @@ let
         moveToOutput "lib/pgxs" "$dev"
 
         # Pretend pg_config is located in $out/bin to return correct paths, but
-        # actually have it in -dev to avoid pulling in all other outputs.
+        # actually have it in -dev to avoid pulling in all other outputs. See the
+        # pg_config.sh script's comments for details.
         moveToOutput "bin/pg_config" "$dev"
-        # To prevent a "pg_config: could not find own program executable" error, we fake
-        # pg_config in the default output.
-        cat << EOF > "$out/bin/pg_config" && chmod +x "$out/bin/pg_config"
-        #!${stdenv'.shell}
-        echo The real pg_config can be found in the -dev output.
-        exit 1
-        EOF
+        install -c -m 755 "${pg_config}"/bin/pg_config "$out/bin/pg_config"
         wrapProgram "$dev/bin/pg_config" --argv0 "$out/bin/pg_config"
 
         # postgres exposes external symbols get_pkginclude_path and similar. Those

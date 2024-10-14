@@ -59,7 +59,7 @@ let
   };
 
   realAttrs = baseAttrs // {
-    name = pname + "-" + version;
+    inherit pname version;
 
     outputs = [ "out" "dev" ] ++ lib.optional withStatic "static";
     outputBin = "dev";
@@ -93,7 +93,8 @@ let
   };
 
   buildRootOnlyAttrs = baseAttrs // {
-    name = pname + "-build-root-" + version;
+    pname = pname + "-build-root";
+    inherit version;
 
     preConfigure = baseAttrs.preConfigure + ''
       mkdir build

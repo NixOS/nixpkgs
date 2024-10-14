@@ -133,9 +133,9 @@ in mkDerivation rec {
     pushd rust
     cargoDeps="$rustDeps" cargoSetupPostUnpackHook
     rustDepsCopy="$cargoDepsCopy"
-    cat .cargo/config >> .cargo/config.toml.in
-    cat .cargo/config >> skim/.cargo/config.toml.in
-    rm .cargo/config
+    cat .cargo/config.toml >> .cargo/config.toml.in
+    cat .cargo/config.toml >> skim/.cargo/config.toml.in
+    rm .cargo/config.toml
     popd
 
     popd
