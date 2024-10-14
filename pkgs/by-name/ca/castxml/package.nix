@@ -32,11 +32,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ] ++ lib.optionals (withManual || withHTML) [ sphinx ];
 
   buildInputs = [
+    libclang
     libffi
     libxml2
     llvm
     zlib
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libclang ];
+  ];
 
   cmakeFlags =
     [
@@ -46,9 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       (lib.cmakeBool "SPHINX_HTML" withHTML)
       (lib.cmakeBool "SPHINX_MAN" withManual)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeOptionType "path" "Clang_DIR" "${lib.getDev libclang}/lib/cmake/clang")
     ];
 
   doCheck = true;
