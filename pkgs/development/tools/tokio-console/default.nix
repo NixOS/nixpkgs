@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokio-console";
-  version = "0.1.10";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "tokio-rs";
     repo = "console";
     rev = "tokio-console-v${version}";
-    hash = "sha256-sjfdxOeaNANYJuJMjZ/tCGc2mWM+98d8yPHAVSl4cF4=";
+    hash = "sha256-rNJ8hUbzJpqzipfNCvtedtLPUagFH+n/O2mp+3BZkJY=";
   };
 
-  cargoHash = "sha256-86KQpRpYSCQs6SUeG0HV26b58x/QUyovoL+5fg8JCOI=";
+  cargoHash = "sha256-EMoNTcmq2YSyIvkaP6NG3RUM8sUnqrYHq7qX/67hjZE=";
 
   buildAndTestSubdir = "tokio-console";
 
