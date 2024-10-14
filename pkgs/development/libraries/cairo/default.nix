@@ -87,7 +87,7 @@ in {
     # `-I' flags to be propagated.
     sed -i "$out/lib/pkgconfig/cairo.pc" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin glib.flattenInclude;
+  '';
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
