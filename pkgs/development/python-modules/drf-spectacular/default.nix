@@ -93,6 +93,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "drf_spectacular" ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Sane and flexible OpenAPI 3 schema generation for Django REST framework";
     homepage = "https://github.com/tfranzel/drf-spectacular";

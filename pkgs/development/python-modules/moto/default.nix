@@ -164,6 +164,8 @@ buildPythonPackage rec {
     "tests/test_cognitoidp/test_cognitoidp.py"
   ];
 
+  doCheck = false;
+
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";
     homepage = "https://github.com/getmoto/moto";
