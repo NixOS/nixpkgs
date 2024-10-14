@@ -67,6 +67,7 @@ rustPlatform.buildRustPackage {
     maintainers = with lib.maintainers; [
       if-loop69420
       sodiboo
+      getchoo
     ];
     mainProgram = "xwayland-satellite";
     platforms = lib.platforms.linux;
