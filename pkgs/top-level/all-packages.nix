@@ -30942,7 +30942,7 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc { };
+  mpc-cli = mpc; # green-alias added 2024-10-14
 
   clerk = callPackage ../applications/audio/clerk { };
 
