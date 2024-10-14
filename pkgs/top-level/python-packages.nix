@@ -2118,6 +2118,8 @@ self: super: with self; {
 
   certbot = callPackage ../development/python-modules/certbot { };
 
+  certbot-dns-azure = callPackage ../development/python-modules/certbot-dns-azure { };
+
   certbot-dns-cloudflare = callPackage ../development/python-modules/certbot-dns-cloudflare { };
 
   certbot-dns-google = callPackage ../development/python-modules/certbot-dns-google { };
