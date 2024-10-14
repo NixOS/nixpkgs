@@ -62,11 +62,8 @@ let
     let
       enableFeaturePinentry =
         f: lib.enableFeature (lib.elem f buildFlavors) ("pinentry-" + flavorInfo.${f}.flag);
-
-      pinentryMkDerivation =
-        if (lib.elem "qt5" buildFlavors) then libsForQt5.mkDerivation else stdenv.mkDerivation;
     in
-    pinentryMkDerivation rec {
+    stdenv.mkDerivation rec {
       pname = "pinentry-${pinentryExtraPname}";
       version = "1.3.1";
 
