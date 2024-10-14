@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   grpc,
-  protobuf,
+  protobuf_25,
   openssl,
   nlohmann_json,
   gtest,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     grpc
-    protobuf
+    protobuf_25
     openssl
     nlohmann_json
     gtest
