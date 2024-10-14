@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nushell/nufmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ iogamaster ];
+    mainProgram = "nufmt";
   };
 }
