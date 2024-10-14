@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation rec {
   pname = "riemann-c-client";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitea {
     domain = "git.madhouse-project.org";
     owner = "algernon";
     repo = "riemann-c-client";
     rev = "riemann-c-client-${version}";
-    hash = "sha256-GAinZtEetRAl04CjxNCTCkGbvdhSZei7gon3KxEqiIY=";
+    hash = "sha256-l9iUDhagODi58FDT9vEb90tsiIcrcMmGYCmH3ML3RCM=";
   };
 
   outputs = [ "bin" "dev" "out" ];
