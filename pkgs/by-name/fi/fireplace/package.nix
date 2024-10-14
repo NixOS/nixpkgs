@@ -1,8 +1,8 @@
-{
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  ncurses,
+{ lib
+, stdenv
+, fetchFromGitHub
+, ncurses
+,
 }:
 stdenv.mkDerivation {
   pname = "fireplace";
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     rev = "aa2070b73be9fb177007fc967b066d88a37e3408";
     hash = "sha256-2NUE/zaFoGwkZxgvVCYXxToiL23aVUFwFNlQzEq9GEc=";
   };
+
+  makeFlags = lib.optional stdenv.hostPlatform.isDarwin [ "CC=cc" ];
 
   meta = {
     description = "Cozy fireplace in your terminal";
