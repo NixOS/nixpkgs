@@ -9,7 +9,7 @@
 
   # dependencies
   click,
-  ordered-set,
+  orderly-set,
   orjson,
 
   # optional-dependencies
@@ -23,11 +23,14 @@
   pyyaml,
   toml,
   tomli-w,
+  polars,
+  pandas,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "7.0.1";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,13 +39,8 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-HqmAE5sLwyjyUahIUeRIJW0c5eliq/qEzE2FydHwc70=";
+    hash = "sha256-SnVsYQHTgy0sDKabImSXbSeKES2bBxjE6ZtVzrenm+A=";
   };
-
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
 
   build-system = [
     setuptools
@@ -50,7 +48,7 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    ordered-set
+    orderly-set
     orjson
   ];
 
@@ -69,6 +67,9 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     tomli-w
+    polars
+    pandas
+    pytest-benchmark
   ] ++ optional-dependencies.cli;
 
   disabledTests = [
