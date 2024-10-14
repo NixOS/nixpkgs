@@ -20925,6 +20925,12 @@
     githubId = 506181;
     name = "Peter Marheine";
   };
+  tartavull = {
+    email = "tartavull@gmail.com";
+    github = "tartavull";
+    githubId = 4648166;
+    name = "Ignacio Tartavull";
+  };
   tasmo = {
     email = "tasmo@tasmo.de";
     github = "tasmo";
