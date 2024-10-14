@@ -100,7 +100,7 @@ let
       length head tail elem elemAt isList;
     inherit (self.strings) concatStrings concatMapStrings concatImapStrings
       stringLength substring isString replaceStrings
-      intersperse concatStringsSep concatMapStringsSep
+      intersperse concatStringsSep concatMapStringsSep concatMapAttrsStringSep
       concatImapStringsSep concatLines makeSearchPath makeSearchPathOutput
       makeLibraryPath makeIncludePath makeBinPath optionalString
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
