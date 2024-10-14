@@ -101,8 +101,6 @@ stdenv.mkDerivation rec {
     ++ builtins.map (b: backends."${b}") withBackends;
 
   postInstall = ''
-    # fix the executable path and install the desktop item
-    substituteInPlace ../files/imv.desktop --replace "imv %F" "$out/bin/imv %F"
     install -Dm644 ../files/imv.desktop $out/share/applications/
   '';
 
