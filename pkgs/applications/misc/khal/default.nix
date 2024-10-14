@@ -6,7 +6,29 @@
 , python3
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      # https://github.com/pimutils/khal/issues/1361
+      icalendar = super.icalendar.overridePythonAttrs (old: rec {
+        version = "5.0.13";
+        src = fetchFromGitHub {
+          owner = "collective";
+          repo = "icalendar";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
+        };
+        patches = [ ];
+        build-system = with self; [ setuptools ];
+        dependencies = with self; [
+          python-dateutil
+          pytz
+        ];
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "khal";
   version = "0.11.3";
   pyproject = true;
@@ -21,13 +43,13 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with python3.pkgs; [
+  ] ++ (with python.pkgs; [
     setuptools-scm
     sphinx
     sphinxcontrib-newsfeed
   ]);
 
-  propagatedBuildInputs = with python3.pkgs;[
+  propagatedBuildInputs = with python.pkgs;[
     atomicwrites
     click
     click-log
@@ -45,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python3.pkgs;[
+  nativeCheckInputs = with python.pkgs;[
     freezegun
     hypothesis
     packaging
