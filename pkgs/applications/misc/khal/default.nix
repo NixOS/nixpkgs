@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glibcLocales
-, installShellFiles
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glibcLocales,
+  installShellFiles,
+  python3,
 }:
 
 let
@@ -40,16 +41,17 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-YP2kQ/qXPDwvFvlHf+A2Ymvk49dmt5tAnTaOhrOV92M=";
   };
 
+  build-system = with python.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
   nativeBuildInputs = [
     glibcLocales
     installShellFiles
-  ] ++ (with python.pkgs; [
-    setuptools-scm
-    sphinx
-    sphinxcontrib-newsfeed
-  ]);
+  ];
 
-  propagatedBuildInputs = with python.pkgs;[
+  dependencies = with python.pkgs; [
     atomicwrites
     click
     click-log
@@ -67,7 +69,7 @@ python.pkgs.buildPythonApplication rec {
     urwid
   ];
 
-  nativeCheckInputs = with python.pkgs;[
+  nativeCheckInputs = with python.pkgs; [
     freezegun
     hypothesis
     packaging
@@ -83,8 +85,15 @@ python.pkgs.buildPythonApplication rec {
       --fish <(_KHAL_COMPLETE=fish_source $out/bin/khal)
 
     # man page
-    PATH="${python3.withPackages (ps: with ps; [ sphinx sphinxcontrib-newsfeed ])}/bin:$PATH" \
-    make -C doc man
+    PATH="${
+      python3.withPackages (
+        ps: with ps; [
+          sphinx
+          sphinxcontrib-newsfeed
+        ]
+      )
+    }/bin:$PATH" \
+      make -C doc man
     installManPage doc/build/man/khal.1
 
     # .desktop file
@@ -93,7 +102,7 @@ python.pkgs.buildPythonApplication rec {
 
   doCheck = !stdenv.hostPlatform.isAarch64;
 
-  LC_ALL = "en_US.UTF-8";
+  env.LC_ALL = "en_US.UTF-8";
 
   disabledTests = [
     # timing based
