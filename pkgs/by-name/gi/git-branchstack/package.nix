@@ -15,7 +15,7 @@ let
       hash = "sha256-gja93LOcVCQ6l+Cygvsm+3uomvxtvUl6t23GIb/tKyQ=";
     };
 
-    buildInputs = with python3Packages; [
+    dependencies = with python3Packages; [
       git-revise
     ];
 
