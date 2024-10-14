@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, xwayland
-, xcb-util-cursor
-, libxcb
-, nix-update-script
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  libxcb,
+  makeWrapper,
+  nix-update-script,
+  pkg-config,
+  rustPlatform,
+  xcb-util-cursor,
+  xwayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +24,9 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-nKPSkHbh73xKWNpN/OpDmLnVmA3uygs3a+ejOhwU3yA=";
 
   nativeBuildInputs = [
+    makeWrapper
     pkg-config
     rustPlatform.bindgenHook
-    makeWrapper
   ];
 
   buildInputs = [
@@ -46,7 +47,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/xwayland-satellite \
-      --prefix PATH : "${lib.makeBinPath [xwayland]}"
+      --prefix PATH : "${lib.makeBinPath [ xwayland ]}"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -55,7 +56,10 @@ rustPlatform.buildRustPackage rec {
     description = "Rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base";
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ if-loop69420 sodiboo ];
+    maintainers = with maintainers; [
+      if-loop69420
+      sodiboo
+    ];
     mainProgram = "xwayland-satellite";
     platforms = platforms.linux;
   };
