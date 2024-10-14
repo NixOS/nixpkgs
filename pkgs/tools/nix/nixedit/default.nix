@@ -50,7 +50,18 @@ stdenv.mkDerivation {
 
     # Wrap nixedit to include the necessary dependencies in PATH
     wrapProgram $out/bin/nixedit --prefix PATH : \
-      "${bash}/bin:${coreutils}/bin:${nix-tree}/bin:${jq}/bin:${micro}/bin:${git}/bin:${fzf}/bin:${dialog}/bin"
+      "${
+        lib.makeBinPath [
+          bash
+          coreutils
+          nix-tree
+          jq
+          micro
+          git
+          fzf
+          dialog
+        ]
+      }"
   '';
 
   doInstallCheck = true;
