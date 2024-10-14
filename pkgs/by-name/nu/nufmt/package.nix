@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rustPlatform,
   darwin,
+  nix-update-script,
   ...
 }:
 rustPlatform.buildRustPackage rec {
@@ -25,6 +26,7 @@ rustPlatform.buildRustPackage rec {
   );
 
   cargoHash = "sha256-16Z20opeZpoa7h258um+grL3ktPmY4P0M/tqMTr5hYc=";
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Nushell formatter";
