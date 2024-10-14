@@ -94,12 +94,20 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "HDF4_ENABLE_SZIP_SUPPORT" szipSupport)
       (lib.cmakeBool "HDF4_ENABLE_SZIP_ENCODING" szipSupport)
       (lib.cmakeBool "HDF4_BUILD_JAVA" javaSupport)
+      (lib.cmakeBool "BUILD_TESTING" finalAttrs.doCheck)
     ]
     ++ lib.optionals javaSupport [
       (lib.cmakeFeature "JAVA_HOME" "${jdk}")
     ]
     ++ lib.optionals fortranSupport [
       (lib.cmakeFeature "CMAKE_Fortran_FLAGS" "-fallow-argument-mismatch")
+    ]
+    # using try_run would set these, but that requires a cross-compiling emulator to be available
+    # instead, we mark them as if the try_run calls returned a non-zero exit code
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      (lib.cmakeFeature "TEST_LFS_WORKS_RUN" "1")
+      (lib.cmakeFeature "H4_PRINTF_LL_TEST_RUN" "1")
+      (lib.cmakeFeature "H4_PRINTF_LL_TEST_RUN__TRYRUN_OUTPUT" "")
     ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -109,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "MFHDF_TEST-hdftest"
