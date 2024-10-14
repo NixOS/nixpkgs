@@ -15,7 +15,8 @@
   ninja,
   pybind11,
   python,
-  runCommand,
+  pytestCheckHook,
+  stdenv,
   substituteAll,
   setuptools,
   torchWithRocm,
@@ -23,6 +24,7 @@
   cudaSupport ? config.cudaSupport,
   rocmSupport ? config.rocmSupport,
   rocmPackages,
+  triton,
 }:
 
 buildPythonPackage {
@@ -164,16 +166,10 @@ buildPythonPackage {
   # CMake is run by setup.py instead
   dontUseCmakeConfigure = true;
 
-  nativeCheckInputs = [
-    cmake
-    # Requires torch (circular dependency) and GPU access: pytestCheckHook
-  ];
+  nativeCheckInputs = [ cmake ];
   preCheck = ''
     # build/temp* refers to build_ext.build_temp (looked up in the build logs)
     (cd ./build/temp* ; ctest)
-
-    # For pytestCheckHook
-    cd test/unit
   '';
 
   pythonImportsCheck = [
@@ -181,20 +177,91 @@ buildPythonPackage {
     "triton.language"
   ];
 
-  # Ultimately, torch is our test suite:
+  passthru.gpuCheck = stdenv.mkDerivation {
+    pname = "triton-pytest";
+    inherit (triton) version src;
+
+    requiredSystemFeatures = [ "cuda" ];
+
+    nativeBuildInputs = [
+      (python.withPackages (ps: [
+        ps.scipy
+        ps.torchWithCuda
+        ps.triton-cuda
+      ]))
+    ];
+
+    dontBuild = true;
+    nativeCheckInputs = [ pytestCheckHook ];
+
+    doCheck = true;
+
+    preCheck = ''
+      cd python/test/unit
+      export HOME=$TMPDIR
+    '';
+    checkPhase = "pytestCheckPhase";
+
+    installPhase = "touch $out";
+  };
+
   passthru.tests = {
+    # Ultimately, torch is our test suite:
     inherit torchWithRocm;
-    # Implemented as alternative to pythonImportsCheck, in case if circular dependency on torch occurs again,
-    # and pythonImportsCheck is commented back.
-    import-triton =
-      runCommand "import-triton"
-        { nativeBuildInputs = [ (python.withPackages (ps: [ ps.triton ])) ]; }
+
+    # Test as `nix run -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda`
+    # or, using `programs.nix-required-mounts`, as `nix build -f "<nixpkgs>" python3Packages.triton.tests.axpy-cuda.gpuCheck`
+    axpy-cuda =
+      cudaPackages.writeGpuTestPython
+        {
+          libraries = ps: [
+            ps.triton
+            ps.torch-no-triton
+          ];
+        }
         ''
-          python << \EOF
+          # Adopted from Philippe Tillet https://triton-lang.org/main/getting-started/tutorials/01-vector-add.html
+
           import triton
-          import triton.language
-          EOF
-          touch "$out"
+          import triton.language as tl
+          import torch
+          import os
+
+          @triton.jit
+          def axpy_kernel(n, a: tl.constexpr, x_ptr, y_ptr, out, BLOCK_SIZE: tl.constexpr):
+            pid = tl.program_id(axis=0)
+            block_start = pid * BLOCK_SIZE
+            offsets = block_start + tl.arange(0, BLOCK_SIZE)
+            mask = offsets < n
+            x = tl.load(x_ptr + offsets, mask=mask)
+            y = tl.load(y_ptr + offsets, mask=mask)
+            output = a * x + y
+            tl.store(out + offsets, output, mask=mask)
+
+          def axpy(a, x, y):
+            output = torch.empty_like(x)
+            assert x.is_cuda and y.is_cuda and output.is_cuda
+            n_elements = output.numel()
+
+            def grid(meta):
+              return (triton.cdiv(n_elements, meta['BLOCK_SIZE']), )
+
+            axpy_kernel[grid](n_elements, a, x, y, output, BLOCK_SIZE=1024)
+            return output
+
+          if __name__ == "__main__":
+            if os.environ.get("HOME", None) == "/homeless-shelter":
+              os.environ["HOME"] = os.environ.get("TMPDIR", "/tmp")
+            if "CC" not in os.environ:
+              os.environ["CC"] = "${lib.getExe' cudaPackages.backendStdenv.cc "cc"}"
+            torch.manual_seed(0)
+            size = 12345
+            x = torch.rand(size, device='cuda')
+            y = torch.rand(size, device='cuda')
+            output_torch = 3.14 * x + y
+            output_triton = axpy(3.14, x, y)
+            assert output_torch.sub(output_triton).abs().max().item() < 1e-6
+            print("Triton axpy: OK")
         '';
   };
 
