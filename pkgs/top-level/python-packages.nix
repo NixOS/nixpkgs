@@ -9127,7 +9127,10 @@ self: super: with self; {
 
   numba-scipy = callPackage ../development/python-modules/numba-scipy { };
 
-  numcodecs = callPackage ../development/python-modules/numcodecs { };
+  numcodecs = callPackage ../development/python-modules/numcodecs {
+    libzstd = pkgs.zstd;
+    liblz4 = pkgs.lz4;
+  };
 
   numdifftools = callPackage ../development/python-modules/numdifftools { };
 

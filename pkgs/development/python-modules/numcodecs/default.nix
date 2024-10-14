@@ -11,6 +11,7 @@
   setuptools-scm,
   cython,
   py-cpuinfo,
+  pkgconfig,
 
   # dependencies
   numpy,
@@ -19,6 +20,11 @@
   msgpack,
   pytestCheckHook,
   importlib-metadata,
+
+  # buildInputs
+  c-blosc,
+  libzstd,
+  liblz4,
 }:
 
 buildPythonPackage rec {
@@ -33,12 +39,21 @@ buildPythonPackage rec {
     hash = "sha256-o883iB3wiY86nA1Ed9+IEz/oUYW//le6MbzC+iB3Cbw=";
   };
 
+  patches = [
+    # A rebased version of:
+    # https://github.com/zarr-developers/numcodecs/pull/569
+    #
+    # From some reason it fails to apply, even when the PR doesn't merge
+    # conflict:
+    ./system-libs.patch
+  ];
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     cython
     py-cpuinfo
+    pkgconfig
   ];
 
   propagatedBuildInputs = [ numpy ];
@@ -48,6 +63,13 @@ buildPythonPackage rec {
     # zfpy = [ zfpy ];
   };
 
+  buildInputs = [
+    c-blosc
+    libzstd
+    liblz4
+  ];
+
+  NUMCODECS_USE_SYSTEM_LIBS = 1;
   preBuild = lib.optionalString (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) ''
     export DISABLE_NUMCODECS_AVX2=1
   '';
