@@ -57,15 +57,18 @@ rustPlatform.buildRustPackage {
 
   passthru.updateScript = unstableGitUpdater { tagPrefix = "v"; };
 
-  meta = with lib; {
-    description = "Rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base";
+  meta = {
+    description = "Xwayland outside your Wayland compositor";
+    longDescription = ''
+      Grants rootless Xwayland integration to any Wayland compositor implementing xdg_wm_base.
+    '';
     homepage = "https://github.com/Supreeeme/xwayland-satellite";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       if-loop69420
       sodiboo
     ];
     mainProgram = "xwayland-satellite";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
