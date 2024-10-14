@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, libGLU, AGL }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, libGLU }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqglviewer";
@@ -12,12 +12,22 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase libGLU ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin AGL;
+  buildInputs = [ qtbase libGLU ];
 
   dontWrapQtApps = true;
 
-  postPatch = ''
+  # Fix build on darwin, and install dylib instead of framework
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace QGLViewer/QGLViewer.pro \
+      --replace-fail \
+        "LIB_DIR_ = /Library/Frameworks" \
+        "LIB_DIR_ = \$\$""{PREFIX_}/lib" \
+      --replace-fail \
+        "!staticlib: CONFIG *= lib_bundle" \
+        ""
+  '';
+
+  preConfigure = ''
     cd QGLViewer
   '';
 
