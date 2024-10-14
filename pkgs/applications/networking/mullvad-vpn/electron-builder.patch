@@ -1,0 +1,83 @@
+diff --git a/gui/tasks/distribution.js b/gui/tasks/distribution.js
+index 0bf9cc3..c93d34e 100644
+--- a/gui/tasks/distribution.js
++++ b/gui/tasks/distribution.js
+@@ -26,11 +26,15 @@ const config = {
+   productName: 'Mullvad VPN',
+   publish: null,
+   asar: true,
++  electronDist: "@electron_dist@",
++  electronVersion: "@electron_version@",
+   compression: noCompression ? 'store' : 'normal',
+   extraResources: [
+     { from: distAssets('ca.crt'), to: '.' },
+     { from: buildAssets('relays.json'), to: '.' },
+     { from: root('CHANGELOG.md'), to: '.' },
++    { from: distAssets('mullvad-daemon'), to: '.' },
++    { from: distAssets('mullvad-problem-report'), to: '.' },
+   ],
+ 
+   directories: {
+@@ -81,7 +85,7 @@ const config = {
+ 
+   mac: {
+     target: {
+-      target: 'pkg',
++      target: 'dir',
+       arch: getMacArch(),
+     },
+     singleArchFiles: 'node_modules/nseventmonitor/lib/binding/Release/**',
+@@ -94,19 +98,6 @@ const config = {
+       NSUserNotificationAlertStyle: 'banner',
+     },
+     extraResources: [
+-      { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad')), to: '.' },
+-      { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-problem-report')), to: '.' },
+-      { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-daemon')), to: '.' },
+-      { from: distAssets(path.join('${env.BINARIES_PATH}', 'mullvad-setup')), to: '.' },
+-      {
+-        from: distAssets(path.join('${env.BINARIES_PATH}', 'libtalpid_openvpn_plugin.dylib')),
+-        to: '.',
+-      },
+-      { from: distAssets(path.join('binaries', '${env.TARGET_TRIPLE}', 'openvpn')), to: '.' },
+-      { from: distAssets(path.join('binaries', '${env.TARGET_TRIPLE}', 'apisocks5')), to: '.' },
+-      { from: distAssets('uninstall_macos.sh'), to: './uninstall.sh' },
+-      { from: buildAssets('shell-completions/_mullvad'), to: '.' },
+-      { from: buildAssets('shell-completions/mullvad.fish'), to: '.' },
+     ],
+   },
+ 
+@@ -160,11 +151,7 @@ const config = {
+   linux: {
+     target: [
+       {
+-        target: 'deb',
+-        arch: getLinuxTargetArch(),
+-      },
+-      {
+-        target: 'rpm',
++        target: 'dir',
+         arch: getLinuxTargetArch(),
+       },
+     ],
+@@ -173,12 +160,6 @@ const config = {
+     icon: distAssets('icon.icns'),
+     extraFiles: [{ from: distAssets('linux/mullvad-gui-launcher.sh'), to: '.' }],
+     extraResources: [
+-      { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-problem-report')), to: '.' },
+-      { from: distAssets(path.join(getLinuxTargetSubdir(), 'mullvad-setup')), to: '.' },
+-      { from: distAssets(path.join(getLinuxTargetSubdir(), 'libtalpid_openvpn_plugin.so')), to: '.' },
+-      { from: distAssets(path.join('linux', 'apparmor_mullvad')), to: '.' },
+-      { from: distAssets(path.join('binaries', '${env.TARGET_TRIPLE}', 'openvpn')), to: '.' },
+-      { from: distAssets(path.join('binaries', '${env.TARGET_TRIPLE}', 'apisocks5')), to: '.' },
+     ],
+   },
+ 
+@@ -441,6 +422,7 @@ function getLinuxVersion() {
+ // Returns the product version. The `args` argument is optional. Set it to `'semver'`
+ // to get the version in semver format.
+ function productVersion(extra_args) {
++  return "@version@";
+   const args = ['run', '-q', '--bin', 'mullvad-version', ...extra_args];
+   return execFileSync('cargo', args, { encoding: 'utf-8' }).trim();
+ }
