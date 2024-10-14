@@ -72,6 +72,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/seperman/deepdiff";
     changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [
+      mic92
+      doronbehar
+    ];
   };
 }
