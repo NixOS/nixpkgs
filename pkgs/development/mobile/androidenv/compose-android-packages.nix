@@ -15,7 +15,7 @@
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "27.0.12077973"
+, ndkVersion ? "27.1.12297006"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
