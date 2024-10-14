@@ -39,15 +39,14 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR"
-        "${lib.getLib libclang}/lib/clang/${lib.versions.major libclang.version}"
-      )
+  cmakeFlags = [
+    (lib.cmakeOptionType "path" "CLANG_RESOURCE_DIR"
+      "${lib.getLib libclang}/lib/clang/${lib.versions.major libclang.version}"
+    )
 
-      (lib.cmakeBool "SPHINX_HTML" withHTML)
-      (lib.cmakeBool "SPHINX_MAN" withManual)
-    ];
+    (lib.cmakeBool "SPHINX_HTML" withHTML)
+    (lib.cmakeBool "SPHINX_MAN" withManual)
+  ];
 
   doCheck = true;
 
