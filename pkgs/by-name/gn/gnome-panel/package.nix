@@ -45,16 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./modulesdir-env-var.patch
   ];
 
-  # make .desktop Exec absolute
-  postPatch = ''
-    patch -p0 <<END_PATCH
-    +++ gnome-panel/gnome-panel.desktop.in
-    @@ -7 +7 @@
-    -Exec=gnome-panel
-    +Exec=$out/bin/gnome-panel
-    END_PATCH
-  '';
-
   preFixup = ''
     gappsWrapperArgs+=(
       --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
