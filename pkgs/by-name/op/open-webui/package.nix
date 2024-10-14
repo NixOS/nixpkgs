@@ -4,6 +4,7 @@
   fetchFromGitHub,
   python3,
   nixosTests,
+  nix-update-script,
 }:
 let
   pname = "open-webui";
@@ -140,6 +141,8 @@ python3.pkgs.buildPythonApplication rec {
   passthru.tests = {
     inherit (nixosTests) open-webui;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
