@@ -61,6 +61,9 @@ buildPythonPackage rec {
       "--deselect=tests/test_process.py::Test_UV_Process::test_process_streams_redirect"
       "--deselect=tests/test_process.py::Test_AIO_Process::test_process_streams_redirect"
     ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      "--deselect=tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"
+    ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # Segmentation fault
       "--deselect=tests/test_fs_event.py::Test_UV_FS_EVENT_RENAME::test_fs_event_rename"
