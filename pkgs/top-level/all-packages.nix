@@ -28980,7 +28980,7 @@ with pkgs;
 
   icesl = callPackage ../applications/misc/icesl { };
 
-  input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
+  input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
 
