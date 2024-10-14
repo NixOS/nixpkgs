@@ -1,5 +1,6 @@
 {
   lib,
+  addDriverRunpath,
   buildPythonPackage,
   cmake,
   config,
@@ -15,10 +16,13 @@
   pybind11,
   python,
   runCommand,
+  substituteAll,
   setuptools,
   torchWithRocm,
   zlib,
   cudaSupport ? config.cudaSupport,
+  rocmSupport ? config.rocmSupport,
+  rocmPackages,
 }:
 
 buildPythonPackage {
@@ -34,29 +38,53 @@ buildPythonPackage {
     hash = "sha256-L5KqiR+TgSyKjEBlkE0yOU1pemMHFk2PhEmxLdbbxUU=";
   };
 
-  patches = [
-    ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
-  ];
+  patches =
+    [
+      ./0001-setup.py-introduce-TRITON_OFFLINE_BUILD.patch
+      (substituteAll {
+        src = ./0001-_build-allow-extra-cc-flags.patch;
+        ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
+      })
+      (substituteAll (
+        {
+          src = ./0002-nvidia-amd-driver-short-circuit-before-ldconfig.patch;
+        }
+        // lib.optionalAttrs rocmSupport { libhipDir = "${lib.getLib rocmPackages.clr}/lib"; }
+        // lib.optionalAttrs cudaSupport {
+          libcudaStubsDir = "${lib.getLib cudaPackages.cuda_cudart}/lib/stubs";
+          ccCmdExtraFlags = "-Wl,-rpath,${addDriverRunpath.driverLink}/lib";
+        }
+      ))
+    ]
+    ++ lib.optionals cudaSupport [
+      (substituteAll {
+        src = ./0003-nvidia-cudart-a-systempath.patch;
+        cudaToolkitIncludeDirs = "${lib.getInclude cudaPackages.cuda_cudart}/include";
+      })
+      (substituteAll {
+        src = ./0004-nvidia-allow-static-ptxas-path.patch;
+        nixpkgsExtraBinaryPaths = lib.escapeShellArgs [ (lib.getExe' cudaPackages.cuda_nvcc "ptxas") ];
+      })
+    ];
 
-  postPatch =
-    ''
-      # Use our `cmakeFlags` instead and avoid downloading dependencies
-      # remove any downloads
-      substituteInPlace python/setup.py \
-        --replace-fail "get_json_package_info(), get_pybind11_package_info()" ""\
-        --replace-fail "get_pybind11_package_info(), get_llvm_package_info()" ""\
-        --replace-fail 'packages += ["triton/profiler"]' ""\
-        --replace-fail "curr_version != version" "False"
+  postPatch = ''
+    # Use our `cmakeFlags` instead and avoid downloading dependencies
+    # remove any downloads
+    substituteInPlace python/setup.py \
+      --replace-fail "get_json_package_info(), get_pybind11_package_info()" ""\
+      --replace-fail "get_pybind11_package_info(), get_llvm_package_info()" ""\
+      --replace-fail 'packages += ["triton/profiler"]' ""\
+      --replace-fail "curr_version != version" "False"
 
-      # Don't fetch googletest
-      substituteInPlace unittest/CMakeLists.txt \
-        --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
-        --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
-    '';
+    # Don't fetch googletest
+    substituteInPlace unittest/CMakeLists.txt \
+      --replace-fail "include (\''${CMAKE_CURRENT_SOURCE_DIR}/googletest.cmake)" ""\
+      --replace-fail "include(GoogleTest)" "find_package(GTest REQUIRED)"
+  '';
+
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
-    setuptools
-    # pytestCheckHook # Requires torch (circular dependency) and probably needs GPUs:
     cmake
     ninja
 
@@ -76,7 +104,7 @@ buildPythonPackage {
     zlib
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     filelock
     # triton uses setuptools at runtime:
     # https://github.com/NixOS/nixpkgs/pull/286763/#discussion_r1480392652
@@ -106,26 +134,40 @@ buildPythonPackage {
     cd python
   '';
 
-  env = {
-    TRITON_BUILD_PROTON = "OFF";
-    TRITON_OFFLINE_BUILD = true;
-  } // lib.optionalAttrs cudaSupport {
-    CC = "${cudaPackages.backendStdenv.cc}/bin/cc";
-    CXX = "${cudaPackages.backendStdenv.cc}/bin/c++";
+  env =
+    {
+      TRITON_BUILD_PROTON = "OFF";
+      TRITON_OFFLINE_BUILD = true;
+    }
+    // lib.optionalAttrs cudaSupport {
+      CC = lib.getExe' cudaPackages.backendStdenv.cc "cc";
+      CXX = lib.getExe' cudaPackages.backendStdenv.cc "c++";
 
-    TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
-    TRITON_CUOBJDUMP_PATH = cudaPackages.cuda_cuobjdump;
-    TRITON_NVDISASM_PATH = cudaPackages.cuda_nvdisasm;
-    TRITON_CUDACRT_PATH = cudaPackages.cuda_nvcc;
-    TRITON_CUDART_PATH = cudaPackages.cuda_cudart;
-    TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
-  };
+      # TODO: Unused because of how TRITON_OFFLINE_BUILD currently works (subject to change)
+      TRITON_PTXAS_PATH = lib.getExe' cudaPackages.cuda_nvcc "ptxas"; # Make sure cudaPackages is the right version each update (See python/setup.py)
+      TRITON_CUOBJDUMP_PATH = lib.getExe' cudaPackages.cuda_cuobjdump "cuobjdump";
+      TRITON_NVDISASM_PATH = lib.getExe' cudaPackages.cuda_nvdisasm "nvdisasm";
+      TRITON_CUDACRT_PATH = lib.getInclude cudaPackages.cuda_nvcc;
+      TRITON_CUDART_PATH = lib.getInclude cudaPackages.cuda_cudart;
+      TRITON_CUPTI_PATH = cudaPackages.cuda_cupti;
+    };
+
+  pythonRemoveDeps = [
+    # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374
+    "torch"
+
+    # CLI tools without dist-info
+    "cmake"
+    "lit"
+  ];
 
   # CMake is run by setup.py instead
   dontUseCmakeConfigure = true;
-  checkInputs = [ cmake ]; # ctest
-  dontUseSetuptoolsCheck = true;
 
+  nativeCheckInputs = [
+    cmake
+    # Requires torch (circular dependency) and GPU access: pytestCheckHook
+  ];
   preCheck = ''
     # build/temp* refers to build_ext.build_temp (looked up in the build logs)
     (cd ./build/temp* ; ctest)
@@ -134,11 +176,10 @@ buildPythonPackage {
     cd test/unit
   '';
 
-  # Circular dependency on torch
-  # pythonImportsCheck = [
-  #   "triton"
-  #   "triton.language"
-  # ];
+  pythonImportsCheck = [
+    "triton"
+    "triton.language"
+  ];
 
   # Ultimately, torch is our test suite:
   passthru.tests = {
@@ -156,15 +197,6 @@ buildPythonPackage {
           touch "$out"
         '';
   };
-
-  pythonRemoveDeps = [
-    # Circular dependency, cf. https://github.com/triton-lang/triton/issues/1374
-    "torch"
-
-    # CLI tools without dist-info
-    "cmake"
-    "lit"
-  ];
 
   meta = with lib; {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
