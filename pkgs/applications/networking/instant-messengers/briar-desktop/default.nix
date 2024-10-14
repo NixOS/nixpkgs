@@ -1,20 +1,13 @@
 { lib
 , stdenv
+, zstd
 , fetchurl
 , openjdk
 , libnotify
 , makeWrapper
-, tor
-, p7zip
 , bash
-, writeScript
 }:
 let
-
-  briar-tor = writeScript "briar-tor" ''
-    #! ${bash}/bin/bash
-    exec ${tor}/bin/tor "$@"
-  '';
 
 in
 stdenv.mkDerivation rec {
@@ -30,7 +23,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     makeWrapper
-    p7zip
   ];
 
   installPhase = ''
@@ -41,16 +33,6 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
         libnotify
       ]}"
-  '';
-
-  fixupPhase = ''
-    # Replace the embedded Tor binary (which is in a Tar archive)
-    # with one from Nixpkgs.
-    cp ${briar-tor} ./tor
-    for arch in {aarch64,armhf,x86_64}; do
-      7z a tor_linux-$arch.zip tor
-      7z a $out/lib/briar-desktop.jar tor_linux-$arch.zip
-    done
   '';
 
   meta = with lib; {
