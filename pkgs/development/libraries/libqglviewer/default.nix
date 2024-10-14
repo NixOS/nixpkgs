@@ -30,6 +30,12 @@ stdenv.mkDerivation (finalAttrs: {
     cd QGLViewer
   '';
 
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install_name_tool -id \
+      $out/lib/libQGLViewer.2.dylib \
+      $out/lib/libQGLViewer.2.dylib
+  '';
+
   meta = {
     description = "C++ library based on Qt that eases the creation of OpenGL 3D viewers";
     homepage = "http://libqglviewer.com";
