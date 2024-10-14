@@ -13,12 +13,13 @@
   pynacl,
   pytestCheckHook,
   pytest-relaxed,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
   version = "3.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -32,6 +33,10 @@ buildPythonPackage rec {
       url = "https://github.com/paramiko/paramiko/commit/18e38b99f515056071fb27b9c1a4f472005c324a.patch";
       hash = "sha256-bPDghPeLo3NiOg+JwD5CJRRLv2VEqmSx1rOF2Tf8ZDA=";
     })
+  ];
+
+  build-system = [
+    setuptools
   ];
 
   dependencies = [
