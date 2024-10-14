@@ -22215,6 +22215,12 @@
     githubId = 17836748;
     name = "Mason Mackaman";
   };
+  usertam = {
+    name = "Samuel Tam";
+    email = "heiyiutam@gmail.com";
+    github = "usertam";
+    githubId = 22500027;
+  };
   uskudnik = {
     email = "urban.skudnik@gmail.com";
     github = "uskudnik";
