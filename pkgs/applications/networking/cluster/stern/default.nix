@@ -1,27 +1,41 @@
-{ stdenv, lib, buildPackages, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  buildGoModule,
+  buildPackages,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
+  stern,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "stern";
-  version = "1.30.0";
+  version = "1.31.0";
 
   src = fetchFromGitHub {
     owner = "stern";
     repo = "stern";
     rev = "v${version}";
-    sha256 = "sha256-sqRPX+NC58mQi0wvs3u3Lb81LBntaY1FzzlY1TIiz18=";
+    hash = "sha256-1jwjd9enO2rQnC+04brzfJKSutnkWLMPyZD0wAqHBfg=";
   };
 
-  vendorHash = "sha256-RLcF7KfKtkwB+nWzaQb8Va9pau+TS2uE9AmJ0aFNsik=";
+  vendorHash = "sha256-IBOkx+y7EFQeQ0sumXiVRqKqHts4SOxB138Uz644cnc=";
 
   subPackages = [ "." ];
 
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/stern/stern/cmd.version=${version}"
+  ];
+
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X github.com/stern/stern/cmd.version=${version}" ];
-
-  postInstall = let
-    stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
-  in
+  postInstall =
+    let
+      stern = if stdenv.buildPlatform.canExecute stdenv.hostPlatform then "$out" else buildPackages.stern;
+    in
     ''
       for shell in bash zsh fish; do
         ${stern}/bin/stern --completion $shell > stern.$shell
@@ -29,11 +43,19 @@ buildGoModule rec {
       done
     '';
 
-  meta = with lib; {
+  passthru.tests.version = testers.testVersion {
+    package = stern;
+  };
+
+  meta = {
     description = "Multi pod and container log tailing for Kubernetes";
-    mainProgram = "stern";
+    changelog = "https://github.com/stern/stern/releases/tag/v${version}";
     homepage = "https://github.com/stern/stern";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ mbode preisschild ];
+    license = lib.licenses.asl20;
+    mainProgram = "stern";
+    maintainers = with lib.maintainers; [
+      mbode
+      preisschild
+    ];
   };
 }
