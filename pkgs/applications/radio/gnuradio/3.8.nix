@@ -34,6 +34,7 @@
 , cairo
 , qt5
 , libsForQt5
+, pcre
 # Features available to override, the list of them is in featuresInfo. They
 # are all turned on by default.
 , features ? {}
@@ -44,6 +45,17 @@
 }:
 
 let
+  swig3 = ((swig.overrideAttrs (old: rec {
+  version = "3.0.12";
+  src = fetchFromGitHub {
+    owner = "swig";
+    repo = "swig";
+    rev = "rel-${version}";
+    sha256 = "1wyffskbkzj5zyhjnnpip80xzsjcr3p0q5486z3wdwabnysnhn8n";
+  };
+})).override
+  { pcre2 = pcre; });
+
   sourceSha256 = "sha256-p4VFjTE0GXmdA7QGhWSUzO/WxJ+8Dq3JEnOABtQtJUU=";
   featuresInfo = {
     # Needed always
@@ -83,7 +95,7 @@ let
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
-        swig
+        swig3
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -98,7 +110,7 @@ let
     gr-ctrlport = {
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
-        swig
+        swig3
       ];
       runtime = [
         thrift
