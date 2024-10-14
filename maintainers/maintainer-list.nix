@@ -16143,6 +16143,18 @@
     githubId = 10776658;
     name = "Patrick Gordon";
   };
+  paepcke = {
+    email = "git@paepcke.de";
+    github = "paepckehh";
+    githubId = 120342602;
+    name = "Michael Paepcke";
+  };
+  pagedmov = {
+    email = "pagedmov@gmail.com";
+    github = "pagedmov";
+    githubId = 19557376;
+    name = "Kyler Clay";
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
