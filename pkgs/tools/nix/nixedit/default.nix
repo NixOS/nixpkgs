@@ -13,7 +13,7 @@
   dialog,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nixedit";
   version = "1.0.0";
 
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
     # Wrap nixedit to include the necessary dependencies in PATH
     wrapProgram $out/bin/nixedit --prefix PATH : \
-      "${lib.makeBinPath buildInputs}"
+      "${lib.makeBinPath finalAttrs.buildInputs}"
   '';
 
   doInstallCheck = true;
@@ -70,4 +70,4 @@ stdenv.mkDerivation rec {
     mainProgram = "nixedit";
     maintainers = [ maintainers.miyu ];
   };
-}
+})
