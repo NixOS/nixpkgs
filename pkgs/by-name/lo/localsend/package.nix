@@ -52,12 +52,11 @@ let
       done
       mkdir -p $out/share/applications
       cp $desktopItem/share/applications/*.desktop $out/share/applications
-      substituteInPlace $out/share/applications/*.desktop --subst-var out
     '';
 
     desktopItem = makeDesktopItem {
       name = "LocalSend";
-      exec = "@out@/bin/localsend_app";
+      exec = "localsend_app";
       icon = "localsend";
       desktopName = "LocalSend";
       startupWMClass = "localsend_app";
