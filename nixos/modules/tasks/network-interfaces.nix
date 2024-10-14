@@ -1604,8 +1604,6 @@ in
         "net.ipv6.conf.default.disable_ipv6" = mkDefault (!cfg.enableIPv6);
         # allow all users to do ICMP echo requests (ping)
         "net.ipv4.ping_group_range" = mkDefault "0 2147483647";
-        # networkmanager falls back to "/proc/sys/net/ipv6/conf/default/use_tempaddr"
-        "net.ipv6.conf.default.use_tempaddr" = tempaddrValues.${cfg.tempAddresses}.sysctl;
       }
       // listToAttrs (
         forEach interfaces (
@@ -1614,12 +1612,7 @@ in
       )
       // listToAttrs (
         forEach interfaces (
-          i:
-          let
-            opt = i.tempAddress;
-            val = tempaddrValues.${opt}.sysctl;
-          in
-          nameValuePair "net.ipv6.conf.${replaceStrings [ "." ] [ "/" ] i.name}.use_tempaddr" val
+          i: nameValuePair "net.ipv4.conf.${replaceStrings [ "." ] [ "/" ] i.name}.proxy_arp" i.proxyARP
         )
       );
 
@@ -1689,8 +1682,11 @@ in
               sysctl-value = tempaddrValues.${cfg.tempAddresses}.sysctl;
             in
             ''
-              # enable and prefer IPv6 privacy addresses by default
-              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.bash}/bin/sh -c 'echo ${sysctl-value} > /proc/sys/net/ipv6/conf/$name/use_tempaddr'"
+              # Enable and prefer IPv6 privacy addresses by default
+              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.all.use_tempaddr=${sysctl-value}"
+              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.default.use_tempaddr=${sysctl-value}"
+              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.$name.use_tempaddr=${sysctl-value}"
+              ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.lo.use_tempaddr=-1"
             '';
         })
         (pkgs.writeTextFile rec {
@@ -1705,7 +1701,7 @@ in
             in
             ''
               # override to ${msg} for ${i.name}
-              ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${
+              ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl -w net.ipv6.conf.${
                 replaceStrings [ "." ] [ "/" ] i.name
               }.use_tempaddr=${val}"
             ''
