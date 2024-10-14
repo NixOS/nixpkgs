@@ -2,10 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   click,
   ordered-set,
   orjson,
+
+  # optional-dependencies
   clevercsv,
+
+  # tests
   jsonpickle,
   numpy,
   pytestCheckHook,
@@ -13,13 +23,12 @@
   pyyaml,
   toml,
   tomli-w,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
   version = "7.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -35,7 +44,11 @@ buildPythonPackage rec {
       --replace '/tmp/' "$TMPDIR/"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     click
     ordered-set
     orjson
@@ -66,13 +79,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepdiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep Difference and Search of any Python object/data";
     mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
     changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       mic92
       doronbehar
     ];
