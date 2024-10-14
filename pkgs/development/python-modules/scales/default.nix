@@ -5,16 +5,17 @@
   pytestCheckHook,
   fetchpatch2,
   six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "scales";
   version = "1.0.9";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8b6930f7d4bf115192290b44c757af5e254e3fcfcb75ff9a51f5c96a404e2753";
+    hash = "sha256-i2kw99S/EVGSKQtEx1evXiVOP8/Ldf+aUfXJakBOJ1M=";
   };
 
   patches = [
@@ -33,12 +34,16 @@ buildPythonPackage rec {
     done;
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  propagatedBuildInputs = [ six ];
+  build-system = [ setuptools ];
 
-  meta = with lib; {
+  dependencies = [ six ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  meta = {
     description = "Stats for Python processes";
     homepage = "https://www.github.com/Cue/scales";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pyrox0 ];
   };
 }
