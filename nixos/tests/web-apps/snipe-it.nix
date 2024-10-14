@@ -65,7 +65,9 @@ in {
     with subtest("Circumvent the pre-flight setup by just writing some settings into the database ourself"):
         snipeit.succeed(
             """
-            mysql -D ${nodes.snipeit.services.snipe-it.database.name} -e "INSERT INTO settings (id, user_id, site_name) VALUES ('1', '1', '${siteName}');"
+            mysql -D ${nodes.snipeit.services.snipe-it.database.name} -e "
+            INSERT INTO settings (id, site_name, login_remote_user_custom_logout_url, login_remote_user_header_name)
+            VALUES ('1', '${siteName}', 'https://whatever.invalid', 'whatever');"
             """
         )
 
