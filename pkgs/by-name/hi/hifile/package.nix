@@ -28,6 +28,8 @@ appimageTools.wrapType2 rec {
       --replace-fail 'Exec=HiFile' 'Exec=${pname}'
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Dual-pane graphical file manager for Windows, macOS and Linux";
     longDescription = ''
