@@ -2,6 +2,8 @@
   lib,
   buildDotnetModule,
   fetchFromGitHub,
+  bc,
+  glib,
   glibc,
   zlib,
   gtk3,
@@ -34,6 +36,8 @@ buildDotnetModule rec {
   '';
 
   runtimeDeps = [
+    bc
+    glib
     glibc
     zlib
     gtk3
@@ -60,6 +64,8 @@ buildDotnetModule rec {
       size=''${sizes[$i]}x''${sizes[$i]}
       install -D omegamaggotprime_''$((i+1))_''${size}x32.png $out/share/icons/hicolor/$size/apps/scarab.png
     done
+
+    wrapProgram "$out/bin/Scarab" --run '. ${./scaling-settings.bash}'
   '';
 
   desktopItems = [
