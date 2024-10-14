@@ -9,7 +9,7 @@
 
   # dependencies
   click,
-  ordered-set,
+  orderly-set,
   orjson,
 
   # optional-dependencies
@@ -23,11 +23,13 @@
   pyyaml,
   toml,
   tomli-w,
+  polars,
+  pandas,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "7.0.1";
+  version = "8.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -36,13 +38,8 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-HqmAE5sLwyjyUahIUeRIJW0c5eliq/qEzE2FydHwc70=";
+    hash = "sha256-SnVsYQHTgy0sDKabImSXbSeKES2bBxjE6ZtVzrenm+A=";
   };
-
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
 
   build-system = [
     setuptools
@@ -50,8 +47,14 @@ buildPythonPackage rec {
 
   dependencies = [
     click
-    ordered-set
+    orderly-set
     orjson
+  ];
+  pythonRelaxDeps = [
+    # Upstream develops this package as well, and from some reason pins this
+    # dependency to a patch version below this one. No significant changes
+    # happend in that relase, so we shouldn't worry, especially if tests pass.
+    "orderly-set"
   ];
 
   optional-dependencies = {
@@ -69,12 +72,17 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     tomli-w
+    polars
+    pandas
   ] ++ optional-dependencies.cli;
 
   disabledTests = [
     # not compatible with pydantic 2.x
     "test_pydantic1"
     "test_pydantic2"
+    # Require pytest-benchmark
+    "test_cache_deeply_nested_a1"
+    "test_lfu"
   ];
 
   pythonImportsCheck = [ "deepdiff" ];
