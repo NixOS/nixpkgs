@@ -1,27 +1,26 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   replaceVars,
   git,
   cargo,
-  stdenv,
+  versionCheckHook,
   darwin,
   nix-update-script,
-  testers,
-  hatch,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     rev = "refs/tags/hatch-v${version}";
-    hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
+    hash = "sha256-jD8mr0PXlGK9YkBPZhNTimuxmq6dJG7cfQP/UEmHTZY=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
@@ -61,10 +60,15 @@ python3Packages.buildPythonApplication rec {
       pytest-xdist
       setuptools
     ]
-    ++ [ cargo ]
+    ++ [
+      cargo
+      versionCheckHook
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
+
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -101,9 +105,6 @@ python3Packages.buildPythonApplication rec {
       "test_new_selected_python"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # https://github.com/NixOS/nixpkgs/issues/209358
-      "test_scripts_no_environment"
-
       # This test assumes it is running on macOS with a system shell on the PATH.
       # It is not possible to run it in a nix build using a /nix/store shell.
       # See https://github.com/pypa/hatch/pull/709 for the relevant code.
@@ -126,8 +127,12 @@ python3Packages.buildPythonApplication rec {
   ];
 
   passthru = {
-    tests.version = testers.testVersion { package = hatch; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "hatch-v([0-9.]+)"
+      ];
+    };
   };
 
   meta = {
