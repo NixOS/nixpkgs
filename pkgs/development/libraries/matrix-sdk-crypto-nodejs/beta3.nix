@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub
-, cargo, rustPlatform, rustc, napi-rs-cli, nodejs, libiconv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  rustPlatform,
+  rustc,
+  napi-rs-cli,
+  nodejs,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +67,10 @@ stdenv.mkDerivation rec {
     description = "No-network-IO implementation of a state machine that handles E2EE for Matrix clients";
     homepage = "https://github.com/matrix-org/matrix-rust-sdk/tree/${src.rev}/bindings/matrix-sdk-crypto-nodejs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ winter dandellion ];
+    maintainers = with maintainers; [
+      winter
+      dandellion
+    ];
     inherit (nodejs.meta) platforms;
   };
 }
