@@ -1,7 +1,8 @@
-{ mkDerivation
-, lib
+{ lib
 , stdenv
 , fetchFromGitLab
+, fetchurl
+, makeDesktopItem
 , cmake
 , boost
 , bzip2
@@ -17,21 +18,27 @@
 , qtsvg
 , qttools
 , VideoDecodeAcceleration
+, wrapQtAppsHook
+, copyDesktopItems
+# needed to run natively on wayland
+, qtwayland
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "ovito";
-  version = "3.7.11";
+  version = "3.11.0";
 
   src = fetchFromGitLab {
     owner = "stuko";
     repo = "ovito";
     rev = "v${version}";
-    hash = "sha256-Z3uwjOYJ7di/LLllbzdKjzUE7m119i03bA8dJPqhxWA=";
+    hash = "sha256-egiA6z1e8ZS7i4CIVjsCKJP1wQSRpmSKitoVTszu0Mc=";
   };
 
   nativeBuildInputs = [
     cmake
+    wrapQtAppsHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -48,16 +55,42 @@ mkDerivation rec {
     qtbase
     qtsvg
     qttools
+    qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     VideoDecodeAcceleration
   ];
+
+  # manually create a desktop file
+  desktopItems = [ (makeDesktopItem {
+    name = "ovito";
+    comment= "Open Visualization Tool";
+    exec = "ovito";
+    icon = "ovito";
+    terminal = false;
+    startupNotify = false;
+    desktopName = "ovito";
+    startupWMClass = "Ovito";
+    categories = [ "Science" ];
+  })];
+
+  postInstall = let
+    icon = fetchurl {
+      url = "https://www.ovito.org/wp-content/uploads/logo_rgb-768x737.png";
+      hash = "sha256-FOmIUeXem+4MjavQNag0UIlcR2wa2emJjivwxoJh6fI=";
+    };
+  in ''
+    install -Dm644 ${icon} $out/share/pixmaps/ovito.png
+  '';
 
   meta = with lib; {
     description = "Scientific visualization and analysis software for atomistic and particle simulation data";
     mainProgram = "ovito";
     homepage = "https://ovito.org";
     license = with licenses;  [ gpl3Only mit ];
-    maintainers = with maintainers; [ twhitehead ];
+    maintainers = with maintainers; [
+      twhitehead
+      chn
+    ];
     broken = stdenv.hostPlatform.isDarwin; # clang-11: error: no such file or directory: '$-DOVITO_COPYRIGHT_NOTICE=...
   };
 }
