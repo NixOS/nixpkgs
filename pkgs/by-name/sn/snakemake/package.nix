@@ -1,18 +1,21 @@
 {
   lib,
+  stdenv,
   fetchPypi,
-  python3,
+  python3Packages,
   stress,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "8.20.1";
-  format = "setuptools";
+  version = "8.23.0";
+
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-adNwIA1z/TwWsa0gQb4hAsUvHInjd30sm1dYKXvvXy8=";
+    hash = "sha256-XENI9VJW62KyrxDGSwQiygggYZOu9yW2QSNyp4BO9Us=";
   };
 
   postPatch = ''
@@ -24,8 +27,13 @@ python3.pkgs.buildPythonApplication rec {
       --replace-fail '"unit_tests/templates"' '"'"$PWD"'/snakemake/unit_tests/templates"'
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     appdirs
+    conda-inject
     configargparse
     connection-pool
     datrie
@@ -60,7 +68,7 @@ python3.pkgs.buildPythonApplication rec {
   # for the current basic test suite. Slurm, Tibanna and Tes require extra
   # setup.
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     numpy
     pandas
     pytestCheckHook
@@ -69,7 +77,9 @@ python3.pkgs.buildPythonApplication rec {
     snakemake-executor-plugin-cluster-generic
     snakemake-storage-plugin-fs
     stress
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   pytestFlagsArray = [
     "tests/tests.py"
@@ -80,39 +90,55 @@ python3.pkgs.buildPythonApplication rec {
     "tests/test_api.py"
   ];
 
-  # Some will be disabled via https://github.com/snakemake/snakemake/pull/3074
-  disabledTests = [
-    # requires graphviz
-    "test_filegraph"
-    # requires s3
-    "test_storage"
-    "test_default_storage"
-    "test_output_file_cache_storage"
-    # requires peppy and eido
-    "test_pep"
-    "test_modules_peppy"
-    # requires perl
-    "test_shadow"
-    # requires snakemake-storage-plugin-http
-    "test_ancient"
-    "test_modules_prefix"
-    # requires snakemake-storage-plugin-s3
-    "test_deploy_sources"
-    # requires modules
-    "test_env_modules"
-    # issue with locating template file
-    "test_generate_unit_tests"
-    # weird
-    "test_strict_mode"
-    "test_issue1256"
-    "test_issue2574"
-    "test_github_issue1384"
-    # future-proofing
-    "conda"
-    "singularity"
-    "apptainer"
-    "container"
-  ];
+  disabledTests =
+    [
+      # FAILED tests/tests.py::test_env_modules - AssertionError: expected successful execution
+      "test_ancient"
+      "test_conda_create_envs_only"
+      "test_env_modules"
+      "test_generate_unit_tests"
+      "test_modules_prefix"
+      "test_strict_mode"
+      # Requires perl
+      "test_shadow"
+      # Require peppy and eido
+      "test_peppy"
+      "test_modules_peppy"
+      "test_pep_pathlib"
+
+      # CalledProcessError
+      "test_filegraph" # requires graphviz
+      "test_github_issue1384"
+
+      # AssertionError: assert 127 == 1
+      "test_issue1256"
+      "test_issue2574"
+
+      # Require `snakemake-storage-plugin-fs` (circular dependency)
+      "test_default_storage"
+      "test_default_storage_local_job"
+      "test_deploy_sources"
+      "test_output_file_cache_storage"
+      "test_storage"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Unclear failure:
+      # AssertionError: expected successful execution
+      # `__darwinAllowLocalNetworking` doesn't help
+      "test_excluded_resources_not_submitted_to_cluster"
+      "test_group_job_resources_with_pipe"
+      "test_group_jobs_resources"
+      "test_group_jobs_resources_with_limited_resources"
+      "test_group_jobs_resources_with_max_threads"
+      "test_issue850"
+      "test_issue860"
+      "test_multicomp_group_jobs"
+      "test_queue_input"
+      "test_queue_input_dryrun"
+      "test_queue_input_forceall"
+      "test_resources_submitted_to_cluster"
+      "test_scopes_submitted_to_cluster"
+    ];
 
   pythonImportsCheck = [
     "snakemake"
@@ -122,10 +148,11 @@ python3.pkgs.buildPythonApplication rec {
     export HOME="$(mktemp -d)"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://snakemake.github.io";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Python-based execution environment for make-like workflows";
+    changelog = "https://github.com/snakemake/snakemake/blob/v${version}/CHANGELOG.md";
     mainProgram = "snakemake";
     longDescription = ''
       Snakemake is a workflow management system that aims to reduce the complexity of
@@ -134,7 +161,7 @@ python3.pkgs.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       helkafen
       renatoGarcia
       veprbl
