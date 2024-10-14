@@ -95,8 +95,8 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 in
 {
   z3_4_12 = common {
-    version = "4.12.5";
-    sha256 = "sha256-Qj9w5s02OSMQ2qA7HG7xNqQGaUacA1d4zbOHynq5k+A=";
+    version = "4.12.6";
+    sha256 = "sha256-X4wfPWVSswENV0zXJp/5u9SQwGJWocLKJ/CNv57Bt+E=";
   };
   z3_4_11 = common {
     version = "4.11.2";
