@@ -47,13 +47,9 @@ buildPythonPackage rec {
     # zfpy = [ zfpy ];
   };
 
-  preBuild =
-    if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then
-      ''
-        export DISABLE_NUMCODECS_AVX2=
-      ''
-    else
-      null;
+  preBuild = lib.optionalString (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) ''
+    export DISABLE_NUMCODECS_AVX2=1
+  '';
 
   nativeCheckInputs = [
     pytestCheckHook
