@@ -30787,6 +30787,8 @@ with pkgs;
     steamSupport = false;
   };
 
+  lutris-humble-cookies = callPackage ../applications/misc/lutris-humble-cookies/default.nix { };
+
   lv2bm = callPackage ../applications/audio/lv2bm { };
 
   lv2lint = callPackage ../applications/audio/lv2lint/default.nix { };
