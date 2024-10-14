@@ -60,7 +60,7 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 
     doCheck = true;
     checkPhase = ''
-      make test
+      make -j $NIX_BUILD_CORES test
       ./test-z3 -a
     '';
 
