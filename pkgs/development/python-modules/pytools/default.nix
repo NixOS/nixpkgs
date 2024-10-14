@@ -53,7 +53,7 @@ buildPythonPackage rec {
   meta = {
     description = "Miscellaneous Python lifesavers";
     homepage = "https://github.com/inducer/pytools/";
-    changelo = "https://github.com/inducer/pytools/releases/tag/v${version}";
+    changelog = "https://github.com/inducer/pytools/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ artuuge ];
   };
