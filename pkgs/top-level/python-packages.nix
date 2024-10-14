@@ -15338,6 +15338,10 @@ self: super: with self; {
 
   stopit = callPackage ../development/python-modules/stopit { };
 
+  stp = toPythonModule (pkgs.stp.override {
+    python3 = self.python;
+  });
+
   stransi = callPackage ../development/python-modules/stransi { };
 
   strategies = callPackage ../development/python-modules/strategies { };
