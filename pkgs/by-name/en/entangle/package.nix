@@ -120,11 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
       -e "/gtk-update-icon-cache/d"
   '';
 
-  postInstall = ''
-    substituteInPlace "$out/share/applications/org.entangle_photo.Manager.desktop" \
-      --replace "Exec=entangle" "Exec=$out/bin/entangle"
-  '';
-
   meta = {
     description = "Tethered camera control and capture";
     longDescription = ''
