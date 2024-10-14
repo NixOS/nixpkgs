@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "stacks";
-  version = "2.66";
+  version = "2.68";
   src = fetchurl {
     url = "http://catchenlab.life.illinois.edu/stacks/source/${pname}-${version}.tar.gz";
-    sha256 = "sha256-9pHmcLYMdn9xy3vhlOU42Io/4L61auoncfpZNRPUN/I=";
+    sha256 = "sha256-ncUeo1bWDrRVewstGohUqvrkkq7Yf5dOAknMCapedlA=";
   };
 
   buildInputs = [ zlib ];

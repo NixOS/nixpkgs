@@ -130,10 +130,7 @@ buildFHSEnv {
     substituteInPlace $out/share/applications/plex-desktop.desktop \
       --replace-fail \
       'Icon=''${SNAP}/meta/gui/icon.png' \
-      'Icon=${plex-desktop}/meta/gui/icon.png' \
-      --replace-fail \
-      'Exec=plex-desktop' \
-      'Exec=plex-desktop-${version}'
+      'Icon=${plex-desktop}/meta/gui/icon.png'
   '';
 
   runScript = writeShellScript "plex-desktop.sh" ''
