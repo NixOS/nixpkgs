@@ -90,4 +90,6 @@ with lib;
       };
 
   };
+
+  meta.maintainers =  with maintainers; [ arianvp ];
 }
