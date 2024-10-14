@@ -26503,6 +26503,11 @@ with pkgs;
 
   trinity = callPackage ../os-specific/linux/trinity { };
 
+  inherit (callPackage ../servers/trinitycore { })
+    trinitycore_335
+    trinitycore_434
+    trinitycore_rolling;
+
   trino-cli = callPackage ../development/tools/database/trino-cli { };
 
   trinsic-cli = callPackage ../tools/admin/trinsic-cli {
