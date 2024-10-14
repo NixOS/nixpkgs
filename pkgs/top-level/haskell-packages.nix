@@ -434,8 +434,8 @@ in {
       # https://github.com/xattr/xattr/issues/55 are solved.
       inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
       # 2023-01-15: Support range >= 11 && < 16
-      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-      llvmPackages = pkgs.llvmPackages_15;
+      buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_18;
+      llvmPackages = pkgs.llvmPackages_18;
     };
 
     ghcjs = compiler.ghcjs810;
