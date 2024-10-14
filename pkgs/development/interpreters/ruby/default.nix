@@ -216,7 +216,7 @@ let
           for makefile in $extMakefiles; do
             make -C "$(dirname "$makefile")" distclean
           done
-          find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log \) -delete
+          find "$out/${finalAttrs.passthru.gemPath}" \( -name gem_make.out -o -name mkmf.log -o -name exts.mk \) -delete
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
