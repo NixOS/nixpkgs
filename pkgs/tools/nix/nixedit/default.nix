@@ -13,15 +13,15 @@
   dialog,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "nixedit";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "fndov";
     repo = "nixedit";
-    rev = "75e7bab546c4946cd65079fdcad8bc2ab1550b8f";
-    hash = "sha256-KpqdyE6TqDHCj2zQZw2F66ZmSI93Oy6LxmPa+DXGB1A=";
+    rev = "d5fd24439917b0359529aee7d29da85f20608877";
+    hash = "sha256-Xp7hMDjPuQyBZ535RHq5fI2r9iIeD8uC5LhHB+CB5sA=";
   };
 
   nativeBuildInputs = [
@@ -50,18 +50,7 @@ stdenv.mkDerivation {
 
     # Wrap nixedit to include the necessary dependencies in PATH
     wrapProgram $out/bin/nixedit --prefix PATH : \
-      "${
-        lib.makeBinPath [
-          bash
-          coreutils
-          nix-tree
-          jq
-          micro
-          git
-          fzf
-          dialog
-        ]
-      }"
+      "${lib.makeBinPath buildInputs}"
   '';
 
   doInstallCheck = true;
@@ -74,11 +63,11 @@ stdenv.mkDerivation {
     $out/bin/nixedit --help > /dev/null
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/fndov/nixedit";
     description = "A NixOS Multipurpose CLI/TUI Utility";
-    license = lib.licenses.gpl3;
+    license = licenses.gpl3;
     mainProgram = "nixedit";
-    maintainers = with lib.maintainers; [ miyu ];
+    maintainers = [ maintainers.miyu ];
   };
 }
