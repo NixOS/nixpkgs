@@ -32325,7 +32325,7 @@ with pkgs;
 
   secretscanner = callPackage ../tools/security/secretscanner { };
 
-  setconf = python3.pkgs.callPackage ../tools/misc/setconf { };
+  setconf = callPackage ../tools/misc/setconf { };
 
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
