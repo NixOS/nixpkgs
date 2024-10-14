@@ -8,6 +8,7 @@
   mock,
   fetchpatch2,
   pytestCheckHook,
+  distutils,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   patches = [
     # remove nose and extra mock
     (fetchpatch2 {
+      name = "remove-nose-and-mock.patch";
       url = "https://github.com/miracle2k/webassets/commit/26e203929eebbb4cdbb9967cf47fefa95df8f24d.patch?full_index=1";
       hash = "sha256-+jrMT6Sl/MOLkleUEDZkzRd5tzBTXZYNoCXRrTFVtq4=";
       excludes = [
@@ -31,6 +33,7 @@ buildPythonPackage rec {
       ];
     })
     (fetchpatch2 {
+      name = "fix-missing-zope-skip.patch";
       url = "https://github.com/miracle2k/webassets/commit/3bfb5ea8223c46c60b922fdbbda36d9b8c5e9c9c.patch?full_index=1";
       hash = "sha256-dV8bp6vYr56mZpzw5C7ac4rXri04o4MrAhwfWUXLe4s=";
     })
@@ -45,6 +48,7 @@ buildPythonPackage rec {
     jinja2
     mock
     pytestCheckHook
+    distutils
   ];
 
   postPatch = ''
@@ -53,8 +57,10 @@ buildPythonPackage rec {
       --replace-fail "isAlive" "is_alive"
   '';
 
-  disabledTestPaths = [
-    "tests/test_filters.py" # no module "distutils"
+  disabledTests = [
+    "TestFilterBaseClass"
+    "TestAutoprefixer6Filter"
+    "TestBabel"
   ];
 
   meta = {
