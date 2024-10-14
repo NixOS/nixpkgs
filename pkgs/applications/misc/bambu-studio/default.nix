@@ -37,7 +37,7 @@
   pcre,
   systemd,
   tbb_2021_11,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     openvdb'
     pcre
     tbb_2021_11
-    webkitgtk
+    webkitgtk_4_0
     wxGTK'
     xorg.libX11
     opencv
