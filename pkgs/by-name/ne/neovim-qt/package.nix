@@ -1,12 +1,12 @@
-{ stdenv, libsForQt5, makeWrapper, neovim, neovim-qt-unwrapped }:
+{ stdenvNoCC, makeWrapper, neovim, neovim-qt-unwrapped }:
 
 let
   unwrapped = neovim-qt-unwrapped;
 in
-libsForQt5.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "neovim-qt";
   version = unwrapped.version;
-  buildCommand = if stdenv.hostPlatform.isDarwin then ''
+  buildCommand = if stdenvNoCC.hostPlatform.isDarwin then ''
     mkdir -p $out/Applications
     cp -r ${unwrapped}/bin/nvim-qt.app $out/Applications
 
