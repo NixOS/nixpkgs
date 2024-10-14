@@ -1,65 +1,68 @@
 # Updating? Keep $out/etc synchronized with passthru keys
 
-{ stdenv
-, lib
-, fetchFromGitHub
-, gi-docgen
-, pkg-config
-, gobject-introspection
-, gettext
-, libgudev
-, libdrm
-, polkit
-, libxmlb
-, gusb
-, sqlite
-, libarchive
-, libredirect
-, curl
-, libjcat
-, elfutils
-, valgrind
-, meson
-, libuuid
-, ninja
-, gnutls
-, protobufc
-, python3
-, wrapGAppsNoGuiHook
-, ensureNewerSourcesForZipFilesHook
-, json-glib
-, bash-completion
-, shared-mime-info
-, umockdev
-, vala
-, makeFontsConf
-, freefont_ttf
-, pango
-, tpm2-tss
-, bubblewrap
-, efibootmgr
-, flashrom
-, tpm2-tools
-, fwupd-efi
-, nixosTests
-, runCommand
-, unstableGitUpdater
-, modemmanager
-, libqmi
-, libmbim
-, libcbor
-, xz
-, nix-update-script
-, enableFlashrom ? false
-, enablePassim ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gi-docgen,
+  pkg-config,
+  gobject-introspection,
+  gettext,
+  libgudev,
+  libdrm,
+  polkit,
+  libxmlb,
+  gusb,
+  sqlite,
+  libarchive,
+  libredirect,
+  curl,
+  libjcat,
+  elfutils,
+  valgrind,
+  meson,
+  libuuid,
+  ninja,
+  gnutls,
+  protobufc,
+  python3,
+  wrapGAppsNoGuiHook,
+  ensureNewerSourcesForZipFilesHook,
+  json-glib,
+  bash-completion,
+  shared-mime-info,
+  umockdev,
+  vala,
+  makeFontsConf,
+  freefont_ttf,
+  pango,
+  tpm2-tss,
+  bubblewrap,
+  efibootmgr,
+  flashrom,
+  tpm2-tools,
+  fwupd-efi,
+  nixosTests,
+  runCommand,
+  unstableGitUpdater,
+  modemmanager,
+  libqmi,
+  libmbim,
+  libcbor,
+  xz,
+  nix-update-script,
+  enableFlashrom ? false,
+  enablePassim ? false,
 }:
 
 let
-  python = python3.withPackages (p: with p; [
-    jinja2
-    pygobject3
-    setuptools
-  ]);
+  python = python3.withPackages (
+    p: with p; [
+      jinja2
+      pygobject3
+      setuptools
+    ]
+  );
 
   isx86 = stdenv.hostPlatform.isx86;
 
@@ -78,11 +81,9 @@ let
   haveFlashrom = isx86 && enableFlashrom;
 
   runPythonCommand =
-    name:
-    buildCommandPython:
+    name: buildCommandPython:
 
-    runCommand
-      name
+    runCommand name
       {
         nativeBuildInputs = [ python3 ];
         inherit buildCommandPython;
@@ -108,7 +109,8 @@ let
         };
       };
     in
-    src // {
+    src
+    // {
       meta = src.meta // {
         # For update script
         position =
@@ -126,7 +128,14 @@ stdenv.mkDerivation (finalAttrs: {
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
   # CLI programs go to out
-  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "devdoc"
+    "man"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "fwupd";
@@ -173,61 +182,69 @@ stdenv.mkDerivation (finalAttrs: {
     vala
   ];
 
-  buildInputs = [
-    polkit
-    libxmlb
-    gusb
-    sqlite
-    libarchive
-    libdrm
-    curl
-    elfutils
-    libgudev
-    libjcat
-    libuuid
-    json-glib
-    umockdev
-    bash-completion
-    pango
-    tpm2-tss
-    fwupd-efi
-    protobufc
-    modemmanager
-    libmbim
-    libcbor
-    libqmi
-    xz # for liblzma
-  ] ++ lib.optionals haveFlashrom [
-    flashrom
-  ];
+  buildInputs =
+    [
+      polkit
+      libxmlb
+      gusb
+      sqlite
+      libarchive
+      libdrm
+      curl
+      elfutils
+      libgudev
+      libjcat
+      libuuid
+      json-glib
+      umockdev
+      bash-completion
+      pango
+      tpm2-tss
+      fwupd-efi
+      protobufc
+      modemmanager
+      libmbim
+      libcbor
+      libqmi
+      xz # for liblzma
+    ]
+    ++ lib.optionals haveFlashrom [
+      flashrom
+    ];
 
-  mesonFlags = [
-    "-Ddocs=enabled"
-    # We are building the official releases.
-    "-Dsupported_build=enabled"
-    "-Dlaunchd=disabled"
-    "-Dudevdir=lib/udev"
-    "-Dsystemd_root_prefix=${placeholder "out"}"
-    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "-Dsysconfdir_install=${placeholder "out"}/etc"
-    "-Defi_os_dir=nixos"
-    "-Dplugin_modem_manager=enabled"
-    "-Dvendor_metadata=true"
-    # We do not want to place the daemon into lib (cyclic reference)
-    "--libexecdir=${placeholder "out"}/libexec"
-  ] ++ lib.optionals (!enablePassim) [
-    "-Dpassim=disabled"
-  ] ++ lib.optionals (!haveDell) [
-    "-Dplugin_synaptics_mst=disabled"
-  ] ++ lib.optionals (!haveRedfish) [
-    "-Dplugin_redfish=disabled"
-  ] ++ lib.optionals (!haveFlashrom) [
-    "-Dplugin_flashrom=disabled"
-  ] ++ lib.optionals (!haveMSR) [
-    "-Dplugin_msr=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Ddocs=enabled"
+      # We are building the official releases.
+      "-Dsupported_build=enabled"
+      "-Dlaunchd=disabled"
+      "-Dudevdir=lib/udev"
+      "-Dsystemd_root_prefix=${placeholder "out"}"
+      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "-Dsysconfdir_install=${placeholder "out"}/etc"
+      "-Defi_os_dir=nixos"
+      "-Dplugin_modem_manager=enabled"
+      "-Dvendor_metadata=true"
+      # We do not want to place the daemon into lib (cyclic reference)
+      "--libexecdir=${placeholder "out"}/libexec"
+    ]
+    ++ lib.optionals (!enablePassim) [
+      "-Dpassim=disabled"
+    ]
+    ++ lib.optionals (!haveDell) [
+      "-Dplugin_synaptics_mst=disabled"
+    ]
+    ++ lib.optionals (!haveRedfish) [
+      "-Dplugin_redfish=disabled"
+    ]
+    ++ lib.optionals (!haveFlashrom) [
+      "-Dplugin_flashrom=disabled"
+    ]
+    ++ lib.optionals (!haveMSR) [
+      "-Dplugin_msr=disabled"
+    ];
 
   # TODO: wrapGAppsHook3 wraps efi capsule even though it is not ELF
   dontWrapGApps = true;
