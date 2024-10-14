@@ -1,19 +1,24 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 let
-  version = "0.9.9.13";
+  version = "0.9.9.14";
   pname = "hifile";
 
   src = fetchurl {
     url = "https://www.hifile.app/files/HiFile-${version}.AppImage";
-    hash = "sha256-nZlPdl7D0UWtm8mFz4IDqmvGeBVc7mbeUpzyHrdDQtk=";
+    hash = "sha256-4hwzlsZGl4du/4b2u4wHwFTZk9ap2fHIXLBi9L2wvS4=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''
