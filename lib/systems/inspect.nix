@@ -141,7 +141,8 @@ rec {
         map (attr2:
           recursiveUpdateUntil
             (path: subattr1: subattr2:
-              if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
+              if (builtins.isString subattr2) then true
+              else if (builtins.intersectAttrs subattr1 subattr2) == {} || subattr1 == subattr2
               then true
               else throw ''
                 pattern conflict at path ${toString path}:
