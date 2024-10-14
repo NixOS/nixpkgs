@@ -13970,6 +13970,8 @@ self: super: with self; {
 
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
 
+  sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
+
   salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };

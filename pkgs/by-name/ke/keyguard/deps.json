@@ -562,9 +562,9 @@
    "module": "sha256-+zlsWwe1d5qQ0kC9H2hm+B+ANhnjgTku0ZxxzeWjtw4=",
    "pom": "sha256-pLWsZsp+eXmLWodQv0wst1w49OU561YWT8m5wxPb354="
   },
-  "androidx/profileinstaller#profileinstaller/1.4.0": {
-   "module": "sha256-Ob+ZeijY7tLLMZgZ9vNSobo6eLnJeQBPvgXia499Fgs=",
-   "pom": "sha256-1f45mBo7S3w5WFEw2gv8k4NQVMg0pDjT5j4GXl94vlU="
+  "androidx/profileinstaller#profileinstaller/1.4.1": {
+   "module": "sha256-bxHPZeS/hESZXMc+WqP4GwgtZucgwFkrxfyA0/c4UPc=",
+   "pom": "sha256-bd5DgntAU15AU9HFLUsiekEVVsKJ5lQAyaHMYeK0HOM="
   },
   "androidx/room#room-common/2.6.1": {
    "module": "sha256-DqB+9xQ6tSYswOSOgvO63WrfFks3AasqwPbwmej2PTs=",
@@ -641,11 +641,11 @@
   "com/android/application#com.android.application.gradle.plugin/8.7.0": {
    "pom": "sha256-7h5ZwC4JeVS67atxKbxn0cANSSfoAFPMLT2TB1hiPQU="
   },
-  "com/android/billingclient#billing-ktx/7.1.0": {
-   "pom": "sha256-j0sHmA2e27XbWm6gZ01a8znZkylNFaleKlHzr6pKKdE="
+  "com/android/billingclient#billing-ktx/7.1.1": {
+   "pom": "sha256-PMPwTqj+PMOAi75eG0Y/3jQzM1RDOqeRERHQzK6Dt9g="
   },
-  "com/android/billingclient#billing/7.1.0": {
-   "pom": "sha256-OxlqMhxa5qAsnRjnu6t87dmLNrnxkEDk2LwIo52jh1I="
+  "com/android/billingclient#billing/7.1.1": {
+   "pom": "sha256-S+5D2uFUS1LoqOUCefEyBPcrve1/ECdDCbG4ekhLdgU="
   },
   "com/android/databinding#baseLibrary/8.7.0": {
    "jar": "sha256-eUETcJ2rIbBsJis3lec8twj7rK5hcV80Nh4a9iN6GHA=",
