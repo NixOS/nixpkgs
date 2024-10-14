@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , fetchurl
 , cups
 , libssh
@@ -15,7 +16,7 @@
 , pkg-config
 }:
 
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "x2goclient";
   version = "4.1.2.2";
 
