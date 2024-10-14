@@ -19092,6 +19092,7 @@ with pkgs;
   certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
   certbot-full = certbot.withPlugins (cp: with cp; [
+    certbot-dns-azure
     certbot-dns-cloudflare
     certbot-dns-google
     certbot-dns-ovh
