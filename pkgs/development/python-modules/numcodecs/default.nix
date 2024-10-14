@@ -2,17 +2,23 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchpatch,
   fetchPypi,
+  fetchpatch,
+  python,
+  pythonOlder,
+
+  # build-system
   setuptools,
   setuptools-scm,
   cython,
-  numpy,
-  msgpack,
   py-cpuinfo,
+
+  # dependencies
+  numpy,
+
+  # tests
+  msgpack,
   pytestCheckHook,
-  python,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
@@ -54,6 +60,7 @@ buildPythonPackage rec {
     msgpack
   ];
 
+  # https://github.com/NixOS/nixpkgs/issues/255262
   pytestFlagsArray = [ "$out/${python.sitePackages}/numcodecs" ];
 
   disabledTests = [
@@ -68,9 +75,9 @@ buildPythonPackage rec {
     "test_non_numpy_inputs"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/zarr-developers/numcodecs";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
     maintainers = [ ];
   };
