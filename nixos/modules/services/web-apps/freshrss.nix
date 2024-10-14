@@ -130,13 +130,37 @@ in
       example = "/mnt/freshrss";
     };
 
-    virtualHost = mkOption {
+    nginx.virtualHost = mkOption {
+      type = types.submodule (import ../web-servers/nginx/vhost-options.nix);
+      example = literalExpression ''
+        {
+          forceSSL = true;
+          sslCertificateKey = "/etc/ssl/freshrss.key";
+          sslCertificate = "/etc/ssl/freshrss.crt";
+        }
+      '';
+      default = { };
+      description = ''
+        Nginx configuration can be done by adapting `services.nginx.virtualHosts.<name>`.
+        See [](#opt-services.nginx.virtualHosts) for further information.
+      '';
+    };
+
+    hostname = mkOption {
       type = types.nullOr types.str;
       default = "freshrss";
       description = ''
         Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
-        You may need to configure the virtualhost further through services.nginx.virtualHosts.<virtualhost>,
+        You may need to configure the virtualhost further through [](#opt-services.freshrss.nginx.virtualHost),
         for example to enable SSL.
+      '';
+    };
+
+    virtualHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        Deprecated: use services.freshrss.hostname instead.
       '';
     };
 
@@ -206,33 +230,46 @@ in
           '';
         }
       ];
+      warnings = flatten [
+        (optional (cfg.virtualHost != null) ''
+          The option services.freshrss.virtualHost is deprecated, please use
+          services.freshrss.hostname instead.
+        '')
+      ];
       # Set up a Nginx virtual host.
-      services.nginx = mkIf (cfg.virtualHost != null) {
-        enable = true;
-        virtualHosts.${cfg.virtualHost} = {
-          root = "${cfg.package}/p";
+      services.nginx =
+        let
+          hostname = if cfg.hostname != null then cfg.hostname else cfg.virtualHost;
+        in
+        mkIf (hostname != null) {
+          enable = true;
+          virtualHosts.${hostname} = mkMerge [
+            {
+              root = mkForce "${cfg.package}/p";
 
-          # php files handling
-          # this regex is mandatory because of the API
-          locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
-            fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
-            fastcgi_split_path_info ^(.+\.php)(/.*)$;
-            # By default, the variable PATH_INFO is not set under PHP-FPM
-            # But FreshRSS API greader.php need it. If you have a “Bad Request” error, double check this var!
-            # NOTE: the separate $path_info variable is required. For more details, see:
-            # https://trac.nginx.org/nginx/ticket/321
-            set $path_info $fastcgi_path_info;
-            fastcgi_param PATH_INFO $path_info;
-            include ${pkgs.nginx}/conf/fastcgi_params;
-            include ${pkgs.nginx}/conf/fastcgi.conf;
-          '';
+              # php files handling
+              # this regex is mandatory because of the API
+              locations."~ ^.+?\.php(/.*)?$".extraConfig = ''
+                fastcgi_pass unix:${config.services.phpfpm.pools.${cfg.pool}.socket};
+                fastcgi_split_path_info ^(.+\.php)(/.*)$;
+                # By default, the variable PATH_INFO is not set under PHP-FPM
+                # But FreshRSS API greader.php need it. If you have a “Bad Request” error, double check this var!
+                # NOTE: the separate $path_info variable is required. For more details, see:
+                # https://trac.nginx.org/nginx/ticket/321
+                set $path_info $fastcgi_path_info;
+                fastcgi_param PATH_INFO $path_info;
+                include ${pkgs.nginx}/conf/fastcgi_params;
+                include ${pkgs.nginx}/conf/fastcgi.conf;
+              '';
 
-          locations."/" = {
-            tryFiles = "$uri $uri/ index.php";
-            index = "index.php index.html index.htm";
-          };
+              locations."/" = {
+                tryFiles = "$uri $uri/ index.php";
+                index = "index.php index.html index.htm";
+              };
+            }
+            cfg.nginx.virtualHost
+          ];
         };
-      };
 
       # Set up phpfpm pool
       services.phpfpm.pools = mkIf (cfg.pool == poolName) {

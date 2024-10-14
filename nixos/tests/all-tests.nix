@@ -359,6 +359,7 @@ in {
   freshrss-pgsql = handleTest ./freshrss-pgsql.nix {};
   freshrss-http-auth = handleTest ./freshrss-http-auth.nix {};
   freshrss-none-auth = handleTest ./freshrss-none-auth.nix {};
+  freshrss-nginx = handleTest ./freshrss-nginx.nix {};
   frigate = handleTest ./frigate.nix {};
   frp = handleTest ./frp.nix {};
   frr = handleTest ./frr.nix {};
