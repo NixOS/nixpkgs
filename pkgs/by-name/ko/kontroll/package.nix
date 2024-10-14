@@ -4,7 +4,7 @@
   rustPlatform,
   fetchFromGitHub,
   protobuf,
-  darwin
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
