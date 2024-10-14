@@ -18,13 +18,29 @@
   stdenv,
   wget,
   wxGTK32,
-  # Boolean flags
-  enableSDL2 ? true,
-  enableTerm ? true,
-  enableWx ? !stdenv.hostPlatform.isDarwin,
-  enableX11 ? !stdenv.hostPlatform.isDarwin,
+  _configuration ? {},
 }:
 
+let
+  eval = lib.evalModules {
+    modules = [
+      ./options.nix
+      _configuration
+      {
+        _module.args = {
+          inherit stdenv;
+          _pkgs = {
+            inherit SDL2 ncurses wxGTK32 libX11;
+          };
+        };
+      }
+    ];
+  };
+  enableSDL2 = eval.config.SDL2;
+  enableTerm = eval.config.term;
+  enableWx = eval.config.wx;
+  enableX11 = eval.config.X11;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bochs";
   version = "2.8";
