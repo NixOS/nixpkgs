@@ -192,7 +192,7 @@ let
             script =
               ''
                 state="/run/nixos/network/addresses/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ip link set dev "${i.name}" up
 
@@ -203,17 +203,17 @@ let
                   ''
                     echo "${cidr}" >> $state
                     echo -n "adding address ${cidr}... "
-                    if out=$(ip addr replace "${cidr}" dev "${i.name}" 2>&1); then
+                    if out="$(ip addr replace "${cidr}" dev "${i.name}" 2>&1)"; then
                       echo "done"
                     else
-                      echo "'ip addr replace "${cidr}" dev "${i.name}"' failed: $out"
+                      echo "'ip addr replace ${cidr} dev ${i.name}' failed: $out"
                       exit 1
                     fi
                   ''
                 )}
 
                 state="/run/nixos/network/routes/${i.name}"
-                mkdir -p $(dirname "$state")
+                mkdir -p "$(dirname "$state")"
 
                 ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
@@ -237,7 +237,7 @@ let
             preStop = ''
               state="/run/nixos/network/routes/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting route $cidr... "
                   ip route del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"
@@ -246,7 +246,7 @@ let
 
               state="/run/nixos/network/addresses/${i.name}"
               if [ -e "$state" ]; then
-                while read cidr; do
+                while read -r cidr; do
                   echo -n "deleting address $cidr... "
                   ip addr del "$cidr" dev "${i.name}" >/dev/null 2>&1 && echo "done" || echo "failed"
                 done < "$state"
