@@ -1119,6 +1119,8 @@ let
 
         gh-notify = buildWithGit super.gh-notify;
 
+        "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
+
         # https://github.com/nlamirault/emacs-gitlab/issues/68
         gitlab = addPackageRequires super.gitlab [ self.f ];
 
