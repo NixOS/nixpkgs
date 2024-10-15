@@ -3,6 +3,8 @@
 , fetchFromGitHub
 , rustPlatform
 , makeBinaryWrapper
+, mesa
+, libglvnd
 , cosmic-icons
 , just
 , pkg-config
@@ -54,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ glib libxkbcommon wayland ];
+  buildInputs = [ glib libglvnd mesa libxkbcommon wayland ];
 
   dontUseJustBuild = true;
 
@@ -70,11 +72,22 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
 
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-files" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ xorg.libX11 xorg.libXcursor xorg.libXrandr xorg.libXi wayland ]}
+  # TODO: remove next two phases if these packages ever stop requiring mutually exclusive features
+  # Credit to lilyinstarlight
+  buildPhase = ''
+    baseCargoBuildFlags="$cargoBuildFlags"
+    cargoBuildFlags="$baseCargoBuildFlags --package cosmic-files"
+    runHook cargoBuildHook
+    cargoBuildFlags="$baseCargoBuildFlags --package cosmic-files-applet"
+    runHook cargoBuildHook
+  '';
+
+  checkPhase = ''
+    baseCargoTestFlags="$cargoTestFlags"
+    cargoTestFlags="$baseCargoTestFlags --package cosmic-files"
+    runHook cargoCheckHook
+    cargoTestFlags="$baseCargoTestFlags --package cosmic-files-applet"
+    runHook cargoCheckHook
   '';
 
   meta = with lib; {
