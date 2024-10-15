@@ -23233,8 +23233,6 @@ with pkgs;
 
   tagparser = callPackage ../development/libraries/tagparser { };
 
-  taskflow = callPackage ../development/libraries/taskflow { };
-
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
