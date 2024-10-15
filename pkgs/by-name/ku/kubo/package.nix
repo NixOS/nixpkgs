@@ -10,7 +10,7 @@ buildGoModule rec {
   version = "0.29.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
-  passthru.repoVersion = "15"; # Also update kubo-migrator when changing the repo version
+  passthru.repoVersion = "15"; # Also update kubo-migrator-unwrapped and kubo-fs-repo-migrations when changing the repo version
 
   # Kubo makes changes to its source tarball that don't match the git source.
   src = fetchurl {
