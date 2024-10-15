@@ -88,9 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" \
       --replace-fail "Exec=heroic-run" "Exec=heroic"
-    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/scalable/apps"
     ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
-    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+    ln -s "$out/share/heroic/src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
 
     runHook postInstall
   '';
