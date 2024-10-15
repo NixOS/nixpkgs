@@ -26751,8 +26751,6 @@ with pkgs;
     useQt6 = true;
   };
 
-  adw-gtk3 = callPackage ../data/themes/adw-gtk3 { };
-
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
