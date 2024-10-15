@@ -37,6 +37,7 @@ python3.pkgs.buildPythonApplication rec {
       certifi
       cheroot
       cryptography
+      dukpy
       filetype
       flask
       flask-babel
@@ -47,8 +48,7 @@ python3.pkgs.buildPythonApplication rec {
       pycurl
       semver
       setuptools
-    ]
-    ++ (if pythonOlder "3.12" then [ js2py ] else [ dukpy ]);
+    ];
 
   optional-dependencies = {
     plugins = with python3.pkgs; [
