@@ -5,6 +5,7 @@
   fetchurl,
   libxslt,
   docbook_xsl,
+  docbook_xml_dtd_43,
   gettext,
   makeWrapper,
 }:
@@ -28,6 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     libxslt
     docbook_xsl
+    docbook_xml_dtd_43
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   preFixup = ''
@@ -40,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
     description = "Tool to help manage well known user directories like the desktop folder and the music folder";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ donovanglover ];
+    maintainers = with maintainers; [
+      donovanglover
+      iFreilicht
+    ];
     platforms = platforms.unix;
     mainProgram = "xdg-user-dirs-update";
   };
