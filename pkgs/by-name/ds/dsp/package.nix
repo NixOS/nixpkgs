@@ -13,6 +13,7 @@
 , ladspaH
 , libtool
 , libpulseaudio
+, fetchpatch
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,6 +28,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
+
+  patches = [
+    # fix compatibility with ffmpeg7
+    # https://github.com/bmc0/dsp/commit/58a9d0c1f99f2d4c7fc51b6dbe563447ec60120f
+    (fetchpatch {
+      url = "https://github.com/bmc0/dsp/commit/58a9d0c1f99f2d4c7fc51b6dbe563447ec60120f.patch?full_index=1";
+      hash = "sha256-7WgJegDL9sVCRnRwm/f1ZZl2eiuRT5oAQaYoDLjEoqs=";
+    })
+  ];
 
   buildInputs = [
     fftw
