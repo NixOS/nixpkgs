@@ -15,7 +15,6 @@
   tqdm,
 
   # tests
-  nose,
   pytestCheckHook,
 }:
 
