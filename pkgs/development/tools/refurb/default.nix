@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
 
   disabledTests = [
     "test_checks" # broken because new mypy release added new checks
+    "test_mypy_consistence" # broken by new mypy release
   ];
 
   pythonImportsCheck = [
