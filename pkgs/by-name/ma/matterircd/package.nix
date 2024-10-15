@@ -20,6 +20,6 @@ buildGoModule rec {
     mainProgram = "matterircd";
     homepage = "https://github.com/42wim/matterircd";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ numinit ];
   };
 }
