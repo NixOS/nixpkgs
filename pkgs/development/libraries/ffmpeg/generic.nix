@@ -76,6 +76,7 @@
 , withJxl ? withFullDeps && lib.versionAtLeast version "5" # JPEG XL de/encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
+, withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1" # LCEVC decoding
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files
@@ -247,6 +248,7 @@
 , intel-media-sdk
 , ladspaH
 , lame
+, lcevcdec
 , lcms2
 , libaom
 , libaribcaption
@@ -607,6 +609,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withLadspa "ladspa")
   ] ++ optionals (versionAtLeast version "7.1") [
     (enableFeature withLc3 "liblc3")
+    (enableFeature withLcevcdec "liblcevc-dec")
   ] ++ optionals (versionAtLeast version "5.1") [
     (enableFeature withLcms2 "lcms2")
   ] ++ [
@@ -771,6 +774,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withJxl [ libjxl ]
   ++ optionals withLadspa [ ladspaH ]
   ++ optionals withLc3 [ liblc3 ]
+  ++ optionals withLcevcdec [ lcevcdec ]
   ++ optionals withLcms2 [ lcms2 ]
   ++ optionals withLzma [ xz ]
   ++ optionals withMfx [ intel-media-sdk ]
