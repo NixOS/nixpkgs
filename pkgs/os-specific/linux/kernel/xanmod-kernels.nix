@@ -5,19 +5,19 @@ let
 
   # NOTE: When updating these, please also take a look at the changes done to
   # kernel config in the xanmod version commit
-  ltsVariant = {
-    version = "6.6.56";
-    hash = "sha256-5EgCIMS6eZWPB8t6z6ts5sSHoeawja0diWuh/DNnvqw=";
-    variant = "lts";
+  variants = {
+    lts = {
+      version = "6.6.56";
+      hash = "sha256-5EgCIMS6eZWPB8t6z6ts5sSHoeawja0diWuh/DNnvqw=";
+    };
+
+    main = {
+      version = "6.11.3";
+      hash = "sha256-Pb/7XToBFZstI1DFgWg4a2HiRuSzA9rEsMBLb6fRvYc=";
+    };
   };
 
-  mainVariant = {
-    version = "6.11.3";
-    hash = "sha256-Pb/7XToBFZstI1DFgWg4a2HiRuSzA9rEsMBLb6fRvYc=";
-    variant = "main";
-  };
-
-  xanmodKernelFor = { version, suffix ? "xanmod1", hash, variant }: buildLinux (args // rec {
+  xanmodKernelFor = { version, suffix ? "xanmod1", hash }: buildLinux (args // rec {
     inherit version;
     modDirVersion = lib.versions.pad 3 "${version}-${suffix}";
 
@@ -64,6 +64,6 @@ let
   } // (args.argsOverride or { }));
 in
 {
-  lts = xanmodKernelFor ltsVariant;
-  main = xanmodKernelFor mainVariant;
+  lts = xanmodKernelFor variants.lts;
+  main = xanmodKernelFor variants.main;
 }
