@@ -4,11 +4,10 @@
   fetchFromGitHub,
   pytestCheckHook,
   aiohttp,
-  codecov,
   flake8,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +24,9 @@ buildPythonPackage rec {
 
   checkInputs = [
     aiohttp
-    codecov
     flake8
     pytest
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
