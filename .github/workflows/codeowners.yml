@@ -35,7 +35,7 @@ jobs:
     # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR itself.
     # We later build and run code from the base branch with access to secrets,
     # so it's important this is not the PRs code.
-    - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       with:
         path: base
 
@@ -48,7 +48,7 @@ jobs:
         app-id: ${{ vars.OWNER_APP_ID }}
         private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
 
-    - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
       with:
         ref: refs/pull/${{ github.event.number }}/merge
         path: pr
@@ -72,7 +72,7 @@ jobs:
 
     # Important: Because we use pull_request_target, this checks out the base branch of the PR, not the PR head.
     # This is intentional, because we need to request the review of owners as declared in the base branch.
-    - uses: actions/checkout@d632683dd7b4114ad314bca15554477dd762a938 # v4.2.0
+    - uses: actions/checkout@eef61447b9ff4aafe5dcd4e0bbf5d482be7e7871 # v4.2.1
 
     - uses: actions/create-github-app-token@5d869da34e18e7287c1daad50e0b8ea0f506ce69 # v1.11.0
       id: app-token
