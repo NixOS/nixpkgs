@@ -227,6 +227,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-DNIXPKGS_QT_PLUGIN_PREFIX=\"${qtPluginPrefix}\"";
 
   outputs = [ "out" "dev" ];
+  separateDebugInfo = true;
 
   moveToDev = false;
 
