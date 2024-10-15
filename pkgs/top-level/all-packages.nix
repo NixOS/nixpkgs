@@ -7194,8 +7194,6 @@ with pkgs;
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
-  tracker = callPackage ../development/libraries/tracker { };
-
   tracy-x11 = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
 
   trivy = callPackage ../tools/admin/trivy { };
@@ -35619,6 +35617,7 @@ with pkgs;
     gnome44Extensions
     gnome45Extensions
     gnome46Extensions
+    gnome47Extensions
   ;
 
   gnome-extensions-cli = python3Packages.callPackage ../desktops/gnome/misc/gnome-extensions-cli { };

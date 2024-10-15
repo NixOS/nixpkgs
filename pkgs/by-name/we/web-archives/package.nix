@@ -11,7 +11,7 @@
   libzim-glib,
   sqlite,
   webkitgtk_4_1,
-  tracker,
+  tinysparql,
   libxml2,
   libisocodes,
   libhandy,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libzim-glib
     sqlite
     webkitgtk_4_1
-    tracker
+    tinysparql
     libxml2
     libisocodes
     libhandy

@@ -27,8 +27,8 @@
 , nixosTests
 , pkg-config
 , python3
-, tracker
-, tracker-miners
+, tinysparql
+, localsearch
 , wrapGAppsHook3
 }:
 
@@ -80,8 +80,8 @@ stdenv.mkDerivation rec {
     libdazzle
     libportal-gtk3
     libhandy
-    tracker
-    tracker-miners # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
+    tinysparql
+    localsearch # For 'org.freedesktop.Tracker.Miner.Files' GSettings schema
 
     at-spi2-core # for tests
   ];
