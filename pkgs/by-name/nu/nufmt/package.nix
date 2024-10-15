@@ -36,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     description = "Nushell formatter";
     homepage = "https://github.com/nushell/nufmt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ iogamaster ];
+    maintainers = with lib.maintainers; [
+      iogamaster
+      khaneliman
+    ];
     mainProgram = "nufmt";
   };
 }
