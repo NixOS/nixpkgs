@@ -13,6 +13,18 @@ in
 
       package = mkPackageOption pkgs "prowlarr" { };
 
+      user = mkOption {
+        type = types.str;
+        default = "prowlarr";
+        description = lib.mdDoc "User account under which Prowlarr runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "prowlarr";
+        description = lib.mdDoc "Group under which Prowlarr runs.";
+      };
+
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -29,12 +41,21 @@ in
 
       serviceConfig = {
         Type = "simple";
-        DynamicUser = true;
+        User = cfg.user;
+        Group = cfg.group;
         StateDirectory = "prowlarr";
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
         Restart = "on-failure";
       };
       environment.HOME = "/var/empty";
+    };
+
+    users.users = mkIf (cfg.user == "prowlarr") {
+      prowlarr = { group = cfg.group; };
+    };
+
+    users.groups = mkIf (cfg.group == "prowlarr") {
+      prowlarr = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
