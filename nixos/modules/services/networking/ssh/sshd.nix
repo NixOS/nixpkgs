@@ -854,6 +854,9 @@ in
 
           serviceConfig =
             {
+              CapabilityBoundingSet = [
+                "~CAP_CHOWN"
+              ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
                 + "${cfg.package}/bin/sshd "
