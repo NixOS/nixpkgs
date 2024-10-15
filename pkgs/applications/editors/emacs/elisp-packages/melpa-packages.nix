@@ -809,6 +809,9 @@ let
         # https://github.com/boogie-org/boogie-friends/issues/42
         boogie-friends = ignoreCompilationError (addPackageRequires super.boogie-friends [ self.lsp-mode ]);
 
+        # this package probably should not be compiled in nix build sandbox
+        borg = ignoreCompilationError super.borg;
+
         bpr = super.bpr.overrideAttrs (
           finalAttrs: previousAttrs: {
             # https://github.com/melpa/melpa/pull/9181
