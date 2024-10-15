@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "siphashc";
-  version = "2.4.1";
+  version = "2.5";
   pyproject = true;
   build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ptNpy7VkUXHbjvdir6v+eYOmtQ/j8XPXq4lj7ceS/5s=";
+    sha256 = "sha256-o7zGnOM96+C0I98iSYzua2MB8TP1okdw/m9O9I2DK00=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

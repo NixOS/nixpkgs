@@ -8,6 +8,7 @@
   ciso8601,
   cryptography,
   fetchFromGitHub,
+  fetchpatch2,
   pycognito,
   pyjwt,
   pytest-aiohttp,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
-  version = "0.81.1";
+  version = "0.82.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -31,11 +32,10 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = "hass-nabucasa";
     rev = "refs/tags/${version}";
-    hash = "sha256-/sY/JijBCcGcbMjoX0yuhFIWvU+TFVN8sRxBx+CDVVs=";
+    hash = "sha256-hRhRXpiIPrI3umOhsVWLwkSwtEfwevC3fNvJElhKy+I=";
   };
 
   pythonRelaxDeps = [ "acme" ];
-
 
   build-system = [ setuptools ];
 

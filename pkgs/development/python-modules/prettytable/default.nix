@@ -12,24 +12,24 @@
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.10.1";
-  format = "pyproject";
+  version = "3.11.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "prettytable";
     rev = "refs/tags/${version}";
-    hash = "sha256-S23nUCA2WTxnCKKKFrtN9HYjP0SHUBPPsVNAc4SYlVg=";
+    hash = "sha256-LtphoD5gCMgWgDcFghinq9zjUD69XudEeGIToqqmVPs=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-vcs
     hatchling
   ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  dependencies = [ wcwidth ];
 
   nativeCheckInputs = [
     pytest-lazy-fixtures

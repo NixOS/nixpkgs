@@ -10928,6 +10928,14 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.051.tar.gz";
       hash = "sha256-ZWlhHcyArBSCx8IiZLGujJw1HUmDUR65psX0ehAVAIk=";
     };
+    patches = [
+      # Fix build with gobject-introspection 1.82
+      # https://gitlab.gnome.org/GNOME/perl-glib-object-introspection/-/issues/7
+      (fetchpatch {
+        url = "https://gitlab.gnome.org/GNOME/perl-glib-object-introspection/-/commit/e5adffecdc9b321d1f8d91777b190b8ae08f8dd0.patch";
+        hash = "sha256-/QAhKENSeP+QRoWx/v8EMFPOouZ36Qd78lhZpvInz7Q=";
+      })
+    ];
     nativeCheckInputs = [ pkgs.cairo CairoGObject ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     preCheck = ''

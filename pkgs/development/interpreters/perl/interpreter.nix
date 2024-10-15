@@ -67,6 +67,9 @@ stdenv.mkDerivation (rec {
     ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
     ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
 
+    # Fix compilation on platforms with only a C locale: https://github.com/Perl/perl5/pull/22569
+    ++ lib.optional (version == "5.40.0") ./fix-build-with-only-C-locale-5.40.0.patch
+
     ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
     ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch

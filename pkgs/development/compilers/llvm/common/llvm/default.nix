@@ -17,6 +17,7 @@
   # TODO: Can this memory corruption bug still occur?
   # <https://github.com/llvm/llvm-project/issues/61350>
 , enableGoldPlugin ? libbfd.hasPluginAPI
+, ld64
 , libbfd
 , libpfm
 , libxml2
@@ -46,6 +47,11 @@
 let
   inherit (lib) optional optionals optionalString;
 
+  # Is there a better way to do this? Darwin wants to disable tests in the first
+  # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
+  # and libunwind. It also wants to disable LTO in the first rebuild.
+  isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
+
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
@@ -66,7 +72,7 @@ let
   #
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
-  python = if doCheck then
+  python = if doCheck && !isDarwinBootstrap then
     # Note that we _explicitly_ ask for a python interpreter for our host
     # platform here; the splicing that would ordinarily take care of this for
     # us does not seem to work once we use `withPackages`.
@@ -95,14 +101,14 @@ let
   patches' = patches ++ lib.optionals enablePolly pollyPatches;
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
   patches = patches';
 
   sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+    else "${finalAttrs.src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
 
@@ -346,13 +352,13 @@ stdenv.mkDerivation (rec {
     ];
   in flagsForLlvmConfig ++ [
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
-  ] ++ optionals (!doCheck) [
+  ] ++ optionals (!finalAttrs.finalPackage.doCheck) [
     "-DLLVM_INCLUDE_TESTS=OFF"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
@@ -432,7 +438,7 @@ stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '');
 
-  inherit doCheck;
+  doCheck = !isDarwinBootstrap && doCheck;
 
   checkTarget = "check-all";
 

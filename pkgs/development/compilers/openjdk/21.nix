@@ -14,8 +14,8 @@
 let
   version = {
     feature = "21";
-    interim = ".0.3";
-    build = "9";
+    interim = ".0.4";
+    build = "7";
   };
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -29,7 +29,7 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
-      hash = "sha256-zRN16lrc5gtDlTVIQJRRx103w/VbRkatCLeEc9AXWPE=";
+      hash = "sha256-+xpQtQ1IQ7btVWnENT9XS5A/2VP101/+XR3BMo8BqYI=";
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ensureNewerSourcesForZipFilesHook ];

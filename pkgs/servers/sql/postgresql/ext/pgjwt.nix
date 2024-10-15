@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, unstableGitUpdater, nixosTests }:
+{ lib, stdenv, fetchFromGitHub, postgresql, unstableGitUpdater, nixosTests, postgresqlTestExtension }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pgjwt";
   version = "0-unstable-2023-03-02";
 
@@ -19,7 +19,17 @@ stdenv.mkDerivation {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  passthru.tests = { inherit (nixosTests) pgjwt; };
+  passthru.tests = {
+    inherit (nixosTests) pgjwt;
+
+    extension = postgresqlTestExtension {
+      inherit (finalAttrs) finalPackage;
+      sql = ''
+        CREATE EXTENSION pgjwt CASCADE;
+        SELECT sign('{"sub":"1234567890","name":"John Doe","admin":true}', 'secret');
+      '';
+    };
+  };
 
   meta = with lib; {
     description = "PostgreSQL implementation of JSON Web Tokens";
@@ -30,4 +40,4 @@ stdenv.mkDerivation {
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [spinus];
   };
-}
+})

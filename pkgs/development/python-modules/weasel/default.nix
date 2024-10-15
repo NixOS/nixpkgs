@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "weasel";
-  version = "0.3.4";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "weasel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6Ck8R10/YW2Nc6acNk2bzgyqSg+OPqwyJjhUgXP/umw=";
+    hash = "sha256-gXPHEoEY0qKcpAtqHlUw5c43/6hKseCx+vBNzEXFF2A=";
   };
 
   pythonRelaxDeps = [
@@ -36,11 +36,9 @@ buildPythonPackage rec {
     "typer"
   ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     cloudpathlib
     confection
     packaging
@@ -59,14 +57,16 @@ buildPythonPackage rec {
   disabledTests = [
     # This test requires internet access
     "test_project_assets"
+    "test_project_git_dir_asset"
+    "test_project_git_file_asset"
   ];
 
   meta = with lib; {
     description = "Small and easy workflow system";
-    mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ GaetanLepage ];
+    mainProgram = "weasel";
   };
 }

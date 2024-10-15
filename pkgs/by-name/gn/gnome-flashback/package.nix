@@ -34,7 +34,8 @@
 
 let
   # From data/sessions/Makefile.am
-  requiredComponentsCommon = enableGnomePanel: [ ] ++ lib.optional enableGnomePanel "gnome-panel";
+  requiredComponentsCommon =
+    enableGnomePanel: [ "gnome-flashback" ] ++ lib.optional enableGnomePanel "gnome-panel";
   requiredComponentsGsd = [
     "org.gnome.SettingsDaemon.A11ySettings"
     "org.gnome.SettingsDaemon.Color"
@@ -63,11 +64,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-flashback";
-  version = "3.52.1";
+  version = "3.54.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-flashback/${lib.versions.majorMinor finalAttrs.version}/gnome-flashback-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ugRhPNrbYr2iBkN8BHKZ4WAlzeG9gJXglKp3dpx4YDo=";
+    hash = "sha256-gkNa4wLNZK6xG25M0YTaj/+qzSSFFf+gIidZXDzPne4=";
   };
 
   # make .desktop Execs absolute

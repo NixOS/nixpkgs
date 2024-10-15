@@ -10,6 +10,7 @@
 
   # tests
   hypothesis,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -25,12 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-HFM8UN3oa+8caVBgIFSg/6PDduiw4gx7j1sQh5P2mD4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov" ""
-  '';
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
@@ -39,6 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     hypothesis
+    pytest-cov-stub
     pytestCheckHook
   ];
 

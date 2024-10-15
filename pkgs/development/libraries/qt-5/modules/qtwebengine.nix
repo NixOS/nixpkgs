@@ -20,11 +20,7 @@
 , systemd
 , enableProprietaryCodecs ? true
 , gn
-, cctools, libobjc, libpm, libunwind, sandbox, xnu
-, ApplicationServices, AVFoundation, Foundation, ForceFeedback, GameController, AppKit
-, ImageCaptureCore, CoreBluetooth, IOBluetooth, CoreWLAN, Quartz, Cocoa, LocalAuthentication
-, MediaPlayer, MediaAccessibility, SecurityInterface, Vision, CoreML, OpenDirectory, Accelerate
-, cups, openbsm, xcbuild, writeScriptBin
+, apple-sdk_13, cctools, cups, bootstrap_cmds, xcbuild, writeScriptBin
 , ffmpeg ? null
 , lib, stdenv
 , version ? null
@@ -55,7 +51,8 @@ let
 
 in
 
-qtModule ({
+# Override the SDK because Qt WebEngine doesn’t seem to build using the 14.4 SDK.
+(qtModule.override { apple-sdk_for_qt = apple-sdk_13; }) ({
   pname = "qtwebengine";
   nativeBuildInputs = [
     bison flex git gperf ninja pkg-config (python.withPackages(ps: [ ps.html5lib ])) which gn nodejs
@@ -65,7 +62,7 @@ qtModule ({
     pkgsBuildBuild.pkg-config
     (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
     pkg-config-wrapped-without-prefix
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin [ bootstrap_cmds xcbuild ];
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
 
@@ -158,22 +155,6 @@ qtModule ({
     substituteInPlace src/buildtools/config/mac_osx.pri \
       --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
-    # Following is required to prevent a build error:
-    # ninja: error: '/nix/store/z8z04p0ph48w22rqzx7ql67gy8cyvidi-SDKs/MacOSX10.12.sdk/usr/include/mach/exc.defs', needed by 'gen/third_party/crashpad/crashpad/util/mach/excUser.c', missing and no known rule to make it
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/BUILD.gn \
-      --replace '$sysroot/usr' "${xnu}"
-
-    # Apple has some secret stuff they don't share with OpenBSM
-    substituteInPlace src/3rdparty/chromium/base/mac/mach_port_rendezvous.cc \
-      --replace "audit_token_to_pid(request.trailer.msgh_audit)" "request.trailer.msgh_audit.val[5]"
-    substituteInPlace src/3rdparty/chromium/third_party/crashpad/crashpad/util/mach/mach_message.cc \
-      --replace "audit_token_to_pid(audit_trailer->msgh_audit)" "audit_trailer->msgh_audit.val[5]"
-
-    # ld: warning: directory not found for option '-L/nix/store/...-xcodebuild-0.1.2-pre/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX11.0.sdk/usr/lib'
-    # ld: fatal warning(s) induced error (-fatal_warnings)
-    substituteInPlace src/3rdparty/chromium/build/config/compiler/BUILD.gn \
-      --replace "-Wl,-fatal_warnings" ""
-
     # Use system ffmpeg
     echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
     echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
@@ -257,40 +238,10 @@ qtModule ({
 
   # FIXME These dependencies shouldn't be needed but can't find a way
   # around it. Chromium pulls this in while bootstrapping GN.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libobjc
-    cctools
-
-    # frameworks
-    ApplicationServices
-    AVFoundation
-    Foundation
-    ForceFeedback
-    GameController
-    AppKit
-    ImageCaptureCore
-    CoreBluetooth
-    IOBluetooth
-    CoreWLAN
-    Quartz
-    Cocoa
-    LocalAuthentication
-    MediaPlayer
-    MediaAccessibility
-    SecurityInterface
-    Vision
-    CoreML
-    OpenDirectory
-    Accelerate
-
-    openbsm
-    libunwind
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cups
-    libpm
-    sandbox
 
     # `sw_vers` is used by `src/3rdparty/chromium/build/config/mac/sdk_info.py`
     # to get some information about the host platform.

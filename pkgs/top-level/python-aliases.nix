@@ -228,6 +228,7 @@ mapAliases ({
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05
   garages-amsterdam = throw "garages-amsterdam has been renamed odp-amsterdam."; # added 2023-01-04
   garminconnect-ha = garminconnect; # added 2022-02-05
+  gbulb = throw "gbulb has been removed as it is unmaintained and no longer compatible with PyGObject 3.50."; # added 2024-10-14
   gcs-oauth2-boto-plugin = throw "gcs-oauth2-boto-plugin was removed as it depends on the removed boto package"; # Added 2024-09-22
   gdtoolkit = throw "gdtoolkit has been promoted to a top-level attribute name: `pkgs.gdtoolkit`"; # added 2023-02-15
   GeoIP = geoip; # added 2023-02-19
@@ -642,6 +643,7 @@ mapAliases ({
   torrent_parser = torrent-parser; # added 2023-11-04
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
+  transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
