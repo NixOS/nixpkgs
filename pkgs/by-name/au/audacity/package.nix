@@ -60,14 +60,14 @@
 # TODO
 # 1. detach sbsms
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
   version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
-    rev = "Audacity-${version}";
+    rev = "Audacity-${finalAttrs.version}";
     hash = "sha256-72k79UFxhk8JUCnMzbU9lZ0Ua3Ui41EkhPGSnGkf9mE=";
   };
 
@@ -201,12 +201,12 @@ stdenv.mkDerivation rec {
       makeWrapper $out/Applications/Audacity.app/Contents/MacOS/Audacity $out/bin/audacity
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Sound editor with graphical UI";
     mainProgram = "audacity";
     homepage = "https://www.audacityteam.org";
     changelog = "https://github.com/audacity/audacity/releases";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2Plus
       # Must be GPL3 when building with "technologies that require it,
       # such as the VST3 audio plugin interface".
@@ -215,10 +215,10 @@ stdenv.mkDerivation rec {
       # Documentation.
       cc-by-30
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       veprbl
       wegank
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
