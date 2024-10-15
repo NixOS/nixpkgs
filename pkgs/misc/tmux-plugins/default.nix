@@ -378,14 +378,14 @@ in rec {
     };
   };
 
-  nord = mkTmuxPlugin rec {
+  nord = mkTmuxPlugin {
     pluginName = "nord";
-    version = "0.3.0";
+    version = "0.3.0-unstable-2023-03-03";
     src = pkgs.fetchFromGitHub {
       owner = "nordtheme";
       repo = "tmux";
-      rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+      rev = "f7b6da07ab55fe32ee5f7d62da56d8e5ac691a92";
+      hash = "sha256-mcmVYNWOUoQLiu4eM/EUudRg67Gcou13xuC6zv9aMKA=";
     };
     meta = {
       homepage = "https://www.nordtheme.com/ports/tmux";
@@ -399,6 +399,7 @@ in rec {
           theme in order to work properly.
       '';
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sigmasquadron ];
     };
   };
 
