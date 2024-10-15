@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://crates.io/crates/ravedude";
     license = with licenses; [ mit /* or */ asl20 ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rvarago ];
+    maintainers = with maintainers; [ rvarago liff ];
     mainProgram = "ravedude";
   };
 }
