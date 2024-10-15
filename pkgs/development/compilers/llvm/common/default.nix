@@ -713,8 +713,12 @@ let
             #
             # See here for some context:
             # https://github.com/NixOS/nixpkgs/pull/194634#issuecomment-1272129132
+            #
+            # Patch is applied for >= 14 as the versions below are broken anyways.
             ++ lib.optional (
-              stdenv.targetPlatform.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
+              lib.versionAtLeast metadata.release_version "14"
+              && stdenv.targetPlatform.isDarwin
+              && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
             ) (metadata.getVersionFile "lldb/cpu_subtype_arm64e_replacement.patch");
         }
         // lib.optionalAttrs (lib.versions.major metadata.release_version == "16") {
