@@ -856,6 +856,7 @@ in
             {
               CapabilityBoundingSet = [
                 "~CAP_CHOWN"
+                "~CAP_DAC_OVERRIDE"
                 "~CAP_FSETID"
                 "~CAP_SETFCAP"
               ];
