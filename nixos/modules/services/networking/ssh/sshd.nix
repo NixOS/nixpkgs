@@ -856,6 +856,7 @@ in
             {
               CapabilityBoundingSet = [
                 "~CAP_CHOWN"
+                "~CAP_FSETID"
               ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
