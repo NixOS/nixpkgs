@@ -862,6 +862,9 @@ in
                 # don't detach into a daemon process
                 + "-f /etc/ssh/sshd_config";
               KillMode = "process";
+              SystemCallFilter = [
+                "~@clock"
+              ];
             }
             // (
               if cfg.startWhenNeeded then
