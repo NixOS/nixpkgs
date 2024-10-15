@@ -29,7 +29,6 @@
 , symlinkJoin
 , enableInstaller ? false, bzip2, sqlite
 , enableMacOSGuests ? false, fetchFromGitHub, unzip
-, enableGuestTools ? true,
 }:
 
 let
@@ -38,33 +37,8 @@ let
   build = "24319023";
   baseUrl = "https://softwareupdate.vmware.com/cds/vmw-desktop/ws/${version}/${build}/linux";
 
-  # tools - versions
-  toolsVersion = "12.4.5";
-  toolsBuild = "23787635";
-
   # macOS - versions
-  fusionVersion = "13.5.2";
-  fusionBuild = "23775688";
   unlockerVersion = "3.0.5";
-
-  guestToolsSrc =
-  let
-    fetchComponent = (system: hash: fetchzip {
-      inherit hash;
-      url = "${baseUrl}/packages/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component.tar";
-      stripRoot = false;
-    } + "/vmware-tools-${system}-${toolsVersion}-${toolsBuild}.x86_64.component");
-  in lib.mapAttrsToList fetchComponent {
-      windows = "sha256-cv/5hv73c9ZaJsbDYdiedHtVARhw6YaFyJ+66rR/T3Y=";
-      windows-x86 = "sha256-4ZtihmocGIF+4yMlqP5Hb9gFt+AxXGzdHQbVCxTs41Q=";
-  };
-
-  # macOS - ISOs
-  darwinIsoSrc = fetchzip {
-    url = "https://softwareupdate.vmware.com/cds/vmw-desktop/fusion/${fusionVersion}/${fusionBuild}/universal/core/com.vmware.fusion.zip.tar";
-    sha256 = "sha256-DDLRWAVRI3ZeXV5bUXWwput9mEC1qsJUsjojI0CJYMI=";
-    stripRoot = false;
-  } + "/com.vmware.fusion.zip";
 
   # macOS - Unlocker
   unlockerSrc = fetchFromGitHub {
@@ -122,19 +96,9 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   } + "/VMware-Workstation-${version}-${build}.x86_64.bundle";
 
-  unpackPhase = let
-    guestTools = lib.optionalString enableGuestTools (lib.concatMapStringsSep " " (src: "--install-component ${src}") guestToolsSrc);
-  in
+  unpackPhase =
   ''
-    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} ${guestTools} --extract unpacked"
-
-    ${lib.optionalString enableMacOSGuests ''
-      mkdir -p fusion/
-      unzip "${darwinIsoSrc}" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-        "payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-        -d fusion/
-    ''}
+    ${vmware-unpack-env}/bin/vmware-unpack-env -c "sh ${src} --extract unpacked"
   '';
 
   postPatch = lib.optionalString enableMacOSGuests ''
@@ -276,23 +240,6 @@ stdenv.mkDerivation rec {
     echo "Installing VMware Network Editor"
     unpacked="unpacked/vmware-network-editor"
     cp -r $unpacked/lib $out/lib/vmware/
-
-    mkdir -p $out/lib/vmware/isoimages/
-
-    ${lib.optionalString enableGuestTools ''
-    echo "Installing VMware Tools"
-    cp unpacked/vmware-tools-windows/windows.iso \
-       unpacked/vmware-tools-windows-x86/windows-x86.iso \
-       $out/lib/vmware/isoimages/
-    ''}
-
-    ${lib.optionalString enableMacOSGuests ''
-      echo "Installing VMWare Tools for MacOS"
-      cp -v \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwin.iso" \
-       "fusion/payload/VMware Fusion.app/Contents/Library/isoimages/x86_x64/darwinPre15.iso" \
-       $out/lib/vmware/isoimages/
-    ''}
 
     ## VMware Player Application
     echo "Installing VMware Player Application"
