@@ -1,0 +1,13 @@
+diff --git a/meson.build b/meson.build
+index 5bbba54..736e3e2 100644
+--- a/meson.build
++++ b/meson.build
+@@ -45,7 +45,7 @@ configure_file(input: 'sshfs.1.in',
+ configure_file(output: 'config.h',
+                configuration : cfg)
+ 
+-sshfs_deps = [ dependency('fuse', version: '>= 2.3'),
++sshfs_deps = [ dependency('fuse-t'),
+                dependency('glib-2.0'),
+                dependency('gthread-2.0') ]
+ 
