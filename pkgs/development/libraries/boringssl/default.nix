@@ -43,17 +43,25 @@ buildGoModule {
   # CMAKE_OSX_ARCHITECTURES is set to x86_64 by Nix, but it confuses boringssl on aarch64-linux.
   cmakeFlags = [ "-GNinja" ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ "-DCMAKE_OSX_ARCHITECTURES=" ];
 
-  installPhase = ''
-    mkdir -p $bin/bin $dev $out/lib
-
-    mv tool/bssl $bin/bin
-
-    mv ssl/libssl.a           $out/lib
-    mv crypto/libcrypto.a     $out/lib
-    mv decrepit/libdecrepit.a $out/lib
-
-    mv ../include $dev
+  installPhase = "ninjaInstallPhase";
+  postInstall = ''
+    [[ -d ''${!outputDev}/include ]] || exit 1
+    [[ -f ''${!outputBin}/bin/bssl ]] || exit 1
+    [[ -f ''${!outputLib}/lib/libssl.a ]] || exit 1
+    [[ -f ''${!outputLib}/lib/libcrypto.a ]] || exit 1
+    install --mode=444 decrepit/libdecrepit.a ''${!outputLib}/lib/libdecrepit.a
   '';
+  # installPhase = ''
+  #   mkdir -p $bin/bin $dev $out/lib
+
+  #   mv tool/bssl $bin/bin
+
+  #   mv ssl/libssl.a           $out/lib
+  #   mv crypto/libcrypto.a     $out/lib
+  #   mv decrepit/libdecrepit.a $out/lib
+
+  #   mv ../include $dev
+  # '';
 
   outputs = [ "out" "bin" "dev" ];
 
