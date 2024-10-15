@@ -1082,22 +1082,6 @@ won't take effect until you reboot the system.
         .subscribe()
         .context("Failed to subscribe to systemd dbus messages")?;
 
-    // Wait for the system to have finished booting.
-    loop {
-        let system_state: String = systemd
-            .get("org.freedesktop.systemd1.Manager", "SystemState")
-            .context("Failed to get system state")?;
-
-        match system_state.as_str() {
-            "running" | "degraded" | "maintenance" => break,
-            _ => {
-                _ = dbus_conn
-                    .process(Duration::from_millis(500))
-                    .context("Failed to process dbus messages")?
-            }
-        }
-    }
-
     let _systemd_reload_status = systemd_reload_status.clone();
     let reloading_token = systemd
         .match_signal(
