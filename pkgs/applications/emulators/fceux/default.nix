@@ -1,13 +1,14 @@
-{ lib
-, SDL2
-, cmake
-, fetchFromGitHub
-, lua
-, minizip
-, pkg-config
-, qt5
-, stdenv
-, x264
+{
+  lib,
+  SDL2,
+  cmake,
+  fetchFromGitHub,
+  lua,
+  minizip,
+  pkg-config,
+  qt5,
+  stdenv,
+  x264,
 }:
 
 let
@@ -40,10 +41,13 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "http://www.fceux.com/";
     description = "Nintendo Entertainment System (NES) Emulator";
-    mainProgram = "fceux";
     changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
     license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres sbruder ];
+    mainProgram = "fceux";
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      sbruder
+    ];
     platforms = lib.platforms.linux;
   };
 })
