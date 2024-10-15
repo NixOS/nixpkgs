@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
       # I observe this test failing with some regularity on ARMv7:
       # https://github.com/libuv/libuv/issues/1871
       "shutdown_close_pipe"
+    ] ++ lib.optionals stdenv.hostPlatform.isS390x [
+      "signal_multiple_loops"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
     in lib.optionalString (finalAttrs.finalPackage.doCheck) ''
