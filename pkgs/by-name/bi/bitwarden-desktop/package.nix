@@ -2,7 +2,6 @@
 , buildNpmPackage
 , cargo
 , copyDesktopItems
-, dbus
 , electron_32
 , fetchFromGitHub
 , glib
@@ -135,7 +134,6 @@ in buildNpmPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
-    dbus
     (gnome-keyring.override { useWrappedDaemon = false; })
   ];
 
@@ -148,14 +146,9 @@ in buildNpmPackage rec {
 
     (
       cd ${cargoRoot}
-      export HOME=$(mktemp -d)
-      export cargoCheckType=release
-      for function in $(declare -F | awk '{print $3}'); do
-        export -f "$function"
-      done
-      dbus-run-session \
-        --config-file=${dbus}/share/dbus-1/session.conf \
-        -- bash -e -c cargoCheckHook
+      HOME=$(mktemp -d)
+      cargoCheckType=release
+      cargoCheckHook
     )
 
     runHook postCheck
