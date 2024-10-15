@@ -19,7 +19,7 @@ let
     input = ${lib.generators.toJSON {} packageNames}
 
     if isfile("extra_package_names.txt")
-      append!(input, readlines("extra_package_names.txt"))
+        append!(input, readlines("extra_package_names.txt"))
     end
 
     input = unique(input)
@@ -34,17 +34,17 @@ let
     ${builtins.readFile ./resolve_packages.jl}
 
     open(ENV["out"], "w") do io
-      for spec in pkgs
-        println(io, "- name: " * spec.name)
-        println(io, "  uuid: " * string(spec.uuid))
-        println(io, "  version: " * string(spec.version))
-        if endswith(spec.name, "_jll") && haskey(deps_map, spec.uuid)
-          println(io, "  depends_on: ")
-          for (dep_name, dep_uuid) in pairs(deps_map[spec.uuid])
-            println(io, "    \"$(dep_name)\": \"$(dep_uuid)\"")
-          end
+        for spec in pkgs
+            println(io, "- name: " * spec.name)
+            println(io, "  uuid: " * string(spec.uuid))
+            println(io, "  version: " * string(spec.version))
+            if endswith(spec.name, "_jll") && haskey(deps_map, spec.uuid)
+                println(io, "  depends_on: ")
+                for (dep_name, dep_uuid) in pairs(deps_map[spec.uuid])
+                    println(io, "    \"$(dep_name)\": \"$(dep_uuid)\"")
+                end
+            end
         end
-      end
     end
   '';
 in
