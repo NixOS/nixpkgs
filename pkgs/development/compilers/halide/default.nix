@@ -14,6 +14,8 @@
   openblas,
   blas,
   lapack,
+  pythonSupport ? false,
+  python3Packages ? null,
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -56,7 +58,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWARNINGS_AS_ERRORS=OFF"
-    "-DWITH_PYTHON_BINDINGS=OFF"
+    "-DWITH_PYTHON_BINDINGS=${if pythonSupport then "ON" else "OFF"}"
     "-DTARGET_WEBASSEMBLY=OFF"
     # Disable performance tests since they may fail on busy machines
     "-DWITH_TEST_PERFORMANCE=OFF"
@@ -66,6 +68,7 @@ stdenv.mkDerivation rec {
     "-DWITH_TEST_FUZZ=OFF"
     # Disable FetchContent for flatbuffers and use the version from nixpkgs instead
     "-DFLATBUFFERS_USE_FETCHCONTENT=OFF"
+    "-DPYBIND11_USE_FETCHCONTENT=OFF"
   ];
 
   doCheck = true;
@@ -85,6 +88,12 @@ stdenv.mkDerivation rec {
     ''
       checkFlagsArray+=("ARGS=-E '${disabledTests}'")
     '';
+
+  postInstall = lib.optionalString pythonSupport ''
+    mkdir -p $out/${builtins.dirOf python3Packages.python.sitePackages}
+    mv -v $out/lib/python3/site-packages $out/${python3Packages.python.sitePackages}
+    rmdir $out/lib/python3/
+  '';
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -106,7 +115,20 @@ stdenv.mkDerivation rec {
       libGL
     ];
 
-  nativeBuildInputs = [ cmake flatbuffers ];
+  nativeBuildInputs =
+    [
+      cmake
+      flatbuffers
+    ]
+    ++ lib.optionals pythonSupport [
+      python3Packages.python
+      python3Packages.pybind11
+    ];
+
+  propagatedBuildInputs = lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.imageio
+  ];
 
   meta = with lib; {
     description = "C++ based language for image processing and computational photography";
