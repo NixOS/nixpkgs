@@ -31,13 +31,13 @@ assert lib.elem ___qtVersion [
 ];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
-  version = "2.6.6-unstable-2024-01-19";
+  version = "2.6.6-unstable-2024-06-09";
 
   src = fetchFromGitHub {
     owner = "TASEmulators";
     repo = "fceux";
-    rev = "2fce5ffe745bb89be471e450d9cd6284cd5614d9";
-    hash = "sha256-5uUTw7ZkmBrGuntSQFNAp1Xz69ANmmIxNGd0/enPoW8=";
+    rev = "f980ec2bc7dc962f6cd76b9ae3131f2eb902c9e7";
+    hash = "sha256-baAjrTzRp61Lw1p5axKJ97PuFiuBNQewXrlN0s8o7us=";
   };
 
   nativeBuildInputs = [
