@@ -2,7 +2,6 @@
 , lib
 , Security
 , openssl
-, git
 , pkg-config
 , protobuf
 , rustPlatform
@@ -14,13 +13,13 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "5.18.0";
+  version = "5.21.0";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-ucAOz00dBgX2Bb63ueaBbyu1XtVQD+96EncUyo7STwA=";
+    hash = "sha256-X5aBrnyZ/tMykJFifyY1LeR/nShBlxm9HazVE0L7RJk=";
   };
 
   # Use system openssl.
@@ -33,21 +32,23 @@ rustPlatform.buildRustPackage rec {
       "cuid-1.3.2" = "sha256-qBu1k/dJiA6rWBwk4nOOqouIneD9h2TTBT8tvs0TDfA=";
       "graphql-parser-0.3.0" = "sha256-0ZAsj2mW6fCLhwTETucjbu4rPNzfbNiHu2wVTBlTNe4=";
       "mysql_async-0.31.3" = "sha256-2wOupQ/LFV9pUifqBLwTvA0tySv+XWbxHiqs7iTzvvg=";
-      "postgres-native-tls-0.5.0" = "sha256-UYPsxhCkXXWk8yPbqjNS0illwjS5mVm3Z/jFwpVwqfw=";
+      "postgres-native-tls-0.5.0" = "sha256-4CftieImsG2mBqpoJFfyq0R2yd2EyQX4oddAwyXMDZc=";
+      "mongodb-3.0.0" = "sha256-1WQgY0zSZhFjt1nrLYTUBrpqBxpCCgKRSeGJLtkE6pw=";
     };
   };
 
-  nativeBuildInputs = [ pkg-config git ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     openssl
     protobuf
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  # FIXME: Workaround Rust 1.80 support by updating time to 0.3.36
-  # https://github.com/prisma/prisma-engines/issues/4989
+  # FIXME: fix this upstream and remove this patch with the next version update.
   postPatch = ''
-    ln -sfn ${./Cargo.lock} Cargo.lock
+    file=libs/user-facing-errors/src/schema_engine.rs
+    echo "#![allow(dead_code)]" | cat - $file > $file.new
+    mv $file.new $file
   '';
 
   preBuild = ''
@@ -59,6 +60,8 @@ rustPlatform.buildRustPackage rec {
 
     export SQLITE_MAX_VARIABLE_NUMBER=250000
     export SQLITE_MAX_EXPR_DEPTH=10000
+
+    export GIT_HASH=0000000000000000000000000000000000000000
   '';
 
   cargoBuildFlags = [
