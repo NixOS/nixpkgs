@@ -934,6 +934,10 @@ let
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
 
+        consult-gh = super.consult-gh.overrideAttrs (old: {
+          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+        });
+
         consult-gh-forge = buildWithGit super.consult-gh-forge;
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
