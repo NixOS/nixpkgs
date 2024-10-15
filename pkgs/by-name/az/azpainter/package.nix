@@ -1,34 +1,55 @@
-{ lib, stdenv, fetchFromGitLab
-, desktop-file-utils, shared-mime-info, ninja, pkg-config
-, libiconv
-, libX11, libXcursor, libXext, libXi
-, freetype, fontconfig
-, libjpeg, libpng, libtiff, libwebp
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  desktop-file-utils,
+  desktopToDarwinBundle,
+  shared-mime-info,
+  ninja,
+  pkg-config,
+  libiconv,
+  libX11,
+  libXcursor,
+  libXext,
+  libXi,
+  freetype,
+  fontconfig,
+  libjpeg,
+  libpng,
+  libtiff,
+  libwebp,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "3.0.8";
+  version = "3.0.9a";
 
   src = fetchFromGitLab {
     owner = "azelpg";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-NiQYX/Dcl/t30Jx08DKr6EP5ODS00pyEGKh/qiNT5t4=";
+    hash = "sha256-QWXlRbCGDk1DRtePeDM3tnbtkdlhbkn/oNTqHvmtEA4=";
   };
 
   nativeBuildInputs = [
     desktop-file-utils # for update-desktop-database
-    shared-mime-info   # for update-mime-info
+    shared-mime-info # for update-mime-info
     ninja
     pkg-config
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
-    libX11 libXcursor libXext libXi
-    freetype fontconfig
-    libjpeg libpng libtiff libwebp
+    libX11
+    libXcursor
+    libXext
+    libXi
+    freetype
+    fontconfig
+    libjpeg
+    libpng
+    libtiff
+    libwebp
     zlib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
