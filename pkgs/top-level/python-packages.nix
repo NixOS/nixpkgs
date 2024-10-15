@@ -10650,8 +10650,6 @@ self: super: with self; {
 
   preggy = callPackage ../development/python-modules/preggy { };
 
-  premailer = callPackage ../development/python-modules/premailer { };
-
   preprocess-cancellation = callPackage ../development/python-modules/preprocess-cancellation { };
 
   preshed = callPackage ../development/python-modules/preshed { };
@@ -13963,6 +13961,8 @@ self: super: with self; {
   sagemaker = callPackage ../development/python-modules/sagemaker { };
 
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
+
+  sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
 
   salib = callPackage ../development/python-modules/salib { };
 

@@ -136,6 +136,7 @@ in {
   artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
+  atticd = runTest ./atticd.nix;
   atuin = handleTest ./atuin.nix {};
   audiobookshelf = handleTest ./audiobookshelf.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
@@ -889,6 +890,7 @@ in {
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
+  saunafs = handleTest ./saunafs.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};

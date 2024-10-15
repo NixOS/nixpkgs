@@ -965,6 +965,7 @@
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba-wsdd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/saunafs.nix
   ./services/network-filesystems/tahoe.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/webdav-server-rs.nix
@@ -979,6 +980,7 @@
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
+  ./services/networking/atticd.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix

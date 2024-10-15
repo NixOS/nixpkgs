@@ -3,6 +3,7 @@
   stdenv,
   llvm_meta,
   monorepoSrc,
+  release_version,
   runCommand,
   cmake,
   libxml2,
@@ -20,16 +21,22 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version patches;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { } ''
-    mkdir $out
-    cp -r ${monorepoSrc}/cmake "$out"
-    cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
-    cp -r ${monorepoSrc}/third-party "$out"
+  src = runCommand "bolt-src-${finalAttrs.version}" { } (
+    ''
+      mkdir $out
+    ''
+    + lib.optionalString (lib.versionAtLeast release_version "14") ''
+      cp -r ${monorepoSrc}/cmake "$out"
+    ''
+    + ''
+      cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
+      cp -r ${monorepoSrc}/third-party "$out"
 
-    # tablegen stuff, probably not the best way but it works...
-    cp -r ${monorepoSrc}/llvm/ "$out"
-    chmod -R +w $out/llvm
-  '';
+      # tablegen stuff, probably not the best way but it works...
+      cp -r ${monorepoSrc}/llvm/ "$out"
+      chmod -R +w $out/llvm
+    ''
+  );
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 
