@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Npry3H+QbAH19hoqAZuOwjpZwCPhOLewD8uKZlo4gdQ=";
+    repo = "pappl";
+    rev = "refs/tagsv${version}";
+    hash = "sha256-Npry3H+QbAH19hoqAZuOwjpZwCPhOLewD8uKZlo4gdQ=";
   };
 
   outputs = [ "out" "dev" ];
@@ -52,12 +52,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "C-based framework/library for developing CUPS Printer Applications";
+    changelog = "https://github.com/michaelrsweet/pappl/blob/v${version}/CHANGES.md";
     mainProgram = "pappl-makeresheader";
     homepage = "https://github.com/michaelrsweet/pappl";
-    license = licenses.asl20;
-    platforms = platforms.linux; # should also work for darwin, but requires additional work
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux; # should also work for darwin, but requires additional work
+    maintainers = [lib.maintainers.NotAShelf];
   };
 }
