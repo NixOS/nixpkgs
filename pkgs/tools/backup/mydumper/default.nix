@@ -1,30 +1,36 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, sphinx
-, glib , pcre
+, glib, pcre, pcre2
 , libmysqlclient, libressl
-, zlib, zstd
-}:
+, zlib, zstd, nix-update-script, util-linux
+, libselinux, libsepol
+, testers, versionCheckHook, mydumper }:
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.14.3-1";
+  version = "0.16.7-5";
 
   src = fetchFromGitHub {
-    owner  = "mydumper";
-    repo = "mydumper";
+    owner = pname;
+    repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-qyJGnrBOElQ3s2VoOWfW1luacd33haanmzKidMBgCpc=";
+    hash = "sha256-DxH2ZP7BSnBfiPBKi1ZBlXNhJeXMzt+V/FMy2nK3nAA=";
+    # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
+    fetchSubmodules = true;
   };
 
   outputs = [ "out" "doc" "man" ];
 
   nativeBuildInputs = [ cmake pkg-config sphinx ];
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
   buildInputs = [
-    glib pcre
+    glib pcre pcre2
     libmysqlclient libressl
-    zlib zstd
-  ];
+    zlib zstd util-linux
+  ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
@@ -32,12 +38,44 @@ stdenv.mkDerivation rec {
     "-DWITH_ZSTD=ON"
   ];
 
+  env.NIX_CFLAGS_COMPILE = (
+    if stdenv.isDarwin then
+      toString [
+        "-Wno-error=deprecated-non-prototype"
+        "-Wno-error=format"
+      ]
+    else
+      "-Wno-unused-result"
+  );
+
+  postPatch = ''
+    # as of mydumper v0.14.5-1, mydumper tries to install its config to /etc
+    substituteInPlace CMakeLists.txt\
+      --replace-fail "/etc" "$out/etc"
+
+    # as of mydumper v0.16.5-1, mydumper disables building docs by default
+    substituteInPlace CMakeLists.txt\
+        --replace-fail "#  add_subdirectory(docs)" "add_subdirectory(docs)"
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  # mydumper --version is checked in `versionCheckHook`
+  passthru.tests = testers.testVersion {
+    package = mydumper;
+    command = "myloader --version";
+    version = "myloader v${version}";
+  };
+
   meta = with lib; {
     description = "High-performance MySQL backup tool";
-    homepage = "https://github.com/maxbube/mydumper";
+    homepage = "https://github.com/mydumper/mydumper";
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ izorkin ];
+    platforms = lib.platforms.unix;
+    maintainers = with maintainers; [
+      izorkin
+      michaelglass
+    ];
   };
 }
