@@ -867,6 +867,7 @@ in
                 "~CAP_FSETID"
                 "~CAP_IPC_LOCK"
                 "~CAP_IPC_OWNER"
+                "~CAP_KILL"
                 "~CAP_SETFCAP"
               ];
               ExecStart =
