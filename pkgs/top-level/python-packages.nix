@@ -9427,7 +9427,9 @@ self: super: with self; {
 
   opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
 
-  opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
+  opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto {
+    protobuf = protobuf4;
+  };
 
   opentelemetry-semantic-conventions = callPackage ../development/python-modules/opentelemetry-semantic-conventions { };
 
