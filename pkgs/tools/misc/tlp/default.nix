@@ -24,13 +24,13 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
-    hash = "sha256-CxO1KU7F6sT5D8vjKOmntjDxcieoRSHTvuSqXfplcHk=";
+    hash = "sha256-kjtszDLlnIkBi3yU/AyGSV8q7QBuZbDhsqJ8AvULb0M=";
   };
 
   # XXX: See patch files for relevant explanations.
@@ -100,7 +100,6 @@
         $out/share/tlp/tlp-pcilist
         $out/share/tlp/tlp-readconfs
         $out/share/tlp/tlp-usblist
-        $out/share/tlp/tpacpi-bat
       )
       for f in "''${fixup_perl[@]}"; do
         wrapProgram "$f" --prefix PATH : "${paths}"
