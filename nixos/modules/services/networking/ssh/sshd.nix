@@ -865,6 +865,7 @@ in
               SystemCallFilter = [
                 "~@clock"
                 "~@cpu-emulation"
+                "~@debug"
               ];
             }
             // (
