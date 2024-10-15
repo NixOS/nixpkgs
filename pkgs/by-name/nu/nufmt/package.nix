@@ -4,18 +4,19 @@
   fetchFromGitHub,
   rustPlatform,
   darwin,
+  llvmPackages,
   nix-update-script,
   ...
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nufmt";
-  version = "unstable-2023-09-25";
+  version = "0-unstable-2024-10-15";
 
   src = fetchFromGitHub {
     owner = "nushell";
     repo = "nufmt";
-    rev = "796ee834c1e31ead4c5479bf2827a4339c5d61d1";
-    hash = "sha256-BwKLl8eMCrqVt9PA5SHAXxu3ypP2ePcSuljKL+wSkvw=";
+    rev = "37b473be178fd752b5bf421f8b20f48209e9c2ec";
+    hash = "sha256-BrVWw6oklG70UomKDv5IBvoFIjtpajHKV37fh4fnK3E=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -25,7 +26,10 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  cargoHash = "sha256-16Z20opeZpoa7h258um+grL3ktPmY4P0M/tqMTr5hYc=";
+  env.LIBCLANG_PATH = lib.optionalString stdenv.cc.isClang "${llvmPackages.libclang.lib}/lib";
+
+  cargoHash = "sha256-eKQJanQ9ax5thc2DuO0yIgovor+i5Soylw58I2Y5cHw=";
+
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
