@@ -89,3 +89,9 @@ DEVELOPER_DIR=${DEVELOPER_DIR_@suffixSalt@:-@fallback_sdk@}
 # Darwin looks for frameworks in the SDK located at `DEVELOPER_DIR`.
 extraBefore+=("-F$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks")
 extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib")
+
+# While the Swift wrapper should take care of this, anything that needs to link Swift auto-linked frameworks
+# also needs these paths. Note: Test and conditionally add it because the path may not exist in older SDKs.
+if [ -d "$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/swift" ]; then
+    extraBefore+=("-L$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/usr/lib/swift")
+fi
