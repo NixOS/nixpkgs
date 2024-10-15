@@ -35,13 +35,13 @@
 
 stdenv.mkDerivation {
   pname = "shadps4";
-  version = "0.3.0-unstable-2024-10-13";
+  version = "0.3.0-unstable-2024-10-14";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "bd9f82df94847b4a5f3d2676ae938f064505c992";
-    hash = "sha256-Z4+hHq2VI4wA1D72dBI7Lt++Rm3q0svjF6AialXxM0k=";
+    rev = "09725bd921088b73746605e672abf6ff40171880";
+    hash = "sha256-NtIiqmiZ1iCciMjT1cL7ONWxNHRO/0bci/thLrcORjo=";
     fetchSubmodules = true;
   };
 
