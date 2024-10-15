@@ -15,7 +15,7 @@
   libGL,
 }:
 let
-  version = "1.4.7";
+  version = "1.4.8";
   src =
     let
       inherit (stdenv.hostPlatform) system;
@@ -25,8 +25,8 @@ let
         aarch64-linux = "arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-aZrNtf5o7HXT8T9MEhcU7X2LWCRvTUZiCIgfJjfbKQs=";
-        aarch64-linux = "sha256-mCbSqhuAHy089QTA3lq0p+elvdYffouZD4Cv4FSxuC4=";
+        x86_64-linux = "sha256-nPnPvF3rCJWk2gI4gy2pZfWI+QrwaE55HKpvOhV/5T0=";
+        aarch64-linux = "sha256-zaUtbJ+uc+xNCb2pxxkg2kLQctTvXSAYRyTKAJ9+a5s=";
       };
     in
     fetchurl {
