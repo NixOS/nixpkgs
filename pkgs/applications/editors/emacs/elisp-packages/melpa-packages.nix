@@ -1236,6 +1236,23 @@ let
         # missing optional dependencies: vterm or eat
         julia-snail = addPackageRequires super.julia-snail [ self.eat ];
 
+        kanagawa-themes = super.kanagawa-themes.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches =
+              if lib.versionOlder finalAttrs.version "20241015.2237" then
+                previousAttrs.patches or [ ]
+                ++ [
+                  (pkgs.fetchpatch {
+                    name = "fix-compilation-error.patch";
+                    url = "https://github.com/Fabiokleis/kanagawa-emacs/commit/83c2b5c292198b46a06ec0ad62619d83fd965433.patch";
+                    hash = "sha256-pB1ht03XCh+BWKHhxBAp701qt/KWAMJ2SQQaN3FgMjU=";
+                  })
+                ]
+              else
+                previousAttrs.patches or null;
+          }
+        );
+
         kite = ignoreCompilationError super.kite; # elisp error
 
         # missing optional dependencies
