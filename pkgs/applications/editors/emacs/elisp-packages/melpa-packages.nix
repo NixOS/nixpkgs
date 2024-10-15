@@ -806,7 +806,8 @@ let
         boa-mode = ignoreCompilationError super.boa-mode; # elisp error
 
         # missing optional dependencies
-        boogie-friends = addPackageRequires super.boogie-friends [ self.lsp-mode ];
+        # https://github.com/boogie-org/boogie-friends/issues/42
+        boogie-friends = ignoreCompilationError (addPackageRequires super.boogie-friends [ self.lsp-mode ]);
 
         bpr = super.bpr.overrideAttrs (
           finalAttrs: previousAttrs: {
