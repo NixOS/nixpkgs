@@ -14,7 +14,7 @@
 , python
 , re2
 , stdenv
-, swig4
+, swig
 , unzip
 , zlib
 }:
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     "-DUSE_GLPK=ON"
     "-DUSE_SCIP=OFF"
     "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
-  ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
 
   strictDeps = true;
 
@@ -75,9 +75,9 @@ stdenv.mkDerivation rec {
     ensureNewerSourcesForZipFilesHook
     pkg-config
     python.pythonOnBuildForHost
-    swig4
+    swig
     unzip
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
   ] ++ (with python.pythonOnBuildForHost.pkgs; [
     pip
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
     protobuf
-    (python.pkgs.protobuf.override { protobuf = protobuf; })
+    (python.pkgs.protobuf4.override { protobuf = protobuf; })
     python.pkgs.numpy
   ];
   nativeCheckInputs = [

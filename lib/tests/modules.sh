@@ -247,6 +247,14 @@ checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-e
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
 checkConfigOutput '^true$' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
+# Check importApply
+checkConfigOutput '"abc"' config.value ./importApply.nix
+# importApply does not set a key.
+# Disabling the function file is not sufficient, because importApply can't reasonably assume that the key is unique.
+# e.g. user may call it multiple times with different arguments and expect each of the module to apply.
+# While this is excusable for the disabledModules aspect, it is not for the deduplication of modules.
+checkConfigOutput '"abc"' config.value ./importApply-disabling.nix
+
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
 checkConfigOutput '^true$' "$@"
@@ -286,6 +294,9 @@ checkConfigOutput '^"42"$' config.value ./declare-coerced-value.nix
 checkConfigOutput '^"24"$' config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'A definition for option .* is not.*string or signed integer convertible to it.*. Definition values:\n\s*- In .*: \[ \]' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
+# Check coerced option merging.
+checkConfigError 'The option .value. in .*/declare-coerced-value.nix. is already declared in .*/declare-coerced-value-no-default.nix.' config.value ./declare-coerced-value.nix ./declare-coerced-value-no-default.nix
+
 # Check coerced value with unsound coercion
 checkConfigOutput '^12$' config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'A definition for option .* is not of type .*. Definition values:\n\s*- In .*: "1000"' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
@@ -304,7 +315,7 @@ checkConfigOutput '^".*Hello.*"$' options.namedPackage.description ./declare-mkP
 checkConfigOutput '^"hello"$' config.pathPackage.pname ./declare-mkPackageOption.nix
 checkConfigOutput '^"pkgs\.hello\.override \{ stdenv = pkgs\.clangStdenv; \}"$' options.packageWithExample.example.text ./declare-mkPackageOption.nix
 checkConfigOutput '^".*Example extra description\..*"$' options.packageWithExtraDescription.description ./declare-mkPackageOption.nix
-checkConfigError 'The option .undefinedPackage. is used but not defined' config.undefinedPackage ./declare-mkPackageOption.nix
+checkConfigError 'The option .undefinedPackage. was accessed but has no value defined. Try setting the option.' config.undefinedPackage ./declare-mkPackageOption.nix
 checkConfigOutput '^null$' config.nullablePackage ./declare-mkPackageOption.nix
 checkConfigOutput '^"null or package"$' options.nullablePackageWithDefault.type.description ./declare-mkPackageOption.nix
 checkConfigOutput '^"myPkgs\.hello"$' options.packageWithPkgsText.defaultText.text ./declare-mkPackageOption.nix
@@ -402,7 +413,7 @@ checkConfigOutput '^null$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-
 checkConfigOutput '^"24"$' config.foo ./freeform-attrsOf.nix ./freeform-str-dep-unstr.nix ./define-value-string.nix
 # Check whether an freeform-typed value can depend on a declared option, this can only work with lazyAttrsOf
 checkConfigError 'infinite recursion encountered' config.foo ./freeform-attrsOf.nix ./freeform-unstr-dep-str.nix
-checkConfigError 'The option .* is used but not defined' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
+checkConfigError 'The option .* was accessed but has no value defined. Try setting the option.' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix
 checkConfigOutput '^"24"$' config.foo ./freeform-lazyAttrsOf.nix ./freeform-unstr-dep-str.nix ./define-value-string.nix
 # submodules in freeformTypes should have their locations annotated
 checkConfigOutput '/freeform-submodules.nix"$' config.fooDeclarations.0 ./freeform-submodules.nix
@@ -418,8 +429,8 @@ checkConfigOutput '^null$' config.value.l1.l2.foo ./types-anything/nested-attrs.
 checkConfigOutput '^null$' config.value.l1.l2.l3.foo ./types-anything/nested-attrs.nix
 # Attribute sets that are coercible to strings shouldn't be recursed into
 checkConfigOutput '^"foo"$' config.value.outPath ./types-anything/attrs-coercible.nix
-# Multiple lists aren't concatenated together
-checkConfigError 'The option .* has conflicting definitions' config.value ./types-anything/lists.nix
+# Multiple lists aren't concatenated together if their definitions are not equal
+checkConfigError 'The option .* has conflicting definition values' config.value ./types-anything/lists.nix
 # Check that all equalizable atoms can be used as long as all definitions are equal
 checkConfigOutput '^0$' config.value.int ./types-anything/equal-atoms.nix
 checkConfigOutput '^false$' config.value.bool ./types-anything/equal-atoms.nix
@@ -427,6 +438,7 @@ checkConfigOutput '^""$' config.value.string ./types-anything/equal-atoms.nix
 checkConfigOutput '^"/[^"]+"$' config.value.path ./types-anything/equal-atoms.nix
 checkConfigOutput '^null$' config.value.null ./types-anything/equal-atoms.nix
 checkConfigOutput '^0.1$' config.value.float ./types-anything/equal-atoms.nix
+checkConfigOutput '^\[1,"a",{"x":null}\]$' config.value.list ./types-anything/equal-atoms.nix
 # Functions can't be merged together
 checkConfigError "The option .value.multiple-lambdas.<function body>. has conflicting option types" config.applied.multiple-lambdas ./types-anything/functions.nix
 checkConfigOutput '^true$' config.valueIsFunction.single-lambda ./types-anything/functions.nix
@@ -461,8 +473,8 @@ checkConfigOutput "{}" config.attrs.a ./emptyValues.nix
 checkConfigOutput "null" config.null.a ./emptyValues.nix
 checkConfigOutput "{}" config.submodule.a ./emptyValues.nix
 # These types don't have empty values
-checkConfigError 'The option .int.a. is used but not defined' config.int.a ./emptyValues.nix
-checkConfigError 'The option .nonEmptyList.a. is used but not defined' config.nonEmptyList.a ./emptyValues.nix
+checkConfigError 'The option .int.a. was accessed but has no value defined. Try setting the option.' config.int.a ./emptyValues.nix
+checkConfigError 'The option .nonEmptyList.a. was accessed but has no value defined. Try setting the option.' config.nonEmptyList.a ./emptyValues.nix
 
 # types.unique
 #   requires a single definition
@@ -522,9 +534,10 @@ checkConfigError 'The module .*/module-class-is-darwin.nix was imported into nix
 checkConfigError 'A submoduleWith option is declared multiple times with conflicting class values "darwin" and "nixos".' config.sub.mergeFail.config ./class-check.nix
 
 # _type check
-checkConfigError 'Could not load a value as a module, because it is of type "flake", in file .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
-checkConfigOutput '^true$' "$@" config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
-checkConfigError 'Could not load a value as a module, because it is of type "configuration", in file .*/import-configuration.nix.*please only import the modules that make up the configuration.*' config ./import-configuration.nix
+checkConfigError 'Expected a module, but found a value of type .*"flake".*, while trying to load a module into .*/module-imports-_type-check.nix' config.ok.config ./module-imports-_type-check.nix
+checkConfigOutput '^true$' config.enable ./declare-enable.nix ./define-enable-with-top-level-mkIf.nix
+checkConfigError 'Expected a module, but found a value of type .*"configuration".*, while trying to load a module into .*/import-configuration.nix.' config ./import-configuration.nix
+checkConfigError 'please only import the modules that make up the configuration' config ./import-configuration.nix
 
 # doRename works when `warnings` does not exist.
 checkConfigOutput '^1234$' config.c.d.e ./doRename-basic.nix
@@ -542,21 +555,21 @@ checkConfigOutput '^"pear\\npear"$' config.twice.raw ./merge-module-with-key.nix
 
 # Declaration positions
 # Line should be present for direct options
-checkConfigOutput '^10$' options.imported.line10.declarationPositions.0.line ./declaration-positions.nix
-checkConfigOutput '/declaration-positions.nix"$' options.imported.line10.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^14$' options.imported.line14.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.imported.line14.declarationPositions.0.file ./declaration-positions.nix
 # Generated options may not have line numbers but they will at least get the
 # right file
-checkConfigOutput '/declaration-positions.nix"$' options.generated.line18.declarationPositions.0.file ./declaration-positions.nix
-checkConfigOutput '^null$' options.generated.line18.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' options.generated.line22.declarationPositions.0.file ./declaration-positions.nix
+checkConfigOutput '^null$' options.generated.line22.declarationPositions.0.line ./declaration-positions.nix
 # Submodules don't break it
-checkConfigOutput '^39$' config.submoduleLine34.submodDeclLine39.0.line ./declaration-positions.nix
-checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine34.submodDeclLine39.0.file ./declaration-positions.nix
+checkConfigOutput '^45$' config.submoduleLine38.submodDeclLine45.0.line ./declaration-positions.nix
+checkConfigOutput '/declaration-positions.nix"$' config.submoduleLine38.submodDeclLine45.0.file ./declaration-positions.nix
 # New options under freeform submodules get collected into the parent submodule
 # (consistent with .declarations behaviour, but weird; notably appears in system.build)
-checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.0.line ./declaration-positions.nix
-checkConfigOutput '^34|23$' options.submoduleLine34.declarationPositions.1.line ./declaration-positions.nix
+checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line ./declaration-positions.nix
 # nested options work
-checkConfigOutput '^30$' options.nested.nestedLine30.declarationPositions.0.line ./declaration-positions.nix
+checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
 
 cat <<EOF
 ====== module tests ======

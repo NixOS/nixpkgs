@@ -1,9 +1,11 @@
 {
   mkKdeDerivation,
+  qttools,
   ki18n,
 }:
 mkKdeDerivation {
   pname = "kmime";
 
-  extraBuildInputs = [ki18n];
+  extraNativeBuildInputs = [ qttools ];
+  extraBuildInputs = [ ki18n ];
 }

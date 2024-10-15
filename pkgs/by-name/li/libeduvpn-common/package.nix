@@ -16,13 +16,13 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    go build -o ${pname}-${version}.so -buildmode=c-shared -tags=release ./exports
+    go build -o libeduvpn-common-${version}.so -buildmode=c-shared -tags=release ./exports
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dt $out/lib ${pname}-${version}.so
+    install -Dt $out/lib libeduvpn-common-${version}.so
     runHook postInstall
   '';
 

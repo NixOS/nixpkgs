@@ -5,10 +5,9 @@
   nix-update-script,
   packaging,
   platformdirs,
-  pydantic_1,
+  pydantic,
   pyyaml,
   requests-unixsocket,
-  setuptools,
   setuptools-scm,
   urllib3,
   pytest-check,
@@ -22,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "craft-providers";
-  version = "1.24.1";
+  version = "2.0.3";
 
   pyproject = true;
 
@@ -30,7 +29,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-providers";
     rev = "refs/tags/${version}";
-    hash = "sha256-l57Y+sdCD0/3sBK48N/3p3ns3o0LB4h9FQ35ha1AOV4=";
+    hash = "sha256-DTUXT5vFIDI06oxka3diWJ5E5oqiX6GXB4ivq6+VrDk=";
   };
 
   patches = [
@@ -52,21 +51,18 @@ buildPythonPackage rec {
     # The urllib3 incompat: https://github.com/msabramo/requests-unixsocket/pull/69
     # This is already patched in nixpkgs.
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==" "setuptools>=" \
+      --replace-fail "setuptools==73.0.1" "setuptools" \
       --replace-fail "urllib3<2" "urllib3"
   '';
 
   pythonRelaxDeps = [ "requests" ];
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     platformdirs
-    pydantic_1
+    pydantic
     pyyaml
     requests-unixsocket
     urllib3

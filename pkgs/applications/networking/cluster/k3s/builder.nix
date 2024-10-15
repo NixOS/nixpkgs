@@ -23,7 +23,7 @@ lib:
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion,
   updateScript ? null,
-}:
+}@attrs:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash
 # variables, creates a package for that version.
@@ -150,9 +150,9 @@ let
   # a shortcut that provides the images archive for the host platform. Currently only supports
   # aarch64 (arm64) and x86_64 (amd64), aborts on other architectures.
   airgapImages = fetchurl (
-    if stdenv.isAarch64 then
+    if stdenv.hostPlatform.isAarch64 then
       imagesVersions.${findImagesArchive "arm64"}
-    else if stdenv.isx86_64 then
+    else if stdenv.hostPlatform.isx86_64 then
       imagesVersions.${findImagesArchive "amd64"}
     else
       abort "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
@@ -211,7 +211,7 @@ let
     sed --quiet '/# --- run the install process --/q;p' ${k3sRepo}/install.sh > install.sh
 
     # Let killall expect "containerd-shim" in the Nix store
-    to_replace="k3s/data/\[\^/\]\*/bin/containerd-shim"
+    to_replace="/data/\[\^/\]\*/bin/containerd-shim"
     replacement="/nix/store/.*k3s-containerd.*/bin/containerd-shim"
     changes=$(sed -i "s|$to_replace|$replacement| w /dev/stdout" install.sh)
     if [ -z "$changes" ]; then
@@ -325,6 +325,7 @@ in
 buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
+  pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
 
   tags = [
     "libsqlite3"

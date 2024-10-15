@@ -17,24 +17,26 @@ mkKdeDerivation {
   # aren't found.
   patches = [
     ./0001-gsettings-schemas-path.patch
-    (
-      substituteAll {
-        src = ./dependency-paths.patch;
-        pgrep = lib.getExe' procps "pgrep";
-        xsettingsd = lib.getExe xsettingsd;
-      }
-    )
+    (substituteAll {
+      src = ./dependency-paths.patch;
+      pgrep = lib.getExe' procps "pgrep";
+      xsettingsd = lib.getExe xsettingsd;
+    })
   ];
 
   preConfigure = ''
     NIX_CFLAGS_COMPILE+=" -DGSETTINGS_SCHEMAS_PATH=\"$GSETTINGS_SCHEMAS_PATH\""
   '';
 
-  extraNativeBuildInputs = [pkg-config wrapGAppsHook3 sass];
-  extraBuildInputs = [qtsvg];
+  extraNativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    sass
+  ];
+  extraBuildInputs = [ qtsvg ];
   dontWrapGApps = true; # There is nothing to wrap
 
-  extraCmakeFlags = ["-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/"];
+  extraCmakeFlags = [ "-DGLIB_SCHEMAS_DIR=${gsettings-desktop-schemas.out}/" ];
 
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''

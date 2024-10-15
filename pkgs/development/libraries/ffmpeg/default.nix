@@ -1,4 +1,8 @@
-{ callPackage, darwin }:
+{
+  callPackage,
+  darwin,
+  cudaPackages,
+}:
 
 let
   mkFFmpeg =
@@ -6,6 +10,7 @@ let
     callPackage ./generic.nix (
       {
         inherit (darwin.apple_sdk.frameworks)
+          Accelerate
           AppKit
           AudioToolbox
           AVFoundation
@@ -13,6 +18,7 @@ let
           VideoToolbox
           ;
         inherit (darwin) xcode;
+        inherit (cudaPackages) cuda_cudart cuda_nvcc libnpp;
       }
       // (initArgs // { inherit ffmpegVariant; })
     );
@@ -23,17 +29,20 @@ let
   };
 
   v6 = {
-    version = "6.1.1";
-    hash = "sha256-Q0c95hbCVUHQWPoh5uC8uzMylmB4BnWg+VhXEgSouzo=";
+    version = "6.1.2";
+    hash = "sha256-h/N56iKkAR5kH+PRQceWZvHe3k+70KWMDEP5iVq/YFQ=";
   };
 
   v7 = {
-    version = "7.0.1";
-    hash = "sha256-HiCT6bvLx4zmJ6ffutoimdz5ENQ55CRF64WBT3HeXMA=";
+    version = "7.0.2";
+    hash = "sha256-6bcTxMt0rH/Nso3X7zhrFNkkmWYtxsbUqVQKh25R1Fs=";
   };
 in
 
 rec {
+  # We keep FFmpeg 4 around for now mainly for a couple of binary
+  # packages (Spotify and REAPER). Please don’t add new source packages
+  # that depend on this version.
   ffmpeg_4 = mkFFmpeg v4 "small";
   ffmpeg_4-headless = mkFFmpeg v4 "headless";
   ffmpeg_4-full = mkFFmpeg v4 "full";
@@ -46,11 +55,17 @@ rec {
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
 
-  # Please make sure this is updated to the latest version on the next major
-  # update to ffmpeg
-  # Packages which use ffmpeg as a library, should pin to the relevant major
-  # version number which the upstream support.
-  ffmpeg = ffmpeg_6;
-  ffmpeg-headless = ffmpeg_6-headless;
-  ffmpeg-full = ffmpeg_6-full;
+  # Please make sure this is updated to new major versions once they
+  # build and work on all the major platforms. If absolutely necessary
+  # due to severe breaking changes, the bump can wait a little bit to
+  # give the most proactive users time to migrate, but don’t hold off
+  # for too long.
+  #
+  # Packages which depend on FFmpeg should generally use these
+  # unversioned aliases to allow for quicker migration to new releases,
+  # but can pin one of the versioned variants if they do not work with
+  # the current default version.
+  ffmpeg = ffmpeg_7;
+  ffmpeg-headless = ffmpeg_7-headless;
+  ffmpeg-full = ffmpeg_7-full;
 }

@@ -1,7 +1,6 @@
 { lib, stdenv, fetchFromGitHub, zlib, libtiff, libxml2, openssl, libiconv
 , libpng, cmake }:
 
-with lib;
 stdenv.mkDerivation rec {
   pname = "dcmtk";
   version = "3.6.8";
@@ -17,7 +16,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description =
       "Collection of libraries and applications implementing large parts of the DICOM standard";
     longDescription = ''

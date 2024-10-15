@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   disabledTests = [
     "PythonTestSSLSocket"
     "PythonThriftTNonblockingServer"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Tests that hang up in the Darwin sandbox
     "SecurityTest"
     "SecurityFromBufferTest"
@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
+    ${lib.optionalString stdenv.hostPlatform.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E "($(echo "$disabledTests" | tr " " "|"))"
 
     runHook postCheck
   '';

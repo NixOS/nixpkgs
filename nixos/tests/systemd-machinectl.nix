@@ -16,7 +16,7 @@ let
 
     imports = [ ../modules/profiles/minimal.nix ];
 
-    system.stateVersion = config.system.nixos.version;
+    system.stateVersion = config.system.nixos.release;
   };
 
   containerSystem = (import ../lib/eval-config.nix {

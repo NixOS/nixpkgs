@@ -1,5 +1,5 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, shadow
-, capabilitiesSupport ? stdenv.isLinux
+{ lib, stdenv, fetchurl, fetchpatch, pkg-config, zlib, shadow
+, capabilitiesSupport ? stdenv.hostPlatform.isLinux
 , libcap_ng
 , libxcrypt
 , ncursesSupport ? true
@@ -12,8 +12,8 @@
 , translateManpages ? true
 , po4a
 , installShellFiles
-, writeSupport ? stdenv.isLinux
-, shadowSupport ? stdenv.isLinux
+, writeSupport ? stdenv.hostPlatform.isLinux
+, shadowSupport ? stdenv.hostPlatform.isLinux
 , memstreamHook
 , gitUpdater
 }:
@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./rtcwake-search-PATH-for-shutdown.patch
+
+    (fetchpatch {
+      name = "basename.patch";
+      url = "https://git.kernel.org/pub/scm/utils/util-linux/util-linux.git/patch/?id=77454e58d58f904cfdc02d3ca5bb65f1bd8739fc";
+      hash = "sha256-ELWC4bYN3rvn9XIN0XgCo55pXNfS2VpbZWuwzRLfO/0=";
+    })
   ];
 
   # We separate some of the utilities into their own outputs. This
@@ -36,7 +42,7 @@ stdenv.mkDerivation rec {
   # the greater util-linux toolset.
   # Compatibility is maintained by symlinking the binaries from the
   # smaller outputs in the bin output.
-  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.isLinux [ "swap" ];
+  outputs = [ "bin" "dev" "out" "lib" "man" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "mount" ] ++ [ "login" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "swap" ];
   separateDebugInfo = true;
 
   postPatch = ''
@@ -91,7 +97,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     moveToOutput bin/mount "$mount"
     moveToOutput bin/umount "$mount"
     ln -svf "$mount/bin/"* $bin/bin/
@@ -101,7 +107,7 @@ stdenv.mkDerivation rec {
     moveToOutput sbin/sulogin "$login"
     prefix=$login _moveSbin
     ln -svf "$login/bin/"* $bin/bin/
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
 
     moveToOutput sbin/swapon "$swap"
     moveToOutput sbin/swapoff "$swap"

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
+{ lib, stdenv, fetchurl, bundlerEnv, ruby_3_2, makeWrapper, nixosTests }:
 
 let
   version = "5.1.3";
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
-    inherit ruby;
+    ruby = ruby_3_2;
     gemdir = ./.;
     groups = [ "development" "ldap" "markdown" "common_mark" "minimagick" "test" ];
   };
@@ -15,7 +15,7 @@ in
     inherit version;
 
     src = fetchurl {
-      url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+      url = "https://www.redmine.org/releases/redmine-${version}.tar.gz";
       hash = "sha256-iiIyD9nJQOZZjzrV+3o5MxlchgaO7plLpvzcIsXOy1k=";
     };
 

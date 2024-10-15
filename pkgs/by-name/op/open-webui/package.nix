@@ -7,25 +7,25 @@
 }:
 let
   pname = "open-webui";
-  version = "0.3.13";
+  version = "0.3.32";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "v${version}";
-    hash = "sha256-7OGUlyBvxX/wra4GYnhmSni/7xloCXUKEu0xa2bbn2A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-XpPaMGn+JA3Rq+Eb97IGWMLAR+0pI+ZJRxOTmxIMPZg=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-hQOpkbw8RDATnORh8Z1ziUhBcXb5xVplVOvueC/3RwA=";
+    npmDepsHash = "sha256-tAPI/H5/lv+RuDZ68lL/cZHcOs8H6ZxXSwiFvkp0y4A=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
     postPatch = ''
       substituteInPlace package.json \
-        --replace-fail "npm run pyodide:fetch && vite build" "vite build" \
+        --replace-fail "npm run pyodide:fetch && vite build" "vite build"
     '';
 
     env.CYPRESS_INSTALL_BINARY = "0"; # disallow cypress from downloading binaries in sandbox
@@ -76,8 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     black
     boto3
     chromadb
+    colbert-ai
     docx2txt
     duckduckgo-search
+    einops
     extract-msg
     fake-useragent
     fastapi
@@ -85,12 +87,14 @@ python3.pkgs.buildPythonApplication rec {
     flask
     flask-cors
     fpdf2
+    ftfy
     google-generativeai
     langchain
     langchain-chroma
     langchain-community
     langfuse
     markdown
+    nltk
     openai
     opencv4
     openpyxl
@@ -102,6 +106,7 @@ python3.pkgs.buildPythonApplication rec {
     psycopg2
     pydub
     pyjwt
+    pymilvus
     pymongo
     pymysql
     pypandoc

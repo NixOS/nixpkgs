@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-task";
-  version = "0.4.0";
+  version = "0.40.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "dvc-task";
     rev = "refs/tags/${version}";
-    hash = "sha256-zSPv+eMGSsGXKtgi9r4EiGY1ZURXeJXWBKvR2GnfP8I=";
+    hash = "sha256-bRQJLncxCigYPEtlvKjUtKqhcBkB7erEtoJQ30yGamE=";
   };
 
   build-system = [ setuptools-scm ];
@@ -49,6 +49,8 @@ buildPythonPackage rec {
   disabledTests = [
     # Test is flaky
     "test_start_already_exists"
+    # Tests require a Docker setup
+    "celery_setup_worker"
   ];
 
   meta = with lib; {

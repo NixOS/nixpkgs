@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
-  version = "2024-02-06a";
+  version = "2024-02-06b";
 
   src = fetchFromGitHub {
     owner = "dokuwiki";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "sha256-gAoEUskTTbcpHgDUBSsAv6QQDvPuxQ1jXZ4TTKrjWIU=";
+    sha256 = "sha256-jrxsVBStvRxHCAOGVUkqtzE75wRBiVR+KxSCNuI2vnk=";
   };
 
   preload = writeText "preload.php" ''
@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     homepage = "https://www.dokuwiki.org";
     platforms = platforms.all;
-    maintainers = with maintainers; [ _1000101 ];
+    maintainers = with maintainers; [
+      _1000101
+      e1mo
+    ];
   };
 }

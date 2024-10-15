@@ -14,7 +14,7 @@ flutterPackages.v3_19.buildFlutterApplication rec {
   version = "2.6.0";
   src = fetchFromGitHub {
     owner = "intiface";
-    repo = pname;
+    repo = "intiface-central";
     rev = "v${version}";
     hash = "sha256-7+rw0cD8MJPFOkgmfHD6y+EojTGQhb15o1mn2p14eoE=";
   };

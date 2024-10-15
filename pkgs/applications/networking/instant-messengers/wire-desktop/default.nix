@@ -6,7 +6,7 @@
 , stdenv
 , lib
 , udev
-, wrapGAppsHook3
+, buildPackages
 , cpio
 , xar
 , libdbusmenu
@@ -57,6 +57,7 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
@@ -97,7 +98,7 @@ let
       autoPatchelfHook
       dpkg
       makeWrapper
-      wrapGAppsHook3
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
     ];
 
     buildInputs = [
@@ -135,6 +136,10 @@ let
       (lib.getLib udev)
       libdbusmenu
     ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}")
+    '';
 
     postFixup = ''
       makeWrapper $out/opt/Wire/wire-desktop $out/bin/wire-desktop \
@@ -183,6 +188,6 @@ let
   };
 
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

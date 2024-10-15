@@ -257,37 +257,37 @@ let
         if final.isMacOS then "MACOSX_DEPLOYMENT_TARGET"
         else if final.isiOS then "IPHONEOS_DEPLOYMENT_TARGET"
         else null;
+
+      # Remove before 25.05
+      androidSdkVersion =
+        if (args ? sdkVer && !args ? androidSdkVersion) then
+          throw "For android `sdkVer` has been renamed to `androidSdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidSdkVersion
+        else
+          null;
+      androidNdkVersion =
+        if (args ? ndkVer && !args ? androidNdkVersion) then
+          throw "For android `ndkVer` has been renamed to `androidNdkVersion`"
+        else if (args ? androidSdkVersion) then
+          args.androidNdkVersion
+        else
+          null;
     } // (
       let
         selectEmulator = pkgs:
           let
-            qemu-user = pkgs.qemu.override {
-              smartcardSupport = false;
-              spiceSupport = false;
-              openGLSupport = false;
-              virglSupport = false;
-              vncSupport = false;
-              gtkSupport = false;
-              sdlSupport = false;
-              alsaSupport = false;
-              pulseSupport = false;
-              pipewireSupport = false;
-              jackSupport = false;
-              smbdSupport = false;
-              seccompSupport = false;
-              tpmSupport = false;
-              capstoneSupport = false;
-              enableDocs = false;
-              hostCpuTargets = [ "${final.qemuArch}-linux-user" ];
-            };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
+          # Note: we guarantee that the return value is either `null` or a path
+          # to an emulator program. That is, if an emulator requires additional
+          # arguments, a wrapper should be used.
           if pkgs.stdenv.hostPlatform.canExecute final
-          then "${pkgs.runtimeShell} -c '\"$@\"' --"
+          then "${pkgs.execline}/bin/exec"
           else if final.isWindows
           then "${wine}/bin/wine${optionalString (final.parsed.cpu.bits == 64) "64"}"
           else if final.isLinux && pkgs.stdenv.hostPlatform.isLinux && final.qemuArch != null
-          then "${qemu-user}/bin/qemu-${final.qemuArch}"
+          then "${pkgs.qemu-user}/bin/qemu-${final.qemuArch}"
           else if final.isWasi
           then "${pkgs.wasmtime}/bin/wasmtime"
           else if final.isMmix
@@ -295,6 +295,10 @@ let
           else null;
       in {
         emulatorAvailable = pkgs: (selectEmulator pkgs) != null;
+
+        # whether final.emulator pkgs.pkgsStatic works
+        staticEmulatorAvailable = pkgs: final.emulatorAvailable pkgs
+          && (final.isLinux || final.isWasi || final.isMmix);
 
         emulator = pkgs:
           if (final.emulatorAvailable pkgs)
@@ -360,12 +364,22 @@ let
               "armv7l" = "armv7";
               "armv6l" = "arm";
               "armv5tel" = "armv5te";
+              "riscv32" = "riscv32gc";
               "riscv64" = "riscv64gc";
             }.${cpu.name} or cpu.name;
             vendor_ = final.rust.platform.vendor;
           # TODO: deprecate args.rustc in favour of args.rust after 23.05 is EOL.
-          in args.rust.rustcTarget or args.rustc.config
-            or "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}";
+          in
+            args.rust.rustcTarget or
+            args.rustc.config or (
+              # Rust uses `wasm32-wasip?` rather than `wasm32-unknown-wasi`.
+              # We cannot know which subversion does the user want, and
+              # currently use WASI 0.1 as default for compatibility. Custom
+              # users can set `rust.rustcTarget` to override it.
+              if final.isWasi
+              then "${cpu_}-wasip1"
+              else "${cpu_}-${vendor_}-${kernel.name}${optionalString (abi.name != "unknown") "-${abi.name}"}"
+            );
 
           # The name of the rust target if it is standard, or the json file
           # containing the custom target spec.

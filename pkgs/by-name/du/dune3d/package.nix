@@ -24,7 +24,7 @@
 }:
 
 let
-  stdenv' = if stdenv.isDarwin then llvmPackages_17.stdenv else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then llvmPackages_17.stdenv else stdenv;
   opencascade-occt = opencascade-occt_7_6;
 in
 stdenv'.mkDerivation (finalAttrs: {
@@ -45,7 +45,7 @@ stdenv'.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     libxml2 # for xmllints
-  ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [
     cmake
@@ -55,7 +55,7 @@ stdenv'.mkDerivation (finalAttrs: {
     libepoxy
     librsvg
     libspnav
-    (if stdenv.isLinux then libuuid else libossp_uuid)
+    (if stdenv.hostPlatform.isLinux then libuuid else libossp_uuid)
     opencascade-occt
     (python3.withPackages (pp: [
       pp.pygobject3

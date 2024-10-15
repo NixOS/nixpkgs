@@ -51,19 +51,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optionals (buildClient && stdenv.isLinux) [
+  ] ++ lib.optionals (buildClient && stdenv.hostPlatform.isLinux) [
     icoutils
   ];
 
   buildInputs = [
     python3 lua5_3 zlib
     wavpack
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ] ++ lib.optionals buildClient ([
     SDL2
     freetype
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
     alsa-lib
     libX11
@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
     "-DCLIENT=${if buildClient then "ON" else "OFF"}"
   ];
 
-  postInstall = lib.optionalString buildClient (lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString buildClient (lib.optionalString stdenv.hostPlatform.isLinux ''
     # Convert and install desktop icon
     mkdir -p $out/share/pixmaps
     icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
 
     # Install menu item
     install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications/teeworlds.app/Contents/MacOS"
     mkdir -p "$out/Applications/teeworlds.app/Contents/Resources"
 

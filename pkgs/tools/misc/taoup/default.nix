@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "globalcitizen";
-    repo = pname;
+    repo = "taoup";
     rev = "v${version}";
     hash = "sha256-UHo3c+DQn77CJONy/QXM55rpIdhVkJbhR82tqmUltPQ=";
   };
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace taoup \
      --subst-var-by ncurses ${ncurses} \
-     --subst-var-by pname ${pname}
+     --subst-var-by pname taoup
     substituteInPlace taoup-fortune \
       --subst-var-by out $out \
       --replace "/bin/bash" "${bash}/bin/bash"

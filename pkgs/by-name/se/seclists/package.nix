@@ -5,13 +5,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "seclists";
-  version = "2024.2";
+  version = "2024.3";
 
   src = fetchFromGitHub {
     owner = "danielmiessler";
     repo = "SecLists";
-    rev = "2024.2";
-    hash = "sha256-qqXOLuZOj+mF7kXrdO62HZTrGsyepOSWr5v6j4WFGcc=";
+    rev = "2024.3";
+    hash = "sha256-Ffd4jpV8F6rtMQVqsu+8X/QU5rwbKXv0zkOCmUuhP8I=";
   };
 
   installPhase = ''

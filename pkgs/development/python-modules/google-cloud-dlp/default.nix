@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "3.18.1";
+  version = "3.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-KYqhwSa9Z+1s41Ve+GGbnR0BfSZE5UwAqgmqEWfxOC0=";
+    pname = "google_cloud_dlp";
+    inherit version;
+    hash = "sha256-SabiX00pD91acxz83PdkDnPynLp5L9MAqKGY/IIUDAU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf
@@ -41,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Test requires credentials
+    # Tests require credentials
     "test_inspect_content"
     "test_list_dlp_jobs"
   ];

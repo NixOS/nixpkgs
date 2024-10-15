@@ -15,10 +15,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfburn";
-  version = "0.7.1";
+  version = "0.7.2";
   odd-unstable = false;
 
-  sha256 = "sha256-wKJ9O4V1b2SoqC4dDKKLg7u8IK9TcjVEa4ZxQv3UOOI=";
+  sha256 = "sha256-eJ+MxNdJiDTLW4GhrwgQIyFuOSTWsF34Oet9HJAtIqI=";
 
   nativeBuildInputs = [
     libxslt

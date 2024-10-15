@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.security.polkit;
@@ -12,14 +9,14 @@ in
 
   options = {
 
-    security.polkit.enable = mkEnableOption "polkit";
+    security.polkit.enable = lib.mkEnableOption "polkit";
 
-    security.polkit.package = mkPackageOption pkgs "polkit" { };
+    security.polkit.package = lib.mkPackageOption pkgs "polkit" { };
 
-    security.polkit.debug = mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
+    security.polkit.debug = lib.mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
 
-    security.polkit.extraConfig = mkOption {
-      type = types.lines;
+    security.polkit.extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example =
         ''
@@ -41,8 +38,8 @@ in
         '';
     };
 
-    security.polkit.adminIdentities = mkOption {
-      type = types.listOf types.str;
+    security.polkit.adminIdentities = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
       description =
@@ -57,7 +54,7 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ cfg.package.bin cfg.package.out ];
 
@@ -65,7 +62,7 @@ in
 
     systemd.services.polkit.serviceConfig.ExecStart = [
       ""
-      "${cfg.package.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
+      "${cfg.package.out}/lib/polkit-1/polkitd ${lib.optionalString (!cfg.debug) "--no-debug"}"
     ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
@@ -78,7 +75,7 @@ in
     environment.etc."polkit-1/rules.d/10-nixos.rules".text =
       ''
         polkit.addAdminRule(function(action, subject) {
-          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+          return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
         });
 
         ${cfg.extraConfig}

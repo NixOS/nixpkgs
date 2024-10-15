@@ -1,4 +1,4 @@
-{ stdenv, lib, akku, curl, git, substituteAll }:
+{ stdenv, lib, akku, curl, git }:
 let
   joinOverrides =
     overrides: pkg: old:
@@ -11,8 +11,8 @@ let
   # debugging
   showLibs = pkg: old: { preCheck = "echo $CHEZSCHEMELIBDIRS"; };
   runTests = pkg: old: { doCheck = true; };
-  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.isAarch64; };
-  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.isDarwin && stdenv.isx86_64; };
+  brokenOnAarch64 = _: lib.addMetaAttrs { broken = stdenv.hostPlatform.isAarch64; };
+  brokenOnx86_64Darwin = lib.addMetaAttrs { broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64; };
 in
 {
   chez-srfi = joinOverrides [
@@ -39,11 +39,14 @@ in
   };
 
   akku = joinOverrides [
+    # uses chez
     (addToBuildInputs [ curl git ])
     (pkg: old: {
-      # hardcode-libcurl
-      patches = akku.patches;
+      # bump akku to 1.1.0-unstable-2024-03-03
+      src = akku.src;
     })
+    # not a tar archive
+    (pkg: old: removeAttrs old [ "unpackPhase" ])
   ];
 
   # circular dependency on wak-trc-testing !?

@@ -31,7 +31,7 @@ buildGoModule rec {
     kubectl
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Giant Swarm command line interface";

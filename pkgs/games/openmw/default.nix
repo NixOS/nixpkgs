@@ -11,7 +11,8 @@
 , VideoDecodeAcceleration
 , boost
 , bullet
-, ffmpeg
+# Please unpin this on the next OpenMW release.
+, ffmpeg_6
 , libXt
 , luajit
 , lz4
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Don't fix Darwin app bundle
     sed -i '/fixup_bundle/d' CMakeLists.txt
   '';
@@ -74,13 +75,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
 
   # If not set, OSG plugin .so files become shell scripts on Darwin.
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   buildInputs = [
     SDL2
     boost
     bullet'
-    ffmpeg
+    ffmpeg_6
     libXt
     luajit
     lz4
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     recastnavigation
     unshield
     yaml-cpp
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreMedia
     VideoDecodeAcceleration
     VideoToolbox
@@ -99,7 +100,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DOpenGL_GL_PREFERENCE=${GL}"
     "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DOPENMW_OSX_DEPLOYMENT=ON"
   ];
 

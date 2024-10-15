@@ -4,29 +4,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  lxml,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "0.4.0";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Pj0L9D5j+5koqhbpr4maa8aLGka1FghKkMEbyKi/D3E=";
+    hash = "sha256-1H7TqFPVstB+nCYwWOT8E2HcmkLQx9pekBq2WIAf8DQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    xmltodict
+    lxml
   ];
 
   pythonImportsCheck = [ "pyblu" ];
@@ -38,6 +38,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/LouisChrist/pyblu/releases/tag/v${version}";
     description = "BluOS API client";
     homepage = "https://github.com/LouisChrist/pyblu";
     license = lib.licenses.mit;

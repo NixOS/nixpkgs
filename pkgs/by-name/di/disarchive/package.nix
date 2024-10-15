@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     guile-lzma
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeCheckInputs = [
     guile-quickcheck

@@ -33,15 +33,15 @@
 , gnome
 , gsettings-desktop-schemas
 , sassc
-, trackerSupport ? stdenv.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
+, trackerSupport ? stdenv.hostPlatform.isLinux && (stdenv.buildPlatform == stdenv.hostPlatform)
 , tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
 , wayland
 , wayland-protocols
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
 , cups
 , AppKit
 , Cocoa
@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     (libepoxy.override { inherit x11Support; })
     isocodes
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
     tracker
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXrandr
     libXrender
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # explicitly propagated, always needed
     Cocoa
     QuartzCore
@@ -166,13 +166,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtracker3=${lib.boolToString trackerSupport}"
     "-Dbroadway_backend=${lib.boolToString broadwaySupport}"
     "-Dx11_backend=${lib.boolToString x11Support}"
-    "-Dquartz_backend=${lib.boolToString (stdenv.isDarwin && !x11Support)}"
+    "-Dquartz_backend=${lib.boolToString (stdenv.hostPlatform.isDarwin && !x11Support)}"
     "-Dintrospection=${lib.boolToString withIntrospection}"
   ];
 
   doCheck = false; # needs X11
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
@@ -202,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs ''${files[@]}
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
     # Launcher
@@ -219,14 +219,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup =  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     demos=(gtk3-demo gtk3-demo-application gtk3-icon-browser gtk3-widget-factory)
 
     for program in ''${demos[@]}; do
       wrapProgram $dev/bin/$program \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${finalAttrs.pname}-${finalAttrs.version}"
     done
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # a comment created a cycle between outputs
     sed '/^# ModulesPath =/d' -i "$out"/lib/gtk-*/*/immodules.cache
   '';

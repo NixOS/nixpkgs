@@ -16,7 +16,7 @@
 , librsvg
 , libzip
 , openssl
-, webkitgtk
+, webkitgtk_4_0
 , libappindicator-gtk3
 }:
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     librsvg
     libzip
     openssl
-    webkitgtk
+    webkitgtk_4_0
     libappindicator-gtk3
   ];
 

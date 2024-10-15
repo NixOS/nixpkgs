@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QsaOFman+VBSIAbCalW63I3QXY0uECZy9+ufOKhSQrA=";
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   # Test checks against machine code output, which fails with some
   # LLVM/compiler versions.

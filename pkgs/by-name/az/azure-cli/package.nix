@@ -21,14 +21,14 @@
 }:
 
 let
-  version = "2.63.0";
+  version = "2.64.0";
 
   src = fetchFromGitHub {
     name = "azure-cli-${version}-src";
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    hash = "sha256-HpWdEZAMnAkB07fnE7IrA0FqpBYKChqojxwAo8RfuQs=";
+    hash = "sha256-1FnrUvRpAkZ0nAxen3seam2S49tBkK5N37ZD99OkvB0=";
   };
 
   # put packages that needs to be overridden in the py package scope
@@ -100,7 +100,10 @@ py.pkgs.toPythonApplication (
 
     sourceRoot = "${src.name}/src/azure-cli";
 
-    nativeBuildInputs = [ installShellFiles ];
+    nativeBuildInputs = [
+      installShellFiles
+      py.pkgs.argcomplete
+    ];
 
     # Dependencies from:
     # https://github.com/Azure/azure-cli/blob/azure-cli-2.62.0/src/azure-cli/setup.py#L52
@@ -191,7 +194,7 @@ py.pkgs.toPythonApplication (
         chardet
         colorama
       ]
-      ++ lib.optional stdenv.isLinux distro
+      ++ lib.optional stdenv.hostPlatform.isLinux distro
       ++ [
         fabric
         javaproperties
@@ -221,11 +224,11 @@ py.pkgs.toPythonApplication (
       ++ lib.concatMap (extension: extension.propagatedBuildInputs) withExtensions;
 
     postInstall =
-      ''
-        substituteInPlace az.completion.sh \
-          --replace register-python-argcomplete ${py.pkgs.argcomplete}/bin/register-python-argcomplete
-        installShellCompletion --bash --name az.bash az.completion.sh
-        installShellCompletion --zsh --name _az az.completion.sh
+      lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+        installShellCompletion --cmd az \
+          --bash <(register-python-argcomplete az --shell bash) \
+          --zsh <(register-python-argcomplete az --shell zsh) \
+          --fish <(register-python-argcomplete az --shell fish)
       ''
       + lib.optionalString withImmutableConfig ''
         export HOME=$TMPDIR

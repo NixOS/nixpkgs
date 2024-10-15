@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-j1qSMPNCtAxClqYqWkRNQmtxkitYi7g/9KtQ5XqcX3w=";
   };
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     ./einval.patch
 
     # patches needed for musl libc, borrowed from alpine packaging.
@@ -39,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
       sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
     })
+  ] ++ [
     (fetchpatch {
       name = "addendum-charset-conversion.patch";
       url = "https://salsa.debian.org/clint/fakeroot/-/commit/b769fb19fd89d696a5e0fd70b974f833f6a0655a.patch";
@@ -47,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ autoreconfHook po4a ];
-  buildInputs = lib.optional (!stdenv.isDarwin) libcap;
+  buildInputs = lib.optional (!stdenv.hostPlatform.isDarwin) libcap;
 
   postUnpack = ''
     sed -i \
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://salsa.debian.org/clint/fakeroot";
     description = "Give a fake root environment through LD_PRELOAD";
+    mainProgram = "fakeroot";
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.unix;

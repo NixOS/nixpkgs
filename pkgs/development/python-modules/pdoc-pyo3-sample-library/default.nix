@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit pname version src;
+    inherit src;
     hash = "sha256-KrEBr998AV/bKcIoq0tX72/QwPD9bQplrS0Zw+JiSMQ=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     rustc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   pythonImportsCheck = [ "pdoc_pyo3_sample_library" ];
 

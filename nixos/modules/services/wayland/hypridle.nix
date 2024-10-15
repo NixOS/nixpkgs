@@ -1,4 +1,9 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
   cfg = config.services.hypridle;
@@ -10,15 +15,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [
-      cfg.package
-    ];
+    environment.systemPackages = [ cfg.package ];
 
-    systemd.user.services.hypridle = {
-      description = "Hypridle idle daemon";
-      wantedBy = [ "graphical-session.target" ];
-      partOf = [ "graphical-session.target" ];
-      script = lib.getExe cfg.package;
+    systemd = {
+      packages = [ cfg.package ];
+      user.services.hypridle.wantedBy = [ "graphical-session.target" ];
     };
   };
 

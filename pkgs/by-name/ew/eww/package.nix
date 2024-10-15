@@ -67,12 +67,11 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       coffeeispower
-      eclairevoyant
       figsoda
       lom
       w-lfchen
     ];
     mainProgram = "eww";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

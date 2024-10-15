@@ -19,25 +19,26 @@
 }:
 
 let
+  presets = {
+    "i686-linux" = "Linux 32-bit";
+    "x86_64-linux" = "Linux 64-bit";
+    "aarch64-linux" = "Linux ARM64";
+  };
   preset =
-    if stdenv.isLinux then
-      if stdenv.is64bit then "Linux/X11 64-bit" else "Linux/X11 32-bit"
-    else if stdenv.isDarwin then
-      "Mac OSX"
-    else
-      throw "unsupported platform";
+    presets.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   godot_version_folder = lib.replaceStrings [ "-" ] [ "." ] godot_4.version;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-lfim5ZiykOhI1kgsu0ni2frUVHPRIPJdrGx6TuUQcSY=";
+    hash = "sha256-IMHv5pOLxj7sqRtWmddziCiOX3T20bcMp2+ZzyhcIFg=";
   };
 
   strictDeps = true;
@@ -95,6 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     maintainers = with maintainers; [ felschr ];
     mainProgram = "pixelorama";

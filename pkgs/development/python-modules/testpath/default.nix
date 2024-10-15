@@ -27,7 +27,7 @@ buildPythonPackage rec {
     rm testpath/cli-32.exe testpath/cli-64.exe
   '';
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Work around https://github.com/jupyter/testpath/issues/24
     export TMPDIR="/tmp"
   '';

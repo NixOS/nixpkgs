@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     python3
   ];
 
-  buildInputs = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # Pull a header that contains a definition of proc_pid_rusage().
     darwin.apple_sdk_11_0.Libsystem
   ];

@@ -6,14 +6,6 @@
 , iconConvTools
 , copyDesktopItems
 , makeDesktopItem
-, libX11
-, libICE
-, libSM
-, libXi
-, libXcursor
-, libXext
-, libXrandr
-, fontconfig
 , glew
 , SDL2
 , glfw
@@ -31,7 +23,7 @@
 , gdk-pixbuf
 }:
 let
-  version = "0.28.0";
+  version = "0.29.0";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +36,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
-    hash = "sha256-mBFTXwnxijXAP6i7DNQ/3bujualysCGjDDjmhe15s4I=";
+    hash = "sha256-0HpHTZhGqCcSCCBk1d5923ALVCjozLn5fym4RH2Ov5Y=";
     fetchSubmodules = true;
   };
 
@@ -95,14 +87,6 @@ buildDotnetModule rec {
     gdk-pixbuf
 
     # Avalonia UI dependencies.
-    libX11
-    libICE
-    libSM
-    libXi
-    libXcursor
-    libXext
-    libXrandr
-    fontconfig
     glew
   ];
 

@@ -16,7 +16,7 @@ buildDunePackage {
 
   dontStrip = true;
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
   };
 

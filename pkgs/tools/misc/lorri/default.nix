@@ -14,9 +14,9 @@ let
   # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
   # It will copy some required files if necessary.
   # Also don’t forget to run `nix-build -A lorri.tests`
-  version = "1.7.0";
-  sha256 = "sha256-pGNhhEBHyWhTaW24dHrxAvpb/qr5RPbHXRwDZx6Rf74=";
-  cargoHash = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
+  version = "1.7.1";
+  sha256 = "sha256-dEdKMgE4Jd8CCvtGQDZNDCYOomZAV8aR7Cmtyn8RfTo=";
+  cargoHash = "sha256-+sKxKxc2DVHn54uQa8K+CKmm0A0ym9SXgtOcfRZ6R5E=";
 
 in (rustPlatform.buildRustPackage rec {
   pname = "lorri";
@@ -38,7 +38,7 @@ in (rustPlatform.buildRustPackage rec {
   RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     sed -i "s/-pg//g" {,src/Apps/TaMaDi/}CMakeLists.txt
   '';
 

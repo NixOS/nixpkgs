@@ -77,7 +77,7 @@ let
       rev = "v${version}";
       hash = "sha256-HTi2FKzKCbRaP13XERUmHkJgw8IfKaRJvsK3+YxFFdc=";
     };
-    buildInputs = prev.buildInputs ++ [ pkg-config ];
+    nativeBuildInputs = prev.nativeBuildInputs ++ [ pkg-config ];
     patches = (prev.patches or [ ]) ++ [
       (fetchpatch {
         name = "stormlib-optimizations.patch";
@@ -138,7 +138,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "NON_PORTABLE" true)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/2s2h")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   asciidoc,
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "4.4.0";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-t2fb8AA9m2I7Qna/v4F2GNL02iCU0r7zz5TgajHUmrg=";
+    hash = "sha256-oMFS5eNNzCpaineCLn0hh3bXGw3SNdj+Pdvk3pevIZg=";
   };
 
   patches = [
@@ -60,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     rm $out/lib/*.a
+
+    ln -s $out/bin/sfsmount $out/bin/mount.saunafs
   '';
+
+  passthru.tests = nixosTests.saunafs;
 
   meta = with lib; {
     description = "Distributed POSIX file system";

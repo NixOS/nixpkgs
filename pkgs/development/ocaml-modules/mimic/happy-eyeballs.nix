@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, mimic, happy-eyeballs-mirage }:
+{ lib, buildDunePackage, dns-client-mirage, mimic, happy-eyeballs-mirage }:
 
 buildDunePackage {
   pname = "mimic-happy-eyeballs";
@@ -6,11 +6,9 @@ buildDunePackage {
   inherit (mimic) src version;
 
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
-
-  strictDeps = true;
 
   propagatedBuildInputs = [
+    dns-client-mirage
     mimic
     happy-eyeballs-mirage
   ];

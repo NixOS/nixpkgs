@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "audible";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkb79";
     repo = "Audible";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qLU8FjJBPKFgjpumPqRiiMBwZi+zW46iEmWM8UerMgs=";
+    hash = "sha256-ILGhjuPIxpRxu/dVDmz531FUgMWosk4P+onPJltuPIs=";
   };
 
   nativeBuildInputs = [ poetry-core ];

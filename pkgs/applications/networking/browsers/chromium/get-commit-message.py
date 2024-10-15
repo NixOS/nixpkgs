@@ -20,7 +20,7 @@ target_version = sys.argv[1] if len(sys.argv) == 2 else None
 
 for entry in feed.entries:
     url = requests.get(entry.link).url.split('?')[0]
-    if entry.title != 'Stable Channel Update for Desktop':
+    if entry.title.lower() != 'Stable Channel Update for Desktop'.lower():
         if target_version and entry.title == '':
             # Workaround for a special case (Chrome Releases bug?):
             if not 'the-stable-channel-has-been-updated-to' in url:

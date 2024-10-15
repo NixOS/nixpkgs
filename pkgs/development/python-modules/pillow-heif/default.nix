@@ -90,12 +90,12 @@ buildPythonPackage rec {
       # Time based
       "test_decode_threads"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # https://github.com/bigcat88/pillow_heif/issues/89
       # not reproducible in nixpkgs
       "test_opencv_crash"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # RuntimeError: Encoder plugin generated an error: Unsupported bit depth: Bit depth not supported by x265
       "test_open_heif_compare_non_standard_modes_data"
       "test_open_save_disable_16bit"

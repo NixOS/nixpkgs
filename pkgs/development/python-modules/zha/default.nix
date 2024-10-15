@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "zha";
-  version = "0.0.30";
+  version = "0.0.34";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha";
     rev = "refs/tags/${version}";
-    hash = "sha256-4Fpe1us/GS2QVJbbnMcI7bziyW5P2kuJ6+p5L9N7lMY=";
+    hash = "sha256-or4mZpfcVl7fTf8O1vBxEeeJvhYNgrlV+FClrzQG/lg=";
   };
 
   postPatch = ''
@@ -44,10 +44,6 @@ buildPythonPackage rec {
       --replace-fail '"setuptools-git-versioning<3"' "" \
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
-
-  pythonRelaxDeps = [
-    "pyserial-asyncio-fast"
-  ];
 
   build-system = [
     setuptools
@@ -87,7 +83,7 @@ buildPythonPackage rec {
     "test_check_available_unsuccessful"
     "test_device_counter_sensors"
     "test_device_tracker"
-    "test_device_unavailable_skips_entity_polling"
+    "test_device_unavailable_or_disabled_skips_entity_polling"
     "test_elec_measurement_sensor_polling"
     "test_electrical_measurement_init"
     "test_group_member_assume_state"

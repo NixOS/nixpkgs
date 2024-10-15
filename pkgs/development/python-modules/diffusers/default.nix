@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.29.2";
+  version = "0.30.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "diffusers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RJQo+2lZ863nP9ZCQbntfuxDI+elB0RJ5E8zGs65E2A=";
+    hash = "sha256-fry16HDAjpuosSHSDDm/Y5dTNkpsGM6S33hOJ3n2x7M=";
   };
 
   build-system = [ setuptools ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     safetensors
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     flax = [
       flax
       jax
@@ -102,7 +102,7 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ passthru.optional-dependencies.torch;
+  ] ++ optional-dependencies.torch;
 
   preCheck =
     let
@@ -153,7 +153,7 @@ buildPythonPackage rec {
     description = "State-of-the-art diffusion models for image and audio generation in PyTorch";
     mainProgram = "diffusers-cli";
     homepage = "https://github.com/huggingface/diffusers";
-    changelog = "https://github.com/huggingface/diffusers/releases/tag/${src.rev}";
+    changelog = "https://github.com/huggingface/diffusers/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.asl20;
     maintainers = with maintainers; [ natsukium ];
   };

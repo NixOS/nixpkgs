@@ -7,10 +7,13 @@
 , fetchpatch
 
 # Build time
+, autoconf
+, automake
 , cmake
 , ensureNewerSourcesHook
 , fmt
 , git
+, libtool
 , makeWrapper
 , nasm
 , pkg-config
@@ -22,10 +25,11 @@
 # Runtime dependencies
 , arrow-cpp
 , babeltrace
-, boost179
+, boost182  # using the version installed by ceph's `install-deps.sh`
 , bzip2
 , cryptsetup
 , cunit
+, e2fsprogs
 , doxygen
 , gperf
 , graphviz
@@ -37,17 +41,22 @@
 , libcap_ng
 , libnl
 , libxml2
+, lmdb
 , lttng-ust
 , lua
+, lvm2
 , lz4
 , oath-toolkit
 , openldap
-, python311
+, parted
+, python311 # to get an idea which Python versions are supported by Ceph, see upstream `do_cmake.sh` (see `PYBUILD=` variable)
 , rdkafka
 , rocksdb
 , snappy
+, openssh
 , sqlite
 , utf8proc
+, xfsprogs
 , zlib
 , zstd
 
@@ -138,11 +147,11 @@ let
     none = [ ];
   };
 
-  getMeta = description: with lib; {
+  getMeta = description: {
      homepage = "https://ceph.io/en/";
      inherit description;
-     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
-     maintainers = with maintainers; [ adev ak johanot krav ];
+     license = with lib.licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
+     maintainers = with lib.maintainers; [ adev ak johanot krav nh2 ];
      platforms = [ "x86_64-linux" "aarch64-linux" ];
    };
 
@@ -172,12 +181,18 @@ let
   python = python311.override {
     self = python;
     packageOverrides = self: super: let
-      cryptographyOverrideVersion = "40.0.1";
       bcryptOverrideVersion = "4.0.1";
     in {
-      # Ceph does not support `bcrypt` > 4.0 yet:
+      # Ceph does not support the following yet:
+      # * `bcrypt` > 4.0
+      # * `cryptography` > 40
+      # See:
+      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
       # * Upstream issue: https://tracker.ceph.com/issues/63529
       #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+      # * Moved to issue: https://tracker.ceph.com/issues/64213
+      #   > MGR modules incompatible with later PyO3 versions - PyO3 modules may only be initialized once per interpreter process
+
       bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
         pname = "bcrypt";
         version = bcryptOverrideVersion;
@@ -193,44 +208,12 @@ let
           hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
         };
       });
-      # Ceph does not support `cryptography` > 40 yet:
-      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-      # * Upstream issue: https://tracker.ceph.com/issues/63529
-      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-      #
+
       # We pin the older `cryptography` 40 here;
       # this also forces us to pin an older `pyopenssl` because the current one
       # is not compatible with older `cryptography`, see:
       #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-      cryptography = super.cryptography.overridePythonAttrs (old: rec {
-        version = cryptographyOverrideVersion;
-
-        src = fetchPypi {
-          inherit (old) pname;
-          version = cryptographyOverrideVersion;
-          hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
-        };
-
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = let cargoRoot = "src/rust"; in "${old.pname}-${cryptographyOverrideVersion}/${cargoRoot}";
-          name = "${old.pname}-${cryptographyOverrideVersion}";
-          hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
-        };
-
-        # Not using the normal `(old.patches or []) ++` pattern here to use
-        # the overridden package's patches, because current nixpkgs's `cryptography`
-        # has patches that do not apply on this old version.
-        patches = [
-          # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
-          # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
-          ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
-        ];
-
-        # Tests would require overriding `cryptography-vectors`, which is not currently
-        # possible/desired, see: https://github.com/NixOS/nixpkgs/pull/281858#pullrequestreview-1841421866
-        doCheck = false;
-      });
+      cryptography = self.callPackage ./old-python-packages/cryptography.nix {};
 
       # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
       # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
@@ -249,6 +232,14 @@ let
         ];
       });
 
+
+      fastapi = super.fastapi.overridePythonAttrs (old: rec {
+        # Flaky test:
+        #     ResourceWarning: Unclosed <MemoryObjectSendStream>
+        # Unclear whether it's flaky in general or only in this overridden package set.
+        doCheck = false;
+      });
+
       # Ceph does not support `kubernetes` >= 19, see:
       #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
       kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
@@ -265,7 +256,7 @@ let
     };
   };
 
-  boost = boost179.override {
+  boost = boost182.override {
     enablePython = true;
     inherit python;
   };
@@ -300,6 +291,9 @@ let
     virtualenv
     werkzeug
 
+    # src/cephadm/zipapp-reqs.txt
+    markupsafe
+
     # src/pybind/mgr/requirements-required.txt
     cryptography
     jsonpatch
@@ -310,49 +304,24 @@ let
   ]);
   inherit (ceph-python-env.python) sitePackages;
 
-  version = "18.2.4";
+  version = "19.2.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-    hash = "sha256-EFqteP3Jo+hASXVesH6gkjDjFO7/1RN151tIf/lQ06s=";
+    hash = "sha256-30vkW1j49hFIxyxzkssSKVSq0VqiwLfDtOb62xfxadM=";
   };
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
 
-    patches = [
-      # Fixes mgr not being able to import `packaging` due to autotools >= 70.
-      # Remove once https://github.com/ceph/ceph/pull/58624 is merged, see
-      # https://github.com/NixOS/nixpkgs/pull/330226#issuecomment-2268421031
-      (fetchpatch {
-        url = "https://github.com/ceph/ceph/commit/8da2d857fa8fdfedd7aad0ca90e1780a3ed085c9.patch";
-        name = "ceph-mgr-python-fix-packaging-import.patch";
-        hash = "sha256-3Yl1X6UfTf0XCXJxgRnM/Js9sz8tS+hsqViY6gDExoI=";
-      })
-
-      # Fixes cryptesetup version parsing regex, see
-      # * https://github.com/NixOS/nixpkgs/issues/334227
-      # * https://www.mail-archive.com/ceph-users@ceph.io/msg26309.html
-      # * https://github.com/ceph/ceph/pull/58997
-      # Remove once we're on the next version of Ceph 18, when this should be in:
-      # https://github.com/ceph/ceph/pull/58997
-      (fetchpatch {
-        url = "https://github.com/ceph/ceph/commit/6ae874902b63652fa199563b6e7950cd75151304.patch";
-        name = "ceph-reef-ceph-volume-fix-set_dmcrypt_no_workqueue.patch";
-        hash = "sha256-r+7hcCz2WF/rJfgKwTatKY9unJlE8Uw3fmOyaY5jVH0=";
-      })
-    ];
-
-    postPatch = ''
-      substituteInPlace cmake/modules/Finduring.cmake \
-        --replace-fail "liburing.a liburing" "uring"
-    '';
-
     nativeBuildInputs = [
+      autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
+      automake # `aclocal` is called, e.g. for `qatlib_ext`
       cmake
       fmt
       git
       makeWrapper
+      libtool # used e.g. for `qatlib_ext`
       nasm
       pkg-config
       python
@@ -370,17 +339,23 @@ in rec {
       babeltrace
       boost
       bzip2
+      # Adding `ceph-python-env` here adds the env's `site-packages` to `PYTHONPATH` during the build.
+      # This is important, otherwise the build system may not find the Python deps and then
+      # silently skip installing ceph-volume and other Ceph python tools.
       ceph-python-env
       cryptsetup
       cunit
+      e2fsprogs # according to `debian/control` file, `ceph-volume` is supposed to use it
       gperf
       gtest
       icu
       libcap
       libnl
       libxml2
+      lmdb
       lttng-ust
       lua
+      lvm2 # according to `debian/control` file, e.g. `pvs` command used by `src/ceph-volume/ceph_volume/api/lvm.py`
       lz4
       malloc
       oath-toolkit
@@ -388,14 +363,17 @@ in rec {
       optLibatomic_ops
       optLibs3
       optYasm
+      parted # according to `debian/control` file, used by `src/ceph-volume/ceph_volume/util/disk.py`
       rdkafka
       rocksdb'
       snappy
+      openssh # according to `debian/control` file, `ssh` command used by `cephadm`
       sqlite
       utf8proc
+      xfsprogs # according to `debian/control` file, `ceph-volume` is supposed to use it
       zlib
       zstd
-    ] ++ lib.optionals stdenv.isLinux [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
       keyutils
       libcap_ng
       liburing
@@ -415,7 +393,11 @@ in rec {
       optLibedit
     ];
 
-    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+    # Picked up, amongst others, by `wrapPythonPrograms`.
+    pythonPath = [
+      ceph-python-env
+      "${placeholder "out"}/${ceph-python-env.sitePackages}"
+    ];
 
     # replace /sbin and /bin based paths with direct nix store paths
     # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
@@ -426,9 +408,8 @@ in rec {
         --replace "/sbin/modprobe" "${kmod}/bin/modprobe" \
         --replace "/bin/grep" "${gnugrep}/bin/grep"
 
-      # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
-      # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
-      export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
+      # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
+      export PYTHONPATH=$PYTHONPATH:$lib/${sitePackages}:$out/${sitePackages}
       patchShebangs src/
     '';
 
@@ -466,11 +447,15 @@ in rec {
       "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
       "-DWITH_SYSTEM_ZSTD:BOOL=ON"
 
+      # Use our own python libraries too, see:
+      #     https://github.com/NixOS/nixpkgs/pull/344993#issuecomment-2391046329
+      "-DCEPHADM_BUNDLED_DEPENDENCIES=none"
+
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
-    ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";
+    ] ++ lib.optional stdenv.hostPlatform.isLinux "-DWITH_SYSTEM_LIBURING=ON";
 
     preBuild =
       # The legacy-option-headers target is not correctly empbedded in the build graph.
@@ -500,11 +485,13 @@ in rec {
 
     passthru = {
       inherit version;
+      inherit python; # to be able to test our overridden packages above individually with `nix-build -A`
       tests = {
         inherit (nixosTests)
           ceph-multi-node
           ceph-single-node
-          ceph-single-node-bluestore;
+          ceph-single-node-bluestore
+          ceph-single-node-bluestore-dmcrypt;
       };
     };
   };

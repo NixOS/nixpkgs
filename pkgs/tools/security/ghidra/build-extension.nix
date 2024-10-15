@@ -11,10 +11,10 @@ let
   metaCommon =
     oldMeta:
     oldMeta
-    // (with lib; {
-      maintainers = (oldMeta.maintainers or [ ]) ++ (with maintainers; [ vringar ]);
+    // {
+      maintainers = (oldMeta.maintainers or [ ]) ++ (with lib.maintainers; [ vringar ]);
       platforms = oldMeta.platforms or ghidra.meta.platforms;
-    });
+    };
 
   buildGhidraExtension =
     {

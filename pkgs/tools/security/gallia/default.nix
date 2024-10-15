@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gallia";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Fraunhofer-AISEC";
     repo = "gallia";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x1sTvb+Z/AttYJVBEfXMx2/Ps34ZbqdLeGN8qHkFXsQ=";
+    hash = "sha256-izMTTZrp4aizq5jS51BNtq3lv9Kr+xI7scZfYKXA/oY=";
   };
 
   pythonRelaxDeps = [ "aiofiles" ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = if stdenv.isDarwin
+  buildInputs = if stdenv.hostPlatform.isDarwin
     then [
       CoreFoundation
       Cocoa
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.can-run-hello-world = callPackage ./test-can-run-hello-world.nix {};
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://strlen.com/lobster/";
     description = "Lobster programming language";
     mainProgram = "lobster";

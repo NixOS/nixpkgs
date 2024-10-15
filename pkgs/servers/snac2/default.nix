@@ -10,21 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "snac2";
-  version = "2.56";
+  version = "2.59";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "grunfink";
     repo = pname;
     rev = version;
-    hash = "sha256-/e2eUlcYvSQKrYvRAdjx6uKR7DnMipvblKZaHMr1go4=";
+    hash = "sha256-CIn+/LC6z+2lnU8w3EzrBIBg94J9OnCxME2mZW65OwE=";
   };
 
   buildInputs = [ curl openssl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
     "-Dst_mtim=st_mtimespec"
     "-Dst_ctim=st_ctimespec"
   ]);

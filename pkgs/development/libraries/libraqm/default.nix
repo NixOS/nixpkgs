@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libraqm";
-  version = "0.10.1";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "HOST-Oman";
     repo = "libraqm";
     rev = "v${version}";
-    sha256 = "sha256-H9W+7Mob3o5ctxfp5UhIxatSdXqqvkpyEibJx9TO7a8=";
+    sha256 = "sha256-KhGE66GS5rIieVXJUFA3jSsXEpbdnzN0VIAF/zOelU4=";
   };
 
   buildInputs = [ freetype harfbuzz fribidi ];

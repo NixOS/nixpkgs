@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
     longDescription = ''
       An open source, decentralized privacy platform built for global person to person eCommerce.

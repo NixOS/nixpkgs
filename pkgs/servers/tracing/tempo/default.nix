@@ -1,15 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib, buildGo122Module, fetchFromGitHub }:
 
-buildGoModule rec {
+# Does not build with Go 1.23
+# FIXME: check again for next release
+buildGo122Module rec {
   pname = "tempo";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "tempo";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-SSAeJOOd282Mnmaj/W5sM8J64qvD9/0SvlbHUtXYYF8=";
+    hash = "sha256-jWoGKY+kC9VAK7jPFaGMJQkC/JeAiUjzqKhE2XjuJio=";
   };
 
   vendorHash = null;

@@ -8,7 +8,7 @@
 , gettext
 , dbus
 , glib
-, udevSupport ? stdenv.isLinux
+, udevSupport ? stdenv.hostPlatform.isLinux
 , libgudev
 , udisks2
 , libgcrypt

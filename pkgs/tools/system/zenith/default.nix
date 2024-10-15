@@ -7,7 +7,7 @@
 , makeWrapper
 }:
 
-assert nvidiaSupport -> stdenv.isLinux;
+assert nvidiaSupport -> stdenv.hostPlatform.isLinux;
 
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
 

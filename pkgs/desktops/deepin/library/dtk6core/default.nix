@@ -1,30 +1,37 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, lshw
-, libuchardet
-, dtkcommon
-, dtk6log
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  lshw,
+  libuchardet,
+  dtkcommon,
+  dtk6log,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6core";
-  version = "6.0.18";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
     rev = finalAttrs.version;
-    hash = "sha256-zyhqkxxWB5U37eBxINNxcbnF5NpImg+E7H1VhfJDz60=";
+    hash = "sha256-3MwvTnjtVVcMjQa1f4UdagEtWhJj8aDgfUlmnGo/R7s=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    (fetchpatch {
+      name = "fix-build-on-qt-6.8.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6core/-/raw/d2e991f96b2940e8533b7e944bab5a7dd6aa0fb7/qt-6.8.patch";
+      hash = "sha256-HZxUrtUmVwnNUwcBoU7ewb+McsRkALQglPBbJU8HTkk=";
+    })
   ];
 
   postPatch = ''
@@ -48,7 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     libuchardet
   ];
 
-  propagatedBuildInputs = [ dtkcommon dtk6log ];
+  propagatedBuildInputs = [
+    dtkcommon
+    dtk6log
+  ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -66,7 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DCore/bin/*; do

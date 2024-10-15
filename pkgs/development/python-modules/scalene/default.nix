@@ -2,32 +2,66 @@
   lib,
   stdenv,
   buildPythonPackage,
-  hypothesis,
-  fetchPypi,
-  setuptools,
-  setuptools-scm,
+  fetchFromGitHub,
   cloudpickle,
   cython,
+  hypothesis,
   jinja2,
   numpy,
-  psutil,
-  pynvml,
   nvidia-ml-py,
+  psutil,
+  pydantic,
+  pynvml,
   pytestCheckHook,
   pythonOlder,
   rich,
+  setuptools-scm,
+  setuptools,
 }:
+
+let
+  heap-layers-src = fetchFromGitHub {
+    owner = "emeryberger";
+    repo = "heap-layers";
+    name = "Heap-Layers";
+    rev = "a2048eae91b531dc5d72be7a194e0b333c06bd4c";
+    sha256 = "sha256-vl3z30CBX7hav/DM/UE0EQ9lLxZF48tMJrYMXuSulyA=";
+  };
+
+  printf-src = fetchFromGitHub {
+    owner = "mpaland";
+    repo = "printf";
+    name = "printf";
+    rev = "v4.0.0";
+    sha256 = "sha256-tgLJNJw/dJGQMwCmfkWNBvHB76xZVyyfVVplq7aSJnI=";
+  };
+in
 
 buildPythonPackage rec {
   pname = "scalene";
-  version = "1.5.43.2";
+  version = "1.5.45";
   pyproject = true;
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LtD7v3pLz4UCnh6xlhkPdcEjyu3mt+YQPYZ0nNCLuDw=";
+  src = fetchFromGitHub {
+    owner = "plasma-umass";
+    repo = "scalene";
+    rev = "v${version}";
+    hash = "sha256-0DhoLsXv2tUEkynMkoA14pNxF6GGLe30bfUOii7+PYE=";
   };
+
+  patches = [
+    ./01-manifest-no-git.patch
+  ];
+
+  prePatch = ''
+    cp -r ${heap-layers-src} vendor/Heap-Layers
+    mkdir vendor/printf
+    cp ${printf-src}/printf.c vendor/printf/printf.cpp
+    cp -r ${printf-src}/* vendor/printf
+    sed -i"" 's/^#define printf printf_/\/\/&/' vendor/printf/printf.h
+    sed -i"" 's/^#define vsnprintf vsnprintf_/\/\/&/' vendor/printf/printf.h
+  '';
 
   nativeBuildInputs = [
     cython
@@ -38,9 +72,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cloudpickle
     jinja2
+    numpy
     psutil
-    rich
+    pydantic
     pynvml
+    rich
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nvidia-ml-py ];
 
   pythonRemoveDeps = [
@@ -54,6 +90,11 @@ buildPythonPackage rec {
   checkInputs = [
     hypothesis
     numpy
+  ];
+
+  disabledTests = [
+    # Flaky -- socket collision
+    "test_show_browser"
   ];
 
   # remove scalene directory to prevent pytest import confusion

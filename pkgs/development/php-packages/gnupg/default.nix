@@ -32,25 +32,25 @@ buildPecl {
       --replace 'SEARCH_PATH="/usr/local /usr /opt"' 'SEARCH_PATH="${gpgme.dev}"'
   '';
 
-  postConfigure = with lib; ''
+  postConfigure = ''
     substituteInPlace Makefile \
       --replace 'run-tests.php' 'run-tests.php -q --offline'
     substituteInPlace tests/gnupg_res_init_file_name.phpt \
       --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (stringLength "${gnupg}/bin/gpg")})'
+      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
     substituteInPlace tests/gnupg_oo_init_file_name.phpt \
       --replace '/usr/bin/gpg' '${gnupg}/bin/gpg' \
-      --replace 'string(12)' 'string(${toString (stringLength "${gnupg}/bin/gpg")})'
+      --replace 'string(12)' 'string(${toString (lib.stringLength "${gnupg}/bin/gpg")})'
   '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/php-gnupg/php-gnupg/releases/tag/gnupg-${version}";
     broken = lib.versionOlder php.version "8.1"; # Broken on PHP older than 8.1.
     description = "PHP wrapper for GpgME library that provides access to GnuPG";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://pecl.php.net/package/gnupg";
-    maintainers = with maintainers; [ taikx4 ] ++ teams.php.members;
+    maintainers = with lib.maintainers; [ taikx4 ] ++ lib.teams.php.members;
   };
 }

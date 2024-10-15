@@ -66,7 +66,7 @@ buildPythonPackage rec {
   # marked as broken and throws an error during evaluation if the package is evaluated anyway.
   # disabling checks on Darwin avoids this and allows the package to be built.
   # if jaxlib is ever fixed on Darwin, remove this.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # mujoco is required for those tests but the mujoco python bindings are not packaged in nixpkgs.

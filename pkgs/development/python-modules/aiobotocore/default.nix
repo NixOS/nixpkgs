@@ -48,7 +48,7 @@ buildPythonPackage rec {
     wrapt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     awscli = [ awscli ];
     boto3 = [ boto3 ];
   };

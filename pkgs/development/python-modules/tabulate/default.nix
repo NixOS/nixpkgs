@@ -26,13 +26,13 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     widechars = [ wcwidth ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = {
     description = "Pretty-print tabular data";

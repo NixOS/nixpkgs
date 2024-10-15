@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch2
 , pkg-config
 , cmake
 , ninja
@@ -42,7 +43,19 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  patches = [
+    # Remove usage of AVCodecContext::reordered_opaque
+    (fetchpatch2 {
+      name = "webrtc-ffmpeg-7.patch";
+      url = "https://webrtc.googlesource.com/src/+/e7d10047096880feb5e9846375f2da54aef91202%5E%21/?format=TEXT";
+      decode = "base64 -d";
+      stripLen = 1;
+      extraPrefix = "src/";
+      hash = "sha256-EdwHeVko8uDsP5GTw2ryWiQgRVCAdPc1me6hySdiwMU=";
+    })
+  ];
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace '"libEGL.so.1"' '"${libGL}/lib/libEGL.so.1"' \
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
@@ -64,7 +77,7 @@ stdenv.mkDerivation {
     crc32c
     libvpx
     abseil-cpp
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
     libXtst
     libXcomposite
@@ -78,7 +91,7 @@ stdenv.mkDerivation {
     mesa
     libdrm
     libGL
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
     AppKit
     IOKit

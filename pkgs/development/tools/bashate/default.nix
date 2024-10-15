@@ -1,38 +1,41 @@
-{ lib
-, babel
-, buildPythonApplication
-, fetchPypi
-, fixtures
-, mock
-, pbr
-, pytestCheckHook
-, pythonOlder
-, setuptools
-, testtools
+{
+  lib,
+  fetchPypi,
+  python3Packages,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bashate";
   version = "2.1.1";
-  disabled = pythonOlder "3.5";
+  pyproject = true;
+
+  disabled = python3Packages.pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-S6tul3+DBacgU1+Pk/H7QsUh/LxKbCs9PXZx9C8iH0w=";
   };
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     babel
     pbr
     setuptools
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     fixtures
     mock
-    pytestCheckHook
+    stestr
     testtools
   ];
+
+  checkPhase = ''
+    runHook preCheck
+    stestr run
+    runHook postCheck
+  '';
 
   pythonImportsCheck = [ "bashate" ];
 
@@ -41,6 +44,6 @@ buildPythonApplication rec {
     mainProgram = "bashate";
     homepage = "https://opendev.org/openstack/bashate";
     license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = teams.openstack.members ++ (with maintainers; [ fab ]);
   };
 }

@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.5";
+  version = "3.2.8";
 
   disabled = pythonOlder "3.7";
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "pyupio";
     repo = "safety";
     rev = "refs/tags/${version}";
-    hash = "sha256-vLibQfSwxZF48KL/vfkCOUi2qH5QGMySbdakLQNP+Ug=";
+    hash = "sha256-H8YF9rax6dM6KCLGiRk7bIHhYVw0RNkH/B9VTZRHe9c=";
   };
 
   postPatch = ''

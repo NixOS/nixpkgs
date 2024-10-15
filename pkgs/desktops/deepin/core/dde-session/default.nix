@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkcore
-, gsettings-qt
-, libsecret
-, xorg
-, systemd
-, dde-polkit-agent
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  dtkcore,
+  gsettings-qt,
+  libsecret,
+  xorg,
+  systemd,
+  dde-polkit-agent,
 }:
 
 stdenv.mkDerivation rec {

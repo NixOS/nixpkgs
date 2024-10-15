@@ -4,6 +4,8 @@
 , makeWrapper
 , rustPlatform
 , tree-sitter
+, gitUpdater
+, versionCheckHook
 }:
 
 let
@@ -32,17 +34,17 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diffsitter";
-  version = "0.8.3";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-XYuX8NMVnVyOo3I2CmMS/TE47wQaigc8sen3ap2geSU=";
+    hash = "sha256-ta7JcSPEgpJwieYvtZnNMFvsYvz4FuxthhmKMYe2XUE=";
     fetchSubmodules = false;
   };
 
-  cargoHash = "sha256-re0FRoyENpo+BF88U9ARuB05W03Slgm4nw1yxcpOA4o=";
+  cargoHash = "sha256-VbdV4dftCxxKLJr9TEuCe9tvSGbc62AUwlDZdaNRNhw=";
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -52,6 +54,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     makeWrapper
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   postInstall = ''
     # completions are not yet implemented
@@ -70,6 +77,8 @@ rustPlatform.buildRustPackage rec {
   #     tests::diff_hunks_snapshot::_medium_rust_rs_true_expects
   #     tests::diff_hunks_snapshot::_short_python_py_true_expects
   #     tests::diff_hunks_snapshot::_short_rust_rs_true_expects
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = with lib; {
     homepage = "https://github.com/afnanenayet/diffsitter";

@@ -13,7 +13,7 @@
 , libxslt
 , gtk3
 , libgnomekbd
-, gnome
+, caribou
 , libtool
 , wrapGAppsHook3
 , gobject-introspection
@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-hXgDTQnOlskzyOogvk7BQ9iJ3oXRtgUUX5bXtgD+gFo=";
+    hash = "sha256-f1Z3fmtCokWNLJwsTOAIAZB3lwFfqakJJco3umyEaYk=";
   };
 
   nativeBuildInputs = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     cinnamon-desktop
     cinnamon-common
     libgnomekbd
-    gnome.caribou
+    caribou
   ];
 
   postPatch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     # https://github.com/NixOS/nixpkgs/issues/101881
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
+      --prefix XDG_DATA_DIRS : "${caribou}/share"
     )
   '';
 

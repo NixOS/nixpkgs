@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2 }:
+{ lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2, nixosTests }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/malsample.pl \
       $out/bin/Mconvert.py
   '';
+
+  passthru.tests = { inherit (nixosTests) monetdb; };
 
   meta = with lib; {
     description = "Open source database system";

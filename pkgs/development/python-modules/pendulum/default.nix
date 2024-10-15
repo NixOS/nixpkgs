@@ -60,7 +60,7 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ iconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
   propagatedBuildInputs =
     [
@@ -82,7 +82,7 @@ buildPythonPackage rec {
 
   disabledTestPaths =
     [ "tests/benchmarks" ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # PermissionError: [Errno 1] Operation not permitted: '/etc/localtime'
       "tests/testing/test_time_travel.py"
     ];

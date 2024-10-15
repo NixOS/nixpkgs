@@ -141,8 +141,10 @@ let
           --absolute-names \
           --verbatim-files-from \
           --transform 'flags=rSh;s|/nix/store/||' \
+          --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
           --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
           | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
+            --quiet \
             --force-uid=0 \
             --force-gid=0 \
             -L ${nixStoreFilesystemLabel} \
@@ -275,15 +277,7 @@ let
     onlyNixStore = false;
     label = rootFilesystemLabel;
     partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
-    # Bootloader should be installed on the system image only if we are booting through bootloaders.
-    # Though, if a user is not using our default filesystems, it is possible to not have any ESP
-    # or a strange partition table that's incompatible with GRUB configuration.
-    # As a consequence, this may lead to disk image creation failures.
-    # To avoid this, we prefer to let the user find out about how to install the bootloader on its ESP/disk.
-    # Usually, this can be through building your own disk image.
-    # TODO: If a user is interested into a more fine grained heuristic for `installBootLoader`
-    # by examining the actual contents of `cfg.fileSystems`, please send a PR.
-    installBootLoader = cfg.useBootLoader && cfg.useDefaultFilesystems;
+    installBootLoader = cfg.installBootLoader;
     touchEFIVars = cfg.useEFIBoot;
     diskSize = "auto";
     additionalSpace = "0M";
@@ -328,7 +322,7 @@ in
 
     virtualisation.diskSize =
       mkOption {
-        type = types.nullOr types.ints.positive;
+        type = types.ints.positive;
         default = 1024;
         description = ''
             The disk size in megabytes of the virtual machine.
@@ -839,6 +833,19 @@ in
           '';
       };
 
+    virtualisation.installBootLoader =
+      mkOption {
+        type = types.bool;
+        default = cfg.useBootLoader && cfg.useDefaultFilesystems;
+        defaultText = "cfg.useBootLoader && cfg.useDefaultFilesystems";
+        description = ''
+          Install boot loader to target image.
+
+          This is best-effort and may break with unconventional partition setups.
+          Use `virtualisation.useDefaultFilesystems` for a known-working configuration.
+        '';
+      };
+
     virtualisation.useEFIBoot =
       mkOption {
         type = types.bool;
@@ -998,6 +1005,13 @@ in
                 If you have a more advanced usecase, please open an issue or a pull request.
               '';
           }
+          {
+            assertion = cfg.installBootLoader -> config.system.switch.enable;
+            message = ''
+              `system.switch.enable` must be enabled for `virtualisation.installBootLoader` to work.
+              Please enable it in your configuration.
+            '';
+          }
         ];
 
     warnings =
@@ -1156,7 +1170,7 @@ in
           value.fsType = "9p";
           value.neededForBoot = true;
           value.options =
-            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" ]
+            [ "trans=virtio" "version=9p2000.L"  "msize=${toString cfg.msize}" "x-systemd.requires=modprobe@9pnet_virtio.service" ]
             ++ lib.optional (tag == "nix-store") "cache=loose";
         };
     in lib.mkMerge [

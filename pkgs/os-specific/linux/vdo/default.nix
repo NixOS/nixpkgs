@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
-  version = "8.2.2.2";  # bump this version with kvdo
+  version = "8.3.0.71";
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = pname;
     rev = version;
-    hash = "sha256-+2w9jzJemI2xr+i/Jd5TIBZ/o8Zv+Ett0fbJbkOD7KI=";
+    hash = "sha256-FZerMUzth43p5jvKQalyYcW+mrl6SLjS8GrivY2qWkI=";
   };
 
   nativeBuildInputs = [
@@ -48,8 +48,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    installShellCompletion --bash $out/bash_completion.d/*
-    rm -r $out/bash_completion.d
+    installShellCompletion --bash $out/usr/share/bash-completion/completions/*
+    rm -rv $out/usr
 
     wrapPythonPrograms
   '';

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.go-autoconfig;
@@ -12,19 +9,19 @@ in {
   options = {
     services.go-autoconfig = {
 
-      enable = mkEnableOption "IMAP/SMTP autodiscover feature for mail clients";
+      enable = lib.mkEnableOption "IMAP/SMTP autodiscover feature for mail clients";
 
-      settings = mkOption {
+      settings = lib.mkOption {
         default = { };
         description = ''
           Configuration for go-autoconfig. See
           <https://github.com/L11R/go-autoconfig/blob/master/config.yml>
           for more information.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = format.type;
         };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             service_addr = ":1323";
             domain = "autoconfig.example.org";
@@ -43,7 +40,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd = {
       services.go-autoconfig = {

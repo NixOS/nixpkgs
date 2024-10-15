@@ -1,13 +1,16 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, testers
-, wstunnel
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  nixosTests,
+  nix-update-script,
+  versionCheckHook,
+  darwin,
 }:
 
 let
-  version = "9.7.4";
+  version = "10.1.3";
 in
 
 rustPlatform.buildRustPackage {
@@ -18,19 +21,34 @@ rustPlatform.buildRustPackage {
     owner = "erebe";
     repo = "wstunnel";
     rev = "v${version}";
-    hash = "sha256-OFm0Jk06Mxzr4F7KrMBGFqcDSuTtrMvBSK99bbOgua4=";
+    hash = "sha256-mrCDx9f+EeA6McRc1s9YwYL4RHKSla10fxXZc1WYPio=";
   };
 
-  cargoHash = "sha256-JMRcXuw6AKfwViOgYAgFdSwUeTo04rEkKj+t+W8wjGI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "fastwebsockets-0.8.0" = "sha256-eqtCh9fMOG2uvL/GLUVXNiSB+ovYLc/Apuq9zssn8hU=";
+    };
+  };
+
+  nativeBuildInputs = [ versionCheckHook ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
+
+  doInstallCheck = true;
 
   checkFlags = [
     # Tries to launch a test container
     "--skip=tcp::tests::test_proxy_connection"
+    "--skip=protocols::tcp::server::tests::test_proxy_connection"
   ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = wstunnel; };
-    nixosTest = nixosTests.wstunnel;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      nixosTest = nixosTests.wstunnel;
+    };
   };
 
   meta = {
@@ -38,7 +56,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/erebe/wstunnel";
     changelog = "https://github.com/erebe/wstunnel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ rvdp neverbehave ];
+    maintainers = with lib.maintainers; [
+      rvdp
+      neverbehave
+    ];
     mainProgram = "wstunnel";
   };
 }

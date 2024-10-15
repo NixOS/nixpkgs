@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Satisfiability modulo theory (SMT) solver";
     mainProgram = "opensmt";
     maintainers = [ maintainers.raskin ];

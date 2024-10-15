@@ -1,4 +1,4 @@
-{ lib, stdenv, undmg, fetchurl }:
+{ lib, stdenv, _7zz, fetchurl }:
 let
   common = import ./common.nix { inherit fetchurl; };
   inherit (stdenv.hostPlatform) system;
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  nativeBuildInputs = [ undmg ];
+  nativeBuildInputs = [ _7zz ];
   installPhase = ''
     runHook preInstall
 

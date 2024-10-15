@@ -1,69 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   attrs,
   argon2-cffi,
-  base58,
   cbor2,
   cffi,
-  click,
   cryptography,
-  ecdsa,
-  eth-abi,
-  eth-account,
   flatbuffers,
-  jinja2,
-  hkdf,
   hyperlink,
-  mnemonic,
   mock,
   msgpack,
   passlib,
-  py-ecc,
-  # , py-eth-sig-utils
-  py-multihash,
   py-ubjson,
   pynacl,
   pygobject3,
   pyopenssl,
   qrcode,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   python-snappy,
   pytestCheckHook,
   pythonOlder,
-  # , pytrie
-  rlp,
   service-identity,
   setuptools,
-  spake2,
   twisted,
   txaio,
   ujson,
-  # , web3
-  # , wsaccel
-  # , xbr
-  yapf,
-  # , zlmdb
   zope-interface,
 }@args:
 
 buildPythonPackage rec {
   pname = "autobahn";
-  version = "23.6.2";
+  version = "24.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7JQhxSohAzZNHvBGgDbmAZ7oT3FyHoazb+Ga1pZsEYE=";
+  src = fetchFromGitHub {
+    owner = "crossbario";
+    repo = "autobahn-python";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-aeTE4a37zr83KZ+v947XikzFrHAhkZ4mj4tXdkQnB84=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "pytest>=2.8.6,<3.3.0" "pytest"
-  '';
 
   build-system = [ setuptools ];
 
@@ -74,25 +52,26 @@ buildPythonPackage rec {
     txaio
   ];
 
-  nativeCheckInputs =
-    [
-      mock
-      pytest-asyncio_0_21
-      pytestCheckHook
-    ]
-    ++ optional-dependencies.scram ++ optional-dependencies.serialization ++ optional-dependencies.xbr;
+  nativeCheckInputs = [
+    mock
+    pytest-asyncio
+    pytestCheckHook
+  ] ++ optional-dependencies.scram ++ optional-dependencies.serialization;
 
   preCheck = ''
     # Run asyncio tests (requires twisted)
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [ "--pyargs autobahn" ];
+  pytestFlagsArray = [
+    "--ignore=./autobahn/twisted"
+    "./autobahn"
+  ];
 
   pythonImportsCheck = [ "autobahn" ];
 
   optional-dependencies = rec {
-    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui ++ xbr;
+    all = accelerate ++ compress ++ encryption ++ nvx ++ serialization ++ scram ++ twisted ++ ui;
     accelerate = [
       # wsaccel
     ];
@@ -122,25 +101,10 @@ buildPythonPackage rec {
       zope-interface
     ];
     ui = [ pygobject3 ];
-    xbr = [
-      base58
-      cbor2
-      click
-      ecdsa
-      eth-abi
-      jinja2
-      hkdf
-      mnemonic
-      py-ecc # py-eth-sig-utils
-      py-multihash
-      rlp
-      spake2
-      twisted # web3 xbr
-      yapf # zlmdb
-    ];
   };
 
   meta = with lib; {
+    changelog = "https://github.com/crossbario/autobahn-python/blob/${src.rev}/docs/changelog.rst";
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;

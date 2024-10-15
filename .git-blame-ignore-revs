@@ -154,11 +154,38 @@ bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
 # nixos/ollama: format with nixfmt-rfc-style (#329561)
 246d1ee533810ac1946d863bbd9de9b525818d56
 
+# steam: cleanup (#216972)
+ad815aebfbfe1415ff6436521d545029c803c3fb
+
 # nixos/nvidia: apply nixfmt-rfc-style (#313440)
 fbdcdde04a7caa007e825a8b822c75fab9adb2d6
+
+# treewide: reformat files which need reformatting after (#341407)
+e0464e47880a69896f0fb1810f00e0de469f770a
 
 # step-cli: format package.nix with nixfmt (#331629)
 fc7a83f8b62e90de5679e993d4d49ca014ea013d
 
+# ndn-cxx: format with nixfmt-rfc-style
+160b2b769c3b8a6d1ae9947afa77520fa2887db7
+
+# ndn-tools: format with nixfmt-rfc-style
+4882ef721ce3d7bb3b5e48ff80125255db515013
+
+# nfd: format with nixfmt-rfc-style
+548c2377fa81e2abfc192fbf4f521e601251c468
+
 # darwin.stdenv: format with nixfmt-rfc-style (#333962)
 93c10ac9e561c6594d3baaeaff2341907390d9b8
+
+# nrr: format with nixfmt-rfc-style (#334578)
+cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
+
+# nixos/kanidm: inherit lib, nixfmt
+8f18393d380079904d072007fb19dc64baef0a3a
+
+# fetchurl: nixfmt-rfc-style
+ce21e97a1f20dee15da85c084f9d1148d84f853b
+
+# percona: apply nixfmt
+8d14fa2886fec877690c6d28cfcdba4503dbbcea

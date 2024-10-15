@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-  '' + lib.optionalString (stdenv.isDarwin) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/Applications
     cp -R Source/PokeFinder.app $out/Applications
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     install -D Source/PokeFinder $out/bin/PokeFinder
     mkdir -p $out/share/pixmaps
     convert "$src/Source/Form/Images/pokefinder.ico[-1]" $out/share/pixmaps/pokefinder.png
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook python3 ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems imagemagick ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook python3 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems imagemagick ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ qtbase qttools ]
-    ++ lib.optionals stdenv.isLinux [ qtwayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

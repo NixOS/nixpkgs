@@ -10,12 +10,13 @@
   fetchFromGitHub,
   git,
   hypothesis,
+  license-expression,
   nix-update-script,
-  pydantic-yaml,
   pyfakefs,
   pygit2,
   pytest-check,
   pytest-mock,
+  pytest-subprocess,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -26,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "craft-application";
-  version = "3.2.0";
+  version = "4.2.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -35,17 +36,20 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-application";
     rev = "refs/tags/${version}";
-    hash = "sha256-2JfCe7FJtuObC/4miA+OC/ctGy1fhdgI7DsowNYjQk8=";
+    hash = "sha256-Y/Eci0ByE1HxUcxWhpQq0F2Ef1xkXZMBDGmUSIyPKII=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==70.1.0" "setuptools"
+      --replace-fail "setuptools==74.1.1" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];
 
-  pythonRelaxDeps = [ "requests" ];
+  pythonRelaxDeps = [
+    "pygit2"
+    "requests"
+  ];
 
   dependencies = [
     craft-archives
@@ -53,7 +57,7 @@ buildPythonPackage rec {
     craft-grammar
     craft-parts
     craft-providers
-    pydantic-yaml
+    license-expression
     pygit2
     pyyaml
     snap-helpers
@@ -65,6 +69,7 @@ buildPythonPackage rec {
     pyfakefs
     pytest-check
     pytest-mock
+    pytest-subprocess
     pytestCheckHook
     responses
   ];
@@ -93,7 +98,7 @@ buildPythonPackage rec {
       # Tests expecting pytest-time
       "test_monitor_builds_success"
     ]
-    ++ lib.optionals stdenv.isAarch64 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # These tests have hardcoded "amd64" strings which fail on aarch64
       "test_process_grammar_build_for"
       "test_process_grammar_platform"

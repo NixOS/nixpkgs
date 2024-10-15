@@ -2,26 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  authlib,
-  httpx,
+  setuptools,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "2.3.2";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
     rev = "v${version}";
-    hash = "sha256-tQ5rQs6ECn9O9dVXKWhmy9BBpOzgqSmwpmbIRbJn2CQ=";
+    hash = "sha256-Ri+vf/vnjQQ+9eZ1Gzt+v68FAxVGt0IY9S3SpeVem3A=";
   };
 
-  propagatedBuildInputs = [
-    authlib
-    httpx
-  ];
+  build-system = [ setuptools ];
+
+  dependencies = [ aiohttp ];
 
   # upstream has no tests
   doCheck = false;

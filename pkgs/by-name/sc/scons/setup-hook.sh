@@ -8,14 +8,13 @@ sconsBuildPhase() {
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
-        buildFlags="${prefixKey:-prefix=}$prefix $buildFlags"
+        prependToVar buildFlags "${prefixKey:-prefix=}$prefix"
     fi
 
     local flagsArray=(
       ${enableParallelBuilding:+-j${NIX_BUILD_CORES}}
-      $sconsFlags ${sconsFlagsArray[@]}
-      $buildFlags ${buildFlagsArray[@]}
     )
+    concatTo flagsArray sconsFlags sconsFlagsArray buildFlags buildFlagsArray
 
     echoCmd 'scons build flags' "${flagsArray[@]}"
     scons "${flagsArray[@]}"
@@ -31,15 +30,13 @@ sconsInstallPhase() {
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then
-        installFlags="${prefixKey:-prefix=}$prefix $installFlags"
+        prependToVar installFlags "${prefixKey:-prefix=}$prefix"
     fi
 
     local flagsArray=(
         ${enableParallelInstalling:+-j${NIX_BUILD_CORES}}
-        $sconsFlags ${sconsFlagsArray[@]}
-        $installFlags ${installFlagsArray[@]}
-        ${installTargets:-install}
     )
+    concatTo flagsArray sconsFlags sconsFlagsArray installFlags installFlagsArray installTargets=install
 
     echoCmd 'scons install flags' "${flagsArray[@]}"
     scons "${flagsArray[@]}"
@@ -63,9 +60,8 @@ sconsCheckPhase() {
     else
         local flagsArray=(
             ${enableParallelChecking:+-j${NIX_BUILD_CORES}}
-            $sconsFlags ${sconsFlagsArray[@]}
-            ${checkFlagsArray[@]}
         )
+        concatTo flagsArray sconsFlags sconsFlagsArray checkFlagsArray checkTarget
 
         echoCmd 'scons check flags' "${flagsArray[@]}"
         scons "${flagsArray[@]}"

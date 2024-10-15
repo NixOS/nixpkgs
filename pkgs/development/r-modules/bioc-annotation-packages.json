@@ -763,7 +763,7 @@
       "name": "ENCODExplorerData",
       "version": "0.99.5",
       "sha256": "00gfm5l8pxrfs4cw4jlw6n0cz5s31isg69k833n89800v26w3kvh",
-      "depends": ["data_table", "jsonlite", "RCurl"]
+      "depends": ["RCurl", "data_table", "jsonlite"]
     },
     "EPICv2manifest": {
       "name": "EPICv2manifest",
@@ -847,13 +847,13 @@
       "name": "FDb.InfiniumMethylation.hg18",
       "version": "2.2.0",
       "sha256": "0vwzqzj49imjdsn8ssiwqi7qic7rqw5pbsiinyxgy7y10fn2i42a",
-      "depends": ["AnnotationDbi", "Biostrings", "GenomicFeatures", "org_Hs_eg_db", "TxDb_Hsapiens_UCSC_hg18_knownGene"]
+      "depends": ["AnnotationDbi", "Biostrings", "GenomicFeatures", "TxDb_Hsapiens_UCSC_hg18_knownGene", "org_Hs_eg_db"]
     },
     "FDb_InfiniumMethylation_hg19": {
       "name": "FDb.InfiniumMethylation.hg19",
       "version": "2.2.0",
       "sha256": "0gq90fvph6kgrpjb89nvzq6hl1k24swn19rgjh5g98l86mja6nk0",
-      "depends": ["AnnotationDbi", "Biostrings", "GenomicFeatures", "org_Hs_eg_db", "TxDb_Hsapiens_UCSC_hg19_knownGene"]
+      "depends": ["AnnotationDbi", "Biostrings", "GenomicFeatures", "TxDb_Hsapiens_UCSC_hg19_knownGene", "org_Hs_eg_db"]
     },
     "FDb_UCSC_snp135common_hg19": {
       "name": "FDb.UCSC.snp135common.hg19",
@@ -901,7 +901,7 @@
       "name": "GenomicState",
       "version": "0.99.15",
       "sha256": "1r7z3n6wyrd2cclj5b7sg15wpmjdh9k5b1hjlw7jjx8j384l7l1h",
-      "depends": ["AnnotationDbi", "AnnotationHub", "bumphunter", "derfinder", "GenomeInfoDb", "GenomicFeatures", "IRanges", "org_Hs_eg_db", "rtracklayer"]
+      "depends": ["AnnotationDbi", "AnnotationHub", "GenomeInfoDb", "GenomicFeatures", "IRanges", "bumphunter", "derfinder", "org_Hs_eg_db", "rtracklayer"]
     },
     "HDO_db": {
       "name": "HDO.db",
@@ -919,7 +919,7 @@
       "name": "Homo.sapiens",
       "version": "1.3.1",
       "sha256": "151vj7h5p1c8yd5swrchk46z469p135wk50hvkl0nhgndvy0jj01",
-      "depends": ["AnnotationDbi", "GenomicFeatures", "GO_db", "org_Hs_eg_db", "OrganismDbi", "TxDb_Hsapiens_UCSC_hg19_knownGene"]
+      "depends": ["AnnotationDbi", "GO_db", "GenomicFeatures", "OrganismDbi", "TxDb_Hsapiens_UCSC_hg19_knownGene", "org_Hs_eg_db"]
     },
     "Hs6UG171_db": {
       "name": "Hs6UG171.db",
@@ -1177,13 +1177,13 @@
       "name": "MafH5.gnomAD.v3.1.2.GRCh38",
       "version": "3.15.1",
       "sha256": "1q9hlva814sjfz8vm9bzw7xzppbcfy5qq7nnz9w742yr59cjb6mp",
-      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "rhdf5", "S4Vectors"]
+      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "S4Vectors", "rhdf5"]
     },
     "MafH5_gnomAD_v4_0_GRCh38": {
       "name": "MafH5.gnomAD.v4.0.GRCh38",
       "version": "3.19.0",
       "sha256": "1hb905rvxvzh2nap52agcm488yarn2j99d23yxa133jw9d8a9zqk",
-      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "rhdf5", "S4Vectors"]
+      "depends": ["BSgenome", "GenomeInfoDb", "GenomicRanges", "GenomicScores", "HDF5Array", "IRanges", "S4Vectors", "rhdf5"]
     },
     "MmAgilentDesign026655_db": {
       "name": "MmAgilentDesign026655.db",
@@ -1213,7 +1213,7 @@
       "name": "Mus.musculus",
       "version": "1.3.1",
       "sha256": "143zdf83gbfqhy8jm9df7gzhw5q3a64jrjrxrzjf0zd76j8s8j6y",
-      "depends": ["AnnotationDbi", "GenomicFeatures", "GO_db", "org_Mm_eg_db", "OrganismDbi", "TxDb_Mmusculus_UCSC_mm10_knownGene"]
+      "depends": ["AnnotationDbi", "GO_db", "GenomicFeatures", "OrganismDbi", "TxDb_Mmusculus_UCSC_mm10_knownGene", "org_Mm_eg_db"]
     },
     "Norway981_db": {
       "name": "Norway981.db",
@@ -1273,7 +1273,7 @@
       "name": "Rattus.norvegicus",
       "version": "1.3.1",
       "sha256": "0bpd7i5jvl2jvf822mhxankx7cqqr4l70xp4f7hcknxw3lxia2f1",
-      "depends": ["AnnotationDbi", "GenomicFeatures", "GO_db", "org_Rn_eg_db", "OrganismDbi", "TxDb_Rnorvegicus_UCSC_rn5_refGene"]
+      "depends": ["AnnotationDbi", "GO_db", "GenomicFeatures", "OrganismDbi", "TxDb_Rnorvegicus_UCSC_rn5_refGene", "org_Rn_eg_db"]
     },
     "RmiR_Hs_miRNA": {
       "name": "RmiR.Hs.miRNA",
@@ -1321,37 +1321,37 @@
       "name": "SNPlocs.Hsapiens.dbSNP144.GRCh37",
       "version": "0.99.20",
       "sha256": "1z8kx43ki1jvj7ms7pcybakcdimfwr6zpjvspkjmma97bdz093iz",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP144_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP144.GRCh38",
       "version": "0.99.20",
       "sha256": "0yxmsnxncr7w30r0d7bg5i96pclm2vf40p9jdqa02rc67a6sximn",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP149_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP149.GRCh38",
       "version": "0.99.20",
       "sha256": "17bv25p1261hn9d7mxfp6pvivj15pxyvr92gms8a8msfqg9y0xkb",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP150_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP150.GRCh38",
       "version": "0.99.20",
       "sha256": "0jkwwgxxpm9ry8kizq8hs70sky41pks1ag40y5aqq91yjbpqlckj",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP155_GRCh37": {
       "name": "SNPlocs.Hsapiens.dbSNP155.GRCh37",
       "version": "0.99.24",
       "sha256": "0am2r8hn5ybxlvlw7c0i91n5xii0km3iy7d9a0wc9v1ykvk6qmgz",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SNPlocs_Hsapiens_dbSNP155_GRCh38": {
       "name": "SNPlocs.Hsapiens.dbSNP155.GRCh38",
       "version": "0.99.24",
       "sha256": "1yzywcyk1yngjys9pyykilzw0w4nfxdmwz04w3b17chsbxvckl5s",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "SomaScan_db": {
       "name": "SomaScan.db",
@@ -1657,13 +1657,13 @@
       "name": "XtraSNPlocs.Hsapiens.dbSNP144.GRCh37",
       "version": "0.99.12",
       "sha256": "0k823fvqjmdkmd47m7wyra6jxmv8lnk2i1xl4pp0mh3zgb87hgfb",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "XtraSNPlocs_Hsapiens_dbSNP144_GRCh38": {
       "name": "XtraSNPlocs.Hsapiens.dbSNP144.GRCh38",
       "version": "0.99.12",
       "sha256": "0d4q32ij2x4726wvw06sgmivid0n94vfdmszdyh607xlcahqxa5z",
-      "depends": ["BiocGenerics", "BSgenome", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
+      "depends": ["BSgenome", "BiocGenerics", "GenomeInfoDb", "GenomicRanges", "IRanges", "S4Vectors"]
     },
     "adme16cod_db": {
       "name": "adme16cod.db",
@@ -2089,7 +2089,7 @@
       "name": "geneplast.data",
       "version": "0.99.9",
       "sha256": "1i31kx4kckfg965s9l3pilvmg847av3rpa05aql43259ccyng4hi",
-      "depends": ["ape", "BiocFileCache", "dplyr", "geneplast", "igraph", "purrr", "readr", "tibble", "tidyr", "treeio"]
+      "depends": ["BiocFileCache", "ape", "dplyr", "geneplast", "igraph", "purrr", "readr", "tibble", "tidyr", "treeio"]
     },
     "geneplast_data_string_v91": {
       "name": "geneplast.data.string.v91",
@@ -2119,7 +2119,7 @@
       "name": "grasp2db",
       "version": "1.1.0",
       "sha256": "1aq19myhcl9kdmzy8f4c3ilf0s0ng99rl58jja2xlmqsm2hik7ya",
-      "depends": ["AnnotationHub", "dbplyr", "digest", "dplyr", "GenomeInfoDb", "RSQLite"]
+      "depends": ["AnnotationHub", "GenomeInfoDb", "RSQLite", "dbplyr", "digest", "dplyr"]
     },
     "gwascatData": {
       "name": "gwascatData",
@@ -3277,13 +3277,13 @@
       "name": "miRBaseVersions.db",
       "version": "1.1.0",
       "sha256": "09n0309glsj53g6wainl5m0vwnlx71ija5zmlqd0cpbhdis5zihw",
-      "depends": ["AnnotationDbi", "DBI", "gtools", "RSQLite"]
+      "depends": ["AnnotationDbi", "DBI", "RSQLite", "gtools"]
     },
     "miRNAtap_db": {
       "name": "miRNAtap.db",
       "version": "0.99.10",
       "sha256": "1j4igmyb9f4fa0a72hkmq3f7xgvyv38wai3mds5sd6mfgfc3brs3",
-      "depends": ["AnnotationDbi", "DBI", "miRNAtap", "RSQLite"]
+      "depends": ["AnnotationDbi", "DBI", "RSQLite", "miRNAtap"]
     },
     "mirbase_db": {
       "name": "mirbase.db",
@@ -3799,1015 +3799,1015 @@
       "name": "pd.081229.hg18.promoter.medip.hx1",
       "version": "0.99.4",
       "sha256": "1h4925dmw0vfsnhllg55gswq3sxfmx9rcjzifdvgs9y27399psrr",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_2006_07_18_hg18_refseq_promoter": {
       "name": "pd.2006.07.18.hg18.refseq.promoter",
       "version": "1.8.1",
       "sha256": "09593qkh3jqlgxlqrpl3gla3y1kcshnzlq6nf10xhlps0qdlskhx",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_2006_07_18_mm8_refseq_promoter": {
       "name": "pd.2006.07.18.mm8.refseq.promoter",
       "version": "0.99.3",
       "sha256": "14cm7z1y7rsk5m2zazg27wvjabckb9ifwa1g091ckwn1jfaf7aqn",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_2006_10_31_rn34_refseq_promoter": {
       "name": "pd.2006.10.31.rn34.refseq.promoter",
       "version": "0.99.3",
       "sha256": "0v0fa1hn5bwa15vg31dar2x0xfki0xby6qf5p1a0ivrx3pnvbsrl",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_ag": {
       "name": "pd.ag",
       "version": "3.12.0",
       "sha256": "0kh7ridgihqpibazpxpf9y8qiznxm4nng39701abamadxb5r6qmq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_aragene_1_0_st": {
       "name": "pd.aragene.1.0.st",
       "version": "3.12.0",
       "sha256": "0255bgsqz8fflnlnxw77wvv6rky46n3pcryk9yhw7nfx0cq19v4r",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_aragene_1_1_st": {
       "name": "pd.aragene.1.1.st",
       "version": "3.12.0",
       "sha256": "105qfxg8p9z0bzffm6zg16c5f6nnv5hddlpcxs0kp3daddap8h5s",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ath1_121501": {
       "name": "pd.ath1.121501",
       "version": "3.12.0",
       "sha256": "0j83s6402xrggnlnqjyphy577by9w1ncvf1az4immzaixdamaaxc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_barley1": {
       "name": "pd.barley1",
       "version": "3.12.0",
       "sha256": "0mha6w2zh7gi4y7ngkh84jaff50h8l9a0q9dwc8a00m5npkpkv4g",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_bovgene_1_0_st": {
       "name": "pd.bovgene.1.0.st",
       "version": "3.12.0",
       "sha256": "00ys19pdc7zgprfrhmk0pzfb5q96qy0vqxi2a6g28pxwf3367b30",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_bovgene_1_1_st": {
       "name": "pd.bovgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0npjm9rpcwj5j8sh1mdr5j1fz7dbwrqvjh2jx69fpslry69i6daq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_bovine": {
       "name": "pd.bovine",
       "version": "3.12.0",
       "sha256": "1g03za5jc8lz21wpx1h2rcxdwsx7ddmmnyflz46z35ginzy41g7h",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_bsubtilis": {
       "name": "pd.bsubtilis",
       "version": "3.12.0",
       "sha256": "07x4dss0zp3p315q38bi7xarycav2hr44x7jb1jx4dypr0jh98mh",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cangene_1_0_st": {
       "name": "pd.cangene.1.0.st",
       "version": "3.12.0",
       "sha256": "0dcwy6gnlj51hkc2gsv6fdq02vczci4z37f3iy1n8zkvz5b4yw6c",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cangene_1_1_st": {
       "name": "pd.cangene.1.1.st",
       "version": "3.12.0",
       "sha256": "0pgw1424rvg3k9m3z6ffiyfj91i930dx2slqd15bnvc9hrr75094",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_canine": {
       "name": "pd.canine",
       "version": "3.12.0",
       "sha256": "0xpisxv7c990w44gd5g2iwfzqi3618xa3mdps69z2j4bfrcm37vq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_canine_2": {
       "name": "pd.canine.2",
       "version": "3.12.0",
       "sha256": "1dx914yyq6ry88d6fipsxsvp41pgcgllznpwsqqm2xa99y85ka5y",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_celegans": {
       "name": "pd.celegans",
       "version": "3.12.0",
       "sha256": "08byc5xvnbfdlikv9118k52pk37br4k8hn86xypkrmbz67fzlzpd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_charm_hg18_example": {
       "name": "pd.charm.hg18.example",
       "version": "0.99.4",
       "sha256": "0nqv3h4zp83vp7q49n956920x5hdfcbw4z3hlvmqx8dixbgr1jrg",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_chicken": {
       "name": "pd.chicken",
       "version": "3.12.0",
       "sha256": "1alkhr297ar6iv7nrjxnlhmq3xvjzpl46mdckkbxw13w73vj6p32",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_chigene_1_0_st": {
       "name": "pd.chigene.1.0.st",
       "version": "3.12.0",
       "sha256": "0smfgx1brfla96ijsv3a3ljcn02kpbk6sczgp06dik3g0k54788h",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_chigene_1_1_st": {
       "name": "pd.chigene.1.1.st",
       "version": "3.12.0",
       "sha256": "013baf38h35fsxq0f32v00rizik8iq76jm1s8azkicv90bvw5g8k",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_chogene_2_0_st": {
       "name": "pd.chogene.2.0.st",
       "version": "3.12.0",
       "sha256": "0pljjz466y2aav9045qgr5hbrv7alyl3gw3br4a8knbijk6fbw15",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_chogene_2_1_st": {
       "name": "pd.chogene.2.1.st",
       "version": "3.12.0",
       "sha256": "0d9pslimh0w37yvvfgqljbr2z5arjn6kx0wnjhp19gcch44jvkr2",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_citrus": {
       "name": "pd.citrus",
       "version": "3.12.0",
       "sha256": "1792gsxdr24264n121zvspdq39ac3khaghv5j66rn2nzqds75qch",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_d_human": {
       "name": "pd.clariom.d.human",
       "version": "3.14.1",
       "sha256": "11q4s4q07fpkl5wpmhhjfkrp4l8i8gy1i8wc80aar84lp1261vvx",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_human": {
       "name": "pd.clariom.s.human",
       "version": "3.14.1",
       "sha256": "0a68mnwv735mi9k9qxs2vv4hnh76yg1n7jjyaw34g8m7405yjxxp",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_human_ht": {
       "name": "pd.clariom.s.human.ht",
       "version": "3.14.1",
       "sha256": "08fzm8xp6wa4x03vqb28dvlz3hiwv2q5n5h9m2np0g4g40hbhg89",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_mouse": {
       "name": "pd.clariom.s.mouse",
       "version": "3.14.1",
       "sha256": "15fc25840lnhv0rlxc98akda1gis1s4xn61ycvymjii3lgx8hwpk",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_mouse_ht": {
       "name": "pd.clariom.s.mouse.ht",
       "version": "3.14.1",
       "sha256": "1ka9mganvymml306yh196rqan333ykrmqp9dfl4xs9mz57p405kk",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_rat": {
       "name": "pd.clariom.s.rat",
       "version": "3.14.1",
       "sha256": "1bx0vipcw3vjpz59h5820yanwy7b8mxb8bkgwp3n58vm24x7l304",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_clariom_s_rat_ht": {
       "name": "pd.clariom.s.rat.ht",
       "version": "3.14.1",
       "sha256": "17fk4qiznh2ks7r4mzbv1gnpjca39n6rzshb5dw5n73rbnd24160",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cotton": {
       "name": "pd.cotton",
       "version": "3.12.0",
       "sha256": "1h71klvndi32j7hb7cy2w6asf7lb1xhs5glxajnd30y7ksigba7l",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cyngene_1_0_st": {
       "name": "pd.cyngene.1.0.st",
       "version": "3.12.0",
       "sha256": "1xkv8m346x1zrnp4bhbjk2xwfq5jkbprbh417bya8swqvcyv3zbj",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cyngene_1_1_st": {
       "name": "pd.cyngene.1.1.st",
       "version": "3.12.0",
       "sha256": "1kicrk0n2lik32q9nkpfy8ydh8klsy6i5cy6m2grddv80g5hc6n4",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cyrgene_1_0_st": {
       "name": "pd.cyrgene.1.0.st",
       "version": "3.12.0",
       "sha256": "1s7rrwcmaar230y90hhvrx3wxlp228j88pwdh2glap2pn3d3rlnd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cyrgene_1_1_st": {
       "name": "pd.cyrgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0p7j8ygyx8f5aqyy847rfcc35hrkcavi1700af971jjrha3gllc0",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_cytogenetics_array": {
       "name": "pd.cytogenetics.array",
       "version": "3.12.0",
       "sha256": "0gd7q64zfxda9irdmmr92iqxlswaj5v4pklsfm96xkn8lxq34dlb",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_drogene_1_0_st": {
       "name": "pd.drogene.1.0.st",
       "version": "3.12.0",
       "sha256": "1zp85q3a2bayr0q5r0ij62kfypzngcz9v791xsf9n9k7nx6714fi",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_drogene_1_1_st": {
       "name": "pd.drogene.1.1.st",
       "version": "3.12.0",
       "sha256": "0yjxjzmcx2hh6rm15p9d36vfj77fwmd7q2kbjk8h7hbpkm72ssdf",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_drosgenome1": {
       "name": "pd.drosgenome1",
       "version": "3.12.0",
       "sha256": "1cp3fs2g88yv50gkd6m769idlj7kci2g82wafn17ci65g64q0g05",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_drosophila_2": {
       "name": "pd.drosophila.2",
       "version": "3.12.0",
       "sha256": "0rr3l6203nfzhz21wps7dfcifvzmbnixcr2piv5jdfh7birj23aa",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_e_coli_2": {
       "name": "pd.e.coli.2",
       "version": "3.12.0",
       "sha256": "1nny0w0adg433n1i20q0jdmi5yy1anpa91dgrklpvxyxbr5902vz",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ecoli": {
       "name": "pd.ecoli",
       "version": "3.12.0",
       "sha256": "0mi5i0cp5xz97pb3ic6qmwl3fp4byyddvas2npll4ngarl5wv5ag",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ecoli_asv2": {
       "name": "pd.ecoli.asv2",
       "version": "3.12.0",
       "sha256": "19pn7691cr0vakxlx0q0x3p1pfc0z8l5f14475bv2fr4djljhhma",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_elegene_1_0_st": {
       "name": "pd.elegene.1.0.st",
       "version": "3.12.0",
       "sha256": "1if8gwvvk9jybsrcwr8sayg1czchpnlmysa9plrm50g7r2ki7m4l",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_elegene_1_1_st": {
       "name": "pd.elegene.1.1.st",
       "version": "3.12.0",
       "sha256": "18v3n3ss3rl2ksvjg1jk1w0mprhhxra55znixfcd8ikqsrdfj2a2",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_equgene_1_0_st": {
       "name": "pd.equgene.1.0.st",
       "version": "3.12.0",
       "sha256": "01vcj6a6hm9j2fbhrz244sbig63j1jyxyg068q4hizpl9lpzaibd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_equgene_1_1_st": {
       "name": "pd.equgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0migyzmrgqvvnkl8w61qv26hj5kjy720q4ipamdn99z9s4r8cxrn",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_feinberg_hg18_me_hx1": {
       "name": "pd.feinberg.hg18.me.hx1",
       "version": "0.99.3",
       "sha256": "1k50khs7mrp1qy9z0whm5drwv59m8zn7v0zxhv26bpvmwbrnlhfg",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_feinberg_mm8_me_hx1": {
       "name": "pd.feinberg.mm8.me.hx1",
       "version": "0.99.3",
       "sha256": "1xk4rmpxjh9mwijwglzlycg7bk2zk599fk7xbnk114rj216y2jsm",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_felgene_1_0_st": {
       "name": "pd.felgene.1.0.st",
       "version": "3.12.0",
       "sha256": "1lf3lp3zjprfwni2nfdpkvj2j6y7hd7znmxqcgj46vccznc49hh6",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_felgene_1_1_st": {
       "name": "pd.felgene.1.1.st",
       "version": "3.12.0",
       "sha256": "027cgqxfgmlkx64y6nm9h36ji781fkrnnrdxblh8h4jwjd5n36rj",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_fingene_1_0_st": {
       "name": "pd.fingene.1.0.st",
       "version": "3.12.0",
       "sha256": "0l19h920cghw65nqbh79s1rwijqdl7k84km0iv1fgx0kxhh28xa0",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_fingene_1_1_st": {
       "name": "pd.fingene.1.1.st",
       "version": "3.12.0",
       "sha256": "1habbw9fvygailw73azfrvczgp6ap1az688vz8pklqq77vlqs1qz",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_genomewidesnp_5": {
       "name": "pd.genomewidesnp.5",
       "version": "3.14.1",
       "sha256": "1kiqmcc07q2m7hkgqczqndk7frpwibpsi2c0ihr5av0vjrp118ak",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_genomewidesnp_6": {
       "name": "pd.genomewidesnp.6",
       "version": "3.14.1",
       "sha256": "1f35nw987axlc5rsr97i7rwcy1dd8zjjj6jf4cg75y0la6rvhfw4",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_guigene_1_0_st": {
       "name": "pd.guigene.1.0.st",
       "version": "3.12.0",
       "sha256": "1rq5gbdm6k0shv82zy7vrqxahzffh1xikrd3a6d1ai67n129bv6f",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_guigene_1_1_st": {
       "name": "pd.guigene.1.1.st",
       "version": "3.12.0",
       "sha256": "0p53kkhaa4d6ib32sfnwvs363zir227dmzxp8yqma0z4kz0djdna",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hc_g110": {
       "name": "pd.hc.g110",
       "version": "3.12.0",
       "sha256": "014bb45m2pwwbz7aca6l6442188mkp5bsk46z7x18g0aa66p06hv",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_focus": {
       "name": "pd.hg.focus",
       "version": "3.12.0",
       "sha256": "1qlkhxq76nb55c299g7x7x8wn8nx1mg4ra5b0faflsjirkh4b32s",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u133_plus_2": {
       "name": "pd.hg.u133.plus.2",
       "version": "3.12.0",
       "sha256": "02ip0mf24lw818ij8xgk7cylb5q1059jwvbdd2aynqqwy2mg31h0",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u133a": {
       "name": "pd.hg.u133a",
       "version": "3.12.0",
       "sha256": "08bk5im2zkb1vif1i6bgfx068xcl5q5m0ac33zpscfdq4jashm7k",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u133a_2": {
       "name": "pd.hg.u133a.2",
       "version": "3.12.0",
       "sha256": "1rlh62r5zmxllkc9izr6a4yr2n88flfz1rybwvi90yggc788chxy",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u133a_tag": {
       "name": "pd.hg.u133a.tag",
       "version": "3.12.0",
       "sha256": "1ndjzcydshh5f3cnrav91hi47bx92z6rqliiwirhx2cqk8bvz5yp",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u133b": {
       "name": "pd.hg.u133b",
       "version": "3.12.0",
       "sha256": "1mafh53bj6g30869pdyl59040m2crqqbfcbdpdxfpigxpqr3rb4c",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u219": {
       "name": "pd.hg.u219",
       "version": "3.12.0",
       "sha256": "04kqvh5ilf83z2iwvfw7m8xsgjxy29vqayp1lgh38y48j0nn24dk",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95a": {
       "name": "pd.hg.u95a",
       "version": "3.12.0",
       "sha256": "1c7d16im1xxs8v0ccn19klwv43qr6b4iw0k5hz9cl8m10jmyw49b",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95av2": {
       "name": "pd.hg.u95av2",
       "version": "3.12.0",
       "sha256": "1l3y2bhjk67jwxvxwn5rngzn5c2dzk4lk24cm74f6px845qw5sk7",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95b": {
       "name": "pd.hg.u95b",
       "version": "3.12.0",
       "sha256": "0gyxh7nagya1hgh5vvwalxmhbqm9pii3l6h1mndvx2ib58msh49h",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95c": {
       "name": "pd.hg.u95c",
       "version": "3.12.0",
       "sha256": "0p9yrwjw75r5dg3z0pl4yr04agjpqv9rz3in2faw3pqawdzndihq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95d": {
       "name": "pd.hg.u95d",
       "version": "3.12.0",
       "sha256": "0ygfx73b122b468zvr9lhw2vkr1aijasrazarqjqc8bjbfm4fybw",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg_u95e": {
       "name": "pd.hg.u95e",
       "version": "3.12.0",
       "sha256": "0cksi811m9fzjq5linlsarfswp3p7rdgks0js3chv91jr3v2z3a7",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hg18_60mer_expr": {
       "name": "pd.hg18.60mer.expr",
       "version": "3.12.0",
       "sha256": "1lsfsgsj6gyv0q509d0axr6g2yv226zxqh8f2n1hw0kfxwl27bm8",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ht_hg_u133_plus_pm": {
       "name": "pd.ht.hg.u133.plus.pm",
       "version": "3.12.0",
       "sha256": "1000f1d28yzc0kcdf380fkx3xlgla3kn4n9f2ddawzjb7igash92",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ht_hg_u133a": {
       "name": "pd.ht.hg.u133a",
       "version": "3.12.0",
       "sha256": "14bnnxsn02mpyynn8bvl8c47id9l2wfakngbvpq4h5yjy689jm1c",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ht_mg_430a": {
       "name": "pd.ht.mg.430a",
       "version": "3.12.0",
       "sha256": "10shsap47217p6zmb9fn86na7if965h45l2r787cisgyyn9n45mq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hta_2_0": {
       "name": "pd.hta.2.0",
       "version": "3.12.2",
       "sha256": "004mm93wag59arzirws3cfqjv4whl8sbv558xxg7pj1ar026g4m3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hu6800": {
       "name": "pd.hu6800",
       "version": "3.12.0",
       "sha256": "07dj0avpx53kwaab9s126pn844nal9kn3h288n1m0kihir2mrjmv",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_huex_1_0_st_v2": {
       "name": "pd.huex.1.0.st.v2",
       "version": "3.14.1",
       "sha256": "1chlvjy1gvw5r8hfmkb34m3h7w2z4s5x9gsc50qbj84988k4gzga",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hugene_1_0_st_v1": {
       "name": "pd.hugene.1.0.st.v1",
       "version": "3.14.1",
       "sha256": "1ikd6h7wnyxm11j0had2wcsxfbfrwdfw9605bvvdgd63dlvdv5dk",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hugene_1_1_st_v1": {
       "name": "pd.hugene.1.1.st.v1",
       "version": "3.14.1",
       "sha256": "0bsvwr4h8j4niagnmf7d2jd714dqk4yzdhr664z6vpx6429s0rsw",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hugene_2_0_st": {
       "name": "pd.hugene.2.0.st",
       "version": "3.14.1",
       "sha256": "02m5x9mrz4ca0w84ljmdpw7rnlzqbqdq0q5k4sg7izx99k5c8r59",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_hugene_2_1_st": {
       "name": "pd.hugene.2.1.st",
       "version": "3.14.1",
       "sha256": "07la78206cvilfm8l2fwrcyy3gpwnhn0p32ilv043ln9drka2r8h",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_maize": {
       "name": "pd.maize",
       "version": "3.12.0",
       "sha256": "02viqnqf02d75sbarxh1k76966yay5i6wwdx118s4c9nlr5q6aqg",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mapping250k_nsp": {
       "name": "pd.mapping250k.nsp",
       "version": "3.12.0",
       "sha256": "10j8c18glhvg07zp6w84hlc6l3a3qkvcvfnq0blpjfdk3a2lndz7",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mapping250k_sty": {
       "name": "pd.mapping250k.sty",
       "version": "3.12.0",
       "sha256": "1hpyijrkr6svxxhrdp6s4jjcvr44hhbrdhrzvnw5ywpykmbphryc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mapping50k_hind240": {
       "name": "pd.mapping50k.hind240",
       "version": "3.12.0",
       "sha256": "1whpjdr4aql846cm8nzgs613pi12qdqfixhqcfv8wrqyks27kq6s",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mapping50k_xba240": {
       "name": "pd.mapping50k.xba240",
       "version": "3.12.0",
       "sha256": "1a1f3lh5ywhyjawdbj2fzban85c8jz70lfcv3pagd5piincjwxq8",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_margene_1_0_st": {
       "name": "pd.margene.1.0.st",
       "version": "3.12.0",
       "sha256": "1s4l57hw511cnzj197jvvzqs8ymfbf14khxcv4llg55prxnvvnfc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_margene_1_1_st": {
       "name": "pd.margene.1.1.st",
       "version": "3.12.0",
       "sha256": "067jv9486win2kv563gr4vpc96lpl02zqd09cnma7ycd7l1nvj9s",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_medgene_1_0_st": {
       "name": "pd.medgene.1.0.st",
       "version": "3.12.0",
       "sha256": "0f5blbhlp160av6r37icjdq2lyrvip09r4yzxhfa2vlxpcm7i83m",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_medgene_1_1_st": {
       "name": "pd.medgene.1.1.st",
       "version": "3.12.0",
       "sha256": "1mlyv6qjcxj9q416pmjq36q0aqp5l47pkd557ayaqd7gm3ygikcq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_medicago": {
       "name": "pd.medicago",
       "version": "3.12.0",
       "sha256": "1wm81jr9d04yiyg0alj197fjigcvjhz2kvh8j6jw9yaawppr0c5p",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74a": {
       "name": "pd.mg.u74a",
       "version": "3.12.0",
       "sha256": "1jji6g49icsxyam9qx3mbaspg24q0hjavi0w75k99m2ckmllc47c",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74av2": {
       "name": "pd.mg.u74av2",
       "version": "3.12.0",
       "sha256": "08ym915fb26qbz2r9kzgf7znai4mc06lr59l1da0x02iaixagg32",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74b": {
       "name": "pd.mg.u74b",
       "version": "3.12.0",
       "sha256": "0yav9ghdk8y12bsqam2r0p4q3r1yymfwrz1kdg0l7qfzw3mn141d",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74bv2": {
       "name": "pd.mg.u74bv2",
       "version": "3.12.0",
       "sha256": "0hxczlax8qnghp4f7d3ph2y5j3vz3k4iwl6lyw3sig51msl4q6sd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74c": {
       "name": "pd.mg.u74c",
       "version": "3.12.0",
       "sha256": "13sq8jmwlqrci87bnl313dyqzy6v141r3fqzh1frl1w66ilw9chm",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mg_u74cv2": {
       "name": "pd.mg.u74cv2",
       "version": "3.12.0",
       "sha256": "1s59s9ch1ynrmnsn5jl2b19phij4qamgcpfs3f5zhji6ip41lckj",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mirna_1_0": {
       "name": "pd.mirna.1.0",
       "version": "3.12.0",
       "sha256": "0klkmrljgvkqvdlm07c47bl0jppbzz95ikxabfi8b3ajv78k6gn1",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mirna_2_0": {
       "name": "pd.mirna.2.0",
       "version": "3.12.0",
       "sha256": "12ynrrr0jrc0kl6s4pkn9fv3r3bh6wsbrfyywb5bvxf71n75wnqy",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mirna_3_0": {
       "name": "pd.mirna.3.0",
       "version": "3.12.0",
       "sha256": "0awghps8nlisdj2anvs400dn1hwdi8iw6xlrw17qr70fznbihdsy",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mirna_3_1": {
       "name": "pd.mirna.3.1",
       "version": "3.8.1",
       "sha256": "0g8fjwhxmps1w5f7lvnv258qn2ipggs1ar4r810amqqxd0yd5ah2",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "oligo", "oligoClasses"]
     },
     "pd_mirna_4_0": {
       "name": "pd.mirna.4.0",
       "version": "3.12.0",
       "sha256": "000gqhcvlpydrpr61853q22x8gvzmlf1kp7w98lll5g1vvwkw1ad",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_moe430a": {
       "name": "pd.moe430a",
       "version": "3.12.0",
       "sha256": "15qys3pm8nwkr385y8mj976k16as8r65lmzykm8cy0skl071i8wb",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_moe430b": {
       "name": "pd.moe430b",
       "version": "3.12.0",
       "sha256": "1xas3ld65xp2g1cfkd1n4v3yvx3g0g221c3ag550k552v0alfbyd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_moex_1_0_st_v1": {
       "name": "pd.moex.1.0.st.v1",
       "version": "3.14.1",
       "sha256": "13bqzbyqngbhj7yji568cc36fq0zw0bjaglfp2n9nnhdddd8b62x",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mogene_1_0_st_v1": {
       "name": "pd.mogene.1.0.st.v1",
       "version": "3.14.1",
       "sha256": "1hmb8kf91jd9q6b4pxiwlaj6ajzmkv1c3xsszyps5cwv13pgdjix",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mogene_1_1_st_v1": {
       "name": "pd.mogene.1.1.st.v1",
       "version": "3.14.1",
       "sha256": "13s7r8g29y56qbj2xm81r5kj65y2qcp5d24bakbhfcvz60wzljqf",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mogene_2_0_st": {
       "name": "pd.mogene.2.0.st",
       "version": "3.14.1",
       "sha256": "0205jk6x8r35bmma771q6km631jlppm4y72zy85bv87dv4adxci8",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mogene_2_1_st": {
       "name": "pd.mogene.2.1.st",
       "version": "3.14.1",
       "sha256": "14qwcq6yyy2ayrqv8kr33chlpgw3vkgq8iwb3yycsh3x3wz40jb8",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mouse430_2": {
       "name": "pd.mouse430.2",
       "version": "3.12.0",
       "sha256": "1ix7vkjy175cxbsbs67z38dhszxjik6370j0jkfpcknms6bh1db3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mouse430a_2": {
       "name": "pd.mouse430a.2",
       "version": "3.12.0",
       "sha256": "11ywfshqxjmwf9q4sj97zv3ylynfkswcfaqglj883p4719lhxmc3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mta_1_0": {
       "name": "pd.mta.1.0",
       "version": "3.12.0",
       "sha256": "07vznamds5lc1xnpv7kjwcrsd5zq0ap4gk8a85xqb93fmcc9ypqi",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mu11ksuba": {
       "name": "pd.mu11ksuba",
       "version": "3.12.0",
       "sha256": "10fkys7y5b5frdrjqw3x2gqzp51lgg29nw6gxz25yi5fznc3nnv2",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_mu11ksubb": {
       "name": "pd.mu11ksubb",
       "version": "3.12.0",
       "sha256": "08734j3asq56v090zi0gzk3ryycjm78dfbb0xqmpr7ggqys96qp9",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_nugo_hs1a520180": {
       "name": "pd.nugo.hs1a520180",
       "version": "3.4.0",
       "sha256": "1qc87zrrccld1hdqmrk1if98c6jq343gzlmib40wvshmrijp3sk3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_nugo_mm1a520177": {
       "name": "pd.nugo.mm1a520177",
       "version": "3.4.0",
       "sha256": "0568zvxc11w2i32wimhmi4271jbmpn97kb0vn4ns20hfg4h63m99",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ovigene_1_0_st": {
       "name": "pd.ovigene.1.0.st",
       "version": "3.12.0",
       "sha256": "0vga20rb0v4yzd28szsppbgfhmn6ky85qrjj9llvacnlj1riwxsi",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ovigene_1_1_st": {
       "name": "pd.ovigene.1.1.st",
       "version": "3.12.0",
       "sha256": "1vzrizvk1dbj6ngjxv9wpbm89q5mr8dkfhr0azrczs54c92xy48r",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_pae_g1a": {
       "name": "pd.pae.g1a",
       "version": "3.12.0",
       "sha256": "0b0bmzfrh7lm2i5d66z24iz0d5zj3qhw89aw011yssks7sr9lq90",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_plasmodium_anopheles": {
       "name": "pd.plasmodium.anopheles",
       "version": "3.12.0",
       "sha256": "0njd97jkg4hxd0jyq03227i00gmy0ccxznzqmp0mjqmkkhljn7nm",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_poplar": {
       "name": "pd.poplar",
       "version": "3.12.0",
       "sha256": "0j5xmf5hqvbb8ylsrvih92vxn1c1lah3mkffn64fji2lgqy9vjp9",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_porcine": {
       "name": "pd.porcine",
       "version": "3.12.0",
       "sha256": "0zx2gz90hhalaas3sf2rh8wcapjwmnckr0gq1r8p572chwf2rb81",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_porgene_1_0_st": {
       "name": "pd.porgene.1.0.st",
       "version": "3.12.0",
       "sha256": "1jiajzn31yjzs942w3i4cjqlpq81rkbryk961fqb9jpwldzg1pmy",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_porgene_1_1_st": {
       "name": "pd.porgene.1.1.st",
       "version": "3.12.0",
       "sha256": "038zwlckx58bw4x5naspfnvk4jcyc2g9bijrh1wd4m4k5mr1i4dk",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rabgene_1_0_st": {
       "name": "pd.rabgene.1.0.st",
       "version": "3.12.0",
       "sha256": "0vwxzwgwh1a0fpyqsc3mnagin67wf2jmymm9kwhcnxargpmslm7k",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rabgene_1_1_st": {
       "name": "pd.rabgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0qs3ka3pdlrpqh66zb62jdfm2y6p2wyn6rcp7gb5qw0s8q9h170a",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rae230a": {
       "name": "pd.rae230a",
       "version": "3.12.0",
       "sha256": "14kb35pcgxh2hmpzyqp9c2xirs0p6y5dvc3h2n568jmmdd14s7j5",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rae230b": {
       "name": "pd.rae230b",
       "version": "3.12.0",
       "sha256": "1db6bm6qyrzwwa2scyw6qg7qcdqq97s5vy8kv0fnqc604b1jdzzq",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_raex_1_0_st_v1": {
       "name": "pd.raex.1.0.st.v1",
       "version": "3.14.1",
       "sha256": "11sxhhpb4fy7wh5k7yxwwv141xgn4r1yshx097wicpa6561ffdkc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ragene_1_0_st_v1": {
       "name": "pd.ragene.1.0.st.v1",
       "version": "3.14.1",
       "sha256": "0afnv1f5xvdh1vdsdfi5k1zscqzpdbf4b399wib3c8dg9vslccgx",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ragene_1_1_st_v1": {
       "name": "pd.ragene.1.1.st.v1",
       "version": "3.14.1",
       "sha256": "1krygwjhqs97gyh94xfbsfd8gg285fg5bgm7rqk7wlwp8fxx8xnn",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ragene_2_0_st": {
       "name": "pd.ragene.2.0.st",
       "version": "3.14.1",
       "sha256": "1rq4ivv107853pyr4jrnbms4fgfzddndibrasgql9d4msca0sbz9",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_ragene_2_1_st": {
       "name": "pd.ragene.2.1.st",
       "version": "3.14.1",
       "sha256": "1k9zqhnck7fgp6g0b8vmasqjvdyqshzs567rz8qabw6jk5ifssvz",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rat230_2": {
       "name": "pd.rat230.2",
       "version": "3.12.0",
       "sha256": "0ysn0qi26b3llqs312an0mlgyahf4pgmixlcq2x2n925drns34gg",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rcngene_1_0_st": {
       "name": "pd.rcngene.1.0.st",
       "version": "3.12.0",
       "sha256": "0hrhvy6dbw8g1h9qgm9frpmfp45pd5h0fnbvbvz94l98a5gda7xx",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rcngene_1_1_st": {
       "name": "pd.rcngene.1.1.st",
       "version": "3.12.0",
       "sha256": "1lyizr096x5idasvlivl3lb67g7n2xvblrk5zfxglaf2fgpbrgwn",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rg_u34a": {
       "name": "pd.rg.u34a",
       "version": "3.12.0",
       "sha256": "18jl5w1say8zyp50iqmd6jiw8ffa7qsk6sw7h7cw0j1g90ssf4y3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rg_u34b": {
       "name": "pd.rg.u34b",
       "version": "3.12.0",
       "sha256": "19v2g9lvadvba2dy0c0qn6j8qnsds2xa4cliiq12byad21833ss0",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rg_u34c": {
       "name": "pd.rg.u34c",
       "version": "3.12.0",
       "sha256": "10j3hcszx637dfd55552b75qni0yryrjk8q6p0wkd5dh6p628qrx",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rhegene_1_0_st": {
       "name": "pd.rhegene.1.0.st",
       "version": "3.12.0",
       "sha256": "1mx221xvxr4ng01ibq1pc472bn5rknfv3sjsbvvfmvqgpwk6z079",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rhegene_1_1_st": {
       "name": "pd.rhegene.1.1.st",
       "version": "3.12.0",
       "sha256": "0f400qal4qmkxv705n5bzz07rkrz5zgs7swk8xp4pyp161fgb171",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rhesus": {
       "name": "pd.rhesus",
       "version": "3.12.0",
       "sha256": "1zrpq7ppl2gaiprvz4sm0zsxqcw2nvn6qzwi3b0cimqf7r2091dd",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rice": {
       "name": "pd.rice",
       "version": "3.12.0",
       "sha256": "0fmd505vianfspb1s5glr6aacnz45dq9skbk1qwm0a9ck6a6paav",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rjpgene_1_0_st": {
       "name": "pd.rjpgene.1.0.st",
       "version": "3.12.0",
       "sha256": "18qj6sdjw17553lwcb3swdx0aiv54izdzzblgl88g90ijny8rbpa",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rjpgene_1_1_st": {
       "name": "pd.rjpgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0i99fyf6ya13z4hfjf3f5ssvys8wjhmwk894zy0p59p7nmphigyc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rn_u34": {
       "name": "pd.rn.u34",
       "version": "3.12.0",
       "sha256": "0ayp6r7z7p61b1lfq9dkq4ips4apgjg6igrcnvsivlfhcfcfs0wf",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rta_1_0": {
       "name": "pd.rta.1.0",
       "version": "3.12.2",
       "sha256": "0x3j1a47lxhlqnhfvh1cii11rd433x16i6xmydwq2dkvm4xgd63h",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rusgene_1_0_st": {
       "name": "pd.rusgene.1.0.st",
       "version": "3.12.0",
       "sha256": "1ik28yykkpdclr5hrv8lzafzfivakwvzgz49q7bpb1g6ihwylshw",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_rusgene_1_1_st": {
       "name": "pd.rusgene.1.1.st",
       "version": "3.12.0",
       "sha256": "090lxwxzj39d6qzlr7c3x50zf98g8x987rv1gdn0gcas15imya6n",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_s_aureus": {
       "name": "pd.s.aureus",
       "version": "3.12.0",
       "sha256": "0kszw94ymxgwd3midzkpl307ch3pyr4g5qjcf4s2jsq6mrvxw666",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_soybean": {
       "name": "pd.soybean",
       "version": "3.12.0",
       "sha256": "0xg90m7k1x9sgmhcp1qdwhxsyr2y5g28p7a4z6gd6mng2l7cgyh0",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_soygene_1_0_st": {
       "name": "pd.soygene.1.0.st",
       "version": "3.12.0",
       "sha256": "1hg90pma4ikdgxpw1f5mkjcw7na4mmjbhpr06dcssjl3bvmd4yxc",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_soygene_1_1_st": {
       "name": "pd.soygene.1.1.st",
       "version": "3.12.0",
       "sha256": "0978vbl59afgrzy0cmwq4mhsdz5rn5d929nz90fvczm6q8g24616",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_sugar_cane": {
       "name": "pd.sugar.cane",
       "version": "3.12.0",
       "sha256": "09m8m99l9mrhs4gr1rb02l54k8i2wgdzz88qlbpl4xmrfnfn99h6",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_tomato": {
       "name": "pd.tomato",
       "version": "3.12.0",
       "sha256": "12jn8i691j3kkgwa771f4kffzfcxv19vi0waw13akch7x7cc09q7",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_u133_x3p": {
       "name": "pd.u133.x3p",
       "version": "3.12.0",
       "sha256": "171rv9syn90k70ivaj8c48s827c08nycpyyc2b76jy405kaqb1gl",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_vitis_vinifera": {
       "name": "pd.vitis.vinifera",
       "version": "3.12.0",
       "sha256": "19r2k7wx3kygw6syqph24glw0b273gpi0z0y8n4bnd3a184g6hxz",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_wheat": {
       "name": "pd.wheat",
       "version": "3.12.0",
       "sha256": "12n8k5ah8fncbrb2hrpi2ah29fj5rxnh5j5zk8lfwhijg2zf52ra",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_x_laevis_2": {
       "name": "pd.x.laevis.2",
       "version": "3.12.0",
       "sha256": "0zf3rc8rz05hzga2g5b8khszz6sr29dlp8z1jyn94ial284d0fn3",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_x_tropicalis": {
       "name": "pd.x.tropicalis",
       "version": "3.12.0",
       "sha256": "1pb6jm14k0g4z9vffi3clyh7rwc11c89hinb2amczg4xfm5lqrdr",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_xenopus_laevis": {
       "name": "pd.xenopus.laevis",
       "version": "3.12.0",
       "sha256": "1fxd95ak5s2dw16prxdwk20hisss32nywy9dc7y72bpqrv0v309y",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_yeast_2": {
       "name": "pd.yeast.2",
       "version": "3.12.0",
       "sha256": "0l6sxg79xmlb7gdxx4bx24l35jgx5y2qfp3pxzcmdnd7c7qy6z5j",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_yg_s98": {
       "name": "pd.yg.s98",
       "version": "3.12.0",
       "sha256": "1krx7kkjlyc41739c349z0sdbslp19iqfai0xzy6f4jk15524vhj",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_zebgene_1_0_st": {
       "name": "pd.zebgene.1.0.st",
       "version": "3.12.0",
       "sha256": "1vywph8shn23k0s8jmvx34rj34y1zxgwcssjnzbipm71f2sa15hw",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_zebgene_1_1_st": {
       "name": "pd.zebgene.1.1.st",
       "version": "3.12.0",
       "sha256": "0xs3kx7l78dfqkasgz8n5s8qjia5qhdcnj1l8al0ivy8mwvlpyxs",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pd_zebrafish": {
       "name": "pd.zebrafish",
       "version": "3.12.0",
       "sha256": "0gg7y7w51pv0vf39qzyaf09wl3vxy222nr69zgxg7cylwxmaky7v",
-      "depends": ["Biostrings", "DBI", "IRanges", "oligo", "oligoClasses", "RSQLite", "S4Vectors"]
+      "depends": ["Biostrings", "DBI", "IRanges", "RSQLite", "S4Vectors", "oligo", "oligoClasses"]
     },
     "pedbarrayv10_db": {
       "name": "pedbarrayv10.db",
@@ -5311,7 +5311,7 @@
       "name": "synaptome.db",
       "version": "0.99.16",
       "sha256": "0sd3kwhf9gh74j6qiaf1i2qzgn69i9yyvza26aysiplirbsy1jr0",
-      "depends": ["AnnotationHub", "DBI", "dbplyr", "dplyr", "igraph", "Rdpack", "RSQLite", "synaptome_data"]
+      "depends": ["AnnotationHub", "DBI", "RSQLite", "Rdpack", "dbplyr", "dplyr", "igraph", "synaptome_data"]
     },
     "targetscan_Hs_eg_db": {
       "name": "targetscan.Hs.eg.db",

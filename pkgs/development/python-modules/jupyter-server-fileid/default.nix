@@ -6,31 +6,35 @@
   hatchling,
   jupyter-events,
   jupyter-server,
+  click,
   pytest-jupyter,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-server-fileid";
-  version = "0.9.2";
+  version = "0.9.3";
+  pyproject = true;
 
   disables = pythonOlder "3.7";
-
-  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "jupyter_server_fileid";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ApCDBVjJqpkC5FGEjU/LxwWBunTkL6i5Ki85M6MMLE0=";
+    hash = "sha256-ob7hnqU7GdaDHEPF7+gwkmsboKZgiiLzzwxbBUwYHYo=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jupyter-events
     jupyter-server
   ];
+
+  optional-dependencies = {
+    cli = [ click ];
+  };
 
   pythonImportsCheck = [ "jupyter_server_fileid" ];
 

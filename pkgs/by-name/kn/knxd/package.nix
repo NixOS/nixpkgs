@@ -10,18 +10,18 @@
 , fmt_9
 , libev
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUsb ? stdenv.isLinux, libusb1
+, withUsb ? stdenv.hostPlatform.isLinux, libusb1
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.61";
+  version = "0.14.63";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
     rev = finalAttrs.version;
-    hash = "sha256-b8svjGaxW8YqonhXewebDUitezKoMcZxcUFGd2EKZQ4=";
+    hash = "sha256-Ka4ATC20PS/yqHj+dbcIXxeqFYHDMKu6DvJWGd4rUMI=";
   };
 
   postPatch = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ fmt_9 libev ]
     ++ lib.optional withSystemd systemd
     ++ lib.optional withUsb libusb1
-    ++ lib.optional stdenv.isDarwin argp-standalone;
+    ++ lib.optional stdenv.hostPlatform.isDarwin argp-standalone;
 
   configureFlags = [
     (lib.enableFeature withSystemd "systemd")

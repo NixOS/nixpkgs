@@ -25,7 +25,7 @@ let
           })
 
         ];
-        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.icecream ];
+        dependencies = oldAttrs.dependencies ++ [ python3.pkgs.icecream ];
       });
     };
   };
@@ -63,7 +63,7 @@ buildPythonApplication rec {
     setuptools
     sshpubkeys
     wrapt
-  ] ++ lib.optionals stdenv.isDarwin [ setuptools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ setuptools ];
   # fix for darwin users
 
   nativeBuildInputs = [ installShellFiles ];

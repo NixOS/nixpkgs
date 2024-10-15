@@ -2,26 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   httpx,
   httpx-sse,
   orjson,
-  poetry-core,
-  pythonOlder,
+
+  # passthru
   writeScript,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.26";
+  version = "0.1.32";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/sdk==${version}";
-    hash = "sha256-o7JrB2WSWfPm927tDRMcjzx+6Io6Q+Yjp4XPVs2+F4o=";
+    hash = "sha256-qOxtrRbdK0M4aFWJX0SFn7U27rvAyqu53iCbYZX3s8A=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -45,6 +48,9 @@ buildPythonPackage rec {
       set -eu -o pipefail
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
+      nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
+      nix-update --commit --version-regex 'checkpointpostgres==(.*)' python3Packages.langgraph-checkpoint-postgres
+      nix-update --commit --version-regex 'checkpointsqlite==(.*)' python3Packages.langgraph-checkpoint-sqlite
     '';
   };
 

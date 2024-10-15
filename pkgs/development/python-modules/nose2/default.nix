@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     coverage = [ coverage ];
   };
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     unittestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   meta = with lib; {
     changelog = "https://github.com/nose-devs/nose2/blob/${version}/docs/changelog.rst";

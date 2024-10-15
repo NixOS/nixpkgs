@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     mainProgram = "com.github.kmwallio.thiefmd";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

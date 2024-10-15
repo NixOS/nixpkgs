@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,11 +11,18 @@ let
   cfg = config.services.garage;
   toml = pkgs.formats.toml { };
   configFile = toml.generate "garage.toml" cfg.settings;
+
+  anyHasPrefix =
+    prefix: strOrList:
+    if isString strOrList then
+      hasPrefix prefix strOrList
+    else
+      any ({ path, ... }: hasPrefix prefix path) strOrList;
 in
 {
   meta = {
     doc = ./garage.md;
-    maintainers = [ ];
+    maintainers = [ maintainers.mjm ];
   };
 
   options.services.garage = {
@@ -20,7 +32,9 @@ in
       type = types.attrsOf types.str;
       description = "Extra environment variables to pass to the Garage server.";
       default = { };
-      example = { RUST_BACKTRACE = "yes"; };
+      example = {
+        RUST_BACKTRACE = "yes";
+      };
     };
 
     environmentFile = mkOption {
@@ -30,7 +44,13 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ([ "error" "warn" "info" "debug" "trace" ]);
+      type = types.enum ([
+        "error"
+        "warn"
+        "info"
+        "debug"
+        "trace"
+      ]);
       default = "info";
       example = "debug";
       description = "Garage log level, see <https://garagehq.deuxfleurs.fr/documentation/quick-start/#launching-the-garage-server> for examples.";
@@ -49,10 +69,12 @@ in
 
           data_dir = mkOption {
             default = "/var/lib/garage/data";
-            example = [ {
-              path = "/var/lib/garage/data";
-              capacity = "2T";
-            } ];
+            example = [
+              {
+                path = "/var/lib/garage/data";
+                capacity = "2T";
+              }
+            ];
             type = with types; either path (listOf attrs);
             description = ''
               The directory in which Garage will store the data blocks of objects. This folder can be placed on an HDD.
@@ -83,7 +105,9 @@ in
       # These assertions can be removed in NixOS 24.11, when all users have been
       # warned once.
       {
-        assertion = (cfg.settings ? replication_factor || cfg.settings ? replication_mode) || lib.versionOlder cfg.package.version "1.0.0";
+        assertion =
+          (cfg.settings ? replication_factor || cfg.settings ? replication_mode)
+          || lib.versionOlder cfg.package.version "1.0.0";
         message = ''
           Garage 1.0.0 requires an explicit replication factor to be set.
           Please set replication_factor to 1 explicitly to preserve the previous behavior.
@@ -129,14 +153,25 @@ in
 
     systemd.services.garage = {
       description = "Garage Object Storage (S3 compatible)";
-      after = [ "network.target" "network-online.target" ];
-      wants = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
+      wants = [
+        "network.target"
+        "network-online.target"
+      ];
       wantedBy = [ "multi-user.target" ];
-      restartTriggers = [ configFile ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
+      restartTriggers = [
+        configFile
+      ] ++ (lib.optional (cfg.environmentFile != null) cfg.environmentFile);
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/garage server";
 
-        StateDirectory = mkIf (hasPrefix "/var/lib/garage" cfg.settings.data_dir || hasPrefix "/var/lib/garage" cfg.settings.metadata_dir) "garage";
+        StateDirectory = mkIf (
+          anyHasPrefix "/var/lib/garage" cfg.settings.data_dir
+          || hasPrefix "/var/lib/garage" cfg.settings.metadata_dir
+        ) "garage";
         DynamicUser = lib.mkDefault true;
         ProtectHome = true;
         NoNewPrivileges = true;

@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "celery-singleton";
   version = "0.3.1";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "steinitzu";
@@ -33,9 +33,9 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     celery
     redis
   ];

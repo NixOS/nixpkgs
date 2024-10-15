@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nqjAQ1NdNJ/T4p8YljEWRt/uy2aDwyBeAsag0TmRc5Q=";
   };
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     doxygen
     gfortran
@@ -50,7 +52,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  configureFlagsArray = lib.optionals stdenv.isDarwin [
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "--with-asl-lib=-lipoptamplinterface -lamplsolver"
   ];
 
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   # ignore one failing test
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace test/Makefile.in --replace-fail \
       "./unitTest\''$(EXEEXT)" \
       ""

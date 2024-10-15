@@ -3,26 +3,22 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
+  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "nsncd";
-  version = "1.4.1-unstable-2024-04-10";
+  version = "1.4.1-unstable-2024-10-03";
 
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev = "7605e330d5a313a8656e6fcaf1c10cd6b5cdd427";
-    hash = "sha256-Bd7qE9MP5coBCkr70TdoJfwYhQpdrn/zmN4KoARcaMI=";
+    rev = "cf94e3cfc7dfff69867209c7e68945bac2d3913d";
+    hash = "sha256-mjTbyO0b9i4LMv7DWHm0Y4z1pvcapCtFsHLV5cTAxQE=";
   };
 
-  cargoHash = "sha256-N7U9YsyGh8+fLT973GGZTmVXcdnWhpqkeYTxzJ0rzdo=";
-
-  # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
-  cargoPatches = [ ./0001-cargo-bump.patch ];
-
-  # TOREMOVE when https://github.com/twosigma/nsncd/pull/119 gets merged.
-  RUSTFLAGS = "-A dead_code";
+  cargoHash = "sha256-cgdob/HmE6I59W5UQRItAFXDj7IvazNt99LbJlKQDNo=";
 
   checkFlags = [
     # Relies on the test environment to be able to resolve "localhost"
@@ -44,6 +40,11 @@ rustPlatform.buildRustPackage {
       picnoir
     ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
+  };
+
+  passthru = {
+    tests.nscd = nixosTests.nscd;
+    updateScript = nix-update-script { };
   };
 }

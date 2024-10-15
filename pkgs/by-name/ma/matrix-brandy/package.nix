@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "matrix-brandy";
-  version = "1.23.2";
+  version = "1.23.3";
 
   src = fetchFromGitHub {
     owner = "stardot";
     repo = "MatrixBrandy";
     rev = "V${version}";
-    hash = "sha256-alyg4AQ1nSISk3NwniTurRVWeUp1q/SQjK2loek8bfI=";
+    hash = "sha256-jw5SxCQ2flvCjO/JO3BHpnpt31wBsBxDkVH7uwVxTS0=";
   };
 
   buildInputs = [

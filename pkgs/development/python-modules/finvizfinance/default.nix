@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   beautifulsoup4,
   datetime,
   lxml,
@@ -14,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "finvizfinance";
-  version = "1.0.1";
-  format = "setuptools";
+  version = "1.1.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.5";
 
@@ -23,20 +24,17 @@ buildPythonPackage rec {
     owner = "lit26";
     repo = "finvizfinance";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4aR1x9GgbxnJUpn1+i95djZEVBFTAIzhMLxHe2FaciY=";
+    hash = "sha256-HCxq8jCT3aHOXeYue7KP5sYzO6nJnB9Sy8gKGZpZHbc=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4"
-  '';
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     datetime
     lxml

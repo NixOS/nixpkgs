@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.ApplicationServices
     libunistring
   ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     # For libuv on darwin
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       export LIBTOOLIZE=libtoolize
     '' +
     # Help libgc's configure.
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
 
   # remove forbidden references to $TMPDIR
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     for f in "$out"/bin/*; do
       if isELF "$f"; then
         patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$f"
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.gpl2Plus;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice ];
-    broken      = stdenv.isDarwin && stdenv.isAarch64; # segfault during build
+    broken      = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault during build
 
     longDescription = ''
       Bigloo is a Scheme implementation devoted to one goal: enabling

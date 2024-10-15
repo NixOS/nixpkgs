@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip }:
+{ lib, stdenv, fetchzip, nixosTests }:
 
 let
   arch = "amd64";
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/bin/jottad
     $out/bin/jotta-cli completion bash > $out/share/bash-completion/completions/jotta-cli.bash
   '';
+
+  passthru.tests = { inherit (nixosTests) jotta-cli; };
 
   meta = with lib; {
     description  = "Jottacloud CLI";

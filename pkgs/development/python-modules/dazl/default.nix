@@ -26,11 +26,11 @@
 
 buildPythonPackage rec {
   pname = "dazl";
-  version = "7.11.0";
+  version = "7.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IErym/Fd8G75NOa+xOyV87UNmEaB31XPvg8GWCSP7k8=";
+    hash = "sha256-fbemLaOh1PHBvQAmMy06JWgnOqdy/kLByAZh4U8ghxc=";
   };
 
   patches = [

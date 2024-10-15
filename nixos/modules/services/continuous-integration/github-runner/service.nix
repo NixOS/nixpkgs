@@ -151,9 +151,10 @@ with lib;
                 # Always clean workDir
                 find -H "$WORK_DIRECTORY" -mindepth 1 -delete
               '';
-              configureRunner = writeScript "configure" ''
+              configureRunner = writeScript "configure" /*bash*/''
                 if [[ -e "${newConfigTokenPath}" ]]; then
                   echo "Configuring GitHub Actions Runner"
+                  # shellcheck disable=SC2054  # don't complain about commas in --labels
                   args=(
                     --unattended
                     --disableupdate

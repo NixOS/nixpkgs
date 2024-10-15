@@ -8,11 +8,11 @@
 }:
 
 let versions = lib.importJSON ./versions.json;
-    arch = if stdenvNoCC.isx86_64 then "amd64"
-           else if stdenvNoCC.isAarch64 then "arm64"
+    arch = if stdenvNoCC.hostPlatform.isx86_64 then "amd64"
+           else if stdenvNoCC.hostPlatform.isAarch64 then "arm64"
            else throw "Unsupported architecture";
-    os = if stdenvNoCC.isLinux then "linux"
-         else if stdenvNoCC.isDarwin then "darwin"
+    os = if stdenvNoCC.hostPlatform.isLinux then "linux"
+         else if stdenvNoCC.hostPlatform.isDarwin then "darwin"
          else throw "Unsupported os";
     versionInfo = versions."${os}-${arch}";
     inherit (versionInfo) hash url;

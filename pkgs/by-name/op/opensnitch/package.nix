@@ -1,17 +1,18 @@
-{ buildGoModule
-, fetchFromGitHub
-, protobuf
-, go-protobuf
-, pkg-config
-, libnetfilter_queue
-, libnfnetlink
-, lib
-, iptables
-, makeWrapper
-, protoc-gen-go-grpc
-, testers
-, opensnitch
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf,
+  go-protobuf,
+  pkg-config,
+  libnetfilter_queue,
+  libnfnetlink,
+  lib,
+  iptables,
+  makeWrapper,
+  protoc-gen-go-grpc,
+  testers,
+  opensnitch,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -45,14 +46,9 @@ buildGoModule rec {
     protoc-gen-go-grpc
   ];
 
-  vendorHash = "sha256-PX41xeUJb/WKv3+z5kbRmJNP1vFu8x35NZvN2Dgp4CQ=";
+  vendorHash = "sha256-urRujxcp58ZuhUtTAqCK0etSZ16YYG/6JY/aOUodl9g=";
 
   preBuild = ''
-    # Fix inconsistent vendoring build error
-    # https://github.com/evilsocket/opensnitch/issues/770
-    cp ${./go.mod} go.mod
-    cp ${./go.sum} go.sum
-
     make -C ../proto ../daemon/ui/protocol/ui.pb.go
   '';
 

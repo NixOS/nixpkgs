@@ -35,14 +35,14 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.optional-dependencies.taggit = [ django-taggit ];
+  optional-dependencies.taggit = [ django-taggit ];
 
   env.DJANGO_SETTINGS_MODULE = "tests.settings";
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.taggit;
+  ] ++ optional-dependencies.taggit;
 
   # https://github.com/wagtail/django-modelcluster/issues/173
   disabledTests = lib.optionals (lib.versionAtLeast django.version "4.2") [

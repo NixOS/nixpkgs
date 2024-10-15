@@ -27,11 +27,11 @@ mkDerivation rec {
   preConfigure = ''
     # Give ownership of the Galaxy S USB device to the logged in user.
     substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
   '';
 
-  installPhase = lib.optionalString (stdenv.isDarwin && enableGUI) ''
+  installPhase = lib.optionalString (stdenv.hostPlatform.isDarwin && enableGUI) ''
     mkdir -p $out/Applications
     mv bin/heimdall-frontend.app $out/Applications/heimdall-frontend.app
     wrapQtApp $out/Applications/heimdall-frontend.app/Contents/MacOS/heimdall-frontend
@@ -44,7 +44,7 @@ mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     homepage = "http://www.glassechidna.com.au/products/heimdall/";
     description = "Cross-platform tool suite to flash firmware onto Samsung Galaxy S devices";
     license = licenses.mit;

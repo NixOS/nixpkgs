@@ -21,16 +21,17 @@
 , pango
 , pkg-config
 , nltk-data
+, xorg
 }:
 
 let
-  version = "2.11.4";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "paperless-ngx";
     repo = "paperless-ngx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qqOTW7qgaZfNFYgVIDdwVh9KlT3Z6g8EALMOv39aRVc=";
+    hash = "sha256-txqwVGLUel74ObCqwMWSqa4Nd2eDRf0SqAIes5tlMDg=";
   };
 
   # subpath installation is broken with uvicorn >= 0.26
@@ -75,18 +76,18 @@ let
       cd src-ui
     '';
 
-    npmDepsHash = "sha256-dze03mkWMA2o3v3aoPTrDtUndTdP7Tk4gvFp4nq80po=";
+    npmDepsHash = "sha256-hb2z2cPMTN5bHtUldTR5Mvgo4nZL8/S+Uhfis37gF44=";
 
     nativeBuildInputs = [
       pkg-config
       python3
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild
     ];
 
     buildInputs = [
       pango
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       giflib
       darwin.apple_sdk.frameworks.CoreText
     ];
@@ -115,15 +116,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "paperless-ngx";
-  format = "other";
+  pyproject = false;
 
   inherit version src;
 
+  postPatch = ''
+    # pytest-xdist makes the tests flaky
+    substituteInPlace src/setup.cfg \
+      --replace-fail "--numprocesses auto --maxprocesses=16" ""
+  '';
+
   nativeBuildInputs = [
     gettext
+    xorg.lndir
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     bleach
     channels
     channels-redis
@@ -190,18 +198,18 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   installPhase = let
-    pythonPath = python.pkgs.makePythonPath propagatedBuildInputs;
+    pythonPath = python.pkgs.makePythonPath dependencies;
   in ''
     runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx
+    mkdir -p $out/lib/paperless-ngx/static/frontend
     cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    ln -s ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/
+    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
     chmod +x $out/lib/paperless-ngx/src/manage.py
     makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
       --prefix PYTHONPATH : "${pythonPath}" \
       --prefix PATH : "${path}"
-    makeWrapper ${python.pkgs.celery}/bin/celery $out/bin/celery \
+    makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
       --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
       --prefix PATH : "${path}"
 
@@ -217,12 +225,12 @@ python.pkgs.buildPythonApplication rec {
     daphne
     factory-boy
     imagehash
+    pytest-cov-stub
     pytest-django
     pytest-env
     pytest-httpx
     pytest-mock
     pytest-rerunfailures
-    pytest-xdist
     pytestCheckHook
   ];
 
@@ -238,10 +246,6 @@ python.pkgs.buildPythonApplication rec {
     export PATH="${path}:$PATH"
     export HOME=$(mktemp -d)
     export XDG_DATA_DIRS="${liberation_ttf}/share:$XDG_DATA_DIRS"
-
-    # Disable unneeded code coverage test
-    substituteInPlace src/setup.cfg \
-      --replace-fail "--cov --cov-report=html --cov-report=xml" ""
   '';
 
   disabledTests = [
@@ -255,11 +259,11 @@ python.pkgs.buildPythonApplication rec {
     "test_rtl_language_detection"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
     inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt snowball_data stopwords ];
+    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -269,6 +273,6 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lukegb gador erikarvstedt leona ];
+    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
   };
 }

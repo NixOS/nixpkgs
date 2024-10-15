@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     DOH = [
       httpx
       h2
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [ cacert ] ++ passthru.optional-dependencies.DNSSEC;
+  checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found

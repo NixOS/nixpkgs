@@ -25,16 +25,19 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-init";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-init";
     rev = "v${version}";
-    hash = "sha256-PeOYYTSqqi/KSp+QjMbnNRQqKENo/zemN5Bpqiyh0vA=";
+    hash = "sha256-0RLEPVtYnwYH+pMnpO0/Evbp7x9d0RMobOVAqwgMJz4=";
   };
 
-  cargoHash = "sha256-YRScCgmrCjzSZWHvnaBTCJsT02gd4SToz130zOMQ+VY=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes."cargo-0.82.0" = "sha256-1G14vLW3FhLxOWGxuHXcWgb+XXS1vOOyQYKVbrJWlmI=";
+  };
 
   nativeBuildInputs = [
     curl
@@ -49,9 +52,9 @@ rustPlatform.buildRustPackage rec {
     openssl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     darwin.apple_sdk.frameworks.CoreFoundation
   ];
 

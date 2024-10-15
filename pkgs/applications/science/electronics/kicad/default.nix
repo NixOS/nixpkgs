@@ -22,10 +22,10 @@
 , pname ? "kicad"
 , stable ? true
 , testing ? false
-, withNgspice ? !stdenv.isDarwin
+, withNgspice ? !stdenv.hostPlatform.isDarwin
 , libngspice
 , withScripting ? true
-, python311
+, python3
 , addons ? [ ]
 , debug ? false
 , sanitizeAddress ? false
@@ -122,14 +122,10 @@ let
     else versionsImport.${baseName}.libVersion.version;
 
   wxGTK = wxGTK32;
-  # KiCAD depends on wxWidgets, which uses distutils (removed in Python 3.12)
-  # See also: https://github.com/wxWidgets/Phoenix/issues/2104
-  # Eventually, wxWidgets should support Python 3.12: https://github.com/wxWidgets/Phoenix/issues/2553
-  # Until then, we use Python 3.11 which still includes distutils
-  python = python311;
+  python = python3;
   wxPython = python.pkgs.wxpython;
   addonPath = "addon.zip";
-  addonsDrvs = map (pkg: pkg.override { inherit addonPath python; }) addons;
+  addonsDrvs = map (pkg: pkg.override { inherit addonPath python3; }) addons;
 
   addonsJoined =
     runCommand "addonsJoined"
@@ -161,7 +157,7 @@ stdenv.mkDerivation rec {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
-  passthru.callPackage = newScope { inherit addonPath python; };
+  passthru.callPackage = newScope { inherit addonPath python3; };
   base = callPackage ./base.nix {
     inherit stable testing baseName;
     inherit kicadSrc kicadVersion;
@@ -238,7 +234,7 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
-      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
+      bin = if stdenv.hostPlatform.isDarwin then "*.app/Contents/MacOS" else "bin";
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
@@ -290,7 +286,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "kicad";
   };
 }

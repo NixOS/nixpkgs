@@ -3,27 +3,34 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # buildInputs
   libiconv,
+
+  # nativeBuildInputs
   rustPlatform,
+
+  # tests
   anyio,
   objsize,
   pydantic,
   pytestCheckHook,
   trio,
   y-py,
+
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pycrdt";
-  version = "0.9.8";
+  version = "0.9.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W93rLSDcCB9jrxC/Z88ToCkcfMGnCTGjBkVRNk3lLaI=";
+    hash = "sha256-AO5KGBG4I+D5q/VSifzmg0ImAujR1ol9zGU4Y61fImc=";
   };
 
   postPatch = ''
@@ -37,7 +44,9 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+
+  dependencies = [ anyio ];
 
   pythonImportsCheck = [ "pycrdt" ];
 
@@ -52,11 +61,11 @@ buildPythonPackage rec {
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
 
-  meta = with lib; {
+  meta = {
     description = "CRDTs based on Yrs";
     homepage = "https://github.com/jupyter-server/pycrdt";
-    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = teams.jupyter.members;
+    changelog = "https://github.com/jupyter-server/pycrdt/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    license = lib.licenses.mit;
+    maintainers = lib.teams.jupyter.members;
   };
 }

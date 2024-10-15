@@ -54,7 +54,7 @@ buildPythonPackage rec {
     python-dateutil
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     bqstorage = [
       google-cloud-bigquery-storage
       grpcio
@@ -78,7 +78,7 @@ buildPythonPackage rec {
     google-cloud-storage
     pytestCheckHook
     pytest-xdist
-  ] ++ passthru.optional-dependencies.pandas ++ passthru.optional-dependencies.ipython;
+  ] ++ optional-dependencies.pandas ++ optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''

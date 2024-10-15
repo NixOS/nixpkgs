@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   name = "maddy";
@@ -138,11 +135,11 @@ in {
   options = {
     services.maddy = {
 
-      enable = mkEnableOption "Maddy, a free an open source mail server";
+      enable = lib.mkEnableOption "Maddy, a free an open source mail server";
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "maddy";
-        type = with types; uniq str;
+        type = with lib.types; uniq str;
         description = ''
           User account under which maddy runs.
 
@@ -154,9 +151,9 @@ in {
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "maddy";
-        type = with types; uniq str;
+        type = with lib.types; uniq str;
         description = ''
           Group account under which maddy runs.
 
@@ -168,26 +165,26 @@ in {
         '';
       };
 
-      hostname = mkOption {
+      hostname = lib.mkOption {
         default = "localhost";
-        type = with types; uniq str;
+        type = with lib.types; uniq str;
         example = ''example.com'';
         description = ''
           Hostname to use. It should be FQDN.
         '';
       };
 
-      primaryDomain = mkOption {
+      primaryDomain = lib.mkOption {
         default = "localhost";
-        type = with types; uniq str;
+        type = with lib.types; uniq str;
         example = ''mail.example.com'';
         description = ''
           Primary MX domain to use. It should be FQDN.
         '';
       };
 
-      localDomains = mkOption {
-        type = with types; listOf str;
+      localDomains = lib.mkOption {
+        type = with lib.types; listOf str;
         default = ["$(primary_domain)"];
         example = [
           "$(primary_domain)"
@@ -199,8 +196,8 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = with types; nullOr lines;
+      config = lib.mkOption {
+        type = with lib.types; nullOr lines;
         default = defaultConfig;
         description = ''
           Server configuration, see
@@ -215,8 +212,8 @@ in {
       };
 
       tls = {
-        loader = mkOption {
-          type = with types; nullOr (enum [ "off" "file" "acme" ]);
+        loader = lib.mkOption {
+          type = with lib.types; nullOr (enum [ "off" "file" "acme" ]);
           default = "off";
           description = ''
             TLS certificates are obtained by modules called "certificate
@@ -237,18 +234,18 @@ in {
           '';
         };
 
-        certificates = mkOption {
-          type = with types; listOf (submodule {
+        certificates = lib.mkOption {
+          type = with lib.types; listOf (submodule {
             options = {
-              keyPath = mkOption {
-                type = types.path;
+              keyPath = lib.mkOption {
+                type = lib.types.path;
                 example = "/etc/ssl/mx1.example.org.key";
                 description = ''
                   Path to the private key used for TLS.
                 '';
               };
-              certPath = mkOption {
-                type = types.path;
+              certPath = lib.mkOption {
+                type = lib.types.path;
                 example = "/etc/ssl/mx1.example.org.crt";
                 description = ''
                   Path to the certificate used for TLS.
@@ -269,8 +266,8 @@ in {
           '';
         };
 
-        extraConfig = mkOption {
-          type = with types; nullOr lines;
+        extraConfig = lib.mkOption {
+          type = with lib.types; nullOr lines;
           description = ''
             Arguments for the specified certificate loader.
 
@@ -284,16 +281,16 @@ in {
         };
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Open the configured incoming and outgoing mail server ports.
         '';
       };
 
-      ensureAccounts = mkOption {
-        type = with types; listOf str;
+      ensureAccounts = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [];
         description = ''
           List of IMAP accounts which get automatically created. Note that for
@@ -307,7 +304,7 @@ in {
         ];
       };
 
-      ensureCredentials = mkOption {
+      ensureCredentials = lib.mkOption {
         default = {};
         description = ''
           List of user accounts which get automatically created if they don't
@@ -319,10 +316,10 @@ in {
           "user1@localhost".passwordFile = /secrets/user1-localhost;
           "user2@localhost".passwordFile = /secrets/user2-localhost;
         };
-        type = types.attrsOf (types.submodule {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            passwordFile = mkOption {
-              type = types.path;
+            passwordFile = lib.mkOption {
+              type = lib.types.path;
               example = "/path/to/file";
               default = null;
               description = ''
@@ -335,7 +332,7 @@ in {
       };
 
       secrets = lib.mkOption {
-        type = with types; listOf path;
+        type = with lib.types; listOf path;
         description = ''
           A list of files containing the various secrets. Should be in the format
           expected by systemd's `EnvironmentFile` directory. Secrets can be
@@ -347,7 +344,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -387,17 +384,17 @@ in {
         };
         maddy-ensure-accounts = {
           script = ''
-            ${optionalString (cfg.ensureAccounts != []) ''
-              ${concatMapStrings (account: ''
+            ${lib.optionalString (cfg.ensureAccounts != []) ''
+              ${lib.concatMapStrings (account: ''
                 if ! ${pkgs.maddy}/bin/maddyctl imap-acct list | grep "${account}"; then
                   ${pkgs.maddy}/bin/maddyctl imap-acct create ${account}
                 fi
               '') cfg.ensureAccounts}
             ''}
-            ${optionalString (cfg.ensureCredentials != {}) ''
-              ${concatStringsSep "\n" (mapAttrsToList (name: cfg: ''
+            ${lib.optionalString (cfg.ensureCredentials != {}) ''
+              ${lib.concatStringsSep "\n" (lib.mapAttrsToList (name: cfg: ''
                 if ! ${pkgs.maddy}/bin/maddyctl creds list | grep "${name}"; then
-                  ${pkgs.maddy}/bin/maddyctl creds create --password $(cat ${escapeShellArg cfg.passwordFile}) ${name}
+                  ${pkgs.maddy}/bin/maddyctl creds create --password $(cat ${lib.escapeShellArg cfg.passwordFile}) ${name}
                 fi
               '') cfg.ensureCredentials)}
             ''}
@@ -422,9 +419,9 @@ in {
         hostname ${cfg.hostname}
 
         ${if (cfg.tls.loader == "file") then ''
-          tls file ${concatStringsSep " " (
+          tls file ${lib.concatStringsSep " " (
             map (x: x.certPath + " " + x.keyPath
-          ) cfg.tls.certificates)} ${optionalString (cfg.tls.extraConfig != "") ''
+          ) cfg.tls.certificates)} ${lib.optionalString (cfg.tls.extraConfig != "") ''
             { ${cfg.tls.extraConfig} }
           ''}
         '' else if (cfg.tls.loader == "acme") then ''
@@ -441,7 +438,7 @@ in {
       '';
     };
 
-    users.users = optionalAttrs (cfg.user == name) {
+    users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
         isSystemUser = true;
         group = cfg.group;
@@ -449,11 +446,11 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == name) {
+    users.groups = lib.optionalAttrs (cfg.group == name) {
       ${cfg.group} = { };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ 25 143 587 ];
     };
 

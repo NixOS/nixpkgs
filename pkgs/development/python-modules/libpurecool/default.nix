@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   netifaces,
   paho-mqtt,
   pycryptodome,
@@ -13,7 +14,7 @@
 buildPythonPackage rec {
   pname = "libpurecool";
   version = "0.6.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -24,10 +25,12 @@ buildPythonPackage rec {
   postPatch = ''
     rm libpurecool/zeroconf.py
     substituteInPlace libpurecool/dyson_pure_cool_link.py \
-      --replace "from .zeroconf import ServiceBrowser, Zeroconf" "from zeroconf import ServiceBrowser, Zeroconf"
+      --replace-fail "from .zeroconf import ServiceBrowser, Zeroconf" "from zeroconf import ServiceBrowser, Zeroconf"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     netifaces
     paho-mqtt
     pycryptodome

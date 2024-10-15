@@ -261,25 +261,27 @@ rec {
     in
     overrideCC targetStdenv cc;
 
-  useMoldLinker = stdenv: let
-    bintools = stdenv.cc.bintools.override {
-      extraBuildCommands = ''
-        wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-        wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
-      '';
-    };
-  in stdenv.override (old: {
-    allowedRequisites = null;
-    cc = stdenv.cc.override { inherit bintools; };
-    # gcc >12.1.0 supports '-fuse-ld=mold'
-    # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
-    # https://github.com/rui314/mold#how-to-use
-    } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
-    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
-      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
-    });
-  });
-
+  useMoldLinker = stdenv:
+    if stdenv.targetPlatform.isDarwin
+    then throw "Mold can't be used to emit Mach-O (Darwin) binaries"
+    else let
+      bintools = stdenv.cc.bintools.override {
+        extraBuildCommands = ''
+          wrap ${stdenv.cc.bintools.targetPrefix}ld.mold ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+          wrap ${stdenv.cc.bintools.targetPrefix}ld ${../build-support/bintools-wrapper/ld-wrapper.sh} ${pkgs.mold}/bin/ld.mold
+        '';
+      };
+    in stdenv.override (old: {
+      allowedRequisites = null;
+      cc = stdenv.cc.override { inherit bintools; };
+      # gcc >12.1.0 supports '-fuse-ld=mold'
+      # the wrap ld above in bintools supports gcc <12.1.0 and shouldn't harm >12.1.0
+      # https://github.com/rui314/mold#how-to-use
+      } // lib.optionalAttrs (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12")) {
+        mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+          NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "") + " -fuse-ld=mold";
+        });
+      });
 
   /* Modify a stdenv so that it builds binaries optimized specifically
      for the machine they are built on.

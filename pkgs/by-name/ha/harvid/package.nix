@@ -20,12 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "x42";
     repo = "harvid";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
+    hash = "sha256-p0W+rKHH/iuGOcRjl6b4s6jQYkm7bqWCz849SDI/7fQ=";
   };
 
   nativeBuildInputs =
     [ pkg-config ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       which
       unixtools.xxd
     ];
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace libharvid/Makefile \
       --replace-fail /usr/bin/libtool ${cctools}/bin/libtool
   '';

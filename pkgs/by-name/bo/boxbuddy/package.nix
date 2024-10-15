@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "boxbuddy";
-  version = "2.2.9";
+  version = "2.2.13";
 
   src = fetchFromGitHub {
     owner = "Dvlv";
     repo = "BoxBuddyRS";
     rev = version;
-    hash = "sha256-u5roZFpeVsqO/4kNdwnD2BCMSM8C0jVG98p/IdlHA8o=";
+    hash = "sha256-47LOwBm7ql3Nvx6PZ2+x5aR9LSpzc8xuixdvKGdNS94=";
   };
 
-  cargoHash = "sha256-LjHPIQoC/Nldfgl5sjbd+sxjtjY2ZeUd5rVaEEELQq4=";
+  cargoHash = "sha256-W4W2tnnNgBcGD0/t5pobj4ca/YrRkHE1l5dIVe21KPU=";
 
   # The software assumes it is installed either in flatpak or in the home directory
   # so the xdg data path needs to be patched here

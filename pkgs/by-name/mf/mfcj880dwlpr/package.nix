@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.brother.com/welcome/dlf102038/mfcj880dwlpr-${version}.i386.deb";
-    sha256 = "1680b301f660a407fe0b69f5de59c7473d2d66dc472a1589b0cd9f51736bfea7";
+    hash = "sha256-FoCzAfZgpAf+C2n13lnHRz0tZtxHKhWJsM2fUXNr/qc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

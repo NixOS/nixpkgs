@@ -55,15 +55,15 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = with lib; let
-      binPath = makeBinPath ([ procps iproute2 getopt bash dnsmasq
+  installPhase = let
+      binPath = lib.makeBinPath ([ procps iproute2 getopt bash dnsmasq
         iptables coreutils which flock gnugrep gnused gawk ]
-        ++ optional useNetworkManager                          networkmanager
-        ++ optional useWifiDependencies                        hostapd
-        ++ optional useWifiDependencies                        iw
-        ++ optional (useWifiDependencies && useWirelessTools)  wirelesstools
-        ++ optional (useWifiDependencies && useHaveged)        haveged
-        ++ optional (useWifiDependencies && useQrencode)       qrencode);
+        ++ lib.optional useNetworkManager                          networkmanager
+        ++ lib.optional useWifiDependencies                        hostapd
+        ++ lib.optional useWifiDependencies                        iw
+        ++ lib.optional (useWifiDependencies && useWirelessTools)  wirelesstools
+        ++ lib.optional (useWifiDependencies && useHaveged)        haveged
+        ++ lib.optional (useWifiDependencies && useQrencode)       qrencode);
     in
     ''
       mkdir -p $out/bin/ $out/.bin-wrapped

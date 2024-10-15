@@ -16,17 +16,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.46.0";
+  version = "3.46.1";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2024/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-b45qezNSc3SIFvmztiu9w3Koid6HgtfwSMZTpEdBen0=";
+    hash = "sha256-Z9P+bSaObq3crjcn/OWPzI6cU4ab3Qegxh443fKWUHE=";
   };
 
   outputs = [ "bin" "dev" "out" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
   buildInputs = [ zlib ] ++ lib.optionals interactive [ readline ncurses ];
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
     mainProgram = "sqlite3";
-    maintainers = with maintainers; [ eelco np ];
+    maintainers = with maintainers; [ np ];
     platforms = platforms.unix ++ platforms.windows;
     pkgConfigModules = [ "sqlite3" ];
   };

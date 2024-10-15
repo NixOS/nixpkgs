@@ -1,6 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.amazon-ssm-agent;
 
@@ -22,16 +20,16 @@ let
   };
 in {
   imports = [
-    (mkRenamedOptionModule [ "services" "ssm-agent" "enable" ] [ "services" "amazon-ssm-agent" "enable" ])
-    (mkRenamedOptionModule [ "services" "ssm-agent" "package" ] [ "services" "amazon-ssm-agent" "package" ])
+    (lib.mkRenamedOptionModule [ "services" "ssm-agent" "enable" ] [ "services" "amazon-ssm-agent" "enable" ])
+    (lib.mkRenamedOptionModule [ "services" "ssm-agent" "package" ] [ "services" "amazon-ssm-agent" "package" ])
   ];
 
   options.services.amazon-ssm-agent = {
-    enable = mkEnableOption "Amazon SSM agent";
-    package = mkPackageOption pkgs "amazon-ssm-agent" {};
+    enable = lib.mkEnableOption "Amazon SSM agent";
+    package = lib.mkPackageOption pkgs "amazon-ssm-agent" {};
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # See https://github.com/aws/amazon-ssm-agent/blob/mainline/packaging/linux/amazon-ssm-agent.service
     systemd.services.amazon-ssm-agent = {
       inherit (cfg.package.meta) description;
@@ -39,7 +37,12 @@ in {
       after    = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      path = [ fake-lsb-release pkgs.coreutils ];
+      path = [
+        fake-lsb-release
+        pkgs.coreutils
+        "/run/wrappers"
+        "/run/current-system/sw"
+      ];
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/amazon-ssm-agent";

@@ -4,7 +4,7 @@
   https://hydra.nixos.org/jobset/nixpkgs/haskell-updates.
 
   To debug this expression you can use `hydra-eval-jobs` from
-  `pkgs.hydra_unstable` which prints the jobset description
+  `pkgs.hydra` which prints the jobset description
   to `stdout`:
 
   $ hydra-eval-jobs -I . pkgs/top-level/release-haskell.nix
@@ -327,7 +327,6 @@ let
         lambdabot
         lhs2tex
         madlang
-        mailctl
         matterhorn
         mkjson
         mueval
@@ -345,8 +344,9 @@ let
         nixfmt-rfc-style
         nota
         nvfetcher
+        oama
         ormolu
-        # pakcs broken by set-extra on 2024-03-15
+        pakcs
         pandoc
         place-cursor-at
         pinboard-notes-backup
@@ -393,19 +393,7 @@ let
       };
 
       # GHCs linked to musl.
-      pkgsMusl.haskell.compiler = lib.recursiveUpdate
-        (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
-        {
-          # remove musl ghc865Binary since it is known to be broken and
-          # causes an evaluation error on darwin.
-          ghc865Binary = {};
-
-          ghcjs = {};
-          ghcjs810 = {};
-        };
-
-      # Get some cache going for MUSL-enabled GHC.
-      pkgsMusl.haskellPackages =
+      pkgsMusl =
         removePlatforms
           [
             # pkgsMusl is compiled natively with musl.  It is not
@@ -419,11 +407,26 @@ let
             "aarch64-darwin"
           ]
           {
-            inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
-              hello
-              lens
-              random
-              ;
+            haskell.compiler = lib.recursiveUpdate
+              (packagePlatforms pkgs.pkgsMusl.haskell.compiler)
+              {
+                # remove musl ghc865Binary since it is known to be broken and
+                # causes an evaluation error on darwin.
+                ghc865Binary = {};
+
+                ghcjs = {};
+                ghcjs810 = {};
+              };
+
+            # Get some cache going for MUSL-enabled GHC.
+            haskellPackages =
+              {
+                inherit (packagePlatforms pkgs.pkgsMusl.haskellPackages)
+                  hello
+                  lens
+                  random
+                ;
+              };
           };
 
       # Test some statically linked packages to catch regressions
@@ -472,37 +475,65 @@ let
             };
           };
 
-      pkgsCross.ghcjs =
-        removePlatforms
-          [
-            # Hydra output size of 3GB is exceeded
-            "aarch64-linux"
-          ]
-          {
-            haskellPackages = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                ghc
-                hello
-                microlens
-              ;
+      pkgsCross = {
+        ghcjs =
+          removePlatforms
+            [
+              # Hydra output size of 3GB is exceeded
+              "aarch64-linux"
+            ]
+            {
+              haskellPackages = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghc98 = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
+
+              haskell.packages.ghcHEAD = {
+                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
+                  ghc
+                  hello
+                  microlens
+                ;
+              };
             };
 
-            haskell.packages.ghc98 = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
-                ghc
-                hello
-                microlens
+        riscv64 = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.riscv64.haskell.compiler)
+              # Our oldest GHC which still uses its own expression. 8.10.7 can
+              # theoretically be used to chain bootstrap all GHCs on riscv64
+              # which doesn't have official bindists.
+              ghc8107
+              # Latest GHC we are able to cross-compile.
+              ghc948
               ;
-            };
-
-            haskell.packages.ghcHEAD = {
-              inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghcHEAD)
-                ghc
-                hello
-                microlens
-              ;
-            };
           };
+        };
+
+        aarch64-multiplatform = {
+          # Cross compilation of GHC
+          haskell.compiler = {
+            inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
+              # Uses a separate expression and LLVM backend for aarch64.
+              ghc8107
+              # Latest GHC we are able to cross-compile. Uses NCG backend.
+              ghc948
+              ;
+          };
+        };
+      };
     })
     (versionedCompilerJobs {
       # Packages which should be checked on more than the
@@ -544,11 +575,8 @@ let
         compilerNames.ghc8107
         # Support ceased as of 2.5.0.0
         compilerNames.ghc902
-        # No support yet (2024-05-12)
-        compilerNames.ghc9101
       ] released;
       hoogle = lib.subtractLists [
-        compilerNames.ghc9101
       ] released;
       hlint = lib.subtractLists [
         compilerNames.ghc902

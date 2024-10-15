@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "python-designateclient";
-  version = "6.0.1";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,20 +32,23 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "python-designateclient";
     rev = version;
-    hash = "sha256-vuaouOA69REx+ZrzXjLGVz5Az1/d6x4WRT1h78xeebk=";
+    hash = "sha256-MwcpRQXH8EjWv41iHxorbFL9EpYu8qOLkDeUx6inEAU=";
   };
 
   env.PBR_VERSION = version;
 
-  build-system = [
+  nativeBuildInputs = [
     openstackdocstheme
-    pbr
-    setuptools
     sphinxHook
     sphinxcontrib-apidoc
   ];
 
   sphinxBuilders = [ "man" ];
+
+  build-system = [
+    pbr
+    setuptools
+  ];
 
   dependencies = [
     debtcollector
@@ -56,8 +59,6 @@ buildPythonPackage rec {
     oslo-utils
     requests
   ];
-
-  doCheck = true;
 
   nativeCheckInputs = [
     oslotest

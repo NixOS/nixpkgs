@@ -12,14 +12,15 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-file-share";
-  version = "12.17.0";
+  version = "12.19.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-97LGz8G3y4AJelOx7S76nlRbSaKRQw02nNtJ+vvIQdY=";
+    pname = "azure_storage_file_share";
+    inherit version;
+    hash = "sha256-6npBdNxsUvUKyMMPIoFZ/MNnXR+Lp3G40O/LwxB0Ang=";
   };
 
   build-system = [ setuptools ];
@@ -31,7 +32,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aio = [ azure-core ] ++ azure-core.optional-dependencies.aio;
   };
 

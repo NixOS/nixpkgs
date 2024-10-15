@@ -74,7 +74,7 @@ in stdenv.mkDerivation {
       xorg.lndir
       gmp
       pkg-config
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       gcc # https://github.com/ghcjs/ghcjs/issues/663
     ];
     dontConfigure = true;

@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     yarn run nextron build --no-pack
     yarn run electron-builder --dir \
       --config electron-builder.yml \
-      -c.electronDist="${electron}/libexec/electron" \
+      -c.electronDist="${electron.dist}" \
       -c.electronVersion=${electron.version}
 
     runHook postBuild

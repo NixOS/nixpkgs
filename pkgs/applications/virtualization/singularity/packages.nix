@@ -9,14 +9,14 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "apptainer";
-        version = "1.3.3";
+        version = "1.3.4";
         projectName = "apptainer";
 
         src = fetchFromGitHub {
           owner = "apptainer";
           repo = "apptainer";
           rev = "refs/tags/v${version}";
-          hash = "sha256-xQZCQa9z1aJ2tVtxMlwcNhlm0EV/nn8OnbfaVZRm4JI=";
+          hash = "sha256-eByF0OpL1OKGq0wY7kw8Sv9sZuVE0K3TGIm4Chk9PC4=";
         };
 
         # Update by running
@@ -47,20 +47,20 @@ let
     callPackage
       (import ./generic.nix rec {
         pname = "singularity-ce";
-        version = "4.1.4";
+        version = "4.2.1";
         projectName = "singularity";
 
         src = fetchFromGitHub {
           owner = "sylabs";
           repo = "singularity";
           rev = "refs/tags/v${version}";
-          hash = "sha256-+qwPzgwfF6A1c/rmSM/5T2N9/wVeWhMoAthj3eSQmh8=";
+          hash = "sha256-Go4um/bIgq2lCZvjJ2GR81XpA/JvjPholi1PzNG9Hz8=";
         };
 
         # Update by running
         # nix-prefetch -E "{ sha256 }: ((import ./. { }).singularity.override { vendorHash = sha256; }).goModules"
         # at the root directory of the Nixpkgs repository
-        vendorHash = "sha256-dTqOSk8APLOsqwEiZ/IL8Zu1SR48MyEYPgRe6PC2nd8=";
+        vendorHash = "sha256-CRZ42NdmJhAkV6bkl5n7rEV4Tu/h65qF5qaQ4W5wQ3w=";
 
         # Do not build conmon and squashfuse from the Git submodule sources,
         # Use Nixpkgs provided version

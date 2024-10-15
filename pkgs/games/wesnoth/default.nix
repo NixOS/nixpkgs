@@ -20,13 +20,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost
                   libvorbis fribidi dbus libpng pcre openssl icu lua curl ]
-                ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation];
+                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa Foundation];
 
   cmakeFlags = [
     "-DENABLE_SYSTEM_LUA=ON"
   ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework AppKit";
 
   meta = with lib; {
     description = "Battle for Wesnoth, a free, turn-based strategy game with a fantasy theme";

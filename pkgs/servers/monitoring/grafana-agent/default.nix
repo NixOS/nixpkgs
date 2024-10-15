@@ -1,5 +1,5 @@
 { lib
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup-yarn-lock
@@ -13,23 +13,25 @@
 , yarn
 }:
 
-buildGoModule rec {
+# Breaks with Go 1.23: https://github.com/grafana/agent/issues/6972
+# FIXME: unpin when fixed upstream
+buildGo122Module rec {
   pname = "grafana-agent";
-  version = "0.42.0";
+  version = "0.43.3";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-qSxm00zC1Ms9C5R077Zn5FKluEqFs8KYUPnDUaMvMs8=";
+    hash = "sha256-10H3qcvjbmwKL06u+gCxfAdn1z6HaJ/8sWoVa2/ojnA=";
   };
 
-  vendorHash = "sha256-rC8iqCZ6tzXVCOHNqH+jAMDh2yTAR88zj45HcgJ2lSg=";
+  vendorHash = "sha256-NtFdrdDnuLT5CSax81smNnZxe+I9OouwVyIANyTNzF8=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/internal/web/ui/yarn.lock";
-    hash = "sha256-FvrfWcuKld242YfZ8CixF5GGFRp8iFWZ3Vkef3Kf4ag=";
+    hash = "sha256-bnJL7W7VfJIrJKvRt9Q6kdEyjLH/IJoCi0TENxz7SUE=";
   };
 
   ldflags = let
@@ -79,12 +81,12 @@ buildGoModule rec {
 
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isLinux [ "-I${lib.getDev systemd}/include" ]);
 
   # go-systemd uses libsystemd under the hood, which does dlopen(libsystemd) at
   # runtime.
   # Add to RUNPATH so it can be found.
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf \
       --set-rpath "${lib.makeLibraryPath [ (lib.getLib systemd) ]}:$(patchelf --print-rpath $out/bin/grafana-agent)" \
       $out/bin/grafana-agent

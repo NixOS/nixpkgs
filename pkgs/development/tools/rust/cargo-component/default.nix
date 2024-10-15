@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-component";
-  version = "0.15.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "cargo-component";
     rev = "v${version}";
-    hash = "sha256-jdGNZg/LXOoudxVhJbFeWEC9L3s0HW1S4nhfsGR4mEI=";
+    hash = "sha256-j1gQgtse3DQWyR4D5BzQ0aAEGhNKoFT0ACRBVOqDdFE=";
   };
 
-  cargoHash = "sha256-YW++YcpQM1Al7qD+KoVJitfK41i59sLjb3edBge1cvA=";
+  cargoHash = "sha256-1YDnqopghS6MpQ2h8e5kQj0bxKAC2B6XzVeC60+M3MM=";
 
   nativeBuildInputs = [
     pkg-config
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 

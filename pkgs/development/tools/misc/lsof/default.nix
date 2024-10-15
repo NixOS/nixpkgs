@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
+{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences, freebsd, ed }:
 
 let
-  dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
+  dialect = lib.last (lib.splitString "-" stdenv.hostPlatform.system);
 in
 
 stdenv.mkDerivation rec {
@@ -21,17 +21,20 @@ stdenv.mkDerivation rec {
     # We remove phony 'FRC' target that forces rebuilds:
     #   'version.h: FRC ...' is translated to 'version.h: ...'.
     sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's|lcurses|lncurses|g' Configure
   '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences perl which ];
+  nativeBuildInputs = [ nukeReferences perl which ed ];
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths
   LSOF_INCLUDE = "${lib.getDev stdenv.cc.libc}/include";
-  configurePhase = "LINUX_CONF_CC=$CC_FOR_BUILD LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB ./Configure -n ${dialect}";
+  configurePhase = let genericFlags = "LSOF_CC=$CC LSOF_AR=\"$AR cr\" LSOF_RANLIB=$RANLIB";
+    linuxFlags = lib.optionalString stdenv.isLinux "LINUX_CONF_CC=$CC_FOR_BUILD";
+    freebsdFlags = lib.optionalString stdenv.isFreeBSD "FREEBSD_SYS=${freebsd.sys.src}/sys";
+    in "${genericFlags} ${linuxFlags} ${freebsdFlags} ./Configure -n ${dialect}";
 
   preBuild = ''
     for filepath in $(find dialects/${dialect} -type f); do
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
     cp lsof $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lsof-org/lsof";
     description = "Tool to list open files";
     mainProgram = "lsof";
@@ -62,8 +65,8 @@ stdenv.mkDerivation rec {
       socket (IPv6/IPv4/UNIX local), or partition (by opening a file
       from it).
     '';
-    license = licenses.purdueBsd;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.purdueBsd;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.unix;
   };
 }

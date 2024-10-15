@@ -1,11 +1,11 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-    rev = "19624";
-    sha256 = "0q3kg7dqvsiar3m70mvmn6bkkm4k1zn4fbh5r8ynib753wlhf504";
+    rev = "19643";
+    sha256 = "1gnji0hglzh6kj9ssawlrix1vlbcyfjdjx5d9qwpnn2p0sgsq7nj";
   }
 , ...
-}:
+} @ args:
 
 let
   majorMinor = lib.versions.majorMinor linux.modDirVersion;
@@ -45,4 +45,4 @@ in linux.override {
 
     maintainers = with lib.maintainers; [ qyliss ];
   };
-}
+} // (args.argsOverride or { })

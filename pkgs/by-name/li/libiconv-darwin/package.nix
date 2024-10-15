@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ (lib.mesonBool "tests" finalAttrs.doInstallCheck) ];
 
   postInstall =
-    lib.optionalString (stdenv.isDarwin && !hostPlatform.isStatic) ''
+    lib.optionalString (stdenv.hostPlatform.isDarwin && !hostPlatform.isStatic) ''
       ${stdenv.cc.targetPrefix}install_name_tool "$out/lib/libiconv.2.dylib" \
         -change '@rpath/libcharset.1.dylib' "$out/lib/libcharset.1.dylib"
     ''

@@ -1,10 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  gettext,
-  flake8,
-  isocodes,
+  fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   charset-normalizer,
 }:
@@ -12,35 +10,27 @@
 buildPythonPackage rec {
   pname = "aeidon";
   version = "1.15";
+  pyproject = true;
 
-  src = fetchPypi {
-    pname = "aeidon";
-    inherit version;
-    sha256 = "sha256-qGpGraRZFVaW1Jys24qvfPo5WDg7Q/fhvm44JH8ulVw=";
+  src = fetchFromGitHub {
+    owner = "otsaloma";
+    repo = "gaupol";
+    rev = "refs/tags/${version}";
+    hash = "sha256-lhNyeieeiBBm3rNDEU0BuWKeM6XYlOtv1voW8tR8cUM=";
   };
 
-  nativeBuildInputs = [
-    gettext
-    flake8
-  ];
-
-  dependencies = [ isocodes ];
-
-  installPhase = ''
-    runHook preInstall
-    python setup.py --without-gaupol install --prefix=$out
-    runHook postInstall
+  postPatch = ''
+    mv setup.py setup_gaupol.py
+    substituteInPlace setup-aeidon.py \
+      --replace "from setup import" "from setup_gaupol import"
+    mv setup-aeidon.py setup.py
   '';
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    charset-normalizer
-  ];
+  build-system = [ setuptools ];
 
-  # Aeidon is looking in the wrong subdirectory for data
-  preCheck = ''
-    cp -r data aeidon/
-  '';
+  dependencies = [ charset-normalizer ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "aeidon/test" ];
 
@@ -52,9 +42,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aeidon" ];
 
   meta = with lib; {
+    changelog = "https://github.com/otsaloma/gaupol/releases/tag/${version}";
     description = "Reading, writing and manipulationg text-based subtitle files";
     homepage = "https://github.com/otsaloma/gaupol";
-    license = licenses.gpl3Only;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ erictapen ];
   };
 

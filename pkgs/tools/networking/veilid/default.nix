@@ -7,6 +7,9 @@
 , protobuf
 , capnproto
 , cmake
+, testers
+, veilid
+, gitUpdater
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ AppKit Security ];
 
   cargoBuildFlags = [
     "--workspace"
@@ -52,8 +55,18 @@ rustPlatform.buildRustPackage rec {
     moveToOutput "lib" "$lib"
   '';
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      veilid-version = testers.testVersion {
+        package = veilid;
+      };
+    };
+  };
+
   meta = with lib; {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
+    mainProgram = "veilid-server";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
     maintainers = with maintainers; [ bbigras qbit ];

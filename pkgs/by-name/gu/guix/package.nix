@@ -29,6 +29,7 @@
 , bzip2
 , libgcrypt
 , sqlite
+, nixosTests
 
 , stateDir ? "/var"
 , storeDir ? "/gnu/store"
@@ -134,6 +135,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru.tests = {
+    inherit (nixosTests) guix;
+  };
+
   meta = with lib; {
     description = "Functional package manager with a Scheme interface";
     longDescription = ''
@@ -149,6 +154,7 @@ stdenv.mkDerivation rec {
       Guix is based on the Nix package manager.
     '';
     homepage = "http://www.gnu.org/software/guix";
+    changelog = "https://git.savannah.gnu.org/cgit/guix.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     mainProgram = "guix";
     maintainers = with maintainers; [ cafkafk foo-dogsquared ];

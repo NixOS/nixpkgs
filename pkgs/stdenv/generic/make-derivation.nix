@@ -42,6 +42,24 @@ let
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
   inherit (import ../../build-support/lib/meson.nix { inherit lib stdenv; }) makeMesonFlags;
 
+  /**
+    This function creates a derivation, and returns it in the form of a [package attribute set](https://nix.dev/manual/nix/latest/glossary#package-attribute-set)
+    that refers to the derivation's outputs.
+
+    `mkDerivation` takes many argument attributes, most of which affect the derivation environment,
+    but [`meta`](#chap-meta) and [`passthru`](#var-stdenv-passthru) only directly affect package attributes.
+
+    The `mkDerivation` argument attributes can be made to refer to one another by passing a function to `mkDerivation`.
+    See [Fixed-point argument of `mkDerivation`](#mkderivation-recursive-attributes).
+
+    Reference documentation see: https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
+
+    :::{.note}
+    This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
+
+    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    :::
+  */
   mkDerivation =
     fnOrAttrs:
       if builtins.isFunction fnOrAttrs
@@ -67,26 +85,8 @@ let
       #              ^^^^
 
       overrideAttrs = f0:
-        let
-          f = self: super:
-            # Convert f0 to an overlay. Legacy is:
-            #   overrideAttrs (super: {})
-            # We want to introduce self. We follow the convention of overlays:
-            #   overrideAttrs (self: super: {})
-            # Which means the first parameter can be either self or super.
-            # This is surprising, but far better than the confusion that would
-            # arise from flipping an overlay's parameters in some cases.
-            let x = f0 super;
-            in
-              if builtins.isFunction x
-              then
-                # Can't reuse `x`, because `self` comes first.
-                # Looks inefficient, but `f0 super` was a cheap thunk.
-                f0 self super
-              else x;
-        in
-          makeDerivationExtensible
-            (self: let super = rattrs self; in super // (if builtins.isFunction f0 || f0?__functor then f self super else f0));
+        makeDerivationExtensible
+          (lib.extends (lib.toExtension f0) rattrs);
 
       finalPackage =
         mkDerivationSimple overrideAttrs args;

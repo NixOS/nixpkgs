@@ -176,7 +176,7 @@ recursiveUpdate lib (rec {
      coqPackages.lib.overrideCoqDerivation
        {
          defaultVersion = "9999";
-         release."9999".sha256 = "1lq8x86vd3vqqh2yq6hvyagpnhfq5wmk5pg2z0xq7b7dbbbhyfkw";
+         release."9999".hash = "sha256-fDoP11rtrIM7+OLdMisv2EF7n/IbGuwFxHiPtg3qCNM=";
        }
        coqPackages.QuickChick;
      ```

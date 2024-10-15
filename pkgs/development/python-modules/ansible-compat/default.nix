@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
-  version = "24.7.0";
+  version = "24.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "ansible_compat";
     inherit version;
-    hash = "sha256-e8egwgpQWh62/5h3Bx/iAzATBCkIfaKY4lCZoU9w0C8=";
+    hash = "sha256-n/ICReG9nemyOjZ5AlJKsOEfvPt0GDGZbaXaW2Crld8=";
   };
 
   nativeBuildInputs = [

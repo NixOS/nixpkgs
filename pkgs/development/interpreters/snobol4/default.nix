@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # enable all features (undocumented, based on manual review of configure script)
   buildInputs = [ bzip2 libffi openssl readline sqlite tcl xz zlib ]
     # ndbm compat library
-    ++ lib.optional stdenv.isLinux gdbm;
+    ++ lib.optional stdenv.hostPlatform.isLinux gdbm;
   configureFlags = lib.optional (tcl != null) "--with-tcl=${tcl}/lib/tclConfig.sh";
 
   # INSTALL says "parallel make will fail"

@@ -83,7 +83,7 @@ let rizin = stdenv.mkDerivation rec {
       fi
     done
     export LIBRARY_PATH
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace binrz/rizin/macos_sign.sh \
       --replace 'codesign' '# codesign'
   '';

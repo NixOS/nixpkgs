@@ -11,28 +11,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.3.0";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
     rev = "v${version}";
-    hash = "sha256-vK8P+6hn7NiympkQE8Bp45ZPqTO24VTSu0QwnXHfdXw=";
+    hash = "sha256-bTDf8muJN0G4+c6UagtWgNLlmGN15twEBjdmKEP0bCE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "notify-6.1.1" = "sha256-5Ft2yvRPi2EaErcGBkF/3Xv6K7ijFGbdjmSqI4go/h4=";
-    };
-  };
+  cargoHash = "sha256-8UsdanF8y4uFoXdC7aAw7pVFRd9GACcfVvqkUtFmN5k=";
 
   env.YAZI_GEN_COMPLETIONS = true;
   env.VERGEN_GIT_SHA = "Nixpkgs";
-  env.VERGEN_BUILD_DATE = "2024-08-01";
+  env.VERGEN_BUILD_DATE = "2024-09-04";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
@@ -55,6 +50,7 @@ rustPlatform.buildRustPackage rec {
       matthiasbeyer
       linsui
       eljamm
+      uncenter
     ];
     mainProgram = "yazi";
   };

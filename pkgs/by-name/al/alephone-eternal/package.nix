@@ -7,7 +7,7 @@ alephone.makeWrapper rec {
 
   zip = fetchurl {
     url = "http://eternal.bungie.org/files/_releases/EternalXv120.zip";
-    sha256 = "1qrvx0sp9xc8zbpp5yz8jdz458ajzmyv2si7hrppiyawc8dpcwck";
+    hash = "sha256-k3F2G2Jc+XhvhidqsX39UqFCfpPo+3Lv+oj1dDXoO+M=";
   };
 
   sourceRoot = "Eternal 1.2.0";

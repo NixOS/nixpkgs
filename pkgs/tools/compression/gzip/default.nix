@@ -2,7 +2,6 @@
 , fetchurl
 , makeWrapper
 , updateAutotoolsGnuConfigScriptsHook
-, xz
 , runtimeShellPackage
 }:
 

@@ -13,7 +13,7 @@
 , gtk3
 , libnotify
 , pango
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 
   # check inputs
@@ -39,7 +39,7 @@
 , xrandr
 , pciutils
 , psmisc
-, glxinfo
+, mesa-demos
 , vulkan-tools
 , xboxdrv
 , pulseaudio
@@ -58,7 +58,7 @@ let
     xrandr
     pciutils
     psmisc
-    glxinfo
+    mesa-demos
     vulkan-tools
     xboxdrv
     pulseaudio
@@ -93,7 +93,7 @@ buildPythonApplication rec {
     gtk3
     libnotify
     pango
-    webkitgtk
+    webkitgtk_4_0
   ] ++ (with gst_all_1; [
     gst-libav
     gst-plugins-bad

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.27.6";
+  version = "2.28.0";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-cEEkXVNyTP922Xgr5ekR9DX0n1uHy1dw77mlnVDRR1U=";
+    sha256 = "sha256-/lsPhpG8z4nNRuk55n7Xo1Q97muWk33Uo3vmX5GxPxU=";
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper wrapQtAppsHook ];

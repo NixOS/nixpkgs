@@ -60,6 +60,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sagemath.org";
     license = licenses.gpl2Plus;
     maintainers = teams.sage.members;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ [ "aarch64-darwin" ];
   };
 }

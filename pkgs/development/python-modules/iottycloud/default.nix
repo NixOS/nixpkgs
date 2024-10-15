@@ -10,15 +10,14 @@
 
 buildPythonPackage rec {
   pname = "iottycloud";
-  version = "0.1.3";
+  version = "0.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pburgio";
     repo = "iottyCloud";
-    # https://github.com/pburgio/iottyCloud/issues/1
-    rev = "c328cc497bf58a1da148ea88e309129177d69af0";
-    hash = "sha256-G06kvp4VG0OmZxDqvKnMJ+uD+6i5BFL/Iuke4vOdO/k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EtAAUyVL7FTn0VoGmU5bU9XouMuEQUOx2t6j/wd1OEo=";
   };
 
   build-system = [ hatchling ];

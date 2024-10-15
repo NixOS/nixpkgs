@@ -20,7 +20,7 @@
 , blas
 
 , pkg-config
-, metalSupport ? stdenv.isDarwin && stdenv.isAarch64 && !openclSupport
+, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport
 , vulkanSupport ? false
 , rpcSupport ? false
 , shaderc
@@ -69,13 +69,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "3565";
+  version = "3887";
 
   src = fetchFromGitHub {
     owner = "ggerganov";
     repo = "llama.cpp";
     rev = "refs/tags/b${finalAttrs.version}";
-    hash = "sha256-eAsChIG30Oj5aFQyFDtyWqqT2PTgmdJ2jSrsi2UH+Gc=";
+    hash = "sha256-uyZ/uyuLzXAeZ8TQK8e6+zf+ZTFRSJJ1Doqw8Cd10+A=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -98,7 +98,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     autoAddDriverRunpath
   ];
 
-  buildInputs = optionals effectiveStdenv.isDarwin darwinBuildInputs
+  buildInputs = optionals effectiveStdenv.hostPlatform.isDarwin darwinBuildInputs
     ++ optionals cudaSupport cudaBuildInputs
     ++ optionals openclSupport [ clblast ]
     ++ optionals rocmSupport rocmBuildInputs
@@ -156,13 +156,13 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "Port of Facebook's LLaMA model in C/C++";
+    description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggerganov/llama.cpp/";
     license = licenses.mit;
     mainProgram = "llama";
     maintainers = with maintainers; [ dit7ya elohmeier philiptaron ];
     platforms = platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
-    broken = (metalSupport && !effectiveStdenv.isDarwin);
+    broken = (metalSupport && !effectiveStdenv.hostPlatform.isDarwin);
   };
 })

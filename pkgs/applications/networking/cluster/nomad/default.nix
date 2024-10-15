@@ -1,6 +1,5 @@
 { lib
 , buildGoModule
-, buildGo121Module
 , buildGo122Module
 , fetchFromGitHub
 , nixosTests
@@ -61,17 +60,7 @@ rec {
 
   nomad_1_5 = throwUnsupportaed "nomad_1_5";
 
-  nomad_1_6 = generic {
-    buildGoModule = buildGo121Module;
-    version = "1.6.10";
-    sha256 = "sha256-kiMdpJzjF0S7lrTX3sBFkWm0Gac9a+qlwCPcMKeVXXQ=";
-    vendorHash = "sha256-qnsPPV/NWTrqUa1v1CL16WfCH7B0zW9ZSnEmtqvotqI=";
-    license = lib.licenses.mpl20;
-    passthru.tests.nomad = nixosTests.nomad;
-    preCheck = ''
-      export PATH="$PATH:$NIX_BUILD_TOP/go/bin"
-    '';
-  };
+  nomad_1_6 = throwUnsupportaed "nomad_1_6";
 
   nomad_1_7 = generic {
     buildGoModule = buildGo122Module;
@@ -87,9 +76,9 @@ rec {
 
   nomad_1_8 = generic {
     buildGoModule = buildGo122Module;
-    version = "1.8.2";
-    sha256 = "sha256-deVLC7yGgLHCauq+3h0Uu5ln5omoeV8/FkVtQM9CEXc=";
-    vendorHash = "sha256-Pr38tRzym8UFPZKs9367xOZJ9P5OHotwwClorcSgOys=";
+    version = "1.8.4";
+    sha256 = "sha256-BzLvALD65VqWNB9gx4BgI/mYWLNeHzp6WSXD/1Xf0Wk=";
+    vendorHash = "sha256-0mnhZeiCLAWvwAoNBJtwss85vhYCrf/5I1AhyXTFnWk=";
     license = lib.licenses.bsl11;
     passthru.tests.nomad = nixosTests.nomad;
     preCheck = ''

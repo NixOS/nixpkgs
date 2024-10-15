@@ -32,6 +32,7 @@
 , udev
 , wayland
 , wayland-protocols
+, wayland-scanner
 , wrapGAppsHook3
 , xorgserver
 , xwayland
@@ -68,6 +69,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     xorgserver # for cvt command
     gobject-introspection
+    wayland-scanner
   ];
 
   buildInputs = [

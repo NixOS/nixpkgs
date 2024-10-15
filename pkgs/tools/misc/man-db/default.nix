@@ -5,6 +5,7 @@
 , gzip
 , lib
 , libiconv
+, libiconvReal
 , libpipeline
 , makeWrapper
 , nixosTests
@@ -28,8 +29,9 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  buildInputs = [ libpipeline db groff ] # (Yes, 'groff' is both native and build input)
+    ++ lib.optional stdenv.isFreeBSD libiconvReal;
+  nativeCheckInputs = [ (if stdenv.isFreeBSD then libiconvReal else libiconv) ]; # for 'iconv' binary; make very sure it matches buildinput libiconv
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -59,6 +61,8 @@ stdenv.mkDerivation rec {
     "ac_cv_func__set_invalid_parameter_handler=no"
     "ac_cv_func_posix_fadvise=no"
     "ac_cv_func_mempcpy=no"
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "--enable-mandirs="
   ];
 
   preConfigure = ''

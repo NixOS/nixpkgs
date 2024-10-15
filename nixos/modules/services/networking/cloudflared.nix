@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.cloudflared;
 
   originRequest = {
-    connectTimeout = mkOption {
-      type = with types; nullOr str;
+    connectTimeout = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "30s";
       description = ''
@@ -15,8 +12,8 @@ let
       '';
     };
 
-    tlsTimeout = mkOption {
-      type = with types; nullOr str;
+    tlsTimeout = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "10s";
       description = ''
@@ -24,8 +21,8 @@ let
       '';
     };
 
-    tcpKeepAlive = mkOption {
-      type = with types; nullOr str;
+    tcpKeepAlive = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "30s";
       description = ''
@@ -33,8 +30,8 @@ let
       '';
     };
 
-    noHappyEyeballs = mkOption {
-      type = with types; nullOr bool;
+    noHappyEyeballs = lib.mkOption {
+      type = with lib.types; nullOr bool;
       default = null;
       example = false;
       description = ''
@@ -42,8 +39,8 @@ let
       '';
     };
 
-    keepAliveConnections = mkOption {
-      type = with types; nullOr int;
+    keepAliveConnections = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       example = 100;
       description = ''
@@ -51,8 +48,8 @@ let
       '';
     };
 
-    keepAliveTimeout = mkOption {
-      type = with types; nullOr str;
+    keepAliveTimeout = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "1m30s";
       description = ''
@@ -60,8 +57,8 @@ let
       '';
     };
 
-    httpHostHeader = mkOption {
-      type = with types; nullOr str;
+    httpHostHeader = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "";
       description = ''
@@ -69,8 +66,8 @@ let
       '';
     };
 
-    originServerName = mkOption {
-      type = with types; nullOr str;
+    originServerName = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "";
       description = ''
@@ -78,8 +75,8 @@ let
       '';
     };
 
-    caPool = mkOption {
-      type = with types; nullOr (either str path);
+    caPool = lib.mkOption {
+      type = with lib.types; nullOr (either str path);
       default = null;
       example = "";
       description = ''
@@ -87,8 +84,8 @@ let
       '';
     };
 
-    noTLSVerify = mkOption {
-      type = with types; nullOr bool;
+    noTLSVerify = lib.mkOption {
+      type = with lib.types; nullOr bool;
       default = null;
       example = false;
       description = ''
@@ -96,8 +93,8 @@ let
       '';
     };
 
-    disableChunkedEncoding = mkOption {
-      type = with types; nullOr bool;
+    disableChunkedEncoding = lib.mkOption {
+      type = with lib.types; nullOr bool;
       default = null;
       example = false;
       description = ''
@@ -105,8 +102,8 @@ let
       '';
     };
 
-    proxyAddress = mkOption {
-      type = with types; nullOr str;
+    proxyAddress = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "127.0.0.1";
       description = ''
@@ -114,8 +111,8 @@ let
       '';
     };
 
-    proxyPort = mkOption {
-      type = with types; nullOr int;
+    proxyPort = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       example = 0;
       description = ''
@@ -123,8 +120,8 @@ let
       '';
     };
 
-    proxyType = mkOption {
-      type = with types; nullOr (enum [ "" "socks" ]);
+    proxyType = lib.mkOption {
+      type = with lib.types; nullOr (enum [ "" "socks" ]);
       default = null;
       example = "";
       description = ''
@@ -138,32 +135,32 @@ let
 in
 {
   options.services.cloudflared = {
-    enable = mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
+    enable = lib.mkEnableOption "Cloudflare Tunnel client daemon (formerly Argo Tunnel)";
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "cloudflared";
       description = "User account under which Cloudflared runs.";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "cloudflared";
       description = "Group under which cloudflared runs.";
     };
 
-    package = mkPackageOption pkgs "cloudflared" { };
+    package = lib.mkPackageOption pkgs "cloudflared" { };
 
-    tunnels = mkOption {
+    tunnels = lib.mkOption {
       description = ''
         Cloudflare tunnels.
       '';
-      type = types.attrsOf (types.submodule ({ name, ... }: {
+      type = lib.types.attrsOf (lib.types.submodule ({ name, ... }: {
         options = {
           inherit originRequest;
 
-          credentialsFile = mkOption {
-            type = types.str;
+          credentialsFile = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Credential file.
 
@@ -172,8 +169,8 @@ in
           };
 
           warp-routing = {
-            enabled = mkOption {
-              type = with types; nullOr bool;
+            enabled = lib.mkOption {
+              type = with lib.types; nullOr bool;
               default = null;
               description = ''
                 Enable warp routing.
@@ -183,8 +180,8 @@ in
             };
           };
 
-          default = mkOption {
-            type = types.str;
+          default = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Catch-all service if no ingress matches.
 
@@ -193,13 +190,13 @@ in
             example = "http_status:404";
           };
 
-          ingress = mkOption {
-            type = with types; attrsOf (either str (submodule ({ hostname, ... }: {
+          ingress = lib.mkOption {
+            type = with lib.types; attrsOf (either str (submodule ({ hostname, ... }: {
               options = {
                 inherit originRequest;
 
-                service = mkOption {
-                  type = with types; nullOr str;
+                service = lib.mkOption {
+                  type = with lib.types; nullOr str;
                   default = null;
                   description = ''
                     Service to pass the traffic.
@@ -209,8 +206,8 @@ in
                   example = "http://localhost:80, tcp://localhost:8000, unix:/home/production/echo.sock, hello_world or http_status:404";
                 };
 
-                path = mkOption {
-                  type = with types; nullOr str;
+                path = lib.mkOption {
+                  type = with lib.types; nullOr str;
                   default = null;
                   description = ''
                     Path filter.
@@ -251,11 +248,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.targets =
-      mapAttrs'
+      lib.mapAttrs'
         (name: tunnel:
-          nameValuePair "cloudflared-tunnel-${name}" {
+          lib.nameValuePair "cloudflared-tunnel-${name}" {
             description = "Cloudflare tunnel '${name}' target";
             requires = [ "cloudflared-tunnel-${name}.service" ];
             after = [ "cloudflared-tunnel-${name}.service" ];
@@ -265,13 +262,13 @@ in
         config.services.cloudflared.tunnels;
 
     systemd.services =
-      mapAttrs'
+      lib.mapAttrs'
         (name: tunnel:
           let
             filterConfig = lib.attrsets.filterAttrsRecursive (_: v: ! builtins.elem v [ null [ ] { } ]);
 
-            filterIngressSet = filterAttrs (_: v: builtins.typeOf v == "set");
-            filterIngressStr = filterAttrs (_: v: builtins.typeOf v == "string");
+            filterIngressSet = lib.filterAttrs (_: v: builtins.typeOf v == "set");
+            filterIngressStr = lib.filterAttrs (_: v: builtins.typeOf v == "string");
 
             ingressesSet = filterIngressSet tunnel.ingress;
             ingressesStr = filterIngressStr tunnel.ingress;
@@ -285,21 +282,21 @@ in
                 (map
                   (key: {
                     hostname = key;
-                  } // getAttr key (filterConfig (filterConfig ingressesSet)))
-                  (attrNames ingressesSet))
+                  } // lib.getAttr key (filterConfig (filterConfig ingressesSet)))
+                  (lib.attrNames ingressesSet))
                 ++
                 (map
                   (key: {
                     hostname = key;
-                    service = getAttr key ingressesStr;
+                    service = lib.getAttr key ingressesStr;
                   })
-                  (attrNames ingressesStr))
+                  (lib.attrNames ingressesStr))
                 ++ [{ service = tunnel.default; }];
             };
 
             mkConfigFile = pkgs.writeText "cloudflared.yml" (builtins.toJSON fullConfig);
           in
-          nameValuePair "cloudflared-tunnel-${name}" ({
+          lib.nameValuePair "cloudflared-tunnel-${name}" ({
             after = [ "network.target" "network-online.target" ];
             wants = [ "network.target" "network-online.target" ];
             wantedBy = [ "multi-user.target" ];
@@ -313,17 +310,17 @@ in
         )
         config.services.cloudflared.tunnels;
 
-    users.users = mkIf (cfg.user == "cloudflared") {
+    users.users = lib.mkIf (cfg.user == "cloudflared") {
       cloudflared = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = mkIf (cfg.group == "cloudflared") {
+    users.groups = lib.mkIf (cfg.group == "cloudflared") {
       cloudflared = { };
     };
   };
 
-  meta.maintainers = with maintainers; [ bbigras anpin ];
+  meta.maintainers = with lib.maintainers; [ bbigras anpin ];
 }

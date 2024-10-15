@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, fetchpatch
 , fetchFromGitHub
 , makeDesktopItem
 , pkg-config
@@ -26,6 +27,7 @@
 
 , wayland
 , wayland-protocols
+, wayland-scanner
 
 , pipewire
 , pulseaudio
@@ -61,10 +63,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix failing cmake assertion when disabling X11 whithout explicitly enabling Wayland.
-    ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
+    (fetchpatch {
+      url = "https://github.com/gnif/LookingGlass/commit/20972cfd9b940fddf9e7f3d2887a271d16398979.patch";
+      hash = "sha256-CqB8AmOZ4YxnEsQkyu/ZEaun6ywpSh4B7PM+MFJF0qU=";
+      stripLen = 1;
+    })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [ cmake pkg-config wayland-scanner ];
 
   buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
     ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ allegro ];
 
-  configureFlags = lib.optional stdenv.isx86_64 "--disable-asm";
+  configureFlags = lib.optional stdenv.hostPlatform.isx86_64 "--disable-asm";
 
   hardeningDisable = [ "format" ];
 

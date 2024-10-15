@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ packaging ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     marshmallow = [ marshmallow ];
     yaml = [ pyyaml ];
     validation = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apispec" ];
 

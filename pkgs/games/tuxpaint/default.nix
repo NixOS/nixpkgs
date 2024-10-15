@@ -28,13 +28,14 @@ let
     url = "mirror://sourceforge/project/tuxpaint/tuxpaint-stamps/2024-01-29/tuxpaint-stamps-2024.01.29.tar.gz";
     hash = "sha256-GwJx9tqaX7I623tJQYO53iiaApZtYsTLQw2ptBIFlKk=";
   };
+
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.32";
   pname = "tuxpaint";
 
   src = fetchurl {
-    url = "mirror://sourceforge/tuxpaint/${version}/tuxpaint-${version}.tar.gz";
+    url = "mirror://sourceforge/tuxpaint/${finalAttrs.version}/tuxpaint-${finalAttrs.version}.tar.gz";
     hash = "sha256-CcziIkFIHcE2D8S8XU2h0xgV16JWO56fohemcrqXS/I=";
   };
 
@@ -110,5 +111,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ woffs ];
     platforms = lib.platforms.linux;
+    mainProgram = "tuxpaint";
   };
-}
+})

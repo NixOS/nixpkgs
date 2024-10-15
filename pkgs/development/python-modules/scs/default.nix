@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "scs";
-  version = "3.2.6";
+  version = "3.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bodono";
     repo = "scs-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-Sl0+1/uEXAg+V2ijDFGmez6hBKQjbi63gN26lPCiEnI=";
+    hash = "sha256-ZhY4h0C8aF3IjD9NMtevcNTSqX+tIUao9bC+WlP+uDk=";
     fetchSubmodules = true;
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   ];
 
   buildInputs =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       [ Accelerate ]
     else
       [

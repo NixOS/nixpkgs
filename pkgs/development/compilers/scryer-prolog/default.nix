@@ -3,9 +3,6 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
-, gmp
-, libmpc
-, mpfr
 , stdenv
 , darwin
 }:
@@ -25,8 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl gmp libmpc mpfr ]
-                ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ openssl ]
+                ++ lib.optionals stdenv.hostPlatform.isDarwin [
                   darwin.apple_sdk.frameworks.SystemConfiguration
                 ];
 

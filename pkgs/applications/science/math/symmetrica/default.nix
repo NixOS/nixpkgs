@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
+  # clang warning: passing arguments to '...' without a prototype is deprecated
+  # in all versions of C and is not supported in C23.
+  CFLAGS = "-std=c99 -Wno-deprecated-non-prototype";
+
   enableParallelBuilding = true;
 
   meta = with lib; {

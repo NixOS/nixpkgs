@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     #"MAKEINFO=${buildPackages.texinfo}/bin/makeinfo"
   ]
   # See: https://sourceforge.net/p/autogen/bugs/187/
-  ++ lib.optionals stdenv.isDarwin [ "ac_cv_func_utimensat=no" ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "ac_cv_func_utimensat=no" ];
 
   #doCheck = true; # not reliable
 

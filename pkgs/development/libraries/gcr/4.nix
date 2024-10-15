@@ -22,6 +22,7 @@
 , gnome
 , python3
 , shared-mime-info
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -56,8 +57,9 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
-    systemd
     gtk4
+  ] ++ lib.optionals systemdSupport [
+    systemd
   ];
 
   propagatedBuildInputs = [
@@ -74,6 +76,7 @@ stdenv.mkDerivation rec {
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
     "-Dgpg_path=${lib.getBin gnupg}/bin/gpg"
+    (lib.mesonEnable "systemd" systemdSupport)
   ];
 
   doCheck = false; # fails 21 out of 603 tests, needs dbus daemon

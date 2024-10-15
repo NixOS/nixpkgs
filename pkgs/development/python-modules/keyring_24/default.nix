@@ -46,7 +46,7 @@ buildPythonPackage rec {
       jaraco-context
       jaraco-functools
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       jeepney
       secretstorage
     ]
@@ -68,7 +68,7 @@ buildPythonPackage rec {
   disabledTestPaths =
     [ "tests/backends/test_macOS.py" ]
     # These tests fail when sandboxing is enabled because they are unable to get a password from keychain.
-    ++ lib.optional stdenv.isDarwin "tests/test_multiprocess.py";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "tests/test_multiprocess.py";
 
   meta = with lib; {
     description = "Store and access your passwords safely";

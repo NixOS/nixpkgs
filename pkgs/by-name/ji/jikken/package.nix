@@ -10,22 +10,22 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jikken";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jikkenio";
     repo = "jikken";
     rev = "v${version}";
-    hash = "sha256-bV9NjwTcX1euk8zRJMGkAULegQmiT8z4jxngOwOPr+M=";
+    hash = "sha256-e1n5Q1bF/n9ELA93ucdaIeXx3LPhd7cWkLxWRRdGlo4=";
   };
 
-  cargoHash = "sha256-gJg/l7L19qk6DELqo4fYc2ZWTHqKeUFEF3YU3+uyFjQ=";
+  cargoHash = "sha256-DALY88q5xsjnoaGJxnVWx/5v4yE80+HNGT/vdFdzkXk=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.IOKit
       darwin.apple_sdk_11_0.frameworks.Security
       darwin.apple_sdk_11_0.frameworks.SystemConfiguration

@@ -22,29 +22,23 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8adgwLAMG6m0lFwWzpJXfzk/tR0YTzUbdoW6boUCCY4=";
+    hash = "sha256-2Cefj0sjbAslOyDWDEgxu2eEPtjb1uCfI06wEdNvG/I=";
   };
 
-  patches = [
-    # this fixes the webserver (nbdiff-web) when jupyter-server >=2.13 is used
-    # see https://github.com/jupyter/nbdime/issues/749
-    ./749.patch
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     hatch-jupyter-builder
     hatchling
     jupyterlab
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     nbformat
     colorama
     pygments

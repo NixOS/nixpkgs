@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "nbsphinx";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-BCpggG/CPVGbxb71nZVXBxORP+RC/adZ1T46r2IQR5Q=";
+    hash = "sha256-c2kW57Daso/JBPSprjtTqaUMKfzMYynAUvzHSFq88rc=";
   };
 
   build-system = [ setuptools ];

@@ -44,7 +44,7 @@ buildPythonPackage rec {
     markupsafe
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       click
       jinja2

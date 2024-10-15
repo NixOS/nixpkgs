@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "111.0.5168.61";
+  version = "113.0.5230.47";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-O2QqosmhhFk6KfiAdlpDYOsZUqGhvtwzYFi2I90Hemo=";
+    hash = "sha256-0RQTcROUv85yE6ceLkyF09/++WrvK828h5hoN1QYpCE=";
   };
 
   unpackPhase = "dpkg-deb -x $src .";

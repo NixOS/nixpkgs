@@ -52,11 +52,16 @@ let
       else null
     );
 
+  cleanModule = lib.flip removeAttrs [
+    "link" # Remove link not to symlink directories. These have been processed to store paths already.
+    "funding" # Remove funding to get rid sponsorship nag in build output
+  ];
+
   # Manage node_modules outside of the store with hooks
   hooks = callPackages ./hooks { };
 
 in
-{
+lib.fix (self: {
   importNpmLock =
     { npmRoot ? null
     , package ? importJSON (npmRoot + "/package.json")
@@ -94,10 +99,8 @@ in
                   fetcherOpts = fetcherOpts.${modulePath} or {};
                 };
               in
-              (removeAttrs module [
-                "link"
-                "funding"
-              ]) // lib.optionalAttrs (src != null) {
+              cleanModule module
+              // lib.optionalAttrs (src != null) {
                 resolved = "file:${src}";
               } // lib.optionalAttrs (module ? dependencies) {
                 dependencies = mapLockDependencies module.dependencies;
@@ -133,8 +136,52 @@ in
       cp "$packageLockPath" $out/package-lock.json
     '';
 
+  # Build node modules from package.json & package-lock.json
+  buildNodeModules =
+    { npmRoot ? null
+    , package ? importJSON (npmRoot + "/package.json")
+    , packageLock ? importJSON (npmRoot + "/package-lock.json")
+    , nodejs
+    , derivationArgs ? { }
+    }:
+    stdenv.mkDerivation ({
+      pname = derivationArgs.pname or "${getName package}-node-modules";
+      version = derivationArgs.version or getVersion package;
+
+      dontUnpack = true;
+
+      npmDeps = self.importNpmLock {
+        inherit npmRoot package packageLock;
+      };
+
+      package = toJSON package;
+      packageLock = toJSON packageLock;
+
+      installPhase = ''
+        runHook preInstall
+        mkdir $out
+        cp package.json $out/
+        cp package-lock.json $out/
+        [[ -d node_modules ]] && mv node_modules $out/
+        runHook postInstall
+      '';
+    } // derivationArgs // {
+      nativeBuildInputs = [
+        nodejs
+        nodejs.passthru.python
+        hooks.npmConfigHook
+      ] ++ derivationArgs.nativeBuildInputs or [ ];
+
+      passAsFile = [ "package" "packageLock" ] ++ derivationArgs.passAsFile or [ ];
+
+      postPatch = ''
+        cp --no-preserve=mode "$packagePath" package.json
+        cp --no-preserve=mode "$packageLockPath" package-lock.json
+      '' + derivationArgs.postPatch or "";
+    });
+
   inherit hooks;
-  inherit (hooks) npmConfigHook;
+  inherit (hooks) npmConfigHook linkNodeModulesHook;
 
   __functor = self: self.importNpmLock;
-}
+})

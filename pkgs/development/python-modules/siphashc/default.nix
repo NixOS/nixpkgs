@@ -13,8 +13,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   src = fetchPypi {
-    pname = "siphashc";
-    inherit version;
+    inherit pname version;
     sha256 = "sha256-ptNpy7VkUXHbjvdir6v+eYOmtQ/j8XPXq4lj7ceS/5s=";
   };
 
@@ -25,7 +24,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python c-module for siphash";
     homepage = "https://github.com/WeblateOrg/siphashc";
-    license = licenses.mit;
+    changelog = "https://github.com/WeblateOrg/siphashc/blob/${version}/CHANGES.rst";
+    license = licenses.isc;
     maintainers = with maintainers; [ erictapen ];
   };
 }

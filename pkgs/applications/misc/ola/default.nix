@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     python3
   ];
   propagatedBuildInputs = [
-    (python3.pkgs.protobuf.override { protobuf = protobuf; })
+    (python3.pkgs.protobuf4.override { protobuf = protobuf; })
     python3.pkgs.numpy
   ];
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Framework for controlling entertainment lighting equipment";
     homepage = "https://www.openlighting.org/ola/";
     maintainers = [ ];

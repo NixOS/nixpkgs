@@ -47,7 +47,7 @@ let
           --replace-fail "go test" "go test -p $NIX_BUILD_CORES -skip '(${lib.concatStringsSep "|" skipTests})'"
       '';
 
-    doCheck = stdenv.isLinux;
+    doCheck = stdenv.hostPlatform.isLinux;
 
     checkPhase = ''
       runHook preCheck
@@ -60,7 +60,7 @@ let
       "-w"
       "-X github.com/arduino/arduino-cli/version.versionString=${version}"
       "-X github.com/arduino/arduino-cli/version.commit=unknown"
-    ] ++ lib.optionals stdenv.isLinux [ "-extldflags '-static'" ];
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags '-static'" ];
 
     postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       export HOME="$(mktemp -d)"
@@ -89,7 +89,7 @@ let
   };
 
 in
-if stdenv.isLinux then
+if stdenv.hostPlatform.isLinux then
   # buildFHSEnv is needed because the arduino-cli downloads compiler
   # toolchains from the internet that have their interpreters pointed at
   # /lib64/ld-linux-x86-64.so.2

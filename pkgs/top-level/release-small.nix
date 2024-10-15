@@ -82,7 +82,6 @@ in
   libxml2 = all;
   libxslt = all;
   lout = linux;
-  lsh = linux;
   lsof = linux;
   ltrace = linux;
   lvm2 = linux;
@@ -144,7 +143,7 @@ in
   util-linux = linux;
   util-linuxMinimal = linux;
   w3m = all;
-  webkitgtk = linux;
+  webkitgtk_4_0 = linux;
   wget = all;
   which = all;
   wirelesstools = linux;

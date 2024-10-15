@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.13.4";
+  version = "1.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     rev = "refs/tags/v${version}";
-    hash = "sha256-8ztnXNdsthoMvooWoJLKrB9yGHjkYhQ2jiwF3KujAnw=";
+    hash = "sha256-U9JR60rSxPYXbZaKR7vVNhGT78AXnqcoqvVC6/1OW/E=";
   };
 
   build-system = with python3Packages; [
@@ -44,8 +44,9 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       ipython
-      pytestCheckHook
       pytest-cov # fix Unknown pytest.mark.no_cover
+      pytest-textual-snapshot
+      pytestCheckHook
     ]
     ++ lib.optionals (pythonOlder "3.12") [ greenlet ];
 

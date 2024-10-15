@@ -8,11 +8,11 @@ symlinkJoin {
   nativeBuildInputs = [ makeWrapper ];
   paths = [ obs-studio ] ++ plugins;
 
-  postBuild = with lib;
+  postBuild =
     let
       # Some plugins needs extra environment, see obs-gstreamer for an example.
       pluginArguments =
-        lists.concatMap (plugin: plugin.obsWrapperArguments or []) plugins;
+        lib.lists.concatMap (plugin: plugin.obsWrapperArguments or []) plugins;
 
       pluginsJoined = symlinkJoin {
         name = "obs-studio-plugins";
@@ -24,9 +24,9 @@ symlinkJoin {
           "$out/bin/obs"
           ''--set OBS_PLUGINS_PATH "${pluginsJoined}/lib/obs-plugins"''
           ''--set OBS_PLUGINS_DATA_PATH "${pluginsJoined}/share/obs/obs-plugins"''
-        ] ++ lists.unique pluginArguments;
+        ] ++ lib.lists.unique pluginArguments;
     in ''
-    ${concatStringsSep " " wrapCommandLine}
+    ${lib.concatStringsSep " " wrapCommandLine}
 
     # Remove unused obs-plugins dir to not cause confusion
     rm -r $out/share/obs/obs-plugins

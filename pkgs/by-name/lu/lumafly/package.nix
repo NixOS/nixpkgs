@@ -5,24 +5,20 @@
   dotnetCorePackages,
   zlib,
   icu,
-  fontconfig,
   openssl,
-  libX11,
-  libICE,
-  libSM,
   icoutils,
   copyDesktopItems,
   makeDesktopItem,
 }:
 buildDotnetModule rec {
   pname = "lumafly";
-  version = "3.2.0.0";
+  version = "3.3.0.0";
 
   src = fetchFromGitHub {
     owner = "TheMulhima";
     repo = "lumafly";
     rev = "v${version}";
-    hash = "sha256-oDSM5Ev9SCjbvCgDZcpzm2bVnzG04yy/WaSwJyh0b18=";
+    hash = "sha256-GVPMAwxbq9XlKjMKd9G5yUol42f+6lSyHukN7NMCVDA=";
   };
 
   projectFile = "Lumafly/Lumafly.csproj";
@@ -36,11 +32,7 @@ buildDotnetModule rec {
   runtimeDeps = [
     zlib
     icu
-    fontconfig
     openssl
-    libX11
-    libICE
-    libSM
   ];
 
   nativeBuildInputs = [

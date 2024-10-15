@@ -4,7 +4,7 @@
 
 The end result of running Bower is a `bower_components` directory which can be included in the web app's build process.
 
-Bower can be run interactively, by installing `nodePackages.bower`. More interestingly, the Bower components can be declared in a Nix derivation, with the help of `nodePackages.bower2nix`.
+Bower can be run interactively, by installing `nodePackages.bower`. More interestingly, the Bower components can be declared in a Nix derivation, with the help of `bower2nix`.
 
 ## bower2nix usage {#ssec-bower2nix-usage}
 

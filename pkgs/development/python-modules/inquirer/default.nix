@@ -20,21 +20,21 @@
 
 buildPythonPackage rec {
   pname = "inquirer";
-  version = "3.2.5";
-  format = "pyproject";
+  version = "3.3.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromGitHub rec {
+  src = fetchFromGitHub {
     owner = "magmax";
     repo = "python-inquirer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7No4Yw0zBGflvglx7G1/yjrsU/DkTrSz93DfIzokBYM=";
+    hash = "sha256-M4EgQ/DX00CtAXRNvXoVKVWxj1jRpnNdG4qxOv20/MI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blessed
     editor
     readchar

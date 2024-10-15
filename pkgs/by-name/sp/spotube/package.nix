@@ -10,16 +10,19 @@
   undmg,
   wrapGAppsHook3,
 
+  glib-networking,
+  gtk3,
   libappindicator,
   libnotify,
-  libsecret,
+  libsoup_3,
   mpv-unwrapped,
   xdg-user-dirs,
+  webkitgtk_4_1,
 }:
 
 let
   pname = "spotube";
-  version = "3.7.1";
+  version = "3.8.3";
 
   meta = {
     description = "Open source, cross-platform Spotify client compatible across multiple platforms";
@@ -53,7 +56,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-EYgjVXO/ztIsVYzEHe14YgXbQTclQIht9Qqr8ewHU8w=";
+      hash = "sha256-N1H/Vy5QQi8zAqiqAi5aTnUQcKC/EgL3GUhEfnCkaAQ=";
     };
 
     sourceRoot = ".";
@@ -77,7 +80,7 @@ let
 
     src = fetchArtifact {
       filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-JKp2RMYNfdBzywqlBpTaHL1iD+E71EL8xY+nzkdA3us=";
+      hash = "sha256-x75ie9FXunClMT+YZVFlvl2VSDl933QYMRpEYjJ8YhY=";
     };
 
     nativeBuildInputs = [
@@ -88,10 +91,13 @@ let
     ];
 
     buildInputs = [
+      glib-networking
+      gtk3
       libappindicator
       libnotify
-      libsecret
+      libsoup_3
       mpv-unwrapped
+      webkitgtk_4_1
     ];
 
     dontWrapGApps = true;
@@ -116,4 +122,4 @@ let
     '';
   };
 in
-if stdenv.isDarwin then darwin else linux
+if stdenv.hostPlatform.isDarwin then darwin else linux

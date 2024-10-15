@@ -1,7 +1,4 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, docker, coreutils, procps, gnused, findutils, gnugrep }:
-
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "docker-gc";
   version = "unstable-2015-10-5";
@@ -23,7 +20,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : "${lib.makeBinPath [ docker coreutils procps gnused findutils gnugrep ]}"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Docker garbage collection of containers and images";
     mainProgram = "docker-gc";
     license = licenses.asl20;

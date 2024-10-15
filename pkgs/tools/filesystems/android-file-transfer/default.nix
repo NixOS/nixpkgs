@@ -26,7 +26,7 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake readline pkg-config wrapQtAppsHook ];
   buildInputs = [ fuse qtbase qttools ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/*.app $out/Applications
   '';

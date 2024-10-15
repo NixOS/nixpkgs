@@ -39,7 +39,7 @@ buildPythonPackage rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies.QRCode = [
+  optional-dependencies.QRCode = [
     base36
     pyqrcode
   ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-timeout
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.QRCode;
+  ] ++ optional-dependencies.QRCode;
 
   disabledTestPaths = [
     # Disable tests requiring network access

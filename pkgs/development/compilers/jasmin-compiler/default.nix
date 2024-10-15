@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jasmin-compiler";
-  version = "2024.07.0";
+  version = "2024.07.1";
 
   src = fetchurl {
     url = "https://github.com/jasmin-lang/jasmin/releases/download/v${version}/jasmin-compiler-v${version}.tar.bz2";
-    hash = "sha256-jE1LSL/fW7RKE5GeVzYtw4aFxtzTiz7IasD5YwDm4HE=";
+    hash = "sha256-at6jWm/Dv/duKmBBCIFkKborMxsQEpqEDO6NrJgzhz8=";
   };
 
   sourceRoot = "jasmin-compiler-v${version}/compiler";
@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
     mpfr
     ppl
   ] ++ (with ocamlPackages; [
-    angstrom
     apron
     yojson
   ]);
 
   propagatedBuildInputs = with ocamlPackages; [
+    angstrom
     batteries
     menhirLib
     zarith

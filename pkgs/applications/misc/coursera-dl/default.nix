@@ -1,15 +1,15 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, glibcLocales
-, pandoc
-, python3
+{
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  pandoc,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coursera-dl";
   version = "0.11.5";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "coursera-dl";
@@ -35,27 +35,17 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace '==' '>='
-  '';
+  build-system = with python3.pkgs; [ setuptools ];
 
-  preConfigure = ''
-    export LC_ALL=en_US.utf-8
-  '';
+  nativeBuildInputs = [ pandoc ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pandoc
-  ];
+  pythonRelaxDeps = true;
 
-  buildInputs = with python3.pkgs; [
-    glibcLocales
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     attrs
     beautifulsoup4
     configargparse
+    distutils
     keyring
     pyasn1
     requests
@@ -77,7 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI for downloading Coursera.org videos and naming them";
     mainProgram = "coursera-dl";
     homepage = "https://github.com/coursera-dl/coursera-dl";
-    changelog = "https://github.com/coursera-dl/coursera-dl/blob/0.11.5/CHANGELOG.md";
+    changelog = "https://github.com/coursera-dl/coursera-dl/blob/${src.rev}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ alexfmpe ];
     platforms = platforms.darwin ++ platforms.linux;

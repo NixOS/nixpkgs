@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       --add-flags "--core $out/share/sbcl/sbcl.core"
   '';
 
-  postFixup = lib.optionalString (!stdenv.isAarch32 && stdenv.isLinux) ''
+  postFixup = lib.optionalString (!stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isLinux) ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 

@@ -31,11 +31,11 @@
     let
       inherit (prev) pname version;
     in
-    if stdenvNoCC.isLinux then
+    if stdenvNoCC.hostPlatform.isLinux then
       {
         src = fetchurl {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-linux.AppImage";
-          sha256 = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
+          hash = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
         };
 
         appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };
@@ -47,24 +47,24 @@
 
           mkdir -p $out/bin $out/share/{applications,revolt-desktop}
 
-          cp -a ${final.appimageContents}/{locales,resources} $out/share/${pname}
-          cp -a ${final.appimageContents}/revolt-desktop.desktop $out/share/applications/${pname}.desktop
+          cp -a ${final.appimageContents}/{locales,resources} $out/share/revolt-desktop
+          cp -a ${final.appimageContents}/revolt-desktop.desktop $out/share/applications/revolt-desktop.desktop
           cp -a ${final.appimageContents}/usr/share/icons $out/share/icons
 
-          substituteInPlace $out/share/applications/${pname}.desktop \
-            --replace 'Exec=AppRun' 'Exec=${pname}'
+          substituteInPlace $out/share/applications/revolt-desktop.desktop \
+            --replace 'Exec=AppRun' 'Exec=revolt-desktop'
 
           runHook postInstall
         '';
 
         postFixup = ''
-          makeWrapper ${electron}/bin/electron $out/bin/${pname} \
-            --add-flags $out/share/${pname}/resources/app.asar \
+          makeWrapper ${electron}/bin/electron $out/bin/revolt-desktop \
+            --add-flags $out/share/revolt-desktop/resources/app.asar \
             --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
         '';
       }
     else
-      assert stdenvNoCC.isDarwin;
+      assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-mac.zip";
@@ -77,7 +77,7 @@
 
           mkdir -p "$out/Applications/" "$out/bin/"
           mv Revolt.app "$out/Applications/"
-          makeWrapper "$out/Applications/Revolt.app/Contents/MacOS/Revolt" "$out/bin/${pname}"
+          makeWrapper "$out/Applications/Revolt.app/Contents/MacOS/Revolt" "$out/bin/revolt-desktop"
 
           runHook postInstall
         '';

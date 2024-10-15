@@ -30,12 +30,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nixos-anywhere";
-  version = "1.3.0";
+  version = "1.4.0";
   src = fetchFromGitHub {
-    owner = "numtide";
+    owner = "nix-community";
     repo = "nixos-anywhere";
     rev = finalAttrs.version;
-    hash = "sha256-AdSrhQhJb9ObCgM1iXnoIBBl+6cjRbuTST4Lt02AP5Q=";
+    hash = "sha256-ssx6Y665uoOO3PX6Mp9NAF8sqoGb7Ezfw+bTY69aGlE=";
   };
   nativeBuildInputs = [ makeWrapper ];
   installPhase = ''
@@ -43,14 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
     install -D -m 0755 src/get-facts.sh $out/bin/get-facts.sh
 
     # We prefer the system's openssh over our own, since it might come with features not present in ours:
-    # https://github.com/numtide/nixos-anywhere/issues/62
+    # https://github.com/nix-community/nixos-anywhere/issues/62
     wrapProgram $out/bin/nixos-anywhere \
       --prefix PATH : ${lib.makeBinPath runtimeDeps} --suffix PATH : ${lib.makeBinPath [ openssh ]}
   '';
 
   meta = with lib; {
     description = "Install nixos everywhere via ssh";
-    homepage = "https://github.com/numtide/nixos-anywhere";
+    homepage = "https://github.com/nix-community/nixos-anywhere";
     mainProgram = "nixos-anywhere";
     license = licenses.mit;
     platforms = platforms.all;

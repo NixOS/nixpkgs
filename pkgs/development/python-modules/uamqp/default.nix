@@ -28,7 +28,7 @@ buildPythonPackage rec {
   };
 
   patches =
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       ./darwin-azure-c-shared-utility-corefoundation.patch
     ]
     ++ [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
       ./clang-fix-incompatible-function-pointer-conversion.patch
     ];
 
-  postPatch = lib.optionalString (stdenv.isDarwin && !stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isx86_64) ''
     # force darwin aarch64 to use openssl instead of applessl, removing
     # some quirks upstream thinks they need to use openssl on macos
     sed -i \
@@ -76,7 +76,7 @@ buildPythonPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       CFNetwork
       Security

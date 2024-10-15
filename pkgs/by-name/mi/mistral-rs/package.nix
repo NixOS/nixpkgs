@@ -19,6 +19,7 @@
 
   testers,
   mistral-rs,
+  nix-update-script,
 
   cudaPackages,
   cudaCapability ? null,
@@ -56,14 +57,14 @@ let
       cudaCapability;
   cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
 
-  # TODO Should we assert mklAccel -> stdenv.isLinux && stdenv.isx86_64 ?
   mklSupport =
     assert accelIsValid;
     (acceleration == "mkl");
 
   metalSupport =
     assert accelIsValid;
-    (acceleration == "metal") || (stdenv.isDarwin && stdenv.isAarch64 && (acceleration == null));
+    (acceleration == "metal")
+    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
   darwinBuildInputs =
     with darwin.apple_sdk.frameworks;
@@ -80,26 +81,22 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.1.18";
+  version = "0.3.1";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lMDFWNv9b0UfckqLmyWRVwnqmGe6nxYsUHzoi2+oG84=";
+    hash = "sha256-ljGr8V6WkpXPV90SiHJ0t7wzBPx0J0FOB52YdLLIeoM=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "candle-core-0.6.0" = "sha256-DxGBWf2H7MamrbboTJ4zHy1HeE8ZVT7QvE3sTYrRxBc=";
-      "range-checked-0.1.0" = "sha256-S+zcF13TjwQPFWZLIbUDkvEeaYdaxCOtDLtI+JRvum8=";
+      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
+      "candle-core-0.6.1" = "sha256-AtKjMTtbMBI2DbZXoWimhqcHmsz2DnRXJorqA0QYNHw=";
     };
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     pkg-config
@@ -112,24 +109,31 @@ rustPlatform.buildRustPackage rec {
       openssl
     ]
     ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
       cudaPackages.cuda_nvrtc
       cudaPackages.libcublas
       cudaPackages.libcurand
     ]
     ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.isDarwin darwinBuildInputs;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinBuildInputs;
 
   cargoBuildFlags =
-    lib.optionals cudaSupport [ "--features=cuda" ]
+    [
+      # This disables the plotly crate which fails to build because of the kaleido feature requiring
+      # network access at build-time.
+      # See https://github.com/NixOS/nixpkgs/pull/323788#issuecomment-2206085825
+      "--no-default-features"
+    ]
+    ++ lib.optionals cudaSupport [ "--features=cuda" ]
     ++ lib.optionals mklSupport [ "--features=mkl" ]
-    ++ lib.optionals (stdenv.isDarwin && metalSupport) [ "--features=metal" ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "--features=metal" ];
 
   env =
     {
       SWAGGER_UI_DOWNLOAD_URL =
         let
           # When updating:
-          # - Look for the version of `utopia-swagger-ui` at:
+          # - Look for the version of `utoipa-swagger-ui` at:
           #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
           # - Look at the corresponding version of `swagger-ui` at:
           #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
@@ -166,20 +170,31 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     "--skip=gguf::gguf_tokenizer::tests::test_decode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_decode_llama"
+    "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_gpt2"
+    "--skip=gguf::gguf_tokenizer::tests::test_encode_decode_llama"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_gpt2"
     "--skip=gguf::gguf_tokenizer::tests::test_encode_llama"
     "--skip=sampler::tests::test_argmax"
     "--skip=sampler::tests::test_gumbel_speculative"
+    "--skip=util::tests::test_parse_image_url"
   ];
 
   passthru = {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
 
-      withMkl = mistral-rs.override { acceleration = "mkl"; };
-      withCuda = mistral-rs.override { acceleration = "cuda"; };
-      withMetal = mistral-rs.override { acceleration = "metal"; };
+      # TODO: uncomment when mkl support will be fixed
+      withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
+        mistral-rs.override { acceleration = "mkl"; }
+      );
+      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+        mistral-rs.override { acceleration = "cuda"; }
+      );
+      withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
+        mistral-rs.override { acceleration = "metal"; }
+      );
     };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -194,6 +209,8 @@ rustPlatform.buildRustPackage rec {
         lib.platforms.linux
       else if metalSupport then
         [ "aarch64-darwin" ]
+      else if mklSupport then
+        [ "x86_64-linux" ]
       else
         lib.platforms.unix;
     broken = mklSupport;

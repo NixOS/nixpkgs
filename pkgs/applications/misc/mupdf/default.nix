@@ -15,7 +15,7 @@
 , libjpeg
 , darwin
 , gumbo
-, enableX11 ? (!stdenv.isDarwin)
+, enableX11 ? (!stdenv.hostPlatform.isDarwin)
 , libX11
 , libXext
 , libXi
@@ -59,19 +59,24 @@ let
   });
 
 in
+
 stdenv.mkDerivation rec {
-  version = "1.23.6";
+  version = "1.24.9";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    sha256 = "sha256-rBHrhZ3UBEiOUVPNyWUbtDQeW6r007Pyfir8gvmq3Ck=";
+    hash = "sha256-C0RqoO7MEU6ZadzNcMl4k1j8y2WJqB1HDclBoIdNqYo=";
   };
 
-  patches = [ ./0001-Use-command-v-in-favor-of-which.patch
-              ./0002-Add-Darwin-deps.patch
-              ./0003-Fix-cpp-build.patch
-            ];
+  patches = [
+    # Upstream makefile does not work with system deps on macOS by default, so
+    # we reuse the Linux section instead.
+    ./fix-darwin-system-deps.patch
+    # Upstream C++ wrap script only defines fixed-sized integers on macOS but
+    # this is required on aarch64-linux too.
+    ./fix-cpp-build.patch
+  ];
 
   postPatch = ''
     substituteInPlace Makerules --replace "(shell pkg-config" "(shell $PKG_CONFIG"
@@ -98,22 +103,23 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ]
     ++ lib.optional (enableGL || enableX11) copyDesktopItems
-    ++ lib.optional (stdenv.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
-    ++ lib.optionals (enableCxx || enablePython) [ python3 python3.pkgs.setuptools python3.pkgs.libclang ]
+    ++ lib.optional (stdenv.hostPlatform.isDarwin && (enableGL || enableX11)) desktopToDarwinBundle
+    ++ lib.optionals (enableCxx || enablePython) [ (python3.pythonOnBuildForHost.withPackages (ps: [ ps.setuptools ps.libclang ])) ]
     ++ lib.optionals (enablePython) [ which swig ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames xcbuild ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames xcbuild ];
 
   buildInputs = [ freetype harfbuzz openjpeg jbig2dec libjpeg gumbo ]
     ++ lib.optionals enableX11 [ libX11 libXext libXi libXrandr ]
     ++ lib.optionals enableCurl [ curl openssl ]
     ++ lib.optionals enableGL (
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         with darwin.apple_sdk.frameworks; [ GLUT OpenGL ]
       else
         [ freeglut-mupdf libGLU ]
     )
     ++ lib.optionals enableOcr [ leptonica tesseract ]
   ;
+
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
@@ -166,13 +172,13 @@ stdenv.mkDerivation rec {
     EOF
 
     moveToOutput "bin" "$bin"
-  '' + (lib.optionalString (stdenv.isDarwin) ''
+  '' + (lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     for exe in $bin/bin/*; do
       install_name_tool -change build/shared-release/libmupdf.dylib $out/lib/libmupdf.dylib "$exe"
     done
   '') + (lib.optionalString (enableX11 || enableGL) ''
     mkdir -p $bin/share/icons/hicolor/48x48/apps
-    cp docs/logo/mupdf.png $bin/share/icons/hicolor/48x48/apps
+    cp docs/logo/mupdf-icon-48.png $bin/share/icons/hicolor/48x48/apps
   '') + (if enableGL then ''
     ln -s "$bin/bin/mupdf-gl" "$bin/bin/mupdf"
   '' else lib.optionalString (enableX11) ''
@@ -182,13 +188,15 @@ stdenv.mkDerivation rec {
     cp build/*/libmupdfcpp.so $out/lib
   '') + (lib.optionalString (enablePython) (''
     mkdir -p $out/${python3.sitePackages}/mupdf
-    cp build/*/_mupdf.so $out/${python3.sitePackages}
+    cp build/*/_mupdf.so $out/${python3.sitePackages}/mupdf
     cp build/*/mupdf.py $out/${python3.sitePackages}/mupdf/__init__.py
-  '' + lib.optionalString (stdenv.isDarwin) ''
-    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/_mupdf.so
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+    install_name_tool -add_rpath $out/lib $out/${python3.sitePackages}/mupdf/_mupdf.so
   ''));
 
   enableParallelBuilding = true;
+
+  env.USE_SONAME = "no";
 
   passthru = {
     tests = {

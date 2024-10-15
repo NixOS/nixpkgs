@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch,
   chardet,
   hatchling,
   html5lib,
@@ -37,6 +38,14 @@ buildPythonPackage rec {
     hash = "sha256-dOPRko7cBw0hdIGFxG4/szSQ8i9So63e6a7g9Pd4EFE=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "tests.patch";
+      url = "https://git.launchpad.net/beautifulsoup/patch/?id=9786a62726de5a8caba10021c4d4a58c8a3e9e3f";
+      hash = "sha256-FOMoJjT0RgqKjbTLN/qCuc0HjhKeenMcgwb9Fp8atAY=";
+    })
+  ];
+
   nativeBuildInputs = [
     hatchling
     sphinxHook
@@ -47,14 +56,14 @@ buildPythonPackage rec {
     soupsieve
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     html5lib = [ html5lib ];
     lxml = [ lxml ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "bs4" ];
 

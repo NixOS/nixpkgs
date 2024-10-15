@@ -15,12 +15,12 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "nix-community";
-    repo = pname;
+    repo = "crate2nix";
     rev = version;
     hash = "sha256-esWhRnt7FhiYq0CcIxw9pvH+ybOQmWBfHYMtleaMhBE=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  sourceRoot = "${src.name}/crate2nix";
 
   cargoHash = "sha256-nQ1VUCFMmpWZWvKFbyJFIZUJ24N9ZPY8JCHWju385NE=";
 
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   postInstall = ''
-    wrapProgram $out/bin/${pname} \
+    wrapProgram $out/bin/crate2nix \
       --prefix PATH ":" ${
         lib.makeBinPath [
           cargo
@@ -44,8 +44,8 @@ rustPlatform.buildRustPackage rec {
 
       for shell in bash zsh fish
       do
-        $out/bin/${pname} completions -s $shell
-        installShellCompletion ${pname}.$shell || installShellCompletion --$shell _${pname}
+        $out/bin/crate2nix completions -s $shell
+        installShellCompletion crate2nix.$shell || installShellCompletion --$shell _crate2nix
       done
   '';
 

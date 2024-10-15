@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-rerunfailures
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # QuTiP tries to access the home directory to create an rc file for us.
   # We need to go to another directory to run the tests from there.
@@ -68,7 +68,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "qutip" ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     graphics = [ matplotlib ];
     ipython = [ ipython ];
     semidefinite = [

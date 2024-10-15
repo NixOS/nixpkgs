@@ -6,6 +6,7 @@
   poetry-core,
   pycryptodomex,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   sensor-state-data,
 }:
@@ -13,31 +14,29 @@
 buildPythonPackage rec {
   pname = "atc-ble";
   version = "0.1.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "atc-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-rwOFKxUlbbNIDJRdCmZpHstXwxcTnvlExgcVDdGbIVY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=atc_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-sensor-state-data
     pycryptodomex
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "atc_ble" ];
 

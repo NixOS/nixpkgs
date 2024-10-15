@@ -6,28 +6,32 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
+  setuptools,
   typeguard,
+  typing-extensions,
   typing-inspect,
 }:
 
 buildPythonPackage rec {
   pname = "marshmallow-dataclass";
-  version = "8.7.0";
-  format = "setuptools";
+  version = "8.7.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "marshmallow_dataclass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O96Xv732euS0X+1ilhLVMoazpC4kUSJvyVYwdj10e2E=";
+    hash = "sha256-0OXP78oyNe/UcI05NHskPyXAuX3dwAW4Uz4dI4b8KV0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     marshmallow
     typing-inspect
-  ];
+  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -51,7 +55,7 @@ buildPythonPackage rec {
     description = "Automatic generation of marshmallow schemas from dataclasses";
     homepage = "https://github.com/lovasoa/marshmallow_dataclass";
     changelog = "https://github.com/lovasoa/marshmallow_dataclass/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

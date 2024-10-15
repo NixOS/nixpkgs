@@ -7,7 +7,6 @@
 , xmlto
 , docbook_xml_dtd_45
 , docbook_xsl
-, coreutils
 , valgrind
 , sourceHighlight
 , meson
@@ -15,16 +14,26 @@
 , bison
 , ninja
 , cunit
+, gitUpdater
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtracefs";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/snapshot/libtracefs-libtracefs-${version}.tar.gz";
-    hash = "sha256-64eXFFdnZHHf4C3vbADtPuIMsfJ85VZ6t8A1gIc1CW0=";
+    hash = "sha256-2UiEgY4mQRLpWah+2rVfPiiUYBSSzRAy5gOv4YELQFQ=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "add-missing-documentation-to-meson-build.patch";
+      url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/patch/?id=4cbebed79b1fe933367e298ea7ddef694b9f98d0";
+      hash = "sha256-tSaR0wpxrm50IyMgMoUCcHBB9r8lQQZZYGru6Znre50=";
+    })
+  ];
 
   postPatch = ''
     chmod +x samples/extract-example.sh
@@ -51,6 +60,12 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ cunit ];
+
+  passthru.updateScript = gitUpdater {
+    # No nicer place to find latest release.
+    url = "https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git";
+    rev-prefix = "libtracefs-";
+  };
 
   meta = with lib; {
     description = "Linux kernel trace file system library";

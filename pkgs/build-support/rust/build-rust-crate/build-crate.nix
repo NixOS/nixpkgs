@@ -27,7 +27,7 @@
       # since rustc 1.42 the "proc_macro" crate is part of the default crate prelude
       # https://github.com/rust-lang/cargo/commit/4d64eb99a4#diff-7f98585dbf9d30aa100c8318e2c77e79R1021-R1022
       ++ lib.optional (lib.elem "proc-macro" crateType) "--extern proc_macro"
-      ++ lib.optional (stdenv.hostPlatform.linker == "lld") # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
+      ++ lib.optional (stdenv.hostPlatform.linker == "lld" && rustc ? llvmPackages.lld) # Needed when building for targets that use lld. e.g. 'wasm32-unknown-unknown'
         "-C linker=${rustc.llvmPackages.lld}/bin/lld"
       ++ lib.optional (stdenv.hasCC && stdenv.hostPlatform.linker != "lld")
         "-C linker=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"

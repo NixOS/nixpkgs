@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tzdata";
-  version = "2024a";
+  version = "2024b";
 
   srcs = [
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzdata${finalAttrs.version}.tar.gz";
-      hash = "sha256-DQQ0RZrL0gWaeo2h8zBKhKhlkfbtacYkj/+lArbt/+M=";
+      hash = "sha256-cOdU2xJqjQ2z0W1rTLX37B4E1fJhJV5FWKZ/6S055VA=";
     })
     (fetchurl {
       url = "https://data.iana.org/time-zones/releases/tzcode${finalAttrs.version}.tar.gz";
-      hash = "sha256-gAcolK3/WkWPHRQ+FuTKHYsqEiycU5naSCy2jLpqH/g=";
+      hash = "sha256-XkOPxEliSQavFqGP9Fc3OfDNqYYuXsKNO8sZy67Q9nI=";
     })
   ];
 
@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     "LIBDIR=${placeholder "dev"}/lib"
     "MANDIR=${placeholder "man"}/share/man"
     "AWK=awk"
+    "CURL=:" # disable network access
     "CFLAGS=-DHAVE_LINK=0"
     "CFLAGS+=-DZIC_BLOAT_DEFAULT=\\\"fat\\\""
     "cc=${stdenv.cc.targetPrefix}cc"
@@ -45,11 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     "CFLAGS+=-DRESERVE_STD_EXT_IDS"
   ];
 
+  enableParallelBuilding = true;
+
   doCheck = true;
-  # everything except for:
-  # - check_web, because that needs curl and wants to talk to https://validator.w3.org
-  # - check_now, because that depends on the current time
-  checkTarget = "check_back check_character_set check_white_space check_links check_name_lengths check_slashed_abbrs check_sorted check_tables check_ziguard check_zishrink check_tzs";
+  checkTarget = "check";
 
   installFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "zic=${buildPackages.tzdata.bin}/bin/zic"

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl
 , buildPackages, bison, flex, pkg-config
 , db, iptables, elfutils, libmnl ,libbpf
-, gitUpdater
+, gitUpdater, pkgsStatic
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,24 @@ stdenv.mkDerivation rec {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-kaYvgnN7RJBaAPqAM2nER9VJ6RTpoqQBj911sdVOjc4=";
   };
+
+  patches = [
+    (fetchurl {
+      name = "musl-endian.patch";
+      url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
+      hash = "sha256-MX+P+PSEh6XlhoWgzZEBlOV9aXhJNd20Gi0fJCcSZ5E=";
+    })
+    (fetchurl {
+      name = "musl-msghdr.patch";
+      url = "https://lore.kernel.org/netdev/20240712191209.31324-2-contact@hacktivis.me/raw";
+      hash = "sha256-X5BYSZBxcvdjtX1069a1GfcpdoVd0loSAe4xTpbCipA=";
+    })
+    (fetchurl {
+      name = "musl-basename.patch";
+      url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
+      hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -47,9 +65,11 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libmnl libbpf ]
+  buildInputs = [ db iptables libmnl  ]
     # needed to uploaded bpf programs
-    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      elfutils libbpf
+  ];
 
   enableParallelBuilding = true;
 
@@ -58,12 +78,14 @@ stdenv.mkDerivation rec {
     url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2.git";
     rev-prefix = "v";
   };
+  # needed for nixos-anywhere
+  passthru.tests.static = pkgsStatic.iproute2;
 
   meta = with lib; {
     homepage = "https://wiki.linuxfoundation.org/networking/iproute2";
     description = "Collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ primeos eelco fpletz globin ];
+    maintainers = with maintainers; [ primeos fpletz globin ];
   };
 }

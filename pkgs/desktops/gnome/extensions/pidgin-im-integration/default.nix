@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glib, gnome }:
+{ lib, stdenv, fetchFromGitHub, glib, gnome-shell }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pidgin-im-integration";
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ ];
-    broken = versionAtLeast gnome.gnome-shell.version "3.32"; # Doesn't support 3.34
+    broken = versionAtLeast gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

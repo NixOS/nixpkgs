@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "statsd_exporter";
-  version = "0.26.1";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "statsd_exporter";
     rev = "v${version}";
-    hash = "sha256-hKwbC56Z6tMolLnYB5G7iSLZoM+cWCh5lPzWiFkOd6E=";
+    hash = "sha256-E7BmszlFTok5DsIVqZiYd/HC1P2euxiABb4BRVh//eQ=";
   };
 
   ldflags =
@@ -26,7 +26,7 @@ buildGoModule rec {
       "-X ${t}.BuildDate=unknown"
     ];
 
-  vendorHash = "sha256-UcdRcHZUJ3XHZNqYXSboaor5WRVPYfilEvRWZjA1YNc=";
+  vendorHash = "sha256-3BoA8DOLRtJXbGXrTVY9qaD+JEz5EjsXp0DDQCbUuzY=";
 
   meta = with lib; {
     description = "Receives StatsD-style metrics and exports them to Prometheus";

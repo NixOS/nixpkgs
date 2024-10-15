@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     CoreAudio
   ];

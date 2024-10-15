@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
+    "-Dgtk_doc=${if stdenv.hostPlatform.isDarwin then "false" else "true"}"
     # Data for examples is useless when the example programs are not installed.
     "-Dexamples=false"
   ];
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gthree.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gthree.x86_64-darwin
   };
 }

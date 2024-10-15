@@ -14,19 +14,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-websecurityscanner";
-  version = "1.14.4";
+  version = "1.14.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-JqI7ELEfq8MUEdk5PI94YZHUc0Hyf3V1qb1ORXPBUz4=";
+    pname = "google_cloud_websecurityscanner";
+    inherit version;
+    hash = "sha256-H2yBAljtBaJ23+Y0AAi9wu5mC6sohvuJSOTNqtvGAjs=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     proto-plus
     protobuf

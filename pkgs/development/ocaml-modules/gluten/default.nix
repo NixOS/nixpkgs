@@ -7,11 +7,11 @@
 
 buildDunePackage rec {
   pname = "gluten";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/gluten/releases/download/${version}/gluten-${version}.tbz";
-    hash = "sha256-VZcbMFDRv+TVSXG05wUYxaWbTnBSa43RiVx9OesPnZY=";
+    hash = "sha256-se7Yn59ggLtL0onMjSUsa88B8D05Vybmb6YGcgfnAV8=";
   };
 
   minimalOCamlVersion = "4.08";

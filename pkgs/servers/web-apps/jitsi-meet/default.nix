@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, nixosTests }:
+{ lib, stdenv, fetchurl, nixosTests, olm }:
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
+  # Test requires running Jitsi Videobridge and Jicofo which are Linux-only
+  passthru.tests = lib.optionalAttrs stdenv.isLinux {
     single-host-smoke-test = nixosTests.jitsi-meet;
   };
 
@@ -34,5 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = teams.jitsi.members;
     platforms = platforms.all;
+    inherit (olm.meta) knownVulnerabilities;
   };
 }

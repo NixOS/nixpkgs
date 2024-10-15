@@ -14,7 +14,7 @@
 }:
 let
   versions = lib.importJSON ./versions.json;
-  flavor = with lib; head (filter (x: x.version == versionFlavor) versions);
+  flavor = lib.head (lib.filter (x: x.version == versionFlavor) versions);
   fetchBinary = runtimeId: fetchurl {
     url = flavor.files.${runtimeId}.url;
     sha256 = flavor.files.${runtimeId}.sha;
@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     install -m755 "$src" -D "$out/bin/StaticSitesClient"
 
     for icu_lib in 'icui18n' 'icuuc' 'icudata'; do
-      patchelf --add-needed "lib''${icu_lib}.so.${with lib; head (splitVersion (getVersion icu70.name))}" "$out/bin/StaticSitesClient"
+      patchelf --add-needed "lib''${icu_lib}.so.${lib.head (lib.splitVersion (lib.getVersion icu70.name))}" "$out/bin/StaticSitesClient"
     done
 
     patchelf --add-needed 'libgssapi_krb5.so' \
@@ -79,19 +79,19 @@ stdenv.mkDerivation {
 
   passthru = {
     # Create tests for all flavors
-    tests = with lib; genAttrs (map (x: x.version) versions) (versionFlavor:
+    tests = lib.genAttrs (map (x: x.version) versions) (versionFlavor:
       azure-static-sites-client.override { inherit versionFlavor; }
     );
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Azure static sites client";
     homepage = "https://github.com/Azure/static-web-apps-cli";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     mainProgram = "StaticSitesClient";
-    maintainers = with maintainers; [ veehaitch ];
+    maintainers = with lib.maintainers; [ veehaitch ];
     platforms = [ "x86_64-linux" ];
   };
 }

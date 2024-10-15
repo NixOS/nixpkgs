@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     # fix command_path for package manager (nix-store)
     substituteInPlace fetch.c \
       --replace "/usr/bin" "/run/current-system/sw/bin"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace "local/bin" "bin" \
       --replace "local/lib" "lib" \
