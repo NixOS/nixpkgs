@@ -868,6 +868,7 @@ in
                 "~CAP_IPC_LOCK"
                 "~CAP_IPC_OWNER"
                 "~CAP_KILL"
+                "~CAP_LEASE"
                 "~CAP_SETFCAP"
               ];
               ExecStart =
