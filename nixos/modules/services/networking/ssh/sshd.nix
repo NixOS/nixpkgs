@@ -856,6 +856,7 @@ in
             {
               CapabilityBoundingSet = [
                 "~CAP_AUDIT_CONTROL"
+                "~CAP_AUDIT_READ"
                 "~CAP_CHOWN"
                 "~CAP_DAC_OVERRIDE"
                 "~CAP_DAC_READ_SEARCH"
