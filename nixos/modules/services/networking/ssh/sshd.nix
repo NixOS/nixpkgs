@@ -865,6 +865,7 @@ in
                 "~CAP_DAC_READ_SEARCH"
                 "~CAP_FOWNER"
                 "~CAP_FSETID"
+                "~CAP_IPC_LOCK"
                 "~CAP_IPC_OWNER"
                 "~CAP_SETFCAP"
               ];
