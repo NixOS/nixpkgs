@@ -63,7 +63,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "5.6.1-unstable-2024-10-12";
+  version = "5.6.2";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
