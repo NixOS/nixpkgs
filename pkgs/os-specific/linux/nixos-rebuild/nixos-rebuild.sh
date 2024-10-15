@@ -103,11 +103,11 @@ while [ "$#" -gt 0 ]; do
       --use-substitutes|--substitute-on-destination|-s)
         copyFlags+=("-s")
         ;;
-      --builders)
+      -I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --I|--max-jobs|-j|--cores|--log-format)
+      --max-jobs|-j|--cores|--log-format)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         copyFlags+=("$i" "$j")
