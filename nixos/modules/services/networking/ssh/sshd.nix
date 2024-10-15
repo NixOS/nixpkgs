@@ -858,6 +858,7 @@ in
                 "~CAP_CHOWN"
                 "~CAP_DAC_OVERRIDE"
                 "~CAP_DAC_READ_SEARCH"
+                "~CAP_FOWNER"
                 "~CAP_FSETID"
                 "~CAP_SETFCAP"
               ];
