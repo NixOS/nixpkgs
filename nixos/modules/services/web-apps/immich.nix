@@ -87,7 +87,8 @@ in
     host = mkOption {
       type = types.str;
       default = "localhost";
-      description = "The host that immich will listen on.";
+      example = ""; # all interfaces
+      description = "The host that immich will listen on. Set to `""` to listen to all interfaces.";
     };
     port = mkOption {
       type = types.port;
@@ -259,6 +260,9 @@ in
       postgresEnv
       // redisEnv
       // {
+        # HOST seems undocumented, but IMMICH_HOST does not work for the immich server
+        # see https://github.com/immich-app/immich/blob/8daa8073ae3a8e69ba410d0184006915995bf6ad/server/src/workers/api.ts#L18
+        # and https://github.com/immich-app/immich/blob/8daa8073ae3a8e69ba410d0184006915995bf6ad/server/src/workers/api.ts#L74
         HOST = cfg.host;
         IMMICH_PORT = toString cfg.port;
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
