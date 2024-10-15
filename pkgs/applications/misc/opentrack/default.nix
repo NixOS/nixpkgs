@@ -18,14 +18,14 @@
   makeDesktopItem,
   fetchurl,
 }: let
-  version = "2022.3.0";
+  version = "2023.3.0";
 
   aruco = callPackage ./aruco.nix {};
 
   # license.txt inside the zip file is MIT
   xplaneSdk = fetchzip {
-    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK303.zip";
-    sha256 = "11wqjsr996c5qhiv2djsd55gc373a9qcq30dvc6rhzm0fys42zba";
+    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK401.zip";
+    hash = "sha256-tUT9yV1949QVr5VebU/7esg7wwWkyak2TSA/kQSrbeo=";
   };
 in
   mkDerivation {
@@ -36,8 +36,13 @@ in
       owner = "opentrack";
       repo = "opentrack";
       rev = "opentrack-${version}";
-      sha256 = "sha256-8gpNORTJclYUYp57Vw/0YO3XC9Idurt0a79fhqx0+mo=";
+      sha256 = "sha256-C0jLS55DcLJh/e5yM8kLG7fhhKvBNllv5HkfCWRIfc4=";
     };
+
+    patches = [
+      # https://github.com/opentrack/opentrack/pull/1754
+      ./0001-fix-wine-no-wrapper.patch
+    ];
 
     nativeBuildInputs = [cmake pkg-config ninja copyDesktopItems];
     buildInputs = [qtbase qttools opencv4 procps eigen libXdmcp libevdev aruco];
