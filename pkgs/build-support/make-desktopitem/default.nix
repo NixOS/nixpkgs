@@ -32,6 +32,9 @@ lib.makeOverridable ({ name # The name of the desktop file
 # not supported until version 1.5, which is not supported by our desktop-file-utils as of 2022-02-23
 # , singleMainWindow ? null
 , extraConfig ? {} # Additional values to be added literally to the final item, e.g. vendor extensions
+# Make the parameters sent to writeTextFile easily overridable, e.g. allow the .desktop file to be 
+# marked as executable
+, fileSettings ? {}
 }:
 let
   # There are multiple places in the FDO spec that make "boolean" values actually tristate,
@@ -116,4 +119,4 @@ writeTextFile {
   destination = "/share/applications/${name}.${extension}";
   text = builtins.concatStringsSep "\n" content;
   checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
-})
+} // fileSettings)
