@@ -1,8 +1,9 @@
-{ lib
-, fetchurl
-, fetchFromGitHub
-, buildGoModule
-, nixosTests
+{
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  buildGoModule,
+  nixosTests,
 }:
 let
   owner = "superseriousbusiness";
