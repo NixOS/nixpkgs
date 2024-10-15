@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool ];
   buildInputs = [ libtommath ];
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     substituteInPlace makefile.shared --replace "LIBTOOL:=glibtool" "LIBTOOL:=libtool"
   '';
