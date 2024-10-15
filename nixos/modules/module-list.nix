@@ -1233,6 +1233,7 @@
   ./services/networking/tailscale.nix
   ./services/networking/tailscale-auth.nix
   ./services/networking/tailscale-derper.nix
+  ./services/networking/tailscale-cert.nix
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
