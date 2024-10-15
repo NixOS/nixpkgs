@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   p7zip,
   cabextract,
@@ -38,21 +39,25 @@ let
 in
 buildPythonPackage rec {
   pname = "patool";
-  version = "2.1.1";
-  format = "setuptools";
+  version = "3.0.0";
+  pyproject = true;
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
-    rev = "upstream/${version}";
-    hash = "sha256-B2P6JldMOAxr4WS+wST+kRVvEm41zH3Nh5LLKoFOws4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-okJLc79bfvna4nRKfdzwwG7zVfJ53RDkVb4U3rN34c0=";
   };
 
   postPatch = ''
     substituteInPlace patoolib/util.py \
       --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'
   '';
+
+  build-system = [ setuptools ];
+
+  pythonImportsCheck = [ "patoolib" ];
 
   nativeCheckInputs = [ pytestCheckHook ] ++ compression-utilities;
 
@@ -67,7 +72,7 @@ buildPythonPackage rec {
     description = "portable archive file manager";
     mainProgram = "patool";
     homepage = "https://wummel.github.io/patool/";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ marius851000 ];
   };
 }
