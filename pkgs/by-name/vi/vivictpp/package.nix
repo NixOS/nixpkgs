@@ -4,10 +4,11 @@
 , SDL2, SDL2_ttf
 , freetype, harfbuzz
 , ffmpeg
-, cacert }:
+, cacert
+, zlib }:
 
 let
-  version = "1.0.0";
+  version = "1.1.0";
   withSubprojects = stdenv.mkDerivation {
     name = "sources-with-subprojects";
 
@@ -15,7 +16,7 @@ let
       owner = "vivictorg";
       repo = "vivictpp";
       rev = "v${version}";
-      hash = "sha256-dCtMjemEjXe63ELAfQhzJl3GecqWLcjL2y5Htn6hYgU=";
+      hash = "sha256-ScuCOmcK714YXEHncizwj6EWdiNIJA1xRMn5gfmg4K4=";
     };
 
     nativeBuildInputs = [
@@ -33,9 +34,9 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-a7NBQJt5T+KwP8Djc8TQiVLNZF8UcXlXrv2G/dZ54aM=";
+    outputHash = "sha256-/6nuTKjQEXfJlHkTkeX/A4PeGb8SOk6Q801gjx1SB6M=";
   };
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   pname = "vivictpp";
   inherit version;
 
@@ -57,6 +58,7 @@ in stdenv.mkDerivation rec {
     freetype
     harfbuzz
     ffmpeg
+    zlib
   ];
 
   preConfigure = ''
