@@ -11,6 +11,7 @@
   dbus,
   zstd,
   versionCheckHook,
+  nix-update-script,
 }:
 
 let
@@ -52,11 +53,15 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/komac";
 
-  passthru.tests.version = testers.testVersion {
-    inherit version;
+  passthru = {
+    tests.version = testers.testVersion {
+      inherit version;
 
-    package = komac;
-    command = "komac --version";
+      package = komac;
+      command = "komac --version";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
