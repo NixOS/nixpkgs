@@ -13,13 +13,13 @@
   pynacl,
   pytestCheckHook,
   pytest-relaxed,
-  six,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "paramiko";
   version = "3.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -35,11 +35,14 @@ buildPythonPackage rec {
     })
   ];
 
+  build-system = [
+    setuptools
+  ];
+
   dependencies = [
     bcrypt
     cryptography
-    pyasn1
-    six
+    pynacl
   ];
 
   optional-dependencies = {
@@ -47,10 +50,7 @@ buildPythonPackage rec {
       pyasn1
       gssapi
     ];
-    ed25519 = [
-      pynacl
-      bcrypt
-    ];
+    ed25519 = [ ];
     invoke = [ invoke ];
   };
 
