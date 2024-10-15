@@ -8370,7 +8370,7 @@ with pkgs;
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_16;
+    llvmPackages = llvmPackages_18;
   };
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
