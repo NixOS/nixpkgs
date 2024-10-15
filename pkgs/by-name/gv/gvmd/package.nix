@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace src/sql_pg.c \
-      --replace-fail "#include <postgresql/libpq-fe.h>" "#include <${postgresql}/include/libpq-fe.h>"
+      --replace-fail "#include <postgresql/libpq-fe.h>" "#include <libpq-fe.h>"
     substituteInPlace doc/CMakeLists.txt \
       --replace-fail "share/doc/gvm/html/" "\''${GMP_DIR}/doc/gvm/html/" \
       --replace-fail "share/man/man8/" "\''${GVMD_MAN_DIR}/man/man8/"
