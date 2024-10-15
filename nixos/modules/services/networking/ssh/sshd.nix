@@ -868,6 +868,7 @@ in
                 "~@debug"
                 "~@module"
                 "~@obsolete"
+                "~@raw-io"
               ];
             }
             // (
