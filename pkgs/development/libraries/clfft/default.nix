@@ -1,7 +1,8 @@
-{ lib, stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost, opencl-clhpp, ocl-icd, darwin }:
+{ lib, gccStdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost, opencl-clhpp, ocl-icd, darwin }:
 
 let
   inherit (darwin.apple_sdk.frameworks) OpenCL;
+  stdenv = gccStdenv;
 in
 stdenv.mkDerivation rec {
   pname = "clfft";
