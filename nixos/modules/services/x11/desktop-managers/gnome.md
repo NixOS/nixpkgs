@@ -132,6 +132,27 @@ Unfortunately, we lack a way for these to be managed in a completely declarative
 So you have to enable them manually with an Extensions application.
 It is possible to use a [GSettings override](#sec-gnome-gsettings-overrides) for this on `org.gnome.shell.enabled-extensions`, but that will only influence the default value.
 
+## Nautilus Extensions {#sec-gnome-nautilus-extensions}
+
+Nautilus extensions can add additional functionality to Nautilus, usually via the right-click menu. Some of these extensions are dynamically loaded from `$NAUTILUS_4_EXTENSIONS_DIR` environment variable, which is automatically set if [](#opt-services.gnome.core-utilities.enable) is true (enabled by default if GNOME is enabled).
+
+Many Python based extensions can be found on the wild, and some of which are even packaged in Nixpkgs, (for example: `nautilus-open-any-terminal`). To load these extensions, you'll have to add the package that loads Python extensions for Nautilus:
+
+```nix
+environment.systemPackages = with pkgs; [
+  gnome.nautilus-python
+];
+```
+
+In fact, any package that includes a python script at `/share/nautilus-python/extensions`, will provide a nautilus Python extension. Other examples include:
+
+- `gnomeExtensions.gsconnect`
+- `kdeconnect-kde`
+- `nextcloud-client`
+- `wezterm`
+
+Some of these extensions, also include `gsettings` schemas, and adding them to `systemPackages` won't make them visible in `dconf-editor` or when you run `gsettings set`. This is further explain in the [next section](#sec-gnome-gsettings-overrides).
+
 ## GSettings Overrides {#sec-gnome-gsettings-overrides}
 
 Majority of software building on the GNOME platform use GLib’s [GSettings](https://developer.gnome.org/gio/unstable/GSettings.html) system to manage runtime configuration. For our purposes, the system consists of XML schemas describing the individual configuration options, stored in the package, and a settings backend, where the values of the settings are stored. On NixOS, like on most Linux distributions, dconf database is used as the backend.
@@ -171,6 +192,21 @@ You can use `dconf-editor` tool to explore which GSettings you can set.
     ];
   };
 }
+```
+
+Adding the `nautilus-open-terminal-any` extension including `gsettings` schemas:
+
+```nix
+# Adds to `environment.pathsToLink` the path: `/share/nautilus-python/extensions`
+# needed for nautilus Python extensions to work.
+services.gnome.core-utilities.enable = true;
+environment.systemPackages = with pkgs; [
+  gnome.nautilus-python
+  nautilus-open-any-terminal
+];
+services.xserver.desktopManager.gnome.extraGSettingsOverridePackages = with pkgs; [
+  nautilus-open-any-terminal
+];
 ```
 
 ## Frequently Asked Questions {#sec-gnome-faq}
