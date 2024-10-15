@@ -63,14 +63,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop";
-  version = "5.6.2";
+  version = "5.6.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
-    rev = "f2e0e481de5d379b9542f6ff9021fab5d409c1d4";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-MmzSxC4tgoCgrG/IQAmpXGHNq+kiU/rSWeKn1f1uEg8=";
+    hash = "sha256-frz425V5eRulNVxCf457TWQAzU/f9/szD/sx3/LYQ2Y=";
   };
 
   patches = [
