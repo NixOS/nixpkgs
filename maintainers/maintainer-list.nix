@@ -14738,6 +14738,12 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  mzabani = {
+    email = "mzabani@gmail.com";
+    github = "mzabani";
+    githubId = 4662691;
+    name = "Marcelo Zabani";
+  };
   mzacho = {
     email = "nixpkgs@martinzacho.net";
     github = "mzacho";
