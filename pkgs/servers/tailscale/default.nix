@@ -63,6 +63,7 @@ buildGoModule {
   postInstall = ''
     ln -s $out/bin/tailscaled $out/bin/tailscale
     moveToOutput "bin/derper" "$derper"
+    ln -s $derper/bin/derper $out/bin/derper
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
