@@ -12980,6 +12980,12 @@
     githubId = 34819524;
     name = "Marcel";
   };
+  MarchCraft = {
+    email = "felix@dienilles.de";
+    github = "MarchCraft";
+    githubId = 30194994;
+    name = "Felix Nilles";
+  };
   marcovergueira = {
     email = "vergueira.marco@gmail.com";
     github = "marcovergueira";
@@ -19432,6 +19438,12 @@
     github = "ShadowRZ";
     githubId = 23130178;
     name = "夜坂雅";
+  };
+  shadows_withal = {
+    email = "shadows@with.al";
+    github = "shadows-withal";
+    githubId = 6445316;
+    name = "liv";
   };
   shahrukh330 = {
     email = "shahrukh330@gmail.com";
