@@ -9284,6 +9284,8 @@ self: super: with self; {
 
   onnx = callPackage ../development/python-modules/onnx { };
 
+  onnx-graphsurgeon = callPackage ../development/python-modules/onnx-graphsurgeon { };
+
   onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common {
     inherit (pkgs) protobuf;
   };
