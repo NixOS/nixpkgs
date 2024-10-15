@@ -55,6 +55,59 @@ let
     };
   };
 
+  locationConfigModule = types.submodule {
+    options = {
+      latitude = mkOption {
+        type = types.float;
+        default = config.location.latitude;
+        defaultText = literalExpression "config.location.latitude";
+        description = ''
+          Latitude in decimal degrees.
+
+          Positive values are north of the equator; negative values
+          are south.
+        '';
+      };
+
+      longitude = mkOption {
+        type = types.float;
+        default = config.location.longitude;
+        defaultText = literalExpression "config.location.longitude";
+        description = ''
+          Longitude in decimal degrees.
+
+          Positive values are north of the equator; negative values
+          are south.
+        '';
+      };
+
+      altitude = mkOption {
+        type = types.number;
+        description = ''
+          Elevation of this location, in metres above sea level.
+        '';
+      };
+
+      accuracyRadius = mkOption {
+        type = types.numbers.nonnegative;
+        description = ''
+          Reported accuracy level, in metres. This value denotes
+          a radius around the given location.
+        '';
+      };
+
+      comment = mkOption {
+        type = types.lines;
+        description = ''
+          A free-form textual description of this location.
+
+          The value is only used as a comment in the configuration
+          file -- it is not parsed by Geoclue.
+        '';
+        default = "Geoclue static-source configuration";
+      };
+    };
+  };
 in
 {
 
@@ -157,6 +210,38 @@ in
         '';
       };
 
+      enableCompass = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether to enable Compass source.
+        '';
+      };
+
+      staticSource = {
+        enable = mkEnableOption "Geoclue fixed location source";
+        location = mkOption {
+          description = ''
+            A fixed location, which will be stored in the text file
+            {file}`/etc/geolocation`.
+
+            The map projection and co-ordinate system are not specified,
+            so assume they are whatever Geoclue is using.
+          '';
+          type = locationConfigModule;
+          example = {
+            comment = ''
+              Example location of a machine inside the torch of
+              the Statue of Liberty.
+            '';
+            latitude = 40.6893129;
+            longitude = -74.0445531;
+            altitude = 96;
+            accuracyRadius = 1.83;
+          };
+        };
+      };
+
       appConfig = mkOption {
         type = types.attrsOf appConfigModule;
         default = {};
@@ -178,7 +263,7 @@ in
 
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = mkMerge [(mkIf cfg.enable {
 
     environment.systemPackages = [ package ];
 
@@ -265,8 +350,52 @@ in
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
         };
+        compass = {
+          enable = cfg.enableCompass;
+        };
+        static-source = {
+          inherit (cfg.staticSource) enable;
+        };
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
-  };
+    })
+    (lib.mkIf cfg.staticSource.enable {
+      services.geoclue2 = {
+        enableNmea = lib.mkDefault false;
+        enable3G = lib.mkDefault false;
+        enableCDMA = lib.mkDefault false;
+        enableModemGPS = lib.mkDefault false;
+        enableWifi = lib.mkDefault false;
+        enableCompass = lib.mkDefault false;
+      };
+
+      environment.etc.geolocation = {
+        user = lib.mkDefault "geoclue";
+        group = lib.mkDefault "geoclue";
+        mode = lib.mkDefault "0600";
+        text =
+          let
+            header = lib.optionals (cfg.staticSource.location.comment != "")
+              (map (line: "# ${line}\n")
+                (lib.splitString "\n" cfg.staticSource.location.comment));
+            attrLine = attr:
+              let
+                value = toString cfg.staticSource.location.${attr};
+                padding = lib.max 1 (20 - lib.stringLength value);
+                pad = lib.strings.replicate padding " ";
+                comment = "# ${attr}";
+              in
+              lib.concatStrings [ value pad comment "\n" ];
+            data = map attrLine [
+              "latitude"
+              "longitude"
+              "altitude"
+              "accuracyRadius"
+            ];
+          in
+          lib.concatStrings (header ++ data);
+      };
+    })
+  ];
 
   meta = with lib; {
     maintainers = with maintainers; [ ] ++ teams.pantheon.members;
