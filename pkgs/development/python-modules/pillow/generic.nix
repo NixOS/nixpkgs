@@ -14,7 +14,7 @@ buildPythonPackage rec {
   inherit
     pname
     version
-    format
+    pyproject
     src
     meta
     passthru

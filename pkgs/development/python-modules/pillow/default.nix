@@ -35,15 +35,13 @@
 import ./generic.nix (
   rec {
     pname = "pillow";
-    version = "10.4.0";
-    format = "pyproject";
-
-    disabled = pythonOlder "3.8";
+    version = "11.0.0";
+    pyproject = true;
 
     src = fetchPypi {
       pname = "pillow";
       inherit version;
-      hash = "sha256-Fmwc1NJDCbMNYfefSpEUt7IxPXRQkSJ3hV/139fNSgY=";
+      hash = "sha256-crrLrySsAD/qm/+YN9Hu22CIdY1B4QDBVSkwFR9ndzk=";
     };
 
     passthru.tests = {
@@ -57,7 +55,7 @@ import ./generic.nix (
         ;
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://python-pillow.org/";
       description = "Friendly PIL fork (Python Imaging Library)";
       longDescription = ''
@@ -66,8 +64,8 @@ import ./generic.nix (
         supports many file formats, and provides powerful image
         processing and graphics capabilities.
       '';
-      license = licenses.hpnd;
-      maintainers = with maintainers; [ prikhi ];
+      license = lib.licenses.hpnd;
+      maintainers = with lib.maintainers; [ prikhi ];
     };
   }
   // args
