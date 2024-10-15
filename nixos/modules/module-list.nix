@@ -495,6 +495,7 @@
   ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
+  ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
   ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/deepin/dde-api.nix
