@@ -18,6 +18,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-t10CxtwnTOg1uQgm6mTrNUIU8LkXJ3BkTycjWteQvuU=";
   };
 
+  patches = [
+    ./paths.patch
+  ];
+
   postPatch = ''
     mv tuna-cmd.py tuna/cmd.py
 
@@ -26,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
                      'packages = ["tuna", "tuna/gui"], entry_points={"console_scripts":["tuna=tuna.cmd:main"]},'
 
     substituteInPlace tuna/tuna_gui.py \
-      --replace-fail "self.binpath + 'pkexec'" "'/run/wrappers/bin/pkexec'" \
+      --replace-fail "@tuna@" "$out/bin/tuna" \
       --replace-fail 'tuna_glade_dirs = [".", "tuna", "/usr/share/tuna"]' "tuna_glade_dirs = [ \"$out/share/tuna\" ]"
   '';
 
