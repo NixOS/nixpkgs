@@ -864,6 +864,7 @@ in
               KillMode = "process";
               SystemCallFilter = [
                 "~@clock"
+                "~@cpu-emulation"
               ];
             }
             // (
