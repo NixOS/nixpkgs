@@ -109,12 +109,11 @@ stdenv.mkDerivation (rec {
       "-Dman1dir=${placeholder "out"}/share/man/man1"
       "-Dman3dir=${placeholder "out"}/share/man/man3"
     ] ++
-    (if stdenv.hostPlatform.isStatic
+    (if (stdenv.cc.targetPrefix != "")
     then [
       "-Dcc=${stdenv.cc.targetPrefix}cc"
       "-Dnm=${stdenv.cc.targetPrefix}nm"
       "-Dar=${stdenv.cc.targetPrefix}ar"
-      "-Uusedl"
     ]
     else [
       "-Dcc=cc"
@@ -126,6 +125,7 @@ stdenv.mkDerivation (rec {
       "-Dlocincpth=${libcInc}/include"
       "-Dloclibpth=${libcLib}/lib"
     ]
+    ++ lib.optional stdenv.hostPlatform.isStatic "-Uusedl"
     ++ lib.optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
     ++ lib.optional stdenv.hostPlatform.isSunOS "-Dcc=gcc"
     ++ lib.optional enableThreading "-Dusethreads"
@@ -138,7 +138,8 @@ stdenv.mkDerivation (rec {
 
   configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
-  postConfigure = lib.optionalString stdenv.hostPlatform.isStatic ''
+  # !canExecute cross uses miniperl which doesn't have this
+  postConfigure = lib.optionalString (!crossCompiling && stdenv.cc.targetPrefix != "") ''
     substituteInPlace Makefile \
       --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
   '';
