@@ -1,0 +1,58 @@
+diff --git a/benchmark/c/CMakeLists.txt b/benchmark/c/CMakeLists.txt
+index 98501f20..ad100551 100644
+--- a/benchmark/c/CMakeLists.txt
++++ b/benchmark/c/CMakeLists.txt
+@@ -24,9 +24,13 @@ add_executable(model_benchmark ${model_benchmark_srcs})
+ target_include_directories(model_benchmark PRIVATE
+   ${CMAKE_CURRENT_SOURCE_DIR}
+   ${CMAKE_SOURCE_DIR}/src  # directory containing the ort_genai headers
++  ${onnxruntime_extensions_SOURCE_DIR}/include
++  ${onnxruntime_extensions_SOURCE_DIR}/shared/api
+ )
+ 
+ target_link_libraries(model_benchmark PRIVATE onnxruntime-genai-static ${ONNXRUNTIME_LIB})
++target_link_libraries(model_benchmark PUBLIC onnxruntime_extensions)
++target_link_libraries(model_benchmark PRIVATE onnxruntime_extensions)
+ 
+ target_link_directories(model_benchmark PRIVATE ${ORT_LIB_DIR})
+ 
+diff --git a/src/python/CMakeLists.txt b/src/python/CMakeLists.txt
+index 6472fe3a..aee8abe9 100644
+--- a/src/python/CMakeLists.txt
++++ b/src/python/CMakeLists.txt
+@@ -102,20 +102,4 @@ if(BUILD_WHEEL)
+     list(APPEND modified_exclude_list "--exclude" ${item})
+   endforeach()
+ 
+-  if(MANYLINUX)
+-    add_custom_target(PyPackageBuild ALL
+-      COMMAND ${PYTHON_EXECUTABLE} -m pip wheel --no-deps .
+-      COMMAND ${CMAKE_COMMAND} -E remove ${WHEEL_TARGET_NAME}/onnxruntime_genai.cpython-*
+-      COMMAND auditwheel repair onnxruntime_genai*linux_x86_64.whl -w ${WHEEL_FILES_DIR} ${modified_exclude_list}
+-      WORKING_DIRECTORY "${WHEEL_FILES_DIR}"
+-      COMMENT "Building wheel with MANYLINUX on ${WHEEL_FILES_DIR}"
+-    )
+-  else()
+-    add_custom_target(PyPackageBuild ALL
+-      COMMAND ${PYTHON_EXECUTABLE} -m pip wheel --no-deps .
+-      WORKING_DIRECTORY "${WHEEL_FILES_DIR}"
+-      COMMENT "Building wheel on ${WHEEL_FILES_DIR}"
+-    )
+-  endif()
+-  add_dependencies(PyPackageBuild python)
+ endif()
+\ No newline at end of file
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index da3502bb..e500b1b3 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -25,6 +25,9 @@ target_link_libraries(unit_tests PRIVATE
+   onnxruntime-genai-static
+   GTest::gtest_main
+ )
++target_link_libraries(unit_tests PRIVATE onnxruntime_extensions)
++target_link_libraries(unit_tests PUBLIC onnxruntime_extensions)
++
+ 
+ if(NOT (CMAKE_SYSTEM_NAME STREQUAL "Android" OR CMAKE_SYSTEM_NAME STREQUAL "Linux"))
+ target_link_libraries(unit_tests PRIVATE ${ONNXRUNTIME_LIB})
