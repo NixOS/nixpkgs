@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   runCommand,
 
   # build-system
@@ -39,6 +40,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-t8gMBebqVVij6R2KEOq3/j1ql4ZiVdE5236uqGUchE0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "musl.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/1a8d8722068ef7e5f061336047a72d1a0f253b98.patch";
+      hash = "sha256-0j3UXsTMDh1+UolkmoLQXlwHXve81yKiGJ7gDWNZVPY=";
+    })
+  ];
 
   build-system = [
     setuptools
