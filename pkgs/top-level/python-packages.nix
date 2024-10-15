@@ -8284,6 +8284,8 @@ self: super: with self; {
 
   multiprocess = callPackage ../development/python-modules/multiprocess { };
 
+  multiqc = callPackage ../development/python-modules/multiqc { };
+
   multiscale-spatial-image = callPackage ../development/python-modules/multiscale-spatial-image { };
 
   multiset = callPackage ../development/python-modules/multiset { };
@@ -14713,6 +14715,8 @@ self: super: with self; {
   speaklater = callPackage ../development/python-modules/speaklater { };
 
   speaklater3 = callPackage ../development/python-modules/speaklater3 { };
+
+  spectra = callPackage ../development/python-modules/spectra { };
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
