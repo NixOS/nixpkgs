@@ -28158,8 +28158,6 @@ with pkgs;
 
   ax25-tools = callPackage ../applications/radio/ax25-tools { };
 
-  azpainter = callPackage ../applications/graphics/azpainter { };
-
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker {
     stdenv = if stdenv.hostPlatform.isDarwin then
       darwin.apple_sdk_11_0.stdenv
