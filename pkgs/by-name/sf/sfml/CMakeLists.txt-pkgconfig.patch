@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fc9a268e..512eb6a7 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -301,6 +301,9 @@ endif()
+ sfml_set_option(SFML_INSTALL_PKGCONFIG_FILES ${SFML_INSTALL_PKGCONFIG_DEFAULT} BOOL "TRUE to automatically install pkg-config files so other projects can find SFML")
+ 
+ if(SFML_INSTALL_PKGCONFIG_FILES)
++    file(RELATIVE_PATH SFML_RELATIVE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX} ${CMAKE_INSTALL_FULL_LIBDIR})
++    set(SFML_PKGCONFIG_DIR "/${SFML_RELATIVE_INSTALL_LIBDIR}/pkgconfig")
++
+     sfml_set_option(SFML_PKGCONFIG_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}/${SFML_PKGCONFIG_DIR}" PATH "Install directory for SFML's pkg-config .pc files")
+ 
+     foreach(sfml_module IN ITEMS all system window graphics audio network)
