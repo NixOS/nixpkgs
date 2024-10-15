@@ -6,6 +6,7 @@
   gitleaks,
   installShellFiles,
   testers,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -43,6 +44,8 @@ buildGoModule rec {
     package = gitleaks;
     command = "${pname} version";
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Scan git repos (or files) for secrets";
