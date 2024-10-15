@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pappl";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-d7QD6Kz4tBVHGFPBYcvRSzW+EtsNgpfweFvCx3ovfWE=";
+    sha256 = "sha256-Npry3H+QbAH19hoqAZuOwjpZwCPhOLewD8uKZlo4gdQ=";
   };
 
   outputs = [ "out" "dev" ];
