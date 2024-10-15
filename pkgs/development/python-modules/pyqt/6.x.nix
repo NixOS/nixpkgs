@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchurl,
+  fetchPypi,
   pkg-config,
   dbus,
   lndir,
@@ -25,17 +25,15 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.7.0.dev2404081550";
+  version = "6.7.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
-  src = fetchurl {
-    urls = [
-      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-    ];
-    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
+  src = fetchPypi {
+    pname = "PyQt6";
+    inherit version;
+    hash = "sha256-NnKoLM06YumasgChOQNCHiko45n9olztmNFAMTrVnLk=";
   };
 
   patches = [
