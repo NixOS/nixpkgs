@@ -4416,8 +4416,6 @@ with pkgs;
 
   clapboard = callPackage ../tools/wayland/clapboard { };
 
-  cliphist = callPackage ../tools/wayland/cliphist { };
-
   clipman = callPackage ../tools/wayland/clipman { };
 
   kabeljau = callPackage ../games/kabeljau { };
