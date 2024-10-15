@@ -100,12 +100,10 @@ in
       ] ++ cfg.runtimePackages;
 
       serviceConfig = {
-        Type = "oneshot";
         User = "renovate";
         Group = "renovate";
         DynamicUser = true;
         LoadCredential = lib.mapAttrsToList (name: value: "SECRET-${name}:${value}") cfg.credentials;
-        RemainAfterExit = false;
         Restart = "on-failure";
         CacheDirectory = "renovate";
         StateDirectory = "renovate";
