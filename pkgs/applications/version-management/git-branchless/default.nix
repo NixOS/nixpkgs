@@ -52,35 +52,14 @@ rustPlatform.buildRustPackage rec {
   # Note that upstream has disabled CI tests for git>=2.46
   # See: https://github.com/arxanas/git-branchless/issues/1416
   #      https://github.com/arxanas/git-branchless/pull/1417
+  # To be re-enabled once arxanas/git-branchless#1416 is resolved
+  doCheck = false;
+
   checkFlags = [
     # FIXME: these tests deadlock when run in the Nix sandbox
     "--skip=test_switch_pty"
     "--skip=test_next_ambiguous_interactive"
     "--skip=test_switch_auto_switch_interactive"
-    # harmless failures, also appear in upstream CI
-    # see e.g. https://github.com/user-attachments/files/17016948/git-branchless-job-logs.txt
-    "--skip=test_amend_undo" # git-branchless#1345
-    # harmless, extra: "branchless: processing 1 update: ref HEAD"
-    "--skip=test_symbolic_transaction_ref"
-    "--skip=test_move_branch_on_merge_conflict_resolution"
-    "--skip=test_move_branches_after_move"
-    "--skip=test_move_delete_checked_out_branch"
-    "--skip=test_move_no_reapply_squashed_commits"
-    "--skip=test_move_orphaned_root"
-    "--skip=test_restore_snapshot_basic"
-    "--skip=test_restore_snapshot_delete_file_only_in_index"
-    "--skip=test_restore_snapshot_deleted_files"
-    "--skip=test_sync_basic"
-    "--skip=test_sync_no_delete_main_branch"
-    # probably harmless, without the extra "Check out from ... to ..." step
-    "--skip=test_undo_doesnt_make_working_dir_dirty"
-    "--skip=test_undo_move_refs"
-    "--skip=test_undo_noninteractive"
-    # probably harmless, different EventCursor::event_id
-    "--skip=test_undo_hide"
-  ];
-  cargoTestFlags = [
-    "--no-fail-fast" # make post-mortem easier
   ];
 
   meta = with lib; {
