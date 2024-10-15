@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   desktop-file-utils,
+  desktopToDarwinBundle,
   shared-mime-info,
   ninja,
   pkg-config,
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     shared-mime-info # for update-mime-info
     ninja
     pkg-config
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
   buildInputs = [
     libX11
