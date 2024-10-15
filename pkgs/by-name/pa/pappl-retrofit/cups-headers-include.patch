@@ -1,0 +1,23 @@
+From 0317fae79cef0c2ed47850183bf64116004ad3c7 Mon Sep 17 00:00:00 2001
+From: Till Kamppeter <till.kamppeter@gmail.com>
+Date: Thu, 27 Apr 2023 20:18:48 +0200
+Subject: [PATCH] pappl-retrofit-private.h: Add "#include <cups/sidechannel.h>"
+
+Seems that some other *.h file, of CUPS or PAPPL most probably,
+does not include cups/sidechannel.h any more.
+---
+ pappl-retrofit/pappl-retrofit-private.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/pappl-retrofit/pappl-retrofit-private.h b/pappl-retrofit/pappl-retrofit-private.h
+index 86dd010..efa8311 100644
+--- a/pappl-retrofit/pappl-retrofit-private.h
++++ b/pappl-retrofit/pappl-retrofit-private.h
+@@ -31,6 +31,7 @@
+ #include <cupsfilters/ieee1284.h>
+ #include <cups/cups.h>
+ #include <cups/dir.h>
++#include <cups/sidechannel.h>
+ #include <limits.h>
+ #include <poll.h>
+ #include <regex.h>
