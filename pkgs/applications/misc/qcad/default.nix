@@ -1,6 +1,5 @@
 { lib
 , stdenv
-, mkDerivation
 , fetchFromGitHub
 , installShellFiles
 , pkg-config
@@ -14,9 +13,10 @@
 , qtsvg
 , qtxmlpatterns
 , qtmacextras
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcad";
   version = "3.31.1.2";
 
@@ -47,6 +47,7 @@ mkDerivation rec {
     pkg-config
     qmake
     qttools
+    wrapQtAppsHook
   ];
 
   buildInputs = [
