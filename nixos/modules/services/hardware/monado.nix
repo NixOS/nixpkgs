@@ -16,6 +16,7 @@ let
 
   cfg = config.services.monado;
 
+  runtimeManifest = "${cfg.package}/share/openxr/1/openxr_monado.json";
 in
 {
   options.services.monado = {
@@ -30,6 +31,19 @@ in
 
         Note that applications can bypass this option by setting an active
         runtime in a writable XDG_CONFIG_DIRS location like `~/.config`.
+      '';
+      default = false;
+      example = true;
+    };
+
+    forceDefaultRuntime = mkOption {
+      type = types.bool;
+      description = ''
+        Whether to ensure that Monado is the active runtime set for the current
+        user.
+
+        This replaces the file `XDG_CONFIG_HOME/openxr/1/active_runtime.json`
+        when starting the service.
       '';
       default = false;
       example = true;
@@ -68,6 +82,16 @@ in
           IPC_EXIT_ON_DISCONNECT = mkDefault "off";
         };
 
+        preStart = mkIf cfg.forceDefaultRuntime ''
+          XDG_CONFIG_HOME="''${XDG_CONFIG_HOME:-$HOME/.config}"
+          targetDir="$XDG_CONFIG_HOME/openxr/1"
+          activeRuntimePath="$targetDir/active_runtime.json"
+
+          echo "Note: Replacing active runtime at '$activeRuntimePath'"
+          mkdir -p "$targetDir"
+          cp -f ${runtimeManifest} "$activeRuntimePath"
+        '';
+
         serviceConfig = {
           ExecStart =
             if cfg.highPriority then
@@ -104,7 +128,7 @@ in
     environment.pathsToLink = [ "/share/openxr" ];
 
     environment.etc."xdg/openxr/1/active_runtime.json" = mkIf cfg.defaultRuntime {
-      source = "${cfg.package}/share/openxr/1/openxr_monado.json";
+      source = runtimeManifest;
     };
   };
 

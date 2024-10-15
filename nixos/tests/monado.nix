@@ -1,5 +1,5 @@
 import ./make-test-python.nix (
-  { pkgs, ... }:
+  { ... }:
   {
     name = "monado";
 
@@ -16,6 +16,8 @@ import ./make-test-python.nix (
         services.monado = {
           enable = true;
           defaultRuntime = true;
+
+          forceDefaultRuntime = true;
         };
         # Stop Monado from probing for any hardware
         systemd.user.services.monado.environment.SIMULATED_ENABLE = "1";
@@ -30,12 +32,18 @@ import ./make-test-python.nix (
         runtimePath = "/run/user/${userId}";
       in
       ''
+        # for defaultRuntime
+        machine.succeed("stat /etc/xdg/openxr/1/active_runtime.json")
+
         machine.succeed("loginctl enable-linger alice")
         machine.wait_for_unit("user@${userId}.service")
 
         machine.wait_for_unit("monado.socket", "alice")
         machine.systemctl("start monado.service", "alice")
         machine.wait_for_unit("monado.service", "alice")
+
+        # for forceDefaultRuntime
+        machine.succeed("stat /home/alice/.config/openxr/1/active_runtime.json")
 
         machine.succeed("su -- alice -c env XDG_RUNTIME_DIR=${runtimePath} openxr_runtime_list")
       '';
