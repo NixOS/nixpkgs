@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, doctest
-, cmake
+{
+  cmake,
+  doctest,
+  fetchFromGitHub,
+  lib,
+  replaceVars,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./unvendor-doctest.patch;
+    (replaceVars ./unvendor-doctest.patch {
       inherit doctest;
     })
   ];
@@ -40,9 +40,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "General-purpose Parallel and Heterogeneous Task Programming System";
     homepage = "https://taskflow.github.io/";
-    changelog = let
-      release = lib.replaceStrings ["."] ["-"] version;
-    in "https://taskflow.github.io/taskflow/release-${release}.html";
+    changelog =
+      let
+        release = lib.replaceStrings [ "." ] [ "-" ] version;
+      in
+      "https://taskflow.github.io/taskflow/release-${release}.html";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ dotlambda ];
