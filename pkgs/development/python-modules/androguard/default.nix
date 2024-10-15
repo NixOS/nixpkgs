@@ -16,7 +16,6 @@
   pyqt5,
   pyperclip,
   pytestCheckHook,
-  mock,
   python-magic,
   qt5,
   # This is usually used as a library, and it'd be a shame to force the GUI
@@ -71,7 +70,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    mock
     pyperclip
     pyqt5
     python-magic
