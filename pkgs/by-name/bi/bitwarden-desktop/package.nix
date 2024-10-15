@@ -146,14 +146,17 @@ in buildNpmPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    pushd ${cargoRoot}
-    export HOME=$(mktemp -d)
-    export -f cargoCheckHook runHook _eval _callImplicitHook _logHook
-    export cargoCheckType=release
-    dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      -- bash -e -c cargoCheckHook
-    popd
+    (
+      cd ${cargoRoot}
+      export HOME=$(mktemp -d)
+      export cargoCheckType=release
+      for function in $(declare -F | awk '{print $3}'); do
+        export -f "$function"
+      done
+      dbus-run-session \
+        --config-file=${dbus}/share/dbus-1/session.conf \
+        -- bash -e -c cargoCheckHook
+    )
 
     runHook postCheck
   '';
