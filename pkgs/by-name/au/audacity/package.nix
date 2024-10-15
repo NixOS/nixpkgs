@@ -53,8 +53,7 @@
 , gtk3
 , libpng
 , libjpeg
-, AppKit
-, CoreAudioKit
+, darwin
 }:
 
 # TODO
@@ -139,8 +138,8 @@ stdenv.mkDerivation rec {
     libuuid
     util-linux
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    CoreAudioKit # for portaudio
+    darwin.apple_sdk.frameworks.AppKit
+    darwin.apple_sdk.frameworks.CoreAudioKit # for portaudio
     libpng
     libjpeg
   ];
