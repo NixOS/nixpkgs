@@ -11,13 +11,24 @@
   minizip,
   pkg-config,
   qt5,
+  qt6,
   stdenv,
   x264,
+  # Configurable options
+  ___qtVersion ? "5",
 }:
 
 let
-  inherit (qt5) qttools wrapQtAppsHook;
+  qtVersionDictionary = {
+    "5" = qt5;
+    "6" = qt6;
+  };
+  inherit (qtVersionDictionary.${___qtVersion}) qttools wrapQtAppsHook;
 in
+assert lib.elem ___qtVersion [
+  "5"
+  "6"
+];
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
   version = "2.6.6-unstable-2024-01-19";
