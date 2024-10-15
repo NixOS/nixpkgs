@@ -36,7 +36,11 @@ assert_can_add(ctx, pkgs)
 for (i, pkg) in pairs(pkgs)
     entry = Pkg.Types.manifest_info(ctx.env.manifest, pkg.uuid)
     is_dep = any(uuid -> uuid == pkg.uuid, [uuid for (name, uuid) in ctx.env.project.deps])
-    pkgs[i] = update_package_add(ctx, pkg, entry, is_dep)
+    if VERSION >= VersionNumber("1.11")
+        pkgs[i] = update_package_add(ctx, pkg, entry, nothing, nothing, is_dep)
+    else
+        pkgs[i] = update_package_add(ctx, pkg, entry, is_dep)
+    end
 end
 
 foreach(pkg -> ctx.env.project.deps[pkg.name] = pkg.uuid, pkgs)
@@ -83,7 +87,11 @@ if VERSION >= VersionNumber("1.9")
             push!(orig_pkgs, pkg)
             ctx.env.project.deps[name] = uuid
             entry = Pkg.Types.manifest_info(ctx.env.manifest, uuid)
-            orig_pkgs[length(orig_pkgs)] = update_package_add(ctx, pkg, entry, false)
+            if VERSION >= VersionNumber("1.11")
+                orig_pkgs[length(orig_pkgs)] = update_package_add(ctx, pkg, entry, nothing, nothing, false)
+            else
+                orig_pkgs[length(orig_pkgs)] = update_package_add(ctx, pkg, entry, false)
+            end
         end
 
         global pkgs, deps_map = _resolve(ctx.io, ctx.env, ctx.registries, orig_pkgs, PRESERVE_NONE, ctx.julia_version)
