@@ -866,6 +866,7 @@ in
                 "~@clock"
                 "~@cpu-emulation"
                 "~@debug"
+                "~@module"
               ];
             }
             // (
