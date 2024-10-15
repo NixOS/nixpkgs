@@ -38780,4 +38780,13 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  dnspy = callPackage ../by-name/dn/dnspy/package.nix {
+    wine = wine64Packages.staging;
+  };
+
+  dnspy32 = callPackage ../by-name/dn/dnspy/package.nix {
+    wine = winePackages.staging;
+    is32bit = true;
+  };
 }

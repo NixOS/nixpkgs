@@ -196,6 +196,13 @@ netcore_target_packages () {
         esac
     fi
 
+    if [[ "$rid" = win-*  ]]; then
+        pkgs+=(
+            "Microsoft.WindowsDesktop.App.Ref"
+            "Microsoft.WindowsDesktop.App.Runtime.$rid"
+        )
+    fi
+
     generate_package_list "$version" '      ' "${pkgs[@]}"
 }
 
