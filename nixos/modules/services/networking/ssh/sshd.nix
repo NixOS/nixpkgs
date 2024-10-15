@@ -869,6 +869,7 @@ in
                 "~@module"
                 "~@obsolete"
                 "~@raw-io"
+                "~@reboot"
               ];
             }
             // (
