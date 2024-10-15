@@ -39,6 +39,7 @@ buildPythonPackage rec {
 
   build-system = [
     cmake
+    protobuf_21
     pybind11
   ];
 
@@ -51,7 +52,6 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    protobuf_21
     protobuf
     numpy
     typing-extensions
