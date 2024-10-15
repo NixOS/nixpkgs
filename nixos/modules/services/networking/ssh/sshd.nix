@@ -869,6 +869,7 @@ in
                 "~CAP_IPC_OWNER"
                 "~CAP_KILL"
                 "~CAP_LEASE"
+                "~CAP_LINUX_IMMUTABLE"
                 "~CAP_SETFCAP"
               ];
               ExecStart =
