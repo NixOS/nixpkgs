@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, sassc
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  sassc,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adw-gtk3";
   version = "5.5";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
-    repo = pname;
-    rev = "v${version}";
+    repo = "adw-gtk3";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-WW6lJmGNn+e0jXu319SSX6e6POWfdgsIeg/U1vmwy1U=";
   };
 
@@ -33,11 +34,11 @@ stdenvNoCC.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Theme from libadwaita ported to GTK-3";
     homepage = "https://github.com/lassekongo83/adw-gtk3";
-    license = licenses.lgpl21Only;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ciferkey ];
+    license = lib.licenses.lgpl21Only;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ciferkey ];
   };
-}
+})
