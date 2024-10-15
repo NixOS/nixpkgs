@@ -873,6 +873,7 @@ in
                 "~CAP_MAC_ADMIN"
                 "~CAP_MAC_OVERRIDE"
                 "~CAP_MKNOD"
+                "~CAP_NET_ADMIN"
                 "~CAP_NET_BROADCAST"
                 "~CAP_NET_RAW"
                 "~CAP_SETFCAP"
