@@ -1676,6 +1676,10 @@ in
 
   nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
 
+  nvim-treesitter-sexp = super.nvim-treesitter-sexp.overrideAttrs {
+    nvimRequireCheck = "treesitter-sexp";
+  };
+
   nvim-ufo = super.nvim-ufo.overrideAttrs {
     dependencies = with self; [ promise-async ];
     nvimRequireCheck = "ufo";
