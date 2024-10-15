@@ -22382,6 +22382,22 @@ with self; {
     };
   };
 
+  SeleniumRemoteDriver = buildPerlPackage {
+    pname = "Selenium-Remote-Driver";
+    version = "1.49";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TE/TEODESIAN/Selenium-Remote-Driver-1.49.tar.gz";
+      hash = "sha256-yg7/7s6kK72vOVqI5j5EkoWKAAZAfJTRz8QY1BOX+mI=";
+    };
+    buildInputs = [ TestDeep TestFatal TestLWPUserAgent TestMockModule ];
+    propagatedBuildInputs = [ ArchiveZip Clone FileWhich HTTPMessage IOString JSON LWP Moo SubInstall TestLongString TryTiny XMLSimple namespaceclean ];
+    meta = {
+      homepage = "https://github.com/teodesian/Selenium-Remote-Driver";
+      description = "Perl Client for Selenium Remote Driver";
+      license = lib.licenses.asl20;
+    };
+  };
+
   SerealDecoder = buildPerlPackage {
     pname = "Sereal-Decoder";
     version = "5.004";
