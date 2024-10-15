@@ -870,6 +870,7 @@ in
                 "~@obsolete"
                 "~@raw-io"
                 "~@reboot"
+                "~@swap"
               ];
             }
             // (
