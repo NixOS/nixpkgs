@@ -859,6 +859,7 @@ in
                 "~CAP_AUDIT_READ"
                 "~CAP_AUDIT_WRITE"
                 "~CAP_BLOCK_SUSPEND"
+                "~CAP_BPF"
                 "~CAP_CHOWN"
                 "~CAP_DAC_OVERRIDE"
                 "~CAP_DAC_READ_SEARCH"
