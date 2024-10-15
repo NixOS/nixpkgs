@@ -16665,7 +16665,7 @@ with pkgs;
 
   gimme-aws-creds = callPackage ../tools/admin/gimme-aws-creds { };
 
-  guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
+  guile_1_8 = guile_1_8_8;
 
   # Needed for autogen
   guile_2_0 = callPackage ../development/interpreters/guile/2.0.nix { };
