@@ -878,6 +878,7 @@ in
                 "~CAP_NET_RAW"
                 "~CAP_SETFCAP"
                 "~CAP_SETPCAP"
+                "~CAP_SYSLOG"
               ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
