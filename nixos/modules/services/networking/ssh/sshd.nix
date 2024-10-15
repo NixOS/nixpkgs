@@ -870,6 +870,7 @@ in
                 "~CAP_KILL"
                 "~CAP_LEASE"
                 "~CAP_LINUX_IMMUTABLE"
+                "~CAP_MAC_ADMIN"
                 "~CAP_SETFCAP"
               ];
               ExecStart =
