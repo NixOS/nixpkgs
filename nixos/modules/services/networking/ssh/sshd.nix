@@ -872,6 +872,7 @@ in
                 "~CAP_LINUX_IMMUTABLE"
                 "~CAP_MAC_ADMIN"
                 "~CAP_MAC_OVERRIDE"
+                "~CAP_MKNOD"
                 "~CAP_SETFCAP"
               ];
               ExecStart =
