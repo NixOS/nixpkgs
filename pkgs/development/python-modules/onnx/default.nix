@@ -18,6 +18,7 @@
   google-re2,
   pillow,
   protobuf,
+  setuptools,
 }:
 
 let
@@ -26,45 +27,52 @@ in
 buildPythonPackage rec {
   pname = "onnx";
   version = "1.16.2";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "onnx";
+    repo = "onnx";
     rev = "refs/tags/v${version}";
     hash = "sha256-JmxnsHRrzj2QzPz3Yndw0MmgZJ8MDYxHjuQ7PQkQsDg=";
   };
 
   build-system = [
     cmake
-    pybind11
+    protobuf
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    protobuf_21 # for protoc
   ];
 
   buildInputs = [
     abseil-cpp
-    protobuf
-    google-re2
+    protobuf_21
     gtestStatic
-    pillow
+    pybind11
   ];
 
   dependencies = [
-    protobuf_21
     protobuf
     numpy
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    google-re2
     nbval
     parameterized
+    pillow
     pytestCheckHook
     tabulate
   ];
 
   postPatch = ''
+    rm -r third_party
+
     chmod +x tools/protoc-gen-mypy.sh.in
     patchShebangs tools/protoc-gen-mypy.sh.in
 
