@@ -1,7 +1,9 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +18,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-LYVhvq5l+PCZXW+elWi3zZFxLekgPn+plo4dybbLK9g=";
+
+  buildInputs = lib.optionals (stdenv.isDarwin) [
+    darwin.apple_sdk_11_0.frameworks.AppKit
+  ];
 
   meta = {
     description = "Utility to copy project tree contents to clipboard";
