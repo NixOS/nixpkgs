@@ -1,5 +1,5 @@
 diff --git a/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp b/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
-index 7e0c48a00e..fdc8b009f4 100644
+index 8c2bc13a74..7b3cd72363 100644
 --- a/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
 +++ b/applets/devicenotifier/plugin/deviceerrormonitor_p.cpp
 @@ -155,7 +155,7 @@ void DeviceErrorMonitor::queryBlockingApps(const QString &devicePath)
@@ -51,7 +51,7 @@ index f5034455c9..8ea57813a1 100644
  
  void CFcQuery::procExited()
 diff --git a/kcms/krdb/krdb.cpp b/kcms/krdb/krdb.cpp
-index eefa0d36a0..76afd0c418 100644
+index 39bcb7317d..b0363afde9 100644
 --- a/kcms/krdb/krdb.cpp
 +++ b/kcms/krdb/krdb.cpp
 @@ -423,7 +423,7 @@ void runRdb(unsigned int flags)
@@ -135,13 +135,13 @@ index 4d31c6f408..17418b1ff7 100644
      }
      return p;
 diff --git a/startkde/systemd/plasma-ksplash-ready.service.in b/startkde/systemd/plasma-ksplash-ready.service.in
-index 3f6744f378..c51266794d 100644
+index 0bd88e6c92..eb1e304d37 100644
 --- a/startkde/systemd/plasma-ksplash-ready.service.in
 +++ b/startkde/systemd/plasma-ksplash-ready.service.in
 @@ -6,5 +6,5 @@ PartOf=graphical-session.target
  
  [Service]
  Type=oneshot
--ExecStart=-@QtBinariesDir@/qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage ready
-+ExecStart=-@qdbus@ org.kde.KSplash /KSplash org.kde.KSplash.setStage ready
+-ExecStart=dbus-send --session  --reply-timeout=1 --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
++ExecStart=@dbus-send@ --session  --reply-timeout=1 --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
  Slice=session.slice
