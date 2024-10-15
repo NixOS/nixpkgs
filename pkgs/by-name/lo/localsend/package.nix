@@ -5,6 +5,7 @@
   fetchFromGitHub,
   flutter324,
   makeDesktopItem,
+  copyDesktopItems,
   nixosTests,
   pkg-config,
   libayatana-appindicator,
@@ -35,7 +36,10 @@ let
       "permission_handler_windows" = "sha256-+TP3neqlQRZnW6BxHaXr2EbmdITIx1Yo7AEn5iwAhwM=";
     };
 
-    nativeBuildInputs = [ pkg-config ];
+    nativeBuildInputs = [
+      pkg-config
+      copyDesktopItems
+    ];
 
     buildInputs = [ libayatana-appindicator ];
 
@@ -50,19 +54,19 @@ let
         mkdir -p $d
         ln -s $out/app/data/flutter_assets/assets/img/logo-''${s}.png $d/localsend.png
       done
-      mkdir -p $out/share/applications
-      cp $desktopItem/share/applications/*.desktop $out/share/applications
     '';
 
-    desktopItem = makeDesktopItem {
-      name = "LocalSend";
-      exec = "localsend_app";
-      icon = "localsend";
-      desktopName = "LocalSend";
-      startupWMClass = "localsend_app";
-      genericName = "An open source cross-platform alternative to AirDrop";
-      categories = [ "Network" ];
-    };
+    desktopItems = [
+      (makeDesktopItem {
+        name = "LocalSend";
+        exec = "localsend_app";
+        icon = "localsend";
+        desktopName = "LocalSend";
+        startupWMClass = "localsend_app";
+        genericName = "An open source cross-platform alternative to AirDrop";
+        categories = [ "Network" ];
+      })
+    ];
 
     passthru = {
       updateScript = ./update.sh;
