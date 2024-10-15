@@ -10,6 +10,7 @@
   komac,
   dbus,
   zstd,
+  versionCheckHook,
 }:
 
 let
@@ -46,6 +47,10 @@ rustPlatform.buildRustPackage {
     YRX_REGENERATE_MODULES_RS = "no";
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/komac";
 
   passthru.tests.version = testers.testVersion {
     inherit version;
