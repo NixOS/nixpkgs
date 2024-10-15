@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
-  version = "4.1";
+  version = "4.1.2";
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
-    sha256 = "sha256-3t8OhvRPj3oanFJKRaUVhGlF0B4E+UAlcfGMIpcet9s=";
+    sha256 = "sha256-hvyCC8eUXNm1d1g+/kEnVllRJokChgJWzuoQB5Xd8j8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
