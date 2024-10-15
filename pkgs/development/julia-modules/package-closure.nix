@@ -10,37 +10,7 @@
 }:
 
 let
-  # The specific package resolution code depends on the Julia version
-  # These are pretty similar and could be combined to reduce duplication
-  resolveCode = if lib.versionOlder julia.version "1.7" then resolveCode1_6 else resolveCode1_8;
-
-  resolveCode1_6 = ''
-    import Pkg.API: check_package_name
-    import Pkg.Types: Context!, PRESERVE_NONE, manifest_info, project_deps_resolve!, registry_resolve!, stdlib_resolve!, ensure_resolved
-    import Pkg.Operations: _resolve, assert_can_add, is_dep, update_package_add
-
-    foreach(pkg -> check_package_name(pkg.name, :add), pkgs)
-    pkgs = deepcopy(pkgs)  # deepcopy for avoid mutating PackageSpec members
-    Context!(ctx)
-
-    project_deps_resolve!(ctx, pkgs)
-    registry_resolve!(ctx, pkgs)
-    stdlib_resolve!(pkgs)
-    ensure_resolved(ctx, pkgs, registry=true)
-
-    assert_can_add(ctx, pkgs)
-
-    for (i, pkg) in pairs(pkgs)
-        entry = manifest_info(ctx, pkg.uuid)
-        pkgs[i] = update_package_add(ctx, pkg, entry, is_dep(ctx, pkg))
-    end
-
-    foreach(pkg -> ctx.env.project.deps[pkg.name] = pkg.uuid, pkgs)
-
-    pkgs, deps_map = _resolve(ctx, pkgs, PRESERVE_NONE)
-'';
-
-  resolveCode1_8 = ''
+  resolveCode = ''
     import Pkg.API: handle_package_input!
     import Pkg.Types: PRESERVE_NONE, UUID, VersionSpec, project_deps_resolve!, registry_resolve!, stdlib_resolve!, ensure_resolved
     import Pkg.Operations: _resolve, assert_can_add, update_package_add
