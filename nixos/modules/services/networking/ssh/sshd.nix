@@ -867,6 +867,7 @@ in
                 "~@cpu-emulation"
                 "~@debug"
                 "~@module"
+                "~@obsolete"
               ];
             }
             // (
