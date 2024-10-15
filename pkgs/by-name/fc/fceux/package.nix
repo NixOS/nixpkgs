@@ -3,7 +3,11 @@
   SDL2,
   cmake,
   fetchFromGitHub,
-  lua,
+  ffmpeg,
+  libX11,
+  libXdmcp,
+  libxcb,
+  lua5_1,
   minizip,
   pkg-config,
   qt5,
@@ -12,7 +16,7 @@
 }:
 
 let
-  inherit (qt5) wrapQtAppsHook;
+  inherit (qt5) qttools wrapQtAppsHook;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fceux";
@@ -33,10 +37,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     SDL2
-    lua
+    ffmpeg
+    libX11
+    libXdmcp
+    libxcb
+    lua5_1
     minizip
+    qttools
     x264
   ];
+
+  strictDeps = true;
 
   meta = {
     homepage = "http://www.fceux.com/";
