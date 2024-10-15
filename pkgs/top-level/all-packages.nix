@@ -25661,6 +25661,10 @@ with pkgs;
   fuse3 = fusePackages.fuse_3;
   fuse-common = hiPrio fusePackages.fuse_3.common;
 
+  fuse-t = callPackage ../by-name/fu/fuse-t/package.nix {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration;
+  };
+
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet { };

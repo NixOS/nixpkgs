@@ -1,0 +1,20 @@
+diff --git a/example/CMakeLists.txt b/example/CMakeLists.txt
+index e1184cb..9989d0b 100644
+--- a/example/CMakeLists.txt
++++ b/example/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-set(CMAKE_OSX_ARCHITECTURES arm64;x86_64)
+-
+ add_executable (hello hello.c)
+ add_executable (hello_ll hello_ll.c)
+ add_executable (cusexmp cusexmp.c)
+diff --git a/lib/CMakeLists.txt b/lib/CMakeLists.txt
+index db6f2ac..70592cd 100644
+--- a/lib/CMakeLists.txt
++++ b/lib/CMakeLists.txt
+@@ -1,5 +1,3 @@
+-set(CMAKE_OSX_ARCHITECTURES arm64;x86_64)
+-
+ set(SRC
+     buffer.c
+     fuse_darwin.c
