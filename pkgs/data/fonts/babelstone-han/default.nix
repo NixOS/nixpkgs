@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation {
   src = fetchzip {
     # upstream download links are unversioned, so hash changes
     url = "https://www.babelstone.co.uk/Fonts/Download/BabelStoneHan.zip";
-    hash = "sha256-9ab664aec4df6ceb32768d1356febda39cd6d5f2ed0c38f940ce7bf68d20d779";
+    hash = "sha256-0yfp426zcyyf83wkh37dybaxd753ppz5c4wdfqrfnv6zqjp69dls=";
   };
 
   installPhase = ''
