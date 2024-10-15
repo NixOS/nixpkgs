@@ -5841,6 +5841,12 @@
     githubId = 6872940;
     name = "Dennis Værum";
   };
+  dvcorreia = {
+    email = "dv_correia@hotmail.com";
+    name = "Diogo Correia";
+    github = "dvcorreia";
+    githubId = 20357938;
+  };
   dvn0 = {
     email = "git@dvn.me";
     github = "dvn0";
