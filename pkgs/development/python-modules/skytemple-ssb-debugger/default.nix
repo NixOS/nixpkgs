@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.7.0";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple-ssb-debugger";
     rev = version;
-    hash = "sha256-S38Nw7FntacEdwdGu2d/zUKOsGostVy9+U2KPxlvI5Q=";
+    hash = "sha256-HmJOjHX2/P284DSIdKuSz3++Qr1fKVGRQmA/+cMrcYw=";
   };
 
   build-system = [ setuptools ];

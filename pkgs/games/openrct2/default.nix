@@ -29,11 +29,11 @@
 }:
 
 let
-  openrct2-version = "0.4.14";
+  openrct2-version = "0.4.15";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.7";
+  objects-version = "1.4.8";
   openmsx-version = "1.6";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.14";
@@ -42,14 +42,14 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-d02LXcqoB6lDGdd82IrHi0Br8rjAFpRgQ86344XUeCA=";
+    hash = "sha256-VumjJGAur+2A7n0pFcNM7brYaoeaVCPBtRGFIZmq5QY=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-XtKhgCahGzhuIdwvoz47rlRthZEhb0w+OuGhZnplHSc=";
+    hash = "sha256-A6iFaWda5qiFirGqOP6H9w0PP5Me8BRr2HXKZPHJImE=";
   };
 
   openmsx-src = fetchFromGitHub {

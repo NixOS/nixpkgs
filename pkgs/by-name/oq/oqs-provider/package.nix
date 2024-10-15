@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "open-quantum-safe";
     repo  = "oqs-provider";
     rev = finalAttrs.version;
-    hash = "sha256-2+TpYpZwC8vx6tGgS2waD/BQDfnbq0PJIwvX5wDDBEg=";
+    hash = "sha256-v7YIE5uzBvQHfi2hqkkRrW0F3K4haZyuoKHxAtRqQDA=";
   };
 
   nativeBuildInputs = [
