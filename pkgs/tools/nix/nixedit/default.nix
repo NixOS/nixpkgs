@@ -1,16 +1,16 @@
 {
-  lib
-, stdenv
-, fetchFromGitHub
-, bash
-, fzf
-, jq
-, micro
-, git
-, nix-tree
-, coreutils
-, makeWrapper
-, dialog
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bash,
+  fzf,
+  jq,
+  micro,
+  git,
+  nix-tree,
+  coreutils,
+  makeWrapper,
+  dialog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
