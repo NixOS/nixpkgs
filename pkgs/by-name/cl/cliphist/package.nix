@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -20,6 +21,10 @@ buildGoModule rec {
   postInstall = ''
     cp ${src}/contrib/* $out/bin/
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Wayland clipboard manager";
