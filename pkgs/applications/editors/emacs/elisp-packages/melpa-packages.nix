@@ -934,6 +934,8 @@ let
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
 
+        consult-gh-forge = buildWithGit super.consult-gh-forge;
+
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
         # https://github.com/fuxialexander/counsel-notmuch/issues/3
