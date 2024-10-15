@@ -15,8 +15,8 @@
 
   # https://www.aquamaniac.de/rdm/projects/aqbanking/files
   aqbanking = {
-    version = "6.5.4";
-    hash = "sha256-DRbOrnbwcY5GZjj0VHqLFJJ/HY2YMiB5zWSBrd4wrJk=";
-    releaseId = "499";
+    version = "6.5.12beta";
+    hash = "sha256-TH6+eEiULmOciB1Mqo4vjgF9JbF4BW+llrTjS6BtctY=";
+    releaseId = "526";
   };
 }
