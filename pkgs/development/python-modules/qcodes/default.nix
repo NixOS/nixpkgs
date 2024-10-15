@@ -6,7 +6,6 @@
   # build-system
   setuptools,
   versioningit,
-  wheel,
 
   # dependencies
   broadbean,
@@ -45,8 +44,6 @@
   sphinx,
   sphinx-issues,
   towncrier,
-  opencensus,
-  opencensus-ext-azure,
 
   # checks
   deepdiff,
@@ -62,20 +59,19 @@
 
 buildPythonPackage rec {
   pname = "qcodes";
-  version = "0.48.0";
+  version = "0.49.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "Qcodes";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Q1WyuK1mCbs75kGY1Aaw7S5EfFRjwqzZnhNyeSx7qc8=";
+    hash = "sha256-AlrQH0yKbEz+ICdvWWjMD7LQvWl36cFWlp+fegAmtL8=";
   };
 
   build-system = [
     setuptools
     versioningit
-    wheel
   ];
 
   dependencies = [
@@ -124,10 +120,6 @@ buildPythonPackage rec {
     ];
     loop = [
       # qcodes-loop
-    ];
-    opencensus = [
-      opencensus
-      opencensus-ext-azure
     ];
     refactor = [
       libcst
