@@ -1,20 +1,18 @@
 { stdenv, lib, buildPythonPackage, buildPythonApplication, fetchFromGitHub
-, pkg-config, cmake, setuptools
-, libsamplerate, fftwFloat
-, rtl-sdr, soapysdr-with-plugins, csdr, pycsdr, pydigiham, direwolf, sox, wsjtx, codecserver
-}:
+, pkg-config, cmake, setuptools, libsamplerate, fftwFloat, rtl-sdr
+, soapysdr-with-plugins, csdr, pycsdr, pydigiham, direwolf, sox, wsjtx
+, codecserver }:
 
 let
-
   js8py = buildPythonPackage rec {
     pname = "js8py";
-    version = "0.1.1";
+    version = "0.1.2";
 
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = pname;
       rev = version;
-      sha256 = "1j80zclg1cl5clqd00qqa16prz7cyc32bvxqz2mh540cirygq24w";
+      sha256 = "sha256-06ilrMowapJRqBdAkoWkoM00kq/36uin1bBESVN3JdI=";
     };
 
     pythonImportsCheck = [ "js8py" "test" ];
@@ -29,13 +27,13 @@ let
 
   owrx_connector = stdenv.mkDerivation rec {
     pname = "owrx_connector";
-    version = "0.6.0";
+    version = "0.6.2";
 
     src = fetchFromGitHub {
       owner = "jketterl";
       repo = pname;
       rev = version;
-      sha256 = "sha256-1H0TJ8QN3b6Lof5TWvyokhCeN+dN7ITwzRvEo2X8OWc=";
+      sha256 = "sha256-2gGfEj5LkeQmPxX0vaSTX7sWdjHncqmLHY83/yFBwO8=";
     };
 
     nativeBuildInputs = [
