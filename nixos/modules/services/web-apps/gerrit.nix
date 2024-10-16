@@ -137,6 +137,14 @@ in
           `nix-shell -p util-linux --run uuidgen`.
         '';
       };
+
+      cacheDir = mkOption {
+        type = types.path;
+        default = "/var/cache/gerrit";
+        description = ''
+          TODO
+        '';
+      };
     };
   };
 
@@ -150,7 +158,7 @@ in
     ];
 
     services.gerrit.settings = {
-      cache.directory = "/var/cache/gerrit";
+      cache.directory = cfg.cacheDir;
       container.heapLimit = cfg.jvmHeapLimit;
       gerrit.basePath = lib.mkDefault "git";
       gerrit.serverId = cfg.serverId;
@@ -214,7 +222,7 @@ in
       ;
 
       serviceConfig = {
-        CacheDirectory = "gerrit";
+        CacheDirectory = mkIf (cfg.cacheDir == "/var/cache/gerrit") "gerrit";
         CacheDirectoryMode = 750;
         DynamicUser = true;
         ExecStart = "${gerrit-cli}/bin/gerrit daemon --console-log";
