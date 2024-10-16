@@ -2726,7 +2726,6 @@ in
       "coc-lists"
       "coc-ltex"
       "coc-markdownlint"
-      "coc-metals"
       "coc-pairs"
       "coc-prettier"
       "coc-r-lsp"
