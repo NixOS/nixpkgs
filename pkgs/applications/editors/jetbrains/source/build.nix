@@ -9,6 +9,7 @@
 , rustPlatform
 
 , ant
+, coreutils
 , cmake
 , glib
 , jetbrains
@@ -265,6 +266,12 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mv out/*/artifacts/*-no-jbr.tar.gz $out
     runHook postInstall
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    remote_dev_output=$(${coreutils}/bin/timeout 10s $out/bin/${pname}-remote-dev-server run $(mktemp -d))
+    echo $remote_dev_output | grep "Join link"
   '';
 
   passthru = {
