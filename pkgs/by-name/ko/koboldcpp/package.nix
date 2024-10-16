@@ -5,7 +5,6 @@
   makeWrapper,
   gitUpdater,
   python3Packages,
-  python311Packages ? null, # Ignored. Kept for compatibility with the release
   tk,
   addDriverRunpath,
 
@@ -31,9 +30,7 @@
   vulkanSupport ? true,
   vulkan-loader,
 
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  march ? "",
-  mtune ? "",
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
 }:
 
 let
@@ -114,14 +111,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
-
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString (march != "") (
-      lib.warn "koboldcpp: the march argument is only kept for compatibility; use overrideAttrs intead" "-march=${march}"
-    )
-    + lib.optionalString (mtune != "") (
-      lib.warn "koboldcpp: the mtune argument is only kept for compatibility; use overrideAttrs intead" "-mtune=${mtune}"
-    );
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
