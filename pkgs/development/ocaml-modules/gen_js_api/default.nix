@@ -10,13 +10,13 @@
 
 buildDunePackage rec {
   pname = "gen_js_api";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "LexiFi";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-tplbnQ/1dzZq8m/ibMAkGqY8RHQRmBPHOwh0dGuZCJM=";
+    sha256 = "sha256-9xYSxiPKZP7U1wbnw3/FiLhF/JmTA12rlrr4jSynA3k=";
   };
 
   minimalOCamlVersion = "4.11";
