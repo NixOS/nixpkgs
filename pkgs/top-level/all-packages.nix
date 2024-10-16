@@ -10342,8 +10342,6 @@ with pkgs;
 
   nomad-driver-podman = callPackage ../applications/networking/cluster/nomad-driver-podman { };
 
-  nomad-pack = callPackage ../applications/networking/cluster/nomad-pack { };
-
   nova = callPackage ../applications/networking/cluster/nova { };
 
   nomino = callPackage ../tools/misc/nomino { };
