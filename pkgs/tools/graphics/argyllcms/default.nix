@@ -1,6 +1,7 @@
-{ stdenv, fetchzip, jam, unzip, libX11, libXxf86vm, libXrandr, libXinerama
+{ stdenv, fetchzip, jam, pkg-config, unzip
+, libX11, libXxf86vm, libXrandr, libXinerama
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
-, libXdmcp, libXau, lib, openssl
+, libXdmcp, libXau, xorgproto, lib, openssl
 , buildPackages, substituteAll, writeScript
 }:
 
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-xpbj15GzpGS0d1UjzvYiZ1nmmTjNIyv0ST2blmi7ZSk=";
   };
 
-  nativeBuildInputs = [ jam unzip ];
+  nativeBuildInputs = [ jam pkg-config unzip ];
 
   patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     # Build process generates files by compiling and then invoking an executable.
@@ -30,79 +31,27 @@ stdenv.mkDerivation rec {
       --replace "-m64" ""
   '';
 
-  preConfigure = let
-    # The contents of this file comes from the Jamtop file from the
-    # root of the ArgyllCMS distribution, rewritten to pick up Nixpkgs
-    # library paths. When ArgyllCMS is updated, make sure that changes
-    # in that file is reflected here.
-    jamTop = writeText "argyllcms_jamtop" ''
-      DESTDIR = "/" ;
-      REFSUBDIR = "share/argyllcms" ;
-
-      # Keep this DESTDIR anchored to Jamtop. PREFIX is used literally
-      ANCHORED_PATH_VARS = DESTDIR ;
-
-      # Tell standalone libraries that they are part of Argyll:
-      DEFINES += ARGYLLCMS ;
-
-      # enable serial instruments & support
-      USE_SERIAL = true ;
-
-      # enable fast serial instruments & support
-      USE_FAST_SERIAL = true ;                # (Implicit in USE_SERIAL too)
-
-      # enable USB instruments & support
-      USE_USB = true ;
-
-      # enable dummy Demo Instrument (only if code is available)
-      USE_DEMOINST = true ;
-
-      # enable Video Test Patch Generator and 3DLUT device support
-      # (V2.0.0 and above)
-      USE_VTPGLUT = false ;
-
-      # enable Printer device support
-      USE_PRINTER = false ;
-
-      # enable CMF Measurement device and accessory support (if present)
-      USE_CMFM = false ;
-
-      # Use ArgyllCMS version of libusb (deprecated - don't use)
-      USE_LIBUSB = false ;
-
-      # Compile in graph plotting code (Not fully implemented)
-      USE_PLOT = true ;		# [true]
-
-      JPEGLIB = ;
-      JPEGINC = ;
-      HAVE_JPEG = true ;
-
-      TIFFLIB = ;
-      TIFFINC = ;
-      HAVE_TIFF = true ;
-
-      PNGLIB = ;
-      PNGINC = ;
-      HAVE_PNG = true ;
-
-      ZLIB = ;
-      ZINC = ;
-      HAVE_Z = true ;
-
-      SSLLIB = ;
-      SSLINC = ;
-      HAVE_SSL = true ;
-
-      LINKFLAGS +=
-        ${lib.concatStringsSep " " (map (x: "-L${x}/lib") buildInputs)}
-        -lrt -lX11 -lXext -lXxf86vm -lXinerama -lXrandr -lXau -lXdmcp -lXss
-        -ljpeg -ltiff -lpng -lssl ;
-    '';
-  in ''
-    cp ${jamTop} Jamtop
-    substituteInPlace Makefile --replace "-j 3" "-j $NIX_BUILD_CORES"
+  preConfigure = ''
     # Remove tiff, jpg and png to be sure the nixpkgs-provided ones are used
     rm -rf tiff jpg png
+
+    substituteInPlace Jamtop \
+      --replace-fail /usr/X11R6/include ${lib.getDev xorgproto}/include \
+      --replace-fail /usr/X11R6/lib ${lib.getLib libX11}/lib
+
+    jamFlagsArray=(
+      -q -fJambase -j "$NIX_BUILD_CORES"
+      -s DESTDIR=/
+      -s REFSUBDIR=share/argyllcms
+      -s PREFIX="$out"
+      -s HAVE_JPEG=true
+      -s HAVE_TIFF=true
+      -s HAVE_PNG=true
+      -s HAVE_Z=true
+      -s HAVE_SSL=true
+      -s LINKFLAGS="$($PKG_CONFIG --libs libjpeg libtiff-4 libpng zlib libssl)"
+      -s GUILINKFLAGS="$($PKG_CONFIG --libs x11 xext xxf86vm xinerama xrandr xau xdmcp xscrnsaver)"
+    )
 
     export AR="$AR rusc"
   '';
@@ -112,15 +61,21 @@ stdenv.mkDerivation rec {
     libXrender libXScrnSaver libXdmcp libXau openssl
   ];
 
-  buildFlags = [ "all" ];
+  buildPhase = ''
+    runHook preBuild
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-  ];
+    jam "''${jamFlagsArray[@]}"
 
-  # Install udev rules, but remove lines that set up the udev-acl
-  # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
-  postInstall = ''
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    jam "''${jamFlagsArray[@]}" install
+
+    # Install udev rules, but remove lines that set up the udev-acl
+    # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
     rm -v $out/bin/License.txt
     mkdir -p $out/etc/udev/rules.d
     sed -i '/udev-acl/d' usb/55-Argyll.rules
@@ -128,6 +83,7 @@ stdenv.mkDerivation rec {
 
     sed -i -e 's/^CREATED .*/CREATED "'"$(date -d @$SOURCE_DATE_EPOCH)"'"/g' $out/share/argyllcms/RefMediumGamut.gam
 
+    runHook postInstall
   '';
 
   passthru = {
