@@ -52,7 +52,19 @@ in
 
     daemon.settings =
       mkOption {
-        type = settingsFormat.type;
+        type = types.submodule {
+          freeformType = settingsFormat.type;
+          options = {
+            live-restore = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Allow dockerd to be restarted without affecting running container.
+                This option is incompatible with docker swarm.
+              '';
+            };
+          };
+        };
         default = { };
         example = {
           ipv6 = true;
@@ -73,16 +85,6 @@ in
 
           Enable nvidia-docker wrapper, supporting NVIDIA GPUs inside docker containers.
         '';
-      };
-
-    liveRestore =
-      mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-            Allow dockerd to be restarted without affecting running container.
-            This option is incompatible with docker swarm.
-          '';
       };
 
     storageDriver =
@@ -253,7 +255,6 @@ in
         hosts = [ "fd://" ];
         log-driver = mkDefault cfg.logDriver;
         storage-driver = mkIf (cfg.storageDriver != null) (mkDefault cfg.storageDriver);
-        live-restore = mkDefault cfg.liveRestore;
         runtimes = mkIf cfg.enableNvidia {
           nvidia = {
             # Use the legacy nvidia-container-runtime wrapper to allow
@@ -269,6 +270,7 @@ in
 
   imports = [
     (mkRemovedOptionModule ["virtualisation" "docker" "socketActivation"] "This option was removed and socket activation is now always active")
+    (mkAliasOptionModule ["virtualisation" "docker" "liveRestore"] ["virtualisation" "docker" "daemon" "settings" "live-restore"])
   ];
 
 }
