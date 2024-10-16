@@ -130,9 +130,9 @@
     "hash": "sha256-/L3qETy8AqWynHrVApoLxwXctp+3TTojZDfUebwrV2c="
   },
   "kwin": {
-    "version": "6.2.1",
-    "url": "mirror://kde/stable/plasma/6.2.1/kwin-6.2.1.tar.xz",
-    "hash": "sha256-R4pl0v2xeMHx4kzwy5spDirjfFeP2JwHjDORwz+JU50="
+    "version": "6.2.1.1",
+    "url": "mirror://kde/stable/plasma/6.2.1/kwin-6.2.1.1.tar.xz",
+    "hash": "sha256-Qqc6q2yExt/NdhNoajmkkDIMadbVk6PEwkV4xioZIeg="
   },
   "kwrited": {
     "version": "6.2.1",
@@ -270,9 +270,9 @@
     "hash": "sha256-oKvYKyCe27g7Qx+GN2R4nGtS4WoXp3fA+Oz0rtWRFPw="
   },
   "plasma-workspace": {
-    "version": "6.2.1",
-    "url": "mirror://kde/stable/plasma/6.2.1/plasma-workspace-6.2.1.tar.xz",
-    "hash": "sha256-eKrVJIqTcaYHYLyz/HMsGWKqjGNLQkhHZJaJn4FUwi4="
+    "version": "6.2.1.1",
+    "url": "mirror://kde/stable/plasma/6.2.1/plasma-workspace-6.2.1.1.tar.xz",
+    "hash": "sha256-9tzQxRlttLYRsUPQUNwNYqMFxIlO/sEFzRz+jNnQ1QY="
   },
   "plasma-workspace-wallpapers": {
     "version": "6.2.1",
