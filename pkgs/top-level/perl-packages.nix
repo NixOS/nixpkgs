@@ -29011,12 +29011,13 @@ with self; {
 
   XSParseSublike = buildPerlModule {
     pname = "XS-Parse-Sublike";
-    version = "0.20";
+    version = "0.29";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.20.tar.gz";
-      hash = "sha256-Wn0myqMroqQQUZwMJLHYCznvMgdRN224vbef2u/pms0=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Sublike-0.29.tar.gz";
+      hash = "sha256-UnX1w457gFe6cuzRzAcpO26TOadzdA51pse+lSAfHjw=";
     };
     buildInputs = [ Test2Suite ];
+    propagatedBuildInputs = [ FileShareDir ];
     perlPreHook = lib.optionalString stdenv.hostPlatform.isDarwin "export LD=$CC";
     meta = {
       description = "XS functions to assist in parsing sub-like syntax";
