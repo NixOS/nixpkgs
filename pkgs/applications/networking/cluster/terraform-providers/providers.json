@@ -444,13 +444,13 @@
     "vendorHash": "sha256-ZbU2z7qUHPR7vDSflesSjgK7x3LYXVe/gnVsy19q6Bs="
   },
   "fortios": {
-    "hash": "sha256-/4+FpytrKGDpl6ZZoZ6BpsiiqlxTcxRs+Ag4wVJ9NLw=",
+    "hash": "sha256-hfL1os1jCEIcpeGiqftASRN1RV2sKDhxyBVWkY3KOHA=",
     "homepage": "https://registry.terraform.io/providers/fortinetdev/fortios",
     "owner": "fortinetdev",
     "repo": "terraform-provider-fortios",
-    "rev": "1.20.0",
+    "rev": "1.21.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-eFPOY0oGjTw9JIHNJks5Dgv2vJyS/eaEi+bPQkdBFlc="
+    "vendorHash": "sha256-Tgjrt90MSsHjX5UrgXLDTTxSos8OljLX+UgforwXIh0="
   },
   "gandi": {
     "hash": "sha256-fsCtmwyxkXfOtiZG27VEb010jglK35yr4EynnUWlFog=",
