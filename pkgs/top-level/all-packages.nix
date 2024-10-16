@@ -21660,6 +21660,8 @@ with pkgs;
 
   libuvc = callPackage ../development/libraries/libuvc { };
 
+  libtypec = callPackage ../development/libraries/libtypec { };
+
   libv4l = lowPrio (v4l-utils.override {
     withUtils = false;
   });
