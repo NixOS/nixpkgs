@@ -1391,8 +1391,15 @@ pkg1
 pkg3
 ```
 
-Another option is to pass `true`, that will relax/remove all dependencies, for
-example:
+If you also add `pythonRelaxDepsUpperOnly = true;` you will retain the lower version bound:
+
+```
+pkg1
+pkg3>=1.0
+```
+
+Instead of a list of dependencies you may pass `true`, which will relax/remove
+all dependencies, for example:
 
 ```nix
 {

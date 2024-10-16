@@ -11,6 +11,10 @@
 #     # This will relax the dependency restrictions
 #     # e.g.: abc>1,<=2 -> abc
 #     pythonRelaxDeps = [ "abc" ];
+#     # This will relax only the upper bound
+#     # e.g.: abc>1,<=2 -> abc>1
+#     pythonRelaxDeps = [ "abc" ];
+#     pythonRelaxDepsUpperOnly = true;
 #     # This will relax all dependencies restrictions instead
 #     # pythonRelaxDeps = true;
 #     # This will remove the dependency
@@ -24,7 +28,7 @@
 # IMPLEMENTATION NOTES:
 #
 # The "Requires-Dist" dependency specification format is described in PEP 508.
-# Examples that the regular expressions in this hook needs to support:
+# Examples that this hook needs to support:
 #
 # Requires-Dist: foo
 #   -> foo
@@ -36,47 +40,38 @@
 #   -> foo[optional, xyz]
 # Requires-Dist: foo[optional]~=1.2.3 ; os_name = "posix"
 #   -> foo[optional] ; os_name = "posix"
-#
-# Currently unsupported: URL specs (foo @ https://example.com/a.zip).
 
-_pythonRelaxDeps() {
-    local -r metadata_file="$1"
-
-    if [[ -z "${pythonRelaxDeps:-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
-        return
-    elif [[ "$pythonRelaxDeps" == 1 ]]; then
-        sed -i "$metadata_file" -r \
-            -e 's/(Requires-Dist: [a-zA-Z0-9_.-]+\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/'
-    else
-        for dep in $pythonRelaxDeps; do
-            sed -i "$metadata_file" -r \
-                -e "s/(Requires-Dist: $dep\s*(\[[^]]+\])?)[^;]*(;.*)?/\1\3/i"
-        done
-    fi
-}
-
-_pythonRemoveDeps() {
-    local -r metadata_file="$1"
-
-    if [[ -z "${pythonRemoveDeps:-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
-        return
-    elif [[ "$pythonRemoveDeps" == 1 ]]; then
-        sed -i "$metadata_file" \
-            -e '/Requires-Dist:.*/d'
-    else
-        for dep in $pythonRemoveDeps; do
-            sed -i "$metadata_file" \
-                -e "/Requires-Dist: $dep/d"
-        done
-    fi
-
-}
 
 pythonRelaxDepsHook() {
     pushd dist
 
     local -r unpack_dir="unpacked"
     local -r metadata_file="$unpack_dir/*/*.dist-info/METADATA"
+    local -a hookArgs=()
+
+    if [[ -z "${pythonRelaxDeps:-}" ]] || [[ "$pythonRelaxDeps" == 0 ]]; then
+        :
+    elif [[ "$pythonRelaxDeps" == 1 ]]; then
+        hookArgs+=(--relax-all)
+    else
+        for dep in $pythonRelaxDeps; do
+            hookArgs+=(--relax "$dep")
+        done
+    fi
+
+    if [[ -z "${pythonRemoveDeps:-}" ]] || [[ "$pythonRemoveDeps" == 0 ]]; then
+        :
+    elif [[ "$pythonRemoveDeps" == 1 ]]; then
+        hookArgs+=(--remove-all)
+    else
+        for dep in $pythonRemoveDeps; do
+            hookArgs+=(--remove "$dep")
+        done
+    fi
+
+    if [[ "${pythonRelaxDepsUpperOnly:-0}" == 1 ]]; then
+        hookArgs+=(--relax-upper-only)
+    fi
 
     # We generally shouldn't have multiple wheel files, but let's be safer here
     for wheel in *".whl"; do
@@ -85,9 +80,7 @@ pythonRelaxDepsHook() {
             @pythonInterpreter@ -m wheel unpack --dest "$unpack_dir" "$wheel"
         rm -rf "$wheel"
 
-        # Using no quotes on purpose since we need to expand the glob from `$metadata_file`
-        _pythonRelaxDeps $metadata_file
-        _pythonRemoveDeps $metadata_file
+        @pythonInterpreter@ @hook@ "${hookArgs[@]}" --in-place $metadata_file
 
         if (("${NIX_DEBUG:-0}" >= 1)); then
             echo "pythonRelaxDepsHook: resulting METADATA for '$wheel':"
