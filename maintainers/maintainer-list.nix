@@ -2996,6 +2996,12 @@
     githubId = 68566724;
     name = "bootstrap-prime";
   };
+  booxter = {
+    email = "ihar.hrachyshka@gmail.com";
+    github = "booxter";
+    githubId = 90200;
+    name = "Ihar Hrachyshka";
+  };
   boozedog = {
     email = "code@booze.dog";
     github = "boozedog";

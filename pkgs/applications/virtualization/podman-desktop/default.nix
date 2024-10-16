@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ panda2134 ];
+    maintainers = with maintainers; [ booxter panda2134 ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";
   };
