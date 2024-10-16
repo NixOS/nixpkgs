@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "cliphist";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "sentriz";
     repo = "cliphist";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AWLcHUwFphfUt6gCal+/OqfRmXs7I1m2Xcshe7kPFxQ=";
+    hash = "sha256-tImRbWjYCdIY8wVMibc5g5/qYZGwgT9pl4pWvY7BDlI=";
   };
 
   vendorHash = "sha256-gG8v3JFncadfCEUa7iR6Sw8nifFNTciDaeBszOlGntU=";
