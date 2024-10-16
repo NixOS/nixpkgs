@@ -1,7 +1,7 @@
-{ lib, stdenv, fetchurl, runtimeShell, traceDeps ? false, bash }:
+{ lib, stdenv, fetchurl, bash }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "steam-original";
+  pname = "steam-unwrapped";
   version = "1.0.0.81";
 
   src = fetchurl {
@@ -12,20 +12,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
-  postInstall =
-  let
-   traceLog = "/tmp/steam-trace-dependencies.log";
-  in ''
+  postInstall = ''
     rm $out/bin/steamdeps
-    ${lib.optionalString traceDeps ''
-      cat > $out/bin/steamdeps <<EOF
-      #!${runtimeShell}
-      echo \$1 >> ${traceLog}
-      cat \$1 >> ${traceLog}
-      echo >> ${traceLog}
-      EOF
-      chmod +x $out/bin/steamdeps
-    ''}
 
     # install udev rules
     mkdir -p $out/etc/udev/rules.d/
@@ -38,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
   '';
 
-  passthru.updateScript = ./update-bootstrap.py;
+  passthru.updateScript = ./update.py;
 
   meta = with lib; {
     description = "Digital distribution platform";
@@ -49,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://store.steampowered.com/";
     license = licenses.unfreeRedistributable;
-    maintainers = with maintainers; [ jagajaga ];
+    maintainers = lib.teams.steam.members ++ [ lib.maintainers.jagajaga ];
     mainProgram = "steam";
   };
 })

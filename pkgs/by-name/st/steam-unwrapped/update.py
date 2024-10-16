@@ -27,5 +27,5 @@ if len(found_versions) == 0:
     sys.exit(1)
 
 found_versions.sort()
-subprocess.run(["nix-update", "--version", found_versions[-1], "steamPackages.steam"])
+subprocess.run(["nix-update", "--version", found_versions[-1], "steam-unwrapped"])
 found_versions[0]
