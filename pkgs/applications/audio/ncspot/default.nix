@@ -1,21 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, ncurses
-, openssl
-, Cocoa
-, withALSA ? false, alsa-lib
-, withClipboard ? true, libxcb, python3
-, withCover ? false, ueberzug
-, withPulseAudio ? true, libpulseaudio
-, withPortAudio ? false, portaudio
-, withMPRIS ? true, withNotify ? true, dbus
-, withCrossterm ? true
-, nix-update-script
-, testers
-, ncspot
+{
+  lib,
+  stdenv,
+  Cocoa,
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  libpulseaudio,
+  libxcb,
+  ncspot,
+  ncurses,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  portaudio,
+  python3,
+  rustPlatform,
+  testers,
+  ueberzug,
+  withALSA ? false,
+  withClipboard ? true,
+  withCover ? false,
+  withCrossterm ? true,
+  withMPRIS ? true,
+  withNotify ? true,
+  withPortAudio ? false,
+  withPulseAudio ? true,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,10 +40,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-JJTnaq0JLWHQxAbDpzDRPi5B+ePlQNlDOAsugPah7j4=";
 
-  nativeBuildInputs = [ pkg-config ]
-    ++ lib.optional withClipboard python3;
+  nativeBuildInputs = [ pkg-config ] ++ lib.optional withClipboard python3;
 
-  buildInputs = [ ncurses ]
+  buildInputs =
+    [ ncurses ]
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withClipboard libxcb
@@ -48,15 +57,16 @@ rustPlatform.buildRustPackage rec {
 
   buildNoDefaultFeatures = true;
 
-  buildFeatures = [ "cursive/pancurses-backend" ]
+  buildFeatures =
+    [ "cursive/pancurses-backend" ]
     ++ lib.optional withALSA "alsa_backend"
     ++ lib.optional withClipboard "share_clipboard"
     ++ lib.optional withCover "cover"
-    ++ lib.optional withPulseAudio "pulseaudio_backend"
-    ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withMPRIS "mpris"
     ++ lib.optional withCrossterm "crossterm_backend"
-    ++ lib.optional withNotify "notify";
+    ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withNotify "notify"
+    ++ lib.optional withPortAudio "portaudio_backend"
+    ++ lib.optional withPulseAudio "pulseaudio_backend";
 
   postInstall = ''
     install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/${pname}.desktop
@@ -64,8 +74,8 @@ rustPlatform.buildRustPackage rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
     tests.version = testers.testVersion { package = ncspot; };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
