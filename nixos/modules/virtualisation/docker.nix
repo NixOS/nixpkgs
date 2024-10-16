@@ -57,7 +57,10 @@ in
           options = {
             live-restore = mkOption {
               type = types.bool;
-              default = true;
+              # Prior to NixOS 24.11, this was set to true by default, while upstream defaulted to false.
+              # Keep the option unset to follow upstream defaults
+              default = versionOlder config.system.stateVersion "24.11";
+              defaultText = literalExpression "versionOlder config.system.stateVersion \"24.11\"";
               description = ''
                 Allow dockerd to be restarted without affecting running container.
                 This option is incompatible with docker swarm.
@@ -68,6 +71,7 @@ in
         default = { };
         example = {
           ipv6 = true;
+          "live-restore" = true;
           "fixed-cidr-v6" = "fd00::/80";
         };
         description = ''
