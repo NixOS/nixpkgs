@@ -42,7 +42,7 @@
   pylint,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
   # , pytest-custom-exit-code
   python-multipart,
   reno,
@@ -167,7 +167,7 @@ buildPythonPackage rec {
       pylint
       pytest
       pytest-asyncio
-      pytest-cov
+      pytest-cov-stub
       # pytest-custom-exit-code
       python-multipart
       reno
