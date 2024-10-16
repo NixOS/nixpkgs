@@ -2,6 +2,7 @@
   lib,
   config,
   newScope,
+  recurseIntoAttrs,
   runCommand,
 }:
 
@@ -112,6 +113,7 @@ let
       mpris = callPackage ./mpris.nix { };
       mpv-cheatsheet = callPackage ./mpv-cheatsheet.nix { };
       mpv-discord = callPackage ./mpv-discord.nix { };
+      mpv-image-viewer = recurseIntoAttrs (callPackage ./mpv-image-viewer.nix { });
       mpv-notify-send = callPackage ./mpv-notify-send.nix { };
       mpv-osc-modern = callPackage ./mpv-osc-modern.nix { };
       mpv-osc-tethys = callPackage ./mpv-osc-tethys.nix { };
