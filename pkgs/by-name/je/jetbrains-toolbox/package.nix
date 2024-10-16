@@ -6,6 +6,8 @@
 , runCommand
 , appimageTools
 , icu
+, genericUpdater
+, writeShellScript
 }:
 let
   pname = "jetbrains-toolbox";
@@ -57,6 +59,13 @@ stdenv.mkDerivation {
 
   # Disabling the tests, this seems to be very difficult to test this app.
   doCheck = false;
+
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "jetbrains-toolbox-versionLister" ''
+      curl -Ls 'https://data.services.jetbrains.com/products?code=TBA&release.type=release' \
+        | jq -r '.[] | .releases | flatten[] | .build'
+    '';
+  };
 
   meta = with lib; {
     description = "Jetbrains Toolbox";
