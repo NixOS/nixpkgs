@@ -8010,6 +8010,8 @@ self: super: with self; {
 
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
 
+  mkdocs-git-committers-plugin-2 = callPackage ../development/python-modules/mkdocs-git-committers-plugin-2 { };
+
   mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
 
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
@@ -8023,6 +8025,8 @@ self: super: with self; {
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
 
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
+
+  mkdocs-material-insiders = callPackage ../development/python-modules/mkdocs-material-insiders { };
 
   mkdocs-mermaid2-plugin = callPackage ../development/python-modules/mkdocs-mermaid2-plugin { };
 
