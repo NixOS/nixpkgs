@@ -189,3 +189,6 @@ ce21e97a1f20dee15da85c084f9d1148d84f853b
 
 # percona: apply nixfmt
 8d14fa2886fec877690c6d28cfcdba4503dbbcea
+
+# nlohmann-json: global name migration
+766678a86bb2a4924449253d8adbf6442b42e969
