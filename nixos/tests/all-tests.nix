@@ -1149,6 +1149,7 @@ in {
   webhook = runTest ./webhook.nix;
   weblate = handleTest ./web-apps/weblate.nix {};
   whisparr = handleTest ./whisparr.nix {};
+  whoogle-search = handleTest ./whoogle-search.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};
