@@ -1,5 +1,6 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -I nixpkgs=./. -i bash -p curl jq gawk libossp_uuid libxml2 nix
+# shellcheck shell=bash
 
 set -euo pipefail
 
@@ -10,7 +11,7 @@ get_version_info() {
     local start_pattern="$2"
     local end_pattern="$3"
 
-    local url="https://versionhistory.googleapis.com/v1/chrome/platforms/${platform}/channels/stable/versions/all/releases?filter=endtime=none,fraction>=0.5&order_by=version%20desc"
+    local url="https://versionhistory.googleapis.com/v1/chrome/platforms/${platform}/channels/stable/versions/all/releases?filter=endtime=none,fraction%3E=0.5&order_by=version%20desc"
     local response
     local version
     local current_version
