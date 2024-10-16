@@ -183,7 +183,6 @@ let
   certToConfig = cert: data: let
     acmeServer = data.server;
     useDns = data.dnsProvider != null;
-    useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = lib.optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
@@ -367,13 +366,11 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        EnvironmentFile = lib.mkIf useDnsOrS3 data.environmentFile;
+        EnvironmentFile = lib.mkIf (data.environmentFile != null) data.environmentFile;
 
-        Environment = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+        Environment = lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles;
 
-        LoadCredential = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
+        LoadCredential = lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles;
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
