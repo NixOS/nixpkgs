@@ -23,9 +23,14 @@
   withCover ? false,
   withCrossterm ? true,
   withMPRIS ? stdenv.hostPlatform.isLinux,
+  withNcurses ? false,
   withNotify ? true,
+  withPancurses ? false,
   withPortAudio ? stdenv.hostPlatform.isDarwin,
   withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  withRodio ? false,
+  withShareSelection ? false,
+  withTermion ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,28 +51,33 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     [ ncurses ]
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
-    ++ lib.optional withALSA alsa-lib
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa
+    ++ lib.optional (withALSA || withRodio) alsa-lib
     ++ lib.optional withClipboard libxcb
     ++ lib.optional withCover ueberzug
-    ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional withNcurses ncurses
+    ++ lib.optional withPortAudio portaudio
+    ++ lib.optional withPulseAudio libpulseaudio;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
   buildNoDefaultFeatures = true;
 
   buildFeatures =
-    [ "cursive/pancurses-backend" ]
-    ++ lib.optional withALSA "alsa_backend"
+    lib.optional withALSA "alsa_backend"
     ++ lib.optional withClipboard "share_clipboard"
     ++ lib.optional withCover "cover"
     ++ lib.optional withCrossterm "crossterm_backend"
     ++ lib.optional withMPRIS "mpris"
+    ++ lib.optional withNcurses "ncurses_backend"
     ++ lib.optional withNotify "notify"
+    ++ lib.optional withPancurses "pancurses_backend"
     ++ lib.optional withPortAudio "portaudio_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend";
+    ++ lib.optional withPulseAudio "pulseaudio_backend"
+    ++ lib.optional withRodio "rodio_backend"
+    ++ lib.optional withShareSelection "share_selection"
+    ++ lib.optional withTermion "termion_backend";
 
   postInstall = ''
     install -D --mode=444 $src/misc/ncspot.desktop $out/share/applications/nscpot.desktop
