@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "criu";
-  version = "3.19";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "checkpoint-restore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S0nxBHfm7tWmW5PhSDhSAgy1uDa0RD5GTNpMDUHKqwY=";
+    hash = "sha256-D16s6pGWHWRLvub7foG3Vbzw2hoU4p1VeHt7ymL5hlw=";
   };
 
   enableParallelBuilding = true;
