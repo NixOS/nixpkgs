@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -27,16 +26,14 @@
 
 buildPythonPackage rec {
   pname = "pycrdt-websocket";
-  version = "0.14.2";
+  version = "0.15.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jupyter-server";
     repo = "pycrdt-websocket";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YsAeEUFxCwu7KA2d83J/rb1IlZTQZZecHJAewh+TqWs=";
+    hash = "sha256-O0GRk81at8bgv+/4au8A55dZK2A28+ghy3sitAAZQBI=";
   };
 
   build-system = [ hatchling ];
