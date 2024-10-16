@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , pkgsBuildBuild
 , pkg-config
 , cmake
@@ -64,6 +65,15 @@ in stdenv.mkDerivation (finalAttrs: {
     rev = "10dc3a8e916d73291269e5e2b82dd22681489aa1";
     hash = "sha256-9DPvcFmhzw6MipQeCQnr35LktW0uxtEL8axMMPXIfWw=";
   };
+  patches = [
+    # glibc-2.40 support
+    # [llvm-exegesis] Use correct rseq struct size #100804
+    # https://github.com/llvm/llvm-project/issues/100791
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project//commit/84837e3cc1cf17ed71580e3ea38299ed2bfaa5f6.patch";
+      hash = "sha256-QKa+kyXjjGXwTQTEpmKZx5yYjOyBX8A8NQoIYUaGcIw=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -92,7 +102,9 @@ in stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  sourceRoot = "${finalAttrs.src.name}/llvm";
+  preConfigure = ''
+    cd llvm
+  '';
 
   cmakeFlags = [
     (lib.cmakeFeature "LLVM_TARGETS_TO_BUILD" (lib.concatStringsSep ";" llvmTargetsToBuild'))
@@ -142,18 +154,18 @@ in stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     # `CMake Error: cannot write to file "/build/source/llvm/build/lib/cmake/mlir/MLIRTargets.cmake": Permission denied`
-    chmod +w -R ../mlir
-    patchShebangs ../mlir/test/mlir-reduce
+    chmod +w -R ./mlir
+    patchShebangs ./mlir/test/mlir-reduce
 
     # FileSystem permissions tests fail with various special bits
-    rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
-    rm unittests/Support/Path.cpp
+    rm llvm/test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
+    rm llvm/unittests/Support/Path.cpp
 
-    substituteInPlace unittests/Support/CMakeLists.txt \
+    substituteInPlace llvm/unittests/Support/CMakeLists.txt \
       --replace "Path.cpp" ""
   '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # Not sure why this fails
-    rm test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
+    rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
   '';
 
   postInstall = ''
