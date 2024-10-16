@@ -7,7 +7,6 @@
 , nodejs
 , pnpm
 , makeDesktopItem
-, xcbuild
 , autoSignDarwinBinariesHook
 , nix-update-script
 }:
@@ -51,7 +50,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild.xcrun
     autoSignDarwinBinariesHook
   ];
 
