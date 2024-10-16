@@ -888,6 +888,7 @@ in
                 "~CAP_SYS_RAWIO"
                 "~CAP_SYS_RESOURCE"
                 "~CAP_SYS_TIME"
+                "~CAP_SYS_TTY_CONFIG"
               ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
