@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "extension-helpers";
-  version = "1.1.1";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "extension-helpers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pYCSLb6uuQ9ZtMZOQH0DxLlfgFv3tgH+AL35IN71cNI=";
+    hash = "sha256-qneulhSYB2gYiCdgoU7Dqg1luLWhVouFVihcKeOA37E=";
   };
 
   build-system = [
