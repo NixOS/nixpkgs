@@ -14,8 +14,6 @@ let
   blacklist =
     lib.optionalString (cfg.blacklist != null)
       "--hostlist-exclude ${pkgs.writeText "zapret-blacklist" (lib.concatStringsSep "\n" cfg.blacklist)}";
-
-  ports = if cfg.httpSupport then "80,443" else "443";
 in
 {
   options.services.zapret = {
@@ -145,9 +143,13 @@ in
 
       # Route system traffic via service for specified ports.
       (lib.mkIf cfg.configureFirewall {
-        networking.firewall.extraCommands = ''
-          iptables -t mangle -I POSTROUTING -p tcp -m multiport --dports ${ports} -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${toString cfg.qnum} --queue-bypass
-        '';
+        networking.firewall.extraCommands =
+          ''
+            iptables -t mangle -I POSTROUTING -p tcp -m multiport --dports 443 -m connbytes --connbytes-dir=original --connbytes-mode=packets --connbytes 1:6 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${toString cfg.qnum} --queue-bypass
+          ''
+          + lib.optionalString (cfg.httpSupport) ''
+            iptables -t mangle -I POSTROUTING -p tcp --dport 80 -m mark ! --mark 0x40000000/0x40000000 -j NFQUEUE --queue-num ${toString cfg.qnum} --queue-bypass
+          '';
       })
     ]
   );
