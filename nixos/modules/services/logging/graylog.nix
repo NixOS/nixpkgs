@@ -35,8 +35,8 @@ in
 
       package = lib.mkOption {
         type = lib.types.package;
-        default = if lib.versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
-        defaultText = lib.literalExpression (if lib.versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
+        default = pkgs.graylog-6_0;
+        defaultText = lib.literalExpression "pkgs.graylog-6_0";
         description = "Graylog package to use.";
       };
 
