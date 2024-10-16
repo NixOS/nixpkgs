@@ -1057,11 +1057,11 @@
     "vendorHash": "sha256-lkooWo0DbpL4zjNQ20TRw+hsHXWZP9u7u95n1WyzTQk="
   },
   "rundeck": {
-    "hash": "sha256-VPkHnSOTnRvvX6+K0L0q5IqSSFCE6VPdg2BaSejFMNc=",
+    "hash": "sha256-PdMesiJh6DwFfgucle8GgWBcJRKFRWJW1oMvKLhVQp0=",
     "homepage": "https://registry.terraform.io/providers/rundeck/rundeck",
     "owner": "rundeck",
     "repo": "terraform-provider-rundeck",
-    "rev": "v0.4.7",
+    "rev": "v0.4.9",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
