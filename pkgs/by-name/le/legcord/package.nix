@@ -37,21 +37,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "armcord";
-  version = "3.3.1";
+  pname = "legcord";
+  version = "1.0.1";
 
   src =
     let
-      base = "https://github.com/ArmCord/ArmCord/releases/download";
+      base = "https://github.com/Legcord/Legcord/releases/download";
     in
       {
         x86_64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord-${version}-linux-amd64.deb";
-          hash = "sha256-BFhgZNBHPERvJY9N4NpnlkGo2M0keencU4H4qlXl9mk=";
+          url = "${base}/v${version}/Legcord-${version}-linux-amd64.deb";
+          hash = "sha256-kZ9dhSJjhYmpZJLbWP8nPP6Lxw+wLe3d9cCahfIomNM=";
         };
         aarch64-linux = fetchurl {
-          url = "${base}/v${version}/ArmCord-${version}-linux-arm64.deb";
-          hash = "sha256-PCODruXQW7iAZLKcNw672fs4OuCqDvMlvzRSNca8Tfo=";
+          url = "${base}/v${version}/Legcord-${version}-linux-arm64.deb";
+          hash = "sha256-Ikyjmlt1F7f6WaYWuAgyzLP3zvQPCvMRZ1D9e79umgM=";
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     chmod -R g-w "$out"
 
     # Wrap the startup command
-    makeBinaryWrapper $out/opt/ArmCord/armcord $out/bin/armcord \
+    makeBinaryWrapper $out/opt/Legcord/legcord $out/bin/legcord \
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=UseOzonePlatform --enable-features=WebRTCPipeWireCapturer }}" \
@@ -122,20 +122,20 @@ stdenv.mkDerivation rec {
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
     # Fix desktop link
-    substituteInPlace $out/share/applications/armcord.desktop \
-      --replace /opt/ArmCord/ $out/bin/
+    substituteInPlace $out/share/applications/legcord.desktop \
+      --replace /opt/Legcord/ $out/bin/
 
     runHook postInstall
   '';
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
-    homepage = "https://armcord.app";
-    downloadPage = "https://github.com/ArmCord/ArmCord";
+    homepage = "https://legcord.app";
+    downloadPage = "https://github.com/Legcord/Legcord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
     maintainers = with maintainers; [ wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
-    mainProgram = "armcord";
+    mainProgram = "legcord";
   };
 }
