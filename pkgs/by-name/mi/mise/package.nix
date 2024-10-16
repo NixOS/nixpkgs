@@ -7,9 +7,10 @@
   stdenv,
   coreutils,
   bash,
+  direnv,
+  git,
   pkg-config,
   openssl,
-  direnv,
   Security,
   SystemConfiguration,
   usage,
@@ -19,22 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.9.0";
+  version = "2024.10.8";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-q515JEpws1UnZm1b8zgGxPvudH846XV+Ct4qKN2mNMQ=";
-
-    # registry is not needed for compilation nor for tests.
-    # contains files with the same name but different case, which cause problems with hash on darwin
-    postFetch = ''
-      rm -rf $out/registry
-    '';
+    hash = "sha256-58y7jx7gmWlccezZXP5hSzrvnq8hlZ1QakF+FMgbwcc=";
   };
 
-  cargoHash = "sha256-jGqaGbue+AEK0YjhHMlm84XBgA20p8Um03TjctjXVz0=";
+  cargoHash = "sha256-m2Eiqyh/rGgwRgRArs3fPWoqzi1EidZd5i66yi4SuFo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -52,27 +47,30 @@ rustPlatform.buildRustPackage rec {
       ./test/data/plugins/**/bin/* \
       ./src/fake_asdf.rs \
       ./src/cli/generate/git_pre_commit.rs \
-      ./src/cli/generate/snapshots/*.snap \
-      ./src/cli/reshim.rs \
-      ./test/cwd/.mise/tasks/filetask
+      ./src/cli/generate/snapshots/*.snap
 
     substituteInPlace ./src/test.rs \
-      --replace-fail '/usr/bin/env bash' '${bash}/bin/bash'
+      --replace-fail '/usr/bin/env bash' '${lib.getExe bash}' \
+      --replace-fail '"git"' '"${lib.getExe git}"'
+
+    substituteInPlace ./src/git.rs \
+      --replace-fail '"git"' '"${lib.getExe git}"'
 
     substituteInPlace ./src/env_diff.rs \
-      --replace-fail '"bash"' '"${bash}/bin/bash"'
+      --replace-fail '"bash"' '"${lib.getExe bash}"'
 
     substituteInPlace ./src/cli/direnv/exec.rs \
-      --replace-fail '"env"' '"${coreutils}/bin/env"' \
-      --replace-fail 'cmd!("direnv"' 'cmd!("${direnv}/bin/direnv"'
+      --replace-fail '"env"' '"${lib.getExe' coreutils "env"}"' \
+      --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
   checkFlags = [
-    # Requires .git directory to be present
-    "--skip=cli::plugins::ls::tests::test_plugin_list_urls"
-    "--skip=cli::generate::git_pre_commit::tests::test_git_pre_commit"
-    "--skip=cli::generate::github_action::tests::test_github_action"
+    # last_modified will always be different in nix
+    "--skip=tera::tests::test_last_modified"
+    # requires https://github.com/rbenv/ruby-build
+    "--skip=plugins::core::ruby::tests::test_list_versions_matching"
   ];
+
   cargoTestFlags = [ "--all-features" ];
   # some tests access the same folders, don't test in parallel to avoid race conditions
   dontUseCargoParallelTests = true;
@@ -81,8 +79,8 @@ rustPlatform.buildRustPackage rec {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-v usage' '-v ${usage}/bin/usage' \
-      --replace-fail 'usage complete-word' '${usage}/bin/usage complete-word'
+      --replace-fail '-v usage' '-v ${lib.getExe usage}' \
+      --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
       --bash ./completions/mise.bash \
