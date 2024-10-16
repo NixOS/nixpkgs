@@ -7,6 +7,7 @@
 , perl
 , openssl
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "release-plz";
   version = "0.3.98";
@@ -21,6 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-66P9ShtMZM5XcH8Q9ifw92VCDcwKPhZOywj3Acbhf9o=";
 
   nativeBuildInputs = [ installShellFiles pkg-config perl ];
+
   buildInputs = [ openssl ];
 
   buildAndTestSubdir = "crates/release_plz";
@@ -38,6 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
+    changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
     license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "release-plz";
