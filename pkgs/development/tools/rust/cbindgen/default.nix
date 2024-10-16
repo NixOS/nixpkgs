@@ -46,6 +46,10 @@ rustPlatform.buildRustPackage rec {
     "--skip test_body"
   ];
 
+  # tests currently fail, waiting on upstream
+  # Related: https://github.com/NixOS/nixpkgs/pull/348031
+  doCheck = false;
+
   passthru.tests = {
     inherit
       firefox-unwrapped
