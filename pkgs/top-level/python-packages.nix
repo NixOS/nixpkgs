@@ -4463,6 +4463,8 @@ self: super: with self; {
 
   fitbit = callPackage ../development/python-modules/fitbit { };
 
+  fitdecode = callPackage ../development/python-modules/fitdecode { };
+
   fivem-api = callPackage ../development/python-modules/fivem-api { };
 
   fixerio = callPackage ../development/python-modules/fixerio { };
@@ -17189,6 +17191,12 @@ self: super: with self; {
 
   vega-datasets = callPackage ../development/python-modules/vega-datasets { };
 
+  vegafusion = callPackage ../development/python-modules/vegafusion { };
+
+  vegafusion-embed = callPackage ../development/python-modules/vegafusion-embed {
+    inherit (pkgs) protobuf;
+  };
+
   venstarcolortouch = callPackage ../development/python-modules/venstarcolortouch { };
 
   venusian = callPackage ../development/python-modules/venusian { };
@@ -17262,6 +17270,10 @@ self: super: with self; {
   viv-utils = callPackage ../development/python-modules/viv-utils { };
 
   vllm = callPackage ../development/python-modules/vllm { };
+
+  vl-convert-python = callPackage ../development/python-modules/vl-convert {
+    inherit (pkgs) protobuf;
+  };
 
   vmprof = callPackage ../development/python-modules/vmprof { };
 
