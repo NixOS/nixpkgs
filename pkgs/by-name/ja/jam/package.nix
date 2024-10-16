@@ -87,6 +87,15 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
       command = "jam -v";
     };
+    tests.os = testers.runCommand {
+      name = "${finalAttrs.finalPackage.name}-os";
+      nativeBuildInputs = [ finalAttrs.finalPackage ];
+      script = ''
+        echo 'echo $(OS) ;' > Jamfile
+        os=$(jam -d0)
+        [[ $os != UNKNOWN* ]] && touch $out
+      '';
+    };
   };
 
   meta = {
