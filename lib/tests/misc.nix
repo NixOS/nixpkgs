@@ -139,7 +139,7 @@ let
 
 in
 
-runTests {
+runTests ({
 
 # CUSTOMIZATION
 
@@ -2467,6 +2467,69 @@ runTests {
     expr = meta.platformMatch { } "x86_64-linux";
     expected = false;
   };
+}
+// (let
+  exampleSystem = lib.systems.elaborate "aarch64-darwin";
+in {
+  test_evalPatternMatch_AND = {
+    expr =
+      with lib.meta.platform.constraints;
+      (AND [ is64bit is32bit ])
+      exampleSystem;
+    expected = false;
+  };
+  test_evalPatternMatch_AND_is_noop = {
+    expr =
+      with lib.meta.platform.constraints;
+      (AND [ is64bit ])
+      exampleSystem;
+    expected = true;
+  };
+  test_evalPatternMatch_OR = {
+    expr =
+      with lib.meta.platform.constraints;
+      (OR [ is64bit is32bit ])
+      exampleSystem;
+    expected = true;
+  };
+  test_evalPatternMatch_OR_is_noop = {
+    expr =
+      with lib.meta.platform.constraints;
+      (OR [ is64bit ])
+      exampleSystem;
+    expected = true;
+  };
+  test_evalPatternMatch_NOT = {
+    expr =
+      with lib.meta.platform.constraints;
+      (NOT is64bit)
+      exampleSystem;
+    expected = false;
+  };
+}) // lib.mapAttrs' (system: expected:
+  lib.nameValuePair "test_evalPatternMatch_nested_combination_${system}" {
+    expr =
+      with lib.meta.platform.constraints;
+      (AND [
+        (NOT is32bit)
+        (OR [
+          isLinux
+          isFreeBSD
+        ])
+      ])
+      (lib.systems.elaborate system);
+    inherit expected;
+  }) {
+    aarch64-darwin = false;
+    aarch64-linux = true;
+    armv7l-linux = false;
+    armv7l-darwin = false;
+    x86_64-linux = true;
+    x86_64-freebsd = true;
+    aarch64-freebsd = true;
+    i686-freebsd = false;
+  }
+// {
 
   testPackagesFromDirectoryRecursive = {
     expr = packagesFromDirectoryRecursive {
@@ -2500,4 +2563,4 @@ runTests {
     };
     expected = "c";
   };
-}
+})

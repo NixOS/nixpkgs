@@ -253,6 +253,8 @@ rec {
     ) platform
   );
 
+  platform = import ./platform-constraints.nix { inherit lib; };
+
   /**
     Check if a package is available on a given platform.
 
