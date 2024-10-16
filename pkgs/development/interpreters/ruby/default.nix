@@ -318,4 +318,9 @@ in {
     cargoHash = "sha256-GeelTMRFIyvz1QS2L+Q3KAnyQy7jc0ejhx3TdEFVEbk=";
   };
 
+  ruby_3_4 = generic {
+    version = rubyVersion "3" "4" "0" "preview2";
+    hash = "sha256-RDzX7FSt5HhryXTOn11J8XKmD47chLWXt/4r0qlLg3E=";
+    cargoHash = "sha256-kdfNY8wVmSRR+cwEDYge/HDPRvdTNKLk/BhgqQeelOg=";
+  };
 }
