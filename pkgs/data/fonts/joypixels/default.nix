@@ -104,6 +104,7 @@ stdenv.mkDerivation rec {
         url = free-license.url;
         appendixUrl = appendix.url;
         free = false;
+        redistributable = true;
       };
     maintainers = with maintainers; [ toonn jtojnar ];
     # Not quite accurate since it's a font, not a program, but clearly
