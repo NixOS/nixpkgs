@@ -41,6 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://scala-lang.org/";
     license = licenses.asl20;
     platforms = platforms.all;
+    mainProgram = "scala";
     maintainers = with maintainers; [
       karolchmist
       virusdave

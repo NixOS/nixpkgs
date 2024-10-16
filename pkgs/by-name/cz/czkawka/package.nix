@@ -17,6 +17,7 @@
   testers,
   wrapGAppsHook4,
   xvfb-run,
+  versionCheckHook,
 }:
 
 let
@@ -26,21 +27,16 @@ let
 
   self = buildRustPackage' {
     pname = "czkawka";
-    version = "7.0.0";
+    version = "8.0.0";
 
     src = fetchFromGitHub {
       owner = "qarmin";
       repo = "czkawka";
-      rev = self.version;
-      hash = "sha256-SOWtLmehh1F8SoDQ+9d7Fyosgzya5ZztCv8IcJZ4J94=";
+      rev = "refs/tags/${self.version}";
+      hash = "sha256-Uxko2TRIjqQvd7n9C+P7oMUrm3YY5j7TVzvijEjDwOM=";
     };
 
-    cargoPatches = [
-      # Updates time and time-macros from Cargo.lock
-      ./0000-time.diff
-    ];
-
-    cargoHash = "sha256-cQv8C0P3xizsvnJODkTMJQA98P4nYSCHFT75isJE6es=";
+    cargoHash = "sha256-DR2JU+QcGWliNoRMjSjJns7FsicpNAX5gTariFuQ/dw=";
 
     nativeBuildInputs = [
       gobject-introspection
@@ -84,6 +80,13 @@ let
       install -Dm444 -t $out/share/icons/hicolor/scalable/apps data/icons/com.github.qarmin.czkawka-symbolic.svg
       install -Dm444 -t $out/share/metainfo data/com.github.qarmin.czkawka.metainfo.xml
     '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgram = "${placeholder "out"}/bin/czkawka_cli";
+    versionCheckProgramArg = [ "--version" ];
+    doInstallCheck = true;
 
     passthru = {
       tests.version = testers.testVersion {

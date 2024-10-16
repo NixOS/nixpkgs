@@ -149,6 +149,7 @@ in
       exec = executableName + " --open-url %U";
       icon = "vs${executableName}";
       startupNotify = true;
+      startupWMClass = shortName;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
       mimeTypes = [ "x-scheme-handler/vs${executableName}" ];
       keywords = [ "vscode" ];

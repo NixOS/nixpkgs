@@ -411,11 +411,14 @@ let
         (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
       ];
 
-      # NOTE The PrivateKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuard = checkUnitConfig "WireGuard" [
+        (assertKeyIsSystemdCredential "PrivateKey")
         (assertOnlyFields [
+          "PrivateKey"
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
@@ -426,12 +429,15 @@ let
         (assertRange "FirewallMark" 1 4294967295)
       ];
 
-      # NOTE The PresharedKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable,let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuardPeer = checkUnitConfigWithLegacyKey "wireguardPeerConfig" "WireGuardPeer" [
+        (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"
           "Endpoint"

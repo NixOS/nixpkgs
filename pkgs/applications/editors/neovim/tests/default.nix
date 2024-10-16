@@ -101,8 +101,18 @@ in
   ### neovim tests
   ##################
   nvim_with_plugins = wrapNeovim2 "-with-plugins" nvimConfNix;
+  nvim_singlelines = wrapNeovim2 "-single-lines" nvimConfSingleLines;
 
-  singlelinesconfig = runTest (wrapNeovim2 "-single-lines" nvimConfSingleLines) ''
+  # test that passthru.initRc hasn't changed
+  passthruInitRc = runTest nvim_singlelines ''
+    INITRC=${pkgs.writeTextFile { name = "initrc"; text = nvim_singlelines.passthru.initRc; }}
+    assertFileContent \
+      $INITRC \
+      "${./init-single-lines.vim}"
+  '';
+
+  # test single line concatenation
+  singlelinesconfig = runTest nvim_singlelines ''
       assertFileContains \
         "$luarcGeneric" \
         "vim.cmd.source \"/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-init.vim"
@@ -127,6 +137,7 @@ in
     viAlias = true;
   };
 
+  # test it still works with vim-plug
   nvim_with_plug = neovim.override {
     extraName = "-with-plug";
     configure.packages.plugins = with pkgs.vimPlugins; {

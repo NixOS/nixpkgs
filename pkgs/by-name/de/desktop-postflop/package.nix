@@ -7,7 +7,7 @@
 , pkg-config
 , gtk3
 , libsoup
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     gtk3
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postInstall = ''

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
+{ lib, stdenv, fetchurl, fetchzip, yasm, perl, cmake, pkg-config, python3
 , enableVmaf ? true, libvmaf
 , gitUpdater
 
@@ -13,15 +13,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libaom";
-  version = "3.9.1";
+  version = "3.10.0";
 
   src = fetchzip {
     url = "https://aomedia.googlesource.com/aom/+archive/v${version}.tar.gz";
-    hash = "sha256-XQ1sekNZDUAiYP/HriYRj4+40PAvE/OiyG9bbrdg63I=";
+    hash = "sha256-7xtIT8zalh1XJfVKWeC/+jAkhOuFHw6Q0+c2YMtDark=";
     stripRoot = false;
   };
 
-  patches = [ ./outputs.patch ];
+  patches = [
+    ./outputs.patch
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # This patch defines `_POSIX_C_SOURCE`, which breaks system headers
+    # on Darwin.
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libaom/files/libaom-3.4.0-posix-c-source-ftello.patch?id=50c7c4021e347ee549164595280cf8a23c960959";
+      hash = "sha256-6+u7GTxZcSNJgN7D+s+XAVwbMnULufkTcQ0s7l+Ydl0=";
+    })
+  ];
 
   nativeBuildInputs = [
     yasm perl cmake pkg-config python3

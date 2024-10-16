@@ -1,15 +1,15 @@
 {
-  "version": "17.2.8",
-  "repo_hash": "172ba8vlaqphyhi6d5r9j3km7krxcis81dzlr5xch4i0apd0yyag",
+  "version": "17.2.9",
+  "repo_hash": "060d5rzbcnhr1fsvbaiirgjm5rjr5c5r6yi601lxvksffyn5hmxw",
   "yarn_hash": "10y540bxwaz355p9r4q34199aibadrd5p4d9ck2y3n6735k0hm74",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v17.2.8-ee",
+  "rev": "v17.2.9-ee",
   "passthru": {
-    "GITALY_SERVER_VERSION": "17.2.8",
-    "GITLAB_PAGES_VERSION": "17.2.8",
+    "GITALY_SERVER_VERSION": "17.2.9",
+    "GITLAB_PAGES_VERSION": "17.2.9",
     "GITLAB_SHELL_VERSION": "14.37.0",
     "GITLAB_ELASTICSEARCH_INDEXER_VERSION": "5.2.0",
-    "GITLAB_WORKHORSE_VERSION": "17.2.8"
+    "GITLAB_WORKHORSE_VERSION": "17.2.9"
   }
 }

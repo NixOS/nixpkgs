@@ -33,12 +33,12 @@ assert enableGoldDefault -> enableGold;
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
-  version = "2.42";
+  version = "2.43.1";
 
   srcs = {
     normal = fetchurl {
       url = "mirror://gnu/binutils/binutils-${version}.tar.bz2";
-      hash = "sha256-qlSFDr2lBkxyzU7C2bBWwpQlKZFIY1DZqXqypt/frxI=";
+      hash = "sha256-vsqsXSleA3WHtjpC+tV/49nXuD9HjrJLZ/nuxdDxhy8=";
     };
     vc4-none = fetchFromGitHub {
       owner = "itszor";

@@ -2886,6 +2886,8 @@ self: super: with self; {
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
+  databricks-sdk = callPackage ../development/python-modules/databricks-sdk { };
+
   dataclass-factory = callPackage ../development/python-modules/dataclass-factory { };
 
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
@@ -3734,6 +3736,8 @@ self: super: with self; {
 
   dremel3dpy = callPackage ../development/python-modules/dremel3dpy { };
 
+  drf-extra-fields = callPackage ../development/python-modules/drf-extra-fields { };
+
   drf-jwt = callPackage ../development/python-modules/drf-jwt { };
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
@@ -4575,6 +4579,8 @@ self: super: with self; {
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
 
+  flask-simpleldap = callPackage ../development/python-modules/flask-simpleldap { };
+
   flask-sock = callPackage ../development/python-modules/flask-sock { };
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
@@ -5387,7 +5393,9 @@ self: super: with self; {
 
   graphrag = callPackage ../development/python-modules/graphrag { };
 
-  graph-tool = callPackage ../development/python-modules/graph-tool { };
+  graph-tool = callPackage ../development/python-modules/graph-tool {
+    inherit (pkgs) cgal;
+  };
 
   graphtage = callPackage ../development/python-modules/graphtage { };
 
@@ -5492,7 +5500,9 @@ self: super: with self; {
     qemu = pkgs.qemu;
   };
 
-  gudhi = callPackage ../development/python-modules/gudhi { };
+  gudhi = callPackage ../development/python-modules/gudhi {
+    inherit (pkgs) cgal;
+  };
 
   guidance = callPackage ../development/python-modules/guidance { };
 
@@ -5709,8 +5719,6 @@ self: super: with self; {
   hjson = callPackage ../development/python-modules/hjson { };
 
   hkavr = callPackage ../development/python-modules/hkavr { };
-
-  hkdf = callPackage ../development/python-modules/hkdf { };
 
   hledger-utils = callPackage ../development/python-modules/hledger-utils { };
 
@@ -5988,7 +5996,7 @@ self: super: with self; {
   ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   ifcopenshell = callPackage ../development/python-modules/ifcopenshell {
-    inherit (pkgs) libxml2;
+    inherit (pkgs) cgal libxml2;
   };
 
   ignite = callPackage ../development/python-modules/ignite { };
@@ -6326,6 +6334,8 @@ self: super: with self; {
   jaconv = callPackage ../development/python-modules/jaconv { };
 
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
+
+  jalali-core = callPackage ../development/python-modules/jalali-core { };
 
   jamo = callPackage ../development/python-modules/jamo { };
 
@@ -8859,6 +8869,8 @@ self: super: with self; {
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+  netbox-documents = callPackage ../development/python-modules/netbox-documents { };
+
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
@@ -9014,8 +9026,6 @@ self: super: with self; {
   norfair = callPackage ../development/python-modules/norfair { };
 
   normality = callPackage ../development/python-modules/normality { };
-
-  nose = callPackage ../development/python-modules/nose { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
@@ -9389,6 +9399,10 @@ self: super: with self; {
 
   opentelemetry-instrumentation-asgi = callPackage ../development/python-modules/opentelemetry-instrumentation-asgi { };
 
+  opentelemetry-instrumentation-celery = callPackage ../development/python-modules/opentelemetry-instrumentation-celery { };
+
+  opentelemetry-instrumentation-botocore = callPackage ../development/python-modules/opentelemetry-instrumentation-botocore { };
+
   opentelemetry-instrumentation-dbapi = callPackage ../development/python-modules/opentelemetry-instrumentation-dbapi { };
 
   opentelemetry-instrumentation-django = callPackage ../development/python-modules/opentelemetry-instrumentation-django { };
@@ -9399,11 +9413,17 @@ self: super: with self; {
 
   opentelemetry-instrumentation-grpc = callPackage ../development/python-modules/opentelemetry-instrumentation-grpc { };
 
+  opentelemetry-instrumentation-logging = callPackage ../development/python-modules/opentelemetry-instrumentation-logging { };
+
   opentelemetry-instrumentation-psycopg2 = callPackage ../development/python-modules/opentelemetry-instrumentation-psycopg2 { };
 
   opentelemetry-instrumentation-requests = callPackage ../development/python-modules/opentelemetry-instrumentation-requests { };
 
+  opentelemetry-instrumentation-redis = callPackage ../development/python-modules/opentelemetry-instrumentation-redis { };
+
   opentelemetry-instrumentation-wsgi = callPackage ../development/python-modules/opentelemetry-instrumentation-wsgi { };
+
+  opentelemetry-propagator-aws-xray = callPackage ../development/python-modules/opentelemetry-propagator-aws-xray { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
 
@@ -10628,8 +10648,6 @@ self: super: with self; {
 
   preggy = callPackage ../development/python-modules/preggy { };
 
-  premailer = callPackage ../development/python-modules/premailer { };
-
   preprocess-cancellation = callPackage ../development/python-modules/preprocess-cancellation { };
 
   preshed = callPackage ../development/python-modules/preshed { };
@@ -10695,14 +10713,14 @@ self: super: with self; {
 
   # Protobuf 4.x
   protobuf4 = callPackage ../development/python-modules/protobuf/4.nix {
-    protobuf = pkgs.protobuf;
+    protobuf = pkgs.protobuf_25;
   };
 
   # Protobuf 5.x
   protobuf5 = callPackage ../development/python-modules/protobuf/default.nix { };
 
   # If a protobuf upgrade causes many Python packages to fail, please pin it here to the previous version.
-  protobuf = protobuf4;
+  protobuf = protobuf5;
 
   protobuf3-to-dict = callPackage ../development/python-modules/protobuf3-to-dict { };
 
@@ -11605,6 +11623,8 @@ self: super: with self; {
 
   pylion = callPackage ../development/python-modules/pylion { };
 
+  pylitejet = callPackage ../development/python-modules/pylitejet { };
+
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
@@ -11752,6 +11772,7 @@ self: super: with self; {
   };
 
   pymupdf = callPackage ../development/python-modules/pymupdf { };
+  pymupdf-fonts = callPackage ../development/python-modules/pymupdf-fonts { };
 
   pymvglive = callPackage ../development/python-modules/pymvglive { };
 
@@ -13939,6 +13960,8 @@ self: super: with self; {
 
   sagemaker-core = callPackage ../development/python-modules/sagemaker-core { };
 
+  sagemaker-mlflow = callPackage ../development/python-modules/sagemaker-mlflow { };
+
   salib = callPackage ../development/python-modules/salib { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
@@ -14636,7 +14659,18 @@ self: super: with self; {
     libsoxr = pkgs.soxr;
   };
 
-  spacy = callPackage ../development/python-modules/spacy { };
+  spacy = callPackage ../development/python-modules/spacy {
+    # fix error: ‘_PyCFrame’ has no member named ‘use_tracing’
+    # see: https://aur.archlinux.org/packages/python-spacy
+    cython_0 = cython_0.overridePythonAttrs (old: rec {
+      version = "0.29.37";
+      src = pkgs.fetchPypi {
+        pname = "Cython";
+        inherit version;
+        hash = "sha256-+BPUpt2Ure5dT/JmGR0dlb9tQWSk+sxTVCLAIbJQTPs=";
+      };
+    });
+  };
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
 
@@ -14853,6 +14887,8 @@ self: super: with self; {
   spidev = callPackage ../development/python-modules/spidev { };
 
   splinter = callPackage ../development/python-modules/splinter { };
+
+  spotifyaio = callPackage ../development/python-modules/spotifyaio { };
 
   spotipy = callPackage ../development/python-modules/spotipy { };
 
@@ -15383,7 +15419,7 @@ self: super: with self; {
       ).override {
         protobuf = protobufTF;
       };
-      protobuf-pythonTF = self.protobuf.override {
+      protobuf-pythonTF = self.protobuf4.override {
         protobuf = protobufTF;
       };
       grpcioTF = self.grpcio.override {

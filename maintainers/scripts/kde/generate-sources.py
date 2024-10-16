@@ -23,7 +23,8 @@ mkKdeDerivation {
 '''.strip())
 
 ROOT_TEMPLATE = jinja2.Template('''
-{callPackage}: {
+{ callPackage }:
+{
   {%- for p in packages %}
   {{ p }} = callPackage ./{{ p }} { };
   {%- endfor %}

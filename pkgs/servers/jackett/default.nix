@@ -43,6 +43,7 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "API Support for your favorite torrent trackers";
+    mainProgram = "jackett";
     homepage = "https://github.com/Jackett/Jackett/";
     changelog = "https://github.com/Jackett/Jackett/releases/tag/v${version}";
     license = licenses.gpl2Only;

@@ -1084,6 +1084,24 @@ let
         '';
     });
 
+    sf = old.sf.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    terra = old.terra.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
+    vapour = old.vapour.overrideAttrs (attrs: {
+      configureFlags = [
+        "--with-proj-lib=${pkgs.lib.getLib pkgs.proj}/lib"
+      ];
+    });
+
     rzmq = old.rzmq.overrideAttrs (attrs: {
       preConfigure = "patchShebangs configure";
     });

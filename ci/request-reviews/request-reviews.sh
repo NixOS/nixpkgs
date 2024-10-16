@@ -60,10 +60,8 @@ git -C "$tmp/nixpkgs.git" remote add fork https://github.com/"$prRepo".git
 git -C "$tmp/nixpkgs.git" config remote.fork.partialclonefilter tree:0
 git -C "$tmp/nixpkgs.git" config remote.fork.promisor true
 
-# This should not conflict with any refs in Nixpkgs
-headRef=refs/remotes/fork/pr
-# Only fetch into a remote ref, because the local ref namespace is used by Nixpkgs, don't want any conflicts
-git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch":"$headRef"
+git -C "$tmp/nixpkgs.git" fetch --no-tags fork "$prBranch"
+headRef=$(git -C "$tmp/nixpkgs.git" rev-parse refs/remotes/fork/"$prBranch")
 
 log "Checking correctness of the base branch"
 if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRepo" "$baseBranch" "$prRepo" "$prBranch" | tee "$tmp/invalid-base-error" >&2; then
@@ -80,7 +78,7 @@ if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRep
 fi
 
 log "Getting code owners to request reviews from"
-"$SCRIPT_DIR"/get-reviewers.sh "$tmp/nixpkgs.git" "$baseBranch" "$headRef" "$ownersFile" "$prAuthor" > "$tmp/reviewers.json"
+"$SCRIPT_DIR"/get-reviewers.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseRepo" "$baseBranch" "$headRef" "$prNumber" "$prAuthor" > "$tmp/reviewers.json"
 
 log "Requesting reviews from: $(<"$tmp/reviewers.json")"
 

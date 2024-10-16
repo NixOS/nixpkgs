@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "debian-goodies";
-  version = "0.88.1";
+  version = "0.88.2";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "debian-goodies";
     rev = "debian/${version}";
-    sha256 = "sha256-g1xeWhCkC7HEHHOJpcZ6JFA9jmavJE0lUX1Cmp5A0QQ=";
+    sha256 = "sha256-KPPRxYmCEYwlUAR29tc8w4rerXpswO/rbpEjXPoDV4Q=";
   };
 
   postPatch = ''

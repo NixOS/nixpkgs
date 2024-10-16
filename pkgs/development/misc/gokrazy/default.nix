@@ -1,19 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "gokrazy";
-  version = "unstable-2023-08-12";
+  version = "0-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "gokrazy";
     repo = "tools";
-    rev = "23cde3b0d858497a63c21e93ad30859bf197995f";
-    hash = "sha256-oqtkC04TaOkcXkGAZzATCBA0XnFsx7bSGP9ODyhgAxQ=";
+    rev = "6bec690fe5cdabca7aeec52257118d4ff7d7b060";
+    hash = "sha256-EJ0qEsXhBssWUrzyhtL0So0Yaxzr843QNwoE0tppeuk=";
   };
 
-  vendorHash = "sha256-rIIMqYMgLNCMYEH+44v79i8yGbHDmUY21X3h1E2jP9Q=";
+  vendorHash = "sha256-B/46VGCbLE/6LgW2wfKoHI9cyveE6hE/AfAZzIG5J+g=";
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
   subPackages = [ "cmd/gok" ];
 

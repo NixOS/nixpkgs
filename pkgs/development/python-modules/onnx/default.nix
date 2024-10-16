@@ -18,6 +18,7 @@
   google-re2,
   pillow,
   protobuf,
+  setuptools,
 }:
 
 let
@@ -25,64 +26,62 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.16.2";
-  format = "setuptools";
+  version = "1.17.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "onnx";
+    repo = "onnx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JmxnsHRrzj2QzPz3Yndw0MmgZJ8MDYxHjuQ7PQkQsDg=";
+    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
   };
 
   build-system = [
     cmake
-    pybind11
+    protobuf
+    setuptools
+  ];
+
+  nativeBuildInputs = [
+    protobuf_21 # for protoc
   ];
 
   buildInputs = [
     abseil-cpp
-    protobuf
-    google-re2
+    protobuf_21
     gtestStatic
-    pillow
+    pybind11
   ];
 
   dependencies = [
-    protobuf_21
     protobuf
     numpy
     typing-extensions
   ];
 
   nativeCheckInputs = [
+    google-re2
     nbval
     parameterized
+    pillow
     pytestCheckHook
     tabulate
   ];
 
   postPatch = ''
+    rm -r third_party
+
     chmod +x tools/protoc-gen-mypy.sh.in
     patchShebangs tools/protoc-gen-mypy.sh.in
-
-    substituteInPlace setup.py \
-      --replace 'setup_requires.append("pytest-runner")' ""
-
-    # prevent from fetching & building own gtest
-    substituteInPlace CMakeLists.txt \
-      --replace 'include(googletest)' ""
-    substituteInPlace cmake/unittest.cmake \
-      --replace 'googletest)' ')'
   '';
 
   preConfigure = ''
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
     export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
-    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
+    export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a"
     export ONNX_BUILD_TESTS=1
   '';
 
@@ -107,7 +106,7 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "onnx/test"
-    "onnx/examples"
+    "examples"
   ];
 
   disabledTests =
@@ -135,11 +134,6 @@ buildPythonPackage rec {
       "test_ops_tested"
     ];
 
-  disabledTestPaths = [
-    # Unexpected output fields from running code: {'stderr'}
-    "onnx/examples/np_array_tensorproto.ipynb"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
   postCheck = ''
@@ -150,6 +144,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "onnx" ];
 
   meta = with lib; {
+    changelog = "https://github.com/onnx/onnx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Open Neural Network Exchange";
     homepage = "https://onnx.ai";
     license = licenses.asl20;

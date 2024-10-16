@@ -5,10 +5,10 @@
 {
   firefox = buildMozillaMach rec {
     pname = "firefox";
-    version = "131.0.2";
+    version = "131.0.3";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "fb1a1179a8c62de975c93e1ac6f058cb5492e955bbb7ac2d4b83cdd14ba17bdb2450078bd6f626124b14542f3fda9514bea476aaa34ff4f5a2bee6b1625ec963";
+      sha512 = "3aa96db839f7a45e34c43b5e7e3333e1100ca11545ad26a8e42987fbc72df5ae7ebebe7dfc8c4e856d2bb4676c0516914a07c001f6047799f314146a3329c0ce";
     };
 
     extraPatches = [
@@ -122,34 +122,4 @@
       versionSuffix = "esr";
     };
   };
-
-  firefox-esr-115 = (buildMozillaMach rec {
-    pname = "firefox-esr-115";
-    version = "115.16.1esr";
-    applicationName = "Mozilla Firefox ESR";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "eca42b3494fdab73e67d5c8e8b76520729adb75b5cad85172953dba56b225b0f05dcfea70fe8cc3e1bf1cd3d7103159cc20095d5480bb1b0e6d3ec90588988a8";
-    };
-
-    meta = {
-      changelog = "https://www.mozilla.org/en-US/firefox/${lib.removeSuffix "esr" version}/releasenotes/";
-      description = "Web browser built from Firefox Extended Support Release source tree";
-      homepage = "http://www.mozilla.com/en-US/firefox/";
-      maintainers = with lib.maintainers; [ hexa ];
-      platforms = lib.platforms.unix;
-      badPlatforms = lib.platforms.darwin;
-      broken = stdenv.buildPlatform.is32bit; # since Firefox 60, build on 32-bit platforms fails with "out of memory".
-                                             # not in `badPlatforms` because cross-compilation on 64-bit machine might work.
-      license = lib.licenses.mpl20;
-      mainProgram = "firefox";
-    };
-    tests = [ nixosTests.firefox-esr-115 ];
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-115-unwrapped";
-      versionPrefix = "115";
-      versionSuffix = "esr";
-    };
-  })
-   .override { python3 = python311; };
 }

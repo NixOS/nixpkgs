@@ -2,17 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "inferno";
-  version = "0.11.20";
+  version = "0.11.21";
 
   src = fetchFromGitHub {
     owner = "jonhoo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-+A27B50hRAQvk0QrcCP0QQe6zJkVUIX7qggL8kjJmQY=";
+    hash = "sha256-/tFbizGsgrmeTfd3W6BhVOX8BvOuakWqReQ1vQ0lrjw=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-XmxB18IQh2Bvbez6BowoV+P0qghmOcHpC0ZH4PgsIZo=";
+  cargoHash = "sha256-BoRlKD34c9RZz9fYMgxTbsbU9XL724PG+CVh9G/tl0M=";
 
   # skip flaky tests
   checkFlags = [

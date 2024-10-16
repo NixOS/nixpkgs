@@ -15,7 +15,6 @@
   tqdm,
 
   # tests
-  nose,
   pytestCheckHook,
 }:
 
@@ -44,8 +43,9 @@ buildPythonPackage rec {
     tqdm
   ];
 
+  # Tests currently depend on nose; see
+  # <https://github.com/openvax/mhcflurry/pull/244>.
   nativeCheckInputs = [
-    nose
     pytestCheckHook
   ];
 

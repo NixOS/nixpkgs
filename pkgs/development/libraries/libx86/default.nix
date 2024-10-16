@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     sed -e s@/usr@@ -i Makefile
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   meta = with lib; {
     description = "Real-mode x86 code emulator";
     maintainers = with maintainers; [ raskin ];

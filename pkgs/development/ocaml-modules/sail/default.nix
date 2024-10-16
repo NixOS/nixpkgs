@@ -52,12 +52,12 @@ buildDunePackage rec {
   # This doesnt work in this case, as sail includes multiple packages in the same source tree
   buildPhase = ''
     runHook preBuild
-    dune build --release ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune build --release ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postBuild
   '';
   checkPhase = ''
     runHook preCheck
-    dune runtest ''${enableParallelBuild:+-j $NIX_BUILD_CORES}
+    dune runtest ''${enableParallelBuilding:+-j $NIX_BUILD_CORES}
     runHook postCheck
   '';
   installPhase = ''

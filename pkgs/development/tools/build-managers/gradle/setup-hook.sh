@@ -29,7 +29,9 @@ gradleConfigureHook() {
 }
 
 gradle() {
-    command gradle $gradleFlags "${gradleFlagsArray[@]}" "$@"
+    local flagsArray=()
+    concatTo flagsArray gradleFlags gradleFlagsArray
+    command gradle "${flagsArray[@]}" "$@"
 }
 
 gradleBuildPhase() {

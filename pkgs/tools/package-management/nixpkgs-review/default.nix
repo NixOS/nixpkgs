@@ -9,6 +9,7 @@
   cacert,
   git,
   nix,
+  versionCheckHook,
 
   withAutocomplete ? true,
   withSandboxSupport ? false,
@@ -17,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.10.5";
+  version = "2.12.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
     rev = "refs/tags/${version}";
-    hash = "sha256-dRTKE8gkV298ZmMokyy3Ufer/Lp1GQYdEhIBoLhloEQ=";
+    hash = "sha256-yNdBqL3tceuoUHx8/j2y5ZTq1zeVDAm37RZtlCbC6rg=";
   };
 
   build-system = [
@@ -57,8 +58,6 @@ python3Packages.buildPythonApplication rec {
       "--unset PYTHONPATH"
     ];
 
-  doCheck = false;
-
   postInstall = lib.optionalString withAutocomplete ''
     for cmd in nix-review nixpkgs-review; do
       installShellCompletion --cmd $cmd \
@@ -68,13 +67,18 @@ python3Packages.buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
     changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "nixpkgs-review";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       mic92
     ];

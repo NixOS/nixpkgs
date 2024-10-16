@@ -79,11 +79,10 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/xxx-musl-fixes.patch";
       includes = [
-        "src/basic/cgroup-util.c"
         "src/basic/missing_prctl.h"
         "src/libelogind/sd-journal/journal-file.h"
       ];
-      hash = "sha256-kY+B1t87E/TtWa83r0VoiojhRrrB667ZhUAHtHE7m28=";
+      hash = "sha256-JYPB9AKbQpVgid5BhwBTvcebE5rxDFRMYhKRNS8KPTc=";
     })
     (fetchurl {
       url = "https://github.com/chimera-linux/cports/raw/49d65fe38be815b9918a15ac2d2ff2b123fc559a/main/elogind/patches/gshadow.patch";
@@ -111,7 +110,8 @@ stdenv.mkDerivation rec {
       url = "https://git.openembedded.org/openembedded-core/plain/meta/recipes-core/systemd/systemd/0021-shared-Do-not-use-malloc_info-on-musl.patch?id=6bc5e3f3cd882c81c972dbd27aacc1ce00e5e59a";
       hash = "sha256-ZyOCmM5LcwJ7mHiZr0lQjV4G+XMxjhsUm7g7L3OzDDM=";
     })
-    ./0001-Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
+    ./Add-missing-musl_missing.h-includes-for-basename.patch
+    ./Remove-outdated-musl-hack-in-rlimit_nofile_safe.patch
   ];
 
   # Inspired by the systemd `preConfigure`.

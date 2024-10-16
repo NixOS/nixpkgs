@@ -149,3 +149,104 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 | Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
 
 In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with [`autoAddDriverRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=autoAddDriverRunpath). Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
+
+## Running Docker or Podman containers with CUDA support {#running-docker-or-podman-containers-with-cuda-support}
+
+It is possible to run Docker or Podman containers with CUDA support. The recommended mechanism to perform this task is to use the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).
+
+The NVIDIA Container Toolkit can be enabled in NixOS like follows:
+
+```nix
+{
+  hardware.nvidia-container-toolkit.enable = true;
+}
+```
+
+This will automatically enable a service that generates a CDI specification (located at `/var/run/cdi/nvidia-container-toolkit.json`) based on the auto-detected hardware of your machine. You can check this service by running:
+
+```ShellSession
+$ systemctl status nvidia-container-toolkit-cdi-generator.service
+```
+
+::: {.note}
+Depending on what settings you had already enabled in your system, you might need to restart your machine in order for the NVIDIA Container Toolkit to generate a valid CDI specification for your machine.
+:::
+
+Once that a valid CDI specification has been generated for your machine on boot time, both Podman and Docker (> 25) will use this spec if you provide them with the `--device` flag:
+
+```ShellSession
+$ podman run --rm -it --device=nvidia.com/gpu=all ubuntu:latest nvidia-smi -L
+GPU 0: NVIDIA GeForce RTX 4090 (UUID: <REDACTED>)
+GPU 1: NVIDIA GeForce RTX 2080 SUPER (UUID: <REDACTED>)
+```
+
+```ShellSession
+$ docker run --rm -it --device=nvidia.com/gpu=all ubuntu:latest nvidia-smi -L
+GPU 0: NVIDIA GeForce RTX 4090 (UUID: <REDACTED>)
+GPU 1: NVIDIA GeForce RTX 2080 SUPER (UUID: <REDACTED>)
+```
+
+You can check all the identifiers that have been generated for your auto-detected hardware by checking the contents of the `/var/run/cdi/nvidia-container-toolkit.json` file:
+
+```ShellSession
+$ nix run nixpkgs#jq -- -r '.devices[].name' < /var/run/cdi/nvidia-container-toolkit.json
+0
+1
+all
+```
+
+### Specifying what devices to expose to the container {#specifying-what-devices-to-expose-to-the-container}
+
+You can choose what devices are exposed to your containers by using the identifier on the generated CDI specification. Like follows:
+
+```ShellSession
+$ podman run --rm -it --device=nvidia.com/gpu=0 ubuntu:latest nvidia-smi -L
+GPU 0: NVIDIA GeForce RTX 4090 (UUID: <REDACTED>)
+```
+
+You can repeat the `--device` argument as many times as necessary if you have multiple GPU's and you want to pick up which ones to expose to the container:
+
+```ShellSession
+$ podman run --rm -it --device=nvidia.com/gpu=0 --device=nvidia.com/gpu=1 ubuntu:latest nvidia-smi -L
+GPU 0: NVIDIA GeForce RTX 4090 (UUID: <REDACTED>)
+GPU 1: NVIDIA GeForce RTX 2080 SUPER (UUID: <REDACTED>)
+```
+
+::: {.note}
+By default, the NVIDIA Container Toolkit will use the GPU index to identify specific devices. You can change the way to identify what devices to expose by using the `hardware.nvidia-container-toolkit.device-name-strategy` NixOS attribute.
+:::
+
+### Using docker-compose {#using-docker-compose}
+
+It's possible to expose GPU's to a `docker-compose` environment as well. With a `docker-compose.yaml` file like follows:
+
+```yaml
+services:
+  some-service:
+    image: ubuntu:latest
+    command: sleep infinity
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: cdi
+            device_ids:
+            - nvidia.com/gpu=all
+```
+
+In the same manner, you can pick specific devices that will be exposed to the container:
+
+```yaml
+services:
+  some-service:
+    image: ubuntu:latest
+    command: sleep infinity
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: cdi
+            device_ids:
+            - nvidia.com/gpu=0
+            - nvidia.com/gpu=1
+```

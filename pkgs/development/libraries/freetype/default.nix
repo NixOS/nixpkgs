@@ -38,11 +38,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
-  version = "2.13.2";
+  version = "2.13.3";
 
   src = let inherit (finalAttrs) pname version; in fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-EpkcTlXFBt1/m3ZZM+Yv0r4uBtQhUF15UKEy5PG7SE0=";
+    sha256 = "sha256-BVA1BmbUJ8dNrrhdWse7NTrLpfdpVjlZlTEanG8GMok=";
   };
 
   propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype

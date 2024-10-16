@@ -59,5 +59,7 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = [ maintainers.andersk ];
+    # Requires LFS64 APIs. 202401 and later are fine.
+    broken = stdenv.hostPlatform.isMusl;
   };
 }

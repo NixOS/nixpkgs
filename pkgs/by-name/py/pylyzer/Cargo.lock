@@ -99,9 +99,9 @@ checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
 
 [[package]]
 name = "cc"
-version = "1.1.27"
+version = "1.1.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "677207f6eaec43fcfd092a718c847fc38aa261d0e19b8ef6797e0ccbe789e738"
+checksum = "b16803a61b81d9eabb7eae2588776c4c1e584b738ede45fdbb4c972cec1e9945"
 dependencies = [
  "shlex",
 ]
@@ -145,23 +145,25 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "els"
-version = "0.1.58-nightly.4"
+version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "82ca64c7e007a801f3c026026d4f7c65193ca2ccfab19018cf47b0946ed1de86"
+checksum = "ab76dea4883a3e75fab38a6cd6c761346fec5909850c557fcbd683f7bd30b54e"
 dependencies = [
  "erg_common",
  "erg_compiler",
+ "libc",
  "lsp-types",
  "molc",
  "serde",
  "serde_json",
+ "windows",
 ]
 
 [[package]]
 name = "erg_common"
-version = "0.6.46-nightly.4"
+version = "0.6.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c91d7308be743f27d0bcb6778d85d76bfad86fc54ae53ae5fab06b37bd54fd74"
+checksum = "9cef7281a06474cd12e7eb653d164777023440b13a28c8834124770c4b8f65fa"
 dependencies = [
  "backtrace-on-stack-overflow",
  "erg_proc_macros",
@@ -172,9 +174,9 @@ dependencies = [
 
 [[package]]
 name = "erg_compiler"
-version = "0.6.46-nightly.4"
+version = "0.6.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2ca9d5eb0b29b60d7ac8d7d639add33a4b331b35e4739775f0bd0f1e94be764"
+checksum = "0bf1c1e83a364fafbcec194a27affd02bf4538740c34c1617c45d960d4a3e33c"
 dependencies = [
  "erg_common",
  "erg_parser",
@@ -182,9 +184,9 @@ dependencies = [
 
 [[package]]
 name = "erg_parser"
-version = "0.6.46-nightly.4"
+version = "0.6.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0d0f70495239bd721afb1be7ba33c9146cbd7d4d578bd65fcb86e52561224e0"
+checksum = "9c65037a0c9b890d8f810f7a827b897fba6ae950b34258b1450c9ab1e310813c"
 dependencies = [
  "erg_common",
  "erg_proc_macros",
@@ -193,9 +195,9 @@ dependencies = [
 
 [[package]]
 name = "erg_proc_macros"
-version = "0.6.46-nightly.4"
+version = "0.6.46"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "61073a06b84b2e9c36b3645494102780936b560ba80f8c466cf2cdc374740f3e"
+checksum = "29d7235082b39bf55cdec52da8c010c2d2d9ff7d41dde051158b7815f560f321"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -552,16 +554,16 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.86"
+version = "1.0.87"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e719e8df665df0d1c8fbfd238015744736151d4445ec0836b8e628aae103b77"
+checksum = "b3e4daa0dcf6feba26f985457cdf104d4b4256fc5a09547140f3631bb076b19a"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "py2erg"
-version = "0.0.65"
+version = "0.0.66"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -571,7 +573,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer"
-version = "0.0.65"
+version = "0.0.66"
 dependencies = [
  "els",
  "erg_common",
@@ -581,7 +583,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer_core"
-version = "0.0.65"
+version = "0.0.66"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -592,7 +594,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer_wasm"
-version = "0.0.65"
+version = "0.0.66"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -1005,9 +1007,9 @@ checksum = "9c8d87e72b64a3b4db28d11ce29237c246188f4f51057d65a7eab63b7987e423"
 
 [[package]]
 name = "wasm-bindgen"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a82edfc16a6c469f5f44dc7b571814045d60404b55a0ee849f9bcfa2e63dd9b5"
+checksum = "128d1e363af62632b8eb57219c8fd7877144af57558fb2ef0368d0087bddeb2e"
 dependencies = [
  "cfg-if",
  "once_cell",
@@ -1016,9 +1018,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-backend"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9de396da306523044d3302746f1208fa71d7532227f15e347e2d93e4145dd77b"
+checksum = "cb6dd4d3ca0ddffd1dd1c9c04f94b868c37ff5fac97c30b97cff2d74fce3a358"
 dependencies = [
  "bumpalo",
  "log",
@@ -1031,9 +1033,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "585c4c91a46b072c92e908d99cb1dcdf95c5218eeb6f3bf1efa991ee7a68cccf"
+checksum = "e79384be7f8f5a9dd5d7167216f022090cf1f9ec128e6e6a482a2cb5c5422c56"
 dependencies = [
  "quote",
  "wasm-bindgen-macro-support",
@@ -1041,9 +1043,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-macro-support"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "afc340c74d9005395cf9dd098506f7f44e38f2b4a21c6aaacf9a105ea5e1e836"
+checksum = "26c6ab57572f7a24a4985830b120de1594465e5d500f24afe89e16b4e833ef68"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1054,9 +1056,9 @@ dependencies = [
 
 [[package]]
 name = "wasm-bindgen-shared"
-version = "0.2.93"
+version = "0.2.95"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c62a0a307cb4a311d3a07867860911ca130c3494e8c2719593806c08bc5d0484"
+checksum = "65fc09f10666a9f147042251e0dda9c18f166ff7de300607007e96bdebc1068d"
 
 [[package]]
 name = "windows"

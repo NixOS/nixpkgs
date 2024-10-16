@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prowler";
-  version = "3.16.11";
+  version = "4.3.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "prowler-cloud";
     repo = "prowler";
     rev = "refs/tags/${version}";
-    hash = "sha256-cBqPD5lOhaMXh4OKo7+mERU3YjRU1NiRzSbnKFR6+1I=";
+    hash = "sha256-hzkG0cHNR1t2/8OflRvF44rCl4UeMTq1Vw8sRdcl/WE=";
   };
 
   pythonRelaxDeps = true;
@@ -44,13 +44,19 @@ python3.pkgs.buildPythonApplication rec {
     boto3
     botocore
     colorama
+    dash
+    dash-bootstrap-components
     detect-secrets
     google-api-python-client
     google-auth-httplib2
     jsonschema
+    kubernetes
     msgraph-sdk
     msrestazure
-    pydantic_1
+    numpy
+    pandas
+    py-ocsf-models
+    pydantic
     pytz
     schema
     shodan

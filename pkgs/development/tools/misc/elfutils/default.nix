@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchpatch, pkg-config, musl-fts
 , musl-obstack, m4, zlib, zstd, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs
 , argp-standalone
-, enableDebuginfod ? true, sqlite, curl, libmicrohttpd, libarchive
+, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform libarchive, sqlite, curl, libmicrohttpd, libarchive
 , gitUpdater, autoreconfHook
 }:
 
@@ -77,6 +77,10 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     (lib.enableFeature enableDebuginfod "libdebuginfod")
     (lib.enableFeature enableDebuginfod "debuginfod")
+
+    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101766
+    # Versioned symbols are nice to have, but we can do without.
+    (lib.enableFeature (!stdenv.hostPlatform.isMicroBlaze) "symbol-versioning")
   ] ++ lib.optional (stdenv.targetPlatform.useLLVM or false) "--disable-demangler"
     ++ lib.optionals stdenv.cc.isClang [
       "CFLAGS=-Wno-unused-private-field"

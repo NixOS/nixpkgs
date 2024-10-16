@@ -58,7 +58,7 @@ in {
         install -D -d -m 750 /var/lib/shorewall6
         install -D -d -m 755 /var/lock/subsys
         touch                /var/log/shorewall6.log
-        chown 750            /var/log/shorewall6.log
+        chmod 750            /var/log/shorewall6.log
       '';
     };
     environment = {

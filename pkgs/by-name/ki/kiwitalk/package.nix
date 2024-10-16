@@ -8,7 +8,7 @@
 , desktop-file-utils
 , openssl
 , libayatana-appindicator
-, webkitgtk
+, webkitgtk_4_0
 , pkg-config
 , pnpm
 , nodejs
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     openssl
     libayatana-appindicator
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postInstall = lib.optionalString stdenv.isLinux ''

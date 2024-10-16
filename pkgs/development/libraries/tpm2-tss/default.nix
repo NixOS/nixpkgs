@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
+, cmocka, uthash, swtpm, iproute2, procps, which
 , libuuid
 }:
 let
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka which openssl procps_pkg iproute2 swtpm
   ];
 
   strictDeps = true;

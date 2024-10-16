@@ -2492,14 +2492,14 @@ buildLuarocksPackage {
 lz-n = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "lz.n";
-  version = "2.8.0-1";
+  version = "2.8.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/lz.n-2.8.0-1.rockspec";
-    sha256 = "0mkplfgsnlsc1xjcxxx349bi0h28rgri46hb514xicaqi48jvd8q";
+    url    = "mirror://luarocks/lz.n-2.8.1-1.rockspec";
+    sha256 = "0i3iwzzsm66fgy9cak8b6hq36cfhywqdngwzxdyj9k03bpzhdiyc";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neorocks/lz.n/archive/v2.8.0.zip";
-    sha256 = "18p7zwns44b29pkm3iwh0wsdx1227ja1vww6g13m7gcsvn0h2pgw";
+    url    = "https://github.com/nvim-neorocks/lz.n/archive/v2.8.1.zip";
+    sha256 = "1qwzxl8lzf6gh66zhfbi7q6wav00vnvai0sz8w7aiix7q1jrsl1q";
   };
 
   disabled = luaOlder "5.1";

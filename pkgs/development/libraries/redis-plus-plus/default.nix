@@ -8,13 +8,13 @@ assert enableShared || enableStatic;
 
 stdenv.mkDerivation rec {
   pname = "redis-plus-plus";
-  version = "1.3.12";
+  version = "1.3.13";
 
   src = fetchFromGitHub {
     owner = "sewenew";
     repo = "redis-plus-plus";
     rev = version;
-    sha256 = "sha256-RI7lLvRmS5BglvwRQ8OzSpYIyaKkf/DKrJ3fn1mWYfs=";
+    sha256 = "sha256-bZxs1qnVAkh0BO0CyP1zL/+K3NZYmFy9ryg1QcRLcmg=";
   };
 
   patches = [

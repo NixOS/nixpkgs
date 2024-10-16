@@ -11,6 +11,12 @@ import ./make-test-python.nix ({ pkgs, ... }:
       tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
     };
 
+    services.github-runners.test-disabled = {
+      enable = false;
+      url = "https://github.com/yaxitech";
+      tokenFile = builtins.toFile "github-runner.token" "not-so-secret";
+    };
+
     systemd.services.dummy-github-com = {
       wantedBy = [ "multi-user.target" ];
       before = [ "github-runner-test.service" ];
@@ -33,5 +39,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
     assert "Self-hosted runner registration" in out, "did not read runner registration header"
 
     machine.wait_until_succeeds("test -f /tmp/registration-connect")
+
+    machine.fail("systemctl list-unit-files | grep test-disabled")
   '';
 })

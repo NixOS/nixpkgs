@@ -8,14 +8,14 @@ assert enablePython -> swig != null && python3 != null;
 
 stdenv.mkDerivation (rec {
   pname = "libselinux";
-  version = "3.6";
+  version = "3.7";
   inherit (libsepol) se_url;
 
   outputs = [ "bin" "out" "dev" "man" ] ++ lib.optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${version}/libselinux-${version}.tar.gz";
-    hash = "sha256-uk4O80snDnZypeXxtSP+K+qzpAuzPZOJ9K06hyjyG1I=";
+    hash = "sha256-6gP0LROk+VdXmX26jPCyYyH6xdLxZEGLTMhWqS0rF70=";
   };
 
   patches = [
@@ -79,11 +79,6 @@ stdenv.mkDerivation (rec {
     "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
     "PYTHON_SETUP_ARGS=--no-build-isolation"
   ];
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace src/procattr.c \
-      --replace "#include <unistd.h>" ""
-  '';
 
   preInstall = lib.optionalString enablePython ''
     mkdir -p $py/${python3.sitePackages}/selinux

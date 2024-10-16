@@ -72,6 +72,7 @@
           AdvSendAdvert on;
           AdvManagedFlag on;
           AdvOtherConfigFlag on;
+          RDNSS 2001:db8::1 {};
 
           prefix fd00:1234:5678:${toString n}::/64 {
             AdvAutonomous off;

@@ -27,7 +27,7 @@
 }:
 
 let
-  # submodules
+  # submodules; revs are taken from monero repo's `/external` at the given monero version tag.
   supercop = fetchFromGitHub {
     owner = "monero-project";
     repo = "supercop";
@@ -37,12 +37,11 @@ let
   trezor-common = fetchFromGitHub {
     owner = "trezor";
     repo = "trezor-common";
-    rev = "bc28c316d05bf1e9ebfe3d7df1ab25831d98d168";
-    hash = "sha256-F1Hf1WwHqXMd/5OWrdkpomszACTozDuC7DQXW3p6248=";
+    rev = "bff7fdfe436c727982cc553bdfb29a9021b423b0";
+    hash = "sha256-VNypeEz9AV0ts8X3vINwYMOgO8VpNmyUPC4iY3OOuZI=";
   };
 
 in
-
 stdenv.mkDerivation rec {
   pname = "monero-cli";
   version = "0.18.3.4";
@@ -111,14 +110,28 @@ stdenv.mkDerivation rec {
       "-DCMAKE_CXX_FLAGS=-fpermissive"
     ];
 
-  outputs = [ "out" "source" ];
+  outputs = [
+    "out"
+    "source"
+  ];
 
   meta = {
     description = "Private, secure, untraceable currency";
     homepage = "https://getmonero.org/";
     license = lib.licenses.bsd3;
-    platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ rnhmjoj ];
+
+    platforms = with lib.platforms; linux;
+
+    # macOS/ARM has a working `monerod` (at least), but `monero-wallet-cli`
+    # segfaults on start after entering the wallet password, when built in release mode.
+    # Building the same revision in debug mode to root-cause the above problem doesn't work
+    # because of https://github.com/monero-project/monero/issues/9486
+    badPlatforms = [ "aarch64-darwin" ];
+
+    maintainers = with lib.maintainers; [
+      pmw
+      rnhmjoj
+    ];
     mainProgram = "monero-wallet-cli";
   };
 }

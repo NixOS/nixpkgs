@@ -175,7 +175,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     vulkan-headers
     vulkan-loader
-  ];
+  ] ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
 
   buildInputs = lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
     at-spi2-core
@@ -186,7 +186,6 @@ stdenv.mkDerivation rec {
     CoreBluetooth
   ]
   ++ lib.optional withGtk3 gtk3
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
   ++ lib.optional (libmysqlclient != null && !stdenv.hostPlatform.isMinGW) libmysqlclient
   ++ lib.optional (postgresql != null && lib.meta.availableOn stdenv.hostPlatform postgresql) postgresql;
 

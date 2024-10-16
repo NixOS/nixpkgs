@@ -6,6 +6,7 @@
   buildNpmPackage,
   nodejs_18,
   ffmpeg-full,
+  nunicode,
   util-linux,
   python3,
   getopt,
@@ -45,8 +46,7 @@ let
     inherit
       stdenv
       ffmpeg-full
-      pname
-      nodejs
+      nunicode
       getopt
       ;
   };

@@ -34,7 +34,7 @@ with lib;
             if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
                 mkdir -p /root/.ssh
-                chown 0700 /root/.ssh
+                chmod 0700 /root/.ssh
                 if [ -s /etc/ec2-metadata/public-keys-0-openssh-key ]; then
                     (umask 177; cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys)
                     echo "new key added to authorized_keys"
@@ -47,7 +47,7 @@ with lib;
             userData=/etc/ec2-metadata/user-data
 
             mkdir -p /etc/ssh
-            chown 0755 /etc/ssh
+            chmod 0755 /etc/ssh
 
             if [ -s "$userData" ]; then
               key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' $userData)"
@@ -90,4 +90,6 @@ with lib;
       };
 
   };
+
+  meta.maintainers =  with maintainers; [ arianvp ];
 }

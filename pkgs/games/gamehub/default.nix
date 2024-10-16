@@ -13,7 +13,7 @@
 , libsoup
 , json-glib
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 , libmanette
 , libXtst
 , wrapGAppsHook3
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     libsoup
     libXtst
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   meta = with lib; {

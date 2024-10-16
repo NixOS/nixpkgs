@@ -84,7 +84,7 @@ buildPythonPackage rec {
     pytestcachePhase() {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
-    preDistPhases+=" pytestcachePhase"
+    appendToVar preDistPhases pytestcachePhase
 
     # pytest generates it's own bytecode files to improve assertion messages.
     # These files similar to cpython's bytecode files but are never laoded
@@ -97,7 +97,7 @@ buildPythonPackage rec {
         #    https://github.com/pytest-dev/pytest/blob/7.2.1/src/_pytest/assertion/rewrite.py#L51-L53
         find $out -name "*-pytest-*.py[co]" -delete
     }
-    preDistPhases+=" pytestRemoveBytecodePhase"
+    appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
   pythonImportsCheck = [ "pytest" ];

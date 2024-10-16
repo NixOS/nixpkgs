@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "labelbox";
-  version = "5.1.0";
+  version = "5.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "Labelbox";
     repo = "labelbox-python";
     rev = "refs/tags/v.${version}";
-    hash = "sha256-M55cwT7BrY+8m9ec+2bKDCxGkHJp/c50Gzib4sEg7Bk=";
+    hash = "sha256-vfhlzkCTm1fhvCpzwAaXWPyXE8/2Yx63fTVHl5CWon4=";
   };
 
   sourceRoot = "${src.name}/libs/labelbox";

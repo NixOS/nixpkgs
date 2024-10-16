@@ -1,5 +1,5 @@
 { makeScopeWithSplicing', generateSplicesForMkScope
-, stdenv, buildFHSEnv, pkgsi686Linux, mesa-demos
+, stdenv
 }:
 
 let
@@ -10,21 +10,8 @@ let
                 else if stdenv.hostPlatform.system == "i686-linux" then "i386"
                 else throw "Unsupported platform: ${stdenv.hostPlatform.system}";
 
-    steam-runtime = callPackage ./runtime.nix { };
-    steam-runtime-wrapped = callPackage ./runtime-wrapped.nix { };
     steam = callPackage ./steam.nix { };
-    steam-fhsenv = callPackage ./fhsenv.nix {
-      mesa-demos-i686 =
-        if self.steamArch == "amd64"
-        then pkgsi686Linux.mesa-demos
-        else mesa-demos;
-      steam-runtime-wrapped-i686 =
-        if self.steamArch == "amd64"
-        then pkgsi686Linux.steamPackages.steam-runtime-wrapped
-        else null;
-      inherit buildFHSEnv;
-    };
-    steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
+    steam-fhsenv = callPackage ./fhsenv.nix {};
 
     # This has to exist so Hydra tries to build all of Steam's dependencies.
     # FIXME: Maybe we should expose it as something more generic?

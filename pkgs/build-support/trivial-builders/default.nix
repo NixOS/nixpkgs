@@ -595,7 +595,7 @@ rec {
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
-      # hooks go in nativeBuildInput so these will be nativeBuildInput
+      # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
     , depsTargetTargetPropagated ? [ ]

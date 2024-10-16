@@ -44,6 +44,9 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-cIwCNYXbg7l6z9OAkMAGJ783QI/nCOyrhLPURDcDv+Y=";
   };
 
+  # https://github.com/WeblateOrg/weblate/commit/1cf2a423b20fcd2dde18a43277311334e38208e7
+  pythonRelaxDeps = [ "rapidfuzz" ];
+
   patches = [
     # FIXME This shouldn't be necessary and probably has to do with some dependency mismatch.
     ./cache.lock.patch

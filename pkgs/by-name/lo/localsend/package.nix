@@ -39,6 +39,11 @@ let
 
     buildInputs = [ libayatana-appindicator ];
 
+    postUnpack = ''
+      substituteInPlace $sourceRoot/linux/my_application.cc \
+        --replace-fail "gtk_widget_realize(GTK_WIDGET(window))" "gtk_widget_show(GTK_WIDGET(window))"
+    '';
+
     postInstall = ''
       for s in 32 128 256 512; do
         d=$out/share/icons/hicolor/''${s}x''${s}/apps

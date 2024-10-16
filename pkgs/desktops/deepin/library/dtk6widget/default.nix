@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   doxygen,
@@ -25,6 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
+    (fetchpatch {
+      name = "fix-build-on-qt-6.8.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6widget/-/raw/c4ac094715daa4ec319dc4d55bbca9d818845f82/qt-6.8.patch";
+      hash = "sha256-XEgtAV0mF1+C26wCaukjuv4WNbP4ISGgXt/eav7h9ko=";
+    })
   ];
 
   postPatch = ''

@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dinit";
-  version = "0.19.0";
+  version = "0.19.1";
 
   src = fetchFromGitHub {
     owner = "davmac314";
     repo = "dinit";
     rev = "v${version}";
-    hash = "sha256-ApB0pEFSyawNASF/rqRmhT4FLofZzYmNdNmG2FGpnnk=";
+    hash = "sha256-z5qfC+aUwSK7UJ2RcyNHcUAUYXKbMrWmqmcn7fJVLD8=";
   };
 
   postPatch = ''

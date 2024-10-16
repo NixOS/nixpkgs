@@ -5,6 +5,7 @@
 , writeShellScript
 , glibc
 , pkgsi686Linux
+, runCommandCC
 , coreutils
 , bubblewrap
 }:
@@ -98,29 +99,30 @@ let
     ];
   in map (path: "/etc/${path}") files;
 
-  # Create this on the fly instead of linking from /nix
-  # The container might have to modify it and re-run ldconfig if there are
-  # issues running some binary with LD_LIBRARY_PATH
-  createLdConfCache = ''
-    cat > /etc/ld.so.conf <<EOF
-    /lib
-    /lib/x86_64-linux-gnu
-    /lib64
-    /usr/lib
-    /usr/lib/x86_64-linux-gnu
-    /usr/lib64
-    /lib/i386-linux-gnu
-    /lib32
-    /usr/lib/i386-linux-gnu
-    /usr/lib32
-    /run/opengl-driver/lib
-    /run/opengl-driver-32/lib
-    EOF
-    ldconfig &> /dev/null
+  # Here's the problem case:
+  # - we need to run bash to run the init script
+  # - LD_PRELOAD may be set to another dynamic library, requiring us to discover its dependencies
+  # - oops! ldconfig is part of the init script, and it hasn't run yet
+  # - everything explodes
+  #
+  # In particular, this happens with fhsenvs in fhsenvs, e.g. when running
+  # a wrapped game from Steam.
+  #
+  # So, instead of doing that, we build a tiny static (important!) shim
+  # that executes ldconfig in a completely clean environment to generate
+  # the initial cache, and then execs into the "real" init, which is the
+  # first time we see anything dynamically linked at all.
+  #
+  # Also, the real init is placed strategically at /init, so we don't
+  # have to recompile this every time.
+  containerInit = runCommandCC "container-init" {
+    buildInputs = [ stdenv.cc.libc.static or null ];
+  } ''
+    $CXX -static -s -o $out ${./container-init.cc}
   '';
-  init = run: writeShellScript "${name}-init" ''
+
+  realInit = run: writeShellScript "${name}-init" ''
     source /etc/profile
-    ${createLdConfCache}
     exec ${run} "$@"
   '';
 
@@ -253,6 +255,7 @@ let
       --symlink /etc/ld.so.cache ${glibc}/etc/ld.so.cache \
       --ro-bind ${glibc}/etc/rpc ${glibc}/etc/rpc \
       --remount-ro ${glibc}/etc \
+      --symlink ${realInit runScript} /init \
   '' + optionalString fhsenv.isMultiBuild (indentLines ''
       --tmpfs ${pkgsi686Linux.glibc}/etc \
       --symlink /etc/ld.so.conf ${pkgsi686Linux.glibc}/etc/ld.so.conf \
@@ -265,7 +268,7 @@ let
       "''${auto_mounts[@]}"
       "''${x11_args[@]}"
       ${concatStringsSep "\n  " extraBwrapArgs}
-      ${init runScript} ${initArgs}
+      ${containerInit} ${initArgs}
     )
     exec "''${cmd[@]}"
   '';

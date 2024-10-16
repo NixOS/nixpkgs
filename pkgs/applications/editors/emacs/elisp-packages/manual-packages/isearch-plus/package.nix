@@ -17,8 +17,6 @@ melpaBuild {
     hash = "sha256-h/jkIWjkLFbtBp9F+lhA3CulYy2XaeloLmexR0CDm3E=";
   };
 
-  ignoreCompilationError = false;
-
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {

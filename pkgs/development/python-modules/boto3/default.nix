@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "boto";
     repo = "boto3";
     rev = "refs/tags/${version}";
-    hash = "sha256-fiUguOzNF9T3CcGD1mYl2b5QFbvBG8wNOd3Or2NR66E=";
+    hash = "sha256-4WP5E8LuuxWZi8DK8yOpvyy6isSfB4eFcbctkTEd3As=";
   };
 
   nativeBuildInputs = [

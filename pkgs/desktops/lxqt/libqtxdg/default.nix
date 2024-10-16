@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     }."${version}";
   };
 
+  patches = lib.optionals (lib.versionAtLeast version "4") [ ./qt68.patch ];
+
   nativeBuildInputs = [
     cmake
     lxqt-build-tools

@@ -22,7 +22,7 @@ cargoSetupPostUnpackHook() {
         mkdir .cargo
     fi
 
-    config="$cargoDepsCopy/.cargo/config";
+    config="$cargoDepsCopy/.cargo/config.toml"
     if [[ ! -e $config ]]; then
       config=@defaultConfig@
     fi;
@@ -30,9 +30,9 @@ cargoSetupPostUnpackHook() {
     tmp_config=$(mktemp)
     substitute $config $tmp_config \
       --subst-var-by vendor "$cargoDepsCopy"
-    cat ${tmp_config} >> .cargo/config
+    cat ${tmp_config} >> .cargo/config.toml
 
-    cat >> .cargo/config <<'EOF'
+    cat >> .cargo/config.toml <<'EOF'
     @cargoConfig@
 EOF
 

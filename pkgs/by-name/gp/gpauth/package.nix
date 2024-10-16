@@ -6,7 +6,7 @@
   openssl,
   pkg-config,
   perl,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libsoup
     openssl
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   meta = with lib; {

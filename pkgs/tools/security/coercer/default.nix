@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "coercer";
   version = "2.4.3";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "p0dalirius";
@@ -15,22 +16,16 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-WeaKToKYIB+jjTNIQvAUQQNb25TsNWALYZwIZuBjkPE=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRelaxDeps = [ "impacket" ];
 
-  pythonRelaxDeps = [
-    "impacket"
-  ];
+  build-system = with python3.pkgs; [ poetry-core ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     impacket
     xlsxwriter
   ];
 
-  pythonImportsCheck = [
-    "coercer"
-  ];
+  pythonImportsCheck = [ "coercer" ];
 
   # this file runs into issues on case-insensitive filesystems
   # ValueError: Both <...>/coercer and <...>/coercer.py exist
@@ -40,9 +35,10 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Tool to automatically coerce a Windows server";
-    mainProgram = "coercer";
     homepage = "https://github.com/p0dalirius/Coercer";
-    license = with licenses; [ gpl2Only ];
+    changelog = "https://github.com/p0dalirius/Coercer/releases/tag/${version}";
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "coercer";
   };
 }

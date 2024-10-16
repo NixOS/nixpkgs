@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "napari-npe2";
-  version = "0.7.2-unstable-2023-10-20";
+  version = "0.7.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,19 +27,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napari";
     repo = "npe2";
-    rev = "9d29e4d6dbbec75c2d36273647efd9ddfb59ded0";
-    hash = "sha256-JLu/5pXijPdpKY2z2rREtSKPiP33Yy4viegbxUiQg7Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HjMf5J1n5NKqtunRQ7cqZiTZMTNmcq5j++O03Sxwvqw=";
   };
 
-  # fix this in the next release
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = "0.7.2";
-
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     appdirs
     build
     magicgui
@@ -59,9 +56,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Plugin system for napari (the image visualizer)";
-    mainProgram = "npe2";
     homepage = "https://github.com/napari/npe2";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SomeoneSerge ];
+    mainProgram = "npe2";
   };
 }

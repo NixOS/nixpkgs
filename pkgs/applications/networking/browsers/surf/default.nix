@@ -1,6 +1,6 @@
 { lib, stdenv, fetchgit
 , pkg-config, wrapGAppsHook3
-, glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk
+, glib, gcr, glib-networking, gsettings-desktop-schemas, gtk, libsoup, webkitgtk_4_0
 , xorg, dmenu, findutils, gnused, coreutils, gst_all_1
 , patches ? null
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     gtk
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ] ++ (with gst_all_1; [
     # Audio & video support for webkitgtk WebView
     gstreamer
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://surf.suckless.org";
     license = licenses.mit;
-    platforms = webkitgtk.meta.platforms;
+    platforms = webkitgtk_4_0.meta.platforms;
     maintainers = with maintainers; [ joachifm ];
   };
 }

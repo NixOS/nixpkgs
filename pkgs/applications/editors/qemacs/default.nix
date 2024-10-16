@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qemacs";
-  version = "6.1.1b";
+  version = "6.3.2";
 
   src = fetchFromGitHub {
     owner = "qemacs";
     repo = "qemacs";
-    rev = "06b3d373bbcc52b51ccb438bf3cab38a49492ff0";
-    hash = "sha256-Z4BbA8W3bYdw+cHgI24r55OP1Olr3GwKLlfRxjy45i8=";
+    rev = "0e90c181078f3d85d0d44d985d541184223668e1";
+    hash = "sha256-3kq89CoUi9ocR0q2SqYF8S/xNgBpInC4f2d/dJg/nEM=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://bellard.org/qemacs/";
     description = "Very small but powerful UNIX editor";
-    license = licenses.lgpl2Only;
+    license = licenses.mit;
     maintainers = with maintainers; [ iblech ];
   };
 }

@@ -109,18 +109,21 @@ rec {
       singleIniAtom = nullOr (oneOf [ bool int float str ]) // {
         description = "INI atom (null, bool, int, float or string)";
       };
-      iniAtom = { listsAsDuplicateKeys, listToValue }:
+      iniAtom = { listsAsDuplicateKeys, listToValue, atomsCoercedToLists }:
+        let
+          singleIniAtomOr = if atomsCoercedToLists then coercedTo singleIniAtom lib.singleton else either singleIniAtom;
+        in
         if listsAsDuplicateKeys then
-          coercedTo singleIniAtom lib.singleton (listOf singleIniAtom) // {
+          singleIniAtomOr (listOf singleIniAtom) // {
             description = singleIniAtom.description + " or a list of them for duplicate keys";
           }
         else if listToValue != null then
-          coercedTo singleIniAtom lib.singleton (nonEmptyListOf singleIniAtom) // {
+          singleIniAtomOr (nonEmptyListOf singleIniAtom) // {
             description = singleIniAtom.description + " or a non-empty list of them";
           }
         else
           singleIniAtom;
-      iniSection = { listsAsDuplicateKeys, listToValue }@args:
+      iniSection = { listsAsDuplicateKeys, listToValue, atomsCoercedToLists }@args:
         attrsOf (iniAtom args) // {
           description = "section of an INI file (attrs of " + (iniAtom args).description + ")";
         };
@@ -133,18 +136,26 @@ rec {
         # Alternative to listsAsDuplicateKeys, converts list to non-list
         # listToValue :: [IniAtom] -> IniAtom
         listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
         ...
         }@args:
         assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+        in
         {
 
-        type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
+        type = lib.types.attrsOf (
+          iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; }
+        );
 
         generate = name: value:
           lib.pipe value
           [
             (lib.mapAttrs (_: maybeToList listToValue))
-            (lib.generators.toINI (removeAttrs args ["listToValue"]))
+            (lib.generators.toINI (removeAttrs args ["listToValue" "atomsCoercedToLists"]))
             (pkgs.writeText name)
           ];
       };
@@ -155,26 +166,34 @@ rec {
         # Alternative to listsAsDuplicateKeys, converts list to non-list
         # listToValue :: [IniAtom] -> IniAtom
         listToValue ? null,
+        # Merge multiple instances of the same key into a list
+        atomsCoercedToLists ? null,
         ...
         }@args:
         assert listsAsDuplicateKeys -> listToValue == null;
+        assert atomsCoercedToLists != null -> (listsAsDuplicateKeys || listToValue != null);
+        let
+          atomsCoercedToLists' = if atomsCoercedToLists == null then false else atomsCoercedToLists;
+        in
         {
           type = lib.types.submodule {
             options = {
               sections = lib.mkOption rec {
-                type = lib.types.attrsOf (iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; });
+                type = lib.types.attrsOf (
+                  iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; }
+                );
                 default = {};
                 description = type.description;
               };
               globalSection = lib.mkOption rec {
-                type = iniSection { listsAsDuplicateKeys = listsAsDuplicateKeys; listToValue = listToValue; };
+                type = iniSection { inherit listsAsDuplicateKeys listToValue; atomsCoercedToLists = atomsCoercedToLists'; };
                 default = {};
                 description = "global " + type.description;
               };
             };
           };
           generate = name: { sections ? {}, globalSection ? {}, ... }:
-            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue"])
+            pkgs.writeText name (lib.generators.toINIWithGlobalSection (removeAttrs args ["listToValue" "atomsCoercedToLists"])
             {
               globalSection = maybeToList listToValue globalSection;
               sections = lib.mapAttrs (_: maybeToList listToValue) sections;
@@ -186,6 +205,7 @@ rec {
           atom = iniAtom {
             listsAsDuplicateKeys = listsAsDuplicateKeys;
             listToValue = null;
+            atomsCoercedToLists = false;
           };
         in attrsOf (attrsOf (either atom (attrsOf atom)));
 

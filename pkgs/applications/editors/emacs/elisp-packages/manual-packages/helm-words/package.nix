@@ -22,8 +22,6 @@ melpaBuild {
     helm
   ];
 
-  ignoreCompilationError = false;
-
   meta = {
     homepage = "https://github.com/emacsmirror/helm-words";
     description = "Helm extension for looking up words in dictionaries and thesauri";

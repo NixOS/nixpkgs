@@ -16,7 +16,7 @@
   tetgenSupport ? true,
   tetgen,
   ffmpegSupport ? true,
-  ffmpeg_7,
+  ffmpeg,
   dicomSupport ? false,
   dcmtk,
   withModelRepo ? true,
@@ -75,7 +75,7 @@ stdenv'.mkDerivation (finalAttrs: {
       libssh
     ]
     ++ lib.optional tetgenSupport tetgen
-    ++ lib.optional ffmpegSupport ffmpeg_7
+    ++ lib.optional ffmpegSupport ffmpeg
     ++ lib.optional dicomSupport dcmtk;
 
   meta = {

@@ -2,7 +2,7 @@
 
 let
   pname = "ecdsautils";
-  version = "0.4.1";
+  version = "0.4.2";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     owner = "freifunk-gluon";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-dv0guQTmot5UO1GkMgzvD6uJFyum5kV89LI3xWS1DZA=";
+    sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
   nativeBuildInputs = with pkgs; [ cmake pkg-config doxygen ];

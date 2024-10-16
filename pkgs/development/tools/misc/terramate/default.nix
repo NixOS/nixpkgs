@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "terramate";
-  version = "0.10.6";
+  version = "0.10.8";
 
   src = fetchFromGitHub {
     owner = "terramate-io";
     repo = "terramate";
     rev = "v${version}";
-    hash = "sha256-6IG6wIKz13yBR+LZYkabfckUomIEcjpGbHZ7HCvGs7M=";
+    hash = "sha256-fT1yuFFHI88wUXKguWZD+PHU4j3w5eda7kzCDn+Gg+o=";
   };
 
   vendorHash = "sha256-kjzpXOoyTwjpYLBqDuB6Eup5Yzgej2U+HUo4z8V+cEI=";
@@ -30,6 +30,6 @@ buildGoModule rec {
     homepage = "https://github.com/terramate-io/terramate";
     changelog = "https://github.com/terramate-io/terramate/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya asininemonkey ];
   };
 }

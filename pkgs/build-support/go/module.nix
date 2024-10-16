@@ -1,56 +1,62 @@
 { go, cacert, git, lib, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
+  # The source used to build the derivation.
 , src
+  # Native build inputs used for the derivation.
 , nativeBuildInputs ? [ ]
 , passthru ? { }
 , patches ? [ ]
 
-  # A function to override the goModules derivation
+  # A function to override the `goModules` derivation.
 , overrideModAttrs ? (finalAttrs: previousAttrs: { })
 
-  # path to go.mod and go.sum directory
+  # Directory to the `go.mod` and `go.sum` relative to the `src`.
 , modRoot ? "./"
 
-  # vendorHash is the SRI hash of the vendored dependencies
-  #
-  # if vendorHash is null, then we won't fetch any dependencies and
-  # rely on the vendor folder within the source.
+  # The SRI hash of the vendored dependencies.
+  # If `vendorHash` is `null`, no dependencies are fetched and
+  # the build relies on the vendor folder within the source.
 , vendorHash ? throw (
     if args'?vendorSha256 then
       "buildGoModule: Expect vendorHash instead of vendorSha256"
     else
       "buildGoModule: vendorHash is missing"
   )
+
   # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+
   # Whether to fetch (go mod download) and proxy the vendor directory.
   # This is useful if your code depends on c code and go mod tidy does not
   # include the needed sources to build or if any dependency has case-insensitive
   # conflicts which will produce platform dependant `vendorHash` checksums.
 , proxyVendor ? false
 
-  # We want parallel builds by default
+  # We want parallel builds by default.
 , enableParallelBuilding ? true
 
   # Do not enable this without good reason
-  # IE: programs coupled with the compiler
+  # IE: programs coupled with the compiler.
 , allowGoReference ? false
 
+  # Go env. variable to enable CGO.
 , CGO_ENABLED ? go.CGO_ENABLED
 
+  # Meta data for the final derivation.
 , meta ? { }
 
-  # Not needed with buildGoModule
+  # Not needed with `buildGoModule`.
 , goPackagePath ? ""
 
+  # Go linker flags.
 , ldflags ? [ ]
-
+  # Go build flags.
 , GOFLAGS ? [ ]
 
-  # needed for buildFlags{,Array} warning
-, buildFlags ? ""
-, buildFlagsArray ? ""
+  # Needed for buildFlags{,Array} warning
+, buildFlags ? "" # deprecated
+, buildFlagsArray ? "" # deprecated
 
 , ...
 }@args':
@@ -79,10 +85,10 @@ in
     inherit (go) GOOS GOARCH;
     inherit GO111MODULE GOTOOLCHAIN;
 
-    # The following inheritence behavior is not trivial to expect, and some may
+    # The following inheritance behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
     # out in the wild. In anycase, it's documented in:
-    # doc/languages-frameworks/go.section.md
+    # doc/languages-frameworks/go.section.md.
     prePatch = finalAttrs.prePatch or "";
     patches = finalAttrs.patches or [ ];
     patchFlags = finalAttrs.patchFlags or [ ];
@@ -160,8 +166,8 @@ in
 
     outputHashMode = "recursive";
     outputHash = finalAttrs.vendorHash;
-    # Handle empty vendorHash; avoid
-    # error: empty hash requires explicit hash algorithm
+    # Handle empty `vendorHash`; avoid error:
+    # empty hash requires explicit hash algorithm.
     outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
     # in case an overlay clears passthru by accident, don't fail evaluation
   }).overrideAttrs (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
@@ -323,7 +329,7 @@ in
     } // passthru;
 
     meta = {
-      # Add default meta information
+      # Add default meta information.
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
   }

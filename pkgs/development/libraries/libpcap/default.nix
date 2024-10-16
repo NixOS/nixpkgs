@@ -23,11 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libpcap";
-  version = "1.10.4";
+  version = "1.10.5";
 
   src = fetchurl {
     url = "https://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    hash = "sha256-7RmgOD+tcuOtQ1/SOdfNgNZJFrhyaVUBWdIORxYOvl8=";
+    hash = "sha256-N87ZChmjAqfzLkWCJKAMNlwReQXCzTWsVEtogKgUiPA=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libnl ]
@@ -53,6 +53,8 @@ stdenv.mkDerivation rec {
       rm -f $out/lib/libpcap.a
     fi
   '';
+
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit ettercap nmap ostinato tcpreplay vde2 wireshark;

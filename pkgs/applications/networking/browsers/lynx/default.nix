@@ -46,6 +46,10 @@ stdenv.mkDerivation rec {
     nuke-refs cfg_defs.h
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "Text-mode web browser";
     homepage = "https://lynx.invisible-island.net/";
