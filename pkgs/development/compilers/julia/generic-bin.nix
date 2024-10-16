@@ -88,17 +88,6 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  # Align libccalllazy* SONAMEs
-  # https://github.com/JuliaLang/julia/pull/55968
-  preFixup = lib.optionalString (version == "1.11.0" && stdenv.hostPlatform.isLinux) ''
-    patchelf "$out/lib/julia/libccalllazyfoo.so" \
-      --set-soname libccalllazyfoo.so \
-      --replace-needed ccalllazybar.so libccalllazybar.so
-    patchelf "$out/lib/julia/libccalllazybar.so" \
-      --set-soname libccalllazybar.so \
-      --replace-needed ccalllazyfoo.so libccalllazyfoo.so
-  '';
-
   # Breaks backtraces, etc.
   dontStrip = true;
 
