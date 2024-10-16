@@ -1,14 +1,28 @@
-{ stdenv, lib, buildPythonApplication, fetchPypi, lxml, matplotlib, numpy
-, opencv4, pymavlink, pyserial, setuptools, wxpython, billiard
-, gnureadline }:
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, lxml
+, matplotlib
+, numpy
+, opencv4
+, pymavlink
+, pyserial
+, setuptools
+, wxpython
+, billiard
+, gnureadline
+}:
 
 buildPythonApplication rec {
   pname = "MAVProxy";
-  version = "1.8.70";
+  version = "1.8.71";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-U5K+0lxJbBvwETnJ3MTMkk47CMOSlJBeFrCLHW9OSh8=";
+  src = fetchFromGitHub {
+    owner = "ArduPilot";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-A7tqV1kBCSuWHJUTdUZGcPY/r7X1edGZs6xDctpMbMI=";
   };
 
   postPatch = ''
