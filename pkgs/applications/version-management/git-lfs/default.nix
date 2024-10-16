@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
+{ lib, stdenv, buildGoModule, fetchFromGitHub, asciidoctor, installShellFiles, git, testers, git-lfs }:
 
 buildGoModule rec {
   pname = "git-lfs";
@@ -33,9 +33,23 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
+  __darwinAllowLocalNetworking = true;
+
   preCheck = ''
     unset subPackages
   '';
+
+  checkFlags = let
+    # Skip tests that require network access
+    skippedTests = [
+      "TestCertFromSSLCAInfoConfig"
+      "TestCertFromSSLCAInfoEnv"
+      "TestCertFromSSLCAInfoEnvWithSchannelBackend"
+      "TestCertFromSSLCAPathConfig"
+      "TestCertFromSSLCAPathEnv"
+    ];
+  in lib.optionals stdenv.isDarwin
+  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = ''
     installManPage man/man*/*
