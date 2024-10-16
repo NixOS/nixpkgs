@@ -5029,6 +5029,8 @@ let
         };
       };
 
+      visualjj.visualjj = callPackage ./visualjj.visualjj { };
+
       visualstudioexptteam.intellicode-api-usage-examples = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "intellicode-api-usage-examples";
