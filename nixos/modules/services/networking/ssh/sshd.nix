@@ -885,6 +885,7 @@ in
                 "~CAP_SYS_NICE"
                 "~CAP_SYS_PACCT"
                 "~CAP_SYS_PTRACE"
+                "~CAP_SYS_RAWIO"
               ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
