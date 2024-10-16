@@ -749,7 +749,7 @@ let
     foldl' (res: opt:
       let t  = res.type;
           t' = opt.options.type;
-          mergedType = t.typeMerge t'.functor;
+          mergedType = types.mergeTypes t t';
           typesMergeable = mergedType != null;
           typeSet = if (bothHave "type") && typesMergeable
                        then { type = mergedType; }
