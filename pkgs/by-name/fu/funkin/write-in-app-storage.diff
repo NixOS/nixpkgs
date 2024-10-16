@@ -1,0 +1,52 @@
+diff --git a/source/funkin/modding/PolymodHandler.hx b/source/funkin/modding/PolymodHandler.hx
+index ae754b78..c70d6455 100644
+--- a/source/funkin/modding/PolymodHandler.hx
++++ b/source/funkin/modding/PolymodHandler.hx
+@@ -41,7 +41,7 @@ class PolymodHandler
+     #elseif REDIRECT_ASSETS_FOLDER
+     '../../../../example_mods'
+     #else
+-    'mods'
++    lime.system.System.applicationStorageDirectory + 'mods'
+     #end;
+ 
+   static final CORE_FOLDER:Null<String> =
+diff --git a/source/funkin/play/PlayState.hx b/source/funkin/play/PlayState.hx
+index f55cef38..b2a7940d 100644
+--- a/source/funkin/play/PlayState.hx
++++ b/source/funkin/play/PlayState.hx
+@@ -2820,7 +2820,7 @@ class PlayState extends MusicBeatSubState
+     // spitter for ravy, teehee!!
+     var writer = new json2object.JsonWriter<Array<ScoreInput>>();
+     var output = writer.write(inputSpitter, '  ');
+-    sys.io.File.saveContent("./scores.json", output);
++    sys.io.File.saveContent(lime.system.System.applicationStorageDirectory + "scores.json", output);
+     #end
+ 
+     deathCounter = 0;
+diff --git a/source/funkin/util/logging/CrashHandler.hx b/source/funkin/util/logging/CrashHandler.hx
+index 71d1ad39..ed06ceff 100644
+--- a/source/funkin/util/logging/CrashHandler.hx
++++ b/source/funkin/util/logging/CrashHandler.hx
+@@ -11,7 +11,7 @@ import flixel.FlxG.FlxRenderMethod;
+ @:nullSafety
+ class CrashHandler
+ {
+-  public static final LOG_FOLDER = 'logs';
++  public static final LOG_FOLDER = lime.system.System.applicationStorageDirectory + 'logs';
+ 
+   /**
+    * Called before exiting the game when a standard error occurs, like a thrown exception.
+diff --git a/source/funkin/util/plugins/ScreenshotPlugin.hx b/source/funkin/util/plugins/ScreenshotPlugin.hx
+index c859710d..ed23579a 100644
+--- a/source/funkin/util/plugins/ScreenshotPlugin.hx
++++ b/source/funkin/util/plugins/ScreenshotPlugin.hx
+@@ -38,7 +38,7 @@ typedef ScreenshotPluginParams =
+  */
+ class ScreenshotPlugin extends FlxBasic
+ {
+-  public static final SCREENSHOT_FOLDER = 'screenshots';
++  public static final SCREENSHOT_FOLDER = lime.system.System.applicationStorageDirectory + 'screenshots';
+ 
+   var _hotkeys:Array<FlxKey>;
+ 
