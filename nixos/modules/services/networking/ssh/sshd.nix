@@ -900,6 +900,9 @@ in
                 + "-f /etc/ssh/sshd_config";
               KillMode = "process";
               LockPersonality = true;
+              RestrictAddressFamilies = [
+                "~AF_NETLINK"
+              ];
               RestrictNamespaces = [
                 "~cgroup"
                 "~ipc"
