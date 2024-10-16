@@ -2835,6 +2835,8 @@ self: super: with self; {
 
   cyclopts = callPackage ../development/python-modules/cyclopts { };
 
+  cyipopt = callPackage ../development/python-modules/cyipopt { };
+
   cymem = callPackage ../development/python-modules/cymem { };
 
   cymruwhois = callPackage ../development/python-modules/cymruwhois { };
