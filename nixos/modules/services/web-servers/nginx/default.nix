@@ -94,14 +94,16 @@ let
     REDIRECT_STATUS   = "200";
   };
 
-  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
-    proxy_set_header        Host $host;
-    proxy_set_header        X-Real-IP $remote_addr;
-    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header        X-Forwarded-Proto $scheme;
-    proxy_set_header        X-Forwarded-Host $host;
-    proxy_set_header        X-Forwarded-Server $host;
+  recommendedProxyHeader = command: pkgs.writeText "nginx-recommended-${command}-headers.conf" ''
+    ${command}        Host $host;
+    ${command}        X-Real-IP $remote_addr;
+    ${command}        X-Forwarded-For $proxy_add_x_forwarded_for;
+    ${command}        X-Forwarded-Proto $scheme;
+    ${command}        X-Forwarded-Host $host;
+    ${command}        X-Forwarded-Server $host;
   '';
+  recommendedProxyConfig = recommendedProxyHeader "proxy_set_header";
+  recommendedUwsgiConfig = recommendedProxyHeader "uwsgi_param";
 
   proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
     proxy_cache_path ${concatStringsSep " " [
@@ -442,6 +444,9 @@ let
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection $connection_upgrade;
       ''}
+      ${optionalString (config.uwsgiPass != null)
+        "uwsgi_pass ${config.uwsgiPass};"
+      }
       ${concatStringsSep "\n"
         (mapAttrsToList (n: v: ''fastcgi_param ${n} "${v}";'')
           (optionalAttrs (config.fastcgiParams != {})
@@ -453,6 +458,7 @@ let
       ${optionalString (config.return != null) "return ${toString config.return};"}
       ${config.extraConfig}
       ${optionalString (config.proxyPass != null && config.recommendedProxySettings) "include ${recommendedProxyConfig};"}
+      ${optionalString (config.uwsgiPass != null && config.recommendedProxySettings) "include ${recommendedUwsgiConfig};"}
       ${mkBasicAuth "sublocation" config}
     }
   '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
