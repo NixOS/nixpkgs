@@ -52,9 +52,7 @@ buildGoModule {
     description = "A webpage bookmarking and snapshotting service";
     homepage = "https://github.com/asciimoo/omnom";
     license = lib.licenses.agpl3Only;
-    maintainers = [
-      # maintained by the team working on NGI-supported software, no group for this yet
-    ];
+    maintainers = lib.teams.ngi.members;
     mainProgram = "omnom";
   };
 }
