@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , rustPlatform
 , nix
-, nlohmann_json
+, nlohmann-json
 , boost
 , graphviz
 , Security
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     boost
     nix
-    nlohmann_json
+    nlohmann-json
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];

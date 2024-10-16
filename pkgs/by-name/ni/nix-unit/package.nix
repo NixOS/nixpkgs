@@ -8,7 +8,7 @@
 , meson
 , ninja
 , nixVersions
-, nlohmann_json
+, nlohmann-json
 , pkg-config
 , fetchFromGitHub
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    nlohmann_json
+    nlohmann-json
     # We pin the nix version to a known working one here as upgrades can likely break the build.
     # Since the nix language is rather stable we don't always need to have the latest and greatest for unit tests
     # On each update of nix unit we should re-evaluate what version we need.
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     pkg-config
     ninja
-    # nlohmann_json can be only discovered via cmake files
+    # nlohmann-json can be only discovered via cmake files
     cmake
   ] ++ lib.optional stdenv.cc.isClang [ clang-tools ];
 

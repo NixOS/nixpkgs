@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK32,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
-  nlohmann_json, hicolor-icon-theme, wrapGAppsHook3 }:
+  nlohmann-json, hicolor-icon-theme, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook3
     libxslt xmlto boost libtool pkg-config ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [ lucenepp nlohmann-json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
 
   propagatedBuildInputs = [ gettext ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--without-cld2"
     "--without-cpprest"
     "--with-boost-libdir=${boost.out}/lib"
-    "CPPFLAGS=-I${nlohmann_json}/include/nlohmann/"
+    "CPPFLAGS=-I${nlohmann-json}/include/nlohmann/"
     "LDFLAGS=-llucene++"
   ];
 

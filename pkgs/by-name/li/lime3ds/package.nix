@@ -18,7 +18,7 @@
 , libpulseaudio
 , libunwind
 , libusb1
-, nlohmann_json
+, nlohmann-json
 , openal
 , openssl
 , pipewire
@@ -70,7 +70,7 @@ in stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libunwind
     libusb1
-    nlohmann_json
+    nlohmann-json
     openal
     openssl
     pipewire

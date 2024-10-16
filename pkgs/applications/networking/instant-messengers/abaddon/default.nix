@@ -14,7 +14,7 @@
 , libpulseaudio
 , libsecret
 , libsodium
-, nlohmann_json
+, nlohmann-json
 , pcre2
 , spdlog
 , sqlite
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libopus
     libsecret
     libsodium
-    nlohmann_json
+    nlohmann-json
     pcre2
     spdlog
     sqlite

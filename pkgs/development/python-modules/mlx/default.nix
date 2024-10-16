@@ -19,7 +19,7 @@ let
     rev = "af7d88d808a7608a33723fba067036202910acb3";
     hash = "sha256-LqNvnUbmq0iziD9VP5OTJCSIy+y/hp5lKCUV7RtKTvM=";
   };
-  nlohmann_json = fetchFromGitHub {
+  nlohmann-json' = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v3.11.3";
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     CMAKE_ARGS = toString [
       (lib.cmakeBool "MLX_BUILD_METAL" false)
       (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_GGUFLIB" "${gguf-tools}")
-      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann_json}")
+      (lib.cmakeOptionType "filepath" "FETCHCONTENT_SOURCE_DIR_JSON" "${nlohmann-json'}")
     ];
   };
 
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     xcbuild
     zsh
     gguf-tools
-    nlohmann_json
+    nlohmann-json'
     setuptools
   ];
 

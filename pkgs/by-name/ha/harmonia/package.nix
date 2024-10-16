@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , libsodium
 , nixVersions
-, nlohmann_json
+, nlohmann-json
 , openssl
 , pkg-config
 , rustPlatform
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     boost
     libsodium
     openssl
-    nlohmann_json
+    nlohmann-json
     nixVersions.nix_2_24
   ];
 

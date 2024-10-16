@@ -20,7 +20,7 @@
 , sqlite
 , bzip2
 , lbzip2
-, nlohmann_json
+, nlohmann-json
 , texliveSmall
 , doxygen
 , sphinx
@@ -148,7 +148,7 @@ in stdenv.mkDerivation (finalAttrs: {
     boost
     sqlite
     bzip2
-    nlohmann_json
+    nlohmann-json
     frugally-deep
     roctracer
   ] ++ lib.optionals buildDocs [

@@ -6,7 +6,7 @@
 , ninja
 , curl
 , nix
-, nlohmann_json
+, nlohmann-json
 , pkg-config
 , stdenv
 }:
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     boost
     nix
     curl
-    nlohmann_json
+    nlohmann-json
   ];
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
-    # nlohmann_json can be only discovered via cmake files
+    # nlohmann-json can be only discovered via cmake files
     cmake
   ];
 

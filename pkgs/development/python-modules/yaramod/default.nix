@@ -8,7 +8,7 @@
   pythonOlder,
   gtest,
   pybind11,
-  nlohmann_json,
+  nlohmann-json,
 }:
 
 let
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   postPatch = ''
     rm -r deps/googletest deps/pog/ deps/pybind11/ deps/json/json.hpp
     cp -r --no-preserve=all ${pog} deps/pog/
-    cp -r --no-preserve=all ${nlohmann_json.src}/single_include/nlohmann/json.hpp deps/json/
+    cp -r --no-preserve=all ${nlohmann-json.src}/single_include/nlohmann/json.hpp deps/json/
     cp -r --no-preserve=all ${pybind11.src} deps/pybind11/
     cp -r --no-preserve=all ${gtest.src} deps/googletest/
   '';

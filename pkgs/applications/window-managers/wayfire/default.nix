@@ -21,7 +21,7 @@
 , wayland-scanner
 , wlroots
 , pango
-, nlohmann_json
+, nlohmann-json
 , xorg
 }:
 
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     wayland-protocols
     xorg.xcbutilwm
-    nlohmann_json
+    nlohmann-json
   ];
 
   propagatedBuildInputs = [

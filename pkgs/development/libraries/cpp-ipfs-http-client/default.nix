@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, curl, cmake, nlohmann_json }:
+{ lib, stdenv, fetchFromGitHub, curl, cmake, nlohmann-json }:
 
 stdenv.mkDerivation {
   pname = "cpp-ipfs-http-client";
@@ -15,12 +15,12 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace '# Fetch "JSON for Modern C++"' "include_directories(${nlohmann_json}/include)"
+      --replace '# Fetch "JSON for Modern C++"' "include_directories(${nlohmann-json}/include)"
   '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ curl ];
-  propagatedBuildInputs = [ nlohmann_json ];
+  propagatedBuildInputs = [ nlohmann-json ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=range-loop-construct"

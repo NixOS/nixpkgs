@@ -20,7 +20,7 @@
 , prometheus-cpp
 , nukeReferences
 , git
-, nlohmann_json
+, nlohmann-json
 , docbook_xsl
 , openssh
 , openldap
@@ -150,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     pixz
     boost
     postgresql
-    nlohmann_json
+    nlohmann-json
     prometheus-cpp
   ];
 

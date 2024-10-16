@@ -22,7 +22,7 @@
   libaec,
   libxml2,
   mpfr,
-  nlohmann_json,
+  nlohmann-json,
   opencascade-occt_7_6,
   opencollada,
   pcre,
@@ -86,7 +86,7 @@ buildPythonPackage rec {
     libaec
     libxml2
     mpfr
-    nlohmann_json
+    nlohmann-json
     opencascade-occt
     opencollada
     pcre
@@ -125,7 +125,7 @@ buildPythonPackage rec {
     "-DBUILD_IFCPYTHON=ON"
     "-DCITYJSON_SUPPORT=OFF"
     "-DEIGEN_DIR=${eigen}/include/eigen3"
-    "-DJSON_INCLUDE_DIR=${nlohmann_json}/include/"
+    "-DJSON_INCLUDE_DIR=${nlohmann-json}/include/"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
     "-DOCC_LIBRARY_DIR=${lib.getLib opencascade-occt}/lib"
     "-DOPENCOLLADA_INCLUDE_DIR=${opencollada}/include/opencollada"

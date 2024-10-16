@@ -10,7 +10,7 @@
 , libevdev
 , libinput
 , libxkbcommon
-, nlohmann_json
+, nlohmann-json
 , xcbutilwm
 , gtkmm3
 }:
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevdev
     libinput
     libxkbcommon
-    nlohmann_json
+    nlohmann-json
     xcbutilwm
     gtkmm3
   ];

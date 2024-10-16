@@ -5,7 +5,7 @@
   gtest,
   hydra-core,
   lib,
-  nlohmann_json,
+  nlohmann-json,
   pybind11,
   pyvirtualdisplay,
   sfml,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   # Simulate the git submodules but with nixpkgs dependencies
   postUnpack = ''
     rm -rf $sourceRoot/third_party/*
-    ln -s ${nlohmann_json.src} $sourceRoot/third_party/json
+    ln -s ${nlohmann-json.src} $sourceRoot/third_party/json
     ln -s ${pybind11.src} $sourceRoot/third_party/pybind11
   '';
 

@@ -21,7 +21,7 @@
 , libogg
 , libvorbis
 , libxslt
-, nlohmann_json
+, nlohmann-json
 , pugixml
 , qtbase
 , qtmultimedia
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     libmatroska
     libogg
     libvorbis
-    nlohmann_json
+    nlohmann-json
     pugixml
     qtbase
     qtmultimedia

@@ -16,7 +16,7 @@
   makeDesktopItem,
   makeWrapper,
   ninja,
-  nlohmann_json,
+  nlohmann-json,
   pkg-config,
   python3,
   spdlog,
@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libpulseaudio
     libzip
-    nlohmann_json
+    nlohmann-json
     spdlog
     stormlib'
     tinyxml-2

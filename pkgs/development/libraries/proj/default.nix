@@ -9,7 +9,7 @@
 , libtiff
 , curl
 , gtest
-, nlohmann_json
+, nlohmann-json
 , python3
 , cacert
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  buildInputs = [ sqlite libtiff curl nlohmann_json ];
+  buildInputs = [ sqlite libtiff curl nlohmann-json ];
 
   nativeCheckInputs = [ cacert gtest ];
 

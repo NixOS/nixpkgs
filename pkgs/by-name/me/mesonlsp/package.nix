@@ -15,7 +15,7 @@
   libossp_uuid,
   libpkgconf,
   libuuid,
-  nlohmann_json,
+  nlohmann-json,
   pkgsStatic,
 
   mesonlsp,
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
       libarchive
       libpkgconf
-      nlohmann_json
+      nlohmann-json
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libossp_uuid

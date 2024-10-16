@@ -11,7 +11,7 @@ let
     hash = "sha256-bG34W63ew7haLnC82A3lS7bviPDnApLipaBjJAjLcVk=";
   };
 in stdenv.mkDerivation (finalAttrs: {
-  pname = "nlohmann_json";
+  pname = "nlohmann-json";
   version = "3.11.3";
 
   src = fetchFromGitHub {

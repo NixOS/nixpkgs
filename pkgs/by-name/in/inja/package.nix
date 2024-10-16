@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  nlohmann_json,
+  nlohmann-json,
   doctest,
   callPackage,
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ nlohmann_json ];
+  propagatedBuildInputs = [ nlohmann-json ];
 
   cmakeFlags = [
     (lib.cmakeBool "INJA_BUILD_TESTS" finalAttrs.finalPackage.doCheck)

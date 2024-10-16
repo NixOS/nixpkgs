@@ -15,7 +15,7 @@
   lmdb,
   lmdbxx,
   mtxclient,
-  nlohmann_json,
+  nlohmann-json,
   olm,
   re2,
   spdlog,
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       libsecret
       lmdb
       mtxclient
-      nlohmann_json
+      nlohmann-json
       olm
       qt6Packages.qtbase
       qt6Packages.qtimageformats

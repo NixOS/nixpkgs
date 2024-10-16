@@ -11,7 +11,7 @@
 , libsodium
 , fmt
 , vips
-, nlohmann_json
+, nlohmann-json
 , libsixel
 , microsoft-gsl
 , chafa
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libsodium
     fmt
     vips
-    nlohmann_json
+    nlohmann-json
     libsixel
     microsoft-gsl
     chafa

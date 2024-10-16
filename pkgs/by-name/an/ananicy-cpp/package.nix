@@ -6,7 +6,7 @@
   cmake,
   pkg-config,
   spdlog,
-  nlohmann_json,
+  nlohmann-json,
   systemd,
   libbpf,
   elfutils,
@@ -50,7 +50,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     pcre2
     spdlog
-    nlohmann_json
+    nlohmann-json
     systemd
     zlib
   ] ++ lib.optionals withBpf [

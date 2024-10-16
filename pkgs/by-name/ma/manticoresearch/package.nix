@@ -10,7 +10,7 @@
 , libstemmer
 , mariadb-connector-c
 , re2
-, nlohmann_json
+, nlohmann-json
 , testers
 , manticoresearch
 }:
@@ -76,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
     icu.dev
     libstemmer
     mariadb-connector-c
-    nlohmann_json
+    nlohmann-json
     uni-algo
     re2
   ];

@@ -3,7 +3,7 @@
 , fetchFromGitHub
 , cmake
 , doctest
-, nlohmann_json
+, nlohmann-json
 , libuuid
 , xtl
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    nlohmann_json
+    nlohmann-json
     libuuid
     xtl
   ];

@@ -6,7 +6,7 @@
 , libevent
 , libsodium
 , libuv
-, nlohmann_json
+, nlohmann-json
 , pkg-config
 , spdlog
 , fmt_9
@@ -52,7 +52,7 @@ in stdenv.mkDerivation rec {
     libevent
     libuv
     libsodium
-    nlohmann_json
+    nlohmann-json
     spdlog'
     sqlite
     systemd

@@ -8,7 +8,7 @@
   fetchFromGitHub,
   fetchurl,
   fmt,
-  nlohmann_json,
+  nlohmann-json,
   qt5,
   spdlog,
   substituteAll,
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       curlpp_src = curlpp.src;
       doctest_src = doctest;
       fmt_src = fmt;
-      nlohmann_json_src = nlohmann_json;
+      nlohmann_json_src = nlohmann-json;
       pugixml_src = fetchFromGitHub {
         owner = "muttleyxd";
         repo = "pugixml";

@@ -15,7 +15,7 @@
 , libepoxy
 , librsvg
 , libxmlxx
-, nlohmann_json
+, nlohmann-json
 , pango
 , pkg-config
 , portaudio
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     libepoxy
     librsvg
     libxmlxx
-    nlohmann_json
+    nlohmann-json
     pango
     portaudio
   ];

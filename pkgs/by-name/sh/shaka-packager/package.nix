@@ -10,7 +10,7 @@
   abseil-cpp,
   curl,
   gtest,
-  nlohmann_json,
+  nlohmann-json,
   libpng,
   libxml2,
   libwebm,
@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     abseil-cpp
     curl
     gtest
-    nlohmann_json
+    nlohmann-json
     libpng
     libxml2
     libwebm

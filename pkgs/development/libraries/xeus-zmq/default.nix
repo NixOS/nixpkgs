@@ -4,7 +4,7 @@
 , cmake
 , cppzmq
 , libuuid
-, nlohmann_json
+, nlohmann-json
 , openssl
 , xeus
 , xtl
@@ -33,7 +33,7 @@ clangStdenv.mkDerivation rec {
     zeromq
   ];
 
-  propagatedBuildInputs = [ nlohmann_json ];
+  propagatedBuildInputs = [ nlohmann-json ];
 
   meta = {
     description = "ZeroMQ-based middleware for xeus";

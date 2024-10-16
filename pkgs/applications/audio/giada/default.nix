@@ -18,7 +18,7 @@
 , libogg
 , libvorbis
 , libopus
-, nlohmann_json
+, nlohmann-json
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libmpg123
     libsndfile
     libsamplerate
-    nlohmann_json
+    nlohmann-json
     alsa-lib
     libXpm
     libpulseaudio

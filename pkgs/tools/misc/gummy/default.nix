@@ -12,7 +12,7 @@
 , cli11
 , ddcutil
 , fmt
-, nlohmann_json
+, nlohmann-json
 , spdlog
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     fmt
     libX11
     libXext
-    nlohmann_json
+    nlohmann-json
     sdbus-cpp
     spdlog
     udev

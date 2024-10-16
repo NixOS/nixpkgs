@@ -7,7 +7,7 @@
 , curl
 , grpc
 , prometheus-cpp
-, nlohmann_json
+, nlohmann-json
 , nix-update-script
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     grpc
-    nlohmann_json
+    nlohmann-json
     prometheus-cpp
     protobuf
   ];

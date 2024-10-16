@@ -5,7 +5,7 @@
 , doctest
 , enableAssertions ? false
 , enableBoundChecks ? false # Broadcasts don't pass bound checks
-, nlohmann_json
+, nlohmann-json
 , xtl
 , xsimd
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
   propagatedBuildInputs = [
-    nlohmann_json
+    nlohmann-json
     xtl
     xsimd
   ];
