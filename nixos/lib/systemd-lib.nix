@@ -17,6 +17,7 @@ let
     filterAttrs
     flatten
     flip
+    hasPrefix
     head
     isInt
     isFloat
@@ -195,6 +196,10 @@ in rec {
   assertRemoved = name: see: group: attr:
     optional (attr ? ${name})
       "Systemd ${group} field `${name}' has been removed. See ${see}";
+
+  assertKeyIsSystemdCredential = name: group: attr:
+    optional (attr ? ${name} && !(hasPrefix "@" attr.${name}))
+      "Systemd ${group} field `${name}' is not a systemd credential";
 
   checkUnitConfig = group: checks: attrs: let
     # We're applied at the top-level type (attrsOf unitOption), so the actual
