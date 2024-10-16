@@ -15,6 +15,10 @@
     boot.kernelPackages = pkgs.linuxPackages_latest;
     time.timeZone = "Utc";
 
+    # The standard resolvconf service tries to write to /etc and crashes,
+    # which makes nixos-rebuild exit uncleanly when switching into the new generation
+    services.resolved.enable = true;
+
     environment.etc = {
       "mountpoint/.keep".text = "keep";
       "filemount".text = "keep";
