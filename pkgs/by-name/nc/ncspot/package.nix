@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  Cocoa,
   alsa-lib,
+  config,
+  darwin,
   dbus,
   fetchFromGitHub,
   libpulseaudio,
@@ -17,14 +18,14 @@
   rustPlatform,
   testers,
   ueberzug,
-  withALSA ? false,
+  withALSA ? stdenv.hostPlatform.isLinux,
   withClipboard ? true,
   withCover ? false,
   withCrossterm ? true,
-  withMPRIS ? true,
+  withMPRIS ? stdenv.hostPlatform.isLinux,
   withNotify ? true,
-  withPortAudio ? false,
-  withPulseAudio ? true,
+  withPortAudio ? stdenv.hostPlatform.isDarwin,
+  withPulseAudio ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,7 +52,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
