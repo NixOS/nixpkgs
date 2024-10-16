@@ -8,7 +8,7 @@
   tk,
   addDriverRunpath,
 
-  darwin,
+  apple-sdk_12,
 
   koboldLiteSupport ? true,
 
@@ -29,8 +29,7 @@
 
   vulkanSupport ? true,
   vulkan-loader,
-
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
 }:
 
 let
@@ -39,12 +38,6 @@ let
   libraryPathWrapperArgs = lib.optionalString config.cudaSupport ''
     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
-
-  darwinFrameworks =
-    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
-      darwin.apple_sdk.frameworks
-    else
-      darwin.apple_sdk_11_0.frameworks;
 
   effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
 in
@@ -71,17 +64,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      darwinFrameworks.Accelerate
-      darwinFrameworks.CoreVideo
-      darwinFrameworks.CoreGraphics
-      darwinFrameworks.CoreServices
-    ]
-    ++ lib.optionals metalSupport [
-      darwinFrameworks.MetalKit
-      darwinFrameworks.Foundation
-      darwinFrameworks.MetalPerformanceShaders
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
@@ -96,21 +79,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals vulkanSupport [ vulkan-loader ];
 
   pythonPath = finalAttrs.pythonInputs;
-
-  darwinLdFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
-    "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
-    "-framework CoreServices"
-    "-framework Accelerate"
-  ];
-  metalLdFlags = lib.optionals metalSupport [
-    "-F${darwinFrameworks.Foundation}/Library/Frameworks"
-    "-F${darwinFrameworks.Metal}/Library/Frameworks"
-    "-framework Foundation"
-    "-framework Metal"
-  ];
-
-  env.NIX_LDFLAGS = lib.concatStringsSep " " (finalAttrs.darwinLdFlags ++ finalAttrs.metalLdFlags);
 
   makeFlags = [
     (makeBool "LLAMA_OPENBLAS" openblasSupport)
