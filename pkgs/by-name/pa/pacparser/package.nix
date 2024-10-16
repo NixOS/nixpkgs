@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pacparser";
@@ -19,14 +24,19 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
+  buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ System ]);
+
   hardeningDisable = [ "format" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to parse proxy auto-config (PAC) files";
     homepage = "https://pacparser.manugarg.com/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
+      abbradar
+      caralice
+    ];
     mainProgram = "pactester";
   };
 }
