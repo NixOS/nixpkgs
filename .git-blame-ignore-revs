@@ -117,3 +117,6 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # python3Packages: format with nixfmt
 59b1aef59071cae6e87859dc65de973d2cc595c0
+
+# percona: apply nixfmt
+369350afcba8e6a231dd25b6a010c4e9dec713b9
