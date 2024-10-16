@@ -41,9 +41,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/${finalAttrs.pname}}
     mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    echo "
-      #!${lib.getExe bash}
-      ${lib.getExe nodejs} $out/lib/${finalAttrs.pname}/dist/index.js \$@
+    echo "\
+    #!${lib.getExe bash}
+    ${lib.getExe nodejs} $out/lib/${finalAttrs.pname}/dist/index.js \$@
     " > $out/bin/stylelint-lsp
     chmod +x $out/bin/stylelint-lsp
 
