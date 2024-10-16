@@ -145,6 +145,14 @@ in
           TODO
         '';
       };
+
+      stateDir = mkOption {
+        type = types.path;
+        default = "/var/lib/gerrit";
+        description = ''
+          TODO
+        '';
+      };
     };
   };
 
@@ -192,10 +200,10 @@ in
       ];
 
       environment = {
-        GERRIT_HOME = "%S/gerrit";
+        GERRIT_HOME = "${cfg.stateDir}";
         GERRIT_TMP = "%T";
-        HOME = "%S/gerrit";
-        XDG_CONFIG_HOME = "%S/gerrit/.config";
+        HOME = "${cfg.stateDir}";
+        XDG_CONFIG_HOME = "${cfg.stateDir}/.config";
       };
 
       preStart = ''
@@ -229,9 +237,9 @@ in
         LimitNOFILE = 4096;
         StandardInput = "socket";
         StandardOutput = "journal";
-        StateDirectory = "gerrit";
+        StateDirectory = mkIf (cfg.stateDir == "/var/lib/gerrit") "gerrit";
         StateDirectoryMode = 750;
-        WorkingDirectory = "%S/gerrit";
+        WorkingDirectory = "${cfg.stateDir}";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
