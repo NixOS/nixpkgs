@@ -160,7 +160,7 @@ buildPythonApplication rec {
   '';
 
   passthru = {
-    inherit withPlugins;
+    inherit withPlugins python;
     updateScript = ./update.sh;
   } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     tests = {
