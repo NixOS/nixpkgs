@@ -61238,24 +61238,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-python = nodeEnv.buildNodePackage {
-    name = "coc-python";
-    packageName = "coc-python";
-    version = "1.2.13";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-python/-/coc-python-1.2.13.tgz";
-      sha512 = "thsXkbwwJMpiGa/1GiPvFnbWtC5K8QcZvcUtoc4lU8Hf38LbywK5qRp6M7tOAabJOq5dYcIYYbPZWzGwhoZEiw==";
-    };
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Python extension for coc.nvim, forked from vscode-python.";
-      homepage = "https://github.com/neoclide/coc-python#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-r-lsp = nodeEnv.buildNodePackage {
     name = "coc-r-lsp";
     packageName = "coc-r-lsp";
