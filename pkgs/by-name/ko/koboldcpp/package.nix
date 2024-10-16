@@ -9,6 +9,7 @@
   addDriverRunpath,
 
   darwin,
+  overrideSDK,
 
   koboldLiteSupport ? true,
 
@@ -29,8 +30,7 @@
 
   vulkanSupport ? true,
   vulkan-loader,
-
-  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
 }:
 
 let
@@ -40,13 +40,16 @@ let
     --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ addDriverRunpath.driverLink ]}"
   '';
 
-  darwinFrameworks =
-    if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then
-      darwin.apple_sdk.frameworks
+  stdenv' =
+    if stdenv.hostPlatform.isDarwin then
+      overrideSDK stdenv {
+        darwinMinVersion = "10.15";
+        darwinSdkVersion = "12.3";
+      }
     else
-      darwin.apple_sdk_11_0.frameworks;
+      stdenv;
 
-  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv;
+  effectiveStdenv = if cublasSupport then cudaPackages.backendStdenv else stdenv';
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
@@ -72,15 +75,15 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     [ tk ]
     ++ finalAttrs.pythonInputs
     ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
-      darwinFrameworks.Accelerate
-      darwinFrameworks.CoreVideo
-      darwinFrameworks.CoreGraphics
-      darwinFrameworks.CoreServices
+      darwin.apple_sdk.frameworks.Accelerate
+      darwin.apple_sdk.frameworks.CoreVideo
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreServices
     ]
     ++ lib.optionals metalSupport [
-      darwinFrameworks.MetalKit
-      darwinFrameworks.Foundation
-      darwinFrameworks.MetalPerformanceShaders
+      darwin.apple_sdk.frameworks.MetalKit
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.MetalPerformanceShaders
     ]
     ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
@@ -98,14 +101,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pythonPath = finalAttrs.pythonInputs;
 
   darwinLdFlags = lib.optionals stdenv.hostPlatform.isDarwin [
-    "-F${darwinFrameworks.CoreServices}/Library/Frameworks"
-    "-F${darwinFrameworks.Accelerate}/Library/Frameworks"
+    "-F${darwin.apple_sdk.frameworks.CoreServices}/Library/Frameworks"
+    "-F${darwin.apple_sdk.frameworks.Accelerate}/Library/Frameworks"
     "-framework CoreServices"
     "-framework Accelerate"
   ];
   metalLdFlags = lib.optionals metalSupport [
-    "-F${darwinFrameworks.Foundation}/Library/Frameworks"
-    "-F${darwinFrameworks.Metal}/Library/Frameworks"
+    "-F${darwin.apple_sdk.frameworks.Foundation}/Library/Frameworks"
+    "-F${darwin.apple_sdk.frameworks.Metal}/Library/Frameworks"
     "-framework Foundation"
     "-framework Metal"
   ];
