@@ -137,7 +137,7 @@
         version = "10.3.0.26";
         minCudaVersion = "12.0";
         maxCudaVersion = "12.5";
-        cudnnVersion = "8.9";
+        cudnnVersion = "9.3";
         filename = "TensorRT-10.3.0.26.Linux.x86_64-gnu.cuda-12.5.tar.gz";
         hash = "sha256-rf8c1avl2HATgGFyNR5Y/QJOW/D8YdSe9LhM047ZkIE=";
       }
