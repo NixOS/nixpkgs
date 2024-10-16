@@ -8,7 +8,7 @@
 }:
 buildDunePackage rec {
   pname = "ppx_yojson_conv";
-  version = "0.15.1";
+  version = "0.17.0";
   duneVersion = "3";
   minimalOCamlVersion = "4.08.0";
 
@@ -16,7 +16,7 @@ buildDunePackage rec {
     owner = "janestreet";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
+    sha256 = "sha256-O7t6Bq23C4avBD1ef1DFL+QopZt3ZzHYAcdapF16cGY=";
   };
 
   propagatedBuildInputs = [
