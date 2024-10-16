@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   ] ++ (with xorg; [
     libX11
     libXi
+    libXcursor
   ]));
 
   desktopItems = [
