@@ -24,14 +24,14 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OmWDJVsXtUOYBeUXLx6EkQ1/RuH/3wIe40R5KgpmEC4=";
+    hash = "sha256-0uZdN24TvK4QoBEC0BSAYNALQv9swYZ8SgVJ03m2dzQ=";
   };
 
   enableParallelBuilding = false;
@@ -103,7 +103,7 @@ buildDotnetModule (finalAttrs: {
   executables = [ "NexusMods.App" ];
 
   dotnetBuildFlags = [
-    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.1/src/NexusMods.App/app.pupnet.conf#L38
+    # From https://github.com/Nexus-Mods/NexusMods.App/blob/v0.6.2/src/NexusMods.App/app.pupnet.conf#L38
     "--property:Version=${finalAttrs.version}"
     "--property:TieredCompilation=true"
     "--property:PublishReadyToRun=true"
@@ -127,6 +127,9 @@ buildDotnetModule (finalAttrs: {
     [
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_RemoteImage"
       "NexusMods.UI.Tests.ImageCacheTests.Test_LoadAndCache_ImageStoredFile"
+
+      # Fails with: Expected a <System.ArgumentException> to be thrown, but no exception was thrown.
+      "NexusMods.Networking.ModUpdates.Tests.PerFeedCacheUpdaterTests.Constructor_WithItemsFromDifferentGames_ShouldThrowArgumentException_InDebug"
     ]
     ++ lib.optionals (!_7zz.meta.unfree) [
       "NexusMods.Games.FOMOD.Tests.FomodXmlInstallerTests.InstallsFilesSimple_UsingRar"
