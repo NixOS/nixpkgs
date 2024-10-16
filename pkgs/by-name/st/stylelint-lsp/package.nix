@@ -1,10 +1,10 @@
 {
-  bash,
   fetchFromGitHub,
   lib,
   nodejs,
   pnpm_9,
   stdenvNoCC,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
+    makeWrapper
     nodejs
     pnpm_9.configHook
   ];
@@ -41,11 +42,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/${finalAttrs.pname}}
     mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    echo "\
-    #!${lib.getExe bash}
-    ${lib.getExe nodejs} $out/lib/${finalAttrs.pname}/dist/index.js \$@
-    " > $out/bin/stylelint-lsp
-    chmod +x $out/bin/stylelint-lsp
+    chmod a+x $out/lib/${finalAttrs.pname}/dist/index.js
+    makeWrapper $out/lib/${finalAttrs.pname}/dist/index.js $out/bin/stylelint-lsp  \
+      --prefix PATH : "${lib.getExe nodejs}"
 
     runHook postInstall
   '';
