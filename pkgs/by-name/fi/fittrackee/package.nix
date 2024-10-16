@@ -28,14 +28,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.8.9";
+  version = "0.8.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     rev = "refs/tags/v${version}";
-    hash = "sha256-raN6Ef/Z/JbdJDMKBIaBL8nmvFwvuZFX4rfC0ZgWgKI=";
+    hash = "sha256-K110H5Y8vQrRx2/O+2ezhpGp4G5sJUlzE+1cSYu7+4I=";
   };
 
   build-system = [
