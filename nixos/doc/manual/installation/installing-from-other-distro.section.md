@@ -232,10 +232,45 @@ The first steps to all these are the same:
     $ echo etc/nixos | sudo tee -a /etc/NIXOS_LUSTRATE
     ```
 
-1.  Finally, move the `/boot` directory of your current distribution out
-    of the way (the lustrate process will take care of the rest once you
-    reboot, but this one must be moved out now because NixOS needs to
-    install its own boot files:
+1.  Finally, install NixOS's boot system, backing up the existing boot
+    system's files in the process.
+
+    The details of this step can vary depending on the bootloader
+    configured in NixOS and the bootloader in use by the current
+    system.
+
+    The commands below should work for:
+
+    - BIOS systems.
+
+    - UEFI systems where both the current system and NixOS mount the
+      EFI System Partition on `/boot`, which both systemd-boot and
+      grub expect by default in NixOS, though grub can be configured
+      differently. (Note that anything on the ESP will be removed in
+      this process, such as other coexisting OS's bootloaders.)
+
+    In other cases, most commonly where the ESP is instead mounted on
+    `/boot/EFI`, keep in mind that the general principle is to:
+
+    - Check that your `hardware-configuration.nix` did the right thing
+      with the EFI System Partition. The configuration generator bases
+      its `fileSystems` configuration on the current mount points at
+      the time it is run. If the current system and NixOS's bootloader
+      configuration don't agree on where the ESP is to be mounted,
+      you'll need to manually alter the `fileSystems` configuration
+      and rebuild the system closure.
+
+    - Make sure `/boot` (and the EFI System Partition, if mounted
+      elsewhere) are mounted how the NixOS configuration would mount
+      them.
+
+    - Clear them of files related to the current system, backing them
+      up outside of `/boot` in the process. (NixOS will move the
+      backups into `/old-root` along with everything else when it
+      first boots.)
+
+    - Instruct the NixOS closure built earlier to install its
+      bootloader with the `switch-to-configuration` command below.
 
     ::: {.warning}
     Once you complete this step, your current distribution will no
@@ -246,8 +281,8 @@ The first steps to all these are the same:
     :::
 
     ```ShellSession
-    $ sudo mv -v /boot /boot.bak &&
-    sudo /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+    $ sudo mkdir /boot.bak && sudo mv /boot/* /boot.bak &&
+    sudo NIXOS_INSTALL_BOOTLOADER=1 /nix/var/nix/profiles/system/bin/switch-to-configuration boot
     ```
 
     Cross your fingers, reboot, hopefully you should get a NixOS prompt!
