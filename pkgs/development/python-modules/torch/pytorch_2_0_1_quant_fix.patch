@@ -1,0 +1,11 @@
+diff --git a/torch/csrc/jit/passes/quantization/quantization_type.h b/torch/csrc/jit/passes/quantization/quantization_type.h
+index a1af6078a..4fb1220eb 100644
+--- a/torch/csrc/jit/passes/quantization/quantization_type.h
++++ b/torch/csrc/jit/passes/quantization/quantization_type.h
+@@ -8,4 +8,5 @
+ #pragma once
+ #include <ostream>
++#include <cstdint>
+
+ namespace torch {
+ namespace jit {

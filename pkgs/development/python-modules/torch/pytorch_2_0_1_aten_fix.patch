@@ -1,0 +1,23 @@
+From bb0b283e5ace42b65a6180956bdff6af1b560e4c Mon Sep 17 00:00:00 2001
+From: Nikita Shulga <nshulga@meta.com>
+Date: Fri, 28 Jul 2023 07:08:59 -0700
+Subject: [PATCH] Do not force -Werror on Pooling.cpp
+
+As new versions of compilers are likely find new types of violation s as shown in https://github.com/pytorch/pytorch/issues/105728
+---
+ caffe2/CMakeLists.txt | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/caffe2/CMakeLists.txt b/caffe2/CMakeLists.txt
+index cc6ecdc7415f6..955bc67e2299c 100644
+--- a/caffe2/CMakeLists.txt
++++ b/caffe2/CMakeLists.txt
+@@ -530,8 +530,6 @@ endif()
+ # Required workaround for LLVM 9 includes.
+ if(NOT MSVC)
+   set_source_files_properties(${TORCH_SRC_DIR}/csrc/jit/tensorexpr/llvm_jit.cpp PROPERTIES COMPILE_FLAGS -Wno-noexcept-type)
+-  # Force -Werror on several files
+-  set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/../aten/src/ATen/native/mkldnn/Pooling.cpp PROPERTIES COMPILE_FLAGS "-Werror")
+ endif()
+ # Disable certain warnings for GCC-9.X
+ if(CMAKE_COMPILER_IS_GNUCXX AND (CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0.0))
