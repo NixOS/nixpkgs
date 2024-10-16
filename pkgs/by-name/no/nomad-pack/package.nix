@@ -10,7 +10,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "hashicorp";
-    repo = pname;
+    repo = "nomad-pack";
     rev = "v${version}";
     sha256 = "sha256-dw6sueC1qibJYc6sbZX8HJlEf9R6O8dlE1aobw70UHw=";
   };
