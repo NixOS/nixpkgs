@@ -215,6 +215,7 @@ in
 
       serviceConfig = {
         CacheDirectory = "gerrit";
+        CacheDirectoryMode = 750;
         DynamicUser = true;
         ExecStart = "${gerrit-cli}/bin/gerrit daemon --console-log";
         LimitNOFILE = 4096;
