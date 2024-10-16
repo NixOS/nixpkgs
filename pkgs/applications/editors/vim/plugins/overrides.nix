@@ -2708,7 +2708,6 @@ in
 // (
   let
     nodePackageNames = [
-      "coc-cmake"
       "coc-css"
       "coc-docker"
       "coc-emmet"
