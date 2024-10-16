@@ -55,7 +55,7 @@ rec {
   # Upstream partially documents used Go versions here
   # https://github.com/hashicorp/nomad/blob/master/contributing/golang.md
 
-  nomad = nomad_1_7;
+  nomad = nomad_1_8;
 
   nomad_1_4 = throwUnsupportaed "nomad_1_4";
 
