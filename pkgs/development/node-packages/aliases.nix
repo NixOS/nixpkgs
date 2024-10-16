@@ -74,6 +74,7 @@ mapAliases {
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
   coc-imselect = throw "coc-imselect was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) coc-pyright; # added 2024-07-14
+  coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
