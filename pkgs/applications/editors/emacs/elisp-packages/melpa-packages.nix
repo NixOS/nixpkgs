@@ -806,7 +806,11 @@ let
         boa-mode = ignoreCompilationError super.boa-mode; # elisp error
 
         # missing optional dependencies
-        boogie-friends = addPackageRequires super.boogie-friends [ self.lsp-mode ];
+        # https://github.com/boogie-org/boogie-friends/issues/42
+        boogie-friends = ignoreCompilationError (addPackageRequires super.boogie-friends [ self.lsp-mode ]);
+
+        # this package probably should not be compiled in nix build sandbox
+        borg = ignoreCompilationError super.borg;
 
         bpr = super.bpr.overrideAttrs (
           finalAttrs: previousAttrs: {
@@ -929,6 +933,12 @@ let
 
         # missing optional dependencies
         conda = addPackageRequires super.conda [ self.projectile ];
+
+        consult-gh = super.consult-gh.overrideAttrs (old: {
+          propagatedUserEnvPkgs = old.propagatedUserEnvPkgs or [ ] ++ [ pkgs.gh ];
+        });
+
+        consult-gh-forge = buildWithGit super.consult-gh-forge;
 
         counsel-gtags = ignoreCompilationError super.counsel-gtags; # elisp error
 
@@ -1113,6 +1123,8 @@ let
 
         gh-notify = buildWithGit super.gh-notify;
 
+        "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
+
         # https://github.com/nlamirault/emacs-gitlab/issues/68
         gitlab = addPackageRequires super.gitlab [ self.f ];
 
@@ -1227,6 +1239,23 @@ let
 
         # missing optional dependencies: vterm or eat
         julia-snail = addPackageRequires super.julia-snail [ self.eat ];
+
+        kanagawa-themes = super.kanagawa-themes.overrideAttrs (
+          finalAttrs: previousAttrs: {
+            patches =
+              if lib.versionOlder finalAttrs.version "20241015.2237" then
+                previousAttrs.patches or [ ]
+                ++ [
+                  (pkgs.fetchpatch {
+                    name = "fix-compilation-error.patch";
+                    url = "https://github.com/Fabiokleis/kanagawa-emacs/commit/83c2b5c292198b46a06ec0ad62619d83fd965433.patch";
+                    hash = "sha256-pB1ht03XCh+BWKHhxBAp701qt/KWAMJ2SQQaN3FgMjU=";
+                  })
+                ]
+              else
+                previousAttrs.patches or null;
+          }
+        );
 
         kite = ignoreCompilationError super.kite; # elisp error
 
