@@ -6971,8 +6971,6 @@ with pkgs;
     stdenv = gcc11Stdenv;
   });
 
-  dmg2img = callPackage ../tools/misc/dmg2img { };
-
   docbook2odf = callPackage ../tools/typesetting/docbook2odf { };
 
   doas = callPackage ../tools/security/doas { };
