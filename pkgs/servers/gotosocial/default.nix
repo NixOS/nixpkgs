@@ -1,7 +1,7 @@
 { lib
 , fetchurl
 , fetchFromGitHub
-, buildGoModule
+, buildGo122Module
 , nixosTests
 }:
 let
@@ -15,7 +15,7 @@ let
     hash = "sha256-aZQpd5KvoZvXEMVzGbWrtGsc+P1JStjZ6U5mX6q7Vb0=";
   };
 in
-buildGoModule rec {
+buildGo122Module rec {
   inherit version;
   pname = repo;
 
