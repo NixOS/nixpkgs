@@ -4411,8 +4411,6 @@ with pkgs;
 
   clapboard = callPackage ../tools/wayland/clapboard { };
 
-  cliphist = callPackage ../tools/wayland/cliphist { };
-
   clipman = callPackage ../tools/wayland/clipman { };
 
   kabeljau = callPackage ../games/kabeljau { };
@@ -28177,10 +28175,6 @@ with pkgs;
     audacious = audacious.override { audacious-plugins = null; };
   };
 
-  audacity = callPackage ../applications/audio/audacity {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit;
-  };
-
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   auto-multiple-choice = callPackage ../applications/misc/auto-multiple-choice { };
@@ -33555,8 +33549,6 @@ with pkgs;
 
   wings = callPackage ../applications/graphics/wings { };
 
-  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
-
   wlc = callPackage  ../tools/misc/wlc { };
 
   wlclock = callPackage ../applications/misc/wlclock { };
@@ -33917,8 +33909,6 @@ with pkgs;
   ytmdl = callPackage ../tools/misc/ytmdl { };
 
   yuview = libsForQt5.yuview;
-
-  wallust = callPackage ../applications/misc/wallust { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
