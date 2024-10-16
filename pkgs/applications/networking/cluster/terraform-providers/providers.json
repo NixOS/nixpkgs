@@ -858,13 +858,13 @@
     "vendorHash": "sha256-jTsjVhVEgtI3B+tLl9xLqQsGI2piQc6QA2EHqfVhDxg="
   },
   "null": {
-    "hash": "sha256-KOwJXGvMc9Xgq4Kbr72aW6RDwzldUrU1C3aDxpKO3qE=",
+    "hash": "sha256-zvzBWnxWVXNOebnlgaP8lzwk6DMwwkGxx4i1QKCLSz0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/null",
     "owner": "hashicorp",
     "repo": "terraform-provider-null",
-    "rev": "v3.2.2",
+    "rev": "v3.2.3",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-9MeLKrKV3OESkJ4kTB9A9c9IYY1QsME0CODIoGU+anU="
+    "vendorHash": "sha256-btTvl9WcqWMa5YGkY0PT8c64H6ToNghLKX03dN/3IPs="
   },
   "nutanix": {
     "deleteVendor": true,
