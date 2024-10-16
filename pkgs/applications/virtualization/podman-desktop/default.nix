@@ -1,50 +1,42 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, applyPatches
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
-, nodejs
 , makeWrapper
 , copyDesktopItems
 , electron
+, nodejs
+, pnpm
 , makeDesktopItem
 , xcbuild
 , autoSignDarwinBinariesHook
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.12.0";
+  version = "1.13.2";
 
-  src = applyPatches {
-    src = fetchFromGitHub {
-      owner = "containers";
-      repo = "podman-desktop";
-      rev = "v${finalAttrs.version}";
-      sha256 = "sha256-AdiomKM2RfJQKnyrcsdh8FtX7NuAj3g0KQ3pzy76gYI=";
-    };
-    # fix handling of Unix epoch timestamps for zip header, https://github.com/cthackers/adm-zip/pull/518
-    # apply the patch early so that fetchYarnDeps can pull the patched yarn.lock
-    patches = [
-      ./patches/0001-chore-deps-bump-adm-zip-from-0.5.14-to-0.5.15.patch
-    ];
+  passthru.updateScript = nix-update-script { };
+
+  src = fetchFromGitHub {
+    owner = "containers";
+    repo = "podman-desktop";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-07lf9jy22JUT+Vc5y9Tu1nkWaXU5RTdu3GibcvQsSs8=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    sha256 = "sha256-y3ftK2SrysaWoHKEUeTF7aFp3yKmKcdVEJtOOKLr2G0=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-mkWbFFv0IdLtog6uZM6xgTNlQPC+ytUQD8po8yiv/6Y=";
   };
 
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./patches/extension-no-download-podman.patch
-    ./patches/fix-yarn-lock-deterministic.patch
   ];
 
   postPatch = ''
-    for file in packages/main/src/tray-animate-icon.ts extensions/podman/src/util.ts packages/main/src/plugin/certificates.ts; do
+    for file in packages/main/src/tray-animate-icon.ts extensions/podman/packages/extension/src/util.ts packages/main/src/plugin/certificates.ts; do
       substituteInPlace "$file" \
         --replace 'process.resourcesPath'          "'$out/share/lib/podman-desktop/resources'" \
         --replace '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
@@ -54,10 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
-    nodejs
-    makeWrapper
+    makeWrapper nodejs pnpm.configHook
   ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -65,22 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoSignDarwinBinariesHook
   ];
 
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
-  '';
-
   buildPhase = ''
     runHook preBuild
-
-    yarn --offline run build
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
@@ -89,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     export CSC_IDENTITY_AUTO_DISCOVERY=false
     sed -i "/afterSign/d" .electron-builder.config.cjs
   '' + ''
-    yarn --offline run electron-builder --dir \
+    pnpm build
+    ./node_modules/.bin/electron-builder \
+      --dir \
       --config .electron-builder.config.cjs \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
@@ -138,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
-    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/containers/podman-desktop/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ panda2134 ];
     inherit (electron.meta) platforms;
