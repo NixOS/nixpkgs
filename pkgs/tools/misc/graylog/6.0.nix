@@ -2,8 +2,8 @@
 let
   buildGraylog = callPackage ./graylog.nix {};
 in buildGraylog {
-  version = "6.0.4";
-  hash = "sha256-PU7AepIRwx7FibBkZaQUWUy3v2MeM7cS77FH28aj8I8=";
+  version = "6.0.7";
+  hash = "sha256-whLU1d0wmmdSiMESpzmCTHe5U7GXVHefsonTPO7d7rY=";
   maintainers = with lib.maintainers; [ bbenno ];
   license = lib.licenses.sspl;
 }
