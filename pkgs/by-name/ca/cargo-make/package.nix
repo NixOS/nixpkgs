@@ -2,6 +2,7 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+, installShellFiles
 , bzip2
 , openssl
 , stdenv
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-RjsYrFbS/OiMQKTiPshGcBI9KF75Z5stn2HaB6mniZE=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [
     bzip2
@@ -29,6 +33,10 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
+
+  postInstall = ''
+    installShellCompletion extra/shell/*.bash
+  '';
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.
