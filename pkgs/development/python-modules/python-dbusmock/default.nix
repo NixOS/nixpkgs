@@ -31,14 +31,14 @@ let
 in
 buildPythonPackage rec {
   pname = "python-dbusmock";
-  version = "0.32.1";
+  version = "0.32.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "martinpitt";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-t8gMBebqVVij6R2KEOq3/j1ql4ZiVdE5236uqGUchE0=";
+    hash = "sha256-TOs6wAZDcSD1eP+Hbj78YXoAtKbReC5di5QSpQdwp8E=";
   };
 
   patches = [
@@ -46,6 +46,11 @@ buildPythonPackage rec {
       name = "musl.patch";
       url = "https://github.com/martinpitt/python-dbusmock/commit/1a8d8722068ef7e5f061336047a72d1a0f253b98.patch";
       hash = "sha256-0j3UXsTMDh1+UolkmoLQXlwHXve81yKiGJ7gDWNZVPY=";
+    })
+    (fetchpatch {
+      name = "os-release.patch";
+      url = "https://github.com/martinpitt/python-dbusmock/commit/4b99cff50e8c741f20aef4527b27ccdb2a4053d2.patch";
+      hash = "sha256-Xcovv44JeuTvPAtXWJvWE+MxlyloClSJGKZz+C3P5bE=";
     })
   ];
 
