@@ -108,11 +108,11 @@
     "vendorHash": "sha256-Sq304WOdKx4J1sD1+YA7uDi+uQtUiXa+BISs/j87dWw="
   },
   "aviatrix": {
-    "hash": "sha256-erBjyDX6xG8lpqcPq8iqgsanJKLuSgmiW/9PC8Xbyag=",
+    "hash": "sha256-zp04r3ySIp7z5Rxx+9ADAoca0Cf5YFX8oWqLSAMkNgI=",
     "homepage": "https://registry.terraform.io/providers/AviatrixSystems/aviatrix",
     "owner": "AviatrixSystems",
     "repo": "terraform-provider-aviatrix",
-    "rev": "v3.1.5",
+    "rev": "v3.2.0",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
