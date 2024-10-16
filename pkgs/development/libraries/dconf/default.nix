@@ -15,7 +15,10 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , nixosTests
-, withDocs ? true
+, buildPackages
+, gobject-introspection
+, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+, withDocs ? withIntrospection
 }:
 
 stdenv.mkDerivation rec {
@@ -49,12 +52,14 @@ stdenv.mkDerivation rec {
     glib
     bash-completion
     dbus
+  ] ++ lib.optionals withIntrospection [
     vala
   ];
 
   mesonFlags = [
     "--sysconfdir=/etc"
-    "-Dgtk_doc=${lib.boolToString withDocs}"
+    (lib.mesonBool "gtk_doc" withDocs)
+    (lib.mesonBool "vapi" withIntrospection)
   ];
 
   nativeCheckInputs = [
