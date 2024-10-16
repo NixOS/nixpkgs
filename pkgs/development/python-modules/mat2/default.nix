@@ -96,8 +96,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
-    # Frequently fails when exiftool is updated and adds support for new metadata.
-    "test_all_parametred"
+    # libmat2.pdf.cairo.MemoryError: out of memory
+    "test_all"
   ];
 
   meta = with lib; {

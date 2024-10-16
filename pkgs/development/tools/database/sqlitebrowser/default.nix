@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlitebrowser";
-  version = "3.13.0";
+  version = "3.13.1";
 
   src = fetchFromGitHub {
     owner = "sqlitebrowser";
     repo = "sqlitebrowser";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-2U0jnL2hmrxynMxEiObl10bKFAFlCrY2hulZ/Ggqimw=";
+    sha256 = "sha256-bpZnO8i8MDgOm0f93pBmpy1sZLJQ9R4o4ZLnGfT0JRg=";
   };
 
   patches = lib.optional stdenv.hostPlatform.isDarwin ./macos.patch;

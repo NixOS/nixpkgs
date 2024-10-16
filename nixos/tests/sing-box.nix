@@ -44,13 +44,17 @@ import ./make-test-python.nix (
       type = "tun";
       tag = "inbound:tun";
       interface_name = "tun0";
-      inet4_address = "172.16.0.1/30";
-      inet6_address = "fd00::1/126";
+      address = [
+        "172.16.0.1/30"
+        "fd00::1/126"
+      ];
       auto_route = true;
-      inet4_route_address = [
+      iproute2_table_index = 2024;
+      iproute2_rule_index = 9001;
+      route_address = [
         "${hosts."${target_host}"}/32"
       ];
-      inet4_route_exclude_address = [
+      route_exclude_address = [
         "${hosts."${server_host}"}/32"
       ];
       strict_route = false;
@@ -513,9 +517,14 @@ import ./make-test-python.nix (
 
       with subtest("tun"):
         tun.wait_for_unit("sing-box.service")
-        tun.wait_for_unit("sys-devices-virtual-net-tun0.device")
-        tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev tun0'")
-        tun.succeed("ip addr show tun0")
+        tun.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
+        tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
+        tun.succeed("ip addr show ${tunInbound.interface_name}")
+        tun.succeed("ip route show table ${toString tunInbound.iproute2_table_index} | grep ${tunInbound.interface_name}")
+        assert (
+          tun.succeed("ip rule list table ${toString tunInbound.iproute2_table_index} | sort | head -1 | awk -F: '{print $1}' | tr -d '\n'")
+          == "${toString tunInbound.iproute2_rule_index}"
+        )
         test_curl(tun)
 
       with subtest("wireguard"):
@@ -530,8 +539,8 @@ import ./make-test-python.nix (
 
       with subtest("fakeip"):
         fakeip.wait_for_unit("sing-box.service")
-        fakeip.wait_for_unit("sys-devices-virtual-net-tun0.device")
-        fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev tun0'")
+        fakeip.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
+        fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
         fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
     '';
 
