@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <RootNamespace>ExtractDotNetResources</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AsmResolver.DotNet" Version="5.5.1" />
+        <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
+        <PackageReference Include="Spectre.Console.Analyzer" Version="1.0.0" PrivateAssets="all" />
+
+        <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    </ItemGroup>
+</Project>
