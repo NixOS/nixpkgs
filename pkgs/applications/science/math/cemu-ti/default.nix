@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/gui/qt/";
 
+  patches = [
+    # This is resolved upstream, but I can't apply the patch because the
+    # sourceRoot isn't set to the base of the Git repo.
+    ./resolve-ambiguous-constexpr.patch
+  ];
 
   nativeBuildInputs = [
     cmake
