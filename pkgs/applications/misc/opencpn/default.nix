@@ -10,6 +10,7 @@
 , elfutils
 , fetchFromGitHub
 , flac
+, gitMinimal
 , gtk3
 , glew
 , gtest
@@ -48,13 +49,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.8.4";
+  version = "5.10.2";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-axRI3sssj2Q6IBfIeyvOa494b0EgKFP+lFL/QrGIybQ=";
+    hash = "sha256-VuMClQ5k1mTMF5yWstTi9YTF4tEN68acH5OPhjdzIwM=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -77,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     dbus
     flac
+    gitMinimal
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     AppKit
   ] ++ [
@@ -118,7 +120,12 @@ stdenv.mkDerivation (finalAttrs: {
     lame
   ];
 
-  cmakeFlags = [ "-DOCPN_BUNDLE_DOCS=true" ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (!stdenv.hostPlatform.isx86) [
     "-DSQUISH_USE_SSE=0"
