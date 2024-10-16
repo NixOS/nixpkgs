@@ -16722,7 +16722,7 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
-  mise = callPackage ../tools/misc/mise {
+  mise = callPackage ../by-name/mi/mise/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
