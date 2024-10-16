@@ -7,7 +7,7 @@
 , installShellFiles
 }:
 let
-  version = "3.0.0";
+  version = "3.1.0";
 in
 rustPlatform.buildRustPackage {
   pname = "wallust";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage {
     owner = "explosion-mental";
     repo = "wallust";
     rev = version;
-    hash = "sha256-vZTHlonepK1cyxHhGu3bVBuOmExPtRFrAnYp71Jfs8c=";
+    hash = "sha256-Tad+zyhmTr734GEW0A4SNrfWzqcL0gLFsM6MoMrV17k=";
   };
 
-  cargoHash = "sha256-o6VRekazqbKTef6SLjHqs9/z/Q70auvunP+yFDkclpg=";
+  cargoHash = "sha256-SEaq0qeWuDeIeCqz9imb5nV4WK44CF5wIwG62nhyqlU=";
 
   nativeBuildInputs = [ makeWrapper installShellFiles ];
 
