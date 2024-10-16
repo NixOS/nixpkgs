@@ -579,13 +579,13 @@
     "vendorHash": "sha256-zo22ng+J9ItkptdgUt6Pekkd9T7hFTYdVAWnp2k2vrs="
   },
   "http": {
-    "hash": "sha256-fYbOfsKTah+5pgJdSftZvVlYmBp75o/6ByJO+ayXDhQ=",
+    "hash": "sha256-eNF6OQZmJfzVXfvrhjtMJZG7mNYjS61Bplff+VaxrCA=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/http",
     "owner": "hashicorp",
     "repo": "terraform-provider-http",
-    "rev": "v3.4.4",
+    "rev": "v3.4.5",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-+U6k+mAVdGWOKzopp0yfaMmKuhqG0Laut+jHap4hBWs="
+    "vendorHash": "sha256-GoOKTT+EOhaPhpbgSW3SycYsE8LEQP0v4eQfiTEnPy8="
   },
   "huaweicloud": {
     "hash": "sha256-Qs5/bDIb2SkQn9oXYU0kgpHY2q2obf8h2bN4prsaNrs=",
