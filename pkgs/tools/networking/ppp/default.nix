@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ppp-project";
-    repo = pname;
+    repo = "ppp";
     rev = "ppp-${version}";
     hash = "sha256-sjaBFP/A63+ycuZm3bxOxAAxMrVHZZFED2Uq8rBapdo=";
   };
