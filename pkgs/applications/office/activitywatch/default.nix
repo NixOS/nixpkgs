@@ -32,16 +32,12 @@ rec {
     pname = "aw-watcher-afk";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-watcher-afk";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-      python3.pkgs.pythonRelaxDepsHook
-    ];
+    pyproject = true;
+    build-system = [ python3.pkgs.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       aw-client
       xlib
       pynput
@@ -65,16 +61,12 @@ rec {
     pname = "aw-watcher-window";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-watcher-window";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-      python3.pkgs.pythonRelaxDepsHook
-    ];
+    pyproject = true;
+    build-system = [ python3.pkgs.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       aw-client
       xlib
     ];
@@ -97,21 +89,21 @@ rec {
     pname = "aw-qt";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-qt";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-      wrapQtAppsHook
-    ];
+    pyproject = true;
+    build-system = [ python3.pkgs.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       aw-core
       qtbase
       qtsvg # Rendering icons in the trayicon menu
       pyqt6
       click
+    ];
+
+    nativeBuildInputs = [
+      wrapQtAppsHook
     ];
 
     # Prevent double wrapping
@@ -154,16 +146,12 @@ rec {
     pname = "aw-notify";
     inherit version;
 
-    format = "pyproject";
-
     src = "${sources}/aw-notify";
 
-    nativeBuildInputs = [
-      python3.pkgs.poetry-core
-      python3.pkgs.pythonRelaxDepsHook
-    ];
+    pyproject = true;
+    build-system = [ python3.pkgs.poetry-core ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       aw-client
       desktop-notifier
     ];
