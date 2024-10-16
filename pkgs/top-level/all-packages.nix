@@ -28161,6 +28161,8 @@ with pkgs;
 
   brutefir = callPackage ../applications/audio/brutefir { };
 
+  cctv-viewer = callPackage ../applications/video/cctv-viewer { };
+
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
   cutecapture = callPackage ../applications/video/cutecapture { };

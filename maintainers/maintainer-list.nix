@@ -21750,6 +21750,12 @@
     githubId = 8597964;
     name = "Anton Shkurenko";
   };
+  toolbox = {
+    email = "aaronbinford@gmail.com";
+    github = "aaronbinford";
+    githubId = 61842822;
+    name = "Aaron Binford";
+  };
   toonn = {
     email = "nixpkgs@toonn.io";
     matrix = "@toonn:matrix.org";
