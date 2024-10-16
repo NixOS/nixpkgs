@@ -881,6 +881,7 @@ in
                 "~CAP_SYSLOG"
                 "~CAP_SYS_ADMIN"
                 "~CAP_SYS_BOOT"
+                "~CAP_SYS_MODULE"
               ];
               ExecStart =
                 (lib.optionalString cfg.startWhenNeeded "-")
