@@ -1,4 +1,4 @@
-{ callPackage, fetchpatch }:
+{ callPackage }:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -69,16 +69,10 @@ in
     { });
   julia_111 = wrapJulia (callPackage
     (import ./generic.nix {
-      version = "1.11.0";
-      hash = "sha256-jXd4DNBEhOIfnDgFvmsb1WppvL5srt8kheiZIF2FyHQ=";
+      version = "1.11.1";
+      hash = "sha256-pJuATeboagP+Jsc/WIUeruH/JD1yBPK1rk28XB3CdY0=";
       patches = [
         ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
-        # [build] avoid libedit linkage and align libccalllazy* SONAMEs
-        # https://github.com/JuliaLang/julia/pull/55968
-        (fetchpatch {
-          url = "https://github.com/JuliaLang/julia/commit/77c5875b3cbe85e7fb0bb5a7e796809c901ede95.patch";
-          hash = "sha256-wDAB3VVI6JfOyyFbAktdAe2Im/HbAciq9yFI4HIpWvY=";
-        })
       ];
     })
     { });
