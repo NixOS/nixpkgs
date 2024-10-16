@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
-    hash = "sha256-y/bkdDWrb1KB0EOVSJPfPVYHGp/zQ2+Shb6eLsFQRNQ=";
+    hash = "sha256-VST3ZJuDQBWf+YoN0kPyLrlXWmJABubUFDsKEMxfxHY=";
     fetchSubmodules = true;
   };
 
