@@ -1,9 +1,9 @@
-{ lib
-, qt5
-, autoPatchelfHook
-, unzip
-, fetchzip
-, portaudio
+{
+  lib,
+  qt5,
+  autoPatchelfHook,
+  fetchzip,
+  portaudio,
 }:
 
 qt5.mkDerivation {
@@ -16,7 +16,6 @@ qt5.mkDerivation {
   };
 
   nativeBuildInputs = [
-    unzip
     autoPatchelfHook
   ];
 

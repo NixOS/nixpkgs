@@ -80,10 +80,11 @@ let
     # we call vimrcContent without 'packages' to avoid the init.vim generation
     neovimRcContent' = vimUtils.vimrcContent {
       beforePlugins = "";
-      customRC = lib.concatStringsSep "\n" (pluginRC ++ [neovimRcContent]);
+      customRC = lib.concatStringsSep "\n" (pluginRC ++ lib.optional (neovimRcContent != null) neovimRcContent);
       packages = null;
     };
 
+    packpathDirs.myNeovimPackages = myVimPackage;
     finalPackdir = neovimUtils.packDir packpathDirs;
 
     rcContent = ''
@@ -103,7 +104,6 @@ let
       ++ (extraPython3Packages ps)
       ++ (lib.concatMap (f: f ps) pluginPython3Packages));
 
-    packpathDirs.myNeovimPackages = myVimPackage;
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
@@ -240,6 +240,10 @@ let
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper lndir ];
+
+    # A Vim "package", see ':h packages'
+    vimPackage = myVimPackage;
+
     passthru = {
       inherit providerLuaRc packpathDirs;
       unwrapped = neovim-unwrapped;

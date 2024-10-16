@@ -9027,8 +9027,6 @@ self: super: with self; {
 
   normality = callPackage ../development/python-modules/normality { };
 
-  nose = callPackage ../development/python-modules/nose { };
-
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose2pytest = callPackage ../development/python-modules/nose2pytest { };
@@ -14661,7 +14659,18 @@ self: super: with self; {
     libsoxr = pkgs.soxr;
   };
 
-  spacy = callPackage ../development/python-modules/spacy { };
+  spacy = callPackage ../development/python-modules/spacy {
+    # fix error: ‘_PyCFrame’ has no member named ‘use_tracing’
+    # see: https://aur.archlinux.org/packages/python-spacy
+    cython_0 = cython_0.overridePythonAttrs (old: rec {
+      version = "0.29.37";
+      src = pkgs.fetchPypi {
+        pname = "Cython";
+        inherit version;
+        hash = "sha256-+BPUpt2Ure5dT/JmGR0dlb9tQWSk+sxTVCLAIbJQTPs=";
+      };
+    });
+  };
 
   spacy-alignments = callPackage ../development/python-modules/spacy-alignments { };
 
