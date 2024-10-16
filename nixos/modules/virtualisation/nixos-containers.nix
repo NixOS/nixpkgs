@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }@host:
+{ config, lib, pkgs, noUserModules, ... }@host:
 
 with lib;
 
@@ -494,7 +494,7 @@ in
               '';
               type = lib.mkOptionType {
                 name = "Toplevel NixOS config";
-                merge = loc: defs: (import "${toString config.nixpkgs}/nixos/lib/eval-config.nix" {
+                merge = loc: defs: (noUserModules.extendModules {
                   modules =
                     let
                       extraConfig = { options, ... }: {
