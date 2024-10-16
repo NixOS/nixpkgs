@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libdsk";
-  version = "1.5.19";
+  version = "1.5.20";
 
   src = fetchurl {
     url = "https://www.seasip.info/Unix/LibDsk/${pname}-${version}.tar.gz";
-    sha256 = "sha256-W8w5o9rK/yCipQnfn4gMOwDZ+9WeV3G53q5h2XlevkE=";
+    sha256 = "sha256-/ivN4+Oe0N6VmhWTfdDU48NcQLSIVAAtqzzi6DdlAZ0=";
   };
 
   meta = with lib; {
