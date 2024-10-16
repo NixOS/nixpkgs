@@ -31470,6 +31470,8 @@ with pkgs;
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv { };
 
+  microPlugins = callPackage  ../applications/editors/micro/plugins { };
+
   mle = callPackage ../applications/editors/mle { };
 
   namaka = callPackage ../development/tools/misc/namaka { };
