@@ -902,6 +902,7 @@ in
               LockPersonality = true;
               RestrictAddressFamilies = [
                 "~AF_NETLINK"
+                "~AF_PACKET"
               ];
               RestrictNamespaces = [
                 "~cgroup"
