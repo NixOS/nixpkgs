@@ -1,17 +1,26 @@
-{ branch ? "stable", callPackage, fetchurl, lib, stdenv }:
+{
+  branch ? "stable",
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 let
   versions =
-    if stdenv.hostPlatform.isLinux then {
-      stable = "0.0.71";
-      ptb = "0.0.110";
-      canary = "0.0.502";
-      development = "0.0.30";
-    } else {
-      stable = "0.0.322";
-      ptb = "0.0.140";
-      canary = "0.0.611";
-      development = "0.0.53";
-    };
+    if stdenv.hostPlatform.isLinux then
+      {
+        stable = "0.0.71";
+        ptb = "0.0.111";
+        canary = "0.0.503";
+        development = "0.0.30";
+      }
+    else
+      {
+        stable = "0.0.322";
+        ptb = "0.0.141";
+        canary = "0.0.612";
+        development = "0.0.53";
+      };
   version = versions.${branch};
   srcs = rec {
     x86_64-linux = {
@@ -21,11 +30,11 @@ let
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-        hash = "sha256-NV/0YKn1rG54Zkc9qAmpeb+4YbKjxhjTCdPOd84Lcc8=";
+        hash = "sha256-mms/qTA3XS+R5CDFWFS2RxiHOWnpU348nYagt9L2k2w=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
-        hash = "sha256-2DE7p3eT/mVGC+ejnTcTEhF7sEWyhfUfzj0gYTh+6Dw=";
+        hash = "sha256-Z0dv/jM0RipRI73vO9O5qqE0xf8qJtljZ3Zjr0Tf/KA=";
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
@@ -39,11 +48,11 @@ let
       };
       ptb = fetchurl {
         url = "https://ptb.dl2.discordapp.net/apps/osx/${version}/DiscordPTB.dmg";
-        hash = "sha256-VGhvykujfzI7jwXE+lHTzqT0t08GaON6gCuf13po7wY=";
+        hash = "sha256-EVwosCb/34W4+dx/u/5aq3pl6FqU1QiFT17yPydtGBU=";
       };
       canary = fetchurl {
         url = "https://canary.dl2.discordapp.net/apps/osx/${version}/DiscordCanary.dmg";
-        hash = "sha256-QC8RANqoyMAGKjTF0NNhz7wMt65D5LI1xYtd++dHXC4=";
+        hash = "sha256-xvrsohxoCTODG3Au5E773SEX5UXbBJ98J2Eb3Vtybfw=";
       };
       development = fetchurl {
         url = "https://development.dl2.discordapp.net/apps/osx/${version}/DiscordDevelopment.dmg";
@@ -52,31 +61,46 @@ let
     };
     aarch64-darwin = x86_64-darwin;
   };
-  src = srcs.${stdenv.hostPlatform.system}.${branch} or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
+  src =
+    srcs.${stdenv.hostPlatform.system}.${branch}
+      or (throw "${stdenv.hostPlatform.system} not supported on ${branch}");
 
-  meta = with lib; {
+  meta = {
     description = "All-in-one cross-platform voice and text chat for gamers";
-    homepage = "https://discordapp.com/";
     downloadPage = "https://discordapp.com/download";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
-    maintainers = with maintainers; [ Scrumplex artturin infinidoge jopejoe1 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    homepage = "https://discordapp.com/";
+    license = lib.licenses.unfree;
     mainProgram = "discord";
+    maintainers = with lib.maintainers; [
+      artturin
+      donteatoreo
+      infinidoge
+      jopejoe1
+      Scrumplex
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-  package =
-    if stdenv.isLinux
-    then ./linux.nix
-    else ./darwin.nix;
+  package = if stdenv.hostPlatform.isLinux then ./linux.nix else ./darwin.nix;
 
   packages = (
     builtins.mapAttrs
-      (_: value:
-        callPackage package (value
+      (
+        _: value:
+        callPackage package (
+          value
           // {
-          inherit src version branch;
-          meta = meta // { mainProgram = value.binaryName; };
-        }))
+            inherit src version branch;
+            meta = meta // {
+              mainProgram = value.binaryName;
+            };
+          }
+        )
+      )
       {
         stable = {
           pname = "discord";
