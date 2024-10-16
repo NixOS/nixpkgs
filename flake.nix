@@ -120,10 +120,20 @@
         }).nixos.manual;
       };
 
-      devShells = forAllSystems (system: {
-        /** A shell to get tooling for Nixpkgs development. See nixpkgs/shell.nix. */
-        default = import ./shell.nix { inherit system; };
-      });
+      devShells = forAllSystems (system:
+        { } // lib.optionalAttrs
+          (
+            # Exclude armv6l-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            system != "armv6l-linux"
+            # Exclude riscv64-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            && system != "riscv64-linux"
+            # Exclude FreeBSD because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            && !self.legacyPackages.${system}.stdenv.hostPlatform.isFreeBSD
+          )
+        {
+          /** A shell to get tooling for Nixpkgs development. See nixpkgs/shell.nix. */
+          default = import ./shell.nix { inherit system; };
+        });
 
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.
