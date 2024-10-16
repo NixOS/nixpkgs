@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     owner = "ppp-project";
     repo = pname;
     rev = "ppp-${version}";
-    sha256 = "sha256-sjaBFP/A63+ycuZm3bxOxAAxMrVHZZFED2Uq8rBapdo=";
+    hash = "sha256-sjaBFP/A63+ycuZm3bxOxAAxMrVHZZFED2Uq8rBapdo=";
   };
 
   configureFlags = [
