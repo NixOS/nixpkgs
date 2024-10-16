@@ -31,11 +31,13 @@ let
   stdenv = stdenvNoCC;
   srcDetails = rec {
     x86_64-linux = {
+      archiveDate = "20240825224413";
       urlSuffix = "%5blinux-x86%5d%5b18161880%5d.tar.bz2";
       hash = "sha256-7FoFz88dWYHs2/pxkEwnmiFeeb3+slayrWknEJoAB9o=";
     };
     i686-linux = x86_64-linux;
     x86_64-darwin = {
+      archiveDate = "20240825224411";
       urlSuffix = "%5bmac%5d%5b1DFC84A6%5d.dmg";
       hash = "sha256-Sc5BAlpJsffjcNrZ8+VU3n7G10DoqDKQn/leHDW32Y8=";
     };
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
   version = "1.3.1";
 
   src = fetchurl {
-    url = "https://cdn.fhs.sh/ks/bin/gold_${version}/%5b4ls%5d_katawa_shoujo_${version}-${srcDetails.urlSuffix}";
+    url = "https://web.archive.org/web/${srcDetails.archiveDate}/https://cdn.fhs.sh/ks/bin/gold_${version}/%5b4ls%5d_katawa_shoujo_${version}-${srcDetails.urlSuffix}";
     inherit (srcDetails) hash;
   };
 
