@@ -59,11 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Disable code signing during build on macOS.
-    export CSC_IDENTITY_AUTO_DISCOVERY=false
-    sed -i "/afterSign/d" .electron-builder.config.cjs
-  '' + ''
+
     pnpm build
     ./node_modules/.bin/electron-builder \
       --dir \
