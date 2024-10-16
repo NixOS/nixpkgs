@@ -750,13 +750,13 @@
     "vendorHash": "sha256-t5kQxSjd90mglgMvlMnhWBQlz1r+ZI5BKBD3dqty5lk="
   },
   "lxd": {
-    "hash": "sha256-LGho9iCjKn0OR8sbnkduZtLIxcnVwpedvVinA78791c=",
+    "hash": "sha256-PTpvB+FO94k/wnYQuex+zlpqcwwJSYl3OYRSA1gI7VM=",
     "homepage": "https://registry.terraform.io/providers/terraform-lxd/lxd",
     "owner": "terraform-lxd",
     "repo": "terraform-provider-lxd",
-    "rev": "v2.3.0",
+    "rev": "v2.4.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-J1KWnU0IspjoosI5wIAc8ygOImXlc3tFkhV3yDXoDl4="
+    "vendorHash": "sha256-JIFYDh3EzsCNwY8Hg8aVnUIuhP+MJpygbmwTyRryM0w="
   },
   "mailgun": {
     "hash": "sha256-Sj6iejtaSdAPg2tI5f0b88Lni431cervHxlQWwGl8Bo=",
