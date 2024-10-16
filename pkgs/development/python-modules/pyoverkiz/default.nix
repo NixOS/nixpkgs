@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
-  version = "1.14.1";
+  version = "1.14.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mpD8seRGZZ+1Rgg1ADFiFgYZ1JmLRNdscRwfXIK6Pr4=";
+    hash = "sha256-6ytfmdyVd7AFIWLSKCDpPHEKCy/EsGnOS+1i/bTO0Xs=";
   };
 
   build-system = [ poetry-core ];
