@@ -123,5 +123,8 @@ buildDotnetModule rec {
     maintainers = with maintainers; [ jk artemist ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "Ryujinx";
+    knownVulnerabilities = [
+      "Ryujinx is no longer actively developed / maintained by upstream, as it has been taken down."
+    ];
   };
 }
