@@ -44,13 +44,15 @@ import ./make-test-python.nix (
       type = "tun";
       tag = "inbound:tun";
       interface_name = "tun0";
-      inet4_address = "172.16.0.1/30";
-      inet6_address = "fd00::1/126";
+      address = [
+        "172.16.0.1/30"
+        "fd00::1/126"
+      ];
       auto_route = true;
-      inet4_route_address = [
+      route_address = [
         "${hosts."${target_host}"}/32"
       ];
-      inet4_route_exclude_address = [
+      route_exclude_address = [
         "${hosts."${server_host}"}/32"
       ];
       strict_route = false;
