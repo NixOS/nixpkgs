@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mbuffer";
-  version = "20240929";
+  version = "20241007";
 
   src = fetchurl {
     url = "http://www.maier-komor.de/software/mbuffer/mbuffer-${version}.tgz";
-    sha256 = "sha256-77bG3j4kWdI5h3TN1E7Apua4jEEy7eQ9PV4vbBjZpqc=";
+    sha256 = "sha256-nXNjAQtO9FsWRva19QJ7SbtqIJxQL7hOKBx713HVa+0=";
   };
 
   buildInputs = [
