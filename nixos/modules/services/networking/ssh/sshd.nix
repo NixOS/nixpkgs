@@ -899,6 +899,15 @@ in
                 # don't detach into a daemon process
                 + "-f /etc/ssh/sshd_config";
               KillMode = "process";
+              RestrictNamespaces = [
+                "~cgroup"
+                "~ipc"
+                "~mnt"
+                "~net"
+                "~pid"
+                "~user"
+                "~uts"
+              ];
               SystemCallFilter = [
                 "~@clock"
                 "~@cpu-emulation"
