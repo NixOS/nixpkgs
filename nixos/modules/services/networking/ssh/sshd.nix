@@ -899,6 +899,7 @@ in
                 # don't detach into a daemon process
                 + "-f /etc/ssh/sshd_config";
               KillMode = "process";
+              LockPersonality = true;
               RestrictNamespaces = [
                 "~cgroup"
                 "~ipc"
