@@ -2360,7 +2360,7 @@ with pkgs;
 
   gitls = callPackage ../applications/version-management/gitls { };
 
-  gitmux = callPackage ../applications/version-management/gitmux { };
+  gitmux = callPackage ../applications/version-management/gitmux { buildGoModule = buildGo122Module; };
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
 

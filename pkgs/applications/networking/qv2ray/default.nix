@@ -6,7 +6,7 @@
 , qttools
 , cmake
 , grpc
-, protobuf
+, protobuf_21
 , openssl
 , pkg-config
 , c-ares
@@ -57,7 +57,7 @@ mkDerivation rec {
     libGL
     zlib
     grpc
-    protobuf
+    protobuf_21
     openssl
     c-ares
   ];

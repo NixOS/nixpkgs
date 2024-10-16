@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, extra-cmake-modules
+, pkg-config
 , ninja
 , wayland
 , wayland-scanner
@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_PLUGIN=OFF"
   ];
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ninja wayland-scanner ];
+  nativeBuildInputs = [ cmake ninja pkg-config wayland-scanner ];
   buildInputs = [
     libGL
     libffi
