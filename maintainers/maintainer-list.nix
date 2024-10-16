@@ -15586,6 +15586,12 @@
     github = "Noodlesalat";
     githubId = 12748782;
   };
+  nueidris = {
+    email = "filipessantos@academico.ufs.br";
+    name = "Filipe da Silva Santos";
+    github = "nueidris";
+    githubId = 70187554;
+  };
   nukaduka = {
     email = "ksgokte@gmail.com";
     github = "NukaDuka";
