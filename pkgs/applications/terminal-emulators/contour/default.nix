@@ -99,5 +99,8 @@ stdenv.mkDerivation (final: {
     maintainers = with maintainers; [ moni ];
     platforms = platforms.unix;
     mainProgram = "contour";
+    # This was caused by boxed-cpp 1.4.2 -> 1.4.3
+    # More details in issue #345752
+    broken = true;
   };
 })

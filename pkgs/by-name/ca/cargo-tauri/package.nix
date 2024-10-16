@@ -9,7 +9,7 @@
   libsoup,
   openssl,
   pkg-config,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       gtk3
       libsoup
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;

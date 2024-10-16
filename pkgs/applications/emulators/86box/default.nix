@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
+    changelog = "https://github.com/86Box/86Box/releases/tag/v${finalAttrs.version}";
     license =
       with lib.licenses;
       [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;

@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [ ];
-
   mesonFlags = [
     # install validators to $dev
     "--bindir=${placeholder "dev"}/bin"

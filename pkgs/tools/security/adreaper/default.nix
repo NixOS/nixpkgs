@@ -24,6 +24,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Enumeration tool for Windows Active Directories";
     homepage = "https://github.com/AidenPearce369/ADReaper";
+    changelog = "https://github.com/AidenPearce369/ADReaper/releases/tag/ADReaperv${version}";
     # Upstream doesn't have a license yet
     # https://github.com/AidenPearce369/ADReaper/issues/2
     license = with licenses; [ unfree ];

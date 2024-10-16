@@ -70,9 +70,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-OqqorHVWCDicQKnTxEJjeXzDrsj98vWvtWYyaRmDsUs=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.2.4/forms-v4.2.4.tar.gz",
-    "version": "4.2.4",
+    "hash": "sha256-JhLaTXll2kh/TaWXR1DfUCHuxaJlUMU1oY9ry9yoTTg=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.1/forms-v4.3.1.tar.gz",
+    "version": "4.3.1",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -260,9 +260,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-eMdFS5yQWJNsTVuHBZX4v0PSocP/nT+JaS7RSTYF8p0=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.11/spreed-v18.0.11.tar.gz",
-    "version": "18.0.11",
+    "hash": "sha256-pOnL5uz8FcuHUFn7otp9NQinOqm+oCmXRHx4TM2NukI=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v18.0.12/spreed-v18.0.12.tar.gz",
+    "version": "18.0.12",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -311,7 +311,7 @@
   },
   "unsplash": {
     "hash": "sha256-kNDQk4HYkrBA+o+5/bNYj65ZJbViBjhnbSA87tsu6YE=",
-    "url": "https://github.com/nextcloud/unsplash/releases/download/v3.0.1/unsplash.tar.gz",
+    "url": "https://github.com/nextcloud/unsplash/releases/download/v3.0.2/unsplash.tar.gz",
     "version": "3.0.1",
     "description": "Show a new random featured nature photo in your nextcloud. Now with choosable motives!",
     "homepage": "https://github.com/nextcloud/unsplash/",
@@ -330,9 +330,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-+oeTDRomjmfSLIM6eyP6MHg+qtOs8IPqIWUzBofahYQ=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.2.0/user_saml-v6.2.0.tar.gz",
-    "version": "6.2.0",
+    "hash": "sha256-xxabQU8kZhgI7Q9D0n7hrFygvfZWZDnAQWnB8+A1xwE=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.3.0/user_saml-v6.3.0.tar.gz",
+    "version": "6.3.0",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [

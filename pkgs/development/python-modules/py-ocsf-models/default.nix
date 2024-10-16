@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "py-ocsf-models";
-  version = "0.1.1";
+  version = "0.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "prowler-cloud";
     repo = "py-ocsf-models";
     rev = "refs/tags/${version}";
-    hash = "sha256-NGhlMBNoa8V3vo/z6OBAWqNCSlTyUutiyrTcCe1KF+4=";
+    hash = "sha256-cFtWPO78KRh7IY+ePTzXpLPbZm+EtNvuJkhZZzKKjaA=";
   };
 
   pythonRelaxDeps = true;

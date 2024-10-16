@@ -34,8 +34,8 @@ default-package-overrides:
   - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
   # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
   - hnix-store-remote < 0.7
-  # 2024-08-26: test failure for >= 2.9 https://github.com/ocharles/weeder/issues/176
-  - weeder < 2.9.0
+  # 2024-09-12: match xmonad 0.17.* from Stackage LTS
+  - xmonad-contrib < 0.18.1
 
 
 extra-packages:

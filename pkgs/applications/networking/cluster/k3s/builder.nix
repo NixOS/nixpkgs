@@ -23,7 +23,7 @@ lib:
   # run `grep github.com/kubernetes-sigs/cri-tools go.mod | head -n1 | awk '{print $4}'` in the k3s repo at the tag
   criCtlVersion,
   updateScript ? null,
-}:
+}@attrs:
 
 # builder.nix contains a "builder" expression that, given k3s version and hash
 # variables, creates a package for that version.
@@ -325,6 +325,7 @@ in
 buildGoModule rec {
   pname = "k3s";
   version = k3sVersion;
+  pos = builtins.unsafeGetAttrPos "k3sVersion" attrs;
 
   tags = [
     "libsqlite3"

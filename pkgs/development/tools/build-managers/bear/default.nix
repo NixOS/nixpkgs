@@ -1,21 +1,23 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, grpc
-, protobuf
-, openssl
-, nlohmann_json
-, gtest
-, spdlog
-, c-ares
-, zlib
-, sqlite
-, re2
-, lit
-, python3
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  grpc,
+  protobuf_25,
+  openssl,
+  nlohmann_json,
+  gtest,
+  spdlog,
+  c-ares,
+  zlib,
+  sqlite,
+  re2,
+  lit,
+  python3,
+  coreutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     grpc
-    protobuf
+    protobuf_25
     openssl
     nlohmann_json
     gtest

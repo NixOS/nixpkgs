@@ -88,6 +88,12 @@ stdenv.mkDerivation rec {
     "--no-suite" "fprintd:TestPamFprintd"
   ];
 
+  patches = [
+    # Skip flaky test "test_removal_during_enroll"
+    # https://gitlab.freedesktop.org/libfprint/fprintd/-/issues/129
+    ./skip-test-test_removal_during_enroll.patch
+  ];
+
   postPatch = ''
     patchShebangs \
       po/check-translations.sh \

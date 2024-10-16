@@ -278,7 +278,11 @@ with lib.maintainers;
   };
 
   emacs = {
-    members = [ adisbladis ];
+    members = [
+      AndersonTorres
+      adisbladis
+      linj
+    ];
     scope = "Maintain the Emacs editor and packages.";
     shortName = "Emacs";
   };
@@ -743,6 +747,16 @@ with lib.maintainers;
     scope = "Maintain the Nixpkgs module system.";
     shortName = "Module system";
     enableFeatureFreezePing = true;
+  };
+
+  ngi = {
+    members = [
+      eljamm
+      fricklerhandwerk
+      wegank
+    ];
+    scope = "Maintain NGI-supported software.";
+    shortName = "NGI";
   };
 
   node = {

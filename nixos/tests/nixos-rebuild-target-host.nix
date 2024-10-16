@@ -24,6 +24,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       system.build.privateKey = snakeOilPrivateKey;
       system.build.publicKey = snakeOilPublicKey;
+      # needed to provide STC implementation for target
+      system.switch.enable = true;
     };
 
     target = { nodes, lib, ... }: let

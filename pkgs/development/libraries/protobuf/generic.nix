@@ -18,6 +18,8 @@
 , grpc
 , enableShared ? !stdenv.hostPlatform.isStatic
 
+, testers
+, protobuf
 , ...
 }:
 
@@ -28,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protobuf";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     inherit hash;
   };
 
@@ -74,25 +76,26 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals enableShared [
     "-Dprotobuf_BUILD_SHARED_LIBS=ON"
   ]
-  # Tests fail to build on 32-bit platforms; fixed in 22.x
-  # https://github.com/protocolbuffers/protobuf/issues/10418
-  ++ lib.optionals (stdenv.hostPlatform.is32bit && lib.versionOlder version "22") [
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "-Dprotobuf_BUILD_TESTS=OFF"
   ];
 
-  # FIXME: investigate.  24.x and 23.x have different errors.
-  # At least some of it is not reproduced on some other machine; example:
-  # https://hydra.nixos.org/build/235677717/nixlog/4/tail
-  # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
-  # https://github.com/protocolbuffers/protobuf/issues/8460
-  doCheck = !(stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "23") && !stdenv.hostPlatform.is32bit;
+  doCheck =
+    # FIXME: investigate.  24.x and 23.x have different errors.
+    # At least some of it is not reproduced on some other machine; example:
+    # https://hydra.nixos.org/build/235677717/nixlog/4/tail
+    !(stdenv.hostPlatform.isDarwin && lib.versionAtLeast version "23")
+    # Tests fail to build on 32-bit platforms; fixed in 22.x
+    # https://github.com/protocolbuffers/protobuf/issues/10418
+    # Also AnyTest.TestPackFromSerializationExceedsSizeLimit fails on 32-bit platforms
+    # https://github.com/protocolbuffers/protobuf/issues/8460
+    && !stdenv.hostPlatform.is32bit;
 
   passthru = {
     tests = {
-      pythonProtobuf = python3.pkgs.protobuf.override (_: {
-        protobuf = finalAttrs.finalPackage;
-      });
+      pythonProtobuf = python3.pkgs.protobuf;
       inherit grpc;
+      version = testers.testVersion { package = protobuf; };
     };
 
     inherit abseil-cpp;
@@ -108,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.all;
     homepage = "https://protobuf.dev/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "protoc";
   };
 })

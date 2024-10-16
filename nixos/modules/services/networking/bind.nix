@@ -45,7 +45,7 @@ let
         default = [ "any" ];
       };
       extraConfig = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.lines;
         description = "Extra zone config to be appended at the end of the zone section.";
         default = "";
       };

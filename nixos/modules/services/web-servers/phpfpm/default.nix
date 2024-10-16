@@ -240,7 +240,7 @@ in {
     };
 
     systemd.slices.system-phpfpm = {
-      description = "PHP FastCGI Process manager pools slice";
+      description = "PHP FastCGI Process Manager Slice";
     };
 
     systemd.targets.phpfpm = {

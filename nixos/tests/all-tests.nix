@@ -136,6 +136,7 @@ in {
   artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
+  atticd = runTest ./atticd.nix;
   atuin = handleTest ./atuin.nix {};
   audiobookshelf = handleTest ./audiobookshelf.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
@@ -322,6 +323,7 @@ in {
   fancontrol = handleTest ./fancontrol.nix {};
   fanout = handleTest ./fanout.nix {};
   fcitx5 = handleTest ./fcitx5 {};
+  fedimintd = runTest ./fedimintd.nix;
   fenics = handleTest ./fenics.nix {};
   ferm = handleTest ./ferm.nix {};
   ferretdb = handleTest ./ferretdb.nix {};
@@ -367,6 +369,7 @@ in {
   mimir = handleTest ./mimir.nix {};
   gancio = handleTest ./gancio.nix {};
   garage = handleTest ./garage {};
+  gatus = runTest ./gatus.nix;
   gemstash = handleTest ./gemstash.nix {};
   geoserver = runTest ./geoserver.nix;
   gerrit = handleTest ./gerrit.nix {};
@@ -823,6 +826,7 @@ in {
   printing-socket = handleTest ./printing.nix { socket = true; };
   printing-service = handleTest ./printing.nix { socket = false; };
   private-gpt = handleTest ./private-gpt.nix {};
+  privatebin = runTest ./privatebin.nix;
   privoxy = handleTest ./privoxy.nix {};
   prometheus = handleTest ./prometheus {};
   prometheus-exporters = handleTest ./prometheus-exporters.nix {};
@@ -886,6 +890,7 @@ in {
   samba-wsdd = handleTest ./samba-wsdd.nix {};
   sane = handleTest ./sane.nix {};
   sanoid = handleTest ./sanoid.nix {};
+  saunafs = handleTest ./saunafs.nix {};
   scaphandre = handleTest ./scaphandre.nix {};
   schleuder = handleTest ./schleuder.nix {};
   scion-freestanding-deployment = handleTest ./scion/freestanding-deployment {};
@@ -941,6 +946,7 @@ in {
   sudo = handleTest ./sudo.nix {};
   sudo-rs = handleTest ./sudo-rs.nix {};
   sunshine = handleTest ./sunshine.nix {};
+  suricata = handleTest ./suricata.nix {};
   suwayomi-server = handleTest ./suwayomi-server.nix {};
   swap-file-btrfs = handleTest ./swap-file-btrfs.nix {};
   swap-partition = handleTest ./swap-partition.nix {};
@@ -1066,6 +1072,7 @@ in {
   unbound = handleTest ./unbound.nix {};
   unifi = handleTest ./unifi.nix {};
   unit-php = handleTest ./web-servers/unit-php.nix {};
+  unit-perl = handleTest ./web-servers/unit-perl.nix {};
   upnp.iptables = handleTest ./upnp.nix { useNftables = false; };
   upnp.nftables = handleTest ./upnp.nix { useNftables = true; };
   uptermd = handleTest ./uptermd.nix {};

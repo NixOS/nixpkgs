@@ -853,9 +853,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Resolves domains of proxyPass targets at runtime
-          and not only at start, you have to set
-          services.nginx.resolver, too.
+          Resolves domains of proxyPass targets at runtime and not only at startup.
+          This can be used as a workaround if nginx fails to start because of not-yet-working DNS.
+
+          :::{.warn}
+          `services.nginx.resolver` must be set for this option to work.
+          :::
         '';
       };
 
@@ -896,7 +899,7 @@ in
       typesHashMaxSize = mkOption {
         type = types.ints.positive;
         default = if cfg.defaultMimeTypes == "${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024;
-        defaultText = literalExpression ''if cfg.defaultMimeTypes == "''${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024'';
+        defaultText = literalExpression ''if config.services.nginx.defaultMimeTypes == "''${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024'';
         description = ''
           Sets the maximum size of the types hash tables (`types_hash_max_size`).
           It is recommended that the minimum size possible size is used.
@@ -1071,7 +1074,7 @@ in
             '';
           };
           "memcached" = {
-            servers."unix:/run//memcached/memcached.sock" = {};
+            servers."unix:/run/memcached/memcached.sock" = {};
           };
         };
       };

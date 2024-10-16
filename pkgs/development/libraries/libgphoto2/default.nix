@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
   # These are mentioned in the Requires line of libgphoto's pkg-config file.
   propagatedBuildInputs = [ libexif ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
+
   hardeningDisable = [ "format" ];
 
   postInstall =

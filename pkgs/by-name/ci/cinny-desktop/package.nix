@@ -14,7 +14,7 @@
   glib,
   glib-networking,
   libayatana-appindicator,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,6 +58,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p "$out/bin"
       ln -sf "$out/Applications/Cinny.app/Contents/MacOS/Cinny" "$out/bin/cinny"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -83,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libayatana-appindicator
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.DarwinTools

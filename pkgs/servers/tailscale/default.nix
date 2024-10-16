@@ -15,17 +15,19 @@
 }:
 
 let
-  version = "1.74.1";
+  version = "1.76.0";
 in
 buildGoModule {
   pname = "tailscale";
   inherit version;
 
+  outputs = [ "out" "derper" ];
+
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
-    hash = "sha256-672FtDKgz7Nmoufoe4Xg/b8sA8EuKH8X+3n9PAKYjFk=";
+    hash = "sha256-fCUrZ+rrNJ9+XYjCtgaTUWmWczBbavtPe1pFM3L913w=";
   };
 
   patches = [
@@ -37,13 +39,13 @@ buildGoModule {
     })
   ];
 
-  vendorHash = "sha256-HJEgBs2GOzXvRa95LdwySQmG4/+QwupFDBGrQT6Y2vE=";
+  vendorHash = "sha256-xCZ6YMJ0fqVzO+tKbCzF0ftV05NOB+lJbJBovLqlrtQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [ installShellFiles ];
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/tailscaled" ];
+  subPackages = [ "cmd/derper" "cmd/tailscaled" ];
 
   ldflags = [
     "-w"
@@ -60,6 +62,7 @@ buildGoModule {
 
   postInstall = ''
     ln -s $out/bin/tailscaled $out/bin/tailscale
+    moveToOutput "bin/derper" "$derper"
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/tailscaled \
       --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \

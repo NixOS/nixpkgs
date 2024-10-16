@@ -30,7 +30,7 @@
   mesa,
   pango,
   SDL,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK,
   xorgproto,
 
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       libXxf86vm
       libglvnd
       mesa
-      webkitgtk
+      webkitgtk_4_0
       xorgproto
     ];
 

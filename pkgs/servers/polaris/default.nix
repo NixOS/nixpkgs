@@ -4,20 +4,19 @@
 , rustPlatform
 , nix-update-script
 , polaris-web
-, fetchpatch
 , darwin
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
-  version = "0.14.2";
+  version = "0.14.3";
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
     rev = version;
-    hash = "sha256-UC66xRL9GyTPHJ3z0DD/yyI9GlyqelCaHHDyl79ptJg=";
+    hash = "sha256-2GHYIlEzRS7KXahdrxMjyIcPCNw8gXJw5/4ZpB/zT3Y=";
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -31,15 +30,9 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  cargoPatches = [
-    (fetchpatch { # https://github.com/agersant/polaris/pull/213
-      name = "bump-time-crate.patch";
-      url = "https://github.com/agersant/polaris/commit/f625c57d203bdd3f2d7fcd99ccce1032f04d9b91.patch";
-      hash = "sha256-ICScYbSv4sCMbfZN2thhZMXGPcDX89xIhZqBJpGOzrY=";
-    })
-  ];
-
-  cargoHash = "sha256-PnNLSL6YIpM6b3+oCh2eNRNPpCKyvnWEW7uNaYTKzAU=";
+  cargoHash = if stdenv.buildPlatform.isDarwin
+    then "sha256-HTqsghjfSjwOaN/ApPFvWVEoquZzE3MYzULkhUOXIWI"
+    else "sha256-Z3AbYtdNAyKT5EuGtCktEg0fxs/gpKdsrttRkxZhLAU";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.Security

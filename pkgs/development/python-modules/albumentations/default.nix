@@ -30,7 +30,7 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.16";
+  version = "1.4.17";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-cfft5RovAJaCNTD9P9KsAJFmdwHwE0gYQ3yd6a3AAMU=";
+    hash = "sha256-4JOqaSpBXSrAR3qrOeab+PvhXPcoEnblO0n9TSqW0bY=";
   };
 
   pythonRemoveDeps = [ "opencv-python" ];

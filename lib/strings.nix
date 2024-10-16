@@ -2272,7 +2272,7 @@ rec {
     isCoercibleToString :: a -> bool
     ```
   */
-  isCoercibleToString = lib.warnIf (lib.isInOldestRelease 2305)
+  isCoercibleToString = lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
     "lib.strings.isCoercibleToString is deprecated in favor of either isStringLike or isConvertibleWithToString. Only use the latter if it needs to return true for null, numbers, booleans and list of similarly coercibles."
     isConvertibleWithToString;
 

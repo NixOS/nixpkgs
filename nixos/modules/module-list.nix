@@ -215,7 +215,7 @@
   ./programs/iftop.nix
   ./programs/i3lock.nix
   ./programs/iio-hyprland.nix
-  ./programs/immersed-vr.nix
+  ./programs/immersed.nix
   ./programs/iotop.nix
   ./programs/java.nix
   ./programs/joycond-cemuhook.nix
@@ -759,7 +759,6 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gitweb.nix
-  ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gotenberg.nix
   ./services/misc/gpsd.nix
@@ -883,6 +882,7 @@
   ./services/monitoring/datadog-agent.nix
   ./services/monitoring/do-agent.nix
   ./services/monitoring/fusion-inventory.nix
+  ./services/monitoring/gatus.nix
   ./services/monitoring/goss.nix
   ./services/monitoring/grafana-agent.nix
   ./services/monitoring/grafana-image-renderer.nix
@@ -965,6 +965,7 @@
   ./services/network-filesystems/rsyncd.nix
   ./services/network-filesystems/samba-wsdd.nix
   ./services/network-filesystems/samba.nix
+  ./services/network-filesystems/saunafs.nix
   ./services/network-filesystems/tahoe.nix
   ./services/network-filesystems/u9fs.nix
   ./services/network-filesystems/webdav-server-rs.nix
@@ -979,6 +980,7 @@
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
+  ./services/networking/atticd.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
@@ -1030,6 +1032,7 @@
   ./services/networking/expressvpn.nix
   ./services/networking/fakeroute.nix
   ./services/networking/fastnetmon-advanced.nix
+  ./services/networking/fedimintd.nix
   ./services/networking/ferm.nix
   ./services/networking/firefox-syncserver.nix
   ./services/networking/fireqos.nix
@@ -1229,6 +1232,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/tailscale.nix
   ./services/networking/tailscale-auth.nix
+  ./services/networking/tailscale-derper.nix
   ./services/networking/tayga.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
@@ -1273,6 +1277,7 @@
   ./services/networking/xray.nix
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
+  ./services/networking/zapret.nix
   ./services/networking/zerobin.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
@@ -1373,7 +1378,6 @@
   ./services/video/mirakurun.nix
   ./services/video/photonvision.nix
   ./services/video/mediamtx.nix
-  ./services/video/unifi-video.nix
   ./services/video/v4l2-relayd.nix
   ./services/wayland/cage.nix
   ./services/wayland/hypridle.nix
@@ -1487,6 +1491,7 @@
   ./services/web-apps/powerdns-admin.nix
   ./services/web-apps/pretalx.nix
   ./services/web-apps/pretix.nix
+  ./services/web-apps/privatebin.nix
   ./services/web-apps/prosody-filer.nix
   ./services/web-apps/rimgo.nix
   ./services/web-apps/rutorrent.nix

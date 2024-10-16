@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ ];
-
   # SMART is only supported on Linux and requires the smartmontools package
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/snapraid \

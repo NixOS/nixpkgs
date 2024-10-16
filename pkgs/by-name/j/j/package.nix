@@ -71,6 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://jsoftware.com/";
+    changelog = "https://code.jsoftware.com/wiki/System/ReleaseNotes";
     description = "J programming language, an ASCII-based APL successor";
     longDescription = ''
       J is a high-level, general-purpose programming language that is

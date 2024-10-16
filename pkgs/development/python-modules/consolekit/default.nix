@@ -31,8 +31,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [ ];
-
   meta = {
     description = "Additional utilities for click.";
     homepage = "https://pypi.org/project/consolekit";

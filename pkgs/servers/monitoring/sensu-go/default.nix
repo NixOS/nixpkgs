@@ -1,8 +1,8 @@
-{ buildGo121Module, fetchFromGitHub, lib }:
+{ buildGo122Module, fetchFromGitHub, lib }:
 
 let
   generic = { subPackages, pname, postInstall ? "", mainProgram }:
-    buildGo121Module rec {
+    buildGo122Module rec {
       inherit pname;
       version = "6.11.0";
       shortRev = "9587df6"; # for internal version info

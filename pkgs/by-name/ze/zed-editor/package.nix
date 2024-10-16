@@ -29,7 +29,7 @@
   envsubst,
   gitUpdater,
   cargo-about,
-  testers,
+  versionCheckHook,
   zed-editor,
   buildFHSEnv,
 
@@ -86,13 +86,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.154.4";
+  version = "0.156.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/sL5SVRNVJBMPPZek9zBiek3nXHI1czNwbkGtlk9CzU=";
+    hash = "sha256-nZsc8BUxHIVZoJvY+6JFIyuLJrnQ4H7LhesnEnceA74=";
     fetchSubmodules = true;
   };
 
@@ -243,14 +243,17 @@ rustPlatform.buildRustPackage rec {
     runHook postInstall
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/zeditor";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
       ignoredVersions = "pre";
-    };
-    tests.version = testers.testVersion {
-      inherit version;
-      package = zed-editor;
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };

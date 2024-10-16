@@ -234,7 +234,7 @@ in
     services.redis.servers.paperless.enable = mkIf enableRedis true;
 
     systemd.slices.system-paperless = {
-      description = "Paperless slice";
+      description = "Paperless Document Management System Slice";
       documentation = [ "https://docs.paperless-ngx.com" ];
     };
 

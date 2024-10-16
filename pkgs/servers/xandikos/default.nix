@@ -1,13 +1,15 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
+{
+  fetchFromGitHub,
+  fetchpatch2,
+  lib,
+  nixosTests,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xandikos";
   version = "0.2.11";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
 
@@ -18,12 +20,20 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-cBsceJ6tib8OYx5L2Hv2AqRS+ADRSLIuJGIULNpAmEI=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    setuptools
-    wheel
+  patches = [
+    (fetchpatch2 {
+      name = "fix-compatibility-with-icalendar-v6.patch";
+      url = "https://github.com/jelmer/xandikos/commit/ae8924c374ed86b2efde5bfbc75e56f6d8318086.patch";
+      excludes = [ "requirements.txt" ];
+      hash = "sha256-PCKo5C6Ejw9ZsFFLAMw1ZtMoCq9gJxR65K7CM6RUYwU=";
+    })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     aiohttp
     aiohttp-openmetrics
     dulwich
@@ -31,6 +41,7 @@ python3Packages.buildPythonApplication rec {
     icalendar
     jinja2
     multidict
+    pytz
     vobject
   ];
 

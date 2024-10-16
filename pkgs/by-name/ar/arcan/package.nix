@@ -2,6 +2,7 @@
   lib,
   SDL2,
   callPackage,
+  fetchpatch2,
   cmake,
   espeak-ng,
   ffmpeg,
@@ -59,6 +60,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   inherit (sources.letoram-arcan) pname version src;
+
+  patches = [
+    # (encode) remove deprecated use of pts/channel-layout
+    (fetchpatch2 {
+      url = "https://github.com/letoram/arcan/commit/e717c1b5833bdc2dea7dc6f64eeaf39c683ebd26.patch?full_index=1";
+      hash = "sha256-nUmOWfphGtGiLehUa78EJWqTlD7SvqJgl8lnn90vTFU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

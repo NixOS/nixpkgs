@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblxi";
-  version = "1.20";
+  version = "1.21";
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "liblxi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-jS0huNkbyKrsJ3NkenrYtjkzLakOsTJpwlgSo98ribE=";
+    hash = "sha256-ZRUYwMy+vvNClHxctoTMDlbnCSp2A0L9roo5KXWCMpI=";
   };
 
   postPatch = ''

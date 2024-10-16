@@ -4,8 +4,6 @@ with lib;
 let
   cfg = config.services.freshrss;
 
-  poolName = "freshrss";
-
   extension-env = pkgs.buildEnv {
     name = "freshrss-extensions";
     paths = cfg.extensions;
@@ -141,8 +139,8 @@ in
     };
 
     pool = mkOption {
-      type = types.str;
-      default = poolName;
+      type = types.nullOr types.str;
+      default = "freshrss";
       description = ''
         Name of the php-fpm pool to use and setup. If not specified, a pool will be created
         with default values.
@@ -235,8 +233,8 @@ in
       };
 
       # Set up phpfpm pool
-      services.phpfpm.pools = mkIf (cfg.pool == poolName) {
-        ${poolName} = {
+      services.phpfpm.pools = mkIf (cfg.pool != null) {
+        ${cfg.pool} = {
           user = "freshrss";
           settings = {
             "listen.owner" = "nginx";
@@ -271,9 +269,9 @@ in
         let
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
-              "--default_user" = ''"${cfg.defaultUser}"'';
-              "--auth_type" = ''"${cfg.authType}"'';
-              "--base_url" = ''"${cfg.baseUrl}"'';
+              "--default-user" = ''"${cfg.defaultUser}"'';
+              "--auth-type" = ''"${cfg.authType}"'';
+              "--base-url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
               # The following attributes are optional depending on the type of

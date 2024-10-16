@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nu-plugin-net";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "fennewald";
     repo = "nu_plugin_net";
     rev = "refs/tags/${version}";
-    hash = "sha256-GOF2CSlsjI8PAmIxj/+mR01X5XMviEM8gj7ZYTbeX7I=";
+    hash = "sha256-nKcB919M9FkDloulh9IusWYPhf8vlhUmKVs6Gd6w3Bw=";
   };
 
-  cargoHash = "sha256-2FjKGirjTb6ZjDmhK9ciQzVtWCF8CcYeA+YXcr1oMP4=";
+  cargoHash = "sha256-3FMalpgKYZ4xM2fHXTFOVu5I8yS06K1bDiKg4we7jF4=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
 

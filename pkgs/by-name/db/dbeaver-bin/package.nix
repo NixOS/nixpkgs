@@ -11,7 +11,7 @@
   gtk3,
   swt,
   glib,
-  webkitgtk,
+  webkitgtk_4_0,
   glib-networking,
 }:
 
@@ -72,7 +72,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               swt
               gtk3
               glib
-              webkitgtk
+              webkitgtk_4_0
               glib-networking
             ]
           }"

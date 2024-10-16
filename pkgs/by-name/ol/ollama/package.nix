@@ -218,9 +218,7 @@ goBuild {
         service-cuda = nixosTests.ollama-cuda;
         service-rocm = nixosTests.ollama-rocm;
       };
-
-    updateScript = nix-update-script { };
-  };
+  } // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
 
   meta = {
     description =

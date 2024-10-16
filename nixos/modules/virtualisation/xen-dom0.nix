@@ -8,6 +8,35 @@
 }:
 
 let
+  inherit (builtins) readFile;
+  inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
+  inherit (lib.options)
+    mkOption
+    mkEnableOption
+    literalExpression
+    mkPackageOption
+    ;
+  inherit (lib.types)
+    listOf
+    str
+    ints
+    lines
+    enum
+    path
+    submodule
+    addCheck
+    float
+    bool
+    int
+    nullOr
+    ;
+  inherit (lib.lists) optional optionals;
+  inherit (lib.strings) hasSuffix optionalString;
+  inherit (lib.meta) getExe;
+  inherit (lib.attrsets) optionalAttrs;
+  inherit (lib.trivial) boolToString;
+  inherit (lib.teams.xen) members;
+
   cfg = config.virtualisation.xen;
 
   xenBootBuilder = pkgs.writeShellApplication {
@@ -22,7 +51,7 @@ let
         gnused
         jq
       ])
-      ++ lib.lists.optionals (cfg.efi.bootBuilderVerbosity == "info") (
+      ++ optionals (cfg.efi.bootBuilderVerbosity == "info") (
         with pkgs;
         [
           bat
@@ -36,12 +65,12 @@ let
     # We disable SC2016 because we don't want to expand the regexes in the sed commands.
     excludeShellChecks = [ "SC2016" ];
 
-    text = builtins.readFile ./xen-boot-builder.sh;
+    text = readFile ./xen-boot-builder.sh;
   };
 in
 
 {
-  imports = with lib.modules; [
+  imports = [
     (mkRemovedOptionModule
       [
         "virtualisation"
@@ -123,59 +152,33 @@ in
 
   options.virtualisation.xen = {
 
-    enable = lib.options.mkEnableOption "the Xen Project Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
+    enable = mkEnableOption "the Xen Project Hypervisor, a virtualisation technology defined as a *type-1 hypervisor*, which allows multiple virtual machines, known as *domains*, to run concurrently on the physical machine. NixOS runs as the privileged *Domain 0*. This option requires a reboot into a Xen kernel to take effect";
 
-    debug = lib.options.mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
+    debug = mkEnableOption "Xen debug features for Domain 0. This option enables some hidden debugging tests and features, and should not be used in production";
 
-    trace = lib.options.mkOption {
-      type = lib.types.bool;
+    trace = mkOption {
+      type = bool;
       default = cfg.debug;
-      defaultText = lib.options.literalExpression "false";
+      defaultText = literalExpression "false";
       example = true;
       description = "Whether to enable Xen debug tracing and logging for Domain 0.";
     };
 
-    package = lib.options.mkOption {
-      type = lib.types.package;
-      default = pkgs.xen;
-      defaultText = lib.options.literalExpression "pkgs.xen";
-      example = lib.options.literalExpression "pkgs.xen-slim";
-      description = ''
-        The package used for Xen Project Hypervisor.
-      '';
-      relatedPackages = [
-        "xen"
-        "xen-slim"
-      ];
-    };
+    package = mkPackageOption pkgs "Xen Hypervisor" { default = [ "xen" ]; };
 
     qemu = {
-      package = lib.options.mkOption {
-        type = lib.types.package;
-        default = pkgs.xen;
-        defaultText = lib.options.literalExpression "pkgs.xen";
-        example = lib.options.literalExpression "pkgs.qemu_xen";
-        description = ''
-          The package with QEMU binaries that runs in Domain 0
-          and virtualises the unprivileged domains.
-        '';
-        relatedPackages = [
-          "xen"
-          {
-            name = "qemu_xen";
-            comment = "For use with `pkgs.xen-slim`.";
-          }
-        ];
+      package = mkPackageOption pkgs "QEMU (with Xen Hypervisor support)" {
+        default = [ "qemu_xen" ];
       };
-      pidFile = lib.options.mkOption {
-        type = lib.types.path;
+      pidFile = mkOption {
+        type = path;
         default = "/run/xen/qemu-dom0.pid";
         example = "/var/run/xen/qemu-dom0.pid";
         description = "Path to the QEMU PID file.";
       };
     };
 
-    bootParams = lib.options.mkOption {
+    bootParams = mkOption {
       default = [ ];
       example = ''
         [
@@ -184,7 +187,7 @@ in
           "vga=ask"
         ]
       '';
-      type = lib.types.listOf lib.types.str;
+      type = listOf str;
       description = ''
         Xen Command Line parameters passed to Domain 0 at boot time.
         Note: these are different from `boot.kernelParams`. See
@@ -193,8 +196,8 @@ in
     };
 
     efi = {
-      bootBuilderVerbosity = lib.options.mkOption {
-        type = lib.types.enum [
+      bootBuilderVerbosity = mkOption {
+        type = enum [
           "default"
           "info"
           "debug"
@@ -218,11 +221,11 @@ in
         '';
       };
 
-      path = lib.options.mkOption {
-        type = lib.types.path;
+      path = mkOption {
+        type = path;
         default = "${cfg.package.boot}/${cfg.package.efi}";
-        defaultText = lib.options.literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
-        example = lib.options.literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
+        defaultText = literalExpression "\${config.virtualisation.xen.package.boot}/\${config.virtualisation.xen.package.efi}";
+        example = literalExpression "\${config.virtualisation.xen.package}/boot/efi/efi/nixos/xen-\${config.virtualisation.xen.package.version}.efi";
         description = ''
           Path to xen.efi. `pkgs.xen` is patched to install the xen.efi file
           on `$boot/boot/xen.efi`, but an unpatched Xen build may install it
@@ -234,10 +237,10 @@ in
     };
 
     dom0Resources = {
-      maxVCPUs = lib.options.mkOption {
+      maxVCPUs = mkOption {
         default = 0;
         example = 4;
-        type = lib.types.ints.unsigned;
+        type = ints.unsigned;
         description = ''
           Amount of virtual CPU cores allocated to Domain 0 on boot.
           If set to 0, all cores are assigned to Domain 0, and
@@ -245,10 +248,10 @@ in
         '';
       };
 
-      memory = lib.options.mkOption {
+      memory = mkOption {
         default = 0;
         example = 512;
-        type = lib.types.ints.unsigned;
+        type = ints.unsigned;
         description = ''
           Amount of memory (in MiB) allocated to Domain 0 on boot.
           If set to 0, all memory is assigned to Domain 0, and
@@ -256,11 +259,11 @@ in
         '';
       };
 
-      maxMemory = lib.options.mkOption {
+      maxMemory = mkOption {
         default = cfg.dom0Resources.memory;
-        defaultText = lib.options.literalExpression "config.virtualisation.xen.dom0Resources.memory";
+        defaultText = literalExpression "config.virtualisation.xen.dom0Resources.memory";
         example = 1024;
-        type = lib.types.ints.unsigned;
+        type = ints.unsigned;
         description = ''
           Maximum amount of memory (in MiB) that Domain 0 can
           dynamically allocate to itself. Does nothing if set
@@ -271,8 +274,8 @@ in
     };
 
     domains = {
-      extraConfig = lib.options.mkOption {
-        type = lib.types.lines;
+      extraConfig = mkOption {
+        type = lines;
         default = "";
         example = ''
           XENDOMAINS_SAVE=/persist/xen/save
@@ -288,28 +291,28 @@ in
     };
 
     store = {
-      path = lib.options.mkOption {
-        type = lib.types.path;
+      path = mkOption {
+        type = path;
         default = "${cfg.package}/bin/oxenstored";
-        defaultText = lib.options.literalExpression "\${config.virtualisation.xen.package}/bin/oxenstored";
-        example = lib.options.literalExpression "\${config.virtualisation.xen.package}/bin/xenstored";
+        defaultText = literalExpression "\${config.virtualisation.xen.package}/bin/oxenstored";
+        example = literalExpression "\${config.virtualisation.xen.package}/bin/xenstored";
         description = ''
           Path to the Xen Store Daemon. This option is useful to
           switch between the legacy C-based Xen Store Daemon, and
           the newer OCaml-based Xen Store Daemon, `oxenstored`.
         '';
       };
-      type = lib.options.mkOption {
-        type = lib.types.enum [
+      type = mkOption {
+        type = enum [
           "c"
           "ocaml"
         ];
-        default = if (lib.strings.hasSuffix "oxenstored" cfg.store.path) then "ocaml" else "c";
+        default = if (hasSuffix "oxenstored" cfg.store.path) then "ocaml" else "c";
         internal = true;
         readOnly = true;
         description = "Helper internal option that determines the type of the Xen Store Daemon based on cfg.store.path.";
       };
-      settings = lib.options.mkOption {
+      settings = mkOption {
         default = { };
         example = {
           enableMerge = false;
@@ -324,34 +327,34 @@ in
           The OCaml-based Xen Store Daemon configuration. This
           option does nothing with the C-based `xenstored`.
         '';
-        type = lib.types.submodule {
+        type = submodule {
           options = {
-            pidFile = lib.options.mkOption {
+            pidFile = mkOption {
               default = "/run/xen/xenstored.pid";
               example = "/var/run/xen/xenstored.pid";
-              type = lib.types.path;
+              type = path;
               description = "Path to the Xen Store Daemon PID file.";
             };
-            testEAGAIN = lib.options.mkOption {
+            testEAGAIN = mkOption {
               default = cfg.debug;
-              defaultText = lib.options.literalExpression "config.virtualisation.xen.debug";
+              defaultText = literalExpression "config.virtualisation.xen.debug";
               example = true;
-              type = lib.types.bool;
+              type = bool;
               visible = false;
               description = "Randomly fail a transaction with EAGAIN. This option is used for debugging purposes only.";
             };
-            enableMerge = lib.options.mkOption {
+            enableMerge = mkOption {
               default = true;
               example = false;
-              type = lib.types.bool;
+              type = bool;
               description = "Whether to enable transaction merge support.";
             };
             conflict = {
-              burstLimit = lib.options.mkOption {
+              burstLimit = mkOption {
                 default = 5.0;
                 example = 15.0;
-                type = lib.types.addCheck (
-                  lib.types.float
+                type = addCheck (
+                  float
                   // {
                     name = "nonnegativeFloat";
                     description = "nonnegative floating point number, meaning >=0";
@@ -369,12 +372,12 @@ in
                   domain's requests are ignored.
                 '';
               };
-              maxHistorySeconds = lib.options.mkOption {
+              maxHistorySeconds = mkOption {
                 default = 5.0e-2;
                 example = 1.0;
-                type = lib.types.addCheck (
-                  lib.types.float // { description = "nonnegative floating point number, meaning >=0"; }
-                ) (n: n >= 0);
+                type = addCheck (float // { description = "nonnegative floating point number, meaning >=0"; }) (
+                  n: n >= 0
+                );
                 description = ''
                   Limits applied to domains whose writes cause other domains' transaction
                   commits to fail. Must include decimal point.
@@ -384,10 +387,10 @@ in
                   is the minimum pause-time during which a domain will be ignored.
                 '';
               };
-              rateLimitIsAggregate = lib.options.mkOption {
+              rateLimitIsAggregate = mkOption {
                 default = true;
                 example = false;
-                type = lib.types.bool;
+                type = bool;
                 description = ''
                   If the conflict.rateLimitIsAggregate option is `true`, then after each
                   tick one point of conflict-credit is given to just one domain: the
@@ -408,16 +411,16 @@ in
               };
             };
             perms = {
-              enable = lib.options.mkOption {
+              enable = mkOption {
                 default = true;
                 example = false;
-                type = lib.types.bool;
+                type = bool;
                 description = "Whether to enable the node permission system.";
               };
-              enableWatch = lib.options.mkOption {
+              enableWatch = mkOption {
                 default = true;
                 example = false;
-                type = lib.types.bool;
+                type = bool;
                 description = ''
                   Whether to enable the watch permission system.
 
@@ -432,144 +435,142 @@ in
               };
             };
             quota = {
-              enable = lib.options.mkOption {
+              enable = mkOption {
                 default = true;
                 example = false;
-                type = lib.types.bool;
+                type = bool;
                 description = "Whether to enable the quota system.";
               };
-              maxEntity = lib.options.mkOption {
+              maxEntity = mkOption {
                 default = 1000;
                 example = 1024;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Entity limit for transactions.";
               };
-              maxSize = lib.options.mkOption {
+              maxSize = mkOption {
                 default = 2048;
                 example = 4096;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Size limit for transactions.";
               };
-              maxWatch = lib.options.mkOption {
+              maxWatch = mkOption {
                 default = 100;
                 example = 256;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Maximum number of watches by the Xenstore Watchdog.";
               };
-              transaction = lib.options.mkOption {
+              transaction = mkOption {
                 default = 10;
                 example = 50;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Maximum number of transactions.";
               };
-              maxRequests = lib.options.mkOption {
+              maxRequests = mkOption {
                 default = 1024;
                 example = 1024;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Maximum number of requests per transaction.";
               };
-              maxPath = lib.options.mkOption {
+              maxPath = mkOption {
                 default = 1024;
                 example = 1024;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Path limit for the quota system.";
               };
-              maxOutstanding = lib.options.mkOption {
+              maxOutstanding = mkOption {
                 default = 1024;
                 example = 1024;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Maximum outstanding requests, i.e. in-flight requests / domain.";
               };
-              maxWatchEvents = lib.options.mkOption {
+              maxWatchEvents = mkOption {
                 default = 1024;
                 example = 2048;
-                type = lib.types.ints.positive;
+                type = ints.positive;
                 description = "Maximum number of outstanding watch events per watch.";
               };
             };
-            persistent = lib.options.mkOption {
+            persistent = mkOption {
               default = false;
               example = true;
-              type = lib.types.bool;
+              type = bool;
               description = "Whether to activate the filed base backend.";
             };
             xenstored = {
               log = {
-                file = lib.options.mkOption {
+                file = mkOption {
                   default = "/var/log/xen/xenstored.log";
                   example = "/dev/null";
-                  type = lib.types.path;
+                  type = path;
                   description = "Path to the Xen Store log file.";
                 };
-                level = lib.options.mkOption {
+                level = mkOption {
                   default = if cfg.trace then "debug" else null;
-                  defaultText = lib.options.literalExpression "if (config.virtualisation.xen.trace == true) then \"debug\" else null";
+                  defaultText = literalExpression "if (config.virtualisation.xen.trace == true) then \"debug\" else null";
                   example = "error";
-                  type = lib.types.nullOr (
-                    lib.types.enum [
-                      "debug"
-                      "info"
-                      "warn"
-                      "error"
-                    ]
-                  );
+                  type = nullOr (enum [
+                    "debug"
+                    "info"
+                    "warn"
+                    "error"
+                  ]);
                   description = "Logging level for the Xen Store.";
                 };
                 # The hidden options below have no upstream documentation whatsoever.
                 # The nb* options appear to alter the log rotation behaviour, and
                 # the specialOps option appears to affect the Xenbus logging logic.
-                nbFiles = lib.options.mkOption {
+                nbFiles = mkOption {
                   default = 10;
                   example = 16;
-                  type = lib.types.int;
+                  type = int;
                   visible = false;
                   description = "Set `xenstored-log-nb-files`.";
                 };
               };
               accessLog = {
-                file = lib.options.mkOption {
+                file = mkOption {
                   default = "/var/log/xen/xenstored-access.log";
                   example = "/var/log/security/xenstored-access.log";
-                  type = lib.types.path;
+                  type = path;
                   description = "Path to the Xen Store access log file.";
                 };
-                nbLines = lib.options.mkOption {
+                nbLines = mkOption {
                   default = 13215;
                   example = 16384;
-                  type = lib.types.int;
+                  type = int;
                   visible = false;
                   description = "Set `access-log-nb-lines`.";
                 };
-                nbChars = lib.options.mkOption {
+                nbChars = mkOption {
                   default = 180;
                   example = 256;
-                  type = lib.types.int;
+                  type = int;
                   visible = false;
                   description = "Set `acesss-log-nb-chars`.";
                 };
-                specialOps = lib.options.mkOption {
+                specialOps = mkOption {
                   default = false;
                   example = true;
-                  type = lib.types.bool;
+                  type = bool;
                   visible = false;
                   description = "Set `access-log-special-ops`.";
                 };
               };
               xenfs = {
-                kva = lib.options.mkOption {
+                kva = mkOption {
                   default = "/proc/xen/xsd_kva";
                   example = cfg.store.settings.xenstored.xenfs.kva;
-                  type = lib.types.path;
+                  type = path;
                   visible = false;
                   description = ''
                     Path to the Xen Store Daemon KVA location inside the XenFS pseudo-filesystem.
                     While it is possible to alter this value, some drivers may be hardcoded to follow the default paths.
                   '';
                 };
-                port = lib.options.mkOption {
+                port = mkOption {
                   default = "/proc/xen/xsd_port";
                   example = cfg.store.settings.xenstored.xenfs.port;
-                  type = lib.types.path;
+                  type = path;
                   visible = false;
                   description = ''
                     Path to the Xen Store Daemon userspace port inside the XenFS pseudo-filesystem.
@@ -578,11 +579,11 @@ in
                 };
               };
             };
-            ringScanInterval = lib.options.mkOption {
+            ringScanInterval = mkOption {
               default = 20;
               example = 30;
-              type = lib.types.addCheck (
-                lib.types.int
+              type = addCheck (
+                int
                 // {
                   name = "nonzeroInt";
                   description = "nonzero signed integer, meaning !=0";
@@ -602,7 +603,7 @@ in
 
   ## Implementation ##
 
-  config = lib.modules.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     assertions = [
       {
         assertion = pkgs.stdenv.hostPlatform.isx86_64;
@@ -639,18 +640,18 @@ in
     ];
 
     virtualisation.xen.bootParams =
-      lib.lists.optionals cfg.trace [
+      optionals cfg.trace [
         "loglvl=all"
         "guest_loglvl=all"
       ]
       ++
-        lib.lists.optional (cfg.dom0Resources.memory != 0)
+        optional (cfg.dom0Resources.memory != 0)
           "dom0_mem=${toString cfg.dom0Resources.memory}M${
-            lib.strings.optionalString (
+            optionalString (
               cfg.dom0Resources.memory != cfg.dom0Resources.maxMemory
             ) ",max:${toString cfg.dom0Resources.maxMemory}M"
           }"
-      ++ lib.lists.optional (
+      ++ optional (
         cfg.dom0Resources.maxVCPUs != 0
       ) "dom0_max_vcpus=${toString cfg.dom0Resources.maxVCPUs}";
 
@@ -701,7 +702,7 @@ in
 
       # See the `xenBootBuilder` script in the main `let...in` statement of this file.
       loader.systemd-boot.extraInstallCommands = ''
-        ${lib.meta.getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
+        ${getExe xenBootBuilder} ${cfg.efi.bootBuilderVerbosity}
       '';
     };
 
@@ -744,7 +745,7 @@ in
 
             XENSTORED="${cfg.store.path}"
             QEMU_XEN="${cfg.qemu.package}/${cfg.qemu.package.qemu-system-i386}"
-            ${lib.strings.optionalString cfg.trace ''
+            ${optionalString cfg.trace ''
               XENSTORED_TRACE=yes
               XENCONSOLED_TRACE=all
             ''}
@@ -756,10 +757,10 @@ in
           '';
         }
         # The OCaml-based Xen Store Daemon requires /etc/xen/oxenstored.conf to start.
-        // lib.attrsets.optionalAttrs (cfg.store.type == "ocaml") {
+        // optionalAttrs (cfg.store.type == "ocaml") {
           "xen/oxenstored.conf".text = ''
             pid-file = ${cfg.store.settings.pidFile}
-            test-eagain = ${lib.trivial.boolToString cfg.store.settings.testEAGAIN}
+            test-eagain = ${boolToString cfg.store.settings.testEAGAIN}
             merge-activate = ${toString cfg.store.settings.enableMerge}
             conflict-burst-limit = ${toString cfg.store.settings.conflict.burstLimit}
             conflict-max-history-seconds = ${toString cfg.store.settings.conflict.maxHistorySeconds}
@@ -775,7 +776,7 @@ in
             quota-path-max = ${toString cfg.store.settings.quota.maxPath}
             quota-maxoutstanding = ${toString cfg.store.settings.quota.maxOutstanding}
             quota-maxwatchevents = ${toString cfg.store.settings.quota.maxWatchEvents}
-            persistent = ${lib.trivial.boolToString cfg.store.settings.persistent}
+            persistent = ${boolToString cfg.store.settings.persistent}
             xenstored-log-file = ${cfg.store.settings.xenstored.log.file}
             xenstored-log-level = ${
               if isNull cfg.store.settings.xenstored.log.level then
@@ -787,7 +788,7 @@ in
             access-log-file = ${cfg.store.settings.xenstored.accessLog.file}
             access-log-nb-lines = ${toString cfg.store.settings.xenstored.accessLog.nbLines}
             acesss-log-nb-chars = ${toString cfg.store.settings.xenstored.accessLog.nbChars}
-            access-log-special-ops = ${lib.trivial.boolToString cfg.store.settings.xenstored.accessLog.specialOps}
+            access-log-special-ops = ${boolToString cfg.store.settings.xenstored.accessLog.specialOps}
             ring-scan-interval = ${toString cfg.store.settings.ringScanInterval}
             xenstored-kva = ${cfg.store.settings.xenstored.xenfs.kva}
             xenstored-port = ${cfg.store.settings.xenstored.xenfs.port}
@@ -870,5 +871,5 @@ in
       };
     };
   };
-  meta.maintainers = lib.teams.xen.members;
+  meta.maintainers = members;
 }

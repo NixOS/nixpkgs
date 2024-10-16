@@ -16,21 +16,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.0.9";
+  version = "6.0.12";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
     rev = version;
-    hash = "sha256-mml+nj+Z6267QtejTkWiR3SdNAdZCNz4M8r6LzvhALw=";
+    hash = "sha256-fod3ZkJktmJGHF8nSSp9lVMg/qYKQd4EiauFGTSvbsg=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "const-field-offset-0.1.5" = "sha256-0MaNu6cUXislY+wDFuxZptXeJRkOuXGRJwZWm6AvcZ8=";
-      "notify-rust-4.7.0" = "sha256-A7edUorty5GpGXCUQPszZuXtLdEmbmrDSU9JcoDaiaI=";
-      "supergfxctl-5.2.3" = "sha256-wKcHoMukdUXZrdbE1xsylq7ySJpxny3+0dGUQ40BVH8=";
+      "const-field-offset-0.1.5" = "sha256-QtlvLwe27tLLdWhqiKzXoUvBsBcZbfwY84jXUduzCKw=";
+      "supergfxctl-5.2.4" = "sha256-MQJJaTajPQ45BU6zyMx0Wwf7tAPcT4EURWWbZxrbGzE=";
     };
   };
 

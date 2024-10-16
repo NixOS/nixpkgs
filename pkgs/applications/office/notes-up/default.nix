@@ -17,7 +17,7 @@
 , libgee
 , pantheon
 , sqlite
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     libgee
     pantheon.granite
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

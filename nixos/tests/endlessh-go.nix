@@ -44,15 +44,19 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         server.wait_for_unit("endlessh-go.service")
         server.wait_for_open_port(2222)
         server.wait_for_open_port(9229)
+        server.fail("curl -sSf server:9229/metrics | grep -q endlessh_client_closed_count_total")
         client.succeed("nc -dvW5 server 2222")
-        client.succeed("curl -kv server:9229/metrics")
+        server.succeed("curl -sSf server:9229/metrics | grep -q endlessh_client_closed_count_total")
+        client.fail("curl -sSfm 5 server:9229/metrics")
 
     with subtest("Privileged"):
         activate_specialisation("privileged")
         server.wait_for_unit("endlessh-go.service")
         server.wait_for_open_port(22)
         server.wait_for_open_port(92)
+        server.fail("curl -sSf server:92/metrics | grep -q endlessh_client_closed_count_total")
         client.succeed("nc -dvW5 server 22")
-        client.succeed("curl -kv server:92/metrics")
+        server.succeed("curl -sSf server:92/metrics | grep -q endlessh_client_closed_count_total")
+        client.fail("curl -sSfm 5 server:92/metrics")
   '';
 })

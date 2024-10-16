@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.0.3";
 
   src = fetchurl {
-    url = "https://downloads.sourceforge.net/project/openctm/OpenCTM-${finalAttrs.version}/OpenCTM-${finalAttrs.version}-src.tar.bz2";
+    url = "mirror://sourceforge/project/openctm/OpenCTM-${finalAttrs.version}/OpenCTM-${finalAttrs.version}-src.tar.bz2";
     hash = "sha256-So0mCNlzZPfuxWt8Y3xWuTCK6YKGs+kNu3QTyQ6UPx0=";
   };
 

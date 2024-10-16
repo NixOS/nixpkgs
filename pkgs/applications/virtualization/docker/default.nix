@@ -14,7 +14,7 @@ rec {
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, tini, libtool
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
-      , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
+      , iptables, e2fsprogs, xz, util-linux, xfsprogs, gitMinimal
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.hostPlatform.isLinux, symlinkJoin
       , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
@@ -95,7 +95,7 @@ rec {
         ++ lib.optional withSystemd systemd
         ++ lib.optional withSeccomp libseccomp;
 
-      extraPath = lib.optionals stdenv.hostPlatform.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux git ]);
+      extraPath = lib.optionals stdenv.hostPlatform.isLinux (lib.makeBinPath [ iproute2 iptables e2fsprogs xz xfsprogs procps util-linux gitMinimal ]);
 
       extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
@@ -323,9 +323,9 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.3.0";
+    version = "27.3.1";
     cliRev = "v${version}";
-    cliHash = "sha256-1z2MmWq+HD2fhpZqXu0G7oBL3Mc0NN/fR69aMWRelns=";
+    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
     mobyRev = "v${version}";
     mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
     runcRev = "v1.1.14";

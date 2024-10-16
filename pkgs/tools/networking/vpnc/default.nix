@@ -27,6 +27,10 @@ stdenv.mkDerivation {
     "SCRIPT_PATH=${vpnc-scripts}/bin/vpnc-script"
   ] ++ lib.optional opensslSupport "OPENSSL_GPL_VIOLATION=yes";
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   postPatch = ''
     patchShebangs src/makeman.pl
   '';

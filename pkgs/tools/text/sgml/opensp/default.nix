@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
   ++ lib.optional stdenv.cc.isClang autoreconfHook
   ++ lib.optionals stdenv.hostPlatform.isCygwin [ autoconf automake libtool ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+  };
+
   doCheck = false; # fails
 
   meta = with lib; {

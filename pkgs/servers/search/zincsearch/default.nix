@@ -55,5 +55,8 @@ buildGoModule rec {
     homepage = "https://zincsearch-docs.zinc.dev/";
     license = licenses.asl20;
     maintainers = with maintainers; [ dit7ya ];
+    # Doesn't build with Go version later v1.21 (which is EOL).
+    # Upstream issue: https://github.com/zincsearch/zincsearch/issues/975
+    broken = true;
   };
 }

@@ -1020,7 +1020,7 @@ in {
           '';
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
+          # On Nextcloud ≥ 26, it is not necessary to patch the database files to prevent
           # an automatic creation of the database user.
           environment.NC_setup_create_db_user = lib.mkIf (nextcloudGreaterOrEqualThan "26") "false";
         };

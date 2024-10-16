@@ -168,7 +168,7 @@ in
       type = lib.types.package;
       default = pkgs.go;
       defaultText = lib.literalExpression "pkgs.go";
-      example = "pkgs.go_1_21";
+      example = "pkgs.go_1_23";
       description = ''
         The Go package used by Athens at runtime.
 

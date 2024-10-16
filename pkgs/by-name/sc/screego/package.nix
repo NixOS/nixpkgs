@@ -16,7 +16,7 @@ let
     owner = "screego";
     repo = "server";
     rev = "v${version}";
-    hash = "sha256-P8O3E7mNAqUid42XFaJBQm3ApxykYLCuHXDOFHrG9Fs=";
+    hash = "sha256-PTGIcv+jgX8t37otBypuZG6DaGIeo92+w6YlRynIkZE=";
   };
 
   ui = stdenv.mkDerivation {
@@ -35,6 +35,10 @@ let
       yarnBuildHook
       nodejs
     ];
+
+    preConfigure = ''
+      export HOME=$(mktemp -d)
+    '';
 
     installPhase = ''
       cp -r build $out
@@ -67,6 +71,8 @@ buildGo123Module rec {
   postInstall = ''
     mv $out/bin/server $out/bin/screego
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Screen sharing for developers";

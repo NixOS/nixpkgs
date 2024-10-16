@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lurk";
-  version = "0.3.7";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "jakwai01";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-99WdRyE2avoH5Ea277Dx/HNcOdWxOamR41W7dQQadpo=";
+    hash = "sha256-JY5MSjHN8/n5iILgqjo6EOzuQRuTovAptMPh6oiJ7Zw=";
   };
 
-  cargoHash = "sha256-BUIMtJCzK//bZuvn9iptBd7lVMGyWFNJ/0oTfwPu0DE=";
+  cargoHash = "sha256-cVGN5LZwjWijvVoAnz8LUyTImfT6KvgTGEg5JODGXHk=";
 
   postPatch = ''
     substituteInPlace src/lib.rs \

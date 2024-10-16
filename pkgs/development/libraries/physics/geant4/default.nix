@@ -4,7 +4,7 @@
 , enableQt             ? enableQT
 , enableXM             ? false
 , libGLX
-, enableOpenGLX11      ? !libGLX.meta.broken
+, enableOpenGLX11      ? !stdenv.isDarwin
 , enablePython         ? false
 , enableRaytracerX11   ? false
 

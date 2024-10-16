@@ -160,7 +160,7 @@ in {
       checkPhase = ''
         runHook preCheck
 
-        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes make test
+        NO_INTERACTION=yes SKIP_PERF_SENSITIVE=yes SKIP_ONLINE_TESTS=yes make test
         runHook postCheck
       '';
 
@@ -656,7 +656,10 @@ in {
           configureFlags = [
             "--enable-soap"
           ];
-          doCheck = stdenv.hostPlatform.isDarwin;  # TODO: a couple tests still fail on *-linux
+          # Some tests are causing issues in the Darwin sandbox with issues
+          # such as
+          #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
+          doCheck = !stdenv.hostPlatform.isDarwin;
           internalDeps = [ php.extensions.session ];
           patches = lib.optionals (lib.versions.majorMinor php.version == "8.1") [
             # Fix tests with libxml2 2.12

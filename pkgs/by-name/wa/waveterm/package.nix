@@ -32,32 +32,32 @@
 }:
 
 let
-  inherit (stdenv.hostPlatform) system;
-  throwSystem = throw "Unsupported system: ${system}";
-
   pname = "waveterm";
-  version = "0.8.7";
+  version = "0.8.10";
 
-  suffix =
-    {
-      x86_64-linux = "waveterm-linux-x64-${version}.zip";
-      aarch64-linux = "waveterm-linux-arm64-${version}.zip";
-      x86_64-darwin = "Wave-darwin-universal-${version}.zip ";
-      aarch64-darwin = "Wave-darwin-arm64-${version}.zip";
-    }
-    .${system} or throwSystem;
+  src =
+    let
+      inherit (stdenv.hostPlatform) system;
+      selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+      suffix = selectSystem {
+        x86_64-linux = "waveterm-linux-x64-${version}.zip";
+        aarch64-linux = "waveterm-linux-arm64-${version}.zip";
+        x86_64-darwin = "Wave-darwin-universal-${version}.zip ";
+        aarch64-darwin = "Wave-darwin-arm64-${version}.zip";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-jhXHuzHMwo9U5B+FA2xAreOYRVroMCXqDo+9pjAyh0Q=";
+        aarch64-linux = "sha256-JnKkjG67uvYNod+uosJ+svTAm9bulJzTpza3jQie1yQ=";
+        x86_64-darwin = "sha256-Dk/pKZrqkjKc7WEGkrLdZdgUEaz8ndXjZuINyVNxEa8=";
+        aarch64-darwin = "sha256-FgBbUrp+Z9K4gmM4mew0NQ2yIjuC+cgYrrYkjv0Ohhg=";
+      };
+    in
+    fetchurl {
+      url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}";
+      inherit hash;
+    };
 
-  src = fetchurl {
-    url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}";
-    hash =
-      {
-        x86_64-linux = "sha256-pWBKZid8sumi/EP3DA5KcLnZsHsuKYK6E6NHXdWKh8s=";
-        aarch64-linux = "sha256-2paRX+OGPSEktV4S+V43ZE9UgltLYZ+Nyba5/miBQkA=";
-        x86_64-darwin = "sha256-tsqw597gQIMnQ/OPZhrWwaRliF94KyS+ryajttDLqBA=";
-        aarch64-darwin = "sha256-PD38UBSNKuv836P/py/CtrLOlddHa0+w7R20YVY4Ybc=";
-      }
-      .${system} or throwSystem;
-  };
+  passthru.updateScript = ./update.sh;
 
   desktopItems = [
     (makeDesktopItem {
@@ -112,6 +112,8 @@ let
       src
       desktopItems
       unpackPhase
+      meta
+      passthru
       ;
 
     nativeBuildInputs = [
@@ -172,6 +174,7 @@ let
       src
       unpackPhase
       meta
+      passthru
       ;
 
     nativeBuildInputs = [

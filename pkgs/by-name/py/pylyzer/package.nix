@@ -10,19 +10,18 @@
   darwin,
   which,
   nix-update-script,
-  testers,
-  pylyzer,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.63";
+  version = "0.0.66";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nTaU5rfY/Kp2vZLNzFvEtsnpVtcjOC17sXYywZNDvIk=";
+    hash = "sha256-vDeQ7IuECykBtcu4qvKKhcr/3vCXjN1JyL3/D4kwnng=";
   };
 
   cargoLock = {
@@ -63,9 +62,14 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/pylyzer --set ERG_PATH $out/lib/erg
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = pylyzer; };
   };
 
   meta = {

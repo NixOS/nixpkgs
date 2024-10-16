@@ -4,7 +4,6 @@
 , fetchzip
 , fetchurl
 , cacert
-, tzdata
 , unicode-emoji
 , unicode-character-database
 , cmake
@@ -13,6 +12,7 @@
 , curl
 , libavif
 , libjxl
+, libpulseaudio
 , libwebp
 , libxcrypt
 , python3
@@ -29,16 +29,6 @@
 }:
 
 let
-  inherit (builtins) elemAt;
-  cldr_version = "45.0.0";
-  cldr-json = fetchzip {
-    url = "https://github.com/unicode-org/cldr-json/releases/download/${cldr_version}/cldr-${cldr_version}-json-modern.zip";
-    stripRoot = false;
-    hash = "sha256-BPDvYjlvJMudX/YlS7HrwKEABYx+1KzjiFlLYA5+Oew=";
-    postFetch = ''
-      echo -n ${cldr_version} > $out/version.txt
-    '';
-  };
   unicode-idna = fetchurl {
     url = "https://www.unicode.org/Public/idna/${unicode-character-database.version}/IdnaMappingTable.txt";
     hash = "sha256-QCy9KF8flS/NCDS2NUHVT2nT2PG4+Fmb9xoaFJNfgsQ=";
@@ -58,13 +48,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ladybird";
-  version = "0-unstable-2024-09-21";
+  version = "0-unstable-2024-10-05";
 
   src = fetchFromGitHub {
     owner = "LadybirdWebBrowser";
     repo = "ladybird";
-    rev = "44f672bacf6779f6bbe5972d84e210f953f14598";
-    hash = "sha256-Qku6W1kETOXQh8Kxn0wabe0Xc4gkpxrGbDFwIik34eY=";
+    rev = "077bc68a4cbf2d8c97abc818515a22471da42c99";
+    hash = "sha256-zlQEOk9rex9Evpc2+4q2e2QPwGd9kLOQ393DJPuwh7c=";
   };
 
   postPatch = ''
@@ -89,18 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preConfigure = ''
-    # Setup caches for LibLocale, LibUnicode, LibTimezone, LibTLS and LibGfx
+    # Setup caches for LibUnicode, LibTLS and LibGfx
     # Note that the versions of the input data packages must match the
     # expected version in the package's CMake.
 
     # Check that the versions match
-    grep -F 'locale_version = "${cldr_version}"' Meta/gn/secondary/Userland/Libraries/LibLocale/BUILD.gn || (echo cldr_version mismatch && exit 1)
-    grep -F 'tzdb_version = "${tzdata.version}"' Meta/gn/secondary/Userland/Libraries/LibTimeZone/BUILD.gn || (echo tzdata.version mismatch && exit 1)
     grep -F 'set(CACERT_VERSION "${cacert_version}")' Meta/CMake/ca_certificates_data.cmake || (echo cacert_version mismatch && exit 1)
 
     mkdir -p build/Caches
-
-    ln -s ${cldr-json} build/Caches/CLDR
 
     cp -r ${unicode-character-database}/share/unicode build/Caches/UCD
     chmod +w build/Caches/UCD
@@ -108,10 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${unicode-idna} build/Caches/UCD/IdnaMappingTable.txt
     echo -n ${unicode-character-database.version} > build/Caches/UCD/version.txt
     chmod -w build/Caches/UCD
-
-    mkdir build/Caches/TZDB
-    tar -xzf ${elemAt tzdata.srcs 0} -C build/Caches/TZDB
-    echo -n ${tzdata.version} > build/Caches/TZDB/version.txt
 
     mkdir build/Caches/CACERT
     cp ${cacert}/etc/ssl/certs/ca-bundle.crt build/Caches/CACERT/cacert-${cacert_version}.pem
@@ -146,6 +128,7 @@ stdenv.mkDerivation (finalAttrs: {
     skia
     woff2
   ] ++ lib.optional stdenv.hostPlatform.isLinux [
+    libpulseaudio.dev
     qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
@@ -163,9 +146,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # FIXME: Add an option to -DENABLE_QT=ON on macOS to use Qt rather than Cocoa for the GUI
-  # FIXME: Add an option to enable PulseAudio rather than using Qt multimedia on non-macOS
-
-  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications $out/bin
@@ -182,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Browser using the SerenityOS LibWeb engine with a Qt or Cocoa GUI";
-    homepage = "https://ladybird.dev";
+    homepage = "https://ladybird.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];

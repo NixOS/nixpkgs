@@ -2,12 +2,6 @@
 
 with haskellLib;
 
-let
-  disableParallelBuilding = overrideCabal (drv: {
-    enableParallelBuilding = false;
-  });
-in
-
 # cabal2nix doesn't properly add dependencies conditional on arch(javascript)
 
 (self: super: {

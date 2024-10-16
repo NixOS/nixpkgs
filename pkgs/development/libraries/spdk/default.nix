@@ -23,13 +23,13 @@
 stdenv.mkDerivation rec {
   pname = "spdk";
 
-  version = "24.05";
+  version = "24.09";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    hash = "sha256-kjZWaarvNSYXseJ/uH7Ak7DbWEgrLnAwXcL8byJ9fjU=";
+    hash = "sha256-27mbIycenOk51PLQrAfU1cZcjiWddNtxoyC6Q9wxqFg=";
     fetchSubmodules = true;
   };
 

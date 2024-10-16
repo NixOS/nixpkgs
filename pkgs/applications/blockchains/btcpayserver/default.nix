@@ -31,6 +31,7 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
+    changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
