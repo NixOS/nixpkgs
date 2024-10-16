@@ -1,29 +1,40 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pls";
-  version = "0.0.1-beta.8";
+  version = "0.0.1-beta.9";
 
   src = fetchFromGitHub {
     owner = "pls-rs";
     repo = "pls";
-    rev = "v${version}";
-    hash = "sha256-gJufm2krZSTdBbbfZ+355M9e3MJQbDEpSPf0EbZEayQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-ofwdhGpqYlADDY2BLe0SkoHWqSeRNtQaXK61zWVFXzw=";
   };
 
-  cargoHash = "sha256-cDAHzK3pgpn5zEFdLBltf1e28yFFkXOzcF+nvDb8aWI=";
+  cargoHash = "sha256-u9uge44epAi9UiROThUewCNzmgeEi/Gy9h9NxVUb0YM=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  env.LIBGIT2_NO_VENDOR = "1";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs =
+    [
+      libgit2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = {
-    changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";
+    changelog = "https://github.com/pls-rs/pls/releases/tag/v${version}";
     description = "Prettier and powerful ls";
     homepage = "http://pls.cli.rs";
     license = lib.licenses.gpl3Plus;
