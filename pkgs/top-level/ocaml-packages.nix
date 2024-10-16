@@ -1407,6 +1407,8 @@ let
 
     ogg = callPackage ../development/ocaml-modules/ogg { };
 
+    ohex = callPackage ../development/ocaml-modules/ohex { };
+
     ojs = callPackage ../development/ocaml-modules/gen_js_api/ojs.nix { };
 
     omd = callPackage ../development/ocaml-modules/omd { };

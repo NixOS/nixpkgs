@@ -47,5 +47,6 @@ buildDunePackage rec {
     changelog = "https://github.com/leostera/riot/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }

@@ -3,12 +3,12 @@
 , mirage-crypto
 , dune-configurator
 , pkg-config
-, cstruct
 , mirage-crypto-rng
 , mirage-crypto-pk
-, hex
 , alcotest
 , asn1-combinators
+, ohex
+, ounit2
 , ppx_deriving_yojson
 , ppx_deriving
 , yojson
@@ -23,14 +23,11 @@ buildDunePackage rec {
     src
     version;
 
-  duneVersion = "3";
-
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     dune-configurator
   ];
   propagatedBuildInputs = [
-    cstruct
     mirage-crypto
     mirage-crypto-rng
   ] ++ lib.optionals withFreestanding [
@@ -41,9 +38,10 @@ buildDunePackage rec {
 
   doCheck = true;
   checkInputs = [
-    hex
     alcotest
     asn1-combinators
+    ohex
+    ounit2
     ppx_deriving_yojson
     ppx_deriving
     yojson
