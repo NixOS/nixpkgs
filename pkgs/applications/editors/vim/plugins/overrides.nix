@@ -1817,6 +1817,14 @@ in
     nvimRequireCheck = "refactoring";
   };
 
+  remote-sshfs-nvim = super.remote-sshfs-nvim.overrideAttrs {
+    dependencies = with self; [
+      telescope-nvim
+      plenary-nvim
+    ];
+    nvimRequireCheck = "remote-sshfs";
+  };
+
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs {
     dependencies = with self; [
