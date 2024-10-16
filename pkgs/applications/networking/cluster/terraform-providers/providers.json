@@ -180,13 +180,13 @@
     "vendorHash": "sha256-oDMKf39uNMO9/kyiZ1IuZlj2yIF1q5Z3wewxEBh3yso="
   },
   "bitwarden": {
-    "hash": "sha256-YB+9CWd3U6Yl33ZFbTxzjomrLCilpBPKLdn6Yv7LAUA=",
+    "hash": "sha256-9YYaZmMFR47drh4dg/Zl85VWWBwAEYzMga6WHY2UgPU=",
     "homepage": "https://registry.terraform.io/providers/maxlaverse/bitwarden",
     "owner": "maxlaverse",
     "repo": "terraform-provider-bitwarden",
-    "rev": "v0.8.1",
+    "rev": "v0.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-BZ1+D0JQrGb6qE25+eTLSHIQdCmzucMPKUY/6x2LwT8="
+    "vendorHash": "sha256-TRrVtJdI0ZqBfuIr947cQJh+o663CHOCScAcYDcy048="
   },
   "brightbox": {
     "hash": "sha256-pwFbCP+qDL/4IUfbPRCkddkbsEEeAu7Wp12/mDL0ABA=",
