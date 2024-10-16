@@ -22212,8 +22212,6 @@ with pkgs;
 
   nikto = callPackage ../tools/networking/nikto { };
 
-  nlohmann_json = callPackage ../development/libraries/nlohmann_json { };
-
   nng = callPackage ../development/libraries/nng { };
 
   nntp-proxy = callPackage ../applications/networking/nntp-proxy { };
