@@ -5,11 +5,11 @@
 }:
 appimageTools.wrapType2 rec {
   pname = "snipaste";
-  version = "2.9.2-Beta";
+  version = "2.10.2";
 
   src = fetchurl {
     url = "https://download.snipaste.com/archives/Snipaste-${version}-x86_64.AppImage";
-    hash = "sha256-oV69uABjzkbQdwb+1wRRxszhrwI4uyzhQZ4aXBnyeo8=";
+    hash = "sha256-u9e2d9ZpHDbDIsFkseOdJX2Kspn9TkhFfZxbeielDA8=";
   };
 
   meta = {
