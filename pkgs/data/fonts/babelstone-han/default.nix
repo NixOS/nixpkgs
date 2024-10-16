@@ -25,6 +25,6 @@ stdenvNoCC.mkDerivation {
 
     license = licenses.arphicpl;
     platforms = platforms.all;
-    maintainers = with maintainers; [ emily deeengan ];
+    maintainers = with maintainers; [ emily ];
   };
 }
