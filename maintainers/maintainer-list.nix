@@ -2962,6 +2962,12 @@
     githubId = 150560585;
     name = "Dmitry Ivankov";
   };
+  bonds = {
+    email = "scott@ggr.com";
+    github = "bonds";
+    githubId = 53434;
+    name = "Scott Bonds";
+  };
   bonsairobo = {
     email = "duncanfairbanks6@gmail.com";
     github = "bonsairobo";
