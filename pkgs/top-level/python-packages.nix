@@ -15461,7 +15461,9 @@ self: super: with self; {
 
   tensorflow-estimator-bin = callPackage ../development/python-modules/tensorflow-estimator/bin.nix { };
 
-  tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
+  tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata {
+    protobuf-core = pkgs.protobuf;
+  };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
