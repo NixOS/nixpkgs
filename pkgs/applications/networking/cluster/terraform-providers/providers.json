@@ -804,13 +804,13 @@
     "vendorHash": "sha256-Gn4P4NIksv8S4DmnuYArxdSQDQsyCeayJJAIkmm/I6A="
   },
   "mongodbatlas": {
-    "hash": "sha256-ZAgoC6HNBIQP3tCo3+kZh7TyMDi+caPstqB5HpjTa5g=",
+    "hash": "sha256-ztdzVTCQDPOgXVv/39SDfaNM4wR/zh5ReikEGz4S8Jw=",
     "homepage": "https://registry.terraform.io/providers/mongodb/mongodbatlas",
     "owner": "mongodb",
     "repo": "terraform-provider-mongodbatlas",
-    "rev": "v1.18.1",
+    "rev": "v1.21.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-llbYJi3ghgh9y97ri03a7ZBXSUPMs7f3FLd4iLRRmmk="
+    "vendorHash": "sha256-DJXpVYF1AQ5q4ASJFsIyag6OTFxpRSealN98859G5Ls="
   },
   "namecheap": {
     "hash": "sha256-g3i7jZBOl2umsyRk1z7Radv8a9Ry6oQ8oorv3YbY7Xo=",
