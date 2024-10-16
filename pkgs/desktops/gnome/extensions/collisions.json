@@ -1,371 +1,50 @@
 {
-  "38": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "lock-keys": [
-      "lockkeys@vaina.lt",
-      "lockkeys@fawtytoo"
-    ],
-    "fuzzy-clock": [
-      "Fuzzy_Clock@dallagi",
-      "fuzzy-clock@keepawayfromfire.co.uk"
-    ],
-    "hide-activities-button": [
-      "Hide_Activities@shay.shayel.org",
-      "hide-activities-button@nmingori.gnome-shell-extensions.org"
-    ],
-    "shutdowntimer": [
-      "ShutdownTimer@neumann",
-      "ShutdownTimer@deminder"
-    ],
-    "bottompanel": [
-      "bottompanel@tmoer93",
-      "bottom-panel@sulincix"
-    ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "transparent-window": [
-      "transparent-window@pbxqdown.github.com",
-      "transparentwindows.mdirshad07"
-    ],
-    "azan-islamic-prayer-times": [
-      "azan@faissal.bensefia.id",
-      "azan@hatem.masmoudi.org"
-    ],
-    "floating-dock": [
-      "floatingDock@sun.wxg@gmail.com",
-      "floating-dock@nandoferreira_prof@hotmail.com"
-    ],
-    "gnome-trash": [
-      "gnome-trash@gnome-trash.b00f.gitlab.com",
-      "gnome-trash@b00f.github.io"
-    ],
-    "true-color-invert": [
-      "true-color-invert@jackkenney",
-      "true-color-window-invert@lynet101"
-    ],
-    "volume-scroller": [
-      "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@francislavoie.github.io"
-    ]
-  },
-  "40": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "lock-keys": [
-      "lockkeys@vaina.lt",
-      "lockkeys@fawtytoo"
-    ],
-    "system-monitor": [
-      "system-monitor@paradoxxx.zero.gmail.com",
-      "System_Monitor@bghome.gmail.com"
-    ],
-    "hide-activities-button": [
-      "Hide_Activities@shay.shayel.org",
-      "hide-activities-button@nmingori.gnome-shell-extensions.org"
-    ],
-    "clipboard-indicator": [
-      "clipboard-indicator@tudmotu.com",
-      "clipboard-indicator@Dieg0Js.github.io"
-    ],
-    "shutdowntimer": [
-      "ShutdownTimer@neumann",
-      "shutdown-timer-gnome-shell-extension",
-      "ShutdownTimer@deminder"
-    ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
-    ],
-    "fuzzy-clock": [
-      "fuzzy-clock@keepawayfromfire.co.uk",
-      "FuzzyClock@johngoetz"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "panel-date-format": [
-      "panel-date-format@keiii.github.com",
-      "panel-date-format@atareao.es"
-    ],
-    "disable-unredirect-fullscreen-windows": [
-      "unredirect@vaina.lt",
-      "unredirect@aunetx"
-    ],
-    "floating-dock": [
-      "floatingDock@sun.wxg@gmail.com",
-      "floating-dock@nandoferreira_prof@hotmail.com"
-    ],
-    "extension-list": [
-      "extension-list@tu.berry",
-      "screen-lock@garciabaameiro.com"
-    ],
-    "wireguard-indicator": [
-      "wireguard-indicator@gregos.me",
-      "wireguard-indicator@atareao.es"
-    ],
-    "true-color-invert": [
-      "true-color-invert@jackkenney",
-      "true-color-window-invert@lynet101"
-    ],
-    "volume-scroller": [
-      "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@francislavoie.github.io"
-    ],
-    "floating-panel": [
-      "floating-panel@aylur",
-      "floating-panel-usedbymyself@wpism"
-    ]
-  },
-  "41": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "lock-keys": [
-      "lockkeys@vaina.lt",
-      "lockkeys@fawtytoo"
-    ],
-    "shutdowntimer": [
-      "ShutdownTimer@neumann",
-      "ShutdownTimer@deminder"
-    ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
-    ],
-    "fuzzy-clock": [
-      "fuzzy-clock@keepawayfromfire.co.uk",
-      "FuzzyClock@johngoetz"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "panel-date-format": [
-      "panel-date-format@keiii.github.com",
-      "panel-date-format@atareao.es"
-    ],
-    "disable-unredirect-fullscreen-windows": [
-      "unredirect@vaina.lt",
-      "unredirect@aunetx"
-    ],
-    "floating-dock": [
-      "floatingDock@sun.wxg@gmail.com",
-      "floating-dock@nandoferreira_prof@hotmail.com"
-    ],
-    "wireguard-indicator": [
-      "wireguard-indicator@gregos.me",
-      "wireguard-indicator@atareao.es"
-    ],
-    "true-color-invert": [
-      "true-color-invert@jackkenney",
-      "true-color-window-invert@lynet101"
-    ],
-    "volume-scroller": [
-      "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@francislavoie.github.io"
-    ],
-    "floating-panel": [
-      "floating-panel@aylur",
-      "floating-panel-usedbymyself@wpism"
-    ]
-  },
-  "42": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "lock-keys": [
-      "lockkeys@vaina.lt",
-      "lockkeys@fawtytoo"
-    ],
-    "persian-calendar": [
-      "PersianCalendar@oxygenws.com",
-      "persian-calendar@iamrezamousavi.gmail.com"
-    ],
-    "clipboard-indicator": [
-      "clipboard-indicator@tudmotu.com",
-      "clipboard-indicator@Dieg0Js.github.io"
-    ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
-    ],
-    "fuzzy-clock": [
-      "fuzzy-clock@keepawayfromfire.co.uk",
-      "FuzzyClock@johngoetz"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "panel-date-format": [
-      "panel-date-format@keiii.github.com",
-      "panel-date-format@atareao.es"
-    ],
-    "wireguard-indicator": [
-      "wireguard-indicator@gregos.me",
-      "wireguard-indicator@atareao.es"
-    ],
-    "true-color-invert": [
-      "true-color-invert@jackkenney",
-      "true-color-window-invert@lynet101"
-    ],
-    "volume-scroller": [
-      "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@francislavoie.github.io"
-    ],
-    "auto-activities": [
-      "auto-activities@acedron.github.io",
-      "auto-activities@CleoMenezesJr.github.io"
-    ],
-    "floating-panel": [
-      "floating-panel@aylur",
-      "floating-panel-usedbymyself@wpism"
-    ]
-  },
-  "43": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "lock-keys": [
-      "lockkeys@vaina.lt",
-      "lockkeys@fawtytoo"
-    ],
-    "persian-calendar": [
-      "PersianCalendar@oxygenws.com",
-      "persian-calendar@iamrezamousavi.gmail.com"
-    ],
-    "clipboard-indicator": [
-      "clipboard-indicator@tudmotu.com",
-      "clipboard-indicator@Dieg0Js.github.io"
-    ],
-    "keep-awake": [
-      "KeepAwake@jepfa.de",
-      "awake@vixalien.com"
-    ],
-    "noannoyance": [
-      "noannoyance@sindex.com",
-      "noannoyance@daase.net"
-    ],
-    "fuzzy-clock": [
-      "fuzzy-clock@keepawayfromfire.co.uk",
-      "FuzzyClock@johngoetz"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "panel-date-format": [
-      "panel-date-format@keiii.github.com",
-      "panel-date-format@atareao.es"
-    ],
-    "battery-time": [
-      "batime@martin.zurowietz.de",
-      "batterytime@typeof.pw"
-    ],
-    "volume-scroller": [
-      "volume_scroller@trflynn89.pm.me",
-      "volume_scroller@francislavoie.github.io"
-    ],
-    "floating-panel": [
-      "floating-panel@aylur",
-      "floating-panel-usedbymyself@wpism"
-    ]
-  },
-  "44": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "workspace-indicator": [
-      "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
-      "horizontal-workspace-indicator@tty2.io"
-    ],
-    "persian-calendar": [
-      "PersianCalendar@oxygenws.com",
-      "persian-calendar@iamrezamousavi.gmail.com"
-    ],
-    "clipboard-indicator": [
-      "clipboard-indicator@tudmotu.com",
-      "clipboard-indicator@Dieg0Js.github.io"
-    ],
-    "virtualbox-applet": [
-      "vbox-applet@gs.eros2.info",
-      "vbox-applet@buba98"
-    ],
-    "panel-date-format": [
-      "panel-date-format@keiii.github.com",
-      "panel-date-format@atareao.es"
-    ],
-    "battery-time": [
-      "batime@martin.zurowietz.de",
-      "batterytime@typeof.pw"
-    ]
-  },
-  "45": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "persian-calendar": [
-      "PersianCalendar@oxygenws.com",
-      "persian-calendar@iamrezamousavi.gmail.com"
-    ],
-    "battery-time": [
-      "batime@martin.zurowietz.de",
-      "batterytime@typeof.pw"
-    ],
-    "power-profile-indicator": [
-      "power-profile-indicator@laux.wtf",
-      "power-profile@fthx"
-    ]
-  },
-  "46": {
-    "applications-menu": [
-      "apps-menu@gnome-shell-extensions.gcampax.github.com",
-      "Applications_Menu@rmy.pobox.com"
-    ],
-    "persian-calendar": [
-      "PersianCalendar@oxygenws.com",
-      "persian-calendar@iamrezamousavi.gmail.com"
-    ],
-    "power-profile-indicator": [
-      "power-profile-indicator@laux.wtf",
-      "power-profile@fthx"
-    ]
-  }
+  "applications-menu": [
+    "Applications_Menu@rmy.pobox.com",
+    "apps-menu@gnome-shell-extensions.gcampax.github.com"
+  ],
+  "workspace-indicator": [
+    "horizontal-workspace-indicator@tty2.io",
+    "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
+  ],
+  "persian-calendar": [
+    "persian-calendar@iamrezamousavi.gmail.com",
+    "PersianCalendar@oxygenws.com"
+  ],
+  "openweather": [
+    "openweather-extension@jenslody.de",
+    "openweather-extension@penguin-teal.github.io"
+  ],
+  "clipboard-indicator": [
+    "clipboard-indicator@tudmotu.com",
+    "clipboard-indicator@Dieg0Js.github.io"
+  ],
+  "system-monitor": [
+    "system-monitor@gnome-shell-extensions.gcampax.github.com",
+    "System_Monitor@bghome.gmail.com"
+  ],
+  "virtualbox-applet": [
+    "vbox-applet@gs.eros2.info",
+    "vbox-applet@buba98"
+  ],
+  "panel-date-format": [
+    "panel-date-format@atareao.es",
+    "panel-date-format@keiii.github.com"
+  ],
+  "battery-time": [
+    "batterytime@typeof.pw",
+    "batime@martin.zurowietz.de"
+  ],
+  "kernel-indicator": [
+    "kernel-indicator@elboulangero.gitlab.com",
+    "kernel-indicator@pvizc.gitlab.com"
+  ],
+  "fuzzy-clock": [
+    "fuzzy-clock@keepawayfromfire.co.uk",
+    "FuzzyClock@johngoetz"
+  ],
+  "power-profile-indicator": [
+    "power-profile-indicator@laux.wtf",
+    "power-profile@fthx"
+  ]
 }
