@@ -8,7 +8,7 @@
 , CoreFoundation
 , SystemConfiguration
 , Security
-, withLLVM ? !stdenv.hostPlatform.isDarwin
+, withLLVM ? false
 , withSinglepass ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 }:
 
@@ -69,5 +69,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://wasmer.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    # error: multiple fields are never read
+    #    --> lib/compiler-llvm/src/translator/intrinsics.rs:141:9
+    broken = withLLVM;
   };
 }
