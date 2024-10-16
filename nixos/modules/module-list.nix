@@ -1249,6 +1249,7 @@
   ./services/networking/tox-node.nix
   ./services/networking/toxvpn.nix
   ./services/networking/trickster.nix
+  ./services/networking/tun2socks.nix
   ./services/networking/twingate.nix
   ./services/networking/ucarp.nix
   ./services/networking/unbound.nix
