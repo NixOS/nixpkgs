@@ -37,4 +37,6 @@ maturinBuildHook() {
     echo "Finished maturinBuildHook"
 }
 
-buildPhase=maturinBuildHook
+if [ -z "${dontMaturinBuild-}" ] && [ -z "${buildPhase-}" ]; then
+    buildPhase=maturinBuildHook
+fi
