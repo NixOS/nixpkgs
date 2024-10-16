@@ -33856,8 +33856,6 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
-  wallust = callPackage ../applications/misc/wallust { };
-
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
