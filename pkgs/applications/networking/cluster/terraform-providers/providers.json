@@ -543,13 +543,13 @@
     "vendorHash": "sha256-t9nXq30jRSlx9gMR+s8irDVdSE5tg9ZvMp47HZwEm7w="
   },
   "helm": {
-    "hash": "sha256-82jM8XZF8X7tYbebMXPYNyhNGqQ51zl3WxYWX2ObD1g=",
+    "hash": "sha256-8cYhbxbjTfloDd3cLYNPv98TzeC0XVrb4DQ2ScZDYvI=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/helm",
     "owner": "hashicorp",
     "repo": "terraform-provider-helm",
-    "rev": "v2.15.0",
+    "rev": "v2.16.1",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QERpwymuz45RiH9SMuAJPyl/z8r0a5Wd8NBMFKV6NjI="
+    "vendorHash": "sha256-cMdWIciJEUvcrRaMMDlXI7fuJHXV6FCpyqG18Q926iQ="
   },
   "heroku": {
     "hash": "sha256-B/NaFe8KOKGJJlF3vZnpdMnbD1VxBktqodPBk+4NZEc=",
