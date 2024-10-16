@@ -18980,10 +18980,6 @@ with pkgs;
     botan3
     ;
 
-  box2d = callPackage ../development/libraries/box2d {
-    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
-  };
-
   boxfort = callPackage ../development/libraries/boxfort { };
 
   brunsli = callPackage ../development/libraries/brunsli { };
