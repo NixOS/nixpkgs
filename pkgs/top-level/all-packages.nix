@@ -2360,7 +2360,7 @@ with pkgs;
 
   gitls = callPackage ../applications/version-management/gitls { };
 
-  gitmux = callPackage ../applications/version-management/gitmux { };
+  gitmux = callPackage ../applications/version-management/gitmux { buildGoModule = buildGo122Module; };
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
 
@@ -4410,8 +4410,6 @@ with pkgs;
   chopchop = callPackage ../tools/security/chopchop { };
 
   clapboard = callPackage ../tools/wayland/clapboard { };
-
-  cliphist = callPackage ../tools/wayland/cliphist { };
 
   clipman = callPackage ../tools/wayland/clipman { };
 
@@ -26749,8 +26747,6 @@ with pkgs;
     useQt6 = true;
   };
 
-  adw-gtk3 = callPackage ../data/themes/adw-gtk3 { };
-
   agave = callPackage ../data/fonts/agave { };
 
   aileron = callPackage ../data/fonts/aileron { };
@@ -28177,10 +28173,6 @@ with pkgs;
   audacious-plugins = qt6Packages.callPackage ../applications/audio/audacious/plugins.nix {
     # Avoid circular dependency
     audacious = audacious.override { audacious-plugins = null; };
-  };
-
-  audacity = callPackage ../applications/audio/audacity {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit;
   };
 
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
@@ -33557,8 +33549,6 @@ with pkgs;
 
   wings = callPackage ../applications/graphics/wings { };
 
-  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
-
   wlc = callPackage  ../tools/misc/wlc { };
 
   wlclock = callPackage ../applications/misc/wlclock { };
@@ -33919,8 +33909,6 @@ with pkgs;
   ytmdl = callPackage ../tools/misc/ytmdl { };
 
   yuview = libsForQt5.yuview;
-
-  wallust = callPackage ../applications/misc/wallust { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 

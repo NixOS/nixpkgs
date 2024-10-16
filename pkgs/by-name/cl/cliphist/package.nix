@@ -2,24 +2,29 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "cliphist";
-  version = "0.5.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "sentriz";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-U78G7X9x3GQg3qcBINni8jWa0wSXQu+TjYChuRPPcLE=";
+    repo = "cliphist";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-tImRbWjYCdIY8wVMibc5g5/qYZGwgT9pl4pWvY7BDlI=";
   };
 
-  vendorHash = "sha256-O4jOFWygmFxm8ydOq1xtB1DESyWpFGXeSp8a6tT+too=";
+  vendorHash = "sha256-gG8v3JFncadfCEUa7iR6Sw8nifFNTciDaeBszOlGntU=";
 
   postInstall = ''
     cp ${src}/contrib/* $out/bin/
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Wayland clipboard manager";
