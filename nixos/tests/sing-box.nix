@@ -49,6 +49,8 @@ import ./make-test-python.nix (
         "fd00::1/126"
       ];
       auto_route = true;
+      iproute2_table_index = 2024;
+      iproute2_rule_index = 9001;
       route_address = [
         "${hosts."${target_host}"}/32"
       ];
@@ -515,9 +517,14 @@ import ./make-test-python.nix (
 
       with subtest("tun"):
         tun.wait_for_unit("sing-box.service")
-        tun.wait_for_unit("sys-devices-virtual-net-tun0.device")
-        tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev tun0'")
-        tun.succeed("ip addr show tun0")
+        tun.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
+        tun.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
+        tun.succeed("ip addr show ${tunInbound.interface_name}")
+        tun.succeed("ip route show table ${toString tunInbound.iproute2_table_index} | grep ${tunInbound.interface_name}")
+        assert (
+          tun.succeed("ip rule list table ${toString tunInbound.iproute2_table_index} | sort | head -1 | awk -F: '{print $1}' | tr -d '\n'")
+          == "${toString tunInbound.iproute2_rule_index}"
+        )
         test_curl(tun)
 
       with subtest("wireguard"):
@@ -532,8 +539,8 @@ import ./make-test-python.nix (
 
       with subtest("fakeip"):
         fakeip.wait_for_unit("sing-box.service")
-        fakeip.wait_for_unit("sys-devices-virtual-net-tun0.device")
-        fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev tun0'")
+        fakeip.wait_for_unit("sys-devices-virtual-net-${tunInbound.interface_name}.device")
+        fakeip.wait_until_succeeds("ip route get ${hosts."${target_host}"} | grep 'dev ${tunInbound.interface_name}'")
         fakeip.succeed("dig +short A ${target_host} @${target_host} | grep '^198.18.'")
     '';
 
