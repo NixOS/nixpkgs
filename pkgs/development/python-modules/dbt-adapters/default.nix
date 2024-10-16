@@ -26,6 +26,8 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "protobuf" ];
+
   dependencies = [
     agate
     dbt-common
