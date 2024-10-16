@@ -171,6 +171,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network-online.target" ] ++ lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
       requires = lib.optionals hasLocalPostgresDB [ "postgresql.service" ];
+      wants = [ "network-online.target" ];
 
       serviceConfig = {
         ExecStart = "${lib.getExe cfg.package} -f ${checkedConfigFile} --mode ${cfg.mode}";
