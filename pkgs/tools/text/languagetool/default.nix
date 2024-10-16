@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchzip, jre, makeWrapper, nixosTests }:
-
+{ lib
+, stdenv
+, fetchzip
+, jre
+, makeWrapper
+, nixosTests
+, writeTextFile
+, extraSpelling ? { } # Custom spelling { en = ["multithreading" "quadtree"]; global=["Nixos"];}
+}:
+let
+  mkSpellFile = lang: data: writeTextFile {
+    name = "spelling_custom_" + lang + ".txt";
+    text = builtins.concatStringsSep "\n" data;
+  };
+  mkCustomSpellPath = lang: "$out/share/org/languagetool/resource/" +
+    (if lang == "global" then "spelling_global.txt"
+    else "${lang}/hunspell/spelling_custom.txt");
+  attrValuesAsLines = set: builtins.concatStringsSep "\n" (builtins.attrValues set);
+in
 stdenv.mkDerivation rec {
   pname = "LanguageTool";
   version = "6.5";
@@ -24,6 +41,12 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jre}/bin/java $out/bin/languagetool-http-server \
       --add-flags "-cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer"
+
+
+    ${ attrValuesAsLines (builtins.mapAttrs (lang: data: ''
+      mkdir -p $(dirname ${mkCustomSpellPath lang}) # Ensure dir for custom spell exist
+      ln -f -s ${mkSpellFile lang data} ${mkCustomSpellPath lang} # symlink to spellfile
+    '') extraSpelling) }
 
     runHook postInstall
   '';
