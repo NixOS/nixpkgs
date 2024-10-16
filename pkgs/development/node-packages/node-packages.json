@@ -5,6 +5,7 @@
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@microsoft/rush"
+, "@rescript/language-server"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"

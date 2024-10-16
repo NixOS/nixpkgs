@@ -12,6 +12,7 @@
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
+  "@rescript/language-server" = "rescript-language-server";
   "@uppy/companion" = "companion";
   "@webassemblyjs/repl-1.11.1" = "wasm";
   "@webassemblyjs/wasm-strip" = "wasm-strip";
