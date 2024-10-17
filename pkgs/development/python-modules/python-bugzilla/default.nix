@@ -10,12 +10,12 @@
 }:
 
 buildPythonPackage rec {
-  pname = "bugzilla";
+  pname = "python-bugzilla";
   version = "3.3.0";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "python_${pname}";
+    pname = "python_bugzilla";
     inherit version;
     hash = "sha256-4YIgFx4DPrO6YAxNE5NZ0BqhrOwdrrxDCJEORQdj3kc=";
   };
