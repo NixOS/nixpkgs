@@ -69,7 +69,6 @@ extra-packages:
   - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
   - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
-  - hpack == 0.36.0                     # 2024-07-27: required for stack-2.15.7 to match upstream stack release
   - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
   - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
