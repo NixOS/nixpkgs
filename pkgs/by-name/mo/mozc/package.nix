@@ -17,7 +17,7 @@ let
   ut-dictionary = merge-ut-dictionaries.override { inherit dictionaries; };
 in
 buildBazelPackage rec {
-  pname = "ibus-mozc";
+  pname = "mozc";
   version = "2.30.5544.102";
 
   src = fetchFromGitHub {
