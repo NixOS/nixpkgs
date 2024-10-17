@@ -9741,6 +9741,7 @@ with pkgs;
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };
+  libportal-qt6 = libportal.override { variant = "qt6"; };
 
   libmicrodns = callPackage ../development/libraries/libmicrodns { };
 
@@ -28977,7 +28978,7 @@ with pkgs;
 
   icesl = callPackage ../applications/misc/icesl { };
 
-  input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
+  input-leap = qt6Packages.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
 
