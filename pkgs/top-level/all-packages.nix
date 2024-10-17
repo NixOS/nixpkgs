@@ -32279,6 +32279,8 @@ with pkgs;
 
   uade = callPackage ../applications/audio/uade { };
 
+  saber = callPackage ../applications/graphics/saber { };
+
   sacc = callPackage ../applications/networking/gopher/sacc { };
 
   savvycan = libsForQt5.callPackage ../applications/networking/sniffers/savvycan {};
