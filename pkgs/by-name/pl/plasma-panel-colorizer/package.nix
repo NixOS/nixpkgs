@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   kdePackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   dontWrapQtApps = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fully-featured widget to bring Latte-Dock and WM status bar customization features to the default KDE Plasma panel";
