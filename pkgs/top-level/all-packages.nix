@@ -26961,8 +26961,6 @@ with pkgs;
     inherit (nodePackages) svgo;
   };
 
-  emojipick = callPackage ../applications/misc/emojipick { };
-
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
   envypn-font = callPackage ../data/fonts/envypn-font { };
