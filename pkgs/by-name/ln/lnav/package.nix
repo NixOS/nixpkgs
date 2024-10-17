@@ -16,6 +16,9 @@
   gpm,
   libarchive,
   nix-update-script,
+  cargo,
+  rustPlatform,
+  rustc,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +43,9 @@ stdenv.mkDerivation rec {
     zlib
     curl.dev
     re2c
+    cargo
+    rustPlatform.cargoSetupHook
+    rustc
   ];
   buildInputs = [
     bzip2
@@ -48,9 +54,15 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     curl
-    gpm
     libarchive
   ];
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    src = "${src}/src/third-party/prqlc-c";
+    hash = "sha256-jfmr6EuNW2mEHTEVHn6YnBDMzKxKI097vEFHXC4NT2Y=";
+  };
+
+  cargoRoot = "src/third-party/prqlc-c";
 
   preConfigure = ''
     ./autogen.sh
