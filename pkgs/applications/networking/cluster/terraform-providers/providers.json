@@ -234,13 +234,13 @@
     "vendorHash": "sha256-j3qdi19dxJL+R8Xa6MDag6KHMuBnzEZ9lUhuSAEZOAQ="
   },
   "cloudflare": {
-    "hash": "sha256-9M7PQEBg0qDmyz2B35krNUF9dDo0g28JomFor7b/Nsc=",
+    "hash": "sha256-R6cJQaBnsARO3qg48ijqVdyrSivLN3Wf96yqTjuaN/c=",
     "homepage": "https://registry.terraform.io/providers/cloudflare/cloudflare",
     "owner": "cloudflare",
     "repo": "terraform-provider-cloudflare",
-    "rev": "v4.41.0",
+    "rev": "v4.44.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uLkoG0m3v1vohXO03nCrfxEhvJYfJOvYSIHsgYCjKtc="
+    "vendorHash": "sha256-g575BZRdCekfUgF78DENloCeM8TTz5OhLxxgb1OkElc="
   },
   "cloudfoundry": {
     "hash": "sha256-1nYncJLVU/f9WD6Quh9IieIXgixPzbPk4zbtI1zmf9g=",
@@ -460,6 +460,15 @@
     "rev": "v2.3.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-EiTWJ4bw8IwsRTD9Lt28Up2DXH0oVneO2IaO8VqWtkw="
+  },
+  "gitea": {
+    "hash": "sha256-cIbDYFc6q6GMoQH9bqEA/LqC3MczAM7mewhYRRYQcy0=",
+    "homepage": "https://registry.terraform.io/providers/go-gitea/gitea",
+    "owner": "go-gitea",
+    "repo": "terraform-provider-gitea",
+    "rev": "v0.5.1",
+    "spdx": "MIT",
+    "vendorHash": "sha256-7gA6KoP7NwjwItigBUeCg9AYQ/MggkOHOe/bH7Tf/xA="
   },
   "github": {
     "hash": "sha256-XnCoXKKAk1RvQiZ7IWxIOalSS5EC/l7jJYf7RVpAT6s=",
