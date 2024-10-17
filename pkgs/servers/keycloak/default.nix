@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     mkdir $out
     cp -r * $out
 
-    rm $out/bin/*.{ps1,bat}
+    rm $out/bin/*.{ps1,bat,orig}
 
     runHook postInstall
   '';
