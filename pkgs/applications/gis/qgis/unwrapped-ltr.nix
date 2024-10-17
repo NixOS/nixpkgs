@@ -6,8 +6,8 @@
 , wrapGAppsHook3
 , wrapQtAppsHook
 
-, withGrass ? true
-, withWebKit ? false
+, withGrass
+, withWebKit
 
 , bison
 , cmake

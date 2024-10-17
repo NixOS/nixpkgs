@@ -2187,8 +2187,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
-  git-branchstack = python3.pkgs.callPackage ../applications/version-management/git-branchstack { };
-
   git-bug = callPackage ../applications/version-management/git-bug { };
 
   git-bug-migration = callPackage ../applications/version-management/git-bug-migration { };
@@ -8593,6 +8591,7 @@ with pkgs;
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
+    spdlog_llvm = spdlog.override { inherit stdenv fmt; };
   })
     irods
     irods-icommands;
@@ -8823,7 +8822,9 @@ with pkgs;
 
   jmespath = callPackage ../development/tools/jmespath { };
 
-  juicefs = callPackage ../tools/filesystems/juicefs { };
+  juicefs = callPackage ../tools/filesystems/juicefs {
+    buildGoModule = buildGo122Module;
+  };
 
   juicity = callPackage ../tools/networking/juicity { };
 
