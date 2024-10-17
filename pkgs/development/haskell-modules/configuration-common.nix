@@ -2935,13 +2935,6 @@ self: super: {
     hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
   }) super.nix-serve-ng;
 
-  # Needs a matching version of ipython-kernel and a
-  # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
-  # transitively pulls in
-  ihaskell = super.ihaskell.overrideScope (self: super: {
-    ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
-  });
-
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [
     (fetchpatch {
