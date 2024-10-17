@@ -5,13 +5,13 @@
 
 buildDunePackage rec {
   pname = "conduit";
-  version = "6.2.3";
+  version = "7.1.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-conduit/releases/download/v${version}/conduit-${version}.tbz";
-    hash = "sha256-OkaEuxSFsfJH1ghN0KNW4QJ+ksLNRns1yr1Zp2RCPnk=";
+    hash = "sha256-WNIhigfnFwYCXeOMoCUyM+lw81tMrNN/cGlBtMvqV/c=";
   };
 
   propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib uri ppx_sexp_conv ];
