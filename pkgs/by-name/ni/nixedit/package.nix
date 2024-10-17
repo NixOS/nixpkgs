@@ -59,10 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installCheckPhase = ''
-    if ! uname -a | grep "NixOS" > /dev/null; then
-      echo "This package can only be installed on NixOS."
-      exit 1
-    fi
 
     $out/bin/nixedit --help > /dev/null
   '';
