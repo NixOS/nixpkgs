@@ -105,6 +105,7 @@ mapAliases {
   alsaTools = alsa-tools; # Added 2021-06-10
   alsaUtils = alsa-utils; # Added 2021-06-10
   amtk = throw "amtk has been renamed to libgedit-amtk and is now maintained by Gedit Technology"; # Added 2023-12-31
+  ams-lv2 = throw "ams-lv2 has been removed from nixpkgs; upstream archived, build fails."; # Added 2024-09-26
   angelfish = libsForQt5.kdeGear.angelfish; # Added 2021-10-06
   ansible_2_12 = throw "Ansible 2.12 goes end of life in 2023/05 and can't be supported throughout the 23.05 release cycle"; # Added 2023-05-16
   ansible_2_13 = throw "Ansible 2.13 goes end of life in 2023/11"; # Added 2023-12-30
