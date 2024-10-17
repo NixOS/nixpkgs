@@ -6,7 +6,7 @@
   ninja,
   pkg-config,
   grpc,
-  protobuf_25,
+  protobuf,
   openssl,
   nlohmann_json,
   gtest,
@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "bear";
-  version = "3.1.3";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "rizsotto";
     repo = pname;
     rev = version;
-    hash = "sha256-1nZPzgLWcmaRkOUXdm16IW2Nw/p1w8GBGEfZX/v+En0=";
+    hash = "sha256-pwdjytP+kmTwozRl1Gd0jUqRs3wfvcYPqiQvVwa6s9c=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     grpc
-    protobuf_25
+    protobuf
     openssl
     nlohmann_json
     gtest
@@ -61,11 +61,6 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     (lib.cmakeBool "ENABLE_UNIT_TESTS" false)
     (lib.cmakeBool "ENABLE_FUNC_TESTS" false)
-  ];
-
-  patches = [
-    # Fix toolchain environment variable handling and the Darwin SIP check.
-    ./fix-functional-tests.patch
   ];
 
   postPatch = ''
