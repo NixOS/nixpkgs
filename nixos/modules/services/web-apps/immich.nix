@@ -91,7 +91,7 @@ in
     };
     port = mkOption {
       type = types.port;
-      default = 3001;
+      default = 2283;
       description = "The port that immich will listen on.";
     };
     openFirewall = mkOption {

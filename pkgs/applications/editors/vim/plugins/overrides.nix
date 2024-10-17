@@ -2729,7 +2729,6 @@ in
       "coc-metals"
       "coc-pairs"
       "coc-prettier"
-      "coc-python"
       "coc-r-lsp"
       "coc-rls"
       "coc-rust-analyzer"

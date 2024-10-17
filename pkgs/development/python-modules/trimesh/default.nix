@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.4.9";
+  version = "4.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6fVMtO9w+dtJRGytOEW3qAQ/x9YtkZKyQXQfP7DYE6w=";
+    hash = "sha256-/EnZ+8KeJQF3daAk5d+A9iXJ3dv5gs4+pdNEUHCVBCU=";
   };
 
   build-system = [ setuptools ];
@@ -44,6 +44,7 @@ buildPythonPackage rec {
     homepage = "https://trimesh.org/";
     changelog = "https://github.com/mikedh/trimesh/releases/tag/${version}";
     license = licenses.mit;
+    mainProgram = "trimesh";
     maintainers = with maintainers; [
       gebner
       pbsds
