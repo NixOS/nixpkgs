@@ -93,12 +93,14 @@ rec {
     else if    (f.wrapped == null && f'.wrapped == null)
             && (f.payload == null && f'.payload == null)
        then f.type
+    # value types
+    else if (f.payload != null && f'.payload != null) then
+      if payload != null
+       then f.type payload
+      else null
     # composed types
     else if (f.wrapped != null && f'.wrapped != null) && (wrapped != null)
        then f.type wrapped
-    # value types
-    else if (f.payload != null && f'.payload != null) && (payload != null)
-       then f.type payload
     else null;
 
   # Default type functor
@@ -617,7 +619,7 @@ rec {
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit name lazy; };
       functor = defaultFunctor "attrsWith" // {
-        type = payload: attrsWith payload;
+        wrapped = elemType;
         payload = {
           # Important!: Add new function attributes here in case of future changes
           inherit elemType name lazy;
@@ -640,7 +642,7 @@ rec {
               else
                 null;
           in
-          if elemType == null || name == null || lazy == null then
+          if elemType == null || lazy == null || name == null then
             null
           else
             {
