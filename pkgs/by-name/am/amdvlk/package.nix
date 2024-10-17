@@ -23,6 +23,8 @@
 let
 
   suffix = if stdenv.system == "x86_64-linux" then "64" else "32";
+  # Fix https://github.com/NixOS/nixpkgs/issues/348903 until the glslang update to 15.0.0 is merged into master
+  glslang_fixed = glslang.overrideAttrs (finalAttrs: oldAttrs: { cmakeFlags = [ ]; });
 
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -59,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       cmake
       directx-shader-compiler
-      glslang
+      glslang_fixed
       ninja
       patchelf
       perl
