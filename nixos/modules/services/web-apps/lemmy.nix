@@ -204,7 +204,6 @@ in
           };
           "/" = {
             # mixed frontend and backend requests, based on the request headers
-            recommendedProxySettings = true;
             extraConfig = ''
               set $proxpass "${ui}";
               if ($http_accept = "application/activity+json") {
@@ -221,6 +220,11 @@ in
               rewrite ^(.+)/+$ $1 permanent;
 
               proxy_pass $proxpass;
+              # Proxied `Host` header is required to validate ActivityPub HTTP signatures for incoming events.
+              # The other headers are optional, for the sake of better log data.
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header Host $host;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
             '';
           };
         };
