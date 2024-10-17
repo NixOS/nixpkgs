@@ -2531,9 +2531,12 @@ self: super: {
   # 2024-03-02: base <=4.18.0.0  https://github.com/srid/url-slug/pull/2
   url-slug = doJailbreak super.url-slug;
 
-  glirc = doJailbreak (super.glirc.override {
-    vty = self.vty_5_35_1;
-  });
+  glirc = super.glirc.override {
+    vty = self.vty_6_2;
+    vty-unix = super.vty-unix.override {
+      vty = self.vty_6_2;
+    };
+  };
 
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
