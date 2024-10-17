@@ -3,19 +3,20 @@
   buildPythonPackage,
   fetchPypi,
   requests,
+  responses,
   pytestCheckHook,
   glibcLocalesUtf8,
 }:
 
 buildPythonPackage rec {
   pname = "bugzilla";
-  version = "3.2.0";
+  version = "3.3.0";
   format = "setuptools";
 
   src = fetchPypi {
-    pname = "python-${pname}";
+    pname = "python_${pname}";
     inherit version;
-    sha256 = "TvyM+il4N8nk6rIg4ZcXZxW9Ye4zzsLBsPJ5DweGA4c=";
+    sha256 = "sha256-4YIgFx4DPrO6YAxNE5NZ0BqhrOwdrrxDCJEORQdj3kc=";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     glibcLocalesUtf8
+    responses
   ];
 
   preCheck = ''
