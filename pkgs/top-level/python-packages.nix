@@ -4964,6 +4964,8 @@ self: super: with self; {
 
   geoarrow-types = callPackage ../development/python-modules/geoarrow-types { };
 
+  geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
+
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
   geocoder = callPackage ../development/python-modules/geocoder { };
