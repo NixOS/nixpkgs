@@ -18,6 +18,8 @@ rec {
     inherit cargo;
   };
 
+  fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix { inherit cargo; };
+
   buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
     inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook
       fetchCargoTarball importCargoLock rustc cargo cargo-auditable;
