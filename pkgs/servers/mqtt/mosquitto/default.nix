@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) mosquitto;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
-    license = licenses.epl10;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.peterhoeg ];
+    platforms = lib.platforms.unix;
   };
 }
