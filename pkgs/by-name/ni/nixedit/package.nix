@@ -59,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installCheckPhase = ''
-
     $out/bin/nixedit --help > /dev/null
   '';
 
