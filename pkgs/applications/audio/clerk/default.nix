@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rofi
-, tmux
-, fzf
-, mpc-cli
-, perl
-, util-linux
-, libnotify
-, perlPackages
+{
+  lib,
+  fetchFromGitHub,
+  fzf,
+  installShellFiles,
+  libnotify,
+  makeWrapper,
+  mpc,
+  perlPackages,
+  rofi,
+  stdenv,
+  tmux,
+  unstableGitUpdater,
+  util-linux,
 }:
 
 stdenv.mkDerivation {
   pname = "clerk";
-  version = "unstable-2023-10-07";
+  version = "4.0.5-unstable-2023-10-07";
 
   src = fetchFromGitHub {
     owner = "carnager";
@@ -23,12 +25,10 @@ stdenv.mkDerivation {
     hash = "sha256-V2nDLq2ViC5Twve0EILBEYOdEavqgYB/TQq/T+ftfmk=";
   };
 
-  postPatch = ''
-    substituteInPlace clerk_rating_client.service \
-      --replace "/usr" "$out"
-  '';
-
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   buildInputs = with perlPackages; [
     perl
@@ -47,36 +47,57 @@ stdenv.mkDerivation {
 
   strictDeps = true;
 
+  postPatch = ''
+    substituteInPlace clerk_rating_client.service \
+      --replace "/usr" "$out"
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    install -D clerk.pl $out/bin/clerk
-    install -D clerk_rating_client $out/bin/clerk_rating_client
+    mv clerk.pl clerk
+    installBin clerk clerk_rating_client
     install -D clerk_rating_client.service $out/lib/systemd/user/clerk_rating_client.service
+
     runHook postInstall
   '';
 
-  postFixup = let
-    binPath = lib.makeBinPath [
-      libnotify
-      mpc-cli
-      rofi
-      tmux
-      fzf
-      util-linux
-    ];
-  in
-  ''
-    wrapProgram $out/bin/clerk --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
-    wrapProgram $out/bin/clerk_rating_client --set PERL5LIB $PERL5LIB --prefix PATH : "${binPath}"
-  '';
+  postFixup =
+    let
+      binPath = lib.makeBinPath [
+        fzf
+        libnotify
+        mpc
+        rofi
+        tmux
+        util-linux
+      ];
+    in
+    ''
+      pushd $out/bin
+      for f in clerk clerk_rating_client; do
+        wrapProgram $f \
+          --prefix PATH : "${binPath}" \
+          --set PERL5LIB $PERL5LIB
+      done
+      popd
+    '';
 
-  meta = with lib; {
-    description = "MPD client based on rofi/fzf";
+  passthru.updateScript = unstableGitUpdater {
+    url = "https://github.com/carnager/clerk.git";
+    hardcodeZeroVersion = true;
+  };
+
+  meta = {
     homepage = "https://github.com/carnager/clerk";
-    license = licenses.mit;
-    maintainers = with maintainers; [ anderspapitto rewine ];
+    description = "MPD client based on rofi/fzf";
+    license = lib.licenses.mit;
     mainProgram = "clerk";
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      anderspapitto
+      rewine
+      AndersonTorres
+    ];
+    platforms = lib.platforms.linux;
   };
 }
