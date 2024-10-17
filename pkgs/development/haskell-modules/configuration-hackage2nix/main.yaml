@@ -719,10 +719,7 @@ unsupported-platforms:
   mpi-hs-cereal:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-store:                                 [ aarch64-linux, platforms.darwin ]
   mplayer-spot:                                 [ aarch64-linux, platforms.darwin ]
-  monomer:                                      [ platforms.darwin ] # depends on mesa
-  monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
-  nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   network-unexceptional:                        [ platforms.darwin ] # depends on posix-api
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
@@ -740,7 +737,6 @@ unsupported-platforms:
   reactive-balsa:                               [ platforms.darwin ] # depends on alsa-core
   reflex-dom-fragment-shader-canvas:            [ platforms.darwin, aarch64-linux ]
   reflex-localize-dom:                          [ platforms.darwin, aarch64-linux ]
-  rsi-break:                                    [ platforms.darwin ] # depends on monomer
   rtlsdr:                                       [ platforms.darwin ]
   rubberband:                                   [ platforms.darwin ]
   SDL-mixer:                                    [ platforms.darwin ] # depends on mesa
