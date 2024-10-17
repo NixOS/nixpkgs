@@ -1,18 +1,24 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
+
+  # build-system
   hatch-jupyter-builder,
   hatch-nodejs-version,
   hatchling,
+  jupyterlab,
+
+  # dependencies
   jsonschema,
   jupyter-events,
   jupyter-server,
   jupyter-server-fileid,
   jupyter-ydoc,
-  jupyterlab,
+  pycrdt,
   pycrdt-websocket,
+
+  # tests
   pytest-jupyter,
   pytestCheckHook,
   websockets,
@@ -20,15 +26,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_collaboration";
     inherit version;
-    hash = "sha256-uLbNYzszaSLnU4VcaDr5KBcRN+Xm/B471s+W9qJibsk=";
+    hash = "sha256-OjX7C7+eRerggQwKEcqF1CmUH5wGtF8ZavtuvTYTNTk=";
   };
 
   postPatch = ''
@@ -48,6 +52,7 @@ buildPythonPackage rec {
     jupyter-server
     jupyter-server-fileid
     jupyter-ydoc
+    pycrdt
     pycrdt-websocket
   ];
 
@@ -65,20 +70,13 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
-  disabledTests = [
-    # ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-    "test_dirty"
-    # causes a hang
-    "test_rooms"
-  ];
-
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
     changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = teams.jupyter.members;
+    license = lib.licenses.bsd3;
+    maintainers = lib.teams.jupyter.members;
   };
 }
