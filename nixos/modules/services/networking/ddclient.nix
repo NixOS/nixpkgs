@@ -222,7 +222,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       restartTriggers = lib.optional (cfg.configFile != null) cfg.configFile;
-      path = lib.optional (lib.hasPrefix "if," cfg.use) pkgs.iproute2;
+      path = lib.optional (lib.hasPrefix "if," cfg.use || lib.hasPrefix "if," cfg.usev4 || lib.hasPrefix "if," cfg.usev6) pkgs.iproute2;
 
       serviceConfig = {
         DynamicUser = true;
