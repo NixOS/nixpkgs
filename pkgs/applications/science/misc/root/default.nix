@@ -24,7 +24,7 @@
 , libGL
 , libxcrypt
 , libxml2
-, llvm_16
+, llvm_18
 , lsof
 , lz4
 , xz
@@ -56,15 +56,16 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.32.06";
+  version = "6.34.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-P8Ay2T/oSN6lrbG0fY8KhieVIyk/7gqis81Sof+rckc=";
+  src = fetchgit {
+    url = "https://github.com/root-project/root";
+    rev = "2ec063a57aa4a99eefecd5153b343855e5ea1306";
+    hash = "sha256-mDxIbhf7aTYZZUbVQ6qzAxmUXYZkV/xF0p9jbNOE5No=";
   };
 
   clad_src = fetchgit {
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
-    llvm_16
+    llvm_18
     lz4
     xz
     gsl
@@ -113,10 +114,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa CoreSymbolication OpenGL ]
   ;
 
-  patches = [
-    ./sw_vers.patch
-  ];
-
   preConfigure = ''
     for path in builtins/*; do
       if [[ "$path" != "builtins/openui5" ]] && [[ "$path" != "builtins/rendercore" ]]; then
@@ -126,29 +123,18 @@ stdenv.mkDerivation rec {
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-    # We have to bypass the connection check, because it would disable clad.
-    # This should probably be fixed upstream with a flag to disable the
-    # connectivity check!
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'if(clad AND NO_CONNECTION)' 'if(FALSE)'
-    # Make sure that clad is not downloaded when building
-    substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace-fail 'UPDATE_COMMAND ""' 'SOURCE_DIR ${clad_src} DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
     # Make sure that clad is finding the right llvm version
     substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-      --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=${llvm_16.dev}/lib/cmake/llvm'
+      --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
 
     substituteInPlace interpreter/llvm-project/clang/tools/driver/CMakeLists.txt \
       --replace-fail 'add_clang_symlink(''${link} clang)' ""
-
-    # Don't require textutil on macOS
-    : > cmake/modules/RootCPack.cmake
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
       -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
 
-    patchShebangs build/unix/
+    patchShebangs cmake/unix/
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Eliminate impure reference to /System/Library/PrivateFrameworks
     substituteInPlace core/macosx/CMakeLists.txt \
@@ -158,9 +144,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCLAD_SOURCE_DIR=${clad_src}"
     "-DCMAKE_INSTALL_BINDIR=bin"
-    "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
     "-Dbuiltin_llvm=OFF"
     "-Dfail-on-missing=ON"
     "-Dfitsio=OFF"
