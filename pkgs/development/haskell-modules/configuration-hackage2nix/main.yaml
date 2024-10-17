@@ -41,7 +41,6 @@ default-package-overrides:
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
-  - Cabal == 3.6.*                      # used for packages needing newer Cabal on ghc 8.10 and 9.0
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.2 and 9.0
   - Cabal-syntax == 3.10.*
   - Cabal == 3.10.*
