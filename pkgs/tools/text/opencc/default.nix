@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencc";
-  version = "1.1.8";
+  version = "1.1.9";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "sha256-JKudwA2C7gHihjPnsqPq5i7X8TvG8yQYZEG5f/xu3yo=";
+    sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
   nativeBuildInputs =
