@@ -5879,6 +5879,10 @@ self: super: with self; {
 
   humanize = callPackage ../development/python-modules/humanize { };
 
+  humann = callPackage ../development/python-modules/humann {
+    humann-db = null;
+  };
+
   human-readable = callPackage ../development/python-modules/human-readable { };
 
   humblewx = callPackage ../development/python-modules/humblewx { };
@@ -7966,6 +7970,8 @@ self: super: with self; {
   minio = callPackage ../development/python-modules/minio { };
 
   miniupnpc = callPackage ../development/python-modules/miniupnpc { };
+
+  minpath = callPackage ../development/python-modules/minpath { };
 
   mip = callPackage ../development/python-modules/mip { };
 
