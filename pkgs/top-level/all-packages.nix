@@ -20797,6 +20797,8 @@ with pkgs;
 
   libelfin = callPackage ../development/libraries/libelfin { };
 
+  libetebase = callPackage ../development/libraries/libetebase { };
+
   libetpan = callPackage ../development/libraries/libetpan { };
 
   libexecinfo = callPackage ../development/libraries/libexecinfo { };
@@ -28992,6 +28994,7 @@ with pkgs;
 
   evolution-data-server-gtk4 = evolution-data-server.override { withGtk3 = false; withGtk4 = true; };
   evolution-ews = callPackage ../applications/networking/mailreaders/evolution/evolution-ews { };
+  evolution-etesync = callPackage ../applications/networking/mailreaders/evolution/evolution-etesync { };
   evolution = callPackage ../applications/networking/mailreaders/evolution/evolution { };
   evolutionWithPlugins = callPackage ../applications/networking/mailreaders/evolution/evolution/wrapper.nix { plugins = [ evolution evolution-ews ]; };
 
