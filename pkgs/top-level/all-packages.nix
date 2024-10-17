@@ -11169,7 +11169,9 @@ with pkgs;
 
   pingtcp = callPackage ../tools/networking/pingtcp { };
 
-  pingu = callPackage ../tools/networking/pingu { };
+  pingu = callPackage ../tools/networking/pingu {
+    buildGoModule = buildGo122Module;
+  };
 
   pinnwand = callPackage ../servers/pinnwand { };
 
