@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
+    hash = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
