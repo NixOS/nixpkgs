@@ -86,6 +86,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open source MQTT v3.1/3.1.1/5.0 broker";
     homepage = "https://mosquitto.org/";
+    changelog = "https://github.com/eclipse/mosquitto/blob/v${version}/ChangeLog.txt";
     license = lib.licenses.epl10;
     maintainers = [ lib.maintainers.peterhoeg ];
     platforms = lib.platforms.unix;
