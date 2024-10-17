@@ -7,8 +7,7 @@
   darwin,
   rust-jemalloc-sys,
   nix-update-script,
-  testers,
-  sqruff,
+  versionCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sqruff";
@@ -40,9 +39,12 @@ rustPlatform.buildRustPackage rec {
       'config.program.program = "../../target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/sqruff".into();'
   '';
 
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = sqruff; };
   };
 
   meta = {
