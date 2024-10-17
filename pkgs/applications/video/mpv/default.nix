@@ -7,7 +7,6 @@
   buildPackages,
   callPackage,
   config,
-  darwin,
   docutils,
   fetchFromGitHub,
   ffmpeg,
@@ -33,7 +32,6 @@
   libcdio-paranoia,
   libdrm,
   libdvdnav,
-  libiconv,
   libjack2,
   libplacebo,
   libpng,
@@ -68,7 +66,6 @@
   wayland,
   wayland-protocols,
   wayland-scanner,
-  xcbuild,
   zimg,
 
   # Boolean
@@ -107,33 +104,9 @@
 }:
 
 let
-  inherit (darwin.apple_sdk_11_0.frameworks)
-    AVFoundation
-    Accelerate
-    Cocoa
-    CoreAudio
-    CoreFoundation
-    CoreMedia
-    MediaPlayer
-    VideoToolbox
-    ;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
-
-  overrideSDK =
-    platform: version:
-    platform // lib.optionalAttrs (platform ? darwinMinVersion) { darwinMinVersion = version; };
-
-  stdenv' =
-    if swiftSupport && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then
-      stdenv.override (old: {
-        buildPlatform = overrideSDK old.buildPlatform "11.0";
-        hostPlatform = overrideSDK old.hostPlatform "11.0";
-        targetPlatform = overrideSDK old.targetPlatform "11.0";
-      })
-    else
-      stdenv;
 in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mpv";
   version = "0.39.0";
 
@@ -150,11 +123,6 @@ stdenv'.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-BOGh+QBTO7hrHohh+RqjSF8eHQH8jVBPjG/k4eyFaaM=";
   };
-
-  patches = [
-    # Fix build with Darwin SDK 11
-    ./0001-fix-darwin-build.patch
-  ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
@@ -211,7 +179,6 @@ stdenv'.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       buildPackages.darwin.sigtool
-      xcbuild.xcrun
     ]
     ++ lib.optionals swiftSupport [ swift ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
@@ -284,19 +251,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ++ lib.optionals xvSupport [ libXv ]
     ++ lib.optionals zimgSupport [ zimg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      CoreFoundation
-      Cocoa
-      CoreAudio
-      MediaPlayer
-      VideoToolbox
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && swiftSupport) [
-      AVFoundation
-      CoreMedia
-    ];
+    ;
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
