@@ -2105,12 +2105,6 @@ self: super: {
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  taskell = super.taskell.override {
-    # Does not support brick >= 1.0
-    # https://github.com/smallhadroncollider/taskell/issues/125
-    brick = self.brick_0_70_1;
-  };
-
   # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
   ghc-bignum = super.ghc-bignum or self.mkDerivation {
     pname = "ghc-bignum";
