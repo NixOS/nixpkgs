@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "pylyzer";
     publisher = "pylyzer";
-    version = "0.1.8";
-    hash = "sha256-GoY4cobxL64bREtgl7q/iR66axSM3tBrle/b9h3ED8Q=";
+    version = "0.1.10";
+    hash = "sha256-dDkX0U/XmHk5Jo+VdvxDkcA/1xu0Ae8kaDuDd/xjdUc=";
   };
 
   meta = {

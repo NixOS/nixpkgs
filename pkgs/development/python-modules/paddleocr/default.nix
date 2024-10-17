@@ -14,7 +14,6 @@
   openpyxl,
   pdf2docx,
   pillow,
-  premailer,
   pyclipper,
   pymupdf,
   python-docx,
@@ -76,7 +75,6 @@ buildPythonPackage {
     openpyxl
     pdf2docx
     pillow
-    premailer
     pyclipper
     pymupdf
     python-docx

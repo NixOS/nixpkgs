@@ -507,12 +507,20 @@ in {
                          in nameValuePair "${n}.automount" (automountToUnit v)) cfg.automounts);
 
 
-      services.initrd-nixos-activation = {
-        after = [ "initrd-fs.target" ];
+      services.initrd-find-nixos-closure = {
+        description = "Find NixOS closure";
+
+        unitConfig = {
+          RequiresMountsFor = "/sysroot/nix/store";
+          DefaultDependencies = false;
+        };
+        before = [ "shutdown.target" ];
+        conflicts = [ "shutdown.target" ];
         requiredBy = [ "initrd.target" ];
-        unitConfig.AssertPathExists = "/etc/initrd-release";
-        serviceConfig.Type = "oneshot";
-        description = "NixOS Activation";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
 
         script = /* bash */ ''
           set -uo pipefail
@@ -542,6 +550,8 @@ in {
           # Assume the directory containing the init script is the closure.
           closure="$(dirname "$closure")"
 
+          ln --symbolic "$closure" /nixos-closure
+
           # If we are not booting a NixOS closure (e.g. init=/bin/sh),
           # we don't know what root to prepare so we don't do anything
           if ! [ -x "/sysroot$(readlink "/sysroot$closure/prepare-root" || echo "$closure/prepare-root")" ]; then
@@ -550,12 +560,48 @@ in {
             exit 0
           fi
           echo 'NEW_INIT=' > /etc/switch-root.conf
+        '';
+      };
 
+      # We need to propagate /run for things like /run/booted-system
+      # and /run/current-system.
+      mounts = [
+        {
+          where = "/sysroot/run";
+          what = "/run";
+          options = "bind";
+          unitConfig = {
+            # See the comment on the mount unit for /run/etc-metadata
+            DefaultDependencies = false;
+          };
+          requiredBy = [ "initrd-fs.target" ];
+          before = [ "initrd-fs.target" ];
+        }
+      ];
 
-          # We need to propagate /run for things like /run/booted-system
-          # and /run/current-system.
-          mkdir -p /sysroot/run
-          mount --bind /run /sysroot/run
+      services.initrd-nixos-activation = {
+        requires = [
+          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+        ];
+        after = [
+          "initrd-fs.target"
+          config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+        ];
+        requiredBy = [ "initrd.target" ];
+        unitConfig = {
+          AssertPathExists = "/etc/initrd-release";
+          RequiresMountsFor = [
+            "/sysroot/run"
+          ];
+        };
+        serviceConfig.Type = "oneshot";
+        description = "NixOS Activation";
+
+        script = /* bash */ ''
+          set -uo pipefail
+          export PATH="/bin:${cfg.package.util-linux}/bin"
+
+          closure="$(realpath /nixos-closure)"
 
           # Initialize the system
           export IN_NIXOS_SYSTEMD_STAGE1=true

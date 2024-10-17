@@ -125,8 +125,6 @@ with pkgs;
 
   ld-library-path = callPackage ./ld-library-path {};
 
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
-
   cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
   php = recurseIntoAttrs (callPackages ./php {});

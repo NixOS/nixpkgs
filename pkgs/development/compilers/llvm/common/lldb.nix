@@ -32,7 +32,9 @@ let
     if monorepoSrc != null then
       runCommand "lldb-src-${version}" { } (''
         mkdir -p "$out"
+      '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
+      '' + ''
         cp -r ${monorepoSrc}/lldb "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "19" && enableManpages) ''
         mkdir -p "$out/llvm"

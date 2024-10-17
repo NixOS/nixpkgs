@@ -980,6 +980,7 @@
   ./services/networking/aria2.nix
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
+  ./services/networking/atticd.nix
   ./services/networking/autossh.nix
   ./services/networking/avahi-daemon.nix
   ./services/networking/babeld.nix
@@ -1276,6 +1277,7 @@
   ./services/networking/xray.nix
   ./services/networking/xrdp.nix
   ./services/networking/yggdrasil.nix
+  ./services/networking/zapret.nix
   ./services/networking/zerobin.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix

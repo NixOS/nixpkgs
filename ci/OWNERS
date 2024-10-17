@@ -128,6 +128,18 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/modules/installer/cd-dvd/                @ElvishJerricco
 /nixos/modules/installer/sd-card/
 
+# Amazon
+/nixos/modules/virtualisation/amazon-init.nix     @arianvp
+/nixos/modules/virtualisation/ec2-data.nix        @arianvp
+/nixos/modules/virtualisation/amazon-options.nix  @arianvp
+/nixos/modules/virtualisation/amazon-image.nix    @arianvp
+/nixos/maintainers/scripts/ec2/                   @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix @arianvp
+/nixos/tests/amazon-ssm-agent.nix                 @arianvp
+/nixos/modules/system/boot/grow-partition.nix     @arianvp
+
+
+
 # Updaters
 ## update.nix
 /maintainers/scripts/update.nix   @jtojnar

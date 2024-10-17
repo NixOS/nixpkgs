@@ -136,6 +136,7 @@ in {
   artalk = handleTest ./artalk.nix {};
   atd = handleTest ./atd.nix {};
   atop = handleTest ./atop.nix {};
+  atticd = runTest ./atticd.nix;
   atuin = handleTest ./atuin.nix {};
   audiobookshelf = handleTest ./audiobookshelf.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};

@@ -145,6 +145,7 @@ in
         wants = [ "network-pre.target" ];
         wantedBy = [ "multi-user.target" ];
         restartTriggers = [ config.environment.etc."resolvconf.conf".source ];
+        serviceConfig.Type = "oneshot";
         serviceConfig.RemainAfterExit = true;
 
         script = ''

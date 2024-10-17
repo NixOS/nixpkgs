@@ -2364,7 +2364,7 @@ with pkgs;
 
   gitls = callPackage ../applications/version-management/gitls { };
 
-  gitmux = callPackage ../applications/version-management/gitmux { };
+  gitmux = callPackage ../applications/version-management/gitmux { buildGoModule = buildGo122Module; };
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
 
@@ -4416,8 +4416,6 @@ with pkgs;
 
   clapboard = callPackage ../tools/wayland/clapboard { };
 
-  cliphist = callPackage ../tools/wayland/cliphist { };
-
   clipman = callPackage ../tools/wayland/clipman { };
 
   kabeljau = callPackage ../games/kabeljau { };
@@ -5606,6 +5604,10 @@ with pkgs;
   };
 
   nltk-data = callPackage ../tools/text/nltk-data { };
+
+  seabios-coreboot = seabios.override { ___build-type = "coreboot"; };
+  seabios-csm = seabios.override { ___build-type = "csm"; };
+  seabios-qemu = seabios.override { ___build-type = "qemu"; };
 
   seaborn-data = callPackage ../tools/misc/seaborn-data { };
 
@@ -8832,7 +8834,9 @@ with pkgs;
 
   jmespath = callPackage ../development/tools/jmespath { };
 
-  juicefs = callPackage ../tools/filesystems/juicefs { };
+  juicefs = callPackage ../tools/filesystems/juicefs {
+    buildGoModule = buildGo122Module;
+  };
 
   juicity = callPackage ../tools/networking/juicity { };
 
@@ -10998,10 +11002,8 @@ with pkgs;
 
   perceptualdiff = callPackage ../tools/graphics/perceptualdiff { };
 
-  inherit (import ../servers/sql/percona-server pkgs) percona-server_lts percona-server_innovation;
-  percona-server = percona-server_lts;
-  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_lts percona-xtrabackup_innovation;
-  percona-xtrabackup = percona-xtrabackup_lts;
+  inherit (import ../servers/sql/percona-server pkgs) percona-server_8_0 percona-server_8_4 percona-server;
+  inherit (import ../tools/backup/percona-xtrabackup pkgs) percona-xtrabackup_8_0 percona-xtrabackup_8_4 percona-xtrabackup;
 
   pick = callPackage ../tools/misc/pick { };
 
@@ -12393,8 +12395,6 @@ with pkgs;
 
   soundkonverter = libsForQt5.soundkonverter;
 
-  soundwireserver = callPackage ../applications/audio/soundwireserver { };
-
   sozu = callPackage ../servers/sozu { };
 
   spacer = callPackage ../tools/misc/spacer { };
@@ -13784,10 +13784,6 @@ with pkgs;
 
   wget2 = callPackage ../tools/networking/wget2 { };
 
-  wgpu-utils = callPackage ../tools/graphics/wgpu-utils {
-    inherit (darwin.apple_sdk.frameworks) QuartzCore;
-  };
-
   wg-bond = callPackage ../applications/networking/wg-bond { };
 
   wgcf = callPackage ../applications/networking/wgcf { };
@@ -14379,13 +14375,6 @@ with pkgs;
   libclang = llvmPackages.libclang;
   clang-manpages = llvmPackages.clang-manpages;
 
-  clang-sierraHack = clang.override {
-    name = "clang-wrapper-with-reexport-hack";
-    bintools = darwin.binutils.override {
-      useMacosReexportHack = true;
-    };
-  };
-
   clang = llvmPackages.clang;
   clang_12 = llvmPackages_12.clang;
   clang_13 = llvmPackages_13.clang;
@@ -14408,7 +14397,6 @@ with pkgs;
 
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.cc.isClang then stdenv else lowPrio llvmPackages.stdenv;
-  clang-sierraHack-stdenv = overrideCC stdenv buildPackages.clang-sierraHack;
   libcxxStdenv = if stdenv.hostPlatform.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
@@ -18400,8 +18388,6 @@ with pkgs;
   sloc = nodePackages.sloc;
 
   smc = callPackage ../tools/misc/smc { };
-
-  snakemake = callPackage ../applications/science/misc/snakemake { };
 
   snore = callPackage ../tools/misc/snore { };
 
@@ -24494,9 +24480,6 @@ with pkgs;
 
   matrix-alertmanager = callPackage ../servers/monitoring/matrix-alertmanager { };
 
-  mattermost = callPackage ../servers/mattermost { };
-  matterircd = callPackage ../servers/mattermost/matterircd.nix { };
-
   mattermost-desktop = callPackage ../applications/networking/instant-messengers/mattermost-desktop { };
 
   memcached = callPackage ../servers/memcached { };
@@ -28134,10 +28117,6 @@ with pkgs;
     audacious = audacious.override { audacious-plugins = null; };
   };
 
-  audacity = callPackage ../applications/audio/audacity {
-    inherit (darwin.apple_sdk.frameworks) AppKit CoreAudioKit;
-  };
-
   audio-recorder = callPackage ../applications/audio/audio-recorder { };
 
   auto-multiple-choice = callPackage ../applications/misc/auto-multiple-choice { };
@@ -28161,8 +28140,6 @@ with pkgs;
   ax25-apps = callPackage ../applications/radio/ax25-apps { };
 
   ax25-tools = callPackage ../applications/radio/ax25-tools { };
-
-  azpainter = callPackage ../applications/graphics/azpainter { };
 
   bambootracker = libsForQt5.callPackage ../applications/audio/bambootracker {
     stdenv = if stdenv.hostPlatform.isDarwin then
@@ -29351,8 +29328,6 @@ with pkgs;
   fclones = callPackage ../tools/misc/fclones { };
 
   fclones-gui = darwin.apple_sdk_11_0.callPackage ../tools/misc/fclones/gui.nix { };
-
-  fcp = callPackage ../tools/misc/fcp { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
 
@@ -32333,8 +32308,6 @@ with pkgs;
 
   secretscanner = callPackage ../tools/security/secretscanner { };
 
-  setconf = python3.pkgs.callPackage ../tools/misc/setconf { };
-
   semiphemeral = callPackage ../tools/misc/semiphemeral { };
 
   semver = callPackage ../applications/misc/semver { };
@@ -33519,8 +33492,6 @@ with pkgs;
 
   wings = callPackage ../applications/graphics/wings { };
 
-  write_stylus = libsForQt5.callPackage ../applications/graphics/write_stylus { };
-
   wlc = callPackage  ../tools/misc/wlc { };
 
   wlclock = callPackage ../applications/misc/wlclock { };
@@ -33881,8 +33852,6 @@ with pkgs;
   ytmdl = callPackage ../tools/misc/ytmdl { };
 
   yuview = libsForQt5.yuview;
-
-  wallust = callPackage ../applications/misc/wallust { };
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
@@ -34617,7 +34586,9 @@ with pkgs;
 
   extremetuxracer = callPackage ../games/extremetuxracer { };
 
-  exult = callPackage ../games/exult { };
+  exult = callPackage ../games/exult {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+  };
 
   fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
   fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
@@ -35232,17 +35203,14 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
-
-  steam = steamPackages.steam-fhsenv;
-
   steam-run = steam.run;
 
-  steam-run-free = steamPackages.steam-fhsenv-without-steam.run;
+  # This exists so Hydra tries to build all of Steam's dependencies.
+  steam-fhsenv-without-steam = steam.override { steam-unwrapped = null; };
+
+  steam-run-free = steam-fhsenv-without-steam.run;
 
   steam-tui = callPackage ../games/steam-tui { };
-
-  steamcmd = steamPackages.steamcmd;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
 
@@ -38650,8 +38618,6 @@ with pkgs;
   fac-build = callPackage ../development/tools/build-managers/fac {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-
-  nufmt = callPackage ../development/tools/nufmt { };
 
   bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 

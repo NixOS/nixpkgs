@@ -20,6 +20,11 @@
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
   cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
+
+  assertRemovedOption = option: message: {
+    assertion = !lib.hasAttrByPath option cfg;
+    message = "The option `services.headscale.${lib.options.showOption option}` was removed. " + message;
+  };
 in {
   options = {
     services.headscale = {
@@ -81,21 +86,6 @@ in {
         '';
         type = lib.types.submodule {
           freeformType = settingsFormat.type;
-
-          imports = with lib; [
-            (mkAliasOptionModule ["acl_policy_path"] ["policy" "path"])
-            (mkAliasOptionModule ["db_host"] ["database" "postgres" "host"])
-            (mkAliasOptionModule ["db_name"] ["database" "postgres" "name"])
-            (mkAliasOptionModule ["db_password_file"] ["database" "postgres" "password_file"])
-            (mkAliasOptionModule ["db_path"] ["database" "sqlite" "path"])
-            (mkAliasOptionModule ["db_port"] ["database" "postgres" "port"])
-            (mkAliasOptionModule ["db_type"] ["database" "type"])
-            (mkAliasOptionModule ["db_user"] ["database" "postgres" "user"])
-            (mkAliasOptionModule ["dns_config" "base_domain"] ["dns" "base_domain"])
-            (mkAliasOptionModule ["dns_config" "domains"] ["dns" "search_domains"])
-            (mkAliasOptionModule ["dns_config" "magic_dns"] ["dns" "magic_dns"])
-            (mkAliasOptionModule ["dns_config" "nameservers"] ["dns" "nameservers" "global"])
-          ];
 
           options = {
             server_url = lib.mkOption {
@@ -299,7 +289,6 @@ in {
                 default = true;
                 description = ''
                   Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
-                  Only works if there is at least a nameserver defined.
                 '';
                 example = false;
               };
@@ -309,11 +298,13 @@ in {
                 default = "";
                 description = ''
                   Defines the base domain to create the hostnames for MagicDNS.
-                  {option}`baseDomain` must be a FQDNs, without the trailing dot.
-                  The FQDN of the hosts will be
-                  `hostname.namespace.base_domain` (e.g.
-                  `myhost.mynamespace.example.com`).
+                  This domain must be different from the {option}`server_url`
+                  domain.
+                  {option}`base_domain` must be a FQDN, without the trailing dot.
+                  The FQDN of the hosts will be `hostname.base_domain` (e.g.
+                  `myhost.tailnet.example.com`).
                 '';
+                example = "tailnet.example.com";
               };
 
               nameservers = {
@@ -500,6 +491,30 @@ in {
   ];
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        # This is stricter than it needs to be but is exactly what upstream does:
+        # https://github.com/kradalby/headscale/blob/adc084f20f843d7963c999764fa83939668d2d2c/hscontrol/types/config.go#L799
+        assertion = with cfg.settings; dns.use_username_in_magic_dns or false || dns.base_domain == "" || !lib.hasInfix dns.base_domain server_url;
+        message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
+      }
+      {
+        assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
+        message = "dns.base_domain must be set when using MagicDNS";
+      }
+      (assertRemovedOption ["settings" "acl_policy_path"] "Use `policy.path` instead.")
+      (assertRemovedOption ["settings" "db_host"] "Use `database.postgres.host` instead.")
+      (assertRemovedOption ["settings" "db_name"] "Use `database.postgres.name` instead.")
+      (assertRemovedOption ["settings" "db_password_file"] "Use `database.postgres.password_file` instead.")
+      (assertRemovedOption ["settings" "db_path"] "Use `database.sqlite.path` instead.")
+      (assertRemovedOption ["settings" "db_port"] "Use `database.postgres.port` instead.")
+      (assertRemovedOption ["settings" "db_type"] "Use `database.type` instead.")
+      (assertRemovedOption ["settings" "db_user"] "Use `database.postgres.user` instead.")
+      (assertRemovedOption ["settings" "dns_config"] "Use `dns` instead.")
+      (assertRemovedOption ["settings" "dns_config" "domains"] "Use `dns.search_domains` instead.")
+      (assertRemovedOption ["settings" "dns_config" "nameservers"] "Use `dns.nameservers.global` instead.")
+    ];
+
     services.headscale.settings = lib.mkMerge [
       cliConfig
       {

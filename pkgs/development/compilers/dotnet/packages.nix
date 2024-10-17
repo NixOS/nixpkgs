@@ -7,6 +7,7 @@
   strip-nondeterminism,
   zip,
   nugetPackageHook,
+  baseName ? "dotnet",
   fallbackTargetPackages ? { },
 }:
 
@@ -93,7 +94,7 @@ let
   };
 
   sdk = mkCommon "sdk" rec {
-    pname = "dotnet-sdk";
+    pname = "${baseName}-sdk";
     version = releaseManifest.sdkVersion;
 
     src = vmr;
@@ -147,7 +148,7 @@ let
   };
 
   runtime = mkCommon "runtime" rec {
-    pname = "dotnet-runtime";
+    pname = "${baseName}-runtime";
     version = releaseManifest.runtimeVersion;
 
     src = vmr;
@@ -172,7 +173,7 @@ let
   };
 
   aspnetcore = mkCommon "aspnetcore" rec {
-    pname = "dotnet-aspnetcore-runtime";
+    pname = "${baseName}-aspnetcore-runtime";
     version = releaseManifest.aspNetCoreVersion or releaseManifest.runtimeVersion;
 
     src = vmr;

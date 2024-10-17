@@ -5,18 +5,28 @@
   fetchurl,
   releaseManifestFile,
   releaseInfoFile,
+  bootstrapSdkFile,
   allowPrerelease ? false,
   depsFile,
-  bootstrapSdk,
   pkgsBuildHost,
+  buildDotnetSdk,
 }:
 
 let
-  inherit (lib.importJSON releaseInfoFile) tarballHash artifactsUrl artifactsHash;
+  inherit (lib.importJSON releaseInfoFile)
+    tarballHash
+    artifactsUrl
+    artifactsHash
+    bootstrapSdk
+    ;
 
   pkgs = callPackage ./stage1.nix {
-    inherit releaseManifestFile tarballHash depsFile;
-    bootstrapSdk = bootstrapSdk.overrideAttrs (old: {
+    inherit
+      releaseManifestFile
+      tarballHash
+      depsFile
+      ;
+    bootstrapSdk = (buildDotnetSdk bootstrapSdkFile).sdk.overrideAttrs (old: {
       passthru = old.passthru or { } // {
         artifacts = stdenvNoCC.mkDerivation rec {
           name = lib.nameFromURL artifactsUrl ".tar.gz";
@@ -43,7 +53,12 @@ pkgs
   vmr = pkgs.vmr.overrideAttrs (old: {
     passthru = old.passthru // {
       updateScript = pkgsBuildHost.callPackage ./update.nix {
-        inherit releaseManifestFile releaseInfoFile allowPrerelease;
+        inherit
+          releaseManifestFile
+          releaseInfoFile
+          bootstrapSdkFile
+          allowPrerelease
+          ;
       };
     };
   });
