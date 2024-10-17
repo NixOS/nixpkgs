@@ -21,6 +21,12 @@ let
 
     ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
   '';
+
+  nginxCommonHeaders = lib.optionalString config.services.nginx.virtualHosts.${cfg.settings.server.DOMAIN}.forceSSL ''
+    add_header Strict-Transport-Security 'max-age=31536000';
+  '' + lib.optionalString (config.services.nginx.virtualHosts.${cfg.settings.server.DOMAIN}.quic && config.services.nginx.virtualHosts.${cfg.settings.server.DOMAIN}.http3) ''
+    add_header Alt-Svc 'h3=":$server_port"; ma=604800';
+  '';
 in
 
 {
@@ -299,7 +305,8 @@ in
             server = {
               PROTOCOL = mkOption {
                 type = types.enum [ "http" "https" "fcgi" "http+unix" "fcgi+unix" ];
-                default = "http";
+                default = if cfg.configureNginx then "http+unix" else "http";
+                defaultText = literalExpression ''if cfg.configureNginx then "http+unix" else "http"'';
                 description = ''Listen protocol. `+unix` means "over unix", not "in addition to."'';
               };
 
@@ -331,8 +338,8 @@ in
 
               STATIC_ROOT_PATH = mkOption {
                 type = types.either types.str types.path;
-                default = cfg.package.data;
-                defaultText = literalExpression "config.${opt.package}.data";
+                default = if cfg.configureNginx then "${pkgs.compressDrvWeb cfg.package.data {}}" else "${cfg.package.data}";
+                defaultText = literalExpression ''if cfg.configureNginx then ''${pkgs.compressDrvWeb cfg.package.data {}} else config.${opt.package}.data'';
                 example = "/var/lib/gitea/data";
                 description = "Upper level of template and static files path.";
               };
@@ -383,6 +390,22 @@ in
         };
       };
 
+      configureNginx = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Configure nginx as a reverse proxy for gitea.";
+      };
+
+      maxUploadSize = lib.mkOption {
+        type = lib.types.int;
+        default = 512;
+        description = ''
+          Maximum supported size for a file upload in MiB. Maximum HTTP body
+          size is set to this value for nginx. it affects attachment uploading,
+          form posting, package uploading and LFS pushing, etc.
+        '';
+      };
+
       extraConfig = mkOption {
         type = with types; nullOr str;
         default = null;
@@ -431,10 +454,15 @@ in
         ROOT = cfg.repositoryRoot;
       };
 
-      server = mkIf cfg.lfs.enable {
-        LFS_START_SERVER = true;
-        LFS_JWT_SECRET = "#lfsjwtsecret#";
-      };
+      server = mkMerge [
+        (mkIf cfg.configureNginx {
+          STATIC_URL_PREFIX = lib.mkDefault "/static";
+        })
+        (mkIf cfg.lfs.enable {
+          LFS_START_SERVER = true;
+          LFS_JWT_SECRET = "#lfsjwtsecret#";
+        })
+      ];
 
       camo = mkIf (cfg.camoHmacKeyFile != null) {
         HMAC_KEY = "#hmackey#";
@@ -442,6 +470,13 @@ in
 
       session = {
         COOKIE_NAME = lib.mkDefault "session";
+      };
+
+      picture = mkIf cfg.configureNginx {
+        AVATAR_STORAGE_TYPE = lib.mkDefault "local";
+        AVATAR_UPLOAD_PATH = lib.mkDefault "avatars";
+        REPOSITORY_AVATAR_STORAGE_TYPE = lib.mkDefault "local";
+        REPOSITORY_AVATAR_UPLOAD_PATH = lib.mkDefault "repo-avatars";
       };
 
       security = {
@@ -492,6 +527,76 @@ in
       ];
     };
 
+    services.nginx = lib.mkIf cfg.configureNginx {
+      enable = true;
+      upstreams = {
+        "gitea" = {
+          servers = { ${if (cfg.settings.server.PROTOCOL == "http+unix")
+                      then "unix:${cfg.settings.server.HTTP_ADDR}"
+                      else "127.0.0.1:${toString cfg.httpPort}"
+                    } = { fail_timeout = "0"; }; };
+        };
+      };
+      virtualHosts."${cfg.settings.server.DOMAIN}" = {
+        root = "${cfg.customDir}/public";
+        locations."/" = {
+          tryFiles = "$uri @gitea";
+          priority = 1100;
+
+          extraConfig = nginxCommonHeaders;
+        };
+
+        locations."^~ /avatars/" = lib.mkIf (cfg.settings.picture.AVATAR_STORAGE_TYPE == "local") {
+          alias = "${cfg.stateDir}/data/${cfg.settings.picture.AVATAR_UPLOAD_PATH}/";
+          tryFiles = "$uri =404";
+          priority = 3110;
+
+          extraConfig = ''
+            default_type "image";
+            add_header Cache-Control 'public, max-age=604800, must-revalidate';
+          '' + nginxCommonHeaders;
+        };
+
+        locations."^~ /repo-avatars/" = lib.mkIf (cfg.settings.picture.REPOSITORY_AVATAR_STORAGE_TYPE == "local") {
+          alias = "${cfg.stateDir}/data/${cfg.settings.picture.REPOSITORY_AVATAR_UPLOAD_PATH}/";
+          tryFiles = "$uri =404";
+          priority = 3120;
+
+          extraConfig = ''
+            default_type "image";
+            add_header Cache-Control 'public, max-age=604800, must-revalidate';
+          '' + nginxCommonHeaders;
+        };
+
+        locations."^~ ${cfg.settings.server.STATIC_URL_PREFIX}/assets/" = {
+          alias = "${cfg.settings.server.STATIC_ROOT_PATH}/public/assets/";
+          tryFiles = "$uri =404";
+          priority = 3130;
+
+          extraConfig = ''
+            add_header Cache-Control 'public, max-age=604800, must-revalidate';
+          '' + nginxCommonHeaders;
+        };
+
+        locations."@gitea" = {
+          proxyPass = "http://gitea";
+          priority = 4100;
+
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection $http_connection;
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+
+            client_max_body_size ${toString cfg.maxUploadSize}M;
+          '' + nginxCommonHeaders;
+        };
+      };
+    };
+
     systemd.tmpfiles.rules = [
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -501,6 +606,7 @@ in
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.customDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -508,6 +614,7 @@ in
       "z '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.customDir}/public' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
 
@@ -624,6 +731,7 @@ in
         ProcSubset = "pid";
         ProtectProc = "invisible";
         # Access write directories
+        ReadOnlyPaths = [ "${cfg.customDir}/public" ];
         ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
         # Capabilities
@@ -674,7 +782,9 @@ in
     };
 
     users.groups = mkIf (cfg.group == "gitea") {
-      gitea = {};
+      gitea = {
+        members = lib.optional cfg.configureNginx config.services.nginx.user;
+      };
     };
 
     warnings =
