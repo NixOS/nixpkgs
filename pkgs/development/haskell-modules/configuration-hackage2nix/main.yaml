@@ -78,7 +78,6 @@ extra-packages:
   - immortal == 0.2.2.1                 # required by Hasura 1.3.1, 2020-08-20
   - language-docker == 11.0.0           # required by hadolint 2.12.0, 2022-11-16
   - language-javascript == 0.7.0.0      # required by purescript
-  - lens-aeson < 1.2                    # 2022-12-17: For aeson < 2.0 compat
   - lsp == 2.1.0.0                      # 2024-02-28: need for dhall-lsp-server unstable
   - lsp-types == 2.0.2.0                # 2024-02-28: need for dhall-lsp-server unstable
   - lsp < 2.5                           # 2024-07-08: need for koka
