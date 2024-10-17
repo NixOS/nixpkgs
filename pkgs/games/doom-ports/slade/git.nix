@@ -15,18 +15,19 @@
 , glew
 , lua
 , mpg123
+, wrapGAppsHook3
 , unstableGitUpdater
 }:
 
 stdenv.mkDerivation rec {
   pname = "slade";
-  version = "3.2.4-unstable-2023-09-30";
+  version = "3.2.6-unstable-2024-09-30";
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
-    rev = "d05af4bd3a9a655dfe17d02760bab3542cc0b909";
-    sha256 = "sha256-lzTSE0WH+4fOad9E/pL3LDc4L151W0hFEmD0zsS0gpQ=";
+    rev = "b225d41ea77332a4b7df114672ee8f430303b4bf";
+    hash = "sha256-P327xzal1jOvG1uCQKnxl6T3pJHnfKL0Ti2vnVe1foA=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''
@@ -38,6 +39,7 @@ stdenv.mkDerivation rec {
     pkg-config
     which
     zip
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -59,6 +61,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix GDK_BACKEND : x11
+    )
+  '';
+
   passthru.updateScript = unstableGitUpdater {
     url = "https://github.com/sirjuddington/SLADE.git";
   };
@@ -66,7 +74,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Doom editor";
     homepage = "http://slade.mancubus.net/";
-    license = licenses.gpl2Plus;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ertes ];
   };
