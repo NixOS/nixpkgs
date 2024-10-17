@@ -20,6 +20,10 @@ let self = stdenv.mkDerivation rec {
     hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
   };
 
+  patches = [
+    ./remove-cc-reference.patch
+  ];
+
   #outputs TODO: split $cxx due to libstdc++ dependency
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
   # - see #5855 for related discussion

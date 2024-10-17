@@ -35,7 +35,9 @@ let
       inherit hash;
     };
 
-    inherit patches;
+    patches = patches ++ [
+      ./remove-cflags-references.patch
+    ];
 
     postPatch = ''
       patchShebangs Configure
