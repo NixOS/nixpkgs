@@ -30,7 +30,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  version = "3.6";
+  version = "4.0";
 
   outputs = [ "out" "dev" ];
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   # whether we fetch a source tarball or a tag from the git repo
   src = fetchurl {
     url = "https://bitbucket.org/multicoreware/x265_git/downloads/x265_${version}.tar.gz";
-    hash = "sha256-ZjUx80HFOJ9GDXMOYuEKT8yjQoyiyhCWk4Z7xf4uKAc=";
+    hash = "sha256-dbTQVinjZZE94xALOKRZsE4qIXqPMO+qkbVy2ObXEoI=";
   };
 
   patches = [
