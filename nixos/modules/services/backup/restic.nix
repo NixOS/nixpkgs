@@ -56,6 +56,14 @@ in
                 bwlimit = "10M";
                 drive-use-trash = "true";
               };
+
+              RESTIC_CACHE_DIR = lib.mkOption {
+                type = with lib.types; nullOr path;
+                default = "/var/cache/restic-backups-${name}";
+                description = ''
+                  Location of the cache directory.
+                '';
+              };
             };
 
             rcloneConfig = lib.mkOption {
@@ -421,7 +429,7 @@ in
           environment =
             {
               # not %C, because that wouldn't work in the wrapper script
-              RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
+              RESTIC_CACHE_DIR = backup.settings.RESTIC_CACHE_DIR;
               RESTIC_PASSWORD_FILE = backup.settings.RESTIC_PASSWORD_FILE;
               RESTIC_REPOSITORY = backup.settings.RESTIC_REPOSITORY;
               RESTIC_REPOSITORY_FILE = backup.settings.RESTIC_REPOSITORY_FILE;
