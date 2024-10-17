@@ -18391,8 +18391,6 @@ with pkgs;
 
   smc = callPackage ../tools/misc/smc { };
 
-  snakemake = callPackage ../applications/science/misc/snakemake { };
-
   snore = callPackage ../tools/misc/snore { };
 
   snzip = callPackage ../tools/archivers/snzip { };
@@ -35266,17 +35264,14 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
-
-  steam = steamPackages.steam-fhsenv;
-
   steam-run = steam.run;
 
-  steam-run-free = steamPackages.steam-fhsenv-without-steam.run;
+  # This exists so Hydra tries to build all of Steam's dependencies.
+  steam-fhsenv-without-steam = steam.override { steam-unwrapped = null; };
+
+  steam-run-free = steam-fhsenv-without-steam.run;
 
   steam-tui = callPackage ../games/steam-tui { };
-
-  steamcmd = steamPackages.steamcmd;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
 

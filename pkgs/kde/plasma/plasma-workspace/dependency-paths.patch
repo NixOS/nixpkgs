@@ -135,13 +135,13 @@ index 4d31c6f408..17418b1ff7 100644
      }
      return p;
 diff --git a/startkde/systemd/plasma-ksplash-ready.service.in b/startkde/systemd/plasma-ksplash-ready.service.in
-index 0bd88e6c92..eb1e304d37 100644
+index 1e903130a9..1d807a8526 100644
 --- a/startkde/systemd/plasma-ksplash-ready.service.in
 +++ b/startkde/systemd/plasma-ksplash-ready.service.in
 @@ -6,5 +6,5 @@ PartOf=graphical-session.target
  
  [Service]
  Type=oneshot
--ExecStart=dbus-send --session  --reply-timeout=1 --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
-+ExecStart=@dbus-send@ --session  --reply-timeout=1 --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
+-ExecStart=dbus-send --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
++ExecStart=@dbus-send@ --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
  Slice=session.slice
