@@ -1820,7 +1820,6 @@ dont-distribute-packages:
  - hackage2twitter
  - hackmanager
  - haddock
- - haddock_2_23_1
  - haddocset
  - hadoop-tools
  - haggis
