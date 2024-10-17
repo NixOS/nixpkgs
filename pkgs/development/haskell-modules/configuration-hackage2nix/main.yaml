@@ -52,7 +52,6 @@ extra-packages:
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
-  - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
