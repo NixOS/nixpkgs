@@ -319,6 +319,7 @@ in
                   RESTIC_REPOSITORY = repositoryBase;
                   RESTIC_REPOSITORY_FILE = repositoryFileBase;
 
+                  # not %C, because that wouldn't work in the wrapper script
                   RESTIC_CACHE_DIR = lib.mkOption {
                     type = with lib.types; nullOr path;
                     default = "/var/cache/restic-backups-${name}";
@@ -381,6 +382,7 @@ in
       assertion = (v.repositoryFile == null);
       message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
     }) config.services.restic.backups);
+
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
@@ -414,10 +416,7 @@ in
       lib.nameValuePair "restic-backups-${name}" (
         {
           environment =
-            {
-              # not %C, because that wouldn't work in the wrapper script
-              inherit (backup.settings) RESTIC_CACHE_DIR RESTIC_PASSWORD_FILE RESTIC_REPOSITORY RESTIC_REPOSITORY_FILE;
-            }
+            backup.settings
             // lib.optionalAttrs (backup.rcloneOptions != null) (
               lib.mapAttrs' (
                 name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
