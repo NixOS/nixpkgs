@@ -54,7 +54,9 @@ while [ "$#" -gt 0 ]; do
         ;;
       switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
-        if [ "$i" = list-generations ]; then
+        # add your command here, if its result does not depend on the nix
+        # version, see `--no-build-nix` option
+        if [[ "$i" = list-generations || "$i" = edit ]]; then
             buildNix=
             fast=1
         fi
@@ -370,154 +372,6 @@ nixFlakeBuild() {
     fi
 }
 
-
-if [ -z "$action" ]; then showSyntax; fi
-
-# Only run shell scripts from the Nixpkgs tree if the action is
-# "switch", "boot", or "test". With other actions (such as "build"),
-# the user may reasonably expect that no code from the Nixpkgs tree is
-# executed, so it's safe to run nixos-rebuild against a potentially
-# untrusted tree.
-canRun=
-if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
-    canRun=1
-fi
-
-# Verify that user is not trying to use attribute building and flake
-# at the same time
-if [[ -z $buildingAttribute && -n $flake ]]; then
-    log "error: '--flake' cannot be used with '--file' or '--attr'"
-    exit 1
-fi
-
-# If ‘--upgrade’ or `--upgrade-all` is given,
-# run ‘nix-channel --update nixos’.
-if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
-    # If --upgrade-all is passed, or there are other channels that
-    # contain a file called ".update-on-nixos-rebuild", update them as
-    # well. Also upgrade the nixos channel.
-
-    for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
-        channel_name=$(basename "$channelpath")
-
-        if [[ "$channel_name" == "nixos" ]]; then
-            runCmd nix-channel --update "$channel_name"
-        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            runCmd nix-channel --update "$channel_name"
-        elif [[ -n $upgrade_all ]] ; then
-            runCmd nix-channel --update "$channel_name"
-        fi
-    done
-fi
-
-# Make sure that we use the Nix package we depend on, not something
-# else from the PATH for nix-{env,instantiate,build}.  This is
-# important, because NixOS defaults the architecture of the rebuilt
-# system to the architecture of the nix-* binaries used.  So if on an
-# amd64 system the user has an i686 Nix package in her PATH, then we
-# would silently downgrade the whole system to be i686 NixOS on the
-# next reboot.
-if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
-    export PATH=@nix@/bin:$PATH
-fi
-
-# Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
-# actual flake.
-if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
-    flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
-fi
-
-# For convenience, use the hostname as the default configuration to
-# build from the flake.
-if [[ -n $flake ]]; then
-    if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
-       flake="${BASH_REMATCH[1]}"
-       flakeAttr="${BASH_REMATCH[2]}"
-    fi
-    if [[ -z $flakeAttr ]]; then
-        hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
-        if [[ -z $hostname ]]; then
-            hostname=default
-        fi
-        flakeAttr="nixosConfigurations.\"$hostname\""
-    else
-        flakeAttr="nixosConfigurations.\"$flakeAttr\""
-    fi
-fi
-
-if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
-    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
-    exit 1
-fi
-
-tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
-
-if [[ ${#tmpDir} -ge 60 ]]; then
-    # Very long tmp dirs lead to "too long for Unix domain socket"
-    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-    rmdir "$tmpDir"
-    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
-fi
-
-cleanup() {
-    for ctrl in "$tmpDir"/ssh-*; do
-        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
-    done
-    rm -rf "$tmpDir"
-}
-trap cleanup EXIT
-
-
-# Re-execute nixos-rebuild from the Nixpkgs tree.
-if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
-    if [[ -z $buildingAttribute ]]; then
-        p=$(runCmd nix-build --no-out-link $buildFile -A "${attr:+$attr.}config.system.build.nixos-rebuild" "${extraBuildFlags[@]}")
-        SHOULD_REEXEC=1
-    elif [[ -z $flake ]]; then
-        if p=$(runCmd nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
-            SHOULD_REEXEC=1
-        fi
-    else
-        runCmd nix "${flakeFlags[@]}" build --out-link "${tmpDir}/nixos-rebuild" "$flake#$flakeAttr.config.system.build.nixos-rebuild" "${extraBuildFlags[@]}" "${lockFlags[@]}"
-        if p=$(readlink -e "${tmpDir}/nixos-rebuild"); then
-            SHOULD_REEXEC=1
-        fi
-    fi
-
-    if [[ -n $SHOULD_REEXEC ]]; then
-        export _NIXOS_REBUILD_REEXEC=1
-        # Manually call cleanup as the EXIT trap is not triggered when using exec
-        cleanup
-        runCmd exec "$p/bin/nixos-rebuild" "${origArgs[@]}"
-        exit 1
-    fi
-fi
-
-# Find configuration.nix and open editor instead of building.
-if [ "$action" = edit ]; then
-    if [[ -z $buildingAttribute ]]; then
-        log "error: '--file' and '--attr' are not supported with 'edit'"
-        exit 1
-    elif [[ -z $flake ]]; then
-        NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config)}
-        if [[ -d $NIXOS_CONFIG ]]; then
-            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
-        fi
-        runCmd exec ${EDITOR:-nano} "$NIXOS_CONFIG"
-    else
-        runCmd exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
-    fi
-    exit 1
-fi
-
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
-
-# First build Nix, since NixOS may require a newer version than the
-# current one.
-if [[ -n "$rollback" || "$action" = dry-build ]]; then
-    buildNix=
-fi
-
 nixSystem() {
     machine="$(uname -m)"
     if [[ "$machine" =~ i.86 ]]; then
@@ -590,6 +444,164 @@ getVersion() {
     fi
 }
 
+#
+### Validation section
+#
+
+if [ -z "$action" ]; then showSyntax; fi
+
+# Verify that user is not trying to use attribute building and flake
+# at the same time
+if [[ -z $buildingAttribute && -n $flake ]]; then
+    log "error: '--flake' cannot be used with '--file' or '--attr'"
+    exit 1
+fi
+
+if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; then
+    log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
+    exit 1
+fi
+
+#
+### Preparation
+#
+
+# See cleanup function below
+tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
+cleanup() {
+    for ctrl in "$tmpDir"/ssh-*; do
+        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
+    done
+    rm -rf "$tmpDir"
+}
+trap cleanup EXIT
+
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
+
+# Use /etc/nixos/flake.nix if it exists. It can be a symlink to the
+# actual flake.
+if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
+    flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
+fi
+
+# For convenience, use the hostname as the default configuration to
+# build from the flake.
+if [[ -n $flake ]]; then
+    if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
+       flake="${BASH_REMATCH[1]}"
+       flakeAttr="${BASH_REMATCH[2]}"
+    fi
+    if [[ -z $flakeAttr ]]; then
+        hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
+        if [[ -z $hostname ]]; then
+            hostname=default
+        fi
+        flakeAttr="nixosConfigurations.\"$hostname\""
+    else
+        flakeAttr="nixosConfigurations.\"$flakeAttr\""
+    fi
+fi
+
+# Only run shell scripts from the Nixpkgs tree if the action is
+# "switch", "boot", or "test". With other actions (such as "build"),
+# the user may reasonably expect that no code from the Nixpkgs tree is
+# executed, so it's safe to run nixos-rebuild against a potentially
+# untrusted tree.
+canRun=
+if [[ "$action" = switch || "$action" = boot || "$action" = test ]]; then
+    canRun=1
+fi
+
+# Make sure that we use the Nix package we depend on, not something
+# else from the PATH for nix-{env,instantiate,build}.  This is
+# important, because NixOS defaults the architecture of the rebuilt
+# system to the architecture of the nix-* binaries used.  So if on an
+# amd64 system the user has an i686 Nix package in her PATH, then we
+# would silently downgrade the whole system to be i686 NixOS on the
+# next reboot.
+if [ -z "$_NIXOS_REBUILD_REEXEC" ]; then
+    export PATH=@nix@/bin:$PATH
+fi
+
+#
+### Perform action
+#
+
+# If ‘--upgrade’ or `--upgrade-all` is given,
+# run ‘nix-channel --update nixos’.
+if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
+    # If --upgrade-all is passed, or there are other channels that
+    # contain a file called ".update-on-nixos-rebuild", update them as
+    # well. Also upgrade the nixos channel.
+
+    for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
+        channel_name=$(basename "$channelpath")
+
+        if [[ "$channel_name" == "nixos" ]]; then
+            runCmd nix-channel --update "$channel_name"
+        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+            runCmd nix-channel --update "$channel_name"
+        elif [[ -n $upgrade_all ]] ; then
+            runCmd nix-channel --update "$channel_name"
+        fi
+    done
+fi
+
+# Re-execute nixos-rebuild from the Nixpkgs tree.
+if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
+    if [[ -z $buildingAttribute ]]; then
+        p=$(runCmd nix-build --no-out-link $buildFile -A "${attr:+$attr.}config.system.build.nixos-rebuild" "${extraBuildFlags[@]}")
+        SHOULD_REEXEC=1
+    elif [[ -z $flake ]]; then
+        if p=$(runCmd nix-build --no-out-link --expr 'with import <nixpkgs/nixos> {}; config.system.build.nixos-rebuild' "${extraBuildFlags[@]}"); then
+            SHOULD_REEXEC=1
+        fi
+    else
+        runCmd nix "${flakeFlags[@]}" build --out-link "${tmpDir}/nixos-rebuild" "$flake#$flakeAttr.config.system.build.nixos-rebuild" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+        if p=$(readlink -e "${tmpDir}/nixos-rebuild"); then
+            SHOULD_REEXEC=1
+        fi
+    fi
+
+    if [[ -n $SHOULD_REEXEC ]]; then
+        export _NIXOS_REBUILD_REEXEC=1
+        # Manually call cleanup as the EXIT trap is not triggered when using exec
+        cleanup
+        runCmd exec "$p/bin/nixos-rebuild" "${origArgs[@]}"
+        exit 1
+    fi
+fi
+
+# Find configuration.nix and open editor instead of building.
+if [ "$action" = edit ]; then
+    if [[ -z $buildingAttribute ]]; then
+        log "error: '--file' and '--attr' are not supported with 'edit'"
+        exit 1
+    elif [[ -z $flake ]]; then
+        NIXOS_CONFIG=${NIXOS_CONFIG:-$(runCmd nix-instantiate --find-file nixos-config)}
+        if [[ -d $NIXOS_CONFIG ]]; then
+            NIXOS_CONFIG=$NIXOS_CONFIG/default.nix
+        fi
+        runCmd exec ${EDITOR:-nano} "$NIXOS_CONFIG"
+    else
+        runCmd exec nix "${flakeFlags[@]}" edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+    fi
+    exit 1
+fi
+
+# First build Nix, since NixOS may require a newer version than the
+# current one.
+if [[ -n "$rollback" || "$action" = dry-build ]]; then
+    buildNix=
+fi
 
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
