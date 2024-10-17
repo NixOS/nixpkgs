@@ -47,8 +47,8 @@ let
 in
 import ./default.nix
   {
-    rustcVersion = "1.81.0";
-    rustcSha256 = "hyRI/r3/MuUMPJCn4V+bstsTHRPFiP6QcbDtiIN8z6c=";
+    rustcVersion = "1.82.0";
+    rustcSha256 = "fFP0UJ7aGE4XTvprp9XutYZYVobOjt78eBorEafPUSo=";
 
     llvmSharedForBuild = llvmSharedFor pkgsBuildBuild;
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
@@ -105,33 +105,32 @@ import ./default.nix
 
     # Note: the version MUST be one version prior to the version we're
     # building
-    bootstrapVersion = "1.80.1";
+    bootstrapVersion = "1.81.0";
 
     # fetch hashes by running `print-hashes.sh ${bootstrapVersion}`
     bootstrapHashes = {
-      i686-unknown-linux-gnu = "1bc0ce998dcf070994ad46292637c5c7368f4bdf1cec1a08baa43af74926be54";
-      x86_64-unknown-linux-gnu = "9eedaea9719914a0f4673899aa11693607f25486569913fcca5905ef1da784ec";
-      x86_64-unknown-linux-musl = "5b38cc33ed789e15542ee4cbff6fbb11a61d8946b2b1e9e6843386abed398737";
-      arm-unknown-linux-gnueabihf = "f07a757846bcc74404380312d7dec4342be887da20e1d5101aaa4cc14d222eb4";
-      armv7-unknown-linux-gnueabihf = "1daaf1944f0ba08ae1fcded8698742fdc6ae00027981c5900ea066214137a99d";
-      aarch64-unknown-linux-gnu = "4ae791da82be6e7223f4f6cd477799624481aa1011e17c37753a57d257f89198";
-      aarch64-unknown-linux-musl = "929d85092b64f69196e8fba2c88ce7a11dd6e4ccd583e4e3363591af041c400f";
-      x86_64-apple-darwin = "4fcc0dad8b47066e13877e2839760ef1f40754a90a8fe83ecd4a1f14bf63c71a";
-      aarch64-apple-darwin = "170ea11a424d67bbf16df3a4788e0d844ced00490e44c18c366304db1ef8ca6d";
-      powerpc64le-unknown-linux-gnu = "0eb2b3efc93cad3baf4653357a4a8a2d5a963ae80dbce8955e1bb4f60e02c659";
-      riscv64gc-unknown-linux-gnu = "1c1a70a6a38fb9483d77a330a957ccd436be83d8033a9023fc742ccd8e3ef5ca";
-      s390x-unknown-linux-gnu = "ca7f0ede6ec61c9f8bb5ac239c2fd14c1db3b164c58abc934851186489d247df";
-      x86_64-unknown-freebsd = "d7f4f66c3cc97616bcd37d9f63ed14c3c22c72a467f308453df2f1b128ffe0bc";
+      i686-unknown-linux-gnu = "0ab6ff2da7218220a2fb6e9538f5582c5d27448e91ff6ea2e296b2aee2b5e2d9";
+      x86_64-unknown-linux-gnu = "4ca7c24e573dae2f382d8d266babfddc307155e1a0a4025f3bc11db58a6cab3e";
+      x86_64-unknown-linux-musl = "2a0829c842425ab316a63adb0d604421be1c4df332388ac26d63aef47e857c12";
+      arm-unknown-linux-gnueabihf = "0da7b4a3b760fa514ba5e1a731fd212f1d082468f118f19e852136a30d2c0253";
+      armv7-unknown-linux-gnueabihf = "5a8d799a09cc605ea3a88dc43bd348bd6335847a0b71ba8e73b40968a0a7bf6f";
+      aarch64-unknown-linux-gnu = "ef4da9c1ecd56bbbb36f42793524cce3062e6a823ae22cb679a945c075c7755b";
+      aarch64-unknown-linux-musl = "fab9a1a69e61326399becab2571381b079ee42f2b648d862b0c3df05004dc864";
+      x86_64-apple-darwin = "f74d8ad24cc3cbfb825da98a08d98319565e4d18ec2c3e9503bf0a33c81ba767";
+      aarch64-apple-darwin = "60a41dea4ae0f4006325745a6400e6fdc3e08ad3f924fac06f04c238cf23f4ec";
+      powerpc64le-unknown-linux-gnu = "bf98b27de08a2fd5a2202a2b621b02bfde2a6fde397df2a735d018aeffcdc5e2";
+      riscv64gc-unknown-linux-gnu = "664e7a50c03848afc86d579a9cbf82cd0b2291a97776f7f81cee9bbf9fc1f648";
+      s390x-unknown-linux-gnu = "e0450ff125cadd3813c7888f5ca42f78e68df13c212b12d5eac3325062632723";
+      x86_64-unknown-freebsd = "b96ebbc043058eedebccd20f1d01e64f2241107665fe2336e6927966d8b9d8d3";
     };
 
-    selectRustPackage = pkgs: pkgs.rust_1_81;
+    selectRustPackage = pkgs: pkgs.rust_1_82;
 
     rustcPatches = [
       (fetchpatch {
         name = "fix-fastCross.patch";
         url = "https://github.com/rust-lang/rust/commit/c15469a7fec811d1a4f69ff26e18c6f383df41d2.patch";
-        excludes = [ "src/bootstrap/src/core/build_steps/dist.rs" ];
-        hash = "sha256-t8tW0eUZVJu6jUaXo41ZoPblNKisdL6ueoNLaf9Vhog=";
+        hash = "sha256-lFc48AMoGf4LCP65IsXS5rEB9eYacTP8ADftQkj8zkg=";
       })
     ];
   }
