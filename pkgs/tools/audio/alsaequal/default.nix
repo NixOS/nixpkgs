@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitHub
 , alsa-lib, caps
 }:
 
@@ -6,9 +6,11 @@ stdenv.mkDerivation rec {
   pname = "alsaequal";
   version = "0.6";
 
-  src = fetchurl {
-    url = "https://thedigitalmachine.net/tools/alsaequal-${version}.tar.bz2";
-    sha256 = "1w3g9q5z3nrn3mwdhaq6zsg0jila8d102dgwgrhj9vfx58apsvli";
+  src = fetchFromGitHub {
+    owner = "bassdr";
+    repo = "alsaequal";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-cCo8qWQv4bQ+RvH43Xbj+Q4qC5DmvracBuzI96EAnhY=";
   };
 
   buildInputs = [ alsa-lib ];
@@ -36,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Real-time adjustable equalizer plugin for ALSA";
-    homepage = "https://thedigitalmachine.net/alsaequal.html";
+    homepage = "https://github.com/bassdr/alsaequal";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ymeister ];
   };
