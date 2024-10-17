@@ -478,7 +478,7 @@ in {
 
     rust-out-of-tree-module = if lib.versionAtLeast kernel.version "6.7" then callPackage ../os-specific/linux/rust-out-of-tree-module { } else null;
 
-    tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
+    tuxedo-drivers = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-drivers { } else null;
 
     jool = callPackage ../os-specific/linux/jool { };
 
@@ -610,6 +610,7 @@ in {
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
+    tuxedo-keyboard = self.tuxedo-drivers;
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
