@@ -1,9 +1,11 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   rustPlatform,
   pytestCheckHook,
+  libiconv,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +36,10 @@ buildPythonPackage rec {
   nativeBuildInputs = with rustPlatform; [
     cargoSetupHook
     maturinBuildHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   doCheck = false; # test artifacts missing
