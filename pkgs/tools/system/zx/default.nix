@@ -2,20 +2,27 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildNpmPackage rec {
   pname = "zx";
-  version = "8.1.4";
+  version = "8.1.9";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "zx";
     rev = version;
-    hash = "sha256-9B/X7lOaNTXRGIteGDnLexVF8joo1m+xsfaqxTL2150=";
+    hash = "sha256-vy53g6nG/krK1PsfIKEdok67ghf9Jm2xNMmZpU2N+A0=";
   };
 
-  npmDepsHash = "sha256-HNaREvW8opvxjZWJ7cFrIoF1JELWBemr8VB9DyYdNfA=";
+  npmDepsHash = "sha256-bKckzwvJNWDYkF1ZBwB9RpzJAVTIoAjoKK8D3V8RHmQ=";
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Tool for writing scripts using JavaScript";

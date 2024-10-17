@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip copyDesktopItems ];
   buildInputs = [ jre ];
 
-  desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
+  desktopItems = lib.optional (!stdenv.hostPlatform.isDarwin) (makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
     icon = "${./basex.svg}"; # icon copied from Ubuntu basex package

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "build"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "arch=${stdenv.hostPlatform.darwinArch}"
   ];
 

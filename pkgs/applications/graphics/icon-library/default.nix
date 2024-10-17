@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-nWGTYoSa0/fxnD0Mb2132LkeB1oa/gj/oIXBbI+FDw8=";
   };
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Set the location to gettext to ensure the nixpkgs one on Darwin instead of the vendored one.
     # The vendored gettext does not build with clang 16.
     GETTEXT_BIN_DIR = "${lib.getBin buildPackages.gettext}/bin";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     gtk4
     gtksourceview5
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

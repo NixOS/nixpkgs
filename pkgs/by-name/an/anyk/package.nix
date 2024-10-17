@@ -30,17 +30,17 @@ let
   extraClasspath = [
     (fetchurl {
       url = "mirror://maven/org/glassfish/metro/webservices-rt/2.4.10/webservices-rt-2.4.10.jar";
-      sha256 = "sha256-lHclIZn3HR2B2lMttmmQGIV67qJi5KhL5jT2WNUQpPI=";
+      hash = "sha256-lHclIZn3HR2B2lMttmmQGIV67qJi5KhL5jT2WNUQpPI=";
     })
 
     (fetchurl {
       url = "mirror://maven/org/glassfish/metro/webservices-api/2.4.10/webservices-api-2.4.10.jar";
-      sha256 = "sha256-1jiabjPkRnh+l/fmTt8aKE5hpeLreYOiLH9sVIcLUQE=";
+      hash = "sha256-1jiabjPkRnh+l/fmTt8aKE5hpeLreYOiLH9sVIcLUQE=";
     })
 
     (fetchurl {
       url = "mirror://maven/com/sun/activation/jakarta.activation/2.0.1/jakarta.activation-2.0.1.jar";
-      sha256 = "sha256-ueJLfdbgdJVWLqllMb4xMMltuk144d/Yitu96/QzKHE=";
+      hash = "sha256-ueJLfdbgdJVWLqllMb4xMMltuk144d/Yitu96/QzKHE=";
     })
 
     # Patch one of the classes so it works with the packages above by removing .internal. from the package names.

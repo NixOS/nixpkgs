@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitLab, pkg-config, wrapGAppsHook3
 , withLibui ? true, gtk3
-, withUdisks ? stdenv.isLinux, udisks, glib
+, withUdisks ? stdenv.hostPlatform.isLinux, udisks, glib
 , libX11 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     # feel free add them if you have a machine to test
     platforms = with platforms; linux;
     # never built on aarch64-linux since first introduction in nixpkgs
-    broken = stdenv.isLinux && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
     mainProgram = "usbimager";
   };
 }

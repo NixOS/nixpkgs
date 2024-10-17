@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  # Not a propagatedBuildInput because only the $py output needs it; $out is
+  # Not in propagatedBuildInputs because only the $py output needs it; $out is
   # just the library itself (e.g. C/C++ headers).
   buildInputs = with python.pkgs; [
     python
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     scikit-build-core
   ];
 
-  env.CXXFLAGS = toString (lib.optional stdenv.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
+  env.CXXFLAGS = toString (lib.optional stdenv.hostPlatform.isDarwin [ "-faligned-allocation" "-fno-aligned-new" "-fvisibility=hidden" ]);
 
   postBuild = ''
     pushd ../api/python

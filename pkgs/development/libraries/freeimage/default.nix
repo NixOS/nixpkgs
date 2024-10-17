@@ -30,22 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "pkg-config" "$PKG_CONFIG"
     substituteInPlace Makefile.gnu \
       --replace "pkg-config" "$PKG_CONFIG"
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     # Upstream Makefile hardcodes i386 and x86_64 architectures only
     substituteInPlace Makefile.osx --replace "x86_64" "arm64"
   '';
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     fixDarwinDylibNames
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     autoSignDarwinBinariesHook
   ];
   buildInputs = [ libtiff libtiff.dev_private libpng zlib libwebp libraw openexr openjpeg libjpeg libjpeg.dev_private jxrlib ];
 
-  postBuild = lib.optionalString (!stdenv.isDarwin) ''
+  postBuild = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     make -f Makefile.fip
   '';
 
@@ -56,13 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $INCDIR $INSTALLDIR
   ''
   # Workaround for Makefiles.osx not using ?=
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
   '';
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     make -f Makefile.fip install
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s $out/lib/libfreeimage.3.dylib $out/lib/libfreeimage.dylib
   '';
 

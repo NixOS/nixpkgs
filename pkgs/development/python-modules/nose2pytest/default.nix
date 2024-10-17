@@ -5,8 +5,7 @@
   fetchpatch2,
   setuptools,
   fissix,
-  pytestCheckHook,
-  nose,
+  pytest,
 }:
 
 let
@@ -37,16 +36,13 @@ buildPythonPackage {
 
   build-system = [ setuptools ];
 
-  dependencies = [ fissix ];
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    nose
+  dependencies = [
+    fissix
+    pytest
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # Tests depend on nose!
+  doCheck = false;
 
   pythonImportsCheck = [ "nose2pytest.assert_tools" ];
 

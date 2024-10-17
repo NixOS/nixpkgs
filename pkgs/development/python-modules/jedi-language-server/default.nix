@@ -49,7 +49,7 @@ buildPythonPackage rec {
     HOME="$(mktemp -d)"
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # https://github.com/pappasam/jedi-language-server/issues/313
     "test_publish_diagnostics_on_change"
     "test_publish_diagnostics_on_save"

@@ -6,6 +6,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testCredentials = {
       password = "Password1_cZPEwpCWvrReripJmAZdmVIZd8HHoHcl";
     };
+
+    # copy certs to store to work around mount namespacing
+    certsPath = pkgs.runCommandNoCC "snakeoil-certs" { } ''
+      mkdir $out
+      cp ${certs."${serverDomain}".cert} $out/snakeoil.crt
+      cp ${certs."${serverDomain}".key} $out/snakeoil.key
+    '';
   in
   {
     name = "kanidm";
@@ -19,8 +26,8 @@ import ./make-test-python.nix ({ pkgs, ... }:
           domain = serverDomain;
           bindaddress = "[::]:443";
           ldapbindaddress = "[::1]:636";
-          tls_chain = certs."${serverDomain}".cert;
-          tls_key = certs."${serverDomain}".key;
+          tls_chain = "${certsPath}/snakeoil.crt";
+          tls_key = "${certsPath}/snakeoil.key";
         };
       };
 

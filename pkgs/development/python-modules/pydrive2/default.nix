@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [
       appdirs
       fsspec

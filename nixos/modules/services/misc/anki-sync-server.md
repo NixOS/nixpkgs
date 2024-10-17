@@ -56,13 +56,3 @@ following options:
   services.anki-sync-server.openFirewall = true;
 }
 ```
-
-
-## Alternatives {#module-services-anki-sync-server-alternatives}
-
-The [`ankisyncd` NixOS
-module](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/misc/ankisyncd.nix)
-provides similar functionality, but using a third-party implementation,
-[`anki-sync-server-rs`](https://github.com/ankicommunity/anki-sync-server-rs/).
-According to that project's README, it is "no longer maintained", and not
-recommended for Anki 2.1.64+.

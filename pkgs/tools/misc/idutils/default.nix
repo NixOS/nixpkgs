@@ -16,15 +16,15 @@ stdenv.mkDerivation rec {
     ./bootstrap --force --gnulib-srcdir=${gnulib} --skip-po --bootstrap-sync --no-git
     '';
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     emacs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 
   nativeBuildInputs = [ gnulib autoconf bison automake gettext gperf texinfo perl rsync ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   patches = [ ./nix-mapping.patch ];
 

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nstool";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "jakcron";
     repo = "nstool";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-NGuosc4Vwc4WA+b7mtn2WyJFPI4xfx/vJsd8S58js+U=";
+    hash = "sha256-FF+USFL5Y6MkAKvfR05D/+L/XJSmkiSp9WLbF7Gg2V8=";
     fetchSubmodules = true;
   };
 

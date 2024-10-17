@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-SHLhL4Alct7dSwL4cAZYFLLVFB99va9wju2rgmtRpYo=";
   };
 
-  patches = optionals stdenv.isDarwin [ ./darwin-fix-configure.patch ];
+  patches = optionals stdenv.hostPlatform.isDarwin [ ./darwin-fix-configure.patch ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [libxml2 openssl bash]

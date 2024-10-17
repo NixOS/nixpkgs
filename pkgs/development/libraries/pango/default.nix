@@ -16,7 +16,7 @@
 , ninja
 , glib
 , python3
-, x11Support? !stdenv.isDarwin, libXft
+, x11Support? !stdenv.hostPlatform.isDarwin, libXft
 , withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
 , buildPackages, gobject-introspection
 , testers
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     fribidi
     libthai
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics

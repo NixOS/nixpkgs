@@ -6,7 +6,6 @@
 , substituteAll
 , coreutils
 , curl
-, glxinfo
 , gnugrep
 , gnused
 , xdg-utils
@@ -18,6 +17,7 @@
 , git
 , glslang
 , mako
+, mesa-demos
 , meson
 , ninja
 , pkg-config
@@ -131,9 +131,9 @@ stdenv.mkDerivation (finalAttrs: {
       path = lib.makeBinPath [
         coreutils
         curl
-        glxinfo
         gnugrep
         gnused
+        mesa-demos
         xdg-utils
       ];
 

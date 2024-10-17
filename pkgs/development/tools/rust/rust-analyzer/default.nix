@@ -13,14 +13,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
-  version = "2024-08-12";
-  cargoHash = "sha256-F1DuuBjHCPY3NIwnS1jFMTxcMnc1TGv2KaKttF6FIKs=";
+  version = "2024-09-02";
+  cargoHash = "sha256-t45RzYkuywGByGWwUON3dW0aKjLYcFXB8uy4CybPuf4=";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
-    sha256 = "sha256-xAxVDxuvCs8WWkrxVWjCiqxTkHhGj7sSppr1YMuEdT8=";
+    hash = "sha256-YH0kH5CSOnAuPUB1BUzUqvnKiv5SgDhfMNjrkki9Ahk=";
   };
 
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];
@@ -32,14 +32,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = lib.optional useMimalloc cmake;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     libiconv
   ];
 
   buildFeatures = lib.optional useMimalloc "mimalloc";
 
-  CFG_RELEASE = version;
+  env.CFG_RELEASE = version;
 
   inherit doCheck;
   preCheck = lib.optionalString doCheck ''

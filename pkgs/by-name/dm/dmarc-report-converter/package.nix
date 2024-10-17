@@ -25,7 +25,7 @@ buildGoModule rec {
   ];
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" { } ''
+    simple = runCommand "dmarc-report-converter-test" { } ''
       ${dmarc-report-converter}/bin/dmarc-report-converter -h > $out
     '';
   };

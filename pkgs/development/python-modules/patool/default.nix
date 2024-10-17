@@ -61,7 +61,7 @@ buildPythonPackage rec {
     "test_unzip_file"
     "test_zip"
     "test_zip_file"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_ar" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_ar" ];
 
   meta = with lib; {
     description = "portable archive file manager";

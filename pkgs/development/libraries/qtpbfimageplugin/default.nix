@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
       --replace '$$PROTOBUF/include' '${protobuf}/include' \

@@ -34,7 +34,7 @@ let
 
     nativeBuildInputs = [ hatchling ];
 
-    passthru.optional-dependencies = {
+    optional-dependencies = {
       brotli = if isPyPy then [ brotlicffi ] else [ brotli ];
       socks = [ pysocks ];
     };
@@ -47,7 +47,7 @@ let
         trustme
       ]
       ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ]
-      ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+      ++ lib.flatten (builtins.attrValues optional-dependencies);
 
     # Tests in urllib3 are mostly timeout-based instead of event-based and
     # are therefore inherently flaky. On your own machine, the tests will

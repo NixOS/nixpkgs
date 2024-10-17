@@ -1,67 +1,56 @@
-{ stdenvNoCC
+{ fetchFromGitHub
+, makeDesktopItem
+, copyDesktopItems
 , lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, wrapGAppsHook3
+, flutter
 , quickemu
 , zenity
 }:
-
-stdenvNoCC.mkDerivation rec {
+flutter.buildFlutterApplication rec {
   pname = "quickgui";
-  version = "1.2.8";
-
-  src = fetchurl {
-    url = "https://github.com/quickemu-project/quickgui/releases/download/v${version}/quickgui_${version}-1_lunar1.0_amd64.deb";
-    sha256 = "sha256-crnV7OWH5UbkMM/TxTIOlXmvqBgjFmQG7RxameMOjH0=";
+  version = "1.2.10";
+  src = fetchFromGitHub {
+    owner = "quickemu-project";
+    repo = "quickgui";
+    rev = version;
+    hash = "sha256-M2Qy66RqsjXg7ZpHwaXCN8qXRIsisnIyaENx3KqmUfQ=";
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    wrapGAppsHook3
-  ];
+  pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  buildInputs = [
-    quickemu
-    zenity
-  ];
+  gitHashes = {
+    window_size = "sha256-XelNtp7tpZ91QCEcvewVphNUtgQX7xrp5QP0oFo6DgM=";
+  };
 
-  strictDeps = true;
+  extraWrapProgramArgs = "--prefix PATH : ${lib.makeBinPath [ quickemu zenity ]}";
 
-  unpackCmd = "dpkg-deb -x $curSrc source";
-
-  installPhase = ''
-    runHook preInstall
-
-    mv usr $out
-
-    runHook postInstall
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ quickemu zenity ]}
-    )
-  '';
+  nativeBuildInputs = [ copyDesktopItems ];
 
   postFixup = ''
-    substituteInPlace $out/share/applications/quickgui.desktop \
-      --replace "/usr" $out
-
-    # quickgui PR 88
-    echo "Categories=System;" >> $out/share/applications/quickgui.desktop
+    for SIZE in 16 32 48 64 128 256 512; do
+      mkdir -p $out/share/icons/hicolor/$SIZEx$SIZE/apps/
+      cp -av assets/resources/quickgui_$SIZE.png $out/share/icons/hicolor/$SIZEx$SIZE/apps/quickgui.png
+    done
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "quickgui";
+      exec = "quickgui";
+      icon = "quickgui";
+      desktopName = "Quickgui";
+      comment = "An elegant virtual machine manager for the desktop";
+      categories = [ "Development" "System" ];
+    })
+  ];
+
   meta = with lib; {
-    description = "Flutter frontend for quickemu";
+    description = "Elegant virtual machine manager for the desktop";
     homepage = "https://github.com/quickemu-project/quickgui";
-    changelog = "https://github.com/quickemu-project/quickgui/releases/tag/v${version}";
+    changelog = "https://github.com/quickemu-project/quickgui/releases/";
     license = licenses.mit;
-    maintainers = with maintainers; [ heyimnova ];
+    maintainers = with maintainers; [ flexiondotorg heyimnova ];
     platforms = [ "x86_64-linux" ];
-    sourceProvenance = [ sourceTypes.binaryNativeCode ];
     mainProgram = "quickgui";
   };
 }

@@ -15,11 +15,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "remind";
-  version = "05.00.02";
+  version = "05.00.06";
 
   src = fetchurl {
     url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    hash = "sha256-XxVjAV3TGDPI8XaFXXSminsMffq8m8ljw68YMIC2lYg=";
+    hash = "sha256-uGGh1eRPT6bGYF4F9e79D+aMnpOQukktlmJbyM2uRco=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [
@@ -38,7 +38,7 @@ tcl.mkTclDerivation rec {
       --replace-fail 'set Rem2PDF "rem2pdf"' "set Rem2PDF \"$out/bin/rem2pdf\""
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
     # On Darwin setenv and unsetenv are defined in stdlib.h from libSystem
     "-DHAVE_SETENV"
     "-DHAVE_UNSETENV"

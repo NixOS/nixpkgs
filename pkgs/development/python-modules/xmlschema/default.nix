@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
-  version = "3.3.2";
+  version = "3.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cZVNgY0Y9tE+ud8596Ujidc7aq+Gon9x6q/XDCuJ9oI=";
+    hash = "sha256-0x8nk8F+kg5SSDQI4dOnv67ilyN4z2MZ5phPC3PW4WQ=";
   };
 
   build-system = [ setuptools ];
@@ -35,10 +35,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # -file://///filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    # +file:////filer01/MY_HOME/dev/XMLSCHEMA/test.xsd
-    "test_normalize_url_slashes"
-    "test_normalize_url_with_base_unc_path"
+    # Incorrect error message in pickling test for Python 3.12 in Debian
+    # https://github.com/sissaschool/xmlschema/issues/412
+    "test_pickling_subclassed_schema__issue_263"
   ];
 
   pythonImportsCheck = [ "xmlschema" ];

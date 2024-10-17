@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya figsoda ];
     platforms = platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "boxxy";
   };
 }

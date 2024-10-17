@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.isx86_64)
+    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
     (cmakeBool "ENABLE_LTO" true)
     (cmakeBool "ENABLE_ONEDNN_FOR_GPU" false)
@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Cannot find macos sdk
+    broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

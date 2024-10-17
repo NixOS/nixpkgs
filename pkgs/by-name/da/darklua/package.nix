@@ -19,7 +19,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fYx+SQdQMnNSygr0/Y4zEPtqfQPZYmQUq3ndi1HlXuE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

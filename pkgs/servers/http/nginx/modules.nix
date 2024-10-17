@@ -218,8 +218,8 @@ let self = {
       name = "develkit";
       owner = "vision5";
       repo = "ngx_devel_kit";
-      rev = "v0.3.1";
-      sha256 = "1c5zfpvm0hrd9lp8rasmw79dnr2aabh0i6y11wzb783bp8m3p2sq";
+      rev = "v0.3.3";
+      hash= "sha256-/RQUVHwIdNqm3UemQ/oNs2ksg8beziA4Pxejd5Yg0Pg=";
     };
 
     meta = with lib; {

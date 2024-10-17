@@ -111,7 +111,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DSuil_INCLUDE_DIR=${suil}/include/suil-0"
   ];
 
-  # Needed for libraries that get dlopen'd
+  # Needed for libraries that get dlopen'd
   env.NIX_LDFLAGS = toString [
     "-lasound"
     "-llilv-0"

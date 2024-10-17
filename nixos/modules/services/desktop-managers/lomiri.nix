@@ -16,7 +16,6 @@ in {
         libayatana-common
         ubports-click
       ]) ++ (with pkgs.lomiri; [
-        content-hub
         hfd-service
         history-service
         libusermetrics
@@ -24,8 +23,11 @@ in {
         lomiri-calculator-app
         lomiri-camera-app
         lomiri-clock-app
+        lomiri-content-hub
+        lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
+        lomiri-gallery-app
         lomiri-polkit-agent
         lomiri-schemas # exposes some required dbus interfaces
         lomiri-session # wrappers to properly launch the session
@@ -42,13 +44,15 @@ in {
         telephony-service
         teleports
       ]);
-      variables = {
-        # To override the keyboard layouts in Lomiri
-        NIXOS_XKB_LAYOUTS = config.services.xserver.xkb.layout;
-      };
+
+      # To override the default keyboard layout in Lomiri
+      etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text = lib.strings.replaceStrings [","] ["\n"] config.services.xserver.xkb.layout;
     };
 
-    hardware.pulseaudio.enable = lib.mkDefault true;
+    hardware = {
+      bluetooth.enable = lib.mkDefault true;
+    };
+
     networking.networkmanager.enable = lib.mkDefault true;
 
     systemd.packages = with pkgs.lomiri; [
@@ -86,6 +90,8 @@ in {
         ayatana-indicator-messages
         ayatana-indicator-power
         ayatana-indicator-session
+      ] ++ lib.optionals config.hardware.bluetooth.enable [
+        ayatana-indicator-bluetooth
       ] ++ lib.optionals (config.hardware.pulseaudio.enable || config.services.pipewire.pulse.enable) [
         ayatana-indicator-sound
       ]) ++ (with pkgs.lomiri; [
@@ -123,7 +129,7 @@ in {
 
     environment.pathsToLink = [
       # Configs for inter-app data exchange system
-      "/share/content-hub/peers"
+      "/share/lomiri-content-hub/peers"
       # Configs for inter-app URL requests
       "/share/lomiri-url-dispatcher/urls"
       # Splash screens & other images for desktop apps launched via lomiri-app-launch
@@ -188,10 +194,6 @@ in {
     };
 
     users.groups.usermetrics = { };
-
-    # TODO content-hub cannot pass files between applications without asking AA for permissions. And alot of the Lomiri stack is designed with AA availability in mind. This might be a requirement to be closer to upstream?
-    # But content-hub currently fails to pass files between applications even with AA enabled, and we can get away without AA in many places. Let's see how this develops before requiring this for good.
-    # security.apparmor.enable = true;
   };
 
   meta.maintainers = lib.teams.lomiri.members;

@@ -2,18 +2,29 @@
 
 stdenv.mkDerivation rec {
   pname = "mlkit";
-  version = "4.7.11";
+  version = "4.7.12";
 
   src = fetchFromGitHub {
     owner = "melsman";
     repo = "mlkit";
     rev = "v${version}";
-    sha256 = "sha256-awjinXegc8jLd6OAB8QLDoXnotZhKbyfMWckp2U3MjA=";
+    sha256 = "sha256-9a2CbIOHdN+kTtm2Z001qOEO/nXuSLrzq0ovgHU1hTQ=";
   };
 
   nativeBuildInputs = [ autoreconfHook mlton ];
 
   buildFlags = [ "mlkit" "mlkit_libs" ];
+
+  doCheck = true;
+
+  checkPhase = ''
+    runHook preCheck
+    echo ==== Running MLKit test suite: test ====
+    make -C test_dev test
+    echo ==== Running MLKit test suite: test_prof ====
+    make -C test_dev test_prof
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "Standard ML Compiler and Toolkit";

@@ -112,7 +112,7 @@ in stdenv.mkDerivation (finalAttrs: {
             echo -e "include Makefile\nprint_regress_files:\n\t@echo \$(REGRESS)" > Makefile.regress
             REGRESS_TESTS=$(make -f Makefile.regress print_regress_files)
 
-            ${postgresql}/lib/pgxs/src/test/regress/pg_regress \
+            ${lib.getDev postgresql}/lib/pgxs/src/test/regress/pg_regress \
               --bindir='${postgresqlWithSelf}/bin' \
               --temp-instance=regress-instance \
               --dbname=contrib_regression \

@@ -9,7 +9,7 @@
 , glib
 , pkg-config
 , cyrus_sasl
-, pulseaudioSupport ? stdenv.isLinux
+, pulseaudioSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libgcrypt
 , gtk3

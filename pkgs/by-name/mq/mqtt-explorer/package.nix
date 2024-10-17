@@ -12,9 +12,6 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 # NOTE mqtt-explorer has 3 yarn subpackages and uses relative links
 # between them, which makes it hard to package them via 3 `mkYarnPackage`
 # since the resulting `node_modules` directories don't have the same structure
@@ -54,13 +51,13 @@ stdenv.mkDerivation rec {
     typescript
     fixup-yarn-lock
     makeWrapper
-  ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ copyDesktopItems ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   # disable code signing on macos
   # https://github.com/electron-userland/electron-builder/blob/77f977435c99247d5db395895618b150f5006e8f/docs/code-signing.md#how-to-disable-code-signing-during-the-build-process-on-macos
-  postConfigure = lib.optionalString stdenv.isDarwin ''
+  postConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export CSC_IDENTITY_AUTO_DISCOVERY=false
   '';
 
@@ -88,7 +85,7 @@ stdenv.mkDerivation rec {
 
     patchShebangs {node_modules,app/node_modules,backend/node_modules}
 
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     runHook postConfigure
@@ -109,7 +106,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString (!stdenv.isDarwin) ''
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       mkdir -p "$out/share/mqtt-explorer"/{app,icons/hicolor}
 
       cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/share/mqtt-explorer/app"
@@ -131,7 +128,7 @@ stdenv.mkDerivation rec {
         --inherit-argv0
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/{Applications,bin}
       mv "build/mac/MQTT Explorer.app" $out/Applications
 

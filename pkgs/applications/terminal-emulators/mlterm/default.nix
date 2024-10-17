@@ -27,8 +27,8 @@
   # documentd in `./configure --help`, and it is reported here:
   # https://github.com/arakiken/mlterm/issues/73
   fb = false;
-  quartz = stdenv.isDarwin;
-  wayland = stdenv.isLinux;
+  quartz = stdenv.hostPlatform.isDarwin;
+  wayland = stdenv.hostPlatform.isLinux;
   sdl2 = true;
 }
 , libxkbcommon
@@ -59,16 +59,16 @@
   mlfc = true;
 }
 # Whether to enable the X window system
-, enableX11 ? stdenv.isLinux
+, enableX11 ? stdenv.hostPlatform.isLinux
 # Most of the input methods and other build features are enabled by default,
 # the following attribute set can be used to disable some of them. It's parsed
 # when we set `configureFlags`. If you find other configure Flags that require
 # dependencies, it'd be nice to make that contribution here.
 , enableFeatures ? {
-  uim = !stdenv.isDarwin;
-  ibus = !stdenv.isDarwin;
-  fcitx = !stdenv.isDarwin;
-  m17n = !stdenv.isDarwin;
+  uim = !stdenv.hostPlatform.isDarwin;
+  ibus = !stdenv.hostPlatform.isDarwin;
+  fcitx = !stdenv.hostPlatform.isDarwin;
+  m17n = !stdenv.hostPlatform.isDarwin;
   ssh2 = true;
   bidi = true;
   # Open Type layout support, (substituting glyphs with opentype fonts)
@@ -185,7 +185,7 @@ in stdenv.mkDerivation (finalAttrs: {
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
     install -D contrib/icon/mlterm-icon-gnome2.png "$out/share/icons/hicolor/48x48/apps/mlterm.png"
     install -D -t $out/share/applications $desktopItem/share/applications/*
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications/
     cp -a cocoa/mlterm.app $out/Applications/
     install $out/bin/mlterm -Dt $out/Applications/mlterm.app/Contents/MacOS/

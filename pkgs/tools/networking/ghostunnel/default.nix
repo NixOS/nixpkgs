@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";

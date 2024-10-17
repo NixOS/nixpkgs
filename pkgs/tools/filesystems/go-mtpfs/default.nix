@@ -29,7 +29,7 @@ buildGoModule rec {
     homepage = "https://github.com/hanwen/go-mtpfs";
     license = licenses.bsd3;
     maintainers = [ ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "go-mtpfs";
   };
 }

@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

@@ -11,15 +11,14 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "7.2";
+  version = "7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "RestrictedPython";
-    inherit version;
-    hash = "sha256-TR0w9wmmYhynxCNvCLZ7cyplHICZFF8TcHjH3UvtPSE=";
+    inherit pname version;
+    hash = "sha256-gbYpJHE9vSgJF/zq7K8hD+96Sd3fGgjIwhSjYT++tCU=";
   };
 
   build-system = [ setuptools ];

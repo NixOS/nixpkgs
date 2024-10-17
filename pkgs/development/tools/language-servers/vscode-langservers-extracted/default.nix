@@ -23,7 +23,7 @@ buildNpmPackage rec {
   buildPhase =
     let
       extensions =
-        if stdenv.isDarwin
+        if stdenv.hostPlatform.isDarwin
         then "../VSCodium.app/Contents/Resources/app/extensions"
         else "../resources/app/extensions";
     in

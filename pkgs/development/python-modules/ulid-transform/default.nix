@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
-  version = "0.13.1";
-  format = "pyproject";
+  version = "1.0.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
-    repo = pname;
+    repo = "ulid-transform";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tOtOTFKBVQmCm02k9Q8r+EgF39iN+XNXCnlw2ppYM58=";
+    hash = "sha256-99hq329jUpok+rP8WzxN1yTOp15Zfy7tIGRpQMecrc0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     poetry-core
     setuptools
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to create and transform ULIDs";
     homepage = "https://github.com/bdraco/ulid-transform";
-    changelog = "https://github.com/bdraco/ulid-transform/releases/tag/v${version}";
+    changelog = "https://github.com/bdraco/ulid-transform/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

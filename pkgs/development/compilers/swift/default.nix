@@ -25,7 +25,7 @@ let
     #
     # The following selects the correct Clang version, matching the version
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
-    clang = if pkgs.stdenv.isDarwin
+    clang = if pkgs.stdenv.hostPlatform.isDarwin
       then
         swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
@@ -68,11 +68,11 @@ let
       useSwiftDriver = false;
     };
 
-    Dispatch = if stdenv.isDarwin
+    Dispatch = if stdenv.hostPlatform.isDarwin
       then null # part of libsystem
       else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
-    Foundation = if stdenv.isDarwin
+    Foundation = if stdenv.hostPlatform.isDarwin
       then apple_sdk.frameworks.Foundation
       else callPackage ./foundation { swift = swiftNoSwiftDriver; };
 

@@ -11,7 +11,6 @@
   lightgbm,
   lime,
   matplotlib,
-  nose,
   numba,
   numpy,
   oldest-supported-numpy,
@@ -61,7 +60,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     plots = [
       matplotlib
       ipython
@@ -108,7 +107,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ipython
     matplotlib
-    nose
     pytest-mpl
     pytestCheckHook
     # optional dependencies, which only serve to enable more tests:

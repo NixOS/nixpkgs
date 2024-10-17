@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, utils, ... }@moduleArgs:
 
 with lib;
 with utils;
@@ -136,10 +136,21 @@ let
 
     };
 
-    config.options = mkMerge [
+    config.options = let
+      inInitrd = utils.fsNeededForBoot config;
+    in mkMerge [
       (mkIf config.autoResize [ "x-systemd.growfs" ])
       (mkIf config.autoFormat [ "x-systemd.makefs" ])
       (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+      (mkIf
+        # With scripted stage 1, depends is implemented by sorting 'config.system.build.fileSystems'
+        (lib.length config.depends > 0 && (inInitrd -> moduleArgs.config.boot.initrd.systemd.enable))
+        (
+          map (
+            x: "x-systemd.requires-mounts-for=${optionalString inInitrd "/sysroot"}${x}"
+          ) config.depends
+        )
+      )
     ];
 
   };

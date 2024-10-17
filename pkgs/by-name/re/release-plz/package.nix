@@ -41,6 +41,6 @@ rustPlatform.buildRustPackage rec {
     license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "release-plz";
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -15,6 +15,7 @@
   porthole,
   unstableGitUpdater,
   yasnippet,
+  el-patch,
 }:
 
 melpaBuild {
@@ -45,6 +46,7 @@ melpaBuild {
     nav-flash
     porthole
     yasnippet
+    el-patch
   ];
 
   passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };

@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     readline
     sasl
     libxcrypt
-  ] ++ lib.optionals stdenv.isLinux [ nettools ]
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ nettools ]
   ++ lib.optionals pythonSupport [ python3 ]
   ++ lib.optionals guileSupport [ guile_2_2 ];
 
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!guileSupport) "--without-guile";
 
   nativeCheckInputs = [ dejagnu mkpasswd ];
-  doCheck = !stdenv.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
+  doCheck = !stdenv.hostPlatform.isDarwin; # ERROR: All 46 tests were run, 46 failed unexpectedly.
   doInstallCheck = false; # fails
 
   preCheck = ''

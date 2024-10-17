@@ -71,7 +71,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.0.2";
+  version = "4.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -80,7 +80,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-0ctOInVRJqjmcqy67PTriRmqo3fz1qMEVV+K5lXvZ6k=";
+    hash = "sha256-4jxA8qvLX53cLooCpkn9hvcz4SFGc29TKxUah80Ufp4=";
   };
 
   build-system = [
@@ -147,7 +147,7 @@ buildPythonApplication rec {
   SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
   # TimeoutErrors on slow machines -> aarch64
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
@@ -162,7 +162,7 @@ buildPythonApplication rec {
   passthru = {
     inherit withPlugins;
     updateScript = ./update.sh;
-  } // lib.optionalAttrs stdenv.isLinux {
+  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
     tests = {
       inherit (nixosTests) buildbot;
     };
@@ -174,6 +174,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2Only;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

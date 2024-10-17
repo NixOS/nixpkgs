@@ -31,11 +31,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "imlib2";
-  version = "1.12.2";
+  version = "1.12.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/imlib2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-zEmTGiBWCWioZIycoHkIWXYIXqltWaAbHhfLVa8P/kI=";
+    hash = "sha256-liRGVldqPgpvWLeOUU3ckZYirGgGcRvCMYN+7mLB3jQ=";
   };
 
   buildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
-  configureFlags = optional stdenv.isDarwin "--enable-amd64=no"
+  configureFlags = optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
     ++ optional (!svgSupport) "--without-svg"
     ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";

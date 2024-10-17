@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   # filter out one test that fails in the sandbox of nix or with neovim v0.10
   # or on macOS
   preCheck = ''
-    checkFlagsArray+=('BUSTED=busted --output TAP --exclude-tags=${"nix,v10" + lib.optionalString stdenv.isDarwin ",mac"}')
+    checkFlagsArray+=('BUSTED=busted --output TAP --exclude-tags=${"nix,v10" + lib.optionalString stdenv.hostPlatform.isDarwin ",mac"}')
   '';
 
   meta = with lib; {

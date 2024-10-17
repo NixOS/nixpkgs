@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.hardware.flipperzero;
@@ -9,9 +6,9 @@ let
 in
 
 {
-  options.hardware.flipperzero.enable = mkEnableOption "udev rules and software for Flipper Zero devices";
+  options.hardware.flipperzero.enable = lib.mkEnableOption "udev rules and software for Flipper Zero devices";
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.qFlipper ];
     services.udev.packages = [ pkgs.qFlipper ];
   };

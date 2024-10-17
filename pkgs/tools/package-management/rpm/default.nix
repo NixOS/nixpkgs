@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
   buildInputs = [ cpio zlib zstd bzip2 file libarchive libgcrypt nspr nss db xz python lua sqlite ]
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-    ++ lib.optional stdenv.isLinux libcap;
+    ++ lib.optional stdenv.hostPlatform.isLinux libcap;
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "--enable-zstd"
     "--localstatedir=/var"
     "--sharedstatedir=/com"
-  ] ++ lib.optional stdenv.isLinux "--with-cap";
+  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-cap";
 
   postPatch = ''
     substituteInPlace Makefile.am --replace '@$(MKDIR_P) $(DESTDIR)$(localstatedir)/tmp' ""

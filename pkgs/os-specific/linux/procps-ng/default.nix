@@ -14,7 +14,7 @@
   # system (or very similar like that found in Cygwin). The one
   # exception is ‘watch’ which is portable enough to run on pretty much
   # any UNIX-compatible system.
-, watchOnly ? !(stdenv.isLinux || stdenv.isCygwin)
+, watchOnly ? !(stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isCygwin)
 
 , binlore
 , procps

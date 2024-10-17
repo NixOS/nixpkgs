@@ -1,6 +1,5 @@
 {
   python,
-  pythonAtLeast,
   fetchurl,
   lib,
   stdenv,
@@ -35,28 +34,9 @@ stdenv.mkDerivation rec {
     ./Modify-sendCommand-signatures.patch
   ];
 
-  postPatch =
-    (lib.optionalString (pythonAtLeast "3.12") ''
-      substituteInPlace \
-        ez_setup.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/utils.py \
-        build_scripts/wheel_override.py \
-        build_scripts/wheel_utils.py \
-        sources/pyside2/CMakeLists.txt \
-        --replace-fail "from distutils" "import setuptools; from distutils"
-      substituteInPlace \
-        build_scripts/config.py \
-        build_scripts/main.py \
-        build_scripts/options.py \
-        build_scripts/setup_runner.py \
-        build_scripts/utils.py \
-        --replace-fail "import distutils" "import setuptools; import distutils"
-    '')
-    + ''
-      cd sources/pyside2
-    '';
+  postPatch = ''
+    cd sources/pyside2
+  '';
 
   cmakeFlags = [
     "-DBUILD_TESTS=OFF"
@@ -69,8 +49,12 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     qt5.qmake
-    python
-    python.pkgs.setuptools
+    (python.withPackages (
+      ps: with ps; [
+        distutils
+        setuptools
+      ]
+    ))
   ];
 
   buildInputs =
@@ -113,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.qt.io/Qt_for_Python";
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

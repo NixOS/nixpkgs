@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dill = [ dill ];
     diskcache = [ diskcache ];
     redis = [ redis ];

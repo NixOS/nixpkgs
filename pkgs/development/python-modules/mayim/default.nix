@@ -33,7 +33,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
     mysql = [ asyncmy ];
     sqlite = [ aiosqlite ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
       pytest-asyncio
       pytest-cov-stub
     ]
-    ++ (with passthru.optional-dependencies; [
+    ++ (with optional-dependencies; [
       postgres
       mysql
       sqlite

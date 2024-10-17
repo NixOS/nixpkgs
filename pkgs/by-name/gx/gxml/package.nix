@@ -53,6 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "GXml provides a GObject API for manipulating XML and a Serializable framework from GObject to XML";
     homepage = "https://gitlab.gnome.org/GNOME/gxml";
+    changelog = "https://gitlab.gnome.org/GNOME/gxml/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jmarmstrong1207 ] ++ teams.gnome.members;

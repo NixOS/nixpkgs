@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
     branch          = baseOcamlBranch;
     platforms       = with platforms; linux ++ darwin;
-    broken          = stdenv.isAarch64 || stdenv.isMips;
+    broken          = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isMips;
 
     longDescription = ''
       A simple extension of OCaml with the primitive type of code values, and

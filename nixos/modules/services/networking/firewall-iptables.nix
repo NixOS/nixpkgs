@@ -29,11 +29,7 @@
    complete firewall (in the default configuration).
 
 */
-
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.networking.firewall;
@@ -89,17 +85,17 @@ let
     # jumps to the "nixos-fw-refuse" chain.
     ip46tables -N nixos-fw-log-refuse
 
-    ${optionalString cfg.logRefusedConnections ''
+    ${lib.optionalString cfg.logRefusedConnections ''
       ip46tables -A nixos-fw-log-refuse -p tcp --syn -j LOG --log-level info --log-prefix "refused connection: "
     ''}
-    ${optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
+    ${lib.optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
       ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type broadcast \
         -j LOG --log-level info --log-prefix "refused broadcast: "
       ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type multicast \
         -j LOG --log-level info --log-prefix "refused multicast: "
     ''}
     ip46tables -A nixos-fw-log-refuse -m pkttype ! --pkt-type unicast -j nixos-fw-refuse
-    ${optionalString cfg.logRefusedPackets ''
+    ${lib.optionalString cfg.logRefusedPackets ''
       ip46tables -A nixos-fw-log-refuse \
         -j LOG --log-level info --log-prefix "refused packet: "
     ''}
@@ -114,11 +110,11 @@ let
     ip46tables -t mangle -F nixos-fw-rpfilter 2> /dev/null || true
     ip46tables -t mangle -X nixos-fw-rpfilter 2> /dev/null || true
 
-    ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
+    ${lib.optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       # Perform a reverse-path test to refuse spoofers
       # For now, we just drop, as the mangle table doesn't have a log-refuse yet
       ip46tables -t mangle -N nixos-fw-rpfilter 2> /dev/null || true
-      ip46tables -t mangle -A nixos-fw-rpfilter -m rpfilter --validmark ${optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
+      ip46tables -t mangle -A nixos-fw-rpfilter -m rpfilter --validmark ${lib.optionalString (cfg.checkReversePath == "loose") "--loose"} -j RETURN
 
       # Allows this host to act as a DHCP4 client without first having to use APIPA
       iptables -t mangle -A nixos-fw-rpfilter -p udp --sport 67 --dport 68 -j RETURN
@@ -126,7 +122,7 @@ let
       # Allows this host to act as a DHCPv4 server
       iptables -t mangle -A nixos-fw-rpfilter -s 0.0.0.0 -d 255.255.255.255 -p udp --sport 68 --dport 67 -j RETURN
 
-      ${optionalString cfg.logReversePathDrops ''
+      ${lib.optionalString cfg.logReversePathDrops ''
         ip46tables -t mangle -A nixos-fw-rpfilter -j LOG --log-level info --log-prefix "rpfilter drop: "
       ''}
       ip46tables -t mangle -A nixos-fw-rpfilter -j DROP
@@ -135,7 +131,7 @@ let
     ''}
 
     # Accept all traffic on the trusted interfaces.
-    ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
+    ${lib.flip lib.concatMapStrings cfg.trustedInterfaces (iface: ''
       ip46tables -A nixos-fw -i ${iface} -j nixos-fw-accept
     '')}
 
@@ -143,51 +139,51 @@ let
     ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept
 
     # Accept connections to the allowed TCP ports.
-    ${concatStrings (mapAttrsToList (iface: cfg:
-      concatMapStrings (port:
+    ${lib.concatStrings (lib.mapAttrsToList (iface: cfg:
+      lib.concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ip46tables -A nixos-fw -p tcp --dport ${toString port} -j nixos-fw-accept ${lib.optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPorts
     ) cfg.allInterfaces)}
 
     # Accept connections to the allowed TCP port ranges.
-    ${concatStrings (mapAttrsToList (iface: cfg:
-      concatMapStrings (rangeAttr:
+    ${lib.concatStrings (lib.mapAttrsToList (iface: cfg:
+      lib.concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ip46tables -A nixos-fw -p tcp --dport ${range} -j nixos-fw-accept ${lib.optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedTCPPortRanges
     ) cfg.allInterfaces)}
 
     # Accept packets on the allowed UDP ports.
-    ${concatStrings (mapAttrsToList (iface: cfg:
-      concatMapStrings (port:
+    ${lib.concatStrings (lib.mapAttrsToList (iface: cfg:
+      lib.concatMapStrings (port:
         ''
-          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ip46tables -A nixos-fw -p udp --dport ${toString port} -j nixos-fw-accept ${lib.optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPorts
     ) cfg.allInterfaces)}
 
     # Accept packets on the allowed UDP port ranges.
-    ${concatStrings (mapAttrsToList (iface: cfg:
-      concatMapStrings (rangeAttr:
+    ${lib.concatStrings (lib.mapAttrsToList (iface: cfg:
+      lib.concatMapStrings (rangeAttr:
         let range = toString rangeAttr.from + ":" + toString rangeAttr.to; in
         ''
-          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${optionalString (iface != "default") "-i ${iface}"}
+          ip46tables -A nixos-fw -p udp --dport ${range} -j nixos-fw-accept ${lib.optionalString (iface != "default") "-i ${iface}"}
         ''
       ) cfg.allowedUDPPortRanges
     ) cfg.allInterfaces)}
 
     # Optionally respond to ICMPv4 pings.
-    ${optionalString cfg.allowPing ''
-      iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${optionalString (cfg.pingLimit != null)
+    ${lib.optionalString cfg.allowPing ''
+      iptables -w -A nixos-fw -p icmp --icmp-type echo-request ${lib.optionalString (cfg.pingLimit != null)
         "-m limit ${cfg.pingLimit} "
       }-j nixos-fw-accept
     ''}
 
-    ${optionalString config.networking.enableIPv6 ''
+    ${lib.optionalString config.networking.enableIPv6 ''
       # Accept all ICMPv6 messages except redirects and node
       # information queries (type 139).  See RFC 4890, section
       # 4.4.
@@ -218,7 +214,7 @@ let
     # Clean up after added ruleset
     ip46tables -D INPUT -j nixos-fw 2>/dev/null || true
 
-    ${optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
+    ${lib.optionalString (kernelHasRPFilter && (cfg.checkReversePath != false)) ''
       ip46tables -t mangle -D PREROUTING -j nixos-fw-rpfilter 2>/dev/null || true
     ''}
 
@@ -256,8 +252,8 @@ in
   options = {
 
     networking.firewall = {
-      extraCommands = mkOption {
-        type = types.lines;
+      extraCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "iptables -A INPUT -p icmp -j ACCEPT";
         description = ''
@@ -270,8 +266,8 @@ in
         '';
       };
 
-      extraStopCommands = mkOption {
-        type = types.lines;
+      extraStopCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = "iptables -P INPUT ACCEPT";
         description = ''
@@ -289,7 +285,7 @@ in
 
   # FIXME: Maybe if `enable' is false, the firewall should still be
   # built but not started by default?
-  config = mkIf (cfg.enable && config.networking.nftables.enable == false) {
+  config = lib.mkIf (cfg.enable && config.networking.nftables.enable == false) {
 
     assertions = [
       # This is approximately "checkReversePath -> kernelHasRPFilter",
@@ -302,7 +298,7 @@ in
     ];
 
     environment.systemPackages = [ pkgs.nixos-firewall-tool ];
-    networking.firewall.checkReversePath = mkIf (!kernelHasRPFilter) (mkDefault false);
+    networking.firewall.checkReversePath = lib.mkIf (!kernelHasRPFilter) (lib.mkDefault false);
 
     systemd.services.firewall = {
       description = "Firewall";

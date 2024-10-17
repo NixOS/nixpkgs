@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "autarco";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-autarco";
     rev = "refs/tags/v${version}";
-    hash = "sha256-e/wi4suDMSQTaSdyYsTiBxVUNvisYBVPqy9Rpk0lwJw=";
+    hash = "sha256-7Q6kvJxhds0myu3pMOLSCJKwoGPzHjNSo8H3ctgFvjM=";
   };
 
   pythonRelaxDeps = [ "orjson" ];

@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath $out/lib $out/lib/libr_io.${finalAttrs.version}.dylib
   '';
 

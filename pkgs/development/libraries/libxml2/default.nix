@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
-  version = "2.13.3";
+  version = "2.13.4";
 
   outputs = [ "bin" "dev" "out" "devdoc" ]
     ++ lib.optional pythonSupport "py"
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor finalAttrs.version}/libxml2-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CAXXwYDPCcqtcWZsekWKdPBBVhpTKQJFTaUEfYOUgTg=";
+    hash = "sha256-ZdBC4cgBAkPmF++wKv2iC4XCFgrNv7y1smuAzsZRVlA=";
   };
 
   strictDeps = true;
@@ -49,13 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
     ncurses
-  ] ++ lib.optionals (stdenv.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
     libintl
   ];
 
   propagatedBuildInputs = [
     findXMLCatalogs
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
   ] ++ lib.optionals icuSupport [
     icu
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
     stdenv.hostPlatform.libc != "musl";
-  preCheck = lib.optional stdenv.isDarwin ''
+  preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
   '';
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "XML parsing library for C";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ eelco jtojnar ];
+    maintainers = with maintainers; [ jtojnar ];
     pkgConfigModules = [ "libxml-2.0" ];
   };
 })

@@ -32,7 +32,7 @@ let
     npmBuildScript = "dist";
 
     nativeBuildInputs = [
-      python3 # Used by gyp
+      (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
     ];
 
     patches = [

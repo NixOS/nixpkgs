@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ pcre python3 zlib libxml2 lz4 xz gsl xxHash libxcrypt ]
-    ++ lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ Cocoa OpenGL ]
   ;
 
   patches = [
@@ -147,7 +147,7 @@ stdenv.mkDerivation rec {
     "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
   setupHook = ./setup-hook.sh;
 
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     homepage = "https://root.cern.ch/";
     description = "Data analysis framework";
     platforms = platforms.unix;
-    broken = !stdenv.isx86_64 || stdenv.cc.isClang or false;
+    broken = !stdenv.hostPlatform.isx86_64 || stdenv.cc.isClang or false;
     maintainers = with maintainers; [ veprbl ];
     license = licenses.lgpl21;
   };

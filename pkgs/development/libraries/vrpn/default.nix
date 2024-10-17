@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreFoundation
     darwin.apple_sdk.frameworks.GLUT
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.OpenGL
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGLU
     libGL
   ];

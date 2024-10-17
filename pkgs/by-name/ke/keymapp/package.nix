@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -m755 -D keymapp "$out/bin/${pname}"
-    install -Dm644 icon.png "$out/share/pixmaps/${pname}.png"
+    install -m755 -D keymapp "$out/bin/keymapp"
+    install -Dm644 icon.png "$out/share/pixmaps/keymapp.png"
 
     runHook postInstall
   '';

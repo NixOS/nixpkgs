@@ -35,16 +35,16 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional withClipboard python3;
 
   buildInputs = [ ncurses ]
-    ++ lib.optional stdenv.isLinux openssl
+    ++ lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optional withALSA alsa-lib
     ++ lib.optional withClipboard libxcb
     ++ lib.optional withCover ueberzug
     ++ lib.optional withPulseAudio libpulseaudio
     ++ lib.optional withPortAudio portaudio
     ++ lib.optional (withMPRIS || withNotify) dbus
-    ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-DNCURSES_UNCTRL_H_incl";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DNCURSES_UNCTRL_H_incl";
 
   buildNoDefaultFeatures = true;
 

@@ -77,7 +77,7 @@ buildPythonPackage rec {
       # https://github.com/pycurl/pycurl/issues/836
       "test_proxy_tlsauth"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Fatal Python error: Segmentation fault
       "cadata_test"
     ];

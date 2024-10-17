@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ veprbl ];
     platforms = platforms.unix;
-    broken = stdenv.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
+    broken = stdenv.hostPlatform.isAarch64; # doesn't compile: ignoring return value of 'FILE* freopen...
   };
 }

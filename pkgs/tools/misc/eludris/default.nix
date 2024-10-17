@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "-p eludris" ];
   cargoTestFlags = [ "-p eludris" ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "098h1jhlj87axpza5zgy58prp0zn94wyrbch6x0s7q4mzh7dc8ba";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ libX11 ];
 
   patches = [

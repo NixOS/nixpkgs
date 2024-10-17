@@ -107,6 +107,14 @@ let
       hash = "sha256-d9XmXHq264rTT80zphYcKLxS+AyUhjb19D3DuBJvMI4=";
       fetchSubmodules = true;
     };
+
+    patches = [
+      (fetchpatch {
+        name = "GCC14.patch";
+        url = "https://github.com/mumble-voip/mumble/commit/56945a9dfb62d29dccfe561572ebf64500deaed1.patch";
+        hash = "sha256-Frct9XJ/ZuHPglx+GB9h3vVycR8YY039dStIbfkPPDk=";
+      })
+    ];
   };
 in {
   mumble  = client source;

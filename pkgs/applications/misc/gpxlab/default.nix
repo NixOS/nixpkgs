@@ -19,7 +19,7 @@ mkDerivation rec {
     lrelease GPXLab/locale/*.ts
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv GPXLab/GPXLab.app $out/Applications
   '';

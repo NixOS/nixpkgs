@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.37.1";
+  version = "1.37.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-43p2sD6mpcoMukr7mY2GTsti4FVC7Blq0ZozuIJlC30=";
+    hash = "sha256-YYmgxlW80y6HOlRQbG3N+wTZM5pB58ZzZHEOa6vWbRw=";
   };
 
   outputs = [ "out" "man" ];
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   buildInputs = [
     gpgme
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     btrfs-progs
     libapparmor
     libseccomp

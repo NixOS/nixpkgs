@@ -156,7 +156,6 @@ in {
     platform = "rk3588";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
-    platformCanUseHDCPBlob = true;
 
     # TODO: remove this once the following get merged:
     # 1: https://review.trustedfirmware.org/c/TF-A/trusted-firmware-a/+/21840

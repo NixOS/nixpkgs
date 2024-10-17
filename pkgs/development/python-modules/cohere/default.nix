@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -16,6 +15,7 @@
   pydantic,
   pydantic-core,
   requests,
+  sagemaker,
   tokenizers,
   types-requests,
   typing-extensions,
@@ -23,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.8.1";
+  version = "5.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-IU+6X2lyH+5SeWSfzogLLj0D5t1rRwkNbb8AyaaIxnA=";
+    hash = "sha256-KhONCdIGKYbIcFG+zv6uXSiX+crsmgPZUU+5NsSWaA8=";
   };
 
   build-system = [ poetry-core ];
@@ -46,6 +44,7 @@ buildPythonPackage rec {
     pydantic
     pydantic-core
     requests
+    sagemaker
     tokenizers
     types-requests
     typing-extensions

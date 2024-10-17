@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 

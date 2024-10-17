@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-iMMkjJ5dnlr0oSCifBQPWkInQBCp1bh23s+BcKzDNCg=";
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Multitree-based personal task manager";
     homepage = "https://github.com/climech/grit";
     license = licenses.mit;

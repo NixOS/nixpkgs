@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "jx";
-  version = "3.10.154";
+  version = "3.10.156";
 
   src = fetchFromGitHub {
     owner = "jenkins-x";
     repo = "jx";
     rev = "v${version}";
-    sha256 = "sha256-BrCErGsHJq9h2AijwhG8MwCxXGJ9sCDpCOqazsmi8hs=";
+    sha256 = "sha256-bN/sdKuf+JV4fD3g9Wgow94nLMa8qgWEO1UBZAKLBWk=";
   };
 
   vendorHash = "sha256-AIaZVkWdNj1Vsrv2k4B5lLE0lOFuiTD7lwS/DikmC14=";
@@ -33,7 +33,7 @@ buildGoModule rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Command line tool for installing and using Jenkins X";
     mainProgram = "jx";
     homepage = "https://jenkins-x.io";

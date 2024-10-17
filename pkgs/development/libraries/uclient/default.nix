@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ mkg20001 ];
     mainProgram = "uclient-fetch";
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

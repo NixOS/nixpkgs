@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
-    name = "${pname}-${version}";
+    name = "uutils-coreutils-${version}";
     hash = "sha256-JowORfYHxN8GqvWeUm0ACnHNM3uZviYbhR7BOeAfphw=";
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
 
   makeFlags = [
     "CARGO=${cargo}/bin/cargo"

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
-  installPhase = if stdenv.isDarwin then ''
+  installPhase = if stdenv.hostPlatform.isDarwin then ''
     runHook preInstall
 
     mkdir -p $out/Applications

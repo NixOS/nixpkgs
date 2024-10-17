@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     mbedtls
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Doff64_t=off_t";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Doff64_t=off_t";
 
   postInstall = ''
     install -Dm644 ../LICENSE.TXT $out/usr/share/licenses/${pname}/LICENSE.TXT

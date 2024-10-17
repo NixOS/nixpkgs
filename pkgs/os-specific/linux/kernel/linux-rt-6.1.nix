@@ -6,7 +6,7 @@
 , ... } @ args:
 
 let
-  version = "6.1.105-rt38"; # updated by ./update-rt.sh
+  version = "6.1.111-rt42"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in buildLinux (args // {
@@ -19,14 +19,14 @@ in buildLinux (args // {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v6.x/linux-${kversion}.tar.xz";
-    sha256 = "162yz32jqd2xkswsd1jxmjq4yhzmhzn17snicad35x51k3vaigr3";
+    sha256 = "1c7d49kppv8xgqlsrfm1286mnvz8vcnbqqh6zgfca2s13px9hwn4";
   };
 
   kernelPatches = let rt-patch = {
     name = "rt";
     patch = fetchurl {
       url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-      sha256 = "0mk9xz1llzfib0g68b7d1ni5qyj899ldz6n1x1him0ngrqqb0y97";
+      sha256 = "16yb962fkkvgppbx8glp5ph3h1jl2q1b4m2s8gsf3k9i9yim7v5c";
     };
   }; in [ rt-patch ] ++ kernelPatches;
 

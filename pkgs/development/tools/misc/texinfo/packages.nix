@@ -88,10 +88,6 @@ in
       branch = finalAttrs.version;
     };
   });
-  texinfo5 = buildTexinfo {
-    version = "5.2";
-    hash = "sha256-VHHvaDpkWIp8/vRu8r3T+8vKidhH4QgyYSKT8QXkTto=";
-  };
   texinfo6_5 = buildTexinfo {
     version = "6.5";
     hash = "sha256-d3dLP0oGwgcFzC7xyASGRCLjz5UjXpZbHwCkbffaX2I=";

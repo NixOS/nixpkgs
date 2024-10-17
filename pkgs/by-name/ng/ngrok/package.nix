@@ -7,20 +7,20 @@
 let
   versions = lib.importJSON ./versions.json;
   arch =
-    if stdenv.isi686 then
+    if stdenv.hostPlatform.isi686 then
       "386"
-    else if stdenv.isx86_64 then
+    else if stdenv.hostPlatform.isx86_64 then
       "amd64"
-    else if stdenv.isAarch32 then
+    else if stdenv.hostPlatform.isAarch32 then
       "arm"
-    else if stdenv.isAarch64 then
+    else if stdenv.hostPlatform.isAarch64 then
       "arm64"
     else
       throw "Unsupported architecture";
   os =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "linux"
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       "darwin"
     else
       throw "Unsupported os";
@@ -58,7 +58,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.sh;
 
   # Stripping causes SEGFAULT on darwin
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   meta = {
     description = "Allows you to expose a web server running on your local machine to the internet";

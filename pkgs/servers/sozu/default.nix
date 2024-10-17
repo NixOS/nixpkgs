@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ protobuf ];
 
   buildInputs =
-    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   doCheck = false;
 
@@ -47,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ Br1ght0ne gaelreyrol ];
     mainProgram = "sozu";
     # error[E0432]: unresolved import `std::arch::x86_64`
-    broken = !stdenv.isx86_64;
+    broken = !stdenv.hostPlatform.isx86_64;
   };
 }

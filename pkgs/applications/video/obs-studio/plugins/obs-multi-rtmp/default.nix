@@ -2,24 +2,33 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-multi-rtmp";
-  version = "0.2.8.1-OBS28";
+  version = "0.6.0.1";
 
   src = fetchFromGitHub {
     owner = "sorayuki";
     repo = "obs-multi-rtmp";
     rev = version;
-    sha256 = "sha256-1W+c8Y0AmtKQmCIg8IDAaYYStQzDpZRuqw3vZEY5ncU=";
+    sha256 = "sha256-MRBQY9m6rj8HVdn58mK/Vh07FSm0EglRUaP20P3FFO4=";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ];
 
-  patches = [
-    # Patch cmake file to link against the obs build output, instead of its sources
-    ./fix-build.patch
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_QT" true)
+    (lib.cmakeBool "ENABLE_FRONTEND_API" true)
+    (lib.cmakeBool "CMAKE_COMPILE_WARNING_AS_ERROR" false)
   ];
 
   dontWrapQtApps = true;
+
+  # install dirs changed after 0.5.0.3-OBS30
+  postInstall = ''
+    mkdir -p $out/{lib,share/obs/obs-plugins/}
+    mv $out/dist/obs-multi-rtmp/data $out/share/obs/obs-plugins/obs-multi-rtmp
+    mv $out/dist/obs-multi-rtmp/bin/64bit $out/lib/obs-plugins
+    rm -rf $out/dist
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/sorayuki/obs-multi-rtmp/";

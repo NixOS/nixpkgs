@@ -43,7 +43,7 @@ python.pkgs.buildPythonPackage rec {
     commonmark
     aiohttp
     yarl
-    mautrix
+    (mautrix.override { withOlm = withE2BE; })
     tulir-telethon
     asyncpg
     mako

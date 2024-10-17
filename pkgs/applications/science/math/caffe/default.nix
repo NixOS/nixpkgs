@@ -73,14 +73,14 @@ stdenv.mkDerivation rec {
                 ++ lib.optional ncclSupport nccl
                 ++ lib.optionals leveldbSupport [ leveldb snappy ]
                 ++ lib.optionals pythonSupport [ python numpy ]
-                ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ]
+                ++ lib.optionals stdenv.hostPlatform.isDarwin [ Accelerate CoreGraphics CoreVideo ]
                 ;
 
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
     let pp = python.pkgs; in ([
       pp.numpy pp.scipy pp.scikit-image pp.h5py
-      pp.matplotlib pp.ipython pp.networkx pp.nose
+      pp.matplotlib pp.ipython pp.networkx
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six
     ] ++ lib.optional leveldbSupport pp.leveldb)

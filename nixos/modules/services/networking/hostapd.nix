@@ -235,7 +235,7 @@ in {
             };
 
             channel = mkOption {
-              default = 7;
+              default = 0;
               example = 11;
               type = types.int;
               description = ''

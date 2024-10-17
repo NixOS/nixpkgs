@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "opensearch-py";
-  version = "2.6.0";
+  version = "2.7.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "opensearch-project";
     repo = "opensearch-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qpay0EDD99MzxDMkjk3hU/34rxLD71PM8zdcIcHj/0Q=";
+    hash = "sha256-GC0waXxHRiXVXjhTGbet3HvDKmUBKzoufu/J4fmrM+k=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     events
   ];
 
-  passthru.optional-dependencies.async = [ aiohttp ];
+  optional-dependencies.async = [ aiohttp ];
 
   nativeCheckInputs = [
     botocore
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     pytz
-  ] ++ passthru.optional-dependencies.async;
+  ] ++ optional-dependencies.async;
 
   disabledTestPaths = [
     # require network

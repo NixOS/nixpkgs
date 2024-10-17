@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.62.1"; # N.B: if you change this, please update:
+  version = "1.66.1"; # N.B: if you change this, please update:
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
-    hash = "sha256-L0bn6Bg36UKIRxznH9o4T7WXUqMwFjr8ybeQfbUi8xM=";
+    hash = "sha256-CmQUUbIYPWRS7q7OX+TmkTvoqtJAUEwhL/lev8JdB8U=";
     fetchSubmodules = true;
   };
 
@@ -40,13 +40,14 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
-  ];
+    # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
+  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./dynamic-lookup-darwin.patch);
 
   nativeBuildInputs = [ cmake pkg-config ]
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [ c-ares re2 zlib abseil-cpp ];
   buildInputs = [ openssl protobuf ]
-    ++ lib.optionals stdenv.isLinux [ libnsl ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
   cmakeFlags = [
     "-DgRPC_ZLIB_PROVIDER=package"
@@ -91,12 +92,12 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Workaround for https://github.com/llvm/llvm-project/issues/48757
     "-Wno-elaborated-enum-base"
   ]);
 
-  enableParallelBuilds = true;
+  enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;

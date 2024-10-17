@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "translate_toolkit";
     inherit version;
-    sha256 = "sha256-95zIAelFSNK5+f1GY8DUgHPDQBS5K+9ULjXaSaa0wWM=";
+    hash = "sha256-95zIAelFSNK5+f1GY8DUgHPDQBS5K+9ULjXaSaa0wWM=";
   };
 
   dependencies = [

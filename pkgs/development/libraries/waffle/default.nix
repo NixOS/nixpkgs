@@ -11,7 +11,7 @@
 , pkg-config
 , python3
 , x11Support ? true, libxcb, libX11
-, waylandSupport ? true, wayland, wayland-protocols
+, waylandSupport ? true, wayland, wayland-protocols, wayland-scanner
 , useGbm ? true, mesa, udev
 }:
 
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     mesa
   ];
 
+  depsBuildBuild = [ pkg-config ];
+
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+  ] ++ lib.optionals waylandSupport [
+    wayland-scanner
   ];
 
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
@@ -66,7 +70,7 @@ stdenv.mkDerivation rec {
     mainProgram = "wflinfo";
     homepage = "https://www.waffle-gl.org/";
     license = licenses.bsd2;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ Flakebi ];
   };
 }

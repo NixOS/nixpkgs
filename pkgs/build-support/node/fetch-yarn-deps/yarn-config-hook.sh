@@ -1,5 +1,4 @@
 yarnConfigHook(){
-    runHook preConfigure
     echo "Executing yarnConfigHook"
 
     # Use a constant HOME directory
@@ -29,9 +28,8 @@ yarnConfigHook(){
     patchShebangs node_modules
 
     echo "finished yarnConfigHook"
-    runHook postConfigure
 }
 
-if [[ -z "${dontYarnInstallDeps-}" && -z "${configurePhase-}" ]]; then
-    configurePhase=yarnConfigHook
+if [[ -z "${dontYarnInstallDeps-}" ]]; then
+    postConfigureHooks+=(yarnConfigHook)
 fi

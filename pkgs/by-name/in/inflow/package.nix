@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "stephen-huan";
     repo = "inflow";
     rev = "v${version}";
-    sha256 = "sha256-xKUqkrPwITai8g6U1NiNieAip/AzISgFfFtvR30hLNk=";
+    hash = "sha256-xKUqkrPwITai8g6U1NiNieAip/AzISgFfFtvR30hLNk=";
   };
 
   buildPhase = ''

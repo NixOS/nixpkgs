@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ncurses
     rtl-sdr
     soapysdr-with-plugins
-  ] ++ lib.optional stdenv.isLinux limesuite;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux limesuite;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
     "-Wno-implicit-function-declaration -Wno-int-conversion -Wno-unknown-warning-option";

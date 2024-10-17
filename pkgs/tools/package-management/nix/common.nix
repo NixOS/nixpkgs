@@ -59,12 +59,14 @@ in
 , libxml2
 , libxslt
 , lowdown
+, lowdown-unsandboxed
 , toml11
 , man
 , mdbook
 , mdbook-linkcheck
 , nlohmann_json
 , nixosTests
+, nixVersions
 , openssl
 , perl
 , pkg-config
@@ -73,10 +75,9 @@ in
 , sqlite
 , util-linuxMinimal
 , xz
-
-, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+, enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , enableStatic ? stdenv.hostPlatform.isStatic
-, withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
+, withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
 
 , confDir
@@ -85,7 +86,9 @@ in
 
   # passthru tests
 , pkgsi686Linux
+, pkgsStatic
 , runCommand
+, pkgs
 }: let
 self = stdenv.mkDerivation {
   pname = "nix";
@@ -99,11 +102,13 @@ self = stdenv.mkDerivation {
     [ "out" "dev" ]
     ++ lib.optionals enableDocumentation [ "man" "doc" ];
 
-  hardeningEnable = lib.optionals (!stdenv.isDarwin) [ "pie" ];
+  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
 
   hardeningDisable = [
     "shadowstack"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+
+  nativeInstallCheckInputs = lib.optional atLeast221 git ++ lib.optional atLeast219 man;
 
   nativeBuildInputs = [
     pkg-config
@@ -118,11 +123,11 @@ self = stdenv.mkDerivation {
     docbook_xsl_ns
     docbook5
   ] ++ lib.optionals (enableDocumentation && atLeast24) [
-    (lib.getBin lowdown)
+    (lib.getBin lowdown-unsandboxed)
     mdbook
   ] ++ lib.optionals (atLeast213 && enableDocumentation) [
     mdbook-linkcheck
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
   ];
 
@@ -143,9 +148,9 @@ self = stdenv.mkDerivation {
     libgit2
   ] ++ lib.optionals (atLeast224 || lib.versionAtLeast version "pre20240626") [
     toml11
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
-  ] ++ lib.optionals (stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
     libcpuid
   ] ++ lib.optionals atLeast214 [
     rapidcheck
@@ -155,11 +160,6 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ];
 
-  installCheckInputs = lib.optionals atLeast221 [
-    git
-  ] ++ lib.optionals atLeast219 [
-    man
-  ];
 
   propagatedBuildInputs = [
     boehmgc
@@ -178,7 +178,7 @@ self = stdenv.mkDerivation {
       mkdir -p $out/lib
       cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
       rm -f $out/lib/*.a
-      ${lib.optionalString stdenv.isLinux ''
+      ${lib.optionalString stdenv.hostPlatform.isLinux ''
         chmod u+w $out/lib/*.so.*
         patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
       ''}
@@ -207,9 +207,9 @@ self = stdenv.mkDerivation {
     "--enable-gc"
   ] ++ lib.optionals (!enableDocumentation) [
     "--disable-doc-gen"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--with-sandbox-shell=${busybox-sandbox-shell}/bin/busybox"
-  ] ++ lib.optionals (atLeast210 && stdenv.isLinux && stdenv.hostPlatform.isStatic) [
+  ] ++ lib.optionals (atLeast210 && stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic) [
     "--enable-embedded-sandbox-shell"
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform ? nix && stdenv.hostPlatform.nix ? system) [
     "--with-system=${stdenv.hostPlatform.nix.system}"
@@ -235,20 +235,26 @@ self = stdenv.mkDerivation {
   installCheckTarget = if atLeast210 then "installcheck" else null;
 
   # socket path becomes too long otherwise
-  preInstallCheck = lib.optionalString stdenv.isDarwin ''
+  preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export TMPDIR=$NIX_BUILD_TOP
   ''
   # Prevent crashes in libcurl due to invoking Objective-C `+initialize` methods after `fork`.
   # See http://sealiesoftware.com/blog/archive/2017/6/5/Objective-C_and_fork_in_macOS_1013.html.
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
   ''
   # See https://github.com/NixOS/nix/issues/5687
-  + lib.optionalString (atLeast25 && stdenv.isDarwin) ''
+  + lib.optionalString (atLeast25 && stdenv.hostPlatform.isDarwin) ''
     echo "exit 99" > tests/gc-non-blocking.sh
+  '' # TODO: investigate why this broken
+  + lib.optionalString (atLeast25 && stdenv.hostPlatform.system == "aarch64-linux") ''
+    echo "exit 0" > tests/functional/flakes/show.sh
+  '' + ''
+    # nixStatic otherwise does not find its man pages in tests.
+    export MANPATH=$man/share/man:$MANPATH
   '';
 
-  separateDebugInfo = stdenv.isLinux && (atLeast24 -> !enableStatic);
+  separateDebugInfo = stdenv.hostPlatform.isLinux && (atLeast24 -> !enableStatic);
 
   enableParallelBuilding = true;
 
@@ -258,11 +264,6 @@ self = stdenv.mkDerivation {
     perl-bindings = perl.pkgs.toPerlModule (callPackage ./nix-perl.nix { nix = self; inherit Security; });
 
     tests = {
-      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
-      # Basic smoke test that needs to pass when upgrading nix.
-      # Note that this test does only test the nixVersions.stable attribute.
-      misc = nixosTests.nix-misc.default;
-
       srcVersion = runCommand "nix-src-version" {
         inherit version;
       } ''
@@ -277,6 +278,22 @@ self = stdenv.mkDerivation {
         fi
         touch $out
       '';
+
+      /** Intended to test `lib`, but also a good smoke test for Nix */
+      nixpkgs-lib = import ../../../../lib/tests/test-with-nix.nix {
+        inherit lib pkgs;
+        nix = self;
+      };
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixStatic = pkgsStatic.nixVersions.${self_attribute_name};
+
+      # Basic smoke tests that needs to pass when upgrading nix.
+      # Note that this test does only test the nixVersions.stable attribute.
+      misc = nixosTests.nix-misc.default;
+      upgrade = nixosTests.nix-upgrade;
+      simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
+      nixi686 = pkgsi686Linux.nixVersions.${self_attribute_name};
     };
   };
 

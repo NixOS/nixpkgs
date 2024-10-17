@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Image viewer for image processing experts";
     maintainers = [ lib.maintainers.kidanger ];
     license = lib.licenses.gpl3;
-    broken = stdenv.isDarwin; # the CMake expects the SDL2::SDL2main target for darwin
+    broken = stdenv.hostPlatform.isDarwin; # the CMake expects the SDL2::SDL2main target for darwin
     mainProgram = "vpv";
   };
 })

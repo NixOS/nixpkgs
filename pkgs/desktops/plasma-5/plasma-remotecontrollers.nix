@@ -11,6 +11,7 @@
 , kscreenlocker
 , kwindowsystem
 , wayland
+, wayland-scanner
 , pkg-config
 , libcec
 , libcec_platform
@@ -20,7 +21,7 @@
 }:
 mkDerivation {
   pname = "plasma-remotecontrollers";
-  nativeBuildInputs = [ extra-cmake-modules pkg-config ];
+  nativeBuildInputs = [ extra-cmake-modules pkg-config wayland-scanner ];
   buildInputs = [
     kconfig
     knotifications

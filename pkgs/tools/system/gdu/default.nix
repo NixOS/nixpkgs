@@ -38,7 +38,7 @@ buildGoModule rec {
     installManPage gdu.1
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # https://github.com/dundee/gdu/issues/371

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.6.21b";
 
   src = fetchzip {
-    url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/empty/empty/empty-${version}.tgz";
     sha256 = "1rkixh2byr70pdxrwr4lj1ckh191rjny1m5xbjsa7nqw1fw6c2xs";
     stripRoot = false;
   };

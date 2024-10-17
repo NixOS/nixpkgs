@@ -2,45 +2,50 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+
+  # build-system
   setuptools,
-  prettytable,
-  sqlalchemy,
-  sqlparse,
+
+  # dependencies
   ipython-genutils,
   jinja2,
-  sqlglot,
   jupysql-plugin,
   ploomber-core,
-  ploomber-extension,
-  ipython,
+  prettytable,
+  sqlalchemy,
+  sqlglot,
+  sqlparse,
+
+  # optional-dependencies
   duckdb,
   duckdb-engine,
-  matplotlib,
-  polars,
+  grpcio,
+  ipython,
   ipywidgets,
+  js2py,
+  matplotlib,
   numpy,
   pandas,
-  js2py,
-  pyspark,
+  polars,
   pyarrow,
-  grpcio,
+  pyspark,
+
+  # tests
   pytestCheckHook,
   psutil,
 }:
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.10.11";
+  version = "0.10.13";
 
   pyproject = true;
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
     rev = "refs/tags/${version}";
-    hash = "sha256-A9zTjH+9RYKcgy4mI6uOMHOc46om06y1zK3IbxeVcWE=";
+    hash = "sha256-vNuMGHFkatJS5KjxaOBwZ7JolIDAdYqGq3JNKSV2fKE=";
   };
 
   pythonRelaxDeps = [ "sqlalchemy" ];
@@ -48,36 +53,40 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    prettytable
-    sqlalchemy
-    sqlparse
     ipython-genutils
     jinja2
-    sqlglot
     jupysql-plugin
     ploomber-core
-    ploomber-extension
+    prettytable
+    sqlalchemy
+    sqlglot
+    sqlparse
   ];
 
   optional-dependencies.dev = [
-    ipython
     duckdb
     duckdb-engine
-    matplotlib
-    polars
+    grpcio
+    ipython
     ipywidgets
+    js2py
+    matplotlib
     numpy
     pandas
-    js2py
-    pyspark
+    polars
     pyarrow
-    grpcio
+    pyspark
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     psutil
   ] ++ optional-dependencies.dev;
+
+  disabledTests = [
+    # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
+    "test_resultset_polars_dataframe"
+  ];
 
   disabledTestPaths = [
     # require docker
@@ -101,11 +110,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "sql" ];
 
-  meta = with lib; {
+  meta = {
     description = "Better SQL in Jupyter";
     homepage = "https://github.com/ploomber/jupysql";
     changelog = "https://github.com/ploomber/jupysql/blob/${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ pacien ];
   };
 }

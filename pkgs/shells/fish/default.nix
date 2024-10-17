@@ -177,7 +177,7 @@ let
 
       # tests/checks/complete.fish
       sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
-    '' + lib.optionalString stdenv.isDarwin ''
+    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # Tests use pkill/pgrep which are currently not built on Darwin
       # See https://github.com/NixOS/nixpkgs/pull/103180
       rm tests/pexpects/exit.py
@@ -187,7 +187,7 @@ let
       # pexpect tests are flaky in general
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/bind.py
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
       rm tests/pexpects/exit_handlers.py
@@ -208,12 +208,12 @@ let
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DOCDIR=${placeholder "doc"}/share/doc/fish"
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-DMAC_CODESIGN_ID=OFF"
     ];
 
     # Fish’s test suite needs to be able to look up process information and send signals.
-    sandboxProfile = lib.optionalString stdenv.isDarwin ''
+    sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
       (allow mach-lookup mach-task-name)
       (allow signal (target children))
     '';
@@ -235,7 +235,7 @@ let
       gnused
       groff
       gettext
-    ] ++ lib.optional (!stdenv.isDarwin) man-db;
+    ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
     doCheck = true;
 
@@ -278,13 +278,13 @@ let
       end
       EOF
 
-    '' + lib.optionalString stdenv.isLinux ''
+    '' + lib.optionalString stdenv.hostPlatform.isLinux ''
       for cur in $out/share/fish/functions/*.fish; do
         sed -e "s|/usr/bin/getent|${getent}/bin/getent|" \
             -i "$cur"
       done
 
-    '' + lib.optionalString (!stdenv.isDarwin) ''
+    '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
               "$out/share/fish/tools/create_manpage_completions.py"
       sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
@@ -308,7 +308,7 @@ let
     passthru = {
       shellPath = "/bin/fish";
       tests = {
-        nixos = lib.optionalAttrs stdenv.isLinux nixosTests.fish;
+        nixos = lib.optionalAttrs stdenv.hostPlatform.isLinux nixosTests.fish;
 
         # Test the fish_config tool by checking the generated splash page.
         # Since the webserver requires a port to run, it is not started.

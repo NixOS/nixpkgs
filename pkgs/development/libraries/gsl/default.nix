@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.isDarwin) then ''
+  preConfigure = if (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11" && stdenv.hostPlatform.isDarwin) then ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '' else null;
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isx86_64 "-mno-fma";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isx86_64 "-mno-fma";
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
   doCheck = stdenv.hostPlatform.system != "i686-linux";

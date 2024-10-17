@@ -23,7 +23,7 @@ cat > $SCRIPT_DIR/default.nix << EOF
 
 callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ])
   (
-    if stdenv.isAarch64 then
+    if stdenv.hostPlatform.isAarch64 then
       rec {
         pname = "brave";
         version = "${latestVersionAarch64}";
@@ -31,7 +31,7 @@ callPackage ./make-brave.nix (removeAttrs args [ "callPackage" ])
         hash = "${hashAarch64}";
         platform = "aarch64-linux";
       }
-    else if stdenv.isx86_64 then
+    else if stdenv.hostPlatform.isx86_64 then
       rec {
         pname = "brave";
         version = "${latestVersionAmd64}";

@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-Io+69kIW4DV2EkA73pjaTcTRbDSYBf61R7F+141Jojs=";
 
-  postInstall = lib.optionalString (!stdenv.isDarwin) ''
+  postInstall = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mv $out/bin/Go365 $out/bin/$pname
   '';
 

@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
       disclaims that its implementations are not cryptographically secure
       and should not be used when cryptographic security is required.
 
-      It is not known that the issues can be exploited over the network in
-      practical conditions. Upstream has stated that the library should
-      not be used going forwards, and there are no plans to move to a
-      another cryptography implementation or otherwise further maintain
-      the library at all.
+      It is not known if the issues can be exploited over the network in
+      practical conditions. Upstream does not believe such an attack is
+      feasible, but has stated that the library should not be used going
+      forward, and there are no plans to move to another cryptography
+      implementation or otherwise further maintain the library at all.
 
       You should make an informed decision about whether to override this
       security warning, especially if you critically rely on end‐to‐end
@@ -51,6 +51,12 @@ stdenv.mkDerivation rec {
 
       For further information, see:
 
+      * The CVE records for the known vulnerabilities:
+
+        * CVE-2024-45191
+        * CVE-2024-45192
+        * CVE-2024-45193
+
       * The libolm deprecation notice:
         <https://gitlab.matrix.org/matrix-org/olm/-/blob/6d4b5b07887821a95b144091c8497d09d377f985/README.md#important-libolm-is-now-deprecated>
 
@@ -60,8 +66,9 @@ stdenv.mkDerivation rec {
       * The blog post disclosing the details of the known vulnerabilities:
         <https://soatok.blog/2024/08/14/security-issues-in-matrixs-olm-library/>
 
-      * The Matrix.org project lead’s response to the disclosure:
-        <https://news.ycombinator.com/item?id=41249371>
+      * The statement about the deprecation and vulnerabilities from the
+        Matrix.org Foundation:
+        <https://matrix.org/blog/2024/08/libolm-deprecation/>
 
       * A (likely incomplete) aggregation of client tracking issue links:
         <https://github.com/NixOS/nixpkgs/pull/334638#issuecomment-2289025802>

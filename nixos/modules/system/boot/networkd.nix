@@ -20,6 +20,7 @@ let
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
           "IPv6Forwarding"
+          "UseDomains"
         ])
         (assertValueOneOf "SpeedMeter" boolValues)
         (assertInt "SpeedMeterIntervalSec")
@@ -28,6 +29,7 @@ let
         (assertValueOneOf "IPv6PrivacyExtensions" (boolValues ++ ["prefer-public" "kernel"]))
         (assertValueOneOf "IPv4Forwarding" boolValues)
         (assertValueOneOf "IPv6Forwarding" boolValues)
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
       ];
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
@@ -409,11 +411,14 @@ let
         (assertValueOneOf "Layer2SpecificHeader" [ "none" "default" ])
       ];
 
-      # NOTE The PrivateKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuard = checkUnitConfig "WireGuard" [
+        (assertKeyIsSystemdCredential "PrivateKey")
         (assertOnlyFields [
+          "PrivateKey"
           "PrivateKeyFile"
           "ListenPort"
           "FirewallMark"
@@ -424,12 +429,15 @@ let
         (assertRange "FirewallMark" 1 4294967295)
       ];
 
-      # NOTE The PresharedKey directive is missing on purpose here, please
-      # do not add it to this list. The nix store is world-readable,let's
-      # refrain ourselves from providing a footgun.
+      # NOTE Check whether the key starts with an @, in which case it is
+      # interpreted as the name of the credential from which the actual key
+      # shall be read by systemd-creds.
+      # Do not remove this check as the nix store is world-readable.
       sectionWireGuardPeer = checkUnitConfigWithLegacyKey "wireguardPeerConfig" "WireGuardPeer" [
+        (assertKeyIsSystemdCredential "PresharedKey")
         (assertOnlyFields [
           "PublicKey"
+          "PresharedKey"
           "PresharedKeyFile"
           "AllowedIPs"
           "Endpoint"
@@ -652,6 +660,7 @@ let
           "Address"
           "Gateway"
           "DNS"
+          "UseDomains"
           "Domains"
           "DNSDefaultRoute"
           "NTP"
@@ -705,6 +714,7 @@ let
         (assertValueOneOf "DNSSEC" (boolValues ++ ["allow-downgrade"]))
         (assertValueOneOf "LLDP" (boolValues ++ ["routers-only"]))
         (assertValueOneOf "EmitLLDP" (boolValues ++ ["nearest-bridge" "non-tpmr-bridge" "customer-bridge"]))
+        (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))
         (assertValueOneOf "DNSDefaultRoute" boolValues)
         (assertRemoved "IPForward" "IPv4Forwarding and IPv6Forwarding in systemd.network(5) and networkd.conf(5)")
         (assertValueOneOf "IPv4Forwarding" boolValues)
@@ -851,6 +861,7 @@ let
           "UseGateway"
           "UseRoutes"
           "UseTimezone"
+          "IPv6OnlyMode"
           "ClientIdentifier"
           "VendorClassIdentifier"
           "UserClass"
@@ -884,6 +895,7 @@ let
         (assertValueOneOf "UseGateway" boolValues)
         (assertValueOneOf "UseRoutes" boolValues)
         (assertValueOneOf "UseTimezone" boolValues)
+        (assertValueOneOf "IPv6OnlyMode" boolValues)
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
@@ -1039,19 +1051,27 @@ let
           "Managed"
           "OtherInformation"
           "RouterLifetimeSec"
+          "RetransmitSec"
           "RouterPreference"
+          "HopLimit"
           "UplinkInterface"
           "EmitDNS"
           "DNS"
           "EmitDomains"
           "Domains"
           "DNSLifetimeSec"
+          "HomeAgent"
+          "HomeAgentLifetimeSec"
+          "HomeAgentPreference"
         ])
         (assertValueOneOf "Managed" boolValues)
         (assertValueOneOf "OtherInformation" boolValues)
         (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+        (assertInt "HopLimit")
         (assertValueOneOf "EmitDNS" boolValues)
         (assertValueOneOf "EmitDomains" boolValues)
+        (assertValueOneOf "HomeAgent" boolValues)
+        (assertInt "HomeAgentPreference")
       ];
 
       sectionIPv6PREF64Prefix = checkUnitConfigWithLegacyKey "ipv6PREF64PrefixConfig" "IPv6PREF64Prefix" [

@@ -29,6 +29,6 @@ in stdenv.mkDerivation {
     maintainers = with maintainers; [ mbbx6spp ];
     platforms = platforms.unix;
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = (stdenv.isDarwin && stdenv.isAarch64) || (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

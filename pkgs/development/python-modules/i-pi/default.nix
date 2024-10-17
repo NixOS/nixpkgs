@@ -6,6 +6,7 @@
   makeWrapper,
   setuptools,
   numpy,
+  scipy,
   distutils,
   pytestCheckHook,
   mock,
@@ -32,7 +33,10 @@ buildPythonPackage rec {
     makeWrapper
   ];
 
-  dependencies = [ numpy ];
+  dependencies = [
+    numpy
+    scipy
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook

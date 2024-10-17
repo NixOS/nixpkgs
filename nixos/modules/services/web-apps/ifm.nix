@@ -1,21 +1,19 @@
-{ config, lib, pkgs, ...}:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.ifm;
-
-  version = "4.0.2";
-  src = pkgs.fetchurl {
-    url = "https://github.com/misterunknown/ifm/releases/download/v${version}/cdn.ifm.php";
-    hash = "sha256-37WbRM6D7JGmd//06zMhxMGIh8ioY8vRUmxX4OHgqBE=";
-  };
-
-  php = pkgs.php83;
-in {
+in
+{
   options.services.ifm = {
     enable = lib.mkEnableOption ''
       Improved file manager, a single-file web-based filemanager
 
       Lightweight and minimal, served using PHP's built-in server
-  '';
+    '';
 
     dataDir = lib.mkOption {
       type = lib.types.str;
@@ -37,7 +35,7 @@ in {
 
     settings = lib.mkOption {
       type = with lib.types; attrsOf anything;
-      default = {};
+      default = { };
       description = ''
         Configuration of the IFM service.
 
@@ -58,14 +56,7 @@ in {
       wantedBy = [ "multi-user.target" ];
 
       environment = {
-        IFM_ROOT_DIR = "/data";
       } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
-
-      script = ''
-        mkdir -p /tmp/ifm
-        ln -s ${src} /tmp/ifm/index.php
-        ${lib.getExe php} -S ${cfg.listenAddress}:${builtins.toString cfg.port} -t /tmp/ifm
-      '';
 
       serviceConfig = {
         DynamicUser = true;
@@ -73,6 +64,7 @@ in {
         StandardOutput = "journal";
         BindPaths = "${cfg.dataDir}:/data";
         PrivateTmp = true;
+        ExecStart = "${lib.getExe pkgs.ifm-web} ${lib.escapeShellArg cfg.listenAddress} ${builtins.toString cfg.port} /data";
       };
     };
   };

@@ -76,44 +76,40 @@ import ../make-test-python.nix (
         };
       };
 
-    testScript =
-      ''
-        start_all()
+    testScript = ''
+      start_all()
 
-        machine.wait_for_unit("k3s")
-        machine.succeed("kubectl cluster-info")
-        machine.fail("sudo -u noprivs kubectl cluster-info")
-      '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
-      + lib.optionalString (!pkgs.stdenv.isAarch64) ''machine.succeed("k3s check-config")''
-      + ''
+      machine.wait_for_unit("k3s")
+      machine.succeed("kubectl cluster-info")
+      machine.fail("sudo -u noprivs kubectl cluster-info")
+      machine.succeed("k3s check-config")
+      machine.succeed(
+          "${pauseImage} | ctr image import -"
+      )
 
-        machine.succeed(
-            "${pauseImage} | ctr image import -"
-        )
+      # Also wait for our service account to show up; it takes a sec
+      machine.wait_until_succeeds("kubectl get serviceaccount default")
+      machine.succeed("kubectl apply -f ${testPodYaml}")
+      machine.succeed("kubectl wait --for 'condition=Ready' pod/test")
+      machine.succeed("kubectl delete -f ${testPodYaml}")
 
-        # Also wait for our service account to show up; it takes a sec
-        machine.wait_until_succeeds("kubectl get serviceaccount default")
-        machine.succeed("kubectl apply -f ${testPodYaml}")
-        machine.succeed("kubectl wait --for 'condition=Ready' pod/test")
-        machine.succeed("kubectl delete -f ${testPodYaml}")
+      # regression test for #176445
+      machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
 
-        # regression test for #176445
-        machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")
+      with subtest("Run k3s-killall"):
+          # Call the killall script with a clean path to assert that
+          # all required commands are wrapped
+          output = machine.succeed("PATH= ${k3s}/bin/k3s-killall.sh 2>&1 | tee /dev/stderr")
+          assert "command not found" not in output, "killall script contains unknown command"
 
-        with subtest("Run k3s-killall"):
-            # Call the killall script with a clean path to assert that
-            # all required commands are wrapped
-            output = machine.succeed("PATH= ${k3s}/bin/k3s-killall.sh 2>&1 | tee /dev/stderr")
-            assert "command not found" not in output, "killall script contains unknown command"
+          # Check that killall cleaned up properly
+          machine.fail("systemctl is-active k3s.service")
+          machine.fail("systemctl list-units | grep containerd")
+          machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
+          machine.fail("ip netns show | grep cni-")
 
-            # Check that killall cleaned up properly
-            machine.fail("systemctl is-active k3s.service")
-            machine.fail("systemctl list-units | grep containerd")
-            machine.fail("ip link show | awk -F': ' '{print $2}' | grep -e flannel -e cni0")
-            machine.fail("ip netns show | grep cni-")
-
-        machine.shutdown()
-      '';
+      machine.shutdown()
+    '';
 
     meta.maintainers = lib.teams.k3s.members;
   }

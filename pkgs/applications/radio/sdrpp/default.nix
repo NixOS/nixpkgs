@@ -8,12 +8,12 @@
 , hackrf_source ? true, hackrf
 , limesdr_source ? true, limesuite
 , perseus_source ? false    # needs libperseus-sdr, not yet available in nixpks
-, plutosdr_source ? stdenv.isLinux, libiio, libad9361
+, plutosdr_source ? stdenv.hostPlatform.isLinux, libiio, libad9361
 , rfspace_source ? true
 , rtl_sdr_source ? true, rtl-sdr-osmocom, libusb1  # osmocom better w/ rtlsdr v4
 , rtl_tcp_source ? true
 , sdrplay_source ? false, sdrplay
-, soapy_source ? true, soapysdr
+, soapy_source ? true, soapysdr-with-plugins
 , spyserver_source ? true
 , usrp_source	? false, uhd, boost
 
@@ -70,8 +70,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ glfw glew fftwFloat volk zstd ]
-    ++ lib.optional stdenv.isDarwin AppKit
-    ++ lib.optional stdenv.isLinux libX11
+    ++ lib.optional stdenv.hostPlatform.isDarwin AppKit
+    ++ lib.optional stdenv.hostPlatform.isLinux libX11
     ++ lib.optional airspy_source airspy
     ++ lib.optional airspyhf_source airspyhf
     ++ lib.optional bladerf_source libbladeRF
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional limesdr_source limesuite
     ++ lib.optionals rtl_sdr_source [ rtl-sdr-osmocom libusb1 ]
     ++ lib.optional sdrplay_source sdrplay
-    ++ lib.optional soapy_source soapysdr
+    ++ lib.optional soapy_source soapysdr-with-plugins
     ++ lib.optionals plutosdr_source [ libiio libad9361 ]
     ++ lib.optionals usrp_source [ uhd boost ]
     ++ lib.optional audio_sink rtaudio

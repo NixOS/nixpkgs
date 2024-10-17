@@ -10,14 +10,14 @@
 }:
 
 buildGoModule rec {
-  version = "3.1.1";
+  version = "3.2.0";
   pname = "grafana-loki";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "loki";
     rev = "v${version}";
-    hash = "sha256-QOokLht/nIzQAzXQuJv5M4QTQD0Zhzf9+Q0ILl2Mds0=";
+    hash = "sha256-dche8MbVSlwKMD/znOCj80FNf5KZmEuI3uodrFLrmjM=";
   };
 
   vendorHash = null;
@@ -34,9 +34,9 @@ buildGoModule rec {
   tags = ["promtail_journal_enabled"];
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = lib.optionals stdenv.isLinux [ systemd.dev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ systemd.dev ];
 
-  preFixup = lib.optionalString stdenv.isLinux ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${lib.getLib systemd}/lib"
   '';

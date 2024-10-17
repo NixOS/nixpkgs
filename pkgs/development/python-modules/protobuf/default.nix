@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "protobuf";
-  version = "5.27.2";
+  version = "5.28.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8+ze8ia5r4VgdfKCJ/8skM46WU0JLDm+5VE1c/JeJxQ=";
+    hash = "sha256-WTeWdP8RlxdAT3RUZHkTeHA08D/nBJy+8ddKl7tFk/A=";
   };
 
   build-system = [ setuptools ];
@@ -30,10 +30,11 @@ buildPythonPackage rec {
     "google._upb._message"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    changelog = "https://github.com/protocolbuffers/protobuf/releases/v${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

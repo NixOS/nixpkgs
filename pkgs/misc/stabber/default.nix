@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ glib expat libmicrohttpd ] ++
-    lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+    lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   meta = with lib; {
     description = "Stubbed XMPP Server";

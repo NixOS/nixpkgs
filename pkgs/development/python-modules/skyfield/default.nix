@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   certifi,
   numpy,
   sgp4,
@@ -15,24 +16,26 @@
 
 buildPythonPackage rec {
   pname = "skyfield";
-  version = "1.45";
-  format = "setuptools";
+  version = "1.49";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "skyfielders";
     repo = "python-skyfield";
     rev = version;
-    hash = "sha256-kZrXNVE+JGPGiVsd6CTwOqfciYLsD2A4pTS3FpqO+Dk=";
+    hash = "sha256-PZ63sohdfpop3nYQr2RIMjPbrL9jdfincEhw5D8NZ+Y=";
   };
 
   # Fix broken tests on "exotic" platforms.
   # https://github.com/skyfielders/python-skyfield/issues/582#issuecomment-822033858
   postPatch = ''
     substituteInPlace skyfield/tests/test_planetarylib.py \
-      --replace "if IS_32_BIT" "if True"
+      --replace-fail "if IS_32_BIT" "if True"
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     certifi
     numpy
     sgp4
@@ -46,9 +49,7 @@ buildPythonPackage rec {
     assay
   ];
 
-  # assay is broken on Python >= 3.11
-  # https://github.com/brandon-rhodes/assay/issues/15
-  doCheck = pythonOlder "3.11";
+  doCheck = true;
 
   checkPhase = ''
     runHook preCheck

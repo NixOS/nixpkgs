@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   pname = "bc";
   version = "1.07.1";
   src = fetchurl {
-    url = "mirror://gnu/bc/${pname}-${version}.tar.gz";
+    url = "mirror://gnu/bc/bc-${version}.tar.gz";
     sha256 = "62adfca89b0a1c0164c2cdca59ca210c1d44c3ffc46daf9931cf4942664cb02a";
   };
 

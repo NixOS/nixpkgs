@@ -27,7 +27,7 @@ buildPythonPackage rec {
   dependencies = [ regex ];
 
   # loops forever
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "somajo" ];
 

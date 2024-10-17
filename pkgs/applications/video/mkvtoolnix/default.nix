@@ -49,13 +49,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
-  version = "86.0";
+  version = "87.0";
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
-    hash = "sha256-h9rVs4A7JihnCj15XUus9xMvShKWyYhJN/90v/fl0PE=";
+    hash = "sha256-UU57ZgH1sxCXspwfKXScw08aJYiv+k526U8q8N1tA+4=";
   };
 
   nativeBuildInputs = [
@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ optionals withGUI [ cmark ]
-  ++ optionals stdenv.isLinux [ qtwayland ]
-  ++ optionals stdenv.isDarwin [ libiconv ];
+  ++ optionals stdenv.hostPlatform.isLinux [ qtwayland ]
+  ++ optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

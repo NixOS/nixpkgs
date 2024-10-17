@@ -47,18 +47,18 @@ stdenv.mkDerivation rec {
     libedit
     curl
     openssl
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     pcsclite.dev
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.PCSC
     libiconv
   ];
 
-  preBuild = lib.optionalString stdenv.isLinux ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     NIX_CFLAGS_COMPILE="$(pkg-config --cflags libpcsclite) $NIX_CFLAGS_COMPILE"
   '';
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DDISABLE_LTO=ON"
   ];
 

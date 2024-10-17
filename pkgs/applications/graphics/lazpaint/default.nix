@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
     downloadPage = "https://github.com/bgrabitmap/lazpaint/";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
     mainProgram = "lazpaint";
   };
 }

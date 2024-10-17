@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   };
 
   postPatch =
-    lib.optionalString stdenv.isDarwin ''
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace src/linker.cpp \
           --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
     ''
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
     which
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
   ];

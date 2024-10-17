@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,14 +25,14 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = "pylutron-caseta";
     rev = "refs/tags/v${version}";
-    hash = "sha256-u2FPWDWBSoS5mJPnYAkLTQR6K8YLDs77djdWL+7840o=";
+    hash = "sha256-8NO1IAm16b5jxjVPSQqOSx5hJjAOAXyOknqwkgPT5Zo=";
   };
 
   nativeBuildInputs = [ hatchling ];
 
   propagatedBuildInputs = [ cryptography ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       xdg

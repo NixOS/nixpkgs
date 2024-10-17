@@ -17,7 +17,7 @@
 # files.
 
 let
-  version = "2.6.2";
+  version = "2.6.3";
   tag = "R_${lib.replaceStrings ["."] ["_"] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
-    hash = "sha256-7hS0xdiQixvsN62TdgfqsYPU2YBqCK3uRyw8MSHSc2Q=";
+    hash = "sha256-J02yVKaXm95arUBHY6cElWlA5GWEPyqb2e168i4sDvw=";
   };
 
   strictDeps = true;
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  configureFlags = lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags = lib.optional stdenv.hostPlatform.isFreeBSD "--with-pic";
 
   outputMan = "dev"; # tiny page for a dev tool
 

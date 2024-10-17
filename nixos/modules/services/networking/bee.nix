@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.bee;
   format = pkgs.formats.yaml {};
@@ -15,13 +13,13 @@ in {
 
   options = {
     services.bee = {
-      enable = mkEnableOption "Ethereum Swarm Bee";
+      enable = lib.mkEnableOption "Ethereum Swarm Bee";
 
-      package = mkPackageOption pkgs "bee" {
+      package = lib.mkPackageOption pkgs "bee" {
         example = "bee-unstable";
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = format.type;
         description = ''
           Ethereum Swarm Bee configuration. Refer to
@@ -30,8 +28,8 @@ in {
         '';
       };
 
-      daemonNiceLevel = mkOption {
-        type = types.int;
+      daemonNiceLevel = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         description = ''
           Daemon process priority for bee.
@@ -39,16 +37,16 @@ in {
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "bee";
         description = ''
           User the bee binary should execute under.
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "bee";
         description = ''
           Group the bee binary should execute under.
@@ -59,14 +57,14 @@ in {
 
   ### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = (hasAttr "password" cfg.settings) != true;
+      { assertion = (lib.hasAttr "password" cfg.settings) != true;
         message = ''
           `services.bee.settings.password` is insecure. Use `services.bee.settings.password-file` or `systemd.services.bee.serviceConfig.EnvironmentFile` instead.
         '';
       }
-      { assertion = (hasAttr "swap-endpoint" cfg.settings) || (cfg.settings.swap-enable or true == false);
+      { assertion = (lib.hasAttr "swap-endpoint" cfg.settings) || (cfg.settings.swap-enable or true == false);
         message = ''
           In a swap-enabled network a working Ethereum blockchain node is required. You must specify one using `services.bee.settings.swap-endpoint`, or disable `services.bee.settings.swap-enable` = false.
         '';
@@ -119,7 +117,7 @@ After you finish configuration run 'sudo bee-get-addr'."
       '';
     };
 
-    users.users = optionalAttrs (cfg.user == "bee") {
+    users.users = lib.optionalAttrs (cfg.user == "bee") {
       bee = {
         group = cfg.group;
         home = cfg.settings.data-dir;
@@ -128,7 +126,7 @@ After you finish configuration run 'sudo bee-get-addr'."
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "bee") {
+    users.groups = lib.optionalAttrs (cfg.group == "bee") {
       bee = {};
     };
   };

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
     "-Wno-unused-result"
     "-Wformat-overflow=0"
-  ] ++ (lib.optionals stdenv.isLinux [
+  ] ++ (lib.optionals stdenv.hostPlatform.isLinux [
     "-DUSE_ALSA_SOUND" # Don't use OSS for beeps.
   ]);
   makeFlags = [
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoPatchelfHook pkg-config SDL2 perl unzip ]; # SDL2 for `sdl2-config`.
   buildInputs = [ ncurses SDL2 ]
-    ++ (lib.optional stdenv.isLinux alsa-lib);
+    ++ (lib.optional stdenv.hostPlatform.isLinux alsa-lib);
   runtimeDependencies = [ ncurses SDL2 ]; # Both of these are dlopen()'ed at runtime.
 
   meta = with lib; {
     # error: unsupported option '-fsanitize=safe-stack' for target 'x86_64-apple-darwin'
-    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     homepage = "https://syncterm.bbsdev.net/";
     description = "BBS terminal emulator";
     mainProgram = "syncterm";

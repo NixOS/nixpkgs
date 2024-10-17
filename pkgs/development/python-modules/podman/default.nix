@@ -34,7 +34,7 @@ buildPythonPackage rec {
     urllib3
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     progress_bar = [ rich ];
   };
 

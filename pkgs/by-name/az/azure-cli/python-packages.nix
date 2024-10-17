@@ -42,31 +42,34 @@ let
           ./0001-optional-immutable-configuration-dir.patch
         ];
 
-        propagatedBuildInputs = with self; [
-          argcomplete
-          azure-cli-telemetry
-          azure-common
-          azure-mgmt-core
-          cryptography
-          distro
-          humanfriendly
-          jmespath
-          knack
-          msal-extensions
-          msal
-          msrestazure
-          packaging
-          paramiko
-          pkginfo
-          psutil
-          pyjwt
-          pyopenssl
-          requests
-        ];
+        propagatedBuildInputs =
+          with self;
+          [
+            argcomplete
+            azure-cli-telemetry
+            azure-common
+            azure-mgmt-core
+            cryptography
+            distro
+            humanfriendly
+            jmespath
+            knack
+            msal-extensions
+            msal
+            msrestazure
+            packaging
+            paramiko
+            pkginfo
+            psutil
+            pyjwt
+            pyopenssl
+            requests
+          ]
+          ++ requests.optional-dependencies.socks;
 
         nativeCheckInputs = with self; [ pytest ];
 
-        doCheck = stdenv.isLinux;
+        doCheck = stdenv.hostPlatform.isLinux;
 
         # ignore tests that does network call, or assume powershell
         checkPhase = ''
@@ -116,6 +119,17 @@ let
         overrideAzureMgmtPackage super.azure-mgmt-batchai "7.0.0b1" "zip"
           "sha256-mT6vvjWbq0RWQidugR229E8JeVEiobPD3XA/nDM3I6Y=";
 
+      azure-mgmt-billing =
+        (overrideAzureMgmtPackage super.azure-mgmt-billing "6.0.0" "zip"
+          "sha256-1PXFpBiKRW/h6zK2xF9VyiBpx0vkHrdpIYQLOfL1wH8="
+        ).overridePythonAttrs
+          (attrs: {
+            propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
+              self.msrest
+              self.msrestazure
+            ];
+          });
+
       # AttributeError: type object 'CustomDomainsOperations' has no attribute 'disable_custom_https'
       azure-mgmt-cdn =
         overrideAzureMgmtPackage super.azure-mgmt-cdn "12.0.0" "zip"
@@ -135,6 +149,11 @@ let
       azure-mgmt-eventgrid =
         overrideAzureMgmtPackage super.azure-mgmt-eventgrid "10.2.0b2" "zip"
           "sha256-QcHY1wCwQyVOEdUi06/wEa4dqJH5Ccd33gJ1Sju0qZA=";
+
+      # ValueError: The operation 'azure.mgmt.hdinsight.operations#ExtensionsOperations.get_azure_monitor_agent_status' is invalid.
+      azure-mgmt-hdinsight =
+        overrideAzureMgmtPackage super.azure-mgmt-hdinsight "9.0.0b3" "tar.gz"
+          "sha256-clSeCP8+7T1uI4Nec+zhzDK980C9+JGeeJFsNSwgD2Q=";
 
       # ValueError: The operation 'azure.mgmt.kusto.operations#ClustersOperations.delete' is invalid.
       azure-mgmt-kusto =

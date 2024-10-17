@@ -44,17 +44,19 @@ buildDotnetModule rec {
     gm convert $src/GalaxyBudsClient/Resources/icon_white.ico $out/share/icons/hicolor/256x256/apps/${meta.mainProgram}.png
   '';
 
-  desktopItems = makeDesktopItem {
-    name = meta.mainProgram;
-    exec = meta.mainProgram;
-    icon = meta.mainProgram;
-    desktopName = meta.mainProgram;
-    genericName = "Galaxy Buds Client";
-    comment = meta.description;
-    type = "Application";
-    categories = [ "Settings" ];
-    startupNotify = true;
-  };
+  desktopItems = [
+    (makeDesktopItem {
+      name = meta.mainProgram;
+      exec = meta.mainProgram;
+      icon = meta.mainProgram;
+      desktopName = meta.mainProgram;
+      genericName = "Galaxy Buds Client";
+      comment = meta.description;
+      type = "Application";
+      categories = [ "Settings" ];
+      startupNotify = true;
+    })
+  ];
 
   meta = with lib; {
     mainProgram = "GalaxyBudsClient";

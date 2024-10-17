@@ -11,51 +11,56 @@
   django,
   pytz,
 
-  # tests
+  # optional-dependencies
   coreapi,
   coreschema,
   django-guardian,
   inflection,
   psycopg2,
+  pygments,
+  pyyaml,
+
+  # tests
   pytestCheckHook,
   pytest-django,
-  pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework";
-  version = "3.15.1";
-  format = "setuptools";
+  version = "3.15.2";
+  pyproject = true;
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "encode";
     repo = "django-rest-framework";
     rev = version;
-    hash = "sha256-G914NvxRmKGkxrozoWNUIoI74YkYRbeNcQwIG4iSeXU=";
+    hash = "sha256-ne0sk4m11Ha77tNmCsdhj7QVmCkYj5GjLn/dLF4qxU8=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     django
-    pytz
-  ];
+    pygments
+  ] ++ (lib.optional (lib.versionOlder django.version "5.0.0") pytz);
+
+  optional-dependencies = {
+    complete = [
+      coreapi
+      coreschema
+      django-guardian
+      inflection
+      psycopg2
+      pygments
+      pyyaml
+    ];
+  };
 
   nativeCheckInputs = [
     pytest-django
     pytestCheckHook
-
-    # optional tests
-    coreapi
-    coreschema
-    django-guardian
-    inflection
-    psycopg2
-    pyyaml
-  ];
+  ] ++ optional-dependencies.complete;
 
   disabledTests = [
     # https://github.com/encode/django-rest-framework/issues/9422

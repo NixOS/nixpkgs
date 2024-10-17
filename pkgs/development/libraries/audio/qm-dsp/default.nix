@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     rmdir $out/include/qm-dsp
   '';
 
-  env.NIX_CFLAGS_COMPILE = "-I${kissfft}/include/kissfft";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude kissfft}/include/kissfft";
 
   meta = with lib; {
     description = "C++ library of functions for DSP and Music Informatics purposes";

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     freetype
     SDL
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
   ];
 
@@ -33,12 +33,14 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    (lib.strings.enableFeature stdenv.isLinux "platform")
+    (lib.strings.enableFeature stdenv.hostPlatform.isLinux "platform")
     "--enable-examples=no"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "--x-includes=${lib.getDev libX11}/include"
     "--x-libraries=${lib.getLib libX11}/lib"
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   # libtool --tag=CXX --mode=link g++ -g -O2 libexamples.la ../src/platform/X11/libaggplatformX11.la ../src/libagg.la -o alpha_mask2 alpha_mask2.o
   # libtool: error: cannot find the library 'libexamples.la'

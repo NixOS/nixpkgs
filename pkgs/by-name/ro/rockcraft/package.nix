@@ -1,59 +1,20 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   dpkg,
   nix-update-script,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      craft-application = super.craft-application.overridePythonAttrs (old: rec {
-        version = "1.2.1";
-        src = fetchFromGitHub {
-          owner = "canonical";
-          repo = "craft-application";
-          rev = "refs/tags/${version}";
-          hash = "sha256-CXZEWVoE66dlQJp4G8tinufjyaDJaH1Muxz/qd/81oA=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml \
-            --replace-fail "setuptools==67.7.2" "setuptools"
-        '';
-        preCheck = ''
-          export HOME=$(mktemp -d)
-        '';
-      });
-      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
-        version = "0.11.2";
-        src = fetchFromGitHub {
-          owner = "NowanIlfideme";
-          repo = "pydantic-yaml";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
-        };
-        dependencies = with self; [
-          deprecated
-          importlib-metadata
-          pydantic_1
-          ruamel-yaml
-          types-deprecated
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.2.3";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "rockcraft";
-    rev = "refs/tags/${version}";
-    hash = "sha256-Qk7Fi4I/5TCf9llGTsTBQsAxUkeVmAlH6tFNYMsyZ1c=";
+    rev = "1d87e33cf207b3a2f16eb125743ec11546fa0cb1";
+    hash = "sha256-QnW3BMu4Tuvj8PCt5eYJbNMiojXpyJ1uza6hpMxxSOE=";
   };
 
   postPatch = ''
@@ -64,17 +25,19 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "distutils.util" "setuptools.dist"
   '';
 
-  build-system = with python.pkgs; [ setuptools-scm ];
+  build-system = with python3Packages; [ setuptools-scm ];
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
     craft-application
     craft-archives
+    craft-platforms
     spdx-lookup
   ];
 
   nativeCheckInputs =
-    with python.pkgs;
+    with python3Packages;
     [
+      craft-platforms
       pytest-check
       pytest-mock
       pytest-subprocess

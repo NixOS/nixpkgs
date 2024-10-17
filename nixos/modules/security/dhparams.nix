@@ -157,7 +157,7 @@ in {
                 continue
               fi
             '') cfg.params)}
-            rm $file
+            rm "$file"
           done
 
           # TODO: Ideally this would be removing the *former* cfg.path, though

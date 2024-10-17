@@ -4,29 +4,29 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  lxml,
   poetry-core,
   pytest-asyncio,
   pytestCheckHook,
-  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "pyblu";
-  version = "0.5.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2gpd7oDDmjUVm7bEED2ZK/27a8XUITxU0ylRfxeg/qU=";
+    hash = "sha256-1H7TqFPVstB+nCYwWOT8E2HcmkLQx9pekBq2WIAf8DQ=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
-    xmltodict
+    lxml
   ];
 
   pythonImportsCheck = [ "pyblu" ];

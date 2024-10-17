@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "engrampa";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "nFxMm8+LCO6qjydVONJLTJVQidWK7AMx6JwCuE2FOGo=";
+    hash = "sha256-Hpl3wjdFv4hDo38xUXHZr5eBSglxrqw9d08BdlCsCe8=";
   };
 
   nativeBuildInputs = [

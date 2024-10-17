@@ -39,7 +39,7 @@ python3.pkgs.buildPythonApplication rec {
     requests
     tqdm
     urllib3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     idna
     cryptography
     pyopenssl
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     git
     pkg-config
     zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
     xcbuild.xcrun
   ] ++ (with python3.pkgs; [
     mock
@@ -73,7 +73,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "TestFTP"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Rejects paths containing nix
     "test_conditional_os"
     # Requires Apple Clang

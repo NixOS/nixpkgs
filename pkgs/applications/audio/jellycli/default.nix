@@ -21,7 +21,7 @@ buildGoModule rec {
   buildInputs = [ alsa-lib ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Jellyfin terminal client";
     longDescription = ''
       Terminal music player, works with Jellyfin (>= 10.6) , Emby (>= 4.4), and

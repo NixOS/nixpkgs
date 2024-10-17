@@ -33,7 +33,8 @@ with lib;
 
             if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
-                mkdir -m 0700 -p /root/.ssh
+                mkdir -p /root/.ssh
+                chmod 0700 /root/.ssh
                 if [ -s /etc/ec2-metadata/public-keys-0-openssh-key ]; then
                     (umask 177; cat /etc/ec2-metadata/public-keys-0-openssh-key >> /root/.ssh/authorized_keys)
                     echo "new key added to authorized_keys"
@@ -45,19 +46,20 @@ with lib;
             # generate one normally.
             userData=/etc/ec2-metadata/user-data
 
-            mkdir -m 0755 -p /etc/ssh
+            mkdir -p /etc/ssh
+            chmod 0755 /etc/ssh
 
             if [ -s "$userData" ]; then
               key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' $userData)"
               key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' $userData)"
-              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
+              if [ -n "$key" ] && [ -n "$key_pub" ] && [ ! -e /etc/ssh/ssh_host_dsa_key ]; then
                   (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
                   echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
               fi
 
               key="$(sed 's/|/\n/g; s/SSH_HOST_ED25519_KEY://; t; d' $userData)"
               key_pub="$(sed 's/SSH_HOST_ED25519_KEY_PUB://; t; d' $userData)"
-              if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_ed25519_key ]; then
+              if [ -n "$key" ] && [ -n "$key_pub" ] && [ ! -e /etc/ssh/ssh_host_ed25519_key ]; then
                   (umask 077; echo "$key" > /etc/ssh/ssh_host_ed25519_key)
                   echo "$key_pub" > /etc/ssh/ssh_host_ed25519_key.pub
               fi
@@ -79,7 +81,7 @@ with lib;
             # ec2-get-console-output.
             echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
             for i in /etc/ssh/ssh_host_*_key.pub; do
-                ${config.programs.ssh.package}/bin/ssh-keygen -l -f $i || true > /dev/console
+                ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" || true > /dev/console
             done
             echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
           '';
@@ -88,4 +90,6 @@ with lib;
       };
 
   };
+
+  meta.maintainers =  with maintainers; [ arianvp ];
 }

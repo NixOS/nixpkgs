@@ -20,7 +20,7 @@ mkDerivation rec {
     libpthreadstubs libxcb libXdmcp
     qtsvg qttools qtwebengine qtx11extras
     kwallet kpurpose karchive kio
-  ] ++ lib.optionals stdenv.isLinux [ qtwayland ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   nativeBuildInputs = [
     cmake

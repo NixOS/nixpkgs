@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ boost fcgi openssl opensaml-cpp log4shib xercesc xml-security-c xml-tooling-c ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices
       SystemConfiguration
     ]);

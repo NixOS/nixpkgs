@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/rygel/${lib.versions.majorMinor finalAttrs.version}/rygel-${finalAttrs.version}.tar.xz";
-    sha256 = "R9JXBLYQiDdeJqq6Vr5HwXGJRy5vgMdSq+hvAu9OMwQ=";
+    hash = "sha256-R9JXBLYQiDdeJqq6Vr5HwXGJRy5vgMdSq+hvAu9OMwQ=";
   };
 
   patches = [
@@ -100,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Home media solution (UPnP AV MediaServer) that allows you to easily share audio, video and pictures to other devices";
     homepage = "https://gitlab.gnome.org/GNOME/rygel";
+    changelog = "https://gitlab.gnome.org/GNOME/rygel/-/blob/rygel-${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

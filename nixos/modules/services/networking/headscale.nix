@@ -3,25 +3,38 @@
   lib,
   pkgs,
   ...
-}:
-with lib; let
+}: let
   cfg = config.services.headscale;
 
   dataDir = "/var/lib/headscale";
   runDir = "/run/headscale";
 
+  cliConfig = {
+    # Turn off update checks since the origin of our package
+    # is nixpkgs and not Github.
+    disable_check_updates = true;
+
+    unix_socket = "${runDir}/headscale.sock";
+  };
+
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "headscale.yaml" cfg.settings;
+  cliConfigFile = settingsFormat.generate "headscale.yaml" cliConfig;
+
+  assertRemovedOption = option: message: {
+    assertion = !lib.hasAttrByPath option cfg;
+    message = "The option `services.headscale.${lib.options.showOption option}` was removed. " + message;
+  };
 in {
   options = {
     services.headscale = {
-      enable = mkEnableOption "headscale, Open Source coordination server for Tailscale";
+      enable = lib.mkEnableOption "headscale, Open Source coordination server for Tailscale";
 
-      package = mkPackageOption pkgs "headscale" { };
+      package = lib.mkPackageOption pkgs "headscale" {};
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "headscale";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           User account under which headscale runs.
 
@@ -33,9 +46,9 @@ in {
         '';
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "headscale";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Group under which headscale runs.
 
@@ -47,8 +60,8 @@ in {
         '';
       };
 
-      address = mkOption {
-        type = types.str;
+      address = lib.mkOption {
+        type = lib.types.str;
         default = "127.0.0.1";
         description = ''
           Listening address of headscale.
@@ -56,8 +69,8 @@ in {
         example = "0.0.0.0";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 8080;
         description = ''
           Listening port of headscale.
@@ -65,18 +78,18 @@ in {
         example = 443;
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         description = ''
           Overrides to {file}`config.yaml` as a Nix attribute set.
           Check the [example config](https://github.com/juanfont/headscale/blob/main/config-example.yaml)
           for possible options.
         '';
-        type = types.submodule {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            server_url = mkOption {
-              type = types.str;
+            server_url = lib.mkOption {
+              type = lib.types.str;
               default = "http://127.0.0.1:8080";
               description = ''
                 The url clients will connect to.
@@ -84,25 +97,49 @@ in {
               example = "https://myheadscale.example.com:443";
             };
 
-            private_key_path = mkOption {
-              type = types.path;
-              default = "${dataDir}/private.key";
-              description = ''
-                Path to private key file, generated automatically if it does not exist.
-              '';
-            };
-
-            noise.private_key_path = mkOption {
-              type = types.path;
+            noise.private_key_path = lib.mkOption {
+              type = lib.types.path;
               default = "${dataDir}/noise_private.key";
               description = ''
                 Path to noise private key file, generated automatically if it does not exist.
               '';
             };
 
+            prefixes = let
+              prefDesc = ''
+                Each prefix consists of either an IPv4 or IPv6 address,
+                and the associated prefix length, delimited by a slash.
+                It must be within IP ranges supported by the Tailscale
+                client - i.e., subnets of 100.64.0.0/10 and fd7a:115c:a1e0::/48.
+              '';
+            in {
+              v4 = lib.mkOption {
+                type = lib.types.str;
+                default = "100.64.0.0/10";
+                description = prefDesc;
+              };
+
+              v6 = lib.mkOption {
+                type = lib.types.str;
+                default = "fd7a:115c:a1e0::/48";
+                description = prefDesc;
+              };
+
+              allocation = lib.mkOption {
+                type = lib.types.enum ["sequential" "random"];
+                example = "random";
+                default = "sequential";
+                description = ''
+                  Strategy used for allocation of IPs to nodes, available options:
+                  - sequential (default): assigns the next free IP from the previous given IP.
+                  - random: assigns the next free IP from a pseudo-random IP generator (crypto/rand).
+                '';
+              };
+            };
+
             derp = {
-              urls = mkOption {
-                type = types.listOf types.str;
+              urls = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = ["https://controlplane.tailscale.com/derpmap/default"];
                 description = ''
                   List of urls containing DERP maps.
@@ -110,8 +147,8 @@ in {
                 '';
               };
 
-              paths = mkOption {
-                type = types.listOf types.path;
+              paths = lib.mkOption {
+                type = lib.types.listOf lib.types.path;
                 default = [];
                 description = ''
                   List of file paths containing DERP maps.
@@ -119,8 +156,8 @@ in {
                 '';
               };
 
-              auto_update_enable = mkOption {
-                type = types.bool;
+              auto_update_enable = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = ''
                   Whether to automatically update DERP maps on a set frequency.
@@ -128,18 +165,26 @@ in {
                 example = false;
               };
 
-              update_frequency = mkOption {
-                type = types.str;
+              update_frequency = lib.mkOption {
+                type = lib.types.str;
                 default = "24h";
                 description = ''
                   Frequency to update DERP maps.
                 '';
                 example = "5m";
               };
+
+              server.private_key_path = lib.mkOption {
+                type = lib.types.path;
+                default = "${dataDir}/derp_server_private.key";
+                description = ''
+                  Path to derp private key file, generated automatically if it does not exist.
+                '';
+              };
             };
 
-            ephemeral_node_inactivity_timeout = mkOption {
-              type = types.str;
+            ephemeral_node_inactivity_timeout = lib.mkOption {
+              type = lib.types.str;
               default = "30m";
               description = ''
                 Time before an inactive ephemeral node is deleted.
@@ -147,128 +192,144 @@ in {
               example = "5m";
             };
 
-            db_type = mkOption {
-              type = types.enum ["sqlite3" "postgres"];
-              example = "postgres";
-              default = "sqlite3";
-              description = "Database engine to use.";
-            };
-
-            db_host = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              example = "127.0.0.1";
-              description = "Database host address.";
-            };
-
-            db_port = mkOption {
-              type = types.nullOr types.port;
-              default = null;
-              example = 3306;
-              description = "Database host port.";
-            };
-
-            db_name = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              example = "headscale";
-              description = "Database name.";
-            };
-
-            db_user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              example = "headscale";
-              description = "Database user.";
-            };
-
-            db_password_file = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              example = "/run/keys/headscale-dbpassword";
-              description = ''
-                A file containing the password corresponding to
-                {option}`database.user`.
-              '';
-            };
-
-            db_path = mkOption {
-              type = types.nullOr types.str;
-              default = "${dataDir}/db.sqlite";
-              description = "Path to the sqlite3 database file.";
-            };
-
-            log.level = mkOption {
-              type = types.str;
-              default = "info";
-              description = ''
-                headscale log level.
-              '';
-              example = "debug";
-            };
-
-            log.format = mkOption {
-              type = types.str;
-              default = "text";
-              description = ''
-                headscale log format.
-              '';
-              example = "json";
-            };
-
-            dns_config = {
-              nameservers = mkOption {
-                type = types.listOf types.str;
-                default = ["1.1.1.1"];
+            database = {
+              type = lib.mkOption {
+                type = lib.types.enum ["sqlite" "sqlite3" "postgres"];
+                example = "postgres";
+                default = "sqlite";
                 description = ''
-                  List of nameservers to pass to Tailscale clients.
+                  Database engine to use.
+                  Please note that using Postgres is highly discouraged as it is only supported for legacy reasons.
+                  All new development, testing and optimisations are done with SQLite in mind.
                 '';
               };
 
-              override_local_dns = mkOption {
-                type = types.bool;
-                default = false;
-                description = ''
-                  Whether to use [Override local DNS](https://tailscale.com/kb/1054/dns/).
-                '';
-                example = true;
+              sqlite = {
+                path = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = "${dataDir}/db.sqlite";
+                  description = "Path to the sqlite3 database file.";
+                };
+
+                write_ahead_log = lib.mkOption {
+                  type = lib.types.bool;
+                  default = true;
+                  description = ''
+                    Enable WAL mode for SQLite. This is recommended for production environments.
+                    https://www.sqlite.org/wal.html
+                  '';
+                  example = true;
+                };
               };
 
-              domains = mkOption {
-                type = types.listOf types.str;
+              postgres = {
+                host = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  example = "127.0.0.1";
+                  description = "Database host address.";
+                };
+
+                port = lib.mkOption {
+                  type = lib.types.nullOr lib.types.port;
+                  default = null;
+                  example = 3306;
+                  description = "Database host port.";
+                };
+
+                name = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  example = "headscale";
+                  description = "Database name.";
+                };
+
+                user = lib.mkOption {
+                  type = lib.types.nullOr lib.types.str;
+                  default = null;
+                  example = "headscale";
+                  description = "Database user.";
+                };
+
+                password_file = lib.mkOption {
+                  type = lib.types.nullOr lib.types.path;
+                  default = null;
+                  example = "/run/keys/headscale-dbpassword";
+                  description = ''
+                    A file containing the password corresponding to
+                    {option}`database.user`.
+                  '';
+                };
+              };
+            };
+
+            log = {
+              level = lib.mkOption {
+                type = lib.types.str;
+                default = "info";
+                description = ''
+                  headscale log level.
+                '';
+                example = "debug";
+              };
+
+              format = lib.mkOption {
+                type = lib.types.str;
+                default = "text";
+                description = ''
+                  headscale log format.
+                '';
+                example = "json";
+              };
+            };
+
+            dns = {
+              magic_dns = lib.mkOption {
+                type = lib.types.bool;
+                default = true;
+                description = ''
+                  Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
+                '';
+                example = false;
+              };
+
+              base_domain = lib.mkOption {
+                type = lib.types.str;
+                default = "";
+                description = ''
+                  Defines the base domain to create the hostnames for MagicDNS.
+                  This domain must be different from the {option}`server_url`
+                  domain.
+                  {option}`base_domain` must be a FQDN, without the trailing dot.
+                  The FQDN of the hosts will be `hostname.base_domain` (e.g.
+                  `myhost.tailnet.example.com`).
+                '';
+                example = "tailnet.example.com";
+              };
+
+              nameservers = {
+                global = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [];
+                  description = ''
+                    List of nameservers to pass to Tailscale clients.
+                  '';
+                };
+              };
+
+              search_domains = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = [];
                 description = ''
                   Search domains to inject to Tailscale clients.
                 '';
                 example = ["mydomain.internal"];
               };
-
-              magic_dns = mkOption {
-                type = types.bool;
-                default = true;
-                description = ''
-                  Whether to use [MagicDNS](https://tailscale.com/kb/1081/magicdns/).
-                  Only works if there is at least a nameserver defined.
-                '';
-                example = false;
-              };
-
-              base_domain = mkOption {
-                type = types.str;
-                default = "";
-                description = ''
-                  Defines the base domain to create the hostnames for MagicDNS.
-                  {option}`baseDomain` must be a FQDNs, without the trailing dot.
-                  The FQDN of the hosts will be
-                  `hostname.namespace.base_domain` (e.g.
-                  `myhost.mynamespace.example.com`).
-                '';
-              };
             };
 
             oidc = {
-              issuer = mkOption {
-                type = types.str;
+              issuer = lib.mkOption {
+                type = lib.types.str;
                 default = "";
                 description = ''
                   URL to OpenID issuer.
@@ -276,33 +337,33 @@ in {
                 example = "https://openid.example.com";
               };
 
-              client_id = mkOption {
-                type = types.str;
+              client_id = lib.mkOption {
+                type = lib.types.str;
                 default = "";
                 description = ''
                   OpenID Connect client ID.
                 '';
               };
 
-              client_secret_path = mkOption {
-                type = types.nullOr types.str;
+              client_secret_path = lib.mkOption {
+                type = lib.types.nullOr lib.types.str;
                 default = null;
                 description = ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.
                 '';
               };
 
-              scope = mkOption {
-                type = types.listOf types.str;
+              scope = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
                 default = ["openid" "profile" "email"];
                 description = ''
                   Scopes used in the OIDC flow.
                 '';
               };
 
-              extra_params = mkOption {
-                type = types.attrsOf types.str;
-                default = { };
+              extra_params = lib.mkOption {
+                type = lib.types.attrsOf lib.types.str;
+                default = {};
                 description = ''
                   Custom query parameters to send with the Authorize Endpoint request.
                 '';
@@ -311,27 +372,27 @@ in {
                 };
               };
 
-              allowed_domains = mkOption {
-                type = types.listOf types.str;
-                default = [ ];
+              allowed_domains = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = [];
                 description = ''
                   Allowed principal domains. if an authenticated user's domain
                   is not in this list authentication request will be rejected.
                 '';
-                example = [ "example.com" ];
+                example = ["example.com"];
               };
 
-              allowed_users = mkOption {
-                type = types.listOf types.str;
-                default = [ ];
+              allowed_users = lib.mkOption {
+                type = lib.types.listOf lib.types.str;
+                default = [];
                 description = ''
                   Users allowed to authenticate even if not in allowedDomains.
                 '';
-                example = [ "alice@example.com" ];
+                example = ["alice@example.com"];
               };
 
-              strip_email_domain = mkOption {
-                type = types.bool;
+              strip_email_domain = lib.mkOption {
+                type = lib.types.bool;
                 default = true;
                 description = ''
                   Whether the domain part of the email address should be removed when generating namespaces.
@@ -339,16 +400,16 @@ in {
               };
             };
 
-            tls_letsencrypt_hostname = mkOption {
-              type = types.nullOr types.str;
+            tls_letsencrypt_hostname = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = "";
               description = ''
                 Domain name to request a TLS certificate for.
               '';
             };
 
-            tls_letsencrypt_challenge_type = mkOption {
-              type = types.enum ["TLS-ALPN-01" "HTTP-01"];
+            tls_letsencrypt_challenge_type = lib.mkOption {
+              type = lib.types.enum ["TLS-ALPN-01" "HTTP-01"];
               default = "HTTP-01";
               description = ''
                 Type of ACME challenge to use, currently supported types:
@@ -356,8 +417,8 @@ in {
               '';
             };
 
-            tls_letsencrypt_listen = mkOption {
-              type = types.nullOr types.str;
+            tls_letsencrypt_listen = lib.mkOption {
+              type = lib.types.nullOr lib.types.str;
               default = ":http";
               description = ''
                 When HTTP-01 challenge is chosen, letsencrypt must set up a
@@ -366,28 +427,40 @@ in {
               '';
             };
 
-            tls_cert_path = mkOption {
-              type = types.nullOr types.path;
+            tls_cert_path = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
               default = null;
               description = ''
                 Path to already created certificate.
               '';
             };
 
-            tls_key_path = mkOption {
-              type = types.nullOr types.path;
+            tls_key_path = lib.mkOption {
+              type = lib.types.nullOr lib.types.path;
               default = null;
               description = ''
                 Path to key for already created certificate.
               '';
             };
 
-            acl_policy_path = mkOption {
-              type = types.nullOr types.path;
-              default = null;
-              description = ''
-                Path to a file containing ACL policies.
-              '';
+            policy = {
+              mode = lib.mkOption {
+                type = lib.types.enum ["file" "database"];
+                default = "file";
+                description = ''
+                  The mode can be "file" or "database" that defines
+                  where the ACL policies are stored and read from.
+                '';
+              };
+
+              path = lib.mkOption {
+                type = lib.types.nullOr lib.types.path;
+                default = null;
+                description = ''
+                  If the mode is set to "file", the path to a
+                  HuJSON file containing ACL policies.
+                '';
+              };
             };
           };
         };
@@ -395,67 +468,73 @@ in {
     };
   };
 
-  imports = [
-    # TODO address + port = listen_addr
-    (mkRenamedOptionModule ["services" "headscale" "serverUrl"] ["services" "headscale" "settings" "server_url"])
-    (mkRenamedOptionModule ["services" "headscale" "privateKeyFile"] ["services" "headscale" "settings" "private_key_path"])
-    (mkRenamedOptionModule ["services" "headscale" "derp" "urls"] ["services" "headscale" "settings" "derp" "urls"])
-    (mkRenamedOptionModule ["services" "headscale" "derp" "paths"] ["services" "headscale" "settings" "derp" "paths"])
+  imports = with lib; [
     (mkRenamedOptionModule ["services" "headscale" "derp" "autoUpdate"] ["services" "headscale" "settings" "derp" "auto_update_enable"])
+    (mkRenamedOptionModule ["services" "headscale" "derp" "paths"] ["services" "headscale" "settings" "derp" "paths"])
     (mkRenamedOptionModule ["services" "headscale" "derp" "updateFrequency"] ["services" "headscale" "settings" "derp" "update_frequency"])
+    (mkRenamedOptionModule ["services" "headscale" "derp" "urls"] ["services" "headscale" "settings" "derp" "urls"])
     (mkRenamedOptionModule ["services" "headscale" "ephemeralNodeInactivityTimeout"] ["services" "headscale" "settings" "ephemeral_node_inactivity_timeout"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "type"] ["services" "headscale" "settings" "db_type"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "path"] ["services" "headscale" "settings" "db_path"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "host"] ["services" "headscale" "settings" "db_host"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "port"] ["services" "headscale" "settings" "db_port"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "name"] ["services" "headscale" "settings" "db_name"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "user"] ["services" "headscale" "settings" "db_user"])
-    (mkRenamedOptionModule ["services" "headscale" "database" "passwordFile"] ["services" "headscale" "settings" "db_password_file"])
     (mkRenamedOptionModule ["services" "headscale" "logLevel"] ["services" "headscale" "settings" "log" "level"])
-    (mkRenamedOptionModule ["services" "headscale" "dns" "nameservers"] ["services" "headscale" "settings" "dns_config" "nameservers"])
-    (mkRenamedOptionModule ["services" "headscale" "dns" "domains"] ["services" "headscale" "settings" "dns_config" "domains"])
-    (mkRenamedOptionModule ["services" "headscale" "dns" "magicDns"] ["services" "headscale" "settings" "dns_config" "magic_dns"])
-    (mkRenamedOptionModule ["services" "headscale" "dns" "baseDomain"] ["services" "headscale" "settings" "dns_config" "base_domain"])
-    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "issuer"] ["services" "headscale" "settings" "oidc" "issuer"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientId"] ["services" "headscale" "settings" "oidc" "client_id"])
     (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "clientSecretFile"] ["services" "headscale" "settings" "oidc" "client_secret_path"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "hostname"] ["services" "headscale" "settings" "tls_letsencrypt_hostname"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "challengeType"] ["services" "headscale" "settings" "tls_letsencrypt_challenge_type"])
-    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "httpListen"] ["services" "headscale" "settings" "tls_letsencrypt_listen"])
+    (mkRenamedOptionModule ["services" "headscale" "openIdConnect" "issuer"] ["services" "headscale" "settings" "oidc" "issuer"])
+    (mkRenamedOptionModule ["services" "headscale" "serverUrl"] ["services" "headscale" "settings" "server_url"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "certFile"] ["services" "headscale" "settings" "tls_cert_path"])
     (mkRenamedOptionModule ["services" "headscale" "tls" "keyFile"] ["services" "headscale" "settings" "tls_key_path"])
-    (mkRenamedOptionModule ["services" "headscale" "aclPolicyFile"] ["services" "headscale" "settings" "acl_policy_path"])
+    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "challengeType"] ["services" "headscale" "settings" "tls_letsencrypt_challenge_type"])
+    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "hostname"] ["services" "headscale" "settings" "tls_letsencrypt_hostname"])
+    (mkRenamedOptionModule ["services" "headscale" "tls" "letsencrypt" "httpListen"] ["services" "headscale" "settings" "tls_letsencrypt_listen"])
 
     (mkRemovedOptionModule ["services" "headscale" "openIdConnect" "domainMap"] ''
       Headscale no longer uses domain_map. If you're using an old version of headscale you can still set this option via services.headscale.settings.oidc.domain_map.
     '')
   ];
 
-  config = mkIf cfg.enable {
-    services.headscale.settings = {
-      listen_addr = mkDefault "${cfg.address}:${toString cfg.port}";
+  config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        # This is stricter than it needs to be but is exactly what upstream does:
+        # https://github.com/kradalby/headscale/blob/adc084f20f843d7963c999764fa83939668d2d2c/hscontrol/types/config.go#L799
+        assertion = with cfg.settings; dns.use_username_in_magic_dns or false || dns.base_domain == "" || !lib.hasInfix dns.base_domain server_url;
+        message = "server_url cannot contain the base_domain, this will cause the headscale server and embedded DERP to become unreachable from the Tailscale node.";
+      }
+      {
+        assertion = with cfg.settings; dns.magic_dns -> dns.base_domain != "";
+        message = "dns.base_domain must be set when using MagicDNS";
+      }
+      (assertRemovedOption ["settings" "acl_policy_path"] "Use `policy.path` instead.")
+      (assertRemovedOption ["settings" "db_host"] "Use `database.postgres.host` instead.")
+      (assertRemovedOption ["settings" "db_name"] "Use `database.postgres.name` instead.")
+      (assertRemovedOption ["settings" "db_password_file"] "Use `database.postgres.password_file` instead.")
+      (assertRemovedOption ["settings" "db_path"] "Use `database.sqlite.path` instead.")
+      (assertRemovedOption ["settings" "db_port"] "Use `database.postgres.port` instead.")
+      (assertRemovedOption ["settings" "db_type"] "Use `database.type` instead.")
+      (assertRemovedOption ["settings" "db_user"] "Use `database.postgres.user` instead.")
+      (assertRemovedOption ["settings" "dns_config"] "Use `dns` instead.")
+      (assertRemovedOption ["settings" "dns_config" "domains"] "Use `dns.search_domains` instead.")
+      (assertRemovedOption ["settings" "dns_config" "nameservers"] "Use `dns.nameservers.global` instead.")
+    ];
 
-      # Turn off update checks since the origin of our package
-      # is nixpkgs and not Github.
-      disable_check_updates = true;
+    services.headscale.settings = lib.mkMerge [
+      cliConfig
+      {
+        listen_addr = lib.mkDefault "${cfg.address}:${toString cfg.port}";
 
-      unix_socket = "${runDir}/headscale.sock";
-
-      tls_letsencrypt_cache_dir = "${dataDir}/.cache";
-    };
+        tls_letsencrypt_cache_dir = "${dataDir}/.cache";
+      }
+    ];
 
     environment = {
-      # Setup the headscale configuration in a known path in /etc to
-      # allow both the Server and the Client use it to find the socket
-      # for communication.
-      etc."headscale/config.yaml".source = configFile;
+      # Headscale CLI needs a minimal config to be able to locate the unix socket
+      # to talk to the server instance.
+      etc."headscale/config.yaml".source = cliConfigFile;
 
-      systemPackages = [ cfg.package ];
+      systemPackages = [cfg.package];
     };
 
-    users.groups.headscale = mkIf (cfg.group == "headscale") {};
+    users.groups.headscale = lib.mkIf (cfg.group == "headscale") {};
 
-    users.users.headscale = mkIf (cfg.user == "headscale") {
+    users.users.headscale = lib.mkIf (cfg.user == "headscale") {
       description = "headscale user";
       home = dataDir;
       group = cfg.group;
@@ -464,23 +543,20 @@ in {
 
     systemd.services.headscale = {
       description = "headscale coordination server for Tailscale";
-      wants = [ "network-online.target" ];
+      wants = ["network-online.target"];
       after = ["network-online.target"];
       wantedBy = ["multi-user.target"];
-      restartTriggers = [configFile];
-
-      environment.GIN_MODE = "release";
 
       script = ''
-        ${optionalString (cfg.settings.db_password_file != null) ''
-          export HEADSCALE_DB_PASS="$(head -n1 ${escapeShellArg cfg.settings.db_password_file})"
+        ${lib.optionalString (cfg.settings.database.postgres.password_file != null) ''
+          export HEADSCALE_DATABASE_POSTGRES_PASS="$(head -n1 ${lib.escapeShellArg cfg.settings.database.postgres.password_file})"
         ''}
 
-        exec ${cfg.package}/bin/headscale serve
+        exec ${lib.getExe cfg.package} serve --config ${configFile}
       '';
 
       serviceConfig = let
-        capabilityBoundingSet = ["CAP_CHOWN"] ++ optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
+        capabilityBoundingSet = ["CAP_CHOWN"] ++ lib.optional (cfg.port < 1024) "CAP_NET_BIND_SERVICE";
       in {
         Restart = "always";
         Type = "simple";
@@ -525,5 +601,5 @@ in {
     };
   };
 
-  meta.maintainers = with maintainers; [kradalby misterio77];
+  meta.maintainers = with lib.maintainers; [kradalby misterio77];
 }

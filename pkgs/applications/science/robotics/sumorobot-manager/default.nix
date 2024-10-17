@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapPython qt5.wrapQtAppsHook dos2unix ];
 
-  buildPhase = "true";
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/opt/sumorobot-manager

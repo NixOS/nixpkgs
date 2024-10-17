@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, cmake
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, intltool
-, libayatana-common
-, libnotify
-, librda
-, lomiri
-, pkg-config
-, python3
-, systemd
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  intltool,
+  libayatana-common,
+  libnotify,
+  librda,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,24 +51,24 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    libayatana-common
-    libnotify
-    librda
-    systemd
-  ] ++ (with lomiri; [
-    cmake-extras
-    deviceinfo
-    lomiri-schemas
-    lomiri-sounds
-  ]);
+  buildInputs =
+    [
+      glib
+      libayatana-common
+      libnotify
+      librda
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      deviceinfo
+      lomiri-schemas
+      lomiri-sounds
+    ]);
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (ps: with ps; [ python-dbusmock ]))
   ];
 
   checkInputs = [
@@ -87,12 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   passthru = {
-    ayatana-indicators = [ "ayatana-indicator-power" ];
+    ayatana-indicators = {
+      ayatana-indicator-power = [
+        "ayatana"
+        "lomiri"
+      ];
+    };
     tests.vm = nixosTests.ayatana-indicators;
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Ayatana Indicator showing power state";
     longDescription = ''
       This Ayatana Indicator displays current power management information and
@@ -100,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/AyatanaIndicators/ayatana-indicator-power";
     changelog = "https://github.com/AyatanaIndicators/ayatana-indicator-power/blob/${finalAttrs.version}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.linux;
   };
 })

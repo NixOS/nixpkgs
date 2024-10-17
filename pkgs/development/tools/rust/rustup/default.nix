@@ -39,13 +39,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     (curl.override { inherit openssl; })
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [ CoreServices Security libiconv xz ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Security libiconv xz ];
 
   buildFeatures = [ "no-self-update" ];
 
   checkFeatures = [ "test" ];
 
-  patches = lib.optionals stdenv.isLinux [
+  patches = lib.optionals stdenv.hostPlatform.isLinux [
     (runCommand "0001-dynamically-patchelf-binaries.patch"
       {
         CC = stdenv.cc;
@@ -62,7 +62,7 @@ rustPlatform.buildRustPackage rec {
 
   # Random tests fail nondeterministically on macOS.
   # TODO: Investigate this.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # skip failing tests
   checkFlags = [

@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     lib.optional withGui wxGTK31
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   strictDeps = true;
 

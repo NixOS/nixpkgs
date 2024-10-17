@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Client for many p2p networks, with multiple frontends";
     homepage = "https://github.com/ygrek/mldonkey";
     license = lib.licenses.gpl2Only;

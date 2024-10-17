@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   #
   #     $ tar xf "$(nix-build -A svnfs.src)"
   #     $ grep -R FUSE_USE_VERSION
-  configureFlags = lib.optionals stdenv.isDarwin [ "CFLAGS=-DFUSE_USE_VERSION=25" ];
+  configureFlags = lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-DFUSE_USE_VERSION=25" ];
 
   # why is this required?
   preConfigure=''

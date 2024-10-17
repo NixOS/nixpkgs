@@ -24,13 +24,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ctranslate2";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "OpenNMT";
     repo = "CTranslate2";
     rev = "v${version}";
-    hash = "sha256-ApmGto9RzT8t49bsZVwk8aQnIau9sQyFvt9qnWKUGAE=";
+    hash = "sha256-E/ulk+Oo1zEP+sCKMZuMVSoO0MDjQ2opTflSwLmCJMw=";
     fetchSubmodules = true;
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
   ]
-  ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DWITH_ACCELERATE=ON";
 
   buildInputs = lib.optionals withMkl [
     mkl
@@ -67,10 +67,10 @@ stdenv.mkDerivation rec {
     oneDNN
   ] ++ lib.optionals withOpenblas [
     openblas
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     llvmPackages.openmp
     darwin.apple_sdk.frameworks.Accelerate
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     darwin.apple_sdk.frameworks.CoreGraphics
     darwin.apple_sdk.frameworks.CoreVideo
   ];

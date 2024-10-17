@@ -1,0 +1,15 @@
+diff --git a/go.mod b/go.mod
+index 50b6806..f23b2ec 100644
+--- a/go.mod
++++ b/go.mod
+@@ -1,8 +1,9 @@
+ module github.com/cloudflare/gokey
+ 
+-go 1.13
++go 1.17
+ 
+ require (
+ 	golang.org/x/crypto v0.17.0
+ 	golang.org/x/term v0.15.0
++	golang.org/x/sys v0.15.0
+ )

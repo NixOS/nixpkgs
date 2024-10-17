@@ -3,8 +3,19 @@
   lib,
   makeWrapper,
   zathura_core,
+  zathura_djvu,
+  zathura_ps,
+  zathura_cb,
+  zathura_pdf_mupdf,
+  zathura_pdf_poppler,
   file,
-  plugins ? [ ],
+  useMupdf,
+  plugins ? [
+    zathura_djvu
+    zathura_ps
+    zathura_cb
+    (if useMupdf then zathura_pdf_mupdf else zathura_pdf_poppler)
+  ],
 }:
 symlinkJoin {
   name = "zathura-with-plugins-${zathura_core.version}";

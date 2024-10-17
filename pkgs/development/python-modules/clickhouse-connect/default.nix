@@ -53,7 +53,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-dotenv
-  ] ++ passthru.optional-dependencies.sqlalchemy ++ passthru.optional-dependencies.numpy;
+  ] ++ optional-dependencies.sqlalchemy ++ optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [
@@ -68,14 +68,12 @@ buildPythonPackage rec {
     "clickhouse_connect.driverc.npconv"
   ];
 
-  passthru = {
-    optional-dependencies = {
-      sqlalchemy = [ sqlalchemy ];
-      numpy = [ numpy ];
-      pandas = [ pandas ];
-      arrow = [ pyarrow ];
-      orjson = [ orjson ];
-    };
+  optional-dependencies = {
+    sqlalchemy = [ sqlalchemy ];
+    numpy = [ numpy ];
+    pandas = [ pandas ];
+    arrow = [ pyarrow ];
+    orjson = [ orjson ];
   };
 
   meta = with lib; {

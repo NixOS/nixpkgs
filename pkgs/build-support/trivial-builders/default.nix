@@ -36,17 +36,8 @@ rec {
   # `runCommandCCLocal` left out on purpose.
   # We shouldn’t force the user to have a cc in scope.
 
-  # TODO: Move documentation for runCommandWith to the Nixpkgs manual
-  /*
-    Generalized version of the `runCommand`-variants
-    which does customized behavior via a single
-    attribute set passed as the first argument
-    instead of having a lot of variants like
-    `runCommand*`. Additionally it allows changing
-    the used `stdenv` freely and has a more explicit
-    approach to changing the arguments passed to
-    `stdenv.mkDerivation`.
-   */
+  # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
+  # See https://nixos.org/manual/nixpkgs/unstable/#trivial-builder-runCommandWith
   runCommandWith =
     let
       # prevent infinite recursion for the default stdenv value
@@ -95,6 +86,13 @@ rec {
     , preferLocalBuild ? true
     , derivationArgs ? { }
     }:
+    assert lib.assertMsg (destination != "" -> (lib.hasPrefix "/" destination && destination != "/")) ''
+      destination must be an absolute path, relative to the derivation's out path,
+      got '${destination}' instead.
+
+      Ensure that the path starts with a / and specifies at least the filename.
+    '';
+
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
@@ -597,7 +595,7 @@ rec {
   makeSetupHook =
     { name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook"
     , deps ? [ ]
-      # hooks go in nativeBuildInput so these will be nativeBuildInput
+      # hooks go in nativeBuildInputs so these will be nativeBuildInputs
     , propagatedBuildInputs ? [ ]
       # these will be buildInputs
     , depsTargetTargetPropagated ? [ ]

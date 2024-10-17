@@ -15,8 +15,6 @@ let
       builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
   jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
 
-  # Workaround for a ghc-9.6 issue: https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  disableParallelBuilding = overrideCabal (drv: { enableParallelBuilding = false; });
 in
 
 self: super: {
@@ -109,9 +107,6 @@ self: super: {
     package-version             # doctest <0.21, tasty-hedgehog <1.4
   ;
 
-  # Avoid triggering an issue in ghc-9.6.2
-  gi-gtk = disableParallelBuilding super.gi-gtk;
-
   # Pending text-2.0 support https://github.com/gtk2hs/gtk2hs/issues/327
   gtk = doJailbreak super.gtk;
 
@@ -155,6 +150,17 @@ self: super: {
       sha256 = "sha256-b7u9GiIAd2xpOrM0MfILHNb6Nt7070lNRIadn2l3DfQ=";
     })];
   }) super.ConfigFile;
+
+  # Compatibility with core libs of GHC 9.6
+  # Jailbreak to lift bound on time
+  kqueue = doJailbreak (appendPatches [
+    (pkgs.fetchpatch {
+      name = "kqueue-ghc-9.6.patch";
+      url = "https://github.com/hesselink/kqueue/pull/10/commits/a2735e807d761410e776482ec04515d9cf76a7f5.patch";
+      sha256 = "18rilz4nrwcmlvll3acjx2lp7s129pviggb8fy3hdb0z34ls5j84";
+      excludes = [ ".gitignore" ];
+    })
+  ] super.kqueue);
 
   # This runs into the following GHC bug currently affecting 9.6.* and 9.8.* as
   # well as 9.10.1: https://gitlab.haskell.org/ghc/ghc/-/issues/24432

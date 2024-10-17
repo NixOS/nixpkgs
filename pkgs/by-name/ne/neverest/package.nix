@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromSourcehut {
     owner = "~soywod";
-    repo = "${pname}-cli";
+    repo = "neverest-cli";
     rev = "v${version}";
     hash = "sha256-3PSJyhxrOCiuHUeVHO77+NecnI5fN5EZfPhYizuYvtE=";
   };
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
     ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch;
 
   # TODO: unit tests temporarily broken, remove this line for the next

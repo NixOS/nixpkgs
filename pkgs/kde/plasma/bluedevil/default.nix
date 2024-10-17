@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "bluedevil";
 
-  extraNativeBuildInputs = [shared-mime-info];
+  extraNativeBuildInputs = [ shared-mime-info ];
 }

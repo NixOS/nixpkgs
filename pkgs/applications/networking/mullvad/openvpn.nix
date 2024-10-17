@@ -31,7 +31,7 @@ openvpn.overrideAttrs (oldAttrs:
     ];
 
     buildInputs = oldAttrs.buildInputs or [ ]
-       ++ optional stdenv.isLinux [ libnl.dev ];
+       ++ optional stdenv.hostPlatform.isLinux [ libnl.dev ];
 
     configureFlags = [
       # Assignement instead of appending to make sure to use exactly the flags required by mullvad
@@ -52,7 +52,7 @@ openvpn.overrideAttrs (oldAttrs:
       "--disable-lz4"
       "--enable-comp-stub"
     ]
-    ++ optional stdenv.isLinux [
+    ++ optional stdenv.hostPlatform.isLinux [
       # Flags are based on https://github.com/mullvad/mullvadvpn-app-binaries/blob/main/Makefile#L35
       "--enable-dco" # requires libnl
       "--disable-iproute2"

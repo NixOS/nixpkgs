@@ -8,7 +8,7 @@
 , wrapGAppsHook4
 , gtk4
 , gdk-pixbuf
-, webkitgtk
+, webkitgtk_4_0
 , gtksourceview5
 , glib-networking
 , libadwaita
@@ -42,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     gdk-pixbuf
-    webkitgtk
+    webkitgtk_4_0
     gtksourceview5
     glib-networking
     libadwaita

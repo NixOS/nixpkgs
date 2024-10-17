@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ xorg.libX11 ];
 
-  mesonFlags = lib.optionals stdenv.isLinux [ "-Dmoduledir=${mesa.driverLink}/lib/vdpau" ];
+  mesonFlags = lib.optionals stdenv.hostPlatform.isLinux [ "-Dmoduledir=${mesa.driverLink}/lib/vdpau" ];
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-lX11";
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lX11";
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/VDPAU/";

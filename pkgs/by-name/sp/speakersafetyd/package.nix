@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   postPatch = ''
     substituteInPlace speakersafetyd.service --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "target/release" "target/${rust.lib.toRustTargetSpec stdenv.hostPlatform}/$cargoBuildType"
+    substituteInPlace Makefile --replace "target/release" "target/${stdenv.hostPlatform.rust.cargoShortTarget}/$cargoBuildType"
     # creating files in /var does not make sense in a nix package
     substituteInPlace Makefile --replace 'install -dDm0755 $(DESTDIR)/$(VARDIR)/lib/speakersafetyd/blackbox' ""
   '';

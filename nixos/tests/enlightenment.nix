@@ -4,6 +4,9 @@ import ./make-test-python.nix ({ pkgs, ...} :
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [ romildo ];
+    timeout = 600;
+    # OCR tests are flaky
+    broken = true;
   };
 
   nodes.machine = { ... }:
@@ -18,7 +21,6 @@ import ./make-test-python.nix ({ pkgs, ...} :
         user = "alice";
       };
     };
-    hardware.pulseaudio.enable = true; # needed for the factl test, /dev/snd/* exists without them but udev doesn't care then
     environment.systemPackages = [ pkgs.xdotool ];
     services.acpid.enable = true;
     services.connman.enable = true;

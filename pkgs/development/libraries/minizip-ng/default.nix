@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DMZ_LIB_SUFFIX='-ng'"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # missing header file
     "-DMZ_LIBCOMP=OFF"
   ];

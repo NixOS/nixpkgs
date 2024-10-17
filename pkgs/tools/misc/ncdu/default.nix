@@ -5,7 +5,7 @@
 , zig
 , installShellFiles
 , testers
-, pie ? stdenv.isDarwin
+, pie ? stdenv.hostPlatform.isDarwin
 }:
 
 stdenv.mkDerivation (finalAttrs: {

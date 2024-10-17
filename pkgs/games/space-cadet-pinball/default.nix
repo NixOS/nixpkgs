@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL2
     SDL2_mixer
-  ] ++ lib.optional stdenv.isDarwin Cocoa;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   # Darwin needs a custom installphase since it is excluded from the cmake install
   # https://github.com/k4zmu2a/SpaceCadetPinball/blob/0f88e43ba261bc21fa5c3ef9d44969a2a079d0de/CMakeLists.txt#L221
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     runHook preInstall
     mkdir -p $out/bin
     install ../bin/SpaceCadetPinball $out/bin

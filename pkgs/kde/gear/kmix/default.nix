@@ -1,4 +1,4 @@
-{mkKdeDerivation}:
+{ mkKdeDerivation }:
 mkKdeDerivation {
   pname = "kmix";
   # FIXME(qt5)

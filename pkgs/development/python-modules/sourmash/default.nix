@@ -21,7 +21,8 @@
   pytestCheckHook,
 }:
 let
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv { darwinMinVersion = "10.14"; } else stdenv;
+  stdenv' =
+    if stdenv.hostPlatform.isDarwin then overrideSDK stdenv { darwinMinVersion = "10.14"; } else stdenv;
 in
 buildPythonPackage rec {
   pname = "sourmash";

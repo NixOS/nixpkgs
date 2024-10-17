@@ -22,9 +22,9 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-+ptjsz2MDIB/aqu4UxkBLCcehtamFdmswNUsHs23LuE=";
 
   nativeBuildInputs = [ pkg-config python3 ];
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     libsecret
-  ] ++ lib.optionals stdenv.isDarwin (with darwin; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin; [
     Security
     apple_sdk.frameworks.AppKit
   ]);

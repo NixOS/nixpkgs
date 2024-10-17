@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config python3 addDriverRunpath ];
   buildInputs = [ libX11 libXext xorgproto ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/GLX/Makefile.am \
       --replace "-Wl,-Bsymbolic " ""
     substituteInPlace src/EGL/Makefile.am \

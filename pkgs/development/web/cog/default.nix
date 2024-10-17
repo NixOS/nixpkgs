@@ -8,7 +8,7 @@
 , libwpe
 , libwpe-fdo
 , glib-networking
-, webkitgtk
+, webkitgtk_4_0
 , makeWrapper
 , wrapGAppsHook3
 , adwaita-icon-theme
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     wayland
     libwpe
     libwpe-fdo
-    webkitgtk
+    webkitgtk_4_0
     glib-networking
     gdk-pixbuf
     adwaita-icon-theme

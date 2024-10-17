@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
         url = "mirror://sourceforge/project/freepascal/Linux/${version}/fpc-${version}.aarch64-linux.tar";
         sha256 = "b39470f9b6b5b82f50fc8680a5da37d2834f2129c65c24c5628a80894d565451";
       }
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       fetchurl {
         url = "mirror://sourceforge/project/freepascal/Mac%20OS%20X/${version}/fpc-${version}.intelarm64-macosx.dmg";
         sha256 = "05d4510c8c887e3c68de20272abf62171aa5b2ef1eba6bce25e4c0bc41ba8b7d";

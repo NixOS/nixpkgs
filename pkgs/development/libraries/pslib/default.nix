@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ zlib libpng libjpeg giflib libtiff ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
   };
 

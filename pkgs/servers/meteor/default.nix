@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/meteor
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Patch Meteor to dynamically fixup shebangs and ELF metadata where
     # necessary.
     pushd $out

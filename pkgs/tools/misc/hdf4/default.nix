@@ -5,7 +5,7 @@
 , fixDarwinDylibNames
 , cmake
 , libjpeg
-, uselibtirpc ? stdenv.isLinux
+, uselibtirpc ? stdenv.hostPlatform.isLinux
 , libtirpc
 , zlib
 , szipSupport ? false
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ] ++ lib.optional fortranSupport gfortran;
 
@@ -104,7 +104,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  excludedTests = lib.optionals stdenv.isDarwin [
+  excludedTests = lib.optionals stdenv.hostPlatform.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
     "HDP-dumpsds-18"

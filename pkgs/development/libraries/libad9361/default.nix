@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libiio ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix iio include path on darwin to match linux
     for i in test/*.c; do
       substituteInPlace $i \

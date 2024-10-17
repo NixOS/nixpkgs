@@ -7,11 +7,11 @@
 
 buildDunePackage rec {
   pname = "hpack";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchurl {
     url = "https://github.com/anmonteiro/ocaml-h2/releases/download/${version}/h2-${version}.tbz";
-    hash = "sha256-GdXwazlgDurjzy7ekLpuMkCii8W+F/jl/IBv/WTHgFM=";
+    hash = "sha256-DYm28XgXUpTnogciO+gdW4P8Mbl1Sb7DTwQyo7KoBw8=";
   };
 
   minimalOCamlVersion = "4.08";

@@ -1,6 +1,7 @@
 { fetchurl
 , fetchpatch
 , lib
+, config
 , stdenv
 , pkg-config
 , libdaemon
@@ -20,6 +21,9 @@
 , python ? null
 , withPython ? false
 }:
+
+# Added 2024-09-03. Drop this assertion after 24.11 is released.
+assert lib.assertMsg (config.avahi or {} == {}) "config.avahi has been removed; please use an overlay or services.avahi.package to configure the avahi package.";
 
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
@@ -137,7 +141,7 @@ stdenv.mkDerivation rec {
     expat
     libiconv
     libevent
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     libpcap
   ] ++ lib.optionals gtk3Support [
     gtk3
@@ -167,7 +171,7 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=no"
   ] ++ lib.optionals withLibdnssdCompat [
     "--enable-compat-libdns_sd"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # autoipd won't build on darwin
     "--disable-autoipd"
   ];
@@ -179,7 +183,7 @@ stdenv.mkDerivation rec {
     "sysconfdir=${placeholder "out"}/etc"
   ];
 
-  preBuild = lib.optionalString stdenv.isDarwin ''
+  preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '20 i\
     #define __APPLE_USE_RFC_2292' \
     avahi-core/socket.c
