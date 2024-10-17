@@ -4,7 +4,7 @@
 , just
 , pop-icon-theme
 , hicolor-icon-theme
-, unstableGitUpdater
+, nix-update-script
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "cosmic-icons";
@@ -32,7 +32,12 @@ stdenvNoCC.mkDerivation rec {
 
   dontDropIconThemeCache = true;
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "epoch-(.*)"
+    ];
+  };
 
   meta = with lib; {
     description = "System76 Cosmic icon theme for Linux";
