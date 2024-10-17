@@ -8602,6 +8602,7 @@ with pkgs;
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
+    spdlog_llvm = spdlog.override { inherit stdenv fmt; };
   })
     irods
     irods-icommands;
