@@ -7,7 +7,7 @@
   libpulseaudio,
   gtkmm4,
   libsigcxx,
-  # Since version 6.0, libcanberra is optional
+  # Since version 6.1, libcanberra is optional
   withLibcanberra ? true,
   libcanberra-gtk3,
   json-glib,
@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pavucontrol";
-  version = "6.0";
+  version = "6.1";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pulseaudio";
     repo = "pavucontrol";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-nxzFvD/KUevIJOw9jgcr0Hfvg7KiSOmTBfKN3jLu3Cg=";
+    hash = "sha256-cru4I+LljYKIpIr7gSolnuLuUIXgc8l+JUmPrme4+YA=";
   };
 
   buildInputs = [
