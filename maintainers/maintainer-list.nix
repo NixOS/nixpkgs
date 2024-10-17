@@ -3816,6 +3816,13 @@
     githubId = 98980;
     name = "Chmouel Boudjnah";
   };
+  chn = {
+    name = "Haonan Chen";
+    email = "chn@chn.moe";
+    matrix = "@chn:chn.moe";
+    github = "CHN-beta";
+    githubId = 35858462;
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
