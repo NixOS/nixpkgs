@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   postPatch =
     ''
-      patchShebangs tp/maintain
+      patchShebangs tp/maintain/regenerate_commands_perl_info.pl
     ''
     # This patch is needed for IEEE-standard long doubles on
     # powerpc64; it does not apply cleanly to texinfo 5.x or
@@ -125,7 +125,7 @@ stdenv.mkDerivation {
   postFixup = optionalString crossBuildTools ''
     for f in "$out"/bin/{pod2texi,texi2any}; do
       substituteInPlace "$f" \
-        --replace ${buildPackages.perl}/bin/perl ${perl}/bin/perl
+        --replace-fail ${buildPackages.perl}/bin/perl ${perl}/bin/perl
     done
   '';
 
