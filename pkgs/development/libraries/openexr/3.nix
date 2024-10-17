@@ -5,18 +5,19 @@
 , imath
 , libdeflate
 , pkg-config
+, libjxl
 , pkgsCross
 }:
 
 stdenv.mkDerivation rec {
   pname = "openexr";
-  version = "3.3.0";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "openexr";
     rev = "v${version}";
-    hash = "sha256-/B0IMbPnixLR10KrE2n9n2Ny/pLIsG6DpBJn8Ax79oE=";
+    hash = "sha256-mVUxxYe6teiJ18PQ9703/kjBpJ9+a7vcDme+NwtQQQM=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -47,6 +48,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.hostPlatform.isAarch32;
 
   passthru.tests = {
+    inherit libjxl;
     musl = pkgsCross.musl64.openexr_3;
   };
 
