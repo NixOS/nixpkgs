@@ -161,6 +161,8 @@ with pkgs;
 
   ### BUILD SUPPORT
 
+  __flattenIncludeHackHook = callPackage ../build-support/setup-hooks/flatten-include-hack { };
+
   autoreconfHook = callPackage (
     { makeSetupHook, autoconf, automake, gettext, libtool }:
     makeSetupHook {

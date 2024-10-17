@@ -18,6 +18,8 @@
 
 , gitUpdater
 , testers
+
+, __flattenIncludeHackHook
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   separateDebugInfo = !stdenv.hostPlatform.isStatic;
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
+  nativeBuildInputs = [ meson ninja pkg-config __flattenIncludeHackHook ];
 
   buildInputs = [ libpng ];
 
