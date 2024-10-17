@@ -5462,6 +5462,18 @@ final: prev:
     meta.homepage = "https://github.com/rebelot/kanagawa.nvim/";
   };
 
+  kdl-vim = buildVimPlugin {
+    pname = "kdl.vim";
+    version = "2023-02-20";
+    src = fetchFromGitHub {
+      owner = "imsnif";
+      repo = "kdl.vim";
+      rev = "b84d7d3a15d8d30da016cf9e98e2cfbe35cddee5";
+      sha256 = "0kh0wgwpjbp2iaznk2s8xy0l2l26zvlb9s3adwxapb13a4mwma11";
+    };
+    meta.homepage = "https://github.com/imsnif/kdl.vim/";
+  };
+
   keymap-layer-nvim = buildVimPlugin {
     pname = "keymap-layer.nvim";
     version = "2022-07-16";
