@@ -7042,8 +7042,8 @@ with pkgs;
 
   dt-schema = callPackage ../development/tools/dt-schema { };
 
-  inherit (import ../build-support/dlang/dub-support.nix { inherit callPackage; })
-    buildDubPackage dub-to-nix;
+  inherit (import ../build-support/dlang/dub-support.nix pkgs)
+     dub-to-nix importDubLock buildDubPackage dubSetupHook dubBuildHook dubCheckHook;
 
   duc = callPackage ../tools/misc/duc { };
 
