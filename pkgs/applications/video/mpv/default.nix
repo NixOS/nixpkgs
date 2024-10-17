@@ -94,7 +94,7 @@
   vaapiSupport ? x11Support || waylandSupport,
   vapoursynthSupport ? false,
   vdpauSupport ? true,
-  vulkanSupport ? stdenv.hostPlatform.isLinux,
+  vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   x11Support ? stdenv.hostPlatform.isLinux,
   xineramaSupport ? stdenv.hostPlatform.isLinux,
