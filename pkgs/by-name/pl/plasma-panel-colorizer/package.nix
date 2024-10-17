@@ -8,19 +8,28 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "plasma-panel-colorizer";
-  version = "0.5.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "luisbocanegra";
     repo = "plasma-panel-colorizer";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-+JweNB+zjbXh6Htyvu2vgogAr5Fl5wDPCpm6GV18NJ0=";
+    hash = "sha256-O+qIsYF0E+9LeiDcOUh8pZVY1rVoMlniju6yLact2Bc=";
   };
 
   nativeBuildInputs = [
     cmake
     kdePackages.extra-cmake-modules
+  ];
+
+  buildInputs = [
     kdePackages.plasma-desktop
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "INSTALL_PLASMOID" true)
+    (lib.cmakeBool "BUILD_PLUGIN" true)
+    (lib.cmakeFeature "Qt6_DIR" "${kdePackages.qtbase}/lib/cmake/Qt6")
   ];
 
   dontWrapQtApps = true;
