@@ -1,4 +1,7 @@
-{ buildFHSEnv, envision-unwrapped }:
+{
+  buildFHSEnv,
+  envision-unwrapped,
+}:
 
 buildFHSEnv {
   name = "envision";
@@ -7,6 +10,7 @@ buildFHSEnv {
 
   strictDeps = true;
 
+  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]
@@ -20,7 +24,7 @@ buildFHSEnv {
     )
     ++ (
       # OpenComposite dependencies
-      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs ++ [ pkgs.boost ]
+      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs ++ [ pkgs.boost186 ]
     )
     ++ (
       # Monado dependencies
@@ -36,6 +40,17 @@ buildFHSEnv {
           xorg.libXrandr
           xorg.libXrender
           xorg.xorgproto
+          # Additional dependencies required for Monado WMR support
+          bc
+          fmt
+          fmt.dev
+          git-lfs
+          gtest
+          jq
+          libepoxy
+          lz4.dev
+          tbb
+          libxkbcommon
         ])
       )
     )
