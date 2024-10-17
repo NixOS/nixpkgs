@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "dwmblocks";
-  version = "unstable-2020-12-27";
+  version = "0-unstable-2020-12-27";
 
   src = fetchFromGitHub {
     owner = "torrinfail";
