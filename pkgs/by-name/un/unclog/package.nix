@@ -22,9 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ga1jCJiEzlsRMXijdrM25JI4DI1SQAGYKdTA3AHv52c=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = {
     description = "Unclog your changelog";
