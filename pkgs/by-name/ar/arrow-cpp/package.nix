@@ -32,7 +32,7 @@
   lz4,
   minio,
   ninja,
-  nlohmann_json,
+  nlohmann-json,
   openssl,
   perl,
   protobuf,
@@ -140,7 +140,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtest
       libbacktrace
       lz4
-      nlohmann_json # alternative JSON parser to rapidjson
+      nlohmann-json # alternative JSON parser to rapidjson
       protobuf # substrait requires protobuf
       rapidjson
       re2
@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       curl
       google-cloud-cpp
       grpc
-      nlohmann_json
+      nlohmann-json
     ];
 
   preConfigure = ''

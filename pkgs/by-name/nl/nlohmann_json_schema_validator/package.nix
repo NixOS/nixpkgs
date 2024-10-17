@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, nlohmann_json
+, nlohmann-json
 , cmake
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Ybr5dNmjBBPTYPvgorJ6t2+zvAjxYQISWXJmgUVHBVE=";
   };
 
-  buildInputs = [ nlohmann_json ];
+  buildInputs = [ nlohmann-json ];
   nativeBuildInputs = [ cmake ];
 
   meta = {

@@ -18,7 +18,7 @@
 , kirigami
 , kirigami-addons
 , knotifications
-, nlohmann_json
+, nlohmann-json
 , qqc2-desktop-style
 }:
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation {
     kirigami
     kirigami-addons
     knotifications
-    nlohmann_json
+    nlohmann-json
     qqc2-desktop-style
   ];
 

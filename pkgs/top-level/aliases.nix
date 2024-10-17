@@ -1137,6 +1137,7 @@ mapAliases {
   nixops_unstable = throw "nixops_unstable has been replaced. Please use for example 'nixops_unstable_minimal.withPlugins (ps: [ ps.nixops-gce ps.nixops-encrypted-links ])' instead"; # Added 2024-02-28
 
   nixosTest = testers.nixosTest; # Added 2022-05-05
+  nlohmann_json = nlohmann-json; # Added 2024-10-16
   nmap-unfree = nmap; # Added 2021-04-06
   nodejs_14 = throw "nodejs_14 has been removed as it is EOL."; # Added 2023-10-30
   nodejs-slim_14 = throw "nodejs-slim_14 has been removed as it is EOL."; # Added 2023-10-30

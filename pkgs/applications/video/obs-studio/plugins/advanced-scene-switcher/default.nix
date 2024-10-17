@@ -9,7 +9,7 @@
   asio,
   curl,
   libremidi,
-  nlohmann_json,
+  nlohmann-json,
   obs-studio,
   opencv,
   procps,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     asio
     curl
     libremidi
-    nlohmann_json
+    nlohmann-json
     obs-studio
     opencv
     procps

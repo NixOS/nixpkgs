@@ -5,7 +5,7 @@
 , cmake
 , functionalplus
 , eigen
-, nlohmann_json
+, nlohmann-json
 , doctest
 , python3Packages
 , buildTests ? false # Needs tensorflow
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     functionalplus
     eigen
-    nlohmann_json
+    nlohmann-json
   ];
 
   cmakeFlags = lib.optionals buildTests [ "-DFDEEP_BUILD_UNITTEST=ON" ];

@@ -18,7 +18,7 @@
   libxkbcommon,
   mesa,
   mir,
-  nlohmann_json,
+  nlohmann-json,
   pcre2,
   pkg-config,
   wayland,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     mesa # gbm.h
     mir
-    nlohmann_json
+    nlohmann-json
     pcre2
     wayland
     yaml-cpp

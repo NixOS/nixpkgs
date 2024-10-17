@@ -58,7 +58,7 @@ buildFHSEnv {
         libpulseaudio
         libva
         ninja
-        nlohmann_json
+        nlohmann-json
         openxr-loader
         pipewire
         systemdLibs # udev

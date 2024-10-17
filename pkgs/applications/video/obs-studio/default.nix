@@ -46,7 +46,7 @@
 , srt
 , qtwayland
 , wrapQtAppsHook
-, nlohmann_json
+, nlohmann-json
 , websocketpp
 , asio
 , decklinkSupport ? false
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     libva
     srt
     qtwayland
-    nlohmann_json
+    nlohmann-json
     websocketpp
     asio
     libdatachannel

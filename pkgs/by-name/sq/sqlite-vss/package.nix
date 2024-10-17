@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , gomp
 , llvmPackages
-, nlohmann_json
+, nlohmann-json
 , sqlite
 , stdenv
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ nlohmann_json faiss sqlite ]
+  buildInputs = [ nlohmann-json faiss sqlite ]
     ++ lib.optional stdenv.hostPlatform.isLinux gomp
     ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 

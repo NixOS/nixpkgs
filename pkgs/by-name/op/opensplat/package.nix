@@ -6,7 +6,7 @@
   fetchFromGitHub,
   python3,
   opencv,
-  nlohmann_json,
+  nlohmann-json,
   nanoflann,
   glm,
   cxxopts,
@@ -44,7 +44,7 @@ stdenv'.mkDerivation {
   ];
 
   buildInputs = [
-    nlohmann_json
+    nlohmann-json
     nanoflann
     glm
     cxxopts

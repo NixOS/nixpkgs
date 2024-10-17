@@ -7,7 +7,7 @@
   coeurl,
   curl,
   libevent,
-  nlohmann_json,
+  nlohmann-json,
   olm,
   openssl,
   re2,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     coeurl
     curl
     libevent
-    nlohmann_json
+    nlohmann-json
     olm
     openssl
     re2

@@ -14,7 +14,7 @@
 , miopen
 , protobuf
 , half
-, nlohmann_json
+, nlohmann-json
 , msgpack
 , sqlite
 , oneDNN_2
@@ -90,7 +90,7 @@ in stdenv.mkDerivation (finalAttrs: {
     miopen
     protobuf
     half
-    nlohmann_json
+    nlohmann-json
     msgpack
     sqlite
     oneDNN_2

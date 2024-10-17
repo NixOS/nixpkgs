@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl
-, clang-tools, cmake, bzip2, zlib, expat, boost, git, pandoc, nlohmann_json
+, clang-tools, cmake, bzip2, zlib, expat, boost, git, pandoc, nlohmann-json
 # Nominatim needs to be built with the same postgres version it will target
 , postgresql
 , python3, php, lua
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     zlib
     expat
     boost
-    nlohmann_json
+    nlohmann-json
     (python3.withPackages (ps: with ps; [
       pyyaml
       python-dotenv

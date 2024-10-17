@@ -11,7 +11,7 @@
 , uhdm
 , antlr4
 , capnproto
-, nlohmann_json
+, nlohmann-json
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     uhdm
     capnproto
     antlr4.runtime.cpp
-    nlohmann_json
+    nlohmann-json
   ];
 
   cmakeFlags = [

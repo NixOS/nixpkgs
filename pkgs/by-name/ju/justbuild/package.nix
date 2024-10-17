@@ -4,7 +4,7 @@
   fetchurl,
 
   fmt_10,
-  nlohmann_json,
+  nlohmann-json,
   cli11,
   microsoft-gsl,
   libgit2,
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     # under the key .repositories.fmt
     fmt_10
     microsoft-gsl
-    nlohmann_json
+    nlohmann-json
 
     # Dependencies of the compiled just-mr
     curl

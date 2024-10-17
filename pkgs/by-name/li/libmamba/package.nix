@@ -6,7 +6,7 @@
   fmt,
   spdlog,
   tl-expected,
-  nlohmann_json,
+  nlohmann-json,
   yaml-cpp,
   simdjson,
   reproc,
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     fmt
     spdlog
     tl-expected
-    nlohmann_json
+    nlohmann-json
     yaml-cpp
     simdjson
     reproc

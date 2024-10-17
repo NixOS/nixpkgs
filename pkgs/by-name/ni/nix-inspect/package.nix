@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   boost,
-  nlohmann_json,
+  nlohmann-json,
   nixVersions,
   pkg-config,
   meson,
@@ -28,7 +28,7 @@
 
     buildInputs = [
       boost
-      nlohmann_json
+      nlohmann-json
       nixVersions.nix_2_19.dev
     ];
 

@@ -6,7 +6,7 @@
 , gtest
 , libtorrent
 , ncurses
-, jsonRpcSupport ? true, nlohmann_json
+, jsonRpcSupport ? true, nlohmann-json
 , xmlRpcSupport ? true, xmlrpc_c
 }:
 
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     libtorrent
     ncurses
   ]
-  ++ lib.optional jsonRpcSupport nlohmann_json
+  ++ lib.optional jsonRpcSupport nlohmann-json
   ++ lib.optional xmlRpcSupport xmlrpc_c;
 
   cmakeFlags = [

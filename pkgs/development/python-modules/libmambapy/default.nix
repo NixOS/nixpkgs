@@ -11,7 +11,7 @@
   fmt,
   spdlog,
   tl-expected,
-  nlohmann_json,
+  nlohmann-json,
   yaml-cpp,
   reproc,
   libsolv,
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     fmt
     spdlog
     tl-expected
-    nlohmann_json
+    nlohmann-json
     yaml-cpp
     reproc
     libsolv

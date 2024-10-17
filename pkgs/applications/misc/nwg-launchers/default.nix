@@ -4,7 +4,7 @@
 , gtkmm3
 , meson
 , ninja
-, nlohmann_json
+, nlohmann-json
 , pkg-config
 , swaylock
 , makeWrapper
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtkmm3
-    nlohmann_json
+    nlohmann-json
     gtk-layer-shell
   ];
 

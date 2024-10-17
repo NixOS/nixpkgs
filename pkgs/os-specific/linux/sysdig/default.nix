@@ -19,7 +19,7 @@
   protobuf,
   grpc,
   yaml-cpp,
-  nlohmann_json,
+  nlohmann-json,
   re2,
   zstd,
   uthash,
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     grpc
     yaml-cpp
     jsoncpp
-    nlohmann_json
+    nlohmann-json
     zstd
     uthash
     clang

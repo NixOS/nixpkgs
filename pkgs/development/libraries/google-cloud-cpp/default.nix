@@ -10,7 +10,7 @@
 , grpc
 , gtest
 , ninja
-, nlohmann_json
+, nlohmann-json
 , openssl
 , pkg-config
 , protobuf
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     crc32c
     (curl.override { inherit openssl; })
     grpc
-    nlohmann_json
+    nlohmann-json
     openssl
     protobuf
   ];

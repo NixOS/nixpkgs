@@ -20,7 +20,7 @@
 , libmicrohttpd
 , libuuid
 , lz4
-, nlohmann_json
+, nlohmann-json
 , openssl
 , pcre
 , perl
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pushd json
     rm json.hpp
-    ln -s ${nlohmann_json.src}/single_include/nlohmann/json.hpp .
+    ln -s ${nlohmann-json.src}/single_include/nlohmann/json.hpp .
     popd
 
     pushd prometheus-cpp/prometheus-cpp/3rdparty

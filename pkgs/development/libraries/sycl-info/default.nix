@@ -5,7 +5,7 @@
 , ocl-icd
 , opencl-headers
 , lyra
-, nlohmann_json
+, nlohmann-json
 , ronn
 , doctest
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    nlohmann_json
+    nlohmann-json
     ronn
     opencl-headers
     ocl-icd

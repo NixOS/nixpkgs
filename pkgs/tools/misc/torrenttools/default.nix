@@ -12,7 +12,7 @@
 , howard-hinnant-date
 , yaml-cpp
 , ninja
-, nlohmann_json
+, nlohmann-json
 , openssl
 , re2
 , sigslot
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
     gsl-lite
     howard-hinnant-date
     yaml-cpp
-    nlohmann_json
+    nlohmann-json
     openssl
     re2
     sigslot

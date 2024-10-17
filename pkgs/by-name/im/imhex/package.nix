@@ -18,7 +18,7 @@
   jansson,
   curl,
   fmt_8,
-  nlohmann_json,
+  nlohmann-json,
   yara,
   rsync,
   autoPatchelfHook,
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     jansson
     libGLU
     mbedtls
-    nlohmann_json
+    nlohmann-json
     yara
   ];
 

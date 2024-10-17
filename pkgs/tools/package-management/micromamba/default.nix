@@ -10,7 +10,7 @@
 , libarchive
 , libsolv
 , yaml-cpp
-, nlohmann_json
+, nlohmann-json
 , python3
 , reproc
 , spdlog
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2
     cli11
-    nlohmann_json
+    nlohmann-json
     curl
     libarchive
     yaml-cpp

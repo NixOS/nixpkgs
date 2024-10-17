@@ -28,7 +28,7 @@
   meson,
   ninja,
   nix-update-script,
-  nlohmann_json,
+  nlohmann-json,
   pipewire,
   pkg-config,
   rnnoise,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     libsndfile
     lilv
     lv2
-    nlohmann_json
+    nlohmann-json
     pipewire
     rnnoise
     rubberband

@@ -14,7 +14,7 @@
 , lua
 , luajit
 , libosmium
-, nlohmann_json
+, nlohmann-json
 , opencv
 , potrace
 , protozero
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     expat
     fmt_11
     libosmium
-    nlohmann_json
+    nlohmann-json
     opencv
     postgresql
     potrace

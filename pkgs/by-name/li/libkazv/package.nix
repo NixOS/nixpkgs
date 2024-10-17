@@ -11,7 +11,7 @@
   libcpr,
   libhttpserver,
   libmicrohttpd,
-  nlohmann_json,
+  nlohmann-json,
   olm,
   pkg-config,
   zug,
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     libhttpserver
     libmicrohttpd
     olm
-    nlohmann_json
+    nlohmann-json
     zug
   ];
 

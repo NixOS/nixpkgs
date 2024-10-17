@@ -3,7 +3,7 @@
 , fetchpatch
 , lib
 , curl
-, nlohmann_json
+, nlohmann-json
 , openssl
 , pkg-config
 , linkFarmFromDrvs
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    nlohmann_json
+    nlohmann-json
     openssl
   ];
 

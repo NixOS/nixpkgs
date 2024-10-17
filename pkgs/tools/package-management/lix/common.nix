@@ -44,7 +44,7 @@ assert (hash == null) -> (src != null);
   mercurial,
   mdbook,
   mdbook-linkcheck,
-  nlohmann_json,
+  nlohmann-json,
   ninja,
   openssl,
   toml11,
@@ -153,7 +153,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     boehmgc
-    nlohmann_json
+    nlohmann-json
   ];
 
   postPatch = ''

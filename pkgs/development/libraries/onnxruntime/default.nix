@@ -12,7 +12,7 @@
 , glibcLocales
 , gtest
 , libpng
-, nlohmann_json
+, nlohmann-json
 , nsync
 , pkg-config
 , python3Packages
@@ -141,7 +141,7 @@ effectiveStdenv.mkDerivation rec {
     eigen
     glibcLocales
     libpng
-    nlohmann_json
+    nlohmann-json
     microsoft-gsl
     pytorch_clog
     zlib

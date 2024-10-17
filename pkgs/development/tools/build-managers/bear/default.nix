@@ -8,7 +8,7 @@
   grpc,
   protobuf_25,
   openssl,
-  nlohmann_json,
+  nlohmann-json,
   gtest,
   spdlog,
   c-ares,
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     grpc
     protobuf_25
     openssl
-    nlohmann_json
+    nlohmann-json
     gtest
     spdlog
     c-ares

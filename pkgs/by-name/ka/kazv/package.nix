@@ -11,7 +11,7 @@
   kdePackages,
   lager,
   libkazv,
-  nlohmann_json,
+  nlohmann-json,
   olm,
   pkg-config,
   qt6,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.knotifications
     lager
     libkazv
-    nlohmann_json
+    nlohmann-json
     olm
     qt6.qtbase
     qt6.qtimageformats

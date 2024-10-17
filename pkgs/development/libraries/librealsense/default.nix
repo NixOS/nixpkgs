@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , cmake
 , libusb1
-, nlohmann_json
+, nlohmann-json
 , ninja
 , pkg-config
 , gcc
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     gcc.cc.lib
-    nlohmann_json
+    nlohmann-json
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
     ++ lib.optionals enablePython (with pythonPackages; [ python pybind11 ])
     ++ lib.optionals enableGUI [ mesa gtk3 glfw libGLU curl ];

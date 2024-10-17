@@ -8,7 +8,7 @@
 , qtx11extras
 , spdlog
 , fmt
-, nlohmann_json
+, nlohmann-json
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ spdlog fmt nlohmann_json ];
+  buildInputs = [ spdlog fmt nlohmann-json ];
   propagatedBuildInputs = [ qtbase qtdeclarative qtquickcontrols2 qtx11extras ];
 
   dontWrapQtApps = true;

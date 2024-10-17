@@ -11,7 +11,7 @@
   fmt,
   muparserx,
   ninja,
-  nlohmann_json,
+  nlohmann-json,
   spdlog,
   # Python Inputs
   cvxpy,
@@ -59,7 +59,7 @@ buildPythonPackage rec {
   buildInputs = [
     blas
     catch2
-    nlohmann_json
+    nlohmann-json
     fmt
     muparserx
     spdlog

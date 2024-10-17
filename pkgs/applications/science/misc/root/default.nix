@@ -32,7 +32,7 @@
 , openblas
 , openssl
 , pcre
-, nlohmann_json
+, nlohmann-json
 , pkg-config
 , procps
 , python
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
   propagatedBuildInputs = [
-    nlohmann_json
+    nlohmann-json
   ];
   buildInputs = [
     davix
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
 
     # Hardcode path to fix use with cmake
     sed -i cmake/scripts/ROOTConfig.cmake.in \
-      -e '1iset(nlohmann_json_DIR "${nlohmann_json}/lib/cmake/nlohmann_json/")'
+      -e '1iset(nlohmann_json_DIR "${nlohmann-json}/lib/cmake/nlohmann_json/")'
 
     patchShebangs build/unix/
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''

@@ -13,7 +13,7 @@
   nixd,
   nixf,
   nixt,
-  nlohmann_json,
+  nlohmann-json,
   pkg-config,
   testers,
   python3,
@@ -73,7 +73,7 @@ in
       buildInputs = [
         gtest
         boost182
-        nlohmann_json
+        nlohmann-json
       ];
 
       passthru.tests.pkg-config = testers.hasPkgConfigModules {

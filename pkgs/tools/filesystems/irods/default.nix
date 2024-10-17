@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, bzip2, zlib, autoconf, automake, cmake, help2man, texinfo, libtool, cppzmq
 , libarchive, avro-cpp_llvm, boost, zeromq, openssl, pam, libiodbc, libkrb5, gcc, libcxx, which, catch2
-, nanodbc_llvm, fmt, nlohmann_json, spdlog, curl }:
+, nanodbc_llvm, fmt, nlohmann-json, spdlog, curl }:
 
 let
   avro-cpp = avro-cpp_llvm;
@@ -10,7 +10,7 @@ let
     inherit lib stdenv bzip2 zlib autoconf automake cmake
       help2man texinfo libtool cppzmq libarchive
       zeromq openssl pam libiodbc libkrb5 gcc libcxx
-      boost avro-cpp which catch2 nanodbc fmt nlohmann_json
+      boost avro-cpp which catch2 nanodbc fmt nlohmann-json
       spdlog curl;
   };
 in

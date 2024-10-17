@@ -64,7 +64,7 @@ in
 , man
 , mdbook
 , mdbook-linkcheck
-, nlohmann_json
+, nlohmann-json
 , nixosTests
 , nixVersions
 , openssl
@@ -164,7 +164,7 @@ self = stdenv.mkDerivation {
   propagatedBuildInputs = [
     boehmgc
   ] ++ lib.optionals (atLeast27) [
-    nlohmann_json
+    nlohmann-json
   ];
 
   postPatch = ''

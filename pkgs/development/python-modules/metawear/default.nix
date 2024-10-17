@@ -5,7 +5,7 @@
   cython,
   boost,
   bluez,
-  nlohmann_json,
+  nlohmann-json,
   pyserial,
   requests,
   warble,
@@ -26,11 +26,11 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     bluez
-    nlohmann_json
+    nlohmann-json
   ];
 
   postPatch = ''
-    # remove vendored nlohmann_json
+    # remove vendored nlohmann-json
     rm MetaWear-SDK-Cpp/src/metawear/dfu/cpp/json.hpp
     substituteInPlace MetaWear-SDK-Cpp/src/metawear/dfu/cpp/file_operations.cpp \
         --replace '#include "json.hpp"' '#include <nlohmann/json.hpp>'

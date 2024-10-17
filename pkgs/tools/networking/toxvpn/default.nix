@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, nlohmann_json
+, nlohmann-json
 , libtoxcore
 , libsodium
 , libcap
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "sha256-UncU0cpoyy9Z0TCChGmaHpyhW9ctz32gU7n3hgpOEwU=";
   };
 
-  buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
+  buildInputs = [ libtoxcore nlohmann-json libsodium zeromq ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap systemd ];
 
   nativeBuildInputs = [ cmake ];

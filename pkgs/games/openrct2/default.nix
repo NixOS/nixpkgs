@@ -21,7 +21,7 @@
 , libpthreadstubs
 , libvorbis
 , libzip
-, nlohmann_json
+, nlohmann-json
 , openssl
 , pkg-config
 , speexdsp
@@ -103,7 +103,7 @@ stdenv.mkDerivation {
     libpthreadstubs
     libvorbis
     libzip
-    nlohmann_json
+    nlohmann-json
     openssl
     speexdsp
     zlib

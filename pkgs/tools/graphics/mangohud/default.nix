@@ -25,7 +25,7 @@
 , libXNVCtrl
 , wayland
 , libX11
-, nlohmann_json
+, nlohmann-json
 , spdlog
 , glew
 , glfw
@@ -189,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
-    nlohmann_json
+    nlohmann-json
     spdlog
   ] ++ lib.optionals gamescopeSupport [
     glew
