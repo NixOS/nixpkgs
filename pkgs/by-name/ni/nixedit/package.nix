@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/fndov/nixedit";
-    description = "A NixOS Multipurpose CLI/TUI Utility";
+    description = "NixOS Multipurpose CLI/TUI Utility";
     license = licenses.gpl3;
     mainProgram = "nixedit";
     maintainers = [ maintainers.miyu ];
