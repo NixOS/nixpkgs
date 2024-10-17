@@ -97,9 +97,9 @@ let
       readline
       openssl
       (libxml2.override {enableHttp = true;})
-      icu
       libuuid
     ]
+      ++ lib.optionals (!stdenv'.hostPlatform.isStatic) [ icu ]
       ++ lib.optionals (olderThan "13") [ libxcrypt ]
       ++ lib.optionals jitSupport [ llvmPackages.llvm ]
       ++ lib.optionals lz4Enabled [ lz4 ]
@@ -107,7 +107,7 @@ let
       ++ lib.optionals systemdSupport [ systemdLibs ]
       ++ lib.optionals pythonSupport [ python3 ]
       ++ lib.optionals gssSupport [ libkrb5 ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
+      ++ lib.optionals (stdenv'.hostPlatform.isLinux && !stdenv'.hostPlatform.isStatic) [ linux-pam ];
 
     nativeBuildInputs = [
       makeWrapper
@@ -136,7 +136,11 @@ let
     configureFlags = [
       "--with-openssl"
       "--with-libxml"
-      "--with-icu"
+      # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
+      #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
+      #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
+      #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
+      (lib.withFeature (!stdenv'.hostPlatform.isStatic) "icu")
       "--sysconfdir=/etc"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
       "--enable-debug"
@@ -147,7 +151,11 @@ let
       ++ lib.optionals gssSupport [ "--with-gssapi" ]
       ++ lib.optionals pythonSupport [ "--with-python" ]
       ++ lib.optionals jitSupport [ "--with-llvm" ]
-      ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
+      # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
+      #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
+      #     in function `pam_modutil_audit_write':(.text+0x571):
+      #     undefined reference to `audit_close'
+      ++ lib.optionals (stdenv'.hostPlatform.isLinux && !stdenv'.hostPlatform.isStatic) [ "--with-pam" ]
       # This could be removed once the upstream issue is resolved:
       # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [ "LDFLAGS_EX_BE=-Wl,-export_dynamic" ];
@@ -216,7 +224,7 @@ let
         # because there is a realistic use-case for extensions to locate the /lib directory to
         # load other shared modules.
         remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
-
+      '' + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
         if [ -z "''${dontDisableStatic:-}" ]; then
           # Remove static libraries in case dynamic are available.
           for i in $lib/lib/*.a; do
@@ -227,6 +235,7 @@ let
             fi
           done
         fi
+      '' + ''
         # The remaining static libraries are libpgcommon.a, libpgport.a and related.
         # Those are only used when building e.g. extensions, so go to $dev.
         moveToOutput "lib/*.a" "$dev"
@@ -244,7 +253,9 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
-    doCheck = !stdenv'.hostPlatform.isDarwin;
+    # Tests don't run on darwin because of System Integrity Protection (SIP), which
+    # disallows LD_LIBRARY_PATH to be set.
+    doCheck = !(stdenv'.hostPlatform.isDarwin || stdenv'.hostPlatform.isStatic);
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check-world";
 
