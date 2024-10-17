@@ -31183,7 +31183,6 @@ with pkgs;
 
   mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
     stdenv = if stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else stdenv;
-    inherit lua;
   };
 
   # Wrap avoiding rebuild
