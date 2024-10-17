@@ -94,7 +94,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hrkfdn/ncspot";
     changelog = "https://github.com/hrkfdn/ncspot/releases/tag/v${version}";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ liff ];
+    maintainers = with lib.maintainers; [
+      liff
+      getchoo
+    ];
     mainProgram = "ncspot";
   };
 }
