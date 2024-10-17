@@ -11,17 +11,9 @@ mkCoqDerivation {
   owner = "mit-plv";
 
   inherit version;
-  defaultVersion =
-    with lib.versions;
-    lib.switch coq.version [
-      {
-        case = range "8.11" "8.20";
-        out = "0.0.6";
-      }
-      {
-        case = range "8.11" "8.20";
-        out = "0.0.5";
-      }
+  defaultVersion = with lib.versions; lib.switch coq.version [
+      { case = range "8.18" "8.20"; out = "0.0.6"; }
+      { case = range "8.17" "8.20"; out = "0.0.5"; }
     ] null;
 
   releaseRev = v: "v${v}";
