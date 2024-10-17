@@ -111,6 +111,9 @@ let
          );
 
   defaultSplash = pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader.gnomeFilePath;
+
+  deviceTree = with config.hardware.deviceTree;
+    if isNull name then null else "${package}/${name}";
 in
 
 {
@@ -723,6 +726,8 @@ in
       system.systemBuilderArgs.configurationName = cfg.configurationName;
       system.systemBuilderCommands = ''
         echo -n "$configurationName" > $out/configuration-name
+      '' + optionalString (deviceTree != null) ''
+          ln -s ${deviceTree} $out/fdtfile
       '';
 
       system.build.installBootLoader =
