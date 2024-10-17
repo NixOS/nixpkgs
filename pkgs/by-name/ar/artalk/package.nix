@@ -5,34 +5,31 @@
   artalk,
   fetchurl,
   installShellFiles,
+  versionCheckHook,
   stdenv,
   testers,
   nixosTests,
 }:
 buildGoModule rec {
   pname = "artalk";
-  version = "2.9.0";
+  version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5tUUlkGeT4kY/81EQ29M6z+JnBT4YCa8gecbV9WMuDo=";
+    hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
   };
   web = fetchurl {
     url = "https://github.com/${src.owner}/${src.repo}/releases/download/v${version}/artalk_ui.tar.gz";
-    hash = "sha256-Cx3fDpnl52kwILzH9BBLfsWe5qEbIl/ecJd1wJEB/Hc=";
+    hash = "sha256-ckKC4lErKVdJuJ+pGysmMR96a9LkrCYnWB4j6VPP8OY=";
   };
 
-  CGO_ENABLED = 1;
-
-  vendorHash = "sha256-edqmv/Q99pgnScJqCmLwjHd7uKMNPGfCSujNTUQtpLc=";
+  vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/ArtalkJS/Artalk/internal/config.Version=${version}"
-    "-X github.com/ArtalkJS/Artalk/internal/config.CommitHash=${version}"
   ];
 
   preBuild = ''
@@ -42,21 +39,22 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      # work around case insensitive file systems
-      mv $out/bin/Artalk $out/bin/artalk.tmp
-      mv $out/bin/artalk.tmp $out/bin/artalk
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd artalk \
-        --bash <($out/bin/artalk completion bash) \
-        --fish <($out/bin/artalk completion fish) \
-        --zsh <($out/bin/artalk completion zsh)
-    '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd artalk \
+      --bash <($out/bin/artalk completion bash) \
+      --fish <($out/bin/artalk completion fish) \
+      --zsh <($out/bin/artalk completion zsh)
+  '';
+
+  doInstallCheck = true;
+
+  versionCheckProgramArg = "-v";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru.tests = {
-    version = testers.testVersion { package = artalk; };
     inherit (nixosTests) artalk;
   };
 
@@ -65,6 +63,10 @@ buildGoModule rec {
     homepage = "https://github.com/ArtalkJS/Artalk";
     changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${version}";
     license = lib.licenses.mit;
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "artalk";
   };
