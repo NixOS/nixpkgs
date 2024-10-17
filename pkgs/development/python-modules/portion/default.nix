@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "portion";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AlexandreDecan";
     repo = "portion";
     rev = "refs/tags/${version}";
-    hash = "sha256-sNOieFenrWh6iDXCyCBedx+qIsS+daAr+WVBpkc8yVQ=";
+    hash = "sha256-TBCnlkGZZ/3tWEojxDGNYcXtYHhrooJkaWBsRkadXEE=";
   };
 
   build-system = [ setuptools ];
