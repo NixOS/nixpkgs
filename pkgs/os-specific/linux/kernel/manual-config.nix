@@ -1,6 +1,6 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
 , cpio, elfutils, hexdump, zstd, python3Minimal, zlib, pahole, kmod, ubootTools
-, fetchpatch
+, fetchpatch, fetchurl
 , rustc, rust-bindgen, rustPlatform
 }:
 
@@ -178,6 +178,14 @@ let
           (fetchpatch {
             url = "https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git/patch/?id=d9e5c3e9e75162f845880535957b7fd0b4637d23";
             hash = "sha256-bBOyJcP6jUvozFJU0SPTOf3cmnTQ6ZZ4PlHjiniHXLU=";
+          })
+        # Fix linker related errors when using LLVM on x86_64.
+        ++ optional (lib.versionAtLeast version "6.6" &&
+                    stdenv.cc.bintools.isLLVM &&
+                    stdenv.targetPlatform.isx86_64)
+          (fetchurl {
+            url = "https://lore.kernel.org/all/20240208012057.2754421-2-yshuiv7@gmail.com/t.mbox.gz";
+            hash = "sha256-Am8ayonHRhrWTqx0L8TEWw1VPQmSU57S7mjKFTn9Nu4=";
           });
 
       postPatch = ''
