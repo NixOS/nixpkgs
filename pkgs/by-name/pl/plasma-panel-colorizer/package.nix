@@ -27,6 +27,8 @@ stdenv.mkDerivation (finalAttrs: {
     kdePackages.plasma-desktop
   ];
 
+  strictDeps = true;
+
   cmakeFlags = [
     (lib.cmakeBool "INSTALL_PLASMOID" true)
     (lib.cmakeBool "BUILD_PLUGIN" true)
