@@ -3961,10 +3961,6 @@ with pkgs;
 
   backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
 
-  bandwhich = callPackage ../tools/networking/bandwhich {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   badrobot = callPackage ../tools/security/badrobot { };
 
   bao = callPackage ../tools/security/bao { };
