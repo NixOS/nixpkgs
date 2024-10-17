@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pygmars";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "pygmars";
     rev = "refs/tags/v${version}";
-    hash = "sha256-RwAZ1ZLh0zgGshSv7LleBHMotKapDFtD69ptqQnr0EA=";
+    hash = "sha256-OhmTD83p/4tCMoCXy35/0fy8Tw1usn27dJyzpOeGlkU=";
   };
 
   dontConfigure = true;
