@@ -4,17 +4,17 @@
   fetchFromGitHub,
   pytestCheckHook,
   aiohttp,
-  codecov,
   flake8,
   pytest,
   pytest-asyncio,
-  pytest-cov,
+  pytest-cov-stub,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "throttler";
   version = "1.2.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "uburuntu";
@@ -23,22 +23,22 @@ buildPythonPackage rec {
     hash = "sha256-fE35zPjBUn4e1VRkkIUMtYJ/+LbnUxnxyfnU+UEPwr4=";
   };
 
-  checkInputs = [
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
     aiohttp
-    codecov
     flake8
     pytest
     pytest-asyncio
-    pytest-cov
     pytestCheckHook
   ];
 
   pytestFlagsArray = [ "tests/" ];
 
-  meta = with lib; {
+  meta = {
     description = "Zero-dependency Python package for easy throttling with asyncio support";
     homepage = "https://github.com/uburuntu/throttler";
-    license = licenses.mit;
-    maintainers = with maintainers; [ renatoGarcia ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ renatoGarcia ];
   };
 }
