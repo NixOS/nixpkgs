@@ -99,8 +99,6 @@ self: super: {
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
 
-  mmorph = super.mmorph_1_1_3;
-
   # https://github.com/haskellari/time-compat/issues/23
   time-compat = dontCheck super.time-compat;
 
