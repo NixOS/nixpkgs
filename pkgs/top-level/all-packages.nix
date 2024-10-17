@@ -33211,8 +33211,6 @@ with pkgs;
     qtermwidget = lxqt.qtermwidget_1_4;
   };
 
-  virtscreen = callPackage ../tools/admin/virtscreen { };
-
   virtual-ans = callPackage ../applications/audio/virtual-ans { };
 
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
