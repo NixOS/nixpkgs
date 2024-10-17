@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "2.0.18";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "mosquitto";
     rev = "v${version}";
-    hash = "sha256-Vs0blV2IhnlEAm0WtOartz+0vLesJfp78FNJCivRxHk=";
+    hash = "sha256-CFfCsKL06NKgiKb1pksBMiSoH3Wz3Ots66uoZiN1y6A=";
   };
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
