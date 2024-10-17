@@ -27,9 +27,7 @@ buildPythonPackage rec {
     python3Packages.azure-mgmt-dns
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   doCheck = true;
 
