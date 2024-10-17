@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fnlfmt";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromSourcehut {
     owner = "~technomancy";
     repo = pname;
     rev = version;
-    sha256 = "sha256-rhbYG0TpqAZnbLaZOG739/pDA61Dwb4Y1HhBxWLtOus=";
+    sha256 = "sha256-wbeWAv4xhxh7M6tRd9qpgBRtg1/fqg0AUPvh2M5f60Q=";
   };
 
   nativeBuildInputs = [ luaPackages.fennel ];
