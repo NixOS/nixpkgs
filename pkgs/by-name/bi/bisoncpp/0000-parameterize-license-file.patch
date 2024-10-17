@@ -1,0 +1,15 @@
+diff -Naur bisoncpp-sources-6.09.00-old/bisonc++/documentation/manual/conditions/gpl.yo bisoncpp-sources-6.09.00-new/bisonc++/documentation/manual/conditions/gpl.yo
+--- bisoncpp-sources-6.09.00-old/bisonc++/documentation/manual/conditions/gpl.yo	1969-12-31 21:00:01.000000000 -0300
++++ bisoncpp-sources-6.09.00-new/bisonc++/documentation/manual/conditions/gpl.yo	2024-10-07 17:19:52.344796158 -0300
+@@ -1,9 +1,9 @@
+ The text of the em(GNU General Public License) (GPL) is frequently found in
+ files named tt(COPYING). On em(Debian) systems the GPL may be found in the
+-file tt(/usr/share/common-licenses/GPL). Alternatively, visit 
++file tt(@license_file@). Alternatively, visit 
+ lurl(https://www.gnu.org/licenses/gpl-3.0.en.html).
+ 
+ The GPL is shown below:
+ 
+-verbinclude(../../../LICENSE)
++verbinclude(@license_file@)
+ 
