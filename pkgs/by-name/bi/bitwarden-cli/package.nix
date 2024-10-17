@@ -35,6 +35,7 @@ buildNpmPackage rec {
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     xcbuild.xcrun
+    xcbuild.xcodebuild
   ];
 
   makeCacheWritable = true;
