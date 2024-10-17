@@ -1,0 +1,111 @@
+From 5abdd5c6c01c64c0e7d9ed0c8eb8d12ca2f5abee Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 11 Jun 2024 00:21:05 -0400
+Subject: [PATCH 3/3] Revert "ntdll: Make __wine_unix_call() an inline
+ function."
+
+This reverts commit 127650c293b5716c6a1f2028185c3f3fe8c6598c.
+---
+ dlls/ntdll/loader.c    | 11 ++++++++++-
+ dlls/ntdll/ntdll.spec  |  1 +
+ dlls/win32u/main.c     |  8 +++++---
+ include/wine/unixlib.h |  7 ++-----
+ 4 files changed, 18 insertions(+), 9 deletions(-)
+
+diff --git a/dlls/ntdll/loader.c b/dlls/ntdll/loader.c
+index 6d22a255e0a..6b2de559965 100644
+--- a/dlls/ntdll/loader.c
++++ b/dlls/ntdll/loader.c
+@@ -70,7 +70,7 @@ typedef DWORD (CALLBACK *DLLENTRYPROC)(HMODULE,DWORD,LPVOID);
+ typedef void  (CALLBACK *LDRENUMPROC)(LDR_DATA_TABLE_ENTRY *, void *, BOOLEAN *);
+ 
+ void (FASTCALL *pBaseThreadInitThunk)(DWORD,LPTHREAD_START_ROUTINE,void *) = NULL;
+-NTSTATUS (WINAPI *__wine_unix_call_dispatcher)( unixlib_handle_t, unsigned int, void * ) = NULL;
++NTSTATUS (WINAPI *__wine_unix_call_dispatcher)( unixlib_handle_t, unsigned int, void * ) = __wine_unix_call;
+ 
+ static DWORD (WINAPI *pCtrlRoutine)(void *);
+ 
+@@ -3331,6 +3331,15 @@ NTSTATUS WINAPI __wine_ctrl_routine( void *arg )
+ }
+ 
+ 
++/***********************************************************************
++ *              __wine_unix_call
++ */
++NTSTATUS WINAPI __wine_unix_call( unixlib_handle_t handle, unsigned int code, void *args )
++{
++    return __wine_unix_call_dispatcher( handle, code, args );
++}
++
++
+ /***********************************************************************
+  *           __wine_unix_spawnvp
+  */
+diff --git a/dlls/ntdll/ntdll.spec b/dlls/ntdll/ntdll.spec
+index 3471905c762..5070d1c4b40 100644
+--- a/dlls/ntdll/ntdll.spec
++++ b/dlls/ntdll/ntdll.spec
+@@ -1719,6 +1719,7 @@
+ @ cdecl wine_server_handle_to_fd(long long ptr ptr)
+ 
+ # Unix interface
++@ stdcall __wine_unix_call(int64 long ptr)
+ @ stdcall __wine_unix_spawnvp(long ptr)
+ @ stdcall __wine_ctrl_routine(ptr)
+ @ extern -private __wine_syscall_dispatcher
+diff --git a/dlls/win32u/main.c b/dlls/win32u/main.c
+index 8e32fc63556..28383161b6f 100644
+--- a/dlls/win32u/main.c
++++ b/dlls/win32u/main.c
+@@ -33,6 +33,8 @@
+ 
+ void *__wine_syscall_dispatcher = NULL;
+ 
++static unixlib_handle_t win32u_handle;
++
+ /*******************************************************************
+  *         syscalls
+  */
+@@ -2190,8 +2192,6 @@ void __cdecl __wine_spec_unimplemented_stub( const char *module, const char *fun
+     for (;;) RtlRaiseException( &record );
+ }
+ 
+-void *dummy = NtQueryVirtualMemory;  /* forced import to avoid link error with winecrt0 */
+-
+ BOOL WINAPI DllMain( HINSTANCE inst, DWORD reason, void *reserved )
+ {
+     HMODULE ntdll;
+@@ -2206,7 +2206,9 @@ BOOL WINAPI DllMain( HINSTANCE inst, DWORD reason, void *reserved )
+         LdrGetDllHandle( NULL, 0, &ntdll_name, &ntdll );
+         dispatcher_ptr = RtlFindExportedRoutineByName( ntdll, "__wine_syscall_dispatcher" );
+         __wine_syscall_dispatcher = *dispatcher_ptr;
+-        if (!__wine_init_unix_call()) WINE_UNIX_CALL( 0, NULL );
++        if (!NtQueryVirtualMemory( GetCurrentProcess(), inst, MemoryWineUnixFuncs,
++                                   &win32u_handle, sizeof(win32u_handle), NULL ))
++            __wine_unix_call( win32u_handle, 0, NULL );
+         break;
+     }
+     return TRUE;
+diff --git a/include/wine/unixlib.h b/include/wine/unixlib.h
+index 9a342fada73..90c16ff1f07 100644
+--- a/include/wine/unixlib.h
++++ b/include/wine/unixlib.h
+@@ -269,13 +269,10 @@ static inline NTSTATUS __wine_unix_call( unixlib_handle_t handle, unsigned int c
+     return __wine_unix_call_arm64ec( handle, code, args );
+ }
+ #else
+-static inline NTSTATUS __wine_unix_call( unixlib_handle_t handle, unsigned int code, void *args )
+-{
+-    return __wine_unix_call_dispatcher( handle, code, args );
+-}
++NTSYSAPI NTSTATUS WINAPI __wine_unix_call( unixlib_handle_t handle, unsigned int code, void *args );
+ #endif
+ 
+-#define WINE_UNIX_CALL(code,args) __wine_unix_call( __wine_unixlib_handle, (code), (args) )
++#define WINE_UNIX_CALL(code,args) __wine_unix_call_dispatcher( __wine_unixlib_handle, (code), (args) )
+ 
+ #endif /* WINE_UNIX_LIB */
+ 
+-- 
+2.45.1
+
