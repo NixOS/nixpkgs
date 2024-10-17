@@ -6,6 +6,7 @@ let
   pythonInterpreter = pythonOnBuildForHost.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
+  compatHelpers = ../compat-helpers.sh;
   setuppy = ../run_setup.py;
 in {
   makePythonHook = let
@@ -102,7 +103,7 @@ in {
       name = "pytest-check-hook";
       propagatedBuildInputs = [ pytest ];
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit compatHelpers pythonCheckInterpreter;
       };
     } ./pytest-check-hook.sh) {};
 
@@ -194,7 +195,7 @@ in {
       name = "setuptools-build-hook";
       propagatedBuildInputs = [ setuptools wheel ];
       substitutions = {
-        inherit pythonInterpreter setuppy;
+        inherit compatHelpers pythonInterpreter setuppy;
         # python2.pkgs.setuptools does not support parallelism
         setuptools_has_parallel = setuptools != null && lib.versionAtLeast setuptools.version "69";
       };
@@ -218,7 +219,7 @@ in {
     makePythonHook {
       name = "unittest-check-hook";
       substitutions = {
-        inherit pythonCheckInterpreter;
+        inherit compatHelpers pythonCheckInterpreter;
       };
     } ./unittest-check-hook.sh) {};
 
