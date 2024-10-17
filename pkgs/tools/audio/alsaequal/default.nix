@@ -1,19 +1,23 @@
 { lib, stdenv, fetchFromGitHub
-, alsa-lib, caps
+, alsa-lib, caps,
+  ladspaH
 }:
 
 stdenv.mkDerivation rec {
   pname = "alsaequal";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "bassdr";
     repo = "alsaequal";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cCo8qWQv4bQ+RvH43Xbj+Q4qC5DmvracBuzI96EAnhY=";
+    hash = "sha256-jI+w/jCFslQSNeIS7mwb+LZSawU4XjbSNNgpvuShH1g=";
   };
 
-  buildInputs = [ alsa-lib ];
+  buildInputs = [
+    alsa-lib
+    ladspaH
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
@@ -22,10 +26,6 @@ stdenv.mkDerivation rec {
     # Adds executable permissions to resulting libraries
     # and changes their destination directory from "usr/lib/alsa-lib" to "lib/alsa-lib" to better align with nixpkgs filesystem hierarchy.
     ./makefile.patch
-    # Fixes control port check, which resulted in false error.
-    ./false_error.patch
-    # Fixes name change of an "Eq" to "Eq10" method in version 9 of caps library.
-    ./caps_9.x.patch
   ];
 
   postPatch = ''
