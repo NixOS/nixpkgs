@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config autoreconfHook ];
 
   makeFlags = [ "usrbin_execdir=$(out)/bin" ]
-    ++ lib.optionals watchOnly [ "watch" "PKG_LDFLAGS=" ];
+    ++ lib.optionals watchOnly [ "src/watch" ];
 
   enableParallelBuilding = true;
 
@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = lib.optionalString watchOnly ''
-    install -m 0755 -D watch $out/bin/watch
-    install -m 0644 -D watch.1 $out/share/man/man1/watch.1
+    install -m 0755 -D src/watch $out/bin/watch
+    install -m 0644 -D man/watch.1 $out/share/man/man1/watch.1
   '';
 
   # no obvious exec in documented arguments; haven't trawled source
