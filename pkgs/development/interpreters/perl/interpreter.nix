@@ -14,7 +14,7 @@
 , zlib
 , config
 , passthruFun
-, perlAttr ? "perl${lib.versions.major version}${lib.versions.minor version}"
+, perlAttr ? "perl${lib.versions.major version}"
 , enableThreading ? true, coreutils, makeWrapper
 , enableCrypt ? true, libxcrypt ? null
 , overrides ? config.perlPackageOverrides or (p: {}) # TODO: (self: super: {}) like in python
