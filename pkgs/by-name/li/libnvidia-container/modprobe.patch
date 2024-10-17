@@ -1,7 +1,7 @@
 diff -ruN nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.c nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.c
---- nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.c	2020-07-09 17:06:05.000000000 +0000
-+++ nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.c	2020-08-18 12:43:03.223871514 +0000
-@@ -840,10 +840,10 @@
+--- nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.c	2021-11-13 14:36:58.096684602 +0000
++++ nvidia-modprobe-@modprobeVersion@-patched/modprobe-utils/nvidia-modprobe-utils.c	2021-11-13 14:43:40.965146390 +0000
+@@ -959,10 +959,10 @@
      return mknod_helper(major, minor_num, vgpu_dev_name, NV_PROC_REGISTRY_PATH);
  }
 
@@ -17,13 +17,14 @@ diff -ruN nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils
      char field[32];
      FILE *fp;
 diff -ruN nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.h nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.h
---- nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.h	2020-07-09 17:06:05.000000000 +0000
-+++ nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.h	2020-08-18 12:43:44.227745050 +0000
-@@ -81,6 +81,7 @@
+--- nvidia-modprobe-@modprobeVersion@/modprobe-utils/nvidia-modprobe-utils.h	2021-11-13 14:36:58.096684602 +0000
++++ nvidia-modprobe-@modprobeVersion@-patched/modprobe-utils/nvidia-modprobe-utils.h	2021-11-13 14:38:34.078700961 +0000
+@@ -87,6 +87,7 @@
  int nvidia_nvswitch_get_file_state(int minor);
  int nvidia_cap_mknod(const char* cap_file_path, int *minor);
  int nvidia_cap_get_file_state(const char* cap_file_path);
 +int nvidia_cap_get_device_file_attrs(const char* cap_file_path, int *major, int *minor, char *name);
+ int nvidia_cap_imex_channel_mknod(int minor);
+ int nvidia_cap_imex_channel_file_state(int minor);
  int nvidia_get_chardev_major(const char *name);
-
- #endif /* NV_LINUX */
+ int nvidia_msr_modprobe(void);
