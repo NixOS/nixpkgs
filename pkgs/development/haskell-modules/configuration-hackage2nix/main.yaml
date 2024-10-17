@@ -51,7 +51,6 @@ extra-packages:
   - apply-refact == 0.11.*              # 2023-02-02: needed for hls-hlint-plugin on GHC 9.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
   - crackNum < 3.0                      # 2021-05-21: 3.0 removed the lib which sbv 7.13 uses
-  - foundation < 0.0.29                 # 2022-08-30: last version to support GHC < 8.10
   - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-api-compat == 8.6               # 2021-09-07: preserve for GHC 8.8.4
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
