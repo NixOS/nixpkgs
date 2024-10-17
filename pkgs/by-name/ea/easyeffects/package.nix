@@ -114,6 +114,11 @@ stdenv.mkDerivation rec {
       )
     '';
 
+  patches = [
+    # Remove when lsp-plugins is >= 1.2.17. (https://github.com/wwmm/easyeffects/issues/3394)
+    ./0001-Revert-Merge-pull-request-3340-from-violetmage-viole.patch
+  ];
+
   separateDebugInfo = true;
 
   passthru = {
