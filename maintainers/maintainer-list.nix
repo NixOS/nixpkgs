@@ -8401,6 +8401,13 @@
     githubId = 33969028;
     name = "Sebastian Hasler";
   };
+  hasnep = {
+    name = "Hannes";
+    email = "h@nnes.dev";
+    matrix = "@hasnep:matrix.org";
+    github = "Hasnep";
+    githubId = 25184102;
+  };
   hausken = {
     name = "Hausken";
     email = "hauskens-git@disp.lease>";
