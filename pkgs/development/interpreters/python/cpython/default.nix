@@ -141,11 +141,11 @@ let
     pythonVersion = with sourceVersion; "${major}.${minor}";
     sitePackages = "lib/${libPrefix}/site-packages";
     inherit hasDistutilsCxxPatch pythonAttr;
-    pythonOnBuildForBuild = override pkgsBuildBuild.${pythonAttr};
-    pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
-    pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
-    pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
-    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
+    pythonOnBuildForBuild = pkgsBuildBuild.${pythonAttr};
+    pythonOnBuildForHost = pkgsBuildHost.${pythonAttr};
+    pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
+    pythonOnHostForHost = pkgsHostHost.${pythonAttr};
+    pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (pkgsTargetTarget.${pythonAttr});
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
