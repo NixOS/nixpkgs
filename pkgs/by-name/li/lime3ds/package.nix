@@ -7,9 +7,10 @@
   cpp-jwt,
   doxygen,
   enet,
+  fetchpatch,
   fetchzip,
   fmt,
-  ffmpeg-headless,
+  ffmpeg_6-headless,
   gamemode,
   httplib,
   inih,
@@ -77,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
       cpp-jwt
       enet
       fmt
-      ffmpeg-headless
+      ffmpeg_6-headless
       httplib
       inih
       libGL
@@ -111,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
     ++ optionals enableQtTranslations [ kdePackages.qttools ]
     ++ optionals enableCubeb [ cubeb ]
     ++ optional useDiscordRichPresence rapidjson;
+
+  patches = [
+    # FIXME: this patch fixes the build with newer QT versions, remove it when the new version gets released
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Lime3DS/Lime3DS/pull/441.patch";
+      hash = "sha256-NKJ3fmh5kY/DaTCVbIz1dvJrvK5IbJt1eogrbXWciCI=";
+    })
+  ];
 
   postPatch = ''
     # Fix file not found when looking in var/empty instead of opt
