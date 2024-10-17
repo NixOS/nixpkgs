@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -31,7 +36,10 @@ in
     };
 
     virtualisation.digitalOceanImage.compressionMethod = mkOption {
-      type = types.enum [ "gzip" "bzip2" ];
+      type = types.enum [
+        "gzip"
+        "bzip2"
+      ];
       default = "gzip";
       example = "bzip2";
       description = ''
@@ -48,23 +56,32 @@ in
     system.build.digitalOceanImage = import ../../lib/make-disk-image.nix {
       name = "digital-ocean-image";
       format = "qcow2";
-      postVM = let
-        compress = {
-          "gzip" = "${pkgs.gzip}/bin/gzip";
-          "bzip2" = "${pkgs.bzip2}/bin/bzip2";
-        }.${cfg.compressionMethod};
-      in ''
-        ${compress} $diskImage
-      '';
-      configFile = if cfg.configFile == null
-        then config.virtualisation.digitalOcean.defaultConfigFile
-        else cfg.configFile;
+      postVM =
+        let
+          compress =
+            {
+              "gzip" = "${pkgs.gzip}/bin/gzip";
+              "bzip2" = "${pkgs.bzip2}/bin/bzip2";
+            }
+            .${cfg.compressionMethod};
+        in
+        ''
+          ${compress} $diskImage
+        '';
+      configFile =
+        if cfg.configFile == null then
+          config.virtualisation.digitalOcean.defaultConfigFile
+        else
+          cfg.configFile;
       inherit (cfg) diskSize;
       inherit config lib pkgs;
     };
 
   };
 
-  meta.maintainers = with maintainers; [ arianvp eamsden ];
+  meta.maintainers = with maintainers; [
+    arianvp
+    eamsden
+  ];
 
 }
