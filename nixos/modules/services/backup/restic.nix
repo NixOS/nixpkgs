@@ -55,6 +55,17 @@ in
               '';
             };
 
+            rcloneSettings = lib.mkOption {
+              description = ''
+                Rclone settings. They are provided as environment variables. They should be provided in upper snake
+                case (e.g. {env}`RCLONE_SKIP_LINKS`). See <https://rclone.org/docs/#options> for supported options.
+              '';
+              type = lib.types.submodule {
+                freeformType = with lib.types; attrsOf str;
+              };
+              default = {};
+            };
+
             rcloneOptions = lib.mkOption {
               type =
                 with lib.types;
@@ -65,18 +76,7 @@ in
                   ])
                 );
               default = null;
-              description = ''
-                Options to pass to rclone to control its behavior.
-                See <https://rclone.org/docs/#options> for
-                available options. When specifying option names, strip the
-                leading `--`. To set a flag such as
-                `--drive-use-trash`, which does not take a value,
-                set the value to the Boolean `true`.
-              '';
-              example = {
-                bwlimit = "10M";
-                drive-use-trash = "true";
-              };
+              internal = true;
             };
 
             rcloneConfig = lib.mkOption {
@@ -381,6 +381,10 @@ in
     (lib.mapAttrsToList (n: v: {
       assertion = (v.repositoryFile == null);
       message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
+    }) config.services.restic.backups) ++
+    (lib.mapAttrsToList (n: v: {
+      assertion = (v.rcloneOptions == null);
+      message = "services.restic.backups.${n}.rcloneOptions: option was removed. Use services.restic.backups.${n}.rcloneSettings instead";
     }) config.services.restic.backups);
 
     systemd.services = lib.mapAttrs' (
@@ -417,11 +421,7 @@ in
         {
           environment =
             backup.settings
-            // lib.optionalAttrs (backup.rcloneOptions != null) (
-              lib.mapAttrs' (
-                name: value: lib.nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-              ) backup.rcloneOptions
-            )
+            // lib.optionalAttrs (backup.rcloneSettings != null) backup.rcloneSettings
             // lib.optionalAttrs (backup.rcloneConfigFile != null) {
               RCLONE_CONFIG = backup.rcloneConfigFile;
             }
