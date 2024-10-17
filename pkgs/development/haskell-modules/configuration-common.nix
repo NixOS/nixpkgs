@@ -2248,8 +2248,8 @@ self: super: {
   gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
     gi-gdk = self.gi-gdk_4;
   });
-  gi-gdk_4 = self.gi-gdk_4_0_8;
-  gi-gdk_4_0_8 = doDistribute super.gi-gdk_4_0_8;
+  gi-gdk_4 = self.gi-gdk_4_0_9;
+  gi-gdk_4_0_9 = doDistribute super.gi-gdk_4_0_9;
   # GSK is only used for GTK 4.
   gi-gsk = super.gi-gsk.override {
     gi-gdk = self.gi-gdk_4;
