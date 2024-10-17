@@ -1,0 +1,48 @@
+diff --git a/scwx-qt/source/scwx/qt/settings/settings_interface.hpp b/scwx-qt/source/scwx/qt/settings/settings_interface.hpp
+index f5f5bb4..27afba4 100644
+--- a/scwx-qt/source/scwx/qt/settings/settings_interface.hpp
++++ b/scwx-qt/source/scwx/qt/settings/settings_interface.hpp
+@@ -6,6 +6,7 @@
+ #include <memory>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace scwx
+ {
+diff --git a/wxdata/include/scwx/common/vcp.hpp b/wxdata/include/scwx/common/vcp.hpp
+index 9d95c7a..de6cb58 100644
+--- a/wxdata/include/scwx/common/vcp.hpp
++++ b/wxdata/include/scwx/common/vcp.hpp
+@@ -1,6 +1,7 @@
+ #pragma once
+ 
+ #include <string>
++#include <cstdint>
+ 
+ namespace scwx
+ {
+diff --git a/wxdata/include/scwx/util/digest.hpp b/wxdata/include/scwx/util/digest.hpp
+index e0bbc3c..3602e4e 100644
+--- a/wxdata/include/scwx/util/digest.hpp
++++ b/wxdata/include/scwx/util/digest.hpp
+@@ -2,6 +2,7 @@
+ 
+ #include <istream>
+ #include <vector>
++#include <cstdint>
+ 
+ #include <openssl/evp.h>
+ 
+diff --git a/wxdata/include/scwx/util/strings.hpp b/wxdata/include/scwx/util/strings.hpp
+index e282133..4d6e6eb 100644
+--- a/wxdata/include/scwx/util/strings.hpp
++++ b/wxdata/include/scwx/util/strings.hpp
+@@ -3,6 +3,7 @@
+ #include <optional>
+ #include <string>
+ #include <vector>
++#include <cstdint>
+ 
+ namespace scwx
+ {

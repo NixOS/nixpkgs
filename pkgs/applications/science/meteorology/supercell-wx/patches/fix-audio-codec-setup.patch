@@ -1,0 +1,13 @@
+diff --git a/scwx-qt/source/scwx/qt/ui/setup/audio_codec_page.cpp b/scwx-qt/source/scwx/qt/ui/setup/audio_codec_page.cpp
+index 2830ed3..8617ed0 100644
+--- a/scwx-qt/source/scwx/qt/ui/setup/audio_codec_page.cpp
++++ b/scwx-qt/source/scwx/qt/ui/setup/audio_codec_page.cpp
+@@ -167,7 +167,7 @@ bool AudioCodecPage::IsRequired()
+    // Setup is required if codec errors are not ignored, and the default codecs
+    // are not supported
+    return (!ignoreCodecErrors &&
+-           oggCodecs.contains(QMediaFormat::AudioCodec::Vorbis));
++           !oggCodecs.contains(QMediaFormat::AudioCodec::Vorbis));
+ }
+ 
+ } // namespace setup
