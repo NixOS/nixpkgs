@@ -421,6 +421,57 @@ let
        (final.parsed.abi.assertions or []);
     final;
 
+  # Breaks down an elaborated system into its arguments.
+  delaborate = platform:
+    lib.removeAttrs platform (lib.attrNames inspect.predicates
+      ++ lib.attrNames architectures.predicates
+      ++ [
+        "canExecute"
+        "darwinArch"
+        "darwinPlatform"
+        "emulator"
+        "emulatorAvailable"
+        "extensions"
+        "efiArch"
+        "hasSharedLibraries"
+        "isCompatible"
+        "libDir"
+        "linuxArch"
+        "parsed"
+        "qemuArch"
+        "ubootArch"
+        "uname"
+      ]);
+
+  updateTriple = parsed: { cpu ? null, abi ? null, kernel ? null, vendor ? null }@args:
+    parse.tripleFromSystem
+      (parse.mkSystemFromSkeleton ((lib.mapAttrs
+        (n: v: v.name)
+        (lib.filterAttrs (n: v: lib.isAttrs v) parsed)) // lib.filterAttrs (n: v: v != null) args));
+
+  # Elaborates a new system and inherit the previous one but override the parsed.
+  # CPU, ABI, Kernel, and Vendor all can be changed but by default inherit from the previous platform.
+  composeNew = platform: { cpu ? null, abi ? null, kernel ? null, vendor ? null }@args:
+    elaborate ({
+      system = updateTriple platform.parsed args;
+    } // lib.removeAttrs (delaborate platform) [ "system" "config" ]);
+
+  as32bit = platform: if !platform.is32bit && platform.parsed.cpu ? as32bit then
+    composeNew platform {
+      cpu = platform.parsed.cpu.as32bit;
+      abi = if platform.isAarch64 && platform.parsed.abi.name == "gnu" then
+        "gnueabi"
+      else platform.parsed.abi.name;
+    } else null;
+
+  as64bit = platform: if !platform.is64bit && !platform.isWasm && platform.parsed.cpu ? as64bit then
+    composeNew platform {
+      cpu = platform.parsed.cpu.as64bit;
+      abi = if platform.isAarch32 && platform.parsed.abi.name == "gnueabi" then
+        "gnu"
+      else platform.parsed.abi.name;
+    } else null;
+
 in
 
 # Everything in this attrset is the public interface of the file.
@@ -435,5 +486,10 @@ in
     inspect
     parse
     platforms
+    delaborate
+    updateTriple
+    composeNew
+    as32bit
+    as64bit
     ;
 }
