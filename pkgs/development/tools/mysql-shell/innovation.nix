@@ -34,8 +34,8 @@
 let
   pythonDeps = with python3.pkgs; [ certifi paramiko pyyaml ];
 
-  mysqlShellVersion = "9.0.1";
-  mysqlServerVersion = "9.0.1";
+  mysqlShellVersion = "9.1.0";
+  mysqlServerVersion = "9.1.0";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-shell-innovation";
@@ -44,11 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   srcs = [
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor mysqlServerVersion}/mysql-${mysqlServerVersion}.tar.gz";
-      hash = "sha256-GPpl8epq6nHkGP4FSFUtmijeaOK4vDupU2WZ60WaZgY=";
+      hash = "sha256-UsNnUjm/2dPIMiT/IAKqbihvq5e/WytcoahcnDR3Zvw=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-Shell/mysql-shell-${finalAttrs.version}-src.tar.gz";
-      hash = "sha256-F77W+cY1X29p4DIA1JOxJ6jAKT+8Qz4LkHh91MASlE0=";
+      hash = "sha256-YHlM/heqV8vQnIGxwEESXx+wRVr++TFjSb00tPwBb2s=";
     })
   ];
 
