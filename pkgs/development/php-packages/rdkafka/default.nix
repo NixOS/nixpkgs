@@ -18,7 +18,7 @@ buildPecl {
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${rdkafka}'
+      --replace-fail 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${lib.getInclude rdkafka}'
   '';
 
   meta = with lib; {
