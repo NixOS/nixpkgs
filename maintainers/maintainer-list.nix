@@ -15819,6 +15819,12 @@
     githubId = 25470747;
     name = "Nick";
   };
+  okwilkins = {
+    email = "okwilkins@gmail.com";
+    github = "okwilkins";
+    githubId = 5969778;
+    name = "Oliver Wilkins";
+  };
   olcai = {
     email = "dev@timan.info";
     github = "olcai";
