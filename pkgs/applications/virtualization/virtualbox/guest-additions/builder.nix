@@ -1,14 +1,32 @@
-{ stdenv, kernel, fetchurl, lib, pam, libxslt
-, libXext, libXcursor, libXmu
-, glib, libXrandr, dbus, xz
-, pkg-config, which, xorg
-, yasm, patchelf, makeself
-, linuxHeaders, openssl}:
+{
+  stdenv,
+  kernel,
+  fetchurl,
+  lib,
+  pam,
+  libxslt,
+  libXext,
+  libXcursor,
+  libXmu,
+  glib,
+  libXrandr,
+  dbus,
+  xz,
+  pkg-config,
+  which,
+  xorg,
+  yasm,
+  patchelf,
+  makeself,
+  linuxHeaders,
+  openssl,
+}:
 
 let
   buildType = "release";
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "VirtualBox-GuestAdditions-builder-${kernel.version}";
   version = "7.0.20";
 
@@ -19,8 +37,26 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
-  nativeBuildInputs = [ patchelf pkg-config which yasm makeself xorg.xorgserver openssl linuxHeaders xz ] ++ kernel.moduleBuildDependencies;
-  buildInputs = [ dbus libxslt libXext libXcursor pam libXmu libXrandr ];
+  nativeBuildInputs = [
+    patchelf
+    pkg-config
+    which
+    yasm
+    makeself
+    xorg.xorgserver
+    openssl
+    linuxHeaders
+    xz
+  ] ++ kernel.moduleBuildDependencies;
+  buildInputs = [
+    dbus
+    libxslt
+    libXext
+    libXcursor
+    pam
+    libXmu
+    libXrandr
+  ];
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
@@ -58,61 +94,61 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
-      NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
+    NIX_CFLAGS_COMPILE=$(echo "$NIX_CFLAGS_COMPILE" | sed 's,\-isystem ${lib.getDev stdenv.cc.libc}/include,,g')
 
-      cat >> LocalConfig.kmk <<LOCAL_CONFIG
-      VBOX_WITH_TESTCASES            :=
-      VBOX_WITH_TESTSUITE            :=
-      VBOX_WITH_VALIDATIONKIT        :=
-      VBOX_WITH_DOCS                 :=
-      VBOX_WITH_WARNINGS_AS_ERRORS   :=
+    cat >> LocalConfig.kmk <<LOCAL_CONFIG
+    VBOX_WITH_TESTCASES            :=
+    VBOX_WITH_TESTSUITE            :=
+    VBOX_WITH_VALIDATIONKIT        :=
+    VBOX_WITH_DOCS                 :=
+    VBOX_WITH_WARNINGS_AS_ERRORS   :=
 
-      VBOX_WITH_ORIGIN               :=
-      VBOX_PATH_APP_PRIVATE_ARCH_TOP := $out/share/virtualbox
-      VBOX_PATH_APP_PRIVATE_ARCH     := $out/libexec/virtualbox
-      VBOX_PATH_SHARED_LIBS          := $out/libexec/virtualbox
-      VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
-      VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
-      VBOX_PATH_APP_DOCS             := $out/doc
+    VBOX_WITH_ORIGIN               :=
+    VBOX_PATH_APP_PRIVATE_ARCH_TOP := $out/share/virtualbox
+    VBOX_PATH_APP_PRIVATE_ARCH     := $out/libexec/virtualbox
+    VBOX_PATH_SHARED_LIBS          := $out/libexec/virtualbox
+    VBOX_WITH_RUNPATH              := $out/libexec/virtualbox
+    VBOX_PATH_APP_PRIVATE          := $out/share/virtualbox
+    VBOX_PATH_APP_DOCS             := $out/doc
 
-      VBOX_USE_SYSTEM_XORG_HEADERS := 1
-      VBOX_USE_SYSTEM_GL_HEADERS := 1
-      VBOX_NO_LEGACY_XORG_X11 := 1
-      SDK_VBoxLibPng_INCS :=
-      SDK_VBoxLibXml2_INCS :=
-      SDK_VBoxLibLzma_INCS := ${xz.dev}/include
-      SDK_VBoxLibLzma_LIBS := ${xz.out}/lib
+    VBOX_USE_SYSTEM_XORG_HEADERS := 1
+    VBOX_USE_SYSTEM_GL_HEADERS := 1
+    VBOX_NO_LEGACY_XORG_X11 := 1
+    SDK_VBoxLibPng_INCS :=
+    SDK_VBoxLibXml2_INCS :=
+    SDK_VBoxLibLzma_INCS := ${xz.dev}/include
+    SDK_VBoxLibLzma_LIBS := ${xz.out}/lib
 
-      SDK_VBoxOpenSslStatic_INCS := ${openssl.dev}/include/ssl
+    SDK_VBoxOpenSslStatic_INCS := ${openssl.dev}/include/ssl
 
-      VBOX_ONLY_ADDITIONS := 1
-      VBOX_WITH_SHARED_CLIPBOARD := 1
-      VBOX_WITH_GUEST_PROPS := 1
-      VBOX_WITH_VMSVGA := 1
-      VBOX_WITH_SHARED_FOLDERS := 1
-      VBOX_WITH_GUEST_CONTROL := 1
-      VBOX_WITHOUT_LINUX_GUEST_PACKAGE := 1
-      VBOX_WITH_PAM :=
-      VBOX_WITH_UPDATE_AGENT :=
-      VBOX_WITH_AUDIO_ALSA :=
-      VBOX_WITH_AUDIO_PULSE :=
+    VBOX_ONLY_ADDITIONS := 1
+    VBOX_WITH_SHARED_CLIPBOARD := 1
+    VBOX_WITH_GUEST_PROPS := 1
+    VBOX_WITH_VMSVGA := 1
+    VBOX_WITH_SHARED_FOLDERS := 1
+    VBOX_WITH_GUEST_CONTROL := 1
+    VBOX_WITHOUT_LINUX_GUEST_PACKAGE := 1
+    VBOX_WITH_PAM :=
+    VBOX_WITH_UPDATE_AGENT :=
+    VBOX_WITH_AUDIO_ALSA :=
+    VBOX_WITH_AUDIO_PULSE :=
 
-      VBOX_BUILD_PUBLISHER := _NixOS
-      LOCAL_CONFIG
+    VBOX_BUILD_PUBLISHER := _NixOS
+    LOCAL_CONFIG
 
-      ./configure \
-        --only-additions \
-        --with-linux=${kernel.dev} \
-        --disable-kmods
+    ./configure \
+      --only-additions \
+      --with-linux=${kernel.dev} \
+      --disable-kmods
 
-      sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig @' \
-        -i AutoConfig.kmk
-      sed -e 's@arch/x86/@@' \
-        -i Config.kmk
+    sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${glib.dev}/lib/pkgconfig @' \
+      -i AutoConfig.kmk
+    sed -e 's@arch/x86/@@' \
+      -i Config.kmk
 
-      export USER=nix
-      set +x
-    '';
+    export USER=nix
+    set +x
+  '';
 
   enableParallelBuilding = true;
 
@@ -130,7 +166,11 @@ in stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p $out
-    cp -rv ./out/linux.${if stdenv.hostPlatform.is32bit then "x86" else "amd64"}/${buildType}/bin/additions/VBoxGuestAdditions-${if stdenv.hostPlatform.is32bit then "x86" else "amd64"}.tar.bz2 $out/
+    cp -rv ./out/linux.${
+      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
+    }/${buildType}/bin/additions/VBoxGuestAdditions-${
+      if stdenv.hostPlatform.is32bit then "x86" else "amd64"
+    }.tar.bz2 $out/
 
     runHook postInstall
   '';
