@@ -36,6 +36,8 @@ clangStdenv.mkDerivation (finalAttrs: {
       hash = "sha256-C+7x/VpVwewXEPwibi7GxGfjuhDkhcjTyGbZHlYL2Bs=";
     })
     ./match-wrappers.patch
+    # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/27
+    ./reliable-mounts-file.patch
   ];
 
   strictDeps = true;

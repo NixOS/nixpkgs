@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, versionCheckHook
 }:
 
 buildGoModule rec {
@@ -15,6 +16,14 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-T6VcyklwfRS012ZRzqxkahn9YYrQGky/znTqLIkAoK0=";
+
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/nats";
 
   meta = with lib; {
     description = "NATS Command Line Interface";

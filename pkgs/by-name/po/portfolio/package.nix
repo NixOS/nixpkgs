@@ -9,8 +9,7 @@
   makeDesktopItem,
   openjdk17,
   stdenvNoCC,
-  swt,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
   gitUpdater,
 }:
@@ -29,8 +28,7 @@ let
     glib-networking
     gtk3
     libsecret
-    swt
-    webkitgtk
+    webkitgtk_4_0
   ];
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -56,7 +54,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar" \
       --prefix PATH : ${openjdk17}/bin
 
     # Create desktop item

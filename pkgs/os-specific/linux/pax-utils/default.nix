@@ -16,12 +16,12 @@
 
 stdenv.mkDerivation rec {
   pname = "pax-utils";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchgit {
     url = "https://anongit.gentoo.org/git/proj/pax-utils.git";
     rev = "v${version}";
-    hash = "sha256-WyNng+UtfRz1+Eu4gwXLxUvBAg+m3mdrc8GdEPYRKVE=";
+    hash = "sha256-fOdiZcS1ZWGN8U5v65LzGIZJD6hCl5dbLMHDpSyms+8=";
   };
 
   strictDeps = true;

@@ -10,8 +10,6 @@ let
   enableDHCP = config.networking.dhcpcd.enable &&
         (config.networking.useDHCP || lib.any (i: i.useDHCP == true) interfaces);
 
-  enableNTPService = (config.services.ntp.enable || config.services.ntpd-rs.enable || config.services.openntpd.enable || config.services.chrony.enable);
-
   # Don't start dhcpcd on explicitly configured interfaces or on
   # interfaces that are part of a bridge, bond or sit device.
   ignoredInterfaces =
@@ -87,23 +85,6 @@ let
 
       ${cfg.extraConfig}
     '';
-
-  exitHook = pkgs.writeText "dhcpcd.exit-hook" ''
-    ${lib.optionalString enableNTPService ''
-      if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-        # Restart ntpd. We need to restart it to make sure that it will actually do something:
-        # if ntpd cannot resolve the server hostnames in its config file, then it will never do
-        # anything ever again ("couldn't resolve ..., giving up on it"), so we silently lose
-        # time synchronisation. This also applies to openntpd.
-        ${lib.optionalString config.services.ntp.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd.service || true"}
-        ${lib.optionalString config.services.ntpd-rs.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart ntpd-rs.service || true"}
-        ${lib.optionalString config.services.openntpd.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart openntpd.service || true"}
-        ${lib.optionalString config.services.chrony.enable "/run/current-system/systemd/bin/systemctl try-reload-or-restart chronyd.service || true"}
-      fi
-    ''}
-
-    ${cfg.runHook}
-  '';
 
 in
 
@@ -207,14 +188,14 @@ in
   config = lib.mkIf enableDHCP {
 
     assertions = [ {
-      # dhcpcd doesn't start properly with malloc ∉ [ libc scudo ]
+      # dhcpcd doesn't start properly with malloc ∉ [ jemalloc libc mimalloc scudo ]
       # see https://github.com/NixOS/nixpkgs/issues/151696
       assertion =
         dhcpcd.enablePrivSep
-          -> lib.elem config.environment.memoryAllocator.provider [ "libc" "scudo" ];
+          -> lib.elem config.environment.memoryAllocator.provider [ "jemalloc" "libc" "mimalloc" "scudo" ];
       message = ''
         dhcpcd with privilege separation is incompatible with chosen system malloc.
-          Currently only the `libc` and `scudo` allocators are known to work.
+          Currently `graphene-hardened` allocator is known to be broken.
           To disable dhcpcd's privilege separation, overlay Nixpkgs and override dhcpcd
           to set `enablePrivSep = false`.
       '';
@@ -230,10 +211,11 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ] ++ lib.optional (!hasDefaultGatewaySet) "network-online.target";
-        wants = [ "network.target" ];
+        wants = [ "network.target"  "resolvconf.service" ];
+        after = [ "resolvconf.service" ];
         before = [ "network-online.target" ];
 
-        restartTriggers = lib.optional (enableNTPService || cfg.runHook != "") [ exitHook ];
+        restartTriggers = [ cfg.runHook ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
         # because it brings down the network interfaces configured by
@@ -295,9 +277,7 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc."dhcpcd.exit-hook" = lib.mkIf (enableNTPService || cfg.runHook != "") {
-      source = exitHook;
-    };
+    environment.etc."dhcpcd.exit-hook".text = cfg.runHook;
 
     powerManagement.resumeCommands = lib.mkIf config.systemd.services.dhcpcd.enable
       ''

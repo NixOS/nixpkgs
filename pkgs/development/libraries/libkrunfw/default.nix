@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   kernelSrc = fetchurl {
-    url = "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.52.tar.xz";
+    url = "mirror://kernel/linux/kernel/v6.x/linux-6.6.52.tar.xz";
     hash = "sha256-FZGrNIOZ1KpTEhFYUlBWppyM8P4OkJNbAJXppY43tLg=";
   };
 

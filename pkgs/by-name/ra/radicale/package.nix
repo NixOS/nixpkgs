@@ -6,19 +6,15 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.2.3";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1IlnXVetQQuKBt6+QVKNeMM6qBQAiUhqc+4x3xOnSdE=";
+    hash = "sha256-S9/bPgItbr6rRr4WX+hmyU1RvKn5gz9FdZjYlr0hnd0=";
   };
-
-  postPatch = ''
-    sed -i '/addopts/d' setup.cfg
-  '';
 
   build-system = with python3.pkgs; [
     setuptools
@@ -36,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest7CheckHook
+    pytestCheckHook
     waitress
   ];
 

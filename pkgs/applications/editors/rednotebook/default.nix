@@ -1,5 +1,5 @@
 { lib, buildPythonApplication, fetchFromGitHub
-, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
+, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk_4_0
 , pygobject3, pyyaml, setuptools
 }:
 
@@ -23,7 +23,7 @@ buildPythonApplication rec {
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
-    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
+    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk_4_0
     pygobject3 pyyaml
   ];
 

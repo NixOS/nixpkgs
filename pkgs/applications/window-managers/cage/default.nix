@@ -1,5 +1,4 @@
 { lib, stdenv, fetchFromGitHub
-, substituteAll
 , meson, ninja, pkg-config, wayland-scanner, scdoc, makeWrapper
 , wlroots, wayland, wayland-protocols, pixman, libxkbcommon, xcbutilwm
 , systemd, libGL, libX11, mesa
@@ -9,23 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "cage";
-  version = "0.1.5-unstable-2024-07-29";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "cage-kiosk";
     repo = "cage";
-    rev = "d3fb99d6654325ec46277cfdb589f89316bed701";
-    hash = "sha256-WP0rWO9Wbs/09wTY8IlIUybnVUnwiNdXD9JgsoVG4rM=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-2SFtz62z0EF8cpFTC6wGi125MD4a5mkXqP/C+7fH+3g=";
   };
-
-  patches = [
-    # TODO: Remove on next stable release.
-    (substituteAll {
-      src = ./inject-git-commit.patch;
-      gitCommit = lib.substring 0 7 src.rev;
-      gitBranch = "master";
-    })
-  ];
 
   depsBuildBuild = [
     pkg-config

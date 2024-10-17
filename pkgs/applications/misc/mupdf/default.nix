@@ -60,17 +60,21 @@ let
 
 in
 stdenv.mkDerivation rec {
-  version = "1.24.8";
+  version = "1.24.9";
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
-    hash = "sha256-pRjZvpds2yAG1FOC1/+xubjWS8P9PLc8picNdS+n9Eg=";
+    hash = "sha256-C0RqoO7MEU6ZadzNcMl4k1j8y2WJqB1HDclBoIdNqYo=";
   };
 
   patches = [
-    ./0002-Add-Darwin-deps.patch
-    ./0003-Fix-cpp-build.patch
+    # Upstream makefile does not work with system deps on macOS by default, so
+    # we reuse the Linux section instead.
+    ./fix-darwin-system-deps.patch
+    # Upstream C++ wrap script only defines fixed-sized integers on macOS but
+    # this is required on aarch64-linux too.
+    ./fix-cpp-build.patch
   ];
 
   postPatch = ''

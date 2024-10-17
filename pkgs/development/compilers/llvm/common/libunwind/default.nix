@@ -19,7 +19,9 @@ let
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${pname} "$out"
       mkdir -p "$out/libcxx"
       cp -r ${monorepoSrc}/libcxx/cmake "$out/libcxx"

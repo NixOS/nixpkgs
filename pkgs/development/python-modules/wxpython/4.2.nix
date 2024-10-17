@@ -30,7 +30,7 @@
   mesa,
   pango,
   SDL,
-  webkitgtk,
+  webkitgtk_4_0,
   wxGTK,
   xorgproto,
 
@@ -42,13 +42,13 @@
 
 buildPythonPackage rec {
   pname = "wxpython";
-  version = "4.2.1";
+  version = "4.2.2";
   format = "other";
 
   src = fetchPypi {
     pname = "wxPython";
     inherit version;
-    hash = "sha256-5I3iEaZga/By7D+neHcda3RsALf0uXDrWHKN31bRPVw=";
+    hash = "sha256-XbywZQ9n/cLFlleVolX/qj17CfsUmqjaLQ2apE444ro=";
   };
 
   patches = [
@@ -93,7 +93,7 @@ buildPythonPackage rec {
       libXxf86vm
       libglvnd
       mesa
-      webkitgtk
+      webkitgtk_4_0
       xorgproto
     ];
 

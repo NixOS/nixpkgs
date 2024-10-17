@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, util-linux, bash }:
+{ lib, stdenv, fetchFromGitHub, pkg-config, util-linux, bash, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "bcache-tools";
@@ -26,7 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    ./bcache-udev-modern.patch
+    (substituteAll {
+      src = ./bcache-udev-modern.patch;
+      shell = "${bash}/bin/sh";
+    })
     ./fix-static.patch
   ];
 

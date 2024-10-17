@@ -50,14 +50,16 @@ let
         "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
       }.${variant};
       license = lib.licenses.gpl3Plus;
-      maintainers = with lib.maintainers; [
-        AndersonTorres
-        adisbladis
-        jwiegley
-        lovek323
-        matthewbauer
-        # atemu for issues relating to Macport
-      ];
+      maintainers = {
+        "mainline" = with lib.maintainers; [
+          AndersonTorres
+          adisbladis
+          jwiegley
+          lovek323
+          matthewbauer
+        ];
+        "macport" = with lib.maintainers; [ ];
+      }.${variant};
       platforms = {
         "mainline" = lib.platforms.all;
         "macport" = lib.platforms.darwin;

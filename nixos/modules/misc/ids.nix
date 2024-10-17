@@ -236,7 +236,7 @@ in
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
-      #shout = 206; # dynamically allocated as of 2021-09-18
+      #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
@@ -296,7 +296,7 @@ in
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #pdns-recursor = 269; # dynamically allocated as of 2020-20-18
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
@@ -607,7 +607,7 @@ in
       sickbeard = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
-      gogs = 268;
+      # gogs = 268; # unused, removed in 2024-10-12
       #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused

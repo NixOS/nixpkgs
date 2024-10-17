@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation {
   pname = "darcs-to-git";
-  version = "0-unstable-2024-02-20";
+  version = "0-unstable-2024-09-30";
 
   src = fetchFromGitHub {
     owner = "purcell";
     repo = "darcs-to-git";
-    rev = "2a31a95726658fef1b48e1f0010928fc2a69d5bf";
-    hash = "sha256-ep36lAYUnO3kX0ff3PxrBHog5CIGsJaERiNN5DmmAQI=";
+    rev = "9d556cb7daa06b9de3cb97487b98bab2869a7fe7";
+    hash = "sha256-0GKSzqgJgi1w4uZOqixp/F6i7hK2ZmuQI0px8FEDFXM=";
   };
 
   patchPhase =

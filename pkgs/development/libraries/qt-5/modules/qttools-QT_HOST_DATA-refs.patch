@@ -1,0 +1,39 @@
+From 985a5b530e27372a0766ce897c621026928abfbb Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 7 Aug 2024 22:16:42 +0200
+Subject: [PATCH] Patch QT_HOST_DATA references
+
+---
+ src/linguist/linguist.pro                           | 2 +-
+ src/qtattributionsscanner/qtattributionsscanner.pro | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/linguist/linguist.pro b/src/linguist/linguist.pro
+index 7638c7710..bd8798818 100644
+--- a/src/linguist/linguist.pro
++++ b/src/linguist/linguist.pro
+@@ -47,7 +47,7 @@ contains(CMAKE_BIN_DIR, "^\\.\\./.*") {
+ load(qt_build_paths)
+ 
+ cmake_linguist_config_file.input = $$PWD/Qt5LinguistToolsConfig.cmake.in
+-cmake_linguist_config_version_file.input = $$[QT_HOST_DATA/src]/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
++cmake_linguist_config_version_file.input = @qtbaseDev@/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
+ cmake_linguist_macros_file.input = $$PWD/Qt5LinguistToolsMacros.cmake
+ CMAKE_PACKAGE_VERSION = $$MODULE_VERSION
+ cmake_linguist_config_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5LinguistTools/Qt5LinguistToolsConfig.cmake
+diff --git a/src/qtattributionsscanner/qtattributionsscanner.pro b/src/qtattributionsscanner/qtattributionsscanner.pro
+index d645a22a9..5d4239f83 100644
+--- a/src/qtattributionsscanner/qtattributionsscanner.pro
++++ b/src/qtattributionsscanner/qtattributionsscanner.pro
+@@ -51,7 +51,7 @@ load(qt_build_paths)
+ equals(QMAKE_HOST.os, Windows): CMAKE_BIN_SUFFIX = ".exe"
+ 
+ cmake_qattributionsscanner_config_file.input = $$PWD/Qt5AttributionsScannerTools.cmake.in
+-cmake_qattributionsscanner_config_version_file.input = $$[QT_HOST_DATA/src]/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
++cmake_qattributionsscanner_config_version_file.input = @qtbaseDev@/mkspecs/features/data/cmake/Qt5ConfigVersion.cmake.in
+ CMAKE_PACKAGE_VERSION = $$MODULE_VERSION
+ cmake_qattributionsscanner_config_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5AttributionsScannerTools/Qt5AttributionsScannerToolsConfig.cmake
+ cmake_qattributionsscanner_config_version_file.output = $$MODULE_BASE_OUTDIR/lib/cmake/Qt5AttributionsScannerTools/Qt5AttributionsScannerToolsConfigVersion.cmake
+-- 
+2.44.1
+

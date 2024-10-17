@@ -135,7 +135,6 @@ buildFHSEnv {
       udev
       unixODBC
       util-linux
-      v4l-utils
       vulkan-loader
       wayland
       zlib

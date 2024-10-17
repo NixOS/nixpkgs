@@ -853,9 +853,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Resolves domains of proxyPass targets at runtime
-          and not only at start, you have to set
-          services.nginx.resolver, too.
+          Resolves domains of proxyPass targets at runtime and not only at startup.
+          This can be used as a workaround if nginx fails to start because of not-yet-working DNS.
+
+          :::{.warn}
+          `services.nginx.resolver` must be set for this option to work.
+          :::
         '';
       };
 
@@ -1144,14 +1147,6 @@ in
           services.nginx.virtualHosts.<name>.onlySSL,
           services.nginx.virtualHosts.<name>.forceSSL and
           services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
-        '';
-      }
-
-      {
-        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
-          1.19.4 or above; see the documentation for services.nginx.package.
         '';
       }
 

@@ -141,6 +141,7 @@ let
           --absolute-names \
           --verbatim-files-from \
           --transform 'flags=rSh;s|/nix/store/||' \
+          --transform 'flags=rSh;s|~nix~case~hack~[[:digit:]]\+||g' \
           --files-from ${hostPkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
           | ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
             --quiet \

@@ -16,7 +16,6 @@ in {
         libayatana-common
         ubports-click
       ]) ++ (with pkgs.lomiri; [
-        content-hub
         hfd-service
         history-service
         libusermetrics
@@ -24,6 +23,7 @@ in {
         lomiri-calculator-app
         lomiri-camera-app
         lomiri-clock-app
+        lomiri-content-hub
         lomiri-docviewer-app
         lomiri-download-manager
         lomiri-filemanager-app
@@ -129,7 +129,7 @@ in {
 
     environment.pathsToLink = [
       # Configs for inter-app data exchange system
-      "/share/content-hub/peers"
+      "/share/lomiri-content-hub/peers"
       # Configs for inter-app URL requests
       "/share/lomiri-url-dispatcher/urls"
       # Splash screens & other images for desktop apps launched via lomiri-app-launch
@@ -194,10 +194,6 @@ in {
     };
 
     users.groups.usermetrics = { };
-
-    # TODO content-hub cannot pass files between applications without asking AA for permissions. And alot of the Lomiri stack is designed with AA availability in mind. This might be a requirement to be closer to upstream?
-    # But content-hub currently fails to pass files between applications even with AA enabled, and we can get away without AA in many places. Let's see how this develops before requiring this for good.
-    # security.apparmor.enable = true;
   };
 
   meta.maintainers = lib.teams.lomiri.members;

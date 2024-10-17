@@ -6,17 +6,18 @@
 , gst_all_1
 , ipu6-camera-hal
 , libdrm
+, libva
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "icamerasrc-${ipu6-camera-hal.ipuVersion}";
-  version = "unstable-2023-10-23";
+  version = "unstable-2024-09-29";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    rev = "528a6f177732def4d5ebc17927220d8823bc8fdc";
-    hash = "sha256-Ezcm5OpF/NKvJf5sFeJyvNc2Uq0166GukC9MuNUV2Fs=";
+    rev = "refs/tags/20240926_1446";
+    hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
   };
 
   nativeBuildInputs = [
@@ -34,8 +35,10 @@ stdenv.mkDerivation {
   buildInputs = [
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
     ipu6-camera-hal
     libdrm
+    libva
   ];
 
   NIX_CFLAGS_COMPILE = [

@@ -141,6 +141,12 @@ py.pkgs.buildPythonApplication rec {
     export HOME=$(mktemp -d)
   '';
 
+  # Propagating dependencies leaks them through $PYTHONPATH which causes issues
+  # when used in nix-shell.
+  postFixup = ''
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   pytestFlagsArray = [
     "-Wignore::DeprecationWarning"
   ];

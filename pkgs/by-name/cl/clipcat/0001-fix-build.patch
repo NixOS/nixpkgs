@@ -1,0 +1,50 @@
+From 9ba11f90c4364529f220c44a3266926bf8f6a4b4 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Tue, 22 Oct 2024 18:43:20 +0800
+Subject: [PATCH] fix build
+
+---
+ Cargo.toml              | 1 -
+ crates/proto/build.rs   | 1 -
+ crates/proto/src/lib.rs | 1 -
+ 3 files changed, 3 deletions(-)
+
+diff --git a/Cargo.toml b/Cargo.toml
+index 8deae48..214a0e3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -122,7 +122,6 @@ clipcat-server          = { path = "./crates/server" }
+ 
+ [workspace.lints.rust]
+ async_fn_in_trait = "allow"
+-box_pointers      = "allow"
+ 
+ # TODO: deny `unused_crate_dependencies` after https://github.com/rust-lang/rust/issues/95513 being solved
+ unused_crate_dependencies = "allow"
+diff --git a/crates/proto/build.rs b/crates/proto/build.rs
+index 5e38f62..d6ba4be 100644
+--- a/crates/proto/build.rs
++++ b/crates/proto/build.rs
+@@ -6,7 +6,6 @@ fn prost_config() -> Config {
+     config
+ }
+ 
+-#[allow(box_pointers)]
+ fn main() -> Result<(), Box<dyn std::error::Error>> {
+     tonic_build::configure().compile_with_config(
+         prost_config(),
+diff --git a/crates/proto/src/lib.rs b/crates/proto/src/lib.rs
+index a7205ab..e4dcd02 100644
+--- a/crates/proto/src/lib.rs
++++ b/crates/proto/src/lib.rs
+@@ -2,7 +2,6 @@ mod utils;
+ mod proto {
+     // SAFETY: allow: prost
+     #![allow(
+-        box_pointers,
+         unreachable_pub,
+         unused_qualifications,
+         unused_results,
+-- 
+2.46.1
+

@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-CSD3AZ36tmC/cYSdPsdDYx894+jd9GkGkhYJ767QY8A=";
+    hash = "sha256-7Uj1YBpunj9/32U5hpCokxfcVoRB9Oi2G9Cso+gAu5Q=";
   };
 
   patches = [

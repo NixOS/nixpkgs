@@ -14,24 +14,24 @@
   glib,
   glib-networking,
   libayatana-appindicator,
-  webkitgtk,
+  webkitgtk_4_0,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cinny-desktop";
   # We have to be using the same version as cinny-web or this isn't going to work.
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
     rev = "refs/tags/v${version}";
-    hash = "sha256-W73ma8ScF3LGv45yhZCV80zhh7URLuWhbi+JumyTp+4=";
+    hash = "sha256-W8WSnfUqWTtyb6x0Kmej5sAxsi1Kh/uDkIx6SZhgSvw=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-ved2W4+Dt7pN9j9vIaDlAkaY517nBEgPKgu8ArcHXsM=";
+  cargoHash = "sha256-rg4NdxyJfnEPmFjb2wKJcF7ga7t5WNX/LB0haOvGbXU=";
 
   postPatch =
     let
@@ -84,7 +84,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
       libayatana-appindicator
-      webkitgtk
+      webkitgtk_4_0
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.DarwinTools

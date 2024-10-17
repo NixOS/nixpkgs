@@ -6081,11 +6081,6 @@
       "qtkeychain",
       "selenium-webdriver-at-spi"
     ],
-    "trojita": [
-      "akonadi-contacts",
-      "extra-cmake-modules",
-      "sonnet"
-    ],
     "umbrello": [
       "extra-cmake-modules",
       "karchive",
@@ -6234,5 +6229,5 @@
       "kwindowsystem"
     ]
   },
-  "version": "55fdd899"
+  "version": "10b4e2ea"
 }

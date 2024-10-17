@@ -91,7 +91,7 @@ in
     };
     port = mkOption {
       type = types.port;
-      default = 3001;
+      default = 2283;
       description = "The port that immich will listen on.";
     };
     openFirewall = mkOption {
@@ -227,7 +227,6 @@ in
     services.redis.servers = mkIf cfg.redis.enable {
       immich = {
         enable = true;
-        user = cfg.user;
         port = cfg.redis.port;
         bind = mkIf (!isRedisUnixSocket) cfg.redis.host;
       };
@@ -283,9 +282,14 @@ in
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         StateDirectory = "immich";
+        SyslogIdentifier = "immich";
         RuntimeDirectory = "immich";
         User = cfg.user;
         Group = cfg.group;
+        # ensure that immich-server has permission to connect to the redis socket.
+        SupplementaryGroups = mkIf (cfg.redis.enable && isRedisUnixSocket) [
+          config.services.redis.servers.immich.group
+        ];
       };
     };
 

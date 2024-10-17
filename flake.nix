@@ -80,8 +80,17 @@
 
       checks = forAllSystems (system: {
         tarball = jobs.${system}.tarball;
-        # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
-      } // lib.optionalAttrs (self.legacyPackages.${system}.stdenv.hostPlatform.isLinux && !self.legacyPackages.${system}.targetPlatform.isPower64) {
+      } // lib.optionalAttrs
+        (
+          self.legacyPackages.${system}.stdenv.hostPlatform.isLinux
+          # Exclude power64 due to "libressl is not available on the requested hostPlatform" with hostPlatform being power64
+          && !self.legacyPackages.${system}.targetPlatform.isPower64
+          # Exclude armv6l-linux due to "cannot bootstrap GHC on this platform ('armv6l-linux' with libc 'defaultLibc')"
+          && system != "armv6l-linux"
+          # Exclude riscv64-linux due to "cannot bootstrap GHC on this platform ('riscv64-linux' with libc 'defaultLibc')"
+          && system != "riscv64-linux"
+        )
+      {
         # Test that ensures that the nixosSystem function can accept a lib argument
         # Note: prefer not to extend or modify `lib`, especially if you want to share reusable modules
         #       alternatives include: `import` a file, or put a custom library in an option or in `_module.args.<libname>`
@@ -111,10 +120,20 @@
         }).nixos.manual;
       };
 
-      devShells = forAllSystems (system: {
-        /** A shell to get tooling for Nixpkgs development. See nixpkgs/shell.nix. */
-        default = import ./shell.nix { inherit system; };
-      });
+      devShells = forAllSystems (system:
+        { } // lib.optionalAttrs
+          (
+            # Exclude armv6l-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            system != "armv6l-linux"
+            # Exclude riscv64-linux because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            && system != "riscv64-linux"
+            # Exclude FreeBSD because "Package ‘ghc-9.6.6’ in .../pkgs/development/compilers/ghc/common-hadrian.nix:579 is not available on the requested hostPlatform"
+            && !self.legacyPackages.${system}.stdenv.hostPlatform.isFreeBSD
+          )
+        {
+          /** A shell to get tooling for Nixpkgs development. See nixpkgs/shell.nix. */
+          default = import ./shell.nix { inherit system; };
+        });
 
       /**
         A nested structure of [packages](https://nix.dev/manual/nix/latest/glossary#package-attribute-set) and other values.

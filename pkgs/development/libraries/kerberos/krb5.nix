@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
   # stdenv will take care of overriding bindir, sbindir, etc. such that "out" contains the binaries.
   prefix = builtins.placeholder "lib";
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    NIX_CFLAGS_COMPILE = "-fcommon";
+  };
+
   configureFlags = [
       "--localstatedir=/var/lib"
       (lib.withFeature withLdap "ldap")

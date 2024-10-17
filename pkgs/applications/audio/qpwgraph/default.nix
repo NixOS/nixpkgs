@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpwgraph";
-  version = "0.7.5";
+  version = "0.7.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-EMBoP0gmJ1JwjkCc1UjTM4BgeYhFSFhUOD14rJRow1o=";
+    sha256 = "sha256-Ap2iSYalsyzUq/MvKUim3l29FFYid0FLUBKQ29FyWDg=";
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

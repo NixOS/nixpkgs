@@ -1,50 +1,46 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libelfin
-, ncurses
-, python3
-, python3Packages
-, makeWrapper
+{
+  lib,
+  docutils,
+  fetchFromGitHub,
+  libelfin,
+  ncurses,
+  pkg-config,
+  python3Packages,
+  makeWrapper,
 }:
-stdenv.mkDerivation rec {
+
+python3Packages.buildPythonApplication rec {
   pname = "coz";
-  version = "0.2.1";
+  version = "0.2.2";
+  pyproject = false; # Built with make
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "coz";
     rev = version;
-    hash = "sha256-DHpXKyqaDflD2olAXnyaxXvwsB3Tx4hKCeugxL0ZVG0=";
+    hash = "sha256-tvFXInxjodB0jEgEKgnOGapiVPomBG1hvrhYtG2X5jI=";
   };
 
-  postPatch = ''
-    sed -i -e '/pid_t gettid/,+2d' libcoz/ccutil/thread.h
-  '';
-
-  postConfigure = ''
-    # This is currently hard-coded. Will be fixed in the next release.
-    sed -e "s|/usr/lib/|$out/lib/|" -i ./coz
-  '';
-
   nativeBuildInputs = [
+    pkg-config
     ncurses
-    makeWrapper
-    python3Packages.wrapPython
+    docutils
   ];
 
   buildInputs = [
+    ncurses
     libelfin
-    (python3.withPackages (p: [ p.docutils ]))
   ];
 
-  installPhase = ''
-    mkdir -p $out/share/man/man1
-    make install prefix=$out
+  dependencies = [ python3Packages.docutils ];
 
-    # fix executable includes
+  makeFlags = [ "prefix=${placeholder "out"}" ];
+
+  strictDeps = true;
+
+  # fix executable includes
+  postInstall = ''
     chmod -x $out/include/coz.h
-
-    wrapPythonPrograms
   '';
 
   meta = {
@@ -52,6 +48,9 @@ stdenv.mkDerivation rec {
     description = "Profiler based on casual profiling";
     mainProgram = "coz";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [
+      zimbatm
+      aleksana
+    ];
   };
 }

@@ -1,17 +1,16 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
-  fetchPypi,
-  setuptools,
-  python,
-  pkg-config,
+  fetchFromGitHub,
   gdb,
-  numpy,
   ncurses,
-
-  # Reverse dependency
-  sage,
+  numpy,
+  pkg-config,
+  pygame-ce,
+  python,
+  sage, # Reverse dependency
+  setuptools,
+  stdenv,
 }:
 
 let
@@ -37,10 +36,11 @@ buildPythonPackage rec {
   version = "3.0.11";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "cython";
-    inherit version;
-    hash = "sha256-cUbdKvhoK0ymEzGFHmrrzp/lFY51MAND+AwHyoCx+v8=";
+  src = fetchFromGitHub {
+    owner = "cython";
+    repo = "cython";
+    rev = version;
+    hash = "sha256-ZyDNv95eS9YrVHIh5C/Xq8OvfX1cnI3f9GjA+OfaONA=";
   };
 
   build-system = [
@@ -73,17 +73,44 @@ buildPythonPackage rec {
   # doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
-    inherit sage;
+    inherit pygame-ce sage;
   };
 
-  # force regeneration of generated code in source distributions
+  # Force code regeneration in source distributions
   # https://github.com/cython/cython/issues/5089
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
-    description = "Optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
+    description = "Optimising static compiler for both the Python and the extended Cython programming languages";
+    longDescription = ''
+      Cython is an optimising static compiler for both the Python programming
+      language and the extended Cython programming language (based on Pyrex). It
+      makes writing C extensions for Python as easy as Python itself.
+
+      Cython gives you the combined power of Python and C to let you:
+
+      - write Python code that calls back and forth from and to C or C++ code
+        natively at any point.
+      - easily tune readable Python code into plain C performance by adding
+        static type declarations, also in Python syntax.
+      - use combined source code level debugging to find bugs in your Python,
+        Cython and C code.
+      - interact efficiently with large data sets, e.g. using multi-dimensional
+        NumPy arrays.
+      - quickly build your applications within the large, mature and widely used
+        CPython ecosystem.
+      - integrate natively with existing code and data from legacy, low-level or
+        high-performance libraries and applications.
+
+      The Cython language is a superset of the Python language that additionally
+      supports calling C functions and declaring C types on variables and class
+      attributes. This allows the compiler to generate very efficient C code
+      from Cython code.
+    '';
+    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
+    mainProgram = "cython";
+    maintainers = with lib.maintainers; [ AndersonTorres ];
   };
 }

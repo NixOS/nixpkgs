@@ -17,6 +17,11 @@ let
       hash = "sha256-v0q2MhySayij7+qBTE5q01IOq/DyUcWnjpbzB/AV34c=";
     })
     ./meshboolean-const.patch
+    # Drop if this fix gets merged upstream
+    (fetchpatch {
+      url = "https://github.com/supermerill/SuperSlicer/commit/fa7c545efa5d1880cf24af32083094fc872d3692.patch";
+      hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
+    })
   ];
 
   versions = {

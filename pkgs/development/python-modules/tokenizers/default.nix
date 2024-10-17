@@ -52,7 +52,7 @@ let
     };
     "big.txt" = fetchurl {
       url = "https://norvig.com/big.txt";
-      sha256 = "sha256-+gZsfUDw8gGsQUTmUqpiQw5YprOAXscGUPZ42lgE6Hs=";
+      hash = "sha256-+gZsfUDw8gGsQUTmUqpiQw5YprOAXscGUPZ42lgE6Hs=";
     };
     "bert-wiki.json" = fetchurl {
       url = "https://s3.amazonaws.com/models.huggingface.co/bert/anthony/doc-pipeline/tokenizer.json";
@@ -74,14 +74,14 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.20.0";
+  version = "0.20.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uuSHsdyx77YQjf1aiz7EJ/X+6RaOgfmjGqHSlMaCWDI=";
+    hash = "sha256-QTe1QdmJHSoosNG9cCJS7uQNdoMwgL+CJHQQUX5VtSY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
@@ -149,6 +149,7 @@ buildPythonPackage rec {
   meta = {
     description = "Fast State-of-the-Art Tokenizers optimized for Research and Production";
     homepage = "https://github.com/huggingface/tokenizers";
+    changelog = "https://github.com/huggingface/tokenizers/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     platforms = lib.platforms.unix;
