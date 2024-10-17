@@ -66,7 +66,6 @@ extra-packages:
   - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hashable == 1.4.7.0                 # allows GHC 9.10
-  - hinotify == 0.3.9                   # for xmonad-0.26: https://github.com/kolmodin/hinotify/issues/29
   - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
   - hlint == 3.2.8                      # 2022-09-21: needed for hls on ghc 8.8
   - hlint == 3.4.1                      # 2022-09-21: needed for hls with ghc-lib-parser 9.2
