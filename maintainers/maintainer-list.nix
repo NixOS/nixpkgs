@@ -7278,6 +7278,12 @@
     github = "frectonz";
     githubId = 53809656;
   };
+  fred-drake = {
+    email = "fred.drake@gmail.com";
+    github = "fred-drake";
+    githubId = 1041653;
+    name = "Fred Drake";
+  };
   fredeb = {
     email = "im@fredeb.dev";
     github = "FredeEB";
