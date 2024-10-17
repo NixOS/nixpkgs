@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "nexB";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python lexing and parsing library";
     homepage = "https://github.com/nexB/pygmars";
-    changelog = "https://github.com/nexB/pygmars/releases/tag/v${version}";
+    changelog = "https://github.com/aboutcode-org/pygmars/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };
