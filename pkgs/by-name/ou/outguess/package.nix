@@ -18,6 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  strictDeps = true;
+
   configureFlags = [ "--with-generic-jconfig" ];
 
   meta = {
