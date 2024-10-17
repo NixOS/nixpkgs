@@ -1073,7 +1073,8 @@ mapAliases {
   mozart-binary = throw "'mozart-binary' has been renamed to/replaced by 'mozart2-binary'"; # Converted to throw 2023-09-10
   mozart = throw "'mozart' has been renamed to/replaced by 'mozart2-binary'"; # Converted to throw 2023-09-10
   mp3info = throw "'mp3info' has been removed due to lack of maintenance upstream. Consider using 'eartag' or 'tagger' instead"; # Added 2024-09-14
-  mpc_cli = mpc-cli; # moved from top-level 2022-01-24
+  mpc-cli = throw "mpc-cli has been renamed to mpc."; # Added 2024-10-14
+  mpc_cli = throw "mpc_cli has been renamed to mpc."; # Added 2024-10-14
   mpd_clientlib = libmpdclient; # Added 2021-02-11
   mpdevil = plattenalbum; # Added 2024-05-22
   mpg321 = throw "'mpg321' has been removed due to it being unmaintained by upstream. Consider using mpg123 instead."; # Added 2024-05-10
