@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +35,11 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
 
   meta = with lib; {
     description = "Small binary that runs a list of commands in parallel and awaits termination";
