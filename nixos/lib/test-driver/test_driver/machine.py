@@ -1234,6 +1234,9 @@ class Machine:
         self.monitor.close()
         self.serial_thread.join()
 
+        if self.qmp_client:
+            self.qmp_client.close()
+
     def run_callbacks(self) -> None:
         for callback in self.callbacks:
             callback()

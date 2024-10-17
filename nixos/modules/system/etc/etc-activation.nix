@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 {
 
@@ -34,12 +34,30 @@
         mounts = [
           {
             where = "/run/etc-metadata";
-            what = "/sysroot${config.system.build.etcMetadataImage}";
+            what = "/etc-metadata-image";
             type = "erofs";
             options = "loop";
-            unitConfig.RequiresMountsFor = [
-              "/sysroot/nix/store"
+            unitConfig = {
+              # Since this unit depends on the nix store being mounted, it cannot
+              # be a dependency of local-fs.target, because if it did, we'd have
+              # local-fs.target ordered after the nix store mount which would cause
+              # things like network.target to only become active after the nix store
+              # has been mounted.
+              # This breaks for instance setups where sshd needs to be up before
+              # any encrypted disks can be mounted.
+              DefaultDependencies = false;
+              RequiresMountsFor = [
+                "/sysroot/nix/store"
+              ];
+            };
+            requires = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
             ];
+            after = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ];
+            requiredBy = [ "initrd-fs.target" ];
+            before = [ "initrd-fs.target" ];
           }
           {
             where = "/sysroot/etc";
@@ -49,7 +67,7 @@
               "relatime"
               "redirect_dir=on"
               "metacopy=on"
-              "lowerdir=/run/etc-metadata::/sysroot${config.system.build.etcBasedir}"
+              "lowerdir=/run/etc-metadata::/etc-basedir"
             ] ++ lib.optionals config.system.etc.overlay.mutable [
               "rw"
               "upperdir=/sysroot/.rw-etc/upper"
@@ -59,28 +77,77 @@
             ]);
             requiredBy = [ "initrd-fs.target" ];
             before = [ "initrd-fs.target" ];
-            requires = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];
-            after = lib.mkIf config.system.etc.overlay.mutable [ "rw-etc.service" ];
-            unitConfig.RequiresMountsFor = [
-              "/sysroot/nix/store"
-              "/run/etc-metadata"
+            requires = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ] ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
             ];
+            after = [
+              config.boot.initrd.systemd.services.initrd-find-etc.name
+            ] ++ lib.optionals config.system.etc.overlay.mutable [
+              config.boot.initrd.systemd.services."rw-etc".name
+            ];
+            unitConfig = {
+              RequiresMountsFor = [
+                "/sysroot/nix/store"
+                "/run/etc-metadata"
+              ];
+              DefaultDependencies = false;
+            };
           }
         ];
-        services = lib.mkIf config.system.etc.overlay.mutable {
-          rw-etc = {
-            unitConfig = {
-              DefaultDependencies = false;
-              RequiresMountsFor = "/sysroot";
+        services = lib.mkMerge [
+          (lib.mkIf config.system.etc.overlay.mutable {
+            rw-etc = {
+              requiredBy = [ "initrd-fs.target" ];
+              before = [ "initrd-fs.target" ];
+              unitConfig = {
+                DefaultDependencies = false;
+                RequiresMountsFor = "/sysroot";
+              };
+              serviceConfig = {
+                Type = "oneshot";
+                ExecStart = ''
+                  /bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work
+                '';
+              };
             };
-            serviceConfig = {
-              Type = "oneshot";
-              ExecStart = ''
-                /bin/mkdir -p -m 0755 /sysroot/.rw-etc/upper /sysroot/.rw-etc/work
+          })
+          {
+            initrd-find-etc = {
+              description = "Find the path to the etc metadata image and based dir";
+              requires = [
+                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+              ];
+              after = [
+                config.boot.initrd.systemd.services.initrd-find-nixos-closure.name
+              ];
+              before = [ "shutdown.target" ];
+              conflicts = [ "shutdown.target" ];
+              requiredBy = [ "initrd.target" ];
+              unitConfig = {
+                DefaultDependencies = false;
+                RequiresMountsFor = "/sysroot/nix/store";
+              };
+              serviceConfig = {
+                Type = "oneshot";
+                RemainAfterExit = true;
+              };
+
+              script = /* bash */ ''
+                set -uo pipefail
+
+                closure="$(realpath /nixos-closure)"
+
+                metadata_image="$(chroot /sysroot ${lib.getExe' pkgs.coreutils "realpath"} "$closure/etc-metadata-image")"
+                ln -s "/sysroot$metadata_image" /etc-metadata-image
+
+                basedir="$(chroot /sysroot ${lib.getExe' pkgs.coreutils "realpath"} "$closure/etc-basedir")"
+                ln -s "/sysroot$basedir" /etc-basedir
               '';
             };
-          };
-        };
+          }
+        ];
       };
 
     })

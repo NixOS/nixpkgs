@@ -1,6 +1,6 @@
 {
   lib,
-  steam,
+  steam-unwrapped,
   buildFHSEnv,
   writeShellScript,
   extraPkgs ? pkgs: [ ], # extra packages to add to targetPkgs
@@ -21,7 +21,7 @@ let
 
     # https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/main/docs/distro-assumptions.md#command-line-tools
     targetPkgs = pkgs: with pkgs; [
-      steam
+      steam-unwrapped
 
       bash
       coreutils
@@ -63,8 +63,8 @@ let
       libcap  # not documented, required by srt-bwrap
     ] ++ extraLibraries pkgs;
 
-    extraInstallCommands = lib.optionalString (steam != null) ''
-      ln -s ${steam}/share $out/share
+    extraInstallCommands = lib.optionalString (steam-unwrapped != null) ''
+      ln -s ${steam-unwrapped}/share $out/share
     '';
 
     profile = ''
@@ -124,7 +124,7 @@ in steamEnv {
       exec "$@"
     '';
 
-    meta = (steam.meta or {}) // {
+    meta = (steam-unwrapped.meta or {}) // {
       description = "Run commands in the same FHS environment that is used for Steam";
       mainProgram = "steam-run";
       name = "steam-run";
@@ -135,7 +135,7 @@ in steamEnv {
     };
   };
 
-  meta = (steam.meta or {}) // {
+  meta = (steam-unwrapped.meta or {}) // {
     description = "Steam dependencies (dummy package, do not use)";
   };
 }
