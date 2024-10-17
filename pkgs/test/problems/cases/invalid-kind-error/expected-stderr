@@ -1,0 +1,7 @@
+error: Package ‘a-0’ in /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-default.nix:11 has an invalid meta attrset:
+  - key 'meta.problems.invalid.kind' has invalid value; expected one of "removal", "deprecated", got
+    "invalid"
+, refusing to evaluate.
+
+
+(use '--show-trace' to show detailed location information)

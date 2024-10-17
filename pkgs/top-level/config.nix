@@ -13,6 +13,7 @@ let
     literalExpression
     mapAttrsToList
     mkOption
+    mkRemovedOptionModule
     optionals
     types
     ;
@@ -36,8 +37,15 @@ let
       internal = true;
     };
 
+    # Should be replaced by importing <nixos/modules/misc/assertions.nix> in the future
+    # see also https://github.com/NixOS/nixpkgs/pull/207187
     warnings = mkOption {
       type = types.listOf types.str;
+      default = [];
+      internal = true;
+    };
+    assertions = mkOption {
+      type = types.listOf types.anything;
       default = [];
       internal = true;
     };
@@ -168,21 +176,6 @@ let
       feature = "build packages with ROCm support by default";
     };
 
-    showDerivationWarnings = mkOption {
-      type = types.listOf (types.enum [ "maintainerless" ]);
-      default = [];
-      description = ''
-        Which warnings to display for potentially dangerous
-        or deprecated values passed into `stdenv.mkDerivation`.
-
-        A list of warnings can be found in
-        [/pkgs/stdenv/generic/check-meta.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/stdenv/generic/check-meta.nix).
-
-        This is not a stable interface; warnings may be added, changed
-        or removed without prior notice.
-      '';
-    };
-
     checkMeta = mkOption {
       type = types.bool;
       default = false;
@@ -190,6 +183,92 @@ let
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };
+
+    problems =
+      let
+        inherit (import ../stdenv/generic/problems.nix { inherit lib; }) problemHandlers problemKinds;
+        handlerType = types.enum problemHandlers;
+        problemKindType = types.enum problemKinds;
+      in
+      {
+        handlers = mkOption {
+          type = with types; attrsOf (attrsOf handlerType);
+          default = {};
+          description = ''
+            Specify how to handle packages with problems.
+            Each key has the format `packageName.problemName`, each value is one of "error", "warn" or "ignore".
+
+            This option takes precedence over anything in `problems.matchers`.
+
+            Package names are taken from `lib.getName`, which looks at the `pname` first and falls back to extracting the "pname" part from the `name` attribute.
+
+            See <link xlink:href="https://nixos.org/manual/nixpkgs/stable/#sec-ignore-problems">Installing packages with problems</link> in the NixOS manual.
+          '';
+        };
+
+        matchers = mkOption {
+          type = types.listOf (
+            types.submodule ({config, ...}: {
+              options = {
+                package = mkOption {
+                  type = types.nullOr types.str;
+                  description = "Match problems of packages with this name";
+                  default = null;
+                };
+                name = mkOption {
+                  type = types.nullOr types.str;
+                  description = "Match problems with this problem name";
+                  default = null;
+                };
+                kind = mkOption {
+                  type = types.nullOr problemKindType;
+                  description = "Match problems of this problem kind";
+                  default = null;
+                };
+                handler = mkOption {
+                  type = handlerType;
+                  description = "Specify the handler for matched problems";
+                };
+
+                # Temporary hack to get assertions in submodules, see global assertions below
+                assertions = mkOption {
+                  type = types.listOf types.anything;
+                  default = [];
+                  internal = true;
+                };
+              };
+              config = {
+                assertions = [
+                  {
+                    assertion = !(config.package != null && config.name != null);
+                    message = ''A matcher cannot match on both a package and problem name as this would not be a wildcard, for that use `problems.handlers = { ${toString config.package}.${toString config.name} = "${toString config.handler}"; };` instead'';
+                  }
+                ];
+              };
+            })
+          );
+          default = [];
+          description = ''
+            A more powerful and less ergonomic version of `problems.handlers`.
+            Each value is a matcher, that may match onto certain properties of a problem and specify a handler for them.
+
+            If multiple matchers match a problem, the handler with the highest severity (error > warn > ignore) will be used.
+            Values in `problems.handlers` always take precedence over matchers.
+
+            Any matchers must not contain both a `package` and `name` field, for this should be handled by using `problems.handlers` instead.
+          '';
+          example = [
+            {
+              kind = "maintainerless";
+              handler = "warn";
+            }
+            {
+              package = "myPackageICareAbout";
+              handler = "error";
+            }
+          ];
+        };
+      };
   };
 
 in {
@@ -202,12 +281,39 @@ in {
         in r // { _undeclared = r; };
     };
 
+  imports = [
+    (mkRemovedOptionModule ["showDerivationWarnings"] "See `config.problems.matchers` and the respective documentation. Be aware that the semantics have changed!")
+  ];
+
+
   inherit options;
 
   config = {
     warnings = optionals config.warnUndeclaredOptions (
       mapAttrsToList (k: v: "undeclared Nixpkgs option set: config.${k}") config._undeclared or {}
     );
+
+    assertions =
+      # Collect the assertions from the problems.matchers.* submodules, propagate them into here
+      lib.concatMap (matcher: matcher.assertions) config.problems.matchers;
+
+    # Put the default value for matchers in here (as in, not as an *actual* mkDefault default value),
+    # to force it being merged with any custom values instead of being overridden.
+    problems.matchers = [
+      # Be loud and clear about package removals
+      {
+        kind = "removal";
+        handler = "error";
+      }
+      {
+        kind = "maintainerless";
+        handler = "ignore";
+      }
+      # Wildcard for everything else
+      {
+        handler = "ignore";
+      }
+    ];
   };
 
 }
