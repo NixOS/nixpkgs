@@ -1853,6 +1853,12 @@
     githubId = 10285250;
     name = "Artur E. Ruuge";
   };
+  asamonik = {
+    email = "mail@asamonik.at";
+    github = "asamonik";
+    githubId = 49288593;
+    name = "Andreas";
+  };
   asbachb = {
     email = "asbachb-nixpkgs-5c2a@impl.it";
     matrix = "@asbachb:matrix.org";
