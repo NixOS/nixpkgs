@@ -18,11 +18,9 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ZIwZrLl7goweYUj3t5e0yaOqeppFHXvK9PL3chNZZRw=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pyo3-log-0.11.0" = "sha256-UU8064vM7cf20lwfifyPC205CY4tIgif0slDz/Pjf9Q=";
-    };
+  cargoDeps = rustPlatform.mkCargoVendorDeps {
+    inherit pname version src;
+    hash = "sha256-wvQBTQXq+VK7wdBQI1Zjw6k+DmpoJWUmZQ9Y5NVWg/0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
