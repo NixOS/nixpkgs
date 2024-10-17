@@ -1,8 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-}:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 
+  installShellFiles,
+  scdoc,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "tuigreet";
   version = "0.9.1";
@@ -15,6 +18,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-RkJjAmZ++4nc/lLh8g0LxGq2DjZGxQEjFOl8Yzx116A=";
+
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
+
+  postInstall = ''
+    scdoc < contrib/man/tuigreet-1.scd > tuigreet.1
+    installManPage tuigreet.1
+  '';
 
   meta = {
     description = "Graphical console greeter for greetd";
