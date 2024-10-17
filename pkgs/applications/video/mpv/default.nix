@@ -90,7 +90,6 @@
   sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
   speexSupport ? true,
-  swiftSupport ? stdenv.hostPlatform.isDarwin,
   theoraSupport ? true,
   vaapiSupport ? x11Support || waylandSupport,
   vapoursynthSupport ? false,
@@ -143,29 +142,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Ensure we reference 'lib' (not 'out') of Swift.
-  preConfigure = lib.optionalString swiftSupport ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export SWIFT_LIB_DYNAMIC="${lib.getLib swift.swift}/lib/swift/macosx"
   '';
 
-  mesonFlags =
-    [
-      (lib.mesonOption "default_library" "shared")
-      (lib.mesonBool "libmpv" true)
-      (lib.mesonEnable "libarchive" archiveSupport)
-      (lib.mesonEnable "manpage-build" true)
-      (lib.mesonEnable "cdda" cddaSupport)
-      (lib.mesonEnable "dvbin" dvbinSupport)
-      (lib.mesonEnable "dvdnav" dvdnavSupport)
-      (lib.mesonEnable "openal" openalSupport)
-      (lib.mesonEnable "sdl2" sdl2Support)
-      # Disable whilst Swift isn't supported
-      (lib.mesonEnable "swift-build" swiftSupport)
-      (lib.mesonEnable "macos-cocoa-cb" swiftSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Toggle explicitly because it fails on darwin
-      (lib.mesonEnable "videotoolbox-pl" vulkanSupport)
-    ];
+  mesonFlags = [
+    (lib.mesonOption "default_library" "shared")
+    (lib.mesonBool "libmpv" true)
+    (lib.mesonEnable "libarchive" archiveSupport)
+    (lib.mesonEnable "manpage-build" true)
+    (lib.mesonEnable "cdda" cddaSupport)
+    (lib.mesonEnable "dvbin" dvbinSupport)
+    (lib.mesonEnable "dvdnav" dvdnavSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "sdl2" sdl2Support)
+  ];
 
   mesonAutoFeatures = "auto";
 
@@ -179,8 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       buildPackages.darwin.sigtool
+      swift
     ]
-    ++ lib.optionals swiftSupport [ swift ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
   buildInputs =
@@ -250,8 +241,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals xineramaSupport [ libXinerama ]
     ++ lib.optionals xvSupport [ libXv ]
     ++ lib.optionals zimgSupport [ zimg ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ]
-    ;
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
 
   postBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     pushd .. # Must be run from the source dir because it uses relative paths
