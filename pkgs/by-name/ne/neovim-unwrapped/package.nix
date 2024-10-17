@@ -4,6 +4,7 @@
 , libvterm-neovim
 , tree-sitter
 , fetchurl
+, fetchpatch
 , buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
@@ -82,6 +83,18 @@ in {
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+
+      # FIXME: remove in the next release
+      # Fix byte index encoding bounds which were previously only checked
+      # against the UTF-8 length, whereas the default is UTF-16, which caused
+      # undefined behaviour.
+      # - https://github.com/neovim/neovim/pull/30747
+      # - https://github.com/nix-community/nixvim/issues/2390
+      (fetchpatch {
+        name = "fix-lsp-str_byteindex_enc-bounds-checking-30747.patch";
+        url = "https://patch-diff.githubusercontent.com/raw/neovim/neovim/pull/30747.patch";
+        hash = "sha256-2oNHUQozXKrHvKxt7R07T9YRIIx8W3gt8cVHLm2gYhg=";
+      })
     ];
 
     dontFixCmake = true;
