@@ -15,12 +15,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xml-security-c";
-  version = "2.0.4";
+  version = "3.0.0";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xml-security";
     rev = finalAttrs.version;
-    hash = "sha256-60A6LqUUGmoZMmIvhuZWjrZl6utp7WLhPe738oNd/AA=";
+    hash = "sha256-D60JtD4p9ERh6sowvwBHtE9XWVm3D8saooagDvA6ZtQ=";
   };
 
   configureFlags = [
