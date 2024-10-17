@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   installPhase = ''
+    runHook reInstall
+
     mkdir -p $out/bin
 
     # Move the script
@@ -48,12 +50,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Ensure it is executable
     chmod +x $out/bin/nixedit
 
-    # Wrap nixedit to include the necessary dependencies in PATH
-    wrapProgram $out/bin/nixedit --prefix PATH : \
-      "${lib.makeBinPath finalAttrs.buildInputs}"
+    runHook postInstall
   '';
 
-  doInstallCheck = true;
+  postFixup = ''
+    wrapProgram $out/bin/nixedit \
+      --prefix PATH : "${lib.makeBinPath finalAttrs.buildInputs}"
+  '';
+
   installCheckPhase = ''
     if ! uname -a | grep "NixOS" > /dev/null; then
       echo "This package can only be installed on NixOS."
@@ -69,5 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     mainProgram = "nixedit";
     maintainers = [ maintainers.miyu ];
+    platforms = lib.platforms.linux;
   };
 })
