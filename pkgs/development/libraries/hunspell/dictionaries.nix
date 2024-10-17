@@ -846,6 +846,31 @@ rec {
     };
   };
 
+  /* INDONESIA */
+
+  id_ID = mkDict rec {
+    pname = "hunspell-dict-id-libreoffice";
+    version = "24.8.0.2";
+    dictFileName = "id_ID";
+    readmeFile = "README-dict.adoc";
+    src = fetchFromGitHub {
+      owner = "LibreOffice";
+      repo = "dictionaries";
+      rev = "libreoffice-${version}";
+      sha256 = "sha256-3CvjgNjsrm4obATK6LmtYob8i2ngTbwP6FB4HlJMPCE=";
+    };
+    buildPhase = ''
+      cp -a id/* .
+    '';
+    meta = {
+      homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
+      description = "Hunspell dictionary for Indonesia from LibreOffice";
+      license = with lib.licenses; [ lgpl21Only lgpl3Only ];
+      maintainers = with lib.maintainers; [ AchmadFathoni ];
+      platforms = lib.platforms.all;
+    };
+  };
+
   /* CROATIAN */
 
   hr_HR = hr-hr;
