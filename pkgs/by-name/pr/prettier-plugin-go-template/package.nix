@@ -6,7 +6,7 @@
 
 buildNpmPackage rec {
   pname = "prettier-plugin-go-template";
-  version = "0-unstable-2023-07-26";
+  version = "0.0.15-unstable-2023-07-26";
 
   src = fetchFromGitHub {
     owner = "NiklasPor";
@@ -16,6 +16,13 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-PpJnVZFRxpUHux2jIBDtyBS4qNo6IJY4kwTAq6stEVQ=";
+
+  dontNpmPrune = true;
+
+  postInstall = ''
+    cd "$nodeModulesPath"
+    find -mindepth 1 -maxdepth 1 -type d | grep -Exv "\./(ulid|prettier)" | xargs rm -rf
+  '';
 
   meta = {
     description = "Fixes prettier formatting for go templates";
