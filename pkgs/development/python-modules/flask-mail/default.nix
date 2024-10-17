@@ -31,6 +31,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Broken by fix for CVE-2023-27043.
+  disabledTests = [
+    "test_unicode_sender_tuple"
+    "test_unicode_sender"
+  ];
+
   meta = {
     description = "Flask extension providing simple email sending capabilities";
     homepage = "https://github.com/pallets-eco/flask-mail";
