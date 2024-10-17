@@ -62,7 +62,6 @@ extra-packages:
   - ghc-lib-parser == 9.8.*             # 2024-05-19: preserve for GHC 9.8
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.8.*          # 2024-05-19: preserve for GHC 9.8
-  - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy == 1.19.12                    # for ghcjs
   - hashable == 1.4.7.0                 # allows GHC 9.10
   - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
