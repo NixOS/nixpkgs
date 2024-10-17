@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "neo4j";
-  version = "5.22.0";
+  version = "5.24.2";
 
   src = fetchurl {
     url = "https://neo4j.com/artifact.php?name=neo4j-community-${version}-unix.tar.gz";
-    hash = "sha256-gK5iNkGjs1Pjsryl5Jy28Nu3nYnVEoUMdRw1ahN4xEQ=";
+    hash = "sha256-fhbcTyxDvBiKNYtHxfrZ0DAPH7LVmY5lOA/kJd2K9tY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
