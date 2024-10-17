@@ -16420,6 +16420,7 @@ with pkgs;
   python313FreeThreading = python313.override {
     pythonAttr = "python313FreeThreading";
     enableGIL = false;
+    enableJIT = true;
   };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };

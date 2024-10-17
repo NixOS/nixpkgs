@@ -72,6 +72,11 @@
 # enabling LTO on 32bit arch causes downstream packages to fail when linking
 , enableLTO ? stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.is64bit && stdenv.hostPlatform.isLinux)
 
+# enable experimental just-in-time compilation on 3.13 and newer
+, enableJIT ? false
+, clang
+, llvm
+
 # enable asserts to ensure the build remains reproducible
 , reproducibleBuild ? false
 
@@ -127,6 +132,7 @@ let
   inherit (passthru) pythonOnBuildForHost;
 
   tzdataSupport = tzdata != null && passthru.pythonAtLeast "3.9";
+  jitSupport = enableJIT && passthru.pythonAtLeast "3.13";
 
   passthru = let
     # When we override the interpreter we also need to override the spliced versions of the interpreter
@@ -161,6 +167,9 @@ let
     pythonOnBuildForHost
   ] ++ optionals (stdenv.cc.isClang && (!stdenv.hostPlatform.useAndroidPrebuilt or false) && (enableLTO || enableOptimizations)) [
     stdenv.cc.cc.libllvm.out
+  ] ++ optionals jitSupport [
+    clang
+    llvm
   ];
 
   buildInputs = lib.filter (p: p != null) ([
@@ -339,6 +348,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     }."${stdenv.hostPlatform.libc}" or "");
     # Determinism: We fix the hashes of str, bytes and datetime objects.
     PYTHONHASHSEED=0;
+  } // lib.optionalAttrs (jitSupport) {
+    PYTHON_FOR_REGEN = lib.getExe pkgsBuildBuild.python3Minimal;
   };
 
   # https://docs.python.org/3/using/configure.html
@@ -360,6 +371,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
     "--enable-framework=${placeholder "out"}/Library/Frameworks"
   ] ++ optionals (pythonAtLeast "3.13") [
     (enableFeature enableGIL "gil")
+  ] ++ optionals jitSupport [
+    "--enable-experimental-jit=yes-off"
   ] ++ optionals enableOptimizations [
     "--enable-optimizations"
   ] ++ optionals (stdenv.hostPlatform.isDarwin && configd == null) [
