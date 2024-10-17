@@ -38753,4 +38753,7 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  openfoam-com_2406 = openfoam-com;
+  openfoam-com_2312 = callPackage ../by-name/op/openfoam-com/v2312.nix {};
 }
