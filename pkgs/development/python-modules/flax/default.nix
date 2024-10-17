@@ -21,9 +21,11 @@
   # checks
   cloudpickle,
   einops,
+  flaxlib,
   keras,
-  pytest-xdist,
   pytestCheckHook,
+  pytest-xdist,
+  sphinx,
   tensorflow,
   treescope,
 
@@ -33,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "flax";
-  version = "0.9.0";
+  version = "0.10.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flax";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iDWuUJKO7V4QrbVsS4ALgy6fbllOC43o7W4mhjtZ9xc=";
+    hash = "sha256-+URbQGnmqmSNgucEyWvI5DMnzXjpmJzLA+Pho2lX+S4=";
   };
 
   build-system = [
@@ -69,9 +71,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cloudpickle
     einops
+    flaxlib
     keras
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    sphinx
     tensorflow
     treescope
   ];
