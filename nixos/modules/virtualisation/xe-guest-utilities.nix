@@ -9,7 +9,7 @@ in {
   };
   config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.xe-guest-utilities ];
-    systemd.tmpfiles.rules = [ "d /run/xenstored 0755 - - -" ];
+    systemd.tmpfiles.settings."10-xe-guest-utilities"."/run/xenstored".d.mode = "0755";
 
     systemd.services.xe-daemon = {
       description = "xen daemon file";

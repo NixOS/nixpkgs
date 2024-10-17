@@ -330,15 +330,37 @@ in
       } ];
     };
 
-    systemd.tmpfiles.rules = [
-      "d ${stateDir} 0750 ${user} ${group} - -"
-      "d ${stateDir}/tmp 0750 ${user} ${group} - -"
-      "d ${stateDir}/tmp/assets 0750 ${user} ${group} - -"
-      "d ${stateDir}/tmp/runtime 0750 ${user} ${group} - -"
-      "d ${stateDir}/tmp/upload 0750 ${user} ${group} - -"
-      "d ${stateDir}/credentials 0700 ${user} ${group} - -"
-      "C ${stateDir}/upload 0750 ${user} ${group} - ${cfg.package}/share/limesurvey/upload"
-    ];
+    systemd.tmpfiles.settings."10-limesurvey" = {
+      ${stateDir}.d = {
+        inherit user group;
+        mode = "0750";
+      };
+      "${stateDir}/tmp".d = {
+        inherit user group;
+        mode = "0750";
+      };
+      "${stateDir}/tmp/assets".d = {
+        inherit user group;
+        mode = "0750";
+      };
+      "${stateDir}/tmp/runtime".d = {
+        inherit user group;
+        mode = "0750";
+      };
+      "${stateDir}/tmp/upload".d = {
+        inherit user group;
+        mode = "0750";
+      };
+      "${stateDir}/credentials".d = {
+        inherit user group;
+        mode = "0700";
+      };
+      "${stateDir}/upload".C = {
+        inherit user group;
+        mode = "0750";
+        argument = "${cfg.package}/share/limesurvey/upload";
+      };
+    };
 
     systemd.services.limesurvey-init = {
       wantedBy = [ "multi-user.target" ];

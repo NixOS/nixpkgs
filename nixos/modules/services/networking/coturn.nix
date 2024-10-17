@@ -358,8 +358,10 @@ in {
           Restart = "on-abort";
         };
       };
-    systemd.tmpfiles.rules = [
-      "d  /run/coturn 0700 turnserver turnserver - -"
-    ];
+    systemd.tmpfiles.settings."10-coturn"."/run/coturn".d = {
+      user = "turnserver";
+      group = "turnserver";
+      mode = "0700";
+    };
   }]));
 }

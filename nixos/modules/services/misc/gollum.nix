@@ -132,7 +132,9 @@ in
 
     users.groups."${cfg.group}" = { };
 
-    systemd.tmpfiles.rules = [ "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -" ];
+    systemd.tmpfiles.settings."10-gollum".${cfg.stateDir}.d = {
+      inherit (cfg) user group;
+    };
 
     systemd.services.gollum = {
       description = "Gollum wiki";

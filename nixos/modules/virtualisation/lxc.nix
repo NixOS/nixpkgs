@@ -75,7 +75,11 @@ in
     environment.etc."lxc/default.conf".text = cfg.defaultConfig;
     environment.etc."lxc/lxc-net".text = cfg.bridgeConfig;
     environment.pathsToLink = [ "/share/lxc" ];
-    systemd.tmpfiles.rules = [ "d /var/lib/lxc/rootfs 0755 root root -" ];
+    systemd.tmpfiles.settings."10-lxc"."/var/lib/lxc/rootfs".d = {
+      user = "root";
+      group = "root";
+      mode = "0755";
+    };
 
     security.apparmor.packages = [ cfg.package ];
     security.apparmor.policies = {

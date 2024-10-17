@@ -101,12 +101,14 @@ in
       octoprint.gid = config.ids.gids.octoprint;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+    systemd.tmpfiles.settings."10-octoprint" = {
+      ${cfg.stateDir}.d = {
+        inherit (cfg) user group;
+      };
       # this will allow octoprint access to raspberry specific hardware to check for throttling
       # read-only will not work: "VCHI initialization failed" error
-      "a /dev/vchiq - - - - u:octoprint:rw"
-    ];
+      "/dev/vchiq".a.argument = "u:octoprint:rw";
+    };
 
     systemd.services.octoprint = {
       description = "OctoPrint, web interface for 3D printers";

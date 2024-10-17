@@ -55,9 +55,9 @@ in
   };
 
   config = mkIf cfg.enable {
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-tautulli".${cfg.dataDir}.d = {
+      inherit (cfg) user group;
+    };
 
     systemd.services.tautulli = {
       description = "Tautulli Plex Monitor";

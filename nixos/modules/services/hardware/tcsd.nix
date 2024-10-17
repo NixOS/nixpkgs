@@ -127,10 +127,10 @@ in
       ACTION=="add", KERNEL=="tpm[0-9]*", TAG+="systemd"
     '';
 
-    systemd.tmpfiles.rules = [
-      # Initialise the state directory
-      "d ${cfg.stateDir} 0770 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-tcsd".${cfg.stateDir}.d = {
+      inherit (cfg) user group;
+      mode = "0770";
+    };
 
     systemd.services.tcsd = {
       description = "Manager for Trusted Computing resources";

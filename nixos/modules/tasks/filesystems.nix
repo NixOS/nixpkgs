@@ -436,10 +436,18 @@ in
         };
       };
 
-    systemd.tmpfiles.rules = [
-      "d /run/keys 0750 root ${toString config.ids.gids.keys}"
-      "z /run/keys 0750 root ${toString config.ids.gids.keys}"
-    ];
+    systemd.tmpfiles.settings."10-filesystems"."/run/keys" = {
+      d = {
+        user = "root";
+        group = toString config.ids.gids.keys;
+        mode = "0750";
+      };
+      z = {
+        user = "root";
+        group = toString config.ids.gids.keys;
+        mode = "0750";
+      };
+    };
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {

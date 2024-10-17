@@ -197,7 +197,11 @@ in
         startAt = cfg.frequency;
       };
 
-      tmpfiles.rules = optional (localTarget != null) "d ${localTarget} 0700 root root -";
+      tmpfiles.settings."10-duplicity".${localTarget}.d = {
+        user = "root";
+        group = "root";
+        mode = "0700";
+      };
     };
 
     assertions = singleton {

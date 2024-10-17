@@ -224,7 +224,10 @@ in {
           };
         };
 
-        tmpfiles.rules = [ "d '${cfg.dataDir}' 0775 ${cfg.user} ${cfg.group} -" ];
+        tmpfiles.settings."10-rutorrent".${cfg.dataDir}.d = {
+          inherit (cfg) user group;
+          mode = "0775";
+        };
       };
 
       users.groups."${cfg.group}" = {};

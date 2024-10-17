@@ -175,9 +175,11 @@ in
       users.groups.scanner.gid = config.ids.gids.scanner;
       networking.firewall.allowedUDPPorts = lib.mkIf config.hardware.sane.openFirewall [ 8612 ];
 
-      systemd.tmpfiles.rules = [
-        "d /var/lock/sane 0770 root scanner - -"
-      ];
+      systemd.tmpfiles.settings."10-sane"."/var/lock/sane".d = {
+        user = "root";
+        group = "scanner";
+        mode = "0770";
+      };
     })
 
     (lib.mkIf config.services.saned.enable {

@@ -179,7 +179,12 @@ in {
     };
     users.groups.apache-kafka = {};
 
-    systemd.tmpfiles.rules = map (logDir: "d '${logDir}' 0700 apache-kafka - - -") cfg.settings."log.dirs";
+    systemd.tmpfiles.settings."10-apache-kafka" = lib.genAttrs (_: {
+      d = {
+        user = "apache-kafka";
+        mode = "0700";
+      };
+    }) cfg.settings."log.dirs";
 
     systemd.services.apache-kafka = {
       description = "Apache Kafka Daemon";

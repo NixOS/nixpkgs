@@ -82,10 +82,16 @@ in
 
     environment.systemPackages = [cfg.package];
 
-    systemd.tmpfiles.rules = [
-      "d '${dataDir}' 0700 ${cfg.user} - - -"
-      "d '${systemDir}' 0700 ${cfg.user} - - -"
-    ];
+    systemd.tmpfiles.settings."10-firebird" = {
+      ${dataDir}.d = {
+        inherit (cfg) user;
+        mode = "0700";
+      };
+      ${systemDir}.d = {
+        inherit (cfg) user;
+        mode = "0700";
+      };
+    };
 
     systemd.services.firebird =
       { description = "Firebird Super-Server";
