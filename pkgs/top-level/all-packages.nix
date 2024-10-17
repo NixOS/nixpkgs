@@ -32622,8 +32622,6 @@ with pkgs;
   teamspeak5_client = callPackage ../applications/networking/instant-messengers/teamspeak/client5.nix { };
   teamspeak_server = callPackage ../applications/networking/instant-messengers/teamspeak/server.nix { };
 
-  taskell = haskell.lib.compose.justStaticExecutables haskellPackages.taskell;
-
   taskjuggler = callPackage ../applications/misc/taskjuggler { };
 
   tabula-java = callPackage ../applications/misc/tabula-java { };

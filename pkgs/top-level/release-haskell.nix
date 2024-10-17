@@ -366,7 +366,6 @@ let
         stylish-haskell
         taffybar
         tamarin-prover
-        taskell
         termonad
         tldr-hs
         tweet-hs
