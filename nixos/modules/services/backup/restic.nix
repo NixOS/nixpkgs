@@ -56,14 +56,6 @@ in
                 bwlimit = "10M";
                 drive-use-trash = "true";
               };
-
-              RESTIC_CACHE_DIR = lib.mkOption {
-                type = with lib.types; nullOr path;
-                default = "/var/cache/restic-backups-${name}";
-                description = ''
-                  Location of the cache directory.
-                '';
-              };
             };
 
             rcloneConfig = lib.mkOption {
@@ -339,6 +331,14 @@ in
                       Path to the file containing the repository location to backup to.
                     '';
                   };
+
+                  RESTIC_CACHE_DIR = lib.mkOption {
+                    type = with lib.types; nullOr path;
+                    default = "/var/cache/restic-backups-${name}";
+                    description = ''
+                      Location of the cache directory.
+                    '';
+                  };
                 };
               };
               example = lib.literalExpression ''
@@ -379,7 +379,7 @@ in
   config = {
     assertions =
     (lib.mapAttrsToList (n: v: {
-      assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.RESTIC_REPOSITORY_FILE == null);
+      assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.settings.RESTIC_REPOSITORY_FILE == null);
       message = "services.restic.backups.${n}.settings: exactly one of RESTIC_REPOSITORY or RESTIC_REPOSITORY_FILE should be set";
     }) config.services.restic.backups) ++
     (lib.mapAttrsToList (n: v: {
@@ -391,7 +391,7 @@ in
       message = "services.restic.backups.${n}.repository: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY";
     }) config.services.restic.backups) ++
     (lib.mapAttrsToList (n: v: {
-      assertion = (v.repository == "");
+      assertion = (v.repositoryFile == null);
       message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
     }) config.services.restic.backups);
     systemd.services = lib.mapAttrs' (
@@ -429,10 +429,7 @@ in
           environment =
             {
               # not %C, because that wouldn't work in the wrapper script
-              RESTIC_CACHE_DIR = backup.settings.RESTIC_CACHE_DIR;
-              RESTIC_PASSWORD_FILE = backup.settings.RESTIC_PASSWORD_FILE;
-              RESTIC_REPOSITORY = backup.settings.RESTIC_REPOSITORY;
-              RESTIC_REPOSITORY_FILE = backup.settings.RESTIC_REPOSITORY_FILE;
+              inherit (backup.settings) RESTIC_CACHE_DIR RESTIC_PASSWORD_FILE RESTIC_REPOSITORY RESTIC_REPOSITORY_FILE;
             }
             // lib.optionalAttrs (backup.rcloneOptions != null) (
               lib.mapAttrs' (
