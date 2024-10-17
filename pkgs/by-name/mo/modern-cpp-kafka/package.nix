@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/morganstanley/modern-cpp-kafka/commit/236f8f91f5c3ad6e1055a6f55cd3aebd218e1226.patch";
       hash = "sha256-cy568TQUu08sadq79hDz9jMvDqiDjfr+1cLMxFWGm1Q=";
     })
+    (fetchpatch {
+      name = "macos-find-dylib.patch";
+      url = "https://github.com/morganstanley/modern-cpp-kafka/commit/dc2753cd95b607a7202b40bad3aad472558bf350.patch";
+      hash = "sha256-Te3GwAVRDyb6GFWlvkq1mIcNeXCtMyLr+/w1LilUYbE=";
+    })
   ];
 
   postPatch = ''

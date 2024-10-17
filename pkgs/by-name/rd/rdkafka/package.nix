@@ -4,11 +4,10 @@
   fetchFromGitHub,
   zlib,
   zstd,
-  pkg-config,
-  python3,
   openssl,
-  which,
   curl,
+  cmake,
+  ninja,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,10 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OCCsxgEO8UvCcC0XwzqpqmaT8dV0Klrspp+2o1FbH2Y=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+  ];
+
   nativeBuildInputs = [
-    pkg-config
-    python3
-    which
+    cmake
+    ninja
   ];
 
   buildInputs = [
@@ -35,7 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     curl
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
+  # some tests don't build on darwin
+  cmakeFlags = [
+    (lib.cmakeBool "RDKAFKA_BUILD_TESTS" (!stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "RDKAFKA_BUILD_EXAMPLES" (!stdenv.hostPlatform.isDarwin))
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=strict-overflow")
+  ];
 
   postPatch = ''
     patchShebangs .
