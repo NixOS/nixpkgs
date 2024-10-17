@@ -17032,8 +17032,6 @@ with pkgs;
 
   buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
 
-  bear = callPackage ../development/tools/build-managers/bear { };
-
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
