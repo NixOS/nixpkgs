@@ -48,6 +48,9 @@ python3Packages.buildPythonApplication rec {
     description = "Profiler based on casual profiling";
     mainProgram = "coz";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ zimbatm ];
+    maintainers = with lib.maintainers; [
+      zimbatm
+      aleksana
+    ];
   };
 }
