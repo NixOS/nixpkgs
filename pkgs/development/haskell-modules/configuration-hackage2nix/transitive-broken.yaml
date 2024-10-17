@@ -1519,7 +1519,6 @@ dont-distribute-packages:
  - glazier-react
  - glazier-react-examples
  - glazier-react-widget
- - glirc
  - global
  - global-config
  - glome-hs
