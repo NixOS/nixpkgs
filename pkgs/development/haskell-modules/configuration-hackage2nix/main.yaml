@@ -50,7 +50,6 @@ extra-packages:
   - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
   - apply-refact == 0.11.*              # 2023-02-02: needed for hls-hlint-plugin on GHC 9.2
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
-  - base16-bytestring < 1               # required for cabal-install etc.
   - basement < 0.0.15                   # 2022-08-30: last version to support GHC < 8.10
   - brick == 0.70.*                     # 2022-08-13: needed by taskell
   - brittany == 0.13.1.2                # 2022-09-20: needed for hls on ghc 8.8
