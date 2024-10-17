@@ -9,7 +9,7 @@
   enet,
   fetchzip,
   fmt,
-  ffmpeg-headless,
+  ffmpeg_6-headless,
   gamemode,
   httplib,
   inih,
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       cpp-jwt
       enet
       fmt
-      ffmpeg-headless
+      ffmpeg_6-headless
       httplib
       inih
       libGL
