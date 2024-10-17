@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.virtualbox;
 
-in {
+in
+{
 
   options = {
     virtualbox = {
@@ -51,7 +57,14 @@ in {
         '';
       };
       params = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            int
+            bool
+            (listOf str)
+          ]);
         example = {
           audio = "alsa";
           rtcuseutc = "on";
@@ -64,11 +77,21 @@ in {
         '';
       };
       exportParams = lib.mkOption {
-        type = with lib.types; listOf (oneOf [ str int bool (listOf str) ]);
+        type =
+          with lib.types;
+          listOf (oneOf [
+            str
+            int
+            bool
+            (listOf str)
+          ]);
         example = [
-          "--vsys" "0" "--vendor" "ACME Inc."
+          "--vsys"
+          "0"
+          "--vendor"
+          "ACME Inc."
         ];
-        default = [];
+        default = [ ];
         description = ''
           Parameters passed to the Virtualbox export command.
 
@@ -86,23 +109,25 @@ in {
           mountPoint = "/home/demo/storage";
           size = 100 * 1024;
         };
-        type = lib.types.nullOr (lib.types.submodule {
-          options = {
-            size = lib.mkOption {
-              type = lib.types.int;
-              description = "Size in MiB";
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            options = {
+              size = lib.mkOption {
+                type = lib.types.int;
+                description = "Size in MiB";
+              };
+              label = lib.mkOption {
+                type = lib.types.str;
+                default = "vm-extra-storage";
+                description = "Label for the disk partition";
+              };
+              mountPoint = lib.mkOption {
+                type = lib.types.str;
+                description = "Path where to mount this disk.";
+              };
             };
-            label = lib.mkOption {
-              type = lib.types.str;
-              default = "vm-extra-storage";
-              description = "Label for the disk partition";
-            };
-            mountPoint = lib.mkOption {
-              type = lib.types.str;
-              description = "Path where to mount this disk.";
-            };
-          };
-        });
+          }
+        );
       };
       postExportCommands = lib.mkOption {
         type = lib.types.lines;
@@ -122,7 +147,14 @@ in {
         '';
       };
       storageController = lib.mkOption {
-        type = with lib.types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        type =
+          with lib.types;
+          attrsOf (oneOf [
+            str
+            int
+            bool
+            (listOf str)
+          ]);
         example = {
           name = "SCSI";
           add = "scsi";
@@ -175,77 +207,80 @@ in {
       diskSize = cfg.baseImageSize;
       additionalSpace = "${toString cfg.baseImageFreeSpace}M";
 
-      postVM =
-        ''
-          export HOME=$PWD
-          export PATH=${pkgs.virtualbox}/bin:$PATH
+      postVM = ''
+        export HOME=$PWD
+        export PATH=${pkgs.virtualbox}/bin:$PATH
 
-          echo "converting image to VirtualBox format..."
-          VBoxManage convertfromraw $diskImage disk.vdi
+        echo "converting image to VirtualBox format..."
+        VBoxManage convertfromraw $diskImage disk.vdi
 
-          ${lib.optionalString (cfg.extraDisk != null) ''
-            echo "creating extra disk: data-disk.raw"
-            dataDiskImage=data-disk.raw
-            truncate -s ${toString cfg.extraDisk.size}M $dataDiskImage
+        ${lib.optionalString (cfg.extraDisk != null) ''
+          echo "creating extra disk: data-disk.raw"
+          dataDiskImage=data-disk.raw
+          truncate -s ${toString cfg.extraDisk.size}M $dataDiskImage
 
-            parted --script $dataDiskImage -- \
-              mklabel msdos \
-              mkpart primary ext4 1MiB -1
-            eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
-            mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
-            echo "creating extra disk: data-disk.vdi"
-            VBoxManage convertfromraw $dataDiskImage data-disk.vdi
-          ''}
+          parted --script $dataDiskImage -- \
+            mklabel msdos \
+            mkpart primary ext4 1MiB -1
+          eval $(partx $dataDiskImage -o START,SECTORS --nr 1 --pairs)
+          mkfs.ext4 -F -L ${cfg.extraDisk.label} $dataDiskImage -E offset=$(sectorsToBytes $START) $(sectorsToKilobytes $SECTORS)K
+          echo "creating extra disk: data-disk.vdi"
+          VBoxManage convertfromraw $dataDiskImage data-disk.vdi
+        ''}
 
-          echo "creating VirtualBox VM..."
-          vmName="${cfg.vmName}";
-          VBoxManage createvm --name "$vmName" --register \
-            --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
-          VBoxManage modifyvm "$vmName" \
-            --memory ${toString cfg.memorySize} \
-            ${lib.cli.toGNUCommandLineShell { } cfg.params}
-          VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
-          VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
-            --medium disk.vdi
-          ${lib.optionalString (cfg.extraDisk != null) ''
-            VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 1 --device 0 --type hdd \
-            --medium data-disk.vdi
-          ''}
+        echo "creating VirtualBox VM..."
+        vmName="${cfg.vmName}";
+        VBoxManage createvm --name "$vmName" --register \
+          --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
+        VBoxManage modifyvm "$vmName" \
+          --memory ${toString cfg.memorySize} \
+          ${lib.cli.toGNUCommandLineShell { } cfg.params}
+        VBoxManage storagectl "$vmName" ${lib.cli.toGNUCommandLineShell { } cfg.storageController}
+        VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 0 --device 0 --type hdd \
+          --medium disk.vdi
+        ${lib.optionalString (cfg.extraDisk != null) ''
+          VBoxManage storageattach "$vmName" --storagectl ${cfg.storageController.name} --port 1 --device 0 --type hdd \
+          --medium data-disk.vdi
+        ''}
 
-          echo "exporting VirtualBox VM..."
-          mkdir -p $out
-          fn="$out/${cfg.vmFileName}"
-          VBoxManage export "$vmName" --output "$fn" --options manifest ${lib.escapeShellArgs cfg.exportParams}
-          ${cfg.postExportCommands}
+        echo "exporting VirtualBox VM..."
+        mkdir -p $out
+        fn="$out/${cfg.vmFileName}"
+        VBoxManage export "$vmName" --output "$fn" --options manifest ${lib.escapeShellArgs cfg.exportParams}
+        ${cfg.postExportCommands}
 
-          rm -v $diskImage
+        rm -v $diskImage
 
-          mkdir -p $out/nix-support
-          echo "file ova $fn" >> $out/nix-support/hydra-build-products
-        '';
+        mkdir -p $out/nix-support
+        echo "file ova $fn" >> $out/nix-support/hydra-build-products
+      '';
     };
 
-    fileSystems = {
-      "/" = {
-        device = "/dev/disk/by-label/nixos";
-        autoResize = true;
-        fsType = "ext4";
-      };
-    } // (lib.optionalAttrs (cfg.extraDisk != null) {
-      ${cfg.extraDisk.mountPoint} = {
-        device = "/dev/disk/by-label/" + cfg.extraDisk.label;
-        autoResize = true;
-        fsType = "ext4";
-      };
-    });
+    fileSystems =
+      {
+        "/" = {
+          device = "/dev/disk/by-label/nixos";
+          autoResize = true;
+          fsType = "ext4";
+        };
+      }
+      // (lib.optionalAttrs (cfg.extraDisk != null) {
+        ${cfg.extraDisk.mountPoint} = {
+          device = "/dev/disk/by-label/" + cfg.extraDisk.label;
+          autoResize = true;
+          fsType = "ext4";
+        };
+      });
 
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";
 
-    swapDevices = [{
-      device = "/var/swap";
-      size = 2048;
-    }];
+    swapDevices = [
+      {
+        device = "/var/swap";
+        size = 2048;
+      }
+    ];
 
     virtualisation.virtualbox.guest.enable = true;
 
