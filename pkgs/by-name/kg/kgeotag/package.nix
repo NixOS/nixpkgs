@@ -2,14 +2,14 @@
 
 libsForQt5.mkDerivation rec {
   pname = "kgeotag";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "kgeotag";
     owner = "graphics";
     rev = "v${version}";
-    hash = "sha256-G9SyGvoSOL6nsWnMuSIUSFHFUwZUzExBJBkKN46o8GI=";
+    hash = "sha256-lUfU6SHRCglC81BTcVFFOp/psWXsUFOTEPUrZutrJaY=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
