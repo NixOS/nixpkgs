@@ -1,5 +1,5 @@
 { lib
-, kaem
+, stage0-posix
 , mes
 }:
 let
@@ -8,7 +8,7 @@ let
 
   src = ./ln.c;
 in
-kaem.runCommand "${pname}-${version}" {
+stage0-posix.kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   meta = with lib; {

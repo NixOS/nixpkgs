@@ -1,6 +1,6 @@
 { lib
 , fetchurl
-, kaem
+, stage0-posix
 , tinycc
 , gnumake
 , gnupatch
@@ -70,7 +70,7 @@ let
     })
   ];
 in
-kaem.runCommand "${pname}-${version}" {
+stage0-posix.kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
   nativeBuildInputs = [
