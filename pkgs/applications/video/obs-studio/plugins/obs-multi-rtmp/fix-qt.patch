@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 32bab01..cbd9a74 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -22,8 +22,8 @@ if(ENABLE_FRONTEND_API)
+ endif()
+ 
+ if(ENABLE_QT)
+-  find_qt(COMPONENTS Widgets Core)
+-  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt::Core Qt::Widgets)
++  find_package(Qt6 COMPONENTS Widgets Core)
++  target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE Qt6::Core Qt6::Widgets)
+   target_compile_options(
+     ${CMAKE_PROJECT_NAME} PRIVATE $<$<C_COMPILER_ID:Clang,AppleClang>:-Wno-quoted-include-in-framework-header
+                                   -Wno-comma>)
