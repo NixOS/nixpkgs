@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitea }:
+{ lib, buildGoModule, fetchFromGitea, installShellFiles }:
 
 buildGoModule rec {
   pname = "tea";
@@ -21,4 +21,12 @@ buildGoModule rec {
     maintainers = with maintainers; [ j4m3s techknowlogick ];
     mainProgram = "tea";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion \
+      --bash contrib/autocomplete.sh \
+      --zsh contrib/autocomplete.zsh
+  '';
 }
