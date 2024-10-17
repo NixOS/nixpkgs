@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-Cv1Ldvk0+VzNsKnDFwDtLZ5ixUOGV+PWYAqN9KV9g/s=";
+    sha256 = "sha256-A/iCYAXiMaBaEeqWdv3p65F3nKhdhUNlgfMpqwrX6eM=";
   };
 
   nativeBuildInputs = [
@@ -56,13 +56,6 @@ stdenv.mkDerivation rec {
     wingpanel-indicator-keyboard # gsettings schemas
     wingpanel-quick-settings # gsettings schemas
   ];
-
-  postPatch = ''
-    # Hide these before we land the new dock
-    substituteInPlace src/Views/Dock.vala \
-      --replace-fail "box.append (icon_box);" "" \
-      --replace-fail "box.append (hide_box);" ""
-  '';
 
   passthru = {
     updateScript = nix-update-script { };
