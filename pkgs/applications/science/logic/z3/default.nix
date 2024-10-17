@@ -60,7 +60,8 @@ let common = { version, sha256, patches ? [ ], tag ? "z3" }:
 
     doCheck = true;
     checkPhase = ''
-      make -j $NIX_BUILD_CORES test
+      cores=${if stdenv.isDarwin then "1" else "$NIX_BUILD_CORES"}
+      make -j $cores test
       ./test-z3 -a
     '';
 
