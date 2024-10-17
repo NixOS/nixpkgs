@@ -437,12 +437,7 @@ in {
 
         "/etc/sysctl.d/nixos.conf".text = "kernel.modprobe = /sbin/modprobe";
         "/etc/modprobe.d/systemd.conf".source = "${cfg.package}/lib/modprobe.d/systemd.conf";
-        "/etc/modprobe.d/ubuntu.conf".source = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-            src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-            preferLocalBuild = true;
-        } ''
-          ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-        '';
+        "/etc/modprobe.d/ubuntu.conf".source = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
         "/etc/modprobe.d/debian.conf".source = pkgs.kmod-debian-aliases;
 
         "/etc/os-release".source = config.boot.initrd.osRelease;
