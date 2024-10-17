@@ -119,9 +119,7 @@ in
             repositoryFile = lib.mkOption {
               type = with lib.types; nullOr path;
               default = null;
-              description = ''
-                Path to the file containing the repository location to backup to.
-              '';
+              internal = true;
             };
 
             paths = lib.mkOption {
@@ -325,6 +323,14 @@ in
                     '';
                     example = "sftp:backup@192.168.1.100:/backups/${name}";
                   };
+
+                  RESTIC_REPOSITORY_FILE = lib.mkOption {
+                    type = with lib.types; nullOr path;
+                    default = null;
+                    description = ''
+                      Path to the file containing the repository location to backup to.
+                    '';
+                  };
                 };
               };
               example = lib.literalExpression ''
@@ -365,8 +371,8 @@ in
   config = {
     assertions =
     (lib.mapAttrsToList (n: v: {
-      assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.repositoryFile == null);
-      message = "services.restic.backups.${n}: exactly one of settings.RESTIC_REPOSITORY or repositoryFile should be set";
+      assertion = (v.settings.RESTIC_REPOSITORY == null) != (v.RESTIC_REPOSITORY_FILE == null);
+      message = "services.restic.backups.${n}.settings: exactly one of RESTIC_REPOSITORY or RESTIC_REPOSITORY_FILE should be set";
     }) config.services.restic.backups) ++
     (lib.mapAttrsToList (n: v: {
       assertion = (v.passwordFile == "");
@@ -375,6 +381,10 @@ in
     (lib.mapAttrsToList (n: v: {
       assertion = (v.repository == null);
       message = "services.restic.backups.${n}.repository: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY";
+    }) config.services.restic.backups) ++
+    (lib.mapAttrsToList (n: v: {
+      assertion = (v.repository == "");
+      message = "services.restic.backups.${n}.repositoryFile: option was renamed to services.restic.backups.${n}.settings.RESTIC_REPOSITORY_FILE";
     }) config.services.restic.backups);
     systemd.services = lib.mapAttrs' (
       name: backup:
@@ -414,7 +424,7 @@ in
               RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
               RESTIC_PASSWORD_FILE = backup.settings.RESTIC_PASSWORD_FILE;
               RESTIC_REPOSITORY = backup.settings.RESTIC_REPOSITORY;
-              RESTIC_REPOSITORY_FILE = backup.repositoryFile;
+              RESTIC_REPOSITORY_FILE = backup.settings.RESTIC_REPOSITORY_FILE;
             }
             // lib.optionalAttrs (backup.rcloneOptions != null) (
               lib.mapAttrs' (
