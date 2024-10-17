@@ -38,15 +38,28 @@ stdenv.mkDerivation (finalAttrs: {
     curl
   ];
 
-  # some tests don't build on darwin
+  # examples and tests don't build on darwin statically
   cmakeFlags = [
-    (lib.cmakeBool "RDKAFKA_BUILD_TESTS" (!stdenv.hostPlatform.isDarwin))
-    (lib.cmakeBool "RDKAFKA_BUILD_EXAMPLES" (!stdenv.hostPlatform.isDarwin))
+    (lib.cmakeBool "RDKAFKA_BUILD_STATIC" stdenv.hostPlatform.isStatic)
+    (lib.cmakeBool "RDKAFKA_BUILD_TESTS" (
+      !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic
+    ))
+    (lib.cmakeBool "RDKAFKA_BUILD_EXAMPLES" (
+      !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isStatic
+    ))
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-Wno-error=strict-overflow")
   ];
 
   postPatch = ''
     patchShebangs .
+  '';
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isStatic ''
+    # rdkafka changes the library names for static libraries but users in pkgsStatic aren't likely to be aware of this
+    # make sure the libraries are findable with both names
+    for pc in rdkafka{,++}; do
+      ln -s $dev/lib/pkgconfig/$pc{-static,}.pc
+    done
   '';
 
   enableParallelBuilding = true;
