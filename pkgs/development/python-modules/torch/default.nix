@@ -38,7 +38,7 @@
   darwin,
   numactl,
 
-  # Propagated build inputs
+  # dependencies
   astunparse,
   fsspec,
   filelock,
@@ -86,8 +86,6 @@
   future,
   tensorboard,
   protobuf,
-
-  pythonOlder,
 
   # ROCm dependencies
   rocmSupport ? config.rocmSupport,
@@ -225,10 +223,8 @@ in
 buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.4.1";
+  version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8.0";
 
   outputs = [
     "out" # output standard python package
@@ -243,17 +239,11 @@ buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-x/zM/57syr46CP1TfGaefSjzvNm4jJbWFZGVGyzPMg8=";
+    hash = "sha256-z41VAN4l/6hyHsxNOnJORy5EQK93kSMkDHRVQrdxv7k=";
   };
 
   patches =
-    [
-      # Allow setting PYTHON_LIB_REL_PATH with an environment variable.
-      # https://github.com/pytorch/pytorch/pull/128419
-      ./passthrough-python-lib-rel-path.patch
-      ./0001-cmake.py-propagate-cmakeFlags-from-environment.patch
-    ]
-    ++ lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
+    lib.optionals cudaSupport [ ./fix-cmake-cuda-toolkit.patch ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
       # pthreadpool added support for Grand Central Dispatch in April
       # 2020. However, this relies on functionality (DISPATCH_APPLY_AUTO)
@@ -537,6 +527,9 @@ buildPythonPackage rec {
     ++ lib.optionals MPISupport [ mpi ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
+  pythonRelaxDeps = [
+    "sympy"
+  ];
   dependencies = [
     astunparse
     cffi
