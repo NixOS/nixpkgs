@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "handlr-regex";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "Anomalocaridid";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xYt+pntqfq1RwaLAoTIH6zaJZWgyl58I/2xWCWe+bBs=";
+    hash = "sha256-xjrETTBHqekdPn2NwpGVoRoU8mf0F4jZN2yt0k8ypRA=";
   };
 
-  cargoHash = "sha256-w5eZm+wHx4aU6zsNZhg8mehDSzpd6k6PpV/V7tzukIA=";
+  cargoHash = "sha256-V/daNs2vk2N6N5eUq1haxxuNyGMBLLBSmBx0JozaN5A=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    installShellCompletion \
-      --zsh assets/completions/_handlr \
-      --bash assets/completions/handlr \
-      --fish assets/completions/handlr.fish
+    installShellCompletion --cmd handlr \
+      --zsh <(COMPLETE=zsh $out/bin/handlr) \
+      --bash <(COMPLETE=bash $out/bin/handlr) \
+      --fish <(COMPLETE=fish $out/bin/handlr)
 
-    installManPage assets/manual/man1/*
+    installManPage target/release-tmp/build/handlr-regex-*/out/manual/man1/*
   '';
 
   passthru.updateScript = nix-update-script { };
