@@ -1,4 +1,4 @@
-{ lib, fetchzip, tcl, tcllib, tk, }:
+{ lib, fetchzip, tcl, tclPackages, tk, }:
 
 tcl.mkTclDerivation {
   pname = "nagelfar";
@@ -11,7 +11,7 @@ tcl.mkTclDerivation {
 
   buildInputs = [
     tcl
-    tcllib
+    tclPackages.tcllib
     tk
   ];
 
