@@ -17323,6 +17323,12 @@
     githubId = 70191398;
     name = "Ryan Cao";
   };
+  ryand56 = {
+    email = "git@ryand.ca";
+    github = "ryand56";
+    githubId = 22267679;
+    name = "Ryan Omasta";
+  };
   ryane = {
     email = "ryanesc@gmail.com";
     github = "ryane";
