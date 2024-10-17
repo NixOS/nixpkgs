@@ -3,6 +3,8 @@
   stdenv,
   fetchFromGitHub,
   installShellFiles,
+  testers,
+  await,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +36,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = await;
+  };
 
   meta = with lib; {
     description = "Small binary that runs a list of commands in parallel and awaits termination";
