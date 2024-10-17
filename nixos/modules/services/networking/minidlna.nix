@@ -21,6 +21,8 @@ in
     '';
   };
 
+  options.services.minidlna.package = lib.mkPackageOption pkgs "minidlna" { };
+
   options.services.minidlna.openFirewall = mkOption {
     type = types.bool;
     default = false;
@@ -141,7 +143,7 @@ in
         CacheDirectory = "minidlna";
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
-        ExecStart = "${pkgs.minidlna}/sbin/minidlnad -S -P /run/minidlna/pid -f ${settingsFile}";
+        ExecStart = "${lib.getExe cfg.package} -S -P /run/minidlna/pid -f ${settingsFile}";
       };
     };
   };
