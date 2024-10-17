@@ -724,7 +724,6 @@ self: super: {
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
-  network_2_6_3_1 = dontCheck super.network_2_6_3_1; # package is missing files for test
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
@@ -1811,10 +1810,6 @@ self: super: {
   # tests seem to require a different version of hspec-core
   hspec-contrib = dontCheck super.hspec-contrib;
 
-  # github.com/ucsd-progsys/liquidhaskell/issues/1729
-  liquidhaskell-boot = super.liquidhaskell-boot.override { Diff = self.Diff_0_3_4; };
-  Diff_0_3_4 = dontCheck super.Diff_0_3_4;
-
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
@@ -2109,12 +2104,6 @@ self: super: {
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  taskell = super.taskell.override {
-    # Does not support brick >= 1.0
-    # https://github.com/smallhadroncollider/taskell/issues/125
-    brick = self.brick_0_70_1;
-  };
-
   # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
   ghc-bignum = super.ghc-bignum or self.mkDerivation {
     pname = "ghc-bignum";
@@ -2219,17 +2208,6 @@ self: super: {
     editedCabalFile = null;
     revision = null;
   } super.llvm-hs-pure);
-
-  # * Fix build failure by picking patch from 8.5, we need
-  #   this version of sbv for petrinizer
-  # * Pin version of crackNum that still exposes its library
-  sbv_7_13 = appendPatch (fetchpatch {
-      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
-      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
-    })
-    (super.sbv_7_13.override {
-      crackNum = self.crackNum_2_4;
-    });
 
   # Too strict bounds on dimensional
   # https://github.com/enomsg/science-constants-dimensional/pull/1
@@ -2944,13 +2922,6 @@ self: super: {
     url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
     hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
   }) super.nix-serve-ng;
-
-  # Needs a matching version of ipython-kernel and a
-  # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
-  # transitively pulls in
-  ihaskell = super.ihaskell.overrideScope (self: super: {
-    ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
-  });
 
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [
