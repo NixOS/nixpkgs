@@ -5,7 +5,7 @@
 , stdenv
 }:
 let
-  pname = "immersed-vr";
+  pname = "immersed";
   version = "10.5.0";
 
   sources = rec {
