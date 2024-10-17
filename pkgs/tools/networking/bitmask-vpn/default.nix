@@ -1,9 +1,11 @@
 { lib
 , stdenv
 , substituteAll
-, fetchFromGitLab
+, git
+, fetchgit
 , buildGoModule
 , wrapQtAppsHook
+, python3
 , python3Packages
 , pkg-config
 , openvpn
@@ -25,12 +27,11 @@
 let
   version = "0.24.8";
 
-  src = fetchFromGitLab {
-    domain = "0xacab.org";
-    owner = "leap";
-    repo = "bitmask-vpn";
+  src = fetchgit {
+    url = "https://0xacab.org/leap/bitmask-vpn.git";
     rev = "8b3ac473f64b6de0262fbf945ff25af8029134f1";
-    sha256 = "sha256-nYMfO091w6H7LyY1+aYubFppg4/3GiZZm4e+0m9Gb3k=";
+    leaveDotGit = true;
+    sha256 = "sha256-XUgCVHnTLZXFU+r0s1yuYryWNBJRgQrFlf3g1iRrLWs=";
   };
 
   # bitmask-root is only used on GNU/Linux
@@ -105,7 +106,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     cmake
+    git
     pkg-config
+    python3
     python3Packages.wrapPython
     which
     wrapQtAppsHook
@@ -130,6 +133,8 @@ buildGoModule rec {
   # gui/build.sh will build Go modules into lib/libgoshim.a
   buildPhase = ''
     runHook preBuild
+
+    make vendor
 
     # TODO: this is a hack that copies the qrc file that should by built by qmlcachegen
     # qmlcachegen is in qtdeclarative/libexec, but qmake is in qtbase/bin
