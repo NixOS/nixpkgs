@@ -19,12 +19,12 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
-  version = "1.21.7";
+  version = "1.21.8";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TDuTBos9/KaWmrERFV5N1vey1oC5h3jej9Rgt4N72w0=";
+    hash = "sha256-y7f4HD0UDyIHOStLxd3mU4TutY4bfuoabWQd7C9zUqk=";
   };
 
   postPatch = ''
