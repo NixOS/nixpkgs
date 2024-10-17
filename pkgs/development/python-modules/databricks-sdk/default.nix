@@ -12,6 +12,8 @@
   requests,
 
   # tests
+  langchain-openai,
+  openai,
   pyfakefs,
   pytestCheckHook,
   pytest-mock,
@@ -20,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.34.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pbOm1aTHtIAwk/TJ5CCT9/CqSTuHTWkRgJuflObkU54=";
+    hash = "sha256-CEv/+3E7KWV9LXzFPvDQIL1v8iFgbsS3/cTS/4obWas=";
   };
 
   build-system = [
@@ -44,6 +46,8 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    langchain-openai
+    openai
     pyfakefs
     pytestCheckHook
     pytest-mock
