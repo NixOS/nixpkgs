@@ -289,50 +289,6 @@ let
       "PYTHONWARNINGS=ignore::DeprecationWarning"
     ] ++ lib.optionals (!stdenv.buildPlatform.isDarwin || lib.versionAtLeast version "20") [
       "FLAKY_TESTS=skip"
-      # Skip some tests that are not passing in this context
-      "CI_SKIP_TESTS=${lib.concatStringsSep "," ([
-        "test-child-process-exec-env"
-        "test-child-process-uid-gid"
-        "test-fs-write-stream-eagain"
-        "test-process-euid-egid"
-        "test-process-initgroups"
-        "test-process-setgroups"
-        "test-process-uid-gid"
-        "test-setproctitle"
-        # This is a bit weird, but for some reason fs watch tests fail with
-        # sandbox.
-        "test-fs-promises-watch"
-        "test-fs-watch"
-        "test-fs-watch-encoding"
-        "test-fs-watch-non-recursive"
-        "test-fs-watch-recursive-add-file"
-        "test-fs-watch-recursive-add-file-to-existing-subfolder"
-        "test-fs-watch-recursive-add-file-to-new-folder"
-        "test-fs-watch-recursive-add-file-with-url"
-        "test-fs-watch-recursive-add-folder"
-        "test-fs-watch-recursive-assert-leaks"
-        "test-fs-watch-recursive-promise"
-        "test-fs-watch-recursive-symlink"
-        "test-fs-watch-recursive-sync-write"
-        "test-fs-watch-recursive-update-file"
-        "test-fs-watchfile"
-        "test-runner-run"
-        "test-runner-watch-mode"
-        "test-watch-mode-files_watcher"
-      ] ++ lib.optionals (!lib.versionAtLeast version "22") [
-        "test-tls-multi-key"
-      ] ++ lib.optionals stdenv.buildPlatform.isDarwin [
-        # Disable tests that don’t work under macOS sandbox.
-        "test-macos-app-sandbox"
-        "test-os"
-        "test-os-process-priority"
-      ] ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
-        # These tests fail on x86_64-darwin (even without sandbox).
-        # TODO: revisit at a later date.
-        "test-fs-readv"
-        "test-fs-readv-sync"
-        "test-vm-memleak"
-      ])}"
     ];
 
     postInstall = ''

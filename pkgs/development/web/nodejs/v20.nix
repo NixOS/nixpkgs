@@ -48,5 +48,9 @@ buildNodejs {
       url = "https://github.com/nodejs/node/commit/0f7bdcc17fbc7098b89f238f4bd8ecad9367887b.patch?full_index=1";
       hash = "sha256-lXx6QyD2anlY9qAwjNMFM2VcHckBshghUF1NaMoaNl4=";
     })
+    (fetchpatch2 {
+      url = "https://github.com/nodejs/node/commit/9d0041ac40f225a8c79f57ca96f205d2a9ba7048.patch";
+      hash = "sha256-WhhtXUQ7GthoUiOGcznzF59E5kDaDB4pCCnSW3uaDOo=";
+    })
   ] ++ gypPatches;
 }
