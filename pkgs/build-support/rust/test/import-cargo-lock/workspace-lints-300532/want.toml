@@ -1,5 +1,5 @@
 [package]
-name = "im_using_workspaces"
+name = "im_using_workspace_lints"
 version = "1.0.0"
 publish = false
 keywords = [
@@ -12,11 +12,11 @@ keywords = [
 bar = "1.0.0"
 
 [dependencies.foo]
+version = "1.0.0"
 features = [
     "cat",
     "meow",
 ]
-version = "1.0.0"
 
 [lints.rust]
 unsafe_code = "forbid"
