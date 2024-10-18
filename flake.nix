@@ -54,7 +54,7 @@
           - `system`: Legacy alias for `nixpkgs.hostPlatform`, but this is already set in the generated `hardware-configuration.nix`, included by `configuration.nix`.
           - `pkgs`: Legacy alias for `nixpkgs.pkgs`; use `nixpkgs.pkgs` and `nixosModules.readOnlyPkgs` instead.
         */
-        nixosSystem = args:
+        nixosSystem = args: final.warnIf (args?specialArgs && args.specialArgs?pkgs && !(args?allowPkgMasking && args.allowPkgMasking)) "nixosSystem: Masking pkgs in specialArgs is not recommended, as it can lead to unexpected behavior. Use overlays instead. If this is really the behavior you want, set allowPkgMasking = true in nixosSystem."
           import ./nixos/lib/eval-config.nix (
             {
               lib = final;
@@ -74,7 +74,7 @@
                   config.nixpkgs.flake.source = self.outPath;
                 })
               ];
-            } // builtins.removeAttrs args [ "modules" ]
+            } // builtins.removeAttrs args [ "modules" "allowPkgMasking" ]
           );
       });
 
