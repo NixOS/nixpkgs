@@ -1,0 +1,4 @@
+{
+  freecad,
+  fetchFromGitHub
+}
