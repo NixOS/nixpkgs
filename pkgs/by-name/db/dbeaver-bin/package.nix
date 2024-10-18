@@ -9,7 +9,6 @@
   autoPatchelfHook,
   wrapGAppsHook3,
   gtk3,
-  swt,
   glib,
   webkitgtk_4_0,
   glib-networking,
@@ -65,11 +64,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
           --prefix PATH : "${openjdk17}/bin" \
           --set JAVA_HOME "${openjdk17.home}" \
-          --prefix CLASSPATH : "$out/dbeaver/plugins/*:${swt}/jars/swt.jar" \
           --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
           --prefix LD_LIBRARY_PATH : "$out/lib:${
             lib.makeLibraryPath [
-              swt
               gtk3
               glib
               webkitgtk_4_0
