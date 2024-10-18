@@ -9,6 +9,7 @@
   stdenv,
   testers,
   zlib,
+  targetPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     # always link against static build of LLVM
     (lib.cmakeBool "ZIG_STATIC_LLVM" true)
     # ensure determinism in the compiler build
-    (lib.cmakeFeature "ZIG_TARGET_MCPU" "baseline")
+    (lib.cmakeFeature "ZIG_TARGET_MCPU" targetPlatform.cpuModel.zig)
   ];
 
   env.ZIG_GLOBAL_CACHE_DIR = "$TMPDIR/zig-cache";

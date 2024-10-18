@@ -9,6 +9,7 @@ with pkgs;
       pkgSets = lib.pipe pkgNames [
         (filter (lib.hasPrefix "llvmPackages"))
         (filter (n: n != "rocmPackages.llvm"))
+        (filter (n: n != "llvmPackagesSet"))
         # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
