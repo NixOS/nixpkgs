@@ -21051,11 +21051,9 @@ with pkgs;
 
   libieee1284 = callPackage ../development/libraries/libieee1284 { };
 
-  libimobiledevice = callPackage ../development/libraries/libimobiledevice {
-    inherit (darwin.apple_sdk.frameworks) SystemConfiguration CoreFoundation;
+  libimobiledevice = callPackage ../by-name/li/libimobiledevice/package.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration;
   };
-
-  libimobiledevice-glue = callPackage ../development/libraries/libimobiledevice-glue { };
 
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
   libindicator-gtk3 = libindicator.override { gtkVersion = "3"; };
@@ -21133,8 +21131,6 @@ with pkgs;
   libnsl = callPackage ../development/libraries/libnsl { };
 
   liboping = callPackage ../development/libraries/liboping { };
-
-  libplist = callPackage ../development/libraries/libplist { };
 
   libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
     inherit (lomiri) cmake-extras;
