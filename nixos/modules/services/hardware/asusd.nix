@@ -1,17 +1,36 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.asusd;
 in
 {
-  options = {
+  imports = [
+    (lib.mkRemovedOptionModule
+      [
+        "services"
+        "asusd"
+        "auraConfig"
+      ]
+      ''
+        This option has been replaced by `services.asusd.auraConfigs' because asusd
+        supports multiple aura devices since version 6.0.0.
+      ''
+    )
+  ];
+
+  options = with lib.types; {
     services.asusd = {
       enable = lib.mkEnableOption "the asusd service for ASUS ROG laptops";
 
       package = lib.mkPackageOption pkgs "asusctl" { };
 
       enableUserService = lib.mkOption {
-        type = lib.types.bool;
+        type = bool;
         default = false;
         description = ''
           Activate the asusd-user service.
@@ -19,7 +38,7 @@ in
       };
 
       animeConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/anime.ron.
@@ -28,7 +47,7 @@ in
       };
 
       asusdConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/asusd.ron.
@@ -36,17 +55,17 @@ in
         '';
       };
 
-      auraConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
+      auraConfigs = lib.mkOption {
+        type = attrsOf (either str path);
+        default = { };
         description = ''
-          The content of /etc/asusd/aura.ron.
+          The content of /etc/asusd/aura_<name>.ron.
           See https://asus-linux.org/asusctl/#led-keyboard-control.
         '';
       };
 
       profileConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/profile.ron.
@@ -55,16 +74,16 @@ in
       };
 
       fanCurvesConfig = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = ''
+        type = nullOr (either str path);
+        default = null;
+        description = ''
           The content of /etc/asusd/fan_curves.ron.
           See https://asus-linux.org/asusctl/#fan-curves.
         '';
       };
 
       userLedModesConfig = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+        type = nullOr (either str path);
         default = null;
         description = ''
           The content of /etc/asusd/asusd-user-ledmodes.ron.
@@ -79,19 +98,23 @@ in
 
     environment.etc =
       let
-        maybeConfig = name: cfg: lib.mkIf (cfg != null) {
-          source = pkgs.writeText name cfg;
-          mode = "0644";
-        };
+        maybeConfig =
+          name: cfg:
+          lib.mkIf (cfg != null) {
+            source = if builtins.isPath cfg || lib.isStorePath cfg then cfg else pkgs.writeText name cfg;
+            mode = "0644";
+          };
       in
       {
         "asusd/anime.ron" = maybeConfig "anime.ron" cfg.animeConfig;
         "asusd/asusd.ron" = maybeConfig "asusd.ron" cfg.asusdConfig;
-        "asusd/aura.ron" = maybeConfig "aura.ron" cfg.auraConfig;
         "asusd/profile.conf" = maybeConfig "profile.ron" cfg.profileConfig;
         "asusd/fan_curves.ron" = maybeConfig "fan_curves.ron" cfg.fanCurvesConfig;
         "asusd/asusd_user_ledmodes.ron" = maybeConfig "asusd_user_ledmodes.ron" cfg.userLedModesConfig;
-      };
+      }
+      // lib.attrsets.concatMapAttrs (prod_id: value: {
+        "asusd/aura_${prod_id}.ron" = maybeConfig "aura_${prod_id}.ron" value;
+      }) cfg.auraConfigs;
 
     services.dbus.enable = true;
     systemd.packages = [ cfg.package ];
