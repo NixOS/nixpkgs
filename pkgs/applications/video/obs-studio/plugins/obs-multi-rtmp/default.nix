@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MRBQY9m6rj8HVdn58mK/Vh07FSm0EglRUaP20P3FFO4=";
   };
 
+  patches = [ ./fix-qt.patch ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio qtbase ];
 
