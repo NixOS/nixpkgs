@@ -1125,7 +1125,6 @@ mapAliases {
   swiPrologWithGui = lib.warn "swiPrologWithGui has been renamed to swi-prolog-gui" swi-prolog-gui; # Added 2024-09-07
   swig1 = throw "swig1 has been removed as it is obsolete"; # Added 2024-08-23
   swig2 = throw "swig2 has been removed as it is obsolete"; # Added 2024-08-23
-  swig3 = throw "swig3 has been removed as it is obsolete"; # Added 2024-09-12
   swig4 = swig; # Added 2024-09-12
   swigWithJava = throw "swigWithJava has been removed as the main swig package has supported Java since 2009"; # Added 2024-09-12
   swtpm-tpm2 = throw "'swtpm-tpm2' has been renamed to/replaced by 'swtpm'"; # Converted to throw 2024-10-17
