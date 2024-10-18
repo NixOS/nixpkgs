@@ -1,0 +1,28 @@
+diff --git a/meson.build b/meson.build
+index fbf1e30..da7698d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -39,7 +39,7 @@ spdlog_dep = dependency('spdlog', include_type: 'system')
+ ############
+ # Variable #
+ ############
+-sysconf_dir = '/' / get_option('sysconfdir') / meson.project_name()
++sysconf_dir = get_option('sysconfdir') / meson.project_name()
+ log_dir = get_option('localstatedir') / 'log' / meson.project_name()
+ cfg_data = configuration_data(
+     {
+@@ -80,12 +80,12 @@ install_data(
+ if get_option('boot_service') == 'systemd'
+     install_data(
+         'boot_service/systemd/linux-enable-ir-emitter.service',
+-        install_dir: '/' / get_option('sysconfdir') / 'systemd/system',
++        install_dir: get_option('sysconfdir') / 'systemd/system',
+     )
+ elif get_option('boot_service') == 'openrc'
+     install_data(
+         'boot_service/openrc/linux-enable-ir-emitter',
+-        install_dir: '/' / get_option('sysconfdir') / 'init.d',
++        install_dir: get_option('sysconfdir') / 'init.d',
+     )
+ endif
+ 
