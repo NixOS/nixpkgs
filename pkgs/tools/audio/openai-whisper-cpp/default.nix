@@ -78,15 +78,18 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     GGML_CUDA = "1";
   };
 
-  makeFlags = [ "main" "stream" "command" ];
-
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin
+
     cp ./main $out/bin/whisper-cpp
-    cp ./stream $out/bin/whisper-cpp-stream
-    cp ./command $out/bin/whisper-cpp-command
+
+    for file in *; do
+      if [[ -x "$file" && -f "$file" && "$file" != "main" ]]; then
+        cp "$file" "$out/bin/whisper-cpp-$file"
+      fi
+    done
 
     cp models/download-ggml-model.sh $out/bin/whisper-cpp-download-ggml-model
 
