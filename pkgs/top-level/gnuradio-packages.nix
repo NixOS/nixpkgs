@@ -21,6 +21,8 @@ let
       volk
       logLib
       python
+      qwt
+      swig
     ;
     inherit mkDerivationWith mkDerivation;
     inherit gnuradio;
