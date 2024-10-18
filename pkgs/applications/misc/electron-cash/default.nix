@@ -61,11 +61,6 @@ python3Packages.buildPythonApplication rec {
       --replace "(share_dir" "(\"share\""
   '';
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace $out/share/applications/electron-cash.desktop \
-      --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
-  '';
-
   # If secp256k1 wasn't added to the library path, the following warning is given:
   #
   #   Electron Cash was unable to find the secp256k1 library on this system.
