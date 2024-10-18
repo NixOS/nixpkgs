@@ -22,7 +22,6 @@
   grpcio,
   ipython,
   ipywidgets,
-  js2py,
   matplotlib,
   numpy,
   pandas,
@@ -69,7 +68,6 @@ buildPythonPackage rec {
     grpcio
     ipython
     ipywidgets
-    js2py
     matplotlib
     numpy
     pandas
@@ -101,6 +99,9 @@ buildPythonPackage rec {
     "src/tests/test_plot.py"
     "src/tests/test_magic.py"
     "src/tests/test_magic_plot.py"
+
+    # require js2py (which is unmaintained and insecure)
+    "src/tests/test_widget.py"
   ];
 
   preCheck = ''
