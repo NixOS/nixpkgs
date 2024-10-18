@@ -1,24 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
+{
+  lib,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  fetchFromGitHub,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  overrideSDK,
+  pkg-config,
+  python311Packages,
+  qtbase,
+  qtmultimedia,
+  stdenv,
+  swig,
+  zeromq,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  inherit (if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv) mkDerivation;
+in
+mkDerivation (finalAttrs: {
   pname = "libopenshot";
   version = "0.3.3";
 
@@ -41,20 +46,28 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python3
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.openmp
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python311Packages.python
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_RUBY" false)
+    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python311Packages.python.sitePackages)
   ];
 
   strictDeps = true;
@@ -62,11 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   doCheck = true;
-
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_RUBY" false)
-    (lib.cmakeOptionType "filepath" "PYTHON_MODULE_PATH" python3.sitePackages)
-  ];
 
   passthru = {
     inherit libopenshot-audio;
