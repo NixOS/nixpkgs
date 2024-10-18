@@ -1,5 +1,13 @@
 { lib, stdenv
 , fetchzip
+
+# update script
+, writeScript
+, coreutils
+, curl
+, gnugrep
+, htmlq
+, nix-update
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +54,18 @@ stdenv.mkDerivation rec {
 
     mkdir -p $doc/share/doc/fasmg
     cp docs/*.txt $doc/share/doc/fasmg
+  '';
+
+  passthru.updateScript = writeScript "update-fasmg.sh" ''
+    export PATH="${lib.makeBinPath [ coreutils curl gnugrep htmlq nix-update ]}:$PATH"
+    version=$(
+      curl 'https://flatassembler.net/download.php' \
+        | htmlq .links a.boldlink  -a href \
+        | grep -E '^fasmg\..*\.zip$' \
+        | head -n1 \
+        | cut -d. -f2
+    )
+    nix-update fasmg --version "$version"
   '';
 
   meta = with lib; {
