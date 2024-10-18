@@ -8,7 +8,8 @@
 , fontconfig
 }:
 
-runCommand (rstudio.name + "-wrapper")
+let
+  drv = runCommand (rstudio.name + "-wrapper")
 {
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -43,6 +44,9 @@ runCommand (rstudio.name + "-wrapper")
       makeWrapper ${rstudio}/bin/rsession $out/bin/rsession \
         --set R_PROFILE_USER $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
 
+      makeWrapper ${rstudio}/bin/rstudio-server $out/bin/rstudio-server \
+        --set R_PROFILE_USER $out/$fixLibsR --set FONTCONFIG_FILE ${fontconfig.out}/etc/fonts/fonts.conf
+
       makeWrapper ${rstudio}/bin/rserver $out/bin/rserver \
         --add-flags --rsession-path=$out/bin/rsession
     ''
@@ -51,4 +55,6 @@ runCommand (rstudio.name + "-wrapper")
         makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
           --set R_PROFILE_USER $out/$fixLibsR
       '')
-  )
+  );
+  in
+    drv // { inherit (rstudio) meta; }
