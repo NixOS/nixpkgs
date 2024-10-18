@@ -24301,8 +24301,6 @@ with pkgs;
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
-  mimir = callPackage ../servers/monitoring/mimir { };
-
   phlare = callPackage ../servers/monitoring/phlare { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
