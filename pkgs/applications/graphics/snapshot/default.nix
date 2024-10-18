@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchurl
-, fetchpatch
 , glycin-loaders
 , cargo
 , desktop-file-utils
@@ -24,22 +23,16 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "47.0.1";
+  version = "47.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-YqfxDJAhui5J5+aOfrie9UDAnyx933fCBeVCydro/7E=";
+    hash = "sha256-5LFiZ5ryTH6W7m4itH1f8NqW4KD2FtE66xIHxgn4lIM=";
   };
 
   patches = [
     # Fix paths in glycin library
     glycin-loaders.passthru.glycinPathsPatch
-
-    # Fixes crash on start with "property 'client-name' of type 'GstV4l2Src' not found"
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/snapshot/-/commit/2cf4643b0abc1a238f8f38c3eb8250a347ccb10d.patch";
-      hash = "sha256-qZXDTVYXjstgQwuBAXVmInFhGwC0mOt+u+5XG5LKqGM=";
-    })
   ];
 
   nativeBuildInputs = [
