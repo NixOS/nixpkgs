@@ -7,6 +7,53 @@ let
 
   defaultBackend = options.virtualisation.oci-containers.backend.default;
 
+  capabilities = [
+    "AUDIT_WRITE"
+    "CHOWN"
+    "DAC_OVERRIDE"
+    "FOWNER"
+    "FSETID"
+    "KILL"
+    "MKNOD"
+    "NET_BIND_SERVICE"
+    "NET_RAW"
+    "SETFCAP"
+    "SETGID"
+    "SETPCAP"
+    "SETUID"
+    "SYS_CHROOT"
+    "AUDIT_CONTROL"
+    "AUDIT_READ"
+    "BLOCK_SUSPEND"
+    "BPF"
+    "CHECKPOINT_RESTORE"
+    "DAC_READ_SEARCH"
+    "IPC_LOCK"
+    "IPC_OWNER"
+    "LEASE"
+    "LINUX_IMMUTABLE"
+    "MAC_ADMIN"
+    "MAC_OVERRIDE"
+    "NET_ADMIN"
+    "NET_BROADCAST"
+    "PERFMON"
+    "SYS_ADMIN"
+    "SYS_BOOT"
+    "SYS_MODULE"
+    "SYS_NICE"
+    "SYS_PACCT"
+    "SYS_PTRACE"
+    "SYS_RAWIO"
+    "SYS_RESOURCE"
+    "SYS_TIME"
+    "SYS_TTY_CONFIG"
+    "SYSLOG"
+    "WAKE_ALARM"
+    "DAC_READ_SEARCH"
+    "CLOCK_REALTIME_ALARM"
+    "ALL"
+  ];
+
   containerOptions =
     { ... }: {
 
@@ -262,11 +309,74 @@ let
         };
 
         autoStart = mkOption {
-          type = types.bool;
+          type = with types; bool;
           default = true;
           description = ''
             When enabled, the container is automatically started on boot.
             If this option is set to false, the container has to be started on-demand via its service.
+          '';
+        };
+
+        pull = mkOption {
+          type = with types; enum ["always" "missing" "never" "newer"];
+          default = "missing";
+          description = ''
+            Image pull policy for the container. Must be one of: always, missing, never, newer
+          '';
+        };
+
+        capAdd = mkOption {
+          type = with types; listOf (enum capabilities);
+          default = [];
+          description = ''
+            Capabilities to add to container
+          '';
+          example = literalExpression ''
+            [
+              SYS_ADMIN
+            ]
+          '';
+        };
+
+        capDrop = mkOption {
+          type = with types; listOf (enum capabilities);
+          default = [];
+          description = ''
+            Capabilities to drop from container
+          '';
+          example = literalExpression ''
+            [
+              SYS_ADMIN
+            ]
+          '';
+        };
+
+        devices = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            List of devices to attach to this container.
+          '';
+          example = literalExpression ''
+            [
+              "/dev/dri:/dev/dri"
+            ]
+          '';
+        };
+
+        privileged = mkOption {
+          type = with types; bool;
+          default = false;
+          description = ''
+            Give extended privileges to the container
+          '';
+        };
+
+        networks = mkOption {
+          type = with types; listOf str;
+          default = if cfg.backend == "podman" then ["podman"] else ["bridge"];
+          description = ''
+            Networks to attach the container to
           '';
         };
       };
@@ -341,10 +451,17 @@ let
       ++ map (v: "-v ${escapeShellArg v}") container.volumes
       ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
+      ++ optional (container.privileged) "--privileged"
+      ++ map (c: "--cap-add ${escapeShellArg c}") container.capAdd
+      ++ map (c: "--cap-drop ${escapeShellArg c}") container.capDrop
+      ++ map (d: "--device ${escapeShellArg d}") container.devices
+      ++ map (n: "--network ${escapeShellArg n}") container.networks
+      ++ ["--pull ${escapeShellArg container.pull}"]
       ++ map escapeShellArg container.extraOptions
       ++ [container.image]
       ++ map escapeShellArg container.cmd
     );
+
 
     preStop = if cfg.backend == "podman"
       then "podman stop --ignore --cidfile=/run/podman-${escapedName}.ctr-id"
