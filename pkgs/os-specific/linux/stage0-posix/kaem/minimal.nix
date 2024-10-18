@@ -1,12 +1,12 @@
 { lib
-, derivationWithMeta
+, minimal-bootstrap
 , src
 , hex0
 , version
 , platforms
 , stage0Arch
 }:
-derivationWithMeta {
+minimal-bootstrap.derivationWithMeta {
   inherit version;
   pname = "kaem-minimal";
   builder = hex0;

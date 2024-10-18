@@ -1,5 +1,5 @@
 { lib
-, kaem
+, stage0-posix
 , mes-libc
 }:
 
@@ -15,14 +15,14 @@ rec {
     }:
     let
 
-    crt = kaem.runCommand "crt" {} ''
+    crt = stage0-posix.kaem.runCommand "crt" {} ''
       mkdir -p ''${out}/lib
       ${tcc}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crt1.o ${mes-libc}/lib/crt1.c
       ${tcc}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crtn.o ${mes-libc}/lib/crtn.c
       ${tcc}/bin/tcc ${mes-libc.CFLAGS} -c -o ''${out}/lib/crti.o ${mes-libc}/lib/crti.c
     '';
 
-    library = lib: options: source: kaem.runCommand "${lib}.a" {} ''
+    library = lib: options: source: stage0-posix.kaem.runCommand "${lib}.a" {} ''
       ${tcc}/bin/tcc ${options} -c -o ${lib}.o ${source}
       ${tcc}/bin/tcc -ar cr ''${out} ${lib}.o
     '';
@@ -31,7 +31,7 @@ rec {
     libc = library "libc" mes-libc.CFLAGS "${mes-libc}/lib/libc.c";
     libgetopt = library "libgetopt" mes-libc.CFLAGS "${mes-libc}/lib/libgetopt.c";
   in
-  kaem.runCommand "${pname}-libs-${version}" {} ''
+  stage0-posix.kaem.runCommand "${pname}-libs-${version}" {} ''
     mkdir -p ''${out}/lib
     cp ${crt}/lib/crt1.o ''${out}/lib
     cp ${crt}/lib/crtn.o ''${out}/lib
@@ -54,14 +54,14 @@ rec {
       options = lib.strings.concatStringsSep " " buildOptions;
       libtccOptions = lib.strings.concatStringsSep " "
         (["-c" "-D" "TCC_TARGET_I386=1" ] ++ libtccBuildOptions);
-      compiler =  kaem.runCommand "${pname}-${version}" {
+      compiler =  stage0-posix.kaem.runCommand "${pname}-${version}" {
         inherit pname version meta;
         passthru.tests = rec {
-          get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+          get-version = result: stage0-posix.kaem.runCommand "${pname}-get-version-${version}" {} ''
             ${result}/bin/tcc -version
             mkdir ''${out}
           '';
-          chain = result: kaem.runCommand "${pname}-chain-${version}" {} ''
+          chain = result: stage0-posix.kaem.runCommand "${pname}-chain-${version}" {} ''
             echo ${prev.compiler.tests.chain or prev.compiler.tests.get-version};
             ${result}/bin/tcc -version
             mkdir ''${out}

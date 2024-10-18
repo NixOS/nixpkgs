@@ -1,8 +1,7 @@
 { lib
 , fetchurl
 , callPackage
-, kaem
-, mescc-tools
+, stage0-posix
 }:
 
 # Maintenance note:
@@ -40,7 +39,7 @@ let
     platforms = [ "i686-linux" ];
   };
 
-  srcPost = kaem.runCommand "${pname}-src-${version}" {
+  srcPost = stage0-posix.kaem.runCommand "${pname}-src-${version}" {
     outputs = [ "out" "bin" ];
     inherit meta;
   } ''
@@ -75,9 +74,9 @@ let
     replace --file ''${guile_mes} --output ''${guile_mes} --match-on "(getenv \"GUILE_LOAD_PATH\")" --replace-with ''${__GUILE_LOAD_PATH}
 
     module_mescc_scm=module/mescc/mescc.scm
-    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"M1\")" --replace-with "\"${mescc-tools}/bin/M1\""
-    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"HEX2\")" --replace-with "\"${mescc-tools}/bin/hex2\""
-    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"BLOOD_ELF\")" --replace-with "\"${mescc-tools}/bin/blood-elf\""
+    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"M1\")" --replace-with "\"${stage0-posix.mescc-tools}/bin/M1\""
+    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"HEX2\")" --replace-with "\"${stage0-posix.mescc-tools}/bin/hex2\""
+    replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"BLOOD_ELF\")" --replace-with "\"${stage0-posix.mescc-tools}/bin/blood-elf\""
     replace --file ''${module_mescc_scm} --output ''${module_mescc_scm} --match-on "(getenv \"srcdest\")" --replace-with "\"''${MES_PREFIX}\""
 
     mes_c=src/mes.c
@@ -128,7 +127,7 @@ let
       [ "" ]
       (builtins.baseNameOf source);
 
-  compile = source: kaem.runCommand (stripExt source) {} ''
+  compile = source: stage0-posix.kaem.runCommand (stripExt source) {} ''
     mkdir ''${out}
     cd ''${out}
     ${CC} -c ${srcPrefix}/${source}
@@ -145,7 +144,7 @@ let
 
   mkLib = libname: sources: let
     os = map compile sources;
-  in kaem.runCommand "${pname}-${libname}-${version}" {
+  in stage0-posix.kaem.runCommand "${pname}-${libname}-${version}" {
     inherit meta;
   } ''
     LIBDIR=''${out}/lib
@@ -162,10 +161,10 @@ let
   libc_tcc = mkLib "libc+tcc" libc_tcc_SOURCES;
 
   # Recompile Mes and Mes C library using mes-m2 bootstrapped Mes
-  libs = kaem.runCommand "${pname}-m2-libs-${version}" {
+  libs = stage0-posix.kaem.runCommand "${pname}-m2-libs-${version}" {
     inherit pname version;
 
-    passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+    passthru.tests.get-version = result: stage0-posix.kaem.runCommand "${pname}-get-version-${version}" {} ''
       ${result}/bin/mes --version
       mkdir ''${out}
     '';
@@ -200,10 +199,10 @@ let
   '';
 
   # Build mes itself
-  compiler = kaem.runCommand "${pname}-${version}" {
+  compiler = stage0-posix.kaem.runCommand "${pname}-${version}" {
     inherit pname version;
 
-    passthru.tests.get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
+    passthru.tests.get-version = result: stage0-posix.kaem.runCommand "${pname}-get-version-${version}" {} ''
       ${result}/bin/mes --version
       mkdir ''${out}
     '';
