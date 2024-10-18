@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   version = "0.6.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
@@ -23,17 +24,13 @@ buildPythonPackage rec {
     hash = "sha256-MssA4gDo79mlHjVwQAxhX6DZPHB4Quo6V05Nye91oJg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov aiostream" ""
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
