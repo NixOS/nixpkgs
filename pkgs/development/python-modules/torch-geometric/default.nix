@@ -52,7 +52,7 @@
   onnx,
   onnxruntime,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
 
   # tests
   pytestCheckHook,
@@ -137,7 +137,7 @@ buildPythonPackage rec {
       onnx
       onnxruntime
       pytest
-      pytest-cov
+      pytest-cov-stub
     ];
   };
 
