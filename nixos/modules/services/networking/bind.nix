@@ -265,7 +265,7 @@ in
 
       preStart = ''
         if ! [ -f "/etc/bind/rndc.key" ]; then
-          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -u ${bindUser} -a -A hmac-sha256 2>/dev/null
+          ${bindPkg.out}/sbin/rndc-confgen -c /etc/bind/rndc.key -a -A hmac-sha256 2>/dev/null
         fi
       '';
 
