@@ -148,6 +148,7 @@ rec {
       if isAttrs result then
         result // {
           override = overrideArgs;
+          __origF = f;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} = fdrv:
             overrideResult (x: x.overrideAttrs fdrv);
