@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "prisma";
-  version = "5.21.0";
+  version = "5.21.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma";
     rev = finalAttrs.version;
-    hash = "sha256-i37Hiawmu/06Mv56FtYkvFGOtqW3x4Q2H1C0JW6/0pI=";
+    hash = "sha256-75TmTFl1EKLGE3kgghghary4Z2gjEjdguZ//ND3HAkc=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_8.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-o6m9Lxg+oqq15CtdA9RQRukdJWPPGtw/SwRyHDUf91A=";
+    hash = "sha256-fu2SJUn2xKm8lKNE8ncMRuNu6snj1J6cnHrJfzg+hJc=";
   };
 
   patchPhase = ''
