@@ -13,13 +13,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pixi";
-  version = "0.31.0";
+  version = "0.33.0";
 
   src = fetchFromGitHub {
     owner = "prefix-dev";
     repo = "pixi";
     rev = "v${version}";
-    hash = "sha256-1Woi+HwlN1nP05/cMNj+FVqEVREy/+UivdWGD6lZSNY=";
+    hash = "sha256-erg0YBYZMaSFBFuo685Fq81cH6wv7YLSYwW1Z7aGzO8=";
   };
 
   cargoLock = {
