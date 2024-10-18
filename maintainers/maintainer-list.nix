@@ -23114,6 +23114,12 @@
     githubId = 28888242;
     name = "WORLDofPEACE";
   };
+  WoutSwinkels = {
+    name = "Wout Swinkels";
+    email = "nixpkgs@woutswinkels.com";
+    github = "WoutSwinkels";
+    githubId = 113464111;
+  };
   wozeparrot = {
     email = "wozeparrot@gmail.com";
     github = "wozeparrot";
