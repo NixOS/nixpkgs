@@ -253,20 +253,6 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
 
   passthru = {
-    updateScript =
-      let
-        java-json = fetchurl {
-          url = "https://search.maven.org/remotecontent?filepath=org/json/json/20240303/json-20240303.jar";
-          hash = "sha256-PPbNaJLjLitMHDng9S9SSKL1s3ZG/fu3mma0a2GEFO0=";
-        };
-      in
-      writeShellScript "update-java" ''
-        ${finalAttrs.finalPackage}/bin/java \
-          -cp ${java-json} \
-          ${./JavaUpdater.java} \
-          ${featureVersion} pkgs/development/compilers/openjdk/info.json
-      '';
-
     home = "${finalAttrs.finalPackage}/lib/openjdk";
 
     inherit gtk3;
