@@ -1469,8 +1469,6 @@ dont-distribute-packages:
  - gelatin-gl
  - gelatin-sdl2
  - gelatin-shaders
- - gemini-router
- - gemini-textboard
  - gencheck
  - generic-accessors
  - generic-override-aeson
@@ -1521,7 +1519,6 @@ dont-distribute-packages:
  - glazier-react
  - glazier-react-examples
  - glazier-react-widget
- - glirc
  - global
  - global-config
  - glome-hs
@@ -1823,7 +1820,6 @@ dont-distribute-packages:
  - hackage2twitter
  - hackmanager
  - haddock
- - haddock_2_23_1
  - haddocset
  - hadoop-tools
  - haggis
