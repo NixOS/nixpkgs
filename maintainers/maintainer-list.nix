@@ -9547,6 +9547,13 @@
     githubId = 7005773;
     keys = [ { fingerprint = "B982 0250 1720 D540 6A18  2DA8 188E 4945 E85B 2D21"; } ];
   };
+  jakehillion = {
+    name = "Jake Hillion";
+    email = "jake@hillion.co.uk";
+    matrix = "@jake:hillion.co.uk";
+    github = "JakeHillion";
+    githubId = 5712856;
+  };
   jakeisnt = {
     name = "Jacob Chvatal";
     email = "jake@isnt.online";
