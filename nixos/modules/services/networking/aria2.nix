@@ -139,10 +139,18 @@ in
 
     users.groups.aria2.gid = config.ids.gids.aria2;
 
-    systemd.tmpfiles.rules = [
-      "d '${homeDir}' 0770 aria2 aria2 - -"
-      "d '${config.services.aria2.settings.dir}' 0770 aria2 aria2 - -"
-    ];
+    systemd.tmpfiles.settings."10-aria2" = {
+      ${homeDir}.d = {
+        user = "aria2";
+        group = "aria2";
+        mode = "0770";
+      };
+      ${config.services.aria2.settings.dir}.d = {
+        user = "aria2";
+        group = "aria2";
+        mode = "0770";
+      };
+    };
 
     systemd.services.aria2 = {
       description = "aria2 Service";

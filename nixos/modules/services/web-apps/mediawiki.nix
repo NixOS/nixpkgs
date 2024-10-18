@@ -589,13 +589,24 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${stateDir}' 0750 ${user} ${group} - -"
-      "d '${cacheDir}' 0750 ${user} ${group} - -"
-    ] ++ optionals (cfg.uploadsDir != null) [
-      "d '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-      "Z '${cfg.uploadsDir}' 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-mediawiki" = {
+      ${stateDir}.d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      ${cacheDir}.d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      ${cfg.uploadsDir}.d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      ${cfg.uploadsDir}.Z = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+    };
 
     systemd.services.mediawiki-init = {
       wantedBy = [ "multi-user.target" ];

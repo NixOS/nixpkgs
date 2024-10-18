@@ -226,12 +226,24 @@ in
       dolibarr_mailing_limit_sendbyweb = false;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group}"
-      "d '${cfg.stateDir}/documents' 0750 ${cfg.user} ${cfg.group}"
-      "f '${cfg.stateDir}/conf.php' 0660 ${cfg.user} ${cfg.group}"
-      "L '${cfg.stateDir}/install.forced.php' - ${cfg.user} ${cfg.group} - ${mkConfigFile "install.forced.php" install}"
-    ];
+    systemd.tmpfiles.settings."10-dolibarr" = {
+      ${cfg.stateDir}.d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      "${cfg.stateDir}/documents".d = {
+        inherit (cfg) user group;
+        mode = "0750";
+      };
+      "${cfg.stateDir}/conf.php".f = {
+        inherit (cfg) user group;
+        mode = "0660";
+      };
+      "${cfg.stateDir}/install.forced.php".L = {
+        inherit (cfg) user group;
+        argument = mkConfigFile "install.forced.php" install;
+      };
+    };
 
     services.mysql = mkIf cfg.database.createLocally {
       enable = mkDefault true;

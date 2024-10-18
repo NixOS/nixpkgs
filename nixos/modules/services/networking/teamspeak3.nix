@@ -139,9 +139,9 @@ in
       gid = config.ids.gids.teamspeak;
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.logPath}' - ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.settings."10-teamspeak3".${cfg.logPath}.d = {
+      inherit user group;
+    };
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.fileTransferPort ] ++ (map (port:

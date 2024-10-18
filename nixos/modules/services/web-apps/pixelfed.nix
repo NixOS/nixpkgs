@@ -435,11 +435,17 @@ in {
       '';
     };
 
-    systemd.tmpfiles.rules = [
+    systemd.tmpfiles.settings."10-pixelfed" = {
       # Cache must live across multiple systemd units runtimes.
-      "d ${cfg.runtimeDir}/                         0700 ${user} ${group} - -"
-      "d ${cfg.runtimeDir}/cache                    0700 ${user} ${group} - -"
-    ];
+      ${cfg.runtimeDir}.d = {
+        inherit user group;
+        mode = "0700";
+      };
+      "${cfg.runtimeDir}/cache".d = {
+        inherit user group;
+        mode = "0700";
+      };
+    };
 
     # Enable NGINX to access our phpfpm-socket.
     users.users."${config.services.nginx.user}".extraGroups = [ cfg.group ];

@@ -480,17 +480,21 @@ in
           };
         };
       };
-      tmpfiles.rules = let
-        group = config.services.nginx.group;
-      in [
-        "d ${cfg.dataDir}                0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/updates        0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/uploads        0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/backup         0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/logbook        0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/assets/json    0750 ${cfg.user} ${group} - -"
-        "d ${cfg.dataDir}/assets/qslcard 0750 ${cfg.user} ${group} - -"
-      ];
+      tmpfiles.settings."10-cloudlog" = let
+        defaultConfig = {
+          inherit (cfg) user;
+          inherit (config.services.nginx.group) group;
+          mode = "0750";
+        };
+      in {
+        ${cfg.dataDir}.d = defaultConfig;
+        "${cfg.dataDir}/updates".d = defaultConfig;
+        "${cfg.dataDir}/uploads".d = defaultConfig;
+        "${cfg.dataDir}/backup".d = defaultConfig;
+        "${cfg.dataDir}/logbook".d = defaultConfig;
+        "${cfg.dataDir}/assets/json".d = defaultConfig;
+        "${cfg.dataDir}/assets/qslcard".d = defaultConfig;
+      };
     };
 
     users.users."${cfg.user}" = {

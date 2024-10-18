@@ -105,11 +105,22 @@ in {
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail
       (security.wrappers.smtpctl // { program = "sendmail"; });
 
-    systemd.tmpfiles.rules = [
-      "d /var/spool/smtpd 711 root - - -"
-      "d /var/spool/smtpd/offline 770 root smtpq - -"
-      "d /var/spool/smtpd/purge 700 smtpq root - -"
-    ];
+    systemd.tmpfiles.settings."10-opensmtpd" = {
+      "/var/spool/smtpd".d = {
+        user = "root";
+        mode = "0711";
+      };
+      "/var/spool/smtpd/offline" = {
+        user = "root";
+        group = "smtpq";
+        mode = "0770";
+      };
+      "/var/spool/smtpd/purge" = {
+        user = "smtpq";
+        group = "root";
+        mode = "0700";
+      };
+    };
 
     systemd.services.opensmtpd = let
       procEnv = pkgs.buildEnv {

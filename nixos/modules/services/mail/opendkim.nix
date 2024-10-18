@@ -102,9 +102,9 @@ in {
 
     environment.systemPackages = [ pkgs.opendkim ];
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.keyPath}' - ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-opendkim".${cfg.keyPath}.d = {
+      inherit (cfg) user group;
+    };
 
     systemd.services.opendkim = {
       description = "OpenDKIM signing and verification daemon";

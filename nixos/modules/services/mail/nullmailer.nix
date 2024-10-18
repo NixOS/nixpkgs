@@ -207,12 +207,17 @@
       groups.${cfg.group} = { };
     };
 
-    systemd.tmpfiles.rules = [
-      "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
-      "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
-    ];
+    systemd.tmpfiles.settings."10-nullmailer" = let
+      defaultConfig = {
+        inherit (cfg) user group;
+        mode = "0770";
+      };
+    in {
+      "/var/spool/nullmailer".d = defaultConfig;
+      "/var/spool/nullmailer/failed".d = defaultConfig;
+      "/var/spool/nullmailer/queue".d = defaultConfig;
+      "/var/spool/nullmailer/tmp".d = defaultConfig;
+    };
 
     systemd.services.nullmailer = {
       description = "nullmailer";

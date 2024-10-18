@@ -43,10 +43,8 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.tmpfiles.rules = [
-      # The config file has to be inside the state dir
-      "L+ ${stateDir}/config.yaml - - - - ${configFile}"
-    ];
+    # The config file has to be inside the state dir
+    systemd.tmpfiles.settings."10-softserve".${stateDir}."L+".argument = configFile;
 
     systemd.services.soft-serve = {
       description = "Soft Serve git server";

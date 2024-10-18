@@ -33,7 +33,11 @@ in {
   config = lib.mkMerge [
     # host configuration
     (lib.mkIf cfg.enable {
-      systemd.tmpfiles.rules = [ "d ${cfg.cacheDir} 0770 ${cfg.owner} ${cfg.group} -" ];
+      systemd.tmpfiles.settings."10-ccache".${cfg.cacheDir}.d = {
+        user = cfg.owner;
+        inherit (cfg) group;
+        mode = "0770";
+      };
 
       # "nix-ccache --show-stats" and "nix-ccache --clear"
       security.wrappers.nix-ccache = {

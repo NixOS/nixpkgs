@@ -103,9 +103,7 @@ in
       };
     };
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}' - ${user} - - -"
-    ];
+    systemd.tmpfiles.settings."10-quassel".${cfg.dataDir}.d.user = user;
 
     systemd.services.quassel =
       { description = "Quassel IRC client daemon";

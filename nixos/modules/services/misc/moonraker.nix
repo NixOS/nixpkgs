@@ -151,9 +151,14 @@ in {
       fullConfig = lib.recursiveUpdate cfg.settings forcedConfig;
     in format.generate "moonraker.cfg" fullConfig;
 
-    systemd.tmpfiles.rules = [
-      "d '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
-    ] ++ lib.optional (cfg.configDir != null) "d '${cfg.configDir}' - ${cfg.user} ${cfg.group} - -";
+    systemd.tmpfiles.settings."10-moonraker" = {
+      ${cfg.stateDir}.d = {
+        inherit (cfg) user group;
+      };
+      ${cfg.configDir}.d = {
+        inherit (cfg) user group;
+      };
+    };
 
     systemd.services.moonraker = {
       description = "Moonraker, an API web server for Klipper";
