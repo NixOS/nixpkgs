@@ -187,10 +187,10 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crystfel";
-  version = "0.11.0";
+  version = "0.11.1";
   src = fetchurl {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
-    sha256 = "sha256-ogNHWYfbxRmB5TdK8K0JpcCnYOOyXapQGSPh8mfp+Tc=";
+    sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
   };
   nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
     ++ lib.optionals withGui [ wrapGAppsHook3 ];
@@ -220,9 +220,6 @@ stdenv.mkDerivation rec {
     # on darwin at least, we need to link to a separate argp library;
     # this patch adds a test for this and the necessary linker options
     ./link-to-argp-standalone-if-needed.patch
-    # hotfix for an issue that occurs (at least) on NixOS:
-    # if the temporary path is too long, we get a segfault
-    ./gui-path-issue.patch
   ];
 
   # CrystFEL calls mosflm by searching PATH for it. We could've create a wrapper script that sets the PATH, but
