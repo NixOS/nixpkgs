@@ -23,6 +23,7 @@ let
           werkzeug = super.werkzeug.overridePythonAttrs (oldAttrs: rec {
             version = "2.2.3";
             format = "setuptools";
+            pyproject = null;
             src = fetchPypi {
               pname = "Werkzeug";
               inherit version;
