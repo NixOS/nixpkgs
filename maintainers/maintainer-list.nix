@@ -19077,6 +19077,12 @@
     githubId = 720864;
     name = "Sébastien Bourdeauducq";
   };
+  sbancuz = {
+    email = "sbancuz@protonmail.com";
+    github = "sbancuz";
+    githubId = 43883450;
+    name = "sbancuz";
+  };
   sbellem = {
     email = "sbellem@gmail.com";
     github = "sbellem";
