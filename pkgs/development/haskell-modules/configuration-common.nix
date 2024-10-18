@@ -27,14 +27,14 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_10_3_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_22_0;
+    process = self.process_1_6_24_0;
   }));
 
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override ({
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.2.5") {
     # Use process core package when possible
-    process = self.process_1_6_22_0;
+    process = self.process_1_6_24_0;
   }));
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
@@ -411,7 +411,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0j037sis64gnrll7ajg48cvzzvxqsrhj7vnhiwcqv8wbmbfv0avn";
+      sha256 = "sha256-hPZTcl3kWeUnSVYOE1W+FDwR3LYg6gaJfEBIY6VSfxY=";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -724,7 +724,6 @@ self: super: {
   nats-queue = dontCheck super.nats-queue;
   netpbm = dontCheck super.netpbm;
   network = dontCheck super.network;
-  network_2_6_3_1 = dontCheck super.network_2_6_3_1; # package is missing files for test
   network-dbus = dontCheck super.network-dbus;
   notcpp = dontCheck super.notcpp;
   ntp-control = dontCheck super.ntp-control;
@@ -1811,10 +1810,6 @@ self: super: {
   # tests seem to require a different version of hspec-core
   hspec-contrib = dontCheck super.hspec-contrib;
 
-  # github.com/ucsd-progsys/liquidhaskell/issues/1729
-  liquidhaskell-boot = super.liquidhaskell-boot.override { Diff = self.Diff_0_3_4; };
-  Diff_0_3_4 = dontCheck super.Diff_0_3_4;
-
   # The test suite attempts to read `/etc/resolv.conf`, which doesn't work in the sandbox.
   domain-auth = dontCheck super.domain-auth;
 
@@ -2109,12 +2104,6 @@ self: super: {
   # https://github.com/serokell/haskell-crypto/issues/25
   crypto-sodium = dontCheck super.crypto-sodium;
 
-  taskell = super.taskell.override {
-    # Does not support brick >= 1.0
-    # https://github.com/smallhadroncollider/taskell/issues/125
-    brick = self.brick_0_70_1;
-  };
-
   # Polyfill for GHCs from the integer-simple days that don't bundle ghc-bignum
   ghc-bignum = super.ghc-bignum or self.mkDerivation {
     pname = "ghc-bignum";
@@ -2220,17 +2209,6 @@ self: super: {
     revision = null;
   } super.llvm-hs-pure);
 
-  # * Fix build failure by picking patch from 8.5, we need
-  #   this version of sbv for petrinizer
-  # * Pin version of crackNum that still exposes its library
-  sbv_7_13 = appendPatch (fetchpatch {
-      url = "https://github.com/LeventErkok/sbv/commit/57014b9c7c67dd9b63619a996e2c66e32c33c958.patch";
-      sha256 = "10npa8nh2413n6p6qld795qfkbld08icm02bspmk93y0kabpgmgm";
-    })
-    (super.sbv_7_13.override {
-      crackNum = self.crackNum_2_4;
-    });
-
   # Too strict bounds on dimensional
   # https://github.com/enomsg/science-constants-dimensional/pull/1
   science-constants-dimensional = doJailbreak super.science-constants-dimensional;
@@ -2248,8 +2226,8 @@ self: super: {
   gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
     gi-gdk = self.gi-gdk_4;
   });
-  gi-gdk_4 = self.gi-gdk_4_0_8;
-  gi-gdk_4_0_8 = doDistribute super.gi-gdk_4_0_8;
+  gi-gdk_4 = self.gi-gdk_4_0_9;
+  gi-gdk_4_0_9 = doDistribute super.gi-gdk_4_0_9;
   # GSK is only used for GTK 4.
   gi-gsk = super.gi-gsk.override {
     gi-gdk = self.gi-gdk_4;
@@ -2531,9 +2509,12 @@ self: super: {
   # 2024-03-02: base <=4.18.0.0  https://github.com/srid/url-slug/pull/2
   url-slug = doJailbreak super.url-slug;
 
-  glirc = doJailbreak (super.glirc.override {
-    vty = self.vty_5_35_1;
-  });
+  glirc = super.glirc.override {
+    vty = self.vty_6_2;
+    vty-unix = super.vty-unix.override {
+      vty = self.vty_6_2;
+    };
+  };
 
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
@@ -2941,13 +2922,6 @@ self: super: {
     url = "https://github.com/aristanetworks/nix-serve-ng/commit/4d9eacfcf753acbcfa0f513bec725e9017076270.patch";
     hash = "sha256-zugyUpEq/iVkxghrvguL95+lJDEpE8MLvZivken0p24=";
   }) super.nix-serve-ng;
-
-  # Needs a matching version of ipython-kernel and a
-  # ghc-syntax-highlighter compatible with a newer ghc-lib-parser it
-  # transitively pulls in
-  ihaskell = super.ihaskell.overrideScope (self: super: {
-    ghc-syntax-highlighter = self.ghc-syntax-highlighter_0_0_10_0;
-  });
 
   # 2024-01-24: support optparse-applicative 0.18
   niv = appendPatches [
