@@ -69,6 +69,13 @@ let
             url = "https://github.com/qt/qtbase/commit/2ea3abed0125d81ca4f3bacb9650db7314657332.patch";
             hash = "sha256-mdTdwhJtebuLUQRo+y1XUrrzgqG9G7GvPQwvrXLycJI=";
           })
+
+          # Backport patch to fix plugin loading through symlinks
+          # FIXME: remove for 6.8.1
+          (fetchpatch2 {
+            url = "https://github.com/qt/qtbase/commit/e25150ca29437ab315e3686aa801b8636e201e2a.patch";
+            hash = "sha256-8WOjjffI48Vlx7gQIiOzfUtPloLys5lf06RQi1lsTys=";
+          })
         ];
       };
       env = callPackage ./qt-env.nix { };
