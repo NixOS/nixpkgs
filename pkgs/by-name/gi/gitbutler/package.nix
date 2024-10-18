@@ -26,13 +26,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitbutler";
-  version = "0.12.16";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "gitbutlerapp";
     repo = "gitbutler";
     rev = "release/${version}";
-    hash = "sha256-L4PVaNb3blpLIcyA7XLc71qwUPUADclxvbOkq1Jc1no=";
+    hash = "sha256-57GCcHV2s4TS+P6NbJ4hq19TwlYkvzH2nO/1TdvU12Y=";
   };
 
   # deactivate the upstream updater in tauri configuration & set the version
@@ -44,8 +44,9 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "tauri-plugin-context-menu-0.7.1" = "sha256-vKfq20hrFLmfoXO94D8HwAE3UdGcuqVZf3+tOBhLqj0=";
-      "tauri-plugin-log-0.0.0" = "sha256-gde2RS5NFA0Xap/Xb7XOeVQ/5t2Nw+j+HOwfeJmSNMU=";
+      "tauri-plugin-context-menu-0.8.2" = "sha256-oRCUzFug2pgY3lkkTTWCVWBDjQwuYHra8gsFjjxYBmM=";
+      "tauri-plugin-log-0.0.0" = "sha256-Utmdi7vx5Fmhc8bf8u3j91YGPo8mjy2XdI1jzN61/fk=";
+      "gix-0.66.0" = "sha256-8G3LSdIcLINCjX612w9KvJQ9zv/PxRmtsVpr92ueKt8=";
     };
   };
 
