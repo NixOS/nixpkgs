@@ -29964,8 +29964,6 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
-  super-productivity = callPackage ../applications/office/super-productivity { };
-
   inherit (callPackages ../development/libraries/wlroots {})
     wlroots_0_17
     wlroots_0_18;
