@@ -15782,6 +15782,8 @@ self: super: with self; {
     triton = self.triton-bin;
   };
 
+  torchbench = callPackage ../development/python-modules/torchbench { };
+
   torchsnapshot = callPackage ../development/python-modules/torchsnapshot { };
 
   torchWithCuda = self.torch.override {
