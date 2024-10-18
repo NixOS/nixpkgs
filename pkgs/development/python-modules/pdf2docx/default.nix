@@ -2,9 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  python,
   buildPythonPackage,
-  imagemagick,
   pip,
   pytestCheckHook,
   pymupdf,
@@ -32,7 +30,6 @@ buildPythonPackage {
 
   nativeBuildInputs = [
     pip
-    imagemagick
   ];
 
   pythonRemoveDeps = [ "opencv-python" ];
@@ -48,15 +45,6 @@ buildPythonPackage {
     opencv4
     python-docx
   ];
-
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
-    # on linux the icon file can only be xbm format
-    convert $out/${python.sitePackages}/pdf2docx/gui/icon.ico \
-      $out/${python.sitePackages}/pdf2docx/gui/icon.xbm
-    substituteInPlace $out/${python.sitePackages}/pdf2docx/gui/App.py \
-      --replace 'icon.ico' 'icon.xbm' \
-      --replace 'iconbitmap(icon_path)' "iconbitmap(f'@{icon_path}')"
-  '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 
