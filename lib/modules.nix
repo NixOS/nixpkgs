@@ -74,6 +74,35 @@ let
           decls
       ));
 
+  # Private filtering function used by evalModules
+  # TODO: Consider moving something like this to `lib.attrsets`?
+  filterAttrsRecursiveWith =
+    {
+      continueRecursing ? _: true,
+      leafPredicate ? _: _: true,
+      branchPredicate ? _: _: true,
+    } @ args:
+    set:
+    lib.pipe set [
+      attrNames
+      (lib.concatMap (name:
+        let
+          value = set.${name};
+          filtered = filterAttrsRecursiveWith args value;
+        in
+          if isAttrs value && continueRecursing value then
+            lib.optional (branchPredicate name filtered) {
+              inherit name;
+              value = filtered;
+            }
+          else
+            lib.optional (leafPredicate name value) {
+              inherit name value;
+            }
+      ))
+      lib.listToAttrs
+    ];
+
   /* See https://nixos.org/manual/nixpkgs/unstable/#module-system-lib-evalModules
      or file://./../doc/module-system/module-system.chapter.md
 
@@ -90,6 +119,9 @@ let
                   # there's _module.args. If specialArgs.modulesPath is defined it will be
                   # used as the base path for disabledModules.
                   specialArgs ? {}
+                , # Whether to merge only defined options into the final config value.
+                  # I.e. options that either have a default value or at least one definition.
+                  definedOptionsOnly ? false
                 , # `class`:
                   # A nominal type for modules. When set and non-null, this adds a check to
                   # make sure that only compatible modules are imported.
@@ -202,6 +234,24 @@ let
             description = "Whether to check whether all option definitions have matching declarations.";
           };
 
+          _module.definedOptionsOnly = mkOption {
+            type = types.bool;
+            internal = true;
+            # This option is readOnly because we cannot use its value to determine how to evaluate the modules
+            readOnly = true;
+            default = definedOptionsOnly;
+            description = ''
+              Whether to merge only defined options into the final `config` value.
+              I.e. options that either have a **default** value or **at least one** definition.
+
+              By default, undefined options are merged in but will throw a _"used but not defined"_ error if
+              their value is evaluated.
+
+              This option does not affect merging of freeform definitions that is done when `freeformType` is
+              non-null.
+            '';
+          };
+
           _module.freeformType = mkOption {
             type = types.nullOr types.optionType;
             internal = true;
@@ -249,9 +299,23 @@ let
 
       config =
         let
+          isNotOption = v: ! isOption v;
+
+          # If definedOptionsOnly is enabled, we first filter for defined options
+          options' =
+            # We'd like to use the _module.definedOptionsOnly option, but that's infinitely recursive.
+            # Therefore, we use a function arg passed to evalModules instead.
+            if definedOptionsOnly then
+              filterAttrsRecursiveWith {
+                continueRecursing = isNotOption;
+                leafPredicate = n: opt: opt.isDefined;
+                branchPredicate = n: set: set != { };
+              } options
+            else
+              options;
 
           # For definitions that have an associated option
-          declaredConfig = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
+          declaredConfig = mapAttrsRecursiveCond isNotOption (_: v: v.value) options';
 
           # If freeformType is set, this is for definitions that don't have an associated option
           freeformConfig =
