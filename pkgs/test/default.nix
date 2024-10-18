@@ -30,6 +30,8 @@ with pkgs;
         (filter (lib.hasPrefix "gcc"))
         (filter (lib.hasSuffix "Stdenv"))
         (filter (n: n != "gccCrossLibcStdenv"))
+        (filter (n: n != "gcc49Stdenv"))
+        (filter (n: n != "gcc6Stdenv"))
       ] ++ lib.optionals (!(
         (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
