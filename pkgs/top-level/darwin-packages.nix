@@ -248,7 +248,7 @@ impure-cmds // apple-source-packages // apple-source-headers // stubs // {
       nixos = import ../../nixos {
         configuration = {
           imports = [
-            ../../nixos/modules/profiles/macos-builder.nix
+            ../../nixos/modules/profiles/nix-builder-vm.nix
           ] ++ modules;
 
           # If you need to override this, consider starting with the right Nixpkgs
