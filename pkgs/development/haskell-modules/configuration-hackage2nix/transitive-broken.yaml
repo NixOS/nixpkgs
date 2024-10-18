@@ -732,6 +732,7 @@ dont-distribute-packages:
  - cabal-cargs
  - cabal-fix
  - cabal-query
+ - cabal-scaffold
  - cabal-test
  - cabal2arch
  - cabalmdvrpm
@@ -964,14 +965,14 @@ dont-distribute-packages:
  - copilot-cbmc
  - copilot-frp-sketch
  - copilot-language
- - copilot-language_3_20
+ - copilot-language_4_0
  - copilot-libraries
- - copilot-libraries_3_20
+ - copilot-libraries_4_0
  - copilot-sbv
  - copilot-theorem
- - copilot-theorem_3_20
+ - copilot-theorem_4_0
  - copilot-verifier
- - copilot_3_20
+ - copilot_4_0
  - corenlp-parser
  - coroutine-enumerator
  - coroutine-iteratee
@@ -988,7 +989,7 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
- - crackNum_3_12
+ - crackNum_3_14
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1162,7 +1163,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_1_1
+ - dl-fedora_1_2
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1499,7 +1500,6 @@ dont-distribute-packages:
  - gi-cairo-again
  - gi-ges
  - gi-gstpbutils
- - gi-gtk-declarative-app-simple
  - git-config
  - git-fmt
  - git-gpush
@@ -1509,6 +1509,7 @@ dont-distribute-packages:
  - gitdo
  - github-data
  - github-webhook-handler-snap
+ - github-workflow-commands
  - gitlib-cross
  - gitlib-s3
  - gitson
@@ -1793,6 +1794,7 @@ dont-distribute-packages:
  - gtk2hs-cast-gtksourceview2
  - gtkimageview
  - gtkrsync
+ - gtvm-hs
  - guarded-rewriting
  - guess-combinator
  - h3spec
@@ -2436,7 +2438,6 @@ dont-distribute-packages:
  - keera-hails-reactivelenses
  - keera-posture
  - keid-resource-gltf
- - keid-ui-dearimgui
  - kerry
  - kevin
  - key-vault
@@ -2459,6 +2460,7 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
+ - kvitable_1_1_0_1
  - laborantin-hs
  - labsat
  - labyrinth
@@ -3543,7 +3545,6 @@ dont-distribute-packages:
  - serv
  - serv-wai
  - servant-aeson-generics-typescript
- - servant-auth-client_0_4_2_0
  - servant-auth-hmac
  - servant-auth-token
  - servant-auth-token-acid
@@ -3807,7 +3808,7 @@ dont-distribute-packages:
  - sydtest-webdriver-screenshot_0_1_0_0
  - sydtest-webdriver-yesod
  - sydtest-yesod
- - sydtest_0_17_0_0
+ - sydtest_0_18_0_0
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -4008,6 +4009,7 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
+ - unbound-generics-unify
  - unbound-kind-generics
  - unfoldable-restricted
  - uni-events
@@ -4166,7 +4168,7 @@ dont-distribute-packages:
  - werewolf-slack
  - wgpu-hs
  - what4
- - what4_1_6
+ - what4_1_6_2
  - wheb-mongo
  - wheb-redis
  - wheb-strapped

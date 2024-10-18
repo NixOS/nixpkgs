@@ -1224,7 +1224,6 @@ broken-packages:
   - dead-code-detection # failure in job https://hydra.nixos.org/build/233205957 at 2023-09-02
   - Deadpan-DDP # failure in job https://hydra.nixos.org/build/233221990 at 2023-09-02
   - dead-simple-json # failure in job https://hydra.nixos.org/build/233204301 at 2023-09-02
-  - dear-imgui # failure in job https://hydra.nixos.org/build/233238246 at 2023-09-02
   - debugger-hs # failure in job https://hydra.nixos.org/build/233206302 at 2023-09-02
   - debug-me # failure in job https://hydra.nixos.org/build/233213991 at 2023-09-02
   - debug-trace-file # failure in job https://hydra.nixos.org/build/233231840 at 2023-09-02
@@ -2052,7 +2051,6 @@ broken-packages:
   - gi-gio-hs-list-model # failure in job https://hydra.nixos.org/build/233241640 at 2023-09-02
   - gi-gstapp # failure in job https://hydra.nixos.org/build/253686159 at 2024-03-31
   - gi-gsttag # failure in job https://hydra.nixos.org/build/233197576 at 2023-09-02
-  - gi-gtk-declarative # failure in job https://hydra.nixos.org/build/233217494 at 2023-09-02
   - gi-gtksheet # failure in job https://hydra.nixos.org/build/233211386 at 2023-09-02
   - gi-gtksource # failure in job https://hydra.nixos.org/build/233215342 at 2023-09-02
   - gi-ibus # failure in job https://hydra.nixos.org/build/233220272 at 2023-09-02
@@ -4568,7 +4566,6 @@ broken-packages:
   - pipes-cereal # failure in job https://hydra.nixos.org/build/233195413 at 2023-09-02
   - pipes-core # failure in job https://hydra.nixos.org/build/233213024 at 2023-09-02
   - pipes-errors # failure in job https://hydra.nixos.org/build/233214912 at 2023-09-02
-  - pipes-extras # failure in job https://hydra.nixos.org/build/252732291 at 2024-03-16
   - pipes-interleave # failure in job https://hydra.nixos.org/build/233247428 at 2023-09-02
   - pipes-io # failure in job https://hydra.nixos.org/build/233243253 at 2023-09-02
   - pipes-kafka # failure in job https://hydra.nixos.org/build/252727228 at 2024-03-16
@@ -5026,11 +5023,8 @@ broken-packages:
   - reflex-dom-svg # failure in job https://hydra.nixos.org/build/233193544 at 2023-09-02
   - reflex-external-ref # failure in job https://hydra.nixos.org/build/233215834 at 2023-09-02
   - reflex-gadt-api # failure in job https://hydra.nixos.org/build/260124380 at 2024-05-19
-  - reflex-gi-gtk # failure in job https://hydra.nixos.org/build/253683412 at 2024-03-31
-  - reflex-gloss # failure in job https://hydra.nixos.org/build/234457448 at 2023-09-13
   - reflex-jsx # failure in job https://hydra.nixos.org/build/233207137 at 2023-09-02
   - reflex-orphans # failure in job https://hydra.nixos.org/build/233249128 at 2023-09-02
-  - reflex-sdl2 # failure in job https://hydra.nixos.org/build/233233947 at 2023-09-02
   - reflex-test-host # failure in job https://hydra.nixos.org/build/233220665 at 2023-09-02
   - reflex-transformers # failure in job https://hydra.nixos.org/build/233243647 at 2023-09-02
   - ref-mtl # failure in job https://hydra.nixos.org/build/233260152 at 2023-09-02
@@ -6498,7 +6492,6 @@ broken-packages:
   - visibility # failure in job https://hydra.nixos.org/build/233206672 at 2023-09-02
   - visual-prof # failure in job https://hydra.nixos.org/build/233250080 at 2023-09-02
   - vitrea # failure in job https://hydra.nixos.org/build/233252038 at 2023-09-02
-  - vivid # failure in job https://hydra.nixos.org/build/252716916 at 2024-03-16
   - vk-aws-route53 # failure in job https://hydra.nixos.org/build/233250126 at 2023-09-02
   - VKHS # failure in job https://hydra.nixos.org/build/233246557 at 2023-09-02
   - vowpal-utils # failure in job https://hydra.nixos.org/build/233251505 at 2023-09-02

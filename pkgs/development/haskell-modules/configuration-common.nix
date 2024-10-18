@@ -1860,6 +1860,12 @@ self: super: {
   # 2024-03-02: vty <5.39 - https://github.com/reflex-frp/reflex-ghci/pull/33
   reflex-ghci = assert super.reflex-ghci.version == "0.2.0.1"; doJailbreak super.reflex-ghci;
 
+  # 2024-09-18: transformers <0.5  https://github.com/reflex-frp/reflex-gloss/issues/6
+  reflex-gloss = assert super.reflex-gloss.version == "0.2"; doJailbreak super.reflex-gloss;
+
+  # 2024-09-18: primitive <0.8  https://gitlab.com/Kritzefitz/reflex-gi-gtk/-/merge_requests/20
+  reflex-gi-gtk = assert super.reflex-gi-gtk.version == "0.2.0.1"; doJailbreak super.reflex-gi-gtk;
+
   # Due to tests restricting base in 0.8.0.0 release
   http-media = doJailbreak super.http-media;
 
@@ -1909,9 +1915,8 @@ self: super: {
     sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
   }) super.pipes-aeson;
 
-  # Needs bytestring 0.11
-  # https://github.com/Gabriella439/Haskell-Pipes-HTTP-Library/pull/17
-  pipes-http = doJailbreak super.pipes-http;
+  # 2024-09-18: transformers <0.6  https://github.com/Gabriella439/Haskell-Pipes-Extras-Library/pull/19
+  pipes-extras = assert super.pipes-extras.version == "1.0.15"; doJailbreak super.pipes-extras;
 
   moto-postgresql = appendPatches [
     # https://gitlab.com/k0001/moto/-/merge_requests/3
@@ -1997,6 +2002,14 @@ self: super: {
   # Test suite fails, upstream not reachable for simple fix (not responsive on github)
   vivid-osc = dontCheck super.vivid-osc;
   vivid-supercollider = dontCheck super.vivid-supercollider;
+  vivid = overrideCabal (drv: assert drv.version == "0.5.2.0"; {
+    # 2024-10-18: Some library dependency must have stopped
+    # re-exporting 'void', so now it needs an extra import line.
+    # Fixed in 0.5.2.1.
+    postPatch = ''
+      sed -i '/) where/a import Control.Monad (void)' Vivid/GlobalState.hs
+    '';
+  }) super.vivid;
 
   # Test suite does not compile.
   feed = dontCheck super.feed;
@@ -2217,9 +2230,15 @@ self: super: {
   # https://github.com/merijn/paramtree/issues/4
   paramtree = dontCheck super.paramtree;
 
-  # Too strict version bounds on haskell-gi
-  # https://github.com/owickstrom/gi-gtk-declarative/issues/100
-  gi-gtk-declarative = doJailbreak super.gi-gtk-declarative;
+  # 2024-09-18: Make compatible with haskell-gi 0.26.10
+  # https://github.com/owickstrom/gi-gtk-declarative/pull/118
+  gi-gtk-declarative = overrideCabal (drv: assert drv.version == "0.7.1"; {
+    jailbreak = true;
+    postPatch = ''
+      sed -i '1 i {-# LANGUAGE FlexibleContexts #-}' \
+        src/GI/Gtk/Declarative/Widget/Conversions.hs
+    '';
+  }) super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
   gi-gtk_4 = self.gi-gtk_4_0_9;
