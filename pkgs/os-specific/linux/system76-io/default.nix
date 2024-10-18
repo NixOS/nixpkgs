@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 let
-  version = "1.0.2";
-  sha256 = "sha256-DWUjQmoojkzFv1p4Xyt0kOwwqQ216ocO5yR/ujhhMPA=";
+  version = "1.0.4";
+  sha256 = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
 in
 stdenv.mkDerivation {
   name = "system76-io-module-${version}-${kernel.version}";
@@ -28,9 +28,9 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    maintainers = [ maintainers.khumba ];
+    maintainers = with maintainers; [ khumba ahoneybun ];
     license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     broken = versionOlder kernel.version "4.14";
     description = "DKMS module for controlling System76 I/O board";
     homepage = "https://github.com/pop-os/system76-io-dkms";
