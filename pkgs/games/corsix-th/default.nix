@@ -2,6 +2,7 @@
 , lib
 , fetchFromGitHub
 , cmake
+, curl
 , doxygen
 , ffmpeg
 , freetype
@@ -14,19 +15,21 @@
 , libiconv
 , Cocoa
 , CoreVideo
+, CoreMedia
+, VideoToolbox
 # Update
 , nix-update-script
 }:
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "corsix-th";
-  version = "0.67";
+  version = "0.68.0";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-WA/VJqHXzBfVUBNtxCVsGBRzSRQ0pvDvAy03ntc0KZE=";
+    hash = "sha256-D8ks+fiFJxwClqW1aNtGGa5UxAFvuH2f2guwPxOEQwI=";
   };
 
   patches = [
@@ -38,6 +41,7 @@ stdenv.mkDerivation(finalAttrs: {
   buildInputs = let
     luaEnv = lua.withPackages(p: with p; [ luafilesystem lpeg luasec luasocket ]);
   in [
+    curl
     ffmpeg
     freetype
     lua
@@ -49,6 +53,8 @@ stdenv.mkDerivation(finalAttrs: {
     libiconv
     Cocoa
     CoreVideo
+    CoreMedia
+    VideoToolbox
   ];
 
   cmakeFlags = [ "-Wno-dev" ];
