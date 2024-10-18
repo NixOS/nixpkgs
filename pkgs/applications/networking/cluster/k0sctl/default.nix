@@ -12,8 +12,8 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "k0sproject";
-    repo = pname;
-    rev = "v${version}";
+    repo = "k0sctl";
+    rev = "refs/tags/v${version}";
     hash = "sha256-86MLQdXc10bvDFeq3ImD19ytjVPVD19eJzicIo6oJZc=";
   };
 
@@ -22,9 +22,9 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/k0sproject/k0sctl/version.Environment=production"
-    "-X github.com/carlmjohnson/versioninfo.Version=v${version}" # Doesn't work currently: https://github.com/carlmjohnson/versioninfo/discussions/12
-    "-X github.com/carlmjohnson/versioninfo.Revision=v${version}"
+    "-X=github.com/k0sproject/k0sctl/version.Environment=production"
+    "-X=github.com/carlmjohnson/versioninfo.Version=v${version}" # Doesn't work currently: https://github.com/carlmjohnson/versioninfo/discussions/12
+    "-X=github.com/carlmjohnson/versioninfo.Revision=v${version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -46,6 +46,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Bootstrapping and management tool for k0s clusters";
     homepage = "https://k0sproject.io/";
+    changelog = "https://github.com/k0sproject/k0sctl/releases/tag/v${version}";
     license = licenses.asl20;
     mainProgram = "k0sctl";
     maintainers = with maintainers; [ nickcao qjoly ];
