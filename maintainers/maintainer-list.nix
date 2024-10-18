@@ -16163,6 +16163,12 @@
     githubId = 10776658;
     name = "Patrick Gordon";
   };
+  pagedmov = {
+    email = "pagedmov@gmail.com";
+    github = "pagedmov";
+    githubId = 19557376;
+    name = "Kyler Clay";
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
