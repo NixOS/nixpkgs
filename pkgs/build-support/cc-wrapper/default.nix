@@ -741,6 +741,8 @@ stdenvNoCC.mkDerivation {
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
     gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
     cc = optionalString (!nativeTools) cc;
