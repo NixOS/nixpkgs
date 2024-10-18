@@ -12,6 +12,7 @@
   opencv4,
   tkinter,
   python-docx,
+  setuptools,
 }:
 let
   version = "0.5.8";
@@ -19,25 +20,25 @@ in
 buildPythonPackage {
   pname = "pdf2docx";
   inherit version;
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "dothinking";
+    owner = "ArtifexSoftware";
     repo = "pdf2docx";
     rev = "refs/tags/v${version}";
     hash = "sha256-tMITDm2NkxWS+H/hhd2LlaPbyuI86ZKaALqqHJqb8V0=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pip
+    setuptools
   ];
 
   pythonRemoveDeps = [ "opencv-python" ];
 
   preBuild = "echo '${version}' > version.txt";
 
-  propagatedBuildInputs = [
-    tkinter
+  dependencies = [
     pymupdf
     fire
     fonttools
@@ -59,8 +60,8 @@ buildPythonPackage {
   meta = with lib; {
     description = "Convert PDF to DOCX";
     mainProgram = "pdf2docx";
-    homepage = "https://github.com/dothinking/pdf2docx";
-    changelog = "https://github.com/dothinking/pdf2docx/releases/tag/v${version}";
+    homepage = "https://github.com/ArtifexSoftware/pdf2docx";
+    changelog = "https://github.com/ArtifexSoftware/pdf2docx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ happysalada ];
   };
