@@ -9,22 +9,24 @@
 
 buildPythonPackage rec {
   pname = "amaranth-soc";
-  version = "0.1a-unstable-2024-06-10";
+  version = "0.1a-unstable-2024-10-12";
   pyproject = true;
   # from `pdm show`
-  realVersion = let
-     tag = builtins.elemAt (lib.splitString "-" version) 0;
-     rev = lib.substring 0 7 src.rev;
-    in "${tag}1.dev1+g${rev}";
+  realVersion =
+    let
+      tag = builtins.elemAt (lib.splitString "-" version) 0;
+      rev = lib.substring 0 7 src.rev;
+    in
+    "${tag}1.dev1+g${rev}";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth-soc";
-    rev = "e1b842800533f44924f21c3867bc2290084d100f";
-    hash = "sha256-GAGQEncONY566v8hLjGeZ7CRlOt36vHg+0a5xcB+g1Y=";
+    rev = "5c43cf58f15d9cd9c69ff83c97997708d386b2dc";
+    hash = "sha256-o9xjH/nmV7ovw6bQ6PaFGLcjz5gDGb+eQ9eGNRPnBV8=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
+  build-system = [ pdm-backend ];
   dependencies = [ amaranth ];
 
   preBuild = ''
