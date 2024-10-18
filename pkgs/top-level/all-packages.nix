@@ -33972,6 +33972,8 @@ with pkgs;
 
   charge-lnd = callPackage ../applications/blockchains/charge-lnd { };
 
+  cometbft = callPackage ../applications/blockchains/cometbft { };
+
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
   dcrctl = callPackage ../applications/blockchains/dcrctl { };
