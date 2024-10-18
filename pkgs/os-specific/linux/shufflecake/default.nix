@@ -1,22 +1,35 @@
-{ lib, kernel, stdenv, fetchFromGitea, libgcrypt, lvm2 }:
+{
+  lib,
+  kernel,
+  stdenv,
+  fetchFromGitea,
+  libgcrypt,
+  lvm2,
+}:
 stdenv.mkDerivation (finalAttrs: {
   name = "shufflecake";
-  version = "0.4.4";
+  version = "0.5.0";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "shufflecake";
     repo = "shufflecake-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zvGHM5kajJlROI8vg1yZQ5NvJvuGLV2iKvumdW8aglA=";
+    hash = "sha256-3mstYAZVtI4yqkfJpOO1QLotc/+HCctCDDLz1hTBQ6Q=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  buildInputs = [ libgcrypt lvm2 ];
+  buildInputs = [
+    libgcrypt
+    lvm2
+  ];
   makeFlags = kernel.makeFlags ++ [
     "KERNEL_DIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
 
-  outputs = [ "out" "bin" ];
+  outputs = [
+    "out"
+    "bin"
+  ];
 
   installPhase = ''
     install -Dm444 dm-sflc.ko $out/lib/modules/${kernel.modDirVersion}/drivers/md/dm-sflc.ko
@@ -33,4 +46,3 @@ stdenv.mkDerivation (finalAttrs: {
     broken = kernel.kernelOlder "6.1";
   };
 })
-
