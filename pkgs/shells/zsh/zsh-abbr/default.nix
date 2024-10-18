@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  installShellFiles,
 }:
 stdenv.mkDerivation rec {
   pname = "zsh-abbr";
@@ -15,12 +16,18 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
+  nativeBuildInputs = [ installShellFiles ];
 
   installPhase = ''
-    install -D zsh-abbr.zsh $out/share/zsh/${pname}/abbr.plugin.zsh
-    # Needed so that `man` can find the manpage, since it looks via PATH
-    mkdir -p $out/bin
-    mv man $out/share/man
+    runHook preInstall
+
+    install zsh-abbr.plugin.zsh zsh-abbr.zsh -Dt $out/share/zsh/zsh-abbr/
+    install completions/_abbr -Dt $out/share/zsh/zsh-abbr/completions/
+
+    # Required for `man` to find the manpage of abbr, since it looks via PATH
+    installManPage man/man1/*
+
+    runHook postInstall
   '';
 
   meta = with lib; {
