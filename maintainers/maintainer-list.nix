@@ -9362,6 +9362,20 @@
     github = "istoph";
     githubId = 114227790;
   };
+  itepastra = {
+    name = "Noa Aarts";
+    github = "itepastra";
+    githubId = 27058689;
+    email = "itepastra@gmail.com";
+    keys = [
+      {
+        fingerprint = "E681 4CAF 06AE B076 D55D  3E32 A16C DCBF 1472 541F";
+      }
+      {
+        fingerprint = "F960 8602 323A F7AB 7603  43C9 A9DD F987 11FA B741";
+      }
+    ];
+  };
   ius = {
     email = "j.de.gram@gmail.com";
     name = "Joerie de Gram";
