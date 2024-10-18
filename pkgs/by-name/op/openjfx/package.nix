@@ -5,7 +5,6 @@
   stdenv,
   pkgs,
 
-  fetchFromGitHub,
   fetchpatch2,
 
   gradle,
@@ -28,6 +27,11 @@
 
   writeText,
 
+  _experimental-update-script-combinators,
+  nixpkgs-openjdk-updater,
+  writeShellScript,
+  path,
+
   withMedia ? true,
   withWebKit ? false,
 
@@ -45,7 +49,10 @@
 
 let
   sourceFile = ./. + "/${featureVersion}/source.json";
-  sourceInfo = lib.importJSON sourceFile;
+  source = nixpkgs-openjdk-updater.openjdkSource {
+    inherit sourceFile;
+    featureVersionPrefix = featureVersion;
+  };
 
   atLeast21 = lib.versionAtLeast featureVersion "21";
   atLeast23 = lib.versionAtLeast featureVersion "23";
@@ -58,10 +65,9 @@ assert lib.assertMsg (lib.pathExists sourceFile)
 
 stdenv.mkDerivation {
   pname = "openjfx-modular-sdk";
-  version = lib.removePrefix "refs/tags/" sourceInfo.rev;
+  version = lib.removePrefix "refs/tags/" source.src.rev;
 
-  # TODO: Tighten up after update scripts are run.
-  src = fetchFromGitHub sourceInfo;
+  inherit (source) src;
 
   patches =
     if featureVersion == "23" then
@@ -164,6 +170,32 @@ stdenv.mkDerivation {
   disallowedReferences = [
     jdk-bootstrap
     gradle_openjfx.jdk
+  ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    source.updateScript
+
+    {
+      command = [
+        # We need to do this separate script rather than simply using
+        # `finalAttrs.mitmCache.updateScript` because the Gradle update
+        # script captures the source at the time of evaluation, making
+        # it miss the update.
+        (writeShellScript "update-openjfx-deps.sh" ''
+          eval "$(
+            nix-build "$1" \
+            -A openjfx${featureVersion}.mitmCache.updateScript
+          )"
+        '')
+
+        # This has to be a separate argument so that
+        # `maintainers/scripts/update.py` can rewrite it to the
+        # appropriate Git work tree.
+        path
+      ];
+
+      supportedFeatures = [ "silent" ];
+    }
   ];
 
   meta = {
