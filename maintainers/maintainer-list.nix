@@ -20389,6 +20389,12 @@
     githubId = 94006354;
     name = "steamwalker";
   };
+  steeleduncan = {
+    email = "steeleduncan@hotmail.com";
+    github = "steeleduncan";
+    githubId = 866573;
+    name = "Duncan Steele";
+  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";
