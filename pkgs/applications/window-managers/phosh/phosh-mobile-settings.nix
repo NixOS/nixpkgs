@@ -10,6 +10,7 @@
 , wrapGAppsHook4
 , desktop-file-utils
 , feedbackd
+, gnome-desktop
 , gtk4
 , libadwaita
 , lm_sensors
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh-mobile-settings";
-  version = "0.41.0";
+  version = "0.42.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = "phosh-mobile-settings";
     rev = "v${version}";
-    hash = "sha256-t5qngjQcjPltUGbcZ+CF5FbZtZkV/cD3xUhuApQbKHo=";
+    hash = "sha256-S1M6A7LVgMRvZB4lr0hVr60HVoNxno5DD0GCTYcG+Lc=";
   };
 
   nativeBuildInputs = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     desktop-file-utils
     feedbackd
+    gnome-desktop
     gtk4
     libadwaita
     lm_sensors
