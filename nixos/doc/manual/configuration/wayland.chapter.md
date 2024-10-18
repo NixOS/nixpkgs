@@ -28,4 +28,4 @@ able to share your screen, you might want to activate this option:
 
 and configure Pipewire using
 [](#opt-services.pipewire.enable)
-and related options.
+and related options (see the [wiki page about Sway](https://wiki.nixos.org/wiki/Sway)).
