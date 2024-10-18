@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "eth-account";
-  version = "0.9.0";
+  version = "0.13.3";
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -24,10 +24,10 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "eth-account";
     rev = "v${version}";
-    hash = "sha256-Ps/vzJv0W1+wy1mSJaqRNNU6CoCMchReHIocB9kPrGs=";
+    hash = "sha256-657l7M7euUGXXKTrQyB/kVA4miyePr310enhkaSBJss=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     bitarray
     eth-abi
     eth-keyfile
