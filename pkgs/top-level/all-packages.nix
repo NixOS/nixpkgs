@@ -31054,12 +31054,6 @@ with pkgs;
     withConplay = false;
   };
 
-  mpc-cli = callPackage ../applications/audio/mpc {
-    inherit (python3Packages) sphinx;
-  };
-
-  clerk = callPackage ../applications/audio/clerk { };
-
   nbstripout = callPackage ../applications/version-management/nbstripout { };
 
   ncmpc = callPackage ../applications/audio/ncmpc { };
