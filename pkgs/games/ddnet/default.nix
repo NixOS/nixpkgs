@@ -122,6 +122,11 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/metainfo
   '';
 
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
+    install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
+  '';
+
   meta = with lib; {
     description = "Teeworlds modification with a unique cooperative gameplay";
     longDescription = ''
