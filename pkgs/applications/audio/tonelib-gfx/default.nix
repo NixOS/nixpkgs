@@ -1,29 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, freetype
-, libglvnd
-, curl
-, libXcursor
-, libXinerama
-, libXrandr
-, libXrender
-, libjack2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  freetype,
+  libglvnd,
+  curl,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libjack2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tonelib-gfx";
-  version = "4.7.8";
+  version = "4.8.5";
 
   src = fetchurl {
-    url = "https://tonelib.net/download/221222/ToneLib-GFX-amd64.deb";
-    hash = "sha256-1sTwHqQYqNloZ3XSwhryqlW7b1FHh4ymtj3rKUcVZIo=";
+    url = "https://tonelib.vip/download/24-10-03/ToneLib-GFX-amd64.deb";
+    hash = "sha256-RG5rliF4/9LDd07i5dSFQzTGPqyF6UmTfatKb59LZA4=";
   };
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+  ];
 
   buildInputs = [
     stdenv.cc.cc.lib
@@ -46,14 +50,18 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mv usr $out
     substituteInPlace $out/share/applications/ToneLib-GFX.desktop --replace /usr/ $out/
- '';
+  '';
 
   meta = with lib; {
     description = "Tonelib GFX is an amp and effects modeling software for electric guitar and bass";
     homepage = "https://tonelib.net/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 orivej ];
+    maintainers = with maintainers; [
+      dan4ik605743
+      husjon
+      orivej
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-GFX";
   };
