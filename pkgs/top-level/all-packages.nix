@@ -19322,7 +19322,8 @@ with pkgs;
       mesa-demos
       libva-vdpau-driver
       libvdpau-va-gl
-      vdpauinfo;
+      vdpauinfo
+      vpl-gpu-rt;
   };
 
   drogon = callPackage ../development/libraries/drogon { };
