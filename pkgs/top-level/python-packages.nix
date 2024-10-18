@@ -15148,6 +15148,8 @@ self: super: with self; {
 
   subliminal = callPackage ../development/python-modules/subliminal { };
 
+  submitit = callPackage ../development/python-modules/submitit { };
+
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
 
   subunit = callPackage ../development/python-modules/subunit {
