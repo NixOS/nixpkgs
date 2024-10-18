@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "7.0.7";
+  version = "7.0.8";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    hash = "sha256-ERL+zKjNOz+j/Q5dyTXVczLnwaTl/SzgSaKVkA9uyJ4=";
+    hash = "sha256-utiqS4/PvlkQesqTOyEvj8uwW1sDxlqjnhv6GFfY5uk=";
   };
 
   dontPatchELF = true;
