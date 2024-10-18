@@ -28,7 +28,7 @@ buildPythonPackage rec {
   version = "0.34.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
@@ -39,11 +39,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "boto3" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     python-fsutil
     python-slugify
     requests
