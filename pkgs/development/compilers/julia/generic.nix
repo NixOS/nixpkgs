@@ -9,12 +9,14 @@
 , which
 , python3
 , gfortran
+, cacert
 , cmake
 , perl
 , gnum4
 , openssl
 , libxml2
 , zlib
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -42,12 +44,18 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     zlib
+  ] ++ lib.optionals (lib.versionAtLeast version "1.11") [
+    cacert
   ];
 
   dontUseCmakeConfigure = true;
 
   postPatch = ''
     patchShebangs .
+  '' + lib.optionalString (lib.versionAtLeast version "1.11") ''
+    substituteInPlace deps/curl.mk \
+      --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
+                     'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
   '';
 
   makeFlags = [

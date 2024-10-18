@@ -3816,6 +3816,13 @@
     githubId = 98980;
     name = "Chmouel Boudjnah";
   };
+  chn = {
+    name = "Haonan Chen";
+    email = "chn@chn.moe";
+    matrix = "@chn:chn.moe";
+    github = "CHN-beta";
+    githubId = 35858462;
+  };
   choochootrain = {
     email = "hurshal@imap.cc";
     github = "choochootrain";
@@ -8393,6 +8400,13 @@
     github = "haslersn";
     githubId = 33969028;
     name = "Sebastian Hasler";
+  };
+  hasnep = {
+    name = "Hannes";
+    email = "h@nnes.dev";
+    matrix = "@hasnep:matrix.org";
+    github = "Hasnep";
+    githubId = 25184102;
   };
   hausken = {
     name = "Hausken";

@@ -15,6 +15,7 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
@@ -86,7 +87,7 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+      libs =   lib.optionals stdenv.hostPlatform.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5

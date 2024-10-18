@@ -6,7 +6,7 @@ let
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/Rambox-${version}-linux-x64.AppImage";
-    hash = "sha256-pm4Ji1gv5vNMgB9ZWNKMLZSUE9wBklQ/MnFOKHP+Rcc=";
+    hash = "sha256-x9GDiSkkO0zYx/veB6xSr6/9/SW6JRTGAASlvWd/P0c=";
   };
 
   desktopItem = (makeDesktopItem {

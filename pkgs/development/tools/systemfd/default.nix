@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage {
     mainProgram = "systemfd";
     homepage = "https://github.com/mitsuhiko/systemfd";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.adisbladis ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 

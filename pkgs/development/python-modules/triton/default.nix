@@ -29,15 +29,15 @@
 
 buildPythonPackage {
   pname = "triton";
-  version = "3.0.0";
+  version = "3.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "triton-lang";
     repo = "triton";
-    # latest branch commit from https://github.com/triton-lang/triton/commits/release/3.0.x/
-    rev = "91f24d87e50cb748b121a6c24e65a01187699c22";
-    hash = "sha256-L5KqiR+TgSyKjEBlkE0yOU1pemMHFk2PhEmxLdbbxUU=";
+    # latest branch commit from https://github.com/triton-lang/triton/commits/release/3.1.x/
+    rev = "cf34004b8a67d290a962da166f5aa2fc66751326";
+    hash = "sha256-233fpuR7XXOaSKN+slhJbE/CMFzAqCRCE4V4rIoJZrk=";
   };
 
   patches =
@@ -265,12 +265,12 @@ buildPythonPackage {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Language and compiler for writing highly efficient custom Deep-Learning primitives";
     homepage = "https://github.com/triton-lang/triton";
-    platforms = platforms.linux;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       SomeoneSerge
       Madouura
       derdennisop
