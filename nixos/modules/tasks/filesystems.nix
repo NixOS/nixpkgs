@@ -532,7 +532,8 @@ in
           "nodev"
         ];
       };
-
+    }
+    // optionalAttrs (!config.boot.isNspawnContainer) {
       "/proc" = {
         fsType = "proc";
         options = [
