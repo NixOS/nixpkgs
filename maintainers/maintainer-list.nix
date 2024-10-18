@@ -20244,6 +20244,11 @@
     githubId = 98590;
     name = "Laurent Arnoud";
   };
+  spl3g = {
+    name = "Ozornin Matvey";
+    github = "spl3g";
+    githubId = 58591608;
+  };
   spoonbaker = {
     github = "Spoonbaker";
     githubId = 47164123;
