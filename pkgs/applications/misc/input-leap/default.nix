@@ -1,5 +1,5 @@
 { lib
-, mkDerivation
+, stdenv
 , fetchFromGitHub
 , cmake
 
@@ -16,31 +16,33 @@
 , libXrandr
 , libXtst
 , libei
-, libportal
+, libportal-qt6
 , openssl
 , pkg-config
 , qtbase
 , qttools
+, qt5compat
 , wrapGAppsHook3
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "input-leap";
-  version = "unstable-2023-12-27";
+  version = "unstable-2024-08-01";
 
   src = fetchFromGitHub {
     owner = "input-leap";
     repo = "input-leap";
-    rev = "ecf1fb6645af7b79e6ea984d3c9698ca0ab6f391";
-    hash = "sha256-TEv1xR1wUG3wXNATLLIZKOtW05X96wsPNOlE77OQK54=";
+    rev = "3a95e113435c6433d2f718ee55a4f688ec1ff893";
+    hash = "sha256-g6Eufl/xQ5y1qXbqfmO4ziQN+cH2bw+3ky+BQPsPGL8=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
+  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools wrapQtAppsHook];
   buildInputs = [
-    curl qtbase avahi
+    curl qtbase avahi qt5compat
     libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM
-  ] ++ lib.optionals withLibei [ libei libportal ];
+  ] ++ lib.optionals withLibei [ libei libportal-qt6 ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"

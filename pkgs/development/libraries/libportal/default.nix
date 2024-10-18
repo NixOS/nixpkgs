@@ -11,14 +11,15 @@
 , gtk3
 , gtk4
 , libsForQt5
+, qt6Packages
 , variant ? null
 }:
 
-assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5";
+assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5" || variant == "qt6";
 
 stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.7.1";
+  version = "0.8.1";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional (variant != "qt5") "devdoc";
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "flatpak";
     repo = "libportal";
     rev = version;
-    sha256 = "sha256-3roZJHnGFM7ClxbB7I/haexPTwYskidz9F+WV3RL9Ho=";
+    sha256 = "sha256-NAkD5pAQpmAtVxsFZt74PwURv+RbGBfqENIwyxEEUSc=";
   };
 
   depsBuildBuild = [
@@ -53,12 +54,15 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (variant == "qt5") [
     libsForQt5.qtbase
     libsForQt5.qtx11extras
+  ] ++ lib.optionals (variant == "qt6") [
+    qt6Packages.qtbase
   ];
 
   mesonFlags = [
     (lib.mesonEnable "backend-gtk3" (variant == "gtk3"))
     (lib.mesonEnable "backend-gtk4" (variant == "gtk4"))
     (lib.mesonEnable "backend-qt5" (variant == "qt5"))
+    (lib.mesonEnable "backend-qt6" (variant == "qt6"))
     (lib.mesonBool "vapi" (variant != "qt5"))
     (lib.mesonBool "introspection" (variant != "qt5"))
     (lib.mesonBool "docs" (variant != "qt5")) # requires introspection=true
