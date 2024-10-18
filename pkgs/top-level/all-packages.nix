@@ -34861,6 +34861,7 @@ with pkgs;
   };
 
   minecraft = callPackage ../games/minecraft { };
+  minecraft-autoupdate = callPackage ../games/minecraft-autoupdate { };
 
   minecraft-server-hibernation = callPackage ../tools/games/minecraft/minecraft-server-hibernation { };
 
