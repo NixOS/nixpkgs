@@ -8783,6 +8783,8 @@ self: super: with self; {
 
   napari-svg = callPackage ../development/python-modules/napari-svg { };
 
+  narwhals = callPackage ../development/python-modules/narwhals { };
+
   nasdaq-data-link = callPackage ../development/python-modules/nasdaq-data-link { };
 
   nats-py = callPackage ../development/python-modules/nats-py { };
