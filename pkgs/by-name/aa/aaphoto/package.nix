@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, fetchurl
+, fetchFromGitHub
 , jasper
 , libpng
 , libjpeg
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
   pname = "aaphoto";
   version = "0.45";
 
-  src = fetchurl {
-    url = "http://log69.com/downloads/aaphoto_sources_${version}.tar.gz";
-    sha256 = "sha256-06koJM7jNVFqVgqg6BmOZ74foqk6yjUIFnwULzPZ4go=";
+  src = fetchFromGitHub {
+    owner = "log69";
+    repo = "aaphoto";
+    rev = "581b3fad60382bdd36356155112559f731e31be3";
+    hash = "sha256-PcvZ6v8vcZcrSn9EJ0CqxYz9gOJXlcVIkLLzFik0Pec=";
   };
 
   nativeBuildInputs = lib.optionals stdenv.cc.isClang [
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://log69.com/aaphoto_en.html";
+    homepage = "https://github.com/log69/aaphoto";
     description = "Free and open source automatic photo adjusting software";
     longDescription = ''
       Auto Adjust Photo tries to give a solution for the automatic color
