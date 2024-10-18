@@ -159,7 +159,7 @@ let
       cmakeEnableFlag = "GR_CHANNELS";
     };
     gr-qtgui = {
-      runtime = [ qt5.qtbase libsForQt5.qwt ];
+      runtime = [ qt5.qtbase libsForQt5.qwt6_1 ];
       pythonRuntime = [ python.pkgs.pyqt5 ];
       cmakeEnableFlag = "GR_QTGUI";
     };
@@ -268,7 +268,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
   } // lib.optionalAttrs (hasFeature "gr-uhd") {
     inherit uhd;
   } // lib.optionalAttrs (hasFeature "gr-qtgui") {
-    inherit (libsForQt5) qwt;
+    qwt = libsForQt5.qwt6_1;
   };
   cmakeFlags = shared.cmakeFlags
     # From some reason, if these are not set, libcodec2 and gsm are not
