@@ -38693,8 +38693,6 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
-  zf = callPackage ../tools/misc/zf { };
-
   isolate = callPackage ../tools/security/isolate { };
 
   dtool = callPackage ../tools/misc/dtool { };
