@@ -176,12 +176,23 @@ let
       export HOSTAR=$AR_FOR_BUILD
       export HOSTLD=$LD_FOR_BUILD
 
+      # Absolute paths for tools avoid any PATH-clobbering issues.
+      export CC=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc
+      export LD=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ld
+      export AR=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}ar
+      export NM=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}nm
+      export STRIP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}strip
+      export OBJCOPY=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objcopy
+      export OBJDUMP=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}objdump
+      export READELF=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}readelf
+
       # Get a basic config file for later refinement with $generateConfig.
       make $makeFlags \
           -C . O="$buildRoot" $kernelBaseConfig \
           ARCH=$kernelArch \
           HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
           CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          LD=$LD AR=$AR NM=$NM STRIP=$STRIP \
           $makeFlags
 
       # Create the config file.
