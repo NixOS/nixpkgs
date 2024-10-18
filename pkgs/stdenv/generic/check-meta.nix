@@ -517,4 +517,4 @@ let
         );
   };
 
-in { inherit assertValidity commonMeta; }
+in { inherit assertValidity commonMeta checkValidity; }
