@@ -76,6 +76,8 @@ mapAliases {
   inherit (pkgs) coc-pyright; # added 2024-07-14
   coc-metals = throw "coc-metals was removed because it was deprecated upstream. vimPlugins.nvim-metals is its official replacement."; # Added 2024-10-16
   coc-python = throw "coc-python was removed because it was abandoned upstream on 2020-12-24. Upstream now recommends using coc-pyright or coc-jedi instead."; # added 2024-10-15
+  coc-tslint = throw "coc-tslint was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
+  coc-tslint-plugin = throw "coc-tslint-plugin was removed because it was deprecated upstream; coc-eslint offers comparable features for eslint, which replaced tslint"; # Added 2024-10-18
   coinmon = throw "coinmon was removed since it was abandoned upstream"; # added 2024-03-19
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
