@@ -13085,8 +13085,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  russ = callPackage ../applications/networking/feedreaders/russ { };
-
   tunnelto = callPackage ../tools/networking/tunnelto {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -30249,10 +30247,6 @@ with pkgs;
   img-cat = callPackage ../applications/graphics/img-cat { };
 
   imgp = python3Packages.callPackage ../applications/graphics/imgp { };
-
-  imhex = callPackage ../by-name/im/imhex/package.nix {
-    llvm = llvm_17;
-  };
 
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
