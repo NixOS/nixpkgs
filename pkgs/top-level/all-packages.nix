@@ -8080,9 +8080,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ripgrep = callPackage ../tools/text/ripgrep {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  ripgrep = callPackage ../tools/text/ripgrep { };
 
   ripgrep-all = callPackage ../tools/text/ripgrep-all {
     inherit (darwin.apple_sdk.frameworks) Security;
