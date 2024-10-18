@@ -62,18 +62,16 @@ stdenv.mkDerivation (rec {
 
   disallowedReferences = [ stdenv.cc ];
 
-  patches = []
+  patches = [
     # Do not look in /usr etc. for dependencies.
-    ++ lib.optional ((lib.versions.majorMinor version) == "5.38") ./no-sys-dirs-5.38.0.patch
-    ++ lib.optional ((lib.versions.majorMinor version) == "5.40") ./no-sys-dirs-5.40.0.patch
-
+    ./no-sys-dirs.patch
     # Fix compilation on platforms with only a C locale: https://github.com/Perl/perl5/pull/22569
-    ++ lib.optional (version == "5.40.0") ./fix-build-with-only-C-locale-5.40.0.patch
-
+    ./fix-build-with-only-C-locale-5.40.0.patch
+  ]
     ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
-    ++ lib.optional (crossCompiling && (lib.versionAtLeast version "5.40.0")) ./cross540.patch
-    ++ lib.optional (crossCompiling && (lib.versionOlder version "5.40.0")) ./cross.patch;
+
+    ++ lib.optional (crossCompiling) ./cross.patch;
 
   # This is not done for native builds because pwd may need to come from
   # bootstrap tools when building bootstrap perl.
@@ -171,15 +169,11 @@ stdenv.mkDerivation (rec {
     # included with the distribution
     cat > ./cpan/Compress-Raw-Zlib/config.in <<EOF
     BUILD_ZLIB   = False
-    INCLUDE      = ${zlib.dev}/include
-    LIB          = ${zlib.out}/lib
+    ZLIB_INCLUDE = ${zlib.dev}/include
+    ZLIB_LIB     = ${zlib.out}/lib
     OLD_ZLIB     = False
     GZIP_OS_CODE = AUTO_DETECT
     USE_ZLIB_NG  = False
-  '' + lib.optionalString (lib.versionAtLeast version "5.40.0") ''
-    ZLIB_INCLUDE = ${zlib.dev}/include
-    ZLIB_LIB     = ${zlib.out}/lib
-  '' + ''
     EOF
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
