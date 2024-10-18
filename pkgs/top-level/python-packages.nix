@@ -1904,8 +1904,6 @@ self: super: with self; {
 
   bugz = callPackage ../development/python-modules/bugz { };
 
-  bugzilla = callPackage ../development/python-modules/bugzilla { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
@@ -9138,6 +9136,8 @@ self: super: with self; {
   nxt-python = callPackage ../development/python-modules/nxt-python { };
 
   plugp100 = callPackage ../development/python-modules/plugp100 {};
+
+  python-bugzilla = callPackage ../development/python-modules/python-bugzilla { };
 
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
