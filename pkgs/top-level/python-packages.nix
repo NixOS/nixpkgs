@@ -12987,6 +12987,8 @@ self: super: with self; {
 
   pytools = callPackage ../development/python-modules/pytools { };
 
+  pytorch-ocl = callPackage ../development/python-modules/pytorch-ocl { };
+
   pytorch-lightning = callPackage ../development/python-modules/pytorch-lightning { };
 
   pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
