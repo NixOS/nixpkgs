@@ -1,6 +1,6 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 let
-  version = "1.0.2";
+  version = "1.0.4";
   sha256 = "sha256-DWUjQmoojkzFv1p4Xyt0kOwwqQ216ocO5yR/ujhhMPA=";
 in
 stdenv.mkDerivation {
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    maintainers = [ maintainers.khumba ];
+    maintainers = [ maintainers.khumba ahoneybun];
     license = [ licenses.gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" ];
     broken = versionOlder kernel.version "4.14";
