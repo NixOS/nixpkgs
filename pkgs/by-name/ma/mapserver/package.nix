@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mapserver";
-  version = "8.2.1";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "MapServer";
     repo = "MapServer";
     rev = "rel-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    hash = "sha256-kZEDC89yoQP0ma5avp6r+Hz8JMpErGlBVQkhlHO6UFw=";
+    hash = "sha256-tub0Jd1IUkONQ5Mqz8urihbrcFLlOQybLhOvzkcwW54=";
   };
 
   nativeBuildInputs =
@@ -70,23 +70,24 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional withPython python3;
 
   cmakeFlags = [
-    "-DWITH_KML=ON"
-    "-DWITH_SOS=ON"
-    "-DWITH_RSVG=ON"
-    "-DWITH_CURL=ON"
-    "-DWITH_CLIENT_WMS=ON"
-    "-DWITH_CLIENT_WFS=ON"
+    (lib.cmakeBool "WITH_KML" true)
+    (lib.cmakeBool "WITH_SOS" true)
+    (lib.cmakeBool "WITH_RSVG" true)
+    (lib.cmakeBool "WITH_CURL" true)
+    (lib.cmakeBool "WITH_CLIENT_WMS" true)
+    (lib.cmakeBool "WITH_CLIENT_WFS" true)
+    (lib.cmakeBool "WITH_PYTHON" withPython)
 
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
-    "-DCMAKE_SKIP_BUILD_RPATH=ON"
-  ] ++ lib.optional withPython "-DWITH_PYTHON=ON";
+    (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform for publishing spatial data and interactive mapping applications to the web";
     homepage = "https://mapserver.org/";
     changelog = "https://mapserver.org/development/changelog/";
-    license = licenses.mit;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = lib.teams.geospatial.members;
+    platforms = lib.platforms.unix;
   };
 }
