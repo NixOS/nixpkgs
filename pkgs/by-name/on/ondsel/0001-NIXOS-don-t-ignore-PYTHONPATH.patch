@@ -1,0 +1,44 @@
+From 1bc3d5306d591bf1892324ec76575f88e1f23796 Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Sat, 14 Sep 2024 20:13:28 +0300
+Subject: [PATCH] NIXOS: don't ignore PYTHONPATH
+
+On NixOS or rather within nixpkgs we provide the runtime Python
+packages via the PYTHONPATH environment variable. FreeCAD tries its
+best to ignore Python environment variables that are being inherited
+from the environment.
+
+Upstream has purposely isolated the environments AFAIK and thus
+shouldn't accept this patch (as is). What they might accept (once
+support for older Python versions has been dropped) is removing the
+PYTHONPATH specific putenv calls.
+---
+ src/Main/MainGui.cpp | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/Main/MainGui.cpp b/src/Main/MainGui.cpp
+index 36087cffd6..89d49d2cc6 100644
+--- a/src/Main/MainGui.cpp
++++ b/src/Main/MainGui.cpp
+@@ -114,10 +114,8 @@ int main(int argc, char** argv)
+     // See https://forum.freecad.org/viewtopic.php?f=18&t=20600
+     // See Gui::Application::runApplication()
+     putenv("LC_NUMERIC=C");
+-    putenv("PYTHONPATH=");
+ #elif defined(FC_OS_MACOSX)
+     (void)QLocale::system();
+-    putenv("PYTHONPATH=");
+ #elif defined(__MINGW32__)
+     const char* mingw_prefix = getenv("MINGW_PREFIX");
+     const char* py_home = getenv("PYTHONHOME");
+@@ -125,7 +123,6 @@ int main(int argc, char** argv)
+         _putenv_s("PYTHONHOME", mingw_prefix);
+     }
+ #else
+-    _putenv("PYTHONPATH=");
+     // https://forum.freecad.org/viewtopic.php?f=4&t=18288
+     // https://forum.freecad.org/viewtopic.php?f=3&t=20515
+     const char* fc_py_home = getenv("FC_PYTHONHOME");
+-- 
+2.44.1
+
