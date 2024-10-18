@@ -399,6 +399,25 @@ Composed types are types that take a type as parameter. `listOf
     returned instead for the same `mkIf false` definition.
     :::
 
+`types.attrsWith` *`attrs`*
+
+:   An attribute set of where all the values are of *`attrs.elemType`* type.
+
+    `attrs.elemType` (`type`, required )
+    : The expected type of all attribute values.
+
+    `attrs.lazy` (`Bool`, default: `false` )
+    : If set to `true` attributes will be evaluated lazily. See also: `types.lazyAttrsOf`
+
+    `attrs.name` (`String`, default: `name` )
+    : Placeholder string in documentation for the attribute names.
+      The default value `name` results in the placeholder `<name>`
+
+    ::: {.note}
+    This is the underlying implementation of `types.attrsOf` and `types.lazyAttrsOf`
+    :::
+
+
 `types.uniq` *`t`*
 
 :   Ensures that type *`t`* cannot be merged. It is used to ensure option
