@@ -340,6 +340,15 @@
         - pkgs/os-specific/linux/systemd/**/*
         - nixos/modules/system/boot/systemd*/**/*
 
+"6.topic: tcl":
+  - any:
+    - changed-files:
+      - any-glob-to-any-file:
+        - doc/languages-frameworks/tcl.section.md
+        - pkgs/development/interpreters/tcl/*
+        - pkgs/development/tcl-modules/**/*
+        - pkgs/top-level/tcl-packages.nix
+
 "6.topic: TeX":
   - any:
     - changed-files:

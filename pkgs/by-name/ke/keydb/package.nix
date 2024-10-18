@@ -12,7 +12,7 @@
   jemalloc,
   which,
   tcl,
-  tcltls,
+  tclPackages,
   ps,
   getconf,
   nixosTests,
@@ -60,11 +60,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # darwin currently lacks a pure `pgrep` which is extensively used here
   doCheck = !stdenv.hostPlatform.isDarwin;
-  nativeCheckInputs = [
-    which
-    tcl
-    ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ] ++ lib.optionals tlsSupport [ tcltls ];
+  nativeCheckInputs =
+    [
+      which
+      tcl
+      ps
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ]
+    ++ lib.optionals tlsSupport [ tclPackages.tcltls ];
   checkPhase = ''
     runHook preCheck
 

@@ -26,7 +26,7 @@
 , readline
 , spdlog
 , tcl
-, tcllib
+, tclPackages
 , xorg
 , yosys
 , zlib
@@ -72,7 +72,7 @@ mkDerivation rec {
     readline
     spdlog
     tcl
-    tcllib
+    tclPackages.tcllib
     yosys
     xorg.libX11
     zlib

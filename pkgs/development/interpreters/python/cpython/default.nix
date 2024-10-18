@@ -35,7 +35,7 @@
 , tzdata
 , withGdbm ? !stdenv.hostPlatform.isWindows, gdbm
 , withReadline ? !stdenv.hostPlatform.isWindows, readline
-, x11Support ? false, tcl, tk, tix, libX11, xorgproto
+, x11Support ? false, tcl, tk, tclPackages, libX11, xorgproto
 
 # splicing/cross
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
@@ -323,10 +323,10 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   '' + optionalString mimetypesSupport ''
     substituteInPlace Lib/mimetypes.py \
       --replace-fail "@mime-types@" "${mailcap}"
-  '' + optionalString (pythonOlder "3.13" && x11Support && (tix != null)) ''
+  '' + optionalString (pythonOlder "3.13" && x11Support && ((tclPackages.tix or null) != null)) ''
     substituteInPlace "Lib/tkinter/tix.py" --replace-fail \
       "os.environ.get('TIX_LIBRARY')" \
-      "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+      "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
   '';
 
   env = {
