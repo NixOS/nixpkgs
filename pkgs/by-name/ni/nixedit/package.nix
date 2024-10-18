@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "NixOS Multipurpose CLI/TUI Utility";
     license = licenses.gpl3;
     mainProgram = "nixedit";
-    maintainers = [ maintainers.miyu ];
+    maintainers = with maintainers; [ miyu ];
     platforms = lib.platforms.linux;
   };
 })
