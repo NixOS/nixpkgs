@@ -1,18 +1,19 @@
 {
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "tocpdf";
-  version = "0.3.3";
+  version = "0.3.9";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "tocPDF";
-    inherit version;
-    hash = "sha256-B+UcvyjWceVErf1uDyGGTGwKBCGHmSOF19Vbk15cPp8=";
+  src = fetchFromGitHub {
+    owner = "kszenes";
+    repo = "tocPDF";
+    rev = "v${version}";
+    hash = "sha256-RaNMhEgJ2pSL9BvK1d2Z8AsUPhARaRtEiCnt/2E2uNs=";
   };
 
   build-system = with python3Packages; [
@@ -27,8 +28,11 @@ python3Packages.buildPythonApplication rec {
     tqdm
   ];
 
-  # no test
-  doCheck = false;
+  optional-dependencies = with python3Packages; {
+    dev = [
+      pytest
+    ];
+  };
 
   pythonImportsCheck = [ "tocPDF" ];
 
