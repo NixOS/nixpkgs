@@ -76,7 +76,9 @@ in
     };
   };
 
-  config.virtualisation.diskSize = lib.mkDefault (3 * 1024);
+  # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+  # to avoid breaking existing configs using that.
+  config.virtualisation.diskSize = lib.mkOverride 1490 (3 * 1024);
   config.virtualisation.diskSizeAutoSupported = !config.ec2.zfs.enable;
 
   config.system.build.amazonImage =

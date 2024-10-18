@@ -48,7 +48,9 @@ in
   };
 
   config = {
-    virtualisation.diskSize = lib.mkDefault (4 * 1024);
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (4 * 1024);
 
     system.build.hypervImage = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;

@@ -68,7 +68,9 @@ in
       };
     };
 
-    virtualisation.diskSize = lib.mkDefault (8 * 1024);
+    # Use a priority just below mkOptionDefault (1500) instead of lib.mkDefault
+    # to avoid breaking existing configs using that.
+    virtualisation.diskSize = lib.mkOverride 1490 (8 * 1024);
     virtualisation.diskSizeAutoSupported = false;
 
     system.build.openstackImage = import ../../../lib/make-single-disk-zfs-image.nix {
