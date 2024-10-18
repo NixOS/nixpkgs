@@ -1,0 +1,10 @@
+diff --git a/meson.build b/meson.build
+index f8644ec..05100de 100644
+--- a/meson.build
++++ b/meson.build
+@@ -175,4 +175,4 @@ systemd_netlogd = executable(
+                    libopenssl,
+                    libsystemd],
+                    install : true,
+-                   install_dir : get_option('prefix'))
++                   install_dir : join_paths(get_option('prefix'), 'bin'))
