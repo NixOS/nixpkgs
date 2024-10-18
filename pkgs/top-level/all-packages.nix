@@ -28352,7 +28352,7 @@ with pkgs;
   bluej = callPackage ../applications/editors/bluej {
     openjdk = openjdk17.override {
       enableJavaFX = true;
-      openjfx = openjfx17.override { withWebKit = true; };
+      openjfx_jdk = openjfx17.override { withWebKit = true; };
     };
   };
 
@@ -28999,7 +28999,7 @@ with pkgs;
   greenfoot = callPackage ../applications/editors/greenfoot {
     openjdk = openjdk17.override {
       enableJavaFX = true;
-      openjfx = openjfx17.override { withWebKit = true; };
+      openjfx_jdk = openjfx17.override { withWebKit = true; };
     };
   };
 
@@ -30274,7 +30274,7 @@ with pkgs;
   jabref = callPackage ../applications/office/jabref {
     jdk = jdk21.override {
       enableJavaFX = true;
-      openjfx = openjfx23.override { withWebKit = true; };
+      openjfx_jdk = openjfx23.override { withWebKit = true; };
     };
   };
 
