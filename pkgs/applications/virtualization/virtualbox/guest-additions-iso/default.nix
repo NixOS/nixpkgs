@@ -1,4 +1,8 @@
-{ fetchurl, lib, virtualbox}:
+{
+  fetchurl,
+  lib,
+  virtualbox,
+}:
 
 let
   inherit (virtualbox) version;
@@ -13,7 +17,13 @@ fetchurl {
     '';
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.gpl2;
-    maintainers = [ lib.maintainers.sander lib.maintainers.friedrichaltheide ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [
+      lib.maintainers.sander
+      lib.maintainers.friedrichaltheide
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }
