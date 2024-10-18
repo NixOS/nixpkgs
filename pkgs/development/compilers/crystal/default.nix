@@ -19,6 +19,7 @@
 , libffi
 , llvmPackages_13
 , llvmPackages_15
+, llvmPackages_18
 , makeWrapper
 , openssl
 , pcre2
@@ -246,6 +247,7 @@ let
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
         crystal = finalAttrs.finalPackage;
       };
+      passthru.llvmPackages = llvmPackages;
 
       meta = with lib; {
         inherit (binary.meta) platforms;
@@ -314,5 +316,20 @@ rec {
     llvmPackages = llvmPackages_15;
   };
 
-  crystal = crystal_1_11;
+  crystal_1_12 = generic {
+    version = "1.12.1";
+    sha256 = "sha256-Q6uI9zPZ3IOGyUuWdC179GPktPGFPRbRWKtOF4YWCBw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+  crystal_1_14 = generic {
+    version = "1.14.0";
+    sha256 = "sha256-ayMF5yinHVOUaZxhlmqxb/iiGJHmloeYuKcnrPmxo9Y=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_18;
+  };
+
+
+  crystal = crystal_1_14;
 }
