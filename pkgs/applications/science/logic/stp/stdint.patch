@@ -1,13 +1,13 @@
 diff --git a/include/stp/AST/ASTNode.h b/include/stp/AST/ASTNode.h
-index 91acd726182c..0a17db23ffbf 100644
+index a05c15d6..a823d95d 100644
 --- a/include/stp/AST/ASTNode.h
 +++ b/include/stp/AST/ASTNode.h
-@@ -24,9 +24,10 @@ THE SOFTWARE.
- #ifndef ASTNODE_H
- #define ASTNODE_H
+@@ -26,9 +26,10 @@ THE SOFTWARE.
+ 
+ #include <cstdint>
  
 +#include "stp/AST/ASTInternal.h"
- #include "stp/AST/NodeFactory/HashingNodeFactory.h"
+ #include "stp/NodeFactory/HashingNodeFactory.h"
 +#include "stp/AST/UsefulDefs.h"
  #include "stp/Util/Attributes.h"
 -#include "ASTInternal.h"
