@@ -375,6 +375,9 @@ let
         networks = mkOption {
           type = with types; listOf str;
           default = if cfg.backend == "podman" then ["podman"] else ["bridge"];
+          defaultText = literalExpression ''
+            if cfg.backend == "podman" then ["podman"] else ["bridge"]
+          '';
           description = ''
             Networks to attach the container to
           '';
