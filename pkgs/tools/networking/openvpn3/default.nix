@@ -2,8 +2,6 @@
 , stdenv
 , fetchFromGitHub
 , asio
-, autoconf-archive
-, autoreconfHook
 , glib
 , gtest
 , jsoncpp
@@ -18,57 +16,77 @@
 , systemd
 , enableSystemdResolved ? false
 , tinyxml-2
-, wrapGAppsHook3
+, meson
+, cmake
+, dbus
+, callPackage
+, fetchurl
+, unzip
+, ninja
+, writeShellScript
+, libcxx
 }:
-
 let
-  openvpn3-core = fetchFromGitHub {
-    owner = "OpenVPN";
-    repo = "openvpn3";
-    rev = "7590cb109349809b948e8edaeecabdbfe24e4b17";
-    hash = "sha256-S9D/FQa7HYj0FJnyb5dCrtgTH9Nf2nvtyp/VHiebq7I=";
+  gdbuspp = callPackage ./gdbuspp.nix {};
+
+  gtest-wrap = stdenv.mkDerivation {
+    name = "gtest-wrap";
+    src = fetchurl {
+      url = "https://wrapdb.mesonbuild.com/v1/projects/gtest/1.10.0/1/get_zip";
+      name = "gtest-1.10.0-1-wrap.zip";
+      hash = "sha256-BP8U6IgOTkZfYmAiHp39Vv6mvHzOTEr/DcUo5KLI9RQ=";
+    };
+    nativeBuildInputs = [ unzip ];
+    installPhase = ''
+      mkdir $out
+      cp -rv . $out
+    '';
   };
-in
-stdenv.mkDerivation rec {
-  pname = "openvpn3";
-  # also update openvpn3-core
-  version = "20";
+
+  version = "23";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     rev = "v${version}";
-    hash = "sha256-Weyb+rcx04mpDdcL7Qt4O+PvPf5MLPAP/Uy+8qoNXbQ=";
+    hash = "sha256-5gkutqyUPZDwRPzSFdUXg2G5mtQKbdhZu8xnNAdXoF0=";
+    fetchSubmodules = true;
   };
 
-  postPatch = ''
-    rm -r ./vendor/googletest
-    cp -r ${gtest.src} ./vendor/googletest
-    rm -r ./openvpn3-core
-    ln -s ${openvpn3-core} ./openvpn3-core
-
-    chmod -R +w ./vendor/googletest
-    shopt -s globstar
-
-    patchShebangs **/*.py **/*.sh ./src/python/{openvpn2,openvpn3-as,openvpn3-autoload} \
-    ./distro/systemd/openvpn3-systemd ./src/tests/dbus/netcfg-subscription-test
-
-    echo "3.git:v${version}:unknown" > openvpn3-core-version
+  openvpn3-core-version = writeShellScript "version" ''
+    MAJOR="3"
+    echo "$MAJOR.git:${src.rev}"
   '';
+in
+stdenv.mkDerivation rec {
+  pname = "openvpn3";
 
-  preAutoreconf = ''
-    substituteInPlace ./update-version-m4.sh --replace 'VERSION="$(git describe --always --tags)"' "VERSION=v${version}"
-    ./update-version-m4.sh
+  inherit src version;
+
+  prePatch = ''
+    cp -r ${gtest.src} ./subprojects/googletest-release-1.10.0
+    chmod -R +w ./subprojects/googletest-release-1.10.0
+    cp -r ${gtest-wrap}/* ./subprojects/googletest-release-1.10.0
+
+    patchShebangs ./scripts/* ./openvpn3-core/scripts/*
+    substituteInPlace ./scripts/get-version --replace 'VERSION="$(git describe --always --tags)"' "VERSION=v${version}"
+    cp "${openvpn3-core-version}" ./openvpn3-core/scripts/version
+
+    # to trigger the creation of host-version.h, which is required at build time
+    mkdir .git
+
+    sed -i '1i#include <iomanip>' src/tests/unit/machine-id.cpp
+    substituteInPlace ./meson.build \
+      --replace "dbus_policy_dir = dep_dbus.get_variable('datadir') / 'dbus-1' / 'system.d'" "dbus_policy_dir = '$out/dbus-1/system.d'" \
+      --replace "dbus_service_dir = dep_dbus.get_variable('system_bus_services_dir')" "dbus_service_dir = '$out/etc/dbus-1/system-services'"
   '';
 
   nativeBuildInputs = [
-    autoconf-archive
-    autoreconfHook
     python3.pkgs.docutils
-    python3.pkgs.jinja2
     pkg-config
-    wrapGAppsHook3
-    python3.pkgs.wrapPython
+    meson
+    cmake
+    ninja
   ] ++ pythonPath;
 
   buildInputs = [
@@ -82,6 +100,9 @@ stdenv.mkDerivation rec {
     openssl
     protobuf
     tinyxml-2
+    dbus
+    gdbuspp
+    libcxx
   ] ++ lib.optionals enableSystemdResolved [
     systemd
   ];
@@ -92,26 +113,12 @@ stdenv.mkDerivation rec {
     pygobject3
   ];
 
-  dontWrapGApps = true;
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
-  '';
-  postFixup = ''
-    wrapPythonPrograms
-  '';
-
-  configureFlags = [
-    "--enable-bash-completion"
-    "--enable-addons-aws"
-    "--disable-selinux-build"
-    "--disable-build-test-progs"
-  ] ++ lib.optionals enableSystemdResolved [
-    # This defaults to --resolv-conf /etc/resolv.conf. See
-    # https://github.com/OpenVPN/openvpn3-linux/blob/v20/configure.ac#L434
-    "DEFAULT_DNS_RESOLVER=--systemd-resolved"
+  mesonFlags = [
+    (lib.mesonOption "selinux" "disabled")
+    (lib.mesonOption "selinux_policy" "disabled")
+    (lib.mesonOption "test_programs" "disabled")
+    (lib.mesonOption "openvpn3_statedir" "${placeholder "out"}/share/openvpn3")
   ];
-
-  NIX_LDFLAGS = "-lpthread";
 
   meta = with lib; {
     description = "OpenVPN 3 Linux client";
