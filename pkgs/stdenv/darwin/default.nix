@@ -133,6 +133,17 @@ let
                 ln -s "${compiler-rt.out}/lib"   "$rsrc/lib"
                 ln -s "${compiler-rt.out}/share" "$rsrc/share"
                 echo "-resource-dir=$rsrc" >> $out/nix-support/cc-cflags
+              ''
+              + lib.optionalString (isFromBootstrapFiles prevStage.llvmPackages.clang-unwrapped) ''
+                # Work around the `-nostdlibinc` patch in the bootstrap tools.
+                # TODO: Remove after the bootstrap tools have been updated.
+                substituteAll ${builtins.toFile "add-flags-extra.sh" ''
+                  if [ "@darwinMinVersion@" ]; then
+                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
+                    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
+                  fi
+                ''} add-flags-extra.sh
+                cat add-flags-extra.sh >> $out/nix-support/add-flags.sh
               '';
 
             cc = prevStage.llvmPackages.clang-unwrapped;

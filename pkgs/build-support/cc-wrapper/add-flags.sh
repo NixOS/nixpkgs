@@ -95,11 +95,6 @@ if [ "@darwinMinVersion@" ]; then
     # xcbuild needs `SDKROOT` to be the name of the SDK, which it sets in its own wrapper,
     # but compilers expect it to point to the absolute path.
     SDKROOT="$DEVELOPER_DIR/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk"
-
-    # Set up various library paths since compilers may not support (or may have disabled) finding them in the sysroot.
-    NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@+=" -isysroot $SDKROOT"
-    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -idirafter $SDKROOT/usr/include"
-    NIX_CFLAGS_COMPILE_@suffixSalt@+=" -iframework $SDKROOT/System/Library/Frameworks"
 fi
 
 # That way forked processes will not extend these environment variables again.
