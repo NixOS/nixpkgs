@@ -5495,6 +5495,12 @@
     githubId = 15774340;
     name = "Thomas Depierre";
   };
+  DictXiong = {
+    email = "me@beardic.cn";
+    github = "DictXiong";
+    githubId = 41772157;
+    name = "Dict Xiong";
+  };
   diegolelis = {
     email = "diego.o.lelis@gmail.com";
     github = "DiegoLelis";
