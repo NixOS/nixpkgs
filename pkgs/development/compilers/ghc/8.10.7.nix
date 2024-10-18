@@ -271,6 +271,20 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8f7dd5710b80906ea7a3e15b7bb56a883a49fed8.patch";
       hash = "sha256-C636Nq2U8YOG/av7XQmG3L1rU0bmC9/7m7Hty5pm5+s=";
     })
+
+    # Backport part of <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/7111> to 8.10.7
+    # The change we are interested in is that Cabal no longer sets include-dirs
+    # for the GHCi library delegating to the system search path or (in our case)
+    # cc-wrapper. Without this patch, the target libffi ends up in there (which
+    # we provide via --with-ffi-includes) which breaks bootstrapping e.g. when
+    # cross compiling GHC. Without include-dirs, cc-wrapper and splicing will
+    # correctly pick the suitable libffi out of the build environment.
+    (fetchpatch {
+      name = "ghci-no-libffi-include.patch";
+      url = "https://gitlab.haskell.org/ghc/ghc/-/commit/b2721819f391ab49871271283f32df54810c4387.patch";
+      sha256 = "1rmv3132xhxbka97v0rx7r6larx5f5nnvs4mgm9q3rmgpjyd1vf9";
+      includes = [ "libraries/ghci/ghci.cabal.in" ];
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Make Block.h compile with c++ compilers. Remove with the next release
     (fetchpatch {
