@@ -37871,8 +37871,6 @@ with pkgs;
 
   stepreduce = callPackage ../applications/misc/stepreduce { };
 
-  stern = callPackage ../applications/networking/cluster/stern { };
-
   streamripper = callPackage ../applications/audio/streamripper { };
 
   sqsh = callPackage ../development/tools/sqsh { };
