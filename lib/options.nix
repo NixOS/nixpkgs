@@ -85,6 +85,7 @@ rec {
     visible ? null,
     # Whether the option can be set only once
     readOnly ? null,
+    meta ? {},
     } @ attrs:
     attrs // { _type = "option"; };
 
