@@ -11,6 +11,13 @@ let cfg = config.services.victoriametrics; in
         The listen address for the http interface.
       '';
     };
+    storageLocation = mkOption {
+      default = "/var/lib/victoriametrics";
+      type = types.path;
+      description = ''
+        The location for persistent data storage.
+      '';
+    };
     retentionPeriod = mkOption {
       type = types.int;
       default = 1;
@@ -41,7 +48,7 @@ let cfg = config.services.victoriametrics; in
         DynamicUser = true;
         ExecStart = ''
           ${cfg.package}/bin/victoria-metrics \
-              -storageDataPath=/var/lib/victoriametrics \
+              -storageDataPath=${cfg.storageLocation} \
               -httpListenAddr ${cfg.listenAddress} \
               -retentionPeriod ${toString cfg.retentionPeriod} \
               ${lib.escapeShellArgs cfg.extraOptions}
