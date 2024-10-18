@@ -243,7 +243,7 @@ let
           (specialArgs.modulesPath or "")
           (regularModules ++ [ internalModule ])
           ({ inherit lib options config specialArgs; } // specialArgs);
-        in mergeModules prefix (reverseList collected);
+        in mergeModules2 options._module prefix (reverseList collected);
 
       options = merged.matchedOptions;
 
@@ -548,10 +548,16 @@ let
        }
   */
   mergeModules = prefix: modules:
-    mergeModules' prefix modules
+    mergeModules2' {} prefix modules
+      (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
+
+  mergeModules2 = _module: prefix: modules:
+    mergeModules2' _module prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
 
   mergeModules' = prefix: modules: configs:
+    mergeModules2' { };
+  mergeModules2' = _module: prefix: modules: configs:
     let
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
@@ -655,7 +661,7 @@ let
           if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
             in {
-              matchedOptions = evalOptionValue loc opt defns';
+              matchedOptions = evalOptionValue' _module loc opt defns';
               unmatchedDefns = [];
             }
           else if optionDecls != [] then
@@ -672,7 +678,7 @@ let
               then
                 let opt = fixupOptionType loc (mergeOptionDecls loc (map optionTreeToOption decls));
                 in {
-                  matchedOptions = evalOptionValue loc opt defns';
+                  matchedOptions = evalOptionValue' _module loc opt defns';
                   unmatchedDefns = [];
                 }
               else
@@ -683,7 +689,7 @@ let
                   showRawDecls loc nonOptions
                 }"
           else
-            mergeModules' loc decls defns) declsByName;
+            mergeModules2' _module loc decls defns) declsByName;
 
       matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
 
@@ -789,7 +795,8 @@ let
 
   /* Merge all the definitions of an option to produce the final
      config value. */
-  evalOptionValue = loc: opt: defs:
+  evalOptionValue = evalOptionValue' {};
+  evalOptionValue' = _module: loc: opt: defs:
     let
       # Add in the default value for this option, if any.
       defs' =
@@ -826,7 +833,38 @@ let
         inherit (res) isDefined;
         # This allows options to be correctly displayed using `${options.path.to.it}`
         __toString = _: showOption loc;
+        meta = checkOptionMeta _module opt;
       };
+
+  checkOptionMeta = _module: opt:
+    let
+      metaConfiguration =
+        evalModules {
+          # The option path. Although the things we're checking happen to be options,
+          # that's not what we're checking against, and that's what the prefix is
+          # about. The checkable options are more like _file, and we'll make use of that.
+          prefix = [ "_modules" "optionMeta" ];
+          modules =
+            [
+              { options = _module.optionMeta or { }; }
+            ]
+            ++ lib.zipListsWith
+              (decl: pos:
+                lib.setDefaultModuleLocation
+                  "option declaration at ${pos.file}:${toString pos.line}:${toString pos.column}"
+                  {
+                    config =
+                      (lib.throwIf
+                        (opt?meta._module)
+                        "In option declarations, `meta._module` is not allowed, but option `${showOption opt.loc}` has it."
+                      opt.meta or {});
+                  }
+              )
+              opt.declarations
+              opt.declarationPositions;
+        };
+    in
+      metaConfiguration.config;
 
   # Merge definitions of a value of a given type.
   mergeDefinitions = loc: type: defs: rec {
@@ -1462,7 +1500,8 @@ private //
     defaultPriority
     doRename
     evalModules
-    evalOptionValue  # for use by lib.types
+    evalOptionValue  # for use by lib.types (?)
+    evalOptionValue'  # for use by lib.types
     filterOverrides
     filterOverrides'
     fixMergeModules

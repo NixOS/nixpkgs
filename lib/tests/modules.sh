@@ -148,6 +148,10 @@ checkConfigError 'The option .sub.wrong2. does not exist. Definition values:' co
 checkConfigError '.*This can happen if you e.g. declared your options in .types.submodule.' config.sub ./error-mkOption-in-submodule-config.nix
 checkConfigError '.*A definition for option .bad. is not of type .non-empty .list of .submodule...\.' config.bad ./error-nonEmptyListOf-submodule.nix
 
+checkConfigOutput '^true$' options.foo.meta.required ./option-meta.nix
+checkConfigError '.*The option ._modules\.optionMeta\.reuired. does not exist.*' options.undeclared.meta.reuired ./option-meta.nix
+checkConfigError '.*option-meta\.nix:[0-9]+:[0-9]+.: false' options.undeclared.meta.reuired ./option-meta.nix
+
 # types.attrTag
 checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
 checkConfigError 'A definition for option .intStrings\.syntaxError. is not of type .attribute-tagged union' config.intStrings.syntaxError ./types-attrTag.nix

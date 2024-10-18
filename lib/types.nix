@@ -684,7 +684,8 @@ rec {
             if tags?${choice}
             then
               { ${choice} =
-                  (lib.modules.evalOptionValue
+                  (lib.modules.evalOptionValue'
+                    { }  # Can't have option meta attributes in attrTag for now; needs `merge` function interface upgrade
                     (loc ++ [choice])
                     tags.${choice}
                     checkedValueDefs
