@@ -15,7 +15,9 @@
       };
     };
   };
-  config.weird = args@{ ... /* note the lack of a `lib` argument */ }:
+  config.weird = args@{ ... /**
+  note the lack of a `lib` argument
+*/ }:
   assert args.lib == { };
   assert args.specialArgs == { lib = { }; };
   {
