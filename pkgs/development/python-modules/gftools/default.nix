@@ -114,6 +114,8 @@ buildPythonPackage rec {
       --replace-fail "'gftools" "'${placeholder "out"}t/bin/gftools"
   '';
 
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
+
   pythonRelaxDeps = [
     "protobuf"
     "pygit2"
