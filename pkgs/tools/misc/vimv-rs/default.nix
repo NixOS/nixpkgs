@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Foundation }:
+{ lib, rustPlatform, fetchCrate, stdenv, apple-sdk_11 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "vimv-rs";
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rYQxIttuGBGEkYkFtSBl8ce1I/Akm6FxeITJcaIeP6M=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   meta = with lib; {
     description = "Command line utility for batch-renaming files";

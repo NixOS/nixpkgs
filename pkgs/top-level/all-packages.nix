@@ -32931,9 +32931,7 @@ with pkgs;
 
   vimv = callPackage ../tools/misc/vimv { };
 
-  vimv-rs = callPackage ../tools/misc/vimv-rs {
-    inherit (darwin.apple_sdk.frameworks) Foundation;
-  };
+  vimv-rs = callPackage ../tools/misc/vimv-rs { };
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
