@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  ruby,
   fetchurl,
   openssl,
   ncurses,
@@ -9,15 +10,16 @@
   coreutils,
   fetchpatch,
   libxcrypt,
+  perl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "epic5";
-  version = "2.0.1";
+  version = "3.0";
 
   src = fetchurl {
-    url = "http://ftp.epicsol.org/pub/epic/EPIC5-PRODUCTION/${pname}-${version}.tar.xz";
-    sha256 = "1ap73d5f4vccxjaaq249zh981z85106vvqmxfm4plvy76b40y9jm";
+    url = "http://ftp.epicsol.org/pub/epic/EPIC5-PRODUCTION/epic5-${finalAttrs.version}.tar.xz";
+    hash = "sha256-ltRzUME6PZkBnaDmoEsMf4Datt26WQvMZ527iswXeaE=";
   };
 
   # Darwin needs libiconv, tcl; while Linux build don't
@@ -26,35 +28,27 @@ stdenv.mkDerivation rec {
       openssl
       ncurses
       libxcrypt
+      ruby
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       tcl
     ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://sources.debian.net/data/main/e/epic5/2.0.1-1/debian/patches/openssl-1.1.patch";
-      sha256 = "03bpsyv1sr5icajs2qkdvv8nnn6rz6yvvj7pgiq8gz9sbp6siyfv";
-    })
-  ];
-
   configureFlags = [
-    "--disable-debug"
     "--with-ipv6"
   ];
 
-  postConfigure = ''
-    substituteInPlace bsdinstall \
-      --replace /bin/cp ${coreutils}/bin/cp \
-      --replace /bin/rm ${coreutils}/bin/rm \
-      --replace /bin/chmod ${coreutils}/bin/chmod \
-  '';
+  nativeBuildInputs = [
+    perl
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "http://epicsol.org";
     description = "IRC client that offers a great ircII interface";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    platform = lib.platforms.unix;
+    mainProgram = "epic5";
   };
-}
+})
