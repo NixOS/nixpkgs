@@ -8151,6 +8151,8 @@ self: super: with self; {
 
   monkeyhex = callPackage ../development/python-modules/monkeyhex { };
 
+  monkeytype = callPackage ../development/python-modules/monkeytype { };
+
   monosat = pkgs.monosat.python {
     inherit buildPythonPackage;
     inherit (self) cython pytestCheckHook;
