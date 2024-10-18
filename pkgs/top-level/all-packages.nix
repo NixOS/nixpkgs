@@ -1299,7 +1299,9 @@ with pkgs;
     cutoffPackages = [ newDependency ];
   };
 
-  replaceVars = callPackage ../build-support/replace-vars { };
+  replaceVars = callPackage ../build-support/replace-vars { } // {
+    withoutCheck = callPackage ../build-support/replace-vars { doCheck = false; };
+  };
 
   replaceDirectDependencies = callPackage ../build-support/replace-direct-dependencies.nix { };
 
