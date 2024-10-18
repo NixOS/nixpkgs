@@ -24,6 +24,7 @@
   xvfb-run,
   gitUpdater,
   md4c,
+  withQtWebEngine ? lib.meta.availableOn stdenv.hostPlatform qtwebengine,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,7 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtpositioning
     qtmultimedia
     qtserialport
-    qtwebengine
     calcmysky
     qxlsx
     indilib
@@ -70,6 +70,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
+  ]
+  ++ lib.optionals withQtWebEngine [
+    qtwebengine
   ];
 
   preConfigure = ''
