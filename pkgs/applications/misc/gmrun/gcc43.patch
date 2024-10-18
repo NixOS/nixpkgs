@@ -1,0 +1,51 @@
+--- a/src/gtkcompletionline.cc.orig	2003-11-16 11:55:07.000000000 +0100
++++ a/src/gtkcompletionline.cc	2008-05-08 08:51:22.000000000 +0200
+@@ -29,6 +29,7 @@
+ #include <set>
+ #include <sstream>
+ #include <string>
++#include <cstring>
+ #include <vector>
+ using namespace std;
+ 
+--- a/src/ci_string.h.orig	2001-05-16 16:39:31.000000000 +0200
++++ a/src/ci_string.h	2008-05-08 08:51:33.000000000 +0200
+@@ -7,6 +7,7 @@
+ #define __CI_STRING_H__
+ 
+ #include <string>
++#include <cstring>
+ #include <ctype.h>
+ 
+ struct ci_char_traits : public std::char_traits<char>
+--- a/src/prefs.cc.orig	2002-08-16 12:48:22.000000000 +0200
++++ a/src/prefs.cc	2008-05-08 08:51:54.000000000 +0200
+@@ -13,6 +13,7 @@
+ #include <fstream>
+ #include <iostream>
+ #include <stdio.h>
++#include <stdlib.h>
+ 
+ #include <list>
+ 
+--- a/src/main.cc.orig	2003-11-16 11:55:07.000000000 +0100
++++ a/src/main.cc	2008-05-08 09:03:11.000000000 +0200
+@@ -14,6 +14,7 @@
+ #include <gdk/gdkkeysyms.h>
+ 
+ #include <string>
++#include <cstring>
+ #include <iostream>
+ #include <sstream>
+ #include <vector>
+
+--- a/src/gtkcompletionline.cc.orig	2009-06-19 22:38:14.000000000 +0400
++++ a/src/gtkcompletionline.cc	2009-06-19 22:37:14.000000000 +0400
+@@ -376,7 +377,7 @@
+   return 0;
+ }
+ 
+-int my_alphasort(const void* va, const void* vb) {
++int my_alphasort(const dirent** va, const dirent** vb) {
+   const struct dirent** a = (const struct dirent**)va;
+   const struct dirent** b = (const struct dirent**)vb;

@@ -1,0 +1,140 @@
+diff --git a/src/backend/plugins/config-gnome/config-gnome.c b/src/backend/plugins/config-gnome/config-gnome.c
+index 52e812e..a1141c5 100644
+--- a/src/backend/plugins/config-gnome/config-gnome.c
++++ b/src/backend/plugins/config-gnome/config-gnome.c
+@@ -83,11 +83,60 @@ px_config_gnome_init (PxConfigGnome *self)
+   if (!self->available)
+     return;
+ 
+-  self->proxy_settings = g_settings_new ("org.gnome.system.proxy");
+-  self->http_proxy_settings = g_settings_new ("org.gnome.system.proxy.http");
+-  self->https_proxy_settings = g_settings_new ("org.gnome.system.proxy.https");
+-  self->ftp_proxy_settings = g_settings_new ("org.gnome.system.proxy.ftp");
+-  self->socks_proxy_settings = g_settings_new ("org.gnome.system.proxy.socks");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy", FALSE);
++    self->proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.http",
++                                             FALSE);
++    self->http_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.https",
++                                             FALSE);
++    self->https_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.ftp",
++                                             FALSE);
++    self->ftp_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.socks",
++                                             FALSE);
++    self->socks_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ }
+ 
+ static void
+diff --git a/tests/config-gnome-test.c b/tests/config-gnome-test.c
+index 677a3e9..a28d277 100644
+--- a/tests/config-gnome-test.c
++++ b/tests/config-gnome-test.c
+@@ -60,11 +60,60 @@ static void
+ fixture_setup (Fixture       *self,
+                gconstpointer  data)
+ {
+-  self->proxy_settings = g_settings_new ("org.gnome.system.proxy");
+-  self->http_proxy_settings = g_settings_new ("org.gnome.system.proxy.http");
+-  self->https_proxy_settings = g_settings_new ("org.gnome.system.proxy.https");
+-  self->ftp_proxy_settings = g_settings_new ("org.gnome.system.proxy.ftp");
+-  self->socks_proxy_settings = g_settings_new ("org.gnome.system.proxy.socks");
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy", FALSE);
++    self->proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.http",
++                                             FALSE);
++    self->http_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.https",
++                                             FALSE);
++    self->https_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.ftp",
++                                             FALSE);
++    self->ftp_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
++  {
++    g_autoptr(GSettingsSchemaSource) schema_source;
++    g_autoptr(GSettingsSchema) schema;
++    schema_source = g_settings_schema_source_new_from_directory("@gds@",
++                                                                g_settings_schema_source_get_default(),
++                                                                TRUE, NULL);
++    schema = g_settings_schema_source_lookup(schema_source,
++                                             "org.gnome.system.proxy.socks",
++                                             FALSE);
++    self->socks_proxy_settings = g_settings_new_full(schema, NULL, NULL);
++  }
+ }
+ 
+ static void

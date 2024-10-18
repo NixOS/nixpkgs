@@ -1,0 +1,28 @@
+{
+  "comment": "This file is kept up to date via update.sh",
+  "browsers": {
+    "chromium": {
+      "revision": "1134",
+      "browserVersion": "129.0.6668.29"
+    },
+    "firefox": {
+      "revision": "1463",
+      "browserVersion": "130.0"
+    },
+    "webkit": {
+      "revision": "2070",
+      "revisionOverrides": {
+        "mac10.14": "1446",
+        "mac10.15": "1616",
+        "mac11": "1816",
+        "mac11-arm64": "1816",
+        "mac12": "2009",
+        "mac12-arm64": "2009"
+      },
+      "browserVersion": "18.0"
+    },
+    "ffmpeg": {
+      "revision": "1010"
+    }
+  }
+}

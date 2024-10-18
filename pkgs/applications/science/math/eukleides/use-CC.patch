@@ -1,0 +1,11 @@
+--- a/build/Makefile
++++ b/build/Makefile
+@@ -11,7 +11,7 @@ LEX = flex
+ LFLAGS = -8
+ YACC = bison
+ YFLAGS = -d
+-CC = gcc
++CC ?= gcc
+ IFLAGS = -I$(COMMON_DIR) -I$(MAIN_DIR) -I$(BUILD_DIR) 
+ ifneq ($(strip $(LOCALES)),)
+ MOFLAGS = -DMO_DIR=\"$(MO_DIR)\" 
