@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.23.3";
+  version = "0.24.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,15 +23,8 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-z/QulOkvkV/1Z+M7EfzdfGvrrtkapYcvfz+3AijR46k=";
+    hash = "sha256-DY8koEXMasxTsWyLRdHY89yOcEsR6c0jiFQULC3nLVs=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/zigpy/zigpy-deconz/commit/86fdcd6be824f12ce3bf88b40217a6224cbf5a89.patch";
-      hash = "sha256-iqpTSJPBMSBZXg5EVXXupxIFRsGCNuxU/oNHZ2VT0Jc=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
