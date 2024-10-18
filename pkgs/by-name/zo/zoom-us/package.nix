@@ -115,7 +115,7 @@ let
 
   binPath = lib.makeBinPath ([ coreutils glib.dev pciutils procps util-linux ] ++ lib.optional pulseaudioSupport pulseaudio);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zoom";
   version = versions.${system} or throwSystem;
 
@@ -153,7 +153,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  postFixup =  lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     makeWrapper $out/Applications/zoom.us.app/Contents/MacOS/zoom.us $out/bin/zoom
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # Desktop File
@@ -161,7 +161,9 @@ stdenv.mkDerivation rec {
         --replace-fail "Exec=/usr/bin/zoom" "Exec=$out/bin/zoom"
 
     for i in aomhost zopen zoom ZoomLauncher ZoomWebviewHost; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
+      if [ -f $out/opt/zoom/$i ]; then
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/opt/zoom/$i
+      fi
     done
 
     # ZoomLauncher sets LD_LIBRARY_PATH before execing zoom
@@ -183,11 +185,13 @@ stdenv.mkDerivation rec {
       --prefix PATH : ${binPath} \
       --prefix LD_LIBRARY_PATH ":" ${libs}
 
-    wrapProgram $out/opt/zoom/ZoomWebviewHost \
-      --unset QML2_IMPORT_PATH \
-      --unset QT_PLUGIN_PATH \
-      --unset QT_SCREEN_SCALE_FACTORS \
-      --prefix LD_LIBRARY_PATH ":" ${libs}
+    if [ -f $out/opt/zoom/ZoomWebviewHost ]; then
+      wrapProgram $out/opt/zoom/ZoomWebviewHost \
+        --unset QML2_IMPORT_PATH \
+        --unset QT_PLUGIN_PATH \
+        --unset QT_SCREEN_SCALE_FACTORS \
+        --prefix LD_LIBRARY_PATH ":" ${libs}
+    fi
 
     # Backwards compatibility: we used to call it zoom-us
     ln -s $out/bin/{zoom,zoom-us}
