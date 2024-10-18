@@ -7,20 +7,16 @@
   numpy,
   lightning-utilities,
   packaging,
-  pretty-errors,
 
   # buildInputs
   torch,
 
   # tests
-  cloudpickle,
-  psutil,
   pytestCheckHook,
   pytest-doctestplus,
   pytest-xdist,
   pytorch-lightning,
   scikit-image,
-  scikit-learn,
 
   # passthru
   torchmetrics,
@@ -28,7 +24,7 @@
 
 let
   pname = "torchmetrics";
-  version = "1.4.3";
+  version = "1.5.1";
 in
 buildPythonPackage {
   inherit pname version;
@@ -38,28 +34,24 @@ buildPythonPackage {
     owner = "Lightning-AI";
     repo = "torchmetrics";
     rev = "refs/tags/v${version}";
-    hash = "sha256-527cHPFdFw/JajHe7Kkz7+zl4EfePaLx77I2OTjjxaA=";
+    hash = "sha256-k3tmrJOn2mQN+RbUbxfjrE+2TJKHs5vHj9aGx8p8fZU=";
   };
 
   dependencies = [
     numpy
     lightning-utilities
     packaging
-    pretty-errors
   ];
 
   # Let the user bring their own instance
   buildInputs = [ torch ];
 
   nativeCheckInputs = [
-    cloudpickle
-    psutil
     pytestCheckHook
     pytest-doctestplus
     pytest-xdist
     pytorch-lightning
     scikit-image
-    scikit-learn
   ];
 
   # A cyclic dependency in: integrations/test_lightning.py
@@ -73,15 +65,19 @@ buildPythonPackage {
     dontInstall = true;
   });
 
-  disabledTests = [
-    # `IndexError: list index out of range`
-    "test_metric_lightning_log"
-  ];
-
   disabledTestPaths = [
     # These require too many "leftpad-level" dependencies
     # Also too cross-dependent
     "tests/unittests"
+
+    # AttributeError: partially initialized module 'pesq' has no attribute 'pesq' (most likely due to a circular import)
+    "examples/audio/pesq.py"
+
+    # Require internet access
+    "examples/text/bertscore.py"
+    "examples/image/clip_score.py"
+    "examples/text/perplexity.py"
+    "examples/text/rouge.py"
 
     # A trillion import path mismatch errors
     "src/torchmetrics"
