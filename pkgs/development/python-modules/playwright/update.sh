@@ -37,10 +37,15 @@ update_browser() {
     name="$1"
     suffix="$2"
     arm64_suffix="${3:-$2-arm64}"
+    if [ "$suffix" = "mac" ]; then
+        platform="darwin"
+    else
+        platform="linux"
+    fi
     revision="$(jq -r ".browsers.$name.revision" "$playwright_dir/browsers.json")"
-    replace_sha "$playwright_dir/$name.nix" "x86_64-linux" \
+    replace_sha "$playwright_dir/$name.nix" "x86_64-$platform" \
         "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$suffix.zip")"
-    replace_sha "$playwright_dir/$name.nix" "aarch64-linux" \
+    replace_sha "$playwright_dir/$name.nix" "aarch64-$platform" \
         "$(prefetch_browser "https://playwright.azureedge.net/builds/$name/$revision/$name-$arm64_suffix.zip")"
 }
 
@@ -62,6 +67,9 @@ update_browser "firefox" "ubuntu-22.04"
 update_browser "webkit" "ubuntu-22.04"
 update_browser "ffmpeg" "linux"
 
+update_browser "chromium" "mac"
+update_browser "firefox" "mac"
+update_browser "ffmpeg" "mac"
 
 # Update package-lock.json files for all npm deps that are built in playwright
 
