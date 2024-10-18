@@ -1,34 +1,50 @@
-{ lib, stdenv, fetchurl, swt, jre, makeWrapper, alsa-lib, jack2, fluidsynth, libpulseaudio, nixosTests }:
+{ autoPatchelfHook,
+  alsa-lib,
+  fetchurl,
+  fluidsynth,
+  jack2,
+  jre,
+  lib,
+  lilv,
+  makeWrapper,
+  nixosTests,
+  qt5,
+  stdenvNoCC,
+  suil,
+}:
 
-let metadata = assert stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux";
-  if stdenv.hostPlatform.system == "i686-linux" then
-    { arch = "x86"; sha256 = "sha256-k4FQrt72VNb5FdYMzxskcVhKlvx8MZelUlLCItxDB7c="; }
-  else
-    { arch = "x86_64"; sha256 = "sha256-mj5wVQlY2xFzdulvMdb5Qb5HGwr7RElzIkpOLjaAfGA="; };
-in stdenv.mkDerivation rec {
-  version = "1.5.5";
+stdenvNoCC.mkDerivation rec {
   pname = "tuxguitar";
+  version = "1.6.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${pname}-${version}-linux-${metadata.arch}.tar.gz";
-    sha256 = metadata.sha256;
+    url = "https://github.com/helge17/tuxguitar/releases/download/${version}/tuxguitar-${version}-linux-swt-amd64.tar.gz";
+    hash = "sha256-eO2U6FFTOz2sR/ZN2Amui2DsWMGcfFkFJ3Lhgzyr6aM=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
+
+  buildInputs = [
+    alsa-lib
+    fluidsynth
+    jack2
+    lilv
+    qt5.qtbase
+    suil
+  ];
+
+  dontWrapQtApps = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -r dist lib share $out/
-    cp tuxguitar.sh $out/bin/tuxguitar
+    mkdir -p $out/bin $out/share/tuxguitar
 
-    ln -s $out/dist $out/bin/dist
-    ln -s $out/lib $out/bin/lib
-    ln -s $out/share $out/bin/share
+    cp -r * $out/share/tuxguitar
 
-    wrapProgram $out/bin/tuxguitar \
-      --set JAVA "${jre}/bin/java" \
-      --prefix LD_LIBRARY_PATH : "$out/lib/:${lib.makeLibraryPath [ swt alsa-lib jack2 fluidsynth libpulseaudio ]}" \
-      --prefix CLASSPATH : "${swt}/jars/swt.jar:$out/lib/tuxguitar.jar:$out/lib/itext.jar"
+    makeWrapper $out/share/tuxguitar/tuxguitar.sh $out/bin/tuxguitar \
+      --prefix PATH : ${lib.makeBinPath [ jre ]}
   '';
 
   passthru.tests = { inherit (nixosTests) tuxguitar; };
@@ -39,7 +55,7 @@ in stdenv.mkDerivation rec {
       TuxGuitar is a multitrack guitar tablature editor and player written
       in Java-SWT. It can open GuitarPro, PowerTab and TablEdit files.
     '';
-    homepage = "http://www.tuxguitar.com.ar/";
+    homepage = "https://github.com/helge17/tuxguitar";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.lgpl2;
     maintainers = [ maintainers.ardumont ];
