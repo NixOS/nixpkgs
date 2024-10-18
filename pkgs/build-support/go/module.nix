@@ -46,9 +46,6 @@
   # Meta data for the final derivation.
 , meta ? { }
 
-  # Not needed with `buildGoModule`.
-, goPackagePath ? ""
-
   # Go linker flags.
 , ldflags ? [ ]
   # Go build flags.
@@ -60,8 +57,6 @@
 
 , ...
 }@args':
-
-assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 
 let
   args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" ];
