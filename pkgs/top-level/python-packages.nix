@@ -13552,6 +13552,10 @@ self: super: with self; {
 
   remarshal = callPackage ../development/python-modules/remarshal { };
 
+  remctl = callPackage ../development/python-modules/remctl {
+    remctl-c = pkgs.remctl;
+  };
+
   remi = callPackage ../development/python-modules/remi { };
 
   remote-pdb = callPackage ../development/python-modules/remote-pdb { };
