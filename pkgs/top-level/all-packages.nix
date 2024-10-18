@@ -2245,9 +2245,7 @@ with pkgs;
 
   git-imerge = python3Packages.callPackage ../applications/version-management/git-imerge { };
 
-  git-interactive-rebase-tool = callPackage ../applications/version-management/git-interactive-rebase-tool {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  git-interactive-rebase-tool = callPackage ../applications/version-management/git-interactive-rebase-tool { };
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
 
