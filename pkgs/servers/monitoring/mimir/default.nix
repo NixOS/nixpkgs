@@ -1,15 +1,13 @@
-{ lib, buildGo122Module, fetchFromGitHub, nixosTests, nix-update-script }:
-# Does not build with Go 1.23
-# FIXME: check again for next release
-buildGo122Module rec {
+{ lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
+buildGoModule rec {
   pname = "mimir";
-  version = "2.13.0";
+  version = "2.14.0";
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
-    hash = "sha256-XBCwc3jpLx8uj+UitFsoIAWVgC/2G8rgjOqrrLLyYdM=";
+    hash = "sha256-XALr755tFYaMnI913NCjwFPieedS00RXv4KhjXfOPfw=";
   };
 
   vendorHash = null;
