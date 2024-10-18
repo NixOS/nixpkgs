@@ -542,6 +542,7 @@ mapAliases ({
   qds-sdk = throw "qds-sdk was removed as it is unmaintained upstream and depends on the removed boto package"; # Added 2024-09-22
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
+  quamash = throw "'quamash' has been removed, since it is unmaintained and broken"; # added 2024-10-17
   querystring_parser = querystring-parser; # added 2024-01-07
   qcodes-loop = throw "qcodes-loop has been removed due to deprecation"; # added 2023-11-30
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";
