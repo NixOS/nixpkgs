@@ -2,10 +2,20 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonOlder,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   click,
-  ordered-set,
+  orderly-set,
   orjson,
+
+  # optional-dependencies
   clevercsv,
+
+  # tests
   jsonpickle,
   numpy,
   pytestCheckHook,
@@ -13,13 +23,15 @@
   pyyaml,
   toml,
   tomli-w,
-  pythonOlder,
+  polars,
+  pandas,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "deepdiff";
-  version = "7.0.1";
-  format = "setuptools";
+  version = "8.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -27,17 +39,16 @@ buildPythonPackage rec {
     owner = "seperman";
     repo = "deepdiff";
     rev = "refs/tags/${version}";
-    hash = "sha256-HqmAE5sLwyjyUahIUeRIJW0c5eliq/qEzE2FydHwc70=";
+    hash = "sha256-SnVsYQHTgy0sDKabImSXbSeKES2bBxjE6ZtVzrenm+A=";
   };
 
-  postPatch = ''
-    substituteInPlace tests/test_command.py \
-      --replace '/tmp/' "$TMPDIR/"
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     click
-    ordered-set
+    orderly-set
     orjson
   ];
 
@@ -56,6 +67,9 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     tomli-w
+    polars
+    pandas
+    pytest-benchmark
   ] ++ optional-dependencies.cli;
 
   disabledTests = [
@@ -66,12 +80,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "deepdiff" ];
 
-  meta = with lib; {
+  meta = {
     description = "Deep Difference and Search of any Python object/data";
     mainProgram = "deep";
     homepage = "https://github.com/seperman/deepdiff";
     changelog = "https://github.com/seperman/deepdiff/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mic92 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      mic92
+      doronbehar
+    ];
   };
 }
