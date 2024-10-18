@@ -19496,6 +19496,12 @@
     githubId = 18403034;
     name = "Shaddy";
   };
+  shadowapex = {
+    email = "shadowapex@gmail.com";
+    github = "ShadowApex";
+    githubId = 376460;
+    name = "William Edwards";
+  };
   shadowrz = {
     email = "shadowrz+nixpkgs@disroot.org";
     matrix = "@ShadowRZ:matrixim.cc";
