@@ -3,7 +3,7 @@ let
 
   container = { config, ... }: {
     # We re-use the NixOS container option ...
-    boot.isContainer = true;
+    boot.isNspawnContainer = true;
     # ... and revert unwanted defaults
     networking.useHostResolvConf = false;
 
