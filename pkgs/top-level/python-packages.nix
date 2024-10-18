@@ -6474,8 +6474,6 @@ self: super: with self; {
     inherit (pkgs) jq;
   };
 
-  js2py = callPackage ../development/python-modules/js2py { };
-
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
   jschema-to-python = callPackage ../development/python-modules/jschema-to-python { };
