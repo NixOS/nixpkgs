@@ -108,6 +108,10 @@ let
 
   };
 
+  usersWithKeys = lib.attrValues (lib.flip lib.filterAttrs config.users.users (n: u:
+    lib.length u.openssh.authorizedKeys.keys != 0 || lib.length u.openssh.authorizedKeys.keyFiles != 0
+  ));
+
   authKeysFiles = let
     mkAuthKeyFile = u: lib.nameValuePair "ssh/authorized_keys.d/${u.name}" {
       mode = "0444";
@@ -116,9 +120,6 @@ let
         ${lib.concatMapStrings (f: lib.readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
       '';
     };
-    usersWithKeys = lib.attrValues (lib.flip lib.filterAttrs config.users.users (n: u:
-      lib.length u.openssh.authorizedKeys.keys != 0 || lib.length u.openssh.authorizedKeys.keyFiles != 0
-    ));
   in lib.listToAttrs (map mkAuthKeyFile usersWithKeys);
 
   authPrincipalsFiles = let
@@ -302,7 +303,8 @@ in
 
       authorizedKeysInHomedir = lib.mkOption {
         type = lib.types.bool;
-        default = true;
+        default = lib.versionOlder config.system.stateVersion "24.11";
+        defaultText = lib.literalMD "`false` unless [](#opt-system.stateVersion) is 24.05 or older";
         description = ''
           Enables the use of the `~/.ssh/authorized_keys` file.
 
@@ -543,6 +545,17 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+
+    warnings = lib.optional (with cfg; lib.all lib.id [
+      # ~/.ssh/authorized_keys is ignored and no custom file locations were set
+      (authorizedKeysFiles == [ "/etc/ssh/authorized_keys.d/%u" ])
+      # no command provides authorized keys
+      (authorizedKeysCommand == "none")
+      # no users have keys in declarative configuration
+      (usersWithKeys == [])
+      # no authentication methods other than public keys are configured
+      ((settings.PasswordAuthentication == false && !package.withKerberos) || settings.AuthenticationMethods == [ "publickey" ])
+    ]) "services.openssh: no keys were set in `users.users.*.openssh.authorizedKeys` and `~/.ssh/authorized_keys` will be ignored";
 
     users.users.sshd =
       {
