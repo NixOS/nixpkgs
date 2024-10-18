@@ -85,6 +85,7 @@ mapAliases ({
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
+  bugzilla = python-bugzilla; # added 2024-10-17
   buildbot = throw "use pkgs.buildbot instead"; # added 2022-04-07
   buildbot-ui = throw "use pkgs.buildbot-ui instead"; # added 2022-04-07
   buildbot-full = throw "use pkgs.buildbot-full instead"; # added 2022-04-07
