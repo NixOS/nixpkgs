@@ -38,6 +38,7 @@ let
         libnvidia-container
         libxfs
         lvm2
+        lxcfs
         minio
         minio-client
         nftables
