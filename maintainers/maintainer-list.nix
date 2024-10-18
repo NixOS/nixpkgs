@@ -2083,6 +2083,12 @@
     githubId = 52001167;
     name = "Auguste Baum";
   };
+  augu5te = {
+    email = "olivier.richard@imag.fr";
+    github = "augu5te";
+    githubId = 2647100;
+    name = "Olivier Richard";
+  };
   auntie = {
     email = "auntieNeo@gmail.com";
     github = "auntieNeo";
