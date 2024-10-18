@@ -12,6 +12,7 @@
   fetchpatch,
   fetchpatch2,
   overrideCC,
+  overrideLibcxx,
   wrapCCWith,
   wrapBintoolsWith,
   buildLlvmTools, # tools, but from the previous stage, for cross
@@ -1064,7 +1065,19 @@ let
         else
           libraries.compiler-rt-libc;
 
-      stdenv = overrideCC stdenv buildLlvmTools.clang;
+      stdenv =
+        let
+          stdenv' = overrideCC stdenv buildLlvmTools.clang;
+        in
+        # Treat libc++ as a “system” library on Darwin where all versions use the same underlying libc++.
+        # Use libcxxStdenv to use a specific version of LLVM and libc++ regardless.
+        if
+          stdenv.targetPlatform.isDarwin
+          && lib.versionOlder metadata.release_version (lib.getVersion stdenv.cc.libcxx)
+        then
+          overrideLibcxx stdenv'
+        else
+          stdenv';
 
       libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
