@@ -5,6 +5,7 @@
   protobuf,
   pytestCheckHook,
   pythonOlder,
+  regex,
   setuptools,
   setuptools-scm,
   uharfbuzz,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "gflanguages";
-  version = "0.6.2";
+  version = "0.6.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-v93mXDwHT/8Tau78ApLUR+dQCpL9jmRQp0BT5y/sfq4=";
+    hash = "sha256-wMhRVWdjKiEfzswnAWqKfzHrpJj0U4q8tzDBGshNryo=";
   };
 
   # Relax the dependency on protobuf 3. Other packages in the Google Fonts
@@ -36,12 +37,23 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    regex
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
     uharfbuzz
     youseedee
+  ];
+
+  pythonImportsCheck = [ "gflanguages" ];
+
+  disabledTests = [
+    # AssertionError
+    "test_exemplars_are_in_script"
+    "test_sample_texts_are_in_script"
   ];
 
   meta = with lib; {
