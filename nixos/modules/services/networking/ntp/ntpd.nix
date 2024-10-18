@@ -132,6 +132,7 @@ in
 
         preStart =
           ''
+            # shellcheck disable=SC2174
             mkdir -m 0755 -p ${stateDir}
             chown ntp ${stateDir}
           '';
