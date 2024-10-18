@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   cairocffi,
   dbus-next,
   glib,
@@ -47,6 +48,14 @@ buildPythonPackage rec {
 
   patches = [
     ./fix-restart.patch # https://github.com/NixOS/nixpkgs/issues/139568
+    (
+      # https://github.com/NixOS/nixpkgs/issues/349241
+      # https://github.com/qtile/qtile/issues/4987
+      fetchpatch {
+        url = "https://github.com/qtile/qtile/pull/4991.patch";
+        hash = "sha256-a9W3nNuPS4TUQHdYJPaEcXEh5Dlx/6K2qTk9R0z91VM=";
+      }
+    )
   ];
 
   postPatch = ''
