@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl
+{ lib, stdenv, fetchFromGitLab, fetchpatch
 # native deps.
 , runCommand, pkg-config, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -17,36 +17,39 @@ inherit (lib) optional optionals optionalString;
 lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
-  pname = "knot-resolver";
-  version = "5.7.4";
+  pname = "knot-resolver-core";
+  version = "6.0.8-" + src.rev;
 
-  src = fetchurl {
-    url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    hash = "sha256-a22m7PBoKAQa+tRN+iJ3gfCuNK0YOmZwCFCTVdGL2cg=";
+  src = fetchFromGitLab {
+    domain = "gitlab.nic.cz";
+    owner = "knot";
+    repo = "knot-resolver";
+    fetchSubmodules = true; # yes, unfortunately hard to work around
+    #rev = "7ef1a7ce0d4"; hash = "sha256-uWoXBgZV42DoBLTZ27gAuIXw7c6iJlAYsOsGhu0Gz+Y=";
+    rev = "b8ec0127"; hash = "sha256-16xFNMsSg+6cZLhtk9BlW5skwP7IDKrFEYZNpoxbJMY="; # !1613 @ 2024-09-24
   };
+  patches = [
+    (fetchpatch {
+      name = "local-data-dname.patch";
+      url = "https://gitlab.nic.cz/knot/knot-resolver/-/commit/bc783277aa0575325d298944cef7b57b596265a0.diff";
+      hash = "sha256-HuZqos0Qcy3onUD1BfizYkbWSTxj0dpQIlU4QOXDBTA=";
+    })
+  ];
 
-  outputs = [ "out" "dev" ];
+  #dontStrip = true; # FIXME: TMP
+
+  outputs = [ "out" "dev" "config_py" ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
     patch meson.build <<EOF
-    @@ -50,2 +50,2 @@
+    @@ -50,2 +50,3 @@
     -systemd_work_dir = prefix / get_option('localstatedir') / 'lib' / 'knot-resolver'
     -systemd_cache_dir = prefix / get_option('localstatedir') / 'cache' / 'knot-resolver'
     +systemd_work_dir  = '/var/lib/knot-resolver'
     +systemd_cache_dir = '/var/cache/knot-resolver'
+    +run_dir = '/run/knot-resolver'
     EOF
-
-    # ExecStart can't be overwritten in overrides.
-    # We need that to use wrapped executable and correct config file.
-    sed '/^ExecStart=/d' -i systemd/kresd@.service.in
-
-    # On x86_64-darwin loading by soname fails to find the libs, surprisingly.
-    # Even though they should already be loaded and they're in RPATH, too.
-    for f in daemon/lua/{kres,zonefile}.lua; do
-      substituteInPlace "$f" \
-        --replace "ffi.load(" "ffi.load('${lib.getLib knot-dns}/lib/' .. "
-    done
   ''
     # some tests have issues with network sandboxing, apparently
   + optionalString doInstallCheck ''
@@ -70,6 +73,7 @@ unwrapped = stdenv.mkDerivation rec {
     ;
 
   mesonFlags = [
+    #"--buildtype=debug" # FIXME: TMP
     "-Dkeyfile_default=${dns-root-data}/root.ds"
     "-Droot_hints=${dns-root-data}/root.hints"
     "-Dinstall_kresd_conf=disabled" # not really useful; examples are inside share/doc/
@@ -83,8 +87,8 @@ unwrapped = stdenv.mkDerivation rec {
   ;
 
   postInstall = ''
+    cp -r ./python "$config_py"
     rm "$out"/lib/libkres.a
-    rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
   '' + optionalString stdenv.hostPlatform.isLinux ''
     rm -r "$out"/lib/sysusers.d/ # ATM more likely to harm than help
   '';
@@ -124,6 +128,7 @@ wrapped-full = runCommand unwrapped.name
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
       --set LUA_CPATH "$LUA_CPATH"
+    ln -sr '${unwrapped}/bin/kres-cache-gc' "$out"/bin/
 
     ln -sr '${unwrapped}/share' "$out"/
     ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
