@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -30,7 +31,23 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
     hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
   };
-  patches = [ ];
+  patches = [
+    # Fix build errors from deprecated QByteArray::count()
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/1b358d27d4bf29567b5d58f3591146bf639b99e1.patch";
+      hash = "sha256-LeDgwZaQDgS8HNf9k2fC0RYQy4nGEq0DMNjY7muNads=";
+    })
+    # Fix build errors from deprecated QVariant::type()
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/ebdd38ce19ef6eb80f076acf93299bd7d24ae6db.patch";
+      hash = "sha256-ZWl0wHH5Foxlttj/GK5phr/C6qJv39U2GWIofZR+Rto=";
+    })
+    # Fix build errors from deprecated QEventPoint::pos and friends
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/pull/9961/commits/10b1c98517dac4eacffd6890c551b817aedd4a19.patch";
+      hash = "sha256-DHOtvVDEdQ+k2ggg4HGpcv1EmKzlijNRTi1yJ7a1bWU=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
