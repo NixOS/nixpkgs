@@ -679,19 +679,15 @@ unsupported-platforms:
   gi-webkit2webextension:                       [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-webkit2:                                   [ platforms.darwin ] # webkitgtk marked broken on darwin
   gi-wnck:                                      [ platforms.darwin ]
-  gl:                                           [ platforms.darwin ] # depends on mesa
-  GLHUI:                                        [ platforms.darwin ] # depends on mesa
   gnome-keyring:                                [ platforms.darwin ]
   grid-proto:                                   [ platforms.darwin ]
   gtk-sni-tray:                                 [ platforms.darwin ]
-  h-raylib:                                     [ platforms.darwin ] # depends on mesa
   haskell-snake:                                [ platforms.darwin ]
   hcwiid:                                       [ platforms.darwin ]
   HDRUtils:                                     [ platforms.darwin ]
   hinotify-bytestring:                          [ platforms.darwin ]
   honk:                                         [ platforms.darwin ]
   HSoM:                                         [ platforms.darwin ]
-  intricacy:                                    [ platforms.darwin ] # depends on mesa
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
@@ -712,10 +708,7 @@ unsupported-platforms:
   mpi-hs-cereal:                                [ aarch64-linux, platforms.darwin ]
   mpi-hs-store:                                 [ aarch64-linux, platforms.darwin ]
   mplayer-spot:                                 [ aarch64-linux, platforms.darwin ]
-  monomer:                                      [ platforms.darwin ] # depends on mesa
-  monomer-hagrid:                               [ platforms.darwin ] # depends on mesa
   mptcp-pm:                                     [ platforms.darwin ]
-  nanovg:                                       [ platforms.darwin ] # depends on mesa
   netlink:                                      [ platforms.darwin ]
   network-unexceptional:                        [ platforms.darwin ] # depends on posix-api
   notifications-tray-icon:                      [ platforms.darwin ] # depends on gi-dbusmenu
