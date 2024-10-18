@@ -35,7 +35,7 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
-  version = "2.4.1";
+  version = "2.5.0";
 in
 buildPythonPackage {
   inherit version;
@@ -45,7 +45,7 @@ buildPythonPackage {
 
   format = "wheel";
 
-  disabled = (pythonOlder "3.8") || (pythonAtLeast "3.13");
+  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.13");
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
