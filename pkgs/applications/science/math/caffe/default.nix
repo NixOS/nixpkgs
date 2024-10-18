@@ -102,6 +102,11 @@ stdenv.mkDerivation rec {
   });
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "# ---[ Flags" \
+                     "# ---[ Flags
+                     add_compile_definitions(GLOG_USE_GLOG_EXPORT)"
+
     substituteInPlace src/caffe/util/io.cpp --replace \
       'SetTotalBytesLimit(kProtoReadBytesLimit, 536870912)' \
       'SetTotalBytesLimit(kProtoReadBytesLimit)'
