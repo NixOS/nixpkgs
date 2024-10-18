@@ -7,13 +7,14 @@
   setuptools,
 
   # tests
+  pytest-cov-stub,
   pytestCheckHook,
   pexpect,
 }:
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "4.0.6";
+  version = "4.2.0";
   pyproject = true;
 
   # Don't use wheels on PyPI
@@ -21,32 +22,33 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-XowLJ9YAHhP9nInFVYtoLEOmlWBRWQX259vwm9SVVZU=";
+    hash = "sha256-xha3bGuDYt4gLcK3x62ym+zCAQVyZjlV1HyKh8kHe64=";
   };
 
   postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "--cov=readchar" "" \
-      --replace "attr: readchar.__version__" "${version}"
+    # Tags on GitHub still have a postfix (-dev0)
+    sed -i 's/\(version = "\)[^"]*\(".*\)/\1${version}\2/' pyproject.toml
     # run Linux tests on Darwin as well
     # see https://github.com/magmax/python-readchar/pull/99 for why this is not upstreamed
     substituteInPlace tests/linux/conftest.py \
       --replace 'sys.platform.startswith("linux")' 'sys.platform.startswith(("darwin", "linux"))'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "readchar" ];
 
   nativeCheckInputs = [
+    pytest-cov-stub
     pytestCheckHook
     pexpect
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/magmax/python-readchar";
     description = "Python library to read characters and key strokes";
+    homepage = "https://github.com/magmax/python-readchar";
+    changelog = "https://github.com/magmax/python-readchar/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = [ maintainers.mmahut ];
+    maintainers = with maintainers; [ mmahut ];
   };
 }

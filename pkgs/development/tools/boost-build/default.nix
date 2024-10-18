@@ -36,10 +36,10 @@ stdenv.mkDerivation {
   patches = useBoost.boostBuildPatches or []
     ++ lib.optional (useBoost ? version && lib.versionAtLeast useBoost.version "1.81") ./fix-clang-target.patch;
 
-  # Upstream defaults to gcc on darwin, but we use clang.
   postPatch = ''
-    substituteInPlace src/build-system.jam \
-    --replace "default-toolset = darwin" "default-toolset = clang-darwin"
+    # Upstream uses arm64, but nixpkgs uses aarch64.
+    substituteInPlace src/tools/clang.jam \
+      --replace-fail 'arch = arm64' 'arch = aarch64'
   '' + lib.optionalString (useBoost ? version && lib.versionAtLeast useBoost.version "1.82") ''
     patchShebangs --build src/engine/build.sh
   '';

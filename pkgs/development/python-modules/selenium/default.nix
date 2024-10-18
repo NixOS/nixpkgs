@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "selenium";
-  version = "4.24.0";
+  version = "4.25.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     repo = "selenium";
     # check if there is a newer tag with or without -python suffix
     rev = "refs/tags/selenium-${version}";
-    hash = "sha256-AsQr9kGv2dxkiFzptDA0D27OXZjYj7oDKz2oEQ2qW7s=";
+    hash = "sha256-ykZdL2Rn+bU8do3e9zf9pJtInBNRGLcXi5pD1vm7OJY=";
   };
 
   patches = [ ./dont-build-the-selenium-manager.patch ];

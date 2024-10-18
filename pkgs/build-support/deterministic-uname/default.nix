@@ -31,7 +31,7 @@ substituteAll {
     then "GNU/Linux"
     else if forPlatform.isDarwin
     then "Darwin" # darwin isn't in host-os.m4 so where does this come from?
-    else if stdenv.buildPlatform.isFreeBSD
+    else if forPlatform.isFreeBSD
     then "FreeBSD"
     else "unknown";
 

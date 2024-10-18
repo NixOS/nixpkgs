@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "syrupy";
-  version = "4.7.1";
+  version = "4.7.2";
   pyproject = true;
 
   disabled = lib.versionOlder python.version "3.8.1";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "syrupy-project";
     repo = "syrupy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-dTUugNqzaMuKV6ZwxRSf9df7tsnmZUBhgqwgGxBhirw=";
+    hash = "sha256-akYUsstepkDrRXqp1DY6wEeXMMlLNcCqitnWpjcAurg=";
   };
 
   build-system = [ poetry-core ];

@@ -9,7 +9,7 @@
   ninja,
   perl,
   python3,
-  pkgconf,
+  pkg-config,
   wrapGAppsHook3,
   at-spi2-core,
   dbus,
@@ -33,13 +33,10 @@
   libunwind,
   libxkbcommon,
   orc,
-  pcre,
-  pcre2,
   udev,
   util-linux,
   xorg,
   zstd,
-  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/entangle/entangle/-/commit/54795d275a93e94331a614c8712740fcedbdd4f0.patch";
       sha256 = "iEgqGjKa0xwSdctwvNdEV361l9nx+bz53xn3fuDgtzY=";
     })
+
+    # Fix implicit dependency
+    # https://github.com/NixOS/nixpkgs/issues/36468
+    # https://gitlab.com/entangle/entangle/-/merge_requests/61
+    ./0001-build-Add-missing-gio-unix-2.0-dependency.patch
   ];
 
   nativeBuildInputs = [
@@ -70,10 +72,9 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     perl # for pod2man and build scripts
     python3 # for build scripts
-    pkgconf
+    pkg-config
     wrapGAppsHook3
     gobject-introspection
-    cmake
   ];
 
   buildInputs =
@@ -100,8 +101,6 @@ stdenv.mkDerivation (finalAttrs: {
       libunwind
       libxkbcommon
       orc
-      pcre # required by libselinux before we USE_PCRE2
-      pcre2 # required by glib-2.0
       udev
       util-linux
       zstd

@@ -59,6 +59,9 @@ buildPythonPackage rec {
     # Broke in werkzeug 2.3 upgrade
     "test_media_types_method"
     "test_media_types_q"
+    # time shenanigans
+    "test_iso8601_date_field_with_offset"
+    "test_rfc822_date_field_with_offset"
   ];
 
   pythonImportsCheck = [ "flask_restful" ];

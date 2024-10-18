@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-common";
-  version = "1.8.0";
+  version = "1.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,12 +31,15 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dbt_common";
     inherit version;
-    hash = "sha256-ehZ+a3zznnWMY9NJx9LfRtkV1vHiIH0HEhsYWfMbmb4=";
+    hash = "sha256-z9n0bp3k+cLJXscCENG+U6xB4nkDjRinkoy7/T+bZ68=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "agate" ];
+  pythonRelaxDeps = [
+    "agate"
+    "protobuf"
+  ];
 
   dependencies = [
     agate

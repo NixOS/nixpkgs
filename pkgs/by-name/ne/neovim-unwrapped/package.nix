@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, libiconv
+{ lib, stdenv, fetchFromGitHub, removeReferencesTo, cmake, gettext, msgpack-c, darwin
 , libuv, lua, pkg-config
 , unibilium
 , libvterm-neovim
@@ -6,7 +6,6 @@
 , fetchurl
 , buildPackages
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
-, CoreServices
 , fixDarwinDylibNames
 , glibcLocales ? null, procps ? null
 
@@ -104,7 +103,7 @@ in {
       neovimLuaEnv
       tree-sitter
       unibilium
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv CoreServices ]
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ]
       ++ lib.optionals finalAttrs.finalPackage.doCheck [ glibcLocales procps ]
     ;
 

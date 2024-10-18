@@ -19,6 +19,7 @@
   libsepol,
   libxcb,
   makeBinaryWrapper,
+  moltenvk,
   nix-update-script,
   ocl-icd,
   opencl-headers,
@@ -119,7 +120,7 @@ stdenv'.mkDerivation (finalAttrs: {
         MediaRemote
         OpenCL
         SystemConfiguration
-        darwin.moltenvk
+        moltenvk
       ]
     );
 

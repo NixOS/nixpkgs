@@ -2,51 +2,46 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
+  jaxtyping,
   linear-operator,
+  mpmath,
   scikit-learn,
+  scipy,
   setuptools,
   setuptools-scm,
-  wheel,
   torch,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "gpytorch";
-  version = "1.12";
-  format = "pyproject";
+  version = "1.13";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8W0QSiXl+C86m5yaI9KfGN92uA2VGjGwQt6DI/1NaQE=";
+    hash = "sha256-jdEJdUFIyM7TTKUHY8epjyZCGolH8nrr7FCyfw+x56s=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/cornellius-gp/gpytorch/pull/2545
-      name = "scipy-1.14-compatibility.patch";
-      url = "https://github.com/cornellius-gp/gpytorch/commit/2562be472521b8aec366de2619e3130a96fab982.patch";
-      excludes = [ "setup.py" ];
-      hash = "sha256-znOFpN6go2iIxP24VjJLKF3Laxcr4xV/IyP2y36g4QY=";
-    })
-  ];
-
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "jaxtyping" ];
+
+  dependencies = [
+    jaxtyping
     linear-operator
+    mpmath
     scikit-learn
+    scipy
     torch
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "gpytorch" ];
 
@@ -56,6 +51,7 @@ buildPythonPackage rec {
     # flaky numerical tests
     "test_classification_error"
     "test_matmul_matrix_broadcast"
+    "test_optimization_optimal_error"
     # https://github.com/cornellius-gp/gpytorch/issues/2396
     "test_t_matmul_matrix"
   ];

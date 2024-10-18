@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "7.3.1";
+  version = "7.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jaraco";
     repo = "inflect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-J0XgSKPzZIt/7WnMGARXpyYzagBGiqRiuNmNnGKDBrs=";
+    hash = "sha256-3I5AdMuxwKtztnrF0lbvBIUxfqn0WlY2Pv6GYitFrA8=";
   };
 
   build-system = [

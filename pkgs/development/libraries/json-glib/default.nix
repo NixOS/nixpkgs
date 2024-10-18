@@ -1,8 +1,11 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
+, docutils
 , glib
 , meson
+, mesonEmulatorHook
 , ninja
 , nixosTests
 , pkg-config
@@ -18,19 +21,26 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.8.0";
+  version = "1.10.0";
 
   outputs = [ "out" "dev" "installedTests" ]
     ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "l+9euSyoEQOa1Qpl8GYz8armR5J4kwe+cXB5XYsxlFQ=";
+    sha256 = "G8qNZtlhBuzBR98xM7laW7eE8fpvFdBt18Go+0oQr3s=";
   };
 
   patches = [
     # Add option for changing installation path of installed tests.
     ./meson-add-installed-tests-prefix-option.patch
+
+    # Restore single quote string extension
+    # https://gitlab.gnome.org/GNOME/json-glib/-/issues/76
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/json-glib/-/commit/2a26bd3dedc3b27471e6df210d76333d3d41159c.patch";
+      hash = "sha256-U/jWB4wneN4MwZO3vAfI9Z7UT/SLMNEx/X8NMsCO8I4=";
+    })
   ];
 
   strictDeps = true;
@@ -40,6 +50,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
     meson
     ninja
     pkg-config
@@ -51,6 +62,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     gi-docgen
+  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ];
 
   propagatedBuildInputs = [
@@ -60,17 +73,8 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
     (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "gtk_doc" withIntrospection)
+    (lib.mesonEnable "documentation" withIntrospection)
   ];
-
-  # Run-time dependency gi-docgen found: NO (tried pkgconfig and cmake)
-  # it should be a build-time dep for build
-  # TODO: send upstream
-  postPatch = ''
-    substituteInPlace doc/meson.build \
-      --replace "'gi-docgen', ver" "'gi-docgen', native:true, ver" \
-      --replace "'gi-docgen', req" "'gi-docgen', native:true, req"
-  '';
 
   doCheck = true;
 

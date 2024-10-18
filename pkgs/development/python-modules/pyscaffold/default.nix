@@ -32,13 +32,12 @@
 
 buildPythonPackage rec {
   pname = "pyscaffold";
-  version = "4.5";
+  version = "4.6";
   pyproject = true;
 
   src = fetchPypi {
-    pname = "PyScaffold";
-    inherit version;
-    hash = "sha256-2En5ouFb3PFl4Z+Wg18LF+Gi1Z1MVhxEW4J6CB3m0mI=";
+    inherit pname version;
+    hash = "sha256-QIW43pIAufMZ32+Op5lyiPFZqOSyhLBi2bKk1qnBI0w=";
   };
 
   nativeBuildInputs = [

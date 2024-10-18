@@ -16,6 +16,7 @@
   # tests
   dirty-equals,
   flask,
+  inline-snapshot,
   passlib,
   pyjwt,
   pytest-asyncio,
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.112.0";
+  version = "0.115.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-M09yte0BGC5w3AZSwDUr9qKUrotqVklO8mwyms9B95Y=";
+    hash = "sha256-TewFTbYdWIHcgRH+YNxNEUZVlaUn2aTZ0YFmDPrPZl4=";
   };
 
   build-system = [ pdm-backend ];
@@ -86,6 +87,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     flask
+    inline-snapshot
     passlib
     pyjwt
     pytestCheckHook

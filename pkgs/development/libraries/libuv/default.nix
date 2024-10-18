@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , autoconf
 , automake
+, darwin
 , libtool
 , pkg-config
 , pkgsStatic
@@ -85,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
   nativeBuildInputs = [ automake autoconf libtool pkg-config ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.libutil ];
 
   preConfigure = ''
     LIBTOOLIZE=libtoolize ./autogen.sh

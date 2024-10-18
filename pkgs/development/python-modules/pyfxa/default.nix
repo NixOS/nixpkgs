@@ -18,15 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pyfxa";
-  version = "0.7.8";
+  version = "0.7.9";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "PyFxA";
-    inherit version;
-    hash = "sha256-DMFZl1hbYNaScOTWkAbK2nKti6wD5SS5A30q7TW5vO4=";
+    inherit pname version;
+    hash = "sha256-dTsWFWaqX6YypNJz9WSlcxJlYOstmTu2ZgOG3RPSViw=";
   };
 
   build-system = [ setuptools ];

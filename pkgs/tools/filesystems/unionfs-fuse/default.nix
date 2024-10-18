@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
-      --replace '/usr/local/include/osxfuse/fuse' '${fuse}/include/fuse'
+      --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuse}/include/fuse'
   '';
 
   nativeBuildInputs = [ cmake ];

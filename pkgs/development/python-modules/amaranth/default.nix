@@ -31,6 +31,11 @@ buildPythonPackage rec {
     hash = "sha256-pf9X1B60FgqTbSw7D80ERHp4GCvCe5lqrlS96xPXLNo=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pdm-backend~=" "pdm-backend>="
+  '';
+
   nativeBuildInputs = [
     git
     pdm-backend

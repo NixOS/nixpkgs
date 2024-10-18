@@ -87,6 +87,9 @@ python.pkgs.buildPythonApplication rec {
     # Discover pretix.plugin entrypoints during build and add them into
     # INSTALLED_APPS, so that their static files are collected.
     ./plugin-build.patch
+
+    # TypeError: FakeServer.get_server() missing 1 required positional argument: 'server_type'
+    ./fakeredis-0.25-compat.patch
   ];
 
   pythonRelaxDeps = [
@@ -98,6 +101,7 @@ python.pkgs.buildPythonApplication rec {
     "protobuf"
     "pyjwt"
     "python-bidi"
+    "redis"
     "requests"
     "sentry-sdk"
   ];

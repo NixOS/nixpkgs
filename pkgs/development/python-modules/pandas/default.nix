@@ -3,14 +3,12 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
   cython,
   meson-python,
   meson,
-  oldest-supported-numpy,
   pkg-config,
   versioneer,
   wheel,
@@ -66,7 +64,7 @@
 let
   pandas = buildPythonPackage rec {
     pname = "pandas";
-    version = "2.2.2";
+    version = "2.2.3";
     pyproject = true;
 
     disabled = pythonOlder "3.9";
@@ -75,29 +73,25 @@ let
       owner = "pandas-dev";
       repo = "pandas";
       rev = "refs/tags/v${version}";
-      hash = "sha256-+zQKrsJmP3FJeOiYwNH1u96+/ECDHQF39evzur3cKjc=";
+      hash = "sha256-6YUROcqOV2P1AbJF9IMBIqTt7/PSTeXDwGgE4uI9GME=";
     };
 
     postPatch = ''
       substituteInPlace pyproject.toml \
-        --replace-fail "Cython==3.0.5" "Cython>=3.0.5" \
         --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
         --replace-fail "meson==1.2.1" "meson>=1.2.1" \
-        --replace-fail "numpy>=2.0.0rc1" "numpy"
+        --replace-fail "numpy>=2.0" "numpy"
     '';
 
-    nativeBuildInputs =
-      [
-        cython
-        meson-python
-        meson
-        numpy
-        pkg-config
-        versioneer
-        wheel
-      ]
-      ++ versioneer.optional-dependencies.toml
-      ++ lib.optionals (pythonOlder "3.12") [ oldest-supported-numpy ];
+    nativeBuildInputs = [
+      cython
+      meson-python
+      meson
+      numpy
+      pkg-config
+      versioneer
+      wheel
+    ] ++ versioneer.optional-dependencies.toml;
 
     enableParallelBuilding = true;
 

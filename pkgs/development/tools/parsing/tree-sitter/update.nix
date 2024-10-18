@@ -83,6 +83,12 @@ let
     "tree-sitter-fluent"
     # to unblock my update
     "csharp-tree-sitter"
+    # (experimental) java bindings to the Tree-sitter parsing library
+    "java-tree-sitter"
+    # go bindings to the Tree-sitter parsing library
+    "go-tree-sitter"
+    # kotlin bindings to the Tree-sitter parsing library
+    "kotlin-tree-sitter"
 
     # Non-grammar repositories
     ".github"
