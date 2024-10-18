@@ -30,25 +30,23 @@ python3.pkgs.buildPythonApplication rec {
     sed -i -E 's/([A-z0-9]*)~=[^;]*(.*)/\1\2/' setup.cfg
   '';
 
-  dependencies =
-    with python3.pkgs;
-    [
-      bitmath
-      certifi
-      cheroot
-      cryptography
-      filetype
-      flask
-      flask-babel
-      flask-caching
-      flask-compress
-      flask-session
-      flask-themes2
-      pycurl
-      semver
-      setuptools
-    ]
-    ++ (if pythonOlder "3.12" then [ js2py ] else [ dukpy ]);
+  dependencies = with python3.pkgs; [
+    bitmath
+    certifi
+    cheroot
+    cryptography
+    dukpy
+    filetype
+    flask
+    flask-babel
+    flask-caching
+    flask-compress
+    flask-session
+    flask-themes2
+    pycurl
+    semver
+    setuptools
+  ];
 
   optional-dependencies = {
     plugins = with python3.pkgs; [
