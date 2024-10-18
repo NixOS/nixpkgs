@@ -5743,6 +5743,11 @@
     name = "Dr Perceptron";
     keys = [ { fingerprint = "7E38 89D9 B1A8 B381 C8DE  A15F 95EB 6DFF 26D1 CEB0"; } ];
   };
+  DrRuhe = {
+    name = "Jakob Gerhardt";
+    github = "drruhe";
+    githubId = 29500714;
+  };
   DrSensor = {
     name = "Fahmi Akbar Wildana";
     email = "sensorfied@gmail.com";
