@@ -9,23 +9,24 @@
   stdenv,
   darwin,
   nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "typst";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
-    rev = "v${version}";
-    hash = "sha256-FagjVU8BJZStE/geexZERuV2P28iF/pPn2mTi1Gu9iU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-OfTMJ7ylVOJjL295W3Flj2upTiUQXmfkyDFSE1v8+a4=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "typst-dev-assets-0.11.1" = "sha256-SMRtitDHFpdMEoOuPBnC3RBTyZ96hb4KmMSCXpAyKfU=";
+      "typst-dev-assets-0.12.0" = "sha256-YLxLuhpAUzktjyprZAhZ4GjcXEDUDdLtSzc5onzLuto=";
     };
   };
 
@@ -54,9 +55,6 @@ rustPlatform.buildRustPackage rec {
     # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
     substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
     substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
-
-    # Fix build with Rust 1.80; remove on next release
-    ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
   postInstall = ''
@@ -67,6 +65,12 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoTestFlags = [ "--workspace" ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
