@@ -14,10 +14,12 @@ buildHomeAssistantComponent rec {
     owner = "hultenvp";
     repo = "solis-sensor";
     rev = "v${version}";
-    sha256 = "sha256-bKe8c+gQj9jvZKlqcbLiD6NhPDJVy/2mxRM8jjlOPnI=";
+    hash = "sha256-bKe8c+gQj9jvZKlqcbLiD6NhPDJVy/2mxRM8jjlOPnI=";
   };
 
   dependencies = [ aiofiles ];
+
+  dontCheckManifest = true; # aiofiles version constraint mismatch
 
   meta = with lib; {
     description = "Home Assistant integration for the SolisCloud PV Monitoring portal via SolisCloud API";

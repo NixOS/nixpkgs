@@ -1,13 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
+{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestExtension }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "plpgsql-check";
   version = "2.7.5";
 
   src = fetchFromGitHub {
     owner = "okbob";
     repo = "plpgsql_check";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-CD/G/wX6o+mC6gowlpFe1DdJWyh3cB9wxSsW2GXrENE=";
   };
 
@@ -19,28 +19,17 @@ stdenv.mkDerivation rec {
     install -D -t $out/share/postgresql/extension *.control
   '';
 
-  passthru.tests.extension = stdenv.mkDerivation {
-    name = "plpgsql-check-test";
-    dontUnpack = true;
-    doCheck = true;
-    buildInputs = [ postgresqlTestHook ];
-    nativeCheckInputs = [ (postgresql.withPackages (ps: [ ps.plpgsql_check ])) ];
-    postgresqlTestUserOptions = "LOGIN SUPERUSER";
-    failureHook = "postgresqlStop";
-    checkPhase = ''
-      runHook preCheck
-      psql -a -v ON_ERROR_STOP=1 -c "CREATE EXTENSION plpgsql_check;"
-      runHook postCheck
-    '';
-    installPhase = "touch $out";
+  passthru.tests.extension = postgresqlTestExtension {
+    inherit (finalAttrs) finalPackage;
+    sql = "CREATE EXTENSION plpgsql_check;";
   };
 
   meta = with lib; {
     description = "Linter tool for language PL/pgSQL";
     homepage = "https://github.com/okbob/plpgsql_check";
-    changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${version}";
+    changelog = "https://github.com/okbob/plpgsql_check/releases/tag/v${finalAttrs.version}";
     platforms = postgresql.meta.platforms;
     license = licenses.mit;
     maintainers = [ ];
   };
-}
+})

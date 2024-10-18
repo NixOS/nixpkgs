@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "boltztrap2";
-  version = "24.1.1";
+  version = "24.9.4";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "BoltzTraP2";
     inherit version;
-    hash = "sha256-kgv4lPBxcBmRKihaTwPRz8bHTWAWUOGZADtJUb3y+C4=";
+    hash = "sha256-BfGR7sY0E9r+RXA1fC9uy1GXC+EFV1RKOvMyvGcf+aE=";
   };
 
   postPatch = ''

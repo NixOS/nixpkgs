@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.16.2";
+  version = "1.16.4";
   format = "pyproject";
 
   src = fetchPypi {
     pname = "pyqt_builder";
     inherit version;
-    hash = "sha256-v3I823zSPSUS4qzae8a4HwD7BczF6aiEa9NNR1FM3bk=";
+    hash = "sha256-RRXkGuN5vi5U+IqJ7PR81uTKxD6GLEq/3hg4nCZmr98=";
   };
 
   nativeBuildInputs = [

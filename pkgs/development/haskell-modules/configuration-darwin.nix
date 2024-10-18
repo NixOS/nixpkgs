@@ -300,6 +300,13 @@ self: super: ({
     __darwinAllowLocalNetworking = true;
   });
 
+  # network requires `IP_RECVTOS`, which was added in 10.15.
+  network =
+    if lib.versionOlder (lib.getVersion pkgs.apple-sdk) "10.15" then
+      addBuildDepend pkgs.apple-sdk_10_15 super.network
+    else
+      super.network;
+
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing

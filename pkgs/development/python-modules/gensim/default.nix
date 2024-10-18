@@ -1,9 +1,10 @@
 {
   lib,
   buildPythonPackage,
-  cython,
+  cython_0,
+  oldest-supported-numpy,
+  setuptools,
   fetchPypi,
-  fetchpatch,
   mock,
   numpy,
   scipy,
@@ -15,29 +16,23 @@
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "4.3.2";
-  format = "setuptools";
+  version = "4.3.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-maxq9v/UBoLnAVXtn5Lsv0OE1Z+1CvEg00PqXuGzCKs=";
+    hash = "sha256-hIUgdqaj2I19rFviReJMIcO4GbVl4UwbYfo+Xudtz1c=";
   };
 
-  patches = [
-    # https://github.com/piskvorky/gensim/pull/3524
-    # Import deprecated scipy.linalg.triu from numpy.triu. remove on next update
-    (fetchpatch {
-      name = "scipi-linalg-triu-fix.patch";
-      url = "https://github.com/piskvorky/gensim/commit/ad68ee3f105fc37cf8db333bfb837fe889ff74ac.patch";
-      hash = "sha256-Ij6HvVD8M2amzcjihu5bo8Lk0iCPl3iIq0lcOnI6G2s=";
-    })
+  build-system = [
+    cython_0
+    oldest-supported-numpy
+    setuptools
   ];
 
-  nativeBuildInputs = [ cython ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     smart-open
     numpy
     scipy

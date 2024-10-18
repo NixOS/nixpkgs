@@ -4,7 +4,7 @@
   coreutils,
   docbook_xml_dtd_45,
   docbook_xsl,
-  docbook-xsl-ns,
+  docbook-xsl-nons,
   fetchgit,
   findutils,
   flex,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     for f in format/docbook/* xmlto.in; do
       substituteInPlace $f \
-        --replace-fail "http://docbook.sourceforge.net/release/xsl/current" "${docbook-xsl-ns}/xml/xsl/docbook"
+        --replace-fail "http://docbook.sourceforge.net/release/xsl/current" "${docbook-xsl-nons}/xml/xsl/docbook"
     done
   '';
 

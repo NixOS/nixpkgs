@@ -28,6 +28,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # https://github.com/hamdanal/rich-argparse/issues/133
+    "test_help_preview_generation"
+  ];
+
   pythonImportsCheck = [ "rich_argparse" ];
 
   meta = with lib; {

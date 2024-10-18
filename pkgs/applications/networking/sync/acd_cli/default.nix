@@ -18,7 +18,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ appdirs colorama python-dateutil fusepy requests
                             requests-toolbelt setuptools sqlalchemy ];
 
-  makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${fuse}/lib/libfuse.so" ];
+  makeWrapperArgs = [ "--prefix LIBFUSE_PATH : ${lib.getLib fuse}/lib/libfuse.so" ];
 
   postFixup = ''
     function lnOverBin() {

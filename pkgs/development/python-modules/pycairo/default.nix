@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pycairo";
-  version = "1.26.0";
+  version = "1.27.0";
 
   disabled = pythonOlder "3.6";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "pygobject";
     repo = "pycairo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-AUnMPsGFkCgVKUdQfym35ZqrA48wq31BNsvc2puoCl8=";
+    hash = "sha256-P9AC8+WlokAxoy6KTJqAz7kOYK/FQVjIKWuj8jQw2OA=";
   };
 
   nativeBuildInputs = [

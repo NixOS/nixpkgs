@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "zarr";
-  version = "2.18.2";
+  version = "2.18.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-m7OTuKCjj7Eh27kTsEfXXbKN6YkPbWRKIXpzz0rnT0c=";
+    hash = "sha256-JYDYy23YRiF3GhDTHE13fcqKJ3BqGomyn0LS034t9c4=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

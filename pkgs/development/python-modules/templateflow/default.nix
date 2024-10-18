@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "24.1.0";
+  version = "24.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "templateflow";
     repo = "python-client";
     rev = "refs/tags/${version}";
-    hash = "sha256-UxYJnKOqIIf10UW5xJ7MrFHtZY5WNVi5oZgdozj65Z8=";
+    hash = "sha256-COS767n2aC65m6AJihZb4NhJ4ZK9YkTAZR7Hcnc/LMs=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

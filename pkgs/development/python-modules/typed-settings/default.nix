@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.3.0";
+  version = "24.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-x1ojSSZNrKkBHKE9dWw7NzX/G6ggRYRIQ5MMahwL1Ps=";
+    hash = "sha256-HCVwXiKrvAvPQXU5rD5wxflPBBcB+oqcWriJizdOMS8=";
   };
 
   build-system = [ hatchling ];

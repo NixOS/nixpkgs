@@ -9,7 +9,7 @@
 }:
 let
   pname = "pyre-extensions";
-  version = "0.0.30";
+  version = "0.0.31";
 in
 buildPythonPackage {
   inherit pname version;
@@ -19,7 +19,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-unkjxIbgia+zehBiOo9K6C1zz/QkJtcRxIrwcOW8MbI=";
+    hash = "sha256-lFgG3TMCeFbPbkHJxK2s/6srVpk/h2L/TqeCb5XbBIE=";
   };
 
   propagatedBuildInputs = [

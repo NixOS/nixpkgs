@@ -20,6 +20,6 @@ in
   jdk-21 = common { sourcePerArch = sources.jdk.openjdk21; };
   jre-21 = common { sourcePerArch = sources.jre.openjdk21; };
 
-  jdk-22 = common { sourcePerArch = sources.jdk.openjdk22; };
-  jre-22 = common { sourcePerArch = sources.jre.openjdk22; };
+  jdk-23 = common { sourcePerArch = sources.jdk.openjdk23; };
+  jre-23 = common { sourcePerArch = sources.jre.openjdk23; };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, glib, expat
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config, glib, expat
 , installShellFiles }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-TfgsZidwXewwqGkb31Qv0SrX8wQdPaK7JQA3nB5h2bs=";
   };
+
+  patches = [
+    # Fix building with glib-2.82
+    # https://github.com/bpeel/prevodb/issues/8
+    (fetchpatch {
+      url = "https://github.com/bpeel/prevodb/commit/38474b47d0ab8ef5451997b87493f0677b8b8358.patch";
+      hash = "sha256-mGHwnN4TT3jiandaN+6uNttKMg0OjV9yKLSuVn3F0CA=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ];
   buildInputs = [ glib expat ];

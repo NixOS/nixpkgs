@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jupysql-plugin";
-  version = "0.4.4";
+  version = "0.4.5";
 
   pyproject = true;
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupysql_plugin";
     inherit version;
-    hash = "sha256-kuaKknbc00nLGwCUsULgUFT52yoptUH2mnUyGYbYYKk=";
+    hash = "sha256-cIXheImO4BL00zn101ZDIzKl2qkIDsTNswZOCs54lNY=";
   };
 
   build-system = [

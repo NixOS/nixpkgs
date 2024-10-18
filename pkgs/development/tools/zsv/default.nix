@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jq ];
 
   configureFlags = [
-    "--jq-prefix=${jq.lib}"
+    "--jq-prefix=${lib.getLib jq}"
   ];
 
   meta = with lib; {

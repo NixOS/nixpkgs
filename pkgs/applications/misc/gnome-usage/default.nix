@@ -15,7 +15,7 @@
 , libgee
 , libgtop
 , gnome
-, tracker
+, tinysparql
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     libadwaita
     libgee
     libgtop
-    tracker
+    tinysparql
   ];
 
   postPatch = ''

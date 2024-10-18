@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "py-desmume";
-  version = "0.0.6";
+  version = "0.0.7";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "SkyTemple";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-AgUdILCqpmuVI3uMSdGl+lIfUVXnIo/egm/48FMRF3M=";
+    hash = "sha256-aH7f/BI89VLUGqwA8Y7ThSpmKxWffYRETT/+EjPVTg8=";
     fetchSubmodules = true;
   };
 

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "ppft";
-  version = "1.7.6.8";
+  version = "1.7.6.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-dqQpp9e3TE10P226g1HljWK2Qy7WXfn+IEeQFg2rmW0=";
+    hash = "sha256-cxYcZ0dOqdgdBLza0WbTmc/z8ITV0twh691GwHW7wmU=";
   };
 
   propagatedBuildInputs = [ six ];

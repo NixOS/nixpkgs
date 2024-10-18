@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "stumpy";
-  version = "1.12.0";
+  version = "1.13.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "TDAmeritrade";
     repo = "stumpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rVl3tIx8iWx2mnaix3V5YnfWWdPBTP8+K2JJKTfctDA=";
+    hash = "sha256-S+Rb6pHphXfbqz4VMnN1p7ZrlWB/g7XCdy/T5/Q8VD8=";
   };
 
   propagatedBuildInputs = [

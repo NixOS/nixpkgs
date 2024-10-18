@@ -13,12 +13,12 @@ let
     pname = "awscli";
     # N.B: if you change this, change botocore and boto3 to a matching version too
     # check e.g. https://github.com/aws/aws-cli/blob/1.33.21/setup.py
-    version = "1.34.29";
+    version = "1.34.30";
     pyproject = true;
 
     src = fetchPypi {
       inherit pname version;
-      hash = "sha256-2w9z6f8ThKIISEiExePHObUZzBrdltP3AfZqKh8d1Mo=";
+      hash = "sha256-7RdAqXdCnS7dzkGQHJHclR2KuBbSbd+epGMQDbDlYxY=";
     };
 
     pythonRelaxDeps = [
@@ -32,7 +32,7 @@ let
       python3.pkgs.setuptools
     ];
 
-    propagatedBuildInputs = with python3.pkgs; [
+    dependencies = with python3.pkgs; [
       botocore
       s3transfer
       colorama
@@ -76,13 +76,13 @@ let
       };
     };
 
-    meta = with lib; {
+    meta = {
       homepage = "https://aws.amazon.com/cli/";
       changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
       description = "Unified tool to manage your AWS services";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       mainProgram = "aws";
-      maintainers = with maintainers; [ anthonyroussel ];
+      maintainers = with lib.maintainers; [ anthonyroussel ];
     };
   };
 in

@@ -47,10 +47,11 @@ buildPythonPackage rec {
     "agate"
     "click"
     "dbt-semantic-interfaces"
+    "logbook"
     "mashumaro"
     "networkx"
-    "logbook"
     "pathspec"
+    "protobuf"
     "urllib3"
   ];
 

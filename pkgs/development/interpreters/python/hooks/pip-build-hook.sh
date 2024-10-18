@@ -10,13 +10,13 @@ pipBuildPhase() {
     mkdir -p dist
     echo "Creating a wheel..."
     @pythonInterpreter@ -m pip wheel \
-       --verbose \
-       --no-index \
-       --no-deps \
-       --no-clean \
-       --no-build-isolation \
-       --wheel-dir dist \
-       $pipBuildFlags .
+        --verbose \
+        --no-index \
+        --no-deps \
+        --no-clean \
+        --no-build-isolation \
+        --wheel-dir dist \
+        $pipBuildFlags .
     echo "Finished creating a wheel..."
 
     runHook postBuild
@@ -29,12 +29,12 @@ pipShellHook() {
 
     # Long-term setup.py should be dropped.
     if [ -e pyproject.toml ]; then
-      tmp_path=$(mktemp -d)
-      export PATH="$tmp_path/bin:$PATH"
-      export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
-      mkdir -p "$tmp_path/@pythonSitePackages@"
-      @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" \
-         --no-build-isolation >&2
+        tmp_path=$(mktemp -d)
+        export PATH="$tmp_path/bin:$PATH"
+        export PYTHONPATH="$tmp_path/@pythonSitePackages@:$PYTHONPATH"
+        mkdir -p "$tmp_path/@pythonSitePackages@"
+        @pythonInterpreter@ -m pip install -e . --prefix "$tmp_path" \
+            --no-build-isolation >&2
     fi
 
     runHook postShellHook

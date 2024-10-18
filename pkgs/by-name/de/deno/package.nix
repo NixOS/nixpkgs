@@ -7,8 +7,8 @@
   cmake,
   protobuf,
   installShellFiles,
-  libiconv,
-  darwin,
+  apple-sdk_11,
+  darwinMinVersionHook,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -45,20 +45,12 @@ rustPlatform.buildRustPackage rec {
     protobuf
     installShellFiles
   ];
-  buildInputs = lib.optionals stdenv.isDarwin (
-    [
-      libiconv
-      darwin.libobjc
-    ]
-    ++ (with darwin.apple_sdk_11_0.frameworks; [
-      Security
-      CoreServices
-      Metal
-      MetalPerformanceShaders
-      Foundation
-      QuartzCore
-    ])
-  );
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+    # V8 supports 10.15+; binary references `aligned_alloc` directly
+    (darwinMinVersionHook "10.15")
+  ];
 
   buildAndTestSubdir = "cli";
 
@@ -116,8 +108,5 @@ rustPlatform.buildRustPackage rec {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    # NOTE: `aligned_alloc` error on darwin SDK < 10.15. Can't do usual overrideSDK with rust toolchain in current implementation.
-    # Should be fixed with darwin SDK refactor and can be revisited.
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

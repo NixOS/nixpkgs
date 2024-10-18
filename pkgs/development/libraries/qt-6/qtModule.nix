@@ -1,5 +1,6 @@
 { lib
 , stdenv
+, apple-sdk_qt
 , cmake
 , ninja
 , perl
@@ -19,7 +20,9 @@ stdenv.mkDerivation (args // {
   inherit pname version src;
   patches = args.patches or patches.${pname} or [ ];
 
-  buildInputs = args.buildInputs or [ ];
+  buildInputs =
+    args.buildInputs or [ ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_qt ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ moveBuildTree ];
   propagatedBuildInputs =

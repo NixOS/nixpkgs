@@ -3,46 +3,22 @@
     "Applications_Menu@rmy.pobox.com",
     "apps-menu@gnome-shell-extensions.gcampax.github.com"
   ],
-  "workspace-indicator": [
-    "horizontal-workspace-indicator@tty2.io",
-    "workspace-indicator@gnome-shell-extensions.gcampax.github.com"
-  ],
   "persian-calendar": [
     "persian-calendar@iamrezamousavi.gmail.com",
     "PersianCalendar@oxygenws.com"
-  ],
-  "openweather": [
-    "openweather-extension@jenslody.de",
-    "openweather-extension@penguin-teal.github.io"
-  ],
-  "clipboard-indicator": [
-    "clipboard-indicator@tudmotu.com",
-    "clipboard-indicator@Dieg0Js.github.io"
   ],
   "system-monitor": [
     "system-monitor@gnome-shell-extensions.gcampax.github.com",
     "System_Monitor@bghome.gmail.com"
   ],
-  "virtualbox-applet": [
-    "vbox-applet@gs.eros2.info",
-    "vbox-applet@buba98"
-  ],
-  "panel-date-format": [
-    "panel-date-format@atareao.es",
-    "panel-date-format@keiii.github.com"
-  ],
-  "battery-time": [
-    "batterytime@typeof.pw",
-    "batime@martin.zurowietz.de"
-  ],
-  "kernel-indicator": [
-    "kernel-indicator@elboulangero.gitlab.com",
-    "kernel-indicator@pvizc.gitlab.com"
-  ],
   "fuzzy-clock": [
     "fuzzy-clock@keepawayfromfire.co.uk",
     "FuzzyClock@johngoetz",
     "FuzzyClock@fire-man-x"
+  ],
+  "battery-time": [
+    "batterytime@typeof.pw",
+    "batime@martin.zurowietz.de"
   ],
   "power-profile-indicator": [
     "power-profile-indicator@laux.wtf",

@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
 
   # build-system
   cmake,
@@ -29,23 +28,15 @@
 
 buildPythonPackage rec {
   pname = "pillow-heif";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
     rev = "refs/tags/v${version}";
-    hash = "sha256-fKh4UbTVj74YxH2vvL24DNmMxg10GSYAmduwuRneE+0=";
+    hash = "sha256-+HQvDf5aovUtZ++BoD22B012N32A+7++O/jbpkIVQws=";
   };
-
-  patches = [
-    (fetchpatch2 {
-      # fix libheif 1.18 support in tests
-      url = "https://github.com/bigcat88/pillow_heif/commit/a59434e9ca1138e47e322ddef2adc79e684384f1.patch";
-      hash = "sha256-yVT/pnO5KWMnsO95EPCZgyhx6FIJOhsna7t0zpTjWpE=";
-    })
-  ];
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
@@ -55,8 +46,9 @@ buildPythonPackage rec {
     cmake
     nasm
     pkg-config
-    setuptools
   ];
+
+  build-system = [ setuptools ];
 
   dontUseCmakeConfigure = true;
 
@@ -74,7 +66,7 @@ buildPythonPackage rec {
     RELEASE_FULL_FLAG = 1;
   };
 
-  propagatedBuildInputs = [ pillow ];
+  dependencies = [ pillow ];
 
   pythonImportsCheck = [ "pillow_heif" ];
 

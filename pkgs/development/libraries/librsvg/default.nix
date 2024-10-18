@@ -113,11 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
-  # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
-  # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
-    NIX_LDFLAGS = "-lobjc";
-  };
+  # librsvg only links Foundation, but it also requiers libobjc.
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_LDFLAGS = "-lobjc"; };
 
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"

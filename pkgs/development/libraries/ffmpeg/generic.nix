@@ -37,6 +37,7 @@
 , withAmf ? lib.meta.availableOn stdenv.hostPlatform amf # AMD Media Framework video encoding
 , withAom ? withHeadlessDeps # AV1 reference encoder
 , withAppKit ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AppKit framework
+, withAribb24 ? withFullDeps # ARIB text and caption decoding
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAudioToolbox ? withHeadlessDeps && stdenv.hostPlatform.isDarwin # Apple AudioToolbox
@@ -46,6 +47,7 @@
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
+, withCdio ? withFullDeps && withGPL # Audio CD grabbing
 , withCelt ? withHeadlessDeps # CELT decoder
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
@@ -143,6 +145,7 @@
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
+, withZvbi ? withFullDeps # Teletext support
 
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -225,6 +228,7 @@
 , alsa-lib
 , amf
 , amf-headers
+, aribb24
 , avisynthplus
 , bzip2
 , celt
@@ -252,6 +256,8 @@
 , libbluray
 , libbs2b
 , libcaca
+, libcdio
+, libcdio-paranoia
 , libdc1394
 , libdrm
 , libdvdnav
@@ -325,6 +331,7 @@
 , zeromq4
 , zimg
 , zlib
+, zvbi
 /*
  *  Darwin frameworks
  */
@@ -457,16 +464,9 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
       })
     ]
-    ++ optionals (lib.versionAtLeast version "7.0" && lib.versionOlder version "7.0.1") [
-      (fetchpatch2 {
-        # Will likely be obsolete in >7.0
-        name = "fate_avoid_dependency_on_samples";
-        url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/7b7b7819bd21cc92ac07f6696b0e7f26fa8f9834";
-        hash = "sha256-TKI289XqtG86Sj9s7mVYvmkjAuRXeK+2cYYEDkg6u6I=";
-      })
-    ]
-    ++ optionals (lib.versionAtLeast version "7.0") [
+    ++ optionals (lib.versionAtLeast version "7.1") [
       ./0001-avfoundation.m-macOS-SDK-10.12-compatibility.patch
+      ./fix-fate-ffmpeg-spec-disposition-7.1.patch
 
       # Expose a private API for Chromium / Qt WebEngine.
       (fetchpatch2 {
@@ -561,6 +561,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withAmf "amf")
     (enableFeature withAom "libaom")
     (enableFeature withAppKit "appkit")
+    (enableFeature withAribb24 "libaribb24")
   ] ++ optionals (versionAtLeast version "6.1") [
     (enableFeature withAribcaption "libaribcaption")
   ] ++ [
@@ -572,6 +573,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withBs2b "libbs2b")
     (enableFeature withBzlib "bzlib")
     (enableFeature withCaca "libcaca")
+    (enableFeature withCdio "libcdio")
     (enableFeature withCelt "libcelt")
     (enableFeature withChromaprint "chromaprint")
     (enableFeature withCodec2 "libcodec2")
@@ -690,6 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withZimg "libzimg")
     (enableFeature withZlib "zlib")
     (enableFeature withZmq "libzmq")
+    (enableFeature withZvbi "libzvbi")
     /*
      * Developer flags
      */
@@ -733,6 +736,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withAmf [ amf-headers ]
   ++ optionals withAom [ libaom ]
   ++ optionals withAppKit [ AppKit ]
+  ++ optionals withAribb24 [ aribb24 ]
   ++ optionals withAribcaption [ libaribcaption ]
   ++ optionals withAss [ libass ]
   ++ optionals withAudioToolbox [ AudioToolbox ]
@@ -742,6 +746,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withBs2b [ libbs2b ]
   ++ optionals withBzlib [ bzip2 ]
   ++ optionals withCaca [ libcaca ]
+  ++ optionals withCdio [ libcdio libcdio-paranoia ]
   ++ optionals withCelt [ celt ]
   ++ optionals withChromaprint [ chromaprint ]
   ++ optionals withCodec2 [ codec2 ]
@@ -828,6 +833,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
   ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZvbi [ zvbi ]
   ;
 
   buildFlags = [ "all" ]
