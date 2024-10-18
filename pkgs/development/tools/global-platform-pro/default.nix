@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, jdk8, maven, makeWrapper, jre8_headless, pcsclite, proot, zlib }:
+{ lib, stdenv, fetchFromGitHub, jdk11, maven, makeWrapper, jre_headless, pcsclite, proot, zlib }:
 
 let
   defineMvnWrapper = ''
@@ -14,20 +14,20 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "global-platform-pro";
-  version = "20.01.23";
-  GPPRO_VERSION = "v20.01.23-0-g5ad373b"; # git describe --tags --always --long --dirty
+  version = "24.10.15";
+  GPPRO_VERSION = "v24.10.15-0-gf2af9ef"; # git describe --tags --always --long --dirty
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
     rev = "v${version}";
-    sha256 = "sha256-z38I61JR4oiAkImkbwcvXoK5QsdoR986dDrOzhHsCeY=";
+    sha256 = "sha256-yy2WOLDetBrbNRf6HvvPdNPD51ujXomI2a2Hj6eVx1Q=";
   };
 
-  mvnJdk = jdk8;
-  mvnHash = "sha256-es8M7gV2z1V9VpWOxanJwQyiemabiUw3n4heJB8Q75A=";
+  mvnJdk = jdk11;
+  mvnHash = "sha256-vTlOxFBjEZRD23ldMF+VRKZx6jyZ6YvgvZM353FWrWQ=";
 
-  nativeBuildInputs = [ jdk8 makeWrapper ];
+  nativeBuildInputs = [ jdk11 makeWrapper ];
 
   # Fix build error due to missing .git directory:
   #  Failed to execute goal pl.project13.maven:git-commit-id-plugin:4.0.0:revision (retrieve-git-info) on project gppro: .git directory is not found! Please specify a valid [dotGitDirectory] in your pom.xml -> [Help 1]
@@ -37,12 +37,20 @@ maven.buildMavenPackage rec {
     preConfigure = defineMvnWrapper;
   };
 
+  postPatch = ''
+    git_properties_file="./library/target/classes/pro/javacard/gp/git.properties"
+    mkdir -p "$(dirname "$git_properties_file")"
+    # Suffix to differentiate from upstream builds.
+    distro_suffix=-nixpkgs
+    echo "git.commit.id.describe=''${GPPRO_VERSION}''${distro_suffix}" > "$git_properties_file"
+  '';
+
   preConfigure = defineMvnWrapper;
 
   installPhase = ''
     mkdir -p "$out/lib/java" "$out/share/java"
     cp tool/target/gp.jar "$out/share/java"
-    makeWrapper "${jre8_headless}/bin/java" "$out/bin/gp" \
+    makeWrapper "${jre_headless}/bin/java" "$out/bin/gp" \
       --add-flags "-jar '$out/share/java/gp.jar'" \
       --prefix LD_LIBRARY_PATH : "${lib.getLib pcsclite}/lib"
   '';
