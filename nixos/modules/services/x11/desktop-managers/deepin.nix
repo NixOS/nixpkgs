@@ -90,7 +90,6 @@ in
         "/lib/dde-control-center"
         "/lib/dde-session-shell"
         "/lib/dde-file-manager"
-        "/share/backgrounds"
         "/share/wallpapers"
         "/share/dde-daemon"
         "/share/dsg"
