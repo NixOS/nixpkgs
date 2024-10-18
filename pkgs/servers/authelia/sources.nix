@@ -10,5 +10,5 @@ rec {
     hash = "sha256-brgA485sst/jXjdhKrhQilreCYBhESro9j/63g8qQg4=";
   };
   vendorHash = "sha256-kSuIyL+6ue8voTzHTfnAYr9q4hUzIv/lkRopGSFaLv8=";
-  pnpmDepsHash = "sha256-NAn7ExVmN6Sk2hOFHfBYvbNgXPQDhkFmvF1sZeTMomE=";
+  pnpmDepsHash = "sha256-fufxoAL0z6bhRnBI4Gu61hBeUnyFYROmfResHJforfE=";
 }

@@ -27,7 +27,7 @@ buildGoModule rec {
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname version src sourceRoot;
-      hash = "sha256-25Bg8sTeH/w25KdfwgZNoqBXz2d5c1QD5vGb33xpTCA=";
+      hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 
     nativeBuildInputs = [
