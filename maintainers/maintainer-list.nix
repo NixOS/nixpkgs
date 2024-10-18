@@ -6704,6 +6704,12 @@
     githubId = 30512529;
     name = "Evils";
   };
+  evris99 = {
+    name = "Evrymachos Koukoumakas";
+    github = "evris99";
+    githubId = 32963606;
+    email = "cptevris@gmail.com";
+  };
   ewok = {
     email = "ewok@ewok.ru";
     github = "ewok-old";
