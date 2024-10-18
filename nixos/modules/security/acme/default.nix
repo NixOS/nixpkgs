@@ -376,13 +376,14 @@ let
 
         LoadCredential = lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles;
 
-        # Run as root (Prefixed with +)
         ExecStartPost =
           let
             manageServices =
               cmd: services:
               lib.optionalString (services != [ ]) "systemctl --no-block ${cmd} ${lib.escapeShellArgs services}";
-          in "+" + (pkgs.writeShellScript "acme-postrun" ''
+          in 
+          # Run as root (Prefixed with +)
+          "+" + (pkgs.writeShellScript "acme-postrun" ''
           cd /var/lib/acme/${lib.escapeShellArg cert}
           ${manageServices "reload-or-restart" data.conflictingServices}
           if [ -e renewed ]; then
