@@ -25,6 +25,8 @@ rec {
 
   importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix { inherit cargo; };
 
+  mkCargoVendorDeps = buildPackages.callPackage ../../../build-support/rust/mk-cargo-vendor-deps.nix { inherit cargo; };
+
   rustcSrc = callPackage ./rust-src.nix {
     inherit runCommand rustc;
   };

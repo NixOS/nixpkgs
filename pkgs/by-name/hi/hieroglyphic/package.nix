@@ -34,11 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
   # inheritance within Git dependencies, but importCargoLock does.
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "detexify-0.4.0" = "sha256-BPOHNr3pwu2il3/ERko+WHAWby4rPR49i62tXDlDRu0=";
-    };
+  cargoDeps = rustPlatform.mkCargoVendorDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-PPrHVkExIwpiE5ruPuqXOybRF88lUvz9AeiD2H15BVc=";
   };
 
   nativeBuildInputs = [
