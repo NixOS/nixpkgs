@@ -1,12 +1,9 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
-}:
+{ pkgs, ...}:
 
 with pkgs.lib;
 
 let
-  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ./make-test-python.nix ({
+  makeKafkaTest = name: { kafkaPackage, mode ? "zookeeper" }: (import ../make-test-python.nix ({
     inherit name;
     meta = with pkgs.lib.maintainers; {
       maintainers = [ nequissimus ];
@@ -58,6 +55,7 @@ let
         ];
 
         networking.firewall.allowedTCPPorts = [ 9092 9093 ];
+        virtualisation.diskSize = 1024;
         # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
         virtualisation.memorySize = 2047;
       };
@@ -68,6 +66,7 @@ let
         };
 
         networking.firewall.allowedTCPPorts = [ 2181 ];
+        virtualisation.diskSize = 1024;
       };
     };
 
@@ -100,7 +99,7 @@ let
           + "--from-beginning --max-messages 1"
       )
     '';
-  }) { inherit system; });
+  }));
 
 in with pkgs; {
   kafka_3_6 = makeKafkaTest "kafka_3_6" { kafkaPackage = apacheKafka_3_6; };
