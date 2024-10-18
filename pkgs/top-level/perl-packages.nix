@@ -19100,6 +19100,8 @@ with self; {
     };
   };
 
+  NetRemctl = callPackage ../development/perl-modules/NetRemctl { };
+
   NetServer = buildPerlPackage {
     pname = "Net-Server";
     version = "2.014";
