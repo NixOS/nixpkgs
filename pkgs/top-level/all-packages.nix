@@ -14389,8 +14389,8 @@ with pkgs;
   clang-tools = llvmPackages.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
-    llvmPackages = llvmPackages_14;
-    inherit (llvmPackages_14) clang;
+    llvmPackages = llvmPackages_17;
+    inherit (llvmPackages_17) clang;
   };
 
   clazy = callPackage ../development/tools/analysis/clazy {
