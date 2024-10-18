@@ -7,7 +7,6 @@
   poetry-core,
 
   # dependencies
-  boto3,
   fastavro,
   httpx,
   httpx-sse,
@@ -15,7 +14,6 @@
   pydantic,
   pydantic-core,
   requests,
-  sagemaker,
   tokenizers,
   types-requests,
   typing-extensions,
@@ -23,20 +21,19 @@
 
 buildPythonPackage rec {
   pname = "cohere";
-  version = "5.11.0";
+  version = "5.11.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cohere-ai";
     repo = "cohere-python";
     rev = "refs/tags/${version}";
-    hash = "sha256-KhONCdIGKYbIcFG+zv6uXSiX+crsmgPZUU+5NsSWaA8=";
+    hash = "sha256-3fYc0jOfmQ8wnKb5JZY+fXoN+8dXhJi5bj2TJHJaOEo=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    boto3
     fastavro
     httpx
     httpx-sse
@@ -44,7 +41,6 @@ buildPythonPackage rec {
     pydantic
     pydantic-core
     requests
-    sagemaker
     tokenizers
     types-requests
     typing-extensions
