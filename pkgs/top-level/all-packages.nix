@@ -28887,8 +28887,6 @@ with pkgs;
 
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
 
-  epic5 = callPackage ../applications/networking/irc/epic5 { };
-
   epick = callPackage ../applications/graphics/epick {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
