@@ -615,6 +615,11 @@ Names of files and directories should be in lowercase, with dashes between words
   As an exception, an explicit conditional expression with null can be used when fixing a important bug without triggering a mass rebuild.
   If this is done a follow up pull request _should_ be created to change the code to `lib.optional(s)`.
 
+# Practical contributing advice
+
+To contribute effectively and efficiently, you need to be aware of how the contributing process generally works.
+This section aims to document the process as we live it in Nixpkgs to set expectations right and give practical tips on how to work with it.
+
 ## I opened a PR, how do I get it merged?
 [i-opened-a-pr-how-do-i-get-it-merged]:#i-opened-a-pr-how-do-i-get-it-merged
 
