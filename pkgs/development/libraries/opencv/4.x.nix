@@ -10,6 +10,7 @@
 , hdf5
 , boost
 , glib
+, glog
 , gflags
 , protobuf_21
 , config
@@ -305,6 +306,7 @@ effectiveStdenv.mkDerivation {
     boost
     gflags
     glib
+    glog
     pcre2
     protobuf_21
     zlib
@@ -401,6 +403,8 @@ effectiveStdenv.mkDerivation {
     pythonPackages.pip
     pythonPackages.wheel
     pythonPackages.setuptools
+  ] ++ optionals (enablePython && effectiveStdenv.hostPlatform == effectiveStdenv.buildPlatform) [
+    pythonPackages.pythonImportsCheckHook
   ] ++ optionals enableCuda [
     cudaPackages.cuda_nvcc
   ];
@@ -544,6 +548,8 @@ effectiveStdenv.mkDerivation {
     popd
     popd
   '';
+
+  pythonImportsCheck = [ "cv2" "cv2.sfm" ];
 
   passthru = {
     cudaSupport = enableCuda;
