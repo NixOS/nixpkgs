@@ -1,23 +1,33 @@
 # Setup hook to use for pip projects
-echo "Sourcing pip-build-hook"
+# shellcheck shell=bash
 
-declare -a pipBuildFlags
+echo "Sourcing pip-build-hook"
 
 pipBuildPhase() {
     echo "Executing pipBuildPhase"
     runHook preBuild
 
     mkdir -p dist
+
+    # ShellCheck seems unable to parse nameref used to implement concatTo.
+    # shellcheck disable=2034
+    declare -a defaultPipBuildFlags=(
+        --verbose
+        --no-index
+        --no-deps
+        --no-clean
+        --no-build-isolation
+        --wheel-dir dist
+    )
+
+    local -a flagsArray
+    concatTo flagsArray defaultPipBuildFlags pipBuildFlags
+
     echo "Creating a wheel..."
-    @pythonInterpreter@ -m pip wheel \
-        --verbose \
-        --no-index \
-        --no-deps \
-        --no-clean \
-        --no-build-isolation \
-        --wheel-dir dist \
-        $pipBuildFlags .
+    @pythonInterpreter@ -m pip wheel "${flagsArray[@]}" .
     echo "Finished creating a wheel..."
+
+    unset flagsArray
 
     runHook postBuild
     echo "Finished executing pipBuildPhase"
