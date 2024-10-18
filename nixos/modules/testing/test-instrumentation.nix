@@ -90,6 +90,7 @@ in
         contents."/etc/systemd/journald.conf".text = ''
           [Journal]
           ForwardToConsole=yes
+          TTYPath=/dev/${qemu-common.qemuSerialDevice}
           MaxLevelConsole=debug
         '';
 
