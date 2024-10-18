@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       name = "Wireworld";
-      exec = pname;
+      exec = "Wireworld";
       comment = "";
       desktopName = "Wireworld";
       genericName = "Wireworld";
