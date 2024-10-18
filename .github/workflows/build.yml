@@ -84,7 +84,7 @@ jobs:
           brew install macfuse
           # Hack to properly target the os libcxx dynlib
           sed -i '' '/^#define _LIBCPP_HAS_NO_VENDOR_AVAILABILITY_ANNOTATIONS/d' "$(brew --prefix llvm)"/include/c++/v1/__config_site
-          echo "CXXFLAGS=-mmacos-version-min=13.3" >> $GITHUB_ENV
+          echo "CXXFLAGS=-mmacos-version-min=13.4" >> $GITHUB_ENV
         shell: bash
         if: matrix.platform == 'macos-13' || matrix.platform == 'macos-14'
 
