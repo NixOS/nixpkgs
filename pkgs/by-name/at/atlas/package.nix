@@ -1,14 +1,21 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, atlas }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  atlas,
+}:
 
 buildGoModule rec {
   pname = "atlas";
-  version = "0.28.0";
+  version = "0.28.1";
 
   src = fetchFromGitHub {
     owner = "ariga";
     repo = "atlas";
     rev = "v${version}";
-    hash = "sha256-D6dHHTxD2eObmXwYntIOtcPsU1vP+K289n+XVoaGUVc=";
+    hash = "sha256-OPGPYCp878nYYujR1jiMpOg1cdLSwa3OZEIxL6JltD4=";
   };
 
   modRoot = "cmd/atlas";
@@ -18,7 +25,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}"
+  ];
 
   subPackages = [ "." ];
 
