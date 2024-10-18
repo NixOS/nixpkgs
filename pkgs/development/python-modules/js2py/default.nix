@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/PiotrDabkowski/Js2Py";
     license = licenses.mit;
     maintainers = with maintainers; [ onny ];
+    knownVulnerabilities = [ "CVE-2024-28397" ];
   };
 }
