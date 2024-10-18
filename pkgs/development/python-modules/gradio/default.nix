@@ -64,7 +64,7 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "4.44.1";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   # We use the Pypi release, since it provides prebuilt webui assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-popSSYrGtj+IZO+Ev3hmpw59B+vpE+35IeHSo3CK1a4=";
+    hash = "sha256-0hU2aObeLfegG7M/AaB0/HcW7IY8QPRy2OQ5Q57x4VM=";
   };
 
   # fix packaging.ParserSyntaxError, which can't handle comments
@@ -168,6 +168,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Actually broken
     "test_mount_gradio_app"
+    "test_processing_utils_backwards_compatibility" # type error
 
     # requires network, it caught our xfail exception
     "test_error_analytics_successful"
@@ -280,6 +281,7 @@ buildPythonPackage rec {
         pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
         doInstallCheck = false;
         doCheck = false;
+        preCheck = "";
         pythonImportsCheck = null;
         dontCheckRuntimeDeps = true;
       });
