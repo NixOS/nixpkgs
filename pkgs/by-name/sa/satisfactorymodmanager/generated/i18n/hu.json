@@ -1,0 +1,303 @@
+{
+  "announcement" : {
+    "go-offline" : "Válts Offline módba",
+    "go-online" : "Válts Online módba",
+    "healthcheck" : "A ficsit.app nem elérhető. Ellenőrizd az internetkapcsolatodat, vagy próbáld meg az offline mód használatát. (Mod Manager Beállítások > Válts Offline módba)",
+    "offline" : "Jelenleg Offline módban vagy. Néhány funkció nem elérhető. (A visszacsatlakozáshoz használd a Mod Manager Beállítások > Válts Online módba)"
+  },
+  "common" : {
+    "add" : "Hozzáadás",
+    "cancel" : "Visszavonás",
+    "close" : "Bezárás",
+    "delete" : "Kitörlés",
+    "import" : "Importálás",
+    "loading" : "Betöltés...",
+    "rename" : "Átnevezés"
+  },
+  "error" : {
+    "failed_to_generate_debug" : "\nHiba történt a hibakereső fájl generálása során. Kérjük, manuálisan ellenőrizd a Satisfactory Mod Manager hibanapló fájljait további információkért, és jelentsd ezt a Discordon. Használd az alábbi gombot a dokumentáció megnyitásához és az útmutató megismeréséhez.",
+    "generate_debug_info" : "Hibakereső információ generálása\n\n\n\n\n\n\n",
+    "help" : "Úgy tűnik, hogy valami hiba történt? Kattints az alábbi gombra, és küldd el a létrehozott zip fájlt a <1>modding Discordon</1> a #help-using-mods csatornába.\n",
+    "invalid_installs" : "{invalidInstalls, plural, one {{invalidInstalls}Érvénytelen Satisfactory telepítés található.} other {{invalidInstalls}Érvénytelen Satisfactory telepítések találhatók.}}",
+    "no_installs" : "Nem található Satisfactory telepítés.\n\n\n\n\n\n\n",
+    "open_log_docs" : "Nyisd meg a Naplózás dokumentációt.\n\n\n\n\n\n\n",
+    "open_modding_discord" : "Nyisd meg a Modding Discordot.\n\n\n\n\n\n\n",
+    "open_modding_discord.must_generate_debug_first" : "Először hibakereső információt kell generálnod.\n\n\n\n\n\n\n\n\n",
+    "reporting_directions" : "Úgy tűnik, hogy valami hiba történt? Kattints az alábbi gombra a naplók összegyűjtéséhez, majd küldd el a létrehozott zip fájlt a modding Discordon a #help-using-mods csatornába.\n\n\n\n\n\n\n",
+    "title" : "Valami hiba történt.\n\n\n\n\n\n\n"
+  },
+  "external-install-mod" : {
+    "already-installed" : "Már telepítve van.",
+    "error-loading" : "Hiba történt a mod részleteinek betöltésekor.",
+    "in-queue" : "Várakozó sorban.\n\n\n\n\n\n\n\n\n",
+    "install" : "Telepítés",
+    "latest-version" : "Legújabb verzió",
+    "title" : "Mod telepítése\n\n\n\n\n\n\n",
+    "version" : "{version} Verzió"
+  },
+  "first_time_setup" : {
+    "acknowledge" : "Get Started!",
+    "change_later_hint" : "Ezeket a beállításokat bármikor módosíthatod a \"Mod Manager Beállítások\" menüben.\n\n\n\n",
+    "intro" : "Válaszd ki a preferenciáidat a kezdéshez.",
+    "open_welcome_guide" : "Nyisd meg a Üdvözlő útmutatót.",
+    "option" : {
+      "language" : {
+        "title" : "Használj ezt a nyelvet, ahol elérhető:"
+      },
+      "queue-auto-start" : {
+        "disabled" : "Várj, amíg megnyomom az \"Alkalmaz\" gombot.",
+        "enabled" : "Változtatások azonnali alkalmazása.\n\n\n\n\n\n\n",
+        "title" : "Amikor modot adok hozzá vagy távolítok el, vagy váltok profilokat..."
+      }
+    },
+    "title" : "Üdvözlünk a Satisfactory Mod Managerben!"
+  },
+  "launch-button" : {
+    "apply-profile-change" : "Alkalmaz {profile}",
+    "apply-queued" : "Alkalmazd a {queued, plural, one {változást} other {# változást}}.\n\n\n\n\n\n",
+    "are-you-sure-warning" : "Biztosan el szeretnéd indítani?",
+    "cant-launch" : "Az SMM nem tudja elindítani ezt a telepítést.",
+    "cant-launch-tooltip" : "A Mod Manager nem képes elindítani ezt a telepítési típust, de továbbra is kezeli a mod fájlokat számodra. Indítsd el a Satisfactory-t a megszokott játékindítód segítségével.",
+    "changes-queued" : "A módosítások még nem kerültek alkalmazásra a mod fájljaidon. Kattints a fenti gombra a várakozó változtatások alkalmazásához.",
+    "game-running" : "A játékindítód azt jelzi, hogy a játék már fut (vagy még mindig a bezárás folyamatában van).",
+    "incompatible-mods" : "{versionIncompatible, plural, one {Inkompatibilis mod, amely nem fog betöltődni vagy összeomlik a játékunk.\n} other {Inkompatibilis modok, amelyek nem fognak betöltődni vagy összeomlanak a játékunk.}}",
+    "launch-in-progress" : "Indítás folyamatban...",
+    "operation-in-progress" : "Egy művelet már folyamatban van.",
+    "play" : "Satisfactory Indítása",
+    "possibly-incompatible-mods" : "{versionPossiblyCompatible, plural, one {Egy mod, amely '{versionPossiblyCompatible, plural, one {valószínűleg inkompatibilis} other {valószínűleg inkompatibilisek}' a játékoddal.} other {# Modok, amelyek '{versionPossiblyCompatible, plural, one {valószínűleg inkompatibilisek} other {valószínűleg inkompatibilisek}' a játékoddal.}}",
+    "profile-change-queued" : "A mod fájljain még nem történt módosítás. Kattintson a fenti gombra az új profil alkalmazásához.\n\n(A \"Kézi indítás\" sor módban van)",
+    "ready" : "A játék készen áll!\n\nMegjegyzés: A Mod Manager már befejezte a mod fájlok telepítését számodra. Indíthatod a játékot a megszokott játékindítód segítségével, és a modok továbbra is betöltődnek.",
+    "reported-incompatible-mods" : "{reportedIncompatible, plural, one {Egy mod} other {# mod}} amely {reportedIncompatible, plural, one {be van jelentve} other {be vannak jelentve} töröttnek ezen a játékverzión. Olvasd el a {versionIncompatible, plural, one {mod} other {modok}} leírását vagy kompatibilitási megjegyzéseit a további információkért.",
+    "reported-possibly-compatible-mods" : "{reportedPossiblyCompatible, plural, one {Egy mod} other {# mod}} amely {reportedPossiblyCompatible, plural, one {be van jelentve} other {be vannak jelentve} sérültnek ezen a játékverzión. Olvasd el a {versionIncompatible, plural, one {mod} other {modok}} leírását vagy kompatibilitási megjegyzéseit a további információkért.",
+    "you-have-warning-mods" : "Neked van:\n\n"
+  },
+  "left-bar" : {
+    "export" : "Exportálás\n\n\n\n\n\n\n",
+    "ficsit-app" : "ficsit.app (Mod tároló)",
+    "game-version" : "Válaszd ki a Játék Telepítést\n\n\n\n\n\n\n",
+    "help" : "Segítség",
+    "install-invalid" : "Érvénytelen",
+    "install-invalid-tooltip" : "Állapot: Az SMM nem tudja kezelni ezt a telepítést.\n\n\n\n\n\n\n",
+    "install-loading" : "Betöltés...",
+    "install-loading-tooltip" : "Állapot: Betöltés...",
+    "install-unknown" : "Ismeretlen\n\n\n\n\n\n\n",
+    "install-unknown-tooltip" : "Állapot: Nem sikerült információt szerezni erről a telepítésről.",
+    "links" : "Linkek",
+    "manage-servers" : "Szerverek kezelése",
+    "mods-off" : "Modok kikapcsolása",
+    "mods-on" : "Modok bekapcsolása",
+    "other" : "Több",
+    "profile" : "Profil",
+    "queue-blocking-switching-tooltip" : "{number, plural, other {Neked van {number} akció a várakozó sorban. Alkalmazd vagy töröld {number, plural, one {azt} other {azokat}} mielőtt telepítéseket vagy profilokat váltanál.} }",
+    "satisfactory-modding-discord" : "Satisfactory Modding Discord\n",
+    "smm-github" : "SMM GitHub",
+    "updates" : "Frissítések"
+  },
+  "mod-changelog" : {
+    "title" : "<1>{mod}</1> Változási naplója"
+  },
+  "mod-details" : {
+    "change-version" : "Verzió változtatása",
+    "change-version-any" : "Bármennyi",
+    "change-version-or-newer" : "vagy újabb",
+    "changelogs" : "Változási naplók\n\n\n",
+    "compatibility" : "Kompatibilitás",
+    "compatibility-branch" : "Ez a mod be lett jelentve mint {state} {branch}-on.",
+    "compatibility-unknown" : "Ismeretlen",
+    "compatibility-unknown-tooltip" : "Még nincs bejelentett kompatibilitási információ erről a modról. Próbáld ki, és vedd fel velünk a kapcsolatot a Discordon, hogy frissíthessük!",
+    "contributors" : "Hozzájárulok <1>({authors})</1>",
+    "created" : "Létrehozva",
+    "downloads" : "Összes letöltés",
+    "installed-version" : "Letöltött verziók",
+    "latest-version" : "Legújabb verzió",
+    "mod-author" : "A mod létrehozója: ",
+    "offline-mode" : "Az offline mód be van kapcsolva. Változási naplók és leírások nem elérhetők.\n",
+    "size" : "Méret",
+    "updated" : "Frissítve",
+    "view-on-ficsit-app" : "Nézd meg a ficsit.app-on",
+    "views" : "Megtekintések"
+  },
+  "mod-list-item" : {
+    "by-author" : "általa",
+    "compatibility-note" : "Ez a mod be lett jelentve mint {state} ezen a játékverzión.\n\n",
+    "compatibility-note-none" : "(Nincs megadva)\n\n\n",
+    "compatibility-warning" : "Problémák lettek bejelentve ezzel a moddal kapcsolatban, de mindenképpen megpróbálhatod telepíteni. Részletek:",
+    "dependency" : "Ez a mod egy másik mod függőségeként van telepítve. Nem telepíthető vagy távolítható el önállóan.",
+    "disable" : "Ez a mod engedélyezve van ezen a profilon. Kattints a letiltásához, ami megakadályozza, hogy betöltődjön a játék indításakor, de továbbra is része marad ennek a profilnak.",
+    "disable-queued" : "Ez a mod letiltásra vár. Kattints a művelet törléséhez.",
+    "disabled-tooltip" : "Ez a mod le van tiltva. Kattints a szünet ikonra az engedélyezéséhez.",
+    "enable" : "Kattints a mod engedélyezéséhez.",
+    "enable-queued" : "Ez a mod engedélyezésre vár. Kattints a művelet törléséhez.",
+    "favorite" : "Kattints a mod kedvencekhez adásához. A mod kedvencként való megjelölése nem kapcsolódik ahhoz, hogy telepítve van-e vagy sem – ez egy módja annak, hogy nyomon követhesd a modot későbbi használatra, függetlenül attól, melyik profilt választottad.",
+    "hidden" : "Ez a mod el lett rejtve a szerző által.",
+    "install" : "Kattints a mod telepítéséhez.",
+    "no-tags" : "(nincs elérhető)",
+    "not-installable" : "Nem tudod telepíteni ezt a modot. Ok:",
+    "queued" : "Ez a mod már várakozik egy másik műveletre.",
+    "queued-install" : "Ez a mod telepítésre vár. Kattints a művelet törléséhez.",
+    "queued-uninstall" : "Ez a mod eltávolításra vár. Kattints a művelet törléséhez.",
+    "unavailable" : "Ez a mod már nem elérhető a ficsit.app-on. Lehet, hogy érdemes eltávolítanod.",
+    "unfavorite" : "Kattints a mod eltávolításához a kedvencek közül.",
+    "uninstall" : "Ez a mod telepítve van ezen a profilon. Kattints a mod eltávolításához.",
+    "wait" : "Várj meg a jelenlegi művelet befejezését."
+  },
+  "mod" : {
+    "compatibility-no-notes" : "(Nincs további megjegyzés)\n\n"
+  },
+  "mods-list-filter" : {
+    "filter" : {
+      "all" : "Összes mod",
+      "compatible" : "Kompatibilis",
+      "dependency" : "Függőség",
+      "disabled" : "Letiltva",
+      "enabled" : "Engedélyezve",
+      "favorite" : "Kedvenc",
+      "installed" : "Letöltve",
+      "not-installed" : "Nincs letöltve",
+      "queued" : "Várakozó"
+    },
+    "order-by" : {
+      "downloads" : "Letöltések",
+      "hotness" : "Népszerűség",
+      "last-updated" : "Utolsó frissítés",
+      "name" : "Név",
+      "popularity" : "Népszerűség",
+      "views" : "Megtekintések"
+    },
+    "search" : "Modok keresése"
+  },
+  "mods-list" : {
+    "no-mods-filtered" : "Nincsenek modok, amelyek megfelelnek a szűrőidnek.",
+    "no-mods-found" : "Nincs található mod.",
+    "show-all" : "Összes mutatása"
+  },
+  "profiles" : {
+    "add" : {
+      "profile-name" : "Profil név",
+      "profile-name-placeholder" : "Új profil név",
+      "title" : "Profil hozzáadása"
+    },
+    "delete" : {
+      "profile-name" : "Profil név",
+      "title" : "Profil kitörlése"
+    },
+    "import" : {
+      "profile-file" : "Profil fájl",
+      "profile-name" : "Profil név",
+      "profile-name-placeholder" : "Új profil név",
+      "profile-version-warning" : "Ez a profil egy újabb verzióval készült, mint a játék. Lehet, hogy nem kompatibilis ezzel a verzióval.",
+      "title" : "Profil betöltése"
+    },
+    "rename" : {
+      "new-profile" : "Új profil név",
+      "new-profile-placeholder" : "Új profil",
+      "old-profile" : "Régi profil név",
+      "old-profile-placeholder" : "Régi profil",
+      "title" : "Profil név megváltoztatása"
+    }
+  },
+  "server-manager" : {
+    "add" : "Hozzáadás",
+    "advanced-note" : "Vedd figyelembe, hogy bizonyos karaktereket lehet, hogy escape-elni kell a felhasználónévben és a jelszóban.",
+    "advanced-path-placeholder" : "felhasználó:jelszó@host:port/út\n",
+    "failed-to-connect" : "Sikerült a kapcsolat a szerverhez, kattints a próbálkozáshoz.",
+    "get-help" : "Segítség a szerverekhez való kapcsolódáshoz.",
+    "host-placeholder" : "host",
+    "invalid" : "Az SMM nem tudja kezelni ezt a telepítést.\n\n\n",
+    "loading" : "Betöltés...",
+    "local-path-placeholder" : "C:\\Szerver\\Fájlai\n\n",
+    "name-placeholder" : "Név (alapértelmezett: {default})",
+    "password-placeholder" : "jelszó",
+    "path-placeholder" : "út",
+    "port-placeholder" : "port (alapértelmezett: {default})",
+    "switch-to-advanced" : "Válts haladó módra",
+    "switch-to-simple" : "Válts egyszerű módra",
+    "title" : "Dedikált Szerverek",
+    "username-placeholder" : "felhasználónév",
+    "validating" : "Érvényesítés...\n"
+  },
+  "server-picker" : {
+    "failed-list-dir" : "Nem sikerült listázni a könyvtárat\n",
+    "failed-valid-check" : "Nem sikerült a könyvtár listázása."
+  },
+  "settings" : {
+    "cache" : {
+      "cache-location" : "Gyorsítótár helye\n\n\n\n\n\n\n",
+      "reset" : "Alapértelmezettre állítás",
+      "save" : "Mentés és tovább",
+      "title" : "Gyorsítótár letöltésének helye változtatása"
+    },
+    "change-cache-location" : "Gyorsítótár helyének változtatása",
+    "copy-mod-list" : "Mod lista másolása",
+    "debug" : "Hibakeresés",
+    "generate-debug-info" : "Hibakeresés indítása",
+    "go-online-offline" : "Menj {offline, select, true {online} other {offline}}",
+    "language" : "Nyelv",
+    "launch-button" : "Indító gomb",
+    "launch-button.button" : "Gomb",
+    "launch-button.cat" : "Nyan",
+    "launch-button.normal" : "Normális",
+    "proxy" : {
+      "proxy" : "Proxy",
+      "remove" : "Proxy eltávolítása",
+      "save" : "Mentés és újraindítás",
+      "title" : "Proxy beállítása"
+    },
+    "queue" : "Várakozó",
+    "queue.start-immediately" : "Indítás rögtön",
+    "queue.start-manually" : "Manuális indítás",
+    "secret-settings" : "Rejtett beállítások",
+    "set-proxy" : "Proxy beállítása",
+    "settings" : "Beállítások",
+    "smm-debug-logging" : "SMM hibakereső bejelentkezés",
+    "start-view" : "Indító nézet",
+    "start-view.compact" : "Kompakt",
+    "start-view.expanded" : "Kiterjesztve",
+    "title" : "Mod Kezelő Beállításai",
+    "update-check" : "Frissítés ellenőrzés",
+    "update-check.ask" : "Kérdezés amikor megtalálva",
+    "update-check.on-exit" : "Amikor kilépés",
+    "update-check.on-start" : "Amikor bekapcsolva"
+  },
+  "smm-update" : {
+    "downloading" : "Letöltés a háttérben",
+    "downloading-stats" : "Frissítés letöltése folyamatban: {current}/{total}, {speed}/s, Becsölt idő {eta}",
+    "title" : "{version} - SMM Frissítés elérhető"
+  },
+  "smm2_migration" : {
+    "feature" : {
+      "performance" : "Fejlesztett teljesítmény",
+      "performance.description" : "Hatékonyság megőrzése!\n",
+      "platform_support" : "Natív Linux Heroic, Steam Snap, Mac támogatás\n",
+      "platform_support.description" : "Szerezzen be egy buildet a GitHub-kiadásokból, ha még nem tette meg!\n",
+      "profile_format" : "Új profil formátum",
+      "profile_format.description" : "Az SMM2 profilok nem kompatibilisek az SMM3-mal! Meglévő profiljait automatikusan áttelepítettük, de az SMM2-vel létrehozott profilokat nem importálhatja.\n",
+      "queue" : "Művelet sorban állás\n",
+      "queue.description" : "Állítson fel egyszerre több mod-letöltést/eltávolítást a sorba.\n",
+      "servers" : "Dedikált szerver kezelése",
+      "servers.description" : "Könnyeben kezeld a szervert, használj SFTP, FTP és SMB fálj kezelő programot!",
+      "translation" : "Fordítási támogatás\n",
+      "translation.description" : "Csatlakozz a Discordunkhoz ha le szeretnéd fordítani a nyelved a SMM-re",
+      "ui" : "Kezelő felület frissítése",
+      "ui.description" : "Friss festékréteg a Satisfactory 1.0 ünneplésére!\n"
+    },
+    "intro" : "Rengeteg fejlesztést hajtottunk végre ezen a verzión. Íme néhány kiemelés:\n",
+    "open_guide" : "Nyissa meg az SMM3 dokumentációját\n",
+    "title" : "Üdvözöljük a Satisfactory Mod Manager 3-as verziójában!\n"
+  },
+  "updates" : {
+    "changelog" : "Változási napló\n",
+    "check-for-updates" : "Ellenőrizd a frissítéseket",
+    "checking-for-updates" : "Frissítések ellenörzése",
+    "hide-ignored" : "Elrejtés figyelmen kívül hagyva\n",
+    "ignore" : "Figyelmen kívül hagyva\n",
+    "mod-update-available" : "{updates, plural, one {{updates} mod frissítés elérhető} other {{updates} modok frissítése elérhető}}",
+    "no-updates" : "Nincs elérhető mod/SMM frissítés",
+    "show-ignored" : "Mutasd a figyelmen kívül hagyottat",
+    "smm-update-available" : "SMM Frissítés elérhető!",
+    "title" : "Frissítések",
+    "unignore" : "Hagyja figyelmen kívül",
+    "update-all" : "Összes frissítése",
+    "update-selected" : "Kiválasztott frissítése"
+  }
+}
