@@ -1,16 +1,22 @@
 {
-  stdenv,
+  featureVersion ? "17",
+
   lib,
+  stdenv,
   pkgs,
+
   fetchFromGitHub,
   fetchpatch2,
-  writeText,
-  openjdk23_headless,
+
   gradle,
-  pkg-config,
+  gradle_7,
   perl,
+  pkg-config,
   cmake,
   gperf,
+  python3,
+  ruby,
+
   gtk2,
   gtk3,
   libXtst,
@@ -18,39 +24,73 @@
   glib,
   alsa-lib,
   ffmpeg,
-  python3,
-  ruby,
+  ffmpeg-headless,
+
+  writeText,
+
   withMedia ? true,
   withWebKit ? false,
+
+  jdk17_headless,
+  jdk21_headless,
+  jdk23_headless,
+  jdk-bootstrap ?
+    {
+      "17" = jdk17_headless;
+      "21" = jdk21_headless;
+      "23" = jdk23_headless;
+    }
+    .${featureVersion},
 }:
 
 let
-  pname = "openjfx-modular-sdk";
-  major = "23";
-  update = "";
-  build = "-ga";
-  repover = "${major}${update}${build}";
-  jdk = openjdk23_headless;
+  sourceFile = ./. + "/${featureVersion}/source.json";
+  sourceInfo = lib.importJSON sourceFile;
 
+  atLeast21 = lib.versionAtLeast featureVersion "21";
+  atLeast23 = lib.versionAtLeast featureVersion "23";
+
+  gradle_openjfx = if atLeast23 then gradle else gradle_7;
 in
+
+assert lib.assertMsg (lib.pathExists sourceFile)
+  "OpenJFX ${featureVersion} is not a supported version";
+
 stdenv.mkDerivation {
-  inherit pname;
-  version = "${major}${update}${build}";
+  pname = "openjfx-modular-sdk";
+  version = lib.removePrefix "refs/tags/" sourceInfo.rev;
 
-  src = fetchFromGitHub {
-    owner = "openjdk";
-    repo = "jfx23u";
-    rev = repover;
-    hash = "sha256-a/ev91Rq7D3z9O56ZZQCgvvbfj5GBt5Lonow2NH3s/E=";
-  };
+  # TODO: Tighten up after update scripts are run.
+  src = fetchFromGitHub sourceInfo;
 
-  patches = [
-    # 8338701: Provide media support for libavcodec version 61
-    # <https://github.com/openjdk/jfx23u/pull/18>
-    (fetchpatch2 {
-      url = "https://github.com/openjdk/jfx23u/commit/aba60fda1c82f00e8e685107592305c403a31287.patch?full_index=1";
-      hash = "sha256-+aRhTwi4VQthAq1SH1jxPl0mTosNMKoTY52jm+jiKso=";
-    })
+  patches =
+    if featureVersion == "23" then
+      [
+        # 8338701: Provide media support for libavcodec version 61
+        # <https://github.com/openjdk/jfx23u/pull/18>
+        (fetchpatch2 {
+          url = "https://github.com/openjdk/jfx23u/commit/aba60fda1c82f00e8e685107592305c403a31287.patch?full_index=1";
+          hash = "sha256-+aRhTwi4VQthAq1SH1jxPl0mTosNMKoTY52jm+jiKso=";
+        })
+      ]
+    else if atLeast21 then
+      [
+        ./21/patches/backport-ffmpeg-7-support-jfx21.patch
+      ]
+    else
+      [
+        ./17/patches/backport-ffmpeg-6-support-jfx11.patch
+        ./17/patches/backport-ffmpeg-7-support-jfx11.patch
+      ];
+
+  nativeBuildInputs = [
+    gradle_openjfx
+    perl
+    pkg-config
+    cmake
+    gperf
+    python3
+    ruby
   ];
 
   buildInputs = [
@@ -60,57 +100,61 @@ stdenv.mkDerivation {
     libXxf86vm
     glib
     alsa-lib
-    ffmpeg
-  ];
-  nativeBuildInputs = [
-    gradle
-    perl
-    pkg-config
-    cmake
-    gperf
-    python3
-    ruby
+    (if atLeast21 then ffmpeg else ffmpeg-headless)
   ];
 
-  dontUseCmakeConfigure = true;
+  mitmCache = gradle_openjfx.fetchDeps {
+    attrPath = "openjfx${featureVersion}";
+    pkg = pkgs."openjfx${featureVersion}".override { withWebKit = true; };
+    data = ./. + "/${featureVersion}/deps.json";
+  };
 
-  config = writeText "gradle.properties" ''
+  gradleBuildTask = "sdk";
+
+  stripDebugList = [ "." ];
+
+  enableParallelBuilding = false;
+
+  __darwinAllowLocalNetworking = true;
+
+  env.config = writeText "gradle.properties" ''
     CONF = Release
-    JDK_HOME = ${jdk.home}
+    JDK_HOME = ${jdk-bootstrap.home}
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
   '';
 
-  postPatch = ''
-    ln -s $config gradle.properties
-  '';
+  dontUseCmakeConfigure = true;
 
-  mitmCache = gradle.fetchDeps {
-    attrPath = "openjfx${major}";
-    pkg = pkgs."openjfx${major}".override { withWebKit = true; };
-    data = ./deps.json;
-  };
+  postPatch =
+    lib.optionalString (!atLeast23) ''
+      # Add missing includes for gcc-13 for webkit build:
+      sed -e '1i #include <cstdio>' \
+        -i modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/Heap.cpp \
+           modules/javafx.web/src/main/native/Source/bmalloc/bmalloc/IsoSharedPageInlines.h
 
-  __darwinAllowLocalNetworking = true;
+    ''
+    + lib.optionalString (!atLeast21) ''
+      substituteInPlace modules/javafx.web/src/main/native/Source/JavaScriptCore/offlineasm/parser.rb \
+        --replace-fail "File.exists?" "File.exist?"
+
+    ''
+    + ''
+      ln -s $config gradle.properties
+    '';
 
   preBuild = ''
     export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
     export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
   '';
 
-  enableParallelBuilding = false;
-
-  gradleBuildTask = "sdk";
-
   installPhase = ''
     cp -r build/modular-sdk $out
   '';
 
-  stripDebugList = [ "." ];
-
   postFixup = ''
     # Remove references to bootstrap.
-    export openjdkOutPath='${jdk.outPath}'
+    export openjdkOutPath='${jdk-bootstrap.outPath}'
     find "$out" -name \*.so | while read lib; do
       new_refs="$(patchelf --print-rpath "$lib" | perl -pe 's,:?\Q$ENV{openjdkOutPath}\E[^:]*,,')"
       patchelf --set-rpath "$new_refs" "$lib"
@@ -118,15 +162,15 @@ stdenv.mkDerivation {
   '';
 
   disallowedReferences = [
-    jdk
-    gradle.jdk
+    jdk-bootstrap
+    gradle_openjfx.jdk
   ];
 
-  meta = with lib; {
-    homepage = "https://openjdk.org/projects/openjfx/";
-    license = licenses.gpl2Classpath;
+  meta = {
     description = "Next-generation Java client toolkit";
-    maintainers = with maintainers; [ abbradar ];
-    platforms = platforms.unix;
+    homepage = "https://openjdk.org/projects/openjfx/";
+    license = lib.licenses.gpl2Classpath;
+    maintainers = with lib.maintainers; [ abbradar ];
+    platforms = lib.platforms.unix;
   };
 }
