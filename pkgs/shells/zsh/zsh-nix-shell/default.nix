@@ -14,16 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z6EYQdasvpl1P78poj9efnnLj7QQg13Me8x1Ryyw+dM=";
   };
 
-  strictDeps = true;
   buildInputs = [ bash ];
+
   installPhase = ''
-    install -D nix-shell.plugin.zsh --target-directory=$out/share/zsh-nix-shell
-    install -D scripts/* --target-directory=$out/share/zsh-nix-shell/scripts
+    install -D nix-shell.plugin.zsh --target-directory="$out/share/zsh-nix-shell"
+    install -D scripts/* --target-directory="$out/share/zsh-nix-shell/scripts"
   '';
 
   meta = with lib; {
-    description = "zsh plugin that lets you use zsh in nix-shell shell";
-    homepage = src.meta.homepage;
+    description = "zsh plugin that lets you use Zsh in nix-shell shell";
+    homepage = "https://github.com/chisui/zsh-nix-shell";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ aw ];
