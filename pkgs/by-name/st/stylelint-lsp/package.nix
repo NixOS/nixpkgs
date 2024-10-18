@@ -1,5 +1,4 @@
 {
-  bash,
   fetchFromGitHub,
   lib,
   nodejs,
@@ -18,8 +17,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-mzhY6MKkXb1jFYZvs/VkGipBjBfUY3GukICb9qVQI80=";
   };
 
-  nativeBuildInputs = [
+  buildInputs = [
     nodejs
+  ];
+
+  nativeBuildInputs = [
     pnpm_9.configHook
   ];
 
@@ -41,11 +43,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/${finalAttrs.pname}}
     mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    echo "
-      #!${lib.getExe bash}
-      ${lib.getExe nodejs} $out/lib/${finalAttrs.pname}/dist/index.js \$@
-    " > $out/bin/stylelint-lsp
-    chmod +x $out/bin/stylelint-lsp
+    chmod a+x $out/lib/${finalAttrs.pname}/dist/index.js
+    ln -s $out/lib/${finalAttrs.pname}/dist/index.js $out/bin/stylelint-lsp
 
     runHook postInstall
   '';
