@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "proton-core";
-  version = "0.2.0";
+  version = "0.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-core";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IiKmtgcCSe2q3qaNuUSaC/D/vSQzVq7w8VN2Xq81+tQ=";
+    hash = "sha256-2Drlai/PYzi1z1CtDYfNhol2wamb/HNrvUhj0XsiyHg=";
   };
 
   build-system = [ setuptools ];
