@@ -1,0 +1,14 @@
+diff -Naurd x/tensorflow/tensorflow.bzl y/tensorflow/tensorflow.bzl
+--- x/tensorflow/tensorflow.bzl	2023-12-13 21:33:03.430643611 +0000
++++ y/tensorflow/tensorflow.bzl	2023-12-15 17:24:41.445609613 +0000
+@@ -960,8 +960,9 @@
+         outs = [src],
+         srcs = [dest],
+         output_to_bindir = 1,
+-        cmd = "ln -sf $$(realpath --relative-to=$(RULEDIR) $<) $@",
++        cmd = "ln -sf $$($(location :compute-relative.sh) $(RULEDIR) $<) $@",
+         visibility = visibility,
++        tools = [":compute-relative.sh"],
+     )
+ 
+ def _get_shared_library_name_os_version_matrix(name, per_os_targets = False, version = None):
