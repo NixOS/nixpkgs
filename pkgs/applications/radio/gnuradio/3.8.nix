@@ -7,7 +7,7 @@
 , pkg-config
 , volk
 , cppunit
-, swig
+, swig3
 , orc
 , boost
 , log4cpp
@@ -83,7 +83,7 @@ let
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
-        swig
+        swig3
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -98,7 +98,7 @@ let
     gr-ctrlport = {
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
-        swig
+        swig3
       ];
       runtime = [
         thrift
@@ -262,6 +262,7 @@ stdenv.mkDerivation (finalAttrs: (shared // {
       boost
       volk
     ;
+    swig = swig3;
     # Used by many gnuradio modules, the same attribute is present in
     # gnuradio3.10 where there it's spdlog.
     logLib = log4cpp;
