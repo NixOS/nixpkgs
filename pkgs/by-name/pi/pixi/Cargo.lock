@@ -1093,6 +1093,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "deunicode"
+version = "1.6.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "339544cc9e2c4dc3fc7149fd630c5f22263a4fdf18a98afd0075784968b5cf00"
+
+[[package]]
 name = "dialoguer"
 version = "0.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1356,6 +1362,16 @@ checksum = "0f214dc438f977e6d4e3500aaa277f5ad94ca83fbbd9b1a15713ce2344ccc5a1"
 dependencies = [
  "event-listener",
  "pin-project-lite",
+]
+
+[[package]]
+name = "fake"
+version = "2.9.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c25829bde82205da46e1823b2259db6273379f626fc211f126f65654a2669be"
+dependencies = [
+ "deunicode",
+ "rand",
 ]
 
 [[package]]
@@ -3308,7 +3324,7 @@ dependencies = [
 
 [[package]]
 name = "pixi"
-version = "0.31.0"
+version = "0.33.0"
 dependencies = [
  "ahash 0.8.11",
  "assert_matches",
@@ -3325,12 +3341,13 @@ dependencies = [
  "csv",
  "deno_task_shell",
  "dialoguer",
- "dirs",
  "distribution-filename",
  "distribution-types",
  "dunce",
+ "fake",
  "fancy_display",
  "flate2",
+ "fs-err",
  "fs_extra",
  "futures",
  "http 1.1.0",
@@ -3378,7 +3395,6 @@ dependencies = [
  "reqwest-middleware",
  "rlimit",
  "rstest",
- "same-file",
  "self-replace",
  "serde",
  "serde_json",
@@ -3544,6 +3560,7 @@ dependencies = [
  "rattler_networking",
  "reqwest 0.12.5",
  "reqwest-middleware",
+ "rstest",
  "serde",
  "serde_json",
  "serde_yaml",
@@ -3927,9 +3944,9 @@ dependencies = [
 
 [[package]]
 name = "rattler"
-version = "0.27.14"
+version = "0.27.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "85a8488d78fb6fa616eeaed34dd3e3ae28de3d41f5fd0f2a692b714546769f6d"
+checksum = "c338b18f3b9302f1b2bc16810c6a30bc9e98f2c40f37d8658616dbd74a181bcd"
 dependencies = [
  "anyhow",
  "clap",
@@ -3968,9 +3985,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_cache"
-version = "0.2.5"
+version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "50307f280939786d161dc4a117032bb3aabd8fd1301f3fcaf63caa095638d990"
+checksum = "55d1681b88074033ade946e04db58397e9d2f317964d68ec77215c2a685a9ed6"
 dependencies = [
  "anyhow",
  "dashmap",
@@ -3996,9 +4013,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_conda_types"
-version = "0.28.1"
+version = "0.28.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0cd1f00e6500bd4252ebb414d1c83aad05e0ab4c177e577344011d38d49ef223"
+checksum = "4c92d862645c581c7abe238e7fb6295750dd389bb27ca19e05162342e0754f8a"
 dependencies = [
  "chrono",
  "dirs",
@@ -4049,9 +4066,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_lock"
-version = "0.22.26"
+version = "0.22.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62ff07b4be849f3eeb334d36d0e3496f8e0fdf096d7ca2b2142b2cbe66e60515"
+checksum = "bbca358701d8308ff9090b221ca682c8c92aab32988c1774b7fdc7175d824021"
 dependencies = [
  "chrono",
  "file_url",
@@ -4110,9 +4127,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_package_streaming"
-version = "0.22.9"
+version = "0.22.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "388a3584bca0b2b7c67c61ae15c280f2202b6590e6afb201a83186432114dc53"
+checksum = "ac020482d1e8eac6aa1114bc87f2af426a8c719e56b7798afe331354a41d1e5e"
 dependencies = [
  "bzip2",
  "chrono",
@@ -4149,9 +4166,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_repodata_gateway"
-version = "0.21.16"
+version = "0.21.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "89a4c1042b0ae79c38f13292fd27a6b8319dcb056928ac688eab67214a6fc125"
+checksum = "a3da152300247f1ce8baa6233acdc86494f38ddf2202a47bf50d54b810675e2d"
 dependencies = [
  "anyhow",
  "async-compression",
@@ -4204,9 +4221,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_shell"
-version = "0.22.3"
+version = "0.22.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75a7d11ca9da7e3954764cb37b96dea0e07c59fbe2f35363083926618a192a2a"
+checksum = "1b9ab12a632b2a9641c4935d160ac181564a66ca56767780bf6ffa9814161dd5"
 dependencies = [
  "enum_dispatch",
  "indexmap 2.3.0",
@@ -4222,9 +4239,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_solve"
-version = "1.0.10"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1ee39b9a5a7e3f1506392034bb39fb7bcac5a296c3ce411a57f285250d953258"
+checksum = "726c21f9119981b47fab512da5d94ddd139617a45ed2863aa709958badc26510"
 dependencies = [
  "chrono",
  "futures",
@@ -4241,9 +4258,9 @@ dependencies = [
 
 [[package]]
 name = "rattler_virtual_packages"
-version = "1.1.6"
+version = "1.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5386d3d7d4e7894f4eeee35b0a3ef204f55993c6eeb7e3fc772ec4566df679f1"
+checksum = "7f6d62812b0b3050fb63ebb3368dd1b64eac3a4d6eb2509bae04d49200b036c5"
 dependencies = [
  "archspec",
  "libloading",
@@ -4590,9 +4607,9 @@ dependencies = [
 
 [[package]]
 name = "resolvo"
-version = "0.8.1"
+version = "0.8.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d68c0ae687bbcd99ab33236c7cbccd2ba1c526a7f7a59743cb991074414c5293"
+checksum = "1621ce52e3ff36c8f55f0017f1e4909f59514af8f852ee943997760bf12c7c15"
 dependencies = [
  "ahash 0.8.11",
  "bitvec",
@@ -5744,9 +5761,9 @@ dependencies = [
 
 [[package]]
 name = "tokio-stream"
-version = "0.1.15"
+version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "267ac89e0bec6e691e5813911606935d77c476ff49024f98abcea3e7b15e37af"
+checksum = "4f4e6ce100d0eb49a2734f8c0812bcd324cf357d21810932c5df6b96ef2b86f1"
 dependencies = [
  "futures-core",
  "pin-project-lite",
@@ -5924,9 +5941,9 @@ checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
 
 [[package]]
 name = "typed-path"
-version = "0.9.1"
+version = "0.9.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "04645b6c01cfb2ddabffc7c67ae6bfe7c3e28a5c37d729f6bb498e784f1fd70c"
+checksum = "50c0c7479c430935701ff2532e3091e6680ec03f2f89ffcd9988b08e885b90a5"
 
 [[package]]
 name = "typeid"
