@@ -2328,6 +2328,12 @@
     githubId = 18467667;
     name = "Alexander Bantyev";
   };
+  balssh = {
+    email = "george.bals25@gmail.com";
+    github = "balssh";
+    githubId = 82440615;
+    name = "George Bals";
+  };
   bananad3v = {
     email = "banana@banana.is-cool.dev";
     github = "BANanaD3V";
