@@ -13630,6 +13630,10 @@ with pkgs;
 
   vul = callPackage ../applications/misc/vul { };
 
+  vuls = callPackage ../by-name/vu/vuls/package.nix {
+    buildGoModule = buildGo123Module;
+  };
+
   xarchive = callPackage ../tools/archivers/xarchive { };
 
   xarchiver = callPackage ../tools/archivers/xarchiver { };
@@ -31541,15 +31545,6 @@ with pkgs;
   };
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
-
-  ncspot = callPackage ../applications/audio/ncspot {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-
-    withALSA = stdenv.hostPlatform.isLinux;
-    withPulseAudio = config.pulseaudio or stdenv.hostPlatform.isLinux;
-    withPortAudio = stdenv.hostPlatform.isDarwin;
-    withMPRIS = stdenv.hostPlatform.isLinux;
-  };
 
   ncview = callPackage ../tools/X11/ncview { } ;
 
