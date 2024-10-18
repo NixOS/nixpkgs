@@ -160,6 +160,7 @@ mapAliases {
 
   budgie = throw "The `budgie` scope has been removed and all packages moved to the top-level"; # Added 2024-07-14
   budgiePlugins = throw "The `budgiePlugins` scope has been removed and all packages moved to the top-level"; # Added 2024-07-14
+  buildGoPackage = throw "`buildGoPackage` has been deprecated and removed, see the Go section in the nixpkgs manual for details"; # Added 2024-11-18
 
   inherit (libsForQt5.mauiPackages) buho; # added 2022-05-17
   butler = throw "butler was removed because it was broken and abandoned upstream"; # added 2024-06-18
