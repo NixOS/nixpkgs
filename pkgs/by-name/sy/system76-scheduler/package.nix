@@ -7,7 +7,7 @@
 , dbus }:
 
 let
-  version = "2.0.1";
+  version = "2.0.2";
 in rustPlatform.buildRustPackage {
   pname = "system76-scheduler";
   inherit version;
@@ -15,9 +15,9 @@ in rustPlatform.buildRustPackage {
     owner = "pop-os";
     repo = "system76-scheduler";
     rev = version;
-    hash = "sha256-o4noaLBXHDe7pMBHfQ85uzKJzwbBE5mkWq8h9l6iIZs=";
+    hash = "sha256-5GiHmu++YRCewDHm/qxKmQwDIAZwlW5Eya/fDriVSdA=";
   };
-  cargoHash = "sha256-hpFDAhOzm4v3lBWwAl/10pS5xvKCScdKsp5wpCeQ+FE=";
+  cargoHash = "sha256-HxNqGe+KrmOoLgaKY9pniPWFF/hehSi1dgZn4LPE7OA=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ dbus pipewire ];
