@@ -14,7 +14,7 @@
 , thrift
 , fftwFloat
 , python
-, swig
+, swig3
 , uhd
 , icu
 , airspy
@@ -85,7 +85,7 @@ in mkDerivation {
   nativeBuildInputs = [
     cmake
     pkg-config
-    swig
+    swig3
   ] ++ lib.optionals (gnuradio.hasFeature "python-support") [
       (if (gnuradio.versionAttr.major == "3.7") then
         python.pkgs.cheetah

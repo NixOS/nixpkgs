@@ -7,7 +7,7 @@
 , pkg-config
 , volk
 , cppunit
-, swig
+, swig3
 , orc
 , boost
 , log4cpp
@@ -83,7 +83,7 @@ let
     python-support = {
       pythonRuntime = [ python.pkgs.six ];
       native = [
-        swig
+        swig3
         python
       ];
       cmakeEnableFlag = "PYTHON";
@@ -98,7 +98,7 @@ let
     gr-ctrlport = {
       cmakeEnableFlag = "GR_CTRLPORT";
       native = [
-        swig
+        swig3
       ];
       runtime = [
         thrift
