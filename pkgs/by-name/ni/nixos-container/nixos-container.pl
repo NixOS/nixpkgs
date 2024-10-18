@@ -171,7 +171,7 @@ sub writeNixOSConfig {
     my $nixosConfig = <<EOF;
 { config, lib, pkgs, ... }:
 
-{ boot.isContainer = true;
+{ boot.isNspawnContainer = true;
   networking.hostName = lib.mkDefault "$containerName";
   networking.useDHCP = false;
   $localExtraConfig
