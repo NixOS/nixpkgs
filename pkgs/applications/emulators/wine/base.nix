@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgArches, makeSetupHook,
+{ stdenv, pkgsBuildHost, lib, pkgArches, makeSetupHook,
   pname, version, src, mingwGccs, monos, geckos, platforms,
   bison, flex, fontforge, makeWrapper, pkg-config,
   nixosTests,
@@ -115,6 +115,7 @@ lib.optionalAttrs (buildScript != null) { builder = buildScript; }
   inherit patches;
 
   configureFlags = prevConfigFlags
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--with-wine-tools=${lib.getOutput "tools" pkgsBuildHost.wine64Packages.minimal}"
     ++ lib.optionals supportFlags.waylandSupport [ "--with-wayland" ]
     ++ lib.optionals supportFlags.vulkanSupport [ "--with-vulkan" ]
     ++ lib.optionals ((stdenv.hostPlatform.isDarwin && !supportFlags.xineramaSupport) || !supportFlags.x11Support) [ "--without-x" ];
