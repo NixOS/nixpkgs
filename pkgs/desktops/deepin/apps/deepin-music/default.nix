@@ -9,7 +9,7 @@
   qt6integration,
   qt6platform-plugins,
   qt6mpris,
-  ffmpeg,
+  ffmpeg_6,
   libvlc,
   qt6Packages,
   taglib,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       qt6Packages.qtbase
       qt6Packages.qt5compat
       qt6Packages.qtmultimedia
-      ffmpeg
+      ffmpeg_6
       libvlc
       taglib
       SDL2
