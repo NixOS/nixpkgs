@@ -6,6 +6,7 @@
   fetchFromGitHub,
   substituteAll,
   python,
+  isPy310,
 
   # build-system
   cython,
@@ -112,6 +113,11 @@ buildPythonPackage rec {
       "test_requote_redirect_url_default"
       # don't run benchmarks
       "test_import_time"
+    ]
+    # these tests fail with python310 but succeeds with 11+
+    ++ lib.optionals isPy310 [
+      "test_https_proxy_unsupported_tls_in_tls"
+      "test_tcp_connector_raise_connector_ssl_error"
     ]
     ++ lib.optionals stdenv.hostPlatform.is32bit [ "test_cookiejar" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

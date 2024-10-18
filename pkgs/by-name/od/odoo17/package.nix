@@ -1,33 +1,53 @@
-{ lib
-, fetchgit
-, fetchzip
-, python312
-, rtlcss
-, wkhtmltopdf
-, nixosTests
+{
+  lib,
+  fetchgit,
+  fetchzip,
+  python310,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
 }:
 
 let
-  odoo_version = "18.0";
+  odoo_version = "17.0";
   odoo_release = "20241010";
-  python = python312.override {
+  python = python310.override {
     self = python;
+    packageOverrides = final: prev: {
+      # requirements.txt fixes docutils at 0.17; the default 0.21.1 tested throws exceptions
+      docutils-0_17 = prev.docutils.overridePythonAttrs (old: rec {
+        version = "0.17";
+        src = fetchgit {
+          url = "git://repo.or.cz/docutils.git";
+          rev = "docutils-${version}";
+          hash = "sha256-O/9q/Dg1DBIxKdNBOhDV16yy5ez0QANJYMjeovDoWX8=";
+        };
+        buildInputs = with prev; [ setuptools ];
+      });
+    };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
 
+  # latest release is at https://github.com/odoo/docker/blob/master/17.0/Dockerfile
   src = fetchzip {
-    # find latest version on https://nightly.odoo.com/${odoo_version}/nightly/src
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
     name = "odoo-${version}";
-    hash = "sha256-TUfLyB0m8XyEiS493Q/ECgSJutAd1rtWX93f3mwfOK0="; # odoo
+    hash = "sha256-s4Fvzjwl2oM0V9G1WQdSoqo7kE7b8tJdluk9f7A06e8="; # odoo
   };
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "--prefix"
+    "PATH"
+    ":"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -35,8 +55,7 @@ in python.pkgs.buildPythonApplication rec {
     chardet
     cryptography
     decorator
-    docutils
-    distutils
+    docutils-0_17 # sphinx has a docutils requirement >= 18
     ebaysdk
     freezegun
     geoip2
@@ -94,6 +113,9 @@ in python.pkgs.buildPythonApplication rec {
     description = "Open Source ERP and CRM";
     homepage = "https://www.odoo.com/";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ mkg20001 siriobalmelli ];
+    maintainers = with maintainers; [
+      mkg20001
+      siriobalmelli
+    ];
   };
 }
