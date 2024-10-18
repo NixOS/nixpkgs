@@ -5015,6 +5015,18 @@ final: prev:
     meta.homepage = "https://github.com/othree/html5.vim/";
   };
 
+  hunk-nvim = buildVimPlugin {
+    pname = "hunk.nvim";
+    version = "2024-09-19";
+    src = fetchFromGitHub {
+      owner = "julienvincent";
+      repo = "hunk.nvim";
+      rev = "eb89245a66bdfce10436d15923bf4deb43d23c96";
+      sha256 = "19j3gcv83gpqqpk39dd1q3wd7p3wrxgry57i3z21rchmd13dzfq9";
+    };
+    meta.homepage = "https://github.com/julienvincent/hunk.nvim/";
+  };
+
   hydra-nvim = buildVimPlugin {
     pname = "hydra.nvim";
     version = "2024-09-05";
