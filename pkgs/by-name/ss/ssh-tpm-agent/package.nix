@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, nix-update-script
 , openssl
 }:
 
@@ -22,6 +23,8 @@ buildGoModule rec {
   buildInputs = [
     openssl
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "SSH agent with support for TPM sealed keys for public key authentication";
