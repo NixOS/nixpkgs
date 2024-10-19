@@ -32609,8 +32609,6 @@ with pkgs;
 
   inherit (ocaml-ng.ocamlPackages) stog;
 
-  stp = callPackage ../applications/science/logic/stp { };
-
   stretchly = callPackage ../applications/misc/stretchly { };
 
   stuffbin = callPackage ../tools/filesystems/stuffbin { };
