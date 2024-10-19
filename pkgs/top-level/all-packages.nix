@@ -29688,8 +29688,6 @@ with pkgs;
 
   gst123 = callPackage ../applications/audio/gst123 { };
 
-  gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
-
   gtklock = callPackage ../tools/wayland/gtklock { };
 
   gtklock-playerctl-module = callPackage ../tools/wayland/gtklock/playerctl-module.nix { };
