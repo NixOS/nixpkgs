@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional includeEverything "-DINCLUDE_EVERYTHING=ON"
   ++ lib.optional sharedLib "-DBUILD_SHARED_LIBS=ON";
 
-  passthru.tests = [ raylib-games ];
+  passthru.tests = { inherit raylib-games; };
 
   patches = [
     # Patch version in CMakeLists.txt to 5.0.0
