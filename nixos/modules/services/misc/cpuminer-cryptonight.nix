@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.cpuminer-cryptonight;
 
@@ -20,28 +17,28 @@ in
   options = {
 
     services.cpuminer-cryptonight = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the cpuminer cryptonight miner.
         '';
       };
-      url = mkOption {
-        type = types.str;
+      url = lib.mkOption {
+        type = lib.types.str;
         description = "URL of mining server";
       };
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         description = "Username for mining server";
       };
-      pass = mkOption {
-        type = types.str;
+      pass = lib.mkOption {
+        type = lib.types.str;
         default = "x";
         description = "Password for mining server";
       };
-      threads = mkOption {
-        type = types.int;
+      threads = lib.mkOption {
+        type = lib.types.int;
         default = 0;
         description = "Number of miner threads, defaults to available processors";
       };
@@ -49,7 +46,7 @@ in
 
   };
 
-  config = mkIf config.services.cpuminer-cryptonight.enable {
+  config = lib.mkIf config.services.cpuminer-cryptonight.enable {
 
     systemd.services.cpuminer-cryptonight = {
       description = "Cryptonight cpuminer";

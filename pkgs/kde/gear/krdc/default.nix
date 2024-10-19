@@ -9,8 +9,13 @@
 mkKdeDerivation {
   pname = "krdc";
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [qtwayland libssh libvncserver freerdp];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtwayland
+    libssh
+    libvncserver
+    freerdp
+  ];
 
   meta.mainProgram = "krdc";
 }

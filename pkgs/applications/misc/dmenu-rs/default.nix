@@ -71,6 +71,6 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3Only ];
     maintainers = with maintainers; [ benjaminedwardwebb ];
     platforms = platforms.linux;
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

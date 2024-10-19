@@ -74,6 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     # error: use of undeclared identifier 'aligned_alloc'
-    broken = stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
+    broken = stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13";
   };
 })

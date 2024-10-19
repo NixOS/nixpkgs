@@ -15,7 +15,6 @@
 , zlib
 , zstd
 , openssl
-, glibc
 , nixosTests
 , sparkSupport ? true
 , spark
@@ -32,26 +31,26 @@ let
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
-              + lib.optionalString stdenv.isAarch64 "-aarch64" + ".tar.gz";
+              + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64" + ".tar.gz";
         inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) hash;
       };
       doCheck = true;
 
       # Build the container executor binary from source
       # InstallPhase is not lazily evaluating containerExecutor for some reason
-      containerExecutor = if stdenv.isLinux then (callPackage ./containerExecutor.nix {
+      containerExecutor = if stdenv.hostPlatform.isLinux then (callPackage ./containerExecutor.nix {
         inherit (finalAttrs) version;
         inherit platformAttrs;
       }) else "";
 
       nativeBuildInputs = [ makeWrapper ]
-                          ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
-      buildInputs = lib.optionals stdenv.isLinux [ stdenv.cc.cc.lib openssl protobuf zlib snappy libtirpc ];
+                          ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ stdenv.cc.cc.lib openssl protobuf zlib snappy libtirpc ];
 
       installPhase = ''
         mkdir $out
         mv * $out/
-      '' + lib.optionalString stdenv.isLinux ''
+      '' + lib.optionalString stdenv.hostPlatform.isLinux ''
         for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
           ln -sf "$n" $out/bin
         done

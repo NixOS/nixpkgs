@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    postgresql
   ];
 
   buildInputs = [

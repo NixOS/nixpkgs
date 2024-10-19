@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     lfc = false;
     # Break because of redundant `-luuid`. This needs to be fixed from the gfal2 upstream.
     # TODO: Change back to `true` once fixed.
-    mock = !stdenv.isDarwin;
+    mock = !stdenv.hostPlatform.isDarwin;
     rfio = false;
     sftp = true;
     srm = false;

@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages
-, newScope, overrideCC, crossLibcStdenv, libcCross
+, newScope, overrideCC, stdenvNoLibc, libcCross
 }:
 
 lib.makeScope newScope (self: with self; {
@@ -14,11 +14,11 @@ lib.makeScope newScope (self: with self; {
   mingw_runtime = mingwrt;
 
   mingw_w64 = callPackage ./mingw-w64 {
-    stdenv = crossLibcStdenv;
+    stdenv = stdenvNoLibc;
   };
 
   # FIXME untested with llvmPackages_16 was using llvmPackages_8
-  crossThreadsStdenv = overrideCC crossLibcStdenv
+  crossThreadsStdenv = overrideCC stdenvNoLibc
     (if stdenv.hostPlatform.useLLVM or false
      then buildPackages.llvmPackages.clangNoLibcxx
      else buildPackages.gccWithoutTargetLibc.override (old: {

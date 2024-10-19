@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.acpid;
 
@@ -34,7 +31,7 @@ let
             echo "event=${handler.event}" > $fn
             echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action }/bin/${name}.sh '%e'" >> $fn
           '';
-        in concatStringsSep "\n" (mapAttrsToList f (canonicalHandlers // cfg.handlers))
+        in lib.concatStringsSep "\n" (lib.mapAttrsToList f (canonicalHandlers // cfg.handlers))
       }
     '';
 
@@ -48,25 +45,25 @@ in
 
     services.acpid = {
 
-      enable = mkEnableOption "the ACPI daemon";
+      enable = lib.mkEnableOption "the ACPI daemon";
 
-      logEvents = mkOption {
-        type = types.bool;
+      logEvents = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Log all event activity.";
       };
 
-      handlers = mkOption {
-        type = types.attrsOf (types.submodule {
+      handlers = lib.mkOption {
+        type = lib.types.attrsOf (lib.types.submodule {
           options = {
-            event = mkOption {
-              type = types.str;
-              example = literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
+            event = lib.mkOption {
+              type = lib.types.str;
+              example = lib.literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
               description = "Event type.";
             };
 
-            action = mkOption {
-              type = types.lines;
+            action = lib.mkOption {
+              type = lib.types.lines;
               description = "Shell commands to execute when the event is triggered.";
             };
           };
@@ -101,20 +98,20 @@ in
         };
       };
 
-      powerEventCommands = mkOption {
-        type = types.lines;
+      powerEventCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Shell commands to execute on a button/power.* event.";
       };
 
-      lidEventCommands = mkOption {
-        type = types.lines;
+      lidEventCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Shell commands to execute on a button/lid.* event.";
       };
 
-      acEventCommands = mkOption {
-        type = types.lines;
+      acEventCommands = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = "Shell commands to execute on an ac_adapter.* event.";
       };
@@ -126,7 +123,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.acpid = {
       description = "ACPI Daemon";
@@ -135,12 +132,12 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = escapeShellArgs
+        ExecStart = lib.escapeShellArgs
           ([ "${pkgs.acpid}/bin/acpid"
              "--foreground"
              "--netlink"
              "--confdir" "${acpiConfDir}"
-           ] ++ optional cfg.logEvents "--logevents"
+           ] ++ lib.optional cfg.logEvents "--logevents"
           );
       };
       unitConfig = {

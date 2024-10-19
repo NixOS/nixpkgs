@@ -27,7 +27,7 @@ mkDerivation rec {
       --replace '$$[QT_INSTALL_TRANSLATIONS]/qt_zh_CN.qm' ""
   '';
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv $out/bin $out/Applications
     rm -fr $out/share
   '';
@@ -38,7 +38,7 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.sebtm ];
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "NotepadNext";
   };
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail 'pip install ' 'pip install --prefix $(out) '
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile \
       --replace-fail '-shared -o' '-shared -install_name "$(out)/$@" -o'
   '';

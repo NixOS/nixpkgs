@@ -57,7 +57,7 @@ buildPythonPackage rec {
     lazy-loader
   ];
 
-  passthru.optional-dependencies.hdf5 = [
+  optional-dependencies.hdf5 = [
     h5io
     pymatreader
   ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)

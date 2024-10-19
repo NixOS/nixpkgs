@@ -8,13 +8,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nb-cli";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "nb_cli";
     inherit version;
-    hash = "sha256-kI3Uy79mv0b+h5wjrRN3My9jOFzryhkStieqaG0YFvM=";
+    hash = "sha256-HZey1RVpx/fHNxdEue1LczYbwYUxEb3i3fHpkKHhn+8=";
   };
 
   build-system = [

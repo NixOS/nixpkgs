@@ -349,6 +349,7 @@ in
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = "@system-service";
+        UMask = 027;
       };
     };
 
@@ -406,4 +407,6 @@ in
       }
     '';
   };
+
+  meta.maintainers = with lib.maintainers; [ felixsinger ];
 }

@@ -97,7 +97,6 @@ in
       # Default services
       services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
@@ -173,7 +172,6 @@ in
       ] ++ utils.removePackagesByName [
         # accessibility
         onboard
-        orca
 
         # theme
         sound-theme-freedesktop
@@ -194,11 +192,10 @@ in
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-xapp
-        (pkgs.xdg-desktop-portal-gtk.override {
-          # Do not build portals that we already have.
-          buildPortalsInGnome = false;
-        })
+        pkgs.xdg-desktop-portal-gtk
       ];
+
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
 
       xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
 

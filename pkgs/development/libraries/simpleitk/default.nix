@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , cmake
-, swig4
+, swig
 , lua
 , elastix
 , itk
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    swig4
+    swig
   ];
   buildInputs = [
     elastix

@@ -12,16 +12,16 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "3.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-FoJfpzrbui+tKCEq15wGC0o44iLCBAuVYBISiy+zOmE=";
+    hash = "sha256-k2jeYeDLpSVw3puiOqlrtQ1a156OV1Er/TqdJuJ+578=";
   };
 
-  npmDepsHash = "sha256-TTFolysg+La605EoS87gmhEjlzwNUVYmnXKr49De7fk=";
+  npmDepsHash = "sha256-k6LdGCpVoBNpHe4z7NrS0T/gcB1EQBvBxGAM3zo+AAo=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'
@@ -30,7 +30,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [ pkg-config python3 ];
 
   buildInputs = [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Security ]);
 
   makeCacheWritable = true;
   npmFlags = [ "--legacy-peer-deps" ];

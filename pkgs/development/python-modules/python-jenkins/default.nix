@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   # test uses timeout mechanism unsafe for use with the "spawn"
   # multiprocessing backend used on macos
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace tests/test_jenkins_sockets.py \
       --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
   '';

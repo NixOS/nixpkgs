@@ -8,7 +8,7 @@
   gobject-introspection,
   gjs,
   glib-networking,
-  gnome,
+  gnome-bluetooth,
   gtk-layer-shell,
   libpulseaudio,
   libsoup_3,
@@ -50,7 +50,7 @@ buildNpmPackage rec {
   buildInputs = [
     gjs
     glib-networking
-    gnome.gnome-bluetooth
+    gnome-bluetooth
     gtk-layer-shell
     libpulseaudio
     libsoup_3

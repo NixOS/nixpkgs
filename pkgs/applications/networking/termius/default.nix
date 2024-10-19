@@ -10,11 +10,13 @@
 , mesa
 , udev
 , wrapGAppsHook3
+, writeScript
 }:
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "8.12.9";
+  version = "9.7.2";
+  revision = "205";
 
   src = fetchurl {
     # find the latest version with
@@ -23,8 +25,8 @@ stdenv.mkDerivation rec {
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_url' -r
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
-    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_194.snap";
-    hash = "sha512-48SHa0KQzbDRD9Z6qb63jH+8/jcjGefSjqsCK52Ob2vnzDDBdsmrRLmFDs/K/FBIjzFV4GAjQx61v9jQtvAsmA==";
+    url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
+    hash = "sha512-LihbkFIFpulewNIHl1oiXJF1npuqNLvVjN8CAmDDf46PAXdpaiMMluHWIJ4NljAACh6d4Uw6m2pKgEDfFN1y6g==";
   };
 
   desktopItem = makeDesktopItem {
@@ -63,7 +65,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/opt/termius
     cp -r ./ $out/opt/termius
 
-    mkdir -p "$out/share/applications" "$out/share/pixmaps/termius-app.png"
+    mkdir -p "$out/share/applications" "$out/share/pixmaps"
     cp "${desktopItem}/share/applications/"* "$out/share/applications"
     cp meta/gui/icon.png $out/share/pixmaps/termius-app.png
 
@@ -75,6 +77,28 @@ stdenv.mkDerivation rec {
   postFixup = ''
     makeWrapper $out/opt/termius/termius-app $out/bin/termius-app \
       "''${gappsWrapperArgs[@]}"
+  '';
+
+  passthru.updateScript = writeScript "update-termius" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p common-updater-scripts curl jq
+
+    set -eu -o pipefail
+
+    data=$(curl -H 'X-Ubuntu-Series: 16' \
+    'https://api.snapcraft.io/api/v1/snaps/details/termius-app?fields=download_sha512,revision,version')
+
+    version=$(jq -r .version <<<"$data")
+
+    if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
+
+        revision=$(jq -r .revision <<<"$data")
+        hash=$(nix hash to-sri "sha512:$(jq -r .download_sha512 <<<"$data")")
+
+        update-source-version "$UPDATE_NIX_ATTR_PATH" "$version" "$hash"
+        update-source-version --ignore-same-hash --version-key=revision "$UPDATE_NIX_ATTR_PATH" "$revision" "$hash"
+
+    fi
   '';
 
   meta = with lib; {

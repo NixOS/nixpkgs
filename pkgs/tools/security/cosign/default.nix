@@ -13,22 +13,22 @@
 }:
 buildGoModule rec {
   pname = "cosign";
-  version = "2.4.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-wTtHdPrGTzDSqkgKMROs772y3mc0X2jMguDZOAL6Ypw=";
+    hash = "sha256-+UZ1o9rkbk/RnyU2Vzzs7uIm+texl5kGa+qt88x4zuk=";
   };
 
   buildInputs =
-    lib.optional (stdenv.isLinux && pivKeySupport) (lib.getDev pcsclite)
-    ++ lib.optionals (stdenv.isDarwin && pivKeySupport) [ PCSC ];
+    lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite)
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pivKeySupport) [ PCSC ];
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
-  vendorHash = "sha256-7HaDsLZsO7QIFiUBE4kH1av97EE+zwphPRusFfpMxUc=";
+  vendorHash = "sha256-E1QHLh2gg5RZ7+tl7eJNR2FmtfVI6rwI6qLD7tio18c=";
 
   subPackages = [
     "cmd/cosign"

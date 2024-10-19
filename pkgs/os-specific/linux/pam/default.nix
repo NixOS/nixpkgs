@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    homepage = "http://www.linux-pam.org/";
+    homepage = "https://github.com/linux-pam/linux-pam";
     description = "Pluggable Authentication Modules, a flexible mechanism for authenticating user";
     platforms = platforms.linux;
     license = licenses.bsd3;

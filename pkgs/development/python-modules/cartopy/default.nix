@@ -65,7 +65,7 @@ buildPythonPackage rec {
     shapely
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ows = [
       owslib
       pillow
@@ -80,7 +80,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
@@ -104,6 +104,6 @@ buildPythonPackage rec {
     mainProgram = "feature_download";
     license = licenses.lgpl3Plus;
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

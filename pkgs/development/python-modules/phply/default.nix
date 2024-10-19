@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   ply,
   pytestCheckHook,
 }:
@@ -10,11 +11,14 @@ buildPythonPackage rec {
   pname = "phply";
   version = "1.2.6";
 
+  pyproject = true;
+
   src = fetchPypi {
-    pname = "phply";
-    inherit version;
-    sha256 = "sha256-Cyd3TShfUHo0RYBaBfj7KZj1bXCScPeLiSCLZbDYSRc=";
+    inherit pname version;
+    hash = "sha256-Cyd3TShfUHo0RYBaBfj7KZj1bXCScPeLiSCLZbDYSRc=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [ ply ];
 

@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
     traitlets
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     app = with python3.pkgs; [
       # ccrawl
       ipython

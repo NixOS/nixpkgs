@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "ucg";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isAarch64 || stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin;
   };
 })
 # TODO: report upstream

@@ -16,7 +16,7 @@
 , waylandSupport ? false
 }:
 
-assert waylandSupport -> stdenv.isLinux;
+assert waylandSupport -> stdenv.hostPlatform.isLinux;
 
 buildGoModule rec {
   pname = "supersonic" + lib.optionalString waylandSupport "-wayland";
@@ -34,7 +34,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     desktopToDarwinBundle
   ];
 
@@ -44,20 +44,20 @@ buildGoModule rec {
   buildInputs = [
     libglvnd
     mpv-unwrapped
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xorg.libXxf86vm
     xorg.libX11
-  ] ++ lib.optionals (stdenv.isLinux && !waylandSupport) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && !waylandSupport) [
     xorg.libXrandr
     xorg.libXinerama
     xorg.libXcursor
     xorg.libXi
     xorg.libXext
-  ] ++ lib.optionals (stdenv.isLinux && waylandSupport) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && waylandSupport) [
     wayland
     wayland-protocols
     libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Cocoa
     darwin.apple_sdk_11_0.frameworks.Kernel
     darwin.apple_sdk_11_0.frameworks.OpenGL

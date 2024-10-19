@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/raspberrypi/usbboot";
+    changelog = "https://github.com/raspberrypi/usbboot/blob/${version}/debian/changelog";
     description = "Utility to boot a Raspberry Pi CM/CM3/CM4/Zero over USB";
     mainProgram = "rpiboot";
     license = licenses.asl20;

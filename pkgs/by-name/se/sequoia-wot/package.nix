@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.SystemConfiguration
     # See comment near sequoia-openpgp/crypto- buildFeatures
   ] ++ lib.optionals (!stdenv.targetPlatform.isWindows) [

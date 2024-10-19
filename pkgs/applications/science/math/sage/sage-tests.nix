@@ -1,5 +1,6 @@
 { stdenv
 , lib
+, pytest
 , sage-with-env
 , makeWrapper
 , files ? null # "null" means run all tests
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
+    pytest
     sage-with-env
   ];
 

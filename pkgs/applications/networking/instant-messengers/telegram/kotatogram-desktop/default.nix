@@ -27,13 +27,10 @@
 , tl-expected
 , hunspell
 , gobject-introspection
-, glibmm_2_68
 , jemalloc
 , rnnoise
 , microsoft-gsl
 , boost
-, fmt
-, wayland
 , libicns
 , darwin
 }:
@@ -44,17 +41,17 @@ let
     inherit stdenv;
   };
 
-  mainProgram = if stdenv.isLinux then "kotatogram-desktop" else "Kotatogram";
+  mainProgram = if stdenv.hostPlatform.isLinux then "kotatogram-desktop" else "Kotatogram";
 in
 stdenv.mkDerivation rec {
   pname = "kotatogram-desktop";
-  version = "0-unstable-2024-07-01";
+  version = "0-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "kotatogram";
     repo = "kotatogram-desktop";
-    rev = "fbb22ebd3e39dfa4a036fa79a7a3f78b86b1cea2";
-    hash = "sha256-ccfmaqapk9ct+5kvBI02xHJ7YCGmm1CcqwM+3hC1bk0=";
+    rev = "0581eb6219343b3cfcbb81124b372df1039b7568";
+    hash = "sha256-rvn8GZmHdMkVutLUe/LmUNIawlb9VgU3sYhPwZ2MWsI=";
     fetchSubmodules = true;
   };
 
@@ -63,20 +60,20 @@ stdenv.mkDerivation rec {
     ./macos-opengl.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
       --replace-fail '"libasound.so.2"' '"${alsa-lib}/lib/libasound.so.2"'
     substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
       --replace-fail '"libpulse.so.0"' '"${libpulseaudio}/lib/libpulse.so.0"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Telegram/lib_webrtc/webrtc/platform/mac/webrtc_environment_mac.mm \
       --replace-fail kAudioObjectPropertyElementMain kAudioObjectPropertyElementMaster
   '';
 
   # Wrapping the inside of the app bundles, avoiding double-wrapping
-  dontWrapQtApps = stdenv.isDarwin;
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     pkg-config
@@ -85,11 +82,11 @@ stdenv.mkDerivation rec {
     python3
     wrapQtAppsHook
     removeReferencesTo
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     # to build bundled libdispatch
     clang
     gobject-introspection
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     lld
   ];
 
@@ -109,17 +106,14 @@ stdenv.mkDerivation rec {
     tg_owt
     microsoft-gsl
     boost
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
     kcoreaddons
     alsa-lib
     libpulseaudio
     hunspell
-    glibmm_2_68
     jemalloc
-    fmt
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks; [
     Cocoa
     CoreFoundation
     CoreServices
@@ -156,7 +150,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_CFLAGS_LINK = "-fuse-ld=lld";
   };
 
@@ -164,7 +158,7 @@ stdenv.mkDerivation rec {
     "-DTDESKTOP_API_TEST=ON"
   ];
 
-  installPhase = lib.optionalString stdenv.isDarwin ''
+  installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     cp -r ${mainProgram}.app $out/Applications
     ln -s $out/{Applications/${mainProgram}.app/Contents/MacOS,bin}
@@ -176,7 +170,7 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${tg_owt.dev} $out/bin/${mainProgram}
   '';
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     wrapQtApp $out/Applications/${mainProgram}.app/Contents/MacOS/${mainProgram}
   '';
 

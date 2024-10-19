@@ -88,12 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/meshlab/src/external/ssynth.cmake \
       --replace-fail '$'{SSYNTH_LINK} ${structuresynth.src} \
       --replace-warn "MD5 ''${SSYNTH_MD5}" ""
-    export cmakeFlags="cmakeFlags
-      -DCMAKE_INSTALL_PREFIX=$out/${python3Packages.python.sitePackages}/pymeshlab
-    "
   '';
 
   cmakeFlags = [
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/${python3Packages.python.sitePackages}/pymeshlab"
     "-DVCGDIR=${vcg.src}"
   ];
 

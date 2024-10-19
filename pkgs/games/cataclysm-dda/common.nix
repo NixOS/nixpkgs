@@ -8,10 +8,10 @@ let
   inherit (lib) optionals optionalString;
 
   cursesDeps = [ gettext ncurses ]
-    ++ optionals stdenv.isDarwin [ CoreFoundation ];
+    ++ optionals stdenv.hostPlatform.isDarwin [ CoreFoundation ];
 
   tilesDeps = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf freetype ]
-    ++ optionals stdenv.isDarwin [ Cocoa ];
+    ++ optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   patchDesktopFile = ''
     substituteInPlace $out/share/applications/org.cataclysmdda.CataclysmDDA.desktop \
@@ -50,14 +50,14 @@ stdenv.mkDerivation {
     "RELEASE=1"
   ] ++ optionals tiles [
     "TILES=1" "SOUND=1"
-  ] ++ optionals stdenv.isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     "NATIVE=osx"
     "CLANG=1"
     "OSX_MIN=${stdenv.hostPlatform.darwinMinVersion}"
   ];
 
   postInstall = optionalString tiles
-  ( if !stdenv.isDarwin
+  ( if !stdenv.hostPlatform.isDarwin
     then patchDesktopFile
     else installMacOSAppLauncher
   );

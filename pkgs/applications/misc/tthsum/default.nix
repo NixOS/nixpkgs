@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     cp obj-unix/tthsum $out/bin
   '';
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Md5sum-alike program that works with Tiger/THEX hashes";
     longDescription = ''
       tthsum generates or checks TTH checksums (root of the THEX hash

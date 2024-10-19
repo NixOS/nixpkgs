@@ -20,7 +20,16 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-wn5DurPWFwSUtc5naEL4lBSQpKWTJkugpN9mKx+Ed2Y=";
   };
 
-  cargoHash = "sha256-TylRxdpAVuGtZ3Lm8je6FZ0JUwetBi6mOGRoT2M3Jyk=";
+  cargoPatches = [
+    # This pacth can be removed with the next version bump, it just updates the `time` crate
+    ./update-time-crate.patch
+  ];
+
+  # To show the "correct" git-hash in `leftwm-check` we manually set the GIT_HASH env variable
+  # can be remove together with the above patch
+  GIT_HASH = "36609e0 patched";
+
+  cargoHash = "sha256-SNq76pTAPSUGVRp/+fwCjSMP/lKVzh6wU+WZW5n/yjg=";
 
   buildInputs = rpathLibs;
 
@@ -39,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ yanganto ];
+    maintainers = with lib.maintainers; [ vuimuich yanganto ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
     mainProgram = "leftwm";
   };

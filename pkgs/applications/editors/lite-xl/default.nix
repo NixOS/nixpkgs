@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     lua5_4
     pcre2
     SDL2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 

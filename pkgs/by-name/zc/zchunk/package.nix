@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     curl
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [ argp-standalone ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ argp-standalone ];
 
   outputs = [
     "out"

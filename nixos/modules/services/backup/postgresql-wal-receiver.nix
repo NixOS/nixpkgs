@@ -1,24 +1,21 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   receiverSubmodule = {
     options = {
-      postgresqlPackage = mkPackageOption pkgs "postgresql" {
+      postgresqlPackage = lib.mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
       };
 
-      directory = mkOption {
-        type = types.path;
-        example = literalExpression "/mnt/pg_wal/main/";
+      directory = lib.mkOption {
+        type = lib.types.path;
+        example = lib.literalExpression "/mnt/pg_wal/main/";
         description = ''
           Directory to write the output to.
         '';
       };
 
-      statusInterval = mkOption {
-        type = types.int;
+      statusInterval = lib.mkOption {
+        type = lib.types.int;
         default = 10;
         description = ''
           Specifies the number of seconds between status packets sent back to the server.
@@ -28,8 +25,8 @@ let
         '';
       };
 
-      slot = mkOption {
-        type = types.str;
+      slot = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = "some_slot_name";
         description = ''
@@ -45,8 +42,8 @@ let
         '';
       };
 
-      synchronous = mkOption {
-        type = types.bool;
+      synchronous = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Flush the WAL data to disk immediately after it has been received.
@@ -57,8 +54,8 @@ let
         '';
       };
 
-      compress = mkOption {
-        type = types.ints.between 0 9;
+      compress = lib.mkOption {
+        type = lib.types.ints.between 0 9;
         default = 0;
         description = ''
           Enables gzip compression of write-ahead logs, and specifies the compression level
@@ -69,8 +66,8 @@ let
         '';
       };
 
-      connection = mkOption {
-        type = types.str;
+      connection = lib.mkOption {
+        type = lib.types.str;
         example = "postgresql://user@somehost";
         description = ''
           Specifies parameters used to connect to the server, as a connection string.
@@ -81,10 +78,10 @@ let
         '';
       };
 
-      extraArgs = mkOption {
-        type = with types; listOf str;
+      extraArgs = lib.mkOption {
+        type = with lib.types; listOf str;
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [
             "--no-sync"
           ]
@@ -94,10 +91,10 @@ let
         '';
       };
 
-      environment = mkOption {
-        type = with types; attrsOf str;
+      environment = lib.mkOption {
+        type = with lib.types; attrsOf str;
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             PGPASSFILE = "/private/passfile";
             PGSSLMODE = "require";
@@ -114,10 +111,10 @@ let
 in {
   options = {
     services.postgresqlWalReceiver = {
-      receivers = mkOption {
-        type = with types; attrsOf (submodule receiverSubmodule);
+      receivers = lib.mkOption {
+        type = with lib.types; attrsOf (submodule receiverSubmodule);
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             main = {
               postgresqlPackage = pkgs.postgresql_15;
@@ -138,7 +135,7 @@ in {
 
   config = let
     receivers = config.services.postgresqlWalReceiver.receivers;
-  in mkIf (receivers != { }) {
+  in lib.mkIf (receivers != { }) {
     users = {
       users.postgres = {
         uid = config.ids.uids.postgres;
@@ -151,18 +148,18 @@ in {
       };
     };
 
-    assertions = concatLists (attrsets.mapAttrsToList (name: config: [
+    assertions = lib.concatLists (lib.attrsets.mapAttrsToList (name: config: [
       {
-        assertion = config.compress > 0 -> versionAtLeast config.postgresqlPackage.version "10";
+        assertion = config.compress > 0 -> lib.versionAtLeast config.postgresqlPackage.version "10";
         message = "Invalid configuration for WAL receiver \"${name}\": compress requires PostgreSQL version >= 10.";
       }
     ]) receivers);
 
-    systemd.tmpfiles.rules = mapAttrsToList (name: config: ''
-      d ${escapeShellArg config.directory} 0750 postgres postgres - -
+    systemd.tmpfiles.rules = lib.mapAttrsToList (name: config: ''
+      d ${lib.escapeShellArg config.directory} 0750 postgres postgres - -
     '') receivers;
 
-    systemd.services = with attrsets; mapAttrs' (name: config: nameValuePair "postgresql-wal-receiver-${name}" {
+    systemd.services = lib.mapAttrs' (name: config: lib.nameValuePair "postgresql-wal-receiver-${name}" {
       description = "PostgreSQL WAL receiver (${name})";
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 0; # retry forever, useful in case of network disruption
@@ -179,22 +176,22 @@ in {
 
       script = let
         receiverCommand = postgresqlPackage:
-         if (versionAtLeast postgresqlPackage.version "10")
+         if (lib.versionAtLeast postgresqlPackage.version "10")
            then "${postgresqlPackage}/bin/pg_receivewal"
            else "${postgresqlPackage}/bin/pg_receivexlog";
       in ''
         ${receiverCommand config.postgresqlPackage} \
           --no-password \
-          --directory=${escapeShellArg config.directory} \
+          --directory=${lib.escapeShellArg config.directory} \
           --status-interval=${toString config.statusInterval} \
-          --dbname=${escapeShellArg config.connection} \
-          ${optionalString (config.compress > 0) "--compress=${toString config.compress}"} \
-          ${optionalString (config.slot != "") "--slot=${escapeShellArg config.slot}"} \
-          ${optionalString config.synchronous "--synchronous"} \
-          ${concatStringsSep " " config.extraArgs}
+          --dbname=${lib.escapeShellArg config.connection} \
+          ${lib.optionalString (config.compress > 0) "--compress=${toString config.compress}"} \
+          ${lib.optionalString (config.slot != "") "--slot=${lib.escapeShellArg config.slot}"} \
+          ${lib.optionalString config.synchronous "--synchronous"} \
+          ${lib.concatStringsSep " " config.extraArgs}
       '';
     }) receivers;
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with lib.maintainers; [ pacien ];
 }

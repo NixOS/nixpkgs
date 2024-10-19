@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonImportsCheckHook,
   pythonOlder,
   # documentation build dependencies
   sphinxHook,
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonImportsCheckHook
     sphinxHook
     sphinx-prompt
     sphinx-rtd-theme

@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.clatd;
 
@@ -11,16 +9,16 @@ in
 {
   options = {
     services.clatd = {
-      enable = mkEnableOption "clatd";
+      enable = lib.mkEnableOption "clatd";
 
-      package = mkPackageOption pkgs "clatd" { };
+      package = lib.mkPackageOption pkgs "clatd" { };
 
-      settings = mkOption {
-        type = types.submodule ({ name, ... }: {
+      settings = lib.mkOption {
+        type = lib.types.submodule ({ name, ... }: {
           freeformType = settingsFormat.type;
         });
         default = { };
-        example = literalExpression ''
+        example = lib.literalExpression ''
           {
             plat-prefix = "64:ff9b::/96";
           }
@@ -32,7 +30,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.clatd = {
       description = "464XLAT CLAT daemon";
       documentation = [ "man:clatd(8)" ];

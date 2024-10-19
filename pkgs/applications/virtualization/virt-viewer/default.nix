@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     gdbm
     spice-gtk
     spice-protocol
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
   ]);
 

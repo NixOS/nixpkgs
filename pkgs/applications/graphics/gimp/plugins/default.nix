@@ -17,7 +17,7 @@ let
   pluginDerivation = attrs: let
     name = attrs.name or "${attrs.pname}-${attrs.version}";
   in stdenv.mkDerivation ({
-    prePhases = "extraLib";
+    prePhases = [ "extraLib" ];
     extraLib = ''
       installScripts(){
         mkdir -p $out/${gimp.targetScriptDir}/${name};
@@ -54,7 +54,7 @@ let
   });
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
-    prePhases = "extraLib";
+    prePhases = [ "extraLib" ];
     dontUnpack = true;
     installPhase = ''
       runHook preInstall
@@ -155,7 +155,7 @@ in
     };
   };
 
-  farbfeld = pluginDerivation rec {
+  farbfeld = pluginDerivation {
     pname = "farbfeld";
     version = "unstable-2019-08-12";
 
@@ -309,7 +309,7 @@ in
     variant = "gimp";
   };
 
-  gimplensfun = pluginDerivation rec {
+  gimplensfun = pluginDerivation {
     version = "unstable-2018-10-21";
     pname = "gimplensfun";
 

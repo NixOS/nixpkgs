@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "-DNCNN_PYTHON=0" # Should be an attribute
   ]
   # Requires setting `Vulkan_LIBRARY` on Darwin. Otherwise the build fails due to missing symbols.
-  ++ lib.optionals stdenv.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DVulkan_LIBRARY=-lvulkan" ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ vulkan-headers vulkan-loader glslang opencv protobuf ];

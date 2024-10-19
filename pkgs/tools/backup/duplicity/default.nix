@@ -39,7 +39,7 @@ let self = python3.pkgs.buildPythonApplication rec {
     # don't try to use gtar on darwin/bsd
     substituteInPlace testing/functional/test_restart.py \
       --replace-fail 'tarcmd = "gtar"' 'tarcmd = "tar"'
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # tests try to access these files in the sandbox, but can't deal with EPERM
     substituteInPlace testing/unit/test_globmatch.py \
       --replace-fail /var/log /test/log
@@ -50,7 +50,7 @@ let self = python3.pkgs.buildPythonApplication rec {
       --replace-fail '"/tmp/' 'os.environ.get("TMPDIR")+"/'
   '';
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # uses /tmp/
     "testing/unit/test_cli_main.py::CommandlineTest::test_intermixed_args"
   ];
@@ -91,16 +91,15 @@ let self = python3.pkgs.buildPythonApplication rec {
     gnutar # Add 'tar' to PATH.
     librsync # Add 'rdiff' to PATH.
     par2cmdline # Add 'par2' to PATH.
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linux # Add 'setsid' to PATH.
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     getconf
   ] ++ (with python3.pkgs; [
     lockfile
     mock
     pexpect
-    pytest
-    pytest-runner
+    pytestCheckHook
     fasteners
   ]);
 
@@ -112,7 +111,7 @@ let self = python3.pkgs.buildPythonApplication rec {
       gnupg
       ncftp
       rsync
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       getconf
     ]); in ''
     makeWrapperArgsBak=("''${makeWrapperArgs[@]}")

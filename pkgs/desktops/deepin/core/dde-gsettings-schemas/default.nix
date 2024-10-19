@@ -2,11 +2,11 @@
   lib,
   runCommand,
   glib,
-  gtk3,
   dde-grand-search,
   startdde,
   dde-session-shell,
   dde-file-manager,
+  dde-tray-loader,
   deepin-desktop-schemas,
   deepin-movie-reborn,
   deepin-system-monitor,
@@ -21,6 +21,7 @@ let
     startdde
     dde-session-shell
     dde-file-manager
+    dde-tray-loader
     deepin-desktop-schemas
     deepin-movie-reborn
     deepin-system-monitor

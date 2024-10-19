@@ -1,36 +1,38 @@
 {
   lib,
-  python3,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
-  uv,
+  replaceVars,
   git,
   cargo,
-  stdenv,
+  versionCheckHook,
   darwin,
   nix-update-script,
-  testers,
-  hatch,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.12.0";
+  version = "1.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     rev = "refs/tags/hatch-v${version}";
-    hash = "sha256-HW2vDVsFrdFRRaPNuGDg9DZpJd8OuYDIqA3KQRa3m9o=";
+    hash = "sha256-jD8mr0PXlGK9YkBPZhNTimuxmq6dJG7cfQP/UEmHTZY=";
   };
 
-  build-system = with python3.pkgs; [
+  patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
+
+  build-system = with python3Packages; [
     hatchling
     hatch-vcs
-    uv
   ];
 
-  dependencies = with python3.pkgs; [
+  pythonRemoveDeps = [ "uv" ];
+
+  dependencies = with python3Packages; [
     click
     hatchling
     httpx
@@ -49,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeCheckInputs =
-    with python3.pkgs;
+    with python3Packages;
     [
       binary
       git
@@ -58,10 +60,15 @@ python3.pkgs.buildPythonApplication rec {
       pytest-xdist
       setuptools
     ]
-    ++ [ cargo ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ [
+      cargo
+      versionCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.ps
     ];
+
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -93,11 +100,11 @@ python3.pkgs.buildPythonApplication rec {
       "test_uv_env"
       "test_pyenv"
       "test_pypirc"
+      # Relies on FHS
+      # Could not read ELF interpreter from any of the following paths: /bin/sh, /usr/bin/env, /bin/dash, /bin/ls
+      "test_new_selected_python"
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      # https://github.com/NixOS/nixpkgs/issues/209358
-      "test_scripts_no_environment"
-
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # This test assumes it is running on macOS with a system shell on the PATH.
       # It is not possible to run it in a nix build using a /nix/store shell.
       # See https://github.com/pypa/hatch/pull/709 for the relevant code.
@@ -108,9 +115,9 @@ python3.pkgs.buildPythonApplication rec {
       "test_macos_archflags"
       "test_macos_max_compat"
     ]
-    ++ lib.optionals stdenv.isAarch64 [ "test_resolve" ];
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "test_resolve" ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: assert [call('test h...2p32/bin/sh')] == [call('test h..., shell=True)]
     # At index 0 diff:
     #    call('test hatch-test.py3.10', shell=True, executable='/nix/store/b34ianga4diikh0kymkpqwmvba0mmzf7-bash-5.2p32/bin/sh')
@@ -120,8 +127,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    tests.version = testers.testVersion { package = hatch; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "hatch-v([0-9.]+)"
+      ];
+    };
   };
 
   meta = {

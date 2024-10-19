@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     portaudio
     libsndfile
     libsamplerate
-  ] ++ lib.optionals (stdenv.isLinux) [ libpulseaudio alsa-lib udev ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [ libpulseaudio alsa-lib udev ];
 
   env.CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++14";
 

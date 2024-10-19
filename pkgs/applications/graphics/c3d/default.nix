@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk ] ++ lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = [ itk ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   cmakeFlags = [ "-DCONVERT3D_USE_ITK_REMOTE_MODULES=OFF" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.gpl3;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     # /build/source/itkextras/OneDimensionalInPlaceAccumulateFilter.txx:312:10: fatal error: xmmintrin.h: No such file or directory
   };
 }

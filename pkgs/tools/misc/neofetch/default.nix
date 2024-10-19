@@ -57,7 +57,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/dylanaraps/neofetch";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alibabzo konimex ];
+    maintainers = with maintainers; [ konimex ];
     mainProgram = "neofetch";
   };
 }

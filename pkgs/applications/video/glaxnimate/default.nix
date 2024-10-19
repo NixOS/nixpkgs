@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitLab
+, fetchpatch
 , cmake
 , zlib
 , potrace
@@ -47,6 +48,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Backport fix for newer ffmpeg
+    # FIXME: remove in next update
+    (fetchpatch {
+      url = "https://invent.kde.org/graphics/glaxnimate/-/commit/4fb2b67a0f0ce2fbffb6fe9f87c3bf7914c8a602.patch";
+      hash = "sha256-QjCnscGa7n+zwrImA4mbQiTQb9jmDGm8Y/7TK8jZXvM=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     wrapQtAppsHook
@@ -72,7 +82,7 @@ stdenv.mkDerivation rec {
 
   qtWrapperArgs = [ ''--prefix PATH : ${python3WithLibs}/bin'' ];
 
-  passthru.tests.version = lib.optionalAttrs stdenv.isLinux (testers.testVersion {
+  passthru.tests.version = lib.optionalAttrs stdenv.hostPlatform.isLinux (testers.testVersion {
     package = glaxnimate;
     command = "${xvfb-run}/bin/xvfb-run glaxnimate --version";
   });

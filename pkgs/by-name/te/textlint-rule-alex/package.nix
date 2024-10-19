@@ -27,7 +27,7 @@ buildNpmPackage rec {
   meta = {
     description = "Textlint rule for alex";
     homepage = "https://github.com/textlint-rule/textlint-rule-alex";
-    changelog = "https://github.com/textlint-rule/textlint-rule-alex/releases/tag/${src.rev}";
+    changelog = "https://github.com/textlint-rule/textlint-rule-alex/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
   };

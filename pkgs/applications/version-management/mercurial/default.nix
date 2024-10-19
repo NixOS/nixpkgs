@@ -50,7 +50,7 @@ let
            rustc
          ];
     buildInputs = [ docutils ]
-      ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
 
     makeFlags = [ "PREFIX=$(out)" ]
       ++ lib.optional rustSupport "PURE=--rust";
@@ -92,7 +92,7 @@ let
       downloadPage = "https://www.mercurial-scm.org/release/";
       changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
       license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ eelco lukegb pacien techknowlogick ];
+      maintainers = with maintainers; [ lukegb pacien techknowlogick ];
       platforms = platforms.unix;
       mainProgram = "hg";
     };

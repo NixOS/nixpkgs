@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rich-click";
-  version = "1.8.2";
+  version = "1.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ewels";
     repo = "rich-click";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O7ZV6+p0nvWmKHUy/aK+qcED/KT4hZojoQRKr9Eg848=";
+    hash = "sha256-7Avg8HcN9q0EUOnkvuM0oIbwTUGAY2ksbX3SOVZtPOc=";
   };
 
   build-system = [ setuptools ];

@@ -18,9 +18,9 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   os =
-    if stdenv.isLinux then
+    if stdenv.hostPlatform.isLinux then
       "linux"
-    else if stdenv.isDarwin then
+    else if stdenv.hostPlatform.isDarwin then
       "darwin"
     else
       throw "Unsupported OS";

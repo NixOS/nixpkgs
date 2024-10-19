@@ -37,6 +37,8 @@ let
     useDHCP = false;
     interfaces.eth1.ipv4.addresses = lib.mkVMOverride [];
     interfaces.eth2.ipv4.addresses = lib.mkVMOverride [];
+    interfaces.eth1.ipv6.addresses = lib.mkVMOverride [];
+    interfaces.eth2.ipv6.addresses = lib.mkVMOverride [];
     # open a port for testing
     firewall.allowedUDPPorts = [ 1234 ];
   };

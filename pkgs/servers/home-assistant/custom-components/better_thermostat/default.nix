@@ -1,24 +1,26 @@
-{ lib, fetchFromGitHub, buildHomeAssistantComponent }:
+{
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildHomeAssistantComponent rec {
   owner = "KartoffelToby";
   domain = "better_thermostat";
-  version = "1.5.0";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "KartoffelToby";
     repo = "better_thermostat";
     rev = "refs/tags/${version}";
-    hash = "sha256-noo96Uks+MHtTbwIoU5gnekp/IwMry0U18X4I1qe4LQ=";
+    hash = "sha256-9iwrGKk3/m38ghDVGzKODWo9vzzZxJ91413/KWnULJU=";
   };
 
-  meta = with lib; {
-    changelog =
-      "https://github.com/KartoffelToby/better_thermostat/releases/tag/${version}";
-    description =
-      "Smart TRV control integrates room-temp sensors, window/door sensors, weather forecasts, and ambient probes for efficient heating and calibration, enhancing energy savings and comfort.";
+  meta = {
+    changelog = "https://github.com/KartoffelToby/better_thermostat/releases/tag/${version}";
+    description = "Smart TRV control integrates room-temp sensors, window/door sensors, weather forecasts, and ambient probes for efficient heating and calibration, enhancing energy savings and comfort";
     homepage = "https://better-thermostat.org/";
-    maintainers = with maintainers; [ mguentner ];
-    license = licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ mguentner ];
+    license = lib.licenses.agpl3Only;
   };
 }

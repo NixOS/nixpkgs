@@ -5,17 +5,17 @@
 
 buildGoModule rec {
   pname = "picocrypt-cli";
-  version = "2.05";
+  version = "2.08";
 
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "CLI";
     rev = version;
-    hash = "sha256-9VvPgATij6WkOVaRDAmwjRshzPk6UCTlaiYJzceTHFQ=";
+    hash = "sha256-6/VmacOXQOCkjLFyzDPyohOueF3WKJu7XCAD9oiFXEc=";
   };
 
   sourceRoot = "${src.name}/picocrypt";
-  vendorHash = "sha256-UNyBDWdl9G8Rt3BLWZyuh1bv4jd9TZ9sOfUAgDPzjlw=";
+  vendorHash = "sha256-QIeuqdoC17gqxFgKJ/IU024dgofBCizWTj2S7CCmED4=";
 
   ldflags = [
     "-s"

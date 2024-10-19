@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     "CONFIG+=mfwebengine"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir "$out"/Applications
     mv app/mindforger.app "$out"/Applications/
   '';

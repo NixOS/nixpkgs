@@ -9,6 +9,7 @@
 , libadwaita
 , libcanberra
 , libgee
+, glib
 , granite7
 , gtk4
 , pulseaudio
@@ -27,6 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
@@ -42,6 +44,8 @@ stdenv.mkDerivation rec {
     pulseaudio
     switchboard
   ];
+
+  strictDeps = true;
 
   passthru = {
     updateScript = nix-update-script { };

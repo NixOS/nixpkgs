@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ./includes.patch
   ];
 
-  hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
+  hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
   nativeBuildInputs = [ bison cmake flex mcpp doxygen graphviz makeWrapper perl ];
   buildInputs = [ bash-completion ncurses zlib sqlite libffi python3 ];

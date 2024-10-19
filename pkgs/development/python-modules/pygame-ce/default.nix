@@ -65,7 +65,9 @@ buildPythonPackage rec {
 
   postPatch =
     ''
+      # cython was pinned to fix windows build hangs (pygame-community/pygame-ce/pull/3015)
       substituteInPlace pyproject.toml \
+        --replace-fail '"cython<=3.0.10",' '"cython",' \
         --replace-fail '"meson<=1.5.0",' '"meson",' \
         --replace-fail '"sphinx<=7.2.6",' "" \
         --replace-fail '"ninja<=1.11.1.1",' ""
@@ -75,7 +77,7 @@ buildPythonPackage rec {
         --replace-fail 'path="fc-list"' 'path="${fontconfig}/bin/fc-list"' \
         --replace-fail /usr/X11/bin/fc-list ${fontconfig}/bin/fc-list
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # flaky
       rm test/system_test.py
       substituteInPlace test/meson.build \
@@ -100,7 +102,7 @@ buildPythonPackage rec {
     SDL2_image
     SDL2_mixer
     SDL2_ttf
-  ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ AppKit ];
 
   nativeCheckInputs = [
     numpy

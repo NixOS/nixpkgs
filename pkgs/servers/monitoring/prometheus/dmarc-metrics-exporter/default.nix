@@ -1,13 +1,13 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
   version = "1.1.0";
-
-  disabled = python3.pythonOlder "3.8";
 
   pyproject = true;
 
@@ -20,25 +20,33 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bite-parser
-    dataclasses-serialization
-    prometheus-client
-    structlog
-    uvicorn
-    xsdata
-  ]
-  ++ uvicorn.optional-dependencies.standard;
+  dependencies =
+    with python3.pkgs;
+    [
+      bite-parser
+      dataclasses-serialization
+      prometheus-client
+      structlog
+      uvicorn
+      xsdata
+    ]
+    ++ uvicorn.optional-dependencies.standard;
 
   nativeCheckInputs = with python3.pkgs; [
     aiohttp
     pytest-asyncio
     pytestCheckHook
     requests
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # flaky tests
+    "test_build_info"
+    "test_prometheus_exporter"
   ];
 
   disabledTestPaths = [

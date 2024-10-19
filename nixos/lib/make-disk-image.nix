@@ -321,7 +321,7 @@ let format' = format; in let
       e2fsprogs
       lkl
       config.system.build.nixos-install
-      config.system.build.nixos-enter
+      nixos-enter
       nix
       systemdMinimal
     ]

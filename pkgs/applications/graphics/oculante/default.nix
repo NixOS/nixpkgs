@@ -41,12 +41,10 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
-
   buildInputs = [
     openssl
     fontconfig
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL
     libX11
     libXcursor
@@ -56,12 +54,13 @@ rustPlatform.buildRustPackage rec {
 
     libxkbcommon
     wayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 
   checkFlags = [
     "--skip=bench"
+    "--skip=tests::net" # requires network access
   ];
 
   postInstall = ''
@@ -72,7 +71,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Minimalistic crossplatform image viewer written in Rust";
     homepage = "https://github.com/woelper/oculante";
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";

@@ -127,8 +127,7 @@ in
         example = "10.3.0";
         description = ''
           Override what rocm will detect your gpu model as.
-          For example, make rocm treat your RX 5700 XT (or any other model)
-          as an RX 6900 XT using a value of `"10.3.0"` (gfx 1030).
+          For example, if you have an RX 5700 XT, try setting this to `"10.1.0"` (gfx 1010).
 
           This sets the value of `HSA_OVERRIDE_GFX_VERSION`. See [ollama's docs](
           https://github.com/ollama/ollama/blob/main/docs/gpu.md#amd-radeon

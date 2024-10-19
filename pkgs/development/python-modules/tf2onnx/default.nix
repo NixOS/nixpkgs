@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytest-runner,
   # runtime dependencies
   numpy,
   onnx,
@@ -34,9 +33,10 @@ buildPythonPackage rec {
     hash = "sha256-qtRzckw/KHWm3gjFwF+cPuBhGbfktjhYIwImwHn2CFk=";
   };
 
-  nativeBuildInputs = [
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'" ""
+  '';
 
   pythonRelaxDeps = [ "flatbuffers" ];
 

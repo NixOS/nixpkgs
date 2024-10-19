@@ -8,9 +8,6 @@
   electron,
 }:
 
-let
-  electronDist = electron + (if stdenv.isDarwin then "/Applications" else "/libexec/electron");
-in
 buildNpmPackage rec {
   pname = "caprine";
   version = "2.60.1";
@@ -29,7 +26,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [ copyDesktopItems ];
 
   postBuild = ''
-    cp -r ${electronDist} electron-dist
+    cp -r ${electron.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -43,7 +40,7 @@ buildNpmPackage rec {
   installPhase = ''
     runHook preInstall
 
-    ${lib.optionalString stdenv.isLinux ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       mkdir -p $out/share/caprine
       cp -r dist/*-unpacked/{locales,resources{,.pak}} $out/share/caprine
 
@@ -56,7 +53,7 @@ buildNpmPackage rec {
       install -Dm644 build/icon.png $out/share/icons/hicolor/512x512/apps/caprine.png
     ''}
 
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r dist/mac*/"Caprine.app" $out/Applications
       makeWrapper "$out/Applications/Caprine.app/Contents/MacOS/Caprine" $out/bin/caprine

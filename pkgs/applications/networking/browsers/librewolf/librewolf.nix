@@ -33,9 +33,9 @@ rec {
     cat ${source}/patches/pref-pane/preferences.ftl >> browser/locales/en-US/browser/preferences/preferences.ftl
   '';
 
-  extraPrefsFiles = [ "${src.settings}/librewolf.cfg" ];
+  extraPrefsFiles = [ "${source}/settings/librewolf.cfg" ];
 
-  extraPoliciesFiles = [ "${src.settings}/distribution/policies.json" ];
+  extraPoliciesFiles = [ "${source}/settings/distribution/policies.json" ];
 
   extraPassthru = {
     librewolf = {

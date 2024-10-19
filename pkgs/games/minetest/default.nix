@@ -42,18 +42,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minetest";
-  version = "5.9.0";
+  version = "5.9.1";
 
   src = fetchFromGitHub {
     owner = "minetest";
     repo = "minetest";
     rev = finalAttrs.version;
-    hash = "sha256-cxbiuoD1J3WFoveUgxeR/XXdE7MMR0UEDFleDiaxnsA=";
+    hash = "sha256-0WTDhFt7GDzN4AK8U17iLkjeSMK+gOWZRq46HBTeO3w=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_CLIENT" buildClient)
     (lib.cmakeBool "BUILD_SERVER" buildServer)
+    (lib.cmakeBool "BUILD_UNITTESTS" (finalAttrs.doCheck or false))
     (lib.cmakeBool "ENABLE_PROMETHEUS" buildServer)
     (lib.cmakeBool "USE_SDL2" useSDL2)
     # Ensure we use system libraries
@@ -91,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     gmp
     libspatialindex
   ] ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform luajit) luajit
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     OpenGL
     OpenAL
@@ -118,17 +119,20 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    substituteInPlace src/filesys.cpp --replace "/bin/rm" "${coreutils}/bin/rm"
-  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace src/filesys.cpp \
+      --replace-fail "/bin/rm" "${coreutils}/bin/rm"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/pagezero_size/d;/fixup_bundle/d' src/CMakeLists.txt
   '';
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchShebangs $out
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/minetest.app $out/Applications
   '';
+
+  doCheck = true;
 
   passthru.updateScript = gitUpdater {
     allowedVersions = "\\.";
@@ -141,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pyrolagus fpletz fgaz ];
+    mainProgram = if buildClient then "minetest" else "minetestserver";
   };
 })

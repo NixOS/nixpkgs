@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lAtBuXQLCBMyXjkWdYcWz4+g7k4MkZHyYM7AbZITWDU=";
   };
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   nativeBuildInputs = [
     gettext

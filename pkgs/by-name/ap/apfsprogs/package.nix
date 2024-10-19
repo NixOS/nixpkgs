@@ -6,21 +6,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfsprogs";
-  version = "unstable-2023-11-30";
+  version = "0-unstable-2024-09-27";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "990163894d871f51ba102a75aed384a275c5991b";
-    hash = "sha256-yCShZ+ALzSe/svErt9/i1JyyEvbIeABGPbpS4lVil0A=";
+    rev = "f31d7c2d69d212ce381399d2bb1e91410f592484";
+    hash = "sha256-+c+wU52XKNOTxSpSrkrNWoGEYw6Zo4CGEOyKMvkXEa0=";
   };
 
   postPatch = let
     shortRev = builtins.substring 0 9 finalAttrs.src.rev;
   in ''
     substituteInPlace \
-      apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile \
-      --replace \
+      apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile apfs-label/Makefile \
+      --replace-fail \
         '$(shell git describe --always HEAD | tail -c 9)' \
         '${shortRev}'
   '';
@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -C apfs-snap $makeFlags
     make -C apfsck $makeFlags
     make -C mkapfs $makeFlags
+    make -C apfs-label $makeFlags
     runHook postBuild
   '';
 
@@ -38,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -C apfs-snap install DESTDIR="$out" $installFlags
     make -C apfsck install DESTDIR="$out" $installFlags
     make -C mkapfs install DESTDIR="$out" $installFlags
+    make -C apfs-label install DESTDIR="$out" $installFlags
     runHook postInstall
   '';
 

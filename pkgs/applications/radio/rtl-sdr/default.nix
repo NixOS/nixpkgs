@@ -13,7 +13,7 @@ let
       nativeBuildInputs = [ pkg-config cmake ];
       propagatedBuildInputs = [ libusb1 ];
 
-      cmakeFlags = lib.optionals stdenv.isLinux [
+      cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
         "-DINSTALL_UDEV_RULES=ON"
         "-DWITH_RPC=ON"
       ];

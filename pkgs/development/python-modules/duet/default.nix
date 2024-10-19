@@ -3,24 +3,32 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "duet";
-  version = "0.2.7";
-  format = "setuptools";
+  version = "0.2.9";
+  pyproject = true;
+
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "duet";
-    rev = "v${version}";
-    hash = "sha256-9CTAupAxZI1twoLpgr7VfECw70QunE6pk+SskiT3JDw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-P7JxUigD7ZyhtocV+YuAVxuUYVa4F7PpXuA1CCmcMvg=";
   };
 
-  propagatedBuildInputs = [ typing-extensions ];
+  build-system = [ setuptools ];
+
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [ "duet" ];
 
   meta = with lib; {
     description = "Simple future-based async library for python";

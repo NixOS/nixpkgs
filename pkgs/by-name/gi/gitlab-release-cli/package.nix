@@ -18,7 +18,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-UwDMRsWbk8rEv2d5FssIzCLby68YZULoxd3/JGLsCQU=";
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip failing test
     "-skip TestHTTPSCustomCA"
   ];

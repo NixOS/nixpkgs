@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # Otherwise clang fails with 'duplicate symbol ___sputc'
-  buildFlags = lib.optional stdenv.isDarwin "CFLAGS=-std=gnu89";
+  buildFlags = lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-std=gnu89";
 
   meta = {
     homepage = "http://libmpeg2.sourceforge.net/";

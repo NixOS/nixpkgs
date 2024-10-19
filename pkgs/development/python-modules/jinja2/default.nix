@@ -35,15 +35,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     i18n = [ babel ];
   };
 
   # Multiple tests run out of stack space on 32bit systems with python2.
   # See https://github.com/pallets/jinja/issues/1158
-  doCheck = !stdenv.is32bit;
+  doCheck = !stdenv.hostPlatform.is32bit;
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.i18n;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.i18n;
 
   disabledTests = lib.optionals (pythonAtLeast "3.13") [
     # https://github.com/pallets/jinja/issues/1900

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     atk
     gdk-pixbuf
     gtk4
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Foundation
   ]);
 

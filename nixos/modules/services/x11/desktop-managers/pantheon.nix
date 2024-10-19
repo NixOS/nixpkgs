@@ -130,7 +130,6 @@ in
 
       # Default services
       hardware.bluetooth.enable = mkDefault true;
-      hardware.pulseaudio.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
@@ -176,8 +175,9 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
       systemd.packages = with pkgs; [
-        gnome.gnome-session
+        gnome-session
         pantheon.gala
         pantheon.gnome-settings-daemon
         pantheon.elementary-session-settings
@@ -212,7 +212,6 @@ in
         adwaita-icon-theme
         gtk3.out # for gtk-launch program
         onboard
-        orca # elementary/greeter#668
         sound-theme-freedesktop
         xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
       ]) ++ (with pkgs.pantheon; [

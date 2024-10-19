@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub
 , autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
 , openssl, json_c, curl, libgcrypt
-, cmocka, uthash, ibm-sw-tpm2, iproute2, procps, which
-, shadow, libuuid
+, cmocka, uthash, swtpm, iproute2, procps, which
+, libuuid
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -10,7 +10,7 @@ let
   # needs to be conditional based on isLinux because procps for other systems
   # might not support the withSystemd option.
   procpsWithoutSystemd = procps.override { withSystemd = false; };
-  procps_pkg = if stdenv.isLinux then procpsWithoutSystemd else procps;
+  procps_pkg = if stdenv.hostPlatform.isLinux then procpsWithoutSystemd else procps;
 in
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
-    shadow
   ];
 
   buildInputs = [
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
+    cmocka which openssl procps_pkg iproute2 swtpm
   ];
 
   strictDeps = true;
@@ -53,6 +52,17 @@ stdenv.mkDerivation rec {
     # Do not rely on dynamic loader path
     # TCTI loader relies on dlopen(), this patch prefixes all calls with the output directory
     ./no-dynamic-loader-path.patch
+
+    # Configure script expects tools from shadow (e.g. useradd) but they are
+    # actually optional (and we can’t use them in Nix sandbox anyway). Make the
+    # check in configure.ac a warning instead of an error so that we can run
+    # configure phase on platforms that don’t have shadow package (e.g. macOS).
+    # Note that *on platforms* does not mean *for platform* i.e. this is for
+    # cross-compilation, tpm2-tss does not support macOS, see upstream issue:
+    # https://github.com/tpm2-software/tpm2-tss/issues/2629
+    # See also
+    # https://github.com/tpm2-software/tpm2-tss/blob/6c46325b466f35d40c2ed1043bfdfcfb8a367a34/Makefile.am#L880-L898
+    ./no-shadow.patch
   ];
 
   postPatch = ''

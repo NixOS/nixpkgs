@@ -47,9 +47,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     wsgidav
-  ] ++ passthru.optional-dependencies.fsspec;
+  ] ++ optional-dependencies.fsspec;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [ fsspec ];
     http2 = [ httpx.optional-dependencies.http2 ];
     all = [

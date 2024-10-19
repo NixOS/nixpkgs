@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ openssl libsodium xz ]
-    ++ (lib.optional stdenv.isDarwin Security);
+    ++ (lib.optional stdenv.hostPlatform.isDarwin Security);
 
   meta = with lib; {
     description = "Data deduplication with compression and public key encryption";

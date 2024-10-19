@@ -7,6 +7,7 @@
   click-option-group,
   fetchPypi,
   hatchling,
+  hypothesis,
   jinja2,
   pydantic,
   pytestCheckHook,
@@ -32,7 +33,7 @@ buildPythonPackage rec {
 
   dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       attrs
       cattrs
@@ -53,9 +54,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     typing-extensions
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests" ];
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ startFPC gawk ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libiconv
       darwin.apple_sdk.frameworks.CoreFoundation
     ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # Patch paths for linux systems. Other platforms will need their own patches.
   patches = [
     ./mark-paths.patch # mark paths for later substitution in postPatch
-  ] ++ lib.optional stdenv.isAarch64 (fetchpatch {
+  ] ++ lib.optional stdenv.hostPlatform.isAarch64 (fetchpatch {
     # backport upstream patch for aarch64 glibc 2.34
     url = "https://gitlab.com/freepascal.org/fpc/source/-/commit/a20a7e3497bccf3415bf47ccc55f133eb9d6d6a0.patch";
     hash = "sha256-xKTBwuOxOwX9KCazQbBNLhMXCqkuJgIFvlXewHY63GM=";
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   NIX_LDFLAGS = lib.optionalString
-    stdenv.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
+    stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks");
 
   makeFlags = [ "NOGDB=1" "FPC=${startFPC}/bin/fpc" ];
 

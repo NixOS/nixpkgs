@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     zlib
     zstd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     CoreServices
   ];

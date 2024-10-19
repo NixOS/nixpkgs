@@ -26,7 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-pjVSX/x0EoZp3i9jRgqUydVgljSkh1wKr85RD97sF6w=";
   };
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 

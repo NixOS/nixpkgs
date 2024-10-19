@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-72wm8dt+Id59A5058mVE5P9TkXW5/LZRthZoxUustVA=";
   };
 
-  prePatch = lib.optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
   buildInputs = [ libffi gmp ];
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin autoreconfHook;
 
   configureFlags = [
     "--enable-shared"

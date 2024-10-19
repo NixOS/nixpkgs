@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libxcrypt
-  ] ++ lib.optional stdenv.isLinux pam
-    ++ lib.optional stdenv.isDarwin utmp;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux pam
+    ++ lib.optional stdenv.hostPlatform.isDarwin utmp;
 
   doCheck = true;
 

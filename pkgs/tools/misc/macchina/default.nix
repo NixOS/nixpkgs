@@ -8,22 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "macchina";
-  version = "6.1.8";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "Macchina-CLI";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-MntHq5nphfjbO0Rx7v6WjsnabSMH5Ke3aR9/embG/rk=";
+    hash = "sha256-v1EaC4VBOvZFL2GoKlTDBMjSe8+4bxaLFvy2V7e7RW4=";
   };
 
-  cargoHash = "sha256-w8WIpT8rUe7olB5kdpDyrId6D698AhcqzsfpOlutaHQ=";
+  cargoHash = "sha256-k17x7BEaBWo4Ka2HIjHd4DrO/tolKR/+s7Mm5ZzJk/Y=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.DisplayServices
   ];

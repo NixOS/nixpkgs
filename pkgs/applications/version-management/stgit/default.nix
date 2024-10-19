@@ -18,15 +18,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
-  version = "2.4.10";
+  version = "2.4.12";
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
-    hash = "sha256-3z0MwqE7+jEuWK1/OUGDolUWzi9soKWvVtlhyA9zJEA=";
+    hash = "sha256-fNQLdW5KFpYUBBmaUYYOmDym7OweXsDfD+uFl688zcY=";
   };
-  cargoHash = "sha256-9cfgKOIxnh1YLeUVLFnRQz6PqeLrz/6Sc2QybCXo6/w=";
+  cargoHash = "sha256-s3PFNc1rn01X6tauRXp5B4cg3AIVSishqDFy0lP/8g8=";
 
   nativeBuildInputs = [
     pkg-config installShellFiles makeWrapper asciidoc xmlto docbook_xsl
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     git perl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.system_cmds libiconv
   ];
 

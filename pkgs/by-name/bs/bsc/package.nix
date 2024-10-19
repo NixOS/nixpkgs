@@ -13,12 +13,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "IlyaGrebnov";
     repo = "libbsc";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-reGg5xvoZBbNFFYPPyT2P1LA7oSCUIm9NIDjXyvkP9Q=";
+    hash = "sha256-reGg5xvoZBbNFFYPPyT2P1LA7oSCUIm9NIDjXyvkP9Q=";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = lib.optional stdenv.isDarwin llvmPackages.openmp;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
   makeFlags = [
     "CC=$(CXX)"

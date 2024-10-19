@@ -100,18 +100,18 @@ buildPythonPackage rec {
       "test_subdomainset_mpi"
       "test_subdomains_mpi"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - assert False
       "test_v0"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # FAILED tests/test_caching.py::TestCaching::test_special_symbols - ValueError: not enough values to unpack (expected 3, got 2)
       "test_special_symbols"
 
       # FAILED tests/test_unexpansion.py::Test2Pass::test_v0 - codepy.CompileError: module compilation failed
       "test_v0"
     ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
       # Numerical tests
       "test_lm_fb"
       "test_lm_ds"
@@ -127,7 +127,9 @@ buildPythonPackage rec {
       "tests/test_dse.py"
       "tests/test_gradient.py"
     ]
-    ++ lib.optionals ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin) [ "tests/test_dle.py" ];
+    ++ lib.optionals (
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin
+    ) [ "tests/test_dle.py" ];
 
   pythonImportsCheck = [ "devito" ];
 

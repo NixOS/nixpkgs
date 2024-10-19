@@ -132,7 +132,7 @@ mkDerivation rec {
     "-DINSTALL_USER_UDEV_RULES=OFF"
   ];
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     rules="$src/res/linux/mixxx-usb-uaccess.rules"
     if [ ! -f "$rules" ]; then
         echo "$rules is missing, must update the Nix file."

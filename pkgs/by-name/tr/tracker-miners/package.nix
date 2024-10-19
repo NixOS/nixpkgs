@@ -105,12 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     poppler
     taglib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libseccomp
     networkmanager
     systemd
     upower
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     e2fsprogs
   ];
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     # security issue since then. Despite a patch now being availab, we're opting
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
-  ] ++ lib.optionals (!stdenv.isLinux) [
+  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
     "-Dbattery_detection=none"
     "-Dnetwork_manager=disabled"
     "-Dsystemd_user_services=false"

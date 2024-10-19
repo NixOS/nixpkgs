@@ -5,16 +5,16 @@ let
   variants = {
     # ./update-zen.py zen
     zen = {
-      version = "6.10.5"; #zen
+      version = "6.11.2"; #zen
       suffix = "zen1"; #zen
-      sha256 = "08ibz7560xsmlnrm8j13hxf8hjjcxfmnjdrwffqc81g9g6rvpqra"; #zen
+      sha256 = "1pwhdx8dcih0q3xj2hndd9vmz1xclrp4dw9yk0p1hi03mb634s40"; #zen
       isLqx = false;
     };
     # ./update-zen.py lqx
     lqx = {
-      version = "6.10.5"; #lqx
+      version = "6.11.2"; #lqx
       suffix = "lqx1"; #lqx
-      sha256 = "09rscj20j94qkmvk0hlpjm6v1n1ndnkv2vl035gsp5lwggws2jqm"; #lqx
+      sha256 = "0q5zdzb26azshn1n8fc5zy5n2sa7sz3q4khkjivafz6pyli1wfl8"; #lqx
       isLqx = true;
     };
   };
@@ -120,7 +120,7 @@ let
       maintainers = with lib.maintainers; [ thiagokokada jerrysm64 ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
-      broken = stdenv.isAarch64;
+      broken = stdenv.hostPlatform.isAarch64;
     };
 
   } // (args.argsOverride or { }));

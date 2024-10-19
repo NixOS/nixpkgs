@@ -62,7 +62,7 @@ buildPythonPackage rec {
     "test_load_firefox_cookie_db"
     "test_no_cookies"
     "test_warns_for_string_browser"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_slack_config" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_slack_config" ];
 
   meta = with lib; {
     description = "Borrow cookies from your browser's authenticated session for use in Python scripts";

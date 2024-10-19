@@ -39,14 +39,16 @@ rustPlatform.buildRustPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.SystemConfiguration
+  ];
 
   checkFlags =
     [
       # requires internet access
       "--skip=workspace::package::external::remote_repo::test::full_download"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # both tests fail on darwin with 'Attempted to create a NULL object.'
       "--skip=workspace::fs::local::test::read"
       "--skip=workspace::package::external::manager::test::local_package"
@@ -69,7 +71,7 @@ rustPlatform.buildRustPackage rec {
     description = "Brand-new language server for Typst";
     homepage = "https://github.com/nvarner/typst-lsp";
     mainProgram = "typst-lsp";
-    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${src.rev}";
+    changelog = "https://github.com/nvarner/typst-lsp/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = with lib.licenses; [
       asl20
       mit

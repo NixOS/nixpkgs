@@ -14,7 +14,7 @@ source @phpScriptUtils@
 composerInstallConfigureHook() {
     echo "Executing composerInstallConfigureHook"
 
-    setComposeRootVersion
+    setComposerRootVersion
 
     if [[ ! -e "${composerVendor}" ]]; then
         echo "No local composer vendor found."

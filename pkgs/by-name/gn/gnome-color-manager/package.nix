@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-color-manager/${lib.versions.majorMinor version}/gnome-color-manager-${version}.tar.xz";
-    sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
+    hash = "sha256-fDwXj6rPy/EdVt4izSZZRqfViqEOPNlowpOOL79Q/e4=";
   };
 
   patches = [ ./0001-Fix-build-with-Exiv2-0.28.patch ];

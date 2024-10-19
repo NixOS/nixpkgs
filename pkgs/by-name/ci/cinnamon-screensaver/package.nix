@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
-  version = "6.2.0";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-hXgDTQnOlskzyOogvk7BQ9iJ3oXRtgUUX5bXtgD+gFo=";
+    hash = "sha256-f1Z3fmtCokWNLJwsTOAIAZB3lwFfqakJJco3umyEaYk=";
   };
 
   nativeBuildInputs = [

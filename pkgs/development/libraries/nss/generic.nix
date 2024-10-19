@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
         --enable-libpkix \
         -j $NIX_BUILD_CORES \
         ${lib.optionalString enableFIPS "--enable-fips"} \
-        ${lib.optionalString stdenv.isDarwin "--clang"} \
+        ${lib.optionalString stdenv.hostPlatform.isDarwin "--clang"} \
         ${lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-tests"}
 
       runHook postBuild
@@ -155,7 +155,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString enableFIPS (''
       for libname in freebl3 nssdbm3 softokn3
       do libfile="$out/lib/lib$libname${stdenv.hostPlatform.extensions.sharedLibrary}"'' +
-    (if stdenv.isDarwin
+    (if stdenv.hostPlatform.isDarwin
     then ''
       DYLD_LIBRARY_PATH=$out/lib:${nspr.out}/lib \
     '' else ''

@@ -4,6 +4,7 @@
 , lib
 , nixosTests
 , pkgsCross
+, testers
 , fetchFromGitHub
 , fetchzip
 , fetchpatch2
@@ -184,7 +185,7 @@ assert withBootloader -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
-  version = "256.4";
+  version = "256.6";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
   # change. More details in the commentary at mesonFlags.
@@ -202,7 +203,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${version}";
-    hash = "sha256-dugBiRgDFpB0eKhhIT3LkA8FhClM0lvvwCMJ+dKtjPM=";
+    hash = "sha256-HQ8kO7Y23RZJnT9XaiclVSSNRW/ApA0D5QbMHQkN5FM=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -266,6 +267,7 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0018-pass-correct-parameters-to-getdents64.patch")
       (musl-patches + "/0019-Adjust-for-musl-headers.patch")
       (musl-patches + "/0020-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch")
+      (musl-patches + "/0021-errno-util-Make-STRERROR-portable-for-musl.patch")
       (musl-patches + "/0022-sd-event-Make-malloc_trim-conditional-on-glibc.patch")
       (musl-patches + "/0023-shared-Do-not-use-malloc_info-on-musl.patch")
       (musl-patches + "/0024-avoid-missing-LOCK_EX-declaration.patch")
@@ -335,6 +337,8 @@ stdenv.mkDerivation (finalAttrs: {
       buildPackages.llvmPackages.libllvm
     ]
   ;
+
+  autoPatchelfFlags = [ "--keep-libc" ];
 
   buildInputs =
     [
@@ -792,6 +796,7 @@ stdenv.mkDerivation (finalAttrs: {
             else "aarch64-multiplatform";
         in
         pkgsCross.${systemString}.systemd;
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
   };
 
@@ -827,7 +832,10 @@ stdenv.mkDerivation (finalAttrs: {
       publicDomain
     ];
     maintainers = with lib.maintainers; [ flokli kloenk ];
-    platforms = lib.platforms.linux;
+    pkgConfigModules = [ "libsystemd" "libudev" "systemd" "udev" ];
+    # See src/basic/missing_syscall_def.h
+    platforms = with lib.platforms; lib.intersectLists linux
+      (aarch ++ x86 ++ loongarch64 ++ m68k ++ mips ++ power ++ riscv ++ s390);
     priority = 10;
     badPlatforms = [
       # https://github.com/systemd/systemd/issues/20600#issuecomment-912338965

@@ -18,14 +18,7 @@ stdenv.mkDerivation rec {
   };
   sourceRoot = ".";
 
-  buildInputs = [
-    makeWrapper
-  ];
-
-  nativeBuildInputs = [
-    nextflow
-  ];
-
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     runHook preInstall
@@ -36,7 +29,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     makeWrapper ${openjdk11}/bin/java $out/bin/nf-test \
       --add-flags "-jar $out/share/nf-test/nf-test.jar" \
-      --prefix PATH : ${lib.makeBinPath nativeBuildInputs} \
+      --prefix PATH : ${lib.makeBinPath [ nextflow ]} \
 
     runHook postInstall
   '';

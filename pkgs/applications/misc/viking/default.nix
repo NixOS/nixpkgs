@@ -10,7 +10,7 @@
 , withMBTiles ? true, sqlite
 , withMd5Hash ? true, nettle
 , withOAuth ? true, liboauth
-, withRealtimeGPSTracking ? (!stdenv.isDarwin), gpsd
+, withRealtimeGPSTracking ? (!stdenv.hostPlatform.isDarwin), gpsd
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook3 yelp-tools ]
-    ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+    ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]
     ++ lib.optional withGeoClue geoclue2

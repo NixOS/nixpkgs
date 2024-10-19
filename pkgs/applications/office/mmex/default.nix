@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-TQgJ2Q4Z7+OtwuwkfPBgm2BmMKML9nmyFLSkmKJ1RE4=";
   };
 
-  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
     substituteInPlace src/platfdep_mac.mm \
       --replace "appearance.name == NSAppearanceNameDarkAqua" "NO"
-  '' + lib.optionalString (stdenv.isLinux && !stdenv.isx86_64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64) ''
     substituteInPlace 3rd/CMakeLists.txt \
       --replace "-msse4.2 -maes" ""
   '';
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     wrapGAppsHook3
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     lsb-release
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     sqlite
     wxGTK32
     gtk3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     "-Wno-unused-parameter"
   ]);
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
     mv $out/mmex.app $out/Applications
     makeWrapper $out/{Applications/mmex.app/Contents/MacOS,bin}/mmex

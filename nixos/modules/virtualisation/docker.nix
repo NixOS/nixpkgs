@@ -244,7 +244,7 @@ in
       };
 
       assertions = [
-        { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.graphics.enable32Bit or false;
+        { assertion = cfg.enableNvidia && pkgs.stdenv.hostPlatform.isx86_64 -> config.hardware.graphics.enable32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32-bit support libraries";
         }];
 

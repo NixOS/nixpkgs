@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     mainProgram = "batmon";
     platforms = with platforms; unix ++ windows;
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     maintainers = with maintainers; [ _6543 ];
   };
 }

@@ -31,41 +31,37 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    addDeps()
-    {
-	if [ -f $1/nix-support/dotnet-assemblies ]
-	then
-	    for i in $(cat $1/nix-support/dotnet-assemblies)
-	    do
-		windowsPath=$(cygpath --windows $i)
-		assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+    runHook preInstall
 
-		addDeps $i
-	    done
-	fi
+    addDeps() {
+      if [ -f $1/nix-support/dotnet-assemblies ]; then
+        for i in $(cat $1/nix-support/dotnet-assemblies); do
+          windowsPath=$(cygpath --windows $i)
+          assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+
+          addDeps $i
+        done
+      fi
     }
 
-    for i in ${toString assemblyInputs}
-    do
-	windowsPath=$(cygpath --windows $i)
-	echo "Using assembly path: $windowsPath"
+    for i in ${toString assemblyInputs}; do
+      windowsPath=$(cygpath --windows $i)
+      echo "Using assembly path: $windowsPath"
 
-	if [ "$assemblySearchPaths" = "" ]
-	then
-	    assemblySearchPaths="$windowsPath"
-	else
-	    assemblySearchPaths="$assemblySearchPaths;$windowsPath"
-	fi
+      if [ "$assemblySearchPaths" = "" ]; then
+        assemblySearchPaths="$windowsPath"
+      else
+        assemblySearchPaths="$assemblySearchPaths;$windowsPath"
+      fi
 
-	addDeps $i
+      addDeps $i
     done
 
     echo "Assembly search paths are: $assemblySearchPaths"
 
-    if [ "$assemblySearchPaths" != "" ]
-    then
-	echo "Using assembly search paths args: $assemblySearchPathsArg"
-	export AssemblySearchPaths=$assemblySearchPaths
+    if [ "$assemblySearchPaths" != "" ]; then
+      echo "Using assembly search paths args: $assemblySearchPathsArg"
+      export AssemblySearchPaths=$assemblySearchPaths
     fi
 
     mkdir -p $out
@@ -77,9 +73,10 @@ stdenv.mkDerivation {
 
     mkdir -p $out/nix-support
 
-    for i in ${toString assemblyInputs}
-    do
-        echo $i >> $out/nix-support/dotnet-assemblies
+    for i in ${toString assemblyInputs}; do
+      echo $i >> $out/nix-support/dotnet-assemblies
     done
+
+    runHook postInstall
   '';
 }

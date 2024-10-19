@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Restricted User Shell";
 
     longDescription =

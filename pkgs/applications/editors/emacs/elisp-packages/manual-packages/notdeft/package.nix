@@ -56,10 +56,8 @@ melpaBuild {
   '';
 
   preInstall = ''
-    install -D --target-directory=$out/bin source/notdeft-xapian
+    install -D --target-directory=$out/bin notdeft-xapian
   '';
-
-  ignoreCompilationError = false;
 
   passthru = {
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };

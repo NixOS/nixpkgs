@@ -74,6 +74,6 @@ mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ yvesf ];
     platforms = qtbase.meta.platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

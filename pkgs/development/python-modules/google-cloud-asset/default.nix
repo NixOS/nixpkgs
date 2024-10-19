@@ -20,14 +20,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-asset";
-  version = "3.26.2";
+  version = "3.26.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-DCFDVdtuXwY7hphChHSzCTc8hw8MEohX67SRGOaRQ6A=";
+    pname = "google_cloud_asset";
+    inherit version;
+    hash = "sha256-c/xmHAD8zXdi+2ifs4bHWPS2B49Fcnr4RqLfrpGwQzs=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +44,7 @@ buildPythonPackage rec {
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libcst = [ libcst ];
   };
 

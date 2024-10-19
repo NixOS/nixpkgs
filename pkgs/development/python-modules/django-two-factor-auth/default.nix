@@ -43,7 +43,7 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     call = [ twilio ];
     sms = [ twilio ];
     webauthn = [

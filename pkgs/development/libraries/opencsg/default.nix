@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ]
-    ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ glew ]
-    ++ lib.optionals stdenv.isLinux [ libGLU libGL libglut libXmu libXext libX11 ]
-    ++ lib.optional stdenv.isDarwin GLUT;
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libGLU libGL libglut libXmu libXext libX11 ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin GLUT;
 
   doCheck = false;
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     install -D copying.txt "$out/share/doc/opencsg/copying.txt"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/*.app $out/Applications
     rmdir $out/bin || true
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  postFixup = lib.optionalString stdenv.isDarwin ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     app=$out/Applications/opencsgexample.app/Contents/MacOS/opencsgexample
     install_name_tool -change \
       $(otool -L $app | awk '/opencsg.+dylib/ { print $1 }') \

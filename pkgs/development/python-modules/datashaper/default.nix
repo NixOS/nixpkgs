@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   poetry-core,
   dacite,
   diskcache,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pyarrow" ];
 

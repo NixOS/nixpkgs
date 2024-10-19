@@ -18,14 +18,14 @@
 , cli11
 , libexif
 , range-v3
-, enableOpencv ? stdenv.isLinux
+, enableOpencv ? stdenv.hostPlatform.isLinux
 , opencv
-, enableWayland ? stdenv.isLinux
+, enableWayland ? stdenv.hostPlatform.isLinux
 , extra-cmake-modules
 , wayland
 , wayland-protocols
 , wayland-scanner
-, enableX11 ? stdenv.isLinux
+, enableX11 ? stdenv.hostPlatform.isLinux
 , xorg
 }:
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
   ];
 
   # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.14 or newer
-  preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
+  preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11.0") ''
     export MACOSX_DEPLOYMENT_TARGET=10.14
   '';
 

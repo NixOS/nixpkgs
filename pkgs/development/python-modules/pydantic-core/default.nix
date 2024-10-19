@@ -47,7 +47,7 @@ let
       typing-extensions
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
     dependencies = [ typing-extensions ];
 

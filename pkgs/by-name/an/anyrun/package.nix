@@ -46,9 +46,9 @@ rustPlatform.buildRustPackage rec {
     gtk3
     gtk-layer-shell
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wayland
   ];
 
@@ -68,7 +68,7 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [ NotAShelf ];
     mainProgram = "anyrun";
   };
 }

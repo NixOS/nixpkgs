@@ -1,35 +1,43 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "datafusion-cli";
-  version = "33.0.0";
+  version = "42.0.0";
 
   src = fetchFromGitHub {
     name = "datafusion-cli-source";
     owner = "apache";
     repo = "arrow-datafusion";
     rev = version;
-    sha256 = "sha256-ywyzvk50Fr9TSaCrqd14lSi1PJ9ggA1YQ/X0aFGFk1M=";
+    sha256 = "sha256-d8DR9I+6ddl5h8WSYBM3UyLUhZe+ICsTfraQkBouMYY=";
   };
 
   sourceRoot = "${src.name}/datafusion-cli";
 
-  cargoHash = "sha256-0a/O9nNi3JLufQxG+5EgCXtV0y03X7R6UY+f/tVGB90=";
+  cargoHash = "sha256-/ofwZI+v0zoszq5zAQRCyqeVrF/ozS8mHHpPdaklhaE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
   checkFlags = [
-    # fails even outside the Nix sandbox
-    "--skip=object_storage::tests::s3_region_validation"
-    # broken
-    "--skip=exec::tests::create_object_store_table_gcs"
+    # Some tests not found fake path
+    "--skip=catalog::tests::query_gs_location_test"
+    "--skip=catalog::tests::query_http_location_test"
+    "--skip=catalog::tests::query_s3_location_test"
+    "--skip=exec::tests::copy_to_external_object_store_test"
+    "--skip=exec::tests::copy_to_object_store_table_s3"
+    "--skip=exec::tests::create_object_store_table_cos"
+    "--skip=exec::tests::create_object_store_table_http"
+    "--skip=exec::tests::create_object_store_table_oss"
+    "--skip=exec::tests::create_object_store_table_s3"
+    "--skip=tests::test_parquet_metadata_works_with_strings"
   ];
 
   meta = with lib; {

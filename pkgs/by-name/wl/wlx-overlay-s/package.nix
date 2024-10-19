@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fontconfig,
   lib,
+  libGL,
+  libuuid,
   libX11,
   libXext,
   libXrandr,
@@ -19,19 +21,20 @@
   shaderc,
   stdenv,
   testers,
+  vulkan-loader,
   wayland,
   wlx-overlay-s,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wlx-overlay-s";
-  version = "0.4.4";
+  version = "0.6";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "wlx-overlay-s";
     rev = "v${version}";
-    hash = "sha256-+pWhtaYOzh7LPSCQeUTlU+/IxtcQTqRci9X7xEUV18U=";
+    hash = "sha256-Gk/3m4eWFZqeQBphBUTGAUqe8SspXqut8n4JM8tTe6o=";
   };
 
   cargoLock = {
@@ -40,8 +43,8 @@ rustPlatform.buildRustPackage rec {
       "libmonado-rs-0.1.0" = "sha256-ja7OW/YSmfzaQoBhu6tec9v8fyNDknLekE2eY7McLPE=";
       "openxr-0.18.0" = "sha256-ktkbhmExstkNJDYM/HYOwAwv3acex7P9SP0KMAOKhQk=";
       "ovr_overlay-0.0.0" = "sha256-5IMEI0IPTacbA/1gibYU7OT6r+Bj+hlQjDZ3Kg0L2gw=";
-      "vulkano-0.34.0" = "sha256-o1KP/mscMG5j3U3xtei/2nMNEh7jLedcW1P0gL9Y1Rc=";
-      "wlx-capture-0.3.12" = "sha256-rZTJp7VhUvE/6lwESW2jKeGweFut6BvcxouG/nyl+GE=";
+      "vulkano-0.34.0" = "sha256-0ZIxU2oItT35IFnS0YTVNmM775x21gXOvaahg/B9sj8=";
+      "wlx-capture-0.3.12" = "sha256-32WnAnNUSfsAA8WB9da3Wqb4acVlXh6HWsY9tPzCHEE=";
     };
   };
 
@@ -76,7 +79,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     patchelf $out/bin/wlx-overlay-s \
       --add-needed ${lib.getLib wayland}/lib/libwayland-client.so.0 \
-      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0
+      --add-needed ${lib.getLib libxkbcommon}/lib/libxkbcommon.so.0 \
+      --add-needed ${lib.getLib libGL}/lib/libEGL.so.1 \
+      --add-needed ${lib.getLib libGL}/lib/libGL.so.1 \
+      --add-needed ${lib.getLib vulkan-loader}/lib/libvulkan.so.1 \
+      --add-needed ${lib.getLib libuuid}/lib/libuuid.so.1
   '';
 
   passthru = {
@@ -91,7 +98,7 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ Scrumplex ];
     platforms = lib.platforms.linux;
-    broken = stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isAarch64;
     mainProgram = "wlx-overlay-s";
   };
 }

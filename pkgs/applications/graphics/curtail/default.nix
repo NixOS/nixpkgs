@@ -20,14 +20,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "curtail";
-  version = "1.10.0";
+  version = "1.11.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
     rev = "refs/tags/${version}";
-    sha256 = "sha256-xwpjyMMdjYMrd79/EzoNae4rQuq2VjwJRNoudNGD78E=";
+    sha256 = "sha256-bN901v2M644EN7tBKN9/kv12AE2XuIPjDSCoohfevFI=";
   };
 
   nativeBuildInputs = [
@@ -72,6 +72,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
   };
 }

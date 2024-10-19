@@ -49,6 +49,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ iblech ];
     platforms   = platforms.unix;
     # Builds but fails to render to the screen at runtime.
-    broken      = stdenv.isDarwin;
+    broken      = stdenv.hostPlatform.isDarwin;
   };
 }

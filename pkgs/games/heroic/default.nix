@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, makeWrapper
-, electron
-, vulkan-helper
-, gogdl
-, legendary-gl
-, nile
-, comet-gog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pnpm,
+  nodejs,
+  makeWrapper,
+  electron,
+  vulkan-helper,
+  gogdl,
+  legendary-gl,
+  nile,
+  comet-gog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "heroic-unwrapped";
-  version = "2.15.1";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     owner = "Heroic-Games-Launcher";
     repo = "HeroicGamesLauncher";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+OQRcBOf9Y34DD7FOp/3SO05mREG6or/HPiOkasHWPM=";
+    hash = "sha256-AndJqk1VAUdC4pOTRzyfhdxmzJMskGF6pUiqPs3fIy4=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
@@ -86,12 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
 
     substituteInPlace "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" \
       --replace-fail "Exec=heroic-run" "Exec=heroic"
-    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/512x512/apps"
+    mkdir -p "$out/share/applications" "$out/share/icons/hicolor/scalable/apps"
     ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
-    ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.png" "$out/share/icons/hicolor/512x512/apps"
+    ln -s "$out/share/heroic/src/frontend/assets/heroic-icon.svg" "$out/share/icons/hicolor/scalable/apps/com.heroicgameslauncher.hgl.svg"
 
     runHook postInstall
   '';
+
+  passthru = {
+    inherit (finalAttrs) pnpmDeps;
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";

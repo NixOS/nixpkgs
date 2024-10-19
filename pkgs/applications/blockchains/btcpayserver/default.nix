@@ -6,13 +6,13 @@
 
 buildDotnetModule rec {
   pname = "btcpayserver";
-  version = "1.13.1";
+  version = "1.13.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-p0GNwwbhsgChlSlPVD/RHhzWF/1URdYp/iYQmJxORU8=";
+    sha256 = "sha256-xga/v+4keZSgayPzitchzV4IRdui1IBPYB/uNVVMIaM=";
   };
 
   projectFile = "BTCPayServer/BTCPayServer.csproj";
@@ -31,6 +31,7 @@ buildDotnetModule rec {
   meta = with lib; {
     description = "Self-hosted, open-source cryptocurrency payment processor";
     homepage = "https://btcpayserver.org";
+    changelog = "https://github.com/btcpayserver/btcpayserver/blob/v${version}/Changelog.md";
     maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;

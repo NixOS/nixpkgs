@@ -114,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     paths =
       expandDeps (
-        lib.optionals (stdenv.isLinux) [
+        lib.optionals (stdenv.hostPlatform.isLinux) [
           gtk3
           wayland
           libepoxy
@@ -139,7 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
           xorg.xorgproto
           zlib
         ]
-        ++ lib.optionals (stdenv.isDarwin) [
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
           clang
           llvm
         ]
@@ -161,7 +161,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-I${finalAttrs.toolchain}/include"
   ] ++ lib.optional (!isOptimized) "-U_FORTIFY_SOURCE";
 
-  nativeCheckInputs = lib.optionals stdenv.isLinux [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     xorg.xorgserver
     openbox
   ];
@@ -175,8 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
       ninja
       dart
     ]
-    ++ lib.optionals (stdenv.isLinux) [ patchelf ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [ patchelf ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       darwin.system_cmds
       darwin.xcode
       tools.xcode-select
@@ -214,7 +214,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p src/${dartPath}/tools/sdks
     ln -s ${dart} src/${dartPath}/tools/sdks/dart-sdk
 
-    ${lib.optionalString (stdenv.isLinux) ''
+    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
       for patchtool in ''${patchtools[@]}; do
         patchelf src/$patchtool --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)
       done
@@ -258,7 +258,9 @@ stdenv.mkDerivation (finalAttrs: {
       "--linux-cpu ${constants.alt-arch}"
     ]
     ++ lib.optional (!isOptimized) "--unoptimized"
-    ++ lib.optional (runtimeMode == "debug") "--no-stripped";
+    ++ lib.optional (runtimeMode == "debug") "--no-stripped"
+    ++ lib.optional finalAttrs.doCheck "--enable-unittests"
+    ++ lib.optional (!finalAttrs.doCheck) "--no-enable-unittests";
 
   # NOTE: Once https://github.com/flutter/flutter/issues/127606 is fixed, use "--no-prebuilt-dart-sdk"
   configurePhase =
@@ -267,7 +269,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       export PYTHONPATH=$src/src/build
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       export PATH=${darwin.xcode}/Contents/Developer/usr/bin/:$PATH
     ''
     + ''
@@ -305,10 +307,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     rm -rf $out/out/$outName/{obj,gen,exe.unstripped,lib.unstripped,zip_archives}
-    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,display_list_rendertests,flutter_tester,toolchain.ninja}
+    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
     find $out/out/$outName -name '*_unittests' -delete
     find $out/out/$outName -name '*_benchmarks' -delete
-
+  '' + lib.optionalString (finalAttrs.doCheck) ''
+    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+  '' + ''
     runHook postInstall
   '';
 
@@ -318,7 +322,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     # Very broken on Darwin
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "The Flutter engine";
     homepage = "https://flutter.dev";
     maintainers = with maintainers; [ RossComputerGuy ];

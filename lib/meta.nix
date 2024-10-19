@@ -133,12 +133,17 @@ rec {
   mapDerivationAttrset = f: set: lib.mapAttrs (name: pkg: if lib.isDerivation pkg then (f pkg) else pkg) set;
 
   /**
-    Set the nix-env priority of the package.
+    The default priority of packages in Nix. See `defaultPriority` in [`src/nix/profile.cc`](https://github.com/NixOS/nix/blob/master/src/nix/profile.cc#L47).
+   */
+  defaultPriority = 5;
+
+  /**
+    Set the nix-env priority of the package. Note that higher values are lower priority, and vice versa.
 
     # Inputs
 
     `priority`
-    : 1\. Function argument
+    : 1\. The priority to set.
 
     `drv`
     : 2\. Function argument
@@ -159,8 +164,7 @@ rec {
   lowPrio = setPrio 10;
 
   /**
-    Apply lowPrio to an attrset with derivations
-
+    Apply lowPrio to an attrset with derivations.
 
     # Inputs
 
@@ -184,8 +188,7 @@ rec {
   hiPrio = setPrio (-10);
 
   /**
-    Apply hiPrio to an attrset with derivations
-
+    Apply hiPrio to an attrset with derivations.
 
     # Inputs
 

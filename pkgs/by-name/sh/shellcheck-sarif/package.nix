@@ -7,14 +7,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "shellcheck-sarif";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-fvOxZd6xLyOm1OjK24Xx6uHz2e8eyIklX1kUAuRGcyY=";
+    hash = "sha256-NPf8BkrpqM/MaVha9/AIuUXPQpslslLFv0l9a0lzYyc=";
   };
 
-  cargoHash = "sha256-jHOCjZ6NAU8YmAc2T1aCSaa2Yx9wkP361LZ2MKAWVLA=";
+  cargoHash = "sha256-YUyZZcSaBqnc216Hu+BAv1raNFRzSnikedr+/n8wTbE=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;

@@ -79,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";
+    changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
     description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
     license = licenses.bsd2;

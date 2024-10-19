@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     aclocal -I m4
   '';
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/be20_api/feature_recorder_set.cpp --replace-fail '#warn ' '#warning '
   '';
 

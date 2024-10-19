@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
-  version = "0.6.8";
+  version = "0.6.9";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
-    hash = "sha256-oEWUXkE8U7/ye6puJZRSkQFi10BPGuc8XZQbHwqOPEI=";
+    hash = "sha256-MP9a8dI5ggM+XEJYB6O4nYDYIXbtxi2TK5b+JQgViZQ=";
   };
 
   build-system = [ setuptools ];
@@ -33,8 +33,7 @@ buildPythonPackage rec {
   dependencies = [
     mypy
     python-lsp-server
-    tomli
-  ];
+  ] ++ lib.optional (pythonOlder "3.11") tomli;
 
   nativeCheckInputs = [ pytestCheckHook ];
 

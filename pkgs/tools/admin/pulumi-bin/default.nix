@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     install -D -t $out/bin/ *
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${stdenv.cc.cc.lib}/lib"
   '' + ''
     installShellCompletion --cmd pulumi \
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
       --zsh  <($out/bin/pulumi completion zsh)
   '';
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook makeWrapper ];
   buildInputs = [ stdenv.cc.cc.libgcc or null ];
 
   meta = with lib; {

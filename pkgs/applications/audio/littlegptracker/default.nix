@@ -20,8 +20,8 @@ stdenv.mkDerivation {
   buildInputs = [
     SDL
   ]
-  ++ lib.optional stdenv.isDarwin Foundation
-  ++ lib.optional stdenv.isLinux jack2;
+  ++ lib.optional stdenv.hostPlatform.isDarwin Foundation
+  ++ lib.optional stdenv.hostPlatform.isLinux jack2;
 
   patches = [
     # Remove outdated (pre-64bit) checks that would fail on modern platforms
@@ -32,15 +32,15 @@ stdenv.mkDerivation {
   preBuild = "cd projects";
 
   makeFlags = [ "CXX=${stdenv.cc.targetPrefix}c++" ]
-    ++ lib.optionals stdenv.isLinux  [ "PLATFORM=DEB" ]
-    ++ lib.optionals stdenv.isDarwin [ "PLATFORM=OSX" ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux  [ "PLATFORM=DEB" ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "PLATFORM=OSX" ];
 
   env.NIX_CFLAGS_COMPILE = toString ([ "-fpermissive" ] ++
     lib.optional stdenv.hostPlatform.isAarch64 "-Wno-error=narrowing");
 
-  NIX_LDFLAGS = lib.optional stdenv.isDarwin "-framework Foundation";
+  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isDarwin "-framework Foundation";
 
-  installPhase = let extension = if stdenv.isDarwin then "app" else "deb-exe";
+  installPhase = let extension = if stdenv.hostPlatform.isDarwin then "app" else "deb-exe";
     in "install -Dm555 lgpt.${extension} $out/bin/lgpt";
 
   passthru.updateScript = unstableGitUpdater {
@@ -69,7 +69,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     # https://github.com/NixOS/nixpkgs/pull/91766#issuecomment-688751821
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "lgpt";
   };
 }

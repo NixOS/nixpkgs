@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     libiconv
   ];
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
     installManPage doc/innernet.8.gz
     installShellCompletion doc/innernet.completions.{bash,fish,zsh}
     installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
-  '' + (lib.optionalString stdenv.isLinux ''
+  '' + (lib.optionalString stdenv.hostPlatform.isLinux ''
     find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
     find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
   '');

@@ -9,20 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
-  version = "1.10.1";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
-    hash = "sha256-R/6YzpSY7kbmnyJnLzwSI0y+fnGedkQQoT5YtyXWWfM=";
+    hash = "sha256-pxbdAYvWi8epWi3RAzdmOqdvRDrWyZ3qvl6t0a38djk=";
   };
 
   postPatch = ''
     echo -java-home ${jre.home} >>conf/sbtopts
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     stdenv.cc.cc # libstdc++.so.6
     zlib
   ];
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -ra . $out/share/sbt
     ln -sT ../share/sbt/bin/sbt $out/bin/sbt
     ln -sT ../share/sbt/bin/sbtn-${
-      if (stdenv.isDarwin) then "universal-apple-darwin"
+      if (stdenv.hostPlatform.isDarwin) then "universal-apple-darwin"
       else if (stdenv.hostPlatform.isAarch64) then "aarch64-pc-linux"
       else "x86_64-pc-linux"
     } $out/bin/sbtn

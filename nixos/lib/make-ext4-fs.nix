@@ -58,9 +58,17 @@ pkgs.stdenv.mkDerivation {
       # Make a crude approximation of the size of the target image.
       # If the script starts failing, increase the fudge factors here.
       numInodes=$(find ./rootImage | wc -l)
-      numDataBlocks=$(du -s -c -B 4096 --apparent-size ./rootImage | tail -1 | awk '{ print int($1 * 1.10) }')
+      numDataBlocks=$(du -s -c -B 4096 --apparent-size ./rootImage | tail -1 | awk '{ print int($1 * 1.20) }')
       bytes=$((2 * 4096 * $numInodes + 4096 * $numDataBlocks))
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
+
+      mebibyte=$(( 1024 * 1024 ))
+      # Round up to the nearest mebibyte.
+      # This ensures whole 512 bytes sector sizes in the disk image
+      # and helps towards aligning partitions optimally.
+      if (( bytes % mebibyte )); then
+        bytes=$(( ( bytes / mebibyte + 1) * mebibyte ))
+      fi
 
       truncate -s $bytes $img
 

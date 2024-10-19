@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.18.1";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = "delta";
     rev = "refs/tags/${version}";
-    hash = "sha256-9hi3efHzJV9jKJPSkyBaRO7hCYT17QPhw9pP/GwkMdo=";
+    hash = "sha256-fJSKGa935kwLG8WYmT9Ncg2ozpSNMzUJx0WLo1gtVAA=";
   };
 
-  cargoHash = "sha256-aQaqQApoPlm/VhGs11RI9+Fk8s2czuJbOreSr3fEX+g=";
+  cargoHash = "sha256-DIWzRVTADfAZdFckhh2lIfOD13h7GP3KIOQHf/oBHgc=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     oniguruma
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Foundation
   ];
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/dandavison/delta/issues/1660
   dontUseCargoParallelTests = true;
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # This test tries to read /etc/passwd, which fails with the sandbox
     # enabled on Darwin
     "--skip=test_diff_real_files"

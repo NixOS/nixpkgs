@@ -17,13 +17,20 @@ stdenv.mkDerivation rec {
   version = "2024.04";
 
 
-  src = if stdenv.isAarch64 then fetchurl {
-    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-    hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
-  } else fetchurl {
-    url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-    hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
-  };
+  src = {
+    aarch64-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
+      hash = "sha256-FwwB9slKOiYQ3eud2tiqov6yGNxmIicIe6nFpsH28Vk=";
+    };
+    armv7l-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-armhf.deb";
+      hash = "sha256-LgeWQcHm5Qq/7MUuidjily0WsOFZAWGWeO52jNHWKMw=";
+    };
+    x86_64-linux = fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
+      hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
+    };
+  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src_repo = fetchFromGitHub {
     repo = "koreader";
@@ -68,7 +75,7 @@ stdenv.mkDerivation rec {
       "An ebook reader application supporting PDF, DjVu, EPUB, FB2 and many more formats, running on Cervantes, Kindle, Kobo, PocketBook and Android devices";
     mainProgram = "koreader";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ contrun neonfuz];
   };

@@ -38,11 +38,11 @@ buildPecl rec {
       cargo
       rustc
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       rustPlatform.bindgenHook
       rustPlatform.cargoSetupHook
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.rustPlatform.bindgenHook
       darwin.apple_sdk_11_0.rustPlatform.cargoSetupHook
     ];
@@ -52,7 +52,7 @@ buildPecl rec {
       curl
       pcre2
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.Security
       libiconv

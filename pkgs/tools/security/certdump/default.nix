@@ -41,6 +41,6 @@ buildDotnetModule rec {
     license = licenses.asl20;
     maintainers = [ maintainers.baloo ];
     # net5 has no osx-arm64 target available
-    broken = stdenv.isDarwin && stdenv.isAarch64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 }

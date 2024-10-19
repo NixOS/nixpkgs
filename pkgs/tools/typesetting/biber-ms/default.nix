@@ -33,7 +33,7 @@ perlPackages.buildPerlModule {
     TextCSV_XS TextRoman URI UnicodeLineBreak XMLLibXML XMLLibXMLSimple
     XMLLibXSLT XMLWriter autovivification
   ];
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   preConfigure = ''
     cp '${multiscriptBltxml}' t/tdata/multiscript.bltxml
@@ -41,7 +41,7 @@ perlPackages.buildPerlModule {
 
   postInstall = ''
     mv "$out"/bin/biber{,-ms}
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang "$out"/bin/biber-ms
   '';
 

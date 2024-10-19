@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "BitTorrent client written in C++";
     mainProgram = "ctorrent";
     longDescription = ''

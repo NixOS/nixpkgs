@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     freetype
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.libobjc
   ];
 

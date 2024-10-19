@@ -56,7 +56,7 @@ stdenv.mkDerivation {
       --delete '//*[@if="setup.addNativeBroadcom"]' \
       jogl/make/build-newt.xml
   ''
-  + lib.optionalString stdenv.isDarwin ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/if="use.macos/d' gluegen/make/gluegen-cpptasks-base.xml
     rm -r jogl/oculusvr-sdk
   '';
@@ -67,11 +67,11 @@ stdenv.mkDerivation {
     git
     xmlstarlet
     stripJavaArchivesHook
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
     xorg.libX11
     xorg.libXrandr
@@ -81,7 +81,7 @@ stdenv.mkDerivation {
     xorg.libXxf86vm
     xorg.libXrender
     mesa
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.AppKit
     darwin.apple_sdk_11_0.frameworks.Cocoa
   ];

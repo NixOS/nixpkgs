@@ -12,7 +12,7 @@ index dc60d0ae..cf4a06a3 100644
  
      log.info("Attaching {0} to {1} by PID.", session, target)
 diff --git a/tests/debugpy/test_attach.py b/tests/debugpy/test_attach.py
-index afabc1ac..2fff3982 100644
+index 017d7f59..63e86328 100644
 --- a/tests/debugpy/test_attach.py
 +++ b/tests/debugpy/test_attach.py
 @@ -151,8 +151,7 @@ def test_reattach(pyfile, target, run):

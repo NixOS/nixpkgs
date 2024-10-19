@@ -43,7 +43,7 @@ buildPythonPackage rec {
     six
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ click ];
     flex = [ flex ];
     icu = [ pyicu ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable tests that require network
   disabledTestPaths = [ "tests/test_convert.py" ];

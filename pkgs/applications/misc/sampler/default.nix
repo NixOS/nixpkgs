@@ -25,8 +25,8 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  buildInputs = lib.optional stdenv.isLinux alsa-lib
-    ++ lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.OpenAL
   ];
 

@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.virtualisation.virtualbox.host;
 
@@ -18,7 +15,7 @@ in
 
 {
   options.virtualisation.virtualbox.host = {
-    enable = mkEnableOption "VirtualBox" // {
+    enable = lib.mkEnableOption "VirtualBox" // {
       description = ''
         Whether to enable VirtualBox.
 
@@ -29,7 +26,7 @@ in
       '';
     };
 
-    enableExtensionPack = mkEnableOption "VirtualBox extension pack" // {
+    enableExtensionPack = lib.mkEnableOption "VirtualBox extension pack" // {
       description = ''
         Whether to install the Oracle Extension Pack for VirtualBox.
 
@@ -40,18 +37,18 @@ in
       '';
     };
 
-    package = mkPackageOption pkgs "virtualbox" { };
+    package = lib.mkPackageOption pkgs "virtualbox" { };
 
-    addNetworkInterface = mkOption {
-      type = types.bool;
+    addNetworkInterface = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Automatically set up a vboxnet0 host-only network interface.
       '';
     };
 
-    enableHardening = mkOption {
-      type = types.bool;
+    enableHardening = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Enable hardened VirtualBox, which ensures that only the binaries in the
@@ -65,8 +62,8 @@ in
       '';
     };
 
-    headless = mkOption {
-      type = types.bool;
+    headless = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Use VirtualBox installation without GUI and Qt dependency. Useful to enable on servers
@@ -74,16 +71,16 @@ in
       '';
     };
 
-    enableWebService = mkOption {
-      type = types.bool;
+    enableWebService = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Build VirtualBox web service tool (vboxwebsrv) to allow managing VMs via other webpage frontend tools. Useful for headless servers.
       '';
     };
 
-    enableKvm = mkOption {
-      type = types.bool;
+    enableKvm = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Enable KVM support for VirtualBox. This increases compatibility with Linux kernel versions, because the VirtualBox kernel modules
@@ -96,8 +93,8 @@ in
     };
   };
 
-  config = mkIf cfg.enable (mkMerge [{
-    warnings = mkIf (pkgs.config.virtualbox.enableExtensionPack or false)
+  config = lib.mkIf cfg.enable (lib.mkMerge [{
+    warnings = lib.mkIf (pkgs.config.virtualbox.enableExtensionPack or false)
       ["'nixpkgs.virtualbox.enableExtensionPack' has no effect, please use 'virtualisation.virtualbox.host.enableExtensionPack'"];
     environment.systemPackages = [ virtualbox ];
 
@@ -118,7 +115,7 @@ in
         "VBoxSDL"
         "VirtualBoxVM"
       ]);
-    in mkIf cfg.enableHardening
+    in lib.mkIf cfg.enableHardening
       (builtins.listToAttrs (map (x: { name = x; value = mkSuid x; }) executables));
 
     users.groups.vboxusers.gid = config.ids.gids.vboxusers;
@@ -130,14 +127,14 @@ in
         SUBSYSTEM=="usb_device", ACTION=="remove", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
         SUBSYSTEM=="usb", ACTION=="remove", ENV{DEVTYPE}=="usb_device", RUN+="${virtualbox}/libexec/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
       '';
-  } (mkIf cfg.enableKvm {
+  } (lib.mkIf cfg.enableKvm {
     assertions = [
       {
         assertion = !cfg.addNetworkInterface;
         message = "VirtualBox KVM only supports standard NAT networking for VMs. Please turn off virtualisation.virtualbox.host.addNetworkInterface.";
       }
     ];
-  }) (mkIf (!cfg.enableKvm) {
+  }) (lib.mkIf (!cfg.enableKvm) {
     boot.kernelModules = [ "vboxdrv" "vboxnetadp" "vboxnetflt" ];
     boot.extraModulePackages = [ kernelModules ];
 
@@ -149,7 +146,7 @@ in
      '';
 
     # Since we lack the right setuid/setcap binaries, set up a host-only network by default.
-  }) (mkIf cfg.addNetworkInterface {
+  }) (lib.mkIf cfg.addNetworkInterface {
     systemd.services.vboxnet0 =
       { description = "VirtualBox vboxnet0 Interface";
         requires = [ "dev-vboxnetctl.device" ];
@@ -177,7 +174,7 @@ in
     # Make sure NetworkManager won't assume this interface being up
     # means we have internet access.
     networking.networkmanager.unmanaged = ["vboxnet0"];
-  }) (mkIf config.networking.useNetworkd {
+  }) (lib.mkIf config.networking.useNetworkd {
     systemd.network.networks."40-vboxnet0".extraConfig = ''
       [Link]
       RequiredForOnline=no

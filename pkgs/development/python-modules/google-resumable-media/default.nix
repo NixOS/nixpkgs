@@ -30,7 +30,7 @@ buildPythonPackage rec {
     google-crc32c
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     requests = [ requests ];
     aiohttp = [ aiohttp ];
   };
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     mock
     pytest-asyncio
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.requests;
+  ] ++ optional-dependencies.requests;
 
   preCheck = ''
     # prevent shadowing imports

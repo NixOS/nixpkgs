@@ -129,12 +129,9 @@ let
   ''));
 
   commonHttpConfig = ''
-      # Load mime types.
+      # Load mime types and configure maximum size of the types hash tables.
       include ${cfg.defaultMimeTypes};
-      # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
-      # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
-      # overwrite it because nginx does not allow duplicated settings.
-      types_hash_max_size 4096;
+      types_hash_max_size ${toString cfg.typesHashMaxSize};
 
       include ${cfg.package}/conf/fastcgi.conf;
       include ${cfg.package}/conf/uwsgi_params;
@@ -856,9 +853,12 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Resolves domains of proxyPass targets at runtime
-          and not only at start, you have to set
-          services.nginx.resolver, too.
+          Resolves domains of proxyPass targets at runtime and not only at startup.
+          This can be used as a workaround if nginx fails to start because of not-yet-working DNS.
+
+          :::{.warn}
+          `services.nginx.resolver` must be set for this option to work.
+          :::
         '';
       };
 
@@ -894,6 +894,19 @@ in
         description = ''
             Sets the maximum size of the server names hash tables.
           '';
+      };
+
+      typesHashMaxSize = mkOption {
+        type = types.ints.positive;
+        default = if cfg.defaultMimeTypes == "${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024;
+        defaultText = literalExpression ''if config.services.nginx.defaultMimeTypes == "''${pkgs.mailcap}/etc/nginx/mime.types" then 2688 else 1024'';
+        description = ''
+          Sets the maximum size of the types hash tables (`types_hash_max_size`).
+          It is recommended that the minimum size possible size is used.
+          If {option}`recommendedOptimisation` is disabled, nginx would otherwise
+          fail to start since the mailmap `mime.types` database has more entries
+          than the nginx default value 1024.
+        '';
       };
 
       proxyCachePath = mkOption {
@@ -1061,7 +1074,7 @@ in
             '';
           };
           "memcached" = {
-            servers."unix:/run//memcached/memcached.sock" = {};
+            servers."unix:/run/memcached/memcached.sock" = {};
           };
         };
       };

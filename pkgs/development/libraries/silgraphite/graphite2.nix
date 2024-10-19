@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
         doFakeLibgcc = true;
       });
 
-  patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74

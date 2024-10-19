@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
       sqlite
       zstd
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         AppKit

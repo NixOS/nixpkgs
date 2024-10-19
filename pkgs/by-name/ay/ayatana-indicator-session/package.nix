@@ -7,7 +7,7 @@
   cmake,
   dbus,
   glib,
-  gnome,
+  gnome-settings-daemon,
   gsettings-desktop-schemas,
   gtest,
   intltool,
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     # TODO these bloat the closure size alot, just so the indicator doesn't have the potential to crash.
     # is there a better way to give it access to DE-specific schemas as needed?
     # https://github.com/AyatanaIndicators/ayatana-indicator-session/blob/88846bad7ee0aa8e0bb122816d06f9bc887eb464/src/service.c#L1387-L1413
-    gnome.gnome-settings-daemon
+    gnome-settings-daemon
     mate.mate-settings-daemon
   ];
 

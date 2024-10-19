@@ -30,13 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXft
     libexif
     libwebp
-  ] ++ lib.optional stdenv.isDarwin libinotify-kqueue;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin libinotify-kqueue;
 
   postPatch = lib.optionalString (conf != null) ''
     cp ${(builtins.toFile "config.def.h" conf)} config.def.h
   '';
 
-  env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-linotify";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-linotify";
 
   makeFlags = [ "CC:=$(CC)" ];
 

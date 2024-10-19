@@ -499,8 +499,8 @@ let
     stdenv.mkDerivation ({
       name = "${name}${if version == null then "" else "-${version}"}";
       buildInputs = [ tarWrapper python nodejs ]
-        ++ lib.optional (stdenv.isLinux) utillinux
-        ++ lib.optional (stdenv.isDarwin) libtool
+        ++ lib.optional (stdenv.hostPlatform.isLinux) utillinux
+        ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
         ++ buildInputs;
 
       inherit nodejs;
@@ -591,8 +591,8 @@ let
         name = "node-dependencies-${name}${if version == null then "" else "-${version}"}";
 
         buildInputs = [ tarWrapper python nodejs ]
-          ++ lib.optional (stdenv.isLinux) utillinux
-          ++ lib.optional (stdenv.isDarwin) libtool
+          ++ lib.optional (stdenv.hostPlatform.isLinux) utillinux
+          ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool
           ++ buildInputs;
 
         inherit dontStrip; # Stripping may fail a build for some package deployments
@@ -662,7 +662,7 @@ let
     stdenv.mkDerivation ({
       name = "node-shell-${name}${if version == null then "" else "-${version}"}";
 
-      buildInputs = [ python nodejs ] ++ lib.optional (stdenv.isLinux) utillinux ++ buildInputs;
+      buildInputs = [ python nodejs ] ++ lib.optional (stdenv.hostPlatform.isLinux) utillinux ++ buildInputs;
       buildCommand = ''
         mkdir -p $out/bin
         cat > $out/bin/shell <<EOF

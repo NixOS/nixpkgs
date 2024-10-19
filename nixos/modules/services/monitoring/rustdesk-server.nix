@@ -86,7 +86,7 @@ in {
 
     systemd.slices.system-rustdesk = {
       enable = true;
-      description = "Slice designed to contain RustDesk Signal & RustDesk Relay";
+      description = "RustDesk Remote Desktop Slice";
     };
 
     systemd.targets.rustdesk = {

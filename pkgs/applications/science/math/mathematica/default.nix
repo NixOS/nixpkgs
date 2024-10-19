@@ -51,10 +51,7 @@ let versions = callPackage ./versions.nix { };
           sublist = l: lib.sublist 0 n l;
       in lib.compareLists lib.compare (sublist as) (sublist bs) == 0;
 
-    matchesDoc = v:
-      builtins.match (if webdoc
-                      then ".*[0-9]_LINUX.sh"
-                      else ".*[0-9]_BNDL_LINUX.sh") v.src.name != null;
+    matchesDoc = v: (builtins.match ".*[0-9]_LIN(UX)?.sh" v.src.name != null) == webdoc;
 
 in
 
@@ -71,7 +68,7 @@ callPackage ./generic.nix {
     homepage = "http://www.wolfram.com/mathematica/";
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ herberteuler rafaelrc ];
+    maintainers = with maintainers; [ herberteuler rafaelrc chewblacka ];
     platforms = [ "x86_64-linux" ];
   };
 }

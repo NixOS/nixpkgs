@@ -327,7 +327,7 @@ let
 
     setHostId = optionalString (config.networking.hostId != null) ''
       hi="${config.networking.hostId}"
-      ${if pkgs.stdenv.isBigEndian then ''
+      ${if pkgs.stdenv.hostPlatform.isBigEndian then ''
         echo -ne "\x''${hi:0:2}\x''${hi:2:2}\x''${hi:4:2}\x''${hi:6:2}" > /etc/hostid
       '' else ''
         echo -ne "\x''${hi:6:2}\x''${hi:4:2}\x''${hi:2:2}\x''${hi:0:2}" > /etc/hostid
@@ -349,13 +349,7 @@ let
         { object = "${modulesClosure}/lib";
           symlink = "/lib";
         }
-        { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
-              src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-              preferLocalBuild = true;
-            } ''
-              target=$out
-              ${pkgs.buildPackages.perl}/bin/perl -0pe 's/## file: iwlwifi.conf(.+?)##/##/s;' $src > $out
-            '';
+        { object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
           symlink = "/etc/modprobe.d/ubuntu.conf";
         }
         { object = config.environment.etc."modprobe.d/nixos.conf".source;

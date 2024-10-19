@@ -48,7 +48,7 @@ buildPythonPackage rec {
     pygments
   ] ++ lib.optionals (pythonOlder "3.9") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     jupyter = [ ipywidgets ];
   };
 

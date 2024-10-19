@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ncl4xwms8d656x95ga8v8zjybx4cmdl5hlcml7dpcgm3p8qj4ks";
   };
 
-  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   installPhase = ''
     mkdir -p $out $dev/include/btor2parser/ $lib/lib
@@ -21,11 +21,24 @@ stdenv.mkDerivation rec {
     cp -v  lib/libbtor2parser.* $lib/lib
   '';
 
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    # make sure shared libraries are present and program can be executed
+    $out/bin/btorsim -h > /dev/null
+
+    runHook postInstallCheck
+  '';
+
   outputs = [ "out" "dev" "lib" ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
   ];
 
   meta = with lib; {

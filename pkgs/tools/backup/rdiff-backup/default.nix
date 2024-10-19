@@ -27,6 +27,7 @@ pypkgs.buildPythonApplication rec {
     homepage = "https://rdiff-backup.net";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ peterhoeg ];
+    mainProgram = "rdiff-backup";
     platforms = platforms.all;
   };
 }

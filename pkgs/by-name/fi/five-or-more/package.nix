@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${lib.versions.majorMinor version}/five-or-more-${version}.tar.xz";
-    sha256 = "LRDXLu/esyS0R9YyrwwySW4l/BWjwB230vAMm1HQnvQ=";
+    hash = "sha256-LRDXLu/esyS0R9YyrwwySW4l/BWjwB230vAMm1HQnvQ=";
   };
 
   nativeBuildInputs = [

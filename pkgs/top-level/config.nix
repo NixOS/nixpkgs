@@ -134,6 +134,34 @@ let
       feature = "build packages with CUDA support by default";
     };
 
+    replaceBootstrapFiles = mkMassRebuild {
+      type = types.functionTo (types.attrsOf types.package);
+      default = lib.id;
+      defaultText = literalExpression "lib.id";
+      description = ''
+        Use the bootstrap files returned instead of the default bootstrap
+        files.
+        The default bootstrap files are passed as an argument.
+      '';
+      example = literalExpression ''
+        prevFiles:
+        let
+          replacements = {
+            "sha256-YQlr088HPoVWBU2jpPhpIMyOyoEDZYDw1y60SGGbUM0=" = import <nix/fetchurl.nix> {
+              url = "(custom glibc linux x86_64 bootstrap-tools.tar.xz)";
+              hash = "(...)";
+            };
+            "sha256-QrTEnQTBM1Y/qV9odq8irZkQSD9uOMbs2Q5NgCvKCNQ=" = import <nix/fetchurl.nix> {
+              url = "(custom glibc linux x86_64 busybox)";
+              hash = "(...)";
+              executable = true;
+            };
+          };
+        in
+        builtins.mapAttrs (name: prev: replacements.''${prev.outputHash} or prev) prevFiles
+      '';
+    };
+
     rocmSupport = mkMassRebuild {
       type = types.bool;
       default = false;

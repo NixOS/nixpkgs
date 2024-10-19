@@ -59,7 +59,7 @@ buildPythonPackage rec {
     xxhash
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [ s3fs ];
     azure = [ adlfs ];
     gcs = [ gcsfs ];
@@ -71,7 +71,7 @@ buildPythonPackage rec {
     pytest-cases
     pytest-parallel
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pins" ];
 

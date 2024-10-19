@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://projects.coin-or.org/Cbc";
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     description = "Mixed integer programming solver";
   };

@@ -63,7 +63,7 @@ in with passthru; stdenv.mkDerivation rec {
     zlib
   ] ++ lib.optionals (lib.any (l: l == optimizationLevel) [ "0" "1" "2" "3"]) [
     boehmgc
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libunwind Security
   ];
 
@@ -132,9 +132,9 @@ in with passthru; stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  preFixup = lib.optionalString (stdenv.isDarwin) ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     install_name_tool -change @rpath/lib${executable}-c.dylib $out/lib/lib${executable}-c.dylib $out/bin/${executable}
-  '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     mkdir -p $out/${executable}-c/pypy/bin
     mv $out/bin/${executable} $out/${executable}-c/pypy/bin/${executable}
     ln -s $out/${executable}-c/pypy/bin/${executable} $out/bin/${executable}

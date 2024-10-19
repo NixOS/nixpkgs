@@ -287,6 +287,18 @@ let
         '';
       };
 
+      rssh = lib.mkOption {
+        default = false;
+        type = lib.types.bool;
+        description = ''
+          If set, the calling user's SSH agent is used to authenticate
+          against the configured keys. This module works in a manner
+          similar to pam_ssh_agent_auth, but supports a wider range
+          of SSH key types, including those protected by security
+          keys (FIDO2).
+        '';
+      };
+
       duoSecurity = {
         enable = lib.mkOption {
           default = false;
@@ -673,6 +685,7 @@ let
           { name = "ssh_agent_auth"; enable = config.security.pam.sshAgentAuth.enable && cfg.sshAgentAuth; control = "sufficient"; modulePath = "${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so"; settings = {
             file = lib.concatStringsSep ":" config.security.pam.sshAgentAuth.authorizedKeysFiles;
           }; }
+          (let inherit (config.security.pam) rssh; in { name = "rssh"; enable = rssh.enable && cfg.rssh; control = "sufficient"; modulePath = "${pkgs.pam_rssh}/lib/libpam_rssh.so"; inherit (rssh) settings; })
           (let p11 = config.security.pam.p11; in { name = "p11"; enable = cfg.p11Auth; control = p11.control; modulePath = "${pkgs.pam_p11}/lib/security/pam_p11.so"; args = [
             "${pkgs.opensc}/lib/opensc-pkcs11.so"
           ]; })
@@ -950,8 +963,9 @@ let
       value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
-  optionalSudoConfigForSSHAgentAuth = lib.optionalString config.security.pam.sshAgentAuth.enable ''
-    # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
+  optionalSudoConfigForSSHAgentAuth = lib.optionalString
+    (config.security.pam.sshAgentAuth.enable || config.security.pam.rssh.enable) ''
+    # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so and libpam_rssh.so can do their magic.
     Defaults env_keep+=SSH_AUTH_SOCK
   '';
 
@@ -1065,6 +1079,55 @@ in
           :::
         '';
         default = [ "/etc/ssh/authorized_keys.d/%u" ];
+      };
+    };
+
+    security.pam.rssh = {
+      enable = lib.mkEnableOption "authenticating using a signature performed by the ssh-agent";
+
+      settings = lib.mkOption {
+        type = lib.types.submodule {
+          freeformType = moduleSettingsType;
+          options = {
+            auth_key_file = lib.mkOption {
+              type = with lib.types; nullOr nonEmptyStr;
+              description = ''
+                Path to file with trusted public keys in OpenSSH's `authorized_keys` format. The following
+                variables are expanded to the respective PAM items:
+
+                - `service`: `PAM_SERVICE`, the service name,
+                - `user`: `PAM_USER`, the username of the entity under whose identity service will be given,
+                - `tty`: `PAM_TTY`, the terminal name,
+                - `rhost`: `PAM_RHOST`, the requesting hostname, and
+                - `ruser`: `PAM_RUSER`, the requesting entity.
+
+                These PAM items are explained in {manpage}`pam_get_item(3)`.
+
+                Variables may be specified as `$var`, `''${var}` or `''${var:defaultValue}`.
+
+                ::: {.note}
+                Specifying user-writeable files here results in an insecure configuration: a malicious process
+                can then edit such an `authorized_keys` file and bypass the ssh-agent-based authentication.
+
+                This option is ignored if {option}`security.pam.rssh.settings.authorized_keys_command` is set.
+
+                If both this option and {option}`security.pam.rssh.settings.authorized_keys_command` are unset,
+                the keys will be read from `''${HOME}/.ssh/authorized_keys`, which should be considered
+                insecure.
+              '';
+              default = "/etc/ssh/authorized_keys.d/$ruser";
+            };
+          };
+        };
+
+        default = { };
+        description = ''
+          Options to pass to the pam_rssh module. Refer to
+          <https://github.com/z4yx/pam_rssh/blob/main/README.md#optional-arguments>
+          for supported values.
+
+          ${moduleSettingsDescription}
+        '';
       };
     };
 
@@ -1512,16 +1575,30 @@ in
           Did you forget to set `services.openssh.enable` ?
         '';
       }
+      {
+        assertion = with config.security.pam.rssh;
+          enable -> (settings.auth_key_file or null != null || settings.authorized_keys_command or null != null);
+        message = ''
+          security.pam.rssh.enable requires either security.pam.rssh.settings.auth_key_file or
+          security.pam.rssh.settings.authorized_keys_command to be set.
+        '';
+      }
     ];
 
     warnings = lib.optional
-      (with lib; with config.security.pam.sshAgentAuth;
+      (with config.security.pam.sshAgentAuth;
         enable && lib.any (s: lib.hasPrefix "%h" s || lib.hasPrefix "~" s) authorizedKeysFiles)
       ''config.security.pam.sshAgentAuth.authorizedKeysFiles contains files in the user's home directory.
 
         Specifying user-writeable files there result in an insecure configuration:
         a malicious process can then edit such an authorized_keys file and bypass the ssh-agent-based authentication.
         See https://github.com/NixOS/nixpkgs/issues/31611
+      '' ++ lib.optional
+      (with config.security.pam.rssh;
+        enable && settings.auth_key_file or null != null && settings.authorized_keys_command or null != null) ''
+        security.pam.rssh.settings.auth_key_file will be ignored as
+        security.pam.rssh.settings.authorized_keys_command has been specified.
+        Explictly set the former to null to silence this warning.
       '';
 
     environment.systemPackages =

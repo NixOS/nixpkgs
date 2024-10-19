@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Schematic capture and netlisting EDA tool";
     longDescription = ''
       Xschem is a schematic capture program, it allows creation of

@@ -10,7 +10,7 @@
   dtkwidget,
   qt5integration,
   qt5platform-plugins,
-  dde-dock,
+  dde-tray-loader,
   gsettings-qt,
   qtx11extras,
   gtest,
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     qtbase
     dtkwidget
     qt5platform-plugins
-    dde-dock
+    dde-tray-loader
     gsettings-qt
     qtx11extras
     gtest

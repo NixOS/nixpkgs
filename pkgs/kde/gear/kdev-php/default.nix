@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kdev-php";
 
-  extraNativeBuildInputs = [kdevelop-pg-qt];
+  extraNativeBuildInputs = [ kdevelop-pg-qt ];
 }

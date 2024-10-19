@@ -18,7 +18,7 @@ buildRubyGem rec {
     owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "sha256-QnNdseCSwQYhO/ybzWsflMEk68TMgPU3HqXJ7av3SHE=";
+    hash = "sha256-QnNdseCSwQYhO/ybzWsflMEk68TMgPU3HqXJ7av3SHE=";
   };
 
   buildInputs = [ ruby bundler ];

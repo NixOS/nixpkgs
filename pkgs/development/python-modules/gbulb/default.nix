@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gbulb" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GLib implementation of PEP 3156";
     homepage = "https://github.com/beeware/gbulb";
     license = licenses.asl20;

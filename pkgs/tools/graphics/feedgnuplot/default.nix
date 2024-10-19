@@ -30,7 +30,7 @@ perlPackages.buildPerlPackage rec {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = [ makeWrapper installShellFiles ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
   buildInputs = [ gnuplot perl ]
     ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);
@@ -45,7 +45,7 @@ perlPackages.buildPerlPackage rec {
   # Tests require gnuplot 4.6.4 and are completely skipped with gnuplot 5.
   doCheck = false;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/feedgnuplot
   '' + ''
     wrapProgram $out/bin/feedgnuplot \

@@ -1,14 +1,12 @@
 { config, lib, ... }:
-
-with lib;
 {
   meta = {
-    maintainers = teams.freedesktop.members;
+    maintainers = lib.teams.freedesktop.members;
   };
 
   options = {
-    xdg.menus.enable = mkOption {
-      type = types.bool;
+    xdg.menus.enable = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to install files to support the
@@ -17,7 +15,7 @@ with lib;
     };
   };
 
-  config = mkIf config.xdg.menus.enable {
+  config = lib.mkIf config.xdg.menus.enable {
     environment.pathsToLink = [
       "/share/applications"
       "/share/desktop-directories"

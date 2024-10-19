@@ -2,20 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   huggingface-hub,
   langchain-core,
   sentence-transformers,
   tokenizers,
   transformers,
+
+  # tests
+  freezegun,
+  httpx,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
   pytest-mock,
   pytest-socket,
   pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
@@ -24,16 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-huggingface";
-  version = "0.0.3";
+  version = "0.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-huggingface==${version}";
-    hash = "sha256-4k3C6T2N7SBM/wP8KAwMQqt9DkXDdYNt2i/OkZilWw0=";
+    hash = "sha256-ESWhhjWjCbBV/3KjeSwEQzvK6os1mmc3at+8gonfGt4=";
   };
 
   sourceRoot = "${src.name}/libs/partners/huggingface";
@@ -50,6 +54,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    httpx
     lark
     pandas
     pytest-asyncio
@@ -65,6 +70,10 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_huggingface" ];
+
+  passthru = {
+    inherit (langchain-core) updateScript;
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-huggingface==${version}";

@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
     rev = finalAttrs.version;
-    sha256 = "sha256-1j7xzhuhK8ZRAJm9dJ95xiTIla7lh3LBiWc/+x/kjp0=";
+    hash = "sha256-1j7xzhuhK8ZRAJm9dJ95xiTIla7lh3LBiWc/+x/kjp0=";
   };
 
   nativeCheckInputs = [ python3 ];

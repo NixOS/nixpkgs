@@ -70,7 +70,7 @@ buildGoModule rec {
     "-X main.version=v${version}"
   ];
 
-  postInstall = lib.optionalString (!stdenvNoCC.isDarwin) ''
+  postInstall = lib.optionalString (!stdenvNoCC.hostPlatform.isDarwin) ''
     mv $out/bin/SyncYomi $out/bin/syncyomi
   '';
 

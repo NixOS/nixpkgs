@@ -6,13 +6,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "deepin-desktop-base";
-  version = "2024.01.03";
+  version = "2024.07.24";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-45qR1LCnA8ZSrWykqNvvm7Dxbi5pQnAuFy6nZJrzyi0=";
+    hash = "sha256-JOC8nQ/YgUpY93FcniO2uypAfsL/SNU+KfTrthoZfQo=";
   };
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" ];

@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
+  versioneer,
 
   # dependencies
   arviz,
@@ -22,16 +22,14 @@
 
 buildPythonPackage rec {
   pname = "pymc";
-  version = "5.16.2";
+  version = "5.17.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pymc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vOU5P45AJPULGWj9lscZKP3JqfSpkPDnq1Fyq9lIawc=";
+    hash = "sha256-vElS6f46xVvK+p5/IvjgCI4wMZlBe3Q5ZaQUie1yLJw=";
   };
 
   postPatch = ''
@@ -39,7 +37,10 @@ buildPythonPackage rec {
       --replace-fail ', "pytest-cov"' ""
   '';
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    versioneer
+  ];
 
   dependencies = [
     arviz

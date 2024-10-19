@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let cfg = config.services.libinput;
 
     xorgBool = v: if v then "on" else "off";
 
     mkConfigForDevice = deviceType: {
-      dev = mkOption {
-        type = types.nullOr types.str;
+      dev = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/dev/input/event0";
         description = ''
@@ -17,8 +14,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelProfile = mkOption {
-        type = types.enum [ "flat" "adaptive" "custom" ];
+      accelProfile = lib.mkOption {
+        type = lib.types.enum [ "flat" "adaptive" "custom" ];
         default = "adaptive";
         example = "flat";
         description = ''
@@ -36,8 +33,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelSpeed = mkOption {
-        type = types.nullOr types.str;
+      accelSpeed = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "-0.5";
         description = ''
@@ -46,8 +43,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelPointsFallback = mkOption {
-        type = types.nullOr (types.listOf types.number);
+      accelPointsFallback = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
         default = null;
         example = [ 0.0 1.0 2.4 2.5 ];
         description = ''
@@ -56,8 +53,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelPointsMotion = mkOption {
-        type = types.nullOr (types.listOf types.number);
+      accelPointsMotion = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
         default = null;
         example = [ 0.0 1.0 2.4 2.5 ];
         description = ''
@@ -66,8 +63,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelPointsScroll = mkOption {
-        type = types.nullOr (types.listOf types.number);
+      accelPointsScroll = lib.mkOption {
+        type = lib.types.nullOr (lib.types.listOf lib.types.number);
         default = null;
         example = [ 0.0 1.0 2.4 2.5 ];
         description = ''
@@ -76,8 +73,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelStepFallback = mkOption {
-        type = types.nullOr types.number;
+      accelStepFallback = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
         default = null;
         example = 0.1;
         description = ''
@@ -87,8 +84,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelStepMotion = mkOption {
-        type = types.nullOr types.number;
+      accelStepMotion = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
         default = null;
         example = 0.1;
         description = ''
@@ -98,8 +95,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      accelStepScroll = mkOption {
-        type = types.nullOr types.number;
+      accelStepScroll = lib.mkOption {
+        type = lib.types.nullOr lib.types.number;
         default = null;
         example = 0.1;
         description = ''
@@ -109,8 +106,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      buttonMapping = mkOption {
-        type = types.nullOr types.str;
+      buttonMapping = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "1 6 3 4 5 0 7";
         description = ''
@@ -123,8 +120,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      calibrationMatrix = mkOption {
-        type = types.nullOr types.str;
+      calibrationMatrix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description = ''
@@ -133,8 +130,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      clickMethod = mkOption {
-        type = types.nullOr (types.enum [ "none" "buttonareas" "clickfinger" ]);
+      clickMethod = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "none" "buttonareas" "clickfinger" ]);
         default = null;
         example = "buttonareas";
         description = ''
@@ -145,14 +142,14 @@ let cfg = config.services.libinput;
           '';
       };
 
-      leftHanded = mkOption {
-        type = types.bool;
+      leftHanded = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enables left-handed button orientation, i.e. swapping left and right buttons.";
       };
 
-      middleEmulation = mkOption {
-        type = types.bool;
+      middleEmulation = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables middle button emulation. When enabled, pressing the left and right buttons
@@ -160,14 +157,14 @@ let cfg = config.services.libinput;
           '';
       };
 
-      naturalScrolling = mkOption {
-        type = types.bool;
+      naturalScrolling = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enables or disables natural scrolling behavior.";
       };
 
-      scrollButton = mkOption {
-        type = types.nullOr types.int;
+      scrollButton = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 1;
         description = ''
@@ -176,8 +173,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      scrollMethod = mkOption {
-        type = types.enum [ "twofinger" "edge" "button" "none" ];
+      scrollMethod = lib.mkOption {
+        type = lib.types.enum [ "twofinger" "edge" "button" "none" ];
         default = "twofinger";
         example = "edge";
         description = ''
@@ -186,8 +183,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      horizontalScrolling = mkOption {
-        type = types.bool;
+      horizontalScrolling = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables horizontal scrolling. When disabled, this driver will discard any
@@ -196,8 +193,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      sendEventsMode = mkOption {
-        type = types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
+      sendEventsMode = lib.mkOption {
+        type = lib.types.enum [ "disabled" "enabled" "disabled-on-external-mouse" ];
         default = "enabled";
         example = "disabled";
         description = ''
@@ -206,24 +203,24 @@ let cfg = config.services.libinput;
           '';
       };
 
-      tapping = mkOption {
-        type = types.bool;
+      tapping = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables tap-to-click behavior.
           '';
       };
 
-      tappingButtonMap = mkOption {
-        type = types.nullOr (types.enum [ "lrm" "lmr" ]);
+      tappingButtonMap = lib.mkOption {
+        type = lib.types.nullOr (lib.types.enum [ "lrm" "lmr" ]);
         default = null;
         description = ''
           Set the button mapping for 1/2/3-finger taps to left/right/middle or left/middle/right, respectively.
         '';
       };
 
-      tappingDragLock = mkOption {
-        type = types.bool;
+      tappingDragLock = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
             Enables or disables drag lock during tapping behavior. When enabled, a finger up during tap-
@@ -232,8 +229,8 @@ let cfg = config.services.libinput;
           '';
       };
 
-      transformationMatrix = mkOption {
-        type = types.nullOr types.str;
+      transformationMatrix = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "0.5 0 0 0 0.8 0.1 0 0 1";
         description = ''
@@ -242,16 +239,16 @@ let cfg = config.services.libinput;
         '';
       };
 
-      disableWhileTyping = mkOption {
-        type = types.bool;
+      disableWhileTyping = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
             Disable input method while typing.
           '';
       };
 
-      additionalOptions = mkOption {
-        type = types.lines;
+      additionalOptions = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example =
         ''
@@ -269,28 +266,28 @@ let cfg = config.services.libinput;
       Identifier "libinput ${deviceType} configuration"
       MatchDriver "libinput"
       MatchIs${matchIs} "${xorgBool true}"
-      ${optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
+      ${lib.optionalString (cfg.${deviceType}.dev != null) ''MatchDevicePath "${cfg.${deviceType}.dev}"''}
       Option "AccelProfile" "${cfg.${deviceType}.accelProfile}"
-      ${optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
-      ${optionalString (cfg.${deviceType}.accelPointsFallback != null) ''Option "AccelPointsFallback" "${toString cfg.${deviceType}.accelPointsFallback}"''}
-      ${optionalString (cfg.${deviceType}.accelPointsMotion != null) ''Option "AccelPointsMotion" "${toString cfg.${deviceType}.accelPointsMotion}"''}
-      ${optionalString (cfg.${deviceType}.accelPointsScroll != null) ''Option "AccelPointsScroll" "${toString cfg.${deviceType}.accelPointsScroll}"''}
-      ${optionalString (cfg.${deviceType}.accelStepFallback != null) ''Option "AccelStepFallback" "${toString cfg.${deviceType}.accelStepFallback}"''}
-      ${optionalString (cfg.${deviceType}.accelStepMotion != null) ''Option "AccelStepMotion" "${toString cfg.${deviceType}.accelStepMotion}"''}
-      ${optionalString (cfg.${deviceType}.accelStepScroll != null) ''Option "AccelStepScroll" "${toString cfg.${deviceType}.accelStepScroll}"''}
-      ${optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
-      ${optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
-      ${optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
-      ${optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelSpeed != null) ''Option "AccelSpeed" "${cfg.${deviceType}.accelSpeed}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsFallback != null) ''Option "AccelPointsFallback" "${toString cfg.${deviceType}.accelPointsFallback}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsMotion != null) ''Option "AccelPointsMotion" "${toString cfg.${deviceType}.accelPointsMotion}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelPointsScroll != null) ''Option "AccelPointsScroll" "${toString cfg.${deviceType}.accelPointsScroll}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepFallback != null) ''Option "AccelStepFallback" "${toString cfg.${deviceType}.accelStepFallback}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepMotion != null) ''Option "AccelStepMotion" "${toString cfg.${deviceType}.accelStepMotion}"''}
+      ${lib.optionalString (cfg.${deviceType}.accelStepScroll != null) ''Option "AccelStepScroll" "${toString cfg.${deviceType}.accelStepScroll}"''}
+      ${lib.optionalString (cfg.${deviceType}.buttonMapping != null) ''Option "ButtonMapping" "${cfg.${deviceType}.buttonMapping}"''}
+      ${lib.optionalString (cfg.${deviceType}.calibrationMatrix != null) ''Option "CalibrationMatrix" "${cfg.${deviceType}.calibrationMatrix}"''}
+      ${lib.optionalString (cfg.${deviceType}.transformationMatrix != null) ''Option "TransformationMatrix" "${cfg.${deviceType}.transformationMatrix}"''}
+      ${lib.optionalString (cfg.${deviceType}.clickMethod != null) ''Option "ClickMethod" "${cfg.${deviceType}.clickMethod}"''}
       Option "LeftHanded" "${xorgBool cfg.${deviceType}.leftHanded}"
       Option "MiddleEmulation" "${xorgBool cfg.${deviceType}.middleEmulation}"
       Option "NaturalScrolling" "${xorgBool cfg.${deviceType}.naturalScrolling}"
-      ${optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
+      ${lib.optionalString (cfg.${deviceType}.scrollButton != null) ''Option "ScrollButton" "${toString cfg.${deviceType}.scrollButton}"''}
       Option "ScrollMethod" "${cfg.${deviceType}.scrollMethod}"
       Option "HorizontalScrolling" "${xorgBool cfg.${deviceType}.horizontalScrolling}"
       Option "SendEventsMode" "${cfg.${deviceType}.sendEventsMode}"
       Option "Tapping" "${xorgBool cfg.${deviceType}.tapping}"
-      ${optionalString (cfg.${deviceType}.tappingButtonMap != null) ''Option "TappingButtonMap" "${cfg.${deviceType}.tappingButtonMap}"''}
+      ${lib.optionalString (cfg.${deviceType}.tappingButtonMap != null) ''Option "TappingButtonMap" "${cfg.${deviceType}.tappingButtonMap}"''}
       Option "TappingDragLock" "${xorgBool cfg.${deviceType}.tappingDragLock}"
       Option "DisableWhileTyping" "${xorgBool cfg.${deviceType}.disableWhileTyping}"
       ${cfg.${deviceType}.additionalOptions}
@@ -298,7 +295,7 @@ let cfg = config.services.libinput;
 in {
 
   imports =
-    (map (option: mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "libinput" "touchpad" option ]) [
+    (map (option: lib.mkRenamedOptionModule ([ "services" "xserver" "libinput" option ]) [ "services" "libinput" "touchpad" option ]) [
       "accelProfile"
       "accelSpeed"
       "buttonMapping"
@@ -318,15 +315,15 @@ in {
       "disableWhileTyping"
       "additionalOptions"
     ]) ++ [
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "enable" ]   [ "services" "libinput" "enable" ])
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "mouse" ]    [ "services" "libinput" "mouse" ])
-      (mkRenamedOptionModule [ "services" "xserver" "libinput" "touchpad" ] [ "services" "libinput" "touchpad" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "enable" ]   [ "services" "libinput" "enable" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "mouse" ]    [ "services" "libinput" "mouse" ])
+      (lib.mkRenamedOptionModule [ "services" "xserver" "libinput" "touchpad" ] [ "services" "libinput" "touchpad" ])
     ];
 
   options = {
 
     services.libinput = {
-      enable = mkEnableOption "libinput" // {
+      enable = lib.mkEnableOption "libinput" // {
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
       };
@@ -336,7 +333,7 @@ in {
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.modules = [ pkgs.xorg.xf86inputlibinput ];
 

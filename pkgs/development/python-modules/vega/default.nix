@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     widget = [ ipywidgets ];
     jupyterlab = [ jupyterlab ];
   };

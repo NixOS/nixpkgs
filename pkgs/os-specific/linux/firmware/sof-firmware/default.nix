@@ -5,11 +5,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "sof-firmware";
-  version = "2024.03";
+  version = "2024.09";
 
   src = fetchurl {
     url = "https://github.com/thesofproject/sof-bin/releases/download/v${version}/sof-bin-${version}.tar.gz";
-    sha256 = "sha256-T9ky97vBUXsG+nkR5tVmgU1dxP7FYIvbROfE/kkp+/Y=";
+    sha256 = "sha256-6kfZn4E1kAjQdhi8oQPPePgthOlAv+lBoor+B8jLxiA=";
   };
 
   dontFixup = true; # binaries must not be stripped or patchelfed
@@ -22,6 +22,7 @@ stdenvNoCC.mkDerivation rec {
     cp -av sof-ace-tplg $out/lib/firmware/intel/sof-ace-tplg
     cp -av sof-ipc4 $out/lib/firmware/intel/sof-ipc4
     cp -av sof-ipc4-tplg $out/lib/firmware/intel/sof-ipc4-tplg
+    cp -av sof-ipc4-lib $out/lib/firmware/intel/sof-ipc4-lib
     runHook postInstall
   '';
 

@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "photutils";
-  version = "1.13.0";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "photutils";
     rev = "refs/tags/${version}";
-    hash = "sha256-J1i1H7AfQdiUIyBpgJK3dkH6C8MoEOwug4YQP+NEPbk=";
+    hash = "sha256-slrg1iByOhW1jiSG7nKHWj0ZSOP8v3LhCCr+DLLspKM=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "'numpy>=2.0.0rc1'," ""
+      --replace-fail "'numpy>=2.0.0'," ""
   '';
 
   build-system = [
@@ -55,9 +55,10 @@ buildPythonPackage rec {
   dependencies = [
     astropy
     numpy
+    scipy
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       bottleneck
       gwcs
@@ -65,7 +66,6 @@ buildPythonPackage rec {
       rasterio
       scikit-image
       scikit-learn
-      scipy
       shapely
       tqdm
     ];

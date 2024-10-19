@@ -142,13 +142,16 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    libtapi
-    llvm
-    libunwind
-    openssl
-    xar
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.dyld ] ++ lib.optionals stdenv.isLinux [ libdispatch ];
+  buildInputs =
+    [
+      libtapi
+      llvm
+      libunwind
+      openssl
+      xar
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.dyld ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libdispatch ];
 
   # Note for overrides: ld64 cannot be built as a debug build because of UB in its iteration implementations,
   # which trigger libc++ debug assertions due to trying to take the address of the first element of an emtpy vector.

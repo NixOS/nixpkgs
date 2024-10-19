@@ -15,25 +15,18 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "localproxy";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "aws-iot-securetunneling-localproxy";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-voUKfXa43mOltePQEXgmJ2EBaN06E6R/2Zz6O09ogyY=";
+    hash = "sha256-bIJLGJhSzBVqJaTWJj4Pmw/shA4Y0CzX4HhHtQZjfj0=";
   };
 
   patches = [
-    # gcc-13 compatibility fix:
-    #   https://github.com/aws-samples/aws-iot-securetunneling-localproxy/pull/136
     (fetchpatch {
-      name = "gcc-13-part-1.patch";
-      url = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy/commit/f6ba73eaede61841534623cdb01b69d793124f4b.patch";
-      hash = "sha256-sB9GuEuHLyj6DXNPuYAMibUJXdkThKbS/fxvnJU3rS4=";
-    })
-    (fetchpatch {
-      name = "gcc-13-part-2.patch";
+      name = "gcc-13.patch";
       url = "https://github.com/aws-samples/aws-iot-securetunneling-localproxy/commit/de8779630d14e4f4969c9b171d826acfa847822b.patch";
       hash = "sha256-11k6mRvCx72+5G/5LZZx2qnx10yfKpcAZofn8t8BD3E=";
     })
@@ -42,6 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ openssl protobuf catch2 boost icu ];
+
+  postPatch = ''
+    sed -i '/set(OPENSSL_USE_STATIC_LIBS TRUE)/d' CMakeLists.txt
+  '';
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];

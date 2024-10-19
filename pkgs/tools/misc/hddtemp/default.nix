@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     "--with-db-path=${placeholder "out"}/share/hddtemp/hddtemp.db"
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   postInstall = ''
     install -Dm444 ${db} $out/share/hddtemp/hddtemp.db
   '';

@@ -1,63 +1,53 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cmake
-, ninja
-, cairo
-, fribidi
-, libGL
-, libdatrie
-, libjpeg
-, libselinux
-, libsepol
-, libthai
-, libxkbcommon
-, pango
-, pcre
-, util-linux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libXdmcp
-, debug ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  cmake,
+  cairo,
+  hyprutils,
+  hyprwayland-scanner,
+  libGL,
+  libjpeg,
+  libxkbcommon,
+  pango,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libXdmcp,
+  debug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpicker";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-BYQF1zM6bJ44ag9FJ0aTSkhOTY9U7uRdp3SmRCs5fJM=";
+    hash = "sha256-gu26MSYbTlRLMUpZ9PeYXtqqhzPDQXxEDkjiJgwzIIc=";
   };
 
   cmakeBuildType = if debug then "Debug" else "Release";
 
   nativeBuildInputs = [
     cmake
-    ninja
+    hyprwayland-scanner
     pkg-config
   ];
 
   buildInputs = [
     cairo
-    fribidi
+    hyprutils
     libGL
-    libdatrie
     libjpeg
-    libselinux
-    libsepol
-    libthai
     libxkbcommon
     pango
-    pcre
     wayland
     wayland-protocols
     wayland-scanner
     libXdmcp
-    util-linux
   ];
 
   postInstall = ''
@@ -65,11 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 $src/LICENSE -t $out/share/licenses/hyprpicker
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Wlroots-compatible Wayland color picker that does not suck";
     homepage = "https://github.com/hyprwm/hyprpicker";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fufexan ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fufexan ];
     platforms = wayland.meta.platforms;
     mainProgram = "hyprpicker";
   };

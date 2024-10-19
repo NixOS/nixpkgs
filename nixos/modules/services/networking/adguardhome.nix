@@ -1,12 +1,9 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.adguardhome;
   settingsFormat = pkgs.formats.yaml { };
 
-  args = concatStringsSep " " ([
+  args = lib.concatStringsSep " " ([
     "--no-check-update"
     "--pidfile /run/AdGuardHome/AdGuardHome.pid"
     "--work-dir /var/lib/AdGuardHome/"
@@ -28,19 +25,19 @@ let
       checkPhase = "${cfg.package}/bin/adguardhome -c $out --check-config";
     });
 in {
-  options.services.adguardhome = with types; {
-    enable = mkEnableOption "AdGuard Home network-wide ad blocker";
+  options.services.adguardhome = with lib.types; {
+    enable = lib.mkEnableOption "AdGuard Home network-wide ad blocker";
 
-    package = mkOption {
+    package = lib.mkOption {
       type = package;
       default = pkgs.adguardhome;
-      defaultText = literalExpression "pkgs.adguardhome";
+      defaultText = lib.literalExpression "pkgs.adguardhome";
       description = ''
         The package that runs adguardhome.
       '';
     };
 
-    openFirewall = mkOption {
+    openFirewall = lib.mkOption {
       default = false;
       type = bool;
       description = ''
@@ -49,9 +46,9 @@ in {
       '';
     };
 
-    allowDHCP = mkOption {
+    allowDHCP = lib.mkOption {
       default = settings.dhcp.enabled or false;
-      defaultText = literalExpression "config.services.adguardhome.settings.dhcp.enabled or false";
+      defaultText = lib.literalExpression "config.services.adguardhome.settings.dhcp.enabled or false";
       type = bool;
       description = ''
         Allows AdGuard Home to open raw sockets (`CAP_NET_RAW`), which is
@@ -63,7 +60,7 @@ in {
       '';
     };
 
-    mutableSettings = mkOption {
+    mutableSettings = lib.mkOption {
       default = true;
       type = bool;
       description = ''
@@ -72,7 +69,7 @@ in {
       '';
     };
 
-    host = mkOption {
+    host = lib.mkOption {
       default = "0.0.0.0";
       type = str;
       description = ''
@@ -80,7 +77,7 @@ in {
       '';
     };
 
-    port = mkOption {
+    port = lib.mkOption {
       default = 3000;
       type = port;
       description = ''
@@ -88,14 +85,14 @@ in {
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       default = null;
       type = nullOr (submodule {
         freeformType = settingsFormat.type;
         options = {
-          schema_version = mkOption {
+          schema_version = lib.mkOption {
             default = cfg.package.schema_version;
-            defaultText = literalExpression "cfg.package.schema_version";
+            defaultText = lib.literalExpression "cfg.package.schema_version";
             type = int;
             description = ''
               Schema version for the configuration.
@@ -121,7 +118,7 @@ in {
       '';
     };
 
-    extraArgs = mkOption {
+    extraArgs = lib.mkOption {
       default = [ ];
       type = listOf str;
       description = ''
@@ -130,27 +127,27 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.settings != null
-          -> !(hasAttrByPath [ "bind_host" ] cfg.settings);
+          -> !(lib.hasAttrByPath [ "bind_host" ] cfg.settings);
         message = "AdGuard option `settings.bind_host' has been superseded by `services.adguardhome.host'";
       }
       {
         assertion = cfg.settings != null
-          -> !(hasAttrByPath [ "bind_port" ] cfg.settings);
+          -> !(lib.hasAttrByPath [ "bind_port" ] cfg.settings);
         message = "AdGuard option `settings.bind_port' has been superseded by `services.adguardhome.port'";
       }
       {
         assertion = settings != null -> cfg.mutableSettings
-          || hasAttrByPath [ "dns" "bootstrap_dns" ] settings;
+          || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings;
         message = "AdGuard setting dns.bootstrap_dns needs to be configured for a minimal working configuration";
       }
       {
         assertion = settings != null -> cfg.mutableSettings
-          || hasAttrByPath [ "dns" "bootstrap_dns" ] settings
-          && isList settings.dns.bootstrap_dns;
+          || lib.hasAttrByPath [ "dns" "bootstrap_dns" ] settings
+          && lib.isList settings.dns.bootstrap_dns;
         message = "AdGuard setting dns.bootstrap_dns needs to be a list";
       }
     ];
@@ -164,7 +161,7 @@ in {
         StartLimitBurst = 10;
       };
 
-      preStart = optionalString (settings != null) ''
+      preStart = lib.optionalString (settings != null) ''
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
            && [ "${toString cfg.mutableSettings}" = "1" ]; then
           # First run a schema_version update on the existing configuration
@@ -185,7 +182,7 @@ in {
         DynamicUser = true;
         ExecStart = "${lib.getExe cfg.package} ${args}";
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ]
-          ++ optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
+          ++ lib.optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
@@ -193,6 +190,6 @@ in {
       };
     };
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ cfg.port ];
   };
 }

@@ -36,7 +36,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     filecache = [ filelock ];
     redis = [ redis ];
   };
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     mock
     pytestCheckHook
     requests
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cachecontrol" ];
 

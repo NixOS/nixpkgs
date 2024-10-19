@@ -1,5 +1,4 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   inherit (config.security) wrapperDir;
   cfg = config.services.kbfs;
@@ -12,14 +11,14 @@ in {
 
     services.kbfs = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to mount the Keybase filesystem.";
       };
 
-      enableRedirector = mkOption {
-        type = types.bool;
+      enableRedirector = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the Keybase root redirector service, allowing
@@ -28,15 +27,15 @@ in {
         '';
       };
 
-      mountPoint = mkOption {
-        type = types.str;
+      mountPoint = lib.mkOption {
+        type = lib.types.str;
         default = "%h/keybase";
         example = "/keybase";
         description = "Mountpoint for the Keybase filesystem.";
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [
           "-label kbfs"
@@ -52,7 +51,7 @@ in {
 
   ###### implementation
 
-  config = mkIf cfg.enable (mkMerge [
+  config = lib.mkIf cfg.enable (lib.mkMerge [
     {
       # Upstream: https://github.com/keybase/client/blob/master/packaging/linux/systemd/kbfs.service
       systemd.user.services.kbfs = {
@@ -61,7 +60,7 @@ in {
         # Note that the "Requires" directive will cause a unit to be restarted whenever its dependency is restarted.
         # Do not issue a hard dependency on keybase, because kbfs can reconnect to a restarted service.
         # Do not issue a hard dependency on keybase-redirector, because it's ok if it fails (e.g., if it is disabled).
-        wants = [ "keybase.service" ] ++ optional cfg.enableRedirector "keybase-redirector.service";
+        wants = [ "keybase.service" ] ++ lib.optional cfg.enableRedirector "keybase-redirector.service";
         path = [ "/run/wrappers" ];
         unitConfig.ConditionUser = "!@system";
 
@@ -89,7 +88,7 @@ in {
       environment.systemPackages = [ pkgs.kbfs ];
     }
 
-    (mkIf cfg.enableRedirector {
+    (lib.mkIf cfg.enableRedirector {
       security.wrappers."keybase-redirector".source = "${pkgs.kbfs}/bin/redirector";
 
       systemd.tmpfiles.settings."10-kbfs"."/keybase".d = {

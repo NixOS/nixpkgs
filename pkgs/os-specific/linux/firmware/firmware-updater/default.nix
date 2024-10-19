@@ -6,13 +6,9 @@
 
 flutter.buildFlutterApplication rec {
   pname = "firmware-updater";
-  version = "unstable-2024-18-04";
+  version = "0-unstable-2024-10-03";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
-
-  patches = [
-    ./upgrade-file.patch
-  ];
 
   sourceRoot = "./source/packages/firmware_updater";
 
@@ -23,8 +19,8 @@ flutter.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "firmware-updater";
-    rev = "e48bb3f693e5d76656a3e7bbc07be0fcbfa19f23";
-    hash = "sha256-SO3sDIsJCK4Sh51pXO4u6WX4zcFa6jQYu9E+WtVrjDE=";
+    rev = "ce300838d95c5955423eedcac8b05589b14a8c52";
+    hash = "sha256-o3OU43pEzo8FC5e6kknB8BV9n7U4RMqg/+CDbHraAKw=";
   };
 
   meta = with lib; {

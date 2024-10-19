@@ -12,23 +12,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "lsd-rs";
     repo = "lsd";
     rev = "v${version}";
-    hash = "sha256-4vf68Rga2Z+PYIdfzzmDtfjCQVbr8RWiVG29c/UDVsQ=";
+    hash = "sha256-LlMcBMb40yN+rlvGVsh7JaC3j9sF60YxitQQXe1q/oI=";
   };
 
-  cargoHash = "sha256-R+mOpZQLY6VFfxhCSk2MZmoCRGT49knBH9k4C6Z6KuQ=";
+  cargoHash = "sha256-yyXFtMyiMq6TaN9/7+BaBERHgubeA8SJGOr08Mn3RnY=";
 
   nativeBuildInputs = [
     installShellFiles
     pandoc
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = ''
     pandoc --standalone --to man doc/lsd.md -o lsd.1

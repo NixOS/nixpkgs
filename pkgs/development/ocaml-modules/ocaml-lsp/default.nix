@@ -9,6 +9,7 @@
 , dot-merlin-reader
 , spawn
 , ocamlc-loc
+, merlin
 , merlin-lib
 , astring
 , camlp-streams
@@ -24,6 +25,22 @@ let lsp_v =
 ; in
 
 let lsp = lsp_v; in
+
+# Use merlin < 4.17 for OCaml < 5.2
+let merlin-lib_v =
+  if lib.versions.majorMinor ocaml.version == "4.14"
+  then merlin-lib.override {
+    merlin = merlin.override {
+      version = "4.16-414";
+    };
+  } else if lib.versions.majorMinor ocaml.version == "5.1"
+  then merlin-lib.override {
+    merlin = merlin.override {
+      version = "4.16-501";
+    };
+  } else merlin-lib
+; in
+let merlin-lib = merlin-lib_v; in
 
 buildDunePackage rec {
   pname = "ocaml-lsp-server";

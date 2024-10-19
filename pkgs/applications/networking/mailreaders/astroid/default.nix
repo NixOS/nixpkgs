@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, adwaita-icon-theme, gmime3, webkitgtk, ronn
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, adwaita-icon-theme, gmime3, webkitgtk_4_0, ronn
 , libsass, notmuch, boost, wrapGAppsHook3, glib-networking, protobuf
 , gtkmm3, libpeas, gsettings-desktop-schemas, gobject-introspection, python3
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtkmm3 gmime3 webkitgtk libsass libpeas
+    gtkmm3 gmime3 webkitgtk_4_0 libsass libpeas
     python3
     notmuch boost gsettings-desktop-schemas adwaita-icon-theme
     glib-networking protobuf

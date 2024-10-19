@@ -23,24 +23,30 @@
   libslirp,
   wayland,
   wayland-scanner,
+  libsndfile,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  libmpg123,
 
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
   enableVncRenderer ? false,
-  enableWayland ? stdenv.isLinux,
+  enableWayland ? stdenv.hostPlatform.isLinux,
   unfreeEnableDiscord ? false,
   unfreeEnableRoms ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
-  version = "4.1.1";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ioE0EVIXv/biXXvLqwhmtZ/RJM0nLqcE+i+CU+WXBY4=";
+    hash = "sha256-ue5Coy2MpP7Iwl81KJPQPC7eD53/Db5a0PGIR+DdPYI=";
   };
 
   patches = [ ./darwin.patch ];
@@ -75,21 +81,27 @@ stdenv.mkDerivation (finalAttrs: {
       libslirp
       qt5.qtbase
       qt5.qttools
+      libsndfile
+      flac.dev
+      libogg.dev
+      libvorbis.dev
+      libopus.dev
+      libmpg123.dev
     ]
-    ++ lib.optional stdenv.isLinux alsa-lib
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
     ++ lib.optional enableWayland wayland
     ++ lib.optional enableVncRenderer libvncserver
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk_11_0.libs.xpc;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.libs.xpc;
 
   cmakeFlags =
-    lib.optional stdenv.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
+    lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
     ++ lib.optional enableNewDynarec "-DNEW_DYNAREC=ON"
     ++ lib.optional enableVncRenderer "-DVNC=ON"
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
     ++ lib.optional (!unfreeEnableDiscord) "-DDISCORD=OFF";
 
   postInstall =
-    lib.optionalString stdenv.isLinux ''
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
 
       for size in 48 64 72 96 128 192 256 512; do
@@ -107,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-58nNTOLund/KeDlNwzwwihjFVigs/P0K8SN07zExE2c=";
+      hash = "sha256-p3djn950mTUIchFCEg56JbJtIsUuxmqRdYFRl50kI5Y=";
     };
     updateScript = ./update.sh;
   };
@@ -117,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup =
     let
       libPath = lib.makeLibraryPath ([ libpcap ] ++ lib.optional unfreeEnableDiscord discord-gamesdk);
-      libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
+      libPathVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
     ''
       makeWrapperArgs+=(--prefix ${libPathVar} : "${libPath}")
@@ -127,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Emulator of x86-based machines based on PCem";
     mainProgram = "86Box";
     homepage = "https://86box.net/";
+    changelog = "https://github.com/86Box/86Box/releases/tag/v${finalAttrs.version}";
     license =
       with lib.licenses;
       [ gpl2Only ] ++ lib.optional (unfreeEnableDiscord || unfreeEnableRoms) unfree;
