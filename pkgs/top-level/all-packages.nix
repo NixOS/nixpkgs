@@ -2902,8 +2902,6 @@ with pkgs;
 
   yaft = callPackage ../applications/terminal-emulators/yaft { };
 
-  writefreely = callPackage ../applications/misc/writefreely { };
-
   iqueue = callPackage ../development/libraries/iqueue { };
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
