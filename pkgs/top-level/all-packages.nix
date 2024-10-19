@@ -24865,8 +24865,6 @@ with pkgs;
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
-  patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
-
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
   pgcat = callPackage ../servers/sql/pgcat {};
