@@ -4425,6 +4425,8 @@ self: super: with self; {
 
   filetype = callPackage ../development/python-modules/filetype { };
 
+  files-to-prompt = callPackage ../development/python-modules/files-to-prompt { };
+
   filterpy = callPackage ../development/python-modules/filterpy { };
 
   finalfusion = callPackage ../development/python-modules/finalfusion { };
