@@ -2517,7 +2517,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
 
-  fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
+  fceux-qt5 = fceux.override { ___qtVersion = "5"; };
+  fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
 
