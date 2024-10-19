@@ -9674,6 +9674,12 @@
     github = "janlikar";
     githubId = 4228250;
   };
+  janschill = {
+    email = "janschill@proton.me";
+    github = "janschill";
+    githubId = 26876570;
+    name = "Jan Schill";
+  };
   jansol = {
     email = "jan.solanti@paivola.fi";
     github = "jansol";
