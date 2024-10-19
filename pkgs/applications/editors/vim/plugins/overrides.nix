@@ -1114,6 +1114,11 @@ in
     };
   };
 
+  hunk-nvim = super.hunk-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim ];
+    nvimRequireCheck = "hunk";
+  };
+
   # https://hurl.dev/
   hurl = buildVimPlugin {
     pname = "hurl";
