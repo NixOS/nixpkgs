@@ -245,13 +245,14 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "bohonghuang";
       repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
+      rev = "ff60e3495cdbba5c09d0bb8aa49f3184cc060c8e";
+      hash = "sha256-06cyPf+5z+GE3YvZEJ67kC281nkwRz/hoaykTISsni0=";
     };
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-glib
-      cl-glib_dot_gio
+      cl-gio
+      cl-gobject
     ];
     nativeBuildInputs = [
       pkgs.gobject-introspection
@@ -264,13 +265,8 @@ let
 
   cl-gtk4_dot_adw = build-asdf-system {
     pname = "cl-gtk4.adw";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
-    };
+    version = self.cl-gtk4.version;
+    src = self.cl-gtk4.src;
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-gtk4
@@ -283,15 +279,12 @@ let
     ];
   };
 
-  cl-gtk4_dot_webkit2 = build-asdf-system {
-    pname = "cl-gtk4.webkit2";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-gtk4";
-      rev = "e18f621b996fd986d9829d590203c690440dee64";
-      hash = "sha256-++qydw6db4O3m+DAjutVPN8IuePOxseo9vhWEvwiR6E=";
-    };
+  cl-gtk4_dot_webkit2 = throw "cl-gtk4_dot_webkit2 was replaced by cl-gtk4_dot_webkit";
+
+  cl-gtk4_dot_webkit = build-asdf-system {
+    pname = "cl-gtk4.webkit";
+    version = self.cl-gtk4.version;
+    src = self.cl-gtk4.src;
     lispLibs = with self; [
       cl-gobject-introspection-wrapper
       cl-gtk4
@@ -302,8 +295,6 @@ let
     nativeLibs = [
       pkgs.webkitgtk_6_0
     ];
-    # Requires old webkitgtk_5_0 which was replaced by webkitgtk_6_0
-    meta.broken = true;
   };
 
   cl-avro = build-asdf-system {
