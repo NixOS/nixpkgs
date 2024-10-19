@@ -22,7 +22,7 @@
   withGui,
   python3,
   jemalloc,
-  zeromq4,
+  zeromq,
 }:
 
 mkDerivation rec {
@@ -57,7 +57,7 @@ mkDerivation rec {
       python3
       jemalloc
       libnatpmp
-      zeromq4
+      zeromq
       miniupnpc
       util-linux
       protobuf
