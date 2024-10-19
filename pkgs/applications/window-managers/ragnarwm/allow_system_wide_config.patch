@@ -1,0 +1,24 @@
+diff --git a/src/config.c b/src/config.c
+index b7ee725..d7163d7 100644
+--- a/src/config.c
++++ b/src/config.c
+@@ -541,11 +541,15 @@ initconfig(state_t* s) {
+     logmsg(s, LogLevelError, "cannot read config file because HOME is not defined.");
+   }
+ 
+-  const char* relpath = "/.config/ragnarwm/ragnar.cfg";
+-  char cfgpath[strlen(home) + strlen(relpath) + 2];
+-  sprintf(cfgpath, "%s%s", home, relpath);
++  char *cfg_path;
++  char const cfg_path_global[] = "/etc/ragnarwm/ragnar.cfg";
+ 
+-  if(!config_read_file(&cfghndl, cfgpath)) {
++  asprintf(&cfg_path, "%s/.config/ragnarwm/ragnar.cfg", home);
++
++  if (
++    !config_read_file(&cfghndl, cfg_path)
++    && !config_read_file(&cfghndl, cfg_path_global)
++  ) {
+     logmsg(s, LogLevelError, "%s:%d - %s\n", config_error_file(&cfghndl),
+             config_error_line(&cfghndl), config_error_text(&cfghndl));
+ 
