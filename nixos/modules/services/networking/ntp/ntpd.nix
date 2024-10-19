@@ -13,10 +13,8 @@ let
 
   cfg = config.services.ntp;
 
-  stateDir = "/var/lib/ntp";
-
   configFile = pkgs.writeText "ntp.conf" ''
-    driftfile ${stateDir}/ntp.drift
+    driftfile /var/lib/ntp/ntp.drift
 
     restrict default ${toString cfg.restrictDefault}
     restrict -6 default ${toString cfg.restrictDefault}
@@ -143,7 +141,7 @@ in
       isSystemUser = true;
       group = "ntp";
       description = "NTP daemon user";
-      home = stateDir;
+      home = "/var/lib/ntp";
     };
     users.groups.ntp = { };
 
@@ -154,14 +152,10 @@ in
       wants = [ "time-sync.target" ];
       before = [ "time-sync.target" ];
 
-      preStart = ''
-        mkdir -m 0755 -p ${stateDir}
-        chown ntp ${stateDir}
-      '';
-
       serviceConfig = {
         ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
         Type = "forking";
+        StateDirectory = "ntp";
       };
     };
 
