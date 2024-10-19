@@ -13651,8 +13651,6 @@ with pkgs;
     buildGoModule = buildGo123Module;
   };
 
-  xarchive = callPackage ../tools/archivers/xarchive { };
-
   xarchiver = callPackage ../tools/archivers/xarchiver { };
 
   xbanish = callPackage ../tools/X11/xbanish { };
