@@ -326,28 +326,28 @@ let
         };
 
         capAdd = mkOption {
-          type = with types; listOf (enum capabilities);
-          default = [];
+          type = with types; lazyAttrsOf (nullOr bool);
+          default = {};
           description = ''
             Capabilities to add to container
           '';
           example = literalExpression ''
-            [
-              SYS_ADMIN
-            ]
+            {
+              SYS_ADMIN = true;
+            {
           '';
         };
 
         capDrop = mkOption {
-          type = with types; listOf (enum capabilities);
-          default = [];
+          type = with types; lazyAttrsOf (nullOr bool);
+          default = {};
           description = ''
             Capabilities to drop from container
           '';
           example = literalExpression ''
-            [
-              SYS_ADMIN
-            ]
+            {
+              SYS_ADMIN = true;
+            {
           '';
         };
 
@@ -374,10 +374,7 @@ let
 
         networks = mkOption {
           type = with types; listOf str;
-          default = if cfg.backend == "podman" then ["podman"] else ["bridge"];
-          defaultText = literalExpression ''
-            if cfg.backend == "podman" then ["podman"] else ["bridge"]
-          '';
+          default = [];
           description = ''
             Networks to attach the container to
           '';
@@ -455,8 +452,8 @@ let
       ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
       ++ optional (container.privileged) "--privileged"
-      ++ map (c: "--cap-add ${escapeShellArg c}") container.capAdd
-      ++ map (c: "--cap-drop ${escapeShellArg c}") container.capDrop
+      ++ mapAttrsToList (k: _: "--cap-add ${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capAdd)
+      ++ mapAttrsToList (k: _: "--cap-drop ${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capDrop)
       ++ map (d: "--device ${escapeShellArg d}") container.devices
       ++ map (n: "--network ${escapeShellArg n}") container.networks
       ++ ["--pull ${escapeShellArg container.pull}"]
