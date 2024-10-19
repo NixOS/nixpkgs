@@ -43,7 +43,7 @@
         "default"
       ],
       "cacheVariables": {
-        "VCPKG_OSX_DEPLOYMENT_TARGET": "13.3"
+        "VCPKG_OSX_DEPLOYMENT_TARGET": "13.4"
       }
     },
     {
