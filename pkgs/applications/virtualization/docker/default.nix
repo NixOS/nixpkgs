@@ -269,7 +269,7 @@ rec {
     passthru = {
       # Exposed for tarsum build on non-linux systems (build-support/docker/default.nix)
       inherit moby-src;
-      tests = lib.optionals (!clientOnly) { inherit (nixosTests) docker; };
+      tests = lib.optionalAttrs (!clientOnly) { inherit (nixosTests) docker; };
     };
 
     meta = docker-meta // {
