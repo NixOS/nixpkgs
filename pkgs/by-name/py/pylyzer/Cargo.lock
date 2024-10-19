@@ -37,9 +37,9 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
-version = "1.0.89"
+version = "1.0.90"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86fdf8605db99b54d3cd748a44c6d04df638eb5dafb219b135d0149bd0db01f6"
+checksum = "37bf3594c4c988a53154954629820791dde498571819ae4ca50ca811e060cc95"
 
 [[package]]
 name = "autocfg"
@@ -145,9 +145,9 @@ checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
 
 [[package]]
 name = "els"
-version = "0.1.58"
+version = "0.1.59-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ab76dea4883a3e75fab38a6cd6c761346fec5909850c557fcbd683f7bd30b54e"
+checksum = "a2f90c210a0919808e48b96ecffd370ac788386ab061203132872e9bf1ad9f7f"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -161,9 +161,9 @@ dependencies = [
 
 [[package]]
 name = "erg_common"
-version = "0.6.46"
+version = "0.6.47-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9cef7281a06474cd12e7eb653d164777023440b13a28c8834124770c4b8f65fa"
+checksum = "d41f171eb77bf2763b119893966358ad9da72a3edd43cf278a78cf1c16daa2cf"
 dependencies = [
  "backtrace-on-stack-overflow",
  "erg_proc_macros",
@@ -174,9 +174,9 @@ dependencies = [
 
 [[package]]
 name = "erg_compiler"
-version = "0.6.46"
+version = "0.6.47-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0bf1c1e83a364fafbcec194a27affd02bf4538740c34c1617c45d960d4a3e33c"
+checksum = "93d0486bc668c120faf7af954dd4046224185c28821fb945a97eedcadf3e7d58"
 dependencies = [
  "erg_common",
  "erg_parser",
@@ -184,9 +184,9 @@ dependencies = [
 
 [[package]]
 name = "erg_parser"
-version = "0.6.46"
+version = "0.6.47-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c65037a0c9b890d8f810f7a827b897fba6ae950b34258b1450c9ab1e310813c"
+checksum = "98c37f58f3aef2e765610e7281ada15dbba707beaa0262a71e7f6958ee058ed0"
 dependencies = [
  "erg_common",
  "erg_proc_macros",
@@ -195,9 +195,9 @@ dependencies = [
 
 [[package]]
 name = "erg_proc_macros"
-version = "0.6.46"
+version = "0.6.47-nightly.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "29d7235082b39bf55cdec52da8c010c2d2d9ff7d41dde051158b7815f560f321"
+checksum = "97fa545f626fd04abea193a07c364c4fca3903c228bbe9cca4895500944b5aaf"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -292,9 +292,9 @@ checksum = "507460a910eb7b32ee961886ff48539633b788a36b65692b95f225b844c82553"
 
 [[package]]
 name = "libc"
-version = "0.2.159"
+version = "0.2.161"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "561d97a539a36e26a9a5fad1ea11a3039a67714694aaa379433e580854bc3dc5"
+checksum = "8e9489c2807c139ffd9c1794f4af0ebe86a828db53ecdc7fea2111d0fed085d1"
 
 [[package]]
 name = "libm"
@@ -554,16 +554,16 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
-version = "1.0.87"
+version = "1.0.88"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b3e4daa0dcf6feba26f985457cdf104d4b4256fc5a09547140f3631bb076b19a"
+checksum = "7c3a7fc5db1e57d5a779a352c8cdb57b29aa4c40cc69c3a68a7fedc815fbf2f9"
 dependencies = [
  "unicode-ident",
 ]
 
 [[package]]
 name = "py2erg"
-version = "0.0.66"
+version = "0.0.67"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -573,7 +573,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer"
-version = "0.0.66"
+version = "0.0.67"
 dependencies = [
  "els",
  "erg_common",
@@ -583,7 +583,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer_core"
-version = "0.0.66"
+version = "0.0.67"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -594,7 +594,7 @@ dependencies = [
 
 [[package]]
 name = "pylyzer_wasm"
-version = "0.0.66"
+version = "0.0.67"
 dependencies = [
  "erg_common",
  "erg_compiler",
@@ -764,9 +764,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.128"
+version = "1.0.131"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6ff5456707a1de34e7e37f2a6fd3d3f808c318259cbd01ab6377795054b483d8"
+checksum = "67d42a0bd4ac281beff598909bb56a86acaf979b84483e1c79c10dcaf98f8cf3"
 dependencies = [
  "itoa",
  "memchr",
