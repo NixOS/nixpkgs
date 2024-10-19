@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , fetchFromGitLab
 , mkDerivation
 , cmake
@@ -20,9 +21,10 @@
 , qtwebengine
 , solid
 , taglib
+, wrapQtAppsHook
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "tellico";
   version = "4.0.1";
 
@@ -39,6 +41,7 @@ mkDerivation rec {
     extra-cmake-modules
     kdoctools
     makeWrapper
+    wrapQtAppsHook
   ];
 
   buildInputs = [
