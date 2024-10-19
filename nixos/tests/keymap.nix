@@ -78,7 +78,7 @@ let
       # when the X test runs first.
       keymap_environments = {
           "Xorg Keymap": "env DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
-          "VT Keymap": "openvt -sw --",
+          "VT Keymap": "openvt -c 2 -sw --",
       }
 
       machine.wait_for_x()
