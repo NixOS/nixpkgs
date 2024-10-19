@@ -54,13 +54,6 @@ let
     lispLibs = super.cl-unicode.lispLibs ++ [ self.flexi-streams ];
   };
 
-  cl-gobject-introspection = super.cl-gobject-introspection.overrideLispAttrs (o: {
-    postPatch = ''
-      substituteInPlace src/init.lisp \
-        --replace sb-ext::set-floating-point-modes sb-int:set-floating-point-modes
-    '';
-  });
-
   jzon = super.com_dot_inuoe_dot_jzon;
 
   cl-notify = build-asdf-system {
