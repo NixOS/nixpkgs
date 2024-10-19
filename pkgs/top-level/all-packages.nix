@@ -484,8 +484,6 @@ with pkgs;
 
   colorpanes = callPackage ../tools/misc/colorpanes { };
 
-  colorpicker = callPackage ../tools/misc/colorpicker { };
-
   colorstorm = callPackage ../applications/misc/colorstorm { };
 
   comedilib = callPackage ../development/libraries/comedilib {  };
