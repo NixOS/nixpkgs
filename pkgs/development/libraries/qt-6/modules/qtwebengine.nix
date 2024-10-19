@@ -258,6 +258,9 @@ qtModule {
     export NINJAFLAGS="-j$NIX_BUILD_CORES"
   '';
 
+  # Debug info is too big to link with LTO.
+  separateDebugInfo = false;
+
   meta = with lib; {
     description = "Web engine based on the Chromium web browser";
     platforms = [ "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7a-linux" "armv7l-linux" "x86_64-linux" ];
