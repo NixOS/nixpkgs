@@ -54,16 +54,6 @@ let
     lispLibs = super.cl-unicode.lispLibs ++ [ self.flexi-streams ];
   };
 
-  dissect = super.dissect.overrideAttrs {
-    version = "1.0.0-trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "Shinmera";
-      repo = "dissect";
-      rev = "a70cabcd748cf7c041196efd711e2dcca2bbbb2c";
-      hash = "sha256-WXv/jbokgKJTc47rBjvOF5npnqDlsyr8oSXIzN/7ofo=";
-    };
-  };
-
   cl-gobject-introspection = super.cl-gobject-introspection.overrideLispAttrs (o: {
     postPatch = ''
       substituteInPlace src/init.lisp \
