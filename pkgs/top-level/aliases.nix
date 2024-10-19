@@ -1674,7 +1674,7 @@ mapAliases {
   usbguard-nox = throw "'usbguard-nox' has been renamed to/replaced by 'usbguard'"; # Converted to throw 2023-09-10
   utahfs = throw "utahfs has been removed, as it is broken and lack of maintenance from upstream"; # Added 2023-09-29
   util-linuxCurses = util-linux; # Added 2022-04-12
-  utillinux = throw "'utillinux' has been renamed to/replaced by 'util-linux'"; # Converted to throw 2024-10-17
+  utillinux = util-linux; # Added 2020-11-24, keep until node2nix is phased out, see https://github.com/NixOS/nixpkgs/issues/229475
 
   ### V ###
 
