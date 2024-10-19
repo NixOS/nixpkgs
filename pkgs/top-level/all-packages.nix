@@ -10956,8 +10956,6 @@ with pkgs;
 
   papertrail = callPackage ../tools/text/papertrail { };
 
-  pappl = callPackage ../applications/printing/pappl { };
-
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
   parallel = callPackage ../tools/misc/parallel { };
