@@ -34495,8 +34495,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation AudioUnit AudioToolbox;
   };
 
-  eboard = callPackage ../games/eboard { };
-
   ecwolf = callPackage ../games/ecwolf { };
 
   egoboo = callPackage ../games/egoboo { };
