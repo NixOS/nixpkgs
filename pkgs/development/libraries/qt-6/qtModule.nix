@@ -32,7 +32,7 @@ stdenv.mkDerivation (args // {
   moveToDev = false;
 
   outputs = args.outputs or [ "out" "dev" ];
-  separateDebugInfo = true;
+  separateDebugInfo = args.separateDebugInfo or true;
 
   dontWrapQtApps = args.dontWrapQtApps or true;
 }) // {
