@@ -77,16 +77,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       );
     };
 
-  meta = with lib; {
+  meta = {
     description = "Fast, disk space efficient package manager for JavaScript";
     homepage = "https://pnpm.io/";
     changelog = "https://github.com/pnpm/pnpm/releases/tag/v${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Scrumplex
       gepbird
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "pnpm";
   };
 })
