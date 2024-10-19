@@ -303,22 +303,12 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "SahilKang";
       repo = "cl-avro";
-      rev = "7d624253e98afb987a01729bd72c99bae02f0d7d";
-      hash = "sha256-AlTn+Q1gKnAFEfcnz9+VeHz681pPIirg2za3VXYiNWk=";
+      rev = "b8fa26320fa0ae88390215140d57f9cca937f691";
+      hash = "sha256-acXsotvKWuffrLbrG9YJ8yZc5E6WC8N0qCFCAiX6N0Q=";
     };
     lispLibs = with self; [
-      alexandria
-      babel
-      chipz
-      closer-mop
-      ieee-floats
-      flexi-streams
-      local-time
-      local-time-duration
-      md5
-      salza2
-      st-json
-      time-interval
+      alexandria babel chipz closer-mop ieee-floats flexi-streams local-time
+      local-time-duration md5 salza2 st-json time-interval
       trivial-extensible-sequences
     ];
   };
