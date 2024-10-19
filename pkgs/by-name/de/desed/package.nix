@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/SoptikHa2/desed/releases/tag/v${version}";
-    description = "Debugger for Sed: demystify and debug your sed scripts, from comfort of your terminal. ";
+    description = "Debugger for Sed: demystify and debug your sed scripts, from comfort of your terminal";
     homepage = "https://github.com/SoptikHa2/desed";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vinylen ];
