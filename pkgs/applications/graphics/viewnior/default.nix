@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, desktop-file-utils, gtk3, libpng, exiv2, lcms
-, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl}:
+, intltool, gettext, shared-mime-info, glib, gdk-pixbuf, perl, wrapGAppsHook3, webp-pixbuf-loader, gnome, librsvg}:
 
 stdenv.mkDerivation rec {
   pname = "viewnior-gtk3";
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     intltool
     gettext
+    wrapGAppsHook3
   ];
 
   buildInputs = [
@@ -34,6 +35,17 @@ stdenv.mkDerivation rec {
     gdk-pixbuf
     perl
   ];
+
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          webp-pixbuf-loader
+          librsvg
+        ];
+      }
+    }"
+  '';
 
   meta = with lib; {
     description = "Fast and simple image viewer";
