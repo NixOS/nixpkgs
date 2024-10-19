@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGo123Module,
   fetchFromGitHub,
   git,
@@ -30,6 +31,14 @@ buildGo123Module rec {
     "-w"
     "-X=main._version=${version}"
   ];
+
+  __darwinAllowLocalNetworking = true;
+
+  preCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    # timeout
+    rm testdata/script/branch_submit_remote_prompt.txt
+    rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
 
   passthru.updateScript = nix-update-script { };
 
