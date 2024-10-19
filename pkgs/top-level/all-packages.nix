@@ -33813,8 +33813,6 @@ with pkgs;
 
   ytcc = callPackage ../tools/networking/ytcc { };
 
-  ytmdl = callPackage ../tools/misc/ytmdl { };
-
   yuview = libsForQt5.yuview;
 
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
