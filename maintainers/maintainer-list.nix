@@ -15911,6 +15911,12 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  olifloof = {
+    email = "benmoreosm@gmail.com";
+    github = "olifloof";
+    githubId = 35699052;
+    name = "oli";
+  };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";
     github = "oliver-koss";
@@ -16840,12 +16846,6 @@
     githubId = 1576660;
     name = "Jelle Besseling";
     keys = [ { fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E"; } ];
-  };
-  pinkcreeper100 = {
-    email = "benmoreosm@gmail.com";
-    github = "pinkcreeper100";
-    githubId = 35699052;
-    name = "Oliver Samuel Morris";
   };
   pinpox = {
     email = "mail@pablo.tools";
