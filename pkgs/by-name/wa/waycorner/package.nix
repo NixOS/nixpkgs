@@ -5,6 +5,7 @@
   pkg-config,
   fetchFromGitHub,
   wayland,
+  gitUpdater,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "waycorner";
@@ -29,6 +30,8 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/waycorner \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ wayland ]}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Hot corners for Wayland";
