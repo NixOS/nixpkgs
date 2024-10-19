@@ -39,12 +39,18 @@ let
       rev = "2.0.3";
       hash = "sha256-7E+imvfDAJFnXQRWb5hNaSu+Xrf9NXeIKc9fl+o3yHQ=";
     };
+    pubchem-align3d = fetchFromGitHub {
+      owner = "ncbi";
+      repo = "pubchem-align3d";
+      rev = "daefab3dd0c90ca56da9d3d5e375fe4d651e6be3";
+      hash = "sha256-tQB4wqza9rlSoy4Uj9bA99ddawjxGyN9G7DYbcv/Qdo=";
+    };
   };
   boost' = boost.override { enableNumpy = true; };
 in
 buildPythonPackage rec {
   pname = "rdkit";
-  version = "2024.03.6";
+  version = "2024.09.1";
   pyproject = false;
 
   src =
@@ -55,7 +61,7 @@ buildPythonPackage rec {
       owner = "rdkit";
       repo = "rdkit";
       rev = "Release_${versionTag}";
-      hash = "sha256-C9W4hYRO0CRqp3g1sDbVvBWef0ZFxNg5Y9abHI+ixn0=";
+      hash = "sha256-UsyPlAJ8FISblF8szEmRqWansunIhW/gbEBZx13YM+A=";
     };
 
   unpackPhase = ''
@@ -75,6 +81,7 @@ buildPythonPackage rec {
     chmod +w External/FreeSASA/freesasa/src
     cp External/FreeSASA/freesasa2.c External/FreeSASA/freesasa/src
 
+    ln -s ${external.pubchem-align3d} External/pubchem_shape/pubchem-align3d
     ln -s ${rapidjson} External/rapidjson-1.1.0
     ln -s ${comic-neue}/share/fonts/truetype/ComicNeue-Regular.ttf Data/Fonts/
   '';
@@ -121,6 +128,7 @@ buildPythonPackage rec {
     (lib.cmakeFeature "AVALONTOOLS_DIR" "avalon")
     (lib.cmakeFeature "FREESASA_SRC_DIR" "freesasa")
     (lib.cmakeFeature "INCHI_INCLUDE_DIR" "${inchi}/include/inchi")
+    (lib.cmakeFeature "PUBCHEMSHAPE_DIR" "External/pubchem_shape/pubchem-align3d")
   ];
 
   checkPhase = ''
