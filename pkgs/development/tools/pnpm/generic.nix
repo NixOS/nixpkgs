@@ -73,7 +73,7 @@
     homepage = "https://pnpm.io/";
     changelog = "https://github.com/pnpm/pnpm/releases/tag/v${finalAttrs.version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Scrumplex ];
+    maintainers = with maintainers; [ Scrumplex gepbird ];
     platforms = platforms.all;
     mainProgram = "pnpm";
   };
