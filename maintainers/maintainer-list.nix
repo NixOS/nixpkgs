@@ -2996,6 +2996,12 @@
     githubId = 68566724;
     name = "bootstrap-prime";
   };
+  booxter = {
+    email = "ihar.hrachyshka@gmail.com";
+    github = "booxter";
+    githubId = 90200;
+    name = "Ihar Hrachyshka";
+  };
   boozedog = {
     email = "code@booze.dog";
     github = "boozedog";
@@ -3822,6 +3828,12 @@
     matrix = "@chn:chn.moe";
     github = "CHN-beta";
     githubId = 35858462;
+  };
+  cholli = {
+    email = "christoph.hollizeck@hey.com";
+    github = "Daholli";
+    githubId = 25060097;
+    name = "Christoph Hollizeck";
   };
   choochootrain = {
     email = "hurshal@imap.cc";

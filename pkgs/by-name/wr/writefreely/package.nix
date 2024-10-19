@@ -1,29 +1,36 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "writefreely";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "writefreely";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7KTNimthtfmQCgyXevAEj+CZ2MS+uOby73OO1fGNXfs=";
+    sha256 = "sha256-Qr31XSbAckLElD81yxD+K7tngWECQ+wyuESC+biAbyw=";
   };
 
-  vendorHash = "sha256-6RTshhxX+w/gdK53wCHVMpm6EkkRtEJ2/Fe7MfZ0WvY=";
+  vendorHash = "sha256-HmEh8WmKbdAimvzsAiaXcqSXoU1DJx06+s1EH1JZmwo=";
 
-  patches = [
-    ./fix-go-version-error.patch
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/writefreely/writefreely.softwareVer=${version}"
   ];
-
-  ldflags = [ "-s" "-w" "-X github.com/writefreely/writefreely.softwareVer=${version}" ];
 
   tags = [ "sqlite" ];
 
   subPackages = [ "cmd/writefreely" ];
 
-  passthru.tests = { inherit (nixosTests) writefreely; };
+  passthru.tests = {
+    inherit (nixosTests) writefreely;
+  };
 
   meta = with lib; {
     description = "Build a digital writing community";
