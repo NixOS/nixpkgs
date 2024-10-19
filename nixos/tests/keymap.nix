@@ -11,15 +11,15 @@ let
 
   testReader = pkgs.writeScript "test-input-reader" ''
     rm -f ${resultFile} ${resultFile}.tmp
-    logger "testReader: START: Waiting for $1 characters, expecting '$2'."
+    logger "testReader: START: expecting '$1'."
     touch ${readyFile}
-    read -r -N $1 chars
+    read -r -N ''${#1} -t 60 chars
     rm -f ${readyFile}
 
-    if [ "$chars" == "$2" ]; then
-      logger -s "testReader: PASS: Got '$2' as expected." 2>${resultFile}.tmp
+    if [ "$chars" == "$1" ]; then
+      logger -s "testReader: PASS: Got '$1' as expected." 2>${resultFile}.tmp
     else
-      logger -s "testReader: FAIL: Expected '$2' but got '$chars'." 2>${resultFile}.tmp
+      logger -s "testReader: FAIL: Expected '$1' but got '$chars'." 2>${resultFile}.tmp
     fi
     # rename after the file is written to prevent a race condition
     mv  ${resultFile}.tmp ${resultFile}
@@ -39,39 +39,29 @@ let
       import shlex
 
 
-      def run_test_case(cmd, xorg_keymap, test_case_name, inputs, expected):
-          with subtest(test_case_name):
-              assert len(inputs) == len(expected)
-              machine.execute("rm -f ${readyFile} ${resultFile}")
+      def run_test_case(cmd, inputs, expected):
+          assert len(inputs) == len(expected)
+          machine.execute("rm -f ${readyFile} ${resultFile}")
 
-              # set up process that expects all the keys to be entered
-              machine.succeed(
-                  "{} {} {} {} >&2 &".format(
-                      cmd,
-                      "${testReader}",
-                      len(inputs),
-                      shlex.quote("".join(expected)),
-                  )
+          # set up process that expects all the keys to be entered
+          machine.succeed(
+              "${pkgs.systemd}/bin/systemd-cat -t input-test-reader -- {} {} {} &".format(
+                  cmd,
+                  "${testReader}",
+                  shlex.quote("".join(expected)),
               )
+          )
 
-              if xorg_keymap:
-                  # make sure the xterm window is open and has focus
-                  machine.wait_for_window("testterm")
-                  machine.wait_until_succeeds(
-                      "${pkgs.xdotool}/bin/xdotool search --sync --onlyvisible "
-                      "--class testterm windowfocus --sync"
-                  )
+          # wait for reader to be ready
+          machine.wait_for_file("${readyFile}")
 
-              # wait for reader to be ready
-              machine.wait_for_file("${readyFile}")
+          # send all keys
+          for key in inputs:
+              machine.send_key(key)
 
-              # send all keys
-              for key in inputs:
-                  machine.send_key(key)
-
-              # wait for result and check
-              machine.wait_for_file("${resultFile}")
-              machine.succeed("grep -q 'PASS:' ${resultFile}")
+          # wait for result and check
+          machine.wait_for_file("${resultFile}")
+          machine.succeed("grep -q 'PASS:' ${resultFile}")
 
 
       with open("${pkgs.writeText "tests.json" (builtins.toJSON tests)}") as json_file:
@@ -87,19 +77,17 @@ let
       # fighting over the virtual terminal. This does not appear to be a problem
       # when the X test runs first.
       keymap_environments = {
-          "Xorg Keymap": "DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
+          "Xorg Keymap": "env DISPLAY=:0 xterm -title testterm -class testterm -fullscreen -e",
           "VT Keymap": "openvt -sw --",
       }
 
       machine.wait_for_x()
 
-      for keymap_env_name, command in keymap_environments.items():
-          with subtest(keymap_env_name):
-              for test_case_name, test_data in tests.items():
+      for test_case_name, test_data in tests.items():
+          for keymap_env_name, command in keymap_environments.items():
+              with subtest(f"{test_case_name} - {keymap_env_name}"):
                   run_test_case(
                       command,
-                      False,
-                      test_case_name,
                       test_data["qwerty"],
                       test_data["expect"],
                   )
