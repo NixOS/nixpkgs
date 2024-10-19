@@ -1,52 +1,47 @@
 {
   lib,
   stdenv,
-  buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-  fonttools,
-  defcon,
-  lxml,
-  fs,
-  unicodedata2,
-  zopfli,
-  brotlipy,
-  fontpens,
-  brotli,
-  fontmath,
-  mutatormath,
-  booleanoperations,
-  ufoprocessor,
-  ufonormalizer,
-  tqdm,
-  setuptools-scm,
-  scikit-build,
-  cmake,
-  ninja,
-  antlr4_9,
-  libxml2,
-  pytestCheckHook,
   # Enables some expensive tests, useful for verifying an update
-  runAllTests ? false,
   afdko,
+  antlr4_9,
+  booleanoperations,
+  buildPythonPackage,
+  cmake,
+  defcon,
+  fetchFromGitHub,
+  fontmath,
+  fontpens,
+  fonttools,
+  libxml2,
+  mutatormath,
+  ninja,
+  pytestCheckHook,
+  pythonOlder,
+  runAllTests ? false,
+  scikit-build,
+  setuptools-scm,
+  tqdm,
+  ufonormalizer,
+  ufoprocessor,
 }:
 
 buildPythonPackage rec {
   pname = "afdko";
   version = "4.0.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "adobe-type-tools";
-    repo = pname;
+    repo = "afdko";
     rev = "refs/tags/${version}";
     hash = "sha256-I5GKPkbyQX8QNSZgNB3wPKdWwpx8Xkklesu1M7nhgp8=";
   };
 
+  build-system = [ setuptools-scm ];
+
   nativeBuildInputs = [
-    setuptools-scm
     scikit-build
     cmake
     ninja
@@ -78,23 +73,23 @@ buildPythonPackage rec {
   # setup.py will always (re-)execute cmake in buildPhase
   dontConfigure = true;
 
-  propagatedBuildInputs = [
-    booleanoperations
-    fonttools
-    lxml # fonttools[lxml], defcon[lxml] extra
-    fs # fonttools[ufo] extra
-    unicodedata2 # fonttools[unicode] extra
-    brotlipy # fonttools[woff] extra
-    zopfli # fonttools[woff] extra
-    fontpens
-    brotli
-    defcon
-    fontmath
-    mutatormath
-    ufoprocessor
-    ufonormalizer
-    tqdm
-  ];
+  dependencies =
+    [
+      booleanoperations
+      defcon
+      fontmath
+      fontpens
+      fonttools
+      mutatormath
+      tqdm
+      ufonormalizer
+      ufoprocessor
+    ]
+    ++ defcon.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.lxml
+    ++ fonttools.optional-dependencies.ufo
+    ++ fonttools.optional-dependencies.unicode
+    ++ fonttools.optional-dependencies.woff;
 
   # Use system libxml2
   FORCE_SYSTEM_LIBXML2 = true;
@@ -116,7 +111,7 @@ buildPythonPackage rec {
       "test_waterfallplot"
     ]
     ++ lib.optionals (stdenv.cc.isGNU) [
-      # broke in the gcc 13 → 14 update
+      # broke in the gcc 13 -> 14 update
       "test_dump"
       "test_input_formats"
       "test_other_input_formats"
@@ -146,10 +141,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
     description = "Adobe Font Development Kit for OpenType";
+    changelog = "https://github.com/adobe-type-tools/afdko/blob/${version}/NEWS.md";
     homepage = "https://adobe-type-tools.github.io/afdko";
     license = licenses.asl20;
-    maintainers = [ maintainers.sternenseemann ];
+    maintainers = with maintainers; [ sternenseemann ];
   };
 }
