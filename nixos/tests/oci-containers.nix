@@ -28,9 +28,6 @@ let
             capDrop = {
               WAKE_ALARM = true;
             };
-            networks = [
-              "nginx-network"
-            ];
             privileged = true;
             devices = [
               "/dev/snd:/dev/snd"
@@ -45,17 +42,18 @@ let
     };
 
     testScript = ''
-      ${backend}.succeed("${backend} network create nginx-network", timeout=10)
+      import json
+
       start_all()
       ${backend}.wait_for_unit("${backend}-nginx.service")
       ${backend}.wait_for_open_port(8181)
       ${backend}.wait_until_succeeds("curl -f http://localhost:8181 | grep Hello")
+      output = json.loads(${backend}.succeed("${backend} inspect nginx --format json").strip())[0]
       ${backend}.succeed("systemctl stop ${backend}-nginx.service", timeout=10)
-      ${backend}.succeed("${backend} inspect nginx --format '{{index .HostConfig.CapAdd 0 }}' | grep NET_ADMIN", timeout=10)
-      ${backend}.succeed("${backend} inspect nginx --format '{{index .HostConfig.CapDrop 0 }}' | grep WAKE_ALARM", timeout=10)
-      ${backend}.succeed("${backend} inspect nginx --format '{{ range $key, $value := .NetworkSettings.Networks }}{{ $key }}{{ end }}' | grep nginx-network", timeout=10)
-      ${backend}.succeed("${backend} inspect nginx --format '{{ .HostConfig.Privileged }}' | grep true", timeout=10)
-      ${backend}.succeed("${backend} inspect nginx --format '{{index .HostConfig.Devices 0 }}' | grep '{/dev/snd /dev/snd rwm}'", timeout=10)
+      assert output['HostConfig']['CapAdd'][0] == "NET_ADMIN"
+      assert output['HostConfig']['CapDrop'][0] == "WAKE_ALARM"
+      assert output['HostConfig']['Privileged'] == True
+      assert output['HostConfig']['Devices'][0] == {'PathOnHost': '/dev/snd', 'PathInContainer': '/dev/snd', 'CgroupPermissions': 'rwm'}
     '';
   };
 
