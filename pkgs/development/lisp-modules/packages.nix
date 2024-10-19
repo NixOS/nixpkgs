@@ -313,19 +313,6 @@ let
     ];
   };
 
-  trivial-clock = build-asdf-system {
-    pname = "trivial-clock";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-trivial-clock";
-      rev = "641e12ab1763914996beb1ceee67aabc9f1a3b1e";
-      hash = "sha256-mltQEJ2asxyQ/aS/9BuWmN3XZ9bGmmkopcF5YJU1cPk=";
-    };
-    systems = [ "trivial-clock" "trivial-clock/test" ];
-    lispLibs = [ self.cffi self.fiveam ];
-  };
-
   frugal-uuid = build-asdf-system {
     pname = "frugal-uuid";
     version = "trunk";
