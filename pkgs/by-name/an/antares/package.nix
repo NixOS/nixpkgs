@@ -4,6 +4,8 @@
   buildNpmPackage,
   electron,
   nodejs,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildNpmPackage rec {
@@ -28,6 +30,8 @@ buildNpmPackage rec {
 
   buildInputs = [ nodejs ];
 
+  nativeBuildInputs = [ copyDesktopItems ];
+
   npmBuildScript = "compile";
 
   installPhase = ''
@@ -38,11 +42,29 @@ buildNpmPackage rec {
     makeWrapper ${lib.getExe electron} $out/bin/antares \
       --add-flags $out/lib/node_modules/antares/main.js
     runHook postInstall
+
+    # Install icon files
+    mkdir -pv $out/share/icon/
+    cp assets/icon.ico $out/share/icon/antares.ico
   '';
 
   npmFlags = [ "--legacy-peer-deps" ];
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = pname;
+      desktopName = "Antares SQL";
+      exec = pname;
+      icon = pname;
+      terminal = false;
+      type = "Application";
+      startupWMClass = pname;
+      comment = "A modern, fast and productivity driven SQL client with a focus in UX";
+      categories = [ "Development" ];
+    })
+  ];
 
   meta = with lib; {
     description = "Modern, fast and productivity driven SQL client with a focus in UX";
