@@ -9,6 +9,7 @@ let
     setAttr
     hasAttr
     optionals
+    isDerivation
     hasSuffix
     splitString
     remove
@@ -23,7 +24,8 @@ let
   # E.g. cl-unicode creating .txt files during compilation
   build-with-compile-into-pwd = args:
     let
-      build = (build-asdf-system (args // { version = args.version + "-build"; }))
+      args' = if isDerivation args then args.drvAttrs else args;
+      build = (build-asdf-system (args' // { version = args'.version + "-build"; }))
         .overrideAttrs(o: {
           buildPhase = with builtins; ''
             mkdir __fasls
@@ -37,7 +39,7 @@ let
             cp -r * $out
           '';
         });
-    in build-asdf-system (args // {
+    in build-asdf-system (args' // {
       # Patches are already applied in `build`
       patches = [];
       src = build;
@@ -71,12 +73,7 @@ let
     ];
   };
 
-  cl-liballegro-nuklear = build-with-compile-into-pwd {
-    inherit (super.cl-liballegro-nuklear) pname version src;
-    nativeBuildInputs = [ pkgs.allegro5 ];
-    nativeLibs = [ pkgs.allegro5 ];
-    lispLibs = super.cl-liballegro-nuklear.lispLibs ++ [ self.cl-liballegro ];
-  };
+  cl-liballegro-nuklear = build-with-compile-into-pwd super.cl-liballegro-nuklear;
 
   lessp = build-asdf-system {
     pname = "lessp";
