@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, sqlite
-, openssl
-, buildllvmsparse ? false
-, buildc2xml ? false
-, libllvm
-, libxml2
-, substituteAll
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
+  openssl,
+  buildllvmsparse ? false,
+  buildc2xml ? false,
+  libllvm,
+  libxml2,
+  substituteAll,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,25 +25,32 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (let
-      clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);
-      clang-lib = lib.getLib llvmPackages.clang-unwrapped;
-    in substituteAll {
-      src = ./fix_include_path.patch;
+    (
+      let
+        clang-major = lib.versions.major (lib.getVersion llvmPackages.clang-unwrapped);
+        clang-lib = lib.getLib llvmPackages.clang-unwrapped;
+      in
+      substituteAll {
+        src = ./fix_include_path.patch;
 
-      clang = "${clang-lib}/lib/clang/${clang-major}/include";
-      libc = "${lib.getDev stdenv.cc.libc}/include";
-    })
+        clang = "${clang-lib}/lib/clang/${clang-major}/include";
+        libc = "${lib.getDev stdenv.cc.libc}/include";
+      }
+    )
   ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ sqlite openssl ]
-    ++ lib.optionals buildllvmsparse [ libllvm ]
-    ++ lib.optionals buildc2xml [ libxml2.dev ];
+  buildInputs = [
+    sqlite
+    openssl
+  ] ++ lib.optionals buildllvmsparse [ libllvm ] ++ lib.optionals buildc2xml [ libxml2.dev ];
 
-  makeFlags = [ "PREFIX=${placeholder "out"}" "CXX=${stdenv.cc.targetPrefix}c++" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
 
   meta = {
     description = "Semantic analysis tool for C";
