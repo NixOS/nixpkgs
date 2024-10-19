@@ -26,7 +26,7 @@ in
     license = lib.licenses.mpl20;
     mainProgram = "librewolf";
   };
-  tests = [ nixosTests.librewolf ];
+  tests = { inherit (nixosTests) librewolf; };
   updateScript = callPackage ./update.nix {
     attrPath = "librewolf-unwrapped";
   };

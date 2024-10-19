@@ -6529,6 +6529,13 @@
     githubId = 46724898;
     name = "Erik Backman";
   };
+  erikeah = {
+    email = "erikeah@protonmail.com";
+    github = "erikeah";
+    githubId = 11900869;
+    keys = [ { fingerprint = "4142 0380 C7F8 BCDA CC9E  7ABA 0FF3 076B 71F2 5DEF"; } ];
+    name = "Erik Alonso";
+  };
   erikryb = {
     email = "erik.rybakken@math.ntnu.no";
     github = "erikryb";
@@ -7876,6 +7883,17 @@
     github = "gila";
     githubId = 15957973;
     name = "Jeffry Molanus";
+  };
+  gileri = {
+    email = "s@linuxw.info";
+    github = "gileri";
+    githubId = 493438;
+    name = "Éric Gillet";
+    keys = [
+      {
+        fingerprint = "E478 85DC 8F33 FA86 D3FC  183D 80A8 14DB 8ED5 70BC";
+      }
+    ];
   };
   gilice = {
     email = "gilice@proton.me";

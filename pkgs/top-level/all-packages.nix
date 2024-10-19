@@ -4300,8 +4300,6 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
-  clash-geoip = callPackage ../data/misc/clash-geoip { };
-
   clevercsv = with python3Packages; toPythonApplication clevercsv;
 
   cli53 = callPackage ../tools/admin/cli53 { };
@@ -10944,8 +10942,6 @@ with pkgs;
   papeer = callPackage ../tools/text/papeer { };
 
   papertrail = callPackage ../tools/text/papertrail { };
-
-  pappl = callPackage ../applications/printing/pappl { };
 
   par2cmdline = callPackage ../tools/networking/par2cmdline { };
 
@@ -30023,8 +30019,6 @@ with pkgs;
   rlaunch = callPackage ../applications/misc/rlaunch { };
 
   remontoire = callPackage ../applications/misc/remontoire { };
-
-  waycorner = callPackage ../applications/misc/waycorner { };
 
   wayshot = callPackage ../tools/misc/wayshot { };
 
