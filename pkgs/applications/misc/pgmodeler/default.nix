@@ -1,6 +1,8 @@
 { lib
 , stdenv
+, copyDesktopItems
 , fetchFromGitHub
+, makeDesktopItem
 , wrapQtAppsHook
 , pkg-config
 , qmake
@@ -22,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-axw0/QFQfnEc2P8tFRtSY5vVUJTqv+kRn68GXdZ5SeQ=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
+  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook copyDesktopItems ];
   qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "PGSQL_INC=${lib.getDev postgresql}/include"
     "PGSQL_LIB=${lib.getLib postgresql}/lib/libpq.dylib"
@@ -36,7 +38,22 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups libxml2 ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  desktopItems = [
+    (makeDesktopItem {
+      name = "pgModeler";
+      exec = "pgmodeler";
+      icon = "pgmodeler";
+      desktopName = "PgModeler";
+      genericName = "PgModeler";
+      comment = meta.description;
+      categories = [ "Development" ];
+      startupWMClass = "pgmodeler";
+    })
+  ];
+
+  postInstall = ''
+    install -Dm444 apps/pgmodeler/res/windows_ico.ico $out/share/icons/hicolor/256x256/apps/pgmodeler.ico
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin
     for item in pgmodeler pgmodeler-{cli,se,ch}
     do
