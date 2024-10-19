@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "speakersafetyd";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-I1RTtD5V4Z8R8zed/b4FitHyE7gFAja5YcA+z0VvSX0=";
+    hash = "sha256-3DzBNebg1y/+psD2zOpDsnRJmabQLeO1UMxPq9M0CsU=";
   };
-  cargoHash = "sha256-8Dmts6SCRrZqyI+pdfgqsXfJy9Hqspbdb6EpQChMKDA=";
+  cargoHash = "sha256-InWaPybZbUbhIF1MEMeTUGa8LRUPwcTdw7uclZ1zBu4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ alsa-lib ];
