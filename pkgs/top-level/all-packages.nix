@@ -28410,6 +28410,8 @@ with pkgs;
 
   cbc = callPackage ../applications/science/math/cbc { };
 
+  cbconvert-gui = cbconvert.gui;
+
   cddiscid = callPackage ../applications/audio/cd-discid {
     inherit (darwin) IOKit;
   };
