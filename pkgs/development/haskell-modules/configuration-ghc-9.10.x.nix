@@ -118,6 +118,8 @@ self: super: {
   hashable_1_4_7_0 = doJailbreak super.hashable_1_4_7_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
 
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
+
   #
   # Test suite issues
   #
