@@ -24655,6 +24655,8 @@ with pkgs;
     boost = boost179;
   };
 
+  opnborg = callPackage ../servers/opnsense/opnborg {};
+
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
 
   p910nd = callPackage ../servers/p910nd { };
