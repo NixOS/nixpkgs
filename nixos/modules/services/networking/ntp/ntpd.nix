@@ -156,6 +156,32 @@ in
         ExecStart = "@${ntp}/bin/ntpd ntpd -g ${builtins.toString ntpFlags}";
         Type = "forking";
         StateDirectory = "ntp";
+
+        # Hardening options
+        PrivateDevices = true;
+        PrivateIPC = true;
+        PrivateTmp = true;
+        ProtectClock = false;
+        ProtectHome = true;
+
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = true;
+
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        AmbientCapabilities = [
+          "CAP_SYS_TIME"
+        ];
+
+        ProtectControlGroups = true;
+        ProtectProc = "invisible";
+        ProcSubset = "pid";
+        RestrictSUIDSGID = true;
       };
     };
 
