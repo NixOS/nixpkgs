@@ -1,0 +1,14 @@
+diff --git a/torch/csrc/lazy/core/multi_wait.h b/torch/csrc/lazy/core/multi_wait.h
+--- a/torch/csrc/lazy/core/multi_wait.h
++++ b/torch/csrc/lazy/core/multi_wait.h
+@@ -11,9 +11,10 @@
+ #include <condition_variable>
+ #include <functional>
+ #include <memory>
+ #include <mutex>
++#include <stdexcept>
+
+ #include <c10/macros/Export.h>
+
+ namespace torch {
+ namespace lazy {

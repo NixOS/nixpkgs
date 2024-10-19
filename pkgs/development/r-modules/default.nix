@@ -596,6 +596,10 @@ let
     symbolicQspray = [ pkgs.pkg-config ];
     sphereTessellation = [ pkgs.pkg-config ];
     vapour = [ pkgs.pkg-config ];
+    torch = with pkgs; [
+      cmake
+      gcc11
+    ];
   };
 
   packagesWithBuildInputs = {
@@ -803,6 +807,23 @@ let
     MedianaDesigner = [ pkgs.zlib.dev ];
     ChemmineOB = [ pkgs.eigen ];
     DGP4LCF = [ pkgs.lapack pkgs.blas ];
+    #Wrap with mkIf cuda=true or similar
+    torch = [
+      pkgs.cudaPackages_11_8.cuda_cudart.dev
+      pkgs.cudaPackages_11_8.cuda_nvrtc.dev
+      # pkgs.cudaPackages_11_8.cuda_nvrtc.lib
+      pkgs.cudaPackages_11_8.cuda_cccl.dev
+      pkgs.cudaPackages_11_8.cuda_nvtx.dev
+      pkgs.cudaPackages_11_8.cuda_nvcc # no lib or dev?
+      pkgs.cudaPackages_11_8.libcusparse.dev
+      pkgs.cudaPackages_11_8.libcusolver.dev
+      pkgs.cudaPackages_11_8.libcublas.dev
+      pkgs.cudaPackages_11_8.libcurand.dev
+      pkgs.cudaPackages_11_8.libcufft.lib
+      pkgs.cudaPackages_11_8.cudnn.dev
+
+      # pkgs.python3Packages.torchWithCuda.dev # pulled in by setting env var TORCH_PATH in torch override
+    ];
   };
 
   packagesRequiringX = [
@@ -1842,9 +1863,78 @@ let
       '';
     });
 
-    torch = old.torch.overrideAttrs (attrs: {
+    torch =
+      let
+        libtorch_hack_2_0_1 = pkgs.python311Packages.torch.override
+          {
+            # protobuf = pkgs.python3Packages.protobuf.override {
+            #   protobuf = pkgs.protobuf.override {
+            #     stdenv = pkgs.gcc13Stdenv;
+            #     abseil-cpp = pkgs.abseil-cpp.override {
+            #       stdenv = pkgs.gcc13Stdenv;
+            #     };
+            #     gtest = pkgs.gtest.override {
+            #       stdenv = pkgs.gcc13Stdenv;
+            #     };
+            #   };
+            # };
+            # tensorboard = pkgs.python3Packages.tensorboard.override {
+
+            #   protobuf = pkgs.python3Packages.protobuf.override {
+            #                   # stdenv = pkgs.gcc13Stdenv;
+
+            #     protobuf = pkgs.protobuf.override {
+            #       stdenv = pkgs.gcc13Stdenv;
+            #       abseil-cpp = pkgs.abseil-cpp.override {
+            #         stdenv = pkgs.gcc13Stdenv;
+            #       };
+            #       gtest = pkgs.gtest.override {
+            #         stdenv = pkgs.gcc13Stdenv;
+            #       };
+            #     };
+            #   };
+            # };
+            cudaSupport = true;
+            rocmSupport = false;
+            cudaPackages = pkgs.cudaPackages_11_8.overrideScope (cu-fi: _: {
+              # CuDNN 9 is not supported:
+              # https://github.com/cupy/cupy/issues/8215
+              cudnn = cu-fi.cudnn_8_9;
+            });
+
+            # cudaPackages = pkgs.cudaPackages_11_8;
+            effectiveMagma = pkgs.magma-cuda-static.override {
+              cudaPackages = pkgs.cudaPackages_11_8;
+            };
+            #stdenv = pkgs.gcc11Stdenv;
+          };
+      in
+      old.torch.overrideAttrs (attrs: {
+      # CRAN source is modified, and does not contain lantern source
+      src = pkgs.fetchFromGitHub {
+        owner = "mlverse";
+        repo = "torch";
+        rev = "v${lib.strings.removePrefix "r-torch-" attrs.name}";
+        sha256 ="sha256-AqigcWB3mZUsC9sQ7WKqPd7sTAMEHE7mqbjEmuztxfs=";
+      };
+      env = {
+        BUILD_LANTERN = "1";
+        CUDA = "11.8";
+        # May need libtorch 2.0.1
+        # Trialled libtorch-bin, missing a header file
+        TORCH_PATH = "${libtorch_hack_2_0_1.dev}";
+      };
+#      cmakeFlags = [
+#        "-DCMAKE_C_COMPILER=${pkgs.gcc11}/bin/cc"
+#        "-DCMAKE_CXX_COMPILER=${pkgs.gcc11}/bin/c++"
+#      ];
       preConfigure = ''
         patchShebangs configure
+        substituteInPlace configure \
+             --replace-fail "\$R_PACKAGE_DIR" "$out"
+        # I think this might be a bug
+        substituteInPlace src/lantern/CMakeLists.txt \
+             --replace-fail '"ENV{TORCH_PATH}"' '"$ENV{TORCH_PATH}"'
       '';
     });
 
@@ -1863,5 +1953,6 @@ let
       '';
     });
   };
+
 in
   self

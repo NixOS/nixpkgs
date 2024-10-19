@@ -1,0 +1,17 @@
+diff --git a/torch/csrc/jit/runtime/logging.h b/torch/csrc/jit/runtime/logging.h
+--- a/torch/csrc/jit/runtime/logging.h
++++ b/torch/csrc/jit/runtime/logging.h
+@@ -11,12 +11,13 @@
+ #pragma once
+
+ #include <mutex>
+ #include <string>
+ #include <unordered_map>
+ #include <vector>
++#include <stdexcept>
+
+ #include <torch/csrc/Export.h>
+
+ namespace torch {
+ namespace jit {
+ namespace logging {
