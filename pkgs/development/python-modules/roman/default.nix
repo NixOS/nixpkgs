@@ -19,5 +19,6 @@ buildPythonPackage rec {
     description = "Integer to Roman numerals converter";
     homepage = "https://pypi.python.org/pypi/roman";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

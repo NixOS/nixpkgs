@@ -22,6 +22,7 @@ buildPythonPackage rec {
   meta = {
     description = "Show where your regex match assertion failed";
     license = lib.licenses.mit;
+    maintainers = [ ];
     homepage = "https://github.com/asottile/re-assert";
   };
 }

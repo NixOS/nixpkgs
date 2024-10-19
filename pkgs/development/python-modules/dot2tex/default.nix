@@ -47,5 +47,6 @@ buildPythonPackage rec {
     mainProgram = "dot2tex";
     homepage = "https://github.com/kjellmf/dot2tex";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

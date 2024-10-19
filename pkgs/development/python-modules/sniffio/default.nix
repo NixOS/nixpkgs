@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://github.com/python-trio/sniffio";
     license = licenses.asl20;
+    maintainers = [ ];
     description = "Sniff out which async library your code is running under";
   };
 }

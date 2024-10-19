@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pnpnpn/retry-decorator";
     changelog = "https://github.com/pnpnpn/retry-decorator/releases/tag/v${version}";
     license = with licenses; [ asl20 ];
+    maintainers = [ ];
   };
 }

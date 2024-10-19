@@ -30,5 +30,6 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/pylockfile";
     description = "Platform-independent advisory file locking capability for Python applications";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

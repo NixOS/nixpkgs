@@ -19,5 +19,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Ordered set";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

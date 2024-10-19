@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Supports the efficient creation of “hookable” objects";
     homepage = "https://github.com/zopefoundation/zope.hookable";
     license = licenses.zpl21;
+    maintainers = [ ];
   };
 }

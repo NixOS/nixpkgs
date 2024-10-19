@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://pydispatcher.sourceforge.net/";
     description = "Signal-registration and routing infrastructure for use in multiple contexts";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -42,5 +42,6 @@ buildPythonPackage rec {
     description = "Scientific reports with embedded python computations with reST, LaTeX or markdown";
     homepage = "https://mpastell.com/pweave/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

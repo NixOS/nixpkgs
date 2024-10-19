@@ -52,5 +52,6 @@ buildPythonPackage rec {
     description = "Helper to mock/fake web requests in python aiohttp package";
     homepage = "https://github.com/pnuckowski/aioresponses";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

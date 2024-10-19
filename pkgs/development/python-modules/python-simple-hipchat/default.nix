@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Easy peasy wrapper for HipChat's v1 API";
     homepage = "https://github.com/kurttheviking/simple-hipchat-py";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

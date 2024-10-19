@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

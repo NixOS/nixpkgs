@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "pdb wrapper with remote access via tcp socket";
     homepage = "https://github.com/tamentis/rpdb";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

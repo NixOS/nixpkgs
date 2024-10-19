@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Code coverage measurement for python";
     homepage = "https://coverage.readthedocs.io/";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

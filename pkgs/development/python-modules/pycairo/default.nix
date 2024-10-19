@@ -51,6 +51,7 @@ buildPythonPackage rec {
       lgpl21Only
       mpl11
     ];
+    maintainers = [ ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

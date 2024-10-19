@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "Tiny 'shelve'-like database with concurrency support";
     homepage = "https://github.com/vivainio/pickleshare";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

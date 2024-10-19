@@ -40,5 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Changaco/python-libarchive-c";
     description = "Python interface to libarchive";
     license = licenses.cc0;
+    maintainers = [ ];
   };
 }

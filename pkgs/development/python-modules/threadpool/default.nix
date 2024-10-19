@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = "https://chrisarndt.de/projects/threadpool/";
     description = "Easy to use object-oriented thread pool framework";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

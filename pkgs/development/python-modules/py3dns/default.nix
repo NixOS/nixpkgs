@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Python 3 DNS library";
     homepage = "https://launchpad.net/py3dns";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

@@ -20,5 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/borntyping/python-infix";
     description = "Decorator that allows functions to be used as infix functions";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

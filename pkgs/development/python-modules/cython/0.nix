@@ -98,5 +98,6 @@ buildPythonPackage rec {
     description = "Optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

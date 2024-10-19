@@ -38,6 +38,7 @@ buildPythonPackage rec {
     description = "Pure python bindings for augeas";
     homepage = "https://github.com/hercules-team/python-augeas";
     license = licenses.lgpl2Plus;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

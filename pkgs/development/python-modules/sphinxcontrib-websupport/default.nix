@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Sphinx API for Web Apps";
     homepage = "http://sphinx-doc.org/";
     license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

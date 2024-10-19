@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hackebrot/poyo";
     description = "Lightweight YAML Parser for Python";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

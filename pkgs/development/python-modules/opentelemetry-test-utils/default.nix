@@ -33,5 +33,6 @@ buildPythonPackage {
   meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/tests/opentelemetry-test-utils";
     description = "Test utilities for OpenTelemetry unit tests";
+    maintainers = [ ];
   };
 }

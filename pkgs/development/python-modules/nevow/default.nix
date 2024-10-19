@@ -46,5 +46,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/twisted/nevow";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

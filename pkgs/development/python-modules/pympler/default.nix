@@ -56,5 +56,6 @@ buildPythonPackage rec {
     description = "Tool to measure, monitor and analyze memory behavior";
     homepage = "https://pythonhosted.org/Pympler/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -97,5 +97,6 @@ buildPythonPackage rec {
     mainProgram = "weasyprint";
     homepage = "https://weasyprint.org/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

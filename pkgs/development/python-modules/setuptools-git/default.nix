@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "Setuptools revision control system plugin for Git";
     homepage = "https://pypi.python.org/pypi/setuptools-git";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

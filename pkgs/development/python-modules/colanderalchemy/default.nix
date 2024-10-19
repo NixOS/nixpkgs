@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Autogenerate Colander schemas based on SQLAlchemy models";
     homepage = "https://github.com/stefanofontanelli/ColanderAlchemy";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

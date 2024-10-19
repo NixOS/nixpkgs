@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydanny/whichcraft";
     description = "Cross-platform cross-python shutil.which functionality";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

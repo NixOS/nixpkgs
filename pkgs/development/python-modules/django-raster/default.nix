@@ -45,5 +45,6 @@ buildPythonPackage rec {
     description = "Basic raster data integration for Django";
     homepage = "https://github.com/geodesign/django-raster";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

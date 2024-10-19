@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "OFX client for dowloading transactions from banks";
     mainProgram = "ofxclient";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

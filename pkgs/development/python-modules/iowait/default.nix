@@ -13,5 +13,6 @@ buildPythonPackage rec {
   meta = {
     description = "Platform-independent module for I/O completion events";
     homepage = "https://launchpad.net/python-iowait";
+    maintainers = [ ];
   };
 }

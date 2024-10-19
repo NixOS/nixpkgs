@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = "https://das.nasophon.de/pyliblo/";
     description = "Python wrapper for the liblo OSC library";
     license = licenses.lgpl21Only;
+    maintainers = [ ];
   };
 }

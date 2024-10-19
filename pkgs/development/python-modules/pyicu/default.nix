@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Python extension wrapping the ICU C++ API";
     changelog = "https://gitlab.pyicu.org/main/pyicu/-/raw/v${version}/CHANGES";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

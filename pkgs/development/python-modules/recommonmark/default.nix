@@ -43,5 +43,6 @@ buildPythonPackage rec {
     description = "Docutils-compatibility bridge to CommonMark";
     homepage = "https://github.com/rtfd/recommonmark";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

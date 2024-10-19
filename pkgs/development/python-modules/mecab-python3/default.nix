@@ -42,5 +42,6 @@ buildPythonPackage rec {
       lgpl21
       bsd3
     ]; # any of the three
+    maintainers = [ ];
   };
 }

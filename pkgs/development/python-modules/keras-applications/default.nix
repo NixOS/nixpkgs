@@ -33,5 +33,6 @@ buildPythonPackage rec {
     description = "Reference implementations of popular deep learning models";
     homepage = "https://github.com/keras-team/keras-applications";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

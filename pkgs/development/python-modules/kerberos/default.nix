@@ -24,6 +24,7 @@ buildPythonPackage rec {
     description = "Kerberos high-level interface";
     homepage = "https://pypi.org/project/kerberos/";
     license = licenses.asl20;
+    maintainers = [ ];
     knownVulnerabilities = [ "CVE-2015-3206" ];
   };
 }

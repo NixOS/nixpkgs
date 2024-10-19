@@ -81,6 +81,7 @@ buildPythonPackage rec {
       liberal BSD-style Open-Source license.
     '';
     license = licenses.bsd3;
+    maintainers = [ ];
     inherit (mesa.meta) platforms;
   };
 }

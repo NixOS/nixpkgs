@@ -50,5 +50,6 @@ buildPythonPackage rec {
     mainProgram = "twine";
     homepage = "https://github.com/pypa/twine";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

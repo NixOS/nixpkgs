@@ -35,5 +35,6 @@ buildPythonPackage rec {
     description = "Pidfile featuring stale detection and file-locking";
     homepage = "https://github.com/trbs/pid/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

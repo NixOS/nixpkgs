@@ -59,5 +59,6 @@ buildPythonPackage rec {
     mainProgram = "flit";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

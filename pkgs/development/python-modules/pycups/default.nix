@@ -26,5 +26,6 @@ buildPythonPackage rec {
     description = "Python bindings for libcups";
     homepage = "http://cyberelk.net/tim/software/pycups/";
     license = with licenses; [ gpl2Plus ];
+    maintainers = [ ];
   };
 }

@@ -44,5 +44,6 @@ buildPythonPackage rec {
     mainProgram = "acme-tiny";
     homepage = "https://github.com/diafygi/acme-tiny";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

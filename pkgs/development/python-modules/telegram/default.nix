@@ -18,5 +18,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/liluo/telegram";
     description = "Telegram APIs";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

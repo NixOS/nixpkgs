@@ -25,5 +25,6 @@ buildPythonPackage rec {
     description = "Most basic Text::Unidecode port";
     homepage = "https://github.com/kmike/text-unidecode";
     license = licenses.artistic1;
+    maintainers = [ ];
   };
 }

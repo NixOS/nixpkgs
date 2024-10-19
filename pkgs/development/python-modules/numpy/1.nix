@@ -202,5 +202,6 @@ buildPythonPackage rec {
     mainProgram = "f2py";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

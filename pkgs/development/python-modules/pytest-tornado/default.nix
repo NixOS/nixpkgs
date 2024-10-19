@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications";
     homepage = "https://github.com/eugeniy/pytest-tornado";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

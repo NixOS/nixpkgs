@@ -52,5 +52,6 @@ buildPythonPackage rec {
   meta = {
     description = "Convert scikit-learn models to ONNX";
     license = with lib.licenses; [ asl20 ];
+    maintainers = [ ];
   };
 }
