@@ -32050,8 +32050,6 @@ with pkgs;
     inherit (__splicedPackages.libsForQt5) qtbase qtwebengine wrapQtAppsHook qtwayland;
   };
 
-  qxw = callPackage ../applications/editors/qxw { };
-
   rakarrack = callPackage ../applications/audio/rakarrack {
     fltk = fltk13;
   };
