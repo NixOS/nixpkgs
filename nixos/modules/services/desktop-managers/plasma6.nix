@@ -79,6 +79,7 @@ in {
         kio-fuse # fuse interface for KIO
         kpackage # provides kpackagetool tool
         kservice # provides kbuildsycoca6 tool
+        kunifiedpush # provides a background service and a KCM
         kwallet # provides helper service
         kwallet-pam # provides helper service
         kwalletmanager # provides KCMs and stuff
