@@ -21,15 +21,18 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-94qziqJaKW8/L/6+U1yojxdG8BmeAStn+qbfGemTrVA=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook3 ]
-  ++ lib.optionals pkgs.stdenv.isDarwin [
-    pkgs.gettext
-  ];
+  nativeBuildInputs =
+    [ wrapGAppsHook3 ]
+    ++ lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.gettext
+    ];
 
-  patchPhase = '' '' + lib.optionals pkgs.stdenv.isDarwin  ''
-    LINTL="${lib.getLib pkgs.gettext}/lib/libintl.8.dylib"
-    sed -i "s@return 'libintl.8.dylib'@return '$LINTL'@" pdfarranger/pdfarranger.py
-  '';
+  patchPhase =
+    ''''
+    + lib.optionals pkgs.stdenv.isDarwin ''
+      LINTL="${lib.getLib pkgs.gettext}/lib/libintl.8.dylib"
+      sed -i "s@return 'libintl.8.dylib'@return '$LINTL'@" pdfarranger/pdfarranger.py
+    '';
 
   build-system = with python3Packages; [ setuptools ];
 
