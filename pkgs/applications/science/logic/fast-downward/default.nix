@@ -27,12 +27,6 @@ stdenv.mkDerivation rec {
     python build.py release
   '';
 
-  postPatch = ''
-    # Needed because the package tries to be too smart.
-    export CC="$(which $CC)"
-    export CXX="$(which $CXX)"
-  '';
-
   installPhase = ''
     install -Dm755 builds/release/bin/downward $out/libexec/fast-downward/downward
     cp -r builds/release/bin/translate $out/libexec/fast-downward/

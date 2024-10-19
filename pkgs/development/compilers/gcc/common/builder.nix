@@ -46,9 +46,12 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             if [[ -e "''${!curBintools}/nix-support/orig-libc" ]]; then
                 # Figure out what extra flags when linking to pass to the gcc
                 # compilers being generated to make sure that they use our libc.
-                extraLDFlags=($(< "''${!curBintools}/nix-support/libc-ldflags") $(< "''${!curBintools}/nix-support/libc-ldflags-before" || true))
+                extraLDFlags=($(< "''${!curBintools}/nix-support/libc-ldflags"))
+                if [ -e "''${!curBintools}/nix-support/libc-ldflags-before" ]; then
+                    extraLDFlags+=($(< "''${!curBintools}/nix-support/libc-ldflags-before"))
+                fi
                 if [ -e ''${!curBintools}/nix-support/ld-set-dynamic-linker ]; then
-                    extraLDFlags=-dynamic-linker=$(< ''${!curBintools}/nix-support/dynamic-linker)
+                    extraLDFlags+=(-dynamic-linker=$(< ''${!curBintools}/nix-support/dynamic-linker))
                 fi
 
                 # The path to the Libc binaries such as `crti.o'.
@@ -126,16 +129,15 @@ originalAttrs: (stdenv.mkDerivation (finalAttrs: originalAttrs // {
             "NATIVE_SYSTEM_HEADER_DIR=$NIX_FIXINC_DUMMY"
 
             "LDFLAGS_FOR_BUILD=$EXTRA_LDFLAGS_FOR_BUILD"
-            #"LDFLAGS=$EXTRA_LDFLAGS"
+            "LDFLAGS=$EXTRA_LDFLAGS"
             "LDFLAGS_FOR_TARGET=$EXTRA_LDFLAGS_FOR_TARGET"
 
             "CFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
             "CXXFLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
             "FLAGS_FOR_BUILD=$EXTRA_FLAGS_FOR_BUILD $EXTRA_LDFLAGS_FOR_BUILD"
 
-            # It seems there is a bug in GCC 5
-            #"CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
-            #"CXXFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
+            "CFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
+            "CXXFLAGS=$EXTRA_FLAGS $EXTRA_LDFLAGS"
 
             "CFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"
             "CXXFLAGS_FOR_TARGET=$EXTRA_FLAGS_FOR_TARGET $EXTRA_LDFLAGS_FOR_TARGET"

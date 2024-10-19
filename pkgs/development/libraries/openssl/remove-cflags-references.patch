@@ -1,0 +1,18 @@
+--- a/util/mkbuildinf.pl
++++ b/util/mkbuildinf.pl
+@@ -12,6 +12,15 @@
+ my ($cflags, $platform) = @ARGV;
+ $cflags = "compiler: $cflags";
+ 
++# OpenSSL is part of the stdenv bootstrap, but also removeReferencesTo on Darwin
++# requires signingUtils that, in turn, requires OpenSSL, causing infinite
++# recursion. To break the cycle, we make OpenSSL build system aware of the Nix
++# build environment and remove store references from the embedded cflags string
++# at build time. This is arguably cleaner approach as we still retain this
++# information if some dependency needs it, but don’t have to modify and
++# potentially fixup the resulting binaries.
++$cflags =~ s/(\Q$ENV{NIX_STORE}\E)\/[a-z0-9]{32}-/$1\/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-/g;
++
+ my $date = gmtime($ENV{'SOURCE_DATE_EPOCH'} || time()) . " UTC";
+ 
+ print <<"END_OUTPUT";

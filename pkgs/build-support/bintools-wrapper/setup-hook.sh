@@ -54,13 +54,16 @@ fi
 
 export NIX_BINTOOLS${role_post}=@out@
 
+# Note that certain tools (e.g. strip) sometimes don’t have wrappers so we also
+# check the underlying bintools package.
 for cmd in \
     ar as ld nm objcopy objdump readelf ranlib strip strings size windres
 do
     if
-        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
+        cmd_path=$(PATH=@out@/bin:@bintools_bin@/bin type -P @targetPrefix@${cmd})
     then
-        export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
+        export NIX_${cmd^^}_BASENAME${role_post}=@targetPrefix@${cmd}
+        export ${cmd^^}${role_post}=${cmd_path}
     fi
 done
 
@@ -69,4 +72,4 @@ done
 export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
-unset -v role_post cmd upper_case
+unset -v role_post cmd cmd_path
