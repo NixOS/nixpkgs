@@ -25,7 +25,7 @@
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };
-    tests = [ nixosTests.firefox ];
+    tests = { inherit (nixosTests) firefox; };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-unwrapped";
     };
@@ -53,7 +53,7 @@
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };
-    tests = [ nixosTests.firefox-beta ];
+    tests = { inherit (nixosTests) firefox-beta; };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-beta-unwrapped";
       versionSuffix = "b[0-9]*";
@@ -84,7 +84,7 @@
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };
-    tests = [ nixosTests.firefox-devedition ];
+    tests = { inherit (nixosTests) firefox-devedition; };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-devedition-unwrapped";
       versionSuffix = "b[0-9]*";
@@ -113,7 +113,7 @@
       license = lib.licenses.mpl20;
       mainProgram = "firefox";
     };
-    tests = [ nixosTests.firefox-esr-128 ];
+    tests = { inherit (nixosTests) firefox-esr-128; };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-128-unwrapped";
       versionPrefix = "128";
