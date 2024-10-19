@@ -40,48 +40,57 @@ in
         options = {
           http_server = mkOption {
             default = { };
+            description = "HTTP server settings";
             type = submodule {
               inherit freeformType;
               options = {
                 port = mkOption {
                   type = str;
                   default = ":3333";
+                  description = "HTTP server listen port";
                 };
               };
             };
           };
           dht_server = mkOption {
             default = { };
+            description = "DHT server settings";
             type = submodule {
               inherit freeformType;
               options = {
                 port = mkOption {
                   type = port;
                   default = 3334;
+                  description = "DHT listen port";
                 };
               };
             };
           };
           postgres = mkOption {
             default = { };
+            description = "PostgreSQL database configuration";
             type = submodule {
               inherit freeformType;
               options = {
                 host = mkOption {
                   type = str;
                   default = "";
+                  description = "Address, hostname or Unix socket path of the database server";
                 };
                 name = mkOption {
                   type = str;
                   default = "bitmagnet";
+                  description = "Database name to connect to";
                 };
                 user = mkOption {
                   type = str;
                   default = "";
+                  description = "User to connect as";
                 };
                 password = mkOption {
                   type = str;
                   default = "";
+                  description = "Password for database user";
                 };
               };
             };
@@ -163,8 +172,8 @@ in
     };
     users.groups = mkIf (cfg.group == "bitmagnet") { bitmagnet = { }; };
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.dht_server.port ];
-      allowedUDPPorts = [ cfg.dht_server.port ];
+      allowedTCPPorts = [ cfg.settings.dht_server.port ];
+      allowedUDPPorts = [ cfg.settings.dht_server.port ];
     };
     services.postgresql = mkIf cfg.useLocalPostgresDB {
       enable = true;
