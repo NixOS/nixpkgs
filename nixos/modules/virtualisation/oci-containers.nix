@@ -452,10 +452,10 @@ let
       ++ (mapAttrsToList (k: v: "-l ${escapeShellArg k}=${escapeShellArg v}") container.labels)
       ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
       ++ optional (container.privileged) "--privileged"
-      ++ mapAttrsToList (k: _: "--cap-add ${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capAdd)
-      ++ mapAttrsToList (k: _: "--cap-drop ${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capDrop)
-      ++ map (d: "--device ${escapeShellArg d}") container.devices
-      ++ map (n: "--network ${escapeShellArg n}") container.networks
+      ++ mapAttrsToList (k: _: "--cap-add=${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capAdd)
+      ++ mapAttrsToList (k: _: "--cap-drop=${escapeShellArg k}") (filterAttrs (_: v: v == true) container.capDrop)
+      ++ map (d: "--device=${escapeShellArg d}") container.devices
+      ++ map (n: "--network=${escapeShellArg n}") container.networks
       ++ ["--pull ${escapeShellArg container.pull}"]
       ++ map escapeShellArg container.extraOptions
       ++ [container.image]

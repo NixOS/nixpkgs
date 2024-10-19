@@ -23,14 +23,14 @@ let
             imageStream = pkgs.dockerTools.examples.nginxStream;
             ports = ["8181:80"];
             capAdd = {
-              NET_ADMIN = true;
+              CAP_AUDIT_READ = true;
             };
             capDrop = {
-              WAKE_ALARM = true;
+              CAP_AUDIT_WRITE = true;
             };
-            privileged = true;
+            privileged = false;
             devices = [
-              "/dev/snd:/dev/snd"
+              "/dev/random:/dev/random"
             ];
           };
         };
@@ -50,10 +50,10 @@ let
       ${backend}.wait_until_succeeds("curl -f http://localhost:8181 | grep Hello")
       output = json.loads(${backend}.succeed("${backend} inspect nginx --format json").strip())[0]
       ${backend}.succeed("systemctl stop ${backend}-nginx.service", timeout=10)
-      assert output['HostConfig']['CapAdd'][0] == "NET_ADMIN"
-      assert output['HostConfig']['CapDrop'][0] == "WAKE_ALARM"
-      assert output['HostConfig']['Privileged'] == True
-      assert output['HostConfig']['Devices'][0] == {'PathOnHost': '/dev/snd', 'PathInContainer': '/dev/snd', 'CgroupPermissions': 'rwm'}
+      assert output['HostConfig']['CapAdd'] == ["CAP_AUDIT_READ"]
+      assert output['HostConfig']['CapDrop'] == ${if backend == "docker" then "[\"CAP_AUDIT_WRITE\"]" else "[]"} # Rootless podman runs with no capabilities so it cannot drop them
+      assert output['HostConfig']['Privileged'] == False
+      assert output['HostConfig']['Devices'] == [{'PathOnHost': '/dev/random', 'PathInContainer': '/dev/random', 'CgroupPermissions': '${if backend == "docker" then "rwm" else ""}'}]
     '';
   };
 
