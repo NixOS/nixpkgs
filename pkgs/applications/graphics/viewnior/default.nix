@@ -45,6 +45,12 @@ stdenv.mkDerivation rec {
         ];
       }
     }"
+
+    # gtk3 viewnior can be launched in wayland mode and does so by default
+    # but moving around in a zoomed in image doesn't work
+    gappsWrapperArgs+=(
+      --set-default GDK_BACKEND x11
+    )
   '';
 
   meta = with lib; {
