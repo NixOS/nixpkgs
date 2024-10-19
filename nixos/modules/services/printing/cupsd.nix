@@ -384,14 +384,14 @@ in
         preStart = lib.optionalString cfg.stateless ''
           rm -rf /var/cache/cups /var/lib/cups /var/spool/cups
         '' + ''
-            mkdir -m 0700 -p /var/cache/cups
-            mkdir -m 0700 -p /var/spool/cups
-            mkdir -m 0755 -p ${cfg.tempDir}
+            mkdir -m 0700 /var/cache/cups || true
+            mkdir -m 0700 /var/spool/cups || true
+            mkdir -m 0755 ${cfg.tempDir} || true
 
-            mkdir -m 0755 -p /var/lib/cups
+            mkdir -m 0755 /var/lib/cups || true
             # While cups will automatically create self-signed certificates if accessed via TLS,
             # this directory to store the certificates needs to be created manually.
-            mkdir -m 0700 -p /var/lib/cups/ssl
+            mkdir -m 0700 /var/lib/cups/ssl || true
 
             # Backwards compatibility
             if [ ! -L /etc/cups ]; then
