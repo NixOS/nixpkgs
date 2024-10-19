@@ -568,6 +568,7 @@ mapAliases {
   LASzip = laszip; # Added 2024-06-12
   LASzip2 = laszip_2; # Added 2024-06-12
   latinmodern-math = lmmath;
+  leafpad = throw "'leafpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mouspad' instead"; # Added 2024-10-19
   ledger_agent = ledger-agent; # Added 2024-01-07
   lfs = dysk; # Added 2023-07-03
   libAfterImage = throw "'libAfterImage' has been removed from nixpkgs, as it's no longer in development for a long time"; # Added 2024-06-01
