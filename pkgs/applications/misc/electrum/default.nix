@@ -9,26 +9,9 @@
 , enableQt ? true
 , callPackage
 , qtwayland
-, fetchPypi
 }:
 
 let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      # Pin ledger-bitcoin to 0.2.1
-      ledger-bitcoin = super.ledger-bitcoin.overridePythonAttrs (oldAttrs: rec {
-        version = "0.2.1";
-        format = "pyproject";
-        src = fetchPypi {
-          pname = "ledger_bitcoin";
-          inherit version;
-          hash = "sha256-AWl/q2MzzspNIo6yf30S92PgM/Ygsb+1lJsg7Asztso=";
-        };
-      });
-    };
-  };
-
   libsecp256k1_name =
     if stdenv.hostPlatform.isLinux then "libsecp256k1.so.{v}"
     else if stdenv.hostPlatform.isDarwin then "libsecp256k1.{v}.dylib"
@@ -41,7 +24,7 @@ let
 
 in
 
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
   version = "4.5.6";
 
@@ -53,7 +36,7 @@ python.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
@@ -84,7 +67,7 @@ python.pkgs.buildPythonApplication rec {
     qdarkstyle
   ];
 
-  checkInputs = with python.pkgs; lib.optionals enableQt [
+  checkInputs = with python3.pkgs; lib.optionals enableQt [
     pyqt6
   ];
 
@@ -116,7 +99,7 @@ python.pkgs.buildPythonApplication rec {
     wrapQtApp $out/bin/electrum
   '';
 
-  nativeCheckInputs = with python.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "tests" ];
 
