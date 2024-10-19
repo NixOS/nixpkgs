@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  stdenv,
   libsForQt5,
   coreutils,
   xdg-utils,
@@ -9,7 +10,7 @@
   perlPackages,
 }:
 
-libsForQt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qdirstat";
   version = "1.9";
 
@@ -20,7 +21,12 @@ libsForQt5.mkDerivation rec {
     hash = "sha256-pwdmltHDNwUMx1FNOoiXl5Pna0zlKqahmicBCN6UVSU=";
   };
 
-  nativeBuildInputs = [ makeWrapper ] ++ (with libsForQt5; [ qmake ]);
+  nativeBuildInputs =
+    [ makeWrapper ]
+    ++ (with libsForQt5; [
+      qmake
+      wrapQtAppsHook
+    ]);
 
   buildInputs = [ perlPackages.perl ];
 

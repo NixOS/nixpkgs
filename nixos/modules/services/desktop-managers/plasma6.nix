@@ -12,7 +12,7 @@
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv $HOME/.cache/ksycoca*
+    rm -fv "$HOME/.cache/ksycoca"*
   '';
 in {
   options = {

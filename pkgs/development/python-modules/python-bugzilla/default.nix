@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   requests,
   responses,
   pytestCheckHook,
@@ -9,17 +10,19 @@
 }:
 
 buildPythonPackage rec {
-  pname = "bugzilla";
+  pname = "python-bugzilla";
   version = "3.3.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "python_${pname}";
+    pname = "python_bugzilla";
     inherit version;
-    sha256 = "sha256-4YIgFx4DPrO6YAxNE5NZ0BqhrOwdrrxDCJEORQdj3kc=";
+    hash = "sha256-4YIgFx4DPrO6YAxNE5NZ0BqhrOwdrrxDCJEORQdj3kc=";
   };
 
-  propagatedBuildInputs = [ requests ];
+  build-system = [ setuptools ];
+
+  dependencies = [ requests ];
 
   nativeCheckInputs = [
     pytestCheckHook
