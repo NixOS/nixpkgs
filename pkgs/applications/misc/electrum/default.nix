@@ -1,7 +1,6 @@
 { lib
 , stdenv
 , fetchurl
-, fetchFromGitHub
 , protobuf
 , wrapQtAppsHook
 , python3
@@ -14,8 +13,6 @@
 }:
 
 let
-  version = "4.5.5";
-
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
@@ -42,34 +39,16 @@ let
     else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
-  # Not provided in official source releases, which are what upstream signs.
-  tests = fetchFromGitHub {
-    owner = "spesmilo";
-    repo = "electrum";
-    rev = version;
-    sha256 = "sha256-CbhI/q+zjk9odxuvdzpogi046FqkedJooiQwS+WAkJ8=";
-
-    postFetch = ''
-      mv $out ./all
-      mv ./all/tests $out
-    '';
-  };
-
 in
 
-python.pkgs.buildPythonApplication {
+python.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  inherit version;
+  version = "4.5.6";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1jiagz9avkbd158pcip7p4wz0pdsxi94ndvg5p8afvshb32aqwav";
+    hash = "sha256-LO2ZUvbDJaIxrdgA+cM3sGgqJ+N+UlA9ObNINQcrorA=";
   };
-
-  postUnpack = ''
-    # can't symlink, tests get confused
-    cp -ar ${tests} $sourceRoot/tests
-  '';
 
   nativeBuildInputs = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
