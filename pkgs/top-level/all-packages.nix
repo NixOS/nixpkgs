@@ -2515,7 +2515,8 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AudioUnit Carbon Cocoa;
   };
 
-  fceux = libsForQt5.callPackage ../applications/emulators/fceux { };
+  fceux-qt5 = fceux.override { ___qtVersion = "5"; };
+  fceux-qt6 = fceux.override { ___qtVersion = "6"; };
 
   firebird-emu = libsForQt5.callPackage ../applications/emulators/firebird-emu { };
 
@@ -2899,8 +2900,6 @@ with pkgs;
 
   yaft = callPackage ../applications/terminal-emulators/yaft { };
 
-  writefreely = callPackage ../applications/misc/writefreely { };
-
   iqueue = callPackage ../development/libraries/iqueue { };
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
@@ -3033,8 +3032,6 @@ with pkgs;
   ArchiSteamFarm = callPackage ../applications/misc/ArchiSteamFarm { };
 
   archivebox = callPackage ../applications/misc/archivebox { };
-
-  archivemount = callPackage ../tools/filesystems/archivemount { };
 
   archivy = callPackage ../applications/misc/archivy { };
 
@@ -11284,7 +11281,9 @@ with pkgs;
 
   podman-compose = python3Packages.callPackage ../applications/virtualization/podman-compose { };
 
-  podman-desktop = callPackage ../applications/virtualization/podman-desktop {};
+  podman-desktop = callPackage ../applications/virtualization/podman-desktop {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
 
   pods = callPackage ../applications/virtualization/pods { };
 
@@ -24365,8 +24364,6 @@ with pkgs;
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
 
-  mimir = callPackage ../servers/monitoring/mimir { };
-
   phlare = callPackage ../servers/monitoring/phlare { };
 
   grafana-image-renderer = callPackage ../servers/monitoring/grafana-image-renderer { };
@@ -33272,8 +33269,6 @@ with pkgs;
     qtermwidget = lxqt.qtermwidget_1_4;
   };
 
-  virtscreen = callPackage ../tools/admin/virtscreen { };
-
   virtual-ans = callPackage ../applications/audio/virtual-ans { };
 
   virtualbox = libsForQt5.callPackage ../applications/virtualization/virtualbox {
@@ -37936,8 +37931,6 @@ with pkgs;
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
   stepreduce = callPackage ../applications/misc/stepreduce { };
-
-  stern = callPackage ../applications/networking/cluster/stern { };
 
   streamripper = callPackage ../applications/audio/streamripper { };
 
