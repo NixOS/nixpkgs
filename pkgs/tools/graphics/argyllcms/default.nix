@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     rm -v $out/bin/License.txt
     mkdir -p $out/etc/udev/rules.d
-    sed -i '/udev-acl/d' usb/55-Argyll.rules
+    sed -i '/udev-acl/d;/usb_id/d;/usb-db/d' usb/55-Argyll.rules
     cp -v usb/55-Argyll.rules $out/etc/udev/rules.d/
 
     sed -i -e 's/^CREATED .*/CREATED "'"$(date -d @$SOURCE_DATE_EPOCH)"'"/g' $out/share/argyllcms/RefMediumGamut.gam
