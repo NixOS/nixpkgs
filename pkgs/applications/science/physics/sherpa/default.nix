@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "sherpa";
-  version = "2.2.15";
+  version = "2.2.16";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "sha256-3zvLa1k/bm7uOWKUsTyQM39cPBXJJlF1OgPgznl1hks=";
+    sha256 = "sha256-AntSN5BhtJFuDBoOFvrzoCr/W4SnX5CeAXiTcz9MjUs=";
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
