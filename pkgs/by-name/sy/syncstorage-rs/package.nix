@@ -20,13 +20,13 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "syncstorage-rs";
-  version = "0.17.9";
+  version = "0.17.11";
 
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ezTwAAtt0/jKfA6FtvzuQVFYOODMcD4RFiU3x0Umifk=";
+    hash = "sha256-Y4JAHJX89NwOePCso20H2QLhCW+kUuEDXe8eaaU9Dxs=";
   };
 
   nativeBuildInputs = [
