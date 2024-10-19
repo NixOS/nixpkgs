@@ -3,6 +3,7 @@
 , fetchurl
 , cmake
 , fetchpatch
+, ffmpeg
 , fontconfig
 , hunspell
 , hyphen
@@ -14,6 +15,7 @@
 , libstemmer
 , libuchardet
 , libusb1
+, piper-tts
 , pkg-config
 , podofo
 , poppler_utils
@@ -33,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.16.0";
+  version = "7.20.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EWQfaoTwO9BdZQgJQrxfj6b8tmtukvlW5hFo/USjNhU=";
+    hash = "sha256-BhJEJsQKk/kJxycm/1mbtlrSaeFQPvWGGB9DUMidgII=";
   };
 
   patches = [
@@ -50,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
+      hash = "sha256-8tOxFCmZal+JxOz6LeuUr+TgX7IaxC9Ow73bMgFJPt8=";
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -75,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    ffmpeg
     fontconfig
     hunspell
     hyphen
@@ -86,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
+    piper-tts
     podofo
     poppler_utils
     qtbase
@@ -148,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     export PODOFO_LIB_DIR=${podofo.lib}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
+    export PIPER_TTS_DIR=${piper-tts}/bin
 
     python setup.py install --root=$out \
       --prefix=$out \
