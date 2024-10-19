@@ -33,10 +33,10 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-LO2ZUvbDJaIxrdgA+cM3sGgqJ+N+UlA9ObNINQcrorA=";
   };
 
-  nativeBuildInputs = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
+  build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     aiohttp
     aiohttp-socks
     aiorpcx
