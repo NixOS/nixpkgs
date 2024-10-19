@@ -313,28 +313,21 @@ let
     ];
   };
 
-  frugal-uuid = build-asdf-system {
-    pname = "frugal-uuid";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-frugal-uuid";
-      rev = "be27972333a16fc3f16bc7fbf9e3013b2123d75c";
-      hash = "sha256-rWO43vWMibF8/OxL70jle5nhd9oRWC7+MI44KWrQD48=";
-    };
-    systems = [ "frugal-uuid"
-                "frugal-uuid/non-frugal"
-                "frugal-uuid/benchmark"
-                "frugal-uuid/test" ];
-    lispLibs = with self; [
-      babel
-      bordeaux-threads
-      fiveam
-      ironclad
-      trivial-benchmark
-      trivial-clock
+  frugal-uuid = super.frugal-uuid.overrideLispAttrs (o: {
+    systems = [
+      "frugal-uuid"
+      "frugal-uuid/non-frugal"
+      "frugal-uuid/benchmark"
+      "frugal-uuid/test"
     ];
-  };
+    lispLibs = o.lispLibs ++ (with self; [
+      ironclad
+      babel
+      trivial-clock
+      trivial-benchmark
+      fiveam
+    ]);
+  });
 
   duckdb = build-asdf-system {
     pname = "duckdb";
