@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-inH8fUpUR0WXYY2JX72evZqVp3GlnGKBBlrbai/fU6U=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/SoptikHa2/desed/releases/tag/v${version}";
