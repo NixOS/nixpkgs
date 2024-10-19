@@ -11096,6 +11096,14 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+  keatonhasse = {
+    name = "Keaton Hasse";
+    email = git@keatonhasse.com";
+    matrix = "@keatonhasse:matrix.org";
+    github = "keatonhasse";
+    githubId = 27124586;
+    keys = [ { fingerprint = "754E B3C5 3D52 F2B4 69BD  F664 934F 4F13 A56B 63B0"; } ];
+  };
   keenanweaver = {
     email = "keenanweaver@protonmail.com";
     name = "Keenan Weaver";
