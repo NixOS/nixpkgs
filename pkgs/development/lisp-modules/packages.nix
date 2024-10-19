@@ -49,17 +49,6 @@ let
 
   packages = ql.overrideScope (self: super: {
 
-  cl-environments = super.cl-environments.overrideLispAttrs (old: {
-    patches = old.patches or [] ++ [
-      # Needed because SB-INT:TRULY-DYNAMIC-EXTENT has been removed since sbcl 2.3.10.
-      # The update isn't available on quicklisp yet, but we can fetch from upstream directly
-      (pkgs.fetchpatch {
-        url = "https://github.com/alex-gutev/cl-environments/commit/1bd7ecf68adeaf654616c6fb763c1239e0f2e221.patch";
-        sha256 = "sha256-i6KdthYqPlJPvxM2c2kossHYvXNhpZHl/7NzELNrOHU=";
-      })
-    ];
-  });
-
   cl-unicode = build-with-compile-into-pwd {
     inherit (super.cl-unicode) pname version src systems;
     lispLibs = super.cl-unicode.lispLibs ++ [ self.flexi-streams ];
