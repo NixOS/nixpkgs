@@ -144,6 +144,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      prettyName = "Xfce Session";
       desktopNames = [ "XFCE" ];
       bgSupport = !cfg.noDesktop;
       start = ''
