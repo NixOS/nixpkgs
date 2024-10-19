@@ -16198,6 +16198,12 @@
     githubId = 10776658;
     name = "Patrick Gordon";
   };
+  paepcke = {
+    email = "git@paepcke.de";
+    github = "paepckehh";
+    githubId = 120342602;
+    name = "Michael Paepcke";
+  };
   paholg = {
     email = "paho@paholg.com";
     github = "paholg";
