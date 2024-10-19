@@ -20,7 +20,8 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/1player/host-spawn";
     description = "Run commands on your host machine from inside your flatpak sandbox, toolbox or distrobox containers";
-    license = licenses.mit;
+    license = licenses.mit0;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ garrison ];
     mainProgram = "host-spawn";
   };
