@@ -28863,8 +28863,6 @@ with pkgs;
 
   eos-installer = callPackage ../applications/misc/eos-installer { };
 
-  epdfview = callPackage ../applications/misc/epdfview { };
-
   epeg = callPackage ../applications/graphics/epeg { };
 
   epgstation = callPackage ../applications/video/epgstation { };
