@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, protobuf
 , wrapQtAppsHook
 , python3
 , zbar
@@ -70,7 +71,7 @@ python.pkgs.buildPythonApplication {
     cp -ar ${tests} $sourceRoot/tests
   '';
 
-  nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
+  nativeBuildInputs = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && enableQt) qtwayland;
 
   propagatedBuildInputs = with python.pkgs; [
