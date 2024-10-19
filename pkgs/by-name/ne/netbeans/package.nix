@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk17, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  which,
+  unzip,
+  libicns,
+  imagemagick,
+  jdk21,
+  perl,
 }:
 
 let
-  version = "22";
+  version = "23";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +29,7 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
-    hash = "sha256-uuzC2iiTSn3czWod3aBbNh8mVM5bCvmjKUl0ptNdm3M=";
+    hash = "sha256-UNTW0K8JlkxOKz9oO3HUBPZ4yZY7uWBkFZd2uenXtZA=";
   };
 
   buildCommand = ''
@@ -34,9 +44,14 @@ stdenv.mkDerivation {
     mkdir -pv $out/bin
     cp -a netbeans $out
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${lib.makeBinPath [ jdk17 which ]} \
-      --prefix JAVA_HOME : ${jdk17.home} \
-      --add-flags "--jdkhome ${jdk17.home} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jdk21
+          which
+        ]
+      } \
+      --prefix JAVA_HOME : ${jdk21.home} \
+      --add-flags "--jdkhome ${jdk21.home} \
       -J-Dawt.useSystemAAFontSettings=on -J-Dswing.aatext=true"
 
     # Extract pngs from the Apple icon image and create
@@ -57,8 +72,15 @@ stdenv.mkDerivation {
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip ];
-  buildInputs = [ perl libicns imagemagick ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
+  buildInputs = [
+    perl
+    libicns
+    imagemagick
+  ];
 
   meta = {
     description = "Integrated development environment for Java, C, C++ and PHP";
@@ -68,7 +90,11 @@ stdenv.mkDerivation {
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with lib.maintainers; [ sander rszibele kashw2 ];
+    maintainers = with lib.maintainers; [
+      sander
+      rszibele
+      kashw2
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "netbeans";
   };

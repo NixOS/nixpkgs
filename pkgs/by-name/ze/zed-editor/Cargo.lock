@@ -2282,9 +2282,9 @@ dependencies = [
 
 [[package]]
 name = "clap"
-version = "4.5.18"
+version = "4.5.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b0956a43b323ac1afaffc053ed5c4b7c1f1800bacd1683c353aabbb752515dd3"
+checksum = "7be5744db7978a28d9df86a214130d106a89ce49644cbc4e3f0c22c3fba30615"
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -2292,9 +2292,9 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
-version = "4.5.18"
+version = "4.5.19"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4d72166dd41634086d5803a47eb71ae740e61d84709c36f3c34110173db3961b"
+checksum = "a5fbc17d3ef8278f55b282b2a2e75ae6f6c7d4bb70ed3d0382375104bfafdb4b"
 dependencies = [
  "anstream",
  "anstyle",
@@ -4145,6 +4145,7 @@ dependencies = [
  "snippet_provider",
  "task",
  "theme",
+ "tokio",
  "toml 0.8.19",
  "ui",
  "url",
@@ -5147,9 +5148,9 @@ dependencies = [
 
 [[package]]
 name = "grid"
-version = "0.13.0"
+version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d196ffc1627db18a531359249b2bf8416178d84b729f3cebeb278f285fb9b58c"
+checksum = "be136d9dacc2a13cc70bb6c8f902b414fb2641f8db1314637c6b7933411a8f82"
 
 [[package]]
 name = "group"
@@ -6301,6 +6302,7 @@ dependencies = [
  "strum 0.25.0",
  "text",
  "theme",
+ "thiserror",
  "tiktoken-rs",
  "ui",
  "unindent",
@@ -6367,7 +6369,6 @@ dependencies = [
  "node_runtime",
  "paths",
  "project",
- "protols-tree-sitter-proto",
  "regex",
  "rope",
  "rust-embed",
@@ -7841,9 +7842,9 @@ dependencies = [
 
 [[package]]
 name = "parking"
-version = "2.2.0"
+version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bb813b8af86854136c6922af0598d719255ecb2179515e6e7730d468f05c9cae"
+checksum = "f38d5652c16fde515bb1ecef450ab0f6a219d619a7274976324d5e377f7dceba"
 
 [[package]]
 name = "parking_lot"
@@ -8351,9 +8352,9 @@ dependencies = [
 
 [[package]]
 name = "pretty_assertions"
-version = "1.4.0"
+version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "af7cee1a6c8a5b9208b3cb1061f10c0cb689087b3d8ce85fb9d2dd7a29b6ba66"
+checksum = "3ae130e2f271fbc2ac3a40fb1d07180839cdbbe443c7a27e1e3c13c5cac0116d"
 dependencies = [
  "diff",
  "yansi",
@@ -8624,15 +8625,6 @@ name = "protobuf"
 version = "2.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "106dd99e98437432fed6519dedecfade6a06a73bb7b2a1e019fdd2bee5778d94"
-
-[[package]]
-name = "protols-tree-sitter-proto"
-version = "0.2.0"
-source = "git+https://github.com/zed-industries/tree-sitter-proto?rev=0848bd30a64be48772e15fbb9d5ba8c0cc5772ad#0848bd30a64be48772e15fbb9d5ba8c0cc5772ad"
-dependencies = [
- "cc",
- "tree-sitter-language",
-]
 
 [[package]]
 name = "psm"
@@ -8945,7 +8937,6 @@ dependencies = [
  "gpui",
  "language",
  "log",
- "markdown",
  "menu",
  "ordered-float 2.10.1",
  "picker",
@@ -9099,6 +9090,7 @@ dependencies = [
  "serde_json",
  "smol",
  "tempfile",
+ "thiserror",
  "util",
 ]
 
@@ -9107,7 +9099,9 @@ name = "remote_server"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "backtrace",
  "cargo_toml",
+ "clap",
  "client",
  "clock",
  "env_logger",
@@ -10061,9 +10055,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.127"
+version = "1.0.128"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8043c06d9f82bd7271361ed64f415fe5e12a77fdb52e573e7f06a516dea329ad"
+checksum = "6ff5456707a1de34e7e37f2a6fd3d3f808c318259cbd01ab6377795054b483d8"
 dependencies = [
  "indexmap 2.4.0",
  "itoa",
@@ -10604,6 +10598,7 @@ dependencies = [
  "libsqlite3-sys",
  "parking_lot",
  "smol",
+ "sqlformat",
  "thread_local",
  "util",
  "uuid",
@@ -10620,9 +10615,9 @@ dependencies = [
 
 [[package]]
 name = "sqlformat"
-version = "0.2.4"
+version = "0.2.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f895e3734318cc55f1fe66258926c9b910c124d47520339efecbb6c59cec7c1f"
+checksum = "7bba3a93db0cc4f7bdece8bb09e77e2e785c20bfebf79eb8340ed80708048790"
 dependencies = [
  "nom",
  "unicode_categories",
@@ -10878,6 +10873,7 @@ dependencies = [
  "fuzzy",
  "gpui",
  "indoc",
+ "isahc_http_client",
  "language",
  "log",
  "menu",
@@ -11276,6 +11272,7 @@ dependencies = [
  "project",
  "serde",
  "serde_json",
+ "settings",
  "theme",
  "ui",
  "util",
@@ -11284,9 +11281,9 @@ dependencies = [
 
 [[package]]
 name = "taffy"
-version = "0.4.4"
+version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ec17858c2d465b2f734b798b920818a974faf0babb15d7fef81818a4b2d16f1"
+checksum = "9cb893bff0f80ae17d3a57e030622a967b8dbc90e38284d9b4b1442e23873c94"
 dependencies = [
  "arrayvec",
  "grid",
@@ -11360,6 +11357,7 @@ dependencies = [
 name = "telemetry_events"
 version = "0.1.0"
 dependencies = [
+ "language",
  "semantic_version",
  "serde",
 ]
@@ -11425,12 +11423,12 @@ dependencies = [
 
 [[package]]
 name = "terminal_size"
-version = "0.3.0"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "21bebf2b7c9e0a515f6e0f8c51dc0f8e4696391e6f1ff30379559f8365fb0df7"
+checksum = "4f599bd7ca042cfdf8f4512b277c02ba102247820f9d9d4a9f521f496751a6ef"
 dependencies = [
  "rustix 0.38.35",
- "windows-sys 0.48.0",
+ "windows-sys 0.59.0",
 ]
 
 [[package]]
@@ -11509,7 +11507,6 @@ dependencies = [
  "serde_json_lenient",
  "serde_repr",
  "settings",
- "story",
  "util",
  "uuid",
 ]
@@ -11556,18 +11553,18 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c0342370b38b6a11b6cc11d6a805569958d54cfa061a29969c3b5ce2ea405724"
+checksum = "d50af8abc119fb8bb6dbabcfa89656f46f84aa0ac7688088608076ad2b459a84"
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
-version = "1.0.63"
+version = "1.0.64"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261"
+checksum = "08904e7672f5eb876eaaf87e0ce17857500934f4981c4a0ab2b4aa98baac7fc3"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -11746,6 +11743,7 @@ dependencies = [
  "pretty_assertions",
  "project",
  "recent_projects",
+ "remote",
  "rpc",
  "serde",
  "settings",
@@ -14118,6 +14116,7 @@ dependencies = [
  "parking_lot",
  "postage",
  "project",
+ "release_channel",
  "remote",
  "schemars",
  "serde",
@@ -14313,9 +14312,9 @@ dependencies = [
 
 [[package]]
 name = "yansi"
-version = "0.5.1"
+version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "09041cd90cf85f7f8b2df60c646f853b7f535ce68f85244eb6731cf89fa498ec"
+checksum = "cfe53a6657fd280eaa890a3bc59152892ffa3e30101319d168b781ed6529b049"
 
 [[package]]
 name = "yazi"
@@ -14398,7 +14397,7 @@ dependencies = [
 
 [[package]]
 name = "zed"
-version = "0.156.2"
+version = "0.157.5"
 dependencies = [
  "activity_indicator",
  "anyhow",
@@ -14540,7 +14539,7 @@ dependencies = [
 
 [[package]]
 name = "zed_dart"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "zed_extension_api 0.1.0",
 ]
@@ -14645,7 +14644,7 @@ dependencies = [
 
 [[package]]
 name = "zed_php"
-version = "0.2.0"
+version = "0.2.1"
 dependencies = [
  "zed_extension_api 0.1.0",
 ]
@@ -14653,6 +14652,13 @@ dependencies = [
 [[package]]
 name = "zed_prisma"
 version = "0.0.3"
+dependencies = [
+ "zed_extension_api 0.1.0",
+]
+
+[[package]]
+name = "zed_proto"
+version = "0.2.0"
 dependencies = [
  "zed_extension_api 0.1.0",
 ]

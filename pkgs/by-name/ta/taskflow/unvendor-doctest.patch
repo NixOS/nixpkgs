@@ -1,0 +1,21 @@
+diff --git a/unittests/CMakeLists.txt b/unittests/CMakeLists.txt
+index c1fef333..eaf387ea 100644
+--- a/unittests/CMakeLists.txt
++++ b/unittests/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ enable_testing()
+ 
+-include(${TF_3RD_PARTY_DIR}/doctest/doctest.cmake)
++include(@doctest@/lib/cmake/doctest/doctest.cmake)
+ 
+ list(APPEND TF_UNITTESTS 
+   test_utility 
+@@ -44,7 +44,7 @@ endif()
+ foreach(unittest IN LISTS TF_UNITTESTS)
+   add_executable(${unittest} ${unittest}.cpp)
+   target_link_libraries(${unittest} ${PROJECT_NAME} ${ATOMIC_LIBRARY} tf::default_settings)
+-  target_include_directories(${unittest} PRIVATE ${TF_3RD_PARTY_DIR}/doctest)
++  target_include_directories(${unittest} PRIVATE @doctest@/include/doctest)
+   doctest_discover_tests(${unittest})
+ endforeach()
+ 

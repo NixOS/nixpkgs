@@ -1,79 +1,69 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchYarnDeps
-, yarn
-, fixup-yarn-lock
-, nodejs
 , makeWrapper
 , copyDesktopItems
-, desktopToDarwinBundle
 , electron
+, nodejs
+, pnpm
 , makeDesktopItem
+, autoSignDarwinBinariesHook
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "0.12.0";
+  version = "1.13.2";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gEjcI+bfETYZB/pHDXRcNxNVDsbwuqQL1E22fMkIJHI=";
+    sha256 = "sha256-07lf9jy22JUT+Vc5y9Tu1nkWaXU5RTdu3GibcvQsSs8=";
   };
 
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${finalAttrs.src}/yarn.lock";
-    sha256 = "sha256-x0hqNxi6r1i3vBe1tJQl+Oht2St9VIH3Eq27MZLkojA=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-mkWbFFv0IdLtog6uZM6xgTNlQPC+ytUQD8po8yiv/6Y=";
   };
 
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./patches/extension-no-download-podman.patch
-    ./patches/fix-yarn-lock-deterministic.patch
   ];
 
   postPatch = ''
-    for file in packages/main/src/tray-animate-icon.ts extensions/podman/src/util.ts packages/main/src/plugin/certificates.ts; do
+    for file in packages/main/src/tray-animate-icon.ts packages/main/src/plugin/certificates.ts; do
       substituteInPlace "$file" \
-        --replace 'process.resourcesPath'          "'$out/share/lib/podman-desktop/resources'" \
-        --replace '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
+        --replace-fail 'process.resourcesPath' "'$out/share/lib/podman-desktop/resources'"
     done
+    substituteInPlace "extensions/podman/packages/extension/src/util.ts" \
+      --replace-fail '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
-    yarn
-    fixup-yarn-lock
-    nodejs
-    makeWrapper
+    makeWrapper nodejs pnpm.configHook
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     copyDesktopItems
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    autoSignDarwinBinariesHook
   ];
-
-  configurePhase = ''
-    runHook preConfigure
-
-    export HOME="$TMPDIR"
-    yarn config --offline set yarn-offline-mirror "$offlineCache"
-    fixup-yarn-lock yarn.lock
-    yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
-    patchShebangs node_modules/
-
-    runHook postConfigure
-  '';
 
   buildPhase = ''
     runHook preBuild
 
-    yarn --offline run build
-    yarn --offline run electron-builder --dir \
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    pnpm build
+    ./node_modules/.bin/electron-builder \
+      --dir \
       --config .electron-builder.config.cjs \
-      -c.electronDist=${electron.dist} \
+      -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
 
     runHook postBuild
@@ -83,6 +73,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir -p "$out/share/lib/podman-desktop"
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv dist/mac*/Podman\ Desktop.app $out/Applications
+    ln -s $out/Applications/Podman\ Desktop.app/Contents/Resources "$out/share/lib/podman-desktop/resources"
+
+    makeWrapper "$out/Applications/Podman Desktop.app/Contents/MacOS/Podman Desktop" $out/bin/podman-desktop
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     cp -r dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/podman-desktop"
 
     install -Dm644 buildResources/icon.svg "$out/share/icons/hicolor/scalable/apps/podman-desktop.svg"
@@ -91,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "$out/share/lib/podman-desktop/resources/app.asar" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --inherit-argv0
+  '' + ''
 
     runHook postInstall
   '';
@@ -109,12 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "A graphical tool for developing on containers and Kubernetes";
     homepage = "https://podman-desktop.io";
     changelog = "https://github.com/containers/podman-desktop/releases/tag/v${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ panda2134 ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ booxter panda2134 ];
     inherit (electron.meta) platforms;
     mainProgram = "podman-desktop";
   };

@@ -26,6 +26,8 @@
 , moto
 , markdown
 , lz4
+, brotli
+, zstandard
 , setuptools-trial
 , buildbot-worker
 , buildbot-plugins
@@ -71,7 +73,7 @@ let
 in
 buildPythonApplication rec {
   pname = "buildbot";
-  version = "4.0.3";
+  version = "4.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -80,7 +82,7 @@ buildPythonApplication rec {
     owner = "buildbot";
     repo = "buildbot";
     rev = "v${version}";
-    hash = "sha256-4jxA8qvLX53cLooCpkn9hvcz4SFGc29TKxUah80Ufp4=";
+    hash = "sha256-RPg4eXqpm/F1SSoB4MVo61DgZv/iE2R4VtCkUU69iA8=";
   };
 
   build-system = [
@@ -108,6 +110,9 @@ buildPythonApplication rec {
     importlib-resources
     packaging
     unidiff
+    treq
+    brotli
+    zstandard
   ]
     # tls
     ++ twisted.optional-dependencies.tls;
@@ -137,14 +142,10 @@ buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace master/buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
-  '';
-  preBuild = ''
     cd master
+    touch buildbot/py.typed
+    substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
   '';
-
-  # Silence the depreciation warning from SqlAlchemy
-  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
 
   # TimeoutErrors on slow machines -> aarch64
   doCheck = !stdenv.hostPlatform.isAarch64;
@@ -152,11 +153,6 @@ buildPythonApplication rec {
   preCheck = ''
     export LC_ALL="en_US.UTF-8"
     export PATH="$out/bin:$PATH"
-
-    # remove testfile which is missing configuration file from sdist
-    rm buildbot/test/integration/test_graphql.py
-    # tests in this file are flaky, see https://github.com/buildbot/buildbot/issues/6776
-    rm buildbot/test/integration/test_try_client.py
   '';
 
   passthru = {
