@@ -7,6 +7,8 @@
 , slurp
 , wl-clipboard
 , libnotify
+, withFreeze ? true
+, hyprpicker
 , makeWrapper
 }:
 
@@ -28,9 +30,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     install -Dm755 hyprshot -t "$out/bin"
     wrapProgram "$out/bin/hyprshot" \
-      --prefix PATH ":" ${lib.makeBinPath [
+      --prefix PATH ":" ${lib.makeBinPath ([
           hyprland jq grim slurp wl-clipboard libnotify
-        ]}
+        ] ++ lib.optionals withFreeze [ hyprpicker ])}
 
     runHook postInstall
   '';
