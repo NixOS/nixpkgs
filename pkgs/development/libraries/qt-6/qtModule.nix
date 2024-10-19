@@ -7,6 +7,7 @@
 , moveBuildTree
 , srcs
 , patches ? [ ]
+, separateDebugInfo ? true
 }:
 
 args:
@@ -17,7 +18,7 @@ let
   src = args.src or srcs.${pname}.src;
 in
 stdenv.mkDerivation (args // {
-  inherit pname version src;
+  inherit pname version separateDebugInfo src;
   patches = args.patches or patches.${pname} or [ ];
 
   buildInputs =
@@ -32,7 +33,6 @@ stdenv.mkDerivation (args // {
   moveToDev = false;
 
   outputs = args.outputs or [ "out" "dev" ];
-  separateDebugInfo = true;
 
   dontWrapQtApps = args.dontWrapQtApps or true;
 }) // {
