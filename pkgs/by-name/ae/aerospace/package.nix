@@ -9,7 +9,7 @@
 
 let
   appName = "AeroSpace.app";
-  version = "0.14.2-Beta";
+  version = "0.15.2-Beta";
 in
 stdenv.mkDerivation {
   pname = "aerospace";
