@@ -66,7 +66,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/kolunmi/dwlb";
     license = lib.licenses.gpl3Plus;
     mainProgram = "dwlb";
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+      lonyelon
+    ];
     platforms = wayland.meta.platforms;
   };
 }
