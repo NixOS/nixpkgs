@@ -235,7 +235,6 @@ let
     inherit (super.magicl) pname version src lispLibs;
     nativeBuildInputs = [ pkgs.gfortran ];
     nativeLibs = [ pkgs.openblas ];
-    patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
   };
 
   cl-glib = build-asdf-system {
