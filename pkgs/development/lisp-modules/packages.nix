@@ -237,34 +237,7 @@ let
     nativeLibs = [ pkgs.openblas ];
   };
 
-  cl-glib = build-asdf-system {
-    pname = "cl-glib";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-glib";
-      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
-      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
-    };
-    lispLibs = with self; [
-      cl-gobject-introspection-wrapper
-      bordeaux-threads
-    ];
-  };
-
-  cl-glib_dot_gio = build-asdf-system {
-    pname = "cl-glib.gio";
-    version = "1.0.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "bohonghuang";
-      repo = "cl-glib";
-      rev = "84b128192d6b11cf03f1150e474a23368f07edff";
-      hash = "sha256-A56Yz+W4n1rAxxZg15zfkrLMbKMEG/zsWqaX7+kx4Qg=";
-    };
-    lispLibs = with self; [
-      cl-gobject-introspection-wrapper
-    ];
-  };
+  cl-glib_dot_gio = throw "cl-glib_dot_gio was replaced by cl-gio";
 
   cl-gtk4 = build-asdf-system {
     pname = "cl-gtk4";
