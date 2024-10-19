@@ -1,4 +1,8 @@
-{ lib, callPackage }:
+{
+  lib,
+  callPackage,
+}:
+
 let
   inherit (lib) mapAttrs' nameValuePair;
 
@@ -13,7 +17,7 @@ let
     };
   };
 
-  callPnpm = variant: callPackage ./generic.nix {inherit (variant) version hash;};
+  callPnpm = variant: callPackage ./generic.nix { inherit (variant) version hash; };
 
   mkPnpm = versionSuffix: variant: nameValuePair "pnpm_${versionSuffix}" (callPnpm variant);
 in
