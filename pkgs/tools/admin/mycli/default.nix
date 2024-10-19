@@ -1,14 +1,13 @@
-{ lib
-, python3
-, fetchPypi
-, glibcLocales
+{
+  fetchPypi,
+  lib,
+  python3Packages,
 }:
 
-with python3.pkgs;
-
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mycli";
   version = "1.27.2";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -19,40 +18,39 @@ buildPythonApplication rec {
     "sqlparse"
   ];
 
-  propagatedBuildInputs = [
-    cli-helpers
-    click
-    configobj
-    importlib-resources
-    paramiko
-    prompt-toolkit
-    pyaes
-    pycrypto
-    pygments
-    pymysql
-    pyperclip
-    sqlglot
-    sqlparse
+  build-system = with python3Packages; [
+    setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
+  dependencies =
+    with python3Packages;
+    [
+      cli-helpers
+      click
+      configobj
+      cryptography
+      paramiko
+      prompt-toolkit
+      pyaes
+      pygments
+      pymysql
+      pyperclip
+      sqlglot
+      sqlparse
+    ]
+    ++ cli-helpers.optional-dependencies.styles;
+
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
   preCheck = ''
-    export HOME=.
-    export LC_ALL="en_US.UTF-8"
+    export HOME="$(mktemp -d)"
   '';
 
   disabledTestPaths = [
     "mycli/packages/paramiko_stub/__init__.py"
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "cryptography == 36.0.2" "cryptography"
-  '';
-
-  meta = with lib; {
-    inherit version;
+  meta = {
     description = "Command-line interface for MySQL";
     mainProgram = "mycli";
     longDescription = ''
@@ -60,7 +58,7 @@ buildPythonApplication rec {
       syntax highlighting.
     '';
     homepage = "http://mycli.net";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }
