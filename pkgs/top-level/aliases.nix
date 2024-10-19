@@ -1490,6 +1490,7 @@ mapAliases {
   inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
   shhgit = throw "shhgit is broken and is no longer maintained. See https://github.com/eth0izzle/shhgit#-shhgit-is-no-longer-maintained-"; # Added 2023-08-08
   shipyard = jumppad; # Added 2023-06-06
+  shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   signumone-ks = throw "signumone-ks has been removed from nixpkgs because the developers stopped offering the binaries"; # Added 2023-08-17
   simplenote = throw "'simplenote' has been removed because it is no longer maintained and insecure"; # Added 2023-10-09
   skk-dicts = throw "'skk-dicts' has been split into multiple packages under 'skkDictionaries'"; # Added 2023-11-08

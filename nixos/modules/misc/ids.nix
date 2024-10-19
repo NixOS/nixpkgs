@@ -236,7 +236,7 @@ in
       riemanntools = 203;
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
-      #shout = 206; # dynamically allocated as of 2021-09-18
+      #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
       gateone = 207;
       namecoin = 208;
       #lxd = 210; # unused
