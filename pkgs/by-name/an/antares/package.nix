@@ -8,20 +8,21 @@
 
 buildNpmPackage rec {
   pname = "antares";
-  version = "0.7.28";
+  version = "0.7.29";
 
   src = fetchFromGitHub {
     owner = "antares-sql";
     repo = "antares";
     rev = "v${version}";
-    hash = "sha256-nEI1G0A1c+xjALbIcItzh4CFxAeQPOD8h+Bs0aYnEfU=";
+    hash = "sha256-3zgr3Eefx3WDUW9/1NOaneUbFy3GTnJ3tGgivtW1K/g=";
   };
 
-  npmDepsHash = "sha256-lSkZTa2zt8BeucOih8XjQ7QW/tg34umIRe4a4DDBW34=";
+  npmDepsHash = "sha256-WJ5HVVa4rEOsvr52L/OGk+vlxRiKLJTxWmUnpN1FnbY=";
 
   patches = [
-    # In version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
+    # Since version 0.7.28, package-lock is not updated properly so this patch update it to be able to build the package
     # This patch will probably be removed in the next version
+    # If it does not build without it, you just need to do a npm update in the antares project and copy the patch
     ./npm-lock.patch
   ];
 
