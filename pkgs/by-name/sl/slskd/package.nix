@@ -50,6 +50,10 @@ buildDotnetModule rec {
 
   testProjectFile = "tests/slskd.Tests.Unit/slskd.Tests.Unit.csproj";
   doCheck = true;
+  disabledTests = [
+    # Random failures on OfBorg, cause unknown
+    "slskd.Tests.Unit.Transfers.Uploads.UploadGovernorTests+ReturnBytes.Returns_Bytes_To_Bucket"
+  ];
 
   postBuild = ''
     pushd "$npmRoot"

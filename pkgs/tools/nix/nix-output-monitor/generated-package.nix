@@ -9,10 +9,10 @@
 }:
 mkDerivation {
   pname = "nix-output-monitor";
-  version = "2.1.2";
+  version = "2.1.4";
   src = fetchzip {
-    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.2.tar.gz";
-    sha256 = "192h67myibpc2bw5ng60qi4m9jyjd9cf14aba4ps44ayjw95wkc0";
+    url = "https://code.maralorn.de/maralorn/nix-output-monitor/archive/v2.1.4.tar.gz";
+    sha256 = "0ghpbq6a1cmh0xy42ipg8l1qi4pjdjn0df5am26587w396r81n5r";
   };
   isLibrary = true;
   isExecutable = true;
@@ -36,7 +36,7 @@ mkDerivation {
     strict strict-types terminal-size text time transformers
     typed-process word8
   ];
-  homepage = "https://github.com/maralorn/nix-output-monitor";
+  homepage = "https://code.maralorn.de/maralorn/nix-output-monitor";
   description = "Processes output of Nix commands to show helpful and pretty information";
   license = lib.licenses.agpl3Plus;
   mainProgram = "nom";
