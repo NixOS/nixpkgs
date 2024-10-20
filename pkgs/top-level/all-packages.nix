@@ -16930,7 +16930,9 @@ with pkgs;
     electron-chromedriver_29
     electron-chromedriver_30
     electron-chromedriver_31
-    electron-chromedriver_32;
+    electron-chromedriver_32
+    electron-chromedriver_33
+    ;
 
   electron_24 = electron_24-bin;
   electron_27 = electron_27-bin;
