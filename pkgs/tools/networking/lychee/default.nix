@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.15.1";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-L1tvP2lZsFD2swhP1MetQFxxxA+EbrI4aDYTJwbpkVI=";
+    rev = "lychee-v${version}";
+    hash = "sha256-H8iNgyLnzgfUPEVPlDosb6l99efrzM+/RIQ7X7nh4Ks=";
   };
 
-  cargoHash = "sha256-SQ9Dgtg3TKAaj9XkpEzA13U8CumGOlpwiW+Lv6leQW4=";
+  cargoHash = "sha256-cvEAy0Tx892dsd4zeh5D0fy4hoNBaZ2Q++IStbMbUhY=";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,6 +41,9 @@ rustPlatform.buildRustPackage rec {
     "--skip=client::tests"
     "--skip=collector::tests"
     "--skip=src/lib.rs"
+    # Color error for those tests as we are not in a tty
+    "--skip=formatters::response::color::tests::test_format_response_with_error_status"
+    "--skip=formatters::response::color::tests::test_format_response_with_ok_status"
   ];
 
   passthru.tests = {
@@ -55,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Fast, async, stream-based link checker written in Rust";
     homepage = "https://github.com/lycheeverse/lychee";
-    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
+    downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/lychee-v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ totoroot tuxinaut ];
     mainProgram = "lychee";
