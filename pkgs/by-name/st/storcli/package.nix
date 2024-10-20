@@ -7,12 +7,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "storcli";
-  version = "7.2904.00";
-  phase = "30";
+  version = "7.3103.00";
+  phase = "32";
 
   src = fetchzip {
     url = "https://docs.broadcom.com/docs-and-downloads/host-bus-adapters/host-bus-adapters-common-files/sas_sata_nvme_12g_p${finalAttrs.phase}/STORCLI_SAS3.5_P${finalAttrs.phase}.zip";
-    hash = "sha256-VfK71eiDonzWdR6g5zkXgRRi25vwoI4DDL6xy3zsfak=";
+    hash = "sha256-bOlIChZi2eWpc5QA+wXBQA4s+o/MVLVWsligjDpUXEU=";
   };
 
   nativeBuildInputs = [ rpmextract ];
