@@ -3522,6 +3522,8 @@ self: super: with self; {
 
   djangorestframework-guardian2 = callPackage ../development/python-modules/djangorestframework-guardian2 { };
 
+  djangorestframework-jsonp = callPackage ../development/python-modules/djangorestframework-jsonp { };
+
   djangorestframework-recursive = callPackage ../development/python-modules/djangorestframework-recursive { };
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
