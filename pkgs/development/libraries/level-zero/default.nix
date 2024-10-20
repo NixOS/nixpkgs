@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "level-zero";
-  version = "1.17.45";
+  version = "1.18.3";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "level-zero";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2uWZsy8aIV/ToDVuVxpyXoI1GbwZ9IxeLh+1hgjlfEM=";
+    hash = "sha256-ep9RYHnqmOEqfdFtYzOZnv0aWu4TA8JMyWOj0E2uSYk=";
   };
 
   nativeBuildInputs = [ cmake addDriverRunpath ];
@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/oneapi-src/level-zero";
     changelog = "https://github.com/oneapi-src/level-zero/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = [ maintainers.ziguana ];
   };
 }

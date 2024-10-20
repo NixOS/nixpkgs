@@ -13,7 +13,12 @@ let
   mkPackages = callPackage ./packages.nix;
   mkVMR = callPackage ./vmr.nix;
 
-  stage0 = callPackage ./stage0.nix args;
+  stage0 = callPackage ./stage0.nix (
+    args
+    // {
+      baseName = "dotnet-stage0";
+    }
+  );
 
   vmr =
     (mkVMR {

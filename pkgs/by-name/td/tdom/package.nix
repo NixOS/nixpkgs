@@ -9,11 +9,11 @@
 
 tcl.mkTclDerivation rec {
   pname = "tdom";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchzip {
     url = "http://tdom.org/downloads/tdom-${version}-src.tgz";
-    hash = "sha256-7RvHzb4ae1HbJGkXCd68B23q/zhEK6ysYOnT6yeTLU8=";
+    hash = "sha256-WjXIVnz+1Z59fQHMHXzQaIRRwfiBHMTBq/p2alGF+Po=";
   };
 
   buildInputs = [

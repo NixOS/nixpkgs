@@ -3,7 +3,7 @@ import ../generic.nix (args // {
   version = "16.2.0";
   hash = "sha256-3LLoO7SNJfEfDEU7JnAhmAOIdRO+TkgiJKjT8sqzelo=";
   vendorHash = "sha256-iyYfht0aB9Vv2hsaqrieFHXbDhlotKQYfLn4JFqpve8=";
-  pnpmHash = "sha256-phDrOSFQsgA+I4PDK9LJasUBXBO8EkVtQIMx9M4v8u0=";
+  pnpmHash = "sha256-lcev7VwTcuCuced8uZzLoobREWtNRDFRFdfmabJPLtc=";
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

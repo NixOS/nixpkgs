@@ -2,6 +2,7 @@
   lib,
   mkKdeDerivation,
   substituteAll,
+  dbus,
   fontconfig,
   xorg,
   lsof,
@@ -23,7 +24,8 @@ mkKdeDerivation {
   patches = [
     (substituteAll {
       src = ./dependency-paths.patch;
-      fc-match = lib.getExe' fontconfig "fc-match";
+      dbusSend = lib.getExe' dbus "dbus-send";
+      fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
       xmessage = lib.getExe xorg.xmessage;

@@ -46,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/protocolbuffers/protobuf/commit/a7324f88e92bc16b57f3683403b6c993bf68070b.patch";
       hash = "sha256-SmwaUjOjjZulg/wgNmR/F5b8rhYA2wkKAjHIOxjcQdQ=";
     })
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    ./static-executables-have-no-rpath.patch
   ];
 
   nativeBuildInputs = [

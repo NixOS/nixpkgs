@@ -37,6 +37,7 @@
 .Op Fl -build-host Va host
 .Op Fl -target-host Va host
 .Op Fl -use-remote-sudo
+.Op Fl -no-ssh-tty
 .br
 .Op Fl -verbose | v
 .Op Fl -quiet
@@ -391,6 +392,16 @@ When set, nixos-rebuild prefixes activation commands that run on the
 system with
 .Ic sudo Ns
 \&. Setting this option allows deploying as a non-root user.
+.
+.It Fl -no-ssh-tty
+When set, nixos-rebuild will not request a tty when executing commands on the
+.Fl -target-host
+system with
+.Ic ssh Ns
+\&. This may help avoid corrupted terminal output when running multiple
+nixos-rebuild commands in parallel, but may also prevent the remote
+.Ic sudo
+from working properly.
 .
 .It Fl -file Ar path , Fl f Ar path
 Enable and build the NixOS system from the specified file. The file must

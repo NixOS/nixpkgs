@@ -8,6 +8,7 @@
 , cmark
 , docbook_xsl
 , expat
+, fetchpatch2
 , file
 , flac
 , fmt
@@ -57,6 +58,13 @@ stdenv.mkDerivation rec {
     rev = "release-${version}";
     hash = "sha256-UU57ZgH1sxCXspwfKXScw08aJYiv+k526U8q8N1tA+4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/fc83003f541ac690fe308c3f4ac36e62814a40db.diff";
+      hash = "sha256-HOS79g5xm70upV5Okv1COEg0SanXs7brRRB59Ofx5HA=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

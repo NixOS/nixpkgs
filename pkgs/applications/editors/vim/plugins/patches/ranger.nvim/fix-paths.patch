@@ -1,17 +1,26 @@
 diff --git a/lua/ranger-nvim.lua b/lua/ranger-nvim.lua
-index 3b18880..78eb9db 100644
+index be95e36..3bd1587 100644
 --- a/lua/ranger-nvim.lua
 +++ b/lua/ranger-nvim.lua
-@@ -109,7 +109,7 @@ local function build_ranger_cmd(select_current_file)
- 	end
+@@ -127,7 +127,7 @@ local function build_ranger_cmd(select_current_file)
  	local selectfile_flag = select_current_file and " --selectfile=" .. selected_file or ""
- 	return string.format(
--		"ranger --choosefiles=%s %s %s",
-+		"@ranger@ --choosefiles=%s %s %s",
- 		SELECTED_FILEPATH,
- 		selectfile_flag,
- 		create_ranger_cmd_flags(create_cmd_values(opts.keybinds))
-@@ -182,7 +182,7 @@ end
+ 	if select_current_file then
+ 		return string.format(
+-			"ranger --choosefiles=%s %s %s",
++			"@ranger@ --choosefiles=%s %s %s",
+ 			SELECTED_FILEPATH,
+ 			selectfile_flag,
+ 			create_ranger_cmd_flags(create_cmd_values(opts.keybinds))
+@@ -135,7 +135,7 @@ local function build_ranger_cmd(select_current_file)
+ 	else
+ 		vim.api.nvim_buf_delete(1, { force = true })
+ 		return string.format(
+-			"ranger  --choosefiles=%s %s %s",
++			"@ranger@  --choosefiles=%s %s %s",
+ 			SELECTED_FILEPATH,
+ 			create_ranger_cmd_flags(create_cmd_values(opts.keybinds)),
+ 			get_absolute_argument()
+@@ -209,7 +209,7 @@ end
  ---Opens ranger and open selected files on exit.
  ---@param select_current_file boolean|nil open ranger and select the current file. Defaults to true.
  function M.open(select_current_file)

@@ -3,13 +3,13 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  openssl,
-  libplist,
   pkg-config,
   wrapGAppsHook3,
   avahi,
   avahi-compat,
   gst_all_1,
+  libplist,
+  openssl,
   nix-update-script,
 }:
 
@@ -26,14 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace lib/CMakeLists.txt \
+      --replace "APPLE" "FALSE" \
       --replace ".a" "${stdenv.hostPlatform.extensions.sharedLibrary}"
-    sed -i '/PKG_CONFIG_EXECUTABLE/d' renderers/CMakeLists.txt
+    sed -i -e '/PKG_CONFIG_EXECUTABLE/d' -e '/PKG_CONFIG_PATH/d' renderers/CMakeLists.txt
   '';
 
   nativeBuildInputs = [
     cmake
-    openssl
-    libplist
     pkg-config
     wrapGAppsHook3
   ];
@@ -47,6 +46,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
+    libplist
+    openssl
   ];
 
   passthru.updateScript = nix-update-script { };

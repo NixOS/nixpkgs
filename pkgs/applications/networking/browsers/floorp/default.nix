@@ -58,7 +58,9 @@
       license = lib.licenses.mpl20;
       mainProgram = "floorp";
     };
-    tests = [ nixosTests.floorp ];
+    tests = {
+      inherit (nixosTests) floorp;
+    };
   }).override
   {
     # Upstream build configuration can be found at

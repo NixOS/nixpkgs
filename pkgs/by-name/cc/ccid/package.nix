@@ -13,16 +13,16 @@
 
 stdenv.mkDerivation rec {
   pname = "ccid";
-  version = "1.5.5";
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.bz2";
-    hash = "sha256-GUcI91/jadRd18Feiz6Kfbi0nPxVV1dMoqLnbvEsoMo=";
+    url = "https://ccid.apdu.fr/files/${pname}-${version}.tar.xz";
+    hash = "sha256-LsqPsH6P58DTna6sp7l81zxA7Ztyc4okrT3L38kY4eo=";
   };
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace src/Makefile.in --replace-fail /bin/echo echo
+    substituteInPlace src/Makefile.am --replace-fail /bin/echo echo
   '';
 
   configureFlags = [

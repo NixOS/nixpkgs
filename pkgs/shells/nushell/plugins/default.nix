@@ -1,4 +1,4 @@
-{ lib, newScope, IOKit, CoreFoundation, Foundation, Security }:
+{ lib, newScope, dbus, IOKit, CoreFoundation, Foundation, Security }:
 
 lib.makeScope newScope (self: with self; {
   gstat = callPackage ./gstat.nix { inherit Security; };
@@ -9,4 +9,5 @@ lib.makeScope newScope (self: with self; {
   net = callPackage ./net.nix { inherit IOKit CoreFoundation; };
   units = callPackage ./units.nix { };
   highlight = callPackage ./highlight.nix { };
+  dbus = callPackage ./dbus.nix { inherit dbus; nushell_plugin_dbus = self.dbus; };
 })

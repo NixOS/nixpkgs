@@ -9,7 +9,7 @@
 # TODO: Go back to using buildGoModule when upgrading to grafana 11.3.
 buildGo122Module rec {
   pname = "grafana";
-  version = "11.2.2";
+  version = "11.2.2+security-01";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -17,7 +17,7 @@ buildGo122Module rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-rELvOqKVf/Dmh38fxvvFzNM9zRQF9J8OyidXJvuubzs=";
+    hash = "sha256-1ZDX0R3t6CAdIfrYfR373olGL5orSDs2iwriAszl7qk=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22

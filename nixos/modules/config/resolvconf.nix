@@ -114,6 +114,15 @@ in
         '';
       };
 
+      subscriberFiles = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
+        default = [];
+        description = ''
+          Files written by resolvconf updates
+        '';
+        internal = true;
+      };
+
     };
 
   };
@@ -134,6 +143,8 @@ in
     (lib.mkIf cfg.enable {
       users.groups.resolvconf = {};
 
+      networking.resolvconf.subscriberFiles = [ "/etc/resolv.conf" ];
+
       networking.resolvconf.package = pkgs.openresolv;
 
       environment.systemPackages = [ cfg.package ];
@@ -150,8 +161,9 @@ in
 
         script = ''
           ${lib.getExe cfg.package} -u
-          chgrp -R resolvconf /etc/resolv.conf /run/resolvconf
-          chmod -R g=u /etc/resolv.conf /run/resolvconf
+          files=(/run/resolvconf ${lib.escapeShellArgs cfg.subscriberFiles})
+          chgrp -R resolvconf "''${files[@]}"
+          chmod -R g=u "''${files[@]}"
         '';
       };
 

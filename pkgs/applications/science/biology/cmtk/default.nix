@@ -18,6 +18,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iE164NCOSOypZLLZfZy9RTyrS+YnY9ECqfb4QhlsMS4=";
   };
 
+  postPatch = ''
+    substituteInPlace apps/vtkxform.cxx --replace-fail \
+      "float xyzFloat[3] = { xyz[0], xyz[1], xyz[2] };" \
+      "float xyzFloat[3] = { (float)xyz[0], (float)xyz[1], (float)xyz[2] };"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -28,10 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     llvmPackages.openmp
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    (lib.optionalString stdenv.cc.isGNU "-std=c++11")
-    (lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing")
-    (lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-Dfinite=isfinite")
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CXX_STANDARD" "14")
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Dfinite=isfinite")
   ];
 
   meta = with lib; {

@@ -7,7 +7,7 @@
 
 buildGoModule rec {
 
-  version = "photos-v0.9.35";
+  version = "photos-v0.9.46";
   pname = "museum";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ buildGoModule rec {
     repo = "ente";
     sparseCheckout = [ "server" ];
     rev = version;
-    hash = "sha256-A/M2OhDzzOMGXnaqFFV9Z8bn/3HeZc50p2mIv++Q0uE=";
+    hash = "sha256-dJCZxQLnKb+mFG0iaYNrXyDSaslqKdPTXMK4KwvqBd8=";
   };
 
   sourceRoot = "${src.name}/server";

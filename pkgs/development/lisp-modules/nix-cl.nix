@@ -177,15 +177,23 @@ let
         asdf = "${asdfFasl}/asdf.${faslExt}";
       };
 
-      preConfigure = ''
+      configurePhase = ''
+        runHook preConfigure
+
         source ${./setup-hook.sh}
         buildAsdfPath
+
+        runHook postConfigure
       '';
 
       buildPhase = optionalString (src != null) ''
+        runHook preBuild
+
         export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$src//
         export ASDF_OUTPUT_TRANSLATIONS="$src:$(pwd):${storeDir}:${storeDir}"
         ${pkg}/bin/${program} ${toString flags} < $buildScript
+
+        runHook postBuild
       '';
 
       # Copy compiled files to store
@@ -200,6 +208,8 @@ let
             concatMapStringsSep "\\|" (replaceStrings ["." "+"] ["[.]" "[+]"]) systems;
         in
       ''
+        runHook preInstall
+
         mkdir -pv $out
         cp -r * $out
 
@@ -207,6 +217,8 @@ let
         find $out -name "*.asd" \
         | grep -v "/\(${mkSystemsRegex systems}\)\.asd$" \
         | xargs rm -fv || true
+
+        runHook postInstall
       '';
 
       dontPatchShebangs = true;

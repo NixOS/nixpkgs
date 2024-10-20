@@ -27,7 +27,22 @@ let
         map (x: defaultPlugin // (if (x ? plugin) then x else { plugin = x; })) plugins;
 
 
-  /* accepts a list of normalized plugins and convert themn
+  /**
+    accepts a list of normalized plugins and convert them into a vim package
+
+    # Type
+
+    ```
+    normalizedPluginsToVimPackage :: [AttrSet] -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+
+    ```nix
+    normalizedPluginsToVimPackage [ { plugin = vim-fugitive; optional = false'} ]
+    => { start = [ vim-fugitive ]; opt = []; }
+    :::
   */
   normalizedPluginsToVimPackage = normalizedPlugins:
     let

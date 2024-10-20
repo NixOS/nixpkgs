@@ -22,7 +22,6 @@
   argcomplete,
   hypothesis,
   mock,
-  nose,
   pygments,
   requests,
   xmlschema,
@@ -66,7 +65,6 @@ let
         attrs
         hypothesis
         mock
-        nose
         pygments
         requests
         setuptools

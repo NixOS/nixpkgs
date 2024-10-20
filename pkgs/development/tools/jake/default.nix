@@ -5,16 +5,16 @@
 
 buildNpmPackage rec {
   pname = "jake";
-  version = "10.8.7";
+  version = "10.9.1";
 
   src = fetchFromGitHub {
     owner = "jakejs";
     repo = "jake";
     rev = "v${version}";
-    hash = "sha256-Qado9huQx9MVTFp8t7szB+IUVNWQqT/ni62JnURQqeM=";
+    hash = "sha256-rYWr/ACr14/WE88Gk6Kpyl2pq1XRHSfZGXHrwbGC8hQ=";
   };
 
-  npmDepsHash = "sha256-3pOFrH/em/HMTswrZLAeqPAb9U0/odcZPt4AkQkMhZM=";
+  npmDepsHash = "sha256-BwOfPRiVMpFo9tG9oY2r82w2g3y/7sL3PD5epd2igmI=";
 
   dontNpmBuild = true;
 

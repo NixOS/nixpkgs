@@ -58,7 +58,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "imgui";
-  version = "1.90.6";
+  version = "1.91.4";
   outputs = [
     # Note: no "dev" because vcpkg installs include/ and imgui-config.cmake
     # into different prefixes but expects the merged layout at import time
@@ -69,8 +69,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
-    rev = "v${version}";
-    sha256 = "sha256-FSob6FPfg0tF0n72twA5/moLvEaB251BPkIDJUXhYbg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-6j4keBOAzbBDsV0+R4zTNlsltxz2dJDGI43UIrHXDNM=";
   };
 
   cmakeRules = "${vcpkgSource}/ports/imgui";

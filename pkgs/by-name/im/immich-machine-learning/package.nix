@@ -8,27 +8,6 @@
 let
   python = python3.override {
     self = python;
-
-    packageOverrides = self: super: {
-      pydantic = super.pydantic_1;
-
-      versioningit = super.versioningit.overridePythonAttrs (_: {
-        doCheck = false;
-      });
-
-      albumentations = super.albumentations.overridePythonAttrs (old: rec {
-        version = "1.4.3";
-        src = fetchFromGitHub {
-          owner = "albumentations-team";
-          repo = "albumentations";
-          rev = version;
-          hash = "sha256-JIBwjYaUP4Sc1bVM/zlj45cz9OWpb/LOBsIqk1m+sQA=";
-        };
-        dependencies = old.dependencies ++ [
-          self.scikit-learn
-        ];
-      });
-    };
   };
 in
 python.pkgs.buildPythonApplication rec {
@@ -44,7 +23,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace app/test_main.py --replace-fail ": cv2.Mat" ""
   '';
 
-  pythonRelaxDeps = [ "setuptools" ];
+  pythonRelaxDeps = [
+    "pydantic-settings"
+    "setuptools"
+  ];
   pythonRemoveDeps = [ "opencv-python-headless" ];
 
   build-system = with python.pkgs; [
@@ -60,6 +42,8 @@ python.pkgs.buildPythonApplication rec {
       pillow
       fastapi
       uvicorn
+      pydantic
+      pydantic-settings
       aiocache
       rich
       ftfy
@@ -69,7 +53,6 @@ python.pkgs.buildPythonApplication rec {
       gunicorn
       huggingface-hub
       tokenizers
-      pydantic
     ]
     ++ uvicorn.optional-dependencies.standard;
 

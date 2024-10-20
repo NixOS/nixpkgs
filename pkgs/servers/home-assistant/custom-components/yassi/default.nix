@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "samuelspagl";
   domain = "samsung_soundbar";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha_samsung_soundbar";
     rev = version;
-    hash = "sha256-pkwkXI05zDMEXPoE90YJBxoPYlzmSHH/BLExq0J1JrQ=";
+    hash = "sha256-uhyUQebAx4g1PT/urbyx8EZNFE9vIY0bUAKmgCwY3aQ=";
   };
 
   propagatedBuildInputs = [ pysmartthings ];

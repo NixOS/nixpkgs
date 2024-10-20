@@ -55,11 +55,17 @@ in
     systemd.packages = [ cfg.package ];
 
     systemd.services.sing-box = {
-      preStart = ''
-        umask 0077
-        mkdir -p /etc/sing-box
-        ${utils.genJqSecretsReplacementSnippet cfg.settings "/etc/sing-box/config.json"}
-      '';
+      preStart = utils.genJqSecretsReplacementSnippet cfg.settings "/run/sing-box/config.json";
+      serviceConfig = {
+        StateDirectory = "sing-box";
+        StateDirectoryMode = "0700";
+        RuntimeDirectory = "sing-box";
+        RuntimeDirectoryMode = "0700";
+        ExecStart = [
+          ""
+          "${lib.getExe cfg.package} -D \${STATE_DIRECTORY} -C \${RUNTIME_DIRECTORY} run"
+        ];
+      };
       wantedBy = [ "multi-user.target" ];
     };
   };

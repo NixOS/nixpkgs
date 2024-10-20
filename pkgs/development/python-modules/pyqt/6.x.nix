@@ -25,17 +25,15 @@
 
 buildPythonPackage rec {
   pname = "pyqt6";
-  version = "6.7.0.dev2404081550";
+  version = "6.8.0.dev2410141303";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
+  # This is dangerous, how can we get web archive to archive the URL?
   src = fetchurl {
-    urls = [
-      "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-      "http://web.archive.org/web/20240411124842if_/https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz"
-    ];
-    hash = "sha256-H5qZ/rnruGh+UVSXLZyTSvjagmmli/iYq+7BaIzl1YQ=";
+    url = "https://riverbankcomputing.com/pypi/packages/PyQt6/PyQt6-${version}.tar.gz";
+    hash = "sha256-eHYqj22us07uFkErJD2d0y0wueZxtQTwTFW9cI7yoK4=";
   };
 
   patches = [
@@ -55,8 +53,11 @@ buildPythonPackage rec {
     verbose = true
     EOF
 
+    # pythonRelaxDeps doesn't work and the wanted versions are not released AFAIK
     substituteInPlace pyproject.toml \
-      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"'
+      --replace-fail 'version = "${version}"' 'version = "${lib.versions.pad 3 version}"' \
+      --replace-fail "sip >=6.9, <7" "sip >=6.8.6, <7" \
+      --replace-fail 'PyQt-builder >=1.17, <2' "PyQt-builder >=1.16, <2"
   '';
 
   enableParallelBuilding = true;

@@ -5,9 +5,16 @@
 , extraPythonPackages ? (ps: [ ])
 
 , libsForQt5
+
+# unwrapped package parameters
+, withGrass ? true
+, withWebKit ? false
 }:
 let
-  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
+  qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {
+    withGrass = withGrass;
+    withWebKit = withWebKit;
+  };
 in symlinkJoin rec {
 
   inherit (qgis-ltr-unwrapped) version;

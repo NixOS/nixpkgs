@@ -134,6 +134,14 @@ in stdenv.mkDerivation {
       url = "https://github.com/darlinghq/darling/commit/f46eb721c11d32addd807f092f4b3a6ea515bb6d.patch?full_index=1";
       hash = "sha256-FnLcHnK4cNto+E3OQSxE3iK+FHSU8y459FcpMvrzd6o=";
     })
+
+    # Fix compatibility with ffmpeg_7
+    # https://github.com/darlinghq/darling/pull/1537
+    # https://github.com/darlinghq/darling/commit/9655d5598c87dcb22c54a83cc7741b77cb47a1b0
+    (fetchpatch {
+      url = "https://github.com/darlinghq/darling/commit/9655d5598c87dcb22c54a83cc7741b77cb47a1b0.patch?full_index=1";
+      hash = "sha256-ogMo4SRRwiOhaVJ+OS8BVolGDa7vGKyR9bdGiOiCuRc=";
+    })
   ];
 
   postPatch = ''

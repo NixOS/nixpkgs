@@ -98,6 +98,9 @@ let
     sqlite = super.sqlite.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.sqlite ];
     });
+    duckdb = super.duckdb.overrideLispAttrs (o: {
+      nativeLibs = [ pkgs.duckdb ];
+    });
     cl-libuv = super.cl-libuv.overrideLispAttrs (o: {
       nativeBuildInputs = [ pkgs.libuv ];
       nativeLibs = [ pkgs.libuv ];

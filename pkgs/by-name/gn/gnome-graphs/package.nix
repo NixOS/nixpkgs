@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-graphs";
-  version = "1.8.1";
+  version = "1.8.2";
   pyproject = false;
 
   src = fetchFromGitLab {
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "Graphs";
     rev = "v${version}";
-    hash = "sha256-ae6lyyr3vvENyn1kKc8Va4I++7B0rdURwjEpA9klLGg=";
+    hash = "sha256-juKo4pFAjowGaykHkByfA9kEJ68z1ttGhA0OsfHt/XM=";
   };
 
   nativeBuildInputs = [

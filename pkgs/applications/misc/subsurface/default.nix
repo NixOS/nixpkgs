@@ -168,7 +168,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner adisbladis ];
+    maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
   };
 }

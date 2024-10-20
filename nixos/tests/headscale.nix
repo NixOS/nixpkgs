@@ -38,6 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
                 region_id = 999;
                 stun_listen_addr = "0.0.0.0:${toString stunPort}";
               };
+              dns.base_domain = "tailnet";
             };
           };
           nginx = {
@@ -77,6 +78,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
 
       # Check that they are reachable from the tailnet
       peer1.wait_until_succeeds("tailscale ping peer2")
-      peer2.wait_until_succeeds("tailscale ping peer1")
+      peer2.wait_until_succeeds("tailscale ping peer1.tailnet")
     '';
   })

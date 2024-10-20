@@ -82,7 +82,7 @@ python3Packages.buildPythonPackage rec {
     mkdir -p $out/share/applications
     mkdir $out/share/pixmaps
     cp scripts/auto-cpufreq-gtk.desktop $out/share/applications
-    cp images/icon.png $out/share/pixmaps/auto-cpufreq.python3Packages
+    cp images/icon.png $out/share/pixmaps/auto-cpufreq.png
 
     # polkit policy
     mkdir -p $out/share/polkit-1/actions

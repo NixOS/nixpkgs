@@ -7,7 +7,7 @@
 , lxqt-build-tools
 , wrapQtAppsHook
 , gitUpdater
-, version ? "4.0.0"
+, version ? "4.0.1"
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +20,9 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = {
       "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
-      "4.0.0" = "sha256-TTFgkAI3LulYGuqdhorkjNYyo942y1oFy5SRAKl9ZxU=";
+      "4.0.1" = "sha256-h8uHIB0KuSHQVHI61h5BmpvpJHumloHMKN3GabH66EM=";
     }."${version}";
   };
-
-  patches = lib.optionals (lib.versionAtLeast version "4") [ ./qt68.patch ];
 
   nativeBuildInputs = [
     cmake
