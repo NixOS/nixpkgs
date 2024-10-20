@@ -2,17 +2,24 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  param,
-  pytestCheckHook,
   pythonAtLeast,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  param,
   pyyaml,
   requests,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyct";
   version = "0.5.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonAtLeast "3.12";
 
@@ -21,22 +28,28 @@ buildPythonPackage rec {
     hash = "sha256-3Z9KxcvY43w1LAQDYGLTxfZ+/sdtQEdh7xawy/JqpqA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     param
     pyyaml
     requests
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "pyct" ];
 
-  meta = with lib; {
+  meta = {
     description = "ClI for Python common tasks for users";
     mainProgram = "pyct";
     homepage = "https://github.com/pyviz/pyct";
     changelog = "https://github.com/pyviz-dev/pyct/releases/tag/v${version}";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
