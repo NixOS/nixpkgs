@@ -4478,11 +4478,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xwud = callPackage ({ stdenv, pkg-config, fetchurl, libX11, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xwud";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xwud-1.0.6.tar.xz";
-      sha256 = "1zhsih1l3x1038fi1wi9npvfnn8j7580ca73saixjg5sbv8qq134";
+      url = "mirror://xorg/individual/app/xwud-1.0.7.tar.xz";
+      sha256 = "07n6q1z33sjkx8lx8lbd26m8ri5gi145k3mz39kmyykdngdbwp75";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
