@@ -211,7 +211,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Open Source High-Performance Computational Chemistry";
     mainProgram = "nwchem";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ sheepforce markuskowa ];
     homepage = "https://nwchemgit.github.io";
     license = licenses.ecl20;
