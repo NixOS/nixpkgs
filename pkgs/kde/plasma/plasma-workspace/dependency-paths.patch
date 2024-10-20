@@ -46,7 +46,7 @@ index f5034455c9..8ea57813a1 100644
      connect(m_proc, &QProcess::readyReadStandardOutput, this, &CFcQuery::data);
  
 -    m_proc->start(u"fc-match"_s, args);
-+    m_proc->start(u"@fc-match@"_s, args);
++    m_proc->start(u"@fcMatch@"_s, args);
  }
  
  void CFcQuery::procExited()
@@ -143,5 +143,5 @@ index 1e903130a9..1d807a8526 100644
  [Service]
  Type=oneshot
 -ExecStart=dbus-send --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
-+ExecStart=@dbus-send@ --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
++ExecStart=@dbusSend@ --session --reply-timeout=1 --type=method_call --dest=org.kde.KSplash /KSplash org.kde.KSplash.setStage string:ready
  Slice=session.slice
