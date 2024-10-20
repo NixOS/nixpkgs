@@ -39,6 +39,15 @@ in {
         as a Nix attribute set.
       '';
     };
+
+    environmentFile = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      description = ''
+        File containing environment variables in systemd EnvironmentFile format.
+        <literal>COOKIE_AUTHENTICATION_KEY</literal> is a supported variable.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -52,6 +61,7 @@ in {
             --config ${configYml} \
             --frontend-dir ${pkg}/share/frontend
         '';
+        EnvironmentFile = cfg.environmentFile;
         Restart = "always";
         DynamicUser = true;
       };
