@@ -6225,6 +6225,8 @@ self: super: with self; {
 
   iopath = callPackage ../development/python-modules/iopath { };
 
+  iosbackup = callPackage ../development/python-modules/iosbackup { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iottycloud = callPackage ../development/python-modules/iottycloud { };
