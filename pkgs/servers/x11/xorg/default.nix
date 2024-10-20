@@ -2618,11 +2618,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputevdev = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libevdev, udev, mtdev, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-input-evdev";
-    version = "2.10.6";
+    version = "2.11.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-evdev-2.10.6.tar.bz2";
-      sha256 = "1h1y0fwnawlp4yc5llr1l7hwfcxxpln2fxhy6arcf6w6h4z0f9l7";
+      url = "mirror://xorg/individual/driver/xf86-input-evdev-2.11.0.tar.xz";
+      sha256 = "058k0xdf4hkn8lz5gx4c08mgbzvv58haz7a32axndhscjgg2403k";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
