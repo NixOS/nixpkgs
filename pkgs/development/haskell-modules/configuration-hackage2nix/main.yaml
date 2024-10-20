@@ -108,6 +108,7 @@ extra-packages:
   - singletons-th == 3.3                # 2024-06-28: preserve for GHC 9.8
   - singletons-base == 3.3              # 2024-06-28: preserve for GHC 9.8
   - tls < 2.1.0                         # 2024-07-19: requested by darcs == 2.18.3
+  - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
 
 package-maintainers:
   abbradar:

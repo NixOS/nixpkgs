@@ -64,7 +64,7 @@ self: super: {
   apply-refact = doDistribute self.apply-refact_0_14_0_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   auto-update = super.auto-update_0_2_1;
-  extensions = doDistribute self.extensions_0_1_0_3;
+  extensions = doDistribute self.extensions_0_1_0_2;
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
