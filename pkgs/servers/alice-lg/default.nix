@@ -38,6 +38,7 @@ buildGoModule rec {
       yarn
       fixup-yarn-lock
     ];
+
     configurePhase = ''
       runHook preConfigure
 
@@ -81,12 +82,12 @@ buildGoModule rec {
 
   passthru.tests = nixosTests.alice-lg;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alice-lg/alice-lg";
     description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stv0g ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "alice-lg";
   };
 }
