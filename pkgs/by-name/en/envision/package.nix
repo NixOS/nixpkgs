@@ -59,27 +59,12 @@ buildFHSEnv {
       [ pkgs.zlib ])
     ++ (
       # WiVRn dependencies
-      # TODO: Replace with https://github.com/NixOS/nixpkgs/pull/316975 once merged
-      (with pkgs; [
-        avahi
-        cmake
-        cli11
-        ffmpeg
-        git
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
+      pkgs.wivrn.buildInputs
+      ++ pkgs.wivrn.nativeBuildInputs
+      ++ (with pkgs; [
+        glib
         libmd
-        libdrm
-        libpulseaudio
-        libva
         ninja
-        nlohmann_json
-        openxr-loader
-        pipewire
-        systemdLibs # udev
-        vulkan-loader
-        vulkan-headers
-        x264
       ])
       ++ (with pkgs; [
         android-tools # For adb installing WiVRn APKs
