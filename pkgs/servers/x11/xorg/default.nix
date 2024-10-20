@@ -28,11 +28,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   bdftopcf = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "bdftopcf";
-    version = "1.1.1";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/bdftopcf-1.1.1.tar.xz";
-      sha256 = "026rzs92h9jsc7r0kvvyvwhm22q0805gp38rs14x6ghg7kam7j8i";
+      url = "mirror://xorg/individual/util/bdftopcf-1.1.2.tar.xz";
+      sha256 = "0fjjn1z0cbsmhxkms93w73j2jbzf9f3xgbnjvnisl3rk0icvwq5w";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
