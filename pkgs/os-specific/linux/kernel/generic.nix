@@ -71,7 +71,7 @@ lib.makeOverridable ({ # The kernel source tarball.
 , autoModules ? stdenv.hostPlatform.linux-kernel.autoModules
 , preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.linuxArch
-, kernelTests ? []
+, kernelTests ? {}
 
 , stdenv ? args'.stdenv
 , buildPackages ? args'.buildPackages
@@ -276,12 +276,12 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
             modDirVersion = throw (explain "modDirVersion");
           }))).version
           emptyFile;
-    in [
-      (nixosTests.kernel-generic.passthru.testsForKernel overridableKernel)
-      versionDoesNotDependOnPatchesEtc
+    in {
+      inherit versionDoesNotDependOnPatchesEtc;
+      testsForKernel = nixosTests.kernel-generic.passthru.testsForKernel overridableKernel;
       # Disabled by default, because the infinite recursion is hard to understand. The other test's error is better and produces a shorter trace.
-      # versionDoesNotDependOnPatchesEtcNixOS
-    ] ++ kernelTests;
+      # inherit versionDoesNotDependOnPatchesEtcNixOS;
+    } // kernelTests;
   };
 
 }));
