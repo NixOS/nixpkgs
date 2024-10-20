@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, fetchYarnDeps
-, stdenv
-, yarn
-, nodejs
-, nixosTests
-, fixup-yarn-lock
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fetchYarnDeps,
+  stdenv,
+  yarn,
+  nodejs,
+  nixosTests,
+  fixup-yarn-lock,
 }:
 
 buildGoModule rec {
@@ -32,7 +33,11 @@ buildGoModule rec {
       hash = "sha256-PwByNIegKYTOT8Yg3nDMDFZiLRVkbX07z99YaDiBsIY=";
     };
 
-    nativeBuildInputs = [ nodejs yarn fixup-yarn-lock ];
+    nativeBuildInputs = [
+      nodejs
+      yarn
+      fixup-yarn-lock
+    ];
     configurePhase = ''
       runHook preConfigure
 
@@ -81,7 +86,7 @@ buildGoModule rec {
     description = "Looking-glass for BGP sessions";
     changelog = "https://github.com/alice-lg/alice-lg/blob/main/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stv0g ];
     mainProgram = "alice-lg";
   };
 }
