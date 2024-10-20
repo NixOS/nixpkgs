@@ -3078,11 +3078,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videomga = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-mga";
-    version = "2.0.1";
+    version = "2.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-mga-2.0.1.tar.xz";
-      sha256 = "1aq3aqh2yg09gy864kkshfx5pjl5w05jdz97bx5bnrbrhdq3p8r7";
+      url = "mirror://xorg/individual/driver/xf86-video-mga-2.1.0.tar.xz";
+      sha256 = "0wxbcgg5i4yq22pbc50567877z8irxhqzgl3sk6vf5zs9szmvy3v";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
