@@ -44,6 +44,7 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/core";
 
   pythonRelaxDeps = [
+    "protobuf"
     "agate"
     "click"
     "dbt-semantic-interfaces"

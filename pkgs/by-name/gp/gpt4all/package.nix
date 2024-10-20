@@ -3,6 +3,7 @@
 , stdenv
 , fetchFromGitHub
 , fetchurl
+, fetchpatch
 , cmake
 , qt6
 , fmt
@@ -16,11 +17,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gpt4all";
-  version = "3.3.0";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
-    hash = "sha256-aez/APsei30Tp1em/RDCuq+v8hOavHq4O9qZahrsF/g=";
+    hash = "sha256-QzU22y6tt3UhazVSPcFuKejH4AV+mw7JExH61NtAKoM=";
     owner = "nomic-ai";
     repo = "gpt4all";
     rev = "v${finalAttrs.version}";
@@ -33,6 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./embedding-local.patch
+    (fetchpatch {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/004-fix-build-with-qt-6.8.0.diff?h=gpt4all-chat&id=d14b12cb63fae95e578aa839a570189a23833051";
+      sha256 = "3Zur9KFn45f4dgAzOF7p1q42IdLqXwioN4zMiBbWbVU=";
+      # remove the `gpt4all-chat` part of the paths as sourceRoot is gpt4all-chat
+      stripLen = 1;
+    })
   ];
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
@@ -70,6 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
     "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
     "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
+    "-DGGML_VULKAN=ON"
+    "-DGGML_KOMPUTE=ON"
   ] ++ lib.optionals (!cudaSupport) [
     "-DLLMODEL_CUDA=OFF"
   ];
