@@ -1915,12 +1915,12 @@ final: prev:
 
   cmp-nixpkgs-maintainers = buildVimPlugin {
     pname = "cmp-nixpkgs-maintainers";
-    version = "2024-10-15";
+    version = "2024-10-19";
     src = fetchFromGitHub {
       owner = "GaetanLepage";
       repo = "cmp-nixpkgs-maintainers";
-      rev = "828040c309972f044346e0bf43d0f92623b60d65";
-      sha256 = "0wnqhsfinzz3xf746sd731gy6sj05c5z7c09w4lrdchbrxx3zgrb";
+      rev = "86711e7d3e92097b26e53f0b146b93863176377d";
+      sha256 = "sha256-NZuDbrKL/ukLIMxbqVzVgzKkKTnw2Zu1/qD/MTIVO2Q=";
     };
     meta.homepage = "https://github.com/GaetanLepage/cmp-nixpkgs-maintainers/";
   };
@@ -18646,6 +18646,18 @@ final: prev:
       sha256 = "1y0snmb402k1f5r54192d7jpg3fbam4ry92hn063y92110j9580w";
     };
     meta.homepage = "https://github.com/tomtom/tinykeymap_vim/";
+  };
+
+  unimpaired-nvim = buildVimPlugin {
+    pname = "unimpaired.nvim";
+    version = "2024-10-17";
+    src = fetchFromGitHub {
+      owner = "tummetott";
+      repo = "unimpaired.nvim";
+      rev = "8e504ba95dd10a687f4e4dacd5e19db221b88534";
+      sha256 = "sha256-CNU4cigMjbvOdUzUXze9ZDmTZRuYtj4dCuuLVZkMTQg=";
+    };
+    meta.homepage = "https://github.com/tummetott/unimpaired.nvim/";
   };
 
   vim-advanced-sorters = buildVimPlugin {

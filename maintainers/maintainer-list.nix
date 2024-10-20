@@ -662,6 +662,13 @@
     githubId = 4296804;
     name = "Alex Franchuk";
   };
+  aftix = {
+    name = "Wyatt Campbell";
+    email = "aftix@aftix.xyz";
+    matrix = "@aftix:matrix.org";
+    github = "aftix";
+    githubId = 4008299;
+  };
   agbrooks = {
     email = "andrewgrantbrooks@gmail.com";
     github = "agbrooks";
@@ -8230,7 +8237,8 @@
     email = "guanran928@outlook.com";
     github = "Guanran928";
     githubId = 68757440;
-    name = "Guanran928";
+    name = "Guanran Wang";
+    keys = [ { fingerprint = "7835 BC13 4560 0660 0448  5A2C 91F9 7D9E D126 39CF"; } ];
   };
   guekka = {
     github = "Guekka";
@@ -15910,6 +15918,12 @@
     githubId = 72201;
     name = "Ole Jørgen Brønner";
   };
+  olifloof = {
+    email = "benmoreosm@gmail.com";
+    github = "olifloof";
+    githubId = 35699052;
+    name = "oli";
+  };
   oliver-koss = {
     email = "oliver.koss06@gmail.com";
     github = "oliver-koss";
@@ -16612,6 +16626,13 @@
     githubId = 28323;
     name = "Peter Simons";
   };
+  petrkozorezov = {
+    email = "petr.kozorezov@gmail.com";
+    github = "petrkozorezov";
+    githubId = 645017;
+    name = "Petr Kozorezov";
+    keys = [ { fingerprint = "7F1A 353D 3D6D 9CEF 63A9  B5C6 699F 32D5 9999 7C90"; } ];
+  };
   petrosagg = {
     email = "petrosagg@gmail.com";
     github = "petrosagg";
@@ -16839,12 +16860,6 @@
     githubId = 1576660;
     name = "Jelle Besseling";
     keys = [ { fingerprint = "A3A3 65AE 16ED A7A0 C29C  88F1 9712 452E 8BE3 372E"; } ];
-  };
-  pinkcreeper100 = {
-    email = "benmoreosm@gmail.com";
-    github = "pinkcreeper100";
-    githubId = 35699052;
-    name = "Oliver Samuel Morris";
   };
   pinpox = {
     email = "mail@pablo.tools";
