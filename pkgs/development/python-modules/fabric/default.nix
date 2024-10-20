@@ -7,6 +7,7 @@
   invoke,
   mock,
   paramiko,
+  pynacl,
   pytestCheckHook,
   pytest-relaxed,
 }:
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     paramiko
     cryptography
     decorator
+    pynacl
   ];
 
   nativeCheckInputs = [
