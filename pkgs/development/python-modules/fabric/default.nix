@@ -2,13 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  cryptography,
   decorator,
+  deprecated,
+  icecream,
+  invocations,
   invoke,
-  mock,
   paramiko,
   pynacl,
   pypaInstallHook,
+  pytest-cov,
   pytest-relaxed,
   pytestCheckHook,
   setuptoolsBuildHook,
@@ -30,23 +32,22 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    cryptography
     decorator
+    deprecated
     invoke
     paramiko
     pynacl
   ];
 
   nativeCheckInputs = [
-    mock
+    icecream
+    invocations
+    pytest-cov
     pytest-relaxed
     pytestCheckHook
   ];
 
-  # ==================================== ERRORS ====================================
-  # ________________________ ERROR collecting test session _________________________
-  # Direct construction of SpecModule has been deprecated, please use SpecModule.from_parent
-  # See https://docs.pytest.org/en/stable/deprecations.html#node-construction-changed-to-node-from-parent for more details.
+  # distutils.errors.DistutilsArgError: no commands supplied
   doCheck = false;
 
   pythonImportsCheck = [ "fabric" ];
