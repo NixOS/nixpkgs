@@ -12,6 +12,17 @@
   colorcet,
   holoviews,
   pandas,
+
+  # tests
+  pytestCheckHook,
+  dask,
+  xarray,
+  bokeh-sampledata,
+  parameterized,
+  selenium,
+  matplotlib,
+  scipy,
+  plotly,
 }:
 
 buildPythonPackage rec {
@@ -37,8 +48,26 @@ buildPythonPackage rec {
     pandas
   ];
 
-  # Many tests require a network connection
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    dask
+    xarray
+    bokeh-sampledata
+    parameterized
+    selenium
+    matplotlib
+    scipy
+    plotly
+  ];
+
+  disabledTestPaths = [
+    # All of the following below require xarray.tutorial files that require
+    # downloading files from the internet (not possible in the sandbox).
+    "hvplot/tests/testgeo.py"
+    "hvplot/tests/testinteractive.py"
+    "hvplot/tests/testui.py"
+    "hvplot/tests/testutil.py"
+  ];
 
   pythonImportsCheck = [ "hvplot.pandas" ];
 
