@@ -5,4 +5,6 @@
   idris2Lsp = callPackage ./idris2-lsp.nix { };
 
   buildIdris = callPackage ./build-idris.nix { };
+
+  inherit (callPackage ./ipkg-parse.nix { }) parseIpkg importIpkg;
 }
