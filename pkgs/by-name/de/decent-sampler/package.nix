@@ -88,6 +88,6 @@ buildFHSEnv {
     # that it is released under.
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ adam248 ];
+    maintainers = with maintainers; [ adam248 chewblacka ];
   };
 }
