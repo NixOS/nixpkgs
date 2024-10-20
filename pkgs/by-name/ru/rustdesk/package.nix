@@ -189,5 +189,6 @@ rustPlatform.buildRustPackage rec {
       leixb
     ];
     mainProgram = "rustdesk";
+    badPlatforms = lib.platforms.darwin;
   };
 }
