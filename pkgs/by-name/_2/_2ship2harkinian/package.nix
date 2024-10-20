@@ -30,10 +30,11 @@ let
 
   # This would get fetched at build time otherwise, see:
   # https://github.com/HarbourMasters/2ship2harkinian/blob/1.0.2/mm/CMakeLists.txt#L708
-  gamecontrollerdb = fetchurl {
-    name = "gamecontrollerdb.txt";
-    url = "https://raw.githubusercontent.com/gabomdq/SDL_GameControllerDB/b1759cf84028aab89caa1c395e198c340b8dfd89/gamecontrollerdb.txt";
-    hash = "sha256-7C5EkqBIhLGNJuhi3832y0ffW5Ep7iuTYXb1bL5h2Js=";
+  gamecontrollerdb = fetchFromGitHub {
+    owner = "mdqinc";
+    repo = "SDL_GameControllerDB";
+    rev = "4672f1511d2a9e9bbbd21d4969fdc84b349d3ca0";
+    hash = "sha256-9CGaO6Y5Nwgpg4yQkoP0o8D/aH86LJ11+5v11sG5Yvs=";
   };
 
   # 2ship needs a specific imgui version
@@ -164,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postBuild = ''
-    cp ${gamecontrollerdb} ${gamecontrollerdb.name}
+    cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
     pushd ../OTRExporter
     python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../mm/assets/xml --custom-assets-path ../mm/assets/custom --custom-otr-file 2ship.o2r --port-ver ${finalAttrs.version}
     popd
@@ -179,6 +180,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     ln -s $out/2s2h/2s2h.elf $out/bin/2s2h
     install -Dm644 ../mm/linux/2s2hIcon.png $out/share/pixmaps/2s2h.png
+
+    install -Dm644 -t $out/share/licenses/2ship2harkinian ../LICENSE
+    install -Dm644 -t $out/share/licenses/OTRExporter ../OTRExporter/LICENSE
+    install -Dm644 -t $out/share/licenses/SDL_GameControllerDB ${gamecontrollerdb}/LICENSE
+    install -Dm644 -t $out/share/licenses/ZAPDTR ../ZAPDTR/LICENSE
+    install -Dm644 -t $out/share/licenses/libgfxd ${libgfxd}/LICENSE
+    install -Dm644 -t $out/share/licenses/libultraship ../libultraship/LICENSE
+    install -Dm644 -t $out/share/licenses/thread_pool ${thread_pool}/LICENSE.txt
   '';
 
   postFixup = ''
@@ -204,12 +213,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ qubitnano ];
     license = with lib.licenses; [
-      # OTRExporter, OTRGui, ZAPDTR, libultraship
+      # OTRExporter, ZAPDTR, libultraship, libgfxd, thread_pool
       mit
       # 2 Ship 2 Harkinian
       cc0
       # Reverse engineering
       unfree
     ];
+    hydraPlatforms = [ ];
   };
 })
