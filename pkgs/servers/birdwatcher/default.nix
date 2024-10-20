@@ -24,12 +24,12 @@ buildGoModule rec {
     inherit (nixosTests) birdwatcher;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/alice-lg/birdwatcher";
     description = "Small HTTP server meant to provide an API defined by Barry O'Donovan's birds-eye to the BIRD internet routing daemon";
     changelog = "https://github.com/alice-lg/birdwatcher/blob/master/CHANGELOG";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ stv0g ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ stv0g ];
     mainProgram = "birdwatcher";
   };
 }
