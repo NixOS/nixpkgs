@@ -38,7 +38,9 @@ in
     };
 
     support32Bit =
-      mkEnableOption "32 bit drivers usable by 32 bit applications"
+      mkEnableOption ''
+        On 64-bit systems, whether to also enable 32-bit drivers for use in 32-bit applications such as WINE.
+      ''
       // mkOption { default = false; };
   };
   imports = [
