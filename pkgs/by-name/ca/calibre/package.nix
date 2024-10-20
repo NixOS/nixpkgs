@@ -20,12 +20,9 @@
 , podofo
 , poppler_utils
 , python3Packages
-, qmake
-, qtbase
-, qtwayland
+, qt6
 , speechd-minimal
 , sqlite
-, wrapQtAppsHook
 , xdg-utils
 , wrapGAppsHook3
 , popplerSupport ? true
@@ -71,9 +68,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qmake
+    qt6.qmake
+    qt6.wrapQtAppsHook
     wrapGAppsHook3
-    wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -92,8 +89,8 @@ stdenv.mkDerivation (finalAttrs: {
     piper-tts
     podofo
     poppler_utils
-    qtbase
-    qtwayland
+    qt6.qtbase
+    qt6.qtwayland
     sqlite
     (python3Packages.python.withPackages
       (ps: with ps; [

@@ -28371,7 +28371,7 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
-  calibre = qt6Packages.callPackage ../applications/misc/calibre {
+  calibre = callPackage ../by-name/ca/calibre/package.nix {
     podofo = podofo010;
   };
 
