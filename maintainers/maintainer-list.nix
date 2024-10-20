@@ -21452,7 +21452,7 @@
     name = "Fiona Weber";
   };
   vieta = {
-    email = "xyzVietao@gmail.com";
+    email = "xyzVieta@gmail.com";
     github = "yVieta";
     githubId = 94648307;
     name = "Thanh Viet Nguyen";
