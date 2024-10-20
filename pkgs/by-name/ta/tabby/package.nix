@@ -15,7 +15,6 @@
 
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
-  cudaPackages ? { },
 
   rocmSupport ? config.rocmSupport,
 
@@ -33,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.11.1";
+  version = "0.18.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -132,24 +131,30 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OgAE526aW3mVqf6fVmBmL5/B4gH9B54QLEITQk9Kgsg=";
+    hash = "sha256-8clEBWAT+HI2eecOsmldgRcA58Ehq9bZT4ZwUMm494g=";
     fetchSubmodules = true;
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "apalis-0.5.1" = "sha256-hGvVuSy32lSTR5DJdiyf8q1sXbIeuLSGrtyq6m2QlUQ=";
-      "tree-sitter-c-0.20.6" = "sha256-Etl4s29YSOxiqPo4Z49N6zIYqNpIsdk/Qd0jR8jdvW4=";
-      "tree-sitter-cpp-0.20.3" = "sha256-UrQ48CoUMSHmlHzOMu22c9N4hxJtHL2ZYRabYjf5byA=";
-      "tree-sitter-solidity-0.0.3" = "sha256-b+LthCf+g19sjKeNgXZmUV0RNi94O3u0WmXfgKRpaE0=";
+      "ollama-rs-0.1.9" = "sha256-d6sKUxc8VQbRkVqMOeNFqDdKesq5k32AQShK67y2ssg=";
+      "oneshot-0.1.6" = "sha256-PmYuHuNTqToMyMHPRFDUaHUvFkVftx9ZCOBwXj+4Hc4=";
+      "ownedbytes-0.7.0" = "sha256-p0+ohtW0VLmfDTZw/LfwX2gYfuYuoOBcE+JsguK7Wn8=";
+      "sqlx-0.7.4" = "sha256-tcISzoSfOZ0jjNgGpuPPxjMxmBUPw/5FVDoALZEAHKY=";
+      "tree-sitter-c-0.21.3" = "sha256-ucbHLS2xyGo1uyKZv/K1HNXuMo4GpTY327cgdVS9F3c=";
+      "tree-sitter-cpp-0.22.1" = "sha256-3akSuQltFMF6I32HwRU08+Hcl9ojxPGk2ZuOX3gAObw=";
+      "tree-sitter-solidity-1.2.6" = "sha256-S00hdzMoIccPYBEvE092/RIMnG8YEnDGk6GJhXlr4ng=";
     };
   };
 
   # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
   cargoBuildFlags =
     [
-      "--release"
+      # Don't need to build llama-cpp-server (included in default build)
+      "--no-default-features"
+      "--features"
+      "ee"
       "--package"
       "tabby"
     ]
@@ -162,13 +167,11 @@ rustPlatform.buildRustPackage {
       "cuda"
     ];
 
-  OPENSSL_NO_VENDOR = 1;
-
   nativeBuildInputs =
     [
+      git
       pkg-config
       protobuf
-      git
     ]
     ++ optionals enableCuda [
       autoAddDriverRunpath
@@ -180,8 +183,15 @@ rustPlatform.buildRustPackage {
     ++ optionals enableCuda cudaBuildInputs
     ++ optionals enableRocm rocmBuildInputs;
 
-  env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
-  patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
+  postInstall = ''
+    # NOTE: Project contains a subproject for building llama-server
+    # But, we already have a derivation for this
+    ln -s ${lib.getExe' llama-cpp "llama-server"} $out/bin/llama-server
+  '';
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   # Fails with:
   # file cannot create directory: /var/empty/local/lib64/cmake/Llama
