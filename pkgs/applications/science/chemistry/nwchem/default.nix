@@ -195,7 +195,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
-  nativeCheckInputs = [ mpiCheckPhaseHook ];
+  nativeInstallCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
     runHook preInstallCheck
 
