@@ -1224,6 +1224,7 @@ in
   shadowsocks = handleTest ./shadowsocks { };
   shattered-pixel-dungeon = runTest ./shattered-pixel-dungeon.nix;
   shiori = runTest ./shiori.nix;
+  shoko = runTest ./shoko.nix;
   signal-desktop = runTest ./signal-desktop.nix;
   silverbullet = runTest ./silverbullet.nix;
   simple = runTest ./simple.nix;
