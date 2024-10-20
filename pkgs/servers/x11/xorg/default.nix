@@ -3238,11 +3238,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videor128 = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-r128";
-    version = "6.12.1";
+    version = "6.13.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-video-r128-6.12.1.tar.xz";
-      sha256 = "0hf7h54wxgs8njavp0kgadjq1787fhbd588j7pj685hz2wmkq0kx";
+      url = "mirror://xorg/individual/driver/xf86-video-r128-6.13.0.tar.xz";
+      sha256 = "0igpfgls5nx4sz8a7yppr42qi37prqmxsy08zqbxbv81q9dfs2zj";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
