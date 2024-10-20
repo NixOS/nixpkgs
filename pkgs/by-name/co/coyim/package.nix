@@ -38,15 +38,16 @@ buildGoModule {
     adwaita-icon-theme
   ];
 
+  postPatch = ''
+    # fixes build on aarch64
+    rm -v windows_amd64_icon.syso
+  '';
+
   meta = {
     description = "Safe and secure chat client";
     mainProgram = "coyim";
     homepage = "https://coy.im/";
     license = lib.licenses.gpl3;
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-    ];
     broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ PapayaJackal ];
   };
