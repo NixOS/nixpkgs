@@ -351,13 +351,14 @@ let
     src = pkgs.fetchFromGitHub {
       owner = "kaveh808";
       repo = "kons-9";
-      rev = "95ad44fac0566f445c4b7bd040339dcff75ee992";
-      sha256 = "19rl7372j9f1cv2kl55r8vyf4dhcz4way4hkjgysbxzrb1psp17n";
+      rev = "08770e7fbb839b91fd035f1cd4a50ecc81b42d57";
+      sha256 = "sha256-Tit/qmOU5+zp43/ecIXGbh4CtgWzltWM7tHdVWkga0k=";
     };
     systems = [ "kons-9" "kons-9/testsuite" ];
+    patches = [ ./patches/kons-9-fix-testsuite-compilation.patch ];
     lispLibs = with self; [
       closer-mop trivial-main-thread trivial-backtrace cffi cl-opengl cl-glu
-      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber
+      cl-glfw3 cl-paths-ttf zpb-ttf cl-vectors origin clobber shasht
       org_dot_melusina_dot_confidence
     ];
   };
