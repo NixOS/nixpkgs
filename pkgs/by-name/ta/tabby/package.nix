@@ -131,7 +131,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-OgAE526aW3mVqf6fVmBmL5/B4gH9B54QLEITQk9Kgsg=";
     fetchSubmodules = true;
   };
@@ -187,7 +187,12 @@ rustPlatform.buildRustPackage {
   # file cannot create directory: /var/empty/local/lib64/cmake/Llama
   doCheck = false;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/TabbyML/tabby";
