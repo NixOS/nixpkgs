@@ -329,33 +329,9 @@ let
     ]);
   });
 
-  duckdb = build-asdf-system {
-    pname = "duckdb";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "ak-coram";
-      repo = "cl-duckdb";
-      rev = "3ed1df5ba5c738a0b7fed7aa73632ec86f558d09";
-      hash = "sha256-AJMxhtDACe6WTwEOxLsC8y6uBaPqjt8HLRw/eIZI02E=";
-    };
+  duckdb = super.duckdb.overrideLispAttrs (o: {
     systems = [ "duckdb" "duckdb/test" "duckdb/benchmark" ];
-    lispLibs = with self; [
-      bordeaux-threads
-      cffi-libffi
-      cl-ascii-table
-      cl-spark
-      cl-ppcre
-      frugal-uuid
-      let-plus
-      local-time
-      local-time-duration
-      periods
-      float-features
-    ];
-    nativeLibs = with pkgs; [
-      duckdb libffi
-    ];
-  };
+  });
 
   polyclot = build-asdf-system {
     pname = "polyclot";
