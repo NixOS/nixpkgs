@@ -528,8 +528,6 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
-
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
