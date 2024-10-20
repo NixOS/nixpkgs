@@ -8730,6 +8730,18 @@ final: prev:
     meta.homepage = "https://github.com/chrisgrieser/nvim-genghis/";
   };
 
+  nvim-gomove = buildVimPlugin {
+    pname = "nvim-gomove";
+    version = "2024-10-20";
+    src = fetchFromGitHub {
+      owner = "booperlv";
+      repo = "nvim-gomove";
+      rev = "2b44ae7ac0804f4e3959228122f7c85bef1964e3";
+      sha256 = "sha256-9YLJm/L13gTktb6VIkz2W/60cothFtF7feiKd26R5lo=";
+    };
+    meta.homepage = "https://github.com/booperlv/nvim-gomove/";
+  };
+
   nvim-gps = buildVimPlugin {
     pname = "nvim-gps";
     version = "2022-07-05";
