@@ -1,0 +1,19 @@
+--- a/cupsfilters/bannertopdf.c	1970-01-01 01:00:01.000000000 +0100
++++ b/cupsfilters/bannertopdf.c	2023-02-11 00:27:27.238967776 +0100
+@@ -797,14 +797,14 @@
+   if (fstat(fileno(s), &st) < 0)
+   {
+     if (log)
+-      log(ld, CF_LOGLEVEL_ERROR, "cfFilterBannerToPDF: Cannot fstat(): %s\n", , strerror(errno));
++      log(ld, CF_LOGLEVEL_ERROR, "cfFilterBannerToPDF: Cannot fstat(): %s\n", strerror(errno));
+     return (1);
+   }
+   fseek(s, 0L, SEEK_SET);
+   if ((buf = malloc(st.st_size + 1)) == NULL)
+   {
+     if (log)
+-      log(ld, CF_LOGLEVEL_ERROR, "cfFilterBannerToPDF: Cannot malloc(): %s\n", , strerror(errno));
++      log(ld, CF_LOGLEVEL_ERROR, "cfFilterBannerToPDF: Cannot malloc(): %s\n", strerror(errno));
+     return (1);
+   }
+   size_t nbytes = fread(buf, 1, st.st_size, s);
