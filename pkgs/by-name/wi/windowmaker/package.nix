@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromRepoOrCz
-, autoreconfHook
-, callPackage
-, pkg-config
-, imagemagick
-, libX11
-, libXext
-, libXft
-, libXinerama
-, libXmu
-, libXpm
-, libXrandr
-, libXres
-, libexif
-, libjpeg
-, libpng
-, libtiff
-, giflib
-, libwebp
-, pango
+{
+  lib,
+  stdenv,
+  fetchFromRepoOrCz,
+  autoreconfHook,
+  callPackage,
+  pkg-config,
+  imagemagick,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  libXmu,
+  libXpm,
+  libXrandr,
+  libXres,
+  libexif,
+  libjpeg,
+  libpng,
+  libtiff,
+  giflib,
+  libwebp,
+  pango,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -64,7 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    dockapps = callPackage ./dockapps { };
+    dockapps = lib.packagesFromDirectoryRecursive {
+      inherit callPackage;
+      directory = ./dockapps;
+    };
   };
 
   meta = {
