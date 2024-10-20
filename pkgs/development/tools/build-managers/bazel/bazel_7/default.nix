@@ -35,6 +35,7 @@
   # Apple dependencies
   cctools,
   libcxx,
+  libtool,
   sigtool,
   CoreFoundation,
   CoreServices,
@@ -188,7 +189,7 @@ let
         unzip
         runJdk
         bazelForDeps
-      ];
+      ] ++ lib.optional (stdenv.hostPlatform.isDarwin) libtool;
       configurePhase = ''
         runHook preConfigure
 
