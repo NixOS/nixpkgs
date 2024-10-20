@@ -5,13 +5,13 @@
 
 buildNpmPackage rec {
   pname = "universal-remote-card";
-  version = "4.1.0";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "Nerwyn";
     repo = "android-tv-card";
     rev = version;
-    hash = "sha256-ze+bsQbPeqfcZ2pWrI4aH3a1+uxus6wC2G9D+uVMrMU=";
+    hash = "sha256-h7U39dpgEsTboYjfpWxcdP3BkXNB2dQNuSiTCD7zPR0=";
   };
 
   patches = [ ./dont-call-git.patch ];
