@@ -1,43 +1,43 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, fetchpatch
-, fontconfig
-, hunspell
-, hyphen
-, icu
-, imagemagick
-, libjpeg
-, libmtp
-, libpng
-, libstemmer
-, libuchardet
-, libusb1
-, pkg-config
-, podofo
-, poppler_utils
-, python3Packages
-, qmake
-, qtbase
-, qtwayland
-, speechd-minimal
-, sqlite
-, wrapQtAppsHook
-, xdg-utils
-, wrapGAppsHook3
-, popplerSupport ? true
-, speechSupport ? true
-, unrarSupport ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  fetchpatch,
+  ffmpeg,
+  fontconfig,
+  hunspell,
+  hyphen,
+  icu,
+  imagemagick,
+  libjpeg,
+  libmtp,
+  libpng,
+  libstemmer,
+  libuchardet,
+  libusb1,
+  piper-tts,
+  pkg-config,
+  podofo,
+  poppler_utils,
+  python3Packages,
+  qt6,
+  speechd-minimal,
+  sqlite,
+  xdg-utils,
+  wrapGAppsHook3,
+  popplerSupport ? true,
+  speechSupport ? true,
+  unrarSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.16.0";
+  version = "7.20.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EWQfaoTwO9BdZQgJQrxfj6b8tmtukvlW5hFo/USjNhU=";
+    hash = "sha256-BhJEJsQKk/kJxycm/1mbtlrSaeFQPvWGGB9DUMidgII=";
   };
 
   patches = [
@@ -50,10 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-a6yyG0RUsQJBBNxeJsTtQSBV2lxdzz1hnTob88O+SKg=";
+      hash = "sha256-8tOxFCmZal+JxOz6LeuUr+TgX7IaxC9Ow73bMgFJPt8=";
     })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -69,12 +68,13 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-    qmake
+    qt6.qmake
+    qt6.wrapQtAppsHook
     wrapGAppsHook3
-    wrapQtAppsHook
   ];
 
   buildInputs = [
+    ffmpeg
     fontconfig
     hunspell
     hyphen
@@ -86,13 +86,16 @@ stdenv.mkDerivation (finalAttrs: {
     libstemmer
     libuchardet
     libusb1
+    piper-tts
     podofo
     poppler_utils
-    qtbase
-    qtwayland
+    qt6.qtbase
+    qt6.qtwayland
     sqlite
-    (python3Packages.python.withPackages
-      (ps: with ps; [
+    (python3Packages.python.withPackages (
+      ps:
+      with ps;
+      [
         (apsw.overrideAttrs (oldAttrs: {
           setupPyBuildFlags = [ "--enable=load_extension" ];
         }))
@@ -124,13 +127,17 @@ stdenv.mkDerivation (finalAttrs: {
         xxhash
         # the following are distributed with calibre, but we use upstream instead
         odfpy
-      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
-        # much of calibre's functionality is usable without a web
-        # browser, so we enable building on platforms which qtwebengine
-        # does not support by simply omitting qtwebengine.
-        pyqt6-webengine
-      ] ++ lib.optional (unrarSupport) unrardll)
-    )
+      ]
+      ++
+        lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms)
+          [
+            # much of calibre's functionality is usable without a web
+            # browser, so we enable building on platforms which qtwebengine
+            # does not support by simply omitting qtwebengine.
+            pyqt6-webengine
+          ]
+      ++ lib.optional (unrarSupport) unrardll
+    ))
     xdg-utils
   ] ++ lib.optional (speechSupport) speechd-minimal;
 
@@ -148,6 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     export PODOFO_LIB_DIR=${podofo.lib}/lib
     export XDG_DATA_HOME=$out/share
     export XDG_UTILS_INSTALL_MODE="user"
+    export PIPER_TTS_DIR=${piper-tts}/bin
 
     python setup.py install --root=$out \
       --prefix=$out \
@@ -219,9 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
       free and open source and great for both casual users and computer experts.
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
-    license = if unrarSupport
-              then lib.licenses.unfreeRedistributable
-              else lib.licenses.gpl3Plus;
+    license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
