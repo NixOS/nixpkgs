@@ -2678,11 +2678,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86inputlibinput = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libinput, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-input-libinput";
-    version = "1.4.0";
+    version = "1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.4.0.tar.xz";
-      sha256 = "1673ydfrvfqd4inz3vx1qyxa0mhr0f4bi0r7mrcmpisxi76i8g9s";
+      url = "mirror://xorg/individual/driver/xf86-input-libinput-1.5.0.tar.xz";
+      sha256 = "1rl06l0gdqmc4v08mya93m74ana76b7s3fzkmq8ylm3535gw6915";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
