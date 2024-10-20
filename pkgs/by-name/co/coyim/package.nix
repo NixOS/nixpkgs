@@ -35,5 +35,6 @@ buildGoModule {
     license = lib.licenses.gpl3;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     broken = stdenv.hostPlatform.isDarwin;
+    maintainers = with lib.maintainers; [ PapayaJackal ];
   };
 }
