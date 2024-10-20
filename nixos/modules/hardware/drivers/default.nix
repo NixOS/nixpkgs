@@ -15,7 +15,7 @@ let
     types
     ;
 
-  this = config.hardware.acceleration;
+  this = config.hardware.drivers;
 
   envFor =
     p:
@@ -26,7 +26,7 @@ let
 in
 
 {
-  options.hardware.acceleration = {
+  options.hardware.drivers = {
     packages = mkOption {
       type = with types; listOf packageSelector;
       description = ''
@@ -35,6 +35,7 @@ in
         If there is an option for your driver in {option}`hardware.drivers`, you should use that instead.
       '';
       default = [ ];
+      internal = true;
     };
 
     support32Bit =

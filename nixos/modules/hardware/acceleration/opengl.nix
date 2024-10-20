@@ -22,6 +22,6 @@ in
   };
 
   config = mkIf this.enable {
-    hardware.acceleration.packages = attrValues (filterAttrs (n: v: v != null) this.drivers);
+    hardware.drivers.packages = attrValues (filterAttrs (n: v: v != null) this.drivers);
   };
 }

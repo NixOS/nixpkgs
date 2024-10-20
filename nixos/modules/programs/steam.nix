@@ -178,7 +178,9 @@ in {
       # Steam games require OGL and VK
       api.opengl.enable = lib.mkDefault true;
       # api.vulkan.enable = mkDefault true; # TODO
+    };
 
+    hardware.drivers = {
       # Some games are 32bit-only
       support32Bit = lib.mkDefault true;
     };
