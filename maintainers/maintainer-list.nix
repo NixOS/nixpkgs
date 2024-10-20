@@ -711,6 +711,11 @@
     githubId = 209175;
     name = "Alesya Huzik";
   };
+  ahydronous = {
+    github = "ahydronous";
+    githubId = 57762816;
+    name = "Ahydronous";
+  };
   aidalgol = {
     email = "aidalgol+nixpkgs@fastmail.net";
     github = "aidalgol";
