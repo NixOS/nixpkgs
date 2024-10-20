@@ -1,28 +1,29 @@
-{ config
-, lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
+{
+  config,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
 
-, git
-, openssl
-, pkg-config
-, protobuf
+  git,
+  openssl,
+  pkg-config,
+  protobuf,
 
-, llama-cpp
+  llama-cpp,
 
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
+  autoAddDriverRunpath,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
 
-, rocmSupport ? config.rocmSupport
+  rocmSupport ? config.rocmSupport,
 
-, darwin
-, metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  darwin,
+  metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
 
   # one of [ null "cpu" "rocm" "cuda" "metal" ];
-, acceleration ? null
+  acceleration ? null,
 }:
 
 let
@@ -34,39 +35,55 @@ let
   pname = "tabby";
   version = "0.11.1";
 
-
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
     (optional rocmSupport "rocm")
     (optional metalSupport "metal")
   ];
 
-  warnIfMultipleAccelerationMethods = configured: (let
-    len = builtins.length configured;
-    result = if len == 0 then "cpu" else (builtins.head configured);
-  in
-    lib.warnIf (len > 1) ''
-      building tabby with multiple acceleration methods enabled is not
-      supported; falling back to `${result}`
-    ''
-    result
-  );
+  warnIfMultipleAccelerationMethods =
+    configured:
+    (
+      let
+        len = builtins.length configured;
+        result = if len == 0 then "cpu" else (builtins.head configured);
+      in
+      lib.warnIf (len > 1) ''
+        building tabby with multiple acceleration methods enabled is not
+        supported; falling back to `${result}`
+      '' result
+    );
 
   # If user did not not override the acceleration attribute, then try to use one of
   # - nixpkgs.config.cudaSupport
   # - nixpkgs.config.rocmSupport
   # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
-  featureDevice = if (builtins.isNull acceleration) then (warnIfMultipleAccelerationMethods availableAccelerations) else acceleration;
+  featureDevice =
+    if (builtins.isNull acceleration) then
+      (warnIfMultipleAccelerationMethods availableAccelerations)
+    else
+      acceleration;
 
-  warnIfNotLinux = api: (lib.warnIfNot stdenv.hostPlatform.isLinux
-    "building tabby with `${api}` is only supported on linux; falling back to cpu"
-    stdenv.hostPlatform.isLinux);
-  warnIfNotDarwinAarch64 = api: (lib.warnIfNot (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
-    (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64));
+  warnIfNotLinux =
+    api:
+    (lib.warnIfNot stdenv.hostPlatform.isLinux
+      "building tabby with `${api}` is only supported on linux; falling back to cpu"
+      stdenv.hostPlatform.isLinux
+    );
+  warnIfNotDarwinAarch64 =
+    api:
+    (lib.warnIfNot (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      "building tabby with `${api}` is only supported on Darwin-aarch64; falling back to cpu"
+      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    );
 
-  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [ "cpu" "rocm" "cuda" "metal" ];
+  validAccel = lib.assertOneOf "tabby.featureDevice" featureDevice [
+    "cpu"
+    "rocm"
+    "cuda"
+    "metal"
+  ];
 
   # TODO(ghthor): there is a bug here where featureDevice could be cuda, but enableCuda is false
   #  The would result in a startup failure of the service module.
@@ -87,14 +104,21 @@ let
   };
 
   # TODO(ghthor): some of this can be removed
-  darwinBuildInputs = [ llamaccpPackage ]
-  ++ optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Foundation
-    Accelerate
-    CoreVideo
-    CoreGraphics
-  ]
-  ++ optionals enableMetal [ Metal MetalKit ]);
+  darwinBuildInputs =
+    [ llamaccpPackage ]
+    ++ optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Foundation
+        Accelerate
+        CoreVideo
+        CoreGraphics
+      ]
+      ++ optionals enableMetal [
+        Metal
+        MetalKit
+      ]
+    );
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
@@ -123,30 +147,38 @@ rustPlatform.buildRustPackage {
   };
 
   # https://github.com/TabbyML/tabby/blob/v0.7.0/.github/workflows/release.yml#L39
-  cargoBuildFlags = [
-    "--release"
-    "--package" "tabby"
-  ] ++ optionals enableRocm [
-    "--features" "rocm"
-  ] ++ optionals enableCuda [
-    "--features" "cuda"
-  ];
+  cargoBuildFlags =
+    [
+      "--release"
+      "--package"
+      "tabby"
+    ]
+    ++ optionals enableRocm [
+      "--features"
+      "rocm"
+    ]
+    ++ optionals enableCuda [
+      "--features"
+      "cuda"
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 
-  nativeBuildInputs = [
-    pkg-config
-    protobuf
-    git
-  ] ++ optionals enableCuda [
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      protobuf
+      git
+    ]
+    ++ optionals enableCuda [
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = [ openssl ]
-  ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
-  ++ optionals enableCuda cudaBuildInputs
-  ++ optionals enableRocm rocmBuildInputs
-  ;
+  buildInputs =
+    [ openssl ]
+    ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
+    ++ optionals enableCuda cudaBuildInputs
+    ++ optionals enableRocm rocmBuildInputs;
 
   env.LLAMA_CPP_LIB = "${lib.getLib llamaccpPackage}/lib";
   patches = [ ./0001-nix-build-use-nix-native-llama-cpp-package.patch ];
