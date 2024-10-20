@@ -6152,6 +6152,12 @@
     name = "Edward Kimber";
     githubId = 99987;
   };
+  eklairs = {
+    name = "Eklairs";
+    email = "eklairs@proton.me";
+    github = "eklairs";
+    githubId = 142717667;
+  };
   ekleog = {
     email = "leo@gaspard.io";
     matrix = "@leo:gaspard.ninja";
