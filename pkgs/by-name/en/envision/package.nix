@@ -78,11 +78,7 @@ buildFHSEnv {
   '';
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/metainfo
-    ln -s ${envision-unwrapped}/share/envision $out/share
-    ln -s ${envision-unwrapped}/share/icons $out/share
-    ln -s ${envision-unwrapped}/share/applications/org.gabmus.envision.desktop $out/share/applications
-    ln -s ${envision-unwrapped}/share/metainfo/org.gabmus.envision.appdata.xml $out/share/metainfo
+    ln -s ${envision-unwrapped}/share $out/share
   '';
 
   runScript = "envision";
