@@ -1915,12 +1915,12 @@ final: prev:
 
   cmp-nixpkgs-maintainers = buildVimPlugin {
     pname = "cmp-nixpkgs-maintainers";
-    version = "2024-10-15";
+    version = "2024-10-19";
     src = fetchFromGitHub {
       owner = "GaetanLepage";
       repo = "cmp-nixpkgs-maintainers";
-      rev = "828040c309972f044346e0bf43d0f92623b60d65";
-      sha256 = "0wnqhsfinzz3xf746sd731gy6sj05c5z7c09w4lrdchbrxx3zgrb";
+      rev = "86711e7d3e92097b26e53f0b146b93863176377d";
+      sha256 = "sha256-NZuDbrKL/ukLIMxbqVzVgzKkKTnw2Zu1/qD/MTIVO2Q=";
     };
     meta.homepage = "https://github.com/GaetanLepage/cmp-nixpkgs-maintainers/";
   };
