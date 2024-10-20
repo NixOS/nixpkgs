@@ -653,6 +653,18 @@ final: prev:
     meta.homepage = "https://github.com/vim-scripts/align/";
   };
 
+  align-nvim = buildVimPlugin {
+    pname = "align.nvim";
+    version = "2024-10-20";
+    src = fetchFromGitHub {
+      owner = "Vonr";
+      repo = "align.nvim";
+      rev = "12ed24b34df81d57e777fea5a535611bab10a620";
+      sha256 = "sha256-z8+lEs8bQS4Gz3cgQQ5Cb3oW58Et7it/tAxUtE3cLc4=";
+    };
+    meta.homepage = "https://github.com/Vonr/align.nvim/";
+  };
+
   alpha-nvim = buildVimPlugin {
     pname = "alpha-nvim";
     version = "2024-09-30";
