@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-UCErcNNGAVOe1CvbYc1OSwPQzXVM5tpUUtBpLXoaQdY=";
+    hash = "sha256-73v8xkidY9IBUFz/M0BYEVGnoVsr3uh3jP0p6T8QBbA=";
   };
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
