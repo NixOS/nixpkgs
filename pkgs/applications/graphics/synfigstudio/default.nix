@@ -78,6 +78,8 @@ let
       "CXXFLAGS=-std=c++14"
     ];
 
+    enableParallelBuilding = true;
+
     nativeBuildInputs = [
       pkg-config
       autoreconfHook
