@@ -1708,6 +1708,12 @@
     githubId = 718812;
     name = "Antoine R. Dumont";
   };
+  areif-dev = {
+    email = "aj@ajreifsnyder.com";
+    github = "areif-dev";
+    githubId = 53097078;
+    name = "AJ Reifsnyder";
+  };
   arezvov = {
     email = "alex@rezvov.ru";
     github = "arezvov";
@@ -14537,6 +14543,12 @@
     name = "Arthur Outhenin-Chalandre";
     githubId = 3845213;
   };
+  mrgiles = {
+    email = "marcelogiles@gmail.com";
+    github = "mrgiles";
+    githubId = 4009450;
+    name = "Marcelo Giles";
+  };
   mrityunjaygr8 = {
     email = "mrityunjaysaxena1996@gmail.com";
     github = "mrityunjaygr8";
@@ -20063,6 +20075,12 @@
     github = "Smona";
     githubId = 7091399;
     keys = [ { fingerprint = "897E 6BE3 0345 B43D CADD  05B7 290F CF08 1AED B3EC"; } ];
+  };
+  smonson = {
+    name = "Samuel Monson";
+    email = "smonson@irbash.net";
+    github = "sjmonson";
+    githubId = 17662218;
   };
   smrehman = {
     name = "Syed Moiz Ur Rehman";
