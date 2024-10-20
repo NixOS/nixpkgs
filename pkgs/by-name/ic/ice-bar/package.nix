@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ice-bar";
-  version = "0.11.9";
+  version = "0.11.11";
 
   src = fetchurl {
     url = "https://github.com/jordanbaird/Ice/releases/download/${finalAttrs.version}/Ice.zip";
-    hash = "sha256-nC7gIF4OdkUYoacbyr1cv5xpJkWDqhFW11UNZvgrQtE=";
+    hash = "sha256-Iepf+mFN7ym7aZu3xnJVJoQNDZmSFvt15QTGdXtvScs=";
   };
 
   sourceRoot = ".";
