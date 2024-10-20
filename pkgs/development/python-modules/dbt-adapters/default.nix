@@ -27,8 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-I3A3rIMpT+MAq+ebid9RMr6I3W1l4ir78UmfeEr5U3U=";
   };
 
-  pythonRelaxDeps = [ "protobuf" ];
-
   build-system = [ hatchling ];
 
   pythonRelaxDeps = [ "protobuf" ];
