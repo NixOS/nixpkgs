@@ -15135,6 +15135,8 @@ self: super: with self; {
 
   stringparser = callPackage ../development/python-modules/stringparser { };
 
+  stringzilla = callPackage ../development/python-modules/stringzilla { };
+
   stripe = callPackage ../development/python-modules/stripe { };
 
   striprtf = callPackage ../development/python-modules/striprtf { };
