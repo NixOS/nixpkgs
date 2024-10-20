@@ -28,20 +28,29 @@ let
       build = (build-asdf-system (args' // { version = args'.version + "-build"; }))
         .overrideAttrs(o: {
           buildPhase = with builtins; ''
+            runHook preBuild
+
             mkdir __fasls
             export ASDF_OUTPUT_TRANSLATIONS="$(pwd):$(pwd)/__fasls:${storeDir}:${storeDir}"
             export CL_SOURCE_REGISTRY=$CL_SOURCE_REGISTRY:$(pwd)//
             ${o.pkg}/bin/${o.program} ${toString (o.flags or [])} < ${o.buildScript}
+
+            runHook postBuild
           '';
           installPhase = ''
+            runHook preInstall
+
             mkdir -pv $out
             rm -rf __fasls
             cp -r * $out
+
+            runHook postInstall
           '';
         });
     in build-asdf-system (args' // {
       # Patches are already applied in `build`
       patches = [];
+      postPatch = "";
       src = build;
     });
 
@@ -151,8 +160,14 @@ let
   cephes = build-with-compile-into-pwd {
     inherit (super.cephes) pname version src lispLibs;
     patches = [ ./patches/cephes-make.patch ];
+    postPatch = ''
+      find \( -name '*.dll' -o -name '*.dylib' -o -name '*.so' \) -delete
+    '';
     postConfigure = ''
       substituteAllInPlace cephes.asd
+    '';
+    postInstall = ''
+      find $out -name '*.o' -delete
     '';
   };
 
