@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Make Doxygen happy with the setup, reduce log noise
-  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
+  env.FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
     fontDirectories = [ ];
   });
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library to play Commodore 64 music derived from libsidplay2";
     longDescription = ''
       libsidplayfp is a C64 music player library which integrates
@@ -98,12 +98,13 @@ stdenv.mkDerivation (finalAttrs: {
       C64 system and the SID chips.
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
-    license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [
+    changelog = "https://github.com/libsidplayfp/libsidplayfp/releases/tag/v${finalAttrs.version}";
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [
       ramkromberg
       OPNA2608
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     pkgConfigModules = [
       "libsidplayfp"
       "libstilview"
