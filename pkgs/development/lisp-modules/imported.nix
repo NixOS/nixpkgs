@@ -4188,38 +4188,6 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  boondoggle = (build-asdf-system {
-    pname = "boondoggle";
-    version = "20241012-git";
-    asds = [ "boondoggle" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "boondoggle";
-      asd = "boondoggle";
-    });
-    systems = [ "boondoggle" ];
-    lispLibs = [ (getAttr "cl-quil" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  boondoggle-tests = (build-asdf-system {
-    pname = "boondoggle-tests";
-    version = "20241012-git";
-    asds = [ "boondoggle-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "boondoggle-tests";
-      asd = "boondoggle-tests";
-    });
-    systems = [ "boondoggle-tests" ];
-    lispLibs = [ (getAttr "boondoggle" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "sapaclisp" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   bordeaux-fft = (build-asdf-system {
     pname = "bordeaux-fft";
     version = "20150608-http";
@@ -22864,54 +22832,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "cl-quickcheck" ];
     lispLibs = [  ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil = (build-asdf-system {
-    pname = "cl-quil";
-    version = "20241012-git";
-    asds = [ "cl-quil" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "cl-quil";
-      asd = "cl-quil";
-    });
-    systems = [ "cl-quil" ];
-    lispLibs = [ (getAttr "alexa" self) (getAttr "alexandria" self) (getAttr "cl-algebraic-data-type" self) (getAttr "cl-grnm" self) (getAttr "cl-heap" self) (getAttr "cl-permutation" self) (getAttr "clos-encounters" self) (getAttr "closer-mop" self) (getAttr "flexi-streams" self) (getAttr "global-vars" self) (getAttr "magicl" self) (getAttr "parse-float" self) (getAttr "queues_dot_priority-queue" self) (getAttr "qvm" self) (getAttr "salza2" self) (getAttr "split-sequence" self) (getAttr "trivial-garbage" self) (getAttr "yacc" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil-benchmarking = (build-asdf-system {
-    pname = "cl-quil-benchmarking";
-    version = "20241012-git";
-    asds = [ "cl-quil-benchmarking" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "cl-quil-benchmarking";
-      asd = "cl-quil-benchmarking";
-    });
-    systems = [ "cl-quil-benchmarking" ];
-    lispLibs = [ (getAttr "bordeaux-threads" self) (getAttr "cl-quil" self) (getAttr "metering" self) (getAttr "qvm-app" self) (getAttr "trivial-benchmark" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  cl-quil-tests = (build-asdf-system {
-    pname = "cl-quil-tests";
-    version = "20241012-git";
-    asds = [ "cl-quil-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "cl-quil-tests";
-      asd = "cl-quil-tests";
-    });
-    systems = [ "cl-quil-tests" ];
-    lispLibs = [ (getAttr "alexa" self) (getAttr "alexandria" self) (getAttr "cl-permutation" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "magicl" self) (getAttr "qvm" self) (getAttr "yacc" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
@@ -60484,38 +60404,6 @@ in lib.makeScope pkgs.newScope (self: {
       hydraPlatforms = [  ];
     };
   });
-  quilc = (build-asdf-system {
-    pname = "quilc";
-    version = "20241012-git";
-    asds = [ "quilc" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "quilc";
-      asd = "quilc";
-    });
-    systems = [ "quilc" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "cl-quil-benchmarking" self) (getAttr "cl-syslog" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) (getAttr "magicl" self) (getAttr "rpcq" self) (getAttr "split-sequence" self) (getAttr "swank" self) (getAttr "trivial-features" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  quilc-tests = (build-asdf-system {
-    pname = "quilc-tests";
-    version = "20241012-git";
-    asds = [ "quilc-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/quilc/2024-10-12/quilc-20241012-git.tgz";
-      sha256 = "0qy3fzd5cljq1dg5l3nd36wk7a6vna8lm22q0vncchpxvsdgnjpy";
-      system = "quilc-tests";
-      asd = "quilc-tests";
-    });
-    systems = [ "quilc-tests" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "fiasco" self) (getAttr "quilc" self) (getAttr "uuid" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
   quine-mccluskey = (build-asdf-system {
     pname = "quine-mccluskey";
     version = "20141217-git";
@@ -60590,102 +60478,6 @@ in lib.makeScope pkgs.newScope (self: {
     });
     systems = [ "quux-time" ];
     lispLibs = [  ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm = (build-asdf-system {
-    pname = "qvm";
-    version = "20241012-git";
-    asds = [ "qvm" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm";
-      asd = "qvm";
-    });
-    systems = [ "qvm" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cffi-grovel" self) (getAttr "cl-quil" self) (getAttr "clos-encounters" self) (getAttr "global-vars" self) (getAttr "ieee-floats" self) (getAttr "lparallel" self) (getAttr "magicl" self) (getAttr "mt19937" self) (getAttr "static-vectors" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app = (build-asdf-system {
-    pname = "qvm-app";
-    version = "20241012-git";
-    asds = [ "qvm-app" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm-app";
-      asd = "qvm-app";
-    });
-    systems = [ "qvm-app" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "bordeaux-threads" self) (getAttr "cl-fad" self) (getAttr "cl-ppcre" self) (getAttr "cl-quil" self) (getAttr "cl-syslog" self) (getAttr "command-line-arguments" self) (getAttr "drakma" self) (getAttr "global-vars" self) (getAttr "hunchentoot" self) (getAttr "ieee-floats" self) (getAttr "qvm" self) (getAttr "qvm-benchmarks" self) (getAttr "swank" self) (getAttr "trivial-features" self) (getAttr "trivial-garbage" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-app-tests = (build-asdf-system {
-    pname = "qvm-app-tests";
-    version = "20241012-git";
-    asds = [ "qvm-app-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm-app-tests";
-      asd = "qvm-app-tests";
-    });
-    systems = [ "qvm-app-tests" ];
-    lispLibs = [ (getAttr "fiasco" self) (getAttr "qvm-app" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-benchmarks = (build-asdf-system {
-    pname = "qvm-benchmarks";
-    version = "20241012-git";
-    asds = [ "qvm-benchmarks" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm-benchmarks";
-      asd = "qvm-benchmarks";
-    });
-    systems = [ "qvm-benchmarks" ];
-    lispLibs = [ (getAttr "cl-quil" self) (getAttr "qvm" self) (getAttr "trivial-benchmark" self) (getAttr "yason" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-examples = (build-asdf-system {
-    pname = "qvm-examples";
-    version = "20241012-git";
-    asds = [ "qvm-examples" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm-examples";
-      asd = "qvm-examples";
-    });
-    systems = [ "qvm-examples" ];
-    lispLibs = [ (getAttr "cl-grnm" self) (getAttr "cl-quil" self) (getAttr "qvm" self) (getAttr "qvm-app" self) ];
-    meta = {
-      hydraPlatforms = [  ];
-    };
-  });
-  qvm-tests = (build-asdf-system {
-    pname = "qvm-tests";
-    version = "20241012-git";
-    asds = [ "qvm-tests" ];
-    src = (createAsd {
-      url = "http://beta.quicklisp.org/archive/qvm/2024-10-12/qvm-20241012-git.tgz";
-      sha256 = "0kxgy8gdqvxp3hr14cxjk3s7d1w8myisclcaxbh7r9x8rci82a4v";
-      system = "qvm-tests";
-      asd = "qvm-tests";
-    });
-    systems = [ "qvm-tests" ];
-    lispLibs = [ (getAttr "alexandria" self) (getAttr "cffi" self) (getAttr "cl-quil" self) (getAttr "fiasco" self) (getAttr "qvm" self) (getAttr "qvm-examples" self) (getAttr "trivial-garbage" self) ];
     meta = {
       hydraPlatforms = [  ];
     };
