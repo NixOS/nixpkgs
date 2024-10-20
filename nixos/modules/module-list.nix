@@ -1380,6 +1380,7 @@
   ./services/video/photonvision.nix
   ./services/video/mediamtx.nix
   ./services/video/v4l2-relayd.nix
+  ./services/video/wivrn.nix
   ./services/wayland/cage.nix
   ./services/wayland/hypridle.nix
   ./services/web-apps/akkoma.nix
