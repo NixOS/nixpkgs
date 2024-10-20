@@ -14537,6 +14537,12 @@
     name = "Arthur Outhenin-Chalandre";
     githubId = 3845213;
   };
+  mrgiles = {
+    email = "marcelogiles@gmail.com";
+    github = "mrgiles";
+    githubId = 4009450;
+    name = "Marcelo Giles";
+  };
   mrityunjaygr8 = {
     email = "mrityunjaysaxena1996@gmail.com";
     github = "mrityunjaygr8";
