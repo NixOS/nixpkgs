@@ -130,7 +130,7 @@ self: super: {
   primitive-unlifted = dontCheck super.primitive-unlifted; # doesn't compile with primitive ==0.9.*
   bsb-http-chunked = pkgs.haskell.lib.dontCheck super.bsb-http-chunked; # https://github.com/sjakobi/bsb-http-chunked/issues/45
   hinotify = pkgs.haskell.lib.dontCheck super.hinotify; # https://github.com/kolmodin/hinotify/issues/38
-  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_1; # test suite assumes it can freely call curl
+  warp = pkgs.haskell.lib.dontCheck super.warp_3_4_2; # test suite assumes it can freely call curl
 
   haskell-language-server = disableCabalFlag "retrie" (disableCabalFlag "hlint" (disableCabalFlag "stylishhaskel" (super.haskell-language-server.override {stylish-haskell = null;retrie = null;apply-refact=null;hlint = null;})));
 
