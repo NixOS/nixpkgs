@@ -7,31 +7,35 @@
   pytestCheckHook,
   numpy,
   opencv4,
-  typing-extensions,
+  stringzilla,
 }:
 
 buildPythonPackage rec {
   pname = "albucore";
-  version = "0.0.17";
+  version = "0.0.18";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albucore";
     rev = "refs/tags/${version}";
-    hash = "sha256-9fv5jewfL3JKhZyD0YS1WDNZ7wWt+8iF2DcygCOl168=";
+    hash = "sha256-rM7j9PFiQx+Znzpj8zCfyJ45D6M7owPBlaLf3IRBwHI=";
   };
 
   pythonRemoveDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "stringzilla"
+  ];
+
   dependencies = [
     numpy
     opencv4
-    typing-extensions
+    stringzilla
   ];
 
   pythonImportsCheck = [ "albucore" ];
