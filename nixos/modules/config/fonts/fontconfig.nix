@@ -395,7 +395,7 @@ in
               let
                 from = "fonts.fontconfig.hinting.style";
                 val' = lib.removePrefix "hint" val;
-                warning = "The option `${from}` contains a deprecated value `${val}`. Use `${val'}` instead.";
+                warning = "${config.system.diagnostics.prefix}The option `${from}` contains a deprecated value `${val}`. Use `${val'}` instead.";
               in
               lib.warnIf (lib.hasPrefix "hint" val) warning val';
           };

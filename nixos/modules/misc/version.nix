@@ -156,7 +156,7 @@ in
       # Doing this also means fixing the comment in nixos/modules/testing/test-instrumentation.nix
       apply = v:
         lib.warnIf (options.system.stateVersion.highestPrio == (lib.mkOptionDefault { }).priority)
-          "system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
+          "${config.system.diagnostics.prefix}system.stateVersion is not set, defaulting to ${v}. Read why this matters on https://nixos.org/manual/nixos/stable/options.html#opt-system.stateVersion."
           v;
       default = cfg.release;
       defaultText = literalExpression "config.${opt.release}";
