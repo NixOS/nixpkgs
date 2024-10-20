@@ -98,7 +98,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://n8n.io";
     changelog = "https://github.com/n8n-io/n8n/releases/tag/${finalAttrs.src.rev}";
     maintainers = with maintainers; [
-      freezeboy
       gepbird
     ];
     license = licenses.sustainableUse;
