@@ -24,7 +24,7 @@
 
   # license.txt inside the zip file is MIT
   xplaneSdk = fetchzip {
-    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sample_templates/XPSDK401.zip";
+    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sdk_zip_files/XPSDK401.zip";
     hash = "sha256-tUT9yV1949QVr5VebU/7esg7wwWkyak2TSA/kQSrbeo=";
   };
 in
