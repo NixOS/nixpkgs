@@ -148,6 +148,7 @@ in rec {
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
   nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.nixos-configuration-reference-manpage);
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
+  optionsCtagsVim = (buildFromConfig ({ ... }: { }) (config: config.system.build.optionsCtags.vim)).x86_64-linux;
 
 
   # Build the initial ramdisk so Hydra can keep track of its size over time.
