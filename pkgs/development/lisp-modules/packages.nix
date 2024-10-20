@@ -427,19 +427,8 @@ let
     meta.mainProgram = "qlot";
   };
 
-  fset = super.fset.overrideLispAttrs (old: rec {
-    version = "1.4.0";
-    src = pkgs.fetchFromGitHub {
-      owner = "slburson";
-      repo = "fset";
-      rev = "v${version}";
-      hash = "sha256-alO8Ek5Xpyl5N99/LgyIZ50aoRbY7bKh3XBntFV6Q5k=";
-    };
-    lispLibs = with super; [
-      self.misc-extensions
-      mt19937
-      named-readtables
-    ];
+  fset = super.fset.overrideLispAttrs (oa: {
+    systems = [ "fset" "fset/test" ];
     meta = {
       description = "functional collections library";
       homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
