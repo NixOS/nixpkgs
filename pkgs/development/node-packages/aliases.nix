@@ -158,6 +158,7 @@ mapAliases {
   inherit (pkgs) rtlcss; # added 2023-08-29
   s3http = throw "s3http was removed because it was abandoned upstream"; # added 2023-08-18
   inherit (pkgs) serverless; # Added 2023-11-29
+  shout = throw "shout was removed because it was deprecated upstream in favor of thelounge."; # Added 2024-10-19
   inherit (pkgs) snyk; # Added 2023-08-30
   inherit (pkgs) sql-formatter; # added 2024-06-29
   "@squoosh/cli" = throw "@squoosh/cli was removed because it was abandoned upstream"; # added 2023-09-02
