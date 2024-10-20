@@ -120,9 +120,6 @@ import ./make-test-python.nix (
               settings = {
                 RESTIC_PASSWORD_FILE = passwordFile;
                 RESTIC_REPOSITORY = rcloneRepository;
-              };
-              initialize = true;
-              rcloneSettings = {
                 RCLONE_TYPE = "local";
                 RCLONE_ONE_FILE_SYSTEM = "true";
                 RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -132,6 +129,7 @@ import ./make-test-python.nix (
                   type=ftp
                 '';
               };
+              initialize = true;
 
             };
             remoteprune = {
