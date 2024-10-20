@@ -2652,6 +2652,8 @@ self: super: with self; {
 
   crccheck = callPackage ../development/python-modules/crccheck { };
 
+  crcelk = callPackage ../development/python-modules/crcelk { };
+
   crcmod = callPackage ../development/python-modules/crcmod { };
 
   credstash = callPackage ../development/python-modules/credstash { };
@@ -2801,6 +2803,8 @@ self: super: with self; {
   cyclopts = callPackage ../development/python-modules/cyclopts { };
 
   cymem = callPackage ../development/python-modules/cymem { };
+
+  cymruwhois = callPackage ../development/python-modules/cymruwhois { };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
@@ -6473,8 +6477,6 @@ self: super: with self; {
   jq = callPackage ../development/python-modules/jq {
     inherit (pkgs) jq;
   };
-
-  js2py = callPackage ../development/python-modules/js2py { };
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier { };
 
@@ -13329,8 +13331,6 @@ self: super: with self; {
 
   qualysclient = callPackage ../development/python-modules/qualysclient { };
 
-  quamash = callPackage ../development/python-modules/quamash { };
-
   quandl = callPackage ../development/python-modules/quandl { };
 
   quantile-forest = callPackage ../development/python-modules/quantile-forest { };
@@ -14526,6 +14526,8 @@ self: super: with self; {
   smhi-pkg = callPackage ../development/python-modules/smhi-pkg { };
 
   smmap = callPackage ../development/python-modules/smmap { };
+
+  smoke-zephyr = callPackage ../development/python-modules/smoke-zephyr { };
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
