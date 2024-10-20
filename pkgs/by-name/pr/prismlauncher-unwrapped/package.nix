@@ -91,6 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/Applications/")
     ];
 
+  doCheck = true;
+
   dontWrapQtApps = true;
 
   passthru = {
