@@ -24,7 +24,7 @@ buildFHSEnv {
     )
     ++ (
       # OpenComposite dependencies
-      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs ++ [ pkgs.boost186 ]
+      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs
     )
     ++ (
       # Monado dependencies
