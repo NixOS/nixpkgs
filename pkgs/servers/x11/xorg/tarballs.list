@@ -79,7 +79,7 @@ mirror://xorg/individual/doc/xorg-sgml-doctools-1.12.1.tar.xz
 mirror://xorg/individual/driver/xf86-input-evdev-2.11.0.tar.xz
 mirror://xorg/individual/driver/xf86-input-joystick-1.6.4.tar.xz
 mirror://xorg/individual/driver/xf86-input-keyboard-2.0.0.tar.xz
-mirror://xorg/individual/driver/xf86-input-libinput-1.4.0.tar.xz
+mirror://xorg/individual/driver/xf86-input-libinput-1.5.0.tar.xz
 mirror://xorg/individual/driver/xf86-input-mouse-1.9.5.tar.xz
 mirror://xorg/individual/driver/xf86-input-synaptics-1.9.2.tar.xz
 mirror://xorg/individual/driver/xf86-input-vmmouse-13.2.0.tar.xz
