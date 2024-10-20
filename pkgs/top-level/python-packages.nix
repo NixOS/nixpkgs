@@ -3427,6 +3427,8 @@ self: super: with self; {
 
   django-filer = callPackage ../development/python-modules/django-filer { };
 
+  django-filingcabinet = callPackage ../development/python-modules/django-filingcabinet { };
+
   django-filter = callPackage ../development/python-modules/django-filter { };
 
   django-formtools = callPackage ../development/python-modules/django-formtools { };
