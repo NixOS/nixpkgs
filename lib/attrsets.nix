@@ -644,8 +644,10 @@ rec {
   filterAttrs =
     pred:
     set:
-    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
-
+    let
+      attrsToRemove = lib.concatMap (name: if pred name set.${name} then [ ] else [ name ]) (attrNames set);
+    in
+    builtins.removeAttrs set attrsToRemove;
 
   /**
     Filter an attribute set recursively by removing all attributes for
