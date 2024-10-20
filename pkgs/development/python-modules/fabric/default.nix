@@ -24,12 +24,6 @@ buildPythonPackage rec {
     hash = "sha256-h4PKQuOwB28IsmkBqsa52bHxnEEAdOesz6uQLBhP9KM=";
   };
 
-  # only relevant to python < 3.4
-  postPatch = ''
-    substituteInPlace setup.py \
-        --replace ', "pathlib2"' ' '
-  '';
-
   nativeBuildInputs = [
     pypaInstallHook
     setuptoolsBuildHook
