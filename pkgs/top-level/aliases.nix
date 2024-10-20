@@ -1490,6 +1490,7 @@ mapAliases {
   inherit (libsForQt5.mauiPackages) shelf; # added 2022-05-17
   shhgit = throw "shhgit is broken and is no longer maintained. See https://github.com/eth0izzle/shhgit#-shhgit-is-no-longer-maintained-"; # Added 2023-08-08
   shipyard = jumppad; # Added 2023-06-06
+  shout = nodePackages.shout; # Added unknown; moved 2024-10-19
   signumone-ks = throw "signumone-ks has been removed from nixpkgs because the developers stopped offering the binaries"; # Added 2023-08-17
   simplenote = throw "'simplenote' has been removed because it is no longer maintained and insecure"; # Added 2023-10-09
   skk-dicts = throw "'skk-dicts' has been split into multiple packages under 'skkDictionaries'"; # Added 2023-11-08
@@ -1673,7 +1674,7 @@ mapAliases {
   usbguard-nox = throw "'usbguard-nox' has been renamed to/replaced by 'usbguard'"; # Converted to throw 2023-09-10
   utahfs = throw "utahfs has been removed, as it is broken and lack of maintenance from upstream"; # Added 2023-09-29
   util-linuxCurses = util-linux; # Added 2022-04-12
-  utillinux = throw "'utillinux' has been renamed to/replaced by 'util-linux'"; # Converted to throw 2024-10-17
+  utillinux = util-linux; # Added 2020-11-24, keep until node2nix is phased out, see https://github.com/NixOS/nixpkgs/issues/229475
 
   ### V ###
 

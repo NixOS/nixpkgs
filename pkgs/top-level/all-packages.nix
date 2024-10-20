@@ -528,8 +528,6 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
-
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
@@ -12168,8 +12166,6 @@ with pkgs;
 
   shotwell = callPackage ../applications/graphics/shotwell { };
 
-  shout = nodePackages.shout;
-
   shrikhand = callPackage ../data/fonts/shrikhand { };
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
@@ -16543,7 +16539,8 @@ with pkgs;
     mkRuby
     ruby_3_1
     ruby_3_2
-    ruby_3_3;
+    ruby_3_3
+    ruby_3_4;
 
   ruby = ruby_3_3;
   rubyPackages = rubyPackages_3_3;
@@ -16551,6 +16548,7 @@ with pkgs;
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
+  rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
@@ -16619,6 +16617,7 @@ with pkgs;
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+  tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
@@ -17022,8 +17021,6 @@ with pkgs;
   };
 
   buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
-
-  bear = callPackage ../development/tools/build-managers/bear { };
 
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
@@ -23276,6 +23273,7 @@ with pkgs;
 
   tk = tk-8_6;
 
+  tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
@@ -28365,7 +28363,7 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
-  calibre = qt6Packages.callPackage ../applications/misc/calibre {
+  calibre = callPackage ../by-name/ca/calibre/package.nix {
     podofo = podofo010;
   };
 
@@ -30330,10 +30328,9 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3-cli = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = false; };
-  kid3-kde = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = true; withQt = false; };
-  kid3-qt = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
-  kid3 = kid3-kde;
+  kid3-cli = kid3.override { withCLI = true; withKDE = false; withQt = false; };
+  kid3-kde = kid3.override { withCLI = true; withKDE = true; withQt = false; };
+  kid3-qt = kid3.override { withCLI = true; withKDE = false; withQt = true; };
 
   kile = callPackage ../applications/editors/kile { };
 
@@ -32989,11 +32986,6 @@ with pkgs;
 
   tuxedo-rs = callPackage ../os-specific/linux/tuxedo-rs { };
 
-  tuxguitar = callPackage ../applications/editors/music/tuxguitar {
-    jre = jre8;
-    swt = swt_jdk8;
-  };
-
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
   testssl = callPackage ../applications/networking/testssl { };
@@ -33310,8 +33302,6 @@ with pkgs;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
-
-  vym = libsForQt5.callPackage ../applications/misc/vym { };
 
   wad = callPackage ../tools/security/wad { };
 

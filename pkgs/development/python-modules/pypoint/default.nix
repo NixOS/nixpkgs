@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pypoint";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
-    rev = "v${version}";
-    hash = "sha256-Ri+vf/vnjQQ+9eZ1Gzt+v68FAxVGt0IY9S3SpeVem3A=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-9z9VcY42uHIksIvDU1Vz+kvXNmrCu08fGB/waQahmyg=";
   };
 
   build-system = [ setuptools ];
