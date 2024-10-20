@@ -146,6 +146,7 @@ stdenv.mkDerivation (rec {
       kamilchm
       patternspandemic
       redvers
+      numinit
     ];
     platforms = [
       "x86_64-linux"
