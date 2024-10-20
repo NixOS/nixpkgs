@@ -1,7 +1,13 @@
 { lib, config, ... }:
 
 let
-  inherit (lib) mkEnableOption mkOption mkIf attrValues filterAttrs;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    attrValues
+    filterAttrs
+    ;
   inherit (lib.types) attrsOf nullOr packageSelector;
 
   this = config.hardware.acceleration.api.opengl;
@@ -17,7 +23,7 @@ in
 
     drivers = mkOption {
       default = { };
-      type = attrsOf (nullOr (packageSelector));
+      type = attrsOf (nullOr packageSelector);
     };
   };
 
