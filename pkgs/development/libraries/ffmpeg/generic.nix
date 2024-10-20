@@ -57,6 +57,7 @@
 , withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
 , withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
+, withDavs2 ? withFullDeps && withGPL # AVS2 decoder
 , withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin # IIDC-1394 grabbing (ieee 1394)
 , withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # libdrm support
 , withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7" # needed for DVD demuxing
@@ -117,6 +118,7 @@
 , withTensorflow ? false # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
 , withTheora ? withHeadlessDeps # Theora encoder
 , withTwolame ? withFullDeps # MP2 encoding
+, withUavs3d ? withFullDeps # AVS3 decoder
 , withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux  # Video 4 Linux support
 , withV4l2M2m ? withV4l2
 , withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD) # Vaapi hardware acceleration
@@ -133,6 +135,7 @@
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
 , withX265 ? withHeadlessDeps && withGPL # H.265/HEVC encoder
 , withXavs ? withFullDeps && withGPL # AVS encoder
+, withXavs2 ? withFullDeps && withGPL # AVS2 encoder
 , withXcb ? withXcbShm || withXcbxfixes || withXcbShape # X11 grabbing using XCB
 , withXcbShape ? withFullDeps # X11 grabbing shape rendering
 , withXcbShm ? withFullDeps # X11 grabbing shm communication
@@ -236,6 +239,7 @@
 , codec2
 , clang
 , dav1d
+, davs2
 , fdk_aac
 , flite
 , fontconfig
@@ -317,6 +321,7 @@
 , speex
 , srt
 , svt-av1
+, uavs3d
 , vid-stab
 , vo-amrwbenc
 , vulkan-headers
@@ -324,6 +329,7 @@
 , x264
 , x265
 , xavs
+, xavs2
 , xevd
 , xeve
 , xvidcore
@@ -583,6 +589,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withCudaNVCC "cuda-nvcc")
     (enableFeature withCuvid "cuvid")
     (enableFeature withDav1d "libdav1d")
+    (enableFeature withDavs2 "libdavs2")
     (enableFeature withDc1394 "libdc1394")
     (enableFeature withDrm "libdrm")
   ] ++ optionals (versionAtLeast version "7") [
@@ -660,6 +667,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withTensorflow "libtensorflow")
     (enableFeature withTheora "libtheora")
     (enableFeature withTwolame "libtwolame")
+    (enableFeature withUavs3d "libuavs3d")
     (enableFeature withV4l2 "libv4l2")
     (enableFeature withV4l2M2m "v4l2-m2m")
     (enableFeature withVaapi "vaapi")
@@ -678,6 +686,7 @@ stdenv.mkDerivation (finalAttrs: {
     (enableFeature withX264 "libx264")
     (enableFeature withX265 "libx265")
     (enableFeature withXavs "libxavs")
+    (enableFeature withXavs2 "libxavs2")
     (enableFeature withXcb "libxcb")
     (enableFeature withXcbShape "libxcb-shape")
     (enableFeature withXcbShm "libxcb-shm")
@@ -753,6 +762,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withCoreImage [ CoreImage ]
   ++ optionals withCudaNVCC [ cuda_cudart cuda_nvcc ]
   ++ optionals withDav1d [ dav1d ]
+  ++ optionals withDavs2 [ davs2 ]
   ++ optionals withDc1394 [ libdc1394 libraw1394 ]
   ++ optionals withDrm [ libdrm ]
   ++ optionals withDvdnav [ libdvdnav ]
@@ -809,6 +819,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withTensorflow [ libtensorflow ]
   ++ optionals withTheora [ libtheora ]
   ++ optionals withTwolame [ twolame ]
+  ++ optionals withUavs3d [ uavs3d ]
   ++ optionals withV4l2 [ libv4l ]
   ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
   ++ optionals withVdpau [ libvdpau ]
@@ -824,6 +835,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withX264 [ x264 ]
   ++ optionals withX265 [ x265 ]
   ++ optionals withXavs [ xavs ]
+  ++ optionals withXavs2 [ xavs2 ]
   ++ optionals withXcb [ libxcb ]
   ++ optionals withXevd [ xevd ]
   ++ optionals withXeve [ xeve ]
