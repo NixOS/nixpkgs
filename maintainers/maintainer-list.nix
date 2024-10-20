@@ -1708,6 +1708,12 @@
     githubId = 718812;
     name = "Antoine R. Dumont";
   };
+  areif-dev = {
+    email = "aj@ajreifsnyder.com";
+    github = "areif-dev";
+    githubId = 53097078;
+    name = "AJ Reifsnyder";
+  };
   arezvov = {
     email = "alex@rezvov.ru";
     github = "arezvov";
