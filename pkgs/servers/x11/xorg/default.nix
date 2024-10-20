@@ -2418,11 +2418,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xcmsdb = callPackage ({ stdenv, pkg-config, fetchurl, libX11, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xcmsdb";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xcmsdb-1.0.6.tar.xz";
-      sha256 = "0magrza0i5qwpf0zlpqjychp3bzxgdw3p5v616xl4nbxag2fwxrw";
+      url = "mirror://xorg/individual/app/xcmsdb-1.0.7.tar.xz";
+      sha256 = "0f5wddi707cjqm21hynckkqr12mpjqn3dq9fm5gb11w19270di2y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
