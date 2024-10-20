@@ -1,15 +1,19 @@
 {
   lib,
   buildPythonPackage,
-  colorcet,
   fetchPypi,
+  pythonOlder,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  colorcet,
   numpy,
   pandas,
   panel,
   param,
-  pythonOlder,
   pyviz-comms,
 }:
 
@@ -44,11 +48,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "holoviews" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python data analysis and visualization seamless and simple";
     mainProgram = "holoviews";
     homepage = "https://www.holoviews.org/";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
