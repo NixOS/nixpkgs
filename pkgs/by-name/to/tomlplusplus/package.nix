@@ -19,11 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "marzer";
     repo = "tomlplusplus";
-    rev = "v${finalAttrs.version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-h5tbO0Rv2tZezY58yUbyRVpsfRjY3i+5TPkkxr6La8M=";
   };
 
   patches = [
+    # TODO: Remove this patch at the next update
     # https://github.com/marzer/tomlplusplus/pull/233
     (fetchpatch2 {
       name = "tomlplusplus-install-example-programs.patch";
