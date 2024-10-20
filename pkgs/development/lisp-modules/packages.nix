@@ -337,9 +337,9 @@ let
     pname = "polyclot";
     version = "trunk";
     src = pkgs.fetchfossil {
-      url = "https://fossil.turtleware.eu/polyclot";
-      rev = "e678b3c3e002f53b446780406c9ed13f8451309d22a1dc50ced4dbeedf08a1ec";
-      sha256 = "sha256-J08bU9HSVbzEivYtQsyIYPZJTrugj+jJSa4LglS0Olg=";
+      url = "https://fossil.turtleware.eu/fossil.turtleware.eu/polyclot";
+      rev = "18500c968b1fc1e2a915b5c70b8cddc4a2b54de51da4eedc5454e42bfea3b479";
+      sha256 = "sha256-KgBL1QQN4iG6d8E9GlKAuxSwkrY6Zy7e1ZzEDGKad+A=";
     };
     systems = [ "eu.turtleware.polyclot" "eu.turtleware.polyclot/demo" ];
     lispLibs = with self; [ clim mcclim mcclim-layouts ];
