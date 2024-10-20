@@ -19,13 +19,14 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "1.0.3";
+  version = "unstable-2024-07-26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SYSTRAN";
     repo = "faster-whisper";
-    rev = "refs/tags/v${version}";
+    # rev = "refs/tags/v${version}";
+    rev = "d57c5b40b06e59ec44240d93485a95799548af50";
     hash = "sha256-C/O+wt3dykQJmH+VsVkpQwEAdyW8goMUMKR0Z3Y7jdo=";
   };
 
@@ -33,7 +34,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  pythonRelaxDeps = [ "tokenizers" ];
+  pythonRelaxDeps = [
+    "tokenizers"
+    "av"
+  ];
 
   dependencies = [
     av
