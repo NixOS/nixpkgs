@@ -41,6 +41,8 @@
   vulkan-loader,
   vulkan-tools,
   x264,
+  wrapQtAppsHook,
+  makeDesktopItem,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
@@ -95,6 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     python3
     glib # provide gdbus-codegen
+    wrapQtAppsHook
   ] ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
   buildInputs = [
@@ -131,13 +134,26 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "WIVRN_USE_VAAPI" true)
     (lib.cmakeBool "WIVRN_USE_X264" true)
     (lib.cmakeBool "WIVRN_USE_NVENC" cudaSupport)
-    (lib.cmakeBool "WIVRN_USE_SYSTEMD" true)
     (lib.cmakeBool "WIVRN_USE_PIPEWIRE" true)
     (lib.cmakeBool "WIVRN_USE_PULSEAUDIO" true)
     (lib.cmakeBool "WIVRN_BUILD_CLIENT" false)
     (lib.cmakeBool "WIVRN_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MONADO" "${finalAttrs.monado}")
+    (lib.cmakeFeature "WIVRN_BUILD_DASHBOARD" true)
+  ];
+
+    desktopItems = [
+    (makeDesktopItem {
+      name = "WiVRn Server";
+      desktopName = "WiVRn Server";
+      genericName = "WiVRn Server";
+      comment = "Play your PC VR games on a standalone headset";
+      icon = "io.github.wivrn.wivrn";
+      exec = "wivrn-dashboard";
+      type = "Application";
+      categories = [ "Network" "Game" ];
+    })
   ];
 
   passthru.updateScript = nix-update-script { };
