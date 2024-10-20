@@ -9073,6 +9073,8 @@ self: super: with self; {
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
+  NSKeyedUnArchiver = callPackage ../development/python-modules/NSKeyedUnArchiver { };
+
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };
