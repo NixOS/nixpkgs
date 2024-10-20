@@ -15,6 +15,10 @@ buildPythonApplication rec {
     hash = "sha256-0R2k5hRkAJbqgGZEPXWUb48oFxTKMKiQZckf3F+VC3I=";
   };
 
+  pythonRelaxDeps = [
+    "sqlparse"
+  ];
+
   propagatedBuildInputs = [
     cli-helpers
     click
