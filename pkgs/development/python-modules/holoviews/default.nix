@@ -15,6 +15,11 @@
   panel,
   param,
   pyviz-comms,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov,
+  flaky,
 }:
 
 buildPythonPackage rec {
@@ -43,8 +48,24 @@ buildPythonPackage rec {
     pyviz-comms
   ];
 
-  # tests not fully included with pypi release
-  doCheck = false;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov
+    flaky
+  ];
+
+  disabledTests = [
+    # All the below fail due to some change in flaky API
+    "test_periodic_param_fn_non_blocking"
+    "test_callback_cleanup"
+    "test_poly_edit_callback"
+    "test_launch_server_with_complex_plot"
+    "test_launch_server_with_stream"
+    "test_launch_simple_server"
+    "test_server_dynamicmap_with_dims"
+    "test_server_dynamicmap_with_stream"
+    "test_server_dynamicmap_with_stream_dims"
+  ];
 
   pythonImportsCheck = [ "holoviews" ];
 
