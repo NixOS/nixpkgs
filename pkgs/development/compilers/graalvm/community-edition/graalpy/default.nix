@@ -1,9 +1,9 @@
 { stdenv
 , fetchurl
-, graalvmCEPackages
+, graalvmPackages
 }:
 
-graalvmCEPackages.buildGraalvmProduct {
+graalvmPackages.buildGraalvmProduct {
   src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
   version = (import ./hashes.nix).version;
 

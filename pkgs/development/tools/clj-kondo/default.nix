@@ -1,4 +1,4 @@
-{ lib, buildGraalvmNativeImage, graalvmCEPackages, fetchurl
+{ lib, buildGraalvmNativeImage, graalvmPackages, removeReferencesTo, fetchurl
 }:
 
 buildGraalvmNativeImage rec {
@@ -11,7 +11,7 @@ buildGraalvmNativeImage rec {
     sha256 = "sha256-DrSfL1WazlNd5H0jG6m0S5aED4BLVufr1rGIAyifn6E=";
   };
 
-  graalvmDrv = graalvmCEPackages.graalvm-ce;
+  graalvmDrv = graalvmPackages.graalvm-ce;
 
   extraNativeImageBuildArgs =
     [ "-H:+ReportExceptionStackTraces" "--no-fallback" ];
