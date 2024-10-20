@@ -15,7 +15,7 @@ buildFHSEnv {
     pkgs:
     [ pkgs.envision-unwrapped ]
     ++ (with pkgs; [
-      glibc
+      stdenv.cc.libc
       gcc
     ])
     ++ (
