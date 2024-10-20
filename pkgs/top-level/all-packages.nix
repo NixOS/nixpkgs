@@ -14319,7 +14319,7 @@ with pkgs;
     inherit (python3Packages) filecheck;
   };
 
-  bluespec = callPackage ../development/compilers/bluespec {
+  bluespec = callPackage ../by-name/bl/bluespec/package.nix {
     gmp-static = gmp.override { withStatic = true; };
   };
 
