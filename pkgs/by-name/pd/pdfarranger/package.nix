@@ -6,7 +6,8 @@
   gtk3,
   poppler_gi,
   libhandy,
-  pkgs,
+  gettext,
+  stdenv,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,15 +24,17 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs =
     [ wrapGAppsHook3 ]
-    ++ lib.optionals pkgs.stdenv.isDarwin [
-      pkgs.gettext
+    ++ lib.optionals stdenv.isDarwin [
+      gettext
     ];
 
-  patchPhase =
-    ''''
-    + lib.optionals pkgs.stdenv.isDarwin ''
-      LINTL="${lib.getLib pkgs.gettext}/lib/libintl.8.dylib"
-      sed -i "s@return 'libintl.8.dylib'@return '$LINTL'@" pdfarranger/pdfarranger.py
+  postPatch =
+    lib.optionalString stdenv.isDarwin ''
+      LINTL="${lib.getLib gettext}/lib/libintl.8.dylib"
+      substituteInPlace pdfarranger/pdfarranger.py --replace-fail \
+        "return 'libintl.8.dylib'" \
+        "return '$LINTL'"
+      unset LINTL
     '';
 
   build-system = with python3Packages; [ setuptools ];
@@ -61,7 +64,7 @@ python3Packages.buildPythonApplication rec {
     inherit (src.meta) homepage;
     description = "Merge or split pdf documents and rotate, crop and rearrange their pages using a graphical interface";
     mainProgram = "pdfarranger";
-    maintainers = with lib.maintainers; [ symphorien ];
+    maintainers = with lib.maintainers; [ symphorien endle ];
     license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/pdfarranger/pdfarranger/releases/tag/${version}";
   };
