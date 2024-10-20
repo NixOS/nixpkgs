@@ -1,19 +1,42 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, inkscape
-, just
-, xcursorgen
-, hyprcursor
-, xcur2png
-, catppuccin-whiskers
-, python3
-, python3Packages
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  inkscape,
+  just,
+  xcursorgen,
+  hyprcursor,
+  xcur2png,
+  catppuccin-whiskers,
+  python3,
+  python3Packages,
 }:
 let
   dimensions = {
-    palette = [ "frappe" "latte" "macchiato" "mocha" ];
-    color = [ "Blue" "Dark" "Flamingo" "Green" "Lavender" "Light" "Maroon" "Mauve" "Peach" "Pink" "Red" "Rosewater" "Sapphire" "Sky" "Teal" "Yellow" ];
+    palette = [
+      "frappe"
+      "latte"
+      "macchiato"
+      "mocha"
+    ];
+    color = [
+      "Blue"
+      "Dark"
+      "Flamingo"
+      "Green"
+      "Lavender"
+      "Light"
+      "Maroon"
+      "Mauve"
+      "Peach"
+      "Pink"
+      "Red"
+      "Rosewater"
+      "Sapphire"
+      "Sky"
+      "Teal"
+      "Yellow"
+    ];
   };
   variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
@@ -30,11 +53,20 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-LZ2k8i4w68VW4YFmC659iMQsQyduHJOfyL8cLlXhUHo=";
   };
 
-  nativeBuildInputs = [ just inkscape xcursorgen hyprcursor xcur2png catppuccin-whiskers python3 python3Packages.pyside6 ];
+  nativeBuildInputs = [
+    just
+    inkscape
+    xcursorgen
+    hyprcursor
+    xcur2png
+    catppuccin-whiskers
+    python3
+    python3Packages.pyside6
+  ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
 
-  outputsToInstall = [];
+  outputsToInstall = [ ];
 
   buildPhase = ''
     runHook preBuild
