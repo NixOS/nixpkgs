@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, coreutils
-, libxml2
-, lto ? true
-, makeWrapper
-, openssl
-, pcre2
-, pony-corral
-, python3
-# Not really used for anything real, just at build time.
-, git
-, substituteAll
-, which
-, z3
-, cctools
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  coreutils,
+  libxml2,
+  lto ? true,
+  makeWrapper,
+  openssl,
+  pcre2,
+  pony-corral,
+  python3,
+  # Not really used for anything real, just at build time.
+  git,
+  substituteAll,
+  which,
+  z3,
+  cctools,
+  darwin,
 }:
 
 stdenv.mkDerivation (rec {
@@ -47,24 +48,35 @@ stdenv.mkDerivation (rec {
     hash = "sha256-W+OxRTVtemt2esw4P7IyGWXOonUN5ZuscjvzqkYvZbM=";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper which python3 git ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
-  buildInputs = [ libxml2 z3 ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    which
+    python3
+    git
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools ];
 
-  patches = [
-    # Sandbox disallows network access, so disabling problematic networking tests
-    ./disable-networking-tests.patch
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    (substituteAll {
-      src = ./fix-darwin-build.patch;
-      libSystem = darwin.Libsystem;
-    })
+  buildInputs = [
+    libxml2
+    z3
   ];
+
+  patches =
+    [
+      # Sandbox disallows network access, so disabling problematic networking tests
+      ./disable-networking-tests.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      (substituteAll {
+        src = ./fix-darwin-build.patch;
+        libSystem = darwin.Libsystem;
+      })
+    ];
 
   postUnpack = ''
     mkdir -p $NIX_BUILD_TOP/deps
-    tar -C "$benchmark" -cf $NIX_BUILD_TOP/deps/benchmark-${benchmarkRev}.tar .
-    tar -C "$googletest" -cf $NIX_BUILD_TOP/deps/googletest-${googletestRev}.tar .
+    tar -C "$benchmark" -cf $NIX_BUILD_TOP/deps/benchmark-$benchmarkRev.tar .
+    tar -C "$googletest" -cf $NIX_BUILD_TOP/deps/googletest-$googletestRev.tar .
   '';
 
   dontConfigure = true;
@@ -79,8 +91,8 @@ stdenv.mkDerivation (rec {
 
     # Replace downloads with local copies.
     substituteInPlace lib/CMakeLists.txt \
-        --replace-fail "https://github.com/google/benchmark/archive/v${benchmarkRev}.tar.gz" "$NIX_BUILD_TOP/deps/benchmark-${benchmarkRev}.tar" \
-        --replace-fail "https://github.com/google/googletest/archive/release-${googletestRev}.tar.gz" "$NIX_BUILD_TOP/deps/googletest-${googletestRev}.tar"
+        --replace-fail "https://github.com/google/benchmark/archive/v$benchmarkRev.tar.gz" "$NIX_BUILD_TOP/deps/benchmark-$benchmarkRev.tar" \
+        --replace-fail "https://github.com/google/googletest/archive/release-$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
 
   preBuild = ''
@@ -93,20 +105,33 @@ stdenv.mkDerivation (rec {
     "prefix=${placeholder "out"}"
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=redundant-move" "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=redundant-move"
+    "-Wno-error=implicit-fallthrough"
+  ];
 
   # make: *** [Makefile:222: test-full-programs-release] Killed: 9
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   installPhase = ''
-    make config=release prefix=$out ${
-      lib.optionalString stdenv.hostPlatform.isDarwin ("bits=64 " + (lib.optionalString (!lto) "lto=no "))
-    } install
+    makeArgs=(config=release prefix=$out)
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeArgs+=(bits=64)
+  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && !lto) ''
+    makeArgs+=(lto=no)
+  '' + ''
+    make "''${makeArgs[@]}" install
     wrapProgram $out/bin/ponyc \
-        --prefix PATH ":" "${stdenv.cc}/bin" \
-        --set-default CC "$CC" \
-        --prefix PONYPATH : "${lib.makeLibraryPath [ pcre2 openssl (placeholder "out") ]}"
-    '';
+      --prefix PATH ":" "${stdenv.cc}/bin" \
+      --set-default CC "$CC" \
+      --prefix PONYPATH : "${
+        lib.makeLibraryPath [
+          pcre2
+          openssl
+          (placeholder "out")
+        ]
+      }"
+  '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
@@ -117,7 +142,16 @@ stdenv.mkDerivation (rec {
     description = "Pony is an Object-oriented, actor-model, capabilities-secure, high performance programming language";
     homepage = "https://www.ponylang.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ kamilchm patternspandemic redvers ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      kamilchm
+      patternspandemic
+      redvers
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
   };
 })
