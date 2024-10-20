@@ -4994,8 +4994,6 @@ with pkgs;
   inherit (texlive.schemes) texliveBasic texliveBookPub texliveConTeXt texliveFull texliveGUST texliveInfraOnly texliveMedium texliveMinimal texliveSmall texliveTeTeX;
   texlivePackages = recurseIntoAttrs (lib.mapAttrs (_: v: v.build) texlive.pkgs);
 
-  fop = callPackage ../tools/typesetting/fop { };
-
   fondu = callPackage ../tools/misc/fondu {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
