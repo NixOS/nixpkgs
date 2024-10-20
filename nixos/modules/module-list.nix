@@ -715,6 +715,7 @@
   ./services/home-automation/home-assistant.nix
   ./services/home-automation/homebridge.nix
   ./services/home-automation/matter-server.nix
+  ./services/home-automation/openthread-border-router.nix
   ./services/home-automation/wyoming/faster-whisper.nix
   ./services/home-automation/wyoming/openwakeword.nix
   ./services/home-automation/wyoming/piper.nix
