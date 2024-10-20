@@ -656,7 +656,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-footnotes";
           homepage = "https://github.com/mjbvz/vscode-markdown-footnotes";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -689,7 +689,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bierner.markdown-preview-github-styles";
           homepage = "https://github.com/mjbvz/vscode-github-markdown-preview-style";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -710,7 +710,7 @@ let
             # or
             asl20
           ];
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -727,7 +727,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=bmalehorn.vscode-fish";
           homepage = "https://github.com/bmalehorn/vscode-fish";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -1793,7 +1793,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=fabiospampinato.vscode-open-in-github";
           homepage = "https://github.com/fabiospampinato/vscode-open-in-github";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -1930,7 +1930,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=fortran-lang.linter-gfortran";
           homepage = "https://github.com/fortran-lang/vscode-fortran-support";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -2844,7 +2844,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=Kravets.vscode-publint";
           homepage = "https://github.com/kravetsone/vscode-publint";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -3069,7 +3069,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=meganrogge.template-string-converter";
           homepage = "https://github.com/meganrogge/template-string-converter";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -3605,7 +3605,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-wsl";
           homepage = "https://code.visualstudio.com/docs/remote/wsl";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -3716,7 +3716,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=nefrob.vscode-just-syntax";
           homepage = "https://github.com/nefrob/vscode-just";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -4455,7 +4455,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=sswg.swift-lang";
           homepage = "https://github.com/swiftlang/vscode-swift";
           license = lib.licenses.asl20;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -5076,7 +5076,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=vitaliymaz.vscode-svg-previewer";
           homepage = "https://github.com/vitaliymaz/vscode-svg-previewer";
           license = lib.licenses.unfree;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -5408,7 +5408,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=yoavbls.pretty-ts-errors";
           homepage = "https://github.com/yoavbls/pretty-ts-errors";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
@@ -5495,7 +5495,7 @@ let
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=zguolee.tabler-icons";
           homepage = "https://github.com/zguolee/vscode-tabler-icons";
           license = lib.licenses.mit;
-          maintainers = [ lib.maintainers.uncenter ];
+          maintainers = [ ];
         };
       };
 
