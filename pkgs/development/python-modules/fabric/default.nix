@@ -57,7 +57,7 @@ buildPythonPackage rec {
     homepage = "http://fabfile.org/";
     changelog = "https://www.fabfile.org/changelog.html";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "fab";
   };
 }
