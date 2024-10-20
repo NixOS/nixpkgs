@@ -526,8 +526,6 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
-  dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
-
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
   deck = callPackage ../by-name/de/deck/package.nix {
@@ -16614,6 +16612,7 @@ with pkgs;
   tcl = tcl-8_6;
   tcl-8_5 = callPackage ../development/interpreters/tcl/8.5.nix { };
   tcl-8_6 = callPackage ../development/interpreters/tcl/8.6.nix { };
+  tcl-9_0 = callPackage ../development/interpreters/tcl/9.0.nix { };
 
   tclreadline = callPackage ../development/interpreters/tclreadline { };
 
@@ -17017,8 +17016,6 @@ with pkgs;
   };
 
   buildBazelPackage = darwin.apple_sdk_11_0.callPackage ../build-support/build-bazel-package { };
-
-  bear = callPackage ../development/tools/build-managers/bear { };
 
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
@@ -23303,6 +23300,7 @@ with pkgs;
 
   tk = tk-8_6;
 
+  tk-9_0 = callPackage ../development/libraries/tk/9.0.nix { tcl = tcl-9_0; };
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
@@ -30387,10 +30385,9 @@ with pkgs;
 
   khard = callPackage ../applications/misc/khard { };
 
-  kid3-cli = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = false; };
-  kid3-kde = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = true; withQt = false; };
-  kid3-qt = qt6Packages.callPackage ../applications/audio/kid3 { withCLI = true; withKDE = false; withQt = true; };
-  kid3 = kid3-kde;
+  kid3-cli = kid3.override { withCLI = true; withKDE = false; withQt = false; };
+  kid3-kde = kid3.override { withCLI = true; withKDE = true; withQt = false; };
+  kid3-qt = kid3.override { withCLI = true; withKDE = false; withQt = true; };
 
   kile = callPackage ../applications/editors/kile { };
 
@@ -33368,8 +33365,6 @@ with pkgs;
   };
 
   vwm = callPackage ../applications/window-managers/vwm { };
-
-  vym = libsForQt5.callPackage ../applications/misc/vym { };
 
   wad = callPackage ../tools/security/wad { };
 
