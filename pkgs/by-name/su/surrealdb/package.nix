@@ -16,13 +16,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
-  version = "1.3.1";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
     rev = "v${version}";
-    hash = "sha256-dnfgU7nTX3vvqN9Mox6USRfpFdEI/dAOKIVZ2Jd4t9o=";
+    hash = "";
   };
 
   cargoHash = "sha256-B+x+xEcwHqoYMolAuMQzSiO/QA1FiBGO3eis9kgN1S4=";
