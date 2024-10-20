@@ -2672,9 +2672,8 @@ with pkgs;
     inherit (darwin) moltenvk;
   };
 
-  dolphin-emu-primehack = qt5.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
+  dolphin-emu-primehack = qt6.callPackage ../applications/emulators/dolphin-emu/primehack.nix {
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-    fmt = fmt_8;
   };
 
   ### APPLICATIONS/EMULATORS/RETROARCH
