@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3Packages, file, less, highlight, w3m, imagemagick
+{ lib, fetchFromGitHub, python3Packages, file, less, highlight, ueberzugpp, imagemagick
 , imagePreviewSupport ? true
 , sixelPreviewSupport ? true
 , neoVimSupport ? true
@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = [
     less
     file
-  ] ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ]
+  ] ++ lib.optionals imagePreviewSupport [ python3Packages.pillow ueberzugpp ]
     ++ lib.optionals sixelPreviewSupport [ imagemagick ]
     ++ lib.optionals neoVimSupport [ python3Packages.pynvim ]
     ++ lib.optionals improvedEncodingDetection [ python3Packages.chardet ]
@@ -43,10 +43,9 @@ python3Packages.buildPythonApplication rec {
       --replace /usr/share $out/share \
       --replace "#set preview_script ~/.config/ranger/scope.sh" "set preview_script $out/share/doc/ranger/config/scope.sh"
   '' + lib.optionalString imagePreviewSupport ''
-    substituteInPlace ranger/ext/img_display.py \
-      --replace /usr/lib/w3m ${w3m}/libexec/w3m
+    substituteInPlace ranger/config/rc.conf \
+      --replace "set preview_images_method w3m" "set preview_images_method ueberzug"
 
-    # give image previews out of the box when building with w3m
     substituteInPlace ranger/config/rc.conf \
       --replace "set preview_images false" "set preview_images true"
   '';
