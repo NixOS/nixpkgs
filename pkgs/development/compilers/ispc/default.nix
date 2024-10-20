@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname   = "ispc";
-  version = "1.24.0";
+  version = "1.25.0";
 
   dontFixCmake = true; # https://github.com/NixOS/nixpkgs/pull/232522#issuecomment-2133803566
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner  = pname;
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "sha256-1Ns8w34fXgYrSu3XE89uowjaVoW3MOgKYV1Jb/XRj1Q=";
+    sha256 = "sha256-DT8YjyAOdtAaWnCUvKRQGhPOazUkuRWkajBVK279Qhk=";
   };
 
   nativeBuildInputs = [ cmake which m4 bison flex python3 llvmPackages.libllvm.dev tbb ];
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       echo "================================"
       echo
       (cd ../
-       PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
+       PATH=${llvmPackages.clang}/bin:$PATH python scripts/run_tests.py -t $target --non-interactive --verbose --file=test_output.log
        fgrep -q "No new fails"  test_output.log || exit 1)
     done
   '';
