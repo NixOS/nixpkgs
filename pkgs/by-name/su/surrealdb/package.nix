@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     owner = "surrealdb";
     repo = "surrealdb";
     rev = "v${version}";
-    hash = "";
+    hash = "sha256-5OH+E6zfmhg70c1RYQqhVqaJgeC3i6L5KfAyK6q9yw8=";
   };
 
   cargoHash = "sha256-B+x+xEcwHqoYMolAuMQzSiO/QA1FiBGO3eis9kgN1S4=";
