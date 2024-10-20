@@ -61,7 +61,6 @@ self: super: {
   # Upgrade to accommodate new core library versions, where the authors have
   # already made the relevant changes.
   aeson = doDistribute self.aeson_2_2_3_0;
-  apply-refact = doDistribute self.apply-refact_0_14_0_0;
   attoparsec-aeson = doDistribute self.attoparsec-aeson_2_2_2_0;
   auto-update = super.auto-update_0_2_1;
   extensions = doDistribute self.extensions_0_1_0_2;
@@ -111,9 +110,6 @@ self: super: {
   time-compat = doJailbreak super.time-compat; # base <4.20
 
   bitvec = doJailbreak super.bitvec; # primitive <0.9
-
-  apply-refact_0_14_0_0 = doJailbreak super.apply-refact_0_14_0_0; # ghc-exactprint <1.9
-  retrie = doJailbreak super.retrie; # base <4.20, ghc<9.9, ghc-exactprint<1.9
 
   hashable_1_4_7_0 = doJailbreak super.hashable_1_4_7_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
   hashable_1_5_0_0 = doJailbreak super.hashable_1_5_0_0; # relax bounds for QuickCheck, tasty, and tasty-quickcheck
