@@ -1,8 +1,11 @@
 { config, lib, pkgs, options, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkRenamedOptionModule mkAliasOptionModuleMD mkEnableOption
+                mkOption types literalExpression mkPackageOption mkIf
+                optionalString optional mkDefault escapeShellArgs optionalAttrs
+                mkMerge;
+
   cfg = config.services.transmission;
   opt = options.services.transmission;
   inherit (config.environment) etc;
@@ -49,127 +52,127 @@ in
         default = {};
         type = types.submodule {
           freeformType = settingsFormat.type;
-          options.download-dir = mkOption {
-            type = types.path;
-            default = "${cfg.home}/${downloadsDir}";
-            defaultText = literalExpression ''"''${config.${opt.home}}/${downloadsDir}"'';
-            description = "Directory where to download torrents.";
-          };
-          options.incomplete-dir = mkOption {
-            type = types.path;
-            default = "${cfg.home}/${incompleteDir}";
-            defaultText = literalExpression ''"''${config.${opt.home}}/${incompleteDir}"'';
-            description = ''
-              When enabled with
-              services.transmission.home
-              [](#opt-services.transmission.settings.incomplete-dir-enabled),
-              new torrents will download the files to this directory.
-              When complete, the files will be moved to download-dir
-              [](#opt-services.transmission.settings.download-dir).
-            '';
-          };
-          options.incomplete-dir-enabled = mkOption {
-            type = types.bool;
-            default = true;
-            description = "";
-          };
-          options.message-level = mkOption {
-            type = types.ints.between 0 6;
-            default = 2;
-            description = "Set verbosity of transmission messages.";
-          };
-          options.peer-port = mkOption {
-            type = types.port;
-            default = 51413;
-            description = "The peer port to listen for incoming connections.";
-          };
-          options.peer-port-random-high = mkOption {
-            type = types.port;
-            default = 65535;
-            description = ''
-              The maximum peer port to listen to for incoming connections
-              when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
-            '';
-          };
-          options.peer-port-random-low = mkOption {
-            type = types.port;
-            default = 65535;
-            description = ''
-              The minimal peer port to listen to for incoming connections
-              when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
-            '';
-          };
-          options.peer-port-random-on-start = mkOption {
-            type = types.bool;
-            default = false;
-            description = "Randomize the peer port.";
-          };
-          options.rpc-bind-address = mkOption {
-            type = types.str;
-            default = "127.0.0.1";
-            example = "0.0.0.0";
-            description = ''
-              Where to listen for RPC connections.
-              Use `0.0.0.0` to listen on all interfaces.
-            '';
-          };
-          options.rpc-port = mkOption {
-            type = types.port;
-            default = 9091;
-            description = "The RPC port to listen to.";
-          };
-          options.script-torrent-done-enabled = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether to run
-              [](#opt-services.transmission.settings.script-torrent-done-filename)
-              at torrent completion.
-            '';
-          };
-          options.script-torrent-done-filename = mkOption {
-            type = types.nullOr types.path;
-            default = null;
-            description = "Executable to be run at torrent completion.";
-          };
-          options.umask = mkOption {
-            type = types.int;
-            default = 2;
-            description = ''
-              Sets transmission's file mode creation mask.
-              See the umask(2) manpage for more information.
-              Users who want their saved torrents to be world-writable
-              may want to set this value to 0.
-              Bear in mind that the json markup language only accepts numbers in base 10,
-              so the standard umask(2) octal notation "022" is written in settings.json as 18.
-            '';
-          };
-          options.utp-enabled = mkOption {
-            type = types.bool;
-            default = true;
-            description = ''
-              Whether to enable [Micro Transport Protocol (µTP)](https://en.wikipedia.org/wiki/Micro_Transport_Protocol).
-            '';
-          };
-          options.watch-dir = mkOption {
-            type = types.path;
-            default = "${cfg.home}/${watchDir}";
-            defaultText = literalExpression ''"''${config.${opt.home}}/${watchDir}"'';
-            description = "Watch a directory for torrent files and add them to transmission.";
-          };
-          options.watch-dir-enabled = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''Whether to enable the
-              [](#opt-services.transmission.settings.watch-dir).
-            '';
-          };
-          options.trash-original-torrent-files = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''Whether to delete torrents added from the
-              [](#opt-services.transmission.settings.watch-dir).
-            '';
+          options = {
+            download-dir = mkOption {
+              type = types.path;
+              default = "${cfg.home}/${downloadsDir}";
+              defaultText = literalExpression ''"''${config.${opt.home}}/${downloadsDir}"'';
+              description = "Directory where to download torrents.";
+            };
+            incomplete-dir = mkOption {
+              type = types.path;
+              default = "${cfg.home}/${incompleteDir}";
+              defaultText = literalExpression ''"''${config.${opt.home}}/${incompleteDir}"'';
+              description = ''
+                When enabled with
+                services.transmission.home
+                [](#opt-services.transmission.settings.incomplete-dir-enabled),
+                new torrents will download the files to this directory.
+                When complete, the files will be moved to download-dir
+                [](#opt-services.transmission.settings.download-dir).
+              '';
+            };
+            incomplete-dir-enabled = mkOption {
+              type = types.bool;
+              default = true;
+              description = "";
+            };
+            message-level = mkOption {
+              type = types.ints.between 0 6;
+              default = 2;
+              description = "Set verbosity of transmission messages.";
+            };
+            peer-port = mkOption {
+              type = types.port;
+              default = 51413;
+              description = "The peer port to listen for incoming connections.";
+            };
+            peer-port-random-high = mkOption {
+              type = types.port;
+              default = 65535;
+              description = ''
+                The maximum peer port to listen to for incoming connections
+                when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
+              '';
+            };
+            peer-port-random-low = mkOption {
+              type = types.port;
+              default = 65535;
+              description = ''
+                The minimal peer port to listen to for incoming connections
+                when [](#opt-services.transmission.settings.peer-port-random-on-start) is enabled.
+              '';
+            };
+            peer-port-random-on-start = mkOption {
+              type = types.bool;
+              default = false;
+              description = "Randomize the peer port.";
+            };
+            rpc-bind-address = mkOption {
+              type = types.str;
+              default = "127.0.0.1";
+              example = "0.0.0.0";
+              description = ''
+                Where to listen for RPC connections.
+                Use `0.0.0.0` to listen on all interfaces.
+              '';
+            };
+            rpc-port = mkOption {
+              type = types.port;
+              default = 9091;
+              description = "The RPC port to listen to.";
+            };
+            script-torrent-done-enabled = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''
+                Whether to run
+                [](#opt-services.transmission.settings.script-torrent-done-filename)
+                at torrent completion.
+              '';
+            };
+            script-torrent-done-filename = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = "Executable to be run at torrent completion.";
+            };
+            umask = mkOption {
+              type = types.str;
+              default = "022";
+              description = ''
+                Sets transmission's file mode creation mask.
+                See the umask(2) manpage for more information.
+                Users who want their saved torrents to be world-writable
+                may want to set this value to `000`.
+              '';
+            };
+            utp-enabled = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether to enable [Micro Transport Protocol (µTP)](https://en.wikipedia.org/wiki/Micro_Transport_Protocol).
+              '';
+            };
+            watch-dir = mkOption {
+              type = types.path;
+              default = "${cfg.home}/${watchDir}";
+              defaultText = literalExpression ''"''${config.${opt.home}}/${watchDir}"'';
+              description = "Watch a directory for torrent files and add them to transmission.";
+            };
+            watch-dir-enabled = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''Whether to enable the
+                [](#opt-services.transmission.settings.watch-dir).
+              '';
+            };
+            trash-original-torrent-files = mkOption {
+              type = types.bool;
+              default = false;
+              description = ''Whether to delete torrents added from the
+                [](#opt-services.transmission.settings.watch-dir).
+              '';
+            };
           };
         };
       };
@@ -310,8 +313,11 @@ in
       after = [ "network.target" ] ++ optional apparmor.enable "apparmor.service";
       requires = optional apparmor.enable "apparmor.service";
       wantedBy = [ "multi-user.target" ];
-      environment.CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
-      environment.TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
+
+      environment = {
+        CURL_CA_BUNDLE = etc."ssl/certs/ca-certificates.crt".source;
+        TRANSMISSION_WEB_HOME = lib.mkIf (cfg.webHome != null) cfg.webHome;
+      };
 
       serviceConfig = {
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
