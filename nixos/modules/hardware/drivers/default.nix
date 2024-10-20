@@ -67,16 +67,15 @@ in
       }
     ];
 
-    systemd.tmpfiles.rules = [
-      "L+ /run/opengl-driver - - - - ${envFor pkgs}"
-      (
-        if pkgs.stdenv.is32bit then
-          "L+ /run/opengl-driver-32 - - - - opengl-driver"
+    systemd.tmpfiles.settings.graphics-driver = {
+      "/run/opengl-driver"."L+".argument = toString (envFor pkgs);
+      "/run/opengl-driver-32" =
+        if pkgs.stdenv.hostPlatform.isi686 then
+          { "L+".argument = "opengl-driver"; }
         else if this.support32Bit then
-          "L+ /run/opengl-driver-32 - - - - ${envFor pkgs.pkgsi686Linux}"
+          { "L+".argument = toString (envFor pkgs.pkgsi686Linux); }
         else
-          "r /run/opengl-driver-32"
-      )
-    ];
+          { "r" = { }; };
+    };
   };
 }
