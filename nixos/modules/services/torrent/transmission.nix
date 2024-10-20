@@ -133,15 +133,13 @@ in
             description = "Executable to be run at torrent completion.";
           };
           options.umask = mkOption {
-            type = types.int;
-            default = 2;
+            type = types.str;
+            default = "022";
             description = ''
               Sets transmission's file mode creation mask.
               See the umask(2) manpage for more information.
               Users who want their saved torrents to be world-writable
-              may want to set this value to 0.
-              Bear in mind that the json markup language only accepts numbers in base 10,
-              so the standard umask(2) octal notation "022" is written in settings.json as 18.
+              may want to set this value to `000`.
             '';
           };
           options.utp-enabled = mkOption {
