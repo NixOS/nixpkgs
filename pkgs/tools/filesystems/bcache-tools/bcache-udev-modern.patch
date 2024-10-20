@@ -24,7 +24,7 @@ index 9cc7f0d..6a52893 100644
  LABEL="bcache_backing_found"
  RUN{builtin}+="kmod load bcache"
 -RUN+="bcache-register $tempnode"
-+RUN+="/bin/sh -c 'echo $tempnode > /sys/fs/bcache/register_quiet'"
++RUN+="@shell@ -c 'echo $tempnode > /sys/fs/bcache/register_quiet'"
  LABEL="bcache_backing_end"
  
  # Cached devices: symlink
