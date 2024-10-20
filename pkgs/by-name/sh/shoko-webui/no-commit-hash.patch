@@ -1,0 +1,20 @@
+diff --git a/vite.config.mjs b/vite.config.mjs
+index 481b319..186ba94 100644
+--- a/vite.config.mjs
++++ b/vite.config.mjs
+@@ -1,6 +1,5 @@
+ import path from 'path';
+ import { writeFile } from 'fs/promises';
+-import childProcess from 'child_process';
+ import pkg from './package.json';
+ 
+ import { defineConfig } from 'vite';
+@@ -54,7 +53,7 @@ export default defineConfig(async () => {
+ });
+ 
+ async function setupEnv(isDebug) {
+-  const gitHash = childProcess.execSync("git log --pretty=format:'%h' -n 1").toString().replace(/["']/g, '');
++  const gitHash = '';
+   const appVersion = pkg.version;
+ 
+   process.env.VITE_GITHASH = gitHash;
