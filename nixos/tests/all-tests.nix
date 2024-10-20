@@ -942,6 +942,7 @@ in {
   shadow = handleTest ./shadow.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
+  shoko = handleTest ./shoko.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   silverbullet = handleTest ./silverbullet.nix {};
