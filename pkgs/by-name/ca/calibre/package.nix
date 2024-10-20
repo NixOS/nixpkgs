@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, fetchpatch
-, ffmpeg
-, fontconfig
-, hunspell
-, hyphen
-, icu
-, imagemagick
-, libjpeg
-, libmtp
-, libpng
-, libstemmer
-, libuchardet
-, libusb1
-, piper-tts
-, pkg-config
-, podofo
-, poppler_utils
-, python3Packages
-, qt6
-, speechd-minimal
-, sqlite
-, xdg-utils
-, wrapGAppsHook3
-, popplerSupport ? true
-, speechSupport ? true
-, unrarSupport ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  fetchpatch,
+  ffmpeg,
+  fontconfig,
+  hunspell,
+  hyphen,
+  icu,
+  imagemagick,
+  libjpeg,
+  libmtp,
+  libpng,
+  libstemmer,
+  libuchardet,
+  libusb1,
+  piper-tts,
+  pkg-config,
+  podofo,
+  poppler_utils,
+  python3Packages,
+  qt6,
+  speechd-minimal,
+  sqlite,
+  xdg-utils,
+  wrapGAppsHook3,
+  popplerSupport ? true,
+  speechSupport ? true,
+  unrarSupport ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,8 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-8tOxFCmZal+JxOz6LeuUr+TgX7IaxC9Ow73bMgFJPt8=";
     })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  ] ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
@@ -92,8 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtbase
     qt6.qtwayland
     sqlite
-    (python3Packages.python.withPackages
-      (ps: with ps; [
+    (python3Packages.python.withPackages (
+      ps:
+      with ps;
+      [
         (apsw.overrideAttrs (oldAttrs: {
           setupPyBuildFlags = [ "--enable=load_extension" ];
         }))
@@ -125,13 +127,17 @@ stdenv.mkDerivation (finalAttrs: {
         xxhash
         # the following are distributed with calibre, but we use upstream instead
         odfpy
-      ] ++ lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms) [
-        # much of calibre's functionality is usable without a web
-        # browser, so we enable building on platforms which qtwebengine
-        # does not support by simply omitting qtwebengine.
-        pyqt6-webengine
-      ] ++ lib.optional (unrarSupport) unrardll)
-    )
+      ]
+      ++
+        lib.optionals (lib.lists.any (p: p == stdenv.hostPlatform.system) pyqt6-webengine.meta.platforms)
+          [
+            # much of calibre's functionality is usable without a web
+            # browser, so we enable building on platforms which qtwebengine
+            # does not support by simply omitting qtwebengine.
+            pyqt6-webengine
+          ]
+      ++ lib.optional (unrarSupport) unrardll
+    ))
     xdg-utils
   ] ++ lib.optional (speechSupport) speechd-minimal;
 
@@ -221,9 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
       free and open source and great for both casual users and computer experts.
     '';
     changelog = "https://github.com/kovidgoyal/calibre/releases/tag/v${finalAttrs.version}";
-    license = if unrarSupport
-              then lib.licenses.unfreeRedistributable
-              else lib.licenses.gpl3Plus;
+    license = if unrarSupport then lib.licenses.unfreeRedistributable else lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ pSub ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
