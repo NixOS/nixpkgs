@@ -1,13 +1,13 @@
 { lib, stdenv, fetchFromGitHub, zlib, zstd, pkg-config, python3, openssl, which, curl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
   version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     sha256 = "sha256-2AURPvhpgdIm034KEMm7Tmf8Zx/XER76aT6SiINs6wg=";
   };
 
@@ -30,4 +30,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ commandodev ];
   };
-}
+})
