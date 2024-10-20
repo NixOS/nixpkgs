@@ -48,21 +48,6 @@ let
         ]
       );
 
-    meta = {
-      description = "Build smaller, faster, and more secure desktop applications with a web frontend";
-      homepage = "https://tauri.app/";
-      changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${version}";
-      license = with lib.licenses; [
-        asl20 # or
-        mit
-      ];
-      maintainers = with lib.maintainers; [
-        dit7ya
-        getchoo
-        happysalada
-      ];
-      mainProgram = "cargo-tauri";
-    };
   };
 in
 
@@ -76,6 +61,22 @@ cargo-tauri.overrideAttrs (
       tests = {
         setupHooks = callPackage ./test-app.nix { cargo-tauri = finalAttrs.finalPackage; };
       };
+    };
+
+    meta = {
+      description = "Build smaller, faster, and more secure desktop applications with a web frontend";
+      homepage = "https://tauri.app/";
+      changelog = "https://github.com/tauri-apps/tauri/releases/tag/tauri-v${finalAttrs.version}";
+      license = with lib.licenses; [
+        asl20 # or
+        mit
+      ];
+      maintainers = with lib.maintainers; [
+        dit7ya
+        getchoo
+        happysalada
+      ];
+      mainProgram = "cargo-tauri";
     };
   }
 )
