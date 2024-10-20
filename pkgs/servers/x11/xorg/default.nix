@@ -3858,11 +3858,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xkbprint = callPackage ({ stdenv, pkg-config, fetchurl, libX11, libxkbfile, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xkbprint";
-    version = "1.0.6";
+    version = "1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/xkbprint-1.0.6.tar.xz";
-      sha256 = "1c57kb8d8cbf720n9bcjhhaqpk08lac0sk4l0jp8j0mryw299k4r";
+      url = "mirror://xorg/individual/app/xkbprint-1.0.7.tar.xz";
+      sha256 = "1k2rm8lvc2klcdz2s3mymb9a2ahgwqwkgg67v3phv7ij6304jkqw";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
