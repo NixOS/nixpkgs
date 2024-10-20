@@ -20064,6 +20064,12 @@
     githubId = 7091399;
     keys = [ { fingerprint = "897E 6BE3 0345 B43D CADD  05B7 290F CF08 1AED B3EC"; } ];
   };
+  smonson = {
+    name = "Samuel Monson";
+    email = "smonson@irbash.net";
+    github = "sjmonson";
+    githubId = 17662218;
+  };
   smrehman = {
     name = "Syed Moiz Ur Rehman";
     email = "smrehman@proton.me";
