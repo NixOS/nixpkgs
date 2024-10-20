@@ -38699,4 +38699,6 @@ with pkgs;
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
+
+  wivrn = qt6Packages.callPackage ../applications/video/wivrn { };
 }
