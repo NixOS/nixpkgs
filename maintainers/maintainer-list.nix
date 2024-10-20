@@ -23509,6 +23509,12 @@
     githubId = 15948162;
     name = "Yanni Papandreou";
   };
+  yarekt = {
+    name = "Yarek T";
+    email = "yarekt+nixpkgs@gmail.com";
+    github = "yarektyshchenko";
+    githubId = 185304;
+  };
   yarny = {
     github = "Yarny0";
     githubId = 41838844;
