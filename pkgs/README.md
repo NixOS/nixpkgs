@@ -132,6 +132,8 @@ Now that this is out of the way. To add a package to Nixpkgs:
 
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
+(using "→" instead of "->" is also accepted)
+
 ## Category Hierarchy
 [categories]: #category-hierarchy
 
