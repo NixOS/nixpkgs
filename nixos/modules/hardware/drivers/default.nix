@@ -11,7 +11,6 @@ let
     mkIf
     mkRemovedOptionModule
     mkEnableOption
-    optional
     types
     ;
 
@@ -41,19 +40,6 @@ in
     support32Bit =
       mkEnableOption "32 bit drivers usable by 32 bit applications"
       // mkOption { default = false; };
-
-    setLdLibraryPath = mkOption {
-      type = types.bool;
-      internal = true;
-      default = false;
-      description = ''
-        Whether the `LD_LIBRARY_PATH` environment variable
-        should be set to the locations of driver libraries. Drivers which
-        rely on overriding libraries should set this to true. Drivers which
-        support `libglvnd` and other dispatch libraries
-        instead of overriding libraries should not set this.
-      '';
-    };
   };
   imports = [
     # (mkRemovedOptionModule
@@ -89,9 +75,5 @@ in
           "r /run/opengl-driver-32"
       )
     ];
-
-    environment.sessionVariables.LD_LIBRARY_PATH = mkIf this.setLdLibraryPath (
-      [ "/run/opengl-driver/lib" ] ++ optional this.support32Bit "/run/opengl-driver-32/lib"
-    );
   };
 }
