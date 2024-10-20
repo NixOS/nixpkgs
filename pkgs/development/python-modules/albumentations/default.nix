@@ -42,6 +42,10 @@ buildPythonPackage rec {
     hash = "sha256-4JOqaSpBXSrAR3qrOeab+PvhXPcoEnblO0n9TSqW0bY=";
   };
 
+  patches = [
+    ./dont-check-for-updates.patch
+  ];
+
   pythonRemoveDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
