@@ -21,8 +21,6 @@ buildPythonPackage rec {
   version = "0.5.0";
   pyproject = true;
 
-  disabled = pythonAtLeast "3.12";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-3Z9KxcvY43w1LAQDYGLTxfZ+/sdtQEdh7xawy/JqpqA=";
@@ -40,6 +38,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+  # Only the command line doesn't work on with Python 3.12, due to usage of
+  # deprecated distutils module. Not disabling it totally.
+  disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
+    "pyct/tests/test_cmd.py"
   ];
 
   pythonImportsCheck = [ "pyct" ];
