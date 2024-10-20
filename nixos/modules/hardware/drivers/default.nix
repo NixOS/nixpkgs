@@ -42,6 +42,7 @@ in
       // mkOption { default = false; };
   };
   imports = [
+    (lib.mkRenamedOptionModule [ "hardware" "graphics" "enable32Bit"] [ "hardware" "drivers" "support32Bit" ])
     # (mkRemovedOptionModule
     #   [
     #     "hardware"
