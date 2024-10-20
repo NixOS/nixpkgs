@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "BORINGSSL_LIBS=-L${lib.getLib boringssl}/lib"
+    # Linking with CXX because boringssl static libraries depend on C++ stdlib.
+    # Upstream issue: https://www.github.com/meetecho/janus-gateway/issues/3456
+    "CCLD=${stdenv.cc.targetPrefix}c++"
   ];
 
   outputs = [ "out" "dev" "doc" "man" ];
