@@ -867,6 +867,7 @@
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
   ./services/misc/serviio.nix
+  ./services/misc/shoko.nix
   ./services/misc/sickbeard.nix
   ./services/misc/signald.nix
   ./services/misc/siproxd.nix
