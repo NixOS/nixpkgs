@@ -436,32 +436,25 @@ let
     };
   });
 
-  coalton = build-asdf-system {
-    pname = "coalton";
-    version = "trunk";
-    src = pkgs.fetchFromGitHub {
-      owner = "coalton-lang";
-      repo = "coalton";
-      rev = "05111b8a59e3f7346b175ce1ec621bff588e1e1f";
-      hash = "sha256-L9o7Y3zDx9qLXGe/70c1LWEKUWsSRgBQru66mIuaCFw=";
-    };
-    lispLibs = with super; [
-      alexandria
-      eclector-concrete-syntax-tree
-      fiasco
-      float-features
-      self.fset
-      named-readtables
-      trivial-garbage
+  thih-coalton = self.coalton;
+  quil-coalton = self.coalton;
+  coalton = super.coalton.overrideLispAttrs (oa: {
+    systems = [
+      "coalton"
+      "thih-coalton"
+      "quil-coalton"
+      "thih-coalton/tests"
+      "quil-coalton/tests"
+      "coalton/tests"
     ];
+    lispLibs = oa.lispLibs ++ [ self.fiasco ];
     nativeLibs = [ pkgs.mpfr ];
-    systems = [ "coalton" "coalton/tests" ];
     meta = {
       description = "statically typed functional programming language that supercharges Common Lisp";
       homepage = "https://coalton-lang.github.io";
       license = pkgs.lib.licenses.mit;
     };
-  };
+  });
 
   });
 
