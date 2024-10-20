@@ -8,14 +8,16 @@
   mock,
   paramiko,
   pynacl,
-  pytestCheckHook,
+  pypaInstallHook,
   pytest-relaxed,
+  pytestCheckHook,
+  setuptoolsBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "fabric";
   version = "3.2.2";
-  format = "setuptools";
+  pyproject = false;
 
   src = fetchPypi {
     inherit pname version;
@@ -28,18 +30,23 @@ buildPythonPackage rec {
         --replace ', "pathlib2"' ' '
   '';
 
-  propagatedBuildInputs = [
-    invoke
-    paramiko
+  nativeBuildInputs = [
+    pypaInstallHook
+    setuptoolsBuildHook
+  ];
+
+  dependencies = [
     cryptography
     decorator
+    invoke
+    paramiko
     pynacl
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-relaxed
     mock
+    pytest-relaxed
+    pytestCheckHook
   ];
 
   # ==================================== ERRORS ====================================
@@ -50,11 +57,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fabric" ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic remote execution";
-    mainProgram = "fab";
-    homepage = "https://www.fabfile.org/";
-    license = licenses.bsd2;
+    homepage = "http://fabfile.org/";
+    changelog = "https://www.fabfile.org/changelog.html";
+    license = lib.licenses.bsd2;
     maintainers = [ ];
+    mainProgram = "fab";
   };
 }
