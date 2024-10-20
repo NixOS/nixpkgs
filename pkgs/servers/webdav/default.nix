@@ -19,7 +19,10 @@ buildGo123Module rec {
     description = "Simple WebDAV server";
     homepage = "https://github.com/hacdias/webdav";
     license = licenses.mit;
-    maintainers = with maintainers; [ pmy ];
+    maintainers = with maintainers; [
+      pmy
+      pbsds
+    ];
     mainProgram = "webdav";
   };
 }
