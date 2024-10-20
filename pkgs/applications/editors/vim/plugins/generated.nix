@@ -18648,6 +18648,18 @@ final: prev:
     meta.homepage = "https://github.com/tomtom/tinykeymap_vim/";
   };
 
+  unimpaired-nvim = buildVimPlugin {
+    pname = "unimpaired.nvim";
+    version = "2024-10-17";
+    src = fetchFromGitHub {
+      owner = "tummetott";
+      repo = "unimpaired.nvim";
+      rev = "8e504ba95dd10a687f4e4dacd5e19db221b88534";
+      sha256 = "sha256-CNU4cigMjbvOdUzUXze9ZDmTZRuYtj4dCuuLVZkMTQg=";
+    };
+    meta.homepage = "https://github.com/tummetott/unimpaired.nvim/";
+  };
+
   vim-advanced-sorters = buildVimPlugin {
     pname = "vim-advanced-sorters";
     version = "2024-08-16";
