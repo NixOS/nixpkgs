@@ -17,6 +17,7 @@
   freetype,
   git,
   glm,
+  glib,
   glslang,
   harfbuzz,
   libdrm,
@@ -43,13 +44,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wivrn";
-  version = "0.19";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "wivrn";
     repo = "wivrn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-DYV+JUWjjhLZLq+4Hv7jxOyxDqQut/mU1X0ZFMoNkDI=";
+    hash = "sha256-mxvfwp/9CUoc6tU3KW257qlpXEZu7tK33jxn1TjAZYc=";
   };
 
   monado = applyPatches {
@@ -57,18 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
       domain = "gitlab.freedesktop.org";
       owner = "monado";
       repo = "monado";
-      rev = "bcbe19ddd795f182df42051e5495e9727db36c1c";
-      hash = "sha256-sh5slHROcuC3Dgenu1+hm8U5lUOW48JUbiluYvc3NiQ=";
+      rev = "d7089f182b0514e13554e99512d63e69c30523c5";
+      hash = "sha256-5+8cFDQ2ptaBIJMdZ6gyb0GSL8vBaZktbuBnRlTWOmg=";
     };
 
-    patches = [
-      "${finalAttrs.src}/patches/monado/0001-c-multi-disable-dropping-of-old-frames.patch"
-      "${finalAttrs.src}/patches/monado/0002-ipc-server-Always-listen-to-stdin.patch"
-      "${finalAttrs.src}/patches/monado/0003-c-multi-Don-t-log-frame-time-diff.patch"
-      "${finalAttrs.src}/patches/monado/0005-distortion-images.patch"
-      "${finalAttrs.src}/patches/monado/0008-Use-mipmaps-for-distortion-shader.patch"
-      "${finalAttrs.src}/patches/monado/0009-convert-to-YCbCr-in-monado.patch"
-    ];
+    patches = (
+      map (f: "${finalAttrs.src}/patches/monado/${f}") [
+        "0002-ipc-server-Always-listen-to-stdin.patch"
+        "0003-Use-extern-socket-fd.patch"
+        "0005-distortion-images.patch"
+        "0008-Use-mipmaps-for-distortion-shader.patch"
+        "0009-convert-to-YCbCr-in-monado.patch"
+        "0010-d-solarxr-Add-SolarXR-WebSockets-driver.patch"
+      ]
+    );
   };
 
   strictDeps = true;
@@ -91,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
     pkg-config
     python3
+    glib # provide gdbus-codegen
   ] ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
 
   buildInputs = [
@@ -101,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     freetype
     glm
+    glib
     harfbuzz
     libdrm
     libGL
