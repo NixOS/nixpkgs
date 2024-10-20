@@ -19,10 +19,9 @@ callPackage ./generic.nix args {
   # this package should point to the latest release.
   version = "2.2.6";
 
-  tests = [
-    nixosTests.zfs.installer
-    nixosTests.zfs.series_2_2
-  ];
+  tests = {
+    inherit (nixosTests.zfs) installer series_2_2;
+  };
 
   maintainers = with lib.maintainers; [ adamcstephens amarshall ];
 
