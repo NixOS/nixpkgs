@@ -9139,6 +9139,8 @@ self: super: with self; {
 
   nsapi = callPackage ../development/python-modules/nsapi { };
 
+  nskeyedunarchiver = callPackage ../development/python-modules/nskeyedunarchiver { };
+
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 
   ntplib = callPackage ../development/python-modules/ntplib { };
