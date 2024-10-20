@@ -4079,6 +4079,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-flutter/flutter-tools.nvim/";
   };
 
+  focus-nvim = buildVimPlugin {
+    pname = "focus.nvim";
+    version = "2024-10-20";
+    src = fetchFromGitHub {
+      owner = "nvim-focus";
+      repo = "focus.nvim";
+      rev = "3841a38df972534567e85840d7ead20d3a26faa6";
+      sha256 = "sha256-mgHk4u0ab2uSUNE+7DU22IO/xS5uop9iATfFRk6l6hs=";
+    };
+    meta.homepage = "https://github.com/nvim-focus/focus.nvim/";
+  };
+
   fold-preview-nvim = buildVimPlugin {
     pname = "fold-preview.nvim";
     version = "2023-01-27";
