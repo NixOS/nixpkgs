@@ -1,0 +1,26 @@
+diff --git a/platforms/iOS/vm/OSX/sqSqueakOSXApplication.m b/platforms/iOS/vm/OSX/sqSqueakOSXApplication.m
+index d248e9fd0..0ae695061 100644
+--- a/platforms/iOS/vm/OSX/sqSqueakOSXApplication.m
++++ b/platforms/iOS/vm/OSX/sqSqueakOSXApplication.m
+@@ -559,7 +559,7 @@ printOptionStrings()
+ 			sizeof(char *),
+ 			(int (*)(const void*,const void*))sortStrings);
+ 	while (--count >= 0)
+-		printf(optionStrings[count]);
++		printf("%s", optionStrings[count]);
+ }
+ 
+ - (void) printUsage {
+diff --git a/platforms/unix/vm/sqUnixMain.c b/platforms/unix/vm/sqUnixMain.c
+index 4795563f5..419f527e3 100644
+--- a/platforms/unix/vm/sqUnixMain.c
++++ b/platforms/unix/vm/sqUnixMain.c
+@@ -1829,7 +1829,7 @@ printOptionStrings()
+ 			sizeof(char *),
+ 			(int (*)(const void*,const void*))sortStrings);
+ 	while (--count >= 0)
+-		printf(optionStrings[count]);
++		printf("%s", optionStrings[count]);
+ }
+ 
+ void
