@@ -74,25 +74,23 @@
     splitLines = lib.splitString "\n" text;
     trimmedLines = map lib.trim splitLines;
     nonEmptyLines = builtins.filter (line: line != "") trimmedLines;
-    nonEmptyLinesWithoutComments = builtins.filter (line: !(startsWith "--" line)) nonEmptyLines;
+    nonEmptyLinesWithoutComments =
+      builtins.filter (line: !(startsWith "--" line)) nonEmptyLines;
 
     foldLines =
-      builtins.foldl'
-      (
-        acc: line: let
-          isCommaLine = builtins.substring 0 1 line == ",";
-          init = lib.sublist 0 lastIndex acc;
-          lastIndex = builtins.length acc - 1;
-          last =
-            if lastIndex >= 0
-            then builtins.elemAt acc lastIndex
-            else "";
-          newLastLine = last + line;
-        in
-          if isCommaLine
-          then (init ++ [newLastLine])
-          else acc ++ [line]
-      )
+      builtins.foldl' (acc: line: let
+        isCommaLine = builtins.substring 0 1 line == ",";
+        init = lib.sublist 0 lastIndex acc;
+        lastIndex = builtins.length acc - 1;
+        last =
+          if lastIndex >= 0
+          then builtins.elemAt acc lastIndex
+          else "";
+        newLastLine = last + line;
+      in
+        if isCommaLine
+        then (init ++ [newLastLine])
+        else acc ++ [line])
       []
       nonEmptyLinesWithoutComments;
   in
@@ -134,7 +132,8 @@
           };
         }
         .${operatorAndInclusive}
-        or (throw "Invalid version operator ${operatorAndInclusive} in version part ${value}");
+        or (throw
+          "Invalid version operator ${operatorAndInclusive} in version part ${value}");
     in
       {
         version = builtins.elemAt split 1;
@@ -177,7 +176,8 @@
         };
       }
       .${"${left.operator}${right.operator}"}
-      or (throw "Invalid version string ${value}")
+      or (throw
+        "Invalid version string ${value}")
     else throw "Invalid version string ${value}";
 
   parseVersion_emptyIsInfinity = value:
@@ -193,33 +193,34 @@
   parseIpkg = text: let
     lines = parseToLines text;
     # split by first whitespace using regex, first element is the key
-    dict =
-      builtins.foldl'
-      (acc: line: let
-        splitByFirstWhitespaceIgnoreEqualSign = builtins.match "([[:alnum:]_]+)[[:space:]]+=?[[:space:]]*(.*)" line;
-        key = builtins.elemAt splitByFirstWhitespaceIgnoreEqualSign 0;
-        value = builtins.elemAt splitByFirstWhitespaceIgnoreEqualSign 1;
+    dict = builtins.foldl' (acc: line: let
+      splitByFirstWhitespaceIgnoreEqualSign =
+        builtins.match "([[:alnum:]_]+)[[:space:]]+=?[[:space:]]*(.*)" line;
+      key = builtins.elemAt splitByFirstWhitespaceIgnoreEqualSign 0;
+      value = builtins.elemAt splitByFirstWhitespaceIgnoreEqualSign 1;
 
-        keyParsed =
-          if key == "package"
-          then "name"
-          else key;
+      keyParsed =
+        if key == "package"
+        then "name"
+        else key;
 
-        valueParsed =
-          if key == "depends"
-          then parseDependencies value
-          else if key == "modules"
-          then commaSeparatedToArray value
-          else if key == "langversion"
-          then parseVersion value
-          else removeQuotes value;
-      in
-        acc // {${keyParsed} = valueParsed;})
-      {}
-      lines;
+      valueParsed =
+        if key == "depends"
+        then parseDependencies value
+        else if key == "modules"
+        then commaSeparatedToArray value
+        else if key == "langversion"
+        then parseVersion value
+        else removeQuotes value;
+    in
+      acc // {${keyParsed} = valueParsed;}) {} lines;
 
     removeQuotes = value:
-      if builtins.substring 0 1 value == "\"" && builtins.substring (builtins.stringLength value - 1) 1 value == "\""
+      if
+        builtins.substring 0 1 value
+        == ''"''
+        && builtins.substring (builtins.stringLength value - 1) 1 value
+        == ''"''
       then builtins.substring 1 (builtins.stringLength value - 2) value
       else value;
 
@@ -237,9 +238,12 @@
 
     # "foo >= 0.6.0, bar >= 0.7.0" => { foo = { lowerInclusive = true; lowerBound = "0.6.0"; ... }; bar = { lowerInclusive = true; lowerBound = "0.7.0"; ... } }
     parseDependencies = string: let
-      nameValuesArray = builtins.map dependecyToHashNameValue (commaSeparatedToArray string);
+      nameValuesArray =
+        builtins.map dependecyToHashNameValue
+        (commaSeparatedToArray string);
     in
-      builtins.mapAttrs (_name: value: parseVersion_emptyIsInfinity value) (builtins.listToAttrs nameValuesArray);
+      builtins.mapAttrs (_name: value: parseVersion_emptyIsInfinity value)
+      (builtins.listToAttrs nameValuesArray);
   in
     dict;
 
@@ -312,14 +316,14 @@
       expected = [
         "package micropack"
         "version = 0.0.1"
-        "authors = \"Stefan Höck\""
-        "brief   = \"Minimalistic installer for pack\""
+        ''authors = "Stefan Höck"''
+        ''brief   = "Minimalistic installer for pack"''
         "langversion >= 0.6.0"
         "depends = base >= 0.6.0, elab-util, idris2, parser-toml"
         "main       = MicroPack"
         "executable = micropack"
         "modules = Pack.CmdLn, Pack.CmdLn.Completion, Pack.CmdLn.Types, Pack.Config"
-        "sourcedir  = \"src\""
+        ''sourcedir  = "src"''
       ];
     };
     # taken from idris2 --dump-ipkg-json ./micropack.ipkg
@@ -378,16 +382,17 @@
       expected = [
         "package pack"
         "version = 0.0.1"
-        "authors = \"Stefan Höck\""
-        "brief   = \"A package manager for Idris2 with curated package collections\""
+        ''authors = "Stefan Höck"''
+        ''
+          brief   = "A package manager for Idris2 with curated package collections"''
         "langversion >= 0.6.0"
-        "prebuild = \"bash version.sh\""
-        "postbuild = \"bash restore.sh\""
+        ''prebuild = "bash version.sh"''
+        ''postbuild = "bash restore.sh"''
         "depends = base >= 0.6.0, elab-util, idris2, parser-toml"
         "modules = Pack.CmdLn, Pack.CmdLn.Completion, Pack.CmdLn.Opts, Pack.CmdLn.Types, Pack.Config"
         "main       = Main"
         "executable = pack"
-        "sourcedir  = \"src\""
+        ''sourcedir  = "src"''
       ];
     };
     test2Parsed = {
@@ -453,14 +458,23 @@
     if testResults == []
     then true
     else let
-      errorMessage = lib.concatStringsSep "\n\n" (map (
-          test:
-            "Test: " + test.name + "\nExpected: " + builtins.toJSON test.expected + "\nActual  : " + builtins.toJSON test.result
-        )
-        testResults);
+      errorMessage = lib.concatStringsSep "\n\n" (map (test:
+        "Test: "
+        + test.name
+        + ''
+
+          Expected: ''
+        + builtins.toJSON test.expected
+        + ''
+
+          Actual  : ''
+        + builtins.toJSON test.result)
+      testResults);
     in
-      builtins.throw "\nTests failed.\n${errorMessage}\n";
+      builtins.throw ''
+
+        Tests failed.
+        ${errorMessage}
+      '';
 in
-  assert (runTestsAll tests); {
-    inherit parseIpkg importIpkg;
-  }
+  assert (runTestsAll tests); {inherit parseIpkg importIpkg;}
