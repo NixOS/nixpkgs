@@ -363,18 +363,6 @@ let
     ];
   };
 
-  sb-cga = build-asdf-system {
-    pname = "sb-cga";
-    version = "1.0.1";
-    src = pkgs.fetchFromGitHub {
-      owner = "nikodemus";
-      repo = "sb-cga";
-      rev = "9a554ea1c01cac998ff7eaa5f767bc5bcdc4c094";
-      sha256 = "sha256-iBM+VXu6JRqGmeIFzfXbGot+elvangmfSpDB7DjFpPg";
-    };
-    lispLibs = [ self.alexandria ];
-  };
-
   nsb-cga = super.nsb-cga.overrideLispAttrs (oa: {
     lispLibs = oa.lispLibs ++ [ self.sb-cga ];
   });
