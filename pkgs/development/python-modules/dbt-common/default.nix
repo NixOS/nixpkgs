@@ -1,24 +1,30 @@
 {
   lib,
-  agate,
+  fetchPypi,
   buildPythonPackage,
+  pythonOlder,
+
+  # build-system
+  hatchling,
+
+  # dependencies
+  agate,
   colorama,
   deepdiff,
-  fetchPypi,
-  hatchling,
   isodate,
   jinja2,
   jsonschema,
   mashumaro,
   pathspec,
   protobuf,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   typing-extensions,
+
+  # tests
+  pytestCheckHook,
+  pytest-mock,
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +40,9 @@ buildPythonPackage rec {
     hash = "sha256-ehZ+a3zznnWMY9NJx9LfRtkV1vHiIH0HEhsYWfMbmb4=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [
+    hatchling
+  ];
 
   pythonRelaxDeps = [
     "protobuf"
@@ -60,9 +68,9 @@ buildPythonPackage rec {
   doCheck = false;
 
   nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
     pytestCheckHook
+    pytest-xdist
+    pytest-mock
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
