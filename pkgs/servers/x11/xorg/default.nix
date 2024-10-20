@@ -854,11 +854,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   fonttosfnt = callPackage ({ stdenv, pkg-config, fetchurl, libfontenc, freetype, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "fonttosfnt";
-    version = "1.2.3";
+    version = "1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/app/fonttosfnt-1.2.3.tar.xz";
-      sha256 = "1bv1glfz4jqvkwx8hmv2vqilvxxl6jww3rvbzv6zbl6b83r96yma";
+      url = "mirror://xorg/individual/app/fonttosfnt-1.2.4.tar.xz";
+      sha256 = "0wk3fs038sh2sl1sqayzfjvygmcdp903qa1pd3aankxrgzv3b5i4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
