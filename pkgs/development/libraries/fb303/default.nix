@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fbthrift
-, fizz
-, folly
-, glog
-, libsodium
-, mvfst
-, python3
-, wangle
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fbthrift,
+  fizz,
+  folly,
+  glog,
+  libsodium,
+  mvfst,
+  python3,
+  wangle,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,17 @@ stdenv.mkDerivation rec {
     owner = "facebook";
     repo = "fb303";
     rev = "v${version}";
-    sha256 = "sha256-Jtztb8CTqvRdRjUa3jaouP5PFAwoM4rKLIfgvOyXUIg=";
+    hash = "sha256-Jtztb8CTqvRdRjUa3jaouP5PFAwoM4rKLIfgvOyXUIg=";
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [
-    "-DPYTHON_EXTENSIONS=OFF"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-DPYTHON_EXTENSIONS=OFF"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   buildInputs = [
     fbthrift
