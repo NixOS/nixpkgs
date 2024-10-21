@@ -117,6 +117,7 @@ let
   packages = [
     pkgs.modemmanager
     pkgs.networkmanager
+    pkgs.openconnect
   ]
   ++ cfg.plugins
   ++ lib.optionals (!delegateWireless && !enableIwd) [
@@ -577,6 +578,10 @@ in
     systemd.services.NetworkManager = {
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
+
+      # NetworkManager has been patched to search for needed binaries in its PATH.
+      # nftables, dnsmasq, dhcpcd and iputils are required for standard functionality.
+      path = [ pkgs.openconnect pkgs.nftables pkgs.dnsmasq pkgs.dhcpcd pkgs.iputils ];
 
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
 
