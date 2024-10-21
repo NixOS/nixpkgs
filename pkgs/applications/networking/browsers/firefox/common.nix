@@ -83,6 +83,11 @@ in
 , zlib
 , pkgsBuildBuild
 
+# Darwin
+, apple-sdk_14
+, cups
+, rsync # used when preparing .app directory
+
 # optionals
 
 ## addon signing/sideloading
@@ -214,6 +219,8 @@ let
     pref("${key}", ${builtins.toJSON value.value});
   '') defaultPrefs));
 
+  toolkit = if stdenv.hostPlatform.isDarwin then "cairo-cocoa" else "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
+
 in
 
 buildStdenv.mkDerivation {
@@ -263,7 +270,7 @@ buildStdenv.mkDerivation {
   + extraPostPatch;
 
   # Ignore trivial whitespace changes in patches, this fixes compatibility of
-  # ./env_var_for_system_dir.patch with Firefox >=65 without having to track
+  # ./env_var_for_system_dir-*.patch with Firefox >=65 without having to track
   # two patches.
   patchFlags = [ "-p1" "-l" ];
 
@@ -279,7 +286,6 @@ buildStdenv.mkDerivation {
     makeWrapper
     nodejs
     perl
-    pkg-config
     python3
     rust-cbindgen
     rustPlatform.bindgenHook
@@ -288,6 +294,8 @@ buildStdenv.mkDerivation {
     which
     wrapGAppsHook3
   ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
   ++ lib.optionals crashreporterSupport [ dump_syms patchelf ]
   ++ lib.optionals pgoSupport [ xvfb-run ]
   ++ extraNativeBuildInputs;
@@ -381,20 +389,9 @@ buildStdenv.mkDerivation {
     "--disable-tests"
     "--disable-updater"
     "--enable-application=${application}"
-    "--enable-default-toolkit=cairo-gtk3${lib.optionalString waylandSupport "-wayland"}"
-    "--enable-system-pixman"
+    "--enable-default-toolkit=${toolkit}"
     "--with-distribution-id=org.nixos"
     "--with-libclang-path=${lib.getLib llvmPackagesBuildBuild.libclang}/lib"
-    "--with-system-ffi"
-    "--with-system-icu"
-    "--with-system-jpeg"
-    "--with-system-libevent"
-    "--with-system-libvpx"
-    "--with-system-nspr"
-    "--with-system-nss"
-    "--with-system-png" # needs APNG support
-    "--with-system-webp"
-    "--with-system-zlib"
     "--with-wasi-sysroot=${wasiSysRoot}"
     # for firefox, host is buildPlatform, target is hostPlatform
     "--host=${buildStdenv.buildPlatform.config}"
@@ -410,17 +407,34 @@ buildStdenv.mkDerivation {
   ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
-  ++ [
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # MacOS builds use bundled versions of libraries: https://bugzilla.mozilla.org/show_bug.cgi?id=1776255
+    "--enable-system-pixman"
+    "--with-system-ffi"
+    "--with-system-icu"
+    "--with-system-jpeg"
+    "--with-system-libevent"
+    "--with-system-libvpx"
+    "--with-system-nspr"
+    "--with-system-nss"
+    "--with-system-png" # needs APNG support
+    "--with-system-webp"
+    "--with-system-zlib"
+
+    # These options are not available on MacOS, even --disable-*
     (enableFeature alsaSupport "alsa")
+    (enableFeature jackSupport "jack")
+    (enableFeature pulseaudioSupport "pulseaudio")
+    (enableFeature sndioSupport "sndio")
+  ]
+  ++ [
     (enableFeature crashreporterSupport "crashreporter")
     (enableFeature ffmpegSupport "ffmpeg")
     (enableFeature geolocationSupport "necko-wifi")
     (enableFeature gssSupport "negotiateauth")
-    (enableFeature jackSupport "jack")
     (enableFeature jemallocSupport "jemalloc")
-    (enableFeature pulseaudioSupport "pulseaudio")
-    (enableFeature sndioSupport "sndio")
     (enableFeature webrtcSupport "webrtc")
+
     (enableFeature debugBuild "debug")
     (if debugBuild then "--enable-profiling" else "--enable-optimize")
     # --enable-release adds -ffunction-sections & LTO that require a big amount
@@ -435,26 +449,33 @@ buildStdenv.mkDerivation {
 
   buildInputs = [
     bzip2
+    file
+    libGL
+    libGLU
+    libstartup_notification
+    nasm
+    perl
+    zip
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+    cups
+  ]
+  ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) ([
     dbus
     dbus-glib
-    file
     fontconfig
     freetype
     glib
     gtk3
     libffi
-    libGL
-    libGLU
     libevent
     libjpeg
     libpng
-    libstartup_notification
     libvpx
     libwebp
-    nasm
     nspr
     pango
-    perl
     xorg.libX11
     xorg.libXcursor
     xorg.libXdamage
@@ -466,21 +487,20 @@ buildStdenv.mkDerivation {
     xorg.libXtst
     xorg.pixman
     xorg.xorgproto
-    zip
     zlib
-  ]
+    (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/)
+  ] ++ lib.optional  alsaSupport alsa-lib
+    ++ lib.optional  jackSupport libjack2
+    ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
+    ++ lib.optional  sndioSupport sndio
+    ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
+  ))
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
   # icu74 fails to build on 127 and older
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1862601
   ++ [ (if (lib.versionAtLeast version "115") then icu73 else icu72) ]
-  ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
-  ++ lib.optional  alsaSupport alsa-lib
-  ++ lib.optional  jackSupport libjack2
-  ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
-  ++ lib.optional  sndioSupport sndio
   ++ lib.optional  gssSupport libkrb5
-  ++ lib.optionals waylandSupport [ libxkbcommon libdrm ]
   ++ lib.optional  jemallocSupport jemalloc
   ++ extraBuildInputs;
 
@@ -536,27 +556,45 @@ buildStdenv.mkDerivation {
     cd objdir
   '';
 
-  postInstall = ''
-    # Install distribution customizations
-    install -Dvm644 ${distributionIni} $out/lib/${binaryName}/distribution/distribution.ini
-    install -Dvm644 ${defaultPrefsFile} $out/lib/${binaryName}/browser/defaults/preferences/nixos-default-prefs.js
+  # The target will prepare .app bundle
+  installTargets = lib.optionalString stdenv.hostPlatform.isDarwin "stage-package";
 
-  '' + lib.optionalString buildStdenv.hostPlatform.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r dist/${binaryName}/*.app $out/Applications
+
+    appBundlePath=(dist/${binaryName}/*.app)
+    appBundle=''${appBundlePath[0]#dist/${binaryName}}
+    resourceDir=$out/Applications/$appBundle/Contents/Resources
+
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Remove SDK cruft. FIXME: move to a separate output?
     rm -rf $out/share/idl $out/include $out/lib/${binaryName}-devel-*
 
     # Needed to find Mozilla runtime
     gappsWrapperArgs+=(--argv0 "$out/bin/.${binaryName}-wrapped")
+
+    resourceDir=$out/lib/${binaryName}
+  '' + ''
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} "$resourceDir/distribution/distribution.ini"
+    install -Dvm644 ${defaultPrefsFile} "$resourceDir/browser/defaults/preferences/nixos-default-prefs.js"
+
+    cd ..
   '';
 
-  postFixup = lib.optionalString crashreporterSupport ''
+  postFixup = lib.optionalString (crashreporterSupport && buildStdenv.hostPlatform.isLinux) ''
     patchelf --add-rpath "${lib.makeLibraryPath [ curl ]}" $out/lib/${binaryName}/crashreporter
   '';
 
+  # Some basic testing
   doInstallCheck = true;
-  installCheckPhase = ''
-    # Some basic testing
-    "$out/bin/${binaryName}" --version
+  installCheckPhase = lib.optionalString buildStdenv.hostPlatform.isDarwin ''
+    bindir=$out/Applications/$appBundle/Contents/MacOS
+  '' + lib.optionalString (!buildStdenv.hostPlatform.isDarwin) ''
+    bindir=$out/bin
+  '' + ''
+    "$bindir/${binaryName}" --version
   '';
 
   passthru = {
