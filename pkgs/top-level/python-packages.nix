@@ -5510,6 +5510,8 @@ self: super: with self; {
 
   guidance = callPackage ../development/python-modules/guidance { };
 
+  guidata = callPackage ../development/python-modules/guidata { };
+
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
@@ -10509,6 +10511,8 @@ self: super: with self; {
 
   plotly = callPackage ../development/python-modules/plotly { };
 
+  plotpy = callPackage ../development/python-modules/plotpy { };
+
   plotnine = callPackage ../development/python-modules/plotnine { };
 
   pluggy = callPackage ../development/python-modules/pluggy { };
@@ -13370,6 +13374,8 @@ self: super: with self; {
   qutip = callPackage ../development/python-modules/qutip { };
 
   qmk-dotty-dict = callPackage ../development/python-modules/qmk-dotty-dict { };
+
+  pythonqwt = callPackage ../development/python-modules/pythonqwt { };
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
