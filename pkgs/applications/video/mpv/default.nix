@@ -75,8 +75,8 @@
   jackaudioSupport ? false,
   javascriptSupport ? true,
   openalSupport ? true,
-  pipewireSupport ? stdenv.hostPlatform.isLinux,
-  pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  pipewireSupport ? !stdenv.hostPlatform.isDarwin,
+  pulseSupport ? config.pulseaudio or (!stdenv.hostPlatform.isDarwin),
   rubberbandSupport ? true,
   sdl2Support ? false,
   sixelSupport ? false,
@@ -84,8 +84,8 @@
   vapoursynthSupport ? false,
   vdpauSupport ? true,
   vulkanSupport ? true,
-  waylandSupport ? stdenv.hostPlatform.isLinux,
-  x11Support ? stdenv.hostPlatform.isLinux,
+  waylandSupport ? !stdenv.hostPlatform.isDarwin,
+  x11Support ? !stdenv.hostPlatform.isDarwin,
   zimgSupport ? true,
 }:
 
