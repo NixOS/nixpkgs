@@ -18,7 +18,6 @@
   libX11,
   libXScrnSaver,
   libXext,
-  libXinerama,
   libXpresent,
   libXrandr,
   libXv,
@@ -90,7 +89,6 @@
   vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   x11Support ? stdenv.hostPlatform.isLinux,
-  xineramaSupport ? stdenv.hostPlatform.isLinux,
   xvSupport ? stdenv.hostPlatform.isLinux,
   zimgSupport ? true,
 }:
@@ -223,7 +221,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXpresent
       libXScrnSaver
     ]
-    ++ lib.optionals xineramaSupport [ libXinerama ]
     ++ lib.optionals xvSupport [ libXv ]
     ++ lib.optionals zimgSupport [ zimg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
