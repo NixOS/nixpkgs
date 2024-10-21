@@ -36450,8 +36450,6 @@ with pkgs;
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
-  xschem = callPackage ../applications/science/electronics/xschem { };
-
   xyce = callPackage ../applications/science/electronics/xyce { };
 
   xyce-parallel = callPackage ../applications/science/electronics/xyce {
