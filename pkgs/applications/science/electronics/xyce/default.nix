@@ -170,6 +170,12 @@ stdenv.mkDerivation rec {
       install -t $doc/share/doc/${pname}-${version}/ $(basename $d.pdf)
       popd
     done
+
+    install -d $out/share/${pname}-${version}/python/
+    substitute utils/XyceCInterface/xyce_interface.py.cmake \
+               utils/XyceCInterface/xyce_interface.py \
+      --replace-fail "@CMAKE_INSTALL_PREFIX@" $out
+    install utils/XyceCInterface/xyce_interface.py $out/share/${pname}-${version}/python/
   '';
 
   meta = with lib; {
