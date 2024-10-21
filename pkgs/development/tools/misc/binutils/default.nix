@@ -90,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     # version detection in `libtool.m4` fails to detect the Darwin version correctly.
     ./0001-libtool.m4-update-macos-version-detection-block.patch
   ]
-  ++ lib.optional targetPlatform.isiOS ./support-ios.patch
   # Adds AVR-specific options to "size" for compatibility with Atmel's downstream distribution
   # Patch from arch-community
   # https://github.com/archlinux/svntogit-community/blob/c8d53dd1734df7ab15931f7fad0c9acb8386904c/trunk/avr-size.patch
