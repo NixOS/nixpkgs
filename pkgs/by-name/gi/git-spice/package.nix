@@ -5,6 +5,7 @@
   fetchFromGitHub,
   git,
   nix-update-script,
+  installShellFiles,
 }:
 
 buildGo123Module rec {
@@ -22,6 +23,8 @@ buildGo123Module rec {
 
   subPackages = [ "." ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   nativeCheckInputs = [ git ];
 
   buildInputs = [ git ];
@@ -38,6 +41,13 @@ buildGo123Module rec {
     # timeout
     rm testdata/script/branch_submit_remote_prompt.txt
     rm testdata/script/branch_submit_multiple_pr_templates.txt
+  '';
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd gs \
+      --bash <($out/bin/gs shell completion bash) \
+      --zsh <($out/bin/gs shell completion zsh) \
+      --fish <($out/bin/gs shell completion fish)
   '';
 
   passthru.updateScript = nix-update-script { };
