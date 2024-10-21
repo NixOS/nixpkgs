@@ -17028,13 +17028,11 @@ with pkgs;
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
-    autoreconfHook = autoreconfHook269;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
   binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
-    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
@@ -20225,6 +20223,7 @@ with pkgs;
     icu73
     icu74
     icu75
+    icu76
   ;
 
   icu = icu74;
@@ -30599,8 +30598,6 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
 
-  lazpaint = callPackage ../applications/graphics/lazpaint { };
-
   caps = callPackage ../applications/audio/caps { };
 
   lbdb = callPackage ../tools/misc/lbdb { };
@@ -34609,6 +34606,10 @@ with pkgs;
   factorio-headless-experimental = factorio.override { releaseType = "headless"; experimental = true; };
 
   factorio-demo = factorio.override { releaseType = "demo"; };
+
+  factorio-space-age = factorio.override { releaseType = "expansion"; };
+
+  factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
 
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 
