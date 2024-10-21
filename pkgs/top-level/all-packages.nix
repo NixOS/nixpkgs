@@ -21920,8 +21920,6 @@ with pkgs;
 
   microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
 
-  microsoft-edge = callPackage ../applications/networking/browsers/microsoft-edge { };
-
   micronucleus = callPackage ../development/tools/misc/micronucleus { };
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
