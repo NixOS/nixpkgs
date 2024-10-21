@@ -6,6 +6,7 @@
 , libmysqlclient
 , makeBinaryWrapper
 , lib
+, nix-update-script
 }:
 
 let
@@ -55,6 +56,8 @@ rustPlatform.buildRustPackage rec {
 
   # almost all tests need a DB to test against
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     description = "Mozilla Sync Storage built with Rust";
