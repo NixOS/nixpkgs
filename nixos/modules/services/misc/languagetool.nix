@@ -27,7 +27,7 @@ in
       description = ''
         Set the Access-Control-Allow-Origin header in the HTTP response,
         used for direct (non-proxy) JavaScript-based access from browsers.
-        `null` to allow access from all sites.
+        `"*"` to allow access from all sites.
       '';
     };
 
