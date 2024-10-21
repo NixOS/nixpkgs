@@ -1,17 +1,17 @@
 {
   lib,
+  anyio,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   hatchling,
-  anyio,
   httpcore,
   httpx,
-  wsproto,
   pytestCheckHook,
+  pythonOlder,
   starlette,
   trio,
   uvicorn,
+  wsproto,
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "0.6.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "frankie567";
@@ -46,14 +46,14 @@ buildPythonPackage rec {
     wsproto
   ];
 
-  pythonImportsCheck = [ "httpx_ws" ];
-
   nativeCheckInputs = [
     pytestCheckHook
     starlette
     trio
     uvicorn
   ];
+
+  pythonImportsCheck = [ "httpx_ws" ];
 
   disabledTestPaths = [
     # hang
@@ -63,6 +63,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "WebSocket support for HTTPX";
     homepage = "https://github.com/frankie567/httpx-ws";
+    changelog = "https://github.com/frankie567/httpx-ws/releases/tag/v${version}";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }
