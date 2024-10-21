@@ -17,18 +17,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "tranxuanthang";
     repo = "lrcget";
     rev = "${version}";
-    hash = "sha256-OrmSaRKhGCl5sTirzICx8PBsQm23pYUBBtb07+P1ZbY=";
+    hash = "sha256-phsiVscbgQwMVWwVizb1n/6OlftQYWvkJ5+As5ITFrQ=";
   };
 
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoHash = "sha256-V9+/sfCxeZJ39nOuMBv2YlkzewoS+N3kFyBGdIqkw/A=";
+  cargoHash = "sha256-mHti3KLjKe25qPLFf0ofzcM2wU4nvhiusIC4bpUdtiY=";
 
   frontend = buildNpmPackage {
     inherit version src;
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     # To fix `npm ERR! Your cache folder contains root-owned files`
     makeCacheWritable = true;
 
-    npmDepsHash = "sha256-qQ5UMO3UuD6IvUveTRF35qTlGq5PMbxp1Q4UroDqVtk=";
+    npmDepsHash = "sha256-vjDj3b7GVZvM9ioVBp5JpRbWUa33EK6qFTDVgCZkGRA=";
 
     postBuild = ''
       cp -r dist/ $out
