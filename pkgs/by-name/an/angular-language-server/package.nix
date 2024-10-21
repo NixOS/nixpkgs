@@ -1,26 +1,28 @@
-{ lib
-, fetchYarnDeps
-, fetchFromGitHub
-, nodejs
-, typescript
-, yarnConfigHook
-, makeBinaryWrapper
-, runCommand
-, angular-language-server
-, writeShellApplication
-, curl
-, common-updater-scripts
-, jq
-, gnused
-, pcre
-, gawk
-, bazel_5
-, buildBazelPackage
-, pnpm_8
-,
+{
+  lib,
+  stdenvNoCC,
+  fetchYarnDeps,
+  fetchFromGitHub,
+  nodejs,
+  typescript,
+  yarnConfigHook,
+  makeBinaryWrapper,
+  runCommand,
+  angular-language-server,
+  writeShellApplication,
+  curl,
+  common-updater-scripts,
+  jq,
+  gnused,
+  pcre,
+  gawk,
+  bazel_6,
+  buildBazelPackage,
+  pnpm_8,
+  esbuild,
 }:
 
-buildBazelPackage rec {
+stdenvNoCC.mkDerivation rec {
   pname = "angular-language-server";
   version = "18.2.0";
   src = fetchFromGitHub {
@@ -44,71 +46,46 @@ buildBazelPackage rec {
     yarnConfigHook
     nodejs
     makeBinaryWrapper
+    esbuild
     #pnpm_8.configHook
   ];
 
   buildInputs = [ typescript ];
 
-  bazel = bazel_5;
+  #bazel = bazel_6;
 
-  fetchAttrs = {
-    hash = "sha256-NOKElUu5LBzachxmdiOU2gbJBy65aEqyBAWFaqg8AXk=";
-  };
+  #fetchAttrs = {
+  #  hash = "sha256-1zSRpzXEbHfg0IjsmopfuJbwNe3LYmyykRF99IYSiBQ=";
+  #};
 
-  bazelTargets = [ ":npm" ];
+  #bazelTargets = [ ":npm" ];
 
-  postPatch = ''
-    bazel --version | cut -c 7-11 > .bazelversion
-    cat >> BUILD.bazel << EOF
-    load("@rules_nodejs//nodejs:toolchain.bzl", "nodejs_toolchain")
-    nodejs_toolchain(
-      name = "nix-node-toolchain",
-      node_path = "${nodejs}/bin/node",
-    )
-    toolchain(
-      name = "nix_nodejs",
-      exec_compatible_with = [
-        "@platforms//os:linux",
-      ],
-      toolchain = ":nix-node-toolchain",
-      toolchain_type = "@rules_nodejs//nodejs:toolchain_type",
-    )
-    EOF
-
-    substituteInPlace WORKSPACE \
-      --replace-fail 'nodejs_register_toolchains(
-        name = "nodejs",
-        node_version = "18.13.0",
-    )' 'register_toolchains("//:nix_nodejs")' \
-      --replace-fail 'load("@rules_nodejs//nodejs:repositories.bzl", "nodejs_register_toolchains")' ""
-
-    cat WORKSPACE | grep "nodejs"
+  #postPatch = ''
+  #  bazel --version | cut -c 7-11 > .bazelversion
+  #'';
+  buildPhase = ''
+    runHook preBuild
+    tsc -b server
+    ls -la dist/server/src
+    cat dist/server/src/banner.js
+    esbuild dist/server/src/server.js --bundle --banner:js="$(cat dist/server/src/banner.js)" --resolve-extensions=.js --outfile=dist/index.js --platform=node
+    ls -la
+    runHook postBuild
   '';
 
-  buildAttrs = {
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 server/bin/ngserver $out/bin/ngserver
+    install -Dm755 dist/index.js $out/index.js
+    cp -r node_modules $out/node_modules
+    runHook postInstall
+  '';
 
-    preBuild = ''
-      echo "running preBuild"
-      tsc -b
-      ls -la
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm755 bazel-bin/vsix_sandbox/server/bin/ngserver $out/bin/ngserver
-      install -Dm755 bazel-bin/vsix_sandbox/server/index.js $out/index.js
-      cp -r bazel-bin/vsix_sandbox/node_modules $out/node_modules
-      runHook postInstall
-    '';
-
-    postFixup = ''
-      patchShebangs $out/bin/ngserver
-      patchShebangs $out/index.js
-      patchShebangs $out/node_modules
-      wrapProgram $out/bin/ngserver \
-        --add-flags "--tsProbeLocations $out/node_modules --ngProbeLocations $out/node_modules"
-    '';
-  };
+  postFixup = ''
+    patchShebangs $out/bin/ngserver $out/index.js $out/node_modules
+    wrapProgram $out/bin/ngserver \
+      --add-flags "--tsProbeLocations $out/node_modules --ngProbeLocations $out/node_modules"
+  '';
 
   passthru = {
     tests = {
