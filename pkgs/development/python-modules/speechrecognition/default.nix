@@ -20,7 +20,7 @@ buildPythonPackage rec {
   version = "3.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
@@ -47,6 +47,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
+    audio = [ pyaudio ];
     whisper-api = [ openai ];
     whisper-local = [
       openai-whisper
@@ -57,7 +58,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pocketsphinx
-  ] ++ optional-dependencies.whisper-local ++ optional-dependencies.whisper-api;
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 
