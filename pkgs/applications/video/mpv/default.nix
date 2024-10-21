@@ -72,7 +72,7 @@
   cmsSupport ? true,
   drmSupport ? stdenv.hostPlatform.isLinux,
   dvbinSupport ? stdenv.hostPlatform.isLinux,
-  dvdnavSupport ? stdenv.hostPlatform.isLinux,
+  dvdnavSupport ? true,
   jackaudioSupport ? false,
   javascriptSupport ? true,
   openalSupport ? true,
