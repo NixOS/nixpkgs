@@ -7,7 +7,7 @@
 , libsForQt5
 
 # unwrapped package parameters
-, withGrass ? true
+, withGrass ? false
 , withWebKit ? false
 }:
 let
