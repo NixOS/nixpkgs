@@ -5,6 +5,8 @@
   pkg-config,
   nix-update-script,
   fetchFromGitHub,
+  IOKit,
+  Foundation,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +22,10 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-VHx+DLS+v4p++KI+ZLzJpFk4A5Omwy6E0vJ/lgP3pC0=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
-  buildInputs = [ ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    IOKit
+    Foundation
+  ];
   cargoBuildFlags = [ "--package nu_plugin_highlight" ];
 
   checkPhase = ''
