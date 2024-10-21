@@ -270,6 +270,7 @@ mapAliases ({
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
   image-match = throw "image-match has been removed because it is no longer maintained"; # added 2023-06-10
   imgaug = throw "imgaug has been removed as it is no longer maintained"; # added 2023-07-10
+  imgtool = throw "imgtool has been promoted to a top-level attribute name: `mcuboot-imgtool`"; # added 2024-10-09
   intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years";  # added 2024-05-21
