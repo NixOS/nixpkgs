@@ -22,7 +22,6 @@ let
     ]
     ++ finalPackage.optional-dependencies.redis
     ++ lib.optionals cfg.celery.enable [ celery ]
-    ++ lib.optionals (cfg.settings.database.backend == "mysql") finalPackage.optional-dependencies.mysql
     ++ lib.optionals (cfg.settings.database.backend == "postgresql") finalPackage.optional-dependencies.postgres;
   };
 in
