@@ -116,7 +116,7 @@ buildPythonApplication rec {
   ];
 
   # check phase uses the output bin, which is not possible when cross-compiling
-  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
     runHook preCheck
