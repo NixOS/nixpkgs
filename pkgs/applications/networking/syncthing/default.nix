@@ -13,16 +13,16 @@ let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
       pname = stname;
-      version = "1.27.12";
+      version = "1.28.0";
 
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "v${version}";
-        hash = "sha256-/HPq71KkWUE0vG7qUBD3JON4N5KBkuRWc4SvX/JA2nQ=";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-JW78n/3hssH600uXn4YLxcIJylPbSpEZICtKmqfqamI=";
       };
 
-      vendorHash = "sha256-R5GlsCkfoMc5km+NaV+TNUlM3Ot1ARcXfEFimcZOLI4=";
+      vendorHash = "sha256-9/PfiOSCInduQXZ47KbrD3ca9O0Zt+TP7XoX+HjwQgs=";
 
       nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
         # Recent versions of macOS seem to require binaries to be signed when
@@ -43,7 +43,7 @@ let
         (
           export GOOS="${pkgsBuildBuild.go.GOOS}" GOARCH="${pkgsBuildBuild.go.GOARCH}" CC=$CC_FOR_BUILD
           go build build.go
-          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/strelaypoolsrv/auto
+          go generate github.com/syncthing/syncthing/lib/api/auto github.com/syncthing/syncthing/cmd/infra/strelaypoolsrv/auto
         )
         ./build -goos ${go.GOOS} -goarch ${go.GOARCH} -no-upgrade -version v${version} build ${target}
         runHook postBuild
