@@ -9231,8 +9231,6 @@ with pkgs;
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
-  matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
-
   matrix-synapse = callPackage ../servers/matrix-synapse/wrapper.nix { };
   matrix-synapse-unwrapped = callPackage ../servers/matrix-synapse/default.nix { };
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
@@ -10877,7 +10875,7 @@ with pkgs;
 
   oxlint = callPackage ../development/tools/oxlint { };
 
-  ovito = libsForQt5.callPackage ../applications/graphics/ovito {
+  ovito = qt6Packages.callPackage ../applications/graphics/ovito {
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
   };
 
@@ -15606,7 +15604,6 @@ with pkgs;
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
   cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
-  cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -24920,8 +24917,6 @@ with pkgs;
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
-  patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
-
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
   pgcat = callPackage ../servers/sql/pgcat {};
@@ -30478,8 +30473,6 @@ with pkgs;
   kubernetes-metrics-server = callPackage ../applications/networking/cluster/kubernetes-metrics-server { };
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
-
-  kubent = callPackage ../applications/networking/cluster/kubent { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 

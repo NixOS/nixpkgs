@@ -1,21 +1,22 @@
 { lib
-, pythonPackages
+, python3Packages
 , fetchFromGitHub
 , nixosTests
+, nix-update-script
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "patroni";
-  version = "4.0.2";
+  version = "4.0.3";
 
   src = fetchFromGitHub {
     owner = "zalando";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ykTg5Zd4dU1D6dnj6QbNfGUXrSteKrQjV2hpIPhXGLU=";
+    sha256 = "sha256-urNTxaipM4wD+1fp7EFdT7/FGLq86O1nOfst7JyX0fc=";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python3Packages; [
     boto3
     click
     consul
@@ -34,7 +35,7 @@ pythonPackages.buildPythonApplication rec {
     ydiff
   ];
 
-  nativeCheckInputs = with pythonPackages; [
+  nativeCheckInputs = with python3Packages; [
     flake8
     mock
     pytestCheckHook
@@ -47,8 +48,10 @@ pythonPackages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "patroni" ];
 
-  passthru.tests = {
-    patroni = nixosTests.patroni;
+  passthru = {
+    tests.patroni = nixosTests.patroni;
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

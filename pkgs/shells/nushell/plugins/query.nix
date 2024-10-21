@@ -11,7 +11,7 @@
   curl,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "nushell_plugin_query";
   inherit (nushell) version src;
   cargoHash = "sha256-M55nMYsTlmJZWXaNPZJ3M7w34cxpZx49Ap+u1Pr/Htw=";
@@ -37,15 +37,15 @@ rustPlatform.buildRustPackage {
     extraArgs = [ "--version=skip" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Nushell plugin to query JSON, XML, and various web data";
     mainProgram = "nu_plugin_query";
     homepage = "https://github.com/nushell/nushell/tree/${version}/crates/nu_plugin_query";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       happysalada
       aidalgol
     ];
-    platforms = with platforms; all;
+    platforms = lib.platforms.all;
   };
 }
