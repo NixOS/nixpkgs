@@ -36,6 +36,24 @@
         "version": "1.1.110"
       }
     },
+    "expansion": {
+      "experimental": {
+        "name": "factorio_expansion_x64-2.0.7.tar.xz",
+        "needsAuth": true,
+        "sha256": "1zvk1skkm37kyikq4l1q285l8zhxc6lqvs1x2y2ccxwd4cdm6r96",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/2.0.7/expansion/linux64",
+        "version": "2.0.7"
+      },
+      "stable": {
+        "name": "factorio_expansion_x64-2.0.7.tar.xz",
+        "needsAuth": true,
+        "sha256": "1zvk1skkm37kyikq4l1q285l8zhxc6lqvs1x2y2ccxwd4cdm6r96",
+        "tarDirectory": "x64",
+        "url": "https://factorio.com/get-download/2.0.7/expansion/linux64",
+        "version": "2.0.7"
+      }
+    },
     "headless": {
       "experimental": {
         "name": "factorio_headless_x64-2.0.7.tar.xz",

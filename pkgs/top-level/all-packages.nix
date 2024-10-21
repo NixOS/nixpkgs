@@ -34551,6 +34551,10 @@ with pkgs;
 
   factorio-demo = factorio.override { releaseType = "demo"; };
 
+  factorio-space-age = factorio.override { releaseType = "expansion"; };
+
+  factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
+
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 
   factorio-utils = callPackage ../games/factorio/utils.nix { };

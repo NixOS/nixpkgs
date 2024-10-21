@@ -29,7 +29,8 @@
 
 assert releaseType == "alpha"
   || releaseType == "headless"
-  || releaseType == "demo";
+  || releaseType == "demo"
+  || releaseType == "expansion";
 
 let
 
@@ -272,6 +273,7 @@ let
         cp -a doc-html $out/share/factorio
       '';
     };
+    expansion = alpha;
   };
 
 in
