@@ -3,10 +3,10 @@
 , buildGoModule
 , stdenv
 , lib
-, procps
 , fetchFromGitHub
 , nixosTests
 , autoSignDarwinBinariesHook
+, nix-update-script
 }:
 
 let
@@ -57,8 +57,11 @@ let
 
       inherit postInstall;
 
-      passthru.tests = {
-        inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+      passthru = {
+        tests = {
+          inherit (nixosTests) syncthing syncthing-init syncthing-relay;
+        };
+        updateScript = nix-update-script { };
       };
 
       meta = {
