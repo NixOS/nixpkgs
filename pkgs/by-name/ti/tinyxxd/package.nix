@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinyxxd";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     repo = "tinyxxd";
     owner = "xyproto";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-W7BrQga98ACrhTHF3UlGQMRmcdJaxgorDP6FpD5mr2A=";
+    hash = "sha256-SPKDowZrr1m9DiL7p8pKHKJuahEiwCmW5VhuE314Otw=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
