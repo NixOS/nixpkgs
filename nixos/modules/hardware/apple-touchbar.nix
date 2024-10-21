@@ -30,31 +30,7 @@ in
 
     environment.etc."tiny-dfr/config.toml".source = cfgFile;
 
-    systemd.services."systemd-backlight@backlight:228200000.display-pipe.0" = {};
-    systemd.services."systemd-backlight@backlight:appletb_backlight" = {};
-
-    systemd.services.tiny-dfr = {
-      enable = true;
-      description = "Tiny Apple silicon touch bar daemon";
-      after = [
-        "systemd-user-sessions.service"
-        "getty@tty1.service"
-        "systemd-logind.service"
-        "dev-tiny_dfr_display.device"
-        "dev-tiny_dfr_backlight.device"
-        "dev-tiny_dfr_display_backlight.device"
-      ] ++ optional config.boot.plymouth.enable "plymouth-quit.service";
-      bindsTo = [
-        "dev-tiny_dfr_display.device"
-        "dev-tiny_dfr_backlight.device"
-        "dev-tiny_dfr_display_backlight.device"
-      ];
-      serviceConfig = {
-        ExecStart = "${pkgs.tiny-dfr}/bin/tiny-dfr";
-        Restart = "always";
-      };
-    };
-
+    systemd.packages = with pkgs; [ tiny-dfr ];
     services.udev.packages = with pkgs; [ tiny-dfr ];
   };
 }
