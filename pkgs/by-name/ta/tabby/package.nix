@@ -23,6 +23,7 @@
 
   # one of [ null "cpu" "rocm" "cuda" "metal" ];
   acceleration ? null,
+  versionCheckHook,
 }:
 
 let
@@ -166,6 +167,12 @@ rustPlatform.buildRustPackage {
       "--features"
       "cuda"
     ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   nativeBuildInputs =
     [
