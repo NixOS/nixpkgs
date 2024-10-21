@@ -1,6 +1,5 @@
 { lib
 , mkXfceDerivation
-, fetchpatch2
 , gobject-introspection
 , glib
 , gtk3
@@ -15,19 +14,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
-  version = "0.6.2";
+  version = "0.6.3";
   odd-unstable = false;
 
-  sha256 = "sha256-A4siNxbTf9ObJJg8inPuH7Lo4dckLbFljV6aPFQxRto=";
-
-  patches = [
-    # shortcuts-plugin: Fix shortcuts-editor include
-    # https://gitlab.xfce.org/apps/mousepad/-/merge_requests/131
-    (fetchpatch2 {
-      url = "https://gitlab.xfce.org/apps/mousepad/-/commit/d2eb43ae4d692cc4753647111eb3deebfa26abbb.patch";
-      hash = "sha256-Ldn0ZVmCzqG8lOkeaazkodEMip3lTm/lJEhfsL8TyT8=";
-    })
-  ];
+  sha256 = "sha256-L1txMS86lOEE9tOPTIOr1Gh4lwH7krnAeq4f3yS5kN0=";
 
   nativeBuildInputs = [ gobject-introspection ];
 
