@@ -141,6 +141,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     cp *.so "$out/bin"
     cp *.embd "$out/bin"
 
+    ${lib.optionalString metalSupport ''
+      cp *.metal "$out/bin"
+    ''}
+
     ${lib.optionalString (!koboldLiteSupport) ''
       rm "$out/bin/kcpp_docs.embd"
       rm "$out/bin/klite.embd"
