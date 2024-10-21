@@ -19,6 +19,8 @@ stdenvNoCC.mkDerivation {
   installPhase = ''
     mkdir -p $out/share/rime-data
     rm -rf ./others
+    rm -rf ./.github
+    rm squirrel.yaml weasel.yaml
     cp -r ./* $out/share/rime-data
   '';
 
