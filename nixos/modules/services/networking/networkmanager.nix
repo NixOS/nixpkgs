@@ -117,6 +117,7 @@ let
   packages = [
     pkgs.modemmanager
     pkgs.networkmanager
+    pkgs.openconnect
   ]
   ++ cfg.plugins
   ++ lib.optionals (!delegateWireless && !enableIwd) [
@@ -578,6 +579,10 @@ in
       wantedBy = [ "network.target" ];
       restartTriggers = [ configFile ];
 
+      # NetworkManager has been patched to search for needed binaries in its PATH.
+      # nftables, dnsmasq, dhcpcd and iputils are required for standard functionality.
+      path = [ pkgs.openconnect pkgs.nftables pkgs.dnsmasq pkgs.dhcpcd pkgs.iputils ];
+
       aliases = [ "dbus-org.freedesktop.NetworkManager.service" ];
 
       serviceConfig = {
@@ -609,6 +614,9 @@ in
       wantedBy = [ "multi-user.target" ];
       before = [ "network-online.target" ];
       after = [ "NetworkManager.service" ];
+      # This might be needed if some ensured profile needs to enable an
+      # openconnect VPN connection.
+      path = [ pkgs.openconnect ];
       script = let
         path = id: "/run/NetworkManager/system-connections/${id}.nmconnection";
       in ''
