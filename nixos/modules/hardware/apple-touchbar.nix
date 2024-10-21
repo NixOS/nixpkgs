@@ -17,6 +17,13 @@ in
         Configuration for tiny-dfr. See
         <https://github.com/WhatAmISupposedToPutHere/tiny-dfr/blob/master/share/tiny-dfr/config.toml>
       '';
+      example = literalExpression ''
+        {
+          MediaLayerDefault = true;
+          ShowButtonOutlines = false;
+          EnablePixelShift = true;
+        }
+      '';
     };
   };
 
