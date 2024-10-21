@@ -376,6 +376,9 @@ self: super: builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Tries accessing the GitHub API
+  github-app-token = dontCheck super.github-app-token;
+
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
   warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
