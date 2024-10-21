@@ -6,13 +6,14 @@
   fetchpatch,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "xdis";
   version = "6.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -47,7 +48,11 @@ buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     click
     six
   ];
