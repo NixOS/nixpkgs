@@ -9,7 +9,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "nu-plugin-net";
+  pname = "nushell_plugin_net";
   version = "1.8.0";
 
   src = fetchFromGitHub {
