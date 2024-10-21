@@ -14,13 +14,13 @@
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "yandex-music";
-  version = "5.18.2";
+  version = "5.23.2";
 
   src = fetchFromGitHub {
     owner = "cucumber-sp";
     repo = "yandex-music-linux";
     rev = "v${version}";
-    hash = "sha256-y+T2ckrnhrOiiPKBUlnvDb4FwrIfbaIXwVi16AoX/bQ=";
+    hash = "sha256-nhy4D2PgTMsQOs8hPY39Z+I+Tldgf1ASZbatfxWqNTw=";
   };
 
   nativeBuildInputs = [
