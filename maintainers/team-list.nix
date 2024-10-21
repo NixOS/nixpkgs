@@ -383,6 +383,7 @@ with lib.maintainers;
       nh2
       nialov
       sikmir
+      wilhelmines
       willcohen
     ];
     githubTeams = [ "geospatial" ];
