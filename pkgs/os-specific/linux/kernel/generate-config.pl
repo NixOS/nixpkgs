@@ -46,8 +46,7 @@ sub runConfig {
     # required to get clang LTO working, among other things.
     my $pid = open2(\*IN, \*OUT,
                     "make -C $ENV{SRC} O=$buildRoot config"
-                    . " SHELL=bash ARCH=$ENV{ARCH} CC=$ENV{CC} HOSTCC=$ENV{HOSTCC} HOSTCXX=$ENV{HOSTCXX}"
-                    . " LD=$ENV{LD} NM=$ENV{NM} AR=$ENV{AR} OBJCOPY=$ENV{OBJCOPY}"
+                    . " SHELL=bash ARCH=$ENV{ARCH} CROSS_COMPILE=$ENV{CROSS_COMPILE}"
                     . " $makeFlags");
 
     # Parse the output, look for questions and then send an
