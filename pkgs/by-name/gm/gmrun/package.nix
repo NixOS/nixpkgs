@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, glib, gtk2, pkg-config, popt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  gtk2,
+  pkg-config,
+  popt,
+}:
 
 let
   version = "0.9.2";
@@ -14,17 +22,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ glib gtk2 popt ];
+  buildInputs = [
+    glib
+    gtk2
+    popt
+  ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
   patches = [
-      ./gcc43.patch
-      ./find-config-file-in-system-etc-dir.patch
-      ./gmrun-0.9.2-xdg.patch
-    ];
+    ./gcc43.patch
+    ./find-config-file-in-system-etc-dir.patch
+    ./gmrun-0.9.2-xdg.patch
+  ];
 
   meta = with lib; {
     description = "Gnome Completion-Run Utility";
