@@ -107,6 +107,8 @@ self: super: {
 
     rum = super.callPackage ./rum.nix { };
 
+    sqlite_fdw = super.callPackage ./sqlite_fdw.nix { };
+
     tsja = super.callPackage ./tsja.nix { };
 
     wal2json = super.callPackage ./wal2json.nix { };
