@@ -1,12 +1,13 @@
 { lib
 , resholve
-, fetchFromGitHub
+, fetchFromGitLab
 , asciidoc
 , bash
 , coreutils
 , gawk
 , gnugrep
 , gnum4
+, gnused
 , pacman
 , util-linux
 , chrootPath ? [
@@ -21,13 +22,14 @@
 
 resholve.mkDerivation rec {
   pname = "arch-install-scripts";
-  version = "28";
+  version = "29";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
+    domain = "gitlab.archlinux.org";
     owner = "archlinux";
     repo = "arch-install-scripts";
     rev = "v${version}";
-    hash = "sha256-TytCeejhjWYDzWFjGubUl08OrsAQa9fFULoamDfbdDY=";
+    hash = "sha256-XWcZZ+ET3J4dB6M9CdXESf0iQh+2vYxlxoJ6TZ3vFUk=";
   };
 
   nativeBuildInputs = [ asciidoc gnum4 ];
@@ -61,7 +63,7 @@ resholve.mkDerivation rec {
       interpreter = "${bash}/bin/bash";
 
       # packages resholve should resolve executables from
-      inputs = [ coreutils gawk gnugrep pacman util-linux ];
+      inputs = [ coreutils gawk gnugrep gnused pacman util-linux ];
 
       execer = [ "cannot:${pacman}/bin/pacman-key" ];
 
