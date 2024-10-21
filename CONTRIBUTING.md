@@ -392,14 +392,10 @@ Here is a Git history diagram showing the flow of commits between the three bran
 } }%%
 gitGraph
     commit id:" "
-    branch staging-next
     branch staging
+    commit id:"  "
+    branch staging-next
 
-    checkout master
-    checkout staging
-    checkout master
-    commit id:"    "
-    checkout staging-next
     merge master id:"automatic"
     checkout staging
     merge staging-next id:"automatic "
