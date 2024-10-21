@@ -48,7 +48,10 @@ python3Packages.buildPythonApplication {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3Packages; [ babel ];
+  build-system = with python3Packages; [
+    setuptools
+    babel
+  ];
 
   dependencies = with python3Packages; [
     androguard
