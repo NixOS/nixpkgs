@@ -15,7 +15,7 @@ let
       src = fetchFromGitHub {
         repo = pname;
         owner = "boxed";
-        rev = version;
+        rev = "refs/tags/${version}";
         hash = "sha256-G+OL/9km2iUeZ1QCpU73CIWVWMexcs3r9RdCnAsESnY=";
       };
 
