@@ -5723,7 +5723,7 @@ with pkgs;
   pn = callPackage ../tools/text/pn { };
 
   pocket-casts = callPackage ../applications/audio/pocket-casts {
-    electron = electron_27;
+    electron = electron_31;
   };
 
   portal = callPackage ../tools/misc/portal { };
@@ -9721,6 +9721,7 @@ with pkgs;
   libportal-gtk3 = libportal.override { variant = "gtk3"; };
   libportal-gtk4 = libportal.override { variant = "gtk4"; };
   libportal-qt5 = libportal.override { variant = "qt5"; };
+  libportal-qt6 = libportal.override { variant = "qt6"; };
 
   libmicrodns = callPackage ../development/libraries/libmicrodns { };
 
@@ -24252,7 +24253,6 @@ with pkgs;
 
   envoy = callPackage ../by-name/en/envoy/package.nix {
     jdk = openjdk11_headless;
-    gn = gn1924;
   };
 
   ergochat = callPackage ../servers/irc/ergochat { };
@@ -33278,8 +33278,6 @@ with pkgs;
       else null;
   };
 
-  vivictpp = callPackage ../applications/video/vivictpp { };
-
   primusLib = callPackage ../tools/X11/primus/lib.nix {
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
@@ -34586,10 +34584,6 @@ with pkgs;
   eboard = callPackage ../games/eboard { };
 
   ecwolf = callPackage ../games/ecwolf { };
-
-  eduke32 = callPackage ../games/eduke32 {
-    inherit (darwin.apple_sdk.frameworks) AGL Cocoa GLUT OpenGL;
-  };
 
   egoboo = callPackage ../games/egoboo { };
 
@@ -36880,7 +36874,6 @@ with pkgs;
   };
 
   rivet = callPackage ../development/libraries/physics/rivet {
-    hepmc = hepmc2;
     imagemagick = graphicsmagick-imagemagick-compat;
   };
 

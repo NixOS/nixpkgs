@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   pname = "${pname}-webui";
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
-    hash = "sha256-DYsx1X1yXYEPFuMlvZtbJdefcCR8/wSUidFwsMy8oLk=";
+    hash = "sha256-ZKDhBdVyLIPf7CQaYUvj9dJd3lA3zsqroSjTyvOmunQ=";
   };
 
   nativeBuildInputs = [

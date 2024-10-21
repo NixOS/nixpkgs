@@ -4,6 +4,7 @@
 , fetchFromGitea
 , pkg-config
 , pcsclite
+, dbus
 , testers
 , openpgp-card-tools
 , darwin
@@ -11,21 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "openpgp-card-tools";
-  version = "0.11.3";
+  version = "0.11.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "openpgp-card";
     repo = "openpgp-card-tools";
     rev = "v${version}";
-    hash = "sha256-htFhNzBuinj9qiTzcW0eia74jvCT/+9b1aLli594JJQ=";
+    hash = "sha256-ZnIJLNg9soRzGEjoRNbUzDUtj71y54t+qTC4QDjiCmM=";
   };
 
-  cargoHash = "sha256-I2ExtUUM0ZJyhtyzP+IsgiMPMUFVHqPiMHFlvuUMjRc=";
+  cargoHash = "sha256-t+fKCviu9UOz2GHkIBqtSp0vyqXPAR1TuWi4yOYR0Bc=";
 
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
 
-  buildInputs = [ pcsclite ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  buildInputs = [ pcsclite dbus ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.PCSC
     darwin.apple_sdk.frameworks.Security
   ];

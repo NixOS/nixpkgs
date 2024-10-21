@@ -12730,6 +12730,12 @@
     githubId = 26020062;
     name = "lumi";
   };
+  luna_1024 = {
+    email = "contact@luna.computer";
+    github = "luna-1024";
+    githubId = 7243615;
+    name = "Luna";
+  };
   lunarequest = {
     email = "nullarequest@vivlaid.net";
     github = "Lunarequest";
@@ -13728,6 +13734,12 @@
     github = "mattmelling";
     githubId = 1215331;
     name = "Matt Melling";
+  };
+  melon = {
+    email = "melontime05@gmail.com";
+    github = "BlaiZephyr";
+    githubId = 101197249;
+    name = "Tim";
   };
   melsigl = {
     email = "melanie.bianca.sigl@gmail.com";
