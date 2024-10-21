@@ -2,10 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitea,
-  flake8,
   click,
   pyyaml,
-  six,
   pytestCheckHook,
   pytest-cov,
 }:
@@ -28,10 +26,8 @@ buildPythonPackage rec {
     pytest-cov
   ];
   propagatedBuildInputs = [
-    flake8
     click
     pyyaml
-    six
   ];
 
   # test_cli asserts on exact quoting style of output
