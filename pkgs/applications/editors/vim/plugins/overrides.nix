@@ -2003,7 +2003,7 @@ in
       in
       ''
         substituteInPlace lua/sqlite/defs.lua \
-          --replace "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or ${lib.escapeShellArg libsqlite}"
+          --replace-warn "path = vim.g.sqlite_clib_path" "path = vim.g.sqlite_clib_path or '${libsqlite}'"
       '';
 
     passthru = oa.passthru // {
