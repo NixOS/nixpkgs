@@ -213,6 +213,7 @@ mapAliases {
   bitwarden_rs-sqlite = vaultwarden-sqlite;
   bitwarden_rs-vault = vaultwarden-vault;
 
+  byzanz = throw "'byzanz' has been removed, upstream archived. 'ffmpeg' can be used instead, see https://trac.ffmpeg.org/wiki/Capture/Desktop"; # Added 2024-10-21
 
 
   ### C ###

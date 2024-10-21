@@ -6140,8 +6140,6 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
-  byzanz = callPackage ../applications/video/byzanz { };
-
   anydesk = callPackage ../applications/networking/remote/anydesk { };
 
   anystyle-cli = callPackage ../tools/misc/anystyle-cli { };
