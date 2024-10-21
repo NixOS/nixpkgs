@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-82ph8LTtaruaV97gdnqSQI8IfqO9wzYbR7WTGx086pQ=";
   };
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch=main" ]; };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs =
