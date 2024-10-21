@@ -10,6 +10,7 @@
 , doxygen
 , eigen
 , elfutils
+, fetchpatch2
 , glslang
 , gst-plugins-base
 , gstreamer
@@ -81,15 +82,6 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags = [
-    (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
-    (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
-    (lib.cmakeBool "XRT_HAVE_TRACY" true)
-    (lib.cmakeBool "XRT_FEATURE_TRACING" true)
-    (lib.cmakeBool "XRT_HAVE_STEAM" true)
-    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
-  ];
-
   buildInputs = [
     bluez
     cjson
@@ -140,6 +132,25 @@ stdenv.mkDerivation (finalAttrs: {
   #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR (See https://github.com/NixOS/nixpkgs/issues/292661)
   #  - DRIVER_ULV2 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
   #  - DRIVER_ULV5 - Needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html (See https://github.com/NixOS/nixpkgs/issues/292624)
+
+  patches = [
+    # Remove this patch on the next update
+    # https://gitlab.freedesktop.org/monado/monado/-/merge_requests/2338
+    (fetchpatch2 {
+      name = "improve-reproducibility.patch";
+      url = "https://gitlab.freedesktop.org/monado/monado/-/commit/9819fb6dd61d2af5b2d993ed37b976760002b055.patch";
+      hash = "sha256-qpTF1Q64jl8ZnJzMtflrpHLahCqfde2DXA9/Avlc18I=";
+    })
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "XRT_FEATURE_SERVICE" serviceSupport)
+    (lib.cmakeBool "XRT_OPENXR_INSTALL_ABSOLUTE_RUNTIME_PATH" true)
+    (lib.cmakeBool "XRT_HAVE_TRACY" true)
+    (lib.cmakeBool "XRT_FEATURE_TRACING" true)
+    (lib.cmakeBool "XRT_HAVE_STEAM" true)
+    (lib.optionals enableCuda "-DCUDA_TOOLKIT_ROOT_DIR=${cudaPackages.cudatoolkit}")
+  ];
 
   # Help openxr-loader find this runtime
   setupHook = writeText "setup-hook" ''
