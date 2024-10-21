@@ -82,7 +82,6 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   rubberbandSupport ? true,
-  screenSaverSupport ? true,
   sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
   vaapiSupport ? x11Support || waylandSupport,
@@ -199,7 +198,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
     ++ lib.optionals rubberbandSupport [ rubberband ]
-    ++ lib.optionals screenSaverSupport [ libXScrnSaver ]
     ++ lib.optionals sdl2Support [ SDL2 ]
     ++ lib.optionals sixelSupport [ libsixel ]
     ++ lib.optionals vaapiSupport [ libva ]
@@ -223,6 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXxf86vm
       libXrandr
       libXpresent
+      libXScrnSaver
     ]
     ++ lib.optionals xineramaSupport [ libXinerama ]
     ++ lib.optionals xvSupport [ libXv ]
