@@ -55,28 +55,6 @@ in
       };
     };
 
-    services.udev.extraRules = ''
-      SUBSYSTEM=="drm", KERNEL=="card*", DRIVERS=="adp|appletbdrm", TAG-="master-of-seat", ENV{ID_SEAT}="seat-touchbar"
-
-      SUBSYSTEM=="input", ATTR{name}=="Apple Inc. Touch Bar Display Touchpad", ENV{ID_SEAT}="seat-touchbar"
-      SUBSYSTEM=="input", ATTR{name}=="MacBookPro17,1 Touch Bar", ENV{ID_SEAT}="seat-touchbar"
-      SUBSYSTEM=="input", ATTR{name}=="Mac14,7 Touch Bar", ENV{ID_SEAT}="seat-touchbar"
-
-      ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="05ac", ATTR{idProduct}=="8302", ATTR{bConfigurationValue}=="1", ATTR{bConfigurationValue}="0", ATTR{bConfigurationValue}="2"
-
-      SUBSYSTEM=="input", ATTR{name}=="Apple Inc. Touch Bar Display Touchpad", TAG+="systemd", ENV{SYSTEMD_WANTS}="tiny-dfr.service"
-      SUBSYSTEM=="input", ATTR{name}=="MacBookPro17,1 Touch Bar", TAG+="systemd", ENV{SYSTEMD_WANTS}="tiny-dfr.service"
-      SUBSYSTEM=="input", ATTR{name}=="Mac14,7 Touch Bar", TAG+="systemd", ENV{SYSTEMD_WANTS}="tiny-dfr.service"
-
-      SUBSYSTEM=="drm", KERNEL=="card[0-9]*", DRIVERS=="adp|appletbdrm", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_display"
-
-      SUBSYSTEM=="backlight", KERNEL=="appletb_backlight", DRIVERS=="hid-appletb-bl", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_backlight"
-      SUBSYSTEM=="backlight", KERNEL=="228200000.display-pipe.0", DRIVERS=="panel-summit", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_backlight"
-
-      SUBSYSTEM=="backlight", KERNEL=="apple-panel-bl", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_display_backlight"
-      SUBSYSTEM=="backlight", KERNEL=="gmux_backlight", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_display_backlight"
-      SUBSYSTEM=="backlight", KERNEL=="intel_backlight", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_display_backlight"
-      SUBSYSTEM=="backlight", KERNEL=="acpi_video0", TAG+="systemd", ENV{SYSTEMD_ALIAS}="/dev/tiny_dfr_display_backlight"
-    '';
+    services.udev.packages = with pkgs; [ tiny-dfr ];
   };
 }
