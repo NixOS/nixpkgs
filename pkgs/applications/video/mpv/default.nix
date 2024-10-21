@@ -34,7 +34,6 @@
   libdvdnav,
   libjack2,
   libplacebo,
-  libpng,
   libpthreadstubs,
   libpulseaudio,
   libsixel,
@@ -79,7 +78,6 @@
   dvdnavSupport ? stdenv.hostPlatform.isLinux,
   jackaudioSupport ? false,
   javascriptSupport ? true,
-  libpngSupport ? true,
   openalSupport ? true,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
@@ -197,7 +195,6 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals jackaudioSupport [ libjack2 ]
     ++ lib.optionals javascriptSupport [ mujs ]
-    ++ lib.optionals libpngSupport [ libpng ]
     ++ lib.optionals openalSupport [ openalSoft ]
     ++ lib.optionals pipewireSupport [ pipewire ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
