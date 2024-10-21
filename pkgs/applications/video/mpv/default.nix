@@ -79,7 +79,7 @@
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   rubberbandSupport ? true,
-  sdl2Support ? !stdenv.hostPlatform.isDarwin,
+  sdl2Support ? false,
   sixelSupport ? false,
   vaapiSupport ? !stdenv.hostPlatform.isDarwin && (x11Support || waylandSupport),
   vapoursynthSupport ? false,
