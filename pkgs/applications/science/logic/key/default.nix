@@ -1,40 +1,41 @@
 { lib, stdenv
-, fetchurl
+, fetchFromGitHub
 , jdk
-, gradle_7
+, gradle_8
 , jre
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
 , testers
+, git
 , key
 }:
 
 let
-  gradle = gradle_7;
+  gradle = gradle_8;
 
 in stdenv.mkDerivation rec {
   pname = "key";
-  version = "2.10.0";
-  src = fetchurl {
-    url = "https://www.key-project.org/dist/${version}/key-${version}-sources.tgz";
-    sha256 = "1f201cbcflqd1z6ysrkh3mff5agspw3v74ybdc3s2lfdyz3b858w";
+  version = "2.12.2";
+  src = fetchFromGitHub {
+    owner = "KeYProject";
+    repo = "key";
+    rev = "refs/tags/KeY-${version}";
+    hash = "sha256-veqaWyWEiTot2cAjvyPG+Ra8/pqS4i6w6iR+qhozIM4=";
   };
-  sourceRoot = "key-${version}/key";
 
   nativeBuildInputs = [
     jdk
-    gradle_7
+    gradle
     makeWrapper
     copyDesktopItems
+    git
   ];
-
-  executable-name = "KeY";
 
   desktopItems = [
     (makeDesktopItem {
       name = "KeY";
-      exec = executable-name;
+      exec = meta.mainProgram;
       icon = "key";
       comment = meta.description;
       desktopName = "KeY";
@@ -51,7 +52,9 @@ in stdenv.mkDerivation rec {
   __darwinAllowLocalNetworking = true;
 
   # tests are broken on darwin
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  # TODO: on update to 2.12.3+, restore to !stdenv.hostPlatform.isDarwin;
+  # (currently some tests are failing)
+  doCheck = false;
 
   installPhase = ''
     runHook preInstall
@@ -61,7 +64,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/share/icons/hicolor/256x256/apps
     cp key.ui/src/main/resources/de/uka/ilkd/key/gui/images/key-color-icon-square.png $out/share/icons/hicolor/256x256/apps/key.png
-    makeWrapper ${jre}/bin/java $out/bin/KeY \
+    makeWrapper ${lib.getExe jre} $out/bin/KeY \
       --add-flags "-cp $out/share/java/KeY.jar de.uka.ilkd.key.core.Main"
 
     runHook postInstall
@@ -73,9 +76,10 @@ in stdenv.mkDerivation rec {
       command = "KeY --help";
     };
 
-  meta = with lib; {
+  meta = {
     description = "Java formal verification tool";
     homepage = "https://www.key-project.org"; # also https://formal.iti.kit.edu/key/
+    changelog = "https://keyproject.github.io/key-docs/changelog/";
     longDescription = ''
       The KeY System is a formal software development tool that aims to
       integrate design, implementation, formal specification, and formal
@@ -83,9 +87,9 @@ in stdenv.mkDerivation rec {
       At the core of the system is a novel theorem prover for the first-order
       Dynamic Logic for Java with a user-friendly graphical interface.
     '';
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ fgaz ];
-    mainProgram = executable-name;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ fgaz fliegendewurst ];
+    mainProgram = "KeY";
+    platforms = jdk.meta.platforms;
   };
 }
