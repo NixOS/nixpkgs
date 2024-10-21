@@ -17576,6 +17576,8 @@ self: super: with self; {
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
 
+  world-bank-data = callPackage ../development/python-modules/world-bank-data { };
+
   worldengine = callPackage ../development/python-modules/worldengine { };
 
   wrapio = callPackage ../development/python-modules/wrapio { };
