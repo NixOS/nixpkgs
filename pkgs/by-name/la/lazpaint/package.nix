@@ -2,17 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lazarus,
+  lazarus-qt,
   fpc,
-  pango,
-  cairo,
-  glib,
-  atk,
-  gtk2,
-  libX11,
-  gdk-pixbuf,
+  autoPatchelfHook,
+  libsForQt5,
+  libqt5pas,
+  xorg,
   python3,
-  makeWrapper,
 }:
 
 let
@@ -31,62 +27,64 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "lazpaint";
-  version = "7.2.2-unstable-2024-01-20";
+  version = "7.2.2-unstable-2024-01-23";
 
   src = fetchFromGitHub {
     owner = "bgrabitmap";
     repo = "lazpaint";
-    rev = "fe54c2e2561c51218a5a2755842ce3fc2e0ebb35";
-    hash = "sha256-LaOTJiS+COJUlyJiN9H2kEKwv5lbJqOHsUXOnb+IQFA=";
+    rev = "45a7a471d531d6adb5ee557ff917a99af76e92f1";
+    hash = "sha256-KgCxSK72Ow29T58mlcYCJiS4D0Ov2/p37c1FSNgKZew=";
   };
 
   nativeBuildInputs = [
-    lazarus
+    lazarus-qt
     fpc
-    makeWrapper
+    libsForQt5.wrapQtAppsHook
+    autoPatchelfHook
   ];
 
   buildInputs = [
-    pango
-    cairo
-    glib
-    atk
-    gtk2
-    libX11
-    gdk-pixbuf
+    libsForQt5.qtbase
+    libqt5pas
   ];
 
-  NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
+  runtimeDependencies = [
+    xorg.libX11
+  ];
 
   preConfigure = ''
-    patchShebangs configure
+    patchShebangs --build configure
   '';
 
   buildPhase = ''
+    runHook preBuild
+
+    export HOME=$(mktemp -d)
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap
     cp -r --no-preserve=mode ${bgracontrols} bgracontrols
 
-    lazbuild --lazarusdir=${lazarus}/share/lazarus \
-      --build-mode=Release \
+    lazbuild --lazarusdir=${lazarus-qt}/share/lazarus \
+      --build-mode=ReleaseQt5 \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       bgracontrols/bgracontrols.lpk \
       lazpaintcontrols/lazpaintcontrols.lpk \
       lazpaint/lazpaint.lpi
+
+    runHook postBuild
   '';
 
-  postBuild = ''
-    # Python is needed for scripts
-    wrapProgram $out/bin/lazpaint \
-      --prefix PATH : ${lib.makeBinPath [ python3 ]}
+  # Python is needed for scripts
+  preFixup = ''
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ python3 ]})
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Image editor like PaintBrush or Paint.Net";
     homepage = "https://lazpaint.github.io";
     downloadPage = "https://github.com/bgrabitmap/lazpaint/";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ aleksana ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ aleksana ];
     mainProgram = "lazpaint";
   };
 }
