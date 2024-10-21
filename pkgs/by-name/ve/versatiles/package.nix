@@ -17,8 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SeTDfxoIVTWXI1miolHthIhgBWDtFtPEMWGjmFl/f4o="; # When updating: Same as above
 
+  # Testing only necessary for the `bins` and `lib` features
+  cargoTestFlags = [
+    "--bins"
+    "--lib"
+  ];
+
+  # Skip tests that require network access
   checkFlags = [
-    # Skip tests that require network access
     "--skip tools::convert::tests::test_remote1"
     "--skip tools::convert::tests::test_remote2"
     "--skip tools::probe::tests::test_remote"
