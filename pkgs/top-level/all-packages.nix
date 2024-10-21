@@ -9242,8 +9242,6 @@ with pkgs;
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
-  matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
-
   matrix-synapse = callPackage ../servers/matrix-synapse/wrapper.nix { };
   matrix-synapse-unwrapped = callPackage ../servers/matrix-synapse/default.nix { };
   matrix-synapse-plugins = recurseIntoAttrs matrix-synapse-unwrapped.plugins;
