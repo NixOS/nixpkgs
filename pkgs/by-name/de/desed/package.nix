@@ -2,24 +2,27 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "desed";
-  version = "1.2.1-unstable-2024-09-06";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "SoptikHa2";
     repo = "desed";
-    rev = "master";
-    hash = "sha256-iCpEfefXXognk4YI1LLb3mwgaqMw4m3haq/gdS1JbQU=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-FL9w+XdClLBCRp+cLqDzTVj8j9LMUp8jZ6hiG4KvIds=";
   };
 
-  cargoHash = "sha256-z2qv394C0GhQC21HuLyvlNjrM65KFEZh1XLj+Y/B9ZM=";
+  cargoHash = "sha256-inH8fUpUR0WXYY2JX72evZqVp3GlnGKBBlrbai/fU6U=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    changelog = "https://github.com/SoptikHa2/desed/releases/tag/v1.2.1";
-    description = "Debugger for Sed: demystify and debug your sed scripts, from comfort of your terminal. ";
+    changelog = "https://github.com/SoptikHa2/desed/releases/tag/v${version}";
+    description = "Debugger for Sed: demystify and debug your sed scripts, from comfort of your terminal";
     homepage = "https://github.com/SoptikHa2/desed";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ vinylen ];

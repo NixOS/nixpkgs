@@ -199,6 +199,8 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
+  blink-cmp = callPackage ./blink-cmp { };
+
   # The GitHub repository returns 404, which breaks the update script
   vim-pony = buildVimPlugin {
     pname = "vim-pony";
@@ -1110,6 +1112,11 @@ in
       rev = "v${himalaya.version}";
       sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
     };
+  };
+
+  hunk-nvim = super.hunk-nvim.overrideAttrs {
+    dependencies = with self; [ nui-nvim ];
+    nvimRequireCheck = "hunk";
   };
 
   # https://hurl.dev/
@@ -2091,6 +2098,14 @@ in
     src = "${taskwarrior2.src}/scripts/vim";
   };
 
+  telekasten-nvim = super.telekasten-nvim.overrideAttrs {
+    dependencies = with self; [
+      plenary-nvim
+      telescope-nvim
+    ];
+    nvimRequireCheck = "telekasten";
+  };
+
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs {
     dependencies = with self; [
       sqlite-lua
@@ -2726,7 +2741,6 @@ in
       "coc-lists"
       "coc-ltex"
       "coc-markdownlint"
-      "coc-metals"
       "coc-pairs"
       "coc-prettier"
       "coc-r-lsp"

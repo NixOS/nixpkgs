@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    hash = "sha256-d4uVeHy4/91Ki6Wk6GlOt2lcK6U+M7fOryiOYA7q/x4=";
+    hash = "sha256-PwM9B2Qx4TxlcahQM/KEBTzWKc4cNrleDEYKg0m8bVE=";
   };
 
-  npmDepsHash = "sha256-rMLUQGcbBJBbxXP67lXp0ww8U2HYM/m1CP2dOw1cCHc=";
+  npmDepsHash = "sha256-WPuXTcHCKrwepITGtZFCIwylVAdYlI3cNsuhqx1AEYI=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -52,7 +52,7 @@ buildNpmPackage rec {
     description = "Pocket Casts webapp, packaged for the Linux Desktop";
     homepage = "https://github.com/felicianotech/pocket-casts-desktop-app";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with maintainers; [ yayayayaka ];
     mainProgram = "pocket-casts";
     platforms = platforms.linux;
   };

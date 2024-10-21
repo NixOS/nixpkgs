@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "coroot";
-  version = "1.5.8";
+  version = "1.5.9";
 
   src = fetchFromGitHub {
     owner = "coroot";
     repo = "coroot";
     rev = "v${version}";
-    hash = "sha256-c8i+JtmUzq8lsRU8NpR4p1EXtIljYs1uZAq3O5fMqa4=";
+    hash = "sha256-z6eD+qAdwu7DoyKTlAQqucdWRtT+h4qCPt0eTQceYXw=";
   };
   # github.com/grafana/pyroscope-go/godeltaprof 0.1.6 is broken on go 1.23
   # use patch from https://github.com/coroot/coroot/pull/357 until it gets fixed

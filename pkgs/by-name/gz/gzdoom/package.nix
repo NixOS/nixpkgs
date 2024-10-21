@@ -28,14 +28,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.13.0";
+  version = "4.13.1";
 
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "gzdoom";
     rev = "g${version}";
     fetchSubmodules = true;
-    hash = "sha256-Cm4ww/QXTzRiSojeGtZ+CwAL2oSxKaTaTLiGkcNjxaE=";
+    hash = "sha256-pp05tcXFM2NqAPtOtsUprWyV6RE8MQoRSXyp56yELVI=";
   };
 
   outputs = [

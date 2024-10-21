@@ -18,7 +18,7 @@
 , extraBuildInputs ? []
 , extraMakeFlags ? []
 , extraPassthru ? {}
-, tests ? []
+, tests ? {}
 }:
 
 let
