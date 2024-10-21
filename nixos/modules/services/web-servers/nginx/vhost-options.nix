@@ -230,6 +230,86 @@ with lib;
       description = "Path to root SSL certificate for stapling and client certificates.";
     };
 
+    # Since this is just an add_header, in principle it could be configured at
+    # the location level, but in practice I can't imagine that often being what
+    # people want, and they can always use `extraConfig` if necessary.
+    strictTransportSecurity = {
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable HTTP Strict Transport Security (HSTS). This sends
+          the header "strict-transport-security: max-age=63072000" on all
+          responses, which tells clients to refuse to use an insecure HTTP
+          connection for this host for the next 63072000 seconds (approximately
+          2 years), or for the duration specified by
+          `strictTransportSecurity.seconds` if set. This helps protects against
+          man-in-the-middle attacks that e.g. block HTTPS connections in the
+          hope that the client will fall back to an insecure HTTP connection,
+          which can be intercepted and modified.
+
+          The strict-transport-security header is (sent but) ignored on HTTP
+          connections, so this setting will only take effect if your website
+          actually is available over HTTPS.
+
+          HSTS only protects clients who have managed to connect at least once
+          without the man in the middle in the last two years: see also
+          `strictTransportSecurity.preload` for how to protect even the very
+          first connection.
+
+          HSTS is recommended in cases where you can reliably serve HTTPS, but
+          very annoying if you temporarily set it up but then want to use HTTP
+          again, so it is not enabled by default.
+        '';
+      };
+
+      seconds = mkOption {
+        type = types.int;
+        default = 63072000;
+        description = ''
+          If HTTP Strict Transport Security (HSTS) is enabled by
+          `strictTransportSecurity.enable`, this is how long the browser is
+          instructed to retain the setting, in seconds. 2 years (63072000 seconds)
+          is recommended, but if you're introducing HSTS for the first time on an
+          existing site you may want to ramp up the value gradually, or set it to
+          0 to tell clients to drop their HSTS config for this domain.
+        '';
+      };
+
+      includeSubdomains = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If HTTP Strict Transport Security (HSTS) is enabled by
+          `strictTransportSecurity.enable`, also specify the `includeSubdomains`
+          directive, so that e.g. if the vhost is https://www.website.example it
+          also sets the HSTS policy for https://sub.www.website.example. (Note
+          that "sibling" domains like https://mail.website.example are not
+          affected.)
+        '';
+      };
+
+      preload = mkOption {
+        type = types.bool;
+        # https://hstspreload.org/ specifically says not to enable this by
+        # default
+        default = false;
+        description = ''
+          If HTTP Strict Transport Security (HSTS) is enabled by
+          `strictTransportSecurity.enable`, also specify the (non-standard, but
+          widely recognised) `preload` directive. This allows submitting your
+          site to https://hstspreload.org/ to be added to the HSTS preload list
+          used by all major browsers, so that it is not necessary to visit your
+          site even once to enable HSTS.
+
+          Read the submission form before enabling this, since it describes the
+          constraints your config must satisfy, and has advice and warnings
+          about e.g. how slow adding or removing a domain from the preload list
+          can be.
+        '';
+      };
+    };
+
     http2 = mkOption {
       type = types.bool;
       default = true;
