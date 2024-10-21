@@ -42,6 +42,9 @@ buildPythonPackage {
     description = "Library to create mumble bots";
     homepage = "https://github.com/tjni/pymumble";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thelegy ];
+    maintainers = with maintainers; [
+      thelegy
+      tjni
+    ];
   };
 }
