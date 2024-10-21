@@ -18,15 +18,7 @@ This installs the sway compositor along with some essential utilities.
 Now you can start sway from the TTY console.
 
 If you are using a wlroots-based compositor, like sway, and want to be
-able to share your screen, you might want to activate this option:
-
-```nix
-{
-  xdg.portal.wlr.enable = true;
-}
-```
-
-and configure Pipewire using
+able to share your screen, make sure to configure Pipewire using
 [](#opt-services.pipewire.enable)
 and related options.
 
