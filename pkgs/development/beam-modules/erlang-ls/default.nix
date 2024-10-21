@@ -17,9 +17,12 @@ let
           '';
       });
       json_polyfill = super.json_polyfill.overrideAttrs (_: {
-        # don't attempt to remove beam file during build, as it won't exist for erlang >= 27
+        # When compiling with erlang >= 27, the json_polyfill rebar script will
+        # delete the json.beam file as it's not needed. However, we need to
+        # adjust this path as the nix build will put the beam file under `ebin`
+        # instead of `$REBAR_DEPS_DIR/json_polyfill/ebin`.
         postPatch = ''
-          substituteInPlace rebar.config.script --replace "{erlc_compile, \"rm \\\"\$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\\\"\"}" ""
+          substituteInPlace rebar.config.script --replace "{erlc_compile, \"rm \\\"\$REBAR_DEPS_DIR/json_polyfill/ebin/json.beam\\\"\"}" "{erlc_compile, \"rm \\\"ebin/json.beam\\\"\"}"
           '';
       });
     });
