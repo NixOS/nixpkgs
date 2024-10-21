@@ -56,6 +56,7 @@ in
         '';
         Restart = "on-failure";
         KillSignal = "SIGINT";
+        SuccessExitStatus = "0 156";
       };
     };
 
