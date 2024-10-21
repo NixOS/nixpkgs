@@ -23670,9 +23670,6 @@ with pkgs;
 
   zlog = callPackage ../development/libraries/zlog { };
 
-  zeromq4 = callPackage ../development/libraries/zeromq/4.x.nix { };
-  zeromq = zeromq4;
-
   cppzmq = callPackage ../development/libraries/cppzmq { };
 
   czmq = callPackage ../development/libraries/czmq { };

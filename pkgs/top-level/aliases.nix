@@ -1802,6 +1802,7 @@ mapAliases {
   ### Z ###
 
   zabbix40 = throw "'zabbix40' has been removed as it has reached end of life"; # Added 2024-01-07
+  zeromq4 = zeromq; # Added 2024-10-19
   zfsStable = zfs; # Added 2024-02-26
   zfsUnstable = zfs_unstable; # Added 2024-02-26
   zinc = zincsearch; # Added 2023-05-28

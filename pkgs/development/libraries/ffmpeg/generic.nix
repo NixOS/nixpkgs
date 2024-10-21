@@ -328,7 +328,7 @@
 , xeve
 , xvidcore
 , xz
-, zeromq4
+, zeromq
 , zimg
 , zlib
 , zvbi
@@ -832,7 +832,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals withXvid [ xvidcore ]
   ++ optionals withZimg [ zimg ]
   ++ optionals withZlib [ zlib ]
-  ++ optionals withZmq [ zeromq4 ]
+  ++ optionals withZmq [ zeromq ]
   ++ optionals withZvbi [ zvbi ]
   ;
 
