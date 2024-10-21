@@ -98,13 +98,9 @@ let
   package = config.security.pam.package;
   parentConfig = config;
 
-  pamOpts = { config, name, ... }: let cfg = config; in let config = parentConfig; in {
-
-    imports = [
-      (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
-    ];
-
-    options = {
+  pamOpts = default: {config, name, ...}: let cfg = config; in let
+    config = parentConfig;
+    configDefaults = {
 
       name = lib.mkOption {
         example = "sshd";
@@ -597,6 +593,24 @@ let
       };
 
     };
+  in {
+    imports = [
+      (lib.mkRenamedOptionModule [ "enableKwallet" ] [ "kwallet" "enable" ])
+    ];
+
+    options =
+      if default
+      then configDefaults
+      else lib.mapAttrsRecursiveCond
+        (as: !(lib.isOption as))
+        (path: value:
+          if lib.isOption value && builtins.hasAttr "default" value
+          then value // {
+            default = lib.attrByPath path (throw "Service default does not exist") config.security.pam.serviceDefaults;
+            defaultText = lib.literalExpression "config.security.pam.serviceDefaults.${lib.concatStringsSep "." path}";
+          }
+          else value)
+        configDefaults;
 
     # The resulting /etc/pam.d/* file contents are verified in
     # nixos/tests/pam/pam-file-contents.nix. Please update tests there when
@@ -1022,9 +1036,17 @@ in
      '';
     };
 
+    security.pam.serviceDefaults = lib.mkOption {
+      default = {};
+      type = lib.types.submodule (pamOpts true);
+      description = ''
+        This option defines the default PAM service configuration.
+      '';
+    };
+
     security.pam.services = lib.mkOption {
       default = {};
-      type = with lib.types; attrsOf (submodule pamOpts);
+      type = with lib.types; attrsOf (submodule (pamOpts false));
       description = ''
           This option defines the PAM services.  A service typically
           corresponds to a program that uses PAM,
