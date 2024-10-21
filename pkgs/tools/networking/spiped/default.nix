@@ -4,6 +4,7 @@
   fetchurl,
   openssl,
   coreutils,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,6 +34,8 @@ stdenv.mkDerivation rec {
     make install BINDIR=$out/bin MAN1DIR=$out/share/man/man1
     runHook postInstall
   '';
+
+  passthru.tests.spiped = nixosTests.spiped;
 
   meta = {
     description = "Utility for secure encrypted channels between sockets";
