@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace dool \
       --replace \
-        "os.path.abspath(os.path.dirname(sys.argv[0])) + '/plugins/'" \
+        "os.path.dirname(os.path.abspath(__file__)) + '/plugins/'" \
         "'$out/share/dool/'"
   '';
 
