@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchurl
-, makeDesktopItem
-, copyDesktopItems
-, buildFHSEnv
-, alsa-lib
-, freetype
-, nghttp2
-, libX11
-, }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchurl,
+  makeDesktopItem,
+  copyDesktopItems,
+  buildFHSEnv,
+  alsa-lib,
+  freetype,
+  nghttp2,
+  libX11,
+}:
 
 let
   pname = "decent-sampler";
@@ -42,7 +43,10 @@ let
         comment = "DecentSampler player";
         icon = "decent-sampler";
         exec = "decent-sampler";
-        categories = [ "Audio" "AudioVideo" ];
+        categories = [
+          "Audio"
+          "AudioVideo"
+        ];
       })
     ];
 
@@ -81,9 +85,9 @@ buildFHSEnv {
   meta = with lib; {
     description = "Audio sample player";
     longDescription = ''
-        Decent Sampler is an audio sample player.
-        Allowing you to play sample libraries in the DecentSampler format
-        (files with extensions: dspreset and dslibrary).
+      Decent Sampler is an audio sample player.
+      Allowing you to play sample libraries in the DecentSampler format
+      (files with extensions: dspreset and dslibrary).
     '';
     mainProgram = "decent-sampler";
     homepage = "https://www.decentsamples.com/product/decent-sampler-plugin/";
@@ -91,6 +95,9 @@ buildFHSEnv {
     # that it is released under.
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ adam248 chewblacka ];
+    maintainers = with maintainers; [
+      adam248
+      chewblacka
+    ];
   };
 }
