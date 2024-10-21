@@ -466,10 +466,22 @@ in
 
     boot.isContainer = mkOption {
       type = types.bool;
-      default = false;
+      default = config.boot.isNspawnContainer;
+      defaultText = "config.boot.isNspawnContainer";
       description = ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
+      '';
+    };
+
+    boot.isNspawnContainer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the machine is running in an nspawn container. This
+        option is added because [](#opt-boot.isContainer) is heavily used
+        for non-nspawn environments as well, hence nspawn-specific settings
+        are guarded by this option.
       '';
     };
 
@@ -505,7 +517,7 @@ in
                             then { inherit (host.pkgs.stdenv) hostPlatform; }
                             else { localSystem = host.pkgs.stdenv.hostPlatform; }
                           ;
-                          boot.isContainer = true;
+                          boot.isNspawnContainer = true;
                           networking.hostName = mkDefault name;
                           networking.useDHCP = false;
                           assertions = [
