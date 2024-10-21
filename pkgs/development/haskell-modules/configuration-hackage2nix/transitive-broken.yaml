@@ -3049,6 +3049,10 @@ dont-distribute-packages:
  - peyotls
  - peyotls-codec
  - pg-entity
+ - phladiprelio-general-shared
+ - phladiprelio-general-simple
+ - phladiprelio-ukrainian-shared
+ - phladiprelio-ukrainian-simple
  - phonetic-languages-common
  - phonetic-languages-constraints
  - phonetic-languages-examples
