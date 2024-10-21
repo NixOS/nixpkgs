@@ -107,15 +107,17 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" ];
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
-      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
-    ''}
-    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
-    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
-  )'';
+  postUnpack = ''
+    (
+      cd "$sourceRoot/subprojects"
+      ${lib.optionalString finalAttrs.finalPackage.doCheck ''
+        cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+      ''}
+      cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
+      cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+      cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+    )
+  '';
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the preload

@@ -160,7 +160,8 @@ stdenv.mkDerivation (
        # Build out of source tree and make the source tree read-only.  This
        # helps catch violations of the GNU Coding Standards (info
        # "(standards) Configuration"), like `make distcheck' does.
-       '' mkdir "../build"
+       ''
+          mkdir "../build"
           cd "../build"
           configureScript="../$sourceRoot/configure"
           chmod -R a-w "../$sourceRoot"
