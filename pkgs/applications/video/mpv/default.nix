@@ -21,7 +21,6 @@
   libXpresent,
   libXrandr,
   libXv,
-  libXxf86vm,
   libarchive,
   libass,
   libbluray,
@@ -216,7 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXext
       libGLU
       libGL
-      libXxf86vm
       libXrandr
       libXpresent
       libXScrnSaver
