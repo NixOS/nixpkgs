@@ -710,7 +710,7 @@ Don't worry about it.
 If there is a build failure however and it happened due to a package related to your change, you need to investigate it of course.
 If ofBorg reveals the build to be broken on some platform and you don't have access to that platform, you should set your package's `meta.broken` accordingly.
 
-When in any doubt, please simply ask via a comment in your PR or through one of the help channels.
+When in any doubt, please ask via a comment in your PR or through one of the help channels.
 
 ## I received a review on my PR, how do I get it over the finish line?
 
@@ -749,7 +749,7 @@ It is convention to mark review comments that are not critical to the PR as nitp
 As the PR author, you should still take a look at these as they will often reveal best practices and unwritten rules that usually have good reasons behind them and you may want to incorporate them into your modus operandi.
 
 Please keep in mind that reviewers almost always mean well here.
-Their intent is not to denounce your code, they simply want your code to be as good as it can be.
+Their intent is not to denounce your code, they want your code to be as good as it can be.
 Through their experience, they may also take notice of a seemingly insignificant issues that have caused significant burden before.
 
 Sometimes however, they can also get a bit carried away and become too perfectionistic.
@@ -775,8 +775,8 @@ If someone left an approving review on your PR and didn't merge a few days later
 
 Please see it as your responsibility to actively remind reviewers of your open PRs.
 
-The easiest way to do so is to simply cause them a Github notification.
-Github notifies people involved in the PR when you add a comment to your PR, push your PR or re-request their review.
+The easiest way to do so is to cause them a Github notification.
+Github notifies people involved in the PR whenever you add a comment to your PR, push your PR or re-request their review.
 Doing any of that will get you people's attention again.
 Everyone deserves proper attention, and yes that includes you!
 However please be mindful that committers can sadly not always give everyone the attention they deserve.
