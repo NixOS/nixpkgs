@@ -1,25 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, curl, openssl, Security }:
+{ lib, stdenv, fetchFromGitHub, cmake, curl, openssl, Security }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhv";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "ithewei";
     repo = "libhv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-tVuQwj2HvAhp51urGCuNPjBEIaTu9yR031Ih/5or9Pk=";
+    hash = "sha256-N2YD84eORA5nDpeeqy9jCvRx86PkRaKLzI6LF1AnHtU=";
   };
-
-  patches = [
-    # Fix build failure on gcc-13:
-    #   https://github.com/ithewei/libhv/pull/490
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/ithewei/libhv/commit/b3e61519fbdbbb956fed275c0a849ba5d4d6e45c.patch";
-      hash = "sha256-fuYI+B3qZkSAbLZc0p6/0fnqaHx6w9N9vhTEE2t6UUs=";
-    })
-  ];
 
   nativeBuildInputs = [ cmake ];
 
