@@ -18215,6 +18215,8 @@ with pkgs;
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
+  hammerspoon = callPackage ../os-specific/darwin/hammerspoon { };
+
   rcodesign = darwin.apple_sdk_11_0.callPackage ../development/tools/rcodesign {};
 
   rdocker = callPackage ../development/tools/rdocker { };
