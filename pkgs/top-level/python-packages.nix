@@ -4966,11 +4966,21 @@ self: super: with self; {
 
   geocachingapi = callPackage ../development/python-modules/geocachingapi { };
 
+  geoarrow-c = callPackage ../development/python-modules/geoarrow-c { };
+
+  geoarrow-pandas = callPackage ../development/python-modules/geoarrow-pandas { };
+
+  geoarrow-pyarrow = callPackage ../development/python-modules/geoarrow-pyarrow { };
+
+  geoarrow-rust-core = callPackage ../development/python-modules/geoarrow-rust-core { };
+
   geocoder = callPackage ../development/python-modules/geocoder { };
 
   geodatasets = callPackage ../development/python-modules/geodatasets { };
 
   geographiclib = callPackage ../development/python-modules/geographiclib { };
+
+  geohash = callPackage ../development/python-modules/geohash { };
 
   geoip2 = callPackage ../development/python-modules/geoip2 { };
 
@@ -10961,6 +10971,8 @@ self: super: with self; {
 
   pyarrow-hotfix = callPackage ../development/python-modules/pyarrow-hotfix { };
 
+  pyarrow-ops = callPackage ../development/python-modules/pyarrow-ops { };
+
   pyasn = callPackage ../development/python-modules/pyasn { };
 
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
@@ -12542,6 +12554,8 @@ self: super: with self; {
 
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
+  pytest-parametrization = callPackage ../development/python-modules/pytest-parametrization { };
+
   pytest-parallel = callPackage ../development/python-modules/pytest-parallel { };
 
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
@@ -13314,6 +13328,8 @@ self: super: with self; {
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
+
+  quackosm = callPackage ../development/python-modules/quackosm { };
 
   quadprog = callPackage ../development/python-modules/quadprog { };
 
