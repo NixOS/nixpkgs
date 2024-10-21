@@ -13815,7 +13815,9 @@ with pkgs;
 
   wipe = callPackage ../tools/security/wipe { };
 
-  wireguard-go = callPackage ../tools/networking/wireguard-go { };
+  wireguard-go = callPackage ../tools/networking/wireguard-go {
+    buildGoModule = buildGo122Module;
+  };
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
