@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "1.5.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pDgvdQhlJ5aMRGdi2qXRXVCdJRvrOP/Nr0SSZyHH1WM=";
+    hash = "sha256-XAO+UeHsOFAmUXqzMY/Iws1E738ZnU4Wz7E4YNIeGKY=";
   };
 
   build-system = [ poetry-core ];
