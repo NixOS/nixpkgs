@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Python bindings for the docker credentials store API";
     homepage = "https://github.com/shin-/dockerpy-creds";
     license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
