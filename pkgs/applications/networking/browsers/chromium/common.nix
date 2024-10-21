@@ -314,7 +314,7 @@ let
     ] ++ lib.optionals (chromiumVersionAtLeast "129") [
       # Rebased variant of patch right above to build M129+ with our rust and our clang.
       ./patches/chromium-129-rust.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "130") [
+    ] ++ lib.optionals (chromiumVersionAtLeast "130" && !ungoogled) [
       # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
       # and std::hardware_constructive_interference_size.
       # So let's revert the change for now and hope that our rustc.llvmPackages and
@@ -324,6 +324,7 @@ let
       # Note: We exclude the changes made to the partition_allocator (PA), as the revert
       # would otherwise not apply because upstream reverted those changes to PA already
       # in https://chromium-review.googlesource.com/c/chromium/src/+/5841144
+      # Note: ungoogled-chromium already reverts this as part of its patchset.
       (githubPatch {
         commit = "fc838e8cc887adbe95110045d146b9d5885bf2a9";
         hash = "sha256-NNKzIp6NYdeZaqBLWDW/qNxiDB1VFRz7msjMXuMOrZ8=";

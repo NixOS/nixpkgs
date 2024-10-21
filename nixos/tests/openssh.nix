@@ -14,10 +14,7 @@ in {
       { ... }:
 
       {
-        services.openssh = {
-          enable = true;
-          authorizedKeysInHomedir = true;
-        };
+        services.openssh.enable = true;
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
         users.users.root.openssh.authorizedKeys.keys = [
@@ -42,11 +39,7 @@ in {
       { ... }:
 
       {
-        services.openssh = {
-          enable = true;
-          startWhenNeeded = true;
-          authorizedKeysInHomedir = true;
-        };
+        services.openssh = { enable = true; startWhenNeeded = true; };
         security.pam.services.sshd.limits =
           [ { domain = "*"; item = "memlock"; type = "-"; value = 1024; } ];
         users.users.root.openssh.authorizedKeys.keys = [

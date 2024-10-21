@@ -103,7 +103,7 @@ super: lib.trivial.pipe super [
     nativeBuildInputs = [ wrapGAppsHook3 ];
     patches = [
       (substituteAll {
-        inherit gjs util-linux xdg-utils;
+        inherit gjs;
         util_linux = util-linux;
         xdg_utils = xdg-utils;
         src = ./extensionOverridesPatches/gtk4-ding_at_smedius.gitlab.com.patch;
