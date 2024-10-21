@@ -5,14 +5,19 @@
   buildPythonPackage,
   pythonRelaxDepsHook,
   fetchFromGitHub,
+
+  # build system
+  packaging,
+  setuptools,
+  wheel,
+
+  # dependencies
   which,
   ninja,
   cmake,
-  packaging,
-  setuptools,
+  setuptools-scm,
   torch,
   outlines,
-  wheel,
   psutil,
   ray,
   pandas,
@@ -34,15 +39,23 @@
   lm-format-enforcer,
   prometheus-fastapi-instrumentator,
   cupy,
-  writeShellScript,
+  gguf,
+  einops,
+  importlib-metadata,
+  partial-json-parser,
+  compressed-tensors,
+  mistral-common,
+  msgspec,
+  numactl,
+  tokenizers,
+  oneDNN,
 
   config,
 
   cudaSupport ? config.cudaSupport,
   cudaPackages ? { },
 
-  # Has to be either rocm or cuda, default to the free one
-  rocmSupport ? !config.cudaSupport,
+  rocmSupport ? false,
   rocmPackages ? { },
   gpuTargets ? [ ],
 }@args:
@@ -54,11 +67,14 @@ let
     rev = "refs/tags/v3.5.0";
     sha256 = "sha256-D/s7eYsa5l/mfx73tE4mnFcTQdYqGmXa9d9TCryw4e4=";
   };
+
+  cpuSupport = !cudaSupport && !rocmSupport;
+
 in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.5.3.post1";
+  version = "0.6.3.post1";
   pyproject = true;
 
   stdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
@@ -67,7 +83,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-++DK2Y2zz+1KrEcdQc5XFrSjc7fCwMD2DQ/RqY7PoFU=";
+    hash = "sha256-VHFU8EzkYRTZwm6cRmA5+YAm3NWkrYjX9ZSXUZNnkx0=";
   };
 
   patches = [
@@ -77,11 +93,16 @@ buildPythonPackage rec {
 
   # Ignore the python version check because it hard-codes minor versions and
   # lags behind `ray`'s python interpreter support
+  # Relax torch dependency manually because the nonstandard requirements format
+  # is not caught by pythonRelaxDeps
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         'set(PYTHON_SUPPORTED_VERSIONS' \
         'set(PYTHON_SUPPORTED_VERSIONS "${lib.versions.majorMinor python.version}"'
+    substituteInPlace requirements*.txt pyproject.toml \
+      --replace-warn 'torch==2.4.0' 'torch==${lib.getVersion torch}' \
+      --replace-warn 'torch == 2.4.0' 'torch == ${lib.getVersion torch}' \
   '';
 
   nativeBuildInputs = [
@@ -98,7 +119,15 @@ buildPythonPackage rec {
   ];
 
   buildInputs =
-    (lib.optionals cudaSupport (
+    [
+      setuptools-scm
+      torch
+    ]
+    ++ (lib.optionals cpuSupport ([
+      numactl
+      oneDNN
+    ]))
+    ++ (lib.optionals cudaSupport (
       with cudaPackages;
       [
         cuda_cudart # cuda_runtime.h, -lcudart
@@ -139,6 +168,14 @@ buildPythonPackage rec {
       ray
       sentencepiece
       tiktoken
+      tokenizers
+      msgspec
+      gguf
+      einops
+      importlib-metadata
+      partial-json-parser
+      compressed-tensors
+      mistral-common
       torch
       torchvision
       transformers
@@ -153,14 +190,24 @@ buildPythonPackage rec {
     ];
 
   dontUseCmakeConfigure = true;
-  cmakeFlags = [ (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}") ];
+  cmakeFlags = [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
+  ];
 
   env =
-    lib.optionalAttrs cudaSupport { CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}"; }
+    lib.optionalAttrs cudaSupport {
+      VLLM_TARGET_DEVICE = "cuda";
+      CUDA_HOME = "${lib.getDev cudaPackages.cuda_nvcc}";
+    }
     // lib.optionalAttrs rocmSupport {
+      VLLM_TARGET_DEVICE = "rocm";
       # Otherwise it tries to enumerate host supported ROCM gfx archs, and that is not possible due to sandboxing.
       PYTORCH_ROCM_ARCH = lib.strings.concatStringsSep ";" rocmPackages.clr.gpuTargets;
       ROCM_HOME = "${rocmPackages.clr}";
+    }
+    // lib.optionalAttrs cpuSupport {
+      VLLM_TARGET_DEVICE = "cpu";
     };
 
   pythonRelaxDeps = true;
@@ -176,8 +223,8 @@ buildPythonPackage rec {
       happysalada
       lach
     ];
-    # RuntimeError: Unknown runtime environment
-    broken = true;
-    # broken = !cudaSupport && !rocmSupport;
+
+    # CPU support relies on unpackaged dependency `intel_extension_for_pytorch`
+    broken = cpuSupport;
   };
 }
