@@ -13,6 +13,7 @@
 , libnotify
 , udev
 , e2fsprogs
+, runCommand
 , python3
 , autoPatchelfHook
 , vmopts ? null
@@ -133,6 +134,13 @@ with stdenv; lib.makeOverridable mkDerivation (rec {
 
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    remote_dev_output=$(${coreutils}/bin/timeout 10s $out/bin/${pname}-remote-dev-server run $(mktemp -d) || true)
+    echo $remote_dev_output | grep "Join link"
+  '';
+
 } // lib.optionalAttrs (!(meta.license.free or true)) {
   preferLocalBuild = true;
 })
