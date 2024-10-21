@@ -38,6 +38,7 @@
   libvdpau,
   libxkbcommon,
   lua,
+  makeWrapper,
   mesa,
   meson,
   mujs,
@@ -152,6 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       buildPackages.darwin.sigtool
       swift
+      makeWrapper
     ]
     ++ lib.optionals waylandSupport [ wayland-scanner ];
 
@@ -244,6 +246,13 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p $out/Applications
       cp -r mpv.app $out/Applications
+
+      # On macOS, many things won’t work properly unless `mpv(1)` is
+      # executed from the app bundle, such as spatial audio with
+      # `--ao=avfoundation`. This wrapper ensures that those features
+      # work reliably and also avoids shipping two copies of the entire
+      # `mpv` executable.
+      makeWrapper $out/Applications/mpv.app/Contents/MacOS/mpv $out/bin/mpv
     '';
 
   # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
