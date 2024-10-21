@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "xcrawl3r";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "hueristiq";
     repo = "xcrawl3r";
     rev = "refs/tags/${version}";
-    hash = "sha256-K7UuWsteI8mEAGOF/g/EbT/Ch6sbmKhiiYB3npdDmFk=";
+    hash = "sha256-W1cvSvRnDGFp4br8s/nL+owIGWTJ1bVX6kvmeTLUuuI=";
   };
 
-  vendorHash = "sha256-/yBSrZdlVMZgcKcONBSq7C5IFC30TJL0z6FZRXm+HUs=";
+  vendorHash = "sha256-fHdtqjFmT+8cmy2SxjjBvw5Rct7lA2ksGVmm/9ncbRI=";
 
   ldflags = [
     "-s"
