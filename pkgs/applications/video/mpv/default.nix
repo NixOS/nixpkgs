@@ -19,7 +19,6 @@
   libXext,
   libXpresent,
   libXrandr,
-  libXv,
   libarchive,
   libass,
   libbluray,
@@ -87,7 +86,6 @@
   vulkanSupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux,
   x11Support ? stdenv.hostPlatform.isLinux,
-  xvSupport ? stdenv.hostPlatform.isLinux,
   zimgSupport ? true,
 }:
 
@@ -217,7 +215,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXpresent
       libXScrnSaver
     ]
-    ++ lib.optionals xvSupport [ libXv ]
     ++ lib.optionals zimgSupport [ zimg ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ nv-codec-headers-11 ];
 
