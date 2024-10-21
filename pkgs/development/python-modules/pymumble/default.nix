@@ -7,12 +7,13 @@
   pytestCheckHook,
   pycrypto,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage {
   pname = "pymumble";
   version = "unstable-2024-10-20";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,7 +24,11 @@ buildPythonPackage {
     hash = "sha256-9lfWvfrS+vUFTf9jo4T+VHkm9u/hVjsDszLBQIEZVcQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     opuslib
     protobuf
   ];
