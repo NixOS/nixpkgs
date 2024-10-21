@@ -9894,6 +9894,8 @@ self: super: with self; {
 
   pescea = callPackage ../development/python-modules/pescea { };
 
+  pesq = callPackage ../development/python-modules/pesq { };
+
   pex = callPackage ../development/python-modules/pex { };
 
   pexif = callPackage ../development/python-modules/pexif { };
