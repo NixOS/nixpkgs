@@ -11,6 +11,18 @@ stdenv.mkDerivation rec {
   pname = "gperftools";
   version = "2.15";
 
+  # split output to minimize dependencies on dynamic linking.
+  # tcmalloc_minimal goes into a dedicated output to further minimize
+  # the runtime dependencies of applications that just use tcmalloc
+  # as an allocator, without the profiling.
+  outputs = [
+    "out"
+    "dev"
+    "tcmalloc_minimal"
+    "lib"
+    "static"
+  ];
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
@@ -50,6 +62,25 @@ stdenv.mkDerivation rec {
   dontDisableStatic = true;
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    mkdir -p $tcmalloc_minimal/lib
+    mkdir -p $static/lib
+    mv $lib/lib/*.a $static/lib/
+    mv $lib/lib/libtcmalloc_minimal.* $tcmalloc_minimal/lib/
+
+    # Ensure that metadata files know about new locations
+    substituteInPlace $dev/lib/pkgconfig/libtcmalloc_minimal.pc --replace-fail $lib $tcmalloc_minimal
+    substituteInPlace $tcmalloc_minimal/lib/libtcmalloc_minimal.la --replace-fail $lib $tcmalloc_minimal
+  '';
+
+  # static goes last to ensure dynamic libraries get priority in
+  # NIX_LDFLAGS.
+  propagatedBuildOutputs = [
+    "tcmalloc_minimal"
+    "lib"
+    "static"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/gperftools/gperftools";
