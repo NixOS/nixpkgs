@@ -43,7 +43,7 @@ in appimageTools.wrapType2 {
     homepage = "https://simplex.chat";
     changelog = "https://github.com/simplex-chat/simplex-chat/releases/tag/v${version}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ terryg yuu ];
+    maintainers = with maintainers; [ terryg ];
     platforms = [ "x86_64-linux" ];
   };
 }
