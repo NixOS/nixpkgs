@@ -162,7 +162,7 @@ stdenv'.mkDerivation (finalAttrs: {
     ''
       substituteInPlace meson.build \
         --replace-fail "conf_data.set_quoted('CONFIGURATION', configuration)" \
-                       "conf_data.set_quoted('CONFIGURATION', '<ommited>')"
+                       "conf_data.set_quoted('CONFIGURATION', '<omitted>')"
     ''
     # A trick to patchShebang everything except mpv_identify.sh
     ''
