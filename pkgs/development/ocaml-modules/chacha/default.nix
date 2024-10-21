@@ -26,9 +26,6 @@ buildDunePackage rec {
     sha256 = "sha256-y7X9toFDrgdv3qmFmUs7K7QS+Gy45rRLulKy48m7uqc=";
   })];
 
-  minimalOCamlVersion = "4.02";
-  duneVersion = "3";
-
   propagatedBuildInputs = [ cstruct mirage-crypto ];
 
   # alcotest isn't available for OCaml < 4.05 due to fmt
@@ -45,5 +42,6 @@ buildDunePackage rec {
     '';
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ fufexan ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }
