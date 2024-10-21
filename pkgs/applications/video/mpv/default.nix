@@ -38,7 +38,6 @@
   libpthreadstubs,
   libpulseaudio,
   libsixel,
-  libtheora,
   libuchardet,
   libva,
   libvdpau,
@@ -88,7 +87,6 @@
   screenSaverSupport ? true,
   sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
-  theoraSupport ? true,
   vaapiSupport ? x11Support || waylandSupport,
   vapoursynthSupport ? false,
   vdpauSupport ? true,
@@ -207,7 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals screenSaverSupport [ libXScrnSaver ]
     ++ lib.optionals sdl2Support [ SDL2 ]
     ++ lib.optionals sixelSupport [ libsixel ]
-    ++ lib.optionals theoraSupport [ libtheora ]
     ++ lib.optionals vaapiSupport [ libva ]
     ++ lib.optionals vapoursynthSupport [ vapoursynth ]
     ++ lib.optionals vdpauSupport [ libvdpau ]
