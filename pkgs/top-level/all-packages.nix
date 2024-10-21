@@ -29502,8 +29502,6 @@ with pkgs;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
-  gmrun = callPackage ../applications/misc/gmrun { };
-
   goffice = callPackage ../development/libraries/goffice { };
 
   gtkterm = callPackage ../tools/misc/gtkterm { };
