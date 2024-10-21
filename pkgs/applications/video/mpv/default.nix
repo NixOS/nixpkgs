@@ -131,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     (lib.mesonOption "default_library" "shared")
     (lib.mesonBool "libmpv" true)
-    (lib.mesonEnable "libarchive" archiveSupport)
     (lib.mesonEnable "manpage-build" true)
     (lib.mesonEnable "cdda" cddaSupport)
     (lib.mesonEnable "dvbin" dvbinSupport)
