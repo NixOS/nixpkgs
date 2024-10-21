@@ -1229,9 +1229,6 @@ mapAliases {
   wmii_hg = wmii;
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
   write_stylus = styluslabs-write-bin; # Added 2024-10-09
-  wxGTK30-gtk2 = wxGTK30; # Added 2022-12-03
-  wxGTK30-gtk3 = wxGTK30; # Added 2022-12-03
-  wxmac = wxGTK30; # Added 2023-03-22
 
   ### X ###
 
