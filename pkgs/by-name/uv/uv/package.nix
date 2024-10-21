@@ -15,22 +15,23 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "uv";
-  version = "0.4.20";
+  version = "0.4.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "uv";
     rev = "refs/tags/${version}";
-    hash = "sha256-PfjYGCPPRZVm4H9oxkWdjW7kHu4CqdkenFgL61dOU5k=";
+    hash = "sha256-qAfM9I2NboYkUukWnOjuGcdjp8IONAI6Qwwg1r9kCGg=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "async_zip-0.0.17" = "sha256-3k9rc4yHWhqsCUJ17K55F8aQoCKdVamrWAn6IDWo3Ss=";
-      "pubgrub-0.2.1" = "sha256-pU+F6hwqy+r6tz5OBoB6gU0+vdH6F3ikUaPrcvYRX2c=";
-      "reqwest-middleware-0.3.3" = "sha256-csQN7jZTifliSTsOm6YrjPVgsXBOfelY7LkHD1HkNGQ=";
+      "pubgrub-0.2.1" = "sha256-mSpRBdQJWtKKD1zHkV7vuyfKTDY6Ejgjll5q5ryCfmY=";
+      "reqwest-middleware-0.3.3" = "sha256-KjyXB65a7SAfwmxokH2PQFFcJc6io0xuIBQ/yZELJzM=";
+      "rust-netrc-0.1.1" = "sha256-DeDAm2k4/2A9Nw8zXeKOMdxhbseGIrRXH0KgGf2shOc=";
       "tl-0.7.8" = "sha256-F06zVeSZA4adT6AzLzz1i9uxpI1b8P1h+05fFfjm3GQ=";
     };
   };
