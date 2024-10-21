@@ -16957,9 +16957,9 @@ with pkgs;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
   electron_33 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_33 then electron-source.electron_33 else electron_33-bin;
-  electron = electron_32;
-  electron-bin = electron_32-bin;
-  electron-chromedriver = electron-chromedriver_32;
+  electron = electron_33;
+  electron-bin = electron_33-bin;
+  electron-chromedriver = electron-chromedriver_33;
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
