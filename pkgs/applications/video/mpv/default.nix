@@ -81,7 +81,7 @@
   rubberbandSupport ? true,
   sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
-  vaapiSupport ? x11Support || waylandSupport,
+  vaapiSupport ? !stdenv.hostPlatform.isDarwin && (x11Support || waylandSupport),
   vapoursynthSupport ? false,
   vdpauSupport ? true,
   vulkanSupport ? true,
