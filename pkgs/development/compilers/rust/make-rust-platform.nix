@@ -22,7 +22,7 @@ rec {
 
   buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
     inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook
-      fetchCargoTarball importCargoLock rustc cargo cargo-auditable;
+      fetchCargoTarball fetchCargoVendor importCargoLock rustc cargo cargo-auditable;
   };
 
   importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix { inherit cargo; };

@@ -1,6 +1,7 @@
 { lib
 , importCargoLock
 , fetchCargoTarball
+, fetchCargoVendor
 , stdenv
 , callPackage
 , cargoBuildHook
@@ -36,6 +37,7 @@
 , cargoDepsHook ? ""
 , buildType ? "release"
 , meta ? {}
+, useCustomVendorFetcher ? false
 , cargoLock ? null
 , cargoVendorDir ? null
 , checkType ? buildType
@@ -68,6 +70,10 @@ let
   cargoDeps =
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
+    else if useCustomVendorFetcher then fetchCargoVendor {
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack; # TODO: improve
+      hash = args.cargoHash;
+    }
     else fetchCargoTarball ({
       inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
