@@ -448,18 +448,6 @@ mapAliases {
   gnome_mplayer = throw "'gnome_mplayer' has been removed due to lack of maintenance upstream. Consider using 'celluloid' instead"; # Added 2024-09-14
   gnome-resources = resources; # added 2023-12-10
 
-  gnuradio-with-packages = gnuradio3_7.override {
-    extraPackages = lib.attrVals [
-      "osmosdr"
-      "ais"
-      "gsm"
-      "nacl"
-      "rds"
-      "limesdr"
-    ]
-      gnuradio3_7Packages;
-  }; # Added 2020-10-16
-
   gmock = throw "'gmock' has been renamed to/replaced by 'gtest'"; # Converted to throw 2024-10-17
 
   gnome3 = throw "'gnome3' has been renamed to/replaced by 'gnome'"; # Converted to throw 2024-10-17
