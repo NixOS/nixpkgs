@@ -97,8 +97,8 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = !xenSupport;
 
-  preConfigure =
-    '' for i in "tests/util/"*.in
+  preConfigure = ''
+       for i in "tests/util/"*.in
        do
          sed -i "$i" -e's|/bin/bash|${stdenv.shell}|g'
        done
@@ -184,17 +184,17 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "GNU GRUB, the Grand Unified Boot Loader";
 
-    longDescription =
-      '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
-         Unified Bootloader, which was originally designed and implemented by
-         Erich Stefan Boleyn.
+    longDescription = ''
+      GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand
+      Unified Bootloader, which was originally designed and implemented by
+      Erich Stefan Boleyn.
 
-         Briefly, the boot loader is the first software program that runs when a
-         computer starts.  It is responsible for loading and transferring
-         control to the operating system kernel software (such as the Hurd or
-         the Linux).  The kernel, in turn, initializes the rest of the
-         operating system (e.g., GNU).
-      '';
+      Briefly, the boot loader is the first software program that runs when a
+      computer starts.  It is responsible for loading and transferring
+      control to the operating system kernel software (such as the Hurd or
+      the Linux).  The kernel, in turn, initializes the rest of the
+      operating system (e.g., GNU).
+    '';
 
     homepage = "https://www.gnu.org/software/grub/";
 

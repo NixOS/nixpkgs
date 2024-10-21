@@ -36,10 +36,11 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Monospace bitmap font aimed at programmers";
-    longDescription = ''Tamsyn is a monospace bitmap font, primarily aimed at
-    programmers. It was derived from Gilles Boccon-Gibod's MonteCarlo. Tamsyn
-    font was further inspired by Gohufont, Terminus, Dina, Proggy, Fixedsys, and
-    Consolas.
+    longDescription = ''
+      Tamsyn is a monospace bitmap font, primarily aimed at
+      programmers. It was derived from Gilles Boccon-Gibod's MonteCarlo. Tamsyn
+      font was further inspired by Gohufont, Terminus, Dina, Proggy, Fixedsys, and
+      Consolas.
     '';
     homepage = "http://www.fial.com/~scott/tamsyn-font/";
     downloadPage = "http://www.fial.com/~scott/tamsyn-font/download";

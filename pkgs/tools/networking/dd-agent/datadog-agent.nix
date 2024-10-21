@@ -103,8 +103,8 @@ in buildGoModule rec {
     cp -R $src/pkg/status/templates $out/share/datadog-agent
 
     wrapProgram "$out/bin/agent" \
-      --set PYTHONPATH "$out/${python.sitePackages}"'' + lib.optionalString withSystemd '' \
-      --prefix LD_LIBRARY_PATH : '' + lib.makeLibraryPath [ (lib.getLib systemd) rtloader ];
+      --set PYTHONPATH "$out/${python.sitePackages}"''
+      + lib.optionalString withSystemd " --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ (lib.getLib systemd) rtloader ]}";
 
   passthru.tests.version = testers.testVersion {
     package = datadog-agent;

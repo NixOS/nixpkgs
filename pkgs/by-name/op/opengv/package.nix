@@ -27,14 +27,16 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Collection of computer vision methods for solving geometric vision problems";
     homepage = "https://github.com/laurentkneip/opengv";
     license = lib.licenses.bsd2;
-    longDescription = ''OpenGV is a collection of computer vision methods for solving
+    longDescription = ''
+        OpenGV is a collection of computer vision methods for solving
         geometric vision problems. It contains absolute-pose, relative-pose,
         triangulation, and point-cloud alignment methods for the calibrated
         case. All problems can be solved with central or non-central cameras,
         and embedded into a random sample consensus or nonlinear optimization
         context. Matlab and Python interfaces are implemented as well. The link
         to the above pages also shows links to precompiled Matlab mex-libraries.
-        Please consult the documentation for more information.'';
+        Please consult the documentation for more information.
+    '';
     maintainers = [ lib.maintainers.locochoco ];
     platforms = lib.platforms.all;
   };

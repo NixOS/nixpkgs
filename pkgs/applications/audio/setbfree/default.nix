@@ -36,10 +36,12 @@ stdenv.mkDerivation  rec {
 
   doInstallCheck = true;
 
-  installCheckPhase = ''(
-    set -x
-    test -e $out/bin/setBfreeUI
-  )'';
+  installCheckPhase = ''
+    (
+      set -x;
+      test -e $out/bin/setBfreeUI
+    )
+  '';
 
   enableParallelBuilding = true;
 

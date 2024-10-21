@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Collection of common network programs";
 
-    longDescription =
-      '' The GNU network utilities suite provides the
-         following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
-         rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
-         traceroute, uucpd, and whois.
-      '';
+    longDescription = ''
+      The GNU network utilities suite provides the
+      following tools: ftp(d), hostname, ifconfig, inetd, logger, ping, rcp,
+      rexec(d), rlogin(d), rsh(d), syslogd, talk(d), telnet(d), tftp(d),
+      traceroute, uucpd, and whois.
+    '';
 
     homepage = "https://www.gnu.org/software/inetutils/";
     license = licenses.gpl3Plus;

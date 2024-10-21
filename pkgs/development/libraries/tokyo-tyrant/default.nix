@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Network interface of the Tokyo Cabinet DBM";
 
-    longDescription =
-      '' Tokyo Tyrant is a package of network interface to the DBM called
+    longDescription = ''
+         Tokyo Tyrant is a package of network interface to the DBM called
          Tokyo Cabinet.  Though the DBM has high performance, you might
          bother in case that multiple processes share the same database, or
          remote processes access the database.  Thus, Tokyo Tyrant is
