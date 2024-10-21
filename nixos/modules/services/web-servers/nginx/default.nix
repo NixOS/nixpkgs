@@ -1151,14 +1151,6 @@ in
       }
 
       {
-        assertion = any (host: host.rejectSSL) (attrValues virtualHosts) -> versionAtLeast cfg.package.version "1.19.4";
-        message = ''
-          services.nginx.virtualHosts.<name>.rejectSSL requires nginx version
-          1.19.4 or above; see the documentation for services.nginx.package.
-        '';
-      }
-
-      {
         assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
         message = ''
           Options services.nginx.service.virtualHosts.<name>.enableACME and
