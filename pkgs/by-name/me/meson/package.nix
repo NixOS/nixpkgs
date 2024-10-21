@@ -85,12 +85,12 @@ python3.pkgs.buildPythonApplication rec {
     # https://github.com/mesonbuild/meson/pull/13038
     ./007-case-sensitive-fs.patch
 
-    # Fix meson's detection for zig's linker
-    # https://github.com/mesonbuild/meson/pull/12293
+    # Fix meson for zig's linker
+    # https://github.com/mesonbuild/meson/pull/13515
     (fetchpatch {
       name = "linker-support-zig-cc.patch";
-      url = "https://github.com/mesonbuild/meson/pull/12293/commits/2baae244c995794d9addfe6ed924dfa72f01be82.patch";
-      hash = "sha256-dDOmSRBKl/gs7I3kmLXIyQk3zsOdlaYov72pPSel4+I=";
+      url = "https://github.com/mesonbuild/meson/pull/13515.patch";
+      hash = "sha256-Jf71pTUFIgInGAap2UatTuPowJl6r3bpYouCAjBmQhA=";
     })
   ];
 
