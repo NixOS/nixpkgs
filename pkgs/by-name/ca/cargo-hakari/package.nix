@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [
       figsoda
       macalinao
+      nartsiss
     ];
   };
 }
