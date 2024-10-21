@@ -24,6 +24,7 @@
 , openjpegSupport ? !stdenv.hostPlatform.isMinGW, openjpeg
 , libwebpSupport ? !stdenv.hostPlatform.isMinGW, libwebp
 , libheifSupport ? true, libheif
+, fftwSupport ? true, fftw
 , potrace
 , coreutils
 , curl
@@ -76,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature libjxlSupport "jxl")
     (lib.withFeatureAs ghostscriptSupport "gs-font-dir" "${ghostscript.fonts}/share/fonts")
     (lib.withFeature ghostscriptSupport "gslib")
+    (lib.withFeature fftwSupport "fftw")
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # due to libxml2 being without DLLs ATM
     "--enable-static" "--disable-shared"
@@ -113,7 +115,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional lcms2Support lcms2
     ++ lib.optional libX11Support libX11
     ++ lib.optional libXtSupport libXt
-    ++ lib.optional libwebpSupport libwebp;
+    ++ lib.optional libwebpSupport libwebp
+    ++ lib.optional fftwSupport fftw;
 
   postInstall = ''
     (cd "$dev/include" && ln -s ImageMagick* ImageMagick)
