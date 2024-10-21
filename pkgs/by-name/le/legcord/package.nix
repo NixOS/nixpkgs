@@ -7,6 +7,7 @@
 , makeWrapper
 , copyDesktopItems
 , makeDesktopItem
+, nix-update-script
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
       terminal = false;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
