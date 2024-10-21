@@ -39,7 +39,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       common-updater-scripts
     ];
     text = ''
-      set -euo pipefail
       redirect_url="$(curl -s -L -f "https://releases.arc.net/release/Arc-latest.dmg" -o /dev/null -w '%{url_effective}')"
       # The url scheme is: https://releases.arc.net/release/Arc-1.23.4-56789.dmg
       # We strip everything before 'Arc-' and after '.dmg'
