@@ -24,8 +24,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/Applications/Arc.app
-    cp -R . $out/Applications/Arc.app
+    mkdir -p "$out/Applications/Arc.app"
+    cp -R . "$out/Applications/Arc.app"
 
     runHook postInstall
   '';
