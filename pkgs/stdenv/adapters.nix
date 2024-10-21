@@ -120,9 +120,7 @@ rec {
 
   # Return a modified stdenv that builds static libraries instead of
   # shared libraries.
-  makeStaticLibraries = stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
+  makeStaticLibraries = extendMkDerivationArgs (args: {
         dontDisableStatic = true;
       } // lib.optionalAttrs (!(args.dontAddStaticConfigureFlags or false)) {
         configureFlags = (args.configureFlags or []) ++ [
@@ -132,7 +130,6 @@ rec {
         cmakeFlags = (args.cmakeFlags or []) ++ [ "-DBUILD_SHARED_LIBS:BOOL=OFF" ];
         mesonFlags = (args.mesonFlags or []) ++ [ "-Ddefault_library=static" ];
       });
-    });
 
   # Best effort static binaries. Will still be linked to libSystem,
   # but more portable than Nix store binaries.
@@ -171,12 +168,11 @@ rec {
   /* Modify a stdenv so that all buildInputs are implicitly propagated to
      consuming derivations
   */
-  propagateBuildInputs = stdenv:
-    stdenv.override (old: {
-      mkDerivationFromStdenv = extendMkDerivationArgs' old (args: {
+  propagateBuildInputs = extendMkDerivationArgs (args: {
         propagatedBuildInputs = (args.propagatedBuildInputs or []) ++ (args.buildInputs or []);
         buildInputs = [];
-      });
+  });
+
   /* Modify a stdenv so as to extend `mkDerivation`'s arguments.
      A stronger version of `addAttrsToDerivation`.
 
@@ -200,13 +196,11 @@ rec {
            { env.NIX_CFLAGS_COMPILE = "-O0"; }
            stdenv;
   */
-  addAttrsToDerivation = extraAttrs: stdenv: stdenv.override (old: {
-    mkDerivationFromStdenv = extendMkDerivationArgs' old (_: extraAttrs);
-  });
+  addAttrsToDerivation = extraAttrs: extendMkDerivationArgs (_: extraAttrs);
 
 
   /* Use the trace output to report all processed derivations with their
-     license name.
+     licen:se name.
   */
   traceDrvLicenses = stdenv:
     stdenv.override (old: {
