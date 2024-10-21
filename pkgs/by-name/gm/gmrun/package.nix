@@ -1,44 +1,37 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  glib,
-  gtk2,
+  fetchFromGitHub,
   pkg-config,
-  popt,
+  wrapGAppsHook3,
 }:
 
-let
-  version = "0.9.2";
-in
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gmrun";
-  inherit version;
+  version = "1.4w";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/gmrun/${pname}-${version}.tar.gz";
-    sha256 = "180z6hbax1qypy5cyy2z6nn7fzxla4ib47ck8mqwr714ag77na8p";
+  src = fetchFromGitHub {
+    owner = "wdlkmpx";
+    repo = "gmrun";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-sp+Atod9ZKVF8sxNWIMrlewqZAGnoLo2mZUNkCtSkec=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    glib
-    gtk2
-    popt
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
   ];
 
   doCheck = true;
 
   enableParallelBuilding = true;
 
-  patches = [
-    ./gcc43.patch
-    ./find-config-file-in-system-etc-dir.patch
-    ./gmrun-0.9.2-xdg.patch
-  ];
+  # Problem with component size on wayland
+  preFixup = ''
+    gappsWrapperArgs+=(--set-default GDK_BACKEND x11)
+  '';
 
-  meta = with lib; {
+  meta = {
     description = "Gnome Completion-Run Utility";
     longDescription = ''
       A simple program which provides a "run program" window, featuring a bash-like TAB completion.
@@ -46,10 +39,10 @@ stdenv.mkDerivation rec {
       Also, supports CTRL-R / CTRL-S / "!" for searching through history.
       Running commands in a terminal with CTRL-Enter. URL handlers.
     '';
-    homepage = "https://sourceforge.net/projects/gmrun/";
-    license = licenses.gpl2;
-    maintainers = [ ];
-    platforms = platforms.all;
+    homepage = "https://github.com/wdlkmpx/gmrun";
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
     mainProgram = "gmrun";
   };
-}
+})
