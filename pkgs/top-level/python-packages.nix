@@ -15810,6 +15810,10 @@ self: super: with self; {
     rocmSupport = false;
   };
 
+  torchWithVulkan = self.torch.override {
+    vulkanSupport = true;
+  };
+
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
