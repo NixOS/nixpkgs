@@ -180,6 +180,8 @@ in ((chromium.override { upstream-info = info.chromium; }).mkDerivation (base: {
     enable_dangling_raw_ptr_feature_flag = false;
     clang_unsafe_buffers_paths = "";
     enterprise_cloud_content_analysis = false;
+  } // lib.optionalAttrs (lib.versionAtLeast info.version "33") {
+    content_enable_legacy_ipc = true;
   } // {
 
     # other
