@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchFromGitea,
   flake8,
   click,
   pyyaml,
@@ -15,7 +15,8 @@ buildPythonPackage rec {
   version = "1.2.2";
   format = "setuptools";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "hjacobs";
     repo = "python-clickclick";
     rev = version;
@@ -38,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Click command line utilities";
-    homepage = "https://github.com/hjacobs/python-clickclick/";
+    homepage = "https://codeberg.org/hjacobs/python-clickclick/";
     license = licenses.asl20;
   };
 }
