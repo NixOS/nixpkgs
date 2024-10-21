@@ -15695,6 +15695,8 @@ with pkgs;
 
   cauwugo = callPackage ../development/tools/rust/cauwugo { };
 
+  cfclient = with python3Packages; toPythonApplication cfclient;
+
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
   devspace = callPackage ../development/tools/misc/devspace { };
@@ -26738,8 +26740,6 @@ with pkgs;
   bgnet = callPackage ../data/documentation/bgnet { };
 
   bibata-cursors-translucent = callPackage ../data/icons/bibata-cursors/translucent.nix { };
-
-  apple-cursor = callPackage ../data/icons/apple-cursor { };
 
   blackbird = callPackage ../data/themes/blackbird { };
 
