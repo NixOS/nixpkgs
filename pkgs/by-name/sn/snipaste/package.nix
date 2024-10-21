@@ -12,6 +12,8 @@ appimageTools.wrapType2 rec {
     hash = "sha256-u9e2d9ZpHDbDIsFkseOdJX2Kspn9TkhFfZxbeielDA8=";
   };
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Screenshot tools";
     homepage = "https://www.snipaste.com/";
