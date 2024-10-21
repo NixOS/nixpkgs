@@ -165,6 +165,10 @@ in
   ###### interface
 
   options = {
+    security.enableWrappers = lib.mkEnableOption "SUID/SGID wrappers" // {
+      default = true;
+    };
+
     security.wrappers = lib.mkOption {
       type = lib.types.attrsOf wrapperType;
       default = {};
@@ -227,7 +231,7 @@ in
   };
 
   ###### implementation
-  config = {
+  config = lib.mkIf config.security.enableWrappers {
 
     assertions = lib.mapAttrsToList
       (name: opts:
