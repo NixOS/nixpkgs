@@ -1,19 +1,19 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, pkg-config
-, installShellFiles
-, libclang
-, clang
-, llvmPackages
-, libllvm
-, yaml-cpp
-, elfutils
-, libunwind
-, enableLibcxx ? false
-, debug ? false
-,
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  pkg-config,
+  installShellFiles,
+  libclang,
+  clang,
+  llvmPackages,
+  libllvm,
+  yaml-cpp,
+  elfutils,
+  libunwind,
+  enableLibcxx ? false,
+  debug ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clang-uml";
@@ -26,14 +26,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YzHlauVuFLT2PmfqJBNwqQ/P7d7tyl3brk7Vo/kTOF4=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    installShellFiles
-  ] ++ (if debug then [
-    elfutils
-    libunwind
-  ] else [ ]);
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      installShellFiles
+    ]
+    ++ (
+      if debug then
+        [
+          elfutils
+          libunwind
+        ]
+      else
+        [ ]
+    );
 
   buildInputs = [
     clang
