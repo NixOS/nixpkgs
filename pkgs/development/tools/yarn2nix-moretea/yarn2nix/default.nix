@@ -211,7 +211,15 @@ in rec {
     # Path -> PathGlob -> [Path]
     expandGlob = base: glob: expandGlobList base (splitGlob glob);
 
-    packagePaths = lib.concatMap (expandGlob src) packageGlobs;
+    validPackage = path:
+      let
+        packageJSON = path+"/package.json";
+        package = lib.importJSON packageJSON;
+      in
+        builtins.pathExists (path+"/package.json") &&
+        builtins.hasAttr "name" package &&
+        builtins.hasAttr "version" package;
+    packagePaths = builtins.filter validPackage (lib.concatMap (expandGlob src) packageGlobs);
 
     packages = lib.listToAttrs (map (src:
       let
