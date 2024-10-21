@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   # override this to false if you don't want to build python3
-  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # prevent the `install-data-local` Makefile rule from running;
   # all it does is attempt to `mkdir` the `localstatedir`.
