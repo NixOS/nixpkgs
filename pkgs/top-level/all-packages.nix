@@ -14966,6 +14966,8 @@ with pkgs;
     z3 = z3_4_8_5;
   };
 
+  pyre = callPackage ../development/tools/pyre { };
+
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix {});
 
   glslang = callPackage ../development/compilers/glslang { };
