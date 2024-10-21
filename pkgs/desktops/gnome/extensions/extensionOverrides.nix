@@ -168,4 +168,13 @@ super: lib.trivial.pipe super [
         --replace "GLib.build_filenamev([GLib.DIR_SEPARATOR_S, 'usr', 'share', 'touchegg', 'touchegg.conf'])" "'${touchegg}/share/touchegg/touchegg.conf'"
     '';
   }))
+
+  (patchExtension "todo.txt@bart.libert.gmail.com" (old: {
+    postPatch = ''
+      for js in libs/*.js; do
+        substituteInPlace $js \
+          --replace-quiet "import Clutter from 'gi://Clutter'" "imports.gi.GIRepository.Repository.prepend_search_path('${mutter.passthru.libdir}'); const Clutter = (await import('gi://Clutter')).default"
+      done
+    '';
+  }))
 ]
