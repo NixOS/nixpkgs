@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   beamPackages,
   fetchFromGitHub,
   fetchFromGitLab,
@@ -11,6 +12,7 @@
   vips,
   pkg-config,
   glib,
+  darwin,
   ...
 }:
 
@@ -91,10 +93,16 @@ beamPackages.mixRelease rec {
 
       vix = prev.vix.override {
         nativeBuildInputs = [ pkg-config ];
-        buildInputs = [
-          vips
-          glib.dev
-        ];
+        buildInputs =
+          [
+            vips
+            glib.dev
+          ]
+          ++ lib.optionals stdenv.isDarwin [
+            darwin.apple_sdk.frameworks.Foundation
+            darwin.apple_sdk.frameworks.AppKit
+            darwin.apple_sdk.frameworks.Kerberos
+          ];
         VIX_COMPILATION_MODE = "PLATFORM_PROVIDED_LIBVIPS";
       };
 
