@@ -56,7 +56,6 @@
   python3,
   rubberband,
   shaderc, # instead of spirv-cross
-  speex,
   stdenv,
   swift,
   testers,
@@ -89,7 +88,6 @@
   screenSaverSupport ? true,
   sdl2Support ? !stdenv.hostPlatform.isDarwin,
   sixelSupport ? false,
-  speexSupport ? true,
   theoraSupport ? true,
   vaapiSupport ? x11Support || waylandSupport,
   vapoursynthSupport ? false,
@@ -209,7 +207,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals screenSaverSupport [ libXScrnSaver ]
     ++ lib.optionals sdl2Support [ SDL2 ]
     ++ lib.optionals sixelSupport [ libsixel ]
-    ++ lib.optionals speexSupport [ speex ]
     ++ lib.optionals theoraSupport [ libtheora ]
     ++ lib.optionals vaapiSupport [ libva ]
     ++ lib.optionals vapoursynthSupport [ vapoursynth ]
