@@ -47,6 +47,8 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.7";
 
+  stdenv = cudaPackages.backendStdenv;
+
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
@@ -118,7 +120,7 @@ buildPythonPackage rec {
     homepage = "https://cupy.chainer.org/";
     changelog = "https://github.com/cupy/cupy/releases/tag/v${version}";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ hyphon81 ];
   };
 }
