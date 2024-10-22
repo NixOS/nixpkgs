@@ -8,22 +8,25 @@
   torch,
   requests,
   setuptools,
+  openai,
+  pyaudio,
   soundfile,
+  openai-whisper,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.10.4";
+  version = "3.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Uberi";
     repo = "speech_recognition";
     rev = "refs/tags/${version}";
-    hash = "sha256-icXZUg2lVLo8Z5t9ptDj67BjQLnEgrG8geYZ/lZeJt4=";
+    hash = "sha256-5DZ5QhaYpVtd+AX5OSYD3cM+37Ez0+EL5a+zJ+X/uNg=";
   };
 
   build-system = [ setuptools ];
@@ -33,12 +36,20 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  optional-dependencies = {
+    audio = [ pyaudio ];
+    whisper-local = [
+      openai-whisper
+      soundfile
+    ];
+    whisper-api = [ openai ];
+  };
+
   nativeCheckInputs = [
     numpy
     pytestCheckHook
     torch
-    soundfile
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 
