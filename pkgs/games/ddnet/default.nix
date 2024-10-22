@@ -92,13 +92,6 @@ stdenv.mkDerivation rec {
     Security
   ]);
 
-#  patches = [
-#    (fetchpatch {
-#      url = "https://github.com/ddnet/ddnet/pull/8517/commits/c840bf45016a30e629f7684df5fab5d07b2c70d5.patch";
-#      hash = "sha256-UG7pi0Xh/nAHFEF1RIyNZLewF+NFilTLARbV5oUlftc=";
-#    })
-#  ];
-
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
       --replace /usr/ $out/
