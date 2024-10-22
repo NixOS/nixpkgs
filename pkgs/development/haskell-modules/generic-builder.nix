@@ -41,7 +41,7 @@ in
 , buildFlags ? []
 , haddockFlags ? []
 , description ? null
-, doCheck ? !isCross
+, doCheck ? stdenv.hostPlatform.canExecute stdenv.buildPlatform
 , doBenchmark ? false
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle
