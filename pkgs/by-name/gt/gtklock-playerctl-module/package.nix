@@ -2,38 +2,45 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
   pkg-config,
   gtk3,
   playerctl,
-  libsoup,
+  libsoup_3,
+  gtklock,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtklock-playerctl-module";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eN4E3+jv8IyRvV8pvfCjCc6pl8y7qSLRlj7tYkX0JrE=";
+    repo = "gtklock-playerctl-module";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-YlnZxp06Bb8eIgZhCvbiX6jgnNuGoSv4wx0N4AD1V7o=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     gtk3
     playerctl
-    libsoup
+    libsoup_3
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  passthru.tests.testModule = gtklock.testModule finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Gtklock module adding media player controls to the lockscreen";
     homepage = "https://github.com/jovanlanik/gtklock-playerctl-module";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
-}
+})
