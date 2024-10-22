@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python -p "python3.withPackages (ps: with ps; [ ps.absl-py ps.requests ])" nix
+#! nix-shell -i python -p "python3.withPackages (ps: with ps; [ ps.absl-py ps.requests ])"
 
 from collections import defaultdict
 import copy
@@ -15,13 +15,12 @@ from absl import logging
 import requests
 
 
-FACTORIO_API = "https://factorio.com/api/latest-releases"
+FACTORIO_RELEASES = "https://factorio.com/api/latest-releases"
+FACTORIO_HASHES = "https://factorio.com/download/sha256sums/"
 
 
 FLAGS = flags.FLAGS
 
-flags.DEFINE_string('username', '', 'Factorio username for retrieving binaries.')
-flags.DEFINE_string('token', '', 'Factorio token for retrieving binaries.')
 flags.DEFINE_string('out', '', 'Output path for versions.json.')
 flags.DEFINE_list('release_type', '', 'If non-empty, a comma-separated list of release types to update (e.g. alpha).')
 flags.DEFINE_list('release_channel', '', 'If non-empty, a comma-separated list of release channels to update (e.g. experimental).')
@@ -37,6 +36,7 @@ class System:
 @dataclass
 class ReleaseType:
     name: str
+    hash_filename_format: list[str]
     needs_auth: bool = False
 
 
@@ -48,16 +48,18 @@ class ReleaseChannel:
 FactorioVersionsJSON = Dict[str, Dict[str, str]]
 OurVersionJSON = Dict[str, Dict[str, Dict[str, Dict[str, str]]]]
 
+FactorioHashes = Dict[str, str]
+
 
 SYSTEMS = [
     System(nix_name="x86_64-linux", url_name="linux64", tar_name="x64"),
 ]
 
 RELEASE_TYPES = [
-    ReleaseType("alpha", needs_auth=True),
-    ReleaseType("demo"),
-    ReleaseType("headless"),
-    ReleaseType("expansion", needs_auth=True),
+    ReleaseType("alpha", needs_auth=True, hash_filename_format=["factorio_linux_{version}.tar.xz"]),
+    ReleaseType("demo", hash_filename_format=["factorio_demo_x64_{version}.tar.xz"]),
+    ReleaseType("headless", hash_filename_format=["factorio-headless_linux_{version}.tar.xz", "factorio_headless_x64_{version}.tar.xz"]),
+    ReleaseType("expansion", needs_auth=True, hash_filename_format=["factorio-space-age_linux_{version}.tar.xz"]),
 ]
 
 RELEASE_CHANNELS = [
@@ -77,7 +79,20 @@ def find_versions_json() -> str:
 
 
 def fetch_versions() -> FactorioVersionsJSON:
-    return json.loads(requests.get("https://factorio.com/api/latest-releases").text)
+    return json.loads(requests.get(FACTORIO_RELEASES).text)
+
+
+def fetch_hashes() -> FactorioHashes:
+    resp = requests.get(FACTORIO_HASHES)
+    resp.raise_for_status()
+    out = {}
+    for ln in resp.text.split('\n'):
+        ln = ln.strip()
+        if not ln:
+            continue
+        sha256, filename = ln.split()
+        out[filename] = sha256
+    return out
 
 
 def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersionJSON:
@@ -100,6 +115,7 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
                     "url":          f"https://factorio.com/get-download/{version}/{release_type.name}/{system.url_name}",
                     "version":      version,
                     "needsAuth":    release_type.needs_auth,
+                    "candidateHashFilenames": [fmt.format(version=version) for fmt in release_type.hash_filename_format],
                     "tarDirectory": system.tar_name,
                 }
                 output[system.nix_name][release_type.name][release_channel.name] = this_release
@@ -138,38 +154,27 @@ def merge_versions(old: OurVersionJSON, new: OurVersionJSON) -> OurVersionJSON:
     return iter_version(new, _merge_version)
 
 
-def nix_prefetch_url(name: str, url: str, algo: str = 'sha256') -> str:
-    cmd = ['nix-prefetch-url', '--type', algo, '--name', name, url]
-    logging.info('running %s', cmd)
-    out = subprocess.check_output(cmd)
-    return out.decode('utf-8').strip()
-
-
-def fill_in_hash(versions: OurVersionJSON) -> OurVersionJSON:
+def fill_in_hash(versions: OurVersionJSON, factorio_hashes: FactorioHashes) -> OurVersionJSON:
     """Fill in sha256 hashes for anything missing them."""
     urls_to_hash = {}
     def _fill_in_hash(system_name: str, release_type_name: str, release_channel_name: str, release: Dict[str, str]) -> Dict[str, str]:
+        for candidate_filename in release["candidateHashFilenames"]:
+            if candidate_filename in factorio_hashes:
+                release["sha256"] = factorio_hashes[candidate_filename]
+                break
+        else:
+            logging.error("%s/%s/%s: failed to find any of %s in %s", system_name, release_type_name, release_channel_name, release["candidateHashFilenames"], FACTORIO_HASHES)
+            return release
         if "sha256" in release:
             logging.info("%s/%s/%s: skipping fetch, sha256 already present", system_name, release_type_name, release_channel_name)
             return release
-        url = release["url"]
-        if url in urls_to_hash:
-            logging.info("%s/%s/%s: found url %s in cache", system_name, release_type_name, release_channel_name, url)
-            release["sha256"] = urls_to_hash[url]
-            return release
-        logging.info("%s/%s/%s: fetching %s", system_name, release_type_name, release_channel_name, url)
-        if release["needsAuth"]:
-            if not FLAGS.username or not FLAGS.token:
-                raise Exception("fetching %s/%s/%s from %s requires --username and --token" % (system_name, release_type_name, release_channel_name, url))
-            url += f"?username={FLAGS.username}&token={FLAGS.token}"
-        release["sha256"] = nix_prefetch_url(release["name"], url)
-        urls_to_hash[url] = release["sha256"]
         return release
     return iter_version(versions, _fill_in_hash)
 
 
 def main(argv):
     factorio_versions = fetch_versions()
+    factorio_hashes = fetch_hashes()
     new_our_versions = generate_our_versions(factorio_versions)
     old_our_versions = None
     our_versions_path = find_versions_json()
@@ -181,7 +186,7 @@ def main(argv):
         logging.info('Merging in old hashes')
         new_our_versions = merge_versions(old_our_versions, new_our_versions)
     logging.info('Fetching necessary tars to get hashes')
-    new_our_versions = fill_in_hash(new_our_versions)
+    new_our_versions = fill_in_hash(new_our_versions, factorio_hashes)
     with open(our_versions_path, 'w') as f:
         logging.info('Writing versions.json to %s', our_versions_path)
         json.dump(new_our_versions, f, sort_keys=True, indent=2)
