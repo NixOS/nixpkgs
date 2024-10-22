@@ -35,13 +35,29 @@ in
     package = lib.mkPackageOption pkgs "foot" { };
 
     settings = lib.mkOption {
-      inherit (settingsFormat) type;
-      default = { };
-      description = ''
-        Configuration for foot terminal emulator. Further information can be found in {command}`man 5 foot.ini`.
+      type = lib.types.submodule {
+        freeformType = settingsFormat.type;
 
-        Global configuration has to be written under the [main] section.
+        options = {
+          main = lib.mkOption {
+            type = settingsFormat.type.nestedTypes.elemType;
+            default = { };
+            description = ''
+              Main configuration section (global section). All options that
+              could occur outside any section in {manpage}`foot.ini(5)` need to
+              be placed in this section.
+            '';
+          };
+        };
+      };
+
+      default = { };
+
+      description = ''
+        Configuration for foot terminal emulator. Further information can be
+        found in {manpage}`foot.ini(5)`.
       '';
+
       example = {
         main.font = "FreeMono:size=12";
         scrollback.lines = 100000;
@@ -49,10 +65,19 @@ in
     };
 
     theme = lib.mkOption {
-      type = with lib.types; nullOr str;
+      type =
+        with lib.types;
+        nullOr (oneOf [
+          path
+          str
+        ]);
       default = null;
       description = ''
-        Theme name. Check <https://codeberg.org/dnkl/foot/src/branch/master/themes> for available themes.
+        Theme to use for foot. This can be either a theme config file to include
+        (given as a path) or the name of one of the themes bundled with foot
+        (given as a plain string).
+        See <https://codeberg.org/dnkl/foot/src/branch/master/themes> for a
+        full list of available themes.
       '';
       example = "aeroroot";
     };
@@ -76,9 +101,12 @@ in
       etc."xdg/foot/foot.ini".source = settingsFormat.generate "foot.ini" cfg.settings;
     };
     programs = {
-      foot.settings.main.include = lib.optionals (cfg.theme != null) [
-        "${pkgs.foot.themes}/share/foot/themes/${cfg.theme}"
-      ];
+      foot.settings.main.include = lib.mkIf (cfg.theme != null) (
+        if lib.hasPrefix "/" (toString cfg.theme) then
+          "${cfg.theme}"
+        else
+          "${cfg.package.themes}/share/foot/themes/${cfg.theme}"
+      );
       # https://codeberg.org/dnkl/foot/wiki#user-content-shell-integration
       bash.interactiveShellInit = lib.mkIf cfg.enableBashIntegration ". ${./bashrc} # enable shell integration for foot terminal";
       fish.interactiveShellInit = lib.mkIf cfg.enableFishIntegration "source ${./config.fish} # enable shell integration for foot terminal";
