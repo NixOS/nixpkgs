@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools,
-  pyreqwest-impersonate,
+  primp,
 
   # Optional dependencies
   lxml,
@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckduckgo-search";
-  version = "6.2.13";
+  version = "6.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     owner = "deedy5";
     repo = "duckduckgo_search";
     rev = "refs/tags/v${version}";
-    hash = "sha256-KRg6Rya3qhp8VUb1rdDWulGzfY7LEzuCD9HyF48LdOo=";
+    hash = "sha256-5AuPAv78ePrnCr5L4CfIu/fq7Ha19zC78zg8JLu3U2A=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     click
-    pyreqwest-impersonate
+    primp
   ];
 
   optional-dependencies = {
