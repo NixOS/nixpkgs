@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "python-visualization";
     repo = "folium";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uKT6WqT3pI3rqfV/3CA+mXBk3F7h4RWW1h2FPIy0JH4=";
+    hash = "sha256-TNj3javEETjWpI3xs1y/AuKHqFwnTBmWORZK2fafKqI=";
   };
 
   nativeBuildInputs = [
