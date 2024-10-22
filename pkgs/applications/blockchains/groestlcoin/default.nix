@@ -2,7 +2,6 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
-, fetchpatch2
 , autoreconfHook
 , pkg-config
 , installShellFiles
@@ -15,6 +14,7 @@
 , miniupnpc
 , zeromq
 , zlib
+, db53
 , sqlite
 , qrencode
 , qtbase ? null
@@ -33,22 +33,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
-  version = "27.0";
+  version = "28.0";
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
-    sha256 = "0f6vi2k5xvjrhiazfjcd4aj246dfcg51xsnqb9wdjl41cg0ckwmf";
+    sha256 = "0kl7nq62362clgzxwwd5c256xnaar4ilxcvbralazxg47zv95r11";
   };
-
-  patches = [
-    # upnp: add compatibility for miniupnpc 2.2.8
-    (fetchpatch2 {
-      url = "https://github.com/Groestlcoin/groestlcoin/commit/8acdf66540834b9f9cf28f16d389e8b6a48516d5.patch?full_index=1";
-      hash = "sha256-oDvHUvwAEp0LJCf6QBESn38Bu359TcPpLhvuLX3sm6M=";
-    })
-  ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config installShellFiles ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
@@ -57,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
   buildInputs = [ boost libevent miniupnpc zeromq zlib ]
-    ++ lib.optionals withWallet [ sqlite ]
+    ++ lib.optionals withWallet [ db53 sqlite ]
     ++ lib.optionals withGui [ qrencode qtbase qttools ];
 
   postInstall = ''
