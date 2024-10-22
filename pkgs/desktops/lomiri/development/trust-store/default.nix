@@ -42,6 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "option(ENABLE_WERROR \"Treat all build warnings as errors\" ON)" \
+                     "option(ENABLE_WERROR \"Treat all build warnings as errors\" ON)
+                      add_compile_definitions(GLOG_USE_GLOG_EXPORT)"
+
     # pkg-config patching hook expects prefix variable
     substituteInPlace data/trust-store.pc.in \
       --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \

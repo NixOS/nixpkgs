@@ -55,6 +55,11 @@ buildPythonPackage rec {
     ./fix-scripts.patch
   ];
   postPatch = ''
+    substituteInPlace opensfm/src/CMakeLists.txt \
+      --replace-fail "####### Find Dependencies #######" \
+                     "####### Find Dependencies #######
+                     add_compile_definitions(GLOG_USE_GLOG_EXPORT)"
+
     rm opensfm/src/cmake/FindGlog.cmake
     rm opensfm/src/cmake/FindGflags.cmake
 
