@@ -14,15 +14,15 @@
   libGL,
 }:
 
-stdenv.mkDerivation {
-  version = "0.9.0";
+stdenv.mkDerivation (finalAttrs: {
   pname = "helm";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "mtytel";
     repo = "helm";
-    rev = "927d2ed27f71a735c3ff2a1226ce3129d1544e7e";
-    sha256 = "17ys2vvhncx9i3ydg3xwgz1d3gqv4yr5mqi7vr0i0ca6nad6x3d4";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-pI1umrJGMRBB3ifiWrInG7/Rwn+8j9f8iKkzC/cW2p8=";
   };
 
   buildInputs = [
@@ -43,25 +43,31 @@ stdenv.mkDerivation {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  CXXFLAGS = "-DHAVE_LROUND";
+  CXXFLAGS = [
+    "-DHAVE_LROUND"
+    "-fpermissive"
+  ];
   enableParallelBuilding = true;
-  makeFlags = [ "DESTDIR=$(out)" ];
+  makeFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   patches = [
     # gcc9 compatibility https://github.com/mtytel/helm/pull/233
     (fetchpatch {
       url = "https://github.com/mtytel/helm/commit/cb611a80bd5a36d31bfc31212ebbf79aa86c6f08.patch";
-      sha256 = "1i2289srcfz17c3zzab6f51aznzdj62kk53l4afr32bkjh9s4ixk";
+      hash = "sha256-s0eiE5RziZGdInSUOYWR7duvQnFmqf8HO+E7lnVCQsQ=";
     })
   ];
 
-  prePatch = ''
-    sed -i 's|usr/||g' Makefile
-    sed -i "s|/usr/share/|$out/share/|" src/common/load_save.cpp
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "usr/" ""
+
+    substituteInPlace src/common/load_save.cpp \
+      --replace-fail "/usr/share/" "$out/share/"
   '';
 
-  meta = with lib; {
-    homepage = "http://tytel.org/helm";
+  meta = {
+    homepage = "https://tytel.org/helm";
     description = "Free, cross-platform, polyphonic synthesizer";
     longDescription = ''
       A free, cross-platform, polyphonic synthesizer.
@@ -81,8 +87,11 @@ stdenv.mkDerivation {
         Effects: Formant filter, stutter, delay
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [
+      magnetophon
+      bot-wxt1221
+    ];
+    platforms = lib.platforms.linux;
     mainProgram = "helm";
   };
-}
+})
