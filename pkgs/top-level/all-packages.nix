@@ -36639,9 +36639,9 @@ with pkgs;
     fltk = fltk-minimal;
   };
 
-  factorio = callPackage ../games/factorio {
+  factorio = callPackage ../by-name/fa/factorio/package.nix {
     releaseType = "alpha";
-    versionsJson = ../games/factorio/versions-1.json;
+    versionsJson = ../by-name/fa/factorio/versions-1.json;
   };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
@@ -36676,9 +36676,9 @@ with pkgs;
 
   factorio-space-age-experimental = factorio_2.override { releaseType = "expansion"; experimental = true; };
 
-  factorio-mods = callPackage ../games/factorio/mods.nix { };
+  factorio-mods = callPackage ../by-name/fa/factorio/mods.nix { };
 
-  factorio-utils = callPackage ../games/factorio/utils.nix { };
+  factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
   fairymax = callPackage ../games/fairymax { };
 
