@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, glib
-, accountsservice
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  glib,
+  accountsservice,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gtk3 glib accountsservice ];
+  buildInputs = [
+    gtk3
+    glib
+    accountsservice
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
