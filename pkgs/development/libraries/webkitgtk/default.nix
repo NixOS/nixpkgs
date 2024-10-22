@@ -1,5 +1,5 @@
 { lib
-, stdenv
+, clangStdenv
 , buildPackages
 , runCommand
 , fetchurl
@@ -72,11 +72,12 @@
 , enableGeoLocation ? true
 , enableExperimental ? false
 , withLibsecret ? true
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+, systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd
 , testers
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+# https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
   version = "2.46.2";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
@@ -85,14 +86,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   # https://github.com/NixOS/nixpkgs/issues/153528
   # Can't be linked within a 4GB address space.
-  separateDebugInfo = stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.is32bit;
+  separateDebugInfo = clangStdenv.hostPlatform.isLinux && !clangStdenv.hostPlatform.is32bit;
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
     hash = "sha256-Wq4cXAow1enFgxZStvG978MddeCtgctAGFsK7ZLOebY=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isLinux [
+  patches = lib.optionals clangStdenv.hostPlatform.isLinux [
     (substituteAll {
       src = ./fix-bubblewrap-paths.patch;
       inherit (builtins) storeDir;
@@ -100,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  preConfigure = lib.optionalString (clangStdenv.hostPlatform != clangStdenv.buildPlatform) ''
     # Ignore gettext in cmake_prefix_path so that find_program doesn't
     # pick up the wrong gettext. TODO: Find a better solution for
     # this, maybe make cmake not look up executables in
@@ -123,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
     glib # for gdbus-codegen
     unifdef
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     wayland-scanner
   ];
 
@@ -159,14 +160,14 @@ stdenv.mkDerivation (finalAttrs: {
     p11-kit
     sqlite
     woff2
-  ] ++ lib.optionals stdenv.hostPlatform.isBigEndian [
+  ] ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
     # https://bugs.webkit.org/show_bug.cgi?id=274032
     fontconfig
     freetype
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ] ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     libedit
     readline
-  ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0") (
+  ] ++ lib.optional (clangStdenv.hostPlatform.isDarwin && lib.versionOlder clangStdenv.hostPlatform.darwinSdkVersion "11.0") (
     # this can likely be removed as:
     # "libproc.h is included in the 10.12 SDK Libsystem and should be identical to this one."
     # but the package is marked broken on darwin so unable to test
@@ -178,7 +179,7 @@ stdenv.mkDerivation (finalAttrs: {
     runCommand "webkitgtk_headers" { } ''
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
-  ) ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ) ++ lib.optionals clangStdenv.hostPlatform.isLinux [
     libseccomp
     libmanette
     wayland
@@ -211,12 +212,12 @@ stdenv.mkDerivation (finalAttrs: {
       "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
-    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    ] ++ lib.optionals clangStdenv.hostPlatform.isLinux [
       # Have to be explicitly specified when cross.
       # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
       "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
       "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ] ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
       "-DENABLE_GAMEPAD=OFF"
       "-DENABLE_GTKDOC=OFF"
       "-DENABLE_MINIBROWSER=OFF"
@@ -255,6 +256,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = teams.gnome.members;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = clangStdenv.hostPlatform.isDarwin;
   };
 })
