@@ -34,6 +34,9 @@ in buildFHSEnv {
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
+    # Appimages
+    fuse
+
     # Adventure Game Studio
     allegro dumb
 
@@ -86,9 +89,8 @@ in buildFHSEnv {
 
     # Redream // "redream is not available for the x86_64 architecture"
 
-
-    # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
-    llvm
+    # RPCS3
+    llvm e2fsprogs libgpg-error
 
     # ScummVM
     nasm sndio

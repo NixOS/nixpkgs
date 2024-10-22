@@ -138,6 +138,7 @@ buildPythonApplication rec {
   dontWrapGApps = true;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath requiredTools}"
+    "--prefix APPIMAGE_EXTRACT_AND_RUN : 1"
     "\${gappsWrapperArgs[@]}"
   ];
 
