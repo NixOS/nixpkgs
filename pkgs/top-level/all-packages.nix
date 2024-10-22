@@ -20270,8 +20270,6 @@ with pkgs;
 
   impy = callPackage ../development/libraries/impy { };
 
-  ineffassign = callPackage ../development/tools/ineffassign { };
-
   ijs = callPackage ../development/libraries/ijs { };
 
   itktcl  = callPackage ../development/libraries/itktcl { };
