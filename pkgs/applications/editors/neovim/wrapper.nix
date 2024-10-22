@@ -107,7 +107,10 @@ let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
-    generatedWrapperArgs =
+    generatedWrapperArgs = let
+      binPath = lib.makeBinPath (lib.optional finalAttrs.withRuby rubyEnv ++ lib.optional finalAttrs.withNodeJs nodejs);
+    in
+
       # vim accepts a limited number of commands so we join them all
           [
             "--add-flags" ''--cmd "lua ${providerLuaRc}"''
@@ -116,10 +119,15 @@ let
             "--add-flags" ''--cmd "set packpath^=${finalPackdir}"''
             "--add-flags" ''--cmd "set rtp^=${finalPackdir}"''
           ]
+          ++ lib.optionals finalAttrs.withRuby [
+            "--set" "GEM_HOME" "${rubyEnv}/${rubyEnv.ruby.gemPath}"
+          ] ++ lib.optionals (binPath != "") [
+            "--suffix" "PATH" ":" binPath
+          ]
           ;
 
     providerLuaRc = neovimUtils.generateProviderRc {
-      inherit withPython3 withNodeJs withPerl;
+      inherit (finalAttrs) withPython3 withNodeJs withPerl;
       withRuby = rubyEnv != null;
     };
 
