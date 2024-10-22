@@ -12,6 +12,9 @@
 , spandsp3
 , sofia_sip
 , libks
+, libshout
+, mpg123
+, lame
 }:
 
 let
@@ -172,7 +175,7 @@ in
     png = mk "formats/mod_png" [];
     portaudio_stream = mk "formats/mod_portaudio_stream" [];
     shell_stream = mk "formats/mod_shell_stream" [];
-    shout = mk "formats/mod_shout" [];
+    shout = mk "formats/mod_shout" [ libshout mpg123 lame lame.lib ];
     sndfile = mk "formats/mod_sndfile" [];
     ssml = mk "formats/mod_ssml" [];
     tone_stream = mk "formats/mod_tone_stream" [];
