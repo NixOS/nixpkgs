@@ -1105,7 +1105,7 @@ dependencies = [
 [[package]]
 name = "cosmic-config"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "atomicwrites",
  "cosmic-config-derive",
@@ -1127,7 +1127,7 @@ dependencies = [
 [[package]]
 name = "cosmic-config-derive"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "quote",
  "syn 1.0.109",
@@ -1188,7 +1188,7 @@ dependencies = [
 [[package]]
 name = "cosmic-text"
 version = "0.12.1"
-source = "git+https://github.com/pop-os/cosmic-text.git#58c2ccd1fb3daf0abc792f9dd52b5766b7125ccd"
+source = "git+https://github.com/pop-os/cosmic-text.git#e16b39f29c84773a05457fe39577a602de27855c"
 dependencies = [
  "bitflags 2.6.0",
  "fontdb",
@@ -1210,7 +1210,7 @@ dependencies = [
 [[package]]
 name = "cosmic-theme"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "almost",
  "cosmic-config",
@@ -2607,7 +2607,7 @@ dependencies = [
 [[package]]
 name = "iced"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "dnd",
  "iced_accessibility",
@@ -2625,7 +2625,7 @@ dependencies = [
 [[package]]
 name = "iced_accessibility"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "accesskit",
  "accesskit_unix",
@@ -2634,7 +2634,7 @@ dependencies = [
 [[package]]
 name = "iced_core"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "bitflags 2.6.0",
  "dnd",
@@ -2656,7 +2656,7 @@ dependencies = [
 [[package]]
 name = "iced_futures"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "futures",
  "iced_core",
@@ -2669,7 +2669,7 @@ dependencies = [
 [[package]]
 name = "iced_graphics"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "bitflags 2.6.0",
  "bytemuck",
@@ -2693,7 +2693,7 @@ dependencies = [
 [[package]]
 name = "iced_renderer"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "iced_graphics",
  "iced_tiny_skia",
@@ -2705,7 +2705,7 @@ dependencies = [
 [[package]]
 name = "iced_runtime"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "dnd",
  "iced_accessibility",
@@ -2719,7 +2719,7 @@ dependencies = [
 [[package]]
 name = "iced_sctk"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "enum-repr",
  "float-cmp",
@@ -2745,7 +2745,7 @@ dependencies = [
 [[package]]
 name = "iced_style"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "iced_core",
  "once_cell",
@@ -2755,7 +2755,7 @@ dependencies = [
 [[package]]
 name = "iced_tiny_skia"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "bytemuck",
  "cosmic-text",
@@ -2772,7 +2772,7 @@ dependencies = [
 [[package]]
 name = "iced_wgpu"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "as-raw-xcb-connection",
  "bitflags 2.6.0",
@@ -2801,7 +2801,7 @@ dependencies = [
 [[package]]
 name = "iced_widget"
 version = "0.12.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "dnd",
  "iced_renderer",
@@ -3094,7 +3094,7 @@ checksum = "97b3888a4aecf77e811145cadf6eef5901f4782c53886191b2f693f24761847c"
 [[package]]
 name = "libcosmic"
 version = "0.1.0"
-source = "git+https://github.com/pop-os/libcosmic/#22138671b4af21b58a4273a5aa2f7b4c3247c393"
+source = "git+https://github.com/pop-os/libcosmic/#57256e53e58146e5984783ea6c29d0af515bebea"
 dependencies = [
  "apply",
  "ashpd 0.9.1",
@@ -3129,7 +3129,6 @@ dependencies = [
  "shlex",
  "slotmap",
  "taffy",
- "textdistance",
  "thiserror",
  "tokio",
  "tracing",
@@ -4995,12 +4994,6 @@ checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
 dependencies = [
  "winapi-util",
 ]
-
-[[package]]
-name = "textdistance"
-version = "1.0.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d321c8576c2b47e43953e9cce236550d4cd6af0a6ce518fe084340082ca6037b"
 
 [[package]]
 name = "thiserror"
