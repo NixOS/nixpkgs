@@ -1,8 +1,6 @@
 {
   lib,
-  args,
   buildPythonPackage,
-  clint,
   fetchFromGitHub,
   libffi,
   matlink-gpapi,
@@ -19,7 +17,7 @@
 buildPythonPackage rec {
   pname = "gplaycli";
   version = "3.29";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.6";
 
@@ -30,14 +28,14 @@ buildPythonPackage rec {
     hash = "sha256-uZBrIxnDSaJDOPcD7J4SCPr9nvecDDR9h+WnIjIP7IE=";
   };
 
+  build-system = [ setuptools ];
+
   propagatedBuildInputs = [
     libffi
     pyasn1
-    clint
     ndg-httpsclient
     protobuf
     requests
-    args
     matlink-gpapi
     pyaxmlparser
     setuptools
