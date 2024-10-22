@@ -14388,8 +14388,6 @@ with pkgs;
 
   gpxsee = gpxsee-qt5;
 
-  gtklock-playerctl-module = callPackage ../tools/wayland/gtklock/playerctl-module.nix { };
-
   gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
 
   gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
