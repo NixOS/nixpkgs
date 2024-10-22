@@ -10,6 +10,7 @@
   gtk3,
   pam,
   gtk-session-lock,
+  runCommand,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +40,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  passthru.testModule =
+    module:
+    runCommand "${module.name}-test.sh" { } ''
+      MODULE_PATH=$(find ${module}/lib/gtklock -maxdepth 1 -name '*.so')
+      echo -e "[main]\nmodules=''${MODULE_PATH}" >./config.ini
+      ${finalAttrs.finalPackage}/bin/gtklock --config ./config.ini >./log 2>&1 || true
+      if grep incompatible ./log; then
+        echo "${module.name} is incompatible with current ${finalAttrs.finalPackage.name}!"
+        exit 1
+      else
+        echo "Successfully tested ${module.name} against ${finalAttrs.finalPackage.name}."
+      fi
+      touch $out
+    '';
 
   meta = {
     description = "GTK-based lockscreen for Wayland";
