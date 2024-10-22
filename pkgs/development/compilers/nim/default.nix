@@ -1,7 +1,7 @@
 # https://nim-lang.github.io/Nim/packaging.html
 # https://nim-lang.org/docs/nimc.html
 
-{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit, fetchFromGitHub
+{ lib, callPackage, buildPackages, stdenv, fetchurl, fetchgit
 , makeWrapper, openssl, pcre, readline, boehmgc, sqlite, Security
 , nim-unwrapped-2, nim-unwrapped-1, nim }:
 
@@ -76,16 +76,16 @@ in {
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "2.0.4";
+    version = "2.2.0";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-cVJr0HQ53I43j6Gm60B+2hKY8fPU30R23KDjyjy+Pwk=";
+      hash = "sha256-zphChJyXYOSH7N0c2t98DyhEyvrmBUAcfHKuJXZEiTw=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
-      ++ lib.optional stdenv.isDarwin Security;
+      ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
     patches = [
       ./NIM_CONFIG_DIR.patch
@@ -94,7 +94,7 @@ in {
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
 
-      ./extra-mangling.patch
+      ./extra-mangling-2.patch
       # Mangle store paths of modules to prevent runtime dependence.
 
       ./openssl.patch
@@ -124,9 +124,9 @@ in {
       "--os:${nimHost.os}"
       "-d:release"
       "-d:useGnuReadline"
-    ] ++ lib.optional (stdenv.isDarwin || stdenv.isLinux) "-d:nativeStacktrace";
+    ] ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isLinux) "-d:nativeStacktrace";
 
-    preBuild = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    preBuild = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       substituteInPlace makefile \
         --replace "aarch64" "arm64"
     '';
@@ -151,12 +151,16 @@ in {
       runHook postInstall
     '';
 
+    passthru = {
+      updateScript.command = [ ./update.sh ];
+    };
+
     meta = with lib; {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
       mainProgram = "nim";
-      maintainers = with maintainers; [ ehmry ];
+      maintainers = with maintainers; [ ehmry eveeifyeve ];
     };
   });
 
@@ -192,7 +196,7 @@ in {
 
         # Needed for any nim package that uses the standard library's
         # 'std/sysrand' module.
-        depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
+        depsTargetTargetPropagated = lib.optional stdenv.hostPlatform.isDarwin Security;
 
         inherit patches;
 
@@ -252,7 +256,7 @@ in {
             runHook postBuild
           '';
 
-        wrapperArgs = lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [
+        wrapperArgs = lib.optionals (!(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) [
           "--prefix PATH : ${lib.makeBinPath [ buildPackages.gdb ]}:${
             placeholder "out"
           }/bin"
@@ -303,7 +307,7 @@ in {
         meta = nim'.meta // {
           description = nim'.meta.description
             + " (${targetPlatformConfig} wrapper)";
-          platforms = with lib.platforms; unix ++ genode;
+          platforms = with lib.platforms; unix ++ genode ++ windows;
         };
       });
 in {

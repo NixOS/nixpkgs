@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fischerfredl/flask-expects-json";
-    description = "Decorator for REST endpoints in flask. Validate JSON request data.";
+    description = "Decorator for REST endpoints in flask. Validate JSON request data";
     license = licenses.mit;
     maintainers = [ ];
   };

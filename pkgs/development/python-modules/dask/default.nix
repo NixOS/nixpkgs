@@ -6,7 +6,6 @@
 
   # build-system
   setuptools,
-  wheel,
 
   # dependencies
   click,
@@ -35,28 +34,22 @@
   pytest-rerunfailures,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 let
   self = buildPythonPackage rec {
     pname = "dask";
-    version = "2024.5.1";
+    version = "2024.9.1";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "dask";
       repo = "dask";
       rev = "refs/tags/${version}";
-      hash = "sha256-FzvzmQa9kJAZw67HY+d+3uC6Bd246vp5QsyXepGnKH8=";
+      hash = "sha256-lbWV6qgLQ8itJsnz7ojrgfrO12+AwNe1/DJvxBo5A+Q=";
     };
 
-    build-system = [
-      setuptools
-      wheel
-    ];
+    build-system = [ setuptools ];
 
     dependencies = [
       click
@@ -69,7 +62,7 @@ let
       toolz
     ];
 
-    passthru.optional-dependencies = lib.fix (self: {
+    optional-dependencies = lib.fix (self: {
       array = [ numpy ];
       complete = [
         pyarrow
@@ -97,8 +90,8 @@ let
         hypothesis
         pytest-asyncio
       ]
-      ++ passthru.optional-dependencies.array
-      ++ passthru.optional-dependencies.dataframe
+      ++ self.optional-dependencies.array
+      ++ self.optional-dependencies.dataframe
       ++ lib.optionals (!arrow-cpp.meta.broken) [
         # support is sparse on aarch64
         pyarrow
@@ -111,15 +104,15 @@ let
       echo "def get_versions(): return {'dirty': False, 'error': None, 'full-revisionid': None, 'version': '${version}'}" > dask/_version.py
 
       substituteInPlace setup.py \
-        --replace "import versioneer" "" \
-        --replace "version=versioneer.get_version()," "version='${version}'," \
-        --replace "cmdclass=versioneer.get_cmdclass()," ""
+        --replace-fail "import versioneer" "" \
+        --replace-fail "version=versioneer.get_version()," "version='${version}'," \
+        --replace-fail "cmdclass=versioneer.get_cmdclass()," ""
 
       substituteInPlace pyproject.toml \
-        --replace ', "versioneer[toml]==0.29"' "" \
-        --replace " --durations=10" "" \
-        --replace " --cov-config=pyproject.toml" "" \
-        --replace "\"-v" "\" "
+        --replace-fail ', "versioneer[toml]==0.29"' "" \
+        --replace-fail " --durations=10" "" \
+        --replace-fail " --cov-config=pyproject.toml" "" \
+        --replace-fail "\"-v" "\" "
     '';
 
     pytestFlagsArray = [
@@ -130,14 +123,14 @@ let
     ];
 
     disabledTests =
-      lib.optionals stdenv.isDarwin [
+      lib.optionals stdenv.hostPlatform.isDarwin [
         # Test requires features of python3Packages.psutil that are
         # blocked in sandboxed-builds
         "test_auto_blocksize_csv"
         # AttributeError: 'str' object has no attribute 'decode'
         "test_read_dir_nometa"
       ]
-      ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
         # concurrent.futures.process.BrokenProcessPool: A process in the process pool terminated abpruptly...
         "test_foldby_tree_reduction"
         "test_to_bag"

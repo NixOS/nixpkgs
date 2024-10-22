@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Toilal/rebulk/";
     changelog = "https://github.com/Toilal/rebulk/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

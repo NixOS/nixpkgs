@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "urwidgets";
-  version = "0.2.0";
+  version = "0.2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "AnonymouX47";
     repo = "urwidgets";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ultlfNeCGFTqKaMeXu0+NihkN5/6NtMewk33YfIzhu8=";
+    hash = "sha256-RgY7m0smcdUspGkCdzepxruEMDq/mAsVFNjHMLoWAyc=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "urwidgets" ];
 
   meta = with lib; {
-    description = "A collection of widgets for urwid";
+    description = "Collection of widgets for urwid";
     homepage = "https://github.com/AnonymouX47/urwidgets";
     changelog = "https://github.com/AnonymouX47/urwidgets/releases/tag/v${version}";
     license = licenses.mit;

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
   wheel,
@@ -36,12 +37,10 @@ buildPythonPackage rec {
     wheel
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace tox.ini \
-      --replace " --cov=wheel_filename --no-cov-on-fail" ""
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "wheel_filename" ];
 

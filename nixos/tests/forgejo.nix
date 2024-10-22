@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem
 , config ? { }
 , pkgs ? import ../.. { inherit system config; }
+, forgejoPackage ? pkgs.forgejo
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -41,6 +42,8 @@ let
     hash = "sha256-h2/UIp8IjPo3eE4Gzx52Fb7pcgG/Ww7u31w5fdKVMos=";
   };
 
+  metricSecret = "fakesecret";
+
   supportedDbTypes = [ "mysql" "postgres" "sqlite3" ];
   makeForgejoTest = type: nameValuePair type (makeTest {
     name = "forgejo-${type}";
@@ -51,6 +54,7 @@ let
         virtualisation.memorySize = 2047;
         services.forgejo = {
           enable = true;
+          package = forgejoPackage;
           database = { inherit type; };
           settings.service.DISABLE_REGISTRATION = true;
           settings."repository.signing".SIGNING_KEY = signingPrivateKeyId;
@@ -59,6 +63,8 @@ let
             ENABLE_PUSH_CREATE_USER = true;
             DEFAULT_PUSH_CREATE_PRIVATE = false;
           };
+          settings.metrics.ENABLED = true;
+          secrets.metrics.TOKEN = pkgs.writeText "metrics_secret" metricSecret;
         };
         environment.systemPackages = [ config.services.forgejo.package pkgs.gnupg pkgs.jq pkgs.file pkgs.htmlq ];
         services.openssh.enable = true;
@@ -141,7 +147,7 @@ let
         assert "BEGIN PGP PUBLIC KEY BLOCK" in server.succeed("curl http://localhost:3000/api/v1/signing-key.gpg")
 
         api_version = json.loads(server.succeed("curl http://localhost:3000/api/forgejo/v1/version")).get("version")
-        assert "development" != api_version and "${pkgs.forgejo.version}+gitea-" in api_version, (
+        assert "development" != api_version and "${forgejoPackage.version}+gitea-" in api_version, (
             "/api/forgejo/v1/version should not return 'development' "
             + f"but should contain a forgejo+gitea compatibility version string. Got '{api_version}' instead."
         )
@@ -191,6 +197,10 @@ let
             + '-H "Accept: application/json" | jq length)" = "1"',
             timeout=10
         )
+
+        with subtest("Testing /metrics endpoint with token from cfg.secrets"):
+            server.fail("curl --fail http://localhost:3000/metrics")
+            server.succeed('curl --fail http://localhost:3000/metrics -H "Authorization: Bearer ${metricSecret}"')
 
         with subtest("Testing runner registration and action workflow"):
             server.succeed(

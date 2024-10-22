@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
-  version = "3.15.1";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
-    hash = "sha256-Fc9EzzOULRfzQENHd/7aXWqLeoPjNsseqpZETNGvV6U=";
+    hash = "sha256-iWu3HnfjT9hiDyl9Ni0xJa/e+E9fbh3bnfrdE1ChaWc=";
   };
 
-  vendorHash = "sha256-g9QjalRLc2NUsyd7Do1PWw9oD9ATuJGMRaqSaC6AcD0=";
+  vendorHash = "sha256-dMzDKYjPBAiNFwzaBML76tMylHtBs9Tb2Ulj/WovVJ4=";
 
   subPackages = ["cmd"];
 

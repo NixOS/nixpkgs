@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "Provider of IANA time zone data";
     homepage = "https://github.com/python/tzdata";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

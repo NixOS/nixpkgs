@@ -54,6 +54,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "CBOR protocol implementation for C and others";
     homepage = "https://github.com/PJK/libcbor";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
   };
 })

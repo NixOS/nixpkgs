@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "WhyNotHugo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
+    hash = "sha256-uYzLRZ+6ZgIwhSuJWRBpLYHgonX7sFXgUZid0V26V0Q=";
   };
 
   nativeBuildInputs = [ gobject-introspection meson ninja pkg-config wrapGAppsHook3 ];

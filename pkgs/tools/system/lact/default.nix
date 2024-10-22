@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lact";
-  version = "0.5.4";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "ilya-zlobintsev";
     repo = "LACT";
     rev = "v${version}";
-    hash = "sha256-Umi+J6RnYgHO30kFPFKhhKtqyzsLVPMkeQPeG3I4jcs=";
+    hash = "sha256-iz6Pl+A7Y/Ljot3QH2GaopgtfuYLpTLSq6uSprQ2EEU=";
   };
 
-  cargoHash = "sha256-CMK8o1Hcs5E+GtP9EgKmAa5fXHsY5PCYuFQh1zf0YE4=";
+  cargoHash = "sha256-uoMkz+0Jr07GpMRUKuJvrTTSAGdhLf35q/8but1fwIk=";
 
   nativeBuildInputs = [
     blueprint-compiler

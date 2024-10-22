@@ -15,23 +15,28 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "texlab";
-  version = "5.16.1";
+  version = "5.20.0";
 
   src = fetchFromGitHub {
     owner = "latex-lsp";
     repo = "texlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oXROZdnmkqb0nd2CdLJO/KYkoe+BriYlfMJXe1yKGTA=";
+    hash = "sha256-hKQdc9p69L0t2MwCR4Fy20Nl+2qQk5JJoCaB4O43DNY=";
   };
 
-  cargoHash = "sha256-4GWoTHSQD7DnAsiUWEF2TX+2r3XD3t/9+j/PGL7Haq8=";
+  cargoHash = "sha256-A/stdJ1baV0hdDXTdLd9gi8+JO7qPgQbNiYjHkp1GPQ=";
+
+  # https://github.com/latex-lsp/texlab/pull/1237
+  preBuild = ''
+    rm .cargo/config.toml
+  '';
 
   outputs = [ "out" ] ++ lib.optional (!isCross) "man";
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optional (!isCross) help2man;
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Security
     CoreServices
@@ -41,7 +46,7 @@ rustPlatform.buildRustPackage rec {
   # generate the man page
   postInstall = lib.optionalString (!isCross) ''
     # TexLab builds man page separately in CI:
-    # https://github.com/latex-lsp/texlab/blob/v5.16.1/.github/workflows/publish.yml#L117-L121
+    # https://github.com/latex-lsp/texlab/blob/v5.20.0/.github/workflows/publish.yml#L110-L114
     help2man --no-info "$out/bin/texlab" > texlab.1
     installManPage texlab.1
   '';
@@ -49,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "An implementation of the Language Server Protocol for LaTeX";
+    description = "Implementation of the Language Server Protocol for LaTeX";
     homepage = "https://github.com/latex-lsp/texlab";
     changelog = "https://github.com/latex-lsp/texlab/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

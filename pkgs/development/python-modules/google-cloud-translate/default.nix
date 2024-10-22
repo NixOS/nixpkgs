@@ -5,6 +5,7 @@
   google-api-core,
   google-cloud-core,
   google-cloud-testutils,
+  grpc-google-iam-v1,
   mock,
   proto-plus,
   protobuf,
@@ -16,21 +17,23 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "3.15.3";
+  version = "3.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7Vh6HmDPhHw7Gt1rKCVuLRci+nOkKFM09excqTPmFvI=";
+    pname = "google_cloud_translate";
+    inherit version;
+    hash = "sha256-B5fZVMT26gcyKelQASugg6TMl1K0MdwGJOJZTih0ae8=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-cloud-core
+    grpc-google-iam-v1
     proto-plus
     protobuf
   ] ++ google-api-core.optional-dependencies.grpc;
@@ -64,6 +67,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-translate";
     changelog = "https://github.com/googleapis/python-translate/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

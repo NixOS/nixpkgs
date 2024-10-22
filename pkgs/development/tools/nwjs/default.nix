@@ -3,6 +3,7 @@
 , atk
 , autoPatchelfHook
 , buildEnv
+, buildPackages
 , cairo
 , cups
 , dbus
@@ -32,7 +33,6 @@
 , stdenv
 , systemd
 , udev
-, wrapGAppsHook3
 , xorg
 }:
 
@@ -87,7 +87,7 @@ let
     extraOutputsToInstall = [ "lib" "out" ];
   };
 
-  version = "0.87.0";
+  version = "0.90.0";
 in
 stdenv.mkDerivation {
   pname = "nwjs";
@@ -98,16 +98,18 @@ stdenv.mkDerivation {
     in fetchurl {
       url = "https://dl.nwjs.io/v${version}/nwjs-${flavor}v${version}-linux-${bits}.tar.gz";
       hash = {
-        "sdk-ia32" = "sha256-We4tSI8rQbEIoxNgTP/IkL/sD7GegVQDAtXUSY4AoB0=";
-        "sdk-x64" = "sha256-pWsNVHNm1gVAy9ofZ6g1Im5TpzxM2bmJ6RENa21N4qM=";
-        "ia32" = "sha256-ExxzzErT3GBI1yLYycojDkzKZ2VuvsOjaingQiK1Kww=";
-        "x64" = "sha256-tKm3aTlfPuevdjqFFEVU6nvIixoBDUcnJPFyO1PNRqE=";
+        "sdk-ia32" = "sha256-dETXtOdJ9/1wZ47l/j/K5moN4m+KNc7vu7wVGql8NXQ=";
+        "sdk-x64" = "sha256-mRIKIrFIdXQ+tLled3ygJvMCBDKP08bl3IlqTbQmYq0=";
+        "ia32" = "sha256-+nGIQuWdPfctPNzDu7mkEUOmLx1cwcJoVCAk6ImNBxQ=";
+        "x64" = "sha256-uEb0GTONaR58nhjGAan1HCOqQKtQ2JDrTaSL+SfRY6E=";
       }."${flavor + bits}";
     };
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [ nwEnv ];
@@ -138,7 +140,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "An app runtime based on Chromium and node.js";
+    description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

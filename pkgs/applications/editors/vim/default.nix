@@ -26,18 +26,22 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-multibyte"
     "--enable-nls"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) ([
     "vim_cv_toupper_broken=no"
     "--with-tlib=ncurses"
     "vim_cv_terminfo=yes"
     "vim_cv_tgetent=zero" # it does on native anyway
-    "vim_cv_timer_create=yes"
     "vim_cv_tty_group=tty"
     "vim_cv_tty_mode=0660"
     "vim_cv_getcwd_broken=no"
     "vim_cv_stat_ignores_slash=yes"
     "vim_cv_memmove_handles_overlap=yes"
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+    "vim_cv_timer_create=no"
+    "vim_cv_timer_create_with_lrt=yes"
+  ] ++ lib.optionals (!stdenv.hostPlatform.isFreeBSD) [
+    "vim_cv_timer_create=yes"
+  ]);
 
   # which.sh is used to for vim's own shebang patching, so make it find
   # binaries for the host platform.

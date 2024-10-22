@@ -7,6 +7,7 @@
 
 let
   py = python3.override {
+    self = py;
     packageOverrides = self: super: {
 
       click = super.click.overridePythonAttrs (oldAttrs: rec {

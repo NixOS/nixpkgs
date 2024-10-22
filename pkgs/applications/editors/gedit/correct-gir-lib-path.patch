@@ -1,13 +1,16 @@
 diff --git a/gedit/meson.build b/gedit/meson.build
-index a8683e61a..fc48669f7 100644
+index bc689e5..e3b90d8 100644
 --- a/gedit/meson.build
 +++ b/gedit/meson.build
-@@ -191,7 +191,7 @@ libgedit_shared_lib = shared_library(
-   c_args: libgedit_c_args,
-   link_args: libgedit_link_args,
-   install: true,
--  install_dir: get_option('libdir') / 'gedit',
-+  install_dir: get_option('prefix') / get_option('libdir') / 'gedit',
- )
+@@ -165,9 +165,9 @@ libgedit_private_headers += 'gedit-enum-types-private.h'
+ subdir('resources')
  
- # GObject Introspection
+ if host_machine.system() == 'windows'
+-  libgedit_shared_lib_install_dir = get_option('libdir')
++  libgedit_shared_lib_install_dir = get_option('prefix') / get_option('libdir')
+ else
+-  libgedit_shared_lib_install_dir = get_option('libdir') / 'gedit'
++  libgedit_shared_lib_install_dir = get_option('prefix') / get_option('libdir') / 'gedit'
+ endif
+ 
+ libgedit_shared_lib = shared_library(

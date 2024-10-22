@@ -18,7 +18,7 @@ php81.buildComposerProject (finalAttrs: {
 
   meta = {
     changelog = "https://magerun.net/category/magerun/";
-    description = "The swiss army knife for Magento1/OpenMage developers";
+    description = "Swiss army knife for Magento1/OpenMage developers";
     homepage = "https://magerun.net/";
     license = lib.licenses.mit;
     mainProgram = "n98-magerun";

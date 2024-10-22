@@ -35,11 +35,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vasttrafik" ];
 
   meta = with lib; {
-    description = "A Python wrapper and cli for Västtrafik public API";
+    description = "Python wrapper and cli for Västtrafik public API";
     mainProgram = "vtjp";
     homepage = "https://github.com/Miicroo/python-vasttrafik";
     changelog = "https://github.com/Miicroo/python-vasttrafik/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

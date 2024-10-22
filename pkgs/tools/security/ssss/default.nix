@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "http://point-at-infinity.org/ssss/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

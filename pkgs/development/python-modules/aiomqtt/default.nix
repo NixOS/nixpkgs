@@ -48,10 +48,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "The idiomatic asyncio MQTT client, wrapped around paho-mqtt";
+    description = "Idiomatic asyncio MQTT client, wrapped around paho-mqtt";
     homepage = "https://github.com/sbtinstruments/aiomqtt";
     changelog = "https://github.com/sbtinstruments/aiomqtt/blob/${src.rev}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

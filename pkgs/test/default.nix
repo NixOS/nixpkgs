@@ -12,7 +12,6 @@ with pkgs;
         # Are throw aliases.
         (filter (n: n != "llvmPackages_rocm"))
         (filter (n: n != "llvmPackages_latest"))
-        (filter (n: n != "llvmPackages_git"))
         (filter (n: n != "llvmPackages_6"))
         (filter (n: n != "llvmPackages_7"))
         (filter (n: n != "llvmPackages_8"))
@@ -31,6 +30,8 @@ with pkgs;
         (filter (lib.hasPrefix "gcc"))
         (filter (lib.hasSuffix "Stdenv"))
         (filter (n: n != "gccCrossLibcStdenv"))
+        (filter (n: n != "gcc49Stdenv"))
+        (filter (n: n != "gcc6Stdenv"))
       ] ++ lib.optionals (!(
         (stdenv.buildPlatform.isLinux && stdenv.buildPlatform.isx86_64) &&
         (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64)
@@ -49,7 +50,6 @@ with pkgs;
           sets = lib.pipe gccTests ([
             (filterAttrs (_: v: lib.meta.availableOn stdenv.hostPlatform v.stdenv.cc))
             # Broken
-            (filterAttrs (n: _: n != "gcc49Stdenv"))
             (filterAttrs (n: _: n != "gccMultiStdenv"))
           ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
             # fails with things like
@@ -83,6 +83,8 @@ with pkgs;
     inherit gccTests;
   };
 
+  devShellTools = callPackage ../build-support/dev-shell-tools/tests { };
+
   stdenv-inputs = callPackage ./stdenv-inputs { };
   stdenv = callPackage ./stdenv { };
 
@@ -105,6 +107,8 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
+  compress-drv = callPackage ../build-support/compress-drv/test.nix { };
+
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchtorrent = callPackages ../build-support/fetchtorrent/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
@@ -122,8 +126,6 @@ with pkgs;
   kernel-config = callPackage ./kernel.nix {};
 
   ld-library-path = callPackage ./ld-library-path {};
-
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
 
   cross = callPackage ./cross {} // { __attrsFailEvaluation = true; };
 
@@ -165,7 +167,7 @@ with pkgs;
     makeBinaryWrapper = pkgs.makeBinaryWrapper.override {
       # Enable sanitizers in the tests only, to avoid the performance cost in regular usage.
       # The sanitizers cause errors on aarch64-darwin, see https://github.com/NixOS/nixpkgs/pull/150079#issuecomment-994132734
-      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.isDarwin && pkgs.stdenv.isAarch64))
+      sanitizers = pkgs.lib.optionals (! (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64))
         [ "undefined" "address" ];
     };
   };
@@ -179,6 +181,8 @@ with pkgs;
   auto-patchelf-hook = callPackage ./auto-patchelf-hook { };
 
   systemd = callPackage ./systemd { };
+
+  replaceVars = recurseIntoAttrs (callPackage ./replace-vars { });
 
   substitute = recurseIntoAttrs (callPackage ./substitute { });
 }

@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildDunePackage, substituteAll
+{ lib, fetchurl, fetchpatch, buildDunePackage, substituteAll
 , dot-merlin-reader, dune_2, yojson, csexp, result, menhirSdk }:
 
 buildDunePackage rec {
@@ -18,6 +18,12 @@ buildDunePackage rec {
       dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
       dune = "${dune_2}/bin/dune";
     })
+    # https://github.com/ocaml/merlin/pull/1798
+    (fetchpatch {
+      name = "vim-python-12-syntax-warning-fix.patch";
+      url = "https://github.com/ocaml/merlin/commit/9e0c47b0d5fd0c4edc37c4c7ce927b155877557d.patch";
+      hash = "sha256-HmdTISE/s45C5cwLgsCHNUW6OAPSsvQ/GcJE6VDEobs=";
+    })
   ];
 
   strictDeps = true;
@@ -25,7 +31,7 @@ buildDunePackage rec {
   buildInputs = [ dot-merlin-reader yojson csexp result menhirSdk ];
 
   meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
+    description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];

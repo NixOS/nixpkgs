@@ -17,23 +17,20 @@
 
 buildPythonPackage rec {
   pname = "pyogrio";
-  version = "0.8.0";
+  version = "0.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "pyogrio";
     rev = "v${version}";
-    hash = "sha256-h4Rv5xOWSJSv0nLbosviz5EiF/IsZO5wzBel9YRd0Bg=";
+    hash = "sha256-AyKBktZWzUxD1HKKp89gQ97c4WPB5PkXnkFqN+RHx7c=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace-fail "versioneer[toml]==0.28" "versioneer[toml]"
-  '' + lib.optionalString (!pythonOlder "3.12") ''
-    substituteInPlace setup.py \
-      --replace-fail "distutils" "setuptools._distutils"
   '';
 
   nativeBuildInputs = [

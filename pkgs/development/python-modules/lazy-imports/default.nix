@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -29,7 +28,7 @@ buildPythonPackage {
   ];
 
   meta = with lib; {
-    description = "Python tool to support lazy imports.";
+    description = "Python tool to support lazy imports";
     homepage = "https://github.com/telekom/lazy-imports";
     changelog = "https://github.com/telekom/lazy-imports/releases/tag/${version}";
     license = licenses.asl20;

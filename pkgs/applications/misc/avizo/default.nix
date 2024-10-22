@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A neat notification daemon for Wayland";
+    description = "Neat notification daemon for Wayland";
     homepage = "https://github.com/misterdanb/avizo";
     license = licenses.gpl3;
     platforms = platforms.linux;

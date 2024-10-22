@@ -1,8 +1,10 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
 
   # build-system
@@ -55,6 +57,14 @@ buildPythonPackage rec {
     '';
     hash = "sha256-XGGRWEvd1SbQsK8W5yxDzBd5hlvXcDzr8t5Qa6skH/M=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python-3.13-compat.patch";
+      url = "https://github.com/sphinx-doc/sphinx/commit/3496de62b743942115acb486cf35dfcc102586c3.patch";
+      hash = "sha256-5VBPOQeGyj3a8VBq4hc9S/eKaeVZeGCTNislwgsauZo=";
+    })
+  ];
 
   build-system = [ flit-core ];
 
@@ -115,6 +125,10 @@ buildPythonPackage rec {
       "test_cython"
       # Could not fetch remote image: http://localhost:7777/sphinx.png
       "test_copy_images"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # https://github.com/sphinx-doc/sphinx/issues/12430
+      "test_autodoc_type_aliases"
     ]
     ++ lib.optionals isPyPy [
       # PyPy has not __builtins__ which get asserted

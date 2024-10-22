@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The video game rating system";
+    description = "Video game rating system";
     homepage = "https://trueskill.org";
     license = licenses.bsd3;
     maintainers = with maintainers; [ eadwu ];

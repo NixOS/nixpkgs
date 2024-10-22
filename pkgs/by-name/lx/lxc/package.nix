@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.0";
+  version = "6.0.2";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-D994gekFgW/1Q4iVFM/3Zi0JXKn9Ghfd3UcjckVfoFY=";
+    hash = "sha256-qc60oSs2KahQJpSmhrctXpV2Zumv7EvlnGFaOCSCX/E=";
   };
 
   nativeBuildInputs = [
@@ -49,17 +49,35 @@ stdenv.mkDerivation (finalAttrs: {
     # fix docbook2man version detection
     ./docbook-hack.patch
 
-    # fix linking
-    ./4428.diff
+    # Fix hardcoded path of lxc-user-nic
+    # This is needed to use unprivileged containers
+    ./user-nic.diff
   ];
 
   mesonFlags = [
-    "-Dinstall-init-files=false"
+    "-Dinstall-init-files=true"
     "-Dinstall-state-dirs=false"
     "-Dspecfile=false"
-    # re-enable when fixed https://github.com/lxc/lxc/issues/4427
-    # "-Dtools-multicall=true"
+    "-Dtools-multicall=true"
+    "-Dtools=false"
+    "-Dusernet-config-path=/etc/lxc/lxc-usernet"
+    "-Ddistrosysconfdir=${placeholder "out"}/etc/lxc"
+    "-Dsystemd-unitdir=${placeholder "out"}/lib/systemd/system"
   ];
+
+  # /run/current-system/sw/share
+  postInstall = ''
+    substituteInPlace $out/etc/lxc/lxc --replace-fail "$out/etc/lxc" "/etc/lxc"
+    substituteInPlace $out/libexec/lxc/lxc-net --replace-fail "$out/etc/lxc" "/etc/lxc"
+
+    substituteInPlace $out/share/lxc/templates/lxc-download --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/templates/lxc-local --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/templates/lxc-oci --replace-fail "$out/share" "/run/current-system/sw/share"
+
+    substituteInPlace $out/share/lxc/config/common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/config/userns.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+    substituteInPlace $out/share/lxc/config/oci.common.conf --replace-fail "$out/share" "/run/current-system/sw/share"
+  '';
 
   enableParallelBuilding = true;
 
@@ -69,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     tests = {
       incus-legacy-init = nixosTests.incus.container-legacy-init;
       incus-systemd-init = nixosTests.incus.container-systemd-init;
+      lxc = nixosTests.lxc;
       lxd = nixosTests.lxd.container;
     };
 

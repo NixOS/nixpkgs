@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A vibration/audio feedback tool to be used with virtual keyboards";
+    description = "Vibration/audio feedback tool to be used with virtual keyboards";
     homepage = "https://git.sr.ht/~proycon/clickclack";
     license = licenses.mit;
     platforms = platforms.linux;

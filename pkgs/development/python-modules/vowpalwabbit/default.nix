@@ -55,7 +55,7 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${python.pkgs.boost}/lib"
   '';
 
@@ -66,10 +66,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project.";
+    description = "Vowpal Wabbit is a fast machine learning library for online learning, and this is the python wrapper for the project";
     homepage = "https://github.com/JohnLangford/vowpal_wabbit";
     license = licenses.bsd3;
-    broken = stdenv.isAarch64;
     maintainers = with maintainers; [ teh ];
+    # Test again when new version is released
+    broken = stdenv.hostPlatform.isLinux;
   };
 }

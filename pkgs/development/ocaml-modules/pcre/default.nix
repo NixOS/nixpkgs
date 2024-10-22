@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   meta = with lib; {
     homepage = "https://mmottl.github.io/pcre-ocaml";
-    description = "An efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
+    description = "Efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ maggesi vbmithr ];
   };

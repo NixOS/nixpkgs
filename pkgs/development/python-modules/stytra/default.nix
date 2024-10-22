@@ -13,7 +13,6 @@
   imageio-ffmpeg,
   lightparam,
   matplotlib,
-  nose,
   numba,
   numpy,
   opencv4,
@@ -74,7 +73,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    nose
     pytestCheckHook
     pyserial
   ];
@@ -85,10 +83,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A modular package to control stimulation and track behaviour";
+    description = "Modular package to control stimulation and track behaviour";
     homepage = "https://github.com/portugueslab/stytra";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ tbenst ];
-    broken = true; # incompatible with pyqtgraph>0.13.0: https://github.com/portugueslab/stytra/issues/87
   };
 }

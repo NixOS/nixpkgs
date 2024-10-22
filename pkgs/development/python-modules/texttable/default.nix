@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/foutaise/texttable";
     changelog = "https://github.com/foutaise/texttable/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

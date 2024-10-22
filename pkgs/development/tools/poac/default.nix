@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake git cacert ];
   buildInputs = [
     (boost179.override {
-      enableShared = stdenv.isDarwin;
-      enableStatic = !stdenv.isDarwin;
+      enableShared = stdenv.hostPlatform.isDarwin;
+      enableStatic = !stdenv.hostPlatform.isDarwin;
     })
     git2-cpp
     glob
@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     homepage = "https://poac.pm";
     description = "Package Manager for C++";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     # error: call to 'format' is ambiguous
     broken = true; # last successful build 2023-12-31

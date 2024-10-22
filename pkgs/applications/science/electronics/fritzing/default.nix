@@ -60,7 +60,7 @@ stdenv.mkDerivation {
     quazip
     libngspice
     clipper
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
   ];
 
@@ -93,7 +93,7 @@ stdenv.mkDerivation {
     "phoenix.pro"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
     mv $out/bin/Fritzing.app $out/Applications/Fritzing.app
     cp FritzingInfo.plist $out/Applications/Fritzing.app/Contents/Info.plist
@@ -109,7 +109,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "An open source prototyping tool for Arduino-based projects";
+    description = "Open source prototyping tool for Arduino-based projects";
     homepage = "https://fritzing.org/";
     license = with licenses; [ gpl3 cc-by-sa-30 ];
     maintainers = with maintainers; [ robberer muscaln ];

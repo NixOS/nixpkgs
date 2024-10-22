@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
         { suffix = "donna";         configureFlags = ["--enable-donna"]; }
       ] ++ lib.optionals stdenv.hostPlatform.isx86 [
         { suffix = "donna-sse2";    configureFlags = ["--enable-donna-sse2"]; }
-      ] ++ lib.optionals (!stdenv.isDarwin && stdenv.isx86_64) [
+      ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
         { suffix = "amd64-51-30k";  configureFlags = ["--enable-amd64-51-30k"]; }
         { suffix = "amd64-64-24k";  configureFlags = ["--enable-amd64-64-24k"]; }
       ];
@@ -42,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "http://cathug2kyi4ilneggumrenayhuhsvrgn6qv2y47bgeet42iivkpynqad.onion/";
     license = licenses.cc0;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

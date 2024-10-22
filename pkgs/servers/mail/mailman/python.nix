@@ -1,6 +1,7 @@
 { python3, fetchPypi, lib, overlay ? (_: _: {}) }:
 
-python3.override {
+lib.fix (self: python3.override {
+  inherit self;
   packageOverrides = lib.composeExtensions
     (self: super: {
       /*
@@ -31,4 +32,4 @@ python3.override {
     })
 
     overlay;
-}
+})

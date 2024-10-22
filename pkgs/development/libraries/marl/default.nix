@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/marl";
-    description = "A hybrid thread / fiber task scheduler written in C++ 11";
+    description = "Hybrid thread / fiber task scheduler written in C++ 11";
     platforms = platforms.all;
     license = licenses.asl20;
     maintainers = with maintainers; [ breakds ];

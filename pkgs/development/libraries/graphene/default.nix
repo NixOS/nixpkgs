@@ -11,7 +11,7 @@
 , mutest
 , nixosTests
 , glib
-, withDocumentation ? !stdenv.hostPlatform.isStatic
+, withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform || stdenv.hostPlatform.emulatorAvailable buildPackages
 , gtk-doc
 , docbook_xsl
 , docbook_xml_dtd_43
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "ebassi";
-    repo = finalAttrs.pname;
+    repo = "graphene";
     rev = finalAttrs.version;
     sha256 = "P6JQhSktzvyMHatP/iojNGXPmcsxsFxdYerXzS23ojI=";
   };
@@ -65,10 +65,10 @@ stdenv.mkDerivation (finalAttrs: {
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc
+  ] ++ lib.optionals (withDocumentation && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
   ];
 
   buildInputs = [
@@ -84,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "introspection" withIntrospection)
     "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
-  ] ++ lib.optionals stdenv.isAarch32 [
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
     # the box test is failing with SIGBUS on armv7l-linux
     # https://github.com/ebassi/graphene/issues/215
     "-Darm_neon=false"
@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   in lib.optionalString withIntrospection ''
     if [ -x '${introspectionPy}' ] ; then
       wrapProgram '${introspectionPy}' \
-        --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+        --prefix GI_TYPELIB_PATH : "${lib.makeSearchPath "lib/girepository-1.0" [ glib.out (placeholder "out") ]}"
     fi
   '';
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A thin layer of graphic data types";
+    description = "Thin layer of graphic data types";
     homepage = "https://github.com/ebassi/graphene";
     license = licenses.mit;
     maintainers = teams.gnome.members ++ (with maintainers; [ ]);

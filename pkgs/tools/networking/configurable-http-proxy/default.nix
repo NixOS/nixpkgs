@@ -20,7 +20,7 @@ buildNpmPackage rec {
 
   meta = {
     changelog = "https://github.com/jupyterhub/configurable-http-proxy/blob/${src.rev}/CHANGELOG.md";
-    description = "A configurable-on-the-fly HTTP Proxy";
+    description = "Configurable-on-the-fly HTTP Proxy";
     homepage = "https://github.com/jupyterhub/configurable-http-proxy";
     license = lib.licenses.bsd3;
     mainProgram = "configurable-http-proxy";

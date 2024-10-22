@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Simple Ants simulator";
     mainProgram = "antsimulator";
     license = licenses.mit;
-    maintainers = with maintainers; [ ivar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

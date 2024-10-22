@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = "Simple OpenGL core profile loading";
     homepage = "https://github.com/skaslev/gl3w";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ lilyinstarlight ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

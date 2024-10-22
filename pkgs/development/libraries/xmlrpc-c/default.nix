@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xmlrpc-c";
-  version = "1.51.07";
+  version = "1.59.03";
 
   src = fetchurl {
     url = "mirror://sourceforge/xmlrpc-c/${pname}-${version}.tgz";
-    sha256 = "sha256-hNIK4z+SdYL4IdYcC5GUrvvx15JFkKE/qdpa4WmK3tk=";
+    hash = "sha256-vbcdtCqwvlFZFVWIXRFoKwRMEDTUoylkAb+SHsCyM/4=";
   };
 
   buildInputs = [ curl libxml2 ];
@@ -20,10 +20,13 @@ stdenv.mkDerivation rec {
     (cd tools/xmlrpc && make && make install)
   '';
 
-  hardeningDisable = [ "format" ];
+  enableParallelBuilding = true;
+
+  # ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration";
 
   meta = with lib; {
-    description = "A lightweight RPC library based on XML and HTTP";
+    description = "Lightweight RPC library based on XML and HTTP";
     homepage = "https://xmlrpc-c.sourceforge.net/";
     # <xmlrpc-c>/doc/COPYING also lists "Expat license",
     # "ABYSS Web Server License" and "Python 1.5.2 License"

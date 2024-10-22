@@ -61,7 +61,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "chainer" ];
 
   meta = with lib; {
-    description = "A flexible framework of neural networks for deep learning";
+    description = "Flexible framework of neural networks for deep learning";
     homepage = "https://chainer.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];

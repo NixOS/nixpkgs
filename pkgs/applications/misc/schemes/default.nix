@@ -7,7 +7,6 @@
 , gtk4
 , gtksourceview5
 , libadwaita
-, libgee
 , libpanel
 , meson
 , ninja
@@ -17,14 +16,14 @@
 
 stdenv.mkDerivation rec {
   pname = "schemes";
-  version = "0.2.0";
+  version = "46.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "chergert";
     repo = "schemes";
     rev = version;
-    hash = "sha256-XUC24KzZSU4+F2JZMsydukvAwEGdMxCnkPG6QHnCw6w=";
+    hash = "sha256-m82jR958f1g/4gSJ4NbNa4fwxVseH399Z8JpWr7tLh8=";
   };
 
   nativeBuildInputs = [

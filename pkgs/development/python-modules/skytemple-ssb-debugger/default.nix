@@ -2,6 +2,7 @@
   buildPythonPackage,
   explorerscript,
   fetchFromGitHub,
+  setuptools,
   gobject-introspection,
   gtk3,
   gtksourceview4,
@@ -23,15 +24,17 @@
 
 buildPythonPackage rec {
   pname = "skytemple-ssb-debugger";
-  version = "1.6.4";
+  version = "1.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple-ssb-debugger";
     rev = version;
-    hash = "sha256-whnwFwPYPGF+UtjrzRKgXJNPsUGvmE+HHKJcPf0qcuA=";
+    hash = "sha256-HmJOjHX2/P284DSIdKuSz3++Qr1fKVGRQmA/+cMrcYw=";
   };
+
+  build-system = [ setuptools ];
 
   buildInputs = [
     gtk3
@@ -41,7 +44,7 @@ buildPythonPackage rec {
     gobject-introspection
     wrapGAppsHook3
   ];
-  propagatedBuildInputs = [
+  dependencies = [
     explorerscript
     ndspy
     nest-asyncio

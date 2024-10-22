@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = [ "--disable-watchdog" ] ++
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       "CPPFLAGS=-fexceptions"
       "--disable-ppl_lcdd" "--disable-ppl_lpsol" "--disable-ppl_pips"
     ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    description = "The Parma Polyhedra Library";
+    description = "Parma Polyhedra Library";
 
     longDescription = ''
       The Parma Polyhedra Library (PPL) provides numerical abstractions

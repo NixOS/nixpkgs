@@ -1,4 +1,9 @@
-{ lib, fetchPypi, nixosTests, python3 }:
+{
+  lib,
+  fetchPypi,
+  nixosTests,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.5.0b3.dev85";
@@ -22,14 +27,15 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     # relax version bounds
-    sed -i 's/\([A-z0-9]*\)~=.*$/\1/' setup.cfg
+    sed -i -E 's/([A-z0-9]*)~=[^;]*(.*)/\1\2/' setup.cfg
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     bitmath
     certifi
     cheroot
     cryptography
+    dukpy
     filetype
     flask
     flask-babel
@@ -37,33 +43,30 @@ python3.pkgs.buildPythonApplication rec {
     flask-compress
     flask-session
     flask-themes2
-    js2py
     pycurl
     semver
     setuptools
   ];
 
-  passthru = {
-    optional-dependencies = {
-      plugins = with python3.pkgs; [
-        beautifulsoup4 # for some plugins
-        colorlog # colorful console logging
-        pillow # for some CAPTCHA plugin
-        send2trash # send some files to trash instead of deleting them
-        slixmpp # XMPP plugin
-      ];
-    };
-
-    tests = {
-      inherit (nixosTests) pyload;
-    };
+  optional-dependencies = {
+    plugins = with python3.pkgs; [
+      beautifulsoup4 # for some plugins
+      colorlog # colorful console logging
+      pillow # for some CAPTCHA plugin
+      send2trash # send some files to trash instead of deleting them
+      slixmpp # XMPP plugin
+    ];
   };
 
-  meta = with lib; {
+  passthru.tests = {
+    inherit (nixosTests) pyload;
+  };
+
+  meta = {
     description = "Free and open-source download manager with support for 1-click-hosting sites";
     homepage = "https://github.com/pyload/pyload";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ruby0b ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ ruby0b ];
     mainProgram = "pyload";
   };
 }

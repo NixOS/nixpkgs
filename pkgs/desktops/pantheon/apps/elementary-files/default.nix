@@ -12,6 +12,7 @@
 , glib
 , libgee
 , libhandy
+, libportal-gtk3
 , granite
 , pango
 , bamf
@@ -25,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "6.5.3";
+  version = "7.0.0";
 
   outputs = [ "out" "dev" ];
 
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "files";
     rev = version;
-    sha256 = "sha256-geJLHRo1Bd2oFT+UtirHj9FVSFTFMK/v/5h+NF9woFo=";
+    hash = "sha256-6pEHyrQjqgbpOUEM/zbpuF8GM7JotDYfCnumU3aXIaI=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
     libgee
     libgit2-glib
     libhandy
+    libportal-gtk3
     pango
     sqlite
     systemd

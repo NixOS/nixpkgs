@@ -14,21 +14,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.3.6";
+  version = "2.3.8";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-ZcpxMVUb24Ckb3CunibNYvDRk6MOsutUCUfElbUQ8Ok=";
+    hash = "sha256-QBc0avci232UIxzTKlS0pjL7cCuvwAFgw6dSwdtYAtU=";
   };
 
-  cargoHash = "sha256-uZlzWxdruwPemUnvhjyh9uKRb8vj7462N/2u2bTGQgI=";
+  cargoHash = "sha256-jnDS9tIJ387A2P9oUSYB3tXrXjwwVmQ26erIIlHBkao=";
 
   nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
 
-  buildInputs = [ sqlite ] ++ (if stdenv.isDarwin then [
+  buildInputs = [ sqlite ] ++ (if stdenv.hostPlatform.isDarwin then [
     libiconv
     Security
     SystemConfiguration
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [
     "shell_completion"
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     "systemd"
   ];
 

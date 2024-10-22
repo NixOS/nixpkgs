@@ -1,4 +1,4 @@
-{ qtModule, qtbase, qtquickcontrols, wayland, wayland-scanner, pkg-config }:
+{ qtModule, qtbase, qtquickcontrols, wayland, wayland-scanner, pkg-config, lib }:
 
 qtModule {
   pname = "qtwayland";
@@ -12,4 +12,5 @@ qtModule {
     # context).
     ./qtwayland-app_id.patch
   ];
+  meta.badPlatforms = lib.platforms.darwin;
 }

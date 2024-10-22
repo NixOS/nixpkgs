@@ -98,7 +98,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "An extensible mail notification daemon";
+    description = "Extensible mail notification daemon";
     homepage = "https://github.com/pulb/mailnag";
     license = licenses.gpl2;
     platforms = platforms.linux;

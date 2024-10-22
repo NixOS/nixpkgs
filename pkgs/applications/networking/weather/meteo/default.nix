@@ -16,7 +16,7 @@
 , json-glib
 , libappindicator
 , libsoup
-, webkitgtk
+, webkitgtk_4_0
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     owner = "bitseater";
     repo = pname;
     rev = version;
-    sha256 = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
+    hash = "sha256-hubKusrs0Hh8RryoEI29pnhTSNsIbtGMltlH4qoM6gE=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     json-glib
     libappindicator
     libsoup
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''

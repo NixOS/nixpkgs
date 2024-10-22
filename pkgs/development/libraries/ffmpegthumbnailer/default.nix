@@ -39,8 +39,13 @@ stdenv.mkDerivation rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
+  postInstall = ''
+    substituteInPlace $out/share/thumbnailers/ffmpegthumbnailer.thumbnailer \
+      --replace-fail '=ffmpegthumbnailer' "=$out/bin/ffmpegthumbnailer"
+  '';
+
   meta = with lib; {
-    description = "A lightweight video thumbnailer";
+    description = "Lightweight video thumbnailer";
     longDescription = "FFmpegthumbnailer is a lightweight video
         thumbnailer that can be used by file managers to create thumbnails
         for your video files. The thumbnailer uses ffmpeg to decode frames

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "01h00328kbw83q11yrsvcly69p0hql3kw49b4jx6gwkrdm8c2amk";
   };
 
-  cargoSha256 = "1dgmn4g35yc7hwnxznkrpwnikn329nc0z8y7bxlcd308k1v83919";
+  cargoHash = "sha256-KaSBdpgIjMZoX8ejD5hNYtgZLb952t8th4f5Mh6x9bU=";
 
   meta = with lib; {
     description = "Display file system space usage using graphs and colors";

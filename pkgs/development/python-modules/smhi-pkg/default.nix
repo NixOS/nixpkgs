@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "smhi-pkg";
-  version = "1.0.16";
+  version = "1.0.17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "joysoftware";
     repo = "pypi_smhi";
     rev = "refs/tags/${version}";
-    hash = "sha256-jcIXzAZO9SxC/0apdjAVv1GmBTbdlasfXr1/Tj9adNc=";
+    hash = "sha256-dJh44JGWy3VafTnwwxWcr5cXClmzY1YuySy1RJzOak8=";
   };
 
   propagatedBuildInputs = [ aiohttp ];

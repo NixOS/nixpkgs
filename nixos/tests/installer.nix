@@ -11,7 +11,7 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
-               , extraConfig, forceGrubReinstallCount ? 0, flake ? false
+               , extraConfig, forceGrubReinstallCount ? 0, withTestInstrumentation ? true
                , clevisTest
                }:
     pkgs.writeText "configuration.nix" ''
@@ -19,7 +19,7 @@ let
 
       { imports =
           [ ./hardware-configuration.nix
-            ${if flake
+            ${if !withTestInstrumentation
               then "" # Still included, but via installer/flake.nix
               else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
           ];
@@ -81,7 +81,7 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi, grubIdentifier
                   , postInstallCommands, postBootCommands, extraConfig
-                  , testSpecialisationConfig, testFlakeSwitch, clevisTest, clevisFallbackTest
+                  , testSpecialisationConfig, testFlakeSwitch, testByAttrSwitch, clevisTest, clevisFallbackTest
                   , disableFileSystems
                   }:
     let
@@ -316,6 +316,119 @@ let
 
       target.shutdown()
     ''
+    + optionalString testByAttrSwitch ''
+      with subtest("Configure system with attribute set"):
+        target.succeed("""
+          mkdir /root/my-config
+          mv /etc/nixos/hardware-configuration.nix /root/my-config/
+          rm /etc/nixos/configuration.nix
+        """)
+        target.copy_from_host_via_shell(
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
+               forceGrubReinstallCount = 1;
+               withTestInstrumentation = false;
+            }}",
+          "/root/my-config/configuration.nix",
+        )
+        target.copy_from_host_via_shell(
+          "${./installer/byAttrWithChannel.nix}",
+          "/root/my-config/default.nix",
+        )
+      with subtest("Switch to attribute set based config with channels"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      target.shutdown()
+
+      ${startTarget}
+
+      target.succeed("""
+        rm /root/my-config/default.nix
+      """)
+      target.copy_from_host_via_shell(
+        "${./installer/byAttrNoChannel.nix}",
+        "/root/my-config/default.nix",
+      )
+
+      target.succeed("""
+        pkgs=$(readlink -f /nix/var/nix/profiles/per-user/root/channels)/nixos
+        if ! [[ -e $pkgs/pkgs/top-level/default.nix ]]; then
+          echo 1>&2 "$pkgs does not seem to be a nixpkgs source. Please fix the test so that pkgs points to a nixpkgs source.";
+          exit 1;
+        fi
+        sed -e s^@nixpkgs@^$pkgs^ -i /root/my-config/default.nix
+
+      """)
+
+      with subtest("Switch to attribute set based config without channels"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      target.shutdown()
+
+      ${startTarget}
+
+      with subtest("nix-channel command is not available anymore"):
+        target.succeed("! which nix-channel")
+
+      with subtest("builtins.nixPath is now empty"):
+        target.succeed("""
+          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
+        """)
+
+      with subtest("<nixpkgs> does not resolve"):
+        target.succeed("""
+          ! nix-instantiate '<nixpkgs>' --eval --expr
+        """)
+
+      with subtest("Evaluate attribute set based config in fresh env without nix-channel"):
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+
+      with subtest("Evaluate attribute set based config in fresh env without channel profiles"):
+        target.succeed("""
+          (
+            exec 1>&2
+            mkdir -p /root/restore
+            mv -v /root/.nix-channels /root/restore/
+            mv -v ~/.nix-defexpr /root/restore/
+            mkdir -p /root/restore/channels
+            mv -v /nix/var/nix/profiles/per-user/root/channels* /root/restore/channels/
+          )
+        """)
+        target.succeed("nixos-rebuild switch --file /root/my-config/default.nix")
+    ''
+    + optionalString (testByAttrSwitch && testFlakeSwitch) ''
+      with subtest("Restore channel profiles"):
+        target.succeed("""
+          (
+            exec 1>&2
+            mv -v /root/restore/.nix-channels /root/
+            mv -v /root/restore/.nix-defexpr ~/.nix-defexpr
+            mv -v /root/restore/channels/* /nix/var/nix/profiles/per-user/root/
+            rm -vrf /root/restore
+          )
+        """)
+
+      with subtest("Restore /etc/nixos"):
+        target.succeed("""
+          mv -v /root/my-config/hardware-configuration.nix /etc/nixos/
+        """)
+        target.copy_from_host_via_shell(
+          "${makeConfig {
+               inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
+               forceGrubReinstallCount = 1;
+            }}",
+          "/etc/nixos/configuration.nix",
+        )
+
+      with subtest("Restore /root/my-config"):
+        target.succeed("""
+          rm -vrf /root/my-config
+        """)
+
+    ''
+    + optionalString (testByAttrSwitch && !testFlakeSwitch) ''
+      target.shutdown()
+    ''
     + optionalString testFlakeSwitch ''
       ${startTarget}
 
@@ -330,7 +443,7 @@ let
           "${makeConfig {
                inherit bootLoader grubDevice grubIdentifier grubUseEfi extraConfig clevisTest;
                forceGrubReinstallCount = 1;
-               flake = true;
+               withTestInstrumentation = false;
             }}",
           "/root/my-config/configuration.nix",
         )
@@ -350,7 +463,32 @@ let
         """)
 
       with subtest("Switch to flake based config"):
-        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz 2>&1 | tee activation-log >&2")
+
+        target.succeed("""
+          cat -n activation-log >&2
+        """)
+
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/nix/var/nix/profiles/per-user/root/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F '/root/.nix-defexpr/channels exists, but channels have been disabled.' activation-log
+        """)
+        target.succeed("""
+          grep -F 'Due to https://github.com/NixOS/nix/issues/9574, Nix may still use these channels when NIX_PATH is unset.' activation-log
+        """)
+        target.succeed("rm activation-log")
+
+        # Perform the suggested cleanups we've just seen in the log
+        # TODO after https://github.com/NixOS/nix/issues/9574: don't remove them yet
+        target.succeed("""
+          rm -rf /root/.nix-defexpr/channels /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
+        """)
+
 
       target.shutdown()
 
@@ -361,10 +499,20 @@ let
 
       # Note that the channel profile is still present on disk, but configured
       # not to be used.
-      with subtest("builtins.nixPath is now empty"):
-        target.succeed("""
-          [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]]
-        """)
+      # TODO after issue https://github.com/NixOS/nix/issues/9574: re-enable this assertion
+      # I believe what happens is
+      #   - because of the issue, we've removed the `nix-path =` line from nix.conf
+      #   - the "backdoor" shell is not a proper session and does not have `NIX_PATH=""` set
+      #   - seeing no nix path settings at all, Nix loads its hardcoded default value,
+      #     which is unfortunately non-empty
+      # Or maybe it's the new default NIX_PATH?? :(
+      # with subtest("builtins.nixPath is now empty"):
+      #   target.succeed("""
+      #     (
+      #       set -x;
+      #       [[ "[ ]" == "$(nix-instantiate builtins.nixPath --eval --expr)" ]];
+      #     )
+      #   """)
 
       with subtest("<nixpkgs> does not resolve"):
         target.succeed("""
@@ -378,12 +526,16 @@ let
         target.succeed("""
           (
             exec 1>&2
-            rm -v /root/.nix-channels
+            rm -vf /root/.nix-channels
             rm -vrf ~/.nix-defexpr
             rm -vrf /nix/var/nix/profiles/per-user/root/channels*
           )
         """)
-        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz")
+        target.succeed("nixos-rebuild switch --flake /root/my-config#xyz | tee activation-log >&2")
+        target.succeed("cat -n activation-log >&2")
+        target.succeed("! grep -F '/root/.nix-defexpr/channels' activation-log")
+        target.succeed("! grep -F 'but channels have been disabled' activation-log")
+        target.succeed("! grep -F 'https://github.com/NixOS/nix/issues/9574' activation-log")
 
       target.shutdown()
     '';
@@ -399,6 +551,7 @@ let
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
     , testFlakeSwitch ? false
+    , testByAttrSwitch ? false
     , clevisTest ? false
     , clevisFallbackTest ? false
     , disableFileSystems ? false
@@ -473,12 +626,16 @@ let
             libxslt.bin
             nixos-artwork.wallpapers.simple-dark-gray-bottom
             ntp
+            perlPackages.ConfigIniFiles
+            perlPackages.FileSlurp
+            perlPackages.JSON
             perlPackages.ListCompare
             perlPackages.XMLLibXML
             # make-options-doc/default.nix
             (python3.withPackages (p: [ p.mistune ]))
             shared-mime-info
             sudo
+            switch-to-configuration-ng
             texinfo
             unionfs-fuse
             xorg.lndir
@@ -492,6 +649,10 @@ let
           in [
             (pkgs.grub2.override { inherit zfsSupport; })
             (pkgs.grub2_efi.override { inherit zfsSupport; })
+            pkgs.nixos-artwork.wallpapers.simple-dark-gray-bootloader
+            pkgs.perlPackages.FileCopyRecursive
+            pkgs.perlPackages.XMLSAX
+            pkgs.perlPackages.XMLSAXBase
           ])
           ++ optionals (bootLoader == "systemd-boot") [
             pkgs.zstd.bin
@@ -533,7 +694,7 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions postInstallCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
-                testSpecialisationConfig testFlakeSwitch clevisTest clevisFallbackTest
+                testSpecialisationConfig testFlakeSwitch testByAttrSwitch clevisTest clevisFallbackTest
                 disableFileSystems;
       };
     };
@@ -586,6 +747,15 @@ let
   };
 
   simple-test-config-flake = simple-test-config // {
+    testFlakeSwitch = true;
+  };
+
+  simple-test-config-by-attr = simple-test-config // {
+    testByAttrSwitch = true;
+  };
+
+  simple-test-config-from-by-attr-to-flake = simple-test-config // {
+    testByAttrSwitch = true;
     testFlakeSwitch = true;
   };
 
@@ -714,7 +884,7 @@ let
     '';
   };
 
-  mkClevisZfsTest = { fallback ? false }: makeInstallerTest "clevis-zfs${optionalString fallback "-fallback"}" {
+  mkClevisZfsTest = { fallback ? false, parentDataset ? false }: makeInstallerTest "clevis-zfs${optionalString parentDataset "-parent-dataset"}${optionalString fallback "-fallback"}" {
     clevisTest = true;
     clevisFallbackTest = fallback;
     enableOCR = fallback;
@@ -731,17 +901,27 @@ let
         "udevadm settle",
         "mkswap /dev/vda2 -L swap",
         "swapon -L swap",
+    '' + optionalString (!parentDataset) ''
         "zpool create -O mountpoint=legacy rpool /dev/vda3",
         "echo -n password | zfs create"
         + " -o encryption=aes-256-gcm -o keyformat=passphrase rpool/root",
+    '' + optionalString (parentDataset) ''
+        "echo -n password | zpool create -O mountpoint=none -O encryption=on -O keyformat=passphrase rpool /dev/vda3",
+        "zfs create -o mountpoint=legacy rpool/root",
+    '' +
+    ''
         "mount -t zfs rpool/root /mnt",
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount LABEL=boot /mnt/boot",
         "udevadm settle")
     '';
-    extraConfig = ''
+    extraConfig = optionalString (!parentDataset) ''
       boot.initrd.clevis.devices."rpool/root".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' + optionalString (parentDataset) ''
+      boot.initrd.clevis.devices."rpool".secretFile = "/etc/nixos/clevis-secret.jwe";
+    '' +
+    ''
       boot.zfs.requestEncryptionCredentials = true;
 
 
@@ -771,6 +951,10 @@ in {
   simple = makeInstallerTest "simple" simple-test-config;
 
   switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
+
+  switchToByAttr = makeInstallerTest "switch-to-by-attr" simple-test-config-by-attr;
+
+  switchFromByAttrToFlake = makeInstallerTest "switch-from-by-attr-to-flake" simple-test-config-from-by-attr-to-flake;
 
   # Test cloned configurations with the simple grub configuration
   simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
@@ -1359,6 +1543,8 @@ in {
   clevisLuksFallback = mkClevisLuksTest { fallback = true; };
   clevisZfs = mkClevisZfsTest { };
   clevisZfsFallback = mkClevisZfsTest { fallback = true; };
+  clevisZfsParentDataset = mkClevisZfsTest { parentDataset = true; };
+  clevisZfsParentDatasetFallback = mkClevisZfsTest { parentDataset = true; fallback = true; };
 } // optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''

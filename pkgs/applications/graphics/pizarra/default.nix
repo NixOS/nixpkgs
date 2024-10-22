@@ -1,9 +1,7 @@
 { lib
 , fetchFromGitLab
 , rustPlatform
-, cargo
 , pkg-config
-, binutils-unwrapped
 , gtk3-x11
 , atk
 , glib
@@ -21,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     repo = "pizarra-gtk";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
+    hash = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
   };
 
   cargoHash = "sha256-btvMUKADGHlXLmeKF1K9Js44SljZ0MejGId8aDwPhVU=";
@@ -40,7 +38,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A simple blackboard written in GTK";
+    description = "Simple blackboard written in GTK";
     mainProgram = "pizarra";
     longDescription = ''
       A simple endless blackboard.

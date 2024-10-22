@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ zlib ];
 
   # see https://github.com/bwa-mem2/bwa-mem2/issues/93
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i 's/memset_s/memset8_s/g' ext/safestringlib/include/safe_mem_lib.h
     sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/memset16_s.c
     sed -i 's/memset_s/memset8_s/g' ext/safestringlib/safeclib/memset32_s.c

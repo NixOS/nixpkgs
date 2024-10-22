@@ -6,7 +6,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   jar = fetchurl {
     url = "https://download.jetbrains.com/charisma/youtrack-${finalAttrs.version}.jar";
-    sha256 = "sha256-NQKWmKEq5ljUXd64zY27Nj8TU+uLdA37chbFVdmwjNs=";
+    hash = "sha256-NQKWmKEq5ljUXd64zY27Nj8TU+uLdA37chbFVdmwjNs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

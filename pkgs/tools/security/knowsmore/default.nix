@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "knowsmore";
-  version = "0.1.38";
+  version = "0.1.43";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "helviojunior";
     repo = "knowsmore";
     rev = "refs/tags/v${version}";
-    hash = "sha256-A68JuzlWvq3OAtgq6uAFcTTYKmL7xjKWZ0HQfVXKt4k=";
+    hash = "sha256-rLESaedhEHTMYVbITr3vjyE6urhwl/g1/iTMZ4ruE1c=";
   };
 
   pythonRelaxDeps = [
@@ -21,11 +21,7 @@ python3.pkgs.buildPythonApplication rec {
     "urllib3"
   ];
 
-  pythonRemoveDeps = [ "bs4" ];
-
   build-system = with python3.pkgs; [ setuptools ];
-
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   dependencies = with python3.pkgs; [
     aioconsole

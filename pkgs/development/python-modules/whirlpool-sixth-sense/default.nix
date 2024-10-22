@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "whirlpool-sixth-sense";
-  version = "0.18.8";
+  version = "0.18.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
     rev = "refs/tags/${version}";
-    hash = "sha256-Nmjw6b1k5M4H23tJxUPPJ3JIkuK5ylqEeFp18cGz9pA=";
+    hash = "sha256-aDvUV83o/yKx15kenDGng5xh3LECLVlLWJlVe/y+1Co=";
   };
 
   build-system = [ setuptools ];

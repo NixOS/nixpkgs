@@ -28,11 +28,11 @@ in appimageTools.wrapType2 rec {
   '';
 
   meta = with lib; {
-    description = "A single place for all of your web applications";
+    description = "Single place for all of your web applications";
     homepage = "https://getstation.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "station";
   };
 }

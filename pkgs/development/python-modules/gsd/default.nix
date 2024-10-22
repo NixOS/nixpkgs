@@ -4,27 +4,33 @@
   cython,
   fetchFromGitHub,
   numpy,
+  numpy_2,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gsd";
-  version = "3.2.1";
-  format = "setuptools";
+  version = "3.3.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
-    repo = pname;
+    repo = "gsd";
     rev = "refs/tags/v${version}";
-    hash = "sha256-huMM98An/DG8PIVblS3b6AxF6vJ5IoKOs1f9kBnR3ik=";
+    hash = "sha256-4NxZPu4DrwQW6qHeYairefabfN7J0+48tvVwi6ti4vk=";
   };
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy_2
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ numpy ];
+  dependencies = [ numpy ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -44,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/glotzerlab/gsd";
     changelog = "https://github.com/glotzerlab/gsd/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

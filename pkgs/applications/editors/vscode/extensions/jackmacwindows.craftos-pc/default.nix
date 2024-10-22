@@ -33,7 +33,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
   '';
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/jackmacwindows.craftos-pc/changelog";
-    description = "A Visual Studio Code extension for opening a CraftOS-PC window";
+    description = "Visual Studio Code extension for opening a CraftOS-PC window";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=jackmacwindows.craftos-pc";
     homepage = "https://www.craftos-pc.cc/docs/extension";
     license = lib.licenses.mit;

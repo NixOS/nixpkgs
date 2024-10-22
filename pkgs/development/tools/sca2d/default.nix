@@ -41,7 +41,7 @@ python.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "sca2d" ];
 
   meta = with lib; {
-    description = "An experimental static code analyser for OpenSCAD";
+    description = "Experimental static code analyser for OpenSCAD";
     mainProgram = "sca2d";
     homepage = "https://gitlab.com/bath_open_instrumentation_group/sca2d";
     changelog = "https://gitlab.com/bath_open_instrumentation_group/sca2d/-/blob/${src.rev}/CHANGELOG.md";

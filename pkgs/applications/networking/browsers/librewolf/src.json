@@ -1,15 +1,11 @@
 {
-  "packageVersion": "126.0-1",
+  "packageVersion": "131.0.3-1",
   "source": {
-    "rev": "126.0-1",
-    "sha256": "1q8fjki6rgzrir84y7j2anra2w213bm0g74nw205gja9qsxlassc"
-  },
-  "settings": {
-    "rev": "e439bde05b2980089b9c8a6f990562dcd9e9ca4a",
-    "sha256": "16fzdpjqz5ih2pjkj698hrqlw4wck4adys4cdfc2kflf6aydk39m"
+    "rev": "131.0.3-1",
+    "sha256": "0ayl43nq3h9a3b4nl7sfmil43v0k3x1bmxl7c7ws8710dj2674rc"
   },
   "firefox": {
-    "version": "126.0",
-    "sha512": "56025b051d544ca294911a1d6a66f09945f71012131881b64313dafb579730810a4b091950c90a21d4fd3f393ba23670d8409086e1677d80d0bbbe347c303527"
+    "version": "131.0.3",
+    "sha512": "3aa96db839f7a45e34c43b5e7e3333e1100ca11545ad26a8e42987fbc72df5ae7ebebe7dfc8c4e856d2bb4676c0516914a07c001f6047799f314146a3329c0ce"
   }
 }

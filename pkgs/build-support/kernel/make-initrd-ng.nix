@@ -37,9 +37,9 @@ in
 , extension ? _compressorMeta.extension or
     (throw "Unrecognised compressor ${_compressorName}, please specify filename extension")
 
-# List of { object = path_or_derivation; symlink = "/path"; }
+# List of { source = path_or_derivation; target = "/path"; }
 # The paths are copied into the initramfs in their nix store path
-# form, then linked at the root according to `symlink`.
+# form, then linked at the root according to `target`.
 , contents
 
 # List of uncompressed cpio files to prepend to the initramfs. This
@@ -72,7 +72,7 @@ in
   ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   passAsFile = ["contents"];
-  contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${lib.optionalString (symlink != null) symlink}") contents + "\n";
+  contents = builtins.toJSON contents;
 
   nativeBuildInputs = [makeInitrdNGTool libarchive] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 

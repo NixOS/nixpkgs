@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "makeself";
     rev = "release-${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
+    hash = "sha256-15lUtErGsbXF2Gn0f0rvA18mMuVMmkKrGO2poeYZU9g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
-  version = "1.21.2";
+  version = "1.21.3";
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
-    hash = "sha256-iiekjV/X9dAqk9WTxDgi6SK/XkI0aKEfN4Hopgid3Rw=";
+    hash = "sha256-9LWoacjisyaiR0spF5/k5SneIo09UaCHBE1mrewftd8=";
   };
 
   setOutputFlags = false;
@@ -18,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ m4 pkg-config tcl ];
   buildInputs = [ bzip2 elfutils libarchive openssl xz zlib ]
-    ++ lib.optional stdenv.isLinux libbsd;
+    ++ lib.optional stdenv.hostPlatform.isLinux libbsd;
 
   enableParallelBuilding = true;
 

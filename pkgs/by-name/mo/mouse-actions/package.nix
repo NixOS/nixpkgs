@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mouse-actions";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "jersou";
     repo = "mouse-actions";
     rev = "v${version}";
-    hash = "sha256-02E4HrKIoBV3qZPVH6Tjz9Bv/mh5C8amO1Ilmd+YO5g=";
+    hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
-  cargoHash = "sha256-5SUVZlrXIPtlu9KBzucZDCp5t5t8Z4/Nfht2Pw5agVI=";
+  cargoHash = "sha256-N7BaEvQyKtM8hkDJJTlFKzfq01KMiGZ0fuXHcKctfLc=";
 
   buildInputs = [
     libX11

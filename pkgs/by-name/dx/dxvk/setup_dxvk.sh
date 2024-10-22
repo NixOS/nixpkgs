@@ -12,6 +12,7 @@ set -eu -o pipefail
 ## Defaults
 
 declare -A dlls=(
+    [d3d8]="dxvk/d3d8.dll"
     [d3d9]="dxvk/d3d9.dll"
     [d3d10]="dxvk/d3d10.dll dxvk/d3d10_1.dll dxvk/d3d10core.dll"
     [d3d11]="dxvk/d3d11.dll"
@@ -22,7 +23,7 @@ declare -A obsolete_dlls=(
     [mcfgthreads]="mcfgthreads/mcfgthread-12.dll"
 )
 
-declare -A targets=([d3d9]=1 [d3d11]=1 [dxgi]=1)
+declare -A targets=([d3d8]=1 [d3d9]=1 [d3d11]=1 [dxgi]=1)
 
 
 # Option variables

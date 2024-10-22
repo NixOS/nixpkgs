@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 ruby '>= 2.7.0', '< 3.3.0'
 
-gem 'rails', '6.1.7.7'
+gem 'rails', '6.1.7.8'
 gem 'rouge', '~> 4.2.0'
 gem 'request_store', '~> 1.5.0'
 gem 'mini_mime', '~> 1.1.0'

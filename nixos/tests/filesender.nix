@@ -2,7 +2,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "filesender";
   meta = {
     maintainers = with lib.maintainers; [ nhnn ];
-    broken = pkgs.stdenv.isAarch64; # selenium.common.exceptions.WebDriverException: Message: Unsupported platform/architecture combination: linux/aarch64
+    broken = pkgs.stdenv.hostPlatform.isAarch64; # selenium.common.exceptions.WebDriverException: Message: Unsupported platform/architecture combination: linux/aarch64
   };
 
   nodes.filesender = { ... }: let

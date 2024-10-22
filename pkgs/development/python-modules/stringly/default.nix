@@ -1,6 +1,5 @@
 {
   lib,
-  python,
   buildPythonPackage,
   fetchPypi,
   typing-extensions,
@@ -19,10 +18,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "stringly" ];
 
   propagatedBuildInputs = [ typing-extensions ];
-
-  checkPhase = ''
-    ${python.interpreter} -m unittest
-  '';
 
   meta = with lib; {
     description = "Stringly: Human Readable Object Serialization";

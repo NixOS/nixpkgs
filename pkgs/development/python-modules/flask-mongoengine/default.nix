@@ -42,7 +42,7 @@ buildPythonPackage rec {
     mongoengine
   ] ++ lib.optionals (pythonOlder "3.8") [ typing-extensions ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     wtf = [
       flask-wtf
       wtforms
@@ -63,6 +63,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mongoengine/flask-mongoengine";
     changelog = "https://github.com/MongoEngine/flask-mongoengine/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

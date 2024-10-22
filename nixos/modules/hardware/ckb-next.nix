@@ -1,22 +1,19 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.hardware.ckb-next;
 
 in
   {
     imports = [
-      (mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
-      (mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
+      (lib.mkRenamedOptionModule [ "hardware" "ckb" "enable" ] [ "hardware" "ckb-next" "enable" ])
+      (lib.mkRenamedOptionModule [ "hardware" "ckb" "package" ] [ "hardware" "ckb-next" "package" ])
     ];
 
     options.hardware.ckb-next = {
-      enable = mkEnableOption "the Corsair keyboard/mouse driver";
+      enable = lib.mkEnableOption "the Corsair keyboard/mouse driver";
 
-      gid = mkOption {
-        type = types.nullOr types.int;
+      gid = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 100;
         description = ''
@@ -24,23 +21,23 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "ckb-next" { };
+      package = lib.mkPackageOption pkgs "ckb-next" { };
     };
 
-    config = mkIf cfg.enable {
+    config = lib.mkIf cfg.enable {
       environment.systemPackages = [ cfg.package ];
 
       systemd.services.ckb-next = {
         description = "Corsair Keyboards and Mice Daemon";
         wantedBy = ["multi-user.target"];
         serviceConfig = {
-          ExecStart = "${cfg.package}/bin/ckb-next-daemon ${optionalString (cfg.gid != null) "--gid=${builtins.toString cfg.gid}"}";
+          ExecStart = "${cfg.package}/bin/ckb-next-daemon ${lib.optionalString (cfg.gid != null) "--gid=${builtins.toString cfg.gid}"}";
           Restart = "on-failure";
         };
       };
     };
 
     meta = {
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   }

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
     install -Dm755 stepreduce $out/bin/stepreduce
 
-    runHook prostInstall
+    runHook postInstall
   '';
 
   meta = with lib; {

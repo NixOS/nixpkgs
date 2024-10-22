@@ -10,15 +10,14 @@
 
 buildPythonPackage rec {
   pname = "bottleneck";
-  version = "1.3.8";
+  version = "1.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "Bottleneck";
-    inherit version;
-    hash = "sha256-Z4DYlpabp/U8iZW6kMh8VIvrPbQ13JDGC5oQ7Rq02Gg=";
+    inherit pname version;
+    hash = "sha256-vrNt9Rm4cJ59NXwMljmwO4hcpjVbv15TdSxoXeUWBbg=";
   };
 
   propagatedBuildInputs = [ numpy ];
@@ -35,6 +34,6 @@ buildPythonPackage rec {
     description = "Fast NumPy array functions";
     homepage = "https://github.com/pydata/bottleneck";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -7,20 +7,15 @@
 , jq
 , makeWrapper
 , maven
-, writeText
 }:
 
 let
-  maven' = maven.override {
-    inherit jdk;
-  };
-
-  version = "3.8.1";
+  version = "3.8.2";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-MnFwFJdKIU7D8GQgnDvCO+P8r8h1Se/wmbt/Z3EX+3Q=";
+    hash = "sha256-3KCO9ooYN8PPVirU2wh7wu4feHqugc3JSXWR2aWIanE=";
   };
 
   npmPkg = buildNpmPackage {
@@ -47,7 +42,7 @@ let
     '';
   };
 
-in maven'.buildMavenPackage {
+in maven.buildMavenPackage {
   inherit src version;
 
   pname = "openrefine";
@@ -55,10 +50,14 @@ in maven'.buildMavenPackage {
   postPatch = ''
     cp -r ${npmPkg} main/webapp/modules/core/3rdparty
   '';
-  mvnParameters = "-DskipTests=true -pl !packaging";
-  mvnHash = "sha256-0qsKUMV9M0ZaddR5ust8VikSrsutdxVNNezKqR+F/6M=";
+
+  mvnJdk = jdk;
+  mvnParameters = "-pl !packaging";
+  mvnHash = "sha256-AuZp+uq5bmb4gnzKvqXeTmBrsCT6qmJOrwtJq9iCkRQ=";
 
   nativeBuildInputs = [ makeWrapper ];
+
+  doCheck = false;
 
   installPhase = ''
     mkdir -p $out/lib/server/target/lib
@@ -121,7 +120,7 @@ in maven'.buildMavenPackage {
       fromSource
       binaryBytecode  # maven dependencies
     ];
-    broken = stdenv.isDarwin;  # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin;  # builds, doesn't run
     mainProgram = "refine";
   };
 }

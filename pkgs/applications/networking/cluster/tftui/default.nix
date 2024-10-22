@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "tftui";
-  version = "0.13.2";
+  version = "0.13.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idoavrah";
     repo = "terraform-tui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/y1dgQtpaIRVvhb/esJns3UPwKU1bAFHSQ8tCWzIuIw=";
+    hash = "sha256-xOlPuPVwfVT7jfBJPqZ5FbOs80HE0k2ZqcA+Jcxh9p4=";
   };
 
   pythonRelaxDeps = [
@@ -24,7 +24,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     makeWrapper
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

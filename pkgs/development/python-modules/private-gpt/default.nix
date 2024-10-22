@@ -1,48 +1,56 @@
 {
   lib,
   buildPythonPackage,
-  python,
   fetchFromGitHub,
+  fetchurl,
+
+  # build-system
   poetry-core,
+
+  # dependencies
+  docx2txt,
   fastapi,
   injector,
   llama-index-core,
   llama-index-readers-file,
-  huggingface-hub,
   python-multipart,
   pyyaml,
   transformers,
   uvicorn,
   watchdog,
+
+  # optional-dependencies
+  python,
+  huggingface-hub,
   gradio,
-  fetchurl,
-  fetchpatch,
+
+  # tests
+  nixosTests,
 }:
 
 buildPythonPackage rec {
   pname = "private-gpt";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zylon-ai";
     repo = "private-gpt";
-    rev = "v${version}";
-    hash = "sha256-bjydzJhOJjmbflcJbuMyNsmby7HtNPFW3MY2Tw12cHw=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-IYTysU3W/NrtBuLe3ZJkztVSK+gzjkGIg0qcBYzB3bs=";
   };
-
-  patches = [
-    # Fix a vulnerability, to be removed in the next bump version
-    # See https://github.com/zylon-ai/private-gpt/pull/1890
-    (fetchpatch {
-      url = "https://github.com/zylon-ai/private-gpt/commit/86368c61760c9cee5d977131d23ad2a3e063cbe9.patch";
-      hash = "sha256-4ysRUuNaHW4bmNzg4fn++89b430LP6AzYDoX2HplVH0=";
-    })
-  ];
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "cryptography"
+    "fastapi"
+    "llama-index-core"
+    "llama-index-readers-file"
+  ];
+
   dependencies = [
+    docx2txt
     fastapi
     injector
     llama-index-core
@@ -52,7 +60,7 @@ buildPythonPackage rec {
     transformers
     uvicorn
     watchdog
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # This is needed for running the tests and the service in offline mode,
   # See related issue at https://github.com/zylon-ai/private-gpt/issues/1870
@@ -61,7 +69,7 @@ buildPythonPackage rec {
     hash = "sha256-Ijkht27pm96ZW3/3OFE+7xAPtR0YyTWXoRO8/+hlsqc=";
   };
 
-  passthru.optional-dependencies = with python.pkgs; {
+  optional-dependencies = with python.pkgs; {
     embeddings-huggingface = [
       huggingface-hub
       llama-index-embeddings-huggingface
@@ -85,12 +93,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "private_gpt" ];
 
+  passthru.tests = {
+    inherit (nixosTests) private-gpt;
+  };
+
   meta = {
     changelog = "https://github.com/zylon-ai/private-gpt/blob/${src.rev}/CHANGELOG.md";
     description = "Interact with your documents using the power of GPT, 100% privately, no data leaks";
     homepage = "https://github.com/zylon-ai/private-gpt";
     license = lib.licenses.asl20;
     mainProgram = "private-gpt";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

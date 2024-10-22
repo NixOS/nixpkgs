@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   # does not compile correctly with -O2 on LLVM clang; see
   # https://bitbucket.org/malb/m4rie/issues/23/trying-to-compile-on-apple-m1
-  makeFlags = [] ++ lib.optionals stdenv.isDarwin [ "CFLAGS=-O0" ];
+  makeFlags = [] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "CFLAGS=-O0" ];
   nativeBuildInputs = [
     autoreconfHook
   ];

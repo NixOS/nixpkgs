@@ -32,7 +32,10 @@ in stdenv.mkDerivation {
     cp -a --no-preserve=mode ${libapp} libapp
     cp -a --no-preserve=mode ${libjson} libjson
   '';
-  patches = [ ./work-around-API-borkage.patch ];
+  patches = [
+    ./work-around-API-borkage.patch
+    ./libapp-include-ctype.diff
+  ];
 
   buildInputs = [ curl fuse libxml2 ];
   nativeBuildInputs = [ pkg-config ];
@@ -40,7 +43,7 @@ in stdenv.mkDerivation {
   buildFlags = [
     "static"
     "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optional stdenv.isDarwin "CFLAGS=-D_BSD_SOURCE";
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin "CFLAGS=-D_BSD_SOURCE";
 
   installPhase = ''
     mkdir -p $out/bin

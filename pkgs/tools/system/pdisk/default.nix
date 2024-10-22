@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A low-level Apple partition table editor for Linux, OSS Apple version";
+    description = "Low-level Apple partition table editor for Linux, OSS Apple version";
     homepage = "https://github.com/apple-oss-distributions/pdisk";
     license = with licenses; [
       hpnd # original license statements seems to match this (in files that are shared with mac-fdisk)

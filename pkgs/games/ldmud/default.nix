@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional postgresSupport postgresql
     ++ lib.optional sqliteSupport sqlite ++ lib.optional tlsSupport openssl
     ++ lib.optional pythonSupport python310
-    ++ lib.optionals stdenv.isDarwin [ libiconv ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # To support systems without autoconf LD puts its configure.ac in a non-default
   # location and uses a helper script. We skip that script and symlink the .ac
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
+    description = "Gamedriver for LPMuds including a LPC compiler, interpreter and runtime";
     homepage = "https://ldmud.eu";
     changelog = "https://github.com/ldmud/ldmud/blob/${version}/HISTORY";
     longDescription = ''

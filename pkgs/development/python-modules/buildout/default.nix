@@ -29,7 +29,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "zc.buildout" ];
 
   meta = with lib; {
-    description = "A software build and configuration system";
+    description = "Software build and configuration system";
     mainProgram = "buildout";
     downloadPage = "https://github.com/buildout/buildout";
     homepage = "https://www.buildout.org";

@@ -177,6 +177,26 @@ let
       '';
     };
 
+    borgmatic = {
+      exporterConfig = {
+        enable = true;
+        user = "root";
+      };
+      metricProvider = {
+        services.borgmatic.enable = true;
+        services.borgmatic.settings.source_directories = [ "/home" ];
+        services.borgmatic.settings.repositories = [ { label = "local"; path = "/var/backup"; } ];
+        services.borgmatic.settings.keep_daily = 10;
+      };
+      exporterTest = ''
+        succeed("borgmatic rcreate -e none")
+        succeed("borgmatic")
+        wait_for_unit("prometheus-borgmatic-exporter.service")
+        wait_for_open_port(9996)
+        succeed("curl -sSf localhost:9996/metrics | grep 'borg_total_backups{repository=\"/var/backup\"} 1'")
+      '';
+    };
+
     collectd = {
       exporterConfig = {
         enable = true;
@@ -207,6 +227,34 @@ let
               "curl -sSf localhost:9103/metrics | grep 'collectd_testplugin_gauge{instance=\"testhost\"} 23'"
           )
         '';
+    };
+
+    deluge = {
+      exporterConfig = {
+        enable = true;
+        port = 1234;
+        listenAddress = "127.0.0.1";
+
+        delugeUser = "user";
+        delugePort = 2345;
+        delugePasswordFile = pkgs.writeText "password" "weak_password";
+      };
+      metricProvider = {
+        services.deluge.enable = true;
+        services.deluge.declarative = true;
+        services.deluge.config.daemon_port = 2345;
+        services.deluge.authFile = pkgs.writeText "authFile" ''
+        localclient:abcdef:10
+        user:weak_password:10
+        '';
+      };
+      exporterTest = ''
+        wait_for_unit("deluged.service")
+        wait_for_open_port(2345)
+        wait_for_unit("prometheus-deluge-exporter.service")
+        wait_for_open_port(1234)
+        succeed("curl -sSf http://localhost:1234 | grep 'deluge_torrents'")
+      '';
     };
 
     dnsmasq = {
@@ -314,10 +362,9 @@ let
         tokenPath = pkgs.writeText "token" "abc123";
       };
 
-      # noop: fastly's exporter can't start without first talking to fastly
-      # see: https://github.com/peterbourgon/fastly-exporter/issues/87
       exporterTest = ''
-        succeed("true");
+        wait_for_unit("prometheus-fastly-exporter.service")
+        wait_for_open_port(9118)
       '';
     };
 
@@ -435,7 +482,6 @@ let
     json = {
       exporterConfig = {
         enable = true;
-        url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
           modules = {
             default = {
@@ -483,9 +529,6 @@ let
                 global-module: mod-stats
                 dnssec-signing: off
                 zonefile-sync: -1
-                journal-db: /var/lib/knot/journal
-                kasp-db: /var/lib/knot/kasp
-                timer-db: /var/lib/knot/timer
                 zonefile-load: difference
                 storage: ${pkgs.buildEnv {
                   name = "foo";
@@ -885,82 +928,35 @@ let
       '';
     };
 
-    openldap = {
-      exporterConfig = {
-        enable = true;
-        ldapCredentialFile = "${pkgs.writeText "exporter.yml" ''
-          ldapUser: "cn=root,dc=example"
-          ldapPass: "notapassword"
-        ''}";
-      };
-      metricProvider = {
-        services.openldap = {
-          enable = true;
-          settings.children = {
-            "cn=schema".includes = [
-              "${pkgs.openldap}/etc/schema/core.ldif"
-              "${pkgs.openldap}/etc/schema/cosine.ldif"
-              "${pkgs.openldap}/etc/schema/inetorgperson.ldif"
-              "${pkgs.openldap}/etc/schema/nis.ldif"
-            ];
-            "olcDatabase={1}mdb" = {
-              attrs = {
-                objectClass = [ "olcDatabaseConfig" "olcMdbConfig" ];
-                olcDatabase = "{1}mdb";
-                olcDbDirectory = "/var/lib/openldap/db";
-                olcSuffix = "dc=example";
-                olcRootDN = {
-                  # cn=root,dc=example
-                  base64 = "Y249cm9vdCxkYz1leGFtcGxl";
-                };
-                olcRootPW = {
-                  path = "${pkgs.writeText "rootpw" "notapassword"}";
-                };
-              };
-            };
-            "olcDatabase={2}monitor".attrs = {
-              objectClass = [ "olcDatabaseConfig" ];
-              olcDatabase = "{2}monitor";
-              olcAccess = [ "to dn.subtree=cn=monitor by users read" ];
-            };
-          };
-          declarativeContents."dc=example" = ''
-            dn: dc=example
-            objectClass: domain
-            dc: example
-
-            dn: ou=users,dc=example
-            objectClass: organizationalUnit
-            ou: users
-          '';
-        };
-      };
-      exporterTest = ''
-        wait_for_unit("prometheus-openldap-exporter.service")
-        wait_for_open_port(389)
-        wait_for_open_port(9330)
-        wait_until_succeeds(
-            "curl -sSf http://localhost:9330/metrics | grep 'openldap_scrape{result=\"ok\"} 1'"
-        )
-      '';
-    };
-
     pgbouncer = {
       exporterConfig = {
         enable = true;
-        connectionStringFile = pkgs.writeText "connection.conf" "postgres://admin:@localhost:6432/pgbouncer?sslmode=disable";
+        connectionEnvFile = "${pkgs.writeText "connstr-env" ''
+          PGBOUNCER_EXPORTER_CONNECTION_STRING=postgres://admin@localhost:6432/pgbouncer?sslmode=disable
+        ''}";
       };
 
       metricProvider = {
         services.postgresql.enable = true;
         services.pgbouncer = {
-          # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
-          ignoreStartupParameters = "extra_float_digits";
           enable = true;
-          listenAddress = "*";
-          databases = { postgres = "host=/run/postgresql/ port=5432 auth_user=postgres dbname=postgres"; };
-          authType = "any";
-          maxClientConn = 99;
+          settings = {
+            pgbouncer = {
+              listen_addr = "*";
+              auth_type = "any";
+              max_client_conn = 99;
+              # https://github.com/prometheus-community/pgbouncer_exporter#pgbouncer-configuration
+              ignore_startup_parameters = "extra_float_digits";
+            };
+            databases = {
+              postgres = concatStringsSep " " [
+                "host=/run/postgresql"
+                "port=5432"
+                "auth_user=postgres"
+                "dbname=postgres"
+              ];
+            };
+          };
         };
       };
       exporterTest = ''

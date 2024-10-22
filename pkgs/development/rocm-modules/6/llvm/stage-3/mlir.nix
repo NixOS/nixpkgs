@@ -6,7 +6,6 @@
 , vulkan-loader
 , glslang
 , shaderc
-, lit
 , fetchpatch
 }:
 

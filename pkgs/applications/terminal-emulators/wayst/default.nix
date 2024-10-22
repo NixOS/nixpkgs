@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   passthru.tests.test = nixosTests.terminal-emulators.wayst;
 
   meta = with lib; {
-    description = "A simple terminal emulator";
+    description = "Simple terminal emulator";
     mainProgram = "wayst";
     homepage = "https://github.com/91861/wayst";
     license = licenses.mit;

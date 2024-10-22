@@ -27,7 +27,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://bdd.fi/x/runitor";
-    description = "A command runner with healthchecks.io integration";
+    description = "Command runner with healthchecks.io integration";
     longDescription = ''
       Runitor runs the supplied command, captures its output, and based on its exit
       code reports successful or failed execution to https://healthchecks.io or your

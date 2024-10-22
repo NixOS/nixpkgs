@@ -16,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "django-stubs";
-  version = "4.2.7";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jM0v9O5a3yK547expRbS4cIZHp2U5nLDXMK8PdYeD2s=";
+    pname = "django_stubs";
+    inherit version;
+    hash = "sha256-hhKMIotl5smoXl3FbrHG9BElkX2uDiHmz+zfGyfmMMU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-stubs-ext
     types-pytz
@@ -36,13 +37,13 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     compatible-mypy = [ mypy ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "django-stubs" ];
 

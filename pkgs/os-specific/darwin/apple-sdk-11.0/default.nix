@@ -51,7 +51,7 @@ let
   };
 
   mkCc = cc:
-    if stdenv.isAarch64 then cc
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then cc
     else
       cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
@@ -59,7 +59,7 @@ let
       };
 
   mkStdenv = stdenv:
-    if stdenv.isAarch64 then stdenv
+    if lib.versionAtLeast stdenv.hostPlatform.darwinSdkVersion "11" then stdenv
     else
       let
         darwinMinVersion = "10.12";
@@ -127,7 +127,7 @@ let
       }) bindgenHook;
     };
 
-    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {
+    callPackage = newScope (lib.optionalAttrs stdenv.hostPlatform.isDarwin (stdenvs // rec {
       inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
       darwin = pkgs.darwin.overrideScope (_: prev: {
         inherit (prev.darwin.apple_sdk_11_0)

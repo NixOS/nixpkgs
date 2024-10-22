@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   meta = with lib; {
-    description = "A very basic terminfo library";
+    description = "Very basic terminfo library";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ pSub ];

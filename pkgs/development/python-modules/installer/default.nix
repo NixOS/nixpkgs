@@ -51,7 +51,7 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
-    description = "A low-level library for installing a Python package from a wheel distribution";
+    description = "Low-level library for installing a Python package from a wheel distribution";
     homepage = "https://github.com/pypa/installer";
     changelog = "https://github.com/pypa/installer/blob/${src.rev}/docs/changelog.md";
     license = licenses.mit;

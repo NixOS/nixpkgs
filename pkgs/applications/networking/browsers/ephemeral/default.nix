@@ -13,7 +13,7 @@
 , pantheon
 , pkg-config
 , python3
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , glib-networking
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     libdazzle
     libgee
     pantheon.granite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The always-incognito web browser";
+    description = "Always-incognito web browser";
     homepage = "https://github.com/cassidyjames/ephemeral";
     maintainers = with maintainers; [ xiorcale ] ++ teams.pantheon.members;
     platforms = platforms.linux;

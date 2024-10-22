@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wxGTK32
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";
     homepage = "https://comical.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric wegank ];
+    maintainers = with lib.maintainers; [ wegank ];
     platforms = with lib.platforms; unix;
     mainProgram = "comical";
   };

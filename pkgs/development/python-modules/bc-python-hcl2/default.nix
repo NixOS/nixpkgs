@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   lark,
-  pynose,
   pythonOlder,
   setuptools,
 }:
@@ -20,11 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-rI/1n7m9Q36im4mn18UH/QoelXhFuumurGnyiSuNaB4=";
   };
 
-  # Nose is required during build process, so can not use `nativeCheckInputs`.
-  buildInputs = [
-    pynose
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [ lark ];
 

@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = with python.pkgs; with llvmPackages; [ abseil-cpp boost libllvm.all libclang.all ]
     ++ [ jedi jedi-language-server pybind11 ]
-    ++ lib.optional stdenv.isDarwin Cocoa;
+    ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS="-DPATH_TO_LLVM_ROOT=${llvmPackages.libllvm} -DUSE_SYSTEM_ABSEIL=true"
@@ -95,7 +95,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A code-completion and comprehension server";
+    description = "Code-completion and comprehension server";
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
     license = licenses.gpl3;

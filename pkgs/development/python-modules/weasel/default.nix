@@ -8,7 +8,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   smart-open,
@@ -38,7 +37,6 @@ buildPythonPackage rec {
   ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -64,7 +62,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A small and easy workflow system";
+    description = "Small and easy workflow system";
     mainProgram = "weasel";
     homepage = "https://github.com/explosion/weasel/";
     changelog = "https://github.com/explosion/weasel/releases/tag/v${version}";

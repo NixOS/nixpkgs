@@ -40,6 +40,6 @@ buildPythonPackage rec {
     mainProgram = "ilua";
     homepage = "https://github.com/guysv/ilua";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
   };
 }

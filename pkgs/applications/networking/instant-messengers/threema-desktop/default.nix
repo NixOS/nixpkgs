@@ -32,7 +32,7 @@ let
     npmBuildScript = "dist";
 
     nativeBuildInputs = [
-      python3 # Used by gyp
+      (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
     ];
 
     patches = [
@@ -122,7 +122,7 @@ buildNpmPackage rec {
     homepage = "https://threema.ch";
     license = licenses.agpl3Only;
     mainProgram = "threema";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

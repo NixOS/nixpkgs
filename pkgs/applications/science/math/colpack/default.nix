@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   configureFlags = [
-    "--enable-openmp=${if stdenv.isLinux then "yes" else "no"}"
+    "--enable-openmp=${if stdenv.hostPlatform.isLinux then "yes" else "no"}"
     "--enable-examples=no"
   ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A package comprising of implementations of algorithms for
+    description = "Package comprising of implementations of algorithms for
     vertex coloring and derivative computation";
     homepage = "https://cscapes.cs.purdue.edu/coloringpage/software.htm#functionalities";
     license = licenses.lgpl3Plus;

@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -10,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.6.4";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "yifeikong";
     repo = "curl_cffi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bNBpZAIdfub2osByo827RBw/gouCmNt8uVN0y1KdcUk=";
+    hash = "sha256-fVmZ5DKgkjnO1CPYVSa9qei26B0mXqZMtVGhtNGfEpY=";
   };
 
   patches = [ ./use-system-libs.patch ];
@@ -30,6 +31,10 @@ buildPythonPackage rec {
     cffi
     certifi
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  };
 
   pythonImportsCheck = [ "curl_cffi" ];
 

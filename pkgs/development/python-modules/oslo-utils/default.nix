@@ -15,6 +15,7 @@
   pbr,
   pyparsing,
   pytz,
+  qemu,
   setuptools,
   stestr,
   testscenarios,
@@ -26,13 +27,13 @@
 
 buildPythonPackage rec {
   pname = "oslo-utils";
-  version = "7.1.0";
+  version = "7.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "oslo.utils";
     inherit version;
-    hash = "sha256-XkLzOU0fH5duiZSsSgkYlm0vfq98dzgN1hLEpBSN2Y4=";
+    hash = "sha256-WaXT5Oe7x42AHM68K4I+QptiTBK7bjtudvccKfK/Id8=";
   };
 
   postPatch = ''
@@ -63,6 +64,7 @@ buildPythonPackage rec {
     eventlet
     fixtures
     oslotest
+    qemu
     stestr
     testscenarios
     pyyaml

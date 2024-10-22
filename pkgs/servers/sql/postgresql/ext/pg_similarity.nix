@@ -12,14 +12,16 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ postgresql gcc ];
-  buildPhase = "USE_PGXS=1 make";
+
+  makeFlags = [ "USE_PGXS=1" ];
+
   installPhase = ''
     install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
     install -D ./{pg_similarity--unpackaged--1.0.sql,pg_similarity--1.0.sql,pg_similarity.control} -t $out/share/postgresql/extension
   '';
 
   meta = {
-    description = "An extension to support similarity queries on PostgreSQL";
+    description = "Extension to support similarity queries on PostgreSQL";
     longDescription = ''
        pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
        is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional

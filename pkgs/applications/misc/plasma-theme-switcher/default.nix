@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/maldoinc/plasma-theme-switcher/";
-    description = "A KDE Plasma theme switcher";
+    description = "KDE Plasma theme switcher";
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ kevink ];
     mainProgram = "plasma-theme";

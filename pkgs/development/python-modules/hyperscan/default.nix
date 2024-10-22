@@ -45,7 +45,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A CPython extension for the Hyperscan regular expression matching library";
+    description = "CPython extension for the Hyperscan regular expression matching library";
     homepage = "https://github.com/darvid/python-hyperscan";
     changelog = "https://github.com/darvid/python-hyperscan/blob/${src.rev}/CHANGELOG.md";
     platforms = [

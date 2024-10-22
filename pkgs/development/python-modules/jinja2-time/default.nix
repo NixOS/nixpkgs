@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hackebrot/jinja2-time";
     description = "Jinja2 Extension for Dates and Times";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,7 +4,7 @@
   aresponses,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
@@ -12,26 +12,28 @@
 
 buildPythonPackage rec {
   pname = "aioweenect";
-  version = "1.1.1";
-  format = "pyproject";
+  version = "1.1.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "eifinger";
-    repo = pname;
+    repo = "aioweenect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9CYdOUPCt4TkepVuVJHMZngFHyCLFwVvik1xDnfneEc=";
+    hash = "sha256-2qTjRXQdTExqY5/ckB6UrkmavzjZK/agfL9+o6fXS0M=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace "--cov --cov-report term-missing --cov-report xml --cov=aioweenect tests" ""
+      --replace-fail "--cov --cov-report term-missing --cov=src/aioweenect --asyncio-mode=auto" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  pythonRelaxDeps = [ "aiohttp" ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  build-system = [ hatchling ];
+
+  dependencies = [ aiohttp ];
 
   nativeCheckInputs = [
     aresponses
@@ -44,6 +46,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for the weenect API";
     homepage = "https://github.com/eifinger/aioweenect";
+    changelog = "https://github.com/eifinger/aioweenect/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

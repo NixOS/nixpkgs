@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p common-updater-scripts jq
     set -eu -o pipefail
     version=$(curl --globoff "https://api.wordpress.org/core/version-check/1.7/" | jq -r '.offers[0].version')
-    update-source-version wordpress $version
+    update-source-version wordpress $version --file=./pkgs/servers/web-apps/wordpress/default.nix
   '';
 
   meta = with lib; {

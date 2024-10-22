@@ -36,7 +36,7 @@ buildPythonPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Interact with snap configuration and properties from inside a snap.";
+    description = "Interact with snap configuration and properties from inside a snap";
     homepage = "https://github.com/albertodonato/snap-helpers";
     changelog = "https://github.com/albertodonato/snap-helpers/releases/tag/${version}";
     license = lib.licenses.lgpl3Only;

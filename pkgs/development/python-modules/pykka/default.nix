@@ -36,9 +36,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.pykka.org/";
-    description = "A Python implementation of the actor model";
+    description = "Python implementation of the actor model";
     changelog = "https://github.com/jodal/pykka/releases/tag/v${version}";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.asl20;
   };
 }

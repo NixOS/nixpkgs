@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.appimage;
@@ -18,16 +23,31 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.binfmt.registrations.appimage = lib.mkIf cfg.binfmt {
-      wrapInterpreterInShell = false;
-      interpreter = lib.getExe cfg.package;
-      recognitionType = "magic";
-      offset = 0;
-      mask = ''\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff'';
-      magicOrExtension = ''\x7fELF....AI\x02'';
-    };
+    boot.binfmt.registrations = lib.mkIf cfg.binfmt (
+      let
+        appimage_common = {
+          wrapInterpreterInShell = false;
+          interpreter = lib.getExe cfg.package;
+          recognitionType = "magic";
+          offset = 0;
+          mask = ''\xff\xff\xff\xff\x00\x00\x00\x00\xff\xff\xff'';
+        };
+      in
+      {
+        appimage_type_1 = appimage_common // {
+          magicOrExtension = ''\x7fELF....AI\x01'';
+        };
+        appimage_type_2 = appimage_common // {
+          magicOrExtension = ''\x7fELF....AI\x02'';
+        };
+      }
+    );
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with lib.maintainers; [ jopejoe1 atemu ];
+  meta.maintainers = with lib.maintainers; [
+    jopejoe1
+    atemu
+    aleksana
+  ];
 }

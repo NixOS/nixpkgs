@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, gtk3, glib, wrapGAppsHook3, libusb1, hidapi, udev, pkg-config }:
+{ lib, fetchFromGitHub, rustPlatform, gtk3, glib, wrapGAppsHook3, libusb1, hidapi, udev, pkg-config }:
 
 # system76-keyboard-configurator tries to spawn a daemon as root via pkexec, so
 # your system needs a PolicyKit authentication agent running for the
@@ -6,13 +6,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-keyboard-configurator";
-  version = "1.3.10";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
     rev = "v${version}";
-    sha256 = "sha256-5U9LWFaCwszvT1reu6NflPKQUrsQkP/NdSO4LBHWm2g=";
+    sha256 = "sha256-rnKWzct2k/ObjBnf90uwMar7fjZAUvQ2RPPZVZQsWEA=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  cargoHash = "sha256-S4+cS4m69nqDN2h0vwyO35fFFBEa0Rcxx0XDBfSNLp0=";
+  cargoHash = "sha256-3FUcJHuMOSbtE0sL6N2AvedyseJ7RiUbo8jtY/nWAW0=";
 
   postInstall = ''
     install -Dm444 linux/com.system76.keyboardconfigurator.desktop -t $out/share/applications

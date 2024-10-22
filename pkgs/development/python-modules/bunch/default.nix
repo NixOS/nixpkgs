@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "Python dictionary that provides attribute-style access";
     homepage = "https://github.com/dsc/bunch";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

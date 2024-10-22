@@ -6,15 +6,17 @@
   nltk,
   numpy,
   pandas,
+  plotly,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
+  scikit-learn,
   tomli,
 }:
 
 buildPythonPackage rec {
   pname = "niaarm";
-  version = "0.3.9";
+  version = "0.3.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,8 +25,10 @@ buildPythonPackage rec {
     owner = "firefly-cpp";
     repo = "NiaARM";
     rev = "refs/tags/${version}";
-    hash = "sha256-J3126RSJYBCSyxoPsvsDgmx9E+9fP2h6avPiCHISL7c=";
+    hash = "sha256-rYFfLtPJgIdSjRIzDIQeHwoQm9NrI6nM3/BF7wAMr1Y=";
   };
+
+  pythonRelaxDeps = [ "scikit-learn" ];
 
   nativeBuildInputs = [ poetry-core ];
 
@@ -33,6 +37,8 @@ buildPythonPackage rec {
     nltk
     numpy
     pandas
+    plotly
+    scikit-learn
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   disabledTests = [
@@ -45,7 +51,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "niaarm" ];
 
   meta = with lib; {
-    description = "A minimalistic framework for Numerical Association Rule Mining";
+    description = "Minimalistic framework for Numerical Association Rule Mining";
     mainProgram = "niaarm";
     homepage = "https://github.com/firefly-cpp/NiaARM";
     changelog = "https://github.com/firefly-cpp/NiaARM/blob/${version}/CHANGELOG.md";

@@ -10,7 +10,7 @@
 , runCommand
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
-, withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
+, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl, libutempter
 , withSixel ? true
 }:
 
@@ -27,7 +27,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tmux";
-  version = "3.4";
+  version = "3.5a";
 
   outputs = [ "out" "man" ];
 
@@ -35,13 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "tmux";
     repo = "tmux";
     rev = finalAttrs.version;
-    hash = "sha256-RX3RZ0Mcyda7C7im1r4QgUxTnp95nfpGgQ2HRxr0s64=";
+    hash = "sha256-Z9XHpyh4Y6iBI4+SfFBCGA8huFJpRFZy9nEB7+WQVJE=";
   };
-
-  patches = [(fetchpatch {
-    url = "https://github.com/tmux/tmux/commit/2d1afa0e62a24aa7c53ce4fb6f1e35e29d01a904.diff";
-    hash = "sha256-mDt5wy570qrUc0clGa3GhZFTKgL0sfnQcWJEJBKAbKs=";
-  })];
 
   nativeBuildInputs = [
     pkg-config
@@ -69,13 +64,13 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
   '';
 
   passthru = {
-    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.isDarwin then ''
+    terminfo = runCommand "tmux-terminfo" { nativeBuildInputs = [ ncurses ]; } (if stdenv.hostPlatform.isDarwin then ''
       mkdir -p $out/share/terminfo/74
       cp -v ${ncurses}/share/terminfo/74/tmux $out/share/terminfo/74
       # macOS ships an old version (5.7) of ncurses which does not include tmux-256color so we need to provide it from our ncurses.

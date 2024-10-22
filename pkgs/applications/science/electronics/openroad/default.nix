@@ -8,14 +8,13 @@
 , flex
 , git
 , python3
-, swig4
+, swig
 , boost179
 , cbc       # for clp
 , cimg
 , clp       # for or-tools
 , eigen
 , glpk
-, gtest
 , lcov
 , lemon-graph
 , libjpeg
@@ -52,7 +51,7 @@ mkDerivation rec {
     flex
     git
     pkg-config
-    swig4
+    swig
   ];
 
   buildInputs = [

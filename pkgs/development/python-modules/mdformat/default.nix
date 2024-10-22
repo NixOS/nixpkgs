@@ -1,21 +1,18 @@
 {
   lib,
-  buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
   importlib-metadata,
-  makeWrapper,
   markdown-it-py,
   pytestCheckHook,
   pythonOlder,
   setuptools,
   tomli,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat";
-  version = "0.7.17";
+  version = "0.7.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,12 +21,12 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "mdformat";
     rev = "refs/tags/${version}";
-    hash = "sha256-umtfbhN6sDR/rFr1LwmJ21Ph9bK1Qq43bmMVzGCPD5s=";
+    hash = "sha256-t2yx8cIq8es3XOc2nbHPKjUUium5+RPZuD8oNWZxVV0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs =
+  dependencies =
     [ markdown-it-py ]
     ++ lib.optionals (pythonOlder "3.11") [ tomli ]
     ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];

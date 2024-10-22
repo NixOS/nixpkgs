@@ -5,16 +5,19 @@
 , alsa-lib
 , autoreconfHook
 , avahi
+, curl
 , dbus
 , faad2
 , fetchpatch
 , fetchurl
-, ffmpeg
+# Please unpin FFmpeg on the next upstream release.
+, ffmpeg_6
 , flac
 , fluidsynth
 , freefont_ttf
 , freetype
 , fribidi
+, genericUpdater
 , gnutls
 , libSM
 , libXext
@@ -77,7 +80,9 @@
 , unzip
 , wayland
 , wayland-protocols
+, wayland-scanner
 , wrapGAppsHook3
+, writeShellScript
 , xcbutilkeysyms
 , zlib
 
@@ -98,11 +103,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${optionalString onlyLibVLC "lib"}vlc";
-  version = "3.0.20";
+  version = "3.0.21";
 
   src = fetchurl {
     url = "https://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
-    hash = "sha256-rccoW00nIc3fQOtScMraKqoQozTLVG/VWgY1NEe6KbU=";
+    hash = "sha256-JNu+HX367qCZTV3vC73iABdzRxNtv+Vz9bakzuJa+7A=";
   };
 
   nativeBuildInputs = [
@@ -117,8 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optionals chromecastSupport [ protobuf ]
   ++ optionals withQt5 [ libsForQt5.wrapQtAppsHook ]
   ++ optionals waylandSupport [
-    wayland
-    wayland-protocols
+    wayland-scanner
   ];
 
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
@@ -132,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     avahi
     dbus
     faad2
-    ffmpeg
+    ffmpeg_6
     flac
     fluidsynth
     fribidi
@@ -209,6 +213,8 @@ stdenv.mkDerivation (finalAttrs: {
     # set the path to the compiler
     BUILDCC = "${pkgsBuildBuild.stdenv.cc}/bin/gcc";
     PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = "wayland-scanner";
+  } // lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
   } // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
     LIVE555_PREFIX = live555;
   };
@@ -289,11 +295,18 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t "${libsForQt5.qtbase.dev}" $out/lib/vlc/plugins/gui/libqt_plugin.so
   '';
 
+  passthru.updateScript = genericUpdater {
+    versionLister = writeShellScript "vlc-versionLister" ''
+      ${curl}/bin/curl -s https://get.videolan.org/vlc/ | sed -En 's/^.*href="([0-9]+(\.[0-9]+)+)\/".*$/\1/p'
+    '';
+  };
+
   meta = {
     description = "Cross-platform media player and streaming server";
     homepage = "https://www.videolan.org/vlc/";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ AndersonTorres alois31 ];
     platforms = lib.platforms.linux;
+    mainProgram = "vlc";
   };
 })

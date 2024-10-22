@@ -11,7 +11,7 @@
 
   # tests
   hypothesis,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
@@ -31,24 +31,24 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pytest.ini \
-      --replace "--cov=ndindex/ --cov-report=term-missing --flakes" ""
+      --replace "--flakes" ""
   '';
 
-  passthru.optional-dependencies.arrays = [ numpy ];
+  optional-dependencies.arrays = [ numpy ];
 
   pythonImportsCheck = [ "ndindex" ];
 
   nativeCheckInputs = [
     hypothesis
-    pytest-cov # uses cov markers
+    pytest-cov-stub
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.arrays;
+  ] ++ optional-dependencies.arrays;
 
   meta = with lib; {
     description = "";
     homepage = "https://github.com/Quansight-Labs/ndindex";
     changelog = "https://github.com/Quansight-Labs/ndindex/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

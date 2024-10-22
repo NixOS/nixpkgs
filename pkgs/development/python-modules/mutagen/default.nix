@@ -76,6 +76,6 @@ buildPythonPackage rec {
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

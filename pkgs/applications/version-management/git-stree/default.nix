@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A better Git subtree helper command";
+    description = "Better Git subtree helper command";
     homepage = "http://deliciousinsights.github.io/git-stree";
     license = licenses.mit;
     maintainers = [ maintainers.benley ];

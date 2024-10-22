@@ -7,7 +7,27 @@ in {
   port = 9117;
   extraOpts = {
     settings = mkOption {
-      type = types.attrs;
+      type = types.submodule {
+        options = {
+          consul = mkOption {
+            default = null;
+            type = types.nullOr (types.attrsOf types.anything);
+            description = ''
+              Consul integration options. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
+
+              This is disabled by default.
+            '';
+          };
+          namespaces = mkOption {
+            default = [];
+            type = types.listOf (types.attrsOf types.anything);
+
+            description = ''
+              Namespaces to collect the metrics for. For more information see the [example config](https://github.com/martin-helmich/prometheus-nginxlog-exporter#configuration-file).
+            '';
+          };
+        };
+      };
       default = {};
       description = ''
         All settings of nginxlog expressed as an Nix attrset.

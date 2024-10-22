@@ -4,7 +4,6 @@
   fetchpatch,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   altair,
   ipytablewidgets,
   ipywidgets,
@@ -39,7 +38,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "pandas" ];
@@ -51,7 +49,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     widget = [ ipywidgets ];
     jupyterlab = [ jupyterlab ];
   };
@@ -69,7 +67,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
-    description = "An IPython/Jupyter widget for Vega and Vega-Lite";
+    description = "IPython/Jupyter widget for Vega and Vega-Lite";
     longDescription = ''
       To use this you have to enter a nix-shell with vega. Then run:
 

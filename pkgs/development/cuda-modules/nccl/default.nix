@@ -29,7 +29,7 @@ backendStdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
-    repo = finalAttrs.pname;
+    repo = "nccl";
     rev = "v${finalAttrs.version}";
     hash = "sha256-IF2tILwW8XnzSmfn7N1CO7jXL95gUp02guIW5n1eaig=";
   };
@@ -54,7 +54,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
     ++ lib.optionals (cudaAtLeast "11.4") [
-      cuda_nvcc.dev # crt/host_config.h
+      cuda_nvcc # crt/host_config.h
       cuda_cudart
     ]
     # NOTE: CUDA versions in Nixpkgs only use a major and minor version. When we do comparisons
@@ -69,7 +69,7 @@ backendStdenv.mkDerivation (finalAttrs: {
     patchShebangs ./src/device/generate.py
   '';
 
-  makeFlagsArray =
+  makeFlags =
     [
       "PREFIX=$(out)"
       "NVCC_GENCODE=${cudaFlags.gencodeString}"

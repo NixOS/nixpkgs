@@ -8,7 +8,6 @@
 , ninja
 , gtk-doc
 , docbook-xsl-nons
-, docbook_xml_dtd_43
 , docbook_xml_dtd_45
 , pkg-config
 , libffi
@@ -33,6 +32,7 @@ let
   pythonModules = pp: [
     pp.mako
     pp.markdown
+    pp.setuptools
   ];
 
   # https://discourse.gnome.org/t/dealing-with-glib-and-gobject-introspection-circular-dependency/18701
@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     (python3.withPackages pythonModules)
   ];
 
-  nativeCheckInputs = lib.optionals stdenv.isDarwin [
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools # for otool
   ];
 
@@ -117,7 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgi_cross_use_prebuilt_gi=true"
   ];
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isAarch64;
 
   # During configurePhase, two python scripts are generated and need this. See
   # https://github.com/NixOS/nixpkgs/pull/98316#issuecomment-695785692
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A middleware layer between C libraries and language bindings";
+    description = "Middleware layer between C libraries and language bindings";
     homepage = "https://gi.readthedocs.io/";
     maintainers = teams.gnome.members ++ (with maintainers; [ lovek323 artturin ]);
     pkgConfigModules = [ "gobject-introspection-1.0" ];

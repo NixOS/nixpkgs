@@ -140,7 +140,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage    = src.meta.homepage;
-    description = "A multilingual input method framework";
+    description = "Multilingual input method framework";
     license     = licenses.bsd3;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ ericsagnes oxij ];

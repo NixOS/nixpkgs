@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A developer's tool for browsing source code";
+    description = "Developer's tool for browsing source code";
 
     longDescription = ''
       Cscope is a developer's tool for browsing source code.  It has
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://cscope.sourceforge.net/";
 
-    maintainers = with lib.maintainers; [viric];
+    maintainers = [ ];
 
     platforms = lib.platforms.unix;
   };

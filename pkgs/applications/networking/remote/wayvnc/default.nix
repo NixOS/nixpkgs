@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
-    description = "A VNC server for wlroots based Wayland compositors";
+    description = "VNC server for wlroots based Wayland compositors";
     longDescription = ''
       This is a VNC server for wlroots based Wayland compositors. It attaches
       to a running Wayland session, creates virtual input devices and exposes a

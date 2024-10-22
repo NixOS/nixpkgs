@@ -54,15 +54,15 @@
 
 let
   version = {
-    corporate = "24.1.3.843-1";
-    beta = "24.4.1.918-1";
-    stable = "24.4.1.915-1";
+    corporate = "24.7.1.1195-1";
+    beta = "24.7.1.1124-1";
+    stable = "24.7.1.1120-1";
   }.${edition};
 
   hash = {
-    corporate = "sha256-rI19YmsC2p2Dsi6Grd8IyNdpjMHWwET3wcVw5r7545M=";
-    beta = "sha256-EQjjaTMPQKaULITEF+MQuY1lRVXuOjyiGWuGQtIpIz0=";
-    stable = "sha256-2IIIADFG9kCtzB0X4AfrFI+btqoUzKwd6NlZt7qtL/M=";
+    corporate = "sha256-HPEUeIZl9nRhMzrMv4MzIOnbF8mJ789vCtTWf9TcCH4=";
+    beta = "sha256-vcX/9MWqeUd/YlczHivcL6+TignE8Nk6rO5DaCjf2SQ=";
+    stable = "sha256-wrYPQ8WrttF/tlafA0+e3eDZMq9SFmLk5NOIeHQr14U=";
   }.${edition};
 
   app = {
@@ -165,5 +165,12 @@ in stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
+
+    knownVulnerabilities = [
+      ''
+      Trusts a Russian government issued CA certificate for some websites.
+      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+      ''
+    ];
   };
 }

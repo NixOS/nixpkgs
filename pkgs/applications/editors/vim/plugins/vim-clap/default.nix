@@ -11,22 +11,22 @@
 }:
 
 let
-  version = "0.53";
+  version = "0.54-unstable-2024-08-11";
 
   src = fetchFromGitHub {
     owner = "liuchengxu";
     repo = "vim-clap";
-    rev = "v${version}";
-    hash = "sha256-0D9HMFh0G9Dq78v/Aau7VXN9jBad6ZevqTCjx7FT9Yw=";
+    rev = "3e8d001f5c9be10e4bb680a1d409326902c96c10";
+    hash = "sha256-7bgbKYjJX2Tfprb69/imyvhsCsurrmPWBXVVLX+ZMnM=";
   };
 
   meta = with lib; {
-    description = "A modern performant fuzzy picker for Vim and NeoVim";
+    description = "Modern performant fuzzy picker for Vim and NeoVim";
     mainProgram = "maple";
     homepage = "https://github.com/liuchengxu/vim-clap";
     changelog = "https://github.com/liuchengxu/vim-clap/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 
   maple = rustPlatform.buildRustPackage {
@@ -49,7 +49,7 @@ let
     buildInputs = [
       libgit2
       zlib
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreServices
       darwin.apple_sdk.frameworks.SystemConfiguration

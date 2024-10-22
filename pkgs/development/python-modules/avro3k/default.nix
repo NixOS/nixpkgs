@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
   isPy3k,
 }:
 
 buildPythonPackage rec {
   pname = "avro3k";
   version = "1.7.7-SNAPSHOT";
-  format = "setuptools";
+  pyproject = true;
   disabled = !isPy3k;
 
   src = fetchPypi {
@@ -19,13 +20,15 @@ buildPythonPackage rec {
   # setuptools.extern.packaging.version.InvalidVersion: Invalid version: '1.7.7-SNAPSHOT'
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "1.7.7-SNAPSHOT" "1.7.7"
+      --replace-fail "1.7.7-SNAPSHOT" "1.7.7"
   '';
+
+  build-system = [ setuptools ];
 
   doCheck = false; # No such file or directory: './run_tests.py
 
   meta = with lib; {
-    description = "A serialization and RPC framework";
+    description = "Serialization and RPC framework";
     mainProgram = "avro";
     homepage = "https://pypi.python.org/pypi/avro3k/";
   };

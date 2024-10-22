@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "An ncurses toolkit for creating text-mode graphical user interfaces";
+    description = "Ncurses toolkit for creating text-mode graphical user interfaces";
     homepage = "https://keep.imfreedom.org/libgnt/libgnt/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

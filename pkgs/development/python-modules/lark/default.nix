@@ -3,9 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   regex,
-  pytestCheckHook,
-  pythonOlder,
-  js2py,
   setuptools,
 }:
 
@@ -33,16 +30,11 @@ buildPythonPackage rec {
     "lark.grammars"
   ];
 
-  # Js2py is not supported on 3.12
-  doCheck = pythonOlder "3.12";
-
-  nativeCheckInputs = [
-    js2py
-    pytestCheckHook
-  ];
+  # Js2py is needed for tests but it's unmaintained and insecure
+  doCheck = false;
 
   meta = with lib; {
-    description = "A modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
+    description = "Modern parsing library for Python, implementing Earley & LALR(1) and an easy interface";
     homepage = "https://lark-parser.readthedocs.io/";
     changelog = "https://github.com/lark-parser/lark/releases/tag/${version}";
     license = licenses.mit;

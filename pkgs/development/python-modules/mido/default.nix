@@ -8,7 +8,6 @@
   # build-system
   setuptools,
   setuptools-scm,
-  pythonRelaxDepsHook,
 
   # dependencies
   packaging,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "packaging" ];
@@ -71,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://mido.readthedocs.io";
     changelog = "https://github.com/mido/mido/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

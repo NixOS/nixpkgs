@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   src = fetchFromRepoOrCz {
     repo = "cdimgtools";
     rev = "version/0.3";
-    sha256 = "1hxg3glxj26fh9xnv184sfdc2wi4cnzvn7chz47wcqdsd0d5fn8w";
+    hash = "sha256-HFlXGmi6YcYP+ZAdu79lJHLBmtMEhW17gs4I2ekbr8M=";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper asciidoc perlPackages.PodPerldoc xmlto sourceHighlight docbook_xsl docbook_xml_dtd_45 ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "szatmary";
     repo = "libcaption";
     rev = finalAttrs.version;
-    sha256 = "sha256-OBtxoFJF0cxC+kfSK8TIKIdLkmCh5WOJlI0fejnisJo=";
+    hash = "sha256-OBtxoFJF0cxC+kfSK8TIKIdLkmCh5WOJlI0fejnisJo=";
     fetchSubmodules = true;
   };
 

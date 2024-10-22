@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/executablebooks/sphinx-thebe";
     changelog = "https://github.com/executablebooks/sphinx-thebe/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

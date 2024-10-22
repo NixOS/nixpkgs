@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/orkohunter/keep";
-    description = "A Meta CLI toolkit: Personal shell command keeper and snippets manager";
+    description = "Meta CLI toolkit: Personal shell command keeper and snippets manager";
     mainProgram = "keep";
     platforms = platforms.all;
     license = licenses.mit;

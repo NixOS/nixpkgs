@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {
-    description = "A C library for peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) in Linux";
+    description = "C library for peripheral I/O (GPIO, LED, PWM, SPI, I2C, MMIO, Serial) in Linux";
     homepage = "https://github.com/vsergeev/c-periphery";
     license = licenses.mit;
     maintainers = with maintainers; [ sikmir ];

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ sqlalchemy ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgresql = [ asyncpg ];
     asyncpg = [ asyncpg ];
     aiopg = [ aiopg ];
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

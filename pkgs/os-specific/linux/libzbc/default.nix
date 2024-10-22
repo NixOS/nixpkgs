@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libzbc";
-  version = "5.14.0";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "westerndigitalcorporation";
     repo = "libzbc";
     rev = "v${version}";
-    sha256 = "sha256-+MBk2ZUr3Vt6pZFb4gTXMOzKBlf1EXMF8y/c1iDrIZM=";
+    sha256 = "sha256-8+HF5Wf6lQHbi8Vp2tpom1FO56lQ5RyYsgs8ii+2RD0=";
   };
 
   nativeBuildInputs = [

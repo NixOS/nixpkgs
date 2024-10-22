@@ -25,10 +25,6 @@ buildPythonPackage rec {
     poetry-core
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-  ];
-
   dependencies = [
     colorama
     openai
@@ -36,7 +32,7 @@ buildPythonPackage rec {
     rich
     shellingham
     typer
-  ] ++ typer.optional-dependencies.all;
+  ];
 
   # No tests available
   doCheck = false;

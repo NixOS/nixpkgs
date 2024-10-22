@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "junction";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "junction";
     rev = "v${version}";
-    sha256 = "sha256-qPseu2rzK6xp7eb/SrWK6fML/6xh4raP0MEreyZgqVI=";
+    hash = "sha256-0zY6Dp0aKHtBHSTiGbI5o6876BsARbo8/BbArl0RaMY=";
     fetchSubmodules = true;
   };
 
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     mainProgram = "re.sonny.Junction";
     description = "Choose the application to open files and links";
-    homepage = "https://apps.gnome.org/en/app/re.sonny.Junction/";
+    homepage = "https://apps.gnome.org/Junction/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ hqurve ];
     platforms = platforms.linux;

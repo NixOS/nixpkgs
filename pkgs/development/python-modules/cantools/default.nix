@@ -3,7 +3,7 @@
   argparse-addons,
   bitstruct,
   buildPythonPackage,
-  can,
+  python-can,
   crccheck,
   diskcache,
   fetchPypi,
@@ -36,18 +36,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     argparse-addons
     bitstruct
-    can
+    python-can
     crccheck
     diskcache
     textparser
   ];
 
-  passthru.optional-dependencies.plot = [ matplotlib ];
+  optional-dependencies.plot = [ matplotlib ];
 
   nativeCheckInputs = [
     parameterized
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.plot;
+  ] ++ optional-dependencies.plot;
 
   pythonImportsCheck = [ "cantools" ];
 

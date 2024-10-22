@@ -89,6 +89,6 @@ in
 
   };
 
-  meta.maintainers = with maintainers; [ ];
+  meta.maintainers = [ ];
 
 }

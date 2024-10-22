@@ -9,16 +9,16 @@
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.4.8";
+  version = "0.5";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-ChoeN7qQRR1YmYYvPdJVJ2SVGTDGlM7PsN9jzFjQEyU=";
+    hash = "sha256-vaNXXXaGqYNmhonU+ANN857LAUgwv+PMcON+nBuUoeo=";
   };
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake

@@ -3,10 +3,7 @@
 }:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-    };
-  };
+  python = python3;
 in
 
 python.pkgs.buildPythonPackage {

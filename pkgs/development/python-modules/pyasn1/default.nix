@@ -27,6 +27,6 @@ buildPythonPackage rec {
     homepage = "https://pyasn1.readthedocs.io";
     changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

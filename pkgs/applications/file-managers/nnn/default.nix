@@ -10,6 +10,7 @@
 , which
 , musl-fts
 , pcre
+, gnused
   # options
 , conf ? null
 , withIcons ? false
@@ -20,19 +21,19 @@
 }:
 
 # Mutually exclusive options
-assert withIcons -> (withNerdIcons == false && withEmojis == false);
-assert withNerdIcons -> (withIcons == false && withEmojis == false);
-assert withEmojis -> (withIcons == false && withNerdIcons == false);
+assert withIcons -> (!withNerdIcons && !withEmojis);
+assert withNerdIcons -> (!withIcons && !withEmojis);
+assert withEmojis -> (!withIcons && !withNerdIcons);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
-  version = "4.9";
+  version = "5.0";
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-g19uI36HyzTF2YUQKFP4DE2ZBsArGryVHhX79Y0XzhU=";
+    hash = "sha256-HShHSjqD0zeE1/St1Y2dUeHfac6HQnPFfjmFvSuEXUA=";
   };
 
   patches = [
@@ -60,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals withPcre [ "O_PCRE=1" ]
     ++ extraMakeFlags;
 
-  binPath = lib.makeBinPath [ file which ];
+  binPath = lib.makeBinPath [ file which gnused ];
 
   installTargets = [ "install" "install-desktop" ];
 

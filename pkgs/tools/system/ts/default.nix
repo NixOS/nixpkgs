@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = "http://vicerveza.homeunix.net/~viric/soft/ts";
     description = "Task spooler - batch queue";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.all;
     mainProgram = "ts";
   };

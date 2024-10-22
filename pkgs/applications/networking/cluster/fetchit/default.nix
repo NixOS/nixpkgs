@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
@@ -63,7 +62,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "A tool to manage the life cycle and configuration of Podman containers";
+    description = "Tool to manage the life cycle and configuration of Podman containers";
     mainProgram = "fetchit";
     longDescription = ''
       FetchIt allows for a GitOps based approach to manage containers running on

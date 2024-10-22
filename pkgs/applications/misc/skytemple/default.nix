@@ -3,22 +3,24 @@
 , gobject-introspection
 , gtk3
 , gtksourceview4
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 , python3Packages
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.6.5";
+  version = "1.8.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
-    repo = pname;
+    repo = "skytemple";
     rev = "refs/tags/${version}";
-    hash = "sha256-yfXu1sboKi8STPiX5FUD9q+1U9GfhOyEKDRvU9rgdfI=";
+    hash = "sha256-RFLxDV/L6Qbz14KqIEcMX/EnirNUrHL0MW8v5Z8ByK0=";
   };
+
+  build-system = with python3Packages; [ setuptools ];
 
   buildInputs = [
     gtk3
@@ -26,7 +28,7 @@ python3Packages.buildPythonApplication rec {
     # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   nativeBuildInputs = [
@@ -34,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     cairosvg
     natsort
     ndspy
@@ -42,7 +44,6 @@ python3Packages.buildPythonApplication rec {
     pycairo
     pygal
     psutil
-    gbulb
     pypresence
     sentry-sdk
     setuptools

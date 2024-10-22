@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -51,6 +51,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda lilyball ];
+    maintainers = with maintainers; [ figsoda ];
   };
 }

@@ -1,5 +1,4 @@
 { lib
-, pkgs
 , stdenv
 , fetchFromGitHub
 }:
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://graphitemaster.github.io/gmqcc/";
-    description = "A modern QuakeC compiler";
+    description = "Modern QuakeC compiler";
     mainProgram = "gmqcc";
     longDescription = ''
       For an enduring period of time the options for a decent compiler for

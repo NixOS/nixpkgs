@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [
     "-DPYTHON_EXTENSIONS=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "a base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
+    description = "Base Thrift service and a common set of functionality for querying stats, options, and other information from a service";
     homepage = "https://github.com/facebook/fb303";
     license = licenses.asl20;
     platforms = platforms.unix;

@@ -1,7 +1,7 @@
 prefix=@out@
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
-includedir=${prefix}/include
+includedir=@includedir@
 
 Name: nbcompat
 Description: NetBSD compatibility framework

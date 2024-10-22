@@ -18,12 +18,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TRfr4riMzR/MbsV2RiQNlPoPLhHK5EScNBCeyyamfgE=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 
   meta = with lib; {
-    description = "A cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
+    description = "Cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
     homepage = "https://github.com/aramperes/onetun";
     license = licenses.mit;
     maintainers = with maintainers; [ dit7ya ];

@@ -1,20 +1,29 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, versionCheckHook
 }:
 
 buildGoModule rec {
   pname = "natscli";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "natscli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c2bFFbHKjKwkzX2Br1CC2aMh1Tz0NPVWCfPSFbu/XnU=";
+    hash = "sha256-hLjiY4+01t1ZlP+N8qBG0YiDiw6VdTdeNkrwHwthrjk=";
   };
 
-  vendorHash = "sha256-ltTQWAS6OG485oj6GEpgQnnuCUunSqUtgq1/OPcjKmQ=";
+  vendorHash = "sha256-T6VcyklwfRS012ZRzqxkahn9YYrQGky/znTqLIkAoK0=";
+
+  ldflags = [
+    "-X main.version=${version}"
+  ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/nats";
 
   meta = with lib; {
     description = "NATS Command Line Interface";

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
-  version = "3.11.0";
+  version = "3.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "zabuldon";
     repo = "teslajsonpy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Hb/O4kdmJVN6yGhg/FQ6i0qUrtEuD1dZooJ6pbZ+qig=";
+    hash = "sha256-kUuvzjQBHWy3Si/Ha9M01ijv4QyQwK/g5gyhd7/lIdA=";
   };
 
   build-system = [ poetry-core ];

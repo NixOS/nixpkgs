@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.9.22";
+  version = "1.9.22.1";
   versionSnakeCase = builtins.replaceStrings [ "." ] [ "_" ] version;
 in
 stdenvNoCC.mkDerivation {
@@ -17,7 +17,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/eclipse/org.aspectj/releases/download/V${versionSnakeCase}/aspectj-${version}.jar";
-    hash = "sha256-kQsWu/rS7Qf7Fcg5VZ+QhggvK69aUVD3HCh0aJ2qhfw=";
+    hash = "sha256-NIyYVhJIGXz+vNVoAQzYsDfmOYc4QrRzJGWeQjS4X0U=";
   };
 
   dontUnpack = true;
@@ -48,7 +48,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     homepage = "https://www.eclipse.org/aspectj/";
-    description = "A seamless aspect-oriented extension to the Java programming language";
+    description = "Seamless aspect-oriented extension to the Java programming language";
     license = lib.licenses.epl10;
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];

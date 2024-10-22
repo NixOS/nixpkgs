@@ -45,6 +45,7 @@ let
     const
     escapeXML
     evalModules
+    extends
     filter
     fix
     fold
@@ -58,6 +59,7 @@ let
     genList
     getExe
     getExe'
+    getLicenseFromSpdxIdOr
     groupBy
     groupBy'
     hasAttrByPath
@@ -101,7 +103,9 @@ let
     take
     testAllTrue
     toBaseDigits
+    toExtension
     toHexString
+    fromHexString
     toInt
     toIntBase10
     toShellVars
@@ -231,11 +235,6 @@ runTests {
     ];
   };
 
-  testFix = {
-    expr = fix (x: {a = if x ? a then "a" else "b";});
-    expected = {a = "a";};
-  };
-
   testComposeExtensions = {
     expr = let obj = makeExtensible (self: { foo = self.bar; });
                f = self: super: { bar = false; baz = true; };
@@ -284,6 +283,21 @@ runTests {
   testToHexString = {
     expr = toHexString 250;
     expected = "FA";
+  };
+
+  testFromHexStringFirstExample = {
+    expr = fromHexString "FF";
+    expected = 255;
+  };
+
+  testFromHexStringSecondExample = {
+    expr = fromHexString (builtins.hashString "sha256" "test");
+    expected = 9223372036854775807;
+  };
+
+  testFromHexStringWithPrefix = {
+    expr = fromHexString "0Xf";
+    expected = 15;
   };
 
   testToBaseDigits = {
@@ -352,6 +366,72 @@ runTests {
     expected = "hellohellohellohellohello";
   };
 
+  # Test various strings are trimmed correctly
+  testTrimString = {
+    expr =
+    let
+      testValues = f: mapAttrs (_: f) {
+        empty = "";
+        cr = "\r";
+        lf = "\n";
+        tab = "\t";
+        spaces = "   ";
+        leading = "  Hello, world";
+        trailing = "Hello, world   ";
+        mixed = " Hello, world ";
+        mixed-tabs = " \t\tHello, world \t \t ";
+        multiline = "  Hello,\n  world!  ";
+        multiline-crlf = "  Hello,\r\n  world!  ";
+      };
+    in
+      {
+        leading = testValues (strings.trimWith { start = true; });
+        trailing = testValues (strings.trimWith { end = true; });
+        both = testValues strings.trim;
+      };
+    expected = {
+      leading = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world   ";
+        mixed = "Hello, world ";
+        mixed-tabs = "Hello, world \t \t ";
+        multiline = "Hello,\n  world!  ";
+        multiline-crlf = "Hello,\r\n  world!  ";
+      };
+      trailing = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "  Hello, world";
+        trailing = "Hello, world";
+        mixed = " Hello, world";
+        mixed-tabs = " \t\tHello, world";
+        multiline = "  Hello,\n  world!";
+        multiline-crlf = "  Hello,\r\n  world!";
+      };
+      both = {
+        empty = "";
+        cr = "";
+        lf = "";
+        tab = "";
+        spaces = "";
+        leading = "Hello, world";
+        trailing = "Hello, world";
+        mixed = "Hello, world";
+        mixed-tabs = "Hello, world";
+        multiline = "Hello,\n  world!";
+        multiline-crlf = "Hello,\r\n  world!";
+      };
+    };
+  };
+
   testSplitStringsSimple = {
     expr = strings.splitString "." "a.b.c.d";
     expected = [ "a" "b" "c" "d" ];
@@ -385,6 +465,26 @@ runTests {
   testSplitStringsRegex = {
     expr = strings.splitString "\\[{}]()^$?*+|." "A\\[{}]()^$?*+|.B";
     expected = [ "A" "B" ];
+  };
+
+  testEscapeShellArg = {
+    expr = strings.escapeShellArg "esc'ape\nme";
+    expected = "'esc'\\''ape\nme'";
+  };
+
+  testEscapeShellArgEmpty = {
+    expr = strings.escapeShellArg "";
+    expected = "''";
+  };
+
+  testEscapeShellArgs = {
+    expr = strings.escapeShellArgs ["one" "two three" "four'five"];
+    expected = "one 'two three' 'four'\\''five'";
+  };
+
+  testEscapeShellArgsUnicode = {
+    expr = strings.escapeShellArg "á";
+    expected = "'á'";
   };
 
   testSplitStringsDerivation = {
@@ -486,12 +586,12 @@ runTests {
     '';
     expected = ''
       STRing01='just a '\'''string'\''''
-      declare -a _array_=('with' 'more strings')
+      declare -a _array_=(with 'more strings')
       declare -A assoc=(['with some']='strings
       possibly newlines
       ')
-      drv='/drv'
-      path='/path'
+      drv=/drv
+      path=/path
       stringable='hello toString'
     '';
   };
@@ -1134,6 +1234,28 @@ runTests {
     attrsToList { someFunc= a: a + 1;}
   );
 
+# FIXED-POINTS
+
+  testFix = {
+    expr = fix (x: {a = if x ? a then "a" else "b";});
+    expected = {a = "a";};
+  };
+
+  testToExtension = {
+    expr = [
+      (fix (final: { a = 0; c = final.a; }))
+      (fix (extends (toExtension { a = 1; b = 2; }) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (prev: { a = 1; b = prev.a; })) (final: { a = 0; c = final.a; })))
+      (fix (extends (toExtension (final: prev: { a = 1; b = prev.a; c = final.a + 1; })) (final: { a = 0; c = final.a; })))
+    ];
+    expected = [
+      { a = 0; c = 0; }
+      { a = 1; b = 2; c = 1; }
+      { a = 1; b = 0; c = 1; }
+      { a = 1; b = 0; c = 2; }
+    ];
+  };
+
 # GENERATORS
 # these tests assume attributes are converted to lists
 # in alphabetical order
@@ -1671,7 +1793,7 @@ runTests {
       verbose = true;
     };
 
-    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+    expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {
@@ -2305,6 +2427,25 @@ runTests {
 
   testGetExe'FailureSecondArg = testingThrow (
     getExe' { type = "derivation"; } "dir/executable"
+  );
+
+  testGetLicenseFromSpdxIdOrExamples = {
+    expr = [
+      (getLicenseFromSpdxIdOr "MIT" null)
+      (getLicenseFromSpdxIdOr "mIt" null)
+      (getLicenseFromSpdxIdOr "MY LICENSE" lib.licenses.free)
+      (getLicenseFromSpdxIdOr "MY LICENSE" null)
+    ];
+    expected = [
+      lib.licenses.mit
+      lib.licenses.mit
+      lib.licenses.free
+      null
+    ];
+  };
+
+  testGetLicenseFromSpdxIdOrThrow = testingThrow (
+    getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
   );
 
   testPlatformMatch = {

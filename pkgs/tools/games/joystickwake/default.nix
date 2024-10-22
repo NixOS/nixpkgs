@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A joystick-aware screen waker";
+    description = "Joystick-aware screen waker";
     mainProgram = "joystickwake";
     longDescription = ''
       Linux gamers often find themselves unexpectedly staring at a blank screen, because their display server fails to recognize game controllers as input devices, allowing the screen blanker to activate during gameplay.

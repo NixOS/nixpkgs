@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     owner = "allencch";
     repo = "med";
     rev = version;
-    sha256 = "sha256-m2lVRSNaklB0Xfqgtyc0lNWXfTD8wTWsE06eGv4FOBE=";
+    hash = "sha256-m2lVRSNaklB0Xfqgtyc0lNWXfTD8wTWsE06eGv4FOBE=";
   };
 
   nativeBuildInputs = [ qt6.wrapQtAppsHook cmake pkg-config ];

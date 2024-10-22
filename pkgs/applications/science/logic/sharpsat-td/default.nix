@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "A fast solver for the #SAT model counting problem";
+    description = "Fast solver for the #SAT model counting problem";
     homepage = "https://github.com/Laakeri/sharpsat-td";
     license = with lib.licenses; [ mit asl20 ];
     maintainers = with lib.maintainers; [ ris ];

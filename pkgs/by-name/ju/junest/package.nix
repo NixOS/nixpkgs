@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "junest";
-  version = "7.4.8";
+  version = "7.4.10";
 
   src = fetchFromGitHub {
     owner = "fsquillace";
     repo = "junest";
     rev = "refs/tags/${version}";
-    hash = "sha256-9yrQ721fHUxXEZ0mh27SB8yoUH67ltOktUq3kr4qrBc=";
+    hash = "sha256-Dq4EqmeFI1TEbnc4kQwgqe71eJJpzWm2ywt1y6fD8z4=";
   };
 
   dontBuild = true;

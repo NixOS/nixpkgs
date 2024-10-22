@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
-    description = "A free text editor for developers";
+    description = "Free text editor for developers";
     homepage = "https://fte.sourceforge.net/";
     license = lib.licenses.gpl2;
     maintainers = with lib.maintainers; [ sigmanificient ];

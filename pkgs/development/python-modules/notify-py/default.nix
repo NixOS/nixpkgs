@@ -9,7 +9,6 @@
   libnotify,
   which,
   poetry-core,
-  pythonRelaxDepsHook,
   jeepney,
   loguru,
   pytest,
@@ -19,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "notify-py";
-  version = "0.3.42";
+  version = "0.3.43";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,11 +27,11 @@ buildPythonPackage rec {
     owner = "ms7m";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-XtjJImH9UwPPZS/Yqs8S5xGXOLBRmJRawzxWXoPWvrM=";
+    hash = "sha256-4PJ/0dLG3bWDuF1G/qUmvNaIUFXgPP2S/0uhZz86WRA=";
   };
 
   patches =
-    lib.optionals stdenv.isLinux [
+    lib.optionals stdenv.hostPlatform.isLinux [
       # hardcode paths to aplay and notify-send
       (substituteAll {
         src = ./linux-paths.patch;
@@ -40,7 +39,7 @@ buildPythonPackage rec {
         notifysend = "${libnotify}/bin/notify-send";
       })
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # hardcode path to which
       (substituteAll {
         src = ./darwin-paths.patch;
@@ -50,24 +49,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "loguru" ];
 
-  propagatedBuildInputs = [ loguru ] ++ lib.optionals stdenv.isLinux [ jeepney ];
+  propagatedBuildInputs = [ loguru ] ++ lib.optionals stdenv.hostPlatform.isLinux [ jeepney ];
 
-  nativeCheckInputs = [ pytest ] ++ lib.optionals stdenv.isLinux [ dbus ];
+  nativeCheckInputs = [ pytest ] ++ lib.optionals stdenv.hostPlatform.isLinux [ dbus ];
 
   checkPhase =
-    if stdenv.isDarwin then
+    if stdenv.hostPlatform.isDarwin then
       ''
         # Tests search for "afplay" binary which is built in to macOS and not available in nixpkgs
         mkdir $TMP/bin
         ln -s ${coreutils}/bin/true $TMP/bin/afplay
         PATH="$TMP/bin:$PATH" pytest
       ''
-    else if stdenv.isLinux then
+    else if stdenv.hostPlatform.isLinux then
       ''
         dbus-run-session \
           --config-file=${dbus}/share/dbus-1/session.conf \

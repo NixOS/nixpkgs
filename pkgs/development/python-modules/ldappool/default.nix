@@ -45,7 +45,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ldappool" ];
 
   meta = with lib; {
-    description = "A simple connector pool for python-ldap";
+    description = "Simple connector pool for python-ldap";
     homepage = "https://opendev.org/openstack/ldappool/";
     license = with licenses; [
       mpl11

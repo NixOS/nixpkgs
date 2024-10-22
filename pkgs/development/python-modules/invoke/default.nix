@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Pythonic task execution";
     homepage = "https://www.pyinvoke.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

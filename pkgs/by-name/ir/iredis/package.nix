@@ -51,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
     "--deselect=tests/unittests/test_render_functions.py::test_render_time"
     # Only execute unittests, because cli tests require a running Redis
     "tests/unittests/"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Flaky tests
     "--deselect=tests/unittests/test_entry.py::test_command_shell_options_higher_priority"
     "--deselect=tests/unittests/test_utils.py::test_timer"
@@ -60,11 +60,11 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "iredis" ];
 
   meta = with lib; {
-    description = "A Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
+    description = "Terminal Client for Redis with AutoCompletion and Syntax Highlighting";
     changelog = "https://github.com/laixintao/iredis/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://iredis.xbin.io/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "iredis";
   };
 }

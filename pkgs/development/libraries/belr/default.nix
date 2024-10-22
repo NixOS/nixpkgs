@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DENABLE_STATIC=NO" ];
 
   meta = with lib; {
-    description = "Belledonne Communications' language recognition library. Part of the Linphone project.";
+    description = "Belledonne Communications' language recognition library. Part of the Linphone project";
     homepage = "https://gitlab.linphone.org/BC/public/belr";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

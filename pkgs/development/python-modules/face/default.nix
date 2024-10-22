@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A command-line interface parser and framework";
+    description = "Command-line interface parser and framework";
     longDescription = ''
       A command-line interface parser and framework, friendly for
       users, full-featured for developers.

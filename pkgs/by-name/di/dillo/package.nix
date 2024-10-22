@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "dillo";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "dillo-browser";
     repo = "dillo";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AqffkUPLvVSGq9iYksyvHf3HQ3DLWNlB3CYw4GCAAEI=";
+    hash = "sha256-bGIOYONMtIN4IhSobOeSLiRDR13mo4W/DBX4kQ2S+hg=";
   };
 
   nativeBuildInputs = [
@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dillo-browser.github.io/";
-    description = "A fast graphical web browser with a small footprint";
+    description = "Fast graphical web browser with a small footprint";
     longDescription = ''
       Dillo is a fast and small graphical web browser with the following
       features:

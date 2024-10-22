@@ -42,7 +42,7 @@ buildPythonPackage rec {
     pandas
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     type-geometry = [ shapely ];
     type-image-path = [ imagehash pillow ];
     plotting = [ matplotlib pydot pygraphviz ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # requires running Apache Spark:

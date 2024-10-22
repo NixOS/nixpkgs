@@ -29,6 +29,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jd-boyd/sexpdata";
     changelog = "https://github.com/jd-boyd/sexpdata/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,9 +4,11 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  audioSupport ? true,
+
   darwin,
+  audioSupport ? true,
   alsa-lib,
+  webcamSupport ? false,
 
   # passthru.tests.run
   runCommand,
@@ -18,30 +20,30 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "uiua";
-  version = "0.10.3";
+  version = "0.13.0-dev.1";
 
   src = fetchFromGitHub {
     owner = "uiua-lang";
     repo = "uiua";
     rev = version;
-    hash = "sha256-lqFDzM6EscC8cFPGq/JnEybctaurNRoEQi0zxFaKgwI=";
+    hash = "sha256-dwiwv24bhn8/WVxrq8uReEPhU/5zn3oaH/AMjNJiA4M=";
   };
 
-  cargoHash = "sha256-R97KO3MYmtO9C1Hi9kU+1FDdbOCVQk+gwVXTTvbeok4=";
+  cargoHash = "sha256-4XHKcmOeaeSGfl7uvQQdhm29DBWEdZLX021d9+Ebrww=";
 
   nativeBuildInputs =
-    lib.optionals stdenv.isDarwin [ rustPlatform.bindgenHook ]
+    lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
   buildInputs =
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       AppKit
       CoreServices
     ]
-    ++ lib.optionals (audioSupport && stdenv.isDarwin) [ AudioUnit ]
-    ++ lib.optionals (audioSupport && stdenv.isLinux) [ alsa-lib ];
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isDarwin) [ AudioUnit ]
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildFeatures = lib.optional audioSupport "audio";
+  buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
 
   passthru.updateScript = ./update.sh;
   passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
@@ -52,7 +54,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
-    description = "A stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
+    description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
     longDescription = ''
       Uiua combines the stack-oriented and array-oriented paradigms in a single
       language. Combining these already terse paradigms results in code with a very

@@ -3,12 +3,10 @@
   stdenv,
   fetchFromSourcehut,
   harec,
-  qbe,
-  gitUpdater,
   scdoc,
   tzdata,
+  mailcap,
   substituteAll,
-  fetchpatch,
   callPackage,
   enableCrossCompilation ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit),
   pkgsCross,
@@ -32,6 +30,7 @@ assert
   '';
 
 let
+  inherit (harec) qbe;
   buildArch = stdenv.buildPlatform.uname.processor;
   arch = stdenv.hostPlatform.uname.processor;
   platform = lib.toLower stdenv.hostPlatform.uname.system;
@@ -77,7 +76,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
-  version = "0.24.0";
+  version = "0.24.2";
 
   outputs = [
     "out"
@@ -88,7 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~sircmpwn";
     repo = "hare";
     rev = finalAttrs.version;
-    hash = "sha256-3T+BdNj+Th8QXrcsPMWlN9GBfuMF1ulneWHpDEtyBU8=";
+    hash = "sha256-61lckI0F+Ez5LR/8g6ftS0W7Q/+EU/1flTDFleBg6pc=";
   };
 
   patches = [
@@ -97,24 +96,19 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./001-tzdata.patch;
       inherit tzdata;
     })
-    # Use correct comment syntax for debug+riscv64.
-    (fetchpatch {
-      url = "https://git.sr.ht/~sircmpwn/hare/commit/80e45e4d931a6e90d999846b86471cac00d2a6d5.patch";
-      hash = "sha256-S7nXpiO0tYnKpmpj+fLkolGeHb1TrmgKlMF0+j0qLPQ=";
-    })
     # Don't build haredoc since it uses the build `hare` bin, which breaks
     # cross-compilation.
     ./002-dont-build-haredoc.patch
     # Hardcode harec and qbe.
     (substituteAll {
       src = ./003-hardcode-qbe-and-harec.patch;
-      harec = lib.getExe harec;
-      qbe = lib.getExe qbe;
+      harec_bin = lib.getExe harec;
+      qbe_bin = lib.getExe qbe;
     })
-    # Display toolchains when using `hare version -v`.
-    (fetchpatch {
-      url = "https://git.sr.ht/~sircmpwn/hare/commit/e35f2284774436f422e06f0e8d290b173ced1677.patch";
-      hash = "sha256-A59bGO/9tOghV8/MomTxd8xRExkHVdoMom2d+HTfQGg=";
+    # Use mailcap `/etc/mime.types` for Hare's mime module
+    (substituteAll {
+      src = ./004-use-mailcap-for-mimetypes.patch;
+      inherit mailcap;
     })
   ];
 
@@ -122,13 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
     harec
     qbe
     scdoc
-  ];
-
-  # Needed for build frameworks like `haredo`, which set the HAREC and QBE env vars to `harec` and
-  # `qbe` respectively.
-  propagatedBuildInputs = [
-    harec
-    qbe
   ];
 
   buildInputs = [
@@ -165,13 +152,21 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s configs/${platform}.mk config.mk
   '';
 
-  setupHook = ./setup-hook.sh;
-
   passthru = {
-    updateScript = gitUpdater { };
-    tests = lib.optionalAttrs enableCrossCompilation {
-      crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
-    };
+    tests =
+      lib.optionalAttrs enableCrossCompilation {
+        crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
+      }
+      // lib.optionalAttrs (stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
+        mimeModule = callPackage ./mime-module-test.nix { hare = finalAttrs.finalPackage; };
+      }
+      //
+        lib.optionalAttrs (enableCrossCompilation && stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+          {
+            crossCompilation = callPackage ./cross-compilation-tests.nix { hare = finalAttrs.finalPackage; };
+          };
+    # To be propagated by `hareHook`.
+    inherit harec qbe;
   };
 
   meta = {

@@ -39,9 +39,9 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python framework for sequence labeling evaluation";
+    description = "Python framework for sequence labeling evaluation";
     homepage = "https://github.com/chakki-works/seqeval";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

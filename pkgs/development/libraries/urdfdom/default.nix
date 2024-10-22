@@ -1,27 +1,28 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, urdfdom-headers, console-bridge, tinyxml }:
+, tinyxml-2, console-bridge, urdfdom-headers }:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
-  version = "3.1.1";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "ros";
     repo = pname;
     rev = version;
-    hash = "sha256-UdkGJAXK3Q8QJaqMZBA5/FKUgWq9EVeqkqwVewTlTD8=";
+    hash = "sha256-t1ff5aRHE7LuQdCXuooWPDUgPWjyYyQmQUB1RJmte1w=";
   };
 
   patches = [
     # Fix CMake relative install dir assumptions (https://github.com/ros/urdfdom/pull/142)
     (fetchpatch {
-      url = "https://github.com/ros/urdfdom/commit/cbe6884d267779463bb444be851f6404e692cc0a.patch";
-      hash = "sha256-1gTRKIGqiSRion76bGecSfFJSBskYUJguUIa6ePIiX4=";
+      url = "https://github.com/ros/urdfdom/commit/61a7e35cd5abece97259e76aed8504052b2f5b53.patch";
+      hash = "sha256-b3bEbbaSUDkwTEHJ8gVPEb+AR/zuWwLqiAW5g1T1dPU=";
     })
   ];
 
   nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  propagatedBuildInputs = [ urdfdom-headers console-bridge tinyxml ];
+  buildInputs = [ tinyxml-2 console-bridge ];
+  propagatedBuildInputs = [ urdfdom-headers ];
 
   meta = with lib; {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";

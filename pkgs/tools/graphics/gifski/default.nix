@@ -44,11 +44,6 @@ rustPlatform.buildRustPackage rec {
   #
   checkType = "debug";
 
-  # Cargo.lock is outdated
-  postPatch = ''
-    cargo metadata --offline
-  '';
-
   meta = with lib; {
     description = "GIF encoder based on libimagequant (pngquant)";
     homepage = "https://gif.ski/";

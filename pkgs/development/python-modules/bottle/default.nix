@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://bottlepy.org/";
-    description = "A fast and simple micro-framework for small web-applications";
+    description = "Fast and simple micro-framework for small web-applications";
     mainProgram = "bottle.py";
     downloadPage = "https://github.com/bottlepy/bottle";
     license = licenses.mit;

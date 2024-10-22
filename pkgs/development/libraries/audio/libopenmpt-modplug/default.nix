@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A libmodplug emulation layer based on libopenmpt";
+    description = "Libmodplug emulation layer based on libopenmpt";
     homepage = "https://lib.openmpt.org/libopenmpt/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ OPNA2608 ];

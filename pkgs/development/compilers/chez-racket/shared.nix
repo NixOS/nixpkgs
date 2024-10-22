@@ -1,5 +1,5 @@
 args:
-{ stdenv, lib, fetchFromGitHub, coreutils, darwin
+{ stdenv, lib, fetchFromGitHub, coreutils, cctools, darwin
 , ncurses, libiconv, libX11, zlib, lz4
 }:
 
@@ -20,10 +20,10 @@ stdenv.mkDerivation (args // {
 
   postPatch = ''
     export ZLIB="$(find ${zlib.out}/lib -type f | sort | head -n1)"
-    export LZ4="$(find ${lz4.out}/lib -type f | sort | head -n1)"
+    export LZ4="$(find ${lz4.lib}/lib -type f | sort | head -n1)"
   '';
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin (with darwin; [ cctools autoSignDarwinBinariesHook ]);
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin ([ cctools darwin.autoSignDarwinBinariesHook ]);
   buildInputs = [ libiconv libX11 lz4 ncurses zlib ];
 
   enableParallelBuilding = true;

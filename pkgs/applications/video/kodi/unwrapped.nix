@@ -4,7 +4,7 @@
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
 , gettext, pcre-cpp, yajl, fribidi, which
-, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, swig, jre_headless
+, openssl, gperf, tinyxml2, tinyxml-2, taglib, libssh, jre_headless
 , gtest, ncurses, spdlog
 , libxml2, systemd
 , alsa-lib, libGLU, libGL, ffmpeg, fontconfig, freetype, ftgl
@@ -13,7 +13,7 @@
 , libogg, libvorbis, flac, libxslt
 , lzo, libcdio, libmodplug, libass, libbluray, libudfread
 , sqlite, libmysqlclient, nasm, gnutls, libva, libdrm
-, curl, bzip2, zip, unzip, glxinfo
+, curl, bzip2, zip, unzip, mesa-demos
 , libcec, libcec_platform, dcadec, libuuid
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn2, libpthreadstubs, libtasn1
@@ -87,15 +87,19 @@ let
 
 in stdenv.mkDerivation (finalAttrs: {
     pname = "kodi";
-    version = "21.0";
+    version = "21.1";
     kodiReleaseName = "Omega";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo  = "xbmc";
       rev   = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash  = "sha256-xrFWqgwTkurEwt3/+/e4SCM6Uk9nxuW62SrCFWWqZO0=";
+      hash  = "sha256-NjId1T1cw9dl0Fx1QDsijiN1VUpuQ/EFl1kxWSESCR4=";
     };
+
+    patches = [
+      ./no-python-lib.patch
+    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden
@@ -115,7 +119,7 @@ in stdenv.mkDerivation (finalAttrs: {
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray libudfread
       sqlite libmysqlclient avahi lame
-      curl bzip2 zip unzip glxinfo
+      curl bzip2 zip unzip mesa-demos
       libcec libcec_platform dcadec libuuid
       libxcrypt libgcrypt libgpg-error libunistring
       libcrossguid libplist
@@ -189,6 +193,7 @@ in stdenv.mkDerivation (finalAttrs: {
       "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
       # When wrapped KODI_HOME will likely contain symlinks to static assets
       # that Kodi's built in webserver will cautiously refuse to serve up
       # (because their realpaths are outside of KODI_HOME and the other
@@ -224,7 +229,7 @@ in stdenv.mkDerivation (finalAttrs: {
       # TODO: figure out which binaries should be wrapped this way and which shouldn't
       for p in $(ls --ignore=kodi-send $out/bin/) ; do
         wrapProgram $out/bin/$p \
-          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python glxinfo ]
+          --prefix PATH ":" "${lib.makeBinPath ([ python3Packages.python mesa-demos ]
             ++ lib.optional x11Support xdpyinfo ++ lib.optional sambaSupport samba)}" \
           --prefix LD_LIBRARY_PATH ":" "${lib.makeLibraryPath
               ([ curl systemd libmad libcec libcec_platform libass ]
@@ -256,5 +261,6 @@ in stdenv.mkDerivation (finalAttrs: {
       license     = licenses.gpl2Plus;
       platforms   = platforms.linux;
       maintainers = teams.kodi.members;
+      mainProgram = "kodi";
     };
 })

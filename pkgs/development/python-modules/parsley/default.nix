@@ -18,7 +18,7 @@ buildPythonPackage rec {
   meta = with lib; {
     license = licenses.mit;
     homepage = "https://launchpad.net/parsley";
-    description = "A parser generator library based on OMeta, and other useful parsing tools.";
+    description = "Parser generator library based on OMeta, and other useful parsing tools";
     maintainers = with maintainers; [ seppeljordan ];
   };
 }

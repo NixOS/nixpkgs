@@ -15,12 +15,13 @@
 
   # tests
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "aiohappyeyeballs";
-  version = "2.3.2";
+  version = "2.3.6";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +30,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aiohappyeyeballs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Lj1eUDPoVCElrxowBhhrS0GCjD5qeUCiSB/gHoqC3Q=";
+    hash = "sha256-3cin755WD3e75l+mm//KG+g2UEkHvdYYEFvkJ9j9D6s=";
   };
 
   outputs = [
@@ -37,14 +38,9 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=aiohappyeyeballs --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeBuildInputs = [ poetry-core ] ++ optional-dependencies.docs;
 
-  nativeBuildInputs = [ poetry-core ] ++ passthru.optional-dependencies.docs;
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
       furo
       myst-parser
@@ -55,15 +51,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "aiohappyeyeballs" ];
-
-  disabledTestPaths = [
-    # https://github.com/bdraco/aiohappyeyeballs/issues/30
-    "tests/test_impl.py"
-  ];
 
   meta = with lib; {
     description = "Happy Eyeballs for pre-resolved hosts";

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, readline }:
+{ lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "mrbayes";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       MrBayes uses a simulation technique called Markov chain Monte Carlo (or
       MCMC) to approximate the posterior probabilities of trees.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     homepage = "https://nbisweden.github.io/MrBayes/";
     platforms = platforms.linux;

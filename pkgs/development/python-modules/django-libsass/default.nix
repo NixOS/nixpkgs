@@ -38,7 +38,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A django-compressor filter to compile SASS files using libsass";
+    description = "Django-compressor filter to compile SASS files using libsass";
     homepage = "https://github.com/torchbox/django-libsass";
     changelog = "https://github.com/torchbox/django-libsass/blob/${src.rev}/CHANGELOG.txt";
     license = licenses.bsd3;

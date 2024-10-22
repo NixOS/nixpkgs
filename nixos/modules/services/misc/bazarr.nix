@@ -1,42 +1,41 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.bazarr;
 in
 {
   options = {
     services.bazarr = {
-      enable = mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
+      enable = lib.mkEnableOption "bazarr, a subtitle manager for Sonarr and Radarr";
 
-      openFirewall = mkOption {
-        type = types.bool;
+      package = lib.mkPackageOption pkgs "bazarr" { };
+
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Open ports in the firewall for the bazarr web interface.";
       };
 
-      listenPort = mkOption {
-        type = types.port;
+      listenPort = lib.mkOption {
+        type = lib.types.port;
         default = 6767;
         description = "Port on which the bazarr web interface should listen";
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "bazarr";
         description = "User account under which bazarr runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "bazarr";
         description = "Group under which bazarr runs.";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.bazarr = {
       description = "bazarr";
       after = [ "network.target" ];
@@ -49,7 +48,7 @@ in
         StateDirectory = "bazarr";
         SyslogIdentifier = "bazarr";
         ExecStart = pkgs.writeShellScript "start-bazarr" ''
-          ${pkgs.bazarr}/bin/bazarr \
+          ${cfg.package}/bin/bazarr \
             --config '/var/lib/${StateDirectory}' \
             --port ${toString cfg.listenPort} \
             --no-update True
@@ -58,11 +57,11 @@ in
       };
     };
 
-    networking.firewall = mkIf cfg.openFirewall {
+    networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.listenPort ];
     };
 
-    users.users = mkIf (cfg.user == "bazarr") {
+    users.users = lib.mkIf (cfg.user == "bazarr") {
       bazarr = {
         isSystemUser = true;
         group = cfg.group;
@@ -70,7 +69,7 @@ in
       };
     };
 
-    users.groups = mkIf (cfg.group == "bazarr") {
+    users.groups = lib.mkIf (cfg.group == "bazarr") {
       bazarr = {};
     };
   };

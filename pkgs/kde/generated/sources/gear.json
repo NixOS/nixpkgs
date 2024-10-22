@@ -1,1252 +1,1252 @@
 {
   "accessibility-inspector": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/accessibility-inspector-24.05.0.tar.xz",
-    "hash": "sha256-bIgwqq3GEN0UEqT+Qo1ETE5aP5/k4c0DftkzTwZG6pg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/accessibility-inspector-24.08.2.tar.xz",
+    "hash": "sha256-fE4pQDnVgVZE/d0F1lndMyWtYCjeFWiv4RDlcE2mMTg="
   },
   "akonadi": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-24.05.0.tar.xz",
-    "hash": "sha256-6YGDb7POV0he07XE7UYTG8EsDUzXw3jYy2KPnF9TjZk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-24.08.2.tar.xz",
+    "hash": "sha256-iy8RPrxZACC8FNNiu4xksbi7q+XnPKC6O2NkCZnB99M="
   },
   "akonadi-calendar": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-calendar-24.05.0.tar.xz",
-    "hash": "sha256-Lv05KE6p2+Y86dSpbmIFUlA3DLA4kxn1h6mw7P9I0tY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-calendar-24.08.2.tar.xz",
+    "hash": "sha256-xq01HIIOQKxpp8X2f98qfVQfdmnT1Xh0ZF9vhfdOv54="
   },
   "akonadi-calendar-tools": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-calendar-tools-24.05.0.tar.xz",
-    "hash": "sha256-qjMkoAvmG5p6ACGzznGgyrMMmt6PyPidJFHp9vqj5UI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-calendar-tools-24.08.2.tar.xz",
+    "hash": "sha256-aGp+tN/XYu+zB6TI4eBmjfbILN04T7tggMbJvVn5tcM="
   },
   "akonadiconsole": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadiconsole-24.05.0.tar.xz",
-    "hash": "sha256-81/2NI3rvTAnH0HXPT8DZXoZVnOP8phBcyhrRIGU3ZE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadiconsole-24.08.2.tar.xz",
+    "hash": "sha256-ryud7MGLezBVtE/v8zUgpD+gHA9WrfjjioYVjb7Nbzo="
   },
   "akonadi-contacts": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-contacts-24.05.0.tar.xz",
-    "hash": "sha256-8AMhc0SVJHe3399XoL2iPKFzpS7O90jTFyPFkwn+2UI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-contacts-24.08.2.tar.xz",
+    "hash": "sha256-6hrY06Ttbw0wkbFYeGnHvSm0MJXSvac+gsBC4RrDf8g="
   },
   "akonadi-import-wizard": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-import-wizard-24.05.0.tar.xz",
-    "hash": "sha256-L1cHleGkV/dRQi7kP12tJEebCa42mfoVr2YP270hZY0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-import-wizard-24.08.2.tar.xz",
+    "hash": "sha256-rXGYsdfYZjEFxQpseTHKANFxE2hZqFLfMFw9mNmZkgQ="
   },
   "akonadi-mime": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-mime-24.05.0.tar.xz",
-    "hash": "sha256-plgg19J1B5tHnLIPD8UW9Z+EbCm13NConTNQxpcoAPw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-mime-24.08.2.tar.xz",
+    "hash": "sha256-+9Lgk4WmC/pAn9hPADR/rIv4uZxpAgdwa60F1RVPId0="
   },
   "akonadi-notes": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-notes-24.05.0.tar.xz",
-    "hash": "sha256-mXb2bmDAvKJaezPuyHEfQ8FKl9seZZzeqRSWjtJDGZA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-notes-24.08.2.tar.xz",
+    "hash": "sha256-LcMOIkvqDztYXLcdbMCZdB3pvtuObj8G16nO+jSeD94="
   },
   "akonadi-search": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akonadi-search-24.05.0.tar.xz",
-    "hash": "sha256-2VsVGQ+MP20yBYY2JnPPI5r9NJxXyOApLJgrc03H410="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akonadi-search-24.08.2.tar.xz",
+    "hash": "sha256-l21oZSW5zVyCfTNc0clkOvoNCdjx3amuWu72fviSnFw="
   },
   "akregator": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/akregator-24.05.0.tar.xz",
-    "hash": "sha256-qV+n9eHq0k5Wx7UAxf3+MRGZVITBgd64E7MAIhIJm7M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/akregator-24.08.2.tar.xz",
+    "hash": "sha256-ZHuaCPtYNAL7KQwjTpkhxjQDT7YBwVXHqOV13hb9Wzs="
   },
   "alligator": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/alligator-24.05.0.tar.xz",
-    "hash": "sha256-RziRlNQfGV4bI9iwq4gxXz0gceI1KWJlndMybPfzxeU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/alligator-24.08.2.tar.xz",
+    "hash": "sha256-U5w2J6oadXXKgR1nIV/I7qDpdcpohkV3DJHLXa1XMSg="
   },
   "analitza": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/analitza-24.05.0.tar.xz",
-    "hash": "sha256-tJqBTcQdPr6ydXmqk2wMtNt8SXYkhle5IBj5mWFlRbo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/analitza-24.08.2.tar.xz",
+    "hash": "sha256-EWID/f0+sSTOnzoeF59olHe8ODhFF3IByj9shW0Sxjo="
   },
   "angelfish": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/angelfish-24.05.0.tar.xz",
-    "hash": "sha256-yltDFftPP2VisEXy8xJBzo/1x7vgyrgMU0lC3804Cnw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/angelfish-24.08.2.tar.xz",
+    "hash": "sha256-SCrngjUJodD7egcqcoEG2ID1Q4JRVirzOdpFSKZUlks="
   },
   "arianna": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/arianna-24.05.0.tar.xz",
-    "hash": "sha256-OV+WXxeItC+vFcXb0YyU/+Br+QJgIrupCH+YxpYAsoQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/arianna-24.08.2.tar.xz",
+    "hash": "sha256-4HpVzGm5ndDtrIasInezV2EhcutA+y/xHMCgeDqzxDc="
   },
   "ark": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ark-24.05.0.tar.xz",
-    "hash": "sha256-cLFJ8CJutATJ2VeXHoapS8TAccGqGk0jPEkeX9tj+dc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ark-24.08.2.tar.xz",
+    "hash": "sha256-f98HTZhbufjFHZ/Bh1gPkeA+pxiMjsU2C9Mb1dwVuDw="
   },
   "artikulate": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/artikulate-24.05.0.tar.xz",
-    "hash": "sha256-kUBnBKcxXXvlnYQ0i4W+MAag4tagtbbmVdy09rQs9Rk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/artikulate-24.08.2.tar.xz",
+    "hash": "sha256-l8gqgXHrns7WouW9BbWPEq+YJOFzletUwzNjUXmiUF0="
   },
   "audex": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/audex-24.05.0.tar.xz",
-    "hash": "sha256-WBCMw/Gm4QwhvRXEQ7/zBLLWUkCiW5jFTcSHsNEYfOk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/audex-24.08.2.tar.xz",
+    "hash": "sha256-eUkqCevK4BH1M8hvqamqmsxcaH77QTh6u9nAT/gfaAM="
   },
   "audiocd-kio": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/audiocd-kio-24.05.0.tar.xz",
-    "hash": "sha256-V07l2An23i6L7F7cMYqzD5AdD7FWYApap9Jdrw2/MnQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/audiocd-kio-24.08.2.tar.xz",
+    "hash": "sha256-o5DueitrPoJwWcmDafXqJFA0I7rsycQ7vQYsAKZ785M="
   },
   "audiotube": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/audiotube-24.05.0.tar.xz",
-    "hash": "sha256-zxlGHbImtub20p5OSswgI/Y4GYKjtz24h31TwgTlo7c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/audiotube-24.08.2.tar.xz",
+    "hash": "sha256-NX5Yr9/A7xMMSgeSVYYdtyrsVAI7eUugzQ9mUkVdA98="
   },
   "baloo-widgets": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/baloo-widgets-24.05.0.tar.xz",
-    "hash": "sha256-PSHv1kHCt83uzrxKS5OM3TtPPIfMJgAU49pxHSKp9rc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/baloo-widgets-24.08.2.tar.xz",
+    "hash": "sha256-szeiC0aByC6N1yIxP1e1iqc34tmEIKzBUSQlek0CY/4="
   },
   "blinken": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/blinken-24.05.0.tar.xz",
-    "hash": "sha256-WL0Nxy0g5w0tJQFRjm4QzJ7D+pwCSqbQmnsoylWEKEQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/blinken-24.08.2.tar.xz",
+    "hash": "sha256-QDcvZsQKqCl58hG6PCuy7qtSRWyPz5uq2JwzMDHRFPc="
   },
   "bomber": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/bomber-24.05.0.tar.xz",
-    "hash": "sha256-4xJmlRR71hA4/SuRH3sEoKZDRS29N4333uAG0wjtgi0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/bomber-24.08.2.tar.xz",
+    "hash": "sha256-phawZVBYIG8//Db0mTxV1gWDtlR+ZMoeI4Iwtp0vXaw="
   },
   "bovo": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/bovo-24.05.0.tar.xz",
-    "hash": "sha256-09EavFONoctc28o5mtDfoGTjlaO8PsKGDGu2x+tB0SU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/bovo-24.08.2.tar.xz",
+    "hash": "sha256-kbAk70v9uXxwY3I2hwSS1KxCXUjIH1uIanZexEbHx6s="
   },
   "calendarsupport": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/calendarsupport-24.05.0.tar.xz",
-    "hash": "sha256-UMhbZlrZ7zt6UUIWrdUmX78kI2I3kmdUmj7XI4SMvMc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/calendarsupport-24.08.2.tar.xz",
+    "hash": "sha256-brRVDcxD9FnbHygjd1fklXSF3wgigRgrKJ7vwg0Ya7U="
   },
   "calindori": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/calindori-24.05.0.tar.xz",
-    "hash": "sha256-E1nOyaeKLlLJMP3PmfmSN/W59Rpao2+boI8F4p0G9jY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/calindori-24.08.2.tar.xz",
+    "hash": "sha256-9SFNyfA+S58KYXUozOXkr89pDPAEG/wEtQGJHV2ugz4="
   },
   "cantor": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/cantor-24.05.0.tar.xz",
-    "hash": "sha256-dREEXdoQIOd3m23O+/lPYRWu/h+N6iLipYzQrArh4aI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/cantor-24.08.2.tar.xz",
+    "hash": "sha256-CAxztAXKLYVJctCMHNvHVU6Z89MU43rm+e8ySagCvHg="
   },
   "cervisia": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/cervisia-24.05.0.tar.xz",
-    "hash": "sha256-+5uo9rzp3OmUnUh8Z7qDcfqC/wudTKenh0FFMKrzmZI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/cervisia-24.08.2.tar.xz",
+    "hash": "sha256-qTpkcgLCIJwKXDuwILtoEzGjOJS85g3+U4fOim5yJ+s="
   },
   "colord-kde": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/colord-kde-24.05.0.tar.xz",
-    "hash": "sha256-lJGSTIvMCJpkzdT2hLa3gx7wU5l5XrKxCUIOsezV3HU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/colord-kde-24.08.2.tar.xz",
+    "hash": "sha256-f3WouENrUiPzsnkdlH3sPweZcZWkLdQ79o0Eo+z3B20="
   },
   "dolphin": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/dolphin-24.05.0.tar.xz",
-    "hash": "sha256-4AnOc0NVSBoI//8T5van24trdPoyADCzXZGAodnKB5Q="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/dolphin-24.08.2.tar.xz",
+    "hash": "sha256-VRUWJwditxpTUC5CyuIhBmQuElPiJyBjKoBSUENBRbE="
   },
   "dolphin-plugins": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/dolphin-plugins-24.05.0.tar.xz",
-    "hash": "sha256-cVMp916yLW9ZuqvF3voao3xz6hbWIUHA6uaVMlwBrC4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/dolphin-plugins-24.08.2.tar.xz",
+    "hash": "sha256-aX7Ggt6w6PfU/BTo645s+0w8CWHY10tZRdPHr9AE6A8="
   },
   "dragon": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/dragon-24.05.0.tar.xz",
-    "hash": "sha256-tOghEE07tjv71E9t03FBtCPmTOXbLU6VkVIUhgFQ34s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/dragon-24.08.2.tar.xz",
+    "hash": "sha256-3h+fPtM0R13uiJ8qxaiImlNgjZq6nywJD4jdNQrx5IM="
   },
   "elisa": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/elisa-24.05.0.tar.xz",
-    "hash": "sha256-LTdxJcs0MteiILDpBxMzSOZ9JRyM2mDCXgS7oNJOjfc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/elisa-24.08.2.tar.xz",
+    "hash": "sha256-+eTurdf9lIbjOPE8nyXF19j7S5Y3uCjW/VJUgWoHp8k="
   },
   "eventviews": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/eventviews-24.05.0.tar.xz",
-    "hash": "sha256-gDNR57hV+heQ6/wemOqzRftrcFWNSvl7N6o0QEAleR8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/eventviews-24.08.2.tar.xz",
+    "hash": "sha256-lVH7Tkh0kNv1tdmKOd/6vUo2omFW1iR7Ubf2DQXbBV8="
   },
   "falkon": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/falkon-24.05.0.tar.xz",
-    "hash": "sha256-kggxPYiw9fuoTnfpn0KNgr3j04A5uPEmIAMsdeZEkZ0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/falkon-24.08.2.tar.xz",
+    "hash": "sha256-19zRYVzuYjJVyBhFip2V6sDyDvzj8AOe76z0Yg6u80s="
   },
   "ffmpegthumbs": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ffmpegthumbs-24.05.0.tar.xz",
-    "hash": "sha256-ozfE8ZwTPvRyt8Nk1IEtl5wHi1WaUbnH1t8aoeynBGc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ffmpegthumbs-24.08.2.tar.xz",
+    "hash": "sha256-sGrM3S/wBZ1s+hgNLrjX3ZWbmuyU0RY0vQhmkKBqxqw="
   },
   "filelight": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/filelight-24.05.0.tar.xz",
-    "hash": "sha256-DHdv8NsyPUffuWdyzvY7IxHs7t6UBJSUOw8+i/ipq4w="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/filelight-24.08.2.tar.xz",
+    "hash": "sha256-XpBM30Vz+luFeOQVfaNIrUbnKBmSv71q9ZyUMOFrqU4="
   },
   "francis": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/francis-24.05.0.tar.xz",
-    "hash": "sha256-Zkf1VmCx0MMlwNWqPaUW8ArO0Pe2V6fSu/pqoF1y3/M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/francis-24.08.2.tar.xz",
+    "hash": "sha256-a4zH84wk4UwueXpiKZ1HCZlls45yBVeOMgaBjHkiroA="
   },
   "ghostwriter": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ghostwriter-24.05.0.tar.xz",
-    "hash": "sha256-rhuCZBfcUK8b26igOsuGzqpjDEs+0L9tPIEW0NT2XDg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ghostwriter-24.08.2.tar.xz",
+    "hash": "sha256-g+f/Nefc4DoSCt+pmLYDAYI1CwJqn+YCjQqWKRjncuc="
   },
   "granatier": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/granatier-24.05.0.tar.xz",
-    "hash": "sha256-scZmT4fQo8dna2PKxHcuHlAJvHVrirjlAzDdcglx3ZY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/granatier-24.08.2.tar.xz",
+    "hash": "sha256-zOraxrRmB9j5Y4q+tXrC/0uvj51QxkP3dLwfKGhl/P4="
   },
   "grantlee-editor": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/grantlee-editor-24.05.0.tar.xz",
-    "hash": "sha256-Zqns6Adbiivzzz0IYY2YIjqVShr3ykVWpg7fTvCJFB8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/grantlee-editor-24.08.2.tar.xz",
+    "hash": "sha256-GYbjU2UGuF+Vt3fUxbG56cPlvCBjn9U9NAhW6VxRXi0="
   },
   "grantleetheme": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/grantleetheme-24.05.0.tar.xz",
-    "hash": "sha256-uo55sP1GAHTfufJM7ftgbDyL3lkB4oM0lnlgd28pJ5g="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/grantleetheme-24.08.2.tar.xz",
+    "hash": "sha256-wAYB40gpVIHgM+RCjrSLi0H5gV6mjC1hYOK79UqTW0M="
   },
   "gwenview": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/gwenview-24.05.0.tar.xz",
-    "hash": "sha256-se2CcMpPeWfHY2lnoYqLm/FyiXD2z4p+EbQj0Lzq5LA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/gwenview-24.08.2.tar.xz",
+    "hash": "sha256-HVfcSbA05E21rtbijL3CHo43c7DctN52jk8R0duk7DI="
   },
   "incidenceeditor": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/incidenceeditor-24.05.0.tar.xz",
-    "hash": "sha256-K6hYRgMfoOVcO+9Zds6kTE9tXFyPmeeysaqO4CHhGCo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/incidenceeditor-24.08.2.tar.xz",
+    "hash": "sha256-l/67wkrUq2j84rQYbfuFCPVevs5q5NNmQy1bnRdU8XM="
   },
   "isoimagewriter": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/isoimagewriter-24.05.0.tar.xz",
-    "hash": "sha256-Nl9mo+qPKx9sjAn4fyiT7Gc3r5bldQE2Q1WGVa3lAeE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/isoimagewriter-24.08.2.tar.xz",
+    "hash": "sha256-djuTSkr6lMw3Sc7q9vh8mdWTyWnvC3K50moICfKa4Ik="
   },
   "itinerary": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/itinerary-24.05.0.tar.xz",
-    "hash": "sha256-tjHIF54+pT9I1opIWDRwovlKR108iTcl6NJB99dvlxs="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/itinerary-24.08.2.tar.xz",
+    "hash": "sha256-MOhnRn6nnE7bTg34zdHhWj40bPF8qwEROotJfGa6NgQ="
   },
   "juk": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/juk-24.05.0.tar.xz",
-    "hash": "sha256-mExAW9VQcXbyvDEyTbloe23e5MpS6bN9vSeXj4yuV3M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/juk-24.08.2.tar.xz",
+    "hash": "sha256-RZB9GRHIOoVvS/uCBV/v5Q9P+4jpVnEP+gDMXlv9K/w="
   },
   "k3b": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/k3b-24.05.0.tar.xz",
-    "hash": "sha256-jgxH9vLI08LjiV3I6bAgWxqM4DcpOyDEfNN9QkZFOtA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/k3b-24.08.2.tar.xz",
+    "hash": "sha256-rqgd0ZQsxoPHIulrM6x95YCZ/iTiI0SCcsFI9LiASm8="
   },
   "kaccounts-integration": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kaccounts-integration-24.05.0.tar.xz",
-    "hash": "sha256-jyAiwel9Wg0FSqtzpzjVatJYAK/xRcyDf/ZcqVAmw+g="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kaccounts-integration-24.08.2.tar.xz",
+    "hash": "sha256-Vs40NNILzIlnOCL3uUn1DzL8dTjuckL7l2KFVMksjxY="
   },
   "kaccounts-providers": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kaccounts-providers-24.05.0.tar.xz",
-    "hash": "sha256-Mrsh0NrLjblfss2WUSkPBODZGs2ttGdj7sqBs1G0WEo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kaccounts-providers-24.08.2.tar.xz",
+    "hash": "sha256-FSgFjcyS+FTjHyf9bIaoLqXfNLw7erlC1p/wrH8A2EM="
   },
   "kaddressbook": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kaddressbook-24.05.0.tar.xz",
-    "hash": "sha256-sdJ9+HX1rBe5lr3GaK80BYLcI1hSs1ikdfAC8YUkE1E="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kaddressbook-24.08.2.tar.xz",
+    "hash": "sha256-Sb5L6wgDxqkrlGci+LHBqEJalxLOzEv9AyB6NRdCwU0="
   },
   "kajongg": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kajongg-24.05.0.tar.xz",
-    "hash": "sha256-X0Ie68zuj3au6yjEXr6n1lZ2lMem9/ryPzbOXxVOoXI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kajongg-24.08.2.tar.xz",
+    "hash": "sha256-A3yvvln97eZBmjWRwgNdWjz0KXOLe9gctDIJZXu62Zs="
   },
   "kalarm": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kalarm-24.05.0.tar.xz",
-    "hash": "sha256-uLSs/UUR3rHQS/zzwX/DmVpK03NI4/rpR+RJmcShDWY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kalarm-24.08.2.tar.xz",
+    "hash": "sha256-oe6wl0PTtQVUSJRGYoAbtpNXO4CXjGBQzrspvVeZSgI="
   },
   "kalgebra": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kalgebra-24.05.0.tar.xz",
-    "hash": "sha256-v46chi9OKDCQ8BMpnv++WVQeQD+ciL4rr++SgiS0hWI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kalgebra-24.08.2.tar.xz",
+    "hash": "sha256-tWCwZESHZQci405yh08c7x8h7EEJ5LLyKUQOpvAxFQ8="
   },
   "kalk": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kalk-24.05.0.tar.xz",
-    "hash": "sha256-EZlYtQ1uEDshnBE4Gp9makx/UJAAw1/zOqiqWsZDAJE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kalk-24.08.2.tar.xz",
+    "hash": "sha256-ZlfBKmcXhHt4+w56D2agfT+ULwljU3TUwKSk4ADMWs8="
   },
   "kalm": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kalm-24.05.0.tar.xz",
-    "hash": "sha256-VZmdWHLntFafXDG4k/GfkaL98Niai6Tmctm2nkWhurY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kalm-24.08.2.tar.xz",
+    "hash": "sha256-JquhkpaPF2xMyDJkHs+C1B5a7tZ5AGhfAM9VdtaTYso="
   },
   "kalzium": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kalzium-24.05.0.tar.xz",
-    "hash": "sha256-uB3/bjzuQL21jAopa7Drn0abYHMW+I5gQg37KjK5n4Y="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kalzium-24.08.2.tar.xz",
+    "hash": "sha256-m4yO8wMzwjqym7m849cyTPndGjavSB0ybSx7YySys1c="
   },
   "kamera": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kamera-24.05.0.tar.xz",
-    "hash": "sha256-txJ4zgq0QhI3OkPRZVPPqZtAf3GmxpIJxTb3BKJTkG8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kamera-24.08.2.tar.xz",
+    "hash": "sha256-5OHPBtCyiyvZV1FKRXrn6kid6ZwTV20kBa32ouIHErU="
   },
   "kamoso": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kamoso-24.05.0.tar.xz",
-    "hash": "sha256-ARJD3hrvogP3hRDXXrUSjBve5DXUURemQu/ib5miCQ4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kamoso-24.08.2.tar.xz",
+    "hash": "sha256-UuCqnIRSMlkyeAvnDf2uWeJTvSf+OsnjubGaMuAtl38="
   },
   "kanagram": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kanagram-24.05.0.tar.xz",
-    "hash": "sha256-x+3GgldPSGxKrdwEaDNtg4/fvvM779ajr80W2eplHZ8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kanagram-24.08.2.tar.xz",
+    "hash": "sha256-9hxsb6MJ1Tdy/n5RwtFfzqFT35pH3I6y2A2tiGEeuGI="
   },
   "kapman": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kapman-24.05.0.tar.xz",
-    "hash": "sha256-cng9BQIOWHTzleo/ujdc1Lh64d/HBpatkhJtv40503M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kapman-24.08.2.tar.xz",
+    "hash": "sha256-cjhosHjMMQe+qFpdNBsC+ZarXI8dW3XPkIwmf9EG5U4="
   },
   "kapptemplate": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kapptemplate-24.05.0.tar.xz",
-    "hash": "sha256-jQoJkyQ35ndHfSp9zqC2HTLFvv5v6q6tqIPx1mg4Vg4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kapptemplate-24.08.2.tar.xz",
+    "hash": "sha256-TSsO+Z7VkBHuurVDUBljNUYwwbT47AmZ8khs/lVy0Ho="
   },
   "kasts": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kasts-24.05.0.tar.xz",
-    "hash": "sha256-+h7PGExxrLiLGYPWscctgS4s88k3zMefyIXel8uLYII="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kasts-24.08.2.tar.xz",
+    "hash": "sha256-Vkbz8IkfSYR71Dfgd/4X4Nmb5S7NqedftLveCHicdOM="
   },
   "kate": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kate-24.05.0.tar.xz",
-    "hash": "sha256-0txf3wmQaNMVvpVi0zTJgMgO9t9810AAE6vDjUpO1iY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kate-24.08.2.tar.xz",
+    "hash": "sha256-2Ft1MYiV3KL0DpbuWOkemmAS81h+Itfz4P4Tvv+uymw="
   },
   "katomic": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/katomic-24.05.0.tar.xz",
-    "hash": "sha256-0eUpr6OrhbrkfkhEjhe4+wuXF/DV8TWX8UD08mi3Jhw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/katomic-24.08.2.tar.xz",
+    "hash": "sha256-5oCtP652mvujZIB77D/KfyDZEGd9kCnx7MnWXTcmYE0="
   },
   "kbackup": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kbackup-24.05.0.tar.xz",
-    "hash": "sha256-nV8wwRsNjujMHwyx/+SxWr9H5OIwvNIDmzulpxFYvm8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kbackup-24.08.2.tar.xz",
+    "hash": "sha256-hxRC7eTkR+xRDb6ki1mDna2SFCEXdnXq1FClRbCvKCE="
   },
   "kblackbox": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kblackbox-24.05.0.tar.xz",
-    "hash": "sha256-LVmBnbzXQKpQ/lrheOHZm7eGODp6uleZIFwbR2DebIA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kblackbox-24.08.2.tar.xz",
+    "hash": "sha256-X+KB7aM4lOpHCH+6YcP9o7RDHnP1qkd7SNkjstpUYr8="
   },
   "kblocks": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kblocks-24.05.0.tar.xz",
-    "hash": "sha256-t8ahzvjxMLBDYxBTcfdzvVUcivwOaPj99J2CEA9CtOg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kblocks-24.08.2.tar.xz",
+    "hash": "sha256-pv6IWSnaJM3LL8V4ZuZOZnqRKkZQ9/rbUW1J6ns1KKw="
   },
   "kbounce": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kbounce-24.05.0.tar.xz",
-    "hash": "sha256-pNrXWpi5MT8gsRi4+6Fgjl2JHKSrZOVDuhwOJ1zgRV0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kbounce-24.08.2.tar.xz",
+    "hash": "sha256-EMvWygDfil41cUUm0qlEmIOokvdZ0msYL4PhN+pbIdE="
   },
   "kbreakout": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kbreakout-24.05.0.tar.xz",
-    "hash": "sha256-k7vN0m5jmRre7UUG6dM4qNNdSAwBTDIYmCRKmKXcYUs="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kbreakout-24.08.2.tar.xz",
+    "hash": "sha256-0VJCGDbWOiQJiu/WqimEFeStSbj92KXc3HXfMC5vdG4="
   },
   "kbruch": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kbruch-24.05.0.tar.xz",
-    "hash": "sha256-ZcA/oALhG2KSr9X/AYc7HG+1Y2DC/128LF0oDZotDrg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kbruch-24.08.2.tar.xz",
+    "hash": "sha256-I9KH/azP7/qf47GUmMTbhRyZd8qqwVI5qoYQRA1AFlw="
   },
   "kcachegrind": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcachegrind-24.05.0.tar.xz",
-    "hash": "sha256-IrGVjPw+pjXgisUiR+NffSDPrqQceujWUpfz5PBafLM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcachegrind-24.08.2.tar.xz",
+    "hash": "sha256-h64CpqnNrtXPlSbtQFtZusxdaHFxX5HQwi0iLVyEdfQ="
   },
   "kcalc": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcalc-24.05.0.tar.xz",
-    "hash": "sha256-oGCRgcWtzdTe02/MYYXlCZqXqxOEZUP1gcBODHuqiWQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcalc-24.08.2.tar.xz",
+    "hash": "sha256-DyD/62b4XyqRv3RTaO/pQ8XjKsA8Rem34SSv4OSU/Uk="
   },
   "kcalutils": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcalutils-24.05.0.tar.xz",
-    "hash": "sha256-jG+ZL3Y2LVQJ/Sij6Z1cNtozIDQNcOCWycZuZruQFy0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcalutils-24.08.2.tar.xz",
+    "hash": "sha256-/4Z0PJJoowu/mYYNG49luhb8QNkmLXWs8HAu+8VfZww="
   },
   "kcharselect": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcharselect-24.05.0.tar.xz",
-    "hash": "sha256-zpEnS2Yi+K/7FaXCnUn55Fh1v87QGX4EWw2bOf4vbNA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcharselect-24.08.2.tar.xz",
+    "hash": "sha256-iZ6Vb+s8HmLTWixAIEM5k0FuKKcWAOfJfvYn9I5ss4o="
   },
   "kclock": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kclock-24.05.0.tar.xz",
-    "hash": "sha256-lt6+BetBGLpKgGTkNXx11UcWrQ1+S7a5aykb6tyOucY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kclock-24.08.2.tar.xz",
+    "hash": "sha256-vE/mn8oWtQcly5W0cRzBshz4xfAjv3TZ1/AltcaW9ig="
   },
   "kcolorchooser": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcolorchooser-24.05.0.tar.xz",
-    "hash": "sha256-5GwL6UWMIyohBekWXY38WCSZ97BywSNO9lc5ZXu6K6U="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcolorchooser-24.08.2.tar.xz",
+    "hash": "sha256-pjtX2K5XH49WvHZWjdarDFOCzYdkuA7+ie/OGUNJ08s="
   },
   "kcron": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kcron-24.05.0.tar.xz",
-    "hash": "sha256-JlkNn7fP+SKKKxTcuCTX4i2GwKQgQtbJkk/a2/Dvsj4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kcron-24.08.2.tar.xz",
+    "hash": "sha256-hl1G8QYcVnpQ9VmrevH6/Sw/7bOsKJKTZwNVBv8K5tA="
   },
   "kdebugsettings": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdebugsettings-24.05.0.tar.xz",
-    "hash": "sha256-2cH4lRc9Ea1yZlBHgTB0eBAGvawIaMn6DxWbPZ7D+oE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdebugsettings-24.08.2.tar.xz",
+    "hash": "sha256-bu5AlIpmx9xrQii3TfrS7qfaPf4236Kj3GCwKANeyOg="
   },
   "kdeconnect-kde": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdeconnect-kde-24.05.0.tar.xz",
-    "hash": "sha256-sF9e4WQWCn/6oSaaJ/0qVQBt0An2bGvxBTC84tnZgM0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdeconnect-kde-24.08.2.tar.xz",
+    "hash": "sha256-1xeNlrRF72YJI/MFqQ/GrszK5AScyZo57mwXrAv1HGk="
   },
   "kde-dev-scripts": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kde-dev-scripts-24.05.0.tar.xz",
-    "hash": "sha256-hXPP528NycSczNGjDDXSqGSFuZswkF3ZU6i3iEcslN8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kde-dev-scripts-24.08.2.tar.xz",
+    "hash": "sha256-B0IgBO4xUkQ/z/LUncul58uavGKNbwLhZaSAHMROc7o="
   },
   "kde-dev-utils": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kde-dev-utils-24.05.0.tar.xz",
-    "hash": "sha256-SbAzghe1hnDkPT2uXhMPLrn1Jdl/3IUtndBPmTUEEIk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kde-dev-utils-24.08.2.tar.xz",
+    "hash": "sha256-MY5Gn1LAaoasGo8DRZhSJLUTZk0Ra/77k/TejdDdg8g="
   },
   "kdeedu-data": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdeedu-data-24.05.0.tar.xz",
-    "hash": "sha256-a95Vz3WHKzn2NOOc5NK/D1hoLnoHNMfssOnCY2h+lqM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdeedu-data-24.08.2.tar.xz",
+    "hash": "sha256-XNf2MDYGKALxk147hXRMYSALKi3CL01JQD+czh+qj1o="
   },
   "kdegraphics-mobipocket": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdegraphics-mobipocket-24.05.0.tar.xz",
-    "hash": "sha256-cJRngpwbnZ90ZUm9OniUgkIpwKpjBS+2b4ZeKne1rAQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdegraphics-mobipocket-24.08.2.tar.xz",
+    "hash": "sha256-Vr/d8kznRVE9bfLClfEZ3mhwmB68z40GoQZoIu1/OZU="
   },
   "kdegraphics-thumbnailers": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdegraphics-thumbnailers-24.05.0.tar.xz",
-    "hash": "sha256-UyXO4TJb9WSwcGfWpmZYXRrHh0Eoj0X2KPXtQnCBYQw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdegraphics-thumbnailers-24.08.2.tar.xz",
+    "hash": "sha256-1SBgDqNVa6IRH/TlzRWHSJpUy05t0aXmJriZwpKeGgs="
   },
   "kde-inotify-survey": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kde-inotify-survey-24.05.0.tar.xz",
-    "hash": "sha256-25+lq2Zkqy7g6v7uXJZn6RfSjh+sArzObSwlKUN9eb8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kde-inotify-survey-24.08.2.tar.xz",
+    "hash": "sha256-w470km+siTY+Gn22H/Ofi/dzbtQJoFj+wOUt1rCEoLM="
   },
   "kdenetwork-filesharing": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdenetwork-filesharing-24.05.0.tar.xz",
-    "hash": "sha256-BKfZHnEGsLngG3Qu2fy1yMX+fhR8sPw/a+wDU/nMp7s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdenetwork-filesharing-24.08.2.tar.xz",
+    "hash": "sha256-elaWVNVNgwbH7GIA4JKxoD+LGnPPS3ylQ1RKx7jUTGU="
   },
   "kdenlive": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdenlive-24.05.0.tar.xz",
-    "hash": "sha256-2Eik0zEgs56B5sJ52gkdITuT17/JqlcnSiU6c0CWaK4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdenlive-24.08.2.tar.xz",
+    "hash": "sha256-FVZonukudpc1tZG79ntBhnGBD+7tCepWXpyKAL2/j7c="
   },
   "kdepim-addons": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdepim-addons-24.05.0.tar.xz",
-    "hash": "sha256-A4ezYKpPHBRGFyjZXU8ltgiHS+PagS3/Ikz77r+OjvQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdepim-addons-24.08.2.tar.xz",
+    "hash": "sha256-zkUIDKMo/ysCDPjh17CSSg19xIMBEbyUgUHB4lavqRI="
   },
   "kdepim-runtime": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdepim-runtime-24.05.0.tar.xz",
-    "hash": "sha256-ygf3rO3w+vf7O4vxA6st7Mxz1/3yuheeHC95FYfGRRI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdepim-runtime-24.08.2.tar.xz",
+    "hash": "sha256-JA4T/FBvA1csCMDyl/TPJtMTpGfhc8/kCLLSnsbu8Pk="
   },
   "kdesdk-kio": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdesdk-kio-24.05.0.tar.xz",
-    "hash": "sha256-XF+QO7DAvUA53srQM5LYMF8L7729g361f//zB0jTXj0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdesdk-kio-24.08.2.tar.xz",
+    "hash": "sha256-072EF549k2FZ3t+psVaGvY0/8Y7V/mZg4PON9tDXI6E="
   },
   "kdesdk-thumbnailers": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdesdk-thumbnailers-24.05.0.tar.xz",
-    "hash": "sha256-vyDcFaXIpqCtrLVF7axVbMAmYoqVOoeAg5xstcstenY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdesdk-thumbnailers-24.08.2.tar.xz",
+    "hash": "sha256-f8rNnHRu2fcwKBZ9jEIhvGc29HQB2ofzvoO1+G1kj9o="
   },
   "kdevelop": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdevelop-24.05.0.tar.xz",
-    "hash": "sha256-rY8RwFccgtDWuwuBSREN2n5y9o/s9ilmgt+aqdkvmps="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdevelop-24.08.2.tar.xz",
+    "hash": "sha256-Pfw4jzWYoZPWlVVEb5F/RBgeAt6jgA/w5qC56AgdCgw="
   },
   "kdev-php": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdev-php-24.05.0.tar.xz",
-    "hash": "sha256-mWI1AYGdbWvl9NcryfUYkJqbGRCqcd46zQW1NBpMIbU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdev-php-24.08.2.tar.xz",
+    "hash": "sha256-Yqu92NqkVMjq3DnDC+DdnT6hkD0BPfsoc8x8eL07dcU="
   },
   "kdev-python": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdev-python-24.05.0.tar.xz",
-    "hash": "sha256-GDg8MBo/j/rmZCEE9rQPJM5FsjI26iL7PxlM1OVYv5Q="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdev-python-24.08.2.tar.xz",
+    "hash": "sha256-3i87y9312GpnLHgj50Ac83kmWHWGcQRkERdiDRoUk60="
   },
   "kdf": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdf-24.05.0.tar.xz",
-    "hash": "sha256-nihaoQZlzu3VNxosUGlou1GqTQMaRp0TkMIrdmffHKY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdf-24.08.2.tar.xz",
+    "hash": "sha256-/H5SFpxijru+cdtu0PM5WmbLoPKQO4Y4IkWH9IoIYec="
   },
   "kdialog": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdialog-24.05.0.tar.xz",
-    "hash": "sha256-i32SKv+7QVrwz9Q96GEuHa2Os+W40/QyhPG9UN7gskA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdialog-24.08.2.tar.xz",
+    "hash": "sha256-FtrMEHqOiqdTfptR3a3X2RtaxHYOVRexplrcmnP6fIA="
   },
   "kdiamond": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kdiamond-24.05.0.tar.xz",
-    "hash": "sha256-X2oXJ8r/hEE3EfGW9n3Y5LfcGf+ILKjUcCSEYQrErl4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kdiamond-24.08.2.tar.xz",
+    "hash": "sha256-ijJ/XtNhKu2HB0yidl7u0QWE/TiD9R/9zX4DDuob6qY="
   },
   "keditbookmarks": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/keditbookmarks-24.05.0.tar.xz",
-    "hash": "sha256-q2iIrWj/O53U80luFVJ45yhvaGKaz9ZREth6mJ+nrXA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/keditbookmarks-24.08.2.tar.xz",
+    "hash": "sha256-0sgvXfWAHsbfE40QRg6U7Dg+79O1dZ7LY0QtkuQDwAU="
   },
   "keysmith": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/keysmith-24.05.0.tar.xz",
-    "hash": "sha256-J/MjuyeVmTAayOceV/Ri/ca+wCb4dIv4Cn5VSBzW7aM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/keysmith-24.08.2.tar.xz",
+    "hash": "sha256-TZCj+9bbc/YtMjiDE9HKIrFxM7UiS+3zGL2ZVMIeIVs="
   },
   "kfind": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kfind-24.05.0.tar.xz",
-    "hash": "sha256-/aR31aSMf5QYCSL5ShjQAA3iJjUF07wtRlhwCL3KZyg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kfind-24.08.2.tar.xz",
+    "hash": "sha256-kgZyhADD7d4ho7w9sE9/cyVYj9atPHjeOxBeP6P1REU="
   },
   "kfourinline": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kfourinline-24.05.0.tar.xz",
-    "hash": "sha256-k8VNGCuiEOVY9YuLXE4MzOUaD6nZIrXmhYYj6PYYUKw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kfourinline-24.08.2.tar.xz",
+    "hash": "sha256-9e1XGGOG4ZaKa/eVdpzJx4wPVuMAHJqmybHZjXqjTKI="
   },
   "kgeography": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kgeography-24.05.0.tar.xz",
-    "hash": "sha256-fiFOAm8BfQYPzGULSroONoGa1wOL1hJPrVPqYOapB2M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kgeography-24.08.2.tar.xz",
+    "hash": "sha256-8dx1e9iIDufFxOaelDVWry6FR1s7GGnNdOm6agS+pKI="
   },
   "kget": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kget-24.05.0.tar.xz",
-    "hash": "sha256-zxCDlTIRSZkC3atOitq1nxijqLg4j9TBO9ARdfKtj8E="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kget-24.08.2.tar.xz",
+    "hash": "sha256-aQw0IeOLNz6CVzCoMKiBOSwXGfB4zsEh1oYgqn7Sc4s="
   },
   "kgoldrunner": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kgoldrunner-24.05.0.tar.xz",
-    "hash": "sha256-V4bvEgZ/olNYL64+g7J98jIwOEhHboS+urBSoEqJp+c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kgoldrunner-24.08.2.tar.xz",
+    "hash": "sha256-BZ0vTWG7jDVA2AwCHh//VWwT0+B75yDRZ61kbyE7rEY="
   },
   "kgpg": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kgpg-24.05.0.tar.xz",
-    "hash": "sha256-p/4339kBjAdpMgB0cxt7QAQ4l2okKMVgRQg0DLVElWQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kgpg-24.08.2.tar.xz",
+    "hash": "sha256-CEtAQ/89tflnXDmSo2tp3bPGjp7G8HVT/Mz+40iY8ww="
+  },
+  "kgraphviewer": {
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kgraphviewer-24.08.2.tar.xz",
+    "hash": "sha256-lMg+REm/0cFOVrEX/0NdF6C64Eg0VAU1kHnv3wps3JM="
   },
   "khangman": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/khangman-24.05.0.tar.xz",
-    "hash": "sha256-OsZSt3c2tKiF8ZhFdfYNqvmyX4Ckh0EibCnvBCNQjOM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/khangman-24.08.2.tar.xz",
+    "hash": "sha256-m9bXQ3NbrENOON+Q9b6FbQRxg6SUx2tlxKiB70Puu+o="
   },
   "khealthcertificate": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/khealthcertificate-24.05.0.tar.xz",
-    "hash": "sha256-PklyOP7OdwUMF318RwE2LawqNYzCqiJkFQxkJL6pTBI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/khealthcertificate-24.08.2.tar.xz",
+    "hash": "sha256-g0Lr8zupMlyFLKyVPS9fB1Mo27E/BNy8507Xyfo7Z70="
   },
   "khelpcenter": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/khelpcenter-24.05.0.tar.xz",
-    "hash": "sha256-xMUAvUYcWjJkFbE3qNoywJdCbSq3B8qc1QwnehGnexI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/khelpcenter-24.08.2.tar.xz",
+    "hash": "sha256-ZYzPiHsHHWnl6y5k3poLMrJj/7Mf45zKlJvUXpvai4Q="
   },
   "kidentitymanagement": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kidentitymanagement-24.05.0.tar.xz",
-    "hash": "sha256-eNzsufk4zKzP8lcrlRvwMyHOaymgWqnZcSDxwN87AhI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kidentitymanagement-24.08.2.tar.xz",
+    "hash": "sha256-UKbggnbv1eaNJYLB2j+Mjh3aTMRzrP9IRf7AJ9yj9xU="
   },
   "kig": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kig-24.05.0.tar.xz",
-    "hash": "sha256-1Cx6DhSpN3s1ZkxMmqC3sfAZgMi/hzdTEICj/h3WD+g="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kig-24.08.2.tar.xz",
+    "hash": "sha256-oNpiWtSK8ipxfEdXQPRCE8mCLMJJKPUWQ7GvLKdbOqk="
   },
   "kigo": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kigo-24.05.0.tar.xz",
-    "hash": "sha256-5kcgUP6GLmOp2mYG2CXpkwca4OgsODL+xH9DCKxc60c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kigo-24.08.2.tar.xz",
+    "hash": "sha256-kxzRX+w1jIC/g1bKoNaTDZI75B3SvNLab4MsM51uPa0="
   },
   "killbots": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/killbots-24.05.0.tar.xz",
-    "hash": "sha256-4wtZ+/yOZfwcNi8OkVHgJ3m+V5uVw32nmg+opt5M40c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/killbots-24.08.2.tar.xz",
+    "hash": "sha256-k/nu5nE+ieaLElKi2xeLuMpzaZFDPLy/XMHUG9wEot0="
   },
   "kimagemapeditor": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kimagemapeditor-24.05.0.tar.xz",
-    "hash": "sha256-3lqqZrCmEpGJy6i1KM46Op1iz41+I8uX2su39DfVv/I="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kimagemapeditor-24.08.2.tar.xz",
+    "hash": "sha256-r1twJIsYbBxa65hiX2wzJeMqHFKSoI2w8Z6pXExEjOg="
   },
   "kimap": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kimap-24.05.0.tar.xz",
-    "hash": "sha256-Y/EUFloLIHugR4WVCWXim8y4FNGhsgJrrxkA3MFy/cs="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kimap-24.08.2.tar.xz",
+    "hash": "sha256-q93DHzE4LiESTQ0EgRgoiTQ7c7kxjcEgQ+1euq+edTU="
   },
   "kio-admin": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kio-admin-24.05.0.tar.xz",
-    "hash": "sha256-vRoOBqnd+nHKHOoyX8T5Wp2wONra+OtVN4/RpYYIK+I="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kio-admin-24.08.2.tar.xz",
+    "hash": "sha256-9+BSkZmhYaaz0ynwN7AUhulZxe6De53rhdDHzx8YcmM="
   },
   "kio-extras": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kio-extras-24.05.0.tar.xz",
-    "hash": "sha256-wrRjYTO3WAzrnDSkx33mW2Lk4NldfyPTtvDLLcdhVZ8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kio-extras-24.08.2.tar.xz",
+    "hash": "sha256-mab1SMeqwYAX6+K3OsmTJ/JYW0GCV7wcfgZc7YK9LMc="
   },
   "kio-gdrive": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kio-gdrive-24.05.0.tar.xz",
-    "hash": "sha256-kZfiL3St37iLHIglsSzzB5Ly6jAruWhMvNAMswUFkoQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kio-gdrive-24.08.2.tar.xz",
+    "hash": "sha256-0/qmsTsjiL729aiu2blyKg9q/oC6s8nmWwSnB0xL2v4="
   },
   "kio-zeroconf": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kio-zeroconf-24.05.0.tar.xz",
-    "hash": "sha256-pOeNCaJVsFE0KC6RO98dAL1b77AorGhYUCGqiChe1oE="
-  },
-  "kipi-plugins": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kipi-plugins-24.05.0.tar.xz",
-    "hash": "sha256-gzDY2w7sSBExkrSmQ/TbPkFs8o2CO8ZBXmbLUqS93lA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kio-zeroconf-24.08.2.tar.xz",
+    "hash": "sha256-Cv68ADR4ybvVUcSwk5kHx//w7epXkA0hqj1w+AO/6oU="
   },
   "kirigami-gallery": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kirigami-gallery-24.05.0.tar.xz",
-    "hash": "sha256-nX+YTNl/qBvE3QLKQ+wI5sfT//u/zkhx/GjAyKTnRy8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kirigami-gallery-24.08.2.tar.xz",
+    "hash": "sha256-iESLnXKQaz9qUgmeA7ZX0PIBBoEoFo1VDHM2w1uXX0w="
   },
   "kiriki": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kiriki-24.05.0.tar.xz",
-    "hash": "sha256-KhD9YAh7/CZkuQkhLdlWLYVxOyG8TTWWrZCtObEzliU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kiriki-24.08.2.tar.xz",
+    "hash": "sha256-NROQyN1YPX6+bXhk0lJf778qGV7BTdqzi72pAqTw+5k="
   },
   "kiten": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kiten-24.05.0.tar.xz",
-    "hash": "sha256-D7wwOqzi2JrUnhKj1QMdC+AW/882scfcgPsIOZvL4kQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kiten-24.08.2.tar.xz",
+    "hash": "sha256-T2MDF8rJH7bTX3epmHMKK7+dKmhL5t7VU9mrqFpcEes="
   },
   "kitinerary": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kitinerary-24.05.0.tar.xz",
-    "hash": "sha256-9P2SFBfOnJgq8b3Br99xO2/w+A6rwngeWrVz9X7VJaM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kitinerary-24.08.2.tar.xz",
+    "hash": "sha256-bzyMInh90qk5OC4qQrcczczW8j/KTDHrIIDn2sWFJck="
   },
   "kjournald": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kjournald-24.05.0.tar.xz",
-    "hash": "sha256-KbXTUIS+aBWX3afW0wA202wLlzzNahaA/xOKtvNx8Ps="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kjournald-24.08.2.tar.xz",
+    "hash": "sha256-+ynx9UmyxWBuM8Nvt3U7gITn5PmFNkfreddfujHZqlE="
   },
   "kjumpingcube": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kjumpingcube-24.05.0.tar.xz",
-    "hash": "sha256-6ZrSWvI3vKH4Ga24UDY2ZfN1SKulGznfvvJWbgfN/YE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kjumpingcube-24.08.2.tar.xz",
+    "hash": "sha256-RCQ3DCAyCjCDZIyAogMXOFNQLr3JvnXvpjTatIugpOw="
   },
   "kldap": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kldap-24.05.0.tar.xz",
-    "hash": "sha256-iim3l6ySAOzl7HU7Hb/sVNTaWo4PgtWCPG8+wI3qHq4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kldap-24.08.2.tar.xz",
+    "hash": "sha256-gjpCxxdpl9m4/b8xQJFs9KikON5322jH6hAx0Muk/us="
   },
   "kleopatra": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kleopatra-24.05.0.tar.xz",
-    "hash": "sha256-rO3sEjj1wg/sqS1QXRuoGDwvcs6xJ4jslZ46MzZFOEA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kleopatra-24.08.2.tar.xz",
+    "hash": "sha256-hgPbehv8Rsi+1diYh9XbVEk923iUH9qgPBIa1pSyw5U="
   },
   "klettres": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/klettres-24.05.0.tar.xz",
-    "hash": "sha256-1iNdb5Og2cht/deu+DPg49ndKStRVM9fKMu6m1BkHso="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/klettres-24.08.2.tar.xz",
+    "hash": "sha256-ZdHQfMFj0MAvw6aOSrizZZDYmQ3JoQoHsdIm35qZszE="
   },
   "klickety": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/klickety-24.05.0.tar.xz",
-    "hash": "sha256-E3M16vBkdNYYUUjJwfn8Y81gma9jc4U5S1Dj7/yxNVw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/klickety-24.08.2.tar.xz",
+    "hash": "sha256-Si36hCgOwRWeDXN0Q6xjhG4eDcYIX5/X+HbaeBM/vhY="
   },
   "klines": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/klines-24.05.0.tar.xz",
-    "hash": "sha256-UAiw8+ThdjBck1vHXUkL8XTB0+5n4T60Ps5rzJEYcdI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/klines-24.08.2.tar.xz",
+    "hash": "sha256-GMQLh5yv+QKWfHLgtpO7xnFUimOQXXK0RKprUqS539w="
   },
   "kmag": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmag-24.05.0.tar.xz",
-    "hash": "sha256-quQfo4de42k99umLpR0jY98XUio0716Ak3bWFrpaVlE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmag-24.08.2.tar.xz",
+    "hash": "sha256-FXPLvIrXR6LHHx8bu8we3pxsabkEnpelM/jK/HrN5HY="
   },
   "kmahjongg": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmahjongg-24.05.0.tar.xz",
-    "hash": "sha256-CJB8EO4+BcIM+ywVVRhpQ+XBB3Qnav5YCIr6zuZodJQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmahjongg-24.08.2.tar.xz",
+    "hash": "sha256-vKnxozJamIxLLu1KWUZjWEyUUXHTrfXzRDBdhObt62A="
   },
   "kmail": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmail-24.05.0.tar.xz",
-    "hash": "sha256-qYoEr70P6tvute2llgyQK4TJPujSYV2tkOBNh6sGK/Q="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmail-24.08.2.tar.xz",
+    "hash": "sha256-JpaEbLE9yDRdlkidTtGD3kkyj74jOloVVfS5CFHOY4k="
   },
   "kmail-account-wizard": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmail-account-wizard-24.05.0.tar.xz",
-    "hash": "sha256-RAIJUocA/mSP/74UPLZX0LyMYnV3au9qTjXV9FOFw60="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmail-account-wizard-24.08.2.tar.xz",
+    "hash": "sha256-bvJ85SRmU3euCCqgx/Y3WJT2AaMhwXRej5qmgbp3pDk="
   },
   "kmailtransport": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmailtransport-24.05.0.tar.xz",
-    "hash": "sha256-jsZBkt+K9Tia5pAfdgrPljDEvj5T6XDUENhu0rH//UE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmailtransport-24.08.2.tar.xz",
+    "hash": "sha256-9f3gtgXNis+XADBqQGe0Bd86okDcyNBpRoX+icNknWM="
   },
   "kmbox": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmbox-24.05.0.tar.xz",
-    "hash": "sha256-2d4UvxNatfvH8zkVorqyJTMWlojG0P0RPntR5tdEDpo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmbox-24.08.2.tar.xz",
+    "hash": "sha256-dN6qSzL+PAII8RUpgnnEwtI2+nV3QUnBskDLAx23bN0="
   },
   "kmime": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmime-24.05.0.tar.xz",
-    "hash": "sha256-fARJdKwfOs3gGAR2ayTr4Xt0EyAeeOpP+fTw1347uLk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmime-24.08.2.tar.xz",
+    "hash": "sha256-Ahj+H6XvAxik6O9igR2qCu3vFeu+ANMarlNYW0VspmE="
   },
   "kmines": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmines-24.05.0.tar.xz",
-    "hash": "sha256-pDhqzoFk6B67KUpVhzAtaRCGwqs5srusRjICItpFlEE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmines-24.08.2.tar.xz",
+    "hash": "sha256-C6GK0MrBsXTOfiIum0ara4+nlPoUMYTq0KKTBKMm73Q="
   },
   "kmix": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmix-24.05.0.tar.xz",
-    "hash": "sha256-gpar79OJg9jOAUsT2Jx1K8Z2gXsurti65EmzibAzgpU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmix-24.08.2.tar.xz",
+    "hash": "sha256-gxQ0bqFj5AQIY5abO49MdL5PrH3WvJsNz70F3Po4i/w="
   },
   "kmousetool": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmousetool-24.05.0.tar.xz",
-    "hash": "sha256-+E9rHlbuJi8/do5XV6S3Yj6/P8ZkhqCpGlwYYX92n9w="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmousetool-24.08.2.tar.xz",
+    "hash": "sha256-/Lr5RH/ua/ADYqbGg3I4ahGiT3Ln5co7mrtwOOXwme8="
   },
   "kmouth": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmouth-24.05.0.tar.xz",
-    "hash": "sha256-IFgIHEbjQVeYk53NDKa5SYk6p15U38h7YVPHME6xXsw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmouth-24.08.2.tar.xz",
+    "hash": "sha256-SyIboErUr/O0YBzss62WSoAGcmfUWCwZXykMzLfC6k4="
   },
   "kmplot": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kmplot-24.05.0.tar.xz",
-    "hash": "sha256-NA9k/1BLJGhRpAmYhnV7uVllgfcauOpGDlOGFVhWl2A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kmplot-24.08.2.tar.xz",
+    "hash": "sha256-AhayVF52HOZFrhl86Iypm7W4d4ze01rduLMclM/TzQc="
   },
   "knavalbattle": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/knavalbattle-24.05.0.tar.xz",
-    "hash": "sha256-G6rWWotIeuvgJG/TL6RcxNXVTMpx079dB2jtc5pSvRk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/knavalbattle-24.08.2.tar.xz",
+    "hash": "sha256-RXAoyJACcl3bj1jh/osvt9t1bhJA3hu4/Kh61yuuATY="
   },
   "knetwalk": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/knetwalk-24.05.0.tar.xz",
-    "hash": "sha256-EAz+GY24XllxC65I0DTp79QccDThGchmoWNcbf2Uphg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/knetwalk-24.08.2.tar.xz",
+    "hash": "sha256-qwuShnEQX3YgnijPXSCa9IcA03osLAAMFx6yOrJrVyk="
   },
   "knights": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/knights-24.05.0.tar.xz",
-    "hash": "sha256-7ZBhn3njRM62EA/Z1wb4WL2rC4nZqoAg7JXJGA1gSvI="
-  },
-  "knotes": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/knotes-24.05.0.tar.xz",
-    "hash": "sha256-QyQIQq6CA7WqZ6HRNcaAx95M+nQVmcTLjlt0ghk0W/c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/knights-24.08.2.tar.xz",
+    "hash": "sha256-6AOkE+WULrSTBaISHl9+gjUylRreiqcgO+vtGqqki+U="
   },
   "koko": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/koko-24.05.0.tar.xz",
-    "hash": "sha256-gDebUdHD61vs3h0DJjwk/K6Y1NLoi4ttBXypz+sQqbk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/koko-24.08.2.tar.xz",
+    "hash": "sha256-9LgcWc2vby6MGsJn6ULUWT695MdQqHFHvZoRQpZtkIo="
   },
   "kolf": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kolf-24.05.0.tar.xz",
-    "hash": "sha256-mAPSHv5KyirHktvNEz110tM5BXNK0GTDv4zNqgwQj6A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kolf-24.08.2.tar.xz",
+    "hash": "sha256-7QdOexrxPgWsA2J6cLuPEDpUUByXdXvmri5vZjiEHbo="
   },
   "kollision": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kollision-24.05.0.tar.xz",
-    "hash": "sha256-ww1wGsoFF1+1u8UYftTtaGpO+QDNBg/EFF4Yov8CG2s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kollision-24.08.2.tar.xz",
+    "hash": "sha256-QQLAUw38CcYaoQwECPpu94pdAcWW1lYNw1gDf+3TvTM="
   },
   "kolourpaint": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kolourpaint-24.05.0.tar.xz",
-    "hash": "sha256-ZJ5f1UnFSEaV/1Chltxg+fYcPeNUbv8LUuqfQin5IV4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kolourpaint-24.08.2.tar.xz",
+    "hash": "sha256-lCdxvhNMCHGWcBVmLeiLSHcGzXU6b86l/+2VPRL50JU="
   },
   "kompare": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kompare-24.05.0.tar.xz",
-    "hash": "sha256-9v5g5rOtnhDetTcYFISBzhqDu//zKh7b4emCF5mKZ3A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kompare-24.08.2.tar.xz",
+    "hash": "sha256-c3szGmxqba/pKyNYSrX8mTAL91aK8a7zRJNnbeWqk4Q="
   },
   "kongress": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kongress-24.05.0.tar.xz",
-    "hash": "sha256-PGiHXZojhiGP0hQoHFPi8XrCd9Rn7DvnAJWVTh6+iME="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kongress-24.08.2.tar.xz",
+    "hash": "sha256-0Dzz9OXJwvb6xneFLYKA2YYontUejC0wkJ7EbWUEjPw="
   },
   "konqueror": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/konqueror-24.05.0.tar.xz",
-    "hash": "sha256-UIlCx5+2WgIxV83Ca7/MdFHFBvpfjNBu/rHanYJiJC0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/konqueror-24.08.2.tar.xz",
+    "hash": "sha256-N6LnTlpBiMTkqTlPeTu7cO5LcBiQ6gssP/A6JAo+Bzg="
   },
   "konquest": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/konquest-24.05.0.tar.xz",
-    "hash": "sha256-mH7IjXvMHLUs6VoTGqnvrZuVP7JzmL3NJTTGRaQkhLc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/konquest-24.08.2.tar.xz",
+    "hash": "sha256-KZHlAGcCsjReJa9LY/ESSx2O1eunERRQRo2OuBEBd24="
   },
   "konsole": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/konsole-24.05.0.tar.xz",
-    "hash": "sha256-U+/SXB1XREjbV/RG9CMyjH8vCIifZ978HtXHg8nvR/Q="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/konsole-24.08.2.tar.xz",
+    "hash": "sha256-rnLKTi2RI7m62pnS07ATmP9QgrVJs4V5z5qpTCv/1xk="
   },
   "kontact": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kontact-24.05.0.tar.xz",
-    "hash": "sha256-GEo3RlWD1nh4JU3J4Z+/2Mv0m0Ub2GE6GhGCT56/EKY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kontact-24.08.2.tar.xz",
+    "hash": "sha256-Orw/nc1SbPn96oWc5dfcvIrrEtMvMwQP5INVO8Y5NlA="
   },
   "kontactinterface": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kontactinterface-24.05.0.tar.xz",
-    "hash": "sha256-PaCF7y25d/IUp179Qm1K8GXwumAqGkzVAeBquNUTs7A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kontactinterface-24.08.2.tar.xz",
+    "hash": "sha256-mq2qHgFLoYSCMY6uZ1WcpTwVztY4yFumTNfoW6YZaVc="
   },
   "kontrast": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kontrast-24.05.0.tar.xz",
-    "hash": "sha256-YYvQLhS8kkHjt7p7W6oGU7PMvZVFzYSYIEAtdvmJSNk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kontrast-24.08.2.tar.xz",
+    "hash": "sha256-7WCx4in6SisFEcToonoZR5tpJ09psY93ggkize0LUQQ="
   },
   "konversation": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/konversation-24.05.0.tar.xz",
-    "hash": "sha256-845Wu1uZ09FYcOzzlBkDGGLmeBzRYmbcM2JUNBJLH5s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/konversation-24.08.2.tar.xz",
+    "hash": "sha256-rCLjp9t+iDT3zQrY45hKuErK2IoE/kOz4WyR50NSbK4="
   },
   "kopeninghours": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kopeninghours-24.05.0.tar.xz",
-    "hash": "sha256-ysxgl9jm3N/DPoDuQUimjJfeLsARbH9H74l4AfFxUfs="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kopeninghours-24.08.2.tar.xz",
+    "hash": "sha256-Phl+XVjCNZiJgttT1Mm/1BfdbUS+l/2KeRhgfaOOyqY="
   },
   "korganizer": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/korganizer-24.05.0.tar.xz",
-    "hash": "sha256-4SpL40G6Mi1mboRtOBTvtlj7jDWai/ibSDaeuAOTCtc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/korganizer-24.08.2.tar.xz",
+    "hash": "sha256-44SVgn/vjYNkyNT+cFQyBo+Dy5gcv2mGu32BA/c3rjs="
   },
   "kosmindoormap": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kosmindoormap-24.05.0.tar.xz",
-    "hash": "sha256-85lf2Jm3D3C8/yLZFZbUFDA0c86v4kqk6NBbBDbvxTY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kosmindoormap-24.08.2.tar.xz",
+    "hash": "sha256-xnbTm2PDgZkjsCcjryRYSBUI8R4LKl21hO5mDJmWRcY="
   },
   "kpat": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kpat-24.05.0.tar.xz",
-    "hash": "sha256-tKtW3jq3xPpnc3OdPdm8yqlMpWM6bC8sP7VOZjSPdno="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kpat-24.08.2.tar.xz",
+    "hash": "sha256-LZ2oYxXkJLSEBA4ZEUO+CpNupDhUPQeNlud9xSg6BPI="
   },
   "kpimtextedit": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kpimtextedit-24.05.0.tar.xz",
-    "hash": "sha256-kJGtdDMt27mINyU8fVvmMZriXrCpmigmgv2+mRiCRJs="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kpimtextedit-24.08.2.tar.xz",
+    "hash": "sha256-VVtlkHcxQcTYRdbzoCq7Qjh+rUywD+L+wM4XhbanfIU="
   },
   "kpkpass": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kpkpass-24.05.0.tar.xz",
-    "hash": "sha256-s3DcESUH2/hwM9WgSRS+6unmU4IDdP0bSLR29GfYrSg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kpkpass-24.08.2.tar.xz",
+    "hash": "sha256-PwlaqwtPewP6hKSlnKq0UbVF6aPswi3E/ujttZcAy7s="
   },
   "kpmcore": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kpmcore-24.05.0.tar.xz",
-    "hash": "sha256-CQYrDEGvApQ36MpOpPGrLRzGK/ZqzQMA7nBOSEI4Ej4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kpmcore-24.08.2.tar.xz",
+    "hash": "sha256-gdMPMyKssuuHUemAr2yLE/w5lGg/T5AuWIImtwpFZ5U="
   },
   "kpublictransport": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kpublictransport-24.05.0.tar.xz",
-    "hash": "sha256-qaJa0zmKLckou2mt0ZR8g51zzo4AlXt7vWuYVHf0N7s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kpublictransport-24.08.2.tar.xz",
+    "hash": "sha256-qkSjVdz7kC70RIDFSUDfdH3uj3+zYwHa+88F7DCiNOE="
   },
   "kqtquickcharts": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kqtquickcharts-24.05.0.tar.xz",
-    "hash": "sha256-Hkj2aE59uzISQJJzx1vquVBUtGaYZlovoetTksOgVM4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kqtquickcharts-24.08.2.tar.xz",
+    "hash": "sha256-seLcgMf+J/5VUIxkIaua85DcbjxKvwMVFqGm5GMMzP4="
   },
   "krdc": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/krdc-24.05.0.tar.xz",
-    "hash": "sha256-TOTSVSDU3BN73qfZnNjm/m6itFc4nbX6ZZAs5sJw3nI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/krdc-24.08.2.tar.xz",
+    "hash": "sha256-D71VooCV08hGSc/b4S3YaN3swjIF9pjtA+gkWFyLxgs="
   },
   "krecorder": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/krecorder-24.05.0.tar.xz",
-    "hash": "sha256-OTUviqOAq671zpPPnDtO8+Nd/6ac64JAkeQti/cTjzI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/krecorder-24.08.2.tar.xz",
+    "hash": "sha256-6lW1IeWyhnbcASri5Zmodmi7PRIEpm1jIKGeK3cqk5o="
   },
   "kreversi": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kreversi-24.05.0.tar.xz",
-    "hash": "sha256-Gz3gNEO+K2KkKB/mtngcWUqp9C9yUismwP+/C2Tj30s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kreversi-24.08.2.tar.xz",
+    "hash": "sha256-CumrjLymqw2bBYRwBpVFDSmKa7azg5XklJ6BDaWojOE="
   },
   "krfb": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/krfb-24.05.0.tar.xz",
-    "hash": "sha256-qo9ygdOj5Eq34gh7flZ+P+0SXkXTVQnAOor71O4N2pU="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/krfb-24.08.2.tar.xz",
+    "hash": "sha256-wlCw4RbGk1f3sZQVqsN9eOIogLqffZhbB2doFSNeoS0="
   },
   "kross-interpreters": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kross-interpreters-24.05.0.tar.xz",
-    "hash": "sha256-kYa0N+H83S7pzINYbHMqOTDVX/79OSqrQfjUPJ34kfk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kross-interpreters-24.08.2.tar.xz",
+    "hash": "sha256-k0PPK0U8xZdXgOkMobBOx6fwScCZVMjc2Samu7CTc3Y="
   },
   "kruler": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kruler-24.05.0.tar.xz",
-    "hash": "sha256-UyP+7wC3eodUt+aKDemcUWBAg0/3+NYm4FG2oOFJCks="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kruler-24.08.2.tar.xz",
+    "hash": "sha256-E742B4bxaTk7R1akC6HxXklEvi/HxKS7T4dEM+VI5lU="
   },
   "ksanecore": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksanecore-24.05.0.tar.xz",
-    "hash": "sha256-yk+AubfXwmSD0+vXJ5p/aw4I0XyUGd3gYXgLO/vBFb0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksanecore-24.08.2.tar.xz",
+    "hash": "sha256-+RwD6UWjRgdwZYFLJjeNmTjho5wiyIGFo2YmoFI6R00="
   },
   "kshisen": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kshisen-24.05.0.tar.xz",
-    "hash": "sha256-Bnks4NGuNmaSkUV2oerRh6bEUujPT8Ab6s0kAuSEoE4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kshisen-24.08.2.tar.xz",
+    "hash": "sha256-i+eVjXDXrXmS9iz2zptphVZKSytg0RfpZWpM9LMNdUo="
   },
   "ksirk": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksirk-24.05.0.tar.xz",
-    "hash": "sha256-iGPsBTZqd1Tzp5mtYZdWzBe7lW9P73/TPXPOYIRVfxw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksirk-24.08.2.tar.xz",
+    "hash": "sha256-t6StiVIRpvRJcx4U9P1SsNR5ZkhYvQpYrEM8pPKOSdU="
   },
   "ksmtp": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksmtp-24.05.0.tar.xz",
-    "hash": "sha256-Bqz7OXsq1bO3sxdav2WzLEnVbVwUyQ7CkOybAaVZ1S8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksmtp-24.08.2.tar.xz",
+    "hash": "sha256-qKzU8s5G23niiUG/8AqO0Mv1Mv8hT0ltFyEnYrBNuGM="
   },
   "ksnakeduel": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksnakeduel-24.05.0.tar.xz",
-    "hash": "sha256-F6oni0hi6k0hnD3njsgn3sBYzK6yAm7iMXpQtm5NPNc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksnakeduel-24.08.2.tar.xz",
+    "hash": "sha256-biJ1mBjUPOf/h67GpwoQniChBBV6/HTYukoJNASQ0CQ="
   },
   "kspaceduel": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kspaceduel-24.05.0.tar.xz",
-    "hash": "sha256-AbodAsJGZUmcKMePZJT5rdvQphw5QuNrdX558pAw2Js="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kspaceduel-24.08.2.tar.xz",
+    "hash": "sha256-uF+cjbpgTOEhN5FefkXQjN7K6e2iAd9r2RqKOlb0+G8="
   },
   "ksquares": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksquares-24.05.0.tar.xz",
-    "hash": "sha256-zNEFC9m8HwKz/lUPwBLvXra/FMJaELn3BSwnOMIjfjI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksquares-24.08.2.tar.xz",
+    "hash": "sha256-whGNtx+TENOcwrQwVm7UC9z0wwF14zEs/bOS0JmWsWk="
   },
   "ksudoku": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksudoku-24.05.0.tar.xz",
-    "hash": "sha256-Ssd4rBLpX+tarMn94yP5QFjoulx7SWrb1i9RjBLExFM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksudoku-24.08.2.tar.xz",
+    "hash": "sha256-Xoq3Sz9ONmLZcwHoGZwwsIeXNhu5VyEah0tcdvcUkZQ="
   },
   "ksystemlog": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ksystemlog-24.05.0.tar.xz",
-    "hash": "sha256-tdvwuyGNw5J8TYhWJbviIn9P92qDQY0I2q0OQOTXcEo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ksystemlog-24.08.2.tar.xz",
+    "hash": "sha256-d7jmKc2cwJ/lg+mbuv/q/rN9jtobLGy0CCqUJ/qmqW4="
   },
   "kteatime": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kteatime-24.05.0.tar.xz",
-    "hash": "sha256-h5DVfxzO+iEBGhCICrLsDwqmZIi98USs2MGK1LdL20A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kteatime-24.08.2.tar.xz",
+    "hash": "sha256-c3HLUioLNkBHw+L0UFQpJ7fbM78hmGvjKhNuocyO39s="
   },
   "ktimer": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktimer-24.05.0.tar.xz",
-    "hash": "sha256-vsDaZ8NVdARMdOJ6mLpfpzCpLbhB35WPex6NrDgS6CA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktimer-24.08.2.tar.xz",
+    "hash": "sha256-y2Y7K86Np7pf2teDp2DKo5RtFtYZ1Ad16Za7D+0UKHY="
   },
   "ktnef": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktnef-24.05.0.tar.xz",
-    "hash": "sha256-hthFFgwqWb7xkfCsNeEWMOkhI578bG/vmOpUD3TuB6o="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktnef-24.08.2.tar.xz",
+    "hash": "sha256-OI4PkxQTQplH5W380a1CnuI/2E3XkiI+uKSLHBKxhyg="
   },
   "ktorrent": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktorrent-24.05.0.tar.xz",
-    "hash": "sha256-U/foycDFku4s4Chs2jtXmhJPl5BXrjsKrNwT4m6Uoak="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktorrent-24.08.2.tar.xz",
+    "hash": "sha256-DCxxzPYJQ6AQF/a6ADYeYNlgjHrfHUTx6WesFlkW1uI="
   },
   "ktouch": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktouch-24.05.0.tar.xz",
-    "hash": "sha256-dWDoCiH1ysTGgKoxT3wA0NjLbBwpLE23g5k1Ezid0WI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktouch-24.08.2.tar.xz",
+    "hash": "sha256-vH63wPQAH8UIrikFUCAeWBZoSx6JI+So8FcHkboVhbA="
   },
   "ktrip": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktrip-24.05.0.tar.xz",
-    "hash": "sha256-G0PVf+3CsBPJGgoh5EqJllrNYRrRGZfyQxQmTu9xmn0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktrip-24.08.2.tar.xz",
+    "hash": "sha256-PinHfz/LMzs7KyF60K6igLWFQkCTBABrhUtK2rY3oSI="
   },
   "ktuberling": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/ktuberling-24.05.0.tar.xz",
-    "hash": "sha256-IIDcX+cy9eLk0mDrg9oFcCrB2Uaqv74F2oUjoMqP/ME="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/ktuberling-24.08.2.tar.xz",
+    "hash": "sha256-YfpiOs/HC3GhfPTrC53vCT1+Jf2b4yLGzL4/NX3jtEg="
   },
   "kturtle": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kturtle-24.05.0.tar.xz",
-    "hash": "sha256-ZIXknLSbrtk1/DxBK2fGgdVaHhVsplj7wK6hqCY3PnQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kturtle-24.08.2.tar.xz",
+    "hash": "sha256-YgUCpPW9+QsN6fw2he48KP688UVsIrU4Xx+0bII4rak="
   },
   "kubrick": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kubrick-24.05.0.tar.xz",
-    "hash": "sha256-4sBSE0NSMXRr9UYoJ+ogfKy8IGZlNdd+G2ikvOXrP20="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kubrick-24.08.2.tar.xz",
+    "hash": "sha256-WL2MdJ6rB+JQtDeMUc9SJmN1B5AZ82e8mRQc57KG/94="
   },
   "kwalletmanager": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kwalletmanager-24.05.0.tar.xz",
-    "hash": "sha256-qqx/43iCS13dcxtGoxQyrLtC880IC4yYMDA6UnYkZqI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kwalletmanager-24.08.2.tar.xz",
+    "hash": "sha256-+hxNM3xo1jVzJ3YLiZ/VSjHCYGPNdWhoqyuMyZgrgLI="
   },
   "kwave": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kwave-24.05.0.tar.xz",
-    "hash": "sha256-pntIYFZ9Yb4lFMeAZBdH6ohNT0Tduggim4TC3VeQ5DQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kwave-24.08.2.tar.xz",
+    "hash": "sha256-AQQGXKXm8AQgt737Dr2S9SiQfC6WwpB60GkEAyij3P0="
   },
   "kweather": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kweather-24.05.0.tar.xz",
-    "hash": "sha256-+v863UAF0EwziEeum3obwuXG1fRbb1qW7IBtqRueS74="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kweather-24.08.2.tar.xz",
+    "hash": "sha256-9osHF6CnBwC9oHwGhxH2gYHElKqkvmFUfXgadWby52U="
+  },
+  "kweathercore": {
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kweathercore-24.08.2.tar.xz",
+    "hash": "sha256-PjkMyYg1lSNgxkFvve7tdbhzzC2/wMtf3CxyuTtn+xg="
   },
   "kwordquiz": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/kwordquiz-24.05.0.tar.xz",
-    "hash": "sha256-akh5t53uOQoB9BoUzA5QQn2DojDZdzreSt+vmkdANY0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/kwordquiz-24.08.2.tar.xz",
+    "hash": "sha256-6M7KqBCTNjmfo11lraebVG7x/8du8lFdhWKDXSENh34="
   },
   "libgravatar": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libgravatar-24.05.0.tar.xz",
-    "hash": "sha256-U8RZknoAtFBKA2hKbwaw+AHGbzGw9yAs5k19kFl39Ps="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libgravatar-24.08.2.tar.xz",
+    "hash": "sha256-W3UVMlJaKfK6VvlXWWxEYqEW6yBYwgCagCYNSo9pXdk="
   },
   "libkcddb": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkcddb-24.05.0.tar.xz",
-    "hash": "sha256-KnuEQNrXYN0EvsxvunA0Q2SOxK3xz0PRwfKKSVUGd2s="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkcddb-24.08.2.tar.xz",
+    "hash": "sha256-qdZTAB5hG0dk5PqVnxCnMyDkdeIyshvtxle9zwJF9H0="
   },
   "libkcompactdisc": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkcompactdisc-24.05.0.tar.xz",
-    "hash": "sha256-wsYQ0/ggwk1Sq5iNR/pESEqczqzlu99BV1mBMj5hM2Y="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkcompactdisc-24.08.2.tar.xz",
+    "hash": "sha256-r1CI6BCuv/i+/8WAAVlzXgAybSCEKTFzH4GeQAAnw7Q="
   },
   "libkdcraw": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkdcraw-24.05.0.tar.xz",
-    "hash": "sha256-U3bdRq0ho0WnOckSlRDzzYvkazr5WOS3IuaoFkmneIk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkdcraw-24.08.2.tar.xz",
+    "hash": "sha256-TI/jV/L6+5V+UyDWGlWp10ZmWj7q/CTaKFGA63H7re4="
   },
   "libkdegames": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkdegames-24.05.0.tar.xz",
-    "hash": "sha256-jLs7v7zE6cX9Fcth/1Qt4XwfWmaEB6lQ1HoxHqDdfuQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkdegames-24.08.2.tar.xz",
+    "hash": "sha256-6n2S2qcRm40ww7xeggCZKtILdgkuWJZQHLh4JhdHgEI="
   },
   "libkdepim": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkdepim-24.05.0.tar.xz",
-    "hash": "sha256-Yv7fUMmSlvsHbJ9OoNkHIoo/kSyPknxFkVbLXIlQuoo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkdepim-24.08.2.tar.xz",
+    "hash": "sha256-5Gkrx28BiKP9QJ6q4Rl8bqdi5TISSEHfa4smnxsi1F0="
   },
   "libkeduvocdocument": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkeduvocdocument-24.05.0.tar.xz",
-    "hash": "sha256-+oVNfb8xSJX0LLH37hFKlF73Y8X4o/MtOAT49kf6t/I="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkeduvocdocument-24.08.2.tar.xz",
+    "hash": "sha256-v9e0aKUwlCHIiXCPQ1aDhf3M3vHWUt4VZm/q9Z9ZcqE="
   },
   "libkexiv2": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkexiv2-24.05.0.tar.xz",
-    "hash": "sha256-DO7WiuF8wiXJFddOe2fnfXkS1WYTwKhCz+AN0X0FTXQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkexiv2-24.08.2.tar.xz",
+    "hash": "sha256-4pJGU23AryjEZwhkFhTsf54hdOAjPq038z6ZqroJgJM="
   },
   "libkgapi": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkgapi-24.05.0.tar.xz",
-    "hash": "sha256-2Hi4UhqoMnb4gH+Xz6WzB5iKYJTOwFVhR/rKWukXOYE="
-  },
-  "libkipi": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkipi-24.05.0.tar.xz",
-    "hash": "sha256-k1qhwNpc7EiLewh6Z93jL98UgKdJLEzE/Aj+wXslEcM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkgapi-24.08.2.tar.xz",
+    "hash": "sha256-2XV586ne5xpt3Ta1JaZ6DTs04QbLi8GF3ubNGs0wYxc="
   },
   "libkleo": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkleo-24.05.0.tar.xz",
-    "hash": "sha256-PQn6J80PagQQdk2xIH51e3IWueavObyhozDOE3jhZs8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkleo-24.08.2.tar.xz",
+    "hash": "sha256-Q72tjs6nGpRK7LEB5wANuPtqDFCK/Y6FawRYhyML9g4="
   },
   "libkmahjongg": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkmahjongg-24.05.0.tar.xz",
-    "hash": "sha256-ldNWTua+yzgfSYRMCkfB9ntMnXVTB68E/24J69zqfS0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkmahjongg-24.08.2.tar.xz",
+    "hash": "sha256-oGOgduXkAcL6X0aXS8HGrAXrysEoeyp15TSAiclkrho="
   },
   "libkomparediff2": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libkomparediff2-24.05.0.tar.xz",
-    "hash": "sha256-IroodwLcRIs8n0V6tgxuTL9o+1Qc2DpnvSh6oFcyMA4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libkomparediff2-24.08.2.tar.xz",
+    "hash": "sha256-8dyhIR5u2EIS9l1u5PukZ3DGThlasPAF1u5EHdCy5ow="
   },
   "libksane": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libksane-24.05.0.tar.xz",
-    "hash": "sha256-5zxvGmWuQNrs2ZTCmq4Oh5uYMvAHg+oimlyJcGkXEcg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libksane-24.08.2.tar.xz",
+    "hash": "sha256-6vNORJEOqdRvEUmw6393YkIsw5Vn4qArlm72GLlFMJE="
   },
   "libksieve": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libksieve-24.05.0.tar.xz",
-    "hash": "sha256-VS4FpqEytxp4vLWoHM69gpudWc6k4J5D9IBdl9+Sy0M="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libksieve-24.08.2.tar.xz",
+    "hash": "sha256-yapayByDfwMBjI1cNXu3+RSlAATyEG08XaZVeaUOHPA="
   },
   "libktorrent": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/libktorrent-24.05.0.tar.xz",
-    "hash": "sha256-c2E+uc+P2xv/Dd85d2mIcTI0T36wVv9BJ8MH8axAj4E="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/libktorrent-24.08.2.tar.xz",
+    "hash": "sha256-gh1IFw8hfnBV7Rh806Qz3w4DhAANEfRI/Dxujv7p6Rc="
   },
   "lokalize": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/lokalize-24.05.0.tar.xz",
-    "hash": "sha256-Enb4o2klXbFvLQHJs3i9k8LWaA+j9Sn8WkSJrMqtJK0="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/lokalize-24.08.2.tar.xz",
+    "hash": "sha256-8iGuejWWdFSjniG4ICaOZmnNACDYTQPgNiYeEsVs/6o="
   },
   "lskat": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/lskat-24.05.0.tar.xz",
-    "hash": "sha256-kx+A+ePLPGUaB0w3oknEGTpk096GJbs90P6CyKNw/eg="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/lskat-24.08.2.tar.xz",
+    "hash": "sha256-/JlSqKoouA8D1jBrFKtQXSVYUPT5VjzQLrr9+ge7haM="
   },
   "mailcommon": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/mailcommon-24.05.0.tar.xz",
-    "hash": "sha256-4Td+R9b5xgJrQyG4BgOb/fnMSqGQzxwzWTCx0BoUPoM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/mailcommon-24.08.2.tar.xz",
+    "hash": "sha256-dSHonywH6C+qG16XmU2y9q0uxqiMdRPnGC1ZfhvH0Xc="
   },
   "mailimporter": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/mailimporter-24.05.0.tar.xz",
-    "hash": "sha256-KdZwH2g6JHhmtZSQ6yYFVEq+hdeZU9zPP/KDhjVtP0w="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/mailimporter-24.08.2.tar.xz",
+    "hash": "sha256-dE63EAkJJOt5r/vyhar1jjS4F+FXArMttrkwQ8HVeGg="
   },
   "marble": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/marble-24.05.0.tar.xz",
-    "hash": "sha256-4XoqCHzaQgPYWNDLrlTdTI0SOAFK+k5TL7gNvj8bqaY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/marble-24.08.2.tar.xz",
+    "hash": "sha256-dUGw5kDEuUHrhoMDkHkBjQGAzHIlj5/h1Wusmy9oJzs="
   },
   "markdownpart": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/markdownpart-24.05.0.tar.xz",
-    "hash": "sha256-P0F2889BsV/O0lHuchHqz0t4Y+iczOOnkyKRJKMWKqM="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/markdownpart-24.08.2.tar.xz",
+    "hash": "sha256-FbM0H3I/lp7tYcFODuxXpdeoqTGskBiwbRGDMRv1ujA="
+  },
+  "massif-visualizer": {
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/massif-visualizer-24.08.2.tar.xz",
+    "hash": "sha256-SkUWECEUN4zfqIdDxjLiBpYgnDdwg3MwqUUnVxpTRME="
   },
   "mbox-importer": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/mbox-importer-24.05.0.tar.xz",
-    "hash": "sha256-fxZ8kBnKmf8cWnTIFkszbz3KROKA9c2g7g7vxTagkUk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/mbox-importer-24.08.2.tar.xz",
+    "hash": "sha256-W+dq6hLl6Xc2KUy+rj3JxMD5QmOqy8/I7NOvglcsj4Y="
   },
   "merkuro": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/merkuro-24.05.0.tar.xz",
-    "hash": "sha256-62MuWhger9fwcSUxsazK91XYHIDrm/j+3YxZ/UMFyuI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/merkuro-24.08.2.tar.xz",
+    "hash": "sha256-7zv3e0rFT192IuQ9JGhegl15Hxx2ek4QbdatKm+R8BQ="
   },
   "messagelib": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/messagelib-24.05.0.tar.xz",
-    "hash": "sha256-wOoDA9OfAW+sOaiomp7XT9j0kVeZl945MlNCvQwSzcE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/messagelib-24.08.2.tar.xz",
+    "hash": "sha256-9yfAX/+3QKCjtRZ0RmoTfCOtYC08oT090HB4B5tLQUk="
   },
   "mimetreeparser": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/mimetreeparser-24.05.0.tar.xz",
-    "hash": "sha256-CUAOSsnLWQkGxaCnGWub6N69EvZW8f+EVTe7RHwEdV4="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/mimetreeparser-24.08.2.tar.xz",
+    "hash": "sha256-MRJOsi0CL6mCH/tRA+TZpKjrO9Cvx+wQKwdk/+OOYXo="
   },
   "minuet": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/minuet-24.05.0.tar.xz",
-    "hash": "sha256-QRR35LK6+/eBVrb5QEqGdTNKcWr0PHczIKzGZPV3Njo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/minuet-24.08.2.tar.xz",
+    "hash": "sha256-OkMJAuinU2FNI+Vzv4AG7Yneq7ArGJGoWge7hOxtsHA="
   },
   "neochat": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/neochat-24.05.0.tar.xz",
-    "hash": "sha256-kA7O70X1eM2HytkrRzbYblwYHF+TMKb3eVb9KmQj0bE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/neochat-24.08.2.tar.xz",
+    "hash": "sha256-hz8I817xBVsXZHCYorpaOSTcD7g1BEHTgMNZjYITwbw="
   },
   "okular": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/okular-24.05.0.tar.xz",
-    "hash": "sha256-bzIveN4qoKQHk1H+RlHAgL2Y0n7rf53MN3ZScbSjrIA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/okular-24.08.2.tar.xz",
+    "hash": "sha256-QInHfVvmCu29RdoNS6MZ45CbFaZAzVHTYbAdla0zyPs="
   },
   "palapeli": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/palapeli-24.05.0.tar.xz",
-    "hash": "sha256-XlfWhWUntYONFmC92pBddhIoSdOTijHHG3J0j3jSeXw="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/palapeli-24.08.2.tar.xz",
+    "hash": "sha256-JFhZ1nkH91hFuq7nA7DlafceA+bH9gGV9WphdZoLoy0="
   },
   "parley": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/parley-24.05.0.tar.xz",
-    "hash": "sha256-PKGy4dkjtq58NhV3pMXkgf8ZaA9NVStLHi8ZBbTFF2A="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/parley-24.08.2.tar.xz",
+    "hash": "sha256-nblLobCcIkhdbAS5pc1IRCZZFQEVMtLkx0EdkmTOxPw="
   },
   "partitionmanager": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/partitionmanager-24.05.0.tar.xz",
-    "hash": "sha256-aC8DAiE9lbYoBkImz8ztaqKZvIG37Uam5wXoEQMfumY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/partitionmanager-24.08.2.tar.xz",
+    "hash": "sha256-oimr4ialV3dXjDgnZ37CIYxpxaYxpxQ28mid5g9tTqo="
   },
   "picmi": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/picmi-24.05.0.tar.xz",
-    "hash": "sha256-9j57xfJy66hNrOcTCOhtlhT/bhCQyuThol1gGSYpJPc="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/picmi-24.08.2.tar.xz",
+    "hash": "sha256-JY7O2o/YZkuP1vQqXG3r2PUReukVAAESU2+cxolG1gI="
   },
   "pimcommon": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/pimcommon-24.05.0.tar.xz",
-    "hash": "sha256-YuWnQdCFYysgY4KCoE4szSqsqIfDYOIkRLXcux+WHB8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/pimcommon-24.08.2.tar.xz",
+    "hash": "sha256-NVux0isn6x+3tqbOz45daOKIpSrKSnr9NPcj+Q+UI6Y="
   },
   "pim-data-exporter": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/pim-data-exporter-24.05.0.tar.xz",
-    "hash": "sha256-5sWx1etc8CT7NpL6JPl4rE9MS9vg89D8I0/OjCRp8us="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/pim-data-exporter-24.08.2.tar.xz",
+    "hash": "sha256-Oj5tie3p0AplOKylrJNSZjjK4fLripWL5gq5xQ0hNDY="
   },
   "pim-sieve-editor": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/pim-sieve-editor-24.05.0.tar.xz",
-    "hash": "sha256-D8AMmlMamZjwMajmUXw7mnV3sTn0Ch7T9Mijb2i3tU8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/pim-sieve-editor-24.08.2.tar.xz",
+    "hash": "sha256-g98WYyHHcj0SI71ibImFnDZciZ6NZRhDtXDOL4VrjxA="
   },
   "plasmatube": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/plasmatube-24.05.0.tar.xz",
-    "hash": "sha256-MSG73rDjj4j4bw4Hz0fHuIuCE73B9XSJo33SeSjBEcE="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/plasmatube-24.08.2.tar.xz",
+    "hash": "sha256-b2yaWcQv7t8+TQJ2qtqjwqm68yqGJp/2pOx1sww3kyw="
   },
   "poxml": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/poxml-24.05.0.tar.xz",
-    "hash": "sha256-JyCI4b7NhP8LCQSje/8ADYuFqvJP+m717wTy8OnjSAI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/poxml-24.08.2.tar.xz",
+    "hash": "sha256-4IVUj6HmzPiM3daefE5oATT1/qiLTrh45FRiqFg6JXw="
   },
   "qmlkonsole": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/qmlkonsole-24.05.0.tar.xz",
-    "hash": "sha256-TjFF/dst8SF5Oo9Sw1WQqWh1n2EaeY2PRKndoB0dQkI="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/qmlkonsole-24.08.2.tar.xz",
+    "hash": "sha256-M873T020YW8TsL/oxd5tgjonV14mNo1rMK3iPLZQi3I="
   },
   "rocs": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/rocs-24.05.0.tar.xz",
-    "hash": "sha256-g0aIUZokMLnjZ8ONfm1cY2SgUFlE0OV01RMApyuTkUA="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/rocs-24.08.2.tar.xz",
+    "hash": "sha256-0QAwFhLg0/4+0k2u4oxr0Te0C8sq+cdSZCpghH3FGFI="
   },
   "signon-kwallet-extension": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/signon-kwallet-extension-24.05.0.tar.xz",
-    "hash": "sha256-si4GLHPeP4cHwI25OIQV4nxAwF5w9SWMS1/t0E7Yr8c="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/signon-kwallet-extension-24.08.2.tar.xz",
+    "hash": "sha256-1Y2CnbVI8myXtBwgqGR3dwDvRMRCSms0EALIRZCYD/w="
   },
   "skanlite": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/skanlite-24.05.0.tar.xz",
-    "hash": "sha256-pu97eo60pg7fpfyzkrgn9JA4nqA2TtaTYPaccj1rP8w="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/skanlite-24.08.2.tar.xz",
+    "hash": "sha256-fNuWQRIYc5UkG3EbU1EPm2DaPeexO6qT8g1XnqLXMaY="
   },
   "skanpage": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/skanpage-24.05.0.tar.xz",
-    "hash": "sha256-LHQeX0dvcBPoMvmWt5p07uyiW1bpLRUs7MXe2F1IO2E="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/skanpage-24.08.2.tar.xz",
+    "hash": "sha256-dJ1e2txwGYLstcGHg9L/E9cuplKdnZ6OO8EnE6uwKxk="
   },
   "skladnik": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/skladnik-24.05.0.tar.xz",
-    "hash": "sha256-wilw2+3JhVGV8H6H5VQIPNADTEFC03sgnN/0W5ZKev8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/skladnik-24.08.2.tar.xz",
+    "hash": "sha256-daL1m8awJK7puBf4/oLSZup4Drs64eYEGI+VgPVP1b4="
   },
   "spectacle": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/spectacle-24.05.0.tar.xz",
-    "hash": "sha256-3vKFHo2zzADqsIENmIAUsVuPI7R0uTKxzfPGFEMm1ao="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/spectacle-24.08.2.tar.xz",
+    "hash": "sha256-P5D4z+M1mtlPW7ACWpJRgFoJLFiSzSqJGWXCGgmEy98="
   },
   "step": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/step-24.05.0.tar.xz",
-    "hash": "sha256-X0rorwWFTJzKQlaSXXeEpBU7koHsRCFB8pmmU8MgzMk="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/step-24.08.2.tar.xz",
+    "hash": "sha256-6f9AC8kvbJViWIwIB2FQVTMLI2RlzHpEDu1ZbCK/csI="
   },
   "svgpart": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/svgpart-24.05.0.tar.xz",
-    "hash": "sha256-fQJDisOw2I5ZplPyMC0dvHolNc5ifUnrUKOjOFLbQtQ="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/svgpart-24.08.2.tar.xz",
+    "hash": "sha256-ymFR/KYkDFL0MbzJj/5OFkku/uGI16IxLwbbZcC1xhg="
   },
   "sweeper": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/sweeper-24.05.0.tar.xz",
-    "hash": "sha256-aQHCD2D+86/dMrJWoGJVQZhCREfadgaXBht1wQQyVlY="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/sweeper-24.08.2.tar.xz",
+    "hash": "sha256-LSwg7d9nhp58JaWA5PXYgQLexfVT/3B5MF4fANhEVDU="
   },
   "telly-skout": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/telly-skout-24.05.0.tar.xz",
-    "hash": "sha256-cKZ5kC2uPK90lA80JKDm0hnVDYsMbl3fnIz29/d+zh8="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/telly-skout-24.08.2.tar.xz",
+    "hash": "sha256-y5577kur5lqL/hEXFWnf4qOfBj8SdGUU2XNWrSfGVsY="
   },
   "tokodon": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/tokodon-24.05.0.tar.xz",
-    "hash": "sha256-V1zH08/m0otpOQtswgpPpUHTIM2M/ISvwZL+CU4dnuo="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/tokodon-24.08.2.tar.xz",
+    "hash": "sha256-uEHi9gc1YsGohLJAfT2FpiyoQYvcvLk6Fpt/Pabx2SI="
   },
   "umbrello": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/umbrello-24.05.0.tar.xz",
-    "hash": "sha256-5VStctZd8p3/sXLMaFEWejiUyyCo077wVO0niPwavro="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/umbrello-24.08.2.tar.xz",
+    "hash": "sha256-HlolgPVSawdxb4spDZTaOT2BiPD+OqCHYySvtn3TPEU="
   },
   "yakuake": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/yakuake-24.05.0.tar.xz",
-    "hash": "sha256-ETwtDuNUoSq2yjRp/mjAhiF2iNwu5oAzX//kx52a+6I="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/yakuake-24.08.2.tar.xz",
+    "hash": "sha256-+wij2zZISxXD0u+ydpRrmr9FqX1X62dqGBcjLUZB8ac="
   },
   "zanshin": {
-    "version": "24.05.0",
-    "url": "mirror://kde/stable/release-service/24.05.0/src/zanshin-24.05.0.tar.xz",
-    "hash": "sha256-PSE+XCfIizH3x46EexclmfsyodhvFMmsCZE46nKyHho="
+    "version": "24.08.2",
+    "url": "mirror://kde/stable/release-service/24.08.2/src/zanshin-24.08.2.tar.xz",
+    "hash": "sha256-duajViqesjC1O1EZ27/IfSLAPJ2bpiNU2qlvx/lfPqs="
   }
 }

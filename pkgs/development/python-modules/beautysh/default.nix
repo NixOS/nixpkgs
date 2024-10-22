@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   poetry-core,
-  pytestCheckHook,
+  pytest7CheckHook,
   setuptools,
   types-colorama,
   types-setuptools,
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     types-setuptools
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   pythonImportsCheck = [ "beautysh" ];
 

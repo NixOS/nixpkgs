@@ -7,7 +7,7 @@
 let
   cfg = config.services.nextjs-ollama-llm-ui;
   # we have to override the URL to a Ollama service here, because it gets baked into the web app.
-  nextjs-ollama-llm-ui = cfg.package.override { ollamaUrl = "https://ollama.lambdablob.com"; };
+  nextjs-ollama-llm-ui = cfg.package.override { inherit (cfg) ollamaUrl; };
 in
 {
   options = {
@@ -52,7 +52,7 @@ in
 
       ollamaUrl = lib.mkOption {
         type = lib.types.str;
-        default = "127.0.0.1:11434";
+        default = "http://127.0.0.1:11434";
         example = "https://ollama.example.org";
         description = ''
           The address (including host and port) under which we can access the Ollama backend server.
@@ -79,6 +79,7 @@ in
         serviceConfig = {
           ExecStart = "${lib.getExe nextjs-ollama-llm-ui}";
           DynamicUser = true;
+          CacheDirectory = "nextjs-ollama-llm-ui";
         };
       };
     };

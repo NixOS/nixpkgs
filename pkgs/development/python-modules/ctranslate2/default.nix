@@ -13,7 +13,6 @@
 
   # tests
   pytestCheckHook,
-  tensorflow-bin,
   torch,
   transformers,
   wurlitzer,
@@ -48,7 +47,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    tensorflow-bin
     torch
     transformers
     wurlitzer
@@ -64,6 +62,16 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError: assert 'int8' in {'float32'}
     "test_get_supported_compute_types"
+    # Tensorflow (tf) not available in Python 3.12 yet
+    # To remove when https://github.com/NixOS/nixpkgs/pull/325224 is fixed
+    "test_opennmt_tf_model_conversion"
+    "test_opennmt_tf_model_quantization"
+    "test_opennmt_tf_model_conversion_invalid_vocab"
+    "test_opennmt_tf_model_conversion_invalid_dir"
+    "test_opennmt_tf_shared_embeddings_conversion"
+    "test_opennmt_tf_postnorm_transformer_conversion"
+    "test_opennmt_tf_gpt_conversion"
+    "test_opennmt_tf_multi_features"
   ];
 
   disabledTestPaths = [

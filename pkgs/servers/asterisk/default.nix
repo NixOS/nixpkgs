@@ -27,7 +27,6 @@
 , autoconf
 , libtool
 , automake
-, fetchpatch
 , python3
 , writeScript
 , withOpus ? true

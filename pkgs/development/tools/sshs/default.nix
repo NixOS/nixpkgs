@@ -1,40 +1,31 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, sshs
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  sshs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "sshs";
-  version = "4.2.1";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "quantumsheep";
-    repo = pname;
+    repo = "sshs";
     rev = version;
-    hash = "sha256-phVwNPElQOTgsrDxzyUcDMByxi7t1IIPFCEHJTXiBdY=";
+    hash = "sha256-8tIIpGEQBXfLQ/Bok4KrpDGwoYhIQz/ylg6fUc6mBdc=";
   };
 
-  cargoLock = {
-    # Patch version output
-    lockFile = ./Cargo.lock;
-  };
+  cargoHash = "sha256-w+KYaYO3LXUEk4If6LSncS5KZJyNl8JMLGa+NtF3hf0=";
 
-  postPatch = ''
-    ln -sf ${./Cargo.toml} Cargo.toml
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
+  passthru.tests.version = testers.testVersion { package = sshs; };
 
-  passthru.tests.version = testers.testVersion {
-    package = sshs;
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Terminal user interface for SSH";
     homepage = "https://github.com/quantumsheep/sshs";
-    license = licenses.mit;
-    maintainers = with maintainers; [ not-my-segfault ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ not-my-segfault ];
     mainProgram = "sshs";
   };
 }

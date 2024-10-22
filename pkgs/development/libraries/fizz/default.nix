@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-Wno-dev"
     (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
   ];
 

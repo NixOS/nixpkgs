@@ -1,21 +1,18 @@
 { pkgs, lib, config, ... }:
-
-with lib;
-
 let
   cfg = config.services.hardware.openrgb;
 in {
   options.services.hardware.openrgb = {
-    enable = mkEnableOption "OpenRGB server, for RGB lighting control";
+    enable = lib.mkEnableOption "OpenRGB server, for RGB lighting control";
 
-    package = mkPackageOption pkgs "openrgb" { };
+    package = lib.mkPackageOption pkgs "openrgb" { };
 
-    motherboard = mkOption {
-      type = types.nullOr (types.enum [ "amd" "intel" ]);
+    motherboard = lib.mkOption {
+      type = lib.types.nullOr (lib.types.enum [ "amd" "intel" ]);
       default = if config.hardware.cpu.intel.updateMicrocode then "intel"
         else if config.hardware.cpu.amd.updateMicrocode then "amd"
         else null;
-      defaultText = literalMD ''
+      defaultText = lib.literalMD ''
         if config.hardware.cpu.intel.updateMicrocode then "intel"
         else if config.hardware.cpu.amd.updateMicrocode then "amd"
         else null;
@@ -23,15 +20,15 @@ in {
       description = "CPU family of motherboard. Allows for addition motherboard i2c support.";
     };
 
-    server.port = mkOption {
-      type = types.port;
+    server.port = lib.mkOption {
+      type = lib.types.port;
       default = 6742;
       description = "Set server port of openrgb.";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
@@ -51,5 +48,5 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ jonringer ];
+  meta.maintainers = [ ];
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     libvorbis
-  ] ++ lib.optional stdenv.isDarwin SDL;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin SDL;
 
   env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-narrowing"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   ]);
 
   meta = with lib; {
-    description = "An audio player for the text console";
+    description = "Audio player for the text console";
     homepage = "http://www.mp3blaster.org/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ earldouglas ];

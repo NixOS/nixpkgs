@@ -1,7 +1,7 @@
-{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook3
+{ lib, fetchurl, gettext, wrapGAppsHook3
 
 # Native dependencies
-, python3, gtk3, gobject-introspection, gnome
+, python3, gtk3, gobject-introspection, adwaita-icon-theme
 , gtksourceview4
 , glib-networking
 
@@ -21,17 +21,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.8.4";
+  version = "1.9.5";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-WPzth7HOAbPVJpvN8zSZJGUzsBtACNlwHrHhDPlOScU=";
+    hash = "sha256-f99NsOsWp+vGecI2DxRfZOCrz/DxaRPEX5LI642HVjw=";
   };
 
   format = "pyproject";
 
   buildInputs = [
-    gtk3 gnome.adwaita-icon-theme
+    gtk3
+    adwaita-icon-theme
     gtksourceview4
     glib-networking
   ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
@@ -52,20 +53,12 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
-    omemo-dr qrcode
+    omemo-dr qrcode sqlalchemy emoji
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
   nativeCheckInputs = [ xvfb-run dbus ];
-
-  preBuild = ''
-    python pep517build/build_metadata.py -o dist/metadata
-  '';
-
-  postInstall = ''
-    python pep517build/install_metadata.py dist/metadata --prefix=$out
-  '';
 
   checkPhase = ''
     xvfb-run dbus-run-session \

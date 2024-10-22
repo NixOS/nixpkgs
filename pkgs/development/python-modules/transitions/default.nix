@@ -9,19 +9,18 @@
   pycodestyle,
   pygraphviz,
   pytestCheckHook,
-  pythonAtLeast,
   setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "transitions";
-  version = "0.9.1";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NULDcQjpPirl8hUgjsVzLJSncpN4VKECzXNFuWf+5hs=";
+    hash = "sha256-L4SQ29vUGTZs7xUWAyqwbQfMtYOe9UkF6EKkcmktQgQ=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +47,7 @@ buildPythonPackage rec {
       "test_diagram"
       "test_ordered_with_graph"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Upstream issue https://github.com/pygraphviz/pygraphviz/issues/441
       "test_binary_stream"
     ];
@@ -57,7 +56,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/pytransitions/transitions";
-    description = "A lightweight, object-oriented finite state machine implementation in Python";
+    description = "Lightweight, object-oriented finite state machine implementation in Python";
     changelog = "https://github.com/pytransitions/transitions/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

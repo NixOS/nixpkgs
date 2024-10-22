@@ -1,6 +1,7 @@
 { buildDunePackage, dolmen, dolmen_type
 , gen
 , pp_loc
+, mdx
 }:
 
 buildDunePackage {
@@ -9,7 +10,11 @@ buildDunePackage {
 
   propagatedBuildInputs = [ dolmen dolmen_type gen pp_loc ];
 
+  doCheck = true;
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [ mdx ];
+
   meta = dolmen.meta // {
-    description = "A tool library for automated deduction tools";
+    description = "Tool library for automated deduction tools";
   };
 }

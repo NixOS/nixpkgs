@@ -1,7 +1,4 @@
-{ lib
-, stdenv
-, pkgs
-, makeSetupHook
+{ makeSetupHook
 , waf
 }:
 
@@ -13,12 +10,10 @@ makeSetupHook {
     # waf is not inserted into propagatedBuildInputs, rather it is inserted
     # directly
     inherit waf;
-    wafCrossFlags = lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system)
-      ''--cross-compile "--cross-execute=${stdenv.targetPlatform.emulator pkgs}"'';
   };
 
   meta = {
-    description = "A setup hook for using Waf in Nixpkgs";
+    description = "Setup hook for using Waf in Nixpkgs";
     inherit (waf.meta) maintainers platforms broken;
   };
 } ./setup-hook.sh

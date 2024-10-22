@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "duecredit";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IQgrmEclF/USrTjn5A0BbJ5GHgXh1R/KPJx4K4FuUuY=";
+    hash = "sha256-/nOiDk+7LZcroB7fN97BsLoeZG7+XvTMrwxnJMoofUI=";
   };
 
   postPatch = ''

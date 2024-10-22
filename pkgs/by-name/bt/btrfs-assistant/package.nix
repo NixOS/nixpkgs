@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, bash
-, btrfs-progs
-, cmake
-, coreutils
-, git
-, pkg-config
-, qt6
-, snapper
-, util-linux
-, enableSnapper ? true
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  bash,
+  btrfs-progs,
+  cmake,
+  coreutils,
+  git,
+  pkg-config,
+  qt6,
+  snapper,
+  util-linux,
+  enableSnapper ? true,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,58 +30,52 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     git
     pkg-config
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
     btrfs-progs
+    coreutils
     qt6.qtbase
     qt6.qtsvg
     qt6.qttools
     qt6.qtwayland
-  ];
+    util-linux
+  ] ++ lib.optionals enableSnapper [ snapper ];
 
-  propagatedBuildInputs = [ qt6.wrapQtAppsHook ];
+  prePatch =
+    ''
+      substituteInPlace src/util/System.cpp \
+        --replace-fail '/bin/bash' "${lib.getExe bash}"
 
-  prePatch = ''
-    substituteInPlace src/util/System.cpp \
-      --replace '/bin/bash' "${lib.getExe bash}"
-  ''
-  + lib.optionalString enableSnapper ''
-    substituteInPlace src/main.cpp \
-      --replace '/usr/bin/snapper' "${lib.getExe snapper}"
-  '';
+      substituteInPlace src/main.cpp \
+        --replace-fail 'if (!qEnvironmentVariableIsEmpty("DISPLAY"))' ' if(!qEnvironmentVariableIsEmpty("DISPLAY") || !qEnvironmentVariableIsEmpty("WAYLAND_DISPLAY"))'
+    ''
+    + lib.optionalString enableSnapper ''
+      substituteInPlace src/main.cpp \
+        --replace-fail '/usr/bin/snapper' "${lib.getExe snapper}"
+    '';
 
-  postPatch = ''
-    substituteInPlace src/org.btrfs-assistant.pkexec.policy \
-      --replace '/usr/bin' "$out/bin"
+  postPatch =
+    ''
+      substituteInPlace src/org.btrfs-assistant.pkexec.policy \
+        --replace-fail '/usr/bin' "$out/bin"
 
-    substituteInPlace src/btrfs-assistant \
-      --replace 'btrfs-assistant-bin' "$out/bin/btrfs-assistant-bin"
+      substituteInPlace src/btrfs-assistant \
+        --replace-fail 'btrfs-assistant-bin' "$out/bin/btrfs-assistant-bin"
 
-    substituteInPlace src/btrfs-assistant-launcher \
-      --replace 'btrfs-assistant' "$out/bin/btrfs-assistant"
-  ''
-  + lib.optionalString enableSnapper ''
-    substituteInPlace src/btrfs-assistant.conf \
-      --replace '/usr/bin/snapper' "${lib.getExe snapper}"
-  '';
-
-  qtWrapperArgs =
-    let
-      runtimeDeps = lib.makeBinPath ([
-        coreutils
-        util-linux
-      ]
-      ++ lib.optionals enableSnapper [ snapper ]);
-    in
-    [
-      "--prefix PATH : ${runtimeDeps}"
-    ];
+      substituteInPlace src/btrfs-assistant-launcher \
+        --replace-fail 'btrfs-assistant' "$out/bin/btrfs-assistant"
+    ''
+    + lib.optionalString enableSnapper ''
+      substituteInPlace src/btrfs-assistant.conf \
+        --replace-fail '/usr/bin/snapper' "${lib.getExe snapper}"
+    '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A GUI management tool to make managing a Btrfs filesystem easier";
+    description = "GUI management tool to make managing a Btrfs filesystem easier";
     homepage = "https://gitlab.com/btrfs-assistant/btrfs-assistant";
     license = lib.licenses.gpl3Only;
     mainProgram = "btrfs-assistant-bin";

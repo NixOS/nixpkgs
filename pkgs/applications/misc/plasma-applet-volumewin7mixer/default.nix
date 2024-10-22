@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    description = "A fork of the default volume plasmoid with a Windows 7 theme (vertical sliders)";
+    description = "Fork of the default volume plasmoid with a Windows 7 theme (vertical sliders)";
     homepage = "https://github.com/Zren/plasma-applet-volumewin7mixer";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

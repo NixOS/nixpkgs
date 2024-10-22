@@ -17,7 +17,6 @@
 , wayland
 , gocryptfs
 , cryfs
-, cmake
 }:
 
 stdenv.mkDerivation rec {

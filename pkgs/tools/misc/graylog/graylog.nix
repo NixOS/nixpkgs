@@ -1,13 +1,13 @@
 { lib, stdenv, fetchurl, makeWrapper, openjdk11_headless, openjdk17_headless, systemd, nixosTests}:
 
-{ version, sha256, maintainers, license }:
+{ version, hash, maintainers, license }:
 stdenv.mkDerivation rec {
   pname = "graylog_${lib.versions.majorMinor version}";
   inherit version;
 
   src = fetchurl {
     url = "https://packages.graylog2.org/releases/graylog/graylog-${version}.tgz";
-    inherit sha256;
+    inherit hash;
   };
 
   dontBuild = true;

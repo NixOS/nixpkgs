@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://ghedo.github.io/pflask/";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

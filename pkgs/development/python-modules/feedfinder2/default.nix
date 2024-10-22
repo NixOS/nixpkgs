@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "feedfinder2" ];
 
   meta = with lib; {
-    description = "A Python library for finding feed links on websites";
+    description = "Python library for finding feed links on websites";
     homepage = "https://github.com/dfm/feedfinder2";
     license = licenses.mit;
     maintainers = with maintainers; [ vizid ];

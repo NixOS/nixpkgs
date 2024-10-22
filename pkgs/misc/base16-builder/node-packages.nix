@@ -5,17 +5,13 @@
   }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_18"}:
 
 let
-  globalBuildInputs = pkgs.lib.attrValues (import ./supplement.nix {
-    inherit nodeEnv;
-    inherit (pkgs) stdenv lib nix-gitignore fetchurl fetchgit;
-  });
   nodeEnv = import ../../development/node-packages/node-env.nix {
     inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
     inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
+    libtool = if pkgs.stdenv.hostPlatform.isDarwin then pkgs.cctools or pkgs.darwin.cctools else null;
   };
 in
 import ./node-packages-generated.nix {
   inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-  inherit nodeEnv globalBuildInputs;
+  inherit nodeEnv;
 }

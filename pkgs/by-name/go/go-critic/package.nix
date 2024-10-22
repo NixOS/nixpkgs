@@ -38,7 +38,7 @@ buildGoModule rec {
   };
 
   meta = {
-    description = "The most opinionated Go source code linter for code audit";
+    description = "Most opinionated Go source code linter for code audit";
     homepage = "https://go-critic.com/";
     changelog = "https://github.com/go-critic/go-critic/releases/tag/${src.rev}";
     license = lib.licenses.mit;

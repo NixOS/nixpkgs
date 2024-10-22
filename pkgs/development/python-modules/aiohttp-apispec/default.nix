@@ -3,9 +3,7 @@
   aiohttp,
   apispec,
   buildPythonPackage,
-  callPackage,
   fetchFromGitHub,
-  fetchPypi,
   jinja2,
   packaging,
   pytest-aiohttp,
@@ -47,6 +45,6 @@ buildPythonPackage rec {
     description = "Build and document REST APIs with aiohttp and apispec";
     homepage = "https://github.com/maximdanilchenko/aiohttp-apispec/";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

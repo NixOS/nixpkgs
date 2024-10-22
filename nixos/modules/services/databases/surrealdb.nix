@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
 
   cfg = config.services.surrealdb;
@@ -8,12 +6,12 @@ in {
 
   options = {
     services.surrealdb = {
-      enable = mkEnableOption "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web";
+      enable = lib.mkEnableOption "SurrealDB, a scalable, distributed, collaborative, document-graph database, for the realtime web";
 
-      package = mkPackageOption pkgs "surrealdb" { };
+      package = lib.mkPackageOption pkgs "surrealdb" { };
 
-      dbPath = mkOption {
-        type = types.str;
+      dbPath = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The path that surrealdb will write data to. Use null for in-memory.
           Can be one of "memory", "file://:path", "tikv://:addr".
@@ -22,8 +20,8 @@ in {
         example = "memory";
       };
 
-      host = mkOption {
-        type = types.str;
+      host = lib.mkOption {
+        type = lib.types.str;
         description = ''
           The host that surrealdb will connect to.
         '';
@@ -31,8 +29,8 @@ in {
         example = "127.0.0.1";
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         description = ''
           The port that surrealdb will connect to.
         '';
@@ -40,8 +38,8 @@ in {
         example = 8000;
       };
 
-      extraFlags = mkOption {
-        type = types.listOf types.str;
+      extraFlags = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [];
         example = [ "--allow-all" "--auth" "--user root" "--pass root" ];
         description = ''
@@ -52,18 +50,18 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # Used to connect to the running service
     environment.systemPackages = [ cfg.package ] ;
 
     systemd.services.surrealdb = {
-      description = "A scalable, distributed, collaborative, document-graph database, for the realtime web ";
+      description = "A scalable, distributed, collaborative, document-graph database, for the realtime web";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
+        ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${lib.escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";

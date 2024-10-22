@@ -1,32 +1,32 @@
 {
   lib,
   buildPythonPackage,
+  cudaPackages,
   fetchFromGitHub,
   substituteAll,
-  pythonOlder,
-  addOpenGLRunpath,
+  addDriverRunpath,
   setuptools,
   pytestCheckHook,
   versioneer,
+  pynvml,
 }:
 
 buildPythonPackage rec {
   pname = "pynvml";
-  version = "11.5.0";
+  version = "11.5.3";
   pyproject = true;
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "gpuopenanalytics";
     repo = "pynvml";
     rev = "refs/tags/${version}";
-    hash = "sha256-K3ZENjgi+TVDxr55dRK1y8SwzfgVIzcnD4oEI+KHRa4=";
+    hash = "sha256-8NkYBRpcW3dvxVc6z17TMRPqA0YK/J/CdjuqgdcTdy8=";
   };
 
   patches = [
     (substituteAll {
       src = ./0001-locate-libnvidia-ml.so.1-on-NixOS.patch;
-      inherit (addOpenGLRunpath) driverLink;
+      inherit (addDriverRunpath) driverLink;
     })
   ];
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rm versioneer.py
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     versioneer
   ];
@@ -50,10 +50,17 @@ buildPythonPackage rec {
   # OSError: /run/opengl-driver/lib/libnvidia-ml.so.1: cannot open shared object file: No such file or directory
   doCheck = false;
 
-  meta = with lib; {
+  passthru.tests.tester-nvmlInit = cudaPackages.writeGpuTestPython { libraries = [ pynvml ]; } ''
+    import pynvml
+    from pynvml.smi import nvidia_smi  # noqa: F401
+
+    print(f"{pynvml.nvmlInit()=}")
+  '';
+
+  meta = {
     description = "Python bindings for the NVIDIA Management Library";
     homepage = "https://github.com/gpuopenanalytics/pynvml";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.bcdarwin ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.bcdarwin ];
   };
 }

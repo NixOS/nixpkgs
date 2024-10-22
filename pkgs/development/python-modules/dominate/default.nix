@@ -30,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Knio/dominate/";
     changelog = "https://github.com/Knio/dominate/releases/tag/${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

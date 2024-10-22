@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gfortran ];
 
   # For some reason zlib was only needed after bump to gfortran8
-  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ hoppet lhapdf root5 zlib ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
   patches = [
     ./bad_code.patch
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace src/Makefile.in \
       --replace "-L\$(subst /libgfortran.a, ,\$(FRTLIB) )" "-L${gfortran.cc.lib}/lib"
-  '' + (lib.optionalString stdenv.isDarwin ''
+  '' + (lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace src/Makefile.in \
       --replace "gfortran -print-file-name=libgfortran.a" "gfortran -print-file-name=libgfortran.dylib"
   '');
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
+    description = "APPLgrid project provides a fast and flexible way to reproduce the results of full NLO calculations with any input parton distribution set in only a few milliseconds rather than the weeks normally required to gain adequate statistics";
     license     = licenses.gpl3;
     homepage    = "http://applgrid.hepforge.org";
     platforms   = platforms.unix;

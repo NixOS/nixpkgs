@@ -26,7 +26,7 @@ buildLua {
   passthru.scriptName = "slicing.lua";
 
   meta = {
-    description = "A lua script to cut fragments of the video in uncompressed RGB format";
+    description = "Lua script to cut fragments of the video in uncompressed RGB format";
     homepage = "https://github.com/Kagami/mpv_slicing";
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ tomasajt ];

@@ -20,17 +20,17 @@
 
 buildGoModule rec {
   pname = "aaaaxy";
-  version = "1.5.129";
+  version = "1.5.208";
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-kH2eFFxohvuuEP2p7bt8zOYbk3gF86X9y3sNdLYl/Qo=";
+    hash = "sha256-VfF8bQP7pFaTezOJpda4N9KbCHr5ST/wCvdNRiojio0=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-VEayNWztJYeQoJHVJfAlmHD65PEho1TCttTfT0cbgUQ=";
+  vendorHash = "sha256-PBwI3S8ZvmVD57/ICALe+HvgtbPQpJKNPfkWo+uUeSo=";
 
   buildInputs = [
     alsa-lib
@@ -71,6 +71,9 @@ buildGoModule rec {
     # To work around this, use environment variables.
     postBuild = ''
       substituteInPlace 'vendor/github.com/hajimehoshi/ebiten/v2/internal/graphicsdriver/opengl/gl/procaddr_linbsd.go' \
+        --replace-fail \
+        'import (' \
+        'import ("os"' \
         --replace-fail \
         '{"libGL.so", "libGL.so.2", "libGL.so.1", "libGL.so.0"}' \
         '{os.Getenv("EBITENGINE_LIBGL")}' \
@@ -113,7 +116,7 @@ buildGoModule rec {
   strictDeps = true;
 
   meta = with lib; {
-    description = "A nonlinear 2D puzzle platformer taking place in impossible spaces";
+    description = "Nonlinear 2D puzzle platformer taking place in impossible spaces";
     mainProgram = "aaaaxy";
     homepage = "https://divverent.github.io/aaaaxy/";
     license = licenses.asl20;

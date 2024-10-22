@@ -1,15 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, dde-polkit-agent
-, qt5integration
-, libsecret
-, libgnome-keyring
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  dde-polkit-agent,
+  qt5integration,
+  libsecret,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +39,6 @@ stdenv.mkDerivation rec {
     dtkwidget
     dde-polkit-agent
     qt5integration
-    libgnome-keyring
     libsecret
   ];
 

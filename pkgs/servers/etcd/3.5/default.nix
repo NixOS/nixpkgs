@@ -1,11 +1,11 @@
 { lib, buildGoModule, fetchFromGitHub, symlinkJoin, nixosTests, k3s }:
 
 let
-  version = "3.5.13";
-  etcdSrcHash = "sha256-6dQXgM6VEWwv5CfHvxxPxdhMwNjFsinwhsbSqvQoDxI=";
-  etcdServerVendorHash = "sha256-PB4gACfeYhdOXYs0xbcq2CmSMJnf/ifX2U2DN6zfJ1o=";
-  etcdUtlVendorHash = "sha256-f23mn4zE6beM8yPSbs9gEEEifyF2D+CVKdlYwQtzAkQ=";
-  etcdCtlVendorHash = "sha256-gSlyhmLKarDwc+MhYuTeTqwj0wLiN6+k2bHEVVTkyPc=";
+  version = "3.5.16";
+  etcdSrcHash = "sha256-Y70wWwd+ErRyw6n/8FXNxWM2xcQgJGfnXytdfanfzF8=";
+  etcdServerVendorHash = "sha256-nKwaB2zcrjDArjaOnvGFQndlB0HiOaKH4rY2VsQzfOc=";
+  etcdUtlVendorHash = "sha256-i6EQSMyH89DJItC2n8lEinqJyZ0ACruH/nRSRIGETCk=";
+  etcdCtlVendorHash = "sha256-xEySxidbBpfycKKTg+l5WExnZjhqg2mXbnLueUZOVKc=";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
@@ -20,7 +20,7 @@ let
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = "https://etcd.io/";
-    maintainers = with maintainers; [ offline superherointj ];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 

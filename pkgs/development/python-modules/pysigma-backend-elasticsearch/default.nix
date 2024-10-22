@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-elasticsearch";
-  version = "1.1.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-elasticsearch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1tCn0aPYhjyOQJxN0cqTMDCcE0eZwRtTK6OV3rU1a1E=";
+    hash = "sha256-7XecgpZ2DQr2f/Ge7skbielK7qwuGoy/KAoxzNvk9w4=";
   };
 
   postPatch = ''

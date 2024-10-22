@@ -60,7 +60,7 @@ stdenvNoCC.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A Material Design icon theme based on Paper icon theme";
+    description = "Material Design icon theme based on Paper icon theme";
     homepage = "https://github.com/vinceliuice/vimix-icon-theme";
     license = with licenses; [ cc-by-sa-40 ];
     platforms = platforms.linux;

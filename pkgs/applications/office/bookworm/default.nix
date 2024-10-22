@@ -23,7 +23,7 @@
 , unar
 , unzip
 , vala
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     poppler
     python3
     sqlite
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   postPatch = ''
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A simple, focused eBook reader";
+    description = "Simple, focused eBook reader";
     mainProgram = "com.github.babluboy.bookworm";
     longDescription = ''
       Read the books you love without having to worry about different format complexities like epub, pdf, mobi, cbr, etc.

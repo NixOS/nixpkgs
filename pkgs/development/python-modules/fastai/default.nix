@@ -5,7 +5,6 @@
   fastprogress,
   fastcore,
   fastdownload,
-  torch,
   torchvision,
   matplotlib,
   pillow,
@@ -48,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/fastai/fastai";
-    description = "The fastai deep learning library";
+    description = "Fastai deep learning library";
     mainProgram = "configure_accelerate";
     changelog = "https://github.com/fastai/fastai/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

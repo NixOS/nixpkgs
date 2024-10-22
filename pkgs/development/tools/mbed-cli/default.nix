@@ -8,7 +8,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-X+hNVM8fsy0VFTqFr1pPKWRimacBenTcY4y+PBJpvlI=";
+    hash = "sha256-X+hNVM8fsy0VFTqFr1pPKWRimacBenTcY4y+PBJpvlI=";
   };
 
   nativeCheckInputs = [
@@ -28,7 +28,7 @@ buildPythonApplication rec {
     homepage = "https://github.com/ARMmbed/mbed-cli";
     description = "Arm Mbed Command Line Interface";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }
 

@@ -17,6 +17,7 @@
 pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   buildInputs = [
     (import ./check-eval.nix)
+    (import ./fetchers.nix)
     (import ./maintainers.nix {
       inherit pkgs;
       lib = import ../.;
@@ -32,7 +33,7 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
   nativeBuildInputs = [
     nix
     pkgs.gitMinimal
-  ] ++ lib.optional pkgs.stdenv.isLinux pkgs.inotify-tools;
+  ] ++ lib.optional pkgs.stdenv.hostPlatform.isLinux pkgs.inotify-tools;
   strictDeps = true;
 } ''
   datadir="${nix}/share"
@@ -64,6 +65,9 @@ pkgs.runCommand "nixpkgs-lib-tests-nix-${nix.version}" {
 
   echo "Running lib/tests/sources.sh"
   TEST_LIB=$PWD/lib bash lib/tests/sources.sh
+
+  echo "Running lib/tests/network.sh"
+  TEST_LIB=$PWD/lib bash lib/tests/network.sh
 
   echo "Running lib/fileset/tests.sh"
   TEST_LIB=$PWD/lib bash lib/fileset/tests.sh

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "ome-zarr";
-  version = "0.8.3";
+  version = "0.9.0";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JuNXVse/n/lFbNaLwMcir8NBHiRxcbYvtbxePwI6YoY=";
+    hash = "sha256-YOG9+ONf2OnkSZBL/Vb8Inebx4XDSGJb2fqypaWebhY=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     requests
     scikit-image
     toolz
-  ] ++ fsspec.passthru.optional-dependencies.s3;
+  ] ++ fsspec.optional-dependencies.s3;
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud.";
+    description = "Implementation of next-generation file format (NGFF) specifications for storing bioimaging data in the cloud";
     homepage = "https://pypi.org/project/ome-zarr";
     changelog = "https://github.com/ome/ome-zarr-py/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;

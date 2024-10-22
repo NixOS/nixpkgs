@@ -16,19 +16,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-workstations";
-  version = "0.5.6";
+  version = "0.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-K6Qq243bX3waymyGcirLAANqmP0UAUgFS3kidwCFYBE=";
+    pname = "google_cloud_workstations";
+    inherit version;
+    hash = "sha256-Xu7oL5R/K3oHMea1xCwRLPoxgPNMFRSMYCQ73K9sMgQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     google-auth
     grpc-google-iam-v1

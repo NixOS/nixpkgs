@@ -54,16 +54,16 @@ stdenv.mkDerivation rec {
     libsecret
     openssl
     sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
   ];
 
-  env = lib.optionalAttrs stdenv.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     GETTEXT_DIR = gettext;
   };
 
   meta = with lib; {
-    description = "The ultimate task management solution for seamless organization and efficiency";
+    description = "Ultimate task management solution for seamless organization and efficiency";
     homepage = "https://done.edfloreshz.dev/";
     changelog = "https://github.com/done-devs/done/blob/${src.rev}/CHANGES.md";
     license = licenses.mpl20;

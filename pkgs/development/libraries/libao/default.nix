@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ] ++
     lib.optional  usePulseAudio   libpulseaudio ++
-    lib.optionals stdenv.isLinux  [ alsa-lib libcap ] ++
-    lib.optionals stdenv.isDarwin [ CoreAudio CoreServices AudioUnit ];
+    lib.optionals stdenv.hostPlatform.isLinux  [ alsa-lib libcap ] ++
+    lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio CoreServices AudioUnit ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://xiph.org/ao/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

@@ -2,17 +2,15 @@
 
 buildDunePackage rec {
   pname = "printbox";
-  version = "0.6.1";
+  version = "0.11";
 
-  useDune2 = true;
-
-  minimalOCamlVersion = "4.03";
+  minimalOCamlVersion = "4.04";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7u2ThRhM3vW4ItcFsK4ycgcaW0JcQOFoZZRq2kqbl+k=";
+    sha256 = "sha256-f5iTesEakULlLdDGtX+5i3vesUIbFLjcV3kJ7ZPia0Y=";
   };
 
   nativeCheckInputs = [ mdx.bin ];

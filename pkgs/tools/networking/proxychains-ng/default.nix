@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A preloader which hooks calls to sockets in dynamically linked programs and redirects it through one or more socks/http proxies";
+    description = "Preloader which hooks calls to sockets in dynamically linked programs and redirects it through one or more socks/http proxies";
     homepage = "https://github.com/rofl0r/proxychains-ng";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zenithal ];

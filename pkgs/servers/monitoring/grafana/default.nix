@@ -1,28 +1,15 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
+{ lib, stdenv, buildGo122Module, fetchFromGitHub, removeReferencesTo
 , tzdata, wire
 , yarn, nodejs, python3, cacert
 , jq, moreutils
 , nix-update-script, nixosTests, xcbuild
-, util-linux
+, faketty
 }:
 
-let
-  # We need dev dependencies to run webpack, but patch away
-  # `cypress` (and @grafana/e2e which has a direct dependency on cypress).
-  # This attempts to download random blobs from the Internet in
-  # postInstall. Also, it's just a testing framework, so not worth the hassle.
-  patchAwayGrafanaE2E = ''
-    find . -name package.json | while IFS=$'\n' read -r pkg_json; do
-      <"$pkg_json" jq '. + {
-        "devDependencies": .devDependencies | del(."@grafana/e2e") | del(.cypress)
-      }' | sponge "$pkg_json"
-    done
-    rm -r packages/grafana-e2e
-  '';
-in
-buildGoModule rec {
+# TODO: Go back to using buildGoModule when upgrading to grafana 11.3.
+buildGo122Module rec {
   pname = "grafana";
-  version = "11.0.0";
+  version = "11.2.2+security-01";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -30,11 +17,13 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-cC1dpgb8IiyPIqlVvn8Qi1l7j6lLtQF+BOOO+DQCp4E=";
+    hash = "sha256-1ZDX0R3t6CAdIfrYfR373olGL5orSDs2iwriAszl7qk=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
-  env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
+  env = {
+    CYPRESS_INSTALL_BINARY = 0;
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
     # Fix error: no member named 'aligned_alloc' in the global namespace.
     # Occurs while building @esfx/equatable@npm:1.0.2 on x86_64-darwin
     NIX_CFLAGS_COMPILE = "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
@@ -47,10 +36,7 @@ buildGoModule rec {
       yarn nodejs cacert
       jq moreutils python3
     # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-    postPatch = ''
-      ${patchAwayGrafanaE2E}
-    '';
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
     buildPhase = ''
       runHook preBuild
       export HOME="$(mktemp -d)"
@@ -66,24 +52,21 @@ buildGoModule rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-+Udq8oQSIAHku55VKnrfgHHevzBels0QiOZwnwuts8k=";
+      x86_64-linux = "sha256-rz/IP6wi4VKWgO8P4Mov3oviwsDe5iBSKamArVR/+T0=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-m3jtZNz0J2nZwFHXVp3ApgDfnGBOJvFeUpqOPQqv200=";
+      aarch64-darwin = "sha256-9J9wD8nJ4JEUKroxCEBYZytywzjGkGhujdj9FcNe0rM=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-kcdW6RQghyAOZUDmIo9G6YBC+YaLHdafvj+fCd+dcDE=";
+  vendorHash = "sha256-shQ39N9YxksfzHDgHx3qjLbZfv5D1+sqtpALI0hCK3U=";
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
-
-  postPatch = ''
-    ${patchAwayGrafanaE2E}
-  '';
+  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 faketty ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -115,7 +98,7 @@ buildGoModule rec {
     # After having built all the Go code, run the JS builders now.
 
     # Workaround for https://github.com/nrwl/nx/issues/22445
-    ${util-linux}/bin/script -c 'yarn run build' /dev/null
+    faketty yarn run build
     yarn run plugins:build-bundled
   '';
 
@@ -156,8 +139,5 @@ buildGoModule rec {
     maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     mainProgram = "grafana-server";
-    # requires util-linux to work around https://github.com/nrwl/nx/issues/22445
-    # `script` doesn't seem to be part of util-linux on Darwin though.
-    broken = stdenv.isDarwin;
   };
 }

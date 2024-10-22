@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
+{ lib, stdenv, fetchFromGitHub
 , runtimeShell, nixosTests
 , autoreconfHook, bison, flex
 , docbook_xml_dtd_45, docbook_xsl
-, itstool, libbsd, libxml2, libxslt
+, itstool, libxml2, libxslt
 , libxcrypt, pkg-config
 , glibcCross ? null
 , pam ? null
+, withLibbsd ? lib.meta.availableOn stdenv.hostPlatform libbsd, libbsd
 , withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
 }:
 let
@@ -17,13 +18,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "shadow";
-  version = "4.14.6";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = pname;
     rev = version;
-    hash = "sha256-+klU1a0cSgHPwZkDnbCSjKnBUKIm2Z3OGUvR/zrqQxo=";
+    hash = "sha256-GAwwpyIN5qWSIapjGFfOxPbOx5G6//fEbTpPmkXh6uA=";
   };
 
   outputs = [ "out" "su" "dev" "man" ];
@@ -37,8 +38,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ libbsd libxcrypt ]
-    ++ lib.optional (pam != null && stdenv.isLinux) pam
+  buildInputs = [ libxcrypt ]
+    ++ lib.optional (pam != null && stdenv.hostPlatform.isLinux) pam
+    ++ lib.optional withLibbsd libbsd
     ++ lib.optional withTcb tcb;
 
   patches = [
@@ -47,13 +49,6 @@ stdenv.mkDerivation rec {
     ./respect-xml-catalog-files-var.patch
     ./runtime-shell.patch
     ./fix-install-with-tcb.patch
-    # Fix build against `clang-16` and upcoming `gcc-14`:
-    #   https://github.com/shadow-maint/shadow/pull/857
-    (fetchpatch {
-      name = "fix-implicit-getdef_bool.patch";
-      url = "https://github.com/shadow-maint/shadow/commit/5abe0811b880208600f646356549b7e5cad89060.patch";
-      hash = "sha256-XqvVv8mYY58uXJBKRwncHQRSI45PUkp3dQNn44gzezU=";
-    })
   ];
 
   # The nix daemon often forbids even creating set[ug]id files.
@@ -73,6 +68,7 @@ stdenv.mkDerivation rec {
     "--with-group-name-max-length=32"
     "--with-bcrypt"
     "--with-yescrypt"
+    (lib.withFeature withLibbsd "libbsd")
   ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
     ++ lib.optional withTcb "--with-tcb";
 

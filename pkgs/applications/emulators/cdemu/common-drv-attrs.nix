@@ -9,7 +9,7 @@
     inherit hash;
   };
   meta = with lib; {
-    description = "A suite of tools for emulating optical drives and discs";
+    description = "Suite of tools for emulating optical drives and discs";
     longDescription = ''
       CDEmu consists of:
 

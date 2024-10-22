@@ -39,7 +39,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "id" ];
 
   meta = with lib; {
-    description = "A tool for generating OIDC identities";
+    description = "Tool for generating OIDC identities";
     homepage = "https://github.com/di/id";
     changelog = "https://github.com/di/id/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

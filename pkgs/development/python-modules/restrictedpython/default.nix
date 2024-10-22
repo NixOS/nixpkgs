@@ -11,18 +11,17 @@
 
 buildPythonPackage rec {
   pname = "restrictedpython";
-  version = "7.1";
+  version = "7.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    pname = "RestrictedPython";
-    inherit version;
-    hash = "sha256-h1rrUcE51440zvhgXcZTCbRJFoBg3QhVGh/p7bR8uaU=";
+    inherit pname version;
+    hash = "sha256-gbYpJHE9vSgJF/zq7K8hD+96Sd3fGgjIwhSjYT++tCU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook

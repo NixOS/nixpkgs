@@ -17,13 +17,13 @@
 
 buildGoModule rec {
   pname = "buildah";
-  version = "1.35.4";
+  version = "1.37.3";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "buildah";
     rev = "v${version}";
-    hash = "sha256-lcB23yU7Wn+aILGFLDBnFg30NRDQgJt3J61FmGuQtRo=";
+    hash = "sha256-YYmgxlW80y6HOlRQbG3N+wTZM5pB58ZzZHEOa6vWbRw=";
   };
 
   outputs = [ "out" "man" ];
@@ -36,7 +36,7 @@ buildGoModule rec {
 
   buildInputs = [
     gpgme
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     btrfs-progs
     libapparmor
     libseccomp
@@ -69,7 +69,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = "A tool which facilitates building OCI images";
+    description = "Tool which facilitates building OCI images";
     mainProgram = "buildah";
     homepage = "https://buildah.io/";
     changelog = "https://github.com/containers/buildah/releases/tag/v${version}";

@@ -16,7 +16,7 @@
 , docbook_xsl
 , autoreconfHook
 , dbus
-, enableVideo ? stdenv.isLinux
+, enableVideo ? stdenv.hostPlatform.isLinux
   # The implementation is buggy and produces an error like
   # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
   # for every scanned code.
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     imagemagickBig
     libintl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     Foundation
   ] ++ lib.optionals enableDbus [
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  checkInputs = lib.optionals stdenv.isDarwin [
+  checkInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     argp-standalone
   ];
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -largp"
   '';
 

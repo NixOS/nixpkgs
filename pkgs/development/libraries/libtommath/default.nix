@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
 
   makefile = "makefile.shared";
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) "-DTARGET_OS_IPHONE=0";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) "-DTARGET_OS_IPHONE=0";
 
   enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = "https://www.libtom.net/LibTomMath/";
-    description = "A library for integer-based number-theoretic applications";
+    description = "Library for integer-based number-theoretic applications";
     license = with licenses; [ publicDomain wtfpl ];
     platforms = platforms.unix;
   };

@@ -19,13 +19,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "kupfer";
-  version = "321";
+  version = "327";
 
   format = "other";
 
   src = fetchurl {
-    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.bz2";
-    sha256 = "0nagjp63gxkvsgzrpjk78cbqx9a7rbnjivj1avzb2fkhrlxa90c7";
+    url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
+    sha256 = "sha256-F5ScSfD/LwpSOAAqTN0WX5yFhoz23DYfeCC+KuvixYM=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ buildPythonApplication rec {
   doCheck = false; # no tests
 
   meta = with lib; {
-    description = "A smart, quick launcher";
+    description = "Smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ cobbal ];

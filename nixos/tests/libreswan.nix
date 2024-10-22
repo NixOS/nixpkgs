@@ -3,7 +3,7 @@
 # Eve can eavesdrop the plaintext traffic between Alice and Bob, but once they
 # enable the secure tunnel Eve's spying becomes ineffective.
 
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
 
@@ -37,6 +37,8 @@ let
     useDHCP = false;
     interfaces.eth1.ipv4.addresses = lib.mkVMOverride [];
     interfaces.eth2.ipv4.addresses = lib.mkVMOverride [];
+    interfaces.eth1.ipv6.addresses = lib.mkVMOverride [];
+    interfaces.eth2.ipv6.addresses = lib.mkVMOverride [];
     # open a port for testing
     firewall.allowedUDPPorts = [ 1234 ];
   };
@@ -133,4 +135,4 @@ in
           eve.sleep(1)
           eve.fail("grep rhubarb /tmp/log")
     '';
-})
+}

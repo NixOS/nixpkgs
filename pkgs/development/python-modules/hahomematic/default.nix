@@ -12,13 +12,11 @@
   pythonOlder,
   setuptools,
   voluptuous,
-  websocket-client,
-  xmltodict,
 }:
 
 buildPythonPackage rec {
   pname = "hahomematic";
-  version = "2024.4.12";
+  version = "2024.10.8";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -27,15 +25,14 @@ buildPythonPackage rec {
     owner = "danielperna84";
     repo = "hahomematic";
     rev = "refs/tags/${version}";
-    hash = "sha256-iWl9kDLRh9CAk0tOibDOHcBV7lwVY/TWKYMBZW9G2k0=";
+    hash = "sha256-NFDh6XA6c1IWTHYjXB19V2kEW3ZkjFU/mz5XduzXj+g=";
   };
 
   __darwinAllowLocalNetworking = true;
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools~=69.2.0" "setuptools" \
-      --replace-fail "wheel~=0.43.0" "wheel"
+      --replace-fail "setuptools==75.1.0" "setuptools" \
   '';
 
   build-system = [ setuptools ];

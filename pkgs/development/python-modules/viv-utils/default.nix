@@ -13,14 +13,14 @@
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.7.9";
+  version = "0.7.10";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xM3jtA6fNk36+enL/EcQH59CNajYnGlEDu06QXIFz6A=";
+    hash = "sha256-pQAe4QuOcx5MG+slJkf4UU38TGt4pU0uVZr+vtwsWgM=";
   };
 
   postPatch = ''

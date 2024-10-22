@@ -10,7 +10,6 @@
   pycryptodome,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   six,
 }:
@@ -29,7 +28,6 @@ buildPythonPackage rec {
     hash = "sha256-jDSXPVyy8XvPgsGZXsdfavFPptq28pCwr9C63OZvNrY=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     requests

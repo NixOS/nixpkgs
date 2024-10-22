@@ -7,11 +7,11 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "wlc";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-QMF41B6a2jMSdhjeFoRQq+K1YJAEz96msHLzX6wVqSc=";
+    hash = "sha256-0T8cMq5Mrv/Ygo6BfYho3sjFuu8dYZyUMtJc5gabuG4=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Weblate commandline client using Weblate's REST API";
+    description = "Weblate commandline client using Weblate's REST API";
     homepage = "https://github.com/WeblateOrg/wlc";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ paperdigits ];

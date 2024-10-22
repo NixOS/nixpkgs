@@ -157,6 +157,12 @@ Here are security considerations for this scenario:
 
   In more concrete terms, if you use any other hash, the [`--insecure` flag](https://curl.se/docs/manpage.html#-k) will be passed to the underlying call to `curl` when downloading content.
 
+## Proxy usage {#sec-pkgs-fetchers-proxy}
+
+Nixpkgs fetchers can make use of a http(s) proxy. Each fetcher will automatically inherit proxy-related environment variables (`http_proxy`, `https_proxy`, etc) via [impureEnvVars](https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-impureEnvVars).
+
+The environment variable `NIX_SSL_CERT_FILE` is also inherited in fetchers, and can be used to provide a custom certificate bundle to fetchers. This is usually required for a https proxy to work without certificate validation errors.
+
 []{#fetchurl}
 ## `fetchurl` {#sec-pkgs-fetchers-fetchurl}
 
@@ -365,8 +371,8 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
   _Default value:_ `{}`.
 
 `passthru` (Attribute Set; _optional_)
-: Specifies any extra [passthru](#var-stdenv-passthru) attributes for the derivation returned by `fetchurl`.
-  Note that `fetchurl` defines [passthru attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
+: Specifies any extra [`passthru`](#chap-passthru) attributes for the derivation returned by `fetchurl`.
+  Note that `fetchurl` defines [`passthru` attributes of its own](#ssec-pkgs-fetchers-fetchurl-passthru-outputs).
   Attributes specified in `passthru` can override the default attributes returned by `fetchurl`.
 
   _Default value:_ `{}`.
@@ -387,7 +393,7 @@ If `pname` and `version` are specified, `fetchurl` will use those values and wil
 
 ### Passthru outputs {#ssec-pkgs-fetchers-fetchurl-passthru-outputs}
 
-`fetchurl` also defines its own [`passthru`](#var-stdenv-passthru) attributes:
+`fetchurl` also defines its own [`passthru`](#chap-passthru) attributes:
 
 `url` (String)
 
@@ -869,7 +875,7 @@ It produces packages that cannot be built automatically.
 fetchtorrent {
   config = { peer-limit-global = 100; };
   url = "magnet:?xt=urn:btih:dd8255ecdc7ca55fb0bbf81323d87062db1f6d1c";
-  sha256 = "";
+  hash = "";
 }
 ```
 

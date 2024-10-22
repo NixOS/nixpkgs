@@ -5,7 +5,7 @@
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? false, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+, enableGtk ? true, gtk3, glib
 }:
 
 let
@@ -34,8 +34,8 @@ let
       cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
       libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+    ] ++ lib.optionals (!headless && enableGtk) [
+      gtk3 glib
     ];
 
     patches = [
@@ -69,7 +69,15 @@ let
         url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
         hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
       })
-    ] ++ lib.optionals (!headless && enableGnome2) [
+
+      # Backport fixes for musl 1.2.4 which are already applied in jdk21+
+      # Fetching patch from chimera because they already went through the effort of rebasing it onto jdk17
+      (fetchurl {
+        name = "lfs64.patch";
+        url = "https://raw.githubusercontent.com/chimera-linux/cports/4614075d19e9c9636f3f7e476687247f63330a35/contrib/openjdk17/patches/lfs64.patch";
+        hash = "sha256-t2mRbdEiumBAbIAC0zsJNwCn59WYWHsnRtuOSL6bWB4=";
+      })
+    ] ++ lib.optionals (!headless && enableGtk) [
       ./swing-use-gtk-jdk13.patch
     ];
 
@@ -98,8 +106,15 @@ let
       "--with-zlib=system"
       "--with-lcms=system"
       "--with-stdc++lib=dynamic"
-    ] ++ lib.optional headless "--enable-headless-only"
-      ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "--with-toolchain-type=clang"
+      # Explicitly tell Clang to compile C++ files as C++, see
+      # https://github.com/NixOS/nixpkgs/issues/150655#issuecomment-1935304859
+      "--with-extra-cxxflags=-xc++"
+    ]
+    ++ lib.optional headless "--enable-headless-only"
+    ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
@@ -107,8 +122,8 @@ let
 
     NIX_LDFLAGS = toString (lib.optionals (!headless) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
+    ] ++ lib.optionals (!headless && enableGtk) [
+      "-lgtk-3" "-lgio-2.0"
     ]);
 
     # -j flag is explicitly rejected by the build system:

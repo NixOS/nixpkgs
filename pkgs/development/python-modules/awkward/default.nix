@@ -1,19 +1,22 @@
 {
   lib,
-  fsspec,
-  stdenv,
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatch-fancy-pypi-readme,
   hatchling,
+
+  # dependencies
   awkward-cpp,
-  importlib-metadata,
+  fsspec,
   numpy,
   packaging,
   typing-extensions,
-  jax,
-  jaxlib,
+  importlib-metadata,
+
+  # checks
   numba,
   setuptools,
   numexpr,
@@ -21,20 +24,22 @@
   pyarrow,
   pytest-xdist,
   pytestCheckHook,
+  jax,
+  jaxlib,
+
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "awkward";
-  version = "2.6.4";
+  version = "2.6.9";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
     repo = "awkward";
     rev = "refs/tags/v${version}";
-    hash = "sha256-hoNxNxWfoSlBg6CsKvgEknM4vd+rN/9EFD5nC2y45OA=";
+    hash = "sha256-kYDihmfzMH5LPXSgXpC64qMPqxIX59VzflhP0gWu92Y=";
   };
 
   build-system = [
@@ -46,7 +51,6 @@ buildPythonPackage rec {
     [
       awkward-cpp
       fsspec
-      importlib-metadata
       numpy
       packaging
     ]
@@ -68,7 +72,7 @@ buildPythonPackage rec {
       pytest-xdist
       pytestCheckHook
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       # no support for darwin
       jax
       jaxlib
@@ -78,13 +82,19 @@ buildPythonPackage rec {
   disabledTestPaths = [
     "tests-cuda"
     # Disable tests dependending on jax on darwin
-  ] ++ lib.optionals stdenv.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/test_2603_custom_behaviors_with_jax.py" ];
 
-  meta = with lib; {
+  disabledTests = [
+    # AssertionError: Regex pattern did not match.
+    "test_serialise_with_nonserialisable_attrs"
+    "test_serialise_with_nonserialisable_attrs"
+  ];
+
+  meta = {
     description = "Manipulate JSON-like data with NumPy-like idioms";
     homepage = "https://github.com/scikit-hep/awkward";
     changelog = "https://github.com/scikit-hep/awkward/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

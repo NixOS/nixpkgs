@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "jumppad";
-  version = "0.11.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "jumppad-labs";
     repo = "jumppad";
     rev = version;
-    hash = "sha256-8oynWGvWRqXcIBpgLEpFFDwPCbyePXJmFC8xgKPaN9Q=";
+    hash = "sha256-UO1a8CoHLNoo74zJkzgSlTkB7XWWHWu2EUiqCvLOQj8=";
   };
-  vendorHash = "sha256-39CORZ5qqbMJuTzYt1sKbHPPYkQEwQWSIQ4hWqdUFmk=";
+  vendorHash = "sha256-S4SyuidH8sxJbuG7yHgSP/iHcuP1h5EHaW8X6gG4GNw=";
 
   subPackages = [ "." ];
 
@@ -24,7 +24,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A tool for building modern cloud native development environments";
+    description = "Tool for building modern cloud native development environments";
     homepage = "https://jumppad.dev";
     license = licenses.mpl20;
     maintainers = with maintainers; [ cpcloud ];

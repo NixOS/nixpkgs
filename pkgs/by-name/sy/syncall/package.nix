@@ -69,5 +69,8 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/bergercookie/syncall";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];
+    # Upstream issue making it practically unusable:
+    # https://github.com/bergercookie/syncall/issues/99
+    broken = true;
   };
 }

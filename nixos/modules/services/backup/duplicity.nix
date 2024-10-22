@@ -42,6 +42,28 @@ in
       '';
     };
 
+    includeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to include into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
+      '';
+    };
+
+    excludeFileList = mkOption {
+      type = types.nullOr types.path;
+      default = null;
+      example = /path/to/fileList.txt;
+      description = ''
+        File containing newline-separated list of paths to exclude into the
+        backups. See the FILE SELECTION section in {manpage}`duplicity(1)` for
+        details on the syntax.
+      '';
+    };
+
     targetUrl = mkOption {
       type = types.str;
       example = "s3://host:port/prefix";
@@ -154,6 +176,8 @@ in
             ${lib.optionalString (cfg.cleanup.maxIncr != null) "${dup} remove-all-inc-of-but-n-full ${toString cfg.cleanup.maxIncr} ${target} --force ${extra}"}
             exec ${dup} ${if cfg.fullIfOlderThan == "always" then "full" else "incr"} ${lib.escapeShellArgs (
               [ cfg.root cfg.targetUrl ]
+              ++ lib.optionals (cfg.includeFileList != null) [ "--include-filelist" cfg.includeFileList ]
+              ++ lib.optionals (cfg.excludeFileList != null) [ "--exclude-filelist" cfg.excludeFileList ]
               ++ concatMap (p: [ "--include" p ]) cfg.include
               ++ concatMap (p: [ "--exclude" p ]) cfg.exclude
               ++ (lib.optionals (cfg.fullIfOlderThan != "never" && cfg.fullIfOlderThan != "always") [ "--full-if-older-than" cfg.fullIfOlderThan ])

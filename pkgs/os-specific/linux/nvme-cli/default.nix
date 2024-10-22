@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvme-cli";
-  version = "2.7.1";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "linux-nvme";
     repo = "nvme-cli";
     rev = "v${version}";
-    hash = "sha256-Gm+1tb/Nh+Yg2PgSUn/1hR4CZYnfTWRwcQU0A8UeQwI=";
+    hash = "sha256-8vxalIHA4DRQuI18PRmzrlyG1XHcbKPkZgVB5Yqq9EU=";
   };
 
   mesonFlags = [

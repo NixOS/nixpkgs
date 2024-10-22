@@ -2,7 +2,6 @@
   lib,
   aiohttp,
   async-timeout,
-  backports-zoneinfo,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
@@ -18,7 +17,7 @@ buildPythonPackage rec {
   version = "4.3.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "azogue";
@@ -37,7 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     async-timeout
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

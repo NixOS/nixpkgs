@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "liquidprompt";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ra+uJg9E2Cr1k0Ni1+xG9yKFF9iMInJFB5oAFnc52lc=";
+    hash = "sha256-ZVzFGe3ItWsN23iyGpxZEN2KtviYKI8x/sDa2MRio/Y=";
   };
 
   strictDeps = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "A full-featured & carefully designed adaptive prompt for Bash & Zsh";
+    description = "Full-featured & carefully designed adaptive prompt for Bash & Zsh";
     homepage = "https://github.com/liquidprompt/liquidprompt";
     license = licenses.agpl3Plus;
     platforms = platforms.all;

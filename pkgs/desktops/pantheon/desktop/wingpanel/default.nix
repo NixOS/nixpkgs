@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , nix-update-script
 , wrapGAppsHook3
 , pkg-config
@@ -32,6 +33,13 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./indicators.patch
+
+    # Add sorting for QuickSettings
+    # https://github.com/elementary/wingpanel/pull/516
+    (fetchpatch {
+      url = "https://github.com/elementary/wingpanel/commit/cae197c953f4332e67cf0a5457b4e54f8adc3424.patch";
+      hash = "sha256-P7Cl6M3qvh9pa1qIwWQV4XG5NoCQId+buzEChcUOapk=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -69,7 +77,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "The extensible top panel for Pantheon";
+    description = "Extensible top panel for Pantheon";
     longDescription = ''
       Wingpanel is an empty container that accepts indicators as extensions,
       including the applications menu.

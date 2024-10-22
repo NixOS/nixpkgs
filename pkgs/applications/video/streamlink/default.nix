@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "streamlink";
-  version = "6.7.4";
+  version = "6.11.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kzdTerEZ/ndSSl1mWq7Ou/sG4suN8o0SYNkodkJXUc4=";
+    hash = "sha256-Vi5ddTyhCeGVYgfeSsJ8M3zmuZ++ftcgO5RRBe1bL4Y=";
   };
 
   patches = [
@@ -31,7 +31,6 @@ python3Packages.buildPythonApplication rec {
     mock
     requests-mock
     freezegun
-    pytest-asyncio
     pytest-trio
   ];
 
@@ -42,7 +41,6 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     certifi
-    exceptiongroup
     isodate
     lxml
     pycountry

@@ -6,7 +6,6 @@
   msrestazure,
   azure-common,
   azure-mgmt-core,
-  azure-mgmt-nspkg,
   pythonOlder,
 }:
 

@@ -7,9 +7,11 @@
 , perl
 , texinfo
 , xz
+, binlore
+, coreutils
 , gmpSupport ? true, gmp
-, aclSupport ? stdenv.isLinux, acl
-, attrSupport ? stdenv.isLinux, attr
+, aclSupport ? lib.meta.availableOn stdenv.hostPlatform acl, acl
+, attrSupport ? lib.meta.availableOn stdenv.hostPlatform attr, attr
 , selinuxSupport ? false, libselinux, libsepol
 # No openssl in default version, so openssl-induced rebuilds aren't too big.
 # It makes *sum functions significantly faster.
@@ -27,7 +29,7 @@ assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
 let
-  inherit (lib) concatStringsSep isString optional optionals optionalString;
+  inherit (lib) concatStringsSep isString optional optionalAttrs optionals optionalString;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
 stdenv.mkDerivation rec {
@@ -39,7 +41,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-zTKO3qyS9qZl3p8yPJO3Eq8YWLwuDYjz9xAEaUcKG4o=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # https://lists.gnu.org/archive/html/bug-coreutils/2024-05/msg00037.html
+    # This is not precisely the patch provided - this is a diff of the Makefile.in
+    # after the patch was applied and autoreconf was run, since adding autoreconf
+    # here causes infinite recursion.
+    ./fix-mix-flags-deps-libintl.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     # https://lists.gnu.org/archive/html/bug-coreutils/2024-03/msg00089.html
     ./fix-test-failure-musl.patch
   ];
@@ -90,7 +98,7 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
       echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
     ''
-  ])) + (optionalString stdenv.isAarch64 ''
+  ])) + (optionalString stdenv.hostPlatform.isAarch64 ''
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
   '');
@@ -99,13 +107,12 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
-    autoreconfHook
     perl
     xz.bin
   ]
   ++ optionals stdenv.hostPlatform.isCygwin [
     # due to patch
+    autoreconfHook
     texinfo
   ];
 
@@ -128,7 +135,7 @@ stdenv.mkDerivation rec {
     ++ optional withPrefix "--program-prefix=g"
     # the shipped configure script doesn't enable nls, but using autoreconfHook
     # does so which breaks the build
-    ++ optional stdenv.isDarwin "--disable-nls"
+    ++ optional stdenv.hostPlatform.isDarwin "--disable-nls"
     ++ optionals (isCross && stdenv.hostPlatform.libc == "glibc") [
       # TODO(19b98110126fde7cbb1127af7e3fe1568eacad3d): Needed for fstatfs() I
       # don't know why it is not properly detected cross building with glibc.
@@ -147,7 +154,7 @@ stdenv.mkDerivation rec {
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
-    && !stdenv.isAarch32;
+    && !stdenv.hostPlatform.isAarch32;
 
   # Prevents attempts of running 'help2man' on cross-built binaries.
   PERL = if isCross then "missing" else null;
@@ -176,9 +183,29 @@ stdenv.mkDerivation rec {
     rm -r "$out/share"
   '';
 
+  passthru = {} // optionalAttrs (singleBinary != false) {
+    # everything in the single binary gets the same verdict, so we
+    # override _that case_ with verdicts from separate binaries.
+    #
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; see comment on inverse case below)
+    binlore.out = binlore.synthesize coreutils ''
+      execer can bin/{chroot,env,install,nice,nohup,runcon,sort,split,stdbuf,timeout}
+      execer cannot bin/{[,b2sum,base32,base64,basename,basenc,cat,chcon,chgrp,chmod,chown,cksum,comm,cp,csplit,cut,date,dd,df,dir,dircolors,dirname,du,echo,expand,expr,factor,false,fmt,fold,groups,head,hostid,id,join,kill,link,ln,logname,ls,md5sum,mkdir,mkfifo,mknod,mktemp,mv,nl,nproc,numfmt,od,paste,pathchk,pinky,pr,printenv,printf,ptx,pwd,readlink,realpath,rm,rmdir,seq,sha1sum,sha224sum,sha256sum,sha384sum,sha512sum,shred,shuf,sleep,stat,stty,sum,sync,tac,tail,tee,test,touch,tr,true,truncate,tsort,tty,uname,unexpand,uniq,unlink,uptime,users,vdir,wc,who,whoami,yes}
+    '';
+  } // optionalAttrs (singleBinary == false) {
+    # binlore only spots exec in runcon on some platforms (i.e., not
+    # darwin; I have a note that the behavior may need selinux?).
+    # hard-set it so people working on macOS don't miss cases of
+    # runcon until ofBorg fails.
+    binlore.out = binlore.synthesize coreutils ''
+      execer can bin/runcon
+    '';
+  };
+
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";
-    description = "The GNU Core Utilities";
+    description = "GNU Core Utilities";
     longDescription = ''
       The GNU Core Utilities are the basic file, shell and text manipulation
       utilities of the GNU operating system. These are the core utilities which

@@ -47,7 +47,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "asteroid_filterbanks" ];
 
   meta = with lib; {
-    description = "The PyTorch-based audio source separation toolkit for researchers";
+    description = "PyTorch-based audio source separation toolkit for researchers";
     homepage = "https://github.com/asteroid-team/asteroid-filterbanks";
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];

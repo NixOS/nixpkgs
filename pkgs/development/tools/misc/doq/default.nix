@@ -36,7 +36,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Docstring generator for Python";
     homepage = "https://github.com/heavenshell/py-doq";
-    changelog = "https://github.com/heavenshell/py-doq/releases/tag/${src.rev}";
+    changelog = "https://github.com/heavenshell/py-doq/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ natsukium ];
     mainProgram = "doq";

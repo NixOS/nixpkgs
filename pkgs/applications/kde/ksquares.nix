@@ -4,7 +4,7 @@ mkDerivation {
   pname = "ksquares";
   meta = with lib; {
     homepage = "https://kde.org/applications/en/games/org.kde.ksquares";
-    description = "A game of Dots and Boxes";
+    description = "Game of Dots and Boxes";
     mainProgram = "ksquares";
     maintainers = with maintainers; [ freezeboy ];
     license = licenses.gpl2Plus;

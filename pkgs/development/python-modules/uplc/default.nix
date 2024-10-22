@@ -2,7 +2,6 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   # Python deps
   frozenlist2,
   python-secp256k1-cardano,
@@ -16,18 +15,16 @@
 
 buildPythonPackage rec {
   pname = "uplc";
-  version = "0.6.9";
+  version = "1.0.7";
 
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "OpShin";
     repo = "uplc";
-    rev = version;
-    hash = "sha256-djJMNXijMVzMVzw8NZSe3YFRGyAPqdvr0P374Za5XkU=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-xK2k0XLybWqyP5Qa2Oby8YBgiiswR++yVK7NPgpdSa0=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     setuptools
@@ -40,16 +37,11 @@ buildPythonPackage rec {
     python-secp256k1-cardano
   ];
 
-  pythonRelaxDeps = [
-    "pycardano"
-    "rply"
-  ];
-
   pythonImportsCheck = [ "uplc" ];
 
   meta = with lib; {
     description = "Python implementation of untyped plutus language core";
-    homepage = "https://opshin.dev";
+    homepage = "https://github.com/OpShin/uplc";
     license = licenses.mit;
     maintainers = with maintainers; [ t4ccer ];
     mainProgram = "opshin";

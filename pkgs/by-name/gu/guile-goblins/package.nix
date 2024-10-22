@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # tests hang on darwin, and fail randomly on aarch64-linux on ofborg
-  doCheck = !stdenv.isDarwin && !stdenv.isAarch64;
+  doCheck = !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64;
 
   meta = with lib; {
     description = "Spritely Goblins for Guile";

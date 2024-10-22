@@ -77,15 +77,20 @@ let
 in
 stdenv.mkDerivation {
   pname = "ansel";
-  version = "0-unstable-2024-02-23";
+  version = "0-unstable-2024-08-13";
 
   src = fetchFromGitHub {
     owner = "aurelienpierreeng";
     repo = "ansel";
-    rev = "61eb388760d130476415a51e19f94b199a1088fe";
-    hash = "sha256-68EX5rnOlBHXZnMlXjQk+ZXFIwR5ZFc1Wyg8EzCKaUg=";
+    rev = "85f2b8b15fe2081634c6f2c3f96b5d430e045bf0";
+    hash = "sha256-w2DziVBoCy1NpH4AoIFmKdjqufopqUeYjAwqkOhxHBc=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # don't use absolute paths to binary or icon - see https://github.com/NixOS/nixpkgs/issues/308324
+    ./fix-desktop-file.patch
+  ];
 
   strictDeps = true;
 
@@ -165,11 +170,16 @@ stdenv.mkDerivation {
     hardcodeZeroVersion = true;
   };
 
+  # cmake can't find the binary itself
+  cmakeFlags = [
+    (lib.cmakeFeature "Xsltproc_BIN" (lib.getExe' libxslt "xsltproc"))
+  ];
+
   meta = {
-    description = "A darktable fork minus the bloat plus some design vision";
+    description = "Darktable fork minus the bloat plus some design vision";
     homepage = "https://ansel.photos/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "ansel";
     platforms = lib.platforms.linux;
   };

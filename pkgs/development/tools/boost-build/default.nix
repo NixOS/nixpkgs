@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     sourceRoot="$sourceRoot/tools/build"
   '';
 
-  patches = useBoost.boostBuildPatches or [];
+  patches = useBoost.boostBuildPatches or []
+    ++ lib.optional (useBoost ? version && lib.versionAtLeast useBoost.version "1.81") ./fix-clang-target.patch;
 
   # Upstream defaults to gcc on darwin, but we use clang.
   postPatch = ''
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    ./b2 install --prefix="$out"
+    ./b2 ${lib.optionalString (stdenv.cc.isClang) "toolset=clang "}install --prefix="$out"
 
     # older versions of b2 created this symlink,
     # which we want to support building via useBoost.

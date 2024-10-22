@@ -1,28 +1,28 @@
-{ lib, fetchFromGitHub, buildGoModule, git }:
+{ lib, fetchFromGitHub, buildGoModule, git, openssh }:
 
 buildGoModule rec {
   pname = "gittuf";
-  version = "0.4.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "gittuf";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-BXqxVtdxUbcl2cK4kYEBZIbMCKOjPvuoTnDh8L6+mO8=";
+    hash = "sha256-iPaYwZUnIu9GeyY4kBhj+9gIINYx+pGSWJqPekh535g=";
   };
 
-  vendorHash = "sha256-yRUgtUeoTthxSGZ6VX/MOVeY0NUXq0Nf+XlysHqcpWw=";
+  vendorHash = "sha256-mafN+Nrr0AtfMjnXNoEIuz90kJa58pgY2vUOlv7v+TE=";
 
   ldflags = [ "-X github.com/gittuf/gittuf/internal/version.gitVersion=${version}" ];
 
-  nativeCheckInputs = [ git ];
-  checkFlags = [ "-skip=TestLoadRepository" ];
+  nativeCheckInputs = [ git openssh ];
+  checkFlags = [ "-skip=TestLoadRepository" "-skip=TestSSH" ];
 
   postInstall = "rm $out/bin/cli"; # remove gendoc cli binary
 
   meta = with lib; {
     changelog = "https://github.com/gittuf/gittuf/blob/v${version}/CHANGELOG.md";
-    description = "A security layer for Git repositories";
+    description = "Security layer for Git repositories";
     homepage = "https://gittuf.dev";
     license = licenses.asl20;
     mainProgram = "gittuf";

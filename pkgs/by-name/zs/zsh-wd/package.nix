@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "wd";
-  version = "0.7.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mfaerevaag";
     repo = "wd";
     rev = "v${version}";
-    sha256 = "sha256-u3n+JzInv8VajWAFXECuEOWuQurX8iWklwV2LG4Tj24=";
+    hash = "sha256-UjeLsc6pz1t798Qy6cliYjP0qjXvUIPotbnUm8dBrFs=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

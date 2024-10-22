@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "basex";
-  version = "10.7";
+  version = "11.4";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
-    hash = "sha256-Jr73UoyJfhtXLnYgOPh+jqKc3XZs+WMwJaO5nuD+Vmw=";
+    hash = "sha256-gArcTVD4OoXWB6r9I8q2EXuwCRmbLFE1sO2yfo3AWCQ=";
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];
   buildInputs = [ jre ];
 
-  desktopItems = lib.optional (!stdenv.isDarwin) (makeDesktopItem {
+  desktopItems = lib.optional (!stdenv.hostPlatform.isDarwin) (makeDesktopItem {
     name = "basex";
     exec = "basexgui %f";
     icon = "${./basex.svg}"; # icon copied from Ubuntu basex package

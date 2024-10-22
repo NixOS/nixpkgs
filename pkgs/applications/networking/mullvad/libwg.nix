@@ -12,7 +12,7 @@ buildGoModule {
 
   sourceRoot = "${mullvad.src.name}/wireguard/libwg";
 
-  vendorHash = "sha256-2hb6+OHifm/oAgXCiYf+nwtNDDZNWR6lAbLSGT3AG0I=";
+  vendorHash = "sha256-gaU3na3sjzM6lvmsGRkuGtV2AHvkl6IgzmyGx3R5ZpM=";
 
   # XXX: hack to make the ar archive go to the correct place
   # This is necessary because passing `-o ...` to `ldflags` does not work
@@ -29,7 +29,7 @@ buildGoModule {
   '';
 
   meta = with lib; {
-    description = "A tiny wrapper around wireguard-go";
+    description = "Tiny wrapper around wireguard-go";
     homepage = "https://github.com/mullvad/mullvadvpn-app/tree/main/wireguard/libwg";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cole-h ];

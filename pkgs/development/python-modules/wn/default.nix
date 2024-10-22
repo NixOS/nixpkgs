@@ -37,7 +37,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "wn" ];
 
   meta = with lib; {
-    description = "A modern, interlingual wordnet interface for Python";
+    description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
     changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

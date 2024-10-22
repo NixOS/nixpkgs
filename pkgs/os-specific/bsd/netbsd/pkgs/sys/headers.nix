@@ -9,12 +9,10 @@
   tsort,
   lorder,
   statHook,
-  rsync,
   uudecode,
   config,
   genassym,
   defaultMakeFlags,
-  common,
 }:
 let
   base = import ./base.nix {
@@ -29,12 +27,10 @@ let
       tsort
       lorder
       statHook
-      rsync
       uudecode
       config
       genassym
       defaultMakeFlags
-      common
       ;
   };
 in

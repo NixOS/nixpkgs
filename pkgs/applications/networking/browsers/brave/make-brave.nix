@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook3, makeWrapper
+{ lib, stdenv, fetchurl, buildPackages
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -12,7 +12,7 @@
 , freetype
 , gdk-pixbuf
 , glib
-, gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
 , gtk3
 , gtk4
@@ -49,20 +49,20 @@
 , commandLineArgs ? ""
 
 # Necessary for USB audio devices.
-, pulseSupport ? stdenv.isLinux
+, pulseSupport ? stdenv.hostPlatform.isLinux
 , libpulseaudio
 
 # For GPU acceleration support on Wayland (without the lib it doesn't seem to work)
 , libGL
 
 # For video acceleration via VA-API (--enable-features=VaapiVideoDecoder,VaapiVideoEncoder)
-, libvaSupport ? stdenv.isLinux
+, libvaSupport ? stdenv.hostPlatform.isLinux
 , libva
 , enableVideoAcceleration ? libvaSupport
 
 # For Vulkan support (--enable-features=Vulkan); disabled by default as it seems to break VA-API
 , vulkanSupport ? false
-, addOpenGLRunpath
+, addDriverRunpath
 , enableVulkan ? vulkanSupport
 }:
 
@@ -112,7 +112,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     dpkg
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [
@@ -120,7 +122,7 @@ stdenv.mkDerivation {
     glib gsettings-desktop-schemas gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
   ];
 
   unpackPhase = "dpkg-deb --fsys-tarfile $src | tar -x --no-same-permissions --no-same-owner";
@@ -187,7 +189,7 @@ stdenv.mkDerivation {
       ''}
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}"
       ${optionalString vulkanSupport ''
-      --prefix XDG_DATA_DIRS  : "${addOpenGLRunpath.driverLink}/share"
+      --prefix XDG_DATA_DIRS  : "${addDriverRunpath.driverLink}/share"
       ''}
       --add-flags ${escapeShellArg commandLineArgs}
     )

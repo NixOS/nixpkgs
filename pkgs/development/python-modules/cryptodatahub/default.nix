@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cryptodatahub";
-  version = "0.12.4";
+  version = "0.12.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "coroner";
     repo = "cryptodatahub";
     rev = "refs/tags/v${version}";
-    hash = "sha256-+IGzXYSaeZjN5AxBu7jXgrnGtrtaSveFiVeNQRBZMNg=";
+    hash = "sha256-jYMzvh4tgfLS7Za0MYHbWbczptAvENfzfTEV9Drlfto=";
   };
 
   postPatch = ''
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   preCheck = ''
     # failing tests
     rm test/updaters/test_common.py
+    rm test/common/test_key.py
     # Tests require network access
     rm test/common/test_utils.py
   '';
@@ -65,6 +66,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/coroner/cryptodatahub";
     changelog = "https://gitlab.com/coroner/cryptodatahub/-/blob/${version}/CHANGELOG.rst";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

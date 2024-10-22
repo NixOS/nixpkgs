@@ -4,12 +4,10 @@
 , fetchFromGitHub
 , freetype
 , gtk3-x11
-, mount
 , pcre
 , pkg-config
-, webkitgtk
+, webkitgtk_4_0
 , xorg
-, llvmPackages
 , WebKit
 , MetalKit
 , CoreAudioKit
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Ubsan seems to be broken on aarch64-darwin, it produces linker errors similar to https://github.com/NixOS/nixpkgs/issues/140751
     ./disable-ubsan.patch
   ];
@@ -40,9 +38,9 @@ stdenv.mkDerivation rec {
       pcre
       xorg.libX11
       xorg.libXrandr
-    ] ++ lib.optionals stdenv.isLinux [
-      webkitgtk
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+      webkitgtk_4_0
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       WebKit
       MetalKit
       CoreAudioKit
@@ -50,7 +48,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with lib; {
-    description = "A real-time noise suppression plugin for voice based on Xiph's RNNoise";
+    description = "Real-time noise suppression plugin for voice based on Xiph's RNNoise";
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = licenses.gpl3;
     platforms = platforms.all;

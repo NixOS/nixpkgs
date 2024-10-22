@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ht9YoVlbIVN0aRq0S/wWE7Sf28p3CEI6PVZY3NOgFe0=";
+    hash = "sha256-vrNcreIMYOQxVRbyCsfr7p37wrgPAHy+2LxaUlIuRC4=";
   };
 
   buildInputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/gnote";
-    description = "A note taking application";
+    description = "Note taking application";
     mainProgram = "gnote";
     maintainers = with maintainers; [ jfvillablanca ];
     license = licenses.gpl3Only;

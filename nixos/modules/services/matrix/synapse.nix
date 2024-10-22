@@ -1121,7 +1121,7 @@ in {
           The client listener on matrix-synapse is configured to use UNIX domain sockets.
           This configuration is incompatible with the `register_new_matrix_user` script.
 
-          Disable  `services.mastrix-synapse.enableRegistrationScript` to continue.
+          Disable  `services.matrix-synapse.enableRegistrationScript` to continue.
         '';
       }
     ]

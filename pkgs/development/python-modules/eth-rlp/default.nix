@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "RLP definitions for common Ethereum objects";
     homepage = "https://github.com/ethereum/eth-rlp";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

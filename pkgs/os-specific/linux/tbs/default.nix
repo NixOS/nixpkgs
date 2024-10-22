@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   meta = with lib; {
     homepage = "https://www.tbsdtv.com/";
     description = "Linux driver for TBSDTV cards";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     maintainers = with maintainers; [ ck3d ];
     priority = -1;
     broken = kernel.kernelOlder "4.14" || kernel.kernelAtLeast "6.9";

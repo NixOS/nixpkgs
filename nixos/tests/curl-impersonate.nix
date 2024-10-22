@@ -97,6 +97,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: let
       pyyaml
       pytest-asyncio
       dpkt
+      ts1-signatures
     ]}"
 
     # Prepare test root prefix
@@ -113,7 +114,7 @@ in {
   name = "curl-impersonate";
 
   meta = with lib.maintainers; {
-    maintainers = [ lilyinstarlight ];
+    maintainers = [ ];
   };
 
   nodes = {

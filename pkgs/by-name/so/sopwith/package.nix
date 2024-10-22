@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/fragglet/sdl-sopwith";
-    description = "Classic biplane shoot ‘em-up game.";
+    description = "Classic biplane shoot ‘em-up game";
     license = licenses.gpl2Plus;
     mainProgram = "sopwith";
     maintainers = with maintainers; [ evilbulgarian ];

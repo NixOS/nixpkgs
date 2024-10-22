@@ -8,10 +8,12 @@
 , git
 , inetutils
 , stdenv
+, nixosTests
 }:
 
 let
   python = python3Packages.python.override {
+    self = python;
     packageOverrides = self: super: {
       esphome-dashboard = self.callPackage ./dashboard.nix { };
     };
@@ -19,28 +21,35 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.5.4";
+  version = "2024.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-UxNMHRQLrViK9ssFc0vHA/zqNw5yH8E6n+OAnq6vJdQ=";
+    hash = "sha256-EdxCq/123OJm63NBfGnt5pfqdUXPti+NmbSVRu/gwqc=";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  build-systems = with python.pkgs; [
     setuptools
     argcomplete
+  ];
+
+  nativeBuildInputs = [
     installShellFiles
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;
 
+  pythonRemoveDeps = [
+    "esptool"
+    "platformio"
+  ];
+
   postPatch = ''
-    # drop coverage testing
-    sed -i '/--cov/d' pytest.ini
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==" "setuptools>="
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
@@ -50,7 +59,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   # Remove esptool and platformio from requirements
-  ESPHOME_USE_SUBPROCESS = "";
+  env.ESPHOME_USE_SUBPROCESS = "";
 
   # esphome has optional dependencies it does not declare, they are
   # loaded when certain config blocks are used, like `font`, `image`
@@ -58,7 +67,7 @@ python.pkgs.buildPythonApplication rec {
   # They have validation functions like:
   # - validate_cryptography_installed
   # - validate_pillow_installed
-  propagatedBuildInputs = with python.pkgs; [
+  dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete
     cairosvg
@@ -73,9 +82,9 @@ python.pkgs.buildPythonApplication rec {
     pillow
     platformio
     protobuf
+    puremagic
     pyparsing
     pyserial
-    python-magic
     pyyaml
     requests
     ruamel-yaml
@@ -91,7 +100,7 @@ python.pkgs.buildPythonApplication rec {
     # git is used in esphome/writer.py
     # inetutils is used in esphome/dashboard/status/ping.py
     "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
-    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath propagatedBuildInputs}" # will show better error messages
+    "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
   ];
@@ -103,6 +112,7 @@ python.pkgs.buildPythonApplication rec {
     hypothesis
     mock
     pytest-asyncio
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];
@@ -125,6 +135,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
+    tests = { inherit (nixosTests) esphome; };
   };
 
   meta = with lib; {

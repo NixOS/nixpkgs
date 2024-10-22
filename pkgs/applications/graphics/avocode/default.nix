@@ -1,5 +1,5 @@
 { lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
+, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, adwaita-icon-theme
 , xorg, mozjpeg, makeWrapper, wrapGAppsHook3, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
 }:
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [makeWrapper wrapGAppsHook3 unzip];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+  buildInputs = [ gtk3 adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://avocode.com/";
-    description = "The bridge between designers and developers";
+    description = "Bridge between designers and developers";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = platforms.linux;

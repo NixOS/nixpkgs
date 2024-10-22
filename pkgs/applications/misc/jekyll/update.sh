@@ -1,13 +1,12 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p bundix zlib libyaml
 
-set -o errexit
-set -o nounset
+set -o errexit -o nounset
 
-readonly BASEDIR="$(dirname $(readlink -f $0))"
+script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)
 
 for directory in "basic" "full"; do
-  pushd "$BASEDIR/$directory"
+  pushd "$script_dir/$directory"
   rm -f Gemfile.lock gemset.nix
   BUNDLE_FORCE_RUBY_PLATFORM=true bundix --magic
   rm -rf .bundle vendor

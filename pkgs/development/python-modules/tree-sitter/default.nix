@@ -2,15 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tree-sitter-python,
+  tree-sitter-rust,
+  tree-sitter-html,
+  tree-sitter-javascript,
+  tree-sitter-json,
 }:
 
 buildPythonPackage rec {
   pname = "tree-sitter";
-  version = "0.21.1";
+  version = "0.22.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,26 +23,25 @@ buildPythonPackage rec {
     owner = "tree-sitter";
     repo = "py-tree-sitter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-U4ZdU0lxjZO/y0q20bG5CLKipnfpaxzV3AFR6fGS7m4=";
+    hash = "sha256-4lxE8oDFE0X7YAnB72PKIaHIqovWSM5QnFo0grPAtKU=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    #  Replace distutils with setuptools, https://github.com/tree-sitter/py-tree-sitter/pull/214
-    (fetchpatch {
-      name = "replace-distutils.patch";
-      url = "https://github.com/tree-sitter/py-tree-sitter/commit/80d3cae493c4a47e49cc1d2ebab0a8eaf7617825.patch";
-      hash = "sha256-00coI8/COpYMiSflAECwh6yJCMJj/ucFEn18Npj2g+Q=";
-    })
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    tree-sitter-python
+    tree-sitter-rust
+    tree-sitter-html
+    tree-sitter-javascript
+    tree-sitter-json
   ];
-
-  nativeBuildInputs = [ setuptools ];
-
-  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "tree_sitter" ];
 
   preCheck = ''
+    # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
     rm -r tree_sitter
   '';
 

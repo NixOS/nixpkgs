@@ -9,21 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-health";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchCrate {
     inherit version;
     pname = "nix_health";
-    hash = "sha256-u5ipQnux/ulllfPFyUdeLj7gAf3Vu7KL2Q4uYxtv1q4=";
+    hash = "sha256-/I6LdcH61wgJOEv51J1jkWlD8BlSAaRR1e7gc5H9bQI=";
   };
 
-  cargoHash = "sha256-oTO9V+zGmMgDXrt6w1fB81b+WmK3MRI/eCTNEuVM0hk=";
+  cargoHash = "sha256-mqJA5Fv/sYj6ZkE73emtaHvg9hdT/5lN0kM3sl+GRCo=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libiconv openssl ]
     # Use a newer SDK for CoreFoundation, because the sysinfo crate requires
     # it, https://github.com/GuillaumeGomez/sysinfo/issues/915
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk_11_0.frameworks;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk_11_0.frameworks;
       [ IOKit
         CoreFoundation
       ]);

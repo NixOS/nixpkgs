@@ -29,7 +29,7 @@ let
     }
     .${system} or (throw "Unsupported system: ${system}");
 
-  stdenv' = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
+  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "sketchybar";
@@ -75,7 +75,7 @@ stdenv'.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A highly customizable macOS status bar replacement";
+    description = "Highly customizable macOS status bar replacement";
     homepage = "https://github.com/FelixKratz/SketchyBar";
     license = lib.licenses.gpl3;
     mainProgram = "sketchybar";

@@ -27,7 +27,7 @@ cat > pin.json <<EOF
 {
   "pname": "$crate",
   "version": "$version",
-  "sha256": "$(printf '%s' "$prefetch" | head -n1)"
+  "hash": "$(nix hash to-sri --type sha256 "$(printf '%s' "$prefetch" | head -n1)")"
 }
 EOF
 

@@ -12,25 +12,31 @@
 
   # tests
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ftfy";
-  version = "6.2.0";
+  version = "6.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XkIUPHAl75eUTKJhnWthsGGfxmVPmHcdOehiwUJMdcA=";
+    hash = "sha256-ebUFmI8p1XelipBpr+dVU6AqRuQt5gkcBmDNxngSutw=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ wcwidth ];
+  dependencies = [ wcwidth ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  pythonImportsCheck = [ "ftfy" ];
+
+  nativeCheckInputs = [
+    versionCheckHook
+    pytestCheckHook
+  ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
@@ -45,7 +51,7 @@ buildPythonPackage rec {
     description = "Given Unicode text, make its representation consistent and possibly less broken";
     mainProgram = "ftfy";
     homepage = "https://github.com/LuminosoInsight/python-ftfy";
-    license = licenses.mit;
+    license = licenses.asl20;
     maintainers = with maintainers; [ aborsu ];
   };
 }

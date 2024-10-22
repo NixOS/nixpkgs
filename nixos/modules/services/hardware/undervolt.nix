@@ -1,12 +1,10 @@
 { config, pkgs, lib, ... }:
-
-with lib;
 let
   cfg = config.services.undervolt;
 
   mkPLimit = limit: window:
     if (limit == null && window == null) then null
-    else assert asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
+    else assert lib.asserts.assertMsg (limit != null && window != null) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
   cliArgs = lib.cli.toGNUCommandLine {} {
     inherit (cfg)
@@ -34,96 +32,96 @@ let
 in
 {
   options.services.undervolt = {
-    enable = mkEnableOption ''
+    enable = lib.mkEnableOption ''
        Undervolting service for Intel CPUs.
 
        Warning: This service is not endorsed by Intel and may permanently damage your hardware. Use at your own risk
     '';
 
-    verbose = mkOption {
-      type = types.bool;
+    verbose = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to enable verbose logging.
       '';
     };
 
-    package = mkPackageOption pkgs "undervolt" { };
+    package = lib.mkPackageOption pkgs "undervolt" { };
 
-    coreOffset = mkOption {
-      type = types.nullOr types.int;
+    coreOffset = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset the CPU cores by.
       '';
     };
 
-    gpuOffset = mkOption {
-      type = types.nullOr types.int;
+    gpuOffset = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset the GPU by.
       '';
     };
 
-    uncoreOffset = mkOption {
-      type = types.nullOr types.int;
+    uncoreOffset = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset uncore by.
       '';
     };
 
-    analogioOffset = mkOption {
-      type = types.nullOr types.int;
+    analogioOffset = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The amount of voltage in mV to offset analogio by.
       '';
     };
 
-    temp = mkOption {
-      type = types.nullOr types.int;
+    temp = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The temperature target in Celsius degrees.
       '';
     };
 
-    tempAc = mkOption {
-      type = types.nullOr types.int;
+    tempAc = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The temperature target on AC power in Celsius degrees.
       '';
     };
 
-    tempBat = mkOption {
-      type = types.nullOr types.int;
+    tempBat = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         The temperature target on battery power in Celsius degrees.
       '';
     };
 
-    turbo = mkOption {
-      type = types.nullOr types.int;
+    turbo = lib.mkOption {
+      type = lib.types.nullOr lib.types.int;
       default = null;
       description = ''
         Changes the Intel Turbo feature status (1 is disabled and 0 is enabled).
       '';
     };
 
-    p1.limit = mkOption {
-      type = with types; nullOr int;
+    p1.limit = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       description = ''
         The P1 Power Limit in Watts.
         Both limit and window must be set.
       '';
     };
-    p1.window = mkOption {
-      type = with types; nullOr (oneOf [ float int ]);
+    p1.window = lib.mkOption {
+      type = with lib.types; nullOr (oneOf [ float int ]);
       default = null;
       description = ''
         The P1 Time Window in seconds.
@@ -131,16 +129,16 @@ in
       '';
     };
 
-    p2.limit = mkOption {
-      type = with types; nullOr int;
+    p2.limit = lib.mkOption {
+      type = with lib.types; nullOr int;
       default = null;
       description = ''
         The P2 Power Limit in Watts.
         Both limit and window must be set.
       '';
     };
-    p2.window = mkOption {
-      type = with types; nullOr (oneOf [ float int ]);
+    p2.window = lib.mkOption {
+      type = with lib.types; nullOr (oneOf [ float int ]);
       default = null;
       description = ''
         The P2 Time Window in seconds.
@@ -148,8 +146,8 @@ in
       '';
     };
 
-    useTimer = mkOption {
-      type = types.bool;
+    useTimer = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to set a timer that applies the undervolt settings every 30s.
@@ -160,7 +158,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     hardware.cpu.x86.msr.enable = true;
 
     environment.systemPackages = [ cfg.package ];
@@ -179,7 +177,7 @@ in
       };
     };
 
-    systemd.timers.undervolt = mkIf cfg.useTimer {
+    systemd.timers.undervolt = lib.mkIf cfg.useTimer {
       description = "Undervolt timer to ensure voltage settings are always applied";
       partOf = [ "undervolt.service" ];
       wantedBy = [ "multi-user.target" ];

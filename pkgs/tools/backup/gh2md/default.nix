@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-B7IB1TWfZ0StH2zo/tXfDAaPlgLvr4ciIv7B8EQyp8w=";
+    hash = "sha256-B7IB1TWfZ0StH2zo/tXfDAaPlgLvr4ciIv7B8EQyp8w=";
   };
 
   propagatedBuildInputs = with python3Packages; [ six requests python-dateutil ];

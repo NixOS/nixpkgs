@@ -1,20 +1,20 @@
-{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests }:
+{ lib, stdenv, fetchurl, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
-  os = if stdenv.isDarwin then "osx" else "linux";
+  os = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
   arch = {
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
-    x64-linux_hash = "sha256-EBXK8MGgEOEu99X8n0i7mAoEBpqP9l+PtBlig0NW/Y8=";
-    arm64-linux_hash = "sha256-ZXIXjLnzjsT4nj5lbhg0yp97M9bdm8mo6Ypf3PAHlXc=";
-    x64-osx_hash = "sha256-RR3nyY7KyQXCimmknNEK6en98Q4D+PcFOi8lPAwdp9Q=";
+    x64-linux_hash = "sha256-qvq4Ivv9AKIljEwdMMKWjy5vZnZ4LPd0gxUUIHcEP7E=";
+    arm64-linux_hash = "sha256-MNJOIDNT+3ZZP7sTnTdiDFG+Q+42dUvEj6pGZ3LLS/4=";
+    x64-osx_hash = "sha256-DKPllZhtebuOfYrJVfhxfhPcoXSnozD2VM6+NP3azus=";
   }."${arch}-${os}_hash";
 in stdenv.mkDerivation rec {
   pname = "readarr";
-  version = "0.3.26.2526";
+  version = "0.3.32.2587";
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     cp -r * $out/share/${pname}-${version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Readarr \
       --add-flags "$out/share/${pname}-${version}/Readarr.dll" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl ]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ curl sqlite libmediainfo icu openssl zlib ]}
 
     runHook postInstall
   '';
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A Usenet/BitTorrent ebook downloader";
+    description = "Usenet/BitTorrent ebook downloader";
     homepage = "https://readarr.com";
     license = licenses.gpl3;
     maintainers = [ maintainers.jocelynthode ];

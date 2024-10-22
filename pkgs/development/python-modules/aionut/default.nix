@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aionut";
-  version = "4.3.2";
+  version = "4.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "aionut";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QehVC/6RbWp8KnOuVtLFkK8/STTgHXkXmFbSmzu9z7w=";
+    hash = "sha256-DCWfa5YfrB7MTf78AeSHDgiZzLNXoiNLnty9a+Sr9tQ=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       --replace-fail " --cov=aionut --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio

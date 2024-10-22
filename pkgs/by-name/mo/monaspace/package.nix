@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "An innovative superfamily of fonts for code";
+    description = "Innovative superfamily of fonts for code";
     longDescription = ''
       Since the earliest days of the teletype machine, code has been set in
       monospaced type — letters, on a grid. Monaspace is a new type system that

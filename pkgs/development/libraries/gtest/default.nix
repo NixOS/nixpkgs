@@ -3,12 +3,27 @@
 , fetchFromGitHub
 , cmake
 , ninja
+# Enable C++17 support
+#     https://github.com/google/googletest/issues/3081
+# Projects that require a higher standard can override this package.
+# For an example why that may be necessary, see:
+#     https://github.com/mhx/dwarfs/issues/188#issuecomment-1907574427
+# Setting this to `null` does not pass any flags to set this.
+, cxx_standard ? (
+    if (
+      (stdenv.cc.isGNU && (lib.versionOlder stdenv.cc.version "11.0"))
+      ||
+      (stdenv.cc.isClang && (lib.versionOlder stdenv.cc.version "16.0"))
+    )
+      then "17"
+      else null
+  )
 , static ? stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gtest";
-  version = "1.14.0";
+  version = "1.15.2";
 
   outputs = [ "out" "dev" ];
 
@@ -16,7 +31,7 @@ stdenv.mkDerivation rec {
     owner = "google";
     repo = "googletest";
     rev = "v${version}";
-    hash = "sha256-t0RchAHTJbuI5YW4uyBPykTvcjy90JW9AOPNjIhwh6U=";
+    hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
   };
 
   patches = [
@@ -27,13 +42,8 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
-  ] ++ lib.optionals (
-    (stdenv.cc.isGNU && (lib.versionOlder stdenv.cc.version "11.0"))
-    || (stdenv.cc.isClang && (lib.versionOlder stdenv.cc.version "16.0"))
-  ) [
-    # Enable C++17 support
-    # https://github.com/google/googletest/issues/3081
-    "-DCMAKE_CXX_STANDARD=17"
+  ] ++ lib.optionals (cxx_standard != null) [
+    "-DCMAKE_CXX_STANDARD=${cxx_standard}"
   ];
 
   meta = with lib; {

@@ -44,9 +44,10 @@ import ../pillow/generic.nix (
     };
 
     meta = with lib; {
-      broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+      broken =
+        (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
       homepage = "https://python-pillow.github.io/pillow-perf/";
-      description = "The friendly PIL fork - SIMD version";
+      description = "Friendly PIL fork - SIMD version";
       longDescription = ''
         Pillow-SIMD is "following" Pillow. Pillow-SIMD versions are 100% compatible drop-in replacements for Pillow of the same version.
 
@@ -55,7 +56,7 @@ import ../pillow/generic.nix (
         Currently, Pillow-SIMD can be compiled with SSE4 (default) or AVX2 support.
       '';
       license = licenses.hpnd;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   }
   // args

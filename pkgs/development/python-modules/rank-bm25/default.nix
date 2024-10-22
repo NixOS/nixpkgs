@@ -33,7 +33,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "rank_bm25" ];
 
   meta = with lib; {
-    description = "A Collection of BM25 Algorithms in Python";
+    description = "Collection of BM25 Algorithms in Python";
     homepage = "https://github.com/dorianbrown/rank_bm25";
     changelog = "https://github.com/dorianbrown/rank_bm25/releases/tag/${version}";
     license = licenses.asl20;

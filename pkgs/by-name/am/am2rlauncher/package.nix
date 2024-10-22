@@ -4,14 +4,13 @@
 , glibc
 , gtk3
 , libappindicator
-, webkitgtk
+, webkitgtk_4_0
 , e2fsprogs
 , libnotify
 , libgit2
 , openssl
 , xdelta
 , file
-, busybox
 , openjdk
 , patchelf
 , fetchFromGitHub
@@ -52,7 +51,7 @@ buildDotnetModule {
     owner = "AM2R-Community-Developers";
     repo = "AM2RLauncher";
     rev = "5d8b7d9b3de68e6215c10b9fd223b7f1d5e40dea";
-    sha256 = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
+    hash = "sha256-/nHqo8jh3sOUngbpqdfiQjUWO/8Uzpc5jtW7Ep4q6Wg=";
   };
 
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
@@ -64,7 +63,7 @@ buildDotnetModule {
     glibc
     gtk3
     libappindicator
-    webkitgtk
+    webkitgtk_4_0
     e2fsprogs
     libnotify
     libgit2
@@ -93,7 +92,7 @@ buildDotnetModule {
 
   meta = with lib; {
     homepage = "https://github.com/AM2R-Community-Developers/AM2RLauncher";
-    description = "A front-end for dealing with AM2R updates and mods";
+    description = "Front-end for dealing with AM2R updates and mods";
     longDescription = ''
       A front-end application that simplifies installing the latest
       AM2R-Community-Updates, creating APKs for Android use, as well as Mods for

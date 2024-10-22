@@ -4,6 +4,7 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   aiohttp,
   attrs,
   defusedxml,
@@ -14,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "arcam-fmj";
-  version = "1.4.0";
-  format = "setuptools";
+  version = "1.5.2";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -23,10 +24,12 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "arcam_fmj";
     rev = "refs/tags/${version}";
-    hash = "sha256-/A3Fs0JyzW05L80CtI07Y/kTTrIC6yqubJfYO0kAEf0=";
+    hash = "sha256-hBoUxY+xtW04UPUG2P8A8QQbHxGk0bjcrtXis6nlaGg=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     attrs
     defusedxml
@@ -48,6 +51,7 @@ buildPythonPackage rec {
     "test_silent_server_disconnect"
     "test_heartbeat"
     "test_cancellation"
+    "test_unsupported_zone"
   ];
 
   pythonImportsCheck = [

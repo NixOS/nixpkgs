@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.foundationdb;
   pkg = cfg.package;
@@ -10,10 +7,10 @@ let
   initialIpAddr = if (cfg.publicAddress != "auto") then cfg.publicAddress else "127.0.0.1";
 
   fdbServers = n:
-    concatStringsSep "\n" (map (x: "[fdbserver.${toString (x+cfg.listenPortStart)}]") (range 0 (n - 1)));
+    lib.concatStringsSep "\n" (map (x: "[fdbserver.${toString (x+cfg.listenPortStart)}]") (lib.range 0 (n - 1)));
 
   backupAgents = n:
-    concatStringsSep "\n" (map (x: "[backup_agent.${toString x}]") (range 1 n));
+    lib.concatStringsSep "\n" (map (x: "[backup_agent.${toString x}]") (lib.range 1 n));
 
   configFile = pkgs.writeText "foundationdb.conf" ''
     [general]
@@ -32,25 +29,25 @@ let
     logdir         = ${cfg.logDir}
     logsize        = ${cfg.logSize}
     maxlogssize    = ${cfg.maxLogSize}
-    ${optionalString (cfg.class != null) "class = ${cfg.class}"}
+    ${lib.optionalString (cfg.class != null) "class = ${cfg.class}"}
     memory         = ${cfg.memory}
     storage_memory = ${cfg.storageMemory}
 
-    ${optionalString (lib.versionAtLeast cfg.package.version "6.1") ''
+    ${lib.optionalString (lib.versionAtLeast cfg.package.version "6.1") ''
     trace_format   = ${cfg.traceFormat}
     ''}
 
-    ${optionalString (cfg.tls != null) ''
+    ${lib.optionalString (cfg.tls != null) ''
       tls_plugin           = ${pkg}/libexec/plugins/FDBLibTLS.so
       tls_certificate_file = ${cfg.tls.certificate}
       tls_key_file         = ${cfg.tls.key}
       tls_verify_peers     = ${cfg.tls.allowedPeers}
     ''}
 
-    ${optionalString (cfg.locality.machineId    != null) "locality_machineid=${cfg.locality.machineId}"}
-    ${optionalString (cfg.locality.zoneId       != null) "locality_zoneid=${cfg.locality.zoneId}"}
-    ${optionalString (cfg.locality.datacenterId != null) "locality_dcid=${cfg.locality.datacenterId}"}
-    ${optionalString (cfg.locality.dataHall     != null) "locality_data_hall=${cfg.locality.dataHall}"}
+    ${lib.optionalString (cfg.locality.machineId    != null) "locality_machineid=${cfg.locality.machineId}"}
+    ${lib.optionalString (cfg.locality.zoneId       != null) "locality_zoneid=${cfg.locality.zoneId}"}
+    ${lib.optionalString (cfg.locality.datacenterId != null) "locality_dcid=${cfg.locality.datacenterId}"}
+    ${lib.optionalString (cfg.locality.dataHall     != null) "locality_data_hall=${cfg.locality.dataHall}"}
 
     ${fdbServers cfg.serverProcesses}
 
@@ -62,30 +59,30 @@ in
 {
   options.services.foundationdb = {
 
-    enable = mkEnableOption "FoundationDB Server";
+    enable = lib.mkEnableOption "FoundationDB Server";
 
-    package = mkOption {
-      type        = types.package;
+    package = lib.mkOption {
+      type        = lib.types.package;
       description = ''
         The FoundationDB package to use for this server. This must be specified by the user
         in order to ensure migrations and upgrades are controlled appropriately.
       '';
     };
 
-    publicAddress = mkOption {
-      type        = types.str;
+    publicAddress = lib.mkOption {
+      type        = lib.types.str;
       default     = "auto";
       description = "Publicly visible IP address of the process. Port is determined by process ID";
     };
 
-    listenAddress = mkOption {
-      type        = types.str;
+    listenAddress = lib.mkOption {
+      type        = lib.types.str;
       default     = "public";
       description = "Publicly visible IP address of the process. Port is determined by process ID";
     };
 
-    listenPortStart = mkOption {
-      type          = types.int;
+    listenPortStart = lib.mkOption {
+      type          = lib.types.int;
       default       = 4500;
       description   = ''
         Starting port number for database listening sockets. Every FDB process binds to a
@@ -94,8 +91,8 @@ in
       '';
     };
 
-    openFirewall = mkOption {
-      type        = types.bool;
+    openFirewall = lib.mkOption {
+      type        = lib.types.bool;
       default     = false;
       description = ''
         Open the firewall ports corresponding to FoundationDB processes and coordinators
@@ -103,44 +100,44 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type        = types.path;
+    dataDir = lib.mkOption {
+      type        = lib.types.path;
       default     = "/var/lib/foundationdb";
       description = "Data directory. All cluster data will be put under here.";
     };
 
-    logDir = mkOption {
-      type        = types.path;
+    logDir = lib.mkOption {
+      type        = lib.types.path;
       default     = "/var/log/foundationdb";
       description = "Log directory.";
     };
 
-    user = mkOption {
-      type        = types.str;
+    user = lib.mkOption {
+      type        = lib.types.str;
       default     = "foundationdb";
       description = "User account under which FoundationDB runs.";
     };
 
-    group = mkOption {
-      type        = types.str;
+    group = lib.mkOption {
+      type        = lib.types.str;
       default     = "foundationdb";
       description = "Group account under which FoundationDB runs.";
     };
 
-    class = mkOption {
-      type        = types.nullOr (types.enum [ "storage" "transaction" "stateless" ]);
+    class = lib.mkOption {
+      type        = lib.types.nullOr (lib.types.enum [ "storage" "transaction" "stateless" ]);
       default     = null;
       description = "Process class";
     };
 
-    restartDelay = mkOption {
-      type = types.int;
+    restartDelay = lib.mkOption {
+      type = lib.types.int;
       default = 10;
       description = "Number of seconds to wait before restarting servers.";
     };
 
-    logSize = mkOption {
-      type        = types.str;
+    logSize = lib.mkOption {
+      type        = lib.types.str;
       default     = "10MiB";
       description = ''
         Roll over to a new log file after the current log file
@@ -148,8 +145,8 @@ in
       '';
     };
 
-    maxLogSize = mkOption {
-      type        = types.str;
+    maxLogSize = lib.mkOption {
+      type        = lib.types.str;
       default     = "100MiB";
       description = ''
         Delete the oldest log file when the total size of all log
@@ -158,20 +155,20 @@ in
       '';
     };
 
-    serverProcesses = mkOption {
-      type = types.int;
+    serverProcesses = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = "Number of fdbserver processes to run.";
     };
 
-    backupProcesses = mkOption {
-      type = types.int;
+    backupProcesses = lib.mkOption {
+      type = lib.types.int;
       default = 1;
       description = "Number of backup_agent processes to run for snapshots.";
     };
 
-    memory = mkOption {
-      type        = types.str;
+    memory = lib.mkOption {
+      type        = lib.types.str;
       default     = "8GiB";
       description = ''
         Maximum memory used by the process. The default value is
@@ -192,8 +189,8 @@ in
       '';
     };
 
-    storageMemory = mkOption {
-      type        = types.str;
+    storageMemory = lib.mkOption {
+      type        = lib.types.str;
       default     = "1GiB";
       description = ''
         Maximum memory used for data storage. The default value is
@@ -208,29 +205,29 @@ in
       '';
     };
 
-    tls = mkOption {
+    tls = lib.mkOption {
       default = null;
       description = ''
         FoundationDB Transport Security Layer (TLS) settings.
       '';
 
-      type = types.nullOr (types.submodule ({
+      type = lib.types.nullOr (lib.types.submodule ({
         options = {
-          certificate = mkOption {
-            type = types.str;
+          certificate = lib.mkOption {
+            type = lib.types.str;
             description = ''
               Path to the TLS certificate file. This certificate will
               be offered to, and may be verified by, clients.
             '';
           };
 
-          key = mkOption {
-            type = types.str;
+          key = lib.mkOption {
+            type = lib.types.str;
             description = "Private key file for the certificate.";
           };
 
-          allowedPeers = mkOption {
-            type = types.str;
+          allowedPeers = lib.mkOption {
+            type = lib.types.str;
             default = "Check.Valid=1,Check.Unexpired=1";
             description = ''
               "Peer verification string". This may be used to adjust which TLS
@@ -245,7 +242,7 @@ in
       }));
     };
 
-    locality = mkOption {
+    locality = lib.mkOption {
       default = {
         machineId    = null;
         zoneId       = null;
@@ -257,11 +254,11 @@ in
         FoundationDB locality settings.
       '';
 
-      type = types.submodule ({
+      type = lib.types.submodule ({
         options = {
-          machineId = mkOption {
+          machineId = lib.mkOption {
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               Machine identifier key. All processes on a machine should share a
               unique id. By default, processes on a machine determine a unique id to share.
@@ -269,9 +266,9 @@ in
             '';
           };
 
-          zoneId = mkOption {
+          zoneId = lib.mkOption {
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               Zone identifier key. Processes that share a zone id are
               considered non-unique for the purposes of data replication.
@@ -279,9 +276,9 @@ in
             '';
           };
 
-          datacenterId = mkOption {
+          datacenterId = lib.mkOption {
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               Data center identifier key. All processes physically located in a
               data center should share the id. If you are depending on data
@@ -289,9 +286,9 @@ in
             '';
           };
 
-          dataHall = mkOption {
+          dataHall = lib.mkOption {
             default = null;
-            type = types.nullOr types.str;
+            type = lib.types.nullOr lib.types.str;
             description = ''
               Data hall identifier key. All processes physically located in a
               data hall should share the id. If you are depending on data
@@ -302,9 +299,9 @@ in
       });
     };
 
-    extraReadWritePaths = mkOption {
+    extraReadWritePaths = lib.mkOption {
       default = [ ];
-      type = types.listOf types.path;
+      type = lib.types.listOf lib.types.path;
       description = ''
         An extra set of filesystem paths that FoundationDB can read to
         and write from. By default, FoundationDB runs under a heavily
@@ -316,20 +313,20 @@ in
       '';
     };
 
-    pidfile = mkOption {
-      type        = types.path;
+    pidfile = lib.mkOption {
+      type        = lib.types.path;
       default     = "/run/foundationdb.pid";
       description = "Path to pidfile for fdbmonitor.";
     };
 
-    traceFormat = mkOption {
-      type = types.enum [ "xml" "json" ];
+    traceFormat = lib.mkOption {
+      type = lib.types.enum [ "xml" "json" ];
       default = "xml";
       description = "Trace logging format.";
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       { assertion = lib.versionOlder cfg.package.version "6.1" -> cfg.traceFormat == "xml";
         message = ''
@@ -341,7 +338,7 @@ in
 
     environment.systemPackages = [ pkg ];
 
-    users.users = optionalAttrs (cfg.user == "foundationdb") {
+    users.users = lib.optionalAttrs (cfg.user == "foundationdb") {
       foundationdb = {
         description = "FoundationDB User";
         uid         = config.ids.uids.foundationdb;
@@ -349,11 +346,11 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "foundationdb") {
+    users.groups = lib.optionalAttrs (cfg.group == "foundationdb") {
       foundationdb.gid = config.ids.gids.foundationdb;
     };
 
-    networking.firewall.allowedTCPPortRanges = mkIf cfg.openFirewall
+    networking.firewall.allowedTCPPortRanges = lib.mkIf cfg.openFirewall
       [ { from = cfg.listenPortStart;
           to = (cfg.listenPortStart + cfg.serverProcesses) - 1;
         }

@@ -6,7 +6,7 @@
 , nodejs
 , electron
 , fetchFromGitHub
-, gitUpdater
+, nix-update-script
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.48";
+  version = "3.1.50";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-gm+Q2PXii53WQewl2vD4aUOo0yFuh+LFt8MEPB7ZqE0=";
+    hash = "sha256-WmF7tH5PiaggyvP/klWwNgaLKVhIoApxDtwwLpug52A=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    hash = "sha256-1JXd1pDGEFDG+ogXbEpl4WMYXwksJJJBx20ZPykc7OM=";
+    hash = "sha256-ntXZ4gRXRqiPQxdwXDsLxGdBqUV5eboy9ntTlJsz9FA=";
   };
 
   patches = [
@@ -103,9 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "v";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ebkr/r2modmanPlus/releases/tag/v${finalAttrs.version}";

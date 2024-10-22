@@ -1,40 +1,35 @@
 { config, lib, pkgs, ... }:
-
 let
   cfg = config.services.haproxy;
-
   haproxyCfg = pkgs.writeText "haproxy.conf" ''
     global
       # needed for hot-reload to work without dropping packets in multi-worker mode
       stats socket /run/haproxy/haproxy.sock mode 600 expose-fd listeners level user
-
     ${cfg.config}
   '';
-
 in
-with lib;
 {
   options = {
     services.haproxy = {
 
-      enable = mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer.";
+      enable = lib.mkEnableOption "HAProxy, the reliable, high performance TCP/HTTP load balancer";
 
-      package = mkPackageOption pkgs "haproxy" { };
+      package = lib.mkPackageOption pkgs "haproxy" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "haproxy";
         description = "User account under which haproxy runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "haproxy";
         description = "Group account under which haproxy runs.";
       };
 
-      config = mkOption {
-        type = types.nullOr types.lines;
+      config = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         default = null;
         description = ''
           Contents of the HAProxy configuration file,
@@ -44,7 +39,7 @@ with lib;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [{
       assertion = cfg.config != null;
@@ -93,14 +88,14 @@ with lib;
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "haproxy") {
+    users.users = lib.optionalAttrs (cfg.user == "haproxy") {
       haproxy = {
         group = cfg.group;
         isSystemUser = true;
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "haproxy") {
+    users.groups = lib.optionalAttrs (cfg.group == "haproxy") {
       haproxy = {};
     };
   };

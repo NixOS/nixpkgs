@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A simple program that provides DBus interface to control display temperature and brightness under wayland without flickering";
+    description = "Simple program that provides DBus interface to control display temperature and brightness under wayland without flickering";
     homepage = "https://github.com/MaxVerevkin/wl-gammarelay-rs";
     license = lib.licenses.gpl3Plus;
     mainProgram = "wl-gammarelay-rs";

@@ -1,39 +1,43 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, lshw
-, libuchardet
-, spdlog
-, dtkcommon
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  lshw,
+  libuchardet,
+  dtkcommon,
+  dtk6log,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtk6core";
-  version = "6.0.15";
+  version = "6.0.19";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "dtk6core";
     rev = finalAttrs.version;
-    hash = "sha256-zUJFilafR0hNH/Owmuyh6BLBFPbBuFKcHv40fena0GM=";
+    hash = "sha256-3MwvTnjtVVcMjQa1f4UdagEtWhJj8aDgfUlmnGo/R7s=";
   };
 
   patches = [
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
     (fetchpatch {
-      name = "fix-build-on-qt-6_7_1.patch";
-      url = "https://github.com/linuxdeepin/dtkcore/commit/10bd3842bbde41fbc61c35b81d280075d053119b.patch";
-      hash = "sha256-xZ3BhiMB6S5NJtPUEjtChCB9Jr1BI0mu7AMjyNMqt9w=";
+      name = "fix-build-on-qt-6.8.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/dtk6core/-/raw/d2e991f96b2940e8533b7e944bab5a7dd6aa0fb7/qt-6.8.patch";
+      hash = "sha256-HZxUrtUmVwnNUwcBoU7ewb+McsRkALQglPBbJU8HTkk=";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace misc/DtkCoreConfig.cmake.in \
+      --subst-var-by PACKAGE_TOOL_INSTALL_DIR ${placeholder "out"}/libexec/dtk6/DCore/bin
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -49,11 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6Packages.qtbase
     lshw
     libuchardet
-    spdlog
-  ]
-  ++ lib.optional withSystemd systemd;
+  ];
 
-  propagatedBuildInputs = [ dtkcommon ];
+  propagatedBuildInputs = [
+    dtkcommon
+    dtk6log
+  ];
 
   cmakeFlags = [
     "-DDTK_VERSION=${finalAttrs.version}"
@@ -63,7 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDSG_PREFIX_PATH='/run/current-system/sw'"
     "-DMKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs/modules"
     "-DD_DSG_APP_DATA_FALLBACK=/var/dsg/appdata"
-    "-DBUILD_WITH_SYSTEMD=${if withSystemd then "ON" else "OFF"}"
   ];
 
   preConfigure = ''
@@ -72,7 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk6/DCore/bin/*; do

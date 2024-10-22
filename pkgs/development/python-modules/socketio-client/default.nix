@@ -31,7 +31,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "socketIO_client" ];
 
   meta = with lib; {
-    description = "A socket.io client library for protocol 1.x";
+    description = "Socket.io client library for protocol 1.x";
     homepage = "https://github.com/invisibleroads/socketIO-client";
     license = licenses.mit;
     maintainers = with maintainers; [ raitobezarius ];

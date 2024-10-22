@@ -27,7 +27,7 @@ import ./make-test-python.nix ({ lib, ... }: {
 
     with subtest("Bind subsystem to port"):
       server.wait_for_unit("network-online.target")
-      server.succeed("nvmet port add 1 tcp 0.0.0.0:4420")
+      server.succeed("nvmet port add 1 tcp [::]:4420")
       server.succeed("nvmet port add-subsystem 1 ${subsystem}")
 
     with subtest("Discover and connect to available subsystems"):

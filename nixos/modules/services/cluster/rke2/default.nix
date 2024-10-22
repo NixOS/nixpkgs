@@ -1,6 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
 let
   cfg = config.services.rke2;
 in
@@ -8,12 +6,12 @@ in
   imports = [ ];
 
   options.services.rke2 = {
-    enable = mkEnableOption "rke2";
+    enable = lib.mkEnableOption "rke2";
 
-    package = mkPackageOption pkgs "rke2" { };
+    package = lib.mkPackageOption pkgs "rke2" { };
 
-    role = mkOption {
-      type = types.enum [ "server" "agent" ];
+    role = lib.mkOption {
+      type = lib.types.enum [ "server" "agent" ];
       description = ''
         Whether rke2 should run as a server or agent.
 
@@ -31,26 +29,26 @@ in
       default = "server";
     };
 
-    configPath = mkOption {
-      type = types.path;
+    configPath = lib.mkOption {
+      type = lib.types.path;
       description = "Load configuration from FILE.";
       default = "/etc/rancher/rke2/config.yaml";
     };
 
-    debug = mkOption {
-      type = types.bool;
+    debug = lib.mkOption {
+      type = lib.types.bool;
       description = "Turn on debug logs.";
       default = false;
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       description = "The folder to hold state in.";
       default = "/var/lib/rancher/rke2";
     };
 
-    token = mkOption {
-      type = types.str;
+    token = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Shared secret used to join a server or agent to a cluster.
 
@@ -60,44 +58,44 @@ in
       default = "";
     };
 
-    tokenFile = mkOption {
-      type = types.nullOr types.path;
+    tokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       description = "File path containing rke2 token to use when connecting to the server.";
       default = null;
     };
 
-    disable = mkOption {
-      type = types.listOf types.str;
+    disable = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = "Do not deploy packaged components and delete any deployed components.";
       default = [ ];
     };
 
-    nodeName = mkOption {
-      type = types.nullOr types.str;
+    nodeName = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       description = "Node name.";
       default = null;
     };
 
-    nodeLabel = mkOption {
-      type = types.listOf types.str;
+    nodeLabel = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = "Registering and starting kubelet with set of labels.";
       default = [ ];
     };
 
-    nodeTaint = mkOption {
-      type = types.listOf types.str;
+    nodeTaint = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = "Registering kubelet with set of taints.";
       default = [ ];
     };
 
-    nodeIP = mkOption {
-      type = types.nullOr types.str;
+    nodeIP = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       description = "IPv4/IPv6 addresses to advertise for node.";
       default = null;
     };
 
-    agentToken = mkOption {
-      type = types.str;
+    agentToken = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Shared secret used to join agents to the cluster, but not servers.
 
@@ -107,27 +105,27 @@ in
       default = "";
     };
 
-    agentTokenFile = mkOption {
-      type = types.nullOr types.path;
+    agentTokenFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
       description = "File path containing rke2 agent token to use when connecting to the server.";
       default = null;
     };
 
-    serverAddr = mkOption {
-      type = types.str;
+    serverAddr = lib.mkOption {
+      type = lib.types.str;
       description = "The rke2 server to connect to, used to join a cluster.";
       example = "https://10.0.0.10:6443";
       default = "";
     };
 
-    selinux = mkOption {
-      type = types.bool;
+    selinux = lib.mkOption {
+      type = lib.types.bool;
       description = "Enable SELinux in containerd.";
       default = false;
     };
 
-    cni = mkOption {
-      type = types.enum [ "none" "canal" "cilium" "calico" "flannel" ];
+    cni = lib.mkOption {
+      type = lib.types.enum [ "none" "canal" "cilium" "calico" "flannel" ];
       description = ''
         CNI Plugins to deploy, one of `none`, `calico`, `canal`, `cilium` or `flannel`.
 
@@ -141,8 +139,8 @@ in
       default = "canal";
     };
 
-    cisHardening = mkOption {
-      type = types.bool;
+    cisHardening = lib.mkOption {
+      type = lib.types.bool;
       description = ''
         Enable CIS Hardening for RKE2.
 
@@ -162,8 +160,8 @@ in
       default = false;
     };
 
-    extraFlags = mkOption {
-      type = types.listOf types.str;
+    extraFlags = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       description = ''
         Extra flags to pass to the rke2 service/agent.
 
@@ -176,8 +174,8 @@ in
       default = [ ];
     };
 
-    environmentVars = mkOption {
-      type = types.attrsOf types.str;
+    environmentVars = lib.mkOption {
+      type = lib.types.attrsOf lib.types.str;
       description = ''
         Environment variables for configuring the rke2 service/agent.
 
@@ -199,7 +197,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions = [
       {
         assertion = cfg.role == "agent" -> (builtins.pathExists cfg.configPath || cfg.serverAddr != "");
@@ -234,14 +232,14 @@ in
       '';
     };
     # See: https://docs.rke2.io/security/hardening_guide#set-kernel-parameters
-    boot.kernel.sysctl = mkIf cfg.cisHardening {
+    boot.kernel.sysctl = lib.mkIf cfg.cisHardening {
       "vm.panic_on_oom" = 0;
       "vm.overcommit_memory" = 1;
       "kernel.panic" = 10;
       "kernel.panic_on_oops" = 1;
     };
 
-    systemd.services.rke2 = {
+    systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
       documentation = [ "https://github.com/rancher/rke2#readme" ];
       after = [ "network-online.target" ];
@@ -254,7 +252,7 @@ in
           "-/etc/sysconfig/%N"
           "-/usr/local/lib/systemd/system/%N.env"
         ];
-        Environment = mapAttrsToList (k: v: "${k}=${v}") cfg.environmentVars;
+        Environment = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environmentVars;
         KillMode = "process";
         Delegate = "yes";
         LimitNOFILE = 1048576;
@@ -277,23 +275,23 @@ in
           "-${pkgs.kmod}/bin/modprobe br_netfilter"
           "-${pkgs.kmod}/bin/modprobe overlay"
         ];
-        ExecStart = "${cfg.package}/bin/rke2 '${cfg.role}' ${escapeShellArgs (
-             (optional (cfg.configPath != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configPath}")
-          ++ (optional cfg.debug "--debug")
-          ++ (optional (cfg.dataDir != "/var/lib/rancher/rke2") "--data-dir=${cfg.dataDir}")
-          ++ (optional (cfg.token != "") "--token=${cfg.token}")
-          ++ (optional (cfg.tokenFile != null) "--token-file=${cfg.tokenFile}")
-          ++ (optionals (cfg.role == "server" && cfg.disable != [ ]) (map (d: "--disable=${d}") cfg.disable))
-          ++ (optional (cfg.nodeName != null) "--node-name=${cfg.nodeName}")
-          ++ (optionals (cfg.nodeLabel != [ ]) (map (l: "--node-label=${l}") cfg.nodeLabel))
-          ++ (optionals (cfg.nodeTaint != [ ]) (map (t: "--node-taint=${t}") cfg.nodeTaint))
-          ++ (optional (cfg.nodeIP != null) "--node-ip=${cfg.nodeIP}")
-          ++ (optional (cfg.role == "server" && cfg.agentToken != "") "--agent-token=${cfg.agentToken}")
-          ++ (optional (cfg.role == "server" && cfg.agentTokenFile != null) "--agent-token-file=${cfg.agentTokenFile}")
-          ++ (optional (cfg.serverAddr != "") "--server=${cfg.serverAddr}")
-          ++ (optional cfg.selinux "--selinux")
-          ++ (optional (cfg.role == "server" && cfg.cni != "canal") "--cni=${cfg.cni}")
-          ++ (optional cfg.cisHardening "--profile=${if cfg.package.version >= "1.25" then "cis-1.23" else "cis-1.6"}")
+        ExecStart = "${cfg.package}/bin/rke2 '${cfg.role}' ${lib.escapeShellArgs (
+             (lib.optional (cfg.configPath != "/etc/rancher/rke2/config.yaml") "--config=${cfg.configPath}")
+          ++ (lib.optional cfg.debug "--debug")
+          ++ (lib.optional (cfg.dataDir != "/var/lib/rancher/rke2") "--data-dir=${cfg.dataDir}")
+          ++ (lib.optional (cfg.token != "") "--token=${cfg.token}")
+          ++ (lib.optional (cfg.tokenFile != null) "--token-file=${cfg.tokenFile}")
+          ++ (lib.optionals (cfg.role == "server" && cfg.disable != [ ]) (map (d: "--disable=${d}") cfg.disable))
+          ++ (lib.optional (cfg.nodeName != null) "--node-name=${cfg.nodeName}")
+          ++ (lib.optionals (cfg.nodeLabel != [ ]) (map (l: "--node-label=${l}") cfg.nodeLabel))
+          ++ (lib.optionals (cfg.nodeTaint != [ ]) (map (t: "--node-taint=${t}") cfg.nodeTaint))
+          ++ (lib.optional (cfg.nodeIP != null) "--node-ip=${cfg.nodeIP}")
+          ++ (lib.optional (cfg.role == "server" && cfg.agentToken != "") "--agent-token=${cfg.agentToken}")
+          ++ (lib.optional (cfg.role == "server" && cfg.agentTokenFile != null) "--agent-token-file=${cfg.agentTokenFile}")
+          ++ (lib.optional (cfg.serverAddr != "") "--server=${cfg.serverAddr}")
+          ++ (lib.optional cfg.selinux "--selinux")
+          ++ (lib.optional (cfg.role == "server" && cfg.cni != "canal") "--cni=${cfg.cni}")
+          ++ (lib.optional cfg.cisHardening "--profile=${if cfg.package.version >= "1.25" then "cis-1.23" else "cis-1.6"}")
           ++ cfg.extraFlags
         )}";
         ExecStopPost = let

@@ -6,7 +6,6 @@
   arrow,
   delorean,
   pendulum,
-  pynose,
   pytestCheckHook,
   pytz,
   udatetime,
@@ -30,10 +29,14 @@ buildPythonPackage rec {
     arrow
     delorean
     pendulum
-    pynose
     pytestCheckHook
     pytz
     udatetime
+  ];
+
+  disabledTestPaths = [
+    # depens on nose
+    "tests/test_has_been.py"
   ];
 
   pythonImportsCheck = [ "pycron" ];

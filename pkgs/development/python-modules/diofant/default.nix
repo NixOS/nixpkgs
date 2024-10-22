@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ mpmath ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     exports = [
       cython
       numpy
@@ -55,7 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "diofant" ];
 
   meta = with lib; {
-    description = "A Python CAS library";
+    description = "Python CAS library";
     homepage = "https://diofant.readthedocs.io/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ suhr ];

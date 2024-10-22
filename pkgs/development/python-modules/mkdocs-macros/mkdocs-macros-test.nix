@@ -1,10 +1,7 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchPypi,
-  runCommand,
-  setuptools,
 }:
 
 # Is required for properly testing mkdocs-macros

@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ iconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ iconv ];
 
   propagatedBuildInputs = [
     requests

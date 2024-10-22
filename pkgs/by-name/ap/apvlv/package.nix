@@ -15,13 +15,12 @@
   libxml2,
   libxshmfence,
   man,
-  nix-update-script,
   pcre,
   pkg-config,
   poppler,
   stdenv,
   testers,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence # otherwise warnings in compilation
     pcre
     poppler
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''

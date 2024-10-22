@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libosmo-netif";
-  version = "1.4.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "libosmo-netif";
     rev = version;
-    hash = "sha256-NjclrjpgX2ZySxTTjdeiOTOXsOTESLmj2LY89goedKI=";
+    hash = "sha256-C8lIURQmu15RQij7c09+F/c8XSzTcgHt4MkgdkqTa3Q=";
   };
 
   postPatch = ''
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      janik
       markuskowa
     ];
   };

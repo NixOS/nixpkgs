@@ -2,6 +2,7 @@
 , lib
 , extra-cmake-modules
 , kdoctools
+, wayland-scanner
 , fetchpatch
 , libepoxy
 , lcms2
@@ -61,7 +62,7 @@
 
 mkDerivation {
   pname = "kwin";
-  nativeBuildInputs = [ extra-cmake-modules kdoctools ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
   buildInputs = [
     libepoxy
     lcms2

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command line program which concatenates MP3 files";
+    description = "Command line program which concatenates MP3 files";
     longDescription = ''
       A command line program which concatenates MP3 files, mp3cat
       only outputs MP3 frames with valid headers, even if there is extra garbage

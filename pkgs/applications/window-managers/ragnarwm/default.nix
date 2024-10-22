@@ -61,13 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
     providedSessions = [ "ragnar" ];
   };
 
-  meta = with lib; {
+  meta = {
     description = "Minimal, flexible & user-friendly X tiling window manager";
     homepage = "https://ragnar-website.vercel.app";
     changelog = "https://github.com/cococry/Ragnar/releases/tag/${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sigmanificient ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sigmanificient ];
     mainProgram = "ragnar";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

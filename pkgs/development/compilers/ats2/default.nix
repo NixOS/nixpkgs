@@ -49,14 +49,12 @@ stdenv.mkDerivation rec {
     "CCOMP=${stdenv.cc.targetPrefix}cc"
   ];
 
-  setupHook = with lib;
+  setupHook =
     let
-      hookFiles =
-        [ ./setup-hook.sh ]
-        ++ optional withContrib ./setup-contrib-hook.sh;
+      hookFiles = [ ./setup-hook.sh ] ++ lib.optional withContrib ./setup-contrib-hook.sh;
     in
       builtins.toFile "setupHook.sh"
-      (concatMapStringsSep "\n" builtins.readFile hookFiles);
+      (lib.concatMapStringsSep "\n" builtins.readFile hookFiles);
 
   postInstall = postInstallContrib + postInstallEmacs;
 

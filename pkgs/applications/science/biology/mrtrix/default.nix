@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/MRtrix3/mrtrix3";
     description = "Suite of tools for diffusion imaging";
     maintainers = with maintainers; [ bcdarwin ];

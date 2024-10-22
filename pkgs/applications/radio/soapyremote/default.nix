@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [ "-include sys/select.h" ]);
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [ "-include sys/select.h" ]);
 
   meta = with lib; {
     homepage = "https://github.com/pothosware/SoapyRemote";

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "meilisearch";
-  version = "0.31.1";
+  version = "0.31.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "meilisearch";
     repo = "meilisearch-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-rD9f0J8Ez+WrpEyDZa3GVuBxj6Kv7McBzIuk9RtsjHk=";
+    hash = "sha256-br+FnUnwDt64dvZAMEK/oqESCWZuOUt9Lp9HGcIPqxc=";
   };
 
   build-system = [ setuptools ];

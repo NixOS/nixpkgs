@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "WhatsApp's handshake implementation using Noise Protocol";
     homepage = "https://github.com/tgalal/consonance";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

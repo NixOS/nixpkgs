@@ -12,8 +12,8 @@
  # enable boost for cycles, audaspace or i18n
  # otherwise if the user disabled
  
---- a/scripts/addons/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
-+++ b/scripts/addons/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
+--- a/scripts/addons_core/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
++++ b/scripts/addons_core/io_scene_gltf2/io/com/gltf2_io_draco_compression_extension.py
 @@ -17,7 +17,7 @@ def dll_path() -> Path:
      """
      lib_name = 'extern_draco'

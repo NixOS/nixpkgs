@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
-  version = "3.0";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
-    sha256 = "sha256-RYZnuHjK6/ygFsjjnOTz7glYnibTwDNlou/4cQ7HfKM=";
+    sha256 = "sha256-RbGVjwVIwO6Rj/hbNEowtZLqJdtkTfnq5YdnEYnbkTM=";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # Fix plugin dir
     substituteInPlace pbfplugin.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix darwin build
     substituteInPlace pbfplugin.pro \
       --replace '$$PROTOBUF/include' '${protobuf}/include' \

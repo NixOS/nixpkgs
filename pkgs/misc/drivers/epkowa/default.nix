@@ -251,6 +251,38 @@ let plugins = {
 
     meta = common_meta // { description = "iscan esci s80 plugin for " + passthru.hw; };
   };
+  s600 = stdenv.mkDerivation rec {
+    name = "iscan-gt-s600-bundle";
+    version = "2.30.4";
+
+    src = fetchurl {
+      urls = [
+        "https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+        "https://web.archive.org/web/20240614120113/https://download2.ebz.epson.net/iscan/plugin/gt-s600/rpm/x64/iscan-gt-s600-bundle-${version}.x64.rpm.tar.gz"
+      ];
+      sha256 = "fe1356b1d5c40bc5ac985a5693166efb9e5049a78b412f49c385eb503eadf2c6";
+    };
+
+    nativeBuildInputs = [ autoPatchelfHook rpm ];
+
+    installPhase = ''
+      cd plugins
+      ${rpm}/bin/rpm2cpio iscan-plugin-gt-s600-*.x86_64.rpm | ${cpio}/bin/cpio -idmv
+      mkdir $out
+      cp -r usr/share $out
+      cp -r usr/lib64 $out/lib
+      mv $out/share/iscan $out/share/esci
+      mv $out/lib/iscan $out/lib/esci
+    '';
+
+    passthru = {
+      registrationCommand = ''
+        $registry --add interpreter usb 0x04b8 0x012d "$plugin/lib/esci/libesint66 $plugin/share/esci/esfw66.bin"
+      '';
+      hw = "GT-F650, GT-S600, Perfection V10, Perfection V100 Photo";
+    };
+    meta = common_meta // { description = "iscan gt-s600 plugin for " + passthru.hw; };
+  };
   s650 = stdenv.mkDerivation rec {
     name = "iscan-gt-s650-bundle";
     version = "2.30.4";

@@ -1,12 +1,12 @@
 { lib, stdenvNoCC, fetchFromGitHub }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   pname = "orbitron";
   version = "2011-05-25";
 
   src = fetchFromGitHub {
     owner = "theleagueof";
-    repo = finalAttrs.pname;
+    repo = "orbitron";
     rev = "13e6a5222aa6818d81c9acd27edd701a2d744152";
     hash = "sha256-zjNPVrDUxcQbrsg1/8fFa6Wenu1yuG/XDfKA7NVZ0rA=";
   };
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with lib.maintainers; [ leenaars minijackson ];
   };
-})
+}

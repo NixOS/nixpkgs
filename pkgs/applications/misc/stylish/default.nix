@@ -44,7 +44,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/thevinter/styli.sh";
-    description = "A shell script to manage wallpapers";
+    description = "Shell script to manage wallpapers";
     mainProgram = "styli.sh";
     longDescription = ''
       Styli.sh is a Bash script that aims to automate the tedious process

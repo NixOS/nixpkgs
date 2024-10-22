@@ -1,17 +1,20 @@
 { lib
+, stdenv
 , fetchFromGitHub
 , fetchYarnDeps
+, yarnConfigHook
+, yarnBuildHook
+, nodejs
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, mkYarnPackage
 , electron_29
 }:
 
 let
   electron = electron_29;
 in
-mkYarnPackage rec {
+stdenv.mkDerivation rec {
   pname = "kuro";
   version = "9.0.0";
 
@@ -22,8 +25,6 @@ mkYarnPackage rec {
     hash = "sha256-9Z/r5T5ZI5aBghHmwiJcft/x/wTRzDlbIupujN2RFfU=";
   };
 
-  packageJSON = ./package.json;
-
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     hash = "sha256-GTiNv7u1QK/wjQgpka7REuoLn2wjZG59kYJQaZZPycI=";
@@ -32,30 +33,29 @@ mkYarnPackage rec {
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    nodejs
     makeWrapper
     copyDesktopItems
   ];
 
-  postBuild = ''
-    pushd deps/kuro
-
-    yarn --offline run electron-builder \
-      --dir \
-      -c.electronDist=${electron}/libexec/electron \
-      -c.electronVersion=${electron.version}
-
-    popd
-  '';
+  yarnBuildScript = "electron-builder";
+  yarnBuildFlags = [
+    "--dir"
+    "-c.electronDist=${electron.dist}"
+    "-c.electronVersion=${electron.version}"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     # resources
     mkdir -p "$out/share/lib/kuro"
-    cp -r ./deps/kuro/dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/kuro"
+    cp -r ./dist/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/kuro"
 
     # icons
-    install -Dm644 ./deps/kuro/static/Icon.png $out/share/icons/hicolor/1024x1024/apps/kuro.png
+    install -Dm644 ./static/Icon.png $out/share/icons/hicolor/1024x1024/apps/kuro.png
 
     # executable wrapper
     makeWrapper '${electron}/bin/electron' "$out/bin/kuro" \
@@ -65,9 +65,6 @@ mkYarnPackage rec {
 
     runHook postInstall
   '';
-  # Do not attempt generating a tarball for contents again.
-  # note: `doDist = false;` does not work.
-  distPhase = "true";
 
   desktopItems = [
     (makeDesktopItem {

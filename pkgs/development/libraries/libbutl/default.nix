@@ -9,18 +9,18 @@
 
 stdenv.mkDerivation rec {
   pname = "libbutl";
-  version = "0.16.0";
+  version = "0.17.0";
 
   outputs = [ "out" "dev" "doc" ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/libbutl-${version}.tar.gz";
-    hash = "sha256-MGL6P/lG2sJdJXZiTcDvdy4jmU+2jYHsvaX4eEO9J2g=";
+    hash = "sha256-sFqaEf6s2rF1YcZjw5J6oY5ol5PbO9vy6NseKjrvTvs=";
   };
 
   nativeBuildInputs = [
     build2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     DarwinTools
   ];
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # but especially important when bootstrapping
   disallowedReferences = [ build2 ];
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace libbutl/uuid-linux.cxx \
       --replace '"libuuid.so' '"${lib.getLib libuuid}/lib/libuuid.so'
   '';

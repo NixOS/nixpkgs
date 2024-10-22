@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "social-auth-app-django";
-  version = "5.4.1";
+  version = "5.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "python-social-auth";
     repo = "social-app-django";
     rev = "refs/tags/${version}";
-    hash = "sha256-BvPQo0pXffGYu0tpy5yHT9lJVwOTewBiX5GLeezBrhE=";
+    hash = "sha256-W9boogixZ7X6qysfh2YEat+TOBy1VNreGr27y8hno+0=";
   };
 
   propagatedBuildInputs = [ social-auth-core ];

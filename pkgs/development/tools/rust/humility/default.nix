@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   version = "unstable-2023-11-08";
 
   nativeBuildInputs = [ pkg-config cargo-readme ];
-  buildInputs = [ libusb1 libftdi ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs = [ libusb1 libftdi ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ];
 

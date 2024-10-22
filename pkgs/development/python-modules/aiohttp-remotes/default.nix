@@ -5,6 +5,7 @@
   fetchPypi,
   flit,
   pytest-aiohttp,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
@@ -29,13 +30,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-aiohttp
+    pytest-cov-stub
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --no-cov-on-fail --cov-branch --cov=aiohttp_remotes --cov-report=term --cov-report=html" ""
-  '';
 
   pythonImportsCheck = [ "aiohttp_remotes" ];
 
@@ -44,6 +41,8 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
     "--asyncio-mode=auto"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Set of useful tools for aiohttp.web server";

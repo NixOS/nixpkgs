@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Solanum";
-    description = "A pomodoro timer for the GNOME desktop";
+    description = "Pomodoro timer for the GNOME desktop";
     maintainers = with maintainers; [ linsui ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

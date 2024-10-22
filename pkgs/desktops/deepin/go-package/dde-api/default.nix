@@ -1,32 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, buildGoModule
-, pkg-config
-, deepin-gettext-tools
-, wrapQtAppsHook
-, wrapGAppsHook3
-, alsa-lib
-, gtk3
-, libcanberra
-, libgudev
-, librsvg
-, poppler
-, pulseaudio
-, gdk-pixbuf-xlib
-, coreutils
-, dbus
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  deepin-gettext-tools,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  alsa-lib,
+  gtk3,
+  libcanberra,
+  libgudev,
+  librsvg,
+  poppler,
+  pulseaudio,
+  gdk-pixbuf-xlib,
+  coreutils,
+  dbus,
 }:
 
 buildGoModule rec {
   pname = "dde-api";
-  version = "6.0.9";
+  version = "6.0.11";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-ht5IaXi4nz0/U1zqp4JTiDkQ3NB69q24MgWfu45SpoY=";
+    hash = "sha256-VpZwVNXxdi8ODwxbksQpT0nnUuLOTJ9h0JYucEKdGYM=";
   };
 
   vendorHash = "sha256-zrtUsCF2+301DKwgWectw+UbOehOp8h8u/IMf09XQ8Q=";

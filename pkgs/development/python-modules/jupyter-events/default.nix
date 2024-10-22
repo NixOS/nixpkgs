@@ -48,7 +48,7 @@ buildPythonPackage rec {
     traitlets
   ] ++ jsonschema.optional-dependencies.format-nongpl;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [
       click
       rich
@@ -59,7 +59,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-console-scripts
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH="$out/bin:$PATH"
@@ -73,6 +73,6 @@ buildPythonPackage rec {
     mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

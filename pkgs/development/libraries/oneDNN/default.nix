@@ -9,13 +9,13 @@
 # https://github.com/oneapi-src/oneDNN#oneapi-deep-neural-network-library-onednn
 stdenv.mkDerivation (finalAttrs: {
   pname = "oneDNN";
-  version = "3.4.1";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
     repo = "oneDNN";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-6iPcytsRWvDn2hg5tkSG6A3cv/aOhmEVd5rS2uOKCPk=";
+    hash = "sha256-/ERkk6bgGEKoJEVdnBxMFEzB8pii71t3zQZNtyg+TdQ=";
   };
 
   outputs = [ "out" "dev" "doc" ];

@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kdiff3";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdiff3/kdiff3-${finalAttrs.version}.tar.xz";
-    hash = "sha256-MPFKWrbg1VEWgpF42CdlTDDoQhwE/pcA085npTCEYpg=";
+    hash = "sha256-kYU3dcP6qVIkaOwSPNbedGYqy21RFkdZlqyk3Cw778g=";
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapQtAppsHook ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-Wno-dev" ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ln -s "$out/Applications/KDE/kdiff3.app/Contents/MacOS" "$out/bin"
   '';
 

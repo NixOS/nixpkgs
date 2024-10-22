@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
     cp ./bin/bm $out/bin/
 
     substituteInPlace $out/bin/bm \
-      --replace /build/source $out/share/bonnmotion
+      --replace-fail "$PWD" $out/share/bonnmotion
 
     runHook postInstall
   '';
 
   meta = with lib; {
-    description = "A mobility scenario generation and analysis tool";
+    description = "Mobility scenario generation and analysis tool";
     mainProgram = "bm";
     longDescription = ''
       BonnMotion is a Java software which creates and analyzes mobility

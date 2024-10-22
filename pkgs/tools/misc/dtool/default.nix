@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-o5Xvc0tnoUgfp5k7EqVuEH9Zyo3C+A+mVqPhMtZCYKw=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
   # FIXME: remove patch when upstream version of rustc-serialize is updated
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   checkType = "debug";
 
   meta = with lib; {
-    description = "A command-line tool collection to assist development written in RUST";
+    description = "Command-line tool collection to assist development written in RUST";
     homepage = "https://github.com/guoxbin/dtool";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ linuxissuper ];

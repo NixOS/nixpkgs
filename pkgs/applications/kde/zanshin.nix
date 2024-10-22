@@ -7,7 +7,7 @@
 mkDerivation {
   pname = "zanshin";
   meta = with lib; {
-    description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
+    description = "Powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = "https://zanshin.kde.org/";
     maintainers = with maintainers; [ zraexy ];
     license = licenses.gpl2Plus;

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
 
   # propagates
   django,
@@ -13,7 +12,6 @@
   # tests
   djangorestframework,
   pytest-django,
-  pytest-xdist,
   pytest-mock,
   pytestCheckHook,
 }:
@@ -41,7 +39,6 @@ buildPythonPackage rec {
     requests
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "django" ];
 
   DJANGO_SETTINGS_MODULE = "tests.settings";

@@ -9,22 +9,20 @@
   fetchPypi,
   joblib,
   six,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.33";
+  version = "0.8.37";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V/q8Xw5F9I0kB7NccxGSq8iWN2QR/n5LuDb/oD04+Q0=";
+    hash = "sha256-3EeHE0DRhT5WnF2Pb4/IB+nDEx7dKRafx3pHBnSqibA=";
   };
 
   pythonRemoveDeps = [ "cython" ];
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     cython
   ];
   propagatedBuildInputs = [

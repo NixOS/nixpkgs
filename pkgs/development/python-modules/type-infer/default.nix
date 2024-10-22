@@ -41,6 +41,8 @@ buildPythonPackage rec {
     hash = "sha256-F+gfA7ofrbMEE5SrVt9H3s2mZKQLyr6roNUmL4EMJbI=";
   };
 
+  pythonRelaxDeps = [ "psutil" ];
+
   nativeBuildInputs = [ poetry-core ];
 
   propagatedBuildInputs = [

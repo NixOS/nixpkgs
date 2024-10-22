@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Tool for restoring blurry and defocused images";
     mainProgram = "SmartDeblur";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ rsync ]
-    ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
   buildInputs = [ boost fastjet hepmc zlib lhapdf ];
 
   configureFlags = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    description = "A program for the generation of high-energy physics events";
+    description = "Program for the generation of high-energy physics events";
     mainProgram = "pythia8-config";
     license = licenses.gpl2Only;
     homepage = "https://pythia.org";

@@ -1,12 +1,12 @@
-{ lib, fetchurl, appimageTools, wrapGAppsHook3 }:
+{ lib, fetchurl, appimageTools }:
 
 let
   pname = "jbrowse";
-  version = "2.11.1";
+  version = "2.15.4";
 
   src = fetchurl {
     url = "https://github.com/GMOD/jbrowse-components/releases/download/v${version}/jbrowse-desktop-v${version}-linux.AppImage";
-    sha256 = "sha256-/1QNpoJy4u2sSw6907UQpdYX9aFWp31BxsYVTQoDpi4=";
+    sha256 = "sha256-ojIvC93dx9BSnUw7zBpDMBD0xPCMG4GUH1e5ZRGd9pk=";
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -28,7 +28,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = with lib; {
-    description = "The next-generation genome browser";
+    description = "Next-generation genome browser";
     mainProgram = "jbrowse-desktop";
     homepage = "https://jbrowse.org/jb2/";
     license = licenses.asl20;

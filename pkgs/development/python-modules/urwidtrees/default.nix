@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pazz/urwidtrees";
     changelog = "https://github.com/pazz/urwidtrees/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchzip
+, fetchpatch
 , rustPlatform
 
 # native build inputs
@@ -17,12 +18,13 @@
 , sqlite
 
 # runtime deps
+, gpgme
 , gnum4
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.5";
+  version = "0.8.7";
 
   src = fetchzip {
     urls = [
@@ -30,10 +32,19 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-xfc4DZGKQi/n87JcjTl+s2UFJ20v+6JmzSL36pZlSc0=";
+    hash = "sha256-2+JIehi2wuWdARbhFPvNPIJ9ucZKWjNSORszEG9lyjw=";
   };
 
-  cargoHash = "sha256-7ax3VQ+McmzxdG8TeKnMnD0uJmM0pi9Sskfdl2SZkz4=";
+  cargoHash = "sha256-ZVhUkpiiPKbWcf56cXFgn3Nyr63STHLlD7mpYEetNIY=";
+
+  cargoPatches = [
+    (fetchpatch {
+      # https://github.com/NixOS/nixpkgs/issues/332957#issuecomment-2278578811
+      name = "fix-rust-1.80-compat.patch";
+      url = "https://git.meli-email.org/meli/meli/commit/6b05279a0987315c401516cac8ff0b016a8e02a8.patch";
+      hash = "sha256-mh8H7wmHMXAe01UTvdY8vJeeLyH6ZFwylNLFFL+4LO0=";
+    })
+  ];
 
   # Needed to get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR=1;
@@ -54,12 +65,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeCheckInputs = [
     file
+    gnum4
   ];
 
   postInstall = ''
     installManPage meli/docs/*.{1,5,7}
 
     wrapProgram $out/bin/meli \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gpgme ]} \
       --prefix PATH : ${lib.makeBinPath [ gnum4 ]}
   '';
 
@@ -68,14 +81,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   checkFlags = [
-    "--skip=conf::test_config_parse"        # panicking due to sandbox
-    "--skip=smtp::test::test_smtp"          # requiring network
-    "--skip=utils::xdg::query_default_app"  # doesn't build
-    "--skip=utils::xdg::query_mime_info"    # doesn't build
+    "--skip=conf::tests::test_config_parse"            # panicking due to sandbox
+    "--skip=utils::tests::test_shellexpandtrait_impls" # panicking due to sandbox
+    "--skip=utils::tests::test_shellexpandtrait"       # panicking due to sandbox
   ];
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Terminal e-mail client and e-mail client library";
     mainProgram = "meli";
     homepage = "https://meli.delivery";

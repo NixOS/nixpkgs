@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/amsehili/auditok/";
     changelog = "https://github.com/amsehili/auditok/blob/v${version}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ Benjamin-L ];
+    maintainers = [ ];
   };
 }

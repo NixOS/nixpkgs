@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   dontWrapQtApps = true;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A toolset for model-checking concurrent systems and protocols";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Toolset for model-checking concurrent systems and protocols";
     longDescription = ''
       A formal specification language with an associated toolset,
       that can be used for modelling, validation and verification of

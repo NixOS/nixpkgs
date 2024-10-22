@@ -1,0 +1,176 @@
+diff --git a/src/mapnik_image.cpp b/src/mapnik_image.cpp
+index 9add692c9..488427b56 100644
+--- a/src/mapnik_image.cpp
++++ b/src/mapnik_image.cpp
+@@ -230,7 +230,7 @@ unsigned get_type(mapnik::image_any & im)
+ 
+ std::shared_ptr<image_any> open_from_file(std::string const& filename)
+ {
+-    boost::optional<std::string> type = type_from_filename(filename);
++    auto type = type_from_filename(filename);
+     if (type)
+     {
+         std::unique_ptr<image_reader> reader(get_image_reader(filename,*type));
+diff --git a/src/mapnik_layer.cpp b/src/mapnik_layer.cpp
+index 4fc7ea579..fbd277a81 100644
+--- a/src/mapnik_layer.cpp
++++ b/src/mapnik_layer.cpp
+@@ -95,7 +95,7 @@ struct layer_pickle_suite : boost::python::pickle_suite
+ 
+ std::vector<std::string> & (mapnik::layer::*_styles_)() = &mapnik::layer::styles;
+ 
+-void set_maximum_extent(mapnik::layer & l, boost::optional<mapnik::box2d<double> > const& box)
++void set_maximum_extent(mapnik::layer & l, std::optional<mapnik::box2d<double> > const& box)
+ {
+     if (box)
+     {
+@@ -107,7 +107,7 @@ void set_maximum_extent(mapnik::layer & l, boost::optional<mapnik::box2d<double>
+     }
+ }
+ 
+-void set_buffer_size(mapnik::layer & l, boost::optional<int> const& buffer_size)
++void set_buffer_size(mapnik::layer & l, std::optional<int> const& buffer_size)
+ {
+     if (buffer_size)
+     {
+@@ -121,7 +121,7 @@ void set_buffer_size(mapnik::layer & l, boost::optional<int> const& buffer_size)
+ 
+ PyObject * get_buffer_size(mapnik::layer & l)
+ {
+-    boost::optional<int> buffer_size = l.buffer_size();
++    std::optional<int> buffer_size = l.buffer_size();
+     if (buffer_size)
+     {
+ #if PY_VERSION_HEX >= 0x03000000
+diff --git a/src/mapnik_map.cpp b/src/mapnik_map.cpp
+index 3587e5d8a..cfa523b03 100644
+--- a/src/mapnik_map.cpp
++++ b/src/mapnik_map.cpp
+@@ -105,7 +105,7 @@ mapnik::featureset_ptr query_map_point(mapnik::Map const& m, int index, double x
+     return m.query_map_point(idx, x, y);
+ }
+ 
+-void set_maximum_extent(mapnik::Map & m, boost::optional<mapnik::box2d<double> > const& box)
++void set_maximum_extent(mapnik::Map & m, std::optional<mapnik::box2d<double> > const& box)
+ {
+     if (box)
+     {
+diff --git a/src/python_optional.hpp b/src/python_optional.hpp
+index d690b7c51..9d86c340e 100644
+--- a/src/python_optional.hpp
++++ b/src/python_optional.hpp
+@@ -28,7 +28,7 @@
+ #include <mapnik/util/noncopyable.hpp>
+ #pragma GCC diagnostic pop
+ 
+-// boost::optional<T> to/from converter from John Wiegley
++// std::optional<T> to/from converter from John Wiegley
+ 
+ template <typename T, typename TfromPy>
+ struct object_from_python
+@@ -54,7 +54,7 @@ struct python_optional : public mapnik::util::noncopyable
+ {
+     struct optional_to_python
+     {
+-        static PyObject * convert(const boost::optional<T>& value)
++        static PyObject * convert(const std::optional<T>& value)
+         {
+             return (value ? boost::python::to_python_value<T>()(*value) :
+                     boost::python::detail::none());
+@@ -90,9 +90,9 @@ struct python_optional : public mapnik::util::noncopyable
+                                     data)->storage.bytes;
+ 
+             if (data->convertible == source)        // == None
+-                new (storage) boost::optional<T>(); // A Boost uninitialized value
++                new (storage) std::optional<T>(); // A Boost uninitialized value
+             else
+-                new (storage) boost::optional<T>(*static_cast<T *>(data->convertible));
++                new (storage) std::optional<T>(*static_cast<T *>(data->convertible));
+ 
+             data->convertible = storage;
+         }
+@@ -100,18 +100,18 @@ struct python_optional : public mapnik::util::noncopyable
+ 
+     explicit python_optional()
+     {
+-        register_python_conversion<boost::optional<T>,
++        register_python_conversion<std::optional<T>,
+             optional_to_python, optional_from_python>();
+     }
+ };
+ 
+-// to/from boost::optional<bool>
++// to/from std::optional<bool>
+ template <>
+ struct python_optional<float> : public mapnik::util::noncopyable
+ {
+     struct optional_to_python
+     {
+-        static PyObject * convert(const boost::optional<float>& value)
++        static PyObject * convert(const std::optional<float>& value)
+         {
+             return (value ? PyFloat_FromDouble(*value) :
+                     boost::python::detail::none());
+@@ -133,30 +133,30 @@ struct python_optional<float> : public mapnik::util::noncopyable
+                               boost::python::converter::rvalue_from_python_stage1_data * data)
+         {
+             using namespace boost::python::converter;
+-            void * const storage = ((rvalue_from_python_storage<boost::optional<bool> > *)
++            void * const storage = ((rvalue_from_python_storage<std::optional<bool> > *)
+                                     data)->storage.bytes;
+             if (source == Py_None)  // == None
+-                new (storage) boost::optional<float>(); // A Boost uninitialized value
++                new (storage) std::optional<float>(); // A Boost uninitialized value
+             else
+-                new (storage) boost::optional<float>(PyFloat_AsDouble(source));
++                new (storage) std::optional<float>(PyFloat_AsDouble(source));
+             data->convertible = storage;
+         }
+     };
+ 
+     explicit python_optional()
+     {
+-        register_python_conversion<boost::optional<float>,
++        register_python_conversion<std::optional<float>,
+             optional_to_python, optional_from_python>();
+     }
+ };
+ 
+-// to/from boost::optional<float>
++// to/from std::optional<float>
+ template <>
+ struct python_optional<bool> : public mapnik::util::noncopyable
+ {
+     struct optional_to_python
+     {
+-        static PyObject * convert(const boost::optional<bool>& value)
++        static PyObject * convert(const std::optional<bool>& value)
+         {
+             if (value)
+             {
+@@ -181,13 +181,13 @@ struct python_optional<bool> : public mapnik::util::noncopyable
+                               boost::python::converter::rvalue_from_python_stage1_data * data)
+         {
+             using namespace boost::python::converter;
+-            void * const storage = ((rvalue_from_python_storage<boost::optional<bool> > *)
++            void * const storage = ((rvalue_from_python_storage<std::optional<bool> > *)
+                                     data)->storage.bytes;
+             if (source == Py_None)  // == None
+-                new (storage) boost::optional<bool>(); // A Boost uninitialized value
++                new (storage) std::optional<bool>(); // A Boost uninitialized value
+             else
+             {
+-                new (storage) boost::optional<bool>(source == Py_True ? true : false);
++                new (storage) std::optional<bool>(source == Py_True ? true : false);
+             }
+             data->convertible = storage;
+         }
+@@ -195,7 +195,7 @@ struct python_optional<bool> : public mapnik::util::noncopyable
+ 
+     explicit python_optional()
+     {
+-        register_python_conversion<boost::optional<bool>,
++        register_python_conversion<std::optional<bool>,
+             optional_to_python, optional_from_python>();
+     }
+ };

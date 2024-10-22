@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An efficient WebAssembly interpreter";
+    description = "Efficient WebAssembly interpreter";
     homepage = "https://github.com/paritytech/wasmi";
     changelog = "https://github.com/paritytech/wasmi/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];

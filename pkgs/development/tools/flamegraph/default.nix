@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "FlameGraph";
-  version = "2019-02-16";
+  version = "2023-11-06";
 
   src = fetchFromGitHub {
     owner = "brendangregg";
     repo = pname;
-    rev = "1b1c6deede9c33c5134c920bdb7a44cc5528e9a7";
-    sha256 = "1flvkmv2gbb003d51myl7r0wyhyw1bk9p7v19xagb8xjj4ci947b";
+    rev = "a96184c6939f8c6281fcd7285b54fba80555ac74";
+    sha256 = "sha256-hvp1HxmgNbe85kxe0NyolFUd+kPPBDYAt+g2K8pE1Ak=";
   };
 
   buildInputs = [ perl ];
@@ -24,10 +24,18 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  doCheck = true;
+
+  checkPhase = ''
+    patchShebangs ./test.sh
+    ./test.sh
+  '';
+
   meta = with lib; {
     license = with licenses; [ asl20 cddl gpl2Plus ];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
+    mainProgram = "flamegraph.pl";
     platforms = platforms.unix;
   };
 }

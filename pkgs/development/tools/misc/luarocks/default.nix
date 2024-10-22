@@ -1,3 +1,12 @@
+/*
+This is a minimal/manual luarocks derivation used by `buildLuarocksPackage` to install lua packages.
+
+As a nix user, you should use the generated lua.pkgs.luarocks that contains a luarocks manifest
+which makes it recognizable to luarocks.
+Generating the manifest for luarocks_bootstrap seemed too hackish, which is why we end up
+with two "luarocks" derivations.
+
+*/
 { lib
 , stdenv
 , fetchFromGitHub
@@ -15,14 +24,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "luarocks";
-  version = "3.11.0";
+  pname = "luarocks_bootstrap";
+  version = "3.11.1";
 
   src = fetchFromGitHub {
     owner = "luarocks";
     repo = "luarocks";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mSwwBuLWoMT38iYaV/BTdDmmBz4heTRJzxBHC0Vrvc4=";
+    hash = "sha256-GglygI8HP+aDFEuucOkjQ2Pgfv4+jW+og+2vL3KoZCQ=";
   };
 
   patches = [
@@ -57,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     sed -e "1s@.*@#! ${lua}/bin/lua$LUA_SUFFIX@" -i "$out"/bin/*
     substituteInPlace $out/etc/luarocks/* \
-     --replace '${lua.luaOnBuild}' '${lua}'
+     --replace-quiet '${lua.luaOnBuild}' '${lua}'
    ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd luarocks \
@@ -105,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A package manager for Lua";
+    description = "Package manager for Lua";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin teto ];
     mainProgram = "luarocks";

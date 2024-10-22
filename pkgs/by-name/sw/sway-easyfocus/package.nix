@@ -41,10 +41,10 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = {
-    description = "A tool to help efficiently focus windows in Sway, inspired by i3-easyfocus";
+    description = "Tool to help efficiently focus windows in Sway, inspired by i3-easyfocus";
     homepage = "https://github.com/edzdez/sway-easyfocus";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     mainProgram = "sway-easyfocus";
   };
 }

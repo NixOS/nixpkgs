@@ -35,8 +35,8 @@ in
   builtins.listToAttrs (map (a: { name = a.pname; value = mkDataset a; }) [
     {
       pname = "G4NDL";
-      version = "4.7";
-      sha256 = "sha256-fn09JiEQLcYU91OtkocwopDRlmDu2WMEqdJLRT1nAwk=";
+      version = "4.7.1";
+      sha256 = "sha256-06yuSGIhGNJXneJKVNUz+yQWvw2p3SiPFyTfFIWkbHw=";
       envvar = "NEUTRONHP";
     }
 

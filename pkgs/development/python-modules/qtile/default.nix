@@ -30,18 +30,19 @@
   xcffib,
   xkbcommon,
   nixosTests,
+  extraPackages ? [ ],
 }:
 
 buildPythonPackage rec {
   pname = "qtile";
-  version = "0.26.0";
+  version = "0.28.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qtile";
     repo = "qtile";
     rev = "refs/tags/v${version}";
-    hash = "sha256-htgrfGBGRlJSm88mmwW92ikXR/M1lr0OTom16TIvdpo=";
+    hash = "sha256-r8cAht40r1/6rG1xrfx34YEPuPeyBCuSvX7MarLTTCc=";
   };
 
   patches = [
@@ -66,7 +67,7 @@ buildPythonPackage rec {
     pkg-config
   ];
 
-  dependencies = [
+  dependencies = extraPackages ++ [
     (cairocffi.override { withXcffib = true; })
     dbus-next
     iwlib
@@ -97,10 +98,15 @@ buildPythonPackage rec {
     providedSessions = [ "qtile" ];
   };
 
+  postInstall = ''
+    install resources/qtile.desktop -Dt $out/share/xsessions
+    install resources/qtile-wayland.desktop -Dt $out/share/wayland-sessions
+  '';
+
   meta = with lib; {
     homepage = "http://www.qtile.org/";
     license = licenses.mit;
-    description = "A small, flexible, scriptable tiling window manager written in Python";
+    description = "Small, flexible, scriptable tiling window manager written in Python";
     mainProgram = "qtile";
     platforms = platforms.linux;
     maintainers = with maintainers; [

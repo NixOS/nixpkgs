@@ -1,22 +1,33 @@
-{ lib, stdenv
-, fetchgit
-, cmake
-, linux-pam
-, enablePython ? false
-, python ? null
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  linux-pam,
+  substituteAll,
+  enablePython ? false,
+  python ? null,
 }:
 
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
   pname = "libpam-wrapper";
-  version = "1.1.3";
+  version = "1.1.5";
 
   src = fetchgit {
     url = "git://git.samba.org/pam_wrapper.git";
     rev = "pam_wrapper-${version}";
-    sha256 = "00mqhsashx7njrvxz085d0b88nizhdy7m3x17ip5yhvwsl63km6p";
+    hash = "sha256-AtfkiCUvCxUfll6lOlbMyy5AhS5R2BGF1+ecC1VuwzM=";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./python.patch;
+      siteDir = lib.optionalString enablePython python.sitePackages;
+      includeDir = lib.optionalString enablePython "include/${python.libPrefix}";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optionals enablePython [ python ];
 

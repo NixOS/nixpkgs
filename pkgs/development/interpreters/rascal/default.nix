@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mainProgram = "rascal";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl10;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

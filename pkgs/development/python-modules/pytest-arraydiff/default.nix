@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-KTexRQ/JNWIPJHCdh9QMZ+BVoEPXuFQaJf36mU3aZ94=";
+    hash = "sha256-KTexRQ/JNWIPJHCdh9QMZ+BVoEPXuFQaJf36mU3aZ94=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with comparing array output from tests";
     homepage = "https://github.com/astrofrog/pytest-arraydiff";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

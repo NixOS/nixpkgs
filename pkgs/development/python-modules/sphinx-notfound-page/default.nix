@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonImportsCheckHook,
   pythonOlder,
   # documentation build dependencies
   sphinxHook,
@@ -38,7 +37,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     flit-core
-    pythonImportsCheckHook
     sphinxHook
     sphinx-prompt
     sphinx-rtd-theme
@@ -54,7 +52,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "notfound" ];
 
   meta = with lib; {
-    description = "A sphinx extension to create a custom 404 page with absolute URLs hardcoded";
+    description = "Sphinx extension to create a custom 404 page with absolute URLs hardcoded";
     homepage = "https://github.com/readthedocs/sphinx-notfound-page";
     changelog = "https://github.com/readthedocs/sphinx-notfound-page/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;

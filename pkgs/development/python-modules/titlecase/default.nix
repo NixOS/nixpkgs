@@ -37,6 +37,6 @@ buildPythonPackage rec {
     mainProgram = "titlecase";
     homepage = "https://github.com/ppannuto/python-titlecase";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

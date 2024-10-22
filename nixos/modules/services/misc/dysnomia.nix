@@ -1,16 +1,13 @@
 {pkgs, lib, config, ...}:
-
-with lib;
-
 let
   cfg = config.dysnomia;
 
   printProperties = properties:
-    concatMapStrings (propertyName:
+    lib.concatMapStrings (propertyName:
       let
         property = properties.${propertyName};
       in
-      if isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
+      if lib.isList property then "${propertyName}=(${lib.concatMapStrings (elem: "\"${toString elem}\" ") (properties.${propertyName})})\n"
       else "${propertyName}=\"${toString property}\"\n"
     ) (builtins.attrNames properties);
 
@@ -29,7 +26,7 @@ let
       mkdir -p $out
       cd $out
 
-      ${concatMapStrings (containerName:
+      ${lib.concatMapStrings (containerName:
         let
           containerProperties = cfg.containers.${containerName};
         in
@@ -47,7 +44,7 @@ let
     ''
       mkdir ${containerName}
 
-      ${concatMapStrings (componentName:
+      ${lib.concatMapStrings (componentName:
         let
           component = cfg.components.${containerName}.${componentName};
         in
@@ -61,7 +58,7 @@ let
       mkdir -p $out
       cd $out
 
-      ${concatMapStrings (containerName:
+      ${lib.concatMapStrings (containerName:
         linkMutableComponents { inherit containerName; }
       ) (builtins.attrNames cfg.components)}
     '';
@@ -84,68 +81,68 @@ in
   options = {
     dysnomia = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable Dysnomia";
       };
 
-      enableAuthentication = mkOption {
-        type = types.bool;
+      enableAuthentication = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to publish privacy-sensitive authentication credentials";
       };
 
-      package = mkOption {
-        type = types.path;
+      package = lib.mkOption {
+        type = lib.types.path;
         description = "The Dysnomia package";
       };
 
-      properties = mkOption {
+      properties = lib.mkOption {
         description = "An attribute set in which each attribute represents a machine property. Optionally, these values can be shell substitutions.";
         default = {};
-        type = types.attrs;
+        type = lib.types.attrs;
       };
 
-      containers = mkOption {
+      containers = lib.mkOption {
         description = "An attribute set in which each key represents a container and each value an attribute set providing its configuration properties";
         default = {};
-        type = types.attrsOf types.attrs;
+        type = lib.types.attrsOf lib.types.attrs;
       };
 
-      components = mkOption {
+      components = lib.mkOption {
         description = "An attribute set in which each key represents a container and each value an attribute set in which each key represents a component and each value a derivation constructing its initial state";
         default = {};
-        type = types.attrsOf types.attrs;
+        type = lib.types.attrsOf lib.types.attrs;
       };
 
-      extraContainerProperties = mkOption {
+      extraContainerProperties = lib.mkOption {
         description = "An attribute set providing additional container settings in addition to the default properties";
         default = {};
-        type = types.attrs;
+        type = lib.types.attrs;
       };
 
-      extraContainerPaths = mkOption {
+      extraContainerPaths = lib.mkOption {
         description = "A list of paths containing additional container configurations that are added to the search folders";
         default = [];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
       };
 
-      extraModulePaths = mkOption {
+      extraModulePaths = lib.mkOption {
         description = "A list of paths containing additional modules that are added to the search folders";
         default = [];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
       };
 
-      enableLegacyModules = mkOption {
-        type = types.bool;
+      enableLegacyModules = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable Dysnomia legacy process and wrapper modules";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.etc = {
       "dysnomia/containers" = {
@@ -199,16 +196,16 @@ in
         "sysvinit-script"
         "nixos-configuration"
       ]
-      ++ optional (dysnomiaFlags.enableApacheWebApplication) "apache-webapplication"
-      ++ optional (dysnomiaFlags.enableAxis2WebService) "axis2-webservice"
-      ++ optional (dysnomiaFlags.enableDockerContainer) "docker-container"
-      ++ optional (dysnomiaFlags.enableEjabberdDump) "ejabberd-dump"
-      ++ optional (dysnomiaFlags.enableInfluxDatabase) "influx-database"
-      ++ optional (dysnomiaFlags.enableMySQLDatabase) "mysql-database"
-      ++ optional (dysnomiaFlags.enablePostgreSQLDatabase) "postgresql-database"
-      ++ optional (dysnomiaFlags.enableTomcatWebApplication) "tomcat-webapplication"
-      ++ optional (dysnomiaFlags.enableMongoDatabase) "mongo-database"
-      ++ optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
+      ++ lib.optional (dysnomiaFlags.enableApacheWebApplication) "apache-webapplication"
+      ++ lib.optional (dysnomiaFlags.enableAxis2WebService) "axis2-webservice"
+      ++ lib.optional (dysnomiaFlags.enableDockerContainer) "docker-container"
+      ++ lib.optional (dysnomiaFlags.enableEjabberdDump) "ejabberd-dump"
+      ++ lib.optional (dysnomiaFlags.enableInfluxDatabase) "influx-database"
+      ++ lib.optional (dysnomiaFlags.enableMySQLDatabase) "mysql-database"
+      ++ lib.optional (dysnomiaFlags.enablePostgreSQLDatabase) "postgresql-database"
+      ++ lib.optional (dysnomiaFlags.enableTomcatWebApplication) "tomcat-webapplication"
+      ++ lib.optional (dysnomiaFlags.enableMongoDatabase) "mongo-database"
+      ++ lib.optional (dysnomiaFlags.enableSubversionRepository) "subversion-repository";
     };
 
     dysnomia.containers = lib.recursiveUpdate ({

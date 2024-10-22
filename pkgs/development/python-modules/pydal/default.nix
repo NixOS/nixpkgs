@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pydal";
-  version = "20231114.3";
+  version = "20240713.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xC0W/Knju205mu+yQ0wOcIYu4Tx1Q3hS9CGSBDLuX7E=";
+    hash = "sha256-KW44LUGgCE+KB3tE9ecYqOansjFN6F4A7TRCoKwOsRs=";
   };
 
   nativeBuildInputs = [ setuptools ];

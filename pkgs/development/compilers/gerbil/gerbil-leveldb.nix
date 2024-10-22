@@ -1,4 +1,4 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, leveldb, ... }:
+{ pkgs, lib, fetchFromGitHub, leveldb, ... }:
 
 {
   pname = "gerbil-leveldb";

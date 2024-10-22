@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "pysmt";
-  version = "0.9.5";
+  version = "0.9.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "pysmt";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-cE+WmKzggYof/olxQb5M7xPsBONr39KdjOTG4ofYPUM=";
+    hash = "sha256-HmEdCJOF04h0z5UPpfYa07b78EEBj5KyVAk6aNRFPEo=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

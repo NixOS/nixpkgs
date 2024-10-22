@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "requirements-parser";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "madpah";
     repo = "requirements-parser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZkyfK2s6wmKX/AJsOXlAHOpJ2/zZO0zipdM3j2BrrWo=";
+    hash = "sha256-o9IriQXa2Pd7s16IENqcWgi73XZQoXsbXU471V1CFaI=";
   };
 
   build-system = [ poetry-core ];
@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/davidfischer/requirements-parser";
     changelog = "https://github.com/madpah/requirements-parser/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

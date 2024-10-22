@@ -17,7 +17,6 @@
 , glib
 , cairo
 , pango
-, pandoc
 , gdk-pixbuf
 , gobject-introspection
 , fribidi
@@ -33,13 +32,13 @@
 , gsettings-desktop-schemas
 , gst_all_1
 , sassc
-, trackerSupport ? stdenv.isLinux
+, trackerSupport ? stdenv.hostPlatform.isLinux
 , tracker
-, x11Support ? stdenv.isLinux
-, waylandSupport ? stdenv.isLinux
+, x11Support ? stdenv.hostPlatform.isLinux
+, waylandSupport ? stdenv.hostPlatform.isLinux
 , libGL
 # experimental and can cause crashes in inspector
-, vulkanSupport ? stdenv.isLinux
+, vulkanSupport ? stdenv.hostPlatform.isLinux
 , shaderc
 , vulkan-loader
 , vulkan-headers
@@ -47,8 +46,8 @@
 , wayland
 , wayland-protocols
 , wayland-scanner
-, xineramaSupport ? stdenv.isLinux
-, cupsSupport ? stdenv.isLinux
+, xineramaSupport ? stdenv.hostPlatform.isLinux
+, cupsSupport ? stdenv.hostPlatform.isLinux
 , compileSchemas ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , cups
 , AppKit
@@ -70,7 +69,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk4";
-  version = "4.14.3";
+  version = "4.14.5";
 
   outputs = [ "out" "dev" ] ++ lib.optionals x11Support [ "devdoc" ];
   outputBin = "dev";
@@ -82,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = with finalAttrs; "mirror://gnome/sources/gtk/${lib.versions.majorMinor version}/gtk-${version}.tar.xz";
-    hash = "sha256-K+XIWL3vEQTTeEjJd5wIk3LI0xUD9u/EuU5TtUb8mkM=";
+    hash = "sha256-VUfyufAGsTOZPgcLh8F4BOBR79o5E/6soRCPor5B4k0=";
   };
 
   depsBuildBuild = [
@@ -131,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXrandr
     libXrender
-  ]) ++ lib.optionals stdenv.isDarwin [
+  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
   ] ++ lib.optionals trackerSupport [
     tracker
@@ -143,7 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXinerama
   ] ++ lib.optionals cupsSupport [
     cups
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     libexecinfo
@@ -176,13 +175,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
     (lib.mesonBool "x11-backend" x11Support)
-  ] ++ lib.optionals (stdenv.isDarwin && !stdenv.isAarch64) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
   ];
 
   doCheck = false; # needs X11
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
@@ -219,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     PATH="$OLD_PATH"
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk4-update-icon-cache "$out"
     # Launcher
@@ -235,7 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Wrap demos
-  postFixup =  lib.optionalString (!stdenv.isDarwin) ''
+  postFixup =  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     demos=(gtk4-demo gtk4-demo-application gtk4-icon-browser gtk4-widget-factory)
 
     for program in ''${demos[@]}; do
@@ -261,7 +260,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A multi-platform toolkit for creating graphical user interfaces";
+    description = "Multi-platform toolkit for creating graphical user interfaces";
     longDescription = ''
       GTK is a highly usable, feature rich toolkit for creating
       graphical user interfaces which boasts cross platform
@@ -279,9 +278,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.gnome.org/GNOME/gtk/-/raw/${finalAttrs.version}/NEWS";
     pkgConfigModules = [
       "gtk4"
+    ] ++ lib.optionals broadwaySupport [
       "gtk4-broadway"
+    ] ++ lib.optionals stdenv.hostPlatform.isUnix [
       "gtk4-unix-print"
+    ] ++ lib.optionals waylandSupport [
       "gtk4-wayland"
+    ] ++ lib.optionals x11Support [
       "gtk4-x11"
     ];
   };

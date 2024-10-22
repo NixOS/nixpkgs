@@ -1,7 +1,6 @@
 { lib
 , fetchFromGitHub
 , gtk4
-, wrapGAppsHook3
 , libadwaita
 , tdlib
 , rlottie
@@ -16,7 +15,9 @@
 , blueprint-compiler
 , libxml2
 , libshumate
+, gst_all_1
 , darwin
+, buildPackages
 }:
 
 let
@@ -35,7 +36,7 @@ let
   gtk4-paperplane = gtk4.overrideAttrs (prev: {
     patches = (prev.patches or []) ++ [ "${src}/build-aux/gtk-reversed-list.patch" ];
   });
-  wrapPaperPlaneHook = wrapGAppsHook3.override {
+  wrapPaperPlaneHook = buildPackages.wrapGAppsHook3.override {
     gtk3 = gtk4-paperplane;
   };
   # libadwaita has gtk4 in propagatedBuildInputs so it must be overrided
@@ -96,7 +97,11 @@ stdenv.mkDerivation {
     libadwaita-paperplane
     tdlib-paperplane
     rlottie-paperplane
-  ] ++ lib.optionals stdenv.isDarwin [
+    gst_all_1.gstreamer
+    gst_all_1.gst-libav
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
 

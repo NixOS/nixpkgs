@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "websockify";
-  version = "0.11.0";
+  version = "0.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "novnc";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-82Fk9qbiiCD5Rts1d14sK/njeN7DcjKMKPqE7S/1WHs=";
+    hash = "sha256-+qjWmCkXJj8J5OImMSjTwXWyApmJ883NMr0157iqPS4=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # this test failed on macos
     # https://github.com/novnc/websockify/issues/552
     "test_socket_set_keepalive_options"
@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kanaka/websockify";
     changelog = "https://github.com/novnc/websockify/releases/tag/v${version}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

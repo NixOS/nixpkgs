@@ -21,15 +21,15 @@
 , nlohmann_json
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "giada";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "monocasual";
-    repo = pname;
-    rev = version;
-    sha256 = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
+    repo = "giada";
+    rev = finalAttrs.version;
+    hash = "sha256-vTOUS9mI4B3yRNnM2dNCH7jgMuD3ztdhe1FMgXUIt58=";
     fetchSubmodules = true;
   };
 
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     libXrandr
   ];
 
-  meta = with lib; {
-    description = "A free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
+  meta = {
+    description = "Free, minimal, hardcore audio tool for DJs, live performers and electronic musicians";
     mainProgram = "giada";
     homepage = "https://giadamusic.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.all;
   };
-}
+})

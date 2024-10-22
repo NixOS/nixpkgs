@@ -2,10 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   apricot-select,
   numba,
   numpy,
-  pynose,
   pytestCheckHook,
   pythonOlder,
   scikit-learn,
@@ -29,9 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-v9BHFxmlbwXVipPze/nV35YijdFBuka3gAl85AlsffQ=";
   };
 
-  postPatch = ''
-    sed -i '/"nose"/d' setup.py
-  '';
+  patches = [
+    # migrate to pytest, https://github.com/jmschrei/apricot/pull/43
+    (fetchpatch2 {
+      url = "https://github.com/jmschrei/apricot/commit/ffa5cce97292775c0d6890671a19cacd2294383f.patch?full_index=1";
+      hash = "sha256-9A49m4587kAPK/kzZBqMRPwuA40S3HinLXaslYUcWdM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -44,10 +48,7 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "apricot" ];
 

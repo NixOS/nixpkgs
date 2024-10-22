@@ -1,5 +1,4 @@
-{ config
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , gobject-introspection
@@ -18,17 +17,19 @@
 , vala
 , cmake
 , libmicrodns
+, gtuber
+, glib-networking
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "clapper";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner  = "Rafostar";
     repo   = "clapper";
     rev    = finalAttrs.version;
-    hash = "sha256-5fD1OnVcY3ZC+QfoFqe2jV43/J36r85SpLUYF2ti7dY=";
+    hash = "sha256-IQJTnLB6FzYYPONOqBkvi89iF0U6fx/aWYvNOOJpBvc=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
+    gtuber
+    glib-networking # for TLS support
     gtk4
     libGL
     libadwaita
@@ -69,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "A GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
+    description = "GNOME media player built using GTK4 toolkit and powered by GStreamer with OpenGL rendering";
     longDescription = ''
       Clapper is a GNOME media player built using the GTK4 toolkit.
       The media player is using GStreamer as a media backend.

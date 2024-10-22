@@ -27,14 +27,14 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals robloxSupport [
     openssl
-  ] ++ lib.optionals (robloxSupport && stdenv.isDarwin) [
+  ] ++ lib.optionals (robloxSupport && stdenv.hostPlatform.isDarwin) [
     darwin.apple_sdk.frameworks.Security
   ];
 
   buildNoDefaultFeatures = !robloxSupport;
 
   meta = with lib; {
-    description = "A blazing-fast modern Lua linter written in Rust";
+    description = "Blazing-fast modern Lua linter written in Rust";
     mainProgram = "selene";
     homepage = "https://github.com/kampfkarren/selene";
     changelog = "https://github.com/kampfkarren/selene/blob/${version}/CHANGELOG.md";

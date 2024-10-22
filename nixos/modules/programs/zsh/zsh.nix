@@ -10,7 +10,7 @@ let
   opt = options.programs.zsh;
 
   zshAliases = builtins.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "alias -- ${k}=${lib.escapeShellArg v}")
       (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 

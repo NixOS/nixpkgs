@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://github.com/nassauwinter/zephyr-python-api";
-    description = "A set of wrappers for Zephyr Scale (TM4J) REST API";
+    description = "Set of wrappers for Zephyr Scale (TM4J) REST API";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rapiteanu ];
   };

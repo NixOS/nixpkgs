@@ -59,7 +59,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cryptography = [ cryptography ];
     pycrypto = [ pycrypto ];
     pycryptodome = [ pycryptodome ];
@@ -69,7 +69,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # https://github.com/mpdavis/python-jose/issues/348
@@ -79,8 +79,8 @@ buildPythonPackage rec {
   meta = with lib; {
     changelog = "https://github.com/mpdavis/python-jose/releases/tag/${version}";
     homepage = "https://github.com/mpdavis/python-jose";
-    description = "A JOSE implementation in Python";
+    description = "JOSE implementation in Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ jhhuh ];
+    maintainers = [ ];
   };
 }

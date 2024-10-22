@@ -1,8 +1,6 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
-  fetchFromGitHub,
   edlib,
   cython,
   python,

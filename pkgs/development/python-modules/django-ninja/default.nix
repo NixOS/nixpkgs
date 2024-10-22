@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.1.0";
+  version = "1.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "vitalik";
     repo = "django-ninja";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pvpYDuUZi0Gr5RbBWc91LzgmRLhihrhsKaD/AWN5+Bo=";
+    hash = "sha256-fPlw9iTt1V8VXd0d5hw1i9LT96BcDkAlpBu9SPPd+hI=";
   };
 
   propagatedBuildInputs = [

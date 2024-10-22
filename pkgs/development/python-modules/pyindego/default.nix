@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
 
   # build-system
   setuptools,
@@ -20,14 +20,19 @@
 
 buildPythonPackage rec {
   pname = "pyindego";
-  version = "3.1.1";
+  version = "3.2.2";
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "pyIndego";
-    inherit version;
-    hash = "sha256-lRDi6qYMaPI8SiSNe0vzlKb92axujt44aei8opNPDug=";
+  src = fetchFromGitHub {
+    owner = "sander1988";
+    repo = "pyIndego";
+    rev = "refs/tags/${version}";
+    hash = "sha256-x8/MSbn+urmArQCyxZU1JEUyATJsPzp7bflymE+1rkk=";
   };
+
+  postPatch = ''
+    sed -i "/addopts/d" pytest.ini
+  '';
 
   build-system = [ setuptools ];
 
@@ -55,8 +60,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python interface for Bosch API for lawnmowers";
-    homepage = "https://github.com/jm-73/pyIndego";
-    changelog = "https://github.com/jm-73/pyIndego/blob/${version}/CHANGELOG.md";
+    homepage = "https://github.com/sander1988/pyIndego";
+    changelog = "https://github.com/sander1988/pyIndego/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

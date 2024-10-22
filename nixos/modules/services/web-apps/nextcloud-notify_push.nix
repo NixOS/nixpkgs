@@ -77,20 +77,26 @@ in
         dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
         dbUser = lib.optionalString (cfg.dbuser != null) cfg.dbuser;
         dbPass = lib.optionalString (cfg.dbpassFile != null) ":$DATABASE_PASSWORD";
-        isSocket = lib.hasPrefix "/" (toString cfg.dbhost);
+        dbHostHasPrefix = prefix: lib.hasPrefix prefix (toString cfg.dbhost);
+        isPostgresql = dbType == "postgresql";
+        isMysql = dbType == "mysql";
+        isSocket = (isPostgresql && dbHostHasPrefix "/") || (isMysql && dbHostHasPrefix "localhost:/");
         dbHost = lib.optionalString (cfg.dbhost != null) (if
           isSocket then
-            if dbType == "postgresql" then "?host=${cfg.dbhost}" else
-            if dbType == "mysql" then "?socket=${cfg.dbhost}" else throw "unsupported dbtype"
+            lib.optionalString isMysql "@localhost"
           else
             "@${cfg.dbhost}");
+        dbOpts = lib.optionalString (cfg.dbhost != null && isSocket) (
+          if isPostgresql then "?host=${cfg.dbhost}" else
+          if isMysql then "?socket=${lib.removePrefix "localhost:" cfg.dbhost}" else throw "unsupported dbtype"
+        );
         dbName = lib.optionalString (cfg.dbname != null) "/${cfg.dbname}";
-        dbUrl = "${dbType}://${dbUser}${dbPass}${lib.optionalString (!isSocket) dbHost}${dbName}${lib.optionalString isSocket dbHost}";
+        dbUrl = "${dbType}://${dbUser}${dbPass}${dbHost}${dbName}${dbOpts}";
       in lib.optionalString (dbPass != "") ''
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
-        ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
+        exec ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
       '';
       serviceConfig = {
         User = "nextcloud";
@@ -98,6 +104,7 @@ in
         RuntimeDirectory = [ "nextcloud-notify_push" ];
         Restart = "on-failure";
         RestartSec = "5s";
+        Type = "notify";
       };
     };
 

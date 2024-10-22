@@ -62,9 +62,87 @@ The following is an example expression using `buildGoModule`:
 }
 ```
 
+### Obtaining and overriding `vendorHash` for `buildGoModule` {#buildGoModule-vendorHash}
+
+We can use `nix-prefetch` to obtain the actual hash. The following command gets the value of `vendorHash` for package `pet`:
+
+```sh
+cd path/to/nixpkgs
+nix-prefetch -E "{ sha256 }: ((import ./. { }).my-package.overrideAttrs { vendorHash = sha256; }).goModules"
+```
+
+To obtain the hash without external tools, set `vendorHash = lib.fakeHash;` and run the build. ([more details here](#sec-source-hashes)).
+
+`vendorHash` can be overridden with `overrideAttrs`. Override the above example like this:
+
+```nix
+{
+  pet_0_4_0 = pet.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.4.0";
+      src = fetchFromGitHub {
+        inherit (previousAttrs.src) owner repo;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-gVTpzmXekQxGMucDKskGi+e+34nJwwsXwvQTjRO6Gdg=";
+      };
+      vendorHash = "sha256-dUvp7FEW09V0xMuhewPGw3TuAic/sD7xyXEYviZ2Ivs=";
+    }
+  );
+}
+```
+
+### Overriding `goModules` {#buildGoModule-goModules-override}
+
+Overriding `<pkg>.goModules` by calling `goModules.overrideAttrs` is unsupported. Still, it is possible to override the `vendorHash` (`goModules`'s `outputHash`) and the `pre`/`post` hooks for both the build and patch phases of the primary and `goModules` derivation. Alternatively, the primary derivation provides an overridable `passthru.overrideModAttrs` function to store the attribute overlay implicitly taken by `goModules.overrideAttrs`. Here's an example usage of `overrideModAttrs`:
+
+```nix
+{
+  pet-overridden = pet.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      passthru = previousAttrs.passthru // {
+        # If the original package has an `overrideModAttrs` attribute set, you'd
+        # want to extend it, and not replace it. Hence we use
+        # `lib.composeExtensions`. If you are sure the `overrideModAttrs` of the
+        # original package trivially does nothing, you can safely replace it
+        # with your own by not using `lib.composeExtensions`.
+        overrideModAttrs = lib.composeExtensions previousAttrs.passthru.overrideModAttrs (
+          finalModAttrs: previousModAttrs: {
+            # goModules-specific overriding goes here
+            postBuild = ''
+              # Here you have access to the `vendor` directory.
+              substituteInPlace vendor/github.com/example/repo/file.go \
+                --replace-fail "panic(err)" ""
+            '';
+          }
+        );
+      };
+    }
+  );
+}
+```
+
 ## `buildGoPackage` (legacy) {#ssec-go-legacy}
 
 The function `buildGoPackage` builds legacy Go programs, not supporting Go modules.
+
+::: {.warning}
+`buildGoPackage` is deprecated and will be removed for the 25.05 release.
+:::
+
+### Migrating from `buildGoPackage` to `buildGoModule` {#buildGoPackage-migration}
+
+Go modules, released 6y ago, are now widely adopted in the ecosystem.
+Most upstream projects are using Go modules, and the tooling previously used for dependency management in Go is mostly deprecated, archived or at least unmaintained at this point.
+
+In case a project doesn't have external dependencies or dependencies are vendored in a way understood by `go mod init`, migration can be done with a few changes in the package.
+
+- Switch the builder from `buildGoPackage` to `buildGoModule`
+- Remove `goPackagePath` and other attributes specific to `buildGoPackage`
+- Set `vendorHash = null;`
+- Run `go mod init <module name>` in `postPatch`
+
+In case the package has external dependencies that aren't vendored or the build setup is more complex the upstream source might need to be patched.
+Examples for the migration can be found in the [issue tracking migration withing nixpkgs](https://github.com/NixOS/nixpkgs/issues/318069).
 
 ### Example for `buildGoPackage` {#example-for-buildgopackage}
 

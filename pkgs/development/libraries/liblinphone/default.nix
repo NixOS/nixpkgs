@@ -59,7 +59,6 @@ stdenv.mkDerivation rec {
 
     jsoncpp
     libxml2
-    (python3.withPackages (ps: [ ps.pystache ps.six ]))
     sqlite
     xercesc
     zxing-cpp
@@ -68,6 +67,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     doxygen
+    (python3.withPackages (ps: [ ps.pystache ps.six ]))
   ];
 
   strictDeps = true;

@@ -75,7 +75,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An Ansible kernel for Jupyter";
+    description = "Ansible kernel for Jupyter";
     homepage = "https://github.com/ansible/ansible-jupyter-kernel";
     license = licenses.asl20;
     maintainers = [ ];

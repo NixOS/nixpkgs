@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matlink/gplaycli";
     changelog = "https://github.com/matlink/gplaycli/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

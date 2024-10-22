@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "shell-gpt";
-  version = "1.4.3";
+  version = "1.4.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TheR1D";
     repo = "shell_gpt";
     rev = "refs/tags/${version}";
-    hash = "sha256-T37L4U1kOrrIQJ2znq2UupD3pyit9xd8rAsEwUvGiQ8=";
+    hash = "sha256-4/5CLzIq+RXVTJk4chrd65GeazRp8VFKdOMt3fT+mbI=";
   };
 
   pythonRelaxDeps = [
@@ -26,7 +26,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ hatchling ];
 
-  nativeBuildInputs = with python3.pkgs; [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     click

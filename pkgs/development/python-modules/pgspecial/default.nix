@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/dbcli/pgspecial";
     changelog = "https://github.com/dbcli/pgspecial/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

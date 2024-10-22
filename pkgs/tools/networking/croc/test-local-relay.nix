@@ -28,6 +28,6 @@ stdenv.mkDerivation {
 
   meta = {
     timeout = 300;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

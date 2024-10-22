@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL, SDL_ttf, SDL_image, libSM, libICE, libGLU, libGL, libpng, lua5, autoconf, automake }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL, SDL_ttf, SDL_image, libSM, libICE, libGLU, libGL, libpng, lua5, autoconf, automake, mesa }:
 
 stdenv.mkDerivation rec {
   pname = "gravit";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     homepage = "https://github.com/gak/gravit";
     description = "Beautiful OpenGL-based gravity simulator";
     mainProgram = "gravit";
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
       view in 3D and zoom in and out.
     '';
 
-    platforms = lib.platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     hydraPlatforms = lib.platforms.linux; # darwin times out
   };
 }

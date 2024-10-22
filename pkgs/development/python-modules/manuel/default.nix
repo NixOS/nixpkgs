@@ -34,7 +34,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ zope-testing ];
 
   meta = with lib; {
-    description = "A documentation builder";
+    description = "Documentation builder";
     homepage = "https://pypi.python.org/pypi/manuel";
     license = licenses.zpl20;
   };

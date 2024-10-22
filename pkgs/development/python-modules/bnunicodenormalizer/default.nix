@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "bnunicodenormalizer";
-  version = "0.1.6";
+  version = "0.1.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qVC6+0SnAs25DFzKPHFUOoYPlrRvkGWFptjIVom8wJM=";
+    hash = "sha256-hqNInMgcc9KvtOJlvS0Ni8UvyKI3TiEMiZ4CYJQLwJE=";
   };
 
   nativeCheckInputs = [ pytestCheckHook ];

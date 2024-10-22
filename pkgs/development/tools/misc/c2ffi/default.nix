@@ -52,9 +52,9 @@ llvmPackages.stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/rpav/c2ffi";
-    description = "An LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
+    description = "LLVM based tool for extracting definitions from C, C++, and Objective C header files for use with foreign function call interfaces";
     mainProgram = "c2ffi";
     license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
  };
 }

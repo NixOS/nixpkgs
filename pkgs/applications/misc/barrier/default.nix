@@ -12,7 +12,7 @@ mkDerivation rec {
     owner = "debauchee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
+    hash = "sha256-2tHqLF3zS3C4UnOVIZfpcuzaemC9++nC7lXgFnFSfKU=";
     fetchSubmodules = true;
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage {
     hash = "sha256-LUlF2VhRnuDwJLdITgmXIQV/IuKdx1KXQkiPVHKrl4Q=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./no-darwin-cflags.patch
     ./no-xcode.patch
   ];
@@ -37,7 +37,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "A tool to generate native build files";
+    description = "Tool to generate native build files";
     mainProgram = "gyp";
     homepage = "https://gyp.gsrc.io";
     license = licenses.bsd3;

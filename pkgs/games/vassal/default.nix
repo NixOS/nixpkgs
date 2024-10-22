@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
-  version = "3.7.12";
+  version = "3.7.14";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
-    sha256 = "sha256-pNpDaGx/h3W+AsX965zu3zZ94kMYvh1pV8C8qYN0imc=";
+    sha256 = "sha256-3P3f6X2c5lF1AizEs9z59MhLy0Ntg203rkPAkv+SBtw=";
   };
 
   buildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   forceShare = [ "man" "info" ];
 
   meta = with lib; {
-      description = "A free, open-source boardgame engine";
+      description = "Free, open-source boardgame engine";
       homepage = "https://vassalengine.org/";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.lgpl21Only;

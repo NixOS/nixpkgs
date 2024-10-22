@@ -24,7 +24,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ setuptools ];
 
-  nativeBuildInputs = with python3Packages; [ pythonRelaxDepsHook ];
 
   dependencies = with python3Packages; [
     daemonocle
@@ -49,7 +48,7 @@ python3Packages.buildPythonApplication rec {
       # AssertionError
       "test_null_dummy"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # The tests that spawn a server using Bottle cannot be run on
       # macOS or Windows as the default multiprocessing start method
       # on those platforms is 'spawn', which requires the code to be
@@ -76,7 +75,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/infothrill/python-dyndnsc";
     changelog = "https://github.com/infothrill/python-dyndnsc/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
     mainProgram = "dyndnsc";
     platforms = platforms.unix;
   };

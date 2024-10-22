@@ -4,25 +4,27 @@
   fastavro,
   fetchFromGitHub,
   lib,
-  nose,
   pytestCheckHook,
   requests,
+  setuptools,
   six,
 }:
 
 buildPythonPackage rec {
   pname = "hdfs";
   version = "2.7.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mtth";
-    repo = pname;
+    repo = "hdfs";
     rev = "refs/tags/v${version}";
     hash = "sha256-Pm2E8hB0wbu7npi/sLt9D8jQsH69qNOHLji9CYqST/8=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     docopt
     requests
     six
@@ -30,7 +32,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     fastavro
-    nose
     pytestCheckHook
   ];
 
@@ -42,5 +43,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/mtth/hdfs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
+    mainProgram = "hdfscli";
   };
 }

@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchpatch2
+, updateAutotoolsGnuConfigScriptsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wlpIOPyOTByKrLi9Yg7bMISj1jv4mH/a08onWMYyQPk=";
   };
 
-  patches = lib.optionals stdenv.isCygwin [
+  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+
+  patches = lib.optionals stdenv.hostPlatform.isCygwin [
     ./1.16-cygwin.patch
     ./1.16-vpath.patch
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [

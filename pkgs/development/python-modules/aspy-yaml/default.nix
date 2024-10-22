@@ -22,7 +22,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "A few extensions to pyyaml";
+    description = "Few extensions to pyyaml";
     homepage = "https://github.com/asottile/aspy.yaml";
     license = licenses.mit;
   };

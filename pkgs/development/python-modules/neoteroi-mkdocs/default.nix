@@ -10,20 +10,19 @@
   jinja2,
   mkdocs,
   pytestCheckHook,
-  pythonImportsCheckHook,
   rich,
   setuptools,
 }:
 buildPythonPackage rec {
   pname = "neoteroi-mkdocs";
-  version = "1.0.5";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Neoteroi";
     repo = "mkdocs-plugins";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gpU3G1PeZTKO4fWr4x8Ek0GIBEP3oRAgu7OFn2OZbRE=";
+    hash = "sha256-qizF1Y3BUyr0ekoATJVa62q7gvpbMW3fIKViov2tFTI=";
   };
 
   buildInputs = [ hatchling ];

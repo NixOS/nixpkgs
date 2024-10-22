@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flawz";
-  version = "0.2.0";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "flawz";
     rev = "v${version}";
-    hash = "sha256-eIZUKI/fdaSPHHEEaN/5s4I2LRX44FijUlKzzvuD42E=";
+    hash = "sha256-/gNHi7ZENy0cgnEgDBW82ACUUsuMLYD9eUrSxwO9k1U=";
   };
 
-  cargoHash = "sha256-UWjrVA5T78QLJtMug38y+egLnM+G7zmAIsNmqn2ZE5I=";
+  cargoHash = "sha256-kMiKlZj+G1vfjaEiB3rtPoJl0K3W9xRVwgVz8q2pn1s=";
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
@@ -52,6 +52,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "flawz";
     maintainers = with lib.maintainers; [ anas ];
     platforms = with lib.platforms; unix ++ windows;
-    broken = stdenv.isDarwin; # needing some apple_sdk packages
+    broken = stdenv.hostPlatform.isDarwin; # needing some apple_sdk packages
   };
 }

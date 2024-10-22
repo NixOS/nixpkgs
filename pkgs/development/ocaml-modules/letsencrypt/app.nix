@@ -1,5 +1,4 @@
-{ lib
-, buildDunePackage
+{ buildDunePackage
 , letsencrypt
 , letsencrypt-dns
 , cmdliner
@@ -12,12 +11,10 @@
 , bos
 , fpath
 , randomconv
-, cstruct
 }:
 
 buildDunePackage {
   pname = "letsencrypt-app";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)
@@ -38,11 +35,10 @@ buildDunePackage {
     bos
     fpath
     randomconv
-    cstruct
   ];
 
   meta = letsencrypt.meta // {
-    description = "An ACME client implementation of the ACME protocol (RFC 8555) for OCaml";
+    description = "ACME client implementation of the ACME protocol (RFC 8555) for OCaml";
     mainProgram = "oacmel";
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pid1";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "pid1-rs";
     rev = "v${version}";
-    hash = "sha256-BljIa+4BKI7WHlOhXfN/3VKMzs5G5E4tNlQ2oPpJV2g=";
+    hash = "sha256-2dnQj3AQxedyq1YvHKt+lVXNEtuB5sMRSCqX9YeifzI=";
   };
 
-  cargoHash = "sha256-7PANlw/SKxyAqymfXIXFT/v3U0GCiGfgStguSr0lrqQ=";
+  cargoHash = "sha256-/KK9U1dgCLglgn/MJ7+sov4EEnY/nluEsz0ooMp6ggI=";
 
   meta = with lib; {
     description = "Signal handling and zombie reaping for PID1 process";

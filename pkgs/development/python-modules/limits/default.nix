@@ -6,6 +6,8 @@
   deprecated,
   etcd3,
   fetchFromGitHub,
+  fetchpatch2,
+  flaky,
   hiro,
   importlib-resources,
   motor,
@@ -13,6 +15,7 @@
   pymemcache,
   pymongo,
   pytest-asyncio,
+  pytest-benchmark,
   pytest-lazy-fixture,
   pytestCheckHook,
   pythonOlder,
@@ -23,10 +26,10 @@
 
 buildPythonPackage rec {
   pname = "limits";
-  version = "3.12.0";
+  version = "3.13.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "alisaifee";
@@ -38,8 +41,19 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
-    hash = "sha256-EH2/75tcKuS11XKuo4lCQrFe4/XJZpcWhuGlSuhIk18=";
+    hash = "sha256-y5iMx+AC52ZgGvAvThRaeKFqCGkwmukyZsJ+nzR2AFM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-incompatibility-with-latest-pytest-asyncio.patch";
+      url = "https://github.com/alisaifee/limits/commit/f6dcdb253cd44ca8dc7380c481da1afd8b57af6b.patch";
+      excludes = [ "requirements/test.txt" ];
+      hash = "sha256-NwtN8WHNrwsRcIq18pRjzzGmm7XCzn6O5y+jo9Qr6iQ=";
+    })
+    ./remove-fixed-start-from-async-tests.patch
+    ./only-test-in-memory.patch
+  ];
 
   postPatch = ''
     substituteInPlace pytest.ini \
@@ -53,16 +67,16 @@ buildPythonPackage rec {
     echo 'def get_versions(): return {"version": "${version}"}' > limits/_version.py
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     deprecated
     importlib-resources
     packaging
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     redis = [ redis ];
     rediscluster = [ redis ];
     memcached = [ pymemcache ];
@@ -79,26 +93,23 @@ buildPythonPackage rec {
   doCheck = pythonOlder "3.12"; # SystemError in protobuf
 
   nativeCheckInputs = [
+    flaky
     hiro
     pytest-asyncio
+    pytest-benchmark
     pytest-lazy-fixture
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  disabledTests = [ "test_moving_window_memcached" ];
 
   pythonImportsCheck = [ "limits" ];
-
-  pytestFlagsArray = [
-    # All other tests require a running Docker instance
-    "tests/test_limits.py"
-    "tests/test_ratelimit_parser.py"
-    "tests/test_limit_granularities.py"
-  ];
 
   meta = with lib; {
     description = "Rate limiting using various strategies and storage backends such as redis & memcached";
     homepage = "https://github.com/alisaifee/limits";
     changelog = "https://github.com/alisaifee/limits/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

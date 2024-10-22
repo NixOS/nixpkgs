@@ -1,39 +1,37 @@
 {
+  lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
-  lib,
-  numpy,
-  onnx,
-  packaging,
-  pytestCheckHook,
-  pythonAtLeast,
+
+  # build-system
   setuptools,
-  stdenv,
+
+  # dependencies
+  numpy,
+  packaging,
   torch,
-  torchvision,
   typing-extensions,
+
+  # tests
+  onnx,
+  pytestCheckHook,
+  torchvision,
+
+  pythonAtLeast,
+  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "pytorch-pfn-extras";
-  version = "0.7.6";
+  version = "0.7.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pfnet";
     repo = "pytorch-pfn-extras";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vSon/0GxQfaRtSPsQbYAvE3s/F0HEN59VpzE3w1PnVE=";
+    hash = "sha256-0+ltkm7OH18hlpHYyZCmy1rRleF52IM2BjLoW44tJUY=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "relax-setuptools.patch";
-      url = "https://github.com/pfnet/pytorch-pfn-extras/commit/96abe38c4baa6a144d604bdd4744c55627e55440.patch";
-      hash = "sha256-85UDGcgJyQS5gINbgpNM58b3XJGvf+ArtGhwJ5EXdhk=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -54,9 +52,25 @@ buildPythonPackage rec {
     # Requires CUDA access which is not possible in the nix environment.
     "-m 'not gpu and not mpi'"
     "-Wignore::DeprecationWarning"
+
+    # FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly...
+    "-Wignore::FutureWarning"
   ];
 
   pythonImportsCheck = [ "pytorch_pfn_extras" ];
+
+  disabledTests =
+    [
+      # AssertionError: assert 4 == 0
+      # where 4 = <MagicMock id='140733587469184'>.call_count
+      "test_lr_scheduler_wait_for_first_optimizer_step"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      # torch.distributed is not available on darwin
+      "test_create_distributed_evaluator"
+      "test_distributed_evaluation"
+      "test_distributed_evaluator_progress_bar"
+    ];
 
   disabledTestPaths =
     [
@@ -84,6 +98,11 @@ buildPythonPackage rec {
     ]
     ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # torch.distributed is not available on darwin
+      "tests/pytorch_pfn_extras_tests/distributed_tests/test_distributed_validation_sampler.py"
+      "tests/pytorch_pfn_extras_tests/nn_tests/parallel_tests/test_distributed.py"
+      "tests/pytorch_pfn_extras_tests/profiler_tests/test_record.py"
+      "tests/pytorch_pfn_extras_tests/profiler_tests/test_time_summary.py"
+      "tests/pytorch_pfn_extras_tests/training_tests/extensions_tests/test_accumulate.py"
       "tests/pytorch_pfn_extras_tests/training_tests/extensions_tests/test_sharded_snapshot.py"
     ]
     ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
@@ -92,10 +111,11 @@ buildPythonPackage rec {
       "tests/pytorch_pfn_extras_tests/nn_tests/modules_tests/test_lazy_conv.py"
     ];
 
-  meta = with lib; {
+  meta = {
     description = "Supplementary components to accelerate research and development in PyTorch";
     homepage = "https://github.com/pfnet/pytorch-pfn-extras";
-    license = licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    changelog = "https://github.com/pfnet/pytorch-pfn-extras/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ samuela ];
   };
 }

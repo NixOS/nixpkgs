@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Userspace checkpoint/restore for Linux";
     homepage    = "https://criu.org";
-    license     = licenses.gpl2;
+    license     = licenses.gpl2Plus;
     platforms   = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     maintainers = [ maintainers.thoughtpolice ];
   };

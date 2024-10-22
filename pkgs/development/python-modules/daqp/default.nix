@@ -48,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "daqp" ];
 
   meta = with lib; {
-    description = "A dual active-set algorithm for convex quadratic programming";
+    description = "Dual active-set algorithm for convex quadratic programming";
     homepage = "https://github.com/darnstrom/daqp";
     license = licenses.mit;
     maintainers = with maintainers; [ renesat ];

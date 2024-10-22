@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       This package currently contains all of the screensavers from the
       original collection, plus a few others.
     '';
-    license = lib.licenses.gpl2;
+    license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
   };
 }

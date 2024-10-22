@@ -21,8 +21,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "python";
     publisher = "ms-python";
-    version = "2024.5.11021008";
-    hash = "sha256-UnI0leRKqCtFLBdGS/UvLuCcxQhibyY0ChmzQ9uytoY=";
+    version = "2024.15.2024091301";
+    hash = "sha256-MB8Vq2rjO37yW3Zh+f8ek/yz0qT+ZYHn/JnF5ZA6CXQ=";
   };
 
   buildInputs = [ icu ];
@@ -82,7 +82,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   meta = {
-    description = "A Visual Studio Code extension with rich support for the Python language";
+    description = "Visual Studio Code extension with rich support for the Python language";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-python.python";
     homepage = "https://github.com/Microsoft/vscode-python";
     changelog = "https://github.com/microsoft/vscode-python/releases";

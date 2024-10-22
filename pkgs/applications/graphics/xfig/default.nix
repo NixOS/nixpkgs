@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://sourceforge.net/p/mcj/xfig/ci/${version}/tree/CHANGES";
-    description = "An interactive drawing tool for X11";
+    description = "Interactive drawing tool for X11";
     mainProgram = "xfig";
     longDescription = ''
       Note that you need to have the <literal>netpbm</literal> tools

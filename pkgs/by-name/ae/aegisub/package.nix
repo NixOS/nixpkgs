@@ -7,6 +7,7 @@
   darwin,
   expat,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   ffms,
   fftw,
@@ -37,10 +38,10 @@
   wxGTK,
   zlib,
   # Boolean guard flags
-  alsaSupport ? stdenv.isLinux,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
   openalSupport ? true,
   portaudioSupport ? true,
-  pulseaudioSupport ? config.pulseaudio or stdenv.isLinux,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
 }:
@@ -101,12 +102,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
   ++ lib.optionals openalSupport [
-    (if stdenv.isDarwin then OpenAL else openal)
+    (if stdenv.hostPlatform.isDarwin then OpenAL else openal)
   ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
   ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Carbon
     Cocoa
@@ -120,14 +121,20 @@ stdenv.mkDerivation (finalAttrs: {
     "relro"
   ];
 
-  patches = lib.optionals (!useBundledLuaJIT) [
+  patches = [
+    (fetchpatch {
+      name = "move-iconv-include-to-charset_conv.h.patch";
+      url = "https://github.com/arch1t3cht/Aegisub/commit/b8f4c98c4cbc698e4adbba302c2dc328fe193435.patch";
+      hash = "sha256-dCm/VG+8yK7qWKWF4Ew/M2hbbAC/d3hiuRglR9BvWtw=";
+    })
+  ] ++ lib.optionals (!useBundledLuaJIT) [
     ./000-remove-bundled-luajit.patch
   ];
 
   # error: unknown type name 'NSUInteger'
   postPatch = ''
     substituteInPlace src/dialog_colorpicker.cpp \
-      --replace "NSUInteger" "size_t"
+      --replace-fail "NSUInteger" "size_t"
   '';
 
   env = {
@@ -145,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/wangqr/Aegisub";
-    description = "An advanced subtitle editor; wangqr's fork";
+    description = "Advanced subtitle editor; wangqr's fork";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to

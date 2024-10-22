@@ -181,6 +181,10 @@ let
         communicating with external systems (federation, remote
         storage, Alertmanager).
       '';
+
+      query_log_file = mkOpt types.str ''
+        Path to the file prometheus should write its query log to.
+      '';
     };
   };
 

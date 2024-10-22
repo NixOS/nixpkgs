@@ -22,7 +22,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "All-in-one infinity value for Python. Can be compared to any object.";
+    description = "All-in-one infinity value for Python. Can be compared to any object";
     homepage = "https://github.com/kvesteri/infinity";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mupdt ];

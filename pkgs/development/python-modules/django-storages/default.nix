@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.2";
+  version = "1.14.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,14 +28,14 @@ buildPythonPackage rec {
     owner = "jschneier";
     repo = "django-storages";
     rev = "refs/tags/${version}";
-    hash = "sha256-V0uFZvnBi0B31b/j/u3Co6dd9XcdVefiSkl3XmCTJG4=";
+    hash = "sha256-nlM/XPot3auLzNsnHCVtog2WmiaibDRgbPOw9A5F9QI=";
   };
 
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ django ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     azure = [ azure-storage-blob ];
     boto3 = [ boto3 ];
     dropbox = [ dropbox ];
@@ -50,7 +50,7 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     rsa
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "storages" ];
 

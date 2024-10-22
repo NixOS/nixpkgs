@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   # On Linux, c-reduce's preferred way to reason about
   # the cpu architecture/topology is to use 'lscpu',
   # so let's make sure it knows where to find it:
-  + lib.optionalString stdenv.isLinux ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace creduce/creduce_utils.pm --replace \
       lscpu ${util-linux}/bin/lscpu
   '';
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A C program reducer";
+    description = "C program reducer";
     mainProgram = "creduce";
     homepage = "https://embed.cs.utah.edu/creduce";
     # Officially, the license is: https://github.com/csmith-project/creduce/blob/master/COPYING
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
       property.  It is intended for use by people who discover and report
       bugs in compilers and other tools that process C/C++ code.
     '';
-    maintainers = [ maintainers.dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

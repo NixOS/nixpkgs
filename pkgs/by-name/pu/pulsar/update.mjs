@@ -10,7 +10,7 @@ const constants = {
     sha256FileURL: (newVersion) => `https://github.com/pulsar-edit/pulsar/releases/download/v${newVersion}/SHA256SUMS.txt`,
     x86_64FileName: (newVersion) => `Linux.pulsar-${newVersion}.tar.gz`,
     aarch64FileName: (newVersion) => `ARM.Linux.pulsar-${newVersion}-arm64.tar.gz`,
-    targetFile: new URL("default.nix", import.meta.url).pathname,
+    targetFile: new URL("package.nix", import.meta.url).pathname,
 };
 
 async function utf16ToUtf8(blob) {

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     apr
     aprutil
     python3
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
   ];
 
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Multi-platform GUI front-end for the Subversion revision system";
     homepage = "http://rapidsvn.tigris.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.viric ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "rapidsvn";
   };

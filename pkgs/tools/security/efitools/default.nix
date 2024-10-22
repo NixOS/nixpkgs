@@ -21,6 +21,11 @@ stdenv.mkDerivation rec {
     sha256 = "0jabgl2pxvfl780yvghq131ylpf82k7banjz0ksjhlm66ik8gb1i";
   };
 
+  # https://github.com/ncroxon/gnu-efi/issues/7#issuecomment-2122741592
+  patches = [
+    ./aarch64.patch
+  ];
+
   postPatch = ''
     sed -i -e 's#/usr/include/efi#${gnu-efi}/include/efi/#g' Make.rules
     sed -i -e 's#/usr/lib64/gnuefi#${gnu-efi}/lib/#g' Make.rules

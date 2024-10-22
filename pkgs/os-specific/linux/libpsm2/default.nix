@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/intel/opa-psm2";
-    description = "The PSM2 library supports a number of fabric media and stacks";
-    license = with licenses; [ gpl2 bsd3 ];
+    description = "PSM2 library supports a number of fabric media and stacks";
+    license = with licenses; [ gpl2Only bsd3 ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.bzizou ];
   };

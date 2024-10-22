@@ -2,22 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "resilio-sync";
-  version = "2.7.3";
+  version = "2.8.1.1390";
 
   src = {
     x86_64-linux = fetchurl {
-      url = "https://download-cdn.resilio.com/${version}/linux-x64/resilio-sync_x64.tar.gz";
-      sha256 = "sha256-DYQs9KofHkvtlsRQHRLwQHoHwSZkr40Ih0RVAw2xv3M=";
+      url = "https://download-cdn.resilio.com/${version}/linux/x64/0/resilio-sync_x64.tar.gz";
+      sha256 = "sha256-XrfE2frDxOS32MzO7gpJEsMd0WY+b7TS0h/H94M7Py4=";
     };
 
     i686-linux = fetchurl {
-      url = "https://download-cdn.resilio.com/${version}/linux-i386/resilio-sync_i386.tar.gz";
-      sha256 = "sha256-PFKVBs0KthG4tuvooHkAciPhNQP0K8oi2LyoRUs5V7I=";
+      url = "https://download-cdn.resilio.com/${version}/linux/i386/0/resilio-sync_i386.tar.gz";
+      sha256 = "sha256-tWwb9DHLlXeyimzyo/yxVKqlkP3jlAxT2Yzs6h2bIgs=";
     };
 
     aarch64-linux = fetchurl {
-      url = "https://download-cdn.resilio.com/${version}/linux-arm64/resilio-sync_arm64.tar.gz";
-      sha256 = "sha256-o2DlYOBTkFhQMEDJySlVSNlVqLNbBzacyv2oTwxrXto=";
+      url = "https://download-cdn.resilio.com/${version}/linux/arm64/0/resilio-sync_arm64.tar.gz";
+      sha256 = "sha256-b859DqxTfnBMMeiwXlGKTQ+Mpmr2Rpg24l/GNkxSWbA=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac jwoudenberg ];
+    maintainers = with maintainers; [ domenkozar thoughtpolice cwoac ];
     mainProgram = "rslsync";
   };
 }

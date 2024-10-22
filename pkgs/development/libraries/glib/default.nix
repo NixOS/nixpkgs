@@ -2,6 +2,7 @@
 , lib
 , stdenv
 , fetchurl
+, fetchpatch
 , gettext
 , meson
 , ninja
@@ -16,7 +17,7 @@
 , buildPackages
 
 # this is just for tests (not in the closure of any regular package)
-, coreutils, dbus, tzdata
+, dbus, tzdata
 , desktop-file-utils, shared-mime-info
 , darwin
 , makeHardcodeGsettingsPatch
@@ -29,7 +30,7 @@
   stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian
 }:
 
-assert stdenv.isLinux -> util-linuxMinimal != null;
+assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
   # Some packages don't get "Cflags" from pkg-config correctly
@@ -60,15 +61,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
-  version = "2.80.2";
+  version = "2.80.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-uc+296W9WzEjj9XVbfImst2l6jdhFHW/ifag+UAP6L0=";
+    hash = "sha256-JOApxd/JtE5Fc2l63zMHipgnxIk4VVAEs7kJb6TqA08=";
   };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./darwin-compilation.patch
+    # FIXME: remove when https://gitlab.gnome.org/GNOME/glib/-/merge_requests/4088 is merged and is in the tagged release
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/glib/-/commit/9d0988ca62ee96e09aa76abbd65ff192cfce6858.patch";
+      hash = "sha256-JrR3Ba6L+3M0Nt8DgHmPG8uKtx7hOgUp7np08ATIzjA=";
+    })
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -114,6 +120,15 @@ stdenv.mkDerivation (finalAttrs: {
     # 3. Tools for desktop environment that cannot go to $bin due to $out depending on them ($out)
     #    * gio-launch-desktop
     ./split-dev-programs.patch
+
+    # Tell Meson to install gdb scripts next to the lib
+    # GDB only looks there and in ${gdb}/share/gdb/auto-load,
+    # and by default meson installs in to $out/share/gdb/auto-load
+    # which does not help
+    ./gdb_script.patch
+
+    # glib assumes that `RTLD_LOCAL` is defined to `0`, which is true on Linux and FreeBSD but not on Darwin.
+    ./gmodule-rtld_local.patch
   ];
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
@@ -127,10 +142,10 @@ stdenv.mkDerivation (finalAttrs: {
     bash gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
     elfutils
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     libselinux
     util-linuxMinimal # for libmount
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     AppKit Carbon Cocoa CoreFoundation CoreServices Foundation
   ]);
 
@@ -170,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=${lib.boolToString (!stdenv.hostPlatform.isStatic)}"
   ] ++ lib.optionals (!lib.meta.availableOn stdenv.hostPlatform elfutils) [
     "-Dlibelf=disabled"
-  ] ++ lib.optionals stdenv.isFreeBSD [
+  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
     "-Db_lundef=false"
     "-Dxattr=false"
   ];
@@ -211,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     moveToOutput "share/glib-2.0" "$dev"
+    moveToOutput "share/glib-2.0/gdb" "$out"
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
 
@@ -269,21 +285,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $PWD/glib/libglib-${librarySuffix} $out/lib/libglib-${librarySuffix}
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    meson test --print-errorlogs
-
-    runHook postCheck
-  '';
-
   postCheck = ''
     rm $out/lib/libgobject-${librarySuffix}
     rm $out/lib/libgio-${librarySuffix}
     rm $out/lib/libglib-${librarySuffix}
   '';
 
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.hostPlatform.isLinux;
 
   passthru = rec {
     gioModuleDir = "lib/gio/modules";

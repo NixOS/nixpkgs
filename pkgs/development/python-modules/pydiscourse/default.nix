@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydiscourse" ];
 
   meta = with lib; {
-    description = "A Python library for working with Discourse";
+    description = "Python library for working with Discourse";
     mainProgram = "pydiscoursecli";
     homepage = "https://github.com/pydiscourse/pydiscourse";
     changelog = "https://github.com/pydiscourse/pydiscourse/releases/tag/v${version}";

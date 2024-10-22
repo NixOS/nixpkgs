@@ -7,7 +7,6 @@
   prompt-toolkit,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +25,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "prompt_toolkit" ];
@@ -35,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = lib.optionalString stdenv.isDarwin ''
+  preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     ulimit -n 1024
   '';
 

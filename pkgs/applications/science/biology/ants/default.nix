@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ANTs";
-  version = "2.5.1";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "ANTsX";
     repo = "ANTs";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-q252KC6SKUN5JaQWAcsVmDprVkLXDvkYzNhC7yHJNpk=";
+    hash = "sha256-DZzuHMC0XymFCnDn+H1pRFx9jUt+s03PaN88R4ZBRwY=";
   };
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     itk
     vtk
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
   ];
 

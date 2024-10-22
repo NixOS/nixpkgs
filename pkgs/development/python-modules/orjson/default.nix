@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "orjson";
-  version = "3.10.1";
+  version = "3.10.6";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,13 +40,13 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = "orjson";
     rev = "refs/tags/${version}";
-    hash = "sha256-vEJriLd7f+zlYcMIyhDTkq2kmNc5MaNLHo0qMLS5hro=";
+    hash = "sha256-K3wCzwaGOsaiCm2LW4Oc4XOnp6agrdTxCxqEIMq0fuU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-yQkpjedHwgsZiiZEzYV66aa9RepCFW0PBqtD29tfoMI=";
+    hash = "sha256-SNdwqb47dJ084TMNsm2Btks1UCDerjSmSrQQUiGbx50=";
   };
 
   maturinBuildFlags = [ "--interpreter ${python.executable}" ];
@@ -58,7 +58,7 @@ buildPythonPackage rec {
       maturinBuildHook
     ]);
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   nativeCheckInputs = [
     numpy

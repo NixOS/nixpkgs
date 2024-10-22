@@ -21,22 +21,23 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-shutil";
   inherit (pytest-fixture-config) version src;
   pyproject = true;
-
-  sourceRoot = "${src.name}/pytest-shutil";
 
   # imp was removed in Python 3.12
   patches = [
     (fetchpatch {
       name = "stop-using-imp.patch";
       url = "https://build.opensuse.org/public/source/openSUSE:Factory/python-pytest-shutil/stop-using-imp.patch?rev=10";
-      hash = "sha256-L8tXoQ9q8o6aP3TpJY/sUVVbUd/ebw0h6de6dBj1WNY=";
-      stripLen = 1;
+      hash = "sha256-ZsfOic6VmKIlK+HeAlUwiM4fXgw9wHo445dP9j5/h8Q=";
     })
-  ];
+  ] ++ pytest-fixture-config.patches;
+
+  postPatch = ''
+    cd pytest-shutil
+  '';
 
   build-system = [
     setuptools
@@ -63,7 +64,7 @@ buildPythonPackage rec {
     ];
 
   meta = with lib; {
-    description = "A goodie-bag of unix shell and environment tools for py.test";
+    description = "Goodie-bag of unix shell and environment tools for py.test";
     homepage = "https://github.com/manahl/pytest-plugins";
     maintainers = with maintainers; [ ryansydnor ];
     license = licenses.mit;

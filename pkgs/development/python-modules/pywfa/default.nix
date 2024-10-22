@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for wavefront alignment using WFA2-lib";
     homepage = "https://github.com/kcleal/pywfa";
-    changelog = "https://github.com/kcleal/pywfa/releases/tag/${src.rev}";
+    changelog = "https://github.com/kcleal/pywfa/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ natsukium ];
   };

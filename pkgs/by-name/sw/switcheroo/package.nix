@@ -6,6 +6,7 @@
 , fetchFromGitLab
 , glib
 , gtk4
+, imagemagick
 , libadwaita
 , meson
 , ninja
@@ -49,9 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gtk4
     libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Foundation
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
+    )
+  '';
 
   # Workaround for the gettext-sys issue
   # https://github.com/Koka/gettext-rs/issues/114
@@ -64,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";
-    description = "An app for converting images between different formats";
+    description = "App for converting images between different formats";
     homepage = "https://apps.gnome.org/Converter/";
     license = licenses.gpl3Plus;
     mainProgram = "switcheroo";

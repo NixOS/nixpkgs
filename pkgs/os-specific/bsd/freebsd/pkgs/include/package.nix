@@ -7,7 +7,7 @@
 }:
 
 mkDerivation {
-  isStatic = true;
+  noLibc = true;
   path = "include";
 
   extraPaths = [

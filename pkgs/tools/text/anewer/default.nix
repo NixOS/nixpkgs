@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "181mi674354bddnq894yyq587w7skjh35vn61i41vfi6lqz5dy3d";
   };
 
-  cargoSha256 = "sha256-LJ0l5CZM5NqdbCZe4ELkYf9EkKyBxL/LrNmFy+JS6gM=";
+  cargoHash = "sha256-LJ0l5CZM5NqdbCZe4ELkYf9EkKyBxL/LrNmFy+JS6gM=";
 
   meta = with lib; {
     description = "Append lines from stdin to a file if they don't already exist in the file";

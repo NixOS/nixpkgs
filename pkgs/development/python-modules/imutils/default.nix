@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/jrosebr1/imutils";
-    description = "A series of convenience functions to make basic image processing functions";
+    description = "Series of convenience functions to make basic image processing functions";
     mainProgram = "range-detector";
     license = licenses.mit;
     maintainers = [ ];

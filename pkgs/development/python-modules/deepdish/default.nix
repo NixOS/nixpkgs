@@ -33,7 +33,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Flexible HDF5 saving/loading and other data science tools from the University of Chicago.";
+    description = "Flexible HDF5 saving/loading and other data science tools from the University of Chicago";
     mainProgram = "ddls";
     homepage = "https://github.com/uchicago-cs/deepdish";
     license = licenses.asl20;

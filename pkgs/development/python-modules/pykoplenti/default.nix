@@ -8,7 +8,6 @@
   pycryptodome,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -29,7 +28,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pydantic" ];
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 
@@ -39,7 +37,7 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     CLI = [
       click
       prompt-toolkit

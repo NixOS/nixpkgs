@@ -104,24 +104,27 @@ directory and executed as follows:
 ```bash
 nix-shell generate-shell.nix
 
-Rscript generate-r-packages.R cran  > cran-packages.nix.new
-mv cran-packages.nix.new cran-packages.nix
+Rscript generate-r-packages.R cran  > cran-packages.json.new
+mv cran-packages.json.new cran-packages.json
 
-Rscript generate-r-packages.R bioc  > bioc-packages.nix.new
-mv bioc-packages.nix.new bioc-packages.nix
+Rscript generate-r-packages.R bioc  > bioc-packages.json.new
+mv bioc-packages.json.new bioc-packages.json
 
-Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.nix.new
-mv bioc-annotation-packages.nix.new bioc-annotation-packages.nix
+Rscript generate-r-packages.R bioc-annotation > bioc-annotation-packages.json.new
+mv bioc-annotation-packages.json.new bioc-annotation-packages.json
 
-Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.nix.new
-mv bioc-experiment-packages.nix.new bioc-experiment-packages.nix
+Rscript generate-r-packages.R bioc-experiment > bioc-experiment-packages.json.new
+mv bioc-experiment-packages.json.new bioc-experiment-packages.json
 ```
 
-`generate-r-packages.R <repo>` reads  `<repo>-packages.nix`, therefore
+`generate-r-packages.R <repo>` reads  `<repo>-packages.json`, therefore
 the renaming.
+
+The contents of a generated `*-packages.json` file will be used to
+create a package derivation for each R package listed in the file.
 
 Some packages require overrides to specify external dependencies or other
 patches and special requirements. These overrides are specified in the
-`pkgs/development/r-modules/default.nix` file. As the `*-packages.nix`
+`pkgs/development/r-modules/default.nix` file. As the `*-packages.json`
 contents are automatically generated it should not be edited and broken
 builds should be addressed using overrides.

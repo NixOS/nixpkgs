@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "The xkcd font";
+    description = "Xkcd font";
     homepage = "https://github.com/ipython/xkcd-font";
     license = licenses.cc-by-nc-30;
     platforms = platforms.all;

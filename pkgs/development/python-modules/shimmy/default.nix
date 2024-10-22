@@ -53,6 +53,9 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Requires unpackaged labmaze
+    "tests/test_dm_control_multi_agent.py"
+
     # Requires unpackaged pyspiel
     "tests/test_openspiel.py"
 
@@ -89,7 +92,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/Farama-Foundation/Shimmy/releases/tag/v${version}";
-    description = "An API conversion tool for popular external reinforcement learning environments";
+    description = "API conversion tool for popular external reinforcement learning environments";
     homepage = "https://github.com/Farama-Foundation/Shimmy";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];

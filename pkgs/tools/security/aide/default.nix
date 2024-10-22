@@ -17,11 +17,13 @@ stdenv.mkDerivation rec {
     "--with-posix-acl"
     "--with-selinux"
     "--with-xattr"
+    "--sysconfdir=/etc"
     ];
 
   meta = with lib; {
     homepage = "https://aide.github.io/";
-    description = "A file and directory integrity checker";
+    changelog = "https://github.com/aide/aide/blob/v${version}/ChangeLog";
+    description = "File and directory integrity checker";
     mainProgram = "aide";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ happysalada ];

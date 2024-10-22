@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  verilog,
+  iverilog,
   ghdl,
   pytest,
   pytest-xdist,
@@ -24,13 +24,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest
     pytest-xdist
-    verilog
+    iverilog
     ghdl
   ];
   passthru = {
     # If using myhdl as a dependency, use these if needed and not ghdl and
     # verlog from all-packages.nix
-    inherit ghdl verilog;
+    inherit ghdl iverilog;
   };
   checkPhase = ''
     runHook preCheck
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A free, open-source package for using Python as a hardware description and verification language.";
+    description = "Free, open-source package for using Python as a hardware description and verification language";
     homepage = "https://www.myhdl.org/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ doronbehar ];

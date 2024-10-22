@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "changie";
-  version = "1.19.0";
+  version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "miniscruff";
     repo = "changie";
     rev = "v${version}";
-    hash = "sha256-3GQ9C9UteJG3LfJmDsBbFJ9hnz7ouQ/6bZkQ/8CZ8PI=";
+    hash = "sha256-FZR3KWBCulTbE1Rn6T1neJsjbps0HBPSzzZ57lngB/8=";
   };
 
   vendorHash = "sha256-2SkHId5BDAv525PISLjlrP862Z2fJDN4L839rz8rWaw=";

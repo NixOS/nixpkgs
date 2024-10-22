@@ -6,8 +6,6 @@
   protobuf,
   pycryptodomex,
   pyogg,
-  pytestCheckHook,
-  pythonRelaxDepsHook,
   requests,
   websocket-client,
   zeroconf,
@@ -27,7 +25,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     defusedxml

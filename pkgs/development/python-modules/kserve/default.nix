@@ -2,10 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   deprecation,
   poetry-core,
-  pythonRelaxDepsHook,
-  async-timeout,
+
+  # dependencies
   cloudevents,
   fastapi,
   grpcio,
@@ -14,48 +16,66 @@
   numpy,
   orjson,
   pandas,
-  prometheus-client,
-  protobuf,
-  psutil,
-  python-dateutil,
-  ray,
-  six,
-  tabulate,
-  timing-asgi,
   uvicorn,
-  avro,
+
+  # optional-dependencies
+  azure-identity,
   azure-storage-blob,
   azure-storage-file-share,
   boto3,
-  botocore,
   google-cloud-storage,
+  huggingface-hub,
+  asgi-logger,
+  ray,
+
+  prometheus-client,
+  protobuf,
+  requests,
+  psutil,
+  pydantic,
+  python-dateutil,
+  pyyaml,
+  six,
+  tabulate,
+  timing-asgi,
+
+  # tests
+  avro,
+  grpcio-testing,
+  pytest-asyncio,
   pytestCheckHook,
   tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "kserve";
-  version = "0.12.1";
+  version = "0.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kserve";
     repo = "kserve";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gKJkG8zJY1sGGpI27YZ/QnEPU8J7KHva3nI+JCglQaQ=";
+    hash = "sha256-N/IgiTiyBNw7WQWxcUJlXU+Q9o3UUaduD9ZBKwu0uRE=";
   };
 
   sourceRoot = "${src.name}/python/kserve";
+
+  pythonRelaxDeps = [
+    "fastapi"
+    "httpx"
+    "prometheus-client"
+    "protobuf"
+    "uvicorn"
+    "psutil"
+  ];
 
   build-system = [
     deprecation
     poetry-core
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   dependencies = [
-    async-timeout
     cloudevents
     fastapi
     grpcio
@@ -67,35 +87,38 @@ buildPythonPackage rec {
     prometheus-client
     protobuf
     psutil
+    pydantic
     python-dateutil
-    ray
+    pyyaml
     six
     tabulate
     timing-asgi
     uvicorn
-  ] ++ ray.passthru.optional-dependencies.serve-deps;
-
-  pythonRelaxDeps = [
-    "fastapi"
-    "httpx"
-    "prometheus-client"
-    "protobuf"
-    "ray"
-    "uvicorn"
   ];
 
-  pythonImportsCheck = [ "kserve" ];
+  optional-dependencies = {
+    storage = [
+      azure-identity
+      azure-storage-blob
+      azure-storage-file-share
+      boto3
+      huggingface-hub
+      google-cloud-storage
+      requests
+    ];
+    logging = [ asgi-logger ];
+    ray = [ ray ];
+  };
 
   nativeCheckInputs = [
     avro
-    azure-storage-blob
-    azure-storage-file-share
-    boto3
-    botocore
-    google-cloud-storage
+    grpcio-testing
+    pytest-asyncio
     pytestCheckHook
     tomlkit
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "kserve" ];
 
   disabledTestPaths = [
     # Looks for a config file at the root of the repository
@@ -104,15 +127,18 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Require network access
-    "test_health_handler"
-    "test_infer"
-    "test_infer_v2"
+    "test_infer_graph_endpoint"
+    "test_infer_path_based_routing"
+
+    # Tries to access `/tmp` (hardcoded)
+    "test_local_path_with_out_dir_exist"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Standardized Serverless ML Inference Platform on Kubernetes";
     homepage = "https://github.com/kserve/kserve/tree/master/python/kserve";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ GaetanLepage ];
+    changelog = "https://github.com/kserve/kserve/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

@@ -1,21 +1,19 @@
 { callPackage
-, runCommand
 , lib
 , fetchurl
 , nixosTests
 , withAcme ? false
 , withQuic ? false
-, fetchpatch
 , ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
-  version = "1.5.1";
+  version = "1.7.0";
   pname = if withQuic then "angieQuic" else "angie";
 
   src = fetchurl {
     url = "https://download.angie.software/files/angie-${version}.tar.gz";
-    hash = "sha256-pSBy+Gv3rSa0WqQOxLHM0V03/vLqvOYBGxrjY9qsBfQ=";
+    hash = "sha256-B5fm4BgV/bMLvJ9wOAA4fJyLLGARManDlQmjPXPyHAE=";
   };
 
   configureFlags = lib.optionals withAcme [

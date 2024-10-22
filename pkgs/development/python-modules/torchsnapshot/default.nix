@@ -57,7 +57,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
+    description = "Performant, memory-efficient checkpointing library for PyTorch applications, designed with large, complex distributed workloads in mind";
     homepage = "https://github.com/pytorch/torchsnapshot/";
     changelog = "https://github.com/pytorch/torchsnapshot/releases/tag/${version}";
     license = licenses.bsd3;
@@ -66,6 +66,6 @@ buildPythonPackage rec {
       # https://github.com/pytorch/torchsnapshot/issues/175
       pythonAtLeast "3.12"
       # ModuleNotFoundError: No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package
-      || stdenv.isDarwin;
+      || stdenv.hostPlatform.isDarwin;
   };
 }

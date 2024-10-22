@@ -84,12 +84,12 @@ in
       default = "caddy";
       type = types.str;
       description = ''
-        Group account under which caddy runs.
+        Group under which caddy runs.
 
         ::: {.note}
-        If left as the default value this user will automatically be created
+        If left as the default value this group will automatically be created
         on system activation, otherwise you are responsible for
-        ensuring the user exists before the Caddy service starts.
+        ensuring the group exists before the Caddy service starts.
         :::
       '';
     };
@@ -242,7 +242,7 @@ in
             serverAliases = [ "www.hydra.example.com" ];
             extraConfig = '''
               encode gzip
-              root /srv/http
+              root * /srv/http
             ''';
           };
         };
@@ -356,6 +356,7 @@ in
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
       reloadTriggers = optional cfg.enableReload cfg.configFile;
+      restartTriggers = optional (! cfg.enableReload) cfg.configFile;
 
       serviceConfig = let
         runOptions = ''--config ${configPath} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';

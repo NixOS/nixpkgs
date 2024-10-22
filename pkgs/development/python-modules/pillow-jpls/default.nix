@@ -78,7 +78,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pillow_jpls" ];
 
   meta = with lib; {
-    description = "A JPEG-LS plugin for the Python Pillow library";
+    description = "JPEG-LS plugin for the Python Pillow library";
     homepage = "https://github.com/planetmarshall/pillow-jpls";
     changelog = "https://github.com/planetmarshall/pillow-jpls/releases/tag/v${version}";
     license = licenses.bsd3;

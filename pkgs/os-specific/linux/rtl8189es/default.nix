@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Driver for Realtek rtl8189es";
     homepage = "https://github.com/jwrdegoede/rtl8189ES_linux";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ danielfullmer lheckemann ];
+    maintainers = with maintainers; [ danielfullmer ];
   };
 }

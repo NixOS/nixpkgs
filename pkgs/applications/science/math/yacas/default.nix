@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Easy to use, general purpose Computer Algebra System${lib.optionalString enableGui ", built with GUI."}";
     homepage = "http://www.yacas.org/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

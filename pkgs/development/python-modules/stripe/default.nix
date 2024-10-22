@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "9.8.0";
+  version = "11.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YxYfynRstqgeIVi/YZUMy4118bcjHH9KyeBYF6q1hrQ=";
+    hash = "sha256-H6xmDcwwFCaMr8lKRevqxm8adSNl9gAZ0iY+DB4Plls=";
   };
 
   build-system = [ setuptools ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stripe/stripe-python";
     changelog = "https://github.com/stripe/stripe-python/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

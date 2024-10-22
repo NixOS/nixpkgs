@@ -154,7 +154,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     buildInputs = [ pkgs.gtk-sharp-2_0 ];
 
     meta = {
-      description = "A generic framework for creating extensible applications";
+      description = "Generic framework for creating extensible applications";
       homepage = "https://www.mono-project.com/Mono.Addins";
       longDescription = ''
         A generic framework for creating extensible applications,

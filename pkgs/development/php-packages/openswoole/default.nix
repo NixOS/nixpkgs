@@ -21,7 +21,7 @@ buildPecl {
     hash = "sha256-Z26E1PdKypB/MImCHFgA3rJW5LvVaLZsQUxRv0RcFuo=";
   };
 
-  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];
+  buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ valgrind ];
 
   meta = with lib; {
     changelog = "https://github.com/openswoole/swoole-src/releases/tag/v${version}";

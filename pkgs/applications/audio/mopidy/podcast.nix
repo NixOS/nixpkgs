@@ -7,7 +7,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit version;
     pname = "Mopidy-Podcast";
-    sha256 = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
+    hash = "sha256-grNPVEVM2PlpYhBXe6sabFjWVB9+q+apIRjcHUxH52A=";
   };
 
   propagatedBuildInputs = [

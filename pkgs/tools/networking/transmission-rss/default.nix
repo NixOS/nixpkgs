@@ -13,11 +13,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];
 
-  cargoSha256 = "sha256-QNMdqoxxY8ao2O44hJxZNgLrPwzu9+ieweTPc7pfFY4=";
+  cargoHash = "sha256-QNMdqoxxY8ao2O44hJxZNgLrPwzu9+ieweTPc7pfFY4=";
 
   nativeBuildInputs = [pkg-config];
   buildInputs = [openssl]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       Security
       SystemConfiguration
     ]);

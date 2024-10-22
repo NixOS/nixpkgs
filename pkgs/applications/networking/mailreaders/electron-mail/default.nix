@@ -1,16 +1,22 @@
-{ appimageTools, lib, fetchurl }:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+  nix-update-script,
+}:
 
 let
   pname = "electron-mail";
-  version = "5.1.8";
+  version = "5.2.3";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    sha256 = "sha256-btqlxFrQUyb728i99IE65A9jwEFNvJ5b6zji0kwwATU=";
+    sha256 = "sha256-ajekPPRgprYNWE2osAXe46qVjnxXzkXa+MkWiNYJ5Fc=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -25,6 +31,8 @@ in appimageTools.wrapType2 {
     pkgs.libappindicator-gtk3
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "ElectronMail is an Electron-based unofficial desktop client for ProtonMail";
     mainProgram = "electron-mail";
@@ -32,5 +40,6 @@ in appimageTools.wrapType2 {
     license = licenses.gpl3;
     maintainers = [ maintainers.princemachiavelli ];
     platforms = [ "x86_64-linux" ];
+    changelog = "https://github.com/vladimiry/ElectronMail/releases/tag/v${version}";
   };
 }

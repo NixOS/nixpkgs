@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ openal
-  ] ++ lib.optional stdenv.isDarwin
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin
     darwin.apple_sdk.frameworks.OpenAL
   ;
 

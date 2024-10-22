@@ -6,25 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
-    rev = "v${version}";
-    hash = "sha256-RxC8VOfdTXJZiAroDHTKjJqGWu65Z5uyb4WK1LOqubQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-S9/bPgItbr6rRr4WX+hmyU1RvKn5gz9FdZjYlr0hnd0=";
   };
 
-  postPatch = ''
-    sed -i '/addopts/d' setup.cfg
-  '';
-
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     defusedxml
     passlib
     vobject
@@ -36,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = with python3.pkgs; [
-    pytest7CheckHook
+    pytestCheckHook
     waitress
   ];
 

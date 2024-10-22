@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # test failure on aarch64-linux; unknown reason:
-  cmakeFlags = lib.optionals stdenv.isAarch64 [ "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'" ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'" ];
 
   doCheck = true;
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     # license appears contradictory; see https://github.com/vxl/vxl/issues/752
     # (and see https://github.com/InsightSoftwareConsortium/ITK/pull/1920/files for potential patch)
     license = [ lib.licenses.unfree ];
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 })

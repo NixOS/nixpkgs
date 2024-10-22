@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ libubox libjson ];
   nativeBuildInputs = [ cmake ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-Wno-error=gnu-folding-constant"
   ]);
 

@@ -1,36 +1,81 @@
-{ lib, stdenv, fetchurl, unzip, which, makeWrapper, jdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  which,
+  makeWrapper,
+  installShellFiles,
+  jdk,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 # at runtime, need jdk
 
 stdenv.mkDerivation rec {
   pname = "groovy";
-  version = "3.0.11";
+  version = "4.0.22";
 
   src = fetchurl {
     url = "mirror://apache/groovy/${version}/distribution/apache-groovy-binary-${version}.zip";
-    sha256 = "85abb44e81f94d794230cf5c2c7f1003e598a5f8a6ae04322f28c6f9efe395f6";
+    sha256 = "sha256-2Ro93+NThx1MJlbT0KBcgovD/zbp1J29vsE9zZjwWHc=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    installShellFiles
+    copyDesktopItems
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "groovy";
+      desktopName = "Groovy Console";
+      exec = "groovyConsole";
+      icon = "groovy";
+      comment = meta.description;
+      terminal = false;
+      startupNotify = false;
+      categories = [ "Development" ];
+    })
+  ];
 
   installPhase = ''
+    runHook preInstall
+
+    rm bin/*.bat
+
     mkdir -p $out
     mkdir -p $out/share/doc/groovy
-    rm bin/*.bat
-    mv {bin,conf,grooid,indy,lib} $out
+
+    #Install icons
+    mkdir -p $out/share/icons
+    mv bin/groovy.ico $out/share/icons/
+
+    #Install Completion
+    for p in grape groovy{,doc,c,sh,Console}; do
+      installShellCompletion --cmd $p --bash bin/''${p}_completion
+    done
+    rm bin/*_completion
+
+    mv {bin,conf,grooid,lib} $out
     mv {licenses,LICENSE,NOTICE} $out/share/doc/groovy
 
     sed -i 's#which#${which}/bin/which#g' $out/bin/startGroovy
 
     for p in grape java2groovy groovy{,doc,c,sh,Console}; do
       wrapProgram $out/bin/$p \
-            --set JAVA_HOME "${jdk}" \
-            --prefix PATH ":" "${jdk}/bin"
+        --set JAVA_HOME "${jdk}" \
+        --prefix PATH ":" "${jdk}/bin"
     done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    description = "An agile dynamic language for the Java Platform";
+    description = "Agile dynamic language for the Java Platform";
     homepage = "http://groovy-lang.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ pSub ];

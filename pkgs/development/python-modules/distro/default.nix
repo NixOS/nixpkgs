@@ -24,9 +24,9 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/nir0s/distro";
-    description = "Linux Distribution - a Linux OS platform information API.";
+    description = "Linux Distribution - a Linux OS platform information API";
     mainProgram = "distro";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

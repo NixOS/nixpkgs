@@ -45,7 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals withQT [ pyqt5 ]
     ++ lib.optionals withGTK [ pycairo pygobject3 ]
     ++ lib.optionals withCurses [ urwid ]
-    ++ lib.optionals stdenv.isLinux [ pydbus pyinotify ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pydbus pyinotify ]
     ++ lib.optionals (withGTK || withQT) [ pillow ]);
 
   dontWrapQtApps = true;
@@ -77,6 +77,6 @@ python3.pkgs.buildPythonApplication rec {
     description = "Open multi-site list manager for Unix-like systems (ex-wMAL)";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

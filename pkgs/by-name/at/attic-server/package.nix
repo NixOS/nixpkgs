@@ -1,7 +1,4 @@
-{ attic-client
-}:
-(attic-client.override {
-  crates = [ "attic-server" ];
-}).overrideAttrs {
-  meta.mainProgram = "atticd";
-}
+{ lib, attic-client }:
+lib.addMetaAttrs { mainProgram = "atticd"; } (
+  attic-client.override { crates = [ "attic-server" ]; }
+)

@@ -28,8 +28,6 @@
 , soci
 , postgresql
 , nodejs
-, mkYarnModules
-, fetchYarnDeps
 , qmake
 , server ? false # build server version
 , sqlite
@@ -39,7 +37,7 @@
 
 let
   pname = "RStudio";
-  version = "2023.12.1+402";
+  version = "2024.04.2+764";
   RSTUDIO_VERSION_MAJOR = lib.versions.major version;
   RSTUDIO_VERSION_MINOR = lib.versions.minor version;
   RSTUDIO_VERSION_PATCH = lib.versions.patch version;
@@ -50,8 +48,8 @@ let
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
-    rev = version;
-    hash = "sha256-ecMzkpHazg8jEBz9wh8hqRX2UdziOC8b6F+3xxdugy0=";
+    rev = "v" + version;
+    hash = "sha256-j258eW1MYQrB6kkpjyolXdNuwQ3zSWv9so4q0QLsZuw=";
   };
 
   mathJaxSrc = fetchurl {
@@ -62,8 +60,8 @@ let
   rsconnectSrc = fetchFromGitHub {
     owner = "rstudio";
     repo = "rsconnect";
-    rev = "v1.2.0";
-    hash = "sha256-ghRz4Frd+I9ShRNNOE/kdk9KjRCj0Z1mPnThueriiUY=";
+    rev = "v1.2.2";
+    hash = "sha256-wvM9Bm7Nb6yU9z0o+uF5lB2kdgjOW5wZSk6y48NPF2U=";
   };
 
   # Ideally, rev should match the rstudio release name.
@@ -118,6 +116,7 @@ in
       "-DRSTUDIO_USE_SYSTEM_SOCI=ON"
       "-DRSTUDIO_USE_SYSTEM_BOOST=ON"
       "-DRSTUDIO_USE_SYSTEM_YAML_CPP=ON"
+      "-DRSTUDIO_DISABLE_CHECK_FOR_UPDATES=ON"
       "-DQUARTO_ENABLED=TRUE"
       "-DPANDOC_VERSION=${pandoc.version}"
       "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}/lib/rstudio"
@@ -137,38 +136,35 @@ in
     ];
 
     postPatch = ''
-      substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}
-
-      substituteInPlace src/cpp/CMakeLists.txt \
-        --replace 'SOCI_LIBRARY_DIR "/usr/lib"' 'SOCI_LIBRARY_DIR "${soci}/lib"'
+      substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace-fail '@R@' ${R}
 
       substituteInPlace src/gwt/build.xml \
-        --replace '@node@' ${nodejs} \
-        --replace './lib/quarto' ${quartoSrc}
+        --replace-fail '@node@' ${nodejs} \
+        --replace-fail './lib/quarto' ${quartoSrc}
 
       substituteInPlace src/cpp/conf/rsession-dev.conf \
-        --replace '@node@' ${nodejs}
+        --replace-fail '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-        --replace '@libclang@' ${llvmPackages.libclang.lib} \
-        --replace '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
+        --replace-fail '@libclang@' ${llvmPackages.libclang.lib} \
+        --replace-fail '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
-        --replace '@pandoc@' ${pandoc} \
-        --replace '@quarto@' ${quarto}
+        --replace-fail '@pandoc@' ${pandoc} \
+        --replace-fail '@quarto@' ${quarto}
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
-        --replace '@pandoc@' ${pandoc}/bin \
-        --replace '@quarto@' ${quarto}
+        --replace-fail '@pandoc@' ${pandoc}/bin \
+        --replace-fail '@quarto@' ${quarto}
     '';
 
-    hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));
+    hunspellDictionaries = lib.filter lib.isDerivation (lib.unique (lib.attrValues hunspellDicts));
     # These dicts contain identically-named dict files, so we only keep the
     # -large versions in case of clashes
-    largeDicts = with lib; filter (d: hasInfix "-large-wordlist" d.name) hunspellDictionaries;
-    otherDicts = with lib; filter
-      (d: !(hasAttr "dictFileName" d &&
-        elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
+    largeDicts = lib.filter (d: lib.hasInfix "-large-wordlist" d.name) hunspellDictionaries;
+    otherDicts = lib.filter
+      (d: !(lib.hasAttr "dictFileName" d &&
+        lib.elem d.dictFileName (map (d: d.dictFileName) largeDicts)))
       hunspellDictionaries;
     dictionaries = largeDicts ++ otherDicts;
 
@@ -181,6 +177,11 @@ in
       done
 
       unzip -q ${mathJaxSrc} -d dependencies/mathjax-27
+
+     # As of Chocolate Cosmos, node 18.20.3 is used for runtime
+     # 18.18.2 is still used for build
+     # see https://github.com/rstudio/rstudio/commit/facb5cf1ab38fe77813aaf36590804e4f865d780
+     mkdir -p dependencies/common/node/18.20.3
 
       mkdir -p dependencies/pandoc/${pandoc.version}
       cp ${pandoc}/bin/pandoc dependencies/pandoc/${pandoc.version}/pandoc
@@ -211,7 +212,7 @@ in
     '';
 
     meta = {
-      broken = (stdenv.isLinux && stdenv.isAarch64);
+      broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
       inherit description;
       homepage = "https://www.rstudio.com/";
       license = lib.licenses.agpl3Only;

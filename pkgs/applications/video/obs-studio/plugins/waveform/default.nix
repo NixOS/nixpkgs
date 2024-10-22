@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "waveform";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     fetchSubmodules = true;
     owner = "phandasm";
     repo = "waveform";
     rev = "v${version}";
-    sha256 = "sha256-NcBtj+5X9tPH853a6oXzQCBH26hx8Yt17WjP9ryvgmc=";
+    hash = "sha256-Bg1n1yV4JzNFEXFNayNa1exsSZhmRJ0RLHDjLWmqGZE=";
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

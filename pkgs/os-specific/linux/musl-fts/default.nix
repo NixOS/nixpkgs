@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/void-linux/musl-fts";
-    description = "An implementation of fts(3) for musl-libc";
+    description = "Implementation of fts(3) for musl-libc";
     platforms = platforms.linux;
     license = licenses.bsd3;
     maintainers = [ maintainers.pjjw ];

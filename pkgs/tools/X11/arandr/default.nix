@@ -33,7 +33,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://christian.amsuess.com/tools/arandr/";
-    description = "A simple visual front end for XRandR";
+    description = "Simple visual front end for XRandR";
     license = licenses.gpl3;
     maintainers = with maintainers; [ gepbird ];
     mainProgram = "arandr";

@@ -9,18 +9,14 @@
 
 buildPythonPackage rec {
   pname = "grpcio-tools";
-  version = "1.62.2";
+  version = "1.66.1";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-X9XhWCtnjmuUHuX1gJNAvl4HJGkd9SmaroImZA+U4Y8=";
+    pname = "grpcio_tools";
+    inherit version;
+    hash = "sha256-UFX/6EDqj1BcMDeL4Cr7Tb7LM0gOVU3r4Qtj1rL2QcM=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'protobuf>=4.21.6,<5.0dev' 'protobuf'
-  '';
 
   outputs = [
     "out"
@@ -29,7 +25,14 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "protobuf"
+    "grpcio"
+  ];
+
+  dependencies = [
     protobuf
     grpcio
     setuptools
@@ -44,6 +47,6 @@ buildPythonPackage rec {
     description = "Protobuf code generator for gRPC";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

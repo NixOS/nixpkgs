@@ -1,5 +1,10 @@
 #! @perl@/bin/perl
 
+# NOTE: This script has an alternative implementation at
+# <nixpkgs/pkgs/by-name/sw/switch-to-configuration-ng>. Any behavioral
+# modifications to this script should also be made to that implementation.
+
+
 # Issue #166838 uncovered a situation in which a configuration not suitable
 # for the target architecture caused a cryptic error message instead of
 # a clean failure. Due to this mismatch, the perl interpreter in the shebang

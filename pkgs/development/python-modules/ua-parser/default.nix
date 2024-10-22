@@ -34,7 +34,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ua_parser" ];
 
   meta = with lib; {
-    description = "A python implementation of the UA Parser";
+    description = "Python implementation of the UA Parser";
     homepage = "https://github.com/ua-parser/uap-python";
     license = licenses.asl20;
     platforms = platforms.unix;

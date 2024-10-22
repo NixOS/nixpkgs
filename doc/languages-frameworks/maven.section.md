@@ -219,10 +219,10 @@ stdenv.mkDerivation {
 
   # don't do any fixup
   dontFixup = true;
-  outputHashAlgo = "sha256";
+  outputHashAlgo = null;
   outputHashMode = "recursive";
   # replace this with the correct SHA256
-  outputHash = lib.fakeSha256;
+  outputHash = lib.fakeHash;
 }
 ```
 

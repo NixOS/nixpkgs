@@ -6,7 +6,6 @@
   unittestCheckHook,
   pexpect,
   naked,
-  nix-update-script,
   setuptools,
   wheel,
 }:

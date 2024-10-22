@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/sloria/sphinx-issues";
-    description = "Sphinx extension for linking to your project's issue tracker.";
+    description = "Sphinx extension for linking to your project's issue tracker";
     license = licenses.mit;
     maintainers = with maintainers; [ kaction ];
   };

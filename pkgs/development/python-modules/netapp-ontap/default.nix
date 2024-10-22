@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netapp-ontap";
-  version = "9.15.1.0";
+  version = "9.15.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "netapp_ontap";
     inherit version;
-    hash = "sha256-cw8wfMKBbzN4HWLg8Xxzpnv05atKWeTZlBaBIaNWTvo=";
+    hash = "sha256-rzME9JdaaXW1JOtfcjb5mlwSl4dy7lofnKOB6X6kWuM=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "netapp_ontap" ];
 
   meta = with lib; {
-    description = "A library for working with ONTAP's REST APIs simply in Python";
+    description = "Library for working with ONTAP's REST APIs simply in Python";
     homepage = "https://devnet.netapp.com/restapi.php";
     license = licenses.bsd3;
     maintainers = with maintainers; [ SuperSandro2000 ];

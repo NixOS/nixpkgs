@@ -35,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.gnu.org/software/lightning/";
+    changelog = "https://git.savannah.gnu.org/cgit/lightning.git/tree/ChangeLog?h=lightning-${finalAttrs.version}";
     description = "Run-time code generation library";
     longDescription = ''
       GNU lightning is a library that generates assembly language code at
@@ -45,6 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     license = with lib.licenses; [ lgpl3Plus ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin; # failing tests
+    broken = stdenv.hostPlatform.isDarwin; # failing tests
   };
 })

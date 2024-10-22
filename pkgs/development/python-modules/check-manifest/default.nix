@@ -7,6 +7,7 @@
   git,
   pep517,
   pytestCheckHook,
+  setuptools,
   tomli,
   pythonOlder,
 }:
@@ -26,6 +27,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     build
     pep517
+    setuptools
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [

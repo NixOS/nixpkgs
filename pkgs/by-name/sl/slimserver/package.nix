@@ -24,7 +24,7 @@ let
       sox
       wavpack
     ]
-    ++ (lib.optional stdenv.isLinux monkeysAudio)
+    ++ (lib.optional stdenv.hostPlatform.isLinux monkeysAudio)
   );
   libPath = lib.makeLibraryPath [
     zlib
@@ -33,13 +33,13 @@ let
 in
 perlPackages.buildPerlPackage rec {
   pname = "slimserver";
-  version = "8.5.1";
+  version = "8.5.2";
 
   src = fetchFromGitHub {
     owner = "LMS-Community";
     repo = "slimserver";
     rev = version;
-    hash = "sha256-ULyYZC0/ruJCdwR6cxvBRV1S3DTBJiNua64foi80qvI=";
+    hash = "sha256-262SHaxt5ow3nJtNVk10sbiPUfDb/U+Ab97DRjkJZFI=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -78,7 +78,7 @@ perlPackages.buildPerlPackage rec {
       ExporterLite
       FileBOM
       FileCopyRecursive
-      FileNext
+      # FileNext # https://github.com/LMS-Community/slimserver/pull/1140
       FileReadBackwards
       FileSlurp
       FileWhich
@@ -117,18 +117,19 @@ perlPackages.buildPerlPackage rec {
       XMLSimple
       YAMLLibYAML
     ]
-    # ++ (lib.optional stdenv.isDarwin perlPackages.MacFSEvents)
-    ++ (lib.optional stdenv.isLinux perlPackages.LinuxInotify2);
+    # ++ (lib.optional stdenv.hostPlatform.isDarwin perlPackages.MacFSEvents)
+    ++ (lib.optional stdenv.hostPlatform.isLinux perlPackages.LinuxInotify2);
 
   prePatch = ''
     # remove vendored binaries
     rm -rf Bin
 
     # remove most vendored modules, keeping necessary ones
-    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL
+    mkdir -p CPAN_used/Class/C3/ CPAN_used/SQL/ CPAN_used/File/
     rm -r CPAN/SQL/Abstract/Limit.pm
     cp -rv CPAN/Class/C3/Componentised.pm CPAN_used/Class/C3/
     cp -rv CPAN/DBIx CPAN_used/
+    cp -rv CPAN/File/Next.pm CPAN_used/File/
     cp -rv CPAN/Log CPAN_used/
     cp -rv CPAN/SQL/* CPAN_used/SQL/
     rm -r CPAN
@@ -168,7 +169,7 @@ perlPackages.buildPerlPackage rec {
   meta = with lib; {
     homepage = "https://lyrion.org/";
     changelog = "https://github.com/LMS-Community/slimserver/blob/${version}/Changelog${lib.versions.major version}.html";
-    description = "Lyrion Music Server (formerly Logitech Media Server) is open-source server software which controls a wide range of Squeezebox audio players.";
+    description = "Lyrion Music Server (formerly Logitech Media Server) is open-source server software which controls a wide range of Squeezebox audio players";
     # the firmware is not under a free license, so we do not include firmware in the default package
     # https://github.com/LMS-Community/slimserver/blob/public/8.3/License.txt
     license = if enableUnfreeFirmware then licenses.unfree else licenses.gpl2Only;
@@ -178,6 +179,6 @@ perlPackages.buildPerlPackage rec {
       jecaro
     ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

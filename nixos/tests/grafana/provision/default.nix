@@ -11,7 +11,7 @@ let
         analytics.reporting_enabled = false;
 
         server = {
-          http_addr = "localhost";
+          http_addr = "::1";
           domain = "localhost";
         };
 
@@ -162,7 +162,7 @@ in {
   name = "grafana-provision";
 
   meta = with maintainers; {
-    maintainers = [ kfears willibutz ];
+    maintainers = [ willibutz ];
   };
 
   inherit nodes;
@@ -177,41 +177,41 @@ in {
     for description, machine in [nodeNix, nodeYaml, nodeYamlDir]:
         with subtest(f"Should start provision node: {description}"):
             machine.wait_for_unit("grafana.service")
-            machine.wait_for_open_port(3000)
+            machine.wait_for_open_port(3000, addr="::1")
 
         with subtest(f"Successful datasource provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/datasources/uid/test_datasource | grep Test\ Datasource"
             )
 
         with subtest(f"Successful dashboard provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/dashboards/uid/test_dashboard | grep Test\ Dashboard"
             )
 
         with subtest(f"Successful rule provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/alert-rules/test_rule | grep Test\ Rule"
             )
 
         with subtest(f"Successful contact point provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/contact-points | grep Test\ Contact\ Point"
             )
 
         with subtest(f"Successful policy provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/policies | grep Test\ Contact\ Point"
             )
 
         with subtest(f"Successful template provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/templates | grep Test\ Template"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/templates | grep Test\ Template"
             )
 
         with subtest("Successful mute timings provision with {description}"):
             machine.succeed(
-                "curl -sSfN -u testadmin:snakeoilpwd http://127.0.0.1:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
+                "curl -sSfN -u testadmin:snakeoilpwd http://[::1]:3000/api/v1/provisioning/mute-timings | grep Test\ Mute\ Timing"
             )
   '';
 })

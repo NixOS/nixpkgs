@@ -10,7 +10,6 @@
 , opencv
 , ffmpeg_4
 , libjpeg_turbo
-, rapidjson-unstable
 }:
 
 let
@@ -242,10 +241,12 @@ in rec {
     It is still available for some time as part of rocmPackages_5.
   ''; # Added 2024-3-3
 
-  composable_kernel = callPackage ./composable_kernel {
-    inherit rocmUpdateScript rocm-cmake clr;
-    inherit (llvm) openmp clang-tools-extra;
-    stdenv = llvm.rocmClangStdenv;
+  composable_kernel = callPackage ./composable_kernel/unpack.nix {
+    composable_kernel_build = callPackage ./composable_kernel {
+      inherit rocmUpdateScript rocm-cmake clr;
+      inherit (llvm) openmp clang-tools-extra;
+      stdenv = llvm.rocmClangStdenv;
+    };
   };
 
   half = callPackage ./half {
@@ -301,7 +302,6 @@ in rec {
     inherit (llvm) clang openmp;
     opencv = opencv.override { enablePython = true; };
     ffmpeg = ffmpeg_4;
-    rapidjson = rapidjson-unstable;
     stdenv = llvm.rocmClangStdenv;
 
     # Unfortunately, rocAL needs a custom libjpeg-turbo until further notice

@@ -1,7 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
 , asciidoc
 , cmake
 , docbook_xsl
@@ -15,24 +14,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lastpass-cli";
-  version = "1.3.6";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "lastpass";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-ntUBwZ0bVkkpvWK/jQBkLNpCYEDI14/ki0cLwYpEWXk=";
+    sha256 = "sha256-F/E8Y9aSkx5fhra+ppVsO/NXP28RF+QoGBzUccTfjRQ=";
   };
-
-  patches = [
-    # Pull fix pending upstream inclusion for -fno-common toolchains:
-    #   https://github.com/lastpass/lastpass-cli/pull/576
-    (fetchpatch {
-      name = "fno-common.patch";
-      url = "https://github.com/lastpass/lastpass-cli/commit/e3311cebdb29a3267843cf656a32f01c5062897e.patch";
-      sha256 = "1yjx2p98nb3n8ywc9lhf2zal5fswawb5i6lgnicdin23zngff5l8";
-    })
-  ];
 
   nativeBuildInputs = [ asciidoc cmake docbook_xsl pkg-config ];
 
@@ -57,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/lastpass/lastpass-cli";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ vinylen ];
   };
 }

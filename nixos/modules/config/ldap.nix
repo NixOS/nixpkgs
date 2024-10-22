@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
-with pkgs;
-with lib;
-
 let
+  inherit (lib) mkEnableOption mkIf mkMerge mkOption mkRenamedOptionModule types;
 
   cfg = config.users.ldap;
 
@@ -11,40 +9,40 @@ let
   # this file.  Directives HAVE to start in the first column!
   ldapConfig = {
     target = "ldap.conf";
-    source = writeText "ldap.conf" ''
+    source = pkgs.writeText "ldap.conf" ''
       uri ${config.users.ldap.server}
       base ${config.users.ldap.base}
       timelimit ${toString config.users.ldap.timeLimit}
       bind_timelimit ${toString config.users.ldap.bind.timeLimit}
       bind_policy ${config.users.ldap.bind.policy}
-      ${optionalString config.users.ldap.useTLS ''
+      ${lib.optionalString config.users.ldap.useTLS ''
         ssl start_tls
       ''}
-      ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
+      ${lib.optionalString (config.users.ldap.bind.distinguishedName != "") ''
         binddn ${config.users.ldap.bind.distinguishedName}
       ''}
-      ${optionalString (cfg.extraConfig != "") cfg.extraConfig }
+      ${lib.optionalString (cfg.extraConfig != "") cfg.extraConfig }
     '';
   };
 
-  nslcdConfig = writeText "nslcd.conf" ''
+  nslcdConfig = pkgs.writeText "nslcd.conf" ''
     uri ${cfg.server}
     base ${cfg.base}
     timelimit ${toString cfg.timeLimit}
     bind_timelimit ${toString cfg.bind.timeLimit}
-    ${optionalString (cfg.bind.distinguishedName != "")
+    ${lib.optionalString (cfg.bind.distinguishedName != "")
       "binddn ${cfg.bind.distinguishedName}" }
-    ${optionalString (cfg.daemon.rootpwmoddn != "")
+    ${lib.optionalString (cfg.daemon.rootpwmoddn != "")
       "rootpwmoddn ${cfg.daemon.rootpwmoddn}" }
-    ${optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
+    ${lib.optionalString (cfg.daemon.extraConfig != "") cfg.daemon.extraConfig }
   '';
 
   # nslcd normally reads configuration from /etc/nslcd.conf.
   # this file might contain secrets. We append those at runtime,
   # so redirect its location to something more temporary.
-  nslcdWrapped = runCommand "nslcd-wrapped" { nativeBuildInputs = [ makeWrapper ]; } ''
+  nslcdWrapped = pkgs.runCommand "nslcd-wrapped" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
     mkdir -p $out/bin
-    makeWrapper ${nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
+    makeWrapper ${pkgs.nss_pam_ldapd}/sbin/nslcd $out/bin/nslcd \
       --set LD_PRELOAD    "${pkgs.libredirect}/lib/libredirect.so" \
       --set NIX_REDIRECTS "/etc/nslcd.conf=/run/nslcd/nslcd.conf"
   '';
@@ -222,17 +220,17 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.etc = optionalAttrs (!cfg.daemon.enable) {
+    environment.etc = lib.optionalAttrs (!cfg.daemon.enable) {
       "ldap.conf" = ldapConfig;
     };
 
-    system.nssModules = mkIf cfg.nsswitch (singleton (
-      if cfg.daemon.enable then nss_pam_ldapd else nss_ldap
+    system.nssModules = mkIf cfg.nsswitch (lib.singleton (
+      if cfg.daemon.enable then pkgs.nss_pam_ldapd else pkgs.nss_ldap
     ));
 
-    system.nssDatabases.group = optional cfg.nsswitch "ldap";
-    system.nssDatabases.passwd = optional cfg.nsswitch "ldap";
-    system.nssDatabases.shadow = optional cfg.nsswitch "ldap";
+    system.nssDatabases.group = lib.optional cfg.nsswitch "ldap";
+    system.nssDatabases.passwd = lib.optional cfg.nsswitch "ldap";
+    system.nssDatabases.shadow = lib.optional cfg.nsswitch "ldap";
 
     users = mkIf cfg.daemon.enable {
       groups.nslcd = {

@@ -49,11 +49,11 @@ buildPythonPackage rec {
       SDL2_ttf
       SDL2_mixer
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       mesa
       mtdev
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       ApplicationServices
       AVFoundation
@@ -84,9 +84,9 @@ buildPythonPackage rec {
   # prefer pkg-config over hardcoded framework paths
   USE_OSX_FRAMEWORKS = 0;
   # work around python distutils compiling C++ with $CC (see issue #26709)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
       --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
   '';
@@ -99,7 +99,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "kivy" ];
 
   meta = with lib; {
-    description = "Library for rapid development of hardware-accelerated multitouch applications.";
+    description = "Library for rapid development of hardware-accelerated multitouch applications";
     homepage = "https://pypi.python.org/pypi/kivy";
     license = licenses.mit;
     maintainers = with maintainers; [ risson ];

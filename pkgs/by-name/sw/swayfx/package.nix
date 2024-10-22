@@ -1,5 +1,4 @@
 {
-  lib,
   swayfx-unwrapped,
   sway,
   # Used by the NixOS module:

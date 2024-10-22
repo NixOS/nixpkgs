@@ -1,50 +1,54 @@
-{ lib
-, stdenv
-, symlinkJoin
-, fetchFromGitHub
-, libxcrypt
+{
+  lib,
+  stdenv,
+  symlinkJoin,
+  fetchFromGitHub,
+  libxcrypt,
 }:
 
 let
-  version = "2.61-1";
-  mkSubProject = { subprj # The only mandatory argument
-  , buildInputs ? []
-  , src ? fetchFromGitHub {
+  version = "3.10";
+  srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
     rev = version;
-    sha256 = "sha256-VxAaPhaPXd9xYt663Ju6SLblqiSLizauhhuFqCqbO5M=";
-  }
-  }: stdenv.mkDerivation (finalAttrs: {
-    pname = "wiringpi-${subprj}";
-    inherit version src;
-    sourceRoot = "${src.name}/${subprj}";
-    inherit buildInputs;
-    # Remove (meant for other OSs) lines from Makefiles
-    preInstall = ''
-      sed -i "/chown root/d" Makefile
-      sed -i "/chmod/d" Makefile
-    '';
-    makeFlags = [
-      "DESTDIR=${placeholder "out"}"
-      "PREFIX=/."
-      # On NixOS we don't need to run ldconfig during build:
-      "LDCONFIG=echo"
-    ];
-  });
+    sha256 = "sha256-OWR+yo+SnYaMd8J+ku9ettZi+rDHcHlGZCoucCiRkCI=";
+  };
+  mkSubProject =
+    {
+      subprj, # The only mandatory argument
+      buildInputs ? [ ],
+      src ? srcAll,
+    }:
+    stdenv.mkDerivation (finalAttrs: {
+      pname = "wiringpi-${subprj}";
+      inherit version src;
+      sourceRoot = "${src.name}/${subprj}";
+      inherit buildInputs;
+      # Remove (meant for other OSs) lines from Makefiles
+      preInstall = ''
+        sed -i "/chown root/d" Makefile
+        sed -i "/chmod/d" Makefile
+      '';
+      makeFlags = [
+        "DESTDIR=${placeholder "out"}"
+        "PREFIX=/."
+        # On NixOS we don't need to run ldconfig during build:
+        "LDCONFIG=echo"
+      ];
+    });
   passthru = {
+    # Helps nix-update and probably nixpkgs-update find the src of this package
+    # automatically.
+    src = srcAll;
     inherit mkSubProject;
     wiringPi = mkSubProject {
       subprj = "wiringPi";
-      buildInputs = [
-        libxcrypt
-      ];
+      buildInputs = [ libxcrypt ];
     };
     devLib = mkSubProject {
       subprj = "devLib";
-      buildInputs = [
-        passthru.wiringPi
-      ];
+      buildInputs = [ passthru.wiringPi ];
     };
     wiringPiD = mkSubProject {
       subprj = "wiringPiD";

@@ -1,8 +1,7 @@
 {
+  lib,
+  stdenvLibcMinimal,
   mkDerivation,
-  common,
-  libc,
-  sys,
   bsdSetupHook,
   netbsdSetupHook,
   makeMinimal,
@@ -12,19 +11,18 @@
   lorder,
   mandoc,
   statHook,
-  rsync,
-  headers,
 }:
 
 mkDerivation {
   path = "lib/libutil";
-  version = "9.2";
-  sha256 = "02gm5a5zhh8qp5r5q5r7x8x6x50ir1i0ncgsnfwh1vnrz6mxbq7z";
-  extraPaths = [
-    common
-    libc.src
-    sys.src
+
+  libcMinimal = true;
+
+  outputs = [
+    "out"
+    "man"
   ];
+
   nativeBuildInputs = [
     bsdSetupHook
     netbsdSetupHook
@@ -35,8 +33,19 @@ mkDerivation {
     lorder
     mandoc
     statHook
-    rsync
   ];
-  buildInputs = [ headers ];
+
   SHLIBINSTALLDIR = "$(out)/lib";
+
+  # Hack around GCC's limits.h missing the include_next we want See
+  # https://gcc.gnu.org/legacy-ml/gcc/2003-10/msg01278.html
+  NIX_CFLAGS_COMPILE_BEFORE = "-isystem ${stdenvLibcMinimal.cc.libc.dev}/include";
+
+  extraPaths = [
+    "common"
+    "lib/libc"
+    "sys"
+  ];
+
+  meta.platforms = lib.platforms.netbsd;
 }

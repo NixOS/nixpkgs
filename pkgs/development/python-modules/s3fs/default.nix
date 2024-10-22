@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "s3fs";
-  version = "2024.3.1";
+  version = "2024.6.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-G4vI29Zee2D1SHN49u7/4d5ZqnLKqe/Kba1quHdAVIc=";
+    hash = "sha256-bCEG1sNPv7uI49IMbzVyiW1e49NRKJZpYwHCGjxUG+o=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "s3fs" ];
 
   meta = with lib; {
-    description = "A Pythonic file interface for S3";
+    description = "Pythonic file interface for S3";
     homepage = "https://github.com/fsspec/s3fs";
     changelog = "https://github.com/fsspec/s3fs/raw/${version}/docs/source/changelog.rst";
     license = licenses.bsd3;

@@ -3,14 +3,13 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   poetry-core,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pycountry";
-  version = "23.12.11";
+  version = "24.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,27 +18,15 @@ buildPythonPackage rec {
     owner = "pycountry";
     repo = "pycountry";
     rev = "refs/tags/${version}";
-    hash = "sha256-B6kphZZZgK0YuPSmkiQNbEqEfqOQb+WZGnO2UeEqQN4=";
+    hash = "sha256-4YVPh6OGWguqO9Ortv+vAejxx7WLs4u0SVLv8JlKSWM=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "fix-usage-of-importlib_metadata.patch";
-      url = "https://github.com/pycountry/pycountry/commit/824d2535833d061c04a1f1b6b964f42bb53bced2.patch";
-      excludes = [
-        "HISTORY.txt"
-        "poetry.lock"
-        "pyproject.toml"
-      ];
-      hash = "sha256-U4fbZP++d6YfTJkVG3k2rBC8nOF9NflM6+ONlwBNu+g=";
-    })
-  ];
-
   postPatch = ''
-    sed -i "/addopts/d" pytest.ini
+    sed -i "/addopts/d" pyproject.toml
+    sed -i "/pytest-cov/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

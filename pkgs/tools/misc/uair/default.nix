@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "An extensible pomodoro timer";
+    description = "Extensible pomodoro timer";
     homepage = "https://github.com/metent/uair";
     license = licenses.mit;
     maintainers = with maintainers; [ thled ];

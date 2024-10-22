@@ -28,9 +28,9 @@ buildPythonPackage {
   pythonImportsCheck = [ "notmuch" ];
 
   meta = with lib; {
-    description = "A Python wrapper around notmuch";
+    description = "Python wrapper around notmuch";
     homepage = "https://notmuchmail.org/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -7,7 +7,7 @@
 , atk
 , gtk3
 , gtkspell3
-, gnome
+, adwaita-icon-theme
 , glib
 , goocanvas2
 , gdk-pixbuf
@@ -17,18 +17,17 @@
 , wrapGAppsHook3
 }:
 
-with lib;
-
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "7.2.1";
-
-  disabled = !python3Packages.isPy3k;
+  version = "7.2.5";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-CK3XkHX16Ec/j1DhC29uoj/YqcLXs/KsIb7v/cfoiaM=";
+    hash = "sha256-U6hA6TuIMDTFAZUic60A5IKr/LKxKZEgiTIhkLlTJSw=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     pkg-config
@@ -36,7 +35,7 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     python-dateutil
     pygobject3
     goocalendar
@@ -47,7 +46,7 @@ python3Packages.buildPythonApplication rec {
     atk
     gdk-pixbuf
     glib
-    gnome.adwaita-icon-theme
+    adwaita-icon-theme
     goocanvas2
     fontconfig
     freetype
@@ -57,12 +56,20 @@ python3Packages.buildPythonApplication rec {
     pango
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   strictDeps = false;
+
+  pythonImportsCheck = [ "tryton" ];
 
   doCheck = false;
 
-  meta = {
-    description = "The client of the Tryton application platform";
+  meta = with lib; {
+    description = "Client of the Tryton application platform";
     mainProgram = "tryton";
     longDescription = ''
       The client for Tryton, a three-tier high-level general purpose

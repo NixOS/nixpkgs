@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Pure Python reader for DAWGs created by dawgdic C++ library or DAWG Python extension";
     homepage = "https://github.com/pytries/DAWG-Python";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

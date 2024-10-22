@@ -1,4 +1,4 @@
-{ python3, fetchFromGitHub, gnome, stdenv, lib }:
+{ python3, fetchFromGitHub, nautilus-python, stdenv, lib }:
 stdenv.mkDerivation rec {
   pname = "nautilus-open-in-blackbox";
   version = "0.1.1";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   patches = [ ./paths.patch ];
 
   buildInputs = [
-    gnome.nautilus-python
+    nautilus-python
     python3.pkgs.pygobject3
   ];
 

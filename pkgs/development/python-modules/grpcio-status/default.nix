@@ -10,14 +10,15 @@
 
 buildPythonPackage rec {
   pname = "grpcio-status";
-  version = "1.62.2";
+  version = "1.66.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-YuG/ywICWhzXNzKi0zZy0+nQ300hwSxR4LvK8JurdCo=";
+    pname = "grpcio_status";
+    inherit version;
+    hash = "sha256-s/fTTMxG2D/qUmHuo3hhdEWfdjwx9uNPHSTrptUV0CQ=";
   };
 
   postPatch = ''

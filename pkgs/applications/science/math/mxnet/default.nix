@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "apache-mxnet-src-${version}-incubating.tar.gz";
-    url = "https://dlcdn.apache.org/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
+    url = "mirror://apache/incubator/mxnet/${version}/apache-mxnet-src-${version}-incubating.tar.gz";
     hash = "sha256-EephMoF02MKblvNBl34D3rC/Sww3rOZY+T442euMkyI=";
   };
 

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, cmake
-, anki
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  cmake,
+  anki,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,28 +18,29 @@ python3Packages.buildPythonApplication rec {
     owner = "langfield";
     repo = pname;
     rev = "eb32fbd3229dc1a60bcc76a937ad63f3eb869f65";
-    sha256 = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
+    hash = "sha256-5mQhJhvJQC9835goL3t3DRbD+c4P3KxnOflxvqmxL58=";
   };
 
   patches = [
-    ./update-to-newer-anki-versions.patch
+    ./fix-beartype-error.patch
     ./replace-deprecated-distutils-with-setuptools.patch
+    ./update-to-newer-anki-versions.patch
   ];
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = with python3Packages; [
-    beartype
-    click
-    colorama
-    git-filter-repo
-    gitpython
-    lark
-    tqdm
-    whatthepatch
-  ] ++ [
-    anki
-  ];
+  propagatedBuildInputs =
+    [ anki ]
+    ++ (with python3Packages; [
+      beartype
+      click
+      colorama
+      git-filter-repo
+      gitpython
+      lark
+      tqdm
+      whatthepatch
+    ]);
 
   nativeCheckInputs = with python3Packages; [
     bitstring

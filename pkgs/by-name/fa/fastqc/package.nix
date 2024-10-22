@@ -23,8 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   nativeBuildInputs = [ makeWrapper imagemagick ]
-                      ++ lib.optional stdenv.isLinux copyDesktopItems # postInstallHook
-                      ++ lib.optional stdenv.isDarwin desktopToDarwinBundle; #fixupOutputHook
+                      ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems # postInstallHook
+                      ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle; #fixupOutputHook
   buildInputs = [ jre perl];
 
   desktopItem = (makeDesktopItem {

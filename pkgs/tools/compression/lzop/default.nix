@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.lzop.org";
     description = "Fast file compressor";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     mainProgram = "lzop";

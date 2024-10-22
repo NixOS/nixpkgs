@@ -20,15 +20,15 @@
 
 buildPythonPackage rec {
   pname = "scikit-tda";
-  version = "1.0.0";
+  version = "1.1.1";
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "scikit-tda";
     repo = "scikit-tda";
-    rev = "v${version}";
-    sha256 = "0yhmf5jmxywyj6l9q0rfv9r8wpdk063fvvfnb4azwwccblgz37rj";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-sf7UxCFJZlIMGOgNFwoh/30U7xsBCZuJ3eumsjEelMc=";
   };
 
   propagatedBuildInputs = [

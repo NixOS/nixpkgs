@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
     cp -r --no-preserve=all ${linenoise} ThirdParty/linenoise
   '';
 
-  postPatch = lib.optionalString (!stdenv.isDarwin) ''
+  postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Fix build on gcc-13 due to missing includes
     sed -e '1i #include <cstdint>' -i \
       Libraries/libutil/Headers/libutil/Permissions.h \
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
     # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i Libraries/xcassets/Headers/xcassets/Slot/SystemVersion.h
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Apple Open Sourced LZFSE, but not libcompression, and it isn't
     # part of an impure framework we can add
     substituteInPlace Libraries/libcar/Sources/Rendition.cpp \
@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ zlib libxml2 libpng ]
-    ++ lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices CoreGraphics ImageIO ];
 
   meta = with lib; {
     description = "Xcode-compatible build tool";

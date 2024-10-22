@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , validatePkgConfig
+, fixDarwinDylibNames
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +16,8 @@ stdenv.mkDerivation {
     hash = "sha256-GsrYg16gpjHkkmpCU3yGzqNS/buZl+JoWALLvwzmT4A=";
   };
 
-  nativeBuildInputs = [ validatePkgConfig ];
+  nativeBuildInputs = [ validatePkgConfig ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     runHook preBuild
@@ -41,7 +43,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "https://github.com/antirez/linenoise";
-    description = "A minimal, zero-config, BSD licensed, readline replacement";
+    description = "Minimal, zero-config, BSD licensed, readline replacement";
     maintainers = with lib.maintainers; [ fstamour remexre ];
     platforms = lib.platforms.unix;
     license = lib.licenses.bsd2;

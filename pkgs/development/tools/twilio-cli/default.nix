@@ -2,11 +2,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
-  version = "5.20.0";
+  version = "5.22.3";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-PTA/TsmppbBG8LvofKe8vBjaotShbohEM8tNq1D6q6Y=";
+    hash = "sha256-77OmOXKwm+zBlGVSIab8AxARllYm5gRXNddQ1UY4wD0=";
   };
 
   buildInputs = [ nodejs-slim ];
@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/twilio/twilio-cli";
     changelog = "https://github.com/twilio/twilio-cli/blob/${finalAttrs.version}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = nodejs-slim.meta.platforms;
     mainProgram = "twilio";
   };

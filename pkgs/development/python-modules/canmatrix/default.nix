@@ -12,7 +12,9 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  setuptools,
   six,
+  versioneer,
   xlrd,
   xlwt,
 }:
@@ -20,7 +22,7 @@
 buildPythonPackage rec {
   pname = "canmatrix";
   version = "1.0";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -32,18 +34,22 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
-      --replace "version = versioneer.get_version()" 'version = "${version}"'
+    # Remove vendorized versioneer.py
+    rm versioneer.py
   '';
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  nativeBuildInputs = [ versioneer ];
+
+  dependencies = [
     attrs
     click
     future
     six
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     arxml = [ lxml ];
     fibex = [ lxml ];
     kcd = [ lxml ];
@@ -59,7 +65,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [
     # long_envvar_name_imports requires stable key value pair ordering

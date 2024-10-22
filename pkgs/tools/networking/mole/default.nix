@@ -28,7 +28,7 @@ buildGoModule rec {
     homepage = "https://github.com/davrodpin/mole";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
-    broken = stdenv.isDarwin; # build fails with go > 1.17
+    broken = stdenv.hostPlatform.isDarwin; # build fails with go > 1.17
     mainProgram = "mole";
   };
 }

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "isomd5sum";
-  version = "1.2.4";
+  version = "1.2.5";
 
   src = fetchFromGitHub {
     owner = "rhinstaller";
     repo = pname;
     rev = version;
-    sha256 = "sha256-tpDk7Wt2zV0vB2IILuIJyMMFBSiHKAVkSqsCwnWApJ0=";
+    sha256 = "sha256-c/4CQtAzatfG1Z3SfyB2OZmfJRMnyrZZTqSApsK7R+Q=";
   };
 
   strictDeps = true;

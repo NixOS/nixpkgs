@@ -4,33 +4,30 @@
   fetchFromGitHub,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "async-interrupt";
-  version = "1.1.1";
-  format = "pyproject";
+  version = "1.2.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "async_interrupt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mbvOj1ybCkDNr3je3PtFwmddkh2k/nHOerpC6hGSUYI=";
+    hash = "sha256-opV5h3aLDDpjlRZRZ9OnrPjUOf/i7g+B9T6msk8wtgI=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=async_interrupt --cov-report=term-missing:skip-covered" ""
-  '';
 
   nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

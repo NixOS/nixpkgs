@@ -21,7 +21,7 @@ buildOctavePackage rec {
     homepage = "https://octave.sourceforge.io/optiminterp/index.html";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ KarlJoad ];
-    description = "An optimal interpolation toolbox for octave";
+    description = "Optimal interpolation toolbox for octave";
     longDescription = ''
        An optimal interpolation toolbox for octave. This package provides
        functions to perform a n-dimensional optimal interpolations of

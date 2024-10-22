@@ -1,16 +1,17 @@
 {
   lib,
   fetchPypi,
-  python3Packages,
+  buildPythonPackage,
+  setuptools,
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "chainstream";
   version = "1.0.1";
 
   pyproject = true;
 
-  nativeBuildInputs = [ python3Packages.setuptools ];
+  nativeBuildInputs = [ setuptools ];
 
   src = fetchPypi {
     inherit pname version;

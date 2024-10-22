@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
-  version = "3.4.1";
+  version = "3.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
-    hash = "sha256-b62WO1+5EWzsTCzeZPX9T+ho8Sig46lH/9dPmGGhPWA=";
+    hash = "sha256-Qr3ZGU4y7f6yHD78ecdv7a6IBFDpT+/4Yez0n/MenN0=";
   };
 
   postPatch = ''
@@ -26,10 +26,6 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     setuptools-scm
-  ];
-
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   dependencies = with python3.pkgs; [
@@ -66,6 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTestPaths = [
     # Tests require a running Docker instance
     "tests/plugins-docker/test_executors.py"
+    "tests/unittests/test_import_official_executors.py"
   ];
 
   pythonImportsCheck = [

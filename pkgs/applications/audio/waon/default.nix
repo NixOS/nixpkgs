@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Wave-to-Notes transcriber";
+    description = "Wave-to-Notes transcriber";
     homepage = "https://kichiki.github.io/WaoN/";
     license = licenses.gpl2;
     maintainers = [ maintainers.puckipedia ];

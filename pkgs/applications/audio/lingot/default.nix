@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/lingot/";
     license = lib.licenses.gpl2Plus;
     platforms = with lib.platforms; linux;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

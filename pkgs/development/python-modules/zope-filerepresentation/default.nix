@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = "https://zopefilerepresentation.readthedocs.io/";
     description = "File-system Representation Interfaces";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

@@ -162,7 +162,18 @@ def _fetch_github(url):
 def _hash_to_sri(algorithm, value):
     """Convert a hash to its SRI representation"""
     return (
-        subprocess.check_output(["nix", "hash", "to-sri", "--type", algorithm, value])
+        subprocess.check_output(
+            [
+                "nix",
+                "--extra-experimental-features",
+                "nix-command",
+                "hash",
+                "to-sri",
+                "--type",
+                algorithm,
+                value,
+            ]
+        )
         .decode()
         .strip()
     )
@@ -250,6 +261,8 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
         homepage = subprocess.check_output(
             [
                 "nix",
+                "--extra-experimental-features",
+                "nix-command",
                 "eval",
                 "-f",
                 f"{NIXPKGS_ROOT}/default.nix",
@@ -275,16 +288,17 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
     release = next(filter(lambda x: strip_prefix(x["tag_name"]) == version, releases))
     prefix = get_prefix(release["tag_name"])
 
-    # some attributes require using the fetchgit
-    git_fetcher_args = []
-    if _get_attr_value(f"{attr_path}.src.fetchSubmodules"):
-        git_fetcher_args.append("--fetch-submodules")
-    if _get_attr_value(f"{attr_path}.src.fetchLFS"):
-        git_fetcher_args.append("--fetch-lfs")
-    if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
-        git_fetcher_args.append("--leave-dotGit")
+    fetcher = _get_attr_value(f"{attr_path}.src.fetcher")
+    if fetcher is not None and fetcher.endswith("nix-prefetch-git"):
+        # some attributes require using the fetchgit
+        git_fetcher_args = []
+        if _get_attr_value(f"{attr_path}.src.fetchSubmodules"):
+            git_fetcher_args.append("--fetch-submodules")
+        if _get_attr_value(f"{attr_path}.src.fetchLFS"):
+            git_fetcher_args.append("--fetch-lfs")
+        if _get_attr_value(f"{attr_path}.src.leaveDotGit"):
+            git_fetcher_args.append("--leave-dotGit")
 
-    if git_fetcher_args:
         algorithm = "sha256"
         cmd = [
             "nix-prefetch-git",
@@ -319,14 +333,17 @@ def _get_latest_version_github(attr_path, package, extension, current_version, t
             tag_url = str(release["tarball_url"]).replace(
                 "tarball", "tarball/refs/tags"
             )
-            hash = (
-                subprocess.check_output(
-                    ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
-                    stderr=subprocess.DEVNULL,
+            try:
+                hash = (
+                    subprocess.check_output(
+                        ["nix-prefetch-url", "--type", "sha256", "--unpack", tag_url],
+                        stderr=subprocess.DEVNULL,
+                    )
+                    .decode("utf-8")
+                    .strip()
                 )
-                .decode("utf-8")
-                .strip()
-            )
+            except subprocess.CalledProcessError:
+                raise ValueError("nix-prefetch-url failed")
 
     return version, hash, prefix
 

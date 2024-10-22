@@ -324,7 +324,8 @@ in
               };
               preStart =
                 let
-                  version = pkgs.sourcehut.${srvsrht}.version;
+                  package = pkgs.sourcehut.${srvsrht};
+                  version = package.version;
                   stateDir = "/var/lib/sourcehut/${srvsrht}";
                 in
                 mkBefore ''
@@ -336,14 +337,14 @@ in
                   if test ! -e ${stateDir}/db; then
                     # Setup the initial database.
                     # Note that it stamps the alembic head afterward
-                    ${cfg.python}/bin/${srvsrht}-initdb
+                    ${package}/bin/${srvsrht}-initdb
                     echo ${version} >${stateDir}/db
                   fi
 
                   ${optionalString cfg.settings.${iniKey}.migrate-on-upgrade ''
                     if [ "$(cat ${stateDir}/db)" != "${version}" ]; then
                       # Manage schema migrations using alembic
-                      ${cfg.python}/bin/${srvsrht}-migrate -a upgrade head
+                      ${package}/bin/${srvsrht}-migrate -a upgrade head
                       echo ${version} >${stateDir}/db
                     fi
                   ''}
@@ -389,7 +390,7 @@ in
               after = [ "network.target" "${srvsrht}.service" ];
               serviceConfig = {
                 Type = "oneshot";
-                ExecStart = "${cfg.python}/bin/${timerName}";
+                ExecStart = "${pkgs.sourcehut.${srvsrht}}/bin/${timerName}";
               };
             }
             (timer.service or { })

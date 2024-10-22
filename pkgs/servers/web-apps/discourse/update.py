@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -i python3 -p bundix bundler nix-update nix-universal-prefetch "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" prefetch-yarn-deps
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests click click-log packaging ])" bundix bundler nix-update nurl prefetch-yarn-deps
 from __future__ import annotations
 
 import click
@@ -301,6 +301,11 @@ def update_plugins():
         name = plugin.get('name')
         repo_name = plugin.get('repo_name') or name
 
+        if fetcher == "fetchFromGitHub":
+            url = f"https://github.com/{owner}/{repo_name}"
+        else:
+            raise NotImplementedError(f"Missing URL pattern for {fetcher}")
+
         repo = DiscourseRepo(owner=owner, repo=repo_name)
 
         # implement the plugin pinning algorithm laid out here:
@@ -378,10 +383,11 @@ def update_plugins():
 
         prev_hash = _nix_eval(f'discourse.plugins.{name}.src.outputHash')
         new_hash = subprocess.check_output([
-            'nix-universal-prefetch', fetcher,
-            '--owner', owner,
-            '--repo', repo_name,
-            '--rev', rev,
+            "nurl",
+            "--fetcher", fetcher,
+            "--hash",
+            url,
+            rev,
         ], text=True).strip("\n")
 
         click.echo(f"Update {name}, {prev_commit_sha} -> {rev} in {filename}")

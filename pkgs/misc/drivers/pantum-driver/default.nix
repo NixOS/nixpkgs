@@ -18,11 +18,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pantum-driver";
-  version = "1.1.106";
+  version = "1.1.123";
 
   src = fetchzip {
-    url = "https://drivers.pantum.com/userfiles/files/download/drive/Pantum%20Ubuntu%20Driver%20V1_1_106.zip";
-    hash = "sha256-FzR/wC73dJ4+rqFT+JvTduxzcozJIAs6jADNbmJby+M=";
+    url = "https://github.com/ArticExploit/pantum-driver/releases/download/${version}/Pantum.Ubuntu.Driver.V${builtins.replaceStrings ["."] ["_"] version}.zip";
+    hash = "sha256-TUk6CTnWlSvyG8MOpDRhg/eblAo6X/MDUFOiWuOuro0=";
   };
 
   buildInputs = [ libusb1 libjpeg8 cups ];

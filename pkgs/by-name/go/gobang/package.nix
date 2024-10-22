@@ -25,14 +25,14 @@ rustPlatform.buildRustPackage {
 
   buildInputs =
     with darwin.apple_sdk.frameworks;
-    lib.optionals stdenv.isDarwin [
+    lib.optionals stdenv.hostPlatform.isDarwin [
       CoreFoundation
       Security
       SystemConfiguration
     ];
 
   meta = {
-    description = "A cross-platform TUI database management tool written in Rust";
+    description = "Cross-platform TUI database management tool written in Rust";
     homepage = "https://github.com/tako8ki/gobang";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];

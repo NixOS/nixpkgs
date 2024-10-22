@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cyclonedx";
-  version = "0.5.1";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
     rev = "${pname}-${version}";
-    hash = "sha256-FQM2H/W9p0wmI1GGxnleDGU1y9hpz/Fnxi0KhF2RYeA=";
+    hash = "sha256-DOnf2O0ezQ6rR83lSG9mtvxXFz2hpxb8qi7xLvVKkYw=";
   };
 
-  cargoHash = "sha256-Y4OoQ3JG0syKBJ2KDJ5qzwu/gI+/unvrTafQ+UYiZYA=";
+  cargoHash = "sha256-UHdugnKZ43qYpbaM+orPy7g09ZIcpCvhSMkptmmAf7s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
     SystemConfiguration
     CoreFoundation

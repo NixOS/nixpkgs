@@ -58,6 +58,6 @@ buildPythonPackage rec {
     changelog = "https://sparse.pydata.org/en/stable/changelog.html";
     downloadPage = "https://github.com/pydata/sparse/releases/tag/${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

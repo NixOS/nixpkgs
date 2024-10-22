@@ -9,6 +9,7 @@
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
 , wafHook
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     wafHook
     docbook-xsl-nons
     docbook_xml_dtd_42
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     fixDarwinDylibNames
   ];
 
@@ -50,6 +51,9 @@ stdenv.mkDerivation rec {
     "--enable-talloc-compat1"
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
   # python-config from build Python gives incorrect values when cross-compiling.

@@ -1,5 +1,22 @@
 import ../make-test-python.nix (
-  { pkgs, lib, ... }: {
+  { pkgs, lib, ... }:
+  let
+    quadletContainerFile = pkgs.writeText "quadlet.container" ''
+      [Unit]
+      Description=A test quadlet container
+
+      [Container]
+      Image=localhost/scratchimg:latest
+      Exec=bash -c 'trap exit SIGTERM SIGINT; while true; do sleep 1; done'
+      ContainerName=quadlet
+      Volume=/nix/store:/nix/store
+      Volume=/run/current-system/sw/bin:/bin
+
+      [Install]
+      WantedBy=default.target
+    '';
+  in
+  {
     name = "podman";
     meta = {
       maintainers = lib.teams.podman.members;
@@ -173,6 +190,16 @@ import ../make-test-python.nix (
 
       with subtest("A podman non-member can not use the docker cli"):
           docker.fail(su_cmd("docker version", user="mallory"))
+
+      with subtest("A rootless quadlet container service is created"):
+          dir = "/home/alice/.config/containers/systemd"
+          rootless.succeed(su_cmd("tar cv --files-from /dev/null | podman import - scratchimg"))
+          rootless.succeed(su_cmd(f"mkdir -p {dir}"))
+          rootless.succeed(su_cmd(f"cp -f ${quadletContainerFile} {dir}/quadlet.container"))
+          rootless.systemctl("daemon-reload", "alice")
+          rootless.systemctl("start quadlet", "alice")
+          rootless.wait_until_succeeds(su_cmd("podman ps | grep quadlet"), timeout=20)
+          rootless.systemctl("stop quadlet", "alice")
 
       # TODO: add docker-compose test
 

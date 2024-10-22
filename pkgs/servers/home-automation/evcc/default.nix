@@ -1,11 +1,11 @@
 { lib
 , stdenv
-, buildGo122Module
+, buildGoModule
 , fetchFromGitHub
 , fetchNpmDeps
 , cacert
-, go_1_22
 , git
+, go
 , enumer
 , mockgen
 , nodejs
@@ -14,27 +14,22 @@
 , nixosTests
 }:
 
-let
-  buildGoModule = buildGo122Module;
-  go = go_1_22;
-in
-
 buildGoModule rec {
   pname = "evcc";
-  version = "0.126.3";
+  version = "0.130.13";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-Q+g/XEfIfpGchIZQdouoP9muqq6l0xixOLmIntgIWe0=";
+    hash = "sha256-cqw+4/GwdBy8XpAF/ViI5UxaaS17hryJSCw5kMLin4k=";
   };
 
-  vendorHash = "sha256-tFj1cPBB1qeuwz1RXVVDVNJRfFFKPH6mdMnaiM3jwUc=";
+  vendorHash = "sha256-WP7ao54/PMLI+jAaZQgj1otCHEPHZd1A3oqb0DTgx1c=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-ghDLmsmcG+qDItiqaZy8MTYw/AU58bZfUzYY32XKNyk=";
+    hash = "sha256-pec5hsPrvHHTg++NaLb7vL1YIU1e57o8EVxp9OMhm58=";
   };
 
   nativeBuildInputs = [
@@ -72,30 +67,14 @@ buildGoModule rec {
     make ui
   '';
 
-  doCheck = !stdenv.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
+  doCheck = !stdenv.hostPlatform.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
   checkFlags = let
     skippedTests = [
       # network access
       "TestOctopusConfigParse"
-      "TestTemplates/allinpower"
-      "TestTemplates/electricitymaps"
-      "TestTemplates/elering"
-      "TestTemplates/energinet"
-      "TestTemplates/grünstromindex"
-      "TestTemplates/pun"
-      "TestTemplates/entsoe"
-      "TestTemplates/ngeso"
-      "TestTemplates/tibber"
-      "TestTemplates/groupe-e"
-      "TestTemplates/awattar"
-      "TestTemplates/energy-charts-api"
-      "TestTemplates/polestar"
-      "TestTemplates/sma-inverter-speedwire/battery"
-      "TestTemplates/sma-inverter-speedwire/pv"
-      "TestTemplates/smartenergy"
-      "TestTemplates/tibber-pulse/grid"
-
+      "TestTemplates"
+      "TestOcpp"
     ];
   in
   [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];

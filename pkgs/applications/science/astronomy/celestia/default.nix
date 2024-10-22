@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, freeglut, gtk2, gtkglext
+{ lib, stdenv, fetchFromGitHub, pkg-config, libglut, gtk2, gtkglext
 , libjpeg_turbo, libtheora, libXmu, lua, libGLU, libGL, perl, autoreconfHook
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
-    freeglut gtk2 gtkglext lua perl
+    libglut gtk2 gtkglext lua perl
     libjpeg_turbo libtheora libXmu libGLU libGL
   ];
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    homepage = "https://celestia.space/";
+    homepage = "https://celestiaproject.space/";
     description = "Real-time 3D simulation of space";
     mainProgram = "celestia";
     changelog = "https://github.com/CelestiaProject/Celestia/releases/tag/${version}";

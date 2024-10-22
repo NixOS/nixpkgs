@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "hvac";
-  version = "2.2.0";
+  version = "2.3.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5LAkjFZyy5pvWXTnyPUnGgnGxmPL+KsRczoifz0tssI=";
+    hash = "sha256-G4XjMg6GQt2C8jTbYyU82haagXWJ6CNxPcX8qDEZseI=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ianunruh/hvac";
     changelog = "https://github.com/hvac/hvac/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

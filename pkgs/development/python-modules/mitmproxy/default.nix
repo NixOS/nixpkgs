@@ -4,7 +4,6 @@
   fetchFromGitHub,
   buildPythonPackage,
   pythonOlder,
-  pythonRelaxDepsHook,
   # Mitmproxy requirements
   aioquic,
   asgiref,
@@ -22,7 +21,7 @@
   mitmproxy-rs,
   msgpack,
   passlib,
-  protobuf,
+  protobuf5,
   publicsuffix2,
   pyopenssl,
   pyparsing,
@@ -31,7 +30,7 @@
   setuptools,
   sortedcontainers,
   tornado,
-  urwid-mitmproxy,
+  urwid,
   wsproto,
   zstandard,
   # Additional check requirements
@@ -46,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "10.3.0";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -54,15 +53,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-YjvGsnpQQ8GWLyKmnd3lOxesnr+F2xCNXyahZh0JQnc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-f5TudaLlHtIMAvS7s5mWgqpdi7/vWNF0EdlYNuG67hM=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [
-    "aioquic"
-    "cryptography"
+    "protobuf"
+    "urwid"
   ];
 
   propagatedBuildInputs = [
@@ -81,7 +79,7 @@ buildPythonPackage rec {
     mitmproxy-rs
     msgpack
     passlib
-    protobuf
+    protobuf5
     publicsuffix2
     pyopenssl
     pyparsing
@@ -90,10 +88,10 @@ buildPythonPackage rec {
     setuptools
     sortedcontainers
     tornado
-    urwid-mitmproxy
+    urwid
     wsproto
     zstandard
-  ] ++ lib.optionals stdenv.isDarwin [ mitmproxy-macos ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ mitmproxy-macos ];
 
   nativeCheckInputs = [
     hypothesis
@@ -126,6 +124,23 @@ buildPythonPackage rec {
     # FileNotFoundError: [Errno 2] No such file or directory
     # likely wireguard is also not working in the sandbox
     "test_wireguard"
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test_errorcheck"
+    "test_errorcheck"
+    "test_dns"
+    "test_order"
+  ];
+
+  disabledTestPaths = [
+    # test require a DNS server
+    # RuntimeError: failed to get dns servers: io error: entity not found
+    "test/mitmproxy/addons/test_dns_resolver.py"
+    "test/mitmproxy/tools/test_dump.py"
+    "test/mitmproxy/tools/test_main.py"
+    "test/mitmproxy/tools/web/test_app.py"
+    "test/mitmproxy/tools/web/test_app.py" # 2 out of 31 tests work
+    "test/mitmproxy/tools/web/test_master.py"
   ];
 
   dontUsePytestXdist = true;

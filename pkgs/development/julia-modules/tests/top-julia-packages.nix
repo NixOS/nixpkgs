@@ -11,7 +11,6 @@ let
     buildCommand = ''
       wget https://julialang-logs.s3.amazonaws.com/public_outputs/current/package_requests.csv.gz
       gunzip package_requests.csv.gz
-      ls -lh
       cp package_requests.csv $out
     '';
   };

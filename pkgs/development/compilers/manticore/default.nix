@@ -38,7 +38,7 @@ in stdenv.mkDerivation {
   preInstall = "mkdir -p $out/bin";
 
   meta = {
-    description = "A parallel, pure variant of Standard ML";
+    description = "Parallel, pure variant of Standard ML";
     mainProgram = "pmlc";
 
     longDescription = ''

@@ -5,17 +5,9 @@
 , resholve, bash, coreutils, dbus, file, gawk, glib, gnugrep, gnused, jq, nettools, procmail, procps, which, xdg-user-dirs
 , shared-mime-info
 , perl, perlPackages
-, mimiSupport ? false
 , withXdgOpenUsePortalPatch ? true }:
 
 let
-  # A much better xdg-open
-  mimisrc = fetchFromGitHub {
-    owner = "march-linux";
-    repo = "mimi";
-    rev = "8e0070f17bcd3612ee83cb84e663e7c7fabcca3d";
-    sha256 = "15gw2nyrqmdsdin8gzxihpn77grhk9l97jp7s7pr7sl4n9ya2rpj";
-  };
 
   # Required by the common desktop detection code
   commonDeps = [ dbus coreutils gnugrep gnused ];
@@ -167,7 +159,10 @@ let
     {
       scripts = [ "bin/xdg-screensaver" ];
       interpreter = "${bash}/bin/bash";
-      inputs = commonDeps ++ [ nettools perl procmail procps ];
+      inputs = commonDeps ++ [ nettools perl procps ]
+        # procmail's funky build system is currently broken in cross-build.
+        # xdg-screensaver will gracefully degrade if it's not available.
+        ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) procmail;
       # These are desktop-specific, so we don't want xdg-utils to be able to
       # call them when in a different setup.
       fake.external = commonFakes ++ [
@@ -176,7 +171,7 @@ let
         "xautolock"                 # Xautolock
         "xscreensaver-command"      # Xscreensaver
         "xset"                      # generic-ish X
-      ];
+      ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "lockfile"; # procmail
       keep = {
         "$MV" = true;
         "$XPROP" = true;
@@ -265,10 +260,6 @@ stdenv.mkDerivation (self: {
   # explicitly provide a runtime shell so patchShebangs is consistent across build platforms
   buildInputs = [ bash ];
 
-  postInstall = lib.optionalString mimiSupport ''
-    cp ${mimisrc}/xdg-open $out/bin/xdg-open
-  '';
-
   preFixup = lib.concatStringsSep "\n" (map (resholve.phraseSolution "xdg-utils-resholved") solutions);
 
   passthru.tests.xdg-mime = runCommand "xdg-mime-test" {
@@ -301,9 +292,9 @@ stdenv.mkDerivation (self: {
 
   meta = with lib; {
     homepage = "https://www.freedesktop.org/wiki/Software/xdg-utils/";
-    description = "A set of command line tools that assist applications with a variety of desktop integration tasks";
-    license = if mimiSupport then licenses.gpl2Only else licenses.mit;
-    maintainers = [ maintainers.eelco ];
+    description = "Set of command line tools that assist applications with a variety of desktop integration tasks";
+    license = licenses.mit;
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

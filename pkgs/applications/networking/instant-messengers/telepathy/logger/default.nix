@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus-glib libxml2 sqlite telepathy-glib
     dbus
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.AppKit
     darwin.apple_sdk.frameworks.Foundation
   ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Logger service for Telepathy framework";
     homepage = "https://telepathy.freedesktop.org/components/telepathy-logger/";
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

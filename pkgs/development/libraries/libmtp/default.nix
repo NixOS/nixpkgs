@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   configurePlatforms = [ "build" "host" ];
 
-  makeFlags = lib.optionals (stdenv.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "MTP_HOTPLUG=${buildPackages.libmtp}/bin/mtp-hotplug"
   ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/libmtp/libmtp";
-    description = "An implementation of Microsoft's Media Transfer Protocol";
+    description = "Implementation of Microsoft's Media Transfer Protocol";
     longDescription = ''
       libmtp is an implementation of Microsoft's Media Transfer Protocol (MTP)
       in the form of a library suitable primarily for POSIX compliant operating

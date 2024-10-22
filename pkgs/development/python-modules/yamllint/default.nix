@@ -38,7 +38,7 @@ buildPythonPackage rec {
       # test failure reported upstream: https://github.com/adrienverge/yamllint/issues/373
       "test_find_files_recursively"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # locale tests are broken on BSDs; see https://github.com/adrienverge/yamllint/issues/307
       "test_locale_accents"
       "test_locale_case"
@@ -48,13 +48,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "yamllint" ];
 
   meta = with lib; {
-    description = "A linter for YAML files";
+    description = "Linter for YAML files";
     mainProgram = "yamllint";
     homepage = "https://github.com/adrienverge/yamllint";
     changelog = "https://github.com/adrienverge/yamllint/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      jonringer
       mikefaille
     ];
   };

@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, caqti, logs, lwt }:
+{ buildDunePackage, caqti, logs, lwt }:
 
 buildDunePackage {
   pname = "caqti-lwt";

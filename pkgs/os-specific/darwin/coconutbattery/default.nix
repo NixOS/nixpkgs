@@ -27,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "The standard for battery reading since 2005";
+    description = "Standard for battery reading since 2005";
     longDescription = ''
       With coconutBattery you are always aware of your current battery health.
       It shows you live information about the battery quality in your Mac, iPhone and iPad.

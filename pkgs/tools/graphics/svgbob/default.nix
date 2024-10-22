@@ -7,7 +7,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchCrate {
     inherit version;
     crateName = "svgbob_cli";
-    sha256 = "sha256-QWDi6cpADm5zOzz8hXuqOBtVrqb0DteWmiDXC6PsLS4=";
+    hash = "sha256-QWDi6cpADm5zOzz8hXuqOBtVrqb0DteWmiDXC6PsLS4=";
   };
 
   cargoHash = "sha256-Fj1qjG4SKlchUWW4q0tBC+9fHFFuY6MHngJCFz6J5JY=";

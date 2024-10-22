@@ -18,9 +18,9 @@ buildPerlPackage rec {
     hash = "sha256-sfSnx5bS7vI0KIhBOpB5VYzP6g8oi0rR7mUTxxNWEA0=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin shortenPerlShebang;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     shortenPerlShebang $out/bin/exiftool
   '';
 
@@ -34,7 +34,7 @@ buildPerlPackage rec {
   };
 
   meta = {
-    description = "A tool to read, write and edit EXIF meta information";
+    description = "Tool to read, write and edit EXIF meta information";
     longDescription = ''
       ExifTool is a platform-independent Perl library plus a command-line
       application for reading, writing and editing meta information in a wide

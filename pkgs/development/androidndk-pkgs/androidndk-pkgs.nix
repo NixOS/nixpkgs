@@ -1,6 +1,6 @@
 { lib, stdenv, makeWrapper
 , runCommand, wrapBintoolsWith, wrapCCWith, autoPatchelfHook
-, buildAndroidndk, androidndk, targetAndroidndkPkgs
+, llvmPackages, buildAndroidndk, androidndk, targetAndroidndkPkgs
 }:
 
 let
@@ -44,7 +44,7 @@ let
   buildInfo = ndkBuildInfoFun stdenv.buildPlatform;
   targetInfo = ndkTargetInfoFun stdenv.targetPlatform;
 
-  inherit (stdenv.targetPlatform) sdkVer;
+  androidSdkVersion = if (stdenv.targetPlatform ? androidSdkVersion && stdenv.targetPlatform.androidSdkVersion != null) then stdenv.targetPlatform.androidSdkVersion else (throw "`androidSdkVersion` is not set during the importing of nixpkgs");
   suffixSalt = lib.replaceStrings ["-" "."] ["_" "_"] stdenv.targetPlatform.config;
 
   # targetInfo.triple is what Google thinks the toolchain should be, this is a little
@@ -63,6 +63,7 @@ rec {
     passthru = {
       inherit targetPrefix;
       isClang = true; # clang based cc, but bintools ld
+      inherit (llvmPackages.clang.cc) hardeningUnsupportedFlagsByTargetPlatform;
     };
     dontUnpack = true;
     dontBuild = true;
@@ -76,8 +77,8 @@ rec {
       cp -r ${androidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double} $out/toolchain
       find $out/toolchain -type d -exec chmod 777 {} \;
 
-      if [ ! -d $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer} ]; then
-        echo "NDK does not contain libraries for SDK version ${sdkVer}";
+      if [ ! -d $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${androidSdkVersion} ]; then
+        echo "NDK does not contain libraries for SDK version ${androidSdkVersion}";
         exit 1
       fi
 
@@ -85,8 +86,8 @@ rec {
       ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.so $out/lib/
       ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/*.a $out/lib/
       chmod +w $out/lib/*
-      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.so $out/lib/
-      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}/*.o $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${androidSdkVersion}/*.so $out/lib/
+      ln -s $out/toolchain/sysroot/usr/lib/${targetInfo.triple}/${androidSdkVersion}/*.o $out/lib/
 
       echo "INPUT(-lc++_static)" > $out/lib/libc++.a
 
@@ -129,7 +130,7 @@ rec {
     bintools = binutils;
     libc = targetAndroidndkPkgs.libraries;
     extraBuildCommands = ''
-      echo "-D__ANDROID_API__=${stdenv.targetPlatform.sdkVer}" >> $out/nix-support/cc-cflags
+      echo "-D__ANDROID_API__=${stdenv.targetPlatform.androidSdkVersion}" >> $out/nix-support/cc-cflags
       # Android needs executables linked with -pie since version 5.0
       # Use -fPIC for compilation, and link with -pie if no -shared flag used in ldflags
       echo "-target ${targetInfo.triple} -fPIC" >> $out/nix-support/cc-cflags
@@ -150,9 +151,9 @@ rec {
   # cross-compiling packages to wrap incorrectly wrap binaries we don't include
   # anyways.
   libraries = runCommand "bionic-prebuilt" {} ''
-    lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${sdkVer}
+    lpath=${buildAndroidndk}/libexec/android-sdk/ndk-bundle/toolchains/llvm/prebuilt/${buildInfo.double}/sysroot/usr/lib/${targetInfo.triple}/${androidSdkVersion}
     if [ ! -d $lpath ]; then
-      echo "NDK does not contain libraries for SDK version ${sdkVer} <$lpath>"
+      echo "NDK does not contain libraries for SDK version ${androidSdkVersion} <$lpath>"
       exit 1
     fi
     mkdir -p $out/lib

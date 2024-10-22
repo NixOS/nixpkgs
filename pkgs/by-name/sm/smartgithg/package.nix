@@ -5,7 +5,7 @@
 , openjdk21
 , gtk3
 , glib
-, gnome
+, adwaita-icon-theme
 , wrapGAppsHook3
 , libXtst
 , which
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
+  buildInputs = [ jre adwaita-icon-theme gtk3 ];
 
-  preFixup = with lib; ''
+  preFixup = ''
     gappsWrapperArgs+=( \
-      --prefix PATH : ${makeBinPath [ jre which ]} \
-      --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
+      --prefix PATH : ${lib.makeBinPath [ jre which ]} \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
         gtk3
         glib
         libXtst
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItem = with lib; makeDesktopItem rec {
+  desktopItem = makeDesktopItem rec {
     name = "smartgit";
     exec = "smartgit";
     comment = meta.description;

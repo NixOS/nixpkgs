@@ -127,7 +127,7 @@ in
 {
 
   meta = {
-    maintainers = teams.freedesktop.members ++ [ lib.maintainers.janik ];
+    maintainers = teams.freedesktop.members;
   };
 
   ###### interface
@@ -514,6 +514,12 @@ in
 
     environment.etc = {
       "NetworkManager/NetworkManager.conf".source = configFile;
+
+      # The networkmanager-l2tp plugin expects /etc/ipsec.secrets to include /etc/ipsec.d/ipsec.nm-l2tp.secrets;
+      # see https://github.com/NixOS/nixpkgs/issues/64965
+      "ipsec.secrets".text = ''
+        include ipsec.d/ipsec.nm-l2tp.secrets
+      '';
     }
     // builtins.listToAttrs (map
       (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {

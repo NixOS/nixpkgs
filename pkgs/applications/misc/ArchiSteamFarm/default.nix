@@ -11,13 +11,13 @@
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.0.1.24";
+  version = "6.0.6.4";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-IgsiL5YUeOWQ/WIaTfs0Kmv2XFori8ntGZhrx7xeMkg=";
+    hash = "sha256-U4RApOUtrZ9su4O1jamjDbVrjozujW+vYRI1R7rSzpc=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
@@ -26,25 +26,29 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
 
   projectFile = "ArchiSteamFarm.sln";
-  executables = [ "ArchiSteamFarm" ];
+  executable = "ArchiSteamFarm";
+
+  enableParallelBuilding = false;
+
+  useAppHost = false;
   dotnetFlags = [
-    "-p:PublishSingleFile=true"
-    "-p:PublishTrimmed=true"
-  ];
-  dotnetInstallFlags = [
+    # useAppHost doesn't explicitly disable this
+    "-p:UseAppHost=false"
+    "-p:RuntimeIdentifiers="
+  ]
+  ;
+  dotnetBuildFlags = [
     "--framework=net8.0"
   ];
-  selfContainedBuild = true;
+  dotnetInstallFlags = dotnetBuildFlags;
 
   runtimeDeps = [ libkrb5 zlib openssl ];
 
   doCheck = true;
 
-  preBuild = ''
-    export projectFile=(ArchiSteamFarm)
-  '';
-
   preInstall = ''
+    dotnetProjectFiles=(ArchiSteamFarm)
+
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
     makeWrapperArgs+=(
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
@@ -57,12 +61,18 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
-        -p:UseAppHost=false
-     }
+        $dotnetFlags $dotnetInstallFlags
+    }
 
-     buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-     buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-     buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
+    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
+    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
+    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+
+    chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
+    wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm
+    substituteInPlace $out/bin/ArchiSteamFarm \
+      --replace-fail "exec " "exec dotnet "
   '';
 
   passthru = {

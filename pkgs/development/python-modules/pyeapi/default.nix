@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   setuptools,
   mock,
   netaddr,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyeapi";
-  version = "1.0.2";
+  version = "1.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,17 +20,8 @@ buildPythonPackage rec {
     owner = "arista-eosplus";
     repo = "pyeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GZBoCoAqij54rZezRDF/ihJDQ5T6FFyDSRXGV3//avQ=";
+    hash = "sha256-eGNBQSnYMC9YVCw5mBRH6XRq139AcqFm6HnO2FUzLEE=";
   };
-
-  patches = [
-    # Replace imp, https://github.com/arista-eosplus/pyeapi/pull/295
-    (fetchpatch {
-      name = "replace-imp.patch";
-      url = "https://github.com/arista-eosplus/pyeapi/commit/1f2d8e1fa61566082ccb11a1a17e0f3d8a0c89df.patch";
-      hash = "sha256-ONviRU6eUUZ+TTJ4F41ZXqavW7RIi1MBO7s7OsnWknk=";
-    })
-  ];
 
   build-system = [ setuptools ];
 

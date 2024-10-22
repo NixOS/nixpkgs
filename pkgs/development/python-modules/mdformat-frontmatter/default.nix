@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  linkify-it-py,
-  markdown-it-py,
   mdformat,
   mdit-py-plugins,
   ruamel-yaml,

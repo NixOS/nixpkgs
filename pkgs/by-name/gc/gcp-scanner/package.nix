@@ -20,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     setuptools-git-versioning
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -47,7 +46,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    description = "A comprehensive scanner for Google Cloud";
+    description = "Comprehensive scanner for Google Cloud";
     homepage = "https://github.com/google/gcp_scanner";
     changelog = "https://github.com/google/gcp_scanner/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;

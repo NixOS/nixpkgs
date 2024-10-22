@@ -4,7 +4,6 @@
 , zxing-cpp
 , pillow
 , poetry-core
-, pythonRelaxDepsHook
 
 , src
 , version
@@ -21,7 +20,6 @@ buildPythonApplication {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = true;

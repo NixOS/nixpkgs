@@ -16,13 +16,13 @@ tcl.mkTclDerivation rec {
     "--with-tkinclude=${tk.dev}/include"
   ];
 
-  buildInputs = [ xorg.libX11 tcllib ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+  buildInputs = [ xorg.libX11 tcllib ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
     Cocoa
   ]);
 
   meta = {
     homepage = "https://sourceforge.net/projects/tkimg/";
-    description = "The Img package adds several image formats to Tcl/Tk";
+    description = "Img package adds several image formats to Tcl/Tk";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;

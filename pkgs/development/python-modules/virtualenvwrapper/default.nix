@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-1Ge+rFpEvgD7XNG88zI5jD2rX7O9OveBXqhrTWuz06Q=";
+    hash = "sha256-1Ge+rFpEvgD7XNG88zI5jD2rX7O9OveBXqhrTWuz06Q=";
   };
 
   # pip depend on $HOME setting

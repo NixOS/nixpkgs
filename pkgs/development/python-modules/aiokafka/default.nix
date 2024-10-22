@@ -2,31 +2,29 @@
   lib,
   async-timeout,
   buildPythonPackage,
+  cramjam,
   cython,
   fetchFromGitHub,
   gssapi,
-  kafka-python,
-  lz4,
   packaging,
-  python-snappy,
   pythonOlder,
   setuptools,
+  typing-extensions,
   zlib,
-  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "aiokafka";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiokafka";
     rev = "refs/tags/v${version}";
-    hash = "sha256-G9Q77nWUUW+hG/wm9z/S8gea4U1wHZdj7WdK2LsKBos=";
+    hash = "sha256-CeEPRCsf2SFI5J5FuQlCRRtlOPcCtRiGXJUIQOAbyCc=";
   };
 
   build-system = [
@@ -38,15 +36,19 @@ buildPythonPackage rec {
 
   dependencies = [
     async-timeout
-    kafka-python
     packaging
+    typing-extensions
   ];
 
   optional-dependencies = {
-    snappy = [ python-snappy ];
-    lz4 = [ lz4 ];
-    zstd = [ zstandard ];
+    snappy = [ cramjam ];
+    lz4 = [ cramjam ];
+    zstd = [ cramjam ];
     gssapi = [ gssapi ];
+    all = [
+      cramjam
+      gssapi
+    ];
   };
 
   # Checks require running Kafka server
@@ -59,6 +61,6 @@ buildPythonPackage rec {
     homepage = "https://aiokafka.readthedocs.org";
     changelog = "https://github.com/aio-libs/aiokafka/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

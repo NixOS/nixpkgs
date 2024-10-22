@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.27.1";
+  version = "2.27.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,16 +30,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-CXtaxwm2dscoSsnF43PxGTClYfUs1ahuT8flqcioYx0=";
+    hash = "sha256-6zbKylnnRHGYjwriXHeUVhC4h/d3JVqiH4Bl3vnlHtQ=";
   };
 
   postPatch = ''
     sed -i "/timeout/d" pyproject.toml
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     jinja2
     json5
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     requests
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     openapi = [
       openapi-core
       ruamel-yaml
@@ -61,7 +61,7 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     strict-rfc3339
-  ] ++ passthru.optional-dependencies.openapi;
+  ] ++ optional-dependencies.openapi;
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -85,7 +85,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A set of server components for JupyterLab and JupyterLab like applications";
+    description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;

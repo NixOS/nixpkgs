@@ -21,7 +21,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "autopage" ];
 
   meta = with lib; {
-    description = "A library to provide automatic paging for console output";
+    description = "Library to provide automatic paging for console output";
     homepage = "https://github.com/zaneb/autopage";
     license = licenses.asl20;
     maintainers = teams.openstack.members;

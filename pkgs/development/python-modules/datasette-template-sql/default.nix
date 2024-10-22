@@ -3,7 +3,6 @@
   buildPythonPackage,
   datasette,
   fetchFromGitHub,
-  pytest-asyncio,
   pythonOlder,
 }:
 

@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ installShellFiles pkg-config ];
   buildInputs = [ openssl libsodium xxHash ]
     ++ (lib.optionals gitImportSupport [ libgit2 ])
-    ++ (lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ (lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreServices Security SystemConfiguration
     ]));
 
@@ -40,7 +40,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
-    description = "A distributed version control system";
+    description = "Distributed version control system";
     homepage = "https://pijul.org";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ gal_bolle dywedir fabianhjr ];

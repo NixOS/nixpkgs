@@ -1,6 +1,7 @@
 {
   autoPatchelfHook,
   copyDesktopItems,
+  fetchurl,
   fetchzip,
   lib,
   libGL,
@@ -54,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libGL
     libGLU
-  ] ++ lib.optionals stdenv.isAarch64 [ libxcrypt-legacy ];
+  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ libxcrypt-legacy ];
 
   installPhase = ''
     runHook preInstall
@@ -79,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
       comment = description;
       desktopName = name;
       genericName = name;
+      icon = fetchurl {
+        url = "https://www.geeks3d.com/furmark/i/20240220-furmark-logo-02.png";
+        hash = "sha256-EqhWQgTEmF/2AcqDxgGtr2m5SMYup28hPEhI6ssFw7g=";
+      };
       categories = [
         "System"
         "Monitor"

@@ -13,7 +13,7 @@
 , freetype
 , curl
 , libglvnd
-, webkitgtk
+, webkitgtk_4_0
 , pcre
 , darwin
 }:
@@ -48,11 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     curl # libcurl.so
     stdenv.cc.cc.lib # libstdc++.so libgcc_s.so
     pcre # libpcre2.pc
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib # libasound.so
     libglvnd # libGL.so
-    webkitgtk # webkit2gtk-4.0
-  ] ++ lib.optionals stdenv.isDarwin [
+    webkitgtk_4_0 # webkit2gtk-4.0
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Cocoa
     darwin.apple_sdk.frameworks.MetalKit
     darwin.apple_sdk.frameworks.WebKit
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "juceaide";
     longDescription = "JUCE is an open-source cross-platform C++ application framework for desktop and mobile applications, including VST, VST3, AU, AUv3, RTAS and AAX audio plug-ins";
     homepage = "https://github.com/juce-framework/JUCE";
+    changelog = "https://github.com/juce-framework/JUCE/blob/${finalAttrs.version}/CHANGE_LIST.md";
     license = with licenses; [ isc gpl3Plus ];
     maintainers = with maintainers; [ kashw2 ];
     platforms = platforms.all;

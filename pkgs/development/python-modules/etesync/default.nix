@@ -67,7 +67,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://www.etesync.com/";
-    description = "A python API to interact with an EteSync server.";
+    description = "Python API to interact with an EteSync server";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ valodim ];
   };

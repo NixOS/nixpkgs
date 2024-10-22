@@ -74,6 +74,6 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ flokli nazarewk ];
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/edid-generator.x86_64-darwin
   };
 }

@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   pathable,
   pyyaml,
   referencing,
@@ -14,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "jsonschema-path";
-  version = "0.3.2";
+  version = "0.3.3";
 
   disabled = pythonOlder "3.8";
 
@@ -23,20 +22,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = "jsonschema-path";
-    rev = version;
-    hash = "sha256-HC0yfACKFIQEQoIa8/FUKyV8YS8TQ0BY7i3n9xCdKz8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-oBzB6Ke19QDcMQm4MpnaS132/prrtnCekAXuPMloZx4=";
   };
 
   postPatch = ''
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
-
-  pythonRelaxDeps = [ "referencing" ];
+  build-system = [ poetry-core ];
 
   propagatedBuildInputs = [
     pathable
@@ -52,6 +46,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/p1c2u/jsonschema-path/releases/tag/${version}";
     description = "JSONSchema Spec with object-oriented paths";
     homepage = "https://github.com/p1c2u/jsonschema-path";
     license = lib.licenses.asl20;

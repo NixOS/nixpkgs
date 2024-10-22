@@ -48,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A library of Python tools and extensions for data science";
+    description = "Library of Python tools and extensions for data science";
     homepage = "https://github.com/rasbt/mlxtend";
     license = licenses.bsd3;
     maintainers = with maintainers; [ evax ];

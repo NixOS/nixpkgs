@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "hatasmota";
-  version = "0.8.0";
+  version = "0.9.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Kbz/ETSJGx6u0ZNfEWfl9klBIB3yPcfHGy1uKK50TGA=";
+    hash = "sha256-m40ZK1+cfWgrwWftFqExUZidCrbDMC1Sfshugqrp5QM=";
   };
 
   nativeBuildInputs = [ setuptools ];

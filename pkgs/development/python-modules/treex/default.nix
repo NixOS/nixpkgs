@@ -16,7 +16,6 @@
   tensorflow,
   treeo,
   torchmetrics,
-  pythonRelaxDepsHook,
   torch,
 }:
 
@@ -44,7 +43,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   buildInputs = [ jaxlib ];

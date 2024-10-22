@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://gitlab.com/RemixDev/deezer-py";
-    description = "A wrapper for all Deezer's APIs";
+    description = "Wrapper for all Deezer's APIs";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ natto1784 ];
   };

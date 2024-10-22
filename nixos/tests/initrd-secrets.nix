@@ -9,7 +9,7 @@ let
   testWithCompressor = compressor: testing.makeTest {
     name = "initrd-secrets-${compressor}";
 
-    meta.maintainers = [ lib.maintainers.lheckemann ];
+    meta.maintainers = [ ];
 
     nodes.machine = { ... }: {
       virtualisation.useBootLoader = true;

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sexpp";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "rnpgp";
     repo = "sexpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E1ESN3JKCWYBt1o37d7EVcgARnwGKS6mxua+0m1RMlM=";
+    hash = "sha256-mNt6J8nhzT5sF28ktl3jOkQMKn6x9iE04MMrwwVxyZs=";
   };
 
   buildInputs = [ zlib bzip2 ];

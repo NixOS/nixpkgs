@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "ghostunnel";
-  version = "1.7.3";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ghostunnel";
     repo = "ghostunnel";
     rev = "v${version}";
-    hash = "sha256-6yGAXJOyXNj0xf+1vKxVcU6w3VMpSLh+6PC+yKzFbrs=";
+    hash = "sha256-35E8Qhy3U3ZJJL6EOJ2D98vvr0Vv5qMs9pLuQSMFoAs=";
   };
 
   vendorHash = null;
@@ -33,7 +33,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "TLS proxy with mutual authentication support for securing non-TLS backend applications";
     homepage = "https://github.com/ghostunnel/ghostunnel#readme";
     changelog = "https://github.com/ghostunnel/ghostunnel/releases/tag/v${version}";

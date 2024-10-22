@@ -82,7 +82,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A framework for configuring complex applications";
+    description = "Framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];

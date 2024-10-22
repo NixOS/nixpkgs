@@ -42,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A Python library for creating LaTeX files and snippets";
+    description = "Python library for creating LaTeX files and snippets";
     homepage = "https://jeltef.github.io/PyLaTeX/current/";
     downloadPage = "https://github.com/JelteF/PyLaTeX/releases";
     changelog = "https://jeltef.github.io/PyLaTeX/current/changelog.html";

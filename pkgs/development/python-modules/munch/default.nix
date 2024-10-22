@@ -37,7 +37,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A dot-accessible dictionary (a la JavaScript objects)";
+    description = "Dot-accessible dictionary (a la JavaScript objects)";
     license = licenses.mit;
     homepage = "https://github.com/Infinidat/munch";
   };

@@ -12,11 +12,11 @@ final: prev: let
 
   majorMinorPatch = str: lib.concatStringsSep "." (lib.take 3 (lib.splitVersion str));
 
-  tensorRTPackages = with lib; let
+  tensorRTPackages = let
     # Check whether a file is supported for our cuda version
-    isSupported = fileData: elem cudaVersion fileData.supportedCudaVersions;
+    isSupported = fileData: lib.elem cudaVersion fileData.supportedCudaVersions;
     # Return the first file that is supported. In practice there should only ever be one anyway.
-    supportedFile = files: findFirst isSupported null files;
+    supportedFile = files: lib.findFirst isSupported null files;
 
     # Compute versioned attribute name to be used in this package set
     computeName = version: "tensorrt_${toUnderscore version}";
@@ -34,11 +34,11 @@ final: prev: let
           supportedCudaVersions = [ ];
         };
       }
-      (mapAttrs' (version: attrs: nameValuePair (computeName version) attrs)
-        (filterAttrs (version: file: file != null) (mapAttrs (version: files: supportedFile files) tensorRTVersions)));
+      (lib.mapAttrs' (version: attrs: lib.nameValuePair (computeName version) attrs)
+        (lib.filterAttrs (version: file: file != null) (lib.mapAttrs (version: files: supportedFile files) tensorRTVersions)));
 
     # Add all supported builds as attributes
-    allBuilds = mapAttrs (name: file: buildTensorRTPackage (removeAttrs file ["fileVersionCuda"])) supportedVersions;
+    allBuilds = lib.mapAttrs (name: file: buildTensorRTPackage (lib.removeAttrs file ["fileVersionCuda"])) supportedVersions;
 
     # Set the default attributes, e.g. tensorrt = tensorrt_8_4;
     defaultName = computeName tensorRTDefaultVersion;

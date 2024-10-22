@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     curl
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
-  cargoSha256 = "sha256:8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";
+  cargoHash = "sha256-8SOpL8nfhYen9vza0LYpB/5fgVmBwG7vGMmFOaJskIc=";
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;

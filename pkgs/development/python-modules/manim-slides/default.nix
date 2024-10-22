@@ -5,7 +5,7 @@
   pythonOlder,
 
   hatchling,
-  pythonRelaxDepsHook,
+  hatch-fancy-pypi-readme,
   manim,
   ffmpeg,
 
@@ -35,7 +35,7 @@
 }:
 buildPythonPackage rec {
   pname = "manim-slides";
-  version = "5.1.6";
+  version = "5.1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -44,12 +44,12 @@ buildPythonPackage rec {
     owner = "jeertmans";
     repo = "manim-slides";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BFfp/jeKBXr+Ukh0jNEtMPHlstlBjhSnvA803ddYoZE=";
+    hash = "sha256-0csCUJpIeq3EyER9gqiUgqrfHL9WSzX144Y0djL3dqQ=";
   };
 
   build-system = [
     hatchling
-    pythonRelaxDepsHook
+    hatch-fancy-pypi-readme
   ];
 
   pythonRemoveDeps = [ "opencv-python" ];

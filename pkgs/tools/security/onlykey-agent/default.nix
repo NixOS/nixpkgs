@@ -26,6 +26,7 @@ let
     propagatedBuildInputs = oa.propagatedBuildInputs or [ ] ++ [
       bech32
       cryptography
+      cython
       docutils
       pycryptodome
       pynacl
@@ -49,10 +50,10 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-SbGb7CjcD7cFPvASZtip56B4uxRiFKZBvbsf6sb8fds=";
+    hash = "sha256-SbGb7CjcD7cFPvASZtip56B4uxRiFKZBvbsf6sb8fds=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli ];
+  propagatedBuildInputs = with python3Packages; [ lib-agent onlykey-cli setuptools ];
 
   # move the python library into the sitePackages.
   postInstall = ''

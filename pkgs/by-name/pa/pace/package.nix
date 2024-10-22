@@ -3,6 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  stdenv,
 }: let
   version = "0.15.2";
 in
@@ -21,7 +22,7 @@ in
 
     nativeBuildInputs = [installShellFiles];
 
-    postInstall = ''
+    postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd pace \
         --bash <($out/bin/pace setup completions bash) \
         --fish <($out/bin/pace setup completions fish) \

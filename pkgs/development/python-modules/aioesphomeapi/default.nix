@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "24.3.0";
+  version = "27.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -35,13 +35,15 @@ buildPythonPackage rec {
     owner = "esphome";
     repo = "aioesphomeapi";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wQR3dwN5O++TdtQh+Wcj7c7TNMaRj2lMlOuXOAPVU0Q=";
+    hash = "sha256-2FA0QleMJG69vhyC85tO4ZAY0U8qPIdyJROHKxC35GM=";
   };
 
   build-system = [
     setuptools
     cython
   ];
+
+  pythonRelaxDeps = [ "cryptography" ];
 
   dependencies = [
     aiohappyeyeballs
@@ -62,6 +64,10 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/esphome/aioesphomeapi/issues/837
     "test_reconnect_logic_stop_callback"
+    # python3.12.4 regression
+    # https://github.com/esphome/aioesphomeapi/issues/889
+    "test_start_connection_cannot_increase_recv_buffer"
+    "test_start_connection_can_only_increase_buffer_size_to_262144"
   ];
 
   pythonImportsCheck = [ "aioesphomeapi" ];

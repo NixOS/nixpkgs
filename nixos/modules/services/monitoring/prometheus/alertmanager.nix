@@ -181,15 +181,57 @@ in {
                                                     -i "${alertmanagerYml}"
         '';
         serviceConfig = {
-          Restart  = "always";
-          StateDirectory = "alertmanager";
-          DynamicUser = true; # implies PrivateTmp
-          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
-          WorkingDirectory = "/tmp";
           ExecStart = "${cfg.package}/bin/alertmanager" +
             optionalString (length cmdlineArgs != 0) (" \\\n  " +
               concatStringsSep " \\\n  " cmdlineArgs);
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+
+          EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+
+          CapabilityBoundingSet = [ "" ];
+          DeviceAllow = [ "" ];
+          DynamicUser = true;
+          NoNewPrivileges = true;
+
+          MemoryDenyWriteExecute = true;
+
+          LockPersonality = true;
+
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          ProtectHome = "tmpfs";
+
+          PrivateTmp = true;
+          PrivateDevices = true;
+          PrivateIPC = true;
+
+          ProcSubset = "pid";
+
+          ProtectHostname = true;
+          ProtectClock = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectKernelLogs = true;
+          ProtectControlGroups = true;
+
+          Restart  = "always";
+
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+
+          StateDirectory = "alertmanager";
+          SystemCallFilter = [
+            "@system-service"
+            "~@cpu-emulation"
+            "~@privileged"
+            "~@reboot"
+            "~@setuid"
+            "~@swap"
+          ];
+
+          WorkingDirectory = "/tmp";
         };
       };
     })

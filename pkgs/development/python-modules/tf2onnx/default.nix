@@ -2,8 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
-  pytest-runner,
   # runtime dependencies
   numpy,
   onnx,
@@ -35,10 +33,10 @@ buildPythonPackage rec {
     hash = "sha256-qtRzckw/KHWm3gjFwF+cPuBhGbfktjhYIwImwHn2CFk=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    pytest-runner
-  ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "'pytest-runner'" ""
+  '';
 
   pythonRelaxDeps = [ "flatbuffers" ];
 
@@ -79,5 +77,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/onnx/tensorflow-onnx";
     license = licenses.asl20;
     maintainers = with maintainers; [ happysalada ];
+    # Duplicated `protobuf` in the derivation:
+    # - version 4.24.4 (from onnx), the default version of protobuf in nixpkgs
+    # - version 4.21.12 (from tensorflow), pinned as such because tensorflow is outdated and does
+    #   not support more recent versions of protobuf
+    broken = true;
   };
 }

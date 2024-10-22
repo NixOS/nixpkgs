@@ -15,7 +15,7 @@
 , stdenv
 }:
 let
-  version = "2.0-1413";
+  version = "2.0-1462";
   urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
 in
 stdenv.mkDerivation {
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
-    hash = "sha256-VoTJu5+zuFFknDolGJ/69e1i6B4vfR9ev7sAKhfeRlU=";
+    hash = "sha256-irTDjT9oN0CdxFKAgcHbL2grJ702E6H+WtifGh0pf0E=";
   };
 
   dontConfigure = true;
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
     '';
 
   meta = with lib; {
-    description = "The music player for music lovers";
+    description = "Music player for music lovers";
     changelog = "https://community.roonlabs.com/c/roon/software-release-notes/18";
     homepage = "https://roonlabs.com";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

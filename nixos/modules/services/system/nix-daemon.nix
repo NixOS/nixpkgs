@@ -164,7 +164,7 @@ in
         nixPackage
         pkgs.nix-info
       ]
-      ++ optional (config.programs.bash.enableCompletion) pkgs.nix-bash-completions;
+      ++ optional (config.programs.bash.completion.enable) pkgs.nix-bash-completions;
 
     systemd.packages = [ nixPackage ];
 
@@ -198,6 +198,7 @@ in
             IOSchedulingClass = cfg.daemonIOSchedClass;
             IOSchedulingPriority = cfg.daemonIOSchedPriority;
             LimitNOFILE = 1048576;
+            Delegate = "yes";
           };
 
         restartTriggers = [ config.environment.etc."nix/nix.conf".source ];

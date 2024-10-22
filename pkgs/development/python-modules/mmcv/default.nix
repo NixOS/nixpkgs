@@ -21,39 +21,16 @@
   tifffile,
   lmdb,
   mmengine,
-  symlinkJoin,
 }:
 
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
-  inherit (cudaPackages) backendStdenv cudaVersion;
+  inherit (cudaPackages) backendStdenv;
 
-  cuda-common-redist = with cudaPackages; [
-    cuda_cccl # <thrust/*>
-    libcublas # cublas_v2.h
-    libcusolver # cusolverDn.h
-    libcusparse # cusparse.h
-  ];
-
-  cuda-native-redist = symlinkJoin {
-    name = "cuda-native-redist-${cudaVersion}";
-    paths =
-      with cudaPackages;
-      [
-        cuda_cudart # cuda_runtime.h
-        cuda_nvcc
-      ]
-      ++ cuda-common-redist;
-  };
-
-  cuda-redist = symlinkJoin {
-    name = "cuda-redist-${cudaVersion}";
-    paths = cuda-common-redist;
-  };
 in
 buildPythonPackage rec {
   pname = "mmcv";
-  version = "2.1.0";
+  version = "2.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -62,8 +39,10 @@ buildPythonPackage rec {
     owner = "open-mmlab";
     repo = "mmcv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-an78tRvx18zQ5Q0ca74r4Oe2gJ9F9OfWXLbuP2+rL68=";
+    hash = "sha256-NNF9sLJWV1q6uBE73LUW4UWwYm4TBMTBJjJkFArBmsc=";
   };
+
+  env.CUDA_HOME = lib.optionalString cudaSupport (lib.getDev cudaPackages.cuda_nvcc);
 
   preConfigure =
     ''
@@ -77,7 +56,7 @@ buildPythonPackage rec {
     '';
 
   postPatch = ''
-    substituteInPlace setup.py --replace "cpu_use = 4" "cpu_use = $NIX_BUILD_CORES"
+    substituteInPlace setup.py --replace-fail "cpu_use = 4" "cpu_use = $NIX_BUILD_CORES"
   '';
 
   preCheck = ''
@@ -102,12 +81,23 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     ninja
     which
-  ] ++ lib.optionals cudaSupport [ cuda-native-redist ];
+  ];
 
-  buildInputs = [
-    pybind11
-    torch
-  ] ++ lib.optionals cudaSupport [ cuda-redist ];
+  buildInputs =
+    [
+      pybind11
+      torch
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart # cuda_runtime.h
+        cuda_cccl # <thrust/*>
+        libcublas # cublas_v2.h
+        libcusolver # cusolverDn.h
+        libcusparse # cusparse.h
+      ]
+    );
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -133,7 +123,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mmcv" ];
 
   meta = with lib; {
-    description = "A Foundational Library for Computer Vision Research";
+    description = "Foundational Library for Computer Vision Research";
     homepage = "https://github.com/open-mmlab/mmcv";
     changelog = "https://github.com/open-mmlab/mmcv/releases/tag/v${version}";
     license = with licenses; [ asl20 ];

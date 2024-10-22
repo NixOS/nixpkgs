@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://upx.github.io/";
-    description = "The Ultimate Packer for eXecutables";
+    description = "Ultimate Packer for eXecutables";
     changelog = "https://github.com/upx/upx/blob/${finalAttrs.src.rev}/NEWS";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

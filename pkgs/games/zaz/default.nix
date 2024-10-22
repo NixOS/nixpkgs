@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
-    description = "A puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Puzzle game about arranging balls in triplets, like Luxor, Zuma, or Puzzle Bobble";
     homepage = "https://zaz.sourceforge.net/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];

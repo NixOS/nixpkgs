@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtx11extras
-, qtdeclarative
-, dtkwidget
-, dde-qt-dbus-factory
-, xorg
-, xscreensaver
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  qtdeclarative,
+  dtkwidget,
+  dde-qt-dbus-factory,
+  xorg,
+  xscreensaver,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A screensaver service developed by deepin";
+    description = "Screensaver service developed by deepin";
     mainProgram = "deepin-screensaver";
     homepage = "https://github.com/linuxdeepin/deepin-screensaver";
     license = licenses.gpl3Plus;
@@ -67,4 +68,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.deepin.members;
   };
 }
-

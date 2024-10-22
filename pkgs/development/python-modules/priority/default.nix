@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A pure-Python implementation of the HTTP/2 priority tree";
+    description = "Pure-Python implementation of the HTTP/2 priority tree";
     homepage = "https://github.com/python-hyper/priority/";
     license = licenses.mit;
     maintainers = with maintainers; [ qyliss ];

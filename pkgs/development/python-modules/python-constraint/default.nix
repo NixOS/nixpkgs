@@ -22,7 +22,7 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   meta = with lib; {
-    description = "Constraint Solving Problem resolver for Python.";
+    description = "Constraint Solving Problem resolver for Python";
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
     license = licenses.bsd2;

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     dbus
     glib
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     xvfb-run
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     "-Denable_gtk_doc=true"
   ];
 
-  doCheck = stdenv.isLinux;
+  doCheck = stdenv.hostPlatform.isLinux;
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A library to delight your users with fancy features";
+    description = "Library to delight your users with fancy features";
     mainProgram = "dazzle-list-counters";
     longDescription = ''
       The libdazzle library is a companion library to GObject and GTK. It

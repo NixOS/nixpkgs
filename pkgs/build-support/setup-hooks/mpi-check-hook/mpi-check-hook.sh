@@ -33,10 +33,28 @@ setupMpiCheck() {
 
   case $mpiType in
     openmpi)
-      # make sure the test starts even if we have less than the requested amount of cores
+      # Note, that openmpi-5 switched to using PRRTE.
+      # Thus we need to set PRTE_MCA_* instead of OMPI_MCA_*.
+      # We keep the openmpi-4 parameters for backward compatability.
+
+      # Make sure the test starts even if we have less than the requested amount of cores
       export OMPI_MCA_rmaps_base_oversubscribe=1
+      export PRTE_MCA_rmaps_default_mapping_policy=node:oversubscribe
+
       # Disable CPU pinning
       export OMPI_MCA_hwloc_base_binding_policy=none
+      export PRTE_MCA_hwloc_default_binding_policy=none
+
+      # OpenMPI get confused by the sandbox environment and spew errors like this (both to stdout and stderr):
+      #     [hwloc/linux] failed to find sysfs cpu topology directory, aborting linux discovery.
+      #     [1729458724.473282] [localhost:78   :0]       tcp_iface.c:893  UCX  ERROR scandir(/sys/class/net) failed: No such file or directory
+      # These messages contaminate test output, which makes the difftest to fail.
+      # The solution is to use a preset cpu topology file and disable ucx model.
+
+      # Disable sysfs cpu topology directory discovery.
+      export PRTE_MCA_hwloc_use_topo_file="@topology@"
+      # Use the network model ob1 instead of ucx.
+      export OMPI_MCA_pml=ob1
       ;;
     MPICH)
       # Fix to make mpich run in a sandbox

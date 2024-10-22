@@ -14,8 +14,8 @@ mkKdeDerivation rec {
     hash = "sha256-fRBFgSJ9Whm0JLM/QWjRgVVrEBXW3yIY4BqI1kRJ6Us=";
   };
 
-  extraNativeBuildInputs = [pkg-config];
-  extraBuildInputs = [fuse3];
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [ fuse3 ];
 
-  meta.license = with lib.licenses; [gpl3Plus];
+  meta.license = with lib.licenses; [ gpl3Plus ];
 }

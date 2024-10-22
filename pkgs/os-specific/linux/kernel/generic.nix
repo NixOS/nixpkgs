@@ -84,7 +84,7 @@ lib.makeOverridable ({ # The kernel source tarball.
 # cgit) that are needed here should be included directly in Nixpkgs as
 # files.
 
-assert stdenv.isLinux;
+assert stdenv.hostPlatform.isLinux;
 
 let
   # Dirty hack to make sure that `version` & `src` have
@@ -97,7 +97,7 @@ let
   # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
   basicArgs = builtins.removeAttrs
     args
-    (lib.filter (x: ! (builtins.elem x [ "version" "src" ])) (lib.attrNames args));
+    (lib.filter (x: ! (builtins.elem x [ "version" "pname" "src" ])) (lib.attrNames args));
 
   # Combine the `features' attribute sets of all the kernel patches.
   kernelFeatures = lib.foldr (x: y: (x.features or {}) // y) ({
@@ -108,6 +108,11 @@ let
 
   commonStructuredConfig = import ./common-config.nix {
     inherit lib stdenv version;
+    rustAvailable =
+      lib.any (lib.meta.platformMatch stdenv.hostPlatform) rustc.targetPlatforms
+      && lib.all (p: !lib.meta.platformMatch stdenv.hostPlatform p) rustc.badTargetPlatforms
+      # Known to be broken: https://lore.kernel.org/lkml/31885EDD-EF6D-4EF1-94CA-276BA7A340B7@kernel.org/T/
+      && !(stdenv.hostPlatform.isRiscV && stdenv.cc.isGNU);
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
@@ -140,8 +145,7 @@ let
     passAsFile = [ "kernelConfig" ];
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
-    nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (lib.versionAtLeast version "4.16") [ bison flex ]
+    nativeBuildInputs = [ perl gmp libmpc mpfr bison flex ]
       ++ lib.optional (lib.versionAtLeast version "5.2") pahole
       ++ lib.optionals withRust [ rust-bindgen rustc ]
     ;
@@ -220,7 +224,7 @@ let
 
     config = {
       CONFIG_MODULES = "y";
-      CONFIG_FW_LOADER = "m";
+      CONFIG_FW_LOADER = "y";
       CONFIG_RUST = if withRust then "y" else "n";
     };
   });

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fulcio";
-  version = "1.4.5";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-cuBL+LvUXp4Ke+88jK/0cYaG072CFz3RG/kunXHzkA8=";
+    hash = "sha256-eRf504i9kYQua/p0SNlDGNeXa9ztoyz6M8nukhRyzIY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +20,7 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-7QifP5dgKT7b3lruB+P6c0Cc/BgL4I+FnkzFIztt0oM=";
+  vendorHash = "sha256-VTJhQrsqwGHq8211N3pUf4fmU4H90gRWYJTdEufNGg4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -66,7 +66,7 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/sigstore/fulcio";
     changelog = "https://github.com/sigstore/fulcio/releases/tag/v${version}";
-    description = "A Root-CA for code signing certs - issuing certificates based on an OIDC email address";
+    description = "Root-CA for code signing certs - issuing certificates based on an OIDC email address";
     mainProgram = "fulcio";
     longDescription = ''
       Fulcio is a free code signing Certificate Authority, built to make

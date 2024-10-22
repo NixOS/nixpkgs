@@ -1,4 +1,4 @@
-{ stdenv, lib, pkgs, fzf, gawk, fetchFromGitHub, makeWrapper }:
+{ stdenv, lib, fzf, gawk, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "sway-launcher-desktop";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "TUI Application launcher with Desktop Entry support.";
+    description = "TUI Application launcher with Desktop Entry support";
     mainProgram = "sway-launcher-desktop";
     longDescription = ''
       This is a TUI-based launcher menu made with bash and the amazing fzf.

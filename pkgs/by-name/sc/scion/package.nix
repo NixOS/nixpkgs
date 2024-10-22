@@ -35,12 +35,14 @@ buildGoModule {
 
   doCheck = true;
 
+  tags = [ "sqlite_mattn" ];
+
   passthru.tests = {
     inherit (nixosTests) scion-freestanding-deployment;
   };
 
   meta = with lib; {
-    description = "A future Internet architecture utilizing path-aware networking";
+    description = "Future Internet architecture utilizing path-aware networking";
     homepage = "https://scion-architecture.net/";
     platforms = platforms.unix;
     license = licenses.asl20;

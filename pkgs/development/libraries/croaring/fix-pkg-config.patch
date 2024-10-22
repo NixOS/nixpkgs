@@ -1,0 +1,14 @@
+diff --git a/roaring.pc.in b/roaring.pc.in
+index e3b2391..c29adc3 100644
+--- a/roaring.pc.in
++++ b/roaring.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-libdir=${prefix}/@CMAKE_INSTALL_LIBDIR@
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_FULL_LIBDIR@
++includedir=@CMAKE_INSTALL_FULL_INCLUDEDIR@
+ 
+ Name: roaring
+ Description: Roaring bitmap implementation in C

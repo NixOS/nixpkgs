@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dhewm3";
-  version = "1.5.3";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "dhewm";
     repo = "dhewm3";
     rev = version;
-    sha256 = "sha256-BFVadzN8qhdXTUqFVM7EIqHuW2yx1x+TSWC9+myGfP0=";
+    sha256 = "sha256-losqnxnjRPOczjrRPyyOxCeg9TNScXLcXADgo9Bxm5k=";
   };
 
   # Add libGLU libGL linking
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "Doom 3 port to SDL";
     mainProgram = "dhewm3";
     license = lib.licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

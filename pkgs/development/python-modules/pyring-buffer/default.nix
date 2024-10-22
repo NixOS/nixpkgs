@@ -24,7 +24,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pyring_buffer" ];
 
   meta = with lib; {
-    description = "A pure Python ring buffer for bytes";
+    description = "Pure Python ring buffer for bytes";
     homepage = "https://github.com/rhasspy/pyring-buffer";
     changelog = "https://github.com/rhasspy/pyring-buffer/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   setuptools,
   numpy,
   pytestCheckHook,
@@ -21,7 +22,16 @@ buildPythonPackage rec {
     hash = "sha256-RvzhB1kQNP0IbAygwH2RBi/kSyuFPAHgsiCATPeMHTo=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  patches = [
+    (fetchpatch {
+      # fix "incompatible function pointer types initializing 'PyUFuncGenericFunction'"
+      name = "const-function-signature.patch";
+      url = "https://github.com/aubio/aubio/commit/95ff046c698156f21e2ca0d1d8a02c23ab76969f.patch";
+      hash = "sha256-qKcIPjpcZUizSN/t96WOiOn+IlsrlC0+g7gW77KejH0=";
+    })
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       Accelerate
@@ -40,9 +50,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "aubio" ];
 
   meta = with lib; {
-    description = "a library for audio and music analysis";
+    description = "Library for audio and music analysis";
     homepage = "https://aubio.org";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

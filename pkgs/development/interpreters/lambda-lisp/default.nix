@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Lisp interpreter written in untyped lambda calculus";
+    description = "Lisp interpreter written in untyped lambda calculus";
     homepage = "https://github.com/woodrush/lambdalisp";
     longDescription = ''
       LambdaLisp is a Lisp interpreter written as a closed untyped lambda calculus term.

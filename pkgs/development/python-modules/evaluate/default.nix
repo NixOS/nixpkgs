@@ -3,8 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
-  cookiecutter,
   datasets,
   dill,
   fsspec,
@@ -14,32 +12,29 @@
   numpy,
   packaging,
   pandas,
-  pyarrow,
   requests,
-  responses,
+  setuptools,
   tqdm,
   xxhash,
 }:
 
 buildPythonPackage rec {
   pname = "evaluate";
-  version = "0.4.1";
-  format = "setuptools";
+  version = "0.4.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "huggingface";
-    repo = pname;
+    repo = "evaluate";
     rev = "refs/tags/v${version}";
-    hash = "sha256-axcJg0ZalEd4FOySCiFReKL7wmTCtLaw71YqyLHq8fc=";
+    hash = "sha256-G/SK0nMpkpCEzX8AX/IJqpOPZWAQhP8tyr7TJ+F0NCE=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "responses" ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
-    cookiecutter
+  dependencies = [
     datasets
     numpy
     dill
@@ -51,8 +46,6 @@ buildPythonPackage rec {
     fsspec
     huggingface-hub
     packaging
-    pyarrow
-    responses
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # most tests require internet access.

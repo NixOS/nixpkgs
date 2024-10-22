@@ -1,7 +1,7 @@
 {
   "name": "yaml-language-server",
   "description": "YAML language server",
-  "version": "1.14.0",
+  "version": "1.15.0",
   "author": "Gorkem Ercan (Red Hat)",
   "license": "MIT",
   "contributors": [

@@ -6,7 +6,7 @@
 }:
 let
   pname = "netscanner";
-  version = "0.5.1";
+  version = "0.6.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,10 +17,10 @@ rustPlatform.buildRustPackage {
     owner = "Chleba";
     repo = "netscanner";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iRVmazOiUvpl29A0Ju0e2mzFRJtQD7ViY22Jai005nY=";
+    hash = "sha256-p7ajWY/eGWHPosxFXOKs2YeMAny+/PJ68IAU2NNgm0w=";
   };
 
-  cargoHash = "sha256-oH+rU8IZwC8aZ320bIehddPq/+9IYQs+AlZe94LHNYk=";
+  cargoHash = "sha256-F6titbFM0zsbbwZKcSx3U4cknea83TCITiGm7rPXmFE=";
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \

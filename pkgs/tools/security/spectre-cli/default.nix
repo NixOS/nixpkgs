@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
 
   # Some tests are expected to fail on ARM64
   # See: https://gitlab.com/spectre.app/cli/-/issues/27#note_962950844
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   checkPhase = ''
     mv ../spectre-cli-tests ../spectre_tests.xml ./
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A stateless cryptographic identity algorithm";
+    description = "Stateless cryptographic identity algorithm";
     homepage = "https://spectre.app";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ emmabastas ];

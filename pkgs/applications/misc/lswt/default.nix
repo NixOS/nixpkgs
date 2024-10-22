@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A command that lists Wayland toplevels";
+    description = "Command that lists Wayland toplevels";
     homepage = "https://sr.ht/~leon_plickat/lswt";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edrex ];

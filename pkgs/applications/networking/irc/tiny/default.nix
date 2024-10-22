@@ -4,10 +4,10 @@
 , fetchFromGitHub
 , pkg-config
 , Foundation
-, dbusSupport ? stdenv.isLinux, dbus
+, dbusSupport ? stdenv.hostPlatform.isLinux, dbus
 # rustls will be used for TLS if useOpenSSL=false
-, useOpenSSL ? stdenv.isLinux, openssl
-, notificationSupport ? stdenv.isLinux
+, useOpenSSL ? stdenv.hostPlatform.isLinux, openssl
+, notificationSupport ? stdenv.hostPlatform.isLinux
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,20 +23,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-AhQCfLCoJU7o8s+XL3hDOPmZi9QjOxXSA9uglA1KSuY=";
 
-  # Cargo.lock is outdated
-  preConfigure = ''
-    cargo metadata --offline
-  '';
-
-  nativeBuildInputs = lib.optional stdenv.isLinux pkg-config;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux pkg-config;
   buildInputs = lib.optionals dbusSupport [ dbus ]
                 ++ lib.optionals useOpenSSL [ openssl ]
-                ++ lib.optional stdenv.isDarwin Foundation;
+                ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   buildFeatures = lib.optional notificationSupport "desktop-notifications";
 
   meta = with lib; {
-    description = "A console IRC client";
+    description = "Console IRC client";
     homepage = "https://github.com/osa1/tiny";
     changelog = "https://github.com/osa1/tiny/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;

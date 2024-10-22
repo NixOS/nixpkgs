@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "afterburn";
-  version = "5.5.1";
+  version = "5.7.0";
 
   src = fetchFromGitHub {
     owner = "coreos";
     repo = "afterburn";
     rev = "v${version}";
-    sha256 = "sha256-3+FlW/y8EScJKaFvxa/hOlDF18kEtz2XyMdrDZgcMXs=";
+    sha256 = "sha256-j2eQUro0Rx1axBAaZDNICRrkygb4JAyxVAER/5BXXLY=";
   };
 
-  cargoHash = "sha256-DTFvaXPr21qvx1FA1phueRxTgcrfhGgb9Vktah372Uo=";
+  cargoHash = "sha256-rk/lVoPdA9Uj/MorMchVlQQB9bYmNC90NqM6w9FXLoc=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/coreos/ignition";
-    description = "A one-shot cloud provider agent";
+    description = "One-shot cloud provider agent";
     license = licenses.asl20;
     maintainers = [ maintainers.arianvp ];
     platforms = platforms.linux;

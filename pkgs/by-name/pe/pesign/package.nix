@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications.";
+    description = "Signing tools for PE-COFF binaries. Compliant with the PE and Authenticode specifications";
     homepage = "https://github.com/rhboot/pesign";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ raitobezarius ];

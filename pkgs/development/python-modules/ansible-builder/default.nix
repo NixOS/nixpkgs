@@ -1,11 +1,16 @@
 {
   lib,
-  python3Packages,
+  setuptools,
+  setuptools-scm,
+  jsonschema,
+  requirements-parser,
+  pyyaml,
   podman,
   fetchPypi,
   bindep,
+  buildPythonPackage,
 }:
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "ansible-builder";
   version = "3.0.1";
   format = "pyproject";
@@ -15,14 +20,14 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-rxyhgj9Cad751tPAptCTLCtXQLUXaRYv39bkoFzzjOk=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  nativeBuildInputs = [
     setuptools
     setuptools-scm
   ];
 
   buildInputs = [ bindep ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     podman
     jsonschema
     requirements-parser
@@ -36,7 +41,7 @@ python3Packages.buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "An Ansible execution environment builder";
+    description = "Ansible execution environment builder";
     homepage = "https://ansible-builder.readthedocs.io/en/stable/";
     license = licenses.asl20;
     maintainers = with maintainers; [ melkor333 ];

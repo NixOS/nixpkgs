@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A minimalist builder for Rust";
+    description = "Minimalist builder for Rust";
     mainProgram = "minicargo";
     longDescription = ''
       A minimalist builder for Rust, similar to Cargo but written in C++.

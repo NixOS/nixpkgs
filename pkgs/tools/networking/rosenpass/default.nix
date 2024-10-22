@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rosenpass";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-t5AeJqeV16KCUoBm1GUzj/U6q382CRCR/XG6B2MiBU4=";
+    hash = "sha256-fQIeKGyTkFWUV9M1o256G4U1Os5OlVsRZu+5olEkbD4=";
   };
 
-  cargoHash = "sha256-caYJP3SNpZxtV9y3D62CuzJ5RjMoq98D9W0Fms5E3Nc=";
+  cargoHash = "sha256-GyeJCIE60JuZa/NuixDc3gTj9WAOpSReIyVxQqM4tDQ=";
 
   nativeBuildInputs = [
     cmake # for oqs build in the oqs-sys crate

@@ -8,7 +8,6 @@
   cmake,
   doxygen,
   eigen,
-  gtest,
   hdf5,
   lapack,
   mpi,
@@ -120,7 +119,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "A domain-specific language for finite element variational forms";
+      description = "Domain-specific language for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -155,7 +154,7 @@ let
       runHook postCheck
     '';
     meta = {
-      description = "A compiler for finite element variational forms";
+      description = "Compiler for finite element variational forms";
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
@@ -241,7 +240,7 @@ let
       make runtests
     '';
     meta = {
-      description = "The FEniCS Problem Solving Environment in Python and C++";
+      description = "FEniCS Problem Solving Environment in Python and C++";
       homepage = "https://fenicsproject.org/";
       license = lib.licenses.lgpl3;
     };

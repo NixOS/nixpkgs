@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    description = "An Open-source GUI and QMK fork for configuring your keyboard in real time";
+    description = "Open-source GUI and QMK fork for configuring your keyboard in real time";
     homepage = "https://get.vial.today";
     license = lib.licenses.gpl2Plus;
     mainProgram = "Vial";

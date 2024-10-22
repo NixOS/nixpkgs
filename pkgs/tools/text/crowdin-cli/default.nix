@@ -7,18 +7,17 @@
 , installShellFiles
 , jre
 , makeWrapper
-, crowdin-cli
 , testers
 , unzip
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "crowdin-cli";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchurl {
-    url = "https://github.com/crowdin/${pname}/releases/download/${version}/${pname}.zip";
-    hash = "sha256-7KyQUnl2O/raQLcP5VsMCX3084Mn6HFfxjJmksAkWBc=";
+    url = "https://github.com/crowdin/crowdin-cli/releases/download/${finalAttrs.version}/crowdin-cli.zip";
+    hash = "sha256-158zbgYw4FP/vQVsSs9tt9VcisBWpRn/D4ORiM24PYY=";
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper unzip ];
@@ -38,14 +37,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = crowdin-cli; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = with lib; {
     mainProgram = "crowdin";
     homepage = "https://github.com/crowdin/crowdin-cli/";
-    description = "A command-line client for the Crowdin API";
+    description = "Command-line client for the Crowdin API";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ DamienCassou ];
   };
-}
+})

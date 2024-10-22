@@ -41,18 +41,18 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ markupsafe ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     email = [ email-validator ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "wtforms" ];
 
   meta = with lib; {
-    description = "A flexible forms validation and rendering library for Python";
+    description = "Flexible forms validation and rendering library for Python";
     homepage = "https://github.com/wtforms/wtforms";
     changelog = "https://github.com/wtforms/wtforms/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;

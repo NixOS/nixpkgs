@@ -7,17 +7,28 @@
   pythonOlder,
   setuptools,
 
-  fiona,
   packaging,
   pandas,
+  pyogrio,
   pyproj,
   rtree,
   shapely,
+
+  # optional-dependencies
+  folium,
+  geoalchemy2,
+  geopy,
+  mapclassify,
+  matplotlib,
+  psycopg,
+  pyarrow,
+  sqlalchemy,
+  xyzservices,
 }:
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "0.14.4";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,25 +37,45 @@ buildPythonPackage rec {
     owner = "geopandas";
     repo = "geopandas";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FBhPcae8bnNnsfr14I1p22VhoOf9USF9DAcrAqx+zso=";
+    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
   };
 
   build-system = [ setuptools ];
 
   propagatedBuildInputs = [
-    fiona
     packaging
     pandas
+    pyogrio
     pyproj
     shapely
   ];
 
+  optional-dependencies = {
+    all = [
+      # prevent infinite recursion
+      (folium.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      geoalchemy2
+      geopy
+      # prevent infinite recursion
+      (mapclassify.overridePythonAttrs (prevAttrs: {
+        doCheck = false;
+      }))
+      matplotlib
+      psycopg
+      pyarrow
+      sqlalchemy
+      xyzservices
+    ];
+  };
+
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ];
+  ] ++ optional-dependencies.all;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     export HOME=$(mktemp -d);

@@ -36,7 +36,7 @@ in
           options = {
             enable = mkEnableOption "armagetronad";
 
-            package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
+            package = lib.mkPackageOption pkgs "armagetronad-dedicated" {
               example = ''
                 pkgs.armagetronad."0.2.9-sty+ct+ap".dedicated
               '';

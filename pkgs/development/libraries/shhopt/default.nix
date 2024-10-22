@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTBASEDIR=$(out)" ];
 
   meta = with lib; {
-    description = "A library for parsing command line options";
+    description = "Library for parsing command line options";
     homepage = "https://shh.thathost.com/pub-unix/";
     license = licenses.artistic1;
     platforms = platforms.all;

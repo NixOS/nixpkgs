@@ -54,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/cjrh/aiorun";
     changelog = "https://github.com/cjrh/aiorun/blob/v${version}/CHANGES";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "parallel";
-  version = "20240422";
+  version = "20240922";
 
   src = fetchurl {
-    url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
-    hash = "sha256-eDiIID7eK5LO0x6z6AnKOp2J9FCP3LEYML+zV1SIJGc=";
+    url = "mirror://gnu/parallel/parallel-${version}.tar.bz2";
+    hash = "sha256-YyEHFei3xeEp4JjzM8183V/HovMl6OD7ntbtup8ay8Q=";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/parallel/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub vrthra tomberek ];
+    maintainers = with maintainers; [ pSub tomberek ];
     mainProgram = "parallel";
   };
 }

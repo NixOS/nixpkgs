@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.100.1";
+  version = "6.108.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-3Mwa1nS6rvFBcU5QXLH4/wa38qCvDX9sRina1aJS1Rs=";
+    hash = "sha256-APZTI7AxbtLT+2mkxUapr1sPcq4ViMXy1J6g0I30s5A=";
   };
 
   # I tried to package sphinx-selective-exclude, but it throws
@@ -73,16 +73,18 @@ buildPythonPackage rec {
   pytestFlagsArray = [ "tests/cover" ];
 
   disabledTests =
-    if (pythonOlder "3.10") then
-      [
-        # not sure why these tests fail with only 3.9
-        # FileNotFoundError: [Errno 2] No such file or directory: 'git'
-        "test_observability"
-        "test_assume_has_status_reason"
-        "test_observability_captures_stateful_reprs"
-      ]
-    else
-      null;
+    [
+      # racy, fails to find a file sometimes
+      "test_recreate_charmap"
+      "test_uses_cached_charmap"
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      # not sure why these tests fail with only 3.9
+      # FileNotFoundError: [Errno 2] No such file or directory: 'git'
+      "test_observability"
+      "test_assume_has_status_reason"
+      "test_observability_captures_stateful_reprs"
+    ];
 
   pythonImportsCheck = [ "hypothesis" ];
 
@@ -118,6 +120,6 @@ buildPythonPackage rec {
       lib.replaceStrings [ "." ] [ "-" ] version
     }";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

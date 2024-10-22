@@ -27,14 +27,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ hikari ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     crontrigger = [ croniter ];
   };
 
   pythonImportsCheck = [ "lightbulb" ];
 
   meta = with lib; {
-    description = "A command handler for Hikari, the Python Discord API wrapper library";
+    description = "Command handler for Hikari, the Python Discord API wrapper library";
     longDescription = ''
       Lightbulb is designed to be an easy to use command handler library that integrates with the Discord API wrapper library for Python, Hikari.
 

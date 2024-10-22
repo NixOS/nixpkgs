@@ -33,7 +33,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A case-insensitive list for Python";
+    description = "Case-insensitive list for Python";
     homepage = "https://github.com/Phynix/yamlloader";
     changelog = "https://github.com/Phynix/yamlloader/releases/tag/${version}";
     license = licenses.mit;

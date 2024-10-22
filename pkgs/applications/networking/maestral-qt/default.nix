@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, python3
-, qtbase
-, qtsvg
-, qtwayland
-, nixosTests
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  nixosTests,
+  wrapQtAppsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
-  version = "1.9.3";
+  version = "1.9.4";
   pyproject = true;
 
   disabled = python3.pythonOlder "3.7";
@@ -19,12 +20,10 @@ python3.pkgs.buildPythonApplication rec {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7Lt0Neobtofd1JDoz8BhGn+nFKaMLbM/6z0QQmtEKpA=";
+    hash = "sha256-VkJOKKYnoXux3WjD1JwINGWwv1SMIXfidyV2ITE7dJc=";
   };
 
-  build-system = with python3.pkgs; [
-    setuptools
-  ];
+  build-system = with python3.pkgs; [ setuptools ];
 
   dependencies = with python3.pkgs; [
     click
@@ -37,12 +36,10 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     qtwayland
     qtbase
-    qtsvg  # Needed for the systray icon
+    qtsvg # Needed for the systray icon
   ];
 
-  nativeBuildInputs = [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   dontWrapQtApps = true;
 
@@ -67,7 +64,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://maestral.app";
     changelog = "https://github.com/samschott/maestral/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ peterhoeg sfrijters ];
+    maintainers = with maintainers; [
+      peterhoeg
+      sfrijters
+    ];
     platforms = platforms.linux;
     mainProgram = "maestral_qt";
   };

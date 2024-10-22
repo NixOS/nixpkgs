@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Ddocs=true"
     "-Dtelepathy_backend=${lib.boolToString telepathySupport}"
-    "-Dtests=${lib.boolToString (finalAttrs.doCheck && stdenv.isLinux)}"
+    "-Dtests=${lib.boolToString (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.isLinux)}"
   ];
 
   # backends/eds/lib/libfolks-eds.so.26.0.0.p/edsf-persona-store.c:10697:4:
@@ -90,12 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
   # occur inconsistently
   doCheck = false;
 
-  # Prevents e-d-s add-contacts-stress-test from timing out
-  checkPhase = ''
-    runHook preCheck
-    meson test --timeout-multiplier 4
-    runHook postCheck
-  '';
+  mesonCheckFlags = [
+    # Prevents e-d-s add-contacts-stress-test from timing out
+    "--timeout-multiplier" "4"
+  ];
 
   postPatch = lib.optionalString telepathySupport ''
     patchShebangs tests/tools/manager-file.py
@@ -109,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "A library that aggregates people from multiple sources to create metacontacts";
+    description = "Library that aggregates people from multiple sources to create metacontacts";
     homepage = "https://gitlab.gnome.org/GNOME/folks";
     license = licenses.lgpl21Plus;
     maintainers = teams.gnome.members;

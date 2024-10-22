@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/iwalton3/default-shader-pack";
-    description = "Preconfigured set of MPV shaders and configurations for MPV Shim media clients.";
+    description = "Preconfigured set of MPV shaders and configurations for MPV Shim media clients";
     license = with licenses; [
       gpl3Plus
       mit

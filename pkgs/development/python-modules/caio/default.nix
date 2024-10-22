@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "caio";
-  version = "0.9.13";
+  version = "0.9.17";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = "caio";
     rev = "refs/tags/${version}";
-    hash = "sha256-Q87NuL6yZ5uKImQqqdKTMWNyfUOb4NaZDEvNdqZbHDk=";
+    hash = "sha256-aTJ02dCLb3CsT6KmJxkmOzwtg5nuXeBwz+mT7ZTTU9o=";
   };
 
   build-system = [ setuptools ];

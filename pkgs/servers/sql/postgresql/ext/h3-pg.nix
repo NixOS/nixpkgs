@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace "add_subdirectory(cmake/h3)" "include_directories(${lib.getDev h3_4}/include/h3)"
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/AddPostgreSQLExtension.cmake \
       --replace "INTERPROCEDURAL_OPTIMIZATION TRUE" ""
   '';
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PostgreSQL bindings for H3, a hierarchical hexagonal geospatial indexing system";
     homepage = "https://github.com/zachasme/h3-pg";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (postgresql.meta) platforms;
   };
 })

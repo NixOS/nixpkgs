@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "gtts";
-  version = "2.5.1";
-  format = "pyproject";
+  version = "2.5.3";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CCxD73fpHGsO4zSifWLQtgDkbPvPEnA2357umhOCNoI=";
+    hash = "sha256-8FPKAMVXqw/4X050tAnOAx/wGboZPPJs72VwwaOEamE=";
   };
 
   build-system = [ setuptools ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gtts" ];
 
   meta = with lib; {
-    description = "A Python library and CLI tool to interface with Google Translate text-to-speech API";
+    description = "Python library and CLI tool to interface with Google Translate text-to-speech API";
     mainProgram = "gtts-cli";
     homepage = "https://gtts.readthedocs.io";
     changelog = "https://gtts.readthedocs.io/en/latest/changelog.html";

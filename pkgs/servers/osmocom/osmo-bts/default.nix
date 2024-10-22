@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osmo-bts";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-bts";
     rev = version;
-    hash = "sha256-dje+B1jobsVdQZYyIkLTZzez4HQirCcjyosTQCo/v64=";
+    hash = "sha256-l0iCoiMeBGlJpMvnHUrUfGL3sQCT69D739wiYbnSFeI=";
   };
 
   postPatch = ''
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom GSM Base Transceiver Station (BTS)";
     homepage = "https://osmocom.org/projects/osmobts";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ janik ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

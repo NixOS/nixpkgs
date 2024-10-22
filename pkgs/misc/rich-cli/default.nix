@@ -39,7 +39,6 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
   ];
 
   dependencies = with python3.pkgs; [
@@ -59,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Textualize/rich-cli";
     changelog = "https://github.com/Textualize/rich-cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ joelkoen ];
+    maintainers = [ ];
     mainProgram = "rich";
   };
 }

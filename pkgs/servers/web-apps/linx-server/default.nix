@@ -25,7 +25,7 @@ buildGoModule rec {
   preBuild = "rice embed-go";
 
   meta = with lib; {
-    description = "Self-hosted file/code/media sharing website.";
+    description = "Self-hosted file/code/media sharing website";
     homepage = "https://put.icu";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ urandom ];

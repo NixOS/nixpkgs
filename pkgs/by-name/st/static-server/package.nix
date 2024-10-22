@@ -36,7 +36,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   # tests sometimes fail with SIGQUIT on darwin
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru.tests = {
     version = testers.testVersion {
@@ -47,7 +47,7 @@ buildGoModule rec {
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
-    description = "A simple, zero-configuration HTTP server CLI for serving static files";
+    description = "Simple, zero-configuration HTTP server CLI for serving static files";
     homepage = "https://github.com/eliben/static-server";
     license = licenses.unlicense;
     maintainers = with maintainers; [ figsoda ];

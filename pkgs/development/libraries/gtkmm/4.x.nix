@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  nativeCheckInputs = lib.optionals (!stdenv.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin)[
     xvfb-run
   ];
 
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     runHook preCheck
 
-    ${lib.optionalString (!stdenv.isDarwin) "xvfb-run -s '-screen 0 800x600x24'"} \
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run -s '-screen 0 800x600x24'"} \
       meson test --print-errorlogs
 
     runHook postCheck

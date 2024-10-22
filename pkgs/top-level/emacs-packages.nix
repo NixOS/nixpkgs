@@ -24,17 +24,22 @@
 let
 
   mkElpaDevelPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-devel-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText gcc pkgs buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
   mkElpaPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/elpa-packages.nix {
-    inherit (pkgs) stdenv texinfo writeText gcc pkgs buildPackages;
+    inherit (pkgs) pkgs buildPackages;
+    inherit lib;
+  };
+
+  mkNongnuDevelPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/nongnu-devel-packages.nix {
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
   mkNongnuPackages = { pkgs, lib }: import ../applications/editors/emacs/elisp-packages/nongnu-packages.nix {
-    inherit (pkgs) buildPackages;
+    inherit (pkgs) pkgs buildPackages;
     inherit lib;
   };
 
@@ -47,7 +52,7 @@ let
     inherit lib pkgs;
   };
 
-  emacsWithPackages = { pkgs, lib }: pkgs.callPackage ../build-support/emacs/wrapper.nix {
+  emacsWithPackages = { pkgs, lib }: pkgs.callPackage ../applications/editors/emacs/build-support/wrapper.nix {
     inherit (pkgs.xorg) lndir;
     inherit lib;
   };
@@ -57,6 +62,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
   , lib ? pkgs.lib
   , elpaDevelPackages ? mkElpaDevelPackages { inherit pkgs lib; } self
   , elpaPackages ? mkElpaPackages { inherit pkgs lib; } self
+  , nongnuDevelPackages ? mkNongnuDevelPackages { inherit pkgs lib; } self
   , nongnuPackages ? mkNongnuPackages { inherit pkgs lib; } self
   , melpaStablePackages ? melpaGeneric { inherit pkgs lib; } "stable" self
   , melpaPackages ? melpaGeneric { inherit pkgs lib; } "unstable" self
@@ -64,6 +70,7 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
 }: ({}
   // elpaDevelPackages // { inherit elpaDevelPackages; }
   // elpaPackages // { inherit elpaPackages; }
+  // nongnuDevelPackages // { inherit nongnuDevelPackages; }
   // nongnuPackages // { inherit nongnuPackages; }
   // melpaStablePackages // { inherit melpaStablePackages; }
   // melpaPackages // { inherit melpaPackages; }
@@ -77,11 +84,15 @@ in makeScope pkgs'.newScope (self: makeOverridable ({
       };
     });
 
-    trivialBuild = pkgs.callPackage ../build-support/emacs/trivial.nix {
+    trivialBuild = pkgs.callPackage ../applications/editors/emacs/build-support/trivial.nix {
       inherit (self) emacs;
     };
 
-    melpaBuild = pkgs.callPackage ../build-support/emacs/melpa.nix {
+    elpaBuild = pkgs.callPackage ../applications/editors/emacs/build-support/elpa.nix {
+      inherit (self) emacs;
+    };
+
+    melpaBuild = pkgs.callPackage ../applications/editors/emacs/build-support/melpa.nix {
       inherit (self) emacs;
     };
 

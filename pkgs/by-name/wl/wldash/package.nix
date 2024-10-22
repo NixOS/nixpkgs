@@ -4,7 +4,6 @@
   dbus,
   fetchFromGitHub,
   fontconfig,
-  libffi,
   libpulseaudio,
   libxkbcommon,
   pkg-config,
@@ -57,7 +56,7 @@ rustPlatform.buildRustPackage {
     ./0002-Update-fontconfig.patch
   ];
 
-  cargoSha256 = "sha256-Y7nhj8VpO6sEzVkM3uPv8Tlk2jPn3c/uPJqFc/HjHI0=";
+  cargoHash = "sha256-Y7nhj8VpO6sEzVkM3uPv8Tlk2jPn3c/uPJqFc/HjHI0=";
 
   dontPatchELF = true;
 

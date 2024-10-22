@@ -1,27 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, cmake
-, pkg-config
-, qtbase
-, qtsvg
-, qtx11extras
-, lxqt
-, mtdev
-, xorg
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  lxqt,
+  mtdev,
+  xorg,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
   pname = "qt5integration";
-  version = "5.6.20";
+  version = "5.6.32";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    hash = "sha256-cmvscSIu3LOTKuMs/+JUdJAvQ7OB4o1k+LqfRxNefZU=";
+    hash = "sha256-WRMeH66X21Z6TBKPEabnWqzC95+OR9M5azxvAp6K7T4=";
   };
 
   nativeBuildInputs = [
@@ -31,9 +30,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     dtkwidget
-    qtbase
-    qtsvg
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qtx11extras
     mtdev
     lxqt.libqtxdg_3_12
     xorg.xcbutilrenderutil
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DPLUGIN_INSTALL_BASE_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+    "-DPLUGIN_INSTALL_BASE_DIR=${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}"
   ];
 
   dontWrapQtApps = true;

@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ hatchling ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     DOH = [
       httpx
       h2
@@ -53,7 +53,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  checkInputs = [ cacert ] ++ passthru.optional-dependencies.DNSSEC;
+  checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found
@@ -63,7 +63,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "dns" ];
 
   meta = with lib; {
-    description = "A DNS toolkit for Python";
+    description = "DNS toolkit for Python";
     homepage = "https://www.dnspython.org";
     changelog = "https://github.com/rthalley/dnspython/blob/v${version}/doc/whatsnew.rst";
     license = with licenses; [ isc ];

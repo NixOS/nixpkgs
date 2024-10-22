@@ -14,32 +14,30 @@
 
 buildGoModule rec {
   pname = "goss";
-
-  # Don't forget to update dgoss to the same version.
-  version = "0.4.6";
+  version = "0.4.9";
 
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-4LJD70Y6nxRWdcaPe074iP2MVUMDgoTOwWbC1JecVcI=";
+    hash = "sha256-GdkLasokpWegjK4kZzAskp1NGwcuMjrjjau75cEo8kg=";
   };
 
-  vendorHash = "sha256-5/vpoJZu/swNwQQXtW6wuEVCtOq6HsbFywuipaiwHfs=";
+  vendorHash = "sha256-Rf6Xt54y1BN2o90rDW0WvEm4H5pPfsZ786MXFjsAFaM=";
 
   CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=v${version}"
+    "-X github.com/goss-org/goss/util.Version=v${version}"
   ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = let
     runtimeDependencies = [ bash getent ]
-      ++ lib.optionals stdenv.isLinux [ systemd ];
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ systemd ];
   in ''
     wrapProgram $out/bin/goss \
       --prefix PATH : "${lib.makeBinPath runtimeDependencies}"

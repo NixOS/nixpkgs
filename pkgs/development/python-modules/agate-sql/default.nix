@@ -36,9 +36,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "agatesql" ];
 
   meta = with lib; {
-    description = "Adds SQL read/write support to agate.";
+    description = "Adds SQL read/write support to agate";
     homepage = "https://github.com/wireservice/agate-sql";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ vrthra ];
+    maintainers = [ ];
   };
 }

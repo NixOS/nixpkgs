@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
     DiskArbitration
     Foundation
@@ -50,6 +50,7 @@ rustPlatform.buildRustPackage rec {
     mandown docs/MANPAGE.md > zellij.1
     installManPage zellij.1
 
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd $pname \
       --bash <($out/bin/zellij setup --generate-completion bash) \
       --fish <($out/bin/zellij setup --generate-completion fish) \
@@ -59,7 +60,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests.version = testers.testVersion { package = zellij; };
 
   meta = with lib; {
-    description = "A terminal workspace with batteries included";
+    description = "Terminal workspace with batteries included";
     homepage = "https://zellij.dev/";
     changelog = "https://github.com/zellij-org/zellij/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];

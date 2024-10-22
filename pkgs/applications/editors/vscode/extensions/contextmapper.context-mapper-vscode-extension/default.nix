@@ -10,8 +10,8 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
     name = "context-mapper-vscode-extension";
     publisher = "contextmapper";
-    version = "6.11.0";
-    hash = "sha256-TvApcBBI+Egu7t4tJuEYTs6mhvABOY2eXVb57O4gWfs=";
+    version = "6.12.0";
+    hash = "sha256-iGaVipNvx6J3NgZ2KbBJOSVCwG+lr25u7mfMCY4yB18=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
   '';
 
   meta = {
-    description = "A VSCode extension for Context Mapper";
+    description = "VSCode extension for Context Mapper";
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=${mktplcRef.publisher}.${mktplcRef.name}";
     homepage = "https://github.com/ContextMapper/vscode-extension";
     license = lib.licenses.asl20;

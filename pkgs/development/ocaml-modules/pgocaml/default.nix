@@ -19,7 +19,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "An interface to PostgreSQL databases for OCaml applications";
+    description = "Interface to PostgreSQL databases for OCaml applications";
     homepage = "https://github.com/darioteixeira/pgocaml";
     license = licenses.lgpl2Only;
     maintainers = with maintainers; [ vbgl ];

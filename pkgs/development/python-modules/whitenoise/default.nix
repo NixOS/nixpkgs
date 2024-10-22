@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "whitenoise";
-  version = "6.6.0";
+  version = "6.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "evansd";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-Z59GjrOL+BPHqBCirg9T4qBOrjiuBng6Q5lTuLQx9ac=";
+    hash = "sha256-4SrTiTqBrfFuQ/8mqQL+YiehFWW+ZzKiAF0h2XyYuSs=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     homepage = "https://whitenoise.readthedocs.io/";
     changelog = "https://github.com/evansd/whitenoise/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

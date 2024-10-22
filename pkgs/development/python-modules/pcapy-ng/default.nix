@@ -6,7 +6,6 @@
   libpcap,
   pkgconfig,
   pytestCheckHook,
-  python,
   pythonOlder,
 }:
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "hole" ];
 
   meta = with lib; {
-    description = "Python API for interacting with a Pihole instance.";
+    description = "Python API for interacting with a Pihole instance";
     homepage = "https://github.com/home-assistant-ecosystem/python-hole";
     changelog = "https://github.com/home-assistant-ecosystem/python-hole/releases/tag/${version}";
     license = with licenses; [ mit ];

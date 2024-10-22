@@ -10,7 +10,7 @@ buildDunePackage rec {
 
   useDune2 = true;
 
-  minimumOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
@@ -19,7 +19,7 @@ buildDunePackage rec {
 
   buildInputs = [ dune-configurator ];
   propagatedBuildInputs = [ lapack blas ] ++
-    lib.optionals stdenv.isDarwin
+    lib.optionals stdenv.hostPlatform.isDarwin
       [ darwin.apple_sdk.frameworks.Accelerate ];
 
   meta = with lib; {

@@ -30,7 +30,7 @@ let
       fi
       mkdir -p "$out/bin"
 
-      addToLuaPath "$out"
+      buildLuaPath "$out"
 
       # take every binary from lua packages and put them into the env
       for path in ${lib.concatStringsSep " " paths}; do

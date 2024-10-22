@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Library to configure Python logging easily";
     homepage = "https://github.com/Mergifyio/daiquiri";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, fixDarwinDylibNames, oracle-instantclient, libaio }:
 
 let
-  version = "5.2.0";
+  version = "5.3.0";
   libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in
@@ -14,22 +14,22 @@ stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "sha256-2oM78YgP14oyFBWZ8KdHlGsN3hjoWTBcIvOI+93sSyM=";
+    sha256 = "sha256-Ez9B89I008YMu1s/8J0V4bydkooth+O5846Fmwl4FsA=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ oracle-instantclient ]
-    ++ lib.optionals stdenv.isLinux [ libaio ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ libaio ];
 
   dontPatchELF = true;
   makeFlags = [ "PREFIX=$(out)" "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" ];
 
   postFixup = ''
-    ${lib.optionalString (stdenv.isLinux) ''
+    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
       patchelf --set-rpath "${libPath}:$(patchelf --print-rpath $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary})" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
-    ${lib.optionalString (stdenv.isDarwin) ''
+    ${lib.optionalString (stdenv.hostPlatform.isDarwin) ''
       install_name_tool -add_rpath "${libPath}" $out/lib/libodpic${stdenv.hostPlatform.extensions.sharedLibrary}
     ''}
   '';

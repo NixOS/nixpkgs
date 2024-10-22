@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "goose";
-  version = "3.20.0";
+  version = "3.22.1";
 
   src = fetchFromGitHub {
     owner = "pressly";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-DgxFczS2YAnicf8RTMf7gDzCtDyj/zqzrGfeb3YcYzg=";
+    hash = "sha256-rXh50Yv8UXJc+E32Fgg6Iy2K6x5+IM7dmxsvwFuCQ9U=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-KzIOylWrsOF5oAuuFKUKVSnSJWq3KWZ3Ot7sryNnjIY=";
+  vendorHash = "sha256-xb3yBiV+XyOlMp42c+eCj27DpvJalP5qhEoKG1X2kG8=";
 
   # skipping: end-to-end tests require a docker daemon
   postPatch = ''
@@ -40,13 +40,13 @@ buildGoModule rec {
     "-skip=TestClickUpDown|TestClickHouseFirstThree|TestLockModeAdvisorySession|TestDialectStore|TestGoMigrationStats|TestPostgresSessionLocker"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Database migration tool which supports SQL migrations and Go functions";
     homepage = "https://pressly.github.io/goose/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "goose";
   };
 }

@@ -33,7 +33,8 @@ mkDerivation rec {
 
       # fixup and install desktop file
       desktop-file-install --dir $out/share/applications \
-        --set-key Exec --set-value $binary \
+        --set-key Exec --set-value SoulseekQt \
+        --set-key Terminal --set-value false \
         --set-key Comment --set-value "${meta.description}" \
         --set-key Categories --set-value Network ${appextracted}/default.desktop
       mv $out/share/applications/default.desktop $out/share/applications/SoulseekQt.desktop

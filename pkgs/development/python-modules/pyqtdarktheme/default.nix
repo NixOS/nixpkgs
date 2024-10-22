@@ -55,7 +55,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A flat dark theme for PySide and PyQt";
+    description = "Flat dark theme for PySide and PyQt";
     homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
     license = licenses.mit;
     maintainers = with maintainers; [ paveloom ];

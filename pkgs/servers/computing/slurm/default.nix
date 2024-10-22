@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "23.11.7.1";
+  version = "24.05.3.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    hash = "sha256-TR2dZXdM8SgBD8C/CHe8Zadh2xAzbtb4hgOfhCXkF0M=";
+    hash = "sha256-qYIpYBjbYgbYzPKEgKEEXEf/0bFyp1sFFl7A7mq6Nco=";
   };
 
   outputs = [ "out" "dev" ];
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableX11 [ xorg.xauth ]
   ++ lib.optionals enableGtk2 [ gtk2 ];
 
-  configureFlags = with lib;
-    [ "--with-freeipmi=${freeipmi}"
+  configureFlags = [
+      "--with-freeipmi=${freeipmi}"
       "--with-http-parser=${http-parser}"
       "--with-hwloc=${lib.getDev hwloc}"
       "--with-json=${lib.getDev json_c}"
@@ -78,8 +78,8 @@ stdenv.mkDerivation rec {
       "--with-pmix=${lib.getDev pmix}"
       "--with-bpf=${libbpf}"
       "--without-rpath" # Required for configure to pick up the right dlopen path
-    ] ++ (optional enableGtk2  "--disable-gtktest")
-      ++ (optional (!enableX11) "--disable-x11");
+    ] ++ (lib.optional enableGtk2  "--disable-gtktest")
+      ++ (lib.optional (!enableX11) "--disable-x11");
 
 
   preConfigure = ''

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fcambus/bdf2sfd";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     mainProgram = "bdf2sfd";
   };
 }

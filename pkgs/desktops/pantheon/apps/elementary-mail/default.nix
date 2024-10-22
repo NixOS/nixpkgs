@@ -5,7 +5,6 @@
 , pkg-config
 , meson
 , ninja
-, python3
 , vala
 , gtk3
 , libxml2
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-mail";
-  version = "7.2.0";
+  version = "8.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "mail";
     rev = version;
-    sha256 = "sha256-hBOogZ9ZNS9KnuNn+jNhTtlupBxZL2DG/CiuBR1kFu0=";
+    sha256 = "sha256-6T/OTiuDVAPBqp8BPawf/MVEuWTPrLa3/N1Blvt/7Q8=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    python3
     vala
     wrapGAppsHook3
   ];
@@ -55,11 +53,6 @@ stdenv.mkDerivation rec {
     libportal-gtk3
     webkitgtk_4_1
   ];
-
-  postPatch = ''
-    chmod +x meson/post_install.py
-    patchShebangs meson/post_install.py
-  '';
 
   preFixup = ''
     gappsWrapperArgs+=(

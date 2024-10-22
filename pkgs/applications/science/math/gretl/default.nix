@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = {
-    description = "A software package for econometric analysis";
+    description = "Software package for econometric analysis";
     homepage = "https://gretl.sourceforge.net";
     license = lib.licenses.gpl3;
     longDescription = ''

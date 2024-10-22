@@ -10,6 +10,7 @@
   stdenv,
   wayland,
   wayland-protocols,
+  wayland-scanner,
 }:
 let
   pname = "wl-kbptr";
@@ -30,6 +31,7 @@ stdenv.mkDerivation {
     meson
     ninja
     pkg-config
+    wayland-scanner
   ];
 
   buildInputs = [

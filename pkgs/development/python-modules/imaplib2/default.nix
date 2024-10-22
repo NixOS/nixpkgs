@@ -25,7 +25,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "imaplib2" ];
 
   meta = with lib; {
-    description = "A threaded Python IMAP4 client";
+    description = "Threaded Python IMAP4 client";
     homepage = "https://github.com/jazzband/imaplib2";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];

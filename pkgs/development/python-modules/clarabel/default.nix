@@ -12,18 +12,18 @@
 
 buildPythonPackage rec {
   pname = "clarabel";
-  version = "0.8.1";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-03GEFzlvzLeedKVeDokdHGArwjunh3Zm8cJQL90mI+o=";
+    hash = "sha256-DW0/6IAL5bS11AqOFL1JJmez5GzF2+N2d85e0l8HGdQ=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-9zBr9SUd8jJDSqRX9Xs0mDV5gck/qfqJ3VfEAOz7EsA=";
+    hash = "sha256-NNvrDXBodrO3bxr4X1HEn5uHmHDJ1s9C70lPv7OkSCo=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   propagatedBuildInputs = [
     numpy

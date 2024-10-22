@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.padl.com/OSS/pam_ccreds.html";
     description = "PAM module to locally authenticate using an enterprise identity when the network is unavailable";
     mainProgram = "ccreds_chkpwd";
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
     platforms = platforms.linux;
   };
 }

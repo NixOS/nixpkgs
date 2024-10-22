@@ -7,7 +7,7 @@
 , curlMinimal
 , openssl
 , libsecret
-, webkitgtk
+, webkitgtk_4_0
 , libsoup
 , gtk3
 , atk
@@ -23,11 +23,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "intune-portal";
-  version = "1.2404.25-jammy";
+  version = "1.2405.17-jammy";
 
   src = fetchurl {
-    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/${pname}/${pname}_${version}_amd64.deb";
-    hash = "sha256-ZRJdhhDwXeOjIx7Ml4VvPUOotnJQ9f73nsYzgm6SQC8=";
+    url = "https://packages.microsoft.com/ubuntu/22.04/prod/pool/main/i/intune-portal/intune-portal_${version}_amd64.deb";
+    hash = "sha256-WpVPWzh8jN092MaY2rMXhLfpVXsflMl9hOY9nNGJlLk=";
   };
 
   nativeBuildInputs = [ dpkg ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
           curlMinimal
           openssl
           libsecret
-          webkitgtk
+          webkitgtk_4_0
           libsoup
           gtk3
           atk

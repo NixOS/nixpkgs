@@ -1,0 +1,311 @@
+From 36767c7345161baf0ab125f95c8557f8e24f25db Mon Sep 17 00:00:00 2001
+From: Randy Eckenrode <randy@largeandhighquality.com>
+Date: Tue, 9 Apr 2024 19:28:17 -0400
+Subject: [PATCH 7/8] Add OpenSSL-based CoreCrypto digest functions
+
+---
+ compat/CommonCrypto/CommonDigest.h    |  6 +++
+ compat/CommonCrypto/CommonDigestSPI.c | 21 +++++++++++
+ compat/CommonCrypto/CommonDigestSPI.h | 14 +++++++
+ compat/corecrypto/api_defines.h       | 10 +++++
+ compat/corecrypto/ccdigest.c          | 53 +++++++++++++++++++++++++++
+ compat/corecrypto/ccdigest.h          | 27 ++++++++++++++
+ compat/corecrypto/ccdigest_private.h  | 19 ++++++++++
+ compat/corecrypto/ccsha1.c            | 22 +++++++++++
+ compat/corecrypto/ccsha1.h            |  9 +++++
+ compat/corecrypto/ccsha2.c            | 22 +++++++++++
+ compat/corecrypto/ccsha2.h            |  9 +++++
+ 11 files changed, 212 insertions(+)
+ create mode 100644 compat/CommonCrypto/CommonDigest.h
+ create mode 100644 compat/CommonCrypto/CommonDigestSPI.c
+ create mode 100644 compat/CommonCrypto/CommonDigestSPI.h
+ create mode 100644 compat/corecrypto/api_defines.h
+ create mode 100644 compat/corecrypto/ccdigest.c
+ create mode 100644 compat/corecrypto/ccdigest.h
+ create mode 100644 compat/corecrypto/ccdigest_private.h
+ create mode 100644 compat/corecrypto/ccsha1.c
+ create mode 100644 compat/corecrypto/ccsha1.h
+ create mode 100644 compat/corecrypto/ccsha2.c
+ create mode 100644 compat/corecrypto/ccsha2.h
+
+diff --git a/compat/CommonCrypto/CommonDigest.h b/compat/CommonCrypto/CommonDigest.h
+new file mode 100644
+index 0000000..a60eba7
+--- /dev/null
++++ b/compat/CommonCrypto/CommonDigest.h
+@@ -0,0 +1,6 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#define CCSHA256_OUTPUT_SIZE 32
+diff --git a/compat/CommonCrypto/CommonDigestSPI.c b/compat/CommonCrypto/CommonDigestSPI.c
+new file mode 100644
+index 0000000..41269fc
+--- /dev/null
++++ b/compat/CommonCrypto/CommonDigestSPI.c
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#include "CommonDigestSPI.h"
++
++#include <stdlib.h>
++#include <string.h>
++
++#include <corecrypto/ccsha2.h>
++
++void CCDigest(int type, const uint8_t* bytes, size_t count, uint8_t* digest) {
++    if (type != kCCDigestSHA256) {
++        abort();
++    }
++    const struct ccdigest_info* di = ccsha256_di();
++
++    ccdigest_di_decl(_di, ctx);
++    ccdigest_init(di, ctx);
++    ccdigest_update(di, ctx, count, bytes);
++    ccdigest_final(di, ctx, digest);
++}
+diff --git a/compat/CommonCrypto/CommonDigestSPI.h b/compat/CommonCrypto/CommonDigestSPI.h
+new file mode 100644
+index 0000000..172742a
+--- /dev/null
++++ b/compat/CommonCrypto/CommonDigestSPI.h
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#include <stdint.h>
++
++#include <corecrypto/ccdigest.h>
++#include <cs_blobs.h>
++
++
++#define kCCDigestSHA256 10
++
++EXTERN_C void CCDigest(int type, const uint8_t* bytes, size_t count, uint8_t* digest);
+diff --git a/compat/corecrypto/api_defines.h b/compat/corecrypto/api_defines.h
+new file mode 100644
+index 0000000..13d1e7a
+--- /dev/null
++++ b/compat/corecrypto/api_defines.h
+@@ -0,0 +1,10 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#ifdef __cplusplus
++#define EXTERN_C extern "C"
++#else
++#define EXTERN_C
++#endif
+diff --git a/compat/corecrypto/ccdigest.c b/compat/corecrypto/ccdigest.c
+new file mode 100644
+index 0000000..e29dcb8
+--- /dev/null
++++ b/compat/corecrypto/ccdigest.c
+@@ -0,0 +1,53 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#include "ccdigest.h"
++#include "ccdigest_private.h"
++
++#include <stdlib.h>
++
++#include <openssl/err.h>
++
++
++struct ccdigest_context* _ccdigest_context_new(void)
++{
++    struct ccdigest_context* ctx = malloc(sizeof(struct ccdigest_context));
++    ctx->context = EVP_MD_CTX_new();
++    return ctx;
++}
++
++struct ccdigest_info* _ccdigest_newprovider(const char* name)
++{
++    struct ccdigest_info* di = malloc(sizeof(struct ccdigest_info));
++    di->provider = EVP_MD_fetch(NULL, name, NULL);
++    return di;
++}
++
++void ccdigest_init(const struct ccdigest_info* di, struct ccdigest_context* ctx)
++{
++    if (!EVP_DigestInit_ex2(ctx->context, di->provider, NULL)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
++}
++
++void ccdigest_update(
++    const struct ccdigest_info* _di,
++    struct ccdigest_context* ctx,
++    size_t count,
++    const void* bytes
++)
++{
++    if (!EVP_DigestUpdate(ctx->context, bytes, count)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
++}
++
++void ccdigest_final(const struct ccdigest_info* _di, struct ccdigest_context* ctx, uint8_t* digest)
++{
++    if (!EVP_DigestFinal_ex(ctx->context, digest, NULL)) {
++        ERR_print_errors_fp(stderr);
++        abort();
++    }
++}
+diff --git a/compat/corecrypto/ccdigest.h b/compat/corecrypto/ccdigest.h
+new file mode 100644
+index 0000000..9af2394
+--- /dev/null
++++ b/compat/corecrypto/ccdigest.h
+@@ -0,0 +1,27 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#include <stddef.h>
++#include <stdint.h>
++
++#include "api_defines.h"
++
++
++struct ccdigest_info;
++struct ccdigest_context;
++
++EXTERN_C struct ccdigest_context* _ccdigest_context_new(void);
++
++#define ccdigest_di_decl(_di, ctxvar) \
++    struct ccdigest_context* (ctxvar) = _ccdigest_context_new()
++
++EXTERN_C void ccdigest_init(const struct ccdigest_info* di, struct ccdigest_context* ctx);
++EXTERN_C void ccdigest_update(
++    const struct ccdigest_info* _di,
++    struct ccdigest_context* ctx,
++    size_t count,
++    const void* bytes
++);
++EXTERN_C void ccdigest_final(const struct ccdigest_info* _di, struct ccdigest_context* ctx, uint8_t* digest);
+diff --git a/compat/corecrypto/ccdigest_private.h b/compat/corecrypto/ccdigest_private.h
+new file mode 100644
+index 0000000..0ea9759
+--- /dev/null
++++ b/compat/corecrypto/ccdigest_private.h
+@@ -0,0 +1,19 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#include "api_defines.h"
++
++#include <openssl/evp.h>
++
++
++struct ccdigest_info {
++    EVP_MD* provider;
++};
++
++struct ccdigest_context {
++    EVP_MD_CTX* context;
++};
++
++EXTERN_C struct ccdigest_info* _ccdigest_newprovider(const char* name);
+diff --git a/compat/corecrypto/ccsha1.c b/compat/corecrypto/ccsha1.c
+new file mode 100644
+index 0000000..e02b2b6
+--- /dev/null
++++ b/compat/corecrypto/ccsha1.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#include "ccsha1.h"
++
++#include <assert.h>
++
++#include <cs_blobs.h>
++
++#include "ccdigest_private.h"
++
++
++static struct ccdigest_info* di = NULL;
++
++const struct ccdigest_info* ccsha1_di(void)
++{
++    if (!di) {
++        di = _ccdigest_newprovider("SHA-1");
++        assert(EVP_MD_get_size(di->provider) == CS_SHA1_LEN);
++    }
++    return di;
++}
+diff --git a/compat/corecrypto/ccsha1.h b/compat/corecrypto/ccsha1.h
+new file mode 100644
+index 0000000..8e3f85f
+--- /dev/null
++++ b/compat/corecrypto/ccsha1.h
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#include <corecrypto/ccdigest.h>
++
++
++EXTERN_C const struct ccdigest_info* ccsha1_di(void);
+diff --git a/compat/corecrypto/ccsha2.c b/compat/corecrypto/ccsha2.c
+new file mode 100644
+index 0000000..6504503
+--- /dev/null
++++ b/compat/corecrypto/ccsha2.c
+@@ -0,0 +1,22 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#include "ccsha2.h"
++
++#include <assert.h>
++
++#include <cs_blobs.h>
++
++#include "ccdigest_private.h"
++
++
++static struct ccdigest_info* di = NULL;
++
++const struct ccdigest_info* ccsha256_di(void)
++{
++    if (!di) {
++        di = _ccdigest_newprovider("SHA-256");
++        assert(EVP_MD_get_size(di->provider) == CS_SHA256_LEN);
++    }
++    return di;
++}
+diff --git a/compat/corecrypto/ccsha2.h b/compat/corecrypto/ccsha2.h
+new file mode 100644
+index 0000000..9f30e03
+--- /dev/null
++++ b/compat/corecrypto/ccsha2.h
+@@ -0,0 +1,9 @@
++// SPDX-License-Identifier: APSL-2.0
++// CoreCrypto compatibility shims written by Randy Eckenrode © 2024
++
++#pragma once
++
++#include <corecrypto/ccdigest.h>
++
++
++EXTERN_C const struct ccdigest_info* ccsha256_di(void);
+-- 
+2.45.1
+

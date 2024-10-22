@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   setuptools-scm,
-  pythonRelaxDepsHook,
   requests,
   pydantic,
   aiohttp,
@@ -29,7 +28,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = [
@@ -50,7 +48,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "steamship" ];
 
   meta = with lib; {
-    description = "The fastest way to add language AI to your product";
+    description = "Fastest way to add language AI to your product";
     homepage = "https://www.steamship.com/";
     changelog = "https://github.com/steamship-core/python-client/releases/tag/${version}";
     license = licenses.mit;

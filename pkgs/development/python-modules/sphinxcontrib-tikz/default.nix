@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-tikz";
-  version = "0.4.19";
+  version = "0.4.20";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-gen+bH4NvEbxnxr5HStisB1BqyKIS4n1VoHyAK4mXUk=";
+    hash = "sha256-LuO9H5yi80nAgjpPNQfZHEEOf5a+IPBR/vevFmXzQco=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "TikZ extension for Sphinx";
     homepage = "https://bitbucket.org/philexander/tikz";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.bsd3;
   };
 }

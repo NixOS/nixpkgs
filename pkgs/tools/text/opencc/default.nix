@@ -5,17 +5,19 @@
   cmake,
   python3,
   opencc,
+  rapidjson,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencc";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "BYVoid";
     repo = "OpenCC";
     rev = "ver.${version}";
-    sha256 = "sha256-N7nazA0xoQ2ewOGDiJg1vBBYMdF1/qiCfNjG5CFFbuk=";
+    sha256 = "sha256-JKudwA2C7gHihjPnsqPq5i7X8TvG8yQYZEG5f/xu3yo=";
   };
 
   nativeBuildInputs =
@@ -27,10 +29,23 @@ stdenv.mkDerivation rec {
       opencc # opencc_dict
     ];
 
+  buildInputs = [
+    rapidjson
+  ];
+
+  # TODO use more system dependencies
+  cmakeFlags = [
+    (lib.cmakeBool "USE_SYSTEM_RAPIDJSON" true)
+  ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "ver."; };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/BYVoid/OpenCC";
     license = licenses.asl20;
-    description = "A project for conversion between Traditional and Simplified Chinese";
+    description = "Project for conversion between Traditional and Simplified Chinese";
     longDescription = ''
       Open Chinese Convert (OpenCC) is an opensource project for conversion between
       Traditional Chinese and Simplified Chinese, supporting character-level conversion,

@@ -26,6 +26,6 @@ stdenv.mkDerivation  rec {
     homepage = "https://rakarrack.sourceforge.net";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.goibhniu ];
+    maintainers = [ ];
   };
 }

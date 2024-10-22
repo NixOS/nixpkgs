@@ -10,7 +10,7 @@ let
   '';
 
 in {
-  meta.maintainers = with maintainers; [ primeos calbrecht jcumming ];
+  meta.maintainers = with maintainers; [ calbrecht jcumming ];
 
   options = {
 

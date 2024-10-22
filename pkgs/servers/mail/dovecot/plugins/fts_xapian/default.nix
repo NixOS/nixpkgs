@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dovecot-fts-xapian";
-  version = "1.7.12";
+  version = "1.7.14";
 
   src = fetchFromGitHub {
     owner = "grosjo";
     repo = "fts-xapian";
     rev = version;
-    hash = "sha256-bKCZqv4nml+lCsQ10nfObctpZyYXoLYKVO0nuJOX/JM=";
+    hash = "sha256-cLOkXA4kQ15M5TheXy9qZq2je05iY9jwf3tHw20l1Pw=";
   };
 
   buildInputs = [ xapian icu sqlite ];
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Only;
     maintainers = with maintainers; [ julm symphorien ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/dovecot_fts_xapian.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/dovecot_fts_xapian.x86_64-darwin
   };
 }

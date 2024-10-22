@@ -15,7 +15,7 @@
   python-dateutil,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
+  tenacity,
   respx,
   retrying,
   rfc3339,
@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
-  version = "0.25.1";
+  version = "0.25.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-GtHAV4BvBdexjJxlT1jcNklSogYor2aWoQI2QNs/dOQ=";
+    hash = "sha256-fVUvAXtZcMWBBK0wdGJA0oIneCNKI4GI2qNIc30HU9M=";
   };
 
   patches = [
@@ -54,7 +54,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs
@@ -66,6 +65,7 @@ buildPythonPackage rec {
     python-dateutil
     retrying
     rfc3339
+    tenacity
     toml
   ];
 

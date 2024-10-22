@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  installShellFiles,
   fetchFromGitHub,
   gitUpdater,
   testers,
@@ -9,16 +10,20 @@
 
 buildGoModule rec {
   pname = "mods";
-  version = "1.3.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "mods";
     rev = "v${version}";
-    hash = "sha256-9sr6R7Keg9NQQapZKnjfrMOJilQEYCs8AS04TuNWQ68=";
+    hash = "sha256-1Qx3P1q7zmrzNqmiivri0BxdEsRYgS1cOp17S44jRPI=";
   };
 
-  vendorHash = "sha256-BL5bxyeVkcm7GO1Kzk9d/hj2wY50UhauEFq9YQ/JbCE=";
+  vendorHash = "sha256-LarOXYkyhSCMXkD2G3/XYHnj5bDcL6nwWxlMAYy+9d8=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
 
   ldflags = [
     "-s"
@@ -41,11 +46,22 @@ buildGoModule rec {
     };
   };
 
+  postInstall = ''
+    export HOME=$(mktemp -d)
+    $out/bin/mods man > mods.1
+    $out/bin/mods completion bash > mods.bash
+    $out/bin/mods completion fish > mods.fish
+    $out/bin/mods completion zsh > mods.zsh
+
+    installManPage mods.1
+    installShellCompletion mods.{bash,fish,zsh}
+  '';
+
   meta = with lib; {
     description = "AI on the command line";
     homepage = "https://github.com/charmbracelet/mods";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with maintainers; [ dit7ya caarlos0 ];
     mainProgram = "mods";
   };
 }

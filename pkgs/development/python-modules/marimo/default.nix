@@ -4,15 +4,16 @@
   fetchPypi,
   pythonOlder,
   setuptools,
-  black,
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  ruff,
   starlette,
   tomlkit,
   uvicorn,
@@ -23,28 +24,32 @@
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.6.2";
+  version = "0.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sp3lQPLpU5qvHKQ02c/Ga1M8IsbmOX5nz2XPBMbGj30=";
+    hash = "sha256-7sG6i1WusNuCpuaojFXhSfPWCA2/nzHXvMF29ApGTDg=";
   };
 
   build-system = [ setuptools ];
 
+  # ruff is not packaged as a python module in nixpkgs
+  pythonRemoveDeps = [ "ruff" ];
+
   dependencies = [
-    black
     click
     docutils
     itsdangerous
     jedi
     markdown
+    packaging
     psutil
     pygments
     pymdown-extensions
+    ruff
     starlette
     tomlkit
     uvicorn
@@ -57,7 +62,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "marimo" ];
 
   meta = with lib; {
-    description = "A reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
+    description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
     changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
     license = licenses.asl20;

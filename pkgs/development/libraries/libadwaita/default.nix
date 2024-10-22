@@ -13,7 +13,9 @@
 , glib
 , gtk4
 , gnome
+, adwaita-icon-theme
 , gsettings-desktop-schemas
+, desktop-file-utils
 , xvfb-run
 , AppKit
 , Foundation
@@ -22,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
-  version = "1.5.1";
+  version = "1.5.3";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -32,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "libadwaita";
     rev = finalAttrs.version;
-    hash = "sha256-dH0VPIt6SGTDcb1I72cKnNlyqZ3dptvKmMDjOd17BfA=";
+    hash = "sha256-NCQCd/QnJg2fEI6q5ys8HQXinGnKaoxhMUHd8rwxAmk=";
   };
 
   depsBuildBuild = [
@@ -47,18 +49,19 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     vala
     gobject-introspection
+    desktop-file-utils  # for validate-desktop-file
   ];
 
   mesonFlags = [
     "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.doCheck) [
+  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
     "-Dtests=false"
   ];
 
   buildInputs = [
     appstream
     fribidi
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     AppKit
     Foundation
   ];
@@ -68,8 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    gnome.adwaita-icon-theme
-  ] ++ lib.optionals (!stdenv.isDarwin) [
+    adwaita-icon-theme
+  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     xvfb-run
   ];
 
@@ -77,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # not ok /Adwaita/ButtonContent/style_class_button - Gdk-FATAL-CRITICAL:
   # gdk_macos_monitor_get_workarea: assertion 'GDK_IS_MACOS_MONITOR (self)' failed
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   separateDebugInfo = true;
 
   checkPhase = ''
@@ -95,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       # Tests need a cache directory
       "HOME=$TMPDIR"
     )
-    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.isDarwin) "xvfb-run"} \
+    env "''${testEnvironment[@]}" ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "xvfb-run"} \
       meson test --print-errorlogs
 
     runHook postCheck
@@ -104,6 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput "share/doc" "$devdoc"
+
+    # Put all resources related to demo app into devdoc output.
+    for d in applications icons metainfo; do
+      moveToOutput "share/$d" "$devdoc"
+    done
   '';
 
   passthru = {

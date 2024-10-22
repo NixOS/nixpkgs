@@ -7,15 +7,15 @@
   stdenv
 }:
 stdenv.mkDerivation (finalAttrs: {
-  name = "lcsync";
-  version = "0.3.0";
+  pname = "lcsync";
+  version = "0.3.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "lcsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eiYbS/LYnM2ZjDHO9KhBp1rrovbhm+OVVfmLtjxAE+Y=";
+    hash = "sha256-x8KjvUtn00g+zxDfSWZq4WgALDKRgbCF9rtipdOMbpc=";
   };
   buildInputs = [ lcrq librecast libsodium ];
   configureFlags = [ "SETCAP_PROGRAM=true" ];

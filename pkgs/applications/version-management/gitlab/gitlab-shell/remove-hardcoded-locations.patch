@@ -28,8 +28,8 @@ index c6f2422..fb0426b 100644
  }
  
  func (k *KeyLine) ToString() string {
--	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.Id)
-+	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.Id)
+-	command := fmt.Sprintf("%s %s-%s", path.Join(k.Config.RootDir, executable.BinDir, executable.GitlabShell), k.Prefix, k.ID)
++	command := fmt.Sprintf("%s %s-%s", path.Join("/run/current-system/sw/bin", executable.GitlabShell), k.Prefix, k.ID)
  
  	return fmt.Sprintf(`command="%s",%s %s`, command, SshOptions, k.Value)
  }

@@ -16,7 +16,7 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" ];
 
   meta = with lib; {
-    description = "A small tool to watch a directory and rerun a command when certain files change";
+    description = "Small tool to watch a directory and rerun a command when certain files change";
     mainProgram = "reflex";
     homepage = "https://github.com/cespare/reflex";
     license = licenses.mit;

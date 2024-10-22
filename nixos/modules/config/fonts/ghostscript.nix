@@ -1,11 +1,8 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 {
   options = {
-    fonts.enableGhostscriptFonts = mkOption {
-      type = types.bool;
+    fonts.enableGhostscriptFonts = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         Whether to add the fonts provided by Ghostscript (such as
@@ -17,7 +14,7 @@ with lib;
 
   };
 
-  config = mkIf config.fonts.enableGhostscriptFonts {
-    fonts.packages = [ "${pkgs.ghostscript}/share/ghostscript/fonts" ];
+  config = lib.mkIf config.fonts.enableGhostscriptFonts {
+    fonts.packages = [ pkgs.ghostscript.fonts ];
   };
 }

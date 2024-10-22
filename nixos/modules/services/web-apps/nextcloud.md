@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud29` which is also the latest
+The current default by NixOS is `nextcloud30` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -120,6 +120,65 @@ Auto updates for Nextcloud apps can be enabled using
     Nextcloud supports [server-side encryption (SSE)](https://docs.nextcloud.com/server/latest/admin_manual/configuration_files/encryption_configuration.html).
     This is not an end-to-end encryption, but can be used to encrypt files that will be persisted
     to external storage such as S3.
+
+  - **Issues with file permissions / unsafe path transitions**
+
+    {manpage}`systemd-tmpfiles(8)` makes sure that the paths for
+
+    * configuration (including declarative config)
+    * data
+    * app store
+    * home directory itself (usually `/var/lib/nextcloud`)
+
+    are properly set up. However, `systemd-tmpfiles` will refuse to do so
+    if it detects an unsafe path transition, i.e. creating files/directories
+    within a directory that is neither owned by `root` nor by `nextcloud`, the
+    owning user of the files/directories to be created.
+
+    Symptoms of that include
+
+    * `config/override.config.php` not being updated (and the config file
+      eventually being garbage-collected).
+    * failure to read from application data.
+
+    To work around that, please make sure that all directories in question
+    are owned by `nextcloud:nextcloud`.
+
+  - **`Failed to open stream: No such file or directory` after deploys**
+
+    Symptoms are errors like this after a deployment that disappear after
+    a few minutes:
+
+    ```
+    Warning: file_get_contents(/run/secrets/nextcloud_db_password): Failed to open stream: No such file or directory in /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php on line 11
+
+    Warning: http_response_code(): Cannot set response code - headers already sent (output started at /nix/store/lqw657xbh6h67ccv9cgv104qhcs1i2vw-nextcloud-config.php:11) in /nix/store/ikxpaq7kjdhpr4w7cgl1n28kc2gvlhg6-nextcloud-29.0.7/lib/base.php on line 639
+    Cannot decode /run/secrets/nextcloud_secrets, because: Syntax error
+    ```
+
+    This can happen if [](#opt-services.nextcloud.secretFile) or
+    [](#opt-services.nextcloud.config.dbpassFile) are managed by
+    [sops-nix](https://github.com/Mic92/sops-nix/).
+
+    Here, `/run/secrets/nextcloud_secrets` is a symlink to
+    `/run/secrets.d/N/nextcloud_secrets`. The `N` will be incremented
+    when the sops-nix activation script runs, i.e.
+    `/run/secrets.d/N` doesn't exist anymore after a deploy,
+    only `/run/secrets.d/N+1`.
+
+    PHP maintains a [cache for `realpath`](https://www.php.net/manual/en/ini.core.php#ini.realpath-cache-size)
+    that still resolves to the old path which is causing
+    the `No such file or directory` error. Interestingly,
+    the cache isn't used for `file_exists` which is why this warning
+    comes instead of the error from `nix_read_secret` in
+    `override.config.php`.
+
+    One option to work around this is to turn off the cache by setting
+    the cache size to zero:
+
+    ```nix
+    services.nextcloud.phpOptions."realpath_cache_size" = "0";
+    ```
 
 ## Using an alternative webserver as reverse-proxy (e.g. `httpd`) {#module-services-nextcloud-httpd}
 

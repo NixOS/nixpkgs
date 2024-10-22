@@ -13,16 +13,17 @@
 , udev
 , wayland
 , wayland-protocols
-, wlroots_0_17
+, wayland-scanner
+, wlroots_0_18
 , xwayland
-, zig_0_12
+, zig_0_13
 , withManpages ? true
 , xwaylandSupport ? true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.2";
+  version = "0.3.5";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,16 +33,16 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-I09cR5aN7qXOzV9HDXaL4TjoeJcVa0Ch00zxOJokdDE=";
+    hash = "sha256-NUKjQOT6UgNYCebeHMxOhX08r3493IOL3qHZivEcbAg=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
-    wayland
+    wayland-scanner
     xwayland
-    zig_0_12.hook
+    zig_0_13.hook
   ]
   ++ lib.optional withManpages scdoc;
 
@@ -52,8 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pixman
     udev
+    wayland
     wayland-protocols
-    wlroots_0_17
+    wlroots_0_18
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;
@@ -74,7 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/river/river";
-    description = "A dynamic tiling wayland compositor";
+    description = "Dynamic tiling wayland compositor";
     longDescription = ''
       River is a dynamic tiling Wayland compositor with flexible runtime
       configuration.

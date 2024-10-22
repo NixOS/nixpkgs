@@ -18,13 +18,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gscreenshot";
-  version = "3.5.0";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "${pname}";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-BA118PwMslqvnlRES2fEgTjzfNvKNVae7GzWSyuaqYM=";
+    sha256 = "sha256-fpxKhgLpXbuUhALzF6n4v3FLcLaqbqLLxwQJE/wJrAY=";
   };
 
   # needed for wrapGAppsHook3 to function
@@ -58,7 +58,7 @@ python3Packages.buildPythonApplication rec {
   patches = [ ./0001-Changing-paths-to-be-nix-compatible.patch ];
 
   meta = {
-    description = "A screenshot frontend (CLI and GUI) for a variety of screenshot backends";
+    description = "Screenshot frontend (CLI and GUI) for a variety of screenshot backends";
 
     longDescription = ''
       gscreenshot provides a common frontend and expanded functionality to a

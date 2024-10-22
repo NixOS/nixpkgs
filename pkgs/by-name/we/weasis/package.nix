@@ -73,7 +73,7 @@ in stdenv.mkDerivation rec {
     # Using changelog from releases as it is more accurate
     changelog = "https://github.com/nroduit/Weasis/releases/tag/v${version}";
     license = with lib.licenses; [ asl20 epl20 ];
-    maintainers = [ lib.maintainers.wolfangaukang ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";
   };

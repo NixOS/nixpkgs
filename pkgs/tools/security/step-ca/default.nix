@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "step-ca";
-  version = "0.26.1";
+  version = "0.27.2";
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yej7gzhaUPbcvqbse7Hh7Im38+DUfC9UZkpjpuG8ctk=";
+    hash = "sha256-byVWNab6Q3yryluhMomzLkRNfXQ/68pAq+YGFjbvX1o=";
   };
 
-  vendorHash = "sha256-XlfdIg8YHCeCvc7kZczUxlxUonyZSQATgsxLTMvNDk4=";
+  vendorHash = "sha256-gQEGCbVgtKIaUgBkfpVwLXoUg1EUhaQFn9JZvV5Rjhc=";
 
   ldflags = [
     "-w"
@@ -32,8 +32,8 @@ buildGoModule rec {
   nativeBuildInputs = lib.optionals hsmSupport [ pkg-config ];
 
   buildInputs =
-    lib.optionals (hsmSupport && stdenv.isLinux) [ pcsclite ]
-    ++ lib.optionals (hsmSupport && stdenv.isDarwin) [ PCSC ];
+    lib.optionals (hsmSupport && stdenv.hostPlatform.isLinux) [ pcsclite ]
+    ++ lib.optionals (hsmSupport && stdenv.hostPlatform.isDarwin) [ PCSC ];
 
   postPatch = ''
     substituteInPlace systemd/step-ca.service --replace "/bin/kill" "${coreutils}/bin/kill"
@@ -62,13 +62,12 @@ buildGoModule rec {
   passthru.tests.step-ca = nixosTests.step-ca;
 
   meta = with lib; {
-    description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
+    description = "Private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [
       cmcdragonkai
-      mohe2015
       techknowlogick
     ];
   };

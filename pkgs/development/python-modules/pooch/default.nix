@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pooch";
-  version = "1.8.1";
+  version = "1.8.2";
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-J+9jCX3ZpuT50mlPXPvy8KXe+kT8yv7AjWAecx10YnA=";
+    hash = "sha256-dlYfDeaKAdpN9q846ZVcTJ0aXJDac/fkAnalco7IPRA=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "A friend to fetch your data files.";
+    description = "Friend to fetch your data files";
     homepage = "https://github.com/fatiando/pooch";
     license = licenses.bsd3;
     maintainers = with maintainers; [ GuillaumeDesforges ];

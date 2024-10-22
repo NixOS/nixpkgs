@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
-  version = "2.1.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
-    sha256 = "sha256-bCLMTWtgEay3fLKOFWUoWpOL1iGDHRR5hu+v06bLxLs=";
+    sha256 = "sha256-ugDleco/Ep+10ku+5xcW4zq/RrhruZCRlX0zKeXzLhg=";
   };
 
   patches = [
@@ -99,6 +99,6 @@ stdenv.mkDerivation rec {
     description = "Firewall daemon with D-Bus interface";
     homepage = "https://github.com/firewalld/firewalld";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

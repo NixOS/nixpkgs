@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tangram";
-  version = "3.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "sonnyp";
     repo = "Tangram";
     rev = "v${version}";
-    hash = "sha256-6QOkvsYFgFFyxnDlA5Xpl3FnsSZOj9ooehCPOmpKe8M=";
+    hash = "sha256-vN9zRc8Ac9SI0lIcuf01A2WLqLGtV3DUiNzCSmc2ri4=";
     fetchSubmodules = true;
   };
 

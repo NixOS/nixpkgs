@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   meta = {
-    description = "A library to use GTK 3 to build screen lockers using ext-session-lock-v1 protocol";
+    description = "Library to use GTK 3 to build screen lockers using ext-session-lock-v1 protocol";
     homepage = "https://github.com/Cu3PO42/gtk-session-lock";
     # The author stated "GTK Session Lock is licensed under the GNU General
     # Public License version 3.0 or any later version approved by me (Cu3PO42)."

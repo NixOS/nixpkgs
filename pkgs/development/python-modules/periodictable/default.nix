@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "periodictable";
-  version = "1.7.0";
+  version = "1.7.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qg5XwrGdalIbHAteOH2lkKMahFbkzBwAvKXOLcXwXqk=";
+    hash = "sha256-Q9fbcjPWszli+D156lT0fDuSPT6DQDy8A/WPNTr0tSw=";
   };
 
   propagatedBuildInputs = [

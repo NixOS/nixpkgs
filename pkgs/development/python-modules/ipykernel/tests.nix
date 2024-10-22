@@ -46,7 +46,7 @@ buildPythonPackage {
       # traitlets.config.configurable.MultipleInstanceError: An incompatible siblin...
       "test_install_kernelspec"
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       [
         # see https://github.com/NixOS/nixpkgs/issues/76197
         "test_subprocess_print"

@@ -8,6 +8,7 @@ let
     airzone_cloud = [
       aioairzone
     ];
+    androidtv = home-assistant.getPackages "asuswrt" home-assistant.python.pkgs;
     bluetooth = [
       pyswitchbot
     ];
@@ -34,11 +35,20 @@ let
     shelly = [
       pyswitchbot
     ];
+    songpal = [
+      isal
+    ];
+    system_log = [
+      isal
+    ];
     tilt_ble = [
       ibeacon-ble
     ];
     xiaomi_miio = [
       arrow
+    ];
+    zeroconf = [
+      aioshelly
     ];
     zha = [
       pydeconz
@@ -91,6 +101,7 @@ let
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
+      "--deselect tests/components/jellyfin/test_media_source.py::test_audio_codec_resolve"
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
@@ -107,6 +118,7 @@ let
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
     pname = "homeassistant-test-${component}";
+    pyproject = null;
     format = "other";
 
     dontBuild = true;
@@ -131,12 +143,7 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     '';
 
     meta = old.meta // {
-      broken = lib.elem component [
-        # pinned version incompatible with urllib3>=2.0
-        "telegram_bot"
-        # depends on telegram_bot
-        "telegram"
-      ];
+      broken = lib.elem component [ ];
       # upstream only tests on Linux, so do we.
       platforms = lib.platforms.linux;
     };

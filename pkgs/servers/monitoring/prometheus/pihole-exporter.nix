@@ -18,6 +18,6 @@ buildGoModule rec {
     mainProgram = "pihole-exporter";
     homepage = "https://github.com/eko/pihole-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

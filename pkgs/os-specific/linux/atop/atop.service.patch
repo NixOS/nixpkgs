@@ -1,10 +1,16 @@
+diff --git a/atop.service b/atop.service
+index 6b11dea..f90935f 100644
 --- a/atop.service
 +++ b/atop.service
-@@ -9,5 +9,6 @@
- Environment=LOGPATH=/var/log/atop
+@@ -8,10 +8,10 @@ Environment="LOGOPTS="
+ Environment="LOGINTERVAL=600"
+ Environment="LOGGENERATIONS=28"
+ Environment="LOGPATH=/var/log/atop"
 -EnvironmentFile=/etc/default/atop
 +EnvironmentFile=-/etc/default/atop
+ ExecStartPre=/bin/sh -c 'test -d "${LOGPATH}" || mkdir -p "${LOGPATH}"'
  ExecStartPre=/bin/sh -c 'test -n "$LOGINTERVAL" -a "$LOGINTERVAL" -eq "$LOGINTERVAL"'
  ExecStartPre=/bin/sh -c 'test -n "$LOGGENERATIONS" -a "$LOGGENERATIONS" -eq "$LOGGENERATIONS"'
-+ExecStartPre=/bin/sh -c 'mkdir -p "${LOGPATH}"'
  ExecStart=/bin/sh -c 'exec @out@/bin/atop ${LOGOPTS} -w "${LOGPATH}/atop_$(date +%%Y%%m%%d)" ${LOGINTERVAL}'
+ ExecStartPost=@findutils@/bin/find "${LOGPATH}" -name "atop_*" -mtime +${LOGGENERATIONS} -exec rm -v {} \;
+ KillSignal=SIGUSR2

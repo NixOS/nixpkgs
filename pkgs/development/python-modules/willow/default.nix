@@ -35,12 +35,14 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ flit-core ];
 
+  pythonRelaxDeps = [ "defusedxml" ];
+
   propagatedBuildInputs = [
     filetype
     defusedxml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     heif = [ pillow-heif ];
   };
 
@@ -50,10 +52,10 @@ buildPythonPackage rec {
     pytestCheckHook
     pillow
     wand
-  ] ++ passthru.optional-dependencies.heif;
+  ] ++ optional-dependencies.heif;
 
   meta = with lib; {
-    description = "A Python image library that sits on top of Pillow, Wand and OpenCV";
+    description = "Python image library that sits on top of Pillow, Wand and OpenCV";
     homepage = "https://github.com/torchbox/Willow/";
     license = licenses.bsd2;
     maintainers = with maintainers; [ desiderius ];

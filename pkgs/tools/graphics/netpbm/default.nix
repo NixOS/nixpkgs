@@ -20,14 +20,14 @@ stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
-  version = "11.6.1";
+  version = "11.7.1";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "4907";
-    sha256 = "eMLADYFf/Us8eiBTacf+wvQSGyrV+fslpvlTT+rIiYM=";
+    rev = "4932";
+    sha256 = "bmPqUPOlkQ0vKim+t8ct2ErFU4uWw6L5foODGWrrExs=";
   };
 
   nativeBuildInputs = [
@@ -87,7 +87,7 @@ stdenv.mkDerivation {
 
     # Fix path to rgb.txt
     echo "RGB_DB_PATH = $out/share/netpbm/misc/rgb.txt" >> config.mk
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
     echo "NETPBMLIBTYPE = dylib" >> config.mk
     echo "NETPBMLIBSUFFIX = dylib" >> config.mk

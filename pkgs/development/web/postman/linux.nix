@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   desktopItems = [
       (makeDesktopItem {
       name = "postman";
-      exec = "postman";
+      exec = "postman %U";
       icon = "postman";
       comment = "API Development Environment";
       desktopName = "Postman";

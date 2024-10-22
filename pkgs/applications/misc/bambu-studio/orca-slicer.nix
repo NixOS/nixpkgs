@@ -2,22 +2,41 @@
   lib,
   fetchFromGitHub,
   bambu-studio,
+  opencv,
 }:
-
 bambu-studio.overrideAttrs (
   finalAttrs: previousAttrs: {
-    version = "2.0.0";
+    version = "2.1.1";
     pname = "orca-slicer";
-
-    # Don't inherit patches from bambu-studio
-    patches = [ ./0001-not-for-upstream-CMakeLists-Link-against-webkit2gtk-.patch ];
 
     src = fetchFromGitHub {
       owner = "SoftFever";
       repo = "OrcaSlicer";
       rev = "v${finalAttrs.version}";
-      hash = "sha256-YlLDUH3ODIfax5QwnsVJi1JjZ9WtxP3ssqRP1C4d4bw=";
+      hash = "sha256-7fusdSYpZb4sYl5L/+81PzMd42Nsejj+kCZsq0f7eIk=";
     };
+
+    patches =
+      previousAttrs.patches
+      ++ [
+        # FIXME: only required for 2.1.1, can be removed in the next version
+        ./0002-fix-build-for-gcc-13.diff
+
+        ./dont-link-opencv-world.patch
+      ];
+
+    buildInputs =
+      previousAttrs.buildInputs
+      ++ [
+        opencv
+      ];
+
+    preFixup = ''
+      gappsWrapperArgs+=(
+        # Fixes blackscreen dialogs
+        --set WEBKIT_DISABLE_COMPOSITING_MODE 1
+      )
+    '';
 
     # needed to prevent collisions between the LICENSE.txt files of
     # bambu-studio and orca-slicer.
@@ -26,7 +45,7 @@ bambu-studio.overrideAttrs (
     '';
 
     meta = with lib; {
-      description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc";
+      description = "G-code generator for 3D printers (Bambu, Prusa, Voron, VzBot, RatRig, Creality, etc.)";
       homepage = "https://github.com/SoftFever/OrcaSlicer";
       license = licenses.agpl3Only;
       maintainers = with maintainers; [

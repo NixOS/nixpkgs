@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   aiodns,
   aiohttp,
   boto3,
@@ -22,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.27.2";
+  version = "3.33.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +30,7 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1I08OUseiwCN9vUd56f9IFzCSB9kGjTLojyWm2dIimE=";
+    hash = "sha256-OcGzpYwa8Ouf1ojQS9KnqlL37EYCZo5yjNeXXrkd0B4=";
   };
 
   postPatch = ''

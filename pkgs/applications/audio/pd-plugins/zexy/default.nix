@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "The swiss army knife for puredata";
+    description = "Swiss army knife for puredata";
     homepage = "http://puredata.info/downloads/zexy";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.magnetophon ];

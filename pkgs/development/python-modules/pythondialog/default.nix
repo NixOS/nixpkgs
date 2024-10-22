@@ -21,7 +21,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "A Python interface to the UNIX dialog utility and mostly-compatible programs";
+    description = "Python interface to the UNIX dialog utility and mostly-compatible programs";
     homepage = "http://pythondialog.sourceforge.net/";
     license = licenses.lgpl3;
   };

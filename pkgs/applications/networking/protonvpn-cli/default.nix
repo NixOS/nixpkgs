@@ -33,7 +33,7 @@ buildPythonApplication rec {
   meta = with lib; {
     description = "Linux command-line client for ProtonVPN";
     homepage = "https://github.com/protonvpn/linux-cli";
-    maintainers = with maintainers; [ wolfangaukang ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "protonvpn-cli";

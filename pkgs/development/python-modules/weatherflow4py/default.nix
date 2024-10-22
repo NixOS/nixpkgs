@@ -15,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "weatherflow4py";
-  version = "0.2.20";
+  version = "1.2.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "jeeftor";
     repo = "weatherflow4py";
     rev = "refs/tags/v${version}";
-    hash = "sha256-kkNGhFhciOfhrbjxLM01YC2IRmkdKEbk4EUyDJZJuxU=";
+    hash = "sha256-NOruMysLm0Pu2fsaA/qCNdeCTacomvJ51oqI8V2WFWI=";
   };
 
   build-system = [ poetry-core ];

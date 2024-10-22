@@ -56,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/blakemcbride/TECOC";
-    description = "A clone of the good old TECO editor";
+    description = "Clone of the good old TECO editor";
     longDescription = ''
       For those who don't know: TECO is the acronym of Tape Editor and COrrector
       (because it was a paper tape edition tool in its debut days). Now the

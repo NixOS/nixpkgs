@@ -8,22 +8,22 @@
 , CoreFoundation
 , SystemConfiguration
 , Security
-, withLLVM ? !stdenv.isDarwin
-, withSinglepass ? !(stdenv.isDarwin && stdenv.isx86_64)
+, withLLVM ? false
+, withSinglepass ? !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
-  version = "4.3.1";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-1bxxy0Dso54cYQIZC9UUjtkgL1eyd3oRbhaYCwI0otw=";
+    hash = "sha256-zKo7d7LAfdGb7hC8RK7YH4lhk7RbivS+hNZDyQyHYM8=";
   };
 
-  cargoHash = "sha256-3MwQZdFIWqHvELpIGlqsn/VKyobWki7OcMXQrjbxwKk=";
+  cargoHash = "sha256-tajvVMRfBHefU0kVro830HeJSdgJEKPmEQm7X0+4+Kc=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.llvm
     libffi
     libxml2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     CoreFoundation
     SystemConfiguration
     Security
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "The Universal WebAssembly Runtime";
+    description = "Universal WebAssembly Runtime";
     mainProgram = "wasmer";
     longDescription = ''
       Wasmer is a standalone WebAssembly runtime for running WebAssembly outside
@@ -69,5 +69,8 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://wasmer.io/";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne shamilton nickcao ];
+    # error: multiple fields are never read
+    #    --> lib/compiler-llvm/src/translator/intrinsics.rs:141:9
+    broken = withLLVM;
   };
 }

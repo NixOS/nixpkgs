@@ -15,19 +15,20 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.16.3";
+  version = "2.16.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-2JH+cAbbTWEig4qm3krKbgB3urIk7crmhGZq4+MDxF8=";
+    pname = "google_cloud_tasks";
+    inherit version;
+    hash = "sha256-i9wpSgnjRkfhIKLkDdfsIIcwJNX04JOLL/DDn/N07aw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-core
     grpc-google-iam-v1
     proto-plus
@@ -57,6 +58,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-tasks";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-tasks-v${version}/packages/google-cloud-tasks/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

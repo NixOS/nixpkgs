@@ -43,9 +43,9 @@ stdenv.mkDerivation {
 
     substituteInPlace $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W --replace /opt "$out/opt"
 
-    mkdir -p $out/lib/cups/filter
+    mkdir -p $out/lib/cups/filter $out/share/cups/model
     ln -s $out/opt/brother/Printers/HL1210W/cupswrapper/brother_lpdwrapper_HL1210W $out/lib/cups/filter/brother_lpdwrapper_HL1210W
-    ln -s $out/opt/brother/Printers/HL1210W/cupswrapper/brother-HL1210W-cups-en.ppd $out/lib/cups/filter/brother-HL1210W-cups-en.ppd
+    ln -s $out/opt/brother/Printers/HL1210W/cupswrapper/brother-HL1210W-cups-en.ppd $out/share/cups/model/
     # cp brcupsconfig4 $out/opt/brother/Printers/HL1110/cupswrapper/
     ln -s $out/opt/brother/Printers/HL1210W/cupswrapper/brcupsconfig4 $out/lib/cups/filter/brcupsconfig4
 

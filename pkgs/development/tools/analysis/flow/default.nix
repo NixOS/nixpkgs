@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "flow";
-  version = "0.236.0";
+  version = "0.238.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    hash = "sha256-W0JLnX+IGFMjIi6EkHRzvB3jSl/8/+3iuc9dwlXB2Po=";
+    hash = "sha256-WlHta/wXTULehopXeIUdNAQb12Lf0SJnm1HIVHTDshA=";
   };
 
   postPatch = ''
@@ -26,11 +26,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with ocamlPackages; [ ocaml dune_3 findlib ocamlbuild ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ]
-    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.isLinux [ inotify ]);
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ]
+    ++ (with ocamlPackages; [ core_kernel dtoa fileutils lwt_log lwt_ppx ocaml_lwt ppx_deriving ppx_gen_rec ppx_let sedlex visitors wtf8 ] ++ lib.optionals stdenv.hostPlatform.isLinux [ inotify ]);
 
   meta = with lib; {
-    description = "A static type checker for JavaScript";
+    description = "Static type checker for JavaScript";
     mainProgram = "flow";
     homepage = "https://flow.org/";
     changelog = "https://github.com/facebook/flow/blob/v${version}/Changelog.md";

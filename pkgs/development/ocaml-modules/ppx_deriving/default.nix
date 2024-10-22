@@ -51,7 +51,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";
+    description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02";
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
   };

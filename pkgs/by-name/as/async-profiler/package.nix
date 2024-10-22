@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A low overhead sampling profiler for Java that does not suffer from Safepoint bias problem";
+    description = "Low overhead sampling profiler for Java that does not suffer from Safepoint bias problem";
     homepage = "https://github.com/jvm-profiling-tools/async-profiler";
     license = licenses.asl20;
     maintainers = with maintainers; [ mschuwalow ];

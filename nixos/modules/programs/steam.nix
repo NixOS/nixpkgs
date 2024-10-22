@@ -31,7 +31,7 @@ in {
       default = pkgs.steam;
       defaultText = lib.literalExpression "pkgs.steam";
       example = lib.literalExpression ''
-        pkgs.steam-small.override {
+        pkgs.steam.override {
           extraEnv = {
             MANGOHUD = true;
             OBS_VKCAPTURE = true;
@@ -50,7 +50,7 @@ in {
         }) // (prev.extraEnv or {});
         extraLibraries = pkgs: let
           prevLibs = if prev ? extraLibraries then prev.extraLibraries pkgs else [ ];
-          additionalLibs = with config.hardware.opengl;
+          additionalLibs = with config.hardware.graphics;
             if pkgs.stdenv.hostPlatform.is64bit
             then [ package ] ++ extraPackages
             else [ package32 ] ++ extraPackages32;
@@ -104,8 +104,9 @@ in {
 
     fontPackages = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = config.fonts.packages;
-      defaultText = lib.literalExpression "fonts.packages";
+      # `fonts.packages` is a list of paths now, filter out which are not packages
+      default = builtins.filter lib.types.package.check config.fonts.packages;
+      defaultText = lib.literalExpression "builtins.filter lib.types.package.check config.fonts.packages";
       example = lib.literalExpression "with pkgs; [ source-han-sans ]";
       description = ''
         Font packages to use in Steam.
@@ -175,10 +176,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    hardware.opengl = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
+    hardware.graphics = { # this fixes the "glXChooseVisual failed" bug, context: https://github.com/NixOS/nixpkgs/issues/47932
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
 
     security.wrappers = lib.mkIf (cfg.gamescopeSession.enable && gamescopeCfg.capSysNice) {
@@ -196,8 +196,9 @@ in {
     programs.gamescope.enable = lib.mkDefault cfg.gamescopeSession.enable;
     services.displayManager.sessionPackages = lib.mkIf cfg.gamescopeSession.enable [ gamescopeSessionFile ];
 
-    # optionally enable 32bit pulseaudio support if pulseaudio is enabled
+    # enable 32bit pulseaudio/pipewire support if needed
     hardware.pulseaudio.support32Bit = config.hardware.pulseaudio.enable;
+    services.pipewire.alsa.support32Bit = config.services.pipewire.alsa.enable;
 
     hardware.steam-hardware.enable = true;
 

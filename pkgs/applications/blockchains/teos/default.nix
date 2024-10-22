@@ -40,7 +40,7 @@ in
       rustfmt
     ];
 
-    buildInputs = lib.optionals stdenv.isDarwin [
+    buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.Security
     ];
 
@@ -49,7 +49,7 @@ in
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "A Lightning watchtower compliant with BOLT13, written in Rust";
+      description = "Lightning watchtower compliant with BOLT13, written in Rust";
     };
   };
 
@@ -69,7 +69,7 @@ in
 
     buildInputs = [
       openssl
-    ] ++ lib.optionals stdenv.isDarwin [
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
@@ -78,7 +78,7 @@ in
     __darwinAllowLocalNetworking = true;
 
     meta = meta // {
-      description = "A Lightning watchtower plugin for clightning";
+      description = "Lightning watchtower plugin for clightning";
       mainProgram = "watchtower-client";
     };
   };

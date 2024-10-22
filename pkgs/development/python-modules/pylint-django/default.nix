@@ -14,23 +14,23 @@
 
 buildPythonPackage rec {
   pname = "pylint-django";
-  version = "2.5.4";
+  version = "2.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyCQA";
     repo = "pylint-django";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MNgu3LvFoohXA+JzUiHIaYFw0ssEe+H5T8Ea56LcGuI=";
+    hash = "sha256-Rnty8ryKd5PxFFVYcvB8p9VS3qlHCprxR8+/ySY5qC8=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [ pylint-plugin-utils ];
+  dependencies = [ pylint-plugin-utils ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     with_django = [ django ];
   };
 
@@ -46,6 +46,8 @@ buildPythonPackage rec {
     "test_migrations_plugin"
     "func_noerror_model_unicode_lambda"
     "test_linter_should_be_pickleable_with_pylint_django_plugin_installed"
+    "func_noerror_model_fields"
+    "func_noerror_form_fields"
   ];
 
   pythonImportsCheck = [ "pylint_django" ];

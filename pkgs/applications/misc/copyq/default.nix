@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "CopyQ";
-  version = "8.0.0";
+  version = "9.1.0";
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
     rev = "v${version}";
-    hash = "sha256-Ewunl4k9f0aDjilhKAsVxwR3S6uSZ1xwtu6ccNsNOgk=";
+    hash = "sha256-WBJyLfiPPEQ/Cj5uuwy9KhVc1kw4Hv5TeEuRFDydlGk=";
   };
 
   nativeBuildInputs = [

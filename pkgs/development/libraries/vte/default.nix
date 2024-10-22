@@ -32,14 +32,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
-  version = "0.76.2";
+  version = "0.76.3";
 
   outputs = [ "out" "dev" ]
     ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/vte/${lib.versions.majorMinor finalAttrs.version}/vte-${finalAttrs.version}.tar.xz";
-    hash = "sha256-49xggtW9cPiq+qrSzfyvflHaa6AKkZsR3axu+gnHKEc=";
+    hash = "sha256-9njpTAVvN3/QAhIUrf9UUMsXLpoIsWCREYHd/3t9XWA=";
   };
 
   patches = [
@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "gtk4" (gtkVersion == "4"))
   ] ++ lib.optionals (!systemdSupport) [
     "-D_systemd=false"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # -Bsymbolic-functions is not supported on darwin
     "-D_b_symbolic_functions=false"
   ];
@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://www.gnome.org/";
-    description = "A library implementing a terminal emulator widget for GTK";
+    description = "Library implementing a terminal emulator widget for GTK";
     longDescription = ''
       VTE is a library (libvte) implementing a terminal emulator widget for
       GTK, and a minimal sample application (vte) using that.  Vte is

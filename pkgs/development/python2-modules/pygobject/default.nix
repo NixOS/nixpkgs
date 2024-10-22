@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   outputs = [ "out" "devdoc" ];
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     ./pygobject-2.0-fix-darwin.patch
     (fetchpatch {
       url = "https://github.com/macports/macports-ports/raw/f2975d5bbbc2459c661905c5a850cc661fa32f55/python/py-gobject/files/py-gobject-dynamic_lookup-11.patch";
@@ -43,6 +43,6 @@ buildPythonPackage rec {
     homepage = "https://pygobject.readthedocs.io/";
     description = "Python bindings for GLib";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -15,7 +15,7 @@ buildGoModule rec {
 
   preCheck = ''
     ln -s $GOPATH/bin/otel-cli .
-  '' + lib.optionalString (!stdenv.isDarwin) ''
+  '' + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     substituteInPlace main_test.go \
       --replace-fail 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${lib.makeBinPath [ getent coreutils ]}`'
   '';
@@ -26,7 +26,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/equinix-labs/otel-cli";
-    description = "A command-line tool for sending OpenTelemetry traces";
+    description = "Command-line tool for sending OpenTelemetry traces";
     changelog = "https://github.com/equinix-labs/otel-cli/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with lib.maintainers; [ emattiza urandom ];

@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/emanspeaks/pyls-flake8";
-    description = "A Flake8 plugin for the Python LSP Server.";
+    description = "Flake8 plugin for the Python LSP Server";
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

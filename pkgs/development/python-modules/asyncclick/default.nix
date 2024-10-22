@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "asyncclick";
-  version = "8.1.7.1";
+  version = "8.1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "asyncclick";
     rev = "refs/tags/${version}";
-    hash = "sha256-gx7s/HikvjsXalc0Z73JWMKc1SlhR+kohwk2sW4o19I=";
+    hash = "sha256-ahzI7yILq1OpZ6IT0qt8vjzi6I6zAoTrULOl8CqRw4A=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

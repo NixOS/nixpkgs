@@ -4,6 +4,7 @@
   python,
   runCommand,
   fetchFromGitHub,
+  fetchpatch,
   configargparse,
   acme,
   configobj,
@@ -12,12 +13,7 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pyopenssl,
   pytz,
-  requests,
-  six,
-  zope-component,
-  zope-interface,
   setuptools,
   dialog,
   gnureadline,
@@ -28,17 +24,26 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "2.9.0";
+  version = "2.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yYB9Y0wniRgzNk5XatkjKayIPj7ienXsqOboKPwzIfk=";
+    hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
   };
 
-  sourceRoot = "${src.name}/${pname}";
+  patches = [
+    (fetchpatch {
+      name = "CSR_support_in_pyOpenSSL_is_deprecated.patch";
+      url = "https://github.com/certbot/certbot/commit/f005045d87b25f1922774685646e57765aa202ad.patch";
+      includes = [ "pytest.ini" ];
+      hash = "sha256-YcQbZb7DLU+AXxNyqJRYZIC18DuT6X8kGbfdYtUrHiA=";
+    })
+  ];
+
+  postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
 
   nativeBuildInputs = [ setuptools ];
 

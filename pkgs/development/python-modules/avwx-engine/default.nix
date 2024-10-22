@@ -3,11 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   geopy,
+  hatchling,
   httpx,
   numpy,
-  poetry-core,
-  pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   python-dateutil,
   pythonOlder,
   rapidfuzz,
@@ -19,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.8.28";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -28,14 +29,10 @@ buildPythonPackage rec {
     owner = "avwx-rest";
     repo = "avwx-engine";
     rev = "refs/tags/${version}";
-    hash = "sha256-sxOLhcmTJg/dTrtemr9BcfcBoHTP1eGo8U1ab8iSvUM=";
+    hash = "sha256-CUnUz2SsXtWaqGzaB1PH+EoHqebSue6e8GXhRZRcXLs=";
   };
 
-  postPatch = ''
-    sed -i -e "/--cov/d" -e "/--no-cov/d" pyproject.toml
-  '';
-
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     geopy
@@ -44,7 +41,7 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       numpy
       rapidfuzz
@@ -61,9 +58,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "avwx" ];
 

@@ -21,6 +21,5 @@ do
     prefetch=$(nix-prefetch-url https://www.archimatetool.com/downloads/archi/$latestVersion/$2)
     hash=$(nix-hash --type sha256 --to-sri $prefetch)
 
-    update-source-version archi 0 "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=" --system=$1
-    update-source-version archi $latestVersion $hash --system=$1
+    update-source-version archi $latestVersion $hash --system=$1 --ignore-same-version
 done

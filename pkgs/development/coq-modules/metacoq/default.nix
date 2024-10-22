@@ -1,11 +1,11 @@
-{ lib, fetchzip,
-  mkCoqDerivation, recurseIntoAttrs,  single ? false,
-  coqPackages, coq, equations, version ? null }@args:
-with builtins // lib;
+{ lib,
+  mkCoqDerivation, single ? false,
+  coq, equations, version ? null }@args:
+
 let
   repo  = "metacoq";
   owner = "MetaCoq";
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = lib.switch coq.coq-version [
       { case = "8.11"; out = "1.0-beta2-8.11"; }
       { case = "8.12"; out = "1.0-beta2-8.12"; }
       # Do not provide 8.13 because it does not compile with equations 1.3 provided by default (only 1.2.3)
@@ -15,7 +15,8 @@ let
       { case = "8.16"; out = "1.1-8.16"; }
       { case = "8.17"; out = "1.3.1-8.17"; }
       { case = "8.18"; out = "1.3.1-8.18"; }
-      { case = "8.19"; out = "1.3.1-8.19"; }
+      { case = "8.19"; out = "1.3.2-8.19"; }
+      { case = "8.20"; out = "1.3.2-8.20"; }
     ] null;
   release = {
     "1.0-beta2-8.11".sha256 = "sha256-I9YNk5Di6Udvq5/xpLSNflfjRyRH8fMnRzbo3uhpXNs=";
@@ -32,18 +33,20 @@ let
     "1.3.1-8.17".sha256 = "sha256-l0/QLC7V3zSk/FsaE2eL6tXy2BzbcI5MAk/c+FESwnc=";
     "1.3.1-8.18".sha256 = "sha256-L6Ym4Auwqaxv5tRmJLSVC812dxCqdUU5aN8+t5HVYzY=";
     "1.3.1-8.19".sha256 = "sha256-fZED/Uel1jt5XF83dR6HfyhSkfBdLkET8C/ArDgsm64=";
+    "1.3.2-8.19".sha256 = "sha256-e5Pm1AhaQrO6JoZylSXYWmeXY033QflQuCBZhxGH8MA=";
+    "1.3.2-8.20".sha256 = "sha256-4J7Ly4Fc2E/I6YqvzTLntVVls5t94OUOjVMKJyyJdw8=";
   };
   releaseRev = v: "v${v}";
 
   # list of core metacoq packages sorted by dependency order
-  packages = if versionAtLeast coq.coq-version "8.17"
+  packages = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev"
      then [ "utils" "common" "template-coq" "pcuic" "safechecker" "template-pcuic" "erasure" "quotation" "safechecker-plugin" "erasure-plugin" "all" ]
      else [ "template-coq" "pcuic" "safechecker" "erasure" "all" ];
 
   template-coq = metacoq_ "template-coq";
 
   metacoq_ = package: let
-      metacoq-deps = lib.optionals (package != "single") (map metacoq_ (head (splitList (lib.pred.equal package) packages)));
+      metacoq-deps = lib.optionals (package != "single") (map metacoq_ (lib.head (lib.splitList (lib.pred.equal package) packages)));
       pkgpath = if package == "single" then "./" else "./${package}";
       pname = if package == "all" then "metacoq" else "metacoq-${package}";
       pkgallMake = ''
@@ -57,7 +60,7 @@ let
         mlPlugin = true;
         propagatedBuildInputs = [ equations coq.ocamlPackages.zarith ] ++ metacoq-deps;
 
-        patchPhase =  if versionAtLeast coq.coq-version "8.17" then ''
+        patchPhase = if lib.versionAtLeast coq.coq-version "8.17" || coq.coq-version == "dev" then ''
           patchShebangs ./configure.sh
           patchShebangs ./template-coq/update_plugin.sh
           patchShebangs ./template-coq/gen-src/to-lower.sh
@@ -76,11 +79,11 @@ let
           sed -i -e 's/mv $i $newi;/mv $i tmp; mv tmp $newi;/' ./template-coq/gen-src/to-lower.sh ./pcuic/clean_extraction.sh ./safechecker/clean_extraction.sh ./erasure/clean_extraction.sh
         '' ;
 
-        configurePhase = optionalString (package == "all") pkgallMake + ''
+        configurePhase = lib.optionalString (package == "all") pkgallMake + ''
           touch ${pkgpath}/metacoq-config
-        '' + optionalString (elem package ["safechecker" "erasure" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin"]) ''
+        '' + lib.optionalString (lib.elem package ["safechecker" "erasure" "template-pcuic" "quotation" "safechecker-plugin" "erasure-plugin"]) ''
           echo  "-I ${template-coq}/lib/coq/${coq.coq-version}/user-contrib/MetaCoq/Template/" > ${pkgpath}/metacoq-config
-        '' + optionalString (package == "single") ''
+        '' + lib.optionalString (package == "single") ''
           ./configure.sh local
         '';
 
@@ -90,17 +93,17 @@ let
 
         meta = {
           homepage    = "https://metacoq.github.io/";
-          license     = licenses.mit;
-          maintainers = with maintainers; [ cohencyril ];
+          license     = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ cohencyril ];
         };
-      } // optionalAttrs (package != "single")
-        { passthru = genAttrs packages metacoq_; })
+      } // lib.optionalAttrs (package != "single")
+        { passthru = lib.genAttrs packages metacoq_; })
       ).overrideAttrs (o:
-        let requiresOcamlStdlibShims = versionAtLeast o.version "1.0-8.16" ||
-                                       (o.version == "dev" && (versionAtLeast coq.coq-version "8.16" || coq.coq-version == "dev")) ;
+        let requiresOcamlStdlibShims = lib.versionAtLeast o.version "1.0-8.16" ||
+                                       (o.version == "dev" && (lib.versionAtLeast coq.coq-version "8.16" || coq.coq-version == "dev")) ;
         in
           {
-            propagatedBuildInputs = o.propagatedBuildInputs ++ optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
+            propagatedBuildInputs = o.propagatedBuildInputs ++ lib.optional requiresOcamlStdlibShims coq.ocamlPackages.stdlib-shims;
           });
   in derivation;
 in

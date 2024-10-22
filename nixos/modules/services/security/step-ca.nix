@@ -4,7 +4,7 @@ let
   settingsFormat = (pkgs.formats.json { });
 in
 {
-  meta.maintainers = with lib.maintainers; [ mohe2015 ];
+  meta.maintainers = [ ];
 
   options = {
     services.step-ca = {

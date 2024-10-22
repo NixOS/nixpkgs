@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
       Intel architectures.
     '';
     homepage = "https://github.com/danielw86dev/phc-intel-dkms";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];
     broken = lib.versionAtLeast kernel.version "4.18";
   };

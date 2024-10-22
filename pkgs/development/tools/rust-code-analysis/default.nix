@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchCrate, stdenv }:
+{ lib, rustPlatform, fetchCrate }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-code-analysis";

@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [ pkg-config git ];
 
   buildInputs = [ libgit2 zlib ]
-    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+    ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
 
   meta = with lib; {
-    description = "Alternative to git-crypt using age instead of GPG.";
+    description = "Alternative to git-crypt using age instead of GPG";
     homepage = "https://github.com/vlaci/git-agecrypt";
     license = licenses.mpl20;
     maintainers = with maintainers; [ kuznetsss ];

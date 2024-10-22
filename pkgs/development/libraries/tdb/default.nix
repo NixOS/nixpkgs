@@ -2,6 +2,7 @@
 , fetchurl
 , pkg-config
 , wafHook
+, buildPackages
 , python3
 , readline
 , libxslt
@@ -46,9 +47,12 @@ stdenv.mkDerivation rec {
   wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
   ];
 
-  postFixup = if stdenv.isDarwin
+  postFixup = if stdenv.hostPlatform.isDarwin
     then ''install_name_tool -id $out/lib/libtdb.dylib $out/lib/libtdb.dylib''
     else null;
 
@@ -58,7 +62,7 @@ stdenv.mkDerivation rec {
   PYTHON_CONFIG = "/invalid";
 
   meta = with lib; {
-    description = "The trivial database";
+    description = "Trivial database";
     longDescription = ''
       TDB is a Trivial Database. In concept, it is very much like GDBM,
       and BSD's DB except that it allows multiple simultaneous writers

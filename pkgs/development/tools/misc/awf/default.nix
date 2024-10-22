@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Widget Factory";
+    description = "Widget Factory";
     longDescription = ''
       A widget factory is a theme preview application for gtk2 and
       gtk3. It displays the various widget types provided by gtk2/gtk3

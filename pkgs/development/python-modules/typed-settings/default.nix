@@ -7,6 +7,7 @@
   click-option-group,
   fetchPypi,
   hatchling,
+  hypothesis,
   jinja2,
   pydantic,
   pytestCheckHook,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "typed-settings";
-  version = "24.2.0";
+  version = "24.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,14 +26,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "typed_settings";
     inherit version;
-    hash = "sha256-BuosfIlCgCD+h7eA/6/oE98zdURaT3eik+dysBpJR+Y=";
+    hash = "sha256-x1ojSSZNrKkBHKE9dWw7NzX/G6ggRYRIQ5MMahwL1Ps=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     all = [
       attrs
       cattrs
@@ -53,9 +54,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    hypothesis
     pytestCheckHook
     typing-extensions
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests" ];
 
@@ -79,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/sscherfke/typed-settings";
     changelog = "https://gitlab.com/sscherfke/typed-settings/-/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

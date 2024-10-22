@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A shim for the sudo command that utilizes doas";
+    description = "Shim for the sudo command that utilizes doas";
     homepage = "https://github.com/jirutka/doas-sudo-shim";
     license = licenses.isc;
     mainProgram = "sudo";

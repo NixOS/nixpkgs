@@ -14,13 +14,13 @@ let
   version = "4.2.2.1";
 
   libsecp256k1_name =
-    if stdenv.isLinux then "libsecp256k1.so.0"
-    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+    if stdenv.hostPlatform.isLinux then "libsecp256k1.so.0"
+    else if stdenv.hostPlatform.isDarwin then "libsecp256k1.0.dylib"
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
-    if stdenv.isLinux then "libzbar.so.0"
-    else if stdenv.isDarwin then "libzbar.0.dylib"
+    if stdenv.hostPlatform.isLinux then "libzbar.so.0"
+    else if stdenv.hostPlatform.isDarwin then "libzbar.0.dylib"
     else "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   # Not provided in official source releases, which are what upstream signs.
@@ -70,7 +70,6 @@ python3.pkgs.buildPythonApplication {
     pysocks
     qrcode
     requests
-    tlslite-ng
     certifi
     # plugins
     btchip-python
@@ -113,7 +112,7 @@ python3.pkgs.buildPythonApplication {
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
 
-  postInstall = lib.optionalString stdenv.isLinux ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
     mv $out/${python3.sitePackages}/nix/store"/"*/share $out
@@ -132,13 +131,18 @@ python3.pkgs.buildPythonApplication {
   '';
 
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
-  buildInputs = lib.optional stdenv.isLinux qtwayland;
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux qtwayland;
 
   pytestFlagsArray = [ "electrum_ltc/tests" ];
 
   disabledTests = [
     "test_loop"  # test tries to bind 127.0.0.1 causing permission error
     "test_is_ip_address"  # fails spuriously https://github.com/spesmilo/electrum/issues/7307
+    # electrum_ltc.lnutil.RemoteMisbehaving: received commitment_signed without pending changes
+    "test_reestablish_replay_messages_rev_then_sig"
+    "test_reestablish_replay_messages_sig_then_rev"
+    # stuck on hydra
+    "test_reestablish_with_old_state"
   ];
 
   postCheck = ''

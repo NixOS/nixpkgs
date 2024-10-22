@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
   cfg = config.security.polkit;
@@ -12,12 +9,14 @@ in
 
   options = {
 
-    security.polkit.enable = mkEnableOption "polkit";
+    security.polkit.enable = lib.mkEnableOption "polkit";
 
-    security.polkit.debug = mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
+    security.polkit.package = lib.mkPackageOption pkgs "polkit" { };
 
-    security.polkit.extraConfig = mkOption {
-      type = types.lines;
+    security.polkit.debug = lib.mkEnableOption "debug logs from polkit. This is required in order to see log messages from rule definitions";
+
+    security.polkit.extraConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       example =
         ''
@@ -39,8 +38,8 @@ in
         '';
     };
 
-    security.polkit.adminIdentities = mkOption {
-      type = types.listOf types.str;
+    security.polkit.adminIdentities = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
       description =
@@ -55,15 +54,15 @@ in
   };
 
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.polkit.bin pkgs.polkit.out ];
+    environment.systemPackages = [ cfg.package.bin cfg.package.out ];
 
-    systemd.packages = [ pkgs.polkit.out ];
+    systemd.packages = [ cfg.package.out ];
 
     systemd.services.polkit.serviceConfig.ExecStart = [
       ""
-      "${pkgs.polkit.out}/lib/polkit-1/polkitd ${optionalString (!cfg.debug) "--no-debug"}"
+      "${cfg.package.out}/lib/polkit-1/polkitd ${lib.optionalString (!cfg.debug) "--no-debug"}"
     ];
 
     systemd.services.polkit.restartTriggers = [ config.system.path ];
@@ -76,13 +75,13 @@ in
     environment.etc."polkit-1/rules.d/10-nixos.rules".text =
       ''
         polkit.addAdminRule(function(action, subject) {
-          return [${concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
+          return [${lib.concatStringsSep ", " (map (i: "\"${i}\"") cfg.adminIdentities)}];
         });
 
         ${cfg.extraConfig}
       ''; #TODO: validation on compilation (at least against typos)
 
-    services.dbus.packages = [ pkgs.polkit.out ];
+    services.dbus.packages = [ cfg.package.out ];
 
     security.pam.services.polkit-1 = {};
 
@@ -91,13 +90,13 @@ in
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.bin}/bin/pkexec";
+          source = "${cfg.package.bin}/bin/pkexec";
         };
       polkit-agent-helper-1 =
         { setuid = true;
           owner = "root";
           group = "root";
-          source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+          source = "${cfg.package.out}/lib/polkit-1/polkit-agent-helper-1";
         };
     };
 

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyatmo";
-  version = "8.0.3";
+  version = "8.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -26,18 +26,18 @@ buildPythonPackage rec {
     owner = "jabesq";
     repo = "pyatmo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FnDXj+bY/TMdengnxgludXUTiZw9wpeFiNbWTIxrlzw=";
+    hash = "sha256-SRuBV7XWt4Myks7kbUzGAscggspUbRoLOvYNiorF8To=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "oauthlib~=3.1" "oauthlib" \
-      --replace "requests~=2.24" "requests"
-  '';
+  pythonRelaxDeps = [
+    "oauthlib"
+    "requests-oauthlib"
+    "requests"
+  ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     oauthlib
     requests
@@ -59,6 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jabesq/pyatmo";
     changelog = "https://github.com/jabesq/pyatmo/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

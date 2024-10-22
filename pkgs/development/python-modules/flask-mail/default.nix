@@ -1,41 +1,47 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   blinker,
+  flit-core,
   flask,
-  mock,
-  nose,
-  speaklater,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "flask-mail";
-  version = "0.9.1";
-  format = "setuptools";
+  version = "0.10.0";
+  pyproject = true;
 
-  meta = {
-    description = "Flask-Mail is a Flask extension providing simple email sending capabilities.";
-    homepage = "https://pypi.python.org/pypi/Flask-Mail";
-    license = lib.licenses.bsd3;
+  src = fetchFromGitHub {
+    owner = "pallets-eco";
+    repo = "flask-mail";
+    rev = "refs/tags/${version}";
+    hash = "sha256-G2Z8dj1/IuLsZoNJVrL6LYu0XjTEHtWB9Z058aqG9Ic=";
   };
 
-  src = fetchPypi {
-    pname = "Flask-Mail";
-    inherit version;
-    hash = "sha256-IuXrmpQL9Ae88wQQ7MNwjzxWzESynDThcm/oUAaTX0E=";
-  };
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     blinker
     flask
   ];
-  buildInputs = [
-    blinker
-    mock
-    nose
-    speaklater
+
+  pythonImportsCheck = [ "flask_mail" ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # Broken by fix for CVE-2023-27043.
+    # Reported upstream in https://github.com/pallets-eco/flask-mail/issues/233
+    "test_unicode_sender_tuple"
+    "test_unicode_sender"
   ];
 
-  doCheck = false;
+  meta = {
+    description = "Flask extension providing simple email sending capabilities";
+    homepage = "https://github.com/pallets-eco/flask-mail";
+    changelog = "https://github.com/pallets-eco/flask-mail/blob/${src.rev}/CHANGES.md";
+    license = lib.licenses.bsd3;
+  };
 }

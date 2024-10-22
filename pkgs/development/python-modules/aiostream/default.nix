@@ -3,34 +3,34 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.5.2";
-  format = "setuptools";
+  version = "0.6.3";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
-    repo = pname;
+    repo = "aiostream";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g2W2TtCh2ANPjeTdASVgEu+qKfz/Ugh1rDWJcFvOJpI=";
+    hash = "sha256-MssA4gDo79mlHjVwQAxhX6DZPHB4Quo6V05Nye91oJg=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov aiostream --cov-report html --cov-report term" ""
-  '';
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ typing-extensions ];
+  dependencies = [ typing-extensions ];
 
   nativeCheckInputs = [
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
   ];
 

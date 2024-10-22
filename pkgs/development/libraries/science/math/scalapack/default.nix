@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit (blas) isILP64; };
 
+  __structuredAttrs = true;
+
   # upstream patch, remove with next release
   patches = [ (fetchpatch {
     name = "gcc-10";
@@ -40,11 +42,11 @@ stdenv.mkDerivation rec {
   nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
-  hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
+  hardeningDisable = lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin) [ "stackprotector" ];
 
   # xslu and xsllt tests seem to time out on x86_64-darwin.
   # this line is left so those who force installation on x86_64-darwin can still build
-  doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
+  doCheck = !(stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin);
 
   preConfigure = ''
     cmakeFlagsArray+=(
@@ -52,16 +54,17 @@ stdenv.mkDerivation rec {
       -DLAPACK_LIBRARIES="-llapack"
       -DBLAS_LIBRARIES="-lblas"
       -DCMAKE_Fortran_COMPILER=${lib.getDev mpi}/bin/mpif90
-      ${lib.optionalString passthru.isILP64 ''
-        -DCMAKE_Fortran_FLAGS="-fdefault-integer-8"
-        -DCMAKE_C_FLAGS="-DInt=long"
-      ''}
+      -DCMAKE_C_FLAGS="${lib.concatStringsSep " " [
+            "-Wno-implicit-function-declaration"
+            (lib.optionalString passthru.isILP64 "-DInt=long")
+      ]}"
+      ${lib.optionalString passthru.isILP64 ''-DCMAKE_Fortran_FLAGS="-fdefault-integer-8"''}
       )
   '';
 
   # Increase individual test timeout from 1500s to 10000s because hydra's builds
   # sometimes fail due to this
-  checkFlagsArray = [ "ARGS=--timeout 10000" ];
+  checkFlags = [ "ARGS=--timeout 10000" ];
 
   postFixup = ''
     # _IMPORT_PREFIX, used to point to lib, points to dev output. Every package using the generated
@@ -78,6 +81,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ costrouc markuskowa gdinh ];
     # xslu and xsllt tests fail on x86 darwin
-    broken = stdenv.isDarwin && stdenv.isx86_64;
+    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
   };
 }

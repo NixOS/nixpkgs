@@ -1,6 +1,7 @@
-{ lib
-, buildGhidraExtension
-, ghidra
+{
+  lib,
+  buildGhidraExtension,
+  ghidra,
 }:
 
 buildGhidraExtension {
@@ -28,7 +29,7 @@ buildGhidraExtension {
     downloadPage = "https://github.com/NationalSecurityAgency/ghidra/tree/master/Ghidra/Extensions/MachineLearning";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
   };
 }

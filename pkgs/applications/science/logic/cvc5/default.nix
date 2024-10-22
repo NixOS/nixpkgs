@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cvc5";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner  = "cvc5";
     repo   = "cvc5";
     rev    = "cvc5-${version}";
-    hash  = "sha256-v+3/2IUslQOySxFDYgTBWJIDnyjbU2RPdpfLcIkEtgQ=";
+    hash  = "sha256-d5F4KwPQ1nwYJbEidQsvqyaGwEugo291SpsJE2rr558=";
   };
 
   nativeBuildInputs = [ pkg-config cmake flex ];
@@ -28,8 +28,10 @@ stdenv.mkDerivation rec {
     "-DANTLR3_JAR=${antlr3_4}/lib/antlr/antlr-3.4-complete.jar"
   ];
 
+  doCheck = true;
+
   meta = with lib; {
-    description = "A high-performance theorem prover and SMT solver";
+    description = "High-performance theorem prover and SMT solver";
     mainProgram = "cvc5";
     homepage    = "https://cvc5.github.io";
     license     = licenses.gpl3Only;

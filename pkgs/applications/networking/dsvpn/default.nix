@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A Dead Simple VPN";
+    description = "Dead Simple VPN";
     homepage = "https://github.com/jedisct1/dsvpn";
     license = licenses.mit;
     maintainers = [ ];

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pinentry-bemenu";
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "t-8ch";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-m6P8/cCdGH2c9ne8aLrh6pUJ6Ekn+CNyEn3WlD2LhU8=";
+    sha256 = "sha256-kiGUCcQIS58XjE4r0yiK4hJ85Sg5wrtBqeSYcgUKAmo=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

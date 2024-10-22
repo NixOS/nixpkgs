@@ -4,7 +4,6 @@
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
-  isPy27,
   mock,
   pyparsing,
   pytest-forked,
@@ -58,7 +57,7 @@ buildPythonPackage rec {
       "test_head_301"
       "test_303"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
       "test_connection_close"
       # fails with HTTP 408 Request Timeout, instead of expected 200 OK
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "httplib2" ];
 
   meta = with lib; {
-    description = "A comprehensive HTTP client library";
+    description = "Comprehensive HTTP client library";
     homepage = "https://github.com/httplib2/httplib2";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "A fast json library for C";
+    description = "Fast json library for C";
     homepage = "https://github.com/rsyslog/libfastjson";
     license = licenses.mit;
     maintainers = with maintainers; [ nequissimus ];

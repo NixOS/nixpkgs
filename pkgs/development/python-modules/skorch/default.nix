@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  fetchpatch,
   pythonOlder,
   numpy,
   scikit-learn,
@@ -20,22 +19,13 @@
 
 buildPythonPackage rec {
   pname = "skorch";
-  version = "0.15.0";
+  version = "1.0.0";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-39XVBlCmbg162z9uL84GZrU+v+M8waXbGdVV72ZYf84=";
+    hash = "sha256-JcplwaeYlGRAJXRNac1Ya/hgWoHE+NWjZhCU9eaSyRQ=";
   };
-
-  # Remove at next skorch release:
-  patches = [
-    (fetchpatch {
-      name = "unbreak-tests-with-sklearn-1.4";
-      url = "https://github.com/skorch-dev/skorch/commit/1f7a779d0aa78589e17262c206f5775f2fcd75f8.diff";
-      hash = "sha256-X3SgjgDeq3PlBI13cC56LIL1dV1e+Z3tsBj9sz5pizo=";
-    })
-  ];
 
   disabled = pythonOlder "3.8";
 
@@ -70,7 +60,7 @@ buildPythonPackage rec {
       # failing tests
       "test_pickle_load"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # there is a problem with the compiler selection
       "test_fit_and_predict_with_compile"
     ]

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "scheme-bytestructures";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "TaylanUB";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Wvs288K8BVjUuWvvzpDGBwOxL7mAXjVtgIwJAsQd0L4=";
+    sha256 = "sha256-7FK1dXD1Qz6fFYjNUtHMaDGaezHLVaDvdgOboNNw0Lc=";
   };
 
   strictDeps = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   # In procedure bytevector-u8-ref: Argument 2 out of range
-  dontStrip = stdenv.isDarwin;
+  dontStrip = stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Structured access to bytevector contents";

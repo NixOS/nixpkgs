@@ -8,6 +8,8 @@
 , after ? null
 , condition ? null
 , phase ? "2"
+, prependExtraArgs ? []
+, appendExtraArgs ? []
 }:
 
 # the builder requires that
@@ -18,10 +20,17 @@ stdenv.mkDerivation {
   name = "autostart-${name}";
   priority = 5;
 
-  buildCommand = ''
+  buildCommand = let
+    escapeArgs = args: lib.escapeRegex (lib.escapeShellArgs args);
+    prependArgs = lib.optionalString (prependExtraArgs != []) "${escapeArgs prependExtraArgs} ";
+    appendArgs = lib.optionalString (appendExtraArgs != []) " ${escapeArgs appendExtraArgs}";
+  in ''
     mkdir -p $out/etc/xdg/autostart
     target=${name}.desktop
     cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
+    ${lib.optionalString (prependExtraArgs != [] || appendExtraArgs != []) ''
+      sed -i -r "s/(Exec=)([^ \n]*) *(.*)/\1\2 ${prependArgs}\3${appendArgs}/" $target
+    ''}
     chmod +rw $target
     echo "X-KDE-autostart-phase=${phase}" >> $target
     ${lib.optionalString (after != null) ''echo "${after}" >> $target''}

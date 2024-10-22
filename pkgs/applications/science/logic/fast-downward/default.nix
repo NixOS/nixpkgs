@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A domain-independent planning system";
+    description = "Domain-independent planning system";
     mainProgram = "fast-downward";
     homepage = "https://www.fast-downward.org/";
     license = licenses.gpl3Plus;

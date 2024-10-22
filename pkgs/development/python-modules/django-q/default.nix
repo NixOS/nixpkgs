@@ -76,10 +76,10 @@ buildPythonPackage rec {
     "test_mongo"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    description = "A multiprocessing distributed task queue for Django";
+    description = "Multiprocessing distributed task queue for Django";
     homepage = "https://django-q.readthedocs.org";
     changelog = "https://github.com/Koed00/django-q/releases/tag/v${version}";
     license = licenses.mit;

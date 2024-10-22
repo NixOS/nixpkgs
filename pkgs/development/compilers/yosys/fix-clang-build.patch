@@ -1,14 +1,3 @@
---- a/Makefile
-+++ b/Makefile
-@@ -215,7 +215,7 @@ ABC_ARCHFLAGS += "-DABC_NO_RLIMIT"
- endif
- 
- ifeq ($(CONFIG),clang)
--CXX = clang
-+CXX = clang++
- LD = clang++
- CXXFLAGS += -std=$(CXXSTD) -Os
- ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H -Wno-c++11-narrowing $(ABC_ARCHFLAGS)"
 --- a/tests/cxxrtl/run-test.sh
 +++ b/tests/cxxrtl/run-test.sh
 @@ -5,7 +5,7 @@ set -ex
@@ -20,6 +9,14 @@
      ./cxxrtl-test-${subtest}
  }
  
+@@ -14,4 +14,4 @@ run_subtest value_fuzz
+ 
+ # Compile-only test.
+ ../../yosys -p "read_verilog test_unconnected_output.v; proc; clean; write_cxxrtl cxxrtl-test-unconnected_output.cc"
+-${CC:-gcc} -std=c++11 -c -o cxxrtl-test-unconnected_output -I../../backends/cxxrtl/runtime cxxrtl-test-unconnected_output.cc
++${CXX:-gcc} -std=c++11 -c -o cxxrtl-test-unconnected_output -I../../backends/cxxrtl/runtime cxxrtl-test-unconnected_output.cc
+diff --git a/tests/fmt/run-test.sh b/tests/fmt/run-test.sh
+index 998047f83..2a4a59f01 100644
 --- a/tests/fmt/run-test.sh
 +++ b/tests/fmt/run-test.sh
 @@ -51,7 +51,7 @@ test_cxxrtl () {

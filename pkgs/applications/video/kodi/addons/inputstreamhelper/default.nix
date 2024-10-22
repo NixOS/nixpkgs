@@ -1,4 +1,4 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript }:
+{ lib, rel, buildKodiAddon, fetchzip, fetchpatch, addonUpdateScript }:
 buildKodiAddon rec {
   pname = "inputstreamhelper";
   namespace = "script.module.inputstreamhelper";
@@ -9,6 +9,13 @@ buildKodiAddon rec {
     sha256 = "sha256-v5fRikswmP+KVbxYibD0NbCK8leUnFbya5EtF1FmS0I=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/emilsvennesson/script.module.inputstreamhelper/commit/af6adc16a0bee4921a827946b004ee070406ae37.patch";
+      hash = "sha256-901EyVeZUb0EMvxsEza95qFjTOZ7PDYyqHMRawPM5Zs=";
+    })
+  ];
+
   passthru = {
     pythonPath = "lib";
     updateScript = addonUpdateScript {
@@ -18,7 +25,7 @@ buildKodiAddon rec {
 
   meta = with lib; {
     homepage = "https://github.com/emilsvennesson/script.module.inputstreamhelper";
-    description = "A simple Kodi module that makes life easier for add-on developers relying on InputStream based add-ons and DRM playback";
+    description = "Simple Kodi module that makes life easier for add-on developers relying on InputStream based add-ons and DRM playback";
     license = licenses.mit;
     maintainers = teams.kodi.members;
   };

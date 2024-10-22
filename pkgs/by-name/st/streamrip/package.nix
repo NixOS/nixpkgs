@@ -68,7 +68,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "A scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
+    description = "Scriptable music downloader for Qobuz, Tidal, SoundCloud, and Deezer";
     homepage = "https://github.com/nathom/streamrip";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ paveloom ];
