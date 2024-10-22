@@ -2,7 +2,7 @@
   lib,
   fetchgit,
   buildGoModule,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
 buildGoModule {
@@ -22,7 +22,7 @@ buildGoModule {
     "-w"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Waybar component/utility for displaying and controlling MPRIS2 compliant media players individually";
