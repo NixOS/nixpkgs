@@ -32250,8 +32250,6 @@ with pkgs;
 
   sc-im = callPackage ../applications/misc/sc-im { };
 
-  scite = callPackage ../applications/editors/scite { };
-
   scli = callPackage ../applications/misc/scli { };
 
   scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
