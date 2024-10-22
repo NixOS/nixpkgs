@@ -33,8 +33,8 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  postPhases = [ "postPatchelf" ];
-  postPatchelf = lib.optionalString (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) ''
+  postPhases = lib.optionals (stdenvNoCC.buildPlatform.canExecute stdenvNoCC.hostPlatform) [ "postPatchelf" ];
+  postPatchelf = ''
     completions_dir=$(mktemp -d)
 
     SHELL="bash" $out/bin/bun completions $completions_dir

@@ -5357,8 +5357,6 @@ with pkgs;
 
   libnvme = callPackage ../os-specific/linux/libnvme { };
 
-  libnvidia-container = callPackage ../applications/virtualization/libnvidia-container { };
-
   librenms = callPackage ../servers/monitoring/librenms { };
 
   libxnd = callPackage ../development/libraries/libxnd { };
@@ -8360,7 +8358,7 @@ with pkgs;
   halibut = callPackage ../tools/typesetting/halibut { };
 
   halide = callPackage ../development/compilers/halide {
-    llvmPackages = llvmPackages_16;
+    llvmPackages = llvmPackages_18;
   };
 
   hareThirdParty = recurseIntoAttrs (callPackage ./hare-third-party.nix { });
@@ -9241,8 +9239,6 @@ with pkgs;
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
-
-  matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
 
   matrix-synapse = callPackage ../servers/matrix-synapse/wrapper.nix { };
   matrix-synapse-unwrapped = callPackage ../servers/matrix-synapse/default.nix { };
@@ -10888,7 +10884,7 @@ with pkgs;
 
   oxlint = callPackage ../development/tools/oxlint { };
 
-  ovito = libsForQt5.callPackage ../applications/graphics/ovito {
+  ovito = qt6Packages.callPackage ../applications/graphics/ovito {
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
   };
 
@@ -13332,8 +13328,7 @@ with pkgs;
 
   vimwiki-markdown = python3Packages.callPackage ../tools/misc/vimwiki-markdown { };
 
-  visidata = (newScope python3Packages) ../applications/misc/visidata {
-  };
+  visidata = python3Packages.callPackage ../applications/misc/visidata { };
 
   vit = callPackage ../applications/misc/vit { };
 
@@ -14316,7 +14311,7 @@ with pkgs;
     inherit (python3Packages) filecheck;
   };
 
-  bluespec = callPackage ../development/compilers/bluespec {
+  bluespec = callPackage ../by-name/bl/bluespec/package.nix {
     gmp-static = gmp.override { withStatic = true; };
   };
 
@@ -14377,8 +14372,8 @@ with pkgs;
   clang-tools = llvmPackages.clang-tools;
 
   clang-analyzer = callPackage ../development/tools/analysis/clang-analyzer {
-    llvmPackages = llvmPackages_14;
-    inherit (llvmPackages_14) clang;
+    llvmPackages = llvmPackages;
+    inherit (llvmPackages) clang;
   };
 
   clazy = callPackage ../development/tools/analysis/clazy {
@@ -15612,7 +15607,6 @@ with pkgs;
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
   cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
-  cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -16917,13 +16911,16 @@ with pkgs;
     electron_30-bin
     electron_31-bin
     electron_32-bin
+    electron_33-bin
     ;
 
   inherit (callPackages ../development/tools/electron/chromedriver { })
     electron-chromedriver_29
     electron-chromedriver_30
     electron-chromedriver_31
-    electron-chromedriver_32;
+    electron-chromedriver_32
+    electron-chromedriver_33
+    ;
 
   electron_24 = electron_24-bin;
   electron_27 = electron_27-bin;
@@ -16932,6 +16929,7 @@ with pkgs;
   electron_30 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_30 then electron-source.electron_30 else electron_30-bin;
   electron_31 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_31 then electron-source.electron_31 else electron_31-bin;
   electron_32 = if lib.meta.availableOn stdenv.hostPlatform electron-source.electron_32 then electron-source.electron_32 else electron_32-bin;
+  electron_33 = electron_33-bin;
   electron = electron_32;
   electron-bin = electron_32-bin;
   electron-chromedriver = electron-chromedriver_32;
@@ -17026,13 +17024,11 @@ with pkgs;
   bingrep = callPackage ../development/tools/analysis/bingrep { };
 
   binutils-unwrapped = callPackage ../development/tools/misc/binutils {
-    autoreconfHook = autoreconfHook269;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
   };
   binutils-unwrapped-all-targets = callPackage ../development/tools/misc/binutils {
-    autoreconfHook = if targetPlatform.isiOS then autoreconfHook269 else autoreconfHook;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (stdenv.targetPlatform != stdenv.hostPlatform) || noSysDirs;
@@ -20217,6 +20213,7 @@ with pkgs;
     icu73
     icu74
     icu75
+    icu76
   ;
 
   icu = icu74;
@@ -24189,7 +24186,7 @@ with pkgs;
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5 { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd { erlang = erlang_24; };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   exhaustive = callPackage ../development/tools/exhaustive { };
 
@@ -24847,8 +24844,6 @@ with pkgs;
   ops = callPackage ../applications/virtualization/ops { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
-
-  patroni = callPackage ../servers/sql/patroni { pythonPackages = python3Packages; };
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
@@ -29496,8 +29491,6 @@ with pkgs;
 
   gitolite = callPackage ../applications/version-management/gitolite { };
 
-  gmrun = callPackage ../applications/misc/gmrun { };
-
   goffice = callPackage ../development/libraries/goffice { };
 
   gtkterm = callPackage ../tools/misc/gtkterm { };
@@ -30411,8 +30404,6 @@ with pkgs;
 
   kubemqctl = callPackage ../applications/networking/cluster/kubemqctl { };
 
-  kubent = callPackage ../applications/networking/cluster/kubent { };
-
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
   kubestroyer = callPackage ../tools/security/kubestroyer { };
@@ -30540,8 +30531,6 @@ with pkgs;
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
   };
-
-  lazpaint = callPackage ../applications/graphics/lazpaint { };
 
   caps = callPackage ../applications/audio/caps { };
 
@@ -34551,6 +34540,10 @@ with pkgs;
 
   factorio-demo = factorio.override { releaseType = "demo"; };
 
+  factorio-space-age = factorio.override { releaseType = "expansion"; };
+
+  factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
+
   factorio-mods = callPackage ../games/factorio/mods.nix { };
 
   factorio-utils = callPackage ../games/factorio/utils.nix { };
@@ -34660,8 +34653,6 @@ with pkgs;
   graphwar = callPackage ../games/graphwar { };
 
   gtypist = callPackage ../games/gtypist { };
-
-  gweled = callPackage ../games/gweled { };
 
   harmonist = callPackage ../games/harmonist { };
 

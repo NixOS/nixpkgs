@@ -1861,6 +1861,10 @@ in
     nvimRequireCheck = "rustaceanvim";
   };
 
+  scretch-nvim = super.scretch-nvim.overrideAttrs {
+    nvimRequireCheck = "scretch";
+  };
+
   sg-nvim = super.sg-nvim.overrideAttrs (
     old:
     let

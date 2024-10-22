@@ -10,6 +10,7 @@
   zlib,
   mbedtls,
   cacert,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +29,18 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    libiconv
-    gdbm
-    openssl
-    zlib
-    mbedtls
-    cacert
-  ];
+  buildInputs =
+    [
+      libiconv
+      gdbm
+      openssl
+      zlib
+      mbedtls
+      cacert
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      darwin.apple_sdk_11_0.frameworks.CoreServices
+    ];
 
   postPatch = ''
     patchShebangs .

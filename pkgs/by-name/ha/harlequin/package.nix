@@ -11,14 +11,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "1.24.1";
+  version = "1.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-3Rb47zkWsC6RJhk1btQc/kwxpFFWVnxY2PJooHB7IzQ=";
+    hash = "sha256-iRl91GqYigD6t0aVVShBg835yhlPxgfZcQCdAGUoc1k=";
   };
 
   build-system = with python3Packages; [
