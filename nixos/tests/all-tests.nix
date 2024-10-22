@@ -410,6 +410,7 @@ in {
   grocy = handleTest ./grocy.nix {};
   grow-partition = runTest ./grow-partition.nix;
   grub = handleTest ./grub.nix {};
+  grub-ng = handleTest ./grub.nix { ng = true; };
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};

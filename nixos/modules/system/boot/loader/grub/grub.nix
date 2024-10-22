@@ -694,6 +694,14 @@ in
         '';
       };
 
+      useInstallNg = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether to use `install-grub-ng`, an experimental rewrite of `install-grub`
+          in Rust, with the goal of replacing the original Perl script.
+        '';
+      };
     };
 
   };
@@ -738,13 +746,23 @@ in
             XMLLibXML XMLSAX XMLSAXBase
             ListCompare JSON
           ]);
-        in pkgs.writeScript "install-grub.sh" (''
-        #!${pkgs.runtimeShell}
-        set -e
-        ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
-      '' + flip concatMapStrings cfg.mirroredBoots (args: ''
-        ${perl}/bin/perl ${install-grub-pl} ${grubConfig args} $@
-      '') + cfg.extraInstallCommands);
+          ng = pkgs.install-grub-ng.override {
+            inherit (config.system.nixos) distroName;
+          };
+          genRun = args: if cfg.useInstallNg then
+            "${lib.getExe ng} ${grubConfig args} $@\n"
+          else
+            "${lib.getExe perl} ${install-grub-pl} ${grubConfig args} $@\n";
+        in
+        pkgs.writeScript "install-grub.sh" (
+          ''
+            #!${pkgs.runtimeShell}
+            set -e
+            ${optionalString cfg.enableCryptodisk "export GRUB_ENABLE_CRYPTODISK=y"}
+          ''
+          + flip concatMapStrings cfg.mirroredBoots genRun
+          + cfg.extraInstallCommands
+        );
 
       system.build.grub = grub;
 
