@@ -1,17 +1,31 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wrapGAppsHook3,
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scite";
-  version = "5.2.2";
+  version = "5.5.3";
 
   src = fetchurl {
-    url = "https://www.scintilla.org/scite522.tgz";
-    sha256 = "1q46clclx8r0b8zbq2zi89sygszgqf9ra5l83r2fs0ghvjgh2cxd";
+    url = "https://www.scintilla.org/scite${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}.tgz";
+    hash = "sha256-MtXy8a4MzdJP8Rf6otc+Zu+KfYSJnmmXfBS8RVBBbOY=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 ];
-  sourceRoot = "scintilla/gtk";
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
+
+  sourceRoot = "scite/gtk";
+
+  makeFlags = [
+    "GTK3=1"
+    "prefix=${placeholder "out"}"
+  ];
 
   CXXFLAGS = [
     # GCC 13: error: 'intptr_t' does not name a type
@@ -19,24 +33,27 @@ stdenv.mkDerivation {
     "-include system_error"
   ];
 
-  buildPhase = ''
-    make
-    cd ../../lexilla/src
-    make
-    cd ../../scite/gtk
-    make prefix=$out/
+  preBuild = ''
+    pushd ../../scintilla/gtk
+    make ''${makeFlags[@]}
+    popd
+
+    pushd ../../lexilla/src
+    make ''${makeFlags[@]}
+    popd
   '';
 
-  installPhase = ''
-    make install prefix=$out/
-  '';
+  enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.scintilla.org/SciTE.html";
     description = "SCIntilla based Text Editor";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.rszibele ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
+      rszibele
+      aleksana
+    ];
     mainProgram = "SciTE";
   };
-}
+})
