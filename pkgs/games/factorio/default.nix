@@ -16,6 +16,7 @@
 , makeDesktopItem
 , makeWrapper
 , releaseType
+, requireFile
 , stdenv
 , wayland
 
@@ -38,7 +39,7 @@ let
 
   mods = args.mods or [ ];
 
-  helpMsg = ''
+  helpMsg = version: ''
 
     ===FETCH FAILED===
     Please ensure you have set the username and token with config.nix, or
@@ -61,10 +62,10 @@ let
 
     Alternatively, instead of providing the username+token, you may manually
     download the release through https://factorio.com/download , then add it to
-    the store using e.g.:
+    the Nix store using e.g.:
 
-      releaseType=alpha
-      version=0.17.74
+      releaseType=${releaseType}
+      version=${version}
       nix-prefetch-url file://\''$HOME/Downloads/factorio_\''${releaseType}_x64_\''${version}.tar.xz --name factorio_\''${releaseType}_x64-\''${version}.tar.xz
 
     Note the ultimate "_" is replaced with "-" in the --name arg!
@@ -106,34 +107,28 @@ let
       if !needsAuth then
         fetchurl { inherit name url sha256; }
       else
-        (lib.overrideDerivation
-          (fetchurl {
-            inherit name url sha256;
-            curlOptsList = [
-              "--get"
-              "--data-urlencode"
-              "username@username"
-              "--data-urlencode"
-              "token@token"
-            ];
-          })
-          (_: {
-            # This preHook hides the credentials from /proc
-            preHook =
-              if username != "" && token != "" then ''
-                echo -n "${username}" >username
-                echo -n "${token}"    >token
-              '' else ''
-                # Deliberately failing since username/token was not provided, so we can't fetch.
-                # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
-                exit 1
+        (if username != "" && token != "" then
+          (lib.overrideDerivation
+            (fetchurl {
+              inherit name url sha256;
+              curlOptsList = [
+                "--get"
+                "--data-urlencode"
+                "username@username"
+                "--data-urlencode"
+                "token@token"
+              ];
+            })
+            (_: {
+              # This preHook hides the credentials from /proc
+              preHook = ''
+                  echo -n "${username}" >username
+                  echo -n "${token}"    >token
               '';
-            failureHook = ''
-              cat <<EOF
-              ${helpMsg}
-              EOF
-            '';
-          }));
+            })) else requireFile {
+              inherit name sha256;
+              message = helpMsg version;
+            });
   };
 
   configBaseCfg = ''
@@ -269,8 +264,15 @@ let
     };
     alpha = demo // {
 
+      outputs = [ "out" "devdoc" ];
       installPhase = demo.installPhase + ''
-        cp -a doc-html $out/share/factorio
+        mkdir -p $devdoc/share/doc
+        cp -a doc-html $devdoc/share/doc/factorio
+      '';
+
+      postFixup = ''
+        # postInstall itself is insufficient _multioutDocs hook in preFixup moves this to $doc output instead.
+        moveToOutput "share/doc" "$devdoc"
       '';
     };
     expansion = alpha;
