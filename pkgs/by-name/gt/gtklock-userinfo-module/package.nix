@@ -2,24 +2,31 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
   pkg-config,
   gtk3,
   glib,
   accountsservice,
+  gtklock,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gtklock-userinfo-module";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-gZ9TGARuWFGyWLROlJQWwiEtbzQC9rlG8NKxUuGh57c=";
+    repo = "gtklock-userinfo-module";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-d9S0Tj7aII2JQ5/PZmt8HaUIb5caoD4GND0PGvuRMn8=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
 
   buildInputs = [
     gtk3
@@ -27,13 +34,13 @@ stdenv.mkDerivation rec {
     accountsservice
   ];
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  passthru.tests.testModule = gtklock.testModule finalAttrs.finalPackage;
 
-  meta = with lib; {
+  meta = {
     description = "Gtklock module adding user info to the lockscreen";
     homepage = "https://github.com/jovanlanik/gtklock-userinfo-module";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
-}
+})
