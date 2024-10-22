@@ -196,6 +196,11 @@ package-maintainers:
     - hnix
     - hnix-store-core
     - hnix-store-remote
+  artem:
+    - BNFC-meta
+    - alex-meta
+    - happy-meta
+    - vector-hashtables
   arturcygan:
     - hevm
   athas:
