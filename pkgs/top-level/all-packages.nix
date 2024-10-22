@@ -37097,8 +37097,6 @@ with pkgs;
 
   hck = callPackage ../tools/text/hck { };
 
-  helm = callPackage ../applications/audio/helm { };
-
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
   helmfile-wrapped = callPackage ../applications/networking/cluster/helmfile {
