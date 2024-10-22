@@ -42,6 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     cp Make.inc/Makefile.debian.SEQ ./Makefile.inc
   '';
 
+  enableParallelBuilding = true;
+
   makeFlags =
     lib.optionals stdenv.hostPlatform.isDarwin [
       "SONAME="
