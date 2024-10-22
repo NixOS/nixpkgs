@@ -1,21 +1,34 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
 let
   cfg = config.services.pcscd;
-  cfgFile = pkgs.writeText "reader.conf" config.services.pcscd.readerConfig;
-
-  package = if config.security.polkit.enable
-              then pkgs.pcscliteWithPolkit
-              else pkgs.pcsclite;
+  cfgFile = pkgs.writeText "reader.conf" cfg.readerConfig;
 
   pluginEnv = pkgs.buildEnv {
     name = "pcscd-plugins";
-    paths = map (p: "${p}/pcsc/drivers") config.services.pcscd.plugins;
+    paths = map (p: "${p}/pcsc/drivers") cfg.plugins;
   };
 
 in
 {
   options.services.pcscd = {
     enable = lib.mkEnableOption "PCSC-Lite daemon, to access smart cards using SCard API (PC/SC)";
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      description = "The pcsclite package to use.";
+      default = if config.security.polkit.enable then pkgs.pcscliteWithPolkit else pkgs.pcsclite;
+      defaultText = lib.literalExpression ''
+        if config.security.polkit.enable
+        then "pkgs.pcscliteWithPolkit"
+        else "pkgs.pcsclite"
+      '';
+    };
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.package;
@@ -47,11 +60,11 @@ in
     };
   };
 
-  config = lib.mkIf config.services.pcscd.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."reader.conf".source = cfgFile;
 
-    environment.systemPackages = [ package ];
-    systemd.packages = [ package ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     services.pcscd.plugins = [ pkgs.ccid ];
 
@@ -59,6 +72,7 @@ in
 
     systemd.services.pcscd = {
       environment.PCSCLITE_HP_DROPDIR = pluginEnv;
+      reloadTriggers = [ cfgFile ];
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the
@@ -68,7 +82,10 @@ in
       # around it, we force the path to the cfgFile.
       #
       # https://github.com/NixOS/nixpkgs/issues/121088
-      serviceConfig.ExecStart = [ "" "${lib.getExe package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}" ];
+      serviceConfig.ExecStart = [
+        ""
+        "${lib.getExe cfg.package} -f -x -c ${cfgFile} ${lib.escapeShellArgs cfg.extraArgs}"
+      ];
     };
   };
 }
