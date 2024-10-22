@@ -30229,8 +30229,6 @@ with pkgs;
 
   jaeles = callPackage ../tools/security/jaeles { };
 
-  jalv = callPackage ../applications/audio/jalv { };
-
   jameica = callPackage ../applications/office/jameica {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
