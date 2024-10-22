@@ -1,8 +1,8 @@
 {
   lib,
-  mkYarnPackage,
+  stdenv,
   fetchFromGitHub,
-  fetchYarnDeps,
+  pnpm,
   makeWrapper,
   node-pre-gyp,
   nodejs,
@@ -10,69 +10,62 @@
   sqlite,
 }:
 
-mkYarnPackage rec {
-  pname = "jellyseerr";
-  version = "1.9.2";
+stdenv.mkDerivation (finalAttrs: rec {
+  pname = "";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
-    repo = "jellyseerr";
+    repo = "";
     rev = "v${version}";
-    hash = "sha256-TXe/k/pb7idu7G1wGu6TZksnoFQ5/PN0voVlve3k1UI=";
+    hash = "sha256-ZqHm8GeougFGfOeHXit2+2dRMeQrGgt3kFlm7pUxWpg=";
   };
 
-  packageJSON = ./package.json;
-
-  offlineCache = fetchYarnDeps {
-    yarnLock = "${src}/yarn.lock";
-    hash = "sha256-2iRxguxEI+YKm8ddhRgZMvfZuUgQmCK5ER4jMCFJQMQ=";
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "";
   };
 
   nativeBuildInputs = [
     nodejs
     makeWrapper
+    pnpm.configHook
   ];
 
-  # Fixes "SQLite package has not been found installed" at launch
-  pkgConfig.sqlite3 = {
-    nativeBuildInputs = [
-      node-pre-gyp
-      python3
-      sqlite
-    ];
-    postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node --sqlite=${sqlite.dev}
-      rm -r build-tmp-napi-v6
-    '';
-  };
-
-  pkgConfig.bcrypt = {
-    nativeBuildInputs = [
-      node-pre-gyp
-      python3
-    ];
-    postInstall = ''
-      export CPPFLAGS="-I${nodejs}/include/node"
-      node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
-    '';
-  };
+  buildInputs = [
+    node-pre-gyp
+    python3
+    sqlite
+  ];
 
   buildPhase = ''
     runHook preBuild
-    (
-      shopt -s dotglob
-      cd deps/jellyseerr
-      rm -r config/*
-      yarn build
-      rm -r .next/cache
-    )
+    pnpm build
+    pnpm --ignore-scripts prune --prod
     runHook postBuild
+  '';
+
+  postBuild = ''
+    export CPPFLAGS="-I${nodejs}/include/node"
+    pushd node_modules/sqlite3
+    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node --sqlite=${sqlite.dev}
+    rm -r build-tmp-napi-v6
+    popd
+    pushd node_modules/bcrypt
+    node-pre-gyp install --prefer-offline --build-from-source --nodedir=${nodejs}/include/node
+    popd
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out/{bin,libexec}
+    cp -r {.next,config,dist,node_modules,overseerr-api.yml,package.json} $out/libexec
+    runHook postInstall
   '';
 
   postInstall = ''
     makeWrapper '${nodejs}/bin/node' "$out/bin/jellyseerr" \
-      --add-flags "$out/libexec/jellyseerr/deps/jellyseerr/dist/index.js" \
+      --add-flags "$out/libexec/dist/index.js" \
       --set NODE_ENV production
   '';
 
@@ -85,12 +78,12 @@ mkYarnPackage rec {
     homepage = "https://github.com/Fallenbagel/jellyseerr";
     longDescription = ''
       Jellyseerr is a free and open source software application for managing
-      requests for your media library. It is a a fork of Overseerr built to
+      requests for your media library. It is a fork of Overseerr built to
       bring support for Jellyfin & Emby media servers!
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
     platforms = platforms.linux;
-    mainProgram = "jellyseerr";
+    mainProgram = "";
   };
-}
+})
