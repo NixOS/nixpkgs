@@ -55,9 +55,7 @@ stdenv.mkDerivation rec {
   ]) ++
   (with ocamlPackages; [
     findlib
-    gettext-stub
     ocaml
-    ocaml_gettext
     ounit2
   ]);
 
