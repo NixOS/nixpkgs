@@ -1,0 +1,207 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Thu, 24 Oct 2024 04:40:45 +0900
+Subject: [PATCH] network: process queued remove requests before networkd is
+ stopped
+
+This makes networkd process all queued remove requests when a
+terminating or restarting signal is received. Otherwise, e.g. DHCPv4
+address will not be removed on stop, especially when
+KeepConfiguration=no.
+
+Fixes a bug introduced by 85a6f300c14d75d161cbfdb3eaf5af9594400ecd and
+its subsequent commits.
+
+Fixes #34837.
+
+Co-authored-by: Will Fancher <elvishjerricco@gmail.com>
+---
+ src/network/networkd-link.c    |  8 +++-
+ src/network/networkd-link.h    |  1 +
+ src/network/networkd-manager.c | 72 +++++++++++++++++++++++++---------
+ src/network/networkd-manager.h | 11 +++++-
+ 4 files changed, 71 insertions(+), 21 deletions(-)
+
+diff --git a/src/network/networkd-link.c b/src/network/networkd-link.c
+index 9ce75361fd..8f21504d92 100644
+--- a/src/network/networkd-link.c
++++ b/src/network/networkd-link.c
+@@ -222,7 +222,7 @@ void link_dns_settings_clear(Link *link) {
+         link->dnssec_negative_trust_anchors = set_free_free(link->dnssec_negative_trust_anchors);
+ }
+ 
+-static void link_free_engines(Link *link) {
++void link_free_engines(Link *link) {
+         if (!link)
+                 return;
+ 
+@@ -376,7 +376,7 @@ int link_stop_engines(Link *link, bool may_keep_dhcp) {
+         bool keep_dhcp = may_keep_dhcp &&
+                          link->network &&
+                          !link->network->dhcp_send_decline && /* IPv4 ACD for the DHCPv4 address is running. */
+-                         (link->manager->restarting ||
++                         (link->manager->state == MANAGER_RESTARTING ||
+                           FLAGS_SET(link->network->keep_configuration, KEEP_CONFIGURATION_DHCP_ON_STOP));
+ 
+         if (!keep_dhcp) {
+@@ -1321,6 +1321,10 @@ int link_reconfigure_impl(Link *link, bool force) {
+         int r;
+ 
+         assert(link);
++        assert(link->manager);
++
++        if (link->manager->state != MANAGER_RUNNING)
++                return 0;
+ 
+         if (IN_SET(link->state, LINK_STATE_PENDING, LINK_STATE_LINGER))
+                 return 0;
+diff --git a/src/network/networkd-link.h b/src/network/networkd-link.h
+index b1b2fe42db..18586e6ccf 100644
+--- a/src/network/networkd-link.h
++++ b/src/network/networkd-link.h
+@@ -248,6 +248,7 @@ int link_ipv6ll_gained(Link *link);
+ bool link_has_ipv6_connectivity(Link *link);
+ 
+ int link_stop_engines(Link *link, bool may_keep_dhcp);
++void link_free_engines(Link *link);
+ 
+ const char* link_state_to_string(LinkState s) _const_;
+ LinkState link_state_from_string(const char *s) _pure_;
+diff --git a/src/network/networkd-manager.c b/src/network/networkd-manager.c
+index 4ec4550caf..979b7904e4 100644
+--- a/src/network/networkd-manager.c
++++ b/src/network/networkd-manager.c
+@@ -425,30 +425,71 @@ static int manager_connect_rtnl(Manager *m, int fd) {
+ static int manager_post_handler(sd_event_source *s, void *userdata) {
+         Manager *manager = ASSERT_PTR(userdata);
+ 
++        /* To release dynamic leases, we need to process queued remove requests before stopping networkd.
++         * This is especially important when KeepConfiguration=no. See issue #34837. */
+         (void) manager_process_remove_requests(manager);
+-        (void) manager_process_requests(manager);
+-        (void) manager_clean_all(manager);
++
++        switch (manager->state) {
++        case MANAGER_RUNNING:
++                (void) manager_process_requests(manager);
++                (void) manager_clean_all(manager);
++                return 0;
++
++        case MANAGER_TERMINATING:
++        case MANAGER_RESTARTING:
++                if (!ordered_set_isempty(manager->remove_request_queue))
++                        return 0; /* There are some unissued remove requests. */
++
++                if (netlink_get_reply_callback_count(manager->rtnl) > 0 ||
++                    netlink_get_reply_callback_count(manager->genl) > 0 ||
++                    fw_ctx_get_reply_callback_count(manager->fw_ctx) > 0)
++                        return 0; /* There are some message calls waiting for their replies. */
++
++                manager->state = MANAGER_STOPPED;
++                return sd_event_exit(sd_event_source_get_event(s), 0);
++
++        default:
++                assert_not_reached();
++        }
++
+         return 0;
+ }
+ 
+-static int signal_terminate_callback(sd_event_source *s, const struct signalfd_siginfo *si, void *userdata) {
+-        Manager *m = ASSERT_PTR(userdata);
++static int manager_stop(Manager *manager, ManagerState state) {
++        assert(manager);
++        assert(IN_SET(state, MANAGER_TERMINATING, MANAGER_RESTARTING));
+ 
+-        m->restarting = false;
++        if (manager->state != MANAGER_RUNNING)
++                return 0;
+ 
+-        log_debug("Terminate operation initiated.");
++        switch (state) {
++        case MANAGER_TERMINATING:
++                log_debug("Terminate operation initiated.");
++                break;
++        case MANAGER_RESTARTING:
++                log_debug("Restart operation initiated.");
++                break;
++        default:
++                assert_not_reached();
++        }
+ 
+-        return sd_event_exit(sd_event_source_get_event(s), 0);
+-}
++        manager->state = state;
+ 
+-static int signal_restart_callback(sd_event_source *s, const struct signalfd_siginfo *si, void *userdata) {
+-        Manager *m = ASSERT_PTR(userdata);
++        Link *link;
++        HASHMAP_FOREACH(link, manager->links_by_index) {
++                (void) link_stop_engines(link, /* may_keep_dhcp = */ true);
++                link_free_engines(link);
++        }
+ 
+-        m->restarting = true;
++        return 0;
++}
+ 
+-        log_debug("Restart operation initiated.");
++static int signal_terminate_callback(sd_event_source *s, const struct signalfd_siginfo *si, void *userdata) {
++        return manager_stop(userdata, MANAGER_TERMINATING);
++}
+ 
+-        return sd_event_exit(sd_event_source_get_event(s), 0);
++static int signal_restart_callback(sd_event_source *s, const struct signalfd_siginfo *si, void *userdata) {
++        return manager_stop(userdata, MANAGER_RESTARTING);
+ }
+ 
+ static int signal_reload_callback(sd_event_source *s, const struct signalfd_siginfo *si, void *userdata) {
+@@ -614,16 +655,11 @@ int manager_new(Manager **ret, bool test_mode) {
+ }
+ 
+ Manager* manager_free(Manager *m) {
+-        Link *link;
+-
+         if (!m)
+                 return NULL;
+ 
+         free(m->state_file);
+ 
+-        HASHMAP_FOREACH(link, m->links_by_index)
+-                (void) link_stop_engines(link, true);
+-
+         m->request_queue = ordered_set_free(m->request_queue);
+         m->remove_request_queue = ordered_set_free(m->remove_request_queue);
+ 
+diff --git a/src/network/networkd-manager.h b/src/network/networkd-manager.h
+index c14a98fb97..7fc99fc1c2 100644
+--- a/src/network/networkd-manager.h
++++ b/src/network/networkd-manager.h
+@@ -19,6 +19,15 @@
+ #include "time-util.h"
+ #include "varlink.h"
+ 
++typedef enum ManagerState {
++        MANAGER_RUNNING,
++        MANAGER_TERMINATING,
++        MANAGER_RESTARTING,
++        MANAGER_STOPPED,
++        _MANAGER_STATE_MAX,
++        _MANAGER_STATE_INVALID = -EINVAL,
++} ManagerState;
++
+ struct Manager {
+         sd_netlink *rtnl;
+         /* lazy initialized */
+@@ -35,10 +44,10 @@ struct Manager {
+         KeepConfiguration keep_configuration;
+         IPv6PrivacyExtensions ipv6_privacy_extensions;
+ 
++        ManagerState state;
+         bool test_mode;
+         bool enumerating;
+         bool dirty;
+-        bool restarting;
+         bool manage_foreign_routes;
+         bool manage_foreign_rules;
+         bool manage_foreign_nexthops;

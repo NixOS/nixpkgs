@@ -232,6 +232,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0015-tpm2_context_init-fix-driver-name-checking.patch
     ./0016-systemctl-edit-suggest-systemdctl-edit-runtime-on-sy.patch
     ./0017-meson.build-do-not-create-systemdstatedir.patch
+    # https://github.com/systemd/systemd/pull/34871
+    ./0019-network-process-queued-remove-requests-before-networ.patch
 
     # https://github.com/systemd/systemd/issues/33392
     (fetchpatch2 {
