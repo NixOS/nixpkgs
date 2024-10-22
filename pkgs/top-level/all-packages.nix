@@ -29690,8 +29690,6 @@ with pkgs;
 
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
-  gtklock-powerbar-module = callPackage ../tools/wayland/gtklock/powerbar-module.nix { };
-
   gtklock-userinfo-module = callPackage ../tools/wayland/gtklock/userinfo-module.nix { };
 
   gv = callPackage ../applications/misc/gv { };
