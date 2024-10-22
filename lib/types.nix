@@ -80,10 +80,42 @@ rec {
   };
 
 
+  /**
+    Merges two option types. The order of the two types should be irrelevant.
+
+    It uses their internal implementation given in typeMerge,
+    but in case the first type cannot merge itself with the second,
+    it also tests if the second type can merge itself with the first,
+    making this operation commutative.
+
+    # Example
+
+    ```nix
+    mergeTypes (enum [ "first" ]) (enum [ "second" ])
+    ```
+
+    # Type
+
+    ```
+    mergeTypes :: AttrSet -> AttrSet -> AttrSet
+    ```
+
+    # Arguments
+
+    - [t1] first type to merge
+    - [t2] second type to merge
+   */
+  mergeTypes = t1: t2:
+    let
+      m1 = t1.typeMerge t2.functor;
+      m2 = t2.typeMerge t1.functor;
+    in
+    if m1 != null then m1 else m2;
+
   # Default type merging function
   # takes two type functors and return the merged type
   defaultTypeMerge = f: f':
-    let wrapped = f.wrapped.typeMerge f'.wrapped.functor;
+    let wrapped = mergeTypes f.wrapped f'.wrapped;
         payload = f.binOp f.payload f'.payload;
     in
     # cannot merge different types
@@ -991,8 +1023,8 @@ rec {
                then t2.merge loc defs
           else mergeOneOption loc defs;
       typeMerge = f':
-        let mt1 = t1.typeMerge (elemAt f'.wrapped 0).functor;
-            mt2 = t2.typeMerge (elemAt f'.wrapped 1).functor;
+        let mt1 = mergeTypes t1 (elemAt f'.wrapped 0);
+            mt2 = mergeTypes t2 (elemAt f'.wrapped 1);
         in
            if (name == f'.name) && (mt1 != null) && (mt2 != null)
            then functor.type mt1 mt2
