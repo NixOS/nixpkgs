@@ -16,6 +16,9 @@ in
       # typo, no q
       meta.reuired = false;
     };
+    missingDef = mkOption {
+      type = lib.types.str;
+    };
   };
   config = {
     foo = "bar";

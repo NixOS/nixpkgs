@@ -151,6 +151,7 @@ checkConfigError '.*A definition for option .bad. is not of type .non-empty .lis
 checkConfigOutput '^true$' options.foo.meta.required ./option-meta.nix
 checkConfigError '.*The option .options\.undeclared\.meta\.reuired. does not exist.*' options.undeclared.meta.reuired ./option-meta.nix
 checkConfigError '.*option-meta\.nix:[0-9]+:[0-9]+.: false' options.undeclared.meta.reuired ./option-meta.nix
+checkConfigError '.*The option .options\.missingDef\.meta\.required. was accessed but has no value defined\. Try setting the option.*' options.missingDef.meta.required ./option-meta.nix
 
 # types.attrTag
 checkConfigOutput '^true$' config.okChecks ./types-attrTag.nix
