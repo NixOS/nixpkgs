@@ -979,7 +979,6 @@ in
   };
 
   meta.maintainers = with lib.maintainers; [
-    erictapen
     Flakebi
     oddlama
   ];

@@ -309,6 +309,12 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
+  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
+    tbb = tbb_2021_11;
+    cereal = cereal_1_3_2;
+    opencv = opencv.override { enableGtk3 = true; };
+  };
+
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
   beeper = callPackage ../applications/networking/instant-messengers/beeper { };
@@ -13788,7 +13794,9 @@ with pkgs;
 
   wipe = callPackage ../tools/security/wipe { };
 
-  wireguard-go = callPackage ../tools/networking/wireguard-go { };
+  wireguard-go = callPackage ../tools/networking/wireguard-go {
+    buildGoModule = buildGo122Module;
+  };
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
@@ -24374,10 +24382,10 @@ with pkgs;
   home-assistant = callPackage ../servers/home-assistant { };
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
-  home-assistant-custom-components = lib.recurseIntoAttrs
-    (callPackage ../servers/home-assistant/custom-components {
-      inherit (home-assistant.python.pkgs) callPackage;
-    });
+  home-assistant-custom-components = lib.recurseIntoAttrs (lib.packagesFromDirectoryRecursive {
+    inherit (home-assistant.python.pkgs) callPackage;
+    directory = ../servers/home-assistant/custom-components;
+  });
   home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
     (callPackage ../servers/home-assistant/custom-lovelace-modules {});
 
@@ -25208,10 +25216,6 @@ with pkgs;
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
-
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo123Module;
-  };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 

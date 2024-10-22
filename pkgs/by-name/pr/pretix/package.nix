@@ -101,6 +101,7 @@ python.pkgs.buildPythonApplication rec {
     "protobuf"
     "pyjwt"
     "python-bidi"
+    "qrcode"
     "redis"
     "requests"
     "sentry-sdk"

@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Software suite to create, edit, compose, or convert bitmap images";
     pkgConfigModules = [ "ImageMagick" "MagickWand" ];
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ erictapen dotlambda rhendric ];
+    maintainers = with maintainers; [ dotlambda rhendric ];
     license = licenses.asl20;
     mainProgram = "magick";
   };
