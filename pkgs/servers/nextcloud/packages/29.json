@@ -70,9 +70,9 @@
     ]
   },
   "forms": {
-    "hash": "sha256-JhLaTXll2kh/TaWXR1DfUCHuxaJlUMU1oY9ry9yoTTg=",
-    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.1/forms-v4.3.1.tar.gz",
-    "version": "4.3.1",
+    "hash": "sha256-iU2bqojO+pvMvKDiw+ANMvsH71Ul+8yQ+uNvJfa1ngc=",
+    "url": "https://github.com/nextcloud-releases/forms/releases/download/v4.3.2/forms-v4.3.2.tar.gz",
+    "version": "4.3.2",
     "description": "**Simple surveys and questionnaires, self-hosted!**\n\n- **📝 Simple design:** No mass of options, only the essentials. Works well on mobile of course.\n- **📊 View & export results:** Results are visualized and can also be exported as CSV in the same format used by Google Forms.\n- **🔒 Data under your control!** Unlike in Google Forms, Typeform, Doodle and others, the survey info and responses are kept private on your instance.\n- **🧑‍💻 Connect to your software:** Easily integrate Forms into your service with our full-fledged [REST-API](https://github.com/nextcloud/forms/blob/main/docs/API.md).\n- **🙋 Get involved!** We have lots of stuff planned like more question types, collaboration on forms, [and much more](https://github.com/nextcloud/forms/milestones)!",
     "homepage": "https://github.com/nextcloud/forms",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-3CG5lp1lcPzcvOjcQIFcP8OVZvWCq3iNf4OUCu3X7t8=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.4/groupfolders-v17.0.4.tar.gz",
-    "version": "17.0.4",
+    "hash": "sha256-/pREdGW7kM2imVx6Jk5iZ9odQpk/93AwkFECVPJhyuI=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v17.0.5/groupfolders-v17.0.5.tar.gz",
+    "version": "17.0.5",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-8xQglDlOudopTsEqvnlsOTwOU6eAt6argVSXDxJdWUA=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.8/mail-v3.7.8.tar.gz",
-    "version": "3.7.8",
+    "hash": "sha256-Y591RR3m4k8G0+sNU+hRN013LikCFJ/41SbrILEfp8A=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v3.7.9/mail-v3.7.9.tar.gz",
+    "version": "3.7.9",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -140,8 +140,8 @@
     ]
   },
   "maps": {
-    "hash": "sha256-BmXs6Oepwnm+Cviy4awm3S8P9AiJTt1BnAQNb4TxVYE=",
-    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0/maps-1.4.0.tar.gz",
+    "hash": "sha256-FmRhpPRpMnCHkJFaVvQuR6Y7Pd7vpP+tUVih919g/fQ=",
+    "url": "https://github.com/nextcloud/maps/releases/download/v1.4.0-1-nightly/maps-1.4.0-1-nightly.tar.gz",
     "version": "1.4.0",
     "description": "**The whole world fits inside your cloud!**\n\n- **🗺 Beautiful map:** Using [OpenStreetMap](https://www.openstreetmap.org) and [Leaflet](https://leafletjs.com), you can choose between standard map, satellite, topographical, dark mode or even watercolor! 🎨\n- **⭐ Favorites:** Save your favorite places, privately! Sync with [GNOME Maps](https://github.com/nextcloud/maps/issues/30) and mobile apps is planned.\n- **🧭 Routing:** Possible using either [OSRM](http://project-osrm.org), [GraphHopper](https://www.graphhopper.com) or [Mapbox](https://www.mapbox.com).\n- **🖼 Photos on the map:** No more boring slideshows, just show directly where you were!\n- **🙋 Contacts on the map:** See where your friends live and plan your next visit.\n- **📱 Devices:** Lost your phone? Check the map!\n- **〰 Tracks:** Load GPS tracks or past trips. Recording with [PhoneTrack](https://f-droid.org/en/packages/net.eneiluj.nextcloud.phonetrack/) or [OwnTracks](https://owntracks.org) is planned.",
     "homepage": "https://github.com/nextcloud/maps",
@@ -250,9 +250,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-fcKzfo8tyYiZTwqMnR6vP+dTwTYt1UfBZG8ortPDCNg=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.7/richdocuments-v8.4.7.tar.gz",
-    "version": "8.4.7",
+    "hash": "sha256-oRk06JoOvHUD4D7htl/B+CyCz9ybSIAZCELxV3v4uCU=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.4.8/richdocuments-v8.4.8.tar.gz",
+    "version": "8.4.8",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -320,9 +320,9 @@
     ]
   },
   "user_oidc": {
-    "hash": "sha256-8e4xQjOWSVAps6dg4jvN3MGVSOhaOgjPHPpTOgXKFJY=",
-    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v6.0.1/user_oidc-v6.0.1.tar.gz",
-    "version": "6.0.1",
+    "hash": "sha256-tF68YonuCQ90XuZvZnS7NmJApk3P2741XhFjnyb7TSQ=",
+    "url": "https://github.com/nextcloud-releases/user_oidc/releases/download/v6.1.0/user_oidc-v6.1.0.tar.gz",
+    "version": "6.1.0",
     "description": "Allows flexible configuration of an OIDC server as Nextcloud login user backend.",
     "homepage": "https://github.com/nextcloud/user_oidc",
     "licenses": [
@@ -335,6 +335,16 @@
     "version": "6.3.0",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
+    "licenses": [
+      "agpl"
+    ]
+  },
+  "whiteboard": {
+    "hash": "sha256-3Q0B4nAVoerolDlBmjp0KwTWXLzETPrrZxnmfSDF5Gk=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.0.4/whiteboard-v1.0.4.tar.gz",
+    "version": "1.0.4",
+    "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
+    "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [
       "agpl"
     ]
