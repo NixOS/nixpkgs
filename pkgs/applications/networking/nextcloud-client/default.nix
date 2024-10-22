@@ -21,6 +21,7 @@
 , sphinx
 , sqlite
 , xdg-utils
+, qtwayland
 , wrapQtAppsHook
 }:
 
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     qtwebengine
     qtwebsockets
     sqlite
+    qtwayland
   ];
 
   qtWrapperArgs = [
