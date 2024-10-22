@@ -7,7 +7,7 @@
 
 buildGoModule {
   pname = "waybar-mpris";
-  version = "unstable-2022-01-27";
+  version = "0.1.0-unstable-2022-01-27";
 
   src = fetchgit {
     url = "https://git.hrfee.pw/hrfee/waybar-mpris";
