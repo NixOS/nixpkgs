@@ -7,8 +7,7 @@
   installShellFiles,
   cpio,
   xar,
-  _1password,
-  testers,
+  versionCheckHook,
 }:
 
 let
@@ -48,6 +47,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     installShellFiles
+    versionCheckHook
   ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -78,14 +78,10 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
-  installCheckPhase = ''
-    $out/bin/${mainProgram} --version
-  '';
+  versionCheckProgram = "${builtins.placeholder "out"}/bin/${mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = _1password;
-    };
     updateScript = ./update.sh;
   };
 
