@@ -13,12 +13,12 @@
 , with-utf8, yaml, zlib
 }:
 mkDerivation {
-  pname = "spago";
-  version = "0.21.0";
+  pname = "spago-legacy";
+  version = "0.21.1";
   src = fetchgit {
-    url = "https://github.com/purescript/spago.git";
-    sha256 = "1v5y15nhw6smnir0y7y854pa70iv8asxsqph2y8rz1c9lkz5d41g";
-    rev = "c354f4a461f65fcb83aaa843830ea1589f6c7179";
+    url = "https://github.com/purescript/spago-legacy.git";
+    sha256 = "18p9cic1y9b2v12np4b5sd82rz5njxh8f1vgqs4gwm6xjccmszmr";
+    rev = "2790261c28f59940f192c56f3b8245b3ae8b798d";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -41,7 +41,7 @@ mkDerivation {
     process QuickCheck temporary text turtle versions
   ];
   testToolDepends = [ hspec-discover ];
-  homepage = "https://github.com/purescript/spago#readme";
+  homepage = "https://github.com/purescript/spago-legacy#readme";
   license = lib.licenses.bsd3;
   mainProgram = "spago";
 }
