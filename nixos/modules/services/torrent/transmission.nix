@@ -356,7 +356,7 @@ in
           "transmission/${downloadsDir}"
           "transmission/${watchDir}"
         ];
-        StateDirectoryMode = mkDefault 750;
+        StateDirectoryMode = cfg.downloadDirPermissions;
         # The following options are only for optimizing:
         # systemd-analyze security transmission
         AmbientCapabilities = "";
