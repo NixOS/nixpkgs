@@ -13,17 +13,26 @@
 , grpc
 , abseil-cpp
 , libnsl
+, runCommand
 
 # tests
 , python3
 , arrow-cpp
 }:
 
+# This package should be updated together with all related python grpc packages
+# to ensure compatibility.
+# nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "grpc";
   version = "1.66.1"; # N.B: if you change this, please update:
-    # pythonPackages.grpcio-tools
+    # pythonPackages.grpcio
+    # pythonPackages.grpcio-channelz
+    # pythonPackages.grpcio-health-checking
+    # pythonPackages.grpcio-reflection
     # pythonPackages.grpcio-status
+    # pythonPackages.grpcio-testing
+    # pythonPackages.grpcio-tools
 
   src = fetchFromGitHub {
     owner = "grpc";
@@ -99,9 +108,42 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # Checks that all related packages have the same version as grpc. Different versions have
+  # led to incompatible grpc packages in the past.
+  check-versions =
+    let
+      compareVersion =
+        other:
+        # bash
+        ''
+          if [ "${version}" != "${other.version}" ]; then
+            echo "Version of package ${other.name} does not match this grpc version (${version})"
+            echo "Please ensure that all related packages have the same version"
+            exit 1
+          fi
+        '';
+    in
+    runCommand "check-grpc-versions" { } ''
+      ${lib.concatMapStringsSep "\n" compareVersion (
+        with python3.pkgs;
+        [
+          grpcio
+          grpcio-channelz
+          grpcio-health-checking
+          grpcio-reflection
+          grpcio-status
+          grpcio-testing
+          grpcio-tools
+        ]
+      )}
+
+      # The test succeeds if we get here
+      touch "$out"
+    '';
+
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools jaxlib;
-    inherit arrow-cpp;
+    inherit arrow-cpp check-versions;
   };
 
   meta = with lib; {
