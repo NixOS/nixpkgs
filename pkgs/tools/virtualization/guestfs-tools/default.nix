@@ -25,6 +25,7 @@
 , pkg-config
 , qemu
 , xz
+, gitUpdater
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -104,6 +105,12 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/virt-win-reg \
       --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
   '';
+
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/libguestfs/guestfs-tools";
+    rev-prefix = "v";
+    odd-unstable = true;
+  };
 
   meta = {
     description = "Extra tools for accessing and modifying virtual machine disk images";
