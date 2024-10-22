@@ -42,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://versatiles.org/";
     downloadPage = "https://github.com/versatiles-org/versatiles-rs";
+    changelog = "https://github.com/versatiles-org/versatiles-rs/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ wilhelmines ];
     mainProgram = "versatiles";
