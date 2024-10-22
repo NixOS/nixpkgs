@@ -176,7 +176,8 @@ let
   modDir = factorio-utils.mkModDirDrv mods mods-dat;
 
   base = with actual; {
-    pname = "factorio-${releaseType}";
+    # remap -expansion to -space-age to better match the attr name in nixpkgs.
+    pname = "factorio-${if releaseType == "expansion" then "space-age" else releaseType}";
     inherit version src;
 
     preferLocalBuild = true;
