@@ -5,7 +5,6 @@
   buildPythonPackage,
   chalice,
   channels,
-  click,
   daphne,
   django,
   email-validator,
@@ -40,6 +39,8 @@
   starlette,
   typing-extensions,
   uvicorn,
+  typer,
+  graphlib-backport
 }:
 
 buildPythonPackage rec {
@@ -92,7 +93,7 @@ buildPythonPackage rec {
       libcst
     ];
     debug-server = [
-      click
+      typer
       libcst
       pygments
       python-multipart
