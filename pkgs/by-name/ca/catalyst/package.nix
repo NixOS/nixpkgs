@@ -13,11 +13,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "catalyst";
-  version = "3.8.2";
+  version = "3.8.4";
 
   src = fetchurl {
     url = "https://github.com/CatalystDevOrg/Catalyst/releases/download/v${version}/catalyst-${version}.AppImage";
-    hash = "sha256-HHc8oGfYnCDw3HfHBQbl2ibF+/jPoIF8qIRMDoZQV5s=";
+    hash = "sha256-L+ts4mkcz0+XPJDGBhTJmYEKMFAtq4haOBvfEovNcmQ=";
     name = "${pname}-${version}.AppImage";
   };
 
