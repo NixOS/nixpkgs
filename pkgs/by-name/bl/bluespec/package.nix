@@ -28,13 +28,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "bluespec";
-  version = "2024.01";
+  version = "2024.07";
 
   src = fetchFromGitHub {
     owner = "B-Lang-org";
     repo = "bsc";
     rev = version;
-    sha256 = "sha256-yqmtydv94p7qhps0t4EdPaSZNh/9XCuUwOzLqz0gjxE=";
+    sha256 = "sha256-gA/vfAkkM2cuArN99JZVYEWTIJqg82HlC+BHNVS5Ot0=";
   };
 
   yices-src = fetchurl {
