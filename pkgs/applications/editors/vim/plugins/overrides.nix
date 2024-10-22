@@ -1861,6 +1861,10 @@ in
     nvimRequireCheck = "rustaceanvim";
   };
 
+  scretch-nvim = super.scretch-nvim.overrideAttrs {
+    nvimRequireCheck = "scretch";
+  };
+
   sg-nvim = super.sg-nvim.overrideAttrs (
     old:
     let
@@ -2757,8 +2761,6 @@ in
       "coc-tabnine"
       "coc-texlab"
       "coc-toml"
-      "coc-tslint"
-      "coc-tslint-plugin"
       "coc-tsserver"
       "coc-ultisnips"
       "coc-vetur"
