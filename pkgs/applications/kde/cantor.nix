@@ -7,6 +7,7 @@
   makeWrapper,
   shared-mime-info,
 
+  fetchpatch,
   qtbase,
   qtsvg,
   qttools,
@@ -107,16 +108,24 @@ mkDerivation {
   # Causes failures on Hydra and ofborg from some reason
   enableParallelBuilding = false;
 
-  meta = with lib; {
+  patches = [
+    # fix build for julia 1.1 from upstream
+    (fetchpatch {
+      url = "https://github.com/KDE/cantor/commit/ed9525ec7895c2251668d11218f16f186db48a59.patch?full_index=1";
+      hash = "sha256-paq0e7Tl2aiUjBf1bDHLLUpShwdCQLICNTPNsXSoe5M=";
+    })
+  ];
+
+  meta = {
     description = "Front end to powerful mathematics and statistics packages";
     homepage = "https://cantor.kde.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       cc0
       gpl2Only
       gpl2Plus
       gpl3Only
     ];
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with lib.maintainers; [ hqurve ];
   };
 }
