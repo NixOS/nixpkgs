@@ -182,11 +182,11 @@ in
         message = "Either `services.wakapi.passwordSalt` or `services.wakapi.passwordSaltFile` must be set.";
       }
       {
-        assertion = cfg.passwordSalt != null -> cfg.passwordSaltFile != null;
+        assertion = !(cfg.passwordSalt != null && cfg.passwordSaltFile != null);
         message = "Both `services.wakapi.passwordSalt` `services.wakapi.passwordSaltFile` should not be set at the same time.";
       }
       {
-        assertion = cfg.smtpPassword != null -> cfg.smtpPasswordFile != null;
+        assertion = !(cfg.smtpPassword != null && cfg.smtpPasswordFile != null);
         message = "Both `services.wakapi.smtpPassword` `services.wakapi.smtpPasswordFile` should not be set at the same time.";
       }
       {
