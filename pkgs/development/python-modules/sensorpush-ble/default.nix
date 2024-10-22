@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "sensorpush-ble";
-  version = "1.6.2";
+  version = "1.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "sensorpush-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-IZ2QSAHRdpDKFQYfqkcUm1o+7GaI8e50gEFRK3BV3s8=";
+    hash = "sha256-etsrXJn6n9yL0vhiZNnTepCcau50X0t2wPrhZ9R7XL4=";
   };
 
   postPatch = ''
