@@ -1,4 +1,4 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, nix-eval-jobs
+{ stdenv, lib, rustPlatform, fetchFromGitHub, installShellFiles, makeBinaryWrapper, nix-eval-jobs, nixVersions
 , colmena, testers }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rk2atWWJIR95duUXxAiARegjeCyfAsqTDwEr5P0eIr8=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles makeBinaryWrapper ];
 
   buildInputs = [ nix-eval-jobs ];
 
@@ -25,6 +25,9 @@ rustPlatform.buildRustPackage rec {
       --bash <($out/bin/colmena gen-completions bash) \
       --zsh <($out/bin/colmena gen-completions zsh) \
       --fish <($out/bin/colmena gen-completions fish)
+
+    wrapProgram $out/bin/colmena \
+      --prefix PATH ":" "${lib.makeBinPath [ nixVersions.nix_2_18 ]}"
   '';
 
   # Recursive Nix is not stable yet
