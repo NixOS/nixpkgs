@@ -66,7 +66,7 @@
   netfilter-typo-fix = {
     name = "netfilter-typo-fix";
     patch = fetchpatch {
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/patch/?id=306ed1728e8438caed30332e1ab46b28c25fe3d8";
+      url = "https://lore.kernel.org/netdev/20241021094536.81487-3-pablo@netfilter.org/raw";
       hash = "sha256-ZGc1xAIjf+MlV02jhIWZ4jHC742+z/WpN7RenqpU7e4=";
     };
   };
