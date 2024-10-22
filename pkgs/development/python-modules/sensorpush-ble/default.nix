@@ -6,6 +6,7 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   version = "1.7.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
@@ -25,21 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-etsrXJn6n9yL0vhiZNnTepCcau50X0t2wPrhZ9R7XL4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpush_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sensorpush_ble" ];
 
