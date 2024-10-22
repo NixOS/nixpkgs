@@ -263,21 +263,14 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
-    ] ++ lib.optionals (versionRange "120" "126") [
-      # Partial revert to build M120+ with LLVM 17:
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
-      ./patches/chromium-120-llvm-17.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
-      # Rebased variant of patch right above to build M126+ with LLVM 17.
+      # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
-    ] ++ lib.optionals (versionRange "121" "126") [
-      # M121 is the first version to require the new rust toolchain.
+    ] ++ lib.optionals (versionRange "126" "129") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
-      ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (versionRange "126" "129") [
       # Rebased variant of patch right above to build M126+ with our rust and our clang.
       ./patches/chromium-126-rust.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "129") [
