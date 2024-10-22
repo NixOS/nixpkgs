@@ -28,6 +28,6 @@ buildGoModule rec {
     mainProgram = "ineffassign";
     homepage = "https://github.com/gordonklaus/ineffassign";
     license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    maintainers = with maintainers; [ kalbasit bot-wxt1221 ];
   };
 }
