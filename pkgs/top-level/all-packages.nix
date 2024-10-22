@@ -9173,7 +9173,9 @@ with pkgs;
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
 
-  lldpd = callPackage ../tools/networking/lldpd { };
+  lldpd = callPackage ../tools/networking/lldpd {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   llm = with python3Packages; toPythonApplication llm;
 
