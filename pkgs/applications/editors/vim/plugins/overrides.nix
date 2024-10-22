@@ -2761,8 +2761,6 @@ in
       "coc-tabnine"
       "coc-texlab"
       "coc-toml"
-      "coc-tslint"
-      "coc-tslint-plugin"
       "coc-tsserver"
       "coc-ultisnips"
       "coc-vetur"
