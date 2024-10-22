@@ -17,7 +17,7 @@ buildDotnetGlobalTool rec {
   dotnet-sdk = sdk_8_0;
   dotnet-runtime = sdk_8_0;
 
-  passthru.tests = {
+  passthru = {
     updateScript = nix-update-script { };
   };
 
