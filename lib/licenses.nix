@@ -942,6 +942,11 @@ lib.mapAttrs mkLicense ({
     url = "https://license.coscl.org.cn/MulanPSL2";
   };
 
+  naist-2003 = {
+    spdxId = "NAIST-2003";
+    fullName = "Nara Institute of Science and Technology License (2003)";
+  };
+
   nasa13 = {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
