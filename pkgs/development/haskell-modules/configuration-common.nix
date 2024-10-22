@@ -1336,6 +1336,9 @@ self: super: {
     pkgs.postgresqlTestHook
   ] super.postgresql-simple;
 
+  # Requires pg_config program from postgresql.
+  postgresql-libpq-configure = addBuildTool pkgs.postgresql super.postgresql-libpq-configure;
+
   beam-postgres = lib.pipe super.beam-postgres [
     # Requires pg_ctl command during tests
     (addTestToolDepends [pkgs.postgresql])
