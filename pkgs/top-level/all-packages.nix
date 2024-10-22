@@ -14950,6 +14950,8 @@ with pkgs;
   haxePackages = recurseIntoAttrs (callPackage ./haxe-packages.nix { });
   inherit (haxePackages) hxcpp;
 
+  overrideHaxeLibFromHMM = callPackage ../build-support/haxe/override-haxe-lib-from-hmm.nix { };
+
   hop = callPackage ../development/compilers/hop { };
 
   falcon = callPackage ../development/interpreters/falcon {
@@ -34601,8 +34603,6 @@ with pkgs;
   frogatto = callPackage ../games/frogatto { };
 
   frozen-bubble = callPackage ../games/frozen-bubble { };
-
-  fsg = callPackage ../games/fsg { };
 
   gambit-chess = callPackage ../games/gambit { };
 
