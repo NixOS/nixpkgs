@@ -129,6 +129,7 @@ buildPythonPackage rec {
       pygments
       rich
       libcst
+      typer
     ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
