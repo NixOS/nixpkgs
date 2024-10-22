@@ -91,7 +91,8 @@ let
       (mkPackage "Microsoft.NETCore.DotNetHost" runtime.version)
       (mkPackage "Microsoft.NETCore.DotNetHostPolicy" runtime.version)
       (mkPackage "Microsoft.NETCore.DotNetHostResolver" runtime.version)
-    ];
+    ]
+    ++ targetPackages.${targetRid};
 
   targetPackages = fallbackTargetPackages // {
     ${targetRid} =
