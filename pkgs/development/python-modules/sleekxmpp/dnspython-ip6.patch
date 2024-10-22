@@ -1,0 +1,55 @@
+--- a/sleekxmpp/xmlstream/resolver.py
++++ b/sleekxmpp/xmlstream/resolver.py
+@@ -175,6 +175,9 @@ def get_A(host, resolver=None, use_dnspy
+     """
+     log.debug("DNS: Querying %s for A records." % host)
+
++    if isinstance(host, bytes):
++        host = host.decode("utf-8")
++
+     # If not using dnspython, attempt lookup using the OS level
+     # getaddrinfo() method.
+     if resolver is None or not use_dnspython:
+@@ -189,7 +192,10 @@ def get_A(host, resolver=None, use_dnspy
+     # Using dnspython:
+     try:
+         recs = resolver.query(host, dns.rdatatype.A)
+-        return [rec.to_text() for rec in recs]
++        if isinstance(recs[0].to_text(), bytes):
++            return [rec.to_text().decode("utf-8") for rec in recs]
++        else:
++            return [rec.to_text() for rec in recs]
+     except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+         log.debug("DNS: No A records for %s" % host)
+         return []
+@@ -222,6 +228,9 @@ def get_AAAA(host, resolver=None, use_dn
+     """
+     log.debug("DNS: Querying %s for AAAA records." % host)
+
++    if isinstance(host, bytes):
++        host = host.decode("utf-8")
++
+     # If not using dnspython, attempt lookup using the OS level
+     # getaddrinfo() method.
+     if resolver is None or not use_dnspython:
+@@ -240,7 +249,10 @@ def get_AAAA(host, resolver=None, use_dn
+     # Using dnspython:
+     try:
+         recs = resolver.query(host, dns.rdatatype.AAAA)
+-        return [rec.to_text() for rec in recs]
++        if isinstance(recs[0].to_text(), bytes):
++            return [rec.to_text().decode("utf-8") for rec in recs]
++        else:
++            return [rec.to_text() for rec in recs]
+     except (dns.resolver.NXDOMAIN, dns.resolver.NoAnswer):
+         log.debug("DNS: No AAAA records for %s" % host)
+         return []
+@@ -324,6 +336,8 @@ def get_SRV(host, port, service, proto='
+                 if running_sum >= selected:
+                     rec = sums[running_sum]
+                     host = rec.target.to_text()
++                    if isinstance(host, bytes):
++                        host = host.decode("utf-8")
+                     if host.endswith('.'):
+                         host = host[:-1]
+                     sorted_recs.append((host, rec.port))

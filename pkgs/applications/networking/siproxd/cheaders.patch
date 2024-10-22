@@ -1,0 +1,14 @@
+diff --git a/src/dejitter.c b/src/dejitter.c
+index 1904ab3..cb3624d 100644
+--- a/src/dejitter.c
++++ b/src/dejitter.c
+@@ -22,6 +22,8 @@
+
+ #include <errno.h>
+
++#include <string.h>
++#include <sys/time.h>
+ #include <unistd.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>

@@ -1,0 +1,16 @@
+{
+  "name": "gancio-plugin-telegram",
+  "version": "1.0.1",
+  "description": "Telegram bridge plugin for Gancio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "telegraf": "^4.8.5",
+    "dompurify": "^3.0.2",
+    "jsdom": "^21.1.0"
+  }
+}

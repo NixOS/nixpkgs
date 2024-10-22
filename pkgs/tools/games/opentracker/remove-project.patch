@@ -1,0 +1,14 @@
+diff --git a/OpenTracker.sln b/OpenTracker.sln
+index 0a8c438..77124e1 100644
+--- a/OpenTracker.sln
++++ b/OpenTracker.sln
+@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
+ VisualStudioVersion = 16.0.29806.167
+ MinimumVisualStudioVersion = 10.0.40219.1
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTracker", "OpenTracker\OpenTracker.csproj", "{9D32A24F-7FF0-4632-B663-5AD2D64A6C87}"
+-	ProjectSection(ProjectDependencies) = postProject
+-		{732A9A56-32B4-4149-B3A5-F2A4F48293D3} = {732A9A56-32B4-4149-B3A5-F2A4F48293D3}
+-	EndProjectSection
+ EndProject
+ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenTracker.Models", "OpenTracker.Models\OpenTracker.Models.csproj", "{5DB05A1F-56E3-4035-8898-5CFB22DB3568}"
+ EndProject

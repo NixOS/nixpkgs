@@ -1,0 +1,108 @@
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index d18843c..a9df1fb 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -8,11 +8,6 @@ if(NOT CMAKE_BUILD_TYPE)
+ 	set(CMAKE_BUILD_TYPE Release)
+ endif()
+ 
+-# Check that submodules are present only if source was downloaded with git
+-if(EXISTS "${CMAKE_SOURCE_DIR}/../.git" AND NOT EXISTS "${CMAKE_SOURCE_DIR}/../src/libpng/README")
+-    message (FATAL_ERROR "Submodules are not initialized. Run \n\tgit submodule update --init --recursive\n within the repository")
+-endif()
+-
+ add_executable(ect
+ 	main.cpp
+ 	gztools.cpp
+@@ -56,7 +51,6 @@ add_subdirectory(lodepng EXCLUDE_FROM_ALL)
+ add_subdirectory(miniz EXCLUDE_FROM_ALL)
+ add_subdirectory(zlib EXCLUDE_FROM_ALL)
+ add_subdirectory(zopfli EXCLUDE_FROM_ALL)
+-file(COPY ${CMAKE_SOURCE_DIR}/pngusr.h DESTINATION ${CMAKE_SOURCE_DIR}/libpng/)
+ add_subdirectory(optipng EXCLUDE_FROM_ALL)
+ # Mozjpeg changes the install prefix if it thinks the current is defaulted
+ set(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT FALSE)
+diff --git a/src/Makefile b/src/Makefile
+index cc24367..7aa9f0a 100755
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -18,7 +18,7 @@ CXXSRC = support.cpp zopflipng.cpp zopfli/deflate.cpp zopfli/zopfli_gzip.cpp zop
+ lodepng/lodepng.cpp lodepng/lodepng_util.cpp optipng/codec.cpp optipng/optipng.cpp jpegtran.cpp gztools.cpp \
+ leanify/zip.cpp leanify/leanify.cpp
+ 
+-.PHONY: libpng mozjpeg deps bin all install
++.PHONY: mozjpeg deps bin all install
+ all: deps bin
+ 
+ bin: deps
+@@ -33,9 +33,6 @@ libz.a:
+ 	cd zlib/; \
+ 	$(CC) $(UCFLAGS) -c adler32.c crc32.c deflate.c inffast.c inflate.c inftrees.c trees.c zutil.c gzlib.c gzread.c; \
+ 	ar rcs ../libz.a adler32.o crc32.o deflate.o inffast.o inflate.o inftrees.o trees.o zutil.o gzlib.o gzread.o
+-libpng:
+-	cp pngusr.h libpng/pngusr.h
+-	make -C libpng/ -f scripts/makefile.linux-opt CC="$(CC)" CFLAGS="$(UCFLAGS) -DPNG_USER_CONFIG -Wno-macro-redefined" libpng.a
+ mozjpeg:
+ 	cd mozjpeg/; \
+ 	export CC="$(CC)"; \
+diff --git a/src/optipng/CMakeLists.txt b/src/optipng/CMakeLists.txt
+index 1037a20..3c751e9 100644
+--- a/src/optipng/CMakeLists.txt
++++ b/src/optipng/CMakeLists.txt
+@@ -16,16 +16,14 @@ add_library(optipng
+ add_library(optipng::optipng ALIAS optipng)
+ 
+ #make sure that we are using custom zlib and custom libpng options
+-set(PNG_BUILD_ZLIB ON CACHE BOOL "use custom zlib within libpng" FORCE)
+ set(ZLIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../zlib/ CACHE FILEPATH "custom zlib directory" FORCE)
+ if(NOT WIN32)
+ 	add_compile_options(-Wno-macro-redefined)
+ endif()
+ add_compile_definitions(PNG_USER_CONFIG)
+ 
+-add_subdirectory(../libpng libpng EXCLUDE_FROM_ALL)
+ target_link_libraries(optipng
+-	png_static)
++	png)
+ 
+ # libpng generates some header files that we need to be able to include
+ target_include_directories(optipng
+diff --git a/src/optipng/image.h b/src/optipng/image.h
+index c439f84..8255fa0 100755
+--- a/src/optipng/image.h
++++ b/src/optipng/image.h
+@@ -13,7 +13,7 @@
+ #ifndef OPNGCORE_IMAGE_H
+ #define OPNGCORE_IMAGE_H
+ 
+-#include "../libpng/png.h"
++#include <png.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {
+diff --git a/src/optipng/opngreduc/opngreduc.h b/src/optipng/opngreduc/opngreduc.h
+index a7e6553..06ef956 100755
+--- a/src/optipng/opngreduc/opngreduc.h
++++ b/src/optipng/opngreduc/opngreduc.h
+@@ -13,7 +13,7 @@
+ 
+ #include <stdbool.h>
+ 
+-#include "../../libpng/png.h"
++#include <png.h>
+ 
+ 
+ #ifdef __cplusplus
+diff --git a/src/optipng/trans.h b/src/optipng/trans.h
+index a2f7f3e..c0e8dc4 100755
+--- a/src/optipng/trans.h
++++ b/src/optipng/trans.h
+@@ -13,7 +13,7 @@
+ #ifndef OPNGTRANS_TRANS_H
+ #define OPNGTRANS_TRANS_H
+ 
+-#include "../libpng/png.h"
++#include <png.h>
+ 
+ #ifdef __cplusplus
+ extern "C" {

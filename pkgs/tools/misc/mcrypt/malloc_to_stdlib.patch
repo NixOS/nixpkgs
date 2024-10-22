@@ -1,0 +1,26 @@
+From e295844e8ef5c13487996ab700e5f12a7fadb1a6 Mon Sep 17 00:00:00 2001
+From: Private <private@private.priv>
+Date: Wed, 30 Dec 2020 16:06:46 -0800
+Subject: [PATCH] malloc.h to stdlib.h in rfc2440.c
+
+The malloc.h is deprecated and should not be used
+---
+ src/rfc2440.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/rfc2440.c b/src/rfc2440.c
+index 5a1f296..4d6a5db 100644
+--- a/src/rfc2440.c
++++ b/src/rfc2440.c
+@@ -23,7 +23,7 @@
+ #include <zlib.h>
+ #endif
+ #include <stdio.h>
+-#include <malloc.h>
++#include <stdlib.h>
+ 
+ #include "xmalloc.h"
+ #include "keys.h"
+-- 
+2.13.5
+

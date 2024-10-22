@@ -1,0 +1,13 @@
+diff --git a/mnamer/utils.py b/mnamer/utils.py
+index 636b596..e52bd37 100644
+--- a/mnamer/utils.py
++++ b/mnamer/utils.py
+@@ -280,7 +280,7 @@ def request_json(
+         "like Gecko) Chrome/79.0.3945.88 Safari/537.36"
+     )
+ 
+-    initial_cache_state = session._is_cache_disabled  # yes, i'm a bad person
++    initial_cache_state = session._disabled  # yes, i'm a bad person
+     try:
+         session._is_cache_disabled = not cache
+         response = session.request(

@@ -1,0 +1,12 @@
+diff --git a/Telegram/SourceFiles/core/application.cpp b/Telegram/SourceFiles/core/application.cpp
+index e3e0de6c6..d5851bd6e 100644
+--- a/Telegram/SourceFiles/core/application.cpp
++++ b/Telegram/SourceFiles/core/application.cpp
+@@ -421,7 +421,6 @@ void Application::run() {
+ 
+ void Application::autoRegisterUrlScheme() {
+ 	if (!OptionSkipUrlSchemeRegister.value()) {
+-		InvokeQueued(this, [] { RegisterUrlScheme(); });
+ 	}
+ }
+ 

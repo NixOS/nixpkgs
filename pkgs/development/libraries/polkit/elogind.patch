@@ -1,0 +1,66 @@
+From 78e625dbafa8543b17ffaf9c42cf90c9cf9a612e Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Wed, 8 May 2024 11:20:42 +0200
+Subject: [PATCH] Fix configuration with elogind
+
+Previously, it would try to get sysusers_dir from systemd even though
+systemd_dep was undefined.  Determining systemd_systemdsystemunitdir
+from systemd was already checking for systemd logind specifically, and
+systemd_sysusers_dir is only used in the systemd logind case, so move
+both of those into the systemd-logind-specific branch above.
+
+(cherry picked from commit b58b58af10c390ab9a11a4cfe6a4ff3d50cc0fa5)
+---
+ meson.build | 22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 2f81c90..0888322 100644
+--- a/meson.build
++++ b/meson.build
+@@ -202,6 +202,16 @@ if enable_logind
+     if not logind_dep.found()
+       logind_dep = dependency('libsystemd-login', not_found_message: 'libsystemd support requested but libsystemd or libsystemd-login library not found')
+     endif
++
++    # systemd unit / service files
++    systemd_systemdsystemunitdir = get_option('systemdsystemunitdir')
++    if systemd_systemdsystemunitdir == '' and session_tracking == 'libsystemd-login'
++      systemd_dep = dependency('systemd', not_found_message: 'systemd required but not found, please provide a valid systemd user unit dir or disable it')
++      # FIXME: systemd.pc file does not use variables with relative paths, so `define_variable` cannot be used
++      systemd_systemdsystemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir')
++    endif
++
++    systemd_sysusers_dir = systemd_dep.get_pkgconfig_variable('sysusers_dir', default: '/usr/lib/sysusers.d')
+   else
+     logind_dep = dependency('libelogind', not_found_message: 'libelogind support requested but libelogind library not found')
+   endif
+@@ -210,16 +220,6 @@ if enable_logind
+   config_h.set10('HAVE_' + func.to_upper(), cc.has_function(func, dependencies: logind_dep))
+   func = 'sd_pidfd_get_session'
+   config_h.set10('HAVE_' + func.to_upper(), cc.has_function(func, dependencies: logind_dep))
+-
+-  # systemd unit / service files
+-  systemd_systemdsystemunitdir = get_option('systemdsystemunitdir')
+-  if systemd_systemdsystemunitdir == '' and session_tracking == 'libsystemd-login'
+-    systemd_dep = dependency('systemd', not_found_message: 'systemd required but not found, please provide a valid systemd user unit dir or disable it')
+-    # FIXME: systemd.pc file does not use variables with relative paths, so `define_variable` cannot be used
+-    systemd_systemdsystemunitdir = systemd_dep.get_pkgconfig_variable('systemdsystemunitdir')
+-  endif
+-
+-  systemd_sysusers_dir = systemd_dep.get_pkgconfig_variable('sysusers_dir', default: '/usr/lib/sysusers.d')
+ endif
+ config_h.set('HAVE_LIBSYSTEMD', enable_logind)
+ 
+@@ -404,7 +404,7 @@ output += '        introspection:            ' + enable_introspection.to_string(
+ output += '        Distribution/OS:          ' + os_type + '\n'
+ output += '        Authentication framework: ' + auth_fw + '\n'
+ output += '        Session tracking:         ' + session_tracking + '\n'
+-if enable_logind
++if session_tracking == 'logind'
+   output += '        systemdsystemunitdir:     ' + systemd_systemdsystemunitdir + '\n'
+ endif
+ output += '        polkitd user:             ' + polkitd_user + ' \n'
+-- 
+2.44.0
+

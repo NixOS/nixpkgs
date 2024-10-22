@@ -1,0 +1,455 @@
+Author: Matthew Bauer
+Description: Remove unavailable getent databases
+Version: 7.1.2
+--- a/usr.bin/getent/getent.c	2018-04-16 13:33:49.000000000 -0500
++++ b/usr.bin/getent/getent.c	2018-04-16 13:29:30.000000000 -0500
+@@ -42,7 +42,6 @@
+ #include <grp.h>
+ #include <limits.h>
+ #include <netdb.h>
+-#include <netgroup.h>
+ #include <pwd.h>
+ #include <stdio.h>
+ #include <stdarg.h>
+@@ -57,27 +56,16 @@
+ #include <arpa/nameser.h>
+ 
+ #include <net/if.h>
+-#include <net/if_ether.h>
+ 
+ #include <netinet/in.h>		/* for INET6_ADDRSTRLEN */
+ 
+-#include <rpc/rpcent.h>
+-
+-#include <disktab.h>
+-
+ static int	usage(void) __attribute__((__noreturn__));
+ static int	parsenum(const char *, unsigned long *);
+-static int	disktab(int, char *[]);
+-static int	gettytab(int, char *[]);
+-static int	ethers(int, char *[]);
+ static int	group(int, char *[]);
+ static int	hosts(int, char *[]);
+-static int	netgroup(int, char *[]);
+ static int	networks(int, char *[]);
+ static int	passwd(int, char *[]);
+-static int	printcap(int, char *[]);
+ static int	protocols(int, char *[]);
+-static int	rpc(int, char *[]);
+ static int	services(int, char *[]);
+ static int	shells(int, char *[]);
+ 
+@@ -92,17 +80,11 @@
+ 	const char	*name;
+ 	int		(*callback)(int, char *[]);
+ } databases[] = {
+-	{	"disktab",	disktab,	},
+-	{	"ethers",	ethers,		},
+-	{	"gettytab",	gettytab,	},
+ 	{	"group",	group,		},
+ 	{	"hosts",	hosts,		},
+-	{	"netgroup",	netgroup,	},
+ 	{	"networks",	networks,	},
+ 	{	"passwd",	passwd,		},
+-	{	"printcap",	printcap,	},
+ 	{	"protocols",	protocols,	},
+-	{	"rpc",		rpc,		},
+ 	{	"services",	services,	},
+ 	{	"shells",	shells,		},
+ 
+@@ -195,49 +177,6 @@
+ 	(void)printf("\n");
+ }
+ 
+-
+-		/*
+-		 * ethers
+-		 */
+-
+-static int
+-ethers(int argc, char *argv[])
+-{
+-	char		hostname[MAXHOSTNAMELEN + 1], *hp;
+-	struct ether_addr ea, *eap;
+-	int		i, rv;
+-
+-	assert(argc > 1);
+-	assert(argv != NULL);
+-
+-#define ETHERSPRINT	(void)printf("%-17s  %s\n", ether_ntoa(eap), hp)
+-
+-	rv = RV_OK;
+-	if (argc == 2) {
+-		warnx("Enumeration not supported on ethers");
+-		rv = RV_NOENUM;
+-	} else {
+-		for (i = 2; i < argc; i++) {
+-			if ((eap = ether_aton(argv[i])) == NULL) {
+-				eap = &ea;
+-				hp = argv[i];
+-				if (ether_hostton(hp, eap) != 0) {
+-					rv = RV_NOTFOUND;
+-					break;
+-				}
+-			} else {
+-				hp = hostname;
+-				if (ether_ntohost(hp, eap) != 0) {
+-					rv = RV_NOTFOUND;
+-					break;
+-				}
+-			}
+-			ETHERSPRINT;
+-		}
+-	}
+-	return rv;
+-}
+-
+ 		/*
+ 		 * group
+ 		 */
+@@ -298,7 +237,7 @@
+ hosts(int argc, char *argv[])
+ {
+ 	struct hostent	*he;
+-	char		addr[IN6ADDRSZ];
++	char		addr[NS_IN6ADDRSZ];
+ 	int		i, rv;
+ 
+ 	assert(argc > 1);
+@@ -312,9 +251,9 @@
+ 	} else {
+ 		for (i = 2; i < argc; i++) {
+ 			if (inet_pton(AF_INET6, argv[i], (void *)addr) > 0)
+-				he = gethostbyaddr(addr, IN6ADDRSZ, AF_INET6);
++				he = gethostbyaddr(addr, NS_IN6ADDRSZ, AF_INET6);
+ 			else if (inet_pton(AF_INET, argv[i], (void *)addr) > 0)
+-				he = gethostbyaddr(addr, INADDRSZ, AF_INET);
++				he = gethostbyaddr(addr, NS_INADDRSZ, AF_INET);
+ 			else
+ 				he = gethostbyname(argv[i]);
+ 			if (he != NULL)
+@@ -330,48 +269,6 @@
+ }
+ 
+ 		/*
+-		 * netgroup
+-		 */
+-static int
+-netgroup(int argc, char *argv[])
+-{
+-	int		rv, i;
+-	bool		first;
+-	const char	*host, *user, *domain;
+-
+-	assert(argc > 1);
+-	assert(argv != NULL);
+-
+-#define NETGROUPPRINT(s)	(((s) != NULL) ? (s) : "")
+-
+-	rv = RV_OK;
+-	if (argc == 2) {
+-		warnx("Enumeration not supported on netgroup");
+-		rv = RV_NOENUM;
+-	} else {
+-		for (i = 2; i < argc; i++) {
+-			setnetgrent(argv[i]);
+-			first = true;
+-			while (getnetgrent(&host, &user, &domain) != 0) {
+-				if (first) {
+-					first = false;
+-					(void)fputs(argv[i], stdout);
+-				}
+-				(void)printf(" (%s,%s,%s)",
+-				    NETGROUPPRINT(host),
+-				    NETGROUPPRINT(user),
+-				    NETGROUPPRINT(domain));
+-			}
+-			if (!first)
+-				(void)putchar('\n');
+-			endnetgrent();
+-		}
+-	}
+-
+-	return rv;
+-}
+-
+-		/*
+ 		 * networks
+ 		 */
+ 
+@@ -464,227 +361,6 @@
+ 	return rv;
+ }
+ 
+-static char *
+-mygetent(const char * const * db_array, const char *name)
+-{
+-	char *buf = NULL;
+-	int error;
+-
+-	switch (error = cgetent(&buf, db_array, name)) {
+-	case -3:
+-		warnx("tc= loop in record `%s' in `%s'", name, db_array[0]);
+-		break;
+-	case -2:
+-		warn("system error fetching record `%s' in `%s'", name,
+-		    db_array[0]);
+-		break;
+-	case -1:
+-	case 0:
+-		break;
+-	case 1:
+-		warnx("tc= reference not found in record for `%s' in `%s'",
+-		    name, db_array[0]);
+-		break;
+-	default:
+-		warnx("unknown error %d in record `%s' in `%s'", error, name,
+-		    db_array[0]);
+-		break;
+-	}
+-	return buf;
+-}
+-
+-static char *
+-mygetone(const char * const * db_array, int first)
+-{
+-	char *buf = NULL;
+-	int error;
+-
+-	switch (error = (first ? cgetfirst : cgetnext)(&buf, db_array)) {
+-	case -2:
+-		warnx("tc= loop in `%s'", db_array[0]);
+-		break;
+-	case -1:
+-		warn("system error fetching record in `%s'", db_array[0]);
+-		break;
+-	case 0:
+-	case 1:
+-		break;
+-	case 2:
+-		warnx("tc= reference not found in `%s'", db_array[0]);
+-		break;
+-	default:
+-		warnx("unknown error %d in `%s'", error, db_array[0]);
+-		break;
+-	}
+-	return buf;
+-}
+-
+-static void
+-capprint(const char *cap)
+-{
+-	char *c = strchr(cap, ':');
+-	if (c)
+-		if (c == cap)
+-			(void)printf("true\n");
+-		else {
+-			int l = (int)(c - cap);
+-			(void)printf("%*.*s\n", l, l, cap);
+-		}
+-	else
+-		(void)printf("%s\n", cap);
+-}
+-
+-static void
+-prettyprint(char *b)
+-{
+-#define TERMWIDTH 65
+-	int did = 0;
+-	size_t len;
+-	char *s, c;
+-
+-	for (;;) {
+-		len = strlen(b);
+-		if (len <= TERMWIDTH) {
+-done:
+-			if (did)
+-				printf("\t:");
+-			printf("%s\n", b);
+-			return;
+-		}
+-		for (s = b + TERMWIDTH; s > b && *s != ':'; s--)
+-			continue;
+-		if (*s++ != ':')
+-			goto done;
+-		c = *s;
+-		*s = '\0';
+-		if (did)
+-			printf("\t:");
+-		did++;
+-		printf("%s\\\n", b);
+-		*s = c;
+-		b = s;
+-	}
+-}
+-
+-static void
+-handleone(const char * const *db_array, char *b, int recurse, int pretty,
+-    int level)
+-{
+-	char *tc;
+-
+-	if (level && pretty)
+-		printf("\n");
+-	if (pretty)
+-		prettyprint(b);
+-	else
+-		printf("%s\n", b);
+-	if (!recurse || cgetstr(b, "tc", &tc) <= 0)
+-		return;
+-
+-	b = mygetent(db_array, tc);
+-	free(tc);
+-
+-	if (b == NULL)
+-		return;
+-
+-	handleone(db_array, b, recurse, pretty, ++level);
+-	free(b);
+-}
+-
+-static int
+-handlecap(const char *db, int argc, char *argv[])
+-{
+-	static const char sfx[] = "=#:";
+-	const char *db_array[] = { db, NULL };
+-	char	*b, *cap;
+-	int	i, rv, c;
+-	size_t	j;
+-	int	expand = 1, recurse = 0, pretty = 0;
+-
+-	assert(argc > 1);
+-	assert(argv != NULL);
+-
+-	argc--;
+-	argv++;
+-	while ((c = getopt(argc, argv, "pnr")) != -1)
+-		switch (c) {
+-		case 'n':
+-			expand = 0;
+-			break;
+-		case 'r':
+-			expand = 0;
+-			recurse = 1;
+-			break;
+-		case 'p':
+-			pretty = 1;
+-			break;
+-		default:
+-			usage();
+-			break;
+-		}
+-
+-	argc -= optind;
+-	argv += optind;
+-	csetexpandtc(expand);
+-	rv = RV_OK;
+-	if (argc == 0) {
+-		for (b = mygetone(db_array, 1); b; b = mygetone(db_array, 0)) {
+-			handleone(db_array, b, recurse, pretty, 0);
+-			free(b);
+-		}
+-	} else {
+-		if ((b = mygetent(db_array, argv[0])) == NULL)
+-			return RV_NOTFOUND;
+-		if (argc == 1)
+-			handleone(db_array, b, recurse, pretty, 0);
+-		else {
+-			for (i = 2; i < argc; i++) {
+-				for (j = 0; j < sizeof(sfx) - 1; j++) {
+-					cap = cgetcap(b, argv[i], sfx[j]);
+-					if (cap) {
+-						capprint(cap);
+-						break;
+-					} 
+-				}
+-				if (j == sizeof(sfx) - 1)
+-					printf("false\n");
+-			}
+-		}
+-		free(b);
+-	}
+-	return rv;
+-}
+-
+-		/*
+-		 * gettytab
+-		 */
+-
+-static int
+-gettytab(int argc, char *argv[])
+-{
+-	return handlecap(_PATH_GETTYTAB, argc, argv);
+-}
+-
+-		/*
+-		 * printcap
+-		 */
+-
+-static int
+-printcap(int argc, char *argv[])
+-{
+-	return handlecap(_PATH_PRINTCAP, argc, argv);
+-}
+-
+-		/*
+-		 * disktab
+-		 */
+-
+-static int
+-disktab(int argc, char *argv[])
+-{
+-	return handlecap(_PATH_DISKTAB, argc, argv);
+-}
+-
+ 		/*
+ 		 * protocols
+ 		 */
+@@ -726,47 +402,6 @@
+ }
+ 
+ 		/*
+-		 * rpc
+-		 */
+-
+-static int
+-rpc(int argc, char *argv[])
+-{
+-	struct rpcent	*re;
+-	unsigned long	id;
+-	int		i, rv;
+-	
+-	assert(argc > 1);
+-	assert(argv != NULL);
+-
+-#define RPCPRINT	printfmtstrings(re->r_aliases, "  ", " ", \
+-				"%-16s  %6d", \
+-				re->r_name, re->r_number)
+-
+-	setrpcent(1);
+-	rv = RV_OK;
+-	if (argc == 2) {
+-		while ((re = getrpcent()) != NULL)
+-			RPCPRINT;
+-	} else {
+-		for (i = 2; i < argc; i++) {
+-			if (parsenum(argv[i], &id))
+-				re = getrpcbynumber((int)id);
+-			else
+-				re = getrpcbyname(argv[i]);
+-			if (re != NULL)
+-				RPCPRINT;
+-			else {
+-				rv = RV_NOTFOUND;
+-				break;
+-			}
+-		}
+-	}
+-	endrpcent();
+-	return rv;
+-}
+-
+-		/*
+ 		 * services
+ 		 */
+ 

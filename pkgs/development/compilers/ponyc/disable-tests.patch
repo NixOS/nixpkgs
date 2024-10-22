@@ -1,0 +1,16 @@
+diff --git a/packages/net/_test.pony b/packages/net/_test.pony
+index 9044dfb1..f0ea10f7 100644
+--- a/packages/net/_test.pony
++++ b/packages/net/_test.pony
+@@ -26,11 +26,6 @@ actor \nodoc\ Main is TestList
+       test(_TestTCPThrottle)
+     end
+ 
+-    // Tests below exclude osx and are listed alphabetically
+-    ifdef not osx then
+-      test(_TestBroadcast)
+-    end
+-
+ class \nodoc\ _TestPing is UDPNotify
+   let _h: TestHelper
+   let _ip: NetAddress
