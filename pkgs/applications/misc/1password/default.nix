@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  autoPatchelfHook,
+  installShellFiles,
+  cpio,
+  xar,
+  _1password,
+  testers,
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: hash: extension:
+  fetch =
+    srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
@@ -17,7 +29,9 @@ let
     aarch64-linux = fetch "linux_arm64" "sha256-sBbdkoacGI/gawM4YH+BBCLDhC2B+cE4iKVGHBhwkic=" "zip";
     i686-linux = fetch "linux_386" "sha256-TTd5juT0Aqp1+OfunXcuk0KbL6HIHQV31+1Q1e0GYMY=" "zip";
     x86_64-linux = fetch "linux_amd64" "sha256-Bb6fNoeNxlbDfwt7Jr8BaKCmFUwSdsLQdVoCmQCNmLA=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo=" "pkg";
+    aarch64-darwin =
+      fetch "apple_universal" "sha256-/ryklZnGhrgJggDIa8HmuDsHAXkdrWeXKCQGGVwUAAo="
+        "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -32,9 +46,14 @@ stdenv.mkDerivation {
     else
       throw "Source for ${pname} is not available for ${system}";
 
-  nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [
+    installShellFiles
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    xar
+    cpio
+  ];
 
   unpackPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
     xar -xf $src
@@ -63,10 +82,11 @@ stdenv.mkDerivation {
     $out/bin/${mainProgram} --version
   '';
 
-  passthru.updateScript = ./update.sh;
-
-  passthru.tests.version = testers.testVersion {
-    package = _1password;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = _1password;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
