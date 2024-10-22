@@ -11,8 +11,11 @@
   libX11,
   libXcursor,
   libXi,
+  libiconv,
   stdenv,
   makeWrapper,
+  darwin,
+  writeDarwinBundle,
   zenity,
 }:
 rustPlatform.buildRustPackage rec {
@@ -29,14 +32,31 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-    autoPatchelfHook
     makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
   ];
 
   buildInputs = [
     openssl
     stdenv.cc.cc.lib
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (
+    [ libiconv ]
+    ++ (with darwin.apple_sdk.frameworks; [
+      SystemConfiguration
+      Security
+      AppKit
+      Foundation
+      CoreFoundation
+      OpenGL
+      CoreServices
+      QuartzCore
+      ApplicationServices
+      CoreGraphics
+      CoreVideo
+      Carbon
+      CoreData
+    ]));
 
   # Wayland and X11 libs are required at runtime since winit uses dlopen
   runtimeDependencies = [
@@ -60,9 +80,17 @@ rustPlatform.buildRustPackage rec {
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;
 
-  postFixup = ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/surfer \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p "$out/Applications/Surfer.app/Contents/MacOS"
+
+    ${writeDarwinBundle}/bin/write-darwin-bundle "$out" "Surfer" "unused"
+    mv $out/bin/surfer $out/Applications/Surfer.app/Contents/MacOS/Surfer
+    wrapProgram $out/Applications/Surfer.app/Contents/MacOS/Surfer \
+      --prefix PATH : ${lib.makeBinPath [ zenity ]}
+    ln -s $out/Applications/Surfer.app/Contents/MacOS/Surfer $out/bin/surfer
   '';
 
   meta = {
@@ -71,7 +99,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://gitlab.com/surfer-project/surfer/-/releases/v${version}";
     license = lib.licenses.eupl12;
     maintainers = with lib.maintainers; [ hakan-demirli ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "surfer";
   };
 }
