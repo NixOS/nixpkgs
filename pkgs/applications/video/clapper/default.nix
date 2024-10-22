@@ -17,6 +17,8 @@
 , vala
 , cmake
 , libmicrodns
+, gtuber
+, glib-networking
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
+    gtuber
+    glib-networking # for TLS support
     gtk4
     libGL
     libadwaita
