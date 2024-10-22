@@ -267,10 +267,8 @@ with lib;
         type = types.int;
         default = 63072000;
         description = ''
-          If HTTP Strict Transport Security (HSTS) is enabled by
-          `strictTransportSecurity.enable`, this is how long the browser is
-          instructed to retain the setting, in seconds. 2 years (63072000 seconds)
-          is recommended, but if you're introducing HSTS for the first time on an
+          This is how long the browser is instructed to retain the HSTS setting in seconds.
+          2 years (63072000 seconds) is recommended, but if you're introducing HSTS for the first time on an
           existing site you may want to ramp up the value gradually, or set it to
           0 to tell clients to drop their HSTS config for this domain.
         '';
@@ -280,12 +278,12 @@ with lib;
         type = types.bool;
         default = false;
         description = ''
-          If HTTP Strict Transport Security (HSTS) is enabled by
-          `strictTransportSecurity.enable`, also specify the `includeSubdomains`
-          directive, so that e.g. if the vhost is https://www.website.example it
-          also sets the HSTS policy for https://sub.www.website.example. (Note
-          that "sibling" domains like https://mail.website.example are not
-          affected.)
+          Also specify the `includeSubdomains` directive, so that e.g. if the virtual host is `https://www.example.com` it
+          also sets the HSTS policy for `https://sub.www.example.com`
+          
+          ::: {.note}
+          "Sibling" domains like https://mail.example.com are not affected.
+          :::
         '';
       };
 
@@ -295,9 +293,7 @@ with lib;
         # default
         default = false;
         description = ''
-          If HTTP Strict Transport Security (HSTS) is enabled by
-          `strictTransportSecurity.enable`, also specify the (non-standard, but
-          widely recognised) `preload` directive. This allows submitting your
+          Also specify the `preload` directive. This allows submitting your
           site to https://hstspreload.org/ to be added to the HSTS preload list
           used by all major browsers, so that it is not necessary to visit your
           site even once to enable HSTS.
