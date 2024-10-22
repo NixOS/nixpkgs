@@ -1,50 +1,69 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  gtk2,
+  fetchFromGitHub,
+  libsForQt5,
   libjack2,
   lilv,
   lv2,
+  meson,
+  ninja,
   pkg-config,
-  python3,
+  portaudio,
   serd,
   sord,
   sratom,
   suil,
-  wafHook,
+  wrapGAppsHook3,
+  useJack ? true,
+  useQt ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jalv";
-  version = "1.6.6";
+  version = "1.6.8";
 
-  src = fetchurl {
-    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-ktFBeBtmQ3MgfDQ868XpuM7UYfryb9zLld8AB7BjnhY=";
+  src = fetchFromGitHub {
+    owner = "drobilla";
+    repo = "jalv";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-MAQoc+WcuoG6Psa44VRaZ2TWB2LBpvf6EmqbUZPUf38=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    wafHook
-  ];
-  buildInputs = [
-    gtk2
-    libjack2
-    lilv
-    lv2
-    python3
-    serd
-    sord
-    sratom
-    suil
+  ] ++ lib.optionals (!useQt) [ wrapGAppsHook3 ] ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
+
+  buildInputs =
+    [
+      lilv
+      lv2
+      portaudio
+      serd
+      sord
+      sratom
+      suil
+    ]
+    ++ lib.optionals (!useJack) [ portaudio ]
+    ++ lib.optionals useJack [ libjack2 ]
+    ++ lib.optionals useQt [ libsForQt5.qtbase ];
+
+  mesonFlags = [
+    (lib.mesonEnable "portaudio" (!useJack))
+    (lib.mesonEnable "jack" useJack)
+    (lib.mesonEnable "gtk2" false)
+    (lib.mesonEnable "gtk3" (!useQt))
+    (lib.mesonEnable "qt5" useQt)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple but fully featured LV2 host for Jack";
     homepage = "http://drobilla.net/software/jalv";
-    license = licenses.isc;
-    maintainers = [ ];
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    mainProgram = if useQt then "jalv.qt5" else "jalv.gtk3";
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.linux;
   };
-}
+})
