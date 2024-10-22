@@ -33,12 +33,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "p4";
-  version = "2024.1/2596294";
+  version = "2024.1.2655224";
 
   src = fetchurl {
     # Upstream replaces minor versions, so use archived URL.
-    url = "https://web.archive.org/web/20240526153453id_/https://ftp.perforce.com/perforce/r24.1/bin.tools/p4source.tgz";
-    sha256 = "sha256-6+DOJPeVzP4x0UsN9MlZRAyusapBTICX0BuyvVBQBC8=";
+    url = "https://github.com/impl/nix-p4-archive/releases/download/p4-${version}/p4source-${version}.tgz";
+    hash = "sha256-+ftxoN5Ln9uCl8YnqX3tmbyUTZWONsG0iHz7IpIbodQ=";
   };
 
   nativeBuildInputs = [ jam ];
@@ -60,11 +60,13 @@ stdenv.mkDerivation (finalAttrs: rec {
     ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
     ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [ "-sOSPLAT=aarch64" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
       "-sMACOSX_SDK=${emptyDirectory}"
       "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
-    ];
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [ "-sOSPLAT=arm64" ];
 
   CCFLAGS =
     # The file contrib/optimizations/slide_hash_neon.h is missing from the

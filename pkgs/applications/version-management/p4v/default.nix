@@ -6,15 +6,17 @@
 }:
 
 let
+  version = "2024.3.2656785";
+
   # Upstream replaces minor versions, so use archived URLs.
   srcs = rec {
     x86_64-linux = fetchurl {
-      url = "https://web.archive.org/web/20240612193642id_/https://ftp.perforce.com/perforce/r24.2/bin.linux26x86_64/p4v.tgz";
-      sha256 = "sha256-HA99fHcmgli/vVnr0M8ZJEsaZ2ZLzpG3M8S77oDYJyE=";
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4v-${version}/p4v-${version}-linux26x86_64.tgz";
+      hash = "sha256-Jmj14DMP9tyo+QPyyWTNdEjAcYT06mkIvM+FrJgVIz4=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://web.archive.org/web/20240612194532id_/https://ftp.perforce.com/perforce/r24.2/bin.macosx12u/P4V.dmg";
-      sha256 = "sha256-PS7gfDdWspyL//YWLkrsGi5wh6SIeAry2yef1/V0d6o=";
+      url = "https://github.com/impl/nix-p4-archive/releases/download/p4v-${version}/p4v-${version}-macosx12u.dmg";
+      hash = "sha256-bQw6Lu/MQKWkfBwe6ZHu0O+JEbVM+2UjRXLs4njHGe0=";
     };
     # this is universal
     x86_64-darwin = aarch64-darwin;
@@ -25,7 +27,7 @@ let
     else qt6Packages.callPackage ./linux.nix { };
 in mkDerivation {
   pname = "p4v";
-  version = "2024.2/2606884";
+  inherit version;
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
