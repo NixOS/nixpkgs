@@ -11,19 +11,19 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: rec {
-  pname = "";
+  pname = "jellyseerr";
   version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
-    repo = "";
+    repo = "jellyseerr";
     rev = "v${version}";
     hash = "sha256-ZqHm8GeougFGfOeHXit2+2dRMeQrGgt3kFlm7pUxWpg=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "";
+    hash = "sha256-L0oV4DqjrLubPFnOp4YxnRq+QyJFcbyv3Xpw7rBJ3ms=";
   };
 
   nativeBuildInputs = [
@@ -84,6 +84,6 @@ stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.mit;
     maintainers = with maintainers; [ camillemndn ];
     platforms = platforms.linux;
-    mainProgram = "";
+    mainProgram = "jellyseerr";
   };
 })
