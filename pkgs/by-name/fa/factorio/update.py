@@ -101,8 +101,12 @@ def generate_our_versions(factorio_versions: FactorioVersionsJSON) -> OurVersion
 
     # Deal with times where there's no experimental version
     for rc in RELEASE_CHANNELS:
-        if not factorio_versions[rc.name]:
+        if rc.name not in factorio_versions or not factorio_versions[rc.name]:
             factorio_versions[rc.name] = factorio_versions['stable']
+        for rt in RELEASE_TYPES:
+            if rt.name not in factorio_versions[rc.name] or not factorio_versions[rc.name][rt.name]:
+                factorio_versions[rc.name][rt.name] = factorio_versions['stable'][rt.name]
+
 
     for system in SYSTEMS:
         for release_type in RELEASE_TYPES:
@@ -185,7 +189,7 @@ def main(argv):
     if old_our_versions:
         logging.info('Merging in old hashes')
         new_our_versions = merge_versions(old_our_versions, new_our_versions)
-    logging.info('Fetching necessary tars to get hashes')
+    logging.info('Updating hashes from Factorio SHA256')
     new_our_versions = fill_in_hash(new_our_versions, factorio_hashes)
     with open(our_versions_path, 'w') as f:
         logging.info('Writing versions.json to %s', our_versions_path)
