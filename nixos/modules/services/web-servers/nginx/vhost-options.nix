@@ -264,13 +264,14 @@ with lib;
       };
 
       seconds = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 63072000;
         description = ''
-          This is how long the browser is instructed to retain the HSTS setting in seconds.
-          2 years (63072000 seconds) is recommended, but if you're introducing HSTS for the first time on an
-          existing site you may want to ramp up the value gradually, or set it to
-          0 to tell clients to drop their HSTS config for this domain.
+          This is how long the browser is instructed to retain the HSTS setting
+          in seconds. 2 years (63072000 seconds) is recommended, but if you're
+          introducing HSTS for the first time on an existing site you may want
+          to ramp up the value gradually, or set it to 0 to tell clients to drop
+          their HSTS config for this domain.
         '';
       };
 
@@ -278,9 +279,10 @@ with lib;
         type = types.bool;
         default = false;
         description = ''
-          Also specify the `includeSubdomains` directive, so that e.g. if the virtual host is `https://www.example.com` it
-          also sets the HSTS policy for `https://sub.www.example.com`
-          
+          Also specify the `includeSubdomains` directive in the HSTS header, so
+          that e.g. if the virtual host is `https://www.example.com` it also
+          sets the HSTS policy for `https://sub.www.example.com`.
+
           ::: {.note}
           "Sibling" domains like https://mail.example.com are not affected.
           :::
