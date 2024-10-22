@@ -9493,6 +9493,12 @@
     githubId = 1318743;
     name = "Ivar";
   };
+  ivyfanchiang = {
+    email = "dev@ivyfanchiang.ca";
+    github = "hexadecimalDinosaur";
+    githubId = 36890802;
+    name = "Ivy Fan-Chiang";
+  };
   iwanb = {
     email = "tracnar@gmail.com";
     github = "iwanb";
