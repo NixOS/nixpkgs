@@ -1,18 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, xorg
-, freetype
-, alsa-lib
-, curl
-, libjack2
-, lv2
-, pkg-config
-, libGLU
-, libGL
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  xorg,
+  freetype,
+  alsa-lib,
+  curl,
+  libjack2,
+  lv2,
+  pkg-config,
+  libGLU,
+  libGL,
 }:
 
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
   version = "0.9.0";
   pname = "helm";
 
@@ -24,9 +26,20 @@
   };
 
   buildInputs = [
-    xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
-    xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsa-lib curl libjack2 libGLU libGL lv2
+    xorg.libX11
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXinerama
+    xorg.libXrender
+    xorg.libXrandr
+    freetype
+    alsa-lib
+    curl
+    libjack2
+    libGLU
+    libGL
+    lv2
   ];
   nativeBuildInputs = [ pkg-config ];
 
