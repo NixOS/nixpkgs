@@ -461,6 +461,11 @@ rec {
       descriptionClass = "noun";
       check = x: str.check x && builtins.match pattern x != null;
       inherit (str) merge;
+      functor = defaultFunctor "strMatching" // {
+        type = payload: strMatching payload.pattern;
+        payload = { inherit pattern; };
+        binOp = lhs: rhs: if lhs == rhs then lhs else null;
+      };
     };
 
     # Merge multiple definitions by concatenating them (with the given
