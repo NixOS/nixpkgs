@@ -37081,8 +37081,6 @@ with pkgs;
 
   gummi = callPackage ../applications/misc/gummi { };
 
-  gummy = callPackage ../tools/misc/gummy { };
-
   hashpump = callPackage ../tools/misc/hashpump { };
 
   hck = callPackage ../tools/text/hck { };
