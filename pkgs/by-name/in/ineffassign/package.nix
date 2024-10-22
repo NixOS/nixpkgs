@@ -2,32 +2,38 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  go,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "ineffassign";
-  version = "unstable-2021-09-04";
-  rev = "4cc7213b9bc8b868b2990c372f6fa057fa88b91c";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "gordonklaus";
     repo = "ineffassign";
-    inherit rev;
-    sha256 = "sha256-XLXANN9TOmrNOixWtlqnIC27u+0TW2P3s9MyeyVUcAQ=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JVrAIspRL6XvDd/AnPFt9IJPQ0hY1KPwXvldAfwYkzU=";
   };
 
-  vendorHash = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
+  patches = [
+    ./0001-fix-build.patch # run go get -u. Old dependency can't run correctly on go 1.23
+  ];
+
+  vendorHash = "sha256-WpX5I9PK7xuln6BkIEW2qIF1K/BgaEu/gkJsz+ThVk0=";
+
+  passthru.updateScript = nix-update-script { };
 
   allowGoReference = true;
 
-  nativeCheckInputs = [ go ];
-
-  meta = with lib; {
+  meta = {
     description = "Detect ineffectual assignments in Go code";
     mainProgram = "ineffassign";
     homepage = "https://github.com/gordonklaus/ineffassign";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit bot-wxt1221 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      kalbasit
+      bot-wxt1221
+    ];
   };
 }
