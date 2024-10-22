@@ -30240,6 +30240,8 @@ with pkgs;
 
   jaeles = callPackage ../tools/security/jaeles { };
 
+  jalv-qt = jalv.override { useQt = true; };
+
   jameica = callPackage ../applications/office/jameica {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
