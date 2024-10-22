@@ -85,6 +85,10 @@ stdenv.mkDerivation (
       # Ensure deterministic Cargo vendor builds
       export SOURCE_DATE_EPOCH=1
 
+      if [ -n "''${cargoRoot-}" ]; then
+        cd "$cargoRoot"
+      fi
+
       if [[ ! -f Cargo.lock ]]; then
           echo
           echo "ERROR: The Cargo.lock file doesn't exist"
