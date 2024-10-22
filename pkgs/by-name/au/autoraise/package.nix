@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "AutoRaise (and focus) a window when hovering over it with the mouse";
     homepage = "https://github.com/sbmpost/AutoRaise";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nickhu ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ nickhu ];
     mainProgram = "autoraise";
-    platforms = platforms.darwin;
+    platforms = lib.platforms.darwin;
   };
 }
