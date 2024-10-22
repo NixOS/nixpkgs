@@ -12,21 +12,21 @@
   stdenv,
   darwin,
 
+  versionCheckHook,
+
   # passthru
   nix-update-script,
-  testers,
-  rye,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rye";
-  version = "0.41.0";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "mitsuhiko";
     repo = "rye";
     rev = "refs/tags/${version}";
-    hash = "sha256-JpCa+7SwShfVM4Z+uPo7W2bCEf1QYHxClE/LgGSyFY0=";
+    hash = "sha256-f+yVuyoer0bn38iYR94TUKRT5VzQHDZQyowtas+QOK0=";
   };
 
   cargoLock = {
@@ -99,9 +99,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_version"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion { package = rye; };
   };
 
   meta = {
