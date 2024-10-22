@@ -30,11 +30,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "guestfs-tools";
-  version = "1.52.0";
+  version = "1.52.2";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor finalAttrs.version}-stable/guestfs-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-Iv0TIpcEX5CmdAbw/w7uDyoBBqXxyNz8XDlqYl/3g3Y=";
+    hash = "sha256-02khDS2NLG1QOSqswtDoqBX2Mg6sE/OiUoP9JFs4vTU=";
   };
 
   nativeBuildInputs = [
