@@ -448,8 +448,6 @@ with pkgs;
 
   ciel = callPackage ../tools/package-management/ciel { };
 
-  circt = callPackage ../development/compilers/circt { };
-
   classicube = callPackage ../games/classicube { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
