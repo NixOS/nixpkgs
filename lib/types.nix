@@ -582,7 +582,7 @@ rec {
     # base type for lazyAttrsOf and attrsOf
     attrsWith = {
       elemType,
-      name ? "name",
+      placeholder ? "name",
       lazy ? false,
     }:
     let
@@ -615,25 +615,25 @@ rec {
           (pushPositions defs)))
       );
       emptyValue = { value = {}; };
-      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${name}>"]);
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<${placeholder}>"]);
       getSubModules = elemType.getSubModules;
-      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit name lazy; };
+      substSubModules = m: attrsWith { elemType = elemType.substSubModules m; inherit lazy placeholder; };
       functor = defaultFunctor "attrsWith" // {
         wrapped = elemType;
         payload = {
           # Important!: Add new function attributes here in case of future changes
-          inherit elemType name lazy;
+          inherit elemType lazy placeholder;
         };
         binOp = lhs: rhs:
           let
             elemType = lhs.elemType.typeMerge rhs.elemType.functor;
-            name =
-              if lhs.name == rhs.name then
-                lhs.name
-              else if lhs.name == "name" then
-                rhs.name
-              else if rhs.name == "name" then
-                lhs.name
+            placeholder =
+              if lhs.placeholder == rhs.placeholder then
+                lhs.placeholder
+              else if lhs.placeholder == "name" then
+                rhs.placeholder
+              else if rhs.placeholder == "name" then
+                lhs.placeholder
               else
                 null;
             lazy =
@@ -642,11 +642,11 @@ rec {
               else
                 null;
           in
-          if elemType == null || lazy == null || name == null then
+          if elemType == null || lazy == null || placeholder == null then
             null
           else
             {
-              inherit elemType name lazy;
+              inherit elemType placeholder lazy;
             };
       };
       nestedTypes.elemType = elemType;
