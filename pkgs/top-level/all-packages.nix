@@ -18067,6 +18067,8 @@ with pkgs;
 
   openocd = callPackage ../development/embedded/openocd { };
 
+  openocd-esp32 = callPackage ../by-name/es/esp-idf/openocd-esp32.nix { };
+
   openocd-rp2040 = openocd.overrideAttrs (old: {
     pname = "openocd-rp2040";
     src = fetchFromGitHub {
@@ -23580,6 +23582,10 @@ with pkgs;
 
   xlslib = callPackage ../development/libraries/xlslib { };
 
+  xtensa-esp-elf = callPackage ../by-name/es/esp-idf/xtensa-esp-elf.nix { };
+
+  xtensa-esp-elf-gdb = callPackage ../by-name/es/esp-idf/xtensa-esp-elf-gdb.nix { };
+
   xtensor = callPackage ../development/libraries/xtensor { };
 
   xtl = callPackage ../development/libraries/xtl { };
@@ -26283,6 +26289,10 @@ with pkgs;
 
   riscv-pk = callPackage ../misc/riscv-pk { };
 
+  riscv32-esp-elf = callPackage ../by-name/es/esp-idf/riscv32-esp-elf.nix { };
+
+  riscv32-esp-elf-gdb = callPackage ../by-name/es/esp-idf/riscv32-esp-elf-gdb.nix { };
+
   ristate = callPackage ../tools/misc/ristate { };
 
   roccat-tools = callPackage ../os-specific/linux/roccat-tools { };
@@ -28892,6 +28902,12 @@ with pkgs;
   eq10q = callPackage ../applications/audio/eq10q { };
 
   errbot = callPackage ../applications/networking/errbot { };
+
+  esp-clang = callPackage ../by-name/es/esp-idf/esp-clang.nix { };
+
+  esp-rom-elfs = callPackage ../by-name/es/esp-idf/esp-rom-elfs.nix { };
+
+  esp32ulp-elf = callPackage ../by-name/es/esp-idf/esp32ulp-elf.nix { };
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
@@ -31937,6 +31953,10 @@ with pkgs;
   qemu-user = qemu.override {
     userOnly = true;
   };
+
+  qemu-riscv32 = callPackage ../by-name/es/esp-idf/qemu-riscv32.nix { };
+
+  qemu-xtensa = callPackage ../by-name/es/esp-idf/qemu-xtensa.nix { };
 
   canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
 
