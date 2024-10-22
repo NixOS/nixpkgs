@@ -10090,6 +10090,12 @@
     githubId = 6445082;
     name = "Joseph Lukasik";
   };
+  jh-devv = {
+    email = "jesper.halenius@jh-devv.com";
+    github = "jh-devv";
+    githubId = 122896463;
+    name = "Jesper Halenius";
+  };
   jhh = {
     email = "jeff@j3ff.io";
     github = "jhh";
