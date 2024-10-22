@@ -12,6 +12,7 @@
 , tk
 , wrapGAppsHook3
 , xz
+, desktopToDarwinBundle
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VKpFeI1tUq+2WcOu8zWq/eDvLImQp3cPjqpk5X8ic0Y=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config wrapGAppsHook3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
   buildInputs = [ bzip2 glib gperf gtk3 judy tcl tk xz ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
@@ -41,6 +46,14 @@ stdenv.mkDerivation rec {
     "--enable-judy"
     "--enable-gtk3"
   ];
+
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mv $out/bin/.gtkwave-wrapped $out/Applications/GTKWave.app/Contents/MacOS/.gtkwave-wrapped
+    makeWrapper $out/Applications/GTKWave.app/Contents/MacOS/.gtkwave-wrapped $out/Applications/GTKWave.app/Contents/MacOS/GTKWave \
+      --inherit-argv0 \
+      "''${gappsWrapperArgs[@]}"
+    ln -sf $out/Applications/GTKWave.app/Contents/MacOS/GTKWave $out/bin/gtkwave
+  '';
 
   meta = {
     description = "VCD/Waveform viewer for Unix and Win32";
