@@ -4398,6 +4398,10 @@ self: super: with self; {
 
   dynalite-panel = callPackage ../development/python-modules/dynalite-panel { };
 
+  dynamic-network-architectures =
+    callPackage ../development/python-modules/dynamic-network-architectures
+      { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   e2b = callPackage ../development/python-modules/e2b { };
