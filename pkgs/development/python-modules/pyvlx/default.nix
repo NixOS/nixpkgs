@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "0.2.25";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Julius2342";
@@ -25,9 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-c0HlmqLvpIn2GXorOArBKJ0YzvWz1spmhWwm6Gow2iU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     typing-extensions
     zeroconf
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/Julius2342/pyvlx";
     changelog = "https://github.com/Julius2342/pyvlx/releases/tag/${version}";
-    license = with licenses; [ lgpl2Only ];
+    license = licenses.lgpl2Only;
     maintainers = with maintainers; [ fab ];
     broken = stdenv.hostPlatform.isDarwin;
   };
