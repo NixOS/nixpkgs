@@ -450,6 +450,10 @@ with pkgs;
 
   circt = callPackage ../development/compilers/circt { };
 
+  clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
+    stdenv = clangStdenv;
+  };
+
   classicube = callPackage ../games/classicube { };
 
   clj-kondo = callPackage ../development/tools/clj-kondo { };
