@@ -15,6 +15,7 @@
 , libxkbcommon
 , makeDesktopItem
 , makeWrapper
+, mimalloc
 , releaseType
 , stdenv
 , wayland
@@ -24,6 +25,7 @@
 , username ? ""
 , token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
+, useHugePages ? true # enable hugepages patches
 , ...
 } @ args:
 
@@ -206,7 +208,7 @@ let
 
   releases = rec {
     headless = base;
-    demo = base // {
+    demo = base // rec {
 
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = [ libpulseaudio ];
@@ -227,9 +229,19 @@ let
         wayland
       ];
 
+      optimizationArgs =  ''
+        --prefix LD_PRELOAD : ${mimalloc}/lib/libmimalloc.so       \
+        --set MIMALLOC_DECOMMIT_DELAY 10000                        \
+        --set MIMALLOC_SHOW_STATS 1                                \
+        --set MIMALLOC_SHOW_ERRORS 1                               \
+        --set HUGETLB_MORECORE thp                                 \
+        --set MIMALLOC_ALLOW_LARGE_OS_PAGES 1                      \
+      '';
+
       installPhase = base.installPhase + ''
         wrapProgram $out/bin/factorio                                \
           --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$libPath \
+          ${lib.optionalString useHugePages optimizationArgs}        \
           --run "$out/share/factorio/update-config.sh"               \
           --argv0 ""                                                 \
           --add-flags "-c \$HOME/.factorio/config.cfg"               \
