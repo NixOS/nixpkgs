@@ -111,6 +111,7 @@ let
       url,
       sha256,
       needsAuth,
+      candidateHashFilenames ? [ ],
     }:
     {
       inherit version tarDirectory;
