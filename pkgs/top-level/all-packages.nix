@@ -1432,8 +1432,6 @@ with pkgs;
 
   _3mux = callPackage ../tools/misc/3mux { };
 
-  _1password = callPackage ../applications/misc/1password { };
-
   _1password-gui = callPackage ../applications/misc/1password-gui { };
 
   _1password-gui-beta = callPackage ../applications/misc/1password-gui { channel = "beta"; };
