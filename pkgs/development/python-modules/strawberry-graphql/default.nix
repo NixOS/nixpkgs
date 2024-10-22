@@ -125,11 +125,11 @@ buildPythonPackage rec {
     ];
     chalice = [ chalice ];
     cli = [
-      click
       pygments
       rich
       libcst
       typer
+      graphlib-backport
     ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
