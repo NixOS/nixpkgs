@@ -55,9 +55,9 @@ SYSTEMS = [
 
 RELEASE_TYPES = [
     ReleaseType("alpha", needs_auth=True),
-    ReleaseType("expansion", needs_auth=True),
     ReleaseType("demo"),
     ReleaseType("headless"),
+    ReleaseType("expansion", needs_auth=True),
 ]
 
 RELEASE_CHANNELS = [
@@ -69,7 +69,7 @@ RELEASE_CHANNELS = [
 def find_versions_json() -> str:
     if FLAGS.out:
         return FLAGS.out
-    try_paths = ["pkgs/games/factorio/versions.json", "versions.json"]
+    try_paths = ["pkgs/by-name/fa/factorio/versions.json", "versions.json"]
     for path in try_paths:
         if os.path.exists(path):
             return path
