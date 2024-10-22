@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  targetPlatform,
   fetchurl,
   python312,
   SDL2,
@@ -30,7 +29,7 @@ let
         hash = "sha256-o1Yg0C5k07NZzc9jQrHXR+kkQl8HZ55U9/fqcpe3Iyw=";
       };
     }
-    .${targetPlatform.system} or (throw "${targetPlatform.system} is unsupported.");
+    .${stdenv.targetPlatform.system} or (throw "${stdenv.targetPlatform.system} is unsupported.");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bombsquad";
