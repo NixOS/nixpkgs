@@ -1906,7 +1906,7 @@ with pkgs;
 
   scarab = callPackage ../tools/games/scarab { };
 
-  sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
+  inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
