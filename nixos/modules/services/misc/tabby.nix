@@ -15,6 +15,14 @@ in
 
       package = lib.mkPackageOption pkgs "tabby" { };
 
+      host = lib.mkOption {
+        type = types.str;
+        default = "127.0.0.1";
+        description = ''
+          Specifies the hostname on which the tabby server HTTP interface listens.
+        '';
+      };
+
       port = lib.mkOption {
         type = types.port;
         default = 11029;
@@ -80,29 +88,6 @@ in
         '';
       };
 
-      settings = lib.mkOption {
-        inherit (format) type;
-        default = { };
-        description = ''
-          Tabby scheduler configuration
-
-          See for more details:
-          > https://tabby.tabbyml.com/docs/configuration/#repository-context-for-code-completion
-        '';
-        example = lib.literalExpression ''
-          settings = {
-            repositories = [
-              { name = "tabby"; git_url = "https://github.com/TabbyML/tabby.git"; }
-              { name = "CTranslate2"; git_url = "git@github.com:OpenNMT/CTranslate2.git"; }
-
-              # local directory is also supported, but limited by systemd DynamicUser=1
-              # adding local repositories will need to be done manually
-              { name = "repository_a"; git_url = "file:///var/lib/tabby/repository_a"; }
-            ];
-          };
-        '';
-      };
-
       usageCollection = lib.mkOption {
         type = types.bool;
         default = false;
@@ -113,22 +98,6 @@ in
           > https://tabby.tabbyml.com/docs/configuration#usage-collection
         '';
       };
-
-      indexInterval = lib.mkOption {
-        type = types.str;
-        default = "5hours";
-        example = "5hours";
-        description = ''
-          Run tabby scheduler to generate the index database at this interval.
-          Updates by default every 5 hours. This value applies to
-          `OnUnitInactiveSec`
-
-          The format is described in
-          {manpage}`systemd.time(7)`.
-
-          To disable running `tabby scheduler --now` updates, set to `"never"`
-        '';
-      };
     };
   };
 
@@ -136,10 +105,8 @@ in
 
   config = lib.mkIf cfg.enable {
     environment = {
-      etc."tabby/config.toml".source = format.generate "config.toml" cfg.settings;
       systemPackages = [ tabbyPackage ];
     };
-
 
     systemd = let
       serviceUser = {
@@ -169,30 +136,9 @@ in
           serviceUser
           {
             ExecStart =
-              "${lib.getExe tabbyPackage} serve --model ${cfg.model} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
+              "${lib.getExe tabbyPackage} serve --model ${cfg.model} --host ${cfg.host} --port ${toString cfg.port} --device ${tabbyPackage.featureDevice}";
           }
         ];
-      };
-
-      services.tabby-scheduler = lib.mkIf (cfg.indexInterval != "never") {
-        wantedBy = [ "multi-user.target" ];
-        description = "Tabby repository indexing service";
-        after = [ "network.target" ];
-        environment = serviceEnv;
-        preStart = "cp -f /etc/tabby/config.toml \${TABBY_ROOT}/config.toml";
-        serviceConfig = lib.mkMerge [
-          serviceUser
-          {
-            # Type = "oneshot";
-            ExecStart = "${lib.getExe tabbyPackage} scheduler --now";
-          }
-        ];
-      };
-      timers.tabby-scheduler = lib.mkIf (cfg.indexInterval != "never") {
-        description = "Update timer for tabby-scheduler";
-        partOf = [ "tabby-scheduler.service" ];
-        wantedBy = [ "timers.target" ];
-        timerConfig.OnUnitInactiveSec = cfg.indexInterval;
       };
     };
   };
