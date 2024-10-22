@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
     homepage = "https://about.draw.io/";
     license = licenses.unfree;
     changelog = "https://github.com/jgraph/drawio-desktop/releases/tag/v${version}";
-    maintainers = with maintainers; [ qyliss darkonion0 ];
+    maintainers = with maintainers; [ darkonion0 ];
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "drawio";
   };
