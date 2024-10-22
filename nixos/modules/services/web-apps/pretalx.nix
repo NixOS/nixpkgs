@@ -183,6 +183,17 @@ in
             };
           };
 
+          files = {
+            upload_limit = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 10;
+              example = 50;
+              description = ''
+                Maximum file upload size in MiB.
+              '';
+            };
+          };
+
           filesystem = {
             data = lib.mkOption {
               type = lib.types.path;
