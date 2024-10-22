@@ -252,14 +252,6 @@ let
       # We also need enable_widevine_cdm_component to be false. Unfortunately it isn't exposed as gn
       # flag (declare_args) so we simply hardcode it to false.
       ./patches/widevine-disable-auto-download-allow-bundle.patch
-    ] ++ lib.optionals (versionRange "125" "126") [
-      # Fix building M125 with ninja 1.12. Not needed for M126+.
-      # https://issues.chromium.org/issues/336911498
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5487538
-      (githubPatch {
-        commit = "a976cb05b4024b7a6452d1541378d718cdfe33e6";
-        hash = "sha256-K2PSeJAvhGH2/Yp63/4mJ85NyqXqDDkMWY+ptrpgmOI=";
-      })
     ] ++ lib.optionals (versionRange "127" "128") [
       # Fix missing chrome/browser/ui/webui_name_variants.h dependency
       # and ninja 1.12 compat in M127.
@@ -293,21 +285,14 @@ let
       # Chromium reads initial_preferences from its own executable directory
       # This patch modifies it to read /etc/chromium/initial_preferences
       ./patches/chromium-initial-prefs.patch
-    ] ++ lib.optionals (versionRange "120" "126") [
-      # Partial revert to build M120+ with LLVM 17:
       # https://github.com/chromium/chromium/commit/02b6456643700771597c00741937e22068b0f956
       # https://github.com/chromium/chromium/commit/69736ffe943ff996d4a88d15eb30103a8c854e29
-      ./patches/chromium-120-llvm-17.patch
-    ] ++ lib.optionals (chromiumVersionAtLeast "126") [
-      # Rebased variant of patch right above to build M126+ with LLVM 17.
+      # Rebased variant of patch to build M126+ with LLVM 17.
       # staging-next will bump LLVM to 18, so we will be able to drop this soon.
       ./patches/chromium-126-llvm-17.patch
-    ] ++ lib.optionals (versionRange "121" "126") [
-      # M121 is the first version to require the new rust toolchain.
+    ] ++ lib.optionals (versionRange "126" "129") [
       # Partial revert of https://github.com/chromium/chromium/commit/3687976b0c6d36cf4157419a24a39f6770098d61
       # allowing us to use our rustc and our clang.
-      ./patches/chromium-121-rust.patch
-    ] ++ lib.optionals (versionRange "126" "129") [
       # Rebased variant of patch right above to build M126+ with our rust and our clang.
       ./patches/chromium-126-rust.patch
     ] ++ lib.optionals (chromiumVersionAtLeast "129") [
