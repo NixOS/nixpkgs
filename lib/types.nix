@@ -685,7 +685,7 @@ rec {
             then
               { ${choice} =
                   (lib.modules.evalOptionValue'
-                    { }  # Can't have option meta attributes in attrTag for now; needs `merge` function interface upgrade
+                    { }  # Would need something like `attrTagWith { optionMeta = { }; }`, and a good way to retrieve the `meta`s
                     (loc ++ [choice])
                     tags.${choice}
                     checkedValueDefs
