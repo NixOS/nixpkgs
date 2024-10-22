@@ -14,6 +14,7 @@
 , fmt
 , nlohmann_json
 , spdlog
+, nix-update-script
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,8 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DUDEV_DIR=${placeholder "out"}/lib/udev"
-    "-DUDEV_RULES_DIR=${placeholder "out"}/lib/udev/rules.d"
+    (lib.mapAttrsToList lib.cmakeFeature {
+      "UDEV_DIR" = "${placeholder "out"}/lib/udev";
+      "UDEV_RULES_DIR" = "${placeholder "out"}/lib/udev/rules.d";
+    })
   ];
 
   # Fixes the "gummy start" command, without this it cannot find the binary.
@@ -65,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://codeberg.org/fusco/gummy";
