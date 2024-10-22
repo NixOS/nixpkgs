@@ -282,6 +282,11 @@ with lib;
           that e.g. if the virtual host is `https://www.example.com` it also
           sets the HSTS policy for `https://sub.www.example.com`.
 
+          This can be especially helpful if you have rarely-visited subdomains
+          of a frequently-visited parent domain, but it can also be hazardous
+          since it can enable HSTS for a subdomain which doesn't actually
+          support HTTPS, which would make it fully inaccessible.
+
           ::: {.note}
           "Sibling" domains like https://mail.example.com are not affected.
           :::
