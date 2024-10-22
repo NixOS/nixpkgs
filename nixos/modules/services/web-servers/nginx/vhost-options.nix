@@ -239,11 +239,10 @@ with lib;
         default = false;
         description = ''
           Whether to enable HTTP Strict Transport Security (HSTS). This sends
-          the header "strict-transport-security: max-age=63072000" on all
+          the header "strict-transport-security: max-age=N" on all
           responses, which tells clients to refuse to use an insecure HTTP
-          connection for this host for the next 63072000 seconds (approximately
-          2 years), or for the duration specified by
-          `strictTransportSecurity.seconds` if set. This helps protects against
+          connection for this host for the next N seconds, where N is specified
+          by `strictTransportSecurity.seconds`. This helps protects against
           man-in-the-middle attacks that e.g. block HTTPS connections in the
           hope that the client will fall back to an insecure HTTP connection,
           which can be intercepted and modified.
