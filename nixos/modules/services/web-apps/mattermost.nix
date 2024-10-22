@@ -1,32 +1,87 @@
 { config, pkgs, lib, ... }:
 
-with lib;
-
 let
+  inherit (lib.strings)
+    hasInfix hasSuffix escapeURL concatStringsSep escapeShellArgs;
+
+  inherit (lib.attrsets)
+    mapAttrsToList recursiveUpdate;
+
+  inherit (lib.options)
+    mkOption mkPackageOption mkEnableOption;
+
+  inherit (lib.modules)
+    mkRenamedOptionModule mkMerge mkIf;
+
+  inherit (lib.trivial)
+    warnIf throwIf;
+
+  inherit (lib) types;
 
   cfg = config.services.mattermost;
 
-  database = "postgres://${cfg.localDatabaseUser}:${cfg.localDatabasePassword}@localhost:5432/${cfg.localDatabaseName}?sslmode=disable&connect_timeout=10";
+  # The directory to store mutable data within dataDir.
+  mutableDataDir = "${cfg.dataDir}/data";
 
-  postgresPackage = config.services.postgresql.package;
+  # The plugin directory. Note that this is the *post-unpack* plugin directory,
+  # since Mattermost unpacks plugins to put them there. (Hence, mutable data.)
+  pluginDir = "${mutableDataDir}/plugins";
 
-  createDb = {
-    statePath ? cfg.statePath,
-    localDatabaseUser ? cfg.localDatabaseUser,
-    localDatabasePassword ? cfg.localDatabasePassword,
-    localDatabaseName ? cfg.localDatabaseName,
-    useSudo ? true
-  }: ''
-    if ! test -e ${escapeShellArg "${statePath}/.db-created"}; then
-      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
-        ${postgresPackage}/bin/psql postgres -c \
-          "CREATE ROLE ${localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${localDatabasePassword}'"
-      ${lib.optionalString useSudo "${pkgs.sudo}/bin/sudo -u ${escapeShellArg config.services.postgresql.superUser} \\"}
-        ${postgresPackage}/bin/createdb \
-          --owner ${escapeShellArg localDatabaseUser} ${escapeShellArg localDatabaseName}
-      touch ${escapeShellArg "${statePath}/.db-created"}
-    fi
-  '';
+  # Mattermost uses this as a staging directory to unpack plugins, among possibly other things.
+  # Ensure that it's inside mutableDataDir since it can get rather large.
+  tempDir = "${mutableDataDir}/tmp";
+
+  mkDatabaseUri = {
+    user ? null,
+    password ? null,
+    host ? null,
+    port ? null,
+    path ? null,
+    query ? {}
+  }: let
+    nullToEmpty = val: if val == null then "" else toString val;
+
+    # Converts a list of URI attrs to a query string.
+    toQuery = mapAttrsToList (name: value:
+      if value == null then null else (escapeURL name) + "=" + (escapeURL (toString value))
+    );
+
+    userPart =
+      if user == null && password == null then
+        ""
+      else if user != null && password != null then
+        escapeURL user + ":" + escapeURL password
+      else
+        escapeURL (if password != null then password else user);
+    hostPart =
+      if userPart == "" then
+        escapeURL (nullToEmpty host)
+      else
+        "@" + escapeURL (nullToEmpty host);
+    portPart =
+      if port == null then ""
+      else ":" + (toString port);
+    pathPart =
+      if path == null then ""
+      else "/" + (escapeURL path);
+    queryPart =
+      if query == {} then ""
+      else "?" + concatStringsSep "&" (toQuery query);
+  in
+    "postgres://" + userPart + hostPart + portPart + pathPart + queryPart;
+
+  database =
+    if cfg.database.peerAuth then
+      mkDatabaseUri {
+        path = cfg.database.name;
+        query = { host = cfg.database.socketPath; } // cfg.database.extraConnectionOptions;
+      }
+    else
+      mkDatabaseUri {
+        inherit (cfg.database) user password host port;
+        path = cfg.database.name;
+        query = cfg.database.extraConnectionOptions;
+      };
 
   mattermostPluginDerivations = with pkgs;
     map (plugin: stdenv.mkDerivation {
@@ -53,14 +108,14 @@ let
         cfg.package
       ];
       installPhase = ''
-        mkdir -p $out/data/plugins
+        mkdir -p $out
         plugins=(${escapeShellArgs (map (plugin: "${plugin}/share/plugin.tar.gz") mattermostPluginDerivations)})
         for plugin in "''${plugins[@]}"; do
-          hash="$(sha256sum "$plugin" | cut -d' ' -f1)"
+          hash="$(sha256sum "$plugin" | awk '{print $1}')"
           mkdir -p "$hash"
           tar -C "$hash" -xzf "$plugin"
           autoPatchelf "$hash"
-          GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/data/plugins/$hash.tar.gz" .
+          GZIP_OPT=-9 tar -C "$hash" -cvzf "$out/$hash.tar.gz" .
           rm -rf "$hash"
         done
       '';
@@ -74,19 +129,38 @@ let
 
   mattermostConfWithoutPlugins = recursiveUpdate
     { ServiceSettings.SiteURL = cfg.siteUrl;
-      ServiceSettings.ListenAddress = cfg.listenAddress;
+      ServiceSettings.ListenAddress = "${cfg.host}:${toString cfg.port}";
       TeamSettings.SiteName = cfg.siteName;
       SqlSettings.DriverName = "postgres";
-      SqlSettings.DataSource = database;
-      PluginSettings.Directory = "${cfg.statePath}/plugins/server";
-      PluginSettings.ClientDirectory = "${cfg.statePath}/plugins/client";
+      SqlSettings.DataSource =
+        if cfg.database.fromEnvironment then
+          null
+        else
+          warnIf (!cfg.database.peerAuth && cfg.database.password != null) ''
+            Database password is set in Mattermost config! This password will end up in the Nix store.
+            Write the following to ${if cfg.environmentFile == null then "your environment file" else cfg.environmentFile}:
+
+            MM_SQLSETTINGS_DATASOURCE=${database}
+
+            Then set the following options:
+            services.mattermost.environmentFile = "<your environment file>";
+            services.mattermost.database.fromEnvironment = true;
+
+            Alternatively, you may be able to simply set the following, if the database is on the same host:
+            services.mattermost.database.peerAuth = true;
+          '' database;
+      FileSettings.Directory = cfg.dataDir;
+      PluginSettings.Directory = "${pluginDir}/server";
+      PluginSettings.ClientDirectory = "${pluginDir}/client";
+      LogSettings.FileLocation = cfg.logDir;
     }
-    cfg.extraConfig;
+    cfg.settings;
 
   mattermostConf = recursiveUpdate
     mattermostConfWithoutPlugins
     (
-      lib.optionalAttrs (mattermostPlugins != null) {
+      if mattermostPlugins == null then {}
+      else {
         PluginSettings = {
           Enable = true;
         };
@@ -96,19 +170,22 @@ let
   mattermostConfJSON = pkgs.writeText "mattermost-config.json" (builtins.toJSON mattermostConf);
 
 in
-
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "mattermost" "listenAddress" ] [ "services" "mattermost" "host" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "localDatabaseCreate" ] [ "services" "mattermost" "database" "create" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "localDatabasePassword" ] [ "services" "mattermost" "database" "password" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "localDatabaseUser" ] [ "services" "mattermost" "database" "user" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "localDatabaseName" ] [ "services" "mattermost" "database" "name" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "extraConfig" ] [ "services" "mattermost" "settings" ])
+    (mkRenamedOptionModule [ "services" "mattermost" "statePath" ] [ "services" "mattermost" "dataDir" ])
+  ];
+
   options = {
     services.mattermost = {
       enable = mkEnableOption "Mattermost chat server";
 
       package = mkPackageOption pkgs "mattermost" { };
-
-      statePath = mkOption {
-        type = types.str;
-        default = "/var/lib/mattermost";
-        description = "Mattermost working directory";
-      };
 
       siteUrl = mkOption {
         type = types.str;
@@ -124,12 +201,44 @@ in
         description = "Name of this Mattermost site.";
       };
 
-      listenAddress = mkOption {
+      host = mkOption {
         type = types.str;
-        default = ":8065";
-        example = "[::1]:8065";
+        default = "127.0.0.1";
+        example = "0.0.0.0";
         description = ''
-          Address and port this Mattermost instance listens to.
+          Host or address that this Mattermost instance listens on.
+        '';
+      };
+
+      port = mkOption {
+        type = types.port;
+        default = 8065;
+        description = ''
+          Port for Mattermost server to listen on.
+        '';
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/mattermost";
+        description = ''
+          Mattermost working directory.
+        '';
+      };
+
+      logDir = mkOption {
+        type = types.str;
+        default = "/var/log/mattermost";
+        description = ''
+          Mattermost log directory.
+        '';
+      };
+
+      configDir = mkOption {
+        type = types.str;
+        default = "/etc/mattermost";
+        description = ''
+          Mattermost config directory.
         '';
       };
 
@@ -160,16 +269,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.attrs;
-        default = { };
-        description = ''
-          Additional configuration options as Nix attribute set in config.json schema.
-        '';
-      };
-
       plugins = mkOption {
-        type = types.listOf (types.oneOf [types.path types.package]);
+        type = with types; listOf (either path package);
         default = [];
         example = "[ ./com.github.moussetc.mattermost.plugin.giphy-2.0.0.tar.gz ]";
         description = ''
@@ -179,7 +280,7 @@ in
         '';
       };
       environmentFile = mkOption {
-        type = types.nullOr types.path;
+        type = with types; nullOr path;
         default = null;
         description = ''
           Environment file (see {manpage}`systemd.exec(5)`
@@ -195,36 +296,94 @@ in
         '';
       };
 
-      localDatabaseCreate = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Create a local PostgreSQL database for Mattermost automatically.
-        '';
-      };
+      database = {
+        create = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Create a local PostgreSQL database for Mattermost automatically.
+          '';
+        };
 
-      localDatabaseName = mkOption {
-        type = types.str;
-        default = "mattermost";
-        description = ''
-          Local Mattermost database name.
-        '';
-      };
+        peerAuth = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            If set, will use peer auth instead of connecting to a Postgres server.
+            Use services.mattermost.database.socketPath to configure the socket path.
+          '';
+        };
 
-      localDatabaseUser = mkOption {
-        type = types.str;
-        default = "mattermost";
-        description = ''
-          Local Mattermost database username.
-        '';
-      };
+        socketPath = mkOption {
+          type = types.path;
+          default = "/run/postgresql";
+          description = ''
+            The Postgres socket path.
+          '';
+        };
 
-      localDatabasePassword = mkOption {
-        type = types.str;
-        default = "mmpgsecret";
-        description = ''
-          Password for local Mattermost database user.
-        '';
+        fromEnvironment = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Use services.mattermost.environmentFile to configure the database instead of writing the database URI
+            to the Nix store. Useful if you use password authentication with peerAuth set to false.
+          '';
+        };
+
+        name = mkOption {
+          type = types.str;
+          default = "mattermost";
+          description = ''
+            Local Mattermost database name.
+          '';
+        };
+
+        host = mkOption {
+          type = types.str;
+          default = "localhost";
+          example = "127.0.0.1";
+          description = ''
+            Host to use for the Postgres database. If this is a path, this
+            will use socket authentication and ignore the port.
+          '';
+        };
+
+        port = mkOption {
+          type = types.port;
+          default = 5432;
+          description = ''
+            Port to use for the Postgres database.
+          '';
+        };
+
+        user = mkOption {
+          type = types.str;
+          default = "mattermost";
+          description = ''
+            Local Mattermost database username.
+          '';
+        };
+
+        password = mkOption {
+          type = types.str;
+          default = "mmpgsecret";
+          description = ''
+            Password for local Mattermost database user. If set and `host` is not a path,
+            will cause a warning nagging you to use environmentFile instead.
+          '';
+        };
+
+        extraConnectionOptions = mkOption {
+          type = with types; attrsOf (either int str);
+          default = {
+            sslmode = "disable";
+            connect_timeout = 10;
+          };
+          description = ''
+            Extra options that are placed in the connection URI's query parameters.
+          '';
+        };
       };
 
       user = mkOption {
@@ -240,6 +399,14 @@ in
         default = "mattermost";
         description = ''
           Group which runs the Mattermost service.
+        '';
+      };
+
+      settings = mkOption {
+        type = types.attrs;
+        default = { };
+        description = ''
+          Additional configuration options as Nix attribute set in config.json schema.
         '';
       };
 
@@ -261,73 +428,148 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.users = optionalAttrs (cfg.user == "mattermost") {
-        mattermost = {
-          group = cfg.group;
-          uid = config.ids.uids.mattermost;
-          home = cfg.statePath;
-        };
+      users.users.${cfg.user} = {
+        group = cfg.group;
+        uid = config.ids.uids.mattermost;
+        home = cfg.dataDir;
       };
 
-      users.groups = optionalAttrs (cfg.group == "mattermost") {
-        mattermost.gid = config.ids.gids.mattermost;
+      users.groups.${cfg.group} = {
+        gid = config.ids.gids.mattermost;
       };
 
-      services.postgresql.enable = cfg.localDatabaseCreate;
+      services.postgresql = mkIf cfg.database.create {
+        enable = true;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [{
+          name = throwIf (cfg.database.peerAuth && (cfg.database.user != cfg.user || cfg.database.name != cfg.database.user)) ''
+            Mattermost database peer auth is enabled and the user, database user, or database name mismatch.
+            Peer authentication will not work.
+          '' cfg.database.user;
+          ensureDBOwnership = true;
+        }];
+      };
 
-      # The systemd service will fail to execute the preStart hook
-      # if the WorkingDirectory does not exist
-      systemd.tmpfiles.settings."10-mattermost".${cfg.statePath}.d = { };
+      systemd.tmpfiles.rules = [
+        "d ${cfg.dataDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${cfg.logDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${cfg.configDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${mutableDataDir} 0750 ${cfg.user} ${cfg.group} - -"
+
+        # Remove and recreate tempDir.
+        "R ${tempDir} - - - - -"
+        "d ${tempDir} 0750 ${cfg.user} ${cfg.group} - -"
+
+        # Ensure that pluginDir is a directory, as it could be a symlink on prior versions.
+        "r ${pluginDir} - - - - -"
+        "d ${pluginDir} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${mattermostConf.PluginSettings.Directory} 0750 ${cfg.user} ${cfg.group} - -"
+        "d ${mattermostConf.PluginSettings.ClientDirectory} 0750 ${cfg.user} ${cfg.group} - -"
+
+        "L+ ${cfg.dataDir}/fonts - - - - ${cfg.package}/fonts"
+        "L+ ${cfg.dataDir}/i18n - - - - ${cfg.package}/i18n"
+        "L+ ${cfg.dataDir}/templates - - - - ${cfg.package}/templates"
+        "L+ ${cfg.dataDir}/client - - - - ${cfg.package}/client"
+      ] ++ (
+        if mattermostPlugins == null then
+          # Create the plugin tarball directory if it's a symlink.
+          [
+            "r ${cfg.dataDir}/plugins - - - - -"
+            "d ${cfg.dataDir}/plugins 0750 ${cfg.user} ${cfg.group} - -"
+          ]
+        else
+          # Symlink the plugin tarball directory.
+          ["L+ ${cfg.dataDir}/plugins - - - - ${mattermostPlugins}"]
+      );
 
       systemd.services.mattermost = {
         description = "Mattermost chat service";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "postgresql.service" ];
+        requires = [ "network.target" "postgresql.service" ];
+
+        # Use tempDir as this can get rather large, especially if Mattermost unpacks a large number of plugins.
+        environment.TMPDIR = tempDir;
 
         preStart = ''
-          mkdir -p "${cfg.statePath}"/{data,config,logs,plugins}
-          mkdir -p "${cfg.statePath}/plugins"/{client,server}
-          ln -sf ${cfg.package}/{bin,fonts,i18n,templates,client} "${cfg.statePath}"
-        '' + lib.optionalString (mattermostPlugins != null) ''
-          rm -rf "${cfg.statePath}/data/plugins"
-          ln -sf ${mattermostPlugins}/data/plugins "${cfg.statePath}/data"
+          if [ -f ${cfg.dataDir}/config/config.json ] && [ ! -f ${cfg.configDir}/config.json ]; then
+            # Migrate the old config location to the new config location
+            cp ${cfg.dataDir}/config/config.json ${cfg.configDir}/config.json
+            touch "${cfg.configDir}/.initial-created"
+          fi
         '' + lib.optionalString (!cfg.mutableConfig) ''
-          rm -f "${cfg.statePath}/config/config.json"
-          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
+          ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.configDir}/config.json"
         '' + lib.optionalString cfg.mutableConfig ''
-          if ! test -e "${cfg.statePath}/config/.initial-created"; then
-            rm -f ${cfg.statePath}/config/config.json
-            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.statePath}/config/config.json"
-            touch "${cfg.statePath}/config/.initial-created"
+          if [ ! -e "${cfg.configDir}/.initial-created" ]; then
+            ${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${cfg.package}/config/config.json ${mattermostConfJSON} > "${cfg.configDir}/config.json"
+            touch "${cfg.configDir}/.initial-created"
           fi
         '' + lib.optionalString (cfg.mutableConfig && cfg.preferNixConfig) ''
-          new_config="$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' "${cfg.statePath}/config/config.json" ${mattermostConfJSON})"
-
-          rm -f "${cfg.statePath}/config/config.json"
-          echo "$new_config" > "${cfg.statePath}/config/config.json"
-        '' + lib.optionalString cfg.localDatabaseCreate (createDb {}) + ''
-          # Don't change permissions recursively on the data, current, and symlinked directories (see ln -sf command above).
-          # This dramatically decreases startup times for installations with a lot of files.
-          find . -maxdepth 1 -not -name data -not -name client -not -name templates -not -name i18n -not -name fonts -not -name bin -not -name . \
-            -exec chown "${cfg.user}:${cfg.group}" -R {} \; -exec chmod u+rw,g+r,o-rwx -R {} \;
-
-          chown "${cfg.user}:${cfg.group}" "${cfg.statePath}/data" .
-          chmod u+rw,g+r,o-rwx "${cfg.statePath}/data" .
+          echo "$(${pkgs.jq}/bin/jq -s '.[0] * .[1]' "${cfg.configDir}/config.json" ${mattermostConfJSON})" > "${cfg.configDir}/config.json"
         '';
 
-        serviceConfig = {
-          PermissionsStartOnly = true;
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${cfg.package}/bin/mattermost";
-          WorkingDirectory = "${cfg.statePath}";
-          Restart = "always";
-          RestartSec = "10";
-          LimitNOFILE = "49152";
-          EnvironmentFile = cfg.environmentFile;
-        };
-        unitConfig.JoinsNamespaceOf = mkIf cfg.localDatabaseCreate "postgresql.service";
+        serviceConfig = mkMerge [
+          {
+            User = cfg.user;
+            Group = cfg.group;
+            ExecStart = "${cfg.package}/bin/mattermost --config ${cfg.configDir}/config.json";
+            ReadWritePaths = [ cfg.dataDir cfg.logDir cfg.configDir ];
+            UMask = "0027";
+            Restart = "always";
+            RestartSec = 10;
+            LimitNOFILE = 49152;
+            LockPersonality = true;
+            NoNewPrivileges = true;
+            PrivateDevices = true;
+            PrivateTmp = true;
+            PrivateUsers = true;
+            ProtectClock = true;
+            ProtectControlGroups = true;
+            ProtectHome = true;
+            ProtectHostname = true;
+            ProtectKernelLogs = true;
+            ProtectKernelModules = true;
+            ProtectKernelTunables = true;
+            ProtectProc = "invisible";
+            ProtectSystem = "strict";
+            RestrictNamespaces = true;
+            RestrictSUIDSGID = true;
+            EnvironmentFile = cfg.environmentFile;
+            WorkingDirectory = cfg.dataDir;
+          }
+          (mkIf (cfg.dataDir == "/var/lib/mattermost") {
+            StateDirectory = baseNameOf cfg.dataDir;
+            StateDirectoryMode = "0750";
+          })
+          (mkIf (cfg.logDir == "/var/log/mattermost") {
+            LogsDirectory = baseNameOf cfg.logDir;
+            LogsDirectoryMode = "0750";
+          })
+          (mkIf (cfg.configDir == "/etc/mattermost") {
+            ConfigurationDirectory = baseNameOf cfg.configDir;
+            ConfigurationDirectoryMode = "0750";
+          })
+        ];
+
+        unitConfig.JoinsNamespaceOf = mkIf cfg.database.create "postgresql.service";
       };
+
+      assertions = [
+        {
+          # Make sure the URL doesn't have a trailing slash
+          assertion = !(hasSuffix "/" cfg.siteUrl);
+          message = ''
+            host or listenAddress should not include a port, use services.mattermost.host and services.mattermost.port to specify the port.
+          '';
+        }
+        {
+          # Make sure this isn't a host/port pair
+          assertion = !(hasInfix ":" cfg.host && !(hasInfix "[" cfg.host) && !(hasInfix "]" cfg.host));
+          message = ''
+            host or listenAddress should not include a port, use services.mattermost.host and services.mattermost.port to specify the port.
+          '';
+        }
+      ];
     })
     (mkIf cfg.matterircd.enable {
       systemd.services.matterircd = {

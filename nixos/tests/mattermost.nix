@@ -1,8 +1,8 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 let
   host = "smoke.test";
-  port = "8065";
-  url = "http://${host}:${port}";
+  port = 8065;
+  url = "http://${host}:${toString port}";
   siteName = "NixOS Smoke Tests, Inc.";
 
   makeMattermost = mattermostConfig:
@@ -15,13 +15,21 @@ let
       networking.hosts = {
         "127.0.0.1" = [ host ];
       };
+      services.postgresql.initialScript = lib.mkIf (!config.services.mattermost.database.peerAuth) (pkgs.writeText "init.sql" ''
+        create role ${config.services.mattermost.database.user} with login nocreatedb nocreaterole encrypted password '${config.services.mattermost.database.password}'
+      '');
       services.mattermost = lib.recursiveUpdate {
         enable = true;
         inherit siteName;
-        listenAddress = "0.0.0.0:${port}";
+        host = "0.0.0.0";
+        inherit port;
         siteUrl = url;
-        extraConfig = {
+        database = {
+          peerAuth = true;
+        };
+        settings = {
           SupportSettings.AboutLink = "https://nixos.org";
+          PluginSettings.AutomaticPrepackagedPlugins = false;
         };
       } mattermostConfig;
     };
@@ -32,109 +40,175 @@ in
   nodes = {
     mutable = makeMattermost {
       mutableConfig = true;
-      extraConfig.SupportSettings.HelpLink = "https://search.nixos.org";
+      settings.SupportSettings.HelpLink = "https://search.nixos.org";
     };
     mostlyMutable = makeMattermost {
       mutableConfig = true;
       preferNixConfig = true;
-      plugins = let
-        mattermostDemoPlugin = pkgs.fetchurl {
-          url = "https://github.com/mattermost/mattermost-plugin-demo/releases/download/v0.9.0/com.mattermost.demo-plugin-0.9.0.tar.gz";
-          sha256 = "1h4qi34gcxcx63z8wiqcf2aaywmvv8lys5g8gvsk13kkqhlmag25";
-        };
-      in [
-        mattermostDemoPlugin
+      plugins = [
+        (pkgs.fetchurl {
+          url = "https://github.com/mattermost-community/mattermost-plugin-todo/releases/download/v0.7.1/com.mattermost.plugin-todo-0.7.1.tar.gz";
+          sha256 = "1ki7vsvhjl2xgw4mfmnvn9s5hkn98l7nf4v9fdk59v44zbm7mriz";
+        })
       ];
     };
     immutable = makeMattermost {
       mutableConfig = false;
-      extraConfig.SupportSettings.HelpLink = "https://search.nixos.org";
+
+      # Make sure something other than the default works.
+      user = "mmuser";
+      group = "mmgroup";
+
+      database = {
+        peerAuth = false;
+      };
+      settings.SupportSettings.HelpLink = "https://search.nixos.org";
     };
     environmentFile = makeMattermost {
       mutableConfig = false;
-      extraConfig.SupportSettings.AboutLink = "https://example.org";
+      database.fromEnvironment = true;
+      settings.SupportSettings.AboutLink = "https://example.org";
       environmentFile = pkgs.writeText "mattermost-env" ''
+        MM_SQLSETTINGS_DATASOURCE=postgres:///mattermost?host=/run/postgresql
         MM_SUPPORTSETTINGS_ABOUTLINK=https://nixos.org
       '';
     };
   };
 
   testScript = let
-    expectConfig = jqExpression: pkgs.writeShellScript "expect-config" ''
+    expectMattermostUp = pkgs.writeShellScript "expect-mattermost-up" ''
       set -euo pipefail
-      echo "Expecting config to match: "${lib.escapeShellArg jqExpression} >&2
       curl ${lib.escapeShellArg url} >/dev/null
+    '';
+
+    expectConfig = pkgs.writeShellScript "expect-config" ''
+      set -euo pipefail
       config="$(curl ${lib.escapeShellArg "${url}/api/v4/config/client?format=old"})"
       echo "Config: $(echo "$config" | ${pkgs.jq}/bin/jq)" >&2
-      [[ "$(echo "$config" | ${pkgs.jq}/bin/jq -r ${lib.escapeShellArg ".SiteName == $siteName and .Version == ($mattermostName / $sep)[-1] and (${jqExpression})"} --arg siteName ${lib.escapeShellArg siteName} --arg mattermostName ${lib.escapeShellArg pkgs.mattermost.name} --arg sep '-')" = "true" ]]
+      [[ "$(echo "$config" | ${pkgs.jq}/bin/jq -r ${lib.escapeShellArg ".SiteName == $siteName and .Version == ($mattermostName / $sep)[-1] and "}"($1)" --arg siteName ${lib.escapeShellArg siteName} --arg mattermostName ${lib.escapeShellArg pkgs.mattermost.name} --arg sep '-')" = "true" ]]
     '';
 
-    setConfig = jqExpression: pkgs.writeShellScript "set-config" ''
+    setConfig = pkgs.writeShellScript "set-config" ''
       set -euo pipefail
-      mattermostConfig=/var/lib/mattermost/config/config.json
-      newConfig="$(${pkgs.jq}/bin/jq -r ${lib.escapeShellArg jqExpression} $mattermostConfig)"
-      rm -f $mattermostConfig
-      echo "$newConfig" > "$mattermostConfig"
+      mattermostConfig=/etc/mattermost/config.json
+      echo "Old config: $(echo "$config" | ${pkgs.jq}/bin/jq)" >&2
+      newConfig="$(${pkgs.jq}/bin/jq -r "$1" $mattermostConfig)"
+      echo "New config: $(echo "$newConfig" | ${pkgs.jq}/bin/jq)" >&2
+      truncate -s 0 "$mattermostConfig"
+      echo "$newConfig" >> "$mattermostConfig"
     '';
 
+    expectPlugins = pkgs.writeShellScript "expect-plugins" ''
+      set -euo pipefail
+      case "$1" in
+        ""|*[!0-9]*)
+          plugins="$(curl ${lib.escapeShellArg "${url}/api/v4/plugins/webapp"})"
+          echo "Plugins: $(echo "$plugins" | ${pkgs.jq}/bin/jq)" >&2
+          [[ "$(echo "$plugins" | ${pkgs.jq}/bin/jq -r "$1")" == "true" ]]
+          ;;
+        *)
+          code="$(curl -s -o /dev/null -w "%{http_code}" ${lib.escapeShellArg "${url}/api/v4/plugins/webapp"})"
+          [[ "$code" == "$1" ]]
+          ;;
+      esac
+    '';
   in
   ''
-    start_all()
+    import shlex
+
+    def wait_mattermost_up(node):
+      node.wait_for_unit("mattermost.service")
+      node.wait_for_open_port(8065)
+      node.succeed(f"curl {shlex.quote('${url}')} >/dev/null")
+
+    def restart_mattermost(node):
+      node.systemctl("restart mattermost.service")
+      wait_mattermost_up(node)
+
+    def expect_config(node, *configs):
+      for config in configs:
+        node.succeed(f"${expectConfig} {shlex.quote(config)}")
+
+    def expect_plugins(node, jq_or_code):
+      node.succeed(f"${expectPlugins} {shlex.quote(str(jq_or_code))}")
+
+    def set_config(node, *configs):
+      for config in configs:
+        node.succeed(f"${setConfig} {shlex.quote(config)}")
 
     ## Mutable node tests ##
-    mutable.wait_for_unit("mattermost.service")
-    mutable.wait_for_open_port(8065)
+    mutable.start()
+    wait_mattermost_up(mutable)
 
     # Get the initial config
-    mutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
+    expect_config(mutable, '.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"')
 
     # Edit the config
-    mutable.succeed("${setConfig ''.SupportSettings.AboutLink = "https://mattermost.com"''}")
-    mutable.succeed("${setConfig ''.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"''}")
-    mutable.systemctl("restart mattermost.service")
-    mutable.wait_for_open_port(8065)
+    set_config(
+      mutable,
+      '.SupportSettings.AboutLink = "https://mattermost.com"',
+      '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"'
+    )
+    restart_mattermost(mutable)
 
     # AboutLink and HelpLink should be changed
-    mutable.succeed("${expectConfig ''.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"''}")
+    expect_config(mutable, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
+    mutable.shutdown()
 
     ## Mostly mutable node tests ##
-    mostlyMutable.wait_for_unit("mattermost.service")
-    mostlyMutable.wait_for_open_port(8065)
+    mostlyMutable.start()
+    wait_mattermost_up(mostlyMutable)
 
     # Get the initial config
-    mostlyMutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")
+    expect_config(mostlyMutable, '.AboutLink == "https://nixos.org"')
+
+    # No plugins.
+    expect_plugins(mostlyMutable, 'length == 0')
 
     # Edit the config
-    mostlyMutable.succeed("${setConfig ''.SupportSettings.AboutLink = "https://mattermost.com"''}")
-    mostlyMutable.succeed("${setConfig ''.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"''}")
-    mostlyMutable.systemctl("restart mattermost.service")
-    mostlyMutable.wait_for_open_port(8065)
+    set_config(
+      mostlyMutable,
+      '.SupportSettings.AboutLink = "https://mattermost.com"',
+      '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"',
+      '.PluginSettings.PluginStates."com.mattermost.plugin-todo".Enable = true'
+    )
+    restart_mattermost(mostlyMutable)
 
     # AboutLink should be overridden by NixOS configuration; HelpLink should be what we set above
-    mostlyMutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"''}")
+    expect_config(mostlyMutable, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+
+    # Single plugin that's now enabled.
+    expect_plugins(mostlyMutable, 'length == 1')
+    mostlyMutable.shutdown()
 
     ## Immutable node tests ##
-    immutable.wait_for_unit("mattermost.service")
-    immutable.wait_for_open_port(8065)
+    immutable.start()
+    wait_mattermost_up(immutable)
 
     # Get the initial config
-    immutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
+    expect_config(immutable, '.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"')
 
     # Edit the config
-    immutable.succeed("${setConfig ''.SupportSettings.AboutLink = "https://mattermost.com"''}")
-    immutable.succeed("${setConfig ''.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"''}")
-    immutable.systemctl("restart mattermost.service")
-    immutable.wait_for_open_port(8065)
+    set_config(
+      immutable,
+      '.SupportSettings.AboutLink = "https://mattermost.com"',
+      '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"'
+    )
+    restart_mattermost(immutable)
 
     # Our edits should be ignored on restart
-    immutable.succeed("${expectConfig ''.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"''}")
+    expect_config(immutable, '.AboutLink == "https://nixos.org" and .HelpLink == "https://search.nixos.org"')
 
+    # No plugins.
+    expect_plugins(immutable, 'length == 0')
+    immutable.shutdown()
 
     ## Environment File node tests ##
-    environmentFile.wait_for_unit("mattermost.service")
-    environmentFile.wait_for_open_port(8065)
+    environmentFile.start()
+    wait_mattermost_up(environmentFile)
 
     # Settings in the environment file should override settings set otherwise
-    environmentFile.succeed("${expectConfig ''.AboutLink == "https://nixos.org"''}")
+    expect_config(environmentFile, '.AboutLink == "https://nixos.org"')
+    environmentFile.shutdown()
   '';
 })
