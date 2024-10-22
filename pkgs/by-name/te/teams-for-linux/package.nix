@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_30,
+  electron_32,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -13,7 +13,7 @@
 }:
 
 let
-  electronDist = "${electron_30}/${if stdenv.isDarwin then "Applications" else "libexec/electron"}";
+  electronDist = "${electron_32}/${if stdenv.isDarwin then "Applications" else "libexec/electron"}";
 in
 buildNpmPackage rec {
   pname = "teams-for-linux";
@@ -49,7 +49,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_30.version}
+        -c.electronVersion=${electron_32.version}
 
     runHook postBuild
   '';
@@ -71,7 +71,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_30}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_32}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
