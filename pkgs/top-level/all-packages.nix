@@ -7758,6 +7758,8 @@ with pkgs;
 
   garmintools = callPackage ../development/libraries/garmintools { };
 
+  gatotray = callPackage ../tools/system/gatotray { };
+
   gau = callPackage ../tools/security/gau { };
 
   gauge-unwrapped = callPackage ../development/tools/gauge { };
