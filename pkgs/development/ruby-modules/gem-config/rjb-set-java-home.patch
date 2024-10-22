@@ -1,0 +1,52 @@
+diff --git a/ext/extconf.rb b/ext/extconf.rb
+index a660d25..1cc6813 100644
+--- a/ext/extconf.rb
++++ b/ext/extconf.rb
+@@ -29,7 +29,7 @@ class Path
+ 
+ end
+ 
+-javahome = ENV['JAVA_HOME']
++javahome = "@javaHome@"
+ if javahome.nil? && RUBY_PLATFORM =~ /darwin/
+   javahome = `/usr/libexec/java_home`.strip
+ end
+diff --git a/ext/load.c b/ext/load.c
+index ce678c7..50cd81f 100644
+--- a/ext/load.c
++++ b/ext/load.c
+@@ -103,6 +103,8 @@
+  #define GETDEFAULTJVMINITARGS "JNI_GetDefaultJavaVMInitArgs"
+ #endif
+ 
++# define DEFAULT_HOME "@javaHome@"
++
+ typedef int (JNICALL *GETDEFAULTJAVAVMINITARGS)(void*);
+ typedef int (JNICALL *CREATEJAVAVM)(JavaVM**, JNIEnv**, void*);
+ 
+@@ -238,11 +240,7 @@ static int load_jvm(const char* jvmtype)
+ #endif
+     if (!jh)
+     {
+-        if (RTEST(ruby_verbose))
+-        {
+-            fprintf(stderr, "no JAVA_HOME environment\n");
+-        }
+-        return 0;
++        jh = DEFAULT_HOME;
+     }
+ #if defined(_WIN32)
+     if (*jh == '"' && *(jh + strlen(jh) - 1) == '"')
+diff --git a/lib/rjb.rb b/lib/rjb.rb
+index dcfb320..9d0fd17 100644
+--- a/lib/rjb.rb
++++ b/lib/rjb.rb
+@@ -37,7 +37,7 @@ module RjbConf
+   if /darwin/ =~ RUBY_PLATFORM
+     if ENV['JVM_LIB'].nil? || ENV['JVM_LIB'] == ''
+       if ENV['JAVA_HOME'].nil? || ENV['JAVA_HOME'] == ''
+-        jvms = Dir.glob("#{`/usr/libexec/java_home`.strip}/**/libjvm.dylib")
++        jvms = Dir.glob("@javaHome@/**/libjvm.dylib")
+       else
+         jvms = Dir.glob("#{ENV['JAVA_HOME']}/**/libjvm.dylib")
+       end
