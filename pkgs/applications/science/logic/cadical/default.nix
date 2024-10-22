@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, copyPkgconfigItems, makePkgconfigItem }:
+{ lib, stdenv, fetchFromGitHub, copyPkgconfigItems, makePkgconfigItem
+, version ? "2.1.0"
+}:
 
 stdenv.mkDerivation rec {
   pname = "cadical";
-  version = "2.1.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "cadical";
     rev = "rel-${version}";
-    sha256 = "sha256-sSvJgHxsRaJ/xHEK32fox0MFI7u+pj5ERLfNn2s8kC8=";
+    hash = {
+      "2.1.0" = "sha256-sSvJgHxsRaJ/xHEK32fox0MFI7u+pj5ERLfNn2s8kC8=";
+      "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
+    }.${version};
   };
 
   outputs = [ "out" "dev" "lib" ];

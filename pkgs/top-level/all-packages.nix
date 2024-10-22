@@ -36251,7 +36251,9 @@ with pkgs;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 { };
 
-  cvc5 = callPackage ../applications/science/logic/cvc5 { };
+  cvc5 = callPackage ../applications/science/logic/cvc5 {
+    cadical = pkgs.cadical.override { version = "2.0.0"; };
+  };
 
   drat-trim = callPackage ../applications/science/logic/drat-trim { };
 
