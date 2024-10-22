@@ -196,7 +196,7 @@ in
     ];
 
     warnings = [
-      (lib.optionalString (cfg.db.createLocall -> cfg.db.dialect != "postgres") ''
+      (lib.optionalString (cfg.db.createLocally -> cfg.db.dialect != "postgres") ''
         You have enabled automatic database configuration, but the database dialect is not set to "posgres".
 
         The Wakapi module only supports for PostgreSQL. Please set `services.wakapi.database.createLocally`
