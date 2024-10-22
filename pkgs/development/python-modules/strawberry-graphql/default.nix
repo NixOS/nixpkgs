@@ -1,46 +1,10 @@
-{
-  lib,
-  aiohttp,
-  asgiref,
-  buildPythonPackage,
-  chalice,
-  channels,
-  daphne,
-  django,
-  email-validator,
-  fastapi,
-  fetchFromGitHub,
-  fetchpatch,
-  flask,
-  freezegun,
-  graphql-core,
-  inline-snapshot,
-  libcst,
-  opentelemetry-api,
-  opentelemetry-sdk,
-  poetry-core,
-  pydantic,
-  pygments,
-  pyinstrument,
-  pytest-aiohttp,
-  pytest-asyncio,
-  pytest-django,
-  pytest-emoji,
-  pytest-flask,
-  pytest-mock,
-  pytest-snapshot,
-  pytestCheckHook,
-  python-dateutil,
-  python-multipart,
-  pythonOlder,
-  rich,
-  sanic,
-  sanic-testing,
-  starlette,
-  typing-extensions,
-  uvicorn,
-  typer,
-  graphlib-backport
+{ lib, aiohttp, asgiref, buildPythonPackage, chalice, channels, daphne, django
+, email-validator, fastapi, fetchFromGitHub, fetchpatch, flask, freezegun
+, graphql-core, inline-snapshot, libcst, opentelemetry-api, opentelemetry-sdk
+, poetry-core, pydantic, pygments, pyinstrument, pytest-aiohttp, pytest-asyncio
+, pytest-django, pytest-emoji, pytest-flask, pytest-mock, pytest-snapshot
+, pytestCheckHook, python-dateutil, python-multipart, pythonOlder, rich, sanic
+, sanic-testing, starlette, typing-extensions, uvicorn, typer, graphlib-backport
 }:
 
 buildPythonPackage rec {
@@ -61,7 +25,8 @@ buildPythonPackage rec {
     (fetchpatch {
       # https://github.com/strawberry-graphql/strawberry/pull/2199
       name = "switch-to-poetry-core.patch";
-      url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
+      url =
+        "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
     })
   ];
@@ -73,65 +38,23 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    graphql-core
-    python-dateutil
-    typing-extensions
-  ];
+  dependencies = [ graphql-core python-dateutil typing-extensions ];
 
   optional-dependencies = {
-    aiohttp = [
-      aiohttp
-      pytest-aiohttp
-    ];
-    asgi = [
-      starlette
-      python-multipart
-    ];
-    debug = [
-      rich
-      libcst
-    ];
-    debug-server = [
-      typer
-      libcst
-      pygments
-      python-multipart
-      rich
-      starlette
-      uvicorn
-    ];
-    django = [
-      django
-      pytest-django
-      asgiref
-    ];
-    channels = [
-      channels
-      asgiref
-    ];
-    flask = [
-      flask
-      pytest-flask
-    ];
-    opentelemetry = [
-      opentelemetry-api
-      opentelemetry-sdk
-    ];
+    aiohttp = [ aiohttp pytest-aiohttp ];
+    asgi = [ starlette python-multipart ];
+    debug = [ rich libcst ];
+    debug-server =
+      [ typer libcst pygments python-multipart rich starlette uvicorn ];
+    django = [ django pytest-django asgiref ];
+    channels = [ channels asgiref ];
+    flask = [ flask pytest-flask ];
+    opentelemetry = [ opentelemetry-api opentelemetry-sdk ];
     pydantic = [ pydantic ];
     sanic = [ sanic ];
-    fastapi = [
-      fastapi
-      python-multipart
-    ];
+    fastapi = [ fastapi python-multipart ];
     chalice = [ chalice ];
-    cli = [
-      pygments
-      rich
-      libcst
-      typer
-      graphlib-backport
-    ];
+    cli = [ pygments rich libcst typer graphlib-backport ];
     # starlite = [ starlite ];
     # litestar = [ litestar ];
     pyinstrument = [ pyinstrument ];
@@ -173,7 +96,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "GraphQL library for Python that leverages type annotations";
     homepage = "https://strawberry.rocks";
-    changelog = "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
+    changelog =
+      "https://github.com/strawberry-graphql/strawberry/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ izorkin ];
     mainProgram = "strawberry";
