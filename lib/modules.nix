@@ -843,7 +843,7 @@ let
           # The option path. Although the things we're checking happen to be options,
           # that's not what we're checking against, and that's what the prefix is
           # about. The checkable options are more like _file, and we'll make use of that.
-          prefix = [ "_modules" "optionMeta" ];
+          prefix = [ "options" ] ++ opt.loc ++ [ "meta" ];
           modules =
             [
               { options = _module.optionMeta or { }; }
