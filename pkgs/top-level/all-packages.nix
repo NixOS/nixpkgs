@@ -33572,8 +33572,6 @@ with pkgs;
 
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
-  xchm = callPackage ../applications/misc/xchm { };
-
   inherit (xorg) xcompmgr;
 
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
