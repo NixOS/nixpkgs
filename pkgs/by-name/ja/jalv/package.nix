@@ -1,7 +1,21 @@
-{ lib, stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkg-config, python3
-, serd, sord , sratom, suil, wafHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  libjack2,
+  lilv,
+  lv2,
+  pkg-config,
+  python3,
+  serd,
+  sord,
+  sratom,
+  suil,
+  wafHook,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "jalv";
   version = "1.6.6";
 
@@ -10,9 +24,20 @@ stdenv.mkDerivation  rec {
     sha256 = "sha256-ktFBeBtmQ3MgfDQ868XpuM7UYfryb9zLld8AB7BjnhY=";
   };
 
-  nativeBuildInputs = [ pkg-config wafHook ];
+  nativeBuildInputs = [
+    pkg-config
+    wafHook
+  ];
   buildInputs = [
-    gtk2 libjack2 lilv lv2 python3 serd sord sratom suil
+    gtk2
+    libjack2
+    lilv
+    lv2
+    python3
+    serd
+    sord
+    sratom
+    suil
   ];
 
   meta = with lib; {
