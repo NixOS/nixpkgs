@@ -13,17 +13,17 @@
 
 buildPythonPackage rec {
   pname = "tenacity";
-  version = "8.4.1";
-  format = "pyproject";
+  version = "8.5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VLFBK4eN334fFXfNSVJ7rYze8yQhvVmb6sDGw/EFgv0=";
+    hash = "sha256-i8bAyKCbMebK0TxHr77RpWdRglCpoXFBhYLtjZwgyng=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pbr
     setuptools-scm
   ];
@@ -38,8 +38,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "tenacity" ];
 
   meta = with lib; {
-    homepage = "https://github.com/jd/tenacity";
     description = "Retrying library for Python";
+    homepage = "https://github.com/jd/tenacity";
+    changelog = "https://github.com/jd/tenacity/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jakewaksbaum ];
   };
