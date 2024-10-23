@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   fetchFromGitHub,
   git,
@@ -105,12 +106,18 @@ python3.pkgs.buildPythonApplication rec {
     export PATH="$PATH:$out/bin:${lib.makeBinPath [ git ]}"
   '';
 
-  pytestFlagsArray = [
-    "tests"
-    # Disable warnings
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+  pytestFlagsArray =
+    [
+      "tests"
+      # Disable warnings
+      "-W"
+      "ignore::DeprecationWarning"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      # Disable warnings when falling back to kqueue
+      "-W"
+      "ignore::UserWarning:watchdog.observers"
+    ];
 
   disabledTestPaths = [
     # Disable tests that requires networking or complex setup
