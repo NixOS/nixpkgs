@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-sdk";
-  version = "0.1.32";
+  version = "0.1.33";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     rev = "refs/tags/sdk==${version}";
-    hash = "sha256-qOxtrRbdK0M4aFWJX0SFn7U27rvAyqu53iCbYZX3s8A=";
+    hash = "sha256-oSkF82AvIycGaw0Pb2tldtvjyG9HkXPlSE6onRbDDPE=";
   };
 
   sourceRoot = "${src.name}/libs/sdk-py";
@@ -40,12 +40,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langgraph_sdk" ];
 
   passthru = {
-    # python3Packages.langgraph-sdk depends on python3Packages.langgraph. langgraph-cli is independent of both.
     updateScript = writeScript "update.sh" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p nix-update
 
-      set -eu -o pipefail
+      set -eu -o pipefail +e
       nix-update --commit --version-regex '(.*)' python3Packages.langgraph
       nix-update --commit --version-regex 'sdk==(.*)' python3Packages.langgraph-sdk
       nix-update --commit --version-regex 'checkpoint==(.*)' python3Packages.langgraph-checkpoint
