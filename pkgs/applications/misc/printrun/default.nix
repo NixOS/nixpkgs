@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "printrun";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "kliment";
     repo = "Printrun";
     rev = "refs/tags/printrun-${version}";
-    hash = "sha256-MANgxE3z8xq8ScxdxhwfEVsLMF9lgcdSjJZ0qu5p3ps=";
+    hash = "sha256-INJNGAmghoPIiivQp6AV1XmhyIu8SjfKqL8PTpi/tkY=";
   };
 
   postPatch = ''
