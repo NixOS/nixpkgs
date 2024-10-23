@@ -1,12 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  python3,
+  python3Packages,
 }:
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "hyfetch";
   version = "1.99.0";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
@@ -15,9 +15,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-GL1/V+LgSXJ4b28PfinScDrJhU9VDa4pVi24zWEzbAk=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    typing-extensions
-    setuptools
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
+    python3Packages.typing-extensions
   ];
 
   # No test available
@@ -27,7 +30,7 @@ python3.pkgs.buildPythonApplication rec {
     "hyfetch"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "neofetch with pride flags <3";
     longDescription = ''
       HyFetch is a command-line system information tool fork of neofetch.
@@ -39,8 +42,11 @@ python3.pkgs.buildPythonApplication rec {
       icon set you are using, etc.
     '';
     homepage = "https://github.com/hykilpikonna/HyFetch";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "hyfetch";
-    maintainers = with maintainers; [ yisuidenghua ];
+    maintainers = with lib.maintainers; [
+      yisuidenghua
+      isabelroses
+    ];
   };
 }
