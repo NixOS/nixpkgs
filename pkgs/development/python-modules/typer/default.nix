@@ -6,6 +6,7 @@
   coverage,
   fetchPypi,
   pdm-backend,
+  procps,
   pytest-sugar,
   pytest-xdist,
   pytestCheckHook,
@@ -48,6 +49,8 @@ buildPythonPackage rec {
     pytest-sugar
     pytest-xdist
     pytestCheckHook
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    procps
   ];
 
   preCheck = ''
