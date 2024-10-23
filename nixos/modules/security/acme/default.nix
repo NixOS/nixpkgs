@@ -376,22 +376,24 @@ let
 
         LoadCredential = lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles;
 
-        ExecStartPost =
-          let
-            manageServices =
-              cmd: services:
-              lib.optionalString (services != [ ]) "systemctl --no-block ${cmd} ${lib.escapeShellArgs services}";
-          in 
-          # Run as root (Prefixed with +)
-          "+" + (pkgs.writeShellScript "acme-postrun" ''
+        # Run as root (Prefixed with +)
+        ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
           cd /var/lib/acme/${lib.escapeShellArg cert}
-          ${manageServices "reload-or-restart" data.conflictingServices}
           if [ -e renewed ]; then
             rm renewed
             ${data.postRun}
-            ${manageServices "try-reload-or-restart" data.reloadServices}
+            ${lib.optionalString (data.reloadServices != [])
+                "systemctl --no-block try-reload-or-restart ${lib.escapeShellArgs data.reloadServices}"
+            }
           fi
         '');
+
+        # Start conflicting services after finishing
+        # TODO: How to start only if they were actually running and stopped for cert renewal?
+        ExecStopPost = lib.optionalString
+          (data.conflictingServices != [])
+          # Run as root (Prefixed with +)
+          "+systemctl --no-block restart ${lib.escapeShellArgs data.conflictingServices}";
       } // (
         let
           needsToOpenPrivilegedPort =
