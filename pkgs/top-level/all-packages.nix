@@ -10892,8 +10892,6 @@ with pkgs;
 
   overmind = callPackage ../applications/misc/overmind { };
 
-  oxker = callPackage ../applications/misc/oxker { };
-
   oxlint = callPackage ../development/tools/oxlint { };
 
   ovito = qt6Packages.callPackage ../applications/graphics/ovito {
