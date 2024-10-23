@@ -1001,6 +1001,7 @@ mapAliases {
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
   rr-unstable = rr; # Added 2022-09-17
   rtx = mise; # Added 2024-01-05
+  ruff = python3Packages.ruff; # Moved 2024-10-22
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
   rustc-wasm32 = rustc; # Added 2023-12-01
