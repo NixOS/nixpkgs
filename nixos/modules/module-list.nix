@@ -1283,6 +1283,7 @@
   ./services/networking/zerotierone.nix
   ./services/networking/zeronsd.nix
   ./services/networking/znc/default.nix
+  ./services/openmesh/xnode/admin.nix
   ./services/printing/cupsd.nix
   ./services/printing/ipp-usb.nix
   ./services/printing/cups-pdf.nix
