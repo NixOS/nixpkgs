@@ -47,6 +47,15 @@ stdenv.mkDerivation rec {
     sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
   '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
     sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
+  ''
+    # An accidental inclusion in https://marc.info/?l=glibc-alpha&m=150511271003225&w=2
+    # resulted in a getcwd prototype to be added in when it isn't needed.
+    # Clang does not like this unless the "overridable" attribute was appied.
+    # Since we don't need to redeclare getcwd, we can just remove it.
+    #
+    # Issue: https://github.com/NixOS/nixpkgs/issues/348658
+    + lib.optionalString (stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin) ''
+    substituteInPlace gettext-runtime/intl/dcigettext.c --replace-fail "char *getcwd ();" ""
   '';
 
   strictDeps = true;
