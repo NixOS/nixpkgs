@@ -2,7 +2,7 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     io::{BufRead, Read, Write},
-    os::unix::{fs::PermissionsExt, process::CommandExt},
+    os::unix::fs::PermissionsExt,
     path::{Path, PathBuf},
     rc::Rc,
     str::FromStr,
@@ -13,6 +13,7 @@ use std::{
 use anyhow::{anyhow, bail, Context, Result};
 use dbus::{
     blocking::{stdintf::org_freedesktop_dbus::Properties, LocalConnection, Proxy},
+    channel::Channel,
     Message,
 };
 use glob::glob;
@@ -24,6 +25,7 @@ use nix::{
         signal::{self, SigHandler, Signal},
         stat::Mode,
     },
+    unistd::seteuid,
 };
 use regex::Regex;
 use syslog::Facility;
@@ -884,20 +886,7 @@ fn remove_file_if_exists(p: impl AsRef<Path>) -> std::io::Result<()> {
 }
 
 /// Performs switch-to-configuration functionality for a single non-root user
-fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
-    if Path::new(&parent_exe)
-        != Path::new("/proc/self/exe")
-            .canonicalize()
-            .context("Failed to get full path to current executable")?
-            .as_path()
-    {
-        eprintln!(
-            r#"This program is not meant to be called from outside of switch-to-configuration."#
-        );
-        die();
-    }
-
-    let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
+fn do_user_switch(dbus_conn: LocalConnection) -> anyhow::Result<()> {
     let (systemd, _) = new_dbus_proxies(&dbus_conn);
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
@@ -1662,30 +1651,17 @@ won't take effect until you reboot the system.
                     &user_dbus_path,
                     Duration::from_millis(5000),
                 );
-                let gid: u32 = proxy
-                    .get("org.freedesktop.login1.User", "GID")
-                    .with_context(|| format!("Failed to get GID for {name}"))?;
-
-                let runtime_path: String = proxy
-                    .get("org.freedesktop.login1.User", "RuntimePath")
-                    .with_context(|| format!("Failed to get runtime directory for {name}"))?;
 
                 eprintln!("reloading user units for {}...", name);
-                let myself = Path::new("/proc/self/exe")
-                    .canonicalize()
-                    .context("Failed to get full path to /proc/self/exe")?;
-
-                std::process::Command::new(&myself)
-                    .uid(uid)
-                    .gid(gid)
-                    .env_clear()
-                    .env("XDG_RUNTIME_DIR", runtime_path)
-                    .env("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE", &myself)
-                    .spawn()
-                    .with_context(|| format!("Failed to spawn user activation for {name}"))?
-                    .wait()
-                    .with_context(|| format!("Failed to run user activation for {name}"))?;
+                match get_user_dbus_conn(proxy, &name, uid).map(|conn| do_user_switch(conn)) {
+                    Ok(Err(err)) | Err(err) => {
+                        eprintln!("Failed to reload user units for {}: {err}", name);
+                    }
+                    _ => {}
+                }
             }
+
+            seteuid(0.into()).context("Failed to seteuid to 0")?;
         }
     }
 
@@ -1938,15 +1914,44 @@ won't take effect until you reboot the system.
     std::process::exit(exit_code);
 }
 
+fn get_user_dbus_conn(
+    proxy: Proxy<'_, &LocalConnection>,
+    name: &str,
+    uid: u32,
+) -> anyhow::Result<LocalConnection> {
+    let runtime_path: String = proxy
+        .get("org.freedesktop.login1.User", "RuntimePath")
+        .with_context(|| format!("Failed to get runtime directory for {name}"))?;
+
+    let dbus_socket_path = PathBuf::from_str(&runtime_path)
+        .with_context(|| format!("Invalid user runtime path {}", runtime_path))?
+        .join("bus");
+
+    let dbus_socket_path = format!(
+        "unix:path={}",
+        dbus_socket_path.to_str().with_context(|| format!(
+            "Invalid UTF-8 in DBus socket path {}",
+            dbus_socket_path.display()
+        ))?
+    );
+
+    seteuid(uid.into()).with_context(|| format!("Failed to seteuid to {}", uid))?;
+
+    let mut user_dbus_channel = Channel::open_private(&dbus_socket_path)
+        .with_context(|| format!("Failed to connect to DBus socket for user {}", name))?;
+
+    user_dbus_channel.register().with_context(|| {
+        format!(
+            "Failed to register connection to DBus socket for user {}",
+            name
+        )
+    })?;
+
+    Ok(LocalConnection::from(user_dbus_channel))
+}
+
 fn main() -> anyhow::Result<()> {
-    match (
-        unsafe { nix::libc::geteuid() },
-        std::env::var("__NIXOS_SWITCH_TO_CONFIGURATION_PARENT_EXE").ok(),
-    ) {
-        (0, None) => do_system_switch(),
-        (1..=u32::MAX, None) => bail!("This program does not support being ran outside of the switch-to-configuration environment"),
-        (_, Some(parent_exe)) => do_user_switch(parent_exe),
-    }
+    do_system_switch()
 }
 
 #[cfg(test)]
