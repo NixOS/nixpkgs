@@ -24376,8 +24376,6 @@ with pkgs;
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
-  janus-gateway = callPackage ../servers/janus-gateway { };
-
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
