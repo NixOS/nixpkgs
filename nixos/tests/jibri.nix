@@ -22,9 +22,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         forceSSL = true;
       };
 
-      security.acme.email = "me@example.org";
+      security.acme.defaults.email = "me@example.org";
       security.acme.acceptTerms = true;
-      security.acme.server = "https://example.com"; # self-signed only
+      security.acme.defaults.server = "https://example.com"; # self-signed only
     };
 
   testScript = ''
