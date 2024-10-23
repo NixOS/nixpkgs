@@ -311,6 +311,12 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
+  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
+    tbb = tbb_2021_11;
+    cereal = cereal_1_3_2;
+    opencv = opencv.override { enableGtk3 = true; };
+  };
+
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
   beeper = callPackage ../applications/networking/instant-messengers/beeper { };
@@ -443,6 +449,10 @@ with pkgs;
   ciel = callPackage ../tools/package-management/ciel { };
 
   circt = callPackage ../development/compilers/circt { };
+
+  clang-uml = callPackage ../by-name/cl/clang-uml/package.nix {
+    stdenv = clangStdenv;
+  };
 
   classicube = callPackage ../games/classicube { };
 
@@ -1906,7 +1916,7 @@ with pkgs;
 
   scarab = callPackage ../tools/games/scarab { };
 
-  sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
+  inherit (callPackage ../development/libraries/sdbus-cpp { }) sdbus-cpp sdbus-cpp_2;
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
@@ -13799,7 +13809,9 @@ with pkgs;
 
   wipe = callPackage ../tools/security/wipe { };
 
-  wireguard-go = callPackage ../tools/networking/wireguard-go { };
+  wireguard-go = callPackage ../tools/networking/wireguard-go {
+    buildGoModule = buildGo122Module;
+  };
 
   wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
@@ -24313,10 +24325,10 @@ with pkgs;
   home-assistant = callPackage ../servers/home-assistant { };
 
   buildHomeAssistantComponent = callPackage ../servers/home-assistant/build-custom-component { };
-  home-assistant-custom-components = lib.recurseIntoAttrs
-    (callPackage ../servers/home-assistant/custom-components {
-      inherit (home-assistant.python.pkgs) callPackage;
-    });
+  home-assistant-custom-components = lib.recurseIntoAttrs (lib.packagesFromDirectoryRecursive {
+    inherit (home-assistant.python.pkgs) callPackage;
+    directory = ../servers/home-assistant/custom-components;
+  });
   home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
     (callPackage ../servers/home-assistant/custom-lovelace-modules {});
 
@@ -25147,10 +25159,6 @@ with pkgs;
   slurm-spank-x11 = callPackage ../servers/computing/slurm-spank-x11 { };
 
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
-
-  tailscale = callPackage ../servers/tailscale {
-    buildGoModule = buildGo123Module;
-  };
 
   tailscale-systray = callPackage ../applications/misc/tailscale-systray { };
 
@@ -28878,8 +28886,6 @@ with pkgs;
   epgstation = callPackage ../applications/video/epgstation { };
 
   ephemeral = callPackage ../applications/networking/browsers/ephemeral { };
-
-  epic5 = callPackage ../applications/networking/irc/epic5 { };
 
   epick = callPackage ../applications/graphics/epick {
     inherit (darwin.apple_sdk.frameworks) AppKit;
@@ -33560,8 +33566,6 @@ with pkgs;
 
   xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
-  xchm = callPackage ../applications/misc/xchm { };
-
   inherit (xorg) xcompmgr;
 
   x-create-mouse-void = callPackage ../applications/window-managers/x-create-mouse-void { };
@@ -34530,7 +34534,7 @@ with pkgs;
     fltk = fltk-minimal;
   };
 
-  factorio = callPackage ../games/factorio { releaseType = "alpha"; };
+  factorio = callPackage ../by-name/fa/factorio/package.nix { releaseType = "alpha"; };
 
   factorio-experimental = factorio.override { releaseType = "alpha"; experimental = true; };
 
@@ -34544,9 +34548,9 @@ with pkgs;
 
   factorio-space-age-experimental = factorio.override { releaseType = "expansion"; experimental = true; };
 
-  factorio-mods = callPackage ../games/factorio/mods.nix { };
+  factorio-mods = callPackage ../by-name/fa/factorio/mods.nix { };
 
-  factorio-utils = callPackage ../games/factorio/utils.nix { };
+  factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
   fairymax = callPackage ../games/fairymax { };
 

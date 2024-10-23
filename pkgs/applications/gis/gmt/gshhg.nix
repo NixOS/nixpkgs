@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       Mapping Tools.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ tviti ];
+    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ tviti ]);
   };
 
 }

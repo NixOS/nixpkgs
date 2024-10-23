@@ -1817,6 +1817,13 @@
     githubId = 338268;
     name = "Alexei Robyn";
   };
+  artem = {
+    email = "a@pelenitsyn.top";
+    github = "ulysses4ever";
+    githubId = 6832600;
+    name = "Artem Pelenitsyn";
+    matrix = "@artem.types:matrix.org";
+  };
   artemist = {
     email = "me@artem.ist";
     github = "artemist";
@@ -8938,6 +8945,12 @@
     githubId = 6109326;
     name = "David Hummel";
   };
+  husjon = {
+    name = "Jon Erling Hustadnes";
+    email = "jonerling.hustadnes+nixpkgs@gmail.com";
+    github = "husjon";
+    githubId = 554229;
+  };
   husky = {
     email = "husky@husky.sh";
     github = "huskyistaken";
@@ -9479,6 +9492,12 @@
     github = "ivarmedi";
     githubId = 1318743;
     name = "Ivar";
+  };
+  ivyfanchiang = {
+    email = "dev@ivyfanchiang.ca";
+    github = "hexadecimalDinosaur";
+    githubId = 36890802;
+    name = "Ivy Fan-Chiang";
   };
   iwanb = {
     email = "tracnar@gmail.com";
@@ -18390,7 +18409,7 @@
   };
   rnhmjoj = {
     email = "rnhmjoj@inventati.org";
-    matrix = "@rnhmjoj:maxwell.ydns.eu";
+    matrix = "@rnhmjoj:eurofusion.eu";
     github = "rnhmjoj";
     githubId = 2817565;
     name = "Michele Guerini Rocco";

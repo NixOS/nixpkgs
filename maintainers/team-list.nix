@@ -963,6 +963,21 @@ with lib.maintainers;
     shortName = "Serokell employees";
   };
 
+  stdenv = {
+    members = [
+      artturin
+      emily
+      ericson2314
+      philiptaron
+      reckenrode
+      RossComputerGuy
+    ];
+    scope = "Maintain the standard environment and its surrounding logic.";
+    shortName = "stdenv";
+    enableFeatureFreezePing = true;
+    githubTeams = [ "stdenv" ];
+  };
+
   steam = {
     members = [
       atemu
