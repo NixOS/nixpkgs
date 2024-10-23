@@ -12,16 +12,17 @@
   qttools,
   qtwayland,
   qtwebsockets,
+  gitUpdater
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ausweisapp";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "Governikus";
     repo = "AusweisApp2";
     rev = finalAttrs.version;
-    hash = "sha256-+hkbtxw1Bj/lMgyf3OkwmRXyZL6CS3bTHUlGH9xxe/E=";
+    hash = "sha256-YjnMDHXzL16XMVwewoQztE5yjwn1MA1KAiEmEjIYoPY=";
   };
 
   nativeBuildInputs = [
