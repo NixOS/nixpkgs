@@ -24440,8 +24440,6 @@ with pkgs;
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
-  janus-gateway = callPackage ../servers/janus-gateway { };
-
   janusgraph = callPackage ../servers/nosql/janusgraph { };
 
   jboss = callPackage ../servers/http/jboss { };
@@ -30300,7 +30298,7 @@ with pkgs;
 
   jaeles = callPackage ../tools/security/jaeles { };
 
-  jalv = callPackage ../applications/audio/jalv { };
+  jalv-qt = jalv.override { useQt = true; };
 
   jameica = callPackage ../applications/office/jameica {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -32309,8 +32307,6 @@ with pkgs;
   scantailor-universal = libsForQt5.callPackage ../applications/graphics/scantailor/universal.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
-
-  scite = callPackage ../applications/editors/scite { };
 
   scli = callPackage ../applications/misc/scli { };
 
@@ -37145,8 +37141,6 @@ with pkgs;
   guetzli = callPackage ../applications/graphics/guetzli { };
 
   gummi = callPackage ../applications/misc/gummi { };
-
-  gummy = callPackage ../tools/misc/gummy { };
 
   hashpump = callPackage ../tools/misc/hashpump { };
 

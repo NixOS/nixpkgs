@@ -5,7 +5,7 @@
   fetchFromGitHub,
   alsa-utils,
   copyDesktopItems,
-  electron_30,
+  electron_32,
   makeDesktopItem,
   makeWrapper,
   nix-update-script,
@@ -15,16 +15,16 @@
 
 buildNpmPackage rec {
   pname = "teams-for-linux";
-  version = "1.11.0";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "IsmaelMartinez";
     repo = "teams-for-linux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UNe4stYEOTcQc+ap1/v9EXjHTwKvLYd4t8EPuojDyqw=";
+    hash = "sha256-fSZ94Px0NuxUZqc9cHE6czG/VzNsWp+UXllq7kEQvtI=";
   };
 
-  npmDepsHash = "sha256-OpoPXcSiHnK4UYFimY+yOM6M3dAOcvZ82DdGc++oNLM=";
+  npmDepsHash = "sha256-MfPdOqxiMDsvxsS3yWukRokDitqWQpTpK407xVX461o=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -42,7 +42,7 @@ buildNpmPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    cp -r ${electron_30.dist} electron-dist
+    cp -r ${electron_32.dist} electron-dist
     chmod -R u+w electron-dist
 
     npm exec electron-builder -- \
@@ -50,7 +50,7 @@ buildNpmPackage rec {
         -c.npmRebuild=true \
         -c.asarUnpack="**/*.node" \
         -c.electronDist=electron-dist \
-        -c.electronVersion=${electron_30.version}
+        -c.electronVersion=${electron_32.version}
 
     runHook postBuild
   '';
@@ -72,7 +72,7 @@ buildNpmPackage rec {
       popd
 
       # Linux needs 'aplay' for notification sounds
-      makeWrapper '${lib.getExe electron_30}' "$out/bin/teams-for-linux" \
+      makeWrapper '${lib.getExe electron_32}' "$out/bin/teams-for-linux" \
         --prefix PATH : ${
           lib.makeBinPath [
             alsa-utils
@@ -108,6 +108,8 @@ buildNpmPackage rec {
   ];
 
   passthru.updateScript = nix-update-script { };
+
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Unofficial Microsoft Teams client for Linux";
