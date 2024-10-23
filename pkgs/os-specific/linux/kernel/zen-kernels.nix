@@ -83,8 +83,6 @@ let
       HZ = freeform "1000";
       HZ_1000 = yes;
 
-      # Alternative zpool for zswap
-      Z3FOLD = yes;
     } // lib.optionalAttrs (isLqx) {
       # Google's BBRv3 TCP congestion Control
       TCP_CONG_BBR = yes;
@@ -101,7 +99,6 @@ let
       # Swap storage is compressed with LZ4 using zswap
       ZSWAP_COMPRESSOR_DEFAULT_LZ4  = lib.mkOptionDefault yes;
       ZSWAP_COMPRESSOR_DEFAULT_ZSTD = lib.mkDefault no;
-      ZSWAP_ZPOOL_DEFAULT_Z3FOLD = yes;
 
       # Fix error: unused option: XXX.
       CFS_BANDWIDTH = lib.mkForce (option no);
