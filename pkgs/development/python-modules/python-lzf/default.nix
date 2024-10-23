@@ -26,6 +26,7 @@ buildPythonPackage rec {
     description = "liblzf python bindings";
     homepage = "https://github.com/teepark/python-lzf";
     license = licenses.mit;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

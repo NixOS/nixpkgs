@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Library for building interactive maps";
     homepage = "http://modestmaps.com";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

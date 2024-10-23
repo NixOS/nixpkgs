@@ -47,5 +47,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for FTGL (FreeType for OpenGL)";
     license = licenses.gpl2Plus;
+    maintainers = [ ];
   };
 }

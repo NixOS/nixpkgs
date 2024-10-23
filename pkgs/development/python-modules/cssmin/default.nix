@@ -22,5 +22,6 @@ buildPythonPackage rec {
     mainProgram = "cssmin";
     homepage = "https://github.com/zacharyvoase/cssmin";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -58,5 +58,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/numba/llvmlite";
     homepage = "http://llvmlite.pydata.org/";
     license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

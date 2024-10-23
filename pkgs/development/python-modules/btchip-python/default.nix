@@ -39,5 +39,6 @@ buildPythonPackage rec {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

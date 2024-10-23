@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/makinacorpus/easydict";
     license = licenses.lgpl3;
     description = "Access dict values as attributes (works recursively)";
+    maintainers = [ ];
   };
 }

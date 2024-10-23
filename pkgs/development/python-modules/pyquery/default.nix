@@ -64,5 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/gawel/pyquery";
     changelog = "https://github.com/gawel/pyquery/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
+    maintainers = [ ];
   };
 }

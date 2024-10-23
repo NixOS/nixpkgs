@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "Python unittest test suite for Robot Framework";
     homepage = "https://github.com/collective/robotsuite/";
     license = licenses.gpl3Only;
+    maintainers = [ ];
   };
 }

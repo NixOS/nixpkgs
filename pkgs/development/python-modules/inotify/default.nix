@@ -40,6 +40,7 @@ buildPythonPackage {
     homepage = "https://github.com/dsoprea/PyInotify";
     description = "Monitor filesystems events on Linux platforms with inotify";
     license = lib.licenses.gpl2;
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

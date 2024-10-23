@@ -32,6 +32,7 @@ buildPythonPackage rec {
       (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
     description = "XMPP library for Python";
     license = licenses.mit;
+    maintainers = [ ];
     homepage = "http://sleekxmpp.com/";
   };
 }

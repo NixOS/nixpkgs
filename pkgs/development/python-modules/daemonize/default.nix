@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Library to enable your code run as a daemon process on Unix-like systems";
     homepage = "https://github.com/thesharp/daemonize";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

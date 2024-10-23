@@ -45,5 +45,6 @@ buildPythonPackage rec {
     description = "Create pep517 compliant packages from the meson build system";
     homepage = "https://gitlab.com/thiblahute/mesonpep517";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

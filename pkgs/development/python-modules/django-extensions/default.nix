@@ -91,5 +91,6 @@ buildPythonPackage rec {
     description = "Collection of custom extensions for the Django Framework";
     homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

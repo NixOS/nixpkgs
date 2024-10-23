@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "C++ headers for C extension development";
     homepage = "https://github.com/nucleic/cppy";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

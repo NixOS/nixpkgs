@@ -24,4 +24,8 @@ buildPythonPackage rec {
     six
     python-dateutil
   ];
+
+  meta = {
+    maintainers = [ ];
+  };
 }

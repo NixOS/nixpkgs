@@ -34,5 +34,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://genshi.edgewall.org/";
     license = licenses.bsd0;
+    maintainers = [ ];
   };
 }

@@ -35,6 +35,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Test utilities for code working with files and commands";
     license = licenses.mit;
+    maintainers = [ ];
     homepage = "https://github.com/jupyter/testpath";
   };
 }

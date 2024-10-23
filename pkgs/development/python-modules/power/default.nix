@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Cross-platform system power status information";
     homepage = "https://github.com/Kentzo/Power";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

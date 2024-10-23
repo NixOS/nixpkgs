@@ -29,5 +29,6 @@ buildPythonPackage rec {
     description = "Testing infrastructure for Zope and Plone projects";
     homepage = "https://github.com/plone/plone.testing";
     license = lib.licenses.bsd3;
+    maintainers = [ ];
   };
 }

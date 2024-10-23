@@ -52,5 +52,6 @@ buildPythonPackage {
     description = "Python client for Etcd";
     homepage = "https://github.com/jplana/python-etcd";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

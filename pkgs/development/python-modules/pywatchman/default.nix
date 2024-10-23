@@ -27,5 +27,6 @@ buildPythonPackage rec {
     description = "Watchman client for Python";
     homepage = "https://facebook.github.io/watchman/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

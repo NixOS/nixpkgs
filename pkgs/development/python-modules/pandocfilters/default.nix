@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Python module for writing pandoc filters, with a collection of examples";
     homepage = "https://github.com/jgm/pandocfilters";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -35,6 +35,7 @@ buildPythonPackage rec {
     description = "Recursive descent parsing library based on functional combinators";
     homepage = "https://github.com/vlasovskikh/funcparserlib";
     license = licenses.mit;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

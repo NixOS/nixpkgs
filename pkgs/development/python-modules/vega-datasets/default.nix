@@ -37,5 +37,6 @@ buildPythonPackage rec {
       homepage = "https://github.com/altair-viz/vega_datasets";
       changelog = "https://github.com/altair-viz/vega_datasets/blob/${tag}/CHANGES.md";
       license = lib.licenses.mit;
+      maintainers = [ ];
     };
 }

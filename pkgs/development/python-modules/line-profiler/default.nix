@@ -59,5 +59,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyutils/line_profiler";
     changelog = "https://github.com/pyutils/line_profiler/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

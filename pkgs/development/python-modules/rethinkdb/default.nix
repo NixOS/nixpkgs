@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Python driver library for the RethinkDB database server";
     homepage = "https://github.com/RethinkDB/rethinkdb-python";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

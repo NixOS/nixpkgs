@@ -54,6 +54,7 @@ buildPythonPackage rec {
   meta = {
     description = "Wrappers to build Python packages using PEP 517 hooks";
     license = lib.licenses.mit;
+    maintainers = [ ];
     homepage = "https://github.com/pypa/pep517";
   };
 }

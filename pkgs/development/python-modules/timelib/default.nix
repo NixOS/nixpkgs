@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Parse english textual date descriptions";
     homepage = "https://github.com/pediapress/timelib/";
     license = licenses.zlib;
+    maintainers = [ ];
   };
 }

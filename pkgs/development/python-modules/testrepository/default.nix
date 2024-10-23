@@ -37,5 +37,6 @@ buildPythonPackage rec {
     mainProgram = "testr";
     homepage = "https://pypi.python.org/pypi/testrepository";
     license = licenses.bsd2;
+    maintainers = [ ];
   };
 }

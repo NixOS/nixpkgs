@@ -37,5 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stephan192/dwdwfsapi";
     changelog = "https://github.com/stephan192/dwdwfsapi/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
+    maintainers = [ ];
   };
 }

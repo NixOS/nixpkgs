@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Python NTP library";
     homepage = "http://code.google.com/p/ntplib/";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

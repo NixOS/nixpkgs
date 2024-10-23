@@ -53,6 +53,7 @@ buildPythonPackage rec {
     description = "Vmprof client";
     mainProgram = "vmprofshow";
     license = licenses.mit;
+    maintainers = [ ];
     homepage = "https://vmprof.readthedocs.org/";
   };
 }

@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Backport of traceback to older supported Pythons";
     homepage = "https://pypi.python.org/pypi/traceback2/";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

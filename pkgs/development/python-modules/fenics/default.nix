@@ -286,6 +286,7 @@ let
       homepage = "https://fenicsproject.org/";
       platforms = lib.platforms.all;
       license = lib.licenses.lgpl3;
+      maintainers = [ ];
     };
   };
 in

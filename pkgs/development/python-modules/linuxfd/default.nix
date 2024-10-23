@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/FrankAbelbeck/linuxfd";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ lgpl3Plus ];
+    maintainers = [ ];
   };
 }

@@ -80,5 +80,6 @@ buildPythonPackage rec {
     description = "Enhancements to virtualenv";
     homepage = "https://pypi.python.org/pypi/virtualenvwrapper";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

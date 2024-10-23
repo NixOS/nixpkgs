@@ -36,5 +36,6 @@ buildPythonPackage rec {
     mainProgram = "podcats";
     homepage = "https://github.com/jakubroztocil/podcats";
     license = lib.licenses.bsd2;
+    maintainers = [ ];
   };
 }

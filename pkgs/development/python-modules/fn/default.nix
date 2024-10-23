@@ -35,5 +35,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/kachayev/fn.py";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

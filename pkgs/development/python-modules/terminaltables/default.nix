@@ -18,5 +18,6 @@ buildPythonPackage rec {
     description = "Display simple tables in terminals";
     homepage = "https://github.com/Robpol86/terminaltables";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

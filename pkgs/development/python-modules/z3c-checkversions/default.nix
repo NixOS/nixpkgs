@@ -36,5 +36,6 @@ buildPythonPackage rec {
     description = "Find newer package versions on PyPI";
     mainProgram = "checkversions";
     license = licenses.zpl21;
+    maintainers = [ ];
   };
 }

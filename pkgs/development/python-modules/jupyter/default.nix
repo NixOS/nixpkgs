@@ -41,6 +41,7 @@ buildPythonPackage rec {
     description = "Installs all the Jupyter components in one go";
     homepage = "https://jupyter.org/";
     license = licenses.bsd3;
+    maintainers = [ ];
     priority = 100; # This is a metapackage which is unimportant
   };
 }

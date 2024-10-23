@@ -28,5 +28,6 @@ buildPythonPackage rec {
     description = "Macaroon library for Python";
     homepage = "https://github.com/ecordell/pymacaroons";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "TextUI colors for Python";
     homepage = "https://github.com/kennethreitz/crayons";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

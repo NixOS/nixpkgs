@@ -22,5 +22,6 @@ buildPythonPackage rec {
     description = "get live-data from mvg-live.de";
     homepage = "https://github.com/pc-coholic/PyMVGLive";
     license = licenses.free;
+    maintainers = [ ];
   };
 }

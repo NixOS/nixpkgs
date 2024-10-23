@@ -30,5 +30,6 @@ buildPythonPackage rec {
     mainProgram = "lcov_cobertura";
     homepage = "https://eriwen.github.io/lcov-to-cobertura-xml/";
     license = lib.licenses.asl20;
+    maintainers = [ ];
   };
 }

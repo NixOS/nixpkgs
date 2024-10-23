@@ -23,5 +23,6 @@ buildPythonPackage rec {
     description = "Pure Python library that lets one to read metadata from media files";
     homepage = "http://hg.hardcoded.net/hsaudiotag/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

@@ -30,5 +30,6 @@ buildPythonPackage rec {
     description = "py.test plugin to store test expectations and mark tests based on them";
     homepage = "https://github.com/gsnedders/pytest-expect";
     license = lib.licenses.mit;
+    maintainers = [ ];
   };
 }

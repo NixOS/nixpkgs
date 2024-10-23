@@ -22,5 +22,6 @@ buildPythonPackage rec {
     mainProgram = "genzshcomp";
     homepage = "https://bitbucket.org/hhatto/genzshcomp/";
     license = licenses.bsd0;
+    maintainers = [ ];
   };
 }

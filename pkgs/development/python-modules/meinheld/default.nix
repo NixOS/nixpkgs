@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "High performance asynchronous Python WSGI Web Server";
     homepage = "https://meinheld.org/";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

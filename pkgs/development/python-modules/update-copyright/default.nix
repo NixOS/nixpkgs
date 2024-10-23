@@ -25,5 +25,6 @@ buildPythonPackage rec {
     mainProgram = "update-copyright.py";
     homepage = "http://blog.tremily.us/posts/update-copyright";
     license = licenses.gpl3;
+    maintainers = [ ];
   };
 }

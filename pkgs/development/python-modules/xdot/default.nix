@@ -67,5 +67,6 @@ buildPythonPackage rec {
     mainProgram = "xdot";
     homepage = "https://github.com/jrfonseca/xdot.py";
     license = licenses.lgpl3Plus;
+    maintainers = [ ];
   };
 }

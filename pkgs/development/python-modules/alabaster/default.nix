@@ -27,5 +27,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/bitprophet/alabaster";
     description = "Sphinx theme";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

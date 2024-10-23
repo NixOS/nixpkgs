@@ -36,6 +36,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/terencehonles/fusepy";
     license = licenses.isc;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

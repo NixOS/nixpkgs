@@ -59,6 +59,7 @@ buildPythonPackage rec {
       bsd3
       mit
     ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

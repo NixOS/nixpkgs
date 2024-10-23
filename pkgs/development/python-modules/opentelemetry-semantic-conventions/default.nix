@@ -30,5 +30,6 @@ buildPythonPackage {
   meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/opentelemetry-semantic-conventions";
     description = "OpenTelemetry Semantic Conventions";
+    maintainers = [ ];
   };
 }

@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://launchpad.net/versiontools";
     description = "Smart replacement for plain tuple used in __version__";
     license = licenses.lgpl2;
+    maintainers = [ ];
   };
 }

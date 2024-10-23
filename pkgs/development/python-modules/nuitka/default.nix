@@ -48,6 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python compiler with full language support and CPython compatibility";
     license = licenses.asl20;
+    maintainers = [ ];
     homepage = "https://nuitka.net/";
   };
 }

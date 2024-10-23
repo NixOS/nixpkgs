@@ -24,5 +24,6 @@ buildPythonPackage rec {
     description = "django-multiselectfield";
     homepage = "https://github.com/goinnn/django-multiselectfield";
     license = lib.licenses.lgpl3;
+    maintainers = [ ];
   };
 }

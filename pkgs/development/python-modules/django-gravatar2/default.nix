@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "Essential Gravatar support for Django";
     homepage = "https://github.com/twaddington/django-gravatar";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

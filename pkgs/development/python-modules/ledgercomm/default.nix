@@ -28,5 +28,6 @@ buildPythonPackage rec {
     mainProgram = "ledgercomm-send";
     homepage = "https://github.com/LedgerHQ/ledgercomm";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

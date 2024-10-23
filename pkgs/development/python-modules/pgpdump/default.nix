@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "Python library for parsing PGP packets";
     homepage = "https://github.com/toofishes/python-pgpdump";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

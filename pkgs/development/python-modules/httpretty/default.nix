@@ -42,5 +42,6 @@ buildPythonPackage rec {
     homepage = "https://httpretty.readthedocs.org/";
     description = "HTTP client request mocking tool";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

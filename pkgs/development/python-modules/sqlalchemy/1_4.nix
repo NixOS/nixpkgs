@@ -105,5 +105,6 @@ buildPythonPackage rec {
     description = "Database Toolkit for Python";
     homepage = "https://github.com/sqlalchemy/sqlalchemy";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

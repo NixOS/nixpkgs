@@ -20,5 +20,6 @@ buildPythonPackage rec {
     description = "Django app that integrates jQuery ColorPicker with the Django admin";
     homepage = "https://github.com/gsiegman/django-paintstore";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

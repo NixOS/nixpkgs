@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Capture stdout, stderr easily";
     homepage = "https://github.com/oinume/iocapture";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

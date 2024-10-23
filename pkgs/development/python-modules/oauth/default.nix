@@ -21,5 +21,6 @@ buildPythonPackage rec {
     homepage = "https://code.google.com/archive/p/oauth/";
     description = "Library for OAuth version 1.0a";
     license = licenses.mit;
+    maintainers = [ ];
   };
 }

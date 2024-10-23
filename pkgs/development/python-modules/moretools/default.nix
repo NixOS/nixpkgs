@@ -37,6 +37,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://bitbucket.org/userzimmermann/python-moretools";
     license = licenses.gpl3Plus;
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

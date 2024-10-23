@@ -32,4 +32,8 @@ buildPythonPackage rec {
     requests
     six
   ];
+
+  meta = {
+    maintainers = [ ];
+  };
 }

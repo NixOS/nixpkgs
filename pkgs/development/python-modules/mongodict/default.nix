@@ -21,5 +21,6 @@ buildPythonPackage rec {
     description = "MongoDB-backed Python dict-like interface";
     homepage = "https://github.com/turicas/mongodict/";
     license = licenses.gpl3;
+    maintainers = [ ];
   };
 }

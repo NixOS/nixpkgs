@@ -40,5 +40,6 @@ buildPythonPackage {
   meta = opentelemetry-api.meta // {
     homepage = "https://github.com/open-telemetry/opentelemetry-python/tree/main/exporter/opentelemetry-exporter-prometheus";
     description = "Prometheus Metric Exporter for OpenTelemetry";
+    maintainers = [ ];
   };
 }

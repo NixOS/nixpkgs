@@ -23,4 +23,8 @@ buildPythonPackage rec {
     pytest
     pytest-cov
   ];
+
+  meta = {
+    maintainers = [ ];
+  };
 }

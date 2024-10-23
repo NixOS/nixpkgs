@@ -55,5 +55,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter-sphinx/";
     changelog = "https://github.com/jupyter/jupyter-sphinx/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = licenses.bsd3;
+    maintainers = [ ];
   };
 }

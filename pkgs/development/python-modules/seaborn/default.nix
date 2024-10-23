@@ -69,5 +69,6 @@ buildPythonPackage rec {
     homepage = "https://seaborn.pydata.org/";
     changelog = "https://github.com/mwaskom/seaborn/blob/master/doc/whatsnew/${src.rev}.rst";
     license = with licenses; [ bsd3 ];
+    maintainers = [ ];
   };
 }

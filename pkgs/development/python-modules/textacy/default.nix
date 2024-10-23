@@ -67,5 +67,6 @@ buildPythonPackage rec {
     description = "Higher-level text processing, built on spaCy";
     homepage = "https://textacy.readthedocs.io/";
     license = licenses.asl20;
+    maintainers = [ ];
   };
 }

@@ -19,5 +19,6 @@ buildPythonPackage rec {
     mainProgram = "jsonpointer";
     homepage = "https://github.com/stefankoegl/python-json-pointer";
     license = licenses.bsd2; # "Modified BSD license, says pypi"
+    maintainers = [ ];
   };
 }
