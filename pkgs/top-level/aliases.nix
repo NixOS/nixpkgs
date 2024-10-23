@@ -1083,7 +1083,10 @@ mapAliases {
     steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable";
     steam = lib.warn "`steamPackages.steam` has been moved to top level as `steam-unwrapped`" steam-unwrapped;
     steam-fhsenv = lib.warn "`steamPackages.steam-fhsenv` has been moved to top level as `steam`" steam;
+    steam-fhsenv-small = lib.warn "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`; there is no longer a -small variant" steam;
     steam-fhsenv-without-steam = lib.warn "`steamPackages.steam-fhsenv-without-steam` has been moved to top level as `steam-fhsenv-without-steam`" steam-fhsenv-without-steam;
+    steam-runtime = throw "`steamPackages.steam-runtime` has been removed, as it's no longer supported or necessary";
+    steam-runtime-wrapped = throw "`steamPackages.steam-runtime-wrapped` has been removed, as it's no longer supported or necessary";
     steamcmd = lib.warn "`steamPackages.steamcmd` has been moved to top level as `steamcmd`" steamcmd;
   };
   steam-small = steam; # Added 2024-09-12
