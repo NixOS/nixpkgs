@@ -61,7 +61,7 @@ let
   llvmTargetsToBuild' = [ "AMDGPU" ] ++ builtins.map inferNativeTarget llvmTargetsToBuild;
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-llvm-${targetName}";
-  version = "6.0.2";
+  version = "6.1.2";
 
   outputs = [
     "out"
@@ -78,7 +78,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "llvm-project";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uGxalrwMNCOSqSFVrYUBi3ijkMEFFTrzFImmvZKQf6I=";
+    hash = "sha256-+pe3e65Ri5zOOYvoSUiN0Rto/Ss8OyRfqxRifToAO7g=";
   };
 
   nativeBuildInputs = [
