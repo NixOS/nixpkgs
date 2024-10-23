@@ -1,0 +1,13 @@
+diff --git a/lib/fuse_darwin_private.h b/lib/fuse_darwin_private.h
+index 4d4cc68..840b06f 100644
+--- a/lib/fuse_darwin_private.h
++++ b/lib/fuse_darwin_private.h
+@@ -38,7 +38,7 @@ extern "C" {
+ #endif
+ 
+ #ifndef FUSE_NFSSRV_PROG
+-#  define FUSE_NFSSRV_PROG "/usr/local/bin/go-nfsv4"
++#  define FUSE_NFSSRV_PROG "@out@/bin/go-nfsv4"
+ #endif
+ 
+ #ifndef OSXFUSE_VOLUME_ICON

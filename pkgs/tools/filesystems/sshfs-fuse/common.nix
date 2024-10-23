@@ -1,15 +1,12 @@
-{ version, sha256, platforms, patches ? [ ] }:
+{ version, sha256, platforms, patches ? [ ], fuse }:
 
 { lib, stdenv, fetchFromGitHub
 , meson, pkg-config, ninja, docutils, makeWrapper
-, fuse3, macfuse-stubs, glib
-, which, python3Packages
+, glib, which, python3Packages
 , openssh
 }:
 
-let
-  fuse = if stdenv.hostPlatform.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sshfs-fuse";
   inherit version;
 
@@ -53,7 +50,6 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     inherit platforms;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
-    longDescription = macfuse-stubs.warning;
     homepage = "https://github.com/libfuse/sshfs";
     license = licenses.gpl2Plus;
     mainProgram = "sshfs";
