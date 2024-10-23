@@ -36,7 +36,9 @@ let
   } // cfg.extraSettings;
   serverSettingsString = builtins.toJSON (lib.filterAttrsRecursive (n: v: v != null) serverSettings);
   serverSettingsFile = pkgs.writeText "server-settings.json" serverSettingsString;
-  serverAdminsFile = pkgs.writeText "server-adminlist.json" (builtins.toJSON cfg.admins);
+  playerListOption = name: list:
+    lib.optionalString (list != [])
+      "--${name}=${pkgs.writeText "${name}.json" (builtins.toJSON list)}";
   modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods cfg.mods-dat;
 in
 {
@@ -58,6 +60,30 @@ in
           The address to which the service should bind.
         '';
       };
+
+      allowedPlayers = lib.mkOption {
+        # I would personally prefer for `allowedPlayers = []` to mean "no-one
+        # can connect" but Factorio seems to ignore empty whitelists (even with
+        # --use-server-whitelist) so we can't implement that behaviour, so we
+        # might as well match theirs.
+        type = lib.types.listOf lib.types.str;
+        default = [];
+        example = [ "Rseding91" "Oxyd" ];
+        description = ''
+          If non-empty, only these player names are allowed to connect. The game
+          will not be able to save any changes made in-game with the /whitelist
+          console command, though they will still take effect until the server
+          is restarted.
+
+          If empty, the whitelist defaults to open, but can be managed with the
+          in-game /whitelist console command (see: /help whitelist), which will
+          cause changes to be saved to the game's state directory (see also:
+          `stateDirName`).
+        '';
+      };
+      # Opting not to include the banlist in addition the the whitelist because:
+      # - banlists are not as often known in advance,
+      # - losing banlist changes on restart seems much more of a headache.
 
       admins = lib.mkOption {
         type = lib.types.listOf lib.types.str;
@@ -298,7 +324,9 @@ in
           }"
           (lib.optionalString cfg.loadLatestSave "--start-server-load-latest")
           (lib.optionalString (cfg.mods != []) "--mod-directory=${modDir}")
-          (lib.optionalString (cfg.admins != []) "--server-adminlist=${serverAdminsFile}")
+          (playerListOption "server-adminlist" cfg.admins)
+          (playerListOption "server-whitelist" cfg.allowedPlayers)
+          (lib.optionalString (cfg.allowedPlayers != []) "--use-server-whitelist")
         ];
 
         # Sandboxing
