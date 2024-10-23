@@ -8765,6 +8765,8 @@ self: super: with self; {
 
   natural = callPackage ../development/python-modules/natural { };
 
+  ndcurves = toPythonModule (pkgs.ndcurves.override { python3Packages = self; pythonSupport = true; });
+
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   noneprompt = callPackage ../development/python-modules/noneprompt {  };
