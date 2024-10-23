@@ -6,7 +6,6 @@ let
   inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption mkRenamedOptionModule optional types;
 
   cfg = config.services.automysqlbackup;
-  pkg = pkgs.automysqlbackup;
   user = "automysqlbackup";
   group = "automysqlbackup";
 
@@ -18,10 +17,10 @@ let
     else "'${toString val}'";
 
   configFile = pkgs.writeText "automysqlbackup.conf" ''
-    #version=${pkg.version}
+    #version=${pkgs.automysqlbackup.version}
     # DONT'T REMOVE THE PREVIOUS VERSION LINE!
     #
-    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.config)}
+    ${concatStringsSep "\n" (mapAttrsToList (name: value: "CONFIG_${name}=${toStr value}") cfg.settings)}
   '';
 
 in
@@ -74,7 +73,7 @@ in
       }
     ];
 
-    services.automysqlbackup.config = mapAttrs (name: mkDefault) {
+    services.automysqlbackup.settings = mapAttrs (name: mkDefault) {
       mysql_dump_username = user;
       mysql_dump_host = "localhost";
       mysql_dump_socket = "/run/mysqld/mysqld.sock";
@@ -98,11 +97,11 @@ in
       serviceConfig = {
         User = user;
         Group = group;
-        ExecStart = "${pkg}/bin/automysqlbackup ${configFile}";
+        ExecStart = "${pkgs.automysqlbackup}/bin/automysqlbackup ${configFile}";
       };
     };
 
-    environment.systemPackages = [ pkg ];
+    environment.systemPackages = [ pkgs.automysqlbackup ];
 
     users.users.${user} = {
       group = group;
@@ -114,7 +113,7 @@ in
       "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -"
     ];
 
-    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
+    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.settings.mysql_dump_host == "localhost") {
       name = user;
       ensurePermissions = {
         "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES, EVENT";
