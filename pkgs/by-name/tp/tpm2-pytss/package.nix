@@ -2,17 +2,9 @@
   lib,
   stdenv,
   substituteAll,
-  buildPythonPackage,
+  python3Packages,
   fetchPypi,
-  pythonOlder,
-  asn1crypto,
-  cffi,
-  cryptography,
-  pkgconfig, # see nativeBuildInputs
-  pkg-config, # see nativeBuildInputs
-  pytestCheckHook,
-  pyyaml,
-  setuptools-scm,
+  pkg-config,
   tpm2-tss,
   tpm2-tools,
   swtpm,
@@ -20,6 +12,12 @@
 
 let
   isCross = (stdenv.buildPlatform != stdenv.hostPlatform);
+  inherit (python3Packages)
+    buildPythonPackage
+    pythonOlder
+    pytestCheckHook
+    setuptools-scm
+    ;
 in
 buildPythonPackage rec {
   pname = "tpm2-pytss";
@@ -65,16 +63,16 @@ buildPythonPackage rec {
   # for more details.
   hardeningDisable = [ "fortify" ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     cffi
-    pkgconfig # this is the Python module
+    python3Packages.pkgconfig # this is the Python module
     pkg-config # this is the actual pkg-config tool
     setuptools-scm
   ];
 
   buildInputs = [ tpm2-tss ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     cffi
     asn1crypto
     cryptography

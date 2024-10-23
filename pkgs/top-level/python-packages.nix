@@ -15849,7 +15849,9 @@ self: super: with self; {
 
   tplink-omada-client = callPackage ../development/python-modules/tplink-omada-client { };
 
-  tpm2-pytss = callPackage ../development/python-modules/tpm2-pytss { };
+  tpm2-pytss = toPythonModule (pkgs.tpm2-pytss.override {
+    python3Packages = self;
+  });
 
   tqdm = callPackage ../development/python-modules/tqdm { };
 
