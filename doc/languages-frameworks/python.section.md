@@ -184,7 +184,57 @@ following are specific to `buildPythonPackage`:
   [`makeWrapper`](#fun-makeWrapper) set `PATH` and `PYTHONPATH` environment variables before calling
   the binary. Additional arguments here can allow a developer to set environment
   variables which will be available when the binary is run. For example,
-  `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
+  `makeWrapperArgs = ["--set" "FOO" "BAR" "--set" "BAZ" "QUX"]`.
+
+  ::: {.note}
+  Developers should use `prependToVar` or `appendToVar` to add command-line arguments to `makeWrapperArgs`.
+
+  ```nix
+  buildPythonPackage {
+    preFixup = ''
+      appendToVar makeWrapperArgs --prefix PATH : "$SOME_PATH"
+    '';
+  }
+  ```
+
+  In case there is a need to handle command-line arguments containing spaces or to supress the Bash-expansion behaviour when structured attributes support is not available, use the `convertToArray` to convert `makeWrapperArgs` to a global Bash array in-place.
+
+  ```nix
+  buildPythonPackage {
+    preFixup = ''
+      convertToArray makeWrapperArgs
+      makeWrapperArgs+=(--set GREETING "Hello, world")
+    '';
+  }
+  ```
+
+  For compatibility purposes, there is `expandStringAndConvertToArray` incase Bash-extension on IFS-separated strings are intended. Both `convertToArray` and `expandStringAndConvertToArray` keep Bash arrays unchanged and are safe to apply multiple times.
+  :::
+
+  ::: {.note}
+  For compatibility purposes,
+  when `makeWrapperArgs` is passed as an IFS-separated string to the wrapper script, the string content is Bash-expanded before concatenated after the `wrapProgram` command. This happens when `__structuredAttrs = false` and when `makeWrapperArgs` is not converted to a Bash array.
+
+  Still, developers should not rely on such behaviour, but use `__structuredAttrs = true` to specify flags containing spaces
+
+  ```nix
+  buildPythonPackage {
+    __structuredAttrs = true;
+    makeWrapperArgs = [ "--set" "GREETING" "Hello, world!" ];
+  }
+  ```
+
+  or use -pre and -post phases to specify flags with Bash-expansions.
+
+  ```nix
+  buildPythonPackage {
+    preFixup = ''
+      appendToVar makeWrapperArgs --prefix PATH : "$SOME_PATH"
+    '';
+  }
+  ```
+  :::
+
 * `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
   defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications to `""`.
 * `pypaBuildFlags ? []`: A list of strings. Arguments to be passed to `python -m build --wheel`.
@@ -542,6 +592,36 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+::: {.note}
+`pytestCheckHook`, `setuptoolsBuildHook` and `unittestCheckHook` used to Bash-expand the command string they construct before executing. This was sometimes utilised to workaround the historical lack of `__structuredAttrs = true` support.
+
+For compatibility purposes, the Bash-expanding behaviour for flags attributes taken by these setup hooks is preserved when `__structuredAttrs = false`, but it is now discouraged to abuse such behaviour. Instead, one should use `__structuredAttrs = true` to specify flags containing spaces
+
+```nix
+buildPythonPackage {
+  __structuredAttrs = true;
+  pytestFlagsArray = [ "-m" "not online" ];
+}
+```
+
+or use -pre and -post phases to specify flags with Bash-expansions
+
+```nix
+buildPythonPackage {
+  __structuredAttrs = true;
+  preCheck = ''
+    pytestFlagsArray+=(-n "$NIX_BUILD_CORES")
+  '';
+}
+```
+:::
+
+::: {.note}
+For compatibility purposes, `pytestCheckHook` and `unittestCheckHook` converts `pytestFlagsArray` and `unittestFlagsArray` attributes transparently to Bash arrays even when `__structuredAttrs = false`.
+
+To avoid surprising behaviour, use such attribute only when `__structuredAttrs = true`, and specify them in the pre- and post-phases in case structured attributes are not supported.
+:::
 
 ## User Guide {#user-guide}
 

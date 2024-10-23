@@ -1,9 +1,12 @@
 # Setup hook for storing dist folder (wheels/sdists) in a separate output
+# shellcheck shell=bash
+
 echo "Sourcing python-catch-conflicts-hook.sh"
 
 pythonOutputDistPhase() {
     echo "Executing pythonOutputDistPhase"
     if [[ -d dist ]]; then
+        # shellcheck disable=SC2154
         mv "dist" "$dist"
     else
         cat >&2 <<EOF
@@ -21,4 +24,4 @@ EOF
     echo "Finished executing pythonOutputDistPhase"
 }
 
-preFixupPhases+=" pythonOutputDistPhase"
+appendToVar preFixupPhases pythonOutputDistPhase
