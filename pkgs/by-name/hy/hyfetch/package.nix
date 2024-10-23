@@ -5,14 +5,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hyfetch";
-  version = "1.4.11";
+  version = "1.99.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
     rev = "refs/tags/${version}";
-    hash = "sha256-xzN/tbS5BUvpKeozesE99gNp3NRDjvf4Qx7BHLc4svo=";
+    hash = "sha256-GL1/V+LgSXJ4b28PfinScDrJhU9VDa4pVi24zWEzbAk=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -44,3 +44,5 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [ yisuidenghua ];
   };
 }
+
+
