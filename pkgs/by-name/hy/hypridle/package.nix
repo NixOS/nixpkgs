@@ -9,19 +9,19 @@
   wayland-protocols,
   wayland-scanner,
   hyprlang,
-  sdbus-cpp,
+  sdbus-cpp_2,
   systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-4EgQyprji92cmhGaQQsw6eN6cmEkQKs0+MeD7YLgHlg=";
+    hash = "sha256-20a3pg94dyLFflbBIN+EYJ04nWfWldTfd2YmB/rcrqY=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     hyprlang
     hyprutils
-    sdbus-cpp
+    sdbus-cpp_2
     systemd
     wayland
     wayland-protocols
