@@ -187,14 +187,6 @@ in {
       ];
     };
 
-    linux_6_10 = callPackage ../os-specific/linux/kernel/mainline.nix {
-      branch = "6.10";
-      kernelPatches = [
-        kernelPatches.bridge_stp_helper
-        kernelPatches.request_key_helper
-      ];
-    };
-
     linux_6_11 = callPackage ../os-specific/linux/kernel/mainline.nix {
       branch = "6.11";
       kernelPatches = [
@@ -288,6 +280,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8 = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9 = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10 = throw "linux 6.10 was removed because it has reached its end of life upstream";
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -298,6 +291,7 @@ in {
     linux_6_7_hardened = throw "linux 6.7 was removed because it has reached its end of life upstream";
     linux_6_8_hardened = throw "linux 6.8 was removed because it has reached its end of life upstream";
     linux_6_9_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
+    linux_6_10_hardened = throw "linux 6.9 was removed because it has reached its end of life upstream";
   }));
   /*  Linux kernel modules are inherently tied to a specific kernel.  So
     rather than provide specific instances of those packages for a
@@ -627,7 +621,6 @@ in {
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
     linux_6_6 = recurseIntoAttrs (packagesFor kernels.linux_6_6);
-    linux_6_10 = recurseIntoAttrs (packagesFor kernels.linux_6_10);
     linux_6_11 = recurseIntoAttrs (packagesFor kernels.linux_6_11);
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11"; # Added 2023-10-11
@@ -637,6 +630,7 @@ in {
     linux_6_7 = throw "linux 6.7 was removed because it reached its end of life upstream"; # Added 2024-04-04
     linux_6_8 = throw "linux 6.8 was removed because it reached its end of life upstream"; # Added 2024-08-02
     linux_6_9 = throw "linux 6.9 was removed because it reached its end of life upstream"; # Added 2024-08-02
+    linux_6_10 = throw "linux 6.10 was removed because it reached its end of life upstream"; # Added 2024-10-23
   };
 
   rtPackages = {
