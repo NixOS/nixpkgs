@@ -56,6 +56,16 @@ with lib;
       '';
     };
 
+    uwsgiPass = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "unix:/run/example/example.sock";
+      description = ''
+        Adds uwsgi_pass directive and sets recommended proxy headers if
+        recommendedProxySettings is enabled.
+      '';
+    };
+
     index = mkOption {
       type = types.nullOr types.str;
       default = null;
