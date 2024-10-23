@@ -1,4 +1,4 @@
-{ lib, stdenv, buildGo122Module, fetchFromGitHub, removeReferencesTo
+{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
 , tzdata, wire
 , yarn, nodejs, python3, cacert
 , jq, moreutils
@@ -6,10 +6,9 @@
 , faketty
 }:
 
-# TODO: Go back to using buildGoModule when upgrading to grafana 11.3.
-buildGo122Module rec {
+buildGoModule rec {
   pname = "grafana";
-  version = "11.2.2+security-01";
+  version = "11.3.0";
 
   subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
 
@@ -17,7 +16,7 @@ buildGo122Module rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-1ZDX0R3t6CAdIfrYfR373olGL5orSDs2iwriAszl7qk=";
+    hash = "sha256-tPPhRCZ8auVaX68YhGzpkykxqln8zzqdAZiedpmYqlk=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -52,16 +51,16 @@ buildGo122Module rec {
     dontFixup = true;
     outputHashMode = "recursive";
     outputHash = rec {
-      x86_64-linux = "sha256-rz/IP6wi4VKWgO8P4Mov3oviwsDe5iBSKamArVR/+T0=";
+      x86_64-linux = "sha256-8XuRhipddv28msoSpG5WjpHc7NUEh4/+wRutKrY9r1U=";
       aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-9J9wD8nJ4JEUKroxCEBYZytywzjGkGhujdj9FcNe0rM=";
+      aarch64-darwin = "sha256-IOuE2QjZmeCOZdqA49RWoAtz2FROGqWo8Dp4wFnEkkk=";
       x86_64-darwin = aarch64-darwin;
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
 
-  vendorHash = "sha256-shQ39N9YxksfzHDgHx3qjLbZfv5D1+sqtpALI0hCK3U=";
+  vendorHash = "sha256-3dRXvBmorItNa2HAFhEhMxKwD4LSKSgTUSjukOV2RSg=";
 
   proxyVendor = true;
 
