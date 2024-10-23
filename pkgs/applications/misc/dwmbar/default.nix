@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
   pname = "dwmbar";
-  version = "unstable-2021-12-22";
+  version = "0-unstable-2021-12-22";
 
   src = fetchFromGitHub {
     owner = "thytom";
