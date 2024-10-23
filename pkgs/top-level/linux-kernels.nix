@@ -54,7 +54,7 @@ let
           broken = kernel.meta.broken;
         };
       };
-      kernelPatches = kernel.kernelPatches ++ [
+      kernelPatches = lib.filter ({ name ? null, ... }: name != "netfilter-typo-fix") kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
       ];
       isHardened = true;
