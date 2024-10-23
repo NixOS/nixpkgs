@@ -71,6 +71,7 @@ buildPythonPackage {
   buildInputs = [ llvmPackages.openmp ];
 
   dependencies = [
+    distutils
     astunparse
     flatbuffers
     typing-extensions
