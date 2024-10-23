@@ -1,4 +1,4 @@
-{ stdenv, lib, writeScript, wrapFish }:
+{ stdenv, lib, writeScript, fish }:
 
 attrs@{
   pname,
@@ -63,7 +63,7 @@ stdenv.mkDerivation (drvAttrs // {
 
   inherit doCheck;
 
-  nativeCheckInputs = [ (wrapFish {
+  nativeCheckInputs = [ (fish.override {
     pluginPkgs = checkPlugins;
     functionDirs = checkFunctionDirs;
   }) ] ++ nativeCheckInputs;
