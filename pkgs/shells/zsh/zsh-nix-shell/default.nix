@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Z6EYQdasvpl1P78poj9efnnLj7QQg13Me8x1Ryyw+dM=";
   };
 
+  strictDeps = true;
   buildInputs = [ bash ];
 
   installPhase = ''
