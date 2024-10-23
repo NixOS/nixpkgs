@@ -1,0 +1,13 @@
+diff '--color=auto' -ruN a/src/xwindisp.c b/src/xwindisp.c
+--- a/src/xwindisp.c	1970-01-01 01:00:01.000000000 +0100
++++ b/src/xwindisp.c	2024-10-08 11:44:22.070320821 +0200
+@@ -61,6 +61,9 @@
+ #define YELLOW                        14
+ #define WHITE                         15
+ 
++/* defined in pmars.c */
++extern void sighandler(int dummy);
++
+  /* X names of the colors we allocate */
+ static char *xColorNames[MAXXCOLOR] = {
+   "black", "blue3", "green3", "cyan3",
