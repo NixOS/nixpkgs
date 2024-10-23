@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "6.0.2";
+  version = "6.1.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-vbC4OuCmEpD38lVq0uXNw86iS4KkL6isOVq6vmlu1oM=";
+    hash = "sha256-G8UHSw3eaTs8Bl6aqNHxJPVQ19rTzobP1thvz7f+qHw=";
   };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
