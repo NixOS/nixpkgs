@@ -37,7 +37,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.bazarr = {
-      description = "bazarr";
+      description = "Bazarr";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
