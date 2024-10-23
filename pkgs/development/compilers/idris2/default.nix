@@ -7,4 +7,6 @@
   pack = callPackage ./pack.nix { };
 
   buildIdris = callPackage ./build-idris.nix { };
+
+  inherit (callPackage ./ipkg-parse.nix { }) parseIpkg importIpkg;
 }
