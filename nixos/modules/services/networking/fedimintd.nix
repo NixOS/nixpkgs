@@ -166,10 +166,11 @@ let
             description = "Path to host the API on and forward to the daemon's api port";
           };
           config = mkOption {
-            type = types.submodule
-              (lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
+            type = types.submodule (
+              lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
                 inherit config lib;
-              });
+              }
+            );
             default = { };
             description = "Overrides to the nginx vhost section for api";
           };
