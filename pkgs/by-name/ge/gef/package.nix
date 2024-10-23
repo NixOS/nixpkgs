@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , makeWrapper
 , gdb
+, gdb-binary ? "${lib.getExe gdb}"
 , python3
 , bintools-unwrapped
 , file
@@ -37,7 +38,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/share/gef
     cp gef.py $out/share/gef
-    makeWrapper ${gdb}/bin/gdb $out/bin/gef \
+    makeWrapper ${gdb-binary} $out/bin/gef \
       --add-flags "-q -x $out/share/gef/gef.py" \
       --set NIX_PYTHONPATH ${pythonPath} \
       --prefix PATH : ${lib.makeBinPath [
