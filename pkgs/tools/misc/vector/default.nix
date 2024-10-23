@@ -48,7 +48,7 @@
 
 let
   pname = "vector";
-  version = "0.41.1";
+  version = "0.42.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-E6AVjxwXMDonqsAMcCpaZBEPCi9bVXUygG4PUOLh+ck=";
+    hash = "sha256-0DEEgaQf4/NIbmRQyTdEuj4bPTLX8gjAhv4r48wfNZs=";
   };
 
   cargoLock = {
@@ -101,7 +101,7 @@ rustPlatform.buildRustPackage {
   # Rust 1.80.0 introduced the unexepcted_cfgs lint, which requires crates to allowlist custom cfg options that they inspect.
   # Upstream is working on fixing this in https://github.com/vectordotdev/vector/pull/20949, but silencing the lint lets us build again until then.
   # TODO remove when upgrading Vector
-  RUSTFLAGS = "--allow unexpected_cfgs";
+  RUSTFLAGS = "--allow dependency_on_unit_never_type_fallback --allow dead_code";
 
   # Without this, we get SIGSEGV failure
   RUST_MIN_STACK = 33554432;
