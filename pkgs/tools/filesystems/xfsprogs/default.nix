@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
-  version = "6.9.0";
+  version = "6.11.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
-    hash = "sha256-l1KEeD+z+8ThrmQL2ATXiOQjeoawdYKs7oa25I9lIbc=";
+    hash = "sha256-2uO7QyGW97GDsua9XcRL8z7b19DoW9N9JcI134G4EAo=";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -29,10 +29,13 @@ stdenv.mkDerivation rec {
   enableParallelInstalling = false;
 
   # @sbindir@ is replaced with /run/current-system/sw/bin to fix dependency cycles
+  # and '@pkg_state_dir@' should not point to the nix store, but we cannot use the configure parameter
+  # because then it will try to install to /var
   preConfigure = ''
-    for file in scrub/{xfs_scrub_all.cron.in,xfs_scrub@.service.in,xfs_scrub_all.service.in}; do
+    for file in scrub/*.in; do
       substituteInPlace "$file" \
-        --replace '@sbindir@' '/run/current-system/sw/bin'
+        --replace-quiet '@sbindir@' '/run/current-system/sw/bin' \
+        --replace-quiet '@pkg_state_dir@' '/var'
     done
     patchShebangs ./install-sh
   '';
