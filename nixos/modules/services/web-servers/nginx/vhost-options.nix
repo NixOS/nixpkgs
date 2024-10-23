@@ -397,10 +397,12 @@ with lib;
       '';
 
     assertions = [
-      {
-        assertion = all (l: l.root == null || l.alias == null) (attrValues config.locations);
-        message = "Only one of nginx root or alias can be specified on a location.";
-      }
+      (let
+        matchedLocations = filterAttrs (n: v: v.root != null && v.alias != null) config.locations;
+      in{
+        assertion = (builtins.length (lib.attrValues matchedLocations)) > 0;
+        message = "Only one of root or alias can be specified on location ${lib.concatStringsSep ", " (attrValues matchedLocations)}.";
+      })
       {
         assertion = count id [ config.addSSL (config.onlySSL || config.enableSSL) config.forceSSL config.rejectSSL ] <= 1;
         message = ''

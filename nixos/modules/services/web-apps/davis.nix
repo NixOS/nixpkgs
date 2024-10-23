@@ -220,7 +220,9 @@ in
     };
 
     nginx = lib.mkOption {
-      type = lib.types.submodule (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+      type = lib.types.submodule (
+        lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }
+      );
       default = null;
       example = ''
         {

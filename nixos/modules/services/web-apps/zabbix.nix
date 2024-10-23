@@ -208,7 +208,9 @@ in
       };
 
       nginx.virtualHost = mkOption {
-        type = types.submodule (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; });
+        type = types.submodule (
+          lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }
+        );
         example = literalExpression ''
           {
             forceSSL = true;
