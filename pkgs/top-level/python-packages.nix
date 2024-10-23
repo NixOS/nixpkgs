@@ -6207,6 +6207,8 @@ self: super: with self; {
 
   iopath = callPackage ../development/python-modules/iopath { };
 
+  iOSbackup = callPackage ../development/python-modules/iOSbackup { };
+
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iottycloud = callPackage ../development/python-modules/iottycloud { };
@@ -9080,6 +9082,8 @@ self: super: with self; {
   npyscreen = callPackage ../development/python-modules/npyscreen { };
 
   nsapi = callPackage ../development/python-modules/nsapi { };
+
+  NSKeyedUnArchiver = callPackage ../development/python-modules/NSKeyedUnArchiver { };
 
   ntc-templates = callPackage ../development/python-modules/ntc-templates { };
 

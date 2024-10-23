@@ -936,6 +936,11 @@ lib.mapAttrs mkLicense ({
     fullName = "Microsoft Public License";
   };
 
+  mvt = {
+    fullName = "MVT License 1.1";
+    url = "https://docs.mvt.re/en/latest/license/";
+  };
+
   mulan-psl2 = {
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
