@@ -23,9 +23,9 @@ callPackage ./generic.nix args {
   version = "2.2.6";
   # rev = "";
 
-  tests = [
-    nixosTests.zfs.unstable
-  ];
+  tests = {
+    inherit (nixosTests.zfs) unstable;
+  };
 
   hash = "sha256-wkgoYg6uQOHVq8a9sJXzO/QXJ6q28l7JXWkC+BFvOb0=";
 }
