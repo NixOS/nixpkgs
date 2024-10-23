@@ -43,10 +43,13 @@ buildPythonPackage rec {
     "tests/subtests/test_subtest.py"
   ];
 
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
   # The default tolerance is too strict in our build environment
   # https://github.com/matplotlib/pytest-mpl/pull/9
   # https://github.com/matplotlib/pytest-mpl/issues/225
   preCheck = ''
+    export MPLBACKEND=agg
     substituteInPlace pytest_mpl/plugin.py \
       --replace-fail "DEFAULT_TOLERANCE = 2" "DEFAULT_TOLERANCE = 10"
     substituteInPlace tests/test_pytest_mpl.py \
