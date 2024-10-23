@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   pythonOlder,
   pythonAtLeast,
@@ -67,7 +68,7 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      platform-binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}-${stdenv.hostPlatform.system}" or { };
     in
     fetchPypi (
       {
@@ -75,9 +76,8 @@ buildPythonPackage rec {
         dist = pyShortVersion;
         python = pyShortVersion;
         abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
       }
-      // binary-hash
+      // platform-binary-hash
     );
 
   nativeBuildInputs = [
@@ -163,6 +163,6 @@ buildPythonPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ billhuang ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
   };
 }
