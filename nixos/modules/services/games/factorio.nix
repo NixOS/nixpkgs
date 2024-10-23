@@ -177,7 +177,7 @@ in
       extraSettings = lib.mkOption {
         type = lib.types.attrs;
         default = {};
-        example = { admins = [ "username" ];};
+        example = { max_players = 64; };
         description = ''
           Extra game configuration that will go into server-settings.json
         '';
