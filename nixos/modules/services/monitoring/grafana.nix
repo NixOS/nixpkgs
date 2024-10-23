@@ -250,11 +250,18 @@ in
       type = types.path;
     };
 
+    openFirewall = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Open the ports in the firewall for the server.";
+    };
+
     settings = mkOption {
       description = ''
         Grafana settings. See <https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/>
         for available options. INI format is used.
       '';
+      default = {};
       type = types.submodule {
         freeformType = settingsFormatIni.type;
 
@@ -1787,6 +1794,8 @@ in
         ln -fs ${cfg.package}/share/grafana/tools ${cfg.dataDir}
       '';
     };
+
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [cfg.settings.server.http_port];
 
     users.users.grafana = {
       uid = config.ids.uids.grafana;
