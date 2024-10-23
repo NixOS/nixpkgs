@@ -13,6 +13,7 @@
 , prePatch ? ""
 , patches ? [ ]
 , postPatch ? ""
+, patchFlags ? []
 , nativeBuildInputs ? [ ]
 , buildInputs ? [ ]
   # The output hash of the dependencies for this project.
@@ -45,7 +46,7 @@
 , npmWorkspace ? null
 , nodejs ? topLevelArgs.nodejs
 , npmDeps ?  fetchNpmDeps {
-  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch;
+  inherit forceGitDeps forceEmptyCache src srcs sourceRoot prePatch patches postPatch patchFlags;
   name = "${name}-npm-deps";
   hash = npmDepsHash;
 }
