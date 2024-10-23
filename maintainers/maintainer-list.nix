@@ -19604,10 +19604,11 @@
   };
   shadowrz = {
     email = "shadowrz+nixpkgs@disroot.org";
-    matrix = "@ShadowRZ:matrixim.cc";
+    matrix = "@shadowrz:nixos.dev";
     github = "ShadowRZ";
     githubId = 23130178;
     name = "夜坂雅";
+    keys = [ { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; } ];
   };
   shahrukh330 = {
     email = "shahrukh330@gmail.com";
