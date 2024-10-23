@@ -2,6 +2,7 @@
   clangStdenv,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -27,6 +28,7 @@
   unzip,
   yq,
 
+  baseName ? "dotnet",
   bootstrapSdk,
   releaseManifestFile,
   tarballHash,
@@ -54,9 +56,15 @@ let
 
   _icu = if isDarwin then darwin.ICU else icu;
 
+  # error NU1903: Package 'System.Text.Json' 8.0.4 has a known high severity vulnerability,
+  disableNU1903 = fetchpatch {
+    url = "https://github.com/dotnet/sdk/pull/44028.patch";
+    hash = "sha256-r6AOhXhwT8ar3aS0r5CA9sPiBsp3pnnPIVO+5l5CUGM=";
+  };
+
 in
 stdenv.mkDerivation rec {
-  pname = "dotnet-vmr";
+  pname = "${baseName}-vmr";
   version = release;
 
   # TODO: fix this in the binary sdk packages
@@ -138,11 +146,13 @@ stdenv.mkDerivation rec {
                        (global-name "com.apple.system.opendirectoryd.membership"))
   '';
 
-  patches = lib.optionals (lib.versionAtLeast version "9") [
-    ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
-  ] ++ lib.optionals (lib.versionOlder version "9") [
-    ./fix-aspnetcore-portable-build.patch
-  ];
+  patches =
+    lib.optionals (lib.versionAtLeast version "9") [
+      ./UpdateNuGetConfigPackageSourcesMappings-don-t-add-em.patch
+    ]
+    ++ lib.optionals (lib.versionOlder version "9") [
+      ./fix-aspnetcore-portable-build.patch
+    ];
 
   postPatch =
     ''
@@ -216,6 +226,9 @@ stdenv.mkDerivation rec {
         -s //Project -t elem -n Import \
         -i \$prev -t attr -n Project -v "${./patch-npm-packages.proj}" \
         src/aspnetcore/eng/DotNetBuild.props
+
+      # patch is from sdk repo where vmr bits are in src/SourceBuild/content
+      patch -p4 < ${disableNU1903}
     ''
     + lib.optionalString (lib.versionAtLeast version "9") ''
       # https://github.com/dotnet/source-build/issues/3131#issuecomment-2030215805

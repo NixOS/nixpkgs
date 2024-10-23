@@ -14,13 +14,13 @@
 
 buildDotnetModule rec {
   pname = "git-credential-manager";
-  version = "2.5.1";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "git-ecosystem";
     repo = "git-credential-manager";
     rev = "v${version}";
-    hash = "sha256-fD/HToyreYS8PG85CHHLPQOUKV1cDYGukxyVOr+7cKk=";
+    hash = "sha256-8hjMtfPY/7cNH8WdHyG4kT2W+wGWteHbin1HgTBGiNQ=";
   };
 
   projectFile = "src/shared/Git-Credential-Manager/Git-Credential-Manager.csproj";
@@ -34,6 +34,7 @@ buildDotnetModule rec {
     lib.optional withLibsecretSupport libsecret;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath ([ git ] ++ lib.optionals withGpgSupport [ gnupg pass ])}"
+    "--inherit-argv0"
   ];
 
   passthru = {

@@ -5,6 +5,7 @@
 , fetchFromGitHub
 , jq
 , moreutils
+, versionCheckHook
 , nix-update-script
 , withCmd ? false
 }:
@@ -50,6 +51,11 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm 444 assets/kanata-icon.svg $out/share/icons/hicolor/scalable/apps/kanata.svg
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

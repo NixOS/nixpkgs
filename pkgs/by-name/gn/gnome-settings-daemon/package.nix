@@ -3,6 +3,7 @@
   lib,
   substituteAll,
   fetchurl,
+  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -37,6 +38,7 @@
   tzdata,
   gcr_4,
   gnome-session-ctl,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -56,6 +58,18 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./fix-paths.patch;
       inherit tzdata;
     })
+
+    (fetchpatch {
+      name = "backport-no-systemd-fix-1.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/46f998d7308cb18832666bc34ee54b1d9c27739f.patch";
+      includes = [ "plugins/sharing/gsd-sharing-manager.c" ];
+      hash = "sha256-P5FJUY50Pg3MuwHwGUz28/TMZkT7j+fmGPozWb9rVYo=";
+    })
+    (fetchpatch {
+      name = "backport-no-systemd-fix-2.patch";
+      url = "https://gitlab.gnome.org/GNOME/gnome-settings-daemon/-/commit/1a4d50f4ee611bdede6072c0bfd2a1b2e327c5fc.patch";
+      hash = "sha256-pROhnE9GziS9h0nMWZBsd8YtW6RxMrwmaSOe0UtkUJU=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -71,34 +85,41 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs = [
-    gtk3
-    glib
-    gsettings-desktop-schemas
-    modemmanager
-    networkmanager
-    libnotify
-    libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
-    gnome-desktop
-    libpulseaudio
-    alsa-lib
-    libcanberra-gtk3
-    upower
-    colord
-    libgweather
-    polkit
-    geocode-glib_2
-    geoclue2
-    systemd
-    libgudev
-    libwacom
-    gcr_4
-  ];
+  buildInputs =
+    [
+      gtk3
+      glib
+      gsettings-desktop-schemas
+      modemmanager
+      networkmanager
+      libnotify
+      libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
+      gnome-desktop
+      libpulseaudio
+      alsa-lib
+      libcanberra-gtk3
+      upower
+      colord
+      libgweather
+      polkit
+      geocode-glib_2
+      geoclue2
+      libgudev
+      libwacom
+      gcr_4
+    ]
+    ++ lib.optionals withSystemd [
+      systemd
+    ];
 
-  mesonFlags = [
-    "-Dudev_dir=${placeholder "out"}/lib/udev"
-    "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
-  ];
+  mesonFlags =
+    [
+      "-Dudev_dir=${placeholder "out"}/lib/udev"
+      (lib.mesonBool "systemd" withSystemd)
+    ]
+    ++ lib.optionals withSystemd [
+      "-Dgnome_session_ctl_path=${gnome-session-ctl}/libexec/gnome-session-ctl"
+    ];
 
   # Default for release buildtype but passed manually because
   # we're using plain

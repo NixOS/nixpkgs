@@ -76,12 +76,12 @@ in {
 
   nim-unwrapped-2 = stdenv.mkDerivation (finalAttrs: {
     pname = "nim-unwrapped";
-    version = "2.0.8";
+    version = "2.2.0";
     strictDeps = true;
 
     src = fetchurl {
       url = "https://nim-lang.org/download/nim-${finalAttrs.version}.tar.xz";
-      hash = "sha256-VwLahEcA0xKdtzFwtcYGrb37h+grgWwNkRB+ogpl3xY=";
+      hash = "sha256-zphChJyXYOSH7N0c2t98DyhEyvrmBUAcfHKuJXZEiTw=";
     };
 
     buildInputs = [ boehmgc openssl pcre readline sqlite ]
@@ -94,7 +94,7 @@ in {
       ./nixbuild.patch
       # Load libraries at runtime by absolute path
 
-      ./extra-mangling.patch
+      ./extra-mangling-2.patch
       # Mangle store paths of modules to prevent runtime dependence.
 
       ./openssl.patch
@@ -151,12 +151,16 @@ in {
       runHook postInstall
     '';
 
+    passthru = {
+      updateScript.command = [ ./update.sh ];
+    };
+
     meta = with lib; {
       description = "Statically typed, imperative programming language";
       homepage = "https://nim-lang.org/";
       license = licenses.mit;
       mainProgram = "nim";
-      maintainers = with maintainers; [ ehmry ];
+      maintainers = with maintainers; [ ehmry eveeifyeve ];
     };
   });
 

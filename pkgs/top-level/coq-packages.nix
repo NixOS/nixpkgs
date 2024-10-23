@@ -57,6 +57,7 @@ let
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      coqutil = callPackage ../development/coq-modules/coqutil {};
       corn = callPackage ../development/coq-modules/corn {};
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
@@ -126,6 +127,7 @@ let
       reglang = callPackage ../development/coq-modules/reglang {};
       relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
       rewriter = callPackage ../development/coq-modules/rewriter {};
+      RustExtraction = callPackage ../development/coq-modules/RustExtraction {};
       semantics = callPackage ../development/coq-modules/semantics {};
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };

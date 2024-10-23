@@ -1,12 +1,12 @@
 {
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 let
-  version = "2.12.0";
+  version = "2.12.1";
 in
-buildGo123Module {
+buildGoModule {
   pname = "wakapi";
   inherit version;
 
@@ -14,7 +14,7 @@ buildGo123Module {
     owner = "muety";
     repo = "wakapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-/aacT/VLA5S4PeGcxEGaCpgAw++b3VFD7T0CldZWcQI=";
+    hash = "sha256-+JxTszBa6rURm0vPy8Oke5/hX9EmDphWEp2eglS+SFU=";
   };
 
   vendorHash = "sha256-Q56Ud0MtkstB/dhn+QyAHTzIqHsmKvHEK+5PAt5lIMM=";

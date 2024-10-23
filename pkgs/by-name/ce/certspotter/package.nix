@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildGoModule
-, lowdown
+, lowdown-unsandboxed
 }:
 
 buildGoModule rec {
@@ -19,7 +19,7 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  nativeBuildInputs = [ lowdown ];
+  nativeBuildInputs = [ lowdown-unsandboxed ];
 
   postInstall = ''
     cd man

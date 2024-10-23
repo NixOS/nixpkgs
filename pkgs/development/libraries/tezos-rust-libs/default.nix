@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ llvmPackages_12.llvm cargo ];
-  propagatedBuildDeps = [ llvmPackages_12.libllvm ];
+  propagatedBuildInputs = [ llvmPackages_12.libllvm ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   buildPhase = ''
@@ -48,4 +48,11 @@ stdenv.mkDerivation rec {
   '';
 
   cargoVendorDir = "./vendor";
+
+  meta = {
+    homepage = "https://gitlab.com/tezos/tezos-rust-libs";
+    description = "Tezos: all rust dependencies and their dependencies";
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.ulrikstrid ];
+  };
 }

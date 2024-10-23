@@ -1,10 +1,12 @@
 {
   lib,
   stdenv,
+  stdenvAdapters,
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
   cmake,
+  meson,
   ninja,
   aquamarine,
   binutils,
@@ -15,7 +17,6 @@
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
-  jq,
   libGL,
   libdrm,
   libexecinfo,
@@ -45,29 +46,51 @@
   enableNvidiaPatches ? false,
 }:
 let
-  info = builtins.fromJSON (builtins.readFile ./info.json);
+  inherit (builtins)
+    foldl'
+    ;
+  inherit (lib.asserts) assertMsg;
+  inherit (lib.attrsets) mapAttrsToList;
+  inherit (lib.lists)
+    concatLists
+    optionals
+    ;
+  inherit (lib.strings)
+    makeBinPath
+    optionalString
+    mesonBool
+    mesonEnable
+    ;
+  inherit (lib.trivial)
+    importJSON
+    ;
+
+  info = importJSON ./info.json;
+
+  # possibility to add more adapters in the future, such as keepDebugInfo,
+  # which would be controlled by the `debug` flag
+  adapters = [
+    stdenvAdapters.useMoldLinker
+  ];
+
+  customStdenv = foldl' (acc: adapter: adapter acc) stdenv adapters;
 in
-assert lib.assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
-assert lib.assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
-assert lib.assertMsg (!hidpiXWayland)
+assert assertMsg (!nvidiaPatches) "The option `nvidiaPatches` has been removed.";
+assert assertMsg (!enableNvidiaPatches) "The option `enableNvidiaPatches` has been removed.";
+assert assertMsg (!hidpiXWayland)
   "The option `hidpiXWayland` has been removed. Please refer https://wiki.hyprland.org/Configuring/XWayland";
 
-stdenv.mkDerivation (finalAttrs: {
-  pname = "hyprland" + lib.optionalString debug "-debug";
-  version = "0.43.0";
+customStdenv.mkDerivation (finalAttrs: {
+  pname = "hyprland" + optionalString debug "-debug";
+  version = "0.44.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-+wE97utoDfhQP6AMdZHUmBeL8grbce/Jv2i5M+6AbaE=";
+    hash = "sha256-hnoPoxMFetuoXQuAMgvopl1kCRQ33FYaVVBgV9FIFkM=";
   };
-
-  patches = [
-    # forces GCC to use -std=c++26 on CMake < 3.30
-    "${finalAttrs.src}/nix/stdcxx.patch"
-  ];
 
   postPatch = ''
     # Fix hardcoded paths to /usr installation
@@ -93,13 +116,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     hyprwayland-scanner
-    jq
     makeWrapper
-    cmake
+    meson
     ninja
     pkg-config
-    python3 # for udis86
     wayland-scanner
+    # for udis86
+    cmake
+    python3
   ];
 
   outputs = [
@@ -108,7 +132,7 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  buildInputs =
+  buildInputs = concatLists [
     [
       aquamarine
       cairo
@@ -129,32 +153,40 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       xorg.libXcursor
     ]
-    ++ lib.optionals stdenv.hostPlatform.isBSD [ epoll-shim ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ libexecinfo ]
-    ++ lib.optionals enableXWayland [
+    (optionals customStdenv.hostPlatform.isBSD [ epoll-shim ])
+    (optionals customStdenv.hostPlatform.isMusl [ libexecinfo ])
+    (optionals enableXWayland [
       xorg.libxcb
       xorg.libXdmcp
       xorg.xcbutilerrors
       xorg.xcbutilwm
       xwayland
-    ]
-    ++ lib.optionals withSystemd [ systemd ];
+    ])
+    (optionals withSystemd [ systemd ])
+  ];
 
-  cmakeBuildType = if debug then "Debug" else "RelWithDebInfo";
+  mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
 
-  cmakeFlags = [
-    (lib.cmakeBool "NO_XWAYLAND" (!enableXWayland))
-    (lib.cmakeBool "LEGACY_RENDERER" legacyRenderer)
-    (lib.cmakeBool "NO_SYSTEMD" (!withSystemd))
+  mesonFlags = concatLists [
+    (mapAttrsToList mesonEnable {
+      "xwayland" = enableXWayland;
+      "legacy_renderer" = legacyRenderer;
+      "systemd" = withSystemd;
+    })
+    (mapAttrsToList mesonBool {
+      # PCH provides no benefits when building with Nix
+      "b_pch" = false;
+      "tracy_enable" = false;
+    })
   ];
 
   postInstall = ''
-    ${lib.optionalString wrapRuntimeDeps ''
+    ${optionalString wrapRuntimeDeps ''
       wrapProgram $out/bin/Hyprland \
         --suffix PATH : ${
-          lib.makeBinPath [
+          makeBinPath [
             binutils
             pciutils
             pkgconf
@@ -163,9 +195,10 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
-  passthru.providedSessions = [ "hyprland" ];
-
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    providedSessions = [ "hyprland" ];
+    updateScript = ./update.sh;
+  };
 
   meta = {
     homepage = "https://github.com/hyprwm/Hyprland";

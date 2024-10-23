@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "terranix";
-  version = "2.7.0";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "mrVanDalo";
     repo = "terranix";
     rev = version;
-    sha256 = "sha256-xiUfVD6rtsVWFotVtUW3Q1nQh4obKzgvpN1wqZuGXvM=";
+    sha256 = "sha256-1Pu2j5xsBTuoyga08ZVf+rKp3FOMmJh/0fXen/idOrA=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

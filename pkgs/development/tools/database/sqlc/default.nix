@@ -24,6 +24,6 @@ buildGoModule {
     mainProgram = "sqlc";
     homepage = "https://sqlc.dev/";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.adisbladis ];
+    maintainers = [ ];
   };
 }

@@ -122,5 +122,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ juaningan emmanuelrosa ];
     platforms = [ "x86_64-linux" ];
+    # Requires OpenJFX 11 or 16, which are both EOL.
+    broken = true;
   };
 }

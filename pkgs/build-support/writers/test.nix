@@ -31,6 +31,8 @@ let
     writeJSBin
     writeJSON
     writeLua
+    writeNim
+    writeNimBin
     writeNu
     writePerl
     writePerlBin
@@ -107,6 +109,10 @@ recurseIntoAttrs {
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
+    '');
+
+    nim = expectSuccessBin (writeNimBin "test-writers-nim-bin" { } ''
+      echo "success"
     '');
 
     js = expectSuccessBin (writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
@@ -189,6 +195,10 @@ recurseIntoAttrs {
       if test "test" = "test"
         echo "success"
       end
+    '');
+
+    nim = expectSuccess (writeNim "test-writers-nim" { } ''
+      echo "success"
     '');
 
     nu = expectSuccess (writeNu "test-writers-nushell" ''
@@ -408,6 +418,23 @@ recurseIntoAttrs {
         ''
           (when (= (System/getenv "ThaigerSprint") "Thailand")
             (println "success"))
+        ''
+    );
+
+    nim = expectSuccess (
+      writeNim "test-writers-wrapping-nim"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          import os
+
+          if getEnv("ThaigerSprint") == "Thailand":
+            echo "success"
         ''
     );
 

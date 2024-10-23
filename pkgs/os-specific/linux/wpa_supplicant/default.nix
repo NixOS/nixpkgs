@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
       hash = "sha256-X6mBbj7BkW66aYeSCiI3JKBJv10etLQxaTRfRgwsFmM=";
       revert = true;
     })
+    ./unsurprising-ext-password.patch
   ];
 
   # TODO: Patch epoll so that the dbus actually responds

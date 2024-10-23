@@ -2,7 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , obs-studio
-, webkitgtk
+, webkitgtk_4_0
 , glib-networking
 , meson
 , cmake
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     obs-studio
-    webkitgtk
+    webkitgtk_4_0
     glib-networking
   ];
 

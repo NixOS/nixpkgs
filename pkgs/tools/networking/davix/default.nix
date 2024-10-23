@@ -10,6 +10,7 @@
 , libuuid
 , curl
 , gsoap
+, rapidjson
 , Security
 , enableTools ? true
   # Use libcurl instead of libneon
@@ -30,10 +31,11 @@ stdenv.mkDerivation rec {
   pname = "davix" + lib.optionalString enableThirdPartyCopy "-copy";
   nativeBuildInputs = [ cmake pkg-config python3 ];
   buildInputs = [
-    openssl
-    libxml2
     boost
     curl
+    libxml2
+    openssl
+    rapidjson
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin Security
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid

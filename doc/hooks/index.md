@@ -12,6 +12,7 @@ bmake.section.md
 breakpoint.section.md
 cernlib.section.md
 cmake.section.md
+desktop-file-utils.section.md
 gdk-pixbuf.section.md
 ghc.section.md
 gnome.section.md

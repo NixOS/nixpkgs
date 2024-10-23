@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.57.0";
+  version = "0.59.0";
 in
 python3.pkgs.buildPythonApplication {
   pname = "aider-chat";
@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication {
     owner = "paul-gauthier";
     repo = "aider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ErDepSju8B4GochHKxL03aUfOLAiNfTaXBAllAZ144M=";
+    hash = "sha256-20LicYj1j5gGzhF+SxPUKu858nHZgwDF1JxXeHRtYe0=";
   };
 
   pythonRelaxDeps = true;
@@ -68,6 +68,7 @@ python3.pkgs.buildPythonApplication {
       streamlit
       tokenizers
       watchdog
+      pydub
     ]
     ++ lib.optionals (!tensorflow.meta.broken) [
       llama-index-core

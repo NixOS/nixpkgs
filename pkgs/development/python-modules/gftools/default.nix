@@ -61,14 +61,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.70";
+  version = "0.9.71";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mZGkcIODzc2nuhAWU83BkhjWg4+8vnmCA4eXgDsyFy8=";
+    hash = "sha256-YVuTozuONZbBtrst4Q+NmHxqEZa/YPVRMiagjmjcW9U=";
   };
 
   postPatch = ''
@@ -113,6 +113,8 @@ buildPythonPackage rec {
       Lib/gftools/builder/operations/rename.py \
       --replace-fail "'gftools" "'${placeholder "out"}t/bin/gftools"
   '';
+
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   pythonRelaxDeps = [
     "protobuf"

@@ -138,6 +138,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -146,6 +147,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -154,6 +156,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -162,6 +165,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -170,6 +174,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -178,6 +183,7 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -194,6 +200,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.netfilter-typo-fix
       ];
     };
 
@@ -205,6 +212,7 @@ in {
         kernelPatches = [
           kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
+          kernelPatches.netfilter-typo-fix
         ];
       };
       latest = packageAliases.linux_latest.kernel;
@@ -367,10 +375,7 @@ in {
 
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
-    ipu6-drivers =
-      if kernelOlder "6.10"
-      then callPackage ../os-specific/linux/ipu6-drivers {}
-      else null;
+    ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
 
     ivsc-driver = callPackage ../os-specific/linux/ivsc-driver {};
 
@@ -519,11 +524,7 @@ in {
 
     system76-acpi = callPackage ../os-specific/linux/system76-acpi { };
 
-    system76-power = callPackage ../os-specific/linux/system76-power { };
-
     system76-io = callPackage ../os-specific/linux/system76-io { };
-
-    system76-scheduler = callPackage ../os-specific/linux/system76-scheduler { };
 
     tmon = callPackage ../os-specific/linux/tmon { };
 
@@ -602,6 +603,8 @@ in {
 
     nullfs = callPackage ../os-specific/linux/nullfs { };
 
+    msi-ec = callPackage ../os-specific/linux/msi-ec { };
+
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
@@ -611,6 +614,8 @@ in {
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
     amdgpu-pro = throw "amdgpu-pro was removed due to lack of maintenance"; # Added 2024-06-16
     kvdo = throw "kvdo was removed, because it was added to mainline in kernel version 6.9"; # Added 2024-07-08
+    system76-power = lib.warn "kernelPackages.system76-power is now pkgs.system76-power" pkgs.system76-power; # Added 2024-10-16
+    system76-scheduler = lib.warn "kernelPackages.system76-scheduler is now pkgs.system76-scheduler" pkgs.system76-scheduler; # Added 2024-10-16
   });
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);

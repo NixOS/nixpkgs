@@ -25,16 +25,17 @@
 , qtwebengine
 , libXcomposite
 , bluez
+, writeScript
 }:
 
 let
-  version = "5.0.10";
+  version = "6.0.5231";
 
   subsurfaceSrc = (fetchFromGitHub {
     owner = "Subsurface";
     repo = "subsurface";
-    rev = "v${version}";
-    hash = "sha256-KzUBhFGvocaS1VrVT2stvKrj3uVxYka+dyYZUfkIoNs=";
+    rev = "38a0050ac33566dfd34bf94cf1d7ac66034e4118";
+    hash = "sha256-6fNcBF/Ep2xs2z83ZQ09XNb/ZkhK1nUNLChV1x8qh0Y=";
     fetchSubmodules = true;
   });
 
@@ -136,7 +137,25 @@ stdenv.mkDerivation {
     "-DNO_PRINTING=OFF"
   ];
 
-  passthru = { inherit version libdc googlemaps; };
+  passthru = {
+    inherit version libdc googlemaps;
+    updateScript = writeScript "update-subsurface" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p git common-updater-scripts
+
+      set -eu -o pipefail
+      tmpdir=$(mktemp -d)
+      pushd $tmpdir
+      git clone -b current https://github.com/subsurface/subsurface.git
+      cd subsurface
+      # this returns 6.0.????-local
+      new_version=$(./scripts/get-version.sh | cut -d '-' -f 1)
+      new_rev=$(git rev-list -1 HEAD)
+      popd
+      update-source-version subsurface "$new_version" --rev="$new_rev"
+      rm -rf $tmpdir
+    '';
+  };
 
   meta = with lib; {
     description = "Divelog program";
@@ -149,7 +168,7 @@ stdenv.mkDerivation {
     '';
     homepage = "https://subsurface-divelog.org";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ mguentner adisbladis ];
+    maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
   };
 }

@@ -1,12 +1,6 @@
-{ buildNpmPackage, lib, makeWrapper, bundlerEnv, testers, shopify-cli }:
+{ buildNpmPackage, lib, testers, shopify-cli }:
 let
-  version = "3.63.2";
-
-  # Package the legacy ruby CLI.
-  rubyGems = bundlerEnv {
-    name = "shopify-cli-legacy";
-    gemdir = ./.;
-  };
+  version = "3.67.1";
 in
 buildNpmPackage {
   pname = "shopify";
@@ -20,10 +14,8 @@ buildNpmPackage {
     ];
   };
 
-  npmDepsHash = "sha256-6CEDcWXZXYHFrT2xpbj5NwMrbDZXH6HclgTGkfKDlJs=";
+  npmDepsHash = "sha256-jb87K1tCMYgWrsAgzvdHW8ChB+dvc9yNM0hqajy8Rbo=";
   dontNpmBuild = true;
-
-  nativeBuildInputs = [ makeWrapper ];
 
   passthru = {
     updateScript = ./update.sh;
@@ -32,18 +24,6 @@ buildNpmPackage {
       command = "shopify version";
     };
   };
-
-  postInstall = ''
-    # Disable the installCLIDependencies function.
-    substituteInPlace $(grep -r -l 'await installCLIDependencies' $out/lib/node_modules/shopify/node_modules/@shopify/cli/dist) \
-      --replace-fail 'await installCLIDependencies' '// await installCLIDependencies'
-
-    wrapProgram $out/bin/shopify \
-      --set SHOPIFY_RUBY_BINDIR  ${rubyGems.wrappedRuby}/bin \
-      --prefix PATH : ${rubyGems}/bin \
-      --set SHOPIFY_CLI_VERSION ${version} \
-      --set SHOPIFY_CLI_BUNDLED_THEME_CLI 0
-  '';
 
   meta = {
     platforms = lib.platforms.all;

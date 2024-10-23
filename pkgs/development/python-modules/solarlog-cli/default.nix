@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "solarlog-cli";
-  version = "0.3.0";
+  version = "0.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dontinelli";
     repo = "solarlog_cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jNvwSh89Ncl/rR/cUNVbJfJThJTa9JlANjvH/vRruAU=";
+    hash = "sha256-Oa2o4fuchW3ROtQFVhiWL6rhdUbzSFDegCkm8W7bCpE=";
   };
 
   build-system = [ hatchling ];

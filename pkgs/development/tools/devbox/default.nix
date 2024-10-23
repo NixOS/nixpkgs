@@ -2,16 +2,17 @@
 , fetchFromGitHub
 , installShellFiles
 , lib
+, stdenv
 }:
 buildGoModule rec {
   pname = "devbox";
-  version = "0.13.0";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "jetpack-io";
     repo = pname;
     rev = version;
-    hash = "sha256-gTJotzg7ot9C7NVDiauVJHpkSXBwaK7arjtnwUGFqgE=";
+    hash = "sha256-+3AKBhxf1m6cBNtEx8xmUmJ2PUk0LNPaS+cZhsXJoTs=";
   };
 
   ldflags = [
@@ -20,6 +21,8 @@ buildGoModule rec {
     "-X go.jetpack.io/devbox/internal/build.Version=${version}"
   ];
 
+  subPackages = [ "cmd/devbox" ];
+
   # integration tests want file system access
   doCheck = false;
 
@@ -27,7 +30,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd devbox \
       --bash <($out/bin/devbox completion bash) \
       --fish <($out/bin/devbox completion fish) \

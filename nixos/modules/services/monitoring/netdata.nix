@@ -218,7 +218,6 @@ in {
       ps.psycopg2
       ps.python-ldap
       ps.netdata-pandas
-      ps.changefinder
     ]);
 
     services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");

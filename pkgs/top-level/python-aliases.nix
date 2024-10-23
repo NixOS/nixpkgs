@@ -36,16 +36,19 @@ mapAliases ({
   aadict = throw "aadict was removed, it was introduced as a dependency for a package that never manifested and has been an unused leaf package ever since"; # added 2024-07-08
   abodepy = jaraco-abode; # added 2023-02-01
   acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
+  acoustics = throw "acoustics has been removed because the upstream repository was archived in 2024"; # Added 2024-10-04
   adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
   aioaladdinconnect = throw "aioaladdinconnect has been removed, as the API is supported was obsoleted on 2024-01-24."; # Added 2024-06-07
   aiohttp-isal = throw "aiohttp-isal has been removed, as it has been archived and replace by aiohttp-fast-zlib"; # Added 2024-08-11
   aiomysensors = throw "aiomysensors has been removed, as it was packaged for Home Assistant, which migrated to pymysensors."; # Added 2024-07-07
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
+  aiolip = throw "aiolip has been removed because the upstream repository was archived in 2021"; # Added 2024-10-04
   aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
   aioquic-mitmproxy = throw "aioquic-mitmproxy has been removed because mitmproxy no longer uses it"; # Added 2024-01-16
   amazon_kclpy = amazon-kclpy; # added 2023-08-08
   ambiclimate = throw "ambiclimate has been removed, because the service has been terminated after 2024-03-31."; # Added 2024-06-07
+  ambee = throw "ambee has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
   ansible-doctor = throw "ansible-doctor has been promoted to a top-level attribute name: `pkgs.ansible-doctor`"; # Added 2023-05-16
   ansible-later = throw "ansible-later has been promoted to a top-level attribute name: `pkgs.ansible-later`"; # Added 2023-05-16
@@ -54,6 +57,7 @@ mapAliases ({
   anyjson = throw "anyjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   apache-airflow = throw "apache-airflow has been moved out of pythonPackages and is available as a standalone package"; # added 2023-06-05
   argon2_cffi = argon2-cffi; # added 2022-05-09
+  arnparse = throw "arnparse has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   APScheduler = apscheduler; # added 2023-02-19
   async_generator = async-generator; # added 2023-08-08
   async_stagger = async-stagger; # added 2023-08-08
@@ -62,6 +66,7 @@ mapAliases ({
   atsim_potentials = atsim-potentials; # added 2023-10-08
   inherit (super.pkgs) autotrash; # added 2024-09-23
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
+  azure-functions-devops-build = throw "azure-functions-devops-build has been removed, because it is abandoned"; # added 2024-10-04
   Babel = babel; # added 2022-05-06
   backports_csv = throw "backports_csv has been removed, since we no longer need to backport to python2"; # added 2023-07-28
   backports_functools_lru_cache = throw "backports_functools_lru_cache has been removed, since we no longer need to backport to python3.2"; # added 2023-07-28
@@ -80,6 +85,7 @@ mapAliases ({
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
+  bugzilla = python-bugzilla; # added 2024-10-17
   buildbot = throw "use pkgs.buildbot instead"; # added 2022-04-07
   buildbot-ui = throw "use pkgs.buildbot-ui instead"; # added 2022-04-07
   buildbot-full = throw "use pkgs.buildbot-full instead"; # added 2022-04-07
@@ -191,6 +197,7 @@ mapAliases ({
   filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
   flaskbabel = flask-babel; # added 2023-01-19
+  flask-babelex = throw "flask-babelex package has been removed, use flask-babel instead"; # added 2024-10-07
   flask_assets = flask-assets; # added 2023-08-23
   flask_elastic = flask-elastic; # added 2023-08-23
   flask_login = flask-login; # added 2022-10-17
@@ -232,6 +239,7 @@ mapAliases ({
   glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
   glasgow = throw "glasgow has been promoted to a top-level attribute name: `pkgs.glasgow`"; # added 2023-02-05
   globre = throw "globre was removed, because it was disabled on all python version since 3.7 and last updated in 2020."; # added 2024-05-13
+  google-reauth = throw "google-reauth has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   google_api_python_client = google-api-python-client; # added 2021-03-19
   googleapis_common_protos = googleapis-common-protos; # added 2021-03-19
   google-apitools = throw "google-apitools was removed because it is deprecated and unsupported by upstream"; # added 2023-02-25
@@ -251,6 +259,7 @@ mapAliases ({
   hcs_utils = hcs-utils; # added 2024-01-06
   hdlparse = throw "hdlparse has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   hglib = python-hglib; # added 2023-10-13
+  hkdf = throw "hkdf has been removed, as it is no longer maintained upstream."; # added 2024-10-04
   homeassistant-bring-api = bring-api; # added 2024-04-11
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
   htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
@@ -261,6 +270,7 @@ mapAliases ({
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
   image-match = throw "image-match has been removed because it is no longer maintained"; # added 2023-06-10
   imgaug = throw "imgaug has been removed as it is no longer maintained"; # added 2023-07-10
+  imgtool = throw "imgtool has been promoted to a top-level attribute name: `mcuboot-imgtool`"; # added 2024-10-09
   intreehook =  throw "intreehooks has been removed because it is obsolete as a backend-path key was added to PEP 517"; # added 2023-04-11
   ipaddress = throw "ipaddress has been removed because it is no longer required since python 2.7."; # added 2022-05-30
   ipdbplugin = throw "ipdbplugin has been removed because it has no longer maintained for 6 years";  # added 2024-05-21
@@ -278,6 +288,7 @@ mapAliases ({
   jinja2_pluralize = jinja2-pluralize; # added 2023-11-01
   jinja2_time = jinja2-time; # added 2022-11-07
   JPype1 = jpype1; # added 2023-02-19
+  js2py = throw "js2py has been removed, as it is unmaintained and insecure"; # added 2024-10-17
   jsonpath_rw = jsonpath-rw; # added 2024-01-06
   jsonschema_3 = throw "jsonschema 3 is neither the latest version nor needed inside nixpkgs anymore"; # added 2023-06-28
   jupyter_client = jupyter-client; # added 2021-10-15
@@ -324,6 +335,7 @@ mapAliases ({
   mailman-hyperkitty = throw "Please use pkgs.mailmanPackages.mailman-hyperkitty"; # added 2022-04-29
   mailman-web = throw "Please use pkgs.mailman-web"; # added 2022-04-29
   manticore = throw "manticore has been removed because its dependency wasm no longer builds and is unmaintained"; # added 2023-05-20
+  mapbox = throw "mapbox has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   marshmallow-enum = throw "marshmallow-enum has been removed because it was archived in 2022 and had no maintainer"; # added 2024-05-10
   markerlib = throw "markerlib has been removed because it's abandoned since 2013"; # added 2023-05-19
   memory_profiler = memory-profiler; # added 2023-10-09
@@ -349,6 +361,7 @@ mapAliases ({
   net2grid = gridnet; # add 2022-04-22
   nghttp2 = throw "in 1.52.0 removed deprecated python bindings."; # added 2023-06-08
   ninja-python = ninja; # add 2022-08-03
+  nose = throw "nose has been removed since it has been deprecated and unmaintained for almost a decade and does not work on Python 3.12; please switch to pytest or another test runner/framework"; # added 2024-07-28
   nose3 = throw "nose3 has been removed since it is unmaintained and does not work with Python 3.12"; # added 2024-07-28
   nosejs = throw "nosejs has been removed since it has not been maintained for 15 years and there are no dependent packages"; # added 2024-05-21
   nose-cov = throw "nose-cov has been removed, it was archived and unmaintained since 2012"; # added 2024-05-21
@@ -383,8 +396,10 @@ mapAliases ({
   pathlib = throw "pathlib was removed as it has been integrated in python standard library in version 3.4"; # added 2024-05-13
   pathpy = path; # added 2022-04-12
   pcbnew-transition = pcbnewtransition; # added 2024-03-21
+  pc-ble-driver-py = throw "pc-ble-driver-py has been removed because the upstream repository was archived in 2024"; # Added 2024-10-04
   pdfposter = throw "pdfposter was promoted to a top-level attribute"; # Added 2023-06-29
   pdfminer = pdfminer-six; # added 2022-05-25
+  pdfx = throw "pdfx has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   pep257 = pydocstyle; # added 2022-04-12
   pixelmatch = "pixelmatch has been removed as it was unmaintained"; # Added 2024-08-18
   pkutils = throw "pkutils was removed as it was unused and is not applicable to modern Python build tools"; # added 2024-07-28
@@ -396,11 +411,21 @@ mapAliases ({
   postorius = throw "Please use pkgs.mailmanPackages.postorius"; # added 2022-04-29
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11
+  premailer = throw "premailer was removed, as it is not compatible with lxml>4.9.4.";
   privacyidea-ldap-proxy = throw "privacyidea-ldap-proxy has been removed from nixpkgs"; # added 2023-10-31
   proboscis = throw "proboscis has been removed since it has not been maintained for 11 years"; # added 2024-05-20
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  proton-keyring-linux-secretservice = throw "proton-keyring-linux-secretservice functionality was integrated in the proton-keyring-linux module"; # added 2024-10-16
+  proton-vpn-connection = throw "proton-vpn-connection functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch = throw "proton-vpn-killswitch functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager = throw "proton-vpn-killswitch-network-manager functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-killswitch-network-manager-wireguard = throw "proton-vpn-killswitch-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-logger = throw "proton-vpn-logger functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
+  proton-vpn-network-manager-openvpn = throw "proton-vpn-network-manager-openvpn functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-network-manager-wireguard = throw "proton-vpn-network-manager-wireguard functionality was integrated in the proton-vpn-network-manager module"; # added 2024-10-16
+  proton-vpn-session = throw "proton-vpn-session functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
   pur = throw "pur has been renamed to pkgs.pur"; # added 2021-11-08
   pushbullet = pushbullet-py;  # Added 2022-10-15
@@ -529,6 +554,7 @@ mapAliases ({
   qds-sdk = throw "qds-sdk was removed as it is unmaintained upstream and depends on the removed boto package"; # Added 2024-09-22
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
+  quamash = throw "'quamash' has been removed, since it is unmaintained and broken"; # added 2024-10-17
   querystring_parser = querystring-parser; # added 2024-01-07
   qcodes-loop = throw "qcodes-loop has been removed due to deprecation"; # added 2023-11-30
   qiskit-aqua = throw "qiskit-aqua has been removed due to deprecation, with its functionality moved to different qiskit packages";

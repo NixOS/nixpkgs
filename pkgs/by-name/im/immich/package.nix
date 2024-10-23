@@ -225,7 +225,12 @@ buildNpmPackage' {
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ jvanbruegge ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      jvanbruegge
+      Scrumplex
+      titaniumtown
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "server";
   };

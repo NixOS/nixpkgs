@@ -207,81 +207,29 @@ let
     inherit hash;
   };
 
-  # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
-  # module that is imported by the sysconfig and distutils.sysconfig modules.
-  # The sysconfigdata module is generated at build time and contains settings
-  # required for building Python extension modules, such as include paths and
-  # other compiler flags. By default, the sysconfigdata module is loaded from
-  # the currently running interpreter (ie. the build platform interpreter), but
-  # when cross-compiling we want to load it from the host platform interpreter.
-  # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
-  # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
-  # platform suffix on extension modules. The correct values for these variables
-  # are not documented, and must be derived from the configure script (see links
-  # below).
-  sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
-    machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
+  # win32 is added by Fedora’s patch
+  machdep = if stdenv.hostPlatform.isWindows then
+    "win32"
+  else
+    stdenv.hostPlatform.parsed.kernel.name;
 
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
-    # The configure script uses "arm" as the CPU name for all 32-bit ARM
-    # variants when cross-compiling, but native builds include the version
-    # suffix, so we do the same.
-    pythonHostPlatform = let
-      cpu = {
-        # According to PEP600, Python's name for the Power PC
-        # architecture is "ppc", not "powerpc".  Without the Rosetta
-        # Stone below, the PEP600 requirement that "${ARCH} matches
-        # the return value from distutils.util.get_platform()" fails.
-        # https://peps.python.org/pep-0600/
-        powerpc = "ppc";
-        powerpcle = "ppcle";
-        powerpc64 = "ppc64";
-        powerpc64le = "ppc64le";
-      }.${parsed.cpu.name} or parsed.cpu.name;
-    in "${machdep}-${cpu}";
-
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-    multiarchCpu =
-      if isAarch32 then
-        if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
-      else if isx86_32 then "i386"
-      else parsed.cpu.name;
-
-    pythonAbiName = let
-      # python's build doesn't match the nixpkgs abi in some cases.
-      # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
-      nixpkgsPythonAbiMappings = {
-        "gnuabielfv2" = "gnu";
-        "muslabielfv2" = "musl";
-      };
-      pythonAbi = nixpkgsPythonAbiMappings.${parsed.abi.name} or parsed.abi.name;
-    in
-      # Python <3.11 doesn't distinguish musl and glibc and always prefixes with "gnu"
-      if versionOlder version "3.11" then
-        replaceStrings [ "musl" ] [ "gnu" ] pythonAbi
-      else
-        pythonAbi;
-
-    multiarch =
-      if isDarwin then "darwin"
-      else if isFreeBSD then ""
-      else if isWindows then ""
-      else "${multiarchCpu}-${machdep}-${pythonAbiName}";
-
-    abiFlags = optionalString isPy37 "m";
-
-    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
-    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${machdep}_${multiarch}";
-  in ''
-    sysconfigdataHook() {
-      if [ "$1" = '${placeholder "out"}' ]; then
-        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
-        export _PYTHON_SYSCONFIGDATA_NAME='${pythonSysconfigdataName}'
-      fi
-    }
-
-    addEnvHooks "$hostOffset" sysconfigdataHook
-  '';
+  # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
+  # The configure script uses "arm" as the CPU name for all 32-bit ARM
+  # variants when cross-compiling, but native builds include the version
+  # suffix, so we do the same.
+  pythonHostPlatform = let
+    cpu = {
+      # According to PEP600, Python's name for the Power PC
+      # architecture is "ppc", not "powerpc".  Without the Rosetta
+      # Stone below, the PEP600 requirement that "${ARCH} matches
+      # the return value from distutils.util.get_platform()" fails.
+      # https://peps.python.org/pep-0600/
+      powerpc = "ppc";
+      powerpcle = "ppcle";
+      powerpc64 = "ppc64";
+      powerpc64le = "ppc64le";
+    }.${stdenv.hostPlatform.parsed.cpu.name} or stdenv.hostPlatform.parsed.cpu.name;
+  in "${machdep}-${cpu}";
 
   execSuffix = stdenv.hostPlatform.extensions.executable;
 in with passthru; stdenv.mkDerivation (finalAttrs: {
@@ -612,8 +560,31 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   # Add CPython specific setup-hook that configures distutils.sysconfig to
   # always load sysconfigdata from host Python.
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-    cat << "EOF" >> "$out/nix-support/setup-hook"
-    ${sysconfigdataHook}
+    # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+    sysconfigdataName="$(make --eval $'print-sysconfigdata-name:
+    \t@echo _sysconfigdata_$(ABIFLAGS)_$(MACHDEP)_$(MULTIARCH) ' print-sysconfigdata-name)"
+
+    # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
+    # module that is imported by the sysconfig and distutils.sysconfig modules.
+    # The sysconfigdata module is generated at build time and contains settings
+    # required for building Python extension modules, such as include paths and
+    # other compiler flags. By default, the sysconfigdata module is loaded from
+    # the currently running interpreter (ie. the build platform interpreter), but
+    # when cross-compiling we want to load it from the host platform interpreter.
+    # This can be done using the _PYTHON_SYSCONFIGDATA_NAME environment variable.
+    # The _PYTHON_HOST_PLATFORM variable also needs to be set to get the correct
+    # platform suffix on extension modules. The correct values for these variables
+    # are not documented, and must be derived from the configure script (see links
+    # below).
+    cat <<EOF >> "$out/nix-support/setup-hook"
+    sysconfigdataHook() {
+      if [ "\$1" = '$out' ]; then
+        export _PYTHON_HOST_PLATFORM='${pythonHostPlatform}'
+        export _PYTHON_SYSCONFIGDATA_NAME='$sysconfigdataName'
+      fi
+    }
+
+    addEnvHooks "\$hostOffset" sysconfigdataHook
     EOF
   '';
 

@@ -11,12 +11,12 @@ buildRubyGem rec {
   version = "3.3.1";
   source.sha256 = "sha256-xixLYzDIvX3D+vbe9SccST37TnyZx/YjePLPjagHsOU=";
 
-  erubis = buildRubyGem rec {
+  erubi = buildRubyGem rec {
     inherit ruby;
     name = "ruby${ruby.version}-${gemName}-${version}";
-    gemName = "erubis";
-    version = "2.7.0";
-    source.sha256 = "1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3";
+    gemName = "erubi";
+    version = "1.13.0";
+    source.sha256 = "fca61b47daefd865d0fb50d168634f27ad40181867445badf6427c459c33cd62";
   };
 
   thor = buildRubyGem rec {
@@ -35,7 +35,7 @@ buildRubyGem rec {
     source.sha256 = "04xr4cavnzxlk926pkji7b5yiqy4qsd3gdvv8mg6jliq6sczg9gk";
   };
 
-  propagatedBuildInputs = [ erubis thor xdg ];
+  propagatedBuildInputs = [ erubi thor xdg ];
 
   nativeBuildInputs = [ installShellFiles ];
 

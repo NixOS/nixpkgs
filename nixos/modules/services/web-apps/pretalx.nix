@@ -22,7 +22,6 @@ let
     ]
     ++ finalPackage.optional-dependencies.redis
     ++ lib.optionals cfg.celery.enable [ celery ]
-    ++ lib.optionals (cfg.settings.database.backend == "mysql") finalPackage.optional-dependencies.mysql
     ++ lib.optionals (cfg.settings.database.backend == "postgresql") finalPackage.optional-dependencies.postgres;
   };
 in
@@ -180,6 +179,17 @@ in
               default = "pretalx";
               description = ''
                 Database username.
+              '';
+            };
+          };
+
+          files = {
+            upload_limit = lib.mkOption {
+              type = lib.types.ints.positive;
+              default = 10;
+              example = 50;
+              description = ''
+                Maximum file upload size in MiB.
               '';
             };
           };

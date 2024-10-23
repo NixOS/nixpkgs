@@ -8,7 +8,7 @@
 , automake
 , gettext
 , libtool
-, lowdown
+, lowdown-unsandboxed
 , protobuf
 , unzip
 , which
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   # when building on darwin we need cctools to provide the correct libtool
   # as libwally-core detects the host as darwin and tries to add the -static
   # option to libtool, also we have to add the modified gsed package.
-  nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown protobuf py3 unzip which ]
+  nativeBuildInputs = [ autoconf autogen automake gettext libtool lowdown-unsandboxed protobuf py3 unzip which ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools darwin.autoSignDarwinBinariesHook ];
 
   buildInputs = [ gmp libsodium sqlite zlib jq ];

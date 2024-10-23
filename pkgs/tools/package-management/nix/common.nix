@@ -59,6 +59,7 @@ in
 , libxml2
 , libxslt
 , lowdown
+, lowdown-unsandboxed
 , toml11
 , man
 , mdbook
@@ -122,7 +123,7 @@ self = stdenv.mkDerivation {
     docbook_xsl_ns
     docbook5
   ] ++ lib.optionals (enableDocumentation && atLeast24) [
-    (lib.getBin lowdown)
+    (lib.getBin lowdown-unsandboxed)
     mdbook
   ] ++ lib.optionals (atLeast213 && enableDocumentation) [
     mdbook-linkcheck

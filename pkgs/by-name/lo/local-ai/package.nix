@@ -15,7 +15,7 @@
   ffmpeg,
   cmake,
   pkg-config,
-  buildGoModule,
+  buildGo123Module,
   makeWrapper,
   ncurses,
   which,
@@ -147,8 +147,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "fc54ef0d1c138133a01933296d50a36a1ab64735";
-          hash = "sha256-o87EhrA2Oa98pwyb6GSUgwERY0/GWJiX7kvlxDv4zb4=";
+          rev = "96776405a17034dcfd53d3ddf5d142d34bdbb657";
+          hash = "sha256-V5Z+8cpllhDR0s4InoXyEU59a/qo2b5Xj8oeZd0rtGk=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -299,8 +299,8 @@ let
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "9e3c5345cd46ea718209db53464e426c3fe7a25e";
-      hash = "sha256-JOptyveuaKRLzeZ6GuB3A70IM7dk4we95g5o25XVXJI=";
+      rev = "fdbfb460ed546452a5d53611bba66d10d842e719";
+      hash = "sha256-ZLSVPQUw1sp7sETk2w38qKq8ut7XNGuof2TUvFzjdPk=";
     };
 
     nativeBuildInputs = [
@@ -431,12 +431,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.20.1";
+  version = "2.22.0";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-FeZZC0Tg9JT9Yj0e27GOLSdHEtWl17AHK3j7epwPyY8=";
+    hash = "sha256-EwBgw0WXnK3E3ZyA1+Xk/o7Te7OCJWi7njefA4PDUJ0=";
   };
 
   prepare-sources =
@@ -457,10 +457,10 @@ let
       ${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream
     '';
 
-  self = buildGoModule.override { stdenv = effectiveStdenv; } {
+  self = buildGo123Module.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-mDxp5frUIECSHKjxaJVqIP7mnIusvdT45Xlxc9+P5tE=";
+    vendorHash = "sha256-tb2nVUCUdaOWHpJz4zMqgfJ4PYUqGwV/0lj76n36sUg=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 

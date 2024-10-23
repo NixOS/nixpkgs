@@ -7,6 +7,8 @@
   CoreFoundation,
   cctools,
   avxSupport ? stdenv.hostPlatform.avxSupport,
+  nixosTests,
+  lib,
 }:
 
 let
@@ -33,5 +35,12 @@ buildMongoDB {
 
     # Fix building with python 3.12 since the imp module was removed
     ./mongodb-python312.patch
-  ];
+
+    # mongodb-7_0's mozjs uses avx2 instructions
+    # https://github.com/GermanAizek/mongodb-without-avx/issues/16
+  ] ++ lib.optionals (!avxSupport) [ ./mozjs-noavx.patch ];
+
+  passthru.tests = {
+    inherit (nixosTests) mongodb;
+  };
 }

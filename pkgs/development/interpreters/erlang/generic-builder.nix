@@ -98,6 +98,8 @@ stdenv.mkDerivation ({
 
   inherit src version;
 
+  LANG = "C.UTF-8";
+
   nativeBuildInputs = [ autoconf makeWrapper perl gnum4 libxslt libxml2 ];
 
   buildInputs = [ ncurses opensslPackage ]

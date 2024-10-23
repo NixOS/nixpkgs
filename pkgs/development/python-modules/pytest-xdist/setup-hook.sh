@@ -8,10 +8,17 @@ pytestXdistHook() {
 # until we have dependency mechanism in generic builder, we need to use this ugly hack.
 
 if [ -z "${dontUsePytestXdist-}" ] && [ -z "${dontUsePytestCheck-}" ]; then
-    if [[ " ${preDistPhases:-} " =~ " pytestCheckPhase " ]]; then
-        preDistPhases+=" "
-        preDistPhases="${preDistPhases/ pytestCheckPhase / pytestXdistHook pytestCheckPhase }"
+    if [[ " ${preDistPhases[*]:-} " =~ " pytestCheckPhase " ]]; then
+        _preDistPhases="${preDistPhases[*]} "
+        _preDistPhases="${_preDistPhases/ pytestCheckPhase / pytestXdistHook pytestCheckPhase }"
+        if [[ -n "${__structuredAttrs-}" ]]; then
+            preDistPhases=()
+        else
+            preDistPhases=""
+        fi
+        appendToVar preDistPhases $_preDistPhases
+        unset _preDistPhases
     else
-        preDistPhases+=" pytestXdistHook"
+        appendToVar preDistPhases pytestXdistHook
     fi
 fi

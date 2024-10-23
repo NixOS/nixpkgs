@@ -124,13 +124,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-09-20";
+  version = "0-unstable-2024-10-08";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "44248d3cf4162944ec2e6a45f8cc058758bf5a86";
-    hash = "sha256-WJ7M/1a8j5gRJJVzCJL6JrkGPckD5ZhKzTlmiKNdtm0=";
+    rev = "c69e30122bf7e7a7d3de70dc2418263c6e44159b";
+    hash = "sha256-khkY1GG43/VUBt6g7Egt0Zz0V/rXxnDUpOLtanFum7Y=";
   };
 
   buildInputs = [

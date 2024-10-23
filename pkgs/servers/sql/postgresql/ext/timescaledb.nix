@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for x in CMakeLists.txt sql/CMakeLists.txt; do
       substituteInPlace "$x" \
-        --replace 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/postgresql/extension\""
+        --replace-fail 'DESTINATION "''${PG_SHAREDIR}/extension"' "DESTINATION \"$out/share/postgresql/extension\""
     done
 
     for x in src/CMakeLists.txt src/loader/CMakeLists.txt tsl/src/CMakeLists.txt; do
       substituteInPlace "$x" \
-        --replace 'DESTINATION ''${PG_PKGLIBDIR}' "DESTINATION \"$out/lib\""
+        --replace-fail 'DESTINATION ''${PG_PKGLIBDIR}' "DESTINATION \"$out/lib\""
     done
   '';
 

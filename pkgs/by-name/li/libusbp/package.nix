@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation(finalAttrs: {
   pname = "libusbp";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "pololu";
     repo = "libusbp";
     rev = finalAttrs.version;
-    hash = "sha256-60xpJ97GlqEcy2+pxGNGPfWDnbIFGoPXJijaErOBXQs=";
+    hash = "sha256-hFvQceUapzlD021KIOJbSXX7qv1IQMuEudRHYeCkbS8=";
   };
 
   outputs = [ "out" "dev" ];

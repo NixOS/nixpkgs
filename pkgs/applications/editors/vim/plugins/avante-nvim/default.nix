@@ -10,13 +10,13 @@
 }:
 
 let
-  version = "2024-09-15";
+  version = "2024-10-18";
 
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
-    rev = "f9520c4fdfed08e9cc609d6cd319b358e4ea33a5";
-    hash = "sha256-8zTDGPnhNI2rQA0uJc8gQRj4JCyg+IkO/D3oHYy4f9U=";
+    rev = "36b23cef16c2c624c34bea213f01c06782d2ca40";
+    hash = "sha256-QUFcJMbfr5BAS04ig1IHLCMLACeQhFVH9ZCH/VD8i8Y=";
   };
 
   meta = with lib; {
@@ -65,11 +65,11 @@ vimUtils.buildVimPlugin {
     in
     ''
       mkdir -p $out/build
+      ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
       ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
     '';
 
   doInstallCheck = true;
-  # TODO: enable after https://github.com/NixOS/nixpkgs/pull/342240 merged
-  # nvimRequireCheck = "avante";
+  nvimRequireCheck = "avante";
 }

@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
     (substituteAll {
       src = ./0000-nixpkgs-specific.diff;
       inherit sendmailPath;
-      VIPATH = lib.getExe' vim "vim";
-      DEFPATH = lib.concatStringsSep ":" [
+      viPath = lib.getExe' vim "vim";
+      defPath = lib.concatStringsSep ":" [
         "/run/wrappers/bin"
         "/nix/var/nix/profiles/default/bin"
         "/run/current-system/sw/bin"

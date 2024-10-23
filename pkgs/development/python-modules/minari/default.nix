@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -30,16 +29,14 @@
 
 buildPythonPackage rec {
   pname = "minari";
-  version = "0.5.0";
+  version = "0.5.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Minari";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SVt93d0GbCxeZXhh5vMPvnsBAeJAfGWNceFi0W9RgeM=";
+    hash = "sha256-LriUPl9lrIDz5tzZIOxhj8C2q0LZr6AgJGRw/cWp4Fs=";
   };
 
   build-system = [

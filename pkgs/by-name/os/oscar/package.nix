@@ -5,7 +5,7 @@
   fetchFromGitLab,
   libGLU,
 }:
-qt5.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "oscar";
   version = "1.5.1";
 
@@ -22,7 +22,10 @@ qt5.mkDerivation rec {
     qt5.qtserialport
     libGLU
   ];
-  nativeBuildInputs = [ qt5.qmake ];
+  nativeBuildInputs = [
+    qt5.wrapQtAppsHook
+    qt5.qmake
+  ];
   postPatch = ''
     substituteInPlace oscar/oscar.pro --replace "/bin/bash" "${stdenv.shell}"
   '';

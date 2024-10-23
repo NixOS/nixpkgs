@@ -1,7 +1,7 @@
 { lib, buildDunePackage, fetchurl
 , pkg-config
 , cstruct, cstruct-lwt, mirage-net, mirage-clock
-, mirage-random, mirage-time
+, mirage-crypto-rng-mirage, mirage-time
 , macaddr, macaddr-cstruct, fmt
 , lwt, lwt-dllist, logs, duration, randomconv, ethernet
 , alcotest, mirage-flow, mirage-vnetif, pcap-format
@@ -13,11 +13,11 @@
 
 buildDunePackage rec {
   pname = "tcpip";
-  version = "8.1.0";
+  version = "8.2.0";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    hash = "sha256-hrpdkvkHi93GUxL2O19M40/SVw12VDOyOiJquE11qcA=";
+    hash = "sha256-kW5oirqJdnbERNuBKfSWOtc5+NG+Yx2eAJxiKLS31u0=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildDunePackage rec {
     cstruct-lwt
     mirage-net
     mirage-clock
-    mirage-random
+    mirage-crypto-rng-mirage
     mirage-time
     ipaddr-cstruct
     macaddr
