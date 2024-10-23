@@ -159,15 +159,11 @@ let
 
     passthru = {
       browsersJSON = (lib.importJSON ./browsers.json).browsers;
-      browsers =
-        {
-          x86_64-linux = browsers-linux { };
-          aarch64-linux = browsers-linux { };
-          x86_64-darwin = browsers-mac;
-          aarch64-darwin = browsers-mac;
-        }
-        .${system} or throwSystem;
-      browsers-chromium = browsers-linux { };
+      browsers = browsers { };
+      browsers-chromium = browsers {
+        withFirefox = false;
+        withWebkit = false;
+      };
     };
   });
 
@@ -196,28 +192,7 @@ let
     };
   });
 
-  browsers-mac = stdenv.mkDerivation {
-    pname = "playwright-browsers";
-    inherit (playwright) version;
-
-    dontUnpack = true;
-
-    nativeBuildInputs = [ cacert ];
-
-    installPhase = ''
-      runHook preInstall
-
-      export PLAYWRIGHT_BROWSERS_PATH=$out
-      ${playwright-core}/cli.js install
-      rm -r $out/.links
-
-      runHook postInstall
-    '';
-
-    meta.platforms = lib.platforms.darwin;
-  };
-
-  browsers-linux = lib.makeOverridable (
+  browsers = lib.makeOverridable (
     {
       withChromium ? true,
       withFirefox ? true,
