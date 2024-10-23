@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "chez-matchable";
-  version = "0.2";
+  version = "20160306";
 
   src = fetchFromGitHub {
     owner = "fedeinthemix";
     repo = "chez-matchable";
     rev = "v${version}";
-    sha256 = "sha256-UYoT8Kp1FTfiL22ntrFXFcAB1HGVrJ6p9JgvhUKi+Yo=";
+    sha256 = "sha256-Opw8m/4eKBt9Q5nb+y9/1XwUj/QTclp6+ENcREY/Fgs=";
   };
 
   buildInputs = [ chez ];
