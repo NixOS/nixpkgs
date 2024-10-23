@@ -1,9 +1,9 @@
 { stdenv
 , lib
+, callPackage
 , pandoc
 , typst
 , esbuild
-, deno
 , fetchurl
 , dart-sass
 , rWrapper
@@ -17,6 +17,9 @@
 , sysctl
 }:
 
+let
+  deno = callPackage ./deno.nix {};
+in
 stdenv.mkDerivation (final: {
   pname = "quarto";
   version = "1.5.57";
