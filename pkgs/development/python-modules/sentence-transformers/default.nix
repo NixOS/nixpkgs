@@ -23,7 +23,7 @@
   accelerate,
   datasets,
   pytestCheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     accelerate
     datasets
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "sentence_transformers" ];

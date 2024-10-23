@@ -3,7 +3,7 @@
   fetchPypi,
   buildPythonPackage,
   sphinx,
-  pytest-cov,
+  pytest-cov-stub,
   pytest,
   mako,
   numpy,
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     sphinx
-    pytest-cov
+    pytest-cov-stub
     pytest
   ];
 

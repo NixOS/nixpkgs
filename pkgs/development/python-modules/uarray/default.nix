@@ -9,7 +9,7 @@
   astunparse,
   typing-extensions,
   pytest7CheckHook,
-  pytest-cov,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest7CheckHook
-    pytest-cov
+    pytest-cov-stub
   ];
 
   # Tests must be run from outside the source directory
