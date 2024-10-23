@@ -7,6 +7,7 @@
 , moreutils
 , versionCheckHook
 , nix-update-script
+, nixosTests
 , withCmd ? false
 }:
 
@@ -59,6 +60,9 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = {
+      nixos = nixosTests.kanata;
+    };
   };
 
   meta = with lib; {
