@@ -43,5 +43,7 @@ in
 
     systemd.packages = with pkgs; [ tiny-dfr ];
     services.udev.packages = with pkgs; [ tiny-dfr ];
+
+    systemd.services.tiny-dfr.restartTriggers = [ cfgFile ];
   };
 }
