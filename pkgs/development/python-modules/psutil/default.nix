@@ -8,12 +8,13 @@
   pytestCheckHook,
   python,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "6.0.0";
-  format = "setuptools";
+  version = "6.1.0";
+  pyproject = true;
 
   inherit stdenv;
 
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j6rk8xC22Wn6JsoFRTOLIfc8axXbfEqNk0pUgvqoGPI=";
+    hash = "sha256-NTgV9Zp/ZM2socAwfuE1WKBRL22wZOkv6DN4TwhTnHo=";
   };
 
   postPatch = ''
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     substituteInPlace psutil/arch/osx/cpu.c \
       --replace-fail kIOMainPortDefault kIOMasterPortDefault
   '';
+
+  build-system = [ setuptools ];
 
   buildInputs =
     # workaround for https://github.com/NixOS/nixpkgs/issues/146760
