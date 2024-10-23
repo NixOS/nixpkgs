@@ -8,21 +8,19 @@
   libgcrypt,
   pilot-link,
   pkg-config,
-  slang,
+  sqlite,
 }:
 
 stdenv.mkDerivation {
   pname = "jpilot";
-  version = "2.0.1";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "juddmon";
     repo = "jpilot";
-    rev = "v2_0_1";
-    hash = "sha256-CHCNDoYPi+2zMKkI6JIecmiWMvMF6WsgBZ6Ubfl0RJU=";
+    rev = "v2_0_2";
+    hash = "sha256-ja/P6kq53C7drEPWemGMV5fB4BktHrbrxL39jLEGhRI=";
   };
-
-  patches = [ ./fix-broken-types.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -32,8 +30,7 @@ stdenv.mkDerivation {
   buildInputs = [
     gtk3
     libgcrypt
-    pilot-link
-    slang
+    sqlite
   ];
 
   preConfigure = ''
