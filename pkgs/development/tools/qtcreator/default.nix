@@ -86,11 +86,6 @@ stdenv.mkDerivation rec {
     "--set-default PERFPROFILER_PARSER_FILEPATH ${lib.getBin perf}/bin"
   ];
 
-  postInstall = ''
-    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
-      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
-  '';
-
   meta = with lib; {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
     longDescription = ''
