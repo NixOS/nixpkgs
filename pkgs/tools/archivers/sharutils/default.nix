@@ -66,8 +66,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for remote synchronization and `shell archives'";
-    longDescription =
-      '' GNU shar makes so-called shell archives out of many files, preparing
+    longDescription = ''
+         GNU shar makes so-called shell archives out of many files, preparing
          them for transmission by electronic mail services.  A shell archive
          is a collection of files that can be unpacked by /bin/sh.  A wide
          range of features provide extensive flexibility in manufacturing

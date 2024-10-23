@@ -245,10 +245,11 @@ stdenv.mkDerivation (finalAttrs: {
 
    + (if svnSupport then ''
         # wrap git-svn
-        wrapProgram $out/libexec/git-core/git-svn                                                                                \
-                     --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
-                     --prefix PATH : "${svn.out}/bin" ''
-       else '' # replace git-svn by notification script
+        wrapProgram $out/libexec/git-core/git-svn \
+          --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
+          --prefix PATH : "${svn.out}/bin"
+      '' else ''
+        # replace git-svn by notification script
         notSupported $out/libexec/git-core/git-svn
      '')
 
@@ -261,9 +262,11 @@ stdenv.mkDerivation (finalAttrs: {
         notSupported $out/libexec/git-core/git-send-email
       '')
 
-   + lib.optionalString withManual ''# Install man pages
+   + lib.optionalString withManual ''
+       # Install man pages
        make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
-         -C Documentation ''
+         -C Documentation
+     ''
 
    + (if guiSupport then ''
        # Wrap Tcl/Tk programs
