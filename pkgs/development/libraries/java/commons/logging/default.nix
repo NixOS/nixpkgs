@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "commons-logging";
-  version = "1.3.1";
+  version = "1.3.4";
 
   src = fetchurl {
     url    = "mirror://apache/commons/logging/binaries/commons-logging-${version}-bin.tar.gz";
-    sha256 = "sha256-mM85vfWDc88fNwwflvnRvoh/tb+jDH3o+96RZa9Sp7w=";
+    sha256 = "sha256-asHQ0i4bBICkRK2Hzfo7+/EmT9gX5jcv8KmFMz1qCGI=";
   };
 
   installPhase = ''
