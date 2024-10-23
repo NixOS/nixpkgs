@@ -14,16 +14,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "termscp";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "veeso";
     repo = "termscp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/WYhwt/GAULX/UY1GyqzauaMRlVuvAwwS0DNfYB7aD4=";
+    hash = "sha256-o5RPizjsYJJ1smIALKj3wruuOXgdCv0WEkEUT0qkLIg=";
   };
 
-  cargoHash = "sha256-OqrJpVb9EF22OGP5SOIfEUg66+T96qcN3GH+fs72+7A=";
+  cargoHash = "sha256-6Mi+JG/L1Do9ruEZEYWwZqLOAFrQIqW2eHMLikAtjR4=";
 
   nativeBuildInputs = [
     pkg-config
